@@ -1,0 +1,50 @@
+{
+    "login": {
+        "onBoardingPageTitle": "Please add your name and upload a photo to continue",
+        "phoneNumberPlaceholder": "Phone number",
+        "loginPageInstructions": "Enter your phone number",
+        "verificationCodeInstructions": "Enter the code you received",
+        "submitPhoneNumberButton": "Login",
+        "submitVertButton": "Verify",
+        "phoneNumberError": "Oops! Seems like something went wrong",
+        "invalidPhoneNumberError": "Phone number is not valid",
+        "vertError": "Incorrect verification code",
+        "resendButton": "Resend verification code"
+    },
+    "onboarding": {
+        "submit": "Save",
+        "firstNamePlaceholder": "First name",
+        "lastNamePlaceholder": "Last name",
+        "fullNameError": "Please fill first name and last name"
+    },
+    "home": {
+        "letsRideButton": "Let's ride",
+        "cancelRideButton": "Cancel Ride",
+        "choosePickup": "Choose Pickup",
+        "chooseDropoff": "Choose Dropoff",
+        "rideStates": {
+            "driverOnTheWay": "Driver is on the way",
+            "onBoard": "In ride",
+            "driverArrived": "Your driver has arrived"
+        }
+    },
+    "addressView": {
+        "pickupPlaceholder": "Choose Pickup",
+        "dropoffPlaceholder": "Choose Dropoff"
+    },
+    "popups": {
+        "rideCancel": {
+            "main": "Your ride has been cancelled",
+            "sub": "The ride was cancelled, please try to book again"
+        },
+        "rideOver": {
+            "main": "You have arrived!",
+            "sub": "Your ride is now complete, thank you for riding with us"
+        },
+        "rideRejected": {
+            "main": "We couldn't find a driver for you",
+            "sub": "Your ride was rejected because we couldn't find a driver, please try again later"
+        },
+        "defaultFooterButton": "OK"
+    }
+}
