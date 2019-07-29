@@ -4,7 +4,6 @@ const { Ride } = require('../../../models');
 const router = Router();
 
 router.put('/:rideId', async (req, res) => {
-  console.log('webhook', req.body);
   const ride = await Ride.find({
     where: {
       id: req.params.rideId,
