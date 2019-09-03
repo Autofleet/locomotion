@@ -14,7 +14,7 @@ router.put('/:rideId', async (req, res) => {
     ride.state = 'active';
   } else if (req.body.ride.status === 'completed') {
     ride.state = 'completed';
-  } else if (req.body.ride.status === 'canceled') {
+  } else if (req.body.ride.status === 'cancelled') {
     ride.state = 'canceled';
   }
 
