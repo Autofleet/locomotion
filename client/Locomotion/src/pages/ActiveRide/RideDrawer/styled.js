@@ -96,3 +96,41 @@ export const RideButtonText = styled.Text`
   color: #fff;
   font-size: 18;
 `;
+
+
+export const RowContainer = styled.TouchableOpacity`
+  min-height: 50;
+  padding-top: 10;
+  padding-bottom: 10;
+  align-items: center;
+  flex-direction: row;
+  ${({ paddingStart }) => (paddingStart ? `
+  padding-start: 24;
+  ` : null)}
+  ${({ useBorder }) => (useBorder ? `
+    border-bottom-color: #f2f2f2;
+    border-bottom-width: 1;
+  ` : null)}
+`;
+
+
+export const RideTypeButton = styled.TouchableOpacity`
+  align-items: center;
+  flex: 1;
+`;
+
+
+export const RideTypeButtonText = styled.Text`
+  flex: 1;
+  min-width: 120px;
+  text-align: center;
+  align-items: center;
+  flex-direction: row;
+  padding: 10px;
+  border-radius: 5px;
+  background-color: #e6f0f5;
+  ${({ active }) => (active ? `
+  background-color: #c9e2f0;
+  box-shadow: 0px 5px 5px rgba(0,0,0,0.05);
+  ` : null)}
+`;

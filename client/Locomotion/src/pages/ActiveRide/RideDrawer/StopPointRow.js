@@ -2,6 +2,7 @@ import React from 'react';
 // import { View } from 'react-native';
 import styled from 'styled-components';
 import moment from 'moment';
+import { RowContainer } from './styled';
 
 import i18n from '../../../I18n';
 
@@ -63,23 +64,12 @@ const EtaText = styled.Text`
   /* display: none; */
 `;
 
-const StopPointRowContainer = styled.TouchableOpacity`
-  min-height: 50;
-  padding-top: 10;
-  padding-bottom: 10;
-  padding-start: 24;
-  align-items: center;
-  flex-direction: row;
-  ${({ pickup }) => (pickup ? `
-    border-bottom-color: #f2f2f2;
-    border-bottom-width: 1;
-  ` : null)}
-`;
+
 
 export default ({
-  pickup, description, eta, completedAt, openLocationSelect,
+  pickup, description, eta, completedAt, openLocationSelect, useBorder
 }) => (
-  <StopPointRowContainer pickup={pickup} onPress={openLocationSelect}>
+  <RowContainer pickup={pickup} onPress={openLocationSelect} useBorder paddingStart>
     <StopPointDotContainer origin={pickup}>
       <StopPointDot origin={pickup} />
       <StopPointDotTimeLine />
@@ -92,5 +82,6 @@ export default ({
     <AddressText>
       {description || i18n.t(pickup ? 'home.choosePickup' : 'home.chooseDropoff')}
     </AddressText>
-  </StopPointRowContainer>
+  </RowContainer>
 );
+

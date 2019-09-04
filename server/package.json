@@ -9,7 +9,7 @@
         "test-auto": "jest --watch",
         "linter": "./node_modules/.bin/eslint .",
         "dev": "nodemon index.js",
-        "start": "node index.js",
+        "start": "npm run init && node index.js",
         "migrate": "node_modules/.bin/sequelize db:migrate",
         "init": "bash ./scripts/init.sh"
     },

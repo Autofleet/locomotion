@@ -29,7 +29,7 @@ const AuthLoadingScreen = ({ navigation }) => {
       getFromStorage();
     }
   };
-  useEffect(init);
+  useEffect(init, []);
   return (
     <View>
       <Text>Loading</Text>

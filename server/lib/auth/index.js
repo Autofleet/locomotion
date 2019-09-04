@@ -23,12 +23,12 @@ class Auth {
 
   async createToken(payload, type = 'accessToken') {
     const jwtid = shortid.generate();
-    let expiresIn = AUTH_ACCESS_TOKEN_LIFETIME;
-    let authToken = AUTH_ACCESS_SECRET_KEY;
+    let expiresIn = AUTH_ACCESS_TOKEN_LIFETIME || 10000;
+    let authToken = AUTH_ACCESS_SECRET_KEY || '1234';
 
     if (type === 'refreshToken') {
-      authToken = AUTH_REFRESH_SECRET_KEY;
-      expiresIn = AUTH_REFRESH_TOKEN_LIFETIME;
+      authToken = AUTH_REFRESH_SECRET_KEY || '5678';
+      expiresIn = AUTH_REFRESH_TOKEN_LIFETIME || 1000000;
     }
 
     const token = jwt.sign(payload, authToken, {

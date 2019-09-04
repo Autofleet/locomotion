@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
 
-const SECRET_KEY = process.env.AUTH_ACCESS_SECRET_KEY;
+const SECRET_KEY = process.env.AUTH_ACCESS_SECRET_KEY || '1234';
 
 const getTokenFromHeaders = (headers) => {
   if (headers.authorization && headers.authorization.split(' ')[0] === 'Bearer') {

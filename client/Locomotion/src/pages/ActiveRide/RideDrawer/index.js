@@ -7,9 +7,10 @@ import {
 import I18n from '../../../I18n';
 import {
   Drawer, RideCard, RideStatusText, RideDetailsText, RideButton, RideButtonText,
-  RideDetailsContainer, DriverAvatar,
+  RideDetailsContainer, DriverAvatar
 } from './styled';
 import StopPointRow from './StopPointRow';
+import RideType from './RideType';
 
 const getRideState = (activeRide) => { // false, driverOnTheWay, driverArrived, onBoard
   if (!activeRide) {
@@ -25,8 +26,8 @@ const getRideState = (activeRide) => { // false, driverOnTheWay, driverArrived, 
 };
 
 const RideDrawer = ({
-  activeRide, openLocationSelect, requestStopPoints,
-  cancelRide, createRide, readyToBook,
+  activeRide, openLocationSelect, requestStopPoints, setRideType,
+  cancelRide, createRide, readyToBook, rideType,
 }) => {
   const [origin, destination] = activeRide ? activeRide.stop_points || [] : [];
   const rideState = getRideState(activeRide);
@@ -63,6 +64,7 @@ const RideDrawer = ({
       ) : null}
       <StopPointRow
         pickup
+        useBorder
         openLocationSelect={openLocationSelect}
         description={rideState ? origin && origin.description
           : requestStopPoints && requestStopPoints.pickup && requestStopPoints.pickup.description}
@@ -71,6 +73,7 @@ const RideDrawer = ({
           : undefined}
       />
       <StopPointRow
+        useBorder
         openLocationSelect={openLocationSelect}
         description={rideState ? destination && destination.description
           : requestStopPoints && requestStopPoints.dropoff && requestStopPoints.dropoff.description}
@@ -78,6 +81,7 @@ const RideDrawer = ({
         completedAt={rideState ? destination && destination.completed_at
           : undefined}
       />
+      {!rideState ? ( <RideType setRideType={setRideType} rideType={rideType}/> ) : null }
       {rideState === 'onBoard' ? null
         : (
           <RideButton
@@ -96,3 +100,4 @@ const RideDrawer = ({
 };
 
 export default RideDrawer;
+console.disableYellowBox = true;

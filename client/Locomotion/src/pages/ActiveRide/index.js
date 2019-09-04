@@ -44,12 +44,8 @@ export default ({ navigation }) => {
   const [, togglePopup] = getTogglePopupsState();
   const [requestStopPoints, setRequestStopPoints] = useState({
     openEdit: false,
-    // pickup: {
-    //   description: 'My location',
-    //   lat: 32.070100,
-    //   lng: 34.763717,
-    // }
   });
+  const [rideType, setRideType] = useState('private');
 
   const loadActiveRide = async () => {
     const { data: response } = await network.get('api/v1/me/rides/active', { params: { activeRide: true } });
@@ -131,6 +127,7 @@ export default ({ navigation }) => {
       dropoffAddress: requestStopPoints.dropoff.description,
       dropoffLat: requestStopPoints.dropoff.lat,
       dropoffLng: requestStopPoints.dropoff.lng,
+      rideType,
     });
     if (response.state === 'rejected') {
       togglePopup('rideRejected', true);
@@ -187,6 +184,8 @@ export default ({ navigation }) => {
         openLocationSelect={openLocationSelect}
         requestStopPoints={requestStopPoints}
         activeRide={activeRideState}
+        rideType={rideType}
+        setRideType={setRideType}
       />
       {
           requestStopPoints.openEdit

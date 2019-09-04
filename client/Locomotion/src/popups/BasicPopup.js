@@ -14,7 +14,7 @@ export default ({
     if (closeAfter) {
       setTimeout(closePopup, closeAfter);
     }
-  });
+  }, []);
 
   return (
     <Modal isVisible={isPopupOpen(id) || false}>

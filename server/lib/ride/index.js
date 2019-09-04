@@ -3,7 +3,7 @@ const axios = require('axios');
 const { Ride, User } = require('../../models');
 
 const demandApi = axios.create({
-  baseURL: 'https://demand.autofleet.io/',
+  baseURL: process.env.AF_BACKEND_URL || 'https://demand.autofleet.io/',
   headers: { Authorization: process.env.AF_API_TOKEN },
 });
 
@@ -20,10 +20,12 @@ const rideService = {
       avatar, firstName, lastName, phoneNumber,
     } = await User.findById(userId, { attributes: ['avatar', 'firstName', 'lastName', 'phoneNumber'] });
 
+    console.log('rideData.rideType', rideData.rideType === 'pooling' ? 'active' : 'no');
     try {
       const { data: afRide } = await demandApi.post('/api/v1/rides', {
         external_id: ride.id,
         webhook_url: `${webHookHost}/api/v1/ride-webhook/${ride.id}`,
+        pooling: rideData.rideType === 'pooling' ? 'active' : 'no',
         stop_points: [
           {
             type: 'pickup',

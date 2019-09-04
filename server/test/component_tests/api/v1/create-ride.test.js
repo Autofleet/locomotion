@@ -33,7 +33,7 @@ describe('Create rides', () => {
       dropoffLng: 34.2,
     }).set('Authorization', `Bearer ${accessToken}`);
 
-    console.log('Response 111', res);
+    console.log(accessToken);
     expect(res.statusCode).toBe(200);
     // expect(res.body).toEqual({ success: true });
   });
