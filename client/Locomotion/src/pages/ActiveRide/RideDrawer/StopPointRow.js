@@ -1,5 +1,5 @@
 import React from 'react';
-// import { View } from 'react-native';
+import { View } from 'react-native';
 import styled from 'styled-components';
 import moment from 'moment';
 import { RowContainer } from './styled';
@@ -47,6 +47,10 @@ const StopPointDotTimeLine = styled.View`
   background-color: #8aecff;
 `;
 
+
+const AddressTextCont = styled.View`
+`;
+
 const AddressText = styled.Text`
   font-size: 13;
   color: #666666;
@@ -57,11 +61,8 @@ const AddressText = styled.Text`
 const EtaText = styled.Text`
   font-size: 13;
   color: #808080;
-  margin-start: 46;
-  top: 30px;
-  position: absolute;
+  margin-start: 22;
   font-size: 10px;
-  /* display: none; */
 `;
 
 
@@ -74,14 +75,20 @@ export default ({
       <StopPointDot origin={pickup} />
       <StopPointDotTimeLine />
     </StopPointDotContainer>
-    {eta || completedAt ? (
-      <EtaText>
-        {moment(eta || completedAt).fromNow() }
-      </EtaText>
-    ) : null }
-    <AddressText>
-      {description || i18n.t(pickup ? 'home.choosePickup' : 'home.chooseDropoff')}
-    </AddressText>
+    <AddressTextCont>
+      <View>
+        <AddressText numberOfLines={2}>
+          {description || i18n.t(pickup ? 'home.choosePickup' : 'home.chooseDropoff')}
+        </AddressText>
+      </View>
+      <View>
+        {eta || completedAt ? (
+          <EtaText>
+            {moment(eta || completedAt).fromNow() }
+          </EtaText>
+        ) : null }
+      </View>
+    </AddressTextCont>
   </RowContainer>
 );
 
