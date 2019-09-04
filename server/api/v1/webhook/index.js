@@ -10,6 +10,9 @@ router.put('/:rideId', async (req, res) => {
     },
   });
 
+  if (!ride) {
+    res.json({ error: 'ride not found' });
+  }
   if (req.body.ride.status === 'active') {
     ride.state = 'active';
   } else if (req.body.ride.status === 'completed') {
