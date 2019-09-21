@@ -35,15 +35,15 @@
     "popups": {
         "rideCancel": {
             "main": "Your ride has been cancelled",
-            "sub": "The ride was cancelled, please try to book again"
+            "sub": "Sorry it didn't work this time, please try again soon!"
         },
         "rideOver": {
-            "main": "You have arrived!",
-            "sub": "Your ride is now complete, thank you for riding with us"
+            "main": "You've arrived!",
+            "sub": "Thanks for riding with us, see you soon!"
         },
         "rideRejected": {
-            "main": "We couldn't find a driver for you",
-            "sub": "Your ride was rejected because we couldn't find a driver, please try again later"
+            "main": "Sorry, we couldn't find a driver for you",
+            "sub": "All our drivers are busy right now. Please try again in a few minutes"
         },
         "defaultFooterButton": "OK"
     }
