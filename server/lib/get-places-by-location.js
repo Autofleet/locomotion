@@ -20,6 +20,8 @@ const getFromAvailablePlaces = async (availablePlaces, closetPlace) => {
   const availablePlacesWithDistance = availablePlaces.map(availablePlace => ({
     description: availablePlace.properties.name,
     id: availablePlace.properties.id,
+    lat: availablePlace.geometry.coordinates[1],
+    lng: availablePlace.geometry.coordinates[0],
     distance: turf.distance(turf.point([location.lng, location.lat]), turf.point(availablePlace.geometry.coordinates)),
   }));
 
