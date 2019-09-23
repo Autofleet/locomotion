@@ -6,21 +6,32 @@ const demandApi = axios.create({
 });
 
 
-const getAfNearbyVehiclesWithEta = location => demandApi.get('api/v1/nearby-vehicles', {
-  params: {
-    location,
-    radius: process.env.RADIUS_FOR_CALC_PRE_RIDE_ETA,
-    preEta: 3,
-  },
-});
+const getAfNearbyVehiclesWithEta = async (location) => {
+  let vehicles;
+  try {
+    const { data } = await demandApi.get('api/v1/nearby-vehicles', {
+      params: {
+        location,
+        radius: process.env.RADIUS_FOR_CALC_PRE_RIDE_ETA,
+        preEta: 3,
+      },
+    });
+    vehicles = data;
+  } catch (error) {
+    console.log('Got error while try to get nearby-vehicles from AF', error.message, error.stack);
+    vehicles = [];
+  }
+  return vehicles;
+};
 
 const directions = async (origin, destination) => {
+  const params = {
+    key: process.env.GOOGLE_MAPS_API_KEY,
+    origin: `${origin.lat},${origin.lng}`,
+    destination: `${destination.lat},${destination.lng}`,
+  };
   const { data } = await axios.get('https://maps.googleapis.com/maps/api/directions/json', {
-    params: {
-      key: process.env.GOOGLE_MAPS_API_KEY,
-      origin: `${origin.lat},${origin.lng}`,
-      destination: `${destination.lat},${destination.lng}`,
-    },
+    params,
   });
   return data;
 };

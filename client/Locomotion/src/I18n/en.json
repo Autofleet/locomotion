@@ -45,6 +45,9 @@
             "main": "Sorry, we couldn't find a driver for you",
             "sub": "All our drivers are busy right now. Please try again in a few minutes"
         },
+        "selectNumberOfPassenger": {
+            "main": "Select number of passenger"
+        },
         "defaultFooterButton": "OK"
     }
 }

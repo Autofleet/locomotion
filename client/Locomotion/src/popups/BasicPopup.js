@@ -6,10 +6,15 @@ import {
 import { getTogglePopupsState } from '../context/main';
 
 export default ({
-  id, title, subTitle, closeAfter,
+  id, title, subTitle, closeAfter, content, onClose,
 }) => {
   const [isPopupOpen, togglePopup] = getTogglePopupsState();
-  const closePopup = () => togglePopup(id, false);
+  const closePopup = () => {
+    if (onClose) {
+      onClose();
+    }
+    togglePopup(id, false);
+  };
   useEffect(() => {
     if (closeAfter) {
       setTimeout(closePopup, closeAfter);
@@ -22,6 +27,7 @@ export default ({
         <Content>
           <Title>{title}</Title>
           <SubTitle>{subTitle}</SubTitle>
+          {content ? content : undefined}
         </Content>
         <FooterButton onPress={closePopup} />
       </ModalContainer>

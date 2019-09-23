@@ -26,6 +26,7 @@ const rideService = {
         external_id: ride.id,
         webhook_url: `${webHookHost}/api/v1/ride-webhook/${ride.id}`,
         pooling: rideData.rideType === 'pooling' ? 'active' : 'no',
+        numberOfPassenger: ride.numberOfPassenger,
         stop_points: [
           {
             type: 'pickup',

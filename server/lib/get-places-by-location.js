@@ -31,7 +31,7 @@ const getFromAvailablePlaces = async (availablePlaces, closetPlace) => {
 module.exports = async (input, location) => {
   const availablePlaces = await getAvailablePlaces();
   let predictedAddresses = await getPredictedAddress(input, location);
-  if (availablePlaces && availablePlaces.length) {
+  if (availablePlaces && availablePlaces.length && predictedAddresses.length) {
     predictedAddresses = await getFromAvailablePlaces(availablePlaces, predictedAddresses[0]);
   }
   return predictedAddresses;

@@ -39,13 +39,15 @@ function useInterval(callback, delay) {
 
 export default ({ navigation }) => {
   const [activeRideState, setActiveRide] = useState(null);
+  const [preRideDetails, setPreRideDetails] = useState({});
   const [activeSpState, setActiveSp] = useState(null);
+  const [numberOfPassenger, setNumberOfPassenger] = useState(1);
   const [stopPoints, setStopPoints] = useState(null);
   const [, togglePopup] = getTogglePopupsState();
   const [requestStopPoints, setRequestStopPoints] = useState({
     openEdit: false,
   });
-  const [rideType, setRideType] = useState('private');
+  const [rideType, setRideType] = useState('pool');
 
   const loadActiveRide = async () => {
     const { data: response } = await network.get('api/v1/me/rides/active', { params: { activeRide: true } });
@@ -99,12 +101,27 @@ export default ({ navigation }) => {
     && state.dropoff && state.dropoff.lat
     && state.pickup && state.pickup.lat;
 
+  const loadPreRideDetails = async (origin, destination) => {
+    try {
+      const { data } = await network.get('api/v1/me/rides/pre', { params: { origin, destination } });
+      setPreRideDetails(data);
+    } catch (error) {
+      console.log('Got error while try to get pre detail on a ride', error);
+    }
+  }
+
   const onLocationSelect = (location) => {
     const newState = {
       ...requestStopPoints,
       [location.type]: location,
     };
-    newState.openEdit = !bookValidation(newState);
+    const bookValid = bookValidation(newState)
+    newState.openEdit = !bookValid;
+
+    if (bookValid) {
+      loadPreRideDetails(newState.pickup, newState.dropoff);
+    }
+
     setRequestStopPoints(newState);
   };
 
@@ -127,6 +144,7 @@ export default ({ navigation }) => {
       dropoffAddress: requestStopPoints.dropoff.description,
       dropoffLat: requestStopPoints.dropoff.lat,
       dropoffLng: requestStopPoints.dropoff.lng,
+      numberOfPassenger,
       rideType,
     });
     if (response.state === 'rejected') {
@@ -186,6 +204,9 @@ export default ({ navigation }) => {
         activeRide={activeRideState}
         rideType={rideType}
         setRideType={setRideType}
+        preRideDetails={preRideDetails}
+        onNumberOfPassengerChange={setNumberOfPassenger}
+        numberOfPassenger={numberOfPassenger}
       />
       {
           requestStopPoints.openEdit
