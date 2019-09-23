@@ -20,8 +20,6 @@ const rideService = {
       avatar, firstName, lastName, phoneNumber,
     } = await User.findById(userId, { attributes: ['avatar', 'firstName', 'lastName', 'phoneNumber'] });
 
-    console.log(rideData);
-    console.log(rideData.rideType === 'pool' ? 'active' : 'no', "rideData.rideType === 'pooling' ? 'active' : 'no'");
     try {
       const { data: afRide } = await demandApi.post('/api/v1/rides', {
         external_id: ride.id,
