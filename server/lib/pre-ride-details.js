@@ -43,7 +43,10 @@ const getRouteDistance = async (origin, destination) => {
 
 module.exports = async (origin, destination) => {
   const inAreaVehicles = await getAfNearbyVehiclesWithEta(origin);
-  const eta = (inAreaVehicles.slice(0, 3).reduce((count, vehicle) => count + vehicle.preEta, 0) / 3);
+  let eta;
+  if (inAreaVehicles.length) {
+    eta = (inAreaVehicles.slice(0, 3).reduce((min, vehicle) => (vehicle.preEta < min ? vehicle.preEta : min), inAreaVehicles[0].preEta));
+  }
   const routeDistance = await getRouteDistance(origin, destination);
   const estimatePrice = 1.5 + ((routeDistance / 1000) * 0.5);
 
