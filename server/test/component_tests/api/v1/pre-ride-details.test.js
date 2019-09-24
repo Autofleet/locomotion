@@ -20,8 +20,8 @@ describe('Pre ride details API', () => {
   it('Check pre ride details', async () => {
     const { accessToken } = await createUserAndLogin();
     const res = await request(app).get(`${baseUrl}/me/rides/pre`).query({
-      origin: { lat: 32.052425936877434, lng: 34.766836166381836 },
-      destination: { lat: 32.092318912093184, lng: 34.77919578552246 },
+      origin: JSON.stringify({ lat: 32.052425936877434, lng: 34.766836166381836 }),
+      destination: JSON.stringify({ lat: 32.092318912093184, lng: 34.77919578552246 }),
     }).set('Authorization', `Bearer ${accessToken}`);
     console.log('res', res.body);
     expect(res.statusCode).toBe(200);

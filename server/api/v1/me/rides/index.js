@@ -40,7 +40,7 @@ router.post('/cancel-active-ride', async (req, res) => {
 router.get('/pre', async (req, res) => {
   const { origin, destination } = req.query;
   const preRideDetails = await getPreRideDetails(JSON.parse(origin), JSON.parse(destination));
-  res.json(preRideDetails);
+  res.json({ ...preRideDetails });
 });
 
 module.exports = router;

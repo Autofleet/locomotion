@@ -1,4 +1,5 @@
 const axios = require('axios');
+const moment = require('moment');
 
 const demandApi = axios.create({
   baseURL: process.env.AF_BACKEND_URL,
@@ -11,16 +12,17 @@ const getAfNearbyVehiclesWithEta = async (location) => {
   try {
     const { data } = await demandApi.get('api/v1/nearby-vehicles', {
       params: {
-        location,
+        ...location,
         radius: process.env.RADIUS_FOR_CALC_PRE_RIDE_ETA,
         preEta: 3,
       },
     });
-    vehicles = data;
+    vehicles = data ? data.vehicles : data;
   } catch (error) {
     console.log('Got error while try to get nearby-vehicles from AF', error.message, error.stack);
     vehicles = [];
   }
+  console.log('vehicles', vehicles);
   return vehicles;
 };
 
@@ -38,17 +40,23 @@ const directions = async (origin, destination) => {
 
 const getRouteDistance = async (origin, destination) => {
   const directionResult = await directions(origin, destination);
-  return directionResult.routes[0].legs.reduce((routeDistance, leg) => routeDistance + leg.distance.value, 0);
+  return directionResult.routes.length ?
+    directionResult.routes[0].legs.reduce((routeDistance, leg) => routeDistance + leg.distance.value, 0.01) : false;
 };
 
 module.exports = async (origin, destination) => {
   const inAreaVehicles = await getAfNearbyVehiclesWithEta(origin);
   let eta;
   if (inAreaVehicles.length) {
-    eta = (inAreaVehicles.slice(0, 3).reduce((min, vehicle) => (vehicle.preEta < min ? vehicle.preEta : min), inAreaVehicles[0].preEta));
+    const now = moment();
+    eta = inAreaVehicles
+      .filter(vehicle => vehicle.preEta)
+      .map(vehicle => moment(vehicle.preEta).diff(now, 'minutes'))
+      .sort((preEtaA, preEtaB) => preEtaA > preEtaB);
+    eta = eta.length ? eta[0] : undefined;
   }
   const routeDistance = await getRouteDistance(origin, destination);
-  const estimatePrice = 1.5 + ((routeDistance / 1000) * 0.5);
+  const estimatePrice = routeDistance ? 1.5 + ((routeDistance / 1000) * 0.5) : undefined;
 
   return { eta, estimatePrice };
 };

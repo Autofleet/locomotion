@@ -1,6 +1,7 @@
 import React from 'react';
 import { View } from 'react-native';
 import styled from 'styled-components';
+import i18n from '../../../I18n';
 
 import Button from '../../../Components/Button';
 
@@ -129,8 +130,11 @@ const EtaTitleText = styled.Text`
 
 export const PreRideBox = styled(({ eta, estimatePrice, ...props }) => (
   <View {...props}>
-    <EtaContainer><EtaTitleText>ETA: </EtaTitleText><EtaText>{eta.toFixed(0)}</EtaText></EtaContainer>
-    <EtaContainer right><EtaTitleText>Estimate price: </EtaTitleText><EtaText>{estimatePrice.toFixed(0)}</EtaText></EtaContainer>
+    <EtaContainer><EtaTitleText>ETA: </EtaTitleText><EtaText>{eta ? eta.toFixed(0) : ''}</EtaText></EtaContainer>
+    <EtaContainer right>
+      <EtaTitleText>Estimate price: </EtaTitleText>
+      <EtaText>{estimatePrice ? estimatePrice.toFixed(0) : ''}{i18n.t('currency')}</EtaText>
+    </EtaContainer>
   </View>
   ))`
     padding: 10px 25px;

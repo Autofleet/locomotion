@@ -49,5 +49,6 @@
             "main": "Select number of passenger"
         },
         "defaultFooterButton": "OK"
-    }
+    },
+    "currency": "€"
 }
