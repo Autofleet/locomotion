@@ -662,7 +662,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "locomotion.passenger-app";
+				PRODUCT_BUNDLE_IDENTIFIER = "locomotion.rider-app";
 				PRODUCT_NAME = Locomotion;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "Locomotion-Bridging-Header.h";
@@ -689,7 +689,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "locomotion.passenger-app";
+				PRODUCT_BUNDLE_IDENTIFIER = "locomotion.rider-app";
 				PRODUCT_NAME = Locomotion;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "Locomotion-Bridging-Header.h";
