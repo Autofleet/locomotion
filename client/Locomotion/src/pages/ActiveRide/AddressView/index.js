@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
-import Config from 'react-native-config';
-import axios from 'axios';
+import Geolocation from '@react-native-community/geolocation';
+import network from '../../../services/network';
 import {
   View,
 } from 'react-native';
@@ -18,8 +18,6 @@ import {
   AddressSearchItemText,
 } from './styled';
 
-const { GOOGLE_MAPS_API_KEY } = Config;
-
 export default (props) => {
   const dropoffTextField = useRef(null);
   const [searchPickupText, setSearchPickupText] = useState(
@@ -32,6 +30,13 @@ export default (props) => {
   );
   const [addressListItems, setAddressListItems] = useState(null);
 
+  const enrichPlaceWithLocation = async (place) => {
+    const { data } = await network.get('api/v1/me/places/get-location', { params: {
+      placeId: place.placeid,
+    } });
+    place = { ...place, ...data };
+  }
+
   const setPlace = async (place) => {
     if (addressListItems.type === 'pickup') {
       setSearchPickupText(place.description);
@@ -40,20 +45,14 @@ export default (props) => {
       setSearchDropoffText(place.description);
     }
 
-    const { data } = await axios.get('https://maps.googleapis.com/maps/api/place/details/json', {
-      params: {
-        key: GOOGLE_MAPS_API_KEY,
-        placeid: place.place_id,
-      },
-    });
-
-    console.log(data.result.geometry.location);
+    if (!place.lat && place.placeid) {
+      await enrichPlaceWithLocation(place);
+    }
 
     if (props.onLocationSelect) {
       props.onLocationSelect({
+        ...place,
         type: addressListItems.type,
-        description: place.description,
-        ...data.result.geometry.location,
       });
     }
     setAddressListItems({
@@ -62,15 +61,26 @@ export default (props) => {
     });
   };
 
-  const loadAddress = async (input) => {
-    const { data } = await axios.get('https://maps.googleapis.com/maps/api/place/autocomplete/json', {
-      params: {
-        key: GOOGLE_MAPS_API_KEY,
-        input,
-      },
+  const getPosition = (options) => {
+    return new Promise((resolve, reject) => {
+      Geolocation.getCurrentPosition(resolve);
     });
-    console.log('loadAddressloadAddress', GOOGLE_MAPS_API_KEY);
-    return data.predictions;
+  }
+
+  const loadAddress = async (input) => {
+    try {
+      const { coords } = await getPosition();
+      const { data } = await network.get('api/v1/me/places', { params: {
+        input,
+        location: { lat: coords.latitude, lng: coords.longitude }
+      } });
+  
+      return data;
+    } catch (error) {
+      console.log('Got error while try to get places', error);
+      return undefined;
+    }
+
   };
 
   const setSearchValue = async (value, type) => {
@@ -83,7 +93,7 @@ export default (props) => {
 
     setAddressListItems({
       type,
-      list: await loadAddress(value),
+      ...{ list: value ? await loadAddress(value) : undefined, },
     });
   };
 

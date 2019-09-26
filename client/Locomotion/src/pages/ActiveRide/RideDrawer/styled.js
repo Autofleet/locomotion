@@ -1,4 +1,7 @@
+import React from 'react';
+import { View } from 'react-native';
 import styled from 'styled-components';
+import i18n from '../../../I18n';
 
 import Button from '../../../Components/Button';
 
@@ -112,6 +115,33 @@ export const RowContainer = styled.TouchableOpacity`
     border-bottom-width: 1;
   ` : null)}
 `;
+
+const EtaContainer = styled.View`
+  flex-direction: row;
+  align-self: flex-end;
+`;
+
+const EtaText = styled.Text`
+  
+`;
+const EtaTitleText = styled.Text`
+  font-weight: 500;
+`;
+
+export const PreRideBox = styled(({ eta, estimatePrice, ...props }) => (
+  <View {...props}>
+    <EtaContainer><EtaTitleText>ETA: </EtaTitleText><EtaText>{eta ? eta.toFixed(0) : ''}</EtaText></EtaContainer>
+    <EtaContainer right>
+      <EtaTitleText>Estimate price: </EtaTitleText>
+      <EtaText>{estimatePrice ? estimatePrice.toFixed(0) : ''}{i18n.t('currency')}</EtaText>
+    </EtaContainer>
+  </View>
+  ))`
+    padding: 10px 25px;
+    width: 100%;
+    justify-content: space-between;
+    flex-direction: row;
+  `;
 
 
 export const RideTypeButton = styled.TouchableOpacity`

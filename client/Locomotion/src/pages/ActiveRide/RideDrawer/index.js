@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import {
   View,
   Image,
@@ -7,10 +7,12 @@ import {
 import I18n from '../../../I18n';
 import {
   Drawer, RideCard, RideStatusText, RideDetailsText, RideButton, RideButtonText,
-  RideDetailsContainer, DriverAvatar
+  RideDetailsContainer, DriverAvatar, PreRideBox,
 } from './styled';
 import StopPointRow from './StopPointRow';
 import RideType from './RideType';
+import Switch from '../../../Components/Switch'
+import NumberOfPassenger from './NumberOfPassenger';
 
 const getRideState = (activeRide) => { // false, driverOnTheWay, driverArrived, onBoard
   if (!activeRide) {
@@ -27,7 +29,8 @@ const getRideState = (activeRide) => { // false, driverOnTheWay, driverArrived, 
 
 const RideDrawer = ({
   activeRide, openLocationSelect, requestStopPoints, setRideType,
-  cancelRide, createRide, readyToBook, rideType,
+  cancelRide, createRide, readyToBook, rideType, preRideDetails,
+  onNumberOfPassengerChange, numberOfPassenger,
 }) => {
   const [origin, destination] = activeRide ? activeRide.stop_points || [] : [];
   const rideState = getRideState(activeRide);
@@ -81,7 +84,13 @@ const RideDrawer = ({
         completedAt={rideState ? destination && destination.completed_at
           : undefined}
       />
-      {!rideState ? ( <RideType setRideType={setRideType} rideType={rideType}/> ) : null }
+      {!rideState ? (
+        <Fragment>
+          <NumberOfPassenger onChange={onNumberOfPassengerChange} amount={numberOfPassenger} />
+          {/* <Switch onChange={(active) => setRideType(active ? 'pool' : 'private')} active={rideType === 'pool'} /> */}
+          {preRideDetails.eta || preRideDetails.estimatePrice ? ( <PreRideBox {...preRideDetails} /> ) : null }
+        </Fragment>
+      ) : null }
       {rideState === 'onBoard' ? null
         : (
           <RideButton

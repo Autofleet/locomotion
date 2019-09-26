@@ -55,6 +55,10 @@ module.exports = (sequelize, DataTypes) => {
       field: 'dropoff_lng',
       allowNull: false,
     },
+    numberOfPassenger: {
+      type: DataTypes.INTEGER,
+      field: 'number_of_passenger',
+    },
     completedAt: {
       type: DataTypes.DATE,
       field: 'completed_at',

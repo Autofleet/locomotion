@@ -1,5 +1,6 @@
 const Router = require('../../../../lib/router');
 const rideService = require('../../../../lib/ride');
+const getPreRideDetails = require('../../../../lib/pre-ride-details');
 const { Ride } = require('../../../../models');
 
 const router = Router();
@@ -31,6 +32,15 @@ router.post('/cancel-active-ride', async (req, res) => {
   const ride = await rideService.cancelActiveRide(req.userId);
 
   res.json({ ride });
+});
+
+
+// Get origin destination
+// Return ETA + price estimate
+router.get('/pre', async (req, res) => {
+  const { origin, destination } = req.query;
+  const preRideDetails = await getPreRideDetails(JSON.parse(origin), JSON.parse(destination));
+  res.json({ ...preRideDetails });
 });
 
 module.exports = router;

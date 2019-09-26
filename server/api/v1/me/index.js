@@ -4,6 +4,7 @@ const userService = require('../../../lib/user');
 const router = Router();
 
 router.use('/rides', require('./rides'));
+router.use('/places', require('./places'));
 router.use('/image-upload', require('./upload-image'));
 
 router.get('/', async (req, res) => {
