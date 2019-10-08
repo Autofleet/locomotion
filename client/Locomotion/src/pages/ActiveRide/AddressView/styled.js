@@ -1,4 +1,7 @@
+import React, { useState } from 'react';
+import { View, TextInput } from 'react-native';
 import styled from 'styled-components';
+import xIcon from '../../../assets/x.png'
 
 export const AddressInputs = styled.View`
     position: absolute;
@@ -32,11 +35,53 @@ export const Address = styled.View`
     `}
 `;
 
-export const AddressTextInput = styled.TextInput`
+const ResetInputIcon = styled.Image.attrs({ source: xIcon })`
+    display: flex;
+    margin-top: 4px;
+
+    height: 13px;
+    width: 13px;
+`
+const ResetInputIconContainer = styled.TouchableOpacity`
+    display: flex;
+    height: 22px;
+    width: 20px;
+    margin-right: 10px;
+    margin-left: 10px;
+`;
+
+const AddressTextInputContainer = styled.View`
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+`;
+
+export const AddressTextInput = styled(({ value, onChangeText, ...props }) => {
+    const [focus, setFocus] = useState(false);
+    return (
+        <AddressTextInputContainer>
+            <TextInput
+                onFocus={() => setFocus(true)}
+                onBlur={() => setFocus(false)}
+                value={value}
+                onChangeText={onChangeText}
+                {...props}
+            />
+            {focus && value ? (
+                <ResetInputIconContainer onPress={() => onChangeText('')}>
+                    <ResetInputIcon />
+                </ResetInputIconContainer>
+            ) : undefined}
+        </AddressTextInputContainer>
+    );
+})`
     font-size: 18;
     color: #666666;
     margin-start: 16;
     min-width: 200;
+    display: flex;
+    flex: 1;
 `;
 
 export const OriginDot = styled.View`
@@ -78,9 +123,19 @@ export const RoutePointsContainer = styled.View`
 
 `;
 
-export const AddressSearchItem = styled.TouchableHighlight`
+export const AddressSearchItemTouchableHighlight = styled.TouchableHighlight`
     border-bottom-color: #f2f2f2;
     border-bottom-width: 1;
+`;
+
+export const AddressSearchItem = styled((props) => (
+    <AddressSearchItemTouchableHighlight>
+        <View {...props} />
+    </AddressSearchItemTouchableHighlight>
+))`
+    flex-direction: row;
+    width: 100%;
+    justify-content: space-between;
 `;
 
 export const AddressSearchItemText = styled.Text`
@@ -88,4 +143,14 @@ export const AddressSearchItemText = styled.Text`
     padding-bottom: 18;
     padding-left: 18;
     font-size: 16;
+    display: flex;
+`;
+
+export const DistanceFromAddress = styled.Text`
+    display: flex;
+    align-self: flex-end;
+    padding-right: 10px;
+    padding-bottom: 4px;
+    font-size: 12px;
+    color: grey;
 `;

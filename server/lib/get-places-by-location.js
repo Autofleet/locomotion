@@ -15,7 +15,7 @@ const getPredictedAddress = async (input, location) => {
   return data.predictions;
 };
 
-const getFromAvailablePlaces = async (availablePlaces, closetPlace) => {
+const getFromAvailablePlaces = async (availablePlaces, closetPlace, myLocation) => {
   const location = await getLocationByPlaceId(closetPlace.place_id);
   const availablePlacesWithDistance = availablePlaces.map(availablePlace => ({
     description: availablePlace.properties.name,
@@ -23,6 +23,7 @@ const getFromAvailablePlaces = async (availablePlaces, closetPlace) => {
     lat: availablePlace.geometry.coordinates[1],
     lng: availablePlace.geometry.coordinates[0],
     distance: turf.distance(turf.point([location.lng, location.lat]), turf.point(availablePlace.geometry.coordinates)),
+    distanceFromMe: turf.distance(turf.point([myLocation.lng, myLocation.lat]), turf.point(availablePlace.geometry.coordinates)),
   }));
 
   return availablePlacesWithDistance.sort((place1, place2) => (place1.distance - place2.distance));
@@ -32,7 +33,7 @@ module.exports = async (input, location) => {
   const availablePlaces = await getAvailablePlaces();
   let predictedAddresses = await getPredictedAddress(input, location);
   if (availablePlaces && availablePlaces.length && predictedAddresses.length) {
-    predictedAddresses = await getFromAvailablePlaces(availablePlaces, predictedAddresses[0]);
+    predictedAddresses = await getFromAvailablePlaces(availablePlaces, predictedAddresses[0], location);
   }
   return predictedAddresses;
 };

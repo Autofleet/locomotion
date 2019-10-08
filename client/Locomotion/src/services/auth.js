@@ -1,6 +1,7 @@
 import jwtDecode from 'jwt-decode';
 import StorageService from './storage';
 import AppSettings from './app-settings';
+import { Navigator } from './navigation';
 
 class Auth {
   static jwtVerify(token) {
