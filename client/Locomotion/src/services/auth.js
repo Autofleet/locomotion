@@ -25,6 +25,7 @@ class Auth {
         console.log('error when try to refresh the login token', error);
         if (error.response && error.response.status === 401) {
           if (this.onFaildAuthCallback) { this.onFaildAuthCallback(); }
+          this.logout(Navigator);
           return false;
         }
       }
