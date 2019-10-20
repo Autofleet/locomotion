@@ -38,7 +38,7 @@ export const Address = styled.View`
 const ResetInputIcon = styled.Image.attrs({ source: xIcon })`
     display: flex;
     margin-top: 4px;
-
+    
     height: 13px;
     width: 13px;
 `
@@ -48,6 +48,7 @@ const ResetInputIconContainer = styled.TouchableOpacity`
     width: 20px;
     margin-right: 10px;
     margin-left: 10px;
+    align-self: center;
 `;
 
 const AddressTextInputContainer = styled.View`
@@ -57,7 +58,7 @@ const AddressTextInputContainer = styled.View`
     width: 100%;
 `;
 
-export const AddressTextInput = styled(({ value, onChangeText, ...props }) => {
+export const AddressTextInput = styled(({ value, onChangeText, inputRef, ...props }) => {
     const [focus, setFocus] = useState(false);
     return (
         <AddressTextInputContainer>
@@ -66,6 +67,7 @@ export const AddressTextInput = styled(({ value, onChangeText, ...props }) => {
                 onBlur={() => setFocus(false)}
                 value={value}
                 onChangeText={onChangeText}
+                ref={inputRef}
                 {...props}
             />
             {focus && value ? (
@@ -123,15 +125,15 @@ export const RoutePointsContainer = styled.View`
 
 `;
 
-export const AddressSearchItemTouchableHighlight = styled.TouchableHighlight`
+export const AddressSearchItemTouchableOpacity = styled.TouchableOpacity`
     border-bottom-color: #f2f2f2;
     border-bottom-width: 1;
 `;
 
-export const AddressSearchItem = styled((props) => (
-    <AddressSearchItemTouchableHighlight>
+export const AddressSearchItem = styled(({ onPress, ...props}) => (
+    <AddressSearchItemTouchableOpacity onPress={onPress}>
         <View {...props} />
-    </AddressSearchItemTouchableHighlight>
+    </AddressSearchItemTouchableOpacity>
 ))`
     flex-direction: row;
     width: 100%;

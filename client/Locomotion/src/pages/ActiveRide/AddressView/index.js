@@ -20,7 +20,7 @@ import {
 } from './styled';
 
 export default (props) => {
-  const dropoffTextField = useRef(null);
+  const dropoffTextField = useRef();
   const [searchPickupText, setSearchPickupText] = useState(
     props.requestStopPoints.pickup
     && props.requestStopPoints.pickup.description,
@@ -124,7 +124,7 @@ export default (props) => {
               value={searchDropoffText}
               onChangeText={value => setSearchValue(value, 'dropoff')}
               placeholder={I18n.t('addressView.dropoffPlaceholder')}
-              ref={dropoffTextField}
+              inputRef={dropoffTextField}
             />
           </Address>
         </View>
