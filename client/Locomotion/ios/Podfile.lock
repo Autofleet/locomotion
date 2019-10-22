@@ -118,6 +118,8 @@ PODS:
     - React
   - react-native-maps (0.25.0):
     - React
+  - react-native-webview (7.4.3):
+    - React
   - React-RCTActionSheet (0.60.3):
     - React-Core (= 0.60.3)
   - React-RCTAnimation (0.60.3):
@@ -182,6 +184,7 @@ DEPENDENCIES:
   - react-native-image-picker (from `../node_modules/react-native-image-picker`)
   - react-native-image-resizer (from `../node_modules/react-native-image-resizer`)
   - react-native-maps (from `../node_modules/react-native-maps`)
+  - react-native-webview (from `../node_modules/react-native-webview`)
   - React-RCTActionSheet (from `../node_modules/react-native/Libraries/ActionSheetIOS`)
   - React-RCTAnimation (from `../node_modules/react-native/Libraries/NativeAnimation`)
   - React-RCTBlob (from `../node_modules/react-native/Libraries/Blob`)
@@ -246,6 +249,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-image-resizer"
   react-native-maps:
     :path: "../node_modules/react-native-maps"
+  react-native-webview:
+    :path: "../node_modules/react-native-webview"
   React-RCTActionSheet:
     :path: "../node_modules/react-native/Libraries/ActionSheetIOS"
   React-RCTAnimation:
@@ -301,6 +306,7 @@ SPEC CHECKSUMS:
   react-native-image-picker: 4ffb12aa6e9a09ac5ada77a8deaf3a3f6495aa34
   react-native-image-resizer: ecae22b577b0425cd7803eb8145243038dd4b6bd
   react-native-maps: 190c02ca533fddac5bb49cf17bdece3644612107
+  react-native-webview: dbfec7f16f09a71ea53731bdf5f86ae70eac4313
   React-RCTActionSheet: 9c42321fd5652515d706dd722c5a10b1970d7ec8
   React-RCTAnimation: fabb087dde8964c9a835a7fabd0e7e5701787913
   React-RCTBlob: 93f34281d9c9c9e216b25824309eed9fe22a5d41

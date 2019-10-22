@@ -9,6 +9,7 @@ import Auth from '../services/auth';
 import Login from './Login';
 
 import ActiveRide from './ActiveRide';
+import ContactUs from './ContactUs';
 import Onboarding from './Onboarding';
 
 const AppStack = createDrawerNavigator({
@@ -16,6 +17,12 @@ const AppStack = createDrawerNavigator({
     screen: ActiveRide,
     navigationOptions: {
       drawerLabel: 'Home',
+    },
+  },
+  ContactUs: {
+    screen: ContactUs,
+    navigationOptions: {
+      drawerLabel: 'Contact us',
     },
   },
   Logout: {
