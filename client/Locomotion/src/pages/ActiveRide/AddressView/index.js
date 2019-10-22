@@ -64,7 +64,7 @@ export default (props) => {
 
   const getPosition = (options) => {
     return new Promise((resolve, reject) => {
-      Geolocation.getCurrentPosition(resolve);
+      Geolocation.getCurrentPosition(resolve, reject, { enableHighAccuracy: true });
     });
   }
 

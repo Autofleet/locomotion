@@ -8,8 +8,10 @@ const getPredictedAddress = async (input, location) => {
     params: {
       key: process.env.GOOGLE_MAPS_API_KEY,
       input,
+      strictbounds: true,
+      radius: process.env.RADIUS_FOR_PLACE_API,
+      language: process.env.LANGUAGE_FOR_PLACE_API,
       location: `${location.lat},${location.lng}`,
-      // language: // Change the results lang
     },
   });
   return data.predictions;
