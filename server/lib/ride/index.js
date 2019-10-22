@@ -85,7 +85,9 @@ const rideService = {
 
     if (ride) {
       const afRide = await rideService.getRideFromAf(ride.id);
-      await demandApi.put(`/api/v1/rides/${afRide.id}/cancel`);
+      await demandApi.put(`/api/v1/rides/${afRide.id}/cancel`, {
+        cancellation_reason: 'user/cancellation',
+      });
       ride.state = 'canceled';
       await ride.save();
       return afRide;
