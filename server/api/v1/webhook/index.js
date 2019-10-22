@@ -32,6 +32,7 @@ router.put('/:rideId', async (req, res) => {
         dropoffLat: currentRide.dropoffLat,
         dropoffLng: currentRide.dropoffLng,
         dropoffAddress: currentRide.dropoffAddress,
+        numberOfPassenger: currentRide.numberOfPassenger,
       }, ride.userId);
     }
   }
