@@ -9,7 +9,7 @@ export default ({ children, style, ...props }) => {
   }
 
   return (
-    <SafeAreaView style={{ flex: 1 }} {...props} style={style}>
+    <SafeAreaView {...props} style={style}>
       {children}
     </SafeAreaView>
   );
