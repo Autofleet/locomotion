@@ -6,7 +6,7 @@ const router = Router();
 
 router.get('/', async (req, res) => {
   const { location, input } = req.query;
-  const places = await getPlacesByLocation(input, location);
+  const places = await getPlacesByLocation(input, JSON.parse(location));
   res.json(places);
 });
 

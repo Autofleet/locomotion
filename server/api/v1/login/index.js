@@ -66,6 +66,7 @@ router.post('/refresh', async (req, res) => {
       status: 'ERROR',
       msg: e.message,
     };
+    res.status(401);
   }
   res.json(result);
 });

@@ -23,7 +23,7 @@ router.put('/:rideId', async (req, res) => {
   } else if (req.body.ride.status === 'cancelled') {
     ride.state = 'canceled';
     await ride.save();
-    if (req.body.ride.cancelled_by.includes('fleet')) {
+    if (!req.body.ride.cancellation_reason.includes('user')) {
       const currentRide = ride.get();
       await rideService.create({
         pickupLat: currentRide.pickupLat,
@@ -32,6 +32,7 @@ router.put('/:rideId', async (req, res) => {
         dropoffLat: currentRide.dropoffLat,
         dropoffLng: currentRide.dropoffLng,
         dropoffAddress: currentRide.dropoffAddress,
+        numberOfPassenger: currentRide.numberOfPassenger,
       }, ride.userId);
     }
   }

@@ -2,7 +2,7 @@ import React, {
   useState, useEffect, useRef,
 } from 'react';
 import {
-  StyleSheet,
+  StyleSheet, PermissionsAndroid, Platform,
 } from 'react-native';
 import MapView, { Polyline, Marker } from 'react-native-maps';
 import polyline from '@mapbox/polyline';
@@ -40,6 +40,10 @@ function useInterval(callback, delay) {
 export default ({ navigation }) => {
   const [activeRideState, setActiveRide] = useState(null);
   const [preRideDetails, setPreRideDetails] = useState({});
+  const [mapRegion, setMapRegion] = useState({
+    latitudeDelta: 0.0922,
+    longitudeDelta: 0.0421,
+  });
   const [activeSpState, setActiveSp] = useState(null);
   const [numberOfPassenger, setNumberOfPassenger] = useState(1);
   const [stopPoints, setStopPoints] = useState(null);
@@ -48,6 +52,8 @@ export default ({ navigation }) => {
     openEdit: false,
   });
   const [rideType, setRideType] = useState('pool');
+
+  const mapInstance = useRef();
 
   const loadActiveRide = async () => {
     const { data: response } = await network.get('api/v1/me/rides/active', { params: { activeRide: true } });
@@ -69,7 +75,7 @@ export default ({ navigation }) => {
         if (!activeRideState || activeRideState.state !== activeRide.state
           || activeSp.id !== activeSpState.id) {
           setTimeout(() => {
-            this.map.fitToElements(true);
+            mapInstance.current.fitToElements(true);
           }, 500);
         }
       }
@@ -159,14 +165,36 @@ export default ({ navigation }) => {
     return loadActiveRide();
   };
 
+  const showsUserLocation = !activeRideState || !activeRideState.vehicle;
+
   return (
     <PageContainer>
       <MapView
+        showsUserLocation={showsUserLocation}
         style={StyleSheet.absoluteFillObject}
+        showsMyLocationButton={false}
+        loadingEnabled
+        key="map"
         followsUserLocation
-        showsMyLocationButton
-        showsUserLocation={!activeRideState || !activeRideState.vehicle}
-        ref={ref => this.map = ref}
+        onUserLocationChange={(event) => {
+          if (Platform.OS === 'ios' || !showsUserLocation) {
+            return; // Follow user location works for iOS
+          }
+          const { coordinate } = event.nativeEvent;
+          mapInstance.current.animateToRegion({latitude: coordinate.latitude, longitude: coordinate.longitude,
+            latitudeDelta: mapRegion.latitudeDelta, longitudeDelta: mapRegion.longitudeDelta}, 1000);
+
+          setMapRegion(oldMapRegion => ({
+            ...oldMapRegion,
+            ...coordinate,
+          }))
+        }}
+        ref={mapInstance}
+        onMapReady={() => {
+          PermissionsAndroid.request(
+            PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION
+          );
+        }}
       >
         {activeSpState
           ? (

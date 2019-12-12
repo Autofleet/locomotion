@@ -11,6 +11,7 @@ const {
   AUTH_REFRESH_SECRET_KEY,
   AUTH_ACCESS_TOKEN_LIFETIME,
   AUTH_REFRESH_TOKEN_LIFETIME,
+  VERIFICATION_BYPASS_CODE,
 } = process.env;
 
 
@@ -83,6 +84,10 @@ class Auth {
 
     if (verification) {
       await verification.destroy();
+      return true;
+    }
+
+    if (VERIFICATION_BYPASS_CODE && externalCode === VERIFICATION_BYPASS_CODE) {
       return true;
     }
 

@@ -79,7 +79,6 @@ export const RideButton = styled(Button)`
     if (inRide) {
       return 'background-color: red;';
     }
-    console.log('aasdsadadsa', readyToBook);
     if (readyToBook) {
       return 'background-color: #00435c;';
     }

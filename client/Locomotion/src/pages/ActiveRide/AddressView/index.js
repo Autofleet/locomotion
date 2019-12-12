@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, Fragment } from 'react';
 import Geolocation from '@react-native-community/geolocation';
 import network from '../../../services/network';
 import {
@@ -16,10 +16,11 @@ import {
   RoutePointsContainer,
   AddressSearchItem,
   AddressSearchItemText,
+  DistanceFromAddress,
 } from './styled';
 
 export default (props) => {
-  const dropoffTextField = useRef(null);
+  const dropoffTextField = useRef();
   const [searchPickupText, setSearchPickupText] = useState(
     props.requestStopPoints.pickup
     && props.requestStopPoints.pickup.description,
@@ -63,7 +64,7 @@ export default (props) => {
 
   const getPosition = (options) => {
     return new Promise((resolve, reject) => {
-      Geolocation.getCurrentPosition(resolve);
+      Geolocation.getCurrentPosition(resolve, reject, { enableHighAccuracy: true });
     });
   }
 
@@ -107,18 +108,24 @@ export default (props) => {
               <OriginDot />
               <PointsLine />
             </RoutePointsContainer>
-            <View>
-              <AddressTextInput value={searchPickupText} onChangeText={value => setSearchValue(value, 'pickup')} autoFocus placeholder={I18n.t('addressView.pickupPlaceholder')} />
-            </View>
+            <AddressTextInput
+              value={searchPickupText}
+              onChangeText={value => setSearchValue(value, 'pickup')}
+              autoFocus
+              placeholder={I18n.t('addressView.pickupPlaceholder')}
+            />
           </Address>
           <Address>
             <RoutePointsContainer bottomLine>
               <PointsLine />
               <DestinationDot />
             </RoutePointsContainer>
-            <View>
-              <AddressTextInput value={searchDropoffText} onChangeText={value => setSearchValue(value, 'dropoff')} placeholder={I18n.t('addressView.dropoffPlaceholder')} ref={dropoffTextField} />
-            </View>
+            <AddressTextInput
+              value={searchDropoffText}
+              onChangeText={value => setSearchValue(value, 'dropoff')}
+              placeholder={I18n.t('addressView.dropoffPlaceholder')}
+              inputRef={dropoffTextField}
+            />
           </Address>
         </View>
       </AddressInputsHeader>
@@ -131,6 +138,9 @@ export default (props) => {
             <AddressSearchItemText>
               {item.description}
             </AddressSearchItemText>
+            <DistanceFromAddress>
+              {item.distance ? item.distanceFromMe.toFixed(2) : null}km
+            </DistanceFromAddress>
           </AddressSearchItem>
         ))}
       </View>

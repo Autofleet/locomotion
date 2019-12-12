@@ -23,7 +23,7 @@ const rideService = {
     try {
       const { data: afRide } = await demandApi.post('/api/v1/rides', {
         external_id: ride.id,
-        webhook_url: `${webHookHost}/api/v1/ride-webhook/${ride.id}`,
+        webhook_url: `${webHookHost}/api/v1/ride-webhook/${ride.id}`.replace(/\/\//g, '/'),
         pooling: rideData.rideType === 'pool' ? 'active' : 'no',
         number_of_passengers: ride.numberOfPassenger,
         stop_points: [
@@ -85,7 +85,9 @@ const rideService = {
 
     if (ride) {
       const afRide = await rideService.getRideFromAf(ride.id);
-      await demandApi.put(`/api/v1/rides/${afRide.id}/cancel`);
+      await demandApi.put(`/api/v1/rides/${afRide.id}/cancel`, {
+        cancellation_reason: 'user/cancellation',
+      });
       ride.state = 'canceled';
       await ride.save();
       return afRide;

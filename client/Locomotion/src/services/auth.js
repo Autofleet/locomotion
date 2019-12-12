@@ -1,6 +1,7 @@
 import jwtDecode from 'jwt-decode';
 import StorageService from './storage';
 import AppSettings from './app-settings';
+import { Navigator } from './navigation';
 
 class Auth {
   static jwtVerify(token) {
@@ -22,10 +23,9 @@ class Auth {
         response = await network.post('api/v1/login/refresh', { refreshToken });
       } catch (error) {
         console.log('error when try to refresh the login token', error);
-        if (error.response && error.response.status === 401) {
-          if (this.onFaildAuthCallback) { this.onFaildAuthCallback(); }
-          return false;
-        }
+        if (this.onFaildAuthCallback) { this.onFaildAuthCallback(); }
+        this.logout();
+        return false;
       }
 
       if (response.data && response.data.accessToken) {
@@ -39,7 +39,7 @@ class Auth {
     return accessToken;
   }
 
-  logout = async (navigation) => {
+  logout = async () => {
     // TODO: call server on logout
     // try {
     //   await network.post('api/v1/me/logout')
@@ -47,7 +47,7 @@ class Auth {
     //   console.log('Bad logout request', e)
     // }
     await AppSettings.destroy();
-    return navigation.navigate('Auth');
+    return Navigator.navigate('Auth');
   }
 
   onFaildAuth(cb) {

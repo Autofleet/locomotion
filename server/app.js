@@ -9,7 +9,6 @@ const app = new SExpress({
 });
 
 const serverRunningSince = new Date();
-
 app.get('/', (req, res) => {
   res.json({
     name: packageJson.name,
