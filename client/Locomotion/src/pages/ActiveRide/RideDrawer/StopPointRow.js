@@ -53,7 +53,7 @@ const AddressTextCont = styled.View`
 
 const AddressText = styled.Text`
   font-size: 13;
-  color: #666666;
+  color: #899EC6;
   margin-start: 22;
   margin-end: 16;
 `;

@@ -56,48 +56,52 @@ export default ({ navigation }) => {
   const mapInstance = useRef();
 
   const loadActiveRide = async () => {
-    const { data: response } = await network.get('api/v1/me/rides/active', { params: { activeRide: true } });
-    const activeRide = response.ride;
-    if (activeRide) {
-      const [pickup, dropoff] = activeRide.stop_points;
-      setStopPoints({
-        pickup,
-        dropoff,
-      });
-      let activeSp = activeRide.stop_points.find(sp => sp.state === 'pending');
-      if (activeSp && activeSp.polyline) {
-        activeSp = {
-          ...activeSp,
-          polyline: polyline.decode(activeSp.polyline)
-            .map(tuple => ({ latitude: tuple[0], longitude: tuple[1] })),
-        };
-        setActiveSp(activeSp);
-        if (!activeRideState || activeRideState.state !== activeRide.state
-          || activeSp.id !== activeSpState.id) {
-          setTimeout(() => {
-            mapInstance.current.fitToElements(true);
-          }, 500);
+    try {
+      const { data: response } = await network.get('api/v1/me/rides/active', { params: { activeRide: true } });
+      const activeRide = response.ride;
+      if (activeRide) {
+        const [pickup, dropoff] = activeRide.stop_points;
+        setStopPoints({
+          pickup,
+          dropoff,
+        });
+        let activeSp = activeRide.stop_points.find(sp => sp.state === 'pending');
+        if (activeSp && activeSp.polyline) {
+          activeSp = {
+            ...activeSp,
+            polyline: polyline.decode(activeSp.polyline)
+              .map(tuple => ({ latitude: tuple[0], longitude: tuple[1] })),
+          };
+          setActiveSp(activeSp);
+          if (!activeRideState || activeRideState.state !== activeRide.state
+            || activeSp.id !== activeSpState.id) {
+            setTimeout(() => {
+              mapInstance.current.fitToElements(true);
+            }, 500);
+          }
         }
+        return setActiveRide(activeRide);
       }
-      return setActiveRide(activeRide);
-    }
 
-    if (activeRideState && activeRideState.stop_points[0].completed_at) {
-      // Ride completed
-      togglePopup('rideOver', true);
+      if (activeRideState && activeRideState.stop_points[0].completed_at) {
+        // Ride completed
+        togglePopup('rideOver', true);
+      }
+      if (activeRideState && !activeRideState.stop_points[0].completed_at) {
+        // Ride canceled
+        togglePopup('rideCancel', true);
+      }
+      setActiveSp(null);
+      setStopPoints(null);
+      return setActiveRide(null);
+    } catch(e) {
+      console.log(e)
     }
-    if (activeRideState && !activeRideState.stop_points[0].completed_at) {
-      // Ride canceled
-      togglePopup('rideCancel', true);
-    }
-    setActiveSp(null);
-    setStopPoints(null);
-    return setActiveRide(null);
   };
 
   useInterval(() => {
     loadActiveRide();
-  }, 5000);
+  }, 5 * 1000);
 
   useEffect(() => {
     loadActiveRide();
@@ -109,7 +113,17 @@ export default ({ navigation }) => {
 
   const loadPreRideDetails = async (origin, destination) => {
     try {
-      const { data } = await network.get('api/v1/me/rides/pre', { params: { origin, destination } });
+      const { data } = await network.get('api/v1/me/rides/pre', { params: {
+        origin: {
+          lat: origin.lat,
+          lng: origin.lng,
+        },
+        destination: {
+          lat: destination.lat,
+          lng: destination.lng,
+        }
+      }
+    });
       setPreRideDetails(data);
     } catch (error) {
       console.log('Got error while try to get pre detail on a ride', error);
@@ -121,6 +135,7 @@ export default ({ navigation }) => {
       ...requestStopPoints,
       [location.type]: location,
     };
+    console.log(newState)
     const bookValid = bookValidation(newState)
     newState.openEdit = !bookValid;
 
@@ -191,9 +206,11 @@ export default ({ navigation }) => {
         }}
         ref={mapInstance}
         onMapReady={() => {
-          PermissionsAndroid.request(
-            PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION
-          );
+          if(Platform.OS === 'android') {
+            PermissionsAndroid.request(
+              PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION
+            );
+          }
         }}
       >
         {activeSpState

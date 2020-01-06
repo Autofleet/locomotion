@@ -39,28 +39,29 @@ const RideDrawer = ({
     <Drawer>
       {rideState ? (
         <RideCard>
-          <RideStatusText state={rideState}>
-            {` ${I18n.t(`home.rideStates.${rideState}`)} `}
-          </RideStatusText>
           <RideDetailsContainer>
             <View style={{ flex: 1 }}>
-              <DriverAvatar source={{ uri: activeRide.driver.avatar }} />
-              <RideDetailsText> Driver: </RideDetailsText>
-              <RideDetailsText>
-                {` ${activeRide.driver.first_name} ${activeRide.driver.last_name} `}
-              </RideDetailsText>
-            </View>
-            <View style={{ flex: 1, textAlign: 'right' }}>
               <Image
                 style={{
-                  width: 80, height: 30, marginBottom: 10, alignSelf: 'flex-end',
+                  width: 200,
+                  height: 150,
+                  marginBottom: 10,
+                  alignSelf: 'center',
+                  resizeMode:"contain"
                 }}
                 source={{ uri: activeRide.vehicle.image }}
               />
-              <RideDetailsText right>
+              <DriverAvatar source={{ uri: activeRide.driver.avatar }} />
+                <RideStatusText state={rideState}>
+                  {` ${I18n.t(`home.rideStates.${rideState}`, {
+                    driverName: ` ${activeRide.driver.first_name} ${activeRide.driver.last_name}`
+                  })} `}
+                </RideStatusText>
+                
+              <RideDetailsText>
                 {` ${activeRide.vehicle.model} (${activeRide.vehicle.color}) `}
               </RideDetailsText>
-              <RideDetailsText right>{activeRide.vehicle.license_number}</RideDetailsText>
+              <RideDetailsText>{activeRide.vehicle.license_number}</RideDetailsText>
             </View>
           </RideDetailsContainer>
         </RideCard>

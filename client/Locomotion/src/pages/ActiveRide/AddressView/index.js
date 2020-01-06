@@ -33,9 +33,10 @@ export default (props) => {
 
   const enrichPlaceWithLocation = async (place) => {
     const { data } = await network.get('api/v1/me/places/get-location', { params: {
-      placeId: place.placeid,
+      placeId: place.place_id,
     } });
-    place = { ...place, ...data };
+    console.log({ data})
+    return { ...place, ...data };
   }
 
   const setPlace = async (place) => {
@@ -46,9 +47,12 @@ export default (props) => {
       setSearchDropoffText(place.description);
     }
 
-    if (!place.lat && place.placeid) {
-      await enrichPlaceWithLocation(place);
+    console.log(place)
+    if (!place.lat && place.place_id) {
+      console.log('enrichPlaceWithLocation')
+      place = await enrichPlaceWithLocation(place);
     }
+    console.log(place)
 
     if (props.onLocationSelect) {
       props.onLocationSelect({
@@ -74,7 +78,7 @@ export default (props) => {
       const { data } = await network.get('api/v1/me/places', { params: {
         input,
         location: { lat: coords.latitude, lng: coords.longitude }
-      } });
+      }});
   
       return data;
     } catch (error) {

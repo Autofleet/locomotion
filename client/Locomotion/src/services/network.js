@@ -1,5 +1,5 @@
 import axios from 'axios';
-
+import qs from 'qs';
 import Auth from './auth';
 import AppSettings from './app-settings';
 
@@ -17,11 +17,12 @@ class Network {
   static defaultSettings = {
     baseURL: '/',
     timeout: 2500,
+    paramsSerializer: params => qs.stringify(params, { arrayFormat: 'brackets' }),
   }
 
   constructor(settings = {}) {
     this.settings = Object.assign(Network.defaultSettings, settings);
-    this.axios = axios.create(settings);
+    this.axios = axios.create(this.settings);
     this.axios.interceptors.request.use((request) => {
       console.log(`Starting Request [${request.method}] ${request.url}`, request);
       return request;

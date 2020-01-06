@@ -4,18 +4,24 @@ const getAvailablePlaces = require('./get-available-places');
 const getLocationByPlaceId = require('./get-location-by-place-id');
 
 const getPredictedAddress = async (input, location) => {
-  const { data } = await axios.get('https://maps.googleapis.com/maps/api/place/autocomplete/json', {
-    params: {
-      key: process.env.GOOGLE_MAPS_API_KEY,
-      input,
-      strictbounds: true,
-      radius: process.env.RADIUS_FOR_PLACE_API,
-      language: process.env.LANGUAGE_FOR_PLACE_API,
-      location: `${location.lat},${location.lng}`,
-    },
-  });
-  return data.predictions;
+  try {
+    const { data } = await axios.get('https://maps.googleapis.com/maps/api/place/autocomplete/json', {
+      params: {
+        key: process.env.GOOGLE_MAPS_API_KEY,
+        input,
+        strictbounds: true,
+        radius: process.env.RADIUS_FOR_PLACE_API,
+        language: process.env.LANGUAGE_FOR_PLACE_API,
+        location: `${location.lat},${location.lng}`,
+      },
+    });
+    return data.predictions;
+  } catch (e) {
+    // console.error(e);
+    throw e;
+  }
 };
+
 
 const getFromAvailablePlaces = async (availablePlaces, closetPlace, myLocation) => {
   const location = await getLocationByPlaceId(closetPlace.place_id);
@@ -32,8 +38,12 @@ const getFromAvailablePlaces = async (availablePlaces, closetPlace, myLocation) 
 };
 
 module.exports = async (input, location) => {
-  const availablePlaces = await getAvailablePlaces();
-  let predictedAddresses = await getPredictedAddress(input, location);
+  const promises = await Promise.all([
+    (process.env.GCP_STORAGE_BUCKET_NAME ? await getAvailablePlaces() : []),
+    getPredictedAddress(input, location),
+  ]);
+  const [availablePlaces] = promises;
+  let [, predictedAddresses] = promises;
   if (availablePlaces && availablePlaces.length && predictedAddresses.length) {
     predictedAddresses = await getFromAvailablePlaces(availablePlaces, predictedAddresses[0], location);
   }

@@ -39,7 +39,7 @@ router.post('/cancel-active-ride', async (req, res) => {
 // Return ETA + price estimate
 router.get('/pre', async (req, res) => {
   const { origin, destination } = req.query;
-  const preRideDetails = await getPreRideDetails(JSON.parse(origin), JSON.parse(destination));
+  const preRideDetails = await getPreRideDetails(origin, destination);
   res.json({ ...preRideDetails });
 });
 

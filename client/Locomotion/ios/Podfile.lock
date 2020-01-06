@@ -154,6 +154,8 @@ PODS:
     - SDWebImageWebPCoder (~> 0.2.3)
   - RNGestureHandler (1.3.0):
     - React
+  - RNSVG (9.13.6):
+    - React
   - SDWebImage (5.0.6):
     - SDWebImage/Core (= 5.0.6)
   - SDWebImage/Core (5.0.6)
@@ -199,6 +201,7 @@ DEPENDENCIES:
   - RNDeviceInfo (from `../node_modules/react-native-device-info`)
   - RNFastImage (from `../node_modules/react-native-fast-image`)
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
+  - RNSVG (from `../node_modules/react-native-svg`)
   - yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
 SPEC REPOS:
@@ -279,6 +282,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-fast-image"
   RNGestureHandler:
     :path: "../node_modules/react-native-gesture-handler"
+  RNSVG:
+    :path: "../node_modules/react-native-svg"
   yoga:
     :path: "../node_modules/react-native/ReactCommon/yoga"
 
@@ -321,6 +326,7 @@ SPEC CHECKSUMS:
   RNDeviceInfo: bdc3e922b2ed0f086e9d9ab534e61bc316f08576
   RNFastImage: 9b0c22643872bb7494c8d87bbbb66cc4c0d9e7a2
   RNGestureHandler: 5329a942fce3d41c68b84c2c2276ce06a696d8b0
+  RNSVG: 8ba35cbeb385a52fd960fd28db9d7d18b4c2974f
   SDWebImage: 920f1a2ff1ca8296ad34f6e0510a1ef1d70ac965
   SDWebImageWebPCoder: 7568737603c50f6237850afedd7e9e28e5917e6b
   yoga: 843fe25849b56131275bf3e5da2c468e96f68aff

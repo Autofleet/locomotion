@@ -1,8 +1,12 @@
 const { gcsGetFile } = require('./google-storage');
 
 const availablePlacesPromise = (async () => {
-  const data = await gcsGetFile('locations.json');
-  return JSON.parse(data);
+  if (process.env.GCP_STORAGE_BUCKET_NAME) {
+    console.log('ss');
+    const data = await gcsGetFile('locations.json');
+    return JSON.parse(data);
+  }
+  return [];
 })();
 
 module.exports = async () => {

@@ -30,7 +30,6 @@ export const ErrorText = styled.Text`
   color: ${loginTextColor};
   margin-bottom: -18px;
 `;
-
 export const TextInput = styled.TextInput`
   background-color: white;
   width: 100%;

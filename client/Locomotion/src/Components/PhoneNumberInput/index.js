@@ -2,6 +2,8 @@ import React from 'react';
 import propsTypes from 'prop-types';
 import { View, StyleSheet } from 'react-native';
 import RNPickerSelect from 'react-native-picker-select';
+
+import { Button, Input, Text } from '@ui-kitten/components';
 import glibphonenumber from 'google-libphonenumber';
 
 import { PrefixView } from './styled';
@@ -107,7 +109,7 @@ export default class PhoneNumberInput extends React.Component {
             hideIcon
           />
         </PrefixView>
-        <TextInput
+        <Input
           testID="phoneInput"
           onChangeText={this.onInput}
           keyboardType="numeric"

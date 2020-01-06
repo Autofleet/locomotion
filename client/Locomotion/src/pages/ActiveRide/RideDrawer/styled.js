@@ -7,14 +7,15 @@ import Button from '../../../Components/Button';
 
 export const Drawer = styled.View`
   position: absolute;
-  bottom: 50;
+  bottom: 80;
   width: 90%;
   background-color: #fff;
   left: 5%;
   border-radius: 10;
-  shadow-offset: 0px 0px;
-  shadow-color: #04214f;
-  shadow-opacity: 0.4;
+  shadow-offset: 0px 10px;
+  shadow-color: #212b44;
+  shadow-opacity: 0.3;
+  shadow-radius: 10px;
 `;
 
 const address = `
@@ -24,6 +25,7 @@ const address = `
   padding-start: 24;
   align-items: center;
   flex-direction: row;
+  color: #212b44;
 `;
 
 
@@ -37,10 +39,12 @@ export const RideCard = styled.View`
 `;
 
 export const DriverAvatar = styled.Image`
-  width: 30px;
-  height: 30px;
+  width: 60px;
+  height: 60px;
   border-radius: 100;
-  margin-left: 15px;
+  margin-top: -100px;
+  align-self: center;
+  margin-left: 50%;
   border-width: 1px;
   border-color: #a7a7a7;
   margin-bottom: 10px;
@@ -48,21 +52,23 @@ export const DriverAvatar = styled.Image`
 
 const styleForDriverIsArrivedState = `
   height: 60px;
-  color: #00aeef;
+  color: #212b44;
   margin-top: 40px;
 `;
 
 export const RideStatusText = styled.Text`
   font-size: 16;
   color: #666666;
-  margin-start: 12;
+  align-self: center;
+  margin-top: 10px;
   ${({ state }) => (state === 'driverArrived' ? styleForDriverIsArrivedState : null)}
 `;
 
 export const RideDetailsText = styled.Text`
   font-size: 13;
-  color: #666666;
-  margin-start: 10;
+  color: #212b44;
+  margin-top: 6px;
+  align-self: center;
   text-align: ${({ right }) => (right ? 'right' : 'left')};
   /* background-color: red; */
 `;
@@ -77,7 +83,7 @@ export const RideButton = styled(Button)`
   align-items: center;
   ${({ inRide, readyToBook }) => {
     if (inRide) {
-      return 'background-color: red;';
+      return 'background-color: #f03a5f;';
     }
     if (readyToBook) {
       return 'background-color: #00435c;';

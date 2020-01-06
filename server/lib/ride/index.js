@@ -23,7 +23,7 @@ const rideService = {
     try {
       const { data: afRide } = await demandApi.post('/api/v1/rides', {
         external_id: ride.id,
-        webhook_url: `${webHookHost}/api/v1/ride-webhook/${ride.id}`.replace(/\/\//g, '/'),
+        webhook_url: `${webHookHost}/api/v1/ride-webhook/${ride.id}`,
         pooling: rideData.rideType === 'pool' ? 'active' : 'no',
         number_of_passengers: ride.numberOfPassenger,
         stop_points: [
@@ -48,12 +48,17 @@ const rideService = {
         ],
       });
 
+      console.log({
+        afRide,
+      });
+
       if (afRide.status === 'rejected') {
         ride.state = 'rejected';
       } else {
         ride.state = 'active';
       }
     } catch (e) {
+      console.log(e);
       ride.state = 'rejected';
     }
 

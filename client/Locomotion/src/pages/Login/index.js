@@ -4,9 +4,9 @@ import { Image } from 'react-native';
 import network from '../../services/network';
 import Auth from '../../services/auth';
 
-import SubmitButton from '../../Components/Button/Gradient';
+import { Button, Input, Text } from '@ui-kitten/components';
 import {
-  Container, Text, ErrorText, ResendButton,
+  Container, ErrorText, ResendButton,
 } from './styled';
 import I18n from '../../I18n';
 import PhoneNumberInput from '../../Components/PhoneNumberInput';
@@ -142,12 +142,12 @@ export default ({ navigation }) => {
           source={LogoIconSource}
         />
       </SafeView>
+      <Text appearance='hint'>{I18n.t(`${isVertStep ? 'login.verificationCodeInstructions' : 'login.loginPageInstructions'}`)}</Text>
       {renderRelevantInput()}
-      <Text>{I18n.t(`${isVertStep ? 'login.verificationCodeInstructions' : 'login.loginPageInstructions'}`)}</Text>
       {loginState.error ? <ErrorText>{loginState.error}</ErrorText> : undefined }
-      <SubmitButton onPress={isVertStep ? onVert : onSubmitPhoneNumber}>
+      <Button onPress={isVertStep ? onVert : onSubmitPhoneNumber}>
         {I18n.t(`login.${isVertStep ? 'submitVertButton' : 'submitPhoneNumberButton'}`)}
-      </SubmitButton>
+      </Button>
       {isVertStep ? <ResendButton onPress={resendVertCode}>{I18n.t('login.resendButton')}</ResendButton> : undefined}
     </Container>
   );
