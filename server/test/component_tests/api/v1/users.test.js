@@ -32,9 +32,12 @@ describe('Users Endpoints', () => {
     });
   };
 
+  beforeAll(async () => {
+    expect((await request(app).get('/')).status).toBe(200);
+  });
+
   beforeEach(async () => {
     await clearDatabase();
-    expect((await request(app).get('/')).status).toBe(200);
   });
 
   it('test create new user', async () => {
@@ -54,11 +57,33 @@ describe('Users Endpoints', () => {
 
   it('test get first user', async () => {
     await initDatabase();
-    const userId = firstUserData.id;
-    const res = await request(app).get(`${baseUrl}/${userId}`);
+    const res = await request(app).get(`${baseUrl}/${firstUserData.id}`);
     expect(res.statusCode).toBe(200);
     expect(res.body).toBeDefined();
     expect(res.body.id).toEqual(firstUserData.id);
+  });
+
+  it('test update user', async () => {
+    const newFirstName = 'tester shmester';
+    await initDatabase();
+    const res = await request(app).patch(`${baseUrl}/${firstUserData.id}`).send({
+      firstName: newFirstName,
+    });
+    expect(res.statusCode).toBe(200);
+    expect(res.body).toBeDefined();
+    expect(res.body.id).toEqual(firstUserData.id);
+    expect(res.body.firstName).toEqual(newFirstName);
+  });
+
+  it('test delete user', async () => {
+    await initDatabase();
+    const res = await request(app).get(`${baseUrl}/${firstUserData.id}`);
+    expect(res.statusCode).toBe(200);
+    expect(res.body).toBeDefined();
+    expect(res.body.id).toEqual(firstUserData.id);
+
+    const delRes = await request(app).delete(`${baseUrl}/${firstUserData.id}`);
+    expect(delRes.statusCode).toBe(200);
   });
 });
 

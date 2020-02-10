@@ -21,4 +21,17 @@ router.get('/:userId', async (req, res) => {
   res.json(response);
 });
 
+router.patch('/:userId', async (req, res) => {
+  const { userId } = req.params;
+  const userData = req.body;
+  const response = await userService.update(userId, userData);
+  res.json(response);
+});
+
+router.delete('/:userId', async (req, res) => {
+  const { userId } = req.params;
+  const response = await userService.destroy(userId);
+  res.json(response);
+});
+
 module.exports = router;

@@ -47,7 +47,6 @@ const UserService = {
     const res = await User.destroy({
       where: {
         id,
-        state: 'offline',
       },
     });
 
