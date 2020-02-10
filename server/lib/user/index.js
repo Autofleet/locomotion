@@ -9,13 +9,14 @@ const UserService = {
     return User.findById(id);
   },
   async list(ids) {
-    return User.findAll({
+    const options = ids ? {
       where: {
         id: {
           [Op.in]: ids,
         },
       },
-    });
+    } : {};
+    return User.findAll(options);
   },
   async findByRefreshTokenId(refreshTokenId) {
     return User.findOne({
@@ -46,7 +47,6 @@ const UserService = {
     const res = await User.destroy({
       where: {
         id,
-        state: 'offline',
       },
     });
 
