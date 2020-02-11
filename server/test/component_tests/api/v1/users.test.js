@@ -3,7 +3,7 @@ const app = require('../../../../app');
 const { User, Verification } = require('../../../../models');
 
 describe('Users Endpoints', () => {
-  const baseUrl = '/api/v1';
+  const baseUrl = '/api/v1/admin';
   const usersApiUrl = `${baseUrl}/users`;
   let acToken;
   const firstUserData = {
@@ -37,11 +37,11 @@ describe('Users Endpoints', () => {
   beforeAll(async () => {
     expect((await request(app).get('/')).status).toBe(200);
 
-    const res = await request(app).post(`${baseUrl}/admin/auth`).send({
+    const res = await request(app).post(`${baseUrl}/auth`).send({
       userName: 'admin',
       password: '1234',
     });
-    if (!res.body.token) throw new Error('jwt token is needed for this test!');
+    if (!res.body.token) throw new Error(`admin login is needed for this test! resp was ${JSON.stringify(res)}`);
     acToken = [
       'Authorization',
       `Bearer ${res.body.token}`,
@@ -53,7 +53,6 @@ describe('Users Endpoints', () => {
   });
 
   it('test create new user', async () => {
-    console.log(acToken);
     const res = await request(app).post(`${usersApiUrl}`).set(...acToken).send({ user: firstUserData });
     expect(res.statusCode).toBe(200);
     expect(res.body.id).toEqual(firstUserData.id);

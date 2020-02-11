@@ -7,6 +7,5 @@ router.use('/login', require('./login'));
 router.use('/me', authMiddleware.permissionsMiddleWare, require('./me'));
 router.use('/ride-webhook', require('./webhook'));
 router.use('/admin', require('./admin'));
-router.use('/users', authMiddleware.permissionsMiddleWare, require('./users'));
 
 module.exports = router;
