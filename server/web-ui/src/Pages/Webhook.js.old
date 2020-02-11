@@ -1,0 +1,32 @@
+import React from 'react';
+import moment from 'moment';
+
+import PrivateBase from './PrivateBase';
+import useAsyncMethod, { getEndpoints } from './api';
+import H1 from '../Common/Header/H1';
+import P from '../Common/Header/P';
+import Table from '../Common/Table/themes/strips';
+
+const columns = [
+  { accessor: 'action', Header: 'Action' },
+  { accessor: 'endpoint', Header: 'End Point' },
+  { accessor: 'createdAt', Header: 'Created At' },
+]
+
+export default () => {
+  const endpointsCall = useAsyncMethod(getEndpoints, null, []);
+  return (
+    <PrivateBase>
+      <H1>
+        Fleet Webhooks
+      </H1>
+      {/* <P>
+        Text text text, some other Text and also text. Text text text, some other Text and also text. Text text text, some other Text and also text Text text text, some other Text and also text. Text text text, some other Text and also text.
+      </P> */}
+      <Table
+        columns={columns}
+        data={[...endpointsCall.data]}
+      />
+    </PrivateBase>
+  );
+};

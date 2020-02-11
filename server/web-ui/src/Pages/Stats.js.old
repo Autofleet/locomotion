@@ -1,0 +1,66 @@
+import React, { useEffect, use } from 'react';
+import { LineChart, XAxis, YAxis, CartesianGrid, Tooltip, Line, ResponsiveContainer, Legend } from 'recharts';
+
+import PrivateBase from './PrivateBase';
+import H1 from '../Common/Header/H1';
+import P from '../Common/Header/P';
+import moment from 'moment';
+import useAsyncMethod, { getResponses } from './api';
+
+export default () => {
+  const responsesCall = useAsyncMethod(getResponses, async data => data
+    .map(row => ({
+      'Avg Latency (ms)': row.avg_latency ? Math.round(row.avg_latency) : null,
+      '2xx Response': row.response_200 > 0 ? row.response_200 : null,
+      '3xx Response': row.response_300 > 0 ? row.response_300 : null,
+      '4xx Response': row.response_400 > 0 ? row.response_400 : null,
+      '5xx Response': row.response_500 > 0 ? row.response_500 : null,
+      event_timestamp: moment(row.event_timestamp).format('HH:mm:ss')
+    }))
+    , []);
+
+  return (
+    <PrivateBase>
+      <H1>
+        Stats
+      </H1>
+      <P>
+        Latency - Last 60 minuets
+      </P>
+      <P>{!responsesCall.data.length ? 'Loading...' : null}</P>
+      <ResponsiveContainer height={300}>
+        <LineChart
+          data={responsesCall.data}
+          margin={{ top: 5, right: 20, left: -10, bottom: 5 }}
+        >
+          <XAxis dataKey="event_timestamp" />
+          <YAxis />
+          <Tooltip />
+          <CartesianGrid strokeDasharray="3 3" opacity={0.2}/>
+          <Line type="monotone" dataKey="Avg Latency (ms)" stroke="#91e677" yAxisId={0} />
+          <Legend />
+        </LineChart>
+      </ResponsiveContainer>
+      <P>
+        Response Codes - Last 60 minuets
+      </P>
+      <ResponsiveContainer height={300}>
+        <LineChart
+          data={responsesCall.data}
+          margin={{ top: 5, right: 20, left: -10, bottom: 5 }}
+        >
+          <XAxis dataKey="event_timestamp" />
+          <CartesianGrid strokeDasharray="3 3" opacity={0.2}/>
+          <YAxis />
+          <Tooltip />
+          <Line type="monotone" dataKey="2xx Response" stroke="#91e677" yAxisId={0} />
+          <Line type="monotone" dataKey="3xx Response" stroke="#77e6cc" yAxisId={0} />
+          <Line type="monotone" dataKey="4xx Response" stroke="#f227a1" yAxisId={0} />
+          <Line type="monotone" dataKey="5xx Response" stroke="#ff5454" yAxisId={0} />
+          <Legend />
+        </LineChart>
+      </ResponsiveContainer>
+
+    </PrivateBase>
+  );
+};
