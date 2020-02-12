@@ -21,6 +21,7 @@
 		DE30450F22E2840F00FC9142 /* File.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE30450E22E2840F00FC9142 /* File.swift */; };
 		E73784D0055E2B90E5195204 /* libPods-Locomotion-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DA0043B8F7D552FFB4602ADE /* libPods-Locomotion-tvOS.a */; };
 		EC5EF74B22E4608000293FF4 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EC5EF74A22E4607F00293FF4 /* LaunchScreen.storyboard */; };
+		ECCB37F823F15BAB0058BD6B /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = ECCB37F723F15BAB0058BD6B /* GoogleService-Info.plist */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -68,6 +69,7 @@
 		DE30450D22E2840F00FC9142 /* Locomotion-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Locomotion-Bridging-Header.h"; sourceTree = "<group>"; };
 		DE30450E22E2840F00FC9142 /* File.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = File.swift; sourceTree = "<group>"; };
 		EC5EF74A22E4607F00293FF4 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
+		ECCB37F723F15BAB0058BD6B /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../../../../Desktop/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		ED2971642150620600B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = Platforms/AppleTVOS.platform/Developer/SDKs/AppleTVOS12.0.sdk/System/Library/Frameworks/JavaScriptCore.framework; sourceTree = DEVELOPER_DIR; };
 /* End PBXFileReference section */
@@ -148,6 +150,7 @@
 				13B07FB01A68108700A75B9A /* AppDelegate.m */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
 				13B07FB61A68108700A75B9A /* Info.plist */,
+				ECCB37F723F15BAB0058BD6B /* GoogleService-Info.plist */,
 				13B07FB71A68108700A75B9A /* main.m */,
 				EC5EF74A22E4607F00293FF4 /* LaunchScreen.storyboard */,
 			);
@@ -350,6 +353,7 @@
 			files = (
 				EC5EF74B22E4608000293FF4 /* LaunchScreen.storyboard in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
+				ECCB37F823F15BAB0058BD6B /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -383,7 +387,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "export NODE_BINARY=node\n../node_modules/react-native/scripts/react-native-xcode.sh";
+			shellScript = "# added by Haul\nexport CLI_PATH=node_modules/@haul-bundler/cli/bin/haul.js\nexport NODE_BINARY=node\n../node_modules/react-native/scripts/react-native-xcode.sh";
 		};
 		1DB96FC91C7C297EE584513E /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -415,7 +419,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "export NODE_BINARY=node\n../node_modules/react-native/scripts/react-native-xcode.sh";
+			shellScript = "# added by Haul\nexport CLI_PATH=node_modules/@haul-bundler/cli/bin/haul.js\nexport NODE_BINARY=node\n../node_modules/react-native/scripts/react-native-xcode.sh";
 		};
 		58120083928D672042ECD903 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;

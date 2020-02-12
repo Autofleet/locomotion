@@ -17,8 +17,8 @@ import { needOnboarding } from '../Onboarding';
 
 const LogoIconSource = require('../../assets/logo.png');
 
-export default ({ navigation }) => {
-  console.log('OVERWRITE LOGIN PAGE');
+export default (props) => {
+  const navigation = props.navigation;
 
   const [loginState, dispatchLoginState] = useState({
     phoneNumber: null,
@@ -136,6 +136,8 @@ export default ({ navigation }) => {
     });
   };
 
+
+
   return (
     <Container>
       <SafeView>
@@ -148,7 +150,7 @@ export default ({ navigation }) => {
       <Text>{I18n.t(`${isVertStep ? 'login.verificationCodeInstructions' : 'login.loginPageInstructions'}`)}</Text>
       {loginState.error ? <ErrorText>{loginState.error}</ErrorText> : undefined }
       <SubmitButton onPress={isVertStep ? onVert : onSubmitPhoneNumber}>
-        {I18n.t(`login.${isVertStep ? 'submitVertButton' : 'submitPhoneNumberButton'}`)}XXXXXX
+        {I18n.t(`login.${isVertStep ? 'submitVertButton' : 'submitPhoneNumberButton'}`)}
       </SubmitButton>
       {isVertStep ? <ResendButton onPress={resendVertCode}>{I18n.t('login.resendButton')}</ResendButton> : undefined}
     </Container>
