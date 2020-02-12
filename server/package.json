@@ -9,9 +9,12 @@
         "test-auto": "jest --watch",
         "linter": "./node_modules/.bin/eslint .",
         "dev": "nodemon index.js",
+        "postinstall": "npm install --prefix ./web-ui/",
+        "prestart": "SKIP_PREFLIGHT_CHECK=true npm run build --prefix ./web-ui/ && rm -rf ./web-ui/node_modules/",
         "start": "npm run init && node index.js",
         "migrate": "node_modules/.bin/sequelize db:migrate",
-        "init": "bash ./scripts/init.sh"
+        "init": "bash ./scripts/init.sh",
+        "clean": "rm -rf ./node_modules/ ./web-ui/node_modules/ ./web-ui/build/"
     },
     "engines": {
         "node": ">=10.0.0"

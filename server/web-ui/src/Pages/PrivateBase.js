@@ -3,10 +3,10 @@ import styled from 'styled-components';
 import Modal from 'react-modal';
 import networkService from '../Services/network';
 import logoSrc from '../assets/logo2.png';
-import Nav from './Nav';
+import Input from '../Common/Input';
+import Button from '../Common/Button';
 
 const Content = styled.div`
-
 `;
 
 const PrivateContainer = styled.div`
@@ -15,7 +15,7 @@ const PrivateContainer = styled.div`
 `;
 
 const LoginPopup = styled.div`
-  min-width: 600px; 
+  min-width: 400px; 
   min-height: 280px;
 `;
 
@@ -42,33 +42,20 @@ const InputAndLabel = styled.label`
 const Label = styled.label`
 `;
 
-const Input = styled.input`
-  display: block;
-  border: solid 1px #9c9c9c;
-  font-size: 22px;
-  resize: none;
-  width: 50%;
-  border-radius: 1px;
-  text-align: center;
-  font-size: 18px;
-`;
-
 const PasswordInput = styled(Input)`
 `;
 
-const Submit = styled.button`
-  resize: none;
-  padding: 10px 25px;
-  margin-left: auto;
-  margin-right: auto;
-  border-radius: 2px;
-  text-align: center;
-  font-size: 18px;
-  background: ${({ disabled }) => !disabled ? 'rgb(4, 158, 243)' : '#b9bbbe'};
-  color: #fff;
-  border: none;
-  margin-top: 15px;
+const SubmitContainer = styled.div`
+  position: relative;
+  width: 100%;
+  display: flex;
+  justify-content: center;
 `;
+
+const Submit = styled(Button)`
+  width: 50%;
+`;
+
 const Error = styled.div`
   display: block;
   margin: 15px auto;
@@ -90,68 +77,61 @@ const login = async (userName, password) => {
 export default ({ children }) => {
   let [userName, password] = useState('');
 
-  /*
-
-/*
-
-  return (
-  <PrivateContainer>
- <Modal
-            isOpen={!localStorage.token}
-            style={{
-              overlay: {
-                // position: 'fixed',
-                // backgroundColor: 'rgba(227, 227, 227, 1)',
-                backgroundColor: 'none',
-                zIndex: 100,
-              },
-              content: {
-                position: 'fixed',
-                top: '50%',
-                right: 'auto',
-                bottom: 'auto',
-                left: '50%',
-                transform: 'translate(-50%,-50%)',
-                outline: '0',
-              }
-            }}
-            contentLabel="Example Modal"
-          >
-            <LoginPopup>
-              <Header><Logo/>
-                <Title>
-                  Enter Your login details
-                </Title></Header>
-              <InputAndLabel>
-                <Label>Username:</Label>
-                <Input
-                  onChange={event => userName = event.target.value }
-                />
-              </InputAndLabel>
-              <InputAndLabel>
-                <Label>Password:</Label>
-                <PasswordInput
-                  type='password'
-                  onChange={event => password = event.target.value }
-                />
-              </InputAndLabel>
-              <Submit
-                onClick={async (event) => {
-                  await login(userName, password);
-                  event.preventDefault();
-                } }
-              > Login </Submit>
-            </LoginPopup>
-      </Modal>
-
- */
-
   return (
     <PrivateContainer>
-
-        <Content>
-          {children}
-        </Content>
+      <Modal
+        isOpen={!localStorage.token}
+        style={{
+          overlay: {
+            position: 'fixed',
+            backgroundColor: 'rgba(227, 227, 227, 1)',
+            zIndex: 100,
+          },
+          content: {
+            position: 'fixed',
+            top: '50%',
+            right: 'auto',
+            bottom: 'auto',
+            left: '50%',
+            transform: 'translate(-50%,-50%)',
+            outline: '0',
+          }
+        }}
+        contentLabel="Example Modal"
+      >
+        <LoginPopup>
+          <Header><Logo/>
+            <Title>
+              Enter Your login details
+            </Title></Header>
+          <InputAndLabel>
+            <Label>Username:</Label>
+            <Input
+              withBorder
+              withHover
+              onChange={event => userName = event.target.value}
+            />
+          </InputAndLabel>
+          <InputAndLabel>
+            <Label>Password:</Label>
+            <PasswordInput
+              withBorder
+              withHover
+              type='password'
+              onChange={event => password = event.target.value}
+            />
+          </InputAndLabel>
+          <SubmitContainer><Submit
+            onClick={async (event) => {
+              await login(userName, password);
+              event.preventDefault();
+            }}
+          > Login </Submit></SubmitContainer>
+        </LoginPopup>
+      </Modal>
+      <Content>
+        {children}
+      </Content>
     </PrivateContainer>
-  )
+  );
 };

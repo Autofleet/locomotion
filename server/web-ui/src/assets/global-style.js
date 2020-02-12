@@ -14,7 +14,6 @@ const Style = props => (
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      color: #b9bbbe;
     }
     * {
       box-sizing: border-box;

@@ -32,6 +32,28 @@ const Content = styled.div`
   border-radius: 6px 0px 0px 6px;
 `;
 
+const RowStyle = styled.div`
+ .tableRow {
+  section {
+    opacity: 0;
+  }
+
+  &:hover {
+    box-shadow: 0px 2px 5px 0 rgba(157, 165, 180, 0.5);
+  }
+  &:hover section {
+    opacity: 1;
+  }
+}
+
+.pendingInviteTableRow {
+  opacity: 30%;
+}
+`;
+
+const defaultTrProps = () => ({ className: RowStyle });
+const innerTrProps = defaultTrProps;
+
 export default () => {
   const tracesCall = useAsyncMethod(getUsers, null, []);
   return (
@@ -48,6 +70,7 @@ export default () => {
           </P>
           <P>{!tracesCall.data.length ? 'Loading...' : null}</P>
           <Table
+          getTrProps={ innerTrProps }
             columns={columns}
             data={tracesCall.data}
           />
