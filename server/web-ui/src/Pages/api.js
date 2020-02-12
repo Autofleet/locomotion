@@ -1,6 +1,5 @@
 import network from '../Services/network';
-import { useState, useEffect, useReducer, useCallback } from 'react';
-import axios from 'axios';
+import { useEffect, useReducer, useCallback } from 'react';
 
 const dataFetchReducer = (state, action) => {
   switch (action.type) {
@@ -67,5 +66,3 @@ const useAsyncMethod = (asyncMethod, parser, initialData) => {
 export default useAsyncMethod;
 
 export const getUsers = () => network.get('/api/v1/admin/users');
-export const getResponses = () => network.get('/api/v1/token-metrics/responses');
-export const getEndpoints = () => network.get('/api/v1/fleet-endpoints');

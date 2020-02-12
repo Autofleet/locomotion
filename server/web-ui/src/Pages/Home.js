@@ -1,11 +1,10 @@
 import React from 'react';
-import PrivateBase from './PrivateBase';
+import styled from 'styled-components';
+import { Redirect } from 'react-router-dom';
 import useAsyncMethod, { getUsers } from './api';
-import H1 from '../Common/Header/H1';
-import P from '../Common/Header/P';
+import { P, H1 } from '../Common/Header';
 import Table from '../Common/Table/themes/strips';
 import Nav from './Nav';
-import styled from 'styled-components';
 
 const columns = [
   { accessor: 'firstName', Header: 'First name' },
@@ -17,7 +16,6 @@ const Body = styled.div`
   display: flex;
   flex-direction: row;
 `;
-
 
 const Content = styled.div`
   flex: 1;
@@ -56,18 +54,13 @@ const innerTrProps = defaultTrProps;
 
 export default () => {
   const tracesCall = useAsyncMethod(getUsers, null, []);
-  return (
-    <PrivateBase>
+  return !localStorage.token ? <Redirect to="/login" /> : (
       <Body>
         <Nav/>
         <Content>
           <H1>
             Users
           </H1>
-          <P>
-            Text text text, some other Text and also text. Text text text, some other Text and also text. Text text text, some other Text and also text Text text text, some other Text and also text.
-            Text text text, some other Text and also text.
-          </P>
           <P>{!tracesCall.data.length ? 'Loading...' : null}</P>
           <Table
           getTrProps={ innerTrProps }
@@ -76,6 +69,5 @@ export default () => {
           />
         </Content>
       </Body>
-    </PrivateBase>
   );
 };

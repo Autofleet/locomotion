@@ -54,7 +54,6 @@ const adminPermissionsMiddleWare = async (req, res, next) => {
     userPayload = jwt.verify(accessToken, SECRET_KEY);
     req.userId = userPayload.userId;
   } catch (e) {
-    console.error(e);
     return respUnAuthorizationError('You dont have permission for load this page');
   }
 

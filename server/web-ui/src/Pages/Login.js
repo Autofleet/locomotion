@@ -1,38 +1,51 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import Modal from 'react-modal';
+import { Redirect } from 'react-router-dom';
 import networkService from '../Services/network';
-import logoSrc from '../assets/logo2.png';
+import logoSrc from '../assets/mod-logo.png';
 import Input from '../Common/Input';
 import Button from '../Common/Button';
 
-const Content = styled.div`
-`;
-
-const PrivateContainer = styled.div`
+const LoginContainer = styled.div`
   display: flex;
   flex-direction: row;
+  position: fixed;
+  background-color: rgba(227, 227, 227, 1);
+  z-index: 100;
+  bottom: 0px;
+  box-sizing: border-box;
+  font-family: "Montserrat", sans-serif;
+  left: 0px;
+  line-height: normal;
+  right: 0;
+  top: 0;
 `;
 
-const LoginPopup = styled.div`
-  min-width: 400px; 
-  min-height: 280px;
+const Content = styled.div`
+  position: fixed;
+  inset: 50% auto auto 50%;
+  border: 1px solid rgb(204, 204, 204);
+  background: rgb(255, 255, 255) none repeat scroll 0% 0%;
+  overflow: auto;
+  border-radius: 4px;
+  outline: currentcolor none 0px;
+  padding: 20px;
+  transform: translate(-50%, -50%);
+  min-width: 500px;
 `;
-
 
 const Header = styled.header`
   text-align: center;
 `;
 
 const Logo = styled.img.attrs({ src: logoSrc })`
-  width: 200px;
+  width: 120px;
   margin-left: 15px;
 `;
 
 const Title = styled.h1`
   color: #2e3136;
 `;
-
 
 const InputAndLabel = styled.label`
   display: block;
@@ -68,7 +81,7 @@ const login = async (userName, password) => {
   const loginResult = await networkService.post('api/v1/admin/auth', { userName, password });
   if (loginResult) {
     localStorage.token = loginResult.data.token;
-    window.location.reload();
+    window.location.replace("/");
   } else {
     return {state: 'Error', message: 'can`t log in'};
   }
@@ -77,33 +90,12 @@ const login = async (userName, password) => {
 export default ({ children }) => {
   let [userName, password] = useState('');
 
-  return (
-    <PrivateContainer>
-      <Modal
-        isOpen={!localStorage.token}
-        style={{
-          overlay: {
-            position: 'fixed',
-            backgroundColor: 'rgba(227, 227, 227, 1)',
-            zIndex: 100,
-          },
-          content: {
-            position: 'fixed',
-            top: '50%',
-            right: 'auto',
-            bottom: 'auto',
-            left: '50%',
-            transform: 'translate(-50%,-50%)',
-            outline: '0',
-          }
-        }}
-        contentLabel="Example Modal"
-      >
-        <LoginPopup>
-          <Header><Logo/>
-            <Title>
-              Enter Your login details
-            </Title></Header>
+  return localStorage.token ? <Redirect to="/"/> : (
+      <LoginContainer>
+        <Content>
+          <Header>
+            <Logo/>
+          </Header>
           <InputAndLabel>
             <Label>Username:</Label>
             <Input
@@ -121,17 +113,15 @@ export default ({ children }) => {
               onChange={event => password = event.target.value}
             />
           </InputAndLabel>
-          <SubmitContainer><Submit
+          <SubmitContainer>
+            <Submit
             onClick={async (event) => {
               await login(userName, password);
               event.preventDefault();
-            }}
-          > Login </Submit></SubmitContainer>
-        </LoginPopup>
-      </Modal>
-      <Content>
-        {children}
-      </Content>
-    </PrivateContainer>
+            }}>Login</Submit>
+          </SubmitContainer>
+        </Content>
+      </LoginContainer>
   );
 };
+
