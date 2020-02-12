@@ -45,6 +45,7 @@ const adminPermissionsMiddleWare = async (req, res, next) => {
   }
 
   if (!accessToken) {
+    console.log('No token provided.');
     return respUnAuthorizationError('No token provided.');
   }
 
@@ -53,6 +54,7 @@ const adminPermissionsMiddleWare = async (req, res, next) => {
     userPayload = jwt.verify(accessToken, SECRET_KEY);
     req.userId = userPayload.userId;
   } catch (e) {
+    console.error(e);
     return respUnAuthorizationError('You dont have permission for load this page');
   }
 

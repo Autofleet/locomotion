@@ -1,5 +1,6 @@
 require('dotenv').config();
 
+const express = require('express');
 const SExpress = require('@autofleet/super-express');
 const logger = require('./logger');
 const packageJson = require('./package');
@@ -9,7 +10,7 @@ const app = new SExpress({
 });
 
 const serverRunningSince = new Date();
-app.get('/', (req, res) => {
+app.get('/version', (req, res) => {
   res.json({
     name: packageJson.name,
     version: packageJson.version,
@@ -21,5 +22,7 @@ app.get('/', (req, res) => {
 app.get('/alive', require('./alive'));
 
 app.use('/api', require('./api'));
+
+app.use('/', express.static('./web-ui/build'));
 
 module.exports = app;
