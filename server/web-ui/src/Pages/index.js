@@ -12,12 +12,6 @@ export default () => (
         <Route exact path="/">
           <Home />
         </Route>
-        {/*<Route path="/stats">*/}
-        {/*  <Permission />*/}
-        {/*</Route>*/}
-        {/*<Route path="/webhooks">*/}
-        {/*  <Webhook />*/}
-        {/*</Route>*/}
       </Switch>
   </Router>
 )

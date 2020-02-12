@@ -11,7 +11,6 @@ const Style = props => (
       font-family: 'Montserrat', sans-serif;
       line-height: normal;
       -webkit-font-smoothing: antialiased;
-      background-color: #202225;
       box-sizing: border-box;
       margin: 0;
       padding: 0;

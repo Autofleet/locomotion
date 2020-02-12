@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import logoSrc from '../assets/logo.png';
+import logoSrc from '../assets/logo2.png';
 import logoSmallSrc from '../assets/logo.png';
 import {
   NavLink
@@ -11,22 +11,23 @@ import HelpBubble from '../Common/HelpBubble';
 export const navWidthPx = 280;
 
 const NavContainer = styled.div`
-  background: #2e3136;
+  //background-color: rgb(227, 227, 227);
   width: ${navWidthPx}px;
   height: 100vh;
   padding: 20px;
   box-sizing: border-box;
-  border-right: 1px solid #38444d;
+  //border-right: 1px solid #38444d;  
 `;
 
 const Menu = styled.div``;
+
 const MenuItem = styled(NavLink).attrs({ activeClassName: 'active' })`
   border-radius: 4px;
   display: block;
   font-size: 16px;
   margin-bottom: 6px;
   padding: 8px 16px;
-  color: #b9bbbe;
+  color: rgb(172, 172, 172);
   transition: background .125s,color .125s;
   text-decoration: unset;
   cursor: pointer;

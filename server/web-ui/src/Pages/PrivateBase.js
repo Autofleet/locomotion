@@ -2,14 +2,11 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import Modal from 'react-modal';
 import networkService from '../Services/network';
-import Nav from './Nav';
 import logoSrc from '../assets/logo2.png';
+import Nav from './Nav';
 
-const Body = styled.div`
-  flex: 1;
-  padding: 0 50px;
-  overflow: auto;
-  height: 100vh;
+const Content = styled.div`
+
 `;
 
 const PrivateContainer = styled.div`
@@ -18,7 +15,7 @@ const PrivateContainer = styled.div`
 `;
 
 const LoginPopup = styled.div`
-  min-width: 600px;
+  min-width: 600px; 
   min-height: 280px;
 `;
 
@@ -92,14 +89,20 @@ const login = async (userName, password) => {
 
 export default ({ children }) => {
   let [userName, password] = useState('');
+
+  /*
+
+/*
+
   return (
-    <PrivateContainer>
-      <Modal
+  <PrivateContainer>
+ <Modal
             isOpen={!localStorage.token}
             style={{
               overlay: {
-                position: 'fixed',
-                backgroundColor: 'rgba(0, 0, 0, 1)',
+                // position: 'fixed',
+                // backgroundColor: 'rgba(227, 227, 227, 1)',
+                backgroundColor: 'none',
                 zIndex: 100,
               },
               content: {
@@ -140,10 +143,15 @@ export default ({ children }) => {
               > Login </Submit>
             </LoginPopup>
       </Modal>
-      <Nav />
-      <Body>
-        {children}
-      </Body>
+
+ */
+
+  return (
+    <PrivateContainer>
+
+        <Content>
+          {children}
+        </Content>
     </PrivateContainer>
   )
 };

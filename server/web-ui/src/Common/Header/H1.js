@@ -2,5 +2,5 @@ import styled from 'styled-components';
 
 
 export default styled.h1`
-  color: #fff;
+  color: rgb(51, 51, 51);
 `;
