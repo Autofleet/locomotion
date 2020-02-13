@@ -53,21 +53,23 @@ const defaultTrProps = () => ({ className: RowStyle });
 const innerTrProps = defaultTrProps;
 
 export default () => {
-  const tracesCall = useAsyncMethod(getUsers, null, []);
-  return !localStorage.token ? <Redirect to="/login" /> : (
-      <Body>
-        <Nav/>
-        <Content>
-          <H1>
-            Users
-          </H1>
-          <P>{!tracesCall.data.length ? 'Loading...' : null}</P>
-          <Table
-          getTrProps={ innerTrProps }
-            columns={columns}
-            data={tracesCall.data}
-          />
-        </Content>
-      </Body>
-  );
+  if (!localStorage.token) {
+    return <Redirect to="/login"/>;
+  } else {
+    const tracesCall = useAsyncMethod(getUsers, null, []);
+    return <Body>
+      <Nav/>
+      <Content>
+        <H1>
+          Users
+        </H1>
+        <P>{!tracesCall.data.length ? 'Loading...' : null}</P>
+        <Table
+          getTrProps={innerTrProps}
+          columns={columns}
+          data={tracesCall.data}
+        />
+      </Content>
+    </Body>;
+  }
 };

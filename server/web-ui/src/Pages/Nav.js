@@ -69,6 +69,7 @@ const LogoSmall = styled.img.attrs({ src: logoSmallSrc })`
   margin-top: auto;
   position: fixed;
   bottom: 10px;
+  margin-left: 4em;
 `;
 
 export default () => (
@@ -81,7 +82,7 @@ export default () => (
       </MenuItem>
       <ExternalLink onClick={() => { localStorage.removeItem('token'); window.location.reload() }}>Logout</ExternalLink>
     </Menu>
-    <LogoSmall/>
+    <ExternalLink target="_blank" href="https://autofleet.io/"><LogoSmall/></ExternalLink>
   </NavContainer>
 )
 
