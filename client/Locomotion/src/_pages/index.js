@@ -6,7 +6,7 @@ import {
 
 import AuthLoadingScreen from './Login/AuthLoadingScreen';
 import Auth from '../services/auth';
-import Login from './Login';
+import Login from './_Login';
 
 import ActiveRide from './ActiveRide';
 import ContactUs from './ContactUs';
