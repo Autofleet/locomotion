@@ -20,10 +20,4 @@ export default styled.button`
     background-origin: border-box;
     background-clip: content-box, border-box;
   }
-
-&:active {
-    background-color: rgb(36, 167, 233);
-    box-shadow: 4px 2.9px 8px 0 rgba(85, 195, 255, 0.3);
-    color: #ffffff;
-  }
 `;

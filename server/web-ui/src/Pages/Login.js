@@ -5,6 +5,7 @@ import networkService from '../Services/network';
 import logoSrc from '../assets/mod-logo.png';
 import Input from '../Common/Input';
 import Button from '../Common/Button';
+import LoaderButton from '../Common/LoaderButton'
 
 const LoginContainer = styled.div`
   display: block;
@@ -52,12 +53,14 @@ const PasswordInput = styled(Input)`
 const SubmitContainer = styled.div`
   position: relative;
   width: 100%;
-  display: flex;
+  display: block;
   justify-content: center;
 `;
 
-const Submit = styled(Button)`
+const Submit = styled(LoaderButton)`
   width: 50%;
+  margin: 22px auto 0 auto;
+  display: block;
 `;
 
 const Error = styled.div`
@@ -67,19 +70,32 @@ const Error = styled.div`
   text-align: center;
 `;
 
-const login = async (userName, password) => {
-  console.log(userName, password);
-  const loginResult = await networkService.post('api/v1/admin/auth', { userName, password });
-  if (loginResult) {
-    localStorage.token = loginResult.data.token;
-    window.location.replace("/");
-  } else {
-    return {state: 'Error', message: 'can`t log in'};
-  }
-};
+
 
 export default ({ children }) => {
-  let [userName, password] = useState('');
+  const [userName, setUserName] = useState('');
+  const [password, setPassword] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [loginError, setLoginError] = useState(null);
+
+  const login = async (userName, password) => {
+    setLoginError(null)
+    setIsLoading(true)
+    let loginResult;
+    try {
+      const loginResult = await networkService.post('api/v1/admin/auth', { userName, password });
+      if (loginResult) {
+        localStorage.token = loginResult.data.token;
+        window.location.replace("/");
+      } else {
+        setLoginError('Wrong username or password')
+      }
+    } catch (e) {
+      console.log('error');
+      setLoginError('Network Error')
+    }
+    setIsLoading(false)
+  };
 
   return localStorage.token ? <Redirect to="/"/> : (
       <LoginContainer>
@@ -92,7 +108,7 @@ export default ({ children }) => {
             <Input
               withBorder
               withHover
-              onChange={event => userName = event.target.value}
+              onChange={event => setUserName(event.target.value)}
             />
           </InputAndLabel>
           <InputAndLabel>
@@ -101,16 +117,25 @@ export default ({ children }) => {
               withBorder
               withHover
               type='password'
-              onChange={event => password = event.target.value}
+              onChange={event => setPassword(event.target.value)}
             />
           </InputAndLabel>
           <SubmitContainer>
             <Submit
-            onClick={async (event) => {
-              await login(userName, password);
-              event.preventDefault();
-            }}>Login</Submit>
+              title="Login"
+              displayLoader={isLoading}
+              darkLoader={false}
+              onClick={async (event) => {
+                await login(userName, password);
+              }}
+              disabled={isLoading}
+            />
           </SubmitContainer>
+          {loginError ?
+            <Error>
+              {loginError}
+            </Error>
+          : null}
         </Content>
       </LoginContainer>
   );
