@@ -7,31 +7,22 @@ import Input from '../Common/Input';
 import Button from '../Common/Button';
 
 const LoginContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-  position: fixed;
-  background-color: rgba(227, 227, 227, 1);
-  z-index: 100;
-  bottom: 0px;
-  box-sizing: border-box;
-  font-family: "Montserrat", sans-serif;
-  left: 0px;
-  line-height: normal;
-  right: 0;
-  top: 0;
+  display: block;
+  width: 100%;
+  height: 100vs;
+  background-color: #f6f6f8;
 `;
 
 const Content = styled.div`
-  position: fixed;
-  inset: 50% auto auto 50%;
-  border: 1px solid rgb(204, 204, 204);
+  position: absolute;
+  width: 500px;
+  height: 400px;
+  left: calc(50% - 250px);
+  top: calc(50% - 200px);
+  box-shadow: rgba(51, 70, 85, 0.3) 0px 15px 29px 0px;
   background: rgb(255, 255, 255) none repeat scroll 0% 0%;
-  overflow: auto;
   border-radius: 4px;
-  outline: currentcolor none 0px;
   padding: 20px;
-  transform: translate(-50%, -50%);
-  min-width: 500px;
 `;
 
 const Header = styled.header`
