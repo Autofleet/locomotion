@@ -28,14 +28,6 @@ platform :ios do
     )
   end
 
-  desc "Change app display name"
-  lane :app-name do 
-    update_info_plist(
-      
-    )
-  end
-
-
 end
 
 platform :android do
