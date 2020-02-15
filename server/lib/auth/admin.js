@@ -5,11 +5,9 @@ const SECRET_KEY = process.env.AUTH_ACCESS_SECRET_KEY || '1234';
 const ADMIN_LOGIN_USER = process.env.ADMIN_LOGIN_USER || 'admin';
 const ADMIN_LOGIN_PASS = process.env.ADMIN_LOGIN_PASS || '1234';
 
-export function authAdmin(userName, password) {
-  return (userName === ADMIN_LOGIN_USER) && (password === ADMIN_LOGIN_PASS);
-}
+const authAdmin = (userName, password) => (userName === ADMIN_LOGIN_USER) && (password === ADMIN_LOGIN_PASS);
 
-export const adminPermissionsMiddleWare = async (req, res, next) => {
+const adminPermissionsMiddleWare = async (req, res, next) => {
   const respUnAuthorizationError = message => res.status(403).send({ auth: false, message });
 
   const { headers } = req;
@@ -38,4 +36,9 @@ export const adminPermissionsMiddleWare = async (req, res, next) => {
   }
 
   return next();
+};
+
+module.exports = {
+  authAdmin,
+  adminPermissionsMiddleWare,
 };
