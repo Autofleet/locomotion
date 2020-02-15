@@ -2,10 +2,10 @@
 # yarn lockfile v1
 
 
-"@autofleet/locomotion-sdk@^1.0.4":
-  version "1.0.4"
-  resolved "https://registry.yarnpkg.com/@autofleet/locomotion-sdk/-/locomotion-sdk-1.0.4.tgz#39a6da2ea6b3f021677e6dbd4f51fc33e311fc4d"
-  integrity sha512-2g8SPiXssRW7pJHFumNd8T4sxEcDchPpRwlOiuyYBomt5TudFJCOOTunLTDocqvCJNdNWwYqTLpBYdXXacTI7Q==
+"@autofleet/locomotion-sdk@^1.0.5":
+  version "1.0.5"
+  resolved "https://registry.yarnpkg.com/@autofleet/locomotion-sdk/-/locomotion-sdk-1.0.5.tgz#de94e07dbf40216e0fb8bd3ff0169c6735a32b42"
+  integrity sha512-jyapR6bYXnL/NjsPTazEcwssk4FubOij8eZGwB5r9aeP+JdGRBC0dZryD93l0ESUwEm2t7gzFirtlfOUlGuwOw==
 
 "@babel/code-frame@7.5.5", "@babel/code-frame@^7.0.0", "@babel/code-frame@^7.5.5":
   version "7.5.5"
