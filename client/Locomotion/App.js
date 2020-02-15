@@ -4,9 +4,7 @@ const Logo = require('./src/assets/logo.png');
 
 const App = () => (
   <LocomotionRouter
-    assets={{
-      logo: Logo
-    }}
+    logo={Logo}
   />
 );
 
