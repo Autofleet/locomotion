@@ -81,11 +81,10 @@ export default ({ children }) => {
   const login = async (userName, password) => {
     setLoginError(null)
     setIsLoading(true)
-    let loginResult;
     try {
-      loginResult = await networkService.post('api/v1/admin/auth', { userName, password });
-      if (loginResult.data && logingResult.data.token) {
-        const token = loginResult.data.token;
+      const {data:loginResult} = await networkService.post('api/v1/admin/auth', { userName, password });
+      if (loginResult && loginResult.token) {
+        const token = loginResult.token;
         localStorage.token = token;
         networkService.setToken(token);
       } else {
