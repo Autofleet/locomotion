@@ -66,9 +66,12 @@ const Submit = styled(LoaderButton)`
 `;
 
 const Error = styled.div`
+  margin: 5px auto;
+  transform: translate(0, 24px);
   display: block;
-  margin: 15px auto;
-  width: 200px;
+  width: 80%;
+  font-size: .75rem;
+  color: #f03a5f;
   text-align: center;
 `;
 

@@ -1,12 +1,40 @@
 import React from 'react';
+import Svg from 'react-svg-inline';
 import styled from 'styled-components';
 import { Redirect } from 'react-router-dom';
 import useAsyncMethod, { getUsers } from './api';
 import { P, H1 } from '../Common/Header';
 import Table from '../Common/Table/themes/strips';
 import Nav from './Nav';
+import { generateAvatarById } from '../services/avatar';
+
+const customAvatarSeed = 'Auto Fleet';
+
+const avatarSize = '28px';
+
+export const Avatar = styled.img.attrs({
+  alt: '',
+})`
+  width: ${avatarSize};
+  height: ${avatarSize};
+  border-radius: 50%;
+  display: inline-block;
+`;
 
 const columns = [
+  {
+    Header: '',
+    width: 60,
+    accessor: 'avatar',
+    Cell: ({ original: user }) => {
+      if (user.avatar) {
+        return <Avatar src={user.avatar}/>;
+      } else {
+        return <Svg svg={generateAvatarById(`${user.firstName} ${user.lastName}` || customAvatarSeed)}
+                    width={avatarSize} height={avatarSize}/>;
+      }
+    }
+  },
   { accessor: 'firstName', Header: 'First name' },
   { accessor: 'lastName', Header: 'Last name' },
   { accessor: 'phoneNumber', Header: 'Phone number' },

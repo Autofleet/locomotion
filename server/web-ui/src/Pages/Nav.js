@@ -59,17 +59,20 @@ const ExternalLink = styled.a`
   cursor: pointer;
 `;
 
+const PoweredByLink = styled(ExternalLink)`
+  position: fixed;
+  bottom: 10px;
+  margin: auto 0 0 1em;
+  font-size: 10px;
+`;
+
 const Logo = styled.img.attrs({ src: logoSrc })`
   width: 200px;
   margin-left: 15px;
 `;
 
-const afLogo = styled.img.attrs({ src: afLogoSrc })`
-  width: 95px;
-  margin-top: auto;
-  position: fixed;
-  bottom: 10px;
-  margin-left: 4em;
+const AfLogo = styled.img.attrs({ src: afLogoSrc })`
+  height: 13px;
 `;
 
 export default () => (
@@ -82,7 +85,7 @@ export default () => (
       </MenuItem>
       <ExternalLink onClick={() => { localStorage.removeItem('token'); window.location.reload() }}>Logout</ExternalLink>
     </Menu>
-    <ExternalLink target="_blank" href="https://autofleet.io/"><afLogo/></ExternalLink>
+    <PoweredByLink target="_blank" href="https://autofleet.io/">powered by <AfLogo/></PoweredByLink>
   </NavContainer>
 )
 
