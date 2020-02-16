@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { Redirect } from 'react-router-dom';
 import networkService from '../Services/network';
-import logoSrc from '../assets/mod-logo.png';
+import logoSrc from '../assets/logo.png';
 import Input from '../Common/Input';
 import Button from '../Common/Button';
 import LoaderButton from '../Common/LoaderButton'
@@ -17,7 +17,7 @@ const LoginContainer = styled.div`
 const Content = styled.div`
   position: absolute;
   width: 500px;
-  height: 400px;
+  height: 450px;
   left: calc(50% - 250px);
   top: calc(50% - 200px);
   box-shadow: rgba(51, 70, 85, 0.3) 0px 15px 29px 0px;
@@ -31,7 +31,9 @@ const Header = styled.header`
 `;
 
 const Logo = styled.img.attrs({ src: logoSrc })`
-  width: 120px;
+  min-width: 100px;
+  max-width: 400px;
+  max-height: 120px;
   margin-left: 15px;
 `;
 

@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
-import logoSrc from '../assets/mod-logo.png';
-import logoSmallSrc from '../assets/af-logo.png';
+import logoSrc from '../assets/logo.png';
+import afLogoSrc from '../assets/af-logo.png';
 import {
   NavLink
 } from "react-router-dom";
@@ -64,7 +64,7 @@ const Logo = styled.img.attrs({ src: logoSrc })`
   margin-left: 15px;
 `;
 
-const LogoSmall = styled.img.attrs({ src: logoSmallSrc })`
+const afLogo = styled.img.attrs({ src: afLogoSrc })`
   width: 95px;
   margin-top: auto;
   position: fixed;
@@ -82,7 +82,7 @@ export default () => (
       </MenuItem>
       <ExternalLink onClick={() => { localStorage.removeItem('token'); window.location.reload() }}>Logout</ExternalLink>
     </Menu>
-    <ExternalLink target="_blank" href="https://autofleet.io/"><LogoSmall/></ExternalLink>
+    <ExternalLink target="_blank" href="https://autofleet.io/"><afLogo/></ExternalLink>
   </NavContainer>
 )
 
