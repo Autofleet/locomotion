@@ -84,7 +84,7 @@ export default ({ children }) => {
     let loginResult;
     try {
       loginResult = await networkService.post('api/v1/admin/auth', { userName, password });
-      if (loginResult) {
+      if (loginResult.data && logingResult.data.token) {
         const token = loginResult.data.token;
         localStorage.token = token;
         networkService.setToken(token);

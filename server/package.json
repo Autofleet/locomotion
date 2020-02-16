@@ -10,7 +10,7 @@
         "linter": "./node_modules/.bin/eslint .",
         "dev": "nodemon index.js",
         "dev:webui": "nodemon --ignore web-ui/build/ --exec \"NODE_ENV=development SKIP_PREFLIGHT_CHECK=true npm run build --prefix ./web-ui/ && node ./index.js\"",
-        "postinstall": "npm install --prefix ./web-ui/ && SKIP_PREFLIGHT_CHECK=true npm run build --prefix ./web-ui/",
+        "postinstall": "npm install --unsafe-perm --prefix ./web-ui/ && SKIP_PREFLIGHT_CHECK=true npm run build --prefix ./web-ui/",
         "start": "npm run init && node index.js",
         "migrate": "node_modules/.bin/sequelize db:migrate",
         "init": "bash ./scripts/init.sh",
