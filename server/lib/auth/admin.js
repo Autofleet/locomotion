@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
 
-const ADMIN_USER_ID = 1;
+const ADMIN_USER_ID = process.env.ADMIN_USER_ID || '1';
 const SECRET_KEY = process.env.AUTH_ACCESS_SECRET_KEY || '1234';
 const ADMIN_LOGIN_USER = process.env.ADMIN_LOGIN_USER || 'admin';
 const ADMIN_LOGIN_PASS = process.env.ADMIN_LOGIN_PASS || '1234';

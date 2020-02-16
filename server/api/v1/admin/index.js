@@ -15,7 +15,7 @@ router.post('/auth', async (req, res) => {
   }
 
   const { token } = await authService.createToken({
-    userId: process.env.ADMIN_USER_ID,
+    userId: process.env.ADMIN_USER_ID || '1',
   });
 
   return res.json({
