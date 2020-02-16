@@ -83,10 +83,11 @@ export default ({ children }) => {
     setIsLoading(true)
     let loginResult;
     try {
-      const loginResult = await networkService.post('api/v1/admin/auth', { userName, password });
+      loginResult = await networkService.post('api/v1/admin/auth', { userName, password });
       if (loginResult) {
-        localStorage.token = loginResult.data.token;
-        window.location.replace("/");
+        const token = loginResult.data.token;
+        localStorage.token = token;
+        networkService.setToken(token);
       } else {
         setLoginError('Wrong username or password')
       }
