@@ -6,5 +6,6 @@ const router = Router();
 router.use('/login', require('./login'));
 router.use('/me', authMiddleware.permissionsMiddleWare, require('./me'));
 router.use('/ride-webhook', require('./webhook'));
+router.use('/admin', require('./admin'));
 
 module.exports = router;
