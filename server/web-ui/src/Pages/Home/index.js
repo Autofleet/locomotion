@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {Fragment, useEffect} from 'react';
 import { Redirect } from 'react-router-dom';
 import useAsyncMethod, { getUsers } from '../api';
 import { P, H1 } from '../../Common/Header';
@@ -8,7 +8,7 @@ import { generateAvatarById } from '../../Services/avatar';
 import Toggle from '../../Common/Toggle';
 import {Body, Content, RowStyle ,Buttons, Avatar, SvgButton, SvgBase, avatarSize} from './styled';
 import usersContainer from '../../contexts/usersContainer';
-
+import Popup from '../../Common/Popup'
 const deleteIcon = `
 <svg
  xmlns="http://www.w3.org/2000/svg"
@@ -62,6 +62,10 @@ export default () => {
   if (!localStorage.token) {
     return <Redirect to="/login"/>;
   }
+
+  const [popupState, setPopupState] = useState('')
+  const [chosenUser, setChosenUser] = useState('')
+
     const users = usersContainer.useContainer();
     const columns = [...makeColumns(), {
       Header: '',
@@ -70,7 +74,14 @@ export default () => {
       accessor: ({ id, active }) => ({ id, active }),
       Cell: ({ value: { id, active } }) => ( // eslint-disable-line react/prop-types
         <Buttons>
-          <SvgButton svg={editIcon} />
+          <SvgButton
+            svg={editIcon}
+            onClick={() => {
+              setPopupState('AddUser')
+              const userData = users.getUser(id);
+              setChosenUser(userData)
+            }}
+          />
           <SvgButton
             svg={deleteIcon}
             disableClass={active}
@@ -107,17 +118,30 @@ export default () => {
       users.loadUsers()
     }, []);
 
-    return <Body>
-      <Nav/>
-      <Content>
-        <H1>
-          Users
-        </H1>
-        <Table
-          getTrProps={innerTrProps}
-          columns={columns}
-          data={users.usersMap}
-        />
-      </Content>
-    </Body>;
+    return (
+      <Fragment>
+      <Body>
+        <Nav/>
+        <Content>
+          <H1>
+            Users
+          </H1>
+          <Table
+            getTrProps={innerTrProps}
+            columns={columns}
+            data={users.usersMap}
+          />
+        </Content>
+      </Body>
+
+      <Popup
+        name="AddUser"
+        isVisible={popupState === 'AddUser'}
+        chosenUser={chosenUser}
+        onClose={() => setPopupState(false)}
+        popupName={popupState}
+        initialValues={{}}
+      />
+    </Fragment>
+    );
 };
