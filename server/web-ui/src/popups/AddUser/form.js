@@ -7,7 +7,7 @@ import InputWithLabel, { PhoneInput } from '../../Common/InputWithLabel'
 
 // import AddressSelector from '../../Components/AddressSelector';
 // import SelectFromAvailableEntities from '../../Components/SelectFromAvailableEntities';
-// import Toggle from '../../Components/Toggle';
+import Toggle from '../../Common/Toggle';
 import PopupDialog from '../../Common/PopupDialog';
 
 import {
@@ -20,7 +20,6 @@ import {
   ImageUploader,
   Image,
   UploadButton,
-  PlusIcon,
   PopupFormContainer,
   DriverAvatarContainer,
   DriverAvatarContainerInner,
@@ -40,6 +39,7 @@ const AvatarField = ({
       src={value ? getUrl(value) : 'https://res.cloudinary.com/autofleet/image/upload/v1531728314/Control-Center/person.jpg'}
     />
     <UploadButton>
+      <PlusIcon />
       <ImageUploader
         onChange={(event) => {
           if (value && value.url) {
@@ -89,10 +89,10 @@ const AddDriverForm = ({
         ? ('ManagementDriversEditDriverPopupTitle')
         : ('ManagementDriversAddDriverPopupTitle')
       }
-      closeButtonTitle={('PopupCancel')}
+      closeButtonTitle="Close"
       submitButtonTitle={editMode
-        ? 'applyChanges'
-        : ('addDriverPopupTitle')
+        ? 'Save'
+        : 'Create'
       }
       {...{ onCancel }}
       maxWidth="750px"
@@ -133,6 +133,25 @@ const AddDriverForm = ({
             component={InputWithLabel}
             onChange={(phoneNumber) => {
               setFieldValue('phoneNumber', phoneNumber ? phoneNumber.match(/\d+/g).join('') : '')
+            }}
+          />
+          <Field
+            name="email"
+            label={('PopupPopupLastName')}
+            type="text"
+            errorMessage={errors.email}
+            component={InputWithLabel}
+          />
+           <Toggle
+            labelText="Active"
+            value={`toggle_active`}
+            //checked={active === true}
+            onChange={(event) => {
+              if (event.target.checked) {
+               // users.setUserState(id, true)
+              } else {
+                //users.setUserState(id, false)
+              }
             }}
           />
         </RightSidePopupForm>

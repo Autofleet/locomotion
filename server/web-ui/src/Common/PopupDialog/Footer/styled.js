@@ -20,7 +20,7 @@ export const PopupButtonsContainer = styled.div`
   flex-direction: row;
   line-height: 100%;
   margin-top: 10px;
-  
+
   button:not(:last-child) {
     margin-right: 30px;
   }
@@ -32,7 +32,7 @@ const StyledButton = styled(ButtonBase)`
 `;
 
 export const CancelButton = styled(StyledButton)`
-  font-family: Montserrat;
+  font-family: 'Montserrat', sans-serif;
   font-size: 14px;
   font-weight: 300;
   color: #464646;
@@ -46,10 +46,10 @@ export const ApplyButton = styled(StyledButton)`
   box-shadow: 0px 15px 29px 0 rgba(51, 70, 85, 0.24);
   padding: 0 10px;
 
-  font-family: Montserrat;
+  font-family: 'Montserrat', sans-serif;
   font-size: 14px;
   color: #ffffff;
-    
+
   &:disabled {
     opacity: 0.3;
     color: rgba(51, 51, 51, 0.7);

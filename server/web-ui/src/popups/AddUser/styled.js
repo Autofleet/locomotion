@@ -174,6 +174,5 @@ export const ToggleText = styled.div`
 
 export const RightSidePopupForm = styled.div`
   width: 47%;
-  margin-top: 22px;
 `;
 

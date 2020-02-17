@@ -3,8 +3,8 @@ import React from 'react';
 
 
 import propsTypes from 'prop-types';
-import styles from './index.scss';
-
+//import styles from './index.scss';
+import {FormGroupLabel, InputGroup, FormGroup, FormGroupIcon} from './styled';
 import { Input, PhoneInput, RoundedPhoneInput } from '../Input'
 
 
@@ -25,12 +25,11 @@ const InputWithLabel = ({
   inputComponent: InputComponent,
   ...props
 }) => (
-  <label
+  <FormGroup
     htmlFor={inputId}
-    className={`${styles.formGroup} ${styles.formGroupLabelContainer} ${disabled ? styles.formGroupDisabled : ''}`}
   >
-    <span className={styles.formGroupLabel}>{label}</span>
-    <div className={styles.inputGroup}>
+    <FormGroupLabel>{label}</FormGroupLabel>
+    <InputGroup>
       <InputComponent
         withBorder
         withHover
@@ -39,14 +38,14 @@ const InputWithLabel = ({
         {...field}
         {...props}
       />
-      <img className={styles.formGroupIcon} src={icon} alt="" />
+      <FormGroupIcon src={icon} alt="" />
       {errorMessage &&
-        <span className={styles.errorMessage} style={popupErrorMessageStyle(errorMessageAlignment)}>
+        <ErrorMessage style={popupErrorMessageStyle(errorMessageAlignment)}>
           {errorMessage}
-        </span>
+        </ErrorMessage>
       }
-    </div>
-  </label>
+    </InputGroup>
+  </FormGroup>
 );
 
 export default InputWithLabel;

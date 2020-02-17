@@ -1,5 +1,7 @@
 import React, { Fragment, useEffect, useState } from 'react';
 import { Redirect } from 'react-router-dom';
+import styled from 'styled-components';
+
 import useAsyncMethod, { getUsers } from '../api';
 import { P, H1 } from '../../Common/Header';
 import Table from '../../Common/Table/themes/strips';
@@ -9,6 +11,25 @@ import Toggle from '../../Common/Toggle';
 import {Body, Content, RowStyle ,Buttons, Avatar, SvgButton, SvgBase, avatarSize} from './styled';
 import usersContainer from '../../contexts/usersContainer';
 import Popup from '../../Common/Popup'
+import { ReactComponent as Logo } from '../../assets/delete.svg'
+
+const baseLogo = (props) => (<Logo {...props} />)
+const Cust = styled(baseLogo)`
+
+  cursor: pointer;
+
+    width: 16px;
+    height: 16px;
+
+     stroke: ${({ disableClass }) => disableClass ? '#dfdfdf' : 'rgb(111, 111, 111)'};
+    &:hover {
+      stroke: ${({ disableClass }) => disableClass ? '#dfdfdf' : 'rgb(17, 113, 219)'};
+    }
+    &:active {
+      stroke: ${({ disableClass }) => disableClass ? '#dfdfdf' : 'rgb(57, 153, 255)'};
+    }
+
+`;
 const deleteIcon = `
 <svg
  xmlns="http://www.w3.org/2000/svg"
@@ -101,17 +122,18 @@ export default () => {
       accessor: ({ id, active }) => ({ id, active }),
       Cell: ({ value: { id, active } }) => ( // eslint-disable-line react/prop-types
         <section>
-        <Toggle
-          value={`toggle_${id}`}
-          checked={active === true}
-          onChange={(event) => {
-          if (event.target.checked) {
-            users.setUserState(id, true)
-          } else {
-            users.setUserState(id, false)
-          }
-        }}
-            /></section>
+          <Toggle
+            value={`toggle_${id}`}
+            checked={active === true}
+            onChange={(event) => {
+              if (event.target.checked) {
+                users.setUserState(id, true)
+              } else {
+                users.setUserState(id, false)
+              }
+            }}
+          />
+        </section>
       )
     }]
     useEffect(() => {
