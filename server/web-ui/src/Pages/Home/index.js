@@ -52,7 +52,6 @@ const makeColumns = () => [
   { accessor: 'firstName', Header: 'First name' },
   { accessor: 'lastName', Header: 'Last name' },
   { accessor: 'email', Header: 'Email' },
-  { accessor: 'active', Header: 'Active' },
   { accessor: 'phoneNumber', Header: 'Phone number' }
 ];
 
@@ -72,7 +71,15 @@ export default () => {
       Cell: ({ value: { id, active } }) => ( // eslint-disable-line react/prop-types
         <Buttons>
           <SvgButton svg={editIcon} />
-          <SvgButton svg={deleteIcon} />
+          <SvgButton
+            svg={deleteIcon}
+            disableClass={active}
+            onClick={() => {
+              if(!active) {
+                users.deleteUser(id)
+              }
+            }}
+          />
         </Buttons>
       )
     },
