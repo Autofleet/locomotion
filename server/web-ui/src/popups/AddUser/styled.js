@@ -108,7 +108,7 @@ export const Image = styled.div`
   border-radius: 50%;
 `;
 
-export const popupFormContainer = styled.css`
+export const PopupFormContainer = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -118,18 +118,14 @@ export const popupFormContainer = styled.css`
   overflow-y: auto;
 `;
 
-export const leftSidePopupForm = styled.css`
-  width: 47%;
-`;
-
-export const driverAvatarContainer = styled.css`
+export const DriverAvatarContainer = styled.div`
   width: 127px;
   height: 128px;
   border-radius: 50%;
   padding: 1px;
 `;
 
-export const driverAvatarContainerInner = styled.css`
+export const DriverAvatarContainerInner = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
@@ -152,24 +148,20 @@ export const driverAvatarContainerInner = styled.css`
   }
 `;
 
-export const driverAvatar = styled.css`
+export const DriverAvatar = styled.div`
   width: 126px;
   height: 126px;
   border-radius: 50%;
   background-color: #dedede;
 `;
 
-export const nextShiftsContainer = styled.css`
-  width: 100%;
-`;
-
-export const nextShiftsContainerTitle = styled.css`
+export const NextShiftsContainerTitle = styled.div`
   margin-top: 40px;
   font-family: 'Montserrat', sans-serif;
   font-size: .8125rem;
 `;
 
-export const toggleText = styled.css`
+export const ToggleText = styled.div`
   font-size: .75rem;
   text-align: left;
   letter-spacing: -.2px;
@@ -180,7 +172,8 @@ export const toggleText = styled.css`
   }
 `;
 
-export const rightSidePopupForm = styled.css`
+export const RightSidePopupForm = styled.div`
   width: 47%;
+  margin-top: 22px;
 `;
 

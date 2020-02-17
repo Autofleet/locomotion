@@ -77,9 +77,9 @@ export default () => {
           <SvgButton
             svg={editIcon}
             onClick={() => {
-              setPopupState('AddUser')
               const userData = users.getUser(id);
               setChosenUser(userData)
+              setPopupState('AddUser')
             }}
           />
           <SvgButton
@@ -132,9 +132,7 @@ export default () => {
             data={users.usersMap}
           />
         </Content>
-      </Body>
-
-      <Popup
+        <Popup
         name="AddUser"
         isVisible={popupState === 'AddUser'}
         chosenUser={chosenUser}
@@ -142,6 +140,9 @@ export default () => {
         popupName={popupState}
         initialValues={{}}
       />
+      </Body>
+
+
     </Fragment>
     );
 };

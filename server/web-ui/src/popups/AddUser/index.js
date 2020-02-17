@@ -11,9 +11,7 @@ const requiredField = Yup.string().required('Field requierd');
 
 const AddUser = ({
   initialValues,
-  timeSlots,
   editMode,
-  availableVendors,
   onCancel,
   driverId,
   popupName,

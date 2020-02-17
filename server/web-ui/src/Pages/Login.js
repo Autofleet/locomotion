@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { Redirect } from 'react-router-dom';
 import networkService from '../Services/network';
 import logoSrc from '../assets/logo.png';
-import Input from '../Common/Input';
+import {Input} from '../Common/Input';
 import Button from '../Common/Button';
 import LoaderButton from '../Common/LoaderButton'
 

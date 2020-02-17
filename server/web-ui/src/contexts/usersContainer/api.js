@@ -1,4 +1,4 @@
-import networkService from '../../services/Network';
+import networkService from '../../Services/network';
 
 export const getUsers = async () => {
   const { data: automations } = await networkService.get('/api/v1/admin/users');

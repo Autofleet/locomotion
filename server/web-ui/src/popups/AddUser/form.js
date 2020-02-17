@@ -3,12 +3,12 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Field, FieldArray, Form } from 'formik';
 
-// import InputWithLabel, { PhoneInput } from '../../Components/InputWithLabel';
+import InputWithLabel, { PhoneInput } from '../../Common/InputWithLabel'
+
 // import AddressSelector from '../../Components/AddressSelector';
 // import SelectFromAvailableEntities from '../../Components/SelectFromAvailableEntities';
 // import Toggle from '../../Components/Toggle';
 import PopupDialog from '../../Common/PopupDialog';
-import styles from './index.scss';
 
 import {
   NextShiftsContainer,
@@ -21,6 +21,11 @@ import {
   Image,
   UploadButton,
   PlusIcon,
+  PopupFormContainer,
+  DriverAvatarContainer,
+  DriverAvatarContainerInner,
+  DriverAvatar,
+  RightSidePopupForm
 } from './styled';
 
 const getUrl = value => (typeof value === 'object' ? value.url : value);
@@ -35,7 +40,6 @@ const AvatarField = ({
       src={value ? getUrl(value) : 'https://res.cloudinary.com/autofleet/image/upload/v1531728314/Control-Center/person.jpg'}
     />
     <UploadButton>
-      <PlusIcon />
       <ImageUploader
         onChange={(event) => {
           if (value && value.url) {
@@ -93,49 +97,19 @@ const AddDriverForm = ({
       {...{ onCancel }}
       maxWidth="750px"
     >
-      <div className={styles.popupFormContainer}>
+      <PopupFormContainer>
         <LeftSidePopupForm>
-          <div className={styles.driverAvatarContainer}>
-            <div className={styles.driverAvatarContainerInner}>
+          <DriverAvatarContainer>
+            <DriverAvatarContainerInner>
               <Field
                 name="avatar"
                 component={AvatarField}
-                className={styles.driverAvatar}
+                className={DriverAvatar}
               />
-            </div>
-          </div>
-          <NextShiftsContainer>
-            <NextShiftsTitle>{('PopupNextShiftsTitle')}</NextShiftsTitle>
-            <NextShiftsBody>
-              <FieldArray
-                validateOnChange={false}
-                name="preferredTimeSlotsIds"
-                render={({ push, remove }) => timeSlots
-                  .map(({ id, name }, index) => (
-                    <ToggleContainer key={id}>
-                      <span className={styles.toggleText}>{name}</span>
-                      <Toggle
-                        data-test-id={`toggle_${index}`}
-                        value={id}
-                        checked={values.preferredTimeSlotsIds.includes(id)}
-                        onChange={(event) => {
-                          if (event.target.checked) {
-                            push(event.target.value);
-                          } else {
-                            remove(values.preferredTimeSlotsIds.indexOf(event.target.value));
-                          }
-                        }}
-                      />
-                    </ToggleContainer>
-                  ))}
-              />
-            </NextShiftsBody>
-          </NextShiftsContainer>
+            </DriverAvatarContainerInner>
+          </DriverAvatarContainer>
         </LeftSidePopupForm>
-        <div
-          className={styles.rightSidePopupForm}
-          style={{ marginTop: '22px' }}
-        >
+        <RightSidePopupForm>
           <Field
             name="firstName"
             label={('PopupFirstName')}
@@ -150,14 +124,6 @@ const AddDriverForm = ({
             errorMessage={errors.lastName}
             component={InputWithLabel}
           />
-          <SelectFromAvailableEntities
-            data={availableVendors}
-            filedName="vendorId"
-            i18nLabel="popup.labelVendor"
-            errorMessage={errors.vendorText || errors.vendorId}
-            setFieldValue={setFieldValue}
-            textKey="vendorText"
-          />
           <Field
             name="phoneNumber"
             label={('PopupPopupCell')}
@@ -169,28 +135,8 @@ const AddDriverForm = ({
               setFieldValue('phoneNumber', phoneNumber ? phoneNumber.match(/\d+/g).join('') : '')
             }}
           />
-          <Field
-            name="address"
-            label={('PopupPopupAddress')}
-            component={InputWithLabel}
-            inputComponent={AddressSelector}
-            onSelectAddress={async ({ label }, asyncLocation) => {
-
-              const { lat, lng } = await asyncLocation;
-              setFieldValue('address', label);
-              setFieldValue('addressLat', lat);
-              setFieldValue('addressLng', lng);
-            }}
-          />
-          <Field
-            name="externalId"
-            label={('PopupLabelExternalId')}
-            type="text"
-            errorMessage={errors.externalId}
-            component={InputWithLabel}
-          />
-        </div>
-      </div>
+        </RightSidePopupForm>
+      </PopupFormContainer>
     </PopupDialog>
   </Form>
 )};
@@ -198,13 +144,8 @@ const AddDriverForm = ({
 AddDriverForm.propTypes = {
   values: PropTypes.shape({}).isRequired,
   errors: PropTypes.shape({}).isRequired,
-  timeSlots: PropTypes.arrayOf(PropTypes.shape({
-    id: PropTypes.string.isRequired,
-    name: PropTypes.string.isRequired,
-  })).isRequired,
   editMode: PropTypes.bool.isRequired,
   onCancel: PropTypes.func.isRequired,
-  availableVendors: PropTypes.arrayOf(PropTypes.shape({})),
   setFieldValue: PropTypes.func.isRequired,
 };
 
