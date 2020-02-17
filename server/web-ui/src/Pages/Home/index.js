@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import { Redirect } from 'react-router-dom';
 import useAsyncMethod, { getUsers } from '../api';
 import { P, H1 } from '../../Common/Header';
@@ -7,6 +7,7 @@ import Nav from '../Nav';
 import { generateAvatarById } from '../../Services/avatar';
 import Toggle from '../../Common/Toggle';
 import {Body, Content, RowStyle ,Buttons, Avatar, SvgButton, SvgBase, avatarSize} from './styled';
+import usersContainer from '../../contexts/usersContainer';
 
 const deleteIcon = `
 <svg
@@ -32,7 +33,7 @@ const editIcon = `
 
 const customAvatarSeed = 'Auto Fleet';
 
-const columns = [
+const makeColumns = () => [
   {
     Header: '',
     width: 60,
@@ -52,42 +53,7 @@ const columns = [
   { accessor: 'lastName', Header: 'Last name' },
   { accessor: 'email', Header: 'Email' },
   { accessor: 'active', Header: 'Active' },
-  { accessor: 'phoneNumber', Header: 'Phone number' },
-  {
-    Header: '',
-    id: 'buttons',
-    minWidth: 90,
-    accessor: ({ id, active }) => ({ id, active }),
-    Cell: ({ value: { id, active } }) => ( // eslint-disable-line react/prop-types
-      <Buttons>
-        <SvgButton svg={editIcon} />
-        <SvgButton svg={deleteIcon} />
-      </Buttons>
-    )
-  },
-  {
-    Header: '',
-    id: 'toggle',
-    minWidth: 50,
-    accessor: ({ id, active }) => ({ id, active }),
-    Cell: ({ value: { id, active } }) => ( // eslint-disable-line react/prop-types
-      <section>
-      <Toggle
-            value={`toggle_${id}`}
-            checked={active === true}
-            onChange={(event) => {
-
-
-              if (event.target.checked) {
-                console.log('active');
-
-              } else {
-                console.log('not active');
-              }
-      }}
-          /></section>
-    )
-  }
+  { accessor: 'phoneNumber', Header: 'Phone number' }
 ];
 
 const defaultTrProps = () => ({ className: RowStyle });
@@ -96,21 +62,55 @@ const innerTrProps = defaultTrProps;
 export default () => {
   if (!localStorage.token) {
     return <Redirect to="/login"/>;
-  } else {
-    const tracesCall = useAsyncMethod(getUsers, null, []);
+  }
+    const users = usersContainer.useContainer();
+    const columns = [...makeColumns(), {
+      Header: '',
+      id: 'buttons',
+      minWidth: 90,
+      accessor: ({ id, active }) => ({ id, active }),
+      Cell: ({ value: { id, active } }) => ( // eslint-disable-line react/prop-types
+        <Buttons>
+          <SvgButton svg={editIcon} />
+          <SvgButton svg={deleteIcon} />
+        </Buttons>
+      )
+    },
+    {
+      Header: '',
+      id: 'toggle',
+      minWidth: 50,
+      accessor: ({ id, active }) => ({ id, active }),
+      Cell: ({ value: { id, active } }) => ( // eslint-disable-line react/prop-types
+        <section>
+        <Toggle
+          value={`toggle_${id}`}
+          checked={active === true}
+          onChange={(event) => {
+          if (event.target.checked) {
+            users.setUserState(id, true)
+          } else {
+            users.setUserState(id, false)
+          }
+        }}
+            /></section>
+      )
+    }]
+    useEffect(() => {
+      users.loadUsers()
+    }, []);
+
     return <Body>
       <Nav/>
       <Content>
         <H1>
           Users
         </H1>
-        <P>{!tracesCall.data.length ? 'Loading...' : null}</P>
         <Table
           getTrProps={innerTrProps}
           columns={columns}
-          data={tracesCall.data}
+          data={users.usersMap}
         />
       </Content>
     </Body>;
-  }
 };
