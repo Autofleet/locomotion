@@ -3,7 +3,7 @@ import ReactModal from 'react-modal';
 import propsTypes from 'prop-types';
 import getPopup from '../../popups';
 
-import styles from './index.scss';
+import * as styles from './styled';
 
 const Popup = ({
   name,

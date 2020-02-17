@@ -1,4 +1,4 @@
-import React, {Fragment, useEffect} from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 import { Redirect } from 'react-router-dom';
 import useAsyncMethod, { getUsers } from '../api';
 import { P, H1 } from '../../Common/Header';
@@ -63,8 +63,8 @@ export default () => {
     return <Redirect to="/login"/>;
   }
 
-  const [popupState, setPopupState] = useState('')
-  const [chosenUser, setChosenUser] = useState('')
+  const [popupState, setPopupState] = useState('');
+  const [chosenUser, setChosenUser] = useState('');
 
     const users = usersContainer.useContainer();
     const columns = [...makeColumns(), {

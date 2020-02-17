@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import Svg from 'react-svg-inline';
 
-import Plus from '../../../src/assets/images/management/plus.svg';
+// import Plus from '../../../src/assets/images/management/plus.svg';
 
 export const NextShiftsContainer = styled.div`
   width: 100%;
@@ -66,7 +66,7 @@ export const UploadButton = styled.button`
 `;
 
 export const PlusIcon = styled(Svg).attrs({
-  svg: Plus,
+  // svg: Plus,
 })`
   cursor: pointer;
   pointer-events: none;
@@ -107,3 +107,80 @@ export const Image = styled.div`
   background-image: url(${({ src }) => src});
   border-radius: 50%;
 `;
+
+export const popupFormContainer = styled.css`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 100%;
+  max-height: 60vh;
+  padding: 40px 50px 0px 60px;
+  overflow-y: auto;
+`;
+
+export const leftSidePopupForm = styled.css`
+  width: 47%;
+`;
+
+export const driverAvatarContainer = styled.css`
+  width: 127px;
+  height: 128px;
+  border-radius: 50%;
+  padding: 1px;
+`;
+
+export const driverAvatarContainerInner = styled.css`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 138px;
+  height: 138px;
+  border-radius: 50%;
+  background-color: #F6F6F8;
+  position: relative;
+
+  &::after {
+    position: absolute;
+    top: -1px;
+    left: -1px;
+    width: 140px;
+    height: 140px;
+    border-radius: 50%;
+    content: '';
+    z-index: -1;
+    background: linear-gradient(#1ef5b9, #55c3ff);
+  }
+`;
+
+export const driverAvatar = styled.css`
+  width: 126px;
+  height: 126px;
+  border-radius: 50%;
+  background-color: #dedede;
+`;
+
+export const nextShiftsContainer = styled.css`
+  width: 100%;
+`;
+
+export const nextShiftsContainerTitle = styled.css`
+  margin-top: 40px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: .8125rem;
+`;
+
+export const toggleText = styled.css`
+  font-size: .75rem;
+  text-align: left;
+  letter-spacing: -.2px;
+  color: #5c5c5c;
+
+  &:hover {
+    color: #333;
+  }
+`;
+
+export const rightSidePopupForm = styled.css`
+  width: 47%;
+`;
+

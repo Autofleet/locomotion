@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { omit } from 'lodash';
 
-import Button from '../../../Components/Button';
+import Button from '../../../Common/Button';
 
 const RootBase = props => <footer {...omit(props, ['centered'])} />;
 const ButtonBase = props => <Button {...omit(props, ['redButtons'])} />;

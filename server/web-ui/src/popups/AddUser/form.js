@@ -3,12 +3,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Field, FieldArray, Form } from 'formik';
 
-import InputWithLabel, { PhoneInput } from '../../Components/InputWithLabel';
-import AddressSelector from '../../Components/AddressSelector';
-import SelectFromAvailableEntities from '../../Components/SelectFromAvailableEntities';
-import Toggle from '../../Components/Toggle';
-import PopupDialog from '../../Containers/PopupDialog';
-import i18n from '../../i18n';
+// import InputWithLabel, { PhoneInput } from '../../Components/InputWithLabel';
+// import AddressSelector from '../../Components/AddressSelector';
+// import SelectFromAvailableEntities from '../../Components/SelectFromAvailableEntities';
+// import Toggle from '../../Components/Toggle';
+import PopupDialog from '../../Common/PopupDialog';
 import styles from './index.scss';
 
 import {
@@ -83,13 +82,13 @@ const AddDriverForm = ({
       padding="0px"
       width="80vw"
       title={editMode
-        ? i18n.t('management.drivers.editDriverPopupTitle')
-        : i18n.t('management.drivers.addDriverPopupTitle')
+        ? ('ManagementDriversEditDriverPopupTitle')
+        : ('ManagementDriversAddDriverPopupTitle')
       }
-      closeButtonTitle={i18n.t('popup.cancel')}
+      closeButtonTitle={('PopupCancel')}
       submitButtonTitle={editMode
-        ? i18n.t('popup.applyChanges')
-        : i18n.t('management.drivers.addDriverPopupTitle')
+        ? 'applyChanges'
+        : ('addDriverPopupTitle')
       }
       {...{ onCancel }}
       maxWidth="750px"
@@ -106,7 +105,7 @@ const AddDriverForm = ({
             </div>
           </div>
           <NextShiftsContainer>
-            <NextShiftsTitle>{i18n.t('popup.nextShiftsTitle')}</NextShiftsTitle>
+            <NextShiftsTitle>{('PopupNextShiftsTitle')}</NextShiftsTitle>
             <NextShiftsBody>
               <FieldArray
                 validateOnChange={false}
@@ -139,14 +138,14 @@ const AddDriverForm = ({
         >
           <Field
             name="firstName"
-            label={i18n.t('popup.firstName')}
+            label={('PopupFirstName')}
             type="text"
             errorMessage={errors.firstName}
             component={InputWithLabel}
           />
           <Field
             name="lastName"
-            label={i18n.t('popup.popupLastName')}
+            label={('PopupPopupLastName')}
             type="text"
             errorMessage={errors.lastName}
             component={InputWithLabel}
@@ -161,7 +160,7 @@ const AddDriverForm = ({
           />
           <Field
             name="phoneNumber"
-            label={i18n.t('popup.popupCell')}
+            label={('PopupPopupCell')}
             type="tel"
             errorMessage={errors.phoneNumber}
             inputComponent={PhoneInput}
@@ -172,7 +171,7 @@ const AddDriverForm = ({
           />
           <Field
             name="address"
-            label={i18n.t('popup.popupAddress')}
+            label={('PopupPopupAddress')}
             component={InputWithLabel}
             inputComponent={AddressSelector}
             onSelectAddress={async ({ label }, asyncLocation) => {
@@ -185,7 +184,7 @@ const AddDriverForm = ({
           />
           <Field
             name="externalId"
-            label={i18n.t('popup.labelExternalId')}
+            label={('PopupLabelExternalId')}
             type="text"
             errorMessage={errors.externalId}
             component={InputWithLabel}
