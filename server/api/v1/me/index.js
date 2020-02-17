@@ -1,4 +1,4 @@
-const { Router } = require('@autofleet/node-common');
+const Router = require('../../../lib/router');
 const userService = require('../../../lib/user');
 
 const router = Router();
