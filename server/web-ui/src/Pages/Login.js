@@ -87,7 +87,7 @@ export default ({ children }) => {
     setLoginError(null)
     setIsLoading(true)
     try {
-      const {data:loginResult} = await networkService.post('api/v1/admin/auth', { userName, password });
+      const {data:loginResult} = await networkService.post('/api/v1/admin/auth', { userName, password });
       if (loginResult && loginResult.token) {
         const token = loginResult.token;
         localStorage.token = token;

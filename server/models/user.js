@@ -27,6 +27,18 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       field: 'avatar',
     },
+    email: {
+      type: DataTypes.STRING,
+      field: 'email',
+      unique: true,
+      validate: {
+        isEmail: true,
+      },
+    },
+    active: {
+      type: DataTypes.BOOLEAN,
+      field: 'active',
+    },
   }, {
     paranoid: true,
   });
