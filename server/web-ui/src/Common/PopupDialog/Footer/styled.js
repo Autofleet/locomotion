@@ -12,7 +12,7 @@ export const Root = styled(RootBase)`
   display: flex;
   flex-direction: row;
   justify-content: ${({ centered }) => (centered ? 'center' : 'flex-end')};
-  padding: 40px 50px;
+  padding: 20px 50px;
 `;
 
 export const PopupButtonsContainer = styled.div`

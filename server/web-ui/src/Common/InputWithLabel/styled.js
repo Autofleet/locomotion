@@ -13,7 +13,7 @@ export const FormGroup = styled.label`
     ${({ disabled }) => disabled && 'opacity: 0.3'};
   `;
 
-  export const FormGroupLabel = styled.span`
+export const FormGroupLabel = styled.span`
     display: block;
     margin-bottom: 6px;
     opacity: 0.7;
@@ -22,7 +22,7 @@ export const FormGroup = styled.label`
     color: rgba(51, 51, 51, 0.7);
   `;
 
-  export const InputGroup = styled.div`
+export const InputGroup = styled.div`
     position: relative;
 
     input[type="password"] {
@@ -30,7 +30,7 @@ export const FormGroup = styled.label`
     }
   `;
 
-  export const FormGroupIcon = styled.img`
+export const FormGroupIcon = styled.img`
     width: 16px;
     position: absolute;
     top: 50%;
@@ -38,7 +38,7 @@ export const FormGroup = styled.label`
     transform: translate(0, -50%);
   `;
 
-  export const ErrorMessage = styled.span`
+export const ErrorMessage = styled.span`
     display: block;
     width: 100%;
     font-size: .75rem;

@@ -32,9 +32,11 @@ const useUsers = () => {
   };
 
   const UpdateUser = async (userId, newData) => {
-    const updateState = await update(userId, newData);
-    if (updateState) {
-      setUser(userId, newData);
+    if (Object.keys(newData).length !== 0) {
+      const updateState = await update(userId, newData);
+      if (updateState) {
+        setUser(userId, newData);
+      }
     }
   };
 
@@ -55,14 +57,6 @@ const useUsers = () => {
 
   const getUser = userId => usersMap.find(user => user.id === userId);
 
-  const uploadImage = async (photoUri) => {
-    const formData = new FormData();
-    formData.append('avatar', photoUri);
-
-    const response = await uploadImage(formData);
-
-    return response;
-  };
 
   return {
     loadUsers,
@@ -71,7 +65,6 @@ const useUsers = () => {
     setUserState,
     getUser,
     AddUser,
-    uploadImage,
     UpdateUser
   };
 };

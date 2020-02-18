@@ -102,7 +102,6 @@ export default () => {
             svg={editIcon}
             onClick={() => {
               const userData = users.getUser(id);
-
               setChosenUser(userData)
               setPopupState('EditUser')
             }}
