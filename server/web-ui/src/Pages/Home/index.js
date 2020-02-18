@@ -171,6 +171,7 @@ export default () => {
 
         <Popup
           name="EditUser"
+          editMode
           isVisible={popupState === 'EditUser'}
           chosenUser={chosenUser}
           onClose={() => setPopupState(false)}

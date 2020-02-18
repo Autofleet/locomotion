@@ -3,8 +3,7 @@ import styled from 'styled-components';
 export const FormGroup = styled.label`
     position: relative;
     width: 100%;
-    margin-top: 20px;
-    padding-top: 10px;
+    margin-top: ${({marginTop}) => marginTop ? marginTop : '0px'};
     display: block;
 
     &:first-of-type {
@@ -43,7 +42,7 @@ export const ErrorMessage = styled.span`
     width: 100%;
     font-size: .75rem;
     color: #f03a5f;
-    height: auto;
+    height: 15px;
     margin-top: 10px;
     text-align: center;
   `;

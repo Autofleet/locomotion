@@ -17,8 +17,6 @@ const AddUser = ({
   driverId,
   popupName,
 }) => {
-  console.log('initialValues', initialValues);
-
     const users = usersContainer.useContainer();
     const requiredUniqueField = field => Yup.string().required(('popup.validateRequired'))
       .test('unique', (`UNIQUE ${field}`), value =>
@@ -57,6 +55,7 @@ const AddUser = ({
       render={props => (
         <Form
           {...props}
+          editMode
           onCancel={() => {
             onCancel();
           }}
@@ -68,12 +67,17 @@ const AddUser = ({
 
 export default AddUser;
 
+AddUser.defaultProps = {
+  editMode: false,
+  onCancel: undefined,
+  popupName: false,
+  initialValues: {}
+};
+
 AddUser.propTypes = {
+  editMode: PropTypes.bool,
   popupName: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
   onCancel: PropTypes.func,
   initialValues: PropTypes.shape({}).isRequired,
 };
-AddUser.defaultProps = {
-  onCancel: undefined,
-  popupName: false,
-};
+

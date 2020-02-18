@@ -23,10 +23,12 @@ const InputWithLabel = ({
   disabled,
   field,
   inputComponent: InputComponent,
+  marginTop,
   ...props
 }) => (
   <FormGroup
     htmlFor={inputId}
+    marginTop={marginTop}
   >
     <FormGroupLabel>{label}</FormGroupLabel>
     <InputGroup>
@@ -39,11 +41,11 @@ const InputWithLabel = ({
         {...props}
       />
       <FormGroupIcon src={icon} alt="" />
-      {errorMessage &&
-        <ErrorMessage style={popupErrorMessageStyle(errorMessageAlignment)}>
-          {errorMessage}
-        </ErrorMessage>
-      }
+
+      <ErrorMessage style={popupErrorMessageStyle(errorMessageAlignment)} marginTop={marginTop}>
+        {errorMessage}
+      </ErrorMessage>
+
     </InputGroup>
   </FormGroup>
 );

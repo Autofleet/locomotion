@@ -31,7 +31,7 @@ export const PopupFormContainer = styled.div`
   max-height: 60vh;
   padding: 15px 50px 0px 60px;
   overflow-y: auto;
-  height: 360px;
+  height: 380px;
 `;
 
 export const DriverAvatarContainer = styled.div`

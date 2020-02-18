@@ -37,18 +37,17 @@ AvatarField.propTypes = {
   field: PropTypes.shape({}).isRequired,
 };
 
-const AddDriverForm = ({
-  isValid,
+const AddUserForm = ({
   values,
   errors,
   editMode,
   onCancel,
   setFieldValue,
 }) => {
-  console.log(values);
+  console.log(editMode);
 
   return(
-  <Form name="addDriverForm">
+  <Form name="AddUserForm">
     <PopupDialog
       padding="0px"
       width="80vw"
@@ -132,7 +131,7 @@ const AddDriverForm = ({
   </Form>
 )};
 
-AddDriverForm.propTypes = {
+AddUserForm.propTypes = {
   values: PropTypes.shape({}).isRequired,
   errors: PropTypes.shape({}).isRequired,
   editMode: PropTypes.bool.isRequired,
@@ -140,4 +139,4 @@ AddDriverForm.propTypes = {
   setFieldValue: PropTypes.func.isRequired,
 };
 
-export default AddDriverForm;
+export default AddUserForm;
