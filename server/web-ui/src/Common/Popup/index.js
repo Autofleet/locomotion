@@ -1,11 +1,8 @@
 import React from 'react';
 import ReactModal from 'react-modal';
 import propsTypes from 'prop-types';
-import getPopup from '../../popups';
+import getPopup from '../../Popups';
 import './index.scss';
-
-
-
 
 const Popup = ({
   name,

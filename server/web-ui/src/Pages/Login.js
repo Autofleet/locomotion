@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { Redirect } from 'react-router-dom';
+import i18n from '../i18n';
 import networkService from '../Services/network';
 import logoSrc from '../assets/logo.png';
 import {Input} from '../Common/Input';
@@ -84,8 +85,8 @@ export default ({ children }) => {
   const [loginError, setLoginError] = useState(null);
 
   const login = async (userName, password) => {
-    setLoginError(null)
-    setIsLoading(true)
+    setLoginError(null);
+    setIsLoading(true);
     try {
       const {data:loginResult} = await networkService.post('/api/v1/admin/auth', { userName, password });
       if (loginResult && loginResult.token) {
@@ -93,10 +94,10 @@ export default ({ children }) => {
         localStorage.token = token;
         networkService.setToken(token);
       } else {
-        setLoginError('Wrong username or password')
+        setLoginError(`${i18n.t(`login.loginError`)}`);
       }
     } catch (e) {
-      setLoginError('Network Error')
+      setLoginError(`${i18n.t(`login.networkError`)}`);
     }
     setIsLoading(false)
   };
@@ -108,7 +109,7 @@ export default ({ children }) => {
             <Logo/>
           </Header>
           <InputAndLabel>
-            <Label>Username:</Label>
+            <Label>{i18n.t(`login.userNameLabel`)}:</Label>
             <Input
               withBorder
               withHover
@@ -116,7 +117,7 @@ export default ({ children }) => {
             />
           </InputAndLabel>
           <InputAndLabel>
-            <Label>Password:</Label>
+            <Label>{i18n.t(`login.passwordLabel`)}:</Label>
             <PasswordInput
               withBorder
               withHover
@@ -126,7 +127,7 @@ export default ({ children }) => {
           </InputAndLabel>
           <SubmitContainer>
             <Submit
-              title="Login"
+              title={i18n.t(`login.buttonTitle`)}
               displayLoader={isLoading}
               darkLoader={false}
               onClick={async (event) => {

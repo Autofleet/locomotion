@@ -2,16 +2,15 @@ import React, { Fragment, useEffect, useState } from 'react';
 import { Redirect } from 'react-router-dom';
 import styled from 'styled-components';
 import moment from 'moment';
-
-import useAsyncMethod, { getUsers } from '../api';
-import { P, H1 } from '../../Common/Header';
-import Table from '../../Common/Table/themes/strips';
+import i18n from '../../i18n';
 import Nav from '../Nav';
-import { generateAvatarById } from '../../Services/avatar';
+import { H1 } from '../../Common/Header';
+import Table from '../../Common/Table/themes/strips';
 import Toggle from '../../Common/Toggle';
+import Popup from '../../Common/Popup'
+import { generateAvatarById } from '../../Services/avatar';
 import {Body, Content ,Buttons, Avatar, SvgButton, SvgBase, avatarSize} from './styled';
 import usersContainer from '../../contexts/usersContainer';
-import Popup from '../../Common/Popup'
 import { ReactComponent as Logo } from '../../assets/delete.svg'
 import Icon from '../../Common/Icon'
 
@@ -70,18 +69,18 @@ const makeColumns = () => [
       }
     }
   },
-  { accessor: 'firstName', Header: 'First name', width: 150 },
-  { accessor: 'lastName', Header: 'Last name' },
-  { accessor: 'email', Header: 'Email' },
-  { accessor: 'phoneNumber', Header: 'Phone number' },
+  { accessor: 'firstName', Header: i18n.t('users.firstName'), width: 150 },
+  { accessor: 'lastName', Header: i18n.t('users.lastName')},
+  { accessor: 'email', Header: i18n.t('users.email')},
+  { accessor: 'phoneNumber', Header: i18n.t('users.phoneNumber')},
   {
     accessor: 'active',
-    Header: 'Status',
-    Cell: ({value}) => (value ? 'Active' : 'Disabled')
+    Header: i18n.t('users.status'),
+    Cell: ({value}) => (value ? i18n.t('users.active') : i18n.t('users.disabled'))
   },
   {
     accessor: 'created_at',
-    Header: 'Registration date',
+    Header: i18n.t('users.registrationDate'),
     Cell: ({value}) => moment.utc(value).format('YYYY-MM-DD')
   }
 ];
@@ -154,7 +153,7 @@ export default () => {
         <Nav/>
         <Content>
           <H1>
-            Users
+            {i18n.t('users.users')}
           </H1>
           <Table
             columns={columns}

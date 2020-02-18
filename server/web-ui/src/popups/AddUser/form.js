@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Field, FieldArray, Form } from 'formik';
-
+import i18n from '../../i18n';
 import InputWithLabel, { PhoneInput } from '../../Common/InputWithLabel'
 import Toggle from '../../Common/Toggle';
 import PopupDialog from '../../Common/PopupDialog';
@@ -53,13 +53,13 @@ const AddDriverForm = ({
       padding="0px"
       width="80vw"
       title={editMode
-        ? ('ManagementDriversEditDriverPopupTitle')
-        : ('ManagementDriversAddDriverPopupTitle')
+        ? i18n.t('users.addUser.ManagementDriversEditDriverPopupTitle')
+        : i18n.t('users.addUser.ManagementDriversAddDriverPopupTitle')
       }
-      closeButtonTitle="Close"
+      closeButtonTitle={i18n.t('users.addUser.closeBtn')}
       submitButtonTitle={editMode
-        ? 'Save'
-        : 'Create'
+        ? i18n.t('users.addUser.saveBtn')
+        : i18n.t('users.addUser.createBtn')
       }
       {...{ onCancel }}
       maxWidth="750px"
@@ -78,14 +78,14 @@ const AddDriverForm = ({
           <RightSidePopupForm>
             <Field
               name="firstName"
-              label={('PopupFirstName')}
+              label={i18n.t('users.addUser.PopupFirstName')}
               type="text"
               errorMessage={errors.firstName}
               component={InputWithLabel}
               />
             <Field
               name="lastName"
-              label={('PopupPopupLastName')}
+              label={i18n.t('users.addUser.PopupPopupLastName')}
               type="text"
               errorMessage={errors.lastName}
               component={InputWithLabel}
@@ -95,7 +95,7 @@ const AddDriverForm = ({
           <RightSidePopupForm>
             <Field
                 name="phoneNumber"
-                label={('PopupPopupCell')}
+                label={i18n.t('users.addUser.PopupPopupCell')}
                 type="tel"
                 errorMessage={errors.phoneNumber}
                 inputComponent={PhoneInput}
@@ -106,7 +106,7 @@ const AddDriverForm = ({
                 />
               <Field
                 name="email"
-                label={('Email')}
+                label={i18n.t('users.addUser.Email')}
                 type="text"
                 errorMessage={errors.email}
                 component={InputWithLabel}

@@ -1,0 +1,38 @@
+{
+  "navigation": {
+    "logout": "Logout",
+    "management": "Management",
+    "poweredBy": "powered by",
+    "users": "Users"
+  },
+  "login": {
+    "userNameLabel": "Username",
+    "passwordLabel": "Password",
+    "buttonTitle": "Login",
+    "generalError": "Something went wrong, please try again",
+    "loginError": "Login Failed",
+    "networkError": "Network Error"
+  },
+  "users": {
+    "users": "Users",
+    "firstName": "First name",
+    "lastName": "Last name",
+    "email": "Email",
+    "phoneNumber": "Phone number",
+    "status": "Status",
+    "active": "Active",
+    "disabled": "Disabled",
+    "registrationDate": "Registration Date",
+    "addUser": {
+      "ManagementDriversEditDriverPopupTitle": "Edit user",
+      "ManagementDriversAddDriverPopupTitle": "Add user",
+      "PopupFirstName": "First name",
+      "PopupPopupLastName": "Last name",
+      "PopupPopupCell": "Phone number",
+      "Email": "Email",
+      "closeBtn": "Close",
+      "saveBtn": "Save",
+      "createBtn": "Create"
+    }
+  }
+}
