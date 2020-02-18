@@ -26,7 +26,6 @@ export const Image = styled.div`
 export const PopupFormContainer = styled.div`
   display: flex;
   flex-direction: column;
-  /* justify-content: space-between; */
   width: 100%;
   max-height: 60vh;
   padding: 15px 50px 0px 60px;
