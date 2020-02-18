@@ -2,7 +2,7 @@ import React, { Fragment, useEffect, useState } from 'react';
 import { Redirect } from 'react-router-dom';
 import styled from 'styled-components';
 import moment from 'moment';
-import i18n from '../i18n';
+import i18n from '../../i18n';
 import Nav from '../Nav';
 import { H1 } from '../../Common/Header';
 import Table from '../../Common/Table/themes/strips';

@@ -80,6 +80,7 @@ export default () => (
   <NavContainer>
     <Logo />
     <Menu>
+      <Header/>
       <MenuItem exact to="/">{i18n.t('navigation.users')}</MenuItem>
       <ExternalLink onClick={() => { localStorage.removeItem('token'); window.location.reload() }}>{i18n.t('navigation.logout')}</ExternalLink>
     </Menu>

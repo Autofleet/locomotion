@@ -22,6 +22,17 @@
     "status": "Status",
     "active": "Active",
     "disabled": "Disabled",
-    "registrationDate": "Registration Date"
+    "registrationDate": "Registration Date",
+    "addUser": {
+      "ManagementDriversEditDriverPopupTitle": "Edit user",
+      "ManagementDriversAddDriverPopupTitle": "Add user",
+      "PopupFirstName": "First name",
+      "PopupPopupLastName": "Last name",
+      "PopupPopupCell": "Phone number",
+      "Email": "Email",
+      "closeBtn": "Close",
+      "saveBtn": "Save",
+      "createBtn": "Create"
+    }
   }
 }
