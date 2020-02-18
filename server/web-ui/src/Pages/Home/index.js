@@ -71,7 +71,12 @@ const makeColumns = () => [
   { accessor: 'firstName', Header: 'First name' },
   { accessor: 'lastName', Header: 'Last name' },
   { accessor: 'email', Header: 'Email' },
-  { accessor: 'phoneNumber', Header: 'Phone number' }
+  { accessor: 'phoneNumber', Header: 'Phone number' },
+  {
+    accessor: 'active',
+    Header: 'Status',
+    Cell: ({value}) => (value ? 'Active' : 'Disabled')
+  }
 ];
 
 const defaultTrProps = () => ({ className: RowStyle });
@@ -96,12 +101,7 @@ export default () => {
           <SvgButton
             svg={editIcon}
             onClick={() => {
-              console.log('EDIT CLICK');
-
-              console.log(id);
-
               const userData = users.getUser(id);
-              console.log('userData',userData);
 
               setChosenUser(userData)
               setPopupState('EditUser')
