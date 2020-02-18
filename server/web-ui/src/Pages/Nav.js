@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import i18n from '../i18n';
 import logoSrc from '../assets/logo.png';
 import afLogoSrc from '../assets/af-logo.png';
 import {
@@ -79,13 +80,10 @@ export default () => (
   <NavContainer>
     <Logo />
     <Menu>
-      <Header></Header>
-      <MenuItem exact to="/">
-        Users
-      </MenuItem>
-      <ExternalLink onClick={() => { localStorage.removeItem('token'); window.location.reload() }}>Logout</ExternalLink>
+      <MenuItem exact to="/">{i18n.t('navigation.users')}</MenuItem>
+      <ExternalLink onClick={() => { localStorage.removeItem('token'); window.location.reload() }}>{i18n.t('navigation.logout')}</ExternalLink>
     </Menu>
-    <PoweredByLink target="_blank" href="https://autofleet.io/">powered by <AfLogo/></PoweredByLink>
+    <PoweredByLink target="_blank" href="https://autofleet.io/">{i18n.t('navigation.poweredBy')} <AfLogo/></PoweredByLink>
   </NavContainer>
 )
 
