@@ -13,3 +13,9 @@ export const find = async (id) => {
 
 export const remove = async id => (await networkService.delete(`/api/v1/admin/users/${id}`)).data;
 
+
+export const uploadImage = async formData => (await networkService.post('/api/v1/admin/users/upload-image', formData, {
+  headers: {
+    'content-type': 'multipart/form-data',
+  },
+})).data;

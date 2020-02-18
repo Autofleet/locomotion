@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { createContainer } from 'unstated-next';
-import { getUsers, update, remove } from './api';
+import { getUsers, update, remove, add } from './api';
 
 const useUsers = () => {
   const [usersMap, setUsersMap] = useState([]);
@@ -31,6 +31,21 @@ const useUsers = () => {
     }
   };
 
+  const UpdateUser = async (userId, newData) => {
+    const updateState = await update(userId, newData);
+    if (updateState) {
+      setUser(userId, newData);
+    }
+  };
+
+
+  const AddUser = async (data) => {
+    const addUser = await add(data);
+    if (addUser) {
+      setUser(addUser.id, addUser.data);
+    }
+  };
+
   const deleteUser = async (userId) => {
     const removeUser = await remove(userId);
     if (removeUser) {
@@ -38,15 +53,26 @@ const useUsers = () => {
     }
   };
 
-  const getUser = userId => usersMap[userId];
+  const getUser = userId => usersMap.find(user => user.id === userId);
 
+  const uploadImage = async (photoUri) => {
+    const formData = new FormData();
+    formData.append('avatar', photoUri);
+
+    const response = await uploadImage(formData);
+
+    return response;
+  };
 
   return {
     loadUsers,
     usersMap,
     deleteUser,
     setUserState,
-    getUser
+    getUser,
+    AddUser,
+    uploadImage,
+    UpdateUser
   };
 };
 

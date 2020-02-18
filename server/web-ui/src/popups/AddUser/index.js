@@ -1,9 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Formik } from 'formik';
-//import diff from 'object-diff';
+import diff from 'object-diff';
 import { get } from 'lodash';
 import * as Yup from 'yup';
+import usersContainer from '../../contexts/usersContainer';
 
 import Form from './form';
 
@@ -16,58 +17,72 @@ const AddUser = ({
   driverId,
   popupName,
 }) => {
-/*   const requiredUniqueField = field => Yup.string().required(i18n.t('popup.validateRequired'))
-    .test('unique', i18n.t(`management.drivers.validate.${field}`), value =>
-      !driversManager.find(({ [field]: fieldValue, id }) =>
-        fieldValue === value && id !== driversManager.driverId));
- */
+  console.log('initialValues', initialValues);
+
+    const users = usersContainer.useContainer();
+    const requiredUniqueField = field => Yup.string().required(('popup.validateRequired'))
+      .test('unique', (`UNIQUE ${field}`), value =>
+        !users.usersMap.find(({ [field]: fieldValue, id }) =>
+          fieldValue === value && id !== initialValues.id))
+
   return (
     <Formik
       validateOnBlur={false}
       validateOnChange={false}
       {...{ initialValues }}
-/*       validationSchema={Yup.object().shape({
+       validationSchema={Yup.object().shape({
         firstName: requiredField,
         lastName: requiredField,
         phoneNumber: requiredUniqueField('phoneNumber'),
-        externalId: requiredUniqueField('externalId').nullable(),
+        email: requiredUniqueField('email').email(),
       })}
       onSubmit={async (values, actions) => {
         actions.setSubmitting(true);
-
+        console.log(values);
         const { avatar, ...otherValues } = popupName === 'AddUser'
-          ? values
-          : diff(initialValues, values);
-
+          ? values : diff(initialValues, values);
         const imageFile = get(values.avatar, 'file');
-
         if (imageFile) {
+          console.log('INNN IMAGE FILE');
+
           try {
-            const uploadResponse = await driversManager.uploadDriverImage(imageFile);
+            const uploadResponse = await users.uploadImage(imageFile);
+            console.log('UPLOAD RESP');
+
+            console.log(uploadResponse);
+
             otherValues.avatar = uploadResponse.url;
           } catch (e) {
-            actions.setErrors({ avatar: JSON.stringify(e) });
-            throw e;
+            //actions.setErrors({ avatar: JSON.stringify(e) });
+            console.log('ERROR UPLOAD');
+            console.log(e);
+
+            //throw e;
           }
-        }
-        try {
-          if (popupName === 'AddUser') {
-            await driversManager.AddUser(otherValues);
-          } else {
-            await driversManager.updateDriver(driverId, otherValues);
-          }
-        } catch (error) {
-          appContext.throwClientError({ consoleError: error });
         }
 
+        try {
+          if (popupName === 'AddUser') {
+            await users.AddUser(otherValues);
+          } else {
+            console.log('UPDATINGGG ');
+
+            await users.UpdateUser(values.id, otherValues);
+          }
+        } catch (error) {
+          console.log(error);
+
+          //appContext.throwClientError({ consoleError: error });
+        }
+//
         actions.setSubmitting(false);
-        onCancel();
-      }} */
+        //onCancel();
+      }}
       render={props => (
         <Form
           {...props}
           onCancel={() => {
-            //onCancel();
+            onCancel();
           }}
         />
       )}

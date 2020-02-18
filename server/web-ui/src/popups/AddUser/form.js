@@ -9,6 +9,7 @@ import InputWithLabel, { PhoneInput } from '../../Common/InputWithLabel'
 // import SelectFromAvailableEntities from '../../Components/SelectFromAvailableEntities';
 import Toggle from '../../Common/Toggle';
 import PopupDialog from '../../Common/PopupDialog';
+import { ReactComponent as PlusIcon } from '../../assets/plus.svg'
 
 import {
   NextShiftsContainer,
@@ -70,16 +71,15 @@ AvatarField.propTypes = {
 };
 
 const AddDriverForm = ({
-  driverId,
   isValid,
   values,
   errors,
-  timeSlots,
   editMode,
   onCancel,
-  availableVendors,
   setFieldValue,
 }) => {
+  console.log(values);
+
   return(
   <Form name="addDriverForm">
     <PopupDialog
@@ -137,7 +137,7 @@ const AddDriverForm = ({
           />
           <Field
             name="email"
-            label={('PopupPopupLastName')}
+            label={('Email')}
             type="text"
             errorMessage={errors.email}
             component={InputWithLabel}
@@ -145,12 +145,12 @@ const AddDriverForm = ({
            <Toggle
             labelText="Active"
             value={`toggle_active`}
-            //checked={active === true}
+            checked={values.active}
             onChange={(event) => {
               if (event.target.checked) {
-               // users.setUserState(id, true)
+                setFieldValue('active', true)
               } else {
-                //users.setUserState(id, false)
+                setFieldValue('active', false)
               }
             }}
           />

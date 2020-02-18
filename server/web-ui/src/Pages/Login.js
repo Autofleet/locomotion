@@ -96,7 +96,6 @@ export default ({ children }) => {
         setLoginError('Wrong username or password')
       }
     } catch (e) {
-      console.log('error');
       setLoginError('Network Error')
     }
     setIsLoading(false)

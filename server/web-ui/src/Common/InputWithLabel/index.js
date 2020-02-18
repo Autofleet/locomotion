@@ -4,7 +4,7 @@ import React from 'react';
 
 import propsTypes from 'prop-types';
 //import styles from './index.scss';
-import {FormGroupLabel, InputGroup, FormGroup, FormGroupIcon} from './styled';
+import {FormGroupLabel, InputGroup, FormGroup, FormGroupIcon, ErrorMessage} from './styled';
 import { Input, PhoneInput, RoundedPhoneInput } from '../Input'
 
 

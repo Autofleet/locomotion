@@ -60,8 +60,6 @@ const makeColumns = () => [
     width: 60,
     id: 'avatar',
     Cell: ({ original: user }) => {
-      console.log(user);
-
       if (user.avatar) {
         return <Avatar src={user.avatar}/>;
       } else {
@@ -98,9 +96,15 @@ export default () => {
           <SvgButton
             svg={editIcon}
             onClick={() => {
+              console.log('EDIT CLICK');
+
+              console.log(id);
+
               const userData = users.getUser(id);
+              console.log('userData',userData);
+
               setChosenUser(userData)
-              setPopupState('AddUser')
+              setPopupState('EditUser')
             }}
           />
           <SvgButton
@@ -155,13 +159,24 @@ export default () => {
           />
         </Content>
         <Popup
-        name="AddUser"
-        isVisible={popupState === 'AddUser'}
-        chosenUser={chosenUser}
-        onClose={() => setPopupState(false)}
-        popupName={popupState}
-        initialValues={{}}
-      />
+          name="AddUser"
+          isVisible={popupState === 'AddUser'}
+          chosenUser={chosenUser}
+          onClose={() => setPopupState(false)}
+          popupName={popupState}
+          initialValues={{active: true}}
+        />
+
+        <Popup
+          name="EditUser"
+          isVisible={popupState === 'EditUser'}
+          chosenUser={chosenUser}
+          onClose={() => setPopupState(false)}
+          popupName={popupState}
+          initialValues={chosenUser}
+        />
+
+
       </Body>
 
 

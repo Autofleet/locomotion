@@ -117,7 +117,7 @@ CompoundInput.defaultProps = {
 
 export const PhoneInputDiv = styled.div`
   .react-tel-input > input.form-control {
-    ${({ isRounded }) => (console.log({ isRounded }) || !isRounded ? `
+    ${({ isRounded }) => (!isRounded ? `
       line-height: normal;
       font-family: 'Montserrat',sans-serif;
       -webkit-font-smoothing: antialiased;
@@ -169,7 +169,7 @@ export const PhoneInputDiv = styled.div`
     .react-tel-input .flag-dropdown.open .selected-flag {
       background: rgba(0,0,0,0) !important;
     }
-    
+
     .react-tel-input .flag-dropdown,
     .react-tel-input .flag-dropdown .selected-flag {
       background: rgba(0,0,0,0) !important;

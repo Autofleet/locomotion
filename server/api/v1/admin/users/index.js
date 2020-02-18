@@ -5,8 +5,8 @@ const userService = require('../../../../lib/user');
 const router = Router();
 
 router.post('/', async (req, res) => {
-  const { user } = req.body;
-  const response = await userService.create(user);
+  const userData = req.body;
+  const response = await userService.create(userData);
   res.json(response);
 });
 
@@ -33,5 +33,7 @@ router.delete('/:userId', async (req, res) => {
   const response = await userService.destroy(userId);
   res.json(response);
 });
+
+router.use('/upload-image', require('./upload-image'));
 
 module.exports = router;
