@@ -1,7 +1,4 @@
 import styled from 'styled-components';
-import Svg from 'react-svg-inline';
-
-// import Plus from '../../../src/assets/images/management/plus.svg';
 
 export const NextShiftsContainer = styled.div`
   width: 100%;

@@ -13,6 +13,7 @@ import {Body, Content ,Buttons, Avatar, SvgButton, SvgBase, avatarSize} from './
 import usersContainer from '../../contexts/usersContainer';
 import Popup from '../../Common/Popup'
 import { ReactComponent as Logo } from '../../assets/delete.svg'
+import Icon from '../../Common/Icon'
 
 const baseLogo = (props) => (<Logo {...props} />)
 const Cust = styled(baseLogo)`
@@ -101,6 +102,7 @@ export default () => {
       accessor: ({ id, active }) => ({ id, active }),
       Cell: ({ value: { id, active } }) => ( // eslint-disable-line react/prop-types
         <Buttons>
+          <Icon Component={Logo} />
           <SvgButton
             svg={editIcon}
             onClick={() => {
