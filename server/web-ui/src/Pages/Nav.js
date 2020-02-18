@@ -79,7 +79,7 @@ export default () => (
   <NavContainer>
     <Logo />
     <Menu>
-      <Header>Management</Header>
+      <Header></Header>
       <MenuItem exact to="/">
         Users
       </MenuItem>

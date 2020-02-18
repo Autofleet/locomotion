@@ -68,22 +68,3 @@ export const Content = styled.div`
   border-image: none 100% / 1 / 0 stretch;
   border-radius: 6px 0px 0px 6px;
 `;
-
-export const RowStyle = styled.div`
- .tableRow {
-  section {
-    opacity: 0;
-  }
-
-  &:hover {
-    box-shadow: 0px 2px 5px 0 rgba(157, 165, 180, 0.5);
-  }
-  &:hover section {
-    opacity: 1;
-  }
-}
-
-.pendingInviteTableRow {
-  opacity: 30%;
-}
-`;

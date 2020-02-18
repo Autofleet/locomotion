@@ -1,6 +1,7 @@
 import React, { Fragment, useEffect, useState } from 'react';
 import { Redirect } from 'react-router-dom';
 import styled from 'styled-components';
+import moment from 'moment';
 
 import useAsyncMethod, { getUsers } from '../api';
 import { P, H1 } from '../../Common/Header';
@@ -8,7 +9,7 @@ import Table from '../../Common/Table/themes/strips';
 import Nav from '../Nav';
 import { generateAvatarById } from '../../Services/avatar';
 import Toggle from '../../Common/Toggle';
-import {Body, Content, RowStyle ,Buttons, Avatar, SvgButton, SvgBase, avatarSize} from './styled';
+import {Body, Content ,Buttons, Avatar, SvgButton, SvgBase, avatarSize} from './styled';
 import usersContainer from '../../contexts/usersContainer';
 import Popup from '../../Common/Popup'
 import { ReactComponent as Logo } from '../../assets/delete.svg'
@@ -68,7 +69,7 @@ const makeColumns = () => [
       }
     }
   },
-  { accessor: 'firstName', Header: 'First name' },
+  { accessor: 'firstName', Header: 'First name', width: 150 },
   { accessor: 'lastName', Header: 'Last name' },
   { accessor: 'email', Header: 'Email' },
   { accessor: 'phoneNumber', Header: 'Phone number' },
@@ -76,11 +77,13 @@ const makeColumns = () => [
     accessor: 'active',
     Header: 'Status',
     Cell: ({value}) => (value ? 'Active' : 'Disabled')
+  },
+  {
+    accessor: 'created_at',
+    Header: 'Registration date',
+    Cell: ({value}) => moment.utc(value).format('YYYY-MM-DD')
   }
 ];
-
-const defaultTrProps = () => ({ className: RowStyle });
-const innerTrProps = defaultTrProps;
 
 export default () => {
   if (!localStorage.token) {
@@ -90,8 +93,8 @@ export default () => {
   const [popupState, setPopupState] = useState('');
   const [chosenUser, setChosenUser] = useState('');
 
-    const users = usersContainer.useContainer();
-    const columns = [...makeColumns(), {
+  const users = usersContainer.useContainer();
+  const columns = [...makeColumns(), {
       Header: '',
       id: 'buttons',
       minWidth: 90,
@@ -152,7 +155,6 @@ export default () => {
             Users
           </H1>
           <Table
-            getTrProps={innerTrProps}
             columns={columns}
             data={users.usersMap}
           />
