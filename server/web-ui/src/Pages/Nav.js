@@ -2,10 +2,10 @@ import React from 'react';
 import styled from 'styled-components';
 import i18n from '../i18n';
 import logoSrc from '../assets/logo.png';
-import afLogoSrc from '../assets/af-logo.png';
 import {
   NavLink
 } from "react-router-dom";
+import PoweredByBase from '../Common/PoweredBy';
 
 export const navWidthPx = 280;
 
@@ -60,20 +60,16 @@ const ExternalLink = styled.a`
   cursor: pointer;
 `;
 
-const PoweredByLink = styled(ExternalLink)`
-  position: fixed;
-  bottom: 10px;
-  margin: auto 0 0 1em;
-  font-size: 10px;
-`;
-
 const Logo = styled.img.attrs({ src: logoSrc })`
   width: 200px;
   margin-left: 15px;
 `;
 
-const AfLogo = styled.img.attrs({ src: afLogoSrc })`
-  height: 13px;
+const PoweredBy = styled(PoweredByBase)`
+  padding: 8px 16px;
+  position: fixed;
+  bottom: 10px;
+  margin: auto 0 0 1em;
 `;
 
 export default () => (
@@ -84,7 +80,7 @@ export default () => (
       <MenuItem exact to="/">{i18n.t('navigation.users')}</MenuItem>
       <ExternalLink onClick={() => { localStorage.removeItem('token'); window.location.reload() }}>{i18n.t('navigation.logout')}</ExternalLink>
     </Menu>
-    <PoweredByLink target="_blank" href="https://autofleet.io/">{i18n.t('navigation.poweredBy')} <AfLogo/></PoweredByLink>
+    <PoweredBy/>
   </NavContainer>
 )
 

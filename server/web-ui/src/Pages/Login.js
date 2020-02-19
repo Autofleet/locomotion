@@ -6,6 +6,7 @@ import networkService from '../Services/network';
 import logoSrc from '../assets/logo.png';
 import {Input} from '../Common/Input';
 import LoaderButton from '../Common/LoaderButton'
+import PoweredByBase from '../Common/PoweredBy';
 
 const LoginContainer = styled.div`
   display: block;
@@ -71,7 +72,12 @@ const Error = styled.div`
   text-align: center;
 `;
 
-
+const PoweredBy = styled(PoweredByBase)`
+  position: absolute;
+  bottom: 10px;
+  text-align: center;
+  width: 92%;
+`;
 
 export default ({ children }) => {
   const [userName, setUserName] = useState('');
@@ -136,6 +142,7 @@ export default ({ children }) => {
               {loginError}
             </Error>
           : null}
+          <PoweredBy/>
         </Content>
       </LoginContainer>
   );
