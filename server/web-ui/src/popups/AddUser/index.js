@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Formik } from 'formik';
 import diff from 'object-diff';
-import { get } from 'lodash';
 import * as Yup from 'yup';
 import usersContainer from '../../contexts/usersContainer';
 

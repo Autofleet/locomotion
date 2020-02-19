@@ -5,7 +5,6 @@ import i18n from '../i18n';
 import networkService from '../Services/network';
 import logoSrc from '../assets/logo.png';
 import {Input} from '../Common/Input';
-import Button from '../Common/Button';
 import LoaderButton from '../Common/LoaderButton'
 
 const LoginContainer = styled.div`
@@ -36,10 +35,6 @@ const Logo = styled.img.attrs({ src: logoSrc })`
   max-width: 400px;
   max-height: 120px;
   margin-left: 15px;
-`;
-
-const Title = styled.h1`
-  color: #2e3136;
 `;
 
 const InputAndLabel = styled.label`

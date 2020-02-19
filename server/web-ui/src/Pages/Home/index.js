@@ -1,6 +1,5 @@
 import React, { Fragment, useEffect, useState } from 'react';
 import { Redirect } from 'react-router-dom';
-import styled from 'styled-components';
 import moment from 'moment';
 import i18n from '../../i18n';
 import Nav from '../Nav';
@@ -9,7 +8,7 @@ import Table from '../../Common/Table/themes/strips';
 import Toggle from '../../Common/Toggle';
 import Popup from '../../Common/Popup'
 import { generateAvatarById } from '../../Services/avatar';
-import {Body, Content ,Buttons, Avatar, SvgButton, SvgBase, avatarSize} from './styled';
+import {Body, Content ,Buttons, Avatar, SvgBase, avatarSize} from './styled';
 import usersContainer from '../../contexts/usersContainer';
 import { ReactComponent as deleteIcon } from '../../assets/delete.svg'
 import { ReactComponent as editIcon } from '../../assets/edit.svg'
