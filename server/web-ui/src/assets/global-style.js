@@ -3,6 +3,8 @@ import React from 'react';
 const Style = props => (
   <style>
     {`
+    @import url("https://fonts.googleapis.com/css?family=Montserrat|Montserrat:bold");
+    
     html {
       height: 100%;
     }
@@ -11,6 +13,8 @@ const Style = props => (
       font-family: 'Montserrat', sans-serif;
       line-height: normal;
       -webkit-font-smoothing: antialiased;
+      font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
       box-sizing: border-box;
       margin: 0;
       padding: 0;
