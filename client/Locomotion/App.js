@@ -1,20 +1,11 @@
 import React from 'react';
-import params from 'react-native-config';
-
-import { MainProvider } from './src/context/main';
-import StorybookUI from './storybook';
-import Router from './src/pages';
-import NavigationService from './src/services/navigation';
-
-import RidePopups from './src/popups/RidePopups';
+import { LocomotionRouter } from '@autofleet/locomotion-sdk';
+const Logo = require('./src/assets/logo.png');
 
 const App = () => (
-  <MainProvider>
-    <Router ref={navigation => NavigationService.setTopLevelNavigator(navigation)} />
-
-    {/* Popups */}
-    <RidePopups />
-  </MainProvider>
+  <LocomotionRouter
+    logo={Logo}
+  />
 );
 
-export default params.RUN_STORYBOOK ? StorybookUI : App;
+export default App;

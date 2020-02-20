@@ -3,7 +3,9 @@ const app = require('../../../../app');
 const { User, Verification } = require('../../../../models');
 
 describe('Users Endpoints', () => {
-  const baseUrl = '/api/v1/users';
+  const baseUrl = '/api/v1/admin';
+  const usersApiUrl = `${baseUrl}/users`;
+  let acToken;
   const firstUserData = {
     id: 'f8a0c5fc-9b4c-43fa-93e7-a57349645be2',
     phoneNumber: '972501234567',
@@ -34,6 +36,16 @@ describe('Users Endpoints', () => {
 
   beforeAll(async () => {
     expect((await request(app).get('/')).status).toBe(200);
+
+    const res = await request(app).post(`${baseUrl}/auth`).send({
+      userName: 'admin',
+      password: '1234',
+    });
+    if (!res.body.token) throw new Error(`admin login is needed for this test! resp was ${JSON.stringify(res)}`);
+    acToken = [
+      'Authorization',
+      `Bearer ${res.body.token}`,
+    ];
   });
 
   beforeEach(async () => {
@@ -41,14 +53,14 @@ describe('Users Endpoints', () => {
   });
 
   it('test create new user', async () => {
-    const res = await request(app).post(`${baseUrl}`).send({ user: firstUserData });
+    const res = await request(app).post(`${usersApiUrl}`).set(...acToken).send({ user: firstUserData });
     expect(res.statusCode).toBe(200);
     expect(res.body.id).toEqual(firstUserData.id);
   });
 
   it('test get all users', async () => {
     await initDatabase();
-    const res = await request(app).get(`${baseUrl}`);
+    const res = await request(app).get(`${usersApiUrl}`).set(...acToken);
     expect(res.statusCode).toBe(200);
     expect(res.body.length).toEqual(2);
     expect(res.body[0].id).toEqual(firstUserData.id);
@@ -57,7 +69,7 @@ describe('Users Endpoints', () => {
 
   it('test get first user', async () => {
     await initDatabase();
-    const res = await request(app).get(`${baseUrl}/${firstUserData.id}`);
+    const res = await request(app).get(`${usersApiUrl}/${firstUserData.id}`).set(...acToken);
     expect(res.statusCode).toBe(200);
     expect(res.body).toBeDefined();
     expect(res.body.id).toEqual(firstUserData.id);
@@ -66,7 +78,7 @@ describe('Users Endpoints', () => {
   it('test update user', async () => {
     const newFirstName = 'tester shmester';
     await initDatabase();
-    const res = await request(app).patch(`${baseUrl}/${firstUserData.id}`).send({
+    const res = await request(app).patch(`${usersApiUrl}/${firstUserData.id}`).set(...acToken).send({
       firstName: newFirstName,
     });
     expect(res.statusCode).toBe(200);
@@ -77,12 +89,12 @@ describe('Users Endpoints', () => {
 
   it('test delete user', async () => {
     await initDatabase();
-    const res = await request(app).get(`${baseUrl}/${firstUserData.id}`);
+    const res = await request(app).get(`${usersApiUrl}/${firstUserData.id}`).set(...acToken);
     expect(res.statusCode).toBe(200);
     expect(res.body).toBeDefined();
     expect(res.body.id).toEqual(firstUserData.id);
 
-    const delRes = await request(app).delete(`${baseUrl}/${firstUserData.id}`);
+    const delRes = await request(app).delete(`${usersApiUrl}/${firstUserData.id}`).set(...acToken);
     expect(delRes.statusCode).toBe(200);
   });
 });
