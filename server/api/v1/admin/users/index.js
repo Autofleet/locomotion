@@ -34,6 +34,4 @@ router.delete('/:userId', async (req, res) => {
   res.json(response);
 });
 
-router.use('/upload-image', require('./upload-image'));
-
 module.exports = router;
