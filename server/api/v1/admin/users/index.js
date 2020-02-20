@@ -5,8 +5,8 @@ const userService = require('../../../../lib/user');
 const router = Router();
 
 router.post('/', async (req, res) => {
-  const { user } = req.body;
-  const response = await userService.create(user);
+  const userData = req.body;
+  const response = await userService.create(userData);
   res.json(response);
 });
 

@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { Redirect } from 'react-router-dom';
+import i18n from '../i18n';
 import networkService from '../Services/network';
 import logoSrc from '../assets/logo.png';
-import Input from '../Common/Input';
-import Button from '../Common/Button';
+import {Input} from '../Common/Input';
 import LoaderButton from '../Common/LoaderButton'
+import PoweredByBase from '../Common/PoweredBy';
 
 const LoginContainer = styled.div`
   display: block;
@@ -35,10 +36,6 @@ const Logo = styled.img.attrs({ src: logoSrc })`
   max-width: 400px;
   max-height: 120px;
   margin-left: 15px;
-`;
-
-const Title = styled.h1`
-  color: #2e3136;
 `;
 
 const InputAndLabel = styled.label`
@@ -75,7 +72,12 @@ const Error = styled.div`
   text-align: center;
 `;
 
-
+const PoweredBy = styled(PoweredByBase)`
+  position: absolute;
+  bottom: 10px;
+  text-align: center;
+  width: 92%;
+`;
 
 export default ({ children }) => {
   const [userName, setUserName] = useState('');
@@ -84,20 +86,19 @@ export default ({ children }) => {
   const [loginError, setLoginError] = useState(null);
 
   const login = async (userName, password) => {
-    setLoginError(null)
-    setIsLoading(true)
+    setLoginError(null);
+    setIsLoading(true);
     try {
-      const {data:loginResult} = await networkService.post('api/v1/admin/auth', { userName, password });
+      const {data:loginResult} = await networkService.post('/api/v1/admin/auth', { userName, password });
       if (loginResult && loginResult.token) {
         const token = loginResult.token;
         localStorage.token = token;
         networkService.setToken(token);
       } else {
-        setLoginError('Wrong username or password')
+        setLoginError(`${i18n.t(`login.loginError`)}`);
       }
     } catch (e) {
-      console.log('error');
-      setLoginError('Network Error')
+      setLoginError(`${i18n.t(`login.networkError`)}`);
     }
     setIsLoading(false)
   };
@@ -109,7 +110,7 @@ export default ({ children }) => {
             <Logo/>
           </Header>
           <InputAndLabel>
-            <Label>Username:</Label>
+            <Label>{i18n.t(`login.userNameLabel`)}:</Label>
             <Input
               withBorder
               withHover
@@ -117,7 +118,7 @@ export default ({ children }) => {
             />
           </InputAndLabel>
           <InputAndLabel>
-            <Label>Password:</Label>
+            <Label>{i18n.t(`login.passwordLabel`)}:</Label>
             <PasswordInput
               withBorder
               withHover
@@ -127,7 +128,7 @@ export default ({ children }) => {
           </InputAndLabel>
           <SubmitContainer>
             <Submit
-              title="Login"
+              title={i18n.t(`login.buttonTitle`)}
               displayLoader={isLoading}
               darkLoader={false}
               onClick={async (event) => {
@@ -141,6 +142,7 @@ export default ({ children }) => {
               {loginError}
             </Error>
           : null}
+          <PoweredBy/>
         </Content>
       </LoginContainer>
   );

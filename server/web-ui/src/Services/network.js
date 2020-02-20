@@ -22,7 +22,9 @@ class Network {
   constructor(settings = {}) {
     this.settings = Object.assign(Network.defaultSettings, settings);
     this.axios = axios.create(settings);
-    this.axios.defaults.headers.common[AUTHORIZATION_HEADER] = `Bearer ${authCode}`;
+    if(authCode) {
+      this.axios.defaults.headers.common[AUTHORIZATION_HEADER] = `Bearer ${authCode}`;
+    }
 
     HTTPMethods.map((method) => {
       this[method] = async (...args) => this.axios[method](...args).catch((error) => {

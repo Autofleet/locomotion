@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import propsTypes from 'prop-types';
 import BasicTable from '../';
 
-const margin = 15;
+const margin = 0;
 const Table = styled(BasicTable)`
 
     &.cards-table.ReactTable .rt-tbody .rt-tr-group {

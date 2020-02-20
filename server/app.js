@@ -1,7 +1,7 @@
 require('dotenv').config();
 const path = require('path');
 const express = require('express');
-const SExpress = require('@autofleet/super-express');
+const SExpress = require('./lib/super-express');
 const logger = require('./logger');
 const packageJson = require('./package');
 
