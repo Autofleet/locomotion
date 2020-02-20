@@ -1,0 +1,28 @@
+{
+  "parser": "babel-eslint",
+  "extends": "airbnb",
+  "plugins": ["react", "jsx-a11y", "import"],
+  "rules": {
+      "func-names": [
+          "error",
+          "never"
+      ],
+      "linebreak-style": ["off"],
+      "no-undef": ["error"],
+      "react/sort-comp": ["off"],
+      "react/prefer-stateless-function": ["off"],
+      "react/jsx-filename-extension": 0,
+      "react/no-typos": ["off"],
+      "global-require": ["off"],
+      "jsx-a11y/anchor-is-valid": ["off"],
+      "react/jsx-no-bind": ["off"]
+  },
+  "globals": {
+      "navigator": true,
+      "fetch": true,
+      "this.props.navigation": true,
+      "FormData": true,
+      "WebSocket": true,
+      "it": true
+  }
+}
