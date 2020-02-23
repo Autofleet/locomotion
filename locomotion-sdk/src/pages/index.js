@@ -3,7 +3,7 @@ import { View } from 'react-native';
 import {
   createSwitchNavigator, createStackNavigator, createAppContainer, createDrawerNavigator,
 } from 'react-navigation';
-
+import styled from 'styled-components'
 import AuthLoadingScreen from './Login/AuthLoadingScreen';
 import Auth from '../services/auth';
 import Login from './Login';
@@ -12,6 +12,13 @@ import ActiveRide from './ActiveRide';
 import ContactUs from './ContactUs';
 import Onboarding from './Onboarding';
 import Lock from './Lock';
+
+const PlusIconSource = require('../assets/plus.png');
+const PlusIcon = styled.Image.attrs({ source: PlusIconSource })`
+  width: 16px;
+  height: 16px;
+`;
+
 
 
 export const MainRouter = (props) => {
@@ -22,6 +29,7 @@ export const MainRouter = (props) => {
       screen: addPageProps(ActiveRide),
       navigationOptions: {
         drawerLabel: 'Home',
+        drawerIcon: (<PlusIcon />)
       },
     },
     ContactUs: {
@@ -41,6 +49,15 @@ export const MainRouter = (props) => {
     },
 
   }, {
+    contentOptions: {
+      activeTintColor: '#e91e63',
+      itemsContainerStyle: {
+        marginVertical: 0,
+      },
+      iconContainerStyle: {
+        opacity: 1
+      }
+    }
   });
 
   const AuthStack = createStackNavigator({ SignIn: addPageProps(Login), Onboarding: addPageProps(Onboarding) }, {
