@@ -11,6 +11,7 @@ import Login from './Login';
 import ActiveRide from './ActiveRide';
 import ContactUs from './ContactUs';
 import Onboarding from './Onboarding';
+import Lock from './Lock';
 
 
 export const MainRouter = (props) => {
@@ -51,6 +52,7 @@ export const MainRouter = (props) => {
       AuthLoading: addPageProps(AuthLoadingScreen),
       App: AppStack,
       Auth: AuthStack,
+      Lock
     },
     {
       initialRouteName: 'AuthLoading',

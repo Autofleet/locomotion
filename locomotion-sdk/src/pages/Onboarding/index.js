@@ -54,6 +54,9 @@ export default ({ navigation }) => {
       return;
     }
     AppSettings.update({ userProfile });
+    if(!response.data.active) {
+      return navigation.navigate('Lock');
+    }
     navigation.navigate('App');
   };
 
