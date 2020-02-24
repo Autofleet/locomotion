@@ -1,9 +1,8 @@
 import React from 'react';
-import { View } from 'react-native';
+import { Dimensions, View } from 'react-native';
 import {
   createSwitchNavigator, createStackNavigator, createAppContainer, createDrawerNavigator,
 } from 'react-navigation';
-import styled from 'styled-components'
 import AuthLoadingScreen from './Login/AuthLoadingScreen';
 import Auth from '../services/auth';
 import Login from './Login';
@@ -12,14 +11,17 @@ import ActiveRide from './ActiveRide';
 import ContactUs from './ContactUs';
 import Onboarding from './Onboarding';
 import Lock from './Lock';
+import { DrawerContentComponent, DrawerLabel } from '../Components/Drawer';
 
 const PlusIconSource = require('../assets/plus.png');
-const PlusIcon = styled.Image.attrs({ source: PlusIconSource })`
-  width: 16px;
-  height: 16px;
-`;
+const CarIconSource = require('../assets/menuItems/car.png');
+const HelpIconSource = require('../assets/menuItems/help.png');
+const CreaditCardIconSource = require('../assets/menuItems/creditcard.png');
+const PplIconSource = require('../assets/menuItems/person.png');
 
-
+const drawerWidth = Dimensions.get('window').width;
+const activeBackgroundColor = '#ffffff';
+const inactiveBackgroundColor = '#ffffff';
 
 export const MainRouter = (props) => {
   const addPageProps = (Page) => (navigationProps) => (<Page {...navigationProps} {...props} />);
@@ -28,36 +30,52 @@ export const MainRouter = (props) => {
     Home: {
       screen: addPageProps(ActiveRide),
       navigationOptions: {
-        drawerLabel: 'Home',
-        drawerIcon: (<PlusIcon />)
+        drawerLabel: (<DrawerLabel title="Home" icon={PlusIconSource} />),
+      },
+    },
+    RideHistory: {
+      screen: addPageProps(ActiveRide),
+      navigationOptions: {
+        drawerLabel: (<DrawerLabel title="Trips" icon={CarIconSource} />),
+      },
+    },
+    Payment: {
+      screen: addPageProps(ActiveRide),
+      navigationOptions: {
+        drawerLabel: (<DrawerLabel title="Payment Settings" icon={CreaditCardIconSource} />),
+      },
+    },
+    Account: {
+      screen: addPageProps(ActiveRide),
+      navigationOptions: {
+        drawerLabel: (<DrawerLabel title="Account" icon={PplIconSource} />),
       },
     },
     ContactUs: {
       screen: addPageProps(ContactUs),
       navigationOptions: {
-        drawerLabel: 'Contact us',
+        drawerLabel: (<DrawerLabel title="Support" icon={HelpIconSource} />),
       },
     },
+
     Logout: {
       screen: (({ navigation }) => {
         Auth.logout(navigation);
         return (<View />);
       }),
       navigationOptions: {
-        drawerLabel: 'Logout',
+        drawerLabel: (<DrawerLabel title="Logout" icon={PplIconSource} />),
       },
     },
-
   }, {
+    initialRouteName: 'Home',
+    drawerWidth,
+    contentComponent: DrawerContentComponent,
     contentOptions: {
       activeTintColor: '#e91e63',
-      itemsContainerStyle: {
-        marginVertical: 0,
-      },
-      iconContainerStyle: {
-        opacity: 1
-      }
-    }
+      activeBackgroundColor,
+      inactiveBackgroundColor,
+    },
   });
 
   const AuthStack = createStackNavigator({ SignIn: addPageProps(Login), Onboarding: addPageProps(Onboarding) }, {
@@ -70,7 +88,6 @@ export const MainRouter = (props) => {
       App: AppStack,
       Auth: AuthStack,
       Lock,
-      Onboarding
     },
     {
       initialRouteName: 'AuthLoading',
@@ -79,10 +96,8 @@ export const MainRouter = (props) => {
   ));
 
 
-
-  return (<Router screenProps={{...props}} />);
-}
-
+  return (<Router screenProps={{ ...props }} />);
+};
 
 
 export default MainRouter;
