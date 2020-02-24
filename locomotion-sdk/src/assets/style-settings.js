@@ -1,5 +1,5 @@
 export const padding = '20px';
-export const inputHeight = '50px';
+export const inputHeight = '40px';
 
 export const commonInputStyle = `
   background-color: white;

@@ -7,4 +7,5 @@ export default styled.TextInput`
   width: ${({ width }) => (width || '100%')};
   border-bottom-color: #7c8799;
   border-bottom-width: 1px;
+  margin: 15px auto;
 `;

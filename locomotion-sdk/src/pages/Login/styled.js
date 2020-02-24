@@ -27,8 +27,11 @@ export const Text = styled.Text`
 `;
 
 export const ErrorText = styled.Text`
-  color: ${loginTextColor};
-  margin-bottom: -18px;
+  color: #cc0d28;
+  margin-top: 10px;
+  font-weight: 500;
+  height: 20px;
+  font-size: 14px;
 `;
 
 export const TextInput = styled.TextInput`

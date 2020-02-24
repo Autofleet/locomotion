@@ -35,7 +35,7 @@ const myThumbnail = (props) => {
       width: 50,
       height: 50,
       position: 'relative',
-      marginTop: -100,
+      marginTop: -75,
       marginLeft: -90,
     },
   };

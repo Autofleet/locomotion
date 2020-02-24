@@ -69,7 +69,8 @@ export const MainRouter = (props) => {
       AuthLoading: addPageProps(AuthLoadingScreen),
       App: AppStack,
       Auth: AuthStack,
-      Lock
+      Lock,
+      Onboarding
     },
     {
       initialRouteName: 'AuthLoading',

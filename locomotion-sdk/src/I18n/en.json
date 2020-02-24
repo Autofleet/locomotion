@@ -15,7 +15,19 @@
         "submit": "Save",
         "firstNamePlaceholder": "First name",
         "lastNamePlaceholder": "Last name",
-        "fullNameError": "Please fill first name and last name"
+        "fullNameError": "Please fill first name and last name",
+        "emailPlaceholder": "Email",
+        "validations": {
+            "required": {
+                "firstName": "First name is required",
+                "lastName": "Last name is required",
+                "email": "Email is required"
+            },
+            "email": {
+                "email": "Email must be valid"
+            }
+
+        }
     },
     "home": {
         "letsRideButton": "Let's ride",

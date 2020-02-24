@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import * as yup from 'yup';
 
 import network from '../../services/network';
 import AppSettings from '../../services/app-settings';
@@ -10,25 +11,56 @@ import {
   Container, Text, ErrorText, ResendButton,
 } from '../Login/styled';
 import { FullNameContainer } from './styled';
-import I18n from '../../I18n';
+import i18n from '../../I18n';
 import { useStateValue } from '../../context/main';
+
+
+
 
 export default ({ navigation }) => {
   const [onboardingState, dispatchOnboardingState] = useState({
     uploadPromise: false,
-    firstName: null,
-    lastName: null,
+    firstName: '',
+    lastName: '',
+    email: '',
     avatar: null,
     error: null,
   });
+  useEffect(() => {
+    setFieldsData();
+  }, [])
   const setOnboardingState = object => dispatchOnboardingState({
     ...onboardingState,
     ...object,
   });
+
+  const setFieldsData = async () => {
+    const {userProfile} = await AppSettings.getSettings();
+    console.log('USER PROFILE');
+    console.log(userProfile);
+    dispatchOnboardingState({
+      ...onboardingState,
+      ...userProfile
+    })
+  }
+
   const submit = async () => {
-    if (!onboardingState.firstName || !onboardingState.lastName) {
+    let validate = null
+    const schema = yup.object().shape({
+      firstName: yup.string().required(),
+      lastName: yup.string().required(),
+      email: yup.string().required().email()
+    });
+
+    try {
+      validate = await schema.validate({
+        firstName: onboardingState.firstName,
+        lastName: onboardingState.lastName,
+        email: onboardingState.email,
+      },{abortEarly: true})
+    } catch (e) {
       setOnboardingState({
-        error: I18n.t('onboarding.fullNameError'),
+        error: i18n.t(`onboarding.validations.${e.type}.${e.path}`),
       });
       return;
     }
@@ -41,6 +73,7 @@ export default ({ navigation }) => {
     const userProfile = {
       firstName: onboardingState.firstName,
       lastName: onboardingState.lastName,
+      email: onboardingState.email,
       avatar,
     };
 
@@ -49,7 +82,7 @@ export default ({ navigation }) => {
     if (response.status !== 200) {
       console.log('Got bad response from user patch');
       setOnboardingState({
-        error: I18n.t('onboarding.networkError'),
+        error: i18n.t('onboarding.networkError'),
       });
       return;
     }
@@ -74,31 +107,39 @@ export default ({ navigation }) => {
   return (
     <Container>
       <Text>
-        {I18n.t('login.onBoardingPageTitle')}
+        {i18n.t('login.onBoardingPageTitle')}
         {onboardingState.uploadingImage}
         {onboardingState.avatar}
       </Text>
-      <FullNameContainer>
-        <TextInput
-          placeholder={I18n.t('onboarding.firstNamePlaceholder')}
-          width="48%"
-          onChangeText={inputChange('firstName')}
-        />
-        <TextInput
-          placeholder={I18n.t('onboarding.lastNamePlaceholder')}
-          width="48%"
-          onChangeText={inputChange('lastName')}
-        />
-      </FullNameContainer>
       <ThumbnailPicker
         onImageChoose={onImageChoose}
       />
-      {onboardingState.error ? <ErrorText>{onboardingState.error}</ErrorText> : undefined}
+      <FullNameContainer>
+        <TextInput
+          placeholder={i18n.t('onboarding.firstNamePlaceholder')}
+          width="95%"
+          onChangeText={inputChange('firstName')}
+          value={onboardingState.firstName}
+        />
+        <TextInput
+          placeholder={i18n.t('onboarding.lastNamePlaceholder')}
+          width="95%"
+          onChangeText={inputChange('lastName')}
+          value={onboardingState.lastName}
+        />
+        <TextInput
+          placeholder={i18n.t('onboarding.emailPlaceholder')}
+          width="95%"
+          onChangeText={inputChange('email')}
+          value={onboardingState.email}
+        />
+      </FullNameContainer>
+      <ErrorText>{onboardingState.error ? onboardingState.error : ''}</ErrorText>
       <SubmitButton onPress={submit}>
-        {I18n.t('onboarding.submit')}
+        {i18n.t('onboarding.submit')}
       </SubmitButton>
     </Container>
   );
 };
 
-export const needOnboarding = userProfile => !userProfile.firstName || !userProfile.lastName;
+export const needOnboarding = userProfile => !userProfile.firstName || !userProfile.lastName || !userProfile.email;
