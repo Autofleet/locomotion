@@ -32,6 +32,7 @@ const AuthLoadingScreen = ({ navigation }) => {
           firstName: userData.firstName,
           lastName: userData.lastName,
           avatar: userData.avatar,
+          email: userData.email,
         };
 
         AppSettings.update({ userProfile });
