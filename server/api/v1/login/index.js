@@ -1,6 +1,8 @@
 const Router = require('../../../lib/router');
 const authService = require('../../../lib/auth');
 const userService = require('../../../lib/user');
+const settingService = require('../../../lib/settings');
+const logger = require('../../../logger');
 
 const router = Router();
 
@@ -32,8 +34,18 @@ router.post('/vert', async (req, res) => {
       userId: userProfile.id,
     }, 'refreshToken');
 
+    const additionalUpdateData = {};
+    if (userProfile.active === null) {
+      try {
+        const foundSetting = await settingService.getSettingByKeyFromDb('MANUAL_APPROVAL');
+        additionalUpdateData.active = !foundSetting.value;
+      } catch (e) {
+        logger.error('Error while getting a setting by key', e);
+      }
+    }
     await userProfile.update({
       refreshTokenId: jwtid,
+      ...additionalUpdateData,
     });
 
     return res.json({

@@ -26,5 +26,6 @@ router.post('/auth', async (req, res) => {
 
 
 router.use('/users', adminPermissionsMiddleWare, require('./users'));
+router.use('/settings', adminPermissionsMiddleWare, require('./settings'));
 
 module.exports = router;
