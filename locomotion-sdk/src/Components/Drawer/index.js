@@ -2,6 +2,7 @@ import React from 'react';
 import { View, TouchableOpacity } from 'react-native';
 import styled from 'styled-components';
 import { DrawerItems, SafeAreaView } from 'react-navigation';
+import PageHeader from "../PageHeader";
 
 const closeIconSource = require('../../assets/x.png');
 const ArrowIconSource = require('../../assets/arrowright.png');
@@ -53,29 +54,6 @@ export const DrawerLabel = (props) => {
   );
 };
 
-const HeaderText = styled.Text(props => `
-  color: ${props.color || defaultTextColor};
-  font-weight: bold;  
-  text-align: center;
-`);
-
-const HeaderExit = styled(TouchableOpacity)`
-  position: absolute;
-  right: 0;
-  top: ${(drawerPadding + 5)}px;
-  margin-right: 30px;
-`;
-
-const HeaderExitIcon = styled.Image.attrs({ source: closeIconSource })`
-  width: 13px;
-  height: 13px;
-`;
-
-const Header = styled.View`
-text-align: center;
-padding: ${drawerPadding}px;
-`;
-
 export const DrawerContentComponent = (props) => {
   const { navigation } = props;
   const closeComponent = () => {
@@ -84,12 +62,12 @@ export const DrawerContentComponent = (props) => {
   return (
     <View>
       <SafeAreaView>
-        <Header>
-          <HeaderText>Menü</HeaderText>
-            <HeaderExit onPress={() => closeComponent()}>
-                <HeaderExitIcon />
-            </HeaderExit>
-        </Header>
+        <PageHeader
+          title="Menü"
+          iconSide='right'
+          onIconPress={() => closeComponent()}
+          icon={closeIconSource}
+        />
         <DrawerItems {...props} />
       </SafeAreaView>
     </View>

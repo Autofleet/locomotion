@@ -8,6 +8,7 @@ import Auth from '../services/auth';
 import Login from './Login';
 
 import ActiveRide from './ActiveRide';
+import RideHistory from './RideHistory';
 import ContactUs from './ContactUs';
 import Onboarding from './Onboarding';
 import Lock from './Lock';
@@ -34,7 +35,7 @@ export const MainRouter = (props) => {
       },
     },
     RideHistory: {
-      screen: addPageProps(ActiveRide),
+      screen: addPageProps(RideHistory),
       navigationOptions: {
         drawerLabel: (<DrawerLabel title="Trips" icon={CarIconSource} />),
       },
