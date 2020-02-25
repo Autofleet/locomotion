@@ -1,16 +1,23 @@
 import {Redirect} from "react-router-dom";
-import React, {Fragment} from "react";
+import React, {Fragment, useEffect} from "react";
 import {Body, Content, SettingsContainer } from "./styled";
 import Nav from "../Nav";
 import {H1} from "../../Common/Header";
 import i18n from "../../i18n";
 import Toggle from "../../Common/Toggle";
 import {ToggleContainer} from "../../popups/AddUser/styled";
+import settingsContainer from "../../contexts/settingsContainer";
 
 export default () => {
     if (!localStorage.token) {
         return <Redirect to="/login"/>;
     }
+    const settings = settingsContainer.useContainer();
+
+    useEffect(() => {
+        settings.loadSettings();
+        console.log(settings.SettingsMap)
+    }, []);
 
     return (
         <Fragment>
@@ -36,7 +43,6 @@ export default () => {
                             />
                         </ToggleContainer>
                     </SettingsContainer>
-
                 </Content>
             </Body>
         </Fragment>
