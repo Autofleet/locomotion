@@ -12,6 +12,7 @@
         "resendButton": "Resend verification code"
     },
     "onboarding": {
+        "pageTitle": "Your profile",
         "submit": "Save",
         "firstNamePlaceholder": "First name",
         "lastNamePlaceholder": "Last name",

@@ -106,7 +106,7 @@ export default ({ navigation }) => {
 
   return (
       <Fragment>
-        <PageHeader title='Your account'
+        <PageHeader title={i18n.t('onboarding.pageTitle')}
                     onIconPress={() => navigation.toggleDrawer()}
         />
         <Container>
