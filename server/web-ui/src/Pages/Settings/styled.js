@@ -19,10 +19,9 @@ export const Content = styled.div`
 `;
 
 export const SettingsContainer = styled.div`
-    padding: 20px;  
+    padding: 20px;
     background-color: white;
-    min-height: 200px;
-    margin: 18px;
+    min-height: 80%;
     box-shadow: rgba(0, 0, 0, 0.07) 0px 3px 5px 0px;
     border-radius: 4px;
 `;

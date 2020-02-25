@@ -11,17 +11,17 @@ const iconTopPadding = 25;
 
 const HeaderText = styled.Text(props => `
   color: ${props.color || defaultTextColor};
-  font-weight: bold;  
+  font-weight: bold;
   text-align: center;
 `);
 
 const HeaderIconContainer = styled(TouchableOpacity)(({ side }) => `
   position: absolute;
-  top: ${(iconTopPadding)};
+  top: 0;
 
   right: ${side === 'right' ? 0 : null};
   margin-right: ${side === 'right' ? 30 : null};
-  
+
   left: ${side === 'left' ? 0 : null};
   margin-left: ${side === 'left' ? 13 : null};
 `);
@@ -33,7 +33,6 @@ const HeaderIcon = styled.Image(({ side }) => `
 
 const Header = styled.View`
 text-align: center;
-padding: ${iconTopPadding}px;
 `;
 
 const PageHeader = ({
