@@ -46,7 +46,7 @@ export const MainRouter = (props) => {
       },
     },
     Account: {
-      screen: addPageProps(ActiveRide),
+      screen: addPageProps(Onboarding),
       navigationOptions: {
         drawerLabel: (<DrawerLabel title="Account" icon={PplIconSource} />),
       },
@@ -88,6 +88,7 @@ export const MainRouter = (props) => {
       App: AppStack,
       Auth: AuthStack,
       Lock,
+      Onboarding
     },
     {
       initialRouteName: 'AuthLoading',

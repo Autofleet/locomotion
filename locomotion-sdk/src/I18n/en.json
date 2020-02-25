@@ -62,5 +62,13 @@
         },
         "defaultFooterButton": "OK"
     },
+    "menu": {
+        "home": "Home",
+        "trips": "Trips",
+        "paymentsSettings": "Payment Settings",
+        "account": "Account",
+        "support": "Support",
+        "logout": "Logout"
+    },
     "currency": "€"
 }
