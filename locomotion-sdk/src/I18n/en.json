@@ -70,5 +70,8 @@
         "support": "Support",
         "logout": "Logout"
     },
+    "contactUs": {
+        "pageTitle": "Contact us"
+    },
     "currency": "€"
 }

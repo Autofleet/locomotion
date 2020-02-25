@@ -40,12 +40,12 @@ export const MainRouter = (props) => {
         drawerLabel: (<DrawerLabel title="Trips" icon={CarIconSource} />),
       },
     },
-    Payment: {
-      screen: addPageProps(ActiveRide),
-      navigationOptions: {
-        drawerLabel: (<DrawerLabel title="Payment Settings" icon={CreaditCardIconSource} />),
-      },
-    },
+    // Payment: {
+    //   screen: addPageProps(ActiveRide),
+    //   navigationOptions: {
+    //     drawerLabel: (<DrawerLabel title="Payment Settings" icon={CreaditCardIconSource} />),
+    //   },
+    // },
     Account: {
       screen: addPageProps(Onboarding),
       navigationOptions: {

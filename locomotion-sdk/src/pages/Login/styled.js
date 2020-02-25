@@ -23,7 +23,6 @@ export const Container = styled.View`
 export const Text = styled.Text`
   color: ${loginTextColor};
   /* margin-bottom: 50px; */
-  margin-top: 30px;
 `;
 
 export const ErrorText = styled.Text`

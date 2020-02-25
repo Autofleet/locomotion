@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Fragment } from 'react';
 import * as yup from 'yup';
 
 import network from '../../services/network';
@@ -13,7 +13,7 @@ import {
 import { FullNameContainer } from './styled';
 import i18n from '../../I18n';
 import { useStateValue } from '../../context/main';
-
+import PageHeader from '../../Components/PageHeader';
 
 
 
@@ -40,16 +40,16 @@ export default ({ navigation }) => {
     console.log(userProfile);
     dispatchOnboardingState({
       ...onboardingState,
-      ...userProfile
-    })
-  }
+      ...userProfile,
+    });
+  };
 
   const submit = async () => {
-    let validate = null
+    let validate = null;
     const schema = yup.object().shape({
       firstName: yup.string().required(),
       lastName: yup.string().required(),
-      email: yup.string().required().email()
+      email: yup.string().required().email(),
     });
 
     try {
@@ -57,7 +57,7 @@ export default ({ navigation }) => {
         firstName: onboardingState.firstName,
         lastName: onboardingState.lastName,
         email: onboardingState.email,
-      },{abortEarly: true})
+      }, {abortEarly: true});
     } catch (e) {
       setOnboardingState({
         error: i18n.t(`onboarding.validations.${e.type}.${e.path}`),
@@ -86,8 +86,8 @@ export default ({ navigation }) => {
       });
       return;
     }
-    AppSettings.update({ userProfile });
-    if(!response.data.active) {
+    AppSettings.update({userProfile});
+    if (!response.data.active) {
       return navigation.navigate('Lock');
     }
     navigation.navigate('App');
@@ -105,40 +105,45 @@ export default ({ navigation }) => {
 
 
   return (
-    <Container>
-      <Text>
-        {i18n.t('login.onBoardingPageTitle')}
-        {onboardingState.uploadingImage}
-        {onboardingState.avatar}
-      </Text>
-      <ThumbnailPicker
-        onImageChoose={onImageChoose}
-      />
-      <FullNameContainer>
-        <TextInput
-          placeholder={i18n.t('onboarding.firstNamePlaceholder')}
-          width="95%"
-          onChangeText={inputChange('firstName')}
-          value={onboardingState.firstName}
+      <Fragment>
+        <PageHeader title='Your account'
+                    onIconPress={() => navigation.toggleDrawer()}
         />
-        <TextInput
-          placeholder={i18n.t('onboarding.lastNamePlaceholder')}
-          width="95%"
-          onChangeText={inputChange('lastName')}
-          value={onboardingState.lastName}
-        />
-        <TextInput
-          placeholder={i18n.t('onboarding.emailPlaceholder')}
-          width="95%"
-          onChangeText={inputChange('email')}
-          value={onboardingState.email}
-        />
-      </FullNameContainer>
-      <ErrorText>{onboardingState.error ? onboardingState.error : ''}</ErrorText>
-      <SubmitButton onPress={submit}>
-        {i18n.t('onboarding.submit')}
-      </SubmitButton>
-    </Container>
+        <Container>
+          <Text>
+            {i18n.t('login.onBoardingPageTitle')}
+            {onboardingState.uploadingImage}
+            {onboardingState.avatar}
+          </Text>
+          <ThumbnailPicker
+              onImageChoose={onImageChoose}
+          />
+          <FullNameContainer>
+            <TextInput
+                placeholder={i18n.t('onboarding.firstNamePlaceholder')}
+                width="95%"
+                onChangeText={inputChange('firstName')}
+                value={onboardingState.firstName}
+            />
+            <TextInput
+                placeholder={i18n.t('onboarding.lastNamePlaceholder')}
+                width="95%"
+                onChangeText={inputChange('lastName')}
+                value={onboardingState.lastName}
+            />
+            <TextInput
+                placeholder={i18n.t('onboarding.emailPlaceholder')}
+                width="95%"
+                onChangeText={inputChange('email')}
+                value={onboardingState.email}
+            />
+          </FullNameContainer>
+          <ErrorText>{onboardingState.error ? onboardingState.error : ''}</ErrorText>
+          <SubmitButton onPress={submit}>
+            {i18n.t('onboarding.submit')}
+          </SubmitButton>
+        </Container>
+      </Fragment>
   );
 };
 

@@ -7,7 +7,7 @@ import SafeView from '../SafeView';
 const HamburgerIconSource = require('../../assets/menu.png');
 
 const defaultTextColor = '#686868';
-const drawerPadding = 25;
+const iconTopPadding = 25;
 
 const HeaderText = styled.Text(props => `
   color: ${props.color || defaultTextColor};
@@ -15,9 +15,9 @@ const HeaderText = styled.Text(props => `
   text-align: center;
 `);
 
-const HeaderExit = styled(TouchableOpacity)(({ side }) => `
+const HeaderIconContainer = styled(TouchableOpacity)(({ side }) => `
   position: absolute;
-  top: ${(drawerPadding)};
+  top: ${(iconTopPadding)};
 
   right: ${side === 'right' ? 0 : null};
   margin-right: ${side === 'right' ? 30 : null};
@@ -33,7 +33,7 @@ const HeaderIcon = styled.Image(({ side }) => `
 
 const Header = styled.View`
 text-align: center;
-padding: ${drawerPadding}px;
+padding: ${iconTopPadding}px;
 `;
 
 const PageHeader = ({
@@ -42,14 +42,13 @@ const PageHeader = ({
   <SafeView>
     <Header>
       <HeaderText>{title}</HeaderText>
-      <HeaderExit side={iconSide} onPress={onIconPress}>
+      <HeaderIconContainer side={iconSide} onPress={onIconPress}>
         <HeaderIcon source={icon} side={iconSide} />
-      </HeaderExit>
+      </HeaderIconContainer>
     </Header>
   </SafeView>
 );
 export default PageHeader;
-
 
 PageHeader.defaultProps = {
   title: '',
