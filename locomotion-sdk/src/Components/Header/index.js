@@ -17,8 +17,6 @@ const Header = ({ navigation }) => (
       <HeaderView>
         <Image styled={{ width: 60, height: 60 }} source={HamburgerIconSource} />
       </HeaderView>
-
-      {/* <Text>ADDADAAADA</Text> */}
     </TouchableOpacity>
   </SafeView>
 );

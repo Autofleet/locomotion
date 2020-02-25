@@ -19,6 +19,8 @@ const CarIconSource = require('../assets/menuItems/car.png');
 const HelpIconSource = require('../assets/menuItems/help.png');
 const CreaditCardIconSource = require('../assets/menuItems/creditcard.png');
 const PplIconSource = require('../assets/menuItems/person.png');
+const HomeIconSource = require('../assets/menuItems/home.png');
+const LogoutIconSource = require('../assets/menuItems/logout.png');
 
 const drawerWidth = Dimensions.get('window').width;
 const activeBackgroundColor = '#ffffff';
@@ -31,7 +33,7 @@ export const MainRouter = (props) => {
     Home: {
       screen: addPageProps(ActiveRide),
       navigationOptions: {
-        drawerLabel: (<DrawerLabel title="Home" icon={PlusIconSource} />),
+        drawerLabel: (<DrawerLabel title="Home" icon={HomeIconSource} />),
       },
     },
     RideHistory: {
@@ -65,7 +67,7 @@ export const MainRouter = (props) => {
         return (<View />);
       }),
       navigationOptions: {
-        drawerLabel: (<DrawerLabel title="Logout" icon={PplIconSource} />),
+        drawerLabel: (<DrawerLabel title="Logout" icon={LogoutIconSource} />),
       },
     },
   }, {

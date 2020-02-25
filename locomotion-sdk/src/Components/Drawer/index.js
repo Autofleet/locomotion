@@ -11,8 +11,8 @@ const defaultTextColor = '#686868';
 const drawerPadding = 25;
 
 const DrawerIcon = styled.Image`
-  width: 16px;
-  height: 16px;
+  width: 20px;
+  height: 20px;
   margin-right: 20px;
   opacity: 0.6;
 `;
@@ -20,7 +20,7 @@ const DrawerIcon = styled.Image`
 const Arrow = styled.Image.attrs({ source: ArrowIconSource })`
   position: absolute;
   right: 0;
-  top: ${(drawerPadding + 5)}px;
+  top: ${(drawerPadding + 6)}px;
   opacity: 0.4;
   margin-right: 10px;
   width: 10px;
@@ -29,6 +29,7 @@ const Arrow = styled.Image.attrs({ source: ArrowIconSource })`
 
 const LabelText = styled.Text(props => `
   color: ${props.color || defaultTextColor};
+  margin-top: 1px;
 `);
 
 const StyledDrawerLabel = styled.View`
