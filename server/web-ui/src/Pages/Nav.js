@@ -78,6 +78,7 @@ export default () => (
     <Menu>
       <Header/>
       <MenuItem exact to="/">{i18n.t('navigation.users')}</MenuItem>
+      <MenuItem exact to="/settings">{i18n.t('navigation.settings')}</MenuItem>
       <ExternalLink onClick={() => { localStorage.removeItem('token'); window.location.reload() }}>{i18n.t('navigation.logout')}</ExternalLink>
     </Menu>
     <PoweredBy/>
