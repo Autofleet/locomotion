@@ -4,9 +4,6 @@ import {Header, HeaderText, HeaderIconContainer, HeaderIcon} from './styled';
 import SafeView from '../SafeView';
 const HamburgerIconSource = require('../../assets/menu.png');
 
-const defaultTextColor = '#686868';
-const iconTopPadding = 25;
-
 const PageHeader = ({
   title, icon, onIconPress, iconSide, displayIcon
 }) => (
