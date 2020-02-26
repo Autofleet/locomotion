@@ -10,7 +10,7 @@ const useSettings = () => {
         const newSettingsObj = {};
         const SettingsData = await getSettings();
         setSettingsMap(SettingsData);
-        SettingsData.forEach(setting => {
+        SettingsData.map(setting => {
             newSettingsObj[setting.key] = setting.value;
         });
         setSettingsObj(newSettingsObj);

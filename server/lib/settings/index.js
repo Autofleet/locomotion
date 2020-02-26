@@ -30,7 +30,7 @@ const getSettingByKeyFromDb = async (settingKey) => {
 const getAllSettingFromDb = async () => {
   const foundSettings = await Setting.findAll({});
   const settingsList = [];
-  foundSettings.forEach(foundSetting => {
+  foundSettings.map(foundSetting => {
     const parsedValue = parseValue(foundSetting.value, foundSetting.type);
     settingsList.push({
       ...foundSetting.get(),
@@ -39,7 +39,6 @@ const getAllSettingFromDb = async () => {
   });
   return settingsList;
 };
-
 
 module.exports = {
   getAllSettingFromDb,
