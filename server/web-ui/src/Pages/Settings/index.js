@@ -31,7 +31,7 @@ export default () => {
                             <Toggle
                                 labelText={i18n.t('settings.activateUsersLabel')}
                                 value={`toggle_MANUAL_APPROVAL`}
-                                checked={settings && settings.getSetting('MANUAL_APPROVAL') && settings.getSetting('MANUAL_APPROVAL').value}
+                                checked={settings.getSettingByKey('MANUAL_APPROVAL')}
                                 onChange={(event) => {
                                     if (event.target.checked) {
                                         settings.UpdateSetting('MANUAL_APPROVAL',{value: true});
