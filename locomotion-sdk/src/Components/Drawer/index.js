@@ -3,7 +3,7 @@ import { View, TouchableOpacity } from 'react-native';
 import styled from 'styled-components';
 import { DrawerItems, SafeAreaView } from 'react-navigation';
 import PageHeader from "../PageHeader";
-
+import i18n from '../../I18n'
 const closeIconSource = require('../../assets/x.png');
 const ArrowIconSource = require('../../assets/arrowright.png');
 
@@ -44,7 +44,7 @@ const StyledDrawerLabel = styled.View`
 
 export const DrawerLabel = (props) => {
   const {
-    focused, tintColor, title, icon,
+    focused, tintColor, title, icon
   } = props;
   return (
     <StyledDrawerLabel>
@@ -64,7 +64,7 @@ export const DrawerContentComponent = (props) => {
     <View>
       <SafeAreaView>
         <PageHeader
-          title="Menü"
+          title={i18n.t('menu.title')}
           iconSide='right'
           onIconPress={() => closeComponent()}
           icon={closeIconSource}

@@ -74,11 +74,6 @@ export const MainRouter = (props) => {
     initialRouteName: 'Home',
     drawerWidth,
     contentComponent: DrawerContentComponent,
-    contentOptions: {
-      activeTintColor: '#e91e63',
-      activeBackgroundColor,
-      inactiveBackgroundColor,
-    },
   });
 
   const AuthStack = createStackNavigator({ SignIn: addPageProps(Login), Onboarding: addPageProps(Onboarding) }, {

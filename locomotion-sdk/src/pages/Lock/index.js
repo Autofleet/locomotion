@@ -51,21 +51,19 @@ export default ({ navigation }) => {
 
   return (
     <Container>
-      <HeaderText>
-       Your signup has been recorded
-      </HeaderText>
+      <HeaderText>{I18n.t('lock.header')}</HeaderText>
       <LockTextContainer>
          <Text>
-          We have received your registration and will review it as soos as possible
+          {I18n.t('lock.text')}
         </Text>
         <SubText>
-          You will immediately receive a notifiction when your regisration is completed and you are ready to use Mobility-on-Demand
+          {I18n.t('lock.subText')}
         </SubText>
 
       </LockTextContainer>
       <ButtonContainer>
       <SubmitButton onPress={submit}>
-       Login in different account
+        {I18n.t('lock.submitText')}
       </SubmitButton>
       </ButtonContainer>
     </Container>
