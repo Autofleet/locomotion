@@ -46,7 +46,7 @@ const AuthLoadingScreen = ({ navigation }) => {
         }
       }
 
-      navigation.navigate(page, {showHeader: false});
+      navigation.navigate(page, {showHeaderIcon: false});
     }
     if (!appState) { // Load app state
       getFromStorage();

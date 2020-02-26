@@ -26,10 +26,12 @@ export default ({ navigation, screenOptions, ...props }) => {
     avatar: null,
     error: null,
   });
-  const [showHeader, setShowHeader] = useState(true)
+  const [showHeaderIcon, setShowHeaderIcon] = useState(true)
+
   useEffect(() => {
-    setShowHeader(navigation.getParam('showHeader',true));
+    setShowHeaderIcon(navigation.getParam('showHeaderIcon',true));
   }, [])
+
   useEffect(() => {
     setFieldsData();
   }, [])
@@ -96,9 +98,6 @@ export default ({ navigation, screenOptions, ...props }) => {
   };
 
   const inputChange = field => value => {
-    console.log(field);
-    console.log(value);
-
     return setOnboardingState({
     [field]: value,
   })
@@ -113,10 +112,11 @@ export default ({ navigation, screenOptions, ...props }) => {
 
   return (
       <Fragment>
-        {showHeader ?
+
         <PageHeader title={i18n.t('onboarding.pageTitle')}
                     onIconPress={() => navigation.toggleDrawer()}
-        /> : null}
+                    displayIcon={showHeaderIcon}
+        />
         <Container>
           <Text>
             {i18n.t('login.onBoardingPageTitle')}

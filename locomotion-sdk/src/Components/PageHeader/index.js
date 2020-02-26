@@ -17,7 +17,7 @@ const HeaderText = styled.Text(props => `
 
 const HeaderIconContainer = styled(TouchableOpacity)(({ side }) => `
   position: absolute;
-  top: 0;
+  top: 11px;
 
   right: ${side === 'right' ? 0 : null};
   margin-right: ${side === 'right' ? 30 : null};
@@ -33,20 +33,24 @@ const HeaderIcon = styled.Image(({ side }) => `
 
 const Header = styled.View`
 text-align: center;
+padding: 10px;
+background-color: #ffffff;
 `;
 
 const PageHeader = ({
-  title, icon, onIconPress, iconSide,
+  title, icon, onIconPress, iconSide, displayIcon
 }) => (
   <SafeView>
     <Header>
       <HeaderText>{title}</HeaderText>
+      {displayIcon !== false ?
       <HeaderIconContainer side={iconSide} onPress={onIconPress}>
         <HeaderIcon source={icon} side={iconSide} />
-      </HeaderIconContainer>
+      </HeaderIconContainer> : null}
     </Header>
   </SafeView>
 );
+
 export default PageHeader;
 
 PageHeader.defaultProps = {

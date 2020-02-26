@@ -88,7 +88,7 @@ const Login = ({navigation, logo}) => {
         },
       });
 
-      navigation.navigate(needOnboarding(userProfile) ? 'Onboarding' : 'App', {showHeader: false});
+      navigation.navigate(needOnboarding(userProfile) ? 'Onboarding' : 'App', {showHeaderIcon: false});
     } catch (e) {
       console.log('Bad vert with request', e);
       setLoginState({
