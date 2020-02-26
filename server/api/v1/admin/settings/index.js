@@ -31,7 +31,6 @@ router.get('/get-setting/:settingKey', async (req, res) => {
     key: foundSetting.key,
     value: foundSetting.value,
     type: foundSetting.type,
-    display: foundSetting.display,
   });
 });
 
