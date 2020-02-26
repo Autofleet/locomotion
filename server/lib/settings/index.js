@@ -27,8 +27,22 @@ const getSettingByKeyFromDb = async (settingKey) => {
   };
 };
 
+const getAllSettingFromDb = async () => {
+  const foundSettings = await Setting.findAll({});
+  const settingsList = [];
+  foundSettings.forEach(foundSetting => {
+    const parsedValue = parseValue(foundSetting.value, foundSetting.type);
+    settingsList.push({
+      ...foundSetting.get(),
+      value: parsedValue,
+    });
+  });
+  return settingsList;
+};
+
 
 module.exports = {
+  getAllSettingFromDb,
   getSettingByKeyFromDb,
   patch(settingId, payload) {
     return Setting.update(payload, { where: { id: settingId } });

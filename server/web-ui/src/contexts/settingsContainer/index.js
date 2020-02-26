@@ -3,7 +3,7 @@ import { createContainer } from 'unstated-next';
 import { getSettings, update } from './api';
 
 const useSettings = () => {
-    const [SettingsMap, setSettingsMap] = useState([]);
+    const [settingsMap, setSettingsMap] = useState([]);
 
 
     const loadSettings= async () => {
@@ -11,11 +11,11 @@ const useSettings = () => {
         setSettingsMap(SettingsData);
     };
 
-    const getSettingIndex = settingId => SettingsMap.findIndex(u => u.id === settingId);
+    const getSettingIndex = settingId => settingsMap.findIndex(u => u.id === settingId);
 
     const setSetting = (settingId, newData) => {
         const index = getSettingIndex(settingId);
-        const tmp = [...SettingsMap];
+        const tmp = [...settingsMap];
         tmp[index] = { ...tmp[index], ...newData };
         if (Object.keys(newData).length === 0) {
             tmp.splice(index, 1);
@@ -24,7 +24,8 @@ const useSettings = () => {
         setSettingsMap(tmp);
     };
 
-    const UpdateSetting = async (settingId, newData) => {
+    const UpdateSetting = async (settingKey, newData) => {
+        const { id: settingId} = getSetting(settingKey);
         if (Object.keys(newData).length !== 0) {
             const updateState = await update(settingId, newData);
             if (updateState) {
@@ -33,11 +34,11 @@ const useSettings = () => {
         }
     };
 
-    const getSetting = settingId => SettingsMap.find(setting => setting.id === settingId);
+    const getSetting = settingKey => settingsMap.find(setting => setting.key === settingKey);
 
     return {
         loadSettings,
-        SettingsMap,
+        SettingsMap: settingsMap,
         UpdateSetting,
         getSetting
     };

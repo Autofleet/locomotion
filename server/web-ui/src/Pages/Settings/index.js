@@ -16,7 +16,6 @@ export default () => {
 
     useEffect(() => {
         settings.loadSettings();
-        console.log(settings.SettingsMap)
     }, []);
 
     return (
@@ -31,13 +30,13 @@ export default () => {
                         <ToggleContainer>
                             <Toggle
                                 labelText={i18n.t('settings.activateUsersLabel')}
-                                value={`toggle_active`}
-                                checked={true}
+                                value={`toggle_MANUAL_APPROVAL`}
+                                checked={settings && settings.getSetting('MANUAL_APPROVAL') && settings.getSetting('MANUAL_APPROVAL').value}
                                 onChange={(event) => {
                                     if (event.target.checked) {
-                                        // setFieldValue('active', true)
+                                        settings.UpdateSetting('MANUAL_APPROVAL',{value: true});
                                     } else {
-                                        // setFieldValue('active', false)
+                                        settings.UpdateSetting('MANUAL_APPROVAL',{value: false});
                                     }
                                 }}
                             />

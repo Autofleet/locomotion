@@ -10,7 +10,7 @@ router.get('/', async (req, res) => {
   let foundSettings = [];
 
   try {
-    foundSettings = await Setting.findAll({});
+    foundSettings = await settingLib.getAllSettingFromDb();
   } catch (e) {
     logger.error('Error while gettig all settings', e);
   }
