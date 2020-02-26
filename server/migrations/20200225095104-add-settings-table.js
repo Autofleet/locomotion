@@ -20,11 +20,6 @@ module.exports = {
       type: Sequelize.ENUM('string', 'number', 'json', 'boolean'),
       defaultValue: 'string',
     },
-    display: {
-      allowNull: true,
-      type: Sequelize.BOOLEAN,
-      defaultValue: false,
-    },
     created_at: {
       allowNull: false,
       type: Sequelize.DATE,

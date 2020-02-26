@@ -19,11 +19,6 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.ENUM('string', 'number', 'json', 'boolean'),
       defaultValue: 'string',
     },
-    display: {
-      allowNull: true,
-      type: DataTypes.BOOLEAN,
-      defaultValue: false,
-    },
   }, {
     tableName: 'settings',
   });
