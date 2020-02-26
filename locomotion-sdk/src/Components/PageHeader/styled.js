@@ -12,7 +12,7 @@ export const HeaderText = styled.Text(props => `
 
 export const HeaderIconContainer = styled(TouchableOpacity)(({ side }) => `
   position: absolute;
-  top: 0;
+  top: 11px;
 
   right: ${side === 'right' ? 0 : null};
   margin-right: ${side === 'right' ? 30 : null};
@@ -28,4 +28,6 @@ export const HeaderIcon = styled.Image(({ side }) => `
 
 export const Header = styled.View`
 text-align: center;
+padding: 10px;
+background-color: #ffffff;
 `;
