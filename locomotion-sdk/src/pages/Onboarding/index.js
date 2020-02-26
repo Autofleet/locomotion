@@ -17,7 +17,7 @@ import PageHeader from '../../Components/PageHeader';
 
 
 
-export default ({ navigation }) => {
+export default ({ navigation, screenOptions, ...props }) => {
   const [onboardingState, dispatchOnboardingState] = useState({
     uploadPromise: false,
     firstName: '',
@@ -26,6 +26,10 @@ export default ({ navigation }) => {
     avatar: null,
     error: null,
   });
+  const [showHeader, setShowHeader] = useState(true)
+  useEffect(() => {
+    setShowHeader(navigation.getParam('showHeader',true));
+  }, [])
   useEffect(() => {
     setFieldsData();
   }, [])
@@ -36,8 +40,6 @@ export default ({ navigation }) => {
 
   const setFieldsData = async () => {
     const {userProfile} = await AppSettings.getSettings();
-    console.log('USER PROFILE');
-    console.log(userProfile);
     dispatchOnboardingState({
       ...onboardingState,
       ...userProfile,
@@ -47,9 +49,9 @@ export default ({ navigation }) => {
   const submit = async () => {
     let validate = null;
     const schema = yup.object().shape({
-      firstName: yup.string().required(),
-      lastName: yup.string().required(),
-      email: yup.string().required().email(),
+      firstName: yup.string().required().nullable(),
+      lastName: yup.string().required().nullable(),
+      email: yup.string().required().email().nullable(),
     });
 
     try {
@@ -90,12 +92,17 @@ export default ({ navigation }) => {
     if (!response.data.active) {
       return navigation.navigate('Lock');
     }
-    navigation.navigate('App');
+    navigation.navigate('Home');
   };
 
-  const inputChange = field => value => setOnboardingState({
+  const inputChange = field => value => {
+    console.log(field);
+    console.log(value);
+
+    return setOnboardingState({
     [field]: value,
-  });
+  })
+};
 
   const onImageChoose = (uploadPromise) => {
     setOnboardingState({
@@ -106,9 +113,10 @@ export default ({ navigation }) => {
 
   return (
       <Fragment>
+        {showHeader ?
         <PageHeader title={i18n.t('onboarding.pageTitle')}
                     onIconPress={() => navigation.toggleDrawer()}
-        />
+        /> : null}
         <Container>
           <Text>
             {i18n.t('login.onBoardingPageTitle')}
