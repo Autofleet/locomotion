@@ -60,11 +60,11 @@ router.get('/:settingId', async (req, res) => {
 
 router.patch('/:settingId', async (req, res) => {
   const { settingId } = req.params;
-  const payload = req.body;
+  const { value } = req.body;
   let updatedSetting = {};
 
   try {
-    updatedSetting = await settingLib.patch(settingId, payload);
+    updatedSetting = await settingLib.patch(settingId, { value });
   } catch (e) {
     logger.error('Error updating a setting');
     res.json(500, { status: 'ERROR', error: e });

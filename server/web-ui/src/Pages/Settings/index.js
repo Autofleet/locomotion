@@ -1,47 +1,74 @@
 import {Redirect} from "react-router-dom";
-import React, {Fragment, useEffect} from "react";
-import {Body, Content, SettingsContainer } from "./styled";
-import Nav from "../Nav";
-import {H1} from "../../Common/Header";
+import React, {Fragment, useEffect, useState} from "react";
 import i18n from "../../i18n";
-import Toggle from "../../Common/Toggle";
-import {ToggleContainer} from "../../popups/AddUser/styled";
 import settingsContainer from "../../contexts/settingsContainer";
+import Nav from "../Nav";
+import {Body, Content,} from "./styled";
+import {H1} from "../../Common/Header";
+
+import Form from './form'
+import * as Yup from "yup";
+import {Formik} from "formik";
+import diff from "object-diff";
+
+const requiredField = Yup.string().required('Field requierd');
 
 export default () => {
+    const settings = settingsContainer.useContainer();
+    const [displayLoader, setDisplayLoader] = useState(false);
+    const [showForm, setShowForm] = useState(false);
+
     if (!localStorage.token) {
         return <Redirect to="/login"/>;
     }
-    const settings = settingsContainer.useContainer();
 
     useEffect(() => {
         settings.loadSettings();
     }, []);
 
-    return (
+    useEffect(() => {
+        if (settings.settingsObj) {
+            setShowForm(true);
+        }
+    }, [settings.settingsObj]);
+
+return (
         <Fragment>
             <Body>
                 <Nav/>
                 <Content>
                     <H1>
                         {i18n.t('settings.settings')}
-                    </H1>
-                    <SettingsContainer>
-                        <ToggleContainer>
-                            <Toggle
-                                labelText={i18n.t('settings.activateUsersLabel')}
-                                value={`toggle_MANUAL_APPROVAL`}
-                                checked={settings.getSettingByKey('MANUAL_APPROVAL')}
-                                onChange={(event) => {
-                                    if (event.target.checked) {
-                                        settings.UpdateSetting('MANUAL_APPROVAL',{value: true});
-                                    } else {
-                                        settings.UpdateSetting('MANUAL_APPROVAL',{value: false});
-                                    }
-                                }}
-                            />
-                        </ToggleContainer>
-                    </SettingsContainer>
+                    </H1> { showForm &&
+                        <Formik
+                            validateOnBlur={false}
+                            validateOnChange={false}
+                            {...{ initialValues: settings.settingsObj }}
+                            validationSchema={Yup.object().shape({
+                                MANUAL_APPROVAL: requiredField,
+                                TERMS_URL: requiredField,
+                                PRIVACY_URL: requiredField,
+                                CONTACT_US_URL: requiredField
+                            })}
+                            onSubmit={async (values, actions) => {
+                                actions.setSubmitting(true);
+                                setTimeout(() => setDisplayLoader(true), 100);
+
+                                const { ...otherValues } = diff(settings.settingsObj, values);
+                                try {
+                                    Object.keys(otherValues).map(async (key, index) => {
+                                        await settings.UpdateSetting(key, otherValues[key]);
+                                    });
+                                } catch (error) {
+                                    console.log(error);
+                                }
+                                actions.setSubmitting(false);
+                                setTimeout(() => setDisplayLoader(false), 1200);
+                            }}
+                            render={props => (
+                                <Form {...props} displayLoader={displayLoader} />
+                            )}
+                        /> }
                 </Content>
             </Body>
         </Fragment>

@@ -38,6 +38,10 @@
   },
   "settings": {
     "settings": "Settings",
-    "activateUsersLabel": "Manual Users Approving"
+    "activateUsersLabel": "Manual Users Approving:",
+    "saveButton": "Save",
+    "termsUrlLabel": "Terms url path:",
+    "PrivacyUrlLabel": "Privacy url path:",
+    "ContactUsUrlLabel": "Contact us url path:"
   }
 }

@@ -4,7 +4,7 @@ import {getSettings, update} from './api';
 
 const useSettings = () => {
     const [settingsMap, setSettingsMap] = useState([]);
-    const [settingsObj, setSettingsObj] = useState({});
+    const [settingsObj, setSettingsObj] = useState(null);
 
     const loadSettings= async () => {
         const newSettingsObj = {};
@@ -33,8 +33,8 @@ const useSettings = () => {
 
     const UpdateSetting = async (settingKey, newData) => {
         const { id: settingId} = getSetting(settingKey);
-        if (Object.keys(newData).length !== 0) {
-            const updateState = await update(settingId, newData);
+        if (settingId) {
+            const updateState = await update(settingId, {value: newData});
             if (updateState) {
                 updateSettingsMap(settingId, newData);
                 updateSettingsObj(settingKey, newData.value);
