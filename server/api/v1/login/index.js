@@ -83,4 +83,18 @@ router.post('/refresh', async (req, res) => {
   res.json(result);
 });
 
+router.get('/settings', async (req, res) => {
+  const settingsUrls = await Promise.all([
+    settingService.getSettingByKeyFromDb('TERMS_URL'),
+    settingService.getSettingByKeyFromDb('PRIVACY_URL'),
+    settingService.getSettingByKeyFromDb('CONTACT_US_URL'),
+  ]);
+
+  res.json({
+    termsUrl: settingsUrls[0].value,
+    privacyUrl: settingsUrls[1].value,
+    contactUsUrl: settingsUrls[2].value,
+  });
+});
+
 module.exports = router;

@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from 'react';
+import React, { Fragment, useState, useEffect } from 'react';
 import { Image,View } from 'react-native';
 import propTypes from 'prop-types';
 import Config from 'react-native-config';
@@ -36,6 +36,21 @@ const Login = ({navigation, logo}) => {
     error: null,
     loginStep: 'phoneNumber',
   });
+
+  const [settings, setSettings] = useState({
+    termsUrl: null,
+    privacyUrl: null,
+    contactUsUrl: null
+  })
+
+  const loadSettings = async () => {
+    const {data: settings} = await network.get('/api/v1/login/settings');
+    setSettings(settings);
+  }
+
+  useEffect(() => {
+    loadSettings();
+  }, [])
 
   const [webViewWindow, setWebViewWindow] = useState(null);
   const setLoginState = object => dispatchLoginState({
@@ -146,14 +161,14 @@ const Login = ({navigation, logo}) => {
 
   const openTerms = () => {
     setWebViewWindow({
-      uri: Config.TERMS_URL,
+      uri: settings.termsUrl,
       title: I18n.t('login.termsWebViewTitle')
     })
   }
 
   const openPrivacy = () => {
     setWebViewWindow({
-      uri: Config.PRIVACY_URL,
+      uri: settings.privacyUrl,
       title: I18n.t('login.privacyWebViewTitle')
     })
   }
