@@ -74,7 +74,6 @@ const Login = ({navigation, logo}) => {
   };
 
   const isVertStep = loginState.loginStep === 'vert';
-
   const renderRelevantInput = () => (isVertStep
     ? (
       <PinCode
@@ -177,7 +176,7 @@ const Login = ({navigation, logo}) => {
   return (
     <Fragment>
     <Container>
-      <KeyboardAwareScrollView style={{display: 'flex'}}>
+      <KeyboardAwareScrollView>
         <SafeView>
           <Image
             style={{ width: 200, height: 125, marginBottom: 50, marginTop: 40, marginLeft: 'auto', marginRight: 'auto' }}
@@ -196,7 +195,7 @@ const Login = ({navigation, logo}) => {
       {loginState.error ? <ErrorText>{loginState.error}</ErrorText> : undefined }
 
       {isVertStep ? <ResendButton onPress={resendVertCode}>{I18n.t('login.resendButton')}</ResendButton> : undefined}
-        </KeyboardAwareScrollView>
+    </KeyboardAwareScrollView>
     <SubmitContainer>
 
     <TermsText>

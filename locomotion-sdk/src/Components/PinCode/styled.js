@@ -15,6 +15,9 @@ export const Box = styled.View`
   align-items: center;
   width: 50px;
   background-color: ${({ first }) => first ? 'red' : '#f6f6f8'};
+  margin-right: 8px;
+  margin-left: 8px;
+  margin-top: 15px;
 `;
 
 export const DigitInput = styled.TextInput`
