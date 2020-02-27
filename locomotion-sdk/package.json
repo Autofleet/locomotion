@@ -49,6 +49,8 @@
     "styled-components": "^4.3.2"
   },
   "dependencies": {
+    "i18next": "^19.3.2",
+    "react-i18next": "^11.3.3",
     "yup": "^0.28.1"
   },
   "devDependencies": {

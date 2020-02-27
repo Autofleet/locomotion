@@ -6,7 +6,8 @@ export const Container = styled.View`
   justify-content: space-between;
   width: 100%;
   max-width: 300px;
-  margin-bottom: 50px;
+
+  margin: 0 auto 50px auto;
 `;
 
 export const Box = styled.View`

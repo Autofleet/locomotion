@@ -5,7 +5,7 @@ import network from '../../services/network';
 import AppSettings from '../../services/app-settings';
 
 import ThumbnailPicker from '../../Components/ThumbnailPicker';
-import SubmitButton from '../../Components/Button/Gradient';
+import SubmitButton from '../../Components/RoundedButton';
 import TextInput from '../../Components/TextInput';
 import {
   Container, Text, ErrorText, ResendButton,
