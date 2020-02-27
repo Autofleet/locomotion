@@ -11,8 +11,6 @@ import * as Yup from "yup";
 import {Formik} from "formik";
 import diff from "object-diff";
 
-const requiredField = Yup.string().required('Field requierd');
-
 export default () => {
     const settings = settingsContainer.useContainer();
     const [displayLoader, setDisplayLoader] = useState(false);
@@ -45,10 +43,10 @@ return (
                             validateOnChange={false}
                             {...{ initialValues: settings.settingsObj }}
                             validationSchema={Yup.object().shape({
-                                MANUAL_APPROVAL: requiredField,
-                                TERMS_URL: requiredField,
-                                PRIVACY_URL: requiredField,
-                                CONTACT_US_URL: requiredField
+                                MANUAL_APPROVAL: Yup.boolean(),
+                                TERMS_URL: Yup.string().url('Url invalid').required('Field requierd'),
+                                PRIVACY_URL: Yup.string().url('Url invalid').required('Field requierd'),
+                                CONTACT_US_URL: Yup.string().url('Url invalid').required('Field requierd')
                             })}
                             onSubmit={async (values, actions) => {
                                 actions.setSubmitting(true);
