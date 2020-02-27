@@ -26,8 +26,9 @@ const buttonShadow = `
 const StyledTouchableOpacity = styled.TouchableOpacity`
   width: ${({ width }) => (width || '100%')};
   ${buttonShadow}
-  background-color: red;
-  margin-top: 25px;
+  ${({ marginTop }) => marginTop && `
+    margin-top: ${marginTop};
+  `}
 `;
 
 const Button = styled(({

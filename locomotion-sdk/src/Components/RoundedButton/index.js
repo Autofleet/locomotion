@@ -12,8 +12,13 @@ const LoadingWrapper = styled.View`
 `;
 
 const SubmitButtonText = styled.Text`
-  color: white;
+  color: #ffffff;
+  font-weight: 600;
+  font-size: 15px;
   text-align: center;
+  ${({hollow}) => hollow && `
+    color: #1e273d;
+  `}
 `;
 
 const buttonShadow = `
@@ -25,13 +30,24 @@ const buttonShadow = `
 
 const StyledTouchableOpacity = styled.TouchableOpacity`
   width: ${({ width }) => (width || '100%')};
+  border-radius: 24px;
+  padding-top: 15;
+  padding-bottom: 15;
+  background-color: #1e273d;
+
   ${buttonShadow}
-  background-color: red;
-  margin-top: 25px;
+  ${({ marginTop }) => marginTop && `
+    margin-top: ${marginTop};
+  `}
+
+  ${({hollow}) => hollow && `
+    background-color: #ffffff;
+    border: 2px solid #1e273d;
+  `}
 `;
 
 const Button = styled(({
-  onPress, children, style, ...props
+  onPress, children, style, hollow, ...props
 }) => {
   const [loadingState, setLoadingState] = useState(false);
 
@@ -42,8 +58,7 @@ const Button = styled(({
   };
 
   return (
-    <StyledTouchableOpacity width={style[0].width} {...props} onPress={onPressWithLoading}>
-      <LinearGradient style={{...style, marginTop: 0, paddingTop: 15, paddingBottom: 15}} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }} colors={appPalette}>
+    <StyledTouchableOpacity width={style[0].width} {...props} onPress={onPressWithLoading} hollow={hollow}>
         {loadingState ? (
           <LoadingWrapper>
             <LottieView
@@ -61,11 +76,11 @@ const Button = styled(({
             />
           </LoadingWrapper>
         ) : (
-          <SubmitButtonText>
+          <SubmitButtonText hollow={hollow}>
             {children}
           </SubmitButtonText>
         )}
-      </LinearGradient>
+
     </StyledTouchableOpacity>
   );
 })`
