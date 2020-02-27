@@ -28,6 +28,6 @@ export const ButtonContainer = styled.View `
 
 export const HeaderText = styled(Text) `
   font-weight: 700;
-  margin-top: 15px;
+  margin-top: 25px;
 `
 

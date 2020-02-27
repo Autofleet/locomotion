@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import Auth from '../../services/auth'
 import network from '../../services/network';
 import AppSettings from '../../services/app-settings';
-import SubmitButton from '../../Components/Button/Gradient';
+import SubmitButton from '../../Components/RoundedButton';
 import TextInput from '../../Components/TextInput';
 
 import {
@@ -62,7 +62,7 @@ export default ({ navigation }) => {
 
       </LockTextContainer>
       <ButtonContainer>
-      <SubmitButton onPress={submit}>
+      <SubmitButton onPress={submit} hollow>
         {I18n.t('lock.submitText')}
       </SubmitButton>
       </ButtonContainer>
