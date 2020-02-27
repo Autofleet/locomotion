@@ -1,5 +1,5 @@
 import React, { Fragment, useState } from 'react';
-import { Image,View, KeyboardAvoidingView } from 'react-native';
+import { Image,View } from 'react-native';
 import propTypes from 'prop-types';
 import Config from 'react-native-config';
 import network from '../../services/network';
@@ -7,6 +7,7 @@ import Auth from '../../services/auth';
 //import SubmitButton from '../../Components/Button/Gradient';
 import SubmitButton from '../../Components/RoundedButton';
 import {Trans} from 'react-i18next';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view'
 
 import {
   Container,
@@ -161,26 +162,26 @@ const Login = ({navigation, logo}) => {
   return (
     <Fragment>
     <Container>
-          <KeyboardAvoidingView behavior="position" width='100%' style={{justifyContent: 'center'}}>
+      <KeyboardAwareScrollView style={{display: 'flex'}}>
         <SafeView>
           <Image
-            style={{ width: 200, height: 125, marginBottom: 50, marginTop: 80, marginLeft: 'auto',marginRight: 'auto'}}
+            style={{ width: 200, height: 125, marginBottom: 50, marginTop: 40, marginLeft: 'auto', marginRight: 'auto' }}
             source={logo}
             resizeMode="contain"
-          />
+            />
         </SafeView>
         <IntoTextContainer>
         {!isVertStep ?
           <IntroText>{I18n.t('login.introText')}</IntroText> :
-          <Text style={{marginBottom: 15}}>{I18n.t(`login.verificationCodeInstructions`)}</Text>}
+          <Text>{I18n.t(`login.verificationCodeInstructions`)}</Text>}
         </IntoTextContainer>
-       {renderRelevantInput()}
 
+      {renderRelevantInput()}
 
       {loginState.error ? <ErrorText>{loginState.error}</ErrorText> : undefined }
 
       {isVertStep ? <ResendButton onPress={resendVertCode}>{I18n.t('login.resendButton')}</ResendButton> : undefined}
-      </KeyboardAvoidingView>
+        </KeyboardAwareScrollView>
     <SubmitContainer>
 
     <TermsText>
@@ -192,13 +193,13 @@ const Login = ({navigation, logo}) => {
       </Trans>
     </TermsText>
 
-      <SubmitButton onPress={isVertStep ? onVert : onSubmitPhoneNumber} marginTop="20px" style={{position: 'fixed'}}>
+      <SubmitButton onPress={isVertStep ? onVert : onSubmitPhoneNumber} marginTop="20px">
         {I18n.t(`login.${isVertStep ? 'submitVertButton' : 'submitPhoneNumberButton'}`)}
       </SubmitButton>
     </SubmitContainer>
     </Container>
-    {
-      webViewWindow ?
+
+    {  webViewWindow ?
         <View style={{
           position: 'absolute',
           top: 0,

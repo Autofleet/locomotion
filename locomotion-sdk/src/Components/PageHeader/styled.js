@@ -8,12 +8,13 @@ export const HeaderText = styled.Text(props => `
   color: ${props.color || defaultTextColor};
   font-weight: bold;
   text-align: center;
+  font-size: 16px;
 `);
 
 export const HeaderIconContainer = styled(TouchableOpacity)(({ side }) => `
   padding: 5px;
   position: absolute;
-  top: 15px;
+  top: 10px;
 
   right: ${side === 'right' ? 0 : null};
   margin-right: ${side === 'right' ? 30 : null};
@@ -23,8 +24,8 @@ export const HeaderIconContainer = styled(TouchableOpacity)(({ side }) => `
 `);
 
 export const HeaderIcon = styled.Image(({ side }) => `
-  width: 13px;
-  height: 13px;
+  width: 18px;
+  height: 18px;
 `);
 
 export const Header = styled.View`

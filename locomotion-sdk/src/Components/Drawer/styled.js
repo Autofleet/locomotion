@@ -33,4 +33,5 @@ export const StyledDrawerLabel = styled.View`
   width: 100%;
   flex-direction: row;
   flex: 1;
+  background-color: #ffffff;
 `;

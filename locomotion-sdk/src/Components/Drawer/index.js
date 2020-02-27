@@ -28,7 +28,7 @@ export const DrawerContentComponent = (props) => {
     navigation.closeDrawer();
   };
   return (
-    <View>
+    <View style={{padding: 10}}>
       <SafeAreaView>
         <PageHeader
           title={i18n.t('menu.title')}

@@ -15,7 +15,7 @@ const Header = ({ navigation }) => (
   <SafeView>
     <TouchableOpacity onPress={() => navigation.openDrawer()}>
       <HeaderView>
-        <Image styled={{ width: 60, height: 60 }} source={HamburgerIconSource} />
+        <Image style={{ width: 25, height: 25 }} source={HamburgerIconSource} />
       </HeaderView>
     </TouchableOpacity>
   </SafeView>

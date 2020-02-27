@@ -14,6 +14,7 @@ import { FullNameContainer } from './styled';
 import i18n from '../../I18n';
 import { useStateValue } from '../../context/main';
 import PageHeader from '../../Components/PageHeader';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view'
 
 
 
@@ -111,8 +112,8 @@ export default ({ navigation, screenOptions, ...props }) => {
 
 
   return (
-      <Fragment>
 
+<KeyboardAwareScrollView>
         <PageHeader title={i18n.t('onboarding.pageTitle')}
                     onIconPress={() => navigation.toggleDrawer()}
                     displayIcon={showHeaderIcon}
@@ -129,29 +130,31 @@ export default ({ navigation, screenOptions, ...props }) => {
           <FullNameContainer>
             <TextInput
                 placeholder={i18n.t('onboarding.firstNamePlaceholder')}
-                width="95%"
+                width="40%"
                 onChangeText={inputChange('firstName')}
                 value={onboardingState.firstName}
             />
             <TextInput
                 placeholder={i18n.t('onboarding.lastNamePlaceholder')}
-                width="95%"
+                width="40%"
                 onChangeText={inputChange('lastName')}
                 value={onboardingState.lastName}
             />
-            <TextInput
+
+          </FullNameContainer>
+          <TextInput
                 placeholder={i18n.t('onboarding.emailPlaceholder')}
-                width="95%"
+                width="90%"
                 onChangeText={inputChange('email')}
                 value={onboardingState.email}
             />
-          </FullNameContainer>
           <ErrorText>{onboardingState.error ? onboardingState.error : ''}</ErrorText>
           <SubmitButton onPress={submit}>
             {i18n.t('onboarding.submit')}
           </SubmitButton>
         </Container>
-      </Fragment>
+        </KeyboardAwareScrollView>
+
   );
 };
 

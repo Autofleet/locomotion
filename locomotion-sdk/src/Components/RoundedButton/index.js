@@ -31,12 +31,12 @@ const buttonShadow = `
 const StyledTouchableOpacity = styled.TouchableOpacity`
   width: ${({ width }) => (width || '100%')};
   border-radius: 24px;
-  padding-top: 15;
-  padding-bottom: 15;
-  background-color: #1e273d;
+  padding-top: 8px;
 
-  ${buttonShadow}
-  ${({ marginTop }) => marginTop && `
+  background-color: #1e273d;
+  height: 40px;
+/*   ${buttonShadow}
+ */  ${({ marginTop }) => marginTop && `
     margin-top: ${marginTop};
   `}
 

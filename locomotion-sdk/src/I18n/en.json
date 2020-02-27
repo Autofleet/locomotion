@@ -9,7 +9,7 @@
         "phoneNumberError": "Oops! Seems like something went wrong",
         "invalidPhoneNumberError": "Phone number is not valid",
         "vertError": "Incorrect verification code",
-        "resendButton": "Resend verification code",
+        "resendButton": "Start over",
         "introText": "Please enter your phone number to signup to Mobility-on-Demand. You will receive an SMS with a verification code.",
         "termsWebViewTitle": "Terms and conditions",
         "privacyWebViewTitle": "data protection guidelines",
