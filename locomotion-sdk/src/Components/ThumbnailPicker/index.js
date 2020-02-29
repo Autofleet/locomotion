@@ -68,7 +68,7 @@ export default class ThumbnailPicker extends React.Component {
       <Thumbnail
         mode={this.state.avatarSource ? 'edit' : 'add'}
         onPress={this.openImagePicker.bind(this)}
-        containerStyle={{ marginTop: 50, marginBottom: 50 }}
+        containerStyle={{ marginTop: 50, marginBottom: 25 }}
         size={180}
         source={this.state.avatarSource}
       />

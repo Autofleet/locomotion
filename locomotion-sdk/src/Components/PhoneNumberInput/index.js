@@ -5,11 +5,11 @@ import RNPickerSelect from 'react-native-picker-select';
 import glibphonenumber from 'google-libphonenumber';
 import Config from 'react-native-config';
 
-import { PrefixView } from './styled';
+import { PrefixView, StyledInput } from './styled';
 import TextInput from '../TextInput';
 import codesList from './codes.json';
 
-// import MccMnc from '../../services/MccMnc';
+
 
 const DEFAULT_COUNTRY_CODE = Config.DEFAULT_COUNTRY_CODE || 'IL';
 
@@ -109,7 +109,7 @@ export default class PhoneNumberInput extends React.Component {
             hideIcon
           />
         </PrefixView>
-        <TextInput
+        <StyledInput
           testID="phoneInput"
           onChangeText={this.onInput}
           keyboardType="numeric"

@@ -1,12 +1,12 @@
 export const padding = '20px';
-export const inputHeight = '50px';
+export const inputHeight = '40px';
 
 export const commonInputStyle = `
   background-color: white;
   width: 100%;
   height: ${inputHeight};
-  margin-bottom: 15px;
-  padding: 0px 15px;
+
+  padding: 0px 8px;
   font-size: 17px;
 `;
 

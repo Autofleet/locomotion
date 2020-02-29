@@ -6,6 +6,8 @@ import {
 import AppSettings from '../../services/app-settings';
 import { useStateValue } from '../../context/main';
 import { needOnboarding } from '../Onboarding';
+import network from '../../services/network';
+import Auth from '../../services/auth';
 
 const AuthLoadingScreen = ({ navigation }) => {
   const [appState, dispatch] = useStateValue();
@@ -19,11 +21,32 @@ const AuthLoadingScreen = ({ navigation }) => {
       });
 
       let page = payload.auth ? 'App' : 'Auth';
-      if (payload.userProfile && needOnboarding(payload.userProfile)) {
-        page = 'Onboarding';
+
+      if(payload.userProfile) {
+        const { data: userData } = await network.get('api/v1/me')
+        if(userData  === null) {
+          Auth.logout(navigation);
+        }
+
+        const userProfile = {
+          firstName: userData.firstName,
+          lastName: userData.lastName,
+          avatar: userData.avatar,
+          email: userData.email,
+        };
+
+        AppSettings.update({ userProfile });
+
+        if(!userData.active) {
+          page = 'Lock';
+        }
+
+        if (needOnboarding(userProfile)) {
+          page = 'Onboarding';
+        }
       }
 
-      navigation.navigate(page);
+      navigation.navigate(page, {showHeaderIcon: false});
     }
     if (!appState) { // Load app state
       getFromStorage();

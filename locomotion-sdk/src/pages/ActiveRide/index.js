@@ -15,7 +15,7 @@ import {
 import Header from '../../Components/Header';
 import RideDrawer from './RideDrawer';
 import { getTogglePopupsState } from '../../context/main';
-
+import UserService from '../../services/user';
 
 function useInterval(callback, delay) {
   const savedCallback = useRef();
@@ -102,6 +102,10 @@ export default ({ navigation }) => {
   useEffect(() => {
     loadActiveRide();
   }, []);
+
+  useInterval(() => {
+    UserService.getUser(navigation);
+  }, 10000)
 
   const bookValidation = state => state
     && state.dropoff && state.dropoff.lat

@@ -1,34 +1,71 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, Fragment } from 'react';
+import * as yup from 'yup';
 
 import network from '../../services/network';
 import AppSettings from '../../services/app-settings';
 
 import ThumbnailPicker from '../../Components/ThumbnailPicker';
-import SubmitButton from '../../Components/Button/Gradient';
+import SubmitButton from '../../Components/RoundedButton';
 import TextInput from '../../Components/TextInput';
 import {
   Container, Text, ErrorText, ResendButton,
 } from '../Login/styled';
 import { FullNameContainer } from './styled';
-import I18n from '../../I18n';
+import i18n from '../../I18n';
 import { useStateValue } from '../../context/main';
+import PageHeader from '../../Components/PageHeader';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view'
 
-export default ({ navigation }) => {
+
+
+export default ({ navigation, screenOptions, ...props }) => {
   const [onboardingState, dispatchOnboardingState] = useState({
     uploadPromise: false,
-    firstName: null,
-    lastName: null,
+    firstName: '',
+    lastName: '',
+    email: '',
     avatar: null,
     error: null,
   });
+  const [showHeaderIcon, setShowHeaderIcon] = useState(true)
+
+  useEffect(() => {
+    setShowHeaderIcon(navigation.getParam('showHeaderIcon',true));
+  }, [])
+
+  useEffect(() => {
+    setFieldsData();
+  }, [])
   const setOnboardingState = object => dispatchOnboardingState({
     ...onboardingState,
     ...object,
   });
+
+  const setFieldsData = async () => {
+    const {userProfile} = await AppSettings.getSettings();
+    dispatchOnboardingState({
+      ...onboardingState,
+      ...userProfile,
+    });
+  };
+
   const submit = async () => {
-    if (!onboardingState.firstName || !onboardingState.lastName) {
+    let validate = null;
+    const schema = yup.object().shape({
+      firstName: yup.string().required().nullable(),
+      lastName: yup.string().required().nullable(),
+      email: yup.string().required().email().nullable(),
+    });
+
+    try {
+      validate = await schema.validate({
+        firstName: onboardingState.firstName,
+        lastName: onboardingState.lastName,
+        email: onboardingState.email,
+      }, {abortEarly: true});
+    } catch (e) {
       setOnboardingState({
-        error: I18n.t('onboarding.fullNameError'),
+        error: i18n.t(`onboarding.validations.${e.type}.${e.path}`),
       });
       return;
     }
@@ -41,6 +78,7 @@ export default ({ navigation }) => {
     const userProfile = {
       firstName: onboardingState.firstName,
       lastName: onboardingState.lastName,
+      email: onboardingState.email,
       avatar,
     };
 
@@ -49,17 +87,22 @@ export default ({ navigation }) => {
     if (response.status !== 200) {
       console.log('Got bad response from user patch');
       setOnboardingState({
-        error: I18n.t('onboarding.networkError'),
+        error: i18n.t('onboarding.networkError'),
       });
       return;
     }
-    AppSettings.update({ userProfile });
-    navigation.navigate('App');
+    AppSettings.update({userProfile});
+    if (!response.data.active) {
+      return navigation.navigate('Lock');
+    }
+    navigation.navigate('Home');
   };
 
-  const inputChange = field => value => setOnboardingState({
+  const inputChange = field => value => {
+    return setOnboardingState({
     [field]: value,
-  });
+  })
+};
 
   const onImageChoose = (uploadPromise) => {
     setOnboardingState({
@@ -69,33 +112,50 @@ export default ({ navigation }) => {
 
 
   return (
-    <Container>
-      <Text>
-        {I18n.t('login.onBoardingPageTitle')}
-        {onboardingState.uploadingImage}
-        {onboardingState.avatar}
-      </Text>
-      <FullNameContainer>
-        <TextInput
-          placeholder={I18n.t('onboarding.firstNamePlaceholder')}
-          width="48%"
-          onChangeText={inputChange('firstName')}
+
+<KeyboardAwareScrollView>
+        <PageHeader title={i18n.t('onboarding.pageTitle')}
+                    onIconPress={() => navigation.toggleDrawer()}
+                    displayIcon={showHeaderIcon}
         />
-        <TextInput
-          placeholder={I18n.t('onboarding.lastNamePlaceholder')}
-          width="48%"
-          onChangeText={inputChange('lastName')}
-        />
-      </FullNameContainer>
-      <ThumbnailPicker
-        onImageChoose={onImageChoose}
-      />
-      {onboardingState.error ? <ErrorText>{onboardingState.error}</ErrorText> : undefined}
-      <SubmitButton onPress={submit}>
-        {I18n.t('onboarding.submit')}
-      </SubmitButton>
-    </Container>
+        <Container>
+          <Text>
+            {i18n.t('login.onBoardingPageTitle')}
+            {onboardingState.uploadingImage}
+            {onboardingState.avatar}
+          </Text>
+          <ThumbnailPicker
+              onImageChoose={onImageChoose}
+          />
+          <FullNameContainer>
+            <TextInput
+                placeholder={i18n.t('onboarding.firstNamePlaceholder')}
+                width="40%"
+                onChangeText={inputChange('firstName')}
+                value={onboardingState.firstName}
+            />
+            <TextInput
+                placeholder={i18n.t('onboarding.lastNamePlaceholder')}
+                width="40%"
+                onChangeText={inputChange('lastName')}
+                value={onboardingState.lastName}
+            />
+
+          </FullNameContainer>
+          <TextInput
+                placeholder={i18n.t('onboarding.emailPlaceholder')}
+                width="90%"
+                onChangeText={inputChange('email')}
+                value={onboardingState.email}
+            />
+          <ErrorText>{onboardingState.error ? onboardingState.error : ''}</ErrorText>
+          <SubmitButton onPress={submit}>
+            {i18n.t('onboarding.submit')}
+          </SubmitButton>
+        </Container>
+        </KeyboardAwareScrollView>
+
   );
 };
 
-export const needOnboarding = userProfile => !userProfile.firstName || !userProfile.lastName;
+export const needOnboarding = userProfile => !userProfile.firstName || !userProfile.lastName || !userProfile.email;

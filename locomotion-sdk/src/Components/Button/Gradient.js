@@ -26,6 +26,9 @@ const buttonShadow = `
 const StyledTouchableOpacity = styled.TouchableOpacity`
   width: ${({ width }) => (width || '100%')};
   ${buttonShadow}
+  ${({ marginTop }) => marginTop && `
+    margin-top: ${marginTop};
+  `}
 `;
 
 const Button = styled(({
@@ -38,9 +41,10 @@ const Button = styled(({
     await onPress(args);
     return setLoadingState(false);
   };
+
   return (
     <StyledTouchableOpacity width={style[0].width} {...props} onPress={onPressWithLoading}>
-      <LinearGradient style={style} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }} colors={appPalette}>
+      <LinearGradient style={{...style, marginTop: 0, paddingTop: 15, paddingBottom: 15}} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }} colors={appPalette}>
         {loadingState ? (
           <LoadingWrapper>
             <LottieView

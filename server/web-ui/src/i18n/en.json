@@ -3,7 +3,8 @@
     "logout": "Logout",
     "management": "Management",
     "poweredBy": "powered by",
-    "users": "Users"
+    "users": "Users",
+    "settings": "Settings"
   },
   "login": {
     "userNameLabel": "Username",
@@ -34,5 +35,13 @@
       "saveBtn": "Save",
       "createBtn": "Create"
     }
+  },
+  "settings": {
+    "settings": "Settings",
+    "activateUsersLabel": "Manual Users Approving:",
+    "saveButton": "Save",
+    "termsUrlLabel": "Terms url path:",
+    "PrivacyUrlLabel": "Privacy url path:",
+    "ContactUsUrlLabel": "Contact us url path:"
   }
 }

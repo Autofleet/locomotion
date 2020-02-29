@@ -1,12 +1,24 @@
-import React, { useState } from 'react';
-import { Image } from 'react-native';
+import React, { Fragment, useState, useEffect } from 'react';
+import { Image,View } from 'react-native';
 import propTypes from 'prop-types';
+import Config from 'react-native-config';
 import network from '../../services/network';
 import Auth from '../../services/auth';
+//import SubmitButton from '../../Components/Button/Gradient';
+import SubmitButton from '../../Components/RoundedButton';
+import {Trans} from 'react-i18next';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view'
 
-import SubmitButton from '../../Components/Button/Gradient';
 import {
-  Container, Text, ErrorText, ResendButton,
+  Container,
+  Text,
+  ErrorText,
+  ResendButton,
+  IntoTextContainer,
+  IntroText,
+  SubmitContainer,
+  TermsText,
+  TermsLink
 } from './styled';
 import I18n from '../../I18n';
 import PhoneNumberInput from '../../Components/PhoneNumberInput';
@@ -14,7 +26,7 @@ import PinCode from '../../Components/PinCode';
 import SafeView from '../../Components/SafeView';
 import { useStateValue } from '../../context/main';
 import { needOnboarding } from '../Onboarding';
-
+import WebView from '../WebView'
 const LogoIconSource = require('../../assets/logo.png');
 
 const Login = ({navigation, logo}) => {
@@ -25,6 +37,22 @@ const Login = ({navigation, logo}) => {
     loginStep: 'phoneNumber',
   });
 
+  const [settings, setSettings] = useState({
+    termsUrl: null,
+    privacyUrl: null,
+    contactUsUrl: null
+  })
+
+  const loadSettings = async () => {
+    const {data: settings} = await network.get('/api/v1/login/settings');
+    setSettings(settings);
+  }
+
+  useEffect(() => {
+    loadSettings();
+  }, [])
+
+  const [webViewWindow, setWebViewWindow] = useState(null);
   const setLoginState = object => dispatchLoginState({
     ...loginState,
     ...object,
@@ -46,7 +74,6 @@ const Login = ({navigation, logo}) => {
   };
 
   const isVertStep = loginState.loginStep === 'vert';
-
   const renderRelevantInput = () => (isVertStep
     ? (
       <PinCode
@@ -88,7 +115,7 @@ const Login = ({navigation, logo}) => {
         },
       });
 
-      navigation.navigate(needOnboarding(userProfile) ? 'Onboarding' : 'App');
+      navigation.navigate(needOnboarding(userProfile) ? 'Onboarding' : 'App', {showHeaderIcon: false});
     } catch (e) {
       console.log('Bad vert with request', e);
       setLoginState({
@@ -131,25 +158,76 @@ const Login = ({navigation, logo}) => {
     });
   };
 
+  const openTerms = () => {
+    setWebViewWindow({
+      uri: settings.termsUrl,
+      title: I18n.t('login.termsWebViewTitle')
+    })
+  }
+
+  const openPrivacy = () => {
+    setWebViewWindow({
+      uri: settings.privacyUrl,
+      title: I18n.t('login.privacyWebViewTitle')
+    })
+  }
 
 
   return (
+    <Fragment>
     <Container>
-      <SafeView>
-        <Image
-          style={{ width: 150, height: 75, marginBottom: 40 }}
-          source={logo}
-          resizeMode="contain"
-        />
-      </SafeView>
+      <KeyboardAwareScrollView>
+        <SafeView>
+          <Image
+            style={{ width: 200, height: 125, marginBottom: 50, marginTop: 40, marginLeft: 'auto', marginRight: 'auto' }}
+            source={logo}
+            resizeMode="contain"
+            />
+        </SafeView>
+        <IntoTextContainer>
+        {!isVertStep ?
+          <IntroText>{I18n.t('login.introText')}</IntroText> :
+          <Text>{I18n.t(`login.verificationCodeInstructions`)}</Text>}
+        </IntoTextContainer>
+
       {renderRelevantInput()}
-      <Text>{I18n.t(`${isVertStep ? 'login.verificationCodeInstructions' : 'login.loginPageInstructions'}`)}</Text>
+
       {loginState.error ? <ErrorText>{loginState.error}</ErrorText> : undefined }
-      <SubmitButton onPress={isVertStep ? onVert : onSubmitPhoneNumber}>
+
+      {isVertStep ? <ResendButton onPress={resendVertCode}>{I18n.t('login.resendButton')}</ResendButton> : undefined}
+    </KeyboardAwareScrollView>
+    <SubmitContainer>
+
+    <TermsText>
+      <Trans i18nKey="login.termsAgreement">
+        {[
+          <TermsLink onPress={() => openTerms()}></TermsLink>,
+          <TermsLink onPress={() => openPrivacy()}></TermsLink>
+        ]}
+      </Trans>
+    </TermsText>
+
+      <SubmitButton onPress={isVertStep ? onVert : onSubmitPhoneNumber} marginTop="20px">
         {I18n.t(`login.${isVertStep ? 'submitVertButton' : 'submitPhoneNumberButton'}`)}
       </SubmitButton>
-      {isVertStep ? <ResendButton onPress={resendVertCode}>{I18n.t('login.resendButton')}</ResendButton> : undefined}
+    </SubmitContainer>
     </Container>
+
+    {  webViewWindow ?
+        <View style={{
+          position: 'absolute',
+          top: 0,
+          height: '100%',
+          width: '100%',
+          left: 0,
+          zIndex: 10000,
+          backgroundColor: '#fff',
+        }}
+        >
+        <WebView {...webViewWindow} onIconPress={() => setWebViewWindow(null)} />
+      </View>
+    : null}
+  </Fragment>
   );
 };
 
