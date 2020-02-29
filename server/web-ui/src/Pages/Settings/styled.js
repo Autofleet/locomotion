@@ -91,7 +91,7 @@ export const ApplyButton = styled(ButtonBase)`
   background-color: #23a0fe;
   box-shadow: 0px 15px 29px 0 rgba(51, 70, 85, 0.24);
   padding: 0 10px;
-
+  float: right;
   font-family: 'Montserrat', sans-serif;
   font-size: 14px;
   color: #ffffff;

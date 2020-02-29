@@ -71,10 +71,6 @@ const SettingsForm = ({
                         />
                     </SettingsPanelItem>
 
-                </SettingsPanel>
-
-                <SettingsPanel
-                    transparent>
                     <SettingsPanelItem type='submit'>
                         <ApplyButton
                             redButtons={false}
@@ -86,8 +82,7 @@ const SettingsForm = ({
                         />
                     </SettingsPanelItem>
                 </SettingsPanel>
-
-                <SettingsPanel transparent={'true'} placeholder={'true'} />
+                <SettingsPanel transparent placeholder />
             </SettingsContainer>
         </Form>
 )};
