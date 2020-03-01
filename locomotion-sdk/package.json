@@ -52,6 +52,7 @@
     "i18next": "^19.3.2",
     "react-i18next": "^11.3.3",
     "react-native-keyboard-aware-scroll-view": "^0.9.1",
+    "react-native-table-component": "^1.2.1",
     "yup": "^0.28.1"
   },
   "devDependencies": {
