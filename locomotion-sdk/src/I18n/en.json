@@ -85,5 +85,9 @@
     "contactUs": {
         "pageTitle": "Contact us"
     },
+    "rideHistory": {
+        "pageTitle": "Contact us",
+        "noRides": "ride history is empty"
+    },
     "currency": "€"
 }
