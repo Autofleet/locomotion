@@ -31,7 +31,7 @@ const buttonShadow = `
 const StyledTouchableOpacity = styled.TouchableOpacity`
   width: ${({ width }) => (width || '100%')};
   border-radius: 24px;
-  padding-top: 8px;
+  padding-top: 10px;
 
   background-color: #1e273d;
   height: 40px;

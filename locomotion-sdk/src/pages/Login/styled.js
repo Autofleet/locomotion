@@ -57,12 +57,11 @@ export const IntroText = styled(Text)`
 `;
 
 export const SubmitContainer = styled.View`
-  background-color: white;
-  height: 90px;
-  width: 100%;
+  width: 90%;
   margin-bottom: 70px;
   bottom: 0;
   position: absolute;
+
 `;
 
 export const TermsText = styled.Text`

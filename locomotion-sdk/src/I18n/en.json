@@ -13,7 +13,7 @@
         "introText": "Please enter your phone number to signup to Mobility-on-Demand. You will receive an SMS with a verification code.",
         "termsWebViewTitle": "Terms and conditions",
         "privacyWebViewTitle": "data protection guidelines",
-        "termsAgreement": "By registering, you agree to the <0>terms and conditions</0> and the \n<1>data protection guidelines</1> of MoD Holding GmbH."
+        "termsAgreement": "By registering, you agree to the <0>terms and conditions</0> and the <1>data protection guidelines</1> of MoD Holding GmbH."
     },
     "onboarding": {
         "pageTitle": "Your profile",

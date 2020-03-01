@@ -10,7 +10,7 @@ import TextInput from '../../Components/TextInput';
 import {
   Container, Text, ErrorText, ResendButton,
 } from '../Login/styled';
-import { FullNameContainer } from './styled';
+import { FullNameContainer,SubmitContainer } from './styled';
 import i18n from '../../I18n';
 import { useStateValue } from '../../context/main';
 import PageHeader from '../../Components/PageHeader';
@@ -149,9 +149,12 @@ export default ({ navigation, screenOptions, ...props }) => {
                 value={onboardingState.email}
             />
           <ErrorText>{onboardingState.error ? onboardingState.error : ''}</ErrorText>
+          <SubmitContainer>
+
           <SubmitButton onPress={submit}>
             {i18n.t('onboarding.submit')}
           </SubmitButton>
+          </SubmitContainer>
         </Container>
         </KeyboardAwareScrollView>
 

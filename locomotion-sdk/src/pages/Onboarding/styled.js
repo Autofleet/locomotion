@@ -5,3 +5,7 @@ export const FullNameContainer = styled.View`
   justify-content: space-between;
   width: 100%;
 `;
+
+export const SubmitContainer = styled.View`
+  width: 90%;
+`;
