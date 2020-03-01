@@ -13,12 +13,13 @@ const LoadingWrapper = styled.View`
 
 const SubmitButtonText = styled.Text`
   color: #ffffff;
-  font-weight: 600;
-  font-size: 15px;
+  font-weight: 700;
+  font-size: 14px;
   text-align: center;
   ${({hollow}) => hollow && `
     color: #1e273d;
   `}
+  height: 20px;
 `;
 
 const buttonShadow = `
@@ -31,12 +32,10 @@ const buttonShadow = `
 const StyledTouchableOpacity = styled.TouchableOpacity`
   width: ${({ width }) => (width || '100%')};
   border-radius: 24px;
-  padding-top: 10px;
-
   background-color: #1e273d;
   height: 40px;
-/*   ${buttonShadow}
- */  ${({ marginTop }) => marginTop && `
+  padding-top: 9px;
+  ${({ marginTop }) => marginTop && `
     margin-top: ${marginTop};
   `}
 

@@ -49,7 +49,7 @@
         "header": "Your signup has been recorded",
         "text": "We have received your registration and will review it as soon as possible",
         "subText": "You will immediately receive a notification when your registration is completed and you are ready to use Mobility-on-Demand",
-        "submitText": " Login in different account"
+        "submitText": " Login to different account"
     },
     "addressView": {
         "pickupPlaceholder": "Choose Pickup",
