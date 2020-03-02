@@ -35,6 +35,8 @@ export const DrawerContentComponent = (props) => {
           iconSide='right'
           onIconPress={() => closeComponent()}
           icon={closeIconSource}
+          width="18px"
+          height="18px"
         />
         <DrawerItems {...props} />
       </SafeAreaView>
