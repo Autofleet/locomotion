@@ -86,8 +86,11 @@
         "pageTitle": "Contact us"
     },
     "rideHistory": {
-        "pageTitle": "Contact us",
-        "noRides": "ride history is empty"
+        "pageTitle": "Rides History",
+        "noRides": "Ride history is empty",
+        "tableTimeTitle": "Time",
+        "tableStartTitle": "Start",
+        "tableStopTitle": "Stop"
     },
     "currency": "€"
 }

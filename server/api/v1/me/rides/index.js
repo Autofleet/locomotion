@@ -17,6 +17,16 @@ router.get('/', async (req, res) => {
   res.json({ rides: rides !== null ? rides : [] });
 });
 
+router.get('/history', async (req, res) => {
+  const rides = await Ride.findAll({
+    where: {
+      userId: req.userId,
+      state: Ride.STATES.COMPLETED,
+    },
+  });
+  res.json({ rides: rides !== null ? rides : [] });
+});
+
 router.get('/active', async (req, res) => {
   const ride = await rideService.getRidderActiveRide(req.userId);
   res.json({ ride });
