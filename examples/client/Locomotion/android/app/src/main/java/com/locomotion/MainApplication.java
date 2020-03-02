@@ -7,6 +7,7 @@ import com.facebook.react.PackageList;
 import com.facebook.hermes.reactexecutor.HermesExecutorFactory;
 import com.facebook.react.bridge.JavaScriptExecutorFactory;
 import com.facebook.react.ReactApplication;
+import com.geektime.rnonesignalandroid.ReactNativeOneSignalPackage;
 import fr.bamlab.rnimageresizer.ImageResizerPackage;
 import com.lugg.ReactNativeConfig.ReactNativeConfigPackage;
 import com.learnium.RNDeviceInfo.RNDeviceInfo;
@@ -35,6 +36,7 @@ public class MainApplication extends Application implements ReactApplication {
       // Packages that cannot be autolinked yet can be added manually here, for example:
       // packages.add(new MyReactNativePackage());
       // packages.add(new MainReactPackage(),
+            new ReactNativeOneSignalPackage(),
       packages.add(new ImageResizerPackage());
       packages.add(new ReactNativeConfigPackage());
       packages.add(new RNDeviceInfo());
