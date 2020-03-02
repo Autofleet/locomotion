@@ -100,6 +100,7 @@ export default ({ navigation }) => {
   }, 5000);
 
   useEffect(() => {
+    UserService.getUser(navigation);
     loadActiveRide();
   }, []);
 
