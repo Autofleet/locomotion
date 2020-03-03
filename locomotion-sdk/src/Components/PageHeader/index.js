@@ -1,19 +1,24 @@
 import React from 'react';
 import propsTypes from 'prop-types';
-import {Header, HeaderText, HeaderIconContainer, HeaderIcon} from './styled';
+import {
+  Header, HeaderText, HeaderIconContainer, HeaderIcon,
+} from './styled';
 import SafeView from '../SafeView';
+
 const HamburgerIconSource = require('../../assets/menu.png');
 
 const PageHeader = ({
-  title, icon, onIconPress, iconSide, displayIcon, width, height
+  title, icon, onIconPress, iconSide, displayIcon, width, height,
 }) => (
   <SafeView>
     <Header>
       <HeaderText>{title}</HeaderText>
-      {displayIcon !== false ?
-      <HeaderIconContainer side={iconSide} onPress={onIconPress}>
-        <HeaderIcon width={width} height={width} source={icon} side={iconSide} />
-      </HeaderIconContainer> : null}
+      {displayIcon !== false
+        ? (
+          <HeaderIconContainer side={iconSide} onPress={onIconPress}>
+            <HeaderIcon width={width} height={width} source={icon} side={iconSide} />
+          </HeaderIconContainer>
+        ) : null}
     </Header>
   </SafeView>
 );
@@ -26,7 +31,7 @@ PageHeader.defaultProps = {
   iconSide: 'left',
   onIconPress: () => null,
   height: '25px',
-  width: '25px'
+  width: '25px',
 };
 
 PageHeader.propTypes = {
@@ -35,5 +40,5 @@ PageHeader.propTypes = {
   iconSide: propsTypes.string,
   onIconPress: propsTypes.func,
   width: propsTypes.string,
-  height: propsTypes.string
+  height: propsTypes.string,
 };

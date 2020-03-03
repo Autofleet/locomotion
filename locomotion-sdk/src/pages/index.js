@@ -27,7 +27,7 @@ const activeBackgroundColor = '#ffffff';
 const inactiveBackgroundColor = '#ffffff';
 
 export const MainRouter = (props) => {
-  const addPageProps = (Page) => (navigationProps) => (<Page {...navigationProps} {...props} />);
+  const addPageProps = Page => navigationProps => (<Page {...navigationProps} {...props} />);
 
   const AppStack = createDrawerNavigator({
     Home: {
@@ -76,8 +76,8 @@ export const MainRouter = (props) => {
     contentComponent: DrawerContentComponent,
     contentOptions: {
       inactiveBackgroundColor: '#ffffff',
-      activeBackgroundColor: '#ffffff'
-    }
+      activeBackgroundColor: '#ffffff',
+    },
   });
 
   const AuthStack = createStackNavigator({ SignIn: addPageProps(Login), Onboarding: addPageProps(Onboarding) }, {
@@ -90,7 +90,7 @@ export const MainRouter = (props) => {
       App: AppStack,
       Auth: AuthStack,
       Lock,
-      Onboarding
+      Onboarding,
     },
     {
       initialRouteName: 'AuthLoading',

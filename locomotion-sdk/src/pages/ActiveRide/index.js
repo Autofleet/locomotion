@@ -16,6 +16,7 @@ import Header from '../../Components/Header';
 import RideDrawer from './RideDrawer';
 import { getTogglePopupsState } from '../../context/main';
 import UserService from '../../services/user';
+import OneSignal from '../../services/one-signal';
 
 function useInterval(callback, delay) {
   const savedCallback = useRef();
@@ -102,11 +103,12 @@ export default ({ navigation }) => {
   useEffect(() => {
     UserService.getUser(navigation);
     loadActiveRide();
+    // OneSignal.init();
   }, []);
 
   useInterval(() => {
     UserService.getUser(navigation);
-  }, 10000)
+  }, 10000);
 
   const bookValidation = state => state
     && state.dropoff && state.dropoff.lat
@@ -119,14 +121,14 @@ export default ({ navigation }) => {
     } catch (error) {
       console.log('Got error while try to get pre detail on a ride', error);
     }
-  }
+  };
 
   const onLocationSelect = (location) => {
     const newState = {
       ...requestStopPoints,
       [location.type]: location,
     };
-    const bookValid = bookValidation(newState)
+    const bookValid = bookValidation(newState);
     newState.openEdit = !bookValid;
 
     if (bookValid) {
@@ -186,18 +188,22 @@ export default ({ navigation }) => {
             return; // Follow user location works for iOS
           }
           const { coordinate } = event.nativeEvent;
-          mapInstance.current.animateToRegion({latitude: coordinate.latitude, longitude: coordinate.longitude,
-            latitudeDelta: mapRegion.latitudeDelta, longitudeDelta: mapRegion.longitudeDelta}, 1000);
+          mapInstance.current.animateToRegion({
+            latitude: coordinate.latitude,
+            longitude: coordinate.longitude,
+            latitudeDelta: mapRegion.latitudeDelta,
+            longitudeDelta: mapRegion.longitudeDelta,
+          }, 1000);
 
           setMapRegion(oldMapRegion => ({
             ...oldMapRegion,
             ...coordinate,
-          }))
+          }));
         }}
         ref={mapInstance}
         onMapReady={() => {
           PermissionsAndroid.request(
-            PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION
+            PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
           );
         }}
       >
