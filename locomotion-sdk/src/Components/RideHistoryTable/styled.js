@@ -3,7 +3,7 @@ import { StyleSheet, View } from 'react-native';
 import styled from 'styled-components';
 import { Row, Rows } from 'react-native-table-component';
 
-const tableMarginFromSides = '25';
+const tableMarginFromSides = '20';
 
 export const TableContainer = styled.View(`
     flex: 1;
@@ -20,7 +20,7 @@ export const StyledRows = styled(Rows)`
     border-bottom-width: 1;
     border-bottom-color: rgba(0,0,0,0.07);
     margin: 5px ${tableMarginFromSides}px;
-    padding: 12px 0;
+    padding-bottom: 10px;
 `;
 
 export const textStyle = StyleSheet.create({

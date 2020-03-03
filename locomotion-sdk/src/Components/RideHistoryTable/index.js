@@ -6,6 +6,8 @@ import propsTypes from 'prop-types';
 import i18n from '../../I18n';
 import { TableContainer, StyledHeaderRow, StyledRows, textStyle } from './styled';
 
+const rowsFlexWidth = [2, 3, 3];
+
 const RideHistoryTable = ({ data }) => {
   const getCreatedAt = date => {
     const Date = moment(date).format('DD-MM-YYYY');
@@ -33,10 +35,12 @@ const RideHistoryTable = ({ data }) => {
           <StyledHeaderRow
               data={viewData.tableHead}
               textStyle={textStyle.header}
+              flexArr={rowsFlexWidth}
           />
           <StyledRows
               data={viewData.tableData}
               textStyle={textStyle.row}
+              flexArr={rowsFlexWidth}
           />
         </Table>
       </ScrollView>
