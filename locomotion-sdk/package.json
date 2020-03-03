@@ -46,8 +46,7 @@
     "react-native-modal": "^11.1.0",
     "react-native-picker-select": "^6.3.0",
     "react-native-webview": "^7.4.3",
-    "styled-components": "^4.3.2",
-    "react-native-onesignal": "^3.6.5"
+    "styled-components": "^4.3.2"
   },
   "dependencies": {
     "i18next": "^19.3.2",

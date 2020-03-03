@@ -15,6 +15,8 @@ export default ({ navigation }) => {
 
   const getRides = async () => {
     const history = await RideHistoryService.getHistory();
+    console.log(history);
+
     if (history && history.rides) {
       setRides(history.rides);
       setNoRides(false);
