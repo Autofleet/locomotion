@@ -23,6 +23,7 @@ router.get('/history', async (req, res) => {
       userId: req.userId,
       state: Ride.STATES.COMPLETED,
     },
+    order: [['createdAt', 'DESC']],
   });
   res.json({ rides: rides !== null ? rides : [] });
 });
