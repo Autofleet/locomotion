@@ -17,7 +17,7 @@ const NoRidesMessage = ({ navigation }) => (
 );
 
 export default ({ navigation }) => {
-  const [rides, setRides] = useState({});
+  const [rides, setRides] = useState(null);
 
   const toggleMenu = () => {
     navigation.toggleDrawer();

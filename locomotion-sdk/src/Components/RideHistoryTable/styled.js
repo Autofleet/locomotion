@@ -5,10 +5,10 @@ import { Row, Rows } from 'react-native-table-component';
 
 const tableMarginFromSides = '20';
 
-export const TableContainer = styled.ScrollView(`
+export const TableContainer = styled(ScrollView)`
     flex: 1;
-    backgroundColor: '#fff';
-`);
+    background-color: #fff;
+`;
 
 export const StyledHeaderRow = styled(Row)`
     height: 40;

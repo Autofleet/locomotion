@@ -8,10 +8,10 @@ import { TableContainer, StyledHeaderRow, StyledRows, textStyle } from './styled
 const rowsFlexWidth = [2, 3, 3];
 
 const RideHistoryTable = ({ data }) => {
-  const getCreatedAt = date => {
-    const Date = moment(date).format('DD-MM-YYYY');
-    const Time = moment(date).format('HH:MM');
-    return `${Date}\n${Time}`;
+  const getCreatedAt = data => {
+    const date = moment(data).format('DD-MM-YYYY');
+    const time = moment(date).format('HH:MM');
+    return `${date}\n${time}`;
   };
 
   const formatDataToView = function (data) {
