@@ -1,13 +1,13 @@
 import React, { Fragment, useState, useEffect } from 'react';
-import { Image,View } from 'react-native';
+import { Image, View } from 'react-native';
 import propTypes from 'prop-types';
 import Config from 'react-native-config';
+import { Trans } from 'react-i18next';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import network from '../../services/network';
 import Auth from '../../services/auth';
-//import SubmitButton from '../../Components/Button/Gradient';
+// import SubmitButton from '../../Components/Button/Gradient';
 import SubmitButton from '../../Components/RoundedButton';
-import {Trans} from 'react-i18next';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view'
 
 import {
   Container,
@@ -18,7 +18,7 @@ import {
   IntroText,
   SubmitContainer,
   TermsText,
-  TermsLink
+  TermsLink,
 } from './styled';
 import I18n from '../../I18n';
 import PhoneNumberInput from '../../Components/PhoneNumberInput';
@@ -26,10 +26,11 @@ import PinCode from '../../Components/PinCode';
 import SafeView from '../../Components/SafeView';
 import { useStateValue } from '../../context/main';
 import { needOnboarding } from '../Onboarding';
-import WebView from '../WebView'
+import WebView from '../WebView';
+
 const LogoIconSource = require('../../assets/logo.png');
 
-const Login = ({navigation, logo}) => {
+const Login = ({ navigation, logo }) => {
   const [loginState, dispatchLoginState] = useState({
     phoneNumber: null,
     vertCode: null,
@@ -40,17 +41,17 @@ const Login = ({navigation, logo}) => {
   const [settings, setSettings] = useState({
     termsUrl: null,
     privacyUrl: null,
-    contactUsUrl: null
-  })
+    contactUsUrl: null,
+  });
 
   const loadSettings = async () => {
-    const {data: settings} = await network.get('/api/v1/login/settings');
+    const { data: settings } = await network.get('/api/v1/login/settings');
     setSettings(settings);
-  }
+  };
 
   useEffect(() => {
     loadSettings();
-  }, [])
+  }, []);
 
   const [webViewWindow, setWebViewWindow] = useState(null);
   const setLoginState = object => dispatchLoginState({
@@ -115,7 +116,7 @@ const Login = ({navigation, logo}) => {
         },
       });
 
-      navigation.navigate(needOnboarding(userProfile) ? 'Onboarding' : 'App', {showHeaderIcon: false});
+      navigation.navigate(needOnboarding(userProfile) ? 'Onboarding' : 'App', { showHeaderIcon: false });
     } catch (e) {
       console.log('Bad vert with request', e);
       setLoginState({
@@ -161,85 +162,88 @@ const Login = ({navigation, logo}) => {
   const openTerms = () => {
     setWebViewWindow({
       uri: settings.termsUrl,
-      title: I18n.t('login.termsWebViewTitle')
-    })
-  }
+      title: I18n.t('login.termsWebViewTitle'),
+    });
+  };
 
   const openPrivacy = () => {
     setWebViewWindow({
       uri: settings.privacyUrl,
-      title: I18n.t('login.privacyWebViewTitle')
-    })
-  }
+      title: I18n.t('login.privacyWebViewTitle'),
+    });
+  };
 
 
   return (
     <Fragment>
-    <Container>
-      <KeyboardAwareScrollView>
-        <SafeView>
-          <Image
-            style={{ width: 200, height: 125, marginBottom: 50, marginTop: 40, marginLeft: 'auto', marginRight: 'auto' }}
-            source={logo}
-            resizeMode="contain"
+      <Container>
+        <KeyboardAwareScrollView>
+          <SafeView>
+            <Image
+              style={{
+                width: 200, height: 125, marginBottom: 50, marginTop: 40, marginLeft: 'auto', marginRight: 'auto',
+              }}
+              source={logo}
+              resizeMode="contain"
             />
-        </SafeView>
-        <IntoTextContainer>
-        {!isVertStep ?
-          <IntroText>{I18n.t('login.introText')}</IntroText> :
-          <Text>{I18n.t(`login.verificationCodeInstructions`)}</Text>}
-        </IntoTextContainer>
+          </SafeView>
+          <IntoTextContainer>
+            {!isVertStep
+              ? <IntroText>{I18n.t('login.introText')}</IntroText>
+              : <Text>{I18n.t('login.verificationCodeInstructions')}</Text>}
+          </IntoTextContainer>
 
-      {renderRelevantInput()}
+          {renderRelevantInput()}
 
-      {loginState.error ? <ErrorText>{loginState.error}</ErrorText> : undefined }
+          {loginState.error ? <ErrorText>{loginState.error}</ErrorText> : undefined }
 
-      {isVertStep ? <ResendButton onPress={resendVertCode}>{I18n.t('login.resendButton')}</ResendButton> : undefined}
-    </KeyboardAwareScrollView>
-    <SubmitContainer>
+          {isVertStep ? <ResendButton onPress={resendVertCode}>{I18n.t('login.resendButton')}</ResendButton> : undefined}
+        </KeyboardAwareScrollView>
+        <SubmitContainer>
 
-    <TermsText>
-      <Trans i18nKey="login.termsAgreement">
-        {[
-          <TermsLink onPress={() => openTerms()}></TermsLink>,
-          <TermsLink onPress={() => openPrivacy()}></TermsLink>
-        ]}
-      </Trans>
-    </TermsText>
+          <TermsText>
+            <Trans i18nKey="login.termsAgreement">
+              {[
+                <TermsLink onPress={() => openTerms()} />,
+                <TermsLink onPress={() => openPrivacy()} />,
+              ]}
+            </Trans>
+          </TermsText>
 
-      <SubmitButton onPress={isVertStep ? onVert : onSubmitPhoneNumber} marginTop="20px">
-        {I18n.t(`login.${isVertStep ? 'submitVertButton' : 'submitPhoneNumberButton'}`)}
-      </SubmitButton>
-    </SubmitContainer>
-    </Container>
+          <SubmitButton onPress={isVertStep ? onVert : onSubmitPhoneNumber} marginTop="20px">
+            {I18n.t(`login.${isVertStep ? 'submitVertButton' : 'submitPhoneNumberButton'}`)}
+          </SubmitButton>
+        </SubmitContainer>
+      </Container>
 
-    {  webViewWindow ?
-        <View style={{
-          position: 'absolute',
-          top: 0,
-          height: '100%',
-          width: '100%',
-          left: 0,
-          zIndex: 10000,
-          backgroundColor: '#fff',
-        }}
-        >
-        <WebView {...webViewWindow} onIconPress={() => setWebViewWindow(null)} />
-      </View>
-    : null}
-  </Fragment>
+      { webViewWindow
+        ? (
+          <View style={{
+            position: 'absolute',
+            top: 0,
+            height: '100%',
+            width: '100%',
+            left: 0,
+            zIndex: 10000,
+            backgroundColor: '#fff',
+          }}
+          >
+            <WebView {...webViewWindow} onIconPress={() => setWebViewWindow(null)} />
+          </View>
+        )
+        : null}
+    </Fragment>
   );
 };
 
-export default Login
+export default Login;
 
 Login.defaultProps = {
   navigation: undefined,
-  logo: LogoIconSource
+  logo: LogoIconSource,
 };
 
 Login.propTypes = {
   navigation: propTypes.shape({}),
-  logo: propTypes.any
+  logo: propTypes.any,
 };
-
