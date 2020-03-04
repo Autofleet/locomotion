@@ -12,6 +12,8 @@ class NotificationsService {
   }
 
   init = () => {
+    console.log('INIITTTT');
+
     const permissions = {
       alert: true,
       badge: true,
@@ -38,6 +40,12 @@ class NotificationsService {
 
       this.oneSignalId = data.userId;
     });
+  }
+
+  onAnyEvent = (data) => {
+    console.log('onAnyEvent');
+
+    console.log(data);
   }
 
   onOpened = (openResult) => {

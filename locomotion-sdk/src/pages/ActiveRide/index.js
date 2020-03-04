@@ -16,7 +16,7 @@ import Header from '../../Components/Header';
 import RideDrawer from './RideDrawer';
 import { getTogglePopupsState } from '../../context/main';
 import UserService from '../../services/user';
-//import OneSignal from '../../services/one-signal';
+import OneSignal from '../../services/one-signal';
 
 function useInterval(callback, delay) {
   const savedCallback = useRef();
@@ -103,7 +103,7 @@ export default ({ navigation }) => {
   useEffect(() => {
     UserService.getUser(navigation);
     loadActiveRide();
-    // OneSignal.init();
+    OneSignal.init();
   }, []);
 
   useInterval(() => {
