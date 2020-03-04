@@ -2,7 +2,7 @@ import React, { Fragment, useEffect, useState } from 'react';
 import i18n from '../../I18n';
 import PageHeader from '../../Components/PageHeader';
 import RideHistoryService from '../../services/ride-history';
-import { NoRidesMessageContainer, NoRidesTitle, NoRidesTitleText, NoRidesTitleSubText } from './styled';
+import { PageContent, NoRidesMessageContainer, NoRidesTitle, NoRidesTitleText, NoRidesTitleSubText } from './styled';
 import RideHistoryTable from '../../Components/RideHistoryTable';
 
 const NoRidesMessage = ({ navigation }) => {
@@ -35,7 +35,7 @@ export default ({ navigation }) => {
   }, []);
 
   return (
-    <Fragment>
+    <PageContent>
       <PageHeader
         title={i18n.t('rideHistory.pageTitle')}
         onIconPress={() => toggleMenu()}
@@ -44,6 +44,6 @@ export default ({ navigation }) => {
         ? <RideHistoryTable data={rides} />
         : <NoRidesMessage/>
       }
-    </Fragment>
+    </PageContent>
   );
 };

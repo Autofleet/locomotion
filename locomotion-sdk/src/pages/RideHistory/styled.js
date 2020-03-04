@@ -2,6 +2,12 @@
 import { View, Text, Dimensions } from 'react-native'
 import styled from 'styled-components';
 
+export const PageContent = styled(View)`
+    width: 100%;
+    height: 100%;
+    background-color: #fff;
+`;
+
 export const NoRidesMessageContainer = styled(View)`
     flex: 1;
     flex-direction: column;
