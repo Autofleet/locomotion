@@ -9,6 +9,7 @@ export const NoRidesMessageContainer = styled(View)`
     align-items: center;
     width: 100%;
     height: 100%;
+    background-color: #fff;
 `;
 
 export const NoRidesTitle = styled(View)`
