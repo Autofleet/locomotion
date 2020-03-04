@@ -12,8 +12,6 @@ class NotificationsService {
   }
 
   init = () => {
-    console.log('INIITTTT');
-
     const permissions = {
       alert: true,
       badge: true,
