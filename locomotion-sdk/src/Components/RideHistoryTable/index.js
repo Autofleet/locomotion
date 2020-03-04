@@ -10,7 +10,7 @@ const rowsFlexWidth = [2, 3, 3];
 const RideHistoryTable = ({ data }) => {
   const getCreatedAt = data => {
     const date = moment(data).format('DD-MM-YYYY');
-    const time = moment(date).format('HH:MM');
+    const time = moment(data).format('HH:MM');
     return `${date}\n${time}`;
   };
 
