@@ -1,6 +1,7 @@
-// import { Platform } from 'react-native';
+import { Platform } from 'react-native';
 import OneSignal from 'react-native-onesignal'; // Import package from node modules
 import network from './network';
+import AppSettings from './app-settings';
 
 const notificationsHandlers = {
 
@@ -23,27 +24,20 @@ class NotificationsService {
     OneSignal.addEventListener('ids', this.onAnyEvent);
 
     OneSignal.init('1c33e584-a2b0-46f1-a5c8-51b1981101c5', { kOSSettingsKeyAutoPrompt: true });
-    OneSignal.configure();
     OneSignal.requestPermissions(permissions);
     OneSignal.inFocusDisplaying(2);
     OneSignal.setSubscription(true);
-
-    OneSignal.getPermissionSubscriptionState((data) => {
-      console.log('getPermissionSubscriptionState', data);
-
-      this.registerOnServer({
-        pushToken: data.pushToken,
-        oneSignalId: data.userId,
-      });
-
-      this.oneSignalId = data.userId;
-    });
   }
 
-  onAnyEvent = (data) => {
-    console.log('onAnyEvent');
-
-    console.log(data);
+  onAnyEvent = async (data) => {
+    console.log('onAnyEvent', data);
+    const { userProfile } = await AppSettings.getSettings();
+    if (userProfile.pushUserId !== data.userId || userProfile.pushToken !== data.pushToken) {
+      this.registerOnServer({
+        pushToken: data.pushToken,
+        pushUserId: data.userId,
+      });
+    }
   }
 
   onOpened = (openResult) => {
@@ -61,12 +55,15 @@ class NotificationsService {
     console.log('new notification', payload);
   }
 
-  registerOnServer = async ({ pushToken, oneSignalId }) => {
-    /* user.update({
-    pushToken,
-    oneSignalId,
-    deviceType: Platform.OS,
-  }) */
+  registerOnServer = async ({ pushUserId, pushToken }) => {
+    const pushUserData = {
+      pushUserId,
+      pushToken,
+      deviceType: Platform.OS,
+    };
+
+    const response = await network.patch('api/v1/me', pushUserData);
+    console.log(response.data);
   };
 
   getOneSignalId = () => new Promise(resolve => OneSignal.getPermissionSubscriptionState(({ userId }) => resolve(userId)));
