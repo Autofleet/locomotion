@@ -2,7 +2,6 @@ import React from 'react';
 import params from 'react-native-config';
 
 import { MainProvider } from './context/main';
-import i18nContext from './context/i18n';
 // import StorybookUI from './storybook';
 import Router, { MainRouter } from './pages';
 import NavigationService from './services/navigation';
