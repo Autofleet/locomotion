@@ -87,7 +87,8 @@
     },
     "rideHistory": {
         "pageTitle": "Rides History",
-        "noRides": "Ride history is empty",
+        "noRides": "No results found",
+        "noRidesSubText": "",
         "tableTimeTitle": "Time",
         "tableStartTitle": "Start",
         "tableStopTitle": "Stop"

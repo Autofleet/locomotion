@@ -1,11 +1,11 @@
 import React from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, ScrollView, View } from 'react-native';
 import styled from 'styled-components';
 import { Row, Rows } from 'react-native-table-component';
 
 const tableMarginFromSides = '20';
 
-export const TableContainer = styled.View(`
+export const TableContainer = styled.ScrollView(`
     flex: 1;
     backgroundColor: '#fff';
 `);

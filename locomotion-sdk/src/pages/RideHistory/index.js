@@ -2,12 +2,22 @@ import React, { Fragment, useEffect, useState } from 'react';
 import i18n from '../../I18n';
 import PageHeader from '../../Components/PageHeader';
 import RideHistoryService from '../../services/ride-history';
-import { NoRidesMessage } from './styled';
+import { NoRidesMessageContainer, NoRidesTitle, NoRidesTitleText, NoRidesTitleSubText } from './styled';
 import RideHistoryTable from '../../Components/RideHistoryTable';
+
+const NoRidesMessage = ({ navigation }) => {
+  return (
+      <NoRidesMessageContainer>
+        <NoRidesTitle>
+          <NoRidesTitleText>{i18n.t('rideHistory.noRides')}</NoRidesTitleText>
+          <NoRidesTitleSubText>{i18n.t('rideHistory.noRidesSubText')}</NoRidesTitleSubText>
+        </NoRidesTitle>
+      </NoRidesMessageContainer>
+  )
+};
 
 export default ({ navigation }) => {
   const [rides, setRides] = useState({});
-  const [noRides, setNoRides] = useState(true);
 
   const toggleMenu = () => {
     navigation.toggleDrawer();
@@ -15,13 +25,8 @@ export default ({ navigation }) => {
 
   const getRides = async () => {
     const history = await RideHistoryService.getHistory();
-    console.log(history);
-
     if (history && history.rides) {
       setRides(history.rides);
-      setNoRides(false);
-    } else {
-      setNoRides(true);
     }
   };
 
@@ -35,9 +40,9 @@ export default ({ navigation }) => {
         title={i18n.t('rideHistory.pageTitle')}
         onIconPress={() => toggleMenu()}
       />
-      {!noRides
+      {rides && rides.length > 0
         ? <RideHistoryTable data={rides} />
-        : <NoRidesMessage>{i18n.t('rideHistory.noRides')}</NoRidesMessage>
+        : <NoRidesMessage/>
       }
     </Fragment>
   );

@@ -1,5 +1,4 @@
 import React from 'react';
-import { ScrollView } from 'react-native';
 import { Table } from 'react-native-table-component';
 import moment from 'moment';
 import propsTypes from 'prop-types';
@@ -30,7 +29,6 @@ const RideHistoryTable = ({ data }) => {
 
   return (
     <TableContainer>
-      <ScrollView>
         <Table>
           <StyledHeaderRow
               data={viewData.tableHead}
@@ -43,7 +41,6 @@ const RideHistoryTable = ({ data }) => {
               flexArr={rowsFlexWidth}
           />
         </Table>
-      </ScrollView>
     </TableContainer>
   );
 };
