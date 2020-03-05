@@ -20,7 +20,7 @@ const AuthLoadingScreen = ({ navigation }) => {
         payload,
       });
 
-      let page = payload.auth ? 'App' : 'Auth';
+      let page = payload.userProfile ? 'App' : 'Auth';
 
       if (payload.userProfile) {
         const { data: userData } = await network.get('api/v1/me');
