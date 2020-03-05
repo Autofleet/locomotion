@@ -1,5 +1,6 @@
 import { Platform } from 'react-native';
 import OneSignal from 'react-native-onesignal'; // Import package from node modules
+import Config from 'react-native-config';
 import network from './network';
 import AppSettings from './app-settings';
 
@@ -22,8 +23,7 @@ class NotificationsService {
     OneSignal.addEventListener('received', this.triggerOnNotification);
     OneSignal.addEventListener('opened', this.onOpened);
     OneSignal.addEventListener('ids', this.onAnyEvent);
-
-    OneSignal.init('1c33e584-a2b0-46f1-a5c8-51b1981101c5', { kOSSettingsKeyAutoPrompt: true });
+    OneSignal.init(Config.ONESIGNAL_APP_ID, { kOSSettingsKeyAutoPrompt: true });
     OneSignal.requestPermissions(permissions);
     OneSignal.inFocusDisplaying(2);
     OneSignal.setSubscription(true);
