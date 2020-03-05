@@ -122,10 +122,10 @@ export default ({ navigation, screenOptions, ...props }) => {
           <Text>
             {i18n.t('login.onBoardingPageTitle')}
             {onboardingState.uploadingImage}
-            {onboardingState.avatar}
           </Text>
           <ThumbnailPicker
               onImageChoose={onImageChoose}
+              avatarSource={onboardingState.avatar}
           />
           <FullNameContainer>
             <TextInput

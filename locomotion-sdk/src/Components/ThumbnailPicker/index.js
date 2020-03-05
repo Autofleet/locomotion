@@ -12,10 +12,6 @@ export default class ThumbnailPicker extends React.Component {
     this.state = {
       avatarSource: undefined,
     };
-
-    // if (userContext.state.avatar) {
-    //   this.state.avatarSource = { uri: userContext.state.avatar };
-    // }
   }
 
   uploadPromise = false;
@@ -70,7 +66,7 @@ export default class ThumbnailPicker extends React.Component {
         onPress={this.openImagePicker.bind(this)}
         containerStyle={{ marginTop: 50, marginBottom: 25 }}
         size={180}
-        source={this.state.avatarSource}
+        source={this.state.avatarSource || this.props.avatarSource}
       />
     );
   }
@@ -78,8 +74,10 @@ export default class ThumbnailPicker extends React.Component {
 
 ThumbnailPicker.defaultProps = {
   onImageChoose: () => null,
+  avatarSource: undefined,
 };
 
 ThumbnailPicker.propTypes = {
   onImageChoose: propsTypes.func,
+  avatarSource: propsTypes.string,
 };
