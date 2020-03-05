@@ -5,6 +5,7 @@ import de from './src/I18n/en.json'
 const App = () => (
   <LocomotionRouter
 /*     i18n={{default: 'de', translations: [{lang:'de', translation:de}]}} */
+        /* testing new feature */
   />
 );
 
