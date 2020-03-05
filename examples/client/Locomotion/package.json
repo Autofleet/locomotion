@@ -11,7 +11,7 @@
     "linter": "eslint '**/*.{js,jsx}' --quiet"
   },
   "dependencies": {
-    "@autofleet/locomotion-sdk": "^1.0.11",
+    "@autofleet/locomotion-sdk": "^1.0.17",
     "@google/maps": "^0.5.5",
     "@mapbox/polyline": "^1.1.0",
     "@react-native-community/async-storage": "^1.6.1",
@@ -39,6 +39,7 @@
     "react-native-linear-gradient": "^2.5.4",
     "react-native-maps": "0.25.0",
     "react-native-modal": "^11.1.0",
+    "react-native-onesignal": "^3.6.5",
     "react-native-picker-select": "^6.3.0",
     "react-native-webview": "^7.4.3",
     "react-navigation": "^3.13.0",

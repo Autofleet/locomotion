@@ -38,6 +38,10 @@
   },
   "settings": {
     "settings": "Settings",
+    "validation": {
+      "urlIsInvalid": "Url invalid (https is required)",
+      "fieldIsRequired": "Field requierd"
+    },
     "activateUsersLabel": "Manual Users Approving:",
     "saveButton": "Save",
     "termsUrlLabel": "Terms url path:",

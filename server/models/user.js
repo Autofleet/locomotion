@@ -39,6 +39,20 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.BOOLEAN,
       field: 'active',
     },
+    pushUserId: {
+      type: DataTypes.STRING,
+      field: 'push_user_id',
+    },
+    pushToken: {
+      type: DataTypes.STRING,
+      field: 'push_token',
+    },
+    deviceType: {
+      type: DataTypes.STRING,
+      field: 'device_type',
+    },
+
+
   }, {
     paranoid: true,
   });

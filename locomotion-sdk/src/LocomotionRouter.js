@@ -9,17 +9,14 @@ import NavigationService from './services/navigation';
 
 import RidePopups from './popups/RidePopups';
 
-export default (props) => {
-
-  return (
-    <MainProvider>
-      <MainRouter
-        ref={navigation => NavigationService.setTopLevelNavigator(navigation)}
-        {...props}
-      />
-      {props.children}
-      {/* Popups */}
-      <RidePopups />
-    </MainProvider>
-  );
-};
+export default props => (
+  <MainProvider {...props}>
+    <MainRouter
+      ref={navigation => NavigationService.setTopLevelNavigator(navigation)}
+      {...props}
+    />
+    {props.children}
+    {/* Popups */}
+    <RidePopups />
+  </MainProvider>
+);

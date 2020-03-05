@@ -85,5 +85,13 @@
     "contactUs": {
         "pageTitle": "Contact us"
     },
+    "rideHistory": {
+        "pageTitle": "Rides History",
+        "noRides": "No results found",
+        "noRidesSubText": "",
+        "tableTimeTitle": "Time",
+        "tableStartTitle": "Start",
+        "tableStopTitle": "Stop"
+    },
     "currency": "€"
 }

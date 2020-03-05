@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useReducer } from 'react';
 
 import AppSettings from '../services/app-settings';
+import I18n from '../I18n';
 
 export const StateContext = createContext();
 export const StateProvider = ({ reducer, initialState, children }) => (
@@ -11,8 +12,17 @@ export const StateProvider = ({ reducer, initialState, children }) => (
 export const useStateValue = () => useContext(StateContext);
 
 
-export const MainProvider = ({ children,LoginPage }) => {
+export const MainProvider = ({ children, LoginPage, i18n }) => {
   const initialState = null;
+  if (i18n) {
+    i18n.translations.map(async (lng) => {
+      await I18n.addResourceBundle(lng.lang, 'translation', lng.translation, true, true);
+    });
+
+    if (i18n.default) {
+      I18n.changeLanguage(i18n.default);
+    }
+  }
 
   const saveState = async (state) => {
     try {
@@ -68,5 +78,5 @@ export default {
   StateProvider,
   useStateValue,
   MainProvider,
-  getTogglePopupsState
-}
+  getTogglePopupsState,
+};

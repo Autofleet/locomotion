@@ -1,6 +1,6 @@
 {
   "name": "@autofleet/locomotion-sdk",
-  "version": "1.0.12",
+  "version": "1.0.17",
   "description": "",
   "main": "src/index.js",
   "scripts": {
@@ -8,14 +8,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Autofleet/locomotion-sdk.git"
+    "url": "git+https://github.com/autofleet-open-source/locomotion.git"
   },
   "author": "Ori Efrati",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/Autofleet/locomotion-sdk/issues"
+    "url": "https://github.com/autofleet-open-source/locomotion/issues"
   },
-  "homepage": "https://github.com/Autofleet/locomotion-sdk#readme",
+  "homepage": "https://github.com/autofleet-open-source/locomotion#readme",
   "peerDependencies": {
     "react": "16.8.6",
     "react-native": "0.60.3",
@@ -46,12 +46,15 @@
     "react-native-modal": "^11.1.0",
     "react-native-picker-select": "^6.3.0",
     "react-native-webview": "^7.4.3",
-    "styled-components": "^4.3.2"
+    "styled-components": "^4.3.2",
+    "react-native-onesignal": "^3.6.5"
   },
   "dependencies": {
     "i18next": "^19.3.2",
     "react-i18next": "^11.3.3",
     "react-native-keyboard-aware-scroll-view": "^0.9.1",
+    "react-native-table-component": "^1.2.1",
+    "unstated-next": "^1.1.0",
     "yup": "^0.28.1"
   },
   "devDependencies": {

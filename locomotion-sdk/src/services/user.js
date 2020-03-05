@@ -1,24 +1,24 @@
 import Auth from './auth';
-import network from './network'
+import network from './network';
 
 const UserService = {
   getUser: async (navigation) => {
-    const { data: userData } = await network.get('api/v1/me')
+    const { data: userData } = await network.get('api/v1/me');
 
-    if(!navigation) {
-        return userData;
+    if (!navigation) {
+      return userData;
     }
 
-    if(userData === null) {
-        Auth.logout(navigation);
+    if (userData === null) {
+      Auth.logout(navigation);
     }
 
-    if(userData.active === false) {
-        navigation.navigate('Lock');
+    if (userData.active === false) {
+      navigation.navigate('Lock');
     }
 
     return userData;
-  }
+  },
 };
 
 module.exports = UserService;

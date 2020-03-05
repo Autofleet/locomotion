@@ -3,6 +3,8 @@ import { Dimensions, View } from 'react-native';
 import {
   createSwitchNavigator, createStackNavigator, createAppContainer, createDrawerNavigator,
 } from 'react-navigation';
+import i18n from '../I18n';
+
 import AuthLoadingScreen from './Login/AuthLoadingScreen';
 import Auth from '../services/auth';
 import Login from './Login';
@@ -27,37 +29,37 @@ const activeBackgroundColor = '#ffffff';
 const inactiveBackgroundColor = '#ffffff';
 
 export const MainRouter = (props) => {
-  const addPageProps = (Page) => (navigationProps) => (<Page {...navigationProps} {...props} />);
+  const addPageProps = Page => navigationProps => (<Page {...navigationProps} {...props} />);
 
   const AppStack = createDrawerNavigator({
     Home: {
       screen: addPageProps(ActiveRide),
       navigationOptions: {
-        drawerLabel: (<DrawerLabel title="Home" icon={HomeIconSource} />),
+        drawerLabel: (<DrawerLabel title={i18n.t('menu.home')} icon={HomeIconSource} />),
       },
     },
     RideHistory: {
       screen: addPageProps(RideHistory),
       navigationOptions: {
-        drawerLabel: (<DrawerLabel title="Trips" icon={CarIconSource} />),
+        drawerLabel: (<DrawerLabel title={i18n.t('menu.trips')} icon={CarIconSource} />),
       },
     },
     // Payment: {
     //   screen: addPageProps(ActiveRide),
     //   navigationOptions: {
-    //     drawerLabel: (<DrawerLabel title="Payment Settings" icon={CreaditCardIconSource} />),
+    //     drawerLabel: (<DrawerLabel title={i18n.t('menu.paymentsSettings')} icon={CreaditCardIconSource} />),
     //   },
     // },
     Account: {
       screen: addPageProps(Onboarding),
       navigationOptions: {
-        drawerLabel: (<DrawerLabel title="Account" icon={PplIconSource} />),
+        drawerLabel: (<DrawerLabel title={i18n.t('menu.account')} icon={PplIconSource} />),
       },
     },
     ContactUs: {
       screen: addPageProps(ContactUs),
       navigationOptions: {
-        drawerLabel: (<DrawerLabel title="Support" icon={HelpIconSource} />),
+        drawerLabel: (<DrawerLabel title={i18n.t('menu.support')} icon={HelpIconSource} />),
       },
     },
 
@@ -67,7 +69,7 @@ export const MainRouter = (props) => {
         return (<View />);
       }),
       navigationOptions: {
-        drawerLabel: (<DrawerLabel title="Logout" icon={LogoutIconSource} />),
+        drawerLabel: (<DrawerLabel title={i18n.t('menu.logout')} icon={LogoutIconSource} />),
       },
     },
   }, {
@@ -76,8 +78,8 @@ export const MainRouter = (props) => {
     contentComponent: DrawerContentComponent,
     contentOptions: {
       inactiveBackgroundColor: '#ffffff',
-      activeBackgroundColor: '#ffffff'
-    }
+      activeBackgroundColor: '#ffffff',
+    },
   });
 
   const AuthStack = createStackNavigator({ SignIn: addPageProps(Login), Onboarding: addPageProps(Onboarding) }, {
@@ -90,7 +92,7 @@ export const MainRouter = (props) => {
       App: AppStack,
       Auth: AuthStack,
       Lock,
-      Onboarding
+      Onboarding,
     },
     {
       initialRouteName: 'AuthLoading',

@@ -62,7 +62,7 @@ const myThumbnail = (props) => {
         </TouchableOpacity>
       </LinearGradient>
       {props.mode in modes && (
-      <TouchableOpacity onPress={props.onPress}>
+      <TouchableOpacity onPress={props.onPress} style={{ width: 1, height: 1 }}>
         <Image onPress={props.onPress} style={styles.leftIcon} source={modes[props.mode]} />
       </TouchableOpacity>
       )}

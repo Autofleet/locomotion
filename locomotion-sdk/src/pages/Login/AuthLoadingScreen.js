@@ -20,11 +20,11 @@ const AuthLoadingScreen = ({ navigation }) => {
         payload,
       });
 
-      let page = payload.auth ? 'App' : 'Auth';
+      let page = payload.userProfile ? 'App' : 'Auth';
 
-      if(payload.userProfile) {
-        const { data: userData } = await network.get('api/v1/me')
-        if(userData  === null) {
+      if (payload.userProfile) {
+        const { data: userData } = await network.get('api/v1/me');
+        if (userData === null) {
           Auth.logout(navigation);
         }
 
@@ -33,11 +33,13 @@ const AuthLoadingScreen = ({ navigation }) => {
           lastName: userData.lastName,
           avatar: userData.avatar,
           email: userData.email,
+          pushToken: userData.pushToken,
+          pushUserId: userData.pushUserId,
         };
 
         AppSettings.update({ userProfile });
 
-        if(!userData.active) {
+        if (!userData.active) {
           page = 'Lock';
         }
 
@@ -46,7 +48,7 @@ const AuthLoadingScreen = ({ navigation }) => {
         }
       }
 
-      navigation.navigate(page, {showHeaderIcon: false});
+      navigation.navigate(page, { showHeaderIcon: false });
     }
     if (!appState) { // Load app state
       getFromStorage();

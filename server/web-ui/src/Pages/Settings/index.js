@@ -11,6 +11,18 @@ import * as Yup from "yup";
 import {Formik} from "formik";
 import diff from "object-diff";
 
+const FieldIsRequiredMsg = i18n.t('settings.validation.urlIsInvalid');
+
+Yup.string.prototype.urlHttps = function urlHttps() {
+    return this.matches(
+        /^((https):)?\/\/(((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:)*@)?(((\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5]))|((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.?)(:\d*)?)(\/((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)+(\/(([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)*)*)?)?(\?((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|[\uE000-\uF8FF]|\/|\?)*)?(\#((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|\/|\?)*)?$/i
+        , {
+        name: 'url',
+        message: i18n.t('settings.validation.urlIsInvalid'),
+        excludeEmptyString: true
+    });
+};
+
 export default () => {
     const settings = settingsContainer.useContainer();
     const [displayLoader, setDisplayLoader] = useState(false);
@@ -44,9 +56,9 @@ return (
                             {...{ initialValues: settings.settingsObj }}
                             validationSchema={Yup.object().shape({
                                 MANUAL_APPROVAL: Yup.boolean(),
-                                TERMS_URL: Yup.string().url('Url invalid').required('Field requierd'),
-                                PRIVACY_URL: Yup.string().url('Url invalid').required('Field requierd'),
-                                CONTACT_US_URL: Yup.string().url('Url invalid').required('Field requierd')
+                                TERMS_URL: Yup.string().urlHttps().required(FieldIsRequiredMsg),
+                                PRIVACY_URL: Yup.string().urlHttps().required(FieldIsRequiredMsg),
+                                CONTACT_US_URL: Yup.string().urlHttps().required(FieldIsRequiredMsg)
                             })}
                             onSubmit={async (values, actions) => {
                                 actions.setSubmitting(true);
