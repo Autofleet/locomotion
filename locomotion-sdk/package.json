@@ -1,6 +1,6 @@
 {
   "name": "@autofleet/locomotion-sdk",
-  "version": "1.0.15",
+  "version": "1.0.17",
   "description": "",
   "main": "src/index.js",
   "scripts": {
@@ -8,14 +8,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Autofleet/locomotion-sdk.git"
+    "url": "git+https://github.com/autofleet-open-source/locomotion.git"
   },
   "author": "Ori Efrati",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/Autofleet/locomotion-sdk/issues"
+    "url": "https://github.com/autofleet-open-source/locomotion/issues"
   },
-  "homepage": "https://github.com/Autofleet/locomotion-sdk#readme",
+  "homepage": "https://github.com/autofleet-open-source/locomotion#readme",
   "peerDependencies": {
     "react": "16.8.6",
     "react-native": "0.60.3",
