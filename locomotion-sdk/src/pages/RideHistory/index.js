@@ -34,6 +34,14 @@ export default ({ navigation }) => {
     getRides();
   }, []);
 
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('willFocus', () => {
+      getRides();
+    });
+
+    return unsubscribe;
+  }, [navigation]);
+
   return (
     <PageContent>
       <PageHeader

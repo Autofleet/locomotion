@@ -12,7 +12,7 @@ export const TableContainer = styled(ScrollView)`
 
 export const StyledHeaderRow = styled(Row)`
     height: 40;
-    borderBottomWidth: 0;
+    border-bottom-width: 0;
     margin: 0 ${tableMarginFromSides}px;
 `;
 
@@ -24,16 +24,12 @@ export const StyledRows = styled(Rows)`
 `;
 
 export const textStyle = StyleSheet.create({
-    header: {
-        color: '#A6A6A6',
-        fontSize: 12,
-    },
-    row: {
-        color: '#5F5F5F',
-        fontSize: 12,
-    }
+  header: {
+    color: '#A6A6A6',
+    fontSize: 12,
+  },
+  row: {
+    color: '#5F5F5F',
+    fontSize: 12,
+  },
 });
-
-
-
-
