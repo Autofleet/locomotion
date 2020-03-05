@@ -15,7 +15,7 @@ export default class ThumbnailPicker extends React.Component {
   }
 
   componentWillReceiveProps(newProps) {
-    if (newProps.avatarSource) {
+    if (newProps.avatarSource && !this.state.avatarSource) {
       this.setState({ avatarSource: { uri: newProps.avatarSource } });
     }
   }
@@ -66,15 +66,13 @@ export default class ThumbnailPicker extends React.Component {
   }
 
   render() {
-    console.log(this.props);
-
     return (
       <Thumbnail
         mode={this.props.avatarSource ? 'edit' : 'add'}
         onPress={this.openImagePicker.bind(this)}
         containerStyle={{ marginTop: 50, marginBottom: 25 }}
         size={180}
-        source={this.state.avatarSource}
+        source={(this.state.avatarSource)}
       />
     );
   }
