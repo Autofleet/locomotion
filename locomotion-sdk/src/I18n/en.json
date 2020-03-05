@@ -89,9 +89,12 @@
         "pageTitle": "Rides History",
         "noRides": "No results found",
         "noRidesSubText": "",
-        "tableTimeTitle": "Time",
-        "tableStartTitle": "Start",
-        "tableStopTitle": "Stop"
+        "ridesTable": {
+            "timeTitle": "Time",
+            "startTitle": "Start",
+            "stopTitle": "Stop",
+            "price": "Price"
+        }
     },
     "currency": "€"
 }
