@@ -42,7 +42,6 @@ export default ({ navigation, screenOptions, ...props }) => {
 
   const setFieldsData = async () => {
     const { userProfile } = await AppSettings.getSettings();
-    console.log('userProfile', userProfile);
 
     dispatchOnboardingState({
       ...onboardingState,
