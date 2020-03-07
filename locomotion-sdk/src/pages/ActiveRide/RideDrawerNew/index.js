@@ -101,8 +101,6 @@ const RideDrawer = ({
               {` ${I18n.t(rideState ? 'home.cancelRideButton' : 'home.letsRideButton')} `}
             </RideButton>
           </RideButtonContainer>
-
-
         )
       }
     </Drawer>
