@@ -13,7 +13,7 @@ import {
   PageContainer, StopPointDot, VehicleDot,
 } from './styled';
 import Header from '../../Components/Header';
-import RideDrawer from './RideDrawer';
+import RideDrawer from './RideDrawerNew';
 import { getTogglePopupsState } from '../../context/main';
 import UserService from '../../services/user';
 import OneSignal from '../../services/one-signal';

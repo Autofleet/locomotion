@@ -40,9 +40,13 @@
         "choosePickup": "Choose Pickup",
         "chooseDropoff": "Choose Dropoff",
         "rideStates": {
-            "driverOnTheWay": "Driver is on the way",
+            "driverOnTheWay": "Your ride has been booked",
             "onBoard": "In ride",
             "driverArrived": "Your driver has arrived"
+        },
+        "bookingCard": {
+            "pickupEtaTitle": "Estimated Boarding",
+            "dropoffEtaTitle": "Estimated Exit"
         }
     },
     "lock": {

@@ -47,7 +47,7 @@ const getRouteDistance = async (origin, destination) => {
 module.exports = async (origin, destination) => {
   const inAreaVehicles = await getAfNearbyVehiclesWithEta(origin);
   let eta;
-  if (inAreaVehicles.length) {
+  if (inAreaVehicles && inAreaVehicles.length) {
     const now = moment();
     eta = inAreaVehicles
       .filter(vehicle => vehicle.preEta)

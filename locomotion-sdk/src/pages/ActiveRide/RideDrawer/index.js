@@ -7,12 +7,14 @@ import {
 import I18n from '../../../I18n';
 import {
   Drawer, RideCard, RideStatusText, RideDetailsText, RideButton, RideButtonText,
-  RideDetailsContainer, DriverAvatar, PreRideBox,
+  RideDetailsContainer, DriverAvatar, PreRideBox,RideButtonContainer
 } from './styled';
 import StopPointRow from './StopPointRow';
 import RideType from './RideType';
 import Switch from '../../../Components/Switch'
 import NumberOfPassenger from './NumberOfPassenger';
+import RoundedButton from '../../../Components/RoundedButton';
+
 
 const getRideState = (activeRide) => { // false, driverOnTheWay, driverArrived, onBoard
   if (!activeRide) {
@@ -93,20 +95,30 @@ const RideDrawer = ({
       ) : null }
       {rideState === 'onBoard' ? null
         : (
+          <RideButtonContainer>
+
           <RideButton
             onPress={rideState ? cancelRide : onCreateRide}
-            inRide={rideState}
-            readyToBook={!!readyToBook}
-          >
-            <RideButtonText>
-              {` ${I18n.t(rideState ? 'home.cancelRideButton' : 'home.letsRideButton')} `}
-            </RideButtonText>
+            hollow>
+            {` ${I18n.t(rideState ? 'home.cancelRideButton' : 'home.letsRideButton')} `}
           </RideButton>
+            </RideButtonContainer>
+
+
         )
       }
     </Drawer>
   );
 };
 
+/* <RideButton
+
+            inRide={rideState}
+            readyToBook={!!readyToBook}
+          >
+            <RideButtonText>
+              {` ${I18n.t(rideState ? 'home.cancelRideButton' : 'home.letsRideButton')} `
+            </RideButtonText>
+          </RideButton> */
 export default RideDrawer;
 console.disableYellowBox = true;
