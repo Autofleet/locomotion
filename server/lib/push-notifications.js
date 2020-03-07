@@ -1,11 +1,9 @@
 const OneSignal = require('onesignal-node');
 
-const oneSignal = new OneSignal.Client({
-  app: {
-    appAuthKey: process.env.ONE_SIGNAL_KEY,
-    appId: process.env.ONE_SIGNAL_APP_ID,
-  },
-});
+const oneSignal = new OneSignal.Client(
+  process.env.ONE_SIGNAL_APP_ID,
+  process.env.ONE_SIGNAL_KEY,
+);
 
 const sendNotification = (targetIdsRaw, notificationId, contents, headings, { ttl = (60 * 60) } = {}) => {
   const targetIds = targetIdsRaw.filter(id => typeof id === 'string');
@@ -14,24 +12,22 @@ const sendNotification = (targetIdsRaw, notificationId, contents, headings, { tt
     return true;
   }
 
-  const firstNotification = new OneSignal.Notification({
-    contents,
-    headings,
-    notificationId,
-    ttl,
-  });
-  firstNotification.postBody.android_channel_id = process.env.ANDROID_CHANNEL_ID;
+  return new Promise(async (resolve, reject) => {
+    try {
+      const firstNotification = await oneSignal.createNotification({
+        contents,
+        android_channel_id: process.env.ANDROID_CHANNEL_ID,
+        include_player_ids: targetIds,
+        headings,
+        notificationId,
+        ttl,
+      });
+      resolve(firstNotification);
+    } catch (err) {
+      console.log(err);
 
-  firstNotification.setTargetDevices(targetIds);
-
-  return new Promise((reolvse, reject) => {
-    oneSignal.sendNotification(firstNotification, (err, httpResponse, data) => {
-      if (err) {
-        reject(err);
-      } else {
-        reolvse(data);
-      }
-    });
+      reject(err);
+    }
   });
 };
 
