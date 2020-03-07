@@ -40,19 +40,13 @@ const RideDrawer = ({
   const [canceledRide, setCanceledRide] = useState(null)
   const rideState = getRideState(activeRide);
   const onCreateRide = () => (readyToBook ? createRide() : null);
-  console.log(activeRide);
-  console.log(origin);
-  if(origin) {
-
-    console.log(moment(origin.eta).format('HH:mm'));
-  }
-
 
   return (
     <Drawer>
       <MessageCard
         title={I18n.t('popups.rideCancel.main')}
         subTitle={I18n.t('popups.rideCancel.sub')}
+        id="rideCancel"
         />
       {rideState ?
       <RideStatusContainer>

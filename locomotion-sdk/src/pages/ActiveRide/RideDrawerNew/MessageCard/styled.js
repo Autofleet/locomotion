@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, TouchableOpacity } from 'react-native';
 import styled from 'styled-components';
 import xIcon from '../../../../assets/x.png'
 
@@ -28,7 +28,7 @@ export const MessageText = styled.Text`
   font-weight: 500;
 `;
 
-export const CloseContainer = styled.View`
+export const CloseContainer = styled.TouchableOpacity`
     position: absolute;
     right: 15px;
     top: 15px;
