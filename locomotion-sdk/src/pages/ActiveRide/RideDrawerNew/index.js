@@ -17,6 +17,7 @@ import NumberOfPassenger from './NumberOfPassenger';
 import RoundedButton from '../../../Components/RoundedButton';
 import RideCard from './RideCard';
 import MessageCard from './MessageCard';
+import { getTogglePopupsState } from '../../../context/main'
 
 const getRideState = (activeRide) => { // false, driverOnTheWay, driverArrived, onBoard
   if (!activeRide) {
@@ -37,7 +38,8 @@ const RideDrawer = ({
   onNumberOfPassengerChange, numberOfPassenger
 }) => {
   const [origin, destination] = activeRide ? activeRide.stop_points || [] : [];
-  const [canceledRide, setCanceledRide] = useState(null)
+  const [isPopupOpen, togglePopup] = getTogglePopupsState();
+
   const rideState = getRideState(activeRide);
   const onCreateRide = () => (readyToBook ? createRide() : null);
 
@@ -47,18 +49,52 @@ const RideDrawer = ({
         title={I18n.t('popups.rideCancel.main')}
         subTitle={I18n.t('popups.rideCancel.sub')}
         id="rideCancel"
-        />
-      {rideState ?
-      <RideStatusContainer>
-        <RideStatusText state={rideState}>
-            {` ${I18n.t(`home.rideStates.${rideState}`)} `}
-        </RideStatusText>
-      </RideStatusContainer> : null}
-      {rideState && (moment(origin.eta).add(7,'minutes')).isSameOrBefore(moment()) ?
-      <RideCard activeRide={activeRide} rideState={rideState}></RideCard> :
+      />
 
-      <StopPointsEtaContainer>
-        <StopPointEta
+      <MessageCard
+        id="rideRejected"
+        title={I18n.t('popups.rideRejected.main')}
+        subTitle={I18n.t('popups.rideRejected.sub')}
+      />
+    {!isPopupOpen('ridePopupsStatus') ?
+    <Fragment>
+      {rideState ?
+        <RideStatusContainer>
+          <RideStatusText state={rideState}>
+              {` ${I18n.t(`home.rideStates.${rideState}`)} `}
+          </RideStatusText>
+        </RideStatusContainer>
+       : null}
+
+      {rideState && (moment(origin.eta).add(7,'minutes')).isSameOrBefore(moment()) ?
+        <RideCard activeRide={activeRide} rideState={rideState}></RideCard> :
+          rideState ?
+          <StopPointsEtaContainer>
+            <StopPointEta
+              pickup
+              useBorder
+              openLocationSelect={openLocationSelect}
+              description={rideState ? origin && origin.description
+                : requestStopPoints && requestStopPoints.pickup && requestStopPoints.pickup.description}
+                eta={rideState ? origin && origin.eta : undefined}
+                completedAt={rideState ? origin && origin.completed_at
+                  : undefined}
+              />
+            <StopPointEta
+              useBorder
+              openLocationSelect={openLocationSelect}
+              description={rideState ? destination && destination.description
+                : requestStopPoints && requestStopPoints.dropoff && requestStopPoints.dropoff.description}
+                eta={rideState ? destination && destination.eta : undefined}
+                completedAt={rideState ? destination && destination.completed_at
+                  : undefined}
+              />
+            </StopPointsEtaContainer> : null
+      }
+
+      {!rideState ? (
+        <Fragment>
+           <StopPointRow
           pickup
           useBorder
           openLocationSelect={openLocationSelect}
@@ -68,7 +104,7 @@ const RideDrawer = ({
             completedAt={rideState ? origin && origin.completed_at
               : undefined}
           />
-        <StopPointEta
+        <StopPointRow
           useBorder
           openLocationSelect={openLocationSelect}
           description={rideState ? destination && destination.description
@@ -77,9 +113,6 @@ const RideDrawer = ({
             completedAt={rideState ? destination && destination.completed_at
               : undefined}
           />
-        </StopPointsEtaContainer>}
-      {!rideState ? (
-        <Fragment>
           <NumberOfPassenger onChange={onNumberOfPassengerChange} amount={numberOfPassenger} />
           {/* <Switch onChange={(active) => setRideType(active ? 'pool' : 'private')} active={rideType === 'pool'} /> */}
           {preRideDetails.eta || preRideDetails.estimatePrice ? ( <PreRideBox {...preRideDetails} /> ) : null }
@@ -91,12 +124,13 @@ const RideDrawer = ({
           <RideButtonContainer>
             <RideButton
               onPress={rideState ? cancelRide : onCreateRide}
-              hollow>
+              hollow={!!readyToBook}>
               {` ${I18n.t(rideState ? 'home.cancelRideButton' : 'home.letsRideButton')} `}
             </RideButton>
           </RideButtonContainer>
         )
       }
+      </Fragment> : null}
     </Drawer>
   );
 };

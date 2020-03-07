@@ -89,7 +89,7 @@ export default ({ amount, onChange }) => {
     return MAX_NUMBER_OF_PASSENGER >= (newAmount + change) && (newAmount + change) >= MIN_NUMBER_OF_PASSENGER
   }
 
-  const getNewAmountFunction = change => () => {    
+  const getNewAmountFunction = change => () => {
     if (!validateChange(newAmount, change)) {
       return;
     }

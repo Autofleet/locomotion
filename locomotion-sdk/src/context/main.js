@@ -68,6 +68,7 @@ export const getTogglePopupsState = () => {
   return [id => state && (state[getPopupKey(id)] || false), (id, open) => dispatch({
     type: 'changeState',
     payload: {
+      [getPopupKey('ridePopupsStatus')]: open,
       [getPopupKey(id)]: open,
     },
   })];

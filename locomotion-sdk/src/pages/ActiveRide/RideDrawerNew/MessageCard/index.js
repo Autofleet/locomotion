@@ -8,7 +8,7 @@ import {MessageContainer, MessageText,MessageTitle,CloseContainer,ResetInputIcon
 import { getTogglePopupsState } from '../../../../context/main';
 
 export default ({
-  id, title, subTitle, closeAfter, content, onClose,
+  id, title, subTitle, closeAfter, onClose,
 }) => {
   const [isPopupOpen, togglePopup] = getTogglePopupsState();
   const closePopup = () => {
