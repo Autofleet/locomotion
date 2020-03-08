@@ -15,40 +15,44 @@ router.put('/:rideId', async (req, res) => {
   });
 
   const stopPoints = req.body.ride.stop_points;
-  const { value: arriveMin } = await settingsService.getSettingByKeyFromDb('ARRIVE_REMINDER_MIN');
+  console.log(req.body.ride);
 
-  const etaTime = moment(stopPoints[0].eta);
-  const diff = etaTime.diff(moment(), 'minutes');
+  const { value: arriveReminderMin } = await settingsService.getSettingByKeyFromDb('ARRIVE_REMINDER_MIN');
 
-  if (stopPoints[0].completed_at === null && diff <= arriveMin) {
-    const user = await User.findOne({
-      where: {
-        id: ride.userId,
-      },
-    });
+  if (stopPoints) {
+    const etaTime = moment(stopPoints[0].eta);
+    const diff = etaTime.diff(moment(), 'minutes');
 
-    if (user) {
-      const prevNotification = await Notification.findOne({
+    if (stopPoints[0].completed_at === null && diff <= arriveReminderMin) {
+      const user = await User.findOne({
         where: {
-          userId: user.id,
-          rideId: ride.id,
-          type: 'driverArriving',
+          id: ride.userId,
         },
       });
 
-      if (!prevNotification) {
-        await Notification.create({
-          userId: user.id,
-          rideId: ride.id,
-          type: 'driverArriving',
-          content: {
-            targetIdsRaw: [user.pushUserId],
-            notificationId: 'driverArriving',
-            contents: { en: `Driver arriving in ${arriveMin} minutes to ${stopPoints[0].description}` },
-            headings: { en: 'Driver is arriving!' },
-            ttl: { ttl: 60 * 30 },
+      if (user) {
+        const prevNotification = await Notification.findOne({
+          where: {
+            userId: user.id,
+            rideId: ride.id,
+            type: 'driverArriving',
           },
         });
+
+        if (!prevNotification) {
+          await Notification.create({
+            userId: user.id,
+            rideId: ride.id,
+            type: 'driverArriving',
+            content: {
+              targetIdsRaw: [user.pushUserId],
+              notificationId: 'driverArriving',
+              contents: { en: `Driver arriving in ${arriveReminderMin} minutes to ${stopPoints[0].description}` },
+              headings: { en: 'Driver is arriving!' },
+              ttl: { ttl: 60 * 30 },
+            },
+          });
+        }
       }
     }
   }
