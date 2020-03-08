@@ -42,10 +42,13 @@
       "urlIsInvalid": "Url invalid (https is required)",
       "fieldIsRequired": "Field requierd"
     },
-    "activateUsersLabel": "Manual Users Approving:",
-    "saveButton": "Save",
-    "termsUrlLabel": "Terms url path:",
-    "PrivacyUrlLabel": "Privacy url path:",
-    "ContactUsUrlLabel": "Contact us url path:"
+    "labels": {
+      "activateUsersLabel": "Manual Users Approving:",
+      "saveButton": "Save",
+      "termsUrlLabel": "Terms url path:",
+      "PrivacyUrlLabel": "Privacy url path:",
+      "ContactUsUrlLabel": "Contact us url path:",
+      "MinArriveReminderLabel": "Minutes before arrive to send push notification:"
+    }
   }
 }

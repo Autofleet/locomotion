@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { omit } from 'lodash';
-
+import { Input } from "../../Common/Input";
 import Button from '../../Common/Button';
 import {LabelText} from "../../Common/Toggle/styled";
 
@@ -72,8 +72,12 @@ export const ToggleLabelTextSpacer = styled.div`
     min-width: 140px;
 `;
 
-export const ToggleLabelText = styled(LabelText)`
+export const FieldLabelText = styled(LabelText)`
     width: 85%;
+    opacity: 0.7;
+    line-height: 1;
+    font-size: .8125rem;
+    color: rgba(51, 51, 51, 0.7);
 `;
 
 export const SaveSettingsContainer = styled.div`
@@ -114,3 +118,19 @@ export const ApplyButton = styled(ButtonBase)`
 
 `;
 
+export const NumberInput = styled.input`
+    display: inline-block;
+    position: relative;
+    width: 50px;
+    cursor: pointer;
+    padding-left: 10px;
+    height: 40px;
+    border-radius: 4px;
+    border: solid 1px #dedede;
+    line-height: normal;
+    font-family: 'Montserrat', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    font-size: .8125rem;
+    color: #333;
+    background-color: #ffffff;
+`;

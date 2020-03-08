@@ -58,7 +58,8 @@ return (
                                 MANUAL_APPROVAL: Yup.boolean(),
                                 TERMS_URL: Yup.string().urlHttps().required(FieldIsRequiredMsg),
                                 PRIVACY_URL: Yup.string().urlHttps().required(FieldIsRequiredMsg),
-                                CONTACT_US_URL: Yup.string().urlHttps().required(FieldIsRequiredMsg)
+                                CONTACT_US_URL: Yup.string().urlHttps().required(FieldIsRequiredMsg),
+                                ARRIVE_REMINDER_MIN: Yup.number().required(i18n.t('settings.validation.fieldIsRequired')),
                             })}
                             onSubmit={async (values, actions) => {
                                 actions.setSubmitting(true);
