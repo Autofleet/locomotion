@@ -42,7 +42,8 @@
         "passengersNumber": "Passenger",
         "rideStates": {
             "driverOnTheWay": "Your ride has been booked",
-            "onBoard": "In ride",
+            "driverOnTheWayEta": "Time till boarding: {{pickupEta}} Minutes",
+            "onBoard": "Remaining ride time: app. {{dropoffEta}} minutes.",
             "driverArrived": "Your driver has arrived"
         },
         "bookingCard": {

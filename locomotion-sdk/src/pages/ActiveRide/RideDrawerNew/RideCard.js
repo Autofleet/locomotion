@@ -17,21 +17,20 @@ export default ({
             <View style={{ flex: 2, textAlign: 'left' }}>
               <Image
                 style={{
-                  width: 80, height: 30, marginBottom: 10, alignSelf: 'flex-start',
+                  width: 150, height: 60, marginBottom: 10, alignSelf: 'flex-start',
                 }}
                 source={{ uri: activeRide.vehicle.image }}
               />
               <RideDetailsText> Your car: </RideDetailsText>
-              <RideDetailsText>
-                {` ${activeRide.vehicle.model} (${activeRide.vehicle.color}) `}
+              <RideDetailsText subText>
+                {` ${activeRide.vehicle.model} (${activeRide.vehicle.license_number}) `}
               </RideDetailsText>
-              <RideDetailsText>{activeRide.vehicle.license_number}</RideDetailsText>
             </View>
 
             <View style={{ flex: 1}}>
               <DriverAvatar source={{ uri: activeRide.driver.avatar }} />
               <RideDetailsText> Driver: </RideDetailsText>
-              <RideDetailsText>
+              <RideDetailsText subText>
                 {` ${activeRide.driver.first_name} ${activeRide.driver.last_name} `}
               </RideDetailsText>
             </View>

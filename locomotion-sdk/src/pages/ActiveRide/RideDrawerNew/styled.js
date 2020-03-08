@@ -36,6 +36,7 @@ export const RideCard = styled.View`
 
 export const StopPointsEtaContainer = styled.View`
   ${address}
+  padding-top: 0px;
   flex-direction: row;
   padding-start: 10;
   padding-end: 20;
@@ -43,8 +44,8 @@ export const StopPointsEtaContainer = styled.View`
 `;
 
 export const DriverAvatar = styled.Image`
-  width: 30px;
-  height: 30px;
+  width: 60px;
+  height: 60px;
   border-radius: 100;
   margin-left: 15px;
   border-width: 1px;
@@ -53,9 +54,7 @@ export const DriverAvatar = styled.Image`
 `;
 
 const styleForDriverIsArrivedState = `
-  height: 60px;
-  color: #00aeef;
-  margin-top: 40px;
+  color: #08902d;
 `;
 
 export const RideStatusText = styled.Text`
@@ -75,11 +74,16 @@ export const RideStatusContainer = styled.View`
 
 
 export const RideDetailsText = styled.Text`
-  font-size: 13;
+  font-size: 12;
   color: #000000;
   margin-start: 10;
   text-align: ${({ right }) => (right ? 'right' : 'left')};
-  font-weight: 500;
+
+  ${({subText}) => subText ? `
+    font-weight: 500;
+    font-size: 12;
+    margin-top: 5px;
+  ` : null}
   /* background-color: red; */
 `;
 
@@ -107,7 +111,6 @@ export const RideDetailsContainer = styled.View`
   flex: 1;
   flex-direction: row;
   width: 100%;
-  margin-top: 16;
 `;
 
 export const RideButtonText = styled.Text`

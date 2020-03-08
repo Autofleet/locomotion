@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from 'react';
+import React, { Fragment, useState, useEffect } from 'react';
 import {
   View,
   Image,
@@ -18,6 +18,7 @@ import RoundedButton from '../../../Components/RoundedButton';
 import RideCard from './RideCard';
 import MessageCard from './MessageCard';
 import { getTogglePopupsState } from '../../../context/main'
+import network from '../../../services/network'
 
 const getRideState = (activeRide) => { // false, driverOnTheWay, driverArrived, onBoard
   if (!activeRide) {
@@ -39,9 +40,34 @@ const RideDrawer = ({
 }) => {
   const [origin, destination] = activeRide ? activeRide.stop_points || [] : [];
   const [isPopupOpen, togglePopup] = getTogglePopupsState();
-
+  const [appSettings, setAppSettings] = useState({})
+  const [pickupEta, setPickupEta] = useState(null)
+  const [dropoffEta, setDropoffpEta] = useState(null)
   const rideState = getRideState(activeRide);
   const onCreateRide = () => (readyToBook ? createRide() : null);
+
+  useEffect(() => {
+    getSettings();
+  }, [])
+
+  useEffect(() => {
+    if(origin && origin.eta) {
+      const etaDiff = moment(origin.eta).diff(moment(), 'minutes');
+      setPickupEta(etaDiff)
+    }
+
+    if(destination && destination.eta) {
+      const etaDiff = moment(destination.eta).diff(moment(), 'minutes');
+      setDropoffpEta(etaDiff)
+    }
+  }, [origin, destination])
+
+  const getSettings = async () => {
+    const { data: response } = await network.get('api/v1/me/app-settings');
+    setAppSettings(response)
+  }
+
+
 
   return (
     <Drawer>
@@ -61,12 +87,15 @@ const RideDrawer = ({
       {rideState ?
         <RideStatusContainer>
           <RideStatusText state={rideState}>
-              {` ${I18n.t(`home.rideStates.${rideState}`)} `}
+            {rideState  === 'driverOnTheWay' && pickupEta <= appSettings.ARRIVE_REMINDER_MIN ?
+                I18n.t(`home.rideStates.${rideState}Eta`, {pickupEta, dropoffEta})
+              : I18n.t(`home.rideStates.${rideState}`, {pickupEta, dropoffEta})
+            }
           </RideStatusText>
         </RideStatusContainer>
        : null}
 
-      {rideState && (moment(origin.eta).add(7,'minutes')).isSameOrBefore(moment()) ?
+      {rideState && pickupEta <= appSettings.ARRIVE_REMINDER_MIN ?
         <RideCard activeRide={activeRide} rideState={rideState}></RideCard> :
           rideState ?
           <StopPointsEtaContainer>
