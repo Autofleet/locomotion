@@ -86,7 +86,7 @@ export default ({
     <AddressTextCont>
     <View>
         <StopPointTitle pickup={pickup}>
-        {i18n.t(pickup ? 'home.bookingCard.pickupEtaTitle' : 'home.bookingCard.dropoffEtaTitle')}
+          {i18n.t(pickup ? 'home.bookingCard.pickupEtaTitle' : 'home.bookingCard.dropoffEtaTitle')}
         </StopPointTitle>
       </View>
       <View>

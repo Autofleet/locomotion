@@ -39,6 +39,7 @@
         "cancelRideButton": "Cancel Ride",
         "choosePickup": "Choose Pickup",
         "chooseDropoff": "Choose Dropoff",
+        "passengersNumber": "Passenger",
         "rideStates": {
             "driverOnTheWay": "Your ride has been booked",
             "onBoard": "In ride",
