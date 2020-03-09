@@ -73,7 +73,7 @@ export const ToggleLabelTextSpacer = styled.div`
 `;
 
 export const FieldLabelText = styled(LabelText)`
-    width: 85%;
+    width: 84%;
     opacity: 0.7;
     line-height: 1;
     font-size: .8125rem;
@@ -121,7 +121,8 @@ export const ApplyButton = styled(ButtonBase)`
 export const NumberInput = styled.input`
     display: inline-block;
     position: relative;
-    width: 50px;
+    min-width: 50px;
+    width: 13%;
     cursor: pointer;
     padding-left: 10px;
     height: 40px;
