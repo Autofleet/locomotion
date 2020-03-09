@@ -1,5 +1,6 @@
 const moment = require('moment');
 const { Op } = require('sequelize');
+const i18n = require('../../../i18n');
 const Router = require('../../../lib/router');
 const rideService = require('../../../lib/ride');
 const { Ride, User, Notification } = require('../../../models');
@@ -46,8 +47,8 @@ router.put('/:rideId', async (req, res) => {
         await sendNotification(
           [user.pushUserId],
           'driverArriving',
-          { en: `Driver arriving in ${arriveReminderMin} minutes to ${stopPoints[0].description}` },
-          { en: 'Driver is arriving!' },
+          { en: `${i18n.t('pushNotifications.driverArriving', { etaMinutes: arriveReminderMin, stopPoint })}` },
+          { en: i18n.t('pushNotifications.driverArrivingHeading', { etaMinutes: arriveReminderMin }) },
           { ttl: 60 * 30 },
         );
       }
