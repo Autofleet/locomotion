@@ -164,14 +164,5 @@ const RideDrawer = ({
   );
 };
 
-/* <RideButton
-
-            inRide={rideState}
-            readyToBook={!!readyToBook}
-          >
-            <RideButtonText>
-              {` ${I18n.t(rideState ? 'home.cancelRideButton' : 'home.letsRideButton')} `
-            </RideButtonText>
-          </RideButton> */
 export default RideDrawer;
 console.disableYellowBox = true;
