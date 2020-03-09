@@ -29,6 +29,7 @@ const address = `
 
 export const RideCard = styled.View`
   ${address}
+  min-height: 150px;
   flex-direction: column;
   padding-start: 10;
   padding-end: 20;
@@ -88,7 +89,7 @@ export const RideDetailsText = styled.Text`
 `;
 
 export const RideButtonContainer = styled.View`
-  margin: 10px auto;
+  margin: 0 auto 10px auto;
   height: 40px;
   width: 50%;
 `;
