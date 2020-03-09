@@ -34,9 +34,9 @@ router.get('/active', async (req, res) => {
 });
 
 router.post('/', async (req, res) => {
-  const ride = await rideService.create(req.body, req.userId);
+  const { ride, offer } = await rideService.create(req.body, req.userId);
 
-  res.json(ride);
+  res.json({ride, offer});
 });
 
 router.post('/cancel-active-ride', async (req, res) => {
