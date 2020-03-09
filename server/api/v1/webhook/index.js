@@ -1,4 +1,5 @@
 const moment = require('moment');
+const { Op } = require('sequelize');
 const Router = require('../../../lib/router');
 const rideService = require('../../../lib/ride');
 const { Ride, User, Notification } = require('../../../models');
@@ -21,41 +22,34 @@ router.put('/:rideId', async (req, res) => {
   console.log(req.body.ride);
 
   const stopPoints = req.body.ride.stop_points;
-  if (stopPoints) {
+
+  if (stopPoints && !ride.arrivingPush) {
     const { value: arriveReminderMin } = await settingsService.getSettingByKeyFromDb('ARRIVE_REMINDER_MIN');
     const etaTime = moment(stopPoints[0].eta);
     const diff = etaTime.diff(moment(), 'minutes');
 
     if (stopPoints[0].completed_at === null && diff <= arriveReminderMin) {
-      const user = await User.findOne({
+      const updateRidePush = await Ride.update({ arrivingPush: moment().format() }, {
         where: {
-          id: ride.userId,
+          id: ride.id,
+          arrivingPush: null,
         },
       });
 
-      if (user) {
-        const prevNotification = await Notification.findOne({
+      if (updateRidePush[0]) {
+        const user = await User.findOne({
           where: {
-            userId: user.id,
-            rideId: ride.id,
-            type: 'driverArriving',
+            id: ride.userId,
           },
         });
 
-        if (!prevNotification) {
-          await Notification.create({
-            userId: user.id,
-            rideId: ride.id,
-            type: 'driverArriving',
-            content: {
-              targetIdsRaw: [user.pushUserId],
-              notificationId: 'driverArriving',
-              contents: { en: `Driver arriving in ${arriveReminderMin} minutes to ${stopPoints[0].description}` },
-              headings: { en: 'Driver is arriving!' },
-              ttl: { ttl: 60 * 30 },
-            },
-          });
-        }
+        await sendNotification(
+          [user.pushUserId],
+          'driverArriving',
+          { en: `Driver arriving in ${arriveReminderMin} minutes to ${stopPoints[0].description}` },
+          { en: 'Driver is arriving!' },
+          { ttl: 60 * 30 },
+        );
       }
     }
   }

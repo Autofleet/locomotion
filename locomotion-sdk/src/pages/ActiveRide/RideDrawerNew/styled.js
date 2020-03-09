@@ -68,9 +68,11 @@ export const RideStatusText = styled.Text`
 
 export const RideStatusContainer = styled.View`
   ${address}
+  padding-bottom: 10px;
   flex-direction: column;
   padding-start: 10;
   padding-end: 20;
+
 `;
 
 
