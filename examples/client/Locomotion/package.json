@@ -43,7 +43,8 @@
     "react-native-picker-select": "^6.3.0",
     "react-native-webview": "^7.4.3",
     "react-navigation": "^3.13.0",
-    "styled-components": "^4.3.2"
+    "styled-components": "^4.3.2",
+    "unstated-next": "^1.1.0"
   },
   "devDependencies": {
     "@babel/core": "^7.3.3",

@@ -8,15 +8,18 @@ import NavigationService from './services/navigation';
 // import Firebase from './src/services/firebase';
 
 import RidePopups from './popups/RidePopups';
+import SettingsContext from './context/settings'
 
 export default props => (
   <MainProvider {...props}>
-    <MainRouter
-      ref={navigation => NavigationService.setTopLevelNavigator(navigation)}
-      {...props}
-    />
-    {props.children}
-    {/* Popups */}
-    <RidePopups />
+    <SettingsContext.Provider>
+      <MainRouter
+        ref={navigation => NavigationService.setTopLevelNavigator(navigation)}
+        {...props}
+        />
+      {props.children}
+      {/* Popups */}
+      <RidePopups />
+      </SettingsContext.Provider>
   </MainProvider>
 );

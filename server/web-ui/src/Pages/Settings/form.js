@@ -13,7 +13,6 @@ import { Field, FieldArray, Form } from 'formik';
 import i18n from '../../i18n';
 import Toggle from '../../Common/Toggle';
 import InputWithLabel from "../../Common/InputWithLabel";
-import {ErrorMessage} from "../../Common/InputWithLabel/styled";
 
 const SettingsForm = ({
                         values,
@@ -55,7 +54,7 @@ const SettingsForm = ({
                     <SettingsPanelItem type='text'>
                         <Field
                             name="PRIVACY_URL"
-                            label={i18n.t('settings.labels.PrivacyUrlLabel')}
+                            label={i18n.t('settings.labels.privacyUrlLabel')}
                             type="text"
                             errorMessage={errors.PRIVACY_URL}
                             component={InputWithLabel}
@@ -65,26 +64,51 @@ const SettingsForm = ({
                     <SettingsPanelItem type='text'>
                         <Field
                             name="CONTACT_US_URL"
-                            label={i18n.t('settings.labels.ContactUsUrlLabel')}
+                            label={i18n.t('settings.labels.contactUsUrlLabel')}
                             type="text"
                             errorMessage={errors.CONTACT_US_URL}
                             component={InputWithLabel}
                         />
                     </SettingsPanelItem>
 
+
                     <SettingsPanelItem type='text'>
-                        <FieldLabelText>{i18n.t('settings.labels.MinArriveReminderLabel')}</FieldLabelText>
                         <Field
                             name="ARRIVE_REMINDER_MIN"
-                            value={values['ARRIVE_REMINDER_MIN']}
+                            label={i18n.t('settings.labels.minArriveReminderLabel')}
                             type="number"
-                            component={NumberInput}
+                            component={InputWithLabel}
+                            inputComponent={NumberInput}
+                            errorMessage={errors.ARRIVE_REMINDER_MIN}
                             min="0"
-                            onChange={event => setFieldValue('ARRIVE_REMINDER_MIN', event.target.value)}
+                            inlineField
                         />
-                        <ErrorMessage style={{textAlign: 'right'}}>
-                            {errors.ARRIVE_REMINDER_MIN}
-                        </ErrorMessage>
+                    </SettingsPanelItem>
+
+                    <SettingsPanelItem type='text'>
+                        <Field
+                            name="DISPLAY_ETA_DRIFT"
+                            label={i18n.t('settings.labels.displayEtaDriftMin')}
+                            type="number"
+                            component={InputWithLabel}
+                            inputComponent={NumberInput}
+                            errorMessage={errors.DISPLAY_ETA_DRIFT}
+                            min="0"
+                            inlineField
+                        />
+                    </SettingsPanelItem>
+
+                    <SettingsPanelItem type='text'>
+                        <Field
+                            name="DISPLAY_MAX_ETA_DRIFT"
+                            label={i18n.t('settings.labels.displayMaxEtaDriftMin')}
+                            type="number"
+                            component={InputWithLabel}
+                            inputComponent={NumberInput}
+                            errorMessage={errors.DISPLAY_MAX_ETA_DRIFT}
+                            min="0"
+                            inlineField
+                        />
                     </SettingsPanelItem>
 
                     <SettingsPanelItem type='submit'>

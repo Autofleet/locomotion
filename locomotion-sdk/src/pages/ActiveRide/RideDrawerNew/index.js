@@ -19,6 +19,8 @@ import RideCard from './RideCard';
 import MessageCard from './MessageCard';
 import { getTogglePopupsState } from '../../../context/main'
 import network from '../../../services/network'
+import settingsContext from '../../../context/settings'
+
 
 const getRideState = (activeRide) => { // false, driverOnTheWay, driverArrived, onBoard
   if (!activeRide) {
@@ -45,9 +47,11 @@ const RideDrawer = ({
   const [dropoffEta, setDropoffpEta] = useState(null)
   const rideState = getRideState(activeRide);
   const onCreateRide = () => (readyToBook ? createRide() : null);
+  const useSettings = settingsContext.useContainer();
 
   useEffect(() => {
     getSettings();
+    useSettings.getSettings();
   }, [])
 
   useEffect(() => {
@@ -108,6 +112,7 @@ const RideDrawer = ({
                 eta={rideState ? origin && origin.eta : undefined}
                 completedAt={rideState ? origin && origin.completed_at
                   : undefined}
+                etaDrift={useSettings.settingsList.DISPLAY_ETA_DRIFT}
               />
             <StopPointEta
               useBorder
@@ -117,6 +122,7 @@ const RideDrawer = ({
                 eta={rideState ? destination && destination.eta : undefined}
                 completedAt={rideState ? destination && destination.completed_at
                   : undefined}
+                etaDrift={useSettings.settingsList.DISPLAY_MAX_ETA_DRIFT}
               />
             </StopPointsEtaContainer> : null
       }

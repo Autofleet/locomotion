@@ -19,10 +19,18 @@ export const FormGroupLabel = styled.span`
     line-height: 1;
     font-size: .8125rem;
     color: rgba(51, 51, 51, 0.7);
+    ${({inlineField}) => inlineField && `
+      display: inline-block;
+      width: 90%;
+    `};
   `;
 
 export const InputGroup = styled.div`
     position: relative;
+    ${({inlineField}) => inlineField && `
+      width: 10%;
+      display: inline-block;
+    `};
 
     input[type="password"] {
       padding-right: 43px;

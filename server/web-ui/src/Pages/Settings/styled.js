@@ -51,7 +51,7 @@ export const SettingsPanelHeader = styled.div`
 `;
 
 export const SettingsPanelItem = styled.div(({type}) => `
-    padding: 5% 5% ${type === 'text' ? 0 : 5}% 5%;
+    padding: 5% 5% ${type === 'text' ? 0 : 8}% 5%;
     margin: 0 5%;
 
     ${type !== 'submit' ? `
@@ -122,7 +122,7 @@ export const NumberInput = styled.input`
     display: inline-block;
     position: relative;
     min-width: 50px;
-    width: 13%;
+    width: 10%;
     cursor: pointer;
     padding-left: 10px;
     height: 40px;
