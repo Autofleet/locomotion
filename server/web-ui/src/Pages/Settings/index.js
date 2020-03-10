@@ -37,10 +37,10 @@ export default () => {
     }, []);
 
     useEffect(() => {
-        if (settings.settingsObj) {
+        if (settings.settingsList) {
             setShowForm(true);
         }
-    }, [settings.settingsObj]);
+    }, [settings.settingsList]);
 
 return (
         <Fragment>
@@ -53,7 +53,7 @@ return (
                         <Formik
                             validateOnBlur={false}
                             validateOnChange={false}
-                            {...{ initialValues: settings.settingsObj }}
+                            {...{ initialValues: settings.settingsList }}
                             validationSchema={Yup.object().shape({
                                 MANUAL_APPROVAL: Yup.boolean(),
                                 TERMS_URL: Yup.string().urlHttps().required(FieldIsRequiredMsg),
@@ -65,7 +65,7 @@ return (
                                 actions.setSubmitting(true);
                                 setTimeout(() => setDisplayLoader(true), 100);
 
-                                const { ...otherValues } = diff(settings.settingsObj, values);
+                                const { ...otherValues } = diff(settings.settingsList, values);
                                 try {
                                     Object.keys(otherValues).map(async (key, index) => {
                                         await settings.UpdateSetting(key, otherValues[key]);

@@ -26,12 +26,7 @@ router.post('/logout', async (req, res) => {
 });
 
 router.get('/app-settings', async (req, res) => {
-  const settings = await SettingsService.getAllSettingFromDb();
-  const settingsList = {};
-  settings.map((setting) => {
-    settingsList[setting.key] = setting.value;
-  });
-
+  const settingsList = await SettingsService.getSettingsList();
   res.json(settingsList);
 });
 

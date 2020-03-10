@@ -8,7 +8,7 @@
         "test": "jest --forceExit",
         "test-auto": "jest --watch",
         "linter": "./node_modules/.bin/eslint .",
-        "dev": "nodemon index.js",
+        "dev": "nodemon index.js --ignore web-ui",
         "dev:webui": "nodemon --ignore web-ui/build/ --exec \"NODE_ENV=development SKIP_PREFLIGHT_CHECK=true npm run build --prefix ./web-ui/ && node ./index.js\"",
         "postinstall": "npm install --unsafe-perm --prefix ./web-ui/ && npm rebuild node-sass --prefix ./web-ui/ && SKIP_PREFLIGHT_CHECK=true npm run build --prefix ./web-ui/",
         "start": "npm run init && node index.js",

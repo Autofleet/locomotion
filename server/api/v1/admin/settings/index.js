@@ -10,7 +10,7 @@ router.get('/', async (req, res) => {
   let foundSettings = [];
 
   try {
-    foundSettings = await settingLib.getAllSettingFromDb();
+    foundSettings = await settingLib.getSettingsList();
   } catch (e) {
     logger.error('Error while gettig all settings', e);
   }
@@ -32,6 +32,21 @@ router.get('/get-setting/:settingKey', async (req, res) => {
     value: foundSetting.value,
     type: foundSetting.type,
   });
+});
+
+router.patch('/update-setting/:settingKey', async (req, res) => {
+  const { settingKey } = req.params;
+  const { value } = req.body;
+  let updatedSetting = {};
+
+  try {
+    updatedSetting = await settingLib.updateByKey(settingKey, { value });
+  } catch (e) {
+    logger.error('Error updating a setting');
+    res.json(500, { status: 'ERROR', error: e });
+    throw e;
+  }
+  res.json(updatedSetting);
 });
 
 router.post('/', async (req, res) => {
