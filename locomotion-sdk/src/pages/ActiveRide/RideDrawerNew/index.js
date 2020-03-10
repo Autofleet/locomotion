@@ -150,7 +150,7 @@ const RideDrawer = ({
           />
           <NumberOfPassenger onChange={onNumberOfPassengerChange} amount={numberOfPassenger} />
           {/* <Switch onChange={(active) => setRideType(active ? 'pool' : 'private')} active={rideType === 'pool'} /> */}
-          {preRideDetails.eta || preRideDetails.estimatePrice ? ( <PreRideBox {...preRideDetails} /> ) : null }
+          {/*preRideDetails.eta || preRideDetails.estimatePrice ? ( <PreRideBox {...preRideDetails} /> ) : null */}
         </Fragment>
       ) : null }
 
