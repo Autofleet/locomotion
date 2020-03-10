@@ -115,6 +115,7 @@ export default ({ navigation }) => {
     && state.pickup && state.pickup.lat;
 
   const loadPreRideDetails = async (origin, destination) => {
+    return;
     try {
       const { data } = await network.get('api/v1/me/rides/pre', { params: { origin, destination } });
       setPreRideDetails(data);
