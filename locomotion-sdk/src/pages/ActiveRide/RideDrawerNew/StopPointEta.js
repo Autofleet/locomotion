@@ -71,6 +71,7 @@ export const RowContainer = styled.TouchableOpacity`
   ${({ paddingStart }) => (paddingStart ? `
   padding-start: 24;
   ` : null)}
+  flex: 1;
 `;
 
 const StopPointTitle = styled.Text`
@@ -82,8 +83,6 @@ const StopPointTitle = styled.Text`
 export default ({
   pickup, description, eta, completedAt, openLocationSelect, useBorder, etaDrift
 }) => {
-  console.log(etaDrift);
-
   return (
   <RowContainer pickup={pickup} onPress={openLocationSelect} useBorder paddingStart>
     <AddressTextCont>
