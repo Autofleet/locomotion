@@ -20,8 +20,6 @@ router.put('/:rideId', async (req, res) => {
     res.json({ error: 'ride not found' });
   }
 
-  console.log(req.body.ride);
-
   const stopPoints = req.body.ride.stop_points;
 
   if (stopPoints && !ride.arrivingPush) {
@@ -30,27 +28,37 @@ router.put('/:rideId', async (req, res) => {
     const diff = etaTime.diff(moment(), 'minutes');
 
     if (stopPoints[0].completed_at === null && diff <= arriveReminderMin) {
-      const updateRidePush = await Ride.update({ arrivingPush: moment().format() }, {
-        where: {
-          id: ride.id,
-          arrivingPush: null,
-        },
-      });
-
-      if (updateRidePush[0]) {
-        const user = await User.findOne({
+      try {
+        const updateRidePush = await Ride.update({ arrivingPush: moment().format() }, {
           where: {
-            id: ride.userId,
+            id: ride.id,
+            arrivingPush: null,
           },
         });
 
-        await sendNotification(
-          [user.pushUserId],
-          'driverArriving',
-          { en: `${i18n.t('pushNotifications.driverArriving', { etaMinutes: arriveReminderMin, stopPoint })}` },
-          { en: i18n.t('pushNotifications.driverArrivingHeading', { etaMinutes: arriveReminderMin }) },
-          { ttl: 60 * 30 },
-        );
+        if (updateRidePush[0]) {
+          const user = await User.findOne({
+            where: {
+              id: ride.userId,
+            },
+          });
+
+          await sendNotification(
+            [user.pushUserId],
+            'driverArriving',
+            { en: `${i18n.t('pushNotifications.driverArriving', { etaMinutes: arriveReminderMin, stopPoint: stopPoints[0].description })}` },
+            { en: i18n.t('pushNotifications.driverArrivingHeading', { etaMinutes: arriveReminderMin }) },
+            { ttl: 60 * 30 },
+          );
+        }
+      } catch (e) {
+        await Ride.update({ arrivingPush: null }, {
+          where: {
+            id: ride.id,
+          },
+        });
+
+        console.log('Error sending push', e);
       }
     }
   }
