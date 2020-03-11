@@ -43,7 +43,8 @@
         "rideStates": {
             "driverOnTheWay": "Your ride has been booked",
             "driverOnTheWayEta": "Time till boarding: {{pickupEta}} Minutes",
-            "onBoard": "Remaining ride time: app. {{dropoffEta}} minutes.",
+            "driverOnTheWaySoon": "Time till boarding: Less then 1 minutes",
+            "onBoard": "Remaining ride time: app. {{dropoffEta}} minutes",
             "driverArrived": "Your driver has arrived"
         },
         "bookingCard": {
