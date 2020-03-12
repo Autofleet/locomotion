@@ -45,6 +45,7 @@
             "driverOnTheWayEta": "Time till boarding: {{pickupEta}} Minutes",
             "driverOnTheWaySoon": "Time till boarding: Less then 1 minutes",
             "onBoard": "Remaining ride time: app. {{dropoffEta}} minutes",
+            "onBoardSoon": "Arriving soon",
             "driverArrived": "Your driver has arrived"
         },
         "bookingCard": {

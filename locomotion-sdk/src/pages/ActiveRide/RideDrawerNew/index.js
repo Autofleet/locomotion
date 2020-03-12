@@ -50,7 +50,6 @@ const RideDrawer = ({
   const useSettings = settingsContext.useContainer();
 
   useEffect(() => {
-    getSettings();
     useSettings.getSettings();
   }, [])
 
@@ -65,13 +64,6 @@ const RideDrawer = ({
       setDropoffpEta(etaDiff)
     }
   }, [origin, destination])
-
-  const getSettings = async () => {
-    const { data: response } = await network.get('api/v1/me/app-settings');
-    setAppSettings(response)
-  }
-
-
 
   return (
     <Drawer>
@@ -92,24 +84,12 @@ const RideDrawer = ({
         <RideStatusContainer>
           <RideStatusText state={rideState}>
             {
-              rideState  === 'driverOnTheWay' &&
-              pickupEta <= useSettings.settingsList.ARRIVE_REMINDER_MIN &&
-              pickupEta > 0 ?
-              I18n.t(`home.rideStates.${rideState}Eta`, {pickupEta, dropoffEta})
-            : null}
-
-            {
-              rideState  === 'driverOnTheWay' &&
-              pickupEta > useSettings.settingsList.ARRIVE_REMINDER_MIN ?
-              I18n.t(`home.rideStates.${rideState}`, {pickupEta, dropoffEta})
-            : null}
-
-            {
-              rideState  === 'driverOnTheWay' &&
-              pickupEta <= 0 ?
-              I18n.t(`home.rideStates.${rideState}Soon`, {pickupEta, dropoffEta})
-            : null}
-
+              rideState  === 'driverOnTheWay' ?
+                pickupEta <= useSettings.settingsList.ARRIVE_REMINDER_MIN && pickupEta > 0 ? I18n.t(`home.rideStates.${rideState}Eta`, {pickupEta, dropoffEta}) :
+                  pickupEta > useSettings.settingsList.ARRIVE_REMINDER_MIN ? I18n.t(`home.rideStates.${rideState}`, {pickupEta, dropoffEta}) :
+                    pickupEta <= 0 ? I18n.t(`home.rideStates.${rideState}Soon`, {pickupEta, dropoffEta}) : null
+              : rideState  === 'onBoard' ? I18n.t(`home.rideStates.${rideState}Soon`, {pickupEta, dropoffEta}) : I18n.t(`home.rideStates.${rideState}`, {pickupEta, dropoffEta})
+            }
           </RideStatusText>
         </RideStatusContainer>
        : null}
