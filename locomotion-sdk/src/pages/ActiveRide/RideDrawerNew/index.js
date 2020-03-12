@@ -174,7 +174,7 @@ const RideDrawer = ({
           <RideButtonContainer>
             <RideButton
               onPress={rideState ? cancelRide : onCreateRide}
-              hollow={!!readyToBook}>
+              hollow={!readyToBook}>
               {` ${I18n.t(rideState ? 'home.cancelRideButton' : 'home.letsRideButton')} `}
             </RideButton>
           </RideButtonContainer>
