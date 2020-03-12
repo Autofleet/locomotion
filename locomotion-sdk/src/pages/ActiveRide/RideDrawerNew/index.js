@@ -93,15 +93,14 @@ const RideDrawer = ({
           <RideStatusText state={rideState}>
             {
               rideState  === 'driverOnTheWay' &&
-              pickupEta <= appSettings.ARRIVE_REMINDER_MIN &&
+              pickupEta <= useSettings.settingsList.ARRIVE_REMINDER_MIN &&
               pickupEta > 0 ?
               I18n.t(`home.rideStates.${rideState}Eta`, {pickupEta, dropoffEta})
             : null}
 
-
             {
               rideState  === 'driverOnTheWay' &&
-              pickupEta > appSettings.ARRIVE_REMINDER_MIN ?
+              pickupEta > useSettings.settingsList.ARRIVE_REMINDER_MIN ?
               I18n.t(`home.rideStates.${rideState}`, {pickupEta, dropoffEta})
             : null}
 

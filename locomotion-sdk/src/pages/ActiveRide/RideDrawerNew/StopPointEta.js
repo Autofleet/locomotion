@@ -54,6 +54,7 @@ const AddressText = styled.Text`
   font-size: 11;
   color: #666666;
   margin-top: 5px;
+  min-height: 20px;
 `;
 
 const EtaText = styled.Text`

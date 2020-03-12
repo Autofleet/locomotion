@@ -6,6 +6,7 @@ import {
 } from 'react-native';
 import MapView, { Polyline, Marker } from 'react-native-maps';
 import polyline from '@mapbox/polyline';
+import moment from 'moment'
 
 import network from '../../services/network';
 import AddressView from './AddressView';
@@ -17,6 +18,7 @@ import RideDrawer from './RideDrawerNew';
 import { getTogglePopupsState } from '../../context/main';
 import UserService from '../../services/user';
 import OneSignal from '../../services/one-signal';
+import settingsContext from '../../context/settings'
 
 function useInterval(callback, delay) {
   const savedCallback = useRef();
@@ -53,6 +55,8 @@ export default ({ navigation }) => {
     openEdit: false,
   });
   const [rideType, setRideType] = useState('pool');
+  const [pickupEta, setPickupEta] = useState(null)
+  const [displayMatchInfo, setDisplayMatchInfo] = useState(false)
 
   const mapInstance = useRef();
 
@@ -109,6 +113,15 @@ export default ({ navigation }) => {
   useInterval(() => {
     UserService.getUser(navigation);
   }, 10000);
+
+  useEffect(() => {
+    console.log(activeRideState)
+    if(!activeRideState) {
+      return;
+    }
+    const origin = activeRideState.stop_points[0];
+    calculatePickupEta(origin)
+  }, [activeRideState])
 
   const bookValidation = state => state
     && state.dropoff && state.dropoff.lat
@@ -173,7 +186,16 @@ export default ({ navigation }) => {
     return loadActiveRide();
   };
 
+  const calculatePickupEta = (origin) => {
+    if(origin && origin.eta) {
+      const etaDiff = moment(origin.eta).diff(moment(), 'minutes');
+      setPickupEta(etaDiff)
+      setDisplayMatchInfo(etaDiff <= useSettings.settingsList.ARRIVE_REMINDER_MIN)
+    }
+  }
+
   const showsUserLocation = !activeRideState || !activeRideState.vehicle;
+  const useSettings = settingsContext.useContainer();
 
   return (
     <PageContainer>
@@ -208,7 +230,7 @@ export default ({ navigation }) => {
           );
         }}
       >
-        {activeSpState
+        {activeSpState && displayMatchInfo
           ? (
             <Polyline
               strokeWidth={3}
@@ -225,7 +247,7 @@ export default ({ navigation }) => {
 
             </Marker>
           ) : null}
-        {activeRideState && activeRideState.vehicle && activeRideState.vehicle.location
+        {activeRideState && activeRideState.vehicle && activeRideState.vehicle.location && displayMatchInfo
           ? (
             <Marker
               coordinate={{ latitude: activeRideState.vehicle.location.lat, longitude: activeRideState.vehicle.location.lng }}
