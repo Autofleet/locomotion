@@ -1,4 +1,5 @@
 import React, { useState, Fragment } from 'react';
+import {Text, View} from 'react-native'
 import styled from 'styled-components';
 import BasicPopup from '../../../popups/BasicPopup';
 import i18n from '../../../I18n';
@@ -12,13 +13,12 @@ const MAX_NUMBER_OF_PASSENGER = 5;
 const MIN_NUMBER_OF_PASSENGER = 1;
 
 const PassengerAmountContainer = styled.View`
-  width: 70px;
-  height: 50px;
-  /* background-color: red; */
-  justify-content: center;
+  min-height: 50;
+  padding-top: 10;
+  padding-bottom: 10;
   align-items: center;
-  align-self: flex-end;
-  text-align: center;
+  flex-direction: row;
+  padding-start: 20;
 `;
 
 const PassengerAmountTouchableOpacity = styled.TouchableOpacity`
@@ -36,25 +36,25 @@ const PassengerAmountTouchableOpacity = styled.TouchableOpacity`
 const PassengerAmountIcon = styled.Image.attrs({ source: PassengerAmountIconSource })`
   width: 16px;
   height: 16px;
-  margin-top: 2;
 `;
 
 const PassengerAmountText = styled.Text`
   font-size: 16px;
-  font-weight: 100;
-  margin-left: 8px;
+  font-weight: 500;
+  color: #000000;
+  width: 20px;
 `;
 
 const MinusIcon = styled.Image.attrs({ source: MinusIconSource })`
   width: 16px;
   height: 3px;
+  background-color: blue;
 `;
 
 const PlusIcon = styled.Image.attrs({ source: PlusIconSource })`
   width: 16px;
   height: 16px;
 `;
-
 
 const SetPassengerAmountContainer = styled.View`
   flex-direction: row;
@@ -69,7 +69,7 @@ const SetPassengerAmountContainer = styled.View`
 const SetPassengerAmountBox = styled.TouchableOpacity`
   flex: 1;
   justify-content: center;
-  background-color: ${({ disabled }) => disabled ? '#e8e8e8' : '#fafafb'};
+  background-color: transparent;
   align-items: center;
 `;
 
@@ -80,6 +80,37 @@ const PassengerAmountBox = styled.TouchableOpacity`
   flex-direction: row;
   justify-content: center;
 `;
+const AddressText = styled.Text`
+  font-size: 14px;
+  color: #666666;
+  margin-start: 10;
+  margin-end: 16;
+`;
+
+const StopPointDotContainer = styled.View`
+  position: absolute;
+  left: 16;
+  width: 200px;
+  height: 100%;
+  top: 16px;
+`;
+
+const SetPassengerAmountBoxContainer = styled.View`
+  flex-direction: row;
+  width: 25px;
+  height: 25px;
+  border-radius: 15px;
+  border: 1px solid #525252;
+  opacity: ${({disabled}) => disabled ? 0.3 : 0.7};
+`;
+
+const PassengerControlersContainer = styled.View`
+  width: 60;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-left: auto;
+  margin-right: 15;
+`;
 
 export default ({ amount, onChange }) => {
   const [isPopupOpen, togglePopup] = getTogglePopupsState();
@@ -89,7 +120,7 @@ export default ({ amount, onChange }) => {
     return MAX_NUMBER_OF_PASSENGER >= (newAmount + change) && (newAmount + change) >= MIN_NUMBER_OF_PASSENGER
   }
 
-  const getNewAmountFunction = change => () => {    
+  const getNewAmountFunction = change => () => {
     if (!validateChange(newAmount, change)) {
       return;
     }
@@ -99,24 +130,22 @@ export default ({ amount, onChange }) => {
 
   return (
     <PassengerAmountContainer>
-      <PassengerAmountTouchableOpacity onPress={() => togglePopup('numberOfPassenger', true)}>
+      <View style={{width: '100%', flexDirection: 'row'}}>
         <PassengerAmountIcon />
-        <PassengerAmountText>{amount}</PassengerAmountText>
-      </PassengerAmountTouchableOpacity>
-      <BasicPopup
-        id="numberOfPassenger"
-        title={i18n.t('popups.selectNumberOfPassenger.main')}
-        content={(
-          <Fragment>
-            <SetPassengerAmountContainer>
-              <SetPassengerAmountBox disabled={!validateChange(newAmount, -1)} onPress={getNewAmountFunction(-1)}><MinusIcon /></SetPassengerAmountBox>
-              <PassengerAmountBox><PassengerAmountIcon /><PassengerAmountText>{newAmount}</PassengerAmountText></PassengerAmountBox>
-              <SetPassengerAmountBox disabled={!validateChange(newAmount, 1)} onPress={getNewAmountFunction(1)}><PlusIcon /></SetPassengerAmountBox>
-            </SetPassengerAmountContainer>
-          </Fragment>
-        )}
-        onClose={() => onChange(newAmount)}
-      />
+        <AddressText>{i18n.t('home.passengersNumber')}</AddressText>
+        <PassengerAmountText>{newAmount}</PassengerAmountText>
+        <PassengerControlersContainer>
+          <SetPassengerAmountBoxContainer disabled={!validateChange(newAmount, -1)}>
+              <SetPassengerAmountBox
+                onPress={getNewAmountFunction(-1)}>
+                  <MinusIcon />
+              </SetPassengerAmountBox>
+            </SetPassengerAmountBoxContainer>
+            <SetPassengerAmountBoxContainer disabled={!validateChange(newAmount, 1)} >
+              <SetPassengerAmountBox onPress={getNewAmountFunction(1)}><PlusIcon /></SetPassengerAmountBox>
+            </SetPassengerAmountBoxContainer>
+        </PassengerControlersContainer>
+      </View>
     </PassengerAmountContainer>
   )
 }
