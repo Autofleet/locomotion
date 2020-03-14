@@ -94,7 +94,7 @@ const RideDrawer = ({
         </RideStatusContainer>
        : null}
 
-      {rideState && pickupEta <= appSettings.ARRIVE_REMINDER_MIN ?
+      {rideState && (pickupEta <= appSettings.ARRIVE_REMINDER_MIN || rideState !== 'driverOnTheWay')  ?
         <RideCard activeRide={activeRide} rideState={rideState}></RideCard> :
           rideState ?
           <StopPointsEtaContainer>
