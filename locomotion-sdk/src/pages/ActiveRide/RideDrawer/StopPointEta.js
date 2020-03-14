@@ -69,8 +69,8 @@ export const RowContainer = styled.TouchableOpacity`
   padding-bottom: 10;
   align-items: center;
   flex-direction: column;
-  ${({ paddingStart }) => (paddingStart ? `
-  padding-start: 24;
+   ${({ paddingStart }) => (paddingStart ? `
+  padding-start: 5;
   ` : null)}
   flex: 1;
 `;
@@ -82,10 +82,10 @@ const StopPointTitle = styled.Text`
 `;
 
 export default ({
-  pickup, description, eta, completedAt, openLocationSelect, useBorder, etaDrift
+  pickup, description, eta, completedAt, openLocationSelect, etaDrift, paddingStart
 }) => {
   return (
-  <RowContainer pickup={pickup} onPress={openLocationSelect} useBorder paddingStart>
+  <RowContainer pickup={pickup} onPress={openLocationSelect} paddingStart={paddingStart} >
     <AddressTextCont>
     <View>
         <StopPointTitle pickup={pickup}>

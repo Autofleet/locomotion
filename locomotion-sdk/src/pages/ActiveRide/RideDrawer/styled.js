@@ -16,6 +16,7 @@ export const Drawer = styled.View`
   shadow-offset: 0px 0px;
   shadow-color: #04214f;
   shadow-opacity: 0.4;
+
 `;
 
 const address = `
@@ -32,15 +33,15 @@ export const RideCard = styled.View`
   min-height: 150px;
   flex-direction: column;
   padding-start: 10;
-  padding-end: 20;
+  padding-end: 10;
 `;
 
 export const StopPointsEtaContainer = styled.View`
   ${address}
   padding-top: 0px;
   flex-direction: row;
-  padding-start: 10;
-  padding-end: 20;
+  padding-start: 0;
+  padding-end: 0;
   justify-content: space-between;
 `;
 
