@@ -187,10 +187,14 @@ export default ({ navigation }) => {
   };
 
   const calculatePickupEta = (origin) => {
-    if(origin && origin.eta) {
-      const etaDiff = moment(origin.eta).diff(moment(), 'minutes');
-      setPickupEta(etaDiff)
-      setDisplayMatchInfo(etaDiff <= useSettings.settingsList.ARRIVE_REMINDER_MIN)
+    if(origin.completed_at) {
+      setDisplayMatchInfo(true)
+    } else {
+      if(origin && origin.eta) {
+        const etaDiff = moment(origin.eta).diff(moment(), 'minutes');
+        setPickupEta(etaDiff)
+        setDisplayMatchInfo(etaDiff <= useSettings.settingsList.ARRIVE_REMINDER_MIN)
+      }
     }
   }
 
