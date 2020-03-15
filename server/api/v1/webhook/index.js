@@ -17,7 +17,7 @@ router.put('/:rideId', async (req, res) => {
   });
 
   if (!ride) {
-    res.json({ error: 'ride not found' });
+    return res.json({ error: 'ride not found' });
   }
 
   const stopPoints = req.body.ride.stop_points;
@@ -26,8 +26,11 @@ router.put('/:rideId', async (req, res) => {
     const { value: arriveReminderMin } = await settingsService.getSettingByKeyFromDb('ARRIVE_REMINDER_MIN');
     const etaTime = moment(stopPoints[0].eta);
     const diff = etaTime.diff(moment(), 'minutes');
+    console.log(`Eta Diff: ${diff} Reminder: ${arriveReminderMin}`);
 
     if (stopPoints[0].completed_at === null && diff <= arriveReminderMin) {
+      console.log('Sending Push');
+
       try {
         const updateRidePush = await Ride.update({ arrivingPush: moment().format() }, {
           where: {

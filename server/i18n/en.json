@@ -1,6 +1,6 @@
 {
   "pushNotifications": {
-    "driverArriving": "Your vehicle will arrive at your selected pickup location in {{etaMinutes}} Minutes.\n MoD stop: {{stopPoint}}",
+    "driverArriving": "Your vehicle will arrive at your selected pickup location in {{etaMinutes}} Minutes.\nMoD stop: {{stopPoint}}",
     "driverArrivingHeading": "The vehicle is about to arrive"
   }
 
