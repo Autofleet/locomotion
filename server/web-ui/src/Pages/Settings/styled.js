@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { omit } from 'lodash';
-
+import { Input } from "../../Common/Input";
 import Button from '../../Common/Button';
 import {LabelText} from "../../Common/Toggle/styled";
 
@@ -51,7 +51,7 @@ export const SettingsPanelHeader = styled.div`
 `;
 
 export const SettingsPanelItem = styled.div(({type}) => `
-    padding: 5% 5% ${type === 'text' ? 0 : 5}% 5%;
+    padding: 5% 5% ${type === 'text' ? 0 : 8}% 5%;
     margin: 0 5%;
 
     ${type !== 'submit' ? `
@@ -72,8 +72,12 @@ export const ToggleLabelTextSpacer = styled.div`
     min-width: 140px;
 `;
 
-export const ToggleLabelText = styled(LabelText)`
-    width: 85%;
+export const FieldLabelText = styled(LabelText)`
+    width: 84%;
+    opacity: 0.7;
+    line-height: 1;
+    font-size: .8125rem;
+    color: rgba(51, 51, 51, 0.7);
 `;
 
 export const SaveSettingsContainer = styled.div`
@@ -114,3 +118,20 @@ export const ApplyButton = styled(ButtonBase)`
 
 `;
 
+export const NumberInput = styled.input`
+    display: inline-block;
+    position: relative;
+    min-width: 50px;
+    width: 10%;
+    cursor: pointer;
+    padding-left: 10px;
+    height: 40px;
+    border-radius: 4px;
+    border: solid 1px #dedede;
+    line-height: normal;
+    font-family: 'Montserrat', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    font-size: .8125rem;
+    color: #333;
+    background-color: #ffffff;
+`;

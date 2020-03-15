@@ -1,4 +1,5 @@
 import React, { useState, useRef, Fragment } from 'react';
+import { ScrollView } from 'react-native'
 import Geolocation from '@react-native-community/geolocation';
 import network from '../../../services/network';
 import {
@@ -75,7 +76,7 @@ export default (props) => {
         input,
         location: { lat: coords.latitude, lng: coords.longitude }
       } });
-  
+
       return data;
     } catch (error) {
       console.log('Got error while try to get places', error);
@@ -129,7 +130,7 @@ export default (props) => {
           </Address>
         </View>
       </AddressInputsHeader>
-      <View>
+      <ScrollView>
         {addressListItems && addressListItems.list && addressListItems.list.map(item => (
           <AddressSearchItem
             key={item.id}
@@ -143,7 +144,7 @@ export default (props) => {
             </DistanceFromAddress>
           </AddressSearchItem>
         ))}
-      </View>
+      </ScrollView>
     </AddressInputs>
   );
 };

@@ -4,8 +4,8 @@ import BasicPopup from './BasicPopup';
 
 export default () => (
   <Fragment>
-    <BasicPopup id="rideCancel" title={i18n.t('popups.rideCancel.main')} subTitle={i18n.t('popups.rideCancel.sub')} />
+    {/* <BasicPopup id="rideCancel" title={i18n.t('popups.rideCancel.main')} subTitle={i18n.t('popups.rideCancel.sub')} /> */}
     <BasicPopup id="rideOver" title={i18n.t('popups.rideOver.main')} subTitle={i18n.t('popups.rideOver.sub')} closeAfter={10000} />
-    <BasicPopup id="rideRejected" title={i18n.t('popups.rideRejected.main')} subTitle={i18n.t('popups.rideRejected.sub')} closeAfter={10000} />
+    {/* <BasicPopup id="rideRejected" title={i18n.t('popups.rideRejected.main')} subTitle={i18n.t('popups.rideRejected.sub')} closeAfter={10000} /> */}
   </Fragment>
 );

@@ -16,12 +16,12 @@ export const Drawer = styled.View`
   shadow-offset: 0px 0px;
   shadow-color: #04214f;
   shadow-opacity: 0.4;
-
 `;
 
 const address = `
-  min-height: 20;
-  padding-top: 15px;
+  min-height: 50;
+  padding-top: 10;
+  padding-bottom: 10;
   padding-start: 24;
   align-items: center;
   flex-direction: row;
@@ -30,24 +30,16 @@ const address = `
 
 export const RideCard = styled.View`
   ${address}
-  min-height: 150px;
+  border-bottom-color: #f2f2f2;
+  border-bottom-width: 1;
   flex-direction: column;
   padding-start: 10;
-  padding-end: 10;
-`;
-
-export const StopPointsEtaContainer = styled.View`
-  ${address}
-  padding-top: 0px;
-  flex-direction: row;
-  padding-start: 0;
-  padding-end: 0;
-  justify-content: space-between;
+  padding-end: 20;
 `;
 
 export const DriverAvatar = styled.Image`
-  width: 60px;
-  height: 60px;
+  width: 30px;
+  height: 30px;
   border-radius: 100;
   margin-left: 15px;
   border-width: 1px;
@@ -56,43 +48,28 @@ export const DriverAvatar = styled.Image`
 `;
 
 const styleForDriverIsArrivedState = `
-  color: #08902d;
+  height: 60px;
+  color: #00aeef;
+  margin-top: 40px;
 `;
 
 export const RideStatusText = styled.Text`
-  font-size: 14px;
+  font-size: 16;
   color: #666666;
   margin-start: 12;
-  font-weight: 600;
   ${({ state }) => (state === 'driverArrived' ? styleForDriverIsArrivedState : null)}
 `;
 
-export const RideStatusContainer = styled.View`
-  ${address}
-  padding-bottom: 10px;
-  flex-direction: column;
-  padding-start: 10;
-  padding-end: 20;
-
-`;
-
-
 export const RideDetailsText = styled.Text`
-  font-size: 12;
-  color: #000000;
+  font-size: 13;
+  color: #666666;
   margin-start: 10;
   text-align: ${({ right }) => (right ? 'right' : 'left')};
-
-  ${({subText}) => subText ? `
-    font-weight: 500;
-    font-size: 12;
-    margin-top: 5px;
-  ` : null}
   /* background-color: red; */
 `;
 
 export const RideButtonContainer = styled.View`
-  margin: 0 auto 10px auto;
+  margin: 10px auto;
   height: 40px;
   width: 50%;
 `;
@@ -115,7 +92,7 @@ export const RideDetailsContainer = styled.View`
   flex: 1;
   flex-direction: row;
   width: 100%;
-  justify-content: space-between
+  margin-top: 16;
 `;
 
 export const RideButtonText = styled.Text`

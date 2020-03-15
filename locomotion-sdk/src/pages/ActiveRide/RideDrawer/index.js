@@ -1,18 +1,26 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useState, useEffect } from 'react';
 import {
   View,
   Image,
 } from 'react-native';
+import moment from 'moment';
 
 import I18n from '../../../I18n';
 import {
-  Drawer, RideCard, RideStatusText, RideDetailsText, RideButton, RideButtonText,
-  RideDetailsContainer, DriverAvatar, PreRideBox,
+  Drawer, RideButton, PreRideBox,RideButtonContainer, StopPointsEtaContainer,RideStatusText,RideStatusContainer
 } from './styled';
 import StopPointRow from './StopPointRow';
+import StopPointEta from './StopPointEta';
 import RideType from './RideType';
 import Switch from '../../../Components/Switch'
 import NumberOfPassenger from './NumberOfPassenger';
+import RoundedButton from '../../../Components/RoundedButton';
+import RideCard from './RideCard';
+import MessageCard from './MessageCard';
+import { getTogglePopupsState } from '../../../context/main'
+import network from '../../../services/network'
+import settingsContext from '../../../context/settings'
+
 
 const getRideState = (activeRide) => { // false, driverOnTheWay, driverArrived, onBoard
   if (!activeRide) {
@@ -30,80 +38,140 @@ const getRideState = (activeRide) => { // false, driverOnTheWay, driverArrived, 
 const RideDrawer = ({
   activeRide, openLocationSelect, requestStopPoints, setRideType,
   cancelRide, createRide, readyToBook, rideType, preRideDetails,
-  onNumberOfPassengerChange, numberOfPassenger,
+  onNumberOfPassengerChange, numberOfPassenger
 }) => {
   const [origin, destination] = activeRide ? activeRide.stop_points || [] : [];
+  const [isPopupOpen, togglePopup] = getTogglePopupsState();
+  const [appSettings, setAppSettings] = useState({})
+  const [pickupEta, setPickupEta] = useState(null)
+  const [dropoffEta, setDropoffpEta] = useState(null)
   const rideState = getRideState(activeRide);
   const onCreateRide = () => (readyToBook ? createRide() : null);
+  const useSettings = settingsContext.useContainer();
+
+  useEffect(() => {
+    useSettings.getSettings();
+  }, [])
+
+  useEffect(() => {
+    if(origin && origin.eta) {
+      const etaDiff = moment(origin.eta).diff(moment(), 'minutes');
+      setPickupEta(etaDiff)
+    }
+
+    if(destination && destination.eta) {
+      const etaDiff = moment(destination.eta).diff(moment(), 'minutes');
+      setDropoffpEta(etaDiff)
+    }
+  }, [origin, destination])
+
   return (
     <Drawer>
-      {rideState ? (
-        <RideCard>
+      <MessageCard
+        title={I18n.t('popups.rideCancel.main')}
+        subTitle={I18n.t('popups.rideCancel.sub')}
+        id="rideCancel"
+      />
+
+      <MessageCard
+        id="rideRejected"
+        title={I18n.t('popups.rideRejected.main')}
+        subTitle={I18n.t('popups.rideRejected.sub')}
+      />
+    {!isPopupOpen('ridePopupsStatus') ?
+    <Fragment>
+      {rideState ?
+        <RideStatusContainer>
           <RideStatusText state={rideState}>
-            {` ${I18n.t(`home.rideStates.${rideState}`)} `}
+            {
+              rideState  === 'driverOnTheWay' ?
+                pickupEta <= useSettings.settingsList.ARRIVE_REMINDER_MIN && pickupEta > 0 ?
+                  I18n.t(`home.rideStates.${rideState}Eta`, {pickupEta, dropoffEta}) :
+                  pickupEta > useSettings.settingsList.ARRIVE_REMINDER_MIN ? I18n.t(`home.rideStates.${rideState}`, {pickupEta, dropoffEta}) :
+                    pickupEta <= 0 ? I18n.t(`home.rideStates.${rideState}Soon`, {pickupEta, dropoffEta}) : null
+              : null
+            }
+            {
+              rideState  === 'onBoard' ?
+                dropoffEta > 0 ?
+                I18n.t(`home.rideStates.${rideState}`, {pickupEta, dropoffEta}) : I18n.t(`home.rideStates.${rideState}Soon`, {pickupEta, dropoffEta})
+              : null
+            }
+            {
+              rideState === 'driverArrived' ?
+              I18n.t(`home.rideStates.${rideState}`, {pickupEta, dropoffEta}) : null
+            }
           </RideStatusText>
-          <RideDetailsContainer>
-            <View style={{ flex: 1 }}>
-              <DriverAvatar source={{ uri: activeRide.driver.avatar }} />
-              <RideDetailsText> Driver: </RideDetailsText>
-              <RideDetailsText>
-                {` ${activeRide.driver.first_name} ${activeRide.driver.last_name} `}
-              </RideDetailsText>
-            </View>
-            <View style={{ flex: 1, textAlign: 'right' }}>
-              <Image
-                style={{
-                  width: 80, height: 30, marginBottom: 10, alignSelf: 'flex-end',
-                }}
-                source={{ uri: activeRide.vehicle.image }}
+        </RideStatusContainer>
+       : null}
+
+      {rideState && (pickupEta <= useSettings.settingsList.ARRIVE_REMINDER_MIN || rideState !== 'driverOnTheWay')  ?
+        <RideCard activeRide={activeRide} rideState={rideState}></RideCard> :
+          rideState ?
+          <StopPointsEtaContainer>
+            <StopPointEta
+              pickup
+              useBorder
+              openLocationSelect={openLocationSelect}
+              description={rideState ? origin && origin.description
+                : requestStopPoints && requestStopPoints.pickup && requestStopPoints.pickup.description}
+                eta={rideState ? origin && origin.eta : undefined}
+                completedAt={rideState ? origin && origin.completed_at
+                  : undefined}
+                etaDrift={useSettings.settingsList.DISPLAY_ETA_DRIFT}
               />
-              <RideDetailsText right>
-                {` ${activeRide.vehicle.model} (${activeRide.vehicle.color}) `}
-              </RideDetailsText>
-              <RideDetailsText right>{activeRide.vehicle.license_number}</RideDetailsText>
-            </View>
-          </RideDetailsContainer>
-        </RideCard>
-      ) : null}
-      <StopPointRow
-        pickup
-        useBorder
-        openLocationSelect={openLocationSelect}
-        description={rideState ? origin && origin.description
-          : requestStopPoints && requestStopPoints.pickup && requestStopPoints.pickup.description}
-        eta={rideState ? origin && origin.eta : undefined}
-        completedAt={rideState ? origin && origin.completed_at
-          : undefined}
-      />
-      <StopPointRow
-        useBorder
-        openLocationSelect={openLocationSelect}
-        description={rideState ? destination && destination.description
-          : requestStopPoints && requestStopPoints.dropoff && requestStopPoints.dropoff.description}
-        eta={rideState ? destination && destination.eta : undefined}
-        completedAt={rideState ? destination && destination.completed_at
-          : undefined}
-      />
+            <StopPointEta
+              useBorder
+              openLocationSelect={openLocationSelect}
+              description={rideState ? destination && destination.description
+                : requestStopPoints && requestStopPoints.dropoff && requestStopPoints.dropoff.description}
+                eta={rideState ? destination && destination.eta : undefined}
+                completedAt={rideState ? destination && destination.completed_at
+                  : undefined}
+                etaDrift={useSettings.settingsList.DISPLAY_MAX_ETA_DRIFT}
+              />
+            </StopPointsEtaContainer> : null
+      }
+
       {!rideState ? (
         <Fragment>
+           <StopPointRow
+          pickup
+          useBorder
+          openLocationSelect={openLocationSelect}
+          description={rideState ? origin && origin.description
+            : requestStopPoints && requestStopPoints.pickup && requestStopPoints.pickup.description}
+            eta={rideState ? origin && origin.eta : undefined}
+            completedAt={rideState ? origin && origin.completed_at
+              : undefined}
+          />
+        <StopPointRow
+          useBorder
+          openLocationSelect={openLocationSelect}
+          description={rideState ? destination && destination.description
+            : requestStopPoints && requestStopPoints.dropoff && requestStopPoints.dropoff.description}
+            eta={rideState ? destination && destination.eta : undefined}
+            completedAt={rideState ? destination && destination.completed_at
+              : undefined}
+          />
           <NumberOfPassenger onChange={onNumberOfPassengerChange} amount={numberOfPassenger} />
           {/* <Switch onChange={(active) => setRideType(active ? 'pool' : 'private')} active={rideType === 'pool'} /> */}
-          {preRideDetails.eta || preRideDetails.estimatePrice ? ( <PreRideBox {...preRideDetails} /> ) : null }
+          {/*preRideDetails.eta || preRideDetails.estimatePrice ? ( <PreRideBox {...preRideDetails} /> ) : null */}
         </Fragment>
       ) : null }
+
       {rideState === 'onBoard' ? null
         : (
-          <RideButton
-            onPress={rideState ? cancelRide : onCreateRide}
-            inRide={rideState}
-            readyToBook={!!readyToBook}
-          >
-            <RideButtonText>
+          <RideButtonContainer>
+            <RideButton
+              onPress={rideState ? cancelRide : onCreateRide}
+              hollow={!readyToBook}>
               {` ${I18n.t(rideState ? 'home.cancelRideButton' : 'home.letsRideButton')} `}
-            </RideButtonText>
-          </RideButton>
+            </RideButton>
+          </RideButtonContainer>
         )
       }
+      </Fragment> : null}
     </Drawer>
   );
 };

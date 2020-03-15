@@ -1,6 +1,11 @@
+const moment = require('moment');
+const { Op } = require('sequelize');
+const i18n = require('../../../i18n');
 const Router = require('../../../lib/router');
 const rideService = require('../../../lib/ride');
-const { Ride } = require('../../../models');
+const { Ride, User, Notification } = require('../../../models');
+const sendNotification = require('../../../lib/push-notifications');
+const settingsService = require('../../../lib/settings');
 
 const router = Router();
 
@@ -12,8 +17,55 @@ router.put('/:rideId', async (req, res) => {
   });
 
   if (!ride) {
-    res.json({ error: 'ride not found' });
+    return res.json({ error: 'ride not found' });
   }
+
+  const stopPoints = req.body.ride.stop_points;
+
+  if (stopPoints && !ride.arrivingPush) {
+    const { value: arriveReminderMin } = await settingsService.getSettingByKeyFromDb('ARRIVE_REMINDER_MIN');
+    const etaTime = moment(stopPoints[0].eta);
+    const diff = etaTime.diff(moment(), 'minutes');
+    console.log(`Eta Diff: ${diff} Reminder: ${arriveReminderMin}`);
+
+    if (stopPoints[0].completed_at === null && diff <= arriveReminderMin) {
+      console.log('Sending Push');
+
+      try {
+        const updateRidePush = await Ride.update({ arrivingPush: moment().format() }, {
+          where: {
+            id: ride.id,
+            arrivingPush: null,
+          },
+        });
+
+        if (updateRidePush[0]) {
+          const user = await User.findOne({
+            where: {
+              id: ride.userId,
+            },
+          });
+
+          await sendNotification(
+            [user.pushUserId],
+            'driverArriving',
+            { en: `${i18n.t('pushNotifications.driverArriving', { etaMinutes: arriveReminderMin, stopPoint: stopPoints[0].description })}` },
+            { en: i18n.t('pushNotifications.driverArrivingHeading', { etaMinutes: arriveReminderMin }) },
+            { ttl: 60 * 30 },
+          );
+        }
+      } catch (e) {
+        await Ride.update({ arrivingPush: null }, {
+          where: {
+            id: ride.id,
+          },
+        });
+
+        console.log('Error sending push', e);
+      }
+    }
+  }
+
   if (req.body.ride.status === 'active') {
     ride.state = 'active';
     await ride.save();
@@ -38,6 +90,36 @@ router.put('/:rideId', async (req, res) => {
   }
 
   res.json(ride);
+});
+
+router.get('/notifications', async (req, res) => {
+  const notifications = await Notification.findAll({
+    where: {
+      state: Notification.STATES.PENDING,
+    },
+  });
+
+  notifications.map(async (notificationRecord) => {
+    const notificationContent = notificationRecord.content;
+    try {
+      await sendNotification(
+        notificationContent.targetIdsRaw,
+        notificationContent.type,
+        notificationContent.contents,
+        notificationContent.headings,
+        notificationContent.ttl,
+      );
+
+      notificationRecord.state = Notification.STATES.COMPLETED;
+      notificationRecord.save();
+    } catch (err) {
+      console.log('Push Error', err);
+      notificationRecord.state = Notification.STATES.REJECTED;
+      notificationRecord.save();
+    }
+  });
+
+  res.json(200);
 });
 
 module.exports = router;

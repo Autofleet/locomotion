@@ -75,6 +75,10 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.DATE,
       field: 'updated_at',
     },
+    arrivingPush: {
+      type: DataTypes.DATE,
+      field: 'arriving_push',
+    },
   }, {
     tableName: 'rides',
   });

@@ -42,10 +42,15 @@
       "urlIsInvalid": "Url invalid (https is required)",
       "fieldIsRequired": "Field requierd"
     },
-    "activateUsersLabel": "Manual Users Approving:",
-    "saveButton": "Save",
-    "termsUrlLabel": "Terms url path:",
-    "PrivacyUrlLabel": "Privacy url path:",
-    "ContactUsUrlLabel": "Contact us url path:"
+    "labels": {
+      "activateUsersLabel": "Manual Users Approving:",
+      "saveButton": "Save",
+      "termsUrlLabel": "Terms url path:",
+      "privacyUrlLabel": "Privacy url path:",
+      "contactUsUrlLabel": "Contact us url path:",
+      "minArriveReminderLabel": "Push notification - number of minutes before arrival:",
+      "displayEtaDriftMin": "Passenger facing pickup ETA range (minutes)",
+      "displayMaxEtaDriftMin": "Passenger facing drop-off ETA range (minutes)"
+    }
   }
 }

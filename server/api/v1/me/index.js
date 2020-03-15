@@ -1,5 +1,6 @@
 const Router = require('../../../lib/router');
 const userService = require('../../../lib/user');
+const SettingsService = require('../../../lib/settings');
 
 const router = Router();
 
@@ -22,6 +23,16 @@ router.post('/logout', async (req, res) => {
   res.json({
     status: userProfile ? 'OK' : 'FAIL',
   });
+});
+
+router.get('/app-settings', async (req, res) => {
+  const settings = await SettingsService.getAllSettingFromDb();
+  const settingsList = {};
+  settings.map((setting) => {
+    settingsList[setting.key] = setting.value;
+  });
+
+  res.json(settingsList);
 });
 
 

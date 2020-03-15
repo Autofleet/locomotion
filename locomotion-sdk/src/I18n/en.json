@@ -39,10 +39,22 @@
         "cancelRideButton": "Cancel Ride",
         "choosePickup": "Choose Pickup",
         "chooseDropoff": "Choose Dropoff",
+        "passengersNumber": "Passenger",
         "rideStates": {
-            "driverOnTheWay": "Driver is on the way",
-            "onBoard": "In ride",
+            "driverOnTheWay": "Your ride has been booked",
+            "driverOnTheWayEta": "Time till boarding: {{pickupEta}} Minutes",
+            "driverOnTheWaySoon": "Time till boarding: Less then 1 minutes",
+            "onBoard": "Remaining ride time: app. {{dropoffEta}} minutes",
+            "onBoardSoon": "Arriving soon",
             "driverArrived": "Your driver has arrived"
+        },
+        "bookingCard": {
+            "pickupEtaTitle": "Estimated Boarding",
+            "dropoffEtaTitle": "Estimated Exit"
+        },
+        "rideCard": {
+            "carTitle": "Your MoD car:",
+            "driverTitle": "Driver:"
         }
     },
     "lock": {

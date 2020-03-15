@@ -24,14 +24,15 @@ const InputWithLabel = ({
   field,
   inputComponent: InputComponent,
   marginTop,
+  inlineField,
   ...props
 }) => (
   <FormGroup
     htmlFor={inputId}
     marginTop={marginTop}
   >
-    <FormGroupLabel>{label}</FormGroupLabel>
-    <InputGroup>
+    <FormGroupLabel inlineField={inlineField}>{label}</FormGroupLabel>
+    <InputGroup inlineField={inlineField}>
       <InputComponent
         withBorder
         withHover
@@ -41,7 +42,6 @@ const InputWithLabel = ({
         {...props}
       />
       <FormGroupIcon src={icon} alt="" />
-
       <ErrorMessage style={popupErrorMessageStyle(errorMessageAlignment)} marginTop={marginTop}>
         {errorMessage}
       </ErrorMessage>
@@ -67,6 +67,7 @@ InputWithLabel.defaultProps = {
   form: null,
   field: null,
   disabled: false,
+  inlineField: false
 };
 
 InputWithLabel.propTypes = {
@@ -80,4 +81,5 @@ InputWithLabel.propTypes = {
   form: propsTypes.shape({}),
   field: propsTypes.shape({}),
   disabled: propsTypes.bool,
+  inlineField: propsTypes.bool
 };
