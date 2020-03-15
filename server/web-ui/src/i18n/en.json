@@ -48,9 +48,9 @@
       "termsUrlLabel": "Terms url path:",
       "privacyUrlLabel": "Privacy url path:",
       "contactUsUrlLabel": "Contact us url path:",
-      "minArriveReminderLabel": "Minutes before arrive to send push notification:",
-      "displayEtaDriftMin": "Minutes for ETA Drift",
-      "displayMaxEtaDriftMin": "Minutes for arriving ETA Drift"
+      "minArriveReminderLabel": "Push notification - number of minutes before arrival:",
+      "displayEtaDriftMin": "Passenger facing pickup ETA range (minutes)",
+      "displayMaxEtaDriftMin": "Passenger facing drop-off ETA range (minutes)"
     }
   }
 }
