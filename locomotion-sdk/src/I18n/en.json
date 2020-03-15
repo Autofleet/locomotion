@@ -51,6 +51,10 @@
         "bookingCard": {
             "pickupEtaTitle": "Estimated Boarding",
             "dropoffEtaTitle": "Estimated Exit"
+        },
+        "rideCard": {
+            "carTitle": "Your MoD car:",
+            "driverTitle": "Driver:"
         }
     },
     "lock": {

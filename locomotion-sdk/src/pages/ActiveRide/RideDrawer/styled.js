@@ -115,6 +115,7 @@ export const RideDetailsContainer = styled.View`
   flex: 1;
   flex-direction: row;
   width: 100%;
+  justify-content: space-between
 `;
 
 export const RideButtonText = styled.Text`
