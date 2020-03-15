@@ -10,70 +10,83 @@ const demandApi = axios.create({
 
 const webHookHost = process.env.SERVER_HOST || 'https://716ee2e6.ngrok.io';
 
-const createOffer = async ({external_id, demand_source_id, businessModelId, stop_points}) => {
-  const { data: newOffer } = await demandApi.post('/api/v1/offers', {
-      type: 'offer',
-      externalId: external_id,
-      demandSourceId: demand_source_id,
-      businessModelId,
-      offer_stop_points: stop_points
+const createOffer = async (rideData) => {
+  const {data: offer} = await demandApi.post('/api/v1/offers', {
+    type: 'offer',
+    offer_stop_points: [
+      {
+        type: 'pickup',
+        lat: parseFloat(rideData.pickupLat),
+        lng: parseFloat(rideData.pickupLng),
+      },
+      {
+        type: 'dropoff',
+        lat: parseFloat(rideData.dropoffLat),
+        lng: parseFloat(rideData.dropoffLng),
+      },
+    ]
+  });
+  return offer;
+};
+
+const createRide = async (rideData, userId) => {
+  const ride = await Ride.create({
+    ...rideData,
+    userId,
+  });
+
+  const {
+    avatar, firstName, lastName, phoneNumber,
+  } = await User.findById(userId, {attributes: ['avatar', 'firstName', 'lastName', 'phoneNumber']});
+
+  try {
+    const {data: afRide} = await demandApi.post('/api/v1/rides', {
+      external_id: ride.id,
+      offer_id: rideData.offerId,
+      webhook_url: `${webHookHost}/api/v1/ride-webhook/${ride.id}`.replace(/([^:]\/)\/+/g, '$1'),
+      pooling: rideData.rideType === 'pool' ? 'active' : 'no',
+      number_of_passengers: ride.numberOfPassenger,
+      stop_points: [
+        {
+          type: 'pickup',
+          lat: parseFloat(rideData.pickupLat),
+          lng: parseFloat(rideData.pickupLng),
+          description: ride.pickupAddress,
+          contact_person: `${firstName} ${lastName}`,
+          contact_person_phone: phoneNumber,
+          contact_person_avatar: avatar,
+        },
+        {
+          type: 'dropoff',
+          lat: parseFloat(rideData.dropoffLat),
+          lng: parseFloat(rideData.dropoffLng),
+          description: ride.dropoffAddress,
+          contact_person: `${firstName} ${lastName}`,
+          contact_person_phone: phoneNumber,
+          contact_person_avatar: avatar,
+        },
+      ],
     });
-  return newOffer.status === 'rejected' ? null : newOffer;
+
+    if (afRide.status === 'rejected') {
+      ride.state = 'rejected';
+    } else {
+      ride.state = 'active';
+    }
+  } catch (e) {
+    logger.error(e.stack || e);
+    ride.state = 'rejected';
+  }
+
+  await ride.save();
+  return ride;
 };
 
 const rideService = {
-  createOffer,
   create: async (rideData, userId) => {
-    let offer = null;
-    const ride = await Ride.create({
-      ...rideData,
-      userId,
-    });
-
-    const {
-      avatar, firstName, lastName, phoneNumber,
-    } = await User.findById(userId, { attributes: ['avatar', 'firstName', 'lastName', 'phoneNumber'] });
-
-    try {
-      const { data: afRide } = await demandApi.post('/api/v1/rides', {
-        external_id: ride.id,
-        offer_id: rideData.offerId,
-        webhook_url: `${webHookHost}/api/v1/ride-webhook/${ride.id}`.replace(/([^:]\/)\/+/g, '$1'),
-        pooling: rideData.rideType === 'pool' ? 'active' : 'no',
-        number_of_passengers: ride.numberOfPassenger,
-        stop_points: [
-          {
-            type: 'pickup',
-            lat: parseFloat(rideData.pickupLat),
-            lng: parseFloat(rideData.pickupLng),
-            description: ride.pickupAddress,
-            contact_person: `${firstName} ${lastName}`,
-            contact_person_phone: phoneNumber,
-            contact_person_avatar: avatar,
-          },
-          {
-            type: 'dropoff',
-            lat: parseFloat(rideData.dropoffLat),
-            lng: parseFloat(rideData.dropoffLng),
-            description: ride.dropoffAddress,
-            contact_person: `${firstName} ${lastName}`,
-            contact_person_phone: phoneNumber,
-            contact_person_avatar: avatar,
-          },
-        ],
-      });
-
-      if (afRide.status !== 'rejected') {
-        ride.state = 'active';
-      } else {
-        ride.state = 'rejected';
-        offer = await createOffer(afRide);
-      }
-    } catch (e) {
-      ride.state = 'rejected';
-    }
-
-    await ride.save();
+    const offer = await createOffer(rideData);
+    rideData.offerId = offer.id;
+    const ride = await createRide(rideData, userId);
     return { ride, offer };
   },
   getRidderActiveRide: async (userId) => {
