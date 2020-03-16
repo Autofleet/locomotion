@@ -83,12 +83,8 @@ const createRide = async (rideData, userId) => {
 };
 
 const rideService = {
-  create: async (rideData, userId) => {
-    const offer = await createOffer(rideData);
-    rideData.offerId = offer.id;
-    const ride = await createRide(rideData, userId);
-    return { ride, offer };
-  },
+  createOffer: async (rideData) => await createOffer(rideData),
+  create: async (rideData, userId) => await createRide(rideData, userId),
   getRidderActiveRide: async (userId) => {
     const ride = await Ride.findOne({
       where: {
