@@ -1,6 +1,6 @@
 import React, { useState, useRef, Fragment } from 'react';
 import { ScrollView } from 'react-native'
-import Geolocation from '@react-native-community/geolocation';
+import getPosition from './getPostion';
 import network from '../../../services/network';
 import {
   View,
@@ -62,12 +62,6 @@ export default (props) => {
       list: [],
     });
   };
-
-  const getPosition = (options) => {
-    return new Promise((resolve, reject) => {
-      Geolocation.getCurrentPosition(resolve, reject, { enableHighAccuracy: true });
-    });
-  }
 
   const loadAddress = async (input) => {
     try {

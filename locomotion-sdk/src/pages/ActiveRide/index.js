@@ -9,6 +9,7 @@ import polyline from '@mapbox/polyline';
 import moment from 'moment'
 
 import network from '../../services/network';
+import getPosition from './AddressView/getPostion';
 import AddressView from './AddressView';
 import {
   PageContainer, StopPointDot, VehicleDot,
@@ -219,34 +220,25 @@ export default ({ navigation }) => {
   const showsUserLocation = !activeRideState || !activeRideState.vehicle;
   const useSettings = settingsContext.useContainer();
 
-
-
-  const pik = {
-    description: "Habima",
-    lat: 32.07228368629147,
-    lng: 34.778809547424316,
-    distance: 2.011053581715655,
-    distanceFromMe: 1.5201030044417536,
-    type: "pickup"
-  }
-
-  const drop = {
-    description: "Kiryat Sefer 19",
-    lat: 32.070221,
-    lng: 34.782171,
-    distance: 1.2127900072481492,
-    distanceFromMe: 1.243732752778998,
-    type: "dropoff"
-  }
   useEffect(() => {
-    setTimeout(async () => {
-       setRequestStopPoints({
+    setTimeout( async () => {
+      let closestStation;
+      try {
+        const { coords } = await getPosition();
+        const { data } = await network.get('api/v1/me/places', { params: {
+            location: { lat: coords.latitude, lng: coords.longitude }
+          } });
+        closestStation = data[0];
+      } catch (error) {
+        console.log('Got error while try to get current place', error);
+      }
+      setRequestStopPoints({
         openEdit: false,
-        pickup: pik,
-        dropoff: drop
-      })
-    }, 1000)
-  }, [])
+        pickup: closestStation,
+      });
+    }, 0);
+  }, []);
+
   return (
     <PageContainer>
       <MapView
