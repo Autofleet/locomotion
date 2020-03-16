@@ -38,7 +38,7 @@ const getRideState = (activeRide) => { // false, driverOnTheWay, driverArrived, 
 const RideDrawer = ({
   activeRide, openLocationSelect, requestStopPoints, setRideType,
   cancelRide, createRide, readyToBook, rideType, preRideDetails,
-  onNumberOfPassengerChange, numberOfPassenger
+  onNumberOfPassengerChange, numberOfPassenger,createOffer
 }) => {
   const [origin, destination] = activeRide ? activeRide.stop_points || [] : [];
   const [isPopupOpen, togglePopup] = getTogglePopupsState();
@@ -46,7 +46,19 @@ const RideDrawer = ({
   const [pickupEta, setPickupEta] = useState(null)
   const [dropoffEta, setDropoffpEta] = useState(null)
   const rideState = getRideState(activeRide);
-  const onCreateRide = () => (readyToBook ? createRide() : null);
+  const [rideOffer, setRideOffer] = useState(null);
+
+  //const onCreateRide = () => (readyToBook ? createRide() : null);
+  const onCreateRide = async () => {
+    if(readyToBook){
+      const offerData = await createOffer()
+      setRideOffer(offerData)
+    } else {
+      return null;
+    }
+
+  }
+
   const useSettings = settingsContext.useContainer();
 
   useEffect(() => {
@@ -64,6 +76,13 @@ const RideDrawer = ({
       setDropoffpEta(etaDiff)
     }
   }, [origin, destination])
+
+  useEffect(() => {
+    console.log('RideOffer changed');
+    console.log(rideOffer);
+
+
+  }, [rideOffer])
 
   return (
     <Drawer>
@@ -133,26 +152,53 @@ const RideDrawer = ({
             </StopPointsEtaContainer> : null
       }
 
-      {!rideState ? (
+      {!rideState && !rideOffer ? (
         <Fragment>
            <StopPointRow
-          pickup
-          useBorder
-          openLocationSelect={openLocationSelect}
-          description={rideState ? origin && origin.description
-            : requestStopPoints && requestStopPoints.pickup && requestStopPoints.pickup.description}
-            eta={rideState ? origin && origin.eta : undefined}
-            completedAt={rideState ? origin && origin.completed_at
-              : undefined}
+              pickup
+              useBorder={rideOffer === null}
+              openLocationSelect={openLocationSelect}
+              description={rideState ? origin && origin.description
+                : requestStopPoints && requestStopPoints.pickup && requestStopPoints.pickup.description}
+                eta={rideState ? origin && origin.eta : undefined}
+                completedAt={rideState ? origin && origin.completed_at
+                  : undefined}
           />
-        <StopPointRow
-          useBorder
-          openLocationSelect={openLocationSelect}
-          description={rideState ? destination && destination.description
-            : requestStopPoints && requestStopPoints.dropoff && requestStopPoints.dropoff.description}
-            eta={rideState ? destination && destination.eta : undefined}
-            completedAt={rideState ? destination && destination.completed_at
-              : undefined}
+          <StopPointRow
+            useBorder
+            openLocationSelect={openLocationSelect}
+            description={rideState ? destination && destination.description
+              : requestStopPoints && requestStopPoints.dropoff && requestStopPoints.dropoff.description}
+              eta={rideState ? destination && destination.eta : undefined}
+              completedAt={rideState ? destination && destination.completed_at
+                : undefined}
+          />
+          <NumberOfPassenger onChange={onNumberOfPassengerChange} amount={numberOfPassenger} />
+          {/* <Switch onChange={(active) => setRideType(active ? 'pool' : 'private')} active={rideType === 'pool'} /> */}
+          {/*preRideDetails.eta || preRideDetails.estimatePrice ? ( <PreRideBox {...preRideDetails} /> ) : null */}
+        </Fragment>
+      ) : null }
+
+      {!rideState && rideOffer ? (
+        <Fragment>
+           <StopPointRow
+              pickup
+              useBorder={rideOffer === null}
+              openLocationSelect={openLocationSelect}
+              description={rideState ? origin && origin.description
+                : requestStopPoints && requestStopPoints.pickup && requestStopPoints.pickup.description}
+                eta={rideState ? origin && origin.eta : undefined}
+                completedAt={rideState ? origin && origin.completed_at
+                  : undefined}
+          />
+          <StopPointRow
+            useBorder
+            openLocationSelect={openLocationSelect}
+            description={rideState ? destination && destination.description
+              : requestStopPoints && requestStopPoints.dropoff && requestStopPoints.dropoff.description}
+              eta={rideState ? destination && destination.eta : undefined}
+              completedAt={rideState ? destination && destination.completed_at
+                : undefined}
           />
           <NumberOfPassenger onChange={onNumberOfPassengerChange} amount={numberOfPassenger} />
           {/* <Switch onChange={(active) => setRideType(active ? 'pool' : 'private')} active={rideType === 'pool'} /> */}

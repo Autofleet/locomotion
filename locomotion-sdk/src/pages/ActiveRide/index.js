@@ -181,6 +181,24 @@ export default ({ navigation }) => {
     }
   };
 
+  const createOffer = async () => {
+    const { data: response } = await network.post('api/v1/me/rides/offer', {
+      pickupAddress: requestStopPoints.pickup.description,
+      pickupLat: requestStopPoints.pickup.lat,
+      pickupLng: requestStopPoints.pickup.lng,
+      dropoffAddress: requestStopPoints.dropoff.description,
+      dropoffLat: requestStopPoints.dropoff.lat,
+      dropoffLng: requestStopPoints.dropoff.lng,
+      numberOfPassenger,
+      rideType,
+    });
+    if (response.state === 'rejected') {
+      togglePopup('rideRejected', true);
+    } else {
+      return response;
+    }
+  };
+
   const cancelRide = async () => {
     await network.post('api/v1/me/rides/cancel-active-ride');
     return loadActiveRide();
@@ -201,6 +219,34 @@ export default ({ navigation }) => {
   const showsUserLocation = !activeRideState || !activeRideState.vehicle;
   const useSettings = settingsContext.useContainer();
 
+
+
+  const pik = {
+    description: "Habima",
+    lat: 32.07228368629147,
+    lng: 34.778809547424316,
+    distance: 2.011053581715655,
+    distanceFromMe: 1.5201030044417536,
+    type: "pickup"
+  }
+
+  const drop = {
+    description: "Kiryat Sefer 19",
+    lat: 32.070221,
+    lng: 34.782171,
+    distance: 1.2127900072481492,
+    distanceFromMe: 1.243732752778998,
+    type: "dropoff"
+  }
+  useEffect(() => {
+    setTimeout(async () => {
+       setRequestStopPoints({
+        openEdit: false,
+        pickup: pik,
+        dropoff: drop
+      })
+    }, 1000)
+  }, [])
   return (
     <PageContainer>
       <MapView
@@ -264,6 +310,7 @@ export default ({ navigation }) => {
       <RideDrawer
         createRide={createRide}
         cancelRide={cancelRide}
+        createOffer={createOffer}
         readyToBook={bookValidation(requestStopPoints)}
         openLocationSelect={openLocationSelect}
         requestStopPoints={requestStopPoints}
