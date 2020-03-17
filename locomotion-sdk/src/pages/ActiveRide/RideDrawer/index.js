@@ -157,7 +157,6 @@ const RideDrawer = ({
               openLocationSelect={openLocationSelect}
               description={rideState ? origin && origin.description
                 : requestStopPoints && requestStopPoints.pickup && requestStopPoints.pickup.description}
-                eta={rideState ? origin && origin.eta : undefined}
                 completedAt={rideState ? origin && origin.completed_at
                   : undefined}
           />
@@ -166,7 +165,6 @@ const RideDrawer = ({
             openLocationSelect={openLocationSelect}
             description={rideState ? destination && destination.description
               : requestStopPoints && requestStopPoints.dropoff && requestStopPoints.dropoff.description}
-              eta={rideState ? destination && destination.eta : undefined}
               completedAt={rideState ? destination && destination.completed_at
                 : undefined}
           />
@@ -187,9 +185,8 @@ const RideDrawer = ({
               openLocationSelect={openLocationSelect}
               description={rideState ? origin && origin.description
                 : requestStopPoints && requestStopPoints.pickup && requestStopPoints.pickup.description}
-                eta={rideState ? origin && origin.eta : undefined}
-                completedAt={rideState ? origin && origin.completed_at
-                  : undefined}
+              eta={rideState ? origin && origin.eta : undefined}
+              completedAt={rideState ? origin && origin.completed_at : undefined}
               rideOffer={rideOffer}
               etaDrift={useSettings.settingsList.DISPLAY_ETA_DRIFT}
           />

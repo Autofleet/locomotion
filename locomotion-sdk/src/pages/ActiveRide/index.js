@@ -186,6 +186,21 @@ export default ({ navigation }) => {
   };
 
   const createOffer = async () => {
+    const offer = {
+      id: "cf37a79b-fcc5-4e4a-86c6-13b50c8ceefb",
+      status: "created",
+      eta: "2020-03-16T13:44:44.947Z",
+      expires_at: "2020-03-16T13:37:11.801Z",
+      pickup: {
+        eta: moment("2020-03-16T23:44:44.947Z").format()
+      },
+      dropoff: {
+        eta: moment("2020-03-16T23:44:44.947Z").add(20,'minutes').format()
+      }
+    };
+    setRideOffer(offer)
+    return;
+
     const { data: response } = await network.post('api/v1/me/rides/offer', {
       pickupAddress: requestStopPoints.pickup.description,
       pickupLat: requestStopPoints.pickup.lat,

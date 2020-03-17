@@ -78,7 +78,7 @@ export default ({
                 {`${moment(eta).format('HH:mm')} - ${moment(eta).add(etaDrift, 'minutes').format('HH:mm')}`}
             </EtaText>
             <Wrap>
-            {getWarningMessage()}
+                {getWarningMessage()}
             </Wrap>
         </EtaContainer>
     );
