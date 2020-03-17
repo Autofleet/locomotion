@@ -7,13 +7,15 @@ import moment from 'moment';
 
 import I18n from '../../../I18n';
 import {
-  Drawer, RideButton, PreRideBox,RideButtonContainer, StopPointsEtaContainer,RideStatusText,RideStatusContainer
+  Drawer, RideButton, PreRideBox,RideButtonContainer, StopPointsEtaContainer,RideStatusText,RideStatusContainer,CloseContainer, ResetInputIcon
 } from './styled';
 import StopPointRow from './StopPointRow';
 import StopPointEta from './StopPointEta';
+import StopPointRowOffer from './StopPointRowOffer';
 import RideType from './RideType';
 import Switch from '../../../Components/Switch'
 import NumberOfPassenger from './NumberOfPassenger';
+import NumberOfPassengerOffer from './NumberOfPassengerOffer';
 import RoundedButton from '../../../Components/RoundedButton';
 import RideCard from './RideCard';
 import MessageCard from './MessageCard';
@@ -38,7 +40,7 @@ const getRideState = (activeRide) => { // false, driverOnTheWay, driverArrived, 
 const RideDrawer = ({
   activeRide, openLocationSelect, requestStopPoints, setRideType,
   cancelRide, createRide, readyToBook, rideType, preRideDetails,
-  onNumberOfPassengerChange, numberOfPassenger,createOffer
+  onNumberOfPassengerChange, numberOfPassenger,createOffer,rideOffer, cancelOffer
 }) => {
   const [origin, destination] = activeRide ? activeRide.stop_points || [] : [];
   const [isPopupOpen, togglePopup] = getTogglePopupsState();
@@ -46,17 +48,19 @@ const RideDrawer = ({
   const [pickupEta, setPickupEta] = useState(null)
   const [dropoffEta, setDropoffpEta] = useState(null)
   const rideState = getRideState(activeRide);
-  const [rideOffer, setRideOffer] = useState(null);
 
-  //const onCreateRide = () => (readyToBook ? createRide() : null);
-  const onCreateRide = async () => {
-    if(readyToBook){
-      const offerData = await createOffer()
-      setRideOffer(offerData)
-    } else {
-      return null;
-    }
+  const buttonAction = async () => {
+      if(rideState) {
+        return cancelRide();
+      }
 
+      if(!rideOffer && readyToBook) {
+        return createOffer();
+      }
+
+      if(rideOffer) {
+        return createRide();
+      }
   }
 
   const useSettings = settingsContext.useContainer();
@@ -76,13 +80,6 @@ const RideDrawer = ({
       setDropoffpEta(etaDiff)
     }
   }, [origin, destination])
-
-  useEffect(() => {
-    console.log('RideOffer changed');
-    console.log(rideOffer);
-
-
-  }, [rideOffer])
 
   return (
     <Drawer>
@@ -181,7 +178,10 @@ const RideDrawer = ({
 
       {!rideState && rideOffer ? (
         <Fragment>
-           <StopPointRow
+          <CloseContainer onPress={cancelOffer}>
+                <ResetInputIcon />
+            </CloseContainer>
+           <StopPointRowOffer
               pickup
               useBorder={rideOffer === null}
               openLocationSelect={openLocationSelect}
@@ -190,8 +190,10 @@ const RideDrawer = ({
                 eta={rideState ? origin && origin.eta : undefined}
                 completedAt={rideState ? origin && origin.completed_at
                   : undefined}
+              rideOffer={rideOffer}
+              etaDrift={useSettings.settingsList.DISPLAY_ETA_DRIFT}
           />
-          <StopPointRow
+          <StopPointRowOffer
             useBorder
             openLocationSelect={openLocationSelect}
             description={rideState ? destination && destination.description
@@ -199,10 +201,10 @@ const RideDrawer = ({
               eta={rideState ? destination && destination.eta : undefined}
               completedAt={rideState ? destination && destination.completed_at
                 : undefined}
+              rideOffer={rideOffer}
+              etaDrift={useSettings.settingsList.DISPLAY_MAX_ETA_DRIFT}
           />
-          <NumberOfPassenger onChange={onNumberOfPassengerChange} amount={numberOfPassenger} />
-          {/* <Switch onChange={(active) => setRideType(active ? 'pool' : 'private')} active={rideType === 'pool'} /> */}
-          {/*preRideDetails.eta || preRideDetails.estimatePrice ? ( <PreRideBox {...preRideDetails} /> ) : null */}
+          <NumberOfPassengerOffer onChange={onNumberOfPassengerChange} amount={numberOfPassenger} />
         </Fragment>
       ) : null }
 
@@ -210,7 +212,7 @@ const RideDrawer = ({
         : (
           <RideButtonContainer>
             <RideButton
-              onPress={rideState ? cancelRide : onCreateRide}
+              onPress={buttonAction}
               hollow={!readyToBook}>
               {` ${I18n.t(rideState ? 'home.cancelRideButton' : 'home.letsRideButton')} `}
             </RideButton>

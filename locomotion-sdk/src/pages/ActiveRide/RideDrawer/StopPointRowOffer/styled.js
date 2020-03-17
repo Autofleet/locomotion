@@ -1,11 +1,10 @@
 import React from 'react';
 import { View } from 'react-native';
 import styled from 'styled-components';
-import i18n from '../../../I18n';
+import i18n from '../../../../I18n';
 
-import Button from '../../../Components/Button';
-import RideRoundedButton from '../../../Components/RideButton';
-import xIcon from '../../../assets/x.png'
+import Button from '../../../../Components/Button';
+import RideRoundedButton from '../../../../Components/RideButton';
 
 export const Drawer = styled.View`
   position: absolute;
@@ -93,10 +92,8 @@ export const RideDetailsText = styled.Text`
 `;
 
 export const RideButtonContainer = styled.View`
-  padding-top: 10px;
-  padding-bottom: 10px;
-  margin: 0 auto;
-  min-height: 40px;
+  margin: 0 auto 10px auto;
+  height: 40px;
   width: 50%;
 `;
 
@@ -189,20 +186,4 @@ export const RideTypeButtonText = styled.Text`
   background-color: #c9e2f0;
   box-shadow: 0px 5px 5px rgba(0,0,0,0.05);
   ` : null)}
-`;
-
-export const CloseContainer = styled.TouchableOpacity`
-    position: absolute;
-    right: 10px;
-    top: 10px;
-    width: 13px;
-    height: 13px;
-    z-index: 999;
-`;
-
-
-export const ResetInputIcon = styled.Image.attrs({ source: xIcon })`
-    display: flex;
-    height: 12px;
-    width: 12px;
 `;

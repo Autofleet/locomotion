@@ -48,7 +48,6 @@ const PassengerAmountText = styled.Text`
 const MinusIcon = styled.Image.attrs({ source: MinusIconSource })`
   width: 16px;
   height: 3px;
-  background-color: blue;
 `;
 
 const PlusIcon = styled.Image.attrs({ source: PlusIconSource })`

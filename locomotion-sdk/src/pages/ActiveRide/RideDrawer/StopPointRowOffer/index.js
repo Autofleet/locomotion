@@ -2,9 +2,8 @@ import React from 'react';
 import { View } from 'react-native';
 import styled from 'styled-components';
 import moment from 'moment';
-import { RowContainer } from './styled';
-
-import i18n from '../../../I18n';
+import EtaText from './EtaText'
+import i18n from '../../../../I18n';
 
 const address = `
 min-height: 50;
@@ -20,7 +19,6 @@ export const StopPointDot = styled.View`
   height: 10;
   background-color: ${({ origin }) => (origin ? '#6180c0' : '#08902d')};
   border-radius: 10;
-  /* margin-top: 10; */
 `;
 
 
@@ -33,7 +31,7 @@ border-bottom-width: 1;
 const StopPointDotContainer = styled.View`
   position: absolute;
   left: 16;
-  ${({ origin }) => (origin ? 'bottom: -1;' : 'top: 0;')}
+  ${({ origin }) => (origin ? 'bottom: 10;' : 'top: -10;')}
   justify-content: center;
   align-items: center;
   ${({ origin }) => (origin ? '' : 'flex-direction: column-reverse;')}
@@ -44,51 +42,53 @@ const StopPointDotContainer = styled.View`
 const StopPointDotTimeLine = styled.View`
   width: 2;
   flex: 1;
-  background-color: #dbdbdb;
+  background-color: ${({origin}) => origin ? '#6180c0' : '#08902d'};
 `;
 
 
 const AddressTextCont = styled.View`
+  flex: 1;
 `;
 
 const AddressText = styled.Text`
-  font-size: 13;
-  color: #666666;
+  font-size: 14px;
+  color: ${({pickup}) => pickup ? '#6180c0' : '#08902d'};
   margin-start: 22;
   margin-end: 16;
 `;
 
-const EtaText = styled.Text`
-  font-size: 13;
-  color: #808080;
-  margin-start: 22;
-  font-size: 10px;
+
+const RowContainer = styled.View`
+  min-height: 20;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  align-items: center;
+  flex-direction: row;
+  ${({ paddingStart }) => (paddingStart ? `
+  padding-start: 24;
+  ` : null)}
+  ${({ useBorder }) => (useBorder ? `
+    border-bottom-color: #e2e2e2;
+    border-bottom-width: 1;
+  ` : null)}
 `;
 
-
-
 export default ({
-  pickup, description, eta, completedAt, openLocationSelect, useBorder
+  pickup, description, eta, completedAt, openLocationSelect, useBorder,rideOffer,etaDrift
 }) => (
-  <RowContainer pickup={pickup} onPress={openLocationSelect} useBorder={useBorder} paddingStart>
+  <RowContainer pickup={pickup} useBorder={useBorder} paddingStart>
     <StopPointDotContainer origin={pickup}>
       <StopPointDot origin={pickup} />
-      <StopPointDotTimeLine />
+      <StopPointDotTimeLine origin={pickup} />
     </StopPointDotContainer>
     <AddressTextCont>
-      <View>
-        <AddressText numberOfLines={2}>
-          {description || i18n.t(pickup ? 'home.choosePickup' : 'home.chooseDropoff')}
-        </AddressText>
-      </View>
-      <View>
-        {eta || completedAt ? (
-          <EtaText>
-            {moment(eta || completedAt).fromNow() }
-          </EtaText>
-        ) : null }
-      </View>
+      <AddressText numberOfLines={2} pickup={pickup}>
+        {`${pickup ? 'Boarding' : 'Exit'}: ${description}`}
+      </AddressText>
+      <EtaText eta={rideOffer[(pickup ? 'pickup' : 'dropoff')].eta} etaDrift={etaDrift} pickup={pickup} />
     </AddressTextCont>
   </RowContainer>
 );
+
+
 
