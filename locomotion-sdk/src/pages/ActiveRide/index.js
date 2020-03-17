@@ -59,7 +59,8 @@ export default ({ navigation }) => {
   const [pickupEta, setPickupEta] = useState(null)
   const [displayMatchInfo, setDisplayMatchInfo] = useState(false)
   const [rideOffer, setRideOffer] = useState(null);
-
+  const [offerExpired, setOfferExpired] = useState(false);
+  const [offerTimer, setOfferTimer] = useState(false);
   const mapInstance = useRef();
 
   const loadActiveRide = async () => {
@@ -166,6 +167,8 @@ export default ({ navigation }) => {
   };
 
   const createRide = async () => {
+    clearTimeout(offerTimer);
+
     const { data: response } = await network.post('api/v1/me/rides', {
       pickupAddress: requestStopPoints.pickup.description,
       pickupLat: requestStopPoints.pickup.lat,
@@ -177,7 +180,7 @@ export default ({ navigation }) => {
       rideType,
     });
     if (response.state === 'rejected') {
-      setRideOffer(null);s
+      setRideOffer(null);
       togglePopup('rideRejected', true);
     } else {
       await loadActiveRide();
@@ -192,13 +195,19 @@ export default ({ navigation }) => {
       eta: "2020-03-16T13:44:44.947Z",
       expires_at: "2020-03-16T13:37:11.801Z",
       pickup: {
-        eta: moment("2020-03-16T23:44:44.947Z").format()
+        eta: moment().add(10).format()
       },
       dropoff: {
-        eta: moment("2020-03-16T23:44:44.947Z").add(20,'minutes').format()
+        eta: moment().add(20,'minutes').format()
       }
     };
-    setRideOffer(offer)
+    await new Promise((resolve) => {
+      setTimeout(() => {
+        setRideOffer(offer)
+        resolve();
+      }, 1500)
+    })
+
     return;
 
     const { data: response } = await network.post('api/v1/me/rides/offer', {
@@ -243,25 +252,40 @@ export default ({ navigation }) => {
   const showsUserLocation = !activeRideState || !activeRideState.vehicle;
   const useSettings = settingsContext.useContainer();
 
+  const setClosestStations = async () => {
+    let closestStation;
+    try {
+      const { coords } = await getPosition();
+      const { data } = await network.get('api/v1/me/places', { params: {
+          location: { lat: coords.latitude, lng: coords.longitude }
+        } });
+        console.log(data);
+
+      closestStation = data[0];
+    } catch (error) {
+      console.log('Got error while try to get current place', error);
+    }
+    setRequestStopPoints({
+      openEdit: false,
+      pickup: closestStation,
+    });
+  };
+
   useEffect(() => {
-    setTimeout( async () => {
-      let closestStation;
-      try {
-        const { coords } = await getPosition();
-        const { data } = await network.get('api/v1/me/places', { params: {
-            location: { lat: coords.latitude, lng: coords.longitude }
-          } });
-        closestStation = data[0];
-      } catch (error) {
-        console.log('Got error while try to get current place', error);
-      }
-      setRequestStopPoints({
-        openEdit: false,
-        pickup: closestStation,
-      });
-    }, 0);
+    setClosestStations();
   }, []);
 
+  useEffect(() => {
+    let offerTimeout;
+    if(rideOffer) {
+      setOfferExpired(false)
+      setOfferTimer(setTimeout(() => {
+        setOfferExpired(true)
+      }, 10000));
+    } else {
+      clearTimeout(offerTimer)
+    }
+  }, [rideOffer])
   return (
     <PageContainer>
       <MapView
@@ -337,6 +361,7 @@ export default ({ navigation }) => {
         numberOfPassenger={numberOfPassenger}
         rideOffer={rideOffer}
         cancelOffer={cancelOffer}
+        offerExpired={offerExpired}
       />
       {
           requestStopPoints.openEdit

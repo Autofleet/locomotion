@@ -3,20 +3,22 @@ import { View } from 'react-native';
 import styled from 'styled-components';
 import i18n from '../../../I18n';
 
-import Button from '../../../Components/Button';
 import RideRoundedButton from '../../../Components/RideButton';
+import RoundedButton from '../../../Components/RoundedButton';
+import Button from '../../../Components/Button';
 import xIcon from '../../../assets/x.png'
 
 export const Drawer = styled.View`
-  position: absolute;
+ /*  position: absolute;
   bottom: 50;
-  width: 90%;
+  width: 90%; */
   background-color: #fff;
-  left: 5%;
-  border-radius: 10;
+  border-radius: 4;
+  /* left: 5%;
+  border-radius: 4;
   shadow-offset: 0px 0px;
   shadow-color: #04214f;
-  shadow-opacity: 0.4;
+  shadow-opacity: 0.4; */
 
 `;
 
@@ -97,10 +99,18 @@ export const RideButtonContainer = styled.View`
   padding-bottom: 10px;
   margin: 0 auto;
   min-height: 40px;
+  width: 100%;
+`;
+
+export const DrawerButtonContainer = styled.View`
+  padding-top: 10px;
+  padding-bottom: 10px;
+  margin: 0 auto;
+  min-height: 40px;
   width: 50%;
 `;
 
-export const RideButton = styled(RideRoundedButton)`
+export const AcceptOfferButton = styled(RoundedButton)`
   /*
   ${({ inRide, readyToBook }) => {
     if (inRide) {
@@ -205,4 +215,24 @@ export const ResetInputIcon = styled.Image.attrs({ source: xIcon })`
     display: flex;
     height: 12px;
     width: 12px;
+`;
+
+export const DrawerContainer = styled.View`
+  flex-direction: column;
+  position: absolute;
+  bottom: 50;
+  width: 90%;
+  left: 5%;
+  border-radius: 4;
+  shadow-offset: 0px 0px;
+  shadow-color: #04214f;
+  shadow-opacity: 0.4;
+
+`
+
+export const OfferExpiredText = styled.Text`
+  font-size: 12;
+  color: #b5b5b5;
+  text-align: center;
+  margin-bottom: 5px;
 `;

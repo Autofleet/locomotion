@@ -58,7 +58,10 @@
         },
         "offerCard": {
             "etaNotice": "High Demand! Waiting Time > {{etaThreshold}} min",
-            "passengersNumber": "Passengers"
+            "passengersNumber": "Passengers",
+            "confirmOffer": "Book Now",
+            "expiredOffer": "Renew",
+            "expiredOfferText": "Your request expired"
         }
     },
     "lock": {

@@ -6,7 +6,6 @@ import { Trans } from 'react-i18next';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import network from '../../services/network';
 import Auth from '../../services/auth';
-// import SubmitButton from '../../Components/Button/Gradient';
 import SubmitButton from '../../Components/RoundedButton';
 
 import {

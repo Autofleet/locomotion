@@ -2,12 +2,24 @@ import React, { Fragment, useState, useEffect } from 'react';
 import {
   View,
   Image,
+  Text
 } from 'react-native';
 import moment from 'moment';
 
 import I18n from '../../../I18n';
 import {
-  Drawer, RideButton, PreRideBox,RideButtonContainer, StopPointsEtaContainer,RideStatusText,RideStatusContainer,CloseContainer, ResetInputIcon
+  Drawer,
+  AcceptOfferButton,
+  PreRideBox,
+  RideButtonContainer,
+  StopPointsEtaContainer,
+  RideStatusText,
+  RideStatusContainer,
+  CloseContainer,
+  ResetInputIcon,
+  DrawerContainer,
+  DrawerButtonContainer,
+  OfferExpiredText
 } from './styled';
 import StopPointRow from './StopPointRow';
 import StopPointEta from './StopPointEta';
@@ -17,6 +29,7 @@ import Switch from '../../../Components/Switch'
 import NumberOfPassenger from './NumberOfPassenger';
 import NumberOfPassengerOffer from './NumberOfPassengerOffer';
 import RoundedButton from '../../../Components/RoundedButton';
+import RideButton from '../../../Components/RideButton'
 import RideCard from './RideCard';
 import MessageCard from './MessageCard';
 import { getTogglePopupsState } from '../../../context/main'
@@ -40,13 +53,14 @@ const getRideState = (activeRide) => { // false, driverOnTheWay, driverArrived, 
 const RideDrawer = ({
   activeRide, openLocationSelect, requestStopPoints, setRideType,
   cancelRide, createRide, readyToBook, rideType, preRideDetails,
-  onNumberOfPassengerChange, numberOfPassenger,createOffer,rideOffer, cancelOffer
+  onNumberOfPassengerChange, numberOfPassenger,createOffer,rideOffer, cancelOffer,offerExpired
 }) => {
   const [origin, destination] = activeRide ? activeRide.stop_points || [] : [];
   const [isPopupOpen, togglePopup] = getTogglePopupsState();
   const [appSettings, setAppSettings] = useState({})
   const [pickupEta, setPickupEta] = useState(null)
   const [dropoffEta, setDropoffpEta] = useState(null)
+  const [loading, setLoading] = useState(false)
   const rideState = getRideState(activeRide);
 
   const buttonAction = async () => {
@@ -54,7 +68,7 @@ const RideDrawer = ({
         return cancelRide();
       }
 
-      if(!rideOffer && readyToBook) {
+      if((!rideOffer && readyToBook) || (rideOffer && offerExpired)) {
         return createOffer();
       }
 
@@ -82,6 +96,7 @@ const RideDrawer = ({
   }, [origin, destination])
 
   return (
+    <DrawerContainer>
     <Drawer>
       <MessageCard
         title={I18n.t('popups.rideCancel.main')}
@@ -124,6 +139,7 @@ const RideDrawer = ({
       {rideState && (pickupEta <= useSettings.settingsList.ARRIVE_REMINDER_MIN || rideState !== 'driverOnTheWay')  ?
         <RideCard activeRide={activeRide} rideState={rideState}></RideCard> :
           rideState ?
+          <Fragment>
           <StopPointsEtaContainer>
             <StopPointEta
               pickup
@@ -146,7 +162,17 @@ const RideDrawer = ({
                   : undefined}
                 etaDrift={useSettings.settingsList.DISPLAY_MAX_ETA_DRIFT}
               />
-            </StopPointsEtaContainer> : null
+            </StopPointsEtaContainer>
+            <DrawerButtonContainer>
+              <AcceptOfferButton
+                onPress={buttonAction}
+                hollow
+              >
+                {` ${I18n.t(rideState ? 'home.cancelRideButton' : 'home.letsRideButton')} `}
+              </AcceptOfferButton>
+            </DrawerButtonContainer>
+          </Fragment>
+            : null
       }
 
       {!rideState && !rideOffer ? (
@@ -176,9 +202,10 @@ const RideDrawer = ({
 
       {!rideState && rideOffer ? (
         <Fragment>
+          {!loading ?
           <CloseContainer onPress={cancelOffer}>
-                <ResetInputIcon />
-            </CloseContainer>
+            <ResetInputIcon />
+          </CloseContainer> : null}
            <StopPointRowOffer
               pickup
               useBorder={rideOffer === null}
@@ -202,22 +229,34 @@ const RideDrawer = ({
               etaDrift={useSettings.settingsList.DISPLAY_MAX_ETA_DRIFT}
           />
           <NumberOfPassengerOffer onChange={onNumberOfPassengerChange} amount={numberOfPassenger} />
+          <DrawerButtonContainer>
+          <OfferExpiredText>
+            {`${offerExpired ? I18n.t('home.offerCard.expiredOfferText') : ''}`}</OfferExpiredText>
+            <AcceptOfferButton
+              onPress={buttonAction}
+              setLoading={setLoading}
+              hollow={offerExpired}
+            >
+              {`${I18n.t(!offerExpired ? 'home.offerCard.confirmOffer' : 'home.offerCard.expiredOffer')}`}
+            </AcceptOfferButton>
+          </DrawerButtonContainer>
         </Fragment>
+
       ) : null }
 
-      {rideState === 'onBoard' ? null
-        : (
-          <RideButtonContainer>
-            <RideButton
-              onPress={buttonAction}
-              hollow={!readyToBook}>
-              {` ${I18n.t(rideState ? 'home.cancelRideButton' : 'home.letsRideButton')} `}
-            </RideButton>
-          </RideButtonContainer>
-        )
-      }
       </Fragment> : null}
     </Drawer>
+    {!rideState && !isPopupOpen('ridePopupsStatus') && !rideOffer ?
+     <RideButtonContainer>
+        <RideButton
+          onPress={buttonAction}
+        >
+          {` ${I18n.t(rideState ? 'home.cancelRideButton' : 'home.letsRideButton')} `}
+        </RideButton>
+      </RideButtonContainer>
+    : null
+    }
+    </DrawerContainer>
   );
 };
 

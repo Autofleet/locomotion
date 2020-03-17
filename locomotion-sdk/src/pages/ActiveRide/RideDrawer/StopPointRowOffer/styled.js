@@ -3,7 +3,6 @@ import { View } from 'react-native';
 import styled from 'styled-components';
 import i18n from '../../../../I18n';
 
-import Button from '../../../../Components/Button';
 import RideRoundedButton from '../../../../Components/RideButton';
 
 export const Drawer = styled.View`
