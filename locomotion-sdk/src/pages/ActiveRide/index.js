@@ -9,6 +9,7 @@ import polyline from '@mapbox/polyline';
 import moment from 'moment'
 
 import network from '../../services/network';
+import getPosition from './AddressView/getPostion';
 import AddressView from './AddressView';
 import {
   PageContainer, StopPointDot, VehicleDot,
@@ -226,6 +227,25 @@ export default ({ navigation }) => {
 
   const showsUserLocation = !activeRideState || !activeRideState.vehicle;
   const useSettings = settingsContext.useContainer();
+
+  useEffect(() => {
+    setTimeout( async () => {
+      let closestStation;
+      try {
+        const { coords } = await getPosition();
+        const { data } = await network.get('api/v1/me/places', { params: {
+            location: { lat: coords.latitude, lng: coords.longitude }
+          } });
+        closestStation = data[0];
+      } catch (error) {
+        console.log('Got error while try to get current place', error);
+      }
+      setRequestStopPoints({
+        openEdit: false,
+        pickup: closestStation,
+      });
+    }, 0);
+  }, []);
 
   return (
     <PageContainer>
