@@ -34,9 +34,10 @@ export default (props) => {
 
   const enrichPlaceWithLocation = async (place) => {
     const { data } = await network.get('api/v1/me/places/get-location', { params: {
-      placeId: place.placeid,
+      placeId: (place.placeid || place.place_id),
     } });
     place = { ...place, ...data };
+    return place;
   }
 
   const setPlace = async (place) => {
@@ -47,8 +48,8 @@ export default (props) => {
       setSearchDropoffText(place.description);
     }
 
-    if (!place.lat && place.placeid) {
-      await enrichPlaceWithLocation(place);
+    if (!place.lat && (place.placeid || place.place_id)) {
+      place = await enrichPlaceWithLocation(place);
     }
 
     if (props.onLocationSelect) {
@@ -133,9 +134,10 @@ export default (props) => {
             <AddressSearchItemText>
               {item.description}
             </AddressSearchItemText>
+            {item.distance ?
             <DistanceFromAddress>
-              {item.distance ? item.distanceFromMe.toFixed(2) : null}km
-            </DistanceFromAddress>
+              {item.distance ? `${item.distanceFromMe.toFixed(2)}km` : null}
+            </DistanceFromAddress> : null}
           </AddressSearchItem>
         ))}
       </ScrollView>
