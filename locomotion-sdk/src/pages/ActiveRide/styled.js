@@ -72,3 +72,9 @@ export const MarkerToolTipText = styled.Text`
     font-size: 10px;
     font-weight: 700;
 `;
+
+export const MarkerContainer = styled.View`
+  display: flex;
+  flex-direction: column
+  align-items: center;
+`;
