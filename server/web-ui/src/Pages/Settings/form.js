@@ -111,6 +111,32 @@ const SettingsForm = ({
                         />
                     </SettingsPanelItem>
 
+                    <SettingsPanelItem type='text'>
+                        <Field
+                            name="ETA_MEDIUM_TRESHOLD"
+                            label={i18n.t('settings.labels.displayMediumEta')}
+                            type="number"
+                            component={InputWithLabel}
+                            inputComponent={NumberInput}
+                            errorMessage={errors.DISPLAY_MAX_ETA_DRIFT}
+                            min="0"
+                            inlineField
+                        />
+                    </SettingsPanelItem>
+
+                    <SettingsPanelItem type='text'>
+                        <Field
+                            name="ETA_HIGH_TRESHOLD"
+                            label={i18n.t('settings.labels.displayHighEta')}
+                            type="number"
+                            component={InputWithLabel}
+                            inputComponent={NumberInput}
+                            errorMessage={errors.DISPLAY_MAX_ETA_DRIFT}
+                            min="0"
+                            inlineField
+                        />
+                    </SettingsPanelItem>
+
                     <SettingsPanelItem type='submit'>
                         <ApplyButton
                             redButtons={false}
