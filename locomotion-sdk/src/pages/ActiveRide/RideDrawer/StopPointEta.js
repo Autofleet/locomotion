@@ -77,17 +77,16 @@ export const RowContainer = styled.TouchableOpacity`
 
 const StopPointTitle = styled.Text`
   font-size: 14px;
-  color: ${({pickup}) => pickup ? '#6180c0' : '#08902d'};
+  color: ${({ pickup }) => (pickup ? '#6180c0' : '#08902d')};
   line-height: 16px;
 `;
 
 export default ({
-  pickup, description, eta, completedAt, openLocationSelect, etaDrift, paddingStart
-}) => {
-  return (
-  <RowContainer pickup={pickup} onPress={openLocationSelect} paddingStart={paddingStart} >
+  pickup, description, eta, completedAt, openLocationSelect, etaDrift, paddingStart,
+}) => (
+  <RowContainer pickup={pickup} onPress={openLocationSelect} paddingStart={paddingStart}>
     <AddressTextCont>
-    <View>
+      <View>
         <StopPointTitle pickup={pickup}>
           {i18n.t(pickup ? 'home.bookingCard.pickupEtaTitle' : 'home.bookingCard.dropoffEtaTitle')}
         </StopPointTitle>
@@ -100,7 +99,7 @@ export default ({
       <View>
         {eta || completedAt ? (
           <EtaText>
-              {`${moment(eta).format('HH:mm')} - ${moment(eta).add(etaDrift, 'minutes').format('HH:mm')}`}
+            {`${moment(eta).format('HH:mm')} - ${moment(eta).add(etaDrift, 'minutes').format('HH:mm')}`}
             {/* moment(eta || completedAt).fromNow() */}
           </EtaText>
         ) : null }
@@ -108,5 +107,3 @@ export default ({
     </AddressTextCont>
   </RowContainer>
 );
-
-        }

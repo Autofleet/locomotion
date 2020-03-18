@@ -6,7 +6,7 @@ import i18n from '../../../I18n';
 import RideRoundedButton from '../../../Components/RideButton';
 import RoundedButton from '../../../Components/RoundedButton';
 import Button from '../../../Components/Button';
-import xIcon from '../../../assets/x.png'
+import xIcon from '../../../assets/x.png';
 
 export const Drawer = styled.View`
  /*  position: absolute;
@@ -86,11 +86,11 @@ export const RideDetailsText = styled.Text`
   margin-start: 10;
   text-align: ${({ right }) => (right ? 'right' : 'left')};
 
-  ${({subText}) => subText ? `
+  ${({ subText }) => (subText ? `
     font-weight: 500;
     font-size: 12;
     margin-top: 5px;
-  ` : null}
+  ` : null)}
   /* background-color: red; */
 `;
 
@@ -166,13 +166,19 @@ const EtaTitleText = styled.Text`
 
 export const PreRideBox = styled(({ eta, estimatePrice, ...props }) => (
   <View {...props}>
-    <EtaContainer><EtaTitleText>ETA: </EtaTitleText><EtaText>{eta ? eta.toFixed(0) : ''}</EtaText></EtaContainer>
+    <EtaContainer>
+      <EtaTitleText>ETA: </EtaTitleText>
+      <EtaText>{eta ? eta.toFixed(0) : ''}</EtaText>
+    </EtaContainer>
     <EtaContainer right>
       <EtaTitleText>Estimate price: </EtaTitleText>
-      <EtaText>{estimatePrice ? estimatePrice.toFixed(0) : ''}{i18n.t('currency')}</EtaText>
+      <EtaText>
+        {estimatePrice ? estimatePrice.toFixed(0) : ''}
+        {i18n.t('currency')}
+      </EtaText>
     </EtaContainer>
   </View>
-  ))`
+))`
     padding: 10px 25px;
     width: 100%;
     justify-content: space-between;
@@ -227,8 +233,7 @@ export const DrawerContainer = styled.View`
   shadow-offset: 0px 0px;
   shadow-color: #04214f;
   shadow-opacity: 0.4;
-
-`
+`;
 
 export const OfferExpiredText = styled.Text`
   font-size: 12;

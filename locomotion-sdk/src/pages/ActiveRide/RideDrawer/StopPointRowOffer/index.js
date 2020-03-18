@@ -2,7 +2,7 @@ import React from 'react';
 import { View } from 'react-native';
 import styled from 'styled-components';
 import moment from 'moment';
-import EtaText from './EtaText'
+import EtaText from './EtaText';
 import i18n from '../../../../I18n';
 
 const address = `
@@ -30,7 +30,7 @@ border-bottom-width: 1;
 
 const StopPointDotContainer = styled.View`
   position: absolute;
-  left: 16;
+  left: 35;
   ${({ origin }) => (origin ? 'bottom: 10;' : 'top: -10;')}
   justify-content: center;
   align-items: center;
@@ -42,7 +42,7 @@ const StopPointDotContainer = styled.View`
 const StopPointDotTimeLine = styled.View`
   width: 2;
   flex: 1;
-  background-color: ${({origin}) => origin ? '#6180c0' : '#08902d'};
+  background-color: ${({ origin }) => (origin ? '#6180c0' : '#08902d')};
 `;
 
 
@@ -52,7 +52,7 @@ const AddressTextCont = styled.View`
 
 const AddressText = styled.Text`
   font-size: 14px;
-  color: ${({pickup}) => pickup ? '#6180c0' : '#08902d'};
+  color: ${({ pickup }) => (pickup ? '#6180c0' : '#08902d')};
   margin-start: 22;
   margin-end: 16;
 `;
@@ -65,7 +65,7 @@ const RowContainer = styled.View`
   align-items: center;
   flex-direction: row;
   ${({ paddingStart }) => (paddingStart ? `
-  padding-start: 24;
+  padding-start: 40;
   ` : null)}
   ${({ useBorder }) => (useBorder ? `
     border-bottom-color: #e2e2e2;
@@ -73,14 +73,33 @@ const RowContainer = styled.View`
   ` : null)}
 `;
 
+const OfferRideEtaContainer = styled.TouchableOpacity`
+    position: absolute;
+    left: 10px;
+    bottom: -3px;
+    z-index: 999;
+`;
+const OfferRideEtaText = styled.Text`
+  font-size: 9;
+  color: #b5b5b5;
+  text-align: center;
+  margin-bottom: 5px;
+`;
+
 export default ({
-  pickup, description, eta, completedAt, openLocationSelect, useBorder,rideOffer,etaDrift
+  pickup, description, eta, completedAt, openLocationSelect, useBorder, rideOffer, etaDrift,
 }) => (
   <RowContainer pickup={pickup} useBorder={useBorder} paddingStart>
     <StopPointDotContainer origin={pickup}>
       <StopPointDot origin={pickup} />
       <StopPointDotTimeLine origin={pickup} />
     </StopPointDotContainer>
+    {pickup
+      ? (
+        <OfferRideEtaContainer>
+          <OfferRideEtaText>8 min</OfferRideEtaText>
+        </OfferRideEtaContainer>
+      ) : null}
     <AddressTextCont>
       <AddressText numberOfLines={2} pickup={pickup}>
         {`${pickup ? 'Boarding' : 'Exit'}: ${description}`}
@@ -89,6 +108,3 @@ export default ({
     </AddressTextCont>
   </RowContainer>
 );
-
-
-
