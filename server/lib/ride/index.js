@@ -11,7 +11,7 @@ const demandApi = axios.create({
 const webHookHost = process.env.SERVER_HOST || 'https://716ee2e6.ngrok.io';
 
 const createOffer = async (rideData) => {
-  const {data: offer} = await demandApi.post('/api/v1/offers', {
+  const { data: offer } = await demandApi.post('/api/v1/offers', {
     type: 'offer',
     offer_stop_points: [
       {
@@ -24,7 +24,8 @@ const createOffer = async (rideData) => {
         lat: parseFloat(rideData.dropoffLat),
         lng: parseFloat(rideData.dropoffLng),
       },
-    ]
+    ],
+    number_of_passengers: rideData.numberOfPassengers,
   });
   return offer;
 };
@@ -37,10 +38,10 @@ const createRide = async (rideData, userId) => {
 
   const {
     avatar, firstName, lastName, phoneNumber,
-  } = await User.findById(userId, {attributes: ['avatar', 'firstName', 'lastName', 'phoneNumber']});
+  } = await User.findById(userId, { attributes: ['avatar', 'firstName', 'lastName', 'phoneNumber'] });
 
   try {
-    const {data: afRide} = await demandApi.post('/api/v1/rides', {
+    const { data: afRide } = await demandApi.post('/api/v1/rides', {
       external_id: ride.id,
       offer_id: rideData.offerId,
       webhook_url: `${webHookHost}/api/v1/ride-webhook/${ride.id}`.replace(/([^:]\/)\/+/g, '$1'),
@@ -83,7 +84,7 @@ const createRide = async (rideData, userId) => {
 };
 
 const rideService = {
-  createOffer: async (rideData) => await createOffer(rideData),
+  createOffer: async rideData => await createOffer(rideData),
   create: async (rideData, userId) => await createRide(rideData, userId),
   getRidderActiveRide: async (userId) => {
     const ride = await Ride.findOne({

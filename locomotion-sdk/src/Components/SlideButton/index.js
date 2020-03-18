@@ -7,22 +7,30 @@ import LinearGradient from '../LinearGradient';
 
 import { inputHeight, appPalette } from '../../assets/style-settings';
 
+const arrowIcon = require('../../assets/slider-arrow.png');
+const checkIcon = require('../../assets/check.png');
+
 const SliderContainer = styled.View`
   border-radius: 24px;
-  height: 40px;
-
-  margin-bottom: 20px;
-  width: 80%;
-  margin: 20px auto;
+  height: 50px;
+  width: 100%;
 `;
 
 const ButtonText = styled.Text`
   color: ${({ verified }) => (!verified ? '#08355c' : '#ffffff')};
 `;
 
+export const DrawerButtonContainer = styled.View`
+  padding-top: 10px;
+  padding-bottom: 20px;
+  margin: 0 auto;
+  min-height: 40px;
+  width: 70%;
+`;
+
 const styleScheme = {
   default: {
-    buttonSize: 60,
+    buttonSize: 50,
     backgroundColor: '#f0f0f0',
     textColor: '#08355c',
     buttonColor: '#08355c',
@@ -40,40 +48,57 @@ const Button = ({
   const [loadingState, setLoadingState] = useState(false);
   const [verifiedState, setVerifiedState] = useState(false);
   const sliderRef = useRef();
+  const loaderRef = useRef();
   const onPressWithLoading = async (args) => {
     setLoadingState(true);
-    await onPress(args);
+    await onVerified();
     return setLoadingState(false);
   };
 
+  useEffect(() => {
+    setLoading(loadingState);
+  }, [loadingState]);
   return (
-    <SliderContainer>
-      <RNSwipeVerify
-        ref={ref => sliderRef.current = ref}
-        okButton={{ visible: true, duration: 400 }}
-        onVerified={async () => {
-          try {
-            await onVerified();
-            setVerifiedState(true);
-          } catch (e) {
-            sliderRef.current.reset();
-          }
-        }}
-        icon={(
-          <Image
-            source={require('../../assets/slider-arrow.png')}
-            style={{ width: 40, height: 40 }}
-          />
-        )}
-        {...styleScheme.default}
-        {...(verifiedState ? styleScheme.verified : {})}
-        {...props}
-      >
-        <ButtonText verified={verifiedState}>
-          {!verifiedState ? 'Book Now' : 'Ride has been booked'}
-        </ButtonText>
-      </RNSwipeVerify>
-    </SliderContainer>
+    <DrawerButtonContainer>
+      <SliderContainer>
+        <RNSwipeVerify
+          ref={ref => sliderRef.current = ref}
+          okButton={{ visible: true, duration: 400 }}
+          onVerified={async () => {
+            try {
+              await onPressWithLoading();
+              setVerifiedState(true);
+            } catch (e) {
+              sliderRef.current.reset();
+            }
+          }}
+          icon={!loadingState ? (
+            <Image
+              source={!verifiedState ? arrowIcon : checkIcon}
+              style={{ width: 30, height: 30 }}
+            />
+          ) : (
+            <LottieView
+              style={{
+                width: 50,
+                height: 50,
+              }}
+              autoPlay
+              loop
+              source={require('./loader.json')}
+            />
+
+          )}
+          {...styleScheme.default}
+          {...(verifiedState ? styleScheme.verified : {})}
+          {...props}
+        >
+          <ButtonText verified={verifiedState}>
+            {!verifiedState ? 'Book Now' : 'Ride has been booked'}
+          </ButtonText>
+        </RNSwipeVerify>
+      </SliderContainer>
+    </DrawerButtonContainer>
   );
 };
 

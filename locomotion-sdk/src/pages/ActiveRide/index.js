@@ -49,7 +49,7 @@ export default ({ navigation }) => {
     longitudeDelta: 0.0421,
   });
   const [activeSpState, setActiveSp] = useState(null);
-  const [numberOfPassenger, setNumberOfPassenger] = useState(1);
+  const [numberOfPassengers, setNumberOfPassengers] = useState(1);
   const [stopPoints, setStopPoints] = useState(null);
   const [, togglePopup] = getTogglePopupsState();
   const [requestStopPoints, setRequestStopPoints] = useState({
@@ -176,40 +176,21 @@ export default ({ navigation }) => {
       dropoffAddress: requestStopPoints.dropoff.description,
       dropoffLat: requestStopPoints.dropoff.lat,
       dropoffLng: requestStopPoints.dropoff.lng,
-      numberOfPassenger,
+      numberOfPassengers,
       rideType,
     });
     if (response.state === 'rejected') {
       setRideOffer(null);
       togglePopup('rideRejected', true);
     } else {
-      await loadActiveRide();
-      setRideOffer(null);
+      setTimeout(async () => {
+        await loadActiveRide();
+        setRideOffer(null);
+      }, 2500);
     }
   };
 
   const createOffer = async () => {
-    const offer = {
-      id: 'cf37a79b-fcc5-4e4a-86c6-13b50c8ceefb',
-      status: 'created',
-      eta: '2020-03-16T13:44:44.947Z',
-      expires_at: '2020-03-16T13:37:11.801Z',
-      pickup: {
-        eta: moment().add(10).format(),
-      },
-      dropoff: {
-        eta: moment().add(20, 'minutes').format(),
-      },
-    };
-    await new Promise((resolve) => {
-      setTimeout(() => {
-        setRideOffer(offer);
-        resolve();
-      }, 1500);
-    });
-
-    return;
-
     const { data: response } = await network.post('api/v1/me/rides/offer', {
       pickupAddress: requestStopPoints.pickup.description,
       pickupLat: requestStopPoints.pickup.lat,
@@ -217,9 +198,11 @@ export default ({ navigation }) => {
       dropoffAddress: requestStopPoints.dropoff.description,
       dropoffLat: requestStopPoints.dropoff.lat,
       dropoffLng: requestStopPoints.dropoff.lng,
-      numberOfPassenger,
+      numberOfPassengers,
       rideType,
     });
+
+
     if (response.state === 'rejected') {
       togglePopup('rideRejected', true);
     } else {
@@ -277,6 +260,8 @@ export default ({ navigation }) => {
 
   useEffect(() => {
     let offerTimeout;
+    console.log(rideOffer);
+
     if (rideOffer) {
       setOfferExpired(false);
       setOfferTimer(setTimeout(() => {
@@ -288,6 +273,10 @@ export default ({ navigation }) => {
   }, [rideOffer]);
 
   useEffect(() => {
+    console.log('NUMMM');
+    console.log(rideOffer);
+  }, [rideOffer]);
+  /*   useEffect(() => {
     const offer = {
       id: 'cf37a79b-fcc5-4e4a-86c6-13b50c8ceefb',
       status: 'created',
@@ -301,7 +290,7 @@ export default ({ navigation }) => {
       },
     };
     setRideOffer(offer);
-  }, []);
+  }, []); */
   return (
     <PageContainer>
       <MapView
@@ -373,8 +362,8 @@ export default ({ navigation }) => {
         rideType={rideType}
         setRideType={setRideType}
         preRideDetails={preRideDetails}
-        onNumberOfPassengerChange={setNumberOfPassenger}
-        numberOfPassenger={numberOfPassenger}
+        onNumberOfPassengerChange={setNumberOfPassengers}
+        numberOfPassenger={numberOfPassengers}
         rideOffer={rideOffer}
         cancelOffer={cancelOffer}
         offerExpired={offerExpired}

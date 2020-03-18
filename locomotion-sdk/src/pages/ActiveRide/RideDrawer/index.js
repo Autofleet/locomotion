@@ -238,26 +238,33 @@ const RideDrawer = ({
                     rideOffer={rideOffer}
                     etaDrift={useSettings.settingsList.DISPLAY_MAX_ETA_DRIFT}
                   />
-                  <NumberOfPassengerOffer onChange={onNumberOfPassengerChange} amount={numberOfPassenger} />
-                  {/*                   <SliderButton
-                    onVerified={buttonAction}
-                    setLoading={setLoading}
-                  /> */}
+                  <NumberOfPassengerOffer amount={rideOffer.numberOfPassengers} />
 
-                  <DrawerButtonContainer>
-                    <OfferExpiredText>
-                      {`${offerExpired ? I18n.t('home.offerCard.expiredOfferText') : ''}`}
+                  {!offerExpired
+                    ? (
+                      <SliderButton
+                        onVerified={buttonAction}
+                        setLoading={setLoading}
+                      />
+                    )
 
-                    </OfferExpiredText>
+                    : (
+                      <DrawerButtonContainer>
+                        <OfferExpiredText>
+                          {`${offerExpired ? I18n.t('home.offerCard.expiredOfferText') : ''}`}
 
-                    <AcceptOfferButton
-                      onPress={buttonAction}
-                      setLoading={setLoading}
-                      hollow={offerExpired}
-                    >
-                      {`${I18n.t(!offerExpired ? 'home.offerCard.confirmOffer' : 'home.offerCard.expiredOffer')}`}
-                    </AcceptOfferButton>
-                  </DrawerButtonContainer>
+                        </OfferExpiredText>
+
+                        <AcceptOfferButton
+                          onPress={buttonAction}
+                          setLoading={setLoading}
+                          hollow={offerExpired}
+                        >
+                          {`${I18n.t(!offerExpired ? 'home.offerCard.confirmOffer' : 'home.offerCard.expiredOffer')}`}
+                        </AcceptOfferButton>
+                      </DrawerButtonContainer>
+                    )
+                  }
                 </Fragment>
 
               ) : null }

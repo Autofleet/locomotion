@@ -88,23 +88,27 @@ const OfferRideEtaText = styled.Text`
 
 export default ({
   pickup, description, eta, completedAt, openLocationSelect, useBorder, rideOffer, etaDrift,
-}) => (
-  <RowContainer pickup={pickup} useBorder={useBorder} paddingStart>
-    <StopPointDotContainer origin={pickup}>
-      <StopPointDot origin={pickup} />
-      <StopPointDotTimeLine origin={pickup} />
-    </StopPointDotContainer>
-    {pickup
-      ? (
-        <OfferRideEtaContainer>
-          <OfferRideEtaText>8 min</OfferRideEtaText>
-        </OfferRideEtaContainer>
-      ) : null}
-    <AddressTextCont>
-      <AddressText numberOfLines={2} pickup={pickup}>
-        {`${pickup ? 'Boarding' : 'Exit'}: ${description}`}
-      </AddressText>
-      <EtaText eta={rideOffer[(pickup ? 'pickup' : 'dropoff')].eta} etaDrift={etaDrift} pickup={pickup} />
-    </AddressTextCont>
-  </RowContainer>
-);
+}) => {
+  const rideEta = moment(rideOffer.dropoffTime).diff(moment(rideOffer.pickupTime), 'minutes');
+
+  return (
+    <RowContainer pickup={pickup} useBorder={useBorder} paddingStart>
+      <StopPointDotContainer origin={pickup}>
+        <StopPointDot origin={pickup} />
+        <StopPointDotTimeLine origin={pickup} />
+      </StopPointDotContainer>
+      {pickup
+        ? (
+          <OfferRideEtaContainer>
+            <OfferRideEtaText>{`${rideEta} min`}</OfferRideEtaText>
+          </OfferRideEtaContainer>
+        ) : null}
+      <AddressTextCont>
+        <AddressText numberOfLines={2} pickup={pickup}>
+          {`${pickup ? 'Boarding' : 'Exit'}: ${description}`}
+        </AddressText>
+        <EtaText eta={rideOffer[(pickup ? 'pickupTime' : 'dropoffTime')]} etaDrift={etaDrift} pickup={pickup} />
+      </AddressTextCont>
+    </RowContainer>
+  );
+};
