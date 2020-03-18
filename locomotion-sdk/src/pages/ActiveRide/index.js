@@ -20,6 +20,7 @@ import { getTogglePopupsState } from '../../context/main';
 import UserService from '../../services/user';
 import OneSignal from '../../services/one-signal';
 import settingsContext from '../../context/settings';
+import StationMarker from "./stationMarker";
 
 function useInterval(callback, delay) {
   const savedCallback = useRef();
@@ -44,6 +45,7 @@ function useInterval(callback, delay) {
 export default ({ navigation, menuSide }) => {
   const [activeRideState, setActiveRide] = useState(null);
   const [preRideDetails, setPreRideDetails] = useState({});
+  const [mapMarkers, setMapMarkers] = useState(null);
   const [mapRegion, setMapRegion] = useState({
     latitudeDelta: 0.0922,
     longitudeDelta: 0.0421,
@@ -234,6 +236,7 @@ export default ({ navigation, menuSide }) => {
   const useSettings = settingsContext.useContainer();
 
   const setClosestStations = async () => {
+    let stations;
     let closestStation;
     try {
       const { coords } = await getPosition();
@@ -242,21 +245,29 @@ export default ({ navigation, menuSide }) => {
           location: { lat: coords.latitude, lng: coords.longitude },
         },
       });
-      console.log(data);
-
-      closestStation = data[0];
+      stations = data;
+      closestStation = stations[0];
     } catch (error) {
-      console.log('Got error while try to get current place', error);
+      console.warn('Error while try to get current place', error.stack || error);
     }
     setRequestStopPoints({
       openEdit: false,
       pickup: closestStation,
     });
+    setMapMarkers(stations);
   };
 
   useEffect(() => {
     setClosestStations();
   }, []);
+
+  const selectStationMarker = (key) => {
+    setRequestStopPoints({
+      openEdit: false,
+      pickup: requestStopPoints.pickup,
+      dropoff: mapMarkers[key],
+    });
+  };
 
   useEffect(() => {
     let offerTimeout;
@@ -298,11 +309,23 @@ export default ({ navigation, menuSide }) => {
         }}
         ref={mapInstance}
         onMapReady={() => {
+          if (Platform.OS === 'ios') {
+            return;
+          }
           PermissionsAndroid.request(
             PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
           );
         }}
       >
+        {!activeRideState && mapMarkers ? Object.keys(mapMarkers).map((key) => (
+            <StationMarker
+                isInOffer={!!rideOffer}
+                stationKey={key}
+                selectStation={selectStationMarker}
+                requestStopPoints={requestStopPoints}
+                {...mapMarkers[key]}
+            />
+        )) : null}
         {activeSpState && displayMatchInfo
           ? (
             <Polyline
