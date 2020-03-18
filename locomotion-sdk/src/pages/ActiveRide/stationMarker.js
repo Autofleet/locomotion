@@ -33,7 +33,7 @@ export default ({stationKey, lat, lng, selectStation, requestStopPoints, isInOff
     return (
         <Marker
             coordinate={{latitude: lat, longitude: lng}}
-            onPress={pickup || dropoff ? null : (e) => selectStation(stationKey)}
+            onPress={(e) => selectStation(stationKey, pickup, dropoff)}
         >
             {pickup ? <PickupMarker/> : dropoff ? <DropoffMarker/> : !isInOffer ? <StationMarker/> : null}
         </Marker>

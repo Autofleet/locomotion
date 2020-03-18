@@ -261,11 +261,24 @@ export default ({ navigation, menuSide }) => {
     setClosestStations();
   }, []);
 
-  const selectStationMarker = (key) => {
+  const selectStationMarker = (key, isPickup, isDropoff) => {
+    let pickup = requestStopPoints.pickup;
+    let dropoff = requestStopPoints.dropoff;
+
+    if (isPickup) {
+      pickup = null;
+    } else if (isDropoff) {
+      dropoff = null;
+    } else if (!pickup) {
+      pickup = mapMarkers[key];
+    } else {
+      dropoff = mapMarkers[key];
+    }
+
     setRequestStopPoints({
       openEdit: false,
-      pickup: requestStopPoints.pickup,
-      dropoff: mapMarkers[key],
+      pickup,
+      dropoff,
     });
   };
 
