@@ -34,7 +34,7 @@ export default ({stationKey, lat, lng, selectStation, requestStopPoints, isInOff
     const StationMarker = ({children}) => (
         <Marker
             coordinate={{latitude: lat, longitude: lng}}
-            onPress={(e) => selectStation(stationKey, pickup, dropoff)}
+            onPress={(e) =>  !isInOffer && selectStation(stationKey, pickup, dropoff)}
         >
             {children}
         </Marker>
