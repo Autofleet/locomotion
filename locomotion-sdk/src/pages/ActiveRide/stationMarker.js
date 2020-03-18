@@ -3,7 +3,7 @@ import {Callout, Marker} from 'react-native-maps';
 import I18n from '../../I18n';
 import {ExitMarkerToolTip, MarkerToolTipText, PickupDot, PickupMarkerToolTip, StationDot, DropoffDot, MarkerContainer} from "./styled";
 
-const PickupMarker = () => (
+const PickupMarkerContainer = () => (
     <MarkerContainer>
         <PickupMarkerToolTip>
             <MarkerToolTipText>{I18n.t('home.map.markers.pickup')}</MarkerToolTipText>
@@ -12,7 +12,7 @@ const PickupMarker = () => (
     </MarkerContainer>
 );
 
-const DropoffMarker = () => (
+const DropoffMarkerContainer = () => (
     <MarkerContainer>
         <ExitMarkerToolTip>
             <MarkerToolTipText>{I18n.t('home.map.markers.dropoff')}</MarkerToolTipText>
@@ -21,7 +21,7 @@ const DropoffMarker = () => (
     </MarkerContainer>
 );
 
-const StationMarker = () => (
+const DefaultStationMarkerContainer = () => (
     <MarkerContainer>
         <StationDot/>
     </MarkerContainer>
@@ -30,12 +30,27 @@ const StationMarker = () => (
 export default ({stationKey, lat, lng, selectStation, requestStopPoints, isInOffer}) => {
     const pickup = requestStopPoints.pickup && requestStopPoints.pickup.lng === lng && requestStopPoints.pickup.lat === lat;
     const dropoff = requestStopPoints.dropoff && requestStopPoints.dropoff.lng === lng && requestStopPoints.dropoff.lat === lat;
-    return (
+
+    const StationMarker = ({children}) => (
         <Marker
             coordinate={{latitude: lat, longitude: lng}}
             onPress={(e) => selectStation(stationKey, pickup, dropoff)}
         >
-            {pickup ? <PickupMarker/> : dropoff ? <DropoffMarker/> : !isInOffer ? <StationMarker/> : null}
+            {children}
         </Marker>
     );
+
+    return (pickup ?
+        <StationMarker>
+            <PickupMarkerContainer/>
+        </StationMarker>
+        : dropoff ?
+            <StationMarker>
+                <DropoffMarkerContainer/>
+            </StationMarker>
+            : !isInOffer ?
+                <StationMarker>
+                    <DefaultStationMarkerContainer/>
+                </StationMarker>
+                : null);
 };
