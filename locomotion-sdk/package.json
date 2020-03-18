@@ -53,6 +53,7 @@
     "i18next": "^19.3.2",
     "react-i18next": "^11.3.3",
     "react-native-keyboard-aware-scroll-view": "^0.9.1",
+    "react-native-swipe-verify": "^0.1.6",
     "react-native-table-component": "^1.2.1",
     "unstated-next": "^1.1.0",
     "yup": "^0.28.1"

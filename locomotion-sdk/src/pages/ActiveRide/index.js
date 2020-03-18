@@ -6,7 +6,7 @@ import {
 } from 'react-native';
 import MapView, { Polyline, Marker } from 'react-native-maps';
 import polyline from '@mapbox/polyline';
-import moment from 'moment'
+import moment from 'moment';
 
 import network from '../../services/network';
 import getPosition from './AddressView/getPostion';
@@ -19,7 +19,7 @@ import RideDrawer from './RideDrawer';
 import { getTogglePopupsState } from '../../context/main';
 import UserService from '../../services/user';
 import OneSignal from '../../services/one-signal';
-import settingsContext from '../../context/settings'
+import settingsContext from '../../context/settings';
 
 function useInterval(callback, delay) {
   const savedCallback = useRef();
@@ -56,8 +56,8 @@ export default ({ navigation }) => {
     openEdit: false,
   });
   const [rideType, setRideType] = useState('pool');
-  const [pickupEta, setPickupEta] = useState(null)
-  const [displayMatchInfo, setDisplayMatchInfo] = useState(false)
+  const [pickupEta, setPickupEta] = useState(null);
+  const [displayMatchInfo, setDisplayMatchInfo] = useState(false);
   const [rideOffer, setRideOffer] = useState(null);
   const [offerExpired, setOfferExpired] = useState(false);
   const [offerTimer, setOfferTimer] = useState(false);
@@ -118,13 +118,13 @@ export default ({ navigation }) => {
   }, 10000);
 
   useEffect(() => {
-    console.log(activeRideState)
-    if(!activeRideState) {
+    console.log(activeRideState);
+    if (!activeRideState) {
       return;
     }
     const origin = activeRideState.stop_points[0];
-    calculatePickupEta(origin)
-  }, [activeRideState])
+    calculatePickupEta(origin);
+  }, [activeRideState]);
 
   const bookValidation = state => state
     && state.dropoff && state.dropoff.lat
@@ -190,23 +190,23 @@ export default ({ navigation }) => {
 
   const createOffer = async () => {
     const offer = {
-      id: "cf37a79b-fcc5-4e4a-86c6-13b50c8ceefb",
-      status: "created",
-      eta: "2020-03-16T13:44:44.947Z",
-      expires_at: "2020-03-16T13:37:11.801Z",
+      id: 'cf37a79b-fcc5-4e4a-86c6-13b50c8ceefb',
+      status: 'created',
+      eta: '2020-03-16T13:44:44.947Z',
+      expires_at: '2020-03-16T13:37:11.801Z',
       pickup: {
-        eta: moment().add(10).format()
+        eta: moment().add(10).format(),
       },
       dropoff: {
-        eta: moment().add(20,'minutes').format()
-      }
+        eta: moment().add(20, 'minutes').format(),
+      },
     };
     await new Promise((resolve) => {
       setTimeout(() => {
-        setRideOffer(offer)
+        setRideOffer(offer);
         resolve();
-      }, 1500)
-    })
+      }, 1500);
+    });
 
     return;
 
@@ -223,7 +223,7 @@ export default ({ navigation }) => {
     if (response.state === 'rejected') {
       togglePopup('rideRejected', true);
     } else {
-      setRideOffer(response)
+      setRideOffer(response);
     }
   };
 
@@ -233,21 +233,19 @@ export default ({ navigation }) => {
   };
 
   const cancelOffer = () => {
-    setRideOffer(null)
+    setRideOffer(null);
   };
 
 
   const calculatePickupEta = (origin) => {
-    if(origin.completed_at) {
-      setDisplayMatchInfo(true)
-    } else {
-      if(origin && origin.eta) {
-        const etaDiff = moment(origin.eta).diff(moment(), 'minutes');
-        setPickupEta(etaDiff)
-        setDisplayMatchInfo(etaDiff <= useSettings.settingsList.ARRIVE_REMINDER_MIN)
-      }
+    if (origin.completed_at) {
+      setDisplayMatchInfo(true);
+    } else if (origin && origin.eta) {
+      const etaDiff = moment(origin.eta).diff(moment(), 'minutes');
+      setPickupEta(etaDiff);
+      setDisplayMatchInfo(etaDiff <= useSettings.settingsList.ARRIVE_REMINDER_MIN);
     }
-  }
+  };
 
   const showsUserLocation = !activeRideState || !activeRideState.vehicle;
   const useSettings = settingsContext.useContainer();
@@ -256,10 +254,12 @@ export default ({ navigation }) => {
     let closestStation;
     try {
       const { coords } = await getPosition();
-      const { data } = await network.get('api/v1/me/places', { params: {
-          location: { lat: coords.latitude, lng: coords.longitude }
-        } });
-        console.log(data);
+      const { data } = await network.get('api/v1/me/places', {
+        params: {
+          location: { lat: coords.latitude, lng: coords.longitude },
+        },
+      });
+      console.log(data);
 
       closestStation = data[0];
     } catch (error) {
@@ -277,15 +277,31 @@ export default ({ navigation }) => {
 
   useEffect(() => {
     let offerTimeout;
-    if(rideOffer) {
-      setOfferExpired(false)
+    if (rideOffer) {
+      setOfferExpired(false);
       setOfferTimer(setTimeout(() => {
-        setOfferExpired(true)
+        setOfferExpired(true);
       }, 10000));
     } else {
-      clearTimeout(offerTimer)
+      clearTimeout(offerTimer);
     }
-  }, [rideOffer])
+  }, [rideOffer]);
+
+  useEffect(() => {
+    const offer = {
+      id: 'cf37a79b-fcc5-4e4a-86c6-13b50c8ceefb',
+      status: 'created',
+      eta: '2020-03-16T13:44:44.947Z',
+      expires_at: '2020-03-16T13:37:11.801Z',
+      pickup: {
+        eta: moment().add(10).format(),
+      },
+      dropoff: {
+        eta: moment().add(20, 'minutes').format(),
+      },
+    };
+    setRideOffer(offer);
+  }, []);
   return (
     <PageContainer>
       <MapView
