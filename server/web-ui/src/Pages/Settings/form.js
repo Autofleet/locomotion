@@ -70,7 +70,9 @@ const SettingsForm = ({
                             component={InputWithLabel}
                         />
                     </SettingsPanelItem>
-
+                </SettingsPanel>
+                <SettingsPanel>
+                    <SettingsPanelHeader>Ride</SettingsPanelHeader>
 
                     <SettingsPanelItem type='text'>
                         <Field
@@ -118,7 +120,7 @@ const SettingsForm = ({
                             type="number"
                             component={InputWithLabel}
                             inputComponent={NumberInput}
-                            errorMessage={errors.DISPLAY_MAX_ETA_DRIFT}
+                            errorMessage={errors.ETA_MEDIUM_TRESHOLD}
                             min="0"
                             inlineField
                         />
@@ -131,7 +133,20 @@ const SettingsForm = ({
                             type="number"
                             component={InputWithLabel}
                             inputComponent={NumberInput}
-                            errorMessage={errors.DISPLAY_MAX_ETA_DRIFT}
+                            errorMessage={errors.ETA_HIGH_TRESHOLD}
+                            min="0"
+                            inlineField
+                        />
+                    </SettingsPanelItem>
+
+                    <SettingsPanelItem type='text'>
+                        <Field
+                            name="OFFER_EXPIRATION_TIME"
+                            label={i18n.t('settings.labels.displayOfferExpirationTime')}
+                            type="number"
+                            component={InputWithLabel}
+                            inputComponent={NumberInput}
+                            errorMessage={errors.OFFER_EXPIRATION_TIME}
                             min="0"
                             inlineField
                         />
@@ -148,7 +163,6 @@ const SettingsForm = ({
                         />
                     </SettingsPanelItem>
                 </SettingsPanel>
-                <SettingsPanel transparent placeholder />
             </SettingsContainer>
         </Form>
 )};

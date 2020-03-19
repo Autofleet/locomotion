@@ -9,6 +9,7 @@ const settingsDefaults = {
   DISPLAY_MAX_ETA_DRIFT: 0,
   ETA_MEDIUM_TRESHOLD: 10,
   ETA_HIGH_TRESHOLD: 30,
+  OFFER_EXPIRATION_TIME: 60,
 };
 
 module.exports = settingsDefaults;

@@ -11,7 +11,7 @@ import * as Yup from "yup";
 import {Formik} from "formik";
 import diff from "object-diff";
 
-const FieldIsRequiredMsg = i18n.t('settings.validation.urlIsInvalid');
+const FieldIsRequiredMsg = i18n.t('settings.validation.fieldIsRequired');
 
 Yup.string.prototype.urlHttps = function urlHttps() {
     return this.matches(
@@ -59,7 +59,12 @@ return (
                                 TERMS_URL: Yup.string().urlHttps().required(FieldIsRequiredMsg),
                                 PRIVACY_URL: Yup.string().urlHttps().required(FieldIsRequiredMsg),
                                 CONTACT_US_URL: Yup.string().urlHttps().required(FieldIsRequiredMsg),
-                                ARRIVE_REMINDER_MIN: Yup.number().required(i18n.t('settings.validation.fieldIsRequired')),
+                                ARRIVE_REMINDER_MIN: Yup.number().required(FieldIsRequiredMsg),
+                                DISPLAY_ETA_DRIFT: Yup.number().required(FieldIsRequiredMsg),
+                                DISPLAY_MAX_ETA_DRIFT: Yup.number().required(FieldIsRequiredMsg),
+                                ETA_MEDIUM_TRESHOLD: Yup.number().required(FieldIsRequiredMsg),
+                                ETA_HIGH_TRESHOLD: Yup.number().required(FieldIsRequiredMsg),
+                                OFFER_EXPIRATION_TIME: Yup.number().required(FieldIsRequiredMsg),
                             })}
                             onSubmit={async (values, actions) => {
                                 actions.setSubmitting(true);
