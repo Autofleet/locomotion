@@ -50,12 +50,17 @@ export const SettingsPanelHeader = styled.div`
 `;
 
 export const SettingsPanelItem = styled.div(({type}) => `
-    padding: 5% 5% ${type === 'text' ? 0 : 8}% 5%;
+    padding-top: 5%;
+    padding-bottom: ${type === 'text' ? 0 : 6}%;
+    padding-right: 5%;
+    padding-left: 5%;
     margin: 0 5%;
 
-    ${type !== 'submit' ? `
-    border-bottom: 1px solid rgba(0, 0, 0, 0.07);
-    ` : '' }
+    ${type === 'submit' ?  `
+    padding-bottom: 12%;
+    ` : `
+   border-bottom: 1px solid rgba(0, 0, 0, 0.07);
+   ` }
 
     ${type === 'toggle' ? `
     display: block;
