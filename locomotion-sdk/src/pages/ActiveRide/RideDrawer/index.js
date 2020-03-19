@@ -226,6 +226,9 @@ const RideDrawer = ({
                     completedAt={rideState ? origin && origin.completed_at : undefined}
                     rideOffer={rideOffer}
                     etaDrift={useSettings.settingsList.DISPLAY_ETA_DRIFT}
+                    etaMediumThreshold={useSettings.settingsList.ETA_MEDIUM_THRESHOLD}
+                    etaHighThreshold={useSettings.settingsList.ETA_HIGH_THRESHOLD}
+
                   />
                   <StopPointRowOffer
                     useBorder
@@ -252,9 +255,7 @@ const RideDrawer = ({
                       <DrawerButtonContainer>
                         <OfferExpiredText>
                           {`${offerExpired ? I18n.t('home.offerCard.expiredOfferText') : ''}`}
-
                         </OfferExpiredText>
-
                         <AcceptOfferButton
                           onPress={buttonAction}
                           setLoading={setLoading}

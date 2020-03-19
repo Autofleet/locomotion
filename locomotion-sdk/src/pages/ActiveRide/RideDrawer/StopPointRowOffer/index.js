@@ -87,7 +87,7 @@ const OfferRideEtaText = styled.Text`
 `;
 
 export default ({
-  pickup, description, eta, completedAt, openLocationSelect, useBorder, rideOffer, etaDrift,
+  pickup, description, eta, completedAt, openLocationSelect, useBorder, rideOffer, etaDrift, etaMediumThreshold, etaHighThreshold,
 }) => {
   const rideEta = moment(rideOffer.dropoffTime).diff(moment(rideOffer.pickupTime), 'minutes');
 
@@ -107,7 +107,13 @@ export default ({
         <AddressText numberOfLines={2} pickup={pickup}>
           {`${pickup ? 'Boarding' : 'Exit'}: ${description}`}
         </AddressText>
-        <EtaText eta={rideOffer[(pickup ? 'pickupTime' : 'dropoffTime')]} etaDrift={etaDrift} pickup={pickup} />
+        <EtaText
+          eta={rideOffer[(pickup ? 'pickupTime' : 'dropoffTime')]}
+          etaDrift={etaDrift}
+          pickup={pickup}
+          etaMediumThreshold={etaMediumThreshold}
+          etaHighThreshold={etaHighThreshold}
+        />
       </AddressTextCont>
     </RowContainer>
   );

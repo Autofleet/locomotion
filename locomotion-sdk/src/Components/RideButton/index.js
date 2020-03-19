@@ -13,13 +13,12 @@ const LoadingWrapper = styled.View`
 
 const SubmitButtonText = styled.Text`
   color: #ffffff;
-  font-size: 14px;
+  font-size: 14;
   font-weight: 500;
   text-align: center;
-  ${({hollow}) => hollow && `
+  ${({ hollow }) => hollow && `
     color: #666666;
   `}
-  height: 14px;
 `;
 
 const buttonShadow = `
@@ -34,15 +33,21 @@ const StyledTouchableOpacity = styled.TouchableOpacity`
   border-radius: 4px;
   background-color: #1e273d;
   height: 48px;
-  padding-top: 17px;
   ${({ marginTop }) => marginTop && `
     margin-top: ${marginTop};
   `}
 
-  ${({hollow}) => hollow && `
+  ${({ hollow }) => hollow && `
     background-color: #ffffff;
     border: 2px solid #b5b5b5;
   `}
+`;
+
+const ButtonTextContainer = styled.View`
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  flex: 1;
 `;
 
 const Button = styled(({
@@ -58,6 +63,7 @@ const Button = styled(({
 
   return (
     <StyledTouchableOpacity width={style[0].width} {...props} onPress={onPressWithLoading} hollow={hollow}>
+      <ButtonTextContainer>
         {loadingState ? (
           <LoadingWrapper>
             <LottieView
@@ -79,7 +85,7 @@ const Button = styled(({
             {children}
           </SubmitButtonText>
         )}
-
+      </ButtonTextContainer>
     </StyledTouchableOpacity>
   );
 })`

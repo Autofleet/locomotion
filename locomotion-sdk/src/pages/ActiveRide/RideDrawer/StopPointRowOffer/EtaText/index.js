@@ -2,9 +2,11 @@ import React, { Fragment } from 'react';
 import { View } from 'react-native';
 import styled from 'styled-components';
 import moment from 'moment';
+import Svg, { SvgUri, SvgXml } from 'react-native-svg';
 
 import i18n from '../../../../../I18n';
-import warningIcon from '../../../../../assets/warning.png';
+import warningMediumIcon from '../../../../../assets/warning_yellow.png';
+import warningHighIcon from '../../../../../assets/warning_red.png';
 
 const EtaContainer = styled.View`
     flex-direction: row;
@@ -16,13 +18,14 @@ const Wrap = styled.View`
     flex: 2;
     flex-direction: row;
     padding-top: 2px;
+    padding-right: 3px;
+    padding-left: 2px;
 `;
 const EtaText = styled.Text`
     flex: 1;
     color: #727272;
     margin-start: 22;
     font-size: 12px;
-    margin-top: 1px;
     max-width: 80px;
 `;
 const EtaWarningText = styled.Text`
@@ -33,18 +36,18 @@ const EtaWarningText = styled.Text`
     font-weight: 500;
 `;
 
-const WarningIcon = styled.Image.attrs({ source: warningIcon })`
+const WarningIcon = styled.Image`
   width: 12px;
   height: 12px;
 `;
 
 const WarningContainer = styled.View`
-    flex-direction: row;
+
 `;
 
 
 export default ({
-  eta, etaDrift, pickup,
+  eta, etaDrift, pickup, etaMediumThreshold, etaHighThreshold,
 }) => {
   const getWarningMessage = () => {
     const etaDiff = moment(eta).diff(moment(), 'minutes');
@@ -53,26 +56,29 @@ export default ({
       return null;
     }
 
-    if (etaDiff > 10 && etaDiff <= 30) {
-      etaThreshold = 10;
+    if (etaDiff > etaMediumThreshold) {
+      etaThreshold = etaMediumThreshold;
     }
 
-    if (etaDiff >= 30) {
-      etaThreshold = 30;
+    if (etaDiff >= etaHighThreshold) {
+      etaThreshold = etaHighThreshold;
     }
+
     if (!etaThreshold) {
       return null;
     }
-
     return (
       <Fragment>
-        <WarningIcon />
-        <EtaWarningText red={etaThreshold === 30}>
+        <WarningIcon
+          source={etaThreshold === etaHighThreshold ? warningHighIcon : warningMediumIcon}
+        />
+        <EtaWarningText red={etaThreshold === etaHighThreshold}>
           {i18n.t('home.offerCard.etaNotice', { etaThreshold })}
         </EtaWarningText>
       </Fragment>
     );
   };
+
   return (
     <EtaContainer>
       <EtaText>

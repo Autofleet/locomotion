@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import {View} from 'react-native'
+import { View } from 'react-native';
 import LottieView from 'lottie-react-native';
 import styled from 'styled-components';
 import LinearGradient from '../LinearGradient';
@@ -16,7 +16,7 @@ const SubmitButtonText = styled.Text`
   color: #ffffff;
   font-size: 12px;
   text-align: center;
-  ${({hollow}) => hollow && `
+  ${({ hollow }) => hollow && `
     color: #b5b5b5;
   `}
 `;
@@ -38,7 +38,7 @@ const StyledTouchableOpacity = styled.TouchableOpacity`
     margin-top: ${marginTop};
   `}
 
-  ${({hollow}) => hollow && `
+  ${({ hollow }) => hollow && `
     background-color: #ffffff;
     border: 2px solid #b5b5b5;
   `}
@@ -64,14 +64,14 @@ const Button = styled(({
   };
 
   useEffect(() => {
-    if(setLoading) {
-      setLoading(loadingState)
+    if (setLoading) {
+      setLoading(loadingState);
     }
-  }, [loadingState])
+  }, [loadingState]);
 
   return (
     <StyledTouchableOpacity width={style[0].width} {...props} onPress={onPressWithLoading} hollow={hollow}>
-        <ButtonTextContainer>
+      <ButtonTextContainer>
         {loadingState ? (
           <LoadingWrapper>
             <LottieView

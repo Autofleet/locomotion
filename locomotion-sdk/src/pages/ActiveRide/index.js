@@ -2,7 +2,7 @@ import React, {
   useState, useEffect, useRef,
 } from 'react';
 import {
-  StyleSheet, PermissionsAndroid, Platform,
+  StyleSheet, PermissionsAndroid, Platform, Image,
 } from 'react-native';
 import MapView, { Polyline, Marker } from 'react-native-maps';
 import polyline from '@mapbox/polyline';
@@ -260,37 +260,16 @@ export default ({ navigation }) => {
 
   useEffect(() => {
     let offerTimeout;
-    console.log(rideOffer);
-
     if (rideOffer) {
       setOfferExpired(false);
       setOfferTimer(setTimeout(() => {
         setOfferExpired(true);
-      }, 10000));
+      }, useSettings.settingsList.OFFER_EXPIRATION_TIME * 1000));
     } else {
       clearTimeout(offerTimer);
     }
   }, [rideOffer]);
 
-  useEffect(() => {
-    console.log('NUMMM');
-    console.log(rideOffer);
-  }, [rideOffer]);
-  /*   useEffect(() => {
-    const offer = {
-      id: 'cf37a79b-fcc5-4e4a-86c6-13b50c8ceefb',
-      status: 'created',
-      eta: '2020-03-16T13:44:44.947Z',
-      expires_at: '2020-03-16T13:37:11.801Z',
-      pickup: {
-        eta: moment().add(10).format(),
-      },
-      dropoff: {
-        eta: moment().add(20, 'minutes').format(),
-      },
-    };
-    setRideOffer(offer);
-  }, []); */
   return (
     <PageContainer>
       <MapView
