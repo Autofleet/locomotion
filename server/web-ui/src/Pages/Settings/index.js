@@ -62,8 +62,8 @@ return (
                                 ARRIVE_REMINDER_MIN: Yup.number().required(FieldIsRequiredMsg),
                                 DISPLAY_ETA_DRIFT: Yup.number().required(FieldIsRequiredMsg),
                                 DISPLAY_MAX_ETA_DRIFT: Yup.number().required(FieldIsRequiredMsg),
-                                ETA_MEDIUM_TRESHOLD: Yup.number().required(FieldIsRequiredMsg),
-                                ETA_HIGH_TRESHOLD: Yup.number().required(FieldIsRequiredMsg),
+                                ETA_MEDIUM_THRESHOLD: Yup.number().required(FieldIsRequiredMsg),
+                                ETA_HIGH_THRESHOLD: Yup.number().required(FieldIsRequiredMsg),
                                 OFFER_EXPIRATION_TIME: Yup.number().required(FieldIsRequiredMsg),
                             })}
                             onSubmit={async (values, actions) => {

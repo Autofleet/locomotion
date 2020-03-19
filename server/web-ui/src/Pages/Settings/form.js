@@ -115,12 +115,12 @@ const SettingsForm = ({
 
                     <SettingsPanelItem type='text'>
                         <Field
-                            name="ETA_MEDIUM_TRESHOLD"
+                            name="ETA_MEDIUM_THRESHOLD"
                             label={i18n.t('settings.labels.displayMediumEta')}
                             type="number"
                             component={InputWithLabel}
                             inputComponent={NumberInput}
-                            errorMessage={errors.ETA_MEDIUM_TRESHOLD}
+                            errorMessage={errors.ETA_MEDIUM_THRESHOLD}
                             min="0"
                             inlineField
                         />
@@ -128,12 +128,12 @@ const SettingsForm = ({
 
                     <SettingsPanelItem type='text'>
                         <Field
-                            name="ETA_HIGH_TRESHOLD"
+                            name="ETA_HIGH_THRESHOLD"
                             label={i18n.t('settings.labels.displayHighEta')}
                             type="number"
                             component={InputWithLabel}
                             inputComponent={NumberInput}
-                            errorMessage={errors.ETA_HIGH_TRESHOLD}
+                            errorMessage={errors.ETA_HIGH_THRESHOLD}
                             min="0"
                             inlineField
                         />
