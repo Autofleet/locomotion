@@ -175,7 +175,7 @@ const RideDrawer = ({
                           onPress={buttonAction}
                           hollow
                         >
-                          {` ${I18n.t(rideState ? 'home.cancelRideButton' : 'home.letsRideButton')} `}
+                          {I18n.t(rideState ? 'home.cancelRideButton' : 'home.letsRideButton')}
                         </AcceptOfferButton>
                       </DrawerButtonContainer>
                     </Fragment>
@@ -280,7 +280,7 @@ const RideDrawer = ({
             <RideButton
               onPress={buttonAction}
             >
-              {` ${I18n.t(rideState ? 'home.cancelRideButton' : 'home.letsRideButton')} `}
+              {I18n.t(rideState ? 'home.cancelRideButton' : 'home.letsRideButton')}
             </RideButton>
           </RideButtonContainer>
         )

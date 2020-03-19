@@ -41,7 +41,7 @@ function useInterval(callback, delay) {
   }, [delay]);
 }
 
-export default ({ navigation }) => {
+export default ({ navigation, menuSide }) => {
   const [activeRideState, setActiveRide] = useState(null);
   const [preRideDetails, setPreRideDetails] = useState({});
   const [mapRegion, setMapRegion] = useState({
@@ -329,7 +329,7 @@ export default ({ navigation }) => {
             </Marker>
           ) : null}
       </MapView>
-      <Header navigation={navigation} />
+      <Header navigation={navigation} menuSide={menuSide} />
       <RideDrawer
         createRide={createRide}
         cancelRide={cancelRide}

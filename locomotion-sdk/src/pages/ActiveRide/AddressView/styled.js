@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, TextInput } from 'react-native';
 import styled from 'styled-components';
-import xIcon from '../../../assets/x.png'
+import xIcon from '../../../assets/x.png';
 
 export const AddressInputs = styled.View`
     position: absolute;
@@ -38,10 +38,10 @@ export const Address = styled.View`
 const ResetInputIcon = styled.Image.attrs({ source: xIcon })`
     display: flex;
     margin-top: 4px;
-    
+
     height: 13px;
     width: 13px;
-`
+`;
 const ResetInputIconContainer = styled.TouchableOpacity`
     display: flex;
     height: 22px;
@@ -58,25 +58,27 @@ const AddressTextInputContainer = styled.View`
     width: 100%;
 `;
 
-export const AddressTextInput = styled(({ value, onChangeText, inputRef, ...props }) => {
-    const [focus, setFocus] = useState(false);
-    return (
-        <AddressTextInputContainer>
-            <TextInput
-                onFocus={() => setFocus(true)}
-                onBlur={() => setFocus(false)}
-                value={value}
-                onChangeText={onChangeText}
-                ref={inputRef}
-                {...props}
-            />
-            {focus && value ? (
-                <ResetInputIconContainer onPress={() => onChangeText('')}>
-                    <ResetInputIcon />
-                </ResetInputIconContainer>
-            ) : undefined}
-        </AddressTextInputContainer>
-    );
+export const AddressTextInput = styled(({
+  value, onChangeText, inputRef, ...props
+}) => {
+  const [focus, setFocus] = useState(false);
+  return (
+    <AddressTextInputContainer>
+      <TextInput
+        onFocus={() => setFocus(true)}
+        onBlur={() => setFocus(false)}
+        value={value}
+        onChangeText={onChangeText}
+        ref={inputRef}
+        {...props}
+      />
+      {focus && value ? (
+        <ResetInputIconContainer onPress={() => onChangeText('')}>
+          <ResetInputIcon />
+        </ResetInputIconContainer>
+      ) : undefined}
+    </AddressTextInputContainer>
+  );
 })`
     font-size: 18;
     color: #666666;
@@ -89,21 +91,21 @@ export const AddressTextInput = styled(({ value, onChangeText, inputRef, ...prop
 export const OriginDot = styled.View`
     width: 10;
     height: 10;
-    background-color: #8ac1ff;
+    background-color: #6180c0;
     border-radius: 10;
 `;
 
 export const DestinationDot = styled.View`
     width: 10;
     height: 10;
-    background-color: #02cc64;
+    background-color: #08902d;
     border-radius: 10;
 `;
 
 export const PointsLine = styled.View`
-    width: 1;
+    width: 2;
     flex: 1;
-    background-color: #8aecff;
+    background-color: #dbdbdb;
 `;
 
 export const RoutePointsContainer = styled.View`
@@ -130,10 +132,10 @@ export const AddressSearchItemTouchableOpacity = styled.TouchableOpacity`
     border-bottom-width: 1;
 `;
 
-export const AddressSearchItem = styled(({ onPress, ...props}) => (
-    <AddressSearchItemTouchableOpacity onPress={onPress}>
-        <View {...props} />
-    </AddressSearchItemTouchableOpacity>
+export const AddressSearchItem = styled(({ onPress, ...props }) => (
+  <AddressSearchItemTouchableOpacity onPress={onPress}>
+    <View {...props} />
+  </AddressSearchItemTouchableOpacity>
 ))`
     flex-direction: row;
     width: 100%;

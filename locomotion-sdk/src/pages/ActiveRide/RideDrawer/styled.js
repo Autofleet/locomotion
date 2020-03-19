@@ -226,7 +226,7 @@ export const ResetInputIcon = styled.Image.attrs({ source: xIcon })`
 export const DrawerContainer = styled.View`
   flex-direction: column;
   position: absolute;
-  bottom: 50;
+  bottom: 30;
   width: 90%;
   left: 5%;
   border-radius: 4;
