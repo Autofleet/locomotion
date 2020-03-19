@@ -21,7 +21,7 @@ const SettingsForm = ({
                         displayLoader
                       }) => {
     return(
-        <Form name="settingsForm" style={{height: '100%'}} >
+        <Form name="settingsForm">
             <SettingsContainer>
                 <SettingsPanel>
                     <SettingsPanelHeader>General</SettingsPanelHeader>

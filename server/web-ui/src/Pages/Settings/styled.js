@@ -14,7 +14,6 @@ export const Content = styled.div`
   flex: 1;
   padding: 0 50px;
   overflow: auto;
-  height: 100vh;
   background-color: rgb(251, 251, 252);
   border-color: rgb(223, 223, 223);
   border-style: solid none solid solid;
