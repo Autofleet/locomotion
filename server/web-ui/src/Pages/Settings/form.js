@@ -7,6 +7,7 @@ import {
     FieldLabelText,
     ApplyButton,
     SettingsContainer,
+    SaveSettingsContainer,
 } from "./styled";
 import PropTypes from 'prop-types';
 import { Field, FieldArray, Form } from 'formik';
@@ -151,19 +152,18 @@ const SettingsForm = ({
                             inlineField
                         />
                     </SettingsPanelItem>
-
-                    <SettingsPanelItem type='submit'>
-                        <ApplyButton
-                            redButtons={false}
-                            disabled={false}
-                            type="submit"
-                            data-test-id="submitSettings"
-                            title={i18n.t('settings.labels.saveButton')}
-                            displayLoader={displayLoader}
-                        />
-                    </SettingsPanelItem>
                 </SettingsPanel>
             </SettingsContainer>
+            <SaveSettingsContainer>
+                <ApplyButton
+                    redButtons={false}
+                    disabled={false}
+                    type="submit"
+                    data-test-id="submitSettings"
+                    title={i18n.t('settings.labels.saveButton')}
+                    displayLoader={displayLoader}
+                />
+            </SaveSettingsContainer>
         </Form>
 )};
 

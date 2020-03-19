@@ -85,7 +85,9 @@ export const FieldLabelText = styled(LabelText)`
 `;
 
 export const SaveSettingsContainer = styled.div`
-
+    padding-left: 10px;
+    padding-top: 20px;
+    display: flex;
 `;
 
 const ButtonBase = props => <Button {...omit(props, ['redButtons'])} />;
