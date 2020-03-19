@@ -61,7 +61,8 @@
             "passengersNumber": "Passengers",
             "confirmOffer": "Book Now",
             "expiredOffer": "Renew",
-            "expiredOfferText": "Your request expired"
+            "expiredOfferText": "Your request expired",
+            "offerBooked": "Ride has been booked"
         }
     },
     "lock": {

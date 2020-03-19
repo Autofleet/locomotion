@@ -4,7 +4,7 @@ import LottieView from 'lottie-react-native';
 import styled from 'styled-components';
 import RNSwipeVerify from 'react-native-swipe-verify';
 import LinearGradient from '../LinearGradient';
-
+import i18n from '../../I18n';
 import { inputHeight, appPalette } from '../../assets/style-settings';
 
 const arrowIcon = require('../../assets/slider-arrow.png');
@@ -94,7 +94,7 @@ const Button = ({
           {...props}
         >
           <ButtonText verified={verifiedState}>
-            {!verifiedState ? 'Book Now' : 'Ride has been booked'}
+            {!verifiedState ? i18n.t('home.offerCard.confirmOffer') : i18n.t('home.offerCard.offerBooked')}
           </ButtonText>
         </RNSwipeVerify>
       </SliderContainer>
