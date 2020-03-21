@@ -2,7 +2,6 @@ import React, { Fragment } from 'react';
 import { View } from 'react-native';
 import styled from 'styled-components';
 import moment from 'moment';
-import Svg, { SvgUri, SvgXml } from 'react-native-svg';
 
 import i18n from '../../../../../I18n';
 import warningMediumIcon from '../../../../../assets/warning_yellow.png';
