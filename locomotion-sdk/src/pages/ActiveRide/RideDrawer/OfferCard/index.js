@@ -48,7 +48,6 @@ export default ({
   offerExpired, onVerified, setLoading,onRenewOffer,cancelOffer,loading
 
 }) => {
-
   return (
       <Fragment>
 
@@ -63,7 +62,7 @@ export default ({
           pickup
           description={rideState ? origin && origin.description
             : requestStopPoints && requestStopPoints.pickup && requestStopPoints.pickup.description}
-          eta={rideState ? origin && origin.eta : undefined}
+          eta={rideOffer.pickupTime}
           completedAt={rideState ? origin && origin.completed_at : undefined}
           rideOffer={rideOffer}
           etaDrift={pickupEtaDrift}
@@ -75,7 +74,7 @@ export default ({
           useBorder
           description={rideState ? destination && destination.description
             : requestStopPoints && requestStopPoints.dropoff && requestStopPoints.dropoff.description}
-          eta={rideState ? destination && destination.eta : undefined}
+          eta={rideOffer.dropoffTime}
           completedAt={rideState ? destination && destination.completed_at
             : undefined}
           rideOffer={rideOffer}

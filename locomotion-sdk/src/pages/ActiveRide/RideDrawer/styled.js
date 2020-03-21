@@ -52,23 +52,6 @@ const styleForDriverIsArrivedState = `
   color: #08902d;
 `;
 
-export const RideStatusText = styled.Text`
-  font-size: 14px;
-  color: #666666;
-  margin-start: 12;
-  font-weight: 600;
-  ${({ state }) => (state === 'driverArrived' ? styleForDriverIsArrivedState : null)}
-`;
-
-export const RideStatusContainer = styled.View`
-  ${address}
-  padding-bottom: 10px;
-  flex-direction: column;
-  padding-start: 10;
-  padding-end: 20;
-
-`;
-
 
 export const RideDetailsText = styled.Text`
   font-size: 12;
@@ -98,20 +81,6 @@ export const DrawerButtonContainer = styled.View`
   margin: 0 auto;
   min-height: 40px;
   width: 50%;
-`;
-
-export const AcceptOfferButton = styled(RoundedButton)`
-  /*
-  ${({ inRide, readyToBook }) => {
-    if (inRide) {
-      return 'background-color: red;';
-    }
-    if (readyToBook) {
-      return 'background-color: #00435c;';
-    }
-    return 'background-color: #666666;';
-  }} */
-  /* background-color: #666666; */
 `;
 
 export const RideDetailsContainer = styled.View`
@@ -209,11 +178,4 @@ export const DrawerContainer = styled.View`
   shadow-offset: 0px 0px;
   shadow-color: #04214f;
   shadow-opacity: 0.4;
-`;
-
-export const OfferExpiredText = styled.Text`
-  font-size: 12;
-  color: #b5b5b5;
-  text-align: center;
-  margin-bottom: 5px;
 `;

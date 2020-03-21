@@ -12,16 +12,9 @@ import moment from 'moment';
 import I18n from '../../../I18n';
 import {
   Drawer,
-  AcceptOfferButton,
-  PreRideBox,
   RideButtonContainer,
-  RideStatusText,
-  RideStatusContainer,
-  CloseContainer,
-  ResetInputIcon,
   DrawerContainer,
   DrawerButtonContainer,
-  OfferExpiredText,
 } from './styled';
 import RideType from './RideType';
 import Switch from '../../../Components/Switch';
@@ -64,7 +57,6 @@ const RideDrawer = ({
   const [dropoffEta, setDropoffpEta] = useState(null);
   const [loading, setLoading] = useState(false);
   const rideState = getRideState(activeRide);
-  const sliderRef = useRef(null);
   const buttonAction = async () => {
     if (rideState) {
       return cancelRide();

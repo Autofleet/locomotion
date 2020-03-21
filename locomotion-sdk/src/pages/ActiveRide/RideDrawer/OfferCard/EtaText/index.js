@@ -25,7 +25,7 @@ const EtaText = styled.Text`
     color: #727272;
     margin-start: 22;
     font-size: 12px;
-    max-width: 80px;
+    max-width: 85px;
 `;
 const EtaWarningText = styled.Text`
     flex: 1;
@@ -46,7 +46,7 @@ const WarningContainer = styled.View`
 
 
 export default ({
-  eta, etaDrift, pickup, etaMediumThreshold, etaHighThreshold,
+  eta,etaDrift, pickup, etaMediumThreshold, etaHighThreshold
 }) => {
   const getWarningMessage = () => {
     const etaDiff = moment(eta).diff(moment(), 'minutes');

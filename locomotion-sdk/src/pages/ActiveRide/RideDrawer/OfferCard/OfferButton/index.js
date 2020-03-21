@@ -2,7 +2,7 @@ import React, {Fragment} from 'react';
 import { View } from 'react-native';
 import styled from 'styled-components';
 import moment from 'moment';
-import i18n from '../../../../../I18n';
+import I18n from '../../../../../I18n';
 import RoundedButton from '../../../../../Components/RoundedButton'
 import SliderButton from '../../../../../Components/SlideButton';
 
