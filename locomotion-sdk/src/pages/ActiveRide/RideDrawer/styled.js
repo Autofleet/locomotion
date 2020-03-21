@@ -6,7 +6,6 @@ import i18n from '../../../I18n';
 import RideRoundedButton from '../../../Components/RideButton';
 import RoundedButton from '../../../Components/RoundedButton';
 import Button from '../../../Components/Button';
-import xIcon from '../../../assets/x.png';
 
 export const Drawer = styled.View`
  /*  position: absolute;
@@ -37,15 +36,6 @@ export const RideCard = styled.View`
   flex-direction: column;
   padding-start: 10;
   padding-end: 10;
-`;
-
-export const StopPointsEtaContainer = styled.View`
-  ${address}
-  padding-top: 0px;
-  flex-direction: row;
-  padding-start: 0;
-  padding-end: 0;
-  justify-content: space-between;
 `;
 
 export const DriverAvatar = styled.Image`
@@ -207,21 +197,7 @@ export const RideTypeButtonText = styled.Text`
   ` : null)}
 `;
 
-export const CloseContainer = styled.TouchableOpacity`
-    position: absolute;
-    right: 10px;
-    top: 10px;
-    width: 13px;
-    height: 13px;
-    z-index: 999;
-`;
 
-
-export const ResetInputIcon = styled.Image.attrs({ source: xIcon })`
-    display: flex;
-    height: 12px;
-    width: 12px;
-`;
 
 export const DrawerContainer = styled.View`
   flex-direction: column;

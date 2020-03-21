@@ -1,13 +1,12 @@
 import React, { useState, Fragment } from 'react';
 import {Text, View} from 'react-native'
 import styled from 'styled-components';
-import BasicPopup from '../../../popups/BasicPopup';
-import i18n from '../../../I18n';
-import { getTogglePopupsState } from '../../../context/main';
+import i18n from '../../../../I18n';
 
-const PassengerAmountIconSource = require('../../../assets/ppl.png');
-const PlusIconSource = require('../../../assets/plus.png');
-const MinusIconSource = require('../../../assets/minus.png');
+
+const PassengerAmountIconSource = require('../../../../assets/ppl.png');
+const PlusIconSource = require('../../../../assets/plus.png');
+const MinusIconSource = require('../../../../assets/minus.png');
 
 const MAX_NUMBER_OF_PASSENGER = 5;
 const MIN_NUMBER_OF_PASSENGER = 1;
@@ -40,7 +39,6 @@ const AddressText = styled.Text`
 `;
 
 export default ({ amount, onChange }) => {
-  const [isPopupOpen, togglePopup] = getTogglePopupsState();
   const [newAmount, setNewAmount] = useState(amount);
 
   const validateChange = (newAmount, change) => {

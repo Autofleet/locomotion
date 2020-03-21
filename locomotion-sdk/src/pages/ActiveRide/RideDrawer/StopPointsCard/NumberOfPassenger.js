@@ -1,13 +1,12 @@
 import React, { useState, useEffect, Fragment } from 'react';
 import { Text, View } from 'react-native';
 import styled from 'styled-components';
-import BasicPopup from '../../../popups/BasicPopup';
-import i18n from '../../../I18n';
-import { getTogglePopupsState } from '../../../context/main';
+import i18n from '../../../../I18n';
+import { getTogglePopupsState } from '../../../../context/main';
 
-const PassengerAmountIconSource = require('../../../assets/ppl.png');
-const PlusIconSource = require('../../../assets/plus.png');
-const MinusIconSource = require('../../../assets/minus.png');
+const PassengerAmountIconSource = require('../../../../assets/ppl.png');
+const PlusIconSource = require('../../../../assets/plus.png');
+const MinusIconSource = require('../../../../assets/minus.png');
 
 const MAX_NUMBER_OF_PASSENGER = 5;
 const MIN_NUMBER_OF_PASSENGER = 1;

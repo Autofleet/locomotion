@@ -19,6 +19,7 @@ const SubmitButtonText = styled.Text`
   ${({ hollow }) => hollow && `
     color: #666666;
   `}
+  width: 100%;
 `;
 
 const buttonShadow = `

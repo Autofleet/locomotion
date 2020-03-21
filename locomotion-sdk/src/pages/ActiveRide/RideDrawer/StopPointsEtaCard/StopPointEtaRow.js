@@ -3,7 +3,7 @@ import { View } from 'react-native';
 import styled from 'styled-components';
 import moment from 'moment';
 
-import i18n from '../../../I18n';
+import i18n from '../../../../I18n';
 
 const address = `
 min-height: 50;
@@ -82,9 +82,9 @@ const StopPointTitle = styled.Text`
 `;
 
 export default ({
-  pickup, description, eta, completedAt, openLocationSelect, etaDrift, paddingStart,
+  pickup, description, eta, completedAt, etaDrift, paddingStart,
 }) => (
-  <RowContainer pickup={pickup} onPress={openLocationSelect} paddingStart={paddingStart}>
+  <RowContainer pickup={pickup} paddingStart={paddingStart}>
     <AddressTextCont>
       <View>
         <StopPointTitle pickup={pickup}>
