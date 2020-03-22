@@ -49,7 +49,7 @@ export default ({
   const Star = (props) => {
     const source = props.isOn ? lightStarIconSource : starIconSource;
     return (
-      <TouchableOpacity {...props}><StarIcon source={source}/></TouchableOpacity>
+      <TouchableOpacity {...props}><StarIcon source={source} isOn={props.isOn} /></TouchableOpacity>
     );
   };
 

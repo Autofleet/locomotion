@@ -106,11 +106,11 @@ export const SummaryStars = styled.View`
   padding: 10px 45px;
 `;
 
-export const StarIcon = styled.Image`
+export const StarIcon = styled.Image(({isOn}) => `
   padding: 10px 20px;
   display: flex;
   height: 30px;
   width: 30px;
-  opacity: 0.4;
-`;
+  opacity: ${isOn ? null : 0.4};
+`);
 
