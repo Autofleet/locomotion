@@ -76,7 +76,7 @@ const RowContainer = styled.View`
 const OfferRideEtaContainer = styled.TouchableOpacity`
     position: absolute;
     left: 10px;
-    bottom: -3px;
+    bottom: 0px;
     z-index: 999;
 `;
 const OfferRideEtaText = styled.Text`

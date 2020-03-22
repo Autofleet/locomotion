@@ -25,9 +25,8 @@ export const StopPointsEtaContainer = styled.View`
 `;
 
 export default ({
-  origin, destination, rideState, onNumberOfPassengerChange, numberOfPassenger, requestStopPoints, openLocationSelect
+  origin, destination, rideState, onNumberOfPassengerChange, numberOfPassenger, requestStopPoints, openLocationSelect,readyToBook
 }) => {
-
   return (
       <Fragment>
         <StopPointRow
@@ -47,7 +46,8 @@ export default ({
             completedAt={rideState ? destination && destination.completed_at
                 : undefined}
             />
-            <NumberOfPassenger onChange={onNumberOfPassengerChange} amount={numberOfPassenger} />
+            {readyToBook ?
+              <NumberOfPassenger onChange={onNumberOfPassengerChange} amount={numberOfPassenger} /> : null}
         </Fragment>
   );
 };

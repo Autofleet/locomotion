@@ -8,7 +8,7 @@ import warningMediumIcon from '../../../../../assets/warning_yellow.png';
 import warningHighIcon from '../../../../../assets/warning_red.png';
 
 const EtaContainer = styled.View`
-    flex-direction: row;
+    flex-direction: column;
     justify-content: flex-start;
     margin-top: 3px;
 `;
@@ -17,8 +17,7 @@ const Wrap = styled.View`
     flex: 2;
     flex-direction: row;
     padding-top: 2px;
-    padding-right: 3px;
-    padding-left: 2px;
+    margin-start: 22;
 `;
 const EtaText = styled.Text`
     flex: 1;
@@ -51,16 +50,19 @@ export default ({
   const getWarningMessage = () => {
     const etaDiff = moment(eta).diff(moment(), 'minutes');
     let etaThreshold = null;
+    let warningText = null;
     if (!pickup) {
       return null;
     }
 
     if (etaDiff > etaMediumThreshold) {
       etaThreshold = etaMediumThreshold;
+      warningText='medium'
     }
 
     if (etaDiff >= etaHighThreshold) {
       etaThreshold = etaHighThreshold;
+      warningText='high'
     }
 
     if (!etaThreshold) {
@@ -72,7 +74,7 @@ export default ({
           source={etaThreshold === etaHighThreshold ? warningHighIcon : warningMediumIcon}
         />
         <EtaWarningText red={etaThreshold === etaHighThreshold}>
-          {i18n.t('home.offerCard.etaNotice', { etaThreshold })}
+          {i18n.t(`home.offerCard.etaNotice.${warningText}`, { etaThreshold })}
         </EtaWarningText>
       </Fragment>
     );

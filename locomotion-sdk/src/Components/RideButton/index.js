@@ -17,7 +17,7 @@ const SubmitButtonText = styled.Text`
   font-weight: 500;
   text-align: center;
   ${({ hollow }) => hollow && `
-    color: #666666;
+    color: #ffffff;
   `}
   width: 100%;
 `;
@@ -39,8 +39,7 @@ const StyledTouchableOpacity = styled.TouchableOpacity`
   `}
 
   ${({ hollow }) => hollow && `
-    background-color: #ffffff;
-    border: 2px solid #b5b5b5;
+    background-color: #e2e2e2;
   `}
 `;
 

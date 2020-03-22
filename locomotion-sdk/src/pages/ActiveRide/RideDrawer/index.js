@@ -149,6 +149,7 @@ const RideDrawer = ({
                     onNumberOfPassengerChange={onNumberOfPassengerChange}
                     numberOfPassenger={numberOfPassenger}
                     openLocationSelect={openLocationSelect}
+                    readyToBook={readyToBook}
                   />
                   {/* <Switch onChange={(active) => setRideType(active ? 'pool' : 'private')} active={rideType === 'pool'} /> */}
                   {/* preRideDetails.eta || preRideDetails.estimatePrice ? ( <PreRideBox {...preRideDetails} /> ) : null */}
@@ -185,6 +186,7 @@ const RideDrawer = ({
           <RideButtonContainer>
             <RideButton
               onPress={buttonAction}
+              hollow={!readyToBook}
             >
               {I18n.t(rideState ? 'home.cancelRideButton' : 'home.letsRideButton')}
             </RideButton>

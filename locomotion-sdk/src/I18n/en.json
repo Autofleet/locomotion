@@ -57,7 +57,10 @@
             "driverTitle": "Driver:"
         },
         "offerCard": {
-            "etaNotice": "High Demand! Waiting Time > {{etaThreshold}} min",
+            "etaNotice": {
+                "medium": "High Demand! Waiting Time > {{etaThreshold}} min",
+                "high": "Very High Demand! Waiting Time > {{etaThreshold}} min"
+            },
             "passengersNumber": "Passengers",
             "confirmOffer": "Book Now",
             "expiredOffer": "Renew",
