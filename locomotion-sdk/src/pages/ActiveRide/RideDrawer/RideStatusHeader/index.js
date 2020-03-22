@@ -13,6 +13,10 @@ align-items: center;
 flex-direction: row;
 `;
 
+const styleForDriverIsArrivedState = `
+  color: #08902d;
+`;
+
 export const RideStatusText = styled.Text`
   font-size: 14px;
   color: #666666;
