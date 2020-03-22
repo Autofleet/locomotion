@@ -2,14 +2,15 @@
 # yarn lockfile v1
 
 
-"@autofleet/locomotion-sdk@^1.0.19":
-  version "1.0.19"
-  resolved "https://registry.yarnpkg.com/@autofleet/locomotion-sdk/-/locomotion-sdk-1.0.19.tgz#509d45abe6c01474f7be8d0879d2e8e8718c84fc"
-  integrity sha512-sDe6REgR+IlLyXaLuwGbg6EZmdE3s+KcIxwtHQ/qEwB9+fohJdRcbLqxoMFei7mzME+02NjYV4oUPxG2fWTSuA==
+"@autofleet/locomotion-sdk@^1.1.5":
+  version "1.1.5"
+  resolved "https://registry.yarnpkg.com/@autofleet/locomotion-sdk/-/locomotion-sdk-1.1.5.tgz#dd18f622cd9d98090544c0d23b5841d7119968d7"
+  integrity sha512-frPxv50vEhj/PWkusmK6v8L10YfBdkbrnj6HgHbATnLfZ5pw8F8gZvzm0WByWMl5cNyvgSYG+FHikQ0tL1KzZw==
   dependencies:
     i18next "^19.3.2"
     react-i18next "^11.3.3"
     react-native-keyboard-aware-scroll-view "^0.9.1"
+    react-native-swipe-verify "^0.1.6"
     react-native-table-component "^1.2.1"
     unstated-next "^1.1.0"
     yup "^0.28.1"
@@ -11039,6 +11040,13 @@ react-native-swipe-gestures@^1.0.3:
   version "1.0.4"
   resolved "https://registry.yarnpkg.com/react-native-swipe-gestures/-/react-native-swipe-gestures-1.0.4.tgz#6a9c6613bfe06cd9014a36a2c4a09f719ff62451"
   integrity sha512-C/vz0KPHNyqHk3uF4Cz/jzd/0N8z34ZgsjAZUh/RsXPH2FtJJf3Fw73pQDWJSoCMtvVadlztb8xQ+/aEQrll7w==
+
+react-native-swipe-verify@^0.1.6:
+  version "0.1.6"
+  resolved "https://registry.yarnpkg.com/react-native-swipe-verify/-/react-native-swipe-verify-0.1.6.tgz#332c46562fc0e9e7cc0fbac72b205e7effd53660"
+  integrity sha512-oV3k1Jr5h6ET07Il5/5Xsa59rn3Dj1FObJwhuMU5CJQyrvyjXf+eNPgQ/L6ZAUXUppiLfyatmRgs3w0ZU9M1nw==
+  dependencies:
+    prop-types "^15.6.2"
 
 react-native-tab-view@^1.2.0, react-native-tab-view@^1.4.1:
   version "1.4.1"
