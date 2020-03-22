@@ -13,7 +13,7 @@ const webHookHost = process.env.SERVER_HOST || 'https://716ee2e6.ngrok.io';
 const createOffer = async (rideData) => {
   const { data: offer } = await demandApi.post('/api/v1/offers', {
     type: 'offer',
-    pooling: rideData.rideType === 'pool' ? 'active' : 'no',
+    pooling: process.env.pooling || rideData.rideType === 'pool' ? 'active' : 'no',
     offer_stop_points: [
       {
         type: 'pickup',
