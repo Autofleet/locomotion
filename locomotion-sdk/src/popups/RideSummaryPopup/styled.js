@@ -5,7 +5,7 @@ import xIcon from '../../assets/x.png'
 
 export const SummaryContainer = styled.View`
   padding: 20px 0;
-  height: 500;
+  height: 510;
   background-color: white;
   justify-content: center;
   align-items: center;

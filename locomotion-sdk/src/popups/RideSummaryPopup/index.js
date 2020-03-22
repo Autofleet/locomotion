@@ -1,6 +1,7 @@
 import React, {Fragment, useEffect, useState} from 'react';
 import { View, TouchableOpacity } from 'react-native';
 import Modal from 'react-native-modal';
+import i18n from '../../I18n';
 import {
   SummaryContainer,
   SummarySubTitle,
@@ -71,33 +72,33 @@ export default ({
             <ResetInputIcon />
           </CloseContainer>
           <View style={{ flex: 2, textAlign: 'left', maxWidth: '80%' }}>
-            <SummaryTitle>Thanks for your ride with Mobility-on-Demand!</SummaryTitle>
-            <SummarySubTitle>Your ride data</SummarySubTitle>
+            <SummaryTitle>{i18n.t('popups.rideSummary.thanksForRideHeadline')}</SummaryTitle>
+            <SummarySubTitle>{i18n.t('popups.rideSummary.rideDataHeadline')}</SummarySubTitle>
 
             <SummaryItems>
               <SummaryItem>
                 <SummaryItemIcon source={durationIconSource}/>
-                <SummaryItemTitle>Duration</SummaryItemTitle>
+                <SummaryItemTitle>{i18n.t('popups.rideSummary.durationLabel')}</SummaryItemTitle>
                 <SummaryItemText>value</SummaryItemText>
               </SummaryItem>
 
               <SummaryItem>
                 <SummaryItemIcon source={distanceIconSource}/>
-                <SummaryItemTitle>Distance</SummaryItemTitle>
+                <SummaryItemTitle>{i18n.t('popups.rideSummary.distanceLabel')}</SummaryItemTitle>
                 <SummaryItemText>value</SummaryItemText>
               </SummaryItem>
 
               <SummaryItem last>
                 <SummaryItemIcon source={priceIconSource}/>
-                <SummaryItemTitle>Price</SummaryItemTitle>
+                <SummaryItemTitle>{i18n.t('popups.rideSummary.priceLabel')}</SummaryItemTitle>
                 <SummaryItemText>value</SummaryItemText>
               </SummaryItem>
             </SummaryItems>
 
-            <SummaryStarsSubTitle>How satisfied are you?</SummaryStarsSubTitle>
-            <SummaryStarsTitle>Rate your ride</SummaryStarsTitle>
+            <SummaryStarsSubTitle>{i18n.t('popups.rideSummary.ratingPre')}</SummaryStarsSubTitle>
+            <SummaryStarsTitle>{i18n.t('popups.rideSummary.ratingHeadline')}</SummaryStarsTitle>
             <StarRating/>
-            { rating ? <SummaryStarsSubTitle>We welcome your feedback</SummaryStarsSubTitle> : null}
+            { rating ? <SummaryStarsSubTitle>{i18n.t('popups.rideSummary.ratingPost')}</SummaryStarsSubTitle> : null}
 
           </View>
         </SummaryContainer>

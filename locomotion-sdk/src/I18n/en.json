@@ -79,6 +79,16 @@
         "dropoffPlaceholder": "Choose Dropoff"
     },
     "popups": {
+        "rideSummary": {
+            "thanksForRideHeadline": "Thanks for your ride with Mobility-on-Demand!",
+            "rideDataHeadline": "Your ride data",
+            "durationLabel": "Duration",
+            "distanceLabel": "Distance",
+            "priceLabel": "Price",
+            "ratingPre": "How satisfied are you?",
+            "ratingHeadline": "Rate your ride",
+            "ratingPost": "We welcome your feedback"
+        },
         "rideCancel": {
             "main": "Your ride has been cancelled",
             "sub": "Sorry it didn't work this time, please try again soon!"
