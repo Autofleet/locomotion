@@ -202,8 +202,7 @@ export default ({ navigation, menuSide }) => {
       rideType,
     });
 
-
-    if (response.state === 'rejected') {
+    if (response.status === 'rejected') {
       togglePopup('rideRejected', true);
     } else {
       setRideOffer(response);
