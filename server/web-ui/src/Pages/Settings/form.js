@@ -7,6 +7,7 @@ import {
     FieldLabelText,
     ApplyButton,
     SettingsContainer,
+    SaveSettingsContainer,
 } from "./styled";
 import PropTypes from 'prop-types';
 import { Field, FieldArray, Form } from 'formik';
@@ -21,7 +22,7 @@ const SettingsForm = ({
                         displayLoader
                       }) => {
     return(
-        <Form name="settingsForm" style={{height: '100%'}} >
+        <Form name="settingsForm">
             <SettingsContainer>
                 <SettingsPanel>
                     <SettingsPanelHeader>General</SettingsPanelHeader>
@@ -70,7 +71,9 @@ const SettingsForm = ({
                             component={InputWithLabel}
                         />
                     </SettingsPanelItem>
-
+                </SettingsPanel>
+                <SettingsPanel>
+                    <SettingsPanelHeader>Ride</SettingsPanelHeader>
 
                     <SettingsPanelItem type='text'>
                         <Field
@@ -111,19 +114,56 @@ const SettingsForm = ({
                         />
                     </SettingsPanelItem>
 
-                    <SettingsPanelItem type='submit'>
-                        <ApplyButton
-                            redButtons={false}
-                            disabled={false}
-                            type="submit"
-                            data-test-id="submitSettings"
-                            title={i18n.t('settings.labels.saveButton')}
-                            displayLoader={displayLoader}
+                    <SettingsPanelItem type='text'>
+                        <Field
+                            name="ETA_MEDIUM_THRESHOLD"
+                            label={i18n.t('settings.labels.displayMediumEta')}
+                            type="number"
+                            component={InputWithLabel}
+                            inputComponent={NumberInput}
+                            errorMessage={errors.ETA_MEDIUM_THRESHOLD}
+                            min="0"
+                            inlineField
+                        />
+                    </SettingsPanelItem>
+
+                    <SettingsPanelItem type='text'>
+                        <Field
+                            name="ETA_HIGH_THRESHOLD"
+                            label={i18n.t('settings.labels.displayHighEta')}
+                            type="number"
+                            component={InputWithLabel}
+                            inputComponent={NumberInput}
+                            errorMessage={errors.ETA_HIGH_THRESHOLD}
+                            min="0"
+                            inlineField
+                        />
+                    </SettingsPanelItem>
+
+                    <SettingsPanelItem type='text'>
+                        <Field
+                            name="OFFER_EXPIRATION_TIME"
+                            label={i18n.t('settings.labels.displayOfferExpirationTime')}
+                            type="number"
+                            component={InputWithLabel}
+                            inputComponent={NumberInput}
+                            errorMessage={errors.OFFER_EXPIRATION_TIME}
+                            min="0"
+                            inlineField
                         />
                     </SettingsPanelItem>
                 </SettingsPanel>
-                <SettingsPanel transparent placeholder />
             </SettingsContainer>
+            <SaveSettingsContainer>
+                <ApplyButton
+                    redButtons={false}
+                    disabled={false}
+                    type="submit"
+                    data-test-id="submitSettings"
+                    title={i18n.t('settings.labels.saveButton')}
+                    displayLoader={displayLoader}
+                />
+            </SaveSettingsContainer>
         </Form>
 )};
 

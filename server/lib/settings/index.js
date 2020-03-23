@@ -1,3 +1,4 @@
+const settingsDefaults = require('./defaults');
 const { Setting } = require('../../models');
 
 const parseValue = (value, type) => {
@@ -41,12 +42,21 @@ const getAllSettingFromDb = async () => {
 };
 
 module.exports = {
-  getAllSettingFromDb,
   getSettingByKeyFromDb,
+  getSettingsList: async () => {
+    const settings = await getAllSettingFromDb();
+    const settingsList = {...settingsDefaults};
+    settings.map((setting) => {
+      settingsList[setting.key] = setting.value;
+    });
+    return settingsList;
+  },
+  updateByKey(settingKey, payload) {
+    return Setting.update(payload, { where: { key: settingKey } });
+  },
   patch(settingId, payload) {
     return Setting.update(payload, { where: { id: settingId } });
   },
-
   async get(settingId) {
     let foundSetting = await Setting.findById(settingId);
     if (foundSetting) {
@@ -58,7 +68,6 @@ module.exports = {
 
     return foundSetting;
   },
-
   delete(settingId) {
     return Setting.destroy({ where: { id: settingId } });
   },

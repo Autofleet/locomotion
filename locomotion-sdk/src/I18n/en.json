@@ -39,7 +39,7 @@
         "cancelRideButton": "Cancel Ride",
         "choosePickup": "Choose Pickup",
         "chooseDropoff": "Choose Dropoff",
-        "passengersNumber": "Passenger",
+        "passengersNumber": "Passengers",
         "rideStates": {
             "driverOnTheWay": "Your ride has been booked",
             "driverOnTheWayEta": "Time till boarding: {{pickupEta}} Minutes",
@@ -55,6 +55,17 @@
         "rideCard": {
             "carTitle": "Your MoD car:",
             "driverTitle": "Driver:"
+        },
+        "offerCard": {
+            "etaNotice": {
+                "medium": "High Demand! Waiting Time > {{etaThreshold}} min",
+                "high": "Very High Demand! Waiting Time > {{etaThreshold}} min"
+            },
+            "passengersNumber": "Passengers",
+            "confirmOffer": "Book Now",
+            "expiredOffer": "Renew",
+            "expiredOfferText": "Your request expired",
+            "offerBooked": "Ride has been booked"
         }
     },
     "lock": {

@@ -2,13 +2,14 @@ import React, {
   useState, useEffect, useRef,
 } from 'react';
 import {
-  StyleSheet, PermissionsAndroid, Platform,
+  StyleSheet, PermissionsAndroid, Platform, Image,
 } from 'react-native';
 import MapView, { Polyline, Marker } from 'react-native-maps';
 import polyline from '@mapbox/polyline';
-import moment from 'moment'
+import moment from 'moment';
 
 import network from '../../services/network';
+import getPosition from './AddressView/getPostion';
 import AddressView from './AddressView';
 import {
   PageContainer, StopPointDot, VehicleDot,
@@ -18,7 +19,7 @@ import RideDrawer from './RideDrawer';
 import { getTogglePopupsState } from '../../context/main';
 import UserService from '../../services/user';
 import OneSignal from '../../services/one-signal';
-import settingsContext from '../../context/settings'
+import settingsContext from '../../context/settings';
 
 function useInterval(callback, delay) {
   const savedCallback = useRef();
@@ -40,7 +41,7 @@ function useInterval(callback, delay) {
   }, [delay]);
 }
 
-export default ({ navigation }) => {
+export default ({ navigation, menuSide }) => {
   const [activeRideState, setActiveRide] = useState(null);
   const [preRideDetails, setPreRideDetails] = useState({});
   const [mapRegion, setMapRegion] = useState({
@@ -48,16 +49,18 @@ export default ({ navigation }) => {
     longitudeDelta: 0.0421,
   });
   const [activeSpState, setActiveSp] = useState(null);
-  const [numberOfPassenger, setNumberOfPassenger] = useState(1);
+  const [numberOfPassengers, setNumberOfPassengers] = useState(1);
   const [stopPoints, setStopPoints] = useState(null);
   const [, togglePopup] = getTogglePopupsState();
   const [requestStopPoints, setRequestStopPoints] = useState({
     openEdit: false,
   });
   const [rideType, setRideType] = useState('pool');
-  const [pickupEta, setPickupEta] = useState(null)
-  const [displayMatchInfo, setDisplayMatchInfo] = useState(false)
-
+  const [pickupEta, setPickupEta] = useState(null);
+  const [displayMatchInfo, setDisplayMatchInfo] = useState(false);
+  const [rideOffer, setRideOffer] = useState(null);
+  const [offerExpired, setOfferExpired] = useState(false);
+  const [offerTimer, setOfferTimer] = useState(false);
   const mapInstance = useRef();
 
   const loadActiveRide = async () => {
@@ -115,13 +118,13 @@ export default ({ navigation }) => {
   }, 10000);
 
   useEffect(() => {
-    console.log(activeRideState)
-    if(!activeRideState) {
+    console.log(activeRideState);
+    if (!activeRideState) {
       return;
     }
     const origin = activeRideState.stop_points[0];
-    calculatePickupEta(origin)
-  }, [activeRideState])
+    calculatePickupEta(origin);
+  }, [activeRideState]);
 
   const bookValidation = state => state
     && state.dropoff && state.dropoff.lat
@@ -164,6 +167,8 @@ export default ({ navigation }) => {
   };
 
   const createRide = async () => {
+    clearTimeout(offerTimer);
+
     const { data: response } = await network.post('api/v1/me/rides', {
       pickupAddress: requestStopPoints.pickup.description,
       pickupLat: requestStopPoints.pickup.lat,
@@ -171,13 +176,36 @@ export default ({ navigation }) => {
       dropoffAddress: requestStopPoints.dropoff.description,
       dropoffLat: requestStopPoints.dropoff.lat,
       dropoffLng: requestStopPoints.dropoff.lng,
-      numberOfPassenger,
+      numberOfPassengers,
       rideType,
     });
     if (response.state === 'rejected') {
+      setRideOffer(null);
       togglePopup('rideRejected', true);
     } else {
-      return loadActiveRide();
+      setTimeout(async () => {
+        await loadActiveRide();
+        setRideOffer(null);
+      }, 2500);
+    }
+  };
+
+  const createOffer = async () => {
+    const { data: response } = await network.post('api/v1/me/rides/offer', {
+      pickupAddress: requestStopPoints.pickup.description,
+      pickupLat: requestStopPoints.pickup.lat,
+      pickupLng: requestStopPoints.pickup.lng,
+      dropoffAddress: requestStopPoints.dropoff.description,
+      dropoffLat: requestStopPoints.dropoff.lat,
+      dropoffLng: requestStopPoints.dropoff.lng,
+      numberOfPassengers,
+      rideType,
+    });
+
+    if (response.status === 'rejected') {
+      togglePopup('rideRejected', true);
+    } else {
+      setRideOffer(response);
     }
   };
 
@@ -186,20 +214,60 @@ export default ({ navigation }) => {
     return loadActiveRide();
   };
 
+  const cancelOffer = () => {
+    setRideOffer(null);
+  };
+
+
   const calculatePickupEta = (origin) => {
-    if(origin.completed_at) {
-      setDisplayMatchInfo(true)
-    } else {
-      if(origin && origin.eta) {
-        const etaDiff = moment(origin.eta).diff(moment(), 'minutes');
-        setPickupEta(etaDiff)
-        setDisplayMatchInfo(etaDiff <= useSettings.settingsList.ARRIVE_REMINDER_MIN)
-      }
+    if (origin.completed_at) {
+      setDisplayMatchInfo(true);
+    } else if (origin && origin.eta) {
+      const etaDiff = moment(origin.eta).diff(moment(), 'minutes');
+      setPickupEta(etaDiff);
+      setDisplayMatchInfo(etaDiff <= useSettings.settingsList.ARRIVE_REMINDER_MIN);
     }
-  }
+  };
 
   const showsUserLocation = !activeRideState || !activeRideState.vehicle;
   const useSettings = settingsContext.useContainer();
+
+  const setClosestStations = async () => {
+    let closestStation;
+    try {
+      const { coords } = await getPosition();
+      const { data } = await network.get('api/v1/me/places', {
+        params: {
+          location: { lat: coords.latitude, lng: coords.longitude },
+        },
+      });
+      console.log(data);
+
+      closestStation = data[0];
+    } catch (error) {
+      console.log('Got error while try to get current place', error);
+    }
+    setRequestStopPoints({
+      openEdit: false,
+      pickup: closestStation,
+    });
+  };
+
+  useEffect(() => {
+    setClosestStations();
+  }, []);
+
+  useEffect(() => {
+    let offerTimeout;
+    if (rideOffer) {
+      setOfferExpired(false);
+      setOfferTimer(setTimeout(() => {
+        setOfferExpired(true);
+      }, useSettings.settingsList.OFFER_EXPIRATION_TIME * 1000));
+    } else {
+      clearTimeout(offerTimer);
+    }
+  }, [rideOffer]);
 
   return (
     <PageContainer>
@@ -260,10 +328,11 @@ export default ({ navigation }) => {
             </Marker>
           ) : null}
       </MapView>
-      <Header navigation={navigation} />
+      <Header navigation={navigation} menuSide={menuSide} />
       <RideDrawer
         createRide={createRide}
         cancelRide={cancelRide}
+        createOffer={createOffer}
         readyToBook={bookValidation(requestStopPoints)}
         openLocationSelect={openLocationSelect}
         requestStopPoints={requestStopPoints}
@@ -271,8 +340,11 @@ export default ({ navigation }) => {
         rideType={rideType}
         setRideType={setRideType}
         preRideDetails={preRideDetails}
-        onNumberOfPassengerChange={setNumberOfPassenger}
-        numberOfPassenger={numberOfPassenger}
+        onNumberOfPassengerChange={setNumberOfPassengers}
+        numberOfPassenger={numberOfPassengers}
+        rideOffer={rideOffer}
+        cancelOffer={cancelOffer}
+        offerExpired={offerExpired}
       />
       {
           requestStopPoints.openEdit

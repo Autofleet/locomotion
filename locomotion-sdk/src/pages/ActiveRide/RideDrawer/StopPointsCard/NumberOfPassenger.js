@@ -1,13 +1,12 @@
-import React, { useState, Fragment } from 'react';
-import {Text, View} from 'react-native'
+import React, { useState, useEffect, Fragment } from 'react';
+import { Text, View } from 'react-native';
 import styled from 'styled-components';
-import BasicPopup from '../../../popups/BasicPopup';
-import i18n from '../../../I18n';
-import { getTogglePopupsState } from '../../../context/main';
+import i18n from '../../../../I18n';
+import { getTogglePopupsState } from '../../../../context/main';
 
-const PassengerAmountIconSource = require('../../../assets/ppl.png');
-const PlusIconSource = require('../../../assets/plus.png');
-const MinusIconSource = require('../../../assets/minus.png');
+const PassengerAmountIconSource = require('../../../../assets/ppl.png');
+const PlusIconSource = require('../../../../assets/plus.png');
+const MinusIconSource = require('../../../../assets/minus.png');
 
 const MAX_NUMBER_OF_PASSENGER = 5;
 const MIN_NUMBER_OF_PASSENGER = 1;
@@ -48,7 +47,6 @@ const PassengerAmountText = styled.Text`
 const MinusIcon = styled.Image.attrs({ source: MinusIconSource })`
   width: 16px;
   height: 3px;
-  background-color: blue;
 `;
 
 const PlusIcon = styled.Image.attrs({ source: PlusIconSource })`
@@ -64,7 +62,7 @@ const SetPassengerAmountContainer = styled.View`
   border-color: #dedede;
   border-radius: 2;
   align-self: center;
-`
+`;
 
 const SetPassengerAmountBox = styled.TouchableOpacity`
   flex: 1;
@@ -101,7 +99,7 @@ const SetPassengerAmountBoxContainer = styled.View`
   height: 25px;
   border-radius: 15px;
   border: 1px solid #525252;
-  opacity: ${({disabled}) => disabled ? 0.3 : 0.7};
+  opacity: ${({ disabled }) => (disabled ? 0.3 : 0.7)};
 `;
 
 const PassengerControlersContainer = styled.View`
@@ -116,36 +114,38 @@ export default ({ amount, onChange }) => {
   const [isPopupOpen, togglePopup] = getTogglePopupsState();
   const [newAmount, setNewAmount] = useState(amount);
 
-  const validateChange = (newAmount, change) => {
-    return MAX_NUMBER_OF_PASSENGER >= (newAmount + change) && (newAmount + change) >= MIN_NUMBER_OF_PASSENGER
-  }
+  const validateChange = (newAmount, change) => MAX_NUMBER_OF_PASSENGER >= (newAmount + change) && (newAmount + change) >= MIN_NUMBER_OF_PASSENGER;
 
   const getNewAmountFunction = change => () => {
     if (!validateChange(newAmount, change)) {
       return;
     }
-
     setNewAmount(newAmount + change);
-  }
+  };
+
+  useEffect(() => {
+    onChange(newAmount);
+  }, [newAmount]);
 
   return (
     <PassengerAmountContainer>
-      <View style={{width: '100%', flexDirection: 'row'}}>
+      <View style={{ width: '100%', flexDirection: 'row' }}>
         <PassengerAmountIcon />
         <AddressText>{i18n.t('home.passengersNumber')}</AddressText>
         <PassengerAmountText>{newAmount}</PassengerAmountText>
         <PassengerControlersContainer>
           <SetPassengerAmountBoxContainer disabled={!validateChange(newAmount, -1)}>
-              <SetPassengerAmountBox
-                onPress={getNewAmountFunction(-1)}>
-                  <MinusIcon />
-              </SetPassengerAmountBox>
-            </SetPassengerAmountBoxContainer>
-            <SetPassengerAmountBoxContainer disabled={!validateChange(newAmount, 1)} >
-              <SetPassengerAmountBox onPress={getNewAmountFunction(1)}><PlusIcon /></SetPassengerAmountBox>
-            </SetPassengerAmountBoxContainer>
+            <SetPassengerAmountBox
+              onPress={getNewAmountFunction(-1)}
+            >
+              <MinusIcon />
+            </SetPassengerAmountBox>
+          </SetPassengerAmountBoxContainer>
+          <SetPassengerAmountBoxContainer disabled={!validateChange(newAmount, 1)}>
+            <SetPassengerAmountBox onPress={getNewAmountFunction(1)}><PlusIcon /></SetPassengerAmountBox>
+          </SetPassengerAmountBoxContainer>
         </PassengerControlersContainer>
       </View>
     </PassengerAmountContainer>
-  )
-}
+  );
+};

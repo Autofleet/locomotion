@@ -3,7 +3,7 @@ import { View } from 'react-native';
 import styled from 'styled-components';
 import moment from 'moment';
 
-import i18n from '../../../I18n';
+import i18n from '../../../../I18n';
 
 const address = `
 min-height: 50;
@@ -54,7 +54,7 @@ const AddressText = styled.Text`
   font-size: 11;
   color: #666666;
   margin-top: 5px;
-  min-height: 20px;
+  min-height: 30px;
 `;
 
 const EtaText = styled.Text`
@@ -77,17 +77,16 @@ export const RowContainer = styled.TouchableOpacity`
 
 const StopPointTitle = styled.Text`
   font-size: 14px;
-  color: ${({pickup}) => pickup ? '#6180c0' : '#08902d'};
+  color: ${({ pickup }) => (pickup ? '#6180c0' : '#08902d')};
   line-height: 16px;
 `;
 
 export default ({
-  pickup, description, eta, completedAt, openLocationSelect, etaDrift, paddingStart
-}) => {
-  return (
-  <RowContainer pickup={pickup} onPress={openLocationSelect} paddingStart={paddingStart} >
+  pickup, description, eta, completedAt, etaDrift, paddingStart,
+}) => (
+  <RowContainer pickup={pickup} paddingStart={paddingStart}>
     <AddressTextCont>
-    <View>
+      <View>
         <StopPointTitle pickup={pickup}>
           {i18n.t(pickup ? 'home.bookingCard.pickupEtaTitle' : 'home.bookingCard.dropoffEtaTitle')}
         </StopPointTitle>
@@ -100,7 +99,7 @@ export default ({
       <View>
         {eta || completedAt ? (
           <EtaText>
-              {`${moment(eta).format('HH:mm')} - ${moment(eta).add(etaDrift, 'minutes').format('HH:mm')}`}
+            {`${moment(eta).format('HH:mm')} - ${moment(eta).add(etaDrift, 'minutes').format('HH:mm')}`}
             {/* moment(eta || completedAt).fromNow() */}
           </EtaText>
         ) : null }
@@ -108,5 +107,3 @@ export default ({
     </AddressTextCont>
   </RowContainer>
 );
-
-        }

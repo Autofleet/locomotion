@@ -11,7 +11,7 @@ import * as Yup from "yup";
 import {Formik} from "formik";
 import diff from "object-diff";
 
-const FieldIsRequiredMsg = i18n.t('settings.validation.urlIsInvalid');
+const FieldIsRequiredMsg = i18n.t('settings.validation.fieldIsRequired');
 
 Yup.string.prototype.urlHttps = function urlHttps() {
     return this.matches(
@@ -37,10 +37,10 @@ export default () => {
     }, []);
 
     useEffect(() => {
-        if (settings.settingsObj) {
+        if (settings.settingsList) {
             setShowForm(true);
         }
-    }, [settings.settingsObj]);
+    }, [settings.settingsList]);
 
 return (
         <Fragment>
@@ -53,19 +53,24 @@ return (
                         <Formik
                             validateOnBlur={false}
                             validateOnChange={false}
-                            {...{ initialValues: settings.settingsObj }}
+                            {...{ initialValues: settings.settingsList }}
                             validationSchema={Yup.object().shape({
                                 MANUAL_APPROVAL: Yup.boolean(),
                                 TERMS_URL: Yup.string().urlHttps().required(FieldIsRequiredMsg),
                                 PRIVACY_URL: Yup.string().urlHttps().required(FieldIsRequiredMsg),
                                 CONTACT_US_URL: Yup.string().urlHttps().required(FieldIsRequiredMsg),
-                                ARRIVE_REMINDER_MIN: Yup.number().required(i18n.t('settings.validation.fieldIsRequired')),
+                                ARRIVE_REMINDER_MIN: Yup.number().required(FieldIsRequiredMsg),
+                                DISPLAY_ETA_DRIFT: Yup.number().required(FieldIsRequiredMsg),
+                                DISPLAY_MAX_ETA_DRIFT: Yup.number().required(FieldIsRequiredMsg),
+                                ETA_MEDIUM_THRESHOLD: Yup.number().required(FieldIsRequiredMsg),
+                                ETA_HIGH_THRESHOLD: Yup.number().required(FieldIsRequiredMsg),
+                                OFFER_EXPIRATION_TIME: Yup.number().required(FieldIsRequiredMsg),
                             })}
                             onSubmit={async (values, actions) => {
                                 actions.setSubmitting(true);
                                 setTimeout(() => setDisplayLoader(true), 100);
 
-                                const { ...otherValues } = diff(settings.settingsObj, values);
+                                const { ...otherValues } = diff(settings.settingsList, values);
                                 try {
                                     Object.keys(otherValues).map(async (key, index) => {
                                         await settings.UpdateSetting(key, otherValues[key]);

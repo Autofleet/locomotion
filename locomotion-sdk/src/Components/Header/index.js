@@ -6,15 +6,21 @@ import SafeView from '../SafeView';
 const HamburgerIconSource = require('../../assets/menu.png');
 
 const HeaderView = styled.View`
-
+  align-self: flex-start;
   margin-top: 14px;
   margin-left: 14px;
+
+  ${({ menuSide }) => (menuSide === 'right' ? `
+  align-self: flex-end;
+  margin-right: 14px;
+  margin-left: 0;
+  ` : '')}
 `;
 
-const Header = ({ navigation }) => (
+const Header = ({ navigation, menuSide }) => (
   <SafeView>
     <TouchableOpacity onPress={() => navigation.openDrawer()}>
-      <HeaderView>
+      <HeaderView menuSide={menuSide}>
         <Image style={{ width: 25, height: 25 }} source={HamburgerIconSource} />
       </HeaderView>
     </TouchableOpacity>

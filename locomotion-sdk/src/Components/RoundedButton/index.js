@@ -1,6 +1,7 @@
+import React, { useState, useEffect } from 'react';
+import { View } from 'react-native';
 import LottieView from 'lottie-react-native';
 import styled from 'styled-components';
-import React, { useState } from 'react';
 import LinearGradient from '../LinearGradient';
 
 import { inputHeight, appPalette } from '../../assets/style-settings';
@@ -13,13 +14,11 @@ const LoadingWrapper = styled.View`
 
 const SubmitButtonText = styled.Text`
   color: #ffffff;
-  font-weight: 700;
-  font-size: 14px;
+  font-size: 12px;
   text-align: center;
-  ${({hollow}) => hollow && `
-    color: #1e273d;
+  ${({ hollow }) => hollow && `
+    color: #b5b5b5;
   `}
-  height: 20px;
 `;
 
 const buttonShadow = `
@@ -34,19 +33,27 @@ const StyledTouchableOpacity = styled.TouchableOpacity`
   border-radius: 24px;
   background-color: #1e273d;
   height: 40px;
-  padding-top: 9px;
+
   ${({ marginTop }) => marginTop && `
     margin-top: ${marginTop};
   `}
 
-  ${({hollow}) => hollow && `
+  ${({ hollow }) => hollow && `
     background-color: #ffffff;
-    border: 2px solid #1e273d;
+    border: 2px solid #b5b5b5;
   `}
+  flex-direction: row;
+`;
+
+const ButtonTextContainer = styled.View`
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  flex: 1;
 `;
 
 const Button = styled(({
-  onPress, children, style, hollow, ...props
+  onPress, children, style, hollow, setLoading, ...props
 }) => {
   const [loadingState, setLoadingState] = useState(false);
 
@@ -56,8 +63,15 @@ const Button = styled(({
     return setLoadingState(false);
   };
 
+  useEffect(() => {
+    if (setLoading) {
+      setLoading(loadingState);
+    }
+  }, [loadingState]);
+
   return (
     <StyledTouchableOpacity width={style[0].width} {...props} onPress={onPressWithLoading} hollow={hollow}>
+      <ButtonTextContainer>
         {loadingState ? (
           <LoadingWrapper>
             <LottieView
@@ -71,7 +85,7 @@ const Button = styled(({
                   animation.play();
                 }
               }}
-              source={require('./loader.json')}
+              source={hollow ? require('./dark-loader.json') : require('./loader.json')}
             />
           </LoadingWrapper>
         ) : (
@@ -79,7 +93,7 @@ const Button = styled(({
             {children}
           </SubmitButtonText>
         )}
-
+      </ButtonTextContainer>
     </StyledTouchableOpacity>
   );
 })`

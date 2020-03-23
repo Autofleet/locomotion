@@ -14,7 +14,6 @@ export const Content = styled.div`
   flex: 1;
   padding: 0 50px;
   overflow: auto;
-  height: 100vh;
   background-color: rgb(251, 251, 252);
   border-color: rgb(223, 223, 223);
   border-style: solid none solid solid;
@@ -51,12 +50,17 @@ export const SettingsPanelHeader = styled.div`
 `;
 
 export const SettingsPanelItem = styled.div(({type}) => `
-    padding: 5% 5% ${type === 'text' ? 0 : 8}% 5%;
+    padding-top: 5%;
+    padding-bottom: ${type === 'text' ? 0 : 6}%;
+    padding-right: 5%;
+    padding-left: 5%;
     margin: 0 5%;
 
-    ${type !== 'submit' ? `
-    border-bottom: 1px solid rgba(0, 0, 0, 0.07);
-    ` : '' }
+    ${type === 'submit' ?  `
+    padding-bottom: 12%;
+    ` : `
+   border-bottom: 1px solid rgba(0, 0, 0, 0.07);
+   ` }
 
     ${type === 'toggle' ? `
     display: block;
@@ -81,7 +85,9 @@ export const FieldLabelText = styled(LabelText)`
 `;
 
 export const SaveSettingsContainer = styled.div`
-
+    padding-left: 10px;
+    padding-top: 20px;
+    display: flex;
 `;
 
 const ButtonBase = props => <Button {...omit(props, ['redButtons'])} />;

@@ -3,7 +3,7 @@ import { View } from 'react-native';
 import styled from 'styled-components';
 import moment from 'moment';
 
-import i18n from '../../../I18n';
+import i18n from '../../../../I18n';
 
 const address = `
 min-height: 50;
@@ -14,25 +14,10 @@ align-items: center;
 flex-direction: row;
 `;
 
-export const RowContainer = styled.TouchableOpacity`
-  min-height: 50;
-  padding-top: 10;
-  padding-bottom: 10;
-  align-items: center;
-  flex-direction: row;
-  ${({ paddingStart }) => (paddingStart ? `
-  padding-start: 24;
-  ` : null)}
-  ${({ useBorder }) => (useBorder ? `
-    border-bottom-color: #f2f2f2;
-    border-bottom-width: 1;
-  ` : null)}
-`;
-
 export const StopPointDot = styled.View`
   width: 10;
   height: 10;
-  background-color: ${({ origin }) => (origin ? '#8ac1ff' : '#02cc64')};
+  background-color: ${({ origin }) => (origin ? '#6180c0' : '#08902d')};
   border-radius: 10;
   /* margin-top: 10; */
 `;
@@ -56,9 +41,9 @@ const StopPointDotContainer = styled.View`
 `;
 
 const StopPointDotTimeLine = styled.View`
-  width: 1;
+  width: 2;
   flex: 1;
-  background-color: #8aecff;
+  background-color: #dbdbdb;
 `;
 
 
@@ -79,12 +64,25 @@ const EtaText = styled.Text`
   font-size: 10px;
 `;
 
-
+const RowContainer = styled.TouchableOpacity`
+  min-height: 50;
+  padding-top: 10;
+  padding-bottom: 10;
+  align-items: center;
+  flex-direction: row;
+  ${({ paddingStart }) => (paddingStart ? `
+  padding-start: 24;
+  ` : null)}
+  ${({ useBorder }) => (useBorder ? `
+    border-bottom-color: #f2f2f2;
+    border-bottom-width: 1;
+  ` : null)}
+`;
 
 export default ({
   pickup, description, eta, completedAt, openLocationSelect, useBorder
 }) => (
-  <RowContainer pickup={pickup} onPress={openLocationSelect} useBorder paddingStart>
+  <RowContainer pickup={pickup} onPress={openLocationSelect} useBorder={useBorder} paddingStart>
     <StopPointDotContainer origin={pickup}>
       <StopPointDot origin={pickup} />
       <StopPointDotTimeLine />

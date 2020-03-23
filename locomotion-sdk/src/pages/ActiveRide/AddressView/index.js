@@ -1,6 +1,6 @@
 import React, { useState, useRef, Fragment } from 'react';
 import { ScrollView } from 'react-native'
-import Geolocation from '@react-native-community/geolocation';
+import getPosition from './getPostion';
 import network from '../../../services/network';
 import {
   View,
@@ -34,9 +34,10 @@ export default (props) => {
 
   const enrichPlaceWithLocation = async (place) => {
     const { data } = await network.get('api/v1/me/places/get-location', { params: {
-      placeId: place.placeid,
+      placeId: (place.placeid || place.place_id),
     } });
     place = { ...place, ...data };
+    return place;
   }
 
   const setPlace = async (place) => {
@@ -47,8 +48,8 @@ export default (props) => {
       setSearchDropoffText(place.description);
     }
 
-    if (!place.lat && place.placeid) {
-      await enrichPlaceWithLocation(place);
+    if (!place.lat && (place.placeid || place.place_id)) {
+      place = await enrichPlaceWithLocation(place);
     }
 
     if (props.onLocationSelect) {
@@ -62,12 +63,6 @@ export default (props) => {
       list: [],
     });
   };
-
-  const getPosition = (options) => {
-    return new Promise((resolve, reject) => {
-      Geolocation.getCurrentPosition(resolve, reject, { enableHighAccuracy: true });
-    });
-  }
 
   const loadAddress = async (input) => {
     try {
@@ -139,9 +134,10 @@ export default (props) => {
             <AddressSearchItemText>
               {item.description}
             </AddressSearchItemText>
+            {item.distance ?
             <DistanceFromAddress>
-              {item.distance ? item.distanceFromMe.toFixed(2) : null}km
-            </DistanceFromAddress>
+              {item.distance ? `${item.distanceFromMe.toFixed(2)}km` : null}
+            </DistanceFromAddress> : null}
           </AddressSearchItem>
         ))}
       </ScrollView>
