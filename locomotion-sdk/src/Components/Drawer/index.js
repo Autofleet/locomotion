@@ -23,7 +23,8 @@ export const DrawerLabel = (props) => {
 };
 
 export const DrawerContentComponent = (props) => {
-  const { navigation } = props;
+  const { navigation, screenProps } = props;
+
   const closeComponent = () => {
     navigation.closeDrawer();
   };

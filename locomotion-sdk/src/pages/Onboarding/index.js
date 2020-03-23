@@ -17,7 +17,7 @@ import { useStateValue } from '../../context/main';
 import PageHeader from '../../Components/PageHeader';
 
 
-export default ({ navigation, screenOptions, ...props }) => {
+export default ({ navigation, screenOptions, menuSide, ...props }) => {
   const [onboardingState, dispatchOnboardingState] = useState({
     uploadPromise: false,
     firstName: '',
@@ -116,6 +116,7 @@ export default ({ navigation, screenOptions, ...props }) => {
         title={i18n.t('onboarding.pageTitle')}
         onIconPress={() => navigation.toggleDrawer()}
         displayIcon={showHeaderIcon}
+        iconSide={menuSide}
       />
       <Container>
         <Text>

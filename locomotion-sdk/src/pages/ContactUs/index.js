@@ -10,7 +10,7 @@ import network from '../../services/network';
 const { CONTACT_US_URL: uri } = Config;
 
 
-export default ({ navigation }) => {
+export default ({ navigation, menuSide }) => {
   const [settings, setSettings] = useState({
     termsUrl: null,
     privacyUrl: null,
@@ -31,6 +31,7 @@ export default ({ navigation }) => {
       <PageHeader
         title={i18n.t('contactUs.pageTitle')}
         onIconPress={() => navigation.toggleDrawer()}
+        iconSide={menuSide}
       />
       { uri ? (
         <WebView
