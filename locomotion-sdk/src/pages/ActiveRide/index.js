@@ -20,7 +20,7 @@ import { getTogglePopupsState } from '../../context/main';
 import UserService from '../../services/user';
 import OneSignal from '../../services/one-signal';
 import settingsContext from '../../context/settings';
-import StationMarker from "./stationMarker";
+import StationsMap from "./StationsMap";
 
 function useInterval(callback, delay) {
   const savedCallback = useRef();
@@ -45,7 +45,7 @@ function useInterval(callback, delay) {
 export default ({ navigation, menuSide }) => {
   const [activeRideState, setActiveRide] = useState(null);
   const [preRideDetails, setPreRideDetails] = useState({});
-  const [mapMarkers, setMapMarkers] = useState(null);
+  const [mapMarkers, setMapMarkers] = useState([]);
   const [mapRegion, setMapRegion] = useState({
     latitudeDelta: 0.0922,
     longitudeDelta: 0.0421,
@@ -63,6 +63,8 @@ export default ({ navigation, menuSide }) => {
   const [rideOffer, setRideOffer] = useState(null);
   const [offerExpired, setOfferExpired] = useState(false);
   const [offerTimer, setOfferTimer] = useState(false);
+  const [stations, setStations] = useState([]);
+
   const mapInstance = useRef();
 
   const loadActiveRide = async () => {
@@ -111,6 +113,7 @@ export default ({ navigation, menuSide }) => {
 
   useEffect(() => {
     UserService.getUser(navigation);
+    getStations();
     loadActiveRide();
     OneSignal.init();
   }, []);
@@ -234,9 +237,14 @@ export default ({ navigation, menuSide }) => {
   const showsUserLocation = !activeRideState || !activeRideState.vehicle;
   const useSettings = settingsContext.useContainer();
 
-  const setClosestStations = async () => {
-    let stations;
-    let closestStation;
+  const setClosestStations = async (pickupStation) => {
+    setRequestStopPoints({
+      openEdit: false,
+      pickup: pickupStation,
+    });
+  };
+
+  const getStations = async () => {
     try {
       const { coords } = await getPosition();
       const { data } = await network.get('api/v1/me/places', {
@@ -244,21 +252,25 @@ export default ({ navigation, menuSide }) => {
           location: { lat: coords.latitude, lng: coords.longitude },
         },
       });
-      stations = data;
-      closestStation = stations[0];
+      setStations(data);
     } catch (error) {
       console.warn('Error while try to get current place', error.stack || error);
     }
-    setRequestStopPoints({
-      openEdit: false,
-      pickup: closestStation,
-    });
-    setMapMarkers(stations);
-  };
+  }
 
   useEffect(() => {
-    setClosestStations();
-  }, []);
+    if(stations.length) {
+      setClosestStations(stations[0]);
+      const markersList = stations.map(station => {
+        return {
+          ...station,
+          id: `${station.lat}-${station.lng}`
+        }
+      })
+
+      setMapMarkers(markersList);
+    }
+  }, [stations])
 
   const selectStationMarker = (key, isPickup, isDropoff) => {
     let pickup = requestStopPoints.pickup;
@@ -269,12 +281,12 @@ export default ({ navigation, menuSide }) => {
     } else if (isDropoff) {
       dropoff = null;
     } else if (!pickup) {
-      pickup = mapMarkers[key];
+      pickup = mapMarkers.find(marker => marker.id === key);
     } else {
-      dropoff = mapMarkers[key];
+      dropoff = mapMarkers.find(marker => marker.id === key);
     }
 
-    setRequestStopPoints({
+     setRequestStopPoints({
       openEdit: false,
       pickup,
       dropoff,
@@ -329,15 +341,15 @@ export default ({ navigation, menuSide }) => {
           );
         }}
       >
-        {!activeRideState && mapMarkers ? Object.keys(mapMarkers).map((key) => (
-            <StationMarker
+        {!activeRideState ?
+
+            <StationsMap
                 isInOffer={!!rideOffer}
-                stationKey={key}
+                markersMap={mapMarkers}
                 selectStation={selectStationMarker}
                 requestStopPoints={requestStopPoints}
-                {...mapMarkers[key]}
             />
-        )) : null}
+         : null}
         {activeSpState && displayMatchInfo
           ? (
             <Polyline
