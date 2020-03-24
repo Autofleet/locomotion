@@ -17,11 +17,11 @@ export const StationDot = styled(PointDot)`
   border-radius: 20;
   background-color: #c3c0c0;
 
-  ${({type}) => type === 'pickup' && `
+  ${({ type }) => type === 'pickup' && `
       background-color: #6180C0;
     `}
 
-  ${({type}) => type === 'dropoff' && `
+  ${({ type }) => type === 'dropoff' && `
     background-color: #08902d;
   `}
 `;
@@ -35,11 +35,11 @@ export const MarkerToolTip = styled.View`
     background-color: #c3c0c0;
     position: absolute;
     top: -24px;
-    ${({type}) => type === 'pickup' && `
+    ${({ type }) => type === 'pickup' && `
       background-color: #6180C0;
     `}
 
-    ${({type}) => type === 'dropoff' && `
+    ${({ type }) => type === 'dropoff' && `
       background-color: #08902d;
     `}
 `;
