@@ -28,3 +28,10 @@ export const VehicleDot = styled(PointDot)`
   border-radius: 20;
   background-color: #2384ff;
 `;
+
+export const MapButtonsContainer = styled.View`
+  position: absolute;
+  bottom: 35%;
+  width: 50px;
+  left: 20px;
+`;

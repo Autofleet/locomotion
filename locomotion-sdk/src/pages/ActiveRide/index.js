@@ -12,7 +12,7 @@ import network from '../../services/network';
 import getPosition from './AddressView/getPostion';
 import AddressView from './AddressView';
 import {
-  PageContainer, StopPointDot, VehicleDot,
+  PageContainer, StopPointDot, VehicleDot, MapButtonsContainer,
 } from './styled';
 import Header from '../../Components/Header';
 import RideDrawer from './RideDrawer';
@@ -20,7 +20,8 @@ import { getTogglePopupsState } from '../../context/main';
 import UserService from '../../services/user';
 import OneSignal from '../../services/one-signal';
 import settingsContext from '../../context/settings';
-import StationsMap from "./StationsMap";
+import StationsMap from './StationsMap';
+import MyLocationButton from './ShowMyLocationButton';
 
 function useInterval(callback, delay) {
   const savedCallback = useRef();
@@ -64,6 +65,7 @@ export default ({ navigation, menuSide }) => {
   const [offerExpired, setOfferExpired] = useState(false);
   const [offerTimer, setOfferTimer] = useState(false);
   const [stations, setStations] = useState([]);
+  const [disableAutoLocationFocus, setDisableAutoLocationFocus] = useState(false);
 
   const mapInstance = useRef();
 
@@ -256,25 +258,23 @@ export default ({ navigation, menuSide }) => {
     } catch (error) {
       console.warn('Error while try to get current place', error.stack || error);
     }
-  }
+  };
 
   useEffect(() => {
-    if(stations.length) {
+    if (stations.length) {
       setClosestStations(stations[0]);
-      const markersList = stations.map(station => {
-        return {
-          ...station,
-          id: `${station.lat}-${station.lng}`
-        }
-      })
+      const markersList = stations.map(station => ({
+        ...station,
+        id: `${station.lat}-${station.lng}`,
+      }));
 
       setMapMarkers(markersList);
     }
-  }, [stations])
+  }, [stations]);
 
   const selectStationMarker = (key, isPickup, isDropoff) => {
-    let pickup = requestStopPoints.pickup;
-    let dropoff = requestStopPoints.dropoff;
+    let { pickup } = requestStopPoints;
+    let { dropoff } = requestStopPoints;
 
     if (isPickup) {
       pickup = null;
@@ -286,7 +286,7 @@ export default ({ navigation, menuSide }) => {
       dropoff = mapMarkers.find(marker => marker.id === key);
     }
 
-     setRequestStopPoints({
+    setRequestStopPoints({
       openEdit: false,
       pickup,
       dropoff,
@@ -313,9 +313,10 @@ export default ({ navigation, menuSide }) => {
         showsMyLocationButton={false}
         loadingEnabled
         key="map"
-        followsUserLocation
+        followsUserLocation={!disableAutoLocationFocus}
+        onPanDrag={() => (disableAutoLocationFocus === false ? setDisableAutoLocationFocus(true) : null)}
         onUserLocationChange={(event) => {
-          if (Platform.OS === 'ios' || !showsUserLocation) {
+          if (Platform.OS === 'ios' || !showsUserLocation || disableAutoLocationFocus) {
             return; // Follow user location works for iOS
           }
           const { coordinate } = event.nativeEvent;
@@ -341,15 +342,16 @@ export default ({ navigation, menuSide }) => {
           );
         }}
       >
-        {!activeRideState ?
-
+        {!activeRideState
+          ? (
             <StationsMap
-                isInOffer={!!rideOffer}
-                markersMap={mapMarkers}
-                selectStation={selectStationMarker}
-                requestStopPoints={requestStopPoints}
+              isInOffer={!!rideOffer}
+              markersMap={mapMarkers}
+              selectStation={selectStationMarker}
+              requestStopPoints={requestStopPoints}
             />
-         : null}
+          )
+          : null}
         {activeSpState && displayMatchInfo
           ? (
             <Polyline
@@ -376,6 +378,9 @@ export default ({ navigation, menuSide }) => {
             </Marker>
           ) : null}
       </MapView>
+      <MapButtonsContainer>
+        <MyLocationButton onPress={() => console.log(mapRegion)} displayButton={showsUserLocation} />
+      </MapButtonsContainer>
       <Header navigation={navigation} menuSide={menuSide} />
       <RideDrawer
         createRide={createRide}

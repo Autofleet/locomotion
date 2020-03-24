@@ -2,10 +2,10 @@
 # yarn lockfile v1
 
 
-"@autofleet/locomotion-sdk@^1.1.5":
-  version "1.1.5"
-  resolved "https://registry.yarnpkg.com/@autofleet/locomotion-sdk/-/locomotion-sdk-1.1.5.tgz#dd18f622cd9d98090544c0d23b5841d7119968d7"
-  integrity sha512-frPxv50vEhj/PWkusmK6v8L10YfBdkbrnj6HgHbATnLfZ5pw8F8gZvzm0WByWMl5cNyvgSYG+FHikQ0tL1KzZw==
+"@autofleet/locomotion-sdk@^1.2.1":
+  version "1.2.1"
+  resolved "https://registry.yarnpkg.com/@autofleet/locomotion-sdk/-/locomotion-sdk-1.2.1.tgz#0a10be825ba60d85f35e7b936277f380c7ef5a11"
+  integrity sha512-8KlJWFCaHsD5hrlY3l0/Ke8Soi8tT60pYB8IysSxkedCiLKAsxPLlFpBiGNK/KlrgRAxGAGjGFGLt+MJL+HZ1w==
   dependencies:
     i18next "^19.3.2"
     react-i18next "^11.3.3"
@@ -10988,10 +10988,10 @@ react-native-linear-gradient@^2.5.4:
   resolved "https://registry.yarnpkg.com/react-native-linear-gradient/-/react-native-linear-gradient-2.5.6.tgz#96215cbc5ec7a01247a20890888aa75b834d44a0"
   integrity sha512-HDwEaXcQIuXXCV70O+bK1rizFong3wj+5Q/jSyifKFLg0VWF95xh8XQgfzXwtq0NggL9vNjPKXa016KuFu+VFg==
 
-react-native-maps@0.25.0:
-  version "0.25.0"
-  resolved "https://registry.yarnpkg.com/react-native-maps/-/react-native-maps-0.25.0.tgz#81bc51eb50e33811a9e1c345cc48869413ead67d"
-  integrity sha512-PFJuW1pt+HnnnN0m0OGk29RSvICFVkK/DScX6cUk0SuCSN2DAHx0y6y57lZyYXcYqU4J4usNpfxgp/ccjASDiw==
+react-native-maps@^0.26.0:
+  version "0.26.1"
+  resolved "https://registry.yarnpkg.com/react-native-maps/-/react-native-maps-0.26.1.tgz#6ec316259b38d259c8974448d894bd7a23101da4"
+  integrity sha512-p4VTB8YB5ZmOmDRCUpoHZkm05amZwhIo04AJMBbB9+JAR2PNNfpo0vceoWX0Mag4wnePkdzPomeWMplr/wimTg==
 
 react-native-modal@^11.1.0:
   version "11.5.3"
