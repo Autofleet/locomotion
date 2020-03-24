@@ -46,6 +46,7 @@ export default ({
     <Marker
       coordinate={{ latitude: lat, longitude: lng }}
       onPress={e => !isInOffer && selectStation(stationKey, pickup, dropoff)}
+      style={(pickup || dropoff) ? { zIndex: 1 } : {}}
     >
       {getMarker()}
     </Marker>
