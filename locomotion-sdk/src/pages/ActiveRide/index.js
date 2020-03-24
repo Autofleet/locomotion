@@ -117,6 +117,7 @@ export default ({ navigation, menuSide }) => {
     UserService.getUser(navigation);
     getStations();
     loadActiveRide();
+    initialLocation();
     OneSignal.init();
   }, []);
 
@@ -305,6 +306,14 @@ export default ({ navigation, menuSide }) => {
     }
   }, [rideOffer]);
 
+  const initialLocation = async () => {
+    const { coords } = await getPosition();
+    setMapRegion(oldMapRegion => ({
+      ...oldMapRegion,
+      ...coords,
+    }));
+  };
+
   return (
     <PageContainer>
       <MapView
@@ -379,7 +388,15 @@ export default ({ navigation, menuSide }) => {
           ) : null}
       </MapView>
       <MapButtonsContainer>
-        <MyLocationButton onPress={() => console.log(mapRegion)} displayButton={showsUserLocation} />
+        <MyLocationButton
+          onPress={() => mapInstance.current.animateToRegion({
+            latitude: mapRegion.latitude,
+            longitude: mapRegion.longitude,
+            latitudeDelta: mapRegion.latitudeDelta,
+            longitudeDelta: mapRegion.longitudeDelta,
+          }, 1000)}
+          displayButton={showsUserLocation}
+        />
       </MapButtonsContainer>
       <Header navigation={navigation} menuSide={menuSide} />
       <RideDrawer
