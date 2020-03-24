@@ -56,4 +56,5 @@ export const MarkerContainer = styled.View`
   display: flex;
   flex-direction: column;
   align-items: center;
+  padding: 5px;
 `;
