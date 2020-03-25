@@ -18,6 +18,7 @@ const SliderContainer = styled.View`
 
 const ButtonText = styled.Text`
   color: ${({ verified }) => (!verified ? '#08355c' : '#ffffff')};
+   ${({ verified }) => (verified ? 'margin-right: 20px' : '')};
 `;
 
 export const DrawerButtonContainer = styled.View`
