@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, TextInput } from 'react-native';
+import { View, TextInput, TouchableOpacity } from 'react-native';
 import styled from 'styled-components';
 import xIcon from '../../../assets/x.png';
 
@@ -157,4 +157,24 @@ export const DistanceFromAddress = styled.Text`
     padding-bottom: 4px;
     font-size: 12px;
     color: grey;
+`;
+
+export const HeaderContainer = styled.View`
+text-align: center;
+padding: 15px;
+background-color: #ffffff;
+height: 20px;
+width: 100%;
+`;
+
+export const HeaderIconContainer = styled.TouchableOpacity`
+  padding: 5px;
+  position: absolute;
+  left: 0;
+  margin-left: 10;
+`;
+
+export const HeaderIcon = styled.Image`
+  width: ${({ width }) => (width || '18px')};
+  height: ${({ height }) => (height || '18px')};
 `;

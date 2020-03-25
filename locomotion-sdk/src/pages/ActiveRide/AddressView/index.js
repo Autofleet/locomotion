@@ -1,10 +1,11 @@
 import React, { useState, useRef, Fragment } from 'react';
-import { ScrollView } from 'react-native'
-import getPosition from './getPostion';
-import network from '../../../services/network';
 import {
+  ScrollView,
   View,
 } from 'react-native';
+import getPosition from './getPostion';
+import network from '../../../services/network';
+
 import I18n from '../../../I18n';
 import {
   AddressInputs,
@@ -18,7 +19,14 @@ import {
   AddressSearchItem,
   AddressSearchItemText,
   DistanceFromAddress,
+  HeaderContainer,
+  HeaderIconContainer,
+  HeaderIcon,
 } from './styled';
+import PageHeader from '../../../Components/PageHeader';
+import SafeView from '../../../Components/SafeView';
+
+const closeIconSource = require('../../../assets/arrow-back.png');
 
 export default (props) => {
   const dropoffTextField = useRef();
@@ -33,12 +41,14 @@ export default (props) => {
   const [addressListItems, setAddressListItems] = useState(null);
 
   const enrichPlaceWithLocation = async (place) => {
-    const { data } = await network.get('api/v1/me/places/get-location', { params: {
-      placeId: (place.placeid || place.place_id),
-    } });
+    const { data } = await network.get('api/v1/me/places/get-location', {
+      params: {
+        placeId: (place.placeid || place.place_id),
+      },
+    });
     place = { ...place, ...data };
     return place;
-  }
+  };
 
   const setPlace = async (place) => {
     if (addressListItems.type === 'pickup') {
@@ -67,17 +77,18 @@ export default (props) => {
   const loadAddress = async (input) => {
     try {
       const { coords } = await getPosition();
-      const { data } = await network.get('api/v1/me/places', { params: {
-        input,
-        location: { lat: coords.latitude, lng: coords.longitude }
-      } });
+      const { data } = await network.get('api/v1/me/places', {
+        params: {
+          input,
+          location: { lat: coords.latitude, lng: coords.longitude },
+        },
+      });
 
       return data;
     } catch (error) {
       console.log('Got error while try to get places', error);
       return undefined;
     }
-
   };
 
   const setSearchValue = async (value, type) => {
@@ -90,12 +101,23 @@ export default (props) => {
 
     setAddressListItems({
       type,
-      ...{ list: value ? await loadAddress(value) : undefined, },
+      ...{ list: value ? await loadAddress(value) : undefined },
     });
   };
 
   return (
     <AddressInputs>
+      <SafeView>
+        <HeaderContainer>
+          <HeaderIconContainer onPress={props.closeAddressViewer}>
+            <HeaderIcon
+              width={20}
+              height={20}
+              source={closeIconSource}
+            />
+          </HeaderIconContainer>
+        </HeaderContainer>
+      </SafeView>
       <AddressInputsHeader>
         <View>
           <Address originRow>
@@ -134,10 +156,12 @@ export default (props) => {
             <AddressSearchItemText>
               {item.description}
             </AddressSearchItemText>
-            {item.distance ?
-            <DistanceFromAddress>
-              {item.distance ? `${item.distanceFromMe.toFixed(2)}km` : null}
-            </DistanceFromAddress> : null}
+            {item.distance
+              ? (
+                <DistanceFromAddress>
+                  {item.distance ? `${item.distanceFromMe.toFixed(2)}km` : null}
+                </DistanceFromAddress>
+              ) : null}
           </AddressSearchItem>
         ))}
       </ScrollView>

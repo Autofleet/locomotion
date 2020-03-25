@@ -314,6 +314,12 @@ export default ({ navigation, menuSide }) => {
     }));
   };
 
+  const closeAddressViewer = () => {
+    setRequestStopPoints({
+      ...requestStopPoints,
+      openEdit: false,
+    });
+  };
   return (
     <PageContainer>
       <MapView
@@ -418,7 +424,7 @@ export default ({ navigation, menuSide }) => {
       />
       {
           requestStopPoints.openEdit
-            ? <AddressView onLocationSelect={onLocationSelect} requestStopPoints={requestStopPoints} />
+            ? <AddressView onLocationSelect={onLocationSelect} requestStopPoints={requestStopPoints} closeAddressViewer={closeAddressViewer} />
             : null
         }
     </PageContainer>
