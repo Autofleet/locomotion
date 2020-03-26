@@ -327,6 +327,7 @@ export default ({ navigation, menuSide }) => {
         style={StyleSheet.absoluteFillObject}
         showsMyLocationButton={false}
         loadingEnabled
+        showsCompass={false}
         key="map"
         followsUserLocation={!disableAutoLocationFocus}
         onPanDrag={() => (disableAutoLocationFocus === false ? setDisableAutoLocationFocus(true) : null)}
