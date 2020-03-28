@@ -11,7 +11,7 @@
     "linter": "eslint '**/*.{js,jsx}' --quiet"
   },
   "dependencies": {
-    "@autofleet/locomotion-sdk": "^1.2.1",
+    "@autofleet/locomotion-sdk": "^1.2.2",
     "@google/maps": "^0.5.5",
     "@mapbox/polyline": "^1.1.0",
     "@react-native-community/async-storage": "^1.6.1",
