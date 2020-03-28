@@ -50,11 +50,12 @@ export const MarkerToolTipText = styled.Text`
     color: #fff;
     font-size: 10px;
     font-weight: 700;
+    flex: 1;
 `;
 
 export const MarkerContainer = styled.View`
   display: flex;
-  flex-direction: column;
+  flex-direction: column-reverse;
   align-items: center;
-  padding: 5px;
+  padding: 2px;
 `;
