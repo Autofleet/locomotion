@@ -35,6 +35,12 @@
         }
     },
     "home": {
+        "map": {
+            "markers": {
+                "pickup": "Boarding",
+                "dropoff": "Exit"
+            }
+        },
         "letsRideButton": "Let's ride",
         "cancelRideButton": "Cancel Ride",
         "choosePickup": "Choose Pickup",
