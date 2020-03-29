@@ -1,4 +1,4 @@
-FROM autofleet/locomotion:2.0.8
+FROM autofleet/locomotion:2.0.9
 
 WORKDIR /usr/src/app
 
@@ -7,3 +7,6 @@ WORKDIR /usr/src/app
 #COPY assets/ ./web-ui/src/assets/
 #RUN rm -rf ./web-ui/build
 #RUN SKIP_PREFLIGHT_CHECK=true npm run build --prefix ./web-ui/
+
+# Uncomment if you want to replace i18n translation files
+#COPY i18n/ ./i18n/

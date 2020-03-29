@@ -168,7 +168,7 @@ PODS:
     - React
   - react-native-image-resizer (1.1.0):
     - React
-  - react-native-maps (0.25.0):
+  - react-native-maps (0.26.1):
     - React
   - react-native-onesignal (3.6.5):
     - OneSignal (= 2.12.6)
@@ -406,7 +406,7 @@ SPEC CHECKSUMS:
   react-native-geolocation: c956aeb136625c23e0dce0467664af2c437888c9
   react-native-image-picker: 7a85cf7b0a53845f03ae52fb4592a2748ded069b
   react-native-image-resizer: 1ffe71ec5f2596c3a24d42548c03bfbfb06fe810
-  react-native-maps: 190c02ca533fddac5bb49cf17bdece3644612107
+  react-native-maps: 6e499eee4eabf422ba8b6f94e993cc768bf35153
   react-native-onesignal: f6e1f20292cba72076ddb97e52290b0d5cc0a51c
   react-native-webview: db4682f1698ab4b17a5e88f951031d203ff8aea8
   React-RCTActionSheet: 9c42321fd5652515d706dd722c5a10b1970d7ec8

@@ -1,4 +1,5 @@
 import React, { useState, useEffect, Fragment } from 'react';
+import { View } from 'react-native';
 import * as yup from 'yup';
 
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
@@ -9,15 +10,19 @@ import ThumbnailPicker from '../../Components/ThumbnailPicker';
 import SubmitButton from '../../Components/RoundedButton';
 import TextInput from '../../Components/TextInput';
 import {
-  Container, Text, ErrorText, ResendButton,
+  Text, ErrorText, ResendButton,
 } from '../Login/styled';
-import { FullNameContainer, SubmitContainer } from './styled';
+import {
+  Container, FullNameContainer, SubmitContainer, PageContainer,
+} from './styled';
 import i18n from '../../I18n';
 import { useStateValue } from '../../context/main';
 import PageHeader from '../../Components/PageHeader';
 
 
-export default ({ navigation, screenOptions, ...props }) => {
+export default ({
+  navigation, screenOptions, menuSide, ...props
+}) => {
   const [onboardingState, dispatchOnboardingState] = useState({
     uploadPromise: false,
     firstName: '',
@@ -110,53 +115,59 @@ export default ({ navigation, screenOptions, ...props }) => {
 
 
   return (
-
-    <KeyboardAwareScrollView>
-      <PageHeader
-        title={i18n.t('onboarding.pageTitle')}
-        onIconPress={() => navigation.toggleDrawer()}
-        displayIcon={showHeaderIcon}
-      />
-      <Container>
-        <Text>
-          {i18n.t('login.onBoardingPageTitle')}
-          {onboardingState.uploadingImage}
-        </Text>
-        <ThumbnailPicker
-          onImageChoose={onImageChoose}
-          avatarSource={onboardingState.avatar}
+    <View style={{ backgroundColor: '#ffffff', flex: 1 }}>
+      <KeyboardAwareScrollView
+        extraScrollHeight={20}
+        enableOnAndroid
+      >
+        <PageHeader
+          title={i18n.t('onboarding.pageTitle')}
+          onIconPress={() => navigation.toggleDrawer()}
+          displayIcon={showHeaderIcon}
+          iconSide={menuSide}
         />
-        <FullNameContainer>
-          <TextInput
-            placeholder={i18n.t('onboarding.firstNamePlaceholder')}
-            width="40%"
-            onChangeText={inputChange('firstName')}
-            value={onboardingState.firstName}
+        <Container>
+          <Text>
+            {i18n.t('login.onBoardingPageTitle')}
+            {onboardingState.uploadingImage}
+          </Text>
+          <ThumbnailPicker
+            onImageChoose={onImageChoose}
+            avatarSource={onboardingState.avatar}
           />
+          <FullNameContainer>
+            <TextInput
+              placeholder={i18n.t('onboarding.firstNamePlaceholder')}
+              width="40%"
+              onChangeText={inputChange('firstName')}
+              value={onboardingState.firstName}
+              autoCapitalize="words"
+            />
+            <TextInput
+              placeholder={i18n.t('onboarding.lastNamePlaceholder')}
+              width="40%"
+              onChangeText={inputChange('lastName')}
+              value={onboardingState.lastName}
+              autoCapitalize="words"
+            />
+
+          </FullNameContainer>
           <TextInput
-            placeholder={i18n.t('onboarding.lastNamePlaceholder')}
-            width="40%"
-            onChangeText={inputChange('lastName')}
-            value={onboardingState.lastName}
+            placeholder={i18n.t('onboarding.emailPlaceholder')}
+            width="90%"
+            onChangeText={inputChange('email')}
+            value={onboardingState.email}
           />
+          <ErrorText>{onboardingState.error ? onboardingState.error : ''}</ErrorText>
+          <SubmitContainer>
+            <SubmitButton onPress={submit}>
+              {i18n.t('onboarding.submit')}
+            </SubmitButton>
+          </SubmitContainer>
+        </Container>
 
-        </FullNameContainer>
-        <TextInput
-          placeholder={i18n.t('onboarding.emailPlaceholder')}
-          width="90%"
-          onChangeText={inputChange('email')}
-          value={onboardingState.email}
-        />
-        <ErrorText>{onboardingState.error ? onboardingState.error : ''}</ErrorText>
-        <SubmitContainer>
-
-          <SubmitButton onPress={submit}>
-            {i18n.t('onboarding.submit')}
-          </SubmitButton>
-        </SubmitContainer>
-      </Container>
-    </KeyboardAwareScrollView>
-
+      </KeyboardAwareScrollView>
+    </View>
   );
 };
 

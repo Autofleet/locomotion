@@ -75,7 +75,7 @@ export const MainRouter = (props) => {
   }, {
     initialRouteName: 'Home',
     drawerWidth,
-    contentComponent: DrawerContentComponent,
+    contentComponent: (props)=> (<DrawerContentComponent {...props} />),
     contentOptions: {
       inactiveBackgroundColor: '#ffffff',
       activeBackgroundColor: '#ffffff',

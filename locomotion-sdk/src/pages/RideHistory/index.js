@@ -16,7 +16,7 @@ const NoRidesMessage = ({ navigation }) => (
   </NoRidesMessageContainer>
 );
 
-export default ({ navigation }) => {
+export default ({ navigation,menuSide }) => {
   const [rides, setRides] = useState(null);
 
   const toggleMenu = () => {
@@ -47,6 +47,7 @@ export default ({ navigation }) => {
       <PageHeader
         title={i18n.t('rideHistory.pageTitle')}
         onIconPress={() => toggleMenu()}
+        iconSide={menuSide}
       />
       {rides && rides.length > 0
         ? <RideHistoryTable data={rides} />

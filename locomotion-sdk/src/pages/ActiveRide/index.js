@@ -12,7 +12,7 @@ import network from '../../services/network';
 import getPosition from './AddressView/getPostion';
 import AddressView from './AddressView';
 import {
-  PageContainer, StopPointDot, VehicleDot,
+  PageContainer, StopPointDot, VehicleDot, MapButtonsContainer,
 } from './styled';
 import Header from '../../Components/Header';
 import RideDrawer from './RideDrawer';
@@ -20,6 +20,8 @@ import { getTogglePopupsState } from '../../context/main';
 import UserService from '../../services/user';
 import OneSignal from '../../services/one-signal';
 import settingsContext from '../../context/settings';
+import StationsMap from './StationsMap';
+import MyLocationButton from './ShowMyLocationButton';
 
 function useInterval(callback, delay) {
   const savedCallback = useRef();
@@ -44,6 +46,7 @@ function useInterval(callback, delay) {
 export default ({ navigation, menuSide }) => {
   const [activeRideState, setActiveRide] = useState(null);
   const [preRideDetails, setPreRideDetails] = useState({});
+  const [mapMarkers, setMapMarkers] = useState([]);
   const [mapRegion, setMapRegion] = useState({
     latitudeDelta: 0.0922,
     longitudeDelta: 0.0421,
@@ -61,6 +64,9 @@ export default ({ navigation, menuSide }) => {
   const [rideOffer, setRideOffer] = useState(null);
   const [offerExpired, setOfferExpired] = useState(false);
   const [offerTimer, setOfferTimer] = useState(false);
+  const [stations, setStations] = useState([]);
+  const [disableAutoLocationFocus, setDisableAutoLocationFocus] = useState(false);
+
   const mapInstance = useRef();
 
   const loadActiveRide = async () => {
@@ -109,7 +115,9 @@ export default ({ navigation, menuSide }) => {
 
   useEffect(() => {
     UserService.getUser(navigation);
+    getStations();
     loadActiveRide();
+    initialLocation();
     OneSignal.init();
   }, []);
 
@@ -232,8 +240,14 @@ export default ({ navigation, menuSide }) => {
   const showsUserLocation = !activeRideState || !activeRideState.vehicle;
   const useSettings = settingsContext.useContainer();
 
-  const setClosestStations = async () => {
-    let closestStation;
+  const setClosestStations = async (pickupStation) => {
+    setRequestStopPoints({
+      openEdit: false,
+      pickup: pickupStation,
+    });
+  };
+
+  const getStations = async () => {
     try {
       const { coords } = await getPosition();
       const { data } = await network.get('api/v1/me/places', {
@@ -241,21 +255,44 @@ export default ({ navigation, menuSide }) => {
           location: { lat: coords.latitude, lng: coords.longitude },
         },
       });
-      console.log(data);
-
-      closestStation = data[0];
+      setStations(data);
     } catch (error) {
-      console.log('Got error while try to get current place', error);
+      console.warn('Error while try to get current place', error.stack || error);
     }
-    setRequestStopPoints({
-      openEdit: false,
-      pickup: closestStation,
-    });
   };
 
   useEffect(() => {
-    setClosestStations();
-  }, []);
+    if (stations.length) {
+      setClosestStations(stations[0]);
+      const markersList = stations.map(station => ({
+        ...station,
+        id: `${station.lat}-${station.lng}`,
+      }));
+
+      setMapMarkers(markersList);
+    }
+  }, [stations]);
+
+  const selectStationMarker = (key, isPickup, isDropoff) => {
+    let { pickup } = requestStopPoints;
+    let { dropoff } = requestStopPoints;
+
+    if (isPickup) {
+      pickup = null;
+    } else if (isDropoff) {
+      dropoff = null;
+    } else if (!pickup) {
+      pickup = mapMarkers.find(marker => marker.id === key);
+    } else {
+      dropoff = mapMarkers.find(marker => marker.id === key);
+    }
+
+    setRequestStopPoints({
+      openEdit: false,
+      pickup,
+      dropoff,
+    });
+  };
 
   useEffect(() => {
     let offerTimeout;
@@ -269,6 +306,20 @@ export default ({ navigation, menuSide }) => {
     }
   }, [rideOffer]);
 
+  const initialLocation = async () => {
+    const { coords } = await getPosition();
+    setMapRegion(oldMapRegion => ({
+      ...oldMapRegion,
+      ...coords,
+    }));
+  };
+
+  const closeAddressViewer = () => {
+    setRequestStopPoints({
+      ...requestStopPoints,
+      openEdit: false,
+    });
+  };
   return (
     <PageContainer>
       <MapView
@@ -276,10 +327,12 @@ export default ({ navigation, menuSide }) => {
         style={StyleSheet.absoluteFillObject}
         showsMyLocationButton={false}
         loadingEnabled
+        showsCompass={false}
         key="map"
-        followsUserLocation
+        followsUserLocation={!disableAutoLocationFocus}
+        onPanDrag={() => (disableAutoLocationFocus === false ? setDisableAutoLocationFocus(true) : null)}
         onUserLocationChange={(event) => {
-          if (Platform.OS === 'ios' || !showsUserLocation) {
+          if (Platform.OS === 'ios' || !showsUserLocation || disableAutoLocationFocus) {
             return; // Follow user location works for iOS
           }
           const { coordinate } = event.nativeEvent;
@@ -297,11 +350,24 @@ export default ({ navigation, menuSide }) => {
         }}
         ref={mapInstance}
         onMapReady={() => {
+          if (Platform.OS === 'ios') {
+            return;
+          }
           PermissionsAndroid.request(
             PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
           );
         }}
       >
+        {!activeRideState
+          ? (
+            <StationsMap
+              isInOffer={!!rideOffer}
+              markersMap={mapMarkers}
+              selectStation={selectStationMarker}
+              requestStopPoints={requestStopPoints}
+            />
+          )
+          : null}
         {activeSpState && displayMatchInfo
           ? (
             <Polyline
@@ -328,6 +394,17 @@ export default ({ navigation, menuSide }) => {
             </Marker>
           ) : null}
       </MapView>
+      <MapButtonsContainer>
+        <MyLocationButton
+          onPress={() => mapInstance.current.animateToRegion({
+            latitude: mapRegion.latitude,
+            longitude: mapRegion.longitude,
+            latitudeDelta: mapRegion.latitudeDelta,
+            longitudeDelta: mapRegion.longitudeDelta,
+          }, 1000)}
+          displayButton={showsUserLocation}
+        />
+      </MapButtonsContainer>
       <Header navigation={navigation} menuSide={menuSide} />
       <RideDrawer
         createRide={createRide}
@@ -348,7 +425,7 @@ export default ({ navigation, menuSide }) => {
       />
       {
           requestStopPoints.openEdit
-            ? <AddressView onLocationSelect={onLocationSelect} requestStopPoints={requestStopPoints} />
+            ? <AddressView onLocationSelect={onLocationSelect} requestStopPoints={requestStopPoints} closeAddressViewer={closeAddressViewer} />
             : null
         }
     </PageContainer>
