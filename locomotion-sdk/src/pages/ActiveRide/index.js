@@ -57,6 +57,7 @@ export default ({ navigation, menuSide }) => {
   const [, togglePopup] = getTogglePopupsState();
   const [requestStopPoints, setRequestStopPoints] = useState({
     openEdit: false,
+    selectedType: null,
   });
   const [rideType, setRideType] = useState('pool');
   const [pickupEta, setPickupEta] = useState(null);
@@ -163,14 +164,19 @@ export default ({ navigation, menuSide }) => {
     setRequestStopPoints(newState);
   };
 
-  const openLocationSelect = () => {
+  const openLocationSelect = (type) => {
     if (activeRideState && activeRideState.vehicle) {
       return;
     }
     const newState = {
       ...requestStopPoints,
-      openEdit: true,
+      selectedType: type
     };
+
+    if(requestStopPoints.selectedType === type) {
+      newState.openEdit = true;
+    }
+
     setRequestStopPoints(newState);
   };
 
@@ -244,6 +250,7 @@ export default ({ navigation, menuSide }) => {
     setRequestStopPoints({
       openEdit: false,
       pickup: pickupStation,
+      selectedType: 'pickup'
     });
   };
 
@@ -423,11 +430,11 @@ export default ({ navigation, menuSide }) => {
         cancelOffer={cancelOffer}
         offerExpired={offerExpired}
       />
-      {
+      {/* {
           requestStopPoints.openEdit
             ? <AddressView onLocationSelect={onLocationSelect} requestStopPoints={requestStopPoints} closeAddressViewer={closeAddressViewer} />
             : null
-        }
+        } */}
     </PageContainer>
   );
 };

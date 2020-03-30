@@ -81,8 +81,10 @@
         "submitText": " Login to different account"
     },
     "addressView": {
-        "pickupPlaceholder": "Choose Pickup",
-        "dropoffPlaceholder": "Choose Dropoff"
+        "pickupPlaceholder": "Click on stations or enter address",
+        "dropoffPlaceholder": "Click on stations or enter address",
+        "pickupTitle": "Boarding",
+        "dropoffTitle": "Exit"
     },
     "popups": {
         "rideCancel": {

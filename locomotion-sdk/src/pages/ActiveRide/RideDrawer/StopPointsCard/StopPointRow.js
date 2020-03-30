@@ -55,6 +55,7 @@ const AddressText = styled.Text`
   color: #666666;
   margin-start: 22;
   margin-end: 16;
+  opacity: ${({selected}) => selected ? 1 : 0.5}
 `;
 
 const EtaText = styled.Text`
@@ -79,8 +80,17 @@ const RowContainer = styled.TouchableOpacity`
   ` : null)}
 `;
 
+const AddressTitle = styled.Text`
+  font-size: 11;
+  color: #000000;
+  margin-start: 22;
+  margin-end: 16;
+  font-weight: 500;
+  margin-bottom: 5px;
+`;
+
 export default ({
-  pickup, description, eta, completedAt, openLocationSelect, useBorder
+  pickup, description, eta, completedAt, openLocationSelect, useBorder, title, selected
 }) => (
   <RowContainer pickup={pickup} onPress={openLocationSelect} useBorder={useBorder} paddingStart>
     <StopPointDotContainer origin={pickup}>
@@ -88,19 +98,16 @@ export default ({
       <StopPointDotTimeLine />
     </StopPointDotContainer>
     <AddressTextCont>
-      <View>
-        <AddressText numberOfLines={2}>
-          {description || i18n.t(pickup ? 'home.choosePickup' : 'home.chooseDropoff')}
-        </AddressText>
+    <View>
+        <AddressTitle>
+          {title}
+        </AddressTitle>
       </View>
       <View>
-        {eta || completedAt ? (
-          <EtaText>
-            {moment(eta || completedAt).fromNow() }
-          </EtaText>
-        ) : null }
+        <AddressText numberOfLines={2} selected={selected}>
+          {description || i18n.t(pickup ? 'addressView.pickupPlaceholder' : 'addressView.dropoffPlaceholder')}
+        </AddressText>
       </View>
     </AddressTextCont>
   </RowContainer>
 );
-
