@@ -6,8 +6,8 @@ import xIcon from '../../../../../assets/x.png';
 
 export const AddressInputs = styled.View`
     height:  300px;
-    background-color: #fff;
     width: 100%;
+    padding: 20px 20px 10px 20px;
 `;
 
 export const AddressInputsHeader = styled.SafeAreaView`
@@ -17,43 +17,40 @@ export const AddressInputsHeader = styled.SafeAreaView`
 `;
 
 export const Address = styled.View`
-    min-height: 30;
+    height: 30;
     /* padding-top: 10; */
 
    /*  padding-start: 24; */
     align-items: center;
     flex-direction: row;
-
+    padding-top: 0px;
 
 `;
 
-const ResetInputIcon = styled.Image.attrs({ source: xIcon })`
+export const ResetInputIcon = styled.Image.attrs({ source: xIcon })`
     display: flex;
-    margin-top: 4px;
-
     height: 13px;
     width: 13px;
 `;
-const ResetInputIconContainer = styled.TouchableOpacity`
-    display: flex;
+export const ResetInputIconContainer = styled.TouchableOpacity`
     height: 22px;
-    width: 20px;
-    margin-right: 10px;
-    margin-left: 10px;
+    width: 22px;
+    position: absolute;
+    right: 5px;
+    top: 5px;
     align-self: center;
+    align-items: center;
+    justify-content: center;
+
 `;
 
 const AddressTextInputContainer = styled.View`
-    display: flex;
     flex-direction: row;
-    justify-content: space-between;
     width: 100%;
 `;
 
 export const StyledInput = styled(TextInput)`
   border-bottom-color: #e2e2e2;
-  margin: 0 auto;
-  font-size: 12px;
 `;
 
 export const AddressTextInput = styled(({
@@ -70,20 +67,16 @@ export const AddressTextInput = styled(({
         ref={inputRef}
         {...props}
       />
-      {focus && value ? (
-        <ResetInputIconContainer onPress={() => onChangeText('')}>
-          <ResetInputIcon />
-        </ResetInputIconContainer>
-      ) : undefined}
     </AddressTextInputContainer>
   );
 })`
-    font-size: 18;
+    font-size: 14;
     color: #666666;
-    margin-start: 16;
-    min-width: 200;
+    width: 100%;
     display: flex;
     flex: 1;
+    margin: 0;
+    height: 30px;
 `;
 
 export const OriginDot = styled.View`
@@ -143,6 +136,7 @@ export const AddressSearchItem = styled(({ onPress, ...props }) => (
 export const AddressSearchItemText = styled.Text`
     padding-top: 10;
     padding-bottom: 10;
+    padding-left: 8px;
 
     font-size: 12;
     display: flex;

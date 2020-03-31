@@ -48,7 +48,8 @@ const getRideState = (activeRide) => { // false, driverOnTheWay, driverArrived, 
 const RideDrawer = ({
   activeRide, openLocationSelect, requestStopPoints, setRideType,
   cancelRide, createRide, readyToBook, rideType, preRideDetails,
-  onNumberOfPassengerChange, numberOfPassenger, createOffer, rideOffer, cancelOffer, offerExpired,
+  onNumberOfPassengerChange, numberOfPassenger, createOffer, rideOffer,
+  cancelOffer, offerExpired,onLocationSelect,closeAddressViewer
 }) => {
   const [origin, destination] = activeRide ? activeRide.stop_points || [] : [];
   const [isPopupOpen, togglePopup] = getTogglePopupsState();
@@ -150,6 +151,8 @@ const RideDrawer = ({
                     numberOfPassenger={numberOfPassenger}
                     openLocationSelect={openLocationSelect}
                     readyToBook={readyToBook}
+                    onLocationSelect={onLocationSelect}
+                    closeAddressViewer={closeAddressViewer}
                   />
                   {/* <Switch onChange={(active) => setRideType(active ? 'pool' : 'private')} active={rideType === 'pool'} /> */}
                   {/* preRideDetails.eta || preRideDetails.estimatePrice ? ( <PreRideBox {...preRideDetails} /> ) : null */}

@@ -26,7 +26,16 @@ export const StopPointsEtaContainer = styled.View`
 `;
 
 export default ({
-  origin, destination, rideState, onNumberOfPassengerChange, numberOfPassenger, requestStopPoints, openLocationSelect,readyToBook
+  origin,
+  destination,
+  rideState,
+  onNumberOfPassengerChange,
+  numberOfPassenger,
+  requestStopPoints,
+  openLocationSelect,
+  readyToBook,
+  onLocationSelect,
+  closeAddressViewer
 }) => {
 
   useEffect(() => {
@@ -59,6 +68,11 @@ export default ({
             {readyToBook ?
               <NumberOfPassenger onChange={onNumberOfPassengerChange} amount={numberOfPassenger} /> : null}
         </Fragment>
-        : <AddressView onLocationSelect={() => {}} requestStopPoints={requestStopPoints} />
+        : <AddressView
+            onLocationSelect={onLocationSelect}
+            requestStopPoints={requestStopPoints}
+            type={requestStopPoints.selectedType}
+            onClose={closeAddressViewer}
+          />
   );
 };

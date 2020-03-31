@@ -5,8 +5,8 @@ const getLocationByPlaceId = require('../../../lib/get-location-by-place-id');
 const router = Router();
 
 router.get('/', async (req, res) => {
-  const { location, input } = req.query;
-  const places = await getPlacesByLocation(input, JSON.parse(location));
+  const { location, input, stations } = req.query;
+  const places = await getPlacesByLocation(input, JSON.parse(location), stations);
   res.json(places);
 });
 

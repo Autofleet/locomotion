@@ -9,8 +9,7 @@ import polyline from '@mapbox/polyline';
 import moment from 'moment';
 
 import network from '../../services/network';
-import getPosition from './AddressView/getPostion';
-import AddressView from './AddressView';
+import getPosition from './RideDrawer/StopPointsCard/AddressView/getPostion';
 import {
   PageContainer, StopPointDot, VehicleDot, MapButtonsContainer,
 } from './styled';
@@ -57,7 +56,7 @@ export default ({ navigation, menuSide }) => {
   const [, togglePopup] = getTogglePopupsState();
   const [requestStopPoints, setRequestStopPoints] = useState({
     openEdit: false,
-    selectedType: null,
+    selectedType: 'pickup',
   });
   const [rideType, setRideType] = useState('pool');
   const [pickupEta, setPickupEta] = useState(null);
@@ -153,9 +152,9 @@ export default ({ navigation, menuSide }) => {
     const newState = {
       ...requestStopPoints,
       [location.type]: location,
+      openEdit: false
     };
     const bookValid = bookValidation(newState);
-    newState.openEdit = !bookValid;
 
     if (bookValid) {
       loadPreRideDetails(newState.pickup, newState.dropoff);
@@ -250,7 +249,7 @@ export default ({ navigation, menuSide }) => {
     setRequestStopPoints({
       openEdit: false,
       pickup: pickupStation,
-      selectedType: 'pickup'
+      selectedType: 'dropoff'
     });
   };
 
@@ -260,6 +259,7 @@ export default ({ navigation, menuSide }) => {
       const { data } = await network.get('api/v1/me/places', {
         params: {
           location: { lat: coords.latitude, lng: coords.longitude },
+          stations: true
         },
       });
       setStations(data);
@@ -281,23 +281,11 @@ export default ({ navigation, menuSide }) => {
   }, [stations]);
 
   const selectStationMarker = (key, isPickup, isDropoff) => {
-    let { pickup } = requestStopPoints;
-    let { dropoff } = requestStopPoints;
-
-    if (isPickup) {
-      pickup = null;
-    } else if (isDropoff) {
-      dropoff = null;
-    } else if (!pickup) {
-      pickup = mapMarkers.find(marker => marker.id === key);
-    } else {
-      dropoff = mapMarkers.find(marker => marker.id === key);
-    }
-
+    const station = mapMarkers.find(marker => marker.id === key);
     setRequestStopPoints({
+      ...requestStopPoints,
       openEdit: false,
-      pickup,
-      dropoff,
+      [requestStopPoints.selectedType]: station,
     });
   };
 
@@ -429,12 +417,9 @@ export default ({ navigation, menuSide }) => {
         rideOffer={rideOffer}
         cancelOffer={cancelOffer}
         offerExpired={offerExpired}
+        onLocationSelect={onLocationSelect}
+        closeAddressViewer={closeAddressViewer}
       />
-      {/* {
-          requestStopPoints.openEdit
-            ? <AddressView onLocationSelect={onLocationSelect} requestStopPoints={requestStopPoints} closeAddressViewer={closeAddressViewer} />
-            : null
-        } */}
     </PageContainer>
   );
 };

@@ -22,6 +22,8 @@ import {
   HeaderContainer,
   HeaderIconContainer,
   HeaderIcon,
+  ResetInputIconContainer,
+  ResetInputIcon
 } from './styled';
 import PageHeader from '../../../../../Components/PageHeader';
 import SafeView from '../../../../../Components/SafeView';
@@ -29,15 +31,12 @@ import SafeView from '../../../../../Components/SafeView';
 const closeIconSource = require('../../../../../assets/arrow-back.png');
 
 export default (props) => {
-  const dropoffTextField = useRef();
-  const [searchPickupText, setSearchPickupText] = useState(
-    props.requestStopPoints.pickup
-    && props.requestStopPoints.pickup.description,
+
+  const [searchText, setSearchText] = useState(
+    props.requestStopPoints[props.type]
+    && props.requestStopPoints[props.type].description,
   );
-  const [searchDropoffText, setSearchDropoffText] = useState(
-    props.requestStopPoints.dropoff
-    && props.requestStopPoints.dropoff.description,
-  );
+
   const [addressListItems, setAddressListItems] = useState(null);
 
   const enrichPlaceWithLocation = async (place) => {
@@ -51,36 +50,41 @@ export default (props) => {
   };
 
   const setPlace = async (place) => {
-    if (addressListItems.type === 'pickup') {
-      setSearchPickupText(place.description);
-      dropoffTextField.current.focus();
-    } else {
-      setSearchDropoffText(place.description);
-    }
+    setAddressListItems({
+      type: addressListItems.type,
+      list: [],
+    });
+    setSearchValue(place.description, props.type, true);
 
     if (!place.lat && (place.placeid || place.place_id)) {
       place = await enrichPlaceWithLocation(place);
     }
 
-    if (props.onLocationSelect) {
-      props.onLocationSelect({
-        ...place,
+    if(place.station) {
+      if (props.onLocationSelect) {
+        props.onLocationSelect({
+          ...place,
+          type: addressListItems.type,
+        });
+      }
+      setAddressListItems({
         type: addressListItems.type,
+        list: [],
       });
+
     }
-    setAddressListItems({
-      type: addressListItems.type,
-      list: [],
-    });
+
+/*    */
   };
 
-  const loadAddress = async (input) => {
+  const loadAddress = async (input, showStations) => {
     try {
       const { coords } = await getPosition();
       const { data } = await network.get('api/v1/me/places', {
         params: {
           input,
           location: { lat: coords.latitude, lng: coords.longitude },
+          stations:showStations
         },
       });
 
@@ -91,35 +95,27 @@ export default (props) => {
     }
   };
 
-  const setSearchValue = async (value, type) => {
-    if (type === 'dropoff') {
-      setSearchDropoffText(value);
-    } else {
-      setSearchPickupText(value);
-    }
-    console.log('loadAddressloadAddress', value);
+  const setSearchValue = async (value, type, showStations = null) => {
+    setSearchText(value);
 
     setAddressListItems({
       type,
-      ...{ list: value ? await loadAddress(value) : undefined },
+      ...{ list: value ? await loadAddress(value,showStations) : undefined },
     });
   };
 
   return (
     <AddressInputs>
-      <AddressInputsHeader>
-          <Address>
-            <AddressTextInput
-              value={searchPickupText}
-              onChangeText={value => setSearchValue(value, 'pickup')}
-              autoFocus
-              placeholder={I18n.t('addressView.pickupPlaceholder')}
-            />
-          </Address>
+      <Address>
+        <AddressTextInput
+          value={searchText}
+          onChangeText={value => setSearchValue(value, props.type)}
+          autoFocus
+          placeholder={I18n.t('addressView.pickupPlaceholder')}
+        />
+      </Address>
 
-      </AddressInputsHeader>
-
-      <ScrollView style={{paddingRight: 40, paddingLeft: 16}}>
+      <ScrollView>
         {addressListItems && addressListItems.list && addressListItems.list.map(item => (
           <AddressSearchItem
             key={item.id}
@@ -137,7 +133,9 @@ export default (props) => {
           </AddressSearchItem>
         ))}
       </ScrollView>
-
+      <ResetInputIconContainer onPress={props.onClose}>
+        <ResetInputIcon />
+      </ResetInputIconContainer>
     </AddressInputs>
   );
 };

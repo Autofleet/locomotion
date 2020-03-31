@@ -26,14 +26,20 @@ const getFromAvailablePlaces = async (availablePlaces, closetPlace, myLocation) 
     lng: availablePlace.geometry.coordinates[0],
     distance: location ? turf.distance(turf.point([location.lng, location.lat]), turf.point(availablePlace.geometry.coordinates)) : undefined,
     distanceFromMe: turf.distance(turf.point([myLocation.lng, myLocation.lat]), turf.point(availablePlace.geometry.coordinates)),
+    station: true,
   }));
 
   return availablePlacesWithDistance.sort((place1, place2) => (place1.distanceFromMe - place2.distanceFromMe));
 };
 
-module.exports = async (input, location) => {
+module.exports = async (input, location, stations) => {
   let predictedAddresses;
   const availablePlaces = await getAvailablePlaces();
+  if (!stations) {
+    predictedAddresses = await getPredictedAddress(input, location);
+    return predictedAddresses;
+  }
+
   if (input) {
     predictedAddresses = await getPredictedAddress(input, location);
     if (availablePlaces && availablePlaces.length && predictedAddresses.length) {
