@@ -60,6 +60,7 @@ const RideDrawer = ({
   const rideState = getRideState(activeRide);
 
   const buttonAction = async () => {
+    closeAddressViewer();
     if (rideState) {
       return cancelRide();
     }
@@ -116,7 +117,19 @@ const RideDrawer = ({
               />
 
               {rideState && (pickupEta <= useSettings.settingsList.ARRIVE_REMINDER_MIN || rideState !== 'driverOnTheWay')
-                ? <RideCard activeRide={activeRide} rideState={rideState} />
+                ? (
+                <Fragment>
+                  <RideCard activeRide={activeRide} rideState={rideState} />
+                  <DrawerButtonContainer>
+                    <RoundedButton
+                      onPress={buttonAction}
+                      hollow
+                    >
+                      {I18n.t('home.cancelRidePriceButton')}
+                    </RoundedButton>
+                  </DrawerButtonContainer>
+                </Fragment>
+                )
                 : rideState
                   ? (
                     <Fragment>

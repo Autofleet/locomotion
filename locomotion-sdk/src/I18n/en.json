@@ -43,6 +43,7 @@
         },
         "letsRideButton": "Let's ride",
         "cancelRideButton": "Cancel Ride",
+        "cancelRidePriceButton": "Cancel Ride",
         "choosePickup": "Choose Pickup",
         "chooseDropoff": "Choose Dropoff",
         "passengersNumber": "Passengers",

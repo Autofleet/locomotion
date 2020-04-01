@@ -205,7 +205,6 @@ export default ({ navigation, menuSide }) => {
 
   const createOffer = async () => {
     try {
-
       const { data: response } = await network.post('api/v1/me/rides/offer', {
         pickupAddress: requestStopPoints.pickup.description,
         pickupLat: requestStopPoints.pickup.lat,
