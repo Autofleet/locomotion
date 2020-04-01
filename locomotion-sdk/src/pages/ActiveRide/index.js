@@ -7,6 +7,7 @@ import {
 import MapView, { Polyline, Marker } from 'react-native-maps';
 import polyline from '@mapbox/polyline';
 import moment from 'moment';
+import Config from 'react-native-config';
 
 import network from '../../services/network';
 import getPosition from './RideDrawer/StopPointsCard/AddressView/getPostion';
@@ -320,9 +321,11 @@ export default ({ navigation, menuSide }) => {
       openEdit: false,
     });
   };
+
   return (
     <PageContainer>
       <MapView
+        provider={Config.MAP_PROVIDER}
         showsUserLocation={showsUserLocation}
         style={StyleSheet.absoluteFillObject}
         showsMyLocationButton={false}
@@ -332,7 +335,9 @@ export default ({ navigation, menuSide }) => {
         followsUserLocation={!disableAutoLocationFocus}
         onPanDrag={() => (disableAutoLocationFocus === false ? setDisableAutoLocationFocus(true) : null)}
         onUserLocationChange={(event) => {
-          if (Platform.OS === 'ios' || !showsUserLocation || disableAutoLocationFocus) {
+          console.log('INNN');
+
+          if (/* Platform.OS === 'ios' || */ !showsUserLocation || disableAutoLocationFocus) {
             return; // Follow user location works for iOS
           }
           const { coordinate } = event.nativeEvent;
