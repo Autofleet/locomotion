@@ -20,7 +20,8 @@ import {
   HeaderIconContainer,
   HeaderIcon,
   ResetInputIconContainer,
-  ResetInputIcon
+  ResetInputIcon,
+  StationIcon
 } from "./styled";
 import PageHeader from "../../../../../Components/PageHeader";
 import SafeView from "../../../../../Components/SafeView";
@@ -131,7 +132,10 @@ export default props => {
           addressListItems.list &&
           addressListItems.list.map(item => (
             <AddressSearchItem key={item.id} onPress={() => setPlace(item)}>
+              <View style={{flexDirection: 'row', alignItems: 'center'}}>
+              {item.station ? <StationIcon /> : null}
               <AddressSearchItemText>{item.description}</AddressSearchItemText>
+              </View>
               {item.distance ? (
                 <DistanceFromAddress>
                   {item.distance ? `${item.distanceFromMe.toFixed(2)}km` : null}

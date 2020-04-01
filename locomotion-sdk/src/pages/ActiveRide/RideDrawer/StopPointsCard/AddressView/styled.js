@@ -3,6 +3,7 @@ import { View, TouchableOpacity } from 'react-native';
 import styled from 'styled-components';
 import TextInput from '../../../../../Components/TextInput'
 import xIcon from '../../../../../assets/x.png';
+import stationIcon from '../../../../../assets/marker-tip.png';
 
 export const AddressInputs = styled.View`
     height:  300px;
@@ -121,6 +122,8 @@ export const RoutePointsContainer = styled.View`
 export const AddressSearchItemTouchableOpacity = styled.TouchableOpacity`
     border-bottom-color: #e2e2e2;
     border-bottom-width: 1;
+    padding-top: 10px;
+    padding-bottom: 10px;
 `;
 
 export const AddressSearchItem = styled(({ onPress, ...props }) => (
@@ -131,24 +134,21 @@ export const AddressSearchItem = styled(({ onPress, ...props }) => (
     flex-direction: row;
     width: 100%;
     justify-content: space-between;
+    align-items: center;
 `;
 
 export const AddressSearchItemText = styled.Text`
-    padding-top: 10;
-    padding-bottom: 10;
     padding-left: 8px;
-
-    font-size: 12;
+    font-size: 12px;
     display: flex;
 `;
 
 export const DistanceFromAddress = styled.Text`
     display: flex;
     align-self: flex-end;
-    padding-right: 10px;
-    padding-bottom: 4px;
     font-size: 12px;
     color: grey;
+    align-items: center;
 `;
 
 export const HeaderContainer = styled.View`
@@ -169,4 +169,14 @@ export const HeaderIconContainer = styled.TouchableOpacity`
 export const HeaderIcon = styled.Image`
   width: ${({ width }) => (width || '18px')};
   height: ${({ height }) => (height || '18px')};
+`;
+
+
+export const StationIcon = styled.Image.attrs({ source: stationIcon })`
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 16px;
+    width: 16px;
+    margin-start: 8px;
 `;
