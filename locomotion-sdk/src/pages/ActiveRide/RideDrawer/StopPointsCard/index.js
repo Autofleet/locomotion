@@ -37,10 +37,6 @@ export default ({
   onLocationSelect,
   closeAddressViewer
 }) => {
-
-  useEffect(() => {
-    console.log(requestStopPoints);
-  }, [])
   return (
     !requestStopPoints.openEdit ?
       <Fragment>
