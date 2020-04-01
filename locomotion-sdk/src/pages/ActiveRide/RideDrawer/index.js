@@ -58,6 +58,7 @@ const RideDrawer = ({
   const [dropoffEta, setDropoffpEta] = useState(null);
   const [loading, setLoading] = useState(false);
   const rideState = getRideState(activeRide);
+
   const buttonAction = async () => {
     if (rideState) {
       return cancelRide();
@@ -153,6 +154,7 @@ const RideDrawer = ({
                     readyToBook={readyToBook}
                     onLocationSelect={onLocationSelect}
                     closeAddressViewer={closeAddressViewer}
+                    loading={loading}
                   />
                   {/* <Switch onChange={(active) => setRideType(active ? 'pool' : 'private')} active={rideType === 'pool'} /> */}
                   {/* preRideDetails.eta || preRideDetails.estimatePrice ? ( <PreRideBox {...preRideDetails} /> ) : null */}
@@ -174,8 +176,8 @@ const RideDrawer = ({
                       offerExpired={offerExpired}
                       onVerified={buttonAction}
                       onRenewOffer={buttonAction}
-                      setLoading={setLoading}
                       cancelOffer={cancelOffer}
+                      setLoading={setLoading}
                       loading={loading}
                     />
                 </Fragment>
@@ -190,6 +192,7 @@ const RideDrawer = ({
             <RideButton
               onPress={buttonAction}
               hollow={!readyToBook}
+              setLoading={setLoading}
             >
               {I18n.t(rideState ? 'home.cancelRideButton' : 'home.letsRideButton')}
             </RideButton>

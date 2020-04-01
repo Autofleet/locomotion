@@ -123,7 +123,7 @@ export default props => {
           value={searchText}
           onChangeText={value => setSearchValue(value, props.type)}
           autoFocus
-          placeholder={I18n.t("addressView.pickupPlaceholder")}
+          placeholder={I18n.t("addressView.addressPlaceholder")}
         />
       </Address>
 

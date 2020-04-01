@@ -204,21 +204,27 @@ export default ({ navigation, menuSide }) => {
   };
 
   const createOffer = async () => {
-    const { data: response } = await network.post('api/v1/me/rides/offer', {
-      pickupAddress: requestStopPoints.pickup.description,
-      pickupLat: requestStopPoints.pickup.lat,
-      pickupLng: requestStopPoints.pickup.lng,
-      dropoffAddress: requestStopPoints.dropoff.description,
-      dropoffLat: requestStopPoints.dropoff.lat,
-      dropoffLng: requestStopPoints.dropoff.lng,
-      numberOfPassengers,
-      rideType,
-    });
+    try {
 
-    if (response.status === 'rejected') {
-      togglePopup('rideRejected', true);
-    } else {
-      setRideOffer(response);
+      const { data: response } = await network.post('api/v1/me/rides/offer', {
+        pickupAddress: requestStopPoints.pickup.description,
+        pickupLat: requestStopPoints.pickup.lat,
+        pickupLng: requestStopPoints.pickup.lng,
+        dropoffAddress: requestStopPoints.dropoff.description,
+        dropoffLat: requestStopPoints.dropoff.lat,
+        dropoffLng: requestStopPoints.dropoff.lng,
+        numberOfPassengers,
+        rideType,
+      });
+
+      if (response.status === 'rejected') {
+        togglePopup('rideRejected', true);
+      } else {
+        setRideOffer(response);
+      }
+    } catch(e) {
+      console.log(e);
+
     }
   };
 

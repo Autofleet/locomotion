@@ -55,7 +55,7 @@ const AddressText = styled.Text`
   color: #666666;
   margin-start: 22;
   margin-end: 16;
-  opacity: ${({selected}) => selected ? 1 : 0.5}
+  opacity: ${({selected}) => selected ? 1 : 0.5};
 `;
 
 const EtaText = styled.Text`
@@ -77,7 +77,7 @@ const RowContainer = styled.TouchableOpacity`
   ${({ useBorder }) => (useBorder ? `
     border-bottom-color: #f2f2f2;
     border-bottom-width: 1;
-  ` : null)}
+  ` : null)};
 `;
 
 const AddressTitle = styled.Text`

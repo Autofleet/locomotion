@@ -84,7 +84,8 @@
         "pickupPlaceholder": "Click on stations or enter address",
         "dropoffPlaceholder": "Click on stations or enter address",
         "pickupTitle": "Boarding",
-        "dropoffTitle": "Exit"
+        "dropoffTitle": "Exit",
+        "addressPlaceholder": "Enter Address"
     },
     "popups": {
         "rideCancel": {

@@ -25,6 +25,17 @@ export const StopPointsEtaContainer = styled.View`
   justify-content: space-between;
 `;
 
+const Overlay = styled.View`
+  opacity: 0.7;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  left: 0;
+  top: 0;
+  background-color: #ffffff;
+
+`;
+
 export default ({
   origin,
   destination,
@@ -35,7 +46,8 @@ export default ({
   openLocationSelect,
   readyToBook,
   onLocationSelect,
-  closeAddressViewer
+  closeAddressViewer,
+  loading
 }) => {
   return (
     !requestStopPoints.openEdit ?
@@ -63,7 +75,8 @@ export default ({
         />
             {readyToBook ?
               <NumberOfPassenger onChange={onNumberOfPassengerChange} amount={numberOfPassenger} /> : null}
-        </Fragment>
+          {loading ? <Overlay /> : null}
+      </Fragment>
         : <AddressView
             onLocationSelect={onLocationSelect}
             requestStopPoints={requestStopPoints}
