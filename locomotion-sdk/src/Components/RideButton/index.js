@@ -1,6 +1,6 @@
 import LottieView from 'lottie-react-native';
 import styled from 'styled-components';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import LinearGradient from '../LinearGradient';
 
 import { inputHeight, appPalette } from '../../assets/style-settings';
@@ -51,7 +51,7 @@ const ButtonTextContainer = styled.View`
 `;
 
 const Button = styled(({
-  onPress, children, style, hollow, ...props
+  onPress, children, style, hollow, setLoading, ...props
 }) => {
   const [loadingState, setLoadingState] = useState(false);
 
@@ -60,6 +60,10 @@ const Button = styled(({
     await onPress(args);
     return setLoadingState(false);
   };
+
+  useEffect(() => {
+    setLoading(loadingState)
+  },[loadingState])
 
   return (
     <StyledTouchableOpacity width={style[0].width} {...props} onPress={onPressWithLoading} hollow={hollow}>

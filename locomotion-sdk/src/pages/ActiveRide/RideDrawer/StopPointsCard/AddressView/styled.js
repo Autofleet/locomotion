@@ -1,61 +1,57 @@
 import React, { useState } from 'react';
-import { View, TextInput, TouchableOpacity } from 'react-native';
+import { View, TouchableOpacity } from 'react-native';
 import styled from 'styled-components';
-import xIcon from '../../../assets/x.png';
+import TextInput from '../../../../../Components/TextInput'
+import xIcon from '../../../../../assets/x.png';
+import stationIcon from '../../../../../assets/marker-tip.png';
 
 export const AddressInputs = styled.View`
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    height:  100%;
-    width:  100%;
-    background-color: #fff;
+    height:  300px;
+    width: 100%;
+    padding: 20px 20px 10px 20px;
 `;
 
 export const AddressInputsHeader = styled.SafeAreaView`
-    shadow-offset: 0;
-    shadow-color: #04214f;
-    shadow-opacity: 0.4;
     background-color: #fff;
     overflow: visible;
     height: null;
 `;
 
 export const Address = styled.View`
-    min-height: 50;
-    padding-top: 10;
-    padding-bottom: 10;
-    padding-start: 24;
+    height: 30;
+    /* padding-top: 10; */
+
+   /*  padding-start: 24; */
     align-items: center;
     flex-direction: row;
+    padding-top: 0px;
 
-    ${({ originRow }) => originRow && `
-        border-bottom-color: #f2f2f2;
-        border-bottom-Width: 1
-    `}
 `;
 
-const ResetInputIcon = styled.Image.attrs({ source: xIcon })`
+export const ResetInputIcon = styled.Image.attrs({ source: xIcon })`
     display: flex;
-    margin-top: 4px;
-
     height: 13px;
     width: 13px;
 `;
-const ResetInputIconContainer = styled.TouchableOpacity`
-    display: flex;
+export const ResetInputIconContainer = styled.TouchableOpacity`
     height: 22px;
-    width: 20px;
-    margin-right: 10px;
-    margin-left: 10px;
+    width: 22px;
+    position: absolute;
+    right: 5px;
+    top: 5px;
     align-self: center;
+    align-items: center;
+    justify-content: center;
+
 `;
 
 const AddressTextInputContainer = styled.View`
-    display: flex;
     flex-direction: row;
-    justify-content: space-between;
     width: 100%;
+`;
+
+export const StyledInput = styled(TextInput)`
+  border-bottom-color: #e2e2e2;
 `;
 
 export const AddressTextInput = styled(({
@@ -64,7 +60,7 @@ export const AddressTextInput = styled(({
   const [focus, setFocus] = useState(false);
   return (
     <AddressTextInputContainer>
-      <TextInput
+      <StyledInput
         onFocus={() => setFocus(true)}
         onBlur={() => setFocus(false)}
         value={value}
@@ -72,20 +68,16 @@ export const AddressTextInput = styled(({
         ref={inputRef}
         {...props}
       />
-      {focus && value ? (
-        <ResetInputIconContainer onPress={() => onChangeText('')}>
-          <ResetInputIcon />
-        </ResetInputIconContainer>
-      ) : undefined}
     </AddressTextInputContainer>
   );
 })`
-    font-size: 18;
+    font-size: 14;
     color: #666666;
-    margin-start: 16;
-    min-width: 200;
+    width: 100%;
     display: flex;
     flex: 1;
+    margin: 0;
+    height: 30px;
 `;
 
 export const OriginDot = styled.View`
@@ -128,8 +120,10 @@ export const RoutePointsContainer = styled.View`
 `;
 
 export const AddressSearchItemTouchableOpacity = styled.TouchableOpacity`
-    border-bottom-color: #f2f2f2;
+    border-bottom-color: #e2e2e2;
     border-bottom-width: 1;
+    padding-top: 10px;
+    padding-bottom: 10px;
 `;
 
 export const AddressSearchItem = styled(({ onPress, ...props }) => (
@@ -140,23 +134,21 @@ export const AddressSearchItem = styled(({ onPress, ...props }) => (
     flex-direction: row;
     width: 100%;
     justify-content: space-between;
+    align-items: center;
 `;
 
 export const AddressSearchItemText = styled.Text`
-    padding-top: 18;
-    padding-bottom: 18;
-    padding-left: 18;
-    font-size: 16;
+    padding-left: 8px;
+    font-size: 12px;
     display: flex;
 `;
 
 export const DistanceFromAddress = styled.Text`
     display: flex;
     align-self: flex-end;
-    padding-right: 10px;
-    padding-bottom: 4px;
     font-size: 12px;
     color: grey;
+    align-items: center;
 `;
 
 export const HeaderContainer = styled.View`
@@ -177,4 +169,14 @@ export const HeaderIconContainer = styled.TouchableOpacity`
 export const HeaderIcon = styled.Image`
   width: ${({ width }) => (width || '18px')};
   height: ${({ height }) => (height || '18px')};
+`;
+
+
+export const StationIcon = styled.Image.attrs({ source: stationIcon })`
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 16px;
+    width: 16px;
+    margin-start: 8px;
 `;

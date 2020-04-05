@@ -32,10 +32,11 @@ const address = `
 
 export const RideCard = styled.View`
   ${address}
-  min-height: 150px;
+  min-height: 130px;
   flex-direction: column;
   padding-start: 10;
   padding-end: 10;
+  padding-bottom: 0;
 `;
 
 export const DriverAvatar = styled.Image`
@@ -64,7 +65,6 @@ export const RideDetailsText = styled.Text`
     font-size: 12;
     margin-top: 5px;
   ` : null)}
-  /* background-color: red; */
 `;
 
 export const RideButtonContainer = styled.View`
@@ -171,7 +171,7 @@ export const RideTypeButtonText = styled.Text`
 export const DrawerContainer = styled.View`
   flex-direction: column;
   position: absolute;
-  bottom: 30;
+  bottom: 20;
   width: 90%;
   left: 5%;
   border-radius: 4;
