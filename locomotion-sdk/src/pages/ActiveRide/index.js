@@ -98,6 +98,8 @@ export default ({ navigation, menuSide }) => {
     }
 
     if (activeRideState && activeRideState.stop_points[0].completed_at) {
+      console.log(activeRideState);
+
       // Ride completed
       togglePopup('rideOver', true);
     }
@@ -120,6 +122,7 @@ export default ({ navigation, menuSide }) => {
     loadActiveRide();
     initialLocation();
     OneSignal.init();
+    togglePopup('rideSummary', true)
   }, []);
 
   useInterval(() => {
