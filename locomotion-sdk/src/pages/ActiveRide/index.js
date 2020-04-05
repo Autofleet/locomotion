@@ -333,11 +333,10 @@ export default ({ navigation, menuSide }) => {
         showsCompass={false}
         key="map"
         followsUserLocation={!disableAutoLocationFocus}
+        moveOnMarkerPress={false}
         onPanDrag={() => (disableAutoLocationFocus === false ? setDisableAutoLocationFocus(true) : null)}
         onUserLocationChange={(event) => {
-          console.log('INNN');
-
-          if (/* Platform.OS === 'ios' || */ !showsUserLocation || disableAutoLocationFocus) {
+          if ((Platform.OS === 'ios' && !Config.MAP_PROVIDER !== 'google') || !showsUserLocation || disableAutoLocationFocus) {
             return; // Follow user location works for iOS
           }
           const { coordinate } = event.nativeEvent;
@@ -358,6 +357,7 @@ export default ({ navigation, menuSide }) => {
           if (Platform.OS === 'ios') {
             return;
           }
+
           PermissionsAndroid.request(
             PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
           );
@@ -387,7 +387,6 @@ export default ({ navigation, menuSide }) => {
               coordinate={activeSpState.polyline[activeSpState.polyline.length - 1]}
             >
               <StopPointDot />
-
             </Marker>
           ) : null}
         {activeRideState && activeRideState.vehicle && activeRideState.vehicle.location && displayMatchInfo

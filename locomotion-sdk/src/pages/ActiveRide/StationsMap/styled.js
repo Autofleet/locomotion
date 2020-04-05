@@ -33,7 +33,7 @@ export const MarkerToolTip = styled.View`
     border-radius: 4;
     box-shadow: 0 3px 6px #b5b5b5;
     background-color: #c3c0c0;
-    margin-bottom: 5px;
+
     ${({ type }) => type === 'pickup' && `
       background-color: #6180C0;
     `}
@@ -57,5 +57,4 @@ export const MarkerContainer = styled.View`
   display: flex;
   align-items: center;
   padding: 2px;
-  justify-content: space-between;
 `;

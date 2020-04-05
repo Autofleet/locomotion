@@ -171,7 +171,7 @@ export const RideTypeButtonText = styled.Text`
 export const DrawerContainer = styled.View`
   flex-direction: column;
   position: absolute;
-  bottom: 30;
+  bottom: 20;
   width: 90%;
   left: 5%;
   border-radius: 4;

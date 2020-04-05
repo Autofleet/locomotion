@@ -1,24 +1,6 @@
 import React from 'react';
 import { Callout, Marker } from 'react-native-maps';
-import I18n from '../../../I18n';
-import {
-  MarkerToolTip,
-  MarkerToolTipText,
-  StationDot,
-  MarkerContainer,
-} from './styled';
-
-const PickupMarkerContainer = ({ type }) => (
-  <MarkerContainer>
-    {type
-      ? (
-        <MarkerToolTip type={type}>
-          <MarkerToolTipText>{I18n.t(`home.map.markers.${type}`)}</MarkerToolTipText>
-        </MarkerToolTip>
-      ) : null}
-    <StationDot type={type} />
-  </MarkerContainer>
-);
+import CustomMarker from './CustomMarker'
 
 export default ({
   stationKey, lat, lng, selectStation, requestStopPoints, isInOffer,
@@ -28,15 +10,15 @@ export default ({
 
   const getMarker = () => {
     if (pickup) {
-      return (<PickupMarkerContainer type="pickup" />);
+      return (<CustomMarker type="pickup" />);
     }
 
     if (dropoff) {
-      return (<PickupMarkerContainer type="dropoff" />);
+      return (<CustomMarker type="dropoff" />);
     }
 
     if (!isInOffer) {
-      return (<PickupMarkerContainer />);
+      return (<CustomMarker />);
     }
 
     return null;
@@ -47,6 +29,8 @@ export default ({
       coordinate={{ latitude: lat, longitude: lng }}
       onPress={e => !isInOffer && selectStation(stationKey, pickup, dropoff)}
       style={(pickup || dropoff) ? { zIndex: 1 } : {}}
+      tracksViewChanges={false}
+      key={stationKey}
     >
       {getMarker()}
     </Marker>

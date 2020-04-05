@@ -31,7 +31,7 @@ export const VehicleDot = styled(PointDot)`
 
 export const MapButtonsContainer = styled.View`
   position: absolute;
-  bottom: 35%;
+  top: 25%;
   width: 50px;
   left: 20px;
 `;
