@@ -120,6 +120,7 @@ const RideDrawer = ({
                 ? (
                 <Fragment>
                   <RideCard activeRide={activeRide} rideState={rideState} />
+                  {rideState !== 'onBoard' ?
                   <DrawerButtonContainer>
                     <RoundedButton
                       onPress={buttonAction}
@@ -127,7 +128,7 @@ const RideDrawer = ({
                     >
                       {I18n.t('home.cancelRidePriceButton')}
                     </RoundedButton>
-                  </DrawerButtonContainer>
+                  </DrawerButtonContainer> : null}
                 </Fragment>
                 )
                 : rideState
