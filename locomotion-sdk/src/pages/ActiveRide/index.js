@@ -22,6 +22,7 @@ import OneSignal from '../../services/one-signal';
 import settingsContext from '../../context/settings';
 import StationsMap from './StationsMap';
 import MyLocationButton from './ShowMyLocationButton';
+import RideSummaryPopup from '../../popups/RideSummaryPopup';
 
 function useInterval(callback, delay) {
   const savedCallback = useRef();
@@ -67,12 +68,14 @@ export default ({ navigation, menuSide }) => {
   const [offerTimer, setOfferTimer] = useState(false);
   const [stations, setStations] = useState([]);
   const [disableAutoLocationFocus, setDisableAutoLocationFocus] = useState(false);
+  const [rideSummaryData, setRideSummaryData] = useState({})
 
   const mapInstance = useRef();
 
   const loadActiveRide = async () => {
     const { data: response } = await network.get('api/v1/me/rides/active', { params: { activeRide: true } });
     const activeRide = response.ride;
+
     if (activeRide) {
       const [pickup, dropoff] = activeRide.stop_points;
       setStopPoints({
@@ -98,10 +101,24 @@ export default ({ navigation, menuSide }) => {
     }
 
     if (activeRideState && activeRideState.stop_points[0].completed_at) {
-      console.log(activeRideState);
+
+      const { data: rideSummary } = await network.get('api/v1/me/rides/ride-summary', { params: { rideId: activeRideState.external_id } });
+
+      const pickupTime = rideSummary.stop_points[0].completed_at;
+      const dropoffTime = rideSummary.stop_points[1].completed_at;
+      const distance = rideSummary.stop_points[1].actual_distance;
+      const duration = moment(dropoffTime).diff(moment(pickupTime), 'minutes');
+
+      setRideSummaryData({
+        rideId: activeRideState.external_id,
+        pickupTime,
+        dropoffTime,
+        distance,
+        duration,
+      })
 
       // Ride completed
-      togglePopup('rideOver', true);
+      togglePopup('rideSummary', true)
     }
     if (activeRideState && !activeRideState.stop_points[0].completed_at) {
       // Ride canceled
@@ -130,7 +147,6 @@ export default ({ navigation, menuSide }) => {
   }, 10000);
 
   useEffect(() => {
-    console.log(activeRideState);
     if (!activeRideState) {
       return;
     }
@@ -325,6 +341,15 @@ export default ({ navigation, menuSide }) => {
     });
   };
 
+  const onRating = async (rating) => {
+    const response = await network.post(`api/v1/me/rides/rating`, {
+      externalId: rideSummaryData.rideId,
+      rating: rating
+    });
+
+    return response;
+  }
+
   return (
     <PageContainer>
       <MapView
@@ -432,6 +457,7 @@ export default ({ navigation, menuSide }) => {
         onLocationSelect={onLocationSelect}
         closeAddressViewer={closeAddressViewer}
       />
+      <RideSummaryPopup rideSummaryData={rideSummaryData} onRating={onRating} onClose={() => setRideSummaryData({})} />
     </PageContainer>
   );
 };

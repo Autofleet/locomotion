@@ -97,7 +97,10 @@
             "priceLabel": "Price",
             "ratingPre": "How satisfied are you?",
             "ratingHeadline": "Rate your ride",
-            "ratingPost": "We welcome your feedback"
+            "ratingPost": "We welcome your feedback",
+            "durationValue": "{{duration}} Minutes",
+            "distanceValue": "{{distance}} km",
+            "priceValue": "{{price}} €"
         },
         "rideCancel": {
             "main": "Your ride has been cancelled",

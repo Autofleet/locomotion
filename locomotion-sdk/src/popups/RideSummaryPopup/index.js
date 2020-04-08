@@ -26,10 +26,12 @@ const distanceIconSource = require('../../assets/distance.png');
 const priceIconSource = require('../../assets/price.png');
 
 export default ({
-                  closeAfter, onClose,
+                  closeAfter, onClose,rideSummaryData, onRating
                 }) => {
+                  console.log(rideSummaryData);
+
   const [rating, setRating] = useState(false);
-  const [isPopupOpen, togglePopup] = getTogglePopupsState();
+  const [isPopupOpen, togglePopup, popupData] = getTogglePopupsState();
   const closePopup = () => {
     if (onClose) {
       onClose();
@@ -42,8 +44,8 @@ export default ({
     }
   }, []);
 
-  const updateRating = (rate) => {
-    // alert(rate);
+  const updateRating = async (rate) => {
+    await onRating(rate)
     setRating(rate);
   };
 
@@ -79,20 +81,21 @@ export default ({
               <SummaryItem>
                 <SummaryItemIcon source={durationIconSource}/>
                 <SummaryItemTitle>{i18n.t('popups.rideSummary.durationLabel')}</SummaryItemTitle>
-                <SummaryItemText>value</SummaryItemText>
+                <SummaryItemText>{i18n.t('popups.rideSummary.durationValue', {duration: rideSummaryData.duration})}</SummaryItemText>
               </SummaryItem>
 
-              <SummaryItem>
+              <SummaryItem last={!rideSummaryData.price}>
                 <SummaryItemIcon source={distanceIconSource}/>
                 <SummaryItemTitle>{i18n.t('popups.rideSummary.distanceLabel')}</SummaryItemTitle>
-                <SummaryItemText>value</SummaryItemText>
+                <SummaryItemText>{i18n.t('popups.rideSummary.distanceValue', {distance: (rideSummaryData.distance / 1000).toFixed(1)})}</SummaryItemText>
               </SummaryItem>
 
+            {rideSummaryData.price ?
               <SummaryItem last>
                 <SummaryItemIcon source={priceIconSource}/>
                 <SummaryItemTitle>{i18n.t('popups.rideSummary.priceLabel')}</SummaryItemTitle>
-                <SummaryItemText>value</SummaryItemText>
-              </SummaryItem>
+                <SummaryItemText>{i18n.t('popups.rideSummary.priceValue', {price: rideSummaryData.price})}</SummaryItemText>
+              </SummaryItem> : null}
             </SummaryItems>
 
             <SummaryStarsSubTitle>{i18n.t('popups.rideSummary.ratingPre')}</SummaryStarsSubTitle>

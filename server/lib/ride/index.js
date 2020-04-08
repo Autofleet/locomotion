@@ -126,6 +126,48 @@ const rideService = {
     const { data: afRides } = await demandApi.get('/api/v1/rides', { params: { externalId: rideId } });
     return afRides[0];
   },
+
+  getRideSummary: async (userId, rideId) => {
+    const ride = await Ride.findOne({
+      where: {
+        id: rideId,
+        userId,
+        state: 'completed',
+      },
+    });
+
+    if (ride) {
+      const afRide = await rideService.getRideFromAf(ride.id);
+      return afRide;
+    }
+
+    return null;
+  },
+
+  updateRideRating: async (userId, rideId, rating) => {
+    const ride = await Ride.findOne({
+      where: {
+        id: rideId,
+        userId,
+        state: 'completed',
+      },
+    });
+
+    if (!ride.rating) {
+      ride.rating = rating;
+      await ride.save();
+    }
+
+    if (ride) {
+      const afRide = await rideService.getRideFromAf(ride.id);
+      const updatedRide = await demandApi.post(`/api/v1/rides/${afRide.id}/rating`, {
+        rating,
+      });
+      return updatedRide;
+    }
+
+    return null;
+  },
 };
 
 module.exports = rideService;
