@@ -28,7 +28,6 @@ const priceIconSource = require('../../assets/price.png');
 export default ({
                   closeAfter, onClose,rideSummaryData, onRating
                 }) => {
-                  console.log(rideSummaryData);
 
   const [rating, setRating] = useState(false);
   const [isPopupOpen, togglePopup, popupData] = getTogglePopupsState();

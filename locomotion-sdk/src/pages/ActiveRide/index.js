@@ -139,7 +139,6 @@ export default ({ navigation, menuSide }) => {
     loadActiveRide();
     initialLocation();
     OneSignal.init();
-    togglePopup('rideSummary', true)
   }, []);
 
   useInterval(() => {
