@@ -37,6 +37,7 @@ export default ({ navigation, menuSide }) => {
         <WebView
           source={{ uri: settings.contactUsUrl }}
           style={{ marginTop: 40 }}
+          useWebKit={true}
         />
       ) : null}
     </Fragment>

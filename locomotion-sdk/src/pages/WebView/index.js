@@ -19,6 +19,7 @@ export default ({ navigation, uri, title, onIconPress,menuSide  }) => {
     { uri ? <WebView
       source={{ uri }}
       style={{ marginTop: 0 }}
+      useWebKit={true}
     /> : null}
   </Fragment>);
 };
