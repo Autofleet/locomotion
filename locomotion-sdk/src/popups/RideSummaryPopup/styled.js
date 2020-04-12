@@ -96,7 +96,7 @@ export const SummaryStarsSubTitle = styled.Text`
   color: #727272;
   font-size: 14;
   font-weight: 400;
-  padding-top: 20px
+  padding-top: 20px;
 
 `;
 
@@ -104,6 +104,7 @@ export const SummaryStars = styled.View`
   flex-direction: row;
   align-items: center;
   padding: 10px 45px;
+  justify-content: center;
 `;
 
 export const StarIcon = styled.Image(({isOn}) => `

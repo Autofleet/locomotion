@@ -304,7 +304,7 @@ export default ({ navigation, menuSide }) => {
     }
   }, [stations]);
 
-  const selectStationMarker = (key, isPickup, isDropoff) => {
+  const selectStationMarker = (key) => {
     const station = mapMarkers.find(marker => marker.id === key);
     setRequestStopPoints({
       ...requestStopPoints,
@@ -349,6 +349,15 @@ export default ({ navigation, menuSide }) => {
     return response;
   }
 
+  const focusCurrentLocation = () => {
+    mapInstance.current.animateToRegion({
+      latitude: mapRegion.latitude,
+      longitude: mapRegion.longitude,
+      latitudeDelta: mapRegion.latitudeDelta,
+      longitudeDelta: mapRegion.longitudeDelta,
+    }, 1000)
+  }
+
   return (
     <PageContainer>
       <MapView
@@ -382,7 +391,12 @@ export default ({ navigation, menuSide }) => {
         ref={mapInstance}
         onMapReady={() => {
           if (Platform.OS === 'ios') {
-            return;
+            if(Config.MAP_PROVIDER === 'google') {
+              focusCurrentLocation()
+            } else {
+              return;
+            }
+
           }
 
           PermissionsAndroid.request(
@@ -390,16 +404,15 @@ export default ({ navigation, menuSide }) => {
           );
         }}
       >
-        {!activeRideState
-          ? (
+        {!activeRideState ?
             <StationsMap
               isInOffer={!!rideOffer}
               markersMap={mapMarkers}
               selectStation={selectStationMarker}
               requestStopPoints={requestStopPoints}
-            />
-          )
-          : null}
+              activeRideState={activeRideState}
+            /> : null}
+
         {activeSpState && displayMatchInfo
           ? (
             <Polyline
@@ -427,12 +440,7 @@ export default ({ navigation, menuSide }) => {
       </MapView>
       <MapButtonsContainer>
         <MyLocationButton
-          onPress={() => mapInstance.current.animateToRegion({
-            latitude: mapRegion.latitude,
-            longitude: mapRegion.longitude,
-            latitudeDelta: mapRegion.latitudeDelta,
-            longitudeDelta: mapRegion.longitudeDelta,
-          }, 1000)}
+          onPress={() => focusCurrentLocation()}
           displayButton={showsUserLocation}
         />
       </MapButtonsContainer>

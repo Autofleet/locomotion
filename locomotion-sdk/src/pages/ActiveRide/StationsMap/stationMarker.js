@@ -17,36 +17,18 @@ const CustomMarkerSelector = (props) => {
 }
 
 export default ({
-  stationKey, lat, lng, selectStation, requestStopPoints, isInOffer,
+  stationKey, lat, lng, selectStation, isInOffer, type
 }) => {
-  const pickup = requestStopPoints.pickup && requestStopPoints.pickup.lng === lng && requestStopPoints.pickup.lat === lat;
-  const dropoff = requestStopPoints.dropoff && requestStopPoints.dropoff.lng === lng && requestStopPoints.dropoff.lat === lat;
   const CustomMarker = CustomMarkerSelector();
-
-  const getMarker = () => {
-    if (pickup) {
-      return (<CustomMarker type="pickup" />);
-    }
-
-    if (dropoff) {
-      return (<CustomMarker type="dropoff" />);
-    }
-
-    if (!isInOffer) {
-      return (<CustomMarker />);
-    }
-
-    return null;
-  };
-
   return (
     <Marker
       coordinate={{ latitude: lat, longitude: lng }}
-      onPress={e => !isInOffer && selectStation(stationKey, pickup, dropoff)}
-      style={(pickup || dropoff) ? { zIndex: 1 } : {}}
+      onPress={e => selectStation(stationKey)}
+      style={type ? { zIndex: 1 } : {}}
       key={stationKey}
+      tracksViewChanges={Platform.OS === 'ios' && Config.MAP_PROVIDER === 'google'}
     >
-      {getMarker()}
+      <CustomMarker type={type} />
     </Marker>
 
   );
