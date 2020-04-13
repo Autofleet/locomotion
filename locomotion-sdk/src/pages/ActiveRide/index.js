@@ -44,7 +44,7 @@ function useInterval(callback, delay) {
   }, [delay]);
 }
 
-export default ({ navigation, menuSide }) => {
+export default ({ navigation, menuSide, mapSettings }) => {
   const [activeRideState, setActiveRide] = useState(null);
   const [preRideDetails, setPreRideDetails] = useState({});
   const [mapMarkers, setMapMarkers] = useState([]);
@@ -403,6 +403,7 @@ export default ({ navigation, menuSide }) => {
             PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
           );
         }}
+        {...mapSettings}
       >
         {!activeRideState ?
             <StationsMap
