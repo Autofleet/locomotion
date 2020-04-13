@@ -9,6 +9,7 @@ export const PointDot = styled.View`
   shadow-color: #04214f;
   shadow-opacity: 0.4;
   shadow-radius: 4.65;
+  background-color: transparent;
 `;
 
 export const StationDot = styled(PointDot)`

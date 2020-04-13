@@ -1,38 +1,34 @@
 import React from 'react';
+import {Platform} from 'react-native'
 import { Callout, Marker } from 'react-native-maps';
-import CustomMarker from './CustomMarker'
+
+import AppleCustomMarker from './AppleCustomMarker'
+import GoogleCustomMarker from './GoogleCustomMarker'
+import Config from 'react-native-config';
+
+const CustomMarkerSelector = (props) => {
+  if(Platform.OS === 'ios') {
+    if(Config.MAP_PROVIDER !== 'google') {
+      return AppleCustomMarker;
+    }
+  }
+
+  return GoogleCustomMarker;
+}
 
 export default ({
-  stationKey, lat, lng, selectStation, requestStopPoints, isInOffer,
+  stationKey, lat, lng, selectStation, isInOffer, type
 }) => {
-  const pickup = requestStopPoints.pickup && requestStopPoints.pickup.lng === lng && requestStopPoints.pickup.lat === lat;
-  const dropoff = requestStopPoints.dropoff && requestStopPoints.dropoff.lng === lng && requestStopPoints.dropoff.lat === lat;
-
-  const getMarker = () => {
-    if (pickup) {
-      return (<CustomMarker type="pickup" />);
-    }
-
-    if (dropoff) {
-      return (<CustomMarker type="dropoff" />);
-    }
-
-    if (!isInOffer) {
-      return (<CustomMarker />);
-    }
-
-    return null;
-  };
-
+  const CustomMarker = CustomMarkerSelector();
   return (
     <Marker
       coordinate={{ latitude: lat, longitude: lng }}
-      onPress={e => !isInOffer && selectStation(stationKey, pickup, dropoff)}
-      style={(pickup || dropoff) ? { zIndex: 1 } : {}}
-      tracksViewChanges={false}
+      onPress={e => selectStation(stationKey)}
+      style={type ? { zIndex: 1 } : {}}
       key={stationKey}
+      tracksViewChanges={Platform.OS === 'ios' && Config.MAP_PROVIDER === 'google'}
     >
-      {getMarker()}
+      <CustomMarker type={type} />
     </Marker>
 
   );

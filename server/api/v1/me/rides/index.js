@@ -49,6 +49,17 @@ router.post('/cancel-active-ride', async (req, res) => {
   res.json({ ride });
 });
 
+router.get('/ride-summary', async (req, res) => {
+  const { rideId } = req.query;
+  const afRide = await rideService.getRideSummary(req.userId, rideId);
+  res.json(afRide);
+});
+
+router.post('/rating', async (req, res) => {
+  const { externalId, rating } = req.body;
+  const ride = await rideService.updateRideRating(req.userId, externalId, rating);
+  res.json({ ride });
+});
 
 // Get origin destination
 // Return ETA + price estimate

@@ -75,12 +75,7 @@ export default () => {
             disableClass={active}
             onClick={() => {
               if(!active) {
-                console.log('IN DELETE');
-
                 users.deleteUser(id)
-              } else {
-                console.log('IN DELE ELSE ',active);
-
               }
             }}
           />
