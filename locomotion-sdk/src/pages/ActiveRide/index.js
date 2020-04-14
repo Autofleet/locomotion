@@ -68,7 +68,7 @@ export default ({ navigation, menuSide, mapSettings }) => {
   const [offerTimer, setOfferTimer] = useState(false);
   const [stations, setStations] = useState([]);
   const [disableAutoLocationFocus, setDisableAutoLocationFocus] = useState(false);
-  const [rideSummaryData, setRideSummaryData] = useState({})
+  const [rideSummaryData, setRideSummaryData] = useState({});
 
   const mapInstance = useRef();
 
@@ -101,7 +101,6 @@ export default ({ navigation, menuSide, mapSettings }) => {
     }
 
     if (activeRideState && activeRideState.stop_points[0].completed_at) {
-
       const { data: rideSummary } = await network.get('api/v1/me/rides/ride-summary', { params: { rideId: activeRideState.external_id } });
 
       const pickupTime = rideSummary.stop_points[0].completed_at;
@@ -115,10 +114,10 @@ export default ({ navigation, menuSide, mapSettings }) => {
         dropoffTime,
         distance,
         duration,
-      })
+      });
 
       // Ride completed
-      togglePopup('rideSummary', true)
+      togglePopup('rideSummary', true);
     }
     if (activeRideState && !activeRideState.stop_points[0].completed_at) {
       // Ride canceled
@@ -171,7 +170,7 @@ export default ({ navigation, menuSide, mapSettings }) => {
     const newState = {
       ...requestStopPoints,
       [location.type]: location,
-      openEdit: false
+      openEdit: false,
     };
     const bookValid = bookValidation(newState);
 
@@ -188,10 +187,10 @@ export default ({ navigation, menuSide, mapSettings }) => {
     }
     const newState = {
       ...requestStopPoints,
-      selectedType: type
+      selectedType: type,
     };
 
-    if(requestStopPoints.selectedType === type) {
+    if (requestStopPoints.selectedType === type) {
       newState.openEdit = true;
     }
 
@@ -240,9 +239,8 @@ export default ({ navigation, menuSide, mapSettings }) => {
       } else {
         setRideOffer(response);
       }
-    } catch(e) {
+    } catch (e) {
       console.log(e);
-
     }
   };
 
@@ -273,7 +271,8 @@ export default ({ navigation, menuSide, mapSettings }) => {
     setRequestStopPoints({
       openEdit: false,
       pickup: pickupStation,
-      selectedType: 'dropoff'
+      dropoff: pickupStation,
+      selectedType: 'dropoff',
     });
   };
 
@@ -283,7 +282,7 @@ export default ({ navigation, menuSide, mapSettings }) => {
       const { data } = await network.get('api/v1/me/places', {
         params: {
           location: { lat: coords.latitude, lng: coords.longitude },
-          stations: true
+          stations: true,
         },
       });
       setStations(data);
@@ -341,13 +340,13 @@ export default ({ navigation, menuSide, mapSettings }) => {
   };
 
   const onRating = async (rating) => {
-    const response = await network.post(`api/v1/me/rides/rating`, {
+    const response = await network.post('api/v1/me/rides/rating', {
       externalId: rideSummaryData.rideId,
-      rating: rating
+      rating,
     });
 
     return response;
-  }
+  };
 
   const focusCurrentLocation = () => {
     mapInstance.current.animateToRegion({
@@ -355,8 +354,8 @@ export default ({ navigation, menuSide, mapSettings }) => {
       longitude: mapRegion.longitude,
       latitudeDelta: mapRegion.latitudeDelta,
       longitudeDelta: mapRegion.longitudeDelta,
-    }, 1000)
-  }
+    }, 1000);
+  };
 
   return (
     <PageContainer>
@@ -391,12 +390,11 @@ export default ({ navigation, menuSide, mapSettings }) => {
         ref={mapInstance}
         onMapReady={() => {
           if (Platform.OS === 'ios') {
-            if(Config.MAP_PROVIDER === 'google') {
-              focusCurrentLocation()
+            if (Config.MAP_PROVIDER === 'google') {
+              focusCurrentLocation();
             } else {
               return;
             }
-
           }
 
           PermissionsAndroid.request(
@@ -405,14 +403,16 @@ export default ({ navigation, menuSide, mapSettings }) => {
         }}
         {...mapSettings}
       >
-        {!activeRideState ?
+        {!activeRideState
+          ? (
             <StationsMap
               isInOffer={!!rideOffer}
               markersMap={mapMarkers}
               selectStation={selectStationMarker}
               requestStopPoints={requestStopPoints}
               activeRideState={activeRideState}
-            /> : null}
+            />
+          ) : null}
 
         {activeSpState && displayMatchInfo
           ? (
