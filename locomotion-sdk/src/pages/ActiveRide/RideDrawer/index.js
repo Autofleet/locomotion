@@ -27,10 +27,10 @@ import { getTogglePopupsState } from '../../../context/main';
 import network from '../../../services/network';
 import settingsContext from '../../../context/settings';
 
-import StopPointsEtaCard from './StopPointsEtaCard'
-import StopPointsCard from './StopPointsCard'
-import OfferCard from './OfferCard'
-import RideStatusHeader from './RideStatusHeader'
+import StopPointsEtaCard from './StopPointsEtaCard';
+import StopPointsCard from './StopPointsCard';
+import OfferCard from './OfferCard';
+import RideStatusHeader from './RideStatusHeader';
 
 const getRideState = (activeRide) => { // false, driverOnTheWay, driverArrived, onBoard
   if (!activeRide) {
@@ -49,7 +49,7 @@ const RideDrawer = ({
   activeRide, openLocationSelect, requestStopPoints, setRideType,
   cancelRide, createRide, readyToBook, rideType, preRideDetails,
   onNumberOfPassengerChange, numberOfPassenger, createOffer, rideOffer,
-  cancelOffer, offerExpired,onLocationSelect,closeAddressViewer
+  cancelOffer, offerExpired, onLocationSelect, closeAddressViewer, onRideSchedule,
 }) => {
   const [origin, destination] = activeRide ? activeRide.stop_points || [] : [];
   const [isPopupOpen, togglePopup] = getTogglePopupsState();
@@ -118,18 +118,20 @@ const RideDrawer = ({
 
               {rideState && (pickupEta <= useSettings.settingsList.ARRIVE_REMINDER_MIN || rideState !== 'driverOnTheWay')
                 ? (
-                <Fragment>
-                  <RideCard activeRide={activeRide} rideState={rideState} />
-                  {rideState !== 'onBoard' ?
-                  <DrawerButtonContainer>
-                    <RoundedButton
-                      onPress={buttonAction}
-                      hollow
-                    >
-                      {I18n.t('home.cancelRidePriceButton')}
-                    </RoundedButton>
-                  </DrawerButtonContainer> : null}
-                </Fragment>
+                  <Fragment>
+                    <RideCard activeRide={activeRide} rideState={rideState} />
+                    {rideState !== 'onBoard'
+                      ? (
+                        <DrawerButtonContainer>
+                          <RoundedButton
+                            onPress={buttonAction}
+                            hollow
+                          >
+                            {I18n.t('home.cancelRidePriceButton')}
+                          </RoundedButton>
+                        </DrawerButtonContainer>
+                      ) : null}
+                  </Fragment>
                 )
                 : rideState
                   ? (
@@ -169,6 +171,7 @@ const RideDrawer = ({
                     onLocationSelect={onLocationSelect}
                     closeAddressViewer={closeAddressViewer}
                     loading={loading}
+                    onRideSchedule={onRideSchedule}
                   />
                   {/* <Switch onChange={(active) => setRideType(active ? 'pool' : 'private')} active={rideType === 'pool'} /> */}
                   {/* preRideDetails.eta || preRideDetails.estimatePrice ? ( <PreRideBox {...preRideDetails} /> ) : null */}
@@ -177,23 +180,23 @@ const RideDrawer = ({
 
               {!rideState && rideOffer ? (
                 <Fragment>
-                    <OfferCard
-                      origin={origin}
-                      destination={destination}
-                      rideState={rideState}
-                      requestStopPoints={requestStopPoints}
-                      pickupEtaDrift={useSettings.settingsList.DISPLAY_ETA_DRIFT}
-                      dropoffEtaDrift={useSettings.settingsList.DISPLAY_MAX_ETA_DRIFT}
-                      rideOffer={rideOffer}
-                      etaMediumThreshold={useSettings.settingsList.ETA_MEDIUM_THRESHOLD}
-                      etaHighThreshold={useSettings.settingsList.ETA_HIGH_THRESHOLD}
-                      offerExpired={offerExpired}
-                      onVerified={buttonAction}
-                      onRenewOffer={buttonAction}
-                      cancelOffer={cancelOffer}
-                      setLoading={setLoading}
-                      loading={loading}
-                    />
+                  <OfferCard
+                    origin={origin}
+                    destination={destination}
+                    rideState={rideState}
+                    requestStopPoints={requestStopPoints}
+                    pickupEtaDrift={useSettings.settingsList.DISPLAY_ETA_DRIFT}
+                    dropoffEtaDrift={useSettings.settingsList.DISPLAY_MAX_ETA_DRIFT}
+                    rideOffer={rideOffer}
+                    etaMediumThreshold={useSettings.settingsList.ETA_MEDIUM_THRESHOLD}
+                    etaHighThreshold={useSettings.settingsList.ETA_HIGH_THRESHOLD}
+                    offerExpired={offerExpired}
+                    onVerified={buttonAction}
+                    onRenewOffer={buttonAction}
+                    cancelOffer={cancelOffer}
+                    setLoading={setLoading}
+                    loading={loading}
+                  />
                 </Fragment>
               ) : null }
             </Fragment>

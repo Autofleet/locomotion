@@ -8,7 +8,7 @@ import moment from 'moment';
 import i18n from '../../../../I18n';
 import { getTogglePopupsState } from '../../../../context/main';
 import InputIcon from '../../../../assets/arrow-down.png';
-import DateSelector from './DateTimePicker';
+import DateTimePicker from './DateTimePicker';
 
 const Container = styled.View`
   min-height: 50;
@@ -23,16 +23,31 @@ const Container = styled.View`
 
 const TimeItemContainer = styled.View`
   width: 100%;
-  border-radius: 4px;
   height: 35px;
   flex-direction: row;
   margin-bottom: 10px;
 `;
+
 const TimeItem = styled.TouchableOpacity`
   flex: 1;
   background-color: ${({ selected }) => (selected ? '#6180c0' : '#ffffff')};
   justify-content: center;
   align-items: center;
+  border-width: 1px;
+  border-color: #b5b5b5;
+
+  ${({ side }) => (side === 'right' ? `
+    border-top-right-radius: 4px;
+    border-bottom-right-radius: 4px;
+    border-left-width: 0;
+  ` : null)}
+
+  ${({ side }) => (side === 'left' ? `
+    border-top-left-radius: 4px;
+    border-bottom-left-radius: 4px;
+    border-right-width: 0;
+  ` : null)}
+
   `;
 
 const TextContainer = styled.Text`
@@ -52,18 +67,23 @@ const SelectionTitle = styled.Text`
   padding-bottom: 5px;
 `;
 
-const OrderTimeSelector = ({ selected, text, onPress }) => (
-  <TimeItem selected={selected} onPress={onPress}>
+const OrderTimeSelector = ({
+  selected, text, onPress, side,
+}) => (
+  <TimeItem selected={selected} onPress={onPress} side={side}>
     <TextContainer selected={selected}>{text}</TextContainer>
   </TimeItem>
 
 );
 
-export default ({ amount, onChange }) => {
-  const [orderTime, setOrderTime] = useState('now');
+export default ({ onScheduleTimeSelect }) => {
+  const [ScheduleType, setScheduleType] = useState('now');
 
-  const onSelectOrderTime = (time) => {
-    setOrderTime(time);
+  const onScheduleTypeSelect = (type) => {
+    setScheduleType(type);
+    if (type === 'now') {
+      onScheduleTimeSelect(null);
+    }
   };
 
 
@@ -75,18 +95,22 @@ export default ({ amount, onChange }) => {
       <TimeItemContainer>
         <OrderTimeSelector
           text="Now"
-          selected={orderTime === 'now'}
-          onPress={() => onSelectOrderTime('now')}
+          selected={ScheduleType === 'now'}
+          onPress={() => onScheduleTypeSelect('now')}
+          side="left"
         />
         <OrderTimeSelector
           text="Later"
-          selected={orderTime === 'future'}
-          onPress={() => onSelectOrderTime('future')}
+          selected={ScheduleType === 'future'}
+          onPress={() => onScheduleTypeSelect('future')}
+          side="right"
         />
       </TimeItemContainer>
-      {orderTime === 'future' || true
+      {ScheduleType === 'future'
         ? (
-          <DateSelector />
+          <DateTimePicker
+            onScheduleTimeSelect={onScheduleTimeSelect}
+          />
         )
         : null}
     </Container>

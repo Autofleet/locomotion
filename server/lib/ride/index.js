@@ -68,6 +68,7 @@ const createRide = async (rideData, userId) => {
           contact_person_avatar: avatar,
         },
       ],
+      scheduled_to: rideData.scheduledTo,
     });
 
     if (afRide.status === 'rejected') {

@@ -6,7 +6,7 @@ import i18n from '../../../../I18n';
 import StopPointRow from './StopPointRow';
 import NumberOfPassenger from './NumberOfPassenger';
 import AddressView from './AddressView';
-import TimeSelector from './TimeSelector';
+import RideScheduler from './RideScheduler';
 
 const address = `
 min-height: 50;
@@ -49,6 +49,7 @@ export default ({
   onLocationSelect,
   closeAddressViewer,
   loading,
+  onRideSchedule,
 }) => (
   !requestStopPoints.openEdit
     ? (
@@ -78,7 +79,9 @@ export default ({
           ? (
             <Fragment>
               <NumberOfPassenger onChange={onNumberOfPassengerChange} amount={numberOfPassenger} />
-              <TimeSelector />
+              <RideScheduler
+                onScheduleTimeSelect={onRideSchedule}
+              />
             </Fragment>
           )
           : null}

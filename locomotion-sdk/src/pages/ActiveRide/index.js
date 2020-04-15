@@ -59,6 +59,7 @@ export default ({ navigation, menuSide, mapSettings }) => {
   const [requestStopPoints, setRequestStopPoints] = useState({
     openEdit: false,
     selectedType: 'pickup',
+    scheduledTo: null,
   });
   const [rideType, setRideType] = useState('pool');
   const [pickupEta, setPickupEta] = useState(null);
@@ -209,7 +210,9 @@ export default ({ navigation, menuSide, mapSettings }) => {
       dropoffLng: requestStopPoints.dropoff.lng,
       numberOfPassengers,
       rideType,
+      scheduledTo: requestStopPoints.scheduledTo,
     });
+
     if (response.state === 'rejected') {
       setRideOffer(null);
       togglePopup('rideRejected', true);
@@ -357,6 +360,14 @@ export default ({ navigation, menuSide, mapSettings }) => {
     }, 1000);
   };
 
+  const onRideSchedule = (rideTime) => {
+    const newState = {
+      ...requestStopPoints,
+      scheduledTo: rideTime,
+    };
+    setRequestStopPoints(newState);
+  };
+
   return (
     <PageContainer>
       <MapView
@@ -464,6 +475,7 @@ export default ({ navigation, menuSide, mapSettings }) => {
         offerExpired={offerExpired}
         onLocationSelect={onLocationSelect}
         closeAddressViewer={closeAddressViewer}
+        onRideSchedule={onRideSchedule}
       />
       <RideSummaryPopup rideSummaryData={rideSummaryData} onRating={onRating} onClose={() => setRideSummaryData({})} />
     </PageContainer>

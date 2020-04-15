@@ -79,6 +79,10 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.DATE,
       field: 'arriving_push',
     },
+    scheduledTo: {
+      type: DataTypes.DATE,
+      field: 'scheduled_to',
+    },
   }, {
     tableName: 'rides',
   });

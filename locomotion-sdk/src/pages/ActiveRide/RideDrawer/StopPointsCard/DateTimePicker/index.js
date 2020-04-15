@@ -55,11 +55,11 @@ const InputArrow = styled.Image.attrs({ source: InputIcon })`
 `;
 
 
-export default ({ amount, onChange }) => {
+export default ({ onScheduleTimeSelect }) => {
   const useSettings = settingsContext.useContainer();
   const [optionalDates, setOptionalDates] = useState([]);
   const [optionalTimes, setOptionalTimes] = useState([]);
-  const [fullOptionsData, setFullOptionsData] = useState({});
+  const [scheduleOptions, setScheduleOptions] = useState({});
   const [selectedDate, setSelectedDate] = useState('');
   const [selectedTime, setSelectedTime] = useState('');
 
@@ -98,6 +98,36 @@ export default ({ amount, onChange }) => {
         end: '19:00',
       },
     ],
+    5: [
+      {
+        start: '08:00',
+        end: '13:00',
+      },
+      {
+        start: '16:00',
+        end: '19:00',
+      },
+    ],
+    6: [
+      {
+        start: '08:00',
+        end: '13:00',
+      },
+      {
+        start: '16:00',
+        end: '19:00',
+      },
+    ],
+    7: [
+      {
+        start: '08:00',
+        end: '13:00',
+      },
+      {
+        start: '16:00',
+        end: '19:00',
+      },
+    ],
   };
 
   const getOptionalDates = () => {
@@ -113,32 +143,23 @@ export default ({ amount, onChange }) => {
       if (workingHours[dayInWeek]) {
         displayDates.push(date.format('DD-MM-YYYY'));
         const timeData = getOptionalTimes(date.format('DD-MM-YYYY'), workingHours[dayInWeek]);
-
         const filteredTimeData = timeData.filter(time => moment(time).isSameOrAfter(min));
-        displayHours[date.format('DD-MM-YYYY')] = filteredTimeData;
+
+        if (filteredTimeData.length > 0) {
+          displayHours[date.format('DD-MM-YYYY')] = filteredTimeData;
+        }
       }
       calculatedDate = moment(calculatedDate).add(1, 'days');
     }
 
-    setOptionalDates(displayDates);
-    setFullOptionsData(displayHours);
-    setSelectedDate(displayDates[0]);
+    setScheduleOptions(displayHours);
   };
 
   const getOptionalTimes = (date, dateWorkingHours) => {
-    const todayDate = moment();
-
-    const futureDate = moment(date, 'DD-MM-YYYY');
-
-    const startOfDay = todayDate.startOf('day');
-    const futureStartOfDay = futureDate.startOf('day');
-
-    const diff = startOfDay.diff(futureStartOfDay, 'days');
     const timeInterval = useSettings.settingsList.FUTURE_ORDER_TIME_INTERVAL;
-
     const parseFormat = 'DD-MM-YYYY HH:mm';
-    const currentHour = moment().hour();
     const timesArray = [];
+
     dateWorkingHours.map((timeFrame) => {
       const startTime = moment(`${date} ${timeFrame.start}`, parseFormat);
       const endTime = moment(`${date} ${timeFrame.end}`, parseFormat);
@@ -151,7 +172,9 @@ export default ({ amount, onChange }) => {
         lastTime = lastTime.add(timeInterval, 'minutes');
       }
     });
-    return timesArray;
+
+    const uniq = [...new Set(timesArray)];
+    return uniq;
   };
 
   useEffect(() => {
@@ -159,73 +182,84 @@ export default ({ amount, onChange }) => {
   }, []);
 
   useEffect(() => {
+    if (scheduleOptions) {
+      const preparedDates = prepareForDatePicker(scheduleOptions);
+
+      setOptionalDates(preparedDates);
+      if (preparedDates.length) {
+        setSelectedDate(preparedDates[0].value);
+      }
+    }
+  }, [scheduleOptions]);
+
+
+  useEffect(() => {
     if (selectedDate) {
-      setOptionalTimes(fullOptionsData[selectedDate]);
-      setSelectedTime(fullOptionsData[selectedDate][0]);
+      setOptionalTimes(prepareForTimePicker(scheduleOptions[selectedDate]));
     }
   }, [selectedDate]);
 
-  const prepareForPicker = (data) => {
-    console.log('PREPARE', data);
+  useEffect(() => {
+    onScheduleTimeSelect(selectedTime);
+  }, [selectedTime]);
 
-    const newData = data.map(time => ({ label: time, value: time }));
+  const prepareForDatePicker = (data) => {
+    const dates = Object.getOwnPropertyNames(data);
+    const newData = dates.map(time => ({ label: time, value: time }));
+
     return newData;
   };
 
-  const prepareForPickerTimes = (data) => {
-    console.log('PREPARE TIMES', data);
-
+  const prepareForTimePicker = (data) => {
     const newData = data.map((time) => {
       const formatedTime = moment(time).format('HH:mm');
       return { label: formatedTime, value: time };
     });
+    setSelectedTime(data[0]);
     return newData;
   };
 
+
+  const TimePicker = ({
+    title, items, value, onValueChange,
+  }) => (
+    <TimeSelectorItemContainer>
+      <TimeSelectorTitle>{title}</TimeSelectorTitle>
+      <RNPickerSelect
+        items={items}
+        onValueChange={onValueChange}
+        style={{
+          inputIOS: {
+            fontSize: 14,
+            color: '#727272',
+            paddingRight: 25,
+          },
+          iconContainer: {
+            right: 0,
+            top: -2,
+          },
+        }}
+        value={value}
+        Icon={() => (<InputArrow />)}
+      />
+    </TimeSelectorItemContainer>
+  );
+
   return (
     <TimeSelectorsContainer>
-      <TimeSelectorItemContainer>
-        <TimeSelectorTitle>Date</TimeSelectorTitle>
-        <RNPickerSelect
-          items={prepareForPicker(optionalDates)}
-          onValueChange={setSelectedDate}
-          style={{
-            inputIOS: {
-              fontSize: 14,
-              color: '#727272',
-              paddingRight: 25,
-            },
-            iconContainer: {
-              right: 0,
-              top: -2,
-            },
-          }}
-          value={selectedDate}
-          Icon={() => (<InputArrow />)}
-        />
-      </TimeSelectorItemContainer>
+      <TimePicker
+        title="Date"
+        items={optionalDates}
+        value={selectedDate}
+        onValueChange={value => setSelectedDate(value)}
+      />
 
-      <TimeSelectorItemContainer>
-        <TimeSelectorTitle>Hour</TimeSelectorTitle>
-        <RNPickerSelect
-          items={prepareForPickerTimes(optionalTimes)}
-          onValueChange={setSelectedTime}
-          style={{
-            inputIOS: {
-              fontSize: 14,
-              color: '#727272',
-              paddingRight: 25,
-            },
-            iconContainer: {
-              right: 0,
-              top: -2,
-            },
-          }}
-          value={selectedTime}
-          Icon={() => (<InputArrow />)}
-        />
-      </TimeSelectorItemContainer>
-
+      <TimePicker
+        title="Hour"
+        items={optionalTimes}
+        value={selectedTime}
+        onValueChange={value => setSelectedTime(value)}
+      />
 
     </TimeSelectorsContainer>
   );
