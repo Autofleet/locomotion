@@ -7,6 +7,7 @@ module.exports = (sequelize, DataTypes) => {
     COMPLETED: 'completed',
     CANCELED: 'canceled',
     REJECTED: 'rejected',
+    PENDING: 'pending',
   };
 
   const Ride = sequelize.define('Ride', {

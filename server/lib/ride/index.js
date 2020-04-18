@@ -73,6 +73,8 @@ const createRide = async (rideData, userId) => {
 
     if (afRide.status === 'rejected') {
       ride.state = 'rejected';
+    } else if (afRide.scheduled_to && afRide.status === 'pending') {
+      ride.state = 'pending';
     } else {
       ride.state = 'active';
     }
