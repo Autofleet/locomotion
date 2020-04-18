@@ -91,7 +91,7 @@ export default ({ onScheduleTimeSelect }) => {
     4: [
       {
         start: '08:00',
-        end: '13:00',
+        end: '15:00',
       },
       {
         start: '16:00',
@@ -101,7 +101,7 @@ export default ({ onScheduleTimeSelect }) => {
     5: [
       {
         start: '08:00',
-        end: '13:00',
+        end: '15:00',
       },
       {
         start: '16:00',
@@ -111,21 +111,21 @@ export default ({ onScheduleTimeSelect }) => {
     6: [
       {
         start: '08:00',
-        end: '13:00',
+        end: '15:00',
       },
       {
         start: '16:00',
-        end: '19:00',
+        end: '23:00',
       },
     ],
     7: [
       {
         start: '08:00',
-        end: '13:00',
+        end: '15:00',
       },
       {
         start: '16:00',
-        end: '19:00',
+        end: '23:00',
       },
     ],
   };
@@ -241,6 +241,7 @@ export default ({ onScheduleTimeSelect }) => {
         }}
         value={value}
         Icon={() => (<InputArrow />)}
+        placeholder={{}}
       />
     </TimeSelectorItemContainer>
   );
@@ -248,14 +249,14 @@ export default ({ onScheduleTimeSelect }) => {
   return (
     <TimeSelectorsContainer>
       <TimePicker
-        title="Date"
+        title={i18n.t('home.RideScheduler.timePicker.date')}
         items={optionalDates}
         value={selectedDate}
         onValueChange={value => setSelectedDate(value)}
       />
 
       <TimePicker
-        title="Hour"
+        title={i18n.t('home.RideScheduler.timePicker.hour')}
         items={optionalTimes}
         value={selectedTime}
         onValueChange={value => setSelectedTime(value)}

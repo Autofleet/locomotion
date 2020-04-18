@@ -12,7 +12,6 @@ import DateTimePicker from './DateTimePicker';
 
 const Container = styled.View`
   min-height: 50;
-  padding-top: 10;
   padding-bottom: 10;
 
   flex-direction: column;
@@ -90,17 +89,17 @@ export default ({ onScheduleTimeSelect }) => {
   return (
     <Container>
       <SelectionTitle>
-        I want to start
+        {i18n.t('home.RideScheduler.timeSelectionTitle')}
       </SelectionTitle>
       <TimeItemContainer>
         <OrderTimeSelector
-          text="Now"
+          text={i18n.t('home.RideScheduler.now')}
           selected={ScheduleType === 'now'}
           onPress={() => onScheduleTypeSelect('now')}
           side="left"
         />
         <OrderTimeSelector
-          text="Later"
+          text={i18n.t('home.RideScheduler.future')}
           selected={ScheduleType === 'future'}
           onPress={() => onScheduleTypeSelect('future')}
           side="right"

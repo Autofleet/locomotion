@@ -73,6 +73,19 @@
             "expiredOffer": "Renew",
             "expiredOfferText": "Your request expired",
             "offerBooked": "Ride has been booked"
+        },
+        "futureRides": {
+            "openBookingsButton": "{{openBookings}} open Bookings",
+            "closeButton": "Close"
+        },
+        "RideScheduler": {
+            "timeSelectionTitle": "I want to start",
+            "now": "Now",
+            "future": "Later",
+            "timePicker": {
+                "date": "Date",
+                "hour": "Hour"
+            }
         }
     },
     "lock": {
