@@ -30,7 +30,9 @@ router.get('/history', async (req, res) => {
 
 router.get('/active', async (req, res) => {
   const ride = await rideService.getRidderActiveRide(req.userId);
-  res.json({ ride });
+  const futureRides = await rideService.getPendingRides(req.userId);
+
+  res.json({ ride, futureRides });
 });
 
 router.post('/', async (req, res) => {

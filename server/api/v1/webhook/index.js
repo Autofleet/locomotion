@@ -22,7 +22,7 @@ router.put('/:rideId', async (req, res) => {
 
   const stopPoints = req.body.ride.stop_points;
 
-  if (stopPoints && !ride.arrivingPush) {
+  if (stopPoints && !ride.arrivingPush && req.body.ride.status === 'active') {
     const { value: arriveReminderMin } = await settingsService.getSettingByKeyFromDb('ARRIVE_REMINDER_MIN');
     const etaTime = moment(stopPoints[0].eta);
     const diff = etaTime.diff(moment(), 'minutes');

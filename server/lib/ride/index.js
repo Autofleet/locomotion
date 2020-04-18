@@ -171,6 +171,28 @@ const rideService = {
 
     return null;
   },
+
+  getPendingRides: async (userId) => {
+    const rides = await Ride.findAll({
+      where: {
+        userId,
+        state: 'pending',
+      },
+    });
+
+    if (rides) {
+      const afRides = await Promise.all(rides.map(async (ride) => {
+        const afRide = await rideService.getRideFromAf(ride.id);
+        return afRide;
+      }));
+
+      const filteredRides = afRides.filter(ride => ride.status === 'pending');
+
+      return filteredRides;
+    }
+
+    return null;
+  },
 };
 
 module.exports = rideService;
