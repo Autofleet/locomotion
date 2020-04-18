@@ -15,6 +15,8 @@ import {
   RideButtonContainer,
   DrawerContainer,
   DrawerButtonContainer,
+  FutureOrder,
+  FutureText,
 } from './styled';
 import RideType from './RideType';
 import Switch from '../../../Components/Switch';
@@ -31,6 +33,7 @@ import StopPointsEtaCard from './StopPointsEtaCard';
 import StopPointsCard from './StopPointsCard';
 import OfferCard from './OfferCard';
 import RideStatusHeader from './RideStatusHeader';
+import FutureRides from './FutureRides';
 
 const getRideState = (activeRide) => { // false, driverOnTheWay, driverArrived, onBoard
   if (!activeRide) {
@@ -50,6 +53,7 @@ const RideDrawer = ({
   cancelRide, createRide, readyToBook, rideType, preRideDetails,
   onNumberOfPassengerChange, numberOfPassenger, createOffer, rideOffer,
   cancelOffer, offerExpired, onLocationSelect, closeAddressViewer, onRideSchedule,
+  futureRides,
 }) => {
   const [origin, destination] = activeRide ? activeRide.stop_points || [] : [];
   const [isPopupOpen, togglePopup] = getTogglePopupsState();
@@ -57,6 +61,8 @@ const RideDrawer = ({
   const [pickupEta, setPickupEta] = useState(null);
   const [dropoffEta, setDropoffpEta] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [futureOrdersState, setFutureOrdersState] = useState(false);
+
   const rideState = getRideState(activeRide);
 
   const buttonAction = async () => {
@@ -94,6 +100,11 @@ const RideDrawer = ({
 
   return (
     <DrawerContainer>
+      <FutureRides
+        futureRides={futureRides}
+        onPress={() => setFutureOrdersState(!futureOrdersState)}
+        isOpen={futureOrdersState}
+      />
       <Drawer>
         <MessageCard
           title={I18n.t('popups.rideCancel.main')}
