@@ -66,7 +66,7 @@ router.put('/:rideId', async (req, res) => {
     }
   }
 
-  if (req.body.ride.status === 'active') {
+  if (req.body.ride.status === 'active' || req.body.ride.status === 'dispatched') {
     ride.state = 'active';
     await ride.save();
   } else if (req.body.ride.status === 'completed') {
