@@ -2,6 +2,7 @@ const Router = require('../../../../lib/router');
 const rideService = require('../../../../lib/ride');
 const getPreRideDetails = require('../../../../lib/pre-ride-details');
 const { Ride } = require('../../../../models');
+const settingsLib = require('../../../../lib/settings');
 
 const router = Router();
 
@@ -36,6 +37,15 @@ router.get('/active', async (req, res) => {
 });
 
 router.post('/', async (req, res) => {
+  if (req.body.scheduledTo) {
+    const pendingRides = await rideService.getPendingRides(req.userId);
+    const { MAX_FUTURE_RIDES: maxFutureRides } = await settingsLib.getSettingsList();
+
+    if (pendingRides && pendingRides.length >= maxFutureRides) {
+      throw new Error('maximum future orders reached');
+    }
+  }
+
   const ride = await rideService.create(req.body, req.userId);
   res.json(ride);
 });

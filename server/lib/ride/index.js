@@ -2,6 +2,7 @@ require('dotenv');
 const axios = require('axios');
 const logger = require('../../logger');
 const { Ride, User } = require('../../models');
+const { Op } = require('sequelize');
 
 const demandApi = axios.create({
   baseURL: process.env.AF_BACKEND_URL || 'https://demand.autofleet.io/',
