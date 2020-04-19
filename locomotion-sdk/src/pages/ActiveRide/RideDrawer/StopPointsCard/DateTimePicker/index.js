@@ -64,11 +64,11 @@ export default ({ onScheduleTimeSelect }) => {
   const [selectedTime, setSelectedTime] = useState('');
 
   const workingHours = {
-    1: [{
+    0: [{
       start: '08:00',
       end: '22:00',
     }],
-    2: [
+    1: [
       {
         start: '08:00',
         end: '13:00',
@@ -78,13 +78,23 @@ export default ({ onScheduleTimeSelect }) => {
         end: '19:00',
       },
     ],
-    3: [
+    2: [
       {
         start: '08:00',
         end: '16:00',
       },
       {
         start: '13:00',
+        end: '19:00',
+      },
+    ],
+    3: [
+      {
+        start: '08:00',
+        end: '15:00',
+      },
+      {
+        start: '16:00',
         end: '19:00',
       },
     ],
@@ -105,20 +115,10 @@ export default ({ onScheduleTimeSelect }) => {
       },
       {
         start: '16:00',
-        end: '19:00',
-      },
-    ],
-    6: [
-      {
-        start: '08:00',
-        end: '15:00',
-      },
-      {
-        start: '16:00',
         end: '23:00',
       },
     ],
-    7: [
+    6: [
       {
         start: '08:00',
         end: '15:00',

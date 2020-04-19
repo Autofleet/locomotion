@@ -33,7 +33,7 @@ import StopPointsEtaCard from './StopPointsEtaCard';
 import StopPointsCard from './StopPointsCard';
 import OfferCard from './OfferCard';
 import RideStatusHeader from './RideStatusHeader';
-import FutureRides from './FutureRides';
+import FutureRides, { FutureOrdersButton } from './FutureRides';
 
 const getRideState = (activeRide) => { // false, driverOnTheWay, driverArrived, onBoard
   if (!activeRide) {
@@ -53,7 +53,7 @@ const RideDrawer = ({
   cancelRide, createRide, readyToBook, rideType, preRideDetails,
   onNumberOfPassengerChange, numberOfPassenger, createOffer, rideOffer,
   cancelOffer, offerExpired, onLocationSelect, closeAddressViewer, onRideSchedule,
-  futureRides,
+  futureRides, cancelFutureRide,
 }) => {
   const [origin, destination] = activeRide ? activeRide.stop_points || [] : [];
   const [isPopupOpen, togglePopup] = getTogglePopupsState();
@@ -98,12 +98,23 @@ const RideDrawer = ({
     }
   }, [origin, destination]);
 
+  useEffect(() => {
+    if(futureRides && futureRides.length === 0 && futureOrdersState) {
+      setFutureOrdersState(false)
+    }
+  }, [futureRides])
   return (
     <DrawerContainer>
-      <FutureRides
+      <FutureOrdersButton
         futureRides={futureRides}
         onPress={() => setFutureOrdersState(!futureOrdersState)}
         isOpen={futureOrdersState}
+      />
+      <FutureRides
+        futureRides={futureRides}
+        isOpen={futureOrdersState}
+        onCancel={cancelFutureRide}
+        onPress={() => setFutureOrdersState(!futureOrdersState)}
       />
       <Drawer>
         <MessageCard
@@ -117,7 +128,8 @@ const RideDrawer = ({
           title={I18n.t('popups.rideRejected.main')}
           subTitle={I18n.t('popups.rideRejected.sub')}
         />
-        {!isPopupOpen('ridePopupsStatus')
+
+        {!isPopupOpen('ridePopupsStatus') && !futureOrdersState
           ? (
             <Fragment>
               <RideStatusHeader

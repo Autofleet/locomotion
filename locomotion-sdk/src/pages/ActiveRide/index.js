@@ -46,6 +46,8 @@ function useInterval(callback, delay) {
 
 export default ({ navigation, menuSide, mapSettings }) => {
   const [activeRideState, setActiveRide] = useState(null);
+  const [futureRides, setFutureRides] = useState(null);
+
   const [preRideDetails, setPreRideDetails] = useState({});
   const [mapMarkers, setMapMarkers] = useState([]);
   const [mapRegion, setMapRegion] = useState({
@@ -75,8 +77,8 @@ export default ({ navigation, menuSide, mapSettings }) => {
 
   const loadActiveRide = async () => {
     const { data: response } = await network.get('api/v1/me/rides/active', { params: { activeRide: true } });
-    const activeRide = response.ride;
-
+    const { ride: activeRide, futureRides: futureRidesData } = response;
+    setFutureRides(futureRidesData);
     if (activeRide) {
       const [pickup, dropoff] = activeRide.stop_points;
       setStopPoints({
@@ -98,6 +100,7 @@ export default ({ navigation, menuSide, mapSettings }) => {
           }, 500);
         }
       }
+
       return setActiveRide(activeRide);
     }
 
@@ -368,6 +371,12 @@ export default ({ navigation, menuSide, mapSettings }) => {
     setRequestStopPoints(newState);
   };
 
+  const cancelFutureRide = async (rideId) => {
+    const response = await network.post('api/v1/me/rides/cancel-future-ride', { rideId });
+    console.log(response);
+    loadActiveRide()
+  };
+
   return (
     <PageContainer>
       <MapView
@@ -476,6 +485,8 @@ export default ({ navigation, menuSide, mapSettings }) => {
         onLocationSelect={onLocationSelect}
         closeAddressViewer={closeAddressViewer}
         onRideSchedule={onRideSchedule}
+        futureRides={futureRides}
+        cancelFutureRide={cancelFutureRide}
       />
       <RideSummaryPopup rideSummaryData={rideSummaryData} onRating={onRating} onClose={() => setRideSummaryData({})} />
     </PageContainer>

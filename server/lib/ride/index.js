@@ -193,6 +193,29 @@ const rideService = {
 
     return null;
   },
+
+  cancelFutureRide: async (userId, rideId) => {
+    const ride = await Ride.findOne({
+      where: {
+        id: rideId,
+        userId,
+        state: 'pending',
+      },
+    });
+
+    if (ride) {
+      const afRide = await rideService.getRideFromAf(ride.id);
+      const resp = await demandApi.put(`/api/v1/rides/${afRide.id}/cancel`, {
+        cancellation_reason: 'user/cancellation',
+      });
+
+      ride.state = 'canceled';
+      await ride.save();
+      return afRide;
+    }
+
+    return null;
+  },
 };
 
 module.exports = rideService;

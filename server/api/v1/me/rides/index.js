@@ -71,4 +71,9 @@ router.get('/pre', async (req, res) => {
   res.json({ ...preRideDetails });
 });
 
+router.post('/cancel-future-ride', async (req, res) => {
+  const ride = await rideService.cancelFutureRide(req.userId, req.body.rideId);
+  res.json({ ride });
+});
+
 module.exports = router;

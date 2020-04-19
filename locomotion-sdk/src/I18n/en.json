@@ -76,7 +76,8 @@
         },
         "futureRides": {
             "openBookingsButton": "{{openBookings}} open Bookings",
-            "closeButton": "Close"
+            "closeButton": "Close",
+            "cancelButton": "Cancel"
         },
         "RideScheduler": {
             "timeSelectionTitle": "I want to start",

@@ -32,7 +32,7 @@ const StyledTouchableOpacity = styled.TouchableOpacity`
   width: ${({ width }) => (width || '100%')};
   border-radius: 24px;
   background-color: #1e273d;
-  height: 40px;
+  height: ${({ height }) => (height || '40px')};
 
   ${({ marginTop }) => marginTop && `
     margin-top: ${marginTop};
@@ -70,7 +70,7 @@ const Button = styled(({
   }, [loadingState]);
 
   return (
-    <StyledTouchableOpacity width={style[0].width} {...props} onPress={onPressWithLoading} hollow={hollow}>
+    <StyledTouchableOpacity {...props} onPress={onPressWithLoading} hollow={hollow}>
       <ButtonTextContainer>
         {loadingState ? (
           <LoadingWrapper>
