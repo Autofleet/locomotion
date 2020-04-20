@@ -83,7 +83,7 @@ export default ({
   return (
     <EtaContainer>
       <EtaText>
-        {`${moment(eta).format('HH:mm')} - ${moment(eta).add(etaDrift, 'minutes').format('HH:mm')}`}
+        {eta ? `${moment(eta).format('HH:mm')} - ${moment(eta).add(etaDrift, 'minutes').format('HH:mm')}` : null}
       </EtaText>
       <Wrap>
         {getWarningMessage()}

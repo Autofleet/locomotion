@@ -97,7 +97,7 @@ export default ({
         <StopPointDot origin={pickup} />
         <StopPointDotTimeLine origin={pickup} />
       </StopPointDotContainer>
-      {pickup
+      {pickup && rideOffer.pickupTime && rideOffer.dropoffTime
         ? (
           <OfferRideEtaContainer>
             <OfferRideEtaText>{`${rideEta} min`}</OfferRideEtaText>

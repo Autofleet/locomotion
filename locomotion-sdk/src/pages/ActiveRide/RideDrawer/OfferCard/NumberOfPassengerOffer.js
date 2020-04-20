@@ -2,11 +2,12 @@ import React, { useState, Fragment } from 'react';
 import {Text, View} from 'react-native'
 import styled from 'styled-components';
 import i18n from '../../../../I18n';
-
+import moment from 'moment'
 
 const PassengerAmountIconSource = require('../../../../assets/ppl.png');
 const PlusIconSource = require('../../../../assets/plus.png');
 const MinusIconSource = require('../../../../assets/minus.png');
+const ClockIconSource = require('../../../../assets/clock.png');
 
 const MAX_NUMBER_OF_PASSENGER = 5;
 const MIN_NUMBER_OF_PASSENGER = 1;
@@ -38,7 +39,12 @@ const AddressText = styled.Text`
   margin-end: 5;
 `;
 
-export default ({ amount, onChange }) => {
+const ClockIcon = styled.Image.attrs({ source: ClockIconSource })`
+  width: 15px;
+  height: 15px;
+`;
+
+export default ({ amount, onChange,scheduledTo }) => {
   const [newAmount, setNewAmount] = useState(amount);
 
   const validateChange = (newAmount, change) => {
@@ -55,13 +61,23 @@ export default ({ amount, onChange }) => {
 
   return (
     <PassengerAmountContainer>
-      <View style={{width: '100%', flexDirection: 'row'}}>
+      <View style={{width: '100%', flexDirection: 'row', flex:1}}>
         <View style={{paddingTop: 2}}>
           <PassengerAmountIcon />
         </View>
         <AddressText>{i18n.t('home.offerCard.passengersNumber')}</AddressText>
         <PassengerAmountText>{newAmount}</PassengerAmountText>
+
       </View>
+      {scheduledTo ?
+      <View style={{flex:1, alignSelf: 'flex-end', flexDirection: 'row', justifyContent: 'center'}}>
+        <View style={{opacity: 0.3}}>
+          <ClockIcon></ClockIcon>
+        </View>
+        <AddressText style={{ textAlign: 'center'}}>
+          {moment(scheduledTo).format('DD-MM-YYYY HH:mm')}
+        </AddressText>
+      </View> : null}
     </PassengerAmountContainer>
   )
 }

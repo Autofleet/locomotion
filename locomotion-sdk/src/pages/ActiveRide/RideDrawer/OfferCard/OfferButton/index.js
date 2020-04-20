@@ -40,13 +40,13 @@ export const OfferExpiredText = styled.Text`
 `;
 
 export default ({
-    offerExpired, onVerified, setLoading,onRenewOffer
+    offerExpired, onVerified, setLoading,onRenewOffer, futureRide
 
 }) => {
 
   return (
       <Fragment>
-         {!offerExpired
+         {!offerExpired || futureRide
         ? (
             <SliderButton
             onVerified={onVerified}

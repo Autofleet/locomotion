@@ -23,6 +23,8 @@ import settingsContext from '../../context/settings';
 import StationsMap from './StationsMap';
 import MyLocationButton from './ShowMyLocationButton';
 import RideSummaryPopup from '../../popups/RideSummaryPopup';
+import FutureRideCanceledPopup from '../../popups/FutureRideCanceled';
+
 
 function useInterval(callback, delay) {
   const savedCallback = useRef();
@@ -142,6 +144,7 @@ export default ({ navigation, menuSide, mapSettings }) => {
     loadActiveRide();
     initialLocation();
     OneSignal.init();
+    togglePopup('futureRideCanceled', true);
   }, []);
 
   useInterval(() => {
@@ -156,9 +159,10 @@ export default ({ navigation, menuSide, mapSettings }) => {
     calculatePickupEta(origin);
   }, [activeRideState]);
 
-  const bookValidation = state => state
-    && state.dropoff && state.dropoff.lat
-    && state.pickup && state.pickup.lat;
+  const bookValidation = state => {
+    return state && state.dropoff && state.dropoff.lat
+      && state.pickup && state.pickup.lat;
+  }
 
   const loadPreRideDetails = async (origin, destination) => {
     return;
@@ -223,6 +227,7 @@ export default ({ navigation, menuSide, mapSettings }) => {
       setTimeout(async () => {
         await loadActiveRide();
         setRideOffer(null);
+        setClosestStations();
       }, 2500);
     }
   };
@@ -373,8 +378,14 @@ export default ({ navigation, menuSide, mapSettings }) => {
 
   const cancelFutureRide = async (rideId) => {
     const response = await network.post('api/v1/me/rides/cancel-future-ride', { rideId });
-    console.log(response);
     loadActiveRide()
+  };
+
+  const createFutureOffer = async () => {
+    const offerData = {
+      numberOfPassengers
+    }
+    setRideOffer(offerData);
   };
 
   return (
@@ -487,8 +498,11 @@ export default ({ navigation, menuSide, mapSettings }) => {
         onRideSchedule={onRideSchedule}
         futureRides={futureRides}
         cancelFutureRide={cancelFutureRide}
+        createFutureOffer={createFutureOffer}
       />
       <RideSummaryPopup rideSummaryData={rideSummaryData} onRating={onRating} onClose={() => setRideSummaryData({})} />
+      <FutureRideCanceledPopup onClose={() => {}} />
+
     </PageContainer>
   );
 };
