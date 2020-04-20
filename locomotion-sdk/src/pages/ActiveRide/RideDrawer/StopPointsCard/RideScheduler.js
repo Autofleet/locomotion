@@ -47,6 +47,8 @@ const TimeItem = styled.TouchableOpacity`
     border-right-width: 0;
   ` : null)}
 
+  opacity: ${({disabled}) => disabled ? 0.4 : 1};
+
   `;
 
 const TextContainer = styled.Text`
@@ -67,16 +69,16 @@ const SelectionTitle = styled.Text`
 `;
 
 const OrderTimeSelector = ({
-  selected, text, onPress, side,
+  selected, text, onPress, side, disabled
 }) => (
-  <TimeItem selected={selected} onPress={onPress} side={side}>
+  <TimeItem selected={selected} onPress={onPress} side={side} disabled={disabled}>
     <TextContainer selected={selected}>{text}</TextContainer>
   </TimeItem>
 
 );
 
-export default ({ onScheduleTimeSelect }) => {
-  const [ScheduleType, setScheduleType] = useState('now');
+export default ({ onScheduleTimeSelect, disableFuture = false, scheduledTo }) => {
+  const [scheduleType, setScheduleType] = useState('now');
 
   const onScheduleTypeSelect = (type) => {
     setScheduleType(type);
@@ -85,6 +87,11 @@ export default ({ onScheduleTimeSelect }) => {
     }
   };
 
+  useEffect(() => {
+    if(scheduledTo && scheduleType === 'now') {
+      setScheduleType('future')
+    }
+  }, [])
 
   return (
     <Container>
@@ -94,18 +101,19 @@ export default ({ onScheduleTimeSelect }) => {
       <TimeItemContainer>
         <OrderTimeSelector
           text={i18n.t('home.RideScheduler.now')}
-          selected={ScheduleType === 'now'}
+          selected={scheduleType === 'now'}
           onPress={() => onScheduleTypeSelect('now')}
           side="left"
         />
         <OrderTimeSelector
           text={i18n.t('home.RideScheduler.future')}
-          selected={ScheduleType === 'future'}
+          selected={scheduleType === 'future'}
           onPress={() => onScheduleTypeSelect('future')}
           side="right"
+          disabled={disableFuture}
         />
       </TimeItemContainer>
-      {ScheduleType === 'future'
+      {scheduleType === 'future'
         ? (
           <DateTimePicker
             onScheduleTimeSelect={onScheduleTimeSelect}

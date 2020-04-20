@@ -50,7 +50,9 @@ export default ({
   closeAddressViewer,
   loading,
   onRideSchedule,
-}) => (
+  disableFutureBooking
+}) => {
+  return (
   !requestStopPoints.openEdit
     ? (
       <Fragment>
@@ -81,6 +83,8 @@ export default ({
               <NumberOfPassenger onChange={onNumberOfPassengerChange} amount={numberOfPassenger} />
               <RideScheduler
                 onScheduleTimeSelect={onRideSchedule}
+                disableFuture={disableFutureBooking}
+                scheduledTo={requestStopPoints.scheduledTo}
               />
             </Fragment>
           )
@@ -99,3 +103,4 @@ export default ({
       />
     )
 );
+    }

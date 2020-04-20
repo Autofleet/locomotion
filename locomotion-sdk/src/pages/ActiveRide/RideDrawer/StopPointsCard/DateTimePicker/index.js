@@ -9,18 +9,7 @@ import i18n from '../../../../../I18n';
 import { getTogglePopupsState } from '../../../../../context/main';
 import InputIcon from '../../../../../assets/arrow-down.png';
 import settingsContext from '../../../../../context/settings';
-
-const Container = styled.View`
-  min-height: 50;
-  padding-top: 10;
-  padding-bottom: 10;
-
-  flex-direction: column;
-  padding-start: 20;
-  padding-end: 20;
-
-`;
-
+import TimePicker from './Picker'
 
 const TimeSelectorsContainer = styled.View`
     width: 100%;
@@ -28,34 +17,7 @@ const TimeSelectorsContainer = styled.View`
     flex-direction: row;
 `;
 
-const TimeSelectorItemContainer = styled.View`
-  flex-direction: column;
-  justify-content: space-between;
-  flex: 1;
-`;
-
-const TimeSelectorTitle = styled.Text`
-  font-size: 12px;
-  font-weight: 500;
-  color: #000000;
-`;
-
-const TimeSelector = styled.TouchableOpacity`
-  width: 60px;
-  flex-direction: row;
-`;
-
-const InputText = styled.Text`
-  color: #727272;
-`;
-
-const InputArrow = styled.Image.attrs({ source: InputIcon })`
-    height: 20px;
-    width: 20px;
-`;
-
-
-export default ({ onScheduleTimeSelect }) => {
+const DateTimePicker = ({ onScheduleTimeSelect }) => {
   const useSettings = settingsContext.useContainer();
   const [optionalDates, setOptionalDates] = useState([]);
   const [optionalTimes, setOptionalTimes] = useState([]);
@@ -220,31 +182,7 @@ export default ({ onScheduleTimeSelect }) => {
   };
 
 
-  const TimePicker = ({
-    title, items, value, onValueChange,
-  }) => (
-    <TimeSelectorItemContainer>
-      <TimeSelectorTitle>{title}</TimeSelectorTitle>
-      <RNPickerSelect
-        items={items}
-        onValueChange={onValueChange}
-        style={{
-          inputIOS: {
-            fontSize: 14,
-            color: '#727272',
-            paddingRight: 25,
-          },
-          iconContainer: {
-            right: 0,
-            top: -2,
-          },
-        }}
-        value={value}
-        Icon={() => (<InputArrow />)}
-        placeholder={{}}
-      />
-    </TimeSelectorItemContainer>
-  );
+
 
   return (
     <TimeSelectorsContainer>
@@ -265,3 +203,5 @@ export default ({ onScheduleTimeSelect }) => {
     </TimeSelectorsContainer>
   );
 };
+
+export default DateTimePicker;
