@@ -14,6 +14,8 @@ import {
   CancelContainer,
   CancelButtonContainer,
   DetailsRowContainer,
+  CloseIcon,
+  CloseIconContainer
 } from './styled';
 import StopPointRow from './StopPointRow';
 
@@ -36,12 +38,13 @@ export const FutureOrdersButton = ({
           : i18n.t('home.futureRides.openBookingsButton', { openBookings: futureRides ? futureRides.length : 0 })
         }
       </FutureRideButtonText>
+      {isOpen ? (<CloseIconContainer><CloseIcon /></CloseIconContainer>): null}
     </FutureRidesButton>
   );
 }
 
 export default ({
-  futureRides, isOpen, onCancel,onPress
+  futureRides, isOpen, onCancel, onPress
 }) => {
 
   if (!futureRides || !isOpen) {
@@ -61,7 +64,6 @@ export default ({
           <Container>
             <DateTitle>{moment(ride.scheduled_to).format('DD-MM-YYYY HH:mm')}</DateTitle>
             <DetailsRowContainer>
-
               <SpsContainer>
                 <StopPointRow
                   pickup

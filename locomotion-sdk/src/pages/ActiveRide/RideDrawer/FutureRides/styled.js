@@ -1,9 +1,9 @@
 import styled from 'styled-components';
 import RoundedButton from '../../../../Components/RoundedButton';
+import xIconWhite from '../../../../assets/x-white.png'
 
 export const FutureRidesButton = styled.TouchableOpacity`
   height: 30;
-
   min-width: 115;
   background-color: #6180c0;
   margin-bottom: 8px;
@@ -11,11 +11,14 @@ export const FutureRidesButton = styled.TouchableOpacity`
   border-radius: 4px;
   align-items: center;
   justify-content: center;
+  flex-direction: row;
+
 `;
 
 export const FutureRideButtonText = styled.Text`
   color: #ffffff;
-  font-size: 12px;
+  font-size: 13px;
+  text-align: center;
 `;
 
 export const Container = styled.View`
@@ -23,7 +26,8 @@ export const Container = styled.View`
   flex-direction: column;
   padding-top: 8px;
   padding-bottom: 8px;
-
+  padding-right: 8px;
+  padding-left: 8px;
   background-color: #ffffff;
   border-radius: 4;
   margin-bottom: 5px;
@@ -44,7 +48,7 @@ export const SpsContainer = styled.View`
 `;
 
 export const CancelContainer = styled.View`
-  flex: 1;
+
   justify-content: center;
 
   align-items: flex-end;
@@ -52,4 +56,14 @@ export const CancelContainer = styled.View`
 
 export const DetailsRowContainer = styled.View`
   flex-direction: row;
+`;
+
+export const CloseIconContainer = styled.View`
+  margin-left: 10px;
+  max-width: 20px;
+`;
+
+export const CloseIcon = styled.Image.attrs({ source: xIconWhite })`
+    height: 20px;
+    width: 20px;
 `;
