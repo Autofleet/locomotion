@@ -53,7 +53,7 @@ const RideDrawer = ({
   cancelRide, createRide, readyToBook, rideType, preRideDetails,
   onNumberOfPassengerChange, numberOfPassenger, createOffer, rideOffer,
   cancelOffer, offerExpired, onLocationSelect, closeAddressViewer, onRideSchedule,
-  futureRides, cancelFutureRide,
+  futureRides, cancelFutureRide,createFutureOffer
 }) => {
   const [origin, destination] = activeRide ? activeRide.stop_points || [] : [];
   const [isPopupOpen, togglePopup] = getTogglePopupsState();
@@ -62,6 +62,7 @@ const RideDrawer = ({
   const [dropoffEta, setDropoffpEta] = useState(null);
   const [loading, setLoading] = useState(false);
   const [futureOrdersState, setFutureOrdersState] = useState(false);
+  const [disableFutureBooking, setDisableFutureBooking] = useState(false);
 
   const rideState = getRideState(activeRide);
 
@@ -71,8 +72,12 @@ const RideDrawer = ({
       return cancelRide();
     }
 
-    if ((!rideOffer && readyToBook) || (rideOffer && offerExpired)) {
+    if (((!rideOffer && readyToBook) || (rideOffer && offerExpired)) && !requestStopPoints.scheduledTo) {
       return createOffer();
+    }
+
+    if(!rideOffer && requestStopPoints.scheduledTo) {
+      return createFutureOffer()
     }
 
     if (rideOffer) {
@@ -99,6 +104,13 @@ const RideDrawer = ({
   }, [origin, destination]);
 
   useEffect(() => {
+    const maxFutureRides = useSettings.settingsList.MAX_FUTURE_RIDES;
+    if(futureRides && futureRides.length >= maxFutureRides) {
+      setDisableFutureBooking(true)
+    } else {
+      setDisableFutureBooking(false)
+    }
+
     if(futureRides && futureRides.length === 0 && futureOrdersState) {
       setFutureOrdersState(false)
     }
@@ -195,6 +207,7 @@ const RideDrawer = ({
                     closeAddressViewer={closeAddressViewer}
                     loading={loading}
                     onRideSchedule={onRideSchedule}
+                    disableFutureBooking={disableFutureBooking}
                   />
                   {/* <Switch onChange={(active) => setRideType(active ? 'pool' : 'private')} active={rideType === 'pool'} /> */}
                   {/* preRideDetails.eta || preRideDetails.estimatePrice ? ( <PreRideBox {...preRideDetails} /> ) : null */}
