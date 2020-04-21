@@ -114,7 +114,8 @@
             "ratingPost": "We welcome your feedback",
             "durationValue": "{{duration}} Minutes",
             "distanceValue": "{{distance}} km",
-            "priceValue": "{{price}} €"
+            "priceValue": "{{price}} €",
+            "submit": "Submit"
         },
         "rideCancel": {
             "main": "Your ride has been cancelled",
