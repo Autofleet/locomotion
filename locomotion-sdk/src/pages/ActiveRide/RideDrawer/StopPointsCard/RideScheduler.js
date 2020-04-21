@@ -88,8 +88,10 @@ export default ({ onScheduleTimeSelect, disableFuture = false, scheduledTo }) =>
   };
 
   useEffect(() => {
-    if(scheduledTo && scheduleType === 'now') {
-      setScheduleType('future')
+    if((scheduledTo && scheduleType === 'now') && !disableFuture) {
+      onScheduleTypeSelect('future')
+    } else {
+      onScheduleTypeSelect('now')
     }
   }, [])
 

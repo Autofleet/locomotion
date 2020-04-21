@@ -31,6 +31,7 @@ export const FutureOrdersButton = ({
   }
 
   return (
+    futureRides && futureRides.length ? (
     <FutureRidesButton onPress={onClosePress}>
       <FutureRideButtonText>
         {isOpen
@@ -39,7 +40,7 @@ export const FutureOrdersButton = ({
         }
       </FutureRideButtonText>
       {isOpen ? (<CloseIconContainer><CloseIcon /></CloseIconContainer>): null}
-    </FutureRidesButton>
+    </FutureRidesButton>) : null
   );
 }
 
