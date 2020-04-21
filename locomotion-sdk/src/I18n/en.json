@@ -131,6 +131,10 @@
         "selectNumberOfPassenger": {
             "main": "Select number of passenger"
         },
+        "futureRideCanceled": {
+            "title": "Your ride has been cancelled",
+            "subTitle": "Sorry it didn't work out this time, please create an order to try again"
+        },
         "defaultFooterButton": "OK"
     },
     "menu": {

@@ -67,12 +67,43 @@ router.put('/:rideId', async (req, res) => {
   }
 
   if (req.body.ride.status === 'active' || req.body.ride.status === 'dispatched') {
+    if (ride.state === 'pending') {
+      const user = await User.findOne({
+        where: {
+          id: ride.userId,
+        },
+      });
+
+      await sendNotification(
+        [user.pushUserId],
+        'activatingFutureRide',
+        { en: i18n.t('pushNotifications.activatingFutureRide', { stopPoint: stopPoints[0].description }) },
+        { en: i18n.t('pushNotifications.activatingFutureRideHeading') },
+        { ttl: 60 * 30, data: { type: 'activatingFutureRide' } },
+      );
+    }
     ride.state = 'active';
     await ride.save();
   } else if (req.body.ride.status === 'completed') {
     ride.state = 'completed';
     await ride.save();
   } else if (req.body.ride.status === 'cancelled') {
+    if (req.body.ride.cancelled_by !== 'demand-gateway') {
+      const user = await User.findOne({
+        where: {
+          id: ride.userId,
+        },
+      });
+
+      await sendNotification(
+        [user.pushUserId],
+        'futureRideCanceled',
+        { en: i18n.t('pushNotifications.futureRideCanceled') },
+        { en: i18n.t('pushNotifications.futureRideCanceledHeading') },
+        { ttl: 60 * 30, data: { type: 'futureRideCanceled' } },
+      );
+    }
+
     ride.state = 'canceled';
     await ride.save();
     if (!req.body.ride.cancellation_reason.includes('user')) {

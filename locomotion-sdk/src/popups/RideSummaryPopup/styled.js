@@ -28,7 +28,7 @@ export const SummarySubTitle = styled.Text`
   font-size: 12;
   font-weight: 500;
   padding-top: 20px
-  padding-bottom: 15px
+  padding-bottom: 15px;
 `;
 
 export const CloseContainer = styled.TouchableOpacity`

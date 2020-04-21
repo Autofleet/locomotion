@@ -76,7 +76,11 @@ export default ({ navigation, menuSide, mapSettings }) => {
   const [rideSummaryData, setRideSummaryData] = useState({});
 
   const mapInstance = useRef();
-
+  const notificationsHandler = {
+    futureRideCanceled: () => {
+      togglePopup('futureRideCanceled', true);
+    }
+  }
   const loadActiveRide = async () => {
     const { data: response } = await network.get('api/v1/me/rides/active', { params: { activeRide: true } });
     const { ride: activeRide, futureRides: futureRidesData } = response;
@@ -143,8 +147,7 @@ export default ({ navigation, menuSide, mapSettings }) => {
     getStations();
     loadActiveRide();
     initialLocation();
-    OneSignal.init();
-    togglePopup('futureRideCanceled', true);
+    OneSignal.init(notificationsHandler);
   }, []);
 
   useInterval(() => {
@@ -227,7 +230,6 @@ export default ({ navigation, menuSide, mapSettings }) => {
       setTimeout(async () => {
         await loadActiveRide();
         setRideOffer(null);
-        setClosestStations();
       }, 2500);
     }
   };
@@ -282,7 +284,6 @@ export default ({ navigation, menuSide, mapSettings }) => {
     setRequestStopPoints({
       openEdit: false,
       pickup: pickupStation,
-      dropoff: pickupStation,
       selectedType: 'dropoff',
     });
   };

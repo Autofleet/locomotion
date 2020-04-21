@@ -3,22 +3,22 @@ import OneSignal from 'react-native-onesignal'; // Import package from node modu
 import Config from 'react-native-config';
 import network from './network';
 import AppSettings from './app-settings';
+import { getTogglePopupsState } from '../context/main';
 
-const notificationsHandlers = {
 
-};
 
 class NotificationsService {
   constructor() {
     this.network = network;
   }
 
-  init = () => {
+  init = (notificationsHandlers) => {
     const permissions = {
       alert: true,
       badge: true,
       sound: true,
     };
+    this.notificationsHandlers = notificationsHandlers;;
 
     OneSignal.addEventListener('received', this.triggerOnNotification);
     OneSignal.addEventListener('opened', this.onOpened);
@@ -41,13 +41,12 @@ class NotificationsService {
   }
 
   onOpened = (openResult) => {
-    if (!openResult.notification.payload || !openResult.notification.payload.notificationId) {
-      console.error('Recive notification without notificationId', openResult);
-      return;
-    }
-    const method = notificationsHandlers[openResult.notification.payload.notificationId];
-    if (method) {
-      method();
+    const additionalData = openResult.notification.payload.additionalData;
+    if(additionalData && additionalData.type) {
+      const method = this.notificationsHandlers[additionalData.type];
+      if (method) {
+        method();
+      }
     }
   }
 

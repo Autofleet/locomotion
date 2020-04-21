@@ -5,7 +5,7 @@ const oneSignal = new OneSignal.Client(
   process.env.ONE_SIGNAL_KEY,
 );
 
-const sendNotification = (targetIdsRaw, notificationId, contents, headings, { ttl = (60 * 60) } = {}) => {
+const sendNotification = (targetIdsRaw, notificationId, contents, headings, { ttl = (60 * 60), data = {} } = {}) => {
   const targetIds = targetIdsRaw.filter(id => typeof id === 'string');
 
   if (targetIds.length === 0) {
@@ -21,6 +21,7 @@ const sendNotification = (targetIdsRaw, notificationId, contents, headings, { tt
         headings,
         notificationId,
         ttl,
+        data,
       });
       resolve(firstNotification);
     } catch (err) {
