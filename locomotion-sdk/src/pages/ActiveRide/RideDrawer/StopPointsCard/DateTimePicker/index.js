@@ -25,74 +25,18 @@ const DateTimePicker = ({ onScheduleTimeSelect }) => {
   const [selectedDate, setSelectedDate] = useState('');
   const [selectedTime, setSelectedTime] = useState('');
 
-  const workingHours = {
-    0: [{
-      start: '08:00',
-      end: '22:00',
-    }],
-    1: [
-      {
-        start: '08:00',
-        end: '13:00',
-      },
-      {
-        start: '15:00',
-        end: '19:00',
-      },
-    ],
-    2: [
-      {
-        start: '08:00',
-        end: '16:00',
-      },
-      {
-        start: '13:00',
-        end: '19:00',
-      },
-    ],
-    3: [
-      {
-        start: '08:00',
-        end: '15:00',
-      },
-      {
-        start: '16:00',
-        end: '19:00',
-      },
-    ],
-    4: [
-      {
-        start: '08:00',
-        end: '15:00',
-      },
-      {
-        start: '16:00',
-        end: '19:00',
-      },
-    ],
-    5: [
-      {
-        start: '08:00',
-        end: '15:00',
-      },
-      {
-        start: '16:00',
-        end: '23:00',
-      },
-    ],
-    6: [
-      {
-        start: '08:00',
-        end: '15:00',
-      },
-      {
-        start: '16:00',
-        end: '23:00',
-      },
-    ],
-  };
+  useEffect(() => {
+    useSettings.getWorkingHours()
+  }, [])
 
+  useEffect(() => {
+    if(useSettings.workingHours) {
+      getOptionalDates()
+    }
+
+  }, [useSettings.workingHours])
   const getOptionalDates = () => {
+    const workingHours = useSettings.workingHours
     const min = moment().add(useSettings.settingsList.FUTURE_ORDER_MIN_TIME, 'minutes');
     const max = moment(min).add(useSettings.settingsList.FUTURE_ORDER_MAX_TIME, 'hours');
     let calculatedDate = moment(min);
@@ -138,10 +82,6 @@ const DateTimePicker = ({ onScheduleTimeSelect }) => {
     const uniq = [...new Set(timesArray)];
     return uniq;
   };
-
-  useEffect(() => {
-    getOptionalDates();
-  }, []);
 
   useEffect(() => {
     if (scheduleOptions) {
