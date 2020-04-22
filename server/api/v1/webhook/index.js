@@ -106,16 +106,22 @@ router.put('/:rideId', async (req, res) => {
 
     ride.state = 'canceled';
     await ride.save();
-    if (!req.body.ride.cancellation_reason.includes('user')) {
+    if (!req.body.ride.cancellation_reason.includes('user') && req.body.ride.scheduled_to === null) {
       const currentRide = ride.get();
       await rideService.create({
+        userId: currentRide.userId,
+        pickupAddress: currentRide.pickupAddress,
         pickupLat: currentRide.pickupLat,
         pickupLng: currentRide.pickupLng,
-        pickupAddress: currentRide.pickupAddress,
+        dropoffAddress: currentRide.dropoffAddress,
         dropoffLat: currentRide.dropoffLat,
         dropoffLng: currentRide.dropoffLng,
-        dropoffAddress: currentRide.dropoffAddress,
         numberOfPassenger: currentRide.numberOfPassenger,
+        completedAt: null,
+        canceledAt: null,
+        arrivingPush: null,
+        scheduledTo: currentRide.scheduledTo,
+        state: 'creating',
       }, ride.userId);
     }
   }
