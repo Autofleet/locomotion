@@ -68,7 +68,6 @@ export default ({
           etaDrift={pickupEtaDrift}
           etaMediumThreshold={etaMediumThreshold}
           etaHighThreshold={etaHighThreshold}
-
         />
         <OfferRow
           useBorder
@@ -80,12 +79,13 @@ export default ({
           rideOffer={rideOffer}
           etaDrift={dropoffEtaDrift}
         />
-        <NumberOfPassengerOffer amount={rideOffer.numberOfPassengers} />
+        <NumberOfPassengerOffer amount={rideOffer.numberOfPassengers} scheduledTo={requestStopPoints.scheduledTo} />
         <OfferButton
           offerExpired={offerExpired}
           onVerified={onVerified}
           setLoading={setLoading}
           onRenewOffer={onRenewOffer}
+          futureRide={requestStopPoints.scheduledTo !== null}
         />
         </Fragment>
   );

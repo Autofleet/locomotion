@@ -20,9 +20,9 @@ router.put('/:rideId', async (req, res) => {
     return res.json({ error: 'ride not found' });
   }
 
-  const stopPoints = req.body.ride.stop_points;
+  const stopPoints = req.body.ride.stopPoints;
 
-  if (stopPoints && !ride.arrivingPush) {
+  if (stopPoints && !ride.arrivingPush && req.body.ride.status === 'active') {
     const { value: arriveReminderMin } = await settingsService.getSettingByKeyFromDb('ARRIVE_REMINDER_MIN');
     const etaTime = moment(stopPoints[0].eta);
     const diff = etaTime.diff(moment(), 'minutes');
@@ -66,25 +66,62 @@ router.put('/:rideId', async (req, res) => {
     }
   }
 
-  if (req.body.ride.status === 'active') {
+  if (req.body.ride.status === 'active' || req.body.ride.status === 'dispatched') {
+    if (ride.state === 'pending') {
+      const user = await User.findOne({
+        where: {
+          id: ride.userId,
+        },
+      });
+
+      await sendNotification(
+        [user.pushUserId],
+        'activatingFutureRide',
+        { en: i18n.t('pushNotifications.activatingFutureRide', { stopPoint: stopPoints[0].description }) },
+        { en: i18n.t('pushNotifications.activatingFutureRideHeading') },
+        { ttl: 60 * 30, data: { type: 'activatingFutureRide' } },
+      );
+    }
     ride.state = 'active';
     await ride.save();
   } else if (req.body.ride.status === 'completed') {
     ride.state = 'completed';
     await ride.save();
   } else if (req.body.ride.status === 'cancelled') {
+    if (req.body.ride.cancelled_by !== 'demand-gateway') {
+      const user = await User.findOne({
+        where: {
+          id: ride.userId,
+        },
+      });
+
+      await sendNotification(
+        [user.pushUserId],
+        'futureRideCanceled',
+        { en: i18n.t('pushNotifications.futureRideCanceled') },
+        { en: i18n.t('pushNotifications.futureRideCanceledHeading') },
+        { ttl: 60 * 30, data: { type: 'futureRideCanceled' } },
+      );
+    }
+
     ride.state = 'canceled';
     await ride.save();
-    if (!req.body.ride.cancellation_reason.includes('user')) {
+    if (!req.body.ride.cancellation_reason.includes('user') && req.body.ride.scheduled_to === null) {
       const currentRide = ride.get();
       await rideService.create({
+        userId: currentRide.userId,
+        pickupAddress: currentRide.pickupAddress,
         pickupLat: currentRide.pickupLat,
         pickupLng: currentRide.pickupLng,
-        pickupAddress: currentRide.pickupAddress,
+        dropoffAddress: currentRide.dropoffAddress,
         dropoffLat: currentRide.dropoffLat,
         dropoffLng: currentRide.dropoffLng,
-        dropoffAddress: currentRide.dropoffAddress,
         numberOfPassenger: currentRide.numberOfPassenger,
+        completedAt: null,
+        canceledAt: null,
+        arrivingPush: null,
+        scheduledTo: currentRide.scheduledTo,
+        state: 'creating',
       }, ride.userId);
     }
   }

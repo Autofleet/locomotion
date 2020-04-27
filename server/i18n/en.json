@@ -1,7 +1,12 @@
 {
   "pushNotifications": {
     "driverArriving": "Your car reaches your pickup \"{{stopPoint}}\" in {{etaMinutes}} minutes",
-    "driverArrivingHeading": "Your car arrives soon"
+    "driverArrivingHeading": "Your car arrives soon",
+    "futureRideCanceled": "We are currently unable to find a driver for your ride - please try again",
+    "futureRideCanceledHeading": "Sorry, we cannot service your ride",
+    "activatingFutureRide": "Get ready to meet your driver at \"{{stopPoint}}\"",
+    "activatingFutureRideHeading": "Your Ride Has Been Activated"
+
   }
 
 }

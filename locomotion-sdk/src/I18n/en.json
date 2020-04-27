@@ -73,6 +73,20 @@
             "expiredOffer": "Renew",
             "expiredOfferText": "Your request expired",
             "offerBooked": "Ride has been booked"
+        },
+        "futureRides": {
+            "openBookingsButton": "{{openBookings}} open Bookings",
+            "closeButton": "Close",
+            "cancelButton": "Cancel"
+        },
+        "RideScheduler": {
+            "timeSelectionTitle": "I want to start",
+            "now": "Now",
+            "future": "Later",
+            "timePicker": {
+                "date": "Date",
+                "hour": "Hour"
+            }
         }
     },
     "lock": {
@@ -100,7 +114,8 @@
             "ratingPost": "We welcome your feedback",
             "durationValue": "{{duration}} Minutes",
             "distanceValue": "{{distance}} km",
-            "priceValue": "{{price}} €"
+            "priceValue": "{{price}} €",
+            "submit": "Submit"
         },
         "rideCancel": {
             "main": "Your ride has been cancelled",
@@ -116,6 +131,10 @@
         },
         "selectNumberOfPassenger": {
             "main": "Select number of passenger"
+        },
+        "futureRideCanceled": {
+            "title": "Your ride has been cancelled",
+            "subTitle": "Sorry it didn't work out this time, please create an order to try again"
         },
         "defaultFooterButton": "OK"
     },

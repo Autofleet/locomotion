@@ -1,6 +1,7 @@
 const Router = require('../../../lib/router');
 const userService = require('../../../lib/user');
 const SettingsService = require('../../../lib/settings');
+const TimeSlotsService = require('../../../lib/time-slots');
 
 const router = Router();
 
@@ -30,5 +31,9 @@ router.get('/app-settings', async (req, res) => {
   res.json(settingsList);
 });
 
+router.get('/app-settings/working-hours', async (req, res) => {
+  const settingsList = await TimeSlotsService.getTimeSlots();
+  res.json(settingsList);
+});
 
 module.exports = router;

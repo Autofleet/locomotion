@@ -53,7 +53,12 @@
       "displayMaxEtaDriftMin": "Passenger facing drop-off ETA range (minutes)",
       "displayMediumEta": "Show Medium Demand sign for ETA bigger then (minutes)",
       "displayHighEta": "Show High Demand sign for ETA bigger then (minutes)",
-      "displayOfferExpirationTime": "Ride offer expires after (seconds)"
+      "displayOfferExpirationTime": "Ride offer expires after (seconds)",
+      "futureOrderMinTime": "Minimum Time in advance for Pre-Booking",
+      "futureOrderMaxTime": "Maximum Time in advance for Pre-Booking",
+      "futureOrderTimeInterval": "Available Pre-Booking Windows Time Interval"
     }
   }
 }
+
+

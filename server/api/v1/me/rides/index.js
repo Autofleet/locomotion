@@ -2,6 +2,7 @@ const Router = require('../../../../lib/router');
 const rideService = require('../../../../lib/ride');
 const getPreRideDetails = require('../../../../lib/pre-ride-details');
 const { Ride } = require('../../../../models');
+const settingsLib = require('../../../../lib/settings');
 
 const router = Router();
 
@@ -30,10 +31,21 @@ router.get('/history', async (req, res) => {
 
 router.get('/active', async (req, res) => {
   const ride = await rideService.getRidderActiveRide(req.userId);
-  res.json({ ride });
+  const futureRides = await rideService.getPendingRides(req.userId);
+
+  res.json({ ride, futureRides });
 });
 
 router.post('/', async (req, res) => {
+  if (req.body.scheduledTo) {
+    const pendingRides = await rideService.getPendingRides(req.userId);
+    const { MAX_FUTURE_RIDES: maxFutureRides } = await settingsLib.getSettingsList();
+
+    if (pendingRides && pendingRides.length >= maxFutureRides) {
+      throw new Error('maximum future orders reached');
+    }
+  }
+
   const ride = await rideService.create(req.body, req.userId);
   res.json(ride);
 });
@@ -67,6 +79,11 @@ router.get('/pre', async (req, res) => {
   const { origin, destination } = req.query;
   const preRideDetails = await getPreRideDetails(JSON.parse(origin), JSON.parse(destination));
   res.json({ ...preRideDetails });
+});
+
+router.post('/cancel-future-ride', async (req, res) => {
+  const ride = await rideService.cancelFutureRide(req.userId, req.body.rideId);
+  res.json({ ride });
 });
 
 module.exports = router;

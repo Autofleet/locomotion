@@ -19,6 +19,8 @@ import {
   StarIcon
 } from './styled'
 import { getTogglePopupsState } from '../../context/main';
+import RoundedButton from '../../Components/RoundedButton';
+
 const starIconSource = require('../../assets/star.png');
 const lightStarIconSource = require('../../assets/lightStar.png');
 const durationIconSource = require('../../assets/duration.png');
@@ -30,6 +32,7 @@ export default ({
                 }) => {
 
   const [rating, setRating] = useState(false);
+  const [ratingSent, setRatingSent] = useState(false);
   const [isPopupOpen, togglePopup, popupData] = getTogglePopupsState();
   const closePopup = () => {
     if (onClose) {
@@ -44,7 +47,6 @@ export default ({
   }, []);
 
   const updateRating = async (rate) => {
-    await onRating(rate)
     setRating(rate);
   };
 
@@ -65,6 +67,12 @@ export default ({
         <Star isOn={rating >= 5} onPress={() => updateRating(5)}/>
       </SummaryStars>
     );
+
+    const onSubmit = async () => {
+      setRatingSent(false)
+      await onRating(rating)
+      setRatingSent(true)
+    }
 
   return (
     <Modal isVisible={isPopupOpen('rideSummary') || false}>
@@ -100,7 +108,12 @@ export default ({
             <SummaryStarsSubTitle>{i18n.t('popups.rideSummary.ratingPre')}</SummaryStarsSubTitle>
             <SummaryStarsTitle>{i18n.t('popups.rideSummary.ratingHeadline')}</SummaryStarsTitle>
             <StarRating/>
-            { rating ? <SummaryStarsSubTitle>{i18n.t('popups.rideSummary.ratingPost')}</SummaryStarsSubTitle> : null}
+            <RoundedButton
+                onPress={() => onSubmit()}
+              >
+                {i18n.t('popups.rideSummary.submit')}
+              </RoundedButton>
+            { ratingSent ? <SummaryStarsSubTitle>{i18n.t('popups.rideSummary.ratingPost')}</SummaryStarsSubTitle> : null}
 
           </View>
         </SummaryContainer>

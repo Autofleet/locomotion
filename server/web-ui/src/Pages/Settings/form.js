@@ -152,6 +152,46 @@ const SettingsForm = ({
                             inlineField
                         />
                     </SettingsPanelItem>
+
+                    <SettingsPanelItem type='text'>
+                        <Field
+                            name="FUTURE_ORDER_MIN_TIME"
+                            label={i18n.t('settings.labels.futureOrderMinTime')}
+                            type="number"
+                            component={InputWithLabel}
+                            inputComponent={NumberInput}
+                            errorMessage={errors.FUTURE_ORDER_MIN_TIME}
+                            min="0"
+                            inlineField
+                        />
+                    </SettingsPanelItem>
+
+                    <SettingsPanelItem type='text'>
+                        <Field
+                            name="FUTURE_ORDER_MAX_TIME"
+                            label={i18n.t('settings.labels.futureOrderMaxTime')}
+                            type="number"
+                            component={InputWithLabel}
+                            inputComponent={NumberInput}
+                            errorMessage={errors.FUTURE_ORDER_MAX_TIME}
+                            min="0"
+                            inlineField
+                        />
+                    </SettingsPanelItem>
+
+                    <SettingsPanelItem type='text'>
+                        <Field
+                            name="FUTURE_ORDER_TIME_INTERVAL"
+                            label={i18n.t('settings.labels.futureOrderTimeInterval')}
+                            type="number"
+                            component={InputWithLabel}
+                            inputComponent={NumberInput}
+                            errorMessage={errors.FUTURE_ORDER_TIME_INTERVAL}
+                            min="0"
+                            inlineField
+                        />
+                    </SettingsPanelItem>
+
                 </SettingsPanel>
             </SettingsContainer>
             <SaveSettingsContainer>

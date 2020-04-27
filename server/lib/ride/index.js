@@ -2,6 +2,7 @@ require('dotenv');
 const axios = require('axios');
 const logger = require('../../logger');
 const { Ride, User } = require('../../models');
+const { Op } = require('sequelize');
 
 const demandApi = axios.create({
   baseURL: process.env.AF_BACKEND_URL || 'https://demand.autofleet.io/',
@@ -68,10 +69,13 @@ const createRide = async (rideData, userId) => {
           contact_person_avatar: avatar,
         },
       ],
+      scheduled_to: rideData.scheduledTo,
     });
 
     if (afRide.status === 'rejected') {
       ride.state = 'rejected';
+    } else if (afRide.scheduled_to && afRide.status === 'pending') {
+      ride.state = 'pending';
     } else {
       ride.state = 'active';
     }
@@ -164,6 +168,51 @@ const rideService = {
         rating,
       });
       return updatedRide;
+    }
+
+    return null;
+  },
+
+  getPendingRides: async (userId) => {
+    const rides = await Ride.findAll({
+      where: {
+        userId,
+        state: 'pending',
+      },
+    });
+
+    if (rides) {
+      const afRides = await Promise.all(rides.map(async (ride) => {
+        const afRide = await rideService.getRideFromAf(ride.id);
+        return afRide;
+      }));
+
+      const filteredRides = afRides.filter(ride => ride.status === 'pending');
+
+      return filteredRides;
+    }
+
+    return null;
+  },
+
+  cancelFutureRide: async (userId, rideId) => {
+    const ride = await Ride.findOne({
+      where: {
+        id: rideId,
+        userId,
+        state: 'pending',
+      },
+    });
+
+    if (ride) {
+      const afRide = await rideService.getRideFromAf(ride.id);
+      const resp = await demandApi.put(`/api/v1/rides/${afRide.id}/cancel`, {
+        cancellation_reason: 'user/cancellation',
+      });
+
+      ride.state = 'canceled';
+      await ride.save();
+      return afRide;
     }
 
     return null;

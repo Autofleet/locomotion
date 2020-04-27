@@ -7,6 +7,7 @@ module.exports = (sequelize, DataTypes) => {
     COMPLETED: 'completed',
     CANCELED: 'canceled',
     REJECTED: 'rejected',
+    PENDING: 'pending',
   };
 
   const Ride = sequelize.define('Ride', {
@@ -78,6 +79,10 @@ module.exports = (sequelize, DataTypes) => {
     arrivingPush: {
       type: DataTypes.DATE,
       field: 'arriving_push',
+    },
+    scheduledTo: {
+      type: DataTypes.DATE,
+      field: 'scheduled_to',
     },
   }, {
     tableName: 'rides',

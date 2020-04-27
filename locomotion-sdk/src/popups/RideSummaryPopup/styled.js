@@ -5,7 +5,7 @@ import xIcon from '../../assets/x.png'
 
 export const SummaryContainer = styled.View`
   padding: 20px 0;
-  height: 510;
+  height: 550;
   background-color: white;
   justify-content: center;
   align-items: center;
@@ -28,7 +28,7 @@ export const SummarySubTitle = styled.Text`
   font-size: 12;
   font-weight: 500;
   padding-top: 20px
-  padding-bottom: 15px
+  padding-bottom: 15px;
 `;
 
 export const CloseContainer = styled.TouchableOpacity`
@@ -47,7 +47,7 @@ export const ResetInputIcon = styled.Image.attrs({ source: xIcon })`
 
 export const SummaryItems = styled.View`
   height: 190;
-  padding-bottom: 40px
+  padding-bottom: 40px;
 `;
 
 export const SummaryItem = styled.View(props => `
@@ -105,6 +105,7 @@ export const SummaryStars = styled.View`
   align-items: center;
   padding: 10px 45px;
   justify-content: center;
+  margin-bottom: 10px;
 `;
 
 export const StarIcon = styled.Image(({isOn}) => `
