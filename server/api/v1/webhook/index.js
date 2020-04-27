@@ -20,7 +20,7 @@ router.put('/:rideId', async (req, res) => {
     return res.json({ error: 'ride not found' });
   }
 
-  const stopPoints = req.body.ride.stop_points;
+  const stopPoints = req.body.ride.stopPoints;
 
   if (stopPoints && !ride.arrivingPush && req.body.ride.status === 'active') {
     const { value: arriveReminderMin } = await settingsService.getSettingByKeyFromDb('ARRIVE_REMINDER_MIN');
