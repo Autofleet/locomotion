@@ -22,7 +22,7 @@ router.put('/:rideId', async (req, res) => {
 
   const stopPoints = req.body.ride.stopPoints;
 
-  if (stopPoints && !ride.arrivingPush && req.body.ride.status === 'active') {
+  if (stopPoints && !ride.arrivingPush && req.body.ride.state === 'active') {
     const { value: arriveReminderMin } = await settingsService.getSettingByKeyFromDb('ARRIVE_REMINDER_MIN');
     const etaTime = moment(stopPoints[0].eta);
     const diff = etaTime.diff(moment(), 'minutes');
@@ -66,7 +66,7 @@ router.put('/:rideId', async (req, res) => {
     }
   }
 
-  if (req.body.ride.status === 'active' || req.body.ride.status === 'dispatched') {
+  if (req.body.ride.state === 'active' || req.body.ride.state === 'dispatched') {
     if (ride.state === 'pending') {
       const user = await User.findOne({
         where: {
@@ -84,10 +84,10 @@ router.put('/:rideId', async (req, res) => {
     }
     ride.state = 'active';
     await ride.save();
-  } else if (req.body.ride.status === 'completed') {
+  } else if (req.body.ride.state === 'completed') {
     ride.state = 'completed';
     await ride.save();
-  } else if (req.body.ride.status === 'cancelled') {
+  } else if (req.body.ride.state === 'cancelled') {
     if (req.body.ride.cancelled_by !== 'demand-gateway') {
       const user = await User.findOne({
         where: {
