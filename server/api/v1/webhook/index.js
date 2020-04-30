@@ -9,6 +9,22 @@ const settingsService = require('../../../lib/settings');
 
 const router = Router();
 
+const cancelPush = async (userId) => {
+  const user = await User.findOne({
+    where: {
+      id: userId,
+    },
+  });
+
+  await sendNotification(
+    [user.pushUserId],
+    'futureRideCanceled',
+    { en: i18n.t('pushNotifications.futureRideCanceled') },
+    { en: i18n.t('pushNotifications.futureRideCanceledHeading') },
+    { ttl: 60 * 30, data: { type: 'futureRideCanceled' } },
+  );
+};
+
 router.put('/:rideId', async (req, res) => {
   const ride = await Ride.findOne({
     where: {
@@ -88,25 +104,13 @@ router.put('/:rideId', async (req, res) => {
     ride.state = 'completed';
     await ride.save();
   } else if (req.body.ride.state === 'cancelled') {
-    if (req.body.ride.cancelled_by !== 'demand-gateway') {
-      const user = await User.findOne({
-        where: {
-          id: ride.userId,
-        },
-      });
-
-      await sendNotification(
-        [user.pushUserId],
-        'futureRideCanceled',
-        { en: i18n.t('pushNotifications.futureRideCanceled') },
-        { en: i18n.t('pushNotifications.futureRideCanceledHeading') },
-        { ttl: 60 * 30, data: { type: 'futureRideCanceled' } },
-      );
+    if (req.body.ride.cancelledBy !== 'demand-gateway') {
+      cancelPush(ride.userId);
     }
 
     ride.state = 'canceled';
     await ride.save();
-    if (!req.body.ride.cancellation_reason.includes('user') && req.body.ride.scheduled_to === null) {
+    if (req.body.ride.cancellationReason && !req.body.ride.cancellationReason.includes('user') && req.body.ride.scheduled_to === null) {
       const currentRide = ride.get();
       await rideService.create({
         userId: currentRide.userId,
@@ -124,6 +128,10 @@ router.put('/:rideId', async (req, res) => {
         state: 'creating',
       }, ride.userId);
     }
+  } else if (req.body.ride.state === 'rejected' && req.body.ride.scheduledTo !== null) {
+    cancelPush(ride.userId);
+    ride.state = 'rejected';
+    await ride.save();
   }
 
   res.json(ride);
