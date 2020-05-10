@@ -144,6 +144,12 @@ export default ({ navigation, menuSide, mapSettings }) => {
     loadActiveRide();
   }, 5000);
 
+  if(Config.STATIONS_REFRESH_RATE) {
+    useInterval(() => {
+      getStations();
+    }, Config.STATIONS_REFRESH_RATE * 60000);
+  }
+
   useEffect(() => {
     UserService.getUser(navigation);
     getStations();
