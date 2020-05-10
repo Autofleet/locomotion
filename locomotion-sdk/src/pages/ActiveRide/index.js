@@ -128,6 +128,8 @@ export default ({ navigation, menuSide, mapSettings }) => {
 
       // Ride completed
       togglePopup('rideSummary', true);
+      getStations();
+
     }
     if (activeRideState && !activeRideState.stop_points[0].completed_at) {
       // Ride canceled
@@ -421,13 +423,10 @@ export default ({ navigation, menuSide, mapSettings }) => {
         }}
         ref={mapInstance}
         onMapReady={() => {
-          if (Platform.OS === 'ios') {
-            if (Config.MAP_PROVIDER === 'google') {
+
               focusCurrentLocation();
-            } else {
-              return;
-            }
-          }
+
+
 
           PermissionsAndroid.request(
             PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
