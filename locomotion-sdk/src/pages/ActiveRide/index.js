@@ -369,12 +369,18 @@ export default ({ navigation, menuSide, mapSettings }) => {
   };
 
   const focusCurrentLocation = () => {
-    mapInstance.current.animateToRegion({
-      latitude: mapRegion.latitude,
-      longitude: mapRegion.longitude,
-      latitudeDelta: mapRegion.latitudeDelta,
-      longitudeDelta: mapRegion.longitudeDelta,
-    }, 1000);
+    if(mapRegion.longitude && mapRegion.latitude) {
+      mapInstance.current.animateToRegion({
+        latitude: mapRegion.latitude,
+        longitude: mapRegion.longitude,
+        latitudeDelta: mapRegion.latitudeDelta,
+        longitudeDelta: mapRegion.longitudeDelta,
+      }, 1000);
+    } else {
+      setTimeout(() => {
+        focusCurrentLocation();
+      }, 1000)
+    }
   };
 
   const onRideSchedule = (rideTime) => {
@@ -429,11 +435,7 @@ export default ({ navigation, menuSide, mapSettings }) => {
         }}
         ref={mapInstance}
         onMapReady={() => {
-
-              focusCurrentLocation();
-
-
-
+          focusCurrentLocation();
           PermissionsAndroid.request(
             PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
           );
