@@ -35,9 +35,9 @@ const createOffer = async (rideData) => {
 const createRide = async (rideData, userId) => {
   const ride = await Ride.create({
     ...rideData,
+    numberOfPassenger: rideData.numberOfPassengers,
     userId,
   });
-
   const {
     avatar, firstName, lastName, phoneNumber,
   } = await User.findById(userId, { attributes: ['avatar', 'firstName', 'lastName', 'phoneNumber'] });
@@ -48,7 +48,7 @@ const createRide = async (rideData, userId) => {
       offer_id: rideData.offerId,
       webhook_url: `${webHookHost}/api/v1/ride-webhook/${ride.id}`.replace(/([^:]\/)\/+/g, '$1'),
       pooling: rideData.rideType === 'pool' ? 'active' : 'no',
-      number_of_passengers: ride.numberOfPassenger,
+      number_of_passengers: ride.numberOfPassengers,
       stop_points: [
         {
           type: 'pickup',
@@ -74,7 +74,7 @@ const createRide = async (rideData, userId) => {
 
     if (afRide.status === 'rejected') {
       ride.state = 'rejected';
-    } else if (afRide.scheduled_to && afRide.status === 'pending') {
+    } else if (afRide.status === 'pending') {
       ride.state = 'pending';
     } else {
       ride.state = 'active';
