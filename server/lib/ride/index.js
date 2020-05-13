@@ -58,6 +58,7 @@ const createRide = async (rideData, userId) => {
           contact_person: `${firstName} ${lastName}`,
           contact_person_phone: phoneNumber,
           contact_person_avatar: avatar,
+          afterTime: rideData.scheduledTo,
         },
         {
           type: 'dropoff',
@@ -69,7 +70,6 @@ const createRide = async (rideData, userId) => {
           contact_person_avatar: avatar,
         },
       ],
-      scheduled_to: rideData.scheduledTo,
     });
 
     if (afRide.status === 'rejected') {
