@@ -43,33 +43,38 @@ const createRide = async (rideData, userId) => {
   } = await User.findById(userId, { attributes: ['avatar', 'firstName', 'lastName', 'phoneNumber'] });
 
   try {
+    const stopPoints = [
+      {
+        type: 'pickup',
+        lat: parseFloat(rideData.pickupLat),
+        lng: parseFloat(rideData.pickupLng),
+        description: ride.pickupAddress,
+        contact_person: `${firstName} ${lastName}`,
+        contact_person_phone: phoneNumber,
+        contact_person_avatar: avatar,
+
+      },
+      {
+        type: 'dropoff',
+        lat: parseFloat(rideData.dropoffLat),
+        lng: parseFloat(rideData.dropoffLng),
+        description: ride.dropoffAddress,
+        contact_person: `${firstName} ${lastName}`,
+        contact_person_phone: phoneNumber,
+        contact_person_avatar: avatar,
+      }];
+
+    if (rideData.scheduledTo) {
+      stopPoints[0].afterTime = rideData.scheduledTo;
+    }
+
     const { data: afRide } = await demandApi.post('/api/v1/rides', {
       external_id: ride.id,
       offer_id: rideData.offerId,
       webhook_url: `${webHookHost}/api/v1/ride-webhook/${ride.id}`.replace(/([^:]\/)\/+/g, '$1'),
       pooling: rideData.rideType === 'pool' ? 'active' : 'no',
       number_of_passengers: ride.numberOfPassengers,
-      stop_points: [
-        {
-          type: 'pickup',
-          lat: parseFloat(rideData.pickupLat),
-          lng: parseFloat(rideData.pickupLng),
-          description: ride.pickupAddress,
-          contact_person: `${firstName} ${lastName}`,
-          contact_person_phone: phoneNumber,
-          contact_person_avatar: avatar,
-          afterTime: rideData.scheduledTo,
-        },
-        {
-          type: 'dropoff',
-          lat: parseFloat(rideData.dropoffLat),
-          lng: parseFloat(rideData.dropoffLng),
-          description: ride.dropoffAddress,
-          contact_person: `${firstName} ${lastName}`,
-          contact_person_phone: phoneNumber,
-          contact_person_avatar: avatar,
-        },
-      ],
+      stop_points: stopPoints,
     });
 
     if (afRide.status === 'rejected') {

@@ -38,8 +38,7 @@ module.exports = async (input, location, stations) => {
   const availablePlaces = await getAvailablePlaces();
   if (!stations) {
     predictedAddresses = await getPredictedAddress(input, location);
-    const predictedStations = predictedAddresses.map(s => ({ ...s, station: true }));
-    return predictedStations;
+    return predictedAddresses;
   }
 
   if (input) {
