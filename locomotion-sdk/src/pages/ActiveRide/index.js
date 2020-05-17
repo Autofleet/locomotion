@@ -146,7 +146,9 @@ export default ({ navigation, menuSide, mapSettings }) => {
 
   if(Config.STATIONS_REFRESH_RATE) {
     useInterval(() => {
-      getStations();
+      if(!rideOffer) {
+        getStations();
+      }
     }, Config.STATIONS_REFRESH_RATE * 60000);
   }
 
