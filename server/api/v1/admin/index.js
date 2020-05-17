@@ -27,5 +27,6 @@ router.post('/auth', async (req, res) => {
 
 router.use('/users', adminPermissionsMiddleWare, require('./users'));
 router.use('/settings', adminPermissionsMiddleWare, require('./settings'));
+router.use('/service-hours', adminPermissionsMiddleWare, require('./service-hours'));
 
 module.exports = router;
