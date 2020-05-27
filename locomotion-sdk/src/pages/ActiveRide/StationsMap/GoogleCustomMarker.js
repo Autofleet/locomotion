@@ -27,7 +27,7 @@ export default  ({ type }) => (
             <MarkerToolTipText>{I18n.t(`home.map.markers.${type}`)}</MarkerToolTipText>
           </AndroidMarkerToolTip>
         ) : null}
-      <StationDot type={type} />
+      <StationDot type={type} isGoogle={true} />
     </AndroidMarkerContainer>
   );
 
