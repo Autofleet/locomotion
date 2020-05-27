@@ -153,10 +153,10 @@ export default ({ navigation, menuSide, mapSettings }) => {
   }
 
   useEffect(() => {
+    initialLocation();
     UserService.getUser(navigation);
     getStations();
     loadActiveRide();
-    initialLocation();
     OneSignal.init(notificationsHandler);
   }, []);
 
@@ -347,11 +347,15 @@ export default ({ navigation, menuSide, mapSettings }) => {
   }, [rideOffer]);
 
   const initialLocation = async () => {
-    const { coords } = await getPosition();
-    setMapRegion(oldMapRegion => ({
-      ...oldMapRegion,
-      ...coords,
-    }));
+    try {
+      const geoData = await getPosition();
+      setMapRegion(oldMapRegion => ({
+        ...oldMapRegion,
+        ...geoData.coords,
+      }));
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   const closeAddressViewer = () => {
@@ -378,10 +382,6 @@ export default ({ navigation, menuSide, mapSettings }) => {
         latitudeDelta: mapRegion.latitudeDelta,
         longitudeDelta: mapRegion.longitudeDelta,
       }, 1000);
-    } else {
-      setTimeout(() => {
-        focusCurrentLocation();
-      }, 1000)
     }
   };
 
@@ -404,6 +404,10 @@ export default ({ navigation, menuSide, mapSettings }) => {
     }
     setRideOffer(offerData);
   };
+
+  useEffect(() => {
+    focusCurrentLocation();
+  }, [mapRegion])
 
   return (
     <PageContainer>
@@ -437,7 +441,10 @@ export default ({ navigation, menuSide, mapSettings }) => {
         }}
         ref={mapInstance}
         onMapReady={() => {
-          focusCurrentLocation();
+          //focusCurrentLocation();
+          if(Platform.OS === 'ios') {
+            return;
+          }
           PermissionsAndroid.request(
             PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
           );
