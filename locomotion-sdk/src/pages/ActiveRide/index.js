@@ -53,8 +53,8 @@ export default ({ navigation, menuSide, mapSettings }) => {
   const [preRideDetails, setPreRideDetails] = useState({});
   const [mapMarkers, setMapMarkers] = useState([]);
   const [mapRegion, setMapRegion] = useState({
-    latitudeDelta: 0.0922,
-    longitudeDelta: 0.0421,
+    latitudeDelta: 0.0001,
+    longitudeDelta: 0.0001,
   });
   const [activeSpState, setActiveSp] = useState(null);
   const [numberOfPassengers, setNumberOfPassengers] = useState(1);
