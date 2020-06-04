@@ -58,6 +58,30 @@
       "futureOrderMaxTime": "Maximum Time in advance for Pre-Booking",
       "futureOrderTimeInterval": "Available Pre-Booking Windows Time Interval"
     }
+  },
+  "serviceHours": {
+    "title": "Service Hours",
+    "dayInWeek": "Day",
+    "startTime": "Start Time",
+    "endTime": "End Time",
+    "timezone": "Time Zone",
+    "addTimeSlotButton":  "Add",
+    "weekDays": {
+      "sunday": "Sunday",
+      "monday": "Monday",
+      "tuesday": "Tuesday",
+      "wednesday": "Wednesday",
+      "thursday": "Thursday",
+      "friday": "Friday",
+      "saturday": "Saturday"
+    },
+    "addTimeSlot": {
+      "title": "Add Service Hour",
+      "dayInWeek": "Day",
+      "startTime": "Start Time",
+      "endTime":"End Time",
+      "timezone":"Time Zone"
+    }
   }
 }
 

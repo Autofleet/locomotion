@@ -34,12 +34,19 @@ export default ({
   const [rating, setRating] = useState(false);
   const [ratingSent, setRatingSent] = useState(false);
   const [isPopupOpen, togglePopup, popupData] = getTogglePopupsState();
+  const reset = () => {
+    setRating(false)
+    setRatingSent(false)
+  }
+
   const closePopup = () => {
+    reset();
     if (onClose) {
       onClose();
     }
     togglePopup('rideSummary', false);
   };
+
   useEffect(() => {
     if (closeAfter) {
       setTimeout(closePopup, closeAfter);
@@ -72,6 +79,9 @@ export default ({
       setRatingSent(false)
       await onRating(rating)
       setRatingSent(true)
+      setTimeout(() => {
+        closePopup()
+      }, 2000)
     }
 
   return (

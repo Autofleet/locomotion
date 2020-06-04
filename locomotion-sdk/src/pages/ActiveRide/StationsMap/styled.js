@@ -25,6 +25,10 @@ export const StationDot = styled(PointDot)`
   ${({ type }) => type === 'dropoff' && `
     background-color: #08902d;
   `}
+
+  ${({isGoogle}) => isGoogle && `
+    shadow-opacity: 0;
+  `}
 `;
 
 export const MarkerToolTip = styled.View`

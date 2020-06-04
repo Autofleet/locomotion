@@ -12,6 +12,7 @@ const getPredictedAddress = async (input, location) => {
       radius: process.env.RADIUS_FOR_PLACE_API,
       language: process.env.LANGUAGE_FOR_PLACE_API,
       location: `${location.lat},${location.lng}`,
+      types: 'geocode',
     },
   });
   return data.predictions;

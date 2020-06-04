@@ -128,6 +128,8 @@ export default ({ navigation, menuSide, mapSettings }) => {
 
       // Ride completed
       togglePopup('rideSummary', true);
+      getStations();
+
     }
     if (activeRideState && !activeRideState.stop_points[0].completed_at) {
       // Ride canceled
@@ -142,11 +144,19 @@ export default ({ navigation, menuSide, mapSettings }) => {
     loadActiveRide();
   }, 5000);
 
+  if(Config.STATIONS_REFRESH_RATE) {
+    useInterval(() => {
+      if(!rideOffer) {
+        getStations();
+      }
+    }, Config.STATIONS_REFRESH_RATE * 60000);
+  }
+
   useEffect(() => {
+    initialLocation();
     UserService.getUser(navigation);
     getStations();
     loadActiveRide();
-    initialLocation();
     OneSignal.init(notificationsHandler);
   }, []);
 
@@ -337,11 +347,15 @@ export default ({ navigation, menuSide, mapSettings }) => {
   }, [rideOffer]);
 
   const initialLocation = async () => {
-    const { coords } = await getPosition();
-    setMapRegion(oldMapRegion => ({
-      ...oldMapRegion,
-      ...coords,
-    }));
+    try {
+      const geoData = await getPosition();
+      setMapRegion(oldMapRegion => ({
+        ...oldMapRegion,
+        ...geoData.coords,
+      }));
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   const closeAddressViewer = () => {
@@ -361,12 +375,14 @@ export default ({ navigation, menuSide, mapSettings }) => {
   };
 
   const focusCurrentLocation = () => {
-    mapInstance.current.animateToRegion({
-      latitude: mapRegion.latitude,
-      longitude: mapRegion.longitude,
-      latitudeDelta: mapRegion.latitudeDelta,
-      longitudeDelta: mapRegion.longitudeDelta,
-    }, 1000);
+    if(mapRegion.longitude && mapRegion.latitude) {
+      mapInstance.current.animateToRegion({
+        latitude: mapRegion.latitude,
+        longitude: mapRegion.longitude,
+        latitudeDelta: mapRegion.latitudeDelta,
+        longitudeDelta: mapRegion.longitudeDelta,
+      }, 1000);
+    }
   };
 
   const onRideSchedule = (rideTime) => {
@@ -388,6 +404,10 @@ export default ({ navigation, menuSide, mapSettings }) => {
     }
     setRideOffer(offerData);
   };
+
+  useEffect(() => {
+    focusCurrentLocation();
+  }, [mapRegion])
 
   return (
     <PageContainer>
@@ -421,14 +441,10 @@ export default ({ navigation, menuSide, mapSettings }) => {
         }}
         ref={mapInstance}
         onMapReady={() => {
-          if (Platform.OS === 'ios') {
-            if (Config.MAP_PROVIDER === 'google') {
-              focusCurrentLocation();
-            } else {
-              return;
-            }
+          //focusCurrentLocation();
+          if(Platform.OS === 'ios') {
+            return;
           }
-
           PermissionsAndroid.request(
             PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
           );

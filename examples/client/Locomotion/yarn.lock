@@ -2,10 +2,10 @@
 # yarn lockfile v1
 
 
-"@autofleet/locomotion-sdk@^1.4.0":
-  version "1.4.0"
-  resolved "https://registry.yarnpkg.com/@autofleet/locomotion-sdk/-/locomotion-sdk-1.4.0.tgz#029c183557a840840c0e5573ad450659ac63c96c"
-  integrity sha512-7k+x9z03BPkpJ4g7cWJmPibaragBSNCPt7MvUoyB4FbN2qw884anivEwopAJ7Gp9w+1OMpUQVGAem7G30DNh1w==
+"@autofleet/locomotion-sdk@^1.4.5":
+  version "1.4.5"
+  resolved "https://registry.yarnpkg.com/@autofleet/locomotion-sdk/-/locomotion-sdk-1.4.5.tgz#61f1094739c619fbf44a8daa45eee39d3caca04a"
+  integrity sha512-F//rIgXXpKJ2qoQDGWcV8EO1KMRUTGyMrjA6hFUToOY5QFiZTwfDzFbOQhUHmb9e9A5f8pJGyJvkKsUk1CGKNw==
   dependencies:
     i18next "^19.3.2"
     react-i18next "^11.3.3"
