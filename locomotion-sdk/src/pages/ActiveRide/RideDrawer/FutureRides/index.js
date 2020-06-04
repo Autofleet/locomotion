@@ -60,7 +60,7 @@ export default ({
 
         return (
           <Container>
-            <DateTitle>{moment(ride.scheduled_to).format('DD-MM-YYYY HH:mm')}</DateTitle>
+            <DateTitle>{moment(ride.scheduled_to).format('DD.MM.YYYY HH:mm')}</DateTitle>
             <DetailsRowContainer>
               <SpsContainer>
                 <StopPointRow

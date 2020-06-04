@@ -47,12 +47,12 @@ const DateTimePicker = ({ onScheduleTimeSelect }) => {
       const dayInWeek = date.day();
 
       if (workingHours[dayInWeek]) {
-        displayDates.push(date.format('DD-MM-YYYY'));
-        const timeData = getOptionalTimes(date.format('DD-MM-YYYY'), workingHours[dayInWeek]);
+        displayDates.push(date.format('DD.MM.YYYY'));
+        const timeData = getOptionalTimes(date.format('DD.MM.YYYY'), workingHours[dayInWeek]);
         const filteredTimeData = timeData.filter(time => moment(time).isSameOrAfter(min));
 
         if (filteredTimeData.length > 0) {
-          displayHours[date.format('DD-MM-YYYY')] = filteredTimeData;
+          displayHours[date.format('DD.MM.YYYY')] = filteredTimeData;
         }
       }
       calculatedDate = moment(calculatedDate).add(1, 'days');
@@ -63,7 +63,7 @@ const DateTimePicker = ({ onScheduleTimeSelect }) => {
 
   const getOptionalTimes = (date, dateWorkingHours) => {
     const timeInterval = useSettings.settingsList.FUTURE_ORDER_TIME_INTERVAL;
-    const parseFormat = 'DD-MM-YYYY HH:mm';
+    const parseFormat = 'DD.MM.YYYY HH:mm';
     const timesArray = [];
 
     dateWorkingHours.map((timeFrame) => {
