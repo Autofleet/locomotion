@@ -75,7 +75,7 @@ export default ({ amount, onChange,scheduledTo }) => {
           <ClockIcon></ClockIcon>
         </View>
         <AddressText style={{ textAlign: 'center'}}>
-          {moment(scheduledTo).format('DD-MM-YYYY HH:mm')}
+          {moment(scheduledTo).format('DD.MM.YYYY HH:mm')}
         </AddressText>
       </View> : null}
     </PassengerAmountContainer>

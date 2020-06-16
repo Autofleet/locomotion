@@ -12,7 +12,8 @@ export const FutureRidesButton = styled.TouchableOpacity`
   align-items: center;
   justify-content: center;
   flex-direction: row;
-
+  padding-right: 8px;
+  padding-left: 8px;
 `;
 
 export const FutureRideButtonText = styled.Text`
