@@ -9,19 +9,25 @@ const settingsService = require('../../../lib/settings');
 
 const router = Router();
 
-const cancelPush = async (userId) => {
+const cancelPush = async (userId, rideId, messageType = 'futureRideCanceled') => {
   const user = await User.findOne({
     where: {
       id: userId,
     },
   });
 
+  const notificationSent = await Notification.findOne({ where: { userId, type: messageType } });
+  if (notificationSent) {
+    return false;
+  }
+
+  Notification.create({ userId, rideId, type: messageType });
   await sendNotification(
     [user.pushUserId],
     'futureRideCanceled',
-    { en: i18n.t('pushNotifications.futureRideCanceled') },
-    { en: i18n.t('pushNotifications.futureRideCanceledHeading') },
-    { ttl: 60 * 30, data: { type: 'futureRideCanceled' } },
+    { en: i18n.t(`pushNotifications.${messageType}.text`) },
+    { en: i18n.t(`pushNotifications.${messageType}.heading`) },
+    { ttl: 60 * 30, data: { type: messageType } },
   );
 };
 
@@ -38,15 +44,18 @@ router.put('/:rideId', async (req, res) => {
 
   const stopPoints = req.body.ride.stopPoints;
 
-  if (stopPoints && !ride.arrivingPush && req.body.ride.state === 'active') {
+  const isReminderShouldBeSent = async () => {
     const { value: arriveReminderMin } = await settingsService.getSettingByKeyFromDb('ARRIVE_REMINDER_MIN');
     const etaTime = moment(stopPoints[0].eta);
     const diff = etaTime.diff(moment(), 'minutes');
-    console.log(`Eta Diff: ${diff} Reminder: ${arriveReminderMin}`);
 
-    if (stopPoints[0].completed_at === null && diff <= arriveReminderMin) {
-      console.log('Sending Push');
+    return diff <= arriveReminderMin;
+  };
 
+  if (stopPoints && !ride.arrivingPush && req.body.ride.state === 'active') {
+    const shouldRemind = await isReminderShouldBeSent();
+
+    if (stopPoints[0].completed_at === null && shouldRemind) {
       try {
         const updateRidePush = await Ride.update({ arrivingPush: moment().format() }, {
           where: {
@@ -61,7 +70,7 @@ router.put('/:rideId', async (req, res) => {
               id: ride.userId,
             },
           });
-
+          const { value: arriveReminderMin } = await settingsService.getSettingByKeyFromDb('ARRIVE_REMINDER_MIN');
           await sendNotification(
             [user.pushUserId],
             'driverArriving',
@@ -103,15 +112,20 @@ router.put('/:rideId', async (req, res) => {
   } else if (req.body.ride.state === 'completed') {
     ride.state = 'completed';
     await ride.save();
-  } else if (req.body.ride.state === 'cancelled') {
-    if (req.body.ride.cancelledBy !== 'demand-gateway') {
-      cancelPush(ride.userId);
+  } else if (req.body.ride.state === 'failed') {
+    if (ride.state !== 'canceled') {
+      cancelPush(ride.userId, ride.id, 'failureRide');
     }
-
     ride.state = 'canceled';
     await ride.save();
-    if (req.body.ride.cancellationReason && !req.body.ride.cancellationReason.includes('user') && req.body.ride.scheduled_to === null) {
-      const currentRide = ride.get();
+  } else if (req.body.ride.state === 'cancelled') {
+    ride.state = 'canceled';
+    await ride.save();
+    const currentRide = ride.get();
+    if (req.body.ride.cancelledBy !== 'demand-gateway' && !currentRide.scheduledTo) {
+      if (isReminderShouldBeSent()) {
+        cancelPush(ride.userId, ride.id, 'findingNewDriver');
+      }
       await rideService.create({
         userId: currentRide.userId,
         pickupAddress: currentRide.pickupAddress,
@@ -128,8 +142,19 @@ router.put('/:rideId', async (req, res) => {
         state: 'creating',
       }, ride.userId);
     }
-  } else if (req.body.ride.state === 'rejected' && req.body.ride.scheduledTo !== null) {
-    cancelPush(ride.userId);
+
+    if (currentRide.scheduledTo) {
+      cancelPush(ride.userId, ride.id, 'futureRideFleetCancel');
+    }
+  } else if (req.body.ride.state === 'rejected') {
+    if (ride.state === 'rejected') {
+      if (req.body.ride.scheduledTo) {
+        cancelPush(ride.userId, ride.id, 'futureRideCanceled');
+      } else {
+        cancelPush(ride.userId, ride.id, 'rideReject');
+      }
+    }
+
     ride.state = 'rejected';
     await ride.save();
   }
