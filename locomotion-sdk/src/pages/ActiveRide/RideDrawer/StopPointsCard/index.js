@@ -62,7 +62,7 @@ export default ({
           openLocationSelect={() => openLocationSelect('pickup')}
           description={rideState ? origin && origin.description
             : requestStopPoints && requestStopPoints.pickup && requestStopPoints.pickup.description}
-          completedAt={rideState ? origin && origin.completed_at
+          completedAt={rideState ? origin && origin.completedAt
             : undefined}
           title={i18n.t('addressView.pickupTitle')}
           selected={requestStopPoints.selectedType === 'pickup'}
@@ -72,7 +72,7 @@ export default ({
           openLocationSelect={() => openLocationSelect('dropoff')}
           description={rideState ? destination && destination.description
             : requestStopPoints && requestStopPoints.dropoff && requestStopPoints.dropoff.description}
-          completedAt={rideState ? destination && destination.completed_at
+          completedAt={rideState ? destination && destination.completedAt
             : undefined}
           title={i18n.t('addressView.dropoffTitle')}
           selected={requestStopPoints.selectedType === 'dropoff'}

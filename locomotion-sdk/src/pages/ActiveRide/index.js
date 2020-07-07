@@ -83,15 +83,17 @@ export default ({ navigation, menuSide, mapSettings }) => {
   }
   const loadActiveRide = async () => {
     const { data: response } = await network.get('api/v1/me/rides/active', { params: { activeRide: true } });
+    console.log('ACTIVE RESPONSE', response);
+
     const { ride: activeRide, futureRides: futureRidesData } = response;
     setFutureRides(futureRidesData);
     if (activeRide) {
-      const [pickup, dropoff] = activeRide.stop_points;
+      const [pickup, dropoff] = activeRide.stopPoints;
       setStopPoints({
         pickup,
         dropoff,
       });
-      let activeSp = activeRide.stop_points.find(sp => sp.state === 'pending');
+      let activeSp = activeRide.stopPoints.find(sp => sp.state === 'pending');
       if (activeSp && activeSp.polyline) {
         activeSp = {
           ...activeSp,
@@ -110,16 +112,16 @@ export default ({ navigation, menuSide, mapSettings }) => {
       return setActiveRide(activeRide);
     }
 
-    if (activeRideState && activeRideState.stop_points[0].completed_at) {
-      const { data: rideSummary } = await network.get('api/v1/me/rides/ride-summary', { params: { rideId: activeRideState.external_id } });
+    if (activeRideState && activeRideState.stopPoints[0].completedAt) {
+      const { data: rideSummary } = await network.get('api/v1/me/rides/ride-summary', { params: { rideId: activeRideState.externalId } });
 
-      const pickupTime = rideSummary.stop_points[0].completed_at;
-      const dropoffTime = rideSummary.stop_points[1].completed_at;
-      const distance = rideSummary.stop_points[1].actual_distance;
+      const pickupTime = rideSummary.stopPoints[0].completedAt;
+      const dropoffTime = rideSummary.stopPoints[1].completedAt;
+      const distance = rideSummary.stopPoints[1].actualDistance;
       const duration = moment(dropoffTime).diff(moment(pickupTime), 'minutes');
 
       setRideSummaryData({
-        rideId: activeRideState.external_id,
+        rideId: activeRideState.externalId,
         pickupTime,
         dropoffTime,
         distance,
@@ -131,7 +133,7 @@ export default ({ navigation, menuSide, mapSettings }) => {
       getStations();
 
     }
-    if (activeRideState && !activeRideState.stop_points[0].completed_at) {
+    if (activeRideState && !activeRideState.stopPoints[0].completedAt) {
       // Ride canceled
       togglePopup('rideCancel', true);
     }
@@ -168,7 +170,7 @@ export default ({ navigation, menuSide, mapSettings }) => {
     if (!activeRideState) {
       return;
     }
-    const origin = activeRideState.stop_points[0];
+    const origin = activeRideState.stopPoints[0];
     calculatePickupEta(origin);
   }, [activeRideState]);
 
@@ -278,7 +280,7 @@ export default ({ navigation, menuSide, mapSettings }) => {
 
 
   const calculatePickupEta = (origin) => {
-    if (origin.completed_at) {
+    if (origin.completeAt) {
       setDisplayMatchInfo(true);
     } else if (origin && origin.eta) {
       const etaDiff = moment(origin.eta).diff(moment(), 'minutes');

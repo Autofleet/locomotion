@@ -63,7 +63,7 @@ export default ({
           description={rideState ? origin && origin.description
             : requestStopPoints && requestStopPoints.pickup && requestStopPoints.pickup.description}
           eta={rideOffer.pickupTime}
-          completedAt={rideState ? origin && origin.completed_at : undefined}
+          completedAt={rideState ? origin && origin.completedAt : undefined}
           rideOffer={rideOffer}
           etaDrift={pickupEtaDrift}
           etaMediumThreshold={etaMediumThreshold}
@@ -74,7 +74,7 @@ export default ({
           description={rideState ? destination && destination.description
             : requestStopPoints && requestStopPoints.dropoff && requestStopPoints.dropoff.description}
           eta={rideOffer.dropoffTime}
-          completedAt={rideState ? destination && destination.completed_at
+          completedAt={rideState ? destination && destination.completedAt
             : undefined}
           rideOffer={rideOffer}
           etaDrift={dropoffEtaDrift}

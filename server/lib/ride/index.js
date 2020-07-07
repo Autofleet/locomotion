@@ -11,6 +11,7 @@ const api = axios.create({
   baseURL: process.env.AF_BACKEND_URL || 'https://api.autofleet.io/',
   headers: { Authorization: process.env.AF_API_TOKEN },
 });
+
 const demandApi = {};
 const webHookHost = process.env.SERVER_HOST || 'https://716ee2e6.ngrok.io';
 
@@ -144,7 +145,10 @@ const rideService = {
     return null;
   },
   getRideFromAf: async (rideId) => {
-    const { data: afRides } = await api.get('/api/v1/rides', { params: { externalId: rideId } });
+    console.log(`RIDES AF ${rideId}`);
+    const { data: afRides } = await api.get('/api/v1/rides', { params: { externalId: rideId, demandSourceId: '542e6040-3dc4-44f4-8ea0-efee1c35088b' } });
+    console.log(afRides);
+
     return afRides[0];
   },
 

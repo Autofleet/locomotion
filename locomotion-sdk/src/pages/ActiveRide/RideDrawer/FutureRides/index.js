@@ -56,7 +56,7 @@ export default ({
   return (
     <Fragment>
       {futureRides.map((ride) => {
-        const { stop_points: stopPoints } = ride;
+        const { stopPoints } = ride;
 
         return (
           <Container>
