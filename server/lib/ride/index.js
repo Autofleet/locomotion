@@ -3,16 +3,20 @@ const axios = require('axios');
 const logger = require('../../logger');
 const { Ride, User } = require('../../models');
 const { Op } = require('sequelize');
+const serialize = require('./serializers/serializeRide');
+const serializeOffer = require('./serializers/serializeOffer');
+const { off } = require('../../logger');
 
-const demandApi = axios.create({
-  baseURL: process.env.AF_BACKEND_URL || 'https://demand.autofleet.io/',
+const api = axios.create({
+  baseURL: process.env.AF_BACKEND_URL || 'https://api.autofleet.io/',
   headers: { Authorization: process.env.AF_API_TOKEN },
 });
-
+const demandApi = {};
 const webHookHost = process.env.SERVER_HOST || 'https://716ee2e6.ngrok.io';
 
+
 const createOffer = async (rideData) => {
-  const { data: offer } = await demandApi.post('/api/v1/offers', {
+  const offerClone = serializeOffer.deserializeOffer({
     type: 'offer',
     pooling: process.env.pooling || rideData.rideType === 'pool' ? 'active' : 'no',
     offer_stop_points: [
@@ -29,6 +33,14 @@ const createOffer = async (rideData) => {
     ],
     number_of_passengers: rideData.numberOfPassengers,
   });
+
+  const { data: offer } = await api.post('/api/v1/offers', {
+    ...offerClone,
+    businessModelId: 'afe63608-e559-4ed0-a716-a34feca2d1b0',
+    demandSourceId: 'aeeff4c0-529d-4325-9283-f6d9ce4db1ab',
+  });
+  console.log('Offer', offer);
+
   return offer;
 };
 
@@ -132,7 +144,7 @@ const rideService = {
     return null;
   },
   getRideFromAf: async (rideId) => {
-    const { data: afRides } = await demandApi.get('/api/v1/rides', { params: { externalId: rideId } });
+    const { data: afRides } = await api.get('/api/v1/rides', { params: { externalId: rideId } });
     return afRides[0];
   },
 
