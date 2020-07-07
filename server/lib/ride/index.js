@@ -61,8 +61,8 @@ const createRide = async (rideData, userId) => {
       {
         type: 'pickup',
         description: ride.pickupAddress,
-        lat: parseFloat(rideData.stopPoints[0].lat),
-        lng: parseFloat(rideData.stopPoints[0].lng),
+        lat: parseFloat(ride.pickupLat),
+        lng: parseFloat(ride.pickupLng),
         contactPersonName: `${firstName} ${lastName}`,
         contactPersonPhone: phoneNumber,
         contactPersonAvatar: avatar,
@@ -70,8 +70,8 @@ const createRide = async (rideData, userId) => {
       },
       {
         type: 'dropoff',
-        lat: parseFloat(rideData.stopPoints[1].lat),
-        lng: parseFloat(rideData.stopPoints[1].lng),
+        lat: parseFloat(ride.dropoffLat),
+        lng: parseFloat(ride.dropoffLng),
         description: ride.dropoffAddress,
         contactPersonName: `${firstName} ${lastName}`,
         contactPersonPhone: phoneNumber,
@@ -82,8 +82,16 @@ const createRide = async (rideData, userId) => {
     if (rideData.scheduledTo) {
       stopPoints[0].afterTime = rideData.scheduledTo;
     }
+    console.log(JSON.stringify({
+      externalId: ride.id,
+      offerId: rideData.offerId,
+      webhookUrl: `${webHookHost}/api/v1/ride-webhook/${ride.id}`.replace(/([^:]\/)\/+/g, '$1'),
+      pooling: rideData.rideType === 'pool' ? 'active' : 'no',
+      numberOfPassengers: ride.numberOfPassengers,
+      stopPoints,
+    }));
 
-    const { data: afRide } = await demandApi.post('/api/v1/rides', {
+    const { data: afRide } = await api.post('/api/v1/rides', {
       externalId: ride.id,
       offerId: rideData.offerId,
       webhookUrl: `${webHookHost}/api/v1/ride-webhook/${ride.id}`.replace(/([^:]\/)\/+/g, '$1'),
