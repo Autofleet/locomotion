@@ -145,9 +145,7 @@ const rideService = {
     return null;
   },
   getRideFromAf: async (rideId) => {
-    console.log(`RIDES AF ${rideId}`);
     const { data: afRides } = await api.get('/api/v1/rides', { params: { externalId: rideId, demandSourceId: '542e6040-3dc4-44f4-8ea0-efee1c35088b' } });
-    console.log(afRides);
 
     return afRides[0];
   },
@@ -208,7 +206,7 @@ const rideService = {
         return afRide;
       }));
 
-      const filteredRides = afRides.filter(ride => ride.status === 'pending');
+      const filteredRides = afRides.filter(ride => ride.state === 'pending');
 
       return filteredRides;
     }
