@@ -224,15 +224,25 @@ export default ({ navigation, menuSide, mapSettings }) => {
     clearTimeout(offerTimer);
 
     const { data: response } = await network.post('api/v1/me/rides', {
-      pickupAddress: requestStopPoints.pickup.description,
-      pickupLat: requestStopPoints.pickup.lat,
-      pickupLng: requestStopPoints.pickup.lng,
-      dropoffAddress: requestStopPoints.dropoff.description,
-      dropoffLat: requestStopPoints.dropoff.lat,
-      dropoffLng: requestStopPoints.dropoff.lng,
       numberOfPassengers,
       rideType,
       scheduledTo: requestStopPoints.scheduledTo,
+      stopPoints:[
+         {
+          type: 'pickup',
+          address: requestStopPoints.pickup.description,
+          lat: requestStopPoints.pickup.lat,
+          lng: requestStopPoints.pickup.lng,
+        },
+        {
+          type: 'dropoff',
+          address: requestStopPoints.dropoff.description,
+          lat: requestStopPoints.dropoff.lat,
+          lng: requestStopPoints.dropoff.lng,
+
+
+        },
+      ]
     });
 
     if (response.state === 'rejected') {

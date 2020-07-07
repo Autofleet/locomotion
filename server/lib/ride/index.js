@@ -54,27 +54,29 @@ const createRide = async (rideData, userId) => {
   const {
     avatar, firstName, lastName, phoneNumber,
   } = await User.findById(userId, { attributes: ['avatar', 'firstName', 'lastName', 'phoneNumber'] });
+  const webhookUrl = `${webHookHost}/api/v1/ride-webhook/${ride.id}`.replace(/([^:]\/)\/+/g, '$1');
 
   try {
     const stopPoints = [
       {
         type: 'pickup',
-        lat: parseFloat(rideData.pickupLat),
-        lng: parseFloat(rideData.pickupLng),
         description: ride.pickupAddress,
-        contact_person: `${firstName} ${lastName}`,
-        contact_person_phone: phoneNumber,
-        contact_person_avatar: avatar,
-
+        lat: parseFloat(rideData.stopPoints[0].lat),
+        lng: parseFloat(rideData.stopPoints[0].lng),
+        contactPersonName: `${firstName} ${lastName}`,
+        contactPersonPhone: phoneNumber,
+        contactPersonAvatar: avatar,
+        webhookUrl,
       },
       {
         type: 'dropoff',
-        lat: parseFloat(rideData.dropoffLat),
-        lng: parseFloat(rideData.dropoffLng),
+        lat: parseFloat(rideData.stopPoints[1].lat),
+        lng: parseFloat(rideData.stopPoints[1].lng),
         description: ride.dropoffAddress,
-        contact_person: `${firstName} ${lastName}`,
-        contact_person_phone: phoneNumber,
-        contact_person_avatar: avatar,
+        contactPersonName: `${firstName} ${lastName}`,
+        contactPersonPhone: phoneNumber,
+        contactPersonAvatar: avatar,
+        webhookUrl,
       }];
 
     if (rideData.scheduledTo) {
@@ -82,12 +84,12 @@ const createRide = async (rideData, userId) => {
     }
 
     const { data: afRide } = await demandApi.post('/api/v1/rides', {
-      external_id: ride.id,
-      offer_id: rideData.offerId,
-      webhook_url: `${webHookHost}/api/v1/ride-webhook/${ride.id}`.replace(/([^:]\/)\/+/g, '$1'),
+      externalId: ride.id,
+      offerId: rideData.offerId,
+      webhookUrl: `${webHookHost}/api/v1/ride-webhook/${ride.id}`.replace(/([^:]\/)\/+/g, '$1'),
       pooling: rideData.rideType === 'pool' ? 'active' : 'no',
-      number_of_passengers: ride.numberOfPassengers,
-      stop_points: stopPoints,
+      numberOfPassengers: ride.numberOfPassengers,
+      stopPoints,
     });
 
     if (afRide.status === 'rejected') {
