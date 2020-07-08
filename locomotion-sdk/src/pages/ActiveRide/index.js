@@ -83,7 +83,6 @@ export default ({ navigation, menuSide, mapSettings }) => {
   }
   const loadActiveRide = async () => {
     const { data: response } = await network.get('api/v1/me/rides/active', { params: { activeRide: true } });
-    console.log('ACTIVE RESPONSE', response);
 
     const { ride: activeRide, futureRides: futureRidesData } = response;
     setFutureRides(futureRidesData);

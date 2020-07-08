@@ -2,15 +2,9 @@ require('dotenv');
 const axios = require('axios');
 const logger = require('../../logger');
 const { Ride, User } = require('../../models');
-const { Op } = require('sequelize');
-const serialize = require('./serializers/serializeRide');
+const afSdk = require('../../sdk');
 const serializeOffer = require('./serializers/serializeOffer');
-const { off } = require('../../logger');
-
-const api = axios.create({
-  baseURL: process.env.AF_BACKEND_URL || 'https://api.autofleet.io/',
-  headers: { Authorization: process.env.AF_API_TOKEN },
-});
+const sdk = require('../../sdk');
 
 const demandApi = {};
 const webHookHost = process.env.SERVER_HOST || 'https://716ee2e6.ngrok.io';
@@ -35,22 +29,31 @@ const createOffer = async (rideData) => {
     number_of_passengers: rideData.numberOfPassengers,
   });
 
-  const { data: offer } = await api.post('/api/v1/offers', {
+  const { data: offer } = await sdk.Rides.createOffer({
     ...offerClone,
     businessModelId: 'afe63608-e559-4ed0-a716-a34feca2d1b0',
     demandSourceId: 'aeeff4c0-529d-4325-9283-f6d9ce4db1ab',
   });
-  console.log('Offer', offer);
 
   return offer;
 };
 
 const createRide = async (rideData, userId) => {
+  console.log(rideData);
+  const [pickup, dropoff] = rideData.stopPoints;
+
   const ride = await Ride.create({
     ...rideData,
     numberOfPassenger: rideData.numberOfPassengers,
     userId,
+    pickupLat: pickup.lat,
+    pickupLng: pickup.lng,
+    pickupAddress: pickup.address,
+    dropoffLat: dropoff.lat,
+    dropoffLng: dropoff.lng,
+    dropoffAddress: dropoff.address,
   });
+  console.log(ride);
   const {
     avatar, firstName, lastName, phoneNumber,
   } = await User.findById(userId, { attributes: ['avatar', 'firstName', 'lastName', 'phoneNumber'] });
@@ -82,18 +85,13 @@ const createRide = async (rideData, userId) => {
     if (rideData.scheduledTo) {
       stopPoints[0].afterTime = rideData.scheduledTo;
     }
-    console.log(JSON.stringify({
-      externalId: ride.id,
-      offerId: rideData.offerId,
-      webhookUrl: `${webHookHost}/api/v1/ride-webhook/${ride.id}`.replace(/([^:]\/)\/+/g, '$1'),
-      pooling: rideData.rideType === 'pool' ? 'active' : 'no',
-      numberOfPassengers: ride.numberOfPassengers,
-      stopPoints,
-    }));
 
-    const { data: afRide } = await api.post('/api/v1/rides', {
+    const { data: afRide } = await afSdk.Rides.create({
+      rideType: 'passenger',
       externalId: ride.id,
       offerId: rideData.offerId,
+      businessModelId: 'afe63608-e559-4ed0-a716-a34feca2d1b0',
+      demandSourceId: 'aeeff4c0-529d-4325-9283-f6d9ce4db1ab',
       webhookUrl: `${webHookHost}/api/v1/ride-webhook/${ride.id}`.replace(/([^:]\/)\/+/g, '$1'),
       pooling: rideData.rideType === 'pool' ? 'active' : 'no',
       numberOfPassengers: ride.numberOfPassengers,
@@ -108,6 +106,7 @@ const createRide = async (rideData, userId) => {
       ride.state = 'active';
     }
   } catch (e) {
+    console.log(e.response.data);
     logger.error(e.stack || e);
     ride.state = 'rejected';
   }
@@ -144,7 +143,7 @@ const rideService = {
 
     if (ride) {
       const afRide = await rideService.getRideFromAf(ride.id);
-      await demandApi.put(`/api/v1/rides/${afRide.id}/cancel`, {
+      await sdk.Rides.cancel(afRide.id, {
         cancellation_reason: 'user/cancellation',
       });
       ride.state = 'canceled';
@@ -155,7 +154,10 @@ const rideService = {
     return null;
   },
   getRideFromAf: async (rideId) => {
-    const { data: afRides } = await api.get('/api/v1/rides', { params: { externalId: rideId, demandSourceId: '542e6040-3dc4-44f4-8ea0-efee1c35088b' } });
+    const { data: afRides } = await sdk.Rides.list({
+      externalId: rideId,
+      demandSourceId: 'aeeff4c0-529d-4325-9283-f6d9ce4db1ab',
+    });
 
     return afRides[0];
   },
@@ -235,7 +237,7 @@ const rideService = {
 
     if (ride) {
       const afRide = await rideService.getRideFromAf(ride.id);
-      const resp = await demandApi.put(`/api/v1/rides/${afRide.id}/cancel`, {
+      await sdk.Rides.cancel(afRide.id, {
         cancellation_reason: 'user/cancellation',
       });
 
