@@ -6,7 +6,7 @@ import xIcon from '../../../../../assets/x.png';
 import stationIcon from '../../../../../assets/marker-tip.png';
 
 export const AddressInputs = styled.View`
-    height:  300px;
+    height:  500px;
     width: 100%;
     padding: 20px 20px 10px 20px;
 `;
