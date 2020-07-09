@@ -688,7 +688,7 @@
 				DEVELOPMENT_TEAM = 7K92DGCAEB;
 				INFOPLIST_FILE = Locomotion/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				MARKETING_VERSION = 2.0.10;
+				MARKETING_VERSION = 2.1.0;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -717,7 +717,7 @@
 				DEVELOPMENT_TEAM = 7K92DGCAEB;
 				INFOPLIST_FILE = Locomotion/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				MARKETING_VERSION = 2.0.10;
+				MARKETING_VERSION = 2.1.0;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
