@@ -44,7 +44,7 @@ router.put('/:rideId', async (req, res) => {
     const diff = etaTime.diff(moment(), 'minutes');
     console.log(`Eta Diff: ${diff} Reminder: ${arriveReminderMin}`);
 
-    if (stopPoints[0].completed_at === null && diff <= arriveReminderMin) {
+    if (stopPoints[0].completedAt === null && diff <= arriveReminderMin) {
       console.log('Sending Push');
 
       try {
@@ -104,13 +104,13 @@ router.put('/:rideId', async (req, res) => {
     ride.state = 'completed';
     await ride.save();
   } else if (req.body.ride.state === 'cancelled') {
-    if (req.body.ride.cancelledBy !== 'demand-gateway') {
+    if (req.body.ride.cancelledBy !== 'locomotion') {
       cancelPush(ride.userId);
     }
 
     ride.state = 'canceled';
     await ride.save();
-    if (req.body.ride.cancellationReason && !req.body.ride.cancellationReason.includes('user') && req.body.ride.scheduled_to === null) {
+    if (req.body.ride.cancellationReason && !req.body.ride.cancellationReason.includes('user') && req.body.ride.scheduledTo === null) {
       const currentRide = ride.get();
       await rideService.create({
         userId: currentRide.userId,

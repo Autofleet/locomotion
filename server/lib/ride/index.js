@@ -3,7 +3,6 @@ const axios = require('axios');
 const logger = require('../../logger');
 const { Ride, User } = require('../../models');
 const afSdk = require('../../sdk');
-const serializeOffer = require('./serializers/serializeOffer');
 const sdk = require('../../sdk');
 
 const demandApi = {};
@@ -11,35 +10,42 @@ const webHookHost = process.env.SERVER_HOST || 'https://716ee2e6.ngrok.io';
 
 
 const createOffer = async (rideData) => {
-  const offerClone = serializeOffer.deserializeOffer({
-    type: 'offer',
+  const offerClone = {
+    rideType: 'passenger',
     pooling: process.env.pooling || rideData.rideType === 'pool' ? 'active' : 'no',
-    offer_stop_points: [
+    stopPoints: [
       {
         type: 'pickup',
         lat: parseFloat(rideData.pickupLat),
         lng: parseFloat(rideData.pickupLng),
+        webhookUrl: null,
       },
       {
         type: 'dropoff',
         lat: parseFloat(rideData.dropoffLat),
         lng: parseFloat(rideData.dropoffLng),
+        webhookUrl: null,
       },
     ],
-    number_of_passengers: rideData.numberOfPassengers,
-  });
+    numberOfPassengers: rideData.numberOfPassengers,
+  };
 
-  const { data: offer } = await sdk.Rides.createOffer({
+  const { data: offerResponse } = await sdk.Rides.createOffer({
     ...offerClone,
-    businessModelId: 'afe63608-e559-4ed0-a716-a34feca2d1b0',
-    demandSourceId: 'aeeff4c0-529d-4325-9283-f6d9ce4db1ab',
+    businessModelId: process.env.BUSINESS_MODEL_ID,
+    demandSourceId: process.env.DEMAND_SOURCE_ID,
   });
 
-  return offer;
+  const { offer } = offerResponse;
+  return {
+    ...offerResponse,
+    status: offerResponse.state === 'offer-rejected' ? 'rejected' : offerResponse.state,
+    pickupTime: offer && offer.eta,
+    dropoffTime: offer && offer.eta,
+  };
 };
 
 const createRide = async (rideData, userId) => {
-  console.log(rideData);
   const [pickup, dropoff] = rideData.stopPoints;
 
   const ride = await Ride.create({
@@ -53,7 +59,7 @@ const createRide = async (rideData, userId) => {
     dropoffLng: dropoff.lng,
     dropoffAddress: dropoff.address,
   });
-  console.log(ride);
+
   const {
     avatar, firstName, lastName, phoneNumber,
   } = await User.findById(userId, { attributes: ['avatar', 'firstName', 'lastName', 'phoneNumber'] });
@@ -90,17 +96,17 @@ const createRide = async (rideData, userId) => {
       rideType: 'passenger',
       externalId: ride.id,
       offerId: rideData.offerId,
-      businessModelId: 'afe63608-e559-4ed0-a716-a34feca2d1b0',
-      demandSourceId: 'aeeff4c0-529d-4325-9283-f6d9ce4db1ab',
+      businessModelId: process.env.BUSINESS_MODEL_ID,
+      demandSourceId: process.env.DEMAND_SOURCE_ID,
       webhookUrl: `${webHookHost}/api/v1/ride-webhook/${ride.id}`.replace(/([^:]\/)\/+/g, '$1'),
       pooling: rideData.rideType === 'pool' ? 'active' : 'no',
       numberOfPassengers: ride.numberOfPassengers,
       stopPoints,
     });
 
-    if (afRide.status === 'rejected') {
+    if (afRide.state === 'rejected') {
       ride.state = 'rejected';
-    } else if (afRide.status === 'pending') {
+    } else if (afRide.state === 'pending') {
       ride.state = 'pending';
     } else {
       ride.state = 'active';
@@ -144,7 +150,8 @@ const rideService = {
     if (ride) {
       const afRide = await rideService.getRideFromAf(ride.id);
       await sdk.Rides.cancel(afRide.id, {
-        cancellation_reason: 'user/cancellation',
+        cancellationReason: 'user/cancellation',
+        cancelledBy: 'locomotion',
       });
       ride.state = 'canceled';
       await ride.save();
@@ -156,7 +163,7 @@ const rideService = {
   getRideFromAf: async (rideId) => {
     const { data: afRides } = await sdk.Rides.list({
       externalId: rideId,
-      demandSourceId: 'aeeff4c0-529d-4325-9283-f6d9ce4db1ab',
+      demandSourceId: process.env.DEMAND_SOURCE_ID,
     });
 
     return afRides[0];
@@ -195,10 +202,12 @@ const rideService = {
 
     if (ride) {
       const afRide = await rideService.getRideFromAf(ride.id);
-      const updatedRide = await demandApi.post(`/api/v1/rides/${afRide.id}/rating`, {
+      const updatedRide = await sdk.Rides.rating(afRide.id, {
+        demandSourceId: process.env.DEMAND_SOURCE_ID,
         rating,
       });
-      return updatedRide;
+
+      return ride;
     }
 
     return null;
@@ -218,7 +227,7 @@ const rideService = {
         return afRide;
       }));
 
-      const filteredRides = afRides.filter(ride => ride.state === 'pending');
+      const filteredRides = afRides.filter(ride => ride && ride.state === 'pending');
 
       return filteredRides;
     }
@@ -238,7 +247,8 @@ const rideService = {
     if (ride) {
       const afRide = await rideService.getRideFromAf(ride.id);
       await sdk.Rides.cancel(afRide.id, {
-        cancellation_reason: 'user/cancellation',
+        cancellationReason: 'user/cancellation',
+        cancelledBy: 'locomotion',
       });
 
       ride.state = 'canceled';

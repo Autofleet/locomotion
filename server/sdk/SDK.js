@@ -28,7 +28,11 @@ class RideApi extends BaseApi {
   }
 
   cancel(id, options) {
-    return this.network.post(`/api/v1/rides/${id}/cancel`, options);
+    return this.network.put(`/api/v1/rides/${id}/cancel`, options);
+  }
+
+  rating(id, options) {
+    return this.network.put(`/api/v1/rides/${id}`, options);
   }
 }
 

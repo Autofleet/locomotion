@@ -60,7 +60,7 @@ export default ({
 
         return (
           <Container>
-            <DateTitle>{moment(ride.scheduled_to).format('DD.MM.YYYY HH:mm')}</DateTitle>
+            <DateTitle>{moment(ride.scheduledTo).format('DD.MM.YYYY HH:mm')}</DateTitle>
             <DetailsRowContainer>
               <SpsContainer>
                 <StopPointRow
@@ -76,7 +76,7 @@ export default ({
                   hollow
                   height="30px"
                   width="70px"
-                  onPress={() => onCancel(ride.external_id)}
+                  onPress={() => onCancel(ride.externalId)}
                 >
                   {i18n.t('home.futureRides.cancelButton')}
                 </RoundedButton>
