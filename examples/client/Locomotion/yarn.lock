@@ -2,10 +2,10 @@
 # yarn lockfile v1
 
 
-"@autofleet/locomotion-sdk@^1.4.9":
-  version "1.4.9"
-  resolved "https://registry.yarnpkg.com/@autofleet/locomotion-sdk/-/locomotion-sdk-1.4.9.tgz#d13a745f7c14032c9e15db1df7a0bd35d543a0ec"
-  integrity sha512-ecujGOjvBWIdl6hTXO4pD5Izrl/Ab2AIz56Sle9LieQKg17z8jr+yLKDFKVNLhsps8AX/Qhdw6U5biSa0AeN0Q==
+"@autofleet/locomotion-sdk@^1.5.0":
+  version "1.5.0"
+  resolved "https://registry.yarnpkg.com/@autofleet/locomotion-sdk/-/locomotion-sdk-1.5.0.tgz#51d371c3556e3d953ca2ea2f88a275c9d095341c"
+  integrity sha512-tZoj0zcQuGKBDfQJWqCMmkx1pZTObC8MZt9+CtE9meEffsWnVqf4sL6lHh5/PPZVoIKYPEc4Nrf/h0kutc+1QA==
   dependencies:
     i18next "^19.3.2"
     react-i18next "^11.3.3"
@@ -11043,6 +11043,11 @@ react-native-safe-modules@^1.0.0:
   integrity sha512-tOxHGQUN83MTmQB4ghoQkibqOdGiX4JQEmeyEv96MKWO/x8T2PJv84ECUos9hD3blPRQwVwSpAid1PPPhrVEaw==
   dependencies:
     debounce "^1.2.0"
+
+react-native-screens@^2.9.0:
+  version "2.9.0"
+  resolved "https://registry.yarnpkg.com/react-native-screens/-/react-native-screens-2.9.0.tgz#ead2843107ba00fee259aa377582e457c74f1f3b"
+  integrity sha512-5MaiUD6HA3nzY3JbVI8l3V7pKedtxQF3d8qktTVI0WmWXTI4QzqOU8r8fPVvfKo3MhOXwhWBjr+kQ7DZaIQQeg==
 
 react-native-swipe-gestures@^1.0.3:
   version "1.0.4"
