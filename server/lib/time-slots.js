@@ -9,7 +9,6 @@ const TimeSlotsService = {
         ['startTime', 'ASC'],
       ],
     });
-    console.log(timeSlotsData);
 
     return timeSlotsData;
   },

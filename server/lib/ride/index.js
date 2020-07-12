@@ -1,11 +1,9 @@
 require('dotenv');
-const axios = require('axios');
 const logger = require('../../logger');
 const { Ride, User } = require('../../models');
 const afSdk = require('../../sdk');
 const sdk = require('../../sdk');
 
-const demandApi = {};
 const webHookHost = process.env.SERVER_HOST || 'https://716ee2e6.ngrok.io';
 
 
@@ -36,12 +34,11 @@ const createOffer = async (rideData) => {
     demandSourceId: process.env.DEMAND_SOURCE_ID,
   });
 
-  const { offer } = offerResponse;
   return {
     ...offerResponse,
     status: offerResponse.state === 'offer-rejected' ? 'rejected' : offerResponse.state,
-    pickupTime: offer && offer.eta,
-    dropoffTime: offer && offer.eta,
+    pickupTime: offerResponse.stopPoints[0].etaAtMatching,
+    dropoffTime: offerResponse.stopPoints[1].etaAtMatching,
   };
 };
 
