@@ -310,18 +310,34 @@ export default ({ navigation, menuSide, mapSettings }) => {
   };
 
   const getStations = async () => {
-    try {
-      const { coords } = await getPosition();
-      const { data } = await network.get('api/v1/me/places', {
-        params: {
-          location: { lat: coords.latitude, lng: coords.longitude },
-          stations: true,
-        },
-      });
-      setStations(data);
-    } catch (error) {
-      console.warn('Error while try to get current place', error.stack || error);
+    let lat = mapRegion.latitude || parseFloat(Config.DEFAULT_LATITUDE)
+    let lng = mapRegion.longitude || parseFloat(Config.DEFAULT_LONGITUDE);
+
+    if(Platform.OS !== 'ios') {
+      const locationPermissionCoarse = await PermissionsAndroid.check('android.permission.ACCESS_COARSE_LOCATION')
+      const locationPermissionFine = await PermissionsAndroid.check('android.permission.ACCESS_FINE_LOCATION')
+
+      if(locationPermissionCoarse || locationPermissionFine) {
+        try {
+          const { coords } = await getPosition();
+          if(coords.latitude && coords.longitude) {
+            lat = coords.latitude
+            lng = coords.longitude
+          }
+        } catch (e) {
+          console.log('Error get position', e);
+        }
+      }
     }
+
+    const { data } = await network.get('api/v1/me/places', {
+      params: {
+        location: { lat, lng },
+        stations: true,
+      },
+    });
+
+    setStations(data);
   };
 
   useEffect(() => {
@@ -365,7 +381,16 @@ export default ({ navigation, menuSide, mapSettings }) => {
         ...geoData.coords,
       }));
     } catch (e) {
-      console.log(e);
+      console.log('Init location error', e);
+
+      if(Config.DEFAULT_LATITUDE && Config.DEFAULT_LONGITUDE) {
+        setMapRegion(oldMapRegion => ({
+          ...oldMapRegion,
+          latitude: parseFloat(Config.DEFAULT_LATITUDE),
+          longitude: parseFloat(Config.DEFAULT_LONGITUDE)
+        }));
+      }
+
     }
   };
 

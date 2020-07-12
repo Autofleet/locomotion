@@ -10,13 +10,16 @@ const settingsService = require('../../../lib/settings');
 const router = Router();
 
 const cancelPush = async (userId, rideId, messageType = 'futureRideCanceled') => {
+  console.log(`Push notification user: ${userId} ride: ${rideId} type: ${messageType}`);
+
   const user = await User.findOne({
     where: {
       id: userId,
     },
   });
 
-  const notificationSent = await Notification.findOne({ where: { userId, type: messageType } });
+  const notificationSent = await Notification.findOne({ where: { userId, rideId, type: messageType } });
+
   if (notificationSent) {
     return false;
   }
@@ -43,6 +46,7 @@ router.put('/:rideId', async (req, res) => {
   }
 
   const stopPoints = req.body.ride.stopPoints;
+  console.log(req.body.ride.stopPoints[0]);
 
   const isReminderShouldBeSent = async () => {
     const { value: arriveReminderMin } = await settingsService.getSettingByKeyFromDb('ARRIVE_REMINDER_MIN');
@@ -51,14 +55,13 @@ router.put('/:rideId', async (req, res) => {
       return false;
     }
     const diff = etaTime.diff(moment(), 'minutes');
-
     return diff <= arriveReminderMin;
   };
 
   if (stopPoints && !ride.arrivingPush && req.body.ride.state === 'active') {
     const shouldRemind = await isReminderShouldBeSent();
 
-    if (stopPoints[0].completed_at === null && shouldRemind) {
+    if (stopPoints[0].completedAt === null && shouldRemind) {
       try {
         const updateRidePush = await Ride.update({ arrivingPush: moment().format() }, {
           where: {
@@ -105,8 +108,8 @@ router.put('/:rideId', async (req, res) => {
       await sendNotification(
         [user.pushUserId],
         'activatingFutureRide',
-        { en: i18n.t('pushNotifications.activatingFutureRide', { stopPoint: stopPoints[0].description }) },
-        { en: i18n.t('pushNotifications.activatingFutureRideHeading') },
+        { en: i18n.t('pushNotifications.activatingFutureRide.text', { stopPoint: stopPoints[0].description }) },
+        { en: i18n.t('pushNotifications.activatingFutureRide.heading') },
         { ttl: 60 * 30, data: { type: 'activatingFutureRide' } },
       );
     }
@@ -122,40 +125,53 @@ router.put('/:rideId', async (req, res) => {
     ride.state = 'canceled';
     await ride.save();
   } else if (req.body.ride.state === 'cancelled') {
+    console.log(`Cancel reason ${req.body.ride.id} ${req.body.ride.cancellationReason}`);
+
     ride.state = 'canceled';
     await ride.save();
     const currentRide = ride.get();
-    if (req.body.ride.cancelledBy !== 'locomotion' && !currentRide.scheduledTo) {
+    if (!req.body.ride.cancellationReason.includes('user') && !currentRide.scheduledTo) {
       if (isReminderShouldBeSent()) {
         cancelPush(ride.userId, ride.id, 'findingNewDriver');
       }
+
+      const [pickup, dropoff] = req.body.ride.stopPoints;
       await rideService.create({
         userId: currentRide.userId,
-        pickupAddress: currentRide.pickupAddress,
-        pickupLat: currentRide.pickupLat,
-        pickupLng: currentRide.pickupLng,
-        dropoffAddress: currentRide.dropoffAddress,
-        dropoffLat: currentRide.dropoffLat,
-        dropoffLng: currentRide.dropoffLng,
-        numberOfPassenger: currentRide.numberOfPassenger,
-        completedAt: null,
-        canceledAt: null,
-        arrivingPush: null,
-        scheduledTo: currentRide.scheduledTo,
         state: 'creating',
+        numberOfPassengers: req.body.ride.numberOfPassengers,
+        rideType: req.body.ride.rideType,
+        scheduledTo: req.body.ride.scheduledTo,
+        stopPoints: [
+          {
+            type: 'pickup',
+            address: pickup.description,
+            lat: pickup.lat,
+            lng: pickup.lng,
+          },
+          {
+            type: 'dropoff',
+            address: dropoff.description,
+            lat: dropoff.lat,
+            lng: dropoff.lng,
+          },
+        ],
       }, ride.userId);
     }
 
-    if (currentRide.scheduledTo) {
+    if (!req.body.ride.cancellationReason.includes('user') && currentRide.scheduledTo) {
       cancelPush(ride.userId, ride.id, 'futureRideFleetCancel');
     }
+    console.log(req.body.cancellationReason);
+
+    if (req.body.cancellationReason.includes('no-show')) {
+      cancelPush(ride.userId, ride.id, 'failureRide');
+    }
   } else if (req.body.ride.state === 'rejected') {
-    if (ride.state === 'rejected') {
-      if (req.body.ride.scheduledTo) {
-        cancelPush(ride.userId, ride.id, 'futureRideCanceled');
-      } else {
-        cancelPush(ride.userId, ride.id, 'rideReject');
-      }
+    if (req.body.ride.scheduledTo) {
+      cancelPush(ride.userId, ride.id, 'futureRideCanceled');
+    } else {
+      cancelPush(ride.userId, ride.id, 'rideReject');
     }
 
     ride.state = 'rejected';
