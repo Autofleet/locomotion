@@ -227,7 +227,7 @@ const rideService = {
         return afRide;
       }));
 
-      const filteredRides = afRides.filter(r => !!r).filter(ride => ride.status === 'pending');
+      const filteredRides = afRides.filter(ride => ride && ride.state === 'pending');
 
       return filteredRides;
     }
