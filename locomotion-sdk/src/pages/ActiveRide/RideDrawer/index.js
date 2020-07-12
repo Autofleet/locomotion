@@ -155,7 +155,7 @@ const RideDrawer = ({
                 ? (
                   <Fragment>
                     <RideCard activeRide={activeRide} rideState={rideState} />
-                    {rideState !== 'onBoard'
+                    {rideState !== 'onBoard' && rideState !== 'driverArrived'
                       ? (
                         <DrawerButtonContainer>
                           <RoundedButton
