@@ -11,7 +11,6 @@ const router = Router();
 
 const cancelPush = async (userId, rideId, messageType = 'futureRideCanceled') => {
   console.log(`Push notification user: ${userId} ride: ${rideId} type: ${messageType}`);
-
   const user = await User.findOne({
     where: {
       id: userId,
@@ -46,8 +45,6 @@ router.put('/:rideId', async (req, res) => {
   }
 
   const stopPoints = req.body.ride.stopPoints;
-  console.log(req.body.ride.stopPoints[0]);
-
   const isReminderShouldBeSent = async () => {
     const { value: arriveReminderMin } = await settingsService.getSettingByKeyFromDb('ARRIVE_REMINDER_MIN');
     const etaTime = moment(stopPoints[0].eta);
@@ -58,7 +55,7 @@ router.put('/:rideId', async (req, res) => {
     return diff <= arriveReminderMin;
   };
 
-  if (stopPoints && !ride.arrivingPush && req.body.ride.state === 'active') {
+  if (stopPoints && !ride.arrivingPush && (req.body.ride.state === 'active' || req.body.ride.state === 'dispatched')) {
     const shouldRemind = await isReminderShouldBeSent();
 
     if (stopPoints[0].completedAt === null && shouldRemind) {
@@ -125,15 +122,11 @@ router.put('/:rideId', async (req, res) => {
     ride.state = 'canceled';
     await ride.save();
   } else if (req.body.ride.state === 'cancelled') {
-    console.log(`Cancel reason ${req.body.ride.id} ${req.body.ride.cancellationReason}`);
-
     ride.state = 'canceled';
     await ride.save();
     const currentRide = ride.get();
     if (!req.body.ride.cancellationReason.includes('user') && !currentRide.scheduledTo) {
-      if (isReminderShouldBeSent()) {
-        cancelPush(ride.userId, ride.id, 'findingNewDriver');
-      }
+      cancelPush(ride.userId, ride.id, 'findingNewDriver');
 
       const [pickup, dropoff] = req.body.ride.stopPoints;
       await rideService.create({
@@ -162,9 +155,8 @@ router.put('/:rideId', async (req, res) => {
     if (!req.body.ride.cancellationReason.includes('user') && currentRide.scheduledTo) {
       cancelPush(ride.userId, ride.id, 'futureRideFleetCancel');
     }
-    console.log(req.body.cancellationReason);
 
-    if (req.body.cancellationReason.includes('no-show')) {
+    if (req.body.ride.cancellationReason.includes('no-show')) {
       cancelPush(ride.userId, ride.id, 'failureRide');
     }
   } else if (req.body.ride.state === 'rejected') {

@@ -22,8 +22,10 @@
       "heading":"Sorry, we cannot service your ride",
       "text":"We're finding a different driver for you now - we'll update momentarily."
     },
-    "activatingFutureRide": "Get ready to meet your driver at \"{{stopPoint}}\"",
-    "activatingFutureRideHeading": "Your Ride Has Been Activated"
+    "activatingFutureRide": {
+      "heading": "Your Ride Has Been Activated",
+      "text": "Get ready to meet your driver at \"{{stopPoint}}\""
+    }
 
   }
 
