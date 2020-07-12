@@ -47,6 +47,9 @@ router.put('/:rideId', async (req, res) => {
   const isReminderShouldBeSent = async () => {
     const { value: arriveReminderMin } = await settingsService.getSettingByKeyFromDb('ARRIVE_REMINDER_MIN');
     const etaTime = moment(stopPoints[0].eta);
+    if (!etaTime) {
+      return false;
+    }
     const diff = etaTime.diff(moment(), 'minutes');
 
     return diff <= arriveReminderMin;
@@ -122,7 +125,7 @@ router.put('/:rideId', async (req, res) => {
     ride.state = 'canceled';
     await ride.save();
     const currentRide = ride.get();
-    if (req.body.ride.cancelledBy !== 'demand-gateway' && !currentRide.scheduledTo) {
+    if (req.body.ride.cancelledBy !== 'locomotion' && !currentRide.scheduledTo) {
       if (isReminderShouldBeSent()) {
         cancelPush(ride.userId, ride.id, 'findingNewDriver');
       }
