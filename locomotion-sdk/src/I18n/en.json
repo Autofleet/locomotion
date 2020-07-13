@@ -64,6 +64,8 @@
             "driverTitle": "Driver:"
         },
         "offerCard": {
+            "pickup": "Boarding",
+            "dropoff": "Exit",
             "etaNotice": {
                 "medium": "High Demand! Waiting Time > {{etaThreshold}} min",
                 "high": "Very High Demand! Waiting Time > {{etaThreshold}} min"
