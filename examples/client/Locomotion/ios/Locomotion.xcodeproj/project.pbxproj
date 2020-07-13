@@ -73,6 +73,7 @@
 		ECCB37F723F15BAB0058BD6B /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		ED2971642150620600B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = Platforms/AppleTVOS.platform/Developer/SDKs/AppleTVOS12.0.sdk/System/Library/Frameworks/JavaScriptCore.framework; sourceTree = DEVELOPER_DIR; };
+		F9D2DB4E24B46D3D00ADD75A /* libReact-RCTImage.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = "libReact-RCTImage.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -162,6 +163,7 @@
 		2D16E6871FA4F8E400B85C8A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				F9D2DB4E24B46D3D00ADD75A /* libReact-RCTImage.a */,
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
 				ED2971642150620600B7C4FE /* JavaScriptCore.framework */,
 				607A52E2657A3BE7E7D9C1FE /* libPods-Locomotion.a */,
@@ -686,7 +688,7 @@
 				DEVELOPMENT_TEAM = 7K92DGCAEB;
 				INFOPLIST_FILE = Locomotion/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				MARKETING_VERSION = 2.0.10;
+				MARKETING_VERSION = 2.1.0;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -715,7 +717,7 @@
 				DEVELOPMENT_TEAM = 7K92DGCAEB;
 				INFOPLIST_FILE = Locomotion/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				MARKETING_VERSION = 2.0.10;
+				MARKETING_VERSION = 2.1.0;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",

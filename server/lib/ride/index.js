@@ -1,90 +1,115 @@
 require('dotenv');
-const axios = require('axios');
 const logger = require('../../logger');
 const { Ride, User } = require('../../models');
-const { Op } = require('sequelize');
-
-const demandApi = axios.create({
-  baseURL: process.env.AF_BACKEND_URL || 'https://demand.autofleet.io/',
-  headers: { Authorization: process.env.AF_API_TOKEN },
-});
+const afSdk = require('../../sdk');
+const sdk = require('../../sdk');
 
 const webHookHost = process.env.SERVER_HOST || 'https://716ee2e6.ngrok.io';
 
+
 const createOffer = async (rideData) => {
-  const { data: offer } = await demandApi.post('/api/v1/offers', {
-    type: 'offer',
+  const offerClone = {
+    rideType: 'passenger',
     pooling: process.env.pooling || rideData.rideType === 'pool' ? 'active' : 'no',
-    offer_stop_points: [
+    stopPoints: [
       {
         type: 'pickup',
         lat: parseFloat(rideData.pickupLat),
         lng: parseFloat(rideData.pickupLng),
+        webhookUrl: null,
       },
       {
         type: 'dropoff',
         lat: parseFloat(rideData.dropoffLat),
         lng: parseFloat(rideData.dropoffLng),
+        webhookUrl: null,
       },
     ],
-    number_of_passengers: rideData.numberOfPassengers,
+    numberOfPassengers: rideData.numberOfPassengers,
+  };
+
+  const { data: offerResponse } = await sdk.Rides.createOffer({
+    ...offerClone,
+    businessModelId: process.env.BUSINESS_MODEL_ID,
+    demandSourceId: process.env.DEMAND_SOURCE_ID,
   });
-  return offer;
+
+  return {
+    ...offerResponse,
+    status: offerResponse.state === 'offer-rejected' ? 'rejected' : offerResponse.state,
+    pickupTime: offerResponse.stopPoints[0].etaAtMatching,
+    dropoffTime: offerResponse.stopPoints[1].etaAtMatching,
+  };
 };
 
 const createRide = async (rideData, userId) => {
+  const [pickup, dropoff] = rideData.stopPoints;
+
   const ride = await Ride.create({
     ...rideData,
     numberOfPassenger: rideData.numberOfPassengers,
     userId,
+    pickupLat: pickup.lat,
+    pickupLng: pickup.lng,
+    pickupAddress: pickup.address,
+    dropoffLat: dropoff.lat,
+    dropoffLng: dropoff.lng,
+    dropoffAddress: dropoff.address,
   });
+
   const {
     avatar, firstName, lastName, phoneNumber,
   } = await User.findById(userId, { attributes: ['avatar', 'firstName', 'lastName', 'phoneNumber'] });
+  const webhookUrl = `${webHookHost}/api/v1/ride-webhook/${ride.id}`.replace(/([^:]\/)\/+/g, '$1');
 
   try {
     const stopPoints = [
       {
         type: 'pickup',
-        lat: parseFloat(rideData.pickupLat),
-        lng: parseFloat(rideData.pickupLng),
         description: ride.pickupAddress,
-        contact_person: `${firstName} ${lastName}`,
-        contact_person_phone: phoneNumber,
-        contact_person_avatar: avatar,
-
+        lat: parseFloat(ride.pickupLat),
+        lng: parseFloat(ride.pickupLng),
+        contactPersonName: `${firstName} ${lastName}`,
+        contactPersonPhone: phoneNumber,
+        contactPersonAvatar: avatar,
+        webhookUrl,
       },
       {
         type: 'dropoff',
-        lat: parseFloat(rideData.dropoffLat),
-        lng: parseFloat(rideData.dropoffLng),
+        lat: parseFloat(ride.dropoffLat),
+        lng: parseFloat(ride.dropoffLng),
         description: ride.dropoffAddress,
-        contact_person: `${firstName} ${lastName}`,
-        contact_person_phone: phoneNumber,
-        contact_person_avatar: avatar,
+        contactPersonName: `${firstName} ${lastName}`,
+        contactPersonPhone: phoneNumber,
+        contactPersonAvatar: avatar,
+        webhookUrl,
       }];
 
     if (rideData.scheduledTo) {
       stopPoints[0].afterTime = rideData.scheduledTo;
     }
 
-    const { data: afRide } = await demandApi.post('/api/v1/rides', {
-      external_id: ride.id,
-      offer_id: rideData.offerId,
-      webhook_url: `${webHookHost}/api/v1/ride-webhook/${ride.id}`.replace(/([^:]\/)\/+/g, '$1'),
+    const { data: afRide } = await afSdk.Rides.create({
+      rideType: 'passenger',
+      externalId: ride.id,
+      offerId: rideData.offerId,
+      businessModelId: process.env.BUSINESS_MODEL_ID,
+      demandSourceId: process.env.DEMAND_SOURCE_ID,
+      webhookUrl: `${webHookHost}/api/v1/ride-webhook/${ride.id}`.replace(/([^:]\/)\/+/g, '$1'),
       pooling: rideData.rideType === 'pool' ? 'active' : 'no',
-      number_of_passengers: ride.numberOfPassengers,
-      stop_points: stopPoints,
+      numberOfPassengers: ride.numberOfPassengers,
+      stopPoints,
     });
 
-    if (afRide.status === 'rejected') {
+    if (afRide.state === 'rejected') {
       ride.state = 'rejected';
-    } else if (afRide.status === 'pending') {
+    } else if (afRide.state === 'pending') {
       ride.state = 'pending';
     } else {
       ride.state = 'active';
     }
   } catch (e) {
+    console.log(e.response.data);
     logger.error(e.stack || e);
     ride.state = 'rejected';
   }
@@ -121,8 +146,9 @@ const rideService = {
 
     if (ride) {
       const afRide = await rideService.getRideFromAf(ride.id);
-      await demandApi.put(`/api/v1/rides/${afRide.id}/cancel`, {
-        cancellation_reason: 'user/cancellation',
+      await sdk.Rides.cancel(afRide.id, {
+        cancellationReason: 'user/cancellation',
+        cancelledBy: 'locomotion',
       });
       ride.state = 'canceled';
       await ride.save();
@@ -132,7 +158,11 @@ const rideService = {
     return null;
   },
   getRideFromAf: async (rideId) => {
-    const { data: afRides } = await demandApi.get('/api/v1/rides', { params: { externalId: rideId } });
+    const { data: afRides } = await sdk.Rides.list({
+      externalId: rideId,
+      demandSourceId: process.env.DEMAND_SOURCE_ID,
+    });
+
     return afRides[0];
   },
 
@@ -169,10 +199,12 @@ const rideService = {
 
     if (ride) {
       const afRide = await rideService.getRideFromAf(ride.id);
-      const updatedRide = await demandApi.post(`/api/v1/rides/${afRide.id}/rating`, {
+      const updatedRide = await sdk.Rides.rating(afRide.id, {
+        demandSourceId: process.env.DEMAND_SOURCE_ID,
         rating,
       });
-      return updatedRide;
+
+      return ride;
     }
 
     return null;
@@ -192,7 +224,7 @@ const rideService = {
         return afRide;
       }));
 
-      const filteredRides = afRides.filter(ride => ride.status === 'pending');
+      const filteredRides = afRides.filter(ride => ride && ride.state === 'pending');
 
       return filteredRides;
     }
@@ -211,8 +243,9 @@ const rideService = {
 
     if (ride) {
       const afRide = await rideService.getRideFromAf(ride.id);
-      const resp = await demandApi.put(`/api/v1/rides/${afRide.id}/cancel`, {
-        cancellation_reason: 'user/cancellation',
+      await sdk.Rides.cancel(afRide.id, {
+        cancellationReason: 'user/cancellation',
+        cancelledBy: 'locomotion',
       });
 
       ride.state = 'canceled';

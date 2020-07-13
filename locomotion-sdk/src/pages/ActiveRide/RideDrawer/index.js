@@ -39,10 +39,10 @@ const getRideState = (activeRide) => { // false, driverOnTheWay, driverArrived, 
   if (!activeRide) {
     return false;
   }
-  if (activeRide.stop_points[0].completed_at) {
+  if (activeRide.stopPoints[0].completedAt) {
     return 'onBoard';
   }
-  if (activeRide.stop_points[0].arrived_at) {
+  if (activeRide.stopPoints[0].arrivedAt) {
     return 'driverArrived';
   }
   return 'driverOnTheWay';
@@ -55,7 +55,7 @@ const RideDrawer = ({
   cancelOffer, offerExpired, onLocationSelect, closeAddressViewer, onRideSchedule,
   futureRides, cancelFutureRide,createFutureOffer
 }) => {
-  const [origin, destination] = activeRide ? activeRide.stop_points || [] : [];
+  const [origin, destination] = activeRide ? activeRide.stopPoints || [] : [];
   const [isPopupOpen, togglePopup] = getTogglePopupsState();
   const [appSettings, setAppSettings] = useState({});
   const [pickupEta, setPickupEta] = useState(null);
@@ -155,7 +155,7 @@ const RideDrawer = ({
                 ? (
                   <Fragment>
                     <RideCard activeRide={activeRide} rideState={rideState} />
-                    {rideState !== 'onBoard'
+                    {rideState !== 'onBoard' && rideState !== 'driverArrived'
                       ? (
                         <DrawerButtonContainer>
                           <RoundedButton

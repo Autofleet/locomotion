@@ -26,7 +26,6 @@ export const StopPointsEtaContainer = styled.View`
 export default ({
   pickup, origin, destination, rideState,requestStopPoints, pickupEtaDrift, dropoffEtaDrift,
 }) => {
-
   return (
     <StopPointsEtaContainer>
       <StopPointEtaRow
@@ -34,7 +33,7 @@ export default ({
           description={rideState ? origin && origin.description
           : requestStopPoints && requestStopPoints.pickup && requestStopPoints.pickup.description}
           eta={rideState ? origin && origin.eta : undefined}
-          completedAt={rideState ? origin && origin.completed_at
+          completedAt={rideState ? origin && origin.completedAt
           : undefined}
           etaDrift={pickupEtaDrift}
       />
@@ -42,7 +41,7 @@ export default ({
           description={rideState ? destination && destination.description
           : requestStopPoints && requestStopPoints.dropoff && requestStopPoints.dropoff.description}
           eta={rideState ? destination && destination.eta : undefined}
-          completedAt={rideState ? destination && destination.completed_at
+          completedAt={rideState ? destination && destination.completedAt
           : undefined}
           etaDrift={dropoffEtaDrift}
       />

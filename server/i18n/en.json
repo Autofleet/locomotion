@@ -2,10 +2,30 @@
   "pushNotifications": {
     "driverArriving": "Your car reaches your pickup \"{{stopPoint}}\" in {{etaMinutes}} minutes",
     "driverArrivingHeading": "Your car arrives soon",
-    "futureRideCanceled": "We are currently unable to find a driver for your ride - please try again",
-    "futureRideCanceledHeading": "Sorry, we cannot service your ride",
-    "activatingFutureRide": "Get ready to meet your driver at \"{{stopPoint}}\"",
-    "activatingFutureRideHeading": "Your Ride Has Been Activated"
+    "futureRideCanceled": {
+      "heading": "Sorry, we cannot service your ride",
+      "text": "We are currently unable to find a driver for your ride - please try again"
+    },
+    "futureRideFleetCancel": {
+      "heading": "Sorry, we cannot service your ride",
+      "text": " We're sorry, the future booking you made cannot be served. Please make another booking for a different available time."
+    },
+    "failureRide": {
+      "heading":"Sorry, we cannot service your ride",
+      "text":"We're sorry, your order could not be served right now. Please try again soon."
+    },
+    "rideReject": {
+      "heading":"Sorry, we cannot service your ride",
+      "text":"Sorry, we couldn't find an available driver right now. Please try again soon."
+    },
+    "findingNewDriver": {
+      "heading":"Sorry, we cannot service your ride",
+      "text":"We're finding a different driver for you now - we'll update momentarily."
+    },
+    "activatingFutureRide": {
+      "heading": "Your Ride Has Been Activated",
+      "text": "Get ready to meet your driver at \"{{stopPoint}}\""
+    }
 
   }
 

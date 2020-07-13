@@ -170,7 +170,7 @@ PODS:
     - React
   - react-native-image-picker (1.1.0):
     - React
-  - react-native-image-resizer (1.1.0):
+  - react-native-image-resizer (1.2.3):
     - React
   - react-native-maps (0.26.1):
     - React
@@ -222,6 +222,8 @@ PODS:
     - RNFBApp
   - RNGestureHandler (1.5.2):
     - React
+  - RNScreens (2.9.0):
+    - React
   - SDWebImage (5.5.2):
     - SDWebImage/Core (= 5.5.2)
   - SDWebImage/Core (5.5.2)
@@ -271,6 +273,7 @@ DEPENDENCIES:
   - "RNFBApp (from `../node_modules/@react-native-firebase/app`)"
   - "RNFBCrashlytics (from `../node_modules/@react-native-firebase/crashlytics`)"
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
+  - RNScreens (from `../node_modules/react-native-screens`)
   - yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
 SPEC REPOS:
@@ -373,6 +376,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@react-native-firebase/crashlytics"
   RNGestureHandler:
     :path: "../node_modules/react-native-gesture-handler"
+  RNScreens:
+    :path: "../node_modules/react-native-screens"
   yoga:
     :path: "../node_modules/react-native/ReactCommon/yoga"
 
@@ -413,7 +418,7 @@ SPEC CHECKSUMS:
   react-native-geolocation: c956aeb136625c23e0dce0467664af2c437888c9
   react-native-google-maps: 2e2e697dab576abd5809d78cd74e775865b62bf7
   react-native-image-picker: 7a85cf7b0a53845f03ae52fb4592a2748ded069b
-  react-native-image-resizer: 1ffe71ec5f2596c3a24d42548c03bfbfb06fe810
+  react-native-image-resizer: 2f1577efa3bc762597681f530c8e8d05ce0ceeb3
   react-native-maps: 6e499eee4eabf422ba8b6f94e993cc768bf35153
   react-native-onesignal: f6e1f20292cba72076ddb97e52290b0d5cc0a51c
   react-native-webview: db4682f1698ab4b17a5e88f951031d203ff8aea8
@@ -433,6 +438,7 @@ SPEC CHECKSUMS:
   RNFBApp: 279ec5c4bb43b8fc7b8031eed90ad7d2bea7a048
   RNFBCrashlytics: 90f2954f19196d8f45baa924adb49235d4ebc9db
   RNGestureHandler: 946a7691e41df61e2c4b1884deab41a4cdc3afff
+  RNScreens: c526239bbe0e957b988dacc8d75ac94ec9cb19da
   SDWebImage: 4d5c027c935438f341ed33dbac53ff9f479922ca
   SDWebImageWebPCoder: 947093edd1349d820c40afbd9f42acb6cdecd987
   yoga: 843fe25849b56131275bf3e5da2c468e96f68aff

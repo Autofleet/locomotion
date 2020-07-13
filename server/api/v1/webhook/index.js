@@ -9,19 +9,27 @@ const settingsService = require('../../../lib/settings');
 
 const router = Router();
 
-const cancelPush = async (userId) => {
+const cancelPush = async (userId, rideId, messageType = 'futureRideCanceled') => {
+  console.log(`Push notification user: ${userId} ride: ${rideId} type: ${messageType}`);
   const user = await User.findOne({
     where: {
       id: userId,
     },
   });
 
+  const notificationSent = await Notification.findOne({ where: { userId, rideId, type: messageType } });
+
+  if (notificationSent) {
+    return false;
+  }
+
+  Notification.create({ userId, rideId, type: messageType });
   await sendNotification(
     [user.pushUserId],
     'futureRideCanceled',
-    { en: i18n.t('pushNotifications.futureRideCanceled') },
-    { en: i18n.t('pushNotifications.futureRideCanceledHeading') },
-    { ttl: 60 * 30, data: { type: 'futureRideCanceled' } },
+    { en: i18n.t(`pushNotifications.${messageType}.text`) },
+    { en: i18n.t(`pushNotifications.${messageType}.heading`) },
+    { ttl: 60 * 30, data: { type: messageType } },
   );
 };
 
@@ -37,16 +45,20 @@ router.put('/:rideId', async (req, res) => {
   }
 
   const stopPoints = req.body.ride.stopPoints;
-
-  if (stopPoints && !ride.arrivingPush && req.body.ride.state === 'active') {
+  const isReminderShouldBeSent = async () => {
     const { value: arriveReminderMin } = await settingsService.getSettingByKeyFromDb('ARRIVE_REMINDER_MIN');
     const etaTime = moment(stopPoints[0].eta);
+    if (!etaTime) {
+      return false;
+    }
     const diff = etaTime.diff(moment(), 'minutes');
-    console.log(`Eta Diff: ${diff} Reminder: ${arriveReminderMin}`);
+    return diff <= arriveReminderMin;
+  };
 
-    if (stopPoints[0].completed_at === null && diff <= arriveReminderMin) {
-      console.log('Sending Push');
+  if (stopPoints && !ride.arrivingPush && (req.body.ride.state === 'active' || req.body.ride.state === 'dispatched')) {
+    const shouldRemind = await isReminderShouldBeSent();
 
+    if (stopPoints[0].completedAt === null && shouldRemind) {
       try {
         const updateRidePush = await Ride.update({ arrivingPush: moment().format() }, {
           where: {
@@ -61,7 +73,7 @@ router.put('/:rideId', async (req, res) => {
               id: ride.userId,
             },
           });
-
+          const { value: arriveReminderMin } = await settingsService.getSettingByKeyFromDb('ARRIVE_REMINDER_MIN');
           await sendNotification(
             [user.pushUserId],
             'driverArriving',
@@ -93,8 +105,8 @@ router.put('/:rideId', async (req, res) => {
       await sendNotification(
         [user.pushUserId],
         'activatingFutureRide',
-        { en: i18n.t('pushNotifications.activatingFutureRide', { stopPoint: stopPoints[0].description }) },
-        { en: i18n.t('pushNotifications.activatingFutureRideHeading') },
+        { en: i18n.t('pushNotifications.activatingFutureRide.text', { stopPoint: stopPoints[0].description }) },
+        { en: i18n.t('pushNotifications.activatingFutureRide.heading') },
         { ttl: 60 * 30, data: { type: 'activatingFutureRide' } },
       );
     }
@@ -103,33 +115,57 @@ router.put('/:rideId', async (req, res) => {
   } else if (req.body.ride.state === 'completed') {
     ride.state = 'completed';
     await ride.save();
-  } else if (req.body.ride.state === 'cancelled') {
-    if (req.body.ride.cancelledBy !== 'demand-gateway') {
-      cancelPush(ride.userId);
+  } else if (req.body.ride.state === 'failed') {
+    if (ride.state !== 'canceled') {
+      cancelPush(ride.userId, ride.id, 'failureRide');
     }
-
     ride.state = 'canceled';
     await ride.save();
-    if (req.body.ride.cancellationReason && !req.body.ride.cancellationReason.includes('user') && req.body.ride.scheduled_to === null) {
-      const currentRide = ride.get();
+  } else if (req.body.ride.state === 'cancelled') {
+    ride.state = 'canceled';
+    await ride.save();
+    const currentRide = ride.get();
+    if (!req.body.ride.cancellationReason.includes('user') && !currentRide.scheduledTo) {
+      cancelPush(ride.userId, ride.id, 'findingNewDriver');
+
+      const [pickup, dropoff] = req.body.ride.stopPoints;
       await rideService.create({
         userId: currentRide.userId,
-        pickupAddress: currentRide.pickupAddress,
-        pickupLat: currentRide.pickupLat,
-        pickupLng: currentRide.pickupLng,
-        dropoffAddress: currentRide.dropoffAddress,
-        dropoffLat: currentRide.dropoffLat,
-        dropoffLng: currentRide.dropoffLng,
-        numberOfPassenger: currentRide.numberOfPassenger,
-        completedAt: null,
-        canceledAt: null,
-        arrivingPush: null,
-        scheduledTo: currentRide.scheduledTo,
         state: 'creating',
+        numberOfPassengers: req.body.ride.numberOfPassengers,
+        rideType: req.body.ride.rideType,
+        scheduledTo: req.body.ride.scheduledTo,
+        stopPoints: [
+          {
+            type: 'pickup',
+            address: pickup.description,
+            lat: pickup.lat,
+            lng: pickup.lng,
+          },
+          {
+            type: 'dropoff',
+            address: dropoff.description,
+            lat: dropoff.lat,
+            lng: dropoff.lng,
+          },
+        ],
       }, ride.userId);
     }
-  } else if (req.body.ride.state === 'rejected' && req.body.ride.scheduledTo !== null) {
-    cancelPush(ride.userId);
+
+    if (!req.body.ride.cancellationReason.includes('user') && currentRide.scheduledTo) {
+      cancelPush(ride.userId, ride.id, 'futureRideFleetCancel');
+    }
+
+    if (req.body.ride.cancellationReason.includes('no-show')) {
+      cancelPush(ride.userId, ride.id, 'failureRide');
+    }
+  } else if (req.body.ride.state === 'rejected') {
+    if (req.body.ride.scheduledTo) {
+      cancelPush(ride.userId, ride.id, 'futureRideCanceled');
+    } else {
+      cancelPush(ride.userId, ride.id, 'rideReject');
+    }
+
     ride.state = 'rejected';
     await ride.save();
   }

@@ -24,7 +24,7 @@ export default ({
         />
         <RideDetailsText>{I18n.t('home.rideCard.carTitle')}</RideDetailsText>
         <RideDetailsText subText>
-          {`${activeRide.vehicle.model} (${activeRide.vehicle.license_number})`}
+          {`${activeRide.vehicle.model.name} (${activeRide.vehicle.licenseNumber})`}
         </RideDetailsText>
       </View>
 
@@ -32,7 +32,7 @@ export default ({
         <DriverAvatar source={{ uri: activeRide.driver.avatar }} />
         <RideDetailsText>{I18n.t('home.rideCard.driverTitle')}</RideDetailsText>
         <RideDetailsText subText>
-          {`${activeRide.driver.first_name} ${activeRide.driver.last_name}`}
+          {`${activeRide.driver.firstName} ${activeRide.driver.lastName}`}
         </RideDetailsText>
       </View>
     </RideDetailsContainer>
