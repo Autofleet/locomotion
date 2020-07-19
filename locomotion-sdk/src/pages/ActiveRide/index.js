@@ -310,24 +310,18 @@ export default ({ navigation, menuSide, mapSettings }) => {
   };
 
   const getStations = async () => {
-    let lat = mapRegion.latitude || parseFloat(Config.DEFAULT_LATITUDE)
-    let lng = mapRegion.longitude || parseFloat(Config.DEFAULT_LONGITUDE);
+    let lat, lng;
 
-    if(Platform.OS !== 'ios') {
-      const locationPermissionCoarse = await PermissionsAndroid.check('android.permission.ACCESS_COARSE_LOCATION')
-      const locationPermissionFine = await PermissionsAndroid.check('android.permission.ACCESS_FINE_LOCATION')
+    try {
+      const { coords } = await getPosition();
+      console.log(`GOT COORDS`, coords);
 
-      if(locationPermissionCoarse || locationPermissionFine) {
-        try {
-          const { coords } = await getPosition();
-          if(coords.latitude && coords.longitude) {
-            lat = coords.latitude
-            lng = coords.longitude
-          }
-        } catch (e) {
-          console.log('Error get position', e);
-        }
+      if(coords.latitude && coords.longitude) {
+        lat = coords.latitude
+        lng = coords.longitude
       }
+    } catch (e) {
+      console.log('Error get position', e);
     }
 
     const { data } = await network.get('api/v1/me/places', {
@@ -382,15 +376,6 @@ export default ({ navigation, menuSide, mapSettings }) => {
       }));
     } catch (e) {
       console.log('Init location error', e);
-
-      if(Config.DEFAULT_LATITUDE && Config.DEFAULT_LONGITUDE) {
-        setMapRegion(oldMapRegion => ({
-          ...oldMapRegion,
-          latitude: parseFloat(Config.DEFAULT_LATITUDE),
-          longitude: parseFloat(Config.DEFAULT_LONGITUDE)
-        }));
-      }
-
     }
   };
 
@@ -481,9 +466,9 @@ export default ({ navigation, menuSide, mapSettings }) => {
           if(Platform.OS === 'ios') {
             return;
           }
-          PermissionsAndroid.request(
+          /* PermissionsAndroid.request(
             PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
-          );
+          ); */
         }}
         {...mapSettings}
       >

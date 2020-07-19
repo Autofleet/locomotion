@@ -35,10 +35,7 @@ export default props => {
       props.requestStopPoints[props.type].description
   );
   const [addressListItems, setAddressListItems] = useState(null);
-  const [coords, setCoords] = useState({
-    latitude: Config.DEFAULT_LATITUDE,
-    longitude: Config.DEFAULT_LONGITUDE
-  })
+  const [coords, setCoords] = useState({})
 
   useEffect(() => {
     initCurrentLocation()
