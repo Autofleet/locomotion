@@ -45,6 +45,7 @@ router.put('/:rideId', async (req, res) => {
   }
 
   const stopPoints = req.body.ride.stopPoints;
+  console.log(`Webhook - rideId: ${req.params.rideId} currentState: ${ride.state}  newState: ${req.body.ride.state} SpsStates: ${(stopPoints.map(s => s.state)).join()}`);
   const isReminderShouldBeSent = async () => {
     const { value: arriveReminderMin } = await settingsService.getSettingByKeyFromDb('ARRIVE_REMINDER_MIN');
     const etaTime = moment(stopPoints[0].eta);
