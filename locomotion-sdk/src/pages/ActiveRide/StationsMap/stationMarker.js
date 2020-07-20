@@ -22,7 +22,7 @@ export default ({
   const CustomMarker = CustomMarkerSelector();
   return (
     <Marker
-      coordinate={{ latitude: lat, longitude: lng }}
+      coordinate={{ latitude: parseFloat(lat), longitude: parseFloat(lng) }}
       onPress={e => selectStation(stationKey)}
       style={type ? { zIndex: 1 } : {}}
       key={stationKey}

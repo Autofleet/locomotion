@@ -94,11 +94,11 @@ export default ({ navigation, menuSide, mapSettings }) => {
     }
 
     if(activeRideState.vehicle && activeRideState.vehicle.location && displayMatchInfo) {
-      additional.push({latitude: activeRideState.vehicle.location.lat, longitude: activeRideState.vehicle.location.lng})
+      additional.push({latitude: parseFloat(activeRideState.vehicle.location.lat), longitude: parseFloat(activeRideState.vehicle.location.lng)})
     }
 
     mapInstance.current.fitToCoordinates([
-      {latitude: activeSp.lat, longitude: activeSp.lng},
+      {latitude: parseFloat(activeSp.lat), longitude: parseFloat(activeSp.lng)},
       ...additional
     ], {
       edgePadding: {
@@ -195,19 +195,7 @@ export default ({ navigation, menuSide, mapSettings }) => {
       return;
     }
     const origin = activeRideState.stopPoints[0];
-    console.log(`ACTIVE ST`);
-
-    console.log(activeRideState);
-
     calculatePickupEta(origin);
-/*     this.mapAction('fitToCoordinates', [coords, ...this.props.destinations.map(d => d.coordinate)], {
-      edgePadding: {
-        top: 80,
-        right: 40,
-        bottom: 120,
-        left: 100,
-      },
-    }); */
   }, [activeRideState]);
 
   const bookValidation = state => {
@@ -467,7 +455,9 @@ export default ({ navigation, menuSide, mapSettings }) => {
   };
 
   useEffect(() => {
-    focusCurrentLocation();
+    if(!disableAutoLocationFocus) {
+      focusCurrentLocation();
+    }
   }, [mapRegion])
 
 
@@ -489,17 +479,15 @@ export default ({ navigation, menuSide, mapSettings }) => {
             return; // Follow user location works for iOS
           }
           const { coordinate } = event.nativeEvent;
-          mapInstance.current.animateToRegion({
-            latitude: coordinate.latitude,
-            longitude: coordinate.longitude,
-            latitudeDelta: mapRegion.latitudeDelta,
-            longitudeDelta: mapRegion.longitudeDelta,
-          }, 1000);
 
           setMapRegion(oldMapRegion => ({
             ...oldMapRegion,
             ...coordinate,
           }));
+
+          if(!disableAutoLocationFocus) {
+            focusCurrentLocation();
+          }
         }}
         ref={mapInstance}
         onMapReady={() => {
