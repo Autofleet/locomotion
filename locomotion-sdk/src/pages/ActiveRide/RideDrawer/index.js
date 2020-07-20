@@ -151,7 +151,7 @@ const RideDrawer = ({
                 arrivingReminderMin={useSettings.settingsList.ARRIVE_REMINDER_MIN}
               />
 
-              {rideState && (pickupEta <= useSettings.settingsList.ARRIVE_REMINDER_MIN || rideState !== 'driverOnTheWay')
+              {rideState && (pickupEta <= useSettings.settingsList.ARRIVE_REMINDER_MIN || activeRide.arrivingPush !== false || rideState !== 'driverOnTheWay')
                 ? (
                   <Fragment>
                     <RideCard activeRide={activeRide} rideState={rideState} />

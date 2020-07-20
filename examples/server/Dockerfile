@@ -1,4 +1,4 @@
-FROM autofleet/locomotion:2.1.1
+FROM autofleet/locomotion:2.1.2
 
 WORKDIR /usr/src/app
 

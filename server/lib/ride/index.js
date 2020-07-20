@@ -131,7 +131,7 @@ const rideService = {
 
     if (ride) {
       const afRide = await rideService.getRideFromAf(ride.id);
-      return afRide;
+      return { ...afRide, arrivingPush: ride.arrivingPush };
     }
 
     return null;

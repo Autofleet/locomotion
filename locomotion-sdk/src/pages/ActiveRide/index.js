@@ -81,6 +81,34 @@ export default ({ navigation, menuSide, mapSettings }) => {
       togglePopup('futureRideCanceled', true);
     }
   }
+
+  const focusMarkers = () => {
+    if(!activeRideState) {
+      return;
+    }
+    let activeSp = activeRideState.stopPoints.find(sp => sp.state === 'pending');
+
+    const additional = []
+    if(activeRideState && activeSp.type === 'pickup' && !activeSp.completedAt && mapRegion.latitude && mapRegion.longitude) {
+      additional.push({latitude: mapRegion.latitude, longitude: mapRegion.longitude})
+    }
+
+    if(activeRideState.vehicle && activeRideState.vehicle.location && displayMatchInfo) {
+      additional.push({latitude: activeRideState.vehicle.location.lat, longitude: activeRideState.vehicle.location.lng})
+    }
+
+    mapInstance.current.fitToCoordinates([
+      {latitude: activeSp.lat, longitude: activeSp.lng},
+      ...additional
+    ], {
+      edgePadding: {
+        top: 80,
+        right: 100,
+        bottom: 250,
+        left: 100,
+      },
+    });
+  }
   const loadActiveRide = async () => {
     const { data: response } = await network.get('api/v1/me/rides/active', { params: { activeRide: true } });
 
@@ -100,11 +128,8 @@ export default ({ navigation, menuSide, mapSettings }) => {
             .map(tuple => ({ latitude: tuple[0], longitude: tuple[1] })),
         };
         setActiveSp(activeSp);
-        if (!activeRideState || activeRideState.state !== activeRide.state
-          || activeSp.id !== activeSpState.id) {
-          setTimeout(() => {
-            mapInstance.current.fitToElements(true);
-          }, 500);
+        if(activeRide && !disableAutoLocationFocus) {
+          focusMarkers();
         }
       }
 
@@ -170,7 +195,19 @@ export default ({ navigation, menuSide, mapSettings }) => {
       return;
     }
     const origin = activeRideState.stopPoints[0];
+    console.log(`ACTIVE ST`);
+
+    console.log(activeRideState);
+
     calculatePickupEta(origin);
+/*     this.mapAction('fitToCoordinates', [coords, ...this.props.destinations.map(d => d.coordinate)], {
+      edgePadding: {
+        top: 80,
+        right: 40,
+        bottom: 120,
+        left: 100,
+      },
+    }); */
   }, [activeRideState]);
 
   const bookValidation = state => {
@@ -289,16 +326,16 @@ export default ({ navigation, menuSide, mapSettings }) => {
 
 
   const calculatePickupEta = (origin) => {
-    if (origin.completeAt) {
+    if (origin.completedAt) {
       setDisplayMatchInfo(true);
     } else if (origin && origin.eta) {
       const etaDiff = moment(origin.eta).diff(moment(), 'minutes');
       setPickupEta(etaDiff);
-      setDisplayMatchInfo(etaDiff <= useSettings.settingsList.ARRIVE_REMINDER_MIN);
+      setDisplayMatchInfo((etaDiff <= useSettings.settingsList.ARRIVE_REMINDER_MIN || activeRideState.arrivingPush !== null));
     }
   };
 
-  const showsUserLocation = !activeRideState || !activeRideState.vehicle;
+  const showsUserLocation = !activeRideState || (activeRideState && !activeRideState.stopPoints[0].completedAt);
   const useSettings = settingsContext.useContainer();
 
   const setClosestStations = async (pickupStation) => {
@@ -314,8 +351,6 @@ export default ({ navigation, menuSide, mapSettings }) => {
 
     try {
       const { coords } = await getPosition();
-      console.log(`GOT COORDS`, coords);
-
       if(coords.latitude && coords.longitude) {
         lat = coords.latitude
         lng = coords.longitude
@@ -396,13 +431,18 @@ export default ({ navigation, menuSide, mapSettings }) => {
   };
 
   const focusCurrentLocation = () => {
-    if(mapRegion.longitude && mapRegion.latitude) {
+    setDisableAutoLocationFocus(false)
+    if(mapRegion.longitude && mapRegion.latitude && !activeRideState) {
       mapInstance.current.animateToRegion({
         latitude: mapRegion.latitude,
         longitude: mapRegion.longitude,
         latitudeDelta: mapRegion.latitudeDelta,
         longitudeDelta: mapRegion.longitudeDelta,
       }, 1000);
+    } else {
+      if(activeRideState && activeRideState.vehicle && activeRideState.vehicle.location) {
+        focusMarkers();
+      }
     }
   };
 
@@ -429,6 +469,7 @@ export default ({ navigation, menuSide, mapSettings }) => {
   useEffect(() => {
     focusCurrentLocation();
   }, [mapRegion])
+
 
   return (
     <PageContainer>
@@ -483,6 +524,17 @@ export default ({ navigation, menuSide, mapSettings }) => {
             />
           ) : null}
 
+        {activeSpState
+          ? (
+            <StationsMap
+            isInOffer={!!rideOffer}
+            markersMap={activeRideState && activeRideState.stopPoints ? activeRideState.stopPoints.map(m => ({description: m.description, lat:  m.lat, lng: m.lng, type: m.type, id: `active_${m.type}`})) : []}
+            selectStation={selectStationMarker}
+            requestStopPoints={requestStopPoints}
+            activeRideState={activeRideState}
+          />
+          ) : null}
+
         {activeSpState && displayMatchInfo
           ? (
             <Polyline
@@ -491,14 +543,7 @@ export default ({ navigation, menuSide, mapSettings }) => {
               coordinates={activeSpState.polyline}
             />
           ) : null}
-        {activeSpState
-          ? (
-            <Marker
-              coordinate={activeSpState.polyline[activeSpState.polyline.length - 1]}
-            >
-              <StopPointDot />
-            </Marker>
-          ) : null}
+
         {activeRideState && activeRideState.vehicle && activeRideState.vehicle.location && displayMatchInfo
           ? (
             <Marker
@@ -511,7 +556,7 @@ export default ({ navigation, menuSide, mapSettings }) => {
       <MapButtonsContainer>
         <MyLocationButton
           onPress={() => focusCurrentLocation()}
-          displayButton={showsUserLocation}
+          displayButton
         />
       </MapButtonsContainer>
       <Header navigation={navigation} menuSide={menuSide} />
