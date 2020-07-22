@@ -24,7 +24,7 @@ import StationsMap from './StationsMap';
 import MyLocationButton from './ShowMyLocationButton';
 import RideSummaryPopup from '../../popups/RideSummaryPopup';
 import FutureRideCanceledPopup from '../../popups/FutureRideCanceled';
-
+import AppSettings from '../../services/app-settings'
 
 function useInterval(callback, delay) {
   const savedCallback = useRef();
@@ -319,7 +319,7 @@ export default ({ navigation, menuSide, mapSettings }) => {
     } else if (origin && origin.eta) {
       const etaDiff = moment(origin.eta).diff(moment(), 'minutes');
       setPickupEta(etaDiff);
-      setDisplayMatchInfo((etaDiff <= useSettings.settingsList.ARRIVE_REMINDER_MIN || activeRideState.arrivingPush !== null));
+      setDisplayMatchInfo((etaDiff <= useSettings.settingsList.ARRIVE_REMINDER_MIN || (activeRideState && activeRideState.arrivingPush !== null)))
     }
   };
 

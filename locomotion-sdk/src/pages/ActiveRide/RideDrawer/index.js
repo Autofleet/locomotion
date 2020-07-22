@@ -149,10 +149,10 @@ const RideDrawer = ({
                 pickupEta={pickupEta}
                 dropoffEta={dropoffEta}
                 arrivingReminderMin={useSettings.settingsList.ARRIVE_REMINDER_MIN}
-                arrivingPush={activeRide.arrivingPush}
+                arrivingPush={activeRide ? activeRide.arrivingPush : null}
               />
 
-              {rideState && (pickupEta <= useSettings.settingsList.ARRIVE_REMINDER_MIN || activeRide.arrivingPush !== null || rideState !== 'driverOnTheWay')
+              {rideState && (pickupEta <= useSettings.settingsList.ARRIVE_REMINDER_MIN || (activeRide && activeRide.arrivingPush !== null) || rideState !== 'driverOnTheWay')
                 ? (
                   <Fragment>
                     <RideCard activeRide={activeRide} rideState={rideState} />
