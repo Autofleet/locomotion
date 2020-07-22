@@ -23,11 +23,12 @@ const AuthLoadingScreen = ({ navigation }) => {
       let page = payload.userProfile ? 'App' : 'Auth';
 
       if (payload.userProfile) {
-        const { data: userData } = await network.get('api/v1/me');
-        if (userData === null) {
+        const response = await network.get('api/v1/me');
+        if (response === null) {
           Auth.logout(navigation);
         }
 
+        const userData = response.data
         const userProfile = {
           firstName: userData.firstName,
           lastName: userData.lastName,

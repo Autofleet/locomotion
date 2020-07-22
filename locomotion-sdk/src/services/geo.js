@@ -76,10 +76,6 @@ class Geo {
   }
 
   handleLocation = (location) => {
-    console.log(`###########`);
-
-    console.log(`Handle lopcation`, location);
-
     const newLocation = Object.assign({}, location);
     this.lastLocation = newLocation;
     return location
