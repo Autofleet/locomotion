@@ -77,11 +77,13 @@ export default ({
 
     const onSubmit = async () => {
       setRatingSent(false)
-      await onRating(rating)
-      setRatingSent(true)
-      setTimeout(() => {
-        closePopup()
-      }, 2000)
+      if(rating) {
+        await onRating(rating)
+        setRatingSent(true)
+        setTimeout(() => {
+          closePopup()
+        }, 2000)
+      }
     }
 
   return (
