@@ -35,12 +35,12 @@ export const RideStatusContainer = styled.View`
 `;
 
 export default ({
-    rideState,pickupEta, dropoffEta, arrivingReminderMin
+    rideState,pickupEta, dropoffEta, arrivingReminderMin, arrivingPush
 }) => {
 
     const getTitle = () => {
         if(rideState === 'driverOnTheWay') {
-            if(pickupEta <= arrivingReminderMin && pickupEta > 0) {
+            if((pickupEta <= arrivingReminderMin && pickupEta > 0) || arrivingPush !== null) {
                 return `${rideState}Eta`
             }
 
