@@ -24,7 +24,7 @@ export default ({
         />
         <RideDetailsText>{I18n.t('home.rideCard.carTitle')}</RideDetailsText>
         <RideDetailsText subText>
-          {`${activeRide.vehicle.model.name} (${activeRide.vehicle.licenseNumber})`}
+          {`${activeRide.vehicle.model.name} (${activeRide.vehicle.licensePlate})`}
         </RideDetailsText>
       </View>
 
