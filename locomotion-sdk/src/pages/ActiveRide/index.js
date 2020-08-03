@@ -24,7 +24,7 @@ import StationsMap from './StationsMap';
 import MyLocationButton from './ShowMyLocationButton';
 import RideSummaryPopup from '../../popups/RideSummaryPopup';
 import FutureRideCanceledPopup from '../../popups/FutureRideCanceled';
-
+import AppSettings from '../../services/app-settings'
 
 function useInterval(callback, delay) {
   const savedCallback = useRef();
@@ -81,6 +81,34 @@ export default ({ navigation, menuSide, mapSettings }) => {
       togglePopup('futureRideCanceled', true);
     }
   }
+
+  const focusMarkers = () => {
+    if(!activeRideState) {
+      return;
+    }
+    let activeSp = activeRideState.stopPoints.find(sp => sp.state === 'pending');
+
+    const additional = []
+    if(activeRideState && activeSp.type === 'pickup' && !activeSp.completedAt && mapRegion.latitude && mapRegion.longitude) {
+      additional.push({latitude: mapRegion.latitude, longitude: mapRegion.longitude})
+    }
+
+    if(activeRideState.vehicle && activeRideState.vehicle.location && displayMatchInfo) {
+      additional.push({latitude: parseFloat(activeRideState.vehicle.location.lat), longitude: parseFloat(activeRideState.vehicle.location.lng)})
+    }
+
+    mapInstance.current.fitToCoordinates([
+      {latitude: parseFloat(activeSp.lat), longitude: parseFloat(activeSp.lng)},
+      ...additional
+    ], {
+      edgePadding: {
+        top: 80,
+        right: 100,
+        bottom: 250,
+        left: 100,
+      },
+    });
+  }
   const loadActiveRide = async () => {
     const { data: response } = await network.get('api/v1/me/rides/active', { params: { activeRide: true } });
 
@@ -100,11 +128,8 @@ export default ({ navigation, menuSide, mapSettings }) => {
             .map(tuple => ({ latitude: tuple[0], longitude: tuple[1] })),
         };
         setActiveSp(activeSp);
-        if (!activeRideState || activeRideState.state !== activeRide.state
-          || activeSp.id !== activeSpState.id) {
-          setTimeout(() => {
-            mapInstance.current.fitToElements(true);
-          }, 500);
+        if(activeRide && !disableAutoLocationFocus) {
+          focusMarkers();
         }
       }
 
@@ -289,16 +314,16 @@ export default ({ navigation, menuSide, mapSettings }) => {
 
 
   const calculatePickupEta = (origin) => {
-    if (origin.completeAt) {
+    if (origin.completedAt) {
       setDisplayMatchInfo(true);
     } else if (origin && origin.eta) {
       const etaDiff = moment(origin.eta).diff(moment(), 'minutes');
       setPickupEta(etaDiff);
-      setDisplayMatchInfo(etaDiff <= useSettings.settingsList.ARRIVE_REMINDER_MIN);
+      setDisplayMatchInfo((etaDiff <= useSettings.settingsList.ARRIVE_REMINDER_MIN || (activeRideState && activeRideState.arrivingPush !== null)))
     }
   };
 
-  const showsUserLocation = !activeRideState || !activeRideState.vehicle;
+  const showsUserLocation = !activeRideState || (activeRideState && !activeRideState.stopPoints[0].completedAt);
   const useSettings = settingsContext.useContainer();
 
   const setClosestStations = async (pickupStation) => {
@@ -310,24 +335,16 @@ export default ({ navigation, menuSide, mapSettings }) => {
   };
 
   const getStations = async () => {
-    let lat = mapRegion.latitude || parseFloat(Config.DEFAULT_LATITUDE)
-    let lng = mapRegion.longitude || parseFloat(Config.DEFAULT_LONGITUDE);
+    let lat, lng;
 
-    if(Platform.OS !== 'ios') {
-      const locationPermissionCoarse = await PermissionsAndroid.check('android.permission.ACCESS_COARSE_LOCATION')
-      const locationPermissionFine = await PermissionsAndroid.check('android.permission.ACCESS_FINE_LOCATION')
-
-      if(locationPermissionCoarse || locationPermissionFine) {
-        try {
-          const { coords } = await getPosition();
-          if(coords.latitude && coords.longitude) {
-            lat = coords.latitude
-            lng = coords.longitude
-          }
-        } catch (e) {
-          console.log('Error get position', e);
-        }
+    try {
+      const { coords } = await getPosition();
+      if(coords.latitude && coords.longitude) {
+        lat = coords.latitude
+        lng = coords.longitude
       }
+    } catch (e) {
+      console.log('Error get position', e);
     }
 
     const { data } = await network.get('api/v1/me/places', {
@@ -382,15 +399,6 @@ export default ({ navigation, menuSide, mapSettings }) => {
       }));
     } catch (e) {
       console.log('Init location error', e);
-
-      if(Config.DEFAULT_LATITUDE && Config.DEFAULT_LONGITUDE) {
-        setMapRegion(oldMapRegion => ({
-          ...oldMapRegion,
-          latitude: parseFloat(Config.DEFAULT_LATITUDE),
-          longitude: parseFloat(Config.DEFAULT_LONGITUDE)
-        }));
-      }
-
     }
   };
 
@@ -411,13 +419,18 @@ export default ({ navigation, menuSide, mapSettings }) => {
   };
 
   const focusCurrentLocation = () => {
-    if(mapRegion.longitude && mapRegion.latitude) {
+    setDisableAutoLocationFocus(false)
+    if(mapRegion.longitude && mapRegion.latitude && !activeRideState) {
       mapInstance.current.animateToRegion({
         latitude: mapRegion.latitude,
         longitude: mapRegion.longitude,
         latitudeDelta: mapRegion.latitudeDelta,
         longitudeDelta: mapRegion.longitudeDelta,
       }, 1000);
+    } else {
+      if(activeRideState && activeRideState.vehicle && activeRideState.vehicle.location) {
+        focusMarkers();
+      }
     }
   };
 
@@ -442,8 +455,11 @@ export default ({ navigation, menuSide, mapSettings }) => {
   };
 
   useEffect(() => {
-    focusCurrentLocation();
+    if(!disableAutoLocationFocus) {
+      focusCurrentLocation();
+    }
   }, [mapRegion])
+
 
   return (
     <PageContainer>
@@ -463,17 +479,15 @@ export default ({ navigation, menuSide, mapSettings }) => {
             return; // Follow user location works for iOS
           }
           const { coordinate } = event.nativeEvent;
-          mapInstance.current.animateToRegion({
-            latitude: coordinate.latitude,
-            longitude: coordinate.longitude,
-            latitudeDelta: mapRegion.latitudeDelta,
-            longitudeDelta: mapRegion.longitudeDelta,
-          }, 1000);
 
           setMapRegion(oldMapRegion => ({
             ...oldMapRegion,
             ...coordinate,
           }));
+
+          if(!disableAutoLocationFocus) {
+            focusCurrentLocation();
+          }
         }}
         ref={mapInstance}
         onMapReady={() => {
@@ -481,9 +495,9 @@ export default ({ navigation, menuSide, mapSettings }) => {
           if(Platform.OS === 'ios') {
             return;
           }
-          PermissionsAndroid.request(
+          /* PermissionsAndroid.request(
             PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
-          );
+          ); */
         }}
         {...mapSettings}
       >
@@ -498,6 +512,17 @@ export default ({ navigation, menuSide, mapSettings }) => {
             />
           ) : null}
 
+        {activeSpState
+          ? (
+            <StationsMap
+            isInOffer={!!rideOffer}
+            markersMap={activeRideState && activeRideState.stopPoints ? activeRideState.stopPoints.map(m => ({description: m.description, lat:  m.lat, lng: m.lng, type: m.type, id: `active_${m.type}`})) : []}
+            selectStation={selectStationMarker}
+            requestStopPoints={requestStopPoints}
+            activeRideState={activeRideState}
+          />
+          ) : null}
+
         {activeSpState && displayMatchInfo
           ? (
             <Polyline
@@ -506,14 +531,7 @@ export default ({ navigation, menuSide, mapSettings }) => {
               coordinates={activeSpState.polyline}
             />
           ) : null}
-        {activeSpState
-          ? (
-            <Marker
-              coordinate={activeSpState.polyline[activeSpState.polyline.length - 1]}
-            >
-              <StopPointDot />
-            </Marker>
-          ) : null}
+
         {activeRideState && activeRideState.vehicle && activeRideState.vehicle.location && displayMatchInfo
           ? (
             <Marker
@@ -526,7 +544,7 @@ export default ({ navigation, menuSide, mapSettings }) => {
       <MapButtonsContainer>
         <MyLocationButton
           onPress={() => focusCurrentLocation()}
-          displayButton={showsUserLocation}
+          displayButton
         />
       </MapButtonsContainer>
       <Header navigation={navigation} menuSide={menuSide} />

@@ -42,8 +42,8 @@ class Network {
         return this.axios[method](...args).catch((e) => {
           if ((e.response && e.response.status === 401) || (e.response && e.response.status === 403)) {
             console.log('Got unauthorized response move to logout flow')
-            Auth.logout();
-            return;
+            //Auth.logout();
+            return null;
           }
         });
       };
