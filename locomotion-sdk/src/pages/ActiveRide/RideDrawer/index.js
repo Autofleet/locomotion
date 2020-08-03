@@ -243,13 +243,13 @@ const RideDrawer = ({
       {!rideState && !isPopupOpen('ridePopupsStatus') && !rideOffer
         ? (
           <RideButtonContainer>
-            <RideButton
+            {!futureOrdersState && <RideButton
               onPress={buttonAction}
               hollow={!readyToBook}
               setLoading={setLoading}
             >
               {I18n.t(rideState ? 'home.cancelRideButton' : 'home.letsRideButton')}
-            </RideButton>
+            </RideButton>}
           </RideButtonContainer>
         )
         : null
