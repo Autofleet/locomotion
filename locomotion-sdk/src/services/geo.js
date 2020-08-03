@@ -1,5 +1,6 @@
 import { Platform, PermissionsAndroid, Alert } from 'react-native';
 import RNLocation from 'react-native-location';
+import moment from 'moment';
 
 const currentLocationNative = async () => {
   if (Platform.OS === 'android') {
@@ -64,7 +65,9 @@ class Geo {
   // eslint-disable-next-line class-methods-use-this
   async currentLocation() {
     if (this.lastLocation) {
-      return this.lastLocation;
+      if (moment(this.lastLocation.timestamp).isAfter(moment().subtract(1, 'minute'))) {
+        return this.lastLocation;
+      }
     }
     const rnLastLocation = await RNLocation.getLatestLocation();
     if (rnLastLocation) {
@@ -86,8 +89,7 @@ class Geo {
   };
 
   prepareCoords = (locations) => {
-    return { coords: { latitude: locations[0].latitude, longitude: locations[0].longitude } }
-  }
+    return { coords: { latitude: locations[0].latitude, longitude: locations[0].longitude }, timestamp: new Date() }}
 }
 
 export default new Geo();
