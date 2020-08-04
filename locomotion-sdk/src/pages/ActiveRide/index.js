@@ -26,6 +26,8 @@ import RideSummaryPopup from '../../popups/RideSummaryPopup';
 import FutureRideCanceledPopup from '../../popups/FutureRideCanceled';
 import AppSettings from '../../services/app-settings'
 
+const STATION_AUTOREFRESH_INTERVAL = 1500;
+
 function useInterval(callback, delay) {
   const savedCallback = useRef();
 
@@ -74,6 +76,9 @@ export default ({ navigation, menuSide, mapSettings }) => {
   const [stations, setStations] = useState([]);
   const [disableAutoLocationFocus, setDisableAutoLocationFocus] = useState(false);
   const [rideSummaryData, setRideSummaryData] = useState({});
+  const [autoStationUpdate, setAutoStationUpdate] = useState(null);
+
+  const stopAutoStationUpdate = () => clearInterval(autoStationUpdate);
 
   const mapInstance = useRef();
   const notificationsHandler = {
@@ -184,6 +189,9 @@ export default ({ navigation, menuSide, mapSettings }) => {
     getStations();
     loadActiveRide();
     OneSignal.init(notificationsHandler);
+    setAutoStationUpdate(setInterval(() => {
+      getStations();
+    }, STATION_AUTOREFRESH_INTERVAL));
   }, []);
 
   useInterval(() => {
@@ -229,6 +237,7 @@ export default ({ navigation, menuSide, mapSettings }) => {
   };
 
   const openLocationSelect = (type) => {
+    stopAutoStationUpdate();
     if (activeRideState && activeRideState.vehicle) {
       return;
     }
@@ -376,6 +385,7 @@ export default ({ navigation, menuSide, mapSettings }) => {
       openEdit: false,
       [requestStopPoints.selectedType]: station,
     });
+    stopAutoStationUpdate();
   };
 
   useEffect(() => {
