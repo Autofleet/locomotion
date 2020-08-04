@@ -40,7 +40,7 @@ export default ({
 
     const getTitle = () => {
         if(rideState === 'driverOnTheWay') {
-            if((pickupEta <= arrivingReminderMin && pickupEta > 0) || arrivingPush !== null) {
+            if((pickupEta <= arrivingReminderMin && pickupEta > 0) || (arrivingPush !== null && pickupEta > 0)) {
                 return `${rideState}Eta`
             }
 
