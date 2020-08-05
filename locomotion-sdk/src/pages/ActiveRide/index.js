@@ -356,14 +356,15 @@ export default ({ navigation, menuSide, mapSettings }) => {
       console.log('Error get position', e);
     }
 
-    const { data } = await network.get('api/v1/me/places', {
-      params: {
-        location: { lat, lng },
-        stations: true,
-      },
-    });
-
-    setStations(data);
+    if (lat && lng) {
+      const {data} = await network.get('api/v1/me/places', {
+        params: {
+          location: {lat, lng},
+          stations: true,
+        },
+      });
+      setStations(data);
+    }
   };
 
   useEffect(() => {
