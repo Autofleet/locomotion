@@ -344,26 +344,20 @@ export default ({ navigation, menuSide, mapSettings }) => {
   };
 
   const getStations = async () => {
-    let lat, lng;
-
     try {
       const { coords } = await getPosition();
       if(coords.latitude && coords.longitude) {
-        lat = coords.latitude
-        lng = coords.longitude
+        const { latitude: lat, longitude: lng} = coords;
+        const {data} = await network.get('api/v1/me/places', {
+          params: {
+            location: {lat, lng},
+            stations: true,
+          },
+        });
+        setStations(data);
       }
     } catch (e) {
-      console.log('Error get position', e);
-    }
-
-    if (lat && lng) {
-      const {data} = await network.get('api/v1/me/places', {
-        params: {
-          location: {lat, lng},
-          stations: true,
-        },
-      });
-      setStations(data);
+      console.log('Error getting station position', e);
     }
   };
 
