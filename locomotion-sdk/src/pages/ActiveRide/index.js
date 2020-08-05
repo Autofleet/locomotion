@@ -91,7 +91,7 @@ export default ({ navigation, menuSide, mapSettings }) => {
     if(!activeRideState) {
       return;
     }
-    let activeSp = activeRideState.stopPoints.find(sp => sp.state === 'pending');
+    let activeSp = activeRideState.stopPoints.find(sp => sp.state === 'pending' || sp.state === 'arrived');
 
     const additional = []
     if(activeRideState && activeSp.type === 'pickup' && !activeSp.completedAt && mapRegion.latitude && mapRegion.longitude) {
