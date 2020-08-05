@@ -59,7 +59,7 @@ const createRide = async (rideData, userId) => {
 
   const {
     avatar, firstName, lastName, phoneNumber,
-  } = await User.findById(userId, { attributes: ['avatar', 'firstName', 'lastName', 'phoneNumber'] });
+  } = await User.findByPk(userId, { attributes: ['avatar', 'firstName', 'lastName', 'phoneNumber'] });
   const webhookUrl = `${webHookHost}/api/v1/ride-webhook/${ride.id}`.replace(/([^:]\/)\/+/g, '$1');
 
   try {
