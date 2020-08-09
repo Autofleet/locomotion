@@ -142,7 +142,7 @@ export default ({ navigation, menuSide, mapSettings }) => {
     }
     if (activeRideState) {
       const {data: rideSummary} = await network.get('api/v1/me/rides/ride-summary', {params: {rideId: activeRideState.externalId}});
-      if (rideSummary.state === 'completed') {
+      if (rideSummary && rideSummary.state === 'completed') {
         const pickupTime = rideSummary.stopPoints[0].completedAt;
         const dropoffTime = rideSummary.stopPoints[1].completedAt;
         const distance = rideSummary.stopPoints[1].actualDistance;
