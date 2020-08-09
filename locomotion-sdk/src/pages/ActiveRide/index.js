@@ -140,35 +140,34 @@ export default ({ navigation, menuSide, mapSettings }) => {
 
       return setActiveRide(activeRide);
     }
+    if (activeRideState) {
+      const [pickup] = activeRideState.stopPoints;
+      if (pickup.completedAt) {
+        const {data: rideSummary} = await network.get('api/v1/me/rides/ride-summary', {params: {rideId: activeRideState.externalId}});
 
-    if (activeRideState && activeRideState.stopPoints[0].completedAt) {
-      const { data: rideSummary } = await network.get('api/v1/me/rides/ride-summary', { params: { rideId: activeRideState.externalId } });
+        const pickupTime = rideSummary.stopPoints[0].completedAt;
+        const dropoffTime = rideSummary.stopPoints[1].completedAt;
+        const distance = rideSummary.stopPoints[1].actualDistance;
+        const duration = moment(dropoffTime).diff(moment(pickupTime), 'minutes');
 
-      const pickupTime = rideSummary.stopPoints[0].completedAt;
-      const dropoffTime = rideSummary.stopPoints[1].completedAt;
-      const distance = rideSummary.stopPoints[1].actualDistance;
-      const duration = moment(dropoffTime).diff(moment(pickupTime), 'minutes');
-
-      setRideSummaryData({
-        rideId: activeRideState.externalId,
-        pickupTime,
-        dropoffTime,
-        distance,
-        duration,
-      });
-
-      // Ride completed
-      togglePopup('rideSummary', true);
+        setRideSummaryData({
+          rideId: activeRideState.externalId,
+          pickupTime,
+          dropoffTime,
+          distance,
+          duration,
+        });
+        // Ride completed
+        togglePopup('rideSummary', true);
+      } else {
+        // pickup failed -> show ride canceled
+        togglePopup('rideCancel', true);
+      }
       getStations();
-
+      setActiveSp(null);
+      setStopPoints(null);
+      setActiveRide(null);
     }
-    if (activeRideState && !activeRideState.stopPoints[0].completedAt) {
-      // Ride canceled
-      togglePopup('rideCancel', true);
-    }
-    setActiveSp(null);
-    setStopPoints(null);
-    return setActiveRide(null);
   };
 
   useInterval(() => {
