@@ -41,7 +41,7 @@ const getAllSettingFromDb = async () => {
   return settingsList;
 };
 
-function getSettingValueType(settingValue) {
+const getSettingValueType = (settingValue) => {
   switch (typeof settingValue) {
     case "string":
       return "string"
@@ -56,7 +56,7 @@ function getSettingValueType(settingValue) {
       console.warn(`unsupported SettingValueType('${typeof settingValue}'), fallbacks to 'string'`)
       return "string"
   }
-}
+};
 
 module.exports = {
   getSettingByKeyFromDb,
@@ -70,17 +70,17 @@ module.exports = {
       if (settings.map((s) => s.key).includes(defaultSettingKey)) {
         settingsList[defaultSettingKey] = settings.filter(s => s.key === defaultSettingKey)[0].value;
       } else {
-        const defaultSettingToStore = Setting.build({
+        const defaultSettingToStore = {
             key: defaultSettingKey,
             value: settingsList[defaultSettingKey].toString(),
             type: getSettingValueType(settingsList[defaultSettingKey])
-        });
-        settingsToInsert.push(defaultSettingToStore.save());
+        };
+        settingsToInsert.push(defaultSettingToStore);
       }
     });
 
     if (settingsToInsert.length > 0) {
-      await Promise.all(settingsToInsert);
+      await Setting.bulkCreate(settingsToInsert);
     }
 
     return settingsList;
