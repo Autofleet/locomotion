@@ -33,25 +33,26 @@ export const MainProvider = ({ children, LoginPage, i18n }) => {
   };
 
   const reducer = (state, action) => {
-    switch (action.type) {
-      case 'saveState':
-        const newState = {
-          ...state,
-          ...action.payload,
-        };
-        console.log('saveState', newState);
-        saveState(newState);
-        return newState;
+    if (action && action.type) {
+      switch (action.type) {
+        case 'saveState':
+          const newState = {
+            ...state,
+            ...action.payload,
+          };
+          console.log('saveState', newState);
+          saveState(newState);
+          return newState;
 
-      case 'changeState':
-        return {
-          ...state,
-          ...action.payload,
-        };
+        case 'changeState':
+          return {
+            ...state,
+            ...action.payload,
+          };
 
-      default:
-        return state;
+      }
     }
+    return state;
   };
 
 
