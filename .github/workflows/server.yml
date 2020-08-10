@@ -17,9 +17,9 @@ jobs:
         with:
           node-version: 12
           registry-url: https://registry.npmjs.org/
-      - name: CD Server
-        run: cd server
       - name: NPM Install
         run: npm install
+        working-directory: server
       - name: Run Lint
         run: npm run lint
+        working-directory: server
