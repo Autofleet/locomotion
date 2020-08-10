@@ -1,5 +1,4 @@
 const axios = require('axios');
-const debug = require('debug')('autofleet');
 const jwt = require('jsonwebtoken');
 
 const refreshUrl = '/api/v1/login/refresh';

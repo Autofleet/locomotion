@@ -14,8 +14,8 @@ const AfLogo = styled.img.attrs({ src: afLogoSrc })`
   height: 13px;
 `;
 
-export default (({className}) => (
+export default (({ className }) => (
   <div className={className}>
-    <PoweredByLink target="_blank" href="https://autofleet.io/">{i18n.t('navigation.poweredBy')} <AfLogo/></PoweredByLink>
+    <PoweredByLink target="_blank" href="https://autofleet.io/">{i18n.t('navigation.poweredBy')} <AfLogo /></PoweredByLink>
   </div>
 ));

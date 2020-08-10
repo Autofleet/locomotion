@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import * as css from 'react-table-6/react-table.css'
+import * as css from 'react-table-6/react-table.css';
 
 export const ToggleLabel = styled.label`
     position: relative;

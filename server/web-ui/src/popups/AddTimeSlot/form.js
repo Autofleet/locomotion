@@ -3,12 +3,12 @@ import PropTypes from 'prop-types';
 import { Field, FieldArray, Form } from 'formik';
 import TimeField from 'react-simple-timefield';
 import i18n from '../../i18n';
-import InputWithLabel, { PhoneInput } from '../../Common/InputWithLabel'
+import InputWithLabel, { PhoneInput } from '../../Common/InputWithLabel';
 import Toggle from '../../Common/Toggle';
 import PopupDialog from '../../Common/PopupDialog';
-import { ReactComponent as PlusIcon } from '../../assets/plus.svg'
-import Drop from '../../Common/DropDown'
-import momentTz from 'moment-timezone'
+import { ReactComponent as PlusIcon } from '../../assets/plus.svg';
+import Drop from '../../Common/DropDown';
+import momentTz from 'moment-timezone';
 
 import {
   ImageUploaderContainer,
@@ -19,26 +19,25 @@ import {
   DriverAvatar,
   RightSidePopupForm,
   FormInputsSection,
-  ToggleContainer
+  ToggleContainer,
 } from './styled';
 
 const daysOfWeek = [
-  {label: i18n.t('serviceHours.weekDays.sunday'), value: 0},
-  {label: i18n.t('serviceHours.weekDays.monday'), value: 1},
-  {label: i18n.t('serviceHours.weekDays.tuesday'), value: 2},
-  {label: i18n.t('serviceHours.weekDays.wednesday'), value: 3},
-  {label: i18n.t('serviceHours.weekDays.thursday'), value: 4},
-  {label: i18n.t('serviceHours.weekDays.friday'), value: 5},
-  {label: i18n.t('serviceHours.weekDays.saturday'), value: 6},
-]
+  { label: i18n.t('serviceHours.weekDays.sunday'), value: 0 },
+  { label: i18n.t('serviceHours.weekDays.monday'), value: 1 },
+  { label: i18n.t('serviceHours.weekDays.tuesday'), value: 2 },
+  { label: i18n.t('serviceHours.weekDays.wednesday'), value: 3 },
+  { label: i18n.t('serviceHours.weekDays.thursday'), value: 4 },
+  { label: i18n.t('serviceHours.weekDays.friday'), value: 5 },
+  { label: i18n.t('serviceHours.weekDays.saturday'), value: 6 },
+];
 
 const AddTimeSlotForm = ({
   values,
   errors,
   onCancel,
   setFieldValue,
-}) => {
-  return(
+}) => (
   <Form name="AddTimeSlot">
     <PopupDialog
       padding="0px"
@@ -71,35 +70,35 @@ const AddTimeSlotForm = ({
               component={TimeField}
               onChange={(event, value) => setFieldValue('startTime', value)}
               input={<InputWithLabel />}
-              />
+            />
 
           </RightSidePopupForm>
           <RightSidePopupForm>
             <Field
-                name="timezone"
-                label={i18n.t('serviceHours.addTimeSlot.timezone')}
-                type="text"
-                errorMessage={errors.timezone}
-                component={Drop}
-                onChange={selected => setFieldValue('timezone', selected.value)}
-                options={momentTz.tz.names().map(tz => ({label: tz, value:tz}))}
-              />
-              <Field
-                name="endTime"
-                label={i18n.t('serviceHours.addTimeSlot.endTime')}
-                type="text"
-                errorMessage={errors.endTime}
-                component={TimeField}
-                onChange={(event, value) => setFieldValue('endTime', value)}
-                input={<InputWithLabel />}
-              />
+              name="timezone"
+              label={i18n.t('serviceHours.addTimeSlot.timezone')}
+              type="text"
+              errorMessage={errors.timezone}
+              component={Drop}
+              onChange={selected => setFieldValue('timezone', selected.value)}
+              options={momentTz.tz.names().map(tz => ({ label: tz, value: tz }))}
+            />
+            <Field
+              name="endTime"
+              label={i18n.t('serviceHours.addTimeSlot.endTime')}
+              type="text"
+              errorMessage={errors.endTime}
+              component={TimeField}
+              onChange={(event, value) => setFieldValue('endTime', value)}
+              input={<InputWithLabel />}
+            />
 
           </RightSidePopupForm>
         </FormInputsSection>
       </PopupFormContainer>
     </PopupDialog>
   </Form>
-)};
+);
 
 AddTimeSlotForm.propTypes = {
   values: PropTypes.shape({}).isRequired,

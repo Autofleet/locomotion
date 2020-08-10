@@ -1,5 +1,4 @@
 const request = require('supertest');
-// const nock = require('nock');
 const app = require('../../../../app');
 const createUserAndLogin = require('../../../assets/create-user-and-login');
 const { Ride, User, Verification } = require('../../../../models');
@@ -23,7 +22,7 @@ describe('Create rides', () => {
   //   .reply(200, response)
 
   it('Can create ride', async () => {
-    const { accessToken, userProfile } = await createUserAndLogin();
+    const { accessToken } = await createUserAndLogin();
     const res = await request(app).post(`${baseUrl}/me/rides`).send({
       pickupAddress: 'Some address 1',
       pickupLat: 32,

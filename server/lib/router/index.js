@@ -14,12 +14,13 @@ const METHODS = [
 const AfEntryPoint = func => async (req, res, next) => {
   try {
     await func(req, res, next);
+    return true;
   } catch (e) {
     console.log(e.message, e.stack);
     if (e.statusCode && e.statusCode < 500) {
       return res.status(400).json({ error: e.message, status: 'ERROR' });
     }
-    next(e);
+    return next(e);
   }
 };
 

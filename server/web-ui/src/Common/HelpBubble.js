@@ -22,7 +22,9 @@ const Body = styled.div`
 
 `;
 
-export default styled(({ className, header, text, button="Contact us" }) => (
+export default styled(({
+  className, header, text, button = 'Contact us',
+}) => (
   <div className={className}>
     <Header>{header}</Header>
     <Body>{text}</Body>

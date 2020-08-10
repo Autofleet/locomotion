@@ -3,7 +3,7 @@ import styled from 'styled-components';
 export const FormGroup = styled.label`
     position: relative;
     width: 100%;
-    margin-top: ${({marginTop}) => marginTop ? marginTop : '0px'};
+    margin-top: ${({ marginTop }) => (marginTop || '0px')};
     display: block;
 
     &:first-of-type {
@@ -19,7 +19,7 @@ export const FormGroupLabel = styled.span`
     line-height: 1;
     font-size: .8125rem;
     color: rgba(51, 51, 51, 0.7);
-    ${({inlineField}) => inlineField && `
+    ${({ inlineField }) => inlineField && `
       display: inline-block;
       width: 90%;
     `};
@@ -27,7 +27,7 @@ export const FormGroupLabel = styled.span`
 
 export const InputGroup = styled.div`
     position: relative;
-    ${({inlineField}) => inlineField && `
+    ${({ inlineField }) => inlineField && `
       width: 10%;
       display: inline-block;
     `};

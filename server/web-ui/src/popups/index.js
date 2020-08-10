@@ -4,7 +4,7 @@ import AddTimeSlot from './AddTimeSlot';
 const MyDialogs = {
   AddUser,
   EditUser: AddUser,
-  AddTimeSlot
+  AddTimeSlot,
 };
 
 export default popupName => MyDialogs[popupName];

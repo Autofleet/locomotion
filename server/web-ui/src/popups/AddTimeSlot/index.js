@@ -16,14 +16,14 @@ const AddUser = ({
 }) => {
   const workingHours = serviceHoursContainer.useContainer();
 
-  const requiredUniqueField = field => Yup.string().required(('popup.validateRequired'))
+  const requiredUniqueField = field => Yup.string().required(('popup.validateRequired'));
 
   return (
     <Formik
       validateOnBlur={false}
       validateOnChange={false}
       {...{ initialValues }}
-       validationSchema={Yup.object().shape({
+      validationSchema={Yup.object().shape({
         dayInWeek: requiredField,
         startTime: requiredField,
         endTime: requiredField,
@@ -34,10 +34,10 @@ const AddUser = ({
 
  actions.setSubmitting(true);
         try {
-          await workingHours.AddSlot(values)
+          await workingHours.AddSlot(values);
         } catch (error) {
           console.log(error);
-          //appContext.throwClientError({ consoleError: error });
+          // appContext.throwClientError({ consoleError: error });
         }
         actions.setSubmitting(false);
         onCancel();
@@ -61,7 +61,7 @@ AddUser.defaultProps = {
   editMode: false,
   onCancel: undefined,
   popupName: false,
-  initialValues: {}
+  initialValues: {},
 };
 
 AddUser.propTypes = {

@@ -119,8 +119,8 @@ const createRide = async (rideData, userId) => {
 };
 
 const rideService = {
-  createOffer: async rideData => await createOffer(rideData),
-  create: async (rideData, userId) => await createRide(rideData, userId),
+  createOffer: async rideData => createOffer(rideData),
+  create: async (rideData, userId) => createRide(rideData, userId),
   getRidderActiveRide: async (userId) => {
     const ride = await Ride.findOne({
       where: {
@@ -199,7 +199,7 @@ const rideService = {
 
     if (ride) {
       const afRide = await rideService.getRideFromAf(ride.id);
-      const updatedRide = await sdk.Rides.rating(afRide.id, {
+      await sdk.Rides.rating(afRide.id, {
         demandSourceId: process.env.DEMAND_SOURCE_ID,
         rating,
       });

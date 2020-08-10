@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import Svg from 'react-svg-inline';
-import {omit} from 'lodash'
+import { omit } from 'lodash';
 
 export const avatarSize = '28px';
 
@@ -41,12 +41,12 @@ export const SvgButton = styled(SvgBase)`
     height: 16px;
 
     stroke: rgb(111, 111, 111);
-    stroke: ${({ disableClass }) => disableClass ? '#dfdfdf' : 'rgb(111, 111, 111)'};
+    stroke: ${({ disableClass }) => (disableClass ? '#dfdfdf' : 'rgb(111, 111, 111)')};
     &:hover {
-      stroke: ${({ disableClass }) => disableClass ? '#dfdfdf' : 'rgb(17, 113, 219)'};
+      stroke: ${({ disableClass }) => (disableClass ? '#dfdfdf' : 'rgb(17, 113, 219)')};
     }
     &:active {
-      stroke: ${({ disableClass }) => disableClass ? '#dfdfdf' : 'rgb(57, 153, 255)'};
+      stroke: ${({ disableClass }) => (disableClass ? '#dfdfdf' : 'rgb(57, 153, 255)')};
     }
   }
 `;

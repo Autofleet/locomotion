@@ -3,8 +3,8 @@ import styled from 'styled-components';
 import i18n from '../i18n';
 import logoSrc from '../assets/logo.png';
 import {
-  NavLink
-} from "react-router-dom";
+  NavLink,
+} from 'react-router-dom';
 import PoweredByBase from '../Common/PoweredBy';
 
 export const navWidthPx = 280;
@@ -76,13 +76,13 @@ export default () => (
   <NavContainer>
     <Logo />
     <Menu>
-      <Header/>
+      <Header />
       <MenuItem exact to="/">{i18n.t('navigation.users')}</MenuItem>
       <MenuItem exact to="/settings">{i18n.t('navigation.settings')}</MenuItem>
       <MenuItem exact to="/service-hours">Service Hours</MenuItem>
-      <ExternalLink onClick={() => { localStorage.removeItem('token'); window.location.reload() }}>{i18n.t('navigation.logout')}</ExternalLink>
+      <ExternalLink onClick={() => { localStorage.removeItem('token'); window.location.reload(); }}>{i18n.t('navigation.logout')}</ExternalLink>
     </Menu>
-    <PoweredBy/>
+    <PoweredBy />
   </NavContainer>
-)
+);
 

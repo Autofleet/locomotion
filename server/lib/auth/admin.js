@@ -13,7 +13,7 @@ const adminPermissionsMiddleWare = async (req, res, next) => {
   const { headers } = req;
   let accessToken;
   if (headers.authorization && headers.authorization.split(' ')[0] === 'Bearer') {
-    accessToken = headers.authorization.split(' ')[1];
+    [, accessToken] = headers.authorization.split(' ');
   } else {
     accessToken = false;
   }

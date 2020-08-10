@@ -1,9 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
 import { omit } from 'lodash';
-import { Input } from "../../Common/Input";
+import { Input } from '../../Common/Input';
 import Button from '../../Common/Button';
-import {LabelText} from "../../Common/Toggle/styled";
+import { LabelText } from '../../Common/Toggle/styled';
 
 export const Body = styled.div`
   display: flex;
@@ -30,7 +30,7 @@ export const SettingsContainer = styled.div`
     width: 85%;
 `;
 
-export const SettingsPanel = styled.div( ({transparent, placeholder}) => `
+export const SettingsPanel = styled.div(({ transparent, placeholder }) => `
     flex: 1;
     margin: 10px;
     ${!transparent ? `
@@ -39,7 +39,7 @@ export const SettingsPanel = styled.div( ({transparent, placeholder}) => `
     border-radius: 4px;
     ` : !placeholder ? `
     flex-grow: inherit;
-    ` : `` }
+    ` : ''}
 
 `);
 
@@ -49,18 +49,18 @@ export const SettingsPanelHeader = styled.div`
     border-bottom: 1px solid #efefef;
 `;
 
-export const SettingsPanelItem = styled.div(({type}) => `
+export const SettingsPanelItem = styled.div(({ type }) => `
     padding-top: 5%;
     padding-bottom: ${type === 'text' ? 0 : 6}%;
     padding-right: 5%;
     padding-left: 5%;
     margin: 0 5%;
 
-    ${type === 'submit' ?  `
+    ${type === 'submit' ? `
     padding-bottom: 12%;
     ` : `
    border-bottom: 1px solid rgba(0, 0, 0, 0.07);
-   ` }
+   `}
 
     ${type === 'toggle' ? `
     display: block;
@@ -68,7 +68,7 @@ export const SettingsPanelItem = styled.div(({type}) => `
     font-size: .8125rem;
     color: rgba(51, 51, 51, 0.7);
     margin-top: 10px;
-    ` : '' }
+    ` : ''}
 `);
 
 export const ToggleLabelTextSpacer = styled.div`

@@ -2,7 +2,6 @@ const Router = require('../../../../lib/router');
 const settingLib = require('../../../../lib/settings');
 const logger = require('../../../../logger');
 const { Setting } = require('../../../../models');
-const _ = require('lodash');
 
 const router = Router();
 

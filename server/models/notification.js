@@ -1,5 +1,3 @@
-const _ = require('lodash');
-
 module.exports = (sequelize, DataTypes) => {
   const Notification = sequelize.define('Notification', {
     id: {

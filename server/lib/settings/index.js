@@ -31,7 +31,7 @@ const getSettingByKeyFromDb = async (settingKey) => {
 const getAllSettingFromDb = async () => {
   const foundSettings = await Setting.findAll({});
   const settingsList = [];
-  foundSettings.map((foundSetting) => {
+  foundSettings.forEach((foundSetting) => {
     const parsedValue = parseValue(foundSetting.value, foundSetting.type);
     settingsList.push({
       ...foundSetting.get(),
@@ -45,8 +45,8 @@ module.exports = {
   getSettingByKeyFromDb,
   getSettingsList: async () => {
     const settings = await getAllSettingFromDb();
-    const settingsList = {...settingsDefaults};
-    settings.map((setting) => {
+    const settingsList = { ...settingsDefaults };
+    settings.forEach((setting) => {
       settingsList[setting.key] = setting.value;
     });
     return settingsList;
