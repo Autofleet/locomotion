@@ -140,35 +140,32 @@ export default ({ navigation, menuSide, mapSettings }) => {
 
       return setActiveRide(activeRide);
     }
+    if (activeRideState) {
+      const {data: rideSummary} = await network.get('api/v1/me/rides/ride-summary', {params: {rideId: activeRideState.externalId}});
+      if (rideSummary && rideSummary.state === 'completed') {
+        const pickupTime = rideSummary.stopPoints[0].completedAt;
+        const dropoffTime = rideSummary.stopPoints[1].completedAt;
+        const distance = rideSummary.stopPoints[1].actualDistance;
+        const duration = moment(dropoffTime).diff(moment(pickupTime), 'minutes');
 
-    if (activeRideState && activeRideState.stopPoints[0].completedAt) {
-      const { data: rideSummary } = await network.get('api/v1/me/rides/ride-summary', { params: { rideId: activeRideState.externalId } });
-
-      const pickupTime = rideSummary.stopPoints[0].completedAt;
-      const dropoffTime = rideSummary.stopPoints[1].completedAt;
-      const distance = rideSummary.stopPoints[1].actualDistance;
-      const duration = moment(dropoffTime).diff(moment(pickupTime), 'minutes');
-
-      setRideSummaryData({
-        rideId: activeRideState.externalId,
-        pickupTime,
-        dropoffTime,
-        distance,
-        duration,
-      });
-
-      // Ride completed
-      togglePopup('rideSummary', true);
+        setRideSummaryData({
+          rideId: activeRideState.externalId,
+          pickupTime,
+          dropoffTime,
+          distance,
+          duration,
+        });
+        // Ride completed
+        togglePopup('rideSummary', true);
+      } else {
+        // pickup failed -> show ride canceled
+        togglePopup('rideCancel', true);
+      }
       getStations();
-
+      setActiveSp(null);
+      setStopPoints(null);
+      setActiveRide(null);
     }
-    if (activeRideState && !activeRideState.stopPoints[0].completedAt) {
-      // Ride canceled
-      togglePopup('rideCancel', true);
-    }
-    setActiveSp(null);
-    setStopPoints(null);
-    return setActiveRide(null);
   };
 
   useInterval(() => {
@@ -344,26 +341,21 @@ export default ({ navigation, menuSide, mapSettings }) => {
   };
 
   const getStations = async () => {
-    let lat, lng;
-
     try {
       const { coords } = await getPosition();
       if(coords.latitude && coords.longitude) {
-        lat = coords.latitude
-        lng = coords.longitude
+        const { latitude: lat, longitude: lng} = coords;
+        const {data} = await network.get('api/v1/me/places', {
+          params: {
+            location: {lat, lng},
+            stations: true,
+          },
+        });
+        setStations(data);
       }
     } catch (e) {
-      console.log('Error get position', e);
+      console.log('Error getting station position', e);
     }
-
-    const { data } = await network.get('api/v1/me/places', {
-      params: {
-        location: { lat, lng },
-        stations: true,
-      },
-    });
-
-    setStations(data);
   };
 
   useEffect(() => {
