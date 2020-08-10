@@ -12,13 +12,13 @@ jobs:
   server-lint:
     runs-on: ubuntu-latest
     steps:
-      - name: CD Server
-        run: cd server
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v1
         with:
           node-version: 12
           registry-url: https://registry.npmjs.org/
+      - name: CD Server
+        run: cd server
       - name: NPM Install
         run: npm install
       - name: Run Lint
