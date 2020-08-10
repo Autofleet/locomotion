@@ -5,6 +5,7 @@ name: Server CI
 
 on:
   push:
+    branches: [ '*' ]
     paths:
     - 'server/**'
 
