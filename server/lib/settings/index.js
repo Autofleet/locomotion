@@ -45,7 +45,7 @@ module.exports = {
   getSettingByKeyFromDb,
   getSettingsList: async () => {
     const settings = await getAllSettingFromDb();
-    const settingsList = {...settingsDefaults};
+    const settingsList = { ...settingsDefaults };
     settings.map((setting) => {
       settingsList[setting.key] = setting.value;
     });
