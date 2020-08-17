@@ -41,14 +41,48 @@ const getAllSettingFromDb = async () => {
   return settingsList;
 };
 
+const getSettingValueType = (settingValue) => {
+  switch (typeof settingValue) {
+    case "string":
+      return "string"
+    case "bigint":
+    case "number":
+      return "number"
+    case "object":
+      return "json"
+    case "boolean":
+      return "boolean"
+    default:
+      console.warn(`unsupported SettingValueType('${typeof settingValue}'), fallbacks to 'string'`)
+      return "string"
+  }
+};
+
 module.exports = {
   getSettingByKeyFromDb,
   getSettingsList: async () => {
     const settings = await getAllSettingFromDb();
-    const settingsList = { ...settingsDefaults };
-    settings.map((setting) => {
-      settingsList[setting.key] = setting.value;
+    const settingsList = {...settingsDefaults};
+
+    let settingsToInsert = []
+
+    Object.keys(settingsList).map((defaultSettingKey) => {
+      if (settings.map((s) => s.key).includes(defaultSettingKey)) {
+        settingsList[defaultSettingKey] = settings.filter(s => s.key === defaultSettingKey)[0].value;
+      } else {
+        const defaultSettingToStore = {
+            key: defaultSettingKey,
+            value: settingsList[defaultSettingKey].toString(),
+            type: getSettingValueType(settingsList[defaultSettingKey])
+        };
+        settingsToInsert.push(defaultSettingToStore);
+      }
     });
+
+    if (settingsToInsert.length > 0) {
+      await Setting.bulkCreate(settingsToInsert);
+    }
+
     return settingsList;
   },
   updateByKey(settingKey, payload) {
@@ -58,7 +92,7 @@ module.exports = {
     return Setting.update(payload, { where: { id: settingId } });
   },
   async get(settingId) {
-    let foundSetting = await Setting.findById(settingId);
+    let foundSetting = await Setting.findByPk(settingId);
     if (foundSetting) {
       foundSetting = foundSetting.get();
       foundSetting.value = parseValue(foundSetting.value, foundSetting.type);
@@ -72,4 +106,3 @@ module.exports = {
     return Setting.destroy({ where: { id: settingId } });
   },
 };
-

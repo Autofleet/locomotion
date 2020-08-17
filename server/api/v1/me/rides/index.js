@@ -8,14 +8,14 @@ const router = Router();
 
 // to check if equal to active
 router.get('/', async (req, res) => {
-  const rides = await Ride.find({
+  const rides = await Ride.findOne({
     where: {
       userId: req.userId,
       state: req.query.activeRide ? Ride.STATES.ACTIVE : undefined,
     },
   });
 
-  res.json({ rides: rides !== null ? rides : [] });
+  res.json({ rides: rides !== null ? [rides] : [] });
 });
 
 router.get('/history', async (req, res) => {
