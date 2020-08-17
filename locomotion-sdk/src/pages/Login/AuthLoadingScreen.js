@@ -24,7 +24,7 @@ const AuthLoadingScreen = ({ navigation }) => {
 
       if (payload.userProfile) {
         const response = await network.get('api/v1/me');
-        if (response.data === null) {
+        if (!response || response.data === null) {
           Auth.logout(navigation);
         }
 
