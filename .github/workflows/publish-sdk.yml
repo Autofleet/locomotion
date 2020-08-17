@@ -19,6 +19,7 @@ jobs:
           node-version: 12
           registry-url: https://registry.npmjs.org/
       - run: npm ci
+        working-directory: locomotion-sdk
         env:
           NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
 
@@ -32,5 +33,6 @@ jobs:
           node-version: 12
           registry-url: https://registry.npmjs.org/
       - run: npm publish
+        working-directory: locomotion-sdk
         env:
           NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
