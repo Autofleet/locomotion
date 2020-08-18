@@ -1,5 +1,4 @@
 const moment = require('moment');
-const { Op } = require('sequelize');
 const i18n = require('../../../i18n');
 const Router = require('../../../lib/router');
 const rideService = require('../../../lib/ride');
@@ -24,7 +23,7 @@ const cancelPush = async (userId, rideId, messageType = 'futureRideCanceled') =>
   }
 
   Notification.create({ userId, rideId, type: messageType });
-  await sendNotification(
+  return sendNotification(
     [user.pushUserId],
     'futureRideCanceled',
     { en: i18n.t(`pushNotifications.${messageType}.text`) },
@@ -44,7 +43,7 @@ router.put('/:rideId', async (req, res) => {
     return res.json({ error: 'ride not found' });
   }
 
-  const stopPoints = req.body.ride.stopPoints;
+  const { stopPoints } = req.body.ride;
   console.log(`Webhook - rideId: ${req.params.rideId} currentState: ${ride.state}  newState: ${req.body.ride.state} SpsStates: ${(stopPoints.map(s => s.state)).join()}`);
   const isReminderShouldBeSent = async () => {
     const { value: arriveReminderMin } = await settingsService.getSettingByKeyFromDb('ARRIVE_REMINDER_MIN');
@@ -171,7 +170,7 @@ router.put('/:rideId', async (req, res) => {
     await ride.save();
   }
 
-  res.json(ride);
+  return res.json(ride);
 });
 
 router.get('/notifications', async (req, res) => {
@@ -192,10 +191,12 @@ router.get('/notifications', async (req, res) => {
         notificationContent.ttl,
       );
 
+      // eslint-disable-next-line no-param-reassign
       notificationRecord.state = Notification.STATES.COMPLETED;
       notificationRecord.save();
     } catch (err) {
       console.log('Push Error', err);
+      // eslint-disable-next-line no-param-reassign
       notificationRecord.state = Notification.STATES.REJECTED;
       notificationRecord.save();
     }

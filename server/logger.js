@@ -1,6 +1,8 @@
 const winston = require('winston');
+
 const { createLogger } = winston;
 require('dotenv').config();
+
 if (process.env.NEW_RELIC_KEY) {
   require('newrelic'); // eslint-disable-line
 }

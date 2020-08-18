@@ -74,7 +74,7 @@ const StyledSelect = styled(Select)`
 export const FormGroup = styled.label`
     position: relative;
     width: 100%;
-    margin-top: ${({marginTop}) => marginTop ? marginTop : '0px'};
+    margin-top: ${({ marginTop }) => (marginTop || '0px')};
     display: block;
 
     &:first-of-type {
@@ -107,12 +107,12 @@ export const ErrorMessage = styled.span`
     text-align: center;
   `;
 
-const popupErrorMessageStyle = (errorAlign) => ({
+const popupErrorMessageStyle = errorAlign => ({
   textAlign: errorAlign || 'right',
 });
 
 export default props => (
-<FormGroup
+  <FormGroup
     htmlFor={props.inputId}
   >
     <FormGroupLabel>{props.label}</FormGroupLabel>
@@ -124,7 +124,6 @@ export default props => (
 
     </InputGroup>
   </FormGroup>
-
 
 
 );

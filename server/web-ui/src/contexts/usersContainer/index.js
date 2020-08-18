@@ -6,7 +6,7 @@ const useUsers = () => {
   const [usersMap, setUsersMap] = useState([]);
 
 
-  const loadUsers= async () => {
+  const loadUsers = async () => {
     const usersData = await getUsers();
     setUsersMap(usersData);
   };
@@ -65,7 +65,7 @@ const useUsers = () => {
     setUserState,
     getUser,
     AddUser,
-    UpdateUser
+    UpdateUser,
   };
 };
 

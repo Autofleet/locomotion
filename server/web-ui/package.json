@@ -38,6 +38,7 @@
     "build": "./node_modules/react-scripts/bin/react-scripts.js build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
+    "lint": "./node_modules/.bin/eslint .",
     "init": "echo 'RUN'"
   },
   "eslintConfig": {

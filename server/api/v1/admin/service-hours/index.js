@@ -6,7 +6,6 @@ const logger = require('../../../../logger');
 const router = Router();
 
 router.get('/', async (req, res) => {
-  const workinHours = [];
   let slots = [];
   try {
     slots = await timeSlots.getTimeSlots();

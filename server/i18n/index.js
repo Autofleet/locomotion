@@ -19,6 +19,7 @@ i18n
 
 if (process.env.I18N_LANG) {
   const lang = process.env.I18N_LANG;
+  // eslint-disable-next-line
   i18n.addResourceBundle(lang, 'translation', require(`./${lang}.json`), true, true);
   i18n.changeLanguage(lang);
 }

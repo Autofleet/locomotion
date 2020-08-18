@@ -4,8 +4,8 @@ import { Redirect } from 'react-router-dom';
 import i18n from '../i18n';
 import networkService from '../Services/network';
 import logoSrc from '../assets/logo.png';
-import {Input} from '../Common/Input';
-import LoaderButton from '../Common/LoaderButton'
+import { Input } from '../Common/Input';
+import LoaderButton from '../Common/LoaderButton';
 import PoweredByBase from '../Common/PoweredBy';
 
 const LoginContainer = styled.div`
@@ -89,62 +89,62 @@ export default ({ children }) => {
     setLoginError(null);
     setIsLoading(true);
     try {
-      const {data:loginResult} = await networkService.post('/api/v1/admin/auth', { userName, password });
+      const { data: loginResult } = await networkService.post('/api/v1/admin/auth', { userName, password });
       if (loginResult && loginResult.token) {
-        const token = loginResult.token;
+        const { token } = loginResult;
         localStorage.token = token;
         networkService.setToken(token);
       } else {
-        setLoginError(`${i18n.t(`login.loginError`)}`);
+        setLoginError(`${i18n.t('login.loginError')}`);
       }
     } catch (e) {
-      setLoginError(`${i18n.t(`login.networkError`)}`);
+      setLoginError(`${i18n.t('login.networkError')}`);
     }
-    setIsLoading(false)
+    setIsLoading(false);
   };
 
-  return localStorage.token ? <Redirect to="/"/> : (
-      <LoginContainer>
-        <Content>
-          <Header>
-            <Logo/>
-          </Header>
-          <InputAndLabel>
-            <Label>{i18n.t(`login.userNameLabel`)}:</Label>
-            <Input
-              withBorder
-              withHover
-              onChange={event => setUserName(event.target.value)}
-            />
-          </InputAndLabel>
-          <InputAndLabel>
-            <Label>{i18n.t(`login.passwordLabel`)}:</Label>
-            <PasswordInput
-              withBorder
-              withHover
-              type='password'
-              onChange={event => setPassword(event.target.value)}
-            />
-          </InputAndLabel>
-          <SubmitContainer>
-            <Submit
-              title={i18n.t(`login.buttonTitle`)}
-              displayLoader={isLoading}
-              darkLoader={false}
-              onClick={async (event) => {
+  return localStorage.token ? <Redirect to="/" /> : (
+    <LoginContainer>
+      <Content>
+        <Header>
+          <Logo />
+        </Header>
+        <InputAndLabel>
+          <Label>{i18n.t('login.userNameLabel')}:</Label>
+          <Input
+            withBorder
+            withHover
+            onChange={event => setUserName(event.target.value)}
+          />
+        </InputAndLabel>
+        <InputAndLabel>
+          <Label>{i18n.t('login.passwordLabel')}:</Label>
+          <PasswordInput
+            withBorder
+            withHover
+            type="password"
+            onChange={event => setPassword(event.target.value)}
+          />
+        </InputAndLabel>
+        <SubmitContainer>
+          <Submit
+            title={i18n.t('login.buttonTitle')}
+            displayLoader={isLoading}
+            darkLoader={false}
+            onClick={async (event) => {
                 await login(userName, password);
               }}
-              disabled={isLoading}
-            />
-          </SubmitContainer>
-          {loginError ?
-            <Error>
-              {loginError}
-            </Error>
+            disabled={isLoading}
+          />
+        </SubmitContainer>
+        {loginError ?
+          <Error>
+            {loginError}
+          </Error>
           : null}
-          <PoweredBy/>
-        </Content>
-      </LoginContainer>
+        <PoweredBy />
+      </Content>
+    </LoginContainer>
   );
 };
 

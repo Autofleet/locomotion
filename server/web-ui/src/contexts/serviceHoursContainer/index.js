@@ -25,7 +25,7 @@ const useServiceHours = () => {
     }
   };
 
-/*
+  /*
   const getUserIndex = userId => usersMap.findIndex(u => u.id === userId);
 
   const setUser = (userId, newData) => {
@@ -56,10 +56,6 @@ const useServiceHours = () => {
   };
 
 
-
-
-
-
   const getUser = userId => usersMap.find(user => user.id === userId);
 
  */
@@ -67,7 +63,7 @@ const useServiceHours = () => {
     loadServiceHours,
     slotsMap,
     AddSlot,
-    deleteSlot
+    deleteSlot,
   };
 };
 

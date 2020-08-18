@@ -16,18 +16,18 @@ const AddUser = ({
   driverId,
   popupName,
 }) => {
-    const users = usersContainer.useContainer();
-    const requiredUniqueField = field => Yup.string().required(('popup.validateRequired'))
-      .test('unique', (`UNIQUE ${field}`), value =>
-        !users.usersMap.find(({ [field]: fieldValue, id }) =>
-          fieldValue === value && id !== initialValues.id))
+  const users = usersContainer.useContainer();
+  const requiredUniqueField = field => Yup.string().required(('popup.validateRequired'))
+    .test('unique', (`UNIQUE ${field}`), value =>
+      !users.usersMap.find(({ [field]: fieldValue, id }) =>
+        fieldValue === value && id !== initialValues.id));
 
   return (
     <Formik
       validateOnBlur={false}
       validateOnChange={false}
       {...{ initialValues }}
-       validationSchema={Yup.object().shape({
+      validationSchema={Yup.object().shape({
         firstName: requiredField,
         lastName: requiredField,
         phoneNumber: requiredUniqueField('phoneNumber'),
@@ -46,7 +46,7 @@ const AddUser = ({
           }
         } catch (error) {
           console.log(error);
-          //appContext.throwClientError({ consoleError: error });
+          // appContext.throwClientError({ consoleError: error });
         }
         actions.setSubmitting(false);
         onCancel();
@@ -70,7 +70,7 @@ AddUser.defaultProps = {
   editMode: false,
   onCancel: undefined,
   popupName: false,
-  initialValues: {}
+  initialValues: {},
 };
 
 AddUser.propTypes = {

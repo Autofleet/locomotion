@@ -8,14 +8,14 @@ import serviceHoursContainer from './contexts/serviceHoursContainer';
 function App() {
   return (
     <Fragment>
-        <settingsContainer.Provider>
-            <usersContainer.Provider>
-              <serviceHoursContainer.Provider>
-                <Router/>
-                <GlobalStyle/>
-              </serviceHoursContainer.Provider>
-            </usersContainer.Provider>
-        </settingsContainer.Provider>
+      <settingsContainer.Provider>
+        <usersContainer.Provider>
+          <serviceHoursContainer.Provider>
+            <Router />
+            <GlobalStyle />
+          </serviceHoursContainer.Provider>
+        </usersContainer.Provider>
+      </settingsContainer.Provider>
     </Fragment>
   );
 }

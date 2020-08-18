@@ -6,13 +6,13 @@ import Nav from '../Nav';
 import { H1 } from '../../Common/Header';
 import Table from '../../Common/Table/themes/strips';
 import Toggle from '../../Common/Toggle';
-import Popup from '../../Common/Popup'
+import Popup from '../../Common/Popup';
 import { generateAvatarById } from '../../Services/avatar';
-import {Body, Content ,Buttons, ApplyButton, Avatar, SvgBase, avatarSize} from './styled';
+import { Body, Content, Buttons, ApplyButton, Avatar, SvgBase, avatarSize } from './styled';
 import serviceHoursContainer from '../../contexts/serviceHoursContainer';
-import { ReactComponent as deleteIcon } from '../../assets/delete.svg'
-import { ReactComponent as editIcon } from '../../assets/edit.svg'
-import SvgIcon from '../../Common/SvgIcon'
+import { ReactComponent as deleteIcon } from '../../assets/delete.svg';
+import { ReactComponent as editIcon } from '../../assets/edit.svg';
+import SvgIcon from '../../Common/SvgIcon';
 
 const daysOfWeek = [
   i18n.t('serviceHours.weekDays.sunday'),
@@ -21,23 +21,23 @@ const daysOfWeek = [
   i18n.t('serviceHours.weekDays.wednesday'),
   i18n.t('serviceHours.weekDays.thursday'),
   i18n.t('serviceHours.weekDays.friday'),
-  i18n.t('serviceHours.weekDays.saturday')
-]
+  i18n.t('serviceHours.weekDays.saturday'),
+];
 
 const makeColumns = () => [
   {
     Header: i18n.t('serviceHours.dayInWeek'),
     accessor: 'dayInWeek',
-    Cell: ({value: dayInWeek}) => daysOfWeek[dayInWeek]
+    Cell: ({ value: dayInWeek }) => daysOfWeek[dayInWeek],
   },
   { accessor: 'startTime', Header: i18n.t('serviceHours.startTime'), width: 150 },
-  { accessor: 'endTime', Header: i18n.t('serviceHours.endTime')},
-  { accessor: 'timezone', Header: i18n.t('serviceHours.timezone')}
+  { accessor: 'endTime', Header: i18n.t('serviceHours.endTime') },
+  { accessor: 'timezone', Header: i18n.t('serviceHours.timezone') },
 ];
 
 export default () => {
   if (!localStorage.token) {
-    return <Redirect to="/login"/>;
+    return <Redirect to="/login" />;
   }
 
   const [popupState, setPopupState] = useState('');
@@ -46,42 +46,42 @@ export default () => {
   const workingHours = serviceHoursContainer.useContainer();
 
   const columns = [...makeColumns(), {
-      Header: '',
-      id: 'buttons',
-      minWidth: 90,
-      accessor: ({ id }) => ({ id }),
-      Cell: ({ value: { id } }) => ( // eslint-disable-line react/prop-types
-        <Buttons>
-          <SvgIcon
-            svg={deleteIcon}
-            onClick={() => {
-                workingHours.deleteSlot(id)
+    Header: '',
+    id: 'buttons',
+    minWidth: 90,
+    accessor: ({ id }) => ({ id }),
+    Cell: ({ value: { id } }) => ( // eslint-disable-line react/prop-types
+      <Buttons>
+        <SvgIcon
+          svg={deleteIcon}
+          onClick={() => {
+                workingHours.deleteSlot(id);
             }}
-          />
-        </Buttons>
-      )
-    }]
-    useEffect(() => {
-      workingHours.loadServiceHours();
-    }, []);
+        />
+      </Buttons>
+    ),
+  }];
+  useEffect(() => {
+    workingHours.loadServiceHours();
+  }, []);
 
-    return (
-      <Fragment>
+  return (
+    <Fragment>
       <Body>
-        <Nav/>
+        <Nav />
         <Content>
           <H1>
             {i18n.t('serviceHours.title')}
           </H1>
           <ApplyButton
-              redButtons={false}
-              disabled={false}
-              type="submit"
-              data-test-id="submitSettings"
-              title={i18n.t('serviceHours.addTimeSlotButton')}
-              displayLoader={false}
-              onClick={() => setPopupState('AddTimeSlot')}
-            />
+            redButtons={false}
+            disabled={false}
+            type="submit"
+            data-test-id="submitSettings"
+            title={i18n.t('serviceHours.addTimeSlotButton')}
+            displayLoader={false}
+            onClick={() => setPopupState('AddTimeSlot')}
+          />
           <Table
             columns={columns}
             data={workingHours.slotsMap}
@@ -99,5 +99,5 @@ export default () => {
 
 
     </Fragment>
-    );
+  );
 };
