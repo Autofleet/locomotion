@@ -537,7 +537,10 @@ export default ({ navigation, menuSide, mapSettings }) => {
         {activeRideState && activeRideState.vehicle && activeRideState.vehicle.location && displayMatchInfo
           ? (
             <Marker
-              coordinate={{ latitude: activeRideState.vehicle.location.lat, longitude: activeRideState.vehicle.location.lng }}
+              coordinate={{
+                latitude: activeRideState.vehicle.location.lat.toFixed(5),
+                longitude: activeRideState.vehicle.location.lng.toFixed(5)
+              }}
             >
               <VehicleDot />
             </Marker>
