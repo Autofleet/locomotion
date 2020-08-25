@@ -277,11 +277,14 @@ export default ({ navigation, menuSide, mapSettings }) => {
     });
 
     if (response.state === 'rejected') {
+      setRideOffer(null);
       togglePopup('rideRejected', true);
     } else {
-      loadActiveRide();
+      setTimeout(() => {
+        setRideOffer(null);
+        loadActiveRide();
+      }, 2500);
     }
-    setRideOffer(null);
   };
 
   const createOffer = async () => {
