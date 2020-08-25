@@ -8,6 +8,7 @@ import MapView, { Polyline, Marker } from 'react-native-maps';
 import polyline from '@mapbox/polyline';
 import moment from 'moment';
 import Config from 'react-native-config';
+import CheapRuler from 'cheap-ruler';
 
 import network from '../../services/network';
 import getPosition from './RideDrawer/StopPointsCard/AddressView/getPostion';
@@ -462,6 +463,28 @@ export default ({ navigation, menuSide, mapSettings }) => {
     }
   }, [mapRegion])
 
+  const VehicleMarker = () => {
+    if (activeRideState && activeRideState.vehicle && activeRideState.vehicle.location && displayMatchInfo) {
+      let newPoint;
+      const { lat, lng } = activeRideState.vehicle.location;
+      const fixLat = Number(Number(lat).toFixed(5)),
+        fixLng = Number(Number(lng).toFixed(5));
+      if (activeSpState && activeSpState.polyline) {
+        const ruler = new CheapRuler(fixLat, 'meters');
+        const line = activeSpState.polyline.map(t => [t.longitude, t.latitude]);
+        newPoint = ruler.pointOnLine(
+          line,
+          [fixLng, fixLat],
+        ).point;
+      } else {
+        newPoint = [fixLat, fixLng];
+      }
+      return <Marker coordinate={{latitude: newPoint[1], longitude: newPoint[0]}}>
+        <VehicleDot/>
+      </Marker>;
+    }
+    return null;
+  };
 
   return (
     <PageContainer>
@@ -533,15 +556,7 @@ export default ({ navigation, menuSide, mapSettings }) => {
               coordinates={activeSpState.polyline}
             />
           ) : null}
-
-        {activeRideState && activeRideState.vehicle && activeRideState.vehicle.location && displayMatchInfo
-          ? (
-            <Marker
-              coordinate={{ latitude: activeRideState.vehicle.location.lat, longitude: activeRideState.vehicle.location.lng }}
-            >
-              <VehicleDot />
-            </Marker>
-          ) : null}
+          <VehicleMarker/>
       </MapView>
       <MapButtonsContainer>
         <MyLocationButton

@@ -1,6 +1,6 @@
 {
   "name": "@autofleet/locomotion-sdk",
-  "version": "1.5.10",
+  "version": "1.5.11",
   "description": "",
   "main": "src/index.js",
   "scripts": {
@@ -52,6 +52,7 @@
     "react-native-location": "^2.5.0"
   },
   "dependencies": {
+    "cheap-ruler": "^3.0.1",
     "i18next": "^19.3.2",
     "react-i18next": "^11.3.3",
     "react-native-datepicker": "^1.7.2",
