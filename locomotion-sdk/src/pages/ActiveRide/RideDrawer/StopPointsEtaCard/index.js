@@ -32,7 +32,8 @@ export default ({
           pickup
           description={rideState ? origin && origin.description
           : requestStopPoints && requestStopPoints.pickup && requestStopPoints.pickup.description}
-          eta={rideState ? origin && origin.metadata && origin.metadata.firstEta : undefined}
+          eta={rideState ? origin && origin.eta : undefined}
+          firstEta={rideState ? origin && origin.metadata && origin.metadata.firstEta : undefined}
           completedAt={rideState ? origin && origin.completedAt
           : undefined}
           etaDrift={pickupEtaDrift}
@@ -40,7 +41,8 @@ export default ({
       <StopPointEtaRow
           description={rideState ? destination && destination.description
           : requestStopPoints && requestStopPoints.dropoff && requestStopPoints.dropoff.description}
-          eta={rideState ? destination && destination.metadata && destination.metadata.firstEta : undefined}
+          eta={rideState ? destination && destination.eta : undefined}
+          firstEta={rideState ? destination && destination.metadata && destination.metadata.firstEta : undefined}
           completedAt={rideState ? destination && destination.completedAt
           : undefined}
           etaDrift={dropoffEtaDrift}
