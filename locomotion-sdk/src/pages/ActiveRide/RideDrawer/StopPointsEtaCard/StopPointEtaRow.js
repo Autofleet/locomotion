@@ -99,7 +99,7 @@ export default ({
       <View>
         {eta || completedAt ? (
           <EtaText>
-            {moment(firstEta).add(etaDrift, 'minutes').diff(moment.now()) < 0 ?
+            {moment(firstEta).diff(moment.now()) < 0 ?
               `${moment(eta).format('HH:mm')}` :
               `${moment(firstEta).format('HH:mm')} - ${moment(firstEta).add(etaDrift, 'minutes').format('HH:mm')}`}
             {/* moment(eta || completedAt).fromNow() */}
