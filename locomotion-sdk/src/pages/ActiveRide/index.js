@@ -139,6 +139,7 @@ export default ({ navigation, menuSide, mapSettings }) => {
         }
       }
 
+      setRideOffer(null);
       return setActiveRide(activeRide);
     }
     if (activeRideState) {
@@ -280,9 +281,8 @@ export default ({ navigation, menuSide, mapSettings }) => {
       setRideOffer(null);
       togglePopup('rideRejected', true);
     } else {
-      setTimeout(async () => {
-        await loadActiveRide();
-        setRideOffer(null);
+      setTimeout(() => {
+        loadActiveRide();
       }, 2500);
     }
   };
