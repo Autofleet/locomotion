@@ -1,10 +1,10 @@
 import React from 'react';
 import { LocomotionRouter } from '@autofleet/locomotion-sdk';
-// import de from './src/I18n/en.json';
+import en from './src/I18n/en.json';
 
 const App = () => (
   <LocomotionRouter
-/*     i18n={{default: 'de', translations: [{lang:'de', translation:de}]}} */
+    i18n={{default: 'en', translations: [{lang:'en', translation:en}]}}
     menuSide="right"
     /* mapSettings={{
       customMapStyle: [{

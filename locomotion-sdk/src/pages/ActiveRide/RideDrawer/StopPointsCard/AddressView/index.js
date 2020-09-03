@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, Fragment } from "react";
 import { ScrollView, View } from "react-native";
-import Config from 'react-native-config'
+import Config from 'react-native-config';
 import getPosition from "./getPostion";
 import network from "../../../../../services/network";
 

@@ -1,54 +1,167 @@
 {
-    "login": {
-        "onBoardingPageTitle": "Please add your name and upload a photo to continue",
-        "phoneNumberPlaceholder": "Phone number",
-        "loginPageInstructions": "Enter your phone number",
-        "verificationCodeInstructions": "Enter the code you received",
-        "submitPhoneNumberButton": "Login",
-        "submitVertButton": "Verify",
-        "phoneNumberError": "Oops! Seems like something went wrong",
-        "invalidPhoneNumberError": "Phone number is not valid",
-        "vertError": "Incorrect verification code",
-        "resendButton": "Resend verification code"
+  "login": {
+    "onBoardingPageTitle": "Please add your name and upload a photo to continue",
+    "phoneNumberPlaceholder": "Phone number",
+    "loginPageInstructions": "Enter your phone number",
+    "verificationCodeInstructions": "Enter the code you received",
+    "submitPhoneNumberButton": "Login",
+    "submitVertButton": "Verify",
+    "phoneNumberError": "Oops! Seems like something went wrong",
+    "invalidPhoneNumberError": "Phone number is not valid",
+    "vertError": "Incorrect verification code",
+    "resendButton": "Start over",
+    "introText": "Please enter your phone number to signup to Locomotion. You will receive an SMS with a verification code.",
+    "termsWebViewTitle": "Terms and conditions",
+    "privacyWebViewTitle": "data protection guidelines",
+    "termsAgreement": "By registering, you agree to the <0>terms and conditions</0> and the <1>data protection guidelines</1>"
+  },
+  "onboarding": {
+    "pageTitle": "Your profile",
+    "submit": "Save",
+    "firstNamePlaceholder": "First name",
+    "lastNamePlaceholder": "Last name",
+    "fullNameError": "Please fill first name and last name",
+    "emailPlaceholder": "Email",
+    "validations": {
+      "required": {
+        "firstName": "First name is required",
+        "lastName": "Last name is required",
+        "email": "Email is required"
+      },
+      "email": {
+        "email": "Email must be valid"
+      }
+
+    }
+  },
+  "home": {
+    "map": {
+      "markers": {
+        "pickup": "Boarding",
+        "dropoff": "Exit"
+      }
     },
-    "onboarding": {
-        "submit": "Save",
-        "firstNamePlaceholder": "First name",
-        "lastNamePlaceholder": "Last name",
-        "fullNameError": "Please fill first name and last name"
+    "letsRideButton": "Let's ride",
+    "cancelRideButton": "Cancel Ride",
+    "cancelRidePriceButton": "Cancel Ride",
+    "choosePickup": "Choose Pickup",
+    "chooseDropoff": "Choose Dropoff",
+    "passengersNumber": "Passengers",
+    "rideStates": {
+      "driverOnTheWay": "Your ride has been booked",
+      "driverOnTheWayEta": "Time till boarding: {{pickupEta}} Minutes",
+      "driverOnTheWaySoon": "Time till boarding: Less then 1 minutes",
+      "onBoard": "Remaining ride time: app. {{dropoffEta}} minutes",
+      "onBoardSoon": "Arriving soon",
+      "driverArrived": "Your driver has arrived"
     },
-    "home": {
-        "letsRideButton": "Let's ride",
-        "cancelRideButton": "Cancel Ride",
-        "choosePickup": "Choose Pickup",
-        "chooseDropoff": "Choose Dropoff",
-        "rideStates": {
-            "driverOnTheWay": "Driver is on the way",
-            "onBoard": "In ride",
-            "driverArrived": "Your driver has arrived"
-        }
+    "bookingCard": {
+      "pickupEtaTitle": "Estimated Boarding",
+      "dropoffEtaTitle": "Estimated Exit"
     },
-    "addressView": {
-        "pickupPlaceholder": "Choose Pickup",
-        "dropoffPlaceholder": "Choose Dropoff"
+    "rideCard": {
+      "carTitle": "Your car:",
+      "driverTitle": "Driver:"
     },
-    "popups": {
-        "rideCancel": {
-            "main": "Your ride has been cancelled",
-            "sub": "Sorry it didn't work this time, please try again soon!"
-        },
-        "rideOver": {
-            "main": "You've arrived!",
-            "sub": "Thanks for riding with us, see you soon!"
-        },
-        "rideRejected": {
-            "main": "Sorry, we couldn't find a driver for you",
-            "sub": "All our drivers are busy right now. Please try again in a few minutes"
-        },
-        "selectNumberOfPassenger": {
-            "main": "Select number of passenger"
-        },
-        "defaultFooterButton": "OK"
+    "offerCard": {
+      "pickup": "Boarding",
+      "dropoff": "Exit",
+      "etaNotice": {
+        "medium": "High Demand! Waiting Time > {{etaThreshold}} min",
+        "high": "Very High Demand! Waiting Time > {{etaThreshold}} min"
+      },
+      "passengersNumber": "Passengers",
+      "confirmOffer": "Book Now",
+      "expiredOffer": "Renew",
+      "expiredOfferText": "Your request expired",
+      "offerBooked": "Ride has been booked"
     },
-    "currency": "€"
+    "futureRides": {
+      "openBookingsButton": "{{openBookings}} open Bookings",
+      "closeButton": "Close",
+      "cancelButton": "Cancel"
+    },
+    "RideScheduler": {
+      "timeSelectionTitle": "I want to start",
+      "now": "Now",
+      "future": "Later",
+      "timePicker": {
+        "date": "Date",
+        "hour": "Hour"
+      }
+    }
+  },
+  "lock": {
+    "header": "Your signup has been recorded",
+    "text": "We have received your registration and will review it as soon as possible",
+    "subText": "You will immediately receive a notification when your registration is completed and you are ready to use Mobility-on-Demand",
+    "submitText": " Login to different account"
+  },
+  "addressView": {
+    "pickupPlaceholder": "Enter address",
+    "dropoffPlaceholder": "Enter address",
+    "pickupTitle": "Boarding",
+    "dropoffTitle": "Exit",
+    "addressPlaceholder": "Enter Address"
+  },
+  "popups": {
+    "rideSummary": {
+      "thanksForRideHeadline": "Thanks for your ride with Mobility-on-Demand!",
+      "rideDataHeadline": "Your ride data",
+      "durationLabel": "Duration",
+      "distanceLabel": "Distance",
+      "priceLabel": "Price",
+      "ratingPre": "How satisfied are you?",
+      "ratingHeadline": "Rate your ride",
+      "ratingPost": "We welcome your feedback",
+      "durationValue": "{{duration}} Minutes",
+      "distanceValue": "{{distance}} km",
+      "priceValue": "{{price}} €",
+      "submit": "Submit"
+    },
+    "rideCancel": {
+      "main": "Your ride has been cancelled",
+      "sub": "Sorry it didn't work this time, please try again soon!"
+    },
+    "rideOver": {
+      "main": "You've arrived!",
+      "sub": "Thanks for riding with us, see you soon!"
+    },
+    "rideRejected": {
+      "main": "Sorry, we couldn't find a driver for you",
+      "sub": "All our drivers are busy right now. Please try again in a few minutes"
+    },
+    "selectNumberOfPassenger": {
+      "main": "Select number of passenger"
+    },
+    "futureRideCanceled": {
+      "title": "Your ride has been cancelled",
+      "subTitle": "Sorry it didn't work out this time, please create an order to try again"
+    },
+    "defaultFooterButton": "OK"
+  },
+  "menu": {
+    "title": "Menu",
+    "home": "Home",
+    "trips": "Trips",
+    "paymentsSettings": "Payment Settings",
+    "account": "Account",
+    "support": "Support",
+    "logout": "Logout"
+  },
+  "contactUs": {
+    "pageTitle": "Contact us"
+  },
+  "rideHistory": {
+    "pageTitle": "Rides History",
+    "noRides": "No results found",
+    "noRidesSubText": "",
+    "ridesTable": {
+      "timeTitle": "Time",
+      "startTitle": "Start",
+      "stopTitle": "Stop",
+      "price": "Price"
+    }
+  },
+  "currency": "€"
 }

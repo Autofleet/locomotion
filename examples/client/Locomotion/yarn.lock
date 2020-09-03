@@ -2,11 +2,12 @@
 # yarn lockfile v1
 
 
-"@autofleet/locomotion-sdk@^1.5.4":
-  version "1.5.4"
-  resolved "https://registry.yarnpkg.com/@autofleet/locomotion-sdk/-/locomotion-sdk-1.5.4.tgz#88bef4d6b338643f34b68fda2c0163c4efa38fb7"
-  integrity sha512-wRmenkjtdjNuCEdbsdCpK5FDx+Zojy3ta1dkV0TBrihHMWDexolXkZsYXYCRDY9FqtURRsNNcnlcwzL9tBZiDQ==
+"@autofleet/locomotion-sdk@^1.5.14":
+  version "1.5.14"
+  resolved "https://registry.yarnpkg.com/@autofleet/locomotion-sdk/-/locomotion-sdk-1.5.14.tgz#c54b8c35ac3a6494a1d53e5f9dd9c21da54e21f1"
+  integrity sha512-XEehXVriGRzy2V3kGxOQSGeqdjxSUKY3aGsDSVAPrEqmdzRF0c5Z5MpmtfqkYAFusStJ87Mdp7qwruVTMQW8aw==
   dependencies:
+    cheap-ruler "^3.0.1"
     i18next "^19.3.2"
     react-i18next "^11.3.3"
     react-native-datepicker "^1.7.2"
@@ -3989,6 +3990,11 @@ chardet@^0.7.0:
   version "0.7.0"
   resolved "https://registry.yarnpkg.com/chardet/-/chardet-0.7.0.tgz#90094849f0937f2eedc2425d0d28a9e5f0cbad9e"
   integrity sha512-mT8iDcrh03qDGRRmoA2hmBJnxpllMR+0/0qlzjqZES6NdiWDcZkCNAk4rPFZ9Q85r27unkiNNg8ZOiwZXBHwcA==
+
+cheap-ruler@^3.0.1:
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/cheap-ruler/-/cheap-ruler-3.0.1.tgz#3df3bd6fe664d8cab9e9e826bba24d7271e7645a"
+  integrity sha512-bmBKGkNKcwCpltGzfMXZMrFE06SG8dgSv96W39Mk+um7zbNTQNumKl5LBwFC0gbffy8Jnf0+SDHsOqpDYJxYow==
 
 chokidar@^2.0.0, chokidar@^2.0.2, chokidar@^2.0.4:
   version "2.1.8"
