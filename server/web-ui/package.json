@@ -17,6 +17,7 @@
     "moment-timezone": "^0.5.31",
     "node-sass": "^4.13.1",
     "object-diff": "0.0.4",
+    "prop-types": "^15.7.2",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
     "react-json-view": "^1.19.1",
@@ -25,6 +26,7 @@
     "react-phone-input-2": "^2.11.0",
     "react-router-dom": "^5.1.2",
     "react-scripts": "3.3.0",
+    "react-select": "^3.1.0",
     "react-simple-timefield": "^3.0.0",
     "react-svg-inline": "^2.1.1",
     "react-table-6": "^6.11.0",
@@ -38,11 +40,53 @@
     "build": "./node_modules/react-scripts/bin/react-scripts.js build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "lint": "./node_modules/.bin/eslint .",
+    "lint": "./node_modules/.bin/eslint src",
     "init": "echo 'RUN'"
   },
   "eslintConfig": {
-    "extends": "react-app"
+    "parser": "babel-eslint",
+    "extends": "airbnb",
+    "env": {
+      "jest": true,
+      "browser": true
+    },
+    "rules": {
+      "func-names": [
+        "error",
+        "never"
+      ],
+      "no-undef": "warn",
+      "no-unused-vars": "warn",
+      "react/prop-types": "warn",
+      "no-use-before-define": "warn",
+      "react/default-props-match-prop-types": "warn",
+      "no-useless-escape": "warn",
+      "max-len": "warn",
+      "import/first": "warn",
+      "no-param-reassign": "warn",
+      "no-shadow": "warn",
+      "func-names": "warn",
+      "no-nested-ternary": "warn",
+      "react/jsx-filename-extension": 0,
+      "jsx-a11y/click-events-have-key-events": 0,
+      "jsx-a11y/no-static-element-interactions": 0,
+      "jsx-a11y/no-noninteractive-element-interactions": 0,
+      "import/prefer-default-export": 0
+    },
+    "globals": {
+      "document": true,
+      "chrome": true,
+      "window": true,
+      "FormData": true,
+      "google": true,
+      "jest": true,
+      "describe": true,
+      "beforeAll": true,
+      "afterAll": true,
+      "it": true,
+      "expect": true,
+      "localStorage": true
+    }
   },
   "browserslist": {
     "production": [
