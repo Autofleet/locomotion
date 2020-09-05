@@ -9,6 +9,7 @@
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
     "axios": "^0.19.0",
+    "eslint": "^6.8.0",
     "formik": "^2.1.4",
     "i18next": "^19.1.0",
     "jsonwebtoken": "^8.5.1",
@@ -51,10 +52,7 @@
       "browser": true
     },
     "rules": {
-      "func-names": [
-        "error",
-        "never"
-      ],
+      "func-names": "warn",
       "no-undef": "warn",
       "no-unused-vars": "warn",
       "react/prop-types": "warn",
@@ -65,7 +63,6 @@
       "import/first": "warn",
       "no-param-reassign": "warn",
       "no-shadow": "warn",
-      "func-names": "warn",
       "no-nested-ternary": "warn",
       "react/jsx-filename-extension": 0,
       "jsx-a11y/click-events-have-key-events": 0,
