@@ -60,8 +60,7 @@ export default props => {
     if (!place.lat && (place.placeid || place.place_id)) {
       place = await enrichPlaceWithLocation(place);
     }
-
-    if (place.station) {
+    if (Config.DONT_USE_STATIONS || place.station) {
       if (props.onLocationSelect) {
         props.onLocationSelect({
           ...place,
