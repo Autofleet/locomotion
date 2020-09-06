@@ -10,7 +10,7 @@ const webHookHost = process.env.SERVER_HOST || 'https://716ee2e6.ngrok.io';
 const createOffer = async (rideData) => {
   const offerClone = {
     rideType: 'passenger',
-    pooling: process.env.pooling || rideData.rideType === 'pool' ? 'active' : 'no',
+    pooling: process.env.POOLING || rideData.rideType === 'pool' ? 'active' : 'no',
     stopPoints: [
       {
         type: 'pickup',
@@ -33,6 +33,8 @@ const createOffer = async (rideData) => {
     businessModelId: process.env.BUSINESS_MODEL_ID,
     demandSourceId: process.env.DEMAND_SOURCE_ID,
   });
+
+  console.log('offer', { offerClone, offerResponse })
 
   return {
     ...offerResponse,
