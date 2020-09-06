@@ -6,6 +6,10 @@ const availablePlacesPromise = (async () => {
 })();
 
 module.exports = async () => {
+  if (process.env.DONT_USE_STATIONS) {
+    return [];
+  }
+
   const availablePlaces = await availablePlacesPromise;
   if (!availablePlaces) {
     return [];

@@ -14,7 +14,7 @@ RUN npm install --only=production
 COPY . .
 
 COPY ./web-ui ./web-ui
-RUN npm run postinstall
+RUN npm run install-webui
 # If you are building your code for production
 # RUN npm install --only=production
 

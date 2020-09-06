@@ -8,9 +8,15 @@ const webHookHost = process.env.SERVER_HOST || 'https://716ee2e6.ngrok.io';
 
 
 const createOffer = async (rideData) => {
+  let pooling;
+  if (process.env.POOLING) {
+    pooling = process.env.POOLING;
+  } else {
+    pooling = rideData.rideType === 'pool' ? 'active' : 'no';
+  }
   const offerClone = {
     rideType: 'passenger',
-    pooling: process.env.pooling || rideData.rideType === 'pool' ? 'active' : 'no',
+    pooling,
     stopPoints: [
       {
         type: 'pickup',

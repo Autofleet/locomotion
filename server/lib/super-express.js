@@ -13,7 +13,7 @@ const defaultOptions = {
   helmet: true,
 };
 
-module.exports = (options = {}) => {
+module.exports = function (options = {}) {
   const app = express(options);
 
   const isProd = process.env.NODE_ENV === 'production';
