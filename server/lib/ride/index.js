@@ -40,8 +40,6 @@ const createOffer = async (rideData) => {
     demandSourceId: process.env.DEMAND_SOURCE_ID,
   });
 
-  console.log('offer', { offerClone, offerResponse });
-
   return {
     ...offerResponse,
     status: offerResponse.state === 'offer-rejected' ? 'rejected' : offerResponse.state,
