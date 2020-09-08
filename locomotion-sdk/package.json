@@ -1,6 +1,6 @@
 {
   "name": "@autofleet/locomotion-sdk",
-  "version": "1.5.15",
+  "version": "1.5.16",
   "description": "",
   "main": "src/index.js",
   "scripts": {
@@ -20,7 +20,7 @@
     "react": "16.8.6",
     "react-native": "0.60.3",
     "react-native-linear-gradient": "^2.5.4",
-    "react-native-device-info": "^2.3.2",
+    "react-native-device-info": "^6.0.2",
     "react-native-config": "^0.11.7",
     "react-native-image-picker": "^1.0.1",
     "react-native-maps": "^0.26.0",
@@ -53,18 +53,18 @@
   },
   "dependencies": {
     "cheap-ruler": "^3.0.1",
-    "i18next": "^19.3.2",
-    "react-i18next": "^11.3.3",
+    "i18next": "^19.7.0",
+    "react-i18next": "^11.7.2",
     "react-native-datepicker": "^1.7.2",
-    "react-native-keyboard-aware-scroll-view": "^0.9.1",
+    "react-native-keyboard-aware-scroll-view": "^0.9.2",
     "react-native-swipe-verify": "^0.1.6",
     "react-native-table-component": "^1.2.1",
     "unstated-next": "^1.1.0",
-    "yup": "^0.28.1"
+    "yup": "^0.28.5"
   },
   "devDependencies": {
     "@babel/core": "^7.3.3",
-    "@babel/runtime": "^7.3.1",
+    "@babel/runtime": "^7.11.2",
     "@react-native-community/eslint-config": "^0.0.3",
     "@storybook/addon-actions": "^5.2.0-beta.3",
     "@storybook/addon-links": "^5.2.0-beta.3",
