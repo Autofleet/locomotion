@@ -82,7 +82,7 @@ const StopPointTitle = styled.Text`
 `;
 
 export default ({
-  pickup, description, eta, firstEta, completedAt, etaDrift, paddingStart,
+  pickup, description, eta, firstEta, completedAt, etaDrift, paddingStart, showEta,
 }) => (
   <RowContainer pickup={pickup} paddingStart={paddingStart}>
     <AddressTextCont>
@@ -99,7 +99,7 @@ export default ({
       <View>
         {eta || completedAt ? (
           <EtaText>
-            {moment(firstEta).diff(moment.now()) < 0 ?
+            {showEta ?
               `${moment(eta).format('HH:mm')}` :
               `${moment(firstEta).format('HH:mm')} - ${moment(firstEta).add(etaDrift, 'minutes').format('HH:mm')}`}
             {/* moment(eta || completedAt).fromNow() */}
