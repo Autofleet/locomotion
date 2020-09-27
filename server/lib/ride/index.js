@@ -34,18 +34,23 @@ const createOffer = async (rideData) => {
     numberOfPassengers: rideData.numberOfPassengers,
   };
 
-  const { data: offerResponse } = await sdk.Rides.createOffer({
-    ...offerClone,
-    businessModelId: process.env.BUSINESS_MODEL_ID,
-    demandSourceId: process.env.DEMAND_SOURCE_ID,
-  });
+  try {
+    const {data: offerResponse} = await sdk.Rides.createOffer({
+      ...offerClone,
+      businessModelId: process.env.BUSINESS_MODEL_ID,
+      demandSourceId: process.env.DEMAND_SOURCE_ID,
+    });
 
-  return {
-    ...offerResponse,
-    status: offerResponse.state === 'offer-rejected' ? 'rejected' : offerResponse.state,
-    pickupTime: offerResponse.stopPoints[0].etaAtMatching,
-    dropoffTime: offerResponse.stopPoints[1].etaAtMatching,
-  };
+    return {
+      ...offerResponse,
+      status: offerResponse.state === 'offer-rejected' ? 'rejected' : offerResponse.state,
+      pickupTime: offerResponse.stopPoints[0].etaAtMatching,
+      dropoffTime: offerResponse.stopPoints[1].etaAtMatching,
+    };
+  } catch (e) {
+    console.error('getting offer error', { e })
+    return null;
+  }
 };
 
 const createRide = async (rideData, userId) => {
