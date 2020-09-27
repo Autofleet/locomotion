@@ -35,7 +35,7 @@ const createOffer = async (rideData) => {
   };
 
   try {
-    const {data: offerResponse} = await sdk.Rides.createOffer({
+    const { data: offerResponse } = await sdk.Rides.createOffer({
       ...offerClone,
       businessModelId: process.env.BUSINESS_MODEL_ID,
       demandSourceId: process.env.DEMAND_SOURCE_ID,
@@ -48,7 +48,7 @@ const createOffer = async (rideData) => {
       dropoffTime: offerResponse.stopPoints[1].etaAtMatching,
     };
   } catch (e) {
-    console.error('getting offer error', { e })
+    console.error('getting offer error', { e });
     return null;
   }
 };
