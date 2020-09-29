@@ -1,6 +1,7 @@
 const axios = require('axios');
 const jwt = require('jsonwebtoken');
 
+const { AF_API_URL = 'https://api.autofleet.io/' } = process.env;
 const refreshUrl = '/api/v1/login/refresh';
 
 class BaseApi {
@@ -44,7 +45,7 @@ class AutofleetSdk {
   constructor({ refreshToken } = {}) {
     this.refreshToken = refreshToken;
     this.network = axios.create({
-      baseURL: 'https://api.autofleet.io/',
+      baseURL: AF_API_URL,
     });
 
     this.refreshTokenAndSetInterval();
