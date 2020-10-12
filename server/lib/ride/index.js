@@ -159,7 +159,7 @@ const rideService = {
       const afRide = await rideService.getRideFromAf(ride.id);
       await sdk.Rides.cancel(afRide.id, {
         cancellationReason: 'user/cancellation',
-        cancelledBy: 'locomotion',
+        canceledBy: 'locomotion',
       });
       ride.state = 'canceled';
       await ride.save();
@@ -256,7 +256,7 @@ const rideService = {
       const afRide = await rideService.getRideFromAf(ride.id);
       await sdk.Rides.cancel(afRide.id, {
         cancellationReason: 'user/cancellation',
-        cancelledBy: 'locomotion',
+        canceledBy: 'locomotion',
       });
 
       ride.state = 'canceled';

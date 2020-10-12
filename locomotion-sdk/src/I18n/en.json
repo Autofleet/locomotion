@@ -120,7 +120,7 @@
             "submit": "Submit"
         },
         "rideCancel": {
-            "main": "Your ride has been cancelled",
+            "main": "Your ride has been canceled",
             "sub": "Sorry it didn't work this time, please try again soon!"
         },
         "rideOver": {
@@ -135,7 +135,7 @@
             "main": "Select number of passenger"
         },
         "futureRideCanceled": {
-            "title": "Your ride has been cancelled",
+            "title": "Your ride has been canceled",
             "subTitle": "Sorry it didn't work out this time, please create an order to try again"
         },
         "defaultFooterButton": "OK"
