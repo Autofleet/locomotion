@@ -25,7 +25,7 @@ export default class ThumbnailPicker extends React.Component {
   openImagePicker() {
     ImagePicker.showImagePicker({ allowsEditing: true }, (response) => {
       if (response.didCancel) {
-        console.log('User cancelled image picker');
+        console.log('User canceled image picker');
       } else if (response.error) {
         console.log('ImagePicker Error: ', response.error);
       } else {

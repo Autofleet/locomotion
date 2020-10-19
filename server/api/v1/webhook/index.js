@@ -121,7 +121,7 @@ router.put('/:rideId', async (req, res) => {
     }
     ride.state = 'canceled';
     await ride.save();
-  } else if (req.body.ride.state === 'cancelled') {
+  } else if (req.body.ride.state === 'canceled') {
     ride.state = 'canceled';
     await ride.save();
     const currentRide = ride.get();

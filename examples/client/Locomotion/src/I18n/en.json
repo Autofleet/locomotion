@@ -34,7 +34,7 @@
     },
     "popups": {
         "rideCancel": {
-            "main": "Your ride has been cancelled",
+            "main": "Your ride has been canceled",
             "sub": "Sorry it didn't work this time, please try again soon!"
         },
         "rideOver": {
