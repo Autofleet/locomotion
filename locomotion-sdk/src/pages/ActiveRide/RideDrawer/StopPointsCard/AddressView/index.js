@@ -136,10 +136,13 @@ export default props => {
               {item.station ? <StationIcon /> : null}
               <AddressSearchItemText>{item.description}</AddressSearchItemText>
               </View>
-              {item.distance ? (
-                <DistanceFromAddress>
-                  {item.distance ? `${item.distanceFromMe.toFixed(2)}km` : null}
-                </DistanceFromAddress>
+              {/* eslint-disable-next-line no-extra-boolean-cast */}
+              {!!item.distance ? (
+                  <DistanceFromAddress>
+                    {i18n.t('popups.rideSummary.distanceValue', {
+                      distance: item.distanceFromMe.toFixed(2),
+                    })}
+                  </DistanceFromAddress>
               ) : null}
             </AddressSearchItem>
           ))}
