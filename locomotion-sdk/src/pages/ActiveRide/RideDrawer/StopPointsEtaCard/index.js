@@ -27,7 +27,8 @@ export default ({
   pickup, origin, destination, rideState,requestStopPoints, pickupEtaDrift, dropoffEtaDrift,
 }) => {
   const firstEta = rideState ? origin && origin.metadata && origin.metadata.firstEta : undefined;
-  const showEta = firstEta && (moment(firstEta).diff(moment.now()) < 0);
+  const firstEtaWithDrift = moment.utc(firstEta).add(pickupEtaDrift,'minutes')
+  const showEta = firstEta && (firstEtaWithDrift.diff(moment.now()) < 0);
   return (
     <StopPointsEtaContainer>
       <StopPointEtaRow
