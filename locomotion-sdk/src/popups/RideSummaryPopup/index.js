@@ -109,7 +109,7 @@ export default ({
                 <SummaryItemText>{i18n.t('popups.rideSummary.distanceValue', {distance: (rideSummaryData.distance / 1000).toFixed(1)})}</SummaryItemText>
               </SummaryItem>
 
-            {rideSummaryData.price ?
+            {rideSummaryData.price !== null ?
               <SummaryItem last>
                 <SummaryItemIcon source={priceIconSource}/>
                 <SummaryItemTitle>{i18n.t('popups.rideSummary.priceLabel')}</SummaryItemTitle>

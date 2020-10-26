@@ -136,9 +136,11 @@ export default props => {
               {item.station ? <StationIcon /> : null}
               <AddressSearchItemText>{item.description}</AddressSearchItemText>
               </View>
-              {item.distance ? (
+              {item.distance !== null ? (
                 <DistanceFromAddress>
-                  {item.distance ? `${item.distanceFromMe.toFixed(2)}km` : null}
+                  {I18n.t('popups.rideSummary.distanceValue', {
+                    distance: item.distanceFromMe.toFixed(2),
+                  })}
                 </DistanceFromAddress>
               ) : null}
             </AddressSearchItem>
