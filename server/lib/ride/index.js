@@ -108,7 +108,7 @@ const createRide = async (rideData, userId) => {
       demandSourceId: process.env.DEMAND_SOURCE_ID,
       webhookUrl: `${webHookHost}/api/v1/ride-webhook/${ride.id}`.replace(/([^:]\/)\/+/g, '$1'),
       pooling: rideData.rideType === 'pool' ? 'active' : 'no',
-      numberOfPassengers: ride.numberOfPassengers,
+      numberOfPassengers: rideData.numberOfPassengers,
       stopPoints,
     });
 
