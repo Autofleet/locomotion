@@ -83,29 +83,39 @@ const StopPointTitle = styled.Text`
 
 export default ({
   pickup, description, eta, firstEta, completedAt, etaDrift, paddingStart, showEta,
-}) => (
-  <RowContainer pickup={pickup} paddingStart={paddingStart}>
-    <AddressTextCont>
-      <View>
-        <StopPointTitle pickup={pickup}>
-          {i18n.t(pickup ? 'home.bookingCard.pickupEtaTitle' : 'home.bookingCard.dropoffEtaTitle')}
-        </StopPointTitle>
-      </View>
-      <View>
-        <AddressText numberOfLines={2}>
-          {description || i18n.t(pickup ? 'home.choosePickup' : 'home.chooseDropoff')}
-        </AddressText>
-      </View>
-      <View>
-        {eta || completedAt ? (
-          <EtaText>
-            {showEta ?
-              `${moment(eta).format('HH:mm')}` :
-              `${moment(firstEta).format('HH:mm')} - ${moment(firstEta).add(etaDrift, 'minutes').format('HH:mm')}`}
-            {/* moment(eta || completedAt).fromNow() */}
-          </EtaText>
-        ) : null }
-      </View>
-    </AddressTextCont>
-  </RowContainer>
-);
+}) => {
+  const etaToDisplay = () => {
+    if(!firstEta) {
+      return '';
+    }
+    if(showEta) {
+      return moment(eta).format('HH:mm');
+    } else {
+      return `${moment(firstEta).format('HH:mm')} - ${moment(firstEta).add(etaDrift, 'minutes').format('HH:mm')}`;
+    }
+  }
+
+  return (
+    <RowContainer pickup={pickup} paddingStart={paddingStart}>
+      <AddressTextCont>
+        <View>
+          <StopPointTitle pickup={pickup}>
+            {i18n.t(pickup ? 'home.bookingCard.pickupEtaTitle' : 'home.bookingCard.dropoffEtaTitle')}
+          </StopPointTitle>
+        </View>
+        <View>
+          <AddressText numberOfLines={2}>
+            {description || i18n.t(pickup ? 'home.choosePickup' : 'home.chooseDropoff')}
+          </AddressText>
+        </View>
+        <View>
+          {eta || completedAt ? (
+            <EtaText>
+              {etaToDisplay()}
+            </EtaText>
+          ) : null }
+        </View>
+      </AddressTextCont>
+    </RowContainer>
+  );
+}
