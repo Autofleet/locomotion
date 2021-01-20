@@ -56,7 +56,8 @@
       "displayOfferExpirationTime": "Ride offer expires after (seconds)",
       "futureOrderMinTime": "Minimum Time in advance for Pre-Booking",
       "futureOrderMaxTime": "Maximum Time in advance for Pre-Booking",
-      "futureOrderTimeInterval": "Available Pre-Booking Windows Time Interval"
+      "futureOrderTimeInterval": "Available Pre-Booking Windows Time Interval",
+      "beforeTimeWindowMinutes": "Future ride time window (minuets)"
     }
   },
   "serviceHours": {

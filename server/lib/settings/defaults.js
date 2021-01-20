@@ -14,6 +14,7 @@ const settingsDefaults = {
   FUTURE_ORDER_MAX_TIME: 96,
   FUTURE_ORDER_TIME_INTERVAL: 15,
   MAX_FUTURE_RIDES: 1,
+  BEFORE_TIME_WINDOW_MINUTES: 10,
 };
 
 module.exports = settingsDefaults;
