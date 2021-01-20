@@ -191,6 +191,19 @@ const SettingsForm = ({
           />
         </SettingsPanelItem>
 
+        <SettingsPanelItem type="text">
+          <Field
+            name="BEFORE_TIME_WINDOW_MINUTES"
+            label={i18n.t('settings.labels.beforeTimeWindowMinutes')}
+            type="number"
+            component={InputWithLabel}
+            inputComponent={NumberInput}
+            errorMessage={errors.BEFORE_TIME_WINDOW_MINUTES}
+            min="0"
+            inlineField
+          />
+        </SettingsPanelItem>
+
       </SettingsPanel>
     </SettingsContainer>
     <SaveSettingsContainer>

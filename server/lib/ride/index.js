@@ -1,8 +1,10 @@
 require('dotenv');
+const moment = require('moment');
 const logger = require('../../logger');
 const { Ride, User } = require('../../models');
 const afSdk = require('../../sdk');
 const sdk = require('../../sdk');
+const SettingsService = require('../../lib/settings');
 
 const webHookHost = process.env.SERVER_HOST || 'https://716ee2e6.ngrok.io';
 
@@ -97,7 +99,9 @@ const createRide = async (rideData, userId) => {
       }];
 
     if (rideData.scheduledTo) {
+      const windowSetting = await SettingsService.getSettingByKeyFromDb('BEFORE_TIME_WINDOW_MINUTES');
       stopPoints[0].afterTime = rideData.scheduledTo;
+      stopPoints[0].beforeTime = moment(rideData.scheduledTo).add(windowSetting.value, 'minutes').format();
     }
 
     const { data: afRide } = await afSdk.Rides.create({
