@@ -14,7 +14,7 @@ The app comes pre-integrated to autofleet's backend ride engine that matches rid
 
 To use autofleet's APIs, please fill out this form to request access and your API key: [Autofleet API key form](https://forms.gle/fJKS7Hu29S9BXkdL8)
 
-![Driver on the way](https://www.pastepic.xyz/images/2019/07/17/Screen-Shot-2019-07-17-at-3.57.44-PMccdea7e3ec520a1f.png) ![In ride](https://www.pastepic.xyz/images/2019/07/17/Screen-Shot-2019-07-17-at-3.57.04-PM0543753da337fa33.png)
+![Book ride](https://res.cloudinary.com/dgotwqwlz/image/upload/v1618228158/WhatsApp_Image_2021-04-12_at_14.44.40_2_a3cgun.jpg) ![Confirm booking](https://res.cloudinary.com/dgotwqwlz/image/upload/v1618228158/WhatsApp_Image_2021-04-12_at_14.44.40_1_qsji9l.jpg) ![Ride booked](https://res.cloudinary.com/dgotwqwlz/image/upload/v1618228158/WhatsApp_Image_2021-04-12_at_14.44.40_kmyv6j.jpg)
 
 ## Roadmap
 
