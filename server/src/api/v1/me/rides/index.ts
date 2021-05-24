@@ -1,8 +1,8 @@
-const Router = require('../../../../lib/router');
-const rideService = require('../../../../lib/ride');
-const getPreRideDetails = require('../../../../lib/pre-ride-details');
+import Router from '../../../../lib/router';
+import rideService from '../../../../lib/ride';
+import getPreRideDetails from '../../../../lib/pre-ride-details';
 const { Ride } = require('../../../../models');
-const settingsLib = require('../../../../lib/settings');
+import settingsLib from '../../../../lib/settings';
 
 const router = Router();
 
@@ -86,4 +86,4 @@ router.post('/cancel-future-ride', async (req, res) => {
   res.json({ ride });
 });
 
-module.exports = router;
+export default router;

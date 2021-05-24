@@ -1,8 +1,8 @@
-const Router = require('../../../lib/router');
-const authService = require('../../../lib/auth');
-const userService = require('../../../lib/user');
-const settingService = require('../../../lib/settings');
-const logger = require('../../../logger');
+import Router from '../../../lib/router';
+import authService from '../../../lib/auth';
+import userService from '../../../lib/user';
+import settingService from '../../../lib/settings';
+import logger from '../../../logger';
 
 const router = Router();
 
@@ -34,7 +34,7 @@ router.post('/vert', async (req, res) => {
       userId: userProfile.id,
     }, 'refreshToken');
 
-    const additionalUpdateData = {};
+    const additionalUpdateData = {active: null};
     if (userProfile.active === null) {
       try {
         const foundSetting = await settingService.getSettingByKeyFromDb('MANUAL_APPROVAL');
@@ -97,4 +97,4 @@ router.get('/settings', async (req, res) => {
   });
 });
 
-module.exports = router;
+export default router;

@@ -1,8 +1,8 @@
-const Router = require('../../../lib/router');
-const multer = require('multer');
-const authMiddleware = require('../../../middlewares/auth');
-const userService = require('../../../lib/user');
-const Image = require('../../../lib/cloudinary');
+import Router from '../../../lib/router';
+import multer from 'multer';
+import authMiddleware from '../../../middlewares/auth';
+import userService from '../../../lib/user';
+import Image from '../../../lib/cloudinary';
 
 const upload = multer({ storage: multer.memoryStorage() });
 const router = Router();
@@ -40,4 +40,4 @@ router.post('/', authMiddleware.permissionsMiddleWare, upload.single('avatar'), 
   res.json(result);
 });
 
-module.exports = router;
+export default router;

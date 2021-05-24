@@ -1,12 +1,12 @@
-const git = require('git-last-commit');
+import git from 'git-last-commit';
 
-let lastCommit = {};
+let lastCommit = {shortHash: null, subject: null, branch: null};
 
 git.getLastCommit((err, commit) => {
   lastCommit = commit || {};
 });
 
-module.exports = (req, res) => {
+export default (req, res) => {
   res.json({
     status: 'ok',
     lastCommit: {

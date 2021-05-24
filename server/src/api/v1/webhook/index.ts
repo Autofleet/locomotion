@@ -205,4 +205,4 @@ router.get('/notifications', async (req, res) => {
   res.json(200);
 });
 
-module.exports = router;
+export default router;

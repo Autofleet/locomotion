@@ -3,11 +3,14 @@ const userService = require('../../../lib/user');
 const SettingsService = require('../../../lib/settings');
 const TimeSlotsService = require('../../../lib/time-slots');
 
+import rides from './rides';
+import places from './places';
+import uploadImage from './upload-image';
 const router = Router();
 
-router.use('/rides', require('./rides'));
-router.use('/places', require('./places'));
-router.use('/image-upload', require('./upload-image'));
+router.use('/rides', rides);
+router.use('/places', places);
+router.use('/image-upload', uploadImage);
 
 router.get('/', async (req, res) => {
   const userProfile = await userService.find(req.userId);
@@ -36,4 +39,4 @@ router.get('/app-settings/working-hours', async (req, res) => {
   res.json(settingsList);
 });
 
-module.exports = router;
+export default router;

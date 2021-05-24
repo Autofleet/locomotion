@@ -1,6 +1,6 @@
-const Router = require('../../../../lib/router');
-const timeSlots = require('../../../../lib/time-slots');
-const logger = require('../../../../logger');
+import Router from '../../../../lib/router';
+import timeSlots from '../../../../lib/time-slots';
+import logger from '../../../../logger';
 
 
 const router = Router();
@@ -38,4 +38,4 @@ router.delete('/:slotId', async (req, res) => {
   res.json(slots);
 });
 
-module.exports = router;
+export default router;

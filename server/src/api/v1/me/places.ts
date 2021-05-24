@@ -1,6 +1,6 @@
-const Router = require('../../../lib/router');
-const getPlacesByLocation = require('../../../lib/get-places-by-location');
-const getLocationByPlaceId = require('../../../lib/get-location-by-place-id');
+import Router from '../../../lib/router';
+import getPlacesByLocation from '../../../lib/get-places-by-location';
+import getLocationByPlaceId from '../../../lib/get-location-by-place-id';
 
 const router = Router();
 
@@ -16,4 +16,4 @@ router.get('/get-location', async (req, res) => {
   res.json(location);
 });
 
-module.exports = router;
+export default router;

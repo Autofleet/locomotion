@@ -1,5 +1,5 @@
-const Router = require('../../../../lib/router');
-const userService = require('../../../../lib/user');
+import Router from '../../../../lib/router';
+import userService from '../../../../lib/user';
 
 
 const router = Router();
@@ -34,4 +34,4 @@ router.delete('/:userId', async (req, res) => {
   res.json(response);
 });
 
-module.exports = router;
+export default router;

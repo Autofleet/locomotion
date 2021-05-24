@@ -1,12 +1,12 @@
-const Router = require('../../../../lib/router');
-const settingLib = require('../../../../lib/settings');
-const logger = require('../../../../logger');
-const { Setting } = require('../../../../models');
+import Router  from '../../../../lib/router';
+import settingLib from '../../../../lib/settings';
+import logger from '../../../../logger';
+const { Setting } = require ('../../../../models');
 
 const router = Router();
 
 router.get('/', async (req, res) => {
-  let foundSettings = [];
+  let foundSettings: any = [];
 
   try {
     foundSettings = await settingLib.getSettingsList();
@@ -18,7 +18,7 @@ router.get('/', async (req, res) => {
 
 router.get('/get-setting/:settingKey', async (req, res) => {
   const { settingKey } = req.params;
-  let foundSetting = {};
+  let foundSetting: any = {};
 
   try {
     foundSetting = await settingLib.getSettingByKeyFromDb(settingKey);
@@ -100,4 +100,4 @@ router.delete('/:settingId', async (req, res) => {
   }
 });
 
-module.exports = router;
+export default router;

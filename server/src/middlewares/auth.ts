@@ -1,4 +1,4 @@
-const jwt = require('jsonwebtoken');
+import jwt from 'jsonwebtoken';
 
 const SECRET_KEY = process.env.AUTH_ACCESS_SECRET_KEY || '1234';
 
@@ -10,7 +10,7 @@ const getTokenFromHeaders = (headers) => {
   return false;
 };
 
-module.exports = {
+export default {
   permissionsMiddleWare: async (req, res, next) => {
     const accessToken = getTokenFromHeaders(req.headers);
 
