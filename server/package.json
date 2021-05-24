@@ -19,6 +19,19 @@
     "engines": {
         "node": ">=10.0.0"
     },
+    "nodemonConfig": {
+        "ignore": [
+            "**/*.test.ts",
+            "**/*.spec.ts",
+            ".git",
+            "node_modules"
+        ],
+        "watch": [
+            "src"
+        ],
+        "exec": "ts-node src/index.ts",
+        "ext": "ts,js"
+    },
     "author": "AutoFleet",
     "license": "ISC",
     "dependencies": {
@@ -53,6 +66,7 @@
         "sequelize-cli": "^3.2.0",
         "sequelize-replace-enum-postgres": "^1.5.0",
         "shortid": "^2.2.14",
+        "ts-node": "^10.0.0",
         "winston": "^3.1.0"
     },
     "devDependencies": {
