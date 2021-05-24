@@ -1,10 +1,10 @@
-const moment = require('moment');
+import moment from 'moment';
 const i18n = require('../../../i18n');
-const Router = require('../../../lib/router');
-const rideService = require('../../../lib/ride');
+import Router from '../../../lib/router';
+import rideService from '../../../lib/ride';
 const { Ride, User, Notification } = require('../../../models');
-const sendNotification = require('../../../lib/push-notifications');
-const settingsService = require('../../../lib/settings');
+import sendNotification from '../../../lib/push-notifications';
+import settingsService from '../../../lib/settings';
 
 const router = Router();
 

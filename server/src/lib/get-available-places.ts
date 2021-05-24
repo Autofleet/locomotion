@@ -1,11 +1,11 @@
-const { gcsGetFile } = require('./google-storage');
+import { gcsGetFile } from './google-storage';
 
 const availablePlacesPromise = (async () => {
-  const data = await gcsGetFile('locations.json');
+  const data: string = await gcsGetFile('locations.json');
   return JSON.parse(data);
 })();
 
-module.exports = async () => {
+export default async () => {
   if (process.env.DONT_USE_STATIONS) {
     return [];
   }

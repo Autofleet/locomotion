@@ -1,10 +1,9 @@
 require('dotenv');
-const moment = require('moment');
+import moment from 'moment';
 const logger = require('../../logger');
 const { Ride, User } = require('../../models');
-const afSdk = require('../../sdk');
-const sdk = require('../../sdk');
-const SettingsService = require('../../lib/settings');
+import afSdk from '../../sdk';
+import SettingsService from '../../lib/settings';
 
 const webHookHost = process.env.SERVER_HOST || 'https://716ee2e6.ngrok.io';
 
@@ -37,7 +36,7 @@ const createOffer = async (rideData) => {
   };
 
   try {
-    const { data: offerResponse } = await sdk.Rides.createOffer({
+    const { data: offerResponse } = await afSdk.Rides.createOffer({
       ...offerClone,
       businessModelId: process.env.BUSINESS_MODEL_ID,
       demandSourceId: process.env.DEMAND_SOURCE_ID,
@@ -76,7 +75,7 @@ const createRide = async (rideData, userId) => {
   const webhookUrl = `${webHookHost}/api/v1/ride-webhook/${ride.id}`.replace(/([^:]\/)\/+/g, '$1');
 
   try {
-    const stopPoints = [
+    const stopPoints: Array<any> = [
       {
         type: 'pickup',
         description: ride.pickupAddress,
@@ -161,7 +160,7 @@ const rideService = {
 
     if (ride) {
       const afRide = await rideService.getRideFromAf(ride.id);
-      await sdk.Rides.cancel(afRide.id, {
+      await afSdk.Rides.cancel(afRide.id, {
         cancellationReason: 'user/cancellation',
         canceledBy: 'locomotion',
       });
@@ -173,7 +172,7 @@ const rideService = {
     return null;
   },
   getRideFromAf: async (rideId) => {
-    const { data: afRides } = await sdk.Rides.list({
+    const { data: afRides } = await afSdk.Rides.list({
       externalId: rideId,
       demandSourceId: process.env.DEMAND_SOURCE_ID,
     });
@@ -214,7 +213,7 @@ const rideService = {
 
     if (ride) {
       const afRide = await rideService.getRideFromAf(ride.id);
-      await sdk.Rides.rating(afRide.id, {
+      await afSdk.Rides.rating(afRide.id, {
         demandSourceId: process.env.DEMAND_SOURCE_ID,
         rating,
       });
@@ -234,7 +233,7 @@ const rideService = {
     });
 
     if (rides) {
-      const afRides = await Promise.all(rides.map(async (ride) => {
+      const afRides: Array<any> = await Promise.all(rides.map(async (ride) => {
         const afRide = await rideService.getRideFromAf(ride.id);
         return afRide;
       }));
@@ -258,7 +257,7 @@ const rideService = {
 
     if (ride) {
       const afRide = await rideService.getRideFromAf(ride.id);
-      await sdk.Rides.cancel(afRide.id, {
+      await afSdk.Rides.cancel(afRide.id, {
         cancellationReason: 'user/cancellation',
         canceledBy: 'locomotion',
       });
@@ -272,4 +271,4 @@ const rideService = {
   },
 };
 
-module.exports = rideService;
+export default rideService;

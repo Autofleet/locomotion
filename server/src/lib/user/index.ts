@@ -8,7 +8,7 @@ const UserService = {
   async find(id) {
     return User.findById(id);
   },
-  async list(ids) {
+  async list(ids: Array<string> = []) {
     const options = ids ? {
       where: {
         id: {
@@ -18,7 +18,7 @@ const UserService = {
     } : {};
     return User.findAll(options);
   },
-  async findByRefreshTokenId(refreshTokenId) {
+  async findByRefreshTokenId(refreshTokenId: string) {
     return User.findOne({
       where: {
         refreshTokenId,
@@ -26,7 +26,7 @@ const UserService = {
     });
   },
 
-  async findByPhoneNumber(phoneNumber) {
+  async findByPhoneNumber(phoneNumber: string) {
     return User.findAll({
       where: {
         phoneNumber,
@@ -55,4 +55,4 @@ const UserService = {
 
 };
 
-module.exports = UserService;
+export default UserService;

@@ -1,4 +1,4 @@
-const cloudinary = require('cloudinary').v2;
+import {v2 as cloudinary} from 'cloudinary'
 
 const { env } = process;
 
@@ -27,4 +27,4 @@ class Image {
   }
 }
 
-module.exports = Image;
+export default Image;

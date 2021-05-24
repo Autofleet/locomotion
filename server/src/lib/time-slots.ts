@@ -23,4 +23,4 @@ const TimeSlotsService = {
     return deleteTimeSlot;
   },
 };
-module.exports = TimeSlotsService;
+export default TimeSlotsService;

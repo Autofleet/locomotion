@@ -1,11 +1,12 @@
-const Router = require('../../../lib/router');
-const userService = require('../../../lib/user');
-const SettingsService = require('../../../lib/settings');
-const TimeSlotsService = require('../../../lib/time-slots');
+import Router from '../../../lib/router';
+import userService from '../../../lib/user';
+import SettingsService from '../../../lib/settings';
+import TimeSlotsService from '../../../lib/time-slots';
 
 import rides from './rides';
 import places from './places';
 import uploadImage from './upload-image';
+
 const router = Router();
 
 router.use('/rides', rides);

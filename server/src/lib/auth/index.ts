@@ -1,10 +1,10 @@
 /* eslint-disable class-methods-use-this */
-const jwt = require('jsonwebtoken');
-const shortid = require('shortid');
+import jwt from 'jsonwebtoken';
+import shortid from 'shortid';
 
-const Nexmo = require('../nexmo');
+import Nexmo from '../nexmo';
 const { User, Verification } = require('../../models');
-const userService = require('../../lib/user');
+import userService from '../../lib/user';
 
 const {
   AUTH_ACCESS_SECRET_KEY,
@@ -14,8 +14,11 @@ const {
   VERIFICATION_BYPASS_CODE,
 } = process.env;
 
-
 class Auth {
+  user: any;
+  verification: any;
+  nexmo: any;
+
   constructor(userModel = User, verificationModel = Verification) {
     this.user = userModel;
     this.verification = verificationModel;
@@ -95,4 +98,4 @@ class Auth {
   }
 }
 
-module.exports = new Auth();
+export default new Auth();

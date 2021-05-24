@@ -1,6 +1,6 @@
-const OneSignal = require('onesignal-node');
+import { Client } from 'onesignal-node';
 
-const oneSignal = new OneSignal.Client(
+const oneSignal = new Client(
   process.env.ONE_SIGNAL_APP_ID,
   process.env.ONE_SIGNAL_KEY,
 );
@@ -19,7 +19,7 @@ const sendNotification = (targetIdsRaw, notificationId, contents, headings, { tt
         android_channel_id: process.env.ANDROID_CHANNEL_ID,
         include_player_ids: targetIds,
         headings,
-        notificationId,
+        //notificationId,
         ttl,
         data,
       });
@@ -32,4 +32,4 @@ const sendNotification = (targetIdsRaw, notificationId, contents, headings, { tt
   });
 };
 
-module.exports = sendNotification;
+export default sendNotification;

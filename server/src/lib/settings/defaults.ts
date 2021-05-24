@@ -17,4 +17,4 @@ const settingsDefaults = {
   BEFORE_TIME_WINDOW_MINUTES: 10,
 };
 
-module.exports = settingsDefaults;
+export default settingsDefaults;

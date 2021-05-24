@@ -1,4 +1,4 @@
-const settingsDefaults = require('./defaults');
+import settingsDefaults from './defaults';
 const { Setting } = require('../../models');
 
 const parseValue = (value, type) => {
@@ -41,7 +41,7 @@ const getAllSettingFromDb = async () => {
   return settingsList;
 };
 
-module.exports = {
+export default {
   getSettingByKeyFromDb,
   getSettingsList: async () => {
     const settings = await getAllSettingFromDb();

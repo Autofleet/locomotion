@@ -1,6 +1,6 @@
-const axios = require('axios');
+import axios from 'axios';
 
-module.exports = async (placeId) => {
+export default async (placeId) => {
   const { data } = await axios.get('https://maps.googleapis.com/maps/api/place/details/json', {
     params: {
       key: process.env.GOOGLE_MAPS_API_KEY,

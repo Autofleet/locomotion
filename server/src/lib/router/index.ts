@@ -1,4 +1,4 @@
-const { Router } = require('express');
+import { Router } from 'express';
 
 const METHODS = [
   'all',
@@ -24,7 +24,7 @@ const AfEntryPoint = func => async (req, res, next) => {
   }
 };
 
-const AfRouter = (options) => {
+const AfRouter = (options = {}) => {
   const myRouter = Router({ mergeParams: true, ...options });
   METHODS.map((method) => {
     const internalMethod = myRouter[method].bind(myRouter);
@@ -41,4 +41,4 @@ const AfRouter = (options) => {
   return myRouter;
 };
 
-module.exports = AfRouter;
+export default AfRouter;

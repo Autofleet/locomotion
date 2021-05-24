@@ -1,9 +1,11 @@
-const Promise = require('bluebird');
-const Nexmo = require('nexmo');
+import Promise from 'bluebird';
+import Nexmo from 'nexmo';
 
 Nexmo.CHECK_STATUS_SUCSSES = '0';
 
 class NexmoService {
+  virtualNumber: string;
+  nexmo: any;
   constructor() {
     this.virtualNumber = process.env.NEXMO_VIRTUAL_NUMBER;
 
@@ -29,4 +31,4 @@ class NexmoService {
   }
 }
 
-module.exports = new NexmoService();
+export default new NexmoService();

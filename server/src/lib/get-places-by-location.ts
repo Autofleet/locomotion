@@ -1,7 +1,7 @@
-const axios = require('axios');
-const turf = require('@turf/turf');
-const getAvailablePlaces = require('./get-available-places');
-const getLocationByPlaceId = require('./get-location-by-place-id');
+import axios from 'axios';
+import turf from '@turf/turf';
+import getAvailablePlaces from './get-available-places';
+import getLocationByPlaceId from './get-location-by-place-id';
 
 const getPredictedAddress = async (input, location) => {
   const { data } = await axios.get('https://maps.googleapis.com/maps/api/place/autocomplete/json', {
@@ -33,7 +33,7 @@ const getFromAvailablePlaces = async (availablePlaces, closetPlace, myLocation) 
   return availablePlacesWithDistance.sort((place1, place2) => (place1.distanceFromMe - place2.distanceFromMe));
 };
 
-module.exports = async (input, location, stations) => {
+export default async (input, location, stations) => {
   let predictedAddresses;
   const availablePlaces = await getAvailablePlaces();
   if (!stations) {

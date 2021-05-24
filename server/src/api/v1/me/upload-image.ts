@@ -18,7 +18,7 @@ router.post('/', authMiddleware.permissionsMiddleWare, upload.single('avatar'), 
       throw new Error('could not find user');
     }
 
-    const uploadResult = await Image.upload(req.file.buffer);
+    const uploadResult: any = await Image.upload(req.file.buffer);
     if (!uploadResult.secure_url) {
       throw new Error('could not upload image');
     }

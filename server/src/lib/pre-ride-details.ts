@@ -1,5 +1,5 @@
-const axios = require('axios');
-const moment = require('moment');
+import axios from 'axios';
+import moment from 'moment';
 
 const demandApi = axios.create({
   baseURL: process.env.AF_BACKEND_URL,
@@ -44,7 +44,7 @@ const getRouteDistance = async (origin, destination) => {
     directionResult.routes[0].legs.reduce((routeDistance, leg) => routeDistance + leg.distance.value, 0.01) : false;
 };
 
-module.exports = async (origin, destination) => {
+export default async (origin, destination) => {
   const inAreaVehicles = await getAfNearbyVehiclesWithEta(origin);
   let eta;
   if (inAreaVehicles && inAreaVehicles.length) {

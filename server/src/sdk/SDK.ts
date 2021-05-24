@@ -5,6 +5,7 @@ const { AF_API_URL = 'https://api.autofleet.io/' } = process.env;
 const refreshUrl = '/api/v1/login/refresh';
 
 class BaseApi {
+  network: any;
   constructor(network) {
     this.network = network;
   }
@@ -37,12 +38,18 @@ class RideApi extends BaseApi {
 }
 
 class AutofleetSdk {
+  network: any;
+  refreshToken: string;
+  token: string;
+  Rides: any;
+  timeout: ReturnType<typeof setTimeout>;
+
   static async Init({ refreshToken }) {
     const api = new AutofleetSdk({ refreshToken });
     await api.refreshTokenAndSetInterval();
     return api;
   }
-  constructor({ refreshToken } = {}) {
+  constructor({ refreshToken = null } = {}) {
     this.refreshToken = refreshToken;
     this.network = axios.create({
       baseURL: AF_API_URL,
@@ -81,4 +88,4 @@ class AutofleetSdk {
 // };
 // test();
 
-module.exports = AutofleetSdk;
+export default AutofleetSdk;
