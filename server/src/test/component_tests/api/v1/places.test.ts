@@ -65,8 +65,6 @@ describe('Places api', () => {
       input: 'central park',
     }).set('Authorization', `Bearer ${accessToken}`);
 
-    console.log(results);
-
     const googleSample = JSON.parse(googlePlacesSamples);
     expect(results[0].description).toBe(googleSample.predictions[0].description);
     expect(results[0].id).toBe(googleSample.predictions[0].id);
