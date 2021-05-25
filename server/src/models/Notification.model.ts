@@ -1,11 +1,9 @@
 import {
-    Table, Column, Model, PrimaryKey, DataType,
+    Table, Column, Model, PrimaryKey, DataType, CreatedAt, UpdatedAt
   } from 'sequelize-typescript';
 
-  @Table({
-    timestamps: true,
-  })
-  export class Notification extends Model<Notification> {
+  @Table
+  export class Notification extends Model {
     @PrimaryKey
     @Column({
       defaultValue: DataType.UUIDV4,
@@ -31,11 +29,13 @@ import {
     })
     type: string;
 
+    @CreatedAt
     @Column({
         type: DataType.DATE,
     })
     createdAt: string;
 
+    @UpdatedAt
     @Column({
         type: DataType.DATE,
     })

@@ -1,5 +1,5 @@
 import settingsDefaults from './defaults';
-const { Setting } = require('../../models');
+import { Setting } from '../../models';
 
 const parseValue = (value, type) => {
   if (type === 'number') {
@@ -58,7 +58,7 @@ export default {
     return Setting.update(payload, { where: { id: settingId } });
   },
   async get(settingId) {
-    let foundSetting = await Setting.findById(settingId);
+    let foundSetting = await Setting.findByPk(settingId);
     if (foundSetting) {
       foundSetting = foundSetting.get();
       foundSetting.value = parseValue(foundSetting.value, foundSetting.type);

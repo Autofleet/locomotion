@@ -1,5 +1,5 @@
 const request = require('supertest');
-const app = require('../../../../app');
+import app from '../../../../app';
 
 describe('Login Endpoints', () => {
   const baseUrl = '/api/v1/admin';

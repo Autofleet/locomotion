@@ -1,7 +1,7 @@
 import Router  from '../../../../lib/router';
 import settingLib from '../../../../lib/settings';
 import logger from '../../../../logger';
-const { Setting } = require ('../../../../models');
+import { Setting } from '../../../../models';
 
 const router = Router();
 
@@ -62,7 +62,7 @@ router.post('/', async (req, res) => {
 
 router.get('/:settingId', async (req, res) => {
   const { settingId } = req.params;
-  let foundSettings = [];
+  let foundSettings: Setting = null;
 
   try {
     foundSettings = await settingLib.get(settingId);

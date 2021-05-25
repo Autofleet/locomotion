@@ -1,3 +1,4 @@
+import { TimeSlot } from '../../../../models';
 import Router from '../../../../lib/router';
 import timeSlots from '../../../../lib/time-slots';
 import logger from '../../../../logger';
@@ -28,7 +29,7 @@ router.post('/', async (req, res) => {
 
 router.delete('/:slotId', async (req, res) => {
   const { slotId } = req.params;
-  let slots = [];
+  let slots: number = null;
 
   try {
     slots = await timeSlots.deleteTimeSlot(slotId);

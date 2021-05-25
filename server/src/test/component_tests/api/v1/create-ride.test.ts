@@ -1,7 +1,7 @@
 const request = require('supertest');
-const app = require('../../../../app');
-const createUserAndLogin = require('../../../assets/create-user-and-login');
-const { Ride, User, Verification } = require('../../../../models');
+import app from '../../../../app';
+import createUserAndLogin from '../../../assets/create-user-and-login';
+import { Ride, User, Verification } from '../../../../models';
 
 jest.mock('../../../../lib/nexmo', () => ({
   sendSms: jest.fn(() => true),
@@ -24,15 +24,21 @@ describe('Create rides', () => {
   it('Can create ride', async () => {
     const { accessToken } = await createUserAndLogin();
     const res = await request(app).post(`${baseUrl}/me/rides`).send({
-      pickupAddress: 'Some address 1',
-      pickupLat: 32,
-      pickupLng: 34.1,
-      dropoffAddress: 'Some address 2',
-      dropoffLat: 32.2,
-      dropoffLng: 34.2,
+      numberOfPassenger: 1,
+      stopPoints: [
+        {
+          address: 'Some address 1',
+          lat: 32,
+          lng: 34.1,
+        },
+        {
+          address: 'Some address 2',
+          lat: 32.2,
+          lng: 34.2,
+        }
+      ]
     }).set('Authorization', `Bearer ${accessToken}`);
 
-    console.log(accessToken);
     expect(res.statusCode).toBe(200);
     // expect(res.body).toEqual({ success: true });
   });

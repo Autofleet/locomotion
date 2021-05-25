@@ -13,11 +13,9 @@ import {
   };
 
 
-  @Table({
-    timestamps: true,
-  })
-  export class Ride extends Model<Ride> {
-    STATES = states;
+  @Table
+  export class Ride extends Model {
+    static STATES = states;
 
     @PrimaryKey
     @Column({
@@ -110,4 +108,8 @@ import {
     })
     updatedAt: string;
 
+    @Column({
+      type: DataType.INTEGER,
+    })
+    rating: number;
   }

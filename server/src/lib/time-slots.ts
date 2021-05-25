@@ -1,4 +1,4 @@
-const { TimeSlot } = require('../models');
+import { TimeSlot } from '../models';
 
 
 const TimeSlotsService = {

@@ -1,6 +1,7 @@
 const request = require('supertest');
-const app = require('../../app');
-const { User, Verification } = require('../../models');
+
+import app from '../../app';
+import { User, Verification } from '../../models';
 
 jest.mock('../../lib/nexmo', () => ({
   sendSms: jest.fn(() => true),
@@ -8,9 +9,10 @@ jest.mock('../../lib/nexmo', () => ({
 
 const baseUrl = '/api/v1';
 
-module.exports = async () => {
+export default async () => {
   await User.create({ phoneNumber: '972501234567', firstName: 'GUY' });
   await Verification.create({ phoneNumber: '972501234567', externalCode: '1234' });
   const response = await request(app).post(`${baseUrl}/login/vert`).send({ phoneNumber: '972501234567', code: '1234' });
+
   return response.body;
 };

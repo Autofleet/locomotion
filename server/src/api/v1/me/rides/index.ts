@@ -1,14 +1,14 @@
 import Router from '../../../../lib/router';
 import rideService from '../../../../lib/ride';
 import getPreRideDetails from '../../../../lib/pre-ride-details';
-const { Ride } = require('../../../../models');
+import { Ride } from '../../../../models';
 import settingsLib from '../../../../lib/settings';
 
 const router = Router();
 
 // to check if equal to active
 router.get('/', async (req, res) => {
-  const rides = await Ride.find({
+  const rides = await Ride.findAll({
     where: {
       userId: req.userId,
       state: req.query.activeRide ? Ride.STATES.ACTIVE : undefined,

@@ -2,10 +2,8 @@ import {
     Table, Column, Model, PrimaryKey, DataType,
   } from 'sequelize-typescript';
 
-  @Table({
-    timestamps: true,
-  })
-  export class Settings extends Model<Settings> {
+  @Table
+  export class Setting extends Model {
     @PrimaryKey
     @Column({
       allowNull: false,

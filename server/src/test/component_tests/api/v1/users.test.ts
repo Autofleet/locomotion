@@ -1,6 +1,6 @@
 const request = require('supertest');
-const app = require('../../../../app');
-const { User, Verification } = require('../../../../models');
+import app from '../../../../app';
+import { User, Verification } from '../../../../models';
 
 describe('Users Endpoints', () => {
   const baseUrl = '/api/v1/admin';
@@ -35,7 +35,7 @@ describe('Users Endpoints', () => {
   };
 
   beforeAll(async () => {
-    expect((await request(app).get('/')).status).toBe(200);
+    expect((await request(app).get('/version')).status).toBe(200);
 
     const res = await request(app).post(`${baseUrl}/auth`).send({
       userName: 'admin',
@@ -53,7 +53,8 @@ describe('Users Endpoints', () => {
   });
 
   it('test create new user', async () => {
-    const res = await request(app).post(`${usersApiUrl}`).set(...acToken).send({ user: firstUserData });
+    const res = await request(app).post(`${usersApiUrl}`).set(...acToken).send({ ...firstUserData });
+
     expect(res.statusCode).toBe(200);
     expect(res.body.id).toEqual(firstUserData.id);
   });
@@ -61,6 +62,7 @@ describe('Users Endpoints', () => {
   it('test get all users', async () => {
     await initDatabase();
     const res = await request(app).get(`${usersApiUrl}`).set(...acToken);
+
     expect(res.statusCode).toBe(200);
     expect(res.body.length).toEqual(2);
     expect(res.body[0].id).toEqual(firstUserData.id);

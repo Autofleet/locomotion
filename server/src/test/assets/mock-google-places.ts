@@ -1,4 +1,4 @@
-module.exports = {
+export default JSON.stringify({
   predictions:
   [{
     description: 'Central Park Zoo, East 64th Street, New York, NY, United States',
@@ -31,4 +31,4 @@ module.exports = {
     reference: 'ChIJHTgvgPX2aS4ReiDDN1DWFug',
   }],
   status: 'OK',
-};
+});

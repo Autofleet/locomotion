@@ -2,10 +2,8 @@ import {
     Table, Column, Model, PrimaryKey, DataType,
   } from 'sequelize-typescript';
 
-  @Table({
-    timestamps: true,
-  })
-  export class TimeSlots extends Model<TimeSlots> {
+  @Table
+  export class TimeSlot extends Model{
     @PrimaryKey
     @Column({
       defaultValue: DataType.UUIDV4,

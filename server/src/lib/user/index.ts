@@ -1,14 +1,16 @@
 const Sequelize = require('sequelize');
-const { User } = require('../../models');
+import { User } from '../../models';
 
 
 const { Op } = Sequelize;
 
 const UserService = {
   async find(id) {
-    return User.findById(id);
+    return User.findByPk(id);
   },
-  async list(ids: Array<string> = []) {
+  async list(ids: Array<string> | null = null) {
+    console.log(ids);
+
     const options = ids ? {
       where: {
         id: {
@@ -40,7 +42,7 @@ const UserService = {
   },
 
   async update(id, data) {
-    const user = await User.findById(id);
+    const user = await User.findByPk(id);
     return user.update(data);
   },
   async destroy(id) {

@@ -1,7 +1,7 @@
 require('dotenv');
 import moment from 'moment';
 const logger = require('../../logger');
-const { Ride, User } = require('../../models');
+import { Ride, User } from '../../models';
 import afSdk from '../../sdk';
 import SettingsService from '../../lib/settings';
 
@@ -71,7 +71,7 @@ const createRide = async (rideData, userId) => {
 
   const {
     avatar, firstName, lastName, phoneNumber,
-  } = await User.findById(userId, { attributes: ['avatar', 'firstName', 'lastName', 'phoneNumber'] });
+  } = await User.findByPk(userId, { attributes: ['avatar', 'firstName', 'lastName', 'phoneNumber'] });
   const webhookUrl = `${webHookHost}/api/v1/ride-webhook/${ride.id}`.replace(/([^:]\/)\/+/g, '$1');
 
   try {
@@ -79,8 +79,8 @@ const createRide = async (rideData, userId) => {
       {
         type: 'pickup',
         description: ride.pickupAddress,
-        lat: parseFloat(ride.pickupLat),
-        lng: parseFloat(ride.pickupLng),
+        lat: ride.pickupLat,
+        lng: ride.pickupLng,
         contactPersonName: `${firstName} ${lastName}`,
         contactPersonPhone: phoneNumber,
         contactPersonAvatar: avatar,
@@ -88,8 +88,8 @@ const createRide = async (rideData, userId) => {
       },
       {
         type: 'dropoff',
-        lat: parseFloat(ride.dropoffLat),
-        lng: parseFloat(ride.dropoffLng),
+        lat: ride.dropoffLat,
+        lng: ride.dropoffLng,
         description: ride.dropoffAddress,
         contactPersonName: `${firstName} ${lastName}`,
         contactPersonPhone: phoneNumber,

@@ -3,10 +3,9 @@ import {
   } from 'sequelize-typescript';
 
   @Table({
-    timestamps: true,
     paranoid: true,
   })
-  export class User extends Model<User> {
+  export class User extends Model {
     @PrimaryKey
     @Column({
       defaultValue: DataType.UUIDV4,

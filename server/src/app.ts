@@ -3,8 +3,8 @@ import path from 'path';
 import express from 'express';
 const SExpress = require('./lib/super-express');
 const logger = require('./logger');
-const packageJson = require('../package');
-
+const packageJson = require('../package.json');
+import './sequelize';
 import alive from './alive';
 import api from './api';
 

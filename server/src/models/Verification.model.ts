@@ -3,9 +3,8 @@ import {
   } from 'sequelize-typescript';
 
   @Table({
-    timestamps: true,
   })
-  export class Verification extends Model<Verification> {
+  export class Verification extends Model {
     @PrimaryKey
     @Column({
       type: DataType.UUID,

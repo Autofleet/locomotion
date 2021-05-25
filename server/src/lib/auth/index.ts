@@ -3,7 +3,7 @@ import jwt from 'jsonwebtoken';
 import shortid from 'shortid';
 
 import Nexmo from '../nexmo';
-const { User, Verification } = require('../../models');
+import { User, Verification } from '../../models';
 import userService from '../../lib/user';
 
 const {

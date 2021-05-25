@@ -2,7 +2,7 @@ import moment from 'moment';
 const i18n = require('../../../i18n');
 import Router from '../../../lib/router';
 import rideService from '../../../lib/ride';
-const { Ride, User, Notification } = require('../../../models');
+import { Ride, User, Notification } from '../../../models';
 import sendNotification from '../../../lib/push-notifications';
 import settingsService from '../../../lib/settings';
 
@@ -173,7 +173,7 @@ router.put('/:rideId', async (req, res) => {
   return res.json(ride);
 });
 
-router.get('/notifications', async (req, res) => {
+/* router.get('/notifications', async (req, res) => {
   const notifications = await Notification.findAll({
     where: {
       state: Notification.STATES.PENDING,
@@ -203,6 +203,6 @@ router.get('/notifications', async (req, res) => {
   });
 
   res.json(200);
-});
+});  */
 
 export default router;
