@@ -25,9 +25,9 @@ app.get('/alive', alive);
 
 app.use('/api', api);
 
-app.use(express.static('./web-ui/build'));
+app.use(express.static('./src/web-ui/build'));
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, './web-ui/build/index.html'));
+  res.sendFile(path.join(__dirname, './src/web-ui/build/index.html'));
 });
 
 export default app;

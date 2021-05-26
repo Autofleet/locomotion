@@ -5,12 +5,17 @@
         "esModuleInterop": true,
         "target": "es6",
         "moduleResolution": "node",
-        "sourceMap": true,
+        "sourceMap": false,
         "outDir": "./dist",
         "baseUrl": ".",
         "experimentalDecorators": true,
         "emitDecoratorMetadata": true,
+        "resolveJsonModule": true,
         "allowJs": true,
+        "types": [
+            "node",
+            "jest"
+        ],
         "paths": {
             "*": [
                 "node_modules/*"
@@ -19,5 +24,12 @@
     },
     "include": [
         "src/**/*",
-    ]
+        "src/web-ui/build"
+    ],
+    "exclude": [
+        "node_modules",
+        "**/*.spec.ts",
+        "**/*.test.ts",
+        "src/web-ui"
+    ],
 }
