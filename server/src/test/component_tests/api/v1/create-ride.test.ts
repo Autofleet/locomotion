@@ -1,7 +1,8 @@
-const request = require('supertest');
 import app from '../../../../app';
 import createUserAndLogin from '../../../assets/create-user-and-login';
 import { Ride, User, Verification } from '../../../../models';
+
+const request = require('supertest');
 
 jest.mock('../../../../lib/nexmo', () => ({
   sendSms: jest.fn(() => true),
@@ -35,8 +36,8 @@ describe('Create rides', () => {
           address: 'Some address 2',
           lat: 32.2,
           lng: 34.2,
-        }
-      ]
+        },
+      ],
     }).set('Authorization', `Bearer ${accessToken}`);
 
     expect(res.statusCode).toBe(200);

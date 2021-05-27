@@ -1,20 +1,21 @@
-const _ = require('lodash');
 import {
-    Table, Column, Model, PrimaryKey, DataType,
-  } from 'sequelize-typescript';
+  Table, Column, Model, PrimaryKey, DataType,
+} from 'sequelize-typescript';
 
-  export const states = {
-    CREATING: 'creating',
-    ACTIVE: 'active',
-    COMPLETED: 'completed',
-    CANCELED: 'canceled',
-    REJECTED: 'rejected',
-    PENDING: 'pending',
-  };
+const _ = require('lodash');
+
+export const states = {
+  CREATING: 'creating',
+  ACTIVE: 'active',
+  COMPLETED: 'completed',
+  CANCELED: 'canceled',
+  REJECTED: 'rejected',
+  PENDING: 'pending',
+};
 
 
   @Table
-  export class Ride extends Model {
+export class Ride extends Model {
     static STATES = states;
 
     @PrimaryKey
@@ -38,8 +39,8 @@ import {
     state: string;
 
     @Column({
-        type: DataType.STRING,
-        allowNull: false,
+      type: DataType.STRING,
+      allowNull: false,
     })
     pickupAddress: string;
 
@@ -112,4 +113,4 @@ import {
       type: DataType.INTEGER,
     })
     rating: number;
-  }
+}

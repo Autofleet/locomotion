@@ -1,10 +1,10 @@
 import {
-    Table, Column, Model, PrimaryKey, DataType,
-  } from 'sequelize-typescript';
+  Table, Column, Model, PrimaryKey, DataType,
+} from 'sequelize-typescript';
 
   @Table({
   })
-  export class Verification extends Model {
+export class Verification extends Model {
     @PrimaryKey
     @Column({
       type: DataType.UUID,
@@ -21,5 +21,5 @@ import {
       type: DataType.STRING,
     })
     externalCode: string;
-  }
+}
 

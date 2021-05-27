@@ -1,9 +1,9 @@
 import {
-    Table, Column, Model, PrimaryKey, DataType, CreatedAt, UpdatedAt
-  } from 'sequelize-typescript';
+  Table, Column, Model, PrimaryKey, DataType, CreatedAt, UpdatedAt,
+} from 'sequelize-typescript';
 
   @Table
-  export class Notification extends Model {
+export class Notification extends Model {
     @PrimaryKey
     @Column({
       defaultValue: DataType.UUIDV4,
@@ -12,33 +12,32 @@ import {
     id: string;
 
     @Column({
-        type: DataType.UUID,
-        allowNull: false,
+      type: DataType.UUID,
+      allowNull: false,
     })
     userId: string;
 
     @Column({
-        type: DataType.UUID,
-        allowNull: false,
+      type: DataType.UUID,
+      allowNull: false,
     })
     rideId: string;
 
     @Column({
-        type: DataType.STRING,
-        allowNull: false,
+      type: DataType.STRING,
+      allowNull: false,
     })
     type: string;
 
     @CreatedAt
     @Column({
-        type: DataType.DATE,
+      type: DataType.DATE,
     })
     createdAt: string;
 
     @UpdatedAt
     @Column({
-        type: DataType.DATE,
+      type: DataType.DATE,
     })
     updatedAt: string;
-
-  }
+}

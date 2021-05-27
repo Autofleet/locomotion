@@ -1,11 +1,11 @@
 import {
-    Table, Column, Model, PrimaryKey, DataType,Unique,IsEmail
-  } from 'sequelize-typescript';
+  Table, Column, Model, PrimaryKey, DataType, Unique, IsEmail,
+} from 'sequelize-typescript';
 
   @Table({
     paranoid: true,
   })
-  export class User extends Model {
+export class User extends Model {
     @PrimaryKey
     @Column({
       defaultValue: DataType.UUIDV4,
@@ -64,5 +64,5 @@ import {
       type: DataType.STRING,
     })
     deviceType: string;
-  }
+}
 

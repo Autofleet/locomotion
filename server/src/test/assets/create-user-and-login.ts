@@ -1,7 +1,7 @@
-const request = require('supertest');
-
 import app from '../../app';
 import { User, Verification } from '../../models';
+
+const request = require('supertest');
 
 jest.mock('../../lib/nexmo', () => ({
   sendSms: jest.fn(() => true),

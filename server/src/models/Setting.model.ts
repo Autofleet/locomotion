@@ -1,9 +1,9 @@
 import {
-    Table, Column, Model, PrimaryKey, DataType,
-  } from 'sequelize-typescript';
+  Table, Column, Model, PrimaryKey, DataType,
+} from 'sequelize-typescript';
 
   @Table
-  export class Setting extends Model {
+export class Setting extends Model {
     @PrimaryKey
     @Column({
       allowNull: false,
@@ -14,14 +14,14 @@ import {
     id: number;
 
     @Column({
-        type: DataType.STRING,
-        allowNull: false,
+      type: DataType.STRING,
+      allowNull: false,
     })
     key: string;
 
     @Column({
-        type: DataType.STRING,
-        allowNull: true,
+      type: DataType.STRING,
+      allowNull: true,
     })
     value: string;
 
@@ -31,5 +31,5 @@ import {
       allowNull: false,
     })
     type: string;
-  }
+}
 

@@ -1,5 +1,6 @@
 import Router from '../lib/router';
-import v1 from './v1'
+import v1 from './v1';
+
 const router = Router();
 
 router.use('/v1', v1);

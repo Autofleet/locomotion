@@ -1,5 +1,6 @@
-const Sequelize = require('sequelize');
 import { User } from '../../models';
+
+const Sequelize = require('sequelize');
 
 
 const { Op } = Sequelize;

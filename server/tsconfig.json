@@ -29,7 +29,7 @@
     "exclude": [
         "node_modules",
         "**/*.spec.ts",
-        "**/*.test.ts",
+        //"**/*.test.ts",
         "src/web-ui"
     ],
 }

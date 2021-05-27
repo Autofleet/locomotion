@@ -1,9 +1,9 @@
 import {
-    Table, Column, Model, PrimaryKey, DataType,
-  } from 'sequelize-typescript';
+  Table, Column, Model, PrimaryKey, DataType,
+} from 'sequelize-typescript';
 
   @Table
-  export class TimeSlot extends Model{
+export class TimeSlot extends Model {
     @PrimaryKey
     @Column({
       defaultValue: DataType.UUIDV4,
@@ -18,7 +18,7 @@ import {
     timezone: string;
 
     @Column({
-        type: DataType.INTEGER,
+      type: DataType.INTEGER,
     })
     dayInWeek: number;
 
@@ -33,5 +33,5 @@ import {
       allowNull: false,
     })
     endTime: string;
-  }
+}
 

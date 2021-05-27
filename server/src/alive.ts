@@ -1,6 +1,6 @@
 import git from 'git-last-commit';
 
-let lastCommit = {shortHash: null, subject: null, branch: null};
+let lastCommit = { shortHash: null, subject: null, branch: null };
 
 git.getLastCommit((err, commit) => {
   lastCommit = commit || {};

@@ -1,9 +1,9 @@
 import Router from '../../../lib/router';
 import authService from '../../../lib/auth';
 import { authAdmin, adminPermissionsMiddleWare } from '../../../lib/auth/admin';
-import users from './users'
-import settings from './settings'
-import serviceHours from './service-hours'
+import users from './users';
+import settings from './settings';
+import serviceHours from './service-hours';
 
 
 const router = Router();

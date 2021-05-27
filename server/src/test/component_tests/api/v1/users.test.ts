@@ -1,6 +1,7 @@
-const request = require('supertest');
 import app from '../../../../app';
 import { User, Verification } from '../../../../models';
+
+const request = require('supertest');
 
 describe('Users Endpoints', () => {
   const baseUrl = '/api/v1/admin';
