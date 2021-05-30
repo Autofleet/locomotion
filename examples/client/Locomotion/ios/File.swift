@@ -2,8 +2,7 @@
 //  File.swift
 //  Locomotion
 //
-//  Created by Guy Serfaty on 20/07/2019.
-//  Copyright © 2019 Facebook. All rights reserved.
+//  Created by Ori Efrati on 26/05/2021.
 //
 
 import Foundation
