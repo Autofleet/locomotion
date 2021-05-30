@@ -10,16 +10,17 @@ import NavigationService from './services/navigation';
 import RidePopups from './popups/RidePopups';
 import SettingsContext from './context/settings'
 
-export default props => (
-  <MainProvider {...props}>
+export default props => {
+ return  (
+   <MainProvider {...props}>
     <SettingsContext.Provider>
       <MainRouter
         ref={navigation => NavigationService.setTopLevelNavigator(navigation)}
         {...props}
         />
-      {props.children}
-      {/* Popups */}
+       {props.children}
+      {/*  Popups */}
       <RidePopups />
       </SettingsContext.Provider>
   </MainProvider>
-);
+)};

@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "652520159598",
+    "firebase_url": "https://locomotion.firebaseio.com",
+    "project_id": "locomotion",
+    "storage_bucket": "locomotion.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:652520159598:android:09420e584200412ca7e97f",
+        "android_client_info": {
+          "package_name": "com.locomotion"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "652520159598-o5nhh5gcugf2kpekosh4dqm9l7n2mk91.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB3_V6hyqrL_dQHJUgxvMGyEnXqJcd4nhc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "652520159598-o5nhh5gcugf2kpekosh4dqm9l7n2mk91.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

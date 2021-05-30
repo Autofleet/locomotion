@@ -1,5 +1,5 @@
 import axios from 'axios';
-import turf from '@turf/turf';
+import * as turf from '@turf/turf';
 import getAvailablePlaces from './get-available-places';
 import getLocationByPlaceId from './get-location-by-place-id';
 
@@ -25,12 +25,22 @@ const getFromAvailablePlaces = async (availablePlaces, closetPlace, myLocation) 
     id: availablePlace.properties.id,
     lat: availablePlace.geometry.coordinates[1],
     lng: availablePlace.geometry.coordinates[0],
-    distance: location ? turf.distance(turf.point([location.lng, location.lat]), turf.point(availablePlace.geometry.coordinates)) : undefined,
-    distanceFromMe: turf.distance(turf.point([myLocation.lng, myLocation.lat]), turf.point(availablePlace.geometry.coordinates)),
+    distance: location ?
+      turf.distance(
+        turf.point([location.lng, location.lat]),
+        turf.point(availablePlace.geometry.coordinates),
+      )
+      : null,
+    distanceFromMe: location ?
+      turf.distance(
+        turf.point([myLocation.lng, myLocation.lat]),
+        turf.point(availablePlace.geometry.coordinates),
+      ) : null,
     station: true,
   }));
 
-  return availablePlacesWithDistance.sort((place1, place2) => (place1.distanceFromMe - place2.distanceFromMe));
+  return availablePlacesWithDistance
+    .sort((place1, place2) => (place1.distanceFromMe - place2.distanceFromMe));
 };
 
 export default async (input, location, stations) => {
@@ -44,7 +54,11 @@ export default async (input, location, stations) => {
   if (input) {
     predictedAddresses = await getPredictedAddress(input, location);
     if (availablePlaces && availablePlaces.length && predictedAddresses.length) {
-      predictedAddresses = await getFromAvailablePlaces(availablePlaces, predictedAddresses[0], location);
+      predictedAddresses = await getFromAvailablePlaces(
+        availablePlaces,
+        predictedAddresses[0],
+        location,
+      );
     }
   } else {
     predictedAddresses = await getFromAvailablePlaces(availablePlaces, undefined, location);

@@ -21,7 +21,7 @@ import PageHeader from '../../Components/PageHeader';
 
 
 export default ({
-  navigation, screenOptions, menuSide, ...props
+  navigation, screenOptions, menuSide, route, ...props
 }) => {
   const [onboardingState, dispatchOnboardingState] = useState({
     uploadPromise: false,
@@ -34,12 +34,22 @@ export default ({
   const [showHeaderIcon, setShowHeaderIcon] = useState(true);
 
   useEffect(() => {
-    setShowHeaderIcon(navigation.getParam('showHeaderIcon', true));
+    if(route.params && route.params.showHeaderIcon) {
+      setShowHeaderIcon(route.params.showHeaderIcon);
+    }
   }, []);
 
   useEffect(() => {
     setFieldsData();
   }, []);
+
+  useEffect(() => {
+    console.log(`MOUNT`);
+    return () => {
+      console.log(`UNMOUNT`);
+
+    }
+  }, [])
   const setOnboardingState = object => dispatchOnboardingState({
     ...onboardingState,
     ...object,

@@ -24,7 +24,7 @@ export default ({ navigation, menuSide }) => {
 
   useEffect(() => {
     loadSettings();
-  });
+  }, []);
 
   return (
     <Fragment>

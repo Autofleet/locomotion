@@ -1,5 +1,3 @@
-import { NavigationActions } from 'react-navigation';
-
 let Navigator;
 
 function setTopLevelNavigator(navigatorRef) {
