@@ -18,14 +18,13 @@ To use autofleet's APIs, please fill out this form to request access and your AP
 
 ## Roadmap
 
-* **In-Ride**: updates to ride, ride cancellation 
-* **Post-Ride**: display ride summary, request rating from customer, allow comments on driver
-* Web interface for customer profile and payments management
+* **In-Ride**: updates to ride (destination, new stop points, etc.)
+* **Post-Ride**: allow comments on driver
+* Payments integration, including customer onboarding and processing
 * Walking navigation for customer to pickup point
 * Show nearby vehicles and classes, and pre-ETAs and prices
 * Add special requests/ notes to drivers
-* Time of order - ASAP or book for future order
-* Booking history: details of the previous trips and receipts
+* Customizable branding and color pallette
 
 ## Authors & Acknowledgements
 
