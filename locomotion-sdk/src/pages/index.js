@@ -16,8 +16,9 @@ import RideHistory from './RideHistory';
 import ContactUs from './ContactUs';
 import Onboarding from './Onboarding';
 import Lock from './Lock';
+import Logout from './Logout';
 import { DrawerContentComponent, DrawerLabel, Icon } from '../Components/Drawer';
-import { Arrow } from '../Components/Drawer/styled';
+import AppSettings from '../services/app-settings';
 
 const PlusIconSource = require('../assets/plus.png');
 const CarIconSource = require('../assets/menuItems/car.png');
@@ -53,7 +54,7 @@ const screensOptions = {
     icon: HelpIconSource
   },
   Logout: {
-    screen: ActiveRide,
+    screen: Logout,
     title: i18n.t('menu.logout'),
     icon: LogoutIconSource
   },
@@ -160,7 +161,7 @@ export const MainRouter = (props) => {
       <MainStack.Screen name="Onboarding" component={addPageProps(Onboarding)} options={{ headerShown: false }} />
       <MainStack.Screen name="Auth" component={addPageProps(AuthStackNavigator)} options={{ headerShown: false }} />
       <MainStack.Screen name="Lock" component={addPageProps(Lock)} options={{ headerShown: false }} />
-      <MainStack.Screen name="App" component={addPageProps(Drawer)} options={{ headerShown: false }} />
+      <MainStack.Screen name="App" component={Drawer} options={{ headerShown: false }} />
     </MainStack.Navigator>
   );
 
@@ -192,7 +193,7 @@ export const MainRouter = (props) => {
         }
       }}
     >
-      <MainStackNavigator />
+      <TopLevelNavigator />
     </NavigationContainer>
   );
 };
