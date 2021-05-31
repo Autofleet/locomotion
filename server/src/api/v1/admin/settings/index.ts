@@ -1,4 +1,4 @@
-import Router  from '../../../../lib/router';
+import Router from '../../../../lib/router';
 import settingLib from '../../../../lib/settings';
 import logger from '../../../../logger';
 import { Setting } from '../../../../models';

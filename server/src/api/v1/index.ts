@@ -1,9 +1,9 @@
 import Router from '../../lib/router';
 import authMiddleware from '../../middlewares/auth';
-import login from './login'
-import me from './me'
-import rideWebhook from './webhook'
-import admin from './admin'
+import login from './login';
+import me from './me';
+import rideWebhook from './webhook';
+import admin from './admin';
 
 const router = Router();
 

@@ -9,6 +9,9 @@
     "plugin:@typescript-eslint/recommended"
   ],
   "rules": {
+    "import/prefer-default-export": 0,
+    "@typescript-eslint/no-unused-vars":2,
+    "@typescript-eslint/no-var-requires":1,
     "import/extensions": [
        "error",
        "ignorePackages",
@@ -18,20 +21,8 @@
          "ts": "never",
          "tsx": "never"
        }
-    ],
-    "@typescript-eslint/no-unused-vars": ["error"]
+    ]
  },
- "overrides": [
-    {
-      // enable the rule specifically for TypeScript files
-      "files": ["*.js"],
-      "rules": {
-        "@typescript-eslint/explicit-function-return-type": ["off"],
-        "@typescript-eslint/no-var-requires": ["off"],
-        "@typescript-eslint/camelcase": ["off"]
-      }
-    }
-  ],
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
     "project": "./tsconfig.json",
@@ -55,7 +46,7 @@
     },
     "import/resolver": {
       "node": {
-        "extensions": [".js",".jsx",".ts",".tsx", ".json"]
+        "extensions": [".js",".jsx",".ts",".tsx"]
       }
     }
   }

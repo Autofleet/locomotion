@@ -1,12 +1,13 @@
-require('dotenv').config();
 import path from 'path';
 import express from 'express';
-const SExpress = require('./lib/super-express');
-const logger = require('./logger');
-const packageJson = require('../package.json');
 import './sequelize';
 import alive from './alive';
 import api from './api';
+
+require('dotenv').config();
+const SExpress = require('./lib/super-express');
+const logger = require('./logger');
+const packageJson = require('../package.json');
 
 const app = new SExpress({
   httpLogCb: logger.httpMorganInfo,

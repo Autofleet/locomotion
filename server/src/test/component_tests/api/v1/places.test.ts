@@ -1,14 +1,15 @@
-const request = require('supertest');
 import nock from 'nock';
 import { User, Verification } from '../../../../models';
 import app from '../../../../app';
 import createUserAndLogin from '../../../assets/create-user-and-login';
 import googlePlacesSamples from '../../../assets/mock-google-places';
 import googlePlaceDetailsSamples from '../../../assets/mock-google-place-details';
+import getAvailablePlaces from '../../../../lib/get-available-places';
+
+const request = require('supertest');
 const availablePlacesSamples = require('../../../assets/available-places.sample.json');
 
 jest.mock('../../../../lib/get-available-places');
-import getAvailablePlaces from '../../../../lib/get-available-places';
 
 const mockedGetAvailablePlaces = getAvailablePlaces as jest.Mock;
 

@@ -1,10 +1,11 @@
 import moment from 'moment';
-const i18n = require('../../../i18n');
 import Router from '../../../lib/router';
 import rideService from '../../../lib/ride';
 import { Ride, User, Notification } from '../../../models';
 import sendNotification from '../../../lib/push-notifications';
 import settingsService from '../../../lib/settings';
+
+const i18n = require('../../../i18n');
 
 const router = Router();
 
