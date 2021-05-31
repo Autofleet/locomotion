@@ -24,6 +24,7 @@
     "@react-navigation/native": "^5.9.4",
     "@react-navigation/native-stack": "^5.0.5",
     "@react-navigation/stack": "^5.14.5",
+    "@stripe/stripe-react-native": "^0.1.2",
     "axios": "^0.21.1",
     "google-libphonenumber": "^3.2.21",
     "i18next": "^20.3.0",
