@@ -45,7 +45,7 @@ export const MainRouter = (props) => {
         drawerLabel: (<DrawerLabel title={i18n.t('menu.trips')} icon={CarIconSource} />),
       },
     },
-     Payment: {
+    Payment: {
        screen: addPageProps(Payments),
        navigationOptions: {
          drawerLabel: (<DrawerLabel title={i18n.t('menu.paymentsSettings')} icon={CreaditCardIconSource} />),

@@ -1,6 +1,11 @@
 import React from 'react';
-import { View } from 'react-native';
-import { DrawerItems, SafeAreaView } from 'react-navigation';
+import { View, SafeAreaView } from 'react-native';
+// import { DrawerItems } from 'react-navigation';
+import {
+  DrawerContentScrollView,
+  DrawerItem,
+  DrawerItemList
+} from '@react-navigation/drawer';
 import PageHeader from '../PageHeader';
 import i18n from '../../I18n';
 import {
@@ -9,9 +14,12 @@ import {
 
 const closeIconSource = require('../../assets/x.png');
 
+export const Icon = ({ icon }) => {
+  return (<DrawerIcon source={icon} />)
+}
 export const DrawerLabel = (props) => {
   const {
-    focused, tintColor, title, icon
+    focused, tintColor, title, icon,
   } = props;
   return (
     <StyledDrawerLabel>
@@ -29,17 +37,17 @@ export const DrawerContentComponent = (props) => {
     navigation.closeDrawer();
   };
   return (
-    <View style={{padding: 10}}>
+    <View style={{ padding: 10 }}>
       <SafeAreaView>
         <PageHeader
           title={i18n.t('menu.title')}
-          iconSide='right'
+          iconSide="right"
           onIconPress={() => closeComponent()}
           icon={closeIconSource}
           width="18px"
           height="18px"
         />
-        <DrawerItems {...props} />
+        <DrawerItemList {...props} />
       </SafeAreaView>
     </View>
   );

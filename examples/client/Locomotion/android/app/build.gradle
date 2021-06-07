@@ -1,5 +1,5 @@
 apply plugin: "com.android.application"
-
+apply from: project(':react-native-config').projectDir.getPath() + "/dotenv.gradle"
 import com.android.build.OutputFile
 
 /**
@@ -78,7 +78,7 @@ import com.android.build.OutputFile
  */
 
 project.ext.react = [
-    enableHermes: false,  // clean and rebuild if changing
+    enableHermes: true,  // clean and rebuild if changing
 ]
 
 apply from: "../../node_modules/react-native/react.gradle"
@@ -136,6 +136,10 @@ android {
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
         versionName "1.0"
+         manifestPlaceholders = [
+            onesignal_app_id: project.env.get("ONESIGNAL_APP_ID"),
+            onesignal_google_project_number: "REMOTE"
+        ]
     }
     splits {
         abi {

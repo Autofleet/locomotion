@@ -605,6 +605,7 @@
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/react-native-webview\"",
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/stripe-react-native\"",
 				);
+				MARKETING_VERSION = 2.0;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -631,6 +632,7 @@
 				INFOPLIST_FILE = Locomotion/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
+				MARKETING_VERSION = 2.0;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",

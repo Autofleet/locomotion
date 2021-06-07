@@ -12,6 +12,10 @@ target 'Locomotion' do
     :hermes_enabled => false
   )
 
+  pod 'react-native-config', :path => '../node_modules/react-native-config'
+
+  pod 'react-native-onesignal', :path => '../node_modules/react-native-onesignal'
+
   target 'LocomotionTests' do
     inherit! :complete
     # Pods for testing

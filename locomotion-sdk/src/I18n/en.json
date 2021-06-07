@@ -163,5 +163,10 @@
             "price": "Price"
         }
     },
+    "payments": {
+        "pageTitle": "Payments",
+        "submitCard": "Add Card",
+        "balance": "Balance"
+    },
     "currency": "€"
 }

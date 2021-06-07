@@ -6,7 +6,7 @@ const App = () => {
   return (
     <LocomotionRouter
       /*     i18n={{default: 'de', translations: [{lang:'de', translation:de}]}} */
-      menuSide="right"
+      menuSide="left"
       /* mapSettings={{
           customMapStyle: [{
             featureType: 'poi',
