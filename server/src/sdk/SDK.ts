@@ -37,12 +37,41 @@ class RideApi extends BaseApi {
   }
 }
 
+class PaymentApi extends BaseApi {
+  async getCustomer(id) {
+    return this.network.get(`/api/v1/customer/${id}`, {
+      params: {
+        businessModelId: process.env.BUSINESS_MODEL_ID,
+      },
+    });
+  }
+
+  createCustomer(payload) {
+    return this.network.post('/api/v1/customer', payload);
+  }
+  createPaymentIntent(payload) {
+    return this.network.post('/api/v1/payment/setup', payload);
+  }
+  listMethods(userId) {
+    return this.network.get('/api/v1/payment/methods', {
+      params: {
+        businessModelId: process.env.BUSINESS_MODEL_ID,
+        userId,
+      },
+    });
+  }
+  detachPaymentMethod(payload) {
+    return this.network.post('/api/v1/payment/methods/detach', payload);
+  }
+}
+
 class AutofleetSdk {
   network: any;
   refreshToken: string;
   token: string;
   Rides: any;
   timeout: ReturnType<typeof setTimeout>;
+  Payments: any;
 
   static async Init({ refreshToken }) {
     const api = new AutofleetSdk({ refreshToken });
@@ -64,6 +93,7 @@ class AutofleetSdk {
       return config;
     });
     this.Rides = new RideApi(this.network);
+    this.Payments = new PaymentApi(this.network);
   }
 
   async refreshTokenAndSetInterval() {
