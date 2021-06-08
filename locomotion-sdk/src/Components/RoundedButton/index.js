@@ -70,7 +70,7 @@ const Button = styled(({
   }, [loadingState]);
 
   return (
-    <StyledTouchableOpacity {...props} onPress={onPressWithLoading} hollow={hollow}>
+    <StyledTouchableOpacity {...props} onPress={onPressWithLoading} hollow={hollow} disabled={loadingState}>
       <ButtonTextContainer>
         {loadingState ? (
           <LoadingWrapper>

@@ -31,7 +31,7 @@ export default ({ customer }) => {
             {i18n.t('payments.balance')}:
           </BalanceTitle>
           <BalanceText>
-            {customer ? `${customer.balance} ${customer.currency}` : null}
+            {customer ? customer.balance : null} {customer && customer.currency ? customer.currency : null}
           </BalanceText>
         </BalanceTextContainer>
   );

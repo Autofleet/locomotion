@@ -10,10 +10,10 @@
         "invalidPhoneNumberError": "Phone number is not valid",
         "vertError": "Incorrect verification code",
         "resendButton": "Start over",
-        "introText": "Please enter your phone number to signup to Mobility-on-Demand. You will receive an SMS with a verification code.",
+        "introText": "Please enter your phone number to signup to Locomotion. You will receive an SMS with a verification code.",
         "termsWebViewTitle": "Terms and conditions",
         "privacyWebViewTitle": "data protection guidelines",
-        "termsAgreement": "By registering, you agree to the <0>terms and conditions</0> and the <1>data protection guidelines</1> of MoD Holding GmbH."
+        "termsAgreement": "By registering, you agree to the <0>terms and conditions</0> and the <1>data protection guidelines</1> of Locomotion."
     },
     "onboarding": {
         "pageTitle": "Your profile",
@@ -60,7 +60,7 @@
             "dropoffEtaTitle": "Estimated Exit"
         },
         "rideCard": {
-            "carTitle": "Your MoD car:",
+            "carTitle": "Your car:",
             "driverTitle": "Driver:"
         },
         "offerCard": {
@@ -94,7 +94,7 @@
     "lock": {
         "header": "Your signup has been recorded",
         "text": "We have received your registration and will review it as soon as possible",
-        "subText": "You will immediately receive a notification when your registration is completed and you are ready to use Mobility-on-Demand",
+        "subText": "You will immediately receive a notification when your registration is completed and you are ready to use Locomotion",
         "submitText": " Login to different account"
     },
     "addressView": {
@@ -106,7 +106,7 @@
     },
     "popups": {
         "rideSummary": {
-            "thanksForRideHeadline": "Thanks for your ride with Mobility-on-Demand!",
+            "thanksForRideHeadline": "Thanks for your ride with Locomotion!",
             "rideDataHeadline": "Your ride data",
             "durationLabel": "Duration",
             "distanceLabel": "Distance",
@@ -166,7 +166,8 @@
     "payments": {
         "pageTitle": "Payments",
         "submitCard": "Add Card",
-        "balance": "Balance"
+        "balance": "Balance",
+        "deleteCard": "Delete card"
     },
     "currency": "€"
 }

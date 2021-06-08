@@ -1,7 +1,10 @@
-
+import React from 'react';
 import { View, Text, Dimensions } from 'react-native'
 import styled from 'styled-components';
+import LottieView from 'lottie-react-native';
+
 const creditCardImage = require('../../assets/menuItems/creditcard.png');
+const darkLoader = require('../../assets/loaders/dark-loader.json');
 
 const ERROR_COLOR = '#f03a5f';
 
@@ -91,8 +94,10 @@ export const CreditCardRowText = styled.Text`
 `;
 
 export const DeleteCreditCard = styled.TouchableOpacity`
-    flex: 1;
     margin-top: 15px;
+    align-self: flex-end;
+    padding: 5px;
+    opacity: ${({ disabled }) => (disabled ? 0.5 : 1)};
 `;
 
 export const DeleteCreditCardText = styled.Text`
@@ -101,5 +106,41 @@ export const DeleteCreditCardText = styled.Text`
 `;
 
 export const ErrorMessage = styled.Text`
-    color: ${ERROR_COLOR}
-`
+    color: ${ERROR_COLOR};
+    margin-left: 16px;
+    font-weight: 500;
+    font-size: 16px;
+`;
+
+const FullPageLoaderWrapper = styled.View`
+    width: 100%;
+    height: 100%;
+    background-color: #ffffff;
+    position: absolute;
+    z-index: 99999;
+`;
+
+const LoaderContainer = styled.View`
+    align-self: center;
+    position: absolute;
+    top: 50%;
+    margin-top: -10px;
+`;
+
+
+export const FullPageLoader = (props) => {
+    return (
+        <FullPageLoaderWrapper>
+            <LoaderContainer>
+            <LottieView
+                style={{
+                    width: 20,
+                    height: 20,
+                }}
+                source={darkLoader}
+                {...props}
+            />
+            </LoaderContainer>
+        </FullPageLoaderWrapper>
+    )
+}

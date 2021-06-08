@@ -7,7 +7,8 @@
     "ios": "react-native run-ios",
     "start": "react-native start",
     "test": "jest",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "build-android": "cd android && ./gradlew app:assembleRelease && cd .. && today=`date '+%Y_%m_%d(%H_%M_%S)'`; mv ./android/app/build/outputs/apk/release/app-release.apk ./locomotion-release-$today.apk"
   },
   "dependencies": {
     "@autofleet/locomotion-sdk": "^1.5.20",

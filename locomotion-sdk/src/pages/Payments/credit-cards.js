@@ -27,9 +27,14 @@ import PaymentsContext from '../../context/payments'
 import SubmitButton from '../../Components/RoundedButton';
 
 
-export default ({ paymentMethods, onDetach }) => {
-  console.log('paymentMethods', paymentMethods);
+export default ({ paymentMethods = [], onDetach = () => null }) => {
+  const [loading, setLoading] = useState(false);
 
+  const loadingDetach = async (paymentMethodId) => {
+    setLoading(true);
+    await onDetach(paymentMethodId);
+    setLoading(false);
+  }
   return (
     paymentMethods.map(pm => (
         <CreditCardContainer>
@@ -39,8 +44,8 @@ export default ({ paymentMethods, onDetach }) => {
             <CreditCardRowText>{pm.card.exp_month}/{pm.card.exp_year}</CreditCardRowText>
             <CreditCardRowText>{pm.card.last4}</CreditCardRowText>
           </CreditCardRow>
-          <DeleteCreditCard>
-            <DeleteCreditCardText onPress={() => onDetach(pm.id)}>Delete card</DeleteCreditCardText>
+          <DeleteCreditCard disabled={loading}>
+            <DeleteCreditCardText onPress={() => loadingDetach(pm.id)}>{i18n.t('payments.deleteCard')}</DeleteCreditCardText>
           </DeleteCreditCard>
         </CreditCardContainer>
 

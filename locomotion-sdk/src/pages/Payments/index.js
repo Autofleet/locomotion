@@ -11,13 +11,8 @@ import {
   PageContent,
   SubmitContainer,
   CreditForm,
-  BalanceContainer,
-  BalanceTitle,
-  BalanceText,
-  BalanceTextContainer,
-  CreditCardRow,
-  CreditCardImage,
-  CreditCardRowText
+  ErrorMessage,
+  FullPageLoader
 } from './styled';
 import PaymentsContext from '../../context/payments'
 import SubmitButton from '../../Components/RoundedButton';
@@ -25,7 +20,8 @@ import Balance from './balance'
 import CreditCardsList from './credit-cards'
 
 export default ({ navigation, menuSide }) => {
-  const [card, setCard] = useState(null);
+  const [errorMessage, setErrorMessage] = useState('');
+  const [pageLoading, setPageLoading] = useState(true);
 
   const { confirmPayment, handleCardAction, confirmSetupIntent } = useStripe();
   const usePayments = PaymentsContext.useContainer();
@@ -34,59 +30,43 @@ export default ({ navigation, menuSide }) => {
   };
 
 
-  const loadCustomerData = () => {
-    usePayments.loadCustomer();
-    usePayments.getPaymentMethods();
+  const loadCustomerData = async () => {
+    const customer = await usePayments.loadCustomer();
+    if(customer) {
+      await usePayments.getPaymentMethods()
+    }
+    setPageLoading(false)
   }
 
   useEffect(() => {
     loadCustomerData();
   }, [])
-/*
-  useEffect(() =>  {
-    console.log(usePayments.customer);
-    if(usePayments.customer) {
-      usePayments.getPaymentMethods()
-    }
-  }, [usePayments.customer]) */
 
   const handlePayPress = async () => {
     let customerData = usePayments.customer;
     if(!usePayments.customer) {
       customerData = await usePayments.createCustomer();
     }
-
     const createIntent = await usePayments.createIntent();
-    console.log(createIntent);
-
-
-    //setClientSecret(clientData.clientSecret)
     const billingDetails = {
       email: customerData.email,
     };
-    // Create a setup intent on the backend
-    //const clientSecret = await createSetupIntentOnBackend();
     const { setupIntent, error } = await confirmSetupIntent(createIntent.clientSecret, {
       type: 'Card',
       billingDetails,
     });
 
-    console.log('setupIntent',setupIntent);
-
     if (error) {
-      //Handle the error
       console.log(error);
-
+      setErrorMessage(error.message)
     }
 
     loadCustomerData();
   };
 
   const detachCard = async (paymentMethodId) => {
-    const detachData = await usePayments.detachPaymentMethod(paymentMethodId);
-    console.log(detachData);
-
-    usePayments.getPaymentMethods();
+    await usePayments.detachPaymentMethod(paymentMethodId);
+    await usePayments.getPaymentMethods();
   }
 
   return (
@@ -96,10 +76,12 @@ export default ({ navigation, menuSide }) => {
         onIconPress={() => toggleMenu()}
         iconSide={menuSide}
       />
-      <Balance customer={usePayments.customer} />
+       {pageLoading ? <FullPageLoader autoPlay loop /> : null}
+        <Balance customer={usePayments.customer} />
         <CreditCardsList paymentMethods={usePayments.paymentMethods} onDetach={detachCard} />
 
         {usePayments.paymentMethods.length === 0 ?
+        <>
           <CreditForm>
             <CardField
             postalCodeEnabled={false}
@@ -113,25 +95,23 @@ export default ({ navigation, menuSide }) => {
             style={{
               width: '100%',
               height: 50,
-              marginVertical: 30,
             }}
             onCardChange={(cardDetails) => {
               console.log(cardDetails);
-
-              setCard(cardDetails);
             }}
             onFocus={(focusedField) => {
               console.log('focusField', focusedField);
             }}
             />
-            <Text>sdsdsdssd</Text>
-          </CreditForm> : null}
-    <SubmitContainer>
-
-      <SubmitButton onPress={() => handlePayPress()}>
-        {i18n.t('payments.submitCard')}
-      </SubmitButton>
-    </SubmitContainer>
+            <ErrorMessage>{errorMessage}</ErrorMessage>
+          </CreditForm>
+          <SubmitContainer>
+            <SubmitButton onPress={() => handlePayPress()}>
+              {i18n.t('payments.submitCard')}
+            </SubmitButton>
+          </SubmitContainer>
+          </>
+          : null}
     </PageContent>
   );
 };
