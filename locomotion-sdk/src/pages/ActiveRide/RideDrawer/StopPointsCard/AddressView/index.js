@@ -127,7 +127,7 @@ export default props => {
         />
       </Address>
 
-      <ScrollView>
+      <ScrollView keyboardShouldPersistTaps="handled">
         {addressListItems &&
           addressListItems.list &&
           addressListItems.list.map(item => (
