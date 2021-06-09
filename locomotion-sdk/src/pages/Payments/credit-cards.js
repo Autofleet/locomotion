@@ -9,19 +9,13 @@ import LottieView from 'lottie-react-native';
 import i18n from '../../I18n';
 import PageHeader from '../../Components/PageHeader';
 import {
-  PageContent,
-  SubmitContainer,
-  CreditForm,
-  BalanceContainer,
-  BalanceTitle,
-  BalanceText,
-  BalanceTextContainer,
   CreditCardRow,
   CreditCardImage,
   CreditCardRowText,
   CreditCardContainer,
   DeleteCreditCard,
-  DeleteCreditCardText
+  DeleteCreditCardText,
+  CardsListContainer
 } from './styled';
 import PaymentsContext from '../../context/payments'
 import SubmitButton from '../../Components/RoundedButton';
@@ -36,7 +30,8 @@ export default ({ paymentMethods = [], onDetach = () => null }) => {
     setLoading(false);
   }
   return (
-    paymentMethods.map(pm => (
+    <CardsListContainer>
+    {paymentMethods.map(pm => (
         <CreditCardContainer>
           <CreditCardRow>
             <CreditCardImage />
@@ -49,6 +44,7 @@ export default ({ paymentMethods = [], onDetach = () => null }) => {
           </DeleteCreditCard>
         </CreditCardContainer>
 
-      ))
+      ))}
+      </CardsListContainer>
   );
 };

@@ -12,7 +12,8 @@ import {
   SubmitContainer,
   CreditForm,
   ErrorMessage,
-  FullPageLoader
+  FullPageLoader,
+  CreditFormText
 } from './styled';
 import PaymentsContext from '../../context/payments'
 import SubmitButton from '../../Components/RoundedButton';
@@ -28,7 +29,6 @@ export default ({ navigation, menuSide }) => {
   const toggleMenu = () => {
     navigation.toggleDrawer();
   };
-
 
   const loadCustomerData = async () => {
     const customer = await usePayments.loadCustomer();
@@ -61,7 +61,7 @@ export default ({ navigation, menuSide }) => {
       setErrorMessage(error.message)
     }
 
-    loadCustomerData();
+    await loadCustomerData();
   };
 
   const detachCard = async (paymentMethodId) => {
@@ -78,11 +78,11 @@ export default ({ navigation, menuSide }) => {
       />
        {pageLoading ? <FullPageLoader autoPlay loop /> : null}
         <Balance customer={usePayments.customer} />
-        <CreditCardsList paymentMethods={usePayments.paymentMethods} onDetach={detachCard} />
-
-        {usePayments.paymentMethods.length === 0 ?
+        {usePayments.paymentMethods.length > 0 ?
+        <CreditCardsList paymentMethods={usePayments.paymentMethods} onDetach={detachCard} /> :
         <>
           <CreditForm>
+            <CreditFormText>{i18n.t('payments.newCardDetails')}</CreditFormText>
             <CardField
             postalCodeEnabled={false}
             placeholder={{
@@ -111,7 +111,7 @@ export default ({ navigation, menuSide }) => {
             </SubmitButton>
           </SubmitContainer>
           </>
-          : null}
+      }
     </PageContent>
   );
 };

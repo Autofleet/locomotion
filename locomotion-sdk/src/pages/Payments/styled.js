@@ -21,7 +21,6 @@ export const PageContent = styled(View)`
 export const BalanceContainer = styled.View`
     flex: 1;
     flex-direction: row;
-    background-color: red;
 `
 
 export const BalanceTextContainer = styled.View`
@@ -46,6 +45,14 @@ export const BalanceText = styled.Text`
 
 export const CreditForm = styled.View`
     flex: 1;
+    margin-top: 32px;
+`;
+
+export const CreditFormText = styled.Text`
+    color: #1e273d;
+    font-size: 14px;
+    text-align: left;
+    margin-left: 16px;
 `;
 
 export const SubmitContainer = styled.View`
@@ -58,9 +65,10 @@ export const SubmitContainer = styled.View`
 
 export const CreditCardContainer = styled.View`
     flex-direction: column;
-    flex:1;
     margin-right: 15px;
     margin-left: 15px;
+    height: 100px;
+
 `;
 
 export const CreditCardRow = styled.View`
@@ -69,7 +77,6 @@ export const CreditCardRow = styled.View`
     flex-direction: row;
     justify-content: space-between;
     max-height: 50px;
-    margin-top: 15px;
     border-radius: 5px;
     shadow-opacity: 0.35;
     shadow-radius: 2px;
@@ -94,7 +101,7 @@ export const CreditCardRowText = styled.Text`
 `;
 
 export const DeleteCreditCard = styled.TouchableOpacity`
-    margin-top: 15px;
+    margin-top: 5px;
     align-self: flex-end;
     padding: 5px;
     opacity: ${({ disabled }) => (disabled ? 0.5 : 1)};
@@ -127,7 +134,6 @@ const LoaderContainer = styled.View`
     margin-top: -10px;
 `;
 
-
 export const FullPageLoader = (props) => {
     return (
         <FullPageLoaderWrapper>
@@ -144,3 +150,9 @@ export const FullPageLoader = (props) => {
         </FullPageLoaderWrapper>
     )
 }
+
+export const CardsListContainer = styled.View`
+   flex: 1;
+   flex-direction: column;
+   justify-content: flex-start;
+`;
