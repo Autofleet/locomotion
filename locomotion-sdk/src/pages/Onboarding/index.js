@@ -134,10 +134,11 @@ export default ({
           iconSide={menuSide}
         />
         <Container>
+          {!showHeaderIcon ?
           <Text>
             {i18n.t('login.onBoardingPageTitle')}
             {onboardingState.uploadingImage}
-          </Text>
+          </Text> : null}
           <ThumbnailPicker
             onImageChoose={onImageChoose}
             avatarSource={onboardingState.avatar}
