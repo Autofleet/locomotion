@@ -3,7 +3,6 @@ import {
   Text, View, TouchableOpacity, TextInput,
 } from 'react-native';
 import styled from 'styled-components';
-import RNPickerSelect from 'react-native-picker-select';
 import moment from 'moment';
 import i18n from '../../../../../I18n';
 import { getTogglePopupsState } from '../../../../../context/main';
