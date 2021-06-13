@@ -167,7 +167,8 @@
         "pageTitle": "Payments",
         "submitCard": "Add Card",
         "balance": "Balance",
-        "deleteCard": "Delete card"
+        "deleteCard": "Delete card",
+        "newCardDetails": "Please add your payment details"
     },
     "currency": "€"
 }

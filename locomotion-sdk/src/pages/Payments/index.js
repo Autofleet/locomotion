@@ -23,6 +23,7 @@ import CreditCardsList from './credit-cards'
 export default ({ navigation, menuSide }) => {
   const [errorMessage, setErrorMessage] = useState('');
   const [pageLoading, setPageLoading] = useState(true);
+  const [formReady, setFormReady] = useState(false);
 
   const { confirmPayment, handleCardAction, confirmSetupIntent } = useStripe();
   const usePayments = PaymentsContext.useContainer();
@@ -98,6 +99,11 @@ export default ({ navigation, menuSide }) => {
             }}
             onCardChange={(cardDetails) => {
               console.log(cardDetails);
+              if(cardDetails) {
+                if(formReady !== cardDetails.complete) {
+                  setFormReady(cardDetails.complete)
+                }
+              }
             }}
             onFocus={(focusedField) => {
               console.log('focusField', focusedField);
@@ -106,7 +112,7 @@ export default ({ navigation, menuSide }) => {
             <ErrorMessage>{errorMessage}</ErrorMessage>
           </CreditForm>
           <SubmitContainer>
-            <SubmitButton onPress={() => handlePayPress()}>
+            <SubmitButton onPress={() => handlePayPress()} disabled={!formReady}>
               {i18n.t('payments.submitCard')}
             </SubmitButton>
           </SubmitContainer>

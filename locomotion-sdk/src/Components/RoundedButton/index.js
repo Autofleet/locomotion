@@ -43,6 +43,10 @@ const StyledTouchableOpacity = styled.TouchableOpacity`
     border: 2px solid #b5b5b5;
   `}
   flex-direction: row;
+
+  ${({ disabled }) => disabled && `
+    opacity: 0.7;
+  `}
 `;
 
 const ButtonTextContainer = styled.View`
@@ -53,7 +57,7 @@ const ButtonTextContainer = styled.View`
 `;
 
 const Button = styled(({
-  onPress, children, style, hollow, setLoading, ...props
+  onPress, children, style, hollow, setLoading, disabled, ...props
 }) => {
   const [loadingState, setLoadingState] = useState(false);
 
@@ -70,7 +74,7 @@ const Button = styled(({
   }, [loadingState]);
 
   return (
-    <StyledTouchableOpacity {...props} onPress={onPressWithLoading} hollow={hollow} disabled={loadingState}>
+    <StyledTouchableOpacity {...props} onPress={onPressWithLoading} hollow={hollow} disabled={(loadingState || disabled)}>
       <ButtonTextContainer>
         {loadingState ? (
           <LoadingWrapper>

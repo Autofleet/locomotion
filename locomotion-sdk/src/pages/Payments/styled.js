@@ -131,7 +131,7 @@ const LoaderContainer = styled.View`
     align-self: center;
     position: absolute;
     top: 50%;
-    margin-top: -10px;
+    margin-top: -8px;
 `;
 
 export const FullPageLoader = (props) => {
@@ -140,8 +140,8 @@ export const FullPageLoader = (props) => {
             <LoaderContainer>
             <LottieView
                 style={{
-                    width: 20,
-                    height: 20,
+                    width: 15,
+                    height: 15,
                 }}
                 source={darkLoader}
                 {...props}
