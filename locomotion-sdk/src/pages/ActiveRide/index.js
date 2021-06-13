@@ -116,7 +116,6 @@ export default ({ navigation, menuSide, mapSettings }) => {
   }
   const loadActiveRide = async () => {
     const { data: response } = await network.get('api/v1/me/rides/active', { params: { activeRide: true } });
-
     const { ride: activeRide, futureRides: futureRidesData } = response;
     setFutureRides(futureRidesData);
     if (activeRide) {
@@ -569,6 +568,7 @@ export default ({ navigation, menuSide, mapSettings }) => {
       </MapButtonsContainer>
       <Header navigation={navigation} menuSide={menuSide} />
       <RideDrawer
+        navigation={navigation}
         createRide={createRide}
         cancelRide={cancelRide}
         createOffer={createOffer}

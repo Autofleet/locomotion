@@ -168,7 +168,8 @@
         "submitCard": "Add Card",
         "balance": "Balance",
         "deleteCard": "Delete card",
-        "newCardDetails": "Please add your payment details"
+        "newCardDetails": "Please add your payment details",
+        "setPaymentBanner": "Set payment method"
     },
     "currency": "€"
 }
