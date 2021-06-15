@@ -106,8 +106,8 @@
     },
     "popups": {
         "rideSummary": {
-            "thanksForRideHeadline": "Thanks for your ride with Locomotion!",
-            "rideDataHeadline": "Your ride data",
+            "thanksForRideHeadline": "Thanks for your ride!",
+            "rideDataHeadline": "",
             "durationLabel": "Duration",
             "distanceLabel": "Distance",
             "priceLabel": "Price",
@@ -167,9 +167,17 @@
         "pageTitle": "Payments",
         "submitCard": "Add Card",
         "balance": "Balance",
-        "deleteCard": "Delete card",
+        "deleteCard": "Remove",
         "newCardDetails": "Please add your payment details",
-        "setPaymentBanner": "Set payment method"
+        "setPaymentBanner": "Set payment method",
+        "popups": {
+            "removeCard": {
+                "title": "Remove payment method",
+                "text": "Are you sure you want to remove this payment method?",
+                "confirmText": "Remove",
+                "cancelText": "Back"
+            }
+        }
     },
     "currency": "€"
 }

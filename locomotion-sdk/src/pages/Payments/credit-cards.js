@@ -1,13 +1,6 @@
-import React, { Fragment, useEffect, useState } from 'react';
-import {
-  CardField,
-  CardFieldInput,
-  useStripe,
-} from '@stripe/stripe-react-native';
-import LottieView from 'lottie-react-native';
+import React, { useEffect, useState } from 'react';
 
 import i18n from '../../I18n';
-import PageHeader from '../../Components/PageHeader';
 import {
   CreditCardRow,
   CreditCardImage,
@@ -17,18 +10,14 @@ import {
   DeleteCreditCardText,
   CardsListContainer
 } from './styled';
-import PaymentsContext from '../../context/payments'
-import SubmitButton from '../../Components/RoundedButton';
 
-
-export default ({ paymentMethods = [], onDetach = () => null }) => {
+export default ({ paymentMethods = [], onDetach = () => null, loadingState = false }) => {
   const [loading, setLoading] = useState(false);
 
-  const loadingDetach = async (paymentMethodId) => {
-    setLoading(true);
-    await onDetach(paymentMethodId);
-    setLoading(false);
-  }
+  useEffect(() => {
+    setLoading(loadingState)
+  }, [loading])
+
   return (
     <CardsListContainer>
     {paymentMethods.map(pm => (
@@ -40,7 +29,7 @@ export default ({ paymentMethods = [], onDetach = () => null }) => {
             <CreditCardRowText>{pm.card.last4}</CreditCardRowText>
           </CreditCardRow>
           <DeleteCreditCard disabled={loading}>
-            <DeleteCreditCardText onPress={() => loadingDetach(pm.id)}>{i18n.t('payments.deleteCard')}</DeleteCreditCardText>
+            <DeleteCreditCardText onPress={() => onDetach(pm.id) }>{i18n.t('payments.deleteCard')}</DeleteCreditCardText>
           </DeleteCreditCard>
         </CreditCardContainer>
 

@@ -5,7 +5,7 @@ import network from '../services/network';
 const usePayments = () => {
   const [customerSecret, setCustomerSecret] = useState(null);
   const [customer, setCustomer] = useState(null);
-  const [paymentMethods, setPaymentMethods] = useState([]);
+  const [paymentMethods, setPaymentMethods] = useState(null);
 
   const getCustomer = async () => {
     const { data: clientData } = await network.get('/api/v1/me/payments/customer');
@@ -32,7 +32,6 @@ const usePayments = () => {
     console.log(intent);
     return intent;
   };
-
 
   const getPaymentMethods = async () => {
     const { data: paymentMethodsData } = await network.get('/api/v1/me/payments/methods');
