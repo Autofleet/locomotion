@@ -23,3 +23,6 @@ jobs:
       - name: Run Lint
         run: npm run lint
         working-directory: server
+      - name: Run tests
+        run: npm run test
+        working-directory: server
