@@ -46,7 +46,7 @@ router.post('/', async (req, res) => {
     }
   }
 
-  const ride = await rideService.create(req.body, req.userId);
+  const ride = await rideService.create(req.body, req.userId, req.operationId);
   res.json(ride);
 });
 

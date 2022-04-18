@@ -3,6 +3,7 @@ const path = require('path');
 const express = require('express');
 const SExpress = require('./lib/super-express');
 const logger = require('./logger');
+const { default: parseHeaderOperationId } = require('./middlewares/parse-header-operation-id');
 const packageJson = require('../package');
 
 const app = new SExpress({
@@ -18,6 +19,7 @@ app.get(['/version', '/'], (req, res) => {
   });
 });
 
+app.use(parseHeaderOperationId);
 app.get('/alive', require('./alive'));
 
 app.use('/api', require('./api'));

@@ -15,6 +15,11 @@ export class User extends Model {
   id: string;
 
   @Column({
+    type: DataType.UUID,
+  })
+  operationId: string;
+
+  @Column({
     type: DataType.STRING,
   })
     firstName: string;

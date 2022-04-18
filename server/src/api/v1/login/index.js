@@ -30,6 +30,7 @@ router.post('/vert', async (req, res) => {
 
     const { token: accessToken } = await authService.createToken({
       userId: userProfile.id,
+      operationId: userProfile.operationId,
     });
 
     const { token: refreshToken, jwtid } = await authService.createToken({

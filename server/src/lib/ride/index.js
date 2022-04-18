@@ -4,6 +4,7 @@ const logger = require('../../logger');
 const { Ride, User } = require('../../models');
 const afSdk = require('../../sdk');
 const sdk = require('../../sdk');
+const { user } = require('../auth');
 const SettingsService = require('../settings');
 
 const webHookHost = process.env.SERVER_HOST || 'https://716ee2e6.ngrok.io';
@@ -54,11 +55,11 @@ const createOffer = async (rideData) => {
   }
 };
 
-const createRide = async (rideData, userId) => {
-  console.log(rideData)
+const createRide = async (rideData, userId, operationId) => {
   const [pickup, dropoff] = rideData.stopPoints;
-
+  console.log(operationId, userId)
   const ride = await Ride.create({
+    operationId,
     ...rideData,
     numberOfPassenger: rideData.numberOfPassengers,
     userId,
@@ -135,7 +136,7 @@ const createRide = async (rideData, userId) => {
 
 const rideService = {
   createOffer: async (rideData) => createOffer(rideData),
-  create: async (rideData, userId) => createRide(rideData, userId),
+  create: async (rideData, userId, operationId) => createRide(rideData, userId, operationId),
   getRidderActiveRide: async (userId) => {
     const ride = await Ride.findOne({
       where: {

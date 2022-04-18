@@ -53,8 +53,8 @@ class Auth {
 
   async createVerificationCode(phoneNumber, operationId) {
     const user = await this.user.findOrCreate({
-      where: { phoneNumber },
-      defaults: { phoneNumber },
+      where: { phoneNumber, operationId },
+      defaults: { phoneNumber, operationId },
     });
 
     const externalCode = `${Math.round(Math.random() * 9999)}0000`.substring(0, 4);

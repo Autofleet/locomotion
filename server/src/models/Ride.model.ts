@@ -25,7 +25,12 @@ export class Ride extends Model {
       type: DataType.UUID,
       defaultValue: DataType.UUIDV4,
     })
-    id: string;
+      id: string;
+
+    @Column({
+      type: DataType.UUID,
+    })
+      operationId: string;
 
     @Column({
       type: DataType.UUID,

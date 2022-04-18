@@ -1,6 +1,6 @@
 export default (req, res, next): void => {
-  if (req.headers['X-LOCO-OP-ID']) {
-    const unsafeId = req.headers['X-LOCO-OP-ID'];
+  if (req.headers['x-loco-op-id']) {
+    const unsafeId = req.headers['x-loco-op-id'];
     if (unsafeId.length !== 36) {
       res.json({
         error: 'INVALID HEADERS',
@@ -9,7 +9,7 @@ export default (req, res, next): void => {
     }
 
     // eslint-disable-next-line no-unused-expressions
-    req.headerOperationId = req.headers['X-LOCO-OP-ID'];
+    req.headerOperationId = unsafeId;
   }
   next();
 };
