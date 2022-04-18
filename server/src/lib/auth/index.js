@@ -51,7 +51,7 @@ class Auth {
     return foundUser;
   }
 
-  async createVerificationCode(phoneNumber) {
+  async createVerificationCode(phoneNumber, operationId) {
     const user = await this.user.findOrCreate({
       where: { phoneNumber },
       defaults: { phoneNumber },
@@ -60,7 +60,7 @@ class Auth {
     const externalCode = `${Math.round(Math.random() * 9999)}0000`.substring(0, 4);
 
     if (user) {
-      await this.nexmo.sendSms(phoneNumber, `Your verifiction code is ${externalCode}`);
+      await this.nexmo.sendSms(phoneNumber, `Your verification code is ${externalCode}`);
 
       await this.verification.destroy({
         where: { phoneNumber },
@@ -69,6 +69,7 @@ class Auth {
       const verification = await this.verification.create({
         phoneNumber,
         externalCode,
+        operationId,
       });
 
       return verification;
@@ -77,8 +78,8 @@ class Auth {
     return false;
   }
 
-  async checkVerificationCode(phoneNumber, externalCode) {
-    const verification = await this.verification.findOne({ where: { phoneNumber, externalCode } });
+  async checkVerificationCode(phoneNumber, externalCode, operationId) {
+    const verification = await this.verification.findOne({ where: { phoneNumber, externalCode, operationId } });
 
     if (verification) {
       await verification.destroy();

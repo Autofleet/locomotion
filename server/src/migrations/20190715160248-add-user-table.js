@@ -5,6 +5,10 @@ module.exports = {
       defaultValue: Sequelize.UUIDV4,
       primaryKey: true,
     },
+    operation_id: {
+      type: Sequelize.UUID,
+      allowNull: false,
+    },
     firstName: {
       type: Sequelize.STRING,
       field: 'first_name',

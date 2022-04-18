@@ -8,7 +8,8 @@ const router = Router();
 
 router.post('/', async (req, res) => {
   const { phoneNumber } = req.body;
-  const response = await authService.createVerificationCode(phoneNumber);
+  const { headerOperationId } = req;
+  const response = await authService.createVerificationCode(phoneNumber, headerOperationId);
   res.json({
     success: !!response,
   });
@@ -16,8 +17,9 @@ router.post('/', async (req, res) => {
 
 router.post('/vert', async (req, res) => {
   const { phoneNumber, code } = req.body;
+  const { headerOperationId } = req;
   try {
-    const response = await authService.checkVerificationCode(phoneNumber, code);
+    const response = await authService.checkVerificationCode(phoneNumber, code, headerOperationId);
     let userProfile;
 
     if (response) {
@@ -31,6 +33,7 @@ router.post('/vert', async (req, res) => {
     });
 
     const { token: refreshToken, jwtid } = await authService.createToken({
+      headerOperationId,
       userId: userProfile.id,
     }, 'refreshToken');
 

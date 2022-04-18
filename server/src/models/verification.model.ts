@@ -16,10 +16,15 @@ export class Verification extends Model {
   @Column({
     type: DataType.STRING,
   })
-    phoneNumber: string;
+  phoneNumber: string;
+
+  @Column({
+    type: DataType.UUID,
+  })
+  operationId: string;
 
   @Column({
     type: DataType.STRING,
   })
-    externalCode: string;
+  externalCode: string;
 }

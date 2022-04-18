@@ -6,6 +6,9 @@ module.exports = {
       type: Sequelize.UUID,
       defaultValue: Sequelize.UUIDV4,
     },
+    operation_id: {
+      type: Sequelize.UUID,
+    },
     phone_number: {
       type: Sequelize.STRING,
     },
