@@ -17,8 +17,8 @@
   },
   "homepage": "https://github.com/autofleet-open-source/locomotion#readme",
   "peerDependencies": {
-    "react": "16.8.6",
-    "react-native": "0.60.3",
+    "react": "17.0.2",
+    "react-native": "0.68.1",
     "react-native-linear-gradient": "^2.5.4",
     "react-native-device-info": "^6.0.2",
     "react-native-config": "^0.11.7",
@@ -57,6 +57,7 @@
     "react-i18next": "^11.7.2",
     "react-native-datepicker": "^1.7.2",
     "react-native-keyboard-aware-scroll-view": "^0.9.2",
+    "react-native-picker-select": "^8.0.4",
     "react-native-swipe-verify": "^0.1.6",
     "react-native-table-component": "^1.2.1",
     "unstated-next": "^1.1.0",
