@@ -1,12 +1,12 @@
 import { Sequelize } from 'sequelize-typescript';
 import Config from '../config/config';
 
-export { default as Ride } from './Ride.model';
-export { default as Notification } from './Notification.model';
-export { default as Setting } from './Setting.model';
-export { default as TimeSlot } from './TimeSlot.model';
-export { default as Verification } from './Verification.model';
-export { default as User } from './User.model';
+export { default as Ride } from './Ride/index.model';
+export { default as Notification } from './Notification/index.model';
+export { default as Setting } from './Setting/index.model';
+export { default as TimeSlot } from './TimeSlot/index.model';
+export { default as Verification } from './Verification/index.model';
+export { default as User } from './User/index.model';
 
 const ENV_DEV = 'development';
 
