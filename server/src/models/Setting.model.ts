@@ -2,11 +2,10 @@ import {
   Table, Column, Model, PrimaryKey, DataType,
 } from 'sequelize-typescript';
 
-
 @Table({
   tableName: 'settings',
 })
-export class Setting extends Model {
+export default class Setting extends Model {
   @PrimaryKey
   @Column({
     type: DataType.UUID,
@@ -18,19 +17,19 @@ export class Setting extends Model {
     type: DataType.UUID,
     allowNull: false,
   })
-  key: string;
+    key: string;
 
   @Column({
     type: DataType.STRING,
     defaultValue: 'string',
     allowNull: true,
   })
-  value: string;
+    value: string;
 
   @Column({
     type: DataType.ENUM('string', 'number', 'json', 'boolean'),
     defaultValue: 'string',
     allowNull: false,
   })
-  type: string;
+    type: string;
 }

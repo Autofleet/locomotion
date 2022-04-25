@@ -12,23 +12,14 @@ const sendNotification = (targetIdsRaw, notificationId, contents, headings, { tt
     return true;
   }
 
-  return new Promise(async (resolve, reject) => {
-    try {
-      const firstNotification = await oneSignal.createNotification({
-        contents,
-        android_channel_id: process.env.ANDROID_CHANNEL_ID,
-        include_player_ids: targetIds,
-        headings,
-        notificationId,
-        ttl,
-        data,
-      });
-      resolve(firstNotification);
-    } catch (err) {
-      console.log(err);
-
-      reject(err);
-    }
+  return oneSignal.createNotification({
+    contents,
+    android_channel_id: process.env.ANDROID_CHANNEL_ID,
+    include_player_ids: targetIds,
+    headings,
+    notificationId,
+    ttl,
+    data,
   });
 };
 

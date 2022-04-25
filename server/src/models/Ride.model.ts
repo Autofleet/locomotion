@@ -1,9 +1,6 @@
-import Sequelize from 'sequelize';
 import {
   Table, Column, Model, PrimaryKey, DataType,
 } from 'sequelize-typescript';
-
-const _ = require('lodash');
 
 const states = {
   CREATING: 'creating',
@@ -17,7 +14,7 @@ const states = {
 @Table({
   tableName: 'rides',
 })
-export class Ride extends Model {
+export default class Ride extends Model {
   static STATES = states;
 
     @PrimaryKey

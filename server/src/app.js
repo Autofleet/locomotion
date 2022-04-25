@@ -4,7 +4,7 @@ const express = require('express');
 const SExpress = require('./lib/super-express');
 const logger = require('./logger');
 const { default: parseHeaderOperationId } = require('./middlewares/parse-header-operation-id');
-const packageJson = require('../package');
+const packageJson = require('../package.json');
 
 const app = new SExpress({
   httpLogCb: logger.httpMorganInfo,

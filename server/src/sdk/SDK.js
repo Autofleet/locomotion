@@ -1,8 +1,7 @@
+/* eslint-disable max-classes-per-file */
 const axios = require('axios');
-const jwt = require('jsonwebtoken');
 
 const { AF_API_URL = 'https://api.autofleet.io/' } = process.env;
-const refreshUrl = '/api/v1/login/refresh';
 
 class BaseApi {
   constructor(network) {
@@ -39,7 +38,6 @@ class RideApi extends BaseApi {
 class AutofleetSdk {
   static async Init({ refreshToken }) {
     const api = new AutofleetSdk({ refreshToken });
-    await api.refreshTokenAndSetInterval();
     return api;
   }
 
@@ -58,21 +56,6 @@ class AutofleetSdk {
       return config;
     });
     this.Rides = new RideApi(this.network);
-  }
-
-  async refreshTokenAndSetInterval() {
-    return;
-    clearTimeout(this.timeout);
-    const response = await this.network.post(refreshUrl, {
-      refreshToken: this.refreshToken,
-    });
-    const tokenPayload = jwt.decode(response.data.token);
-    this.token = response.data.token;
-    const expiryDate = new Date(tokenPayload.exp * 1000);
-    const msUntilNextExpiry = expiryDate.getTime() - (new Date()).getTime();
-    this.timeout = setTimeout(() => {
-      // this.refreshTokenAndSetInterval();
-    }, msUntilNextExpiry - (3 * 1000));
   }
 }
 

@@ -5,7 +5,7 @@ const { Op } = Sequelize;
 
 const UserService = {
   async find(id) {
-    console.log(User.findByPk)
+    console.log(User.findByPk);
     return User.findByPk(id);
   },
   async list(ids) {
@@ -36,7 +36,7 @@ const UserService = {
 
   async create(data) {
     const newData = { ...data };
-    console.log(newData)
+    console.log(newData);
     return User.create(newData);
   },
 

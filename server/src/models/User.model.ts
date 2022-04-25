@@ -6,18 +6,18 @@ import {
   tableName: 'users',
   paranoid: true,
 })
-export class User extends Model {
+export default class User extends Model {
   @PrimaryKey
   @Column({
     type: DataType.UUID,
     defaultValue: DataType.UUIDV4,
   })
-  id: string;
+    id: string;
 
   @Column({
     type: DataType.UUID,
   })
-  operationId: string;
+    operationId: string;
 
   @Column({
     type: DataType.STRING,

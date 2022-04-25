@@ -41,7 +41,7 @@
     "project": "./tsconfig.json",
     "sourceType": "module"
   },
-  "ignorePatterns": ["dist/*", "node_modules/", "jest.config.js", "migrations/*", "newrelic.js", "**/*.test.*"],
+  "ignorePatterns": ["dist/*", "node_modules/", "jest.config.js", "migrations/*", "newrelic.js", "**/*.test.*", "test/"],
   "plugins": ["@typescript-eslint"],
   "settings": {
     "import/extensions": [

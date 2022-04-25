@@ -5,7 +5,7 @@ import {
 @Table({
   tableName: 'time-slots',
 })
-export class TimeSlot extends Model {
+export default class TimeSlot extends Model {
   @PrimaryKey
   @Column({
     type: DataType.UUID,

@@ -5,7 +5,7 @@ import {
 @Table({
   tableName: 'notification',
 })
-export class Notification extends Model {
+export default class Notification extends Model {
   @PrimaryKey
   @Column({
     type: DataType.UUID,

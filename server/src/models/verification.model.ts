@@ -5,7 +5,7 @@ import {
 @Table({
   tableName: 'verifications',
 })
-export class Verification extends Model {
+export default class Verification extends Model {
   @PrimaryKey
   @Column({
     type: DataType.UUID,
@@ -16,15 +16,15 @@ export class Verification extends Model {
   @Column({
     type: DataType.STRING,
   })
-  phoneNumber: string;
+    phoneNumber: string;
 
   @Column({
     type: DataType.UUID,
   })
-  operationId: string;
+    operationId: string;
 
   @Column({
     type: DataType.STRING,
   })
-  externalCode: string;
+    externalCode: string;
 }
