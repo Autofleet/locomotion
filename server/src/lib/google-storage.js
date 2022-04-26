@@ -5,7 +5,7 @@ const gcsGetFile = (fileName, bucketName) => new Promise((resolve) => {
     projectId: process.env.GCP_PROJECT_ID,
   });
 
-  const bucket = storage.bucket(process.env.GCP_STORAGE_BUCKET_NAME);
+  const bucket = storage.bucket(process.env.GCP_STORAGE_BUCKET_NAME || 'locomotion');
 
   let currentBucket = bucket;
   if (bucketName) {
