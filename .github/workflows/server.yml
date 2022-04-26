@@ -8,8 +8,7 @@ on:
     paths:
       - 'server/**'
       - '.github/workflows/server.yml'
-env:
-  working-directory: server
+
 jobs:
   server-lint:
     runs-on: ubuntu-latest
@@ -22,9 +21,9 @@ jobs:
           - 5432:5432
         options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
     steps:
-      - name: echo working dir
-        run: echo $working-directory
-        
+      - name: cd to working dir
+        run: cd server
+
       - name: Use Node.js ${{ inputs.nodeVersion }}
         uses: actions/setup-node@v1
         with:
