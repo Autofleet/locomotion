@@ -41,7 +41,7 @@ jobs:
             ${{ runner.OS }}-npm-cache-
 
       - name: Install NPM dependencies
-        working-directory: /server
+        working-directory: ./server
         run: npm ci
         env:
           NODE_AUTH_TOKEN: ${{inputs.npmToken}}
