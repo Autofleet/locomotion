@@ -21,8 +21,7 @@ jobs:
           - 5432:5432
         options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
     steps:
-      - name: cd to working dir
-        run: cd server
+      
 
       - name: Use Node.js ${{ inputs.nodeVersion }}
         uses: actions/setup-node@v1
@@ -31,6 +30,9 @@ jobs:
           always-auth: true
           registry-url: https://registry.npmjs.org
           scope: '@autofleet'
+
+      - name: cd to working dir
+        run: cd server
         
       - name: Cache NPM dependencies
         uses: actions/cache@v1
