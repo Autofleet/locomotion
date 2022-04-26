@@ -47,7 +47,6 @@ class AutofleetSdk {
       baseURL: AF_API_URL,
     });
 
-    this.refreshTokenAndSetInterval();
     this.network.interceptors.request.use((config) => {
       if (this.token) {
         // eslint-disable-next-line no-param-reassign
