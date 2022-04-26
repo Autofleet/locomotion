@@ -16,24 +16,58 @@ jobs:
       postgres:
         image: mdillon/postgis:9.5
         env:
-          POSTGRES_USERNAME: postgres
           POSTGRES_PASSWORD: postgres
-          DB_PASSWORD: postgres
         ports:
           - 5432:5432
         options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v1
+
+      - name: Use Node.js ${{ inputs.nodeVersion }}
+        uses: actions/setup-node@v1
         with:
-          node-version: 12
-          registry-url: https://registry.npmjs.org/
-      - name: NPM Install
-        run: npm install
+          node-version: ${{ inputs.nodeVersion }}
+          always-auth: true
+          registry-url: https://registry.npmjs.org
+          scope: '@autofleet'
         working-directory: server
-      - name: Run Lint
-        run: npm run lint
+      - name: Cache NPM dependencies
+        uses: actions/cache@v1
+        with:
+          path: ~/.npm
+          key: ${{ runner.OS }}-npm-cache-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.OS }}-npm-cache-
         working-directory: server
-      - name: Run tests
-        run: npm run test
+      - name: Install NPM dependencies
+        run: npm ci
+        env:
+          NODE_AUTH_TOKEN: ${{inputs.npmToken}}
+        working-directory: server
+      - name: Check Af npm outdated
+        run: npm outdated $(npm ls --parseable | grep autofleet | sed 's|.*node_modules/\(.*\)|\1|') || true
+        env:
+          NODE_AUTH_TOKEN: ${{inputs.npmToken}}
+        working-directory: server
+      - name: init
+        if: inputs.skipInit != 'true'
+        run: npm run init
+        env:
+          DB_PASSWORD: postgres
+          DB_USERNAME: postgres
+          DB_NAME: postgres
+          DB_HOST: 127.0.0.1
+        working-directory: server
+      - run: npm run linter
+        working-directory: server
+      - name: coverage
+        run: npm run coverage
+        env:
+          DB_PASSWORD: postgres
+          DB_USERNAME: postgres
+          DB_NAME: postgres
+          DB_HOST: 127.0.0.1
+          REDIS_HOST: localhost
+          REDIS_PORT: 6379
+        working-directory: server
+      - run: rm -rf ./coverage
         working-directory: server
