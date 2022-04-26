@@ -10,7 +10,7 @@ on:
       - '.github/workflows/server.yml'
 defaults:
  run:
-  working-directory: ./server
+  working-directory: ../locomotion/server
 
 jobs:
   server-lint:
