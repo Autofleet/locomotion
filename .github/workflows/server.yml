@@ -11,6 +11,14 @@ on:
 jobs:
   server-lint:
     runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: mdillon/postgis:9.5
+        env:
+          POSTGRES_PASSWORD: postgres
+        ports:
+          - 5432:5432
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v1
@@ -22,4 +30,7 @@ jobs:
         working-directory: server
       - name: Run Lint
         run: npm run lint
+        working-directory: server
+      - name: Run tests
+        run: npm run test
         working-directory: server
