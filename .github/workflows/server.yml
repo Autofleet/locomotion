@@ -6,8 +6,8 @@ name: Server CI
 on:
   push:
     paths:
-    - 'server/**'
-    - '.github/workflows/server.yml'
+      - 'server/**'
+      - '.github/workflows/server.yml'
 
 jobs:
   server-lint:
