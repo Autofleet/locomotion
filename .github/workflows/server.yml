@@ -33,7 +33,6 @@ jobs:
           
         
       - name: Cache NPM dependencies
-        working-directory: ./server
         uses: actions/cache@v1
         with:
           path: ~/.npm
