@@ -26,8 +26,6 @@ jobs:
     steps:
       
       - uses: actions/checkout@v2
-      - run : pwd
-      - run : ls 
 
       - name: Use Node.js ${{ inputs.nodeVersion }}
         uses: actions/setup-node@v1
