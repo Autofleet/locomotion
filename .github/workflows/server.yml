@@ -8,6 +8,9 @@ on:
     paths:
       - 'server/**'
       - '.github/workflows/server.yml'
+defaults:
+ run:
+  working-directory: ./server
 
 jobs:
   server-lint:
@@ -41,19 +44,16 @@ jobs:
             ${{ runner.OS }}-npm-cache-
 
       - name: Install NPM dependencies
-        working-directory: ./server
         run: npm ci
         env:
           NODE_AUTH_TOKEN: ${{inputs.npmToken}}
 
       - name: Check Af npm outdated
-        working-directory: /server
         run: npm outdated $(npm ls --parseable | grep autofleet | sed 's|.*node_modules/\(.*\)|\1|') || true
         env:
           NODE_AUTH_TOKEN: ${{inputs.npmToken}}
 
       - name: init
-        working-directory: /server
         if: inputs.skipInit != 'true'
         run: npm run init
         env:
@@ -63,10 +63,8 @@ jobs:
           DB_HOST: 127.0.0.1
 
       - run: npm run linter
-        working-directory: /server
 
       - name: coverage
-        working-directory: /server
         run: npm run coverage
         env:
           DB_PASSWORD: postgres
