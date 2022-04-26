@@ -29,7 +29,7 @@ module.exports = {
     logging: logger.shortInfo,
   },
   production: {
-    username: env.DB_USERNAME || '',
+    username: env.DB_USERNAME || 'root',
     password: env.DB_PASSWORD || null,
     database: env.DB_NAME || 'locomotion_ms_production',
     host: env.DB_HOST || '127.0.0.1',
