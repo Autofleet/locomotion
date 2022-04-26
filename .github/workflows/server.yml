@@ -25,8 +25,8 @@ jobs:
         options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
     steps:
       
-      - name : pwd
-      - name : ls
+      - run : pwd
+      - run : ls
       - name: Use Node.js ${{ inputs.nodeVersion }}
         uses: actions/setup-node@v1
         with:
