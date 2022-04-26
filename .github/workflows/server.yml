@@ -8,9 +8,9 @@ on:
     paths:
       - 'server/**'
       - '.github/workflows/server.yml'
-# defaults:
-#  run:
-#   working-directory: 
+defaults:
+ run:
+  working-directory: 
 
 jobs:
   server-lint:
