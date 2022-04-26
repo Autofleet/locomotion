@@ -8,9 +8,9 @@ on:
     paths:
       - 'server/**'
       - '.github/workflows/server.yml'
-# defaults:
-#  run:
-#   working-directory: server
+defaults:
+ run:
+  working-directory: server
 
 jobs:
   server-lint:
@@ -28,7 +28,7 @@ jobs:
       - uses: actions/checkout@v2
       - run : pwd
       - run : ls 
-      
+
       - name: Use Node.js ${{ inputs.nodeVersion }}
         uses: actions/setup-node@v1
         with:
