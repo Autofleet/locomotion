@@ -24,7 +24,7 @@ if (config.use_env_variable) {
   sequelize = new Sequelize(config.database, config.username, config.password, config);
 }
 
-sequelize.addModels([`${__dirname}/*.model.*`], modelMatch);
+sequelize.addModels([`${__dirname}/*/*.model.*`], modelMatch);
 
 // eslint-disable-next-line object-shorthand
 export default sequelize;
