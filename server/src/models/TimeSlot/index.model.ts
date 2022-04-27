@@ -4,6 +4,7 @@ import {
 
 @Table({
   tableName: 'time-slots',
+  paranoid: true,
 })
 export default class TimeSlot extends Model {
   @PrimaryKey
