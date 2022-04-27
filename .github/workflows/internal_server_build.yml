@@ -11,6 +11,10 @@ on:
 
 jobs:
   Build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    
     - name: Extract branch name
       id: checkBranch
       run: echo "##[set-output name=branchCheck;]$(echo ${GITHUB_REF#refs/heads/})"
