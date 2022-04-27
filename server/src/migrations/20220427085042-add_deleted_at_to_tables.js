@@ -16,11 +16,6 @@ module.exports = {
       Sequelize.DATE,
     ),
     queryInterface.addColumn(
-      'time_slots',
-      'deleted_at',
-      Sequelize.DATE,
-    ),
-    queryInterface.addColumn(
       'verifications',
       'deleted_at',
       Sequelize.DATE,
@@ -37,10 +32,6 @@ module.exports = {
     ),
     queryInterface.removeColumn(
       'settings',
-      'deleted_at',
-    ),
-    queryInterface.removeColumn(
-      'time_slots',
       'deleted_at',
     ),
     queryInterface.removeColumn(
