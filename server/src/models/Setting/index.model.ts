@@ -4,6 +4,7 @@ import {
 
 @Table({
   tableName: 'settings',
+  paranoid: true,
 })
 export default class Setting extends Model {
   @PrimaryKey
