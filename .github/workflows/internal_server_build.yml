@@ -25,7 +25,7 @@ jobs:
           username: _json_key
           password: ${{ secrets.DOCKER_PASSWORD }}
           registry: gcr.io
-          file: ./examples/server/Dockerfile
+          file: "./examples/server/Dockerfile"
           build_args: NPM_TOKEN=${{secrets.NPM_TOKEN}}
           NPM_TOKEN: ${{secrets.NPM_TOKEN}}
           repository: autofleetprod/locomotion-server
