@@ -34,4 +34,3 @@ jobs:
           NPM_TOKEN: ${{secrets.NPM_TOKEN}}
           repository: autofleetprod/locomotion-server
           tags: ${{ steps.checkBranch.outputs.branchCheck }}-latest,${{ steps.checkBranch.outputs.branchCheck }}-${{ steps.date.outputs.date }}
-          push: true
