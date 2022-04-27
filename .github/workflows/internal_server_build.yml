@@ -24,13 +24,12 @@ jobs:
         run: echo "::set-output name=date::$(git rev-parse --short "$GITHUB_SHA")"
 
       - name: Build and push Docker images
-        uses: docker/build-push-action@v1.0
+        uses: docker/build-push-action@v2
         with:
+          push: true
           username: _json_key
-          password: ${{ secrets.DOCKER_PASSWORD }}
+          password: ${{ secrets.LOCOMOTION_DOCKER }}
           registry: gcr.io
           file: examples/server/Dockerfile
-          build_args: NPM_TOKEN=${{secrets.NPM_TOKEN}}
-          NPM_TOKEN: ${{secrets.NPM_TOKEN}}
-          repository: autofleetprod/locomotion-server
+          repository: locomotion-v2/locomotion-server
           tags: ${{ steps.checkBranch.outputs.branchCheck }}-latest,${{ steps.checkBranch.outputs.branchCheck }}-${{ steps.date.outputs.date }}
