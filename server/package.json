@@ -14,7 +14,8 @@
         "start": "npm run init && node index.js",
         "migrate": "node_modules/.bin/sequelize db:migrate",
         "init": "bash ./scripts/init.sh",
-        "clean": "rm -rf ./node_modules/ ./web-ui/node_modules/ ./web-ui/build/"
+        "clean": "rm -rf ./node_modules/ ./web-ui/node_modules/ ./web-ui/build/",
+        "build": "echo build"
     },
     "engines": {
         "node": ">=10.0.0"
