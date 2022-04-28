@@ -6,6 +6,7 @@ on:
       # re-deploy if a change has been made to either the server or to the example
       - 'examples/server/**'
       - 'server/**'
+      - '.github/workflows/autofleet_server_deploy.yml'
 
 jobs:
   Build:
