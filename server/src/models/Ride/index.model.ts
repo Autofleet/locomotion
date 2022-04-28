@@ -13,6 +13,7 @@ const states = {
 
 @Table({
   tableName: 'rides',
+  paranoid: true,
 })
 export default class Ride extends Model {
   static STATES = states;

@@ -3,7 +3,8 @@ import {
 } from 'sequelize-typescript';
 
 @Table({
-  tableName: 'notification',
+  tableName: 'notifications',
+  paranoid: true,
 })
 export default class Notification extends Model {
   @PrimaryKey
