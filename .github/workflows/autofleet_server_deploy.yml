@@ -3,8 +3,9 @@ name: autofleet server build and deploy
 on:
   push:
     paths:
+      # re-deploy if a change has been made to either the server or to the example
       - 'examples/server/**'
-      - '.github/workflows/internal_server_build.yml'
+      - 'server/**'
 
 jobs:
   Build:
@@ -31,10 +32,11 @@ jobs:
             path: 'examples/server'
 
   Deploy_Cloud_Run:
+    if: github.ref == 'refs/heads/master'
     needs: Build
     runs-on: ubuntu-latest
     steps:
-    
+
       - uses: 'google-github-actions/auth@v0'
         with:
           credentials_json: ${{ secrets.LOCOMOTION_DOCKER }}
