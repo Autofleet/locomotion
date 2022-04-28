@@ -29,3 +29,22 @@ jobs:
             repository: ${{secrets.LOCOMOTION_REPO}}
             tags: ${{ steps.checkBranch.outputs.branchCheck }}-latest,${{ steps.checkBranch.outputs.branchCheck }}-${{ steps.date.outputs.date }}
             path: 'examples/server'
+
+  Deploy_Cloud_Run:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: 'google-github-actions/auth@v0'
+        with:
+          credentials_json: ${{ secrets.LOCOMOTION_DOCKER }}
+
+      - name: get image name
+        id: getImageName
+        run: |
+         branchName=${GITHUB_REF#refs/heads/}
+         echo $branchName
+         echo "::set-output name=imageName::$(echo "gcr.io/${{secrets.LOCOMOTION_REPO}}")"
+        
+      - uses: google-github-actions/deploy-cloudrun@v0
+        with:
+          service: 'locomotion-v2'
+          image: ${{ steps.getImageName.outputs.imageName }}
