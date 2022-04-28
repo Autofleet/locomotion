@@ -31,6 +31,7 @@ jobs:
             path: 'examples/server'
 
   Deploy_Cloud_Run:
+    needs: Build
     runs-on: ubuntu-latest
     steps:
       - uses: 'google-github-actions/auth@v0'
