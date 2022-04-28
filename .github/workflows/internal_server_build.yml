@@ -43,7 +43,7 @@ jobs:
         run: |
          branchName=${GITHUB_REF#refs/heads/}
          echo $branchName
-         echo "::set-output name=imageName::$(echo "gcr.io/${{secrets.LOCOMOTION_REPO}}")"
+         echo "::set-output name=imageName::$(echo "gcr.io/${{secrets.LOCOMOTION_REPO}}:$branchName-latest")"
         
       - uses: google-github-actions/deploy-cloudrun@v0
         with:
