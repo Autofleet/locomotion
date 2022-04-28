@@ -49,3 +49,4 @@ jobs:
         with:
           service: 'locomotion-v2'
           image: ${{ steps.getImageName.outputs.imageName }}
+          region: ${{secrets.LOCOMOTION_REGION}}
