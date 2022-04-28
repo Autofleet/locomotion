@@ -1,4 +1,4 @@
-name: Internal Server Build
+name: autofleet server build and deploy
 
 on:
   push:
