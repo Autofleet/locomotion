@@ -5,9 +5,6 @@ on:
     paths:
       - 'examples/server/**'
       - '.github/workflows/internal_server_build.yml'
-# defaults:
-#  run:
-#   working-directory: server
 
 jobs:
   Build:
@@ -29,6 +26,6 @@ jobs:
             username: _json_key
             password: ${{ secrets.LOCOMOTION_DOCKER }}
             registry: gcr.io
-            repository: locomotion-v2/locomotion-server
+            repository: ${{secrets.LOCOMOTION_REPO}}
             tags: ${{ steps.checkBranch.outputs.branchCheck }}-latest,${{ steps.checkBranch.outputs.branchCheck }}-${{ steps.date.outputs.date }}
             path: 'examples/server'
