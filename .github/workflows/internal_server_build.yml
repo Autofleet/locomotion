@@ -23,6 +23,13 @@ jobs:
         id: date
         run: echo "::set-output name=date::$(git rev-parse --short "$GITHUB_SHA")"
 
+        uses: google-github-actions/auth@v0
+        with:
+          credentials_json: ${{ secrets.LOCOMOTION_DOCKER }}
+
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v0
+
       - name: Build and push Docker images
         uses: docker/build-push-action@v2
         with:
