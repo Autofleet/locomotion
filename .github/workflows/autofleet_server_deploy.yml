@@ -34,6 +34,7 @@ jobs:
     needs: Build
     runs-on: ubuntu-latest
     steps:
+    
       - uses: 'google-github-actions/auth@v0'
         with:
           credentials_json: ${{ secrets.LOCOMOTION_DOCKER }}
