@@ -27,9 +27,10 @@ jobs:
           images: autofleet/locomotion
       
       - name: Build and push Docker image
-        uses: docker/build-push-action@v1
+        uses: docker/build-push-action@v2
         with:
-          context: server
+          path: 'server'
+          context: 'server'
           push: true
           tags: test_build
           labels: ${{ steps.meta.outputs.labels }}
