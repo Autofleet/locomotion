@@ -22,7 +22,7 @@
         }
     },
     "include": [
-        "src/**/*","server/src/lib/**/*", "test","src/i18n/en.json", ""
+        "src/**/*","server/src/lib/**/*", "test", ""
     ],
     "exclude": [
         "**/*.test.*",
