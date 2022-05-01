@@ -52,6 +52,8 @@ jobs:
         
       - uses: google-github-actions/deploy-cloudrun@v0
         with:
+          tag: latest
+          tag_traffic: latest=100
           service: 'locomotion-v2'
           image: ${{ steps.getImageName.outputs.imageName }}
           region: ${{secrets.LOCOMOTION_REGION}}
