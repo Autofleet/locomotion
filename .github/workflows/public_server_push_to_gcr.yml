@@ -2,8 +2,7 @@ name: build public server image and push to gcr
 
 on:
   push:
-    paths:
-      # # build and push to gcr if a change has been made to the server
+      # build and push to gcr if a change has been made to the server
       # - '.github/workflows/public_server_push_to_gcr.yml'
       # - 'server/**'
       
