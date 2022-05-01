@@ -50,7 +50,7 @@ jobs:
          echo $branchName
          echo "::set-output name=imageName::$(echo "gcr.io/${{secrets.LOCOMOTION_REPO}}:$branchName-latest")"
         
-      - uses: google-github-actions/deploy-cloudrun@v0
+      - uses: google-github-actions/deploy-cloudrun@v0.9.0
         with:
           tag: latest
           tag_traffic: latest=100
