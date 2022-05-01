@@ -28,4 +28,4 @@ RUN npm run install-webui
 
 RUN npm run build
 EXPOSE 8080
-CMD [ "node", "--max-http-header-size", "1048576", "--unhandled-rejections=warn", "./dist/src/index.js" ]
+CMD [ "node", "--max-http-header-size", "1048576", "./dist/src/index.js" ]
