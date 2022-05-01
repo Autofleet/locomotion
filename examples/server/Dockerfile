@@ -1,4 +1,4 @@
-FROM gcr.io/af-gcr/locomotion-server:add-push-to-docker-hub-latest
+FROM autofleet/locomotion:2.1.7
 
 WORKDIR /usr/src/app
 
