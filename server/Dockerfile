@@ -22,6 +22,10 @@ WORKDIR /usr/src/app
 COPY --from=0 /usr/src/app/node_modules ./node_modules
 
 COPY . .
+
+COPY ./src/web-ui ./web-ui
+RUN npm run install-webui
+
 RUN npm run build
 EXPOSE 8080
 CMD [ "node", "--max-http-header-size", "1048576", "--unhandled-rejections=warn", "./dist/src/index.js" ]
