@@ -13,6 +13,7 @@
         "baseUrl": ".",
         "experimentalDecorators": true,
         "emitDecoratorMetadata": true,
+        "resolveJsonModule": true,
         "allowJs": true,
         "paths": {
             "*": [
@@ -21,7 +22,7 @@
         }
     },
     "include": [
-        "src/**/*", "test"
+        "src/**/*", "test","src/i18n/en.json"
     ],
     "exclude": [
         "**/*.test.*",
