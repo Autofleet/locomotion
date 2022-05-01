@@ -4,8 +4,9 @@ on:
   push:
     paths:
       # build and push to gcr if a change has been made to the server
-      - 'server/**'
       - '.github/workflows/public_server_push_to_gcr.yml'
+      - 'server/**'
+      
 jobs:
     Build:
     # if: github.ref == 'refs/heads/master'
