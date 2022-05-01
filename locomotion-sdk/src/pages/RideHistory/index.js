@@ -6,6 +6,7 @@ import {
   PageContent, NoRidesMessageContainer, NoRidesTitle, NoRidesTitleText, NoRidesTitleSubText,
 } from './styled';
 import RideHistoryTable from '../../Components/RideHistoryTable';
+import Mixpanel from '../../services/Mixpanel';
 
 const NoRidesMessage = ({ navigation }) => (
   <NoRidesMessageContainer>
@@ -31,6 +32,7 @@ export default ({ navigation,menuSide }) => {
   };
 
   useEffect(() => {
+    Mixpanel.pageView(navigation.state.routeName)
     getRides();
   }, []);
 

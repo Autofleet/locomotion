@@ -1,6 +1,7 @@
 import React from 'react';
 import { TouchableOpacity, Image } from 'react-native';
 import styled from 'styled-components';
+import BaseButton from '../ButtonBase';
 import SafeView from '../SafeView';
 
 const HamburgerIconSource = require('../../assets/menu.png');
@@ -17,13 +18,15 @@ const HeaderView = styled.View`
   ` : '')}
 `;
 
+const Button = styled(BaseButton)``;
+
 const Header = ({ navigation, menuSide }) => (
   <SafeView>
-    <TouchableOpacity onPress={() => navigation.openDrawer()}>
+    <Button onPress={() => navigation.openDrawer()} data-test-id='openNavPanelButton'>
       <HeaderView menuSide={menuSide}>
         <Image style={{ width: 25, height: 25 }} source={HamburgerIconSource} />
       </HeaderView>
-    </TouchableOpacity>
+    </Button>
   </SafeView>
 );
 

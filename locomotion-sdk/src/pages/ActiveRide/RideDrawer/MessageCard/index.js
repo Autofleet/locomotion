@@ -27,7 +27,7 @@ export default ({
     <Fragment>
     {isPopupOpen(id) ?
         <MessageContainer>
-            <CloseContainer onPress={() => closePopup()}>
+            <CloseContainer onPress={() => closePopup()} data-test-id='CloseMessageCardButton'>
                 <ResetInputIcon />
             </CloseContainer>
             <View style={{ flex: 2, textAlign: 'left', maxWidth: '80%' }}>

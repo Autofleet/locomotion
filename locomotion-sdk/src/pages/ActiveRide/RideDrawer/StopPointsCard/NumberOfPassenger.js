@@ -3,6 +3,7 @@ import { Text, View } from 'react-native';
 import styled from 'styled-components';
 import i18n from '../../../../I18n';
 import { getTogglePopupsState } from '../../../../context/main';
+import BaseButton from '../../../../Components/ButtonBase';
 
 const PassengerAmountIconSource = require('../../../../assets/ppl.png');
 const PlusIconSource = require('../../../../assets/plus.png');
@@ -64,7 +65,7 @@ const SetPassengerAmountContainer = styled.View`
   align-self: center;
 `;
 
-const SetPassengerAmountBox = styled.TouchableOpacity`
+const SetPassengerAmountBox = styled(BaseButton)`
   flex: 1;
   justify-content: center;
   background-color: transparent;
@@ -135,14 +136,14 @@ export default ({ amount, onChange }) => {
         <PassengerAmountText>{newAmount}</PassengerAmountText>
         <PassengerControlersContainer>
           <SetPassengerAmountBoxContainer disabled={!validateChange(newAmount, -1)}>
-            <SetPassengerAmountBox
+            <SetPassengerAmountBox data-test-id='SetPassengerAmountMinusButton'
               onPress={getNewAmountFunction(-1)}
             >
               <MinusIcon />
             </SetPassengerAmountBox>
           </SetPassengerAmountBoxContainer>
           <SetPassengerAmountBoxContainer disabled={!validateChange(newAmount, 1)}>
-            <SetPassengerAmountBox onPress={getNewAmountFunction(1)}><PlusIcon /></SetPassengerAmountBox>
+            <SetPassengerAmountBox data-test-id='SetPassengerAmountPlusButton' onPress={getNewAmountFunction(1)}><PlusIcon /></SetPassengerAmountBox>
           </SetPassengerAmountBoxContainer>
         </PassengerControlersContainer>
       </View>

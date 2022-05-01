@@ -6,6 +6,7 @@ import i18n from '../../../I18n';
 import RideRoundedButton from '../../../Components/RideButton';
 import RoundedButton from '../../../Components/RoundedButton';
 import Button from '../../../Components/Button';
+import BaseButton from '../../../Components/ButtonBase';
 
 export const Drawer = styled.View`
  /*  position: absolute;
@@ -145,7 +146,7 @@ export const PreRideBox = styled(({ eta, estimatePrice, ...props }) => (
   `;
 
 
-export const RideTypeButton = styled.TouchableOpacity`
+export const RideTypeButton = styled(BaseButton)`
   align-items: center;
   flex: 1;
 `;

@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Text, Image, TouchableOpacity } from 'react-native';
 import styled from 'styled-components';
 import xIcon from '../../assets/x.png'
+import BaseButton from '../../Components/ButtonBase';
 
 export const SummaryContainer = styled.View`
   padding: 20px 0;
@@ -27,11 +28,11 @@ export const SummarySubTitle = styled.Text`
   color: #727272;
   font-size: 12;
   font-weight: 500;
-  padding-top: 20px
+  padding-top: 20px;
   padding-bottom: 15px;
 `;
 
-export const CloseContainer = styled.TouchableOpacity`
+export const CloseContainer = styled(BaseButton)`
     position: absolute;
     right: 15px;
     top: 15px;

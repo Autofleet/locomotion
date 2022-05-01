@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import LinearGradient from '../LinearGradient';
 
 import { inputHeight, appPalette } from '../../assets/style-settings';
+import BaseButton from '../ButtonBase';
 
 const LoadingWrapper = styled.View`
   width: 100%;
@@ -29,7 +30,7 @@ const buttonShadow = `
   shadow-offset: 0px 0px;
 `;
 
-const StyledTouchableOpacity = styled.TouchableOpacity`
+const StyledTouchableOpacity = styled(BaseButton)`
   width: ${({ width }) => (width || '100%')};
   border-radius: 4px;
   background-color: #1e273d;

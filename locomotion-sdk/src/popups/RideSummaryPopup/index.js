@@ -20,6 +20,7 @@ import {
 } from './styled'
 import { getTogglePopupsState } from '../../context/main';
 import RoundedButton from '../../Components/RoundedButton';
+import BaseButton from '../../Components/ButtonBase';
 
 const starIconSource = require('../../assets/star.png');
 const lightStarIconSource = require('../../assets/lightStar.png');
@@ -60,7 +61,7 @@ export default ({
   const Star = (props) => {
     const source = props.isOn ? lightStarIconSource : starIconSource;
     return (
-      <TouchableOpacity {...props}><StarIcon source={source} isOn={props.isOn} /></TouchableOpacity>
+      <BaseButton {...props} data-test-id='RattingButton'><StarIcon source={source} isOn={props.isOn} /></BaseButton>
     );
   };
 
@@ -89,7 +90,7 @@ export default ({
   return (
     <Modal isVisible={isPopupOpen('rideSummary') || false}>
         <SummaryContainer>
-          <CloseContainer onPress={() => closePopup()}>
+          <CloseContainer onPress={() => closePopup()} data-test-id='CloseRideSummaryPopup'>
             <ResetInputIcon />
           </CloseContainer>
           <View style={{ flex: 2, textAlign: 'left', maxWidth: '80%' }}>
@@ -121,6 +122,7 @@ export default ({
             <SummaryStarsTitle>{i18n.t('popups.rideSummary.ratingHeadline')}</SummaryStarsTitle>
             <StarRating/>
             <RoundedButton
+                data-test-id='SubmitRideSummaryPopupButton'
                 onPress={() => onSubmit()}
               >
                 {i18n.t('popups.rideSummary.submit')}

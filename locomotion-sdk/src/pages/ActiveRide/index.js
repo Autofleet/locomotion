@@ -26,6 +26,7 @@ import MyLocationButton from './ShowMyLocationButton';
 import RideSummaryPopup from '../../popups/RideSummaryPopup';
 import FutureRideCanceledPopup from '../../popups/FutureRideCanceled';
 import AppSettings from '../../services/app-settings'
+import Mixpanel from '../../services/Mixpanel';
 
 const STATION_AUTOREFRESH_INTERVAL = 1500;
 
@@ -183,6 +184,7 @@ export default ({ navigation, menuSide, mapSettings }) => {
   }
 
   useEffect(() => {
+    Mixpanel.pageView(navigation.state.routeName)
     initialLocation();
     UserService.getUser(navigation);
     getStations();

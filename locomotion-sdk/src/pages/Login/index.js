@@ -26,6 +26,7 @@ import SafeView from '../../Components/SafeView';
 import { useStateValue } from '../../context/main';
 import { needOnboarding } from '../Onboarding';
 import WebView from '../WebView';
+import Mixpanel from '../../services/Mixpanel';
 
 const LogoIconSource = require('../../assets/logo.png');
 
@@ -49,6 +50,7 @@ const Login = ({ navigation, logo }) => {
   };
 
   useEffect(() => {
+    Mixpanel.pageView(navigation.state.routeName)
     loadSettings();
   }, []);
 
@@ -107,6 +109,7 @@ const Login = ({ navigation, logo }) => {
 
       await Auth.updateTokens(vertResponse.refreshToken, vertResponse.accessToken);
       const userProfile = vertResponse.userProfile || {};
+      Mixpanel.setUser(userProfile)
       dispatch({
         type: 'saveState',
         payload: {
@@ -196,20 +199,20 @@ const Login = ({ navigation, logo }) => {
 
           {loginState.error ? <ErrorText>{loginState.error}</ErrorText> : undefined }
 
-          {isVertStep ? <ResendButton onPress={resendVertCode}>{I18n.t('login.resendButton')}</ResendButton> : undefined}
+          {isVertStep ? <ResendButton data-test-id='ResendLoginCodeButton' onPress={resendVertCode}>{I18n.t('login.resendButton')}</ResendButton> : undefined}
         </KeyboardAwareScrollView>
         <SubmitContainer>
 
           <TermsText>
             <Trans i18nKey="login.termsAgreement">
               {[
-                <TermsLink onPress={() => openTerms()} />,
-                <TermsLink onPress={() => openPrivacy()} />,
+                <TermsLink onPress={() => openTerms()} data-test-id='OpenTermsButton'/>,
+                <TermsLink onPress={() => openPrivacy()} data-test-id='OpenPrivacyButton'/>,
               ]}
             </Trans>
           </TermsText>
 
-          <SubmitButton onPress={isVertStep ? onVert : onSubmitPhoneNumber} marginTop="20px">
+          <SubmitButton onPress={isVertStep ? onVert : onSubmitPhoneNumber} marginTop="20px" data-test-id={`${isVertStep ? 'SubmitVertButton' : 'SubmitPhoneNumberButton'}`}>
             {I18n.t(`login.${isVertStep ? 'submitVertButton' : 'submitPhoneNumberButton'}`)}
           </SubmitButton>
         </SubmitContainer>

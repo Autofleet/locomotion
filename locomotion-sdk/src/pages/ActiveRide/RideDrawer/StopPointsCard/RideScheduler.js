@@ -9,6 +9,7 @@ import i18n from '../../../../I18n';
 import { getTogglePopupsState } from '../../../../context/main';
 import InputIcon from '../../../../assets/arrow-down.png';
 import DateTimePicker from './DateTimePicker';
+import BaseButton from '../../../../Components/ButtonBase';
 
 const Container = styled.View`
   min-height: 50;
@@ -27,7 +28,7 @@ const TimeItemContainer = styled.View`
   margin-bottom: 10px;
 `;
 
-const TimeItem = styled.TouchableOpacity`
+const TimeItem = styled(BaseButton)`
   flex: 1;
   background-color: ${({ selected }) => (selected ? '#6180c0' : '#ffffff')};
   justify-content: center;
@@ -71,7 +72,7 @@ const SelectionTitle = styled.Text`
 const OrderTimeSelector = ({
   selected, text, onPress, side, disabled
 }) => (
-  <TimeItem selected={selected} onPress={onPress} side={side} disabled={disabled}>
+  <TimeItem selected={selected} onPress={onPress} side={side} disabled={disabled} data-test-id={`${text}OrderTimeButton`}>
     <TextContainer selected={selected}>{text}</TextContainer>
   </TimeItem>
 

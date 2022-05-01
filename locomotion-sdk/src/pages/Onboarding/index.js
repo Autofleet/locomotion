@@ -18,6 +18,7 @@ import {
 import i18n from '../../I18n';
 import { useStateValue } from '../../context/main';
 import PageHeader from '../../Components/PageHeader';
+import Mixpanel from '../../services/Mixpanel';
 
 
 export default ({
@@ -34,6 +35,7 @@ export default ({
   const [showHeaderIcon, setShowHeaderIcon] = useState(true);
 
   useEffect(() => {
+    Mixpanel.pageView(navigation.state.routeName)
     setShowHeaderIcon(navigation.getParam('showHeaderIcon', true));
   }, []);
 
@@ -160,7 +162,7 @@ export default ({
           />
           <ErrorText>{onboardingState.error ? onboardingState.error : ''}</ErrorText>
           <SubmitContainer>
-            <SubmitButton onPress={submit}>
+            <SubmitButton onPress={submit} data-test-id='FinishOnboardingButton'>
               {i18n.t('onboarding.submit')}
             </SubmitButton>
           </SubmitContainer>

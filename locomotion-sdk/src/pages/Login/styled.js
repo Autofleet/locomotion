@@ -1,9 +1,10 @@
 import styled from 'styled-components';
 import { padding, inputHeight } from '../../assets/style-settings';
+import BaseButton from '../../Components/ButtonBase';
 
 const loginTextColor = '#7c8799';
 
-export const ResendButton = styled.Text`
+export const ResendButton = styled(BaseButton)`
   color: ${loginTextColor};
   text-decoration: underline;
   text-decoration-color: ${loginTextColor};
@@ -70,7 +71,7 @@ export const TermsText = styled.Text`
   text-align: center;
 `;
 
-export const TermsLink = styled.Text`
+export const TermsLink = styled(BaseButton)`
   font-size: 10px;
   text-align: center;
   font-weight: 500;

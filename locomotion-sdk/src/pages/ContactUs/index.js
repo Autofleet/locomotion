@@ -6,6 +6,7 @@ import i18n from '../../I18n';
 import Header from '../../Components/Header';
 import PageHeader from '../../Components/PageHeader';
 import network from '../../services/network';
+import Mixpanel from '../../services/Mixpanel';
 
 const { CONTACT_US_URL: uri } = Config;
 
@@ -23,6 +24,7 @@ export default ({ navigation, menuSide }) => {
   };
 
   useEffect(() => {
+    Mixpanel.pageView(navigation.state.routeName)
     loadSettings();
   });
 

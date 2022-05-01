@@ -5,6 +5,7 @@ import { Callout, Marker } from 'react-native-maps';
 import AppleCustomMarker from './AppleCustomMarker'
 import GoogleCustomMarker from './GoogleCustomMarker'
 import Config from 'react-native-config';
+import Mixpanel from '../../../services/Mixpanel';
 
 const CustomMarkerSelector = (props) => {
   if(Platform.OS === 'ios') {
@@ -23,7 +24,10 @@ export default ({
   return (
     <Marker
       coordinate={{ latitude: parseFloat(lat), longitude: parseFloat(lng) }}
-      onPress={e => selectStation(stationKey)}
+      onPress={e => {
+        Mixpanel.trackElementClick({id: 'SelectStationButton'});
+        selectStation(stationKey)
+      }}
       style={type ? { zIndex: 1 } : {}}
       key={stationKey}
       tracksViewChanges={Platform.OS === 'ios' && Config.MAP_PROVIDER === 'google'}

@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { TouchableOpacity } from 'react-native';
+import BaseButton from '../ButtonBase';
 
 const defaultTextColor = '#686868';
 const iconTopPadding = 25;
@@ -11,7 +11,7 @@ export const HeaderText = styled.Text(props => `
   font-size: 16px;
 `);
 
-export const HeaderIconContainer = styled(TouchableOpacity)(({ side }) => `
+export const HeaderIconContainer = styled(BaseButton)(({ side }) => `
   padding: 5px;
   position: absolute;
   top: 6px;

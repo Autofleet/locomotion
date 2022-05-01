@@ -1,6 +1,6 @@
 import React from 'react';
-import { TouchableOpacity, View } from 'react-native';
 import styled from 'styled-components';
+import BaseButton from '../../../Components/ButtonBase';
 
 const Sight = styled.Image`
   height: 50px;
@@ -10,9 +10,9 @@ const Sight = styled.Image`
 
 export default styled(({ displayButton, onPress }) => (
   displayButton ? (
-    <TouchableOpacity onPress={onPress}>
+    <BaseButton onPress={onPress} data-test-id='MyLocationButton'>
       <Sight source={require('../../../assets/center_btn.png')} resizeMode="contain" />
-    </TouchableOpacity>
+    </BaseButton>
   ) : null
 ))`
 `;

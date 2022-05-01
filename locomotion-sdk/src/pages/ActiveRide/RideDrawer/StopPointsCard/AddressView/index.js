@@ -146,7 +146,7 @@ export default props => {
             </AddressSearchItem>
           ))}
       </ScrollView>
-      <ResetInputIconContainer onPress={props.onClose}>
+      <ResetInputIconContainer onPress={props.onClose} data-test-id='ClearAddressButton'>
         <ResetInputIcon />
       </ResetInputIconContainer>
     </AddressInputs>

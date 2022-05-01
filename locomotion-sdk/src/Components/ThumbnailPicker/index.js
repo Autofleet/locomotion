@@ -5,6 +5,7 @@ import ImageResizer from 'react-native-image-resizer';
 
 import network from '../../services/network';
 import Thumbnail from '../Thumbnail';
+import { ImageUpload } from '../../context/networkRequests';
 
 export default class ThumbnailPicker extends React.Component {
   constructor() {
@@ -47,11 +48,7 @@ export default class ThumbnailPicker extends React.Component {
       name: 'avatar',
     });
 
-    const { data: response } = await network.post('api/v1/me/image-upload', formData, {
-      headers: {
-        'content-type': 'multipart/form-data',
-      },
-    });
+    const response = await ImageUpload(formData)
 
     if (response.status) {
       return response.url;
