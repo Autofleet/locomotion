@@ -25,9 +25,9 @@ app.get('/alive', require('./alive'));
 
 app.use('/api', require('./api'));
 
-app.use('/admin', express.static('./web-ui/public/index.html'));
+app.use('/admin', express.static('./web-ui/build/index.html'));
 app.get('/admin', (req, res) => {
-  res.sendFile(path.join(__dirname, './web-ui/public/index.html'));
+  res.sendFile(path.join(__dirname, './web-ui/build/index.html'));
 });
 
 module.exports = app;
