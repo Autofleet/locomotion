@@ -1,17 +1,13 @@
-import React, { Fragment, useEffect } from 'react';
+import React, { Fragment } from 'react';
 import { View } from 'react-native';
 import { WebView } from 'react-native-webview';
 import Config from 'react-native-config';
 import i18n from '../../I18n';
 import Header from '../../Components/Header';
 import PageHeader from "../../Components/PageHeader";
-import Mixpanel from '../../services/Mixpanel';
 const closeIconSource = require('../../assets/x.png');
 
 export default ({ navigation, uri, title, onIconPress,menuSide  }) => {
-  useEffect(() => {
-    Mixpanel.pageView(navigation.state.routeName)
-  }, [])
   return (<Fragment>
     <PageHeader
         title={title}

@@ -18,6 +18,7 @@ import {
   SubmitContainer,
   TermsText,
   TermsLink,
+  ResendButtonText,
 } from './styled';
 import I18n from '../../I18n';
 import PhoneNumberInput from '../../Components/PhoneNumberInput';
@@ -27,6 +28,7 @@ import { useStateValue } from '../../context/main';
 import { needOnboarding } from '../Onboarding';
 import WebView from '../WebView';
 import Mixpanel from '../../services/Mixpanel';
+import { getLoginSettings, loginApi, loginVert } from '../../context/user';
 
 const LogoIconSource = require('../../assets/logo.png');
 
@@ -45,7 +47,7 @@ const Login = ({ navigation, logo }) => {
   });
 
   const loadSettings = async () => {
-    const { data: settings } = await network.get('/api/v1/login/settings');
+    const settings = await getLoginSettings()
     setSettings(settings);
   };
 
@@ -94,7 +96,7 @@ const Login = ({ navigation, logo }) => {
 
   const onVert = async () => {
     try {
-      const { data: vertResponse } = await network.post('api/v1/login/vert', {
+      const vertResponse = await loginVert({
         phoneNumber: loginState.phoneNumber,
         code: loginState.vertCode,
       });
@@ -136,7 +138,7 @@ const Login = ({ navigation, logo }) => {
     }
 
     try {
-      await network.post('api/v1/login', {
+      await loginApi({
         phoneNumber: loginState.phoneNumber,
       });
     } catch (e) {
@@ -199,7 +201,10 @@ const Login = ({ navigation, logo }) => {
 
           {loginState.error ? <ErrorText>{loginState.error}</ErrorText> : undefined }
 
-          {isVertStep ? <ResendButton data-test-id='ResendLoginCodeButton' onPress={resendVertCode}>{I18n.t('login.resendButton')}</ResendButton> : undefined}
+          {isVertStep ? 
+            <ResendButton data-test-id='ResendLoginCodeButton' onPress={resendVertCode}>
+            <ResendButtonText>{I18n.t('login.resendButton')}</ResendButtonText>
+            </ResendButton> : undefined}
         </KeyboardAwareScrollView>
         <SubmitContainer>
 

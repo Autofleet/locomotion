@@ -1,11 +1,4 @@
-export const ImageUpload = async (formData) => {
-    const { data } = await network.post('api/v1/me/image-upload', formData, {
-    headers: {
-      'content-type': 'multipart/form-data',
-    },
-  });
-  return data
-}
+import network from '../../services/network'; 
 
 export const getAppSettings = async () => {
     const { data } = await network.get('/api/v1/me/app-settings')

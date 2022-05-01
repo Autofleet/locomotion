@@ -2,6 +2,7 @@ import axios from 'axios';
 
 import Auth from './auth';
 import AppSettings from './app-settings';
+import Mixpanel from './Mixpanel';
 
 const HTTPMethods = [
   'get',
@@ -23,11 +24,13 @@ class Network {
     this.settings = Object.assign(Network.defaultSettings, settings);
     this.axios = axios.create(settings);
     this.axios.interceptors.request.use((request) => {
+      Mixpanel.setEvent('Network request', { method: request.method, endpoint: request.url, request})
       console.log(`Starting Request [${request.method}] ${request.url}`, request);
       return request;
     });
 
     this.axios.interceptors.response.use((response) => {
+      Mixpanel.setEvent('Network response', { method: response.config.method, endpoint: response.config.url, response})
       console.log(`Response [${response.config.method}] ${response.config.url}:`, response);
       return response;
     });

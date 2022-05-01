@@ -1,12 +1,12 @@
 import React, { Fragment, useEffect, useState } from 'react';
 import i18n from '../../I18n';
 import PageHeader from '../../Components/PageHeader';
-import RideHistoryService from '../../services/ride-history';
 import {
   PageContent, NoRidesMessageContainer, NoRidesTitle, NoRidesTitleText, NoRidesTitleSubText,
 } from './styled';
 import RideHistoryTable from '../../Components/RideHistoryTable';
 import Mixpanel from '../../services/Mixpanel';
+import { getRidesHistory } from '../../context/rides';
 
 const NoRidesMessage = ({ navigation }) => (
   <NoRidesMessageContainer>
@@ -25,7 +25,7 @@ export default ({ navigation,menuSide }) => {
   };
 
   const getRides = async () => {
-    const history = await RideHistoryService.getHistory();
+    const history = await getRidesHistory()
     if (history && history.rides) {
       setRides(history.rides);
     }

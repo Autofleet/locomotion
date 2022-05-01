@@ -5,6 +5,10 @@ import BaseButton from '../../Components/ButtonBase';
 const loginTextColor = '#7c8799';
 
 export const ResendButton = styled(BaseButton)`
+  margin: 0 auto 0 auto;
+`;
+
+export const ResendButtonText = styled.Text`
   color: ${loginTextColor};
   text-decoration: underline;
   text-decoration-color: ${loginTextColor};
@@ -71,7 +75,7 @@ export const TermsText = styled.Text`
   text-align: center;
 `;
 
-export const TermsLink = styled(BaseButton)`
+export const TermsLink = styled.Text`
   font-size: 10px;
   text-align: center;
   font-weight: 500;

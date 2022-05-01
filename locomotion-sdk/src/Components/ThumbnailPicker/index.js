@@ -5,7 +5,7 @@ import ImageResizer from 'react-native-image-resizer';
 
 import network from '../../services/network';
 import Thumbnail from '../Thumbnail';
-import { ImageUpload } from '../../context/networkRequests';
+import { ImageUpload } from '../../context/user';
 
 export default class ThumbnailPicker extends React.Component {
   constructor() {

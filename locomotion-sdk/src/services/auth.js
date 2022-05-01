@@ -2,6 +2,7 @@ import jwtDecode from 'jwt-decode';
 import StorageService from './storage';
 import AppSettings from './app-settings';
 import { Navigator } from './navigation';
+import { loginRefresh } from '../context/user';
 
 class Auth {
   static jwtVerify(token) {
@@ -20,7 +21,7 @@ class Auth {
       // call server
       let response;
       try {
-        response = await network.post('api/v1/login/refresh', { refreshToken });
+        response = await loginRefresh({ refreshToken });
       } catch (error) {
         console.log('error when try to refresh the login token', error);
         if (this.onFaildAuthCallback) { this.onFaildAuthCallback(); }

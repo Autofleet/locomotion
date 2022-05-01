@@ -8,6 +8,7 @@ import { useStateValue } from '../../context/main';
 import { needOnboarding } from '../Onboarding';
 import network from '../../services/network';
 import Auth from '../../services/auth';
+import { getUserDetails } from '../../context/user';
 
 const AuthLoadingScreen = ({ navigation }) => {
   const [appState, dispatch] = useStateValue();
@@ -23,7 +24,7 @@ const AuthLoadingScreen = ({ navigation }) => {
       let page = payload.userProfile ? 'App' : 'Auth';
 
       if (payload.userProfile) {
-        const response = await network.get('api/v1/me');
+        const response = await getUserDetails()
         if (!response || response.data === null) {
           Auth.logout(navigation);
         }
