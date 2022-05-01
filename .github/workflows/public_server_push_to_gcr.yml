@@ -2,12 +2,13 @@ name: build public server image and push to gcr
 
 on:
   push:
+    paths:
       # build and push to gcr if a change has been made to the server
-      # - '.github/workflows/public_server_push_to_gcr.yml'
-      # - 'server/**'
+      - '.github/workflows/public_server_push_to_gcr.yml'
+      - 'server/**'
       
 jobs:
-    Build:
+  Build:
     # if: github.ref == 'refs/heads/master'
     runs-on: ubuntu-latest
     steps:
