@@ -1,4 +1,4 @@
-FROM node:16.13.1
+FROM node:11.14.0
 
 # Create app directory
 WORKDIR /usr/src/app
@@ -15,9 +15,6 @@ COPY package*.json ./
 RUN npm install --only=production
 # If you are building your code for production
 # RUN npm install --only=production
-
-FROM node:11.14.0
-WORKDIR /usr/src/app
 
 COPY --from=0 /usr/src/app/node_modules ./node_modules
 
