@@ -34,7 +34,7 @@ jobs:
             path: 'examples/server'
 
   Deploy_Cloud_Run:
-    if: github.ref == 'refs/heads/master'
+    # if: github.ref == 'refs/heads/master'
     needs: Build
     runs-on: ubuntu-latest
     steps:
