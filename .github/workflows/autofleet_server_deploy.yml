@@ -4,6 +4,7 @@ on:
   push:
     paths:
       # re-deploy if a change has been made to either the server or to the example
+      - 'server/**'
       - 'examples/server/**'
       - '.github/workflows/autofleet_server_deploy.yml'
 
