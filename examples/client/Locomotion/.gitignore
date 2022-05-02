@@ -20,7 +20,7 @@ DerivedData
 *.hmap
 *.ipa
 *.xcuserstate
-project.xcworkspace
+GoogleService-Info.plist
 
 # Android/IntelliJ
 #
@@ -29,6 +29,7 @@ build/
 .gradle
 local.properties
 *.iml
+*.hprof
 
 # node.js
 #
@@ -40,6 +41,7 @@ yarn-error.log
 buck-out/
 \.buckd/
 *.keystore
+!debug.keystore
 
 # fastlane
 #
@@ -55,9 +57,6 @@ buck-out/
 # Bundle artifact
 *.jsbundle
 
-# CocoaPods
+# Ruby / CocoaPods
 /ios/Pods/
-*.apk
-android/app/google-services.json
-ios/GoogleService-Info.plist
-.env
+/vendor/bundle/
