@@ -473,8 +473,6 @@ PODS:
     - React-Core
   - RNScreens (2.18.1):
     - React-Core
-  - RNSVG (12.3.0):
-    - React-Core
   - SDWebImage (5.12.5):
     - SDWebImage/Core (= 5.12.5)
   - SDWebImage/Core (5.12.5)
@@ -560,7 +558,6 @@ DEPENDENCIES:
   - "RNFBCrashlytics (from `../node_modules/@react-native-firebase/crashlytics`)"
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
   - RNScreens (from `../node_modules/react-native-screens`)
-  - RNSVG (from `../node_modules/react-native-svg`)
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
 SPEC REPOS:
@@ -698,8 +695,6 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-gesture-handler"
   RNScreens:
     :path: "../node_modules/react-native-screens"
-  RNSVG:
-    :path: "../node_modules/react-native-svg"
   Yoga:
     :path: "../node_modules/react-native/ReactCommon/yoga"
 
@@ -782,7 +777,6 @@ SPEC CHECKSUMS:
   RNFBCrashlytics: b34063b906dd0c57a5d286dd743a40c90c8326c7
   RNGestureHandler: a479ebd5ed4221a810967000735517df0d2db211
   RNScreens: f7ad633b2e0190b77b6a7aab7f914fad6f198d8d
-  RNSVG: 302bfc9905bd8122f08966dc2ce2d07b7b52b9f8
   SDWebImage: 0905f1b7760fc8ac4198cae0036600d67478751e
   SDWebImageWebPCoder: 947093edd1349d820c40afbd9f42acb6cdecd987
   SocketRocket: fccef3f9c5cedea1353a9ef6ada904fde10d6608

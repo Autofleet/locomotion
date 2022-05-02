@@ -61,7 +61,6 @@
     "react-native-datepicker": "^1.7.2",
     "react-native-keyboard-aware-scroll-view": "^0.9.5",
     "react-native-picker-select": "^8.0.4",
-    "react-native-svg": "^12.3.0",
     "react-native-swipe-verify": "^0.1.6",
     "react-native-table-component": "^1.2.1",
     "unstated-next": "^1.1.0",
