@@ -4,6 +4,7 @@ import {
 
 @Table({
   tableName: 'verifications',
+  paranoid: true,
 })
 export default class Verification extends Model {
   @PrimaryKey
