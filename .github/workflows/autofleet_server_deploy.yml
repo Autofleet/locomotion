@@ -1,0 +1,56 @@
+name: autofleet server build and deploy
+
+on:
+  push:
+    paths:
+      # re-deploy if a change has been made to either the server or to the example
+      - 'examples/server/**'
+      - 'server/**'
+      - '.github/workflows/autofleet_server_deploy.yml'
+
+jobs:
+  Build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      
+      - name: Extract branch name
+        id: checkBranch
+        run: echo "##[set-output name=branchCheck;]$(echo ${GITHUB_REF#refs/heads/})"
+        
+      - name: Get current date
+        id: date
+        run: echo "::set-output name=date::$(git rev-parse --short "$GITHUB_SHA")"
+
+      - name: Build and push Docker images
+        uses: docker/build-push-action@v1.0
+        with:
+            username: _json_key
+            password: ${{ secrets.LOCOMOTION_DOCKER }}
+            registry: gcr.io
+            repository: ${{secrets.LOCOMOTION_REPO}}
+            tags: ${{ steps.checkBranch.outputs.branchCheck }}-latest,${{ steps.checkBranch.outputs.branchCheck }}-${{ steps.date.outputs.date }}
+            path: 'examples/server'
+
+  Deploy_Cloud_Run:
+    if: github.ref == 'refs/heads/master'
+    needs: Build
+    runs-on: ubuntu-latest
+    steps:
+
+      - uses: 'google-github-actions/auth@v0'
+        with:
+          credentials_json: ${{ secrets.LOCOMOTION_DOCKER }}
+
+      - name: get image name
+        id: getImageName
+        run: |
+         branchName=${GITHUB_REF#refs/heads/}
+         echo $branchName
+         echo "::set-output name=imageName::$(echo "gcr.io/${{secrets.LOCOMOTION_REPO}}:$branchName-latest")"
+        
+      - uses: google-github-actions/deploy-cloudrun@v0
+        with:
+          service: 'locomotion-v2'
+          image: ${{ steps.getImageName.outputs.imageName }}
+          region: ${{secrets.LOCOMOTION_REGION}}

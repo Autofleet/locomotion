@@ -3,7 +3,8 @@ import {
 } from 'sequelize-typescript';
 
 @Table({
-  tableName: 'time-slots',
+  tableName: 'time_slots',
+  paranoid: true,
 })
 export default class TimeSlot extends Model {
   @PrimaryKey
