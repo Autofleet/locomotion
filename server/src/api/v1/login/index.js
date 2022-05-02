@@ -99,6 +99,6 @@ router.get('/settings', async (req, res) => {
     privacyUrl: settingsUrls[1].value,
     contactUsUrl: settingsUrls[2].value,
   });
-});
+}); 
 
 module.exports = router;
