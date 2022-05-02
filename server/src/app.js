@@ -11,7 +11,7 @@ const app = new SExpress({
   httpLogCb: logger.httpMorganInfo,
 });
 const serverRunningSince = new Date();
-app.get(['/version', '/'], (req, res) => {
+app.get('/version', (req, res) => {
   res.json({
     name: packageJson.name,
     version: packageJson.version,
