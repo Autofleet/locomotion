@@ -37,8 +37,6 @@ describe('Users Endpoints', () => {
   };
 
   beforeAll(async () => {
-    expect((await request(app).get('/')).status).toBe(200);
-
     const res = await request(app).post(`${baseUrl}/auth`).send({
       userName: 'admin',
       password: '1234',
