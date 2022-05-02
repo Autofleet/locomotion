@@ -1,15 +1,10 @@
-const { default: Axios } = require('axios');
 const request = require('supertest');
 const app = require('../../../../app');
 const { User, Verification } = require('../../../../models');
 
 describe('Users Endpoints', () => {
-  const adminUrl = '/api/v1/admin';
-  const BASE_URL = 'http://localhost:8085';
-  const testNetwork = Axios.create({
-    baseURL: BASE_URL,
-  });
-  const usersApiUrl = `${adminUrl}/users`;
+  const baseUrl = '/api/v1/admin';
+  const usersApiUrl = `${baseUrl}/users`;
   let acToken;
   const firstUserData = () => ({
     id: 'f8a0c5fc-9b4c-43fa-93e7-a57349645be2',
@@ -42,16 +37,16 @@ describe('Users Endpoints', () => {
   };
 
   beforeAll(async () => {
+    expect((await request(app).get('/')).status).toBe(200);
 
-    const res  = await testNetwork.post(`${adminUrl}/auth`, {
+    const res = await request(app).post(`${baseUrl}/auth`).send({
       userName: 'admin',
       password: '1234',
     });
-    const { token } = res.data;
-    if (!token) throw new Error(`admin login is needed for this test! resp was ${JSON.stringify(res)}`);
+    if (!res.body.token) throw new Error(`admin login is needed for this test! resp was ${JSON.stringify(res)}`);
     acToken = [
       'Authorization',
-      `Bearer ${token}`,
+      `Bearer ${res.body.token}`,
     ];
   });
 
