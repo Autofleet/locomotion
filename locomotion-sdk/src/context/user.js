@@ -19,8 +19,7 @@ export const loginVert = async (body) => {
 }
 
 export const loginApi = async (body) => {
-    const { data } = await network.post('api/v1/login', body)
-    return data
+    await network.post('api/v1/login', body)
 }
 
 export const updateUser = async (body) => {
