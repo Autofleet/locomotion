@@ -5,7 +5,7 @@ const { User, Verification } = require('../../../../models');
 
 describe('Users Endpoints', () => {
   const adminUrl = '/api/v1/admin';
-  const BASE_URL = 'http://localhost:8085';
+  const BASE_URL = `http://localhost:${process.env.PORT}`;
   const testNetwork = Axios.create({
     baseURL: BASE_URL,
   });
