@@ -16,7 +16,7 @@ RUN npm install --only=production
 # If you are building your code for production
 # RUN npm install --only=production
 
-FROM node:11.14.0
+FROM node:14.17.6
 WORKDIR /usr/src/app
 
 COPY --from=0 /usr/src/app/node_modules ./node_modules
