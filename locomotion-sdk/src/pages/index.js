@@ -14,6 +14,7 @@ import RideHistory from './RideHistory';
 import ContactUs from './ContactUs';
 import Onboarding from './Onboarding';
 import Lock from './Lock';
+import Payments from './Payments';
 import { DrawerContentComponent, DrawerLabel } from '../Components/Drawer';
 
 const PlusIconSource = require('../assets/plus.png');
@@ -44,12 +45,12 @@ export const MainRouter = (props) => {
         drawerLabel: (<DrawerLabel title={i18n.t('menu.trips')} icon={CarIconSource} />),
       },
     },
-    // Payment: {
-    //   screen: addPageProps(ActiveRide),
-    //   navigationOptions: {
-    //     drawerLabel: (<DrawerLabel title={i18n.t('menu.paymentsSettings')} icon={CreaditCardIconSource} />),
-    //   },
-    // },
+    Payment: {
+       screen: addPageProps(Payments),
+       navigationOptions: {
+         drawerLabel: (<DrawerLabel title={i18n.t('menu.paymentsSettings')} icon={CreaditCardIconSource} />),
+       },
+     },
     Account: {
       screen: addPageProps(Onboarding),
       navigationOptions: {

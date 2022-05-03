@@ -43,7 +43,9 @@ const InputArrow = styled.Image.attrs({ source: InputIcon })`
               fontSize: 14,
               color: '#727272',
               height: 20,
-              minWidth: 150,
+              width: 180,
+              marginLeft: -15,
+              marginTop: -15
             },
 
           }}

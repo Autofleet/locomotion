@@ -16,6 +16,10 @@
         "emitDecoratorMetadata": true,
         "resolveJsonModule": true,
         "allowJs": true,
+        "types": [
+            "node",
+            "jest"
+        ],
         "paths": {
             "*": [
                 "node_modules/*"

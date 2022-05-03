@@ -10,9 +10,9 @@ RUN echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > .npmrc
 # A wildcard is used to ensure both package.json AND package-lock.json are copied
 # where available (npm@5+)
 COPY package*.json ./
-COPY ./web-ui/package*.json ./web-ui/
+COPY ./src/web-ui/package*.json ./web-ui/
 
-RUN npm install --only=production
+RUN npm install
 # If you are building your code for production
 # RUN npm install --only=production
 
@@ -22,10 +22,11 @@ WORKDIR /usr/src/app
 COPY --from=0 /usr/src/app/node_modules ./node_modules
 
 COPY . .
+RUN npm run build
 
-COPY ./web-ui ./web-ui
+COPY ./src/web-ui ./web-ui
 RUN npm run install-webui
 
 RUN npm run build
 EXPOSE 8080
-CMD [ "npm", "start" ]
+CMD [ "node", "./dist/index.js" ]

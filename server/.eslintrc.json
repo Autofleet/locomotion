@@ -9,6 +9,9 @@
     "plugin:@typescript-eslint/recommended"
   ],
   "rules": {
+    "import/prefer-default-export": 0,
+    "@typescript-eslint/no-unused-vars":2,
+    "@typescript-eslint/no-var-requires":1,
     "import/extensions": [
        "error",
        "ignorePackages",
@@ -59,7 +62,7 @@
     },
     "import/resolver": {
       "node": {
-        "extensions": [".js",".jsx",".ts",".tsx", ".json"]
+        "extensions": [".js",".jsx",".ts",".tsx"]
       }
     }
   }
