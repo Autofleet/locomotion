@@ -1,14 +1,10 @@
 import moment from 'moment';
 import { Ride, User } from '../../models';
 import afSdk from '../../sdk';
-import SettingsService from '../../lib/settings';
+import SettingsService from '../settings';
 
 require('dotenv');
 const logger = require('../../logger');
-const { Ride, User } = require('../../models');
-const afSdk = require('../../sdk');
-const sdk = require('../../sdk');
-const SettingsService = require('../settings');
 
 const webHookHost = process.env.SERVER_HOST || 'https://716ee2e6.ngrok.io';
 

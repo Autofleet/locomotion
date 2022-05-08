@@ -10,8 +10,6 @@
   ],
   "rules": {
     "import/prefer-default-export": 0,
-    "@typescript-eslint/no-unused-vars":2,
-    "@typescript-eslint/no-var-requires":1,
     "import/extensions": [
        "error",
        "ignorePackages",
@@ -26,8 +24,14 @@
     "@typescript-eslint/no-var-requires": ["off"],
     "@typescript-eslint/camelcase": ["off"],
     "max-len": ["off"],
-    "@typescript-eslint/explicit-function-return-type": ["off"]
- },
+    "@typescript-eslint/explicit-function-return-type": ["off"],
+    "lines-between-class-members":1,
+    "@typescript-eslint/no-explicit-any":1,
+    "indent":1,
+    "no-multiple-empty-lines":1,
+    "operator-linebreak":1,
+    "implicit-arrow-linebreak":1
+  },
  "overrides": [
     {
       // enable the rule specifically for TypeScript files
