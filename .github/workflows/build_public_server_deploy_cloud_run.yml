@@ -6,7 +6,7 @@ on:
       # re-deploy if a change has been made to either the server or to the example
       - 'server/**'
       - 'examples/server/**'
-      - '.github/workflows/build_public_server_deploy_cloud_run'
+      - '.github/workflows/build_public_server_deploy_cloud_run.yml'
 
 jobs:
   Build_Public_GCR:
