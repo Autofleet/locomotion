@@ -6,10 +6,34 @@ on:
       # re-deploy if a change has been made to either the server or to the example
       - 'server/**'
       - 'examples/server/**'
-      - '.github/workflows/autofleet_server_deploy.yml'
+      - '.github/workflows/build_public_server_deploy_cloud_run'
 
 jobs:
-  Build:
+  Build_Public_GCR:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      
+      - name: Extract branch name
+        id: checkBranch
+        run: echo "##[set-output name=branchCheck;]$(echo ${GITHUB_REF#refs/heads/})"
+        
+      - name: Get current date
+        id: date
+        run: echo "::set-output name=date::$(git rev-parse --short "$GITHUB_SHA")"
+
+      - name: Build and push Docker images
+        uses: docker/build-push-action@v1.0
+        with:
+            username: _json_key
+            password: ${{ secrets.AF_GCR_DOCKER_PASSWORD }}
+            registry: gcr.io
+            repository: af-gcr/locomotion-server
+            tags: ${{ steps.checkBranch.outputs.branchCheck }}-latest,${{ steps.checkBranch.outputs.branchCheck }}-${{ steps.date.outputs.date }}
+            path: 'server'
+
+  Build_Autofleet_Server:
+    needs: Build_Public_GCR
     if: github.ref == 'refs/heads/master'
     runs-on: ubuntu-latest
     steps:
@@ -35,7 +59,7 @@ jobs:
 
   Deploy_Cloud_Run:
     if: github.ref == 'refs/heads/master'
-    needs: Build
+    needs: Build_Autofleet_Server
     runs-on: ubuntu-latest
     steps:
 
