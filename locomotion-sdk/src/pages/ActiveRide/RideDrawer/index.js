@@ -126,14 +126,11 @@ const RideDrawer = ({
   }, [futureRides])
 
   useEffect(() => {
-    if(usePayments.paymentMethods) {
-      if(usePayments.paymentMethods.length > 0) {
-        setAllowRideOrder(true);
-      } else {
-        setAllowRideOrder(false);
-      }
+    if(usePayments.paymentMethods && usePayments.paymentMethods.length > 0) {
+      setAllowRideOrder(true);
+    } else {
+      setAllowRideOrder(false);
     }
-
   }, [usePayments.paymentMethods])
   return (
     <DrawerContainer>

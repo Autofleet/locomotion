@@ -62,12 +62,12 @@ router.post('/', async (req, res) => {
 
 router.get('/:settingId', async (req, res) => {
   const { settingId } = req.params;
-  let foundSettings: Setting = null;
+  let foundSettings: Setting;
 
   try {
     foundSettings = await settingLib.get(settingId);
   } catch (e) {
-    logger.error('Error while gettig all settings', e);
+    logger.error('Error while getting setting', e);
   }
   res.json(foundSettings);
 });

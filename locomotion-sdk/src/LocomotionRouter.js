@@ -3,11 +3,8 @@ import Config from 'react-native-config';
 import { initStripe } from '@stripe/stripe-react-native';
 
 import { MainProvider } from './context/main';
-// import StorybookUI from './storybook';
-//import Router, { MainRouter } from './pages';
 import Router, { MainRouter } from './pages';
 import NavigationService from './services/navigation';
-// import Firebase from './src/services/firebase';
 
 import RidePopups from './popups/RidePopups';
 import SettingsContext from './context/settings'
