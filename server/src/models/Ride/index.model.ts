@@ -106,4 +106,9 @@ export default class Ride extends Model {
       type: DataType.DATE,
     })
       scheduledTo: string;
+
+    @Column({
+      type: DataType.INTEGER,
+    })
+      rating: number;
 }

@@ -127,7 +127,7 @@ export default props => {
         />
       </Address>
 
-      <ScrollView>
+      <ScrollView keyboardShouldPersistTaps="handled">
         {addressListItems &&
           addressListItems.list &&
           addressListItems.list.map(item => (
@@ -136,7 +136,7 @@ export default props => {
               {item.station ? <StationIcon /> : null}
               <AddressSearchItemText>{item.description}</AddressSearchItemText>
               </View>
-              {item.distance !== null ? (
+              {item.distance !== null && item.distanceFromMe ? (
                 <DistanceFromAddress>
                   {I18n.t('popups.rideSummary.distanceValue', {
                     distance: item.distanceFromMe.toFixed(2),

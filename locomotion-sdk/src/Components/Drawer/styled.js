@@ -17,7 +17,7 @@ export const Arrow = styled.Image.attrs({ source: ArrowIconSource })`
   margin-left: auto;
   width: 10px;
   height: 10px;
-  margin-top: 10px;
+
 `;
 
 export const LabelText = styled.Text(props => `
@@ -26,7 +26,6 @@ export const LabelText = styled.Text(props => `
 `);
 
 export const StyledDrawerLabel = styled.View`
-  margin: 0 20px;
   border-color: #dfdfdf;
   border-bottom-width: 1px;
   padding: ${drawerPadding}px 10px;

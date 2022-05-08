@@ -40,7 +40,7 @@ export const MainProvider = ({ children, LoginPage, i18n }) => {
             ...state,
             ...action.payload,
           };
-          console.log('saveState', newState);
+
           saveState(newState);
           return newState;
 

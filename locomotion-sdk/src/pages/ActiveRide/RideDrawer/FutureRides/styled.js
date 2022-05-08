@@ -3,8 +3,8 @@ import RoundedButton from '../../../../Components/RoundedButton';
 import xIconWhite from '../../../../assets/x-white.png'
 
 export const FutureRidesButton = styled.TouchableOpacity`
-  height: 30;
-  min-width: 115;
+  height: 30px;
+  min-width: 115px;
   background-color: #6180c0;
   margin-bottom: 8px;
   align-self: flex-end;

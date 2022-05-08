@@ -1,13 +1,6 @@
-import React, { useState, useEffect, Fragment } from 'react';
-import {
-  Text, View, TouchableOpacity, TextInput,
-} from 'react-native';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import RNPickerSelect from 'react-native-picker-select';
-import moment from 'moment';
 import i18n from '../../../../I18n';
-import { getTogglePopupsState } from '../../../../context/main';
-import InputIcon from '../../../../assets/arrow-down.png';
 import DateTimePicker from './DateTimePicker';
 
 const Container = styled.View`
@@ -58,7 +51,7 @@ const TextContainer = styled.Text`
 
 const TitleContainer = styled.Text`
   flex: 1;
-  padding-start: 20;
+  padding-start: 20px;
 `;
 
 const SelectionTitle = styled.Text`

@@ -27,7 +27,7 @@ import RideSummaryPopup from '../../popups/RideSummaryPopup';
 import FutureRideCanceledPopup from '../../popups/FutureRideCanceled';
 import AppSettings from '../../services/app-settings'
 
-const STATION_AUTOREFRESH_INTERVAL = 1500;
+const STATION_AUTOREFRESH_INTERVAL = 60000;
 
 function useInterval(callback, delay) {
   const savedCallback = useRef();
@@ -80,7 +80,6 @@ export default ({ navigation, menuSide, mapSettings }) => {
   const [autoStationUpdate, setAutoStationUpdate] = useState(null);
 
   const stopAutoStationUpdate = () => clearInterval(autoStationUpdate);
-
   const mapInstance = useRef();
   const notificationsHandler = {
     futureRideCanceled: () => {
@@ -117,7 +116,6 @@ export default ({ navigation, menuSide, mapSettings }) => {
   }
   const loadActiveRide = async () => {
     const { data: response } = await network.get('api/v1/me/rides/active', { params: { activeRide: true } });
-
     const { ride: activeRide, futureRides: futureRidesData } = response;
     setFutureRides(futureRidesData);
     if (activeRide) {
@@ -176,7 +174,7 @@ export default ({ navigation, menuSide, mapSettings }) => {
 
   if(Config.STATIONS_REFRESH_RATE) {
     useInterval(() => {
-      if(!rideOffer) {
+      if(!rideOffer && (!requestStopPoints.pickup || !requestStopPoints.dropoff)) {
         getStations();
       }
     }, Config.STATIONS_REFRESH_RATE * 60000);
@@ -191,6 +189,10 @@ export default ({ navigation, menuSide, mapSettings }) => {
     setAutoStationUpdate(setInterval(() => {
       getStations();
     }, STATION_AUTOREFRESH_INTERVAL));
+
+    return () => {
+      stopAutoStationUpdate();
+    }
   }, []);
 
   useInterval(() => {
@@ -566,6 +568,7 @@ export default ({ navigation, menuSide, mapSettings }) => {
       </MapButtonsContainer>
       <Header navigation={navigation} menuSide={menuSide} />
       <RideDrawer
+        navigation={navigation}
         createRide={createRide}
         cancelRide={cancelRide}
         createOffer={createOffer}
