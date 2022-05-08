@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import params from 'react-native-config';
+import Config from 'react-native-config';
 import { initStripe } from '@stripe/stripe-react-native';
 
 import { MainProvider } from './context/main';
@@ -13,10 +13,13 @@ import RidePopups from './popups/RidePopups';
 import SettingsContext from './context/settings'
 import PaymentsContext from './context/payments'
 
+
+const STRIPE_PUBLISHER_KEY = Config.STRIPE_PUBLISHER_KEY || '';
+
 export default props => {
   useEffect(() => {
     initStripe({
-      publishableKey: process.env.STRIPE_PUBLISHER_KEY,
+      publishableKey: STRIPE_PUBLISHER_KEY,
       merchantIdentifier: 'merchant.identifier',
     });
   }, []);

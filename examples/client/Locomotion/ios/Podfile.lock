@@ -482,6 +482,15 @@ PODS:
     - libwebp (~> 1.0)
     - SDWebImage/Core (~> 5.0)
   - SocketRocket (0.6.0)
+  - Stripe (21.7.0):
+    - Stripe/Stripe3DS2 (= 21.7.0)
+    - StripeCore (= 21.7.0)
+  - stripe-react-native (0.1.5):
+    - React
+    - Stripe (~> 21.7.0)
+  - Stripe/Stripe3DS2 (21.7.0):
+    - StripeCore (= 21.7.0)
+  - StripeCore (21.7.0)
   - Yoga (1.14.0)
   - YogaKit (1.18.1):
     - Yoga (~> 1.14)
@@ -561,6 +570,7 @@ DEPENDENCIES:
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
   - RNScreens (from `../node_modules/react-native-screens`)
   - RNSVG (from `../node_modules/react-native-svg`)
+  - "stripe-react-native (from `../node_modules/@stripe/stripe-react-native`)"
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
 SPEC REPOS:
@@ -597,6 +607,8 @@ SPEC REPOS:
     - SDWebImage
     - SDWebImageWebPCoder
     - SocketRocket
+    - Stripe
+    - StripeCore
     - YogaKit
 
 EXTERNAL SOURCES:
@@ -700,6 +712,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-screens"
   RNSVG:
     :path: "../node_modules/react-native-svg"
+  stripe-react-native:
+    :path: "../node_modules/@stripe/stripe-react-native"
   Yoga:
     :path: "../node_modules/react-native/ReactCommon/yoga"
 
@@ -708,7 +722,7 @@ SPEC CHECKSUMS:
   BVLinearGradient: e3aad03778a456d77928f594a649e96995f1c872
   CocoaAsyncSocket: 065fd1e645c7abab64f7a6a2007a48038fdc6a99
   Crashlytics: 9220f5bc89e7a618df411b4f639389dbfb0e03d2
-  DoubleConversion: 831926d9b8bf8166fd87886c4abab286c2422662
+  DoubleConversion: 5805e889d232975c086db112ece9ed034df7a0b2
   Fabric: ea977e3cd9c20425516d3dafd3bf8c941c51223f
   FBLazyVector: 2c76493a346ef8cacf1f442926a39f805fffec1f
   FBReactNativeSpec: 371350f24afa87b6aba606972ec959dcd4a95c9a
@@ -728,7 +742,7 @@ SPEC CHECKSUMS:
   Flipper-RSocket: d9d9ade67cbecf6ac10730304bf5607266dd2541
   FlipperKit: cbdee19bdd4e7f05472a66ce290f1b729ba3cb86
   fmt: ff9d55029c625d3757ed641535fd4a75fedc7ce9
-  glog: 476ee3e89abb49e07f822b48323c51c57124b572
+  glog: 1f3da668190260b06b429bb211bfbee5cd790c28
   GoogleAppMeasurement: dfe55efa543e899d906309eaaac6ca26d249862f
   GoogleDataTransport: 9a8a16f79feffc7f42096743de2a7c4815e84020
   GoogleDataTransportCCTSupport: 0f39025e8cf51f168711bd3fb773938d7e62ddb5
@@ -786,6 +800,9 @@ SPEC CHECKSUMS:
   SDWebImage: 0905f1b7760fc8ac4198cae0036600d67478751e
   SDWebImageWebPCoder: 947093edd1349d820c40afbd9f42acb6cdecd987
   SocketRocket: fccef3f9c5cedea1353a9ef6ada904fde10d6608
+  Stripe: 90596971ef49bade169f68bc59369a796b30a045
+  stripe-react-native: e1c5c7bfa842582581334fc3b3d5eb6f6db18a53
+  StripeCore: c09b492efc3b269a6ff875ad738ca366db97e03b
   Yoga: 17cd9a50243093b547c1e539c749928dd68152da
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
 
