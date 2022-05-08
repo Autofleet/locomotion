@@ -1,3 +1,5 @@
+import app from '../../../../app';
+import { User, Verification } from '../../../../models';
 const request = require('supertest');
 const uuid = require('uuid');
 
