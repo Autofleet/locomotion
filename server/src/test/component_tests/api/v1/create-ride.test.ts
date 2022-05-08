@@ -1,5 +1,5 @@
 import app from '../../../../app';
-import createUserAndLogin from '../../../assets/create-user-and-login';
+import createUserAndLogin from './create-user-and-login.test';
 import { Ride, User, Verification } from '../../../../models';
 
 const request = require('supertest');
