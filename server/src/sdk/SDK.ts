@@ -111,4 +111,4 @@ class AutofleetSdk {
 // };
 // test();
 
-module.exports = AutofleetSdk;
+export default AutofleetSdk;
