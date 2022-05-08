@@ -1,8 +1,8 @@
-const multer = require('multer');
-const Router = require('../../../lib/router');
-const authMiddleware = require('../../../middlewares/auth');
-const userService = require('../../../lib/user');
-const Image = require('../../../lib/cloudinary');
+import multer from 'multer';
+import Image from '../../../lib/cloudinary';
+import userService from '../../../lib/user';
+import authMiddleware from '../../../middlewares/auth';
+import Router from '../../../lib/router';
 
 const upload = multer({ storage: multer.memoryStorage() });
 const router = Router();
