@@ -1,3 +1,4 @@
+import logger from '../../../logger';
 import Router from '../../../lib/router';
 import userService from '../../../lib/user';
 import afSdk from '../../../sdk';
@@ -13,7 +14,7 @@ router.get('/customer', async (req, res) => {
     customer = afCustomer;
     isExist = true;
   } catch (e) {
-    console.log(e.response.data);
+    logger.error('getCustomer', e.response.data);
   }
 
   return res.json({ isExist, customer });
@@ -22,7 +23,7 @@ router.get('/customer', async (req, res) => {
 router.post('/customer', async (req, res) => {
   const customerData = await userService.find(req.userId);
   if (!customerData) {
-    console.log(`Error - user not found ${req.userId}`);
+    logger.info(`Error - user not found ${req.userId}`);
   }
 
   const data = {
@@ -48,7 +49,7 @@ router.post('/intent', async (req, res) => {
 
     return res.json({ clientSecret: setupIntent.client_secret });
   } catch (e) {
-    console.log(e);
+    logger.error('createPaymentIntent', e);
   }
 
   return res.json({ status: 'ERROR' });
@@ -62,13 +63,13 @@ router.post('/detach', async (req, res) => {
       paymentMethodId,
       businessModelId: process.env.BUSINESS_MODEL_ID,
     });
-    console.log('setupIntent', paymentMethods);
+    logger.info('setupIntent', paymentMethods);
 
 
-    console.log(paymentMethods.data);
+    logger.info('paymentMethods', paymentMethods.data);
     return res.json(paymentMethods.data);
   } catch (e) {
-    console.log(e.response.data);
+    logger.error('detachPaymentMethod', e);
   }
 
   return res.json({ status: 'ERROR' });
@@ -79,7 +80,7 @@ router.get('/methods', async (req, res) => {
     const { data: methods } = await afSdk.Payments.listMethods(req.userId);
     return res.json(methods.data);
   } catch (e) {
-    console.log(e);
+    logger.error('listMethods', e);
   }
   return res.json({ status: 'ERROR' });
 });

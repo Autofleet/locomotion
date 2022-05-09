@@ -1,4 +1,5 @@
 import jwt from 'jsonwebtoken';
+import logger from '../../logger';
 
 const ADMIN_USER_ID = process.env.ADMIN_USER_ID || '1';
 const SECRET_KEY = process.env.AUTH_ACCESS_SECRET_KEY || '1234';
@@ -19,7 +20,7 @@ export const adminPermissionsMiddleWare = async (req, res, next) => {
   }
 
   if (!accessToken) {
-    console.log('No token provided.');
+    logger.info('No token provided.');
     return respUnAuthorizationError('No token provided.');
   }
 

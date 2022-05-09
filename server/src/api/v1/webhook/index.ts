@@ -1,4 +1,5 @@
 import moment from 'moment';
+import logger from '../../../logger';
 import Router from '../../../lib/router';
 import rideService from '../../../lib/ride';
 import { Ride, User, Notification } from '../../../models';
@@ -10,7 +11,7 @@ const i18n = require('../../../i18n');
 const router = Router();
 
 const cancelPush = async (userId, rideId, messageType = 'futureRideCanceled') => {
-  console.log(`Push notification user: ${userId} ride: ${rideId} type: ${messageType}`);
+  logger.info(`Push notification user: ${userId} ride: ${rideId} type: ${messageType}`);
   const user = await User.findOne({
     where: {
       id: userId,
@@ -45,7 +46,7 @@ router.put('/:rideId', async (req, res) => {
   }
 
   const { stopPoints } = req.body.ride;
-  console.log(`Webhook - rideId: ${req.params.rideId} currentState: ${ride.state}  newState: ${req.body.ride.state} SpsStates: ${(stopPoints.map((s) => s.state)).join()}`);
+  logger.info(`Webhook - rideId: ${req.params.rideId} currentState: ${ride.state}  newState: ${req.body.ride.state} SpsStates: ${(stopPoints.map((s) => s.state)).join()}`);
   const isReminderShouldBeSent = async () => {
     const { value: arriveReminderMin } = await settingsService.getSettingByKeyFromDb('ARRIVE_REMINDER_MIN');
     const etaTime = moment(stopPoints[0].eta);
@@ -90,7 +91,7 @@ router.put('/:rideId', async (req, res) => {
           },
         });
 
-        console.log('Error sending push', e);
+        logger.info('Error sending push', e);
       }
     }
   }

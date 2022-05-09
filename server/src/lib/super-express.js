@@ -6,6 +6,7 @@ const bodyParser = require('body-parser');
 const morgan = require('morgan');
 const compression = require('compression');
 const helmet = require('helmet');
+const logger = require('../logger');
 
 const defaultOptions = {
   bodyParser: true,
@@ -47,8 +48,8 @@ module.exports = function (options = {}) {
 
   app.nativeListen = app.listen;
   app.listen = (port, cb) => {
-    console.log(chalk.blue(`Super express will listen on port ${port}`));
-    console.log(chalk.blue(`Production mode: ${isProd}`));
+    logger.info(chalk.blue(`Super express will listen on port ${port}`));
+    logger.info(chalk.blue(`Production mode: ${isProd}`));
     app.nativeListen(port, cb);
   };
 

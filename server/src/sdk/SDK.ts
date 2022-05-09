@@ -107,7 +107,7 @@ class AutofleetSdk {
 // const test = async () => {
 //   const sdk = await AutofleetSdk.Init();
 //   const { data: rides } = await sdk.Rides.list();
-//   console.log(rides);
+//   logger.info(rides);
 // };
 // test();
 

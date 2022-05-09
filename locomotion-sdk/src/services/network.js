@@ -13,6 +13,16 @@ const HTTPMethods = [
   'options',
 ];
 
+const limit = 512;
+
+const formatResponseLog = function ({data}) {
+  let str = (typeof data === "string" ? data : JSON.stringify(data)).slice(0, limit);
+  if (str.length === limit) {
+    str = `${str}...(cut)`;
+  }
+  return str;
+};
+
 class Network {
   static defaultSettings = {
     baseURL: '/',
@@ -22,15 +32,32 @@ class Network {
   constructor(settings = {}) {
     this.settings = Object.assign(Network.defaultSettings, settings);
     this.axios = axios.create(settings);
-    this.axios.interceptors.request.use((request) => {
-      console.log(`Starting Request [${request.method}] ${request.url}`, request);
+
+    this.axios.interceptors.request.use(request => {
+      try {
+        console.debug(`Request [${request.method}] ${request.url}`);
+      } catch (e) {
+        console.error('Error in interceptors->request log', e);
+      }
       return request;
     });
 
-    this.axios.interceptors.response.use((response) => {
-      console.log(`Response [${response.config.method}] ${response.config.url}:`, response);
+    this.axios.interceptors.response.use(response => {
+      try {
+        console.debug(`Response [${response.config.method}] ${response.config.url}:`, formatResponseLog(response));
+      } catch (e) {
+        console.error('Error in interceptors->response log', e);
+      }
       return response;
+    }, error => {
+      try {
+        console.error(`Request rejected [${error.config.method}] ${error.config.url}: ${error}`, formatResponseLog(error.response));
+      } catch (e) {
+        console.error('Error in interceptors->error log', e, error);
+      }
+      return Promise.reject(error);
     });
+
 
     // Temp
     HTTPMethods.map((method) => {

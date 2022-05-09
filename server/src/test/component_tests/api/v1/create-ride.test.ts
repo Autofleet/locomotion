@@ -19,7 +19,7 @@ const createUserAndLogin = async () => {
   const response = await request(app).post(`${baseUrl}/login/vert`)
     .send({ phoneNumber: '972501234567', code: '1234' })
     .set('x-loco-op-id', operationId);
-  console.log('response', response.body);
+  console.info('response', response.body);
   return response.body;
 };
 
