@@ -62,7 +62,7 @@ class NotificationsService {
     };
 
     const response = await network.patch('api/v1/me', pushUserData);
-    console.log(response.data);
+    console.log('registerOnServer', response.data);
   };
 
   getOneSignalId = () => new Promise(resolve => OneSignal.getPermissionSubscriptionState(({ userId }) => resolve(userId)));

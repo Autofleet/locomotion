@@ -63,7 +63,7 @@ export default ({ navigation, menuSide }) => {
     });
 
     if (error) {
-      console.log(error);
+      console.error(error);
       setErrorMessage(error.message)
     }
 
@@ -111,7 +111,7 @@ export default ({ navigation, menuSide }) => {
               height: 50,
             }}
             onCardChange={(cardDetails) => {
-              console.log(cardDetails);
+              console.log('onCardChange', cardDetails);
               if(cardDetails) {
                 if(formReady !== cardDetails.complete) {
                   setFormReady(cardDetails.complete)

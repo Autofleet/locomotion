@@ -308,7 +308,7 @@ export default ({ navigation, menuSide, mapSettings }) => {
         setRideOffer(response);
       }
     } catch (e) {
-      console.log(e);
+      console.error('createOffer', e);
     }
   };
 

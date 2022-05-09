@@ -1,4 +1,5 @@
 import { Router } from 'express';
+import logger from '../../logger';
 
 const METHODS = [
   'all',
@@ -16,7 +17,7 @@ const AfEntryPoint = (func) => async (req, res, next) => {
     await func(req, res, next);
     return true;
   } catch (e) {
-    console.log(e.message, e.stack);
+    logger.error('AfEntryPoint', e.message, e.stack);
     if (e.statusCode && e.statusCode < 500) {
       return res.status(400).json({ error: e.message, status: 'ERROR' });
     }
