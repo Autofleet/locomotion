@@ -52,8 +52,8 @@
   "dependencies": {
     "axios": "^0.27.2",
     "cheap-ruler": "^3.0.1",
-    "google-libphonenumber": "^3.2.27",
     "currency-symbol-map": "^5.0.1",
+    "google-libphonenumber": "^3.2.27",
     "i18next": "^19.7.0",
     "lodash": "^4.17.21",
     "moment": "^2.29.3",
