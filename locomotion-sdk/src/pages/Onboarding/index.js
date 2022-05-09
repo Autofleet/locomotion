@@ -36,13 +36,20 @@ export default ({
   const [showHeaderIcon, setShowHeaderIcon] = useState(true);
 
   useEffect(() => {
-    Mixpanel.pageView(navigation.state.routeName)
-    setShowHeaderIcon(navigation.getParam('showHeaderIcon', true));
+     if(
+       navigation &&
+       navigation.state &&
+       navigation.state.params
+      ) {
+        Mixpanel.pageView(navigation.state.routeName)
+        setShowHeaderIcon(navigation.state.params.showHeaderIcon);
+      }
   }, []);
 
   useEffect(() => {
     setFieldsData();
   }, []);
+
   const setOnboardingState = object => dispatchOnboardingState({
     ...onboardingState,
     ...object,
@@ -130,10 +137,11 @@ export default ({
           iconSide={menuSide}
         />
         <Container>
+          {!showHeaderIcon ?
           <Text>
             {i18n.t('login.onBoardingPageTitle')}
             {onboardingState.uploadingImage}
-          </Text>
+          </Text> : null}
           <ThumbnailPicker
             onImageChoose={onImageChoose}
             avatarSource={onboardingState.avatar}

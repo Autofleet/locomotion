@@ -3,7 +3,7 @@ import { Text, View } from 'react-native';
 import styled from 'styled-components';
 import i18n from '../../../../I18n';
 import { getTogglePopupsState } from '../../../../context/main';
-import BaseButton from '../../../../Components/ButtonBase';
+import Button from '../../../../Components/Button';
 
 const PassengerAmountIconSource = require('../../../../assets/ppl.png');
 const PlusIconSource = require('../../../../assets/plus.png');
@@ -65,7 +65,7 @@ const SetPassengerAmountContainer = styled.View`
   align-self: center;
 `;
 
-const SetPassengerAmountBox = styled(BaseButton)`
+const SetPassengerAmountBox = styled(Button)`
   flex: 1;
   justify-content: center;
   background-color: transparent;

@@ -6,7 +6,8 @@ import i18n from '../../../I18n';
 import RideRoundedButton from '../../../Components/RideButton';
 import RoundedButton from '../../../Components/RoundedButton';
 import Button from '../../../Components/Button';
-import BaseButton from '../../../Components/ButtonBase';
+
+const ArrowIconSource = require('../../../assets/white-chevron-right.png');
 
 export const Drawer = styled.View`
  /*  position: absolute;
@@ -146,7 +147,7 @@ export const PreRideBox = styled(({ eta, estimatePrice, ...props }) => (
   `;
 
 
-export const RideTypeButton = styled(BaseButton)`
+export const RideTypeButton = styled(Button)`
   align-items: center;
   flex: 1;
 `;
@@ -180,3 +181,44 @@ export const DrawerContainer = styled.View`
   shadow-color: #04214f;
   shadow-opacity: 0.4;
 `;
+
+const PaymentBarContainer = styled.TouchableOpacity`
+  background-color: rgba(0, 0, 0, 0.5);
+  height: 24px;
+  width: 45%;
+  margin-bottom: 10px;
+  border-radius: 20px;
+  align-self: flex-end;
+  flex-direction: row;
+  justify-content: center;
+  padding-left: 8px;
+`;
+
+const PaymentBarText = styled.Text`
+  text-align: left;
+  font-size: 12px;
+  color: #ffffff;
+  font-weight: 600;
+  align-self: center;
+
+`;
+
+export const Arrow = styled.Image.attrs({ source: ArrowIconSource })`
+  width: 20px;
+  height: 20px;
+  align-self: center;
+
+`;
+export const AddPaymentBar = (props) => {
+  console.log('AddPaymentBar', props);
+
+  return (
+    <PaymentBarContainer {...props}>
+      <PaymentBarText>
+        {props.children}
+      </PaymentBarText>
+      <Arrow />
+    </PaymentBarContainer>
+  )
+}
+

@@ -4,7 +4,7 @@ import styled from 'styled-components';
 
 import i18n from '../I18n';
 import { linkColor } from '../assets/style-settings';
-import BaseButton from '../Components/ButtonBase';
+import Button from '../Components/Button';
 
 const borderRadius = 2;
 
@@ -39,9 +39,9 @@ const FooterButtonText = styled.Text`
 `;
 
 export const FooterButton = styled(({ children, ...props }) => (
-  <BaseButton {...props}>
+  <Button {...props}>
     <FooterButtonText>{children || i18n.t('popups.defaultFooterButton')}</FooterButtonText>
-  </BaseButton>
+  </Button>
 ))`
   height: 60px;
   justify-content: center;

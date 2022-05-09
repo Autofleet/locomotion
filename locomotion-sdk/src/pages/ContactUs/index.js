@@ -26,7 +26,7 @@ export default ({ navigation, menuSide }) => {
   useEffect(() => {
     Mixpanel.pageView(navigation.state.routeName)
     loadSettings();
-  });
+  }, []);
 
   return (
     <Fragment>

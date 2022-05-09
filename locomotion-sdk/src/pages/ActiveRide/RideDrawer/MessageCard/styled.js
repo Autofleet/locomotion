@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
 import styled from 'styled-components';
 import xIcon from '../../../../assets/x.png'
-import BaseButton from '../../../../Components/ButtonBase';
+import Button from '../../../../Components/Button';
 
 export const MessageContainer = styled.View`
     min-height: 20;
@@ -29,7 +29,7 @@ export const MessageText = styled.Text`
   font-weight: 500;
 `;
 
-export const CloseContainer = styled(BaseButton)`
+export const CloseContainer = styled(Button)`
     position: absolute;
     right: 15px;
     top: 15px;

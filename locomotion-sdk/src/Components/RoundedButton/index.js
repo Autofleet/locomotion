@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import LinearGradient from '../LinearGradient';
 
 import { inputHeight, appPalette } from '../../assets/style-settings';
-import BaseButton from '../ButtonBase';
+import Button from '../Button';
 
 const LoadingWrapper = styled.View`
   width: 100%;
@@ -29,7 +29,7 @@ const buttonShadow = `
   shadow-offset: 0px 0px;
 `;
 
-const StyledTouchableOpacity = styled(BaseButton)`
+const StyledTouchableOpacity = styled(Button)`
   width: ${({ width }) => (width || '100%')};
   border-radius: 24px;
   background-color: #1e273d;
@@ -44,6 +44,10 @@ const StyledTouchableOpacity = styled(BaseButton)`
     border: 2px solid #b5b5b5;
   `}
   flex-direction: row;
+
+  ${({ disabled }) => disabled && `
+    opacity: 0.7;
+  `}
 `;
 
 const ButtonTextContainer = styled.View`
@@ -54,7 +58,7 @@ const ButtonTextContainer = styled.View`
 `;
 
 const Button = styled(({
-  onPress, children, style, hollow, setLoading, ...props
+  onPress, children, style, hollow, setLoading, disabled, ...props
 }) => {
   const [loadingState, setLoadingState] = useState(false);
 
@@ -71,7 +75,7 @@ const Button = styled(({
   }, [loadingState]);
 
   return (
-    <StyledTouchableOpacity {...props} onPress={onPressWithLoading} hollow={hollow}>
+    <StyledTouchableOpacity {...props} onPress={onPressWithLoading} hollow={hollow} disabled={(loadingState || disabled)}>
       <ButtonTextContainer>
         {loadingState ? (
           <LoadingWrapper>

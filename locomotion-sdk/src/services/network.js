@@ -14,6 +14,16 @@ const HTTPMethods = [
   'options',
 ];
 
+const limit = 512;
+
+const formatResponseLog = function ({data}) {
+  let str = (typeof data === "string" ? data : JSON.stringify(data)).slice(0, limit);
+  if (str.length === limit) {
+    str = `${str}...(cut)`;
+  }
+  return str;
+};
+
 class Network {
   static defaultSettings = {
     baseURL: '/',
@@ -33,7 +43,15 @@ class Network {
       Mixpanel.setEvent('Network response', { method: response.config.method, endpoint: response.config.url, response})
       console.log(`Response [${response.config.method}] ${response.config.url}:`, response);
       return response;
+    }, error => {
+      try {
+        console.error(`Request rejected [${error.config.method}] ${error.config.url}: ${error}`, formatResponseLog(error.response));
+      } catch (e) {
+        console.error('Error in interceptors->error log', e, error);
+      }
+      return Promise.reject(error);
     });
+
 
     // Temp
     HTTPMethods.map((method) => {
@@ -46,7 +64,7 @@ class Network {
         return this.axios[method](...args).catch((e) => {
           if ((e.response && e.response.status === 401) || (e.response && e.response.status === 403)) {
             console.log('Got unauthorized response move to logout flow')
-            //Auth.logout();
+            Auth.logout();
             return null;
           }
         });

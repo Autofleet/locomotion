@@ -1,9 +1,9 @@
 import styled from 'styled-components';
 import RoundedButton from '../../../../Components/RoundedButton';
 import xIconWhite from '../../../../assets/x-white.png'
-import BaseButton from '../../../../Components/ButtonBase';
+import Button from '../../../../Components/Button';
 
-export const FutureRidesButton = styled(BaseButton)`
+export const FutureRidesButton = styled(Button)`
   height: 30;
   min-width: 115;
   background-color: #6180c0;

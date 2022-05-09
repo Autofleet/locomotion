@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import moment from 'moment';
 
 import i18n from '../../../../I18n';
-import BaseButton from '../../../../Components/ButtonBase';
+import Button from '../../../../Components/Button';
 
 const address = `
 min-height: 50;
@@ -65,7 +65,7 @@ const EtaText = styled.Text`
   font-size: 10px;
 `;
 
-const RowContainer = styled(BaseButton)`
+const RowContainer = styled(Button)`
   min-height: 15;
   align-items: ${({ pickup }) => (pickup ? 'flex-start' : 'flex-end')};
 

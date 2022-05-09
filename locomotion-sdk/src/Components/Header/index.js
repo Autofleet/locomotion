@@ -1,7 +1,7 @@
 import React from 'react';
 import { TouchableOpacity, Image } from 'react-native';
 import styled from 'styled-components';
-import BaseButton from '../ButtonBase';
+import Button from '../Button';
 import SafeView from '../SafeView';
 
 const HamburgerIconSource = require('../../assets/menu.png');
@@ -18,7 +18,7 @@ const HeaderView = styled.View`
   ` : '')}
 `;
 
-const Button = styled(BaseButton)``;
+const Button = styled(Button)``;
 
 const Header = ({ navigation, menuSide }) => (
   <SafeView>

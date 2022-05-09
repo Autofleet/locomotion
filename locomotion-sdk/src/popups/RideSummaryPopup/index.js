@@ -20,7 +20,7 @@ import {
 } from './styled'
 import { getTogglePopupsState } from '../../context/main';
 import RoundedButton from '../../Components/RoundedButton';
-import BaseButton from '../../Components/ButtonBase';
+import Button from '../../Components/Button';
 
 const starIconSource = require('../../assets/star.png');
 const lightStarIconSource = require('../../assets/lightStar.png');
@@ -61,7 +61,7 @@ export default ({
   const Star = (props) => {
     const source = props.isOn ? lightStarIconSource : starIconSource;
     return (
-      <BaseButton {...props} data-test-id='RattingButton'><StarIcon source={source} isOn={props.isOn} /></BaseButton>
+      <Button {...props} data-test-id='RattingButton'><StarIcon source={source} isOn={props.isOn} /></Button>
     );
   };
 

@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import LinearGradient from '../LinearGradient';
 
 import { inputHeight, appPalette } from '../../assets/style-settings';
-import BaseButton from '../ButtonBase';
+import Button from '../Button';
 
 const LoadingWrapper = styled.View`
   width: 100%;
@@ -30,7 +30,7 @@ const buttonShadow = `
   shadow-offset: 0px 0px;
 `;
 
-const StyledTouchableOpacity = styled(BaseButton)`
+const StyledTouchableOpacity = styled(Button)`
   width: ${({ width }) => (width || '100%')};
   border-radius: 4px;
   background-color: #1e273d;
@@ -52,7 +52,7 @@ const ButtonTextContainer = styled.View`
 `;
 
 const Button = styled(({
-  onPress, children, style, hollow, setLoading, ...props
+  onPress, children, style, hollow, setLoading, disabled, ...props
 }) => {
   const [loadingState, setLoadingState] = useState(false);
 
@@ -67,7 +67,7 @@ const Button = styled(({
   },[loadingState])
 
   return (
-    <StyledTouchableOpacity width={style[0].width} {...props} onPress={onPressWithLoading} hollow={hollow}>
+    <StyledTouchableOpacity width={style[0].width} {...props} onPress={onPressWithLoading} hollow={hollow} disabled={disabled}>
       <ButtonTextContainer>
         {loadingState ? (
           <LoadingWrapper>

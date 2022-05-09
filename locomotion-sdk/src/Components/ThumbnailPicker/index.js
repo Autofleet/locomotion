@@ -1,43 +1,56 @@
 import React from 'react';
-import ImagePicker from 'react-native-image-picker';
 import propsTypes from 'prop-types';
-import ImageResizer from 'react-native-image-resizer';
-
-import network from '../../services/network';
+/* eslint-disable class-methods-use-this */
+import {
+  Platform, ActionSheetIOS, UIManager, findNodeHandle,
+} from 'react-native';
+import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
+import i18n from '../../I18n';
 import Thumbnail from '../Thumbnail';
 import { ImageUpload } from '../../context/user';
 
 export default class ThumbnailPicker extends React.Component {
   constructor() {
-    super();
-    this.state = {
-      avatarSource: undefined,
-    };
-  }
+    super()
 
-  componentWillReceiveProps(newProps) {
-    if (newProps.avatarSource && !this.state.avatarSource) {
-      this.setState({ avatarSource: { uri: newProps.avatarSource } });
+    this.assets = [];
+    this.state = {
+      source: undefined
     }
   }
 
-  uploadPromise = false;
+  onCancel = () => {
+    console.log('User cancelled image picker');
+  };
 
-  openImagePicker() {
-    ImagePicker.showImagePicker({ allowsEditing: true }, (response) => {
-      if (response.didCancel) {
-        console.log('User canceled image picker');
-      } else if (response.error) {
-        console.log('ImagePicker Error: ', response.error);
-      } else {
-        const source = { uri: `data:image/jpeg;base64,${response.data}` };
-        this.setState({
-          avatarSource: source,
-        });
-        this.handleImage(response);
-      }
-    });
+  onError = (error) => {
+    console.log('ImagePicker Error: ', error);
+  };
+
+  onSelectPicture(response) {
+    const {
+      assets, errorCode, didCancel,
+    } = response;
+    if (didCancel) {
+      this.onCancel()
+    }
+
+    if (errorCode) {
+      this.onError(errorCode)
+    }
+
+    if (assets && assets.length) {
+      this.onSuccess(assets);
+    }
   }
+
+  onSuccess = (response) => {
+    const source = { uri: `data:image/jpeg;base64,${response[0].base64}` };
+    console.log('source', source);
+
+    this.setState({source});
+    this.uploadImage(response[0]);
+  };
 
   uploadImage = async (data) => {
     const newImage = await ImageResizer.createResizedImage(data.uri, 180, 180, 'PNG', 80);
@@ -62,14 +75,67 @@ export default class ThumbnailPicker extends React.Component {
     this.props.onImageChoose(this.uploadPromise);
   }
 
+  showImagePicker(event) {
+    const options = [i18n.t('popups.photoUpload.takePhoto'), i18n.t('popups.photoUpload.choosePhoto')];
+    const pickerOptions = {
+      mediaType: 'photo',
+      cameraType: 'back',
+      includeBase64: true,
+      saveToPhotos: false,
+      selectionLimit: 1,
+    }
+    const imageCallback = (response) => this.onSelectPicture(response);
+    
+    if (Platform.OS === 'android') {
+      UIManager.showPopupMenu(
+        findNodeHandle(event.target),
+        options,
+        () => null,
+        (action, buttonIndex) => {
+          if (action !== 'itemSelected') {
+            return;
+          }
+
+          if (buttonIndex === 0) {
+            launchCamera(pickerOptions, imageCallback);
+          }
+
+          if (buttonIndex === 1) {
+            launchImageLibrary(pickerOptions, imageCallback);
+          }
+        },
+      );
+    } else {
+      ActionSheetIOS.showActionSheetWithOptions(
+        {
+          options: [i18n.t('live.phoneCallOptions.cancel'), ...options],
+          cancelButtonIndex: 0,
+        },
+        (buttonIndex) => {
+          if (buttonIndex === 0) {
+            this.onCancel()
+          }
+
+          if (buttonIndex === 1) {
+            launchCamera(pickerOptions, imageCallback);
+          }
+
+          if (buttonIndex === 2) {
+            launchImageLibrary(pickerOptions, imageCallback);
+          }
+        },
+      );
+    }
+  }
+
   render() {
     return (
       <Thumbnail
         mode={this.props.avatarSource ? 'edit' : 'add'}
-        onPress={this.openImagePicker.bind(this)}
+        onPress={this.showImagePicker.bind(this)}
         containerStyle={{ marginTop: 50, marginBottom: 25 }}
         size={180}
-        source={(this.state.avatarSource)}
+        source={(this.state.source)}
       />
     );
   }

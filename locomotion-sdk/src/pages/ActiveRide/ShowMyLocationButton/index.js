@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import BaseButton from '../../../Components/ButtonBase';
+import Button from '../../../Components/Button';
 
 const Sight = styled.Image`
   height: 50px;
@@ -10,9 +10,9 @@ const Sight = styled.Image`
 
 export default styled(({ displayButton, onPress }) => (
   displayButton ? (
-    <BaseButton onPress={onPress} data-test-id='MyLocationButton'>
+    <Button onPress={onPress} data-test-id='MyLocationButton'>
       <Sight source={require('../../../assets/center_btn.png')} resizeMode="contain" />
-    </BaseButton>
+    </Button>
   ) : null
 ))`
 `;

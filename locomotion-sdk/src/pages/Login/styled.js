@@ -1,10 +1,10 @@
 import styled from 'styled-components';
 import { padding, inputHeight } from '../../assets/style-settings';
-import BaseButton from '../../Components/ButtonBase';
+import Button from '../../Components/Button';
 
 const loginTextColor = '#7c8799';
 
-export const ResendButton = styled(BaseButton)`
+export const ResendButton = styled(Button)`
   margin: 0 auto 0 auto;
 `;
 
