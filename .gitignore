@@ -1,3 +1,6 @@
 server/.env
 client/Locomotion/.env
 server/mod-germany.app.yaml
+server/dist
+server/web-ui/build
+**/.DS_STORE

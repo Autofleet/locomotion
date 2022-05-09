@@ -1,4 +1,4 @@
-FROM autofleet/locomotion:2.1.7
+FROM gcr.io/af-gcr/locomotion-server:master-latest
 
 WORKDIR /usr/src/app
 

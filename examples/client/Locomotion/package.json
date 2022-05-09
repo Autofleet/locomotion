@@ -18,6 +18,7 @@
     "@react-native-firebase/app": "^14.9.1",
     "@react-native-firebase/crashlytics": "^14.9.1",
     "@react-native-picker/picker": "^2.4.1",
+    "@stripe/stripe-react-native": "^0.8.0",
     "jwt-decode": "^3.1.2",
     "lottie-ios": "^3.2.3",
     "lottie-react-native": "^5.0.1",

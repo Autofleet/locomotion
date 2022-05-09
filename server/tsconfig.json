@@ -1,4 +1,5 @@
 {
+    "types": ["@dicebear/avatars/typings/svgson"],
     "compilerOptions": {
         "incremental": true,
         "module": "commonjs",
@@ -13,6 +14,7 @@
         "baseUrl": ".",
         "experimentalDecorators": true,
         "emitDecoratorMetadata": true,
+        "resolveJsonModule": true,
         "allowJs": true,
         "paths": {
             "*": [
@@ -21,7 +23,9 @@
         }
     },
     "include": [
-        "src/**/*", "test"
+        "src/**/*",
+        "server/src/lib/**/*",
+        "test",
     ],
     "exclude": [
         "**/*.test.*",
