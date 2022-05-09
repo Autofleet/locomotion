@@ -54,6 +54,7 @@
     "react-i18next": "^11.7.2",
     "react-native-datepicker": "^1.7.2",
     "react-native-keyboard-aware-scroll-view": "^0.9.5",
+    "react-native-onesignal": "^4.3.9",
     "react-native-svg": "^12.3.0",
     "react-native-swipe-verify": "^0.1.6",
     "react-native-table-component": "^1.2.1",
