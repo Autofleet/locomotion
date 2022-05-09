@@ -18,7 +18,6 @@ const HeaderView = styled.View`
   ` : '')}
 `;
 
-const Button = styled(Button)``;
 
 const Header = ({ navigation, menuSide }) => (
   <SafeView>

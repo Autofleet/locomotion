@@ -57,7 +57,7 @@ const ButtonTextContainer = styled.View`
   flex: 1;
 `;
 
-const Button = styled(({
+const RoundedButton = styled(({
   onPress, children, style, hollow, setLoading, disabled, ...props
 }) => {
   const [loadingState, setLoadingState] = useState(false);
@@ -110,4 +110,4 @@ const Button = styled(({
   border-radius: 2px;
 `;
 
-export default Button;
+export default RoundedButton;
