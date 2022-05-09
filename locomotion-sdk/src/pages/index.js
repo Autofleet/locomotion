@@ -95,7 +95,7 @@ export const MainRouter = (props) => {
       Onboarding,
     },
     {
-      initialRouteName: 'App',
+      initialRouteName: 'AuthLoading',
       headerMode: 'none',
     },
   ));
