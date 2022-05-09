@@ -29,7 +29,7 @@ const usePayments = () => {
 
   const createIntent = async () => {
     const { data: intent } = await network.post('/api/v1/me/payments/intent');
-    console.log(intent);
+    console.log('createIntent', intent);
     return intent;
   };
 

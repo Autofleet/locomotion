@@ -210,7 +210,7 @@ export const Arrow = styled.Image.attrs({ source: ArrowIconSource })`
 
 `;
 export const AddPaymentBar = (props) => {
-  console.log(props);
+  console.log('AddPaymentBar', props);
 
   return (
     <PaymentBarContainer {...props}>

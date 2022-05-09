@@ -1,16 +1,14 @@
 import Sequelize from 'sequelize';
+import logger from '../../logger';
 import { User } from '../../models';
 
 const { Op } = Sequelize;
 
 const UserService = {
   async find(id) {
-    console.log(User.findByPk);
     return User.findByPk(id);
   },
   async list(ids: Array<string> | null = null) {
-    console.log(ids);
-
     const options = ids ? {
       where: {
         id: {
@@ -38,7 +36,7 @@ const UserService = {
 
   async create(data) {
     const newData = { ...data };
-    console.log(newData);
+    logger.info('create', newData);
     return User.create(newData);
   },
 

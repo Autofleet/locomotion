@@ -1,10 +1,10 @@
 import moment from 'moment';
+import logger from '../../logger';
 import { Ride, User } from '../../models';
 import afSdk from '../../sdk';
 import SettingsService from '../settings';
 
 require('dotenv');
-const logger = require('../../logger');
 
 const webHookHost = process.env.SERVER_HOST || 'https://716ee2e6.ngrok.io';
 
@@ -49,14 +49,14 @@ const createOffer = async (rideData) => {
       dropoffTime: offerResponse.stopPoints[1].etaAtMatching,
     };
   } catch (e) {
-    console.error('getting offer error', { e });
+    logger.error('getting offer error', { e });
     return null;
   }
 };
 
 const createRide = async (rideData, userId, operationId) => {
   const [pickup, dropoff] = rideData.stopPoints;
-  console.log(operationId, userId);
+  logger.info('createRide', operationId, userId);
   const ride = await Ride.create({
     operationId,
     ...rideData,
@@ -124,8 +124,7 @@ const createRide = async (rideData, userId, operationId) => {
       ride.state = 'active';
     }
   } catch (e) {
-    console.log(e.response.data);
-    logger.error(e.stack || e);
+    logger.error('afSdk.Rides.create', e.stack || e);
     ride.state = 'rejected';
   }
 

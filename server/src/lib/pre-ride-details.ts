@@ -1,5 +1,6 @@
 import axios from 'axios';
 import moment from 'moment';
+import logger from '../logger';
 
 const demandApi = axios.create({
   baseURL: process.env.AF_BACKEND_URL,
@@ -18,10 +19,10 @@ const getAfNearbyVehiclesWithEta = async (location) => {
     });
     vehicles = data ? data.vehicles : data;
   } catch (error) {
-    console.log('Got error while try to get nearby-vehicles from AF', error.message, error.stack);
+    logger.info('Got error while try to get nearby-vehicles from AF', error.message, error.stack);
     vehicles = [];
   }
-  console.log('vehicles', vehicles);
+  logger.info('vehicles', vehicles);
   return vehicles;
 };
 

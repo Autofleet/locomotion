@@ -79,7 +79,6 @@ const ButtonTextContainer = styled.View`
 
 const Button = ({ onPress, children, style, hollow, setLoading, disabled, type, useCancelTextButton, ...props  }) => {
   const [loadingState, setLoadingState] = useState(false);
-  console.log();
 
   const onPressWithLoading = async (args) => {
     setLoadingState(true);
