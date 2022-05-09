@@ -105,6 +105,10 @@
         "addressPlaceholder": "Enter Address"
     },
     "popups": {
+        "photoUpload": {
+            "takePhoto":  "Take Photo...",
+            "choosePhoto": "Choose from Library..."
+        },
         "rideSummary": {
             "thanksForRideHeadline": "Thanks for your ride!",
             "rideDataHeadline": "",

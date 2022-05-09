@@ -13,30 +13,29 @@ class NotificationsService {
   }
 
   init = (notificationsHandlers) => {
-    const permissions = {
-      alert: true,
-      badge: true,
-      sound: true,
-    };
-    this.notificationsHandlers = notificationsHandlers;;
+    this.notificationsHandlers = notificationsHandlers;
 
-    OneSignal.addEventListener('received', this.triggerOnNotification);
-    OneSignal.addEventListener('opened', this.onOpened);
-    OneSignal.addEventListener('ids', this.onAnyEvent);
-    OneSignal.init(Config.ONESIGNAL_APP_ID, { kOSSettingsKeyAutoPrompt: true });
-    OneSignal.requestPermissions(permissions);
-    OneSignal.inFocusDisplaying(2);
-    OneSignal.setSubscription(true);
+    OneSignal.setAppId(Config.ONESIGNAL_APP_ID);
+    OneSignal.setNotificationOpenedHandler(this.onOpened);
+    OneSignal.disablePush(false);
+
+    if (Platform.OS === 'ios') {
+      OneSignal.promptForPushNotificationsWithUserResponse(() => {});
+    }
+    OneSignal.addSubscriptionObserver(this.subscriptionObserverHandler);
   }
 
-  onAnyEvent = async (data) => {
-    console.log('onAnyEvent', data);
-    const { userProfile } = await AppSettings.getSettings();
-    if (userProfile.pushUserId !== data.userId || userProfile.pushToken !== data.pushToken) {
-      this.registerOnServer({
-        pushToken: data.pushToken,
-        pushUserId: data.userId,
-      });
+  subscriptionObserverHandler = async (data) => {
+    const { to } = data;
+    const { pushToken, userId } = to;
+    if (pushToken && userId) {
+      const { userProfile } = await AppSettings.getSettings();
+      if (userProfile.pushUserId !== userId || userProfile.pushToken !== pushToken) {
+        this.registerOnServer({
+          pushToken: pushToken,
+          pushUserId: userId,
+        });
+      }
     }
   }
 
