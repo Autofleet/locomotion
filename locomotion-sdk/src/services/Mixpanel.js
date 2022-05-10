@@ -11,7 +11,7 @@ class MixpanelService {
   init = async () => {
     if (!this.isInit) { 
       /*if Config.OPERATION_ID is valid then mixpanelToken = Config.MIXPANEL_TOKEN */
-      await Mixpanel.init('token', true);
+      await Mixpanel.sharedInstanceWithToken('token', true);
       this.isInit = true;
     }
   }

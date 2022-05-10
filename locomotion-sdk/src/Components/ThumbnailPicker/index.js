@@ -7,7 +7,7 @@ import {
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 import i18n from '../../I18n';
 import Thumbnail from '../Thumbnail';
-import { ImageUpload } from '../../context/user';
+import { ImageUpload } from '../../context/user/api';
 
 export default class ThumbnailPicker extends React.Component {
   constructor() {

@@ -1,4 +1,4 @@
-import { getUserDetails } from '../context/user';
+import { getUserDetails } from '../context/user/api';
 import Auth from './auth';
 
 const UserService = {

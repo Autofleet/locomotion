@@ -6,7 +6,7 @@ import {
 } from './styled';
 import RideHistoryTable from '../../Components/RideHistoryTable';
 import Mixpanel from '../../services/Mixpanel';
-import { getRidesHistory } from '../../context/rides';
+import { getRidesHistory } from '../../context/rides/api';
 
 const NoRidesMessage = ({ navigation }) => (
   <NoRidesMessageContainer>

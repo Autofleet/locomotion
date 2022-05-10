@@ -4,7 +4,7 @@ import Config from 'react-native-config';
 import network from './network';
 import AppSettings from './app-settings';
 import { getTogglePopupsState } from '../context/main';
-import { updateUser } from '../context/user';
+import { updateUser } from '../context/user/api';
 
 
 

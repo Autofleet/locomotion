@@ -7,7 +7,7 @@ import AppSettings from '../../services/app-settings';
 import { useStateValue } from '../../context/main';
 import { needOnboarding } from '../Onboarding';
 import Auth from '../../services/auth';
-import { getUserDetails } from '../../context/user';
+import { getUserDetails } from '../../context/user/api';
 
 const AuthLoadingScreen = ({ navigation }) => {
   const [appState, dispatch] = useStateValue();
