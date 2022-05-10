@@ -26,8 +26,8 @@ import RideSummaryPopup from '../../popups/RideSummaryPopup';
 import FutureRideCanceledPopup from '../../popups/FutureRideCanceled';
 import AppSettings from '../../services/app-settings'
 import Mixpanel from '../../services/Mixpanel';
-import { getStationsApi } from '../../context/places';
-import { cancelFutureRideApi, cancelRideApi, createOfferApi, createRideApi, getActiveRides, getPreRideDetails, getRideSummary, sendRating } from '../../context/rides';
+import { getStationsApi } from '../../context/places/api';
+import { cancelFutureRideApi, cancelRideApi, createOfferApi, createRideApi, getActiveRides, getPreRideDetails, getRideSummary, sendRating } from '../../context/rides/api';
 
 
 const STATION_AUTOREFRESH_INTERVAL = 60000;
