@@ -25,7 +25,7 @@ import {
 } from "./styled";
 import PageHeader from "../../../../../Components/PageHeader";
 import SafeView from "../../../../../Components/SafeView";
-import { getLocation, getPlacesByLocation } from "../../../../../context/places";
+import { getLocation, getPlacesByLocation } from "../../../../../context/places/api";
 
 const closeIconSource = require("../../../../../assets/arrow-back.png");
 

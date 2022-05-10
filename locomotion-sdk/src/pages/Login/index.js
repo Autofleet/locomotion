@@ -27,7 +27,7 @@ import { useStateValue } from '../../context/main';
 import { needOnboarding } from '../Onboarding';
 import WebView from '../WebView';
 import Mixpanel from '../../services/Mixpanel';
-import { getLoginSettings, loginApi, loginVert } from '../../context/user';
+import { getLoginSettings, loginApi, loginVert } from '../../context/user/api';
 
 const LogoIconSource = require('../../assets/logo.png');
 

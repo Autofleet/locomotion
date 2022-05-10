@@ -6,7 +6,7 @@ import i18n from '../../I18n';
 import Header from '../../Components/Header';
 import PageHeader from '../../Components/PageHeader';
 import Mixpanel from '../../services/Mixpanel';
-import { getLoginSettings } from '../../context/user';
+import { getLoginSettings } from '../../context/user/api';
 
 const { CONTACT_US_URL: uri } = Config;
 

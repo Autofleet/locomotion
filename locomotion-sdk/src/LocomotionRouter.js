@@ -3,7 +3,7 @@ import Config from 'react-native-config';
 import { initStripe } from '@stripe/stripe-react-native';
 
 import { MainProvider } from './context/main';
-import Router, { MainRouter } from './pages';
+import MainRouter from './pages/index2';
 import NavigationService from './services/navigation';
 
 import RidePopups from './popups/RidePopups';

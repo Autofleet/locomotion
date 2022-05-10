@@ -18,7 +18,7 @@ import i18n from '../../I18n';
 import { useStateValue } from '../../context/main';
 import PageHeader from '../../Components/PageHeader';
 import Mixpanel from '../../services/Mixpanel';
-import { updateUser } from '../../context/user';
+import { updateUser } from '../../context/user/api';
 
 
 export default ({
