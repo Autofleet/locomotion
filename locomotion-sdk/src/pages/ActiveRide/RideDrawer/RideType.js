@@ -12,7 +12,7 @@ export default ({ rideType, setRideType }) => {
     return (
         <RowContainer>
             {values.map(v => (
-                <RideTypeButton onPress={() => setRideType(v.value)}>
+                <RideTypeButton onPress={() => setRideType(v.value)} data-test-id={`${v.label}-RideTypeButton`}>
                     <RideTypeButtonText active={rideType === v.value }> {v.label} </RideTypeButtonText>
                 </RideTypeButton>
             ))}

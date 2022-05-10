@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import TextInput from '../../../../../Components/TextInput'
 import xIcon from '../../../../../assets/x.png';
 import stationIcon from '../../../../../assets/marker-tip.png';
+import Button from '../../../../../Components/Button';
 
 export const AddressInputs = styled.View`
     height:  500px;
@@ -33,7 +34,7 @@ export const ResetInputIcon = styled.Image.attrs({ source: xIcon })`
     height: 13px;
     width: 13px;
 `;
-export const ResetInputIconContainer = styled.TouchableOpacity`
+export const ResetInputIconContainer = styled(Button)`
     height: 22px;
     width: 22px;
     position: absolute;
@@ -119,7 +120,7 @@ export const RoutePointsContainer = styled.View`
 
 `;
 
-export const AddressSearchItemTouchableOpacity = styled.TouchableOpacity`
+export const AddressSearchItemTouchableOpacity = styled(Button)`
     border-bottom-color: #e2e2e2;
     border-bottom-width: 1;
     padding-top: 10px;
@@ -127,7 +128,7 @@ export const AddressSearchItemTouchableOpacity = styled.TouchableOpacity`
 `;
 
 export const AddressSearchItem = styled(({ onPress, ...props }) => (
-  <AddressSearchItemTouchableOpacity onPress={onPress}>
+  <AddressSearchItemTouchableOpacity onPress={onPress} data-test-id='AddressSearchItemButton'>
     <View {...props} />
   </AddressSearchItemTouchableOpacity>
 ))`

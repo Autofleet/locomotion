@@ -5,7 +5,8 @@ import Config from 'react-native-config';
 import i18n from '../../I18n';
 import Header from '../../Components/Header';
 import PageHeader from '../../Components/PageHeader';
-import network from '../../services/network';
+import Mixpanel from '../../services/Mixpanel';
+import { getLoginSettings } from '../../context/user';
 
 const { CONTACT_US_URL: uri } = Config;
 
@@ -18,11 +19,12 @@ export default ({ navigation, menuSide }) => {
   });
 
   const loadSettings = async () => {
-    const { data: settingsData } = await network.get('/api/v1/login/settings');
+    const settingsData = await getLoginSettings()
     setSettings(settingsData);
   };
 
   useEffect(() => {
+    Mixpanel.pageView(navigation.state.routeName)
     loadSettings();
   }, []);
 

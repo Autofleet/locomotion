@@ -4,6 +4,7 @@ import Config from 'react-native-config';
 import network from './network';
 import AppSettings from './app-settings';
 import { getTogglePopupsState } from '../context/main';
+import { updateUser } from '../context/user';
 
 
 
@@ -60,8 +61,8 @@ class NotificationsService {
       deviceType: Platform.OS,
     };
 
-    const response = await network.patch('api/v1/me', pushUserData);
-    console.log('registerOnServer', response.data);
+    const response = await updateUser(pushUserData);
+    console.log(response.data);
   };
 
   getOneSignalId = () => new Promise(resolve => OneSignal.getPermissionSubscriptionState(({ userId }) => resolve(userId)));

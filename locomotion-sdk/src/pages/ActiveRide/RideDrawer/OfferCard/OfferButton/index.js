@@ -63,6 +63,7 @@ export default ({
                     onPress={onRenewOffer}
                     setLoading={setLoading}
                     hollow={offerExpired}
+                    data-test-id='RenewOfferButton'
                 >
                     {`${I18n.t(!offerExpired ? 'home.offerCard.confirmOffer' : 'home.offerCard.expiredOffer')}`}
                 </RoundedButton>

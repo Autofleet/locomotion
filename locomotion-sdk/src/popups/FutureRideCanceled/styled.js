@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import xIcon from '../../assets/x.png'
+import Button from '../../Components/Button';
 
 export const Container = styled.View`
   padding: 20px 0;
@@ -30,7 +31,7 @@ export const SubTitle = styled.Text`
   padding-bottom: 15px;
 `;
 
-export const CloseContainer = styled.TouchableOpacity`
+export const CloseContainer = styled(Button)`
     position: absolute;
     right: 15px;
     top: 15px;

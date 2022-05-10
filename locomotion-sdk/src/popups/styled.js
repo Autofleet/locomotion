@@ -1,9 +1,9 @@
 import React from 'react';
-import { TouchableOpacity } from 'react-native';
 import styled from 'styled-components';
 
 import i18n from '../I18n';
 import { linkColor } from '../assets/style-settings';
+import Button from '../Components/Button';
 
 const borderRadius = 2;
 
@@ -38,9 +38,9 @@ const FooterButtonText = styled.Text`
 `;
 
 export const FooterButton = styled(({ children, ...props }) => (
-  <TouchableOpacity {...props}>
+  <Button {...props}>
     <FooterButtonText>{children || i18n.t('popups.defaultFooterButton')}</FooterButtonText>
-  </TouchableOpacity>
+  </Button>
 ))`
   height: 60px;
   justify-content: center;

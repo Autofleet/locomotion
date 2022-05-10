@@ -5,6 +5,7 @@ import styled from 'styled-components';
 import LinearGradient from '../LinearGradient';
 
 import { inputHeight, appPalette } from '../../assets/style-settings';
+import Button from '../Button';
 
 const LoadingWrapper = styled.View`
   width: 100%;
@@ -28,7 +29,7 @@ const buttonShadow = `
   shadow-offset: 0px 0px;
 `;
 
-const StyledTouchableOpacity = styled.TouchableOpacity`
+const StyledTouchableOpacity = styled(Button)`
   width: ${({ width }) => (width || '100%')};
   border-radius: 24px;
   background-color: #1e273d;
@@ -56,7 +57,7 @@ const ButtonTextContainer = styled.View`
   flex: 1;
 `;
 
-const Button = styled(({
+const RoundedButton = styled(({
   onPress, children, style, hollow, setLoading, disabled, ...props
 }) => {
   const [loadingState, setLoadingState] = useState(false);
@@ -109,4 +110,4 @@ const Button = styled(({
   border-radius: 2px;
 `;
 
-export default Button;
+export default RoundedButton;

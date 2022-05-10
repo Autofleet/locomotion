@@ -33,7 +33,7 @@ export default ({
   return (
     <Modal isVisible={isPopupOpen('futureRideCanceled') || false}>
         <Container>
-          <CloseContainer onPress={() => closePopup()}>
+          <CloseContainer onPress={() => closePopup()} data-test-id='CloseFutureRideCanceledPopup'>
             <ResetInputIcon />
           </CloseContainer>
           <View style={{ flex: 2, textAlign: 'left', maxWidth: '80%' }}>

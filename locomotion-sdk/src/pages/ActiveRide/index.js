@@ -10,7 +10,6 @@ import moment from 'moment';
 import Config from 'react-native-config';
 import CheapRuler from 'cheap-ruler';
 
-import network from '../../services/network';
 import getPosition from './RideDrawer/StopPointsCard/AddressView/getPostion';
 import {
   PageContainer, StopPointDot, VehicleDot, MapButtonsContainer,
@@ -26,6 +25,10 @@ import MyLocationButton from './ShowMyLocationButton';
 import RideSummaryPopup from '../../popups/RideSummaryPopup';
 import FutureRideCanceledPopup from '../../popups/FutureRideCanceled';
 import AppSettings from '../../services/app-settings'
+import Mixpanel from '../../services/Mixpanel';
+import { getStationsApi } from '../../context/places';
+import { cancelFutureRideApi, cancelRideApi, createOfferApi, createRideApi, getActiveRides, getPreRideDetails, getRideSummary, sendRating } from '../../context/rides';
+
 
 const STATION_AUTOREFRESH_INTERVAL = 60000;
 
@@ -115,7 +118,8 @@ export default ({ navigation, menuSide, mapSettings }) => {
     });
   }
   const loadActiveRide = async () => {
-    const { data: response } = await network.get('api/v1/me/rides/active', { params: { activeRide: true } });
+    const response = await getActiveRides({ activeRide: true })
+
     const { ride: activeRide, futureRides: futureRidesData } = response;
     setFutureRides(futureRidesData);
     if (activeRide) {
@@ -141,7 +145,7 @@ export default ({ navigation, menuSide, mapSettings }) => {
       return setActiveRide(activeRide);
     }
     if (activeRideState) {
-      const {data: rideSummary} = await network.get('api/v1/me/rides/ride-summary', {params: {rideId: activeRideState.externalId}});
+      const rideSummary = await getRideSummary({rideId: activeRideState.externalId});
       if (rideSummary && rideSummary.state === 'completed') {
         const pickupTime = rideSummary.stopPoints[0].completedAt;
         const dropoffTime = rideSummary.stopPoints[1].completedAt;
@@ -181,6 +185,7 @@ export default ({ navigation, menuSide, mapSettings }) => {
   }
 
   useEffect(() => {
+    Mixpanel.pageView(navigation.state.routeName)
     initialLocation();
     UserService.getUser(navigation);
     getStations();
@@ -215,7 +220,7 @@ export default ({ navigation, menuSide, mapSettings }) => {
   const loadPreRideDetails = async (origin, destination) => {
     return;
     try {
-      const { data } = await network.get('api/v1/me/rides/pre', { params: { origin, destination } });
+      const data = await getPreRideDetails({ origin, destination })
       setPreRideDetails(data);
     } catch (error) {
       console.log('Got error while try to get pre detail on a ride', error);
@@ -257,7 +262,7 @@ export default ({ navigation, menuSide, mapSettings }) => {
   const createRide = async () => {
     clearTimeout(offerTimer);
 
-    const { data: response } = await network.post('api/v1/me/rides', {
+    const response = await createRideApi({
       numberOfPassengers,
       rideType,
       scheduledTo: requestStopPoints.scheduledTo,
@@ -291,7 +296,7 @@ export default ({ navigation, menuSide, mapSettings }) => {
 
   const createOffer = async () => {
     try {
-      const { data: response } = await network.post('api/v1/me/rides/offer', {
+      const { data: response } = await createOfferApi({
         pickupAddress: requestStopPoints.pickup.description,
         pickupLat: requestStopPoints.pickup.lat,
         pickupLng: requestStopPoints.pickup.lng,
@@ -313,7 +318,7 @@ export default ({ navigation, menuSide, mapSettings }) => {
   };
 
   const cancelRide = async () => {
-    await network.post('api/v1/me/rides/cancel-active-ride');
+    await cancelRideApi()
     return loadActiveRide();
   };
 
@@ -348,12 +353,11 @@ export default ({ navigation, menuSide, mapSettings }) => {
       const { coords } = await getPosition();
       if(coords.latitude && coords.longitude) {
         const { latitude: lat, longitude: lng} = coords;
-        const {data} = await network.get('api/v1/me/places', {
-          params: {
+        const data = await getStationsApi({
             location: {lat, lng},
             stations: true,
           },
-        });
+        );
         setStations(data);
       }
     } catch (e) {
@@ -415,12 +419,10 @@ export default ({ navigation, menuSide, mapSettings }) => {
   };
 
   const onRating = async (rating) => {
-    const response = await network.post('api/v1/me/rides/rating', {
+    await sendRating({
       externalId: rideSummaryData.rideId,
       rating,
     });
-
-    return response;
   };
 
   const focusCurrentLocation = () => {
@@ -448,7 +450,7 @@ export default ({ navigation, menuSide, mapSettings }) => {
   };
 
   const cancelFutureRide = async (rideId) => {
-    const response = await network.post('api/v1/me/rides/cancel-future-ride', { rideId });
+    const response = await cancelFutureRideApi(rideId)
     loadActiveRide()
   };
 

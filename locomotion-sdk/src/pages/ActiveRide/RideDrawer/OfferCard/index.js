@@ -7,6 +7,7 @@ import OfferRow from './OfferRow'
 import NumberOfPassengerOffer from './NumberOfPassengerOffer';
 import OfferButton from './OfferButton';
 import xIcon from '../../../../assets/x.png';
+import Button from '../../../../Components/Button';
 
 const address = `
 min-height: 50;
@@ -26,7 +27,7 @@ export const StopPointsEtaContainer = styled.View`
   justify-content: space-between;
 `;
 
-export const CloseContainer = styled.TouchableOpacity`
+export const CloseContainer = styled(Button)`
     position: absolute;
     right: 10px;
     top: 10px;
@@ -53,7 +54,7 @@ export default ({
 
           {!loading
           ? (
-            <CloseContainer onPress={cancelOffer}>
+            <CloseContainer onPress={cancelOffer} data-test-id='CancelOfferButton'>
               <ResetInputIcon />
             </CloseContainer>
           ) : null}

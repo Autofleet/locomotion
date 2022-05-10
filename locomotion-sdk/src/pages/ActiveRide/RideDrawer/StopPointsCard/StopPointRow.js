@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import moment from 'moment';
 
 import i18n from '../../../../I18n';
+import Button from '../../../../Components/Button';
 
 const address = `
 min-height: 50;
@@ -65,7 +66,7 @@ const EtaText = styled.Text`
   font-size: 10px;
 `;
 
-const RowContainer = styled.TouchableOpacity`
+const RowContainer = styled(Button)`
   min-height: 50;
   padding-top: 10;
   padding-bottom: 10;
@@ -92,7 +93,7 @@ const AddressTitle = styled.Text`
 export default ({
   pickup, description, eta, completedAt, openLocationSelect, useBorder, title, selected
 }) => (
-  <RowContainer pickup={pickup} onPress={openLocationSelect} useBorder={useBorder} paddingStart>
+  <RowContainer pickup={pickup} onPress={openLocationSelect} useBorder={useBorder} paddingStart data-test-id='OpenLocationSelectButton'>
     <StopPointDotContainer origin={pickup}>
       <StopPointDot origin={pickup} />
       <StopPointDotTimeLine />

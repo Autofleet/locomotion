@@ -1,9 +1,8 @@
+import React, { useState } from 'react';
 import LottieView from 'lottie-react-native';
 import styled from 'styled-components';
-import React, { useState, useEffect } from 'react';
-import LinearGradient from '../LinearGradient';
 
-import { inputHeight, appPalette } from '../../assets/style-settings';
+import { inputHeight } from '../../assets/style-settings';
 import Button from '../Button';
 
 const LoadingWrapper = styled.View`
@@ -14,13 +13,11 @@ const LoadingWrapper = styled.View`
 
 const SubmitButtonText = styled.Text`
   color: #ffffff;
-  font-size: 14;
-  font-weight: 500;
+  font-size: 12px;
   text-align: center;
-  ${({ hollow }) => hollow && `
-    color: #ffffff;
+  ${({hollow}) => hollow && `
+    color: #b5b5b5;
   `}
-  width: 100%;
 `;
 
 const buttonShadow = `
@@ -32,16 +29,17 @@ const buttonShadow = `
 
 const StyledTouchableOpacity = styled(Button)`
   width: ${({ width }) => (width || '100%')};
-  border-radius: 4px;
   background-color: #1e273d;
-  height: 48px;
+  height: 40px;
   ${({ marginTop }) => marginTop && `
     margin-top: ${marginTop};
   `}
 
-  ${({ hollow }) => hollow && `
-    background-color: #e2e2e2;
+  ${({hollow}) => hollow && `
+    background-color: #ffffff;
+    border: 2px solid #b5b5b5;
   `}
+  flex-direction: row;
 `;
 
 const ButtonTextContainer = styled.View`
@@ -51,8 +49,8 @@ const ButtonTextContainer = styled.View`
   flex: 1;
 `;
 
-const RideButton = styled(({
-  onPress, children, style, hollow, setLoading, disabled, ...props
+const CommonButton = styled(({
+  onPress, children, style, hollow, ...props
 }) => {
   const [loadingState, setLoadingState] = useState(false);
 
@@ -62,13 +60,9 @@ const RideButton = styled(({
     return setLoadingState(false);
   };
 
-  useEffect(() => {
-    setLoading(loadingState)
-  },[loadingState])
-
   return (
-    <StyledTouchableOpacity width={style[0].width} {...props} onPress={onPressWithLoading} hollow={hollow} disabled={disabled}>
-      <ButtonTextContainer>
+    <StyledTouchableOpacity width={style[0].width} {...props} onPress={onPressWithLoading} hollow={hollow}>
+        <ButtonTextContainer>
         {loadingState ? (
           <LoadingWrapper>
             <LottieView
@@ -102,4 +96,4 @@ const RideButton = styled(({
   border-radius: 2px;
 `;
 
-export default RideButton;
+export default CommonButton;

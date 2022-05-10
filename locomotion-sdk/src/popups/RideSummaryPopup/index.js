@@ -1,5 +1,5 @@
 import React, {Fragment, useEffect, useState} from 'react';
-import { View, TouchableOpacity } from 'react-native';
+import { View } from 'react-native';
 import Modal from 'react-native-modal';
 import i18n from '../../I18n';
 import {
@@ -20,6 +20,7 @@ import {
 } from './styled'
 import { getTogglePopupsState } from '../../context/main';
 import RoundedButton from '../../Components/RoundedButton';
+import Button from '../../Components/Button';
 
 const starIconSource = require('../../assets/star.png');
 const lightStarIconSource = require('../../assets/lightStar.png');
@@ -60,7 +61,7 @@ export default ({
   const Star = (props) => {
     const source = props.isOn ? lightStarIconSource : starIconSource;
     return (
-      <TouchableOpacity {...props}><StarIcon source={source} isOn={props.isOn} /></TouchableOpacity>
+      <Button {...props} data-test-id='RattingButton'><StarIcon source={source} isOn={props.isOn} /></Button>
     );
   };
 
@@ -89,7 +90,7 @@ export default ({
   return (
     <Modal isVisible={isPopupOpen('rideSummary') || false}>
         <SummaryContainer>
-          <CloseContainer onPress={() => closePopup()}>
+          <CloseContainer onPress={() => closePopup()} data-test-id='CloseRideSummaryPopup'>
             <ResetInputIcon />
           </CloseContainer>
           <View style={{ flex: 2, textAlign: 'left', maxWidth: '80%' }}>
@@ -121,6 +122,7 @@ export default ({
             <SummaryStarsTitle>{i18n.t('popups.rideSummary.ratingHeadline')}</SummaryStarsTitle>
             <StarRating/>
             <RoundedButton
+                data-test-id='SubmitRideSummaryPopupButton'
                 onPress={() => onSubmit()}
               >
                 {i18n.t('popups.rideSummary.submit')}

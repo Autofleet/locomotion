@@ -29,7 +29,7 @@ export default ({
           <SubTitle>{subTitle}</SubTitle>
           {content ? content : undefined}
         </Content>
-        <FooterButton onPress={closePopup} />
+        <FooterButton onPress={closePopup} data-test-id='PopupFooterButton'/>
       </ModalContainer>
     </Modal>
   );

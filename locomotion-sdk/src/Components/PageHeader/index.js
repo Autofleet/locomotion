@@ -15,7 +15,7 @@ const PageHeader = ({
       <HeaderText>{title}</HeaderText>
       {displayIcon !== false
         ? (
-          <HeaderIconContainer side={iconSide} onPress={onIconPress}>
+          <HeaderIconContainer side={iconSide} onPress={onIconPress} data-test-id='NavigationPanelButton'>
             <HeaderIcon width={width} height={width} source={icon} side={iconSide} />
           </HeaderIconContainer>
         ) : null}

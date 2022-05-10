@@ -2,6 +2,7 @@ import axios from 'axios';
 import Config from 'react-native-config';
 import Auth from './auth';
 import AppSettings from './app-settings';
+import Mixpanel from './Mixpanel';
 
 const HTTPMethods = [
   'get',
@@ -32,22 +33,15 @@ class Network {
   constructor(settings = {}) {
     this.settings = Object.assign(Network.defaultSettings, settings);
     this.axios = axios.create(settings);
-
-    this.axios.interceptors.request.use(request => {
-      try {
-        console.debug(`Request [${request.method}] ${request.url}`);
-      } catch (e) {
-        console.error('Error in interceptors->request log', e);
-      }
+    this.axios.interceptors.request.use((request) => {
+      Mixpanel.setEvent('Network request', { method: request.method, endpoint: request.url, params: request.params});
+      console.log(`Starting Request [${request.method}] ${request.url}`, request);
       return request;
     });
 
-    this.axios.interceptors.response.use(response => {
-      try {
-        console.debug(`Response [${response.config.method}] ${response.config.url}:`, formatResponseLog(response));
-      } catch (e) {
-        console.error('Error in interceptors->response log', e);
-      }
+    this.axios.interceptors.response.use((response) => {
+      Mixpanel.setEvent('Network response', { method: response.config.method, endpoint: response.config.url, statusCode: response.status});
+      console.log(`Response [${response.config.method}] ${response.config.url}:`, response);
       return response;
     }, error => {
       try {

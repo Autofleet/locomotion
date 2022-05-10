@@ -147,7 +147,7 @@ export const PreRideBox = styled(({ eta, estimatePrice, ...props }) => (
   `;
 
 
-export const RideTypeButton = styled.TouchableOpacity`
+export const RideTypeButton = styled(Button)`
   align-items: center;
   flex: 1;
 `;

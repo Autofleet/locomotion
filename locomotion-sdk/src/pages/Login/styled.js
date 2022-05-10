@@ -1,9 +1,14 @@
 import styled from 'styled-components';
 import { padding, inputHeight } from '../../assets/style-settings';
+import Button from '../../Components/Button';
 
 const loginTextColor = '#7c8799';
 
-export const ResendButton = styled.Text`
+export const ResendButton = styled(Button)`
+  margin: 0 auto 0 auto;
+`;
+
+export const ResendButtonText = styled.Text`
   color: ${loginTextColor};
   text-decoration: underline;
   text-decoration-color: ${loginTextColor};

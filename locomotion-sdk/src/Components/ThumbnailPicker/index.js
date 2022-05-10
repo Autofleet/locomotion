@@ -7,6 +7,7 @@ import {
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 import i18n from '../../I18n';
 import Thumbnail from '../Thumbnail';
+import { ImageUpload } from '../../context/user';
 
 export default class ThumbnailPicker extends React.Component {
   constructor() {
@@ -60,11 +61,7 @@ export default class ThumbnailPicker extends React.Component {
       name: 'avatar',
     });
 
-    const { data: response } = await network.post('api/v1/me/image-upload', formData, {
-      headers: {
-        'content-type': 'multipart/form-data',
-      },
-    });
+    const response = await ImageUpload(formData)
 
     if (response.status) {
       return response.url;

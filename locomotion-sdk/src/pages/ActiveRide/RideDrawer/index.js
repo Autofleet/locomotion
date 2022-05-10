@@ -179,6 +179,7 @@ const RideDrawer = ({
                       ? (
                         <DrawerButtonContainer>
                           <RoundedButton
+                            data-test-id='CancelRidePriceButton'
                             onPress={buttonAction}
                             hollow
                           >
@@ -201,6 +202,7 @@ const RideDrawer = ({
                       />
                       <DrawerButtonContainer>
                         <RoundedButton
+                          data-test-id='CancelRideButton'
                           onPress={buttonAction}
                           hollow
                         >
@@ -264,6 +266,7 @@ const RideDrawer = ({
           <>
           <RideButtonContainer>
             {!futureOrdersState && <RideButton
+              data-test-id={rideState ? 'CancelRideButton' : 'LetsRideButton'}
               onPress={buttonAction}
               hollow={!readyToBook || !allowRideOrder}
               setLoading={setLoading}

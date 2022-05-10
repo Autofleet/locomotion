@@ -1,10 +1,11 @@
 import styled from 'styled-components';
 import RoundedButton from '../../../../Components/RoundedButton';
 import xIconWhite from '../../../../assets/x-white.png'
+import Button from '../../../../Components/Button';
 
-export const FutureRidesButton = styled.TouchableOpacity`
-  height: 30px;
-  min-width: 115px;
+export const FutureRidesButton = styled(Button)`
+  height: 30;
+  min-width: 115;
   background-color: #6180c0;
   margin-bottom: 8px;
   align-self: flex-end;

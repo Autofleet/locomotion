@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef, Fragment } from "react";
 import { ScrollView, View } from "react-native";
 import Config from 'react-native-config'
 import getPosition from "./getPostion";
-import network from "../../../../../services/network";
 
 import I18n from "../../../../../I18n";
 import {
@@ -26,6 +25,7 @@ import {
 } from "./styled";
 import PageHeader from "../../../../../Components/PageHeader";
 import SafeView from "../../../../../Components/SafeView";
+import { getLocation, getPlacesByLocation } from "../../../../../context/places";
 
 const closeIconSource = require("../../../../../assets/arrow-back.png");
 
@@ -47,11 +47,10 @@ export default props => {
   }
 
   const enrichPlaceWithLocation = async place => {
-    const { data } = await network.get("api/v1/me/places/get-location", {
-      params: {
+    const data = getLocation({
         placeId: place.placeid || place.place_id
       }
-    });
+    );
     place = { ...place, ...data };
     return place;
   };
@@ -92,13 +91,12 @@ export default props => {
         location = { lat: coords.latitude, lng: coords.longitude };
       }
 
-      const { data } = await network.get("api/v1/me/places", {
-        params: {
+      const data = await getPlacesByLocation({
           input,
           location,
           stations: showStations
         }
-      });
+      );
       return data;
     } catch (error) {
       console.log("Got error while try to get places", error);
@@ -146,7 +144,7 @@ export default props => {
             </AddressSearchItem>
           ))}
       </ScrollView>
-      <ResetInputIconContainer onPress={props.onClose}>
+      <ResetInputIconContainer onPress={props.onClose} data-test-id='ClearAddressButton'>
         <ResetInputIcon />
       </ResetInputIconContainer>
     </AddressInputs>
