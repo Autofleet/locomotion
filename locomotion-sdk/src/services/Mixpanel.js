@@ -10,8 +10,7 @@ class MixpanelService {
 
   init = async () => {
     if (!this.isInit) { 
-      /*need to change  this token to env variable
-        check that the instance id matches one in the db and if so load this token */
+      /*if Config.OPERATION_ID is valid then mixpanelToken = Config.MIXPANEL_TOKEN */
       await Mixpanel.init('token', true);
       this.isInit = true;
     }

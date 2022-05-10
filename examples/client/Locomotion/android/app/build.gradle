@@ -284,6 +284,7 @@ dependencies {
 
     implementation project(':react-native-linear-gradient')
     
+    compile project(':react-native-mixpanel')
     if (enableHermes) {
         def hermesPath = "../../node_modules/hermes-engine/android/";
         debugImplementation files(hermesPath + "hermes-debug.aar")

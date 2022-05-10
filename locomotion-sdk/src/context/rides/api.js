@@ -1,4 +1,4 @@
-import network from '../services/network';
+import network from '../../services/network';
 
 export const getActiveRides = async (params) => {
     const { data } = await network.get('api/v1/me/rides/active', { params });

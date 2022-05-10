@@ -34,13 +34,13 @@ class Network {
     this.settings = Object.assign(Network.defaultSettings, settings);
     this.axios = axios.create(settings);
     this.axios.interceptors.request.use((request) => {
-      Mixpanel.setEvent('Network request', { method: request.method, endpoint: request.url, request})
+      Mixpanel.setEvent('Network request', { method: request.method, endpoint: request.url, params: request.params});
       console.log(`Starting Request [${request.method}] ${request.url}`, request);
       return request;
     });
 
     this.axios.interceptors.response.use((response) => {
-      Mixpanel.setEvent('Network response', { method: response.config.method, endpoint: response.config.url, response})
+      Mixpanel.setEvent('Network response', { method: response.config.method, endpoint: response.config.url, statusCode: response.status});
       console.log(`Response [${response.config.method}] ${response.config.url}:`, response);
       return response;
     }, error => {

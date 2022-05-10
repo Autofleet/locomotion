@@ -1,4 +1,4 @@
-import network from '../services/network';
+import network from '../../services/network';
 
 export const ImageUpload = async (formData) => {
     const { data } = await network.post('api/v1/me/image-upload', formData, {

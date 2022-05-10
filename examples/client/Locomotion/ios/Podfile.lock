@@ -149,6 +149,7 @@ PODS:
   - lottie-react-native (5.0.1):
     - lottie-ios (~> 3.2.3)
     - React-Core
+  - Mixpanel (3.6.5)
   - nanopb (2.30908.0):
     - nanopb/decode (= 2.30908.0)
     - nanopb/encode (= 2.30908.0)
@@ -382,6 +383,9 @@ PODS:
     - React
   - react-native-maps (0.31.1):
     - React-Core
+  - react-native-mixpanel (1.2.5):
+    - Mixpanel (~> 3.6.0)
+    - React
   - react-native-onesignal (4.3.9):
     - OneSignalXCFramework (= 3.10.3)
     - React (< 1.0.0, >= 0.13.0)
@@ -562,6 +566,7 @@ DEPENDENCIES:
   - react-native-image-resizer (from `../node_modules/react-native-image-resizer`)
   - react-native-location (from `../node_modules/react-native-location`)
   - react-native-maps (from `../node_modules/react-native-maps`)
+  - react-native-mixpanel (from `../node_modules/react-native-mixpanel`)
   - react-native-onesignal (from `../node_modules/react-native-onesignal`)
   - react-native-webview (from `../node_modules/react-native-webview`)
   - React-perflogger (from `../node_modules/react-native/ReactCommon/reactperflogger`)
@@ -613,6 +618,7 @@ SPEC REPOS:
     - GoogleUtilities
     - libevent
     - libwebp
+    - Mixpanel
     - nanopb
     - OneSignalXCFramework
     - OpenSSL-Universal
@@ -684,6 +690,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-location"
   react-native-maps:
     :path: "../node_modules/react-native-maps"
+  react-native-mixpanel:
+    :path: "../node_modules/react-native-mixpanel"
   react-native-onesignal:
     :path: "../node_modules/react-native-onesignal"
   react-native-webview:
@@ -768,6 +776,7 @@ SPEC CHECKSUMS:
   libwebp: 98a37e597e40bfdb4c911fc98f2c53d0b12d05fc
   lottie-ios: c058aeafa76daa4cf64d773554bccc8385d0150e
   lottie-react-native: a029a86e1689c86a07169c520ae770e84348cd20
+  Mixpanel: de8296d8568806ab17bfced0f823c908b808e1e0
   nanopb: a0ba3315591a9ae0a16a309ee504766e90db0c96
   OneSignalXCFramework: 4efd7bd68c2b14920955b3f14b5b75bbf8fb662c
   OpenSSL-Universal: ebc357f1e6bc71fa463ccb2fe676756aff50e88c
@@ -792,6 +801,7 @@ SPEC CHECKSUMS:
   react-native-image-resizer: 506412a2bdd70dde64a61e13505ce10f61a04369
   react-native-location: 9c53c0957756f7d70e8fdc76b1c7ed85867c8d0b
   react-native-maps: 8b8bfada2c86205a7f5a07dd1f92f29b33ea83aa
+  react-native-mixpanel: 3e21f895f4e439f680cee7e236711db273cb273d
   react-native-onesignal: 9d62f1c922821987d103417798542fc91bc98447
   react-native-webview: e742836e562288f0e66e26f436decba163dd93f9
   React-perflogger: 30ab8d6db10e175626069e742eead3ebe8f24fd5
