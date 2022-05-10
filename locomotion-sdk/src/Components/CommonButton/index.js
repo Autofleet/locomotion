@@ -1,10 +1,8 @@
 import React, { useState } from 'react';
-import {View} from 'react-native'
 import LottieView from 'lottie-react-native';
 import styled from 'styled-components';
-import LinearGradient from '../LinearGradient';
 
-import { inputHeight, appPalette } from '../../assets/style-settings';
+import { inputHeight } from '../../assets/style-settings';
 import Button from '../Button';
 
 const LoadingWrapper = styled.View`

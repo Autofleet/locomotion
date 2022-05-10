@@ -1,5 +1,5 @@
 import React, {Fragment, useEffect, useState} from 'react';
-import { View, TouchableOpacity } from 'react-native';
+import { View } from 'react-native';
 import Modal from 'react-native-modal';
 import i18n from '../../I18n';
 import {

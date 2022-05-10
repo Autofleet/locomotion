@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import {
-  TouchableOpacity, Image, StyleSheet, ViewPropTypes,
+  Image, StyleSheet, ViewPropTypes,
 } from 'react-native';
 import FastImage from 'react-native-fast-image';
 import propsTypes from 'prop-types';

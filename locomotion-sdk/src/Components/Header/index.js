@@ -1,5 +1,5 @@
 import React from 'react';
-import { TouchableOpacity, Image } from 'react-native';
+import { Image } from 'react-native';
 import styled from 'styled-components';
 import Button from '../Button';
 import SafeView from '../SafeView';

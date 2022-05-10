@@ -3,7 +3,6 @@ import { View } from 'react-native';
 import * as yup from 'yup';
 
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import network from '../../services/network';
 import AppSettings from '../../services/app-settings';
 
 import ThumbnailPicker from '../../Components/ThumbnailPicker';

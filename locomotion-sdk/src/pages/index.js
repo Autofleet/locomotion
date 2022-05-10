@@ -16,7 +16,6 @@ import Onboarding from './Onboarding';
 import Lock from './Lock';
 import Payments from './Payments';
 import { DrawerContentComponent, DrawerLabel } from '../Components/Drawer';
-import Mixpanel from '../services/Mixpanel';
 
 const PlusIconSource = require('../assets/plus.png');
 const CarIconSource = require('../assets/menuItems/car.png');

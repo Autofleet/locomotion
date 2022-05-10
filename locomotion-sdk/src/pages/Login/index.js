@@ -4,7 +4,6 @@ import propTypes from 'prop-types';
 import Config from 'react-native-config';
 import { Trans } from 'react-i18next';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import network from '../../services/network';
 import Auth from '../../services/auth';
 import SubmitButton from '../../Components/RoundedButton';
 

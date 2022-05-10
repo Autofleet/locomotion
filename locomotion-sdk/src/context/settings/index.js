@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { createContainer } from 'unstated-next';
-import network from '../../services/network';
 import { getAppSettings, getWorkingHoursData } from './apis';
 
 const useSettings = () => {

@@ -10,7 +10,6 @@ import moment from 'moment';
 import Config from 'react-native-config';
 import CheapRuler from 'cheap-ruler';
 
-import network from '../../services/network';
 import getPosition from './RideDrawer/StopPointsCard/AddressView/getPostion';
 import {
   PageContainer, StopPointDot, VehicleDot, MapButtonsContainer,

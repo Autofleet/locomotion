@@ -6,7 +6,6 @@ import {
 import AppSettings from '../../services/app-settings';
 import { useStateValue } from '../../context/main';
 import { needOnboarding } from '../Onboarding';
-import network from '../../services/network';
 import Auth from '../../services/auth';
 import { getUserDetails } from '../../context/user';
 
