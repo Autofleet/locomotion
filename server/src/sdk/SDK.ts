@@ -1,72 +1,16 @@
-/* eslint-disable max-classes-per-file */
-const axios = require('axios');
+import axios from 'axios';
+import logger from '../logger';
+import { RideApi } from './RideApi';
+import { PaymentApi } from './PaymentApi';
 
 const { AF_API_URL = 'https://api.autofleet.io/' } = process.env;
 
-class BaseApi {
-  network: any;
-
-  constructor(network) {
-    this.network = network;
-  }
-}
-
-class RideApi extends BaseApi {
-  list(query) {
-    return this.network.get('/api/v1/rides', { params: query });
-  }
-
-  get(id) {
-    return this.network.get(`/api/v1/rides/${id}`);
-  }
-
-  create(payload) {
-    return this.network.post('/api/v1/rides/', payload);
-  }
-
-  createOffer(payload) {
-    return this.network.post('/api/v1/offers', payload);
-  }
-
-  cancel(id, options) {
-    return this.network.put(`/api/v1/rides/${id}/cancel`, options);
-  }
-
-  rating(id, options) {
-    return this.network.put(`/api/v1/rides/${id}`, options);
-  }
-}
-
-class PaymentApi extends BaseApi {
-  async getCustomer(id) {
-    return this.network.get(`/api/v1/customer/${id}`, {
-      params: {
-        businessModelId: process.env.BUSINESS_MODEL_ID,
-      },
-    });
-  }
-
-  createCustomer(payload) {
-    return this.network.post('/api/v1/customer', payload);
-  }
-
-  createPaymentIntent(payload) {
-    return this.network.post('/api/v1/payment/setup', payload);
-  }
-
-  listMethods(userId) {
-    return this.network.get('/api/v1/payment/methods', {
-      params: {
-        businessModelId: process.env.BUSINESS_MODEL_ID,
-        userId,
-      },
-    });
-  }
-
-  detachPaymentMethod(payload) {
-    return this.network.post('/api/v1/payment/methods/detach', payload);
-  }
-}
+const refreshAuth = async (network, refreshToken) => {
+  const { data: { token } } = await network.post('https://api.autofleet.io/api/v1/login/refresh', {
+    refreshToken,
+  });
+  return token;
+};
 
 class AutofleetSdk {
   network: any;
@@ -99,8 +43,18 @@ class AutofleetSdk {
       }
       return config;
     });
+    this.init();
     this.Rides = new RideApi(this.network);
     this.Payments = new PaymentApi(this.network);
+  }
+
+  private async init() {
+    logger.info('initAuth');
+    try {
+      this.token = await refreshAuth(this.network, this.refreshToken);
+    } catch (e) {
+      logger.error(`auth error: ${e}`);
+    }
   }
 }
 
