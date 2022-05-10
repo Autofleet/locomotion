@@ -1,8 +1,8 @@
-import {BaseApi} from "./BaseApi";
+import BaseApi from './BaseApi';
 
-export class RideApi extends BaseApi {
+export default class RideApi extends BaseApi {
   list(query) {
-    return this.network.get('/api/v1/rides', {params: query});
+    return this.network.get('/api/v1/rides', { params: query });
   }
 
   get(id) {

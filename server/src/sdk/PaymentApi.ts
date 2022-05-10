@@ -1,6 +1,6 @@
-import {BaseApi} from "./BaseApi";
+import BaseApi from './BaseApi';
 
-export class PaymentApi extends BaseApi {
+export default class PaymentApi extends BaseApi {
   async getCustomer(id) {
     return this.network.get(`/api/v1/customer/${id}`, {
       params: {

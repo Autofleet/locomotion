@@ -14,7 +14,7 @@ router.get('/customer', async (req, res) => {
     customer = afCustomer;
     isExist = true;
   } catch (e) {
-    logger.error(`getCustomer ${e}`, e, e.response.data);
+    logger.error(`getCustomer ${e}`, e.response.data);
   }
 
   return res.json({ isExist, customer });
@@ -80,7 +80,7 @@ router.get('/methods', async (req, res) => {
     const { data: methods } = await afSdk.Payments.listMethods(req.userId);
     return res.json(methods.data);
   } catch (e) {
-    logger.error(`listMethods ${e}`, e, e.response.data);
+    logger.error(`listMethods ${e}`, e?.response?.data);
   }
   return res.status(500).json({ status: 'ERROR' });
 });
