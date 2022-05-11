@@ -26,7 +26,6 @@ export const DrawerLabel = (props) => {
 };
 
 export const DrawerContentComponent = (props) => {
-  const navigation = useNavigation()
   const closeComponent = () => {
     props.navigation.closeDrawer();
   };
