@@ -1,6 +1,7 @@
 import React, {
   useState, useEffect, useRef,
 } from 'react';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import {
   StyleSheet, PermissionsAndroid, Platform, Image,
 } from 'react-native';
@@ -52,7 +53,9 @@ function useInterval(callback, delay) {
   }, [delay]);
 }
 
-export default ({ navigation, menuSide, mapSettings }) => {
+export default ({ menuSide, mapSettings }) => {
+  const navigation = useNavigation()
+  const route = useRoute()
   const [activeRideState, setActiveRide] = useState(null);
   const [futureRides, setFutureRides] = useState(null);
 
@@ -185,7 +188,7 @@ export default ({ navigation, menuSide, mapSettings }) => {
   }
 
   useEffect(() => {
-    Mixpanel.pageView(navigation.state.routeName)
+    Mixpanel.pageView(route.name)
     initialLocation();
     UserService.getUser(navigation);
     getStations();

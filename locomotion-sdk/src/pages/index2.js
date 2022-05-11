@@ -8,8 +8,8 @@ const Stack = createNativeStackNavigator();
 function MainRouter() {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName='MainApp'>
-        <Stack.Screen name="AuthScreens" component={null} />
+      <Stack.Navigator initialRouteName='MainApp' screenOptions={{ headerShown: false}}>
+        <Stack.Screen name="AuthScreens" component={() => (<></>)} />
         <Stack.Screen name="MainApp" component={Main} />  
       </Stack.Navigator>
     </NavigationContainer>

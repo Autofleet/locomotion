@@ -1,4 +1,3 @@
-import 'react-native-gesture-handler';
 export { default as LocomotionRouter } from './LocomotionRouter';
 export * from './context';
 export * from './services';

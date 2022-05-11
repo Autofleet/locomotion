@@ -1,6 +1,6 @@
 import React from 'react';
 import { SafeAreaView, View } from 'react-native';
-// import { DrawerItems, SafeAreaView } from 'react-navigation';
+import { useNavigation } from '@react-navigation/native';
 import {
   DrawerItemList,
 } from '@react-navigation/drawer';
@@ -26,10 +26,10 @@ export const DrawerLabel = (props) => {
 };
 
 export const DrawerContentComponent = (props) => {
-  const { navigation, screenProps } = props;
-
+  const navigation = useNavigation()
+console.log('thisisisi')
   const closeComponent = () => {
-    navigation.closeDrawer();
+    props.navigation.closeDrawer();
   };
   return (
     <View style={{padding: 10}}>

@@ -8,18 +8,20 @@ import Payments from './Payments';
 import Onboarding from './Onboarding';
 import ContactUs from './ContactUs';
 import i18n from '../I18n';
+import Auth from '../services/auth';
+import { View } from 'react-native';
 
 const Drawer = createDrawerNavigator();
 
 export default function Main() {
   return (
-    <NavigationContainer>
-      <Drawer.Navigator 
-        initialRouteName="Home" 
+      <Drawer.Navigator
+        initialRouteName="RideHistory" 
         drawerContent={(props)=> (<DrawerContentComponent {...props} />)}
         screenOptions={{
             inactiveBackgroundColor: '#ffffff',
             activeBackgroundColor: '#ffffff',
+            headerShown: false,
           }}>
         <Drawer.Screen name="Home" component={ActiveRide} options={{title: i18n.t('menu.home')}} />
         <Drawer.Screen name="RideHistory" component={RideHistory} options={{title: i18n.t('menu.trips')}} />
@@ -31,6 +33,5 @@ export default function Main() {
                 return (<View />);
         })} options={{title: i18n.t('menu.logout')}} />
       </Drawer.Navigator>
-    </NavigationContainer>
   );
 }
