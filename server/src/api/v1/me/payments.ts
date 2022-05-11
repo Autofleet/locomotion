@@ -46,7 +46,6 @@ router.post('/intent', async (req, res) => {
       userId: req.userId,
       businessModelId: process.env.BUSINESS_MODEL_ID,
     });
-
     return res.json({ clientSecret: setupIntent.client_secret });
   } catch (e) {
     logger.error('createPaymentIntent', e);
@@ -63,10 +62,6 @@ router.post('/detach', async (req, res) => {
       paymentMethodId,
       businessModelId: process.env.BUSINESS_MODEL_ID,
     });
-    logger.info('setupIntent', paymentMethods);
-
-
-    logger.info('paymentMethods', paymentMethods.data);
     return res.json(paymentMethods.data);
   } catch (e) {
     logger.error('detachPaymentMethod', e);
