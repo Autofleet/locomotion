@@ -28,7 +28,12 @@ export default ({ navigation}) => {
         displayIcon={false}
         title={'Add credit card'}
       />
-      <NewCreditForm />
+      <NewCreditForm
+        canSkip
+        onDone={() =>
+          navigation.navigate('Home')
+        }
+      />
     </PageContent>
   );
 };

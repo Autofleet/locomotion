@@ -6,12 +6,13 @@ import {
 import i18n from "../../I18n";
 import PaymentsContext from "../../context/payments";
 import SubmitButton from "../../Components/RoundedButton";
-import {CreditForm, CreditFormText, ErrorMessage, SubmitContainer} from "./styled";
+import {CreditForm, CreditFormText, ErrorMessage, SkipSubmitContainer, SubmitContainer} from "./styled";
 
 export const NewCreditForm = ({ onDone, canSkip = false }) => {
   const {confirmSetupIntent} = useStripe();
   const usePayments = PaymentsContext.useContainer();
 
+  const [loading, setLoading] = useState(false);
   const [formReady, setFormReady] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
 
@@ -53,7 +54,7 @@ export const NewCreditForm = ({ onDone, canSkip = false }) => {
             textColor: '#000000',
           }}
           style={{
-            width: '100%',
+            width: '90%',
             height: 50,
           }}
           onCardChange={(cardDetails) => {
@@ -71,7 +72,18 @@ export const NewCreditForm = ({ onDone, canSkip = false }) => {
         <ErrorMessage>{errorMessage}</ErrorMessage>
       </CreditForm>
       <SubmitContainer>
-        <SubmitButton onPress={() => handlePayPress()} disabled={!formReady}>
+        {canSkip ? (
+          <SkipSubmitContainer>
+            <SubmitButton onPress={() => onDone()} disabled={loading}>
+              {i18n.t('payments.skipForNow')}
+            </SubmitButton>
+          </SkipSubmitContainer>
+        ) : (<></>)}
+        <SubmitButton
+          onPress={() => handlePayPress()}
+          disabled={!formReady}
+          setLoading={setLoading}
+        >
           {i18n.t('payments.submitCard')}
         </SubmitButton>
       </SubmitContainer>

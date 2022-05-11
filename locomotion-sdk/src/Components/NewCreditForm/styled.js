@@ -1,5 +1,9 @@
 import styled from "styled-components";
 
+export const SkipSubmitContainer = styled.View`
+    margin-bottom: 10px;
+`;
+
 export const SubmitContainer = styled.View`
     max-width: 90%;
     justify-content: flex-end;
@@ -7,6 +11,7 @@ export const SubmitContainer = styled.View`
     margin-bottom: 30px;
     flex:1;
 `;
+
 export const ErrorMessage = styled.Text`
     color: #f03a5f;
     margin-left: 16px;
