@@ -46,7 +46,6 @@ export default class ThumbnailPicker extends React.Component {
 
   onSuccess = (response) => {
     const source = { uri: `data:image/jpeg;base64,${response[0].base64}` };
-    console.log('source', source);
 
     this.setState({source});
     this.uploadImage(response[0]);

@@ -26,7 +26,6 @@ export default ({ menuSide }) => {
   const toggleMenu = () => {
     navigation.toggleDrawer();
   };
-  console.log(useDrawerStatus())
   const getRides = async () => {
     const history = await getRidesHistory()
     if (history && history.rides) {
