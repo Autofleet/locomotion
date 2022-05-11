@@ -20,10 +20,11 @@ export const Arrow = styled.Image.attrs({ source: ArrowIconSource })`
 
 `;
 
-export const LabelText = styled.Text(props => `
-  color: ${props.color || defaultTextColor};
-  margin-top: 4px;
-`);
+export const LabelText = styled.Text`
+  color: ${defaultTextColor};
+  height: 30px;
+  line-height: 30px;
+`;
 
 export const StyledDrawerLabel = styled.View`
   border-color: #dfdfdf;
@@ -33,4 +34,5 @@ export const StyledDrawerLabel = styled.View`
   flex-direction: row;
   flex: 1;
   background-color: #ffffff;
+  align-items: center;
 `;

@@ -1,7 +1,7 @@
 import React, { useState, useEffect, Fragment } from 'react';
 import { View } from 'react-native';
 import * as yup from 'yup';
-
+import { useRoute } from '@react-navigation/native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import AppSettings from '../../services/app-settings';
 
@@ -24,6 +24,7 @@ import { updateUser } from '../../context/user/api';
 export default ({
   navigation, screenOptions, menuSide, ...props
 }) => {
+  const route = useRoute()
   const [onboardingState, dispatchOnboardingState] = useState({
     uploadPromise: false,
     firstName: '',
@@ -36,12 +37,10 @@ export default ({
 
   useEffect(() => {
      if(
-       navigation &&
-       navigation.state &&
-       navigation.state.params
+       route.params
       ) {
-        Mixpanel.pageView(navigation.state.routeName)
-        setShowHeaderIcon(navigation.state.params.showHeaderIcon);
+        Mixpanel.pageView(route.name)
+        setShowHeaderIcon(route.params.showHeaderIcon);
       }
   }, []);
 

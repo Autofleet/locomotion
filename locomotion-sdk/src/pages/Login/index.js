@@ -1,6 +1,7 @@
 import React, { Fragment, useState, useEffect } from 'react';
 import { Image, View } from 'react-native';
 import propTypes from 'prop-types';
+import { useRoute } from '@react-navigation/native';
 import Config from 'react-native-config';
 import { Trans } from 'react-i18next';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
@@ -32,6 +33,7 @@ import { getLoginSettings, loginApi, loginVert } from '../../context/user/api';
 const LogoIconSource = require('../../assets/logo.png');
 
 const Login = ({ navigation, logo }) => {
+  const route = useRoute()
   const [loginState, dispatchLoginState] = useState({
     phoneNumber: null,
     vertCode: null,
@@ -51,7 +53,7 @@ const Login = ({ navigation, logo }) => {
   };
 
   useEffect(() => {
-    Mixpanel.pageView(navigation.state.routeName)
+    Mixpanel.pageView(route.name)
     loadSettings();
   }, []);
 
@@ -118,8 +120,7 @@ const Login = ({ navigation, logo }) => {
           userProfile,
         },
       });
-
-      navigation.navigate(needOnboarding(userProfile) ? 'Onboarding' : 'App', { showHeaderIcon: false });
+      navigation.navigate(needOnboarding(userProfile) ? ('Onboarding', { showHeaderIcon: false }) : 'MainApp');
     } catch (e) {
       console.log('Bad vert with request', e);
       setLoginState({
