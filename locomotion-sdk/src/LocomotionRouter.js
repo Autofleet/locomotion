@@ -3,8 +3,7 @@ import Config from 'react-native-config';
 import { initStripe } from '@stripe/stripe-react-native';
 
 import { MainProvider } from './context/main';
-import MainRouter from './pages/index2';
-// import NavigationService from './services/navigation';
+import MainRouter from './pages';
 
 import RidePopups from './popups/RidePopups';
 import SettingsContext from './context/settings'
@@ -29,7 +28,6 @@ export default props => {
     <SettingsContext.Provider>
       <PaymentsContext.Provider>
         <MainRouter
-          // ref={navigation => NavigationService.setTopLevelNavigator(navigation)}
           {...props}
           />
         {props.children}
