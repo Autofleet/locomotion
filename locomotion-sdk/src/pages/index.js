@@ -1,109 +1,22 @@
-import React from 'react';
-import { Dimensions, View } from 'react-native';
-import {
-  createSwitchNavigator, createStackNavigator, createAppContainer, createDrawerNavigator,
-} from 'react-navigation';
-import i18n from '../I18n';
-
+import * as React from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import Main from './Main';
+import Auth from './Auth';
 import AuthLoadingScreen from './Login/AuthLoadingScreen';
-import Auth from '../services/auth';
-import Login from './Login';
 
-import ActiveRide from './ActiveRide';
-import RideHistory from './RideHistory';
-import ContactUs from './ContactUs';
-import Onboarding from './Onboarding';
-import Lock from './Lock';
-import Payments from './Payments';
-import { DrawerContentComponent, DrawerLabel } from '../Components/Drawer';
+const Stack = createNativeStackNavigator();
 
-const PlusIconSource = require('../assets/plus.png');
-const CarIconSource = require('../assets/menuItems/car.png');
-const HelpIconSource = require('../assets/menuItems/help.png');
-const CreaditCardIconSource = require('../assets/menuItems/creditcard.png');
-const PplIconSource = require('../assets/menuItems/person.png');
-const HomeIconSource = require('../assets/menuItems/home.png');
-const LogoutIconSource = require('../assets/menuItems/logout.png');
-
-const drawerWidth = Dimensions.get('window').width;
-const activeBackgroundColor = '#ffffff';
-const inactiveBackgroundColor = '#ffffff';
-
-export const MainRouter = (props) => {
-  const addPageProps = Page => navigationProps => (<Page {...navigationProps} {...props} />);
-
-  const AppStack = createDrawerNavigator({
-    Home: {
-      screen: addPageProps(ActiveRide),
-      navigationOptions: {
-        drawerLabel: (<DrawerLabel title={i18n.t('menu.home')} icon={HomeIconSource} />),
-      },
-    },
-    RideHistory: {
-      screen: addPageProps(RideHistory),
-      navigationOptions: {
-        drawerLabel: (<DrawerLabel title={i18n.t('menu.trips')} icon={CarIconSource} />),
-      },
-    },
-    Payment: {
-       screen: addPageProps(Payments),
-       navigationOptions: {
-         drawerLabel: (<DrawerLabel title={i18n.t('menu.paymentsSettings')} icon={CreaditCardIconSource} />),
-       },
-     },
-    Account: {
-      screen: addPageProps(Onboarding),
-      navigationOptions: {
-        drawerLabel: (<DrawerLabel title={i18n.t('menu.account')} icon={PplIconSource} />),
-      },
-    },
-    ContactUs: {
-      screen: addPageProps(ContactUs),
-      navigationOptions: {
-        drawerLabel: (<DrawerLabel title={i18n.t('menu.support')} icon={HelpIconSource} />),
-      },
-    },
-
-    Logout: {
-      screen: (({ navigation }) => {
-        Auth.logout(navigation);
-        return (<View />);
-      }),
-      navigationOptions: {
-        drawerLabel: (<DrawerLabel title={i18n.t('menu.logout')} icon={LogoutIconSource} />),
-      },
-    },
-  }, {
-    initialRouteName: 'Home',
-    drawerWidth,
-    contentComponent: (props)=> (<DrawerContentComponent {...props} />),
-    contentOptions: {
-      inactiveBackgroundColor: '#ffffff',
-      activeBackgroundColor: '#ffffff',
-    },
-  });
-
-  const AuthStack = createStackNavigator({ SignIn: addPageProps(Login), Onboarding: addPageProps(Onboarding) }, {
-    headerMode: 'none',
-  });
-
-  const Router = createAppContainer(createSwitchNavigator(
-    {
-      AuthLoading: addPageProps(AuthLoadingScreen),
-      App: AppStack,
-      Auth: AuthStack,
-      Lock,
-      Onboarding,
-    },
-    {
-      initialRouteName: 'AuthLoading',
-      headerMode: 'none',
-    },
-  ));
-
-
-  return (<Router screenProps={{ ...props }} />);
-};
-
+function MainRouter() {
+  return (
+    <NavigationContainer>
+      <Stack.Navigator initialRouteName='AuthLoading' screenOptions={{ headerShown: false}}>
+        <Stack.Screen name="AuthScreens" component={Auth} />
+        <Stack.Screen name="MainApp" component={Main} /> 
+        <Stack.Screen name="AuthLoading" component={AuthLoadingScreen} /> 
+      </Stack.Navigator>
+    </NavigationContainer>
+  );
+}
 
 export default MainRouter;
