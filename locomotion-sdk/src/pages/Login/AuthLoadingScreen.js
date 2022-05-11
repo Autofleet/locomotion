@@ -19,7 +19,6 @@ const AuthLoadingScreen = ({ navigation }) => {
         type: 'changeState',
         payload,
       });
-      console.log('payload', payload)
       let page = payload.userProfile ? 'MainApp' : 'AuthScreens';
 
       if (payload.userProfile) {
