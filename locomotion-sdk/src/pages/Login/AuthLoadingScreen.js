@@ -19,8 +19,7 @@ const AuthLoadingScreen = ({ navigation }) => {
         type: 'changeState',
         payload,
       });
-
-      let page = payload.userProfile ? 'App' : 'Auth';
+      let page = payload.userProfile ? 'MainApp' : 'AuthScreens';
 
       if (payload.userProfile) {
         const response = await getUserDetails()
@@ -40,17 +39,22 @@ const AuthLoadingScreen = ({ navigation }) => {
 
         AppSettings.update({ userProfile });
 
+        const nonUserNav = (screen) => {
+          navigation.navigate('AuthScreens', { screen, params: { showHeaderIcon: false }});
+        }
+
         if (!userData.active) {
-          page = 'Lock';
+          nonUserNav('Lock')
         }
 
         if (needOnboarding(userProfile)) {
-          page = 'Onboarding';
+          nonUserNav('Onboarding')
         }
       }
 
-      navigation.navigate(page, { showHeaderIcon: false });
+      navigation.navigate(page);
     }
+
     if (!appState) { // Load app state
       getFromStorage();
     }

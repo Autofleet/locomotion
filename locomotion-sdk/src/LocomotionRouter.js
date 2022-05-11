@@ -1,14 +1,14 @@
 import React, { useEffect } from 'react';
 import Config from 'react-native-config';
 import { initStripe } from '@stripe/stripe-react-native';
-
+import 'react-native-gesture-handler';
 import { MainProvider } from './context/main';
-import Router, { MainRouter } from './pages';
-import NavigationService from './services/navigation';
+import MainRouter from './pages';
 
 import RidePopups from './popups/RidePopups';
 import SettingsContext from './context/settings'
 import PaymentsContext from './context/payments'
+
 
 
 const STRIPE_PUBLISHER_KEY = Config.STRIPE_PUBLISHER_KEY || '';
@@ -28,7 +28,6 @@ export default props => {
     <SettingsContext.Provider>
       <PaymentsContext.Provider>
         <MainRouter
-          ref={navigation => NavigationService.setTopLevelNavigator(navigation)}
           {...props}
           />
         {props.children}

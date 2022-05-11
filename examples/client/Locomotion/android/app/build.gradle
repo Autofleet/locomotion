@@ -79,7 +79,7 @@ import org.apache.tools.ant.taskdefs.condition.Os
  */
 
 project.ext.react = [
-    enableHermes: false,  // clean and rebuild if changing
+    enableHermes: true,  // clean and rebuild if changing
 ]
 
 apply from: "../../node_modules/react-native/react.gradle"
@@ -284,7 +284,7 @@ dependencies {
 
     implementation project(':react-native-linear-gradient')
     
-    compile project(':react-native-mixpanel')
+    implementation project(':react-native-mixpanel')
     if (enableHermes) {
         def hermesPath = "../../node_modules/hermes-engine/android/";
         debugImplementation files(hermesPath + "hermes-debug.aar")

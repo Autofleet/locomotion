@@ -1,4 +1,5 @@
 import React, { Fragment, useState, useEffect } from 'react';
+import { useRoute } from '@react-navigation/native';
 import { View } from 'react-native';
 import { WebView } from 'react-native-webview';
 import Config from 'react-native-config';
@@ -12,6 +13,7 @@ const { CONTACT_US_URL: uri } = Config;
 
 
 export default ({ navigation, menuSide }) => {
+  const route = useRoute()
   const [settings, setSettings] = useState({
     termsUrl: null,
     privacyUrl: null,
@@ -24,7 +26,7 @@ export default ({ navigation, menuSide }) => {
   };
 
   useEffect(() => {
-    Mixpanel.pageView(navigation.state.routeName)
+    Mixpanel.pageView(route.name)
     loadSettings();
   }, []);
 

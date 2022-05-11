@@ -1,6 +1,9 @@
 import React from 'react';
-import { View } from 'react-native';
-import { DrawerItems, SafeAreaView } from 'react-navigation';
+import { SafeAreaView, View } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import {
+  DrawerItemList,
+} from '@react-navigation/drawer';
 import PageHeader from '../PageHeader';
 import i18n from '../../I18n';
 import {
@@ -23,10 +26,8 @@ export const DrawerLabel = (props) => {
 };
 
 export const DrawerContentComponent = (props) => {
-  const { navigation, screenProps } = props;
-
   const closeComponent = () => {
-    navigation.closeDrawer();
+    props.navigation.closeDrawer();
   };
   return (
     <View style={{padding: 10}}>
@@ -39,7 +40,7 @@ export const DrawerContentComponent = (props) => {
           width="18px"
           height="18px"
         />
-        <DrawerItems {...props} />
+        <DrawerItemList {...props} />
       </SafeAreaView>
     </View>
   );

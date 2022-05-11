@@ -1,4 +1,6 @@
 import React, { Fragment, useEffect, useState } from 'react';
+import { useNavigation, useRoute } from '@react-navigation/native';
+import { useDrawerStatus } from '@react-navigation/drawer';
 import i18n from '../../I18n';
 import PageHeader from '../../Components/PageHeader';
 import {
@@ -8,7 +10,7 @@ import RideHistoryTable from '../../Components/RideHistoryTable';
 import Mixpanel from '../../services/Mixpanel';
 import { getRidesHistory } from '../../context/rides/api';
 
-const NoRidesMessage = ({ navigation }) => (
+const NoRidesMessage = () => (
   <NoRidesMessageContainer>
     <NoRidesTitle>
       <NoRidesTitleText>{i18n.t('rideHistory.noRides')}</NoRidesTitleText>
@@ -17,13 +19,13 @@ const NoRidesMessage = ({ navigation }) => (
   </NoRidesMessageContainer>
 );
 
-export default ({ navigation,menuSide }) => {
+export default ({ menuSide }) => {
   const [rides, setRides] = useState(null);
-
+  const navigation = useNavigation()
+  const route = useRoute()
   const toggleMenu = () => {
     navigation.toggleDrawer();
   };
-
   const getRides = async () => {
     const history = await getRidesHistory()
     if (history && history.rides) {
@@ -32,7 +34,7 @@ export default ({ navigation,menuSide }) => {
   };
 
   useEffect(() => {
-    Mixpanel.pageView(navigation.state.routeName)
+    Mixpanel.pageView(route.name)
     getRides();
   }, []);
 

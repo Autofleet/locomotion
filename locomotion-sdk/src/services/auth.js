@@ -1,7 +1,6 @@
 import jwtDecode from 'jwt-decode';
 import StorageService from './storage';
 import AppSettings from './app-settings';
-import { Navigator } from './navigation';
 import { loginRefresh } from '../context/user/api';
 
 class Auth {
@@ -48,7 +47,7 @@ class Auth {
     //   console.log('Bad logout request', e)
     // }
     await AppSettings.destroy();
-    return navigation.navigate('Auth');
+    return navigation.push('AuthScreens', { screen: 'Login'});
   }
 
   onFaildAuth(cb) {

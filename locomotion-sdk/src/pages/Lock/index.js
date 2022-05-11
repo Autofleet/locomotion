@@ -41,7 +41,7 @@ export default ({ navigation }) => {
     }
 
     if(userData.active === true) {
-      navigation.navigate('App');
+      navigation.navigate('MainApp');
     }
   }, 5000)
 
