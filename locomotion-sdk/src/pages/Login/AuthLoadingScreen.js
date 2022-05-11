@@ -20,7 +20,7 @@ const AuthLoadingScreen = ({ navigation }) => {
         payload,
       });
 
-      let page = payload.userProfile ? 'App' : 'Auth';
+      let page = payload.userProfile ? 'MainApp' : 'AuthScreens';
 
       if (payload.userProfile) {
         const response = await getUserDetails()
@@ -49,8 +49,9 @@ const AuthLoadingScreen = ({ navigation }) => {
         }
       }
 
-      navigation.navigate(page, { showHeaderIcon: false });
+      navigation.navigate('AuthScreens', { screen: page, params: { showHeaderIcon: false }});
     }
+
     if (!appState) { // Load app state
       getFromStorage();
     }

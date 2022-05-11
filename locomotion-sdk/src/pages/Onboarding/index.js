@@ -108,7 +108,7 @@ export default ({
     if (!response.data.active) {
       return navigation.navigate('Lock');
     }
-    navigation.navigate('Home');
+    navigation.navigate('MainApp');
   };
 
   const inputChange = field => value => setOnboardingState({

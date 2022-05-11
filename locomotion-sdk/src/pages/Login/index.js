@@ -113,6 +113,7 @@ const Login = ({ navigation, logo }) => {
       await Auth.updateTokens(vertResponse.refreshToken, vertResponse.accessToken);
       const userProfile = vertResponse.userProfile || {};
       Mixpanel.setUser(userProfile)
+      console.log('userProfile', userProfile)
       dispatch({
         type: 'saveState',
         payload: {
@@ -120,7 +121,7 @@ const Login = ({ navigation, logo }) => {
           userProfile,
         },
       });
-      navigation.navigate(needOnboarding(userProfile) ? ('Onboarding', { showHeaderIcon: false }) : 'MainApp');
+      navigation.navigate(needOnboarding(userProfile) ? 'Onboarding' : 'MainApp', { showHeaderIcon: false });
     } catch (e) {
       console.log('Bad vert with request', e);
       setLoginState({
