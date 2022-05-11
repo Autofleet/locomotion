@@ -113,7 +113,6 @@ const Login = ({ navigation, logo }) => {
       await Auth.updateTokens(vertResponse.refreshToken, vertResponse.accessToken);
       const userProfile = vertResponse.userProfile || {};
       Mixpanel.setUser(userProfile)
-      console.log('userProfile', userProfile)
       dispatch({
         type: 'saveState',
         payload: {
