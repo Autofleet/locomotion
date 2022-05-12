@@ -44,6 +44,7 @@
 		5DCACB8F33CDC322A6C60F78 /* libPods-Locomotion.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Locomotion.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = Locomotion/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		89C6BE57DB24E9ADA2F236DE /* Pods-Locomotion-LocomotionTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Locomotion-LocomotionTests.release.xcconfig"; path = "Target Support Files/Pods-Locomotion-LocomotionTests/Pods-Locomotion-LocomotionTests.release.xcconfig"; sourceTree = "<group>"; };
+		AE4C4563282D04BF007CCCE7 /* Locomotion-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Locomotion-Bridging-Header.h"; sourceTree = "<group>"; };
 		EC8EB49F2811511C005D40A9 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
@@ -95,6 +96,7 @@
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */,
 				13B07FB71A68108700A75B9A /* main.m */,
+				AE4C4563282D04BF007CCCE7 /* Locomotion-Bridging-Header.h */,
 			);
 			name = Locomotion;
 			sourceTree = "<group>";
@@ -212,7 +214,7 @@
 						TestTargetID = 13B07F861A680F5B00A75B9A;
 					};
 					13B07F861A680F5B00A75B9A = {
-						LastSwiftMigration = 1120;
+						LastSwiftMigration = 1330;
 					};
 				};
 			};
@@ -531,6 +533,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "locomotion.rider-app";
 				PRODUCT_NAME = Locomotion;
+				SWIFT_OBJC_BRIDGING_HEADER = "Locomotion-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -557,6 +560,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "locomotion.rider-app";
 				PRODUCT_NAME = Locomotion;
+				SWIFT_OBJC_BRIDGING_HEADER = "Locomotion-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
 			};

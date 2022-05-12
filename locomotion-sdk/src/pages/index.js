@@ -12,8 +12,8 @@ function MainRouter() {
     <NavigationContainer>
       <Stack.Navigator initialRouteName='AuthLoading' screenOptions={{ headerShown: false}}>
         <Stack.Screen name="AuthScreens" component={Auth} />
-        <Stack.Screen name="MainApp" component={Main} /> 
-        <Stack.Screen name="AuthLoading" component={AuthLoadingScreen} /> 
+        <Stack.Screen name="MainApp" component={Main} />
+        <Stack.Screen name="AuthLoading" component={AuthLoadingScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );

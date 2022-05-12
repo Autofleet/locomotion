@@ -11,7 +11,7 @@ import {
   CardsListContainer
 } from './styled';
 
-export default ({ paymentMethods = [], onDetach = () => null, loadingState = false }) => {
+export default  ({ paymentMethods = [], onDetach = () => null, loadingState = false }) => {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -21,7 +21,7 @@ export default ({ paymentMethods = [], onDetach = () => null, loadingState = fal
   return (
     <CardsListContainer>
     {paymentMethods.map(pm => (
-        <CreditCardContainer>
+        <CreditCardContainer key={`paymentMethods#${pm.card.last4}`}>
           <CreditCardRow>
             <CreditCardImage />
             <CreditCardRowText>{pm.card.brand}</CreditCardRowText>

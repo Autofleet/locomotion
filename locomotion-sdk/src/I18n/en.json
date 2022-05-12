@@ -169,7 +169,8 @@
     },
     "payments": {
         "pageTitle": "Payments",
-        "submitCard": "Add Card",
+        "submitCard": "Add card",
+        "skipForNow": "Skip for now",
         "balance": "Balance",
         "deleteCard": "Remove",
         "newCardDetails": "Please add your payment details",

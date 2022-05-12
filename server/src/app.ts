@@ -3,16 +3,16 @@ import express from 'express';
 import './sequelize';
 import alive from './alive';
 import api from './api';
+// import logger from './logger';
 
 require('dotenv').config();
 const SExpress = require('./lib/super-express');
-const logger = require('./logger');
 const { default: parseHeaderOperationId } = require('./middlewares/parse-header-operation-id');
 const packageJson = require('../package.json');
 require('./models');
 
 const app = new SExpress({
-  httpLogCb: logger.httpMorganInfo,
+  // httpLogCb: logger.httpMorganInfo,
 });
 const serverRunningSince = new Date();
 app.get('/version', (req, res) => {
