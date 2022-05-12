@@ -40,12 +40,11 @@ export const BalanceText = styled.Text`
     font-weight: 700;
 `
 
-export const CreditCardContainer = styled.View`
+export const CreditCardContainer = styled.TouchableOpacity`
     flex-direction: column;
     margin-right: 15px;
     margin-left: 15px;
     height: 100px;
-
 `;
 
 export const CreditCardRow = styled.View`

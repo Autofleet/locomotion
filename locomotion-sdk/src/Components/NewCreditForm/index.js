@@ -27,17 +27,19 @@ export const NewCreditForm = ({ onDone, canSkip = false }) => {
       email: customerData.email,
     };
     const {setupIntent, error} = await confirmSetupIntent(createIntent.clientSecret, {
-      type: 'Card',
-      billingDetails,
+      paymentMethodType: 'Card',
+      paymentMethod: {
+        billingDetails
+      }
     });
 
     if (error) {
       console.error(error);
       setErrorMessage(error.message)
+    } else {
+      await onDone();
+      await usePayments.getPaymentMethods()
     }
-
-    await onDone();
-    await usePayments.getPaymentMethods()
   };
 
   return (
