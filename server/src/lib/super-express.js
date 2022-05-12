@@ -6,7 +6,7 @@ const bodyParser = require('body-parser');
 const morgan = require('morgan');
 const compression = require('compression');
 const helmet = require('helmet');
-const { default: logger } = require('../logger');
+const logger = require('../logger');
 
 const defaultOptions = {
   bodyParser: true,

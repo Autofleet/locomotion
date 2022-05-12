@@ -1,4 +1,4 @@
-const { default: logger } = require('../logger');
+const logger = require('../logger');
 require('dotenv').config();
 
 const { env } = process;

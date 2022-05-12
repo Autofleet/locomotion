@@ -102,4 +102,4 @@ class LoggerInstanceManager {
   }
 }
 
-module.exports.default = LoggerInstanceManager.getLoggerInstance();
+module.exports = LoggerInstanceManager.getLoggerInstance();
