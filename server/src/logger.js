@@ -1,5 +1,5 @@
-import winston, { Logger } from 'winston';
-import sizeof from 'object-sizeof';
+const winston = require('winston');
+const sizeof = require('object-sizeof');
 
 const { createLogger } = winston;
 require('dotenv').config();
@@ -81,7 +81,7 @@ const getFormat = () => {
   );
 };
 
-const createLoggerInstance = (exceptionHandlers = undefined): Logger => createLogger({
+const createLoggerInstance = (exceptionHandlers = undefined) => createLogger({
   level: getLevel(),
   format: getFormat(),
   transports: [
@@ -92,9 +92,9 @@ const createLoggerInstance = (exceptionHandlers = undefined): Logger => createLo
 });
 
 class LoggerInstanceManager {
-  static instance: Logger;
+  static instance;
 
-  static getLoggerInstance(): Logger {
+  static getLoggerInstance() {
     if (!LoggerInstanceManager.instance) {
       LoggerInstanceManager.instance = createLoggerInstance();
     }
@@ -102,4 +102,4 @@ class LoggerInstanceManager {
   }
 }
 
-export default LoggerInstanceManager.getLoggerInstance();
+module.exports.default = LoggerInstanceManager.getLoggerInstance();
