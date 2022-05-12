@@ -47,7 +47,7 @@ class Auth {
     //   console.log('Bad logout request', e)
     // }
     await AppSettings.destroy();
-    return navigation.push('AuthScreens', { screen: 'Login'});
+    return navigation.replace('AuthScreens', { screen: 'Login'});
   }
 
   onFaildAuth(cb) {
