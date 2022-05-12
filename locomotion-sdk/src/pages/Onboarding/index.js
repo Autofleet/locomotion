@@ -107,7 +107,7 @@ export default ({
     if (!response.data.active) {
       return navigation.navigate('Lock');
     }
-    navigation.navigate('MainApp');
+    navigation.navigate('AddCard');
   };
 
   const inputChange = field => value => setOnboardingState({

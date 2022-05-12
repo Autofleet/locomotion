@@ -31,7 +31,7 @@ export default ({ navigation}) => {
       <NewCreditForm
         canSkip
         onDone={() =>
-          navigation.navigate('Home')
+          navigation.navigate('MainApp')
         }
       />
     </PageContent>
