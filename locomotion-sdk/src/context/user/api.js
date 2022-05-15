@@ -26,11 +26,6 @@ export const updateUser = async (body) => {
     return network.patch('api/v1/me', body);
 }
 
-export const loginRefresh = async (body) => {
-    return network.post('api/v1/login/refresh', body)
-}
-
-
 export const getLoginSettings = async () => {
     const { data } = await network.get('/api/v1/login/settings');
     return data

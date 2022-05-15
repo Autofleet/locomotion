@@ -1,13 +1,16 @@
 import jwtDecode from 'jwt-decode';
 import StorageService from './storage';
 import AppSettings from './app-settings';
-import { loginRefresh } from '../context/user/api';
 
 class Auth {
   static jwtVerify(token) {
     const decoded = jwtDecode(token);
     const now = (new Date().getTime()) / 1000;
     return decoded.exp && decoded.exp > now;
+  }
+
+  loginRefresh = async (network, body) => {
+    return network.post('api/v1/login/refresh', body)
   }
 
   getAT = async (network) => {
@@ -20,7 +23,7 @@ class Auth {
       // call server
       let response;
       try {
-        response = await loginRefresh({ refreshToken });
+        response = await this.loginRefresh(network, { refreshToken });
       } catch (error) {
         console.log('error when try to refresh the login token', error);
         if (this.onFaildAuthCallback) { this.onFaildAuthCallback(); }

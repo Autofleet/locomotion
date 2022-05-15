@@ -26,7 +26,7 @@ export default ({
   return (
     <CardsListContainer>
       {paymentMethods.map(pm => (
-          <CreditCardContainer key={`paymentMethods#${pm.card.last4}`}>
+          <CreditCardContainer key={`paymentMethods#${pm.id}`}>
             <CreditCardRow>
               <CreditCardImage/>
               <CreditCardRowText>{pm.card.brand}</CreditCardRowText>

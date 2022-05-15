@@ -3,6 +3,9 @@ import React, { createContext, useContext, useReducer } from 'react';
 import AppSettings from '../services/app-settings';
 import I18n from '../I18n';
 
+import SettingsContext from './settings'
+import PaymentsContext from './payments'
+
 export const StateContext = createContext();
 export const StateProvider = ({ reducer, initialState, children }) => (
   <StateContext.Provider value={useReducer(reducer, initialState)}>
@@ -57,7 +60,13 @@ export const MainProvider = ({ children, LoginPage, i18n }) => {
 
 
   return (
-    <StateProvider initialState={initialState} reducer={reducer}>{children}</StateProvider>
+    <StateProvider initialState={initialState} reducer={reducer}>
+      <SettingsContext.Provider>
+        <PaymentsContext.Provider>
+          {children}
+        </PaymentsContext.Provider>
+      </SettingsContext.Provider>
+    </StateProvider>
   );
 };
 
