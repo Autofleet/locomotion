@@ -14,7 +14,7 @@ router.get('/customer', async (req, res) => {
     customer = afCustomer;
     isExist = true;
   } catch (e) {
-    logger.error('getCustomer', e.response.data);
+    logger.error(`getCustomer ${e}`, e.response.data);
   }
 
   return res.json({ isExist, customer });
@@ -46,7 +46,6 @@ router.post('/intent', async (req, res) => {
       userId: req.userId,
       businessModelId: process.env.BUSINESS_MODEL_ID,
     });
-
     return res.json({ clientSecret: setupIntent.client_secret });
   } catch (e) {
     logger.error('createPaymentIntent', e);
@@ -63,10 +62,6 @@ router.post('/detach', async (req, res) => {
       paymentMethodId,
       businessModelId: process.env.BUSINESS_MODEL_ID,
     });
-    logger.info('setupIntent', paymentMethods);
-
-
-    logger.info('paymentMethods', paymentMethods.data);
     return res.json(paymentMethods.data);
   } catch (e) {
     logger.error('detachPaymentMethod', e);
@@ -80,9 +75,9 @@ router.get('/methods', async (req, res) => {
     const { data: methods } = await afSdk.Payments.listMethods(req.userId);
     return res.json(methods.data);
   } catch (e) {
-    logger.error('listMethods', e);
+    logger.error(`listMethods ${e}`, e?.response?.data);
   }
-  return res.json({ status: 'ERROR' });
+  return res.status(500).json({ status: 'ERROR' });
 });
 
 

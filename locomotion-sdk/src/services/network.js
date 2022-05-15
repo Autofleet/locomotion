@@ -33,15 +33,23 @@ class Network {
   constructor(settings = {}) {
     this.settings = Object.assign(Network.defaultSettings, settings);
     this.axios = axios.create(settings);
-    this.axios.interceptors.request.use((request) => {
-      Mixpanel.setEvent('Network request', { method: request.method, endpoint: request.url, params: request.params});
-      console.log(`Starting Request [${request.method}] ${request.url}`, request);
+    this.axios.interceptors.request.use(request => {
+      try {
+        Mixpanel.setEvent('Network request', { method: request.method, endpoint: request.url, params: request.params});
+        console.debug(`Request [${request.method}] ${request.url}`);
+      } catch (e) {
+        console.error('Error in interceptors->request log', e);
+      }
       return request;
     });
 
-    this.axios.interceptors.response.use((response) => {
-      Mixpanel.setEvent('Network response', { method: response.config.method, endpoint: response.config.url, statusCode: response.status});
-      console.log(`Response [${response.config.method}] ${response.config.url}:`, response);
+    this.axios.interceptors.response.use(response => {
+      try {
+        Mixpanel.setEvent('Network response', { method: response.config.method, endpoint: response.config.url, statusCode: response.status});
+        console.debug(`Response [${response.config.method}] ${response.config.url}:`, formatResponseLog(response));
+      } catch (e) {
+        console.error('Error in interceptors->response log', e);
+      }
       return response;
     }, error => {
       try {
@@ -52,12 +60,11 @@ class Network {
       return Promise.reject(error);
     });
 
-
     // Temp
     HTTPMethods.map((method) => {
       this[method] = async (...args) => {
         const baseURL = await AppSettings.getServerUrl();
-        this.axios.defaults.baseURL = 'http://localhost:8085/';
+        this.axios.defaults.baseURL = baseURL;
         const accessToken = await Auth.getAT(this.axios);
         this.axios.defaults.headers.common.Authorization = `Bearer ${accessToken}`;
         this.axios.defaults.headers.common['x-loco-op-id'] = Config.OPERATION_ID;

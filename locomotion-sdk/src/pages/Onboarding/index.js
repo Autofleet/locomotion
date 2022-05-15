@@ -12,10 +12,9 @@ import {
   Text, ErrorText, ResendButton,
 } from '../Login/styled';
 import {
-  Container, FullNameContainer, SubmitContainer, PageContainer,
+  Container, FullNameContainer, SubmitContainer,
 } from './styled';
 import i18n from '../../I18n';
-import { useStateValue } from '../../context/main';
 import PageHeader from '../../Components/PageHeader';
 import Mixpanel from '../../services/Mixpanel';
 import { updateUser } from '../../context/user/api';
@@ -108,7 +107,7 @@ export default ({
     if (!response.data.active) {
       return navigation.navigate('Lock');
     }
-    navigation.navigate('MainApp');
+    navigation.navigate('AddCard');
   };
 
   const inputChange = field => value => setOnboardingState({

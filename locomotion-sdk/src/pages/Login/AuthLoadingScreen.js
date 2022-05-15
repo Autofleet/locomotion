@@ -53,7 +53,7 @@ const AuthLoadingScreen = ({ navigation }) => {
         }
       }
 
-      navigation.push('AuthScreens', { screen: "Welcome"});
+      navigation.push('AuthScreens', { screen: "login"});
     }
 
     if (!appState) { // Load app state

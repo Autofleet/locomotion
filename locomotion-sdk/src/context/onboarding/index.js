@@ -30,7 +30,9 @@ const authContainer = () => {
 
   const getUserFromStorage = async () => {
     const settings = await AppSettings.getSettings()
-    setOnboardingState(settings.userProfile)
+    if (settings.userProfile) {
+      setOnboardingState(settings.userProfile)
+    }
   }
 
   useEffect(() => {

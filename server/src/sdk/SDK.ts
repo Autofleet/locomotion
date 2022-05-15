@@ -1,85 +1,37 @@
-/* eslint-disable max-classes-per-file */
-const axios = require('axios');
+import axios, { AxiosInstance } from 'axios';
+import logger from '../logger';
+import RideApi from './RideApi';
+import PaymentApi from './PaymentApi';
 
-const { AF_API_URL = 'https://api.autofleet.io/' } = process.env;
+const { AF_API_URL = 'https://api.autofleet.io/', DEBUG = false } = process.env;
 
-class BaseApi {
-  network: any;
+const refreshAuth = async (network, refreshToken) => {
+  const { data: { token } } = await network.post('https://api.autofleet.io/api/v1/login/refresh', {
+    refreshToken,
+  });
+  return token;
+};
 
-  constructor(network) {
-    this.network = network;
+const limit = 512;
+
+const formatResponseLog = ({ data }) => {
+  let str = (typeof data === 'string' ? data : JSON.stringify(data)).slice(0, limit);
+  if (str.length === limit) {
+    str = `${str}...(cut)`;
   }
-}
-
-class RideApi extends BaseApi {
-  list(query) {
-    return this.network.get('/api/v1/rides', { params: query });
-  }
-
-  get(id) {
-    return this.network.get(`/api/v1/rides/${id}`);
-  }
-
-  create(payload) {
-    return this.network.post('/api/v1/rides/', payload);
-  }
-
-  createOffer(payload) {
-    return this.network.post('/api/v1/offers', payload);
-  }
-
-  cancel(id, options) {
-    return this.network.put(`/api/v1/rides/${id}/cancel`, options);
-  }
-
-  rating(id, options) {
-    return this.network.put(`/api/v1/rides/${id}`, options);
-  }
-}
-
-class PaymentApi extends BaseApi {
-  async getCustomer(id) {
-    return this.network.get(`/api/v1/customer/${id}`, {
-      params: {
-        businessModelId: process.env.BUSINESS_MODEL_ID,
-      },
-    });
-  }
-
-  createCustomer(payload) {
-    return this.network.post('/api/v1/customer', payload);
-  }
-
-  createPaymentIntent(payload) {
-    return this.network.post('/api/v1/payment/setup', payload);
-  }
-
-  listMethods(userId) {
-    return this.network.get('/api/v1/payment/methods', {
-      params: {
-        businessModelId: process.env.BUSINESS_MODEL_ID,
-        userId,
-      },
-    });
-  }
-
-  detachPaymentMethod(payload) {
-    return this.network.post('/api/v1/payment/methods/detach', payload);
-  }
-}
+  return str;
+};
 
 class AutofleetSdk {
-  network: any;
+  network: AxiosInstance;
 
   refreshToken: string;
 
   token: string;
 
-  Rides: any;
+  Rides: RideApi;
 
-  timeout: ReturnType<typeof setTimeout>;
-
-  Payments: any;
+  Payments: PaymentApi;
 
   static async Init({ refreshToken }) {
     const api = new AutofleetSdk({ refreshToken });
@@ -88,9 +40,23 @@ class AutofleetSdk {
 
   constructor({ refreshToken = null } = {}) {
     this.refreshToken = refreshToken;
+    this.init();
+  }
+
+  private async initAuth() {
+    logger.info('initAuth');
+    try {
+      this.token = await refreshAuth(this.network, this.refreshToken);
+    } catch (e) {
+      logger.error(`auth error: ${e}`);
+    }
+  }
+
+  private init() {
     this.network = axios.create({
       baseURL: AF_API_URL,
     });
+    this.initAuth();
 
     this.network.interceptors.request.use((config) => {
       if (this.token) {
@@ -99,6 +65,34 @@ class AutofleetSdk {
       }
       return config;
     });
+
+    if (DEBUG) {
+      this.network.interceptors.request.use((request) => {
+        try {
+          console.debug(`Request [${request.method}] ${request.url}`);
+        } catch (e) {
+          console.error('Error in interceptors->request log', e);
+        }
+        return request;
+      });
+
+      this.network.interceptors.response.use((response) => {
+        try {
+          console.debug(`Response [${response.config.method}] ${response.config.url}:`, formatResponseLog(response));
+        } catch (e) {
+          console.error('Error in interceptors->response log', e);
+        }
+        return response;
+      }, (error) => {
+        try {
+          console.error(`Request rejected [${error.config.method}] ${error.config.url}: ${error}`, formatResponseLog(error.response));
+        } catch (e) {
+          console.error('Error in interceptors->error log', e, error);
+        }
+        return Promise.reject(error);
+      });
+    }
+
     this.Rides = new RideApi(this.network);
     this.Payments = new PaymentApi(this.network);
   }

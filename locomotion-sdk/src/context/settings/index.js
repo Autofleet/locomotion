@@ -8,6 +8,7 @@ const useSettings = () => {
   const getSettings = async () => {
     const settings = await getAppSettings()
     setSettingsList(settings);
+    return settings;
   };
 
   const getWorkingHours = async () => {

@@ -1,12 +1,10 @@
 import React from 'react';
-import { View, Text, Dimensions } from 'react-native'
+import {View} from 'react-native'
 import styled from 'styled-components';
 import LottieView from 'lottie-react-native';
 
 const creditCardImage = require('../../assets/menuItems/creditcard.png');
 const darkLoader = require('../../assets/loaders/dark-loader.json');
-
-const ERROR_COLOR = '#f03a5f';
 
 export const PageContent = styled(View)`
     width: 100%;
@@ -15,7 +13,6 @@ export const PageContent = styled(View)`
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
-
 `;
 
 export const BalanceContainer = styled.View`
@@ -43,32 +40,11 @@ export const BalanceText = styled.Text`
     font-weight: 700;
 `
 
-export const CreditForm = styled.View`
-    flex: 1;
-    margin-top: 32px;
-`;
-
-export const CreditFormText = styled.Text`
-    color: #1e273d;
-    font-size: 14px;
-    text-align: left;
-    margin-left: 16px;
-`;
-
-export const SubmitContainer = styled.View`
-    max-width: 90%;
-    justify-content: flex-end;
-    align-self: center;
-    margin-bottom: 30px;
-    flex:1;
-`;
-
-export const CreditCardContainer = styled.View`
+export const CreditCardContainer = styled.TouchableOpacity`
     flex-direction: column;
     margin-right: 15px;
     margin-left: 15px;
     height: 100px;
-
 `;
 
 export const CreditCardRow = styled.View`
@@ -108,15 +84,8 @@ export const DeleteCreditCard = styled.TouchableOpacity`
 `;
 
 export const DeleteCreditCardText = styled.Text`
-    color: ${ERROR_COLOR};
+    color: ${'#f03a5f'};
     text-align: right;
-`;
-
-export const ErrorMessage = styled.Text`
-    color: ${ERROR_COLOR};
-    margin-left: 16px;
-    font-weight: 500;
-    font-size: 16px;
 `;
 
 const FullPageLoaderWrapper = styled.View`
