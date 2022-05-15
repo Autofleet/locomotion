@@ -9,12 +9,14 @@ import CreditCardsList from './credit-cards'
 import { NewCreditForm } from "../../Components/NewCreditForm";
 
 export default ({navigation, menuSide}) => {
+  const usePayments = PaymentsContext.useContainer();
+
   const [pageLoading, setPageLoading] = useState(true);
   const [loading, setLoading] = useState(false);
   const [methodForDelete, setMethodForDelete] = useState(null);
   const [, togglePopup] = getTogglePopupsState();
-
-  const usePayments = PaymentsContext.useContainer();
+  const [showList, setShowList] = useState(usePayments
+    .paymentMethods && usePayments.paymentMethods.length > 0);
 
   const toggleMenu = () => {
     navigation.toggleDrawer();
@@ -54,14 +56,18 @@ export default ({navigation, menuSide}) => {
       />
       {pageLoading ? <FullPageLoader autoPlay loop/> : null}
       {/* <Balance customer={usePayments.customer} /> */}
-      {usePayments.paymentMethods && usePayments.paymentMethods.length > 0 ? (
+      {showList ? (
         <CreditCardsList
           paymentMethods={usePayments.paymentMethods}
           onDetach={onRemoveMethod}
           loadingState={loading}
+          onAddClick={() => setShowList(false)}
         />) : (
         <NewCreditForm
-          onDone={() => loadCustomerData()}
+          onDone={async () => {
+            await loadCustomerData();
+            return setShowList(true);
+          }}
         />)}
       <ConfirmationPopup
         name="removeCard"
