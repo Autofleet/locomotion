@@ -8,9 +8,11 @@ import { useStateValue } from '../../context/main';
 import { needOnboarding } from '../Onboarding';
 import Auth from '../../services/auth';
 import { getUserDetails } from '../../context/user/api';
+import onboardingContext from '../../context/onboarding'
 
 const AuthLoadingScreen = ({ navigation }) => {
   const [appState, dispatch] = useStateValue();
+  const {navigateBasedOnUser} = onboardingContext.useContainer()
   const init = () => {
     async function getFromStorage() {
       const payload = await AppSettings.getSettings();
@@ -44,11 +46,11 @@ const AuthLoadingScreen = ({ navigation }) => {
         }
 
         if (!userData.active) {
-          nonUserNav('Lock')
+         return nonUserNav('Lock')
         }
 
         if (needOnboarding(userProfile)) {
-          nonUserNav('Onboarding')
+          return navigateBasedOnUser(userProfile)
         }
       }
 

@@ -1,29 +1,22 @@
 import { useNavigation } from "@react-navigation/native";
 import React from "react";
 import i18n from "../../../../I18n";
-import { ButtonsContainer, ButtonText, NavButton } from "./styles";
+import { ButtonText, NavButton } from "./styles";
 
 
-const OnboardingNavButtons = ({lastPage, nextPage, isInvalid, onFail, onNext}) => {
-    const navigation = useNavigation()
+const OnboardingNavButtons = ({isInvalid, onFail, onNext}) => {
 
-    const nextScreen = () => {
+    const nextScreen = async () => {
         if (isInvalid) {
             onFail()
         } else {
-            onNext()
-            navigation.navigate(nextPage)
+            await onNext()
         }
     }
     return (
-        <ButtonsContainer>
-            <NavButton data-test-id='OnboardingBackButton' onPress={() => navigation.navigate(lastPage)}>
-                <ButtonText>{i18n.t('general.back')}</ButtonText>
-            </NavButton>
-            <NavButton data-test-id='OnboardingNextButton' onPress={isInvalid ? onFail : () => navigation.navigate(nextPage)}>
+            <NavButton data-test-id='OnboardingNextButton' onPress={nextScreen}>
                 <ButtonText>{i18n.t('general.next')}</ButtonText>
             </NavButton>
-        </ButtonsContainer>
     )
 }
 

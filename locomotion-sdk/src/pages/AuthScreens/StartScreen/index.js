@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { Trans } from "react-i18next";
-import { View } from "react-native";
 import SvgIcon from '../../../Components/SvgIcon';
 import Logo from '../../../assets/logo.svg';
 import i18n from "../../../I18n";
-import { ButtonsContainer, ButtonText, StartButton, PageContainer, TermsText, TermsLink } from "./styles";
+import onboardingContext from '../../../context/onboarding'
+import { ButtonsContainer, ButtonText, StartButton, PageContainer, TermsText, TermsLink, LogoContainer } from "./styles";
 import { SafeView } from "../Onboarding/styles";
 import WebView from "../../WebView";
 import { getLoginSettings } from "../../../context/user/api";
@@ -49,13 +49,19 @@ const StartScreen = ({navigation}) => {
             <PageContainer>
             { !webViewWindow
             ? (
-                <>
-                    <SvgIcon width="100px" height="100px" svg={Logo} />
+                <>  
+                    <LogoContainer>
+                        <SvgIcon width="100px" height="100px" svg={Logo} />
+                    </LogoContainer>
                     <ButtonsContainer>
-                        <StartButton dark onPress={() => navigation.navigate('Phone')} >
+                        <StartButton dark onPress={() => {
+                          navigation.navigate('Phone')
+                        }}>
                             <ButtonText>{i18n.t('login.signUp')}</ButtonText>
                         </StartButton>
-                        <StartButton>
+                        <StartButton onPress={() => {
+                          navigation.navigate('Phone')
+                        }}>
                             <ButtonText>{i18n.t('login.login')}</ButtonText>
                         </StartButton>
                     </ButtonsContainer>

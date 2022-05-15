@@ -1,19 +1,15 @@
 import styled from "styled-components";
 import Button from "../../../../Components/Button";
 
-export const ButtonsContainer = styled.View`
-display: flex;
-flex-direction: row;
-width: 100%;
-justify-content: space-between;
-`;
-
 export const NavButton = styled(Button)`
-width: 100px;
+width: 100%;
 height: 50px;
-border: 1px solid black;
+background-color: grey;
+border-radius: 30px;
+margin-top: 20px;
 `; 
 
 export const ButtonText = styled.Text`
 margin: auto;
+color: white;
 `;

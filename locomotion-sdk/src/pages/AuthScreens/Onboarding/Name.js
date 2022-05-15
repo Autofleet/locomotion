@@ -3,53 +3,51 @@ import styled from "styled-components";
 import TextInput from "../../../Components/TextInput";
 import OnboardingNavButtons from "./OnboardingNavButtons";
 import onboardingContext from '../../../context/onboarding'
-import { ErrorText, SafeView } from "./styles";
+import { ErrorText, PageContainer, SafeView } from "./styles";
 import i18n from "../../../I18n";
+import Header from "./Header";
+import ScreenText from "./ScreenText";
 
-const FullNameContainer = styled.View`
-  flex-direction: row;
-  justify-content: space-between;
-  width: 100%;
-`;
 
 const Name = () => {
-    const {onboardingState, setOnboardingState} = onboardingContext.useContainer()
+    const {onboardingState, setOnboardingState, updateUserInfo, navigateBasedOnUser} = onboardingContext.useContainer()
     const [showErrorText, setShowErrorText] = useState(false)
 
     const inputChange = field => value => {
         setShowErrorText(false)
+        updateUserInfo({[field]: value })
         setOnboardingState({
         ...onboardingState,
         [field]: value,
       });
     }
 
-    
     return (
         <SafeView>
-            <FullNameContainer>
+            <Header title={i18n.t('onboarding.pages.name.title')} />
+            <PageContainer>
+                <ScreenText 
+                    text={i18n.t('onboarding.pages.name.text')} 
+                    subText={i18n.t('onboarding.pages.name.subText')} />
                 <TextInput
                 placeholder={i18n.t('onboarding.firstNamePlaceholder')}
-                width="40%"
                 onChangeText={inputChange('firstName')}
                 value={onboardingState.firstName}
                 autoCapitalize="words"
                 />
                 <TextInput
                 placeholder={i18n.t('onboarding.lastNamePlaceholder')}
-                width="40%"
                 onChangeText={inputChange('lastName')}
                 value={onboardingState.lastName}
                 autoCapitalize="words"
                 />
-            </FullNameContainer>
             {showErrorText && <ErrorText>{i18n.t('onboarding.fullNameError')}</ErrorText>}
             <OnboardingNavButtons 
-                nextPage="Email" 
-                lastPage="Code" 
                 isInvalid={!onboardingState.firstName || !onboardingState.lastName}
                 onFail={() => setShowErrorText(true)}
+                onNext={() => navigateBasedOnUser(onboardingState)}
                 /> 
+            </PageContainer>
         </SafeView>
     )
 }

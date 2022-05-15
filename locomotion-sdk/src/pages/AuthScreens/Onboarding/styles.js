@@ -9,6 +9,11 @@ export const ErrorText = styled.Text`
 `;
 
 export const SafeView = styled.SafeAreaView`
-align-items: center;
 flex: 1;
+background-color: white;
+`;
+
+export const PageContainer = styled.View`
+flex: 1;
+padding: 30px;
 `;

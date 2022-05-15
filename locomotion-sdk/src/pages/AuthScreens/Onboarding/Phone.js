@@ -1,66 +1,84 @@
 import React, { useState } from "react";
-import styled from "styled-components";
-import PhoneNumberInput from "../../../Components/PhoneNumberInput";
+import PhoneInput from "react-native-phone-number-input";
 import i18n from "../../../I18n";
 import OnboardingNavButtons from "./OnboardingNavButtons";
 import onboardingContext from '../../../context/onboarding'
-import { ErrorText, SafeView } from "./styles";
+import { ErrorText, PageContainer, SafeView } from "./styles";
+import Header from "./Header";
+import ScreenText from "./ScreenText/index";
+import { loginApi } from "../../../context/user/api";
+import { useNavigation } from "@react-navigation/native";
 
 const Phone = () => {
     const {onboardingState, setOnboardingState} = onboardingContext.useContainer()
+    const navigation = useNavigation()
     const [showErrorText, setShowErrorText] = useState(false)
+    const [countryCode, setCountryCode] = useState('972')
     const onPhoneNumberChange = (phoneNumber) => {
+
         setShowErrorText(false)
-        if (!phoneNumber.valid) {
-            return;
-          }
+        if (phoneNumber.length < 9) {
+            return setOnboardingState({
+                ...onboardingState,
+                phoneNumber: '',
+              });
+        }
           setOnboardingState({
             ...onboardingState,
-            phoneNumber: phoneNumber.international,
+            phoneNumber: countryCode + phoneNumber,
           });
     }
 
     const onSubmitPhoneNumber = async () => {
-        if (!loginState.phoneNumber) {
-          setLoginState({
-            error: I18n.t('login.invalidPhoneNumberError'),
-          });
-          return;
-        }
-    
         try {
           await loginApi({
-            phoneNumber: loginState.phoneNumber,
+            phoneNumber: onboardingState.phoneNumber,
           });
+          navigation.navigate('Code')
+
         } catch (e) {
           console.log('Bad login with response', e);
-          setLoginState({
-            error: I18n.t('login.phoneNumberError'),
-          });
-    
+          setShowErrorText(e.message);
           return;
         }
-    
-        setLoginState({
-          loginStep: 'vert',
-          error: '',
-        });
       };
+
+      const onChangeCountry = (v) => {
+        setCountryCode(v.callingCode[0])
+      }
 
     return (
         <SafeView>
-            <PhoneNumberInput 
-                onNumberInput={onPhoneNumberChange}
-                placeholder={i18n.t('login.phoneNumberPlaceholder')}
-            />
-            {showErrorText && <ErrorText>{i18n.t('login.invalidPhoneNumberError')}</ErrorText>}
-            <OnboardingNavButtons 
-                nextPage="Code" 
-                lastPage="Start" 
-                isInvalid={!onboardingState.phoneNumber}
-                onNext={onSubmitPhoneNumber} 
-                onFail={() => setShowErrorText(true)}
-            /> 
+            <Header title={i18n.t('onboarding.pages.phone.title')} />
+            <PageContainer>
+                <ScreenText 
+                    text={i18n.t('onboarding.pages.phone.text')} 
+                    subText={i18n.t('onboarding.pages.phone.subText')} />
+                <PhoneInput 
+                    autoFocus
+                    defaultCode="IL"
+                    onChangeText={onPhoneNumberChange}
+                    onChangeCountry={onChangeCountry}
+                    containerStyle={{
+                        borderWidth: 1,
+                        borderColor: 'grey',
+                        borderRadius: 10,
+                        width: '100%'
+                    }}
+                    textContainerStyle={{
+                        borderLeftWidth: 1,
+                        borderColor: 'grey',
+                        borderTopRightRadius: 10,
+                        borderBottomRightRadius: 10
+                    }}
+                />
+                {showErrorText && <ErrorText>{showErrorText}</ErrorText>}
+                <OnboardingNavButtons 
+                    isInvalid={!onboardingState.phoneNumber}
+                    onNext={onSubmitPhoneNumber} 
+                    onFail={() => setShowErrorText(i18n.t('login.invalidPhoneNumberError'))}
+                /> 
+            </PageContainer>
         </SafeView>
     )
 }

@@ -65,6 +65,7 @@
     "react-native-datepicker": "^1.7.2",
     "react-native-gesture-handler": "^2.4.2",
     "react-native-keyboard-aware-scroll-view": "^0.9.5",
+    "react-native-phone-number-input": "^2.1.0",
     "react-native-reanimated": "^2.8.0",
     "react-native-svg": "^12.3.0",
     "react-native-swipe-verify": "^0.1.6",

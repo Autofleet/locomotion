@@ -57,7 +57,7 @@ class Network {
     HTTPMethods.map((method) => {
       this[method] = async (...args) => {
         const baseURL = await AppSettings.getServerUrl();
-        this.axios.defaults.baseURL = baseURL;
+        this.axios.defaults.baseURL = 'http://localhost:8085/';
         const accessToken = await Auth.getAT(this.axios);
         this.axios.defaults.headers.common.Authorization = `Bearer ${accessToken}`;
         this.axios.defaults.headers.common['x-loco-op-id'] = Config.OPERATION_ID;

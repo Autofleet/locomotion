@@ -180,4 +180,4 @@ export default ({
   );
 };
 
-export const needOnboarding = userProfile => !userProfile.firstName || !userProfile.lastName || !userProfile.email;
+export const needOnboarding = userProfile => !userProfile.firstName || !userProfile.lastName;

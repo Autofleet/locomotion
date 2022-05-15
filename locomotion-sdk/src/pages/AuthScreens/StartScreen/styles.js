@@ -8,12 +8,13 @@ display: flex;
 flex-direction: column;
 flex: 1;
 width: 100%;
+padding: 30px;
 `;
 export const ButtonsContainer = styled.View`
 display: flex;
 flex-direction: column;
 width: 100%;
-padding: 30px;
+margin-bottom: 50px;
 `;
 
 export const StartButton = styled(Button)`
@@ -24,7 +25,7 @@ border-radius: 30px;
 background-color: ${({dark}) => dark ? 'grey' : 'white'};
 color: ${({dark}) => dark ? 'white' : 'grey'};
 ${({dark}) => !dark && 'border: 1px solid grey'};
-box-shadow: 1px 3px 3px grey;
+box-shadow: 0px 3px 3px grey;
 `;
 
 export const ButtonText = styled.Text`
@@ -49,4 +50,8 @@ export const TermsLink = styled.Text`
   &:active {
     color: red;
   }
+`;
+
+export const LogoContainer = styled.View`
+flex: 1;
 `;

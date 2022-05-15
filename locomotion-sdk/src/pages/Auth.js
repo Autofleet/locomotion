@@ -7,13 +7,11 @@ import StartScreen from './AuthScreens/StartScreen';
 import Phone from './AuthScreens/Onboarding/Phone';
 import Code from './AuthScreens/Onboarding/Code';
 import Name from './AuthScreens/Onboarding/Name';
-import OnboardingContext from '../context/onboarding'
 
 const Stack = createNativeStackNavigator();
 
 const AuthScreens = () => {
     return (
-        <OnboardingContext.Provider>
             <Stack.Navigator initialRouteName='Start' screenOptions={{ headerShown: false, gestureEnabled: false }}>
                 <Stack.Screen name="Start" component={StartScreen} />
                 <Stack.Screen name="Phone" component={Phone} />
@@ -21,7 +19,6 @@ const AuthScreens = () => {
                 <Stack.Screen name="Name" component={Name} />
                 <Stack.Screen name="Lock" component={Lock} />  
             </Stack.Navigator>
-        </OnboardingContext.Provider>
     )
 }
 

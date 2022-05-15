@@ -1,0 +1,18 @@
+import { useNavigation } from "@react-navigation/native";
+import React from "react";
+import PageHeader from "../../../Components/PageHeader";
+import backArrow from '../../../assets/arrow-back.png'
+const Header = ({title}) => {
+    const navigation = useNavigation()
+    return (
+        <PageHeader 
+            title={title} 
+            icon={backArrow} 
+            onIconPress={navigation.goBack} 
+            iconSide='left'
+            displayIcon
+            />
+    )
+}
+
+export default Header;
