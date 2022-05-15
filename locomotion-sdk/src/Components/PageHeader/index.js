@@ -3,14 +3,12 @@ import propsTypes from 'prop-types';
 import {
   Header, HeaderText, HeaderIconContainer, HeaderIcon,
 } from './styled';
-import SafeView from '../SafeView';
 
 const HamburgerIconSource = require('../../assets/menu.png');
 
 const PageHeader = ({
   title, icon, onIconPress, iconSide, displayIcon, width, height,
 }) => (
-  <SafeView>
     <Header>
       <HeaderText>{title}</HeaderText>
       {displayIcon !== false
@@ -20,7 +18,6 @@ const PageHeader = ({
           </HeaderIconContainer>
         ) : null}
     </Header>
-  </SafeView>
 );
 
 export default PageHeader;

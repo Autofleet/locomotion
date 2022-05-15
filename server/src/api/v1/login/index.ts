@@ -24,6 +24,9 @@ router.post('/vert', async (req, res) => {
 
     if (response) {
       [userProfile] = await userService.findByPhoneNumber(phoneNumber);
+      if (!userProfile) {
+        return res.json({ status: 'SUCCESS' });
+      }
     } else {
       return res.json({ status: 'FAIL' });
     }

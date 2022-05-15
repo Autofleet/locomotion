@@ -21,6 +21,7 @@ const SvgIcon = ({
   return (
   <IconContainer
     onPress={onPress}
+    disabled={!onPress}
     width={width}
     height={height}
     margin={margin}
@@ -38,7 +39,7 @@ SvgIcon.defaultProps = {
   width: '20px',
   height: '20px',
   margin: null,
-  onPress: () => {},
+  onPress: undefined,
 };
 
 SvgIcon.propTypes = {

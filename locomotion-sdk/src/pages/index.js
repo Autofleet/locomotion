@@ -10,11 +10,11 @@ const Stack = createNativeStackNavigator();
 function MainRouter() {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName='AuthLoading' screenOptions={{ headerShown: false}}>
-        <Stack.Screen name="AuthScreens" component={Auth} options={{ gestureEnabled: false }} />
-        <Stack.Screen name="MainApp" component={Main} /> 
-        <Stack.Screen name="AuthLoading" component={AuthLoadingScreen} /> 
-      </Stack.Navigator>
+        <Stack.Navigator initialRouteName='AuthLoading' screenOptions={{ headerShown: false}}>
+          <Stack.Screen name="AuthScreens" component={Auth} options={{ gestureEnabled: false }} />
+          <Stack.Screen name="MainApp" component={Main} /> 
+          <Stack.Screen name="AuthLoading" component={AuthLoadingScreen} /> 
+        </Stack.Navigator>
     </NavigationContainer>
   );
 }

@@ -1,5 +1,11 @@
 {
+    "general": {
+        "back": "Back",
+        "next": "Next"
+    },
     "login": {
+        "signUp": "Sign up",
+        "login": "Log in",
         "onBoardingPageTitle": "Please add your name and upload a photo to continue",
         "phoneNumberPlaceholder": "Phone number",
         "loginPageInstructions": "Enter your phone number",
@@ -13,14 +19,14 @@
         "introText": "Please enter your phone number to signup to Locomotion. You will receive an SMS with a verification code.",
         "termsWebViewTitle": "Terms and conditions",
         "privacyWebViewTitle": "data protection guidelines",
-        "termsAgreement": "By registering, you agree to the <0>terms and conditions</0> and the <1>data protection guidelines</1> of Locomotion."
+        "termsAgreement": "By proceeding you agree to the <0>Terms of use</0> and <1>Privacy Policy</1>"
     },
     "onboarding": {
         "pageTitle": "Your profile",
         "submit": "Save",
         "firstNamePlaceholder": "First name",
         "lastNamePlaceholder": "Last name",
-        "fullNameError": "Please fill first name and last name",
+        "fullNameError": "Please fill first and last name",
         "emailPlaceholder": "Email",
         "validations": {
             "required": {
