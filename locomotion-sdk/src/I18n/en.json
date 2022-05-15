@@ -39,6 +39,11 @@
                 "title": "Personal Details",
                 "text": "What's your name?",
                 "subText": "Let us know the best way to address you"
+            },
+            "welcome": {
+                "text": "Welcome aboard, {{firstName}}!",
+                "subText": "We are glad to have  you riding with us.",
+                "buttonText": "Let's go!"
             }
         },
         "pageTitle": "Your profile",

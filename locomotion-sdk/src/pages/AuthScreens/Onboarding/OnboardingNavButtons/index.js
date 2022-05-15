@@ -1,10 +1,9 @@
-import { useNavigation } from "@react-navigation/native";
 import React from "react";
 import i18n from "../../../../I18n";
 import { ButtonText, NavButton } from "./styles";
 
 
-const OnboardingNavButtons = ({isInvalid, onFail, onNext}) => {
+const OnboardingNavButtons = ({isInvalid, onFail, onNext, buttonText}) => {
 
     const nextScreen = async () => {
         if (isInvalid) {
@@ -15,7 +14,7 @@ const OnboardingNavButtons = ({isInvalid, onFail, onNext}) => {
     }
     return (
             <NavButton data-test-id='OnboardingNextButton' onPress={nextScreen}>
-                <ButtonText>{i18n.t('general.next')}</ButtonText>
+                <ButtonText>{buttonText || i18n.t('general.next')}</ButtonText>
             </NavButton>
     )
 }

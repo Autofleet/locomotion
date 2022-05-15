@@ -4,8 +4,8 @@ import { createContainer } from 'unstated-next';
 import auth from '../../services/auth';
 import Mixpanel from '../../services/Mixpanel';
 import { useStateValue } from '../main';
-import { loginVert, updateUser } from '../user/api';
 import AppSettings from '../../services/app-settings';
+import { loginVert, updateUser } from '../user/api';
 
 const authContainer = () => {
   const [, dispatch] = useStateValue();
@@ -16,21 +16,26 @@ const authContainer = () => {
     lastName: ''
   })
 
+  const navigateBasedOnUser = (user, login) => {
+    setOnboardingState(user)
+    if (!user.firstName || !user.lastName) {
+      return navigation.navigate('AuthScreens', { screen: 'Name' })
+    }
+    if (login) {
+      navigation.navigate('MainApp')
+    } else {
+      navigation.navigate('AuthScreens', { screen: 'Welcome' })
+    }
+  }
+
   const getUserFromStorage = async () => {
-    const res = await AppSettings.getSettings()
-    setOnboardingState(res.userProfile)
+    const settings = await AppSettings.getSettings()
+    setOnboardingState(settings.userProfile)
   }
 
   useEffect(() => {
     getUserFromStorage()
   }, [])
-
-  const navigateBasedOnUser = (user) => {
-    if (!user.firstName || !user.lastName) {
-      return navigation.navigate('AuthScreens', { screen: 'Name' })
-    }
-    navigation.navigate('MainApp')
-  }
 
   const updateUserInfo = async (values) => {
     const user = await updateUser(values)
@@ -41,7 +46,6 @@ const authContainer = () => {
         userProfile: user,
       },
     });
-    navigateBasedOnUser(user)
   }
 
   const onVert = async (code) => {

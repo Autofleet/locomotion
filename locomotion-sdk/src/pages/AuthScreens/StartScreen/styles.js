@@ -17,6 +17,12 @@ width: 100%;
 margin-bottom: 50px;
 `;
 
+export const Logo = styled.Image`
+margin: auto;
+height: 30%;
+width: 100%;
+`;
+
 export const StartButton = styled(Button)`
 height: 30px;
 margin: 10px 0;
@@ -54,4 +60,5 @@ export const TermsLink = styled.Text`
 
 export const LogoContainer = styled.View`
 flex: 1;
+width: 100%;
 `;

@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Trans } from "react-i18next";
-import SvgIcon from '../../../Components/SvgIcon';
-import Logo from '../../../assets/logo.svg';
+import logo from '../../../assets/logo.png';
 import i18n from "../../../I18n";
-import onboardingContext from '../../../context/onboarding'
-import { ButtonsContainer, ButtonText, StartButton, PageContainer, TermsText, TermsLink, LogoContainer } from "./styles";
+import { ButtonsContainer, ButtonText, StartButton, PageContainer, TermsText, TermsLink, LogoContainer,  Logo } from "./styles";
 import { SafeView } from "../Onboarding/styles";
 import WebView from "../../WebView";
 import { getLoginSettings } from "../../../context/user/api";
@@ -51,7 +49,7 @@ const StartScreen = ({navigation}) => {
             ? (
                 <>  
                     <LogoContainer>
-                        <SvgIcon width="100px" height="100px" svg={Logo} />
+                        <Logo source={logo} />
                     </LogoContainer>
                     <ButtonsContainer>
                         <StartButton dark onPress={() => {

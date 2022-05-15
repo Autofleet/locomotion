@@ -12,7 +12,7 @@ function MainRouter() {
   return (
     <NavigationContainer>
     <OnboardingContext.Provider>
-        <Stack.Navigator initialRouteName='AuthLoading' screenOptions={{ headerShown: false}}>
+        <Stack.Navigator initialRouteName='AuthLoading' screenOptions={{ headerShown: false}} id='authStack'>
           <Stack.Screen name="AuthScreens" component={Auth} options={{ gestureEnabled: false }} />
           <Stack.Screen name="MainApp" component={Main} /> 
           <Stack.Screen name="AuthLoading" component={AuthLoadingScreen} /> 

@@ -24,7 +24,7 @@ export const loginApi = async (body) => {
 }
 
 export const updateUser = async (body) => {
-    const { data } = network.patch('api/v1/me', body);
+    const { data } = await network.patch('api/v1/me', body);
     return data
 }
 
