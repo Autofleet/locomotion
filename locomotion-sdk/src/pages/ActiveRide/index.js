@@ -299,7 +299,7 @@ export default ({ menuSide, mapSettings }) => {
 
   const createOffer = async () => {
     try {
-      const { data: response } = await createOfferApi({
+      const response = await createOfferApi({
         pickupAddress: requestStopPoints.pickup.description,
         pickupLat: requestStopPoints.pickup.lat,
         pickupLng: requestStopPoints.pickup.lng,
