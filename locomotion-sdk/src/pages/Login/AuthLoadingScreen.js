@@ -8,11 +8,9 @@ import { useStateValue } from '../../context/main';
 import { needOnboarding } from '../Onboarding';
 import Auth from '../../services/auth';
 import { getUserDetails } from '../../context/user/api';
-import onboardingContext from '../../context/onboarding'
 
 const AuthLoadingScreen = ({ navigation }) => {
   const [appState, dispatch] = useStateValue();
-  const {navigateBasedOnUser} = onboardingContext.useContainer()
   const init = () => {
     async function getFromStorage() {
       const payload = await AppSettings.getSettings();
@@ -41,7 +39,7 @@ const AuthLoadingScreen = ({ navigation }) => {
         await AppSettings.update({ userProfile });
 
         const nonUserNav = (screen) => {
-          navigation.push('AuthScreens', { screen, params: { showHeaderIcon: false }});
+          navigation.replace('AuthScreens', { screen, params: { showHeaderIcon: false }});
         }
 
         if (!userData.active) {
@@ -49,11 +47,13 @@ const AuthLoadingScreen = ({ navigation }) => {
         }
 
         if (needOnboarding(userProfile)) {
-          return navigateBasedOnUser(userProfile)
+          if (!userProfile.firstName || !userProfile.lastName) {
+            return navigation.replace('AuthScreens', { screen: 'Name' })
+          }
         }
       }
 
-      navigation.push('MainApp');
+      navigation.replace('AuthScreens');
     }
 
     if (!appState) { // Load app state
