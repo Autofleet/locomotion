@@ -1,6 +1,6 @@
 {
   "name": "@autofleet/locomotion-sdk",
-  "version": "1.6.8",
+  "version": "1.6.8-alpha",
   "description": "",
   "main": "src/index.js",
   "scripts": {
