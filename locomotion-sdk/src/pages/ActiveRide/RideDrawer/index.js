@@ -270,7 +270,7 @@ const RideDrawer = ({
               onPress={buttonAction}
               hollow={!readyToBook || !allowRideOrder}
               setLoading={setLoading}
-              disabled={!readyToBook || !allowRideOrder}
+              disabled={!readyToBook}
             >
               {I18n.t(rideState ? 'home.cancelRideButton' : 'home.letsRideButton')}
             </RideButton>}
