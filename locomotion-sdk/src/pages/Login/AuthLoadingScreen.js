@@ -51,6 +51,8 @@ const AuthLoadingScreen = ({ navigation }) => {
             return navigation.replace('AuthScreens', { screen: 'Name' })
           }
         }
+
+        return navigation.replace('MainApp');
       }
 
       navigation.replace('AuthScreens');

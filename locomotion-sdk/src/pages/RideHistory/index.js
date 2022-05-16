@@ -1,6 +1,6 @@
 import React, { Fragment, useEffect, useState } from 'react';
 import { useNavigation, useRoute } from '@react-navigation/native';
-import { useDrawerStatus } from '@react-navigation/drawer';
+import SafeView from '../../Components/SafeView'
 import i18n from '../../I18n';
 import PageHeader from '../../Components/PageHeader';
 import {
@@ -9,6 +9,7 @@ import {
 import RideHistoryTable from '../../Components/RideHistoryTable';
 import Mixpanel from '../../services/Mixpanel';
 import { getRidesHistory } from '../../context/rides/api';
+import { PageContainer } from '../styles';
 
 const NoRidesMessage = () => (
   <NoRidesMessageContainer>
@@ -47,16 +48,20 @@ export default ({ menuSide }) => {
   }, [navigation]);
 
   return (
-    <PageContent>
-      <PageHeader
-        title={i18n.t('rideHistory.pageTitle')}
-        onIconPress={() => toggleMenu()}
-        iconSide={menuSide}
-      />
-      {rides && rides.length > 0
-        ? <RideHistoryTable data={rides} />
-        : <NoRidesMessage />
-      }
-    </PageContent>
+    <PageContainer>
+      <SafeView>
+        <PageContent>
+          <PageHeader
+            title={i18n.t('rideHistory.pageTitle')}
+            onIconPress={() => toggleMenu()}
+            iconSide={menuSide}
+          />
+          {rides && rides.length > 0
+            ? <RideHistoryTable data={rides} />
+            : <NoRidesMessage />
+          }
+        </PageContent>
+      </SafeView>
+    </PageContainer>
   );
 };

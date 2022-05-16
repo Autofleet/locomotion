@@ -9,7 +9,7 @@ import ThumbnailPicker from '../../Components/ThumbnailPicker';
 import SubmitButton from '../../Components/RoundedButton';
 import TextInput from '../../Components/TextInput';
 import {
-  Text, ErrorText, ResendButton,
+  Text, ErrorText,
 } from '../Login/styled';
 import {
   Container, FullNameContainer, SubmitContainer,
@@ -18,7 +18,7 @@ import i18n from '../../I18n';
 import PageHeader from '../../Components/PageHeader';
 import Mixpanel from '../../services/Mixpanel';
 import { updateUser } from '../../context/user/api';
-
+import SafeView from '../../Components/SafeView';
 
 export default ({
   navigation, screenOptions, menuSide, ...props
@@ -123,6 +123,7 @@ export default ({
 
   return (
     <View style={{ backgroundColor: '#ffffff', flex: 1 }}>
+    <SafeView>
       <KeyboardAwareScrollView
         extraScrollHeight={20}
         enableOnAndroid
@@ -175,6 +176,7 @@ export default ({
         </Container>
 
       </KeyboardAwareScrollView>
+    </SafeView>
     </View>
   );
 };
