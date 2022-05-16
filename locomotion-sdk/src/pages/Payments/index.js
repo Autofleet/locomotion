@@ -7,6 +7,8 @@ import PaymentsContext from '../../context/payments'
 import ConfirmationPopup from '../../popups/ConfirmationPopup';
 import CreditCardsList from './credit-cards'
 import { NewCreditForm } from "../../Components/NewCreditForm";
+import SafeView from '../../Components/SafeView'
+import { PageContainer } from '../styles';
 
 export default ({navigation, menuSide}) => {
   const usePayments = PaymentsContext.useContainer();
@@ -48,37 +50,41 @@ export default ({navigation, menuSide}) => {
   }
 
   return (
-    <PageContent>
-      <PageHeader
-        title={i18n.t('payments.pageTitle')}
-        onIconPress={() => toggleMenu()}
-        iconSide={menuSide}
-      />
-      {pageLoading ? <FullPageLoader autoPlay loop/> : null}
-      {/* <Balance customer={usePayments.customer} /> */}
-      {showList ? (
-        <CreditCardsList
-          paymentMethods={usePayments.paymentMethods}
-          onDetach={onRemoveMethod}
-          loadingState={loading}
-          onAddClick={() => setShowList(false)}
-        />) : (
-        <NewCreditForm
-          onDone={async () => {
-            await loadCustomerData();
-            return setShowList(true);
-          }}
-        />)}
-      <ConfirmationPopup
-        name="removeCard"
-        title={i18n.t('payments.popups.removeCard.title')}
-        text={i18n.t('payments.popups.removeCard.text')}
-        confirmText={i18n.t('payments.popups.removeCard.confirmText')}
-        cancelText={i18n.t('payments.popups.removeCard.cancelText')}
-        type="cancel"
-        useCancelTextButton
-        onSubmit={() => detachCard()}
-      />
-    </PageContent>
+    <PageContainer>
+      <SafeView>
+        <PageContent>
+          <PageHeader
+            title={i18n.t('payments.pageTitle')}
+            onIconPress={() => toggleMenu()}
+            iconSide={menuSide}
+          />
+          {pageLoading ? <FullPageLoader autoPlay loop/> : null}
+          {/* <Balance customer={usePayments.customer} /> */}
+          {showList ? (
+            <CreditCardsList
+              paymentMethods={usePayments.paymentMethods}
+              onDetach={onRemoveMethod}
+              loadingState={loading}
+              onAddClick={() => setShowList(false)}
+            />) : (
+            <NewCreditForm
+              onDone={async () => {
+                await loadCustomerData();
+                return setShowList(true);
+              }}
+            />)}
+          <ConfirmationPopup
+            name="removeCard"
+            title={i18n.t('payments.popups.removeCard.title')}
+            text={i18n.t('payments.popups.removeCard.text')}
+            confirmText={i18n.t('payments.popups.removeCard.confirmText')}
+            cancelText={i18n.t('payments.popups.removeCard.cancelText')}
+            type="cancel"
+            useCancelTextButton
+            onSubmit={() => detachCard()}
+          />
+        </PageContent>
+      </SafeView>
+    </PageContainer>
   );
 };

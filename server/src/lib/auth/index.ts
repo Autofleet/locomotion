@@ -1,10 +1,10 @@
 /* eslint-disable class-methods-use-this */
 import jwt from 'jsonwebtoken';
 import shortid from 'shortid';
-
-const Nexmo = require('../nexmo');
-const { User, Verification } = require('../../models');
-const userService = require('../user');
+import Nexmo from '../nexmo';
+// const Nexmo = require('../nexmo');
+import { User, Verification } from '../../models';
+import userService from '../user';
 
 const {
   AUTH_ACCESS_SECRET_KEY,

@@ -1,20 +1,26 @@
 import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import Login from "./Login"
-import Onboarding from "./Onboarding"
 import Lock from './Lock';
+import StartScreen from './AuthScreens/StartScreen';
+import Phone from './AuthScreens/Onboarding/Phone';
+import Code from './AuthScreens/Onboarding/Code';
+import Name from './AuthScreens/Onboarding/Name';
+import Welcome from './AuthScreens/Onboarding/Welcome';
 import AddCard from "./AddCard";
 
 const Stack = createNativeStackNavigator();
 
 const AuthScreens = () => {
     return (
-        <Stack.Navigator initialRouteName='Login' screenOptions={{ headerShown: false}}>
-            <Stack.Screen name="Login" component={Login} />
-            <Stack.Screen name="Onboarding" component={Onboarding} />
-            <Stack.Screen name="AddCard" component={AddCard} />
-            <Stack.Screen name="Lock" component={Lock} />
-        </Stack.Navigator>
+            <Stack.Navigator initialRouteName='Start' screenOptions={{ headerShown: false, gestureEnabled: false }}>
+                <Stack.Screen name="Start" component={StartScreen} />
+                <Stack.Screen name="Phone" component={Phone} />
+                <Stack.Screen name="Code" component={Code} />
+                <Stack.Screen name="Name" component={Name} />
+                <Stack.Screen name="AddCard" component={AddCard} />
+                <Stack.Screen name="Welcome" component={Welcome} />
+                <Stack.Screen name="Lock" component={Lock} />  
+            </Stack.Navigator>
     )
 }
 

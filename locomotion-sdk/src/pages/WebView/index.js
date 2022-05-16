@@ -7,12 +7,11 @@ import Header from '../../Components/Header';
 import PageHeader from "../../Components/PageHeader";
 const closeIconSource = require('../../assets/x.png');
 
-export default ({ navigation, uri, title, onIconPress,menuSide  }) => {
+export default ({ navigation, uri, title, onIconPress,menuSide = 'right'  }) => {
   return (<Fragment>
     <PageHeader
         title={title}
         onIconPress={onIconPress}
-        iconSide="right"
         icon={closeIconSource}
         iconSide={menuSide}
     />

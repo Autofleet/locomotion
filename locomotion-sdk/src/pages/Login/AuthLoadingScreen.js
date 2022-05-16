@@ -19,7 +19,6 @@ const AuthLoadingScreen = ({ navigation }) => {
         type: 'changeState',
         payload,
       });
-      let page = payload.userProfile ? 'MainApp' : 'AuthScreens';
 
       if (payload.userProfile) {
         const response = await getUserDetails()
@@ -37,22 +36,26 @@ const AuthLoadingScreen = ({ navigation }) => {
           pushUserId: userData.pushUserId,
         };
 
-        AppSettings.update({ userProfile });
+        await AppSettings.update({ userProfile });
 
         const nonUserNav = (screen) => {
-          navigation.navigate('AuthScreens', { screen, params: { showHeaderIcon: false }});
+          navigation.replace('AuthScreens', { screen, params: { showHeaderIcon: false }});
         }
 
         if (!userData.active) {
-          nonUserNav('Lock')
+         return nonUserNav('Lock')
         }
 
         if (needOnboarding(userProfile)) {
-          nonUserNav('Onboarding')
+          if (!userProfile.firstName || !userProfile.lastName) {
+            return navigation.replace('AuthScreens', { screen: 'Name' })
+          }
         }
+
+        return navigation.replace('MainApp');
       }
 
-      navigation.navigate(page);
+      navigation.replace('AuthScreens');
     }
 
     if (!appState) { // Load app state

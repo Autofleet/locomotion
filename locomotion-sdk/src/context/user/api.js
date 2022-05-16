@@ -19,11 +19,13 @@ export const loginVert = async (body) => {
 }
 
 export const loginApi = async (body) => {
-    await network.post('api/v1/login', body)
+    const { data } = await network.post('api/v1/login', body)
+    return data
 }
 
 export const updateUser = async (body) => {
-    return network.patch('api/v1/me', body);
+    const { data } = await network.patch('api/v1/me', body);
+    return data
 }
 
 export const getLoginSettings = async () => {

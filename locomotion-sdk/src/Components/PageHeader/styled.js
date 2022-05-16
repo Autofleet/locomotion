@@ -29,7 +29,8 @@ export const HeaderIcon = styled.Image`
 `;
 
 export const Header = styled.View`
-text-align: center;
 padding: 15px;
 background-color: #ffffff;
+width: 100%;
+box-shadow:  0px 5px 3px rgba(68, 68, 68, 0.1);
 `;
