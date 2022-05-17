@@ -33,7 +33,9 @@
             "code": {
                 "title": "verification",
                 "text": "Please enter code",
-                "subText": "A code has been sent to  {{phoneNumber}}"
+                "subText": "A code has been sent to  {{phoneNumber}}",
+                "resendCodeText": "didn't receive an SMS? ",
+                "resendCodeButton": "Resend"
             },
             "name": {
                 "title": "Personal Details",

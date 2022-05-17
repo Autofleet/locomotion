@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import PinCode from "../../../Components/PinCode";
 import OnboardingNavButtons from "./OnboardingNavButtons";
 import onboardingContext from '../../../context/onboarding'
-import { ErrorText, PageContainer, SafeView } from "./styles";
+import { ErrorText, PageContainer, ResendButton, ResendContainer, ResendText, SafeView } from "./styles";
 import i18n from "../../../I18n";
 import { useNavigation } from "@react-navigation/native";
 import Header from "./Header";
@@ -10,6 +10,7 @@ import ScreenText from "./ScreenText";
 
 const Code = () => {
     const {onVert, onboardingState} = onboardingContext.useContainer()
+    const navigation = useNavigation()
     const [code, setCode] = useState('')
     const [showErrorText, setShowErrorText] = useState(false)
     const onVertCodeChange = (value) => {
@@ -35,6 +36,14 @@ const Code = () => {
                     onChange={onVertCodeChange}
                     onLastDigit={verify}
                 />
+                <ResendContainer>
+                    <ResendText>
+                        {i18n.t('onboarding.pages.code.resendCodeText')}
+                    </ResendText>
+                    <ResendButton onPress={() => navigation.navigate('Phone')}>
+                        {i18n.t('onboarding.pages.code.resendCodeButton')}
+                    </ResendButton>
+                </ResendContainer>
                 {showErrorText && <ErrorText>{i18n.t('login.vertError')}</ErrorText>}
                 <OnboardingNavButtons 
                     isInvalid={showErrorText || code.length < 4} 
