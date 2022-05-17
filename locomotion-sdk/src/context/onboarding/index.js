@@ -16,12 +16,12 @@ const authContainer = () => {
     lastName: ''
   })
 
-  const navigateBasedOnUser = (user, login) => {
+  const navigateBasedOnUser = (user, complete) => {
     setOnboardingState(user)
     if (!user.firstName || !user.lastName) {
       return navigation.navigate('AuthScreens', { screen: 'Name' })
     }
-    if (login) {
+    if (complete) {
       navigation.navigate('MainApp')
     } else {
       navigation.navigate('AuthScreens', { screen: 'Welcome' })
@@ -62,7 +62,7 @@ const authContainer = () => {
         return false;
       }
 
-      await auth.updateTokens(vertResponse.refreshToken, vertResponse.accessToken);
+      auth.updateTokens(vertResponse.refreshToken, vertResponse.accessToken);
       const userProfile = vertResponse.userProfile || {};
       Mixpanel.setUser(userProfile)
       dispatch({
