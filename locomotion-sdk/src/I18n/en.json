@@ -43,6 +43,11 @@
                 "text": "What's your name?",
                 "subText": "Let us know the best way to address you"
             },
+            "avatar": {
+                "title": "Personal Details",
+                "text": "Add a photo",
+                "subText": "help us identify you during pickups"
+            },
             "welcome": {
                 "text": "Welcome aboard, {{firstName}}!",
                 "subText": "We are glad to have  you riding with us.",

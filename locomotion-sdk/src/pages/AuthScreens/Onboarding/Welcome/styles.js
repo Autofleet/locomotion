@@ -10,10 +10,12 @@ export const WelcomeText = styled.Text`
 font-size: 35px;
 font-weight: 600;
 margin: 10px 0;
-`
+text-align: center;
+`;
 export const WelcomeSubText = styled.Text`
 margin: 10px 0;
-`
+text-align: center;
+`;
 
 export const Logo = styled.Image`
 margin: auto;

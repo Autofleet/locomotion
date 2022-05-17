@@ -19,8 +19,9 @@ const Code = () => {
     }
 
     const verify = async (v) => {
-        setCode(v)
-        const response = await onVert(v)
+        const input = v || code
+        setCode(input)
+        const response = await onVert(input)
         if (response === 'failed') {
             return setShowErrorText(true)
         }

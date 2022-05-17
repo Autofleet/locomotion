@@ -10,16 +10,13 @@ import ScreenText from "./ScreenText";
 
 
 const Name = () => {
-    const {onboardingState, setOnboardingState, updateUserInfo, navigateBasedOnUser} = onboardingContext.useContainer()
+    const {onboardingState, updateState, updateUserInfo, navigateBasedOnUser} = onboardingContext.useContainer()
     const [showErrorText, setShowErrorText] = useState(false)
 
     const inputChange = field => value => {
         setShowErrorText(false)
         updateUserInfo({[field]: value })
-        setOnboardingState({
-        ...onboardingState,
-        [field]: value,
-      });
+        updateState(field, value)
     }
 
     return (
