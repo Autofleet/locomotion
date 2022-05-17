@@ -4,6 +4,7 @@
         "next": "Next"
     },
     "login": {
+        "getStarted": "Get started!",
         "signUp": "Sign up",
         "login": "Log in",
         "noAccountError": "No account exists with that number",

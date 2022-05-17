@@ -52,15 +52,10 @@ const StartScreen = ({navigation}) => {
                         <Logo source={logo} />
                     </LogoContainer>
                     <ButtonsContainer>
-                        <StartButton dark onPress={() => {
-                          navigation.navigate('Phone')
-                        }}>
-                            <ButtonText>{i18n.t('login.signUp')}</ButtonText>
-                        </StartButton>
                         <StartButton onPress={() => {
                           navigation.navigate('Phone')
                         }}>
-                            <ButtonText>{i18n.t('login.login')}</ButtonText>
+                            <ButtonText>{i18n.t('login.getStarted')}</ButtonText>
                         </StartButton>
                     </ButtonsContainer>
                     <TermsText>
