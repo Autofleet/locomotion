@@ -1,5 +1,5 @@
 import React, {
-  useState, useEffect, useRef,
+  useState, useEffect, useRef, useContext,
 } from 'react';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import {
@@ -15,8 +15,10 @@ import getPosition from './RideDrawer/StopPointsCard/AddressView/getPostion';
 import {
   PageContainer, StopPointDot, VehicleDot, MapButtonsContainer,
 } from './styled';
+import mapDarkMode from '../../assets/mapDarkMode.json';
 import Header from '../../Components/Header';
 import RideDrawer from './RideDrawer';
+import { Context as ThemeContext, THEME_MOD } from '../../context/theme';
 import { getTogglePopupsState } from '../../context/main';
 import UserService from '../../services/user';
 import OneSignal from '../../services/one-signal';
@@ -55,6 +57,7 @@ function useInterval(callback, delay) {
 
 export default ({ menuSide, mapSettings }) => {
   const navigation = useNavigation()
+  const { isDarkMode } = useContext(ThemeContext);
   const route = useRoute()
   const [activeRideState, setActiveRide] = useState(null);
   const [futureRides, setFutureRides] = useState(null);
@@ -531,6 +534,8 @@ export default ({ menuSide, mapSettings }) => {
             PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
           ); */
         }}
+        userInterfaceStyle={isDarkMode ? THEME_MOD.DARK : undefined}
+        customMapStyle={isDarkMode ? mapDarkMode : undefined}
         {...mapSettings}
       >
         {!activeRideState

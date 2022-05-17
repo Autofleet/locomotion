@@ -82,17 +82,17 @@ export const AddressTextInput = styled(({
 `;
 
 export const OriginDot = styled.View`
-    width: 10;
-    height: 10;
+    width: 10px;
+    height: 10px;
     background-color: #6180c0;
-    border-radius: 10;
+    border-radius: 10px;
 `;
 
 export const DestinationDot = styled.View`
-    width: 10;
-    height: 10;
+    width: 10px;
+    height: 10px;
     background-color: #08902d;
-    border-radius: 10;
+    border-radius: 10px;
 `;
 
 export const PointsLine = styled.View`

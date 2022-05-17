@@ -6,7 +6,7 @@ import Button from '../../../../Components/Button';
 
 const Container = styled.View`
   min-height: 50;
-  padding-bottom: 10;
+  padding-bottom: 10px;
 
   flex-direction: column;
   padding-start: 20;

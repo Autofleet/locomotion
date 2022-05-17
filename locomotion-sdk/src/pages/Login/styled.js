@@ -81,7 +81,7 @@ export const TermsLink = styled.Text`
   font-weight: 500;
   color: #000000;
   padding: 2px;
-  line-height: 16;
+  line-height: 16px;
 
   &:active {
     color: red;

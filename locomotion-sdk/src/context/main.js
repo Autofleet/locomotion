@@ -5,6 +5,7 @@ import I18n from '../I18n';
 
 import SettingsContext from './settings'
 import PaymentsContext from './payments'
+import ThemeProvider from './theme'
 
 export const StateContext = createContext();
 export const StateProvider = ({ reducer, initialState, children }) => (
@@ -63,7 +64,9 @@ export const MainProvider = ({ children, LoginPage, i18n }) => {
     <StateProvider initialState={initialState} reducer={reducer}>
       <SettingsContext.Provider>
         <PaymentsContext.Provider>
-          {children}
+          <ThemeProvider>
+            {children}
+          </ThemeProvider>
         </PaymentsContext.Provider>
       </SettingsContext.Provider>
     </StateProvider>
