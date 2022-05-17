@@ -41,7 +41,8 @@ const Code = () => {
                     <ResendText>
                         {i18n.t('onboarding.pages.code.resendCodeText')}
                     </ResendText>
-                    <ResendButton onPress={() => navigation.navigate('Phone')}>
+                    <ResendButton 
+                        onPress={() => navigation.navigate('Phone')}>
                         {i18n.t('onboarding.pages.code.resendCodeButton')}
                     </ResendButton>
                 </ResendContainer>

@@ -55,13 +55,17 @@ const myThumbnail = (props) => {
   const borderRadius = { borderRadius: props.size / 2 };
   const borderRadiusSmall = { borderRadius: (props.size - 10) / 2 };
   return (
-    <Container style={{width: props.size, height: props.size}} >
+    <Container 
+      style={{width: props.size, height: props.size}} >
       <LinearGradient
         start={{ x: 1, y: 1 }}
         end={{ x: 0, y: 0 }}
         style={[styles.linearGradient]}
       >
-        <Button onPress={props.onPress} style={[styles.croper, borderRadius]} data-test-id='ImagePickerButton'>
+        <Button 
+          onPress={props.onPress} 
+          style={[styles.croper, borderRadius]} 
+          data-test-id='ImagePickerButton'>
           <ImageComponent
             style={[styles.image, borderRadiusSmall]}
             source={{uri: props.source}}
@@ -69,8 +73,14 @@ const myThumbnail = (props) => {
         </Button>
       </LinearGradient>
       {props.mode in modes && (
-      <Button onPress={props.onPress} style={styles.iconContainer} data-test-id={`${props.mode}ImageButton`}>
-        <Image onPress={props.onPress} style={styles.icon} source={modes[props.mode]} />
+      <Button 
+        onPress={props.onPress} 
+        style={styles.iconContainer} 
+        data-test-id={`${props.mode}ImageButton`}>
+        <Image 
+          onPress={props.onPress} 
+          style={styles.icon} 
+          source={modes[props.mode]} />
       </Button>
       )}
     </Container>
