@@ -47,7 +47,7 @@ export default props => {
   }
 
   const enrichPlaceWithLocation = async place => {
-    const data = getLocation({
+    const data = await getLocation({
         placeId: place.placeid || place.place_id
       }
     );
