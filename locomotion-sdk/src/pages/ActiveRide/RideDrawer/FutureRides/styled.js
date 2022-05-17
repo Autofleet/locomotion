@@ -31,12 +31,12 @@ export const Container = styled.View`
   padding-right: 8px;
   padding-left: 8px;
   background-color: #ffffff;
-  border-radius: 4;
+  border-radius: 4px;
   margin-bottom: 5px;
 `;
 
 export const DateTitle = styled.Text`
-  font-size: 11;
+  font-size: 11px;
   color: #000000;
   margin-start: 22;
   margin-end: 16;

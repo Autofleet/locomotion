@@ -23,7 +23,7 @@ import RideType from './RideType';
 import Switch from '../../../Components/Switch';
 
 import RoundedButton from '../../../Components/RoundedButton';
-import RideButton from '../../../Components/RideButton';
+import RideButton from '../../../Components/RoundedButton';
 import RideCard from './RideCard';
 import MessageCard from './MessageCard';
 import { getTogglePopupsState } from '../../../context/main';

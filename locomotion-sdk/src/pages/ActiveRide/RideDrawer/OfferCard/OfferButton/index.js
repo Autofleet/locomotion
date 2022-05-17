@@ -9,7 +9,7 @@ import SliderButton from '../../../../../Components/SlideButton';
 const address = `
 min-height: 50;
 padding-top: 10;
-padding-bottom: 10;
+padding-bottom: 10px;
 padding-start: 24;
 align-items: center;
 flex-direction: row;

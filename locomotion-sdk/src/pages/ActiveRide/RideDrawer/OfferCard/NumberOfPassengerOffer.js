@@ -14,7 +14,7 @@ const MIN_NUMBER_OF_PASSENGER = 1;
 
 const PassengerAmountContainer = styled.View`
   padding-top: 10;
-  padding-bottom: 10;
+  padding-bottom: 10px;
   align-items: center;
   flex-direction: row;
   padding-start: 20;

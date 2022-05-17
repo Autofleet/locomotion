@@ -4,7 +4,7 @@ import styled from 'styled-components';
 
 export const PointDot = styled.View`
   border-color: #fff;
-  border-width: 3;
+  border-width: 3px;
   shadow-offset: 0px 0px;
   shadow-color: #04214f;
   shadow-opacity: 0.4;
@@ -15,7 +15,7 @@ export const PointDot = styled.View`
 export const StationDot = styled(PointDot)`
   width: 18;
   height: 18;
-  border-radius: 20;
+  border-radius: 20px;
   background-color: #c3c0c0;
 
   ${({ type }) => type === 'pickup' && `
