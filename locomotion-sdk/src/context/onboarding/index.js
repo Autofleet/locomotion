@@ -25,7 +25,6 @@ const authContainer = () => {
   }
 
   const navigateBasedOnUser = (user, complete) => {
-    console.log(user)
     setOnboardingState(user)
     if (!user.firstName || !user.lastName) {
       return navigation.navigate('AuthScreens', { screen: 'Name' })
