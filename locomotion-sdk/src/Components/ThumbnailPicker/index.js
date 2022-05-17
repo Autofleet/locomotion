@@ -1,57 +1,42 @@
-import React from 'react';
+import React, { useState } from 'react';
 import propsTypes from 'prop-types';
 /* eslint-disable class-methods-use-this */
 import {
   Platform, ActionSheetIOS, UIManager, findNodeHandle,
 } from 'react-native';
+import ImageResizer from 'react-native-image-resizer';
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 import i18n from '../../I18n';
 import Thumbnail from '../Thumbnail';
 import { ImageUpload } from '../../context/user/api';
 
-export default class ThumbnailPicker extends React.Component {
-  constructor() {
-    super()
-
-    this.assets = [];
-    this.state = {
-      source: undefined
-    }
-  }
-
-  onCancel = () => {
+const ThumbnailPicker = (props) => {
+  const onCancel = () => {
     console.log('User cancelled image picker');
   };
 
-  onError = (error) => {
+  const onError = (error) => {
     console.log('ImagePicker Error: ', error);
   };
 
-  onSelectPicture(response) {
+  const onSelectPicture = (response) => {
     const {
       assets, errorCode, didCancel,
     } = response;
     if (didCancel) {
-      this.onCancel()
+      onCancel()
     }
 
     if (errorCode) {
-      this.onError(errorCode)
+      onError(errorCode)
     }
 
     if (assets && assets.length) {
-      this.onSuccess(assets);
+      onSuccess(assets);
     }
   }
 
-  onSuccess = (response) => {
-    const source = { uri: `data:image/jpeg;base64,${response[0].base64}` };
-
-    this.setState({source});
-    this.uploadImage(response[0]);
-  };
-
-  uploadImage = async (data) => {
+  const uploadImage = async (data) => {
     const newImage = await ImageResizer.createResizedImage(data.uri, 180, 180, 'PNG', 80);
     const formData = new FormData();
     formData.append('avatar', {
@@ -68,13 +53,19 @@ export default class ThumbnailPicker extends React.Component {
     return false;
   }
 
-  handleImage(data) {
+  const handleImage = async (data) => {
     console.log('Data of the uploaded image', data);
-    this.uploadPromise = this.uploadImage(data);
-    this.props.onImageChoose(this.uploadPromise);
+    const uploadPromise = await uploadImage(data);
+    props.onImageChoose(uploadPromise);
   }
 
-  showImagePicker(event) {
+
+  const onSuccess = (response) => {
+    handleImage(response[0])
+  };
+
+
+  const  showImagePicker = (event) => {
     const options = [i18n.t('popups.photoUpload.takePhoto'), i18n.t('popups.photoUpload.choosePhoto')];
     const pickerOptions = {
       mediaType: 'photo',
@@ -83,7 +74,7 @@ export default class ThumbnailPicker extends React.Component {
       saveToPhotos: false,
       selectionLimit: 1,
     }
-    const imageCallback = (response) => this.onSelectPicture(response);
+    const imageCallback = (response) => onSelectPicture(response);
     
     if (Platform.OS === 'android') {
       UIManager.showPopupMenu(
@@ -112,7 +103,7 @@ export default class ThumbnailPicker extends React.Component {
         },
         (buttonIndex) => {
           if (buttonIndex === 0) {
-            this.onCancel()
+            onCancel()
           }
 
           if (buttonIndex === 1) {
@@ -127,17 +118,14 @@ export default class ThumbnailPicker extends React.Component {
     }
   }
 
-  render() {
-    return (
-      <Thumbnail
-        mode={this.props.avatarSource ? 'edit' : 'add'}
-        onPress={this.showImagePicker.bind(this)}
-        containerStyle={{ marginTop: 50, marginBottom: 25 }}
-        size={180}
-        source={(this.state.source)}
-      />
-    );
-  }
+  return (
+    <Thumbnail
+      mode={props.avatarSource ? 'edit' : 'add'}
+      onPress={showImagePicker}
+      size={props.size || 180}
+      source={props.avatarSource}
+    />
+  );
 }
 
 ThumbnailPicker.defaultProps = {
@@ -149,3 +137,5 @@ ThumbnailPicker.propTypes = {
   onImageChoose: propsTypes.func,
   avatarSource: propsTypes.string,
 };
+
+export default ThumbnailPicker;

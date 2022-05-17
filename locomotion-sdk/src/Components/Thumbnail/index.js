@@ -6,12 +6,16 @@ import FastImage from 'react-native-fast-image';
 import propsTypes from 'prop-types';
 import LinearGradient from '../LinearGradient';
 import Button from '../Button';
+import styled from 'styled-components';
 
 const modes = {
   edit: require('./edit_btn.png'),
   add: require('./add_btn.png'),
 };
 
+const Container = styled.View`
+
+`;
 const myThumbnail = (props) => {
   const defaultStyles = {
     linearGradient: {
@@ -32,12 +36,14 @@ const myThumbnail = (props) => {
       height: '100%',
       borderRadius: 100,
     },
-    leftIcon: {
+    iconContainer: {
+      position: 'absolute',
+      bottom: 0,
+      right: 0
+    },
+    icon: {
       width: 50,
       height: 50,
-      position: 'relative',
-      marginTop: -75,
-      marginLeft: -90,
     },
   };
 
@@ -45,29 +51,39 @@ const myThumbnail = (props) => {
   defaultStyles.linearGradient.height = props.size;
   defaultStyles.linearGradient = Object.assign(defaultStyles.linearGradient);
   const styles = StyleSheet.create(defaultStyles);
-  const ImageComponent = props.source && props.source.uri && props.source.uri.substring(0, 4) === 'http' ? FastImage : Image;
+  const ImageComponent = props.source && props.source.substring(0, 4) === 'http' ? FastImage : Image;
   const borderRadius = { borderRadius: props.size / 2 };
   const borderRadiusSmall = { borderRadius: (props.size - 10) / 2 };
   return (
-    <Fragment>
+    <Container 
+      style={{width: props.size, height: props.size}} >
       <LinearGradient
         start={{ x: 1, y: 1 }}
         end={{ x: 0, y: 0 }}
-        style={[styles.linearGradient, props.containerStyle]}
+        style={[styles.linearGradient]}
       >
-        <Button onPress={props.onPress} style={[styles.croper, borderRadius]} data-test-id='ImagePickerButton'>
+        <Button 
+          onPress={props.onPress} 
+          style={[styles.croper, borderRadius]} 
+          data-test-id='ImagePickerButton'>
           <ImageComponent
             style={[styles.image, borderRadiusSmall]}
-            source={props.source}
+            source={{uri: props.source}}
           />
         </Button>
       </LinearGradient>
       {props.mode in modes && (
-      <Button onPress={props.onPress} style={{ width: 1, height: 1 }} data-test-id={`${props.mode}ImageButton`}>
-        <Image onPress={props.onPress} style={styles.leftIcon} source={modes[props.mode]} />
+      <Button 
+        onPress={props.onPress} 
+        style={styles.iconContainer} 
+        data-test-id={`${props.mode}ImageButton`}>
+        <Image 
+          onPress={props.onPress} 
+          style={styles.icon} 
+          source={modes[props.mode]} />
       </Button>
       )}
-    </Fragment>
+    </Container>
   );
 };
 
@@ -79,13 +95,11 @@ myThumbnail.defaultProps = {
   onPress: () => null,
   mode: 'preview',
   source: require('./default.png'),
-  containerStyle: {},
 };
 
 myThumbnail.propTypes = {
-  size: propsTypes.oneOfType(propsTypes.number, propsTypes.string),
+  size: propsTypes.oneOfType([propsTypes.number, propsTypes.string]),
   onPress: propsTypes.func,
   mode: propsTypes.string,
   source: Image.propTypes.source,
-  containerStyle: ViewPropTypes.style,
 };
