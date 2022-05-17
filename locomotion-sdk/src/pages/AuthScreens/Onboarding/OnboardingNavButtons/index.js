@@ -9,7 +9,9 @@ const OnboardingNavButtons = ({isInvalid, onFail, onNext, buttonText}) => {
         if (isInvalid) {
             onFail()
         } else {
-            await onNext()
+            if (onNext) {
+                await onNext()
+            }
         }
     }
     return (

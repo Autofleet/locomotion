@@ -22,11 +22,11 @@ const AuthLoadingScreen = ({ navigation }) => {
 
       if (payload.userProfile) {
         const response = await getUserDetails()
-        if (!response || response.data === null) {
+        if (!response) {
           Auth.logout(navigation);
         }
 
-        const userData = response.data
+        const userData = response
         const userProfile = {
           firstName: userData.firstName,
           lastName: userData.lastName,

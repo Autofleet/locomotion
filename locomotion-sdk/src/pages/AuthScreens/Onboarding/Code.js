@@ -17,9 +17,10 @@ const Code = () => {
         setCode(value)
     }
 
-    const verify = () => {
-        const response = onVert(code)
-        if (!response) {
+    const verify = async (v) => {
+        setCode(v)
+        const response = await onVert(v)
+        if (response === 'failed') {
             return setShowErrorText(true)
         }
     }
