@@ -10,7 +10,8 @@ export const ImageUpload = async (formData) => {
 }
 
 export const getUserDetails = async () => {
-    return network.get('api/v1/me');
+    const { data } = network.get('api/v1/me');
+    return data
 }
 
 export const loginVert = async (body) => {
