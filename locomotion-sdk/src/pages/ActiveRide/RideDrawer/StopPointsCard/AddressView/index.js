@@ -44,8 +44,8 @@ export default (props) => {
   }, []);
 
   const initCurrentLocation = async () => {
-    const { coords } = await getPosition();
-    setCoords(coords);
+    const { coords: newCord } = await getPosition();
+    setCoords(newCord);
   };
 
   const enrichPlaceWithLocation = async (place) => {

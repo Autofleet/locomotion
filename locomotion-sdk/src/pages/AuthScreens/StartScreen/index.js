@@ -28,8 +28,8 @@ const StartScreen = ({ navigation }) => {
   });
 
   const loadSettings = async () => {
-    const settings = await getLoginSettings();
-    setSettings(settings);
+    const newSettings = await getLoginSettings();
+    setSettings(newSettings);
   };
 
   useEffect(() => {

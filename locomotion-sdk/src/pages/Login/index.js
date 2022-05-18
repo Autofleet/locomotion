@@ -48,8 +48,8 @@ const Login = ({ navigation, logo }) => {
   });
 
   const loadSettings = async () => {
-    const settings = await getLoginSettings();
-    setSettings(settings);
+    const newSettings = await getLoginSettings();
+    setSettings(newSettings);
   };
 
   useEffect(() => {

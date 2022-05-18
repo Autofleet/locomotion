@@ -16,7 +16,7 @@ const RideHistoryTable = ({ data }) => {
     return `${date}\n${time}`;
   };
 
-  const formatDataToView = data => Object.keys(data).map(elm => ([
+  const formatDataToView = d => Object.keys(d).map(elm => ([
     getCreatedAt(data[elm].createdAt),
     data[elm].pickupAddress,
     data[elm].dropoffAddress,
