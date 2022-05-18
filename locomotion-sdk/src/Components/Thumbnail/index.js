@@ -7,6 +7,7 @@ import propsTypes from 'prop-types';
 import LinearGradient from '../LinearGradient';
 import Button from '../Button';
 import styled from 'styled-components';
+import avatarIcon from './default.png';
 
 const modes = {
   edit: require('./edit_btn.png'),
@@ -68,7 +69,7 @@ const myThumbnail = (props) => {
           data-test-id='ImagePickerButton'>
           <ImageComponent
             style={[styles.image, borderRadiusSmall]}
-            source={{uri: props.source}}
+            source={props.source ? {uri: props.source} : avatarIcon}
           />
         </Button>
       </LinearGradient>
@@ -94,7 +95,7 @@ myThumbnail.defaultProps = {
   size: 220,
   onPress: () => null,
   mode: 'preview',
-  source: require('./default.png'),
+  source: null,
 };
 
 myThumbnail.propTypes = {

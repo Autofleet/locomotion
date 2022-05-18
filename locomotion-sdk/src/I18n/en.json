@@ -48,6 +48,14 @@
                 "text": "Add a photo",
                 "subText": "help us identify you during pickups"
             },
+            "email": {
+                "title": "Personal Details",
+                "text": "Enter your Email address",
+                "subText": "This is where we'll send you receipts",
+                "placeholder": "ex. John@email.com",
+                "error": "Please enter a valid email address",
+                "inUseError": "Email is already in use"
+            },
             "welcome": {
                 "text": "Welcome aboard, {{firstName}}!",
                 "subText": "We are glad to have  you riding with us.",

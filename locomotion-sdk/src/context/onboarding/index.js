@@ -14,7 +14,8 @@ const authContainer = () => {
     phoneNumber: '',
     firstName: '',
     lastName: '',
-    avatar: ''
+    avatar: '',
+    email: ''
   })
 
   const updateState = (field, value) => {
@@ -28,6 +29,9 @@ const authContainer = () => {
     setOnboardingState(user)
     if (!user.firstName || !user.lastName) {
       return navigation.navigate('AuthScreens', { screen: 'Name' })
+    }
+    if (!user.email) {
+      return navigation.navigate('AuthScreens', { screen: 'Email' })
     }
     if (!user.avatar && !user.email) {
       return navigation.navigate('AuthScreens', { screen: 'Avatar' })
