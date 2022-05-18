@@ -38,6 +38,7 @@
     "license": "ISC",
     "dependencies": {
         "@google-cloud/storage": "^5.19.2",
+        "@sendgrid/mail": "^7.6.2",
         "@turf/turf": "^5.1.6",
         "axios": "^0.19.0",
         "babel-core": "^6.26.3",
