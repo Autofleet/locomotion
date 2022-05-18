@@ -85,15 +85,14 @@ export default ({
   pickup, description, eta, firstEta, completedAt, etaDrift, paddingStart, showEta,
 }) => {
   const etaToDisplay = () => {
-    if(!firstEta) {
+    if (!firstEta) {
       return '';
     }
-    if(showEta) {
+    if (showEta) {
       return moment(eta).format('HH:mm');
-    } else {
-      return `${moment(firstEta).format('HH:mm')} - ${moment(firstEta).add(etaDrift, 'minutes').format('HH:mm')}`;
     }
-  }
+    return `${moment(firstEta).format('HH:mm')} - ${moment(firstEta).add(etaDrift, 'minutes').format('HH:mm')}`;
+  };
 
   return (
     <RowContainer pickup={pickup} paddingStart={paddingStart}>
@@ -118,4 +117,4 @@ export default ({
       </AddressTextCont>
     </RowContainer>
   );
-}
+};

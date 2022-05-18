@@ -7,7 +7,6 @@ import { getTogglePopupsState } from '../context/main';
 import { updateUser } from '../context/user/api';
 
 
-
 class NotificationsService {
   constructor() {
     this.network = network;
@@ -33,7 +32,7 @@ class NotificationsService {
       const { userProfile } = await AppSettings.getSettings();
       if (userProfile.pushUserId !== userId || userProfile.pushToken !== pushToken) {
         this.registerOnServer({
-          pushToken: pushToken,
+          pushToken,
           pushUserId: userId,
         });
       }
@@ -41,8 +40,8 @@ class NotificationsService {
   }
 
   onOpened = (openResult) => {
-    const additionalData = openResult.notification.payload.additionalData;
-    if(additionalData && additionalData.type) {
+    const { additionalData } = openResult.notification.payload;
+    if (additionalData && additionalData.type) {
       const method = this.notificationsHandlers[additionalData.type];
       if (method) {
         method();

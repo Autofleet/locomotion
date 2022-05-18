@@ -129,13 +129,19 @@ const EtaTitleText = styled.Text`
 
 export const PreRideBox = styled(({ eta, estimatePrice, ...props }) => (
   <View {...props}>
-    <EtaContainer><EtaTitleText>ETA: </EtaTitleText><EtaText>{eta ? eta.toFixed(0) : ''}</EtaText></EtaContainer>
+    <EtaContainer>
+      <EtaTitleText>ETA: </EtaTitleText>
+      <EtaText>{eta ? eta.toFixed(0) : ''}</EtaText>
+    </EtaContainer>
     <EtaContainer right>
       <EtaTitleText>Estimate price: </EtaTitleText>
-      <EtaText>{estimatePrice ? estimatePrice.toFixed(0) : ''}{i18n.t('currency')}</EtaText>
+      <EtaText>
+        {estimatePrice ? estimatePrice.toFixed(0) : ''}
+        {i18n.t('currency')}
+      </EtaText>
     </EtaContainer>
   </View>
-  ))`
+))`
     padding: 10px 25px;
     width: 100%;
     justify-content: space-between;

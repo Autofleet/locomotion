@@ -10,7 +10,7 @@ const Sight = styled.Image`
 
 export default styled(({ displayButton, onPress }) => (
   displayButton ? (
-    <Button onPress={onPress} data-test-id='MyLocationButton'>
+    <Button onPress={onPress} data-test-id="MyLocationButton">
       <Sight source={require('../../../assets/center_btn.png')} resizeMode="contain" />
     </Button>
   ) : null

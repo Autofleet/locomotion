@@ -9,49 +9,49 @@ import { loginVert, updateUser } from '../user/api';
 
 const authContainer = () => {
   const [, dispatch] = useStateValue();
-  const navigation = useNavigation()
+  const navigation = useNavigation();
   const [onboardingState, setOnboardingState] = useState({
     phoneNumber: '',
     firstName: '',
     lastName: '',
-    avatar: ''
-  })
+    avatar: '',
+  });
 
   const updateState = (field, value) => {
     setOnboardingState({
       ...onboardingState,
-      [field]: value
-    })
-  }
+      [field]: value,
+    });
+  };
 
   const navigateBasedOnUser = (user, complete) => {
-    setOnboardingState(user)
+    setOnboardingState(user);
     if (!user.firstName || !user.lastName) {
-      return navigation.navigate('AuthScreens', { screen: 'Name' })
+      return navigation.navigate('AuthScreens', { screen: 'Name' });
     }
     if (!user.avatar && !user.email) {
-      return navigation.navigate('AuthScreens', { screen: 'Avatar' })
+      return navigation.navigate('AuthScreens', { screen: 'Avatar' });
     }
     if (complete) {
-      navigation.navigate('MainApp')
+      navigation.navigate('MainApp');
     } else {
-      navigation.navigate('AuthScreens', { screen: 'Welcome' })
+      navigation.navigate('AuthScreens', { screen: 'Welcome' });
     }
-  }
+  };
 
   const getUserFromStorage = async () => {
-    const settings = await AppSettings.getSettings()
+    const settings = await AppSettings.getSettings();
     if (settings.userProfile) {
-      setOnboardingState(settings.userProfile)
+      setOnboardingState(settings.userProfile);
     }
-  }
+  };
 
   useEffect(() => {
-    getUserFromStorage()
-  }, [])
+    getUserFromStorage();
+  }, []);
 
   const updateUserInfo = async (values) => {
-    const user = await updateUser(values)
+    const user = await updateUser(values);
     dispatch({
       type: 'saveState',
       payload: {
@@ -59,7 +59,7 @@ const authContainer = () => {
         userProfile: user,
       },
     });
-  }
+  };
 
   const onVert = async (code) => {
     try {
@@ -75,7 +75,7 @@ const authContainer = () => {
 
       auth.updateTokens(vertResponse.refreshToken, vertResponse.accessToken);
       const userProfile = vertResponse.userProfile || {};
-      Mixpanel.setUser(userProfile)
+      Mixpanel.setUser(userProfile);
       dispatch({
         type: 'saveState',
         payload: {
@@ -83,10 +83,10 @@ const authContainer = () => {
           userProfile,
         },
       });
-      navigateBasedOnUser(userProfile, true)
+      navigateBasedOnUser(userProfile, true);
     } catch (e) {
       console.log('Bad vert with request', e);
-      return false
+      return false;
     }
   };
 
@@ -96,7 +96,7 @@ const authContainer = () => {
     updateState,
     onVert,
     updateUserInfo,
-    navigateBasedOnUser
+    navigateBasedOnUser,
   };
 };
 export default createContainer(authContainer);

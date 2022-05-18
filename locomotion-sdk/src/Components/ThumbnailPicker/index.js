@@ -24,17 +24,17 @@ const ThumbnailPicker = (props) => {
       assets, errorCode, didCancel,
     } = response;
     if (didCancel) {
-      onCancel()
+      onCancel();
     }
 
     if (errorCode) {
-      onError(errorCode)
+      onError(errorCode);
     }
 
     if (assets && assets.length) {
       onSuccess(assets);
     }
-  }
+  };
 
   const uploadImage = async (data) => {
     const newImage = await ImageResizer.createResizedImage(data.uri, 180, 180, 'PNG', 80);
@@ -45,27 +45,27 @@ const ThumbnailPicker = (props) => {
       name: 'avatar',
     });
 
-    const response = await ImageUpload(formData)
+    const response = await ImageUpload(formData);
 
     if (response.status) {
       return response.url;
     }
     return false;
-  }
+  };
 
   const handleImage = async (data) => {
     console.log('Data of the uploaded image', data);
     const uploadPromise = await uploadImage(data);
     props.onImageChoose(uploadPromise);
-  }
-
-
-  const onSuccess = (response) => {
-    handleImage(response[0])
   };
 
 
-  const  showImagePicker = (event) => {
+  const onSuccess = (response) => {
+    handleImage(response[0]);
+  };
+
+
+  const showImagePicker = (event) => {
     const options = [i18n.t('popups.photoUpload.takePhoto'), i18n.t('popups.photoUpload.choosePhoto')];
     const pickerOptions = {
       mediaType: 'photo',
@@ -73,9 +73,9 @@ const ThumbnailPicker = (props) => {
       includeBase64: true,
       saveToPhotos: false,
       selectionLimit: 1,
-    }
-    const imageCallback = (response) => onSelectPicture(response);
-    
+    };
+    const imageCallback = response => onSelectPicture(response);
+
     if (Platform.OS === 'android') {
       UIManager.showPopupMenu(
         findNodeHandle(event.target),
@@ -103,7 +103,7 @@ const ThumbnailPicker = (props) => {
         },
         (buttonIndex) => {
           if (buttonIndex === 0) {
-            onCancel()
+            onCancel();
           }
 
           if (buttonIndex === 1) {
@@ -116,7 +116,7 @@ const ThumbnailPicker = (props) => {
         },
       );
     }
-  }
+  };
 
   return (
     <Thumbnail
@@ -126,7 +126,7 @@ const ThumbnailPicker = (props) => {
       source={props.avatarSource}
     />
   );
-}
+};
 
 ThumbnailPicker.defaultProps = {
   onImageChoose: () => null,

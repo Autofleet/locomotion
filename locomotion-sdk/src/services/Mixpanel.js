@@ -1,5 +1,6 @@
 import Mixpanel from 'react-native-mixpanel';
 import { getDeviceId } from 'react-native-device-info';
+
 export const getElementName = props => props['data-test-id'] || props.id;
 
 class MixpanelService {
@@ -9,8 +10,8 @@ class MixpanelService {
   }
 
   init = async () => {
-    if (!this.isInit) { 
-      /*if Config.OPERATION_ID is valid then mixpanelToken = Config.MIXPANEL_TOKEN */
+    if (!this.isInit) {
+      /* if Config.OPERATION_ID is valid then mixpanelToken = Config.MIXPANEL_TOKEN */
       await Mixpanel.sharedInstanceWithToken('token', true);
       this.isInit = true;
     }

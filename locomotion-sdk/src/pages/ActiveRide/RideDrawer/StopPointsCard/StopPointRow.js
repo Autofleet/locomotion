@@ -56,7 +56,7 @@ const AddressText = styled.Text`
   color: #666666;
   margin-start: 22;
   margin-end: 16;
-  opacity: ${({selected}) => selected ? 1 : 0.5};
+  opacity: ${({ selected }) => (selected ? 1 : 0.5)};
 `;
 
 const EtaText = styled.Text`
@@ -91,15 +91,15 @@ const AddressTitle = styled.Text`
 `;
 
 export default ({
-  pickup, description, eta, completedAt, openLocationSelect, useBorder, title, selected
+  pickup, description, eta, completedAt, openLocationSelect, useBorder, title, selected,
 }) => (
-  <RowContainer pickup={pickup} onPress={openLocationSelect} useBorder={useBorder} paddingStart data-test-id='OpenLocationSelectButton'>
+  <RowContainer pickup={pickup} onPress={openLocationSelect} useBorder={useBorder} paddingStart data-test-id="OpenLocationSelectButton">
     <StopPointDotContainer origin={pickup}>
       <StopPointDot origin={pickup} />
       <StopPointDotTimeLine />
     </StopPointDotContainer>
     <AddressTextCont>
-    <View>
+      <View>
         <AddressTitle>
           {title}
         </AddressTitle>

@@ -8,7 +8,7 @@ import i18n from '../../../../../I18n';
 import { getTogglePopupsState } from '../../../../../context/main';
 import InputIcon from '../../../../../assets/arrow-down.png';
 import settingsContext from '../../../../../context/settings';
-import TimePicker from './Picker'
+import TimePicker from './Picker';
 
 const TimeSelectorsContainer = styled.View`
     width: 100%;
@@ -25,17 +25,16 @@ const DateTimePicker = ({ onScheduleTimeSelect }) => {
   const [selectedTime, setSelectedTime] = useState('');
 
   useEffect(() => {
-    useSettings.getWorkingHours()
-  }, [])
+    useSettings.getWorkingHours();
+  }, []);
 
   useEffect(() => {
-    if(useSettings.workingHours) {
-      getOptionalDates()
+    if (useSettings.workingHours) {
+      getOptionalDates();
     }
-
-  }, [useSettings.workingHours])
+  }, [useSettings.workingHours]);
   const getOptionalDates = () => {
-    const workingHours = useSettings.workingHours
+    const { workingHours } = useSettings;
     const min = moment().add(useSettings.settingsList.FUTURE_ORDER_MIN_TIME, 'minutes');
     const max = moment(min).add(useSettings.settingsList.FUTURE_ORDER_MAX_TIME, 'hours');
     let calculatedDate = moment(min);
@@ -119,8 +118,6 @@ const DateTimePicker = ({ onScheduleTimeSelect }) => {
     setSelectedTime(data[0]);
     return newData;
   };
-
-
 
 
   return (

@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import xIcon from '../../assets/x.png'
+import xIcon from '../../assets/x.png';
 import Button from '../../Components/Button';
 
 export const Container = styled.View`

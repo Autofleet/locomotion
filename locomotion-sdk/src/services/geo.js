@@ -15,7 +15,7 @@ const currentLocationNative = async () => {
     if (navigator && navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         resolve, reject,
-        {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000},
+        { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 },
       );
     } else {
       reject();
@@ -35,7 +35,7 @@ class Geo {
         ios: 'bestForNavigation',
         android: 'highAccuracy',
       },
-       // Android only
+      // Android only
       androidProvider: 'playServices',
       interval: 5000,
       maxWaitTime: 5000,
@@ -85,16 +85,15 @@ class Geo {
   handleLocation = (location) => {
     const newLocation = Object.assign({}, location);
     this.lastLocation = newLocation;
-    return location
+    return location;
   };
 
   handleLocationError = (error) => {
     Object.keys(this.watchCbs).forEach(key => this.watchCbs[key].onError(error));
   };
 
-  prepareCoords = (locations) => {
-    return { coords: { latitude: locations[0].latitude, longitude: locations[0].longitude }, timestamp: new Date() }}
+  prepareCoords = locations => ({ coords: { latitude: locations[0].latitude, longitude: locations[0].longitude }, timestamp: new Date() })
 }
 
 export default new Geo();
-export const decodeGmPath = Geo.decodeGmPath;
+export const { decodeGmPath } = Geo;

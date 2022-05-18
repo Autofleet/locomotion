@@ -15,19 +15,18 @@ export const Text = styled.Text`
   text-align: center;
 `;
 
-export const SubText = styled(Text) `
+export const SubText = styled(Text)`
  margin-top: 25px;
 
-`
+`;
 
-export const ButtonContainer = styled.View `
+export const ButtonContainer = styled.View`
   position: absolute;
   bottom: 15px;
   width: 100%;
-`
+`;
 
-export const HeaderText = styled(Text) `
+export const HeaderText = styled(Text)`
   font-weight: 700;
   margin-top: 25px;
-`
-
+`;

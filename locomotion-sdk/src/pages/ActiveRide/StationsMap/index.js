@@ -4,13 +4,14 @@ import I18n from '../../../I18n';
 import StationMarker from './stationMarker';
 
 export default ({
-  markersMap, isInOffer, selectStation, requestStopPoints,activeRideState
-}) =>  (
-  markersMap.map(marker => {
-    const {lat,lng} = marker;
-    let pickup, dropoff;
+  markersMap, isInOffer, selectStation, requestStopPoints, activeRideState,
+}) => (
+  markersMap.map((marker) => {
+    const { lat, lng } = marker;
+    let pickup; let
+      dropoff;
 
-    if(!activeRideState) {
+    if (!activeRideState) {
       pickup = requestStopPoints.pickup && requestStopPoints.pickup.lng === lng && requestStopPoints.pickup.lat === lat;
       dropoff = requestStopPoints.dropoff && requestStopPoints.dropoff.lng === lng && requestStopPoints.dropoff.lat === lat;
     } else {
@@ -20,7 +21,7 @@ export default ({
 
     const getMarkerType = () => {
       if (pickup) {
-        return 'pickup'
+        return 'pickup';
       }
 
       if (dropoff) {
@@ -29,10 +30,10 @@ export default ({
 
 
       return null;
-    }
+    };
 
     const markerType = getMarkerType();
-    if((isInOffer || activeRideState) && markerType === null) {
+    if ((isInOffer || activeRideState) && markerType === null) {
       return null;
     }
 
@@ -44,6 +45,6 @@ export default ({
         type={markerType}
         {...marker}
       />
-    )
+    );
   })
 );

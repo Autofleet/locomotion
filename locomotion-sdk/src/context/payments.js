@@ -14,16 +14,16 @@ const usePayments = () => {
 
   const loadCustomer = async () => {
     const customerData = await getCustomer();
-    if(customerData.isExist) {
-      setCustomer(customerData.customer)
+    if (customerData.isExist) {
+      setCustomer(customerData.customer);
       return customerData;
     }
     return null;
-  }
+  };
 
   const createCustomer = async () => {
     const { data: clientData } = await network.post('/api/v1/me/payments/customer');
-    setCustomer(clientData.client)
+    setCustomer(clientData.client);
     return clientData;
   };
 
@@ -35,7 +35,7 @@ const usePayments = () => {
 
   const getPaymentMethods = async () => {
     const { data: paymentMethodsData } = await network.get('/api/v1/me/payments/methods');
-    setPaymentMethods(paymentMethodsData)
+    setPaymentMethods(paymentMethodsData);
     return paymentMethodsData;
   };
 
@@ -54,7 +54,7 @@ const usePayments = () => {
     createIntent,
     getPaymentMethods,
     paymentMethods,
-    detachPaymentMethod
+    detachPaymentMethod,
   };
 };
 export default createContainer(usePayments);

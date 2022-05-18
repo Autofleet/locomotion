@@ -9,9 +9,7 @@ class Auth {
     return decoded.exp && decoded.exp > now;
   }
 
-  loginRefresh = async (network, body) => {
-    return network.post('api/v1/login/refresh', body)
-  }
+  loginRefresh = async (network, body) => network.post('api/v1/login/refresh', body)
 
   getAT = async (network) => {
     const { accessToken, refreshToken } = await StorageService.get(['accessToken', 'refreshToken']);
@@ -42,7 +40,6 @@ class Auth {
   }
 
   logout = async (navigation) => {
-
     // TODO: call server on logout
     // try {
     //   await network.post('api/v1/me/logout')
@@ -50,7 +47,7 @@ class Auth {
     //   console.log('Bad logout request', e)
     // }
     await AppSettings.destroy();
-    return navigation.replace('AuthScreens', { screen: 'Login'});
+    return navigation.replace('AuthScreens', { screen: 'Login' });
   }
 
   onFaildAuth(cb) {

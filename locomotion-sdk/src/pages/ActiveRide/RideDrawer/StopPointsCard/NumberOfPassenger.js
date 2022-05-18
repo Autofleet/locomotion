@@ -136,14 +136,15 @@ export default ({ amount, onChange }) => {
         <PassengerAmountText>{newAmount}</PassengerAmountText>
         <PassengerControlersContainer>
           <SetPassengerAmountBoxContainer disabled={!validateChange(newAmount, -1)}>
-            <SetPassengerAmountBox data-test-id='SetPassengerAmountMinusButton'
+            <SetPassengerAmountBox
+              data-test-id="SetPassengerAmountMinusButton"
               onPress={getNewAmountFunction(-1)}
             >
               <MinusIcon />
             </SetPassengerAmountBox>
           </SetPassengerAmountBoxContainer>
           <SetPassengerAmountBoxContainer disabled={!validateChange(newAmount, 1)}>
-            <SetPassengerAmountBox data-test-id='SetPassengerAmountPlusButton' onPress={getNewAmountFunction(1)}><PlusIcon /></SetPassengerAmountBox>
+            <SetPassengerAmountBox data-test-id="SetPassengerAmountPlusButton" onPress={getNewAmountFunction(1)}><PlusIcon /></SetPassengerAmountBox>
           </SetPassengerAmountBoxContainer>
         </PassengerControlersContainer>
       </View>

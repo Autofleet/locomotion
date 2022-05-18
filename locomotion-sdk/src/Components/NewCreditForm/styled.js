@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
 export const SkipSubmitContainer = styled.View`
     margin-bottom: 10px;
