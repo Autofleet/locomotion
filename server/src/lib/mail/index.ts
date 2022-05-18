@@ -1,7 +1,7 @@
 import MailService from '@sendgrid/mail';
 import logger from '../../logger';
 
-const SENDGRID_KEY = process.env.SENDGRID_API_KEY || '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';
+const SENDGRID_KEY = process.env.SENDGRID_API_KEY;
 MailService.setApiKey(SENDGRID_KEY);
 
 const SUBJECT = 'Please confirm your email address';
