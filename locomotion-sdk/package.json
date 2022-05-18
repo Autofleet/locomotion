@@ -4,7 +4,8 @@
   "description": "",
   "main": "src/index.js",
   "scripts": {
-    "linter": "eslint '**/*.{js,jsx}' --quiet"
+    "linter": "eslint '**/*.{js,jsx,ts,tsx}' --quiet",
+    "ts": "tsc"
   },
   "repository": {
     "type": "git",
@@ -86,6 +87,9 @@
     "@storybook/react": "^5.1.9",
     "@storybook/react-native": "^5.2.0-beta.3",
     "@storybook/react-native-server": "^5.2.0-beta.3",
+    "@types/jest": "^27.5.1",
+    "@types/react-native": "^0.67.7",
+    "@types/react-test-renderer": "^18.0.0",
     "babel-eslint": "^10.0.2",
     "babel-jest": "^24.1.0",
     "babel-loader": "^8.0.6",
@@ -96,7 +100,8 @@
     "eslint-plugin-react": "^7.14.2",
     "eslint-watch": "^3.1.4",
     "jest": "^24.1.0",
-    "metro-react-native-babel-preset": "^0.54.1"
+    "metro-react-native-babel-preset": "^0.54.1",
+    "typescript": "^4.6.4"
   },
   "jest": {
     "preset": "react-native"
