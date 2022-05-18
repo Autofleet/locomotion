@@ -39,7 +39,7 @@ jobs:
 
       - run: npm run linter
 
-      - run: npm run tc
+      - run: npm run ts
 
 #      - name: coverage
 #        run: npm run coverage
