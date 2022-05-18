@@ -3,7 +3,7 @@ import { View } from 'react-native';
 import styled from 'styled-components';
 import i18n from '../../../I18n';
 
-import RideRoundedButton from '../../../Components/RideButton';
+import RideRoundedButton from '../../../Components/RoundedButton';
 
 export const Drawer = styled.View`
   position: absolute;
@@ -11,7 +11,7 @@ export const Drawer = styled.View`
   width: 90%;
   background-color: #fff;
   left: 5%;
-  border-radius: 10;
+  border-radius: 10px;
   shadow-offset: 0px 0px;
   shadow-color: #04214f;
   shadow-opacity: 0.4;
@@ -20,7 +20,7 @@ export const Drawer = styled.View`
 const address = `
   min-height: 50;
   padding-top: 10;
-  padding-bottom: 10;
+  padding-bottom: 10px;
   padding-start: 24;
   align-items: center;
   flex-direction: row;
@@ -53,14 +53,14 @@ const styleForDriverIsArrivedState = `
 `;
 
 export const RideStatusText = styled.Text`
-  font-size: 16;
+  font-size: 16px;
   color: #666666;
   margin-start: 12;
   ${({ state }) => (state === 'driverArrived' ? styleForDriverIsArrivedState : null)}
 `;
 
 export const RideDetailsText = styled.Text`
-  font-size: 13;
+  font-size: 13px;
   color: #666666;
   margin-start: 10;
   text-align: ${({ right }) => (right ? 'right' : 'left')};
@@ -103,7 +103,7 @@ export const RideButtonText = styled.Text`
 export const RowContainer = styled.TouchableOpacity`
   min-height: 50;
   padding-top: 10;
-  padding-bottom: 10;
+  padding-bottom: 10px;
   align-items: center;
   flex-direction: row;
   ${({ paddingStart }) => (paddingStart ? `

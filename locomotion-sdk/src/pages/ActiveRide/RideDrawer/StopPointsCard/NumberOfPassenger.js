@@ -13,9 +13,9 @@ const MAX_NUMBER_OF_PASSENGER = 5;
 const MIN_NUMBER_OF_PASSENGER = 1;
 
 const PassengerAmountContainer = styled.View`
-  min-height: 50;
-  padding-top: 10;
-  padding-bottom: 10;
+  min-height: 50px;
+  padding-top: 10px;
+  padding-bottom: 10px;
   align-items: center;
   flex-direction: row;
   padding-start: 20;
@@ -25,9 +25,9 @@ const PassengerAmountTouchableOpacity = styled.TouchableOpacity`
   flex-direction: row;
   justify-content: center;
   margin-right: 15px;
-  border-width: 1;
+  border-width: 1px;
   border-color: #333333;
-  border-radius: 3;
+  border-radius: 3px;
   padding: 5px;
   padding-right: 8px;
   padding-left: 8px;

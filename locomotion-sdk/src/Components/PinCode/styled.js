@@ -26,6 +26,6 @@ export const DigitInput = styled.TextInput`
   height: 50px;
   border-color: #dedede;
   text-align: center;
-  border-width: 1;
+  border-width: 1px;
   border-radius: 2px;
 `;

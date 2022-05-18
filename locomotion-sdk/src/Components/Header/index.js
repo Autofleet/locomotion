@@ -1,22 +1,10 @@
 import React from 'react';
-import { Image } from 'react-native';
-import styled from 'styled-components';
+import {Image} from 'react-native';
 import Button from '../Button';
 import SafeView from '../SafeView';
+import {HeaderView} from "./styled";
 
 const HamburgerIconSource = require('../../assets/menu.png');
-
-const HeaderView = styled.View`
-  align-self: flex-start;
-  margin-top: 14px;
-  margin-left: 14px;
-
-  ${({ menuSide }) => (menuSide === 'right' ? `
-  align-self: flex-end;
-  margin-right: 14px;
-  margin-left: 0;
-  ` : '')}
-`;
 
 
 const Header = ({ navigation, menuSide }) => (

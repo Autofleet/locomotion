@@ -45,8 +45,8 @@ router.put('/:rideId', async (req, res) => {
     return res.json({ error: 'ride not found' });
   }
 
-  const { stopPoints } = req.body.ride;
-  logger.info(`Webhook - rideId: ${req.params.rideId} currentState: ${ride.state}  newState: ${req.body.ride.state} SpsStates: ${(stopPoints.map((s) => s.state)).join()}`);
+  const { stopPoints } = req.body.data;
+  logger.info(`Webhook - rideId: ${req.params.rideId} currentState: ${ride.state}  newState: ${req.body.data.state} SpsStates: ${(stopPoints.map((s) => s.state)).join()}`);
   const isReminderShouldBeSent = async () => {
     const { value: arriveReminderMin } = await settingsService.getSettingByKeyFromDb('ARRIVE_REMINDER_MIN');
     const etaTime = moment(stopPoints[0].eta);
@@ -57,7 +57,7 @@ router.put('/:rideId', async (req, res) => {
     return diff <= arriveReminderMin;
   };
 
-  if (stopPoints && !ride.arrivingPush && (req.body.ride.state === 'active' || req.body.ride.state === 'dispatched')) {
+  if (stopPoints && !ride.arrivingPush && (req.body.data.state === 'active' || req.body.data.state === 'dispatched')) {
     const shouldRemind = await isReminderShouldBeSent();
 
     if (stopPoints[0].completedAt === null && shouldRemind) {
@@ -96,7 +96,7 @@ router.put('/:rideId', async (req, res) => {
     }
   }
 
-  if (req.body.ride.state === 'active' || req.body.ride.state === 'dispatched') {
+  if (req.body.data.state === 'active' || req.body.data.state === 'dispatched') {
     if (ride.state === 'pending') {
       const user = await User.findOne({
         where: {
@@ -114,29 +114,29 @@ router.put('/:rideId', async (req, res) => {
     }
     ride.state = 'active';
     await ride.save();
-  } else if (req.body.ride.state === 'completed') {
+  } else if (req.body.data.state === 'completed') {
     ride.state = 'completed';
     await ride.save();
-  } else if (req.body.ride.state === 'failed') {
+  } else if (req.body.data.state === 'failed') {
     if (ride.state !== 'canceled') {
       cancelPush(ride.userId, ride.id, 'failureRide');
     }
     ride.state = 'canceled';
     await ride.save();
-  } else if (req.body.ride.state === 'canceled') {
+  } else if (req.body.data.state === 'canceled') {
     ride.state = 'canceled';
     await ride.save();
     const currentRide = ride.get();
-    if (!req.body.ride.cancellationReason.includes('user') && !currentRide.scheduledTo) {
+    if (!req.body.data.cancellationReason.includes('user') && !currentRide.scheduledTo) {
       cancelPush(ride.userId, ride.id, 'findingNewDriver');
 
-      const [pickup, dropoff] = req.body.ride.stopPoints;
+      const [pickup, dropoff] = req.body.data.stopPoints;
       await rideService.create({
         userId: currentRide.userId,
         state: 'creating',
-        numberOfPassengers: req.body.ride.numberOfPassengers,
-        rideType: req.body.ride.rideType,
-        scheduledTo: req.body.ride.scheduledTo,
+        numberOfPassengers: req.body.data.numberOfPassengers,
+        rideType: req.body.data.rideType,
+        scheduledTo: req.body.data.scheduledTo,
         stopPoints: [
           {
             type: 'pickup',
@@ -154,15 +154,15 @@ router.put('/:rideId', async (req, res) => {
       }, ride.userId, ride.operationId);
     }
 
-    if (!req.body.ride.cancellationReason.includes('user') && currentRide.scheduledTo) {
+    if (!req.body.data.cancellationReason.includes('user') && currentRide.scheduledTo) {
       cancelPush(ride.userId, ride.id, 'futureRideFleetCancel');
     }
 
-    if (req.body.ride.cancellationReason.includes('no-show')) {
+    if (req.body.data.cancellationReason.includes('no-show')) {
       cancelPush(ride.userId, ride.id, 'failureRide');
     }
-  } else if (req.body.ride.state === 'rejected') {
-    if (req.body.ride.scheduledTo) {
+  } else if (req.body.data.state === 'rejected') {
+    if (req.body.data.scheduledTo) {
       cancelPush(ride.userId, ride.id, 'futureRideCanceled');
     } else {
       cancelPush(ride.userId, ride.id, 'rideReject');

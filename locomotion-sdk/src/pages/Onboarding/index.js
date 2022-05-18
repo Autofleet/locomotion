@@ -116,7 +116,7 @@ export default ({
 
   const onImageChoose = (uploadPromise) => {
     setOnboardingState({
-      uploadPromise,
+      avatar: uploadPromise,
     });
   };
 

@@ -5,7 +5,7 @@ import xIcon from '../../../../assets/x.png'
 import Button from '../../../../Components/Button';
 
 export const MessageContainer = styled.View`
-    min-height: 20;
+    min-height: 20px;
     padding-top: 20px;
     padding-bottom: 20px;
     align-items: center;
