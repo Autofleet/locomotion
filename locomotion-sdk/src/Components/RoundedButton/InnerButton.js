@@ -1,7 +1,7 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import propsTypes from 'prop-types';
-import Loader from "../Loader";
-import {ButtonTextContainer, StyledTouchableOpacity, SubmitButtonText} from "./styled";
+import Loader from '../Loader';
+import { ButtonTextContainer, StyledTouchableOpacity, SubmitButtonText } from './styled';
 
 const InnerButton = ({
   onPress,
@@ -66,7 +66,7 @@ InnerButton.defaultProps = {
   hollow: false,
   onPress: () => null,
   disabled: false,
-  useCancelTextButton: false
+  useCancelTextButton: false,
 };
 
 InnerButton.propTypes = {
@@ -74,7 +74,7 @@ InnerButton.propTypes = {
   hollow: propsTypes.bool,
   onPress: propsTypes.func,
   disabled: propsTypes.bool,
-  useCancelTextButton: propsTypes.bool
+  useCancelTextButton: propsTypes.bool,
 };
 
 export default InnerButton;

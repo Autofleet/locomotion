@@ -1,9 +1,11 @@
-import React, {useEffect, useRef, useState} from 'react';
-import {Image} from 'react-native';
+import React, { useEffect, useRef, useState } from 'react';
+import { Image } from 'react-native';
 import RNSwipeVerify from 'react-native-swipe-verify';
 import i18n from '../../I18n';
-import Loader from "../Loader";
-import {ButtonText, DrawerButtonContainer, SliderContainer, styleScheme} from "./styled";
+import Loader from '../Loader';
+import {
+  ButtonText, DrawerButtonContainer, SliderContainer, styleScheme,
+} from './styled';
 
 const arrowIcon = require('../../assets/slider-arrow.png');
 const checkIcon = require('../../assets/check.png');

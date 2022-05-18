@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import RoundedButton from '../../../../Components/RoundedButton';
-import xIconWhite from '../../../../assets/x-white.png'
+import xIconWhite from '../../../../assets/x-white.png';
 import Button from '../../../../Components/Button';
 
 export const FutureRidesButton = styled(Button)`

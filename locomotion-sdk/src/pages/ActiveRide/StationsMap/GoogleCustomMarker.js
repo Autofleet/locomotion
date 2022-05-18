@@ -11,23 +11,21 @@ import {
 
 const AndroidMarkerContainer = styled(MarkerContainer)`
   justify-content: space-between;
-`
+`;
 
 const AndroidMarkerToolTip = styled(MarkerToolTip)`
   margin-bottom: 5px;
-`
+`;
 
 
-
-export default  ({ type }) => (
-    <AndroidMarkerContainer>
-      {type
-        ? (
-          <AndroidMarkerToolTip type={type}>
-            <MarkerToolTipText>{I18n.t(`home.map.markers.${type}`)}</MarkerToolTipText>
-          </AndroidMarkerToolTip>
-        ) : null}
-      <StationDot type={type} isGoogle={true} />
-    </AndroidMarkerContainer>
-  );
-
+export default ({ type }) => (
+  <AndroidMarkerContainer>
+    {type
+      ? (
+        <AndroidMarkerToolTip type={type}>
+          <MarkerToolTipText>{I18n.t(`home.map.markers.${type}`)}</MarkerToolTipText>
+        </AndroidMarkerToolTip>
+      ) : null}
+    <StationDot type={type} isGoogle />
+  </AndroidMarkerContainer>
+);

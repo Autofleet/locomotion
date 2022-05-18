@@ -10,7 +10,6 @@ import TextInput from '../TextInput';
 import codesList from './codes.json';
 
 
-
 const DEFAULT_COUNTRY_CODE = Config.DEFAULT_COUNTRY_CODE || 'IL';
 
 

@@ -1,2 +1,2 @@
-export *  from './main';
-export { default as MainContext } from './main'
+export * from './main';
+export { default as MainContext } from './main';

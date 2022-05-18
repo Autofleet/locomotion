@@ -21,12 +21,12 @@ const AuthLoadingScreen = ({ navigation }) => {
       });
 
       if (payload.userProfile) {
-        const response = await getUserDetails()
+        const response = await getUserDetails();
         if (!response) {
           Auth.logout(navigation);
         }
 
-        const userData = response
+        const userData = response;
         const userProfile = {
           firstName: userData.firstName,
           lastName: userData.lastName,
@@ -39,16 +39,16 @@ const AuthLoadingScreen = ({ navigation }) => {
         await AppSettings.update({ userProfile });
 
         const nonUserNav = (screen) => {
-          navigation.replace('AuthScreens', { screen, params: { showHeaderIcon: false }});
-        }
+          navigation.replace('AuthScreens', { screen, params: { showHeaderIcon: false } });
+        };
 
         if (!userData.active) {
-         return nonUserNav('Lock')
+          return nonUserNav('Lock');
         }
 
         if (needOnboarding(userProfile)) {
           if (!userProfile.firstName || !userProfile.lastName) {
-            return navigation.replace('AuthScreens', { screen: 'Name' })
+            return navigation.replace('AuthScreens', { screen: 'Name' });
           }
         }
 

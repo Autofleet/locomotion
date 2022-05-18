@@ -1,7 +1,9 @@
 import React from 'react';
-import { View, Text, Image, TouchableOpacity } from 'react-native';
+import {
+  View, Text, Image, TouchableOpacity,
+} from 'react-native';
 import styled from 'styled-components';
-import xIcon from '../../assets/x.png'
+import xIcon from '../../assets/x.png';
 import Button from '../../Components/Button';
 
 export const SummaryContainer = styled.View`
@@ -109,11 +111,10 @@ export const SummaryStars = styled.View`
   margin-bottom: 10px;
 `;
 
-export const StarIcon = styled.Image(({isOn}) => `
+export const StarIcon = styled.Image(({ isOn }) => `
   padding: 10px 20px;
   display: flex;
   height: 30px;
   width: 30px;
   opacity: ${isOn ? null : 0.4};
 `);
-

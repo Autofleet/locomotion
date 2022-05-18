@@ -1,6 +1,6 @@
 import React, { Fragment, useEffect, useState } from 'react';
 import { useNavigation, useRoute } from '@react-navigation/native';
-import SafeView from '../../Components/SafeView'
+import SafeView from '../../Components/SafeView';
 import i18n from '../../I18n';
 import PageHeader from '../../Components/PageHeader';
 import {
@@ -22,20 +22,20 @@ const NoRidesMessage = () => (
 
 export default ({ menuSide }) => {
   const [rides, setRides] = useState(null);
-  const navigation = useNavigation()
-  const route = useRoute()
+  const navigation = useNavigation();
+  const route = useRoute();
   const toggleMenu = () => {
     navigation.toggleDrawer();
   };
   const getRides = async () => {
-    const history = await getRidesHistory()
+    const history = await getRidesHistory();
     if (history && history.rides) {
       setRides(history.rides);
     }
   };
 
   useEffect(() => {
-    Mixpanel.pageView(route.name)
+    Mixpanel.pageView(route.name);
     getRides();
   }, []);
 

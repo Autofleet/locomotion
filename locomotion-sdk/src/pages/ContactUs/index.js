@@ -13,25 +13,25 @@ const { CONTACT_US_URL: uri } = Config;
 
 
 export default ({ navigation, menuSide }) => {
-  const route = useRoute()
+  const route = useRoute();
   const [settings, setSettings] = useState({
     termsUrl: null,
     privacyUrl: null,
     contactUsUrl: null,
   });
   const loadSettings = async () => {
-    const settingsData = await getLoginSettings()
+    const settingsData = await getLoginSettings();
     setSettings(settingsData);
   };
 
   useEffect(() => {
-    Mixpanel.pageView(route.name)
+    Mixpanel.pageView(route.name);
     loadSettings();
   }, []);
 
   return (
     <PageContainer>
-      <SafeView style={{height: '100%', width: '100%'}}>
+      <SafeView style={{ height: '100%', width: '100%' }}>
         <PageHeader
           title={i18n.t('contactUs.pageTitle')}
           onIconPress={() => navigation.toggleDrawer()}
@@ -41,7 +41,7 @@ export default ({ navigation, menuSide }) => {
           <WebView
             source={{ uri: settings.contactUsUrl }}
             style={{ marginTop: 40 }}
-            useWebKit={true}
+            useWebKit
           />
         ) : null}
       </SafeView>

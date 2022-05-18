@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from "react";
-import { Trans } from "react-i18next";
+import React, { useEffect, useState } from 'react';
+import { Trans } from 'react-i18next';
+import { useRoute } from '@react-navigation/native';
 import logo from '../../../assets/logo.png';
-import i18n from "../../../I18n";
+import i18n from '../../../I18n';
 import {
   ButtonsContainer,
   ButtonText,
@@ -10,17 +11,16 @@ import {
   TermsText,
   TermsLink,
   LogoContainer,
-  Logo
-} from "./styles";
-import { SafeView } from "../Onboarding/styles";
-import WebView from "../../WebView";
-import { getLoginSettings } from "../../../context/user/api";
-import Mixpanel from "../../../services/Mixpanel";
-import { useRoute } from "@react-navigation/native";
+  Logo,
+} from './styles';
+import { SafeView } from '../Onboarding/styles';
+import WebView from '../../WebView';
+import { getLoginSettings } from '../../../context/user/api';
+import Mixpanel from '../../../services/Mixpanel';
 
 const StartScreen = ({ navigation }) => {
   const [webViewWindow, setWebViewWindow] = useState(null);
-  const route = useRoute()
+  const route = useRoute();
   const [settings, setSettings] = useState({
     termsUrl: null,
     privacyUrl: null,
@@ -28,12 +28,12 @@ const StartScreen = ({ navigation }) => {
   });
 
   const loadSettings = async () => {
-    const settings = await getLoginSettings()
+    const settings = await getLoginSettings();
     setSettings(settings);
   };
 
   useEffect(() => {
-    Mixpanel.pageView(route.name)
+    Mixpanel.pageView(route.name);
     loadSettings();
   }, []);
 
@@ -57,12 +57,12 @@ const StartScreen = ({ navigation }) => {
         {!webViewWindow ? (
           <>
             <LogoContainer>
-                        <Logo source={logo} />
-                    </LogoContainer>
-                    <ButtonsContainer>
-                        <StartButton
+              <Logo source={logo} />
+            </LogoContainer>
+            <ButtonsContainer>
+              <StartButton
                 onPress={() => {
-                  navigation.navigate('Phone')
+                  navigation.navigate('Phone');
                 }}
               >
                 <ButtonText>{i18n.t('login.getStarted')}</ButtonText>
@@ -74,14 +74,14 @@ const StartScreen = ({ navigation }) => {
               >
                 {[
                   <TermsLink
-                    key={'OpenTermsButton'}
+                    key="OpenTermsButton"
                     onPress={() => openTerms()}
-                    data-test-id='OpenTermsButton'
+                    data-test-id="OpenTermsButton"
                   />,
                   <TermsLink
-                    key={'OpenPrivacyButton'}
+                    key="OpenPrivacyButton"
                     onPress={() => openPrivacy()}
-                    data-test-id='OpenPrivacyButton'
+                    data-test-id="OpenPrivacyButton"
                   />,
                 ]}
               </Trans>
@@ -95,7 +95,7 @@ const StartScreen = ({ navigation }) => {
         )}
       </PageContainer>
     </SafeView>
-  )
-}
+  );
+};
 
 export default StartScreen;

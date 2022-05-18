@@ -33,7 +33,7 @@ import { getLoginSettings, loginApi, loginVert } from '../../context/user/api';
 const LogoIconSource = require('../../assets/logo.png');
 
 const Login = ({ navigation, logo }) => {
-  const route = useRoute()
+  const route = useRoute();
   const [loginState, dispatchLoginState] = useState({
     phoneNumber: null,
     vertCode: null,
@@ -48,12 +48,12 @@ const Login = ({ navigation, logo }) => {
   });
 
   const loadSettings = async () => {
-    const settings = await getLoginSettings()
+    const settings = await getLoginSettings();
     setSettings(settings);
   };
 
   useEffect(() => {
-    Mixpanel.pageView(route.name)
+    Mixpanel.pageView(route.name);
     loadSettings();
   }, []);
 
@@ -112,7 +112,7 @@ const Login = ({ navigation, logo }) => {
 
       await Auth.updateTokens(vertResponse.refreshToken, vertResponse.accessToken);
       const userProfile = vertResponse.userProfile || {};
-      Mixpanel.setUser(userProfile)
+      Mixpanel.setUser(userProfile);
       dispatch({
         type: 'saveState',
         payload: {
@@ -201,18 +201,20 @@ const Login = ({ navigation, logo }) => {
 
           {loginState.error ? <ErrorText>{loginState.error}</ErrorText> : undefined }
 
-          {isVertStep ? 
-            <ResendButton data-test-id='ResendLoginCodeButton' onPress={resendVertCode}>
-            <ResendButtonText>{I18n.t('login.resendButton')}</ResendButtonText>
-            </ResendButton> : undefined}
+          {isVertStep
+            ? (
+              <ResendButton data-test-id="ResendLoginCodeButton" onPress={resendVertCode}>
+                <ResendButtonText>{I18n.t('login.resendButton')}</ResendButtonText>
+              </ResendButton>
+            ) : undefined}
         </KeyboardAwareScrollView>
         <SubmitContainer>
 
           <TermsText>
             <Trans i18nKey="login.termsAgreement">
               {[
-                <TermsLink onPress={() => openTerms()} data-test-id='OpenTermsButton'/>,
-                <TermsLink onPress={() => openPrivacy()} data-test-id='OpenPrivacyButton'/>,
+                <TermsLink onPress={() => openTerms()} data-test-id="OpenTermsButton" />,
+                <TermsLink onPress={() => openPrivacy()} data-test-id="OpenPrivacyButton" />,
               ]}
             </Trans>
           </TermsText>

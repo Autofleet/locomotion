@@ -41,7 +41,7 @@ const TimeItem = styled(Button)`
     border-right-width: 0;
   ` : null)}
 
-  opacity: ${({disabled}) => disabled ? 0.4 : 1};
+  opacity: ${({ disabled }) => (disabled ? 0.4 : 1)};
 
   `;
 
@@ -63,7 +63,7 @@ const SelectionTitle = styled.Text`
 `;
 
 const OrderTimeSelector = ({
-  selected, text, onPress, side, disabled
+  selected, text, onPress, side, disabled,
 }) => (
   <TimeItem selected={selected} onPress={onPress} side={side} disabled={disabled} data-test-id={`${text}OrderTimeButton`}>
     <TextContainer selected={selected}>{text}</TextContainer>
@@ -82,12 +82,12 @@ export default ({ onScheduleTimeSelect, disableFuture = false, scheduledTo }) =>
   };
 
   useEffect(() => {
-    if((scheduledTo && scheduleType === 'now') && !disableFuture) {
-      onScheduleTypeSelect('future')
+    if ((scheduledTo && scheduleType === 'now') && !disableFuture) {
+      onScheduleTypeSelect('future');
     } else {
-      onScheduleTypeSelect('now')
+      onScheduleTypeSelect('now');
     }
-  }, [])
+  }, []);
 
   return (
     <Container>

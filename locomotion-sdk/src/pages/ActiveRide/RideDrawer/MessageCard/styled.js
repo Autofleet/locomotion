@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
 import styled from 'styled-components';
-import xIcon from '../../../../assets/x.png'
+import xIcon from '../../../../assets/x.png';
 import Button from '../../../../Components/Button';
 
 export const MessageContainer = styled.View`
@@ -35,7 +35,7 @@ export const CloseContainer = styled(Button)`
     top: 15px;
     width: 13px;
     height: 13px;
-`
+`;
 
 
 export const ResetInputIcon = styled.Image.attrs({ source: xIcon })`
@@ -43,4 +43,4 @@ export const ResetInputIcon = styled.Image.attrs({ source: xIcon })`
     height: 13px;
     width: 13px;
 
-`
+`;

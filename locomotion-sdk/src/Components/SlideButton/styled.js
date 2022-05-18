@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
 export const SliderContainer = styled.View`
   border-radius: 24px;
@@ -6,8 +6,8 @@ export const SliderContainer = styled.View`
   width: 100%;
 `;
 export const ButtonText = styled.Text`
-  color: ${({verified}) => (!verified ? '#08355c' : '#ffffff')};
-   ${({verified}) => (verified ? 'margin-right: 20px' : '')};
+  color: ${({ verified }) => (!verified ? '#08355c' : '#ffffff')};
+   ${({ verified }) => (verified ? 'margin-right: 20px' : '')};
 `;
 export const DrawerButtonContainer = styled.View`
   padding-top: 10px;

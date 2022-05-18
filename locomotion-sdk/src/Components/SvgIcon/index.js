@@ -1,7 +1,7 @@
 import React from 'react';
 import propTypes from 'prop-types';
-import { IconContainer } from './styled';
 import styled from 'styled-components';
+import { IconContainer } from './styled';
 
 const SvgIcon = ({
   svg,
@@ -15,20 +15,21 @@ const SvgIcon = ({
   const Icon = styled(svg)`
   width: ${width};
   height: ${height};
-  stroke: ${ stroke || '#6f6f6f'};
-  fill: ${ fill || '#6f6f6f'};
+  stroke: ${stroke || '#6f6f6f'};
+  fill: ${fill || '#6f6f6f'};
   `;
   return (
-  <IconContainer
-    onPress={onPress}
-    disabled={!onPress}
-    width={width}
-    height={height}
-    margin={margin}
-  >
-    <Icon />
-  </IconContainer>
-)}
+    <IconContainer
+      onPress={onPress}
+      disabled={!onPress}
+      width={width}
+      height={height}
+      margin={margin}
+    >
+      <Icon />
+    </IconContainer>
+  );
+};
 
 export default SvgIcon;
 

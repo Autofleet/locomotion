@@ -1,5 +1,6 @@
-import styled from "styled-components";
-import Button from "../../../Components/Button";
+import styled from 'styled-components';
+import Button from '../../../Components/Button';
+
 const loginTextColor = '#7c8799';
 
 export const PageContainer = styled.View`
@@ -28,9 +29,9 @@ height: 30px;
 margin: 10px 0;
 height: 50px;
 border-radius: 30px;
-background-color: ${({dark}) => dark ? 'grey' : 'white'};
-color: ${({dark}) => dark ? 'white' : 'grey'};
-${({dark}) => !dark && 'border: 1px solid grey'};
+background-color: ${({ dark }) => (dark ? 'grey' : 'white')};
+color: ${({ dark }) => (dark ? 'white' : 'grey')};
+${({ dark }) => !dark && 'border: 1px solid grey'};
 box-shadow: 0px 3px 3px grey;
 `;
 

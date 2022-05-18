@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet } from 'react-native';
 import styled from 'styled-components';
-import vehicleIcon from '../../assets/car-icon.png'
+import vehicleIcon from '../../assets/car-icon.png';
 
 export const PageContainer = styled.View({
   ...StyleSheet.absoluteFillObject,
@@ -33,13 +33,11 @@ export const VehicleIcon = styled.Image`
   border: 1px solid #09304e;
 `;
 
-export const VehicleDot = ({source}) => {
-  return (
-    <VehicleDotContainer>
-      <VehicleIcon source={vehicleIcon}></VehicleIcon>
-    </VehicleDotContainer>
-  )
-}
+export const VehicleDot = ({ source }) => (
+  <VehicleDotContainer>
+    <VehicleIcon source={vehicleIcon} />
+  </VehicleDotContainer>
+);
 /* export const VehicleDot = styled(PointDot)`
   width: 20;
   height: 20;

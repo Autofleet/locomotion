@@ -10,7 +10,7 @@ import RidePopups from './popups/RidePopups';
 
 const STRIPE_PUBLISHER_KEY = Config.STRIPE_PUBLISHER_KEY || '';
 
-export default props => {
+export default (props) => {
   useEffect(() => {
     initStripe({
       publishableKey: STRIPE_PUBLISHER_KEY,
@@ -22,7 +22,7 @@ export default props => {
     <MainProvider {...props}>
       <MainRouter {...props} />
       {props.children}
-      <RidePopups/>
+      <RidePopups />
     </MainProvider>
   );
 };

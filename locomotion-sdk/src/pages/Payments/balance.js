@@ -4,19 +4,20 @@ import i18n from '../../I18n';
 import {
   BalanceTitle,
   BalanceText,
-  BalanceTextContainer
+  BalanceTextContainer,
 } from './styled';
 
 
-export default ({ customer }) => {
-  return (
-        <BalanceTextContainer>
-          <BalanceTitle>
-            {i18n.t('payments.balance')}:
-          </BalanceTitle>
-          <BalanceText>
-            {customer ? customer.balance : null} {customer && customer.currency ? customer.currency : null}
-          </BalanceText>
-        </BalanceTextContainer>
-  );
-};
+export default ({ customer }) => (
+  <BalanceTextContainer>
+    <BalanceTitle>
+      {i18n.t('payments.balance')}
+      :
+    </BalanceTitle>
+    <BalanceText>
+      {customer ? customer.balance : null}
+      {' '}
+      {customer && customer.currency ? customer.currency : null}
+    </BalanceText>
+  </BalanceTextContainer>
+);

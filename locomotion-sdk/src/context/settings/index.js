@@ -6,34 +6,34 @@ const useSettings = () => {
   const [settingsList, setSettingsList] = useState({});
   const [workingHours, setWorkingHours] = useState({});
   const getSettings = async () => {
-    const settings = await getAppSettings()
+    const settings = await getAppSettings();
     setSettingsList(settings);
     return settings;
   };
 
   const getWorkingHours = async () => {
-    const workingHoursData = await getWorkingHoursData()
-    const prepWorkingHours = prepareWorkingHours(workingHoursData)
+    const workingHoursData = await getWorkingHoursData();
+    const prepWorkingHours = prepareWorkingHours(workingHoursData);
     setWorkingHours(prepWorkingHours);
   };
 
   const prepareWorkingHours = (workingHoursData) => {
-    let preparedworkingHours = {};
-    workingHoursData.map(timeSlot => {
-      if(!preparedworkingHours[timeSlot.dayInWeek]) {
+    const preparedworkingHours = {};
+    workingHoursData.map((timeSlot) => {
+      if (!preparedworkingHours[timeSlot.dayInWeek]) {
         preparedworkingHours[timeSlot.dayInWeek] = [];
       }
 
-      preparedworkingHours[timeSlot.dayInWeek].push({start: timeSlot.startTime, end: timeSlot.endTime})
-    })
+      preparedworkingHours[timeSlot.dayInWeek].push({ start: timeSlot.startTime, end: timeSlot.endTime });
+    });
     return preparedworkingHours;
-  }
+  };
 
   return {
     settingsList,
     getSettings,
     getWorkingHours,
-    workingHours
+    workingHours,
   };
 };
 export default createContainer(useSettings);

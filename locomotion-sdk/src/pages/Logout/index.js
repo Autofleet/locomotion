@@ -12,9 +12,7 @@ const Login = ({ navigation, logo }) => {
   }, []);
 
   return (
-    <Fragment>
-
-    </Fragment>
+    <Fragment />
   );
 };
 

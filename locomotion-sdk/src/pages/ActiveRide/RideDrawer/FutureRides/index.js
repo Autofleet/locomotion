@@ -15,7 +15,7 @@ import {
   CancelButtonContainer,
   DetailsRowContainer,
   CloseIcon,
-  CloseIconContainer
+  CloseIconContainer,
 } from './styled';
 import StopPointRow from './StopPointRow';
 
@@ -23,31 +23,31 @@ export const FutureOrdersButton = ({
   futureRides, isOpen, onPress,
 }) => {
   const onClosePress = () => {
-    if(!futureRides || !futureRides.length) {
+    if (!futureRides || !futureRides.length) {
       return null;
     }
 
     return onPress();
-  }
+  };
 
   return (
     futureRides && futureRides.length ? (
-    <FutureRidesButton onPress={onClosePress} data-test-id='FutureRidesButton'>
-      <FutureRideButtonText>
-        {isOpen
-          ? i18n.t('home.futureRides.closeButton')
-          : i18n.t('home.futureRides.openBookingsButton', { openBookings: futureRides ? futureRides.length : 0 })
+      <FutureRidesButton onPress={onClosePress} data-test-id="FutureRidesButton">
+        <FutureRideButtonText>
+          {isOpen
+            ? i18n.t('home.futureRides.closeButton')
+            : i18n.t('home.futureRides.openBookingsButton', { openBookings: futureRides ? futureRides.length : 0 })
         }
-      </FutureRideButtonText>
-      {isOpen ? (<CloseIconContainer><CloseIcon /></CloseIconContainer>): null}
-    </FutureRidesButton>) : null
+        </FutureRideButtonText>
+        {isOpen ? (<CloseIconContainer><CloseIcon /></CloseIconContainer>) : null}
+      </FutureRidesButton>
+    ) : null
   );
-}
+};
 
 export default ({
-  futureRides, isOpen, onCancel, onPress
+  futureRides, isOpen, onCancel, onPress,
 }) => {
-
   if (!futureRides || !isOpen) {
     return null;
   }
@@ -73,7 +73,7 @@ export default ({
               </SpsContainer>
               <CancelContainer>
                 <RoundedButton
-                  data-test-id='CancelFutureRideButton'
+                  data-test-id="CancelFutureRideButton"
                   hollow
                   height="30px"
                   width="70px"
