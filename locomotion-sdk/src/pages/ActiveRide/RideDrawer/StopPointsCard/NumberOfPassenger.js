@@ -115,7 +115,7 @@ export default ({ amount, onChange }) => {
   const [isPopupOpen, togglePopup] = getTogglePopupsState();
   const [newAmount, setNewAmount] = useState(amount);
 
-  const validateChange = (newAmount, change) => MAX_NUMBER_OF_PASSENGER >= (newAmount + change) && (newAmount + change) >= MIN_NUMBER_OF_PASSENGER;
+  const validateChange = (validationAmount, change) => MAX_NUMBER_OF_PASSENGER >= (validationAmount + change) && (validationAmount + change) >= MIN_NUMBER_OF_PASSENGER;
 
   const getNewAmountFunction = change => () => {
     if (!validateChange(newAmount, change)) {
