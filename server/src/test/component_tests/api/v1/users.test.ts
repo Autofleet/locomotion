@@ -63,7 +63,7 @@ describe('Users Endpoints', () => {
   it('test get all users', async () => {
     await initDatabase();
     const res = await request(app).get(`${usersApiUrl}`).set(...acToken);
-
+console.log(res.body)
     expect(res.statusCode).toBe(200);
     expect(res.body.length).toEqual(2);
     expect(res.body[0].id).toEqual(firstUserData().id);

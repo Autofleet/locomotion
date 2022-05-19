@@ -55,16 +55,16 @@ const authContainer = () => {
   }, []);
 
   const verifyEmail = () => {
-    console.log(onboardingState)
-    sendEmailVerification(onboardingState.id)
-  }
+    console.log(onboardingState);
+    sendEmailVerification(onboardingState.id);
+  };
 
   const updateUserInfo = async (values) => {
     if (values.email) {
-      verifyEmail(values.email)
+      verifyEmail(values.email);
     }
     const user = await updateUser(values);
-    setOnboardingState(user)
+    setOnboardingState(user);
     dispatch({
       type: 'saveState',
       payload: {
