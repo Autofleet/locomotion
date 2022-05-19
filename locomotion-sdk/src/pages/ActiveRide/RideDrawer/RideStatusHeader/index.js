@@ -1,4 +1,4 @@
-import React, {Fragment} from 'react';
+import React, { Fragment } from 'react';
 import { View } from 'react-native';
 import styled from 'styled-components';
 import moment from 'moment';
@@ -35,49 +35,46 @@ export const RideStatusContainer = styled.View`
 `;
 
 export default ({
-    rideState,pickupEta, dropoffEta, arrivingReminderMin, arrivingPush
+  rideState, pickupEta, dropoffEta, arrivingReminderMin, arrivingPush,
 }) => {
+  const getTitle = () => {
+    if (rideState === 'driverOnTheWay') {
+      if ((pickupEta <= arrivingReminderMin && pickupEta > 0) || (arrivingPush !== null && pickupEta > 0)) {
+        return `${rideState}Eta`;
+      }
 
-    const getTitle = () => {
-        if(rideState === 'driverOnTheWay') {
-            if((pickupEta <= arrivingReminderMin && pickupEta > 0) || (arrivingPush !== null && pickupEta > 0)) {
-                return `${rideState}Eta`
-            }
+      if (pickupEta > arrivingReminderMin) {
+        return `${rideState}`;
+      }
 
-            if(pickupEta > arrivingReminderMin) {
-                return `${rideState}`
-            }
-
-            if(pickupEta <= 0) {
-                return `${rideState}Soon`
-            }
-        }
-
-        if(rideState === 'onBoard') {
-            if(dropoffEta > 0) {
-                return `${rideState}`
-            } else {
-                return `${rideState}Soon`
-            }
-        }
-
-        if(rideState === 'driverArrived') {
-            return `${rideState}`
-        }
-
+      if (pickupEta <= 0) {
+        return `${rideState}Soon`;
+      }
     }
 
+    if (rideState === 'onBoard') {
+      if (dropoffEta > 0) {
+        return `${rideState}`;
+      }
+      return `${rideState}Soon`;
+    }
+
+    if (rideState === 'driverArrived') {
+      return `${rideState}`;
+    }
+  };
+
   return (
-      <Fragment>
-       {rideState
-                ? (
-                  <RideStatusContainer>
-                    <RideStatusText state={rideState}>
-                      {I18n.t(`home.rideStates.${getTitle()}`, { pickupEta, dropoffEta })}
-                    </RideStatusText>
-                  </RideStatusContainer>
-                )
-                : null}
-        </Fragment>
+    <Fragment>
+      {rideState
+        ? (
+          <RideStatusContainer>
+            <RideStatusText state={rideState}>
+              {I18n.t(`home.rideStates.${getTitle()}`, { pickupEta, dropoffEta })}
+            </RideStatusText>
+          </RideStatusContainer>
+        )
+        : null}
+    </Fragment>
   );
 };

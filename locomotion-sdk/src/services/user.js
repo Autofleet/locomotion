@@ -3,7 +3,7 @@ import Auth from './auth';
 
 const UserService = {
   getUser: async (navigation) => {
-    const userData = await getUserDetails()
+    const userData = await getUserDetails();
 
     if (!navigation) {
       return userData;

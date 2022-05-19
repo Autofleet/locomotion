@@ -1,10 +1,10 @@
 import React from 'react';
-import styled from "styled-components";
+import styled from 'styled-components';
 import LottieView from 'lottie-react-native';
-import darkLoader from "../../assets/dark-loader.json";
-import lightLoader from "../../assets/loader.json";
-import sliderLoader from "../../assets/slider-loader.json";
-import {View} from "react-native";
+import { View } from 'react-native';
+import darkLoader from '../../assets/dark-loader.json';
+import lightLoader from '../../assets/loader.json';
+import sliderLoader from '../../assets/slider-loader.json';
 
 const LoadingWrapper = styled.View`
   width: 100%;
@@ -17,8 +17,7 @@ const Loader = ({ inSlider = false, dark, lottieViewStyle }) => {
   let source;
   if (inSlider) {
     source = sliderLoader;
-  }
-  else {
+  } else {
     source = dark ? darkLoader : lightLoader;
   }
 
@@ -36,7 +35,8 @@ const Loader = ({ inSlider = false, dark, lottieViewStyle }) => {
         autoPlay
         loop
       />
-    </Wrapper>);
+    </Wrapper>
+  );
 };
 
 export default Loader;

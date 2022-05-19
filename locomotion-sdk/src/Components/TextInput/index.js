@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import { commonInputStyle } from '../../assets/style-settings';
 
 
-export default styled.TextInput.attrs(({autoCapitalize}) => ({
+export default styled.TextInput.attrs(({ autoCapitalize }) => ({
   autoCapitalize: autoCapitalize || 'none', autoCompleteType: 'off', autoCorrect: false,
 }))`
   ${commonInputStyle}

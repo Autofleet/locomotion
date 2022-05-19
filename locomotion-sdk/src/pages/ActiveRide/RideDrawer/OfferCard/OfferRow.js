@@ -105,7 +105,7 @@ export default ({
         ) : null}
       <AddressTextCont>
         <AddressText numberOfLines={2} pickup={pickup}>
-          {`${i18n.t(`home.offerCard.${pickup ? 'pickup': 'dropoff'}`)}: ${description}`}
+          {`${i18n.t(`home.offerCard.${pickup ? 'pickup' : 'dropoff'}`)}: ${description}`}
         </AddressText>
         <EtaText
           etaDrift={etaDrift}

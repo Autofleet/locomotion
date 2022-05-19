@@ -1,9 +1,11 @@
-import React, { useState, useEffect, useRef, Fragment } from "react";
-import { ScrollView, View } from "react-native";
-import Config from 'react-native-config'
-import getPosition from "./getPostion";
+import React, {
+  useState, useEffect, useRef, Fragment,
+} from 'react';
+import { ScrollView, View } from 'react-native';
+import Config from 'react-native-config';
+import getPosition from './getPostion';
 
-import I18n from "../../../../../I18n";
+import I18n from '../../../../../I18n';
 import {
   AddressInputs,
   AddressInputsHeader,
@@ -21,41 +23,40 @@ import {
   HeaderIcon,
   ResetInputIconContainer,
   ResetInputIcon,
-  StationIcon
-} from "./styled";
-import PageHeader from "../../../../../Components/PageHeader";
-import SafeView from "../../../../../Components/SafeView";
-import { getLocation, getPlacesByLocation } from "../../../../../context/places/api";
+  StationIcon,
+} from './styled';
+import PageHeader from '../../../../../Components/PageHeader';
+import SafeView from '../../../../../Components/SafeView';
+import { getLocation, getPlacesByLocation } from '../../../../../context/places/api';
 
-const closeIconSource = require("../../../../../assets/arrow-back.png");
+const closeIconSource = require('../../../../../assets/arrow-back.png');
 
-export default props => {
+export default (props) => {
   const [searchText, setSearchText] = useState(
-    props.requestStopPoints[props.type] &&
-      props.requestStopPoints[props.type].description
+    props.requestStopPoints[props.type]
+      && props.requestStopPoints[props.type].description,
   );
   const [addressListItems, setAddressListItems] = useState(null);
-  const [coords, setCoords] = useState({})
+  const [coords, setCoords] = useState({});
 
   useEffect(() => {
-    initCurrentLocation()
-  }, [])
+    initCurrentLocation();
+  }, []);
 
   const initCurrentLocation = async () => {
-    const { coords } = await getPosition();
-    setCoords(coords)
-  }
+    const { coords: newCord } = await getPosition();
+    setCoords(newCord);
+  };
 
-  const enrichPlaceWithLocation = async place => {
+  const enrichPlaceWithLocation = async (place) => {
     const data = await getLocation({
-        placeId: place.placeid || place.place_id
-      }
-    );
+      placeId: place.placeid || place.place_id,
+    });
     place = { ...place, ...data };
     return place;
   };
 
-  const setPlace = async place => {
+  const setPlace = async (place) => {
     if (!place.lat && (place.placeid || place.place_id)) {
       place = await enrichPlaceWithLocation(place);
     }
@@ -63,17 +64,17 @@ export default props => {
       if (props.onLocationSelect) {
         props.onLocationSelect({
           ...place,
-          type: addressListItems.type
+          type: addressListItems.type,
         });
       }
       setAddressListItems({
         type: addressListItems.type,
-        list: []
+        list: [],
       });
     } else {
       setAddressListItems({
         type: addressListItems.type,
-        list: []
+        list: [],
       });
       setSearchValue(place.description, props.type, true, place);
     }
@@ -85,21 +86,20 @@ export default props => {
       if (selectedPlace) {
         location = {
           lat: selectedPlace.lat,
-          lng: selectedPlace.lng
+          lng: selectedPlace.lng,
         };
       } else {
         location = { lat: coords.latitude, lng: coords.longitude };
       }
 
       const data = await getPlacesByLocation({
-          input,
-          location,
-          stations: showStations
-        }
-      );
+        input,
+        location,
+        stations: showStations,
+      });
       return data;
     } catch (error) {
-      console.log("Got error while try to get places", error);
+      console.log('Got error while try to get places', error);
       return undefined;
     }
   };
@@ -109,8 +109,8 @@ export default props => {
     setAddressListItems({
       type,
       ...{
-        list: value ? await loadAddress(value, showStations, place) : undefined
-      }
+        list: value ? await loadAddress(value, showStations, place) : undefined,
+      },
     });
   };
 
@@ -121,18 +121,18 @@ export default props => {
           value={searchText}
           onChangeText={value => setSearchValue(value, props.type)}
           autoFocus
-          placeholder={I18n.t("addressView.addressPlaceholder")}
+          placeholder={I18n.t('addressView.addressPlaceholder')}
         />
       </Address>
 
       <ScrollView keyboardShouldPersistTaps="handled">
-        {addressListItems &&
-          addressListItems.list &&
-          addressListItems.list.map(item => (
+        {addressListItems
+          && addressListItems.list
+          && addressListItems.list.map(item => (
             <AddressSearchItem key={item.id} onPress={() => setPlace(item)}>
-              <View style={{flexDirection: 'row', alignItems: 'center'}}>
-              {item.station ? <StationIcon /> : null}
-              <AddressSearchItemText>{item.description}</AddressSearchItemText>
+              <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                {item.station ? <StationIcon /> : null}
+                <AddressSearchItemText>{item.description}</AddressSearchItemText>
               </View>
               {item.distance !== null && item.distanceFromMe ? (
                 <DistanceFromAddress>
@@ -144,7 +144,7 @@ export default props => {
             </AddressSearchItem>
           ))}
       </ScrollView>
-      <ResetInputIconContainer onPress={props.onClose} data-test-id='ClearAddressButton'>
+      <ResetInputIconContainer onPress={props.onClose} data-test-id="ClearAddressButton">
         <ResetInputIcon />
       </ResetInputIconContainer>
     </AddressInputs>

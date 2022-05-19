@@ -16,8 +16,8 @@ const HTTPMethods = [
 
 const limit = 512;
 
-const formatResponseLog = function ({data}) {
-  let str = (typeof data === "string" ? data : JSON.stringify(data)).slice(0, limit);
+const formatResponseLog = function ({ data }) {
+  let str = (typeof data === 'string' ? data : JSON.stringify(data)).slice(0, limit);
   if (str.length === limit) {
     str = `${str}...(cut)`;
   }
@@ -33,9 +33,9 @@ class Network {
   constructor(settings = {}) {
     this.settings = Object.assign(Network.defaultSettings, settings);
     this.axios = axios.create(settings);
-    this.axios.interceptors.request.use(request => {
+    this.axios.interceptors.request.use((request) => {
       try {
-        Mixpanel.setEvent('Network request', { method: request.method, endpoint: request.url, params: request.params});
+        Mixpanel.setEvent('Network request', { method: request.method, endpoint: request.url, params: request.params });
         console.debug(`Request [${request.method}] ${request.url}`);
       } catch (e) {
         console.error('Error in interceptors->request log', e);
@@ -43,15 +43,15 @@ class Network {
       return request;
     });
 
-    this.axios.interceptors.response.use(response => {
+    this.axios.interceptors.response.use((response) => {
       try {
-        Mixpanel.setEvent('Network response', { method: response.config.method, endpoint: response.config.url, statusCode: response.status});
+        Mixpanel.setEvent('Network response', { method: response.config.method, endpoint: response.config.url, statusCode: response.status });
         console.debug(`Response [${response.config.method}] ${response.config.url}:`, formatResponseLog(response));
       } catch (e) {
         console.error('Error in interceptors->response log', e);
       }
       return response;
-    }, error => {
+    }, (error) => {
       try {
         console.error(`Request rejected [${error.config.method}] ${error.config.url}: ${error}`, formatResponseLog(error.response));
       } catch (e) {
@@ -70,7 +70,7 @@ class Network {
         this.axios.defaults.headers.common['x-loco-op-id'] = Config.OPERATION_ID;
         return this.axios[method](...args).catch((e) => {
           if ((e.response && e.response.status === 401) || (e.response && e.response.status === 403)) {
-            console.log('Got unauthorized response move to logout flow')
+            console.log('Got unauthorized response move to logout flow');
             Auth.logout();
             return null;
           }

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, TouchableOpacity } from 'react-native';
 import styled from 'styled-components';
-import TextInput from '../../../../../Components/TextInput'
+import TextInput from '../../../../../Components/TextInput';
 import xIcon from '../../../../../assets/x.png';
 import stationIcon from '../../../../../assets/marker-tip.png';
 import Button from '../../../../../Components/Button';
@@ -128,7 +128,7 @@ export const AddressSearchItemTouchableOpacity = styled(Button)`
 `;
 
 export const AddressSearchItem = styled(({ onPress, ...props }) => (
-  <AddressSearchItemTouchableOpacity onPress={onPress} data-test-id='AddressSearchItemButton'>
+  <AddressSearchItemTouchableOpacity onPress={onPress} data-test-id="AddressSearchItemButton">
     <View {...props} />
   </AddressSearchItemTouchableOpacity>
 ))`

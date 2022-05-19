@@ -3,8 +3,6 @@ import { View } from 'react-native';
 import styled from 'styled-components';
 import i18n from '../../../I18n';
 
-import RideRoundedButton from '../../../Components/RoundedButton';
-import RoundedButton from '../../../Components/RoundedButton';
 import Button from '../../../Components/Button';
 
 const ArrowIconSource = require('../../../assets/white-chevron-right.png');
@@ -169,7 +167,6 @@ export const RideTypeButtonText = styled.Text`
 `;
 
 
-
 export const DrawerContainer = styled.View`
   flex-direction: column;
   position: absolute;
@@ -219,6 +216,5 @@ export const AddPaymentBar = (props) => {
       </PaymentBarText>
       <Arrow />
     </PaymentBarContainer>
-  )
-}
-
+  );
+};

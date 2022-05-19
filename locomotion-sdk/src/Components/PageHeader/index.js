@@ -9,15 +9,15 @@ const HamburgerIconSource = require('../../assets/menu.png');
 const PageHeader = ({
   title, icon, onIconPress, iconSide, displayIcon, width, height,
 }) => (
-    <Header>
-      <HeaderText>{title}</HeaderText>
-      {displayIcon !== false
-        ? (
-          <HeaderIconContainer side={iconSide} onPress={onIconPress} data-test-id='NavigationPanelButton'>
-            <HeaderIcon width={width} height={width} source={icon} side={iconSide} />
-          </HeaderIconContainer>
-        ) : null}
-    </Header>
+  <Header>
+    <HeaderText>{title}</HeaderText>
+    {displayIcon !== false
+      ? (
+        <HeaderIconContainer side={iconSide} onPress={onIconPress} data-test-id="NavigationPanelButton">
+          <HeaderIcon width={width} height={width} source={icon} side={iconSide} />
+        </HeaderIconContainer>
+      ) : null}
+  </Header>
 );
 
 export default PageHeader;

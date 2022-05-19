@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
 export const ErrorText = styled.Text`
   color: #cc0d28;
@@ -36,7 +36,7 @@ display: flex;
 flex-direction: row;
 justify-content: flex-start;
 align-items: center;
-`
+`;
 export const Name = styled.Text`
 font-size: 20px;
 margin: 10px;

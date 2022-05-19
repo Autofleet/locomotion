@@ -1,10 +1,12 @@
-import React, {Fragment, useEffect} from 'react';
+import React, { Fragment, useEffect } from 'react';
 import {
   View,
   Image,
 } from 'react-native';
 
-import {MessageContainer, MessageText,MessageTitle,CloseContainer,ResetInputIcon} from './styled'
+import {
+  MessageContainer, MessageText, MessageTitle, CloseContainer, ResetInputIcon,
+} from './styled';
 import { getTogglePopupsState } from '../../../../context/main';
 
 export default ({
@@ -23,18 +25,20 @@ export default ({
     }
   }, []);
 
-    return (
+  return (
     <Fragment>
-    {isPopupOpen(id) ?
-        <MessageContainer>
-            <CloseContainer onPress={() => closePopup()} data-test-id='CloseMessageCardButton'>
-                <ResetInputIcon />
+      {isPopupOpen(id)
+        ? (
+          <MessageContainer>
+            <CloseContainer onPress={() => closePopup()} data-test-id="CloseMessageCardButton">
+              <ResetInputIcon />
             </CloseContainer>
             <View style={{ flex: 2, textAlign: 'left', maxWidth: '80%' }}>
-                <MessageTitle>{title}</MessageTitle>
-                <MessageText>{subTitle}</MessageText>
+              <MessageTitle>{title}</MessageTitle>
+              <MessageText>{subTitle}</MessageText>
             </View>
-        </MessageContainer> : null}
+          </MessageContainer>
+        ) : null}
     </Fragment>
-    )
-  }
+  );
+};

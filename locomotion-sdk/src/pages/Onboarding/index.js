@@ -23,7 +23,7 @@ import SafeView from '../../Components/SafeView';
 export default ({
   navigation, screenOptions, menuSide, ...props
 }) => {
-  const route = useRoute()
+  const route = useRoute();
   const [onboardingState, dispatchOnboardingState] = useState({
     uploadPromise: false,
     firstName: '',
@@ -35,12 +35,12 @@ export default ({
   const [showHeaderIcon, setShowHeaderIcon] = useState(true);
 
   useEffect(() => {
-     if(
-       route.params
-      ) {
-        Mixpanel.pageView(route.name)
-        setShowHeaderIcon(route.params.showHeaderIcon);
-      }
+    if (
+      route.params
+    ) {
+      Mixpanel.pageView(route.name);
+      setShowHeaderIcon(route.params.showHeaderIcon);
+    }
   }, []);
 
   useEffect(() => {
@@ -94,7 +94,7 @@ export default ({
       avatar,
     };
 
-    const response = await updateUser(userProfile)
+    const response = await updateUser(userProfile);
 
     if (response.status !== 200) {
       console.log('Got bad response from user patch');
@@ -123,60 +123,62 @@ export default ({
 
   return (
     <View style={{ backgroundColor: '#ffffff', flex: 1 }}>
-    <SafeView>
-      <KeyboardAwareScrollView
-        extraScrollHeight={20}
-        enableOnAndroid
-      >
-        <PageHeader
-          title={i18n.t('onboarding.pageTitle')}
-          onIconPress={() => navigation.toggleDrawer()}
-          displayIcon={showHeaderIcon}
-          iconSide={menuSide}
-        />
-        <Container>
-          {!showHeaderIcon ?
-          <Text>
-            {i18n.t('login.onBoardingPageTitle')}
-            {onboardingState.uploadingImage}
-          </Text> : null}
-          <ThumbnailPicker
-            onImageChoose={onImageChoose}
-            avatarSource={onboardingState.avatar}
+      <SafeView>
+        <KeyboardAwareScrollView
+          extraScrollHeight={20}
+          enableOnAndroid
+        >
+          <PageHeader
+            title={i18n.t('onboarding.pageTitle')}
+            onIconPress={() => navigation.toggleDrawer()}
+            displayIcon={showHeaderIcon}
+            iconSide={menuSide}
           />
-          <FullNameContainer>
-            <TextInput
-              placeholder={i18n.t('onboarding.firstNamePlaceholder')}
-              width="40%"
-              onChangeText={inputChange('firstName')}
-              value={onboardingState.firstName}
-              autoCapitalize="words"
+          <Container>
+            {!showHeaderIcon
+              ? (
+                <Text>
+                  {i18n.t('login.onBoardingPageTitle')}
+                  {onboardingState.uploadingImage}
+                </Text>
+              ) : null}
+            <ThumbnailPicker
+              onImageChoose={onImageChoose}
+              avatarSource={onboardingState.avatar}
             />
+            <FullNameContainer>
+              <TextInput
+                placeholder={i18n.t('onboarding.firstNamePlaceholder')}
+                width="40%"
+                onChangeText={inputChange('firstName')}
+                value={onboardingState.firstName}
+                autoCapitalize="words"
+              />
+              <TextInput
+                placeholder={i18n.t('onboarding.lastNamePlaceholder')}
+                width="40%"
+                onChangeText={inputChange('lastName')}
+                value={onboardingState.lastName}
+                autoCapitalize="words"
+              />
+
+            </FullNameContainer>
             <TextInput
-              placeholder={i18n.t('onboarding.lastNamePlaceholder')}
-              width="40%"
-              onChangeText={inputChange('lastName')}
-              value={onboardingState.lastName}
-              autoCapitalize="words"
+              placeholder={i18n.t('onboarding.emailPlaceholder')}
+              width="90%"
+              onChangeText={inputChange('email')}
+              value={onboardingState.email}
             />
+            <ErrorText>{onboardingState.error ? onboardingState.error : ''}</ErrorText>
+            <SubmitContainer>
+              <SubmitButton onPress={submit} data-test-id="FinishOnboardingButton">
+                {i18n.t('onboarding.submit')}
+              </SubmitButton>
+            </SubmitContainer>
+          </Container>
 
-          </FullNameContainer>
-          <TextInput
-            placeholder={i18n.t('onboarding.emailPlaceholder')}
-            width="90%"
-            onChangeText={inputChange('email')}
-            value={onboardingState.email}
-          />
-          <ErrorText>{onboardingState.error ? onboardingState.error : ''}</ErrorText>
-          <SubmitContainer>
-            <SubmitButton onPress={submit} data-test-id='FinishOnboardingButton'>
-              {i18n.t('onboarding.submit')}
-            </SubmitButton>
-          </SubmitContainer>
-        </Container>
-
-      </KeyboardAwareScrollView>
-    </SafeView>
+        </KeyboardAwareScrollView>
+      </SafeView>
     </View>
   );
 };

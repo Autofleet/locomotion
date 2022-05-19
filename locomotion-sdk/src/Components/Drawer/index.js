@@ -14,7 +14,7 @@ const closeIconSource = require('../../assets/x.png');
 
 export const DrawerLabel = (props) => {
   const {
-    focused, tintColor, title, icon
+    focused, tintColor, title, icon,
   } = props;
   return (
     <StyledDrawerLabel>
@@ -30,16 +30,16 @@ export const DrawerContentComponent = (props) => {
     props.navigation.closeDrawer();
   };
   return (
-      <SafeAreaView>
-        <PageHeader
-          title={i18n.t('menu.title')}
-          iconSide='right'
-          onIconPress={() => closeComponent()}
-          icon={closeIconSource}
-          width="18px"
-          height="18px"
-        />
-        <DrawerItemList {...props} />
-      </SafeAreaView>
+    <SafeAreaView>
+      <PageHeader
+        title={i18n.t('menu.title')}
+        iconSide="right"
+        onIconPress={() => closeComponent()}
+        icon={closeIconSource}
+        width="18px"
+        height="18px"
+      />
+      <DrawerItemList {...props} />
+    </SafeAreaView>
   );
 };

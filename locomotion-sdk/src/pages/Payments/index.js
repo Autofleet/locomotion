@@ -1,16 +1,16 @@
-import React, {useEffect, useState} from 'react';
-import {getTogglePopupsState} from '../../context';
+import React, { useEffect, useState } from 'react';
+import { getTogglePopupsState } from '../../context';
 import i18n from '../../I18n';
 import PageHeader from '../../Components/PageHeader';
-import {FullPageLoader, PageContent} from './styled';
-import PaymentsContext from '../../context/payments'
+import { FullPageLoader, PageContent } from './styled';
+import PaymentsContext from '../../context/payments';
 import ConfirmationPopup from '../../popups/ConfirmationPopup';
-import CreditCardsList from './credit-cards'
-import { NewCreditForm } from "../../Components/NewCreditForm";
-import SafeView from '../../Components/SafeView'
+import CreditCardsList from './credit-cards';
+import { NewCreditForm } from '../../Components/NewCreditForm';
+import SafeView from '../../Components/SafeView';
 import { PageContainer } from '../styles';
 
-export default ({navigation, menuSide}) => {
+export default ({ navigation, menuSide }) => {
   const usePayments = PaymentsContext.useContainer();
 
   const [pageLoading, setPageLoading] = useState(true);
@@ -27,14 +27,14 @@ export default ({navigation, menuSide}) => {
   const loadCustomerData = async () => {
     const customer = await usePayments.loadCustomer();
     if (customer) {
-      await usePayments.getPaymentMethods()
+      await usePayments.getPaymentMethods();
     }
-    setPageLoading(false)
-  }
+    setPageLoading(false);
+  };
 
   useEffect(() => {
     loadCustomerData();
-  }, [])
+  }, []);
 
   const detachCard = async () => {
     setLoading(true);
@@ -42,12 +42,12 @@ export default ({navigation, menuSide}) => {
     await usePayments.getPaymentMethods();
     setLoading(false);
     togglePopup('removeCard', false);
-  }
+  };
 
   const onRemoveMethod = async (methodId) => {
     togglePopup('removeCard', true);
     setMethodForDelete(methodId);
-  }
+  };
 
   return (
     <PageContainer>
@@ -58,7 +58,7 @@ export default ({navigation, menuSide}) => {
             onIconPress={() => toggleMenu()}
             iconSide={menuSide}
           />
-          {pageLoading ? <FullPageLoader autoPlay loop/> : null}
+          {pageLoading ? <FullPageLoader autoPlay loop /> : null}
           {/* <Balance customer={usePayments.customer} /> */}
           {showList ? (
             <CreditCardsList
@@ -66,13 +66,15 @@ export default ({navigation, menuSide}) => {
               onDetach={onRemoveMethod}
               loadingState={loading}
               onAddClick={() => setShowList(false)}
-            />) : (
+            />
+          ) : (
             <NewCreditForm
               onDone={async () => {
                 await loadCustomerData();
                 return setShowList(true);
               }}
-            />)}
+            />
+          )}
           <ConfirmationPopup
             name="removeCard"
             title={i18n.t('payments.popups.removeCard.title')}

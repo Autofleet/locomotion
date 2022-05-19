@@ -26,7 +26,7 @@ export const StationDot = styled(PointDot)`
     background-color: #08902d;
   `}
 
-  ${({isGoogle}) => isGoogle && `
+  ${({ isGoogle }) => isGoogle && `
     shadow-opacity: 0;
   `}
 `;

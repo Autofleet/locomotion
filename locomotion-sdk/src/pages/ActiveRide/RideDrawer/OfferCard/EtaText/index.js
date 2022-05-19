@@ -45,7 +45,7 @@ const WarningContainer = styled.View`
 
 
 export default ({
-  eta,etaDrift, pickup, etaMediumThreshold, etaHighThreshold
+  eta, etaDrift, pickup, etaMediumThreshold, etaHighThreshold,
 }) => {
   const getWarningMessage = () => {
     const etaDiff = moment(eta).diff(moment(), 'minutes');
@@ -57,12 +57,12 @@ export default ({
 
     if (etaDiff > etaMediumThreshold) {
       etaThreshold = etaMediumThreshold;
-      warningText='medium'
+      warningText = 'medium';
     }
 
     if (etaDiff >= etaHighThreshold) {
       etaThreshold = etaHighThreshold;
-      warningText='high'
+      warningText = 'high';
     }
 
     if (!etaThreshold) {

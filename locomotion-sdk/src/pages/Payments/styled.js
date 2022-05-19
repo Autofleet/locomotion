@@ -1,5 +1,5 @@
 import React from 'react';
-import {View} from 'react-native'
+import { View } from 'react-native';
 import styled from 'styled-components';
 import LottieView from 'lottie-react-native';
 
@@ -18,12 +18,12 @@ export const PageContent = styled(View)`
 export const BalanceContainer = styled.View`
     flex: 1;
     flex-direction: row;
-`
+`;
 
 export const BalanceTextContainer = styled.View`
     flex-direction: column;
     justify-content: center;
-`
+`;
 
 
 export const BalanceTitle = styled.Text`
@@ -31,14 +31,14 @@ export const BalanceTitle = styled.Text`
     font-size: 14px;
     text-align: center;
     font-weight: 700;
-`
+`;
 
 export const BalanceText = styled.Text`
     color: #1e273d;
     font-size: 45px;
     text-align: center;
     font-weight: 700;
-`
+`;
 
 export const CreditCardContainer = styled.TouchableOpacity`
     flex-direction: column;
@@ -103,22 +103,20 @@ const LoaderContainer = styled.View`
     margin-top: -8px;
 `;
 
-export const FullPageLoader = (props) => {
-    return (
-        <FullPageLoaderWrapper>
-            <LoaderContainer>
-            <LottieView
-                style={{
-                    width: 15,
-                    height: 15,
-                }}
-                source={darkLoader}
-                {...props}
-            />
-            </LoaderContainer>
-        </FullPageLoaderWrapper>
-    )
-}
+export const FullPageLoader = props => (
+  <FullPageLoaderWrapper>
+    <LoaderContainer>
+      <LottieView
+        style={{
+          width: 15,
+          height: 15,
+        }}
+        source={darkLoader}
+        {...props}
+      />
+    </LoaderContainer>
+  </FullPageLoaderWrapper>
+);
 
 export const CardsListContainer = styled.View`
    flex: 1;

@@ -1,15 +1,17 @@
-import React, {useState} from "react";
+import React, { useState } from 'react';
 import {
   CardField,
   useStripe,
 } from '@stripe/stripe-react-native';
-import i18n from "../../I18n";
-import PaymentsContext from "../../context/payments";
-import SubmitButton from "../../Components/RoundedButton";
-import {CreditForm, CreditFormText, ErrorMessage, SkipSubmitContainer, SubmitContainer} from "./styled";
+import i18n from '../../I18n';
+import PaymentsContext from '../../context/payments';
+import SubmitButton from '../RoundedButton';
+import {
+  CreditForm, CreditFormText, ErrorMessage, SkipSubmitContainer, SubmitContainer,
+} from './styled';
 
 export const NewCreditForm = ({ onDone, canSkip = false }) => {
-  const {confirmSetupIntent} = useStripe();
+  const { confirmSetupIntent } = useStripe();
   const usePayments = PaymentsContext.useContainer();
 
   const [loading, setLoading] = useState(false);
@@ -26,19 +28,19 @@ export const NewCreditForm = ({ onDone, canSkip = false }) => {
     const billingDetails = {
       email: customerData.email,
     };
-    const {setupIntent, error} = await confirmSetupIntent(createIntent.clientSecret, {
+    const { setupIntent, error } = await confirmSetupIntent(createIntent.clientSecret, {
       paymentMethodType: 'Card',
       paymentMethod: {
-        billingDetails
-      }
+        billingDetails,
+      },
     });
 
     if (error) {
       console.error(error);
-      setErrorMessage(error.message)
+      setErrorMessage(error.message);
     } else {
       await onDone();
-      await usePayments.getPaymentMethods()
+      await usePayments.getPaymentMethods();
     }
   };
 
@@ -63,7 +65,7 @@ export const NewCreditForm = ({ onDone, canSkip = false }) => {
             console.log('onCardChange', cardDetails);
             if (cardDetails) {
               if (formReady !== cardDetails.complete) {
-                setFormReady(cardDetails.complete)
+                setFormReady(cardDetails.complete);
               }
             }
           }}
