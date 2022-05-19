@@ -6,7 +6,7 @@ import FastImage from 'react-native-fast-image';
 import propsTypes from 'prop-types';
 import styled from 'styled-components';
 import LinearGradient from '../LinearGradient';
-import Button from '../Button'; 
+import Button from '../Button';
 import avatarIcon from './default.png';
 
 const modes = {
@@ -71,7 +71,7 @@ const myThumbnail = (props) => {
         >
           <ImageComponent
             style={[styles.image, borderRadiusSmall]}
-            source={props.source ? {uri: props.source} : avatarIcon}
+            source={props.source ? { uri: props.source } : avatarIcon}
           />
         </Button>
       </LinearGradient>

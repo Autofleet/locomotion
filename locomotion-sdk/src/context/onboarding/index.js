@@ -15,7 +15,7 @@ const authContainer = () => {
     firstName: '',
     lastName: '',
     avatar: '',
-    email: ''
+    email: '',
   });
 
   const updateState = (field, value) => {
@@ -34,10 +34,10 @@ const authContainer = () => {
       return navigation.navigate('AuthScreens', { screen: 'Avatar' });
     }
     if (!user.email) {
-      return navigation.navigate('AuthScreens', { screen: 'Email' })
+      return navigation.navigate('AuthScreens', { screen: 'Email' });
     }
     if (!user.avatar && !user.email) {
-      return navigation.navigate('AuthScreens', { screen: 'Avatar' })
+      return navigation.navigate('AuthScreens', { screen: 'Avatar' });
     }
     if (complete) {
       navigation.navigate('MainApp');
