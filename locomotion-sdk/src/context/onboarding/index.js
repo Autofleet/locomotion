@@ -5,7 +5,7 @@ import auth from '../../services/auth';
 import Mixpanel from '../../services/Mixpanel';
 import { useStateValue } from '../main';
 import AppSettings from '../../services/app-settings';
-import { loginVert, updateUser } from '../user/api';
+import { loginVert, sendEmailVerification, updateUser } from '../user/api';
 
 const authContainer = () => {
   const [, dispatch] = useStateValue();
@@ -30,13 +30,10 @@ const authContainer = () => {
     if (!user.firstName || !user.lastName) {
       return navigation.navigate('AuthScreens', { screen: 'Name' });
     }
-    if (!user.avatar && !user.email) {
-      return navigation.navigate('AuthScreens', { screen: 'Avatar' });
-    }
     if (!user.email) {
       return navigation.navigate('AuthScreens', { screen: 'Email' });
     }
-    if (!user.avatar && !user.email) {
+    if (!user.avatar) {
       return navigation.navigate('AuthScreens', { screen: 'Avatar' });
     }
     if (complete) {
@@ -57,8 +54,17 @@ const authContainer = () => {
     getUserFromStorage();
   }, []);
 
+  const verifyEmail = () => {
+    console.log(onboardingState)
+    sendEmailVerification(onboardingState.id)
+  }
+
   const updateUserInfo = async (values) => {
+    if (values.email) {
+      verifyEmail(values.email)
+    }
     const user = await updateUser(values);
+    setOnboardingState(user)
     dispatch({
       type: 'saveState',
       payload: {
