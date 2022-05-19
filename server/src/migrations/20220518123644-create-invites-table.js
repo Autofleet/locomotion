@@ -21,5 +21,5 @@ module.exports = {
       paranoid: true,
     });
   },
-  down: queryInterface => queryInterface.dropTable('invites'),
+  down: (queryInterface) => queryInterface.dropTable('invites'),
 };
