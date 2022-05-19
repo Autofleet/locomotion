@@ -8,7 +8,7 @@ import i18n from '../../../../I18n';
 const address = `
 min-height: 50;
 padding-top: 10;
-padding-bottom: 10;
+padding-bottom: 10px;
 padding-start: 24;
 align-items: center;
 flex-direction: row;
@@ -51,7 +51,7 @@ const AddressTextCont = styled.View`
 `;
 
 const AddressText = styled.Text`
-  font-size: 11;
+  font-size: 11px;
   color: #666666;
   margin-top: 5px;
   min-height: 30px;
@@ -66,7 +66,7 @@ const EtaText = styled.Text`
 
 export const RowContainer = styled.TouchableOpacity`
   min-height: 50;
-  padding-bottom: 10;
+  padding-bottom: 10px;
   align-items: center;
   flex-direction: column;
    ${({ paddingStart }) => (paddingStart ? `
@@ -85,15 +85,14 @@ export default ({
   pickup, description, eta, firstEta, completedAt, etaDrift, paddingStart, showEta,
 }) => {
   const etaToDisplay = () => {
-    if(!firstEta) {
+    if (!firstEta) {
       return '';
     }
-    if(showEta) {
+    if (showEta) {
       return moment(eta).format('HH:mm');
-    } else {
-      return `${moment(firstEta).format('HH:mm')} - ${moment(firstEta).add(etaDrift, 'minutes').format('HH:mm')}`;
     }
-  }
+    return `${moment(firstEta).format('HH:mm')} - ${moment(firstEta).add(etaDrift, 'minutes').format('HH:mm')}`;
+  };
 
   return (
     <RowContainer pickup={pickup} paddingStart={paddingStart}>
@@ -118,4 +117,4 @@ export default ({
       </AddressTextCont>
     </RowContainer>
   );
-}
+};

@@ -8,17 +8,17 @@ import i18n from '../../../../I18n';
 const address = `
 min-height: 50;
 padding-top: 10;
-padding-bottom: 10;
+padding-bottom: 10px;
 padding-start: 24;
 align-items: center;
 flex-direction: row;
 `;
 
 export const StopPointDot = styled.View`
-  width: 10;
-  height: 10;
+  width: 10px;
+  height: 10px;
   background-color: ${({ origin }) => (origin ? '#6180c0' : '#08902d')};
-  border-radius: 10;
+  border-radius: 10px;
 `;
 
 
@@ -59,7 +59,7 @@ const AddressText = styled.Text`
 
 
 const RowContainer = styled.View`
-  min-height: 20;
+  min-height: 20px;
   padding-top: 10px;
   padding-bottom: 10px;
   align-items: center;
@@ -105,7 +105,7 @@ export default ({
         ) : null}
       <AddressTextCont>
         <AddressText numberOfLines={2} pickup={pickup}>
-          {`${i18n.t(`home.offerCard.${pickup ? 'pickup': 'dropoff'}`)}: ${description}`}
+          {`${i18n.t(`home.offerCard.${pickup ? 'pickup' : 'dropoff'}`)}: ${description}`}
         </AddressText>
         <EtaText
           etaDrift={etaDrift}

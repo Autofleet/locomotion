@@ -3,8 +3,6 @@ import { View } from 'react-native';
 import styled from 'styled-components';
 import i18n from '../../../I18n';
 
-import RideRoundedButton from '../../../Components/RideButton';
-import RoundedButton from '../../../Components/RoundedButton';
 import Button from '../../../Components/Button';
 
 const ArrowIconSource = require('../../../assets/white-chevron-right.png');
@@ -14,7 +12,7 @@ export const Drawer = styled.View`
   bottom: 50;
   width: 90%; */
   background-color: #fff;
-  border-radius: 4;
+  border-radius: 4px;
   /* left: 5%;
   border-radius: 4;
   shadow-offset: 0px 0px;
@@ -24,7 +22,7 @@ export const Drawer = styled.View`
 `;
 
 const address = `
-  min-height: 20;
+  min-height: 20px;
   padding-top: 15px;
   padding-start: 24;
   align-items: center;
@@ -44,7 +42,7 @@ export const RideCard = styled.View`
 export const DriverAvatar = styled.Image`
   width: 60px;
   height: 60px;
-  border-radius: 100;
+  border-radius: 100px;
   margin-left: 15px;
   border-width: 1px;
   border-color: #a7a7a7;
@@ -57,9 +55,9 @@ const styleForDriverIsArrivedState = `
 
 
 export const RideDetailsText = styled.Text`
-  font-size: 12;
+  font-size: 12px;
   color: #000000;
-  margin-start: 10;
+  margin-start: 10px;
   text-align: ${({ right }) => (right ? 'right' : 'left')};
 
   ${({ subText }) => (subText ? `
@@ -94,14 +92,14 @@ export const RideDetailsContainer = styled.View`
 
 export const RideButtonText = styled.Text`
   color: #fff;
-  font-size: 18;
+  font-size: 18px;
 `;
 
 
 export const RowContainer = styled.TouchableOpacity`
-  min-height: 50;
-  padding-top: 10;
-  padding-bottom: 10;
+  min-height: 50px;
+  padding-top: 10px;
+  padding-bottom: 10px;
   align-items: center;
   flex-direction: row;
   ${({ paddingStart }) => (paddingStart ? `
@@ -169,14 +167,13 @@ export const RideTypeButtonText = styled.Text`
 `;
 
 
-
 export const DrawerContainer = styled.View`
   flex-direction: column;
   position: absolute;
-  bottom: 20;
+  bottom: 20px;
   width: 90%;
   left: 5%;
-  border-radius: 4;
+  border-radius: 4px;
   shadow-offset: 0px 0px;
   shadow-color: #04214f;
   shadow-opacity: 0.4;
@@ -219,6 +216,5 @@ export const AddPaymentBar = (props) => {
       </PaymentBarText>
       <Arrow />
     </PaymentBarContainer>
-  )
-}
-
+  );
+};

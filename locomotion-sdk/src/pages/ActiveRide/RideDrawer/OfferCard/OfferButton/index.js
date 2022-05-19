@@ -1,15 +1,15 @@
-import React, {Fragment} from 'react';
+import React, { Fragment } from 'react';
 import { View } from 'react-native';
 import styled from 'styled-components';
 import moment from 'moment';
 import I18n from '../../../../../I18n';
-import RoundedButton from '../../../../../Components/RoundedButton'
+import RoundedButton from '../../../../../Components/RoundedButton';
 import SliderButton from '../../../../../Components/SlideButton';
 
 const address = `
 min-height: 50;
 padding-top: 10;
-padding-bottom: 10;
+padding-bottom: 10px;
 padding-start: 24;
 align-items: center;
 flex-direction: row;
@@ -40,36 +40,33 @@ export const OfferExpiredText = styled.Text`
 `;
 
 export default ({
-    offerExpired, onVerified, setLoading,onRenewOffer, futureRide
+  offerExpired, onVerified, setLoading, onRenewOffer, futureRide,
 
-}) => {
+}) => (
+  <Fragment>
+    {!offerExpired || futureRide
+      ? (
+        <SliderButton
+          onVerified={onVerified}
+          setLoading={setLoading}
+        />
+      )
 
-  return (
-      <Fragment>
-         {!offerExpired || futureRide
-        ? (
-            <SliderButton
-            onVerified={onVerified}
+      : (
+        <DrawerButtonContainer>
+          <OfferExpiredText>
+            {`${offerExpired ? I18n.t('home.offerCard.expiredOfferText') : ''}`}
+          </OfferExpiredText>
+          <RoundedButton
+            onPress={onRenewOffer}
             setLoading={setLoading}
-            />
-        )
-
-        : (
-            <DrawerButtonContainer>
-                <OfferExpiredText>
-                    {`${offerExpired ? I18n.t('home.offerCard.expiredOfferText') : ''}`}
-                </OfferExpiredText>
-                <RoundedButton
-                    onPress={onRenewOffer}
-                    setLoading={setLoading}
-                    hollow={offerExpired}
-                    data-test-id='RenewOfferButton'
-                >
-                    {`${I18n.t(!offerExpired ? 'home.offerCard.confirmOffer' : 'home.offerCard.expiredOffer')}`}
-                </RoundedButton>
-            </DrawerButtonContainer>
-        )
+            hollow={offerExpired}
+            data-test-id="RenewOfferButton"
+          >
+            {`${I18n.t(!offerExpired ? 'home.offerCard.confirmOffer' : 'home.offerCard.expiredOffer')}`}
+          </RoundedButton>
+        </DrawerButtonContainer>
+      )
         }
-        </Fragment>
-  );
-};
+  </Fragment>
+);

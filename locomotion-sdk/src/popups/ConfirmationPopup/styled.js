@@ -1,16 +1,18 @@
 import React from 'react';
-import { View, Text, Image, TouchableOpacity } from 'react-native';
+import {
+  View, Text, Image, TouchableOpacity,
+} from 'react-native';
 import styled from 'styled-components';
 import RoundedButton from '../../Components/RoundedButton';
-import xIcon from '../../assets/x.png'
+import xIcon from '../../assets/x.png';
 
 export const PopupContainer = styled.View`
   padding: 20px 0;
-  min-height: 250;
+  min-height: 250px;
   background-color: white;
   justify-content: center;
   align-items: center;
-  border-radius: 2;
+  border-radius: 2px;
   border-color: rgba(0, 0, 0, 0.1);
   overflow: hidden;
 `;

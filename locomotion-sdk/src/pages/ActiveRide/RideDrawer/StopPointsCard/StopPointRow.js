@@ -9,17 +9,17 @@ import Button from '../../../../Components/Button';
 const address = `
 min-height: 50;
 padding-top: 10;
-padding-bottom: 10;
+padding-bottom: 10px;
 padding-start: 24;
 align-items: center;
 flex-direction: row;
 `;
 
 export const StopPointDot = styled.View`
-  width: 10;
-  height: 10;
+  width: 10px;
+  height: 10px;
   background-color: ${({ origin }) => (origin ? '#6180c0' : '#08902d')};
-  border-radius: 10;
+  border-radius: 10px;
   /* margin-top: 10; */
 `;
 
@@ -56,7 +56,7 @@ const AddressText = styled.Text`
   color: #666666;
   margin-start: 22;
   margin-end: 16;
-  opacity: ${({selected}) => selected ? 1 : 0.5};
+  opacity: ${({ selected }) => (selected ? 1 : 0.5)};
 `;
 
 const EtaText = styled.Text`
@@ -69,7 +69,7 @@ const EtaText = styled.Text`
 const RowContainer = styled(Button)`
   min-height: 50;
   padding-top: 10;
-  padding-bottom: 10;
+  padding-bottom: 10px;
   align-items: center;
   flex-direction: row;
   ${({ paddingStart }) => (paddingStart ? `
@@ -82,7 +82,7 @@ const RowContainer = styled(Button)`
 `;
 
 const AddressTitle = styled.Text`
-  font-size: 11;
+  font-size: 11px;
   color: #000000;
   margin-start: 22;
   margin-end: 16;
@@ -91,15 +91,15 @@ const AddressTitle = styled.Text`
 `;
 
 export default ({
-  pickup, description, eta, completedAt, openLocationSelect, useBorder, title, selected
+  pickup, description, eta, completedAt, openLocationSelect, useBorder, title, selected,
 }) => (
-  <RowContainer pickup={pickup} onPress={openLocationSelect} useBorder={useBorder} paddingStart data-test-id='OpenLocationSelectButton'>
+  <RowContainer pickup={pickup} onPress={openLocationSelect} useBorder={useBorder} paddingStart data-test-id="OpenLocationSelectButton">
     <StopPointDotContainer origin={pickup}>
       <StopPointDot origin={pickup} />
       <StopPointDotTimeLine />
     </StopPointDotContainer>
     <AddressTextCont>
-    <View>
+      <View>
         <AddressTitle>
           {title}
         </AddressTitle>

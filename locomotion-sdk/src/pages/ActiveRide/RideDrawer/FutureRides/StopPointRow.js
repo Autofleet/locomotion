@@ -9,17 +9,17 @@ import Button from '../../../../Components/Button';
 const address = `
 min-height: 50;
 padding-top: 10;
-padding-bottom: 10;
+padding-bottom: 10px;
 padding-start: 24;
 align-items: center;
 flex-direction: row;
 `;
 
 export const StopPointDot = styled.View`
-  width: 10;
-  height: 10;
+  width: 10px;
+  height: 10px;
   background-color: ${({ origin }) => (origin ? '#6180c0' : '#08902d')};
-  border-radius: 10;
+  border-radius: 10px;
   /* margin-top: 10; */
 `;
 
@@ -52,21 +52,14 @@ const AddressTextCont = styled.View`
 `;
 
 const AddressText = styled.Text`
-  font-size: 12;
+  font-size: 12px;
   color: #666666;
   margin-start: 16;
   margin-end: 16;
 `;
 
-const EtaText = styled.Text`
-  font-size: 13;
-  color: #808080;
-  margin-start: 22;
-  font-size: 10px;
-`;
-
 const RowContainer = styled(Button)`
-  min-height: 15;
+  min-height: 15px;
   align-items: ${({ pickup }) => (pickup ? 'flex-start' : 'flex-end')};
 
 
@@ -79,7 +72,7 @@ const RowContainer = styled(Button)`
 export default ({
   pickup, description, eta, completedAt, openLocationSelect, useBorder, title, selected,
 }) => (
-  <RowContainer pickup={pickup} onPress={openLocationSelect} useBorder={useBorder} paddingStart data-test-id='StopPointRowButton'>
+  <RowContainer pickup={pickup} onPress={openLocationSelect} useBorder={useBorder} paddingStart data-test-id="StopPointRowButton">
     <StopPointDotContainer origin={pickup}>
       <StopPointDot origin={pickup} />
       <StopPointDotTimeLine />

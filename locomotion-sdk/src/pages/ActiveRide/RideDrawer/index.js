@@ -1,12 +1,7 @@
 /* eslint-disable no-nested-ternary */
 import React, {
-  Fragment, useState, useEffect, useRef,
+  Fragment, useState, useEffect,
 } from 'react';
-import {
-  View,
-  Image,
-  Text,
-} from 'react-native';
 import moment from 'moment';
 
 import I18n from '../../../I18n';
@@ -15,21 +10,15 @@ import {
   RideButtonContainer,
   DrawerContainer,
   DrawerButtonContainer,
-  FutureOrder,
-  FutureText,
-  AddPaymentBar
+  AddPaymentBar,
 } from './styled';
-import RideType from './RideType';
-import Switch from '../../../Components/Switch';
 
 import RoundedButton from '../../../Components/RoundedButton';
-import RideButton from '../../../Components/RideButton';
 import RideCard from './RideCard';
 import MessageCard from './MessageCard';
 import { getTogglePopupsState } from '../../../context/main';
-import PaymentsContext from '../../../context/payments'
+import PaymentsContext from '../../../context/payments';
 
-import network from '../../../services/network';
 import settingsContext from '../../../context/settings';
 
 import StopPointsEtaCard from './StopPointsEtaCard';
@@ -37,6 +26,8 @@ import StopPointsCard from './StopPointsCard';
 import OfferCard from './OfferCard';
 import RideStatusHeader from './RideStatusHeader';
 import FutureRides, { FutureOrdersButton } from './FutureRides';
+
+const RideButton = RoundedButton;
 
 const getRideState = (activeRide) => { // false, driverOnTheWay, driverArrived, onBoard
   if (!activeRide) {
@@ -56,7 +47,7 @@ const RideDrawer = ({
   cancelRide, createRide, readyToBook, rideType, preRideDetails,
   onNumberOfPassengerChange, numberOfPassenger, createOffer, rideOffer,
   cancelOffer, offerExpired, onLocationSelect, closeAddressViewer, onRideSchedule,
-  futureRides, cancelFutureRide,createFutureOffer,navigation
+  futureRides, cancelFutureRide, createFutureOffer, navigation,
 }) => {
   const [origin, destination] = activeRide ? activeRide.stopPoints || [] : [];
   const [isPopupOpen, togglePopup] = getTogglePopupsState();
@@ -81,8 +72,8 @@ const RideDrawer = ({
       return createOffer();
     }
 
-    if(!rideOffer && requestStopPoints.scheduledTo) {
-      return createFutureOffer()
+    if (!rideOffer && requestStopPoints.scheduledTo) {
+      return createFutureOffer();
     }
 
     if (rideOffer) {
@@ -93,11 +84,11 @@ const RideDrawer = ({
   const useSettings = settingsContext.useContainer();
 
   const getPaymentMethodStatus = async () => {
-    await usePayments.getPaymentMethods()
-  }
+    await usePayments.getPaymentMethods();
+  };
   useEffect(() => {
     useSettings.getSettings();
-    getPaymentMethodStatus()
+    getPaymentMethodStatus();
   }, []);
 
   useEffect(() => {
@@ -114,33 +105,33 @@ const RideDrawer = ({
 
   useEffect(() => {
     const maxFutureRides = useSettings.settingsList.MAX_FUTURE_RIDES;
-    if(futureRides && futureRides.length >= maxFutureRides) {
-      setDisableFutureBooking(true)
+    if (futureRides && futureRides.length >= maxFutureRides) {
+      setDisableFutureBooking(true);
     } else {
-      setDisableFutureBooking(false)
+      setDisableFutureBooking(false);
     }
 
-    if(futureRides && futureRides.length === 0 && futureOrdersState) {
-      setFutureOrdersState(false)
+    if (futureRides && futureRides.length === 0 && futureOrdersState) {
+      setFutureOrdersState(false);
     }
-  }, [futureRides])
+  }, [futureRides]);
 
   useEffect(() => {
-    if(usePayments.paymentMethods && usePayments.paymentMethods.length > 0) {
+    if (usePayments.paymentMethods && usePayments.paymentMethods.length > 0) {
       setAllowRideOrder(true);
     } else {
       setAllowRideOrder(false);
     }
-  }, [usePayments.paymentMethods])
+  }, [usePayments.paymentMethods]);
   return (
     <DrawerContainer>
       <FutureOrdersButton
         futureRides={futureRides}
         onPress={() => setFutureOrdersState(!futureOrdersState)}
         isOpen={futureOrdersState}
-        />
-      {!allowRideOrder ?
-        <AddPaymentBar onPress={() => navigation.navigate('Payment')}>{I18n.t('payments.setPaymentBanner')}</AddPaymentBar> : null}
+      />
+      {!allowRideOrder
+        ? <AddPaymentBar onPress={() => navigation.navigate('Payment')}>{I18n.t('payments.setPaymentBanner')}</AddPaymentBar> : null}
       <FutureRides
         futureRides={futureRides}
         isOpen={futureOrdersState}
@@ -179,7 +170,7 @@ const RideDrawer = ({
                       ? (
                         <DrawerButtonContainer>
                           <RoundedButton
-                            data-test-id='CancelRidePriceButton'
+                            data-test-id="CancelRidePriceButton"
                             onPress={buttonAction}
                             hollow
                           >
@@ -202,7 +193,7 @@ const RideDrawer = ({
                       />
                       <DrawerButtonContainer>
                         <RoundedButton
-                          data-test-id='CancelRideButton'
+                          data-test-id="CancelRideButton"
                           onPress={buttonAction}
                           hollow
                         >
@@ -264,17 +255,19 @@ const RideDrawer = ({
       {!rideState && !isPopupOpen('ridePopupsStatus') && !rideOffer
         ? (
           <>
-          <RideButtonContainer>
-            {!futureOrdersState && <RideButton
-              data-test-id={rideState ? 'CancelRideButton' : 'LetsRideButton'}
-              onPress={buttonAction}
-              hollow={!readyToBook || !allowRideOrder}
-              setLoading={setLoading}
-              disabled={!readyToBook || !allowRideOrder}
-            >
-              {I18n.t(rideState ? 'home.cancelRideButton' : 'home.letsRideButton')}
-            </RideButton>}
-          </RideButtonContainer>
+            <RideButtonContainer>
+              {!futureOrdersState && (
+              <RideButton
+                data-test-id={rideState ? 'CancelRideButton' : 'LetsRideButton'}
+                onPress={buttonAction}
+                hollow={!readyToBook || !allowRideOrder}
+                setLoading={setLoading}
+                disabled={!readyToBook || !allowRideOrder}
+              >
+                {I18n.t(rideState ? 'home.cancelRideButton' : 'home.letsRideButton')}
+              </RideButton>
+              )}
+            </RideButtonContainer>
           </>
         )
         : null

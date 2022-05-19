@@ -1,5 +1,5 @@
 import React, {
-  useState, useEffect, useRef,
+  useState, useEffect, useRef, useContext,
 } from 'react';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import {
@@ -15,8 +15,10 @@ import getPosition from './RideDrawer/StopPointsCard/AddressView/getPostion';
 import {
   PageContainer, StopPointDot, VehicleDot, MapButtonsContainer,
 } from './styled';
+import mapDarkMode from '../../assets/mapDarkMode.json';
 import Header from '../../Components/Header';
 import RideDrawer from './RideDrawer';
+import { Context as ThemeContext, THEME_MOD } from '../../context/theme';
 import { getTogglePopupsState } from '../../context/main';
 import UserService from '../../services/user';
 import OneSignal from '../../services/one-signal';
@@ -25,10 +27,12 @@ import StationsMap from './StationsMap';
 import MyLocationButton from './ShowMyLocationButton';
 import RideSummaryPopup from '../../popups/RideSummaryPopup';
 import FutureRideCanceledPopup from '../../popups/FutureRideCanceled';
-import AppSettings from '../../services/app-settings'
+import AppSettings from '../../services/app-settings';
 import Mixpanel from '../../services/Mixpanel';
 import { getStationsApi } from '../../context/places/api';
-import { cancelFutureRideApi, cancelRideApi, createOfferApi, createRideApi, getActiveRides, getPreRideDetails, getRideSummary, sendRating } from '../../context/rides/api';
+import {
+  cancelFutureRideApi, cancelRideApi, createOfferApi, createRideApi, getActiveRides, getPreRideDetails, getRideSummary, sendRating,
+} from '../../context/rides/api';
 
 
 const STATION_AUTOREFRESH_INTERVAL = 60000;
@@ -54,8 +58,9 @@ function useInterval(callback, delay) {
 }
 
 export default ({ menuSide, mapSettings }) => {
-  const navigation = useNavigation()
-  const route = useRoute()
+  const navigation = useNavigation();
+  const { isDarkMode } = useContext(ThemeContext);
+  const route = useRoute();
   const [activeRideState, setActiveRide] = useState(null);
   const [futureRides, setFutureRides] = useState(null);
 
@@ -90,27 +95,27 @@ export default ({ menuSide, mapSettings }) => {
   const notificationsHandler = {
     futureRideCanceled: () => {
       togglePopup('futureRideCanceled', true);
-    }
-  }
+    },
+  };
 
   const focusMarkers = () => {
-    if(!activeRideState) {
+    if (!activeRideState) {
       return;
     }
-    let activeSp = activeRideState.stopPoints.find(sp => sp.state === 'pending' || sp.state === 'arrived');
+    const activeSp = activeRideState.stopPoints.find(sp => sp.state === 'pending' || sp.state === 'arrived');
 
-    const additional = []
-    if(activeRideState && activeSp.type === 'pickup' && !activeSp.completedAt && mapRegion.latitude && mapRegion.longitude) {
-      additional.push({latitude: mapRegion.latitude, longitude: mapRegion.longitude})
+    const additional = [];
+    if (activeRideState && activeSp.type === 'pickup' && !activeSp.completedAt && mapRegion.latitude && mapRegion.longitude) {
+      additional.push({ latitude: mapRegion.latitude, longitude: mapRegion.longitude });
     }
 
-    if(activeRideState.vehicle && activeRideState.vehicle.location && displayMatchInfo) {
-      additional.push({latitude: parseFloat(activeRideState.vehicle.location.lat), longitude: parseFloat(activeRideState.vehicle.location.lng)})
+    if (activeRideState.vehicle && activeRideState.vehicle.location && displayMatchInfo) {
+      additional.push({ latitude: parseFloat(activeRideState.vehicle.location.lat), longitude: parseFloat(activeRideState.vehicle.location.lng) });
     }
 
     mapInstance.current.fitToCoordinates([
-      {latitude: parseFloat(activeSp.lat), longitude: parseFloat(activeSp.lng)},
-      ...additional
+      { latitude: parseFloat(activeSp.lat), longitude: parseFloat(activeSp.lng) },
+      ...additional,
     ], {
       edgePadding: {
         top: 80,
@@ -119,9 +124,9 @@ export default ({ menuSide, mapSettings }) => {
         left: 100,
       },
     });
-  }
+  };
   const loadActiveRide = async () => {
-    const response = await getActiveRides({ activeRide: true })
+    const response = await getActiveRides({ activeRide: true });
 
     const { ride: activeRide, futureRides: futureRidesData } = response;
     setFutureRides(futureRidesData);
@@ -139,7 +144,7 @@ export default ({ menuSide, mapSettings }) => {
             .map(tuple => ({ latitude: tuple[0], longitude: tuple[1] })),
         };
         setActiveSp(activeSp);
-        if(activeRide && !disableAutoLocationFocus) {
+        if (activeRide && !disableAutoLocationFocus) {
           focusMarkers();
         }
       }
@@ -148,7 +153,7 @@ export default ({ menuSide, mapSettings }) => {
       return setActiveRide(activeRide);
     }
     if (activeRideState) {
-      const rideSummary = await getRideSummary({rideId: activeRideState.externalId});
+      const rideSummary = await getRideSummary({ rideId: activeRideState.externalId });
       if (rideSummary && rideSummary.state === 'completed') {
         const pickupTime = rideSummary.stopPoints[0].completedAt;
         const dropoffTime = rideSummary.stopPoints[1].completedAt;
@@ -179,16 +184,16 @@ export default ({ menuSide, mapSettings }) => {
     loadActiveRide();
   }, 5000);
 
-  if(Config.STATIONS_REFRESH_RATE) {
+  if (Config.STATIONS_REFRESH_RATE) {
     useInterval(() => {
-      if(!rideOffer && (!requestStopPoints.pickup || !requestStopPoints.dropoff)) {
+      if (!rideOffer && (!requestStopPoints.pickup || !requestStopPoints.dropoff)) {
         getStations();
       }
     }, Config.STATIONS_REFRESH_RATE * 60000);
   }
 
   useEffect(() => {
-    Mixpanel.pageView(route.name)
+    Mixpanel.pageView(route.name);
     initialLocation();
     UserService.getUser(navigation);
     getStations();
@@ -200,7 +205,7 @@ export default ({ menuSide, mapSettings }) => {
 
     return () => {
       stopAutoStationUpdate();
-    }
+    };
   }, []);
 
   useInterval(() => {
@@ -215,15 +220,13 @@ export default ({ menuSide, mapSettings }) => {
     calculatePickupEta(origin);
   }, [activeRideState]);
 
-  const bookValidation = state => {
-    return state && state.dropoff && state.dropoff.lat
+  const bookValidation = state => state && state.dropoff && state.dropoff.lat
       && state.pickup && state.pickup.lat;
-  }
 
   const loadPreRideDetails = async (origin, destination) => {
     return;
     try {
-      const data = await getPreRideDetails({ origin, destination })
+      const data = await getPreRideDetails({ origin, destination });
       setPreRideDetails(data);
     } catch (error) {
       console.log('Got error while try to get pre detail on a ride', error);
@@ -269,8 +272,8 @@ export default ({ menuSide, mapSettings }) => {
       numberOfPassengers,
       rideType,
       scheduledTo: requestStopPoints.scheduledTo,
-      stopPoints:[
-         {
+      stopPoints: [
+        {
           type: 'pickup',
           address: requestStopPoints.pickup.description,
           lat: requestStopPoints.pickup.lat,
@@ -284,7 +287,7 @@ export default ({ menuSide, mapSettings }) => {
 
 
         },
-      ]
+      ],
     });
 
     if (response.state === 'rejected') {
@@ -321,7 +324,7 @@ export default ({ menuSide, mapSettings }) => {
   };
 
   const cancelRide = async () => {
-    await cancelRideApi()
+    await cancelRideApi();
     return loadActiveRide();
   };
 
@@ -336,7 +339,7 @@ export default ({ menuSide, mapSettings }) => {
     } else if (origin && origin.eta) {
       const etaDiff = moment(origin.eta).diff(moment(), 'minutes');
       setPickupEta(etaDiff);
-      setDisplayMatchInfo((etaDiff <= useSettings.settingsList.ARRIVE_REMINDER_MIN || (activeRideState && activeRideState.arrivingPush !== null)))
+      setDisplayMatchInfo((etaDiff <= useSettings.settingsList.ARRIVE_REMINDER_MIN || (activeRideState && activeRideState.arrivingPush !== null)));
     }
   };
 
@@ -354,13 +357,12 @@ export default ({ menuSide, mapSettings }) => {
   const getStations = async () => {
     try {
       const { coords } = await getPosition();
-      if(coords.latitude && coords.longitude) {
-        const { latitude: lat, longitude: lng} = coords;
+      if (coords.latitude && coords.longitude) {
+        const { latitude: lat, longitude: lng } = coords;
         const data = await getStationsApi({
-            location: {lat, lng},
-            stations: true,
-          },
-        );
+          location: { lat, lng },
+          stations: true,
+        });
         setStations(data);
       }
     } catch (e) {
@@ -429,18 +431,16 @@ export default ({ menuSide, mapSettings }) => {
   };
 
   const focusCurrentLocation = () => {
-    setDisableAutoLocationFocus(false)
-    if(mapRegion.longitude && mapRegion.latitude && !activeRideState) {
+    setDisableAutoLocationFocus(false);
+    if (mapRegion.longitude && mapRegion.latitude && !activeRideState) {
       mapInstance.current.animateToRegion({
         latitude: mapRegion.latitude,
         longitude: mapRegion.longitude,
         latitudeDelta: mapRegion.latitudeDelta,
         longitudeDelta: mapRegion.longitudeDelta,
       }, 1000);
-    } else {
-      if(activeRideState && activeRideState.vehicle && activeRideState.vehicle.location) {
-        focusMarkers();
-      }
+    } else if (activeRideState && activeRideState.vehicle && activeRideState.vehicle.location) {
+      focusMarkers();
     }
   };
 
@@ -453,29 +453,29 @@ export default ({ menuSide, mapSettings }) => {
   };
 
   const cancelFutureRide = async (rideId) => {
-    const response = await cancelFutureRideApi(rideId)
-    loadActiveRide()
+    const response = await cancelFutureRideApi(rideId);
+    loadActiveRide();
   };
 
   const createFutureOffer = async () => {
     const offerData = {
-      numberOfPassengers
-    }
+      numberOfPassengers,
+    };
     setRideOffer(offerData);
   };
 
   useEffect(() => {
-    if(!disableAutoLocationFocus) {
+    if (!disableAutoLocationFocus) {
       focusCurrentLocation();
     }
-  }, [mapRegion])
+  }, [mapRegion]);
 
   const VehicleMarker = () => {
     if (activeRideState && activeRideState.vehicle && activeRideState.vehicle.location && displayMatchInfo) {
       let newPoint;
       const { lat, lng } = activeRideState.vehicle.location;
-      const fixLat = Number(Number(lat).toFixed(5)),
-        fixLng = Number(Number(lng).toFixed(5));
+      const fixLat = Number(Number(lat).toFixed(5));
+      const fixLng = Number(Number(lng).toFixed(5));
       if (activeSpState && activeSpState.polyline) {
         const ruler = new CheapRuler(fixLat, 'meters');
         const line = activeSpState.polyline.map(t => [t.longitude, t.latitude]);
@@ -486,9 +486,11 @@ export default ({ menuSide, mapSettings }) => {
       } else {
         newPoint = [fixLat, fixLng];
       }
-      return <Marker coordinate={{latitude: newPoint[1], longitude: newPoint[0]}}>
-        <VehicleDot/>
-      </Marker>;
+      return (
+        <Marker coordinate={{ latitude: newPoint[1], longitude: newPoint[0] }}>
+          <VehicleDot />
+        </Marker>
+      );
     }
     return null;
   };
@@ -517,20 +519,22 @@ export default ({ menuSide, mapSettings }) => {
             ...coordinate,
           }));
 
-          if(!disableAutoLocationFocus) {
+          if (!disableAutoLocationFocus) {
             focusCurrentLocation();
           }
         }}
         ref={mapInstance}
         onMapReady={() => {
-          //focusCurrentLocation();
-          if(Platform.OS === 'ios') {
-            return;
+          // focusCurrentLocation();
+          if (Platform.OS === 'ios') {
+
           }
           /* PermissionsAndroid.request(
             PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
           ); */
         }}
+        userInterfaceStyle={isDarkMode ? THEME_MOD.DARK : undefined}
+        customMapStyle={isDarkMode ? mapDarkMode : undefined}
         {...mapSettings}
       >
         {!activeRideState
@@ -547,12 +551,14 @@ export default ({ menuSide, mapSettings }) => {
         {activeSpState
           ? (
             <StationsMap
-            isInOffer={!!rideOffer}
-            markersMap={activeRideState && activeRideState.stopPoints ? activeRideState.stopPoints.map(m => ({description: m.description, lat:  m.lat, lng: m.lng, type: m.type, id: `active_${m.type}`})) : []}
-            selectStation={selectStationMarker}
-            requestStopPoints={requestStopPoints}
-            activeRideState={activeRideState}
-          />
+              isInOffer={!!rideOffer}
+              markersMap={activeRideState && activeRideState.stopPoints ? activeRideState.stopPoints.map(m => ({
+                description: m.description, lat: m.lat, lng: m.lng, type: m.type, id: `active_${m.type}`,
+              })) : []}
+              selectStation={selectStationMarker}
+              requestStopPoints={requestStopPoints}
+              activeRideState={activeRideState}
+            />
           ) : null}
 
         {activeSpState && displayMatchInfo
@@ -563,7 +569,7 @@ export default ({ menuSide, mapSettings }) => {
               coordinates={activeSpState.polyline}
             />
           ) : null}
-          <VehicleMarker/>
+        <VehicleMarker />
       </MapView>
       <MapButtonsContainer>
         <MyLocationButton

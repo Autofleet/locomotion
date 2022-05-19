@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+
 const ArrowIconSource = require('../../assets/arrowright.png');
 
 const defaultTextColor = '#686868';

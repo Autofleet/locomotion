@@ -4,6 +4,7 @@ import {
 } from 'react-native';
 import FastImage from 'react-native-fast-image';
 import propsTypes from 'prop-types';
+import styled from 'styled-components';
 import LinearGradient from '../LinearGradient';
 import Button from '../Button';
 import styled from 'styled-components';
@@ -40,7 +41,7 @@ const myThumbnail = (props) => {
     iconContainer: {
       position: 'absolute',
       bottom: 0,
-      right: 0
+      right: 0,
     },
     icon: {
       width: 50,
@@ -56,17 +57,19 @@ const myThumbnail = (props) => {
   const borderRadius = { borderRadius: props.size / 2 };
   const borderRadiusSmall = { borderRadius: (props.size - 10) / 2 };
   return (
-    <Container 
-      style={{width: props.size, height: props.size}} >
+    <Container
+      style={{ width: props.size, height: props.size }}
+    >
       <LinearGradient
         start={{ x: 1, y: 1 }}
         end={{ x: 0, y: 0 }}
         style={[styles.linearGradient]}
       >
-        <Button 
-          onPress={props.onPress} 
-          style={[styles.croper, borderRadius]} 
-          data-test-id='ImagePickerButton'>
+        <Button
+          onPress={props.onPress}
+          style={[styles.croper, borderRadius]}
+          data-test-id="ImagePickerButton"
+        >
           <ImageComponent
             style={[styles.image, borderRadiusSmall]}
             source={props.source ? {uri: props.source} : avatarIcon}
@@ -74,14 +77,16 @@ const myThumbnail = (props) => {
         </Button>
       </LinearGradient>
       {props.mode in modes && (
-      <Button 
-        onPress={props.onPress} 
-        style={styles.iconContainer} 
-        data-test-id={`${props.mode}ImageButton`}>
-        <Image 
-          onPress={props.onPress} 
-          style={styles.icon} 
-          source={modes[props.mode]} />
+      <Button
+        onPress={props.onPress}
+        style={styles.iconContainer}
+        data-test-id={`${props.mode}ImageButton`}
+      >
+        <Image
+          onPress={props.onPress}
+          style={styles.icon}
+          source={modes[props.mode]}
+        />
       </Button>
       )}
     </Container>

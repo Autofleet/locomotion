@@ -18,5 +18,5 @@ export default {
   inputHeight,
   commonInputStyle,
   linkColor,
-  appPalette
-}
+  appPalette,
+};

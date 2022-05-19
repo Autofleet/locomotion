@@ -8,7 +8,7 @@ import StopPointEtaRow from './StopPointEtaRow';
 const address = `
 min-height: 50;
 padding-top: 10;
-padding-bottom: 10;
+padding-bottom: 10px;
 padding-start: 24;
 align-items: center;
 flex-direction: row;
@@ -24,33 +24,33 @@ export const StopPointsEtaContainer = styled.View`
 `;
 
 export default ({
-  pickup, origin, destination, rideState,requestStopPoints, pickupEtaDrift, dropoffEtaDrift,
+  pickup, origin, destination, rideState, requestStopPoints, pickupEtaDrift, dropoffEtaDrift,
 }) => {
   const firstEta = rideState ? origin && origin.metadata && origin.metadata.firstEta : undefined;
-  const firstEtaWithDrift = moment.utc(firstEta).add(pickupEtaDrift,'minutes')
+  const firstEtaWithDrift = moment.utc(firstEta).add(pickupEtaDrift, 'minutes');
   const showEta = firstEta && (firstEtaWithDrift.diff(moment.now()) < 0);
   return (
     <StopPointsEtaContainer>
       <StopPointEtaRow
-          pickup
-          description={rideState ? origin && origin.description
+        pickup
+        description={rideState ? origin && origin.description
           : requestStopPoints && requestStopPoints.pickup && requestStopPoints.pickup.description}
-          eta={rideState ? origin && origin.eta : undefined}
-          firstEta={firstEta}
-          completedAt={rideState ? origin && origin.completedAt
+        eta={rideState ? origin && origin.eta : undefined}
+        firstEta={firstEta}
+        completedAt={rideState ? origin && origin.completedAt
           : undefined}
-          etaDrift={pickupEtaDrift}
-          showEta={showEta}
+        etaDrift={pickupEtaDrift}
+        showEta={showEta}
       />
       <StopPointEtaRow
-          description={rideState ? destination && destination.description
+        description={rideState ? destination && destination.description
           : requestStopPoints && requestStopPoints.dropoff && requestStopPoints.dropoff.description}
-          eta={rideState ? destination && destination.eta : undefined}
-          firstEta={rideState ? destination && destination.metadata && destination.metadata.firstEta : undefined}
-          completedAt={rideState ? destination && destination.completedAt
+        eta={rideState ? destination && destination.eta : undefined}
+        firstEta={rideState ? destination && destination.metadata && destination.metadata.firstEta : undefined}
+        completedAt={rideState ? destination && destination.completedAt
           : undefined}
-          etaDrift={dropoffEtaDrift}
-          showEta={showEta}
+        etaDrift={dropoffEtaDrift}
+        showEta={showEta}
       />
     </StopPointsEtaContainer>
   );

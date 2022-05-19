@@ -14,7 +14,7 @@ export const Box = styled.View`
   padding-right: 0px;
   align-items: center;
   width: 50px;
-  background-color: ${({ first }) => first ? 'red' : '#f6f6f8'};
+  background-color: ${({ first }) => (first ? 'red' : '#f6f6f8')};
   margin-right: 8px;
   margin-left: 8px;
   margin-top: 15px;
@@ -26,6 +26,6 @@ export const DigitInput = styled.TextInput`
   height: 50px;
   border-color: #dedede;
   text-align: center;
-  border-width: 1;
+  border-width: 1px;
   border-radius: 2px;
 `;

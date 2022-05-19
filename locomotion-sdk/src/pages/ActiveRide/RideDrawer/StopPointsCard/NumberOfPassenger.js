@@ -13,9 +13,9 @@ const MAX_NUMBER_OF_PASSENGER = 5;
 const MIN_NUMBER_OF_PASSENGER = 1;
 
 const PassengerAmountContainer = styled.View`
-  min-height: 50;
-  padding-top: 10;
-  padding-bottom: 10;
+  min-height: 50px;
+  padding-top: 10px;
+  padding-bottom: 10px;
   align-items: center;
   flex-direction: row;
   padding-start: 20;
@@ -25,9 +25,9 @@ const PassengerAmountTouchableOpacity = styled.TouchableOpacity`
   flex-direction: row;
   justify-content: center;
   margin-right: 15px;
-  border-width: 1;
+  border-width: 1px;
   border-color: #333333;
-  border-radius: 3;
+  border-radius: 3px;
   padding: 5px;
   padding-right: 8px;
   padding-left: 8px;
@@ -115,7 +115,7 @@ export default ({ amount, onChange }) => {
   const [isPopupOpen, togglePopup] = getTogglePopupsState();
   const [newAmount, setNewAmount] = useState(amount);
 
-  const validateChange = (newAmount, change) => MAX_NUMBER_OF_PASSENGER >= (newAmount + change) && (newAmount + change) >= MIN_NUMBER_OF_PASSENGER;
+  const validateChange = (validationAmount, change) => MAX_NUMBER_OF_PASSENGER >= (validationAmount + change) && (validationAmount + change) >= MIN_NUMBER_OF_PASSENGER;
 
   const getNewAmountFunction = change => () => {
     if (!validateChange(newAmount, change)) {
@@ -136,14 +136,15 @@ export default ({ amount, onChange }) => {
         <PassengerAmountText>{newAmount}</PassengerAmountText>
         <PassengerControlersContainer>
           <SetPassengerAmountBoxContainer disabled={!validateChange(newAmount, -1)}>
-            <SetPassengerAmountBox data-test-id='SetPassengerAmountMinusButton'
+            <SetPassengerAmountBox
+              data-test-id="SetPassengerAmountMinusButton"
               onPress={getNewAmountFunction(-1)}
             >
               <MinusIcon />
             </SetPassengerAmountBox>
           </SetPassengerAmountBoxContainer>
           <SetPassengerAmountBoxContainer disabled={!validateChange(newAmount, 1)}>
-            <SetPassengerAmountBox data-test-id='SetPassengerAmountPlusButton' onPress={getNewAmountFunction(1)}><PlusIcon /></SetPassengerAmountBox>
+            <SetPassengerAmountBox data-test-id="SetPassengerAmountPlusButton" onPress={getNewAmountFunction(1)}><PlusIcon /></SetPassengerAmountBox>
           </SetPassengerAmountBoxContainer>
         </PassengerControlersContainer>
       </View>
