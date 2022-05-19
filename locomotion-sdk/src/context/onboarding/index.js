@@ -55,7 +55,6 @@ const authContainer = () => {
   }, []);
 
   const verifyEmail = () => {
-    console.log(onboardingState);
     sendEmailVerification(onboardingState.id);
   };
 

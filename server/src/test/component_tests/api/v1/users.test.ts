@@ -15,6 +15,7 @@ describe('Users Endpoints', () => {
     lastName: 'Teste',
   });
   const secUserData = () => ({
+    id: '1c03d922-1d81-42c5-9dc6-932249fc63e1',
     phoneNumber: '972501234568',
     operationId: 'f8a0c5fc-9b4c-43fa-93e7-a57349645be2',
     firstName: 'secTester',
@@ -63,10 +64,10 @@ describe('Users Endpoints', () => {
   it('test get all users', async () => {
     await initDatabase();
     const res = await request(app).get(`${usersApiUrl}`).set(...acToken);
-console.log(res.body)
+
     expect(res.statusCode).toBe(200);
     expect(res.body.length).toEqual(2);
-    expect(res.body[0].id).toEqual(firstUserData().id);
+    expect(res.body[0].id).toEqual(secUserData().id);
     expect(res.body[1].phoneNumber).toEqual(secUserData().phoneNumber);
   });
 

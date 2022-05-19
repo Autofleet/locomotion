@@ -35,7 +35,6 @@ export const getLoginSettings = async () => {
 };
 
 export const sendEmailVerification = async (userId) => {
-  console.log('userId', userId);
   const { data } = await network.post('/api/v1/invite/send-email-verification', { userId });
   return data;
 };
