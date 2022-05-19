@@ -6,8 +6,7 @@ import FastImage from 'react-native-fast-image';
 import propsTypes from 'prop-types';
 import styled from 'styled-components';
 import LinearGradient from '../LinearGradient';
-import Button from '../Button';
-import styled from 'styled-components';
+import Button from '../Button'; 
 import avatarIcon from './default.png';
 
 const modes = {
