@@ -69,7 +69,8 @@ router.post('/send-email-verification', async (req, res) => {
         privacyUrl: operation.privacyUrl,
       },
     );
-    await sendMail(userProfile.email, operation.emailSender, emailHtml);
+    const subject = operation.verificationEmailSubject || `${operation.clientName} ${operation.emailSender}`;
+    await sendMail(userProfile.email, operation.emailSender, emailHtml, subject);
     res.json({
       status: 'OK',
     });
