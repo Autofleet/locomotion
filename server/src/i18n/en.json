@@ -27,6 +27,13 @@
       "text": "Get ready to meet your driver at \"{{stopPoint}}\""
     }
 
+  },
+  "emailTemplate": {
+    "hi": "Hi",
+    "p1":"Please confirm your email by tapping the link below",
+    "confirmButton": "Confirm email",
+    "issues": "If you encounter any issues please contact",
+    "ignore": "If you think this email wasn't meant for you, please ignore it."
   }
 
 }

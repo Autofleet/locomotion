@@ -1,6 +1,12 @@
-const i18n = require('i18next');
+import i18n from 'i18next';
 
 const en = require('./en.json');
+
+const ns: any = ['translation'];
+const defaultNS: any = 'translation';
+const interpolation: any = {
+  escapeValue: false, // not needed for react
+};
 
 i18n
   .init({
@@ -9,13 +15,11 @@ i18n
       en: {
         translation: en,
       },
-      ns: ['translation'],
-      defaultNS: 'translation',
-      interpolation: {
-        escapeValue: false, // not needed for react
-      },
+      ns,
+      defaultNS,
+      interpolation,
     },
-  });
+  }, null);
 
 if (process.env.I18N_LANG) {
   const lang = process.env.I18N_LANG;
@@ -23,4 +27,4 @@ if (process.env.I18N_LANG) {
   i18n.addResourceBundle(lang, 'translation', require(`./${lang}.json`), true, true);
   i18n.changeLanguage(lang);
 }
-module.exports = i18n;
+export default i18n;

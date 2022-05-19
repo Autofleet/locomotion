@@ -54,6 +54,11 @@ export default class User extends Model {
   @Column({
     type: DataType.BOOLEAN,
   })
+    emailVerified: boolean;
+
+  @Column({
+    type: DataType.BOOLEAN,
+  })
     active: boolean;
 
   @Column({

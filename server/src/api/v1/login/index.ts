@@ -38,7 +38,7 @@ router.post('/vert', async (req, res) => {
       userId: userProfile.id,
     }, 'refreshToken');
 
-    const additionalUpdateData = { active: null };
+    const additionalUpdateData = { active: true };
     if (userProfile.active === null) {
       try {
         const foundSetting = await settingService.getSettingByKeyFromDb('MANUAL_APPROVAL');
