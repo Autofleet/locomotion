@@ -13,13 +13,28 @@ const authContainer = () => {
   const [onboardingState, setOnboardingState] = useState({
     phoneNumber: '',
     firstName: '',
-    lastName: ''
+    lastName: '',
+    avatar: '',
+    email: ''
   })
+
+  const updateState = (field, value) => {
+    setOnboardingState({
+      ...onboardingState,
+      [field]: value
+    })
+  }
 
   const navigateBasedOnUser = (user, complete) => {
     setOnboardingState(user)
     if (!user.firstName || !user.lastName) {
       return navigation.navigate('AuthScreens', { screen: 'Name' })
+    }
+    if (!user.email) {
+      return navigation.navigate('AuthScreens', { screen: 'Email' })
+    }
+    if (!user.avatar && !user.email) {
+      return navigation.navigate('AuthScreens', { screen: 'Avatar' })
     }
     if (complete) {
       navigation.navigate('MainApp')
@@ -82,7 +97,7 @@ const authContainer = () => {
 
   return {
     onboardingState,
-    setOnboardingState,
+    updateState,
     onVert,
     updateUserInfo,
     navigateBasedOnUser

@@ -10,23 +10,16 @@ import { loginApi } from "../../../context/user/api";
 import { useNavigation } from "@react-navigation/native";
 
 const Phone = () => {
-    const {onboardingState, setOnboardingState} = onboardingContext.useContainer()
+    const {onboardingState, updateState} = onboardingContext.useContainer()
     const navigation = useNavigation()
     const [showErrorText, setShowErrorText] = useState(false)
     const [countryCode, setCountryCode] = useState('972')
     const onPhoneNumberChange = (phoneNumber) => {
-
         setShowErrorText(false)
         if (phoneNumber.length < 9) {
-            return setOnboardingState({
-                ...onboardingState,
-                phoneNumber: '',
-              });
+          return updateState('phoneNumber', '')
         }
-          setOnboardingState({
-            ...onboardingState,
-            phoneNumber: countryCode + phoneNumber,
-          });
+        updateState('phoneNumber', countryCode + phoneNumber)
     }
 
     const onSubmitPhoneNumber = async () => {
