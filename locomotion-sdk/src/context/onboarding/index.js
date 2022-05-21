@@ -1,6 +1,5 @@
 import { useNavigation } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react';
-import { debounce } from "lodash";
 import { createContainer } from 'unstated-next';
 import auth from '../../services/auth';
 import Mixpanel from '../../services/Mixpanel';
@@ -13,8 +12,8 @@ const keyToScreen = {
   lastName: 'Name',
   email: 'Email',
   avatar: 'Avatar',
-  welcome: 'Welcome'
-  }
+  welcome: 'Welcome',
+};
 
 const authContainer = () => {
   const [, dispatch] = useStateValue();
@@ -25,7 +24,7 @@ const authContainer = () => {
     lastName: '',
     avatar: '',
     email: '',
-  }
+  };
   const [onboardingState, setOnboardingState] = useState(initialState);
 
   const updateState = (field, value) => {
@@ -41,9 +40,9 @@ const authContainer = () => {
   const navigateBasedOnUser = (user, complete) => {
     setOnboardingState(user);
     let screen;
-    for (let key of Object.keys(initialState)) {
+    for (const key of Object.keys(initialState)) {
       if (!user[key]) {
-        screen = keyToScreen[key]
+        screen = keyToScreen[key];
         break;
       }
     }
@@ -52,7 +51,7 @@ const authContainer = () => {
     } else if (complete) {
       return navigation.navigate('MainApp');
     } else {
-      return navigateToScreen(keyToScreen.welcome)
+      return navigateToScreen(keyToScreen.welcome);
     }
   };
 

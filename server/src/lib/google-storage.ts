@@ -19,4 +19,3 @@ export const gcsGetFile = (fileName, bucketName = null): Promise<string> => new 
     resolve(jsonBuffer);
   });
 });
-

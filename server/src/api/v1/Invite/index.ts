@@ -25,7 +25,7 @@ router.post('/:id/verify', async (req, res) => {
     }
 
     const response = await confirmInvite(invite, user);
-    res.json(response);
+    return res.json(response);
   } catch (e) {
     return handleError(e, res);
   }
@@ -53,7 +53,7 @@ router.post('/send-email-verification', async (req, res) => {
     );
     const subject = operation.verificationEmailSubject || `${operation.clientName} ${operation.emailSender}`;
     await sendMail(user.email, operation.emailSender, emailHtml, subject);
-    res.json({
+    return res.json({
       status: 'OK',
     });
   } catch (e) {

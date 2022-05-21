@@ -8,8 +8,7 @@ const config = Config[env];
 
 // Detect models and import them to the orm
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-const modelMatch = (filename, member) =>
-  filename.substring(0, filename.indexOf('.model')).toLowerCase() === member.toLowerCase();
+const modelMatch = (filename, member) => filename.substring(0, filename.indexOf('.model')).toLowerCase() === member.toLowerCase();
 // eslint-disable-next-line import/no-mutable-exports
 let sequelize: Sequelize;
 if (config.use_env_variable) {

@@ -5,7 +5,9 @@ Nexmo.CHECK_STATUS_SUCSSES = '0';
 
 class NexmoService {
   virtualNumber: string;
+
   nexmo: any;
+
   constructor() {
     this.virtualNumber = process.env.NEXMO_VIRTUAL_NUMBER;
 

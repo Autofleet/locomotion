@@ -8,4 +8,3 @@ module.exports = {
     await queryInterface.addConstraint('users', { fields: ['email', 'deleted_at'], type: 'UNIQUE' });
   },
 };
-
