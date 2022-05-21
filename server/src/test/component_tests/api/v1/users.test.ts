@@ -68,7 +68,7 @@ describe('Users Endpoints', () => {
     expect(res.statusCode).toBe(200);
     expect(res.body.length).toEqual(2);
     expect(res.body[0].id).toEqual(secUserData().id);
-    expect(res.body[1].phoneNumber).toEqual(secUserData().phoneNumber);
+    expect(res.body[1].phoneNumber).toEqual(firstUserData().phoneNumber);
   });
 
   it('test get first user', async () => {
