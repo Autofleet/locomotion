@@ -37,6 +37,7 @@
     "author": "AutoFleet",
     "license": "ISC",
     "dependencies": {
+        "@autofleet/errors": "^1.0.10",
         "@google-cloud/storage": "^5.19.2",
         "@sendgrid/mail": "^7.6.2",
         "@turf/turf": "^5.1.6",

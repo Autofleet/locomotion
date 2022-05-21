@@ -19,12 +19,10 @@ const Email = () => {
   const onNext = async () => {
     try {
       await updateUserInfo({ email });
+      navigateBasedOnUser(onboardingState);
     } catch (e) {
-      console.log(e);
       setErrorText(i18n.t('onboarding.pages.email.inUseError'));
-      return;
     }
-    navigateBasedOnUser(onboardingState);
   };
 
   const onChange = async (value) => {

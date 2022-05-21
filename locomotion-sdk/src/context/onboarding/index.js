@@ -1,5 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react';
+import { debounce } from "lodash";
 import { createContainer } from 'unstated-next';
 import auth from '../../services/auth';
 import Mixpanel from '../../services/Mixpanel';
@@ -7,16 +8,25 @@ import { useStateValue } from '../main';
 import AppSettings from '../../services/app-settings';
 import { loginVert, sendEmailVerification, updateUser } from '../user/api';
 
+const keyToScreen = {
+  firstName: 'Name',
+  lastName: 'Name',
+  email: 'Email',
+  avatar: 'Avatar',
+  welcome: 'Welcome'
+  }
+
 const authContainer = () => {
   const [, dispatch] = useStateValue();
   const navigation = useNavigation();
-  const [onboardingState, setOnboardingState] = useState({
+  const initialState = {
     phoneNumber: '',
     firstName: '',
     lastName: '',
     avatar: '',
     email: '',
-  });
+  }
+  const [onboardingState, setOnboardingState] = useState(initialState);
 
   const updateState = (field, value) => {
     setOnboardingState({
@@ -25,21 +35,24 @@ const authContainer = () => {
     });
   };
 
+  const navigateToScreen = screen => navigation.navigate('AuthScreens', { screen });
+
+
   const navigateBasedOnUser = (user, complete) => {
     setOnboardingState(user);
-    if (!user.firstName || !user.lastName) {
-      return navigation.navigate('AuthScreens', { screen: 'Name' });
+    let screen;
+    for (let key of Object.keys(initialState)) {
+      if (!user[key]) {
+        screen = keyToScreen[key]
+        break;
+      }
     }
-    if (!user.email) {
-      return navigation.navigate('AuthScreens', { screen: 'Email' });
-    }
-    if (!user.avatar) {
-      return navigation.navigate('AuthScreens', { screen: 'Avatar' });
-    }
-    if (complete) {
-      navigation.navigate('MainApp');
+    if (screen) {
+      navigateToScreen(screen);
+    } else if (complete) {
+      return navigation.navigate('MainApp');
     } else {
-      navigation.navigate('AuthScreens', { screen: 'Welcome' });
+      return navigateToScreen(keyToScreen.welcome)
     }
   };
 
@@ -63,7 +76,6 @@ const authContainer = () => {
       verifyEmail(values.email);
     }
     const user = await updateUser(values);
-    setOnboardingState(user);
     dispatch({
       type: 'saveState',
       payload: {

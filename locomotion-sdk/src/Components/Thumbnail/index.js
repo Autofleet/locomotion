@@ -8,10 +8,13 @@ import styled from 'styled-components';
 import LinearGradient from '../LinearGradient';
 import Button from '../Button';
 import avatarIcon from './default.png';
+import editIcon from './edit_btn.png';
+import addIcon from './add_btn.png';
+
 
 const modes = {
-  edit: require('./edit_btn.png'),
-  add: require('./add_btn.png'),
+  edit: editIcon,
+  add: addIcon,
 };
 
 const Container = styled.View`

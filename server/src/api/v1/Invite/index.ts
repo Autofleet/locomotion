@@ -1,68 +1,50 @@
-import moment from 'moment';
+import { handleError, ResourceNotFoundError } from '@autofleet/errors';
 import Router from '../../../lib/router';
 import sendMail from '../../../lib/mail';
 import emailTemplate from '../../../lib/mail/emailTemplate';
 import logger from '../../../logger';
 import { Invite } from '../../../models';
-import { DEFAULT_INVITE_EXPIRE_TIME_HOURS } from '../../../models/Invite/index.model';
 import UserService from '../../../lib/user';
+import { confirmInvite, getInvite } from '../../../lib/invite';
 
 const router = Router();
 
-router.post('/:inviteId/verify', async (req, res) => {
-  const { inviteId } = req.params;
-  let invite: Invite = null;
+router.post('/:id/verify', async (req, res) => {
+  const { id } = req.params;
   try {
-    invite = await Invite.findOne({
-      where: {
-        id: inviteId,
-      },
-    });
+    const invite = await getInvite(id);
+
+    if (!invite) {
+      throw new ResourceNotFoundError('Invite not found');
+    }
+
+    const { userId } = invite;
+    const user = await UserService.find(userId);
+    if (!user) {
+      throw new ResourceNotFoundError('User not found');
+    }
+
+    const response = await confirmInvite(invite, user);
+    res.json(response);
   } catch (e) {
-    res.json({
-      status: 'ERROR',
-      msg: 'invite not found',
-    });
-    return;
-  }
-
-  if (!invite) {
-    res.json({
-      status: 'ERROR',
-      msg: 'invite not found',
-    });
-    return;
-  }
-
-  const { userId } = invite;
-  const user = await UserService.find(userId);
-  const operationSettings: any = {}; // user.operationId to get settings
-  const now: Date = new Date();
-
-  const expireTime = operationSettings.inviteExpireTime || DEFAULT_INVITE_EXPIRE_TIME_HOURS;
-  if (moment(invite.sentAt).add(expireTime, 'hours').isAfter(now)) {
-    invite.update({ approvedAt: now });
-    user.update({ emailVerified: true });
-    res.json(user);
-  } else {
-    res.json({
-      status: 'FAIL',
-      msg: 'invitation expired',
-    });
+    return handleError(e, res);
   }
 });
 
 router.post('/send-email-verification', async (req, res) => {
   const { userId } = req.body;
-  const userProfile = await UserService.find(userId);
-  const newInvite = await Invite.create({ userId: userProfile.id, sentAt: new Date() });
+  const user = await UserService.find(userId);
+  if (!user) {
+    throw new ResourceNotFoundError('user not found');
+  }
+  const newInvite = await Invite.create({ userId: user.id, sentAt: new Date() });
   try {
     const operation: any = {}; /* get operations settings for email info based on user operation_id */
     const emailHtml = emailTemplate(
       {
         inviteId: newInvite.id,
         logoUri: operation.logo,
-        firstName: userProfile.firstName,
+        firstName: user.firstName,
         supportEmail: operation.supportEmail,
         websiteUrl: operation.websiteUrl,
         displayUrl: operation.websiteDisplayUrl,
@@ -70,15 +52,13 @@ router.post('/send-email-verification', async (req, res) => {
       },
     );
     const subject = operation.verificationEmailSubject || `${operation.clientName} ${operation.emailSender}`;
-    await sendMail(userProfile.email, operation.emailSender, emailHtml, subject);
+    await sendMail(user.email, operation.emailSender, emailHtml, subject);
     res.json({
       status: 'OK',
     });
   } catch (e) {
     logger.error(e);
-    res.json({
-      status: 'FAIL',
-    });
+    return handleError(e, res);
   }
 });
 
