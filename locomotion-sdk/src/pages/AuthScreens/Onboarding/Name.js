@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import styled from 'styled-components';
 import TextInput from '../../../Components/TextInput';
 import OnboardingNavButtons from './OnboardingNavButtons';
 import onboardingContext from '../../../context/onboarding';
@@ -14,6 +13,7 @@ const Name = () => {
     onboardingState, updateState, updateUserInfo, navigateBasedOnUser,
   } = onboardingContext.useContainer();
   const [showErrorText, setShowErrorText] = useState(false);
+  const [focusedField, setFocusedField] = useState('firstName')
 
   const inputChange = field => (value) => {
     setShowErrorText(false);
@@ -31,15 +31,26 @@ const Name = () => {
         />
         <TextInput
           placeholder={i18n.t('onboarding.firstNamePlaceholder')}
+          autoFocus
+          onFocus={() => setFocusedField('firstName')}
+          onBlur={() => setFocusedField('')}
           onChangeText={inputChange('firstName')}
           value={onboardingState.firstName}
           autoCapitalize="words"
+          error={showErrorText && !onboardingState.firstName}
+          fullBorder
+          focused={focusedField === 'firstName'}
         />
         <TextInput
           placeholder={i18n.t('onboarding.lastNamePlaceholder')}
+          onFocus={() => setFocusedField('lastName')}
+          onBlur={() => setFocusedField('')}
           onChangeText={inputChange('lastName')}
           value={onboardingState.lastName}
           autoCapitalize="words"
+          error={showErrorText && !onboardingState.lastName}
+          fullBorder
+          focused={focusedField === 'lastName'}
         />
         {showErrorText && <ErrorText>{i18n.t('onboarding.fullNameError')}</ErrorText>}
         <OnboardingNavButtons

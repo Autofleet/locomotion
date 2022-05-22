@@ -6,7 +6,6 @@ import glibphonenumber from 'google-libphonenumber';
 import Config from 'react-native-config';
 
 import { PrefixView, StyledInput } from './styled';
-import TextInput from '../TextInput';
 import codesList from './codes.json';
 
 

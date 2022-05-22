@@ -59,7 +59,7 @@
         "submit": "Save",
         "firstNamePlaceholder": "First name",
         "lastNamePlaceholder": "Last name",
-        "fullNameError": "Please fill first and last name",
+        "fullNameError": "Please fill all fields",
         "emailPlaceholder": "Email",
         "validations": {
             "required": {
