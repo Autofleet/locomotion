@@ -7,7 +7,7 @@ width: 100%;
 height: 50px;
 background-color: ${({ disabled }) => disabled ? '#bcbcbc' : OPERATION_COLOR};
 border-radius: 8px;
-margin-top: 60px;
+margin-top: 40px;
 `;
 
 export const ButtonText = styled.Text`

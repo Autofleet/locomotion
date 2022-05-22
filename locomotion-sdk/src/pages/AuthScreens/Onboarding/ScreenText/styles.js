@@ -3,7 +3,7 @@ import styled from 'styled-components';
 export const TextContainer = styled.View`
 display: flex;
 flex-direction: column;
-margin-bottom: 20px;
+margin-bottom: 40px;
 `;
 
 export const Text = styled.Text`

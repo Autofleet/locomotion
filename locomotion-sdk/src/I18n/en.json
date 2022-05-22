@@ -51,7 +51,7 @@
             },
             "welcome": {
                 "text": "Welcome aboard, {{firstName}}!",
-                "subText": "We are glad to have  you riding with us.",
+                "subText": "We are glad to have you riding with us.",
                 "buttonText": "Let's go!"
             }
         },
