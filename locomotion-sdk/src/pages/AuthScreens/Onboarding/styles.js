@@ -1,7 +1,8 @@
+import { ERROR_COLOR } from '../../../services/sharedStyles';
 import styled from 'styled-components';
 
 export const ErrorText = styled.Text`
-  color: #cc0d28;
+  color: ${ERROR_COLOR};
   font-weight: 500;
   height: 20px;
   font-size: 14px;

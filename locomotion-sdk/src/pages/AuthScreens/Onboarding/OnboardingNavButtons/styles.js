@@ -1,15 +1,17 @@
+import { OPERATION_COLOR } from '../../../../services/sharedStyles';
 import styled from 'styled-components';
 import Button from '../../../../Components/Button';
 
 export const NavButton = styled(Button)`
 width: 100%;
 height: 50px;
-background-color: grey;
-border-radius: 30px;
-margin-top: 20px;
+background-color: ${OPERATION_COLOR};
+border-radius: 8px;
+margin-top: 60px;
 `;
 
 export const ButtonText = styled.Text`
 margin: auto;
 color: white;
+font-size: 19px;
 `;

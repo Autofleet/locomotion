@@ -1,3 +1,4 @@
+import { OPERATION_COLOR } from '../../../services/sharedStyles';
 import styled from 'styled-components';
 import Button from '../../../Components/Button';
 
@@ -52,8 +53,8 @@ height: 30px;
 margin: 10px 0;
 height: 50px;
 border-radius: 8px;
-background-color: ${({ dark }) => (dark ? '#24aaf2' : 'white')};
-${({ dark }) => !dark && 'border: 2px solid #24aaf2'};
+background-color: ${({ dark }) => (dark ? OPERATION_COLOR : 'white')};
+${({ dark }) => !dark && `border: 2px solid ${OPERATION_COLOR}`};
 `;
 
 export const ButtonText = styled.Text`

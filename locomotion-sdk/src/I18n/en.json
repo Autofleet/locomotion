@@ -28,8 +28,9 @@
         "pages": {
             "phone": {
                 "title": "Phone Number",
-                "text": "Verify your phone number",
-                "subText": "It will help us verify it's really you"
+                "text": "Enter mobile phone number",
+                "subText": "we'll send a verification code to this number",
+                "placeholder": "(000) 123 - 4567"
             },
             "code": {
                 "title": "verification",

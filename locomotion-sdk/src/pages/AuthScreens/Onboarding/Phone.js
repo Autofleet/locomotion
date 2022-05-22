@@ -8,11 +8,13 @@ import { ErrorText, PageContainer, SafeView } from './styles';
 import Header from './Header';
 import ScreenText from './ScreenText/index';
 import { loginApi } from '../../../context/user/api';
+import { ERROR_COLOR } from '../../../services/sharedStyles';
 
 const Phone = () => {
   const { onboardingState, updateState } = onboardingContext.useContainer();
   const navigation = useNavigation();
   const [showErrorText, setShowErrorText] = useState(false);
+  const [isFocused, setIsFocused] = useState(false)
   const [countryCode, setCountryCode] = useState('972');
   const onPhoneNumberChange = (phoneNumber) => {
     setShowErrorText(false);
@@ -50,18 +52,28 @@ const Phone = () => {
           autoFocus
           defaultCode="IL"
           onChangeText={onPhoneNumberChange}
+          textInputProps={{
+            onFocus: () => setIsFocused(true),
+            onBlur: () => setIsFocused(false)
+          }}
           onChangeCountry={onChangeCountry}
           containerStyle={{
-            borderWidth: 1,
-            borderColor: 'grey',
-            borderRadius: 10,
             width: '100%',
           }}
+          placeholder={i18n.t('onboarding.pages.phone.placeholder')}
           textContainerStyle={{
-            borderLeftWidth: 1,
-            borderColor: 'grey',
-            borderTopRightRadius: 10,
-            borderBottomRightRadius: 10,
+            borderRadius: 8,
+            backgroundColor: '#f1f2f6',
+            borderWidth: isFocused ? .5 : 0,
+            borderColor: showErrorText ? ERROR_COLOR : '#333333',
+          }}
+          textInputStyle={{
+            color: showErrorText ? ERROR_COLOR : '#333333'
+          }}
+          flagButtonStyle={{
+            backgroundColor: '#f1f2f6',
+            borderRadius: 8,
+            marginRight: 4
           }}
         />
         {showErrorText && <ErrorText>{showErrorText}</ErrorText>}
