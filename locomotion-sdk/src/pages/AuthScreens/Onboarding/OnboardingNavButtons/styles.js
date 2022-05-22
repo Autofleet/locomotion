@@ -5,7 +5,7 @@ import Button from '../../../../Components/Button';
 export const NavButton = styled(Button)`
 width: 100%;
 height: 50px;
-background-color: ${OPERATION_COLOR};
+background-color: ${({ disabled }) => disabled ? '#bcbcbc' : OPERATION_COLOR};
 border-radius: 8px;
 margin-top: 60px;
 `;

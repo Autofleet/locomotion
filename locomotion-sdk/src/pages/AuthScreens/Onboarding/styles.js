@@ -1,4 +1,4 @@
-import { ERROR_COLOR } from '../../../services/sharedStyles';
+import { ERROR_COLOR, OPERATION_COLOR } from '../../../services/sharedStyles';
 import styled from 'styled-components';
 
 export const ErrorText = styled.Text`
@@ -23,13 +23,17 @@ export const ResendContainer = styled.Text`
 width: 100%;
 text-align: center;
 margin-top: 50px;
+opacity: .7;
 `;
 
 export const ResendText = styled.Text`
+color: #707070;
 `;
 
 export const ResendButton = styled.Text`
 text-decoration: underline;
+text-decoration-color: ${OPERATION_COLOR};
+color: ${OPERATION_COLOR};
 `;
 
 export const ImageContainer = styled.View`

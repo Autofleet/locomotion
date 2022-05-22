@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import propsTypes from 'prop-types';
 import SmoothPinCodeInput from 'react-native-smooth-pincode-input';
 import styled from 'styled-components';
+import { OPERATION_COLOR } from '../../services/sharedStyles';
 
 const MainView = styled.View`
     flex-direction: row;
@@ -26,16 +27,16 @@ const PinCode = ({
           onChange(code);
         }}
         onFulfill={onLastDigit}
-        cellSpacing={32}
+        cellSpacing={20}
         animated={false}
         autoFocus
         cellStyle={{
           backgroundColor: '#ffffff',
           borderBottomWidth: 2,
-          borderColor: 'gray',
+          borderColor: '#333333',
         }}
         cellStyleFocused={{
-          borderColor: 'black',
+          borderColor: OPERATION_COLOR,
         }}
       />
     </MainView>
