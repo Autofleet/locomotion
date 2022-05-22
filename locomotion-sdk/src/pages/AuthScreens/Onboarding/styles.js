@@ -3,10 +3,11 @@ import styled from 'styled-components';
 
 export const ErrorText = styled.Text`
   color: ${ERROR_COLOR};
-  font-weight: 500;
-  height: 20px;
-  font-size: 14px;
-  margin: 10px auto 0 auto;
+  font-size: 12px;
+  margin-top: 15px;
+  width: 80%;
+  text-align: center;
+  align-self: center;
 `;
 
 export const SafeView = styled.SafeAreaView`
