@@ -4,3 +4,5 @@ server/mod-germany.app.yaml
 server/dist
 server/web-ui/build
 **/.DS_STORE
+*.apk
+examples/client/Locomotion/android/app/*.json
