@@ -1,8 +1,6 @@
 import styled from 'styled-components';
 import Button from '../../../Components/Button';
 
-const loginTextColor = '#7c8799';
-
 export const PageContainer = styled.View`
 align-items: center;
 display: flex;
@@ -17,49 +15,71 @@ flex-direction: column;
 width: 100%;
 margin-bottom: 50px;
 `;
+export const InfoContainer = styled.View`
+flex: 1;
+width: 100%;
+align-items: center;
+display: flex;
+flex-direction: column;
+justify-content: center;
+`;
+
+export const LogoContainer = styled.View`
+height: 80px;
+width: 140px;
+`;
 
 export const Logo = styled.Image`
-margin: auto;
-height: 30%;
-width: 100%;
+  width: 100%;
+  height: undefined;
+  aspect-ratio: 1.75;
+`;
+
+export const OperationName = styled.Text`
+font-size: 40;
+font-weight: 500;
+color: #333333;
+`;
+
+export const OperationSubName = styled.Text`
+font-size: 20;
+opacity: .6;
+color: #333333;
 `;
 
 export const StartButton = styled(Button)`
 height: 30px;
 margin: 10px 0;
 height: 50px;
-border-radius: 30px;
-background-color: ${({ dark }) => (dark ? 'grey' : 'white')};
-color: ${({ dark }) => (dark ? 'white' : 'grey')};
-${({ dark }) => !dark && 'border: 1px solid grey'};
-box-shadow: 0px 3px 3px grey;
+border-radius: 8px;
+background-color: ${({ dark }) => (dark ? '#24aaf2' : 'white')};
+${({ dark }) => !dark && 'border: 2px solid #24aaf2'};
 `;
 
 export const ButtonText = styled.Text`
+color: ${({ dark }) => (dark ? '#ffffff' : '#333333')};
+font-size: 19px;
 margin: auto;
 `;
 
 export const TermsText = styled.Text`
-  color: ${loginTextColor};
-  font-size: 11px;
+  color:#333333;
+  font-size: 12px;
   text-align: center;
-  width: 50%;
+  width: 200px;
 `;
 
 export const TermsLink = styled.Text`
-  font-size: 10px;
+  font-size: 12px;
   text-align: center;
   font-weight: 500;
-  color: #000000;
+  color: #8ab4f8;
   padding: 2px;
-  line-height: 16px;
-
+  text-decoration: underline;
+  text-decoration-color:  #8ab4f8;
   &:active {
     color: red;
   }
 `;
 
-export const LogoContainer = styled.View`
-flex: 1;
-width: 100%;
-`;
+
