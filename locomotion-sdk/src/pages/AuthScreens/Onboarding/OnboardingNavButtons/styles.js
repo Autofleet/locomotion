@@ -1,11 +1,11 @@
-import { OPERATION_COLOR } from '../../../../services/sharedStyles';
 import styled from 'styled-components';
+import { OPERATION_COLOR } from '../../../../services/sharedStyles';
 import Button from '../../../../Components/Button';
 
 export const NavButton = styled(Button)`
 width: 100%;
 height: 50px;
-background-color: ${({ disabled }) => disabled ? '#bcbcbc' : OPERATION_COLOR};
+background-color: ${({ disabled }) => (disabled ? '#bcbcbc' : OPERATION_COLOR)};
 border-radius: 8px;
 margin-top: 40px;
 `;

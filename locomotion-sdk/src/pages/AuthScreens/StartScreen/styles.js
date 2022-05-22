@@ -1,5 +1,5 @@
-import { OPERATION_COLOR } from '../../../services/sharedStyles';
 import styled from 'styled-components';
+import { OPERATION_COLOR } from '../../../services/sharedStyles';
 import Button from '../../../Components/Button';
 
 export const PageContainer = styled.View`
@@ -82,5 +82,3 @@ export const TermsLink = styled.Text`
     color: red;
   }
 `;
-
-

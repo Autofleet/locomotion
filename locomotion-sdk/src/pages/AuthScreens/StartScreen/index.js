@@ -25,8 +25,8 @@ const StartScreen = ({ navigation }) => {
   const operation = {
     name: 'autofleet',
     subName: 'Rider app',
-    logo
-  }; //replace with operation settings
+    logo,
+  }; // replace with operation settings
   const [webViewWindow, setWebViewWindow] = useState(null);
   const route = useRoute();
   const [settings, setSettings] = useState({
@@ -72,7 +72,8 @@ const StartScreen = ({ navigation }) => {
               {operation.subName && <OperationSubName>{operation.subName}</OperationSubName>}
             </InfoContainer>
             <ButtonsContainer>
-              <StartButton dark
+              <StartButton
+                dark
                 onPress={() => {
                   navigation.navigate('Phone');
                 }}

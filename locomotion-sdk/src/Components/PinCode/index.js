@@ -38,7 +38,7 @@ const PinCode = ({
         }}
         textStyle={{
           fontWeight: '600',
-          fontSize: 40
+          fontSize: 40,
         }}
         cellStyleFocused={{
           borderColor: OPERATION_COLOR,

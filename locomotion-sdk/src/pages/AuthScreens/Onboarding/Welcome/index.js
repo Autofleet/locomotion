@@ -8,7 +8,9 @@ import {
 } from './styles';
 import onboardingContext from '../../../../context/onboarding';
 import { SafeView } from '../styles';
-import { InfoContainer, LogoContainer, Logo, OperationName, OperationSubName } from '../../StartScreen/styles';
+import {
+  InfoContainer, LogoContainer, Logo, OperationName, OperationSubName,
+} from '../../StartScreen/styles';
 
 
 const Welcome = () => {
@@ -16,18 +18,18 @@ const Welcome = () => {
   const operation = {
     name: 'autofleet',
     subName: 'Rider app',
-    logo
-  }; //replace with operation settings
+    logo,
+  }; // replace with operation settings
   const navigation = useNavigation();
   return (
     <SafeView>
       <PageContainer>
-      <InfoContainer>
-        <LogoContainer>
-          <Logo source={operation.logo} />
-        </LogoContainer>
-        <OperationName>{operation.name}</OperationName>
-      </InfoContainer>
+        <InfoContainer>
+          <LogoContainer>
+            <Logo source={operation.logo} />
+          </LogoContainer>
+          <OperationName>{operation.name}</OperationName>
+        </InfoContainer>
         <TextContainer>
           <WelcomeText>
             {i18n.t('onboarding.pages.welcome.text', { firstName: onboardingState.firstName })}

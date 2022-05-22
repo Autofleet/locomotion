@@ -1,5 +1,5 @@
-import { ERROR_COLOR, OPERATION_COLOR } from '../../../services/sharedStyles';
 import styled from 'styled-components';
+import { ERROR_COLOR, OPERATION_COLOR } from '../../../services/sharedStyles';
 
 export const ErrorText = styled.Text`
   color: ${ERROR_COLOR};

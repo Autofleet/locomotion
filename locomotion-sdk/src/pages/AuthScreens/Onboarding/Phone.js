@@ -14,7 +14,7 @@ const Phone = () => {
   const { onboardingState, updateState } = onboardingContext.useContainer();
   const navigation = useNavigation();
   const [showErrorText, setShowErrorText] = useState(false);
-  const [isFocused, setIsFocused] = useState(false)
+  const [isFocused, setIsFocused] = useState(false);
   const [countryCode, setCountryCode] = useState('972');
   const onPhoneNumberChange = (phoneNumber) => {
     setShowErrorText(false);
@@ -54,7 +54,7 @@ const Phone = () => {
           onChangeText={onPhoneNumberChange}
           textInputProps={{
             onFocus: () => setIsFocused(true),
-            onBlur: () => setIsFocused(false)
+            onBlur: () => setIsFocused(false),
           }}
           onChangeCountry={onChangeCountry}
           containerStyle={{
@@ -64,16 +64,16 @@ const Phone = () => {
           textContainerStyle={{
             borderRadius: 8,
             backgroundColor: '#f1f2f6',
-            borderWidth: isFocused ? .5 : 0,
+            borderWidth: isFocused ? 0.5 : 0,
             borderColor: showErrorText ? ERROR_COLOR : '#333333',
           }}
           textInputStyle={{
-            color: showErrorText ? ERROR_COLOR : '#333333'
+            color: showErrorText ? ERROR_COLOR : '#333333',
           }}
           flagButtonStyle={{
             backgroundColor: '#f1f2f6',
             borderRadius: 8,
-            marginRight: 4
+            marginRight: 4,
           }}
         />
         {showErrorText && <ErrorText>{showErrorText}</ErrorText>}
