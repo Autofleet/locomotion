@@ -5,7 +5,6 @@ import {
 import FastImage from 'react-native-fast-image';
 import propsTypes from 'prop-types';
 import styled from 'styled-components';
-import LinearGradient from '../LinearGradient';
 import Button from '../Button';
 
 const modes = {
@@ -58,22 +57,16 @@ const myThumbnail = (props) => {
     <Container
       style={{ width: props.size, height: props.size }}
     >
-      <LinearGradient
-        start={{ x: 1, y: 1 }}
-        end={{ x: 0, y: 0 }}
-        style={[styles.linearGradient]}
+      <Button
+        onPress={props.onPress}
+        style={[styles.croper, borderRadius]}
+        data-test-id="ImagePickerButton"
       >
-        <Button
-          onPress={props.onPress}
-          style={[styles.croper, borderRadius]}
-          data-test-id="ImagePickerButton"
-        >
-          <ImageComponent
-            style={[styles.image, borderRadiusSmall]}
-            source={{ uri: props.source }}
-          />
-        </Button>
-      </LinearGradient>
+        <ImageComponent
+          style={[styles.image, borderRadiusSmall]}
+          source={{ uri: props.source }}
+        />
+      </Button>
       {props.mode in modes && (
       <Button
         onPress={props.onPress}
