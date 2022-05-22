@@ -9,35 +9,35 @@ export const ErrorText = styled.Text`
 `;
 
 export const SafeView = styled.SafeAreaView`
-flex: 1;
-background-color: white;
+  flex: 1;
+  background-color: ${({ theme }) => theme.pageBackgroundColor};
 `;
 
 export const PageContainer = styled.View`
-flex: 1;
-padding: 30px;
+  flex: 1;
+  padding: 30px;
 `;
 
 export const ResendContainer = styled.Text`
-width: 100%;
-text-align: center;
-margin-top: 50px;
+  width: 100%;
+  text-align: center;
+  margin-top: 50px;
 `;
 
 export const ResendText = styled.Text`
 `;
 
 export const ResendButton = styled.Text`
-text-decoration: underline;
+  text-decoration: underline;
 `;
 
 export const ImageContainer = styled.View`
-display: flex;
-flex-direction: row;
-justify-content: flex-start;
-align-items: center;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
 `;
 export const Name = styled.Text`
-font-size: 20px;
-margin: 10px;
+  font-size: 20px;
+  margin: 10px;
 `;
