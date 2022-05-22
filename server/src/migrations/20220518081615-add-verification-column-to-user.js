@@ -1,8 +1,8 @@
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.addColumn('users', 'email_verified', { type: Sequelize.BOOLEAN });
+    await queryInterface.addColumn('users', 'is_email_verified', { type: Sequelize.BOOLEAN });
   },
   down: async (queryInterface) => {
-    await queryInterface.removeColumn('users', 'email_verified');
+    await queryInterface.removeColumn('users', 'is_email_verified');
   },
 };

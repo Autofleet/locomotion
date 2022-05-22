@@ -16,7 +16,7 @@ export const confirmInvite = async (invite: Invite, user) => {
   const expireTime = operationSettings.inviteExpireTime || DEFAULT_INVITE_EXPIRE_TIME_HOURS;
   if (moment(invite.sentAt).add(expireTime, 'hours').isAfter(now)) {
     invite.update({ approvedAt: now });
-    user.update({ emailVerified: true });
+    user.update({ isEmailVerified: true });
     return user;
   }
   throw new BadRequest([{ message: 'invitation expired' }], null);
