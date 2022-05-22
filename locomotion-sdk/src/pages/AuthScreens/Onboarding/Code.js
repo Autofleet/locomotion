@@ -24,7 +24,7 @@ const Code = () => {
     const input = v || code;
     setCode(input);
     const response = await onVert(input);
-    if (!response) {
+    if (response === 'failed') {
       return setShowErrorText(true);
     }
   };

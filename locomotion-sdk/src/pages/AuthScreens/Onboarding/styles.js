@@ -45,5 +45,6 @@ align-items: center;
 `;
 export const Name = styled.Text`
 font-size: 20px;
-margin: 10px;
+margin: 20px;
+font-weight: 600;
 `;
