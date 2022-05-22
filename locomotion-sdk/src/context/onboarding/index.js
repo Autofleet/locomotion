@@ -39,15 +39,15 @@ const authContainer = () => {
 
   const navigateBasedOnUser = (user, complete) => {
     setOnboardingState(user);
-    let screen;
+    let unfinishedScreen;
     for (const key of Object.keys(initialState)) {
       if (!user[key]) {
-        screen = keyToScreen[key];
+        unfinishedScreen = keyToScreen[key];
         break;
       }
     }
-    if (screen) {
-      navigateToScreen(screen);
+    if (unfinishedScreen) {
+      navigateToScreen(unfinishedScreen);
     } else if (complete) {
       return navigation.navigate('MainApp');
     } else {
@@ -72,7 +72,7 @@ const authContainer = () => {
 
   const updateUserInfo = async (values) => {
     if (values.email) {
-      verifyEmail(values.email);
+      verifyEmail();
     }
     const user = await updateUser(values);
     dispatch({
