@@ -25,15 +25,16 @@ const Email = () => {
     }
   };
 
+  const emailSchema = yup.object().shape({
+    email: yup.string().required().email(),
+  });
+
   const onChange = async (value) => {
     setErrorText(false);
     setEmail(value);
-    const schema = yup.object().shape({
-      email: yup.string().required().email(),
-    });
 
     try {
-      await schema.validateAt('email', { email: value });
+      await emailSchema.validateAt('email', { email: value });
     } catch (e) {
       updateState('email', '');
       return;
