@@ -3,7 +3,7 @@ import { ERROR_COLOR, FONT_STYLES, OPERATION_COLOR } from '../../../services/sha
 
 export const ErrorText = styled.Text`
   color: ${ERROR_COLOR};
-  font-size: ${FONT_STYLES.SIZE.DEFAULT};
+  font-size: ${FONT_STYLES.SIZE.SMALL};
   margin-top: 15px;
   width: 80%;
   text-align: center;
@@ -44,7 +44,7 @@ justify-content: flex-start;
 align-items: center;
 `;
 export const Name = styled.Text`
-font-size: ${FONT_STYLES.SIZE.HEADER_1};
+font-size: ${FONT_STYLES.SIZE.EXTRA_LARGE};
 margin: 20px;
 font-weight: 600;
 `;

@@ -13,5 +13,5 @@ margin-top: 40px;
 export const ButtonText = styled.Text`
 margin: auto;
 color: white;
-font-size: ${FONT_STYLES.SIZE.HEADER_2};
+font-size: ${FONT_STYLES.SIZE.LARGE};
 `;

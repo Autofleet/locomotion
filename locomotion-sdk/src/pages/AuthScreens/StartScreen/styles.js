@@ -59,19 +59,19 @@ ${({ dark }) => !dark && `border: 2px solid ${OPERATION_COLOR}`};
 
 export const ButtonText = styled.Text`
 color: ${({ dark }) => (dark ? '#ffffff' : '#333333')};
-font-size: ${FONT_STYLES.SIZE.HEADER_2};
+font-size: ${FONT_STYLES.SIZE.LARGE};
 margin: auto;
 `;
 
 export const TermsText = styled.Text`
   color:#333333;
-  font-size: ${FONT_STYLES.SIZE.DEFAULT};
+  font-size: ${FONT_STYLES.SIZE.SMALL};
   text-align: center;
   width: 200px;
 `;
 
 export const TermsLink = styled.Text`
-  font-size: ${FONT_STYLES.SIZE.DEFAULT};
+  font-size: ${FONT_STYLES.SIZE.SMALL};
   text-align: center;
   font-weight: 500;
   color: #8ab4f8;

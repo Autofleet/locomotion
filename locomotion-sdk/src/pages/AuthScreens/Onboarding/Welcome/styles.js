@@ -8,7 +8,7 @@ margin: 10px 0;
 text-align: center;
 `;
 export const WelcomeSubText = styled.Text`
-font-size: ${FONT_STYLES.SIZE.SUB_TITLE};
+font-size: ${FONT_STYLES.SIZE.MEDIUM};
 margin: 10px 0;
 text-align: center;
 opacity: .6;
