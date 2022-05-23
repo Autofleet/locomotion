@@ -57,14 +57,25 @@ background-color: ${({ dark }) => (dark ? OPERATION_COLOR : 'white')};
 ${({ dark }) => !dark && `border: 2px solid ${OPERATION_COLOR}`};
 `;
 
+
+// margin: 10px 0;
+// height: 50px;
+// border-radius: 30px;
+// background-color: ${({ theme }) => theme.buttonBackgroundColor};
+// color: ${({ theme }) => theme.primaryColor};
+// ${({ theme }) => !theme.isDarkMode && 'border: 1px solid grey'};
+// box-shadow: 0px 3px 3px grey;
+
+
 export const ButtonText = styled.Text`
 color: ${({ dark }) => (dark ? '#ffffff' : '#333333')};
-font-size: ${FONT_STYLES.SIZE.LARGE};
+  color: ${({ theme }) => theme.primaryColor};
+  font-size: ${FONT_STYLES.SIZE.LARGE};
 margin: auto;
 `;
 
 export const TermsText = styled.Text`
-  color:#333333;
+  color: ${({ theme }) => theme.textColor};
   font-size: ${FONT_STYLES.SIZE.SMALL};
   text-align: center;
   width: 200px;
@@ -74,7 +85,7 @@ export const TermsLink = styled.Text`
   font-size: ${FONT_STYLES.SIZE.SMALL};
   text-align: center;
   font-weight: 500;
-  color: #8ab4f8;
+  color: ${({ theme }) => theme.textColor};
   padding: 2px;
   text-decoration: underline;
   text-decoration-color:  #8ab4f8;

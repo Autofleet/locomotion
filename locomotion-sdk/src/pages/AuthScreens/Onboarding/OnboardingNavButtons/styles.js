@@ -11,7 +11,7 @@ margin-top: 40px;
 `;
 
 export const ButtonText = styled.Text`
-margin: auto;
-color: white;
-font-size: ${FONT_STYLES.SIZE.LARGE};
+  margin: auto;
+  color: ${({ theme }) => theme.primaryColor};
+  font-size: ${FONT_STYLES.SIZE.LARGE};
 `;

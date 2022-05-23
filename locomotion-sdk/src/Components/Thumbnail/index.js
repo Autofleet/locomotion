@@ -60,13 +60,14 @@ const myThumbnail = (props) => {
       style={{ width: props.size, height: props.size }}
     >
       <Button
-        onPress={props.onPress}
-        style={[styles.croper, borderRadius]}
-        data-test-id="ImagePickerButton"
-      >
-        <ImageComponent
-          style={[styles.image, borderRadiusSmall]}
-          source={props.source ? { uri: props.source } : avatarIcon}
+        noBg
+          onPress={props.onPress}
+          style={[styles.croper, borderRadius]}
+          data-test-id="ImagePickerButton"
+        >
+          <ImageComponent
+            style={[styles.image, borderRadiusSmall]}
+            source={props.source ? { uri: props.source } : avatarIcon}
         />
       </Button>
       {props.mode in modes && (

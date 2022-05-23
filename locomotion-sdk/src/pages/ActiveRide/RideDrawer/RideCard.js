@@ -15,13 +15,15 @@ export default ({
   <RideCard>
     <RideDetailsContainer>
       <View style={{ flex: 2, textAlign: 'left' }}>
-        <Image
-          style={{
-            width: 150, height: 60, marginBottom: 10, alignSelf: 'flex-start',
-          }}
-          source={{ uri: activeRide.vehicle.image }}
-          resizeMode="contain"
-        />
+        {activeRide.vehicle.image && (
+          <Image
+            style={{
+              width: 150, height: 60, marginBottom: 10, alignSelf: 'flex-start',
+            }}
+            source={{ uri: activeRide.vehicle.image }}
+            resizeMode="contain"
+          />
+        )}
         <RideDetailsText>{I18n.t('home.rideCard.carTitle')}</RideDetailsText>
         <RideDetailsText subText>
           {`${activeRide.vehicle.model.name} (${activeRide.vehicle.licensePlate})`}
