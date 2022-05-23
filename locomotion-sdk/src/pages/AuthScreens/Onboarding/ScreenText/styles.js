@@ -1,3 +1,4 @@
+import { FONT_STYLES } from '../../../../services/sharedStyles';
 import styled from 'styled-components';
 
 export const TextContainer = styled.View`
@@ -7,12 +8,12 @@ margin-bottom: 40px;
 `;
 
 export const Text = styled.Text`
-font-size: 18px;
+font-size: ${FONT_STYLES.SIZE.HEADER_2};
 font-weight: 500;
 margin: 5px 0;
 `;
 
 export const SubText = styled.Text`
-font-size: 15px;
+font-size: ${FONT_STYLES.SIZE.SUB_TITLE};
 opacity: .6;
 `;

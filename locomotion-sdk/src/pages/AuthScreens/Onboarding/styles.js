@@ -1,9 +1,9 @@
 import styled from 'styled-components';
-import { ERROR_COLOR, OPERATION_COLOR } from '../../../services/sharedStyles';
+import { ERROR_COLOR, FONT_STYLES, OPERATION_COLOR } from '../../../services/sharedStyles';
 
 export const ErrorText = styled.Text`
   color: ${ERROR_COLOR};
-  font-size: 12px;
+  font-size: ${FONT_STYLES.SIZE.DEFAULT};
   margin-top: 15px;
   width: 80%;
   text-align: center;
@@ -44,7 +44,7 @@ justify-content: flex-start;
 align-items: center;
 `;
 export const Name = styled.Text`
-font-size: 20px;
+font-size: ${FONT_STYLES.SIZE.HEADER_1};
 margin: 20px;
 font-weight: 600;
 `;

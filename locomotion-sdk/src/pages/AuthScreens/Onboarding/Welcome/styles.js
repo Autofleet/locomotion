@@ -1,3 +1,4 @@
+import { FONT_STYLES } from '../../../../services/sharedStyles';
 import styled from 'styled-components';
 
 export const WelcomeText = styled.Text`
@@ -7,7 +8,7 @@ margin: 10px 0;
 text-align: center;
 `;
 export const WelcomeSubText = styled.Text`
-font-size: 14px;
+font-size: ${FONT_STYLES.SIZE.SUB_TITLE};
 margin: 10px 0;
 text-align: center;
 opacity: .6;

@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { OPERATION_COLOR } from '../../../../services/sharedStyles';
+import { FONT_STYLES, OPERATION_COLOR } from '../../../../services/sharedStyles';
 import Button from '../../../../Components/Button';
 
 export const NavButton = styled(Button)`
@@ -13,5 +13,5 @@ margin-top: 40px;
 export const ButtonText = styled.Text`
 margin: auto;
 color: white;
-font-size: 19px;
+font-size: ${FONT_STYLES.SIZE.HEADER_2};
 `;
