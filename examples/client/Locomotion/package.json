@@ -13,7 +13,7 @@
     "postinstall": "npx jetify"
   },
   "dependencies": {
-    "@autofleet/locomotion-sdk": "^1.7.0",
+    "@autofleet/locomotion-sdk": "^1.7.1",
     "@mapbox/polyline": "^1.1.0",
     "@react-native-async-storage/async-storage": "^1.17.3",
     "@react-native-community/datetimepicker": "^6.1.3",

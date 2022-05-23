@@ -36,7 +36,7 @@ const Avatar = () => {
           <ThumbnailPicker
             onImageChoose={onImageChoose}
             avatarSource={onboardingState.avatar}
-            size={150}
+            size={125}
           />
           <Name>
             {`${onboardingState.firstName} ${onboardingState.lastName}`}
@@ -44,6 +44,7 @@ const Avatar = () => {
         </ImageContainer>
         <OnboardingNavButtons
           onNext={onNext}
+          isInvalid={!onboardingState.avatar}
         />
       </PageContainer>
     </SafeView>

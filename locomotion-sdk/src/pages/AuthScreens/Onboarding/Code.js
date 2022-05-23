@@ -24,7 +24,7 @@ const Code = () => {
     const input = v || code;
     setCode(input);
     const response = await onVert(input);
-    if (response === 'failed') {
+    if (!response) {
       return setShowErrorText(true);
     }
   };
@@ -39,7 +39,9 @@ const Code = () => {
         <PinCode
           onChange={onVertCodeChange}
           onLastDigit={verify}
+          error={showErrorText}
         />
+        {showErrorText && <ErrorText>{i18n.t('login.vertError')}</ErrorText>}
         <ResendContainer>
           <ResendText>
             {i18n.t('onboarding.pages.code.resendCodeText')}
@@ -50,7 +52,6 @@ const Code = () => {
             {i18n.t('onboarding.pages.code.resendCodeButton')}
           </ResendButton>
         </ResendContainer>
-        {showErrorText && <ErrorText>{i18n.t('login.vertError')}</ErrorText>}
         <OnboardingNavButtons
           isInvalid={showErrorText || code.length < 4}
           onFail={() => setShowErrorText(true)}

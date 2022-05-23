@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import PhoneInput from 'react-native-phone-number-input';
 import { useNavigation } from '@react-navigation/native';
 import i18n from '../../../I18n';
 import OnboardingNavButtons from './OnboardingNavButtons';
@@ -8,13 +7,14 @@ import { ErrorText, PageContainer, SafeView } from './styles';
 import Header from './Header';
 import ScreenText from './ScreenText/index';
 import { loginApi } from '../../../context/user/api';
+import PhoneNumberInput from '../../../Components/PhoneNumberInput';
 
 const Phone = () => {
   const { onboardingState, updateState } = onboardingContext.useContainer();
   const navigation = useNavigation();
   const [showErrorText, setShowErrorText] = useState(false);
-  const [countryCode, setCountryCode] = useState('972');
-  const onPhoneNumberChange = (phoneNumber) => {
+
+  const onPhoneNumberChange = (phoneNumber, countryCode) => {
     setShowErrorText(false);
     if (phoneNumber.length < 9) {
       return updateState('phoneNumber', '');
@@ -34,10 +34,6 @@ const Phone = () => {
     }
   };
 
-  const onChangeCountry = (v) => {
-    setCountryCode(v.callingCode[0]);
-  };
-
   return (
     <SafeView>
       <Header title={i18n.t('onboarding.pages.phone.title')} />
@@ -46,23 +42,11 @@ const Phone = () => {
           text={i18n.t('onboarding.pages.phone.text')}
           subText={i18n.t('onboarding.pages.phone.subText')}
         />
-        <PhoneInput
+        <PhoneNumberInput
+          onPhoneNumberChange={onPhoneNumberChange}
           autoFocus
           defaultCode="IL"
-          onChangeText={onPhoneNumberChange}
-          onChangeCountry={onChangeCountry}
-          containerStyle={{
-            borderWidth: 1,
-            borderColor: 'grey',
-            borderRadius: 10,
-            width: '100%',
-          }}
-          textContainerStyle={{
-            borderLeftWidth: 1,
-            borderColor: 'grey',
-            borderTopRightRadius: 10,
-            borderBottomRightRadius: 10,
-          }}
+          error={showErrorText}
         />
         {showErrorText && <ErrorText>{showErrorText}</ErrorText>}
         <OnboardingNavButtons

@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import styled from 'styled-components';
 import TextInput from '../../../Components/TextInput';
 import OnboardingNavButtons from './OnboardingNavButtons';
 import onboardingContext from '../../../context/onboarding';
@@ -31,15 +30,20 @@ const Name = () => {
         />
         <TextInput
           placeholder={i18n.t('onboarding.firstNamePlaceholder')}
+          autoFocus
           onChangeText={inputChange('firstName')}
           value={onboardingState.firstName}
           autoCapitalize="words"
+          error={showErrorText && !onboardingState.firstName}
+          fullBorder
         />
         <TextInput
           placeholder={i18n.t('onboarding.lastNamePlaceholder')}
           onChangeText={inputChange('lastName')}
           value={onboardingState.lastName}
           autoCapitalize="words"
+          error={showErrorText && !onboardingState.lastName}
+          fullBorder
         />
         {showErrorText && <ErrorText>{i18n.t('onboarding.fullNameError')}</ErrorText>}
         <OnboardingNavButtons

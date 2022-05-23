@@ -1,20 +1,22 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import {
-  Image, StyleSheet, ViewPropTypes,
+  Image, StyleSheet,
 } from 'react-native';
 import FastImage from 'react-native-fast-image';
 import propsTypes from 'prop-types';
 import styled from 'styled-components';
-import LinearGradient from '../LinearGradient';
 import Button from '../Button';
+import avatarIcon from './default.png';
+import editIcon from './edit_btn.png';
+import addIcon from './add_btn.png';
+
 
 const modes = {
-  edit: require('./edit_btn.png'),
-  add: require('./add_btn.png'),
+  edit: editIcon,
+  add: addIcon,
 };
 
 const Container = styled.View`
-
 `;
 const myThumbnail = (props) => {
   const defaultStyles = {
@@ -23,13 +25,12 @@ const myThumbnail = (props) => {
       borderRadius: 100,
     },
     croper: {
-      padding: 5,
       width: '100%',
       height: '100%',
       alignItems: 'center',
       justifyContent: 'center',
       borderRadius: 100,
-      backgroundColor: '#f6f6f8',
+      backgroundColor: '#636363',
     },
     image: {
       width: '100%',
@@ -58,22 +59,16 @@ const myThumbnail = (props) => {
     <Container
       style={{ width: props.size, height: props.size }}
     >
-      <LinearGradient
-        start={{ x: 1, y: 1 }}
-        end={{ x: 0, y: 0 }}
-        style={[styles.linearGradient]}
+      <Button
+        onPress={props.onPress}
+        style={[styles.croper, borderRadius]}
+        data-test-id="ImagePickerButton"
       >
-        <Button
-          onPress={props.onPress}
-          style={[styles.croper, borderRadius]}
-          data-test-id="ImagePickerButton"
-        >
-          <ImageComponent
-            style={[styles.image, borderRadiusSmall]}
-            source={{ uri: props.source }}
-          />
-        </Button>
-      </LinearGradient>
+        <ImageComponent
+          style={[styles.image, borderRadiusSmall]}
+          source={props.source ? { uri: props.source } : avatarIcon}
+        />
+      </Button>
       {props.mode in modes && (
       <Button
         onPress={props.onPress}
@@ -98,7 +93,7 @@ myThumbnail.defaultProps = {
   size: 220,
   onPress: () => null,
   mode: 'preview',
-  source: require('./default.png'),
+  source: null,
 };
 
 myThumbnail.propTypes = {
