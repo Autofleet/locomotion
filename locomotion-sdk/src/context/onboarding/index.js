@@ -70,7 +70,7 @@ const authContainer = () => {
 
       if (vertResponse.status !== 'OK' || !vertResponse.refreshToken || !vertResponse.accessToken) {
         console.log('Bad vert with response', vertResponse);
-        return 'failed';
+        return false;
       }
 
       auth.updateTokens(vertResponse.refreshToken, vertResponse.accessToken);
@@ -84,9 +84,10 @@ const authContainer = () => {
         },
       });
       navigateBasedOnUser(userProfile, true);
+      return true
     } catch (e) {
       console.log('Bad vert with request', e);
-      return 'failed';
+      return false;
     }
   };
 
