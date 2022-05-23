@@ -12,7 +12,7 @@ import Avatar from './AuthScreens/Onboarding/Avatar';
 const Stack = createNativeStackNavigator();
 
 const AuthScreens = () => (
-  <Stack.Navigator initialRouteName="Name" screenOptions={{ headerShown: false, gestureEnabled: false }}>
+  <Stack.Navigator initialRouteName="Start" screenOptions={{ headerShown: false, gestureEnabled: false }}>
     <Stack.Screen name="Start" component={StartScreen} />
     <Stack.Screen name="Phone" component={Phone} />
     <Stack.Screen name="Code" component={Code} />
