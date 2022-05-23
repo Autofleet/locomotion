@@ -10,5 +10,5 @@ export const NavButton = styled(Button)`
 
 export const ButtonText = styled.Text`
   margin: auto;
-  color: ${({ theme }) => theme.primaryColor};
+  color: ${({ theme }) => theme.primaryButtonTextColor};
 `;

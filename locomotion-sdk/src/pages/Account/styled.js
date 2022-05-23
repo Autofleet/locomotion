@@ -1,26 +1,22 @@
-import { Dimensions } from 'react-native';
 import styled from 'styled-components';
-import { padding, inputHeight } from '../../assets/style-settings';
-
-const drawerWidth = Dimensions.get('window').height;
-
-const loginTextColor = '#7c8799';
+import { padding } from '../../assets/style-settings';
 
 export const FullNameContainer = styled.View`
   flex-direction: row;
   justify-content: space-between;
-  width: 100%;
+  width: 90%;
 `;
 
+export const NameContainer = styled.View`
+  width: 40%;
+`;
 export const SubmitContainer = styled.View`
   width: 90%;
 `;
 
 export const Container = styled.View`
-  background-color: white;
   flex: 1;
-  color: ${loginTextColor};
-  /* margin-top: 100px; */
+  color: #7c8799;
   text-align: center;
   align-items: center;
   padding: ${padding};

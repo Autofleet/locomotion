@@ -27,14 +27,12 @@ export const StartButton = styled(Button)`
   margin: 10px 0;
   height: 50px;
   border-radius: 30px;
-  background-color: ${({ theme }) => theme.buttonBackgroundColor};
-  color: ${({ theme }) => theme.primaryColor};
-  ${({ theme }) => !theme.isDarkMode && 'border: 1px solid grey'};
+  ${({ theme }) => theme.isDarkMode && 'border: 1px solid grey'};
   box-shadow: 0px 3px 3px grey;
 `;
 
 export const ButtonText = styled.Text`
-  color: ${({ theme }) => theme.primaryColor};
+  color: ${({ theme }) => theme.primaryButtonTextColor};
   margin: auto;
 `;
 
@@ -49,7 +47,7 @@ export const TermsLink = styled.Text`
   font-size: 10px;
   text-align: center;
   font-weight: 500;
-  color: ${({ theme }) => theme.textColor};
+  color: ${({ theme }) => theme.primaryColor};
   padding: 2px;
   line-height: 16px;
 

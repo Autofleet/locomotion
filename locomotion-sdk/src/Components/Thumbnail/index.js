@@ -77,6 +77,7 @@ const myThumbnail = (props) => {
       </LinearGradient>
       {props.mode in modes && (
       <Button
+        noBg
         onPress={props.onPress}
         style={styles.iconContainer}
         data-test-id={`${props.mode}ImageButton`}

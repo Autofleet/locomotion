@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, ScrollView, View } from 'react-native';
+import { StyleSheet, ScrollView } from 'react-native';
 import styled from 'styled-components';
 import { Row, Rows } from 'react-native-table-component';
 
@@ -7,29 +7,28 @@ const tableMarginFromSides = '20';
 
 export const TableContainer = styled(ScrollView)`
     flex: 1;
-    background-color: #fff;
 `;
 
 export const StyledHeaderRow = styled(Row)`
-    height: 40;
+    height: 40px;
     border-bottom-width: 0;
     margin: 0 ${tableMarginFromSides}px;
 `;
 
 export const StyledRows = styled(Rows)`
-    border-bottom-width: 1;
+    border-bottom-width: 1px;
     border-bottom-color: rgba(0,0,0,0.07);
     margin: 5px ${tableMarginFromSides}px;
     padding-bottom: 10px;
 `;
 
-export const textStyle = StyleSheet.create({
+export const textStyled = theme => StyleSheet.create({
   header: {
-    color: '#A6A6A6',
+    color: theme.textColor,
     fontSize: 12,
   },
   row: {
-    color: '#5F5F5F',
+    color: theme.textColor,
     fontSize: 12,
   },
 });

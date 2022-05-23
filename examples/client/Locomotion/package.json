@@ -8,7 +8,7 @@
     "start": "react-native start",
     "test": "jest",
     "lint": "eslint .",
-    "symlink": "rm -rf ./node_modules/@autofleet/locomotion-sdk/src && cp -r ../../../locomotion-sdk/src ./node_modules/@autofleet/locomotion-sdk/src && ./node_modules/react-native/cli.js start",
+    "symlink": "FAST_REFRESH=false rm -rf ./node_modules/@autofleet/locomotion-sdk/src && cp -r ../../../locomotion-sdk/src ./node_modules/@autofleet/locomotion-sdk/src && ./node_modules/react-native/cli.js start",
     "dev": "npx nodemon --exec 'npm run symlink' --watch ../../../locomotion-sdk/src -e js,ts,tsx,jsx --delay 2.5"
   },
   "dependencies": {

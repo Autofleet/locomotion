@@ -9,7 +9,6 @@ const darkLoader = require('../../assets/loaders/dark-loader.json');
 export const PageContent = styled(View)`
     width: 100%;
     height: 100%;
-    background-color: #fff;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
@@ -89,11 +88,11 @@ export const DeleteCreditCardText = styled.Text`
 `;
 
 const FullPageLoaderWrapper = styled.View`
-    width: 100%;
-    height: 100%;
-    background-color: #ffffff;
-    position: absolute;
-    z-index: 99999;
+  width: 100%;
+  height: 100%;
+  background-color: ${({theme}) => theme.pageBackgroundColor};
+  position: absolute;
+  z-index: 99999;
 `;
 
 const LoaderContainer = styled.View`

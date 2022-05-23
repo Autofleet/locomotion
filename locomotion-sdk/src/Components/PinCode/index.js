@@ -41,7 +41,7 @@ const PinCode = ({
         }}
         cellStyleFocused={{
           color: theme.textColor,
-          borderColor: theme.isDarkMode ? '#fff' : '#000',
+          borderColor: theme.primaryColor,
         }}
         textStyleFocused={{
           color: theme.textColor,

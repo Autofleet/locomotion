@@ -51,7 +51,6 @@ export default ({ navigation, menuSide }) => {
 
   return (
     <PageContainer>
-      <SafeView>
         <PageContent>
           <PageHeader
             title={i18n.t('payments.pageTitle')}
@@ -86,7 +85,6 @@ export default ({ navigation, menuSide }) => {
             onSubmit={() => detachCard()}
           />
         </PageContent>
-      </SafeView>
     </PageContainer>
   );
 };

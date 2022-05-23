@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import {
-  CardField,
+  CardForm as MainCardForm,
   useStripe,
 } from '@stripe/stripe-react-native';
 import i18n from '../../I18n';
@@ -48,9 +48,9 @@ export const NewCreditForm = ({ onDone, canSkip = false }) => {
     <>
       <CreditForm>
         <CreditFormText>{i18n.t('payments.newCardDetails')}</CreditFormText>
-        <CardField
+        <MainCardForm
           postalCodeEnabled={false}
-          placeholder={{
+          placeholders={{
             number: '4242 4242 4242 4242',
           }}
           cardStyle={{
@@ -58,11 +58,12 @@ export const NewCreditForm = ({ onDone, canSkip = false }) => {
             textColor: '#000000',
           }}
           style={{
+            marginLeft: 16,
             width: '90%',
-            height: 50,
+            height: 350,
+            border: 0,
           }}
-          onCardChange={(cardDetails) => {
-            console.log('onCardChange', cardDetails);
+          onFormComplete={(cardDetails) => {
             if (cardDetails) {
               if (formReady !== cardDetails.complete) {
                 setFormReady(cardDetails.complete);

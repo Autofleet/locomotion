@@ -1,16 +1,16 @@
 import styled from 'styled-components';
 import Button from '../Button';
 
-const COLORS = {
+const colors = theme => ({
   confirm: {
     primary: {
-      background: '#1e273d',
-      text: '#ffffff',
+      background: theme.primaryColor,
+      text: theme.primaryButtonTextColor,
     },
     hollow: {
-      background: '#ffffff',
-      border: '#b5b5b5',
-      text: '#b5b5b5',
+      background: theme.pageBackgroundColor,
+      text: theme.textColor,
+      border: theme.primaryColor,
     },
   },
   cancel: {
@@ -24,37 +24,44 @@ const COLORS = {
       text: '#f03a5f',
     },
   },
-};
+});
+
 export const SubmitButtonText = styled.Text`
-  color: ${({ type }) => (type ? COLORS[type].primary.text : '#ffffff')};
   font-size: 14px;
   text-align: center;
-  ${({ hollow, type, useCancelTextButton }) => (hollow || useCancelTextButton) && `
-    color: ${type ? (!useCancelTextButton ? COLORS[type].hollow.text : COLORS.confirm.primary.background) : '#b5b5b5'};
-  `}
   width: 100%;
+  ${({
+    useCancelTextButton, theme, hollow, type = 'confirm',
+  }) => (useCancelTextButton ? `
+      color: ${colors(theme).confirm.hollow.text};
+  ` : `
+      color: ${colors(theme)[type][hollow ? 'hollow' : 'primary'].text}
+  `)}
 `;
-export const StyledTouchableOpacity = styled(Button)`
-  width: ${({ width }) => (width || '100%')};
+
+export const StyledButton = styled(Button)`
+  flex-direction: row;
   border-radius: 24px;
-  background-color: ${({ type }) => (type ? COLORS[type].primary.background : '#1e273d')};
+  width: ${({ width }) => (width || '100%')};
   height: ${({ height }) => (height || '40px')};
 
   ${({ marginTop }) => marginTop && `
     margin-top: ${marginTop};
   `}
 
-  ${({ hollow, type, useCancelTextButton }) => (hollow || useCancelTextButton) && `
-    background-color: ${type ? COLORS[type].hollow.background : '#ffffff'};
-    border: 2px solid ${type ? (!useCancelTextButton ? COLORS[type].hollow.border : 'transparent') : '#b5b5b5'};
+  ${({
+    theme, hollow, type = 'confirm', useCancelTextButton,
+  }) => `
+    background-color: ${colors(theme)[type][hollow ? 'hollow' : 'primary'].background};
+    ${(hollow) && `border: 2px solid ${colors(theme)[type].hollow.border};`}
+    ${(useCancelTextButton) && `
+      border: 2px solid transparent;
+    `}
   `}
 
-  flex-direction: row;
-
-  ${({ disabled }) => disabled && `
-    opacity: 0.7;
-  `}
+  ${({ disabled }) => disabled && 'opacity: 0.7;'}
 `;
+
 export const ButtonTextContainer = styled.View`
   justify-content: center;
   align-items: center;

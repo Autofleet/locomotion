@@ -6,7 +6,7 @@ import { Context as ThemeContext } from '../context/theme';
 import ActiveRide from './ActiveRide';
 import RideHistory from './RideHistory';
 import Payments from './Payments';
-import Onboarding from './Onboarding';
+import Account from './Account';
 import ContactUs from './ContactUs';
 import Auth from '../services/auth';
 import { ROUTES } from './consts';
@@ -33,7 +33,7 @@ const Main = () => {
       <Drawer.Screen name={ROUTES.HOME} component={ActiveRide} />
       <Drawer.Screen name={ROUTES.RIDE_HISTORY} component={RideHistory} />
       <Drawer.Screen name={ROUTES.PAYMENT} component={Payments} />
-      <Drawer.Screen name={ROUTES.ACCOUNT} component={Onboarding} />
+      <Drawer.Screen name={ROUTES.ACCOUNT} component={Account} />
       <Drawer.Screen name={ROUTES.CONTACT_US} component={ContactUs} />
       <Drawer.Screen
         name={ROUTES.LOGOUT}

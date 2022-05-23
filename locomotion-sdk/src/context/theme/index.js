@@ -4,11 +4,11 @@ import { ThemeProvider, ThemeContext } from 'styled-components';
 
 // const DARK_MODE_ENABLED = false;
 //
-// const FORCE_DARK_MODE = false;
+const FORCE_DARK_MODE = false;
 
 const DARK_MODE_ENABLED = true;
 
-const FORCE_DARK_MODE = true;
+// const FORCE_DARK_MODE = true;
 
 // interface LocomotionTheme {
 //   primaryColor: string;
@@ -21,6 +21,7 @@ const FORCE_DARK_MODE = true;
 export const darkTheme = {
   primaryColor: 'grey',
   secondaryColor: '',
+
   textColor: '#fff',
   // dividerColor: '#4a4c50',
   pageBackgroundColor: '#24292E',
@@ -28,7 +29,9 @@ export const darkTheme = {
 };
 
 export const lightTheme = {
-  primaryColor: '#fff',
+  primaryColor: '#38a7fc',
+  primaryButtonTextColor: '#fff',
+
   secondaryColor: '',
   textColor: '#000',
   // dividerColor: '#e0e0e0',
