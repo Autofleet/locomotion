@@ -19,10 +19,11 @@ export const ErrorMessage = styled.Text`
     font-size: 16px;
 `;
 export const CreditFormText = styled.Text`
-    color: #1e273d;
-    font-size: 14px;
-    text-align: left;
-    margin-left: 16px;
+  color: #1e273d;
+  font-size: 14px;
+  text-align: left;
+  margin-left: 16px;
+  padding-bottom: 5px;
 `;
 export const CreditForm = styled.View`
     flex: 1;

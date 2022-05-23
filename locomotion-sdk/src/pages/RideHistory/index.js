@@ -49,7 +49,6 @@ export default ({ menuSide }) => {
 
   return (
     <PageContainer>
-      <SafeView>
         <PageContent>
           <PageHeader
             title={i18n.t('rideHistory.pageTitle')}
@@ -61,7 +60,6 @@ export default ({ menuSide }) => {
             : <NoRidesMessage />
           }
         </PageContent>
-      </SafeView>
     </PageContainer>
   );
 };

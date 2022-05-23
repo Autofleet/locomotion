@@ -12,6 +12,6 @@ margin-top: 40px;
 
 export const ButtonText = styled.Text`
   margin: auto;
-  color: ${({ theme }) => theme.primaryColor};
+  color: ${({ theme }) => theme.primaryButtonTextColor};
   font-size: ${FONT_STYLES.SIZE.LARGE};
 `;

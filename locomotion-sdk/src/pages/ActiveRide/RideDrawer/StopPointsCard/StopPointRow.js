@@ -79,6 +79,7 @@ const RowContainer = styled(Button)`
     border-bottom-color: #f2f2f2;
     border-bottom-width: 1;
   ` : null)};
+  background-color: ${({ theme }) => theme.pageBackgroundColor};
 `;
 
 const AddressTitle = styled.Text`

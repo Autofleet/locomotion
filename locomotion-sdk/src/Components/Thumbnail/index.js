@@ -72,6 +72,7 @@ const myThumbnail = (props) => {
       </Button>
       {props.mode in modes && (
       <Button
+        noBg
         onPress={props.onPress}
         style={styles.iconContainer}
         data-test-id={`${props.mode}ImageButton`}

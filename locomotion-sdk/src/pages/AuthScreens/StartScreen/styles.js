@@ -69,7 +69,7 @@ ${({ dark }) => !dark && `border: 2px solid ${OPERATION_COLOR}`};
 
 export const ButtonText = styled.Text`
 color: ${({ dark }) => (dark ? '#ffffff' : '#333333')};
-  color: ${({ theme }) => theme.primaryColor};
+  color: ${({ theme }) => theme.primaryButtonTextColor};
   font-size: ${FONT_STYLES.SIZE.LARGE};
 margin: auto;
 `;
@@ -85,7 +85,7 @@ export const TermsLink = styled.Text`
   font-size: ${FONT_STYLES.SIZE.SMALL};
   text-align: center;
   font-weight: 500;
-  color: ${({ theme }) => theme.textColor};
+  color: ${({ theme }) => theme.primaryColor};
   padding: 2px;
   text-decoration: underline;
   text-decoration-color:  #8ab4f8;
