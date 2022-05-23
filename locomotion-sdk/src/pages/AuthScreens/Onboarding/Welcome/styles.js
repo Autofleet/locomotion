@@ -1,5 +1,5 @@
-import { FONT_STYLES } from '../../../../services/sharedStyles';
 import styled from 'styled-components';
+import { FONT_STYLES } from '../../../../services/sharedStyles';
 
 export const WelcomeText = styled.Text`
 font-size: 35px;

@@ -42,7 +42,7 @@ const Phone = () => {
           text={i18n.t('onboarding.pages.phone.text')}
           subText={i18n.t('onboarding.pages.phone.subText')}
         />
-        <PhoneNumberInput 
+        <PhoneNumberInput
           onPhoneNumberChange={onPhoneNumberChange}
           autoFocus
           defaultCode="IL"

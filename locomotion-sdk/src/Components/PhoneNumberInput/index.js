@@ -1,13 +1,15 @@
-import i18n from '../../I18n';
 import React, { useState } from 'react';
 import PhoneInput from 'react-native-phone-number-input';
+import i18n from '../../I18n';
 import { ERROR_COLOR } from '../../services/sharedStyles';
 import codes from './codes.json';
 
 
-const PhoneNumberInput = ({onPhoneNumberChange, defaultCode, autoFocus, error}) => {
+const PhoneNumberInput = ({
+  onPhoneNumberChange, defaultCode, autoFocus, error,
+}) => {
   const [isFocused, setIsFocused] = useState(false);
-  const initialCode = codes.find((v) => v.code === defaultCode)
+  const initialCode = codes.find(v => v.code === defaultCode);
   const [countryCode, setCountryCode] = useState(initialCode.dialCode);
 
   const onChangeCountry = (v) => {
@@ -18,7 +20,7 @@ const PhoneNumberInput = ({onPhoneNumberChange, defaultCode, autoFocus, error}) 
     <PhoneInput
       autoFocus={autoFocus}
       defaultCode={defaultCode}
-      onChangeText={(v) => onPhoneNumberChange(v, countryCode)}
+      onChangeText={v => onPhoneNumberChange(v, countryCode)}
       textInputProps={{
         onFocus: () => setIsFocused(true),
         onBlur: () => setIsFocused(false),
@@ -43,8 +45,8 @@ const PhoneNumberInput = ({onPhoneNumberChange, defaultCode, autoFocus, error}) 
         marginRight: 4,
       }}
     />
-  )
-}
+  );
+};
 
 
 export default PhoneNumberInput;

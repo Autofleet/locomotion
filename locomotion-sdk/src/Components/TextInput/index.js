@@ -1,15 +1,16 @@
-import React, { useState } from "react";
-import { Input } from "./styled";
+import React, { useState } from 'react';
+import { Input } from './styled';
 
 const TextInput = (props) => {
-  const [isFocused, setIsFocused] = useState(false)
+  const [isFocused, setIsFocused] = useState(false);
   return (
-    <Input 
+    <Input
       onFocus={() => setIsFocused(true)}
       onBlur={() => setIsFocused(false)}
-      isFocused={isFocused} 
-      {...props}/>
-  )
-}
+      isFocused={isFocused}
+      {...props}
+    />
+  );
+};
 
 export default TextInput;

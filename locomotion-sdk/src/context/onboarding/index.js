@@ -84,7 +84,7 @@ const authContainer = () => {
         },
       });
       navigateBasedOnUser(userProfile, true);
-      return true
+      return true;
     } catch (e) {
       console.log('Bad vert with request', e);
       return false;
