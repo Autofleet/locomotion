@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { BaseText } from '../../../Components/BaseText';
 
 export const ErrorText = styled.Text`
   color: #cc0d28;
@@ -16,6 +17,7 @@ export const SafeView = styled.SafeAreaView`
 export const PageContainer = styled.View`
   flex: 1;
   padding: 30px;
+  background-color: ${({ theme }) => theme.pageBackgroundColor};
 `;
 
 export const ResendContainer = styled.Text`
@@ -24,10 +26,10 @@ export const ResendContainer = styled.Text`
   margin-top: 50px;
 `;
 
-export const ResendText = styled.Text`
+export const ResendText = styled(BaseText)`
 `;
 
-export const ResendButton = styled.Text`
+export const ResendButton = styled(BaseText)`
   text-decoration: underline;
 `;
 
@@ -37,7 +39,7 @@ export const ImageContainer = styled.View`
   justify-content: flex-start;
   align-items: center;
 `;
-export const Name = styled.Text`
+export const Name = styled(BaseText)`
   font-size: 20px;
   margin: 10px;
 `;

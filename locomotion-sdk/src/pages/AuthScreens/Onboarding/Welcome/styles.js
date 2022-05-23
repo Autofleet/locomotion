@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { BaseText } from '../../../../Components/BaseText';
 
 export const LogoContainer = styled.View`
 height: 40%;
@@ -6,13 +7,13 @@ align-items: center;
 width: 100%;
 `;
 
-export const WelcomeText = styled.Text`
+export const WelcomeText = styled(BaseText)`
 font-size: 35px;
 font-weight: 600;
 margin: 10px 0;
 text-align: center;
 `;
-export const WelcomeSubText = styled.Text`
+export const WelcomeSubText = styled(BaseText)`
 margin: 10px 0;
 text-align: center;
 `;

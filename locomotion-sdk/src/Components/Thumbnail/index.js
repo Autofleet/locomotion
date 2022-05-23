@@ -64,6 +64,7 @@ const myThumbnail = (props) => {
         style={[styles.linearGradient]}
       >
         <Button
+          noBg
           onPress={props.onPress}
           style={[styles.croper, borderRadius]}
           data-test-id="ImagePickerButton"

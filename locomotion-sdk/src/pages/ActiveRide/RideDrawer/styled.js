@@ -206,15 +206,11 @@ export const Arrow = styled.Image.attrs({ source: ArrowIconSource })`
   align-self: center;
 
 `;
-export const AddPaymentBar = (props) => {
-  console.log('AddPaymentBar', props);
-
-  return (
-    <PaymentBarContainer {...props}>
-      <PaymentBarText>
-        {props.children}
-      </PaymentBarText>
-      <Arrow />
-    </PaymentBarContainer>
-  );
-};
+export const AddPaymentBar = props => (
+  <PaymentBarContainer {...props}>
+    <PaymentBarText>
+      {props.children}
+    </PaymentBarText>
+    <Arrow />
+  </PaymentBarContainer>
+);

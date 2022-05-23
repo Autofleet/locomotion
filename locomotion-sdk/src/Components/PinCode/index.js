@@ -1,19 +1,21 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import propsTypes from 'prop-types';
 import SmoothPinCodeInput from 'react-native-smooth-pincode-input';
 import styled from 'styled-components';
+import { Context as ThemeContext } from '../../context/theme';
 
 const MainView = styled.View`
     flex-direction: row;
     align-items: center;
     justify-content: center;
-    background-color: #ffffff;
+    background-color: ${({ theme }) => theme.pageBackgroundColor};
 `;
 
 const PinCode = ({
   onLastDigit,
   onChange,
 }) => {
+  const theme = useContext(ThemeContext);
   const [digits, setDigits] = useState('');
 
   return (
@@ -29,13 +31,20 @@ const PinCode = ({
         cellSpacing={32}
         animated={false}
         autoFocus
+        containerStyle={{
+          backgroundColor: theme.pageBackgroundColor,
+        }}
         cellStyle={{
-          backgroundColor: '#ffffff',
+          backgroundColor: theme.pageBackgroundColor,
           borderBottomWidth: 2,
           borderColor: 'gray',
         }}
         cellStyleFocused={{
-          borderColor: 'black',
+          color: theme.textColor,
+          borderColor: theme.isDarkMode ? '#fff' : '#000',
+        }}
+        textStyleFocused={{
+          color: theme.textColor,
         }}
       />
     </MainView>

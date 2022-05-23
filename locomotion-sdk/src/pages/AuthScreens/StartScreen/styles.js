@@ -27,19 +27,19 @@ export const StartButton = styled(Button)`
   margin: 10px 0;
   height: 50px;
   border-radius: 30px;
-  background-color: ${({theme}) => theme.buttonBackgroundColor};
-  color: ${({theme}) => theme.textColor};
-  ${({theme}) => !theme.isDarkMode && 'border: 1px solid grey'};
+  background-color: ${({ theme }) => theme.buttonBackgroundColor};
+  color: ${({ theme }) => theme.primaryColor};
+  ${({ theme }) => !theme.isDarkMode && 'border: 1px solid grey'};
   box-shadow: 0px 3px 3px grey;
 `;
 
 export const ButtonText = styled.Text`
-  color: ${({theme}) => (!theme.isDarkMode ? 'white' : 'grey')};
+  color: ${({ theme }) => theme.primaryColor};
   margin: auto;
 `;
 
 export const TermsText = styled.Text`
-  color: ${({theme}) => (theme.isDarkMode ? 'white' : loginTextColor)};
+  color: ${({ theme }) => theme.textColor};
   font-size: 11px;
   text-align: center;
   width: 50%;
@@ -49,7 +49,7 @@ export const TermsLink = styled.Text`
   font-size: 10px;
   text-align: center;
   font-weight: 500;
-  color: ${({theme}) => theme.textColor};
+  color: ${({ theme }) => theme.textColor};
   padding: 2px;
   line-height: 16px;
 
