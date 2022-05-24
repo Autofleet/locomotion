@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import Button from '../Button';
 
 export const HeaderView = styled.View`
   align-self: flex-start;
@@ -10,4 +11,8 @@ export const HeaderView = styled.View`
   margin-right: 14px;
   margin-left: 0;
   ` : '')}
+`;
+
+export const ButtonHeaderView = styled(Button)`
+  background-color: unset;
 `;

@@ -60,6 +60,7 @@ const myThumbnail = (props) => {
       style={{ width: props.size, height: props.size }}
     >
       <Button
+        noBg
         onPress={props.onPress}
         style={[styles.croper, borderRadius]}
         data-test-id="ImagePickerButton"
@@ -71,6 +72,7 @@ const myThumbnail = (props) => {
       </Button>
       {props.mode in modes && (
       <Button
+        noBg
         onPress={props.onPress}
         style={styles.iconContainer}
         data-test-id={`${props.mode}ImageButton`}

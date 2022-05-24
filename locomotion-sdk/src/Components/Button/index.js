@@ -1,9 +1,13 @@
 import React from 'react';
-import { TouchableOpacity } from 'react-native';
+import styled from 'styled-components';
 import Mixpanel from '../../services/Mixpanel';
 
+const Container = styled.TouchableOpacity`
+  ${({ noBg, theme }) => (!noBg ? `background-color: ${theme.primaryColor};` : '')}
+`;
+
 const Button = props => (
-  <TouchableOpacity
+  <Container
     {...props}
     onPress={(e) => { /* eslint-disable-line consistent-return */
       if (props.onPress) {
@@ -13,7 +17,7 @@ const Button = props => (
     }}
   >
     {props.children}
-  </TouchableOpacity>
+  </Container>
 );
 
 

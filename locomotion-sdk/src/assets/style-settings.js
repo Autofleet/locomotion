@@ -10,6 +10,11 @@ export const commonInputStyle = `
   font-size: 17px;
 `;
 
+export const commonInputStyleWithTheme = theme => `
+  ${commonInputStyle}
+  background-color: ${theme.pageBackgroundColor};
+`;
+
 export const linkColor = '#00aeef';
 
 export const appPalette = ['#00aeef', '#4c83ca', '#452f92'];

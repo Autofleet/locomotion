@@ -5,7 +5,7 @@ import {
 } from 'react-native';
 import AppSettings from '../../services/app-settings';
 import { useStateValue } from '../../context/main';
-import { needOnboarding } from '../Onboarding';
+import needOnboarding from './needOnBoarding';
 import Auth from '../../services/auth';
 import { getUserDetails } from '../../context/user/api';
 
