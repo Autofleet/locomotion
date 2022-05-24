@@ -50,7 +50,6 @@ const Provider = ({ children }) => {
   const [isDarkMode, setDarkMode] = useState(isInitDarkMode);
   // Appearance.addChangeListener()
   useEffect(() => {
-    console.log('colorScheme', { colorScheme });
     if (!FORCE_DARK_MODE && DARK_MODE_ENABLED) {
       setDarkMode(colorScheme === THEME_MOD.DARK);
     }
