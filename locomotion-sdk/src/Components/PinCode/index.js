@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import propsTypes from 'prop-types';
 import SmoothPinCodeInput from 'react-native-smooth-pincode-input';
 import styled from 'styled-components';
 import { ERROR_COLOR, OPERATION_COLOR } from '../../services/sharedStyles';
+import { Context } from '../../context/theme';
 
 const MainView = styled.View`
     flex-direction: row;
@@ -17,7 +18,7 @@ const PinCode = ({
   error,
 }) => {
   const [digits, setDigits] = useState('');
-
+  const theme = useContext(Context);
   return (
     <MainView>
       <SmoothPinCodeInput

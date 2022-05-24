@@ -68,11 +68,11 @@ ${({ dark }) => !dark && `border: 2px solid ${OPERATION_COLOR}`};
 
 
 export const ButtonText = styled.Text`
-color: ${({ dark }) => (dark ? '#ffffff' : '#333333')};
-  color: ${({ theme }) => theme.primaryButtonTextColor};
+  color: ${({ dark }) => (dark ? '#ffffff' : '#333333')};
   font-size: ${FONT_STYLES.SIZE.LARGE};
-margin: auto;
+  margin: auto;
 `;
+  // color: ${({ theme }) => theme.primaryButtonTextColor};
 
 export const TermsText = styled.Text`
   color: ${({ theme }) => theme.textColor};
