@@ -2,9 +2,13 @@ import React, { useEffect, useState } from 'react';
 import { useColorScheme, Appearance } from 'react-native';
 import { ThemeProvider, ThemeContext } from 'styled-components';
 
-const DARK_MODE_ENABLED = false;
-
+// const DARK_MODE_ENABLED = false;
+//
 const FORCE_DARK_MODE = false;
+
+const DARK_MODE_ENABLED = true;
+
+// const FORCE_DARK_MODE = true;
 
 // interface LocomotionTheme {
 //   primaryColor: string;
@@ -15,19 +19,24 @@ const FORCE_DARK_MODE = false;
 // }
 
 export const darkTheme = {
-  primaryColor: '',
+  primaryColor: 'grey',
   secondaryColor: '',
+
   textColor: '#fff',
-  dividerColor: '#4a4c50',
-  backgroundColor: '#202023',
+  // dividerColor: '#4a4c50',
+  pageBackgroundColor: '#24292E',
+  buttonBackgroundColor: '#fff',
 };
 
 export const lightTheme = {
-  primaryColor: '',
+  primaryColor: '#38a7fc',
+  primaryButtonTextColor: '#fff',
+
   secondaryColor: '',
   textColor: '#000',
-  dividerColor: '#e0e0e0',
-  backgroundColor: '#fff',
+  // dividerColor: '#e0e0e0',
+  pageBackgroundColor: '#fff',
+  buttonBackgroundColor: 'grey',
 };
 
 export const THEME_MOD = {
@@ -41,8 +50,9 @@ const Provider = ({ children }) => {
   const [isDarkMode, setDarkMode] = useState(isInitDarkMode);
   // Appearance.addChangeListener()
   useEffect(() => {
-    console.log('colorScheme', { colorScheme });
-    setDarkMode(colorScheme === THEME_MOD.DARK);
+    if (!FORCE_DARK_MODE && DARK_MODE_ENABLED) {
+      setDarkMode(colorScheme === THEME_MOD.DARK);
+    }
   }, [colorScheme]);
 
   return (

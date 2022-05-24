@@ -1,9 +1,7 @@
+import { SafeAreaView } from 'react-native';
 import styled from 'styled-components';
 
 const ArrowIconSource = require('../../assets/arrowright.png');
-
-const defaultTextColor = '#686868';
-const drawerPadding = 26;
 
 export const DrawerIcon = styled.Image`
   width: 23px;
@@ -22,18 +20,22 @@ export const Arrow = styled.Image.attrs({ source: ArrowIconSource })`
 `;
 
 export const LabelText = styled.Text`
-  color: ${defaultTextColor};
+  color: ${({ theme }) => theme.textColor};
   height: 30px;
   line-height: 30px;
 `;
 
-export const StyledDrawerLabel = styled.View`
+export const StyledSafeAreaView = styled(SafeAreaView)`
+  background-color: ${({ theme }) => theme.pageBackgroundColor};
+`;
+
+export const StyledDrawerLabel = styled.TouchableOpacity`
   border-color: #dfdfdf;
-  border-bottom-width: 1px;
-  padding: ${drawerPadding}px 10px;
+  border-bottom-width: ${({ lastItem }) => (lastItem ? '0' : '1px')};
+  padding: 30px 10px;
   width: 100%;
   flex-direction: row;
   flex: 1;
-  background-color: #ffffff;
+  background-color: ${({ theme, focused }) => (focused ? 'gray' : theme.pageBackgroundColor)};
   align-items: center;
 `;

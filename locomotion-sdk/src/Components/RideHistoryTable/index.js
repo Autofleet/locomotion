@@ -1,15 +1,18 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Table } from 'react-native-table-component';
 import moment from 'moment';
 import propsTypes from 'prop-types';
 import i18n from '../../I18n';
 import {
-  TableContainer, StyledHeaderRow, StyledRows, textStyle,
+  TableContainer, StyledHeaderRow, StyledRows, textStyled,
 } from './styled';
+import { Context as ThemeContext } from '../../context/theme';
 
 const rowsFlexWidth = [2, 2, 2, 1];
 
 const RideHistoryTable = ({ data }) => {
+  const theme = useContext(ThemeContext);
+  const textStyle = textStyled(theme);
   const getCreatedAt = (tripTime) => {
     const date = moment.utc(tripTime).format('DD.MM.YYYY');
     const time = moment.utc(tripTime).format('HH:mm');

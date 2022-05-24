@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { BaseText } from '../../../Components/BaseText';
 import { ERROR_COLOR, FONT_STYLES, OPERATION_COLOR } from '../../../services/sharedStyles';
 
 export const ErrorText = styled.Text`
@@ -18,6 +19,7 @@ background-color: white;
 export const PageContainer = styled.View`
 flex: 1;
 padding: 30px;
+  background-color: ${({ theme }) => theme.pageBackgroundColor};
 `;
 
 export const ResendContainer = styled.Text`
@@ -27,11 +29,11 @@ margin-top: 50px;
 opacity: .7;
 `;
 
-export const ResendText = styled.Text`
+export const ResendText = styled(BaseText)`
 color: #707070;
 `;
 
-export const ResendButton = styled.Text`
+export const ResendButton = styled(BaseText)`
 text-decoration: underline;
 text-decoration-color: ${OPERATION_COLOR};
 color: ${OPERATION_COLOR};
@@ -43,7 +45,7 @@ flex-direction: row;
 justify-content: flex-start;
 align-items: center;
 `;
-export const Name = styled.Text`
+export const Name = styled(BaseText)`
 font-size: ${FONT_STYLES.SIZE.EXTRA_LARGE};
 margin: 20px;
 font-weight: 600;
