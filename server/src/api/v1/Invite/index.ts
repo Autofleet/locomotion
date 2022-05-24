@@ -7,7 +7,7 @@ import { Invite } from '../../../models';
 import UserService from '../../../lib/user';
 import { confirmInvite, getInvite } from '../../../lib/invite';
 import moment from 'moment';
-import { DEFAULT_INVITE_EXPIRE_TIME_HOURS } from 'src/models/Invite/index.model';
+import { DEFAULT_INVITE_EXPIRE_TIME_HOURS } from '../../../../src/models/Invite/index.model';
 
 const router = Router();
 

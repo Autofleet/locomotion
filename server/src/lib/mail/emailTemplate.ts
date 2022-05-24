@@ -42,7 +42,7 @@ export default ({
     body,
     p,
     div {
-      font-family: 'inter';
+      font-family: 'Inter', sans-serif;
       font-size: 18px;
     }
 
@@ -67,10 +67,11 @@ export default ({
     }
 
     .bottom-link {
-      color: #333333;
+      color: #333333 !important;
       font-size: 13px;
       text-decoration: underline;
       opacity: 70%;
+      white-space: nowrap;
     }
 
     .box-sizing {
@@ -165,14 +166,18 @@ export default ({
     }
   </style>
   <!--user entered Head Start-->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css?family=Montserrat:400,900i&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css?family=Montserrat:400,900i" rel="stylesheet" type="text/css">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;500;900&family=Source+Code+Pro&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:400,900i" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter&display=swap" rel="stylesheet">
      <!--[if !mso]><!-->
       <style type="text/css">
-        @import url(https://fonts.googleapis.com/css?family=Montserrat:400,900i&display=swap);
+        @import url(https://fonts.googleapis.com/css2?family=Montserrat:400,900i&display=swap);
+        @import url('https://fonts.googleapis.com/css2?family=Inter&display=swap');
     </style>
-    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,900i&display=swap" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:400,900i&display=swap" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter&display=swap" rel="stylesheet">
     <!--<![endif]-->
 </head>
 
@@ -228,22 +233,22 @@ export default ({
                                                 data-responsive="false"
                                                 src="${logoUri}"
                                                 height="30">
-                                                <div style="font-family: 'Montserrat'; margin-left: 8px; font-weight: 700; font-size: 12px;">${companyName}</div>
+                                                <div style="font-family: 'Montserrat'; margin-left: 8px; font-weight: 700; font-size: 12px; line-height: 40px;">${companyName}</div>
                                             </td>
                                           </tr>
                                         </tbody>
                                       </table>
-                                      <div style="overflow: hidden; border-radius: 8px; height: 350px; margin: 20px 0; box-shadow: 0px 0px 10px rgb(0, 0, 0, .5); background-color: #fafafa;">
+                                      <div style="overflow: hidden; border-radius: 8px; height: 350px; min-height: 350px; margin: 20px 0; box-shadow: 0px 0px 10px rgb(0, 0, 0, .5); background-color: #fafafa;">
                                         <div class="box-sizing" style="padding: 30px; background-color: #ffffff; width: 100%; height: 30%; line-height: 90px">
                                           <h2 style="line-height: 90px; font-family: inter; font-weight: 800;">${i18n.t('emailTemplate.hi')}, ${firstName}!</h2>
                                         </div>
                                         <div style="width: 100%; height: 70%;">
-                                          <p style="margin: 30px; font-family: inherit; width: 70%;">${i18n.t('emailTemplate.p1')}</p>
+                                          <p style="color: #333333; margin: 30px; font-family: inherit; width: 70%;">${i18n.t('emailTemplate.p1')}</p>
                                           <a href="${`https://locomotion-v2-yzh56sqi3a-ew.a.run.app/invite/${inviteId}`}"
                                           class="prime-link-transition box-sizing"
                                             style="margin: 30px; background-color:#24aaf2; border:none; border-radius:8px; color:#ffffff; display:inline-block; font-size:19px; font-weight:normal; letter-spacing:0px; line-height:normal; padding:12px 18px 12px 18px; text-align:center; text-decoration:none; width: calc(100% - 60px);"
                                             target="_blank">${i18n.t('emailTemplate.buttonText')}</a>
-                                          <p style="color: #707070; opacity: 80%; font-size: 10px; margin: 0 30px; font-family: inherit; width: 100%;">${i18n.t('emailTemplate.expiryDateText')} ${expiryDate}</p>
+                                          <p style="color: #707070; opacity: 80%; font-size: 10px; margin: 0 30px 10px 30px; font-family: inherit; width: 100%;">${i18n.t('emailTemplate.expiryDateText')} ${expiryDate}</p>
                                         </div>      
                                       </div>
                                       <p style="opacity: 70%; font-size: 8px; width: 100%; text-align: center;">${i18n.t('emailTemplate.poweredBy')} <span style="font-weight: 500;">autofleet</span></p>
@@ -252,18 +257,20 @@ export default ({
                                 </tbody>
                               </table>
                               
-                              <div class="box-sizing" style="background-color: #d9d9d9; flex: 1; width: 100%; height: 125px; padding: 30px;">
-                                  <div style="display: flex; flex-direction: row; width: 100%; max-width: 700px; justify-content: space-around; margin: 0 auto;">
+                              <table class="box-sizing" style="background-color: #d9d9d9; flex: 1; width: 100%; height: 150px; padding: 30px;">
+                                  <tr align="center" style="display: flex; flex-direction: row; width: 100%; justify-content: space-between; align-items: center;">
+                                    <td style="width: 100%;">
                                     <a class="bottom-link" href="${helpCenterUrl}">${i18n.t('emailTemplate.helpCenter')}</a>
                                     <a class="bottom-link" href="${termsUrl}">${i18n.t('emailTemplate.terms')}</a>
                                     <a class="bottom-link" href="${privacyUrl}">${i18n.t('emailTemplate.privacy')}</a>
                                     <a class="bottom-link" href="${emailPreferencesUrl}">${i18n.t('emailTemplate.emailPreferences')}</a>
                                     <a class="bottom-link" href="${websiteUrl}">${displayUrl}</a>
-                                  </div>
-                                  <div style="width: 100%; text-align: center; margin-top: 30px; font-size: 12px; opacity: 50%;">
+                                    </td>
+                                  </tr>
+                                  <tr style="width: 100%; text-align: center; margin-top: 30px; font-size: 12px; opacity: 50%; color: #333333;">
                                     ${companyAddress}
-                                  </div>
-                              </div>
+                                  </tr>
+                              </table>
                             </td>
                           </tr>
                         </tbody>
