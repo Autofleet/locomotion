@@ -49,17 +49,17 @@ export default ({ menuSide }) => {
 
   return (
     <PageContainer>
-        <PageContent>
-          <PageHeader
-            title={i18n.t('rideHistory.pageTitle')}
-            onIconPress={() => toggleMenu()}
-            iconSide={menuSide}
-          />
-          {rides && rides.length > 0
-            ? <RideHistoryTable data={rides} />
-            : <NoRidesMessage />
+      <PageContent>
+        <PageHeader
+          title={i18n.t('rideHistory.pageTitle')}
+          onIconPress={() => toggleMenu()}
+          iconSide={menuSide}
+        />
+        {rides && rides.length > 0
+          ? <RideHistoryTable data={rides} />
+          : <NoRidesMessage />
           }
-        </PageContent>
+      </PageContent>
     </PageContainer>
   );
 };

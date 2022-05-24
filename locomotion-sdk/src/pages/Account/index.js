@@ -1,7 +1,8 @@
-import React, { useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import * as yup from 'yup';
 import { useRoute } from '@react-navigation/native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { View } from 'react-native';
 import AppSettings from '../../services/app-settings';
 
 import ThumbnailPicker from '../../Components/ThumbnailPicker';
@@ -18,7 +19,6 @@ import PageHeader from '../../Components/PageHeader';
 import Mixpanel from '../../services/Mixpanel';
 import { updateUser } from '../../context/user/api';
 import { PageContainer } from '../styles';
-import {View} from "react-native";
 
 export default ({
   navigation, screenOptions, menuSide,
@@ -147,12 +147,12 @@ export default ({
           />
           <FullNameContainer>
             <NameContainer>
-            <TextInput
-              placeholder={i18n.t('onboarding.firstNamePlaceholder')}
-              onChangeText={inputChange('firstName')}
-              value={onboardingState.firstName}
-              autoCapitalize="words"
-            />
+              <TextInput
+                placeholder={i18n.t('onboarding.firstNamePlaceholder')}
+                onChangeText={inputChange('firstName')}
+                value={onboardingState.firstName}
+                autoCapitalize="words"
+              />
             </NameContainer>
             <NameContainer>
               <TextInput

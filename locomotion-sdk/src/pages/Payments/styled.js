@@ -90,7 +90,7 @@ export const DeleteCreditCardText = styled.Text`
 const FullPageLoaderWrapper = styled.View`
   width: 100%;
   height: 100%;
-  background-color: ${({theme}) => theme.pageBackgroundColor};
+  background-color: ${({ theme }) => theme.pageBackgroundColor};
   position: absolute;
   z-index: 99999;
 `;

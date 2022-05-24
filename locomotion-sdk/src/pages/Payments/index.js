@@ -51,40 +51,40 @@ export default ({ navigation, menuSide }) => {
 
   return (
     <PageContainer>
-        <PageContent>
-          <PageHeader
-            title={i18n.t('payments.pageTitle')}
-            onIconPress={() => toggleMenu()}
-            iconSide={menuSide}
+      <PageContent>
+        <PageHeader
+          title={i18n.t('payments.pageTitle')}
+          onIconPress={() => toggleMenu()}
+          iconSide={menuSide}
+        />
+        {pageLoading ? <FullPageLoader autoPlay loop /> : null}
+        {/* <Balance customer={usePayments.customer} /> */}
+        {showList ? (
+          <CreditCardsList
+            paymentMethods={usePayments.paymentMethods}
+            onDetach={onRemoveMethod}
+            loadingState={loading}
+            onAddClick={() => setShowList(false)}
           />
-          {pageLoading ? <FullPageLoader autoPlay loop /> : null}
-          {/* <Balance customer={usePayments.customer} /> */}
-          {showList ? (
-            <CreditCardsList
-              paymentMethods={usePayments.paymentMethods}
-              onDetach={onRemoveMethod}
-              loadingState={loading}
-              onAddClick={() => setShowList(false)}
-            />
-          ) : (
-            <NewCreditForm
-              onDone={async () => {
-                await loadCustomerData();
-                return setShowList(true);
-              }}
-            />
-          )}
-          <ConfirmationPopup
-            name="removeCard"
-            title={i18n.t('payments.popups.removeCard.title')}
-            text={i18n.t('payments.popups.removeCard.text')}
-            confirmText={i18n.t('payments.popups.removeCard.confirmText')}
-            cancelText={i18n.t('payments.popups.removeCard.cancelText')}
-            type="cancel"
-            useCancelTextButton
-            onSubmit={() => detachCard()}
+        ) : (
+          <NewCreditForm
+            onDone={async () => {
+              await loadCustomerData();
+              return setShowList(true);
+            }}
           />
-        </PageContent>
+        )}
+        <ConfirmationPopup
+          name="removeCard"
+          title={i18n.t('payments.popups.removeCard.title')}
+          text={i18n.t('payments.popups.removeCard.text')}
+          confirmText={i18n.t('payments.popups.removeCard.confirmText')}
+          cancelText={i18n.t('payments.popups.removeCard.cancelText')}
+          type="cancel"
+          useCancelTextButton
+          onSubmit={() => detachCard()}
+        />
+      </PageContent>
     </PageContainer>
   );
 };
