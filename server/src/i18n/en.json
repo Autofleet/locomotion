@@ -29,9 +29,15 @@
 
   },
   "emailTemplate": {
-    "hi": "Hi",
-    "p1":"Please confirm your email by tapping the link below",
-    "confirmButton": "Confirm email",
+    "hi": "Hey",
+    "p1":"Please confirm your email by pressing the link bellow",
+    "buttonText": "Confirm",
+    "expiryDateText": "This email is valid until",
+    "helpCenter": "Help Center",
+    "terms": "Terms",
+    "privacy": "Privacy",
+    "emailPreferences": "Email preferences",
+    "poweredBy": "Powered by",
     "issues": "If you encounter any issues please contact",
     "ignore": "If you think this email wasn't meant for you, please ignore it.",
     "privacyPolicy": "Privacy policy"

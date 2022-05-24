@@ -3,11 +3,16 @@ import i18n from '../../i18n';
 export default ({
   inviteId,
   logoUri,
+  companyName,
   firstName,
-  supportEmail,
+  expiryDate,
+  helpCenterUrl,
+  termsUrl,
+  emailPreferencesUrl,
   websiteUrl,
   displayUrl,
   privacyUrl,
+  companyAddress
 }): string => `
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html data-editor-version="2" class="sg-campaigns" xmlns="http://www.w3.org/1999/xhtml">
@@ -37,7 +42,7 @@ export default ({
     body,
     p,
     div {
-      font-family: 'Montserrat', sans-serif;
+      font-family: 'inter';
       font-size: 18px;
     }
 
@@ -53,6 +58,25 @@ export default ({
     p {
       margin: 0;
       padding: 0;
+      font-weight: 300;
+    }
+
+    h2 {
+      margin: 0;
+      padding: 0;
+    }
+
+    .bottom-link {
+      color: #333333;
+      font-size: 13px;
+      text-decoration: underline;
+      opacity: 70%;
+    }
+
+    .box-sizing {
+      -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
+      -moz-box-sizing: border-box;    /* Firefox, other Gecko */
+      box-sizing: border-box;
     }
 
     table.wrapper {
@@ -80,7 +104,15 @@ export default ({
       width: 25%;
     }
 
+    .max-width {
+        max-width: 500px;
+      }
+
     @media screen and (max-width:480px) {
+
+      .max-width {
+        max-width: 400px;
+      }
 
       .preheader .rightColumnContent,
       .footer .rightColumnContent {
@@ -135,7 +167,7 @@ export default ({
   <!--user entered Head Start-->
   <link href="https://fonts.googleapis.com/css?family=Montserrat:400,900i&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css?family=Montserrat:400,900i" rel="stylesheet" type="text/css">
-
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;500;900&family=Source+Code+Pro&display=swap" rel="stylesheet">
      <!--[if !mso]><!-->
       <style type="text/css">
         @import url(https://fonts.googleapis.com/css?family=Montserrat:400,900i&display=swap);
@@ -148,10 +180,10 @@ export default ({
   <center class="wrapper" data-link-color="#1188E6"
     data-body-style="font-size:14px; font-family:courier, monospace; color:#000000; background-color:#FFFFFF;">
     <div class="webkit">
-      <table cellpadding="0" cellspacing="0" border="0" width="100%" class="wrapper" bgcolor="#FFFFFF">
+      <table cellpadding="0" cellspacing="0" border="0" width="100%" class="wrapper">
         <tbody>
           <tr>
-            <td valign="top" bgcolor="#FFFFFF" width="100%">
+            <td valign="top" bgcolor="#ededed" width="100%">
               <table width="100%" role="content-container" class="outer" align="center" cellpadding="0" cellspacing="0"
                 border="0">
                 <tbody>
@@ -165,12 +197,12 @@ export default ({
     <center>
     <table><tr><td width="600">
   <![endif]-->
-                              <table width="100%" cellpadding="0" cellspacing="0" border="0"
-                                style="width:100%; max-width:600px;" align="center">
+                              <table width="100%" cellpadding="0" cellspacing="0" border="0" class="max-width"
+                                style="width:100%; padding: 20px;" align="center">
                                 <tbody>
                                   <tr>
                                     <td role="modules-container"
-                                      style="padding:0px 0px 0px 0px; color:#000000; text-align:left;" bgcolor="#FFFFFF"
+                                      style="padding:0px 0px 0px 0px; color:#000000; text-align:left;"
                                       width="100%" align="left">
                                       <table class="module preheader preheader-hide" role="module" data-type="preheader"
                                         border="0" cellpadding="0" cellspacing="0" width="100%"
@@ -188,120 +220,50 @@ export default ({
                                         data-muid="d61b38ae-89a7-4aa0-b454-56c6dff958e3">
                                         <tbody>
                                           <tr>
-                                            <td style="font-size:6px; line-height:10px; padding:20px 0px 0px 0px;"
-                                              valign="top" align="center">
+                                            <td style="font-size:6px; line-height:10px; display: flex; align-items: center;"
+                                              valign="top" align="left">
                                               <img class="max-width" border="0"
-                                                style="display:block; color:#000000; text-decoration:none; font-family:Helvetica, arial, sans-serif; font-size:16px;"
-                                                width="100" alt="" data-proportionally-constrained="true"
+                                                style="color:#000000; text-decoration:none; font-family:Helvetica, arial, sans-serif; font-size:16px;"
+                                                width="50" alt="" data-proportionally-constrained="true"
                                                 data-responsive="false"
                                                 src="${logoUri}"
-                                                height="86">
+                                                height="30">
+                                                <div style="font-family: 'Montserrat'; margin-left: 8px; font-weight: 700; font-size: 12px;">${companyName}</div>
                                             </td>
                                           </tr>
                                         </tbody>
                                       </table>
-                                      <table class="module" role="module" data-type="text" border="0" cellpadding="0"
-                                        cellspacing="0" width="100%" style="table-layout: fixed;"
-                                        data-muid="cc341cc4-77fb-4a8d-8122-d9d55394c96d">
-                                        <tbody>
-                                          <tr>
-                                            <td style="padding:18px 0px 18px 0px; line-height:22px; text-align:inherit;"
-                                              height="100%" valign="top" bgcolor="" role="module-content">
-                                              <div>
-                                                <div style="font-family: inherit">${i18n.t('emailTemplate.hi')}, ${firstName}</div>
-                                                <div style="font-family: inherit"><br></div>
-                                                <div style="font-family: inherit">${i18n.t('emailTemplate.p1')}.</div>
-                                                  <div style="font-family: inherit"><br></div>
-                                                <div></div>
-                                              </div>
-                                            </td>
-                                          </tr>
-                                        </tbody>
-                                      </table>
-                                      <table border="0" cellpadding="0" cellspacing="0" class="module"
-                                        data-role="module-button" data-type="button" role="module"
-                                        style="table-layout:fixed;" width="100%"
-                                        data-muid="4ea8de08-a33a-4aa8-8aff-ecb2fc0cf6a3">
-                                        <tbody>
-                                          <tr>
-                                            <td align="center" bgcolor="" class="outer-td"
-                                              style="padding:10px 0px 20px 0px;">
-                                              <table border="0" cellpadding="0" cellspacing="0" class="wrapper-mobile"
-                                                style="text-align:center;">
-                                                <tbody>
-                                                  <tr>
-                                                    <td align="center" bgcolor="#55C3FF" class="inner-td prime-link-transition"
-                                                      style="border-radius:6px; font-size:16px; text-align:center; background-color:inherit;">
-                                                      <a href="${`https://locomotion-v2-yzh56sqi3a-ew.a.run.app/invite/${inviteId}`}"
-                                                      class="prime-link-transition"
-                                                        style="background-color:#55C3FF; border:0px solid #333333; border-color:#333333; border-radius:30px; border-width:0px; color:#ffffff; display:inline-block; font-size:14px; font-weight:normal; letter-spacing:0px; line-height:normal; padding:12px 18px 12px 18px; text-align:center; text-decoration:none; border-style:solid; width:180px;"
-                                                        target="_blank">${i18n.t('emailTemplate.confirmButton')}</a>
-                                                    </td>
-                                                  </tr>
-                                                </tbody>
-                                              </table>
-                                            </td>
-                                          </tr>
-                                        </tbody>
-                                      </table>
-                                      <table class="module" role="module" data-type="spacer" border="0" cellpadding="0"
-                                        cellspacing="0" width="100%" style="table-layout: fixed;"
-                                        data-muid="1720082f-b60d-4885-8ed9-22325a161634">
-                                        <tbody>
-                                          <tr>
-                                            <td style="padding:0px 0px 1px 0px;" role="module-content"
-                                              bgcolor="#b7b7b7">
-                                            </td>
-                                          </tr>
-                                        </tbody>
-                                      </table>
-                                      <table class="module" role="module" data-type="text" border="0" cellpadding="0"
-                                        cellspacing="0" width="100%" style="table-layout: fixed;"
-                                        data-muid="4c18a5e9-d782-423f-b241-9bdff8f2a97e">
-                                        <tbody>
-                                          <tr>
-                                            <td
-                                              style="padding:18px 0px 18px 0px; line-height:22px; text-align:inherit;"
-                                              height="100%" valign="top" bgcolor="" role="module-content">
-                                              <div>
-                                                <div style="font-family: inherit; font-size: 15px;">${i18n.t('emailTemplate.issues')} <a href="mailto:${supportEmail}"
-                                                    title="support@autofleet.io">${supportEmail}</a>.</div>
-                                                <div style="font-family: inherit; font-size: 15px;">${i18n.t('emailTemplate.ignore')}</div>
-                                                <div></div>
-                                              </div>
-                                            </td>
-                                          </tr>
-                                        </tbody>
-                                      </table>
-                                      <table class="module" role="module" data-type="text" border="0" cellpadding="0"
-                                        cellspacing="0" width="100%" style="table-layout: fixed;"
-                                        data-muid="033fb1eb-2bfa-410a-a61b-0cbe3bb4cfb2">
-                                        <tbody>
-                                          <tr>
-                                            <td style="padding:18px 0px 18px 20px; line-height:22px; text-align:inherit;"
-                                              height="100%" valign="top" bgcolor="" role="module-content">
-                                              <div>
-                                                <div style="font-family: inherit; text-align: center; font-size: 15px;">
-                                                  <a href="${websiteUrl}" title="${displayUrl}">${displayUrl}</a>
-                                                  <span style="color: #b7b7b7">&nbsp;&#9679;&nbsp;</span>
-                                                  <a href="${privacyUrl}" title="Privacy policy">${i18n.t('emailTemplate.privacyPolicy')}</a>
-                                                </div>
-                                                <div></div>
-                                              </div>
-                                            </td>
-                                          </tr>
-                                        </tbody>
-                                      </table>
+                                      <div style="overflow: hidden; border-radius: 8px; height: 350px; margin: 20px 0; box-shadow: 0px 0px 10px rgb(0, 0, 0, .5); background-color: #fafafa;">
+                                        <div class="box-sizing" style="padding: 30px; background-color: #ffffff; width: 100%; height: 30%; line-height: 90px">
+                                          <h2 style="line-height: 90px; font-family: inter; font-weight: 800;">${i18n.t('emailTemplate.hi')}, ${firstName}!</h2>
+                                        </div>
+                                        <div style="width: 100%; height: 70%;">
+                                          <p style="margin: 30px; font-family: inherit; width: 70%;">${i18n.t('emailTemplate.p1')}</p>
+                                          <a href="${`https://locomotion-v2-yzh56sqi3a-ew.a.run.app/invite/${inviteId}`}"
+                                          class="prime-link-transition box-sizing"
+                                            style="margin: 30px; background-color:#24aaf2; border:none; border-radius:8px; color:#ffffff; display:inline-block; font-size:19px; font-weight:normal; letter-spacing:0px; line-height:normal; padding:12px 18px 12px 18px; text-align:center; text-decoration:none; width: calc(100% - 60px);"
+                                            target="_blank">${i18n.t('emailTemplate.buttonText')}</a>
+                                          <p style="color: #707070; opacity: 80%; font-size: 10px; margin: 0 30px; font-family: inherit; width: 100%;">${i18n.t('emailTemplate.expiryDateText')} ${expiryDate}</p>
+                                        </div>      
+                                      </div>
+                                      <p style="opacity: 70%; font-size: 8px; width: 100%; text-align: center;">${i18n.t('emailTemplate.poweredBy')} <span style="font-weight: 500;">autofleet</span></p>
                                     </td>
                                   </tr>
                                 </tbody>
                               </table>
-                              <!--[if mso]>
-                                  </td>
-                                </tr>
-                              </table>
-                            </center>
-                            <![endif]-->
+                              
+                              <div class="box-sizing" style="background-color: #d9d9d9; flex: 1; width: 100%; height: 125px; padding: 30px;">
+                                  <div style="display: flex; flex-direction: row; width: 100%; max-width: 700px; justify-content: space-around; margin: 0 auto;">
+                                    <a class="bottom-link" href="${helpCenterUrl}">${i18n.t('emailTemplate.helpCenter')}</a>
+                                    <a class="bottom-link" href="${termsUrl}">${i18n.t('emailTemplate.terms')}</a>
+                                    <a class="bottom-link" href="${privacyUrl}">${i18n.t('emailTemplate.privacy')}</a>
+                                    <a class="bottom-link" href="${emailPreferencesUrl}">${i18n.t('emailTemplate.emailPreferences')}</a>
+                                    <a class="bottom-link" href="${websiteUrl}">${displayUrl}</a>
+                                  </div>
+                                  <div style="width: 100%; text-align: center; margin-top: 30px; font-size: 12px; opacity: 50%;">
+                                    ${companyAddress}
+                                  </div>
+                              </div>
                             </td>
                           </tr>
                         </tbody>

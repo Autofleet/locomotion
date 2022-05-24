@@ -6,6 +6,8 @@ import logger from '../../../logger';
 import { Invite } from '../../../models';
 import UserService from '../../../lib/user';
 import { confirmInvite, getInvite } from '../../../lib/invite';
+import moment from 'moment';
+import { DEFAULT_INVITE_EXPIRE_TIME_HOURS } from 'src/models/Invite/index.model';
 
 const router = Router();
 
@@ -39,16 +41,33 @@ router.post('/send-email-verification', async (req, res) => {
   }
   const newInvite = await Invite.create({ userId: user.id, sentAt: new Date() });
   try {
-    const operation: any = {}; /* get operations settings for email info based on user operation_id */
+    const operation: any = {
+      logoUri: 'http://cdn.mcauto-images-production.sendgrid.net/e99b027cf41e7516/85cbcea6-36b7-40c8-809e-0076b66f76ce/100x86.gif',
+      clientName: 'autofleet',
+      helpCenterUrl: 'google.com',
+      termsUrl: 'google.com',
+      emailPreferencesUrl: 'google.com',
+      websiteUrl: 'google.com',
+      displayUrl: 'autofleet.io',
+      privacyUrl: 'google.com',
+      companyAddress: '24 herbert st the new york',
+      emailSender: 'me@autofleet.io'
+    }; /* get operations settings for email info based on user operation_id */
+    const expireTime = operation.inviteExpireTime || DEFAULT_INVITE_EXPIRE_TIME_HOURS;
     const emailHtml = emailTemplate(
       {
         inviteId: newInvite.id,
-        logoUri: operation.logo,
+        logoUri: operation.logoUri,
+        companyName: operation.clientName,
         firstName: user.firstName,
-        supportEmail: operation.supportEmail,
+        expiryDate: moment(newInvite.sentAt).add(expireTime, 'hours').format('D MMMM YYYY	[at] h:mm A'),
+        helpCenterUrl: operation.helpCenterUrl,
+        termsUrl: operation.termsUrl,
+        emailPreferencesUrl: operation.emailPreferencesUrl,
         websiteUrl: operation.websiteUrl,
-        displayUrl: operation.websiteDisplayUrl,
+        displayUrl: operation.displayUrl,
         privacyUrl: operation.privacyUrl,
+        companyAddress: operation.companyAddress,
       },
     );
     const subject = operation.verificationEmailSubject || `${operation.clientName} ${operation.emailSender}`;
