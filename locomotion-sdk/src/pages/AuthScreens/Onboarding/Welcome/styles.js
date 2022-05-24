@@ -1,10 +1,5 @@
 import styled from 'styled-components';
-
-export const LogoContainer = styled.View`
-height: 40%;
-align-items: center;
-width: 100%;
-`;
+import { FONT_STYLES } from '../../../../services/sharedStyles';
 
 export const WelcomeText = styled.Text`
 font-size: 35px;
@@ -13,14 +8,10 @@ margin: 10px 0;
 text-align: center;
 `;
 export const WelcomeSubText = styled.Text`
+font-size: ${FONT_STYLES.SIZE.MEDIUM};
 margin: 10px 0;
 text-align: center;
-`;
-
-export const Logo = styled.Image`
-margin: auto;
-height: 50%;
-width: 100%;
+opacity: .6;
 `;
 
 export const PageContainer = styled.View`
@@ -30,6 +21,5 @@ align-items: center;
 `;
 
 export const TextContainer = styled.View`
-height: 40%;
 align-items: center;
 `;

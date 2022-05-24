@@ -230,6 +230,15 @@ android {
             keyAlias 'androiddebugkey'
             keyPassword 'android'
         }
+
+        release {
+            Properties properties = new Properties()
+            properties.load(file('local.properties').newDataInputStream())
+            storeFile file(properties.getProperty('storeFile'))
+            keyAlias properties.getProperty('keyAlias')
+            storePassword properties.getProperty('storePassword')
+            keyPassword properties.getProperty('keyPassword')
+        }
     }
     buildTypes {
         debug {
@@ -238,7 +247,7 @@ android {
         release {
             // Caution! In production, you need to generate your own keystore file.
             // see https://reactnative.dev/docs/signed-apk-android.
-            signingConfig signingConfigs.debug
+            signingConfig signingConfigs.release
             minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
         }
@@ -314,6 +323,7 @@ task copyDownloadableDepsToLibs(type: Copy) {
 }
 
 apply from: file("../../node_modules/@react-native-community/cli-platform-android/native_modules.gradle"); applyNativeModulesAppBuildGradle(project)
+apply from: project(':react-native-config').projectDir.getPath() + "/dotenv.gradle"
 
 def isNewArchitectureEnabled() {
     // To opt-in for the New Architecture, you can either:

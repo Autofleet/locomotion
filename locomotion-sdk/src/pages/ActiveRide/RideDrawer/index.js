@@ -1,7 +1,5 @@
 /* eslint-disable no-nested-ternary */
-import React, {
-  Fragment, useState, useEffect,
-} from 'react';
+import React, { useState, useEffect } from 'react';
 import moment from 'moment';
 
 import I18n from '../../../I18n';
@@ -26,8 +24,6 @@ import StopPointsCard from './StopPointsCard';
 import OfferCard from './OfferCard';
 import RideStatusHeader from './RideStatusHeader';
 import FutureRides, { FutureOrdersButton } from './FutureRides';
-
-const RideButton = RoundedButton;
 
 const getRideState = (activeRide) => { // false, driverOnTheWay, driverArrived, onBoard
   if (!activeRide) {
@@ -153,7 +149,7 @@ const RideDrawer = ({
 
         {!isPopupOpen('ridePopupsStatus') && !futureOrdersState
           ? (
-            <Fragment>
+            <>
               <RideStatusHeader
                 rideState={rideState}
                 pickupEta={pickupEta}
@@ -164,7 +160,7 @@ const RideDrawer = ({
 
               {rideState && (pickupEta <= useSettings.settingsList.ARRIVE_REMINDER_MIN || (activeRide && activeRide.arrivingPush !== null) || rideState !== 'driverOnTheWay')
                 ? (
-                  <Fragment>
+                  <>
                     <RideCard activeRide={activeRide} rideState={rideState} />
                     {rideState !== 'onBoard' && rideState !== 'driverArrived'
                       ? (
@@ -178,11 +174,11 @@ const RideDrawer = ({
                           </RoundedButton>
                         </DrawerButtonContainer>
                       ) : null}
-                  </Fragment>
+                  </>
                 )
                 : rideState
                   ? (
-                    <Fragment>
+                    <>
                       <StopPointsEtaCard
                         origin={origin}
                         destination={destination}
@@ -200,13 +196,13 @@ const RideDrawer = ({
                           {I18n.t('home.cancelRideButton')}
                         </RoundedButton>
                       </DrawerButtonContainer>
-                    </Fragment>
+                    </>
                   )
                   : null
               }
 
               {!rideState && !rideOffer ? (
-                <Fragment>
+                <>
                   <StopPointsCard
                     origin={origin}
                     destination={destination}
@@ -224,11 +220,11 @@ const RideDrawer = ({
                   />
                   {/* <Switch onChange={(active) => setRideType(active ? 'pool' : 'private')} active={rideType === 'pool'} /> */}
                   {/* preRideDetails.eta || preRideDetails.estimatePrice ? ( <PreRideBox {...preRideDetails} /> ) : null */}
-                </Fragment>
+                </>
               ) : null }
 
               {!rideState && rideOffer ? (
-                <Fragment>
+                <>
                   <OfferCard
                     origin={origin}
                     destination={destination}
@@ -246,9 +242,9 @@ const RideDrawer = ({
                     setLoading={setLoading}
                     loading={loading}
                   />
-                </Fragment>
+                </>
               ) : null }
-            </Fragment>
+            </>
           ) : null}
       </Drawer>
 
@@ -257,7 +253,7 @@ const RideDrawer = ({
           <>
             <RideButtonContainer>
               {!futureOrdersState && (
-              <RideButton
+              <RoundedButton
                 data-test-id={rideState ? 'CancelRideButton' : 'LetsRideButton'}
                 onPress={buttonAction}
                 hollow={!readyToBook || !allowRideOrder}
@@ -265,7 +261,7 @@ const RideDrawer = ({
                 disabled={!readyToBook || !allowRideOrder}
               >
                 {I18n.t(rideState ? 'home.cancelRideButton' : 'home.letsRideButton')}
-              </RideButton>
+              </RoundedButton>
               )}
             </RideButtonContainer>
           </>

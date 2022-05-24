@@ -16,7 +16,7 @@ const HTTPMethods = [
 
 const limit = 512;
 
-const formatResponseLog = function ({ data }) {
+const formatResponseLog = function ({ data = '' }) {
   let str = (typeof data === 'string' ? data : JSON.stringify(data)).slice(0, limit);
   if (str.length === limit) {
     str = `${str}...(cut)`;

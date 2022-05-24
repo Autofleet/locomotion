@@ -7,7 +7,7 @@
         "submitPhoneNumberButton": "Login",
         "submitVertButton": "Verify",
         "phoneNumberError": "Oops! Seems like something went wrong",
-        "invalidPhoneNumberError": "Phone number is not valid",
+        "invalidPhoneNumberError": "Please enter a valid phone number.",
         "vertError": "Incorrect verification code",
         "resendButton": "Resend verification code"
     },

@@ -1,8 +1,8 @@
-import React, { useState, useEffect, Fragment } from 'react';
-import { View } from 'react-native';
+import React, { useState, useEffect } from 'react';
 import * as yup from 'yup';
 import { useRoute } from '@react-navigation/native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { View } from 'react-native';
 import AppSettings from '../../services/app-settings';
 
 import ThumbnailPicker from '../../Components/ThumbnailPicker';
@@ -12,16 +12,16 @@ import {
   Text, ErrorText,
 } from '../Login/styled';
 import {
-  Container, FullNameContainer, SubmitContainer,
+  Container, FullNameContainer, NameContainer, SubmitContainer,
 } from './styled';
 import i18n from '../../I18n';
 import PageHeader from '../../Components/PageHeader';
 import Mixpanel from '../../services/Mixpanel';
 import { updateUser } from '../../context/user/api';
-import SafeView from '../../Components/SafeView';
+import { PageContainer } from '../styles';
 
 export default ({
-  navigation, screenOptions, menuSide, ...props
+  navigation, screenOptions, menuSide,
 }) => {
   const route = useRoute();
   const [onboardingState, dispatchOnboardingState] = useState({
@@ -122,65 +122,65 @@ export default ({
 
 
   return (
-    <View style={{ backgroundColor: '#ffffff', flex: 1 }}>
-      <SafeView>
-        <KeyboardAwareScrollView
-          extraScrollHeight={20}
-          enableOnAndroid
-        >
-          <PageHeader
-            title={i18n.t('onboarding.pageTitle')}
-            onIconPress={() => navigation.toggleDrawer()}
-            displayIcon={showHeaderIcon}
-            iconSide={menuSide}
+    <PageContainer>
+      <KeyboardAwareScrollView
+        extraScrollHeight={20}
+        enableOnAndroid
+      >
+        <PageHeader
+          title={i18n.t('onboarding.pageTitle')}
+          onIconPress={() => navigation.toggleDrawer()}
+          displayIcon={showHeaderIcon}
+          iconSide={menuSide}
+        />
+        <Container>
+          {!showHeaderIcon
+            ? (
+              <Text>
+                {i18n.t('login.onBoardingPageTitle')}
+                {onboardingState.uploadingImage}
+              </Text>
+            ) : null}
+          <ThumbnailPicker
+            onImageChoose={onImageChoose}
+            avatarSource={onboardingState.avatar}
           />
-          <Container>
-            {!showHeaderIcon
-              ? (
-                <Text>
-                  {i18n.t('login.onBoardingPageTitle')}
-                  {onboardingState.uploadingImage}
-                </Text>
-              ) : null}
-            <ThumbnailPicker
-              onImageChoose={onImageChoose}
-              avatarSource={onboardingState.avatar}
-            />
-            <FullNameContainer>
+          <FullNameContainer>
+            <NameContainer>
               <TextInput
                 placeholder={i18n.t('onboarding.firstNamePlaceholder')}
-                width="40%"
                 onChangeText={inputChange('firstName')}
                 value={onboardingState.firstName}
                 autoCapitalize="words"
               />
+            </NameContainer>
+            <NameContainer>
               <TextInput
                 placeholder={i18n.t('onboarding.lastNamePlaceholder')}
-                width="40%"
                 onChangeText={inputChange('lastName')}
                 value={onboardingState.lastName}
                 autoCapitalize="words"
               />
+            </NameContainer>
+          </FullNameContainer>
+          <TextInput
+            placeholder={i18n.t('onboarding.emailPlaceholder')}
+            width="90%"
+            onChangeText={inputChange('email')}
+            value={onboardingState.email}
+          />
+          <ErrorText>{onboardingState.error ? onboardingState.error : ''}</ErrorText>
+          <SubmitContainer>
+            <SubmitButton
+              data-test-id="FinishOnboardingButton"
+              onPress={() => submit()}
+            >
+              {i18n.t('onboarding.submit')}
+            </SubmitButton>
+          </SubmitContainer>
+        </Container>
 
-            </FullNameContainer>
-            <TextInput
-              placeholder={i18n.t('onboarding.emailPlaceholder')}
-              width="90%"
-              onChangeText={inputChange('email')}
-              value={onboardingState.email}
-            />
-            <ErrorText>{onboardingState.error ? onboardingState.error : ''}</ErrorText>
-            <SubmitContainer>
-              <SubmitButton onPress={submit} data-test-id="FinishOnboardingButton">
-                {i18n.t('onboarding.submit')}
-              </SubmitButton>
-            </SubmitContainer>
-          </Container>
-
-        </KeyboardAwareScrollView>
-      </SafeView>
-    </View>
+      </KeyboardAwareScrollView>
+    </PageContainer>
   );
 };
-
-export const needOnboarding = userProfile => !userProfile.firstName || !userProfile.lastName;

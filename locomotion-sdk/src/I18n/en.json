@@ -1,7 +1,7 @@
 {
     "general": {
         "back": "Back",
-        "next": "Next"
+        "next": "Continue"
     },
     "login": {
         "getStarted": "Get started!",
@@ -17,7 +17,7 @@
         "submitVertButton": "Verify",
         "phoneNumberError": "Oops! Seems like something went wrong",
         "invalidPhoneNumberError": "Phone number is not valid",
-        "vertError": "Incorrect verification code",
+        "vertError": "Sorry, seems like the verification is incorrect. Please make sure you've typed it correctly.",
         "resendButton": "Start over",
         "introText": "Please enter your phone number to signup to Locomotion. You will receive an SMS with a verification code.",
         "termsWebViewTitle": "Terms and conditions",
@@ -28,8 +28,9 @@
         "pages": {
             "phone": {
                 "title": "Phone Number",
-                "text": "Verify your phone number",
-                "subText": "It will help us verify it's really you"
+                "text": "Enter mobile phone number",
+                "subText": "we'll send a verification code to this number",
+                "placeholder": "(000) 123 - 4567"
             },
             "code": {
                 "title": "verification",
@@ -58,7 +59,7 @@
             },
             "welcome": {
                 "text": "Welcome aboard, {{firstName}}!",
-                "subText": "We are glad to have  you riding with us.",
+                "subText": "We are glad to have you riding with us.",
                 "buttonText": "Let's go!"
             }
         },
@@ -66,7 +67,7 @@
         "submit": "Save",
         "firstNamePlaceholder": "First name",
         "lastNamePlaceholder": "Last name",
-        "fullNameError": "Please fill first and last name",
+        "fullNameError": "Please fill all fields",
         "emailPlaceholder": "Email",
         "validations": {
             "required": {

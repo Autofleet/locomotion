@@ -11,7 +11,7 @@ export const Drawer = styled.View`
  /*  position: absolute;
   bottom: 50;
   width: 90%; */
-  background-color: #fff;
+  background-color: ${({ theme }) => theme.pageBackgroundColor};
   border-radius: 4px;
   /* left: 5%;
   border-radius: 4;
@@ -56,7 +56,7 @@ const styleForDriverIsArrivedState = `
 
 export const RideDetailsText = styled.Text`
   font-size: 12px;
-  color: #000000;
+  color: ${({ theme }) => theme.textColor};
   margin-start: 10px;
   text-align: ${({ right }) => (right ? 'right' : 'left')};
 
@@ -206,15 +206,11 @@ export const Arrow = styled.Image.attrs({ source: ArrowIconSource })`
   align-self: center;
 
 `;
-export const AddPaymentBar = (props) => {
-  console.log('AddPaymentBar', props);
-
-  return (
-    <PaymentBarContainer {...props}>
-      <PaymentBarText>
-        {props.children}
-      </PaymentBarText>
-      <Arrow />
-    </PaymentBarContainer>
-  );
-};
+export const AddPaymentBar = props => (
+  <PaymentBarContainer {...props}>
+    <PaymentBarText>
+      {props.children}
+    </PaymentBarText>
+    <Arrow />
+  </PaymentBarContainer>
+);
