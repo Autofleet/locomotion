@@ -13,7 +13,6 @@ const Card = () => {
 
   const onDone = async () => {
     const methods = await getPaymentMethods();
-    console.log(methods);
     navigateBasedOnUser({ ...onboardingState, cards: methods }, true);
   };
   return (
