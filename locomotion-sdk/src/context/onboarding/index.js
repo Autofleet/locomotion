@@ -6,16 +6,19 @@ import Mixpanel from '../../services/Mixpanel';
 import { useStateValue } from '../main';
 import AppSettings from '../../services/app-settings';
 import { loginVert, sendEmailVerification, updateUser } from '../user/api';
+import PaymentsContext from '../payments';
 
 const keyToScreen = {
   firstName: 'Name',
   lastName: 'Name',
   email: 'Email',
   avatar: 'Avatar',
+  cards: 'AddCard',
   welcome: 'Welcome',
 };
 
 const authContainer = () => {
+  const usePayments = PaymentsContext.useContainer();
   const [, dispatch] = useStateValue();
   const navigation = useNavigation();
   const initialState = {
@@ -24,6 +27,7 @@ const authContainer = () => {
     lastName: '',
     avatar: '',
     email: '',
+    cards: null,
   };
   const [onboardingState, setOnboardingState] = useState(initialState);
 
@@ -52,6 +56,17 @@ const authContainer = () => {
       return navigation.navigate('MainApp');
     } else {
       return navigateToScreen(keyToScreen.welcome);
+    }
+  };
+
+  const getCardInfo = async () => {
+    try {
+      const methods = await usePayments.getPaymentMethods();
+      if (methods.length) {
+        return methods;
+      }
+    } catch (e) {
+      console.error(e);
     }
   };
 
@@ -106,7 +121,8 @@ const authContainer = () => {
           userProfile,
         },
       });
-      navigateBasedOnUser(userProfile, true);
+      const cards = await getCardInfo();
+      navigateBasedOnUser({ ...userProfile, cards }, true);
       return true;
     } catch (e) {
       console.log('Bad vert with request', e);

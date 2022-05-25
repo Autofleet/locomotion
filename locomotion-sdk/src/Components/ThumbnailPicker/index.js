@@ -98,7 +98,7 @@ const ThumbnailPicker = (props) => {
     } else {
       ActionSheetIOS.showActionSheetWithOptions(
         {
-          options: [i18n.t('live.phoneCallOptions.cancel'), ...options],
+          options: [i18n.t('general.cancel'), ...options],
           cancelButtonIndex: 0,
         },
         (buttonIndex) => {

@@ -6,6 +6,19 @@ import LottieView from 'lottie-react-native';
 const creditCardImage = require('../../assets/menuItems/creditcard.png');
 const darkLoader = require('../../assets/loaders/dark-loader.json');
 
+export const CreditFormText = styled.Text`
+  color: #1e273d;
+  font-size: 14px;
+  text-align: left;
+  padding-bottom: 20px;
+`;
+
+export const CardContainer = styled.View`
+width: 100%;
+height: 100%;
+padding: 30px;
+`;
+
 export const PageContent = styled(View)`
     width: 100%;
     height: 100%;

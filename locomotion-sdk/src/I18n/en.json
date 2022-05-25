@@ -1,7 +1,8 @@
 {
     "general": {
         "back": "Back",
-        "next": "Continue"
+        "next": "Continue",
+        "cancel": "cancel"
     },
     "login": {
         "getStarted": "Get started!",
