@@ -66,15 +66,15 @@ const authContainer = () => {
     getUserFromStorage();
   }, []);
 
-  const verifyEmail = () => {
-    sendEmailVerification(onboardingState.id);
+  const verifyEmail = async (userId) => {
+    await sendEmailVerification(userId);
   };
 
   const updateUserInfo = async (values) => {
-    if (values.email) {
-      verifyEmail();
-    }
     const user = await updateUser(values);
+    if (values.email) {
+      verifyEmail(user.id);
+    }
     dispatch({
       type: 'saveState',
       payload: {
