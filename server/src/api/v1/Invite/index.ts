@@ -23,7 +23,6 @@ router.post('/:id/verify', async (req, res) => {
     const user = await UserService.find(userId);
     if (!user) {
       return res.status(404).json({ status: 'ERROR', error: 'User not found' });
-
     }
 
     const response = await confirmInvite(invite, user);
