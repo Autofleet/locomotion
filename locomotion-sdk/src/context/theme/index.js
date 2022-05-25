@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { useColorScheme, Appearance } from 'react-native';
 import { ThemeProvider, ThemeContext } from 'styled-components';
+import Config from 'react-native-config';
 
-// const DARK_MODE_ENABLED = false;
-//
-const FORCE_DARK_MODE = false;
-
-const DARK_MODE_ENABLED = true;
-
-// const FORCE_DARK_MODE = true;
+const {
+  FORCE_DARK_MODE = false,
+  DARK_MODE_ENABLED = true,
+  PRIMARY_COLOR = undefined,
+  SECONDARY_COLOR = undefined,
+} = Config;
 
 // interface LocomotionTheme {
 //   primaryColor: string;
@@ -29,9 +29,9 @@ export const darkTheme = {
 };
 
 export const lightTheme = {
-  primaryColor: '#38a7fc',
+  primaryColor: PRIMARY_COLOR || '#38a7fc',
   // primaryColor: '#f00',
-  secondaryColor: '#08902d',
+  secondaryColor: SECONDARY_COLOR || '#08902d',
   primaryButtonTextColor: '#fff',
   disabledColor: '#bcbcbc',
 
