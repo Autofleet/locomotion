@@ -33,3 +33,8 @@ export const getLoginSettings = async () => {
   const { data } = await network.get('/api/v1/login/settings');
   return data;
 };
+
+export const sendEmailVerification = async (userId) => {
+  const { data } = await network.post('/api/v1/invite/send-email-verification', { userId });
+  return data;
+};

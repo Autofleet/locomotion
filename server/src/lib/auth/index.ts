@@ -16,7 +16,9 @@ const {
 
 class Auth {
   user: any;
+
   verification: any;
+
   nexmo: any;
 
   constructor(userModel = User, verificationModel = Verification) {

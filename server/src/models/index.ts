@@ -7,6 +7,7 @@ export { default as Setting } from './Setting/index.model';
 export { default as TimeSlot } from './TimeSlot/index.model';
 export { default as Verification } from './Verification/index.model';
 export { default as User } from './User/index.model';
+export { default as Invite } from './Invite/index.model';
 
 const ENV_DEV = 'development';
 

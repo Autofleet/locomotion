@@ -37,7 +37,8 @@
       "react/no-typos": ["off"],
       "global-require": ["off"],
       "jsx-a11y/anchor-is-valid": ["off"],
-      "react/jsx-no-bind": ["off"]
+      "react/jsx-no-bind": ["off"],
+      "no-restricted-syntax": "warn"
   },
   "globals": {
       "navigator": true,

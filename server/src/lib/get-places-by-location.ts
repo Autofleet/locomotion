@@ -25,14 +25,14 @@ const getFromAvailablePlaces = async (availablePlaces, closetPlace, myLocation) 
     id: availablePlace.properties.id,
     lat: availablePlace.geometry.coordinates[1],
     lng: availablePlace.geometry.coordinates[0],
-    distance: location ?
-      turf.distance(
+    distance: location
+      ? turf.distance(
         turf.point([location.lng, location.lat]),
         turf.point(availablePlace.geometry.coordinates),
       )
       : null,
-    distanceFromMe: location ?
-      turf.distance(
+    distanceFromMe: location
+      ? turf.distance(
         turf.point([myLocation.lng, myLocation.lat]),
         turf.point(availablePlace.geometry.coordinates),
       ) : null,

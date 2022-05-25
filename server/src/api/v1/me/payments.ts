@@ -39,7 +39,6 @@ router.post('/customer', async (req, res) => {
   res.json({ customer: afCustomer });
 });
 
-
 router.post('/intent', async (req, res) => {
   try {
     const { data: setupIntent } = await afSdk.Payments.createPaymentIntent({
@@ -53,7 +52,6 @@ router.post('/intent', async (req, res) => {
 
   return res.json({ status: 'ERROR' });
 });
-
 
 router.post('/detach', async (req, res) => {
   const { paymentMethodId } = req.body;
@@ -79,6 +77,5 @@ router.get('/methods', async (req, res) => {
   }
   return res.status(500).json({ status: 'ERROR' });
 });
-
 
 export default router;

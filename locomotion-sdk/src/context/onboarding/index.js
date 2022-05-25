@@ -5,17 +5,27 @@ import auth from '../../services/auth';
 import Mixpanel from '../../services/Mixpanel';
 import { useStateValue } from '../main';
 import AppSettings from '../../services/app-settings';
-import { loginVert, updateUser } from '../user/api';
+import { loginVert, sendEmailVerification, updateUser } from '../user/api';
+
+const keyToScreen = {
+  firstName: 'Name',
+  lastName: 'Name',
+  email: 'Email',
+  avatar: 'Avatar',
+  welcome: 'Welcome',
+};
 
 const authContainer = () => {
   const [, dispatch] = useStateValue();
   const navigation = useNavigation();
-  const [onboardingState, setOnboardingState] = useState({
+  const initialState = {
     phoneNumber: '',
     firstName: '',
     lastName: '',
     avatar: '',
-  });
+    email: '',
+  };
+  const [onboardingState, setOnboardingState] = useState(initialState);
 
   const updateState = (field, value) => {
     setOnboardingState({
@@ -24,18 +34,24 @@ const authContainer = () => {
     });
   };
 
+  const navigateToScreen = screen => navigation.navigate('AuthScreens', { screen });
+
+
   const navigateBasedOnUser = (user, complete) => {
     setOnboardingState(user);
-    if (!user.firstName || !user.lastName) {
-      return navigation.navigate('AuthScreens', { screen: 'Name' });
+    let unfinishedScreen;
+    for (const key of Object.keys(initialState)) {
+      if (!user[key]) {
+        unfinishedScreen = keyToScreen[key];
+        break;
+      }
     }
-    if (!user.avatar && !user.email) {
-      return navigation.navigate('AuthScreens', { screen: 'Avatar' });
-    }
-    if (complete) {
-      navigation.navigate('MainApp');
+    if (unfinishedScreen) {
+      navigateToScreen(unfinishedScreen);
+    } else if (complete) {
+      return navigation.navigate('MainApp');
     } else {
-      navigation.navigate('AuthScreens', { screen: 'Welcome' });
+      return navigateToScreen(keyToScreen.welcome);
     }
   };
 
@@ -50,8 +66,15 @@ const authContainer = () => {
     getUserFromStorage();
   }, []);
 
+  const verifyEmail = async (userId) => {
+    await sendEmailVerification(userId);
+  };
+
   const updateUserInfo = async (values) => {
     const user = await updateUser(values);
+    if (values.email) {
+      verifyEmail(user.id);
+    }
     dispatch({
       type: 'saveState',
       payload: {

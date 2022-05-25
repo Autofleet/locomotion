@@ -19,11 +19,13 @@ import PageHeader from '../../Components/PageHeader';
 import Mixpanel from '../../services/Mixpanel';
 import { updateUser } from '../../context/user/api';
 import { PageContainer } from '../styles';
+import { useStateValue } from '../..';
 
 export default ({
   navigation, screenOptions, menuSide,
 }) => {
   const route = useRoute();
+  const [appState] = useStateValue();
   const [onboardingState, dispatchOnboardingState] = useState({
     uploadPromise: false,
     firstName: '',
@@ -33,6 +35,7 @@ export default ({
     error: null,
   });
   const [showHeaderIcon, setShowHeaderIcon] = useState(true);
+
 
   useEffect(() => {
     if (
