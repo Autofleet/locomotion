@@ -1,5 +1,4 @@
 import moment from 'moment';
-import { BadRequest } from '@autofleet/errors';
 import { DEFAULT_INVITE_EXPIRE_TIME_HOURS } from '../../models/Invite/index.model';
 import { Invite } from '../../models';
 
@@ -19,5 +18,5 @@ export const confirmInvite = async (invite: Invite, user) => {
     user.update({ isEmailVerified: true });
     return user;
   }
-  throw new BadRequest([{ message: 'invitation expired' }], null);
+  return false;
 };
