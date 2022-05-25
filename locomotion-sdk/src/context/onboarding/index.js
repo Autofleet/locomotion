@@ -26,8 +26,8 @@ const authContainer = () => {
     firstName: '',
     lastName: '',
     avatar: '',
-    cards: null,
     email: '',
+    cards: null,
   };
   const [onboardingState, setOnboardingState] = useState(initialState);
 

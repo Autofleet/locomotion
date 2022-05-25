@@ -3,6 +3,7 @@ import {
   CardForm as MainCardForm,
   useStripe,
 } from '@stripe/stripe-react-native';
+import { KeyboardAvoidingView, Platform } from 'react-native';
 import i18n from '../../I18n';
 import PaymentsContext from '../../context/payments';
 import SubmitButton from '../RoundedButton';
@@ -49,6 +50,7 @@ export const NewCreditForm = ({ onDone, canSkip = false, PageText }) => {
       <CreditForm>
         <PageText />
         <MainCardForm
+        
           postalCodeEnabled={false}
           placeholders={{
             number: '4242 4242 4242 4242',
@@ -59,7 +61,7 @@ export const NewCreditForm = ({ onDone, canSkip = false, PageText }) => {
           }}
           style={{
             width: '100%',
-            height: 350,
+            height: 190,
             border: 0,
           }}
           onFormComplete={(cardDetails) => {
@@ -75,6 +77,10 @@ export const NewCreditForm = ({ onDone, canSkip = false, PageText }) => {
         />
         <ErrorMessage>{errorMessage}</ErrorMessage>
       </CreditForm>
+      <KeyboardAvoidingView
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      keyboardVerticalOffset={100}
+    >
       <SubmitContainer>
         {canSkip ? (
           <SkipSubmitContainer>
@@ -91,6 +97,7 @@ export const NewCreditForm = ({ onDone, canSkip = false, PageText }) => {
           {i18n.t('payments.submitCard')}
         </SubmitButton>
       </SubmitContainer>
+      </KeyboardAvoidingView>
     </>
   );
 };
