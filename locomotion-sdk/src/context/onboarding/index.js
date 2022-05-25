@@ -65,13 +65,13 @@ const authContainer = () => {
       if (methods.length) {
         setOnboardingState({
           ...onboardingState,
-          cards: methods
+          cards: methods,
         });
       }
     } catch (e) {
-      console.error(e)
+      console.error(e);
     }
-  }
+  };
 
   const getUserFromStorage = async () => {
     const settings = await AppSettings.getSettings();
@@ -124,7 +124,7 @@ const authContainer = () => {
           userProfile,
         },
       });
-      await getCardInfo()
+      await getCardInfo();
       navigateBasedOnUser(userProfile, true);
       return true;
     } catch (e) {

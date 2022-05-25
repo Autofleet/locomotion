@@ -18,7 +18,7 @@ const AuthScreens = () => (
     <Stack.Screen name="Phone" component={Phone} />
     <Stack.Screen name="Code" component={Code} />
     <Stack.Screen name="Name" component={Name} />
-    <Stack.Screen name="AddCard" component={Card}/>
+    <Stack.Screen name="AddCard" component={Card} />
     <Stack.Screen name="Avatar" component={Avatar} />
     <Stack.Screen name="Email" component={Email} />
     <Stack.Screen name="Welcome" component={Welcome} />

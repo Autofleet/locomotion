@@ -50,7 +50,6 @@ export const NewCreditForm = ({ onDone, canSkip = false, PageText }) => {
       <CreditForm>
         <PageText />
         <MainCardForm
-        
           postalCodeEnabled={false}
           placeholders={{
             number: '4242 4242 4242 4242',
@@ -78,25 +77,25 @@ export const NewCreditForm = ({ onDone, canSkip = false, PageText }) => {
         <ErrorMessage>{errorMessage}</ErrorMessage>
       </CreditForm>
       <KeyboardAvoidingView
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
-      keyboardVerticalOffset={100}
-    >
-      <SubmitContainer>
-        {canSkip ? (
-          <SkipSubmitContainer>
-            <SubmitButton onPress={() => onDone()} disabled={loading}>
-              {i18n.t('payments.skipForNow')}
-            </SubmitButton>
-          </SkipSubmitContainer>
-        ) : (<></>)}
-        <SubmitButton
-          onPress={() => handlePayPress()}
-          disabled={!formReady}
-          setLoading={setLoading}
-        >
-          {i18n.t('payments.submitCard')}
-        </SubmitButton>
-      </SubmitContainer>
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        keyboardVerticalOffset={100}
+      >
+        <SubmitContainer>
+          {canSkip ? (
+            <SkipSubmitContainer>
+              <SubmitButton onPress={() => onDone()} disabled={loading}>
+                {i18n.t('payments.skipForNow')}
+              </SubmitButton>
+            </SkipSubmitContainer>
+          ) : (<></>)}
+          <SubmitButton
+            onPress={() => handlePayPress()}
+            disabled={!formReady}
+            setLoading={setLoading}
+          >
+            {i18n.t('payments.submitCard')}
+          </SubmitButton>
+        </SubmitContainer>
       </KeyboardAvoidingView>
     </>
   );
