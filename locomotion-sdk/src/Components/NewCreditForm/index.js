@@ -11,6 +11,7 @@ import {
   CreditForm, ErrorMessage, SkipSubmitContainer, SubmitContainer,
 } from './styled';
 
+// eslint-disable-next-line import/prefer-default-export
 export const NewCreditForm = ({ onDone, canSkip = false, PageText }) => {
   const { confirmSetupIntent } = useStripe();
   const usePayments = PaymentsContext.useContainer();
@@ -20,7 +21,7 @@ export const NewCreditForm = ({ onDone, canSkip = false, PageText }) => {
   const [errorMessage, setErrorMessage] = useState('');
 
   const handlePayPress = async () => {
-    let customerData = usePayments.customer;
+    let customerData = await usePayments.customer;
     console.log('customerData', customerData);
     if (!usePayments.customer) {
       customerData = await usePayments.createCustomer();
@@ -96,7 +97,9 @@ export const NewCreditForm = ({ onDone, canSkip = false, PageText }) => {
             {i18n.t('payments.submitCard')}
           </SubmitButton>
         </SubmitContainer>
+
       </KeyboardAvoidingView>
+
     </>
   );
 };

@@ -8,7 +8,6 @@ export const SubmitContainer = styled.View`
     max-width: 100%;
     justify-content: flex-end;
     align-self: center;
-    margin-bottom: 30px;
     flex:1;
 `;
 

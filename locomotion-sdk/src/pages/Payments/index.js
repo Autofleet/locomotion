@@ -2,12 +2,13 @@ import React, { useEffect, useState } from 'react';
 import { getTogglePopupsState } from '../../context';
 import i18n from '../../I18n';
 import PageHeader from '../../Components/PageHeader';
-import { FullPageLoader, PageContent, CreditFormText } from './styled';
+import {
+  FullPageLoader, PageContent, CreditFormText, CardContainer,
+} from './styled';
 import PaymentsContext from '../../context/payments';
 import ConfirmationPopup from '../../popups/ConfirmationPopup';
 import CreditCardsList from './credit-cards';
 import { NewCreditForm } from '../../Components/NewCreditForm';
-import SafeView from '../../Components/SafeView';
 import { PageContainer } from '../styles';
 
 export default ({ navigation, menuSide }) => {
@@ -67,13 +68,15 @@ export default ({ navigation, menuSide }) => {
             onAddClick={() => setShowList(false)}
           />
         ) : (
-          <NewCreditForm
-            PageText={() => <CreditFormText>{i18n.t('payments.newCardDetails')}</CreditFormText>}
-            onDone={async () => {
-              await loadCustomerData();
-              return setShowList(true);
-            }}
-          />
+          <CardContainer>
+            <NewCreditForm
+              PageText={() => <CreditFormText>{i18n.t('payments.newCardDetails')}</CreditFormText>}
+              onDone={async () => {
+                await loadCustomerData();
+                return setShowList(true);
+              }}
+            />
+          </CardContainer>
         )}
         <ConfirmationPopup
           name="removeCard"
