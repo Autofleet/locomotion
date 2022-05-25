@@ -17,7 +17,7 @@ import {
 import i18n from '../../I18n';
 import PageHeader from '../../Components/PageHeader';
 import Mixpanel from '../../services/Mixpanel';
-import { sendEmailVerification, updateUser } from '../../context/user/api';
+import { updateUser } from '../../context/user/api';
 import { PageContainer } from '../styles';
 import { useStateValue } from '../..';
 
@@ -25,7 +25,7 @@ export default ({
   navigation, screenOptions, menuSide,
 }) => {
   const route = useRoute();
-  const [appState] = useStateValue()
+  const [appState] = useStateValue();
   const [onboardingState, dispatchOnboardingState] = useState({
     uploadPromise: false,
     firstName: '',
@@ -36,9 +36,6 @@ export default ({
   });
   const [showHeaderIcon, setShowHeaderIcon] = useState(true);
 
-  const sendEmail = () => {
-    sendEmailVerification(appState.userProfile.id)
-  }
 
   useEffect(() => {
     if (
@@ -175,12 +172,6 @@ export default ({
             onChangeText={inputChange('email')}
             value={onboardingState.email}
           />
-          <SubmitButton
-              data-test-id="FinishOnboardingButton"
-              onPress={() => sendEmail()}
-            >
-              {'email'}
-            </SubmitButton>
           <ErrorText>{onboardingState.error ? onboardingState.error : ''}</ErrorText>
           <SubmitContainer>
             <SubmitButton

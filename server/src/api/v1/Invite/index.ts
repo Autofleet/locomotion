@@ -1,4 +1,5 @@
 import { handleError, ResourceNotFoundError } from '@autofleet/errors';
+import moment from 'moment';
 import Router from '../../../lib/router';
 import sendMail from '../../../lib/mail';
 import emailTemplate from '../../../lib/mail/emailTemplate';
@@ -6,8 +7,7 @@ import logger from '../../../logger';
 import { Invite } from '../../../models';
 import UserService from '../../../lib/user';
 import { confirmInvite, getInvite } from '../../../lib/invite';
-import moment from 'moment';
-import { DEFAULT_INVITE_EXPIRE_TIME_HOURS } from '../../../../src/models/Invite/index.model';
+import { DEFAULT_INVITE_EXPIRE_TIME_HOURS } from '../../../models/Invite/index.model';
 
 const router = Router();
 
@@ -51,16 +51,17 @@ router.post('/send-email-verification', async (req, res) => {
       displayUrl: 'autofleet.io',
       privacyUrl: 'google.com',
       companyAddress: '24 herbert st the new york',
-      emailSender: 'me@autofleet.io'
+      emailSender: 'me@autofleet.io',
     }; /* get operations settings for email info based on user operation_id */
     const expireTime = operation.inviteExpireTime || DEFAULT_INVITE_EXPIRE_TIME_HOURS;
+    const expiryDate = moment(newInvite.sentAt).add(expireTime, 'hours').format('D MMMM YYYY [at] h:mm A');
     const emailHtml = emailTemplate(
       {
         inviteId: newInvite.id,
         logoUri: operation.logoUri,
         companyName: operation.clientName,
         firstName: user.firstName,
-        expiryDate: moment(newInvite.sentAt).add(expireTime, 'hours').format('D MMMM YYYY	[at] h:mm A'),
+        expiryDate,
         helpCenterUrl: operation.helpCenterUrl,
         termsUrl: operation.termsUrl,
         emailPreferencesUrl: operation.emailPreferencesUrl,
