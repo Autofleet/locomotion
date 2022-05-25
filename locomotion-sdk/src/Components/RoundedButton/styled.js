@@ -37,29 +37,33 @@ export const SubmitButtonText = styled.Text`
   ` : `
       color: ${colors(theme)[type][hollow ? 'hollow' : 'primary'].text}
   `)}
+
+
+  ${({ disabled, theme }) => (disabled ? `
+      color: ${theme.primaryButtonTextColor};
+  ` : '')}
 `;
 
 export const StyledButton = styled(Button)`
-  flex-direction: row;
-  border-radius: 24px;
-  width: ${({ width }) => (width || '100%')};
-  height: ${({ height }) => (height || '40px')};
-
-  ${({ marginTop }) => marginTop && `
-    margin-top: ${marginTop};
-  `}
-
   ${({
-    theme, hollow, type = 'confirm', useCancelTextButton,
+    disabled, theme, hollow, type = 'confirm', useCancelTextButton, width, height, marginTop,
   }) => `
-    background-color: ${colors(theme)[type][hollow ? 'hollow' : 'primary'].background};
-    ${(hollow) && `border: 2px solid ${colors(theme)[type].hollow.border};`}
-    ${(useCancelTextButton) && `
-      border: 2px solid transparent;
-    `}
-  `}
+      flex-direction: row;
+      border-radius: 8px;
+      width: ${width || '100%'};
+      height: ${height || '50px'};
 
-  ${({ disabled }) => disabled && 'opacity: 0.7;'}
+      background-color: ${colors(theme)[type][hollow ? 'hollow' : 'primary'].background};
+      ${marginTop ? `margin-top: ${marginTop};` : ''}
+      ${disabled ? `
+        background-color: ${theme.disabledColor};
+      ` : `
+        ${((hollow) ? `border: 2px solid ${colors(theme)[type].hollow.border};` : '')}
+        ${(useCancelTextButton) ? `
+          border: 2px solid transparent;
+        ` : ''}
+      `}
+    `}
 `;
 
 export const ButtonTextContainer = styled.View`

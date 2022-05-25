@@ -53,7 +53,7 @@ export default ({
 
     {!loading
       ? (
-        <CloseContainer onPress={cancelOffer} data-test-id="CancelOfferButton">
+        <CloseContainer noBg onPress={cancelOffer} data-test-id="CancelOfferButton">
           <ResetInputIcon />
         </CloseContainer>
       ) : null}

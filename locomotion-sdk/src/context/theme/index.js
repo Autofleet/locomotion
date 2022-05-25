@@ -19,24 +19,25 @@ const DARK_MODE_ENABLED = true;
 // }
 
 export const darkTheme = {
-  primaryColor: 'grey',
-  secondaryColor: '',
+  primaryColor: '#38a7fc',
+  secondaryColor: '#08902d',
+  primaryButtonTextColor: '#fff',
+  disabledColor: '#bcbcbc',
 
   textColor: '#fff',
-  // dividerColor: '#4a4c50',
   pageBackgroundColor: '#24292E',
-  buttonBackgroundColor: '#fff',
 };
 
 export const lightTheme = {
   primaryColor: '#38a7fc',
+  // primaryColor: '#f00',
+  secondaryColor: '#08902d',
   primaryButtonTextColor: '#fff',
+  disabledColor: '#bcbcbc',
 
-  secondaryColor: '',
+  /** for dark mode: */
   textColor: '#000',
-  // dividerColor: '#e0e0e0',
   pageBackgroundColor: '#fff',
-  buttonBackgroundColor: 'grey',
 };
 
 export const THEME_MOD = {
