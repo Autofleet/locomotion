@@ -13,7 +13,7 @@ const Card = () => {
 
   const onDone = async () => {
     const methods = await getPaymentMethods();
-    navigateBasedOnUser({ ...onboardingState, cards: methods }, true);
+    navigateBasedOnUser({ ...onboardingState, cards: methods });
   };
   return (
     <SafeView>
