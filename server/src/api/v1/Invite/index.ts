@@ -1,4 +1,3 @@
-import { handleError, ResourceNotFoundError } from '@autofleet/errors';
 import moment from 'moment';
 import Router from '../../../lib/router';
 import sendMail from '../../../lib/mail';
@@ -17,19 +16,22 @@ router.post('/:id/verify', async (req, res) => {
     const invite = await getInvite(id);
 
     if (!invite) {
-      throw new ResourceNotFoundError('Invite not found');
+      return res.status(404).json({ status: 'ERROR', error: 'Invite not found' });
     }
 
     const { userId } = invite;
     const user = await UserService.find(userId);
     if (!user) {
-      throw new ResourceNotFoundError('User not found');
+      return res.status(404).json({ status: 'ERROR', error: 'User not found' });
     }
 
     const response = await confirmInvite(invite, user);
+    if (!response) {
+      return res.status(404).json({ status: 'ERROR', error: 'Invitation expired' });
+    }
     return res.json(response);
   } catch (e) {
-    return handleError(e, res);
+    return res.status(500).json({ status: 'ERROR', error: e });
   }
 });
 
@@ -37,7 +39,7 @@ router.post('/send-email-verification', async (req, res) => {
   const { userId } = req.body;
   const user = await UserService.find(userId);
   if (!user) {
-    throw new ResourceNotFoundError('user not found');
+    return res.status(404).json({ status: 'ERROR', error: 'User not found' });
   }
   const newInvite = await Invite.create({ userId: user.id, sentAt: new Date() });
   try {
@@ -78,7 +80,7 @@ router.post('/send-email-verification', async (req, res) => {
     });
   } catch (e) {
     logger.error(e);
-    return handleError(e, res);
+    return res.status(500).json({ status: 'ERROR', error: e });
   }
 });
 
