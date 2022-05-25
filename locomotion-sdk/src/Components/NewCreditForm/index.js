@@ -21,7 +21,7 @@ export const NewCreditForm = ({ onDone, canSkip = false, PageText }) => {
   const [errorMessage, setErrorMessage] = useState('');
 
   const handlePayPress = async () => {
-    let customerData = await usePayments.customer;
+    let customerData = usePayments.customer;
     console.log('customerData', customerData);
     if (!usePayments.customer) {
       customerData = await usePayments.createCustomer();

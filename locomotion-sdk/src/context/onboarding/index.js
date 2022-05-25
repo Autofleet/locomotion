@@ -63,10 +63,7 @@ const authContainer = () => {
     try {
       const methods = await usePayments.getPaymentMethods();
       if (methods.length) {
-        setOnboardingState({
-          ...onboardingState,
-          cards: methods,
-        });
+        return methods;
       }
     } catch (e) {
       console.error(e);
@@ -124,8 +121,8 @@ const authContainer = () => {
           userProfile,
         },
       });
-      await getCardInfo();
-      navigateBasedOnUser(userProfile, true);
+      const cards = await getCardInfo();
+      navigateBasedOnUser({ ...userProfile, cards }, true);
       return true;
     } catch (e) {
       console.log('Bad vert with request', e);

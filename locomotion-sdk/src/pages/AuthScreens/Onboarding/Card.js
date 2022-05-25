@@ -5,12 +5,16 @@ import { SafeView } from './styles';
 import Header from './Header';
 import ScreenText from './ScreenText';
 import onboardingContext from '../../../context/onboarding';
+import PaymentsContext from '../../../context/payments';
 
 const Card = () => {
   const { navigateBasedOnUser, onboardingState } = onboardingContext.useContainer();
+  const { getPaymentMethods } = PaymentsContext.useContainer();
 
-  const onDone = async (cards) => {
-    navigateBasedOnUser({ ...onboardingState, cards });
+  const onDone = async () => {
+    const methods = await getPaymentMethods();
+    console.log(methods);
+    navigateBasedOnUser({ ...onboardingState, cards: methods }, true);
   };
   return (
     <SafeView>

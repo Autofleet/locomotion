@@ -13,7 +13,7 @@ import Card from './AuthScreens/Onboarding/Card';
 const Stack = createNativeStackNavigator();
 
 const AuthScreens = () => (
-  <Stack.Navigator initialRouteName="Start" screenOptions={{ headerShown: false, gestureEnabled: false }}>
+  <Stack.Navigator initialRouteName="Start" screenOptions={{ headerShown: false, gestureEnabled: false, animation: 'slide_from_left' }}>
     <Stack.Screen name="Start" component={StartScreen} />
     <Stack.Screen name="Phone" component={Phone} />
     <Stack.Screen name="Code" component={Code} />
