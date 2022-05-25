@@ -24,6 +24,9 @@ export default () => (
       <Route exact path="/login">
         <Login />
       </Route>
+      <Route exact path="/invite/:inviteId">
+        <Login />
+      </Route>
     </Switch>
   </Router>
 );
