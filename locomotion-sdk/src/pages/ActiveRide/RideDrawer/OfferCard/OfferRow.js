@@ -1,5 +1,4 @@
 import React from 'react';
-import { View } from 'react-native';
 import styled from 'styled-components';
 import moment from 'moment';
 import EtaText from './EtaText';
@@ -17,15 +16,15 @@ flex-direction: row;
 export const StopPointDot = styled.View`
   width: 10px;
   height: 10px;
-  background-color: ${({ origin }) => (origin ? '#6180c0' : '#08902d')};
+  background-color: ${({ origin, theme }) => (origin ? theme.primaryColor : theme.secondaryColor)};
   border-radius: 10px;
 `;
 
 
 export const PickupRow = styled.View`
-${address}
-border-bottom-color: #f2f2f2;
-border-bottom-width: 1;
+  border-bottom-color: #f2f2f2;
+  border-bottom-width: 1px;
+  ${address}
 `;
 
 const StopPointDotContainer = styled.View`
@@ -40,9 +39,9 @@ const StopPointDotContainer = styled.View`
 `;
 
 const StopPointDotTimeLine = styled.View`
-  width: 2;
+  width: 2px;
   flex: 1;
-  background-color: ${({ origin }) => (origin ? '#6180c0' : '#08902d')};
+  background-color: ${({ origin, theme }) => (origin ? theme.primaryColor : theme.secondaryColor)};
 `;
 
 
@@ -52,7 +51,7 @@ const AddressTextCont = styled.View`
 
 const AddressText = styled.Text`
   font-size: 14px;
-  color: ${({ pickup }) => (pickup ? '#6180c0' : '#08902d')};
+  color: ${({ pickup, theme }) => (pickup ? theme.primaryColor : theme.secondaryColor)};
   margin-start: 22;
   margin-end: 16;
 `;
@@ -80,7 +79,7 @@ const OfferRideEtaContainer = styled.TouchableOpacity`
     z-index: 999;
 `;
 const OfferRideEtaText = styled.Text`
-  font-size: 9;
+  font-size: 9px;
   color: #b5b5b5;
   text-align: center;
   margin-bottom: 5px;

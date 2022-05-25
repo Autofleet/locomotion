@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { useColorScheme, Appearance } from 'react-native';
 import { ThemeProvider, ThemeContext } from 'styled-components';
+import Config from 'react-native-config';
 
-// const DARK_MODE_ENABLED = false;
-//
-const FORCE_DARK_MODE = false;
-
-const DARK_MODE_ENABLED = true;
-
-// const FORCE_DARK_MODE = true;
+const {
+  FORCE_DARK_MODE = false,
+  DARK_MODE_ENABLED = true,
+  PRIMARY_COLOR = undefined,
+  SECONDARY_COLOR = undefined,
+} = Config;
 
 // interface LocomotionTheme {
 //   primaryColor: string;
@@ -19,24 +19,25 @@ const DARK_MODE_ENABLED = true;
 // }
 
 export const darkTheme = {
-  primaryColor: 'grey',
-  secondaryColor: '',
+  primaryColor: '#38a7fc',
+  secondaryColor: '#08902d',
+  primaryButtonTextColor: '#fff',
+  disabledColor: '#bcbcbc',
 
   textColor: '#fff',
-  // dividerColor: '#4a4c50',
   pageBackgroundColor: '#24292E',
-  buttonBackgroundColor: '#fff',
 };
 
 export const lightTheme = {
-  primaryColor: '#38a7fc',
+  primaryColor: PRIMARY_COLOR || '#38a7fc',
+  // primaryColor: '#f00',
+  secondaryColor: SECONDARY_COLOR || '#08902d',
   primaryButtonTextColor: '#fff',
+  disabledColor: '#bcbcbc',
 
-  secondaryColor: '',
+  /** for dark mode: */
   textColor: '#000',
-  // dividerColor: '#e0e0e0',
   pageBackgroundColor: '#fff',
-  buttonBackgroundColor: 'grey',
 };
 
 export const THEME_MOD = {

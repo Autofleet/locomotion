@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { FONT_STYLES, OPERATION_COLOR } from '../../../services/sharedStyles';
+import { FONT_STYLES } from '../../../services/sharedStyles';
 import Button from '../../../Components/Button';
 
 export const PageContainer = styled.View`
@@ -49,23 +49,14 @@ color: #333333;
 `;
 
 export const StartButton = styled(Button)`
-height: 30px;
-margin: 10px 0;
-height: 50px;
-border-radius: 8px;
-background-color: ${({ dark }) => (dark ? OPERATION_COLOR : 'white')};
-${({ dark }) => !dark && `border: 2px solid ${OPERATION_COLOR}`};
+  margin: 10px 0;
+  height: 50px;
+  border-radius: 8px;
+  ${({ theme, dark }) => `
+    background-color: ${dark ? theme.primaryColor : 'white'};
+    ${!dark ? `border: 2px solid ${theme.primaryColor}` : ''};
+  `}
 `;
-
-
-// margin: 10px 0;
-// height: 50px;
-// border-radius: 30px;
-// background-color: ${({ theme }) => theme.buttonBackgroundColor};
-// color: ${({ theme }) => theme.primaryColor};
-// ${({ theme }) => !theme.isDarkMode && 'border: 1px solid grey'};
-// box-shadow: 0px 3px 3px grey;
-
 
 export const ButtonText = styled.Text`
   color: ${({ dark }) => (dark ? '#ffffff' : '#333333')};

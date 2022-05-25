@@ -60,7 +60,7 @@ export default ({
   const Star = (props) => {
     const source = props.isOn ? lightStarIconSource : starIconSource;
     return (
-      <Button {...props} data-test-id="RattingButton"><StarIcon source={source} isOn={props.isOn} /></Button>
+      <Button noBg {...props} data-test-id="RattingButton"><StarIcon source={source} isOn={props.isOn} /></Button>
     );
   };
 

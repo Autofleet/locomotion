@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { BaseText } from '../../../Components/BaseText';
-import { ERROR_COLOR, FONT_STYLES, OPERATION_COLOR } from '../../../services/sharedStyles';
+import { ERROR_COLOR, FONT_STYLES } from '../../../services/sharedStyles';
 
 export const ErrorText = styled.Text`
   color: ${ERROR_COLOR};
@@ -34,9 +34,11 @@ color: #707070;
 `;
 
 export const ResendButton = styled(BaseText)`
-text-decoration: underline;
-text-decoration-color: ${OPERATION_COLOR};
-color: ${OPERATION_COLOR};
+  text-decoration: underline;
+  ${({ theme }) => `
+  text-decoration-color: ${theme.primaryColor};
+  color: ${theme.primaryColor};
+  `}
 `;
 
 export const ImageContainer = styled.View`
