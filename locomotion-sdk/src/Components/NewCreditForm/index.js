@@ -7,10 +7,10 @@ import i18n from '../../I18n';
 import PaymentsContext from '../../context/payments';
 import SubmitButton from '../RoundedButton';
 import {
-  CreditForm, CreditFormText, ErrorMessage, SkipSubmitContainer, SubmitContainer,
+  CreditForm, ErrorMessage, SkipSubmitContainer, SubmitContainer,
 } from './styled';
 
-export const NewCreditForm = ({ onDone, canSkip = false }) => {
+export const NewCreditForm = ({ onDone, canSkip = false, PageText }) => {
   const { confirmSetupIntent } = useStripe();
   const usePayments = PaymentsContext.useContainer();
 
@@ -47,7 +47,7 @@ export const NewCreditForm = ({ onDone, canSkip = false }) => {
   return (
     <>
       <CreditForm>
-        <CreditFormText>{i18n.t('payments.newCardDetails')}</CreditFormText>
+        <PageText />
         <MainCardForm
           postalCodeEnabled={false}
           placeholders={{
@@ -58,8 +58,7 @@ export const NewCreditForm = ({ onDone, canSkip = false }) => {
             textColor: '#000000',
           }}
           style={{
-            marginLeft: 16,
-            width: '90%',
+            width: '100%',
             height: 350,
             border: 0,
           }}

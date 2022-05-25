@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { getTogglePopupsState } from '../../context';
 import i18n from '../../I18n';
 import PageHeader from '../../Components/PageHeader';
-import { FullPageLoader, PageContent } from './styled';
+import { FullPageLoader, PageContent, CreditFormText } from './styled';
 import PaymentsContext from '../../context/payments';
 import ConfirmationPopup from '../../popups/ConfirmationPopup';
 import CreditCardsList from './credit-cards';
@@ -68,6 +68,7 @@ export default ({ navigation, menuSide }) => {
           />
         ) : (
           <NewCreditForm
+            PageText={() => <CreditFormText>{i18n.t('payments.newCardDetails')}</CreditFormText>}
             onDone={async () => {
               await loadCustomerData();
               return setShowList(true);

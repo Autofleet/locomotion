@@ -5,7 +5,7 @@ export const SkipSubmitContainer = styled.View`
 `;
 
 export const SubmitContainer = styled.View`
-    max-width: 90%;
+    max-width: 100%;
     justify-content: flex-end;
     align-self: center;
     margin-bottom: 30px;
@@ -18,14 +18,7 @@ export const ErrorMessage = styled.Text`
     font-weight: 500;
     font-size: 16px;
 `;
-export const CreditFormText = styled.Text`
-  color: #1e273d;
-  font-size: 14px;
-  text-align: left;
-  margin-left: 16px;
-  padding-bottom: 5px;
-`;
+
 export const CreditForm = styled.View`
     flex: 1;
-    margin-top: 32px;
 `;
