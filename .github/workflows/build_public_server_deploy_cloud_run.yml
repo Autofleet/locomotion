@@ -10,7 +10,6 @@ on:
 
 jobs:
   Build_Public_GCR:
-    if: github.ref == 'refs/heads/master'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
