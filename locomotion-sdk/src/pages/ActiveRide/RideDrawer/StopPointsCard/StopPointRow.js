@@ -18,7 +18,7 @@ flex-direction: row;
 export const StopPointDot = styled.View`
   width: 10px;
   height: 10px;
-  background-color: ${({ origin }) => (origin ? '#6180c0' : '#08902d')};
+  background-color: ${({ origin, theme }) => (origin ? theme.primaryColor : theme.secondaryColor)};
   border-radius: 10px;
   /* margin-top: 10; */
 `;

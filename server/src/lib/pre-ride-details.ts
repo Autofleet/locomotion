@@ -4,7 +4,7 @@ import logger from '../logger';
 
 const demandApi = axios.create({
   baseURL: process.env.AF_BACKEND_URL,
-  headers: { Authorization: process.env.AF_API_TOKEN },
+  headers: { Authorization: process.env.AF_REFRESH_TOKEN },
 });
 
 const getAfNearbyVehiclesWithEta = async (location) => {

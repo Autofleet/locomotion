@@ -15,9 +15,7 @@ const Button = props => (
         return props.onPress(e);
       }
     }}
-  >
-    {props.children}
-  </Container>
+  />
 );
 
 

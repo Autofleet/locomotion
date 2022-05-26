@@ -1,6 +1,6 @@
 import i18n from 'i18next';
 
-const en = require('./en.json');
+import en from './en.json';
 
 const ns: any = ['translation'];
 const defaultNS: any = 'translation';

@@ -34,7 +34,7 @@ export const SummarySubTitle = styled.Text`
   padding-bottom: 15px;
 `;
 
-export const CloseContainer = styled(Button)`
+export const CloseContainer = styled(Button).attrs({ noBg: true })`
     position: absolute;
     right: 15px;
     top: 15px;
@@ -69,10 +69,11 @@ export const SummaryItemIcon = styled.Image`
   height: 23px;
   margin-right: 20px;
   opacity: 0.9;
+  tint-color: ${({ theme }) => theme.primaryColor};
 `;
 
 export const SummaryItemTitle = styled.Text`
-  color: #4A83C2;
+  color: ${({ theme }) => theme.primaryColor};
   margin-top: 4px;
   font-size: 12;
   font-weight: 500;
@@ -111,10 +112,14 @@ export const SummaryStars = styled.View`
   margin-bottom: 10px;
 `;
 
-export const StarIcon = styled.Image(({ isOn }) => `
+export const StarIcon = styled.Image(({ isOn, theme }) => `
   padding: 10px 20px;
   display: flex;
   height: 30px;
   width: 30px;
-  opacity: ${isOn ? null : 0.4};
+  ${isOn ? `
+    tint-color: ${theme.primaryColor};
+  ` : `
+    opacity: 0.4;
+  `}
 `);

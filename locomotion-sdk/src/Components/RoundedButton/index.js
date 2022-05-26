@@ -49,6 +49,7 @@ const RoundedButton = ({
         ) : (
           <SubmitButtonText
             hollow={hollow}
+            disabled={disabled}
             type={type}
             useCancelTextButton={useCancelTextButton}
           >

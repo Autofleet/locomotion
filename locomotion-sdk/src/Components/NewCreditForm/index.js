@@ -3,14 +3,16 @@ import {
   CardForm as MainCardForm,
   useStripe,
 } from '@stripe/stripe-react-native';
+import { KeyboardAvoidingView, Platform } from 'react-native';
 import i18n from '../../I18n';
 import PaymentsContext from '../../context/payments';
 import SubmitButton from '../RoundedButton';
 import {
-  CreditForm, CreditFormText, ErrorMessage, SkipSubmitContainer, SubmitContainer,
+  CreditForm, ErrorMessage, SkipSubmitContainer, SubmitContainer,
 } from './styled';
 
-export const NewCreditForm = ({ onDone, canSkip = false }) => {
+// eslint-disable-next-line import/prefer-default-export
+export const NewCreditForm = ({ onDone, canSkip = false, PageText }) => {
   const { confirmSetupIntent } = useStripe();
   const usePayments = PaymentsContext.useContainer();
 
@@ -47,9 +49,9 @@ export const NewCreditForm = ({ onDone, canSkip = false }) => {
   return (
     <>
       <CreditForm>
-        <CreditFormText>{i18n.t('payments.newCardDetails')}</CreditFormText>
+        <PageText />
         <MainCardForm
-          postalCodeEnabled={false}
+          autofocus
           placeholders={{
             number: '4242 4242 4242 4242',
           }}
@@ -58,9 +60,8 @@ export const NewCreditForm = ({ onDone, canSkip = false }) => {
             textColor: '#000000',
           }}
           style={{
-            marginLeft: 16,
-            width: '90%',
-            height: 350,
+            width: '100%',
+            height: 300,
             border: 0,
           }}
           onFormComplete={(cardDetails) => {
@@ -76,22 +77,29 @@ export const NewCreditForm = ({ onDone, canSkip = false }) => {
         />
         <ErrorMessage>{errorMessage}</ErrorMessage>
       </CreditForm>
-      <SubmitContainer>
-        {canSkip ? (
-          <SkipSubmitContainer>
-            <SubmitButton onPress={() => onDone()} disabled={loading}>
-              {i18n.t('payments.skipForNow')}
-            </SubmitButton>
-          </SkipSubmitContainer>
-        ) : (<></>)}
-        <SubmitButton
-          onPress={() => handlePayPress()}
-          disabled={!formReady}
-          setLoading={setLoading}
-        >
-          {i18n.t('payments.submitCard')}
-        </SubmitButton>
-      </SubmitContainer>
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        keyboardVerticalOffset={100}
+      >
+        <SubmitContainer>
+          {canSkip ? (
+            <SkipSubmitContainer>
+              <SubmitButton onPress={() => onDone()} disabled={loading}>
+                {i18n.t('payments.skipForNow')}
+              </SubmitButton>
+            </SkipSubmitContainer>
+          ) : (<></>)}
+          <SubmitButton
+            onPress={() => handlePayPress()}
+            disabled={!formReady}
+            setLoading={setLoading}
+          >
+            {i18n.t('payments.submitCard')}
+          </SubmitButton>
+        </SubmitContainer>
+
+      </KeyboardAvoidingView>
+
     </>
   );
 };

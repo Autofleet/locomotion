@@ -16,17 +16,17 @@ export const DrawerButtonContainer = styled.View`
   min-height: 40px;
   width: 70%;
 `;
-export const styleScheme = {
+export const styleSchemed = theme => ({
   default: {
     buttonSize: 50,
     backgroundColor: '#f0f0f0',
     textColor: '#08355c',
-    buttonColor: '#08355c',
+    buttonColor: theme.primaryColor,
     borderRadius: 30,
   },
   verified: {
-    backgroundColor: '#08902d',
+    backgroundColor: theme.secondaryColor,
     textColor: '#ffffff',
     buttonColor: '#08902d',
   },
-};
+});

@@ -50,11 +50,6 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
 
-      - name: Check Af npm outdated
-        run: npm outdated $(npm ls --parseable | grep autofleet | sed 's|.*node_modules/\(.*\)|\1|') || true
-        env:
-          NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
-
       - name: init
         run: npm run init
         env:

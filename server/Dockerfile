@@ -12,7 +12,7 @@ RUN echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > .npmrc
 COPY package*.json ./
 COPY ./web-ui/package*.json ./web-ui/
 
-RUN npm install --only=production
+RUN npm install --only=production --no-optional
 # If you are building your code for production
 # RUN npm install --only=production
 

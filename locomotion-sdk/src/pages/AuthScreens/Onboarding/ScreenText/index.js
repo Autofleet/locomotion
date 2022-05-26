@@ -6,9 +6,11 @@ const ScreenText = ({ text, subText }) => (
     <Text>
       {text}
     </Text>
+    {subText && (
     <SubText>
       {subText}
     </SubText>
+    )}
   </TextContainer>
 );
 

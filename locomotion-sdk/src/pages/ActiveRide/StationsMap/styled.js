@@ -12,19 +12,21 @@ export const PointDot = styled.View`
   background-color: transparent;
 `;
 
+const getBg = ({ type, theme }) => {
+  if (type === 'pickup') {
+    return theme.primaryColor;
+  } if (type === 'dropoff') {
+    return theme.secondaryColor;
+  }
+  return '#c3c0c0';
+};
+
 export const StationDot = styled(PointDot)`
-  width: 18;
-  height: 18;
+  width: 18px;
+  height: 18px;
   border-radius: 20px;
-  background-color: #c3c0c0;
 
-  ${({ type }) => type === 'pickup' && `
-      background-color: #6180C0;
-    `}
-
-  ${({ type }) => type === 'dropoff' && `
-    background-color: #08902d;
-  `}
+  ${props => `background-color: ${getBg(props)};`}
 
   ${({ isGoogle }) => isGoogle && `
     shadow-opacity: 0;
@@ -37,15 +39,8 @@ export const MarkerToolTip = styled.View`
     padding: 3px 6px 3px 6px;
     border-radius: 4;
     box-shadow: 0 3px 6px #b5b5b5;
-    background-color: #c3c0c0;
 
-    ${({ type }) => type === 'pickup' && `
-      background-color: #6180C0;
-    `}
-
-    ${({ type }) => type === 'dropoff' && `
-      background-color: #08902d;
-    `}
+    ${props => `background-color: ${getBg(props)};`}
     align-items: center;
 `;
 

@@ -51,6 +51,7 @@ const Email = () => {
           subText={i18n.t('onboarding.pages.email.subText')}
         />
         <TextInput
+          autoFocus
           placeholder={i18n.t('onboarding.pages.email.placeholder')}
           onChangeText={onChange}
           value={email}

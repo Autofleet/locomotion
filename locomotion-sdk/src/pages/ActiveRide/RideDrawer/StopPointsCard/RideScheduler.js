@@ -23,7 +23,7 @@ const TimeItemContainer = styled.View`
 
 const TimeItem = styled(Button)`
   flex: 1;
-  background-color: ${({ selected }) => (selected ? '#6180c0' : '#ffffff')};
+  background-color: ${({ selected, theme }) => (selected ? theme.primaryColor : theme.pageBackgroundColor)};
   justify-content: center;
   align-items: center;
   border-width: 1px;
