@@ -8,6 +8,7 @@ import Home from './Home';
 import Settings from './Settings';
 import Login from './Login';
 import ServiceHours from './ServiceHours';
+import InviteCallback from './Invite';
 
 export default () => (
   <Router>
@@ -25,7 +26,7 @@ export default () => (
         <Login />
       </Route>
       <Route exact path="/invite/:inviteId">
-        <Login />
+        <InviteCallback />
       </Route>
     </Switch>
   </Router>

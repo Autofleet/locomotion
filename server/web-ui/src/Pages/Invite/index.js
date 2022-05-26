@@ -1,8 +1,6 @@
 import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
-
-import UsersManager from '../../contexts/usersContainer/manager';
 import { verifyUser } from '../../contexts/usersContainer/api';
 
 const STATUS_ERROR = 'ERROR';
@@ -28,13 +26,6 @@ const InviteCallback = (props) => {
 
   // should show loader
   return <div />;
-};
-InviteCallback.propTypes = {
-  match: PropTypes.shape({
-    params: PropTypes.shape({
-      inviteId: PropTypes.string,
-    }),
-  }).isRequired,
 };
 
 export default InviteCallback;
