@@ -9,7 +9,7 @@ const {
   AUTH_REFRESH_SECRET_KEY,
   AUTH_ACCESS_TOKEN_LIFETIME,
   AUTH_REFRESH_TOKEN_LIFETIME,
-  VERIFICATION_BYPASS_CODE = '0612',
+  VERIFICATION_BYPASS_CODE,
 } = process.env;
 
 export const createToken = async (payload, type = 'accessToken') => {
