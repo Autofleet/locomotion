@@ -28,7 +28,7 @@ const PhoneNumberInput = ({
       onChangeCountry={onChangeCountry}
       containerStyle={{
         width: '100%',
-        height: 60
+        height: 60,
       }}
       placeholder={i18n.t('onboarding.pages.phone.placeholder')}
       textContainerStyle={{
