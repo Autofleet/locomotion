@@ -9,6 +9,7 @@ export const SubmitContainer = styled.View`
     justify-content: flex-end;
     align-self: center;
     flex:1;
+    margin-bottom: 30px;
 `;
 
 export const ErrorMessage = styled.Text`

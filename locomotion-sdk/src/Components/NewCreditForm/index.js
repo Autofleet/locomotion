@@ -51,7 +51,7 @@ export const NewCreditForm = ({ onDone, canSkip = false, PageText }) => {
       <CreditForm>
         <PageText />
         <MainCardForm
-          postalCodeEnabled={false}
+          autofocus
           placeholders={{
             number: '4242 4242 4242 4242',
           }}
@@ -61,7 +61,7 @@ export const NewCreditForm = ({ onDone, canSkip = false, PageText }) => {
           }}
           style={{
             width: '100%',
-            height: 190,
+            height: 300,
             border: 0,
           }}
           onFormComplete={(cardDetails) => {
