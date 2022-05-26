@@ -1,4 +1,11 @@
 {
+  "invites": {
+    "success": {
+      "title": "Great!",
+      "text": "Your email address has been verified successfully",
+      "buttonText": "Continue to app"
+    }
+  },
   "navigation": {
     "logout": "Logout",
     "management": "Management",

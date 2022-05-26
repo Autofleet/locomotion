@@ -99,8 +99,6 @@
   },
   "proxy": "http://localhost:8085",
   "devDependencies": {
-    "babel-eslint": "^10.0.3",
-    "eslint-config-airbnb": "^19.0.4",
-    "eslint-config-airbnb-base": "^15.0.0"
+    "babel-eslint": "^10.0.3"
   }
 }
