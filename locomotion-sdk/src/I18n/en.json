@@ -232,5 +232,9 @@
             }
         }
     },
-    "currency": "€"
+  "currency": "€",
+  "operation": {
+    "name": "Locomotion",
+    "subName": "Rider app"
+  }
 }
