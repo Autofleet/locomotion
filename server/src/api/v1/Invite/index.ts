@@ -4,7 +4,7 @@ import sendMail from '../../../lib/mail';
 import emailTemplate from '../../../lib/mail/emailTemplate';
 import logger from '../../../logger';
 import { Invite } from '../../../models';
-import UserService from '../../../lib/user';
+import { userRepo } from '../../../repositories';
 import { confirmInvite, getInvite } from '../../../lib/invite';
 import { DEFAULT_INVITE_EXPIRE_TIME_HOURS } from '../../../models/Invite/index.model';
 
@@ -20,7 +20,7 @@ router.post('/:id/verify', async (req, res) => {
     }
 
     const { userId } = invite;
-    const user = await UserService.find(userId);
+    const user = await userRepo.find(userId);
     if (!user) {
       return res.status(404).json({ status: 'ERROR', error: 'User not found' });
     }
@@ -37,7 +37,7 @@ router.post('/:id/verify', async (req, res) => {
 
 router.post('/send-email-verification', async (req, res) => {
   const { userId } = req.body;
-  const user = await UserService.find(userId);
+  const user = await userRepo.find(userId);
   if (!user) {
     return res.status(404).json({ status: 'ERROR', error: 'User not found' });
   }

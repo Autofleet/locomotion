@@ -1,6 +1,6 @@
 import multer from 'multer';
 import Image from '../../../lib/cloudinary';
-import userService from '../../../lib/user';
+import { userRepo } from '../../../repositories';
 import authMiddleware from '../../../middlewares/auth';
 import Router from '../../../lib/router';
 
@@ -12,7 +12,7 @@ router.post('/', authMiddleware.permissionsMiddleWare, upload.single('avatar'), 
   const { userId } = req;
 
   try {
-    const user = await userService.find(userId);
+    const user = await userRepo.find(userId);
     if (!user.id) {
       throw new Error('could not find user');
     }

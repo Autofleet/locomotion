@@ -1,6 +1,6 @@
 import logger from '../../../logger';
 import Router from '../../../lib/router';
-import userService from '../../../lib/user';
+import { userRepo } from '../../../repositories';
 import afSdk from '../../../sdk';
 
 const router = Router();
@@ -21,7 +21,7 @@ router.get('/customer', async (req, res) => {
 });
 
 router.post('/customer', async (req, res) => {
-  const customerData = await userService.find(req.userId);
+  const customerData = await userRepo.find(req.userId);
   if (!customerData) {
     logger.info(`Error - user not found ${req.userId}`);
   }

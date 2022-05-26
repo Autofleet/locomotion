@@ -1,11 +1,22 @@
 import {
-  Table, Column, Model, PrimaryKey, DataType,
+  Table, Column, Model, PrimaryKey, DataType, Scopes,
 } from 'sequelize-typescript';
 
 @Table({
   tableName: 'users',
   paranoid: true,
 })
+@Scopes(() => ({
+  userScope() {
+    // TODO: scope by user operationId
+    // return {
+    //   where: {
+    //     operationId: user.operationId,
+    //   },
+    // };
+    return {};
+  },
+}))
 export default class User extends Model {
   @PrimaryKey
   @Column({

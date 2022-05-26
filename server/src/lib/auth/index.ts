@@ -1,103 +1,62 @@
 /* eslint-disable class-methods-use-this */
 import jwt from 'jsonwebtoken';
 import shortid from 'shortid';
-import Nexmo from '../nexmo';
-// const Nexmo = require('../nexmo');
-import { User, Verification } from '../../models';
-import userService from '../user';
+import { userRepo } from '../../repositories';
+import Twilio from '../services/Twilio';
 
 const {
   AUTH_ACCESS_SECRET_KEY,
   AUTH_REFRESH_SECRET_KEY,
   AUTH_ACCESS_TOKEN_LIFETIME,
   AUTH_REFRESH_TOKEN_LIFETIME,
-  VERIFICATION_BYPASS_CODE,
+  VERIFICATION_BYPASS_CODE = '0612',
 } = process.env;
 
-class Auth {
-  user: any;
+export const createToken = async (payload, type = 'accessToken') => {
+  const jwtid = shortid.generate();
+  let expiresIn = AUTH_ACCESS_TOKEN_LIFETIME || 10000;
+  let authToken = AUTH_ACCESS_SECRET_KEY || '1234';
 
-  verification: any;
-
-  nexmo: any;
-
-  constructor(userModel = User, verificationModel = Verification) {
-    this.user = userModel;
-    this.verification = verificationModel;
-    this.nexmo = Nexmo;
+  if (type === 'refreshToken') {
+    authToken = AUTH_REFRESH_SECRET_KEY || '5678';
+    expiresIn = AUTH_REFRESH_TOKEN_LIFETIME || 1000000;
   }
 
-  async createToken(payload, type = 'accessToken') {
-    const jwtid = shortid.generate();
-    let expiresIn = AUTH_ACCESS_TOKEN_LIFETIME || 10000;
-    let authToken = AUTH_ACCESS_SECRET_KEY || '1234';
+  const token = jwt.sign(payload, authToken, {
+    expiresIn,
+    jwtid,
+  });
 
-    if (type === 'refreshToken') {
-      authToken = AUTH_REFRESH_SECRET_KEY || '5678';
-      expiresIn = AUTH_REFRESH_TOKEN_LIFETIME || 1000000;
-    }
+  return { jwtid, token };
+};
 
-    const token = jwt.sign(payload, authToken, {
-      expiresIn,
-      jwtid,
-    });
-
-    return { jwtid, token };
+export const refreshValidator = async (refreshToken) => {
+  let userPayload;
+  try {
+    userPayload = jwt.verify(refreshToken, AUTH_REFRESH_SECRET_KEY);
+  } catch (e) {
+    throw new Error('Refresh token is not valid');
   }
 
-  async refreshValidator(refreshToken) {
-    let userPayload;
-    try {
-      userPayload = jwt.verify(refreshToken, AUTH_REFRESH_SECRET_KEY);
-    } catch (e) {
-      throw new Error('Refresh token is not valid');
-    }
+  const foundUser = await userRepo.findByRefreshTokenId(userPayload.jti);
+  return foundUser;
+};
 
-    const foundUser = await userService.findByRefreshTokenId(userPayload.jti);
-    return foundUser;
+export const send = async (phoneNumber: string, operationId: string): Promise<boolean> => {
+  const [user] = await userRepo.findOrCreate(phoneNumber, operationId);
+
+  if (user) {
+    await Twilio.send(`+${phoneNumber}`);
+    return true;
   }
 
-  async createVerificationCode(phoneNumber, operationId) {
-    const user = await this.user.findOrCreate({
-      where: { phoneNumber, operationId },
-      defaults: { phoneNumber, operationId },
-    });
+  return false;
+};
 
-    const externalCode = `${Math.round(Math.random() * 9999)}0000`.substring(0, 4);
-
-    if (user) {
-      await this.nexmo.sendSms(phoneNumber, `Your verification code is ${externalCode}`);
-
-      await this.verification.destroy({
-        where: { phoneNumber },
-      });
-
-      const verification = await this.verification.create({
-        phoneNumber,
-        externalCode,
-        operationId,
-      });
-
-      return verification;
-    }
-
-    return false;
+export const verify = (phoneNumber, externalCode) => {
+  if (VERIFICATION_BYPASS_CODE && externalCode === VERIFICATION_BYPASS_CODE) {
+    return true;
   }
 
-  async checkVerificationCode(phoneNumber, externalCode, operationId) {
-    const verification = await this.verification.findOne({ where: { phoneNumber, externalCode, operationId } });
-
-    if (verification) {
-      await verification.destroy();
-      return true;
-    }
-
-    if (VERIFICATION_BYPASS_CODE && externalCode === VERIFICATION_BYPASS_CODE) {
-      return true;
-    }
-
-    return false;
-  }
-}
-
-export default new Auth();
+  return Twilio.verify(phoneNumber, externalCode);
+};

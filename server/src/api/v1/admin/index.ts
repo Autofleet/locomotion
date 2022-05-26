@@ -1,5 +1,7 @@
 import Router from '../../../lib/router';
-import authService from '../../../lib/auth';
+import {
+  createToken
+} from '../../../lib/auth';
 import { authAdmin, adminPermissionsMiddleWare } from '../../../lib/auth/admin';
 import users from './users';
 import settings from './settings';
@@ -17,7 +19,7 @@ router.post('/auth', async (req, res) => {
     });
   }
 
-  const { token } = await authService.createToken({
+  const { token } = await createToken({
     userId: process.env.ADMIN_USER_ID || '1',
   });
 
