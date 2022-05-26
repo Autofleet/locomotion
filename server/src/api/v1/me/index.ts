@@ -1,5 +1,5 @@
 import Router from '../../../lib/router';
-import userService from '../../../lib/user';
+import { userRepo } from '../../../repositories';
 import SettingsService from '../../../lib/settings';
 import TimeSlotsService from '../../../lib/time-slots';
 
@@ -16,17 +16,17 @@ router.use('/image-upload', uploadImage);
 router.use('/payments', payments);
 
 router.get('/', async (req, res) => {
-  const userProfile = await userService.find(req.userId);
+  const userProfile = await userRepo.find(req.userId);
   res.json(userProfile);
 });
 
 router.patch('/', async (req, res) => {
-  const userProfile = await userService.update(req.userId, req.body);
+  const userProfile = await userRepo.update(req.userId, req.body);
   res.json(userProfile);
 });
 
 router.post('/logout', async (req, res) => {
-  const userProfile = await userService.update(req.userId, { refreshTokenId: null });
+  const userProfile = await userRepo.update(req.userId, { refreshTokenId: null });
   res.json({
     status: userProfile ? 'OK' : 'FAIL',
   });

@@ -1,5 +1,6 @@
 server/.env
 client/Locomotion/.env
+examples/server/.env
 server/mod-germany.app.yaml
 server/dist
 server/web-ui/build

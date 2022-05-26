@@ -1,6 +1,8 @@
+import { userRepo } from '../../../repositories';
 import Router from '../../../lib/router';
-import authService from '../../../lib/auth';
-import userService from '../../../lib/user';
+import {
+  verify, send, createToken, refreshValidator,
+} from '../../../lib/auth';
 import settingService from '../../../lib/settings';
 import logger from '../../../logger';
 
@@ -9,7 +11,7 @@ const router = Router();
 router.post('/', async (req, res) => {
   const { phoneNumber } = req.body;
   const { headerOperationId } = req;
-  const response = await authService.createVerificationCode(phoneNumber, headerOperationId);
+  const response = await send(phoneNumber, headerOperationId);
   res.json({
     success: !!response,
   });
@@ -19,21 +21,21 @@ router.post('/vert', async (req, res) => {
   const { phoneNumber, code } = req.body;
   const { headerOperationId } = req;
   try {
-    const response = await authService.checkVerificationCode(phoneNumber, code, headerOperationId);
+    const response = await verify(phoneNumber, code);
     let userProfile;
 
     if (response) {
-      [userProfile] = await userService.findByPhoneNumber(phoneNumber);
+      userProfile = await userRepo.findByPhoneNumber(phoneNumber);
     } else {
       return res.json({ status: 'FAIL' });
     }
 
-    const { token: accessToken } = await authService.createToken({
+    const { token: accessToken } = await createToken({
       userId: userProfile.id,
       operationId: userProfile.operationId,
     });
 
-    const { token: refreshToken, jwtid } = await authService.createToken({
+    const { token: refreshToken, jwtid } = await createToken({
       headerOperationId,
       userId: userProfile.id,
     }, 'refreshToken');
@@ -67,10 +69,10 @@ router.post('/refresh', async (req, res) => {
   let result = {};
   const { refreshToken } = req.body;
   try {
-    const userProfile = await authService.refreshValidator(refreshToken);
+    const userProfile = await refreshValidator(refreshToken);
     let accessToken = null;
     if (userProfile) {
-      const { token } = await authService.createToken({
+      const { token } = await createToken({
         userId: userProfile.id,
       });
       accessToken = token;
