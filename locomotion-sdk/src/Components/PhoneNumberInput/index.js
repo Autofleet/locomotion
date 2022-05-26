@@ -28,6 +28,7 @@ const PhoneNumberInput = ({
       onChangeCountry={onChangeCountry}
       containerStyle={{
         width: '100%',
+        height: 60
       }}
       placeholder={i18n.t('onboarding.pages.phone.placeholder')}
       textContainerStyle={{
@@ -38,6 +39,7 @@ const PhoneNumberInput = ({
       }}
       textInputStyle={{
         color: error ? ERROR_COLOR : '#333333',
+        height: 60,
       }}
       flagButtonStyle={{
         backgroundColor: '#f1f2f6',

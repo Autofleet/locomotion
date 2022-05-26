@@ -6,9 +6,9 @@ const ScreenText = ({ text, subText }) => (
     <Text>
       {text}
     </Text>
-    <SubText>
+    {subText && <SubText>
       {subText}
-    </SubText>
+    </SubText>}
   </TextContainer>
 );
 

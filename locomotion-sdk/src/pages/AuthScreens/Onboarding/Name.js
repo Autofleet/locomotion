@@ -13,6 +13,7 @@ const Name = () => {
     onboardingState, updateState, updateUserInfo, navigateBasedOnUser,
   } = onboardingContext.useContainer();
   const [showErrorText, setShowErrorText] = useState(false);
+  const [focusedField, setFocusedField] = useState('firstName');
 
   const inputChange = field => (value) => {
     setShowErrorText(false);

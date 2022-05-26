@@ -292,7 +292,7 @@ dependencies {
     }
 
     implementation project(':react-native-linear-gradient')
-    
+    implementation 'com.google.android.material:material:1.6.0'
     implementation project(':react-native-mixpanel')
     if (enableHermes) {
         def hermesPath = "../../node_modules/hermes-engine/android/";
