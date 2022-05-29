@@ -5,4 +5,5 @@ export const ROUTES = {
   ACCOUNT: 'Account',
   CONTACT_US: 'ContactUs',
   LOGOUT: 'Logout',
+  WEBVIEW: 'webview',
 };

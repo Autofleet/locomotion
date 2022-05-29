@@ -26,11 +26,12 @@ const Main = () => {
         },
       }}
     >
-      <Drawer.Screen name={ROUTES.HOME} component={ROUTES_COMPS.HOME} />
-      <Drawer.Screen name={ROUTES.RIDE_HISTORY} component={ROUTES_COMPS.RIDE_HISTORY} />
-      <Drawer.Screen name={ROUTES.PAYMENT} component={ROUTES_COMPS.PAYMENT} />
-      <Drawer.Screen name={ROUTES.ACCOUNT} component={ROUTES_COMPS.ACCOUNT} />
-      <Drawer.Screen name={ROUTES.CONTACT_US} component={ROUTES_COMPS.CONTACT_US} />
+      <Drawer.Screen name={ROUTES.HOME} component={ROUTES_COMPS[ROUTES.HOME]} />
+      <Drawer.Screen name={ROUTES.RIDE_HISTORY} component={ROUTES_COMPS[ROUTES.RIDE_HISTORY]} />
+      <Drawer.Screen name={ROUTES.PAYMENT} component={ROUTES_COMPS[ROUTES.PAYMENT]} />
+      <Drawer.Screen name={ROUTES.ACCOUNT} component={ROUTES_COMPS[ROUTES.ACCOUNT]} />
+      <Drawer.Screen name={ROUTES.CONTACT_US} component={ROUTES_COMPS[ROUTES.CONTACT_US]} />
+      <Drawer.Screen name={ROUTES.WEBVIEW} component={ROUTES_COMPS[ROUTES.WEBVIEW]} />
       <Drawer.Screen
         name={ROUTES.LOGOUT}
         component={(({ navigation }) => {
