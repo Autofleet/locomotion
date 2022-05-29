@@ -21,3 +21,7 @@ export const Container = styled.View`
   align-items: center;
   padding: ${padding};
 `;
+
+export const LogoutContainer = styled.TouchableOpacity`
+  width: 90%;
+`;
