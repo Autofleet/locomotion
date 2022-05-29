@@ -25,8 +25,8 @@ const authContainer = () => {
     phoneNumber: '',
     firstName: '',
     lastName: '',
-    avatar: '',
     email: '',
+    avatar: '',
     cards: null,
   };
   const [onboardingState, setOnboardingState] = useState(initialState);
@@ -41,7 +41,7 @@ const authContainer = () => {
   const navigateToScreen = screen => navigation.navigate('AuthScreens', { screen });
 
 
-  const navigateBasedOnUser = (user, complete) => {
+  const navigateBasedOnUser = (user) => {
     setOnboardingState(user);
     let unfinishedScreen;
     for (const key of Object.keys(initialState)) {
@@ -50,13 +50,16 @@ const authContainer = () => {
         break;
       }
     }
-    if (unfinishedScreen) {
-      navigateToScreen(unfinishedScreen);
-    } else if (complete) {
-      return navigation.navigate('MainApp');
+    if (!user.didCompleteOnboarding) {
+      if (unfinishedScreen) {
+        navigateToScreen(unfinishedScreen);
+      } else {
+        return navigateToScreen(keyToScreen.welcome);
+      }
     } else {
-      return navigateToScreen(keyToScreen.welcome);
+      return navigation.navigate('MainApp');
     }
+    
   };
 
   const getCardInfo = async () => {
@@ -122,7 +125,7 @@ const authContainer = () => {
         },
       });
       const cards = await getCardInfo();
-      navigateBasedOnUser({ ...userProfile, cards }, true);
+      navigateBasedOnUser({ ...userProfile, cards });
       return true;
     } catch (e) {
       console.log('Bad vert with request', e);
