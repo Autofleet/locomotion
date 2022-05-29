@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useContext, useEffect } from 'react';
 import {
   Text,
   View,
@@ -8,9 +8,17 @@ import { useStateValue } from '../../context/main';
 import needOnboarding from './needOnBoarding';
 import Auth from '../../services/auth';
 import { getUserDetails } from '../../context/user/api';
+import { UserContext } from '../../context/user';
 
 const AuthLoadingScreen = ({ navigation }) => {
+  const { setUser } = useContext(UserContext);
   const [appState, dispatch] = useStateValue();
+
+  const saveUser = (userProfile) => {
+    setUser(userProfile);
+    return AppSettings.update({ userProfile });
+  };
+
   const init = () => {
     async function getFromStorage() {
       const payload = await AppSettings.getSettings();
@@ -36,7 +44,7 @@ const AuthLoadingScreen = ({ navigation }) => {
           pushUserId: userData.pushUserId,
         };
 
-        await AppSettings.update({ userProfile });
+        await saveUser(userProfile);
 
         const nonUserNav = (screen) => {
           navigation.replace('AuthScreens', { screen, params: { showHeaderIcon: false } });

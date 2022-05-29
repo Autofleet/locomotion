@@ -3,13 +3,9 @@ import { View } from 'react-native';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { DrawerContentComponent, DrawerLabel } from '../Components/Drawer';
 import { Context as ThemeContext } from '../context/theme';
-import ActiveRide from './ActiveRide';
-import RideHistory from './RideHistory';
-import Payments from './Payments';
-import Account from './Account';
-import ContactUs from './ContactUs';
 import Auth from '../services/auth';
-import { ROUTES } from './consts';
+import { ROUTES_COMPS } from './consts';
+import { ROUTES } from './routes';
 
 const Drawer = createDrawerNavigator();
 
@@ -30,11 +26,11 @@ const Main = () => {
         },
       }}
     >
-      <Drawer.Screen name={ROUTES.HOME} component={ActiveRide} />
-      <Drawer.Screen name={ROUTES.RIDE_HISTORY} component={RideHistory} />
-      <Drawer.Screen name={ROUTES.PAYMENT} component={Payments} />
-      <Drawer.Screen name={ROUTES.ACCOUNT} component={Account} />
-      <Drawer.Screen name={ROUTES.CONTACT_US} component={ContactUs} />
+      <Drawer.Screen name={ROUTES.HOME} component={ROUTES_COMPS.HOME} />
+      <Drawer.Screen name={ROUTES.RIDE_HISTORY} component={ROUTES_COMPS.RIDE_HISTORY} />
+      <Drawer.Screen name={ROUTES.PAYMENT} component={ROUTES_COMPS.PAYMENT} />
+      <Drawer.Screen name={ROUTES.ACCOUNT} component={ROUTES_COMPS.ACCOUNT} />
+      <Drawer.Screen name={ROUTES.CONTACT_US} component={ROUTES_COMPS.CONTACT_US} />
       <Drawer.Screen
         name={ROUTES.LOGOUT}
         component={(({ navigation }) => {

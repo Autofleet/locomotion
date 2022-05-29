@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import * as yup from 'yup';
 import { useRoute } from '@react-navigation/native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { View } from 'react-native';
+import { ROUTES } from '../routes';
 import AppSettings from '../../services/app-settings';
 
 import ThumbnailPicker from '../../Components/ThumbnailPicker';
@@ -12,20 +12,20 @@ import {
   Text, ErrorText,
 } from '../Login/styled';
 import {
-  Container, FullNameContainer, NameContainer, SubmitContainer,
+  Container, FullNameContainer, LogoutContainer, NameContainer, SubmitContainer,
 } from './styled';
 import i18n from '../../I18n';
 import PageHeader from '../../Components/PageHeader';
 import Mixpanel from '../../services/Mixpanel';
 import { updateUser } from '../../context/user/api';
 import { PageContainer } from '../styles';
-import { useStateValue } from '../..';
+import { UserContext } from '../../context/user';
 
 export default ({
-  navigation, screenOptions, menuSide,
+  navigation, menuSide,
 }) => {
+  const { setUser } = useContext(UserContext);
   const route = useRoute();
-  const [appState] = useStateValue();
   const [onboardingState, dispatchOnboardingState] = useState({
     uploadPromise: false,
     firstName: '',
@@ -62,6 +62,11 @@ export default ({
       ...onboardingState,
       ...userProfile,
     });
+  };
+
+  const saveUser = (userProfile) => {
+    setUser(userProfile);
+    return AppSettings.update({ userProfile });
   };
 
   const submit = async () => {
@@ -106,7 +111,7 @@ export default ({
       });
       return;
     }
-    AppSettings.update({ userProfile });
+    saveUser(userProfile);
     if (!response.data.active) {
       return navigation.navigate('Lock');
     }
@@ -181,6 +186,13 @@ export default ({
               {i18n.t('onboarding.submit')}
             </SubmitButton>
           </SubmitContainer>
+          <LogoutContainer
+            onPress={() => {
+              navigation.navigate(ROUTES.LOGOUT);
+            }}
+          >
+            <ErrorText>{i18n.t('menu.logout')}</ErrorText>
+          </LogoutContainer>
         </Container>
 
       </KeyboardAwareScrollView>
