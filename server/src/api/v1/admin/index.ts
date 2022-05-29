@@ -1,6 +1,6 @@
 import Router from '../../../lib/router';
 import {
-  createToken
+  createToken,
 } from '../../../lib/auth';
 import { authAdmin, adminPermissionsMiddleWare } from '../../../lib/auth/admin';
 import users from './users';
