@@ -4,7 +4,7 @@ import logger from '../../logger';
 const SENDGRID_KEY = process.env.SENDGRID_API_KEY;
 MailService.setApiKey(SENDGRID_KEY);
 
-export default async (to: string, from: string, html: string, subject: string) => {
+const sendMail = async (to: string, from: string, html: string, subject: string) => {
   logger.info(
     'Verification Email sending to new user',
     {
@@ -25,3 +25,5 @@ export default async (to: string, from: string, html: string, subject: string) =
     },
   );
 };
+
+export default sendMail;

@@ -2,10 +2,7 @@ import app from '../../../../app';
 import { User, Verification } from '../../../../models';
 const request = require('supertest');
 const uuid = require('uuid');
-
-jest.mock('../../../../lib/nexmo', () => ({
-  sendSms: jest.fn(() => true),
-}));
+import '../../../mocks';
 
 const createUserData = () => ({
   phoneNumber: '972501234567',

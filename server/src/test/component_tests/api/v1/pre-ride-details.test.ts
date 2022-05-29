@@ -1,9 +1,5 @@
 const request = require('supertest');
-
-jest.mock('../../../../lib/nexmo', () => ({
-  sendSms: jest.fn(() => true),
-}));
-
+import '../../../mocks';
 describe('Pre ride details API', () => {
   const baseUrl = '/api/v1';
 

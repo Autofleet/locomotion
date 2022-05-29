@@ -1,21 +1,18 @@
 import app from '../../../../app';
 import { Ride, User, Verification } from '../../../../models';
-
+import '../../../mocks';
 const uuid = require('uuid');
 const request = require('supertest');
 
 const baseUrl = '/api/v1';
 
-jest.mock('../../../../lib/nexmo', () => ({
-  sendSms: jest.fn(() => true),
-}));
+
 
 const createUserAndLogin = async () => {
   const operationId = uuid.v4();
   await User.create({
     phoneNumber: '972501234567', firstName: 'GUY', lastName: 'Serfaty', operationId,
   });
-  await Verification.create({ phoneNumber: '972501234567', externalCode: '1234', operationId });
   const response = await request(app).post(`${baseUrl}/login/vert`)
     .send({ phoneNumber: '972501234567', code: '1234' })
     .set('x-loco-op-id', operationId);

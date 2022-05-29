@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 import { Twilio } from 'twilio';
 import logger from '../../../logger';
 
@@ -7,6 +8,7 @@ const accountSid = process.env.TWILIO_ACCOUNT_SID;
 const authToken = process.env.TWILIO_AUTH_TOKEN;
 const serviceId = process.env.TWILIO_SERVICE_ID;
 
+const formatPhoneNumber = (phone: string): string => (phone.includes('+') ? phone : `+${phone}`);
 class TwilioService {
   private client: Twilio;
 
@@ -14,13 +16,15 @@ class TwilioService {
     this.client = new Twilio(accountSid, authToken);
   }
 
-  send = async (phoneNumber, channel = 'sms') => {
+  send = async (phoneNumber: string, channel = 'sms') => {
+    phoneNumber = formatPhoneNumber(phoneNumber);
     await this.client.verify.services(serviceId)
       .verifications
       .create({ to: phoneNumber, channel });
   };
 
-  verify = async (phoneNumber, code) => {
+  verify = async (phoneNumber: string, code: string) => {
+    phoneNumber = formatPhoneNumber(phoneNumber);
     try {
       const { valid } = await this.client.verify.services(serviceId)
         .verificationChecks
@@ -29,6 +33,8 @@ class TwilioService {
     } catch (e) {
       logger.error('error while trying verify code', {
         error: e,
+        phoneNumber,
+        code,
       });
       return false;
     }
