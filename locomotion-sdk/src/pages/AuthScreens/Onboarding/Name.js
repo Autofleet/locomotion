@@ -22,7 +22,7 @@ const Name = () => {
 
   return (
     <SafeView>
-      <Header title={i18n.t('onboarding.pages.name.title')} />
+      <Header title={i18n.t('onboarding.pages.name.title')} page={'name'}/>
       <PageContainer>
         <ScreenText
           text={i18n.t('onboarding.pages.name.text')}

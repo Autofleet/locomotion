@@ -17,7 +17,7 @@ const Card = () => {
   };
   return (
     <SafeView>
-      <Header title={i18n.t('onboarding.pages.code.title')} />
+      <Header title={i18n.t('onboarding.pages.code.title')} page={'card'}/>
       <AddCard
         onDone={onDone}
         canSkip={false}

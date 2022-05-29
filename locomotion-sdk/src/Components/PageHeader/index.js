@@ -7,9 +7,10 @@ import {
 const HamburgerIconSource = require('../../assets/menu.png');
 
 const PageHeader = ({
-  title, icon, onIconPress, iconSide, displayIcon, width, height,
+  title, icon, onIconPress, iconSide, displayIcon, width, height, SkipButton
 }) => (
   <Header>
+    {SkipButton && <SkipButton />}
     <HeaderText>{title}</HeaderText>
     {displayIcon !== false
       ? (

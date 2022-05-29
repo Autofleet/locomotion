@@ -30,6 +30,12 @@ const authContainer = () => {
     cards: null,
   };
   const [onboardingState, setOnboardingState] = useState(initialState);
+  const [requiredOnboarding] = useState({
+    name: true,
+    email: true,
+    avatar: false,
+    cards: false,
+  })
 
   const updateState = (field, value) => {
     setOnboardingState({
@@ -140,6 +146,7 @@ const authContainer = () => {
     onVert,
     updateUserInfo,
     navigateBasedOnUser,
+    requiredOnboarding
   };
 };
 export default createContainer(authContainer);

@@ -26,7 +26,7 @@ const Avatar = () => {
 
   return (
     <SafeView>
-      <Header title={i18n.t('onboarding.pages.avatar.title')} />
+      <Header title={i18n.t('onboarding.pages.avatar.title')} page={'avatar'}/>
       <PageContainer>
         <ScreenText
           text={i18n.t('onboarding.pages.avatar.text')}

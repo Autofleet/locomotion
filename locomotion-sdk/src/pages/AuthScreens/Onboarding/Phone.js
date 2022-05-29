@@ -36,7 +36,7 @@ const Phone = () => {
 
   return (
     <SafeView>
-      <Header title={i18n.t('onboarding.pages.phone.title')} />
+      <Header title={i18n.t('onboarding.pages.phone.title')} page={'phone'} />
       <PageContainer>
         <ScreenText
           text={i18n.t('onboarding.pages.phone.text')}

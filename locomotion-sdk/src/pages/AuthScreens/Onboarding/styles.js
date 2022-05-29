@@ -1,3 +1,4 @@
+import Button from '../../../Components/Button';
 import styled from 'styled-components';
 import { BaseText } from '../../../Components/BaseText';
 import { ERROR_COLOR, FONT_STYLES } from '../../../services/sharedStyles';
@@ -51,4 +52,9 @@ export const Name = styled(BaseText)`
 font-size: ${FONT_STYLES.SIZE.EXTRA_LARGE};
 margin: 20px;
 font-weight: 600;
+`;
+
+export const SkipButton = styled(Button)`
+color: #24aaf2;
+font-size: ${FONT_STYLES.SIZE.MEDIUM};
 `;
