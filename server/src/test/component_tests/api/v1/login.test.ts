@@ -1,8 +1,9 @@
+import '../../../mocks'
 import app from '../../../../app';
 import { User, Verification } from '../../../../models';
 const request = require('supertest');
 const uuid = require('uuid');
-import '../../../mocks';
+
 
 const createUserData = () => ({
   phoneNumber: '972501234567',

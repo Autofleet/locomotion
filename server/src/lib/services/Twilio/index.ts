@@ -12,11 +12,20 @@ const formatPhoneNumber = (phone: string): string => (phone.includes('+') ? phon
 class TwilioService {
   private client: Twilio;
 
-  constructor() {
-    if (accountSid && authToken) {
-      this.client = new Twilio(accountSid, authToken);
-    }
+  private static instance;
+
+  private constructor() {
+    this.client = new Twilio(accountSid, authToken);
   }
+
+  static getInstance = (): TwilioService => {
+    if (this.instance) {
+      return this.instance;
+    }
+
+    this.instance = new TwilioService();
+    return this.instance;
+  };
 
   send = async (phoneNumber: string, channel = 'sms') => {
     phoneNumber = formatPhoneNumber(phoneNumber);
@@ -43,4 +52,4 @@ class TwilioService {
   };
 }
 
-export default new TwilioService();
+export default TwilioService;

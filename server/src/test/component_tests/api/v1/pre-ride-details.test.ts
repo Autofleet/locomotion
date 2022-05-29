@@ -1,5 +1,5 @@
+import '../../../mocks'
 const request = require('supertest');
-import '../../../mocks';
 describe('Pre ride details API', () => {
   const baseUrl = '/api/v1';
 

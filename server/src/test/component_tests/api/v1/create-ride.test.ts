@@ -1,6 +1,7 @@
+import '../../../mocks';
 import app from '../../../../app';
 import { Ride, User, Verification } from '../../../../models';
-import '../../../mocks';
+
 const uuid = require('uuid');
 const request = require('supertest');
 

@@ -46,7 +46,7 @@ export const send = async (phoneNumber: string, operationId: string): Promise<bo
   const [user] = await userRepo.findOrCreate(phoneNumber, operationId);
 
   if (user) {
-    await Twilio.send(phoneNumber);
+    await Twilio.getInstance().send(phoneNumber);
     return true;
   }
 
@@ -58,5 +58,5 @@ export const verify = (phoneNumber, externalCode) => {
     return true;
   }
 
-  return Twilio.verify(phoneNumber, externalCode);
+  return Twilio.getInstance().verify(phoneNumber, externalCode);
 };
