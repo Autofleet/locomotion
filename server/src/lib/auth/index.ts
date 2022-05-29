@@ -46,7 +46,7 @@ export const send = async (phoneNumber: string, operationId: string): Promise<bo
   const [user] = await userRepo.findOrCreate(phoneNumber, operationId);
 
   if (user) {
-    await Twilio.send(`+${phoneNumber}`);
+    await Twilio.send(phoneNumber);
     return true;
   }
 

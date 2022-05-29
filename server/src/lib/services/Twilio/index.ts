@@ -13,7 +13,9 @@ class TwilioService {
   private client: Twilio;
 
   constructor() {
-    this.client = new Twilio(accountSid, authToken);
+    if (accountSid && authToken) {
+      this.client = new Twilio(accountSid, authToken);
+    }
   }
 
   send = async (phoneNumber: string, channel = 'sms') => {

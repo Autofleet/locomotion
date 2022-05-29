@@ -6,8 +6,6 @@ const request = require('supertest');
 
 const baseUrl = '/api/v1';
 
-
-
 const createUserAndLogin = async () => {
   const operationId = uuid.v4();
   await User.create({
