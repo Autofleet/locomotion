@@ -25,11 +25,11 @@
     "include": [
         "src/**/*",
         "server/src/lib/**/*",
-        "test",
     ],
     "exclude": [
         "**/*.test.*",
-        "*.test.*"
+        "*.test.*",
+        "test"
     ]
 
 }
