@@ -29,7 +29,7 @@
     "exclude": [
         "**/*.test.*",
         "*.test.*",
-        "test"
+        "test/**/*"
     ]
 
 }
