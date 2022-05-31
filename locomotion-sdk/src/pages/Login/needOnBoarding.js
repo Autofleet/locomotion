@@ -1,4 +1,4 @@
 
-const needOnBoarding = userProfile => !userProfile.firstName || !userProfile.lastName;
+const needOnBoarding = userProfile => !userProfile.didCompleteOnboarding;
 
 export default needOnBoarding;

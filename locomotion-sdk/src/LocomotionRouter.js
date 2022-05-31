@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import Config from 'react-native-config';
 import { initStripe } from '@stripe/stripe-react-native';
 import 'react-native-gesture-handler';
-
+import { NavigationContainer } from '@react-navigation/native';
 import { MainProvider } from './context';
 import MainRouter from './pages';
 
@@ -19,10 +19,12 @@ export default (props) => {
   }, []);
 
   return (
+  <NavigationContainer>
     <MainProvider {...props}>
       <MainRouter {...props} />
       {props.children}
       <RidePopups />
     </MainProvider>
+  </NavigationContainer>
   );
 };

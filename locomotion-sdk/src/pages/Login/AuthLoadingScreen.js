@@ -8,9 +8,14 @@ import { useStateValue } from '../../context/main';
 import needOnboarding from './needOnBoarding';
 import Auth from '../../services/auth';
 import { getUserDetails } from '../../context/user/api';
+import onboardingContext from '../../context/onboarding';
+import PaymentsContext from '../../context/payments';
 
 const AuthLoadingScreen = ({ navigation }) => {
   const [appState, dispatch] = useStateValue();
+  const { navigateBasedOnUser } = onboardingContext.useContainer();
+  const usePayments = PaymentsContext.useContainer();
+
   const init = () => {
     async function getFromStorage() {
       const payload = await AppSettings.getSettings();
@@ -28,13 +33,24 @@ const AuthLoadingScreen = ({ navigation }) => {
 
         const userData = response;
         const userProfile = {
+          phoneNumber: userData.phoneNumber,
           firstName: userData.firstName,
           lastName: userData.lastName,
           avatar: userData.avatar,
           email: userData.email,
           pushToken: userData.pushToken,
           pushUserId: userData.pushUserId,
+          avatar: userData.avatar,
+          cards: null,
         };
+        let cards = null;
+        try {
+          cards = await usePayments.getPaymentMethods();
+        } catch (e) {
+          console.log(e)
+        }
+
+        userProfile.cards = cards
 
         await AppSettings.update({ userProfile });
 
@@ -46,10 +62,8 @@ const AuthLoadingScreen = ({ navigation }) => {
           return nonUserNav('Lock');
         }
 
-        if (needOnboarding(userProfile)) {
-          if (!userProfile.firstName || !userProfile.lastName) {
-            return navigation.replace('AuthScreens', { screen: 'Name' });
-          }
+        if (needOnboarding(userData)) {
+          return navigateBasedOnUser(userProfile)
         }
 
         return navigation.replace('MainApp');
