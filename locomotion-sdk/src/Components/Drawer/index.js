@@ -35,7 +35,7 @@ const DrawerHeader = ({ onIconPress, navigation }) => {
       )}
 
       <HeaderMainText>
-        {`${user.firstName} ${user.lastName}`}
+        {user ? `${user.firstName} ${user.lastName}` : ''}
       </HeaderMainText>
       <HeaderLink
         onPress={() => {
