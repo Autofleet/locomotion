@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { View } from 'react-native';
 import { createDrawerNavigator } from '@react-navigation/drawer';
-import { DrawerContentComponent, DrawerLabel } from '../Components/Drawer';
+import { DrawerContentComponent, DrawerLabel } from '../Components/Menu';
 import { Context as ThemeContext } from '../context/theme';
 import Auth from '../services/auth';
 import { ROUTES_COMPS } from './consts';
@@ -13,7 +13,7 @@ const Main = () => {
   const theme = useContext(ThemeContext);
   return (
     <Drawer.Navigator
-      initialRouteName={ROUTES.HOME}
+      initialRouteName={ROUTES.ACCOUNT}
       drawerContent={props => (<DrawerContentComponent {...props} />)}
       screenOptions={{
         inactiveBackgroundColor: '#ffffff',
