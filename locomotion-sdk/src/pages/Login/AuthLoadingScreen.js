@@ -55,10 +55,10 @@ const AuthLoadingScreen = ({ navigation }) => {
         try {
           cards = await usePayments.getPaymentMethods();
         } catch (e) {
-          console.log(e)
+          console.log(e);
         }
 
-        userProfile.cards = cards
+        userProfile.cards = cards;
 
         await saveUser(userProfile);
 
@@ -71,7 +71,7 @@ const AuthLoadingScreen = ({ navigation }) => {
         }
 
         if (needOnboarding(userData)) {
-          return navigateBasedOnUser(userProfile)
+          return navigateBasedOnUser(userProfile);
         }
 
         return navigation.replace('MainApp');

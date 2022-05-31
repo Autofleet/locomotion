@@ -12,7 +12,7 @@ import ThumbnailPicker from '../../../Components/ThumbnailPicker';
 
 const Avatar = () => {
   const {
-    onboardingState, updateState, updateUserInfo, nextScreen
+    onboardingState, updateState, updateUserInfo, nextScreen,
   } = onboardingContext.useContainer();
 
   const onImageChoose = (image) => {
@@ -22,7 +22,7 @@ const Avatar = () => {
 
   return (
     <SafeView>
-      <Header title={i18n.t('onboarding.pages.avatar.title')} page={'avatar'} />
+      <Header title={i18n.t('onboarding.pages.avatar.title')} page="avatar" />
       <PageContainer>
         <ScreenText
           text={i18n.t('onboarding.pages.avatar.text')}

@@ -11,11 +11,11 @@ const Card = () => {
   const { nextScreen, onboardingState } = onboardingContext.useContainer();
 
   const onDone = async () => {
-    nextScreen()
+    nextScreen();
   };
   return (
     <SafeView>
-      <Header title={i18n.t('onboarding.pages.code.title')} page={'card'}/>
+      <Header title={i18n.t('onboarding.pages.code.title')} page="card" />
       <AddCard
         onDone={onDone}
         canSkip={false}

@@ -10,14 +10,14 @@ const Header = ({ title, page }) => {
 
   const checkRequired = () => {
     if (!requiredOnboarding[page]) {
-      return true
+      return true;
     }
-    return null
-  }
+    return null;
+  };
 
   const goBack = () => {
-    lastScreen()
-  }
+    lastScreen();
+  };
   return (
     <PageHeader
       title={title}

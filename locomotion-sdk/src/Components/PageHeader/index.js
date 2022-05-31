@@ -1,30 +1,32 @@
 import React from 'react';
 import propsTypes from 'prop-types';
+import { View } from 'react-native';
 import {
-  Header, HeaderText, HeaderIconContainer, HeaderIcon, SkipButton, SkipButtonText
+  Header, HeaderText, HeaderIconContainer, HeaderIcon, SkipButton, SkipButtonText,
 } from './styled';
 import i18n from '../../I18n';
-import { View } from 'react-native';
 
 const HamburgerIconSource = require('../../assets/menu.png');
 
 const PageHeader = ({
-  title, icon, onIconPress, iconSide, displayIcon, width, height, showSkipButton, onPressSkip
+  title, icon, onIconPress, iconSide, displayIcon, width, height, showSkipButton, onPressSkip,
 }) => (
   <Header>
-        {displayIcon !== false
+    {displayIcon !== false
       ? (
         <HeaderIconContainer side={iconSide} onPress={onIconPress} data-test-id="NavigationPanelButton">
           <HeaderIcon width={width} height={width} source={icon} side={iconSide} />
         </HeaderIconContainer>
-      ) : <View></View>}
+      ) : <View />}
     <HeaderText>{title}</HeaderText>
-      {showSkipButton && 
+    {showSkipButton
+      && (
       <SkipButton noBg onPress={onPressSkip}>
         <SkipButtonText>
           {i18n.t('general.skip')}
         </SkipButtonText>
-      </SkipButton>}
+      </SkipButton>
+      )}
   </Header>
 );
 
