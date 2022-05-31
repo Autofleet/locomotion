@@ -30,7 +30,7 @@ const Code = () => {
   };
   return (
     <SafeView>
-      <Header title={i18n.t('onboarding.pages.code.title')} />
+      <Header title={i18n.t('onboarding.pages.code.title')} page={'code'}/>
       <PageContainer>
         <ScreenText
           text={i18n.t('onboarding.pages.code.text')}

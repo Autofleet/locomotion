@@ -10,7 +10,7 @@ import ScreenText from './ScreenText';
 
 const Name = () => {
   const {
-    onboardingState, updateState, updateUserInfo, navigateBasedOnUser,
+    onboardingState, updateState, updateUserInfo, nextScreen,
   } = onboardingContext.useContainer();
   const [showErrorText, setShowErrorText] = useState(false);
 
@@ -22,7 +22,7 @@ const Name = () => {
 
   return (
     <SafeView>
-      <Header title={i18n.t('onboarding.pages.name.title')} />
+      <Header title={i18n.t('onboarding.pages.name.title')} page={'name'}/>
       <PageContainer>
         <ScreenText
           text={i18n.t('onboarding.pages.name.text')}
@@ -49,7 +49,7 @@ const Name = () => {
         <OnboardingNavButtons
           isInvalid={!onboardingState.firstName || !onboardingState.lastName}
           onFail={() => setShowErrorText(true)}
-          onNext={() => navigateBasedOnUser(onboardingState)}
+          onNext={() => nextScreen()}
         />
       </PageContainer>
     </SafeView>

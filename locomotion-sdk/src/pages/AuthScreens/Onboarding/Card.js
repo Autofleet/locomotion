@@ -8,16 +8,14 @@ import onboardingContext from '../../../context/onboarding';
 import PaymentsContext from '../../../context/payments';
 
 const Card = () => {
-  const { navigateBasedOnUser, onboardingState } = onboardingContext.useContainer();
-  const { getPaymentMethods } = PaymentsContext.useContainer();
+  const { nextScreen, onboardingState } = onboardingContext.useContainer();
 
   const onDone = async () => {
-    const methods = await getPaymentMethods();
-    navigateBasedOnUser({ ...onboardingState, cards: methods });
+    nextScreen()
   };
   return (
     <SafeView>
-      <Header title={i18n.t('onboarding.pages.code.title')} />
+      <Header title={i18n.t('onboarding.pages.code.title')} page={'card'}/>
       <AddCard
         onDone={onDone}
         canSkip={false}

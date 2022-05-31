@@ -2,7 +2,8 @@
     "general": {
         "back": "Back",
         "next": "Continue",
-        "cancel": "cancel"
+        "cancel": "cancel",
+        "skip": "Skip"
     },
     "login": {
         "getStarted": "Get started!",

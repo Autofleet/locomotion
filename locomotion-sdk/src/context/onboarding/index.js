@@ -8,6 +8,7 @@ import AppSettings from '../../services/app-settings';
 import { loginVert, sendEmailVerification, updateUser } from '../user/api';
 import PaymentsContext from '../payments';
 
+const SCREEN_ORDER = ['phoneNumber', 'Code', 'Name', 'Email', 'Avatar', 'AddCard', 'Welcome']
 const keyToScreen = {
   firstName: 'Name',
   lastName: 'Name',
@@ -25,11 +26,20 @@ const authContainer = () => {
     phoneNumber: '',
     firstName: '',
     lastName: '',
-    avatar: '',
     email: '',
+    avatar: '',
     cards: null,
   };
   const [onboardingState, setOnboardingState] = useState(initialState);
+  const [requiredOnboarding] = useState({
+    phoneNumber: true,
+    code: true,
+    name: true,
+    email: true,
+    avatar: false,
+    cards: false,
+  })
+  const [currentScreenIndex, setCurrentScreenIndex] = useState(0)
 
   const updateState = (field, value) => {
     setOnboardingState({
@@ -38,24 +48,33 @@ const authContainer = () => {
     });
   };
 
-  const navigateToScreen = screen => navigation.navigate('AuthScreens', { screen });
+  const navigateToScreen = () => navigation.navigate('AuthScreens', { screen: SCREEN_ORDER[currentScreenIndex] });
 
+  const nextScreen = () => {
+    setCurrentScreenIndex(currentScreenIndex + 1)
+  }
 
-  const navigateBasedOnUser = (user, complete) => {
+  const lastScreen = () => {
+    setCurrentScreenIndex(currentScreenIndex - 1)
+  }
+  const navigateBasedOnUser = (user) => {
     setOnboardingState(user);
     let unfinishedScreen;
     for (const key of Object.keys(initialState)) {
-      if (!user[key]) {
+      console.log({...initialState, ...user})
+      if (!{...initialState, ...user}[key]) {
         unfinishedScreen = keyToScreen[key];
         break;
       }
     }
-    if (unfinishedScreen) {
-      navigateToScreen(unfinishedScreen);
-    } else if (complete) {
-      return navigation.navigate('MainApp');
+    if (!user.didCompleteOnboarding) {
+      if (unfinishedScreen) {
+        return setCurrentScreenIndex(SCREEN_ORDER.indexOf(unfinishedScreen))
+      } else {
+        return setCurrentScreenIndex(SCREEN_ORDER.indexOf(keyToScreen.welcome))
+      }
     } else {
-      return navigateToScreen(keyToScreen.welcome);
+      return navigation.navigate('MainApp');
     }
   };
 
@@ -80,6 +99,12 @@ const authContainer = () => {
   useEffect(() => {
     getUserFromStorage();
   }, []);
+
+  useEffect(() => {
+    if (currentScreenIndex > 0) {
+      navigateToScreen()
+    }
+  }, [currentScreenIndex])
 
   const verifyEmail = async (userId) => {
     await sendEmailVerification(userId);
@@ -122,7 +147,7 @@ const authContainer = () => {
         },
       });
       const cards = await getCardInfo();
-      navigateBasedOnUser({ ...userProfile, cards }, true);
+      navigateBasedOnUser({ ...userProfile, cards });
       return true;
     } catch (e) {
       console.log('Bad vert with request', e);
@@ -137,6 +162,9 @@ const authContainer = () => {
     onVert,
     updateUserInfo,
     navigateBasedOnUser,
+    requiredOnboarding,
+    nextScreen,
+    lastScreen
   };
 };
 export default createContainer(authContainer);

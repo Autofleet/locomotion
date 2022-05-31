@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import { BaseText } from '../../../Components/BaseText';
 import { ERROR_COLOR, FONT_STYLES } from '../../../services/sharedStyles';
+import Button from '../../../Components/Button';
 
 export const ErrorText = styled.Text`
   color: ${ERROR_COLOR};
