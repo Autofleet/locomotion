@@ -1,27 +1,72 @@
-import React from 'react';
-import PageHeader from '../PageHeader';
+import React, { useContext } from 'react';
+import { ROUTES } from '../../pages/routes';
+import Thumbnail from '../Thumbnail';
 import i18n from '../../I18n';
 import {
-  StyledDrawerLabel, DrawerIcon, LabelText, Arrow, StyledSafeAreaView,
+  StyledDrawerLabel,
+  DrawerIcon,
+  LabelText,
+  StyledSafeAreaView,
+  HeaderIconContainer,
+  HeaderText,
+  HeaderMainText,
+  Header,
+  HeaderLink,
 } from './styled';
-import { ROUTES } from '../../pages/consts';
+import { UserContext } from '../../context/user';
 
 const CarIconSource = require('../../assets/menuItems/car.png');
 const HelpIconSource = require('../../assets/menuItems/help.png');
-const CreaditCardIconSource = require('../../assets/menuItems/creditcard.png');
-const PplIconSource = require('../../assets/menuItems/person.png');
+const CreditCardIconSource = require('../../assets/menuItems/creditcard.png');
 const HomeIconSource = require('../../assets/menuItems/home.png');
-const LogoutIconSource = require('../../assets/menuItems/logout.png');
 
 const closeIconSource = require('../../assets/x.png');
+
+
+const DrawerHeader = ({ onIconPress, navigation }) => {
+  const { user } = useContext(UserContext);
+  return (
+    <Header>
+      {user && (
+        <Thumbnail
+          size={80}
+          source={user.avatar}
+        />
+      )}
+
+      <HeaderMainText>
+        {user ? `${user.firstName} ${user.lastName}` : ''}
+      </HeaderMainText>
+      <HeaderLink
+        onPress={() => {
+          navigation.navigate(ROUTES.ACCOUNT);
+        }}
+      >
+        <HeaderText>
+          {i18n.t('menu.account')}
+        </HeaderText>
+      </HeaderLink>
+
+      <HeaderIconContainer
+        onPress={onIconPress}
+        data-test-id="NavigationPanelButton"
+      >
+        <DrawerIcon
+          source={closeIconSource}
+          height="18px"
+          width="18px"
+        />
+      </HeaderIconContainer>
+    </Header>
+  );
+};
 
 const DrawerLabel = ({
   onPress, focused, tintColor, title, icon, lastItem,
 }) => (
   <StyledDrawerLabel focused={focused} onPress={onPress} lastItem={lastItem}>
-    <DrawerIcon source={icon} fill="#fff" style={{ fill: '#fff' }} />
-    <LabelText color={tintColor}>{title}</LabelText>
-    <Arrow />
+    <DrawerIcon source={icon} focused={focused} fill="#fff" style={{ fill: '#fff' }} />
+    <LabelText color={tintColor} focused={focused}>{title}</LabelText>
   </StyledDrawerLabel>
 );
 
@@ -32,13 +77,9 @@ export const DrawerContentComponent = ({ navigation, state }) => {
   };
   return (
     <StyledSafeAreaView>
-      <PageHeader
-        title={i18n.t('menu.title')}
-        iconSide="right"
+      <DrawerHeader
+        navigation={navigation}
         onIconPress={() => closeComponent()}
-        icon={closeIconSource}
-        width="18px"
-        height="18px"
       />
       <DrawerLabel
         title={i18n.t('menu.home')}
@@ -58,18 +99,11 @@ export const DrawerContentComponent = ({ navigation, state }) => {
       />
       <DrawerLabel
         title={i18n.t('menu.paymentsSettings')}
-        icon={CreaditCardIconSource}
+        icon={CreditCardIconSource}
         onPress={() => {
           navigation.navigate(ROUTES.PAYMENT);
         }}
         focused={route === ROUTES.PAYMENT}
-      />
-      <DrawerLabel
-        title={i18n.t('menu.account')}
-        icon={PplIconSource}
-        onPress={() => {
-          navigation.navigate(ROUTES.ACCOUNT);
-        }}
       />
       <DrawerLabel
         title={i18n.t('menu.support')}
@@ -78,14 +112,6 @@ export const DrawerContentComponent = ({ navigation, state }) => {
           navigation.navigate(ROUTES.CONTACT_US);
         }}
         focused={route === ROUTES.CONTACT_US}
-      />
-      <DrawerLabel
-        title={i18n.t('menu.logout')}
-        icon={LogoutIconSource}
-        onPress={() => {
-          navigation.navigate(ROUTES.LOGOUT);
-        }}
-        lastItem
       />
     </StyledSafeAreaView>
   );

@@ -196,10 +196,10 @@
     "menu": {
         "title": "Menu",
         "home": "Home",
-        "trips": "Trips",
-        "paymentsSettings": "Payment Settings",
+        "trips": "Ride History",
+        "paymentsSettings": "Payment",
         "account": "Account",
-        "support": "Support",
+        "support": "Help and feedback",
         "logout": "Logout"
     },
     "contactUs": {
