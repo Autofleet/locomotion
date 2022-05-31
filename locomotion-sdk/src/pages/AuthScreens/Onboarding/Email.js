@@ -44,7 +44,7 @@ const Email = () => {
 
   return (
     <SafeView>
-      <Header title={i18n.t('onboarding.pages.email.title')} page={'email'}/>
+      <Header title={i18n.t('onboarding.pages.email.title')} page="email" />
       <PageContainer>
         <ScreenText
           text={i18n.t('onboarding.pages.email.text')}

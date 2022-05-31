@@ -23,9 +23,9 @@ const Welcome = () => {
   const navigation = useNavigation();
 
   const onNext = () => {
-    updateUserInfo({didCompleteOnboarding: true})
-    navigation.navigate('MainApp')
-  }
+    updateUserInfo({ didCompleteOnboarding: true });
+    navigation.navigate('MainApp');
+  };
   return (
     <SafeView>
       <PageContainer>

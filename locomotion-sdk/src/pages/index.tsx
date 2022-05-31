@@ -7,11 +7,11 @@ import AuthLoadingScreen from './Login/AuthLoadingScreen';
 const Stack = createNativeStackNavigator();
 
 const MainRouter = () => (
-      <Stack.Navigator initialRouteName="AuthLoading" screenOptions={{ headerShown: false }} id="authStack">
-        <Stack.Screen name="AuthScreens" component={Auth} options={{ gestureEnabled: false }} />
-        <Stack.Screen name="MainApp" component={Main} />
-        <Stack.Screen name="AuthLoading" component={AuthLoadingScreen} />
-      </Stack.Navigator>
+  <Stack.Navigator initialRouteName="AuthLoading" screenOptions={{ headerShown: false }} id="authStack">
+    <Stack.Screen name="AuthScreens" component={Auth} options={{ gestureEnabled: false }} />
+    <Stack.Screen name="MainApp" component={Main} />
+    <Stack.Screen name="AuthLoading" component={AuthLoadingScreen} />
+  </Stack.Navigator>
 );
 
 export default MainRouter;

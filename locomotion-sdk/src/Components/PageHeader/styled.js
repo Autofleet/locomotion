@@ -1,8 +1,8 @@
-import { FONT_STYLES } from '../../services/sharedStyles';
 import styled from 'styled-components';
+import { FONT_STYLES } from '../../services/sharedStyles';
 import Button from '../Button';
 
-const HEADER_PADDING = 15
+const HEADER_PADDING = 15;
 export const HeaderText = styled.Text`
   color: ${({ theme }) => theme.textColor};
   font-weight: bold;

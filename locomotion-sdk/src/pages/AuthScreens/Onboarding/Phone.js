@@ -27,7 +27,7 @@ const Phone = () => {
       await loginApi({
         phoneNumber: onboardingState.phoneNumber,
       });
-      nextScreen()
+      nextScreen();
     } catch (e) {
       console.log('Bad login with response', e);
       setShowErrorText(e.message);
@@ -36,7 +36,7 @@ const Phone = () => {
 
   return (
     <SafeView>
-      <Header title={i18n.t('onboarding.pages.phone.title')} page={'phone'}/>
+      <Header title={i18n.t('onboarding.pages.phone.title')} page="phone" />
       <PageContainer>
         <ScreenText
           text={i18n.t('onboarding.pages.phone.text')}
