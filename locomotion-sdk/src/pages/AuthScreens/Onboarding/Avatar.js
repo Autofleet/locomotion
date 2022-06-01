@@ -15,11 +15,10 @@ const Avatar = () => {
   const {
     nextScreen,
   } = onboardingContext.useContainer();
-  const { updateState, updateUserInfo, user } = useContext(UserContext);
+  const { updateUserInfo, user } = useContext(UserContext);
 
   const onImageChoose = (image) => {
     updateUserInfo({ avatar: image });
-    updateState('avatar', image);
   };
 
   return (

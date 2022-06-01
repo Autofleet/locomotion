@@ -39,7 +39,7 @@ const authContainer = () => {
   const navigateBasedOnUser = (user) => {
     setUser(user);
     let unfinishedScreen;
-    for (const key of Object.keys(initialState)) {
+    for (const key of Object.keys(keyToScreen)) {
       if (!user[key]) {
         unfinishedScreen = keyToScreen[key];
         break;
@@ -61,10 +61,10 @@ const authContainer = () => {
   }, [currentScreenIndex]);
 
   const verifyCode = async (code) => {
-      const userProfile = await onVert(code)
-      if (userProfile) {
-        navigateBasedOnUser(userProfile);
-      }
+    const userProfile = await onVert(code);
+    if (userProfile) {
+      navigateBasedOnUser(userProfile);
+    }
   };
 
 

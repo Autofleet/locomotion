@@ -1,5 +1,5 @@
-import { useStateValue } from '../state';
 import React, { createContext, useEffect, useState } from 'react';
+import { useStateValue } from '../state';
 import AppSettings from '../../services/app-settings';
 import { loginVert, sendEmailVerification, updateUser } from './api';
 import auth from '../../services/auth';
@@ -41,14 +41,14 @@ const UserContextProvider = ({ children }: { children: any }) => {
     cards: null,
     pushToken: '',
     pushUserId: '',
-  }
+  };
   const [user, setUser] = useState<User>(initialUserState);
 
-  const updateState = (field: string, value: any) => {
+  const updateState = (values: any) => {
     const newUser: User = {
       ...user,
-      [field]: value,
-    }
+      ...values,
+    };
     setUser(newUser);
   };
 
@@ -66,17 +66,18 @@ const UserContextProvider = ({ children }: { children: any }) => {
   const verifyEmail = async (userId: string) => {
     await sendEmailVerification(userId);
   };
-  
+
   const updateUserInfo = async (values: any) => {
-    const user = await updateUser(values);
+    updateState(values);
+    const newUser = await updateUser(values);
     if (values.email) {
-      verifyEmail(user.id);
+      verifyEmail(newUser.id);
     }
     dispatch({
       type: 'saveState',
       payload: {
         auth: true,
-        userProfile: user,
+        userProfile: newUser,
       },
     });
   };

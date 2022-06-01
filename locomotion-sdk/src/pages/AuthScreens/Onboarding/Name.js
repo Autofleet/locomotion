@@ -13,13 +13,12 @@ const Name = () => {
   const {
     nextScreen,
   } = onboardingContext.useContainer();
-  const { updateState, updateUserInfo, user } = useContext(UserContext);
+  const { updateUserInfo, user } = useContext(UserContext);
   const [showErrorText, setShowErrorText] = useState(false);
 
   const inputChange = field => (value) => {
     setShowErrorText(false);
     updateUserInfo({ [field]: value });
-    updateState(field, value);
   };
 
   return (
