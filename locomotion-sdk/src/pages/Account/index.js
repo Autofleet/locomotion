@@ -20,12 +20,10 @@ import PageHeader from '../../Components/PageHeader';
 import Mixpanel from '../../services/Mixpanel';
 import { PageContainer } from '../styles';
 import { UserContext } from '../../context/user';
-import onboardingContext from '../../context/onboarding';
 
 const AccountHeader = () => {
-  const {
-    onboardingState: user,
-  } = onboardingContext.useContainer();
+  const { user } = useContext(UserContext);
+
 
   return (
     <AccountHeaderContainer>
@@ -66,9 +64,7 @@ const Card = ({ children, ...props }) => (
 );
 
 const AccountContent = ({ navigation }) => {
-  const {
-    onboardingState: user,
-  } = onboardingContext.useContainer();
+  const { user } = useContext(UserContext);
 
   return (
     <Container>
@@ -125,7 +121,6 @@ const AccountContent = ({ navigation }) => {
 export default ({
   navigation, menuSide,
 }) => {
-  const { user } = useContext(UserContext);
   const route = useRoute();
 
   useEffect(() => {

@@ -25,4 +25,4 @@ const AppSettings = {
   destroy: () => Storage.clear(),
 };
 
-module.exports = AppSettings;
+export default AppSettings;

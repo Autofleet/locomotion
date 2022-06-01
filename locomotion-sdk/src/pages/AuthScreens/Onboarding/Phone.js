@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import i18n from '../../../I18n';
 import OnboardingNavButtons from './OnboardingNavButtons';
@@ -9,10 +9,11 @@ import ScreenText from './ScreenText/index';
 import { loginApi } from '../../../context/user/api';
 import PhoneNumberInput from '../../../Components/PhoneNumberInput';
 import { ONBOARDING_PAGE_NAMES } from '../../routes';
+import { UserContext } from '../../../context/user';
 
 const Phone = () => {
-  const { onboardingState, updateState, nextScreen } = onboardingContext.useContainer();
-  const navigation = useNavigation();
+  const { nextScreen } = onboardingContext.useContainer();
+  const { updateState, user } = useContext(UserContext);
   const [showErrorText, setShowErrorText] = useState(false);
 
   const onPhoneNumberChange = (phoneNumber, countryCode) => {
@@ -26,7 +27,7 @@ const Phone = () => {
   const onSubmitPhoneNumber = async () => {
     try {
       await loginApi({
-        phoneNumber: onboardingState.phoneNumber,
+        phoneNumber: user.phoneNumber,
       });
       nextScreen();
     } catch (e) {
@@ -51,7 +52,7 @@ const Phone = () => {
         />
         {showErrorText && <ErrorText>{showErrorText}</ErrorText>}
         <OnboardingNavButtons
-          isInvalid={!onboardingState.phoneNumber}
+          isInvalid={!user.phoneNumber}
           onNext={onSubmitPhoneNumber}
           onFail={() => setShowErrorText(i18n.t('login.invalidPhoneNumberError'))}
         />
