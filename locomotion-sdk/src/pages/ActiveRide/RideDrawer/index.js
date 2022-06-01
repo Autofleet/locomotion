@@ -14,7 +14,7 @@ import {
 import RoundedButton from '../../../Components/RoundedButton';
 import RideCard from './RideCard';
 import MessageCard from './MessageCard';
-import { getTogglePopupsState } from '../../../context/main';
+import { getTogglePopupsState } from '../../../context/state';
 import PaymentsContext from '../../../context/payments';
 
 import settingsContext from '../../../context/settings';

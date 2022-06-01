@@ -9,10 +9,11 @@ import {
 import Header from './Header';
 import ScreenText from './ScreenText/index';
 import ThumbnailPicker from '../../../Components/ThumbnailPicker';
+import { ONBOARDING_PAGE_NAMES } from '../../routes';
 
 const Avatar = () => {
   const {
-    onboardingState, updateState, navigateBasedOnUser, updateUserInfo,
+    onboardingState, updateState, updateUserInfo, nextScreen,
   } = onboardingContext.useContainer();
 
   const onImageChoose = (image) => {
@@ -20,13 +21,9 @@ const Avatar = () => {
     updateState('avatar', image);
   };
 
-  const onNext = () => {
-    navigateBasedOnUser(onboardingState);
-  };
-
   return (
     <SafeView>
-      <Header title={i18n.t('onboarding.pages.avatar.title')} />
+      <Header title={i18n.t('onboarding.pages.avatar.title')} page={ONBOARDING_PAGE_NAMES.AVATAR} />
       <PageContainer>
         <ScreenText
           text={i18n.t('onboarding.pages.avatar.text')}
@@ -43,7 +40,7 @@ const Avatar = () => {
           </Name>
         </ImageContainer>
         <OnboardingNavButtons
-          onNext={onNext}
+          onNext={nextScreen}
           isInvalid={!onboardingState.avatar}
         />
       </PageContainer>

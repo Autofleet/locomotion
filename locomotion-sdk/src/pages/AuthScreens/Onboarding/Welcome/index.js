@@ -14,13 +14,18 @@ import {
 
 
 const Welcome = () => {
-  const { onboardingState } = onboardingContext.useContainer();
+  const { onboardingState, updateUserInfo } = onboardingContext.useContainer();
   const operation = {
     name: 'autofleet',
     subName: 'Rider app',
     logo,
   }; // replace with operation settings
   const navigation = useNavigation();
+
+  const onNext = () => {
+    updateUserInfo({ didCompleteOnboarding: true });
+    navigation.navigate('MainApp');
+  };
   return (
     <SafeView>
       <PageContainer>
@@ -38,7 +43,7 @@ const Welcome = () => {
             {i18n.t('onboarding.pages.welcome.subText')}
           </WelcomeSubText>
         </TextContainer>
-        <OnboardingNavButtons buttonText={i18n.t('onboarding.pages.welcome.buttonText')} onNext={() => navigation.navigate('MainApp')} />
+        <OnboardingNavButtons buttonText={i18n.t('onboarding.pages.welcome.buttonText')} onNext={onNext} />
       </PageContainer>
     </SafeView>
   );

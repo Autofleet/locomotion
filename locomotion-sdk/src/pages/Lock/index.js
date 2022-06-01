@@ -12,7 +12,6 @@ import {
   LockTextContainer, ButtonContainer, SubText, HeaderText, Text,
 } from './styled';
 import I18n from '../../I18n';
-import { useStateValue } from '../../context/main';
 import UserService from '../../services/user';
 
 const useInterval = (callback, delay) => {

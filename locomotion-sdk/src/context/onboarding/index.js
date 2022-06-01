@@ -3,18 +3,20 @@ import React, { useEffect, useState } from 'react';
 import { createContainer } from 'unstated-next';
 import auth from '../../services/auth';
 import Mixpanel from '../../services/Mixpanel';
-import { useStateValue } from '../main';
+import { useStateValue } from '../state';
 import AppSettings from '../../services/app-settings';
 import { loginVert, sendEmailVerification, updateUser } from '../user/api';
 import PaymentsContext from '../payments';
+import { ONBOARDING_PAGE_NAMES } from '../../pages/routes';
 
+const SCREEN_ORDER = [ONBOARDING_PAGE_NAMES.START, ONBOARDING_PAGE_NAMES.PHONE, ONBOARDING_PAGE_NAMES.CODE, ONBOARDING_PAGE_NAMES.NAME, ONBOARDING_PAGE_NAMES.EMAIL, ONBOARDING_PAGE_NAMES.AVATAR, ONBOARDING_PAGE_NAMES.CARD, ONBOARDING_PAGE_NAMES.WELCOME];
 const keyToScreen = {
-  firstName: 'Name',
-  lastName: 'Name',
-  email: 'Email',
-  avatar: 'Avatar',
-  cards: 'AddCard',
-  welcome: 'Welcome',
+  firstName: ONBOARDING_PAGE_NAMES.NAME,
+  lastName: ONBOARDING_PAGE_NAMES.NAME,
+  email: ONBOARDING_PAGE_NAMES.EMAIL,
+  avatar: ONBOARDING_PAGE_NAMES.AVATAR,
+  cards: ONBOARDING_PAGE_NAMES.CARD,
+  welcome: ONBOARDING_PAGE_NAMES.WELCOME,
 };
 
 const authContainer = () => {
@@ -25,11 +27,20 @@ const authContainer = () => {
     phoneNumber: '',
     firstName: '',
     lastName: '',
-    avatar: '',
     email: '',
+    avatar: '',
     cards: null,
   };
   const [onboardingState, setOnboardingState] = useState(initialState);
+  const [requiredOnboarding] = useState({
+    [ONBOARDING_PAGE_NAMES.PHONE]: true,
+    [ONBOARDING_PAGE_NAMES.CODE]: true,
+    [ONBOARDING_PAGE_NAMES.NAME]: true,
+    [ONBOARDING_PAGE_NAMES.EMAIL]: true,
+    [ONBOARDING_PAGE_NAMES.AVATAR]: false,
+    [ONBOARDING_PAGE_NAMES.CARD]: false,
+  });
+  const [currentScreenIndex, setCurrentScreenIndex] = useState(0);
 
   const updateState = (field, value) => {
     setOnboardingState({
@@ -38,10 +49,16 @@ const authContainer = () => {
     });
   };
 
-  const navigateToScreen = screen => navigation.navigate('AuthScreens', { screen });
+  const navigateToScreen = () => navigation.navigate('AuthScreens', { screen: SCREEN_ORDER[currentScreenIndex] });
 
+  const nextScreen = () => {
+    setCurrentScreenIndex(currentScreenIndex + 1);
+  };
 
-  const navigateBasedOnUser = (user, complete) => {
+  const lastScreen = () => {
+    setCurrentScreenIndex(currentScreenIndex - 1);
+  };
+  const navigateBasedOnUser = (user) => {
     setOnboardingState(user);
     let unfinishedScreen;
     for (const key of Object.keys(initialState)) {
@@ -50,13 +67,13 @@ const authContainer = () => {
         break;
       }
     }
-    if (unfinishedScreen) {
-      navigateToScreen(unfinishedScreen);
-    } else if (complete) {
-      return navigation.navigate('MainApp');
-    } else {
-      return navigateToScreen(keyToScreen.welcome);
+    if (!user.didCompleteOnboarding) {
+      if (unfinishedScreen) {
+        return setCurrentScreenIndex(SCREEN_ORDER.indexOf(unfinishedScreen));
+      }
+      return setCurrentScreenIndex(SCREEN_ORDER.indexOf(keyToScreen.welcome));
     }
+    return navigation.navigate('MainApp');
   };
 
   const getCardInfo = async () => {
@@ -80,6 +97,12 @@ const authContainer = () => {
   useEffect(() => {
     getUserFromStorage();
   }, []);
+
+  useEffect(() => {
+    if (currentScreenIndex > 0) {
+      navigateToScreen();
+    }
+  }, [currentScreenIndex]);
 
   const verifyEmail = async (userId) => {
     await sendEmailVerification(userId);
@@ -122,7 +145,7 @@ const authContainer = () => {
         },
       });
       const cards = await getCardInfo();
-      navigateBasedOnUser({ ...userProfile, cards }, true);
+      navigateBasedOnUser({ ...userProfile, cards });
       return true;
     } catch (e) {
       console.log('Bad vert with request', e);
@@ -137,6 +160,10 @@ const authContainer = () => {
     onVert,
     updateUserInfo,
     navigateBasedOnUser,
+    requiredOnboarding,
+    nextScreen,
+    lastScreen,
+    setCurrentScreenIndex,
   };
 };
 export default createContainer(authContainer);

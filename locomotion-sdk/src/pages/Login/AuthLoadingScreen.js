@@ -4,15 +4,19 @@ import {
   View,
 } from 'react-native';
 import AppSettings from '../../services/app-settings';
-import { useStateValue } from '../../context/main';
+import { useStateValue } from '../../context/state';
 import needOnboarding from './needOnBoarding';
 import Auth from '../../services/auth';
 import { getUserDetails } from '../../context/user/api';
+import onboardingContext from '../../context/onboarding';
+import PaymentsContext from '../../context/payments';
 import { UserContext } from '../../context/user';
 
 const AuthLoadingScreen = ({ navigation }) => {
   const { setUser } = useContext(UserContext);
   const [appState, dispatch] = useStateValue();
+  const { navigateBasedOnUser } = onboardingContext.useContainer();
+  const usePayments = PaymentsContext.useContainer();
 
   const saveUser = (userProfile) => {
     setUser(userProfile);
@@ -35,16 +39,16 @@ const AuthLoadingScreen = ({ navigation }) => {
         }
 
         const userData = response;
-        const userProfile = {
-          firstName: userData.firstName,
-          lastName: userData.lastName,
-          avatar: userData.avatar,
-          email: userData.email,
-          pushToken: userData.pushToken,
-          pushUserId: userData.pushUserId,
-        };
+        let cards = null;
+        try {
+          cards = await usePayments.getPaymentMethods();
+        } catch (e) {
+          console.log(e);
+        }
 
-        await saveUser(userProfile);
+        userData.cards = cards;
+
+        await saveUser(userData);
 
         const nonUserNav = (screen) => {
           navigation.replace('AuthScreens', { screen, params: { showHeaderIcon: false } });
@@ -54,10 +58,8 @@ const AuthLoadingScreen = ({ navigation }) => {
           return nonUserNav('Lock');
         }
 
-        if (needOnboarding(userProfile)) {
-          if (!userProfile.firstName || !userProfile.lastName) {
-            return navigation.replace('AuthScreens', { screen: 'Name' });
-          }
+        if (needOnboarding(userData)) {
+          return navigateBasedOnUser(userData);
         }
 
         return navigation.replace('MainApp');

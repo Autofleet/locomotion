@@ -23,7 +23,7 @@ import I18n from '../../I18n';
 import PhoneNumberInput from '../../Components/PhoneNumberInput';
 import PinCode from '../../Components/PinCode';
 import SafeView from '../../Components/SafeView';
-import { useStateValue } from '../../context/main';
+import { useStateValue } from '../../context/state';
 import needOnboarding from './needOnBoarding';
 import WebView from '../WebView';
 import Mixpanel from '../../services/Mixpanel';

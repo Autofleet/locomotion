@@ -18,7 +18,7 @@ import {
   SummaryStars,
   StarIcon,
 } from './styled';
-import { getTogglePopupsState } from '../../context/main';
+import { getTogglePopupsState } from '../../context/state';
 import RoundedButton from '../../Components/RoundedButton';
 import Button from '../../Components/Button';
 

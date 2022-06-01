@@ -6,18 +6,17 @@ import Header from './Header';
 import ScreenText from './ScreenText';
 import onboardingContext from '../../../context/onboarding';
 import PaymentsContext from '../../../context/payments';
+import { ONBOARDING_PAGE_NAMES } from '../../routes';
 
 const Card = () => {
-  const { navigateBasedOnUser, onboardingState } = onboardingContext.useContainer();
-  const { getPaymentMethods } = PaymentsContext.useContainer();
+  const { nextScreen, onboardingState } = onboardingContext.useContainer();
 
   const onDone = async () => {
-    const methods = await getPaymentMethods();
-    navigateBasedOnUser({ ...onboardingState, cards: methods });
+    nextScreen();
   };
   return (
     <SafeView>
-      <Header title={i18n.t('onboarding.pages.code.title')} />
+      <Header title={i18n.t('onboarding.pages.code.title')} page={ONBOARDING_PAGE_NAMES.CARD} />
       <AddCard
         onDone={onDone}
         canSkip={false}

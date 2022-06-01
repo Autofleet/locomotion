@@ -2,7 +2,8 @@
     "general": {
         "back": "Back",
         "next": "Continue",
-        "cancel": "cancel"
+        "cancel": "cancel",
+        "skip": "Skip"
     },
     "login": {
         "getStarted": "Get started!",
@@ -48,7 +49,7 @@
             "avatar": {
                 "title": "Personal Details",
                 "text": "Add a photo",
-                "subText": "help us identify you during pickups"
+                "subText": "Help us identify you during pickups"
             },
             "email": {
                 "title": "Personal Details",
