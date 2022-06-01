@@ -1,133 +1,138 @@
-import React, { useState, useEffect, useContext } from 'react';
-import * as yup from 'yup';
+import React, { useEffect, useContext } from 'react';
 import { useRoute } from '@react-navigation/native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { ROUTES } from '../routes';
-import AppSettings from '../../services/app-settings';
 
 import ThumbnailPicker from '../../Components/ThumbnailPicker';
-import SubmitButton from '../../Components/RoundedButton';
-import TextInput from '../../Components/TextInput';
 import {
-  Text, ErrorText,
+  ErrorText,
 } from '../Login/styled';
 import {
-  Container, FullNameContainer, LogoutContainer, NameContainer, SubmitContainer,
+  AccountHeaderContainer,
+  AccountHeaderIndicatorContainer,
+  AccountHeaderMainContainer, AccountHeaderMainText,
+  AccountHeaderSubText,
+  Arrow, CardContainer, CardContantContainer, CardsContainer, CardsTitle, CardText, CardTitle,
+  Container, FlexCenterContainer, LogoutContainer,
 } from './styled';
 import i18n from '../../I18n';
 import PageHeader from '../../Components/PageHeader';
 import Mixpanel from '../../services/Mixpanel';
-import { updateUser } from '../../context/user/api';
 import { PageContainer } from '../styles';
 import { UserContext } from '../../context/user';
+import onboardingContext from '../../context/onboarding';
+
+const AccountHeader = () => {
+  const {
+    onboardingState: user,
+  } = onboardingContext.useContainer();
+
+  return (
+    <AccountHeaderContainer>
+      <FlexCenterContainer>
+        <ThumbnailPicker
+          size={125}
+          avatarSource={user.avatar}
+        />
+      </FlexCenterContainer>
+      <AccountHeaderMainContainer>
+        <AccountHeaderMainText>
+          {user ? `${user.firstName} ${user.lastName}` : ''}
+        </AccountHeaderMainText>
+        <AccountHeaderIndicatorContainer>
+          <AccountHeaderMainContainer>
+            <AccountHeaderSubText>
+              12 Trips
+            </AccountHeaderSubText>
+          </AccountHeaderMainContainer>
+          <AccountHeaderMainContainer>
+            <AccountHeaderSubText>
+              200 Miles
+            </AccountHeaderSubText>
+          </AccountHeaderMainContainer>
+        </AccountHeaderIndicatorContainer>
+      </AccountHeaderMainContainer>
+    </AccountHeaderContainer>
+  );
+};
+
+const Card = ({ children, ...props }) => (
+  <CardContainer {...props}>
+    <CardContantContainer>
+      {children}
+    </CardContantContainer>
+    <Arrow />
+  </CardContainer>
+);
+
+const AccountContent = ({ navigation }) => {
+  const {
+    onboardingState: user,
+  } = onboardingContext.useContainer();
+
+  return (
+    <Container>
+      <CardsContainer>
+        <CardsTitle>
+          Account information
+        </CardsTitle>
+        <Card
+          onPress={() => {
+            navigation.navigate('Name');
+          }}
+        >
+          <CardTitle>
+            Name
+          </CardTitle>
+          <CardText>
+            {user ? `${user.firstName} ${user.lastName}` : ''}
+          </CardText>
+        </Card>
+        <Card>
+          <CardTitle>
+            Phone number
+          </CardTitle>
+          <CardText>
+            {user ? `${user.phoneNumber}` : ''}
+          </CardText>
+        </Card>
+        <Card>
+          <CardTitle>
+            Email
+          </CardTitle>
+          <CardText>
+            {user ? `${user.email}` : ''}
+          </CardText>
+        </Card>
+
+        <CardsTitle>
+          Payment Preferences
+        </CardsTitle>
+        <Card>
+          <CardTitle>
+            Default tip
+          </CardTitle>
+          <CardText>
+            5%
+          </CardText>
+        </Card>
+
+      </CardsContainer>
+    </Container>
+  );
+};
 
 export default ({
   navigation, menuSide,
 }) => {
-  const { setUser } = useContext(UserContext);
+  const { user } = useContext(UserContext);
   const route = useRoute();
-  const [onboardingState, dispatchOnboardingState] = useState({
-    uploadPromise: false,
-    firstName: '',
-    lastName: '',
-    email: '',
-    avatar: null,
-    error: null,
-  });
-  const [showHeaderIcon, setShowHeaderIcon] = useState(true);
-
 
   useEffect(() => {
-    if (
-      route.params
-    ) {
+    if (route.params) {
       Mixpanel.pageView(route.name);
-      setShowHeaderIcon(route.params.showHeaderIcon);
     }
   }, []);
-
-  useEffect(() => {
-    setFieldsData();
-  }, []);
-
-  const setOnboardingState = object => dispatchOnboardingState({
-    ...onboardingState,
-    ...object,
-  });
-
-  const setFieldsData = async () => {
-    const { userProfile } = await AppSettings.getSettings();
-
-    dispatchOnboardingState({
-      ...onboardingState,
-      ...userProfile,
-    });
-  };
-
-  const saveUser = (userProfile) => {
-    setUser(userProfile);
-    return AppSettings.update({ userProfile });
-  };
-
-  const submit = async () => {
-    let validate = null;
-    const schema = yup.object().shape({
-      firstName: yup.string().required().nullable(),
-      lastName: yup.string().required().nullable(),
-      email: yup.string().required().email().nullable(),
-    });
-
-    try {
-      validate = await schema.validate({
-        firstName: onboardingState.firstName,
-        lastName: onboardingState.lastName,
-        email: onboardingState.email,
-      }, { abortEarly: true });
-    } catch (e) {
-      setOnboardingState({
-        error: i18n.t(`onboarding.validations.${e.type}.${e.path}`),
-      });
-      return;
-    }
-
-    let avatar;
-    if (onboardingState.uploadPromise) {
-      avatar = await onboardingState.uploadPromise;
-    }
-
-    const userProfile = {
-      firstName: onboardingState.firstName,
-      lastName: onboardingState.lastName,
-      email: onboardingState.email,
-      avatar,
-    };
-
-    const response = await updateUser(userProfile);
-
-    if (response.status !== 200) {
-      console.log('Got bad response from user patch');
-      setOnboardingState({
-        error: i18n.t('onboarding.networkError'),
-      });
-      return;
-    }
-    saveUser(userProfile);
-    if (!response.data.active) {
-      return navigation.navigate('Lock');
-    }
-    navigation.navigate('AddCard');
-  };
-
-  const inputChange = field => value => setOnboardingState({
-    [field]: value,
-  });
-
-  const onImageChoose = (uploadPromise) => {
-    setOnboardingState({
-      avatar: uploadPromise,
-    });
-  };
-
 
   return (
     <PageContainer>
@@ -138,63 +143,22 @@ export default ({
         <PageHeader
           title={i18n.t('onboarding.pageTitle')}
           onIconPress={() => navigation.toggleDrawer()}
-          displayIcon={showHeaderIcon}
           iconSide={menuSide}
-        />
-        <Container>
-          {!showHeaderIcon
-            ? (
-              <Text>
-                {i18n.t('login.onBoardingPageTitle')}
-                {onboardingState.uploadingImage}
-              </Text>
-            ) : null}
-          <ThumbnailPicker
-            onImageChoose={onImageChoose}
-            avatarSource={onboardingState.avatar}
-          />
-          <FullNameContainer>
-            <NameContainer>
-              <TextInput
-                placeholder={i18n.t('onboarding.firstNamePlaceholder')}
-                onChangeText={inputChange('firstName')}
-                value={onboardingState.firstName}
-                autoCapitalize="words"
-              />
-            </NameContainer>
-            <NameContainer>
-              <TextInput
-                placeholder={i18n.t('onboarding.lastNamePlaceholder')}
-                onChangeText={inputChange('lastName')}
-                value={onboardingState.lastName}
-                autoCapitalize="words"
-              />
-            </NameContainer>
-          </FullNameContainer>
-          <TextInput
-            placeholder={i18n.t('onboarding.emailPlaceholder')}
-            width="90%"
-            onChangeText={inputChange('email')}
-            value={onboardingState.email}
-          />
-          <ErrorText>{onboardingState.error ? onboardingState.error : ''}</ErrorText>
-          <SubmitContainer>
-            <SubmitButton
-              data-test-id="FinishOnboardingButton"
-              onPress={() => submit()}
+        >
+          <>
+            <AccountHeader />
+            <LogoutContainer
+              onPress={() => {
+                navigation.navigate(ROUTES.LOGOUT);
+              }}
             >
-              {i18n.t('onboarding.submit')}
-            </SubmitButton>
-          </SubmitContainer>
-          <LogoutContainer
-            onPress={() => {
-              navigation.navigate(ROUTES.LOGOUT);
-            }}
-          >
-            <ErrorText>{i18n.t('menu.logout')}</ErrorText>
-          </LogoutContainer>
-        </Container>
-
+              <ErrorText>{i18n.t('menu.logout')}</ErrorText>
+            </LogoutContainer>
+          </>
+        </PageHeader>
+        <AccountContent
+          navigation={navigation}
+        />
       </KeyboardAwareScrollView>
     </PageContainer>
   );

@@ -1,35 +1,23 @@
 import React, {
-  useState, useEffect, useRef, Fragment,
+  useState, useEffect,
 } from 'react';
 import { ScrollView, View } from 'react-native';
 import Config from 'react-native-config';
-import getPosition from './getPostion';
+import { getPosition } from '../../../../../services/geo';
 
 import I18n from '../../../../../I18n';
 import {
   AddressInputs,
-  AddressInputsHeader,
   Address,
   AddressTextInput,
-  OriginDot,
-  DestinationDot,
-  PointsLine,
-  RoutePointsContainer,
   AddressSearchItem,
   AddressSearchItemText,
   DistanceFromAddress,
-  HeaderContainer,
-  HeaderIconContainer,
-  HeaderIcon,
   ResetInputIconContainer,
   ResetInputIcon,
   StationIcon,
 } from './styled';
-import PageHeader from '../../../../../Components/PageHeader';
-import SafeView from '../../../../../Components/SafeView';
 import { getLocation, getPlacesByLocation } from '../../../../../context/places/api';
-
-const closeIconSource = require('../../../../../assets/arrow-back.png');
 
 export default (props) => {
   const [searchText, setSearchText] = useState(
