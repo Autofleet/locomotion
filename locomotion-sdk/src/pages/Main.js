@@ -13,7 +13,7 @@ const Main = () => {
   const theme = useContext(ThemeContext);
   return (
     <Drawer.Navigator
-      initialRouteName={ROUTES.ACCOUNT}
+      initialRouteName={ROUTES.HOME}
       drawerContent={props => (<DrawerContentComponent {...props} />)}
       screenOptions={{
         inactiveBackgroundColor: '#ffffff',
