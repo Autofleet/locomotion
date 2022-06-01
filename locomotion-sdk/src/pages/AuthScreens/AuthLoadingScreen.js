@@ -3,7 +3,7 @@ import {
   Text,
   View,
 } from 'react-native';
-import { NAVIGATION_CONTAINERS, ONBOARDING_PAGE_NAMES } from '../routes';
+import { APP_ROUTES, AUTH_ROUTES } from '../routes';
 import AppSettings from '../../services/app-settings';
 import Auth from '../../services/auth';
 import { getUserDetails } from '../../context/user/api';
@@ -54,18 +54,25 @@ const AuthLoadingScreen = ({ navigation }) => {
 
         await saveUser(userData);
 
+        const nonUserNav = (screen) => {
+          navigation.replace(
+            APP_ROUTES.AUTH_SCREENS,
+            { screen, params: { showHeaderIcon: false } },
+          );
+        };
+
         if (!userData.active) {
-          return navigation.replace(NAVIGATION_CONTAINERS.AUTH_SCREENS, { screen: ONBOARDING_PAGE_NAMES.LOCK, params: { showHeaderIcon: false } });
+          return navigation.replace(AUTH_ROUTES.LOCK, { params: { showHeaderIcon: false } });
         }
 
         if (!userData.didCompleteOnboarding) {
           return navigateBasedOnUser(userData);
         }
 
-        return navigation.replace(NAVIGATION_CONTAINERS.MAIN_APP);
+        return navigation.replace(APP_ROUTES.MAIN_APP);
       }
       setUser(INITIAL_USER_STATE);
-      navigation.replace(NAVIGATION_CONTAINERS.AUTH_SCREENS);
+      navigation.replace(APP_ROUTES.AUTH_SCREENS);
     }
 
     if (!user) { // Load app state

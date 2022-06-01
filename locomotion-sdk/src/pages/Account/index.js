@@ -1,7 +1,7 @@
 import React, { useEffect, useContext } from 'react';
 import { useRoute } from '@react-navigation/native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { ROUTES } from '../routes';
+import { AUTH_ROUTES, MAIN_ROUTES } from '../routes';
 
 import ThumbnailPicker from '../../Components/ThumbnailPicker';
 import {
@@ -71,7 +71,9 @@ const AccountContent = ({ navigation }) => {
         </CardsTitle>
         <Card
           onPress={() => {
-            navigation.navigate('Name');
+            navigation.navigate(AUTH_ROUTES.NAME, {
+              nextScreen: () => navigation.navigate(MAIN_ROUTES.ACCOUNT),
+            });
           }}
         >
           <CardTitle>
@@ -140,7 +142,7 @@ export default ({
         <AccountHeader />
         <LogoutContainer
           onPress={() => {
-            navigation.navigate(ROUTES.LOGOUT);
+            navigation.navigate(MAIN_ROUTES.LOGOUT);
           }}
         >
           <ErrorText>{i18n.t('menu.logout')}</ErrorText>

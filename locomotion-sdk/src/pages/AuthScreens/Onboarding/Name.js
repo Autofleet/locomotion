@@ -1,4 +1,5 @@
 import React, { useState, useContext } from 'react';
+import { useRoute } from '@react-navigation/native';
 import TextInput from '../../../Components/TextInput';
 import OnboardingNavButtons from './OnboardingNavButtons';
 import { OnboardingContext } from '../../../context/onboarding';
@@ -10,6 +11,7 @@ import { ONBOARDING_PAGE_NAMES } from '../../routes';
 import { UserContext } from '../../../context/user';
 
 const Name = () => {
+  const route = useRoute();
   const { nextScreen } = useContext(OnboardingContext);
   const { updateUserInfo, user } = useContext(UserContext);
   const [showErrorText, setShowErrorText] = useState(false);
@@ -48,7 +50,10 @@ const Name = () => {
         <OnboardingNavButtons
           isInvalid={!user.firstName || !user.lastName}
           onFail={() => setShowErrorText(true)}
-          onNext={() => nextScreen(ONBOARDING_PAGE_NAMES.NAME)}
+          onNext={
+            () => (route.params && route.params.nextScreen
+              ? route.params.nextScreen() : nextScreen(ONBOARDING_PAGE_NAMES.NAME))
+          }
         />
       </PageContainer>
     </SafeView>

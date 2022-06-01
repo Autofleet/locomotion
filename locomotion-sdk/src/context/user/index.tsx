@@ -6,18 +6,18 @@ import Mixpanel from '../../services/Mixpanel';
 import PaymentsContext from '../payments';
 
 export interface User {
-  phoneNumber: string;
-  firstName: string;
-  lastName: string;
-  avatar: string;
-  email: string;
-  pushToken: string;
-  pushUserId: string;
-  cards: any;
+  phoneNumber?: string;
+  firstName?: string;
+  lastName?: string;
+  avatar?: string;
+  email?: string;
+  pushToken?: string;
+  pushUserId?: string;
+  cards?: any;
 }
 
 interface UserContextInterface {
-  setUser: (user: User) => void,
+  setUser: (user: User | null) => void,
   user: User | null,
   updateState: (field: string, value: any) => void,
   getUserFromStorage: () => void,
@@ -26,7 +26,7 @@ interface UserContextInterface {
 }
 
 export const UserContext = createContext<UserContextInterface>({
-  setUser: (user: User) => {},
+  setUser: (user: User | null) => {},
   user: null,
   updateState: (field: string, value: any) => {},
   getUserFromStorage: () => {},

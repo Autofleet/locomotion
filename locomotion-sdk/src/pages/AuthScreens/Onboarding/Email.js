@@ -1,5 +1,6 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import * as yup from 'yup';
+import { useIsFocused } from '@react-navigation/native';
 import TextInput from '../../../Components/TextInput';
 import OnboardingNavButtons from './OnboardingNavButtons';
 import { OnboardingContext } from '../../../context/onboarding';
@@ -15,7 +16,13 @@ const Email = () => {
   const { nextScreen } = useContext(OnboardingContext);
   const { updateState, updateUserInfo, user } = useContext(UserContext);
   const [errorText, setErrorText] = useState(false);
-  const [email, setEmail] = useState('');
+  const [email, setEmail] = useState(user.email);
+
+  const isFocused = useIsFocused();
+
+  useEffect(() => {
+    setEmail(user.email);
+  }, [isFocused]);
 
   const onNext = async () => {
     try {
