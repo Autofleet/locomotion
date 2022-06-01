@@ -5,7 +5,6 @@ import 'react-native-gesture-handler';
 import { NavigationContainer } from '@react-navigation/native';
 import { MainProvider } from './context';
 import MainRouter from './pages';
-import OnboardingContext from './context/onboarding';
 import RidePopups from './popups/RidePopups';
 
 const STRIPE_PUBLISHER_KEY = Config.STRIPE_PUBLISHER_KEY || '';
@@ -21,11 +20,9 @@ export default (props) => {
   return (
     <NavigationContainer>
       <MainProvider {...props}>
-        <OnboardingContext.Provider>
           <MainRouter {...props} />
           {props.children}
           <RidePopups />
-        </OnboardingContext.Provider>
       </MainProvider>
     </NavigationContainer>
   );

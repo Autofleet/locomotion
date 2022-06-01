@@ -9,20 +9,21 @@ import Welcome from './AuthScreens/Onboarding/Welcome';
 import Avatar from './AuthScreens/Onboarding/Avatar';
 import Email from './AuthScreens/Onboarding/Email';
 import Card from './AuthScreens/Onboarding/Card';
+import { ONBOARDING_PAGE_NAMES } from './consts';
 
 const Stack = createNativeStackNavigator();
 
 const AuthScreens = () => (
-  <Stack.Navigator initialRouteName="Start" screenOptions={{ headerShown: false, gestureEnabled: false, animation: 'slide_from_left' }}>
-    <Stack.Screen name="Start" component={StartScreen} />
-    <Stack.Screen name="Phone" component={Phone} />
-    <Stack.Screen name="Code" component={Code} />
-    <Stack.Screen name="Name" component={Name} />
-    <Stack.Screen name="AddCard" component={Card} />
-    <Stack.Screen name="Avatar" component={Avatar} />
-    <Stack.Screen name="Email" component={Email} />
-    <Stack.Screen name="Welcome" component={Welcome} />
-    <Stack.Screen name="Lock" component={Lock} />
+  <Stack.Navigator initialRouteName={ONBOARDING_PAGE_NAMES.START} screenOptions={{ headerShown: false, gestureEnabled: false, animation: 'slide_from_left' }}>
+    <Stack.Screen name={ONBOARDING_PAGE_NAMES.START} component={StartScreen} />
+    <Stack.Screen name={ONBOARDING_PAGE_NAMES.PHONE} component={Phone} />
+    <Stack.Screen name={ONBOARDING_PAGE_NAMES.CODE} component={Code} />
+    <Stack.Screen name={ONBOARDING_PAGE_NAMES.NAME} component={Name} />
+    <Stack.Screen name={ONBOARDING_PAGE_NAMES.CARD} component={Card} />
+    <Stack.Screen name={ONBOARDING_PAGE_NAMES.AVATAR} component={Avatar} />
+    <Stack.Screen name={ONBOARDING_PAGE_NAMES.EMAIL} component={Email} />
+    <Stack.Screen name={ONBOARDING_PAGE_NAMES.WELCOME} component={Welcome} />
+    <Stack.Screen name={ONBOARDING_PAGE_NAMES.LOCK} component={Lock} />
   </Stack.Navigator>
 );
 

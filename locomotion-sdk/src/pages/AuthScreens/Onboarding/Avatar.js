@@ -9,6 +9,7 @@ import {
 import Header from './Header';
 import ScreenText from './ScreenText/index';
 import ThumbnailPicker from '../../../Components/ThumbnailPicker';
+import { ONBOARDING_PAGE_NAMES } from '../../../pages/consts';
 
 const Avatar = () => {
   const {
@@ -22,7 +23,7 @@ const Avatar = () => {
 
   return (
     <SafeView>
-      <Header title={i18n.t('onboarding.pages.avatar.title')} page="avatar" />
+      <Header title={i18n.t('onboarding.pages.avatar.title')} page={ONBOARDING_PAGE_NAMES.AVATAR} />
       <PageContainer>
         <ScreenText
           text={i18n.t('onboarding.pages.avatar.text')}

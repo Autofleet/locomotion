@@ -9,6 +9,7 @@ import {
 import i18n from '../../../I18n';
 import Header from './Header';
 import ScreenText from './ScreenText';
+import { ONBOARDING_PAGE_NAMES } from '../../../pages/consts';
 
 const Code = () => {
   const { onVert, onboardingState } = onboardingContext.useContainer();
@@ -30,7 +31,7 @@ const Code = () => {
   };
   return (
     <SafeView>
-      <Header title={i18n.t('onboarding.pages.code.title')} page="code" />
+      <Header title={i18n.t('onboarding.pages.code.title')} page={ONBOARDING_PAGE_NAMES.CODE} />
       <PageContainer>
         <ScreenText
           text={i18n.t('onboarding.pages.code.text')}

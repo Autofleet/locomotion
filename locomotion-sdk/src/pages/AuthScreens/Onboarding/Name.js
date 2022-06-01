@@ -6,6 +6,7 @@ import { ErrorText, PageContainer, SafeView } from './styles';
 import i18n from '../../../I18n';
 import Header from './Header';
 import ScreenText from './ScreenText';
+import { ONBOARDING_PAGE_NAMES } from '../../../pages/consts';
 
 
 const Name = () => {
@@ -22,7 +23,7 @@ const Name = () => {
 
   return (
     <SafeView>
-      <Header title={i18n.t('onboarding.pages.name.title')} page="name" />
+      <Header title={i18n.t('onboarding.pages.name.title')} page={ONBOARDING_PAGE_NAMES.NAME} />
       <PageContainer>
         <ScreenText
           text={i18n.t('onboarding.pages.name.text')}

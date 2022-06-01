@@ -5,7 +5,7 @@ import backArrow from '../../../assets/arrow-back.png';
 import onboardingContext from '../../../context/onboarding';
 
 const Header = ({ title, page }) => {
-  const { requiredOnboarding, lastScreen, nextScreen } = onboardingContext.useContainer();
+  const { requiredOnboarding, nextScreen } = onboardingContext.useContainer();
   const navigation = useNavigation();
 
   const checkRequired = () => {
@@ -16,7 +16,7 @@ const Header = ({ title, page }) => {
   };
 
   const goBack = () => {
-    lastScreen();
+    navigation.goBack()
   };
   return (
     <PageHeader

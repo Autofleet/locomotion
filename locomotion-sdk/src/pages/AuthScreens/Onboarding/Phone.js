@@ -8,6 +8,7 @@ import Header from './Header';
 import ScreenText from './ScreenText/index';
 import { loginApi } from '../../../context/user/api';
 import PhoneNumberInput from '../../../Components/PhoneNumberInput';
+import { ONBOARDING_PAGE_NAMES } from '../../../pages/consts';
 
 const Phone = () => {
   const { onboardingState, updateState, nextScreen } = onboardingContext.useContainer();
@@ -36,7 +37,7 @@ const Phone = () => {
 
   return (
     <SafeView>
-      <Header title={i18n.t('onboarding.pages.phone.title')} page="phone" />
+      <Header title={i18n.t('onboarding.pages.phone.title')} page={ONBOARDING_PAGE_NAMES.PHONE} />
       <PageContainer>
         <ScreenText
           text={i18n.t('onboarding.pages.phone.text')}

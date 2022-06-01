@@ -6,6 +6,7 @@ import Header from './Header';
 import ScreenText from './ScreenText';
 import onboardingContext from '../../../context/onboarding';
 import PaymentsContext from '../../../context/payments';
+import { ONBOARDING_PAGE_NAMES } from '../../../pages/consts';
 
 const Card = () => {
   const { nextScreen, onboardingState } = onboardingContext.useContainer();
@@ -15,7 +16,7 @@ const Card = () => {
   };
   return (
     <SafeView>
-      <Header title={i18n.t('onboarding.pages.code.title')} page="card" />
+      <Header title={i18n.t('onboarding.pages.code.title')} page={ONBOARDING_PAGE_NAMES.CARD} />
       <AddCard
         onDone={onDone}
         canSkip={false}

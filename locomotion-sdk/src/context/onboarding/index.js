@@ -3,19 +3,20 @@ import React, { useEffect, useState } from 'react';
 import { createContainer } from 'unstated-next';
 import auth from '../../services/auth';
 import Mixpanel from '../../services/Mixpanel';
-import { useStateValue } from '../main';
+import { useStateValue } from '../state';
 import AppSettings from '../../services/app-settings';
 import { loginVert, sendEmailVerification, updateUser } from '../user/api';
 import PaymentsContext from '../payments';
+import { ONBOARDING_PAGE_NAMES } from '../../pages/consts';
 
-const SCREEN_ORDER = ['phoneNumber', 'Code', 'Name', 'Email', 'Avatar', 'AddCard', 'Welcome'];
+const SCREEN_ORDER = [ONBOARDING_PAGE_NAMES.START, ONBOARDING_PAGE_NAMES.PHONE, ONBOARDING_PAGE_NAMES.CODE, ONBOARDING_PAGE_NAMES.NAME, ONBOARDING_PAGE_NAMES.EMAIL, ONBOARDING_PAGE_NAMES.AVATAR, ONBOARDING_PAGE_NAMES.CARD, ONBOARDING_PAGE_NAMES.WELCOME];
 const keyToScreen = {
-  firstName: 'Name',
-  lastName: 'Name',
-  email: 'Email',
-  avatar: 'Avatar',
-  cards: 'AddCard',
-  welcome: 'Welcome',
+  firstName: ONBOARDING_PAGE_NAMES.NAME,
+  lastName: ONBOARDING_PAGE_NAMES.NAME,
+  email: ONBOARDING_PAGE_NAMES.EMAIL,
+  avatar: ONBOARDING_PAGE_NAMES.AVATAR,
+  cards: ONBOARDING_PAGE_NAMES.CARD,
+  welcome: ONBOARDING_PAGE_NAMES.WELCOME,
 };
 
 const authContainer = () => {
@@ -32,12 +33,12 @@ const authContainer = () => {
   };
   const [onboardingState, setOnboardingState] = useState(initialState);
   const [requiredOnboarding] = useState({
-    phoneNumber: true,
-    code: true,
-    name: true,
-    email: true,
-    avatar: false,
-    cards: false,
+    [ONBOARDING_PAGE_NAMES.PHONE]: true,
+    [ONBOARDING_PAGE_NAMES.CODE]: true,
+    [ONBOARDING_PAGE_NAMES.NAME]: true,
+    [ONBOARDING_PAGE_NAMES.EMAIL]: true,
+    [ONBOARDING_PAGE_NAMES.AVATAR]: false,
+    [ONBOARDING_PAGE_NAMES.CARD]: false,
   });
   const [currentScreenIndex, setCurrentScreenIndex] = useState(0);
 
@@ -162,6 +163,7 @@ const authContainer = () => {
     requiredOnboarding,
     nextScreen,
     lastScreen,
+    setCurrentScreenIndex
   };
 };
 export default createContainer(authContainer);
