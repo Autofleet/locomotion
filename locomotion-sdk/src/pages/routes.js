@@ -7,3 +7,15 @@ export const ROUTES = {
   LOGOUT: 'Logout',
   WEBVIEW: 'webview',
 };
+
+export const ONBOARDING_PAGE_NAMES = {
+  START: 'Start',
+  PHONE: 'Phone',
+  CODE: 'Code',
+  NAME: 'Name',
+  CARD: 'AddCard',
+  AVATAR: 'Avatar',
+  EMAIL: 'Email',
+  WELCOME: 'Welcome',
+  LOCK: 'Lock',
+};

@@ -2,7 +2,7 @@ import React, { useState, useEffect, Fragment } from 'react';
 import { Text, View } from 'react-native';
 import styled from 'styled-components';
 import i18n from '../../../../I18n';
-import { getTogglePopupsState } from '../../../../context/main';
+import { getTogglePopupsState } from '../../../../context/state';
 import Button from '../../../../Components/Button';
 
 const PassengerAmountIconSource = require('../../../../assets/ppl.png');

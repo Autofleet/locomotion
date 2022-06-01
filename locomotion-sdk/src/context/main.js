@@ -6,9 +6,7 @@ import SettingsContext from './settings';
 import PaymentsContext from './payments';
 import ThemeProvider from './theme';
 import UserContextProvider from './user';
-import { StateContext, StateProvider } from './state';
-
-
+import { StateProvider } from './state';
 
 
 export const MainProvider = ({ children, LoginPage, i18n }) => {
@@ -71,21 +69,6 @@ export const MainProvider = ({ children, LoginPage, i18n }) => {
   );
 };
 
-const getPopupKey = key => `popup_${key}`;
-
-export const getTogglePopupsState = () => {
-  const [state, dispatch] = useContext(StateContext);
-
-  return [id => state && (state[getPopupKey(id)] || false), (id, open) => dispatch({
-    type: 'changeState',
-    payload: {
-      [getPopupKey('ridePopupsStatus')]: open,
-      [getPopupKey(id)]: open,
-    },
-  })];
-};
-
 export default {
   MainProvider,
-  getTogglePopupsState,
 };

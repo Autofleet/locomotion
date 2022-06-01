@@ -9,7 +9,7 @@ import {
 import i18n from '../../../I18n';
 import Header from './Header';
 import ScreenText from './ScreenText';
-import { ONBOARDING_PAGE_NAMES } from '../../../pages/consts';
+import { ONBOARDING_PAGE_NAMES } from '../../routes';
 
 const Code = () => {
   const { onVert, onboardingState } = onboardingContext.useContainer();

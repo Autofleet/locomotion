@@ -12,7 +12,7 @@ import {
   ContentContainer,
   Content,
 } from './styled';
-import { getTogglePopupsState } from '../../context/main';
+import { getTogglePopupsState } from '../../context/state';
 import RoundedButton from '../../Components/RoundedButton';
 
 const ConfirmationPopup = ({

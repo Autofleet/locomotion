@@ -7,7 +7,7 @@ import moment from 'moment';
 import Config from 'react-native-config';
 
 import { getPosition } from '../../services/geo';
-import { getTogglePopupsState } from '../../context/main';
+import { getTogglePopupsState } from '../../context/state';
 import UserService from '../../services/user';
 import OneSignal from '../../services/one-signal';
 import settingsContext from '../../context/settings';

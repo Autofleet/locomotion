@@ -20,9 +20,9 @@ export default (props) => {
   return (
     <NavigationContainer>
       <MainProvider {...props}>
-          <MainRouter {...props} />
-          {props.children}
-          <RidePopups />
+        <MainRouter {...props} />
+        {props.children}
+        <RidePopups />
       </MainProvider>
     </NavigationContainer>
   );

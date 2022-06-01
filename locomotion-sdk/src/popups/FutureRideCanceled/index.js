@@ -9,7 +9,7 @@ import {
   Title,
   SubTitle,
 } from './styled';
-import { getTogglePopupsState } from '../../context/main';
+import { getTogglePopupsState } from '../../context/state';
 
 export default ({
   closeAfter, onClose, rideSummaryData, onRating,

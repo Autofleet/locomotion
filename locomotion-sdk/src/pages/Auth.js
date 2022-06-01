@@ -9,7 +9,7 @@ import Welcome from './AuthScreens/Onboarding/Welcome';
 import Avatar from './AuthScreens/Onboarding/Avatar';
 import Email from './AuthScreens/Onboarding/Email';
 import Card from './AuthScreens/Onboarding/Card';
-import { ONBOARDING_PAGE_NAMES } from './consts';
+import { ONBOARDING_PAGE_NAMES } from './routes';
 
 const Stack = createNativeStackNavigator();
 

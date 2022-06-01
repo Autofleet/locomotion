@@ -14,15 +14,3 @@ export const ROUTES_COMPS = {
   [ROUTES.CONTACT_US]: ContactUs,
   [ROUTES.WEBVIEW]: WebViewPage,
 };
-
-export const ONBOARDING_PAGE_NAMES = {
-  START: 'Start',
-  PHONE: 'Phone',
-  CODE: 'Code',
-  NAME: 'Name',
-  CARD: 'AddCard',
-  AVATAR: 'Avatar',
-  EMAIL: 'Email',
-  WELCOME: 'Welcome',
-  LOCK: 'Lock'
-}

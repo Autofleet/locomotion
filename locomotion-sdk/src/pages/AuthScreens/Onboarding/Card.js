@@ -6,7 +6,7 @@ import Header from './Header';
 import ScreenText from './ScreenText';
 import onboardingContext from '../../../context/onboarding';
 import PaymentsContext from '../../../context/payments';
-import { ONBOARDING_PAGE_NAMES } from '../../../pages/consts';
+import { ONBOARDING_PAGE_NAMES } from '../../routes';
 
 const Card = () => {
   const { nextScreen, onboardingState } = onboardingContext.useContainer();

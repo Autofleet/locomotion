@@ -24,7 +24,7 @@ import onboardingContext from '../../../context/onboarding';
 
 const StartScreen = () => {
   const {
-    nextScreen, setCurrentScreenIndex
+    nextScreen, setCurrentScreenIndex,
   } = onboardingContext.useContainer();
   const [webViewWindow, setWebViewWindow] = useState(null);
   const route = useRoute();
@@ -41,7 +41,7 @@ const StartScreen = () => {
 
   useEffect(() => {
     Mixpanel.pageView(route.name);
-    setCurrentScreenIndex(0)
+    setCurrentScreenIndex(0);
     loadSettings();
   }, []);
 

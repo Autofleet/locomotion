@@ -3,7 +3,7 @@ import Modal from 'react-native-modal';
 import {
   ModalContainer, Content, FooterButton, Title, SubTitle,
 } from './styled';
-import { getTogglePopupsState } from '../context/main';
+import { getTogglePopupsState } from '../context/state';
 
 export default ({
   id, title, subTitle, closeAfter, content, onClose,

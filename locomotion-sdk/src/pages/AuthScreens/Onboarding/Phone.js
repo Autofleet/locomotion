@@ -8,7 +8,7 @@ import Header from './Header';
 import ScreenText from './ScreenText/index';
 import { loginApi } from '../../../context/user/api';
 import PhoneNumberInput from '../../../Components/PhoneNumberInput';
-import { ONBOARDING_PAGE_NAMES } from '../../../pages/consts';
+import { ONBOARDING_PAGE_NAMES } from '../../routes';
 
 const Phone = () => {
   const { onboardingState, updateState, nextScreen } = onboardingContext.useContainer();

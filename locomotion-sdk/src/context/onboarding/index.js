@@ -7,7 +7,7 @@ import { useStateValue } from '../state';
 import AppSettings from '../../services/app-settings';
 import { loginVert, sendEmailVerification, updateUser } from '../user/api';
 import PaymentsContext from '../payments';
-import { ONBOARDING_PAGE_NAMES } from '../../pages/consts';
+import { ONBOARDING_PAGE_NAMES } from '../../pages/routes';
 
 const SCREEN_ORDER = [ONBOARDING_PAGE_NAMES.START, ONBOARDING_PAGE_NAMES.PHONE, ONBOARDING_PAGE_NAMES.CODE, ONBOARDING_PAGE_NAMES.NAME, ONBOARDING_PAGE_NAMES.EMAIL, ONBOARDING_PAGE_NAMES.AVATAR, ONBOARDING_PAGE_NAMES.CARD, ONBOARDING_PAGE_NAMES.WELCOME];
 const keyToScreen = {
@@ -163,7 +163,7 @@ const authContainer = () => {
     requiredOnboarding,
     nextScreen,
     lastScreen,
-    setCurrentScreenIndex
+    setCurrentScreenIndex,
   };
 };
 export default createContainer(authContainer);
