@@ -61,8 +61,7 @@ const authContainer = () => {
     setOnboardingState(user);
     let unfinishedScreen;
     for (const key of Object.keys(initialState)) {
-      console.log({ ...initialState, ...user });
-      if (!{ ...initialState, ...user }[key]) {
+      if (!user[key]) {
         unfinishedScreen = keyToScreen[key];
         break;
       }
