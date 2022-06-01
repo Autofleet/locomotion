@@ -1,4 +1,5 @@
 import { Platform, PermissionsAndroid, Alert } from 'react-native';
+import Config from 'react-native-config';
 import RNLocation from 'react-native-location';
 import moment from 'moment';
 
@@ -95,5 +96,21 @@ class Geo {
   prepareCoords = locations => ({ coords: { latitude: locations[0].latitude, longitude: locations[0].longitude }, timestamp: new Date() })
 }
 
-export default new Geo();
+const GeoService = new Geo();
+export default GeoService;
+
 export const { decodeGmPath } = Geo;
+
+export const getPosition = async () => {
+  try {
+    return GeoService.currentLocation();
+  } catch (e) {
+    console.log('Error getting location', e);
+    return {
+      coords: {
+        latitude: parseFloat(Config.DEFAULT_LATITUDE),
+        longitude: parseFloat(Config.DEFAULT_LONGITUDE),
+      },
+    };
+  }
+};

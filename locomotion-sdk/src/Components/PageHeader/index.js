@@ -7,7 +7,7 @@ import {
 const HamburgerIconSource = require('../../assets/menu.png');
 
 const PageHeader = ({
-  title, icon, onIconPress, iconSide, displayIcon, width, height,
+  title, icon, onIconPress, iconSide, displayIcon, width, height, children,
 }) => (
   <Header>
     <HeaderText>{title}</HeaderText>
@@ -17,6 +17,7 @@ const PageHeader = ({
           <HeaderIcon width={width} height={width} source={icon} side={iconSide} />
         </HeaderIconContainer>
       ) : null}
+    {children}
   </Header>
 );
 
