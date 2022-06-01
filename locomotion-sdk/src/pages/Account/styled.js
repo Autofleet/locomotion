@@ -84,7 +84,7 @@ export const FlexCenterContainer = styled.View`
 `;
 
 export const AccountHeaderMainContainer = styled(FlexCenterContainer)`
-  padding: 5px;
+  padding: 15px;
   width: 50%;
 `;
 

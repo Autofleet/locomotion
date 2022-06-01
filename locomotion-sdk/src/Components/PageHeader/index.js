@@ -9,7 +9,7 @@ import i18n from '../../I18n';
 const HamburgerIconSource = require('../../assets/menu.png');
 
 const PageHeader = ({
-  title, icon, onIconPress, iconSide, displayIcon, width, height, children, showSkipButton, onPressSkip,
+  title, icon, onIconPress, iconSide, displayIcon, width, showSkipButton, onPressSkip,
 }) => (
   <Header>
     {displayIcon !== false
@@ -27,7 +27,6 @@ const PageHeader = ({
         </SkipButtonText>
       </SkipButton>
       )}
-    {children}
   </Header>
 );
 

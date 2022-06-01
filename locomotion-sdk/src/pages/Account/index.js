@@ -139,18 +139,15 @@ export default ({
           title={i18n.t('onboarding.pageTitle')}
           onIconPress={() => navigation.toggleDrawer()}
           iconSide={menuSide}
+        />
+        <AccountHeader />
+        <LogoutContainer
+          onPress={() => {
+            navigation.navigate(ROUTES.LOGOUT);
+          }}
         >
-          <>
-            <AccountHeader />
-            <LogoutContainer
-              onPress={() => {
-                navigation.navigate(ROUTES.LOGOUT);
-              }}
-            >
-              <ErrorText>{i18n.t('menu.logout')}</ErrorText>
-            </LogoutContainer>
-          </>
-        </PageHeader>
+          <ErrorText>{i18n.t('menu.logout')}</ErrorText>
+        </LogoutContainer>
         <AccountContent
           navigation={navigation}
         />

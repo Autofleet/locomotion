@@ -39,10 +39,10 @@ const Email = () => {
     try {
       await emailSchema.validateAt('email', { email: value });
     } catch (e) {
-      updateState('email', '');
+      updateState({ email: '' });
       return;
     }
-    updateState('email', email);
+    updateState({ email });
   };
 
   return (

@@ -31,7 +31,6 @@ export const HeaderIcon = styled.Image`
 export const Header = styled.View`
   background-color: ${({ theme }) => theme.pageBackgroundColor};
   width: 100%;
-  box-shadow: 0px 5px 3px rgba(68, 68, 68, 0.1);
   display: flex;
   flex-direction: row;
   justify-content: space-between;

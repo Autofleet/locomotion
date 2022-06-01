@@ -13,15 +13,15 @@ import { UserContext } from '../../../context/user';
 
 const Phone = () => {
   const { nextScreen } = onboardingContext.useContainer();
-  const { updateState, user } = useContext(UserContext);
+  const { updateState, user, updateUserInfo } = useContext(UserContext);
   const [showErrorText, setShowErrorText] = useState(false);
-
+  console.log(user);
   const onPhoneNumberChange = (phoneNumber, countryCode) => {
     setShowErrorText(false);
     if (phoneNumber.length < 9) {
-      return updateState('phoneNumber', '');
+      return updateState({ phoneNumber: '' });
     }
-    updateState('phoneNumber', countryCode + phoneNumber);
+    updateState({ phoneNumber: countryCode + phoneNumber });
   };
 
   const onSubmitPhoneNumber = async () => {
@@ -29,6 +29,7 @@ const Phone = () => {
       await loginApi({
         phoneNumber: user.phoneNumber,
       });
+      updateUserInfo({ phoneNumber: user.phoneNumber });
       nextScreen();
     } catch (e) {
       console.log('Bad login with response', e);
