@@ -84,7 +84,7 @@ const UserContextProvider = ({ children }: { children: any }) => {
   const onVert = async (code: string) => {
     try {
       const vertResponse = await loginVert({
-        phoneNumber: user.phoneNumber,
+        phoneNumber: user?.phoneNumber,
         code,
       });
 
