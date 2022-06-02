@@ -1,7 +1,7 @@
 import React, { useState, useContext } from 'react';
 import TextInput from '../../../Components/TextInput';
 import OnboardingNavButtons from './OnboardingNavButtons';
-import onboardingContext from '../../../context/onboarding';
+import { OnboardingContext } from '../../../context/onboarding';
 import { ErrorText, PageContainer, SafeView } from './styles';
 import i18n from '../../../I18n';
 import Header from './Header';
@@ -10,9 +10,7 @@ import { ONBOARDING_PAGE_NAMES } from '../../routes';
 import { UserContext } from '../../../context/user';
 
 const Name = () => {
-  const {
-    nextScreen,
-  } = onboardingContext.useContainer();
+  const { nextScreen } = useContext(OnboardingContext);
   const { updateUserInfo, user } = useContext(UserContext);
   const [showErrorText, setShowErrorText] = useState(false);
 

@@ -2,7 +2,7 @@ import React, { useContext, useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import PinCode from '../../../Components/PinCode';
 import OnboardingNavButtons from './OnboardingNavButtons';
-import onboardingContext from '../../../context/onboarding';
+import { OnboardingContext } from '../../../context/onboarding';
 import {
   ErrorText, PageContainer, ResendButton, ResendContainer, ResendText, SafeView,
 } from './styles';
@@ -13,7 +13,7 @@ import { ONBOARDING_PAGE_NAMES } from '../../routes';
 import { UserContext } from '../../../context/user';
 
 const Code = () => {
-  const { verifyCode } = onboardingContext.useContainer();
+  const { verifyCode } = useContext(OnboardingContext);
   const { user } = useContext(UserContext);
   const navigation = useNavigation();
   const [code, setCode] = useState('');

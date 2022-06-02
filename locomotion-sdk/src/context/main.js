@@ -1,11 +1,10 @@
-import React, { useContext } from 'react';
-import AppSettings from '../services/app-settings';
+import React from 'react';
 import I18n from '../I18n';
-import OnboardingContext from './onboarding';
 import SettingsContext from './settings';
 import PaymentsContext from './payments';
 import ThemeProvider from './theme';
 import UserContextProvider from './user';
+import OnboardingContextProvider from './onboarding';
 import { StateProvider } from './state';
 
 
@@ -58,9 +57,9 @@ export const MainProvider = ({ children, LoginPage, i18n }) => {
         <PaymentsContext.Provider>
           <ThemeProvider>
             <UserContextProvider>
-              <OnboardingContext.Provider>
+              <OnboardingContextProvider>
                 {children}
-              </OnboardingContext.Provider>
+              </OnboardingContextProvider>
             </UserContextProvider>
           </ThemeProvider>
         </PaymentsContext.Provider>

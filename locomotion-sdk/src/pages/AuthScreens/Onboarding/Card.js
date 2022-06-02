@@ -1,14 +1,14 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import i18n from '../../../I18n';
 import AddCard from '../../AddCard';
 import { SafeView } from './styles';
 import Header from './Header';
 import ScreenText from './ScreenText';
-import onboardingContext from '../../../context/onboarding';
+import { OnboardingContext } from '../../../context/onboarding';
 import { ONBOARDING_PAGE_NAMES } from '../../routes';
 
 const Card = () => {
-  const { nextScreen } = onboardingContext.useContainer();
+  const { nextScreen } = useContext(OnboardingContext);
 
   const onDone = async () => {
     nextScreen();

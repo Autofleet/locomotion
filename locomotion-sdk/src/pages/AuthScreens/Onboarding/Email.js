@@ -2,7 +2,7 @@ import React, { useContext, useState } from 'react';
 import * as yup from 'yup';
 import TextInput from '../../../Components/TextInput';
 import OnboardingNavButtons from './OnboardingNavButtons';
-import onboardingContext from '../../../context/onboarding';
+import { OnboardingContext } from '../../../context/onboarding';
 import { ErrorText, PageContainer, SafeView } from './styles';
 import i18n from '../../../I18n';
 import Header from './Header';
@@ -12,9 +12,7 @@ import { UserContext } from '../../../context/user';
 
 
 const Email = () => {
-  const {
-    nextScreen,
-  } = onboardingContext.useContainer();
+  const { nextScreen } = useContext(OnboardingContext);
   const { updateState, updateUserInfo, user } = useContext(UserContext);
   const [errorText, setErrorText] = useState(false);
   const [email, setEmail] = useState('');

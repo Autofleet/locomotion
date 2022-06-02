@@ -1,7 +1,7 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext } from 'react';
 import i18n from '../../../I18n';
 import OnboardingNavButtons from './OnboardingNavButtons';
-import onboardingContext from '../../../context/onboarding';
+import { OnboardingContext } from '../../../context/onboarding';
 import {
   ImageContainer, Name, PageContainer, SafeView,
 } from './styles';
@@ -12,9 +12,7 @@ import { ONBOARDING_PAGE_NAMES } from '../../routes';
 import { UserContext } from '../../../context/user';
 
 const Avatar = () => {
-  const {
-    nextScreen,
-  } = onboardingContext.useContainer();
+  const { nextScreen } = useContext(OnboardingContext);
   const { updateUserInfo, user } = useContext(UserContext);
 
   const onImageChoose = (image) => {

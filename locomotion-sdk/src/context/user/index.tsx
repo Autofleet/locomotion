@@ -1,12 +1,11 @@
 import React, { createContext, useEffect, useState } from 'react';
-import { useStateValue } from '../state';
 import AppSettings from '../../services/app-settings';
 import { loginVert, sendEmailVerification, updateUser } from './api';
 import auth from '../../services/auth';
 import Mixpanel from '../../services/Mixpanel';
 import PaymentsContext from '../payments';
 
-interface User {
+export interface User {
   phoneNumber: string;
   firstName: string;
   lastName: string;
@@ -26,23 +25,18 @@ interface UserContextInterface {
   onVert: (code: string) => Promise<boolean | User>,
 }
 
-export const UserContext = createContext<UserContextInterface | null>(null);
+export const UserContext = createContext<UserContextInterface>({
+  setUser: (user: User) => {},
+  user: null,
+  updateState: (field: string, value: any) => {},
+  getUserFromStorage: () => {},
+  updateUserInfo: (values: {}) => {},
+  onVert: async (code: string) => false,
+});
 
 const UserContextProvider = ({ children }: { children: any }) => {
-  const [, dispatch] = useStateValue();
   const usePayments = PaymentsContext.useContainer();
-
-  const initialUserState = {
-    phoneNumber: '',
-    firstName: '',
-    lastName: '',
-    email: '',
-    avatar: '',
-    cards: null,
-    pushToken: '',
-    pushUserId: '',
-  };
-  const [user, setUser] = useState<User>(initialUserState);
+  const [user, setUser] = useState<User | null>(null);
 
   const updateState = (values: any) => {
     const newUser: User = {
@@ -73,13 +67,6 @@ const UserContextProvider = ({ children }: { children: any }) => {
     if (values.email) {
       verifyEmail(newUser.id);
     }
-    dispatch({
-      type: 'saveState',
-      payload: {
-        auth: true,
-        userProfile: newUser,
-      },
-    });
   };
 
   const getCardInfo = async () => {
@@ -108,13 +95,6 @@ const UserContextProvider = ({ children }: { children: any }) => {
       auth.updateTokens(vertResponse.refreshToken, vertResponse.accessToken);
       const userProfile = vertResponse.userProfile || {};
       Mixpanel.setUser(userProfile);
-      dispatch({
-        type: 'saveState',
-        payload: {
-          auth: true,
-          userProfile,
-        },
-      });
       const cards = await getCardInfo();
       return { ...userProfile, cards };
     } catch (e) {

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Trans } from 'react-i18next';
 import { useRoute } from '@react-navigation/native';
 import logo from '../../../assets/logo.png';
@@ -20,12 +20,10 @@ import { SafeView } from '../Onboarding/styles';
 import WebView from '../../WebView';
 import { getLoginSettings } from '../../../context/user/api';
 import Mixpanel from '../../../services/Mixpanel';
-import onboardingContext from '../../../context/onboarding';
+import { OnboardingContext } from '../../../context/onboarding';
 
 const StartScreen = () => {
-  const {
-    nextScreen, setCurrentScreenIndex,
-  } = onboardingContext.useContainer();
+  const { nextScreen, setCurrentScreenIndex } = useContext(OnboardingContext);
   const [webViewWindow, setWebViewWindow] = useState(null);
   const route = useRoute();
   const [settings, setSettings] = useState({

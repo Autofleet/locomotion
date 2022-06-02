@@ -2,7 +2,7 @@ import React, { useContext, useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import i18n from '../../../I18n';
 import OnboardingNavButtons from './OnboardingNavButtons';
-import onboardingContext from '../../../context/onboarding';
+import { OnboardingContext } from '../../../context/onboarding';
 import { ErrorText, PageContainer, SafeView } from './styles';
 import Header from './Header';
 import ScreenText from './ScreenText/index';
@@ -12,7 +12,7 @@ import { ONBOARDING_PAGE_NAMES } from '../../routes';
 import { UserContext } from '../../../context/user';
 
 const Phone = () => {
-  const { nextScreen } = onboardingContext.useContainer();
+  const { nextScreen } = useContext(OnboardingContext);
   const { updateState, user, updateUserInfo } = useContext(UserContext);
   const [showErrorText, setShowErrorText] = useState(false);
   console.log(user);

@@ -6,12 +6,11 @@ import OnboardingNavButtons from '../OnboardingNavButtons';
 import {
   WelcomeSubText, WelcomeText, PageContainer, TextContainer,
 } from './styles';
-import onboardingContext from '../../../../context/onboarding';
 import { SafeView } from '../styles';
 import {
   InfoContainer, LogoContainer, Logo, OperationName, OperationSubName,
 } from '../../StartScreen/styles';
-import { UserContext } from '../../../context/user';
+import { UserContext } from '../../../../context/user';
 
 
 const Welcome = () => {

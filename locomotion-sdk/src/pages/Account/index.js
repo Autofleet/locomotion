@@ -5,13 +5,10 @@ import { ROUTES } from '../routes';
 
 import ThumbnailPicker from '../../Components/ThumbnailPicker';
 import {
-  ErrorText,
-} from '../Login/styled';
-import {
   AccountHeaderContainer,
   AccountHeaderIndicatorContainer,
   AccountHeaderMainContainer, AccountHeaderMainText,
-  AccountHeaderSubText,
+  AccountHeaderSubText, ErrorText,
   Arrow, CardContainer, CardContantContainer, CardsContainer, CardsTitle, CardText, CardTitle,
   Container, FlexCenterContainer, LogoutContainer,
 } from './styled';
