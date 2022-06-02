@@ -8,8 +8,8 @@ text-align: center;
 `;
 
 export const Container = styled.div`
-height: 100vh;
-width: 100vw;
+height: 100%;
+width: 100%;
 background-color: #f1f2f6;
 display: flex;
 align-items: center;
