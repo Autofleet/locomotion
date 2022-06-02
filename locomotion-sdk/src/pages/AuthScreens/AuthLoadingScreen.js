@@ -10,7 +10,7 @@ import { OnboardingContext } from '../../context/onboarding';
 import PaymentsContext from '../../context/payments';
 import { UserContext } from '../../context/user';
 
-const INITIAL_USER_STATE = {
+export const INITIAL_USER_STATE = {
   phoneNumber: '',
   firstName: '',
   lastName: '',
@@ -53,12 +53,8 @@ const AuthLoadingScreen = ({ navigation }) => {
 
         await saveUser(userData);
 
-        const nonUserNav = (screen) => {
-          navigation.replace('AuthScreens', { screen, params: { showHeaderIcon: false } });
-        };
-
         if (!userData.active) {
-          return nonUserNav('Lock');
+          return navigation.replace('AuthScreens', { screen: 'Lock', params: { showHeaderIcon: false } });
         }
 
         if (!userData.didCompleteOnboarding) {

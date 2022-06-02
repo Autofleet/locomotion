@@ -7,7 +7,7 @@ import { ONBOARDING_PAGE_NAMES } from '../../routes';
 
 const Header = ({ title, page }) => {
   const {
-    nextScreen, requiredOnboarding, lastScreen, setCurrentScreenIndex,
+    nextScreen, requiredOnboarding,
   } = useContext(OnboardingContext);
   const navigation = useNavigation();
   const route = useRoute();
@@ -20,12 +20,7 @@ const Header = ({ title, page }) => {
   };
 
   const goBack = () => {
-    if (route.name === ONBOARDING_PAGE_NAMES.PHONE) {
-      navigation.navigate('AuthScreens', { screen: ONBOARDING_PAGE_NAMES.START });
-      setCurrentScreenIndex(0);
-    } else {
-      lastScreen();
-    }
+    navigation.goBack()
   };
   return (
     <PageHeader
@@ -35,7 +30,7 @@ const Header = ({ title, page }) => {
       iconSide="left"
       displayIcon={navigation.canGoBack()}
       showSkipButton={checkRequired()}
-      onPressSkip={nextScreen}
+      onPressSkip={() => nextScreen(route.name)}
     />
   );
 };

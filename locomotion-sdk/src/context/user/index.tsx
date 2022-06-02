@@ -21,7 +21,7 @@ interface UserContextInterface {
   user: User | null,
   updateState: (field: string, value: any) => void,
   getUserFromStorage: () => void,
-  updateUserInfo: (values: {}) => void,
+  updateUserInfo: (values: {}) => Promise<void>,
   onVert: (code: string) => Promise<boolean | User>,
 }
 
@@ -30,7 +30,7 @@ export const UserContext = createContext<UserContextInterface>({
   user: null,
   updateState: (field: string, value: any) => {},
   getUserFromStorage: () => {},
-  updateUserInfo: (values: {}) => {},
+  updateUserInfo: async (values: {}) => {},
   onVert: async (code: string) => false,
 });
 
@@ -58,14 +58,17 @@ const UserContextProvider = ({ children }: { children: any }) => {
   }, []);
 
   const verifyEmail = async (userId: string) => {
+    console.log('verification')
     await sendEmailVerification(userId);
   };
 
   const updateUserInfo = async (values: any) => {
     updateState(values);
     const newUser = await updateUser(values);
-    AppSettings.update({ userProfile: newUser });
-    if (values.email) {
+    if (newUser.didCompleteOnboarding) {
+      AppSettings.update({ userProfile: newUser });
+    }
+    if (values.email && !newUser.isEmailVerified) {
       verifyEmail(newUser.id);
     }
   };

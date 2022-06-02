@@ -6,11 +6,14 @@ import { Context as ThemeContext } from '../context/theme';
 import Auth from '../services/auth';
 import { ROUTES_COMPS } from './consts';
 import { ROUTES } from './routes';
+import { UserContext } from '../context/user';
+import { INITIAL_USER_STATE } from './AuthScreens/AuthLoadingScreen';
 
 const Drawer = createDrawerNavigator();
 
 const Main = () => {
   const theme = useContext(ThemeContext);
+  const { setUser } = useContext(UserContext)
   return (
     <Drawer.Navigator
       initialRouteName={ROUTES.HOME}
@@ -35,6 +38,7 @@ const Main = () => {
       <Drawer.Screen
         name={ROUTES.LOGOUT}
         component={(({ navigation }) => {
+          setUser(INITIAL_USER_STATE)
           Auth.logout(navigation);
           return (<View />);
         })}

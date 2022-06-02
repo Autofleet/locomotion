@@ -21,9 +21,10 @@ import WebView from '../../WebView';
 import { getLoginSettings } from '../../../context/user/api';
 import Mixpanel from '../../../services/Mixpanel';
 import { OnboardingContext } from '../../../context/onboarding';
+import { ONBOARDING_PAGE_NAMES } from '../../../pages/routes';
 
 const StartScreen = () => {
-  const { nextScreen, setCurrentScreenIndex } = useContext(OnboardingContext);
+  const { nextScreen } = useContext(OnboardingContext);
   const [webViewWindow, setWebViewWindow] = useState(null);
   const route = useRoute();
   const [settings, setSettings] = useState({
@@ -39,7 +40,6 @@ const StartScreen = () => {
 
   useEffect(() => {
     Mixpanel.pageView(route.name);
-    setCurrentScreenIndex(0);
     loadSettings();
   }, []);
 
@@ -72,12 +72,12 @@ const StartScreen = () => {
             <ButtonsContainer>
               <StartButton
                 dark
-                onPress={nextScreen}
+                onPress={() => nextScreen(ONBOARDING_PAGE_NAMES.START)}
               >
                 <ButtonText dark>{i18n.t('login.signUp')}</ButtonText>
               </StartButton>
               <StartButton
-                onPress={nextScreen}
+                onPress={() => nextScreen(ONBOARDING_PAGE_NAMES.START)}
               >
                 <ButtonText>{i18n.t('login.login')}</ButtonText>
               </StartButton>

@@ -1,4 +1,4 @@
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import React, {
   createContext, useContext, useEffect, useState,
 } from 'react';
@@ -9,18 +9,14 @@ interface OnboardingContextInterface {
   verifyCode: (code: string) => Promise<boolean | void>,
   navigateBasedOnUser: (user: any) => void,
   requiredOnboarding: {},
-  nextScreen: () => void,
-  lastScreen: () => void,
-  setCurrentScreenIndex: any,
+  nextScreen: (currentScreen: string) => void,
 }
 
 export const OnboardingContext = createContext<OnboardingContextInterface>({
   verifyCode: async (code) => {},
   navigateBasedOnUser: (user) => {},
   requiredOnboarding: {},
-  nextScreen: () => {},
-  lastScreen: () => {},
-  setCurrentScreenIndex: () => {},
+  nextScreen: (currentScreen: string) => {},
 });
 
 const SCREEN_ORDER = [ONBOARDING_PAGE_NAMES.START, ONBOARDING_PAGE_NAMES.PHONE, ONBOARDING_PAGE_NAMES.CODE, ONBOARDING_PAGE_NAMES.NAME, ONBOARDING_PAGE_NAMES.EMAIL, ONBOARDING_PAGE_NAMES.AVATAR, ONBOARDING_PAGE_NAMES.CARD, ONBOARDING_PAGE_NAMES.WELCOME];
@@ -36,6 +32,7 @@ const keyToScreen: any = {
 const OnboardingContextProvider = ({ children }: { children: any }) => {
   const { setUser, onVert } = useContext(UserContext);
   const navigation: any = useNavigation();
+
   const [requiredOnboarding] = useState({
     [ONBOARDING_PAGE_NAMES.PHONE]: true,
     [ONBOARDING_PAGE_NAMES.CODE]: true,
@@ -44,17 +41,14 @@ const OnboardingContextProvider = ({ children }: { children: any }) => {
     [ONBOARDING_PAGE_NAMES.AVATAR]: false,
     [ONBOARDING_PAGE_NAMES.CARD]: false,
   });
-  const [currentScreenIndex, setCurrentScreenIndex] = useState(0);
 
-  const navigateToScreen = () => navigation.navigate('AuthScreens', { screen: SCREEN_ORDER[currentScreenIndex] });
+  const navigateToScreen = (screen: string) => navigation.navigate('AuthScreens', { screen });
 
-  const nextScreen = () => {
-    setCurrentScreenIndex(currentScreenIndex + 1);
+  const nextScreen = (currentScreen: string) => {
+    const currentIndex = SCREEN_ORDER.indexOf(currentScreen)
+    navigateToScreen(SCREEN_ORDER[currentIndex + 1])
   };
 
-  const lastScreen = () => {
-    setCurrentScreenIndex(currentScreenIndex - 1);
-  };
   const navigateBasedOnUser = (user: any) => {
     setUser(user);
     let unfinishedScreen;
@@ -66,18 +60,12 @@ const OnboardingContextProvider = ({ children }: { children: any }) => {
     }
     if (!user.didCompleteOnboarding) {
       if (unfinishedScreen) {
-        return setCurrentScreenIndex(SCREEN_ORDER.indexOf(unfinishedScreen));
+        return navigateToScreen(unfinishedScreen);
       }
-      return setCurrentScreenIndex(SCREEN_ORDER.indexOf(keyToScreen.welcome));
+      return navigateToScreen(keyToScreen.welcome);
     }
     return navigation.navigate('MainApp');
   };
-
-  useEffect(() => {
-    if (currentScreenIndex > 0) {
-      navigateToScreen();
-    }
-  }, [currentScreenIndex]);
 
   const verifyCode = async (code: string) => {
     const userProfile = await onVert(code);
@@ -94,8 +82,6 @@ const OnboardingContextProvider = ({ children }: { children: any }) => {
         navigateBasedOnUser,
         requiredOnboarding,
         nextScreen,
-        lastScreen,
-        setCurrentScreenIndex,
       }}
     >
       {children}
