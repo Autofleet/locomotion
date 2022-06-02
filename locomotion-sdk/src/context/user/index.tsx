@@ -64,6 +64,7 @@ const UserContextProvider = ({ children }: { children: any }) => {
   const updateUserInfo = async (values: any) => {
     updateState(values);
     const newUser = await updateUser(values);
+    AppSettings.update({ userProfile: newUser });
     if (values.email) {
       verifyEmail(newUser.id);
     }
