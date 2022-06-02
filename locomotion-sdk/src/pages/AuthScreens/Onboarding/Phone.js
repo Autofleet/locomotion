@@ -1,33 +1,36 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import i18n from '../../../I18n';
 import OnboardingNavButtons from './OnboardingNavButtons';
-import onboardingContext from '../../../context/onboarding';
+import { OnboardingContext } from '../../../context/onboarding';
 import { ErrorText, PageContainer, SafeView } from './styles';
 import Header from './Header';
 import ScreenText from './ScreenText/index';
 import { loginApi } from '../../../context/user/api';
 import PhoneNumberInput from '../../../Components/PhoneNumberInput';
+import { ONBOARDING_PAGE_NAMES } from '../../routes';
+import { UserContext } from '../../../context/user';
 
 const Phone = () => {
-  const { onboardingState, updateState } = onboardingContext.useContainer();
-  const navigation = useNavigation();
+  const { nextScreen } = useContext(OnboardingContext);
+  const { updateState, user, updateUserInfo } = useContext(UserContext);
   const [showErrorText, setShowErrorText] = useState(false);
-
+  console.log(user);
   const onPhoneNumberChange = (phoneNumber, countryCode) => {
     setShowErrorText(false);
     if (phoneNumber.length < 9) {
-      return updateState('phoneNumber', '');
+      return updateState({ phoneNumber: '' });
     }
-    updateState('phoneNumber', countryCode + phoneNumber);
+    updateState({ phoneNumber: countryCode + phoneNumber });
   };
 
   const onSubmitPhoneNumber = async () => {
     try {
       await loginApi({
-        phoneNumber: onboardingState.phoneNumber,
+        phoneNumber: user.phoneNumber,
       });
-      navigation.navigate('Code');
+      updateUserInfo({ phoneNumber: user.phoneNumber });
+      nextScreen();
     } catch (e) {
       console.log('Bad login with response', e);
       setShowErrorText(e.message);
@@ -36,7 +39,7 @@ const Phone = () => {
 
   return (
     <SafeView>
-      <Header title={i18n.t('onboarding.pages.phone.title')} />
+      <Header title={i18n.t('onboarding.pages.phone.title')} page={ONBOARDING_PAGE_NAMES.PHONE} />
       <PageContainer>
         <ScreenText
           text={i18n.t('onboarding.pages.phone.text')}
@@ -50,7 +53,7 @@ const Phone = () => {
         />
         {showErrorText && <ErrorText>{showErrorText}</ErrorText>}
         <OnboardingNavButtons
-          isInvalid={!onboardingState.phoneNumber}
+          isInvalid={!user.phoneNumber}
           onNext={onSubmitPhoneNumber}
           onFail={() => setShowErrorText(i18n.t('login.invalidPhoneNumberError'))}
         />

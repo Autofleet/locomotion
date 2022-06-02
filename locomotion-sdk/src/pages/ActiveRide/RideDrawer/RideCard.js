@@ -31,7 +31,7 @@ export default ({
       </View>
 
       <View style={{ flex: 1 }}>
-        <DriverAvatar source={{ uri: activeRide.driver.avatar }} />
+        { activeRide.driver.avatar && <DriverAvatar source={{ uri: activeRide.driver.avatar }} />}
         <RideDetailsText>{I18n.t('home.rideCard.driverTitle')}</RideDetailsText>
         <RideDetailsText subText>
           {`${activeRide.driver.firstName} ${activeRide.driver.lastName}`}

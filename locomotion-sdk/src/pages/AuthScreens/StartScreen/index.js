@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Trans } from 'react-i18next';
 import { useRoute } from '@react-navigation/native';
-import logo from '../../../assets/autofleetLogo.png';
+import logo from '../../../assets/logo.png';
 import i18n from '../../../I18n';
 import {
   ButtonsContainer,
@@ -20,13 +20,10 @@ import { SafeView } from '../Onboarding/styles';
 import WebView from '../../WebView';
 import { getLoginSettings } from '../../../context/user/api';
 import Mixpanel from '../../../services/Mixpanel';
+import { OnboardingContext } from '../../../context/onboarding';
 
-const StartScreen = ({ navigation }) => {
-  const operation = {
-    name: 'autofleet',
-    subName: 'Rider app',
-    logo,
-  }; // replace with operation settings
+const StartScreen = () => {
+  const { nextScreen, setCurrentScreenIndex } = useContext(OnboardingContext);
   const [webViewWindow, setWebViewWindow] = useState(null);
   const route = useRoute();
   const [settings, setSettings] = useState({
@@ -42,6 +39,7 @@ const StartScreen = ({ navigation }) => {
 
   useEffect(() => {
     Mixpanel.pageView(route.name);
+    setCurrentScreenIndex(0);
     loadSettings();
   }, []);
 
@@ -66,24 +64,20 @@ const StartScreen = ({ navigation }) => {
           <>
             <InfoContainer>
               <LogoContainer>
-                <Logo source={operation.logo} />
+                <Logo source={logo} />
               </LogoContainer>
-              <OperationName>{operation.name}</OperationName>
-              {operation.subName && <OperationSubName>{operation.subName}</OperationSubName>}
+              <OperationName>{i18n.t('operation.name', '')}</OperationName>
+              <OperationSubName>{i18n.t('operation.subName', '')}</OperationSubName>
             </InfoContainer>
             <ButtonsContainer>
               <StartButton
                 dark
-                onPress={() => {
-                  navigation.navigate('Phone');
-                }}
+                onPress={nextScreen}
               >
                 <ButtonText dark>{i18n.t('login.signUp')}</ButtonText>
               </StartButton>
               <StartButton
-                onPress={() => {
-                  navigation.navigate('Phone');
-                }}
+                onPress={nextScreen}
               >
                 <ButtonText>{i18n.t('login.login')}</ButtonText>
               </StartButton>

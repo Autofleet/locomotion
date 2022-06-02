@@ -1,18 +1,10 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import Auth from '../../services/auth';
-import network from '../../services/network';
-import AppSettings from '../../services/app-settings';
 import SubmitButton from '../../Components/RoundedButton';
-import TextInput from '../../Components/TextInput';
-
 import {
-  Container, ErrorText, ResendButton,
-} from '../Login/styled';
-import {
-  LockTextContainer, ButtonContainer, SubText, HeaderText, Text,
+  LockTextContainer, ButtonContainer, SubText, HeaderText, Text, Container,
 } from './styled';
 import I18n from '../../I18n';
-import { useStateValue } from '../../context/main';
 import UserService from '../../services/user';
 
 const useInterval = (callback, delay) => {

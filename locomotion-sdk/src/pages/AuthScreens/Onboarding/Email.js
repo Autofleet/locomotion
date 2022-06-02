@@ -1,25 +1,26 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import * as yup from 'yup';
 import TextInput from '../../../Components/TextInput';
 import OnboardingNavButtons from './OnboardingNavButtons';
-import onboardingContext from '../../../context/onboarding';
+import { OnboardingContext } from '../../../context/onboarding';
 import { ErrorText, PageContainer, SafeView } from './styles';
 import i18n from '../../../I18n';
 import Header from './Header';
 import ScreenText from './ScreenText';
+import { ONBOARDING_PAGE_NAMES } from '../../routes';
+import { UserContext } from '../../../context/user';
 
 
 const Email = () => {
-  const {
-    onboardingState, updateState, updateUserInfo, navigateBasedOnUser,
-  } = onboardingContext.useContainer();
+  const { nextScreen } = useContext(OnboardingContext);
+  const { updateState, updateUserInfo, user } = useContext(UserContext);
   const [errorText, setErrorText] = useState(false);
   const [email, setEmail] = useState('');
 
   const onNext = async () => {
     try {
       await updateUserInfo({ email });
-      navigateBasedOnUser(onboardingState);
+      nextScreen();
     } catch (e) {
       setErrorText(i18n.t('onboarding.pages.email.inUseError'));
     }
@@ -36,15 +37,15 @@ const Email = () => {
     try {
       await emailSchema.validateAt('email', { email: value });
     } catch (e) {
-      updateState('email', '');
+      updateState({ email: '' });
       return;
     }
-    updateState('email', email);
+    updateState({ email });
   };
 
   return (
     <SafeView>
-      <Header title={i18n.t('onboarding.pages.email.title')} />
+      <Header title={i18n.t('onboarding.pages.email.title')} page={ONBOARDING_PAGE_NAMES.EMAIL} />
       <PageContainer>
         <ScreenText
           text={i18n.t('onboarding.pages.email.text')}
@@ -55,10 +56,11 @@ const Email = () => {
           placeholder={i18n.t('onboarding.pages.email.placeholder')}
           onChangeText={onChange}
           value={email}
+          fullBorder
         />
         {errorText && <ErrorText>{errorText}</ErrorText>}
         <OnboardingNavButtons
-          isInvalid={!onboardingState.email}
+          isInvalid={!user.email}
           onFail={() => setErrorText(i18n.t('onboarding.pages.email.error'))}
           onNext={onNext}
         />

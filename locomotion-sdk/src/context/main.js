@@ -1,19 +1,12 @@
-import React, { createContext, useContext, useReducer } from 'react';
-
-import AppSettings from '../services/app-settings';
+import React from 'react';
 import I18n from '../I18n';
-
 import SettingsContext from './settings';
 import PaymentsContext from './payments';
 import ThemeProvider from './theme';
-
-export const StateContext = createContext();
-export const StateProvider = ({ reducer, initialState, children }) => (
-  <StateContext.Provider value={useReducer(reducer, initialState)}>
-    {children}
-  </StateContext.Provider>
-);
-export const useStateValue = () => useContext(StateContext);
+import UserContextProvider from './user';
+import OnboardingContextProvider from './onboarding';
+import { StateProvider } from './state';
+import AppSettings from '../services/app-settings';
 
 
 export const MainProvider = ({ children, LoginPage, i18n }) => {
@@ -64,7 +57,11 @@ export const MainProvider = ({ children, LoginPage, i18n }) => {
       <SettingsContext.Provider>
         <PaymentsContext.Provider>
           <ThemeProvider>
-            {children}
+            <UserContextProvider>
+              <OnboardingContextProvider>
+                {children}
+              </OnboardingContextProvider>
+            </UserContextProvider>
           </ThemeProvider>
         </PaymentsContext.Provider>
       </SettingsContext.Provider>
@@ -72,24 +69,6 @@ export const MainProvider = ({ children, LoginPage, i18n }) => {
   );
 };
 
-const getPopupKey = key => `popup_${key}`;
-
-export const getTogglePopupsState = () => {
-  const [state, dispatch] = useContext(StateContext);
-
-  return [id => state && (state[getPopupKey(id)] || false), (id, open) => dispatch({
-    type: 'changeState',
-    payload: {
-      [getPopupKey('ridePopupsStatus')]: open,
-      [getPopupKey(id)]: open,
-    },
-  })];
-};
-
 export default {
-  StateContext,
-  StateProvider,
-  useStateValue,
   MainProvider,
-  getTogglePopupsState,
 };

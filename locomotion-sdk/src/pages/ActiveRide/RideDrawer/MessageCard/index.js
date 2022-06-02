@@ -7,7 +7,7 @@ import {
 import {
   MessageContainer, MessageText, MessageTitle, CloseContainer, ResetInputIcon,
 } from './styled';
-import { getTogglePopupsState } from '../../../../context/main';
+import { getTogglePopupsState } from '../../../../context/state';
 
 export default ({
   id, title, subTitle, closeAfter, onClose,

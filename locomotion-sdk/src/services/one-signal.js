@@ -3,7 +3,6 @@ import OneSignal from 'react-native-onesignal'; // Import package from node modu
 import Config from 'react-native-config';
 import network from './network';
 import AppSettings from './app-settings';
-import { getTogglePopupsState } from '../context/main';
 import { updateUser } from '../context/user/api';
 
 

@@ -5,7 +5,6 @@ import {
 import styled from 'styled-components';
 import moment from 'moment';
 import i18n from '../../../../../I18n';
-import { getTogglePopupsState } from '../../../../../context/main';
 import InputIcon from '../../../../../assets/arrow-down.png';
 import settingsContext from '../../../../../context/settings';
 import TimePicker from './Picker';

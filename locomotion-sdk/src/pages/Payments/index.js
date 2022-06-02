@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { getTogglePopupsState } from '../../context';
+import { getTogglePopupsState } from '../../context/state';
 import i18n from '../../I18n';
 import PageHeader from '../../Components/PageHeader';
 import {

@@ -76,4 +76,10 @@ export default class User extends Model {
 
   })
     deviceType: string;
+
+  @Column({
+    type: DataType.BOOLEAN,
+
+  })
+    didCompleteOnboarding: boolean;
 }

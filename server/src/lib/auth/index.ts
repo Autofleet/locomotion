@@ -63,10 +63,14 @@ class Auth {
       defaults: { phoneNumber, operationId },
     });
 
+    const operation = {
+      name: 'Locomotion',
+    }; // TODO should get from operations settings when ready
+
     const externalCode = `${Math.round(Math.random() * 9999)}0000`.substring(0, 4);
 
     if (user) {
-      await this.nexmo.sendSms(phoneNumber, `Your verification code is ${externalCode}`);
+      await this.nexmo.sendSms(phoneNumber, `Your ${operation.name} code is ${externalCode}`);
 
       await this.verification.destroy({
         where: { phoneNumber },

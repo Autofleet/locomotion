@@ -1,28 +1,27 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import TextInput from '../../../Components/TextInput';
 import OnboardingNavButtons from './OnboardingNavButtons';
-import onboardingContext from '../../../context/onboarding';
+import { OnboardingContext } from '../../../context/onboarding';
 import { ErrorText, PageContainer, SafeView } from './styles';
 import i18n from '../../../I18n';
 import Header from './Header';
 import ScreenText from './ScreenText';
-
+import { ONBOARDING_PAGE_NAMES } from '../../routes';
+import { UserContext } from '../../../context/user';
 
 const Name = () => {
-  const {
-    onboardingState, updateState, updateUserInfo, navigateBasedOnUser,
-  } = onboardingContext.useContainer();
+  const { nextScreen } = useContext(OnboardingContext);
+  const { updateUserInfo, user } = useContext(UserContext);
   const [showErrorText, setShowErrorText] = useState(false);
 
   const inputChange = field => (value) => {
     setShowErrorText(false);
     updateUserInfo({ [field]: value });
-    updateState(field, value);
   };
 
   return (
     <SafeView>
-      <Header title={i18n.t('onboarding.pages.name.title')} />
+      <Header title={i18n.t('onboarding.pages.name.title')} page={ONBOARDING_PAGE_NAMES.NAME} />
       <PageContainer>
         <ScreenText
           text={i18n.t('onboarding.pages.name.text')}
@@ -32,24 +31,24 @@ const Name = () => {
           placeholder={i18n.t('onboarding.firstNamePlaceholder')}
           autoFocus
           onChangeText={inputChange('firstName')}
-          value={onboardingState.firstName}
+          value={user.firstName}
           autoCapitalize="words"
-          error={showErrorText && !onboardingState.firstName}
+          error={showErrorText && !user.firstName}
           fullBorder
         />
         <TextInput
           placeholder={i18n.t('onboarding.lastNamePlaceholder')}
           onChangeText={inputChange('lastName')}
-          value={onboardingState.lastName}
+          value={user.lastName}
           autoCapitalize="words"
-          error={showErrorText && !onboardingState.lastName}
+          error={showErrorText && !user.lastName}
           fullBorder
         />
         {showErrorText && <ErrorText>{i18n.t('onboarding.fullNameError')}</ErrorText>}
         <OnboardingNavButtons
-          isInvalid={!onboardingState.firstName || !onboardingState.lastName}
+          isInvalid={!user.firstName || !user.lastName}
           onFail={() => setShowErrorText(true)}
-          onNext={() => navigateBasedOnUser(onboardingState)}
+          onNext={() => nextScreen()}
         />
       </PageContainer>
     </SafeView>
