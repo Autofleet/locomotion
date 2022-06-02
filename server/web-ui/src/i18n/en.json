@@ -4,6 +4,10 @@
       "title": "Great!",
       "text": "Your email address has been verified successfully",
       "buttonText": "Continue to app"
+    },
+    "fail": {
+      "title": "Oops!",
+      "text": "Something went wrong. Looks like your invitation is no longer valid"
     }
   },
   "navigation": {
