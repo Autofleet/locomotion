@@ -67,7 +67,7 @@ const AuthLoadingScreen = ({ navigation }) => {
 
         return navigation.replace('MainApp');
       }
-      setUser(INITIAL_USER_STATE)
+      setUser(INITIAL_USER_STATE);
       navigation.replace('AuthScreens');
     }
 

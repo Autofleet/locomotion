@@ -1,5 +1,7 @@
 import { useNavigation } from '@react-navigation/native';
-import React, { createContext, useContext, useEffect, useState } from 'react';
+import React, {
+  createContext, useContext, useEffect, useState,
+} from 'react';
 import { ONBOARDING_PAGE_NAMES } from '../../pages/routes';
 import { UserContext } from '../user';
 

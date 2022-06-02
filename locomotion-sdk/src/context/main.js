@@ -6,6 +6,7 @@ import ThemeProvider from './theme';
 import UserContextProvider from './user';
 import OnboardingContextProvider from './onboarding';
 import { StateProvider } from './state';
+import AppSettings from '../services/app-settings';
 
 
 export const MainProvider = ({ children, LoginPage, i18n }) => {

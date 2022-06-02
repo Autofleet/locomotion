@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import Auth from '../../services/auth';
 import SubmitButton from '../../Components/RoundedButton';
 import {
-  LockTextContainer, ButtonContainer, SubText, HeaderText, Text, Container
+  LockTextContainer, ButtonContainer, SubText, HeaderText, Text, Container,
 } from './styled';
 import I18n from '../../I18n';
 import UserService from '../../services/user';

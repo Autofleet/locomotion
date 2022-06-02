@@ -1,5 +1,5 @@
-import { padding } from '../../assets/style-settings';
 import styled from 'styled-components';
+import { padding } from '../../assets/style-settings';
 
 const loginTextColor = '#7c8799';
 
