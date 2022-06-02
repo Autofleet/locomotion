@@ -5,13 +5,10 @@ import { ROUTES } from '../routes';
 
 import ThumbnailPicker from '../../Components/ThumbnailPicker';
 import {
-  ErrorText,
-} from '../Login/styled';
-import {
   AccountHeaderContainer,
   AccountHeaderIndicatorContainer,
   AccountHeaderMainContainer, AccountHeaderMainText,
-  AccountHeaderSubText,
+  AccountHeaderSubText, ErrorText,
   Arrow, CardContainer, CardContantContainer, CardsContainer, CardsTitle, CardText, CardTitle,
   Container, FlexCenterContainer, LogoutContainer,
 } from './styled';
@@ -20,12 +17,10 @@ import PageHeader from '../../Components/PageHeader';
 import Mixpanel from '../../services/Mixpanel';
 import { PageContainer } from '../styles';
 import { UserContext } from '../../context/user';
-import onboardingContext from '../../context/onboarding';
 
 const AccountHeader = () => {
-  const {
-    onboardingState: user,
-  } = onboardingContext.useContainer();
+  const { user } = useContext(UserContext);
+
 
   return (
     <AccountHeaderContainer>
@@ -66,9 +61,7 @@ const Card = ({ children, ...props }) => (
 );
 
 const AccountContent = ({ navigation }) => {
-  const {
-    onboardingState: user,
-  } = onboardingContext.useContainer();
+  const { user } = useContext(UserContext);
 
   return (
     <Container>
@@ -125,7 +118,6 @@ const AccountContent = ({ navigation }) => {
 export default ({
   navigation, menuSide,
 }) => {
-  const { user } = useContext(UserContext);
   const route = useRoute();
 
   useEffect(() => {
@@ -144,18 +136,15 @@ export default ({
           title={i18n.t('onboarding.pageTitle')}
           onIconPress={() => navigation.toggleDrawer()}
           iconSide={menuSide}
+        />
+        <AccountHeader />
+        <LogoutContainer
+          onPress={() => {
+            navigation.navigate(ROUTES.LOGOUT);
+          }}
         >
-          <>
-            <AccountHeader />
-            <LogoutContainer
-              onPress={() => {
-                navigation.navigate(ROUTES.LOGOUT);
-              }}
-            >
-              <ErrorText>{i18n.t('menu.logout')}</ErrorText>
-            </LogoutContainer>
-          </>
-        </PageHeader>
+          <ErrorText>{i18n.t('menu.logout')}</ErrorText>
+        </LogoutContainer>
         <AccountContent
           navigation={navigation}
         />

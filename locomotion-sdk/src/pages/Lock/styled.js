@@ -1,6 +1,16 @@
 import styled from 'styled-components';
+import { padding } from '../../assets/style-settings';
 
 const loginTextColor = '#7c8799';
+
+export const Container = styled.View`
+  background-color: white;
+  height: 100%;
+  color: ${loginTextColor};
+  text-align: center;
+  align-items: center;
+  padding: ${padding};
+`;
 
 export const LockTextContainer = styled.View`
   width: 100%;

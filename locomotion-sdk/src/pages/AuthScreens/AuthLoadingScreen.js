@@ -4,18 +4,26 @@ import {
   View,
 } from 'react-native';
 import AppSettings from '../../services/app-settings';
-import { useStateValue } from '../../context/state';
-import needOnboarding from './needOnBoarding';
 import Auth from '../../services/auth';
 import { getUserDetails } from '../../context/user/api';
-import onboardingContext from '../../context/onboarding';
+import { OnboardingContext } from '../../context/onboarding';
 import PaymentsContext from '../../context/payments';
 import { UserContext } from '../../context/user';
 
+const INITIAL_USER_STATE = {
+  phoneNumber: '',
+  firstName: '',
+  lastName: '',
+  email: '',
+  avatar: '',
+  cards: null,
+  pushToken: '',
+  pushUserId: '',
+};
+
 const AuthLoadingScreen = ({ navigation }) => {
-  const { setUser } = useContext(UserContext);
-  const [appState, dispatch] = useStateValue();
-  const { navigateBasedOnUser } = onboardingContext.useContainer();
+  const { setUser, user } = useContext(UserContext);
+  const { navigateBasedOnUser } = useContext(OnboardingContext);
   const usePayments = PaymentsContext.useContainer();
 
   const saveUser = (userProfile) => {
@@ -26,11 +34,6 @@ const AuthLoadingScreen = ({ navigation }) => {
   const init = () => {
     async function getFromStorage() {
       const payload = await AppSettings.getSettings();
-
-      await dispatch({
-        type: 'changeState',
-        payload,
-      });
 
       if (payload.userProfile) {
         const response = await getUserDetails();
@@ -58,17 +61,17 @@ const AuthLoadingScreen = ({ navigation }) => {
           return nonUserNav('Lock');
         }
 
-        if (needOnboarding(userData)) {
+        if (!userData.didCompleteOnboarding) {
           return navigateBasedOnUser(userData);
         }
 
         return navigation.replace('MainApp');
       }
-
+      setUser(INITIAL_USER_STATE);
       navigation.replace('AuthScreens');
     }
 
-    if (!appState) { // Load app state
+    if (!user) { // Load app state
       getFromStorage();
     }
   };

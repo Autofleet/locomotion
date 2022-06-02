@@ -1,19 +1,19 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import * as yup from 'yup';
 import TextInput from '../../../Components/TextInput';
 import OnboardingNavButtons from './OnboardingNavButtons';
-import onboardingContext from '../../../context/onboarding';
+import { OnboardingContext } from '../../../context/onboarding';
 import { ErrorText, PageContainer, SafeView } from './styles';
 import i18n from '../../../I18n';
 import Header from './Header';
 import ScreenText from './ScreenText';
 import { ONBOARDING_PAGE_NAMES } from '../../routes';
+import { UserContext } from '../../../context/user';
 
 
 const Email = () => {
-  const {
-    onboardingState, updateState, updateUserInfo, nextScreen,
-  } = onboardingContext.useContainer();
+  const { nextScreen } = useContext(OnboardingContext);
+  const { updateState, updateUserInfo, user } = useContext(UserContext);
   const [errorText, setErrorText] = useState(false);
   const [email, setEmail] = useState('');
 
@@ -37,10 +37,10 @@ const Email = () => {
     try {
       await emailSchema.validateAt('email', { email: value });
     } catch (e) {
-      updateState('email', '');
+      updateState({ email: '' });
       return;
     }
-    updateState('email', email);
+    updateState({ email });
   };
 
   return (
@@ -60,7 +60,7 @@ const Email = () => {
         />
         {errorText && <ErrorText>{errorText}</ErrorText>}
         <OnboardingNavButtons
-          isInvalid={!onboardingState.email}
+          isInvalid={!user.email}
           onFail={() => setErrorText(i18n.t('onboarding.pages.email.error'))}
           onNext={onNext}
         />

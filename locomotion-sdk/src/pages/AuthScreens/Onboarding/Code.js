@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import PinCode from '../../../Components/PinCode';
 import OnboardingNavButtons from './OnboardingNavButtons';
-import onboardingContext from '../../../context/onboarding';
+import { OnboardingContext } from '../../../context/onboarding';
 import {
   ErrorText, PageContainer, ResendButton, ResendContainer, ResendText, SafeView,
 } from './styles';
@@ -10,9 +10,11 @@ import i18n from '../../../I18n';
 import Header from './Header';
 import ScreenText from './ScreenText';
 import { ONBOARDING_PAGE_NAMES } from '../../routes';
+import { UserContext } from '../../../context/user';
 
 const Code = () => {
-  const { onVert, onboardingState } = onboardingContext.useContainer();
+  const { verifyCode } = useContext(OnboardingContext);
+  const { user } = useContext(UserContext);
   const navigation = useNavigation();
   const [code, setCode] = useState('');
   const [showErrorText, setShowErrorText] = useState(false);
@@ -24,7 +26,7 @@ const Code = () => {
   const verify = async (v) => {
     const input = v || code;
     setCode(input);
-    const response = await onVert(input);
+    const response = await verifyCode(input);
     if (!response) {
       return setShowErrorText(true);
     }
@@ -35,7 +37,7 @@ const Code = () => {
       <PageContainer>
         <ScreenText
           text={i18n.t('onboarding.pages.code.text')}
-          subText={i18n.t('onboarding.pages.code.subText', { phoneNumber: onboardingState.phoneNumber })}
+          subText={i18n.t('onboarding.pages.code.subText', { phoneNumber: user.phoneNumber })}
         />
         <PinCode
           onChange={onVertCodeChange}

@@ -1,8 +1,7 @@
-import React, { useState } from 'react';
-import PhoneInput from 'react-native-phone-number-input';
+import React, { useContext } from 'react';
 import i18n from '../../../I18n';
 import OnboardingNavButtons from './OnboardingNavButtons';
-import onboardingContext from '../../../context/onboarding';
+import { OnboardingContext } from '../../../context/onboarding';
 import {
   ImageContainer, Name, PageContainer, SafeView,
 } from './styles';
@@ -10,15 +9,14 @@ import Header from './Header';
 import ScreenText from './ScreenText/index';
 import ThumbnailPicker from '../../../Components/ThumbnailPicker';
 import { ONBOARDING_PAGE_NAMES } from '../../routes';
+import { UserContext } from '../../../context/user';
 
 const Avatar = () => {
-  const {
-    onboardingState, updateState, updateUserInfo, nextScreen,
-  } = onboardingContext.useContainer();
+  const { nextScreen } = useContext(OnboardingContext);
+  const { updateUserInfo, user } = useContext(UserContext);
 
   const onImageChoose = (image) => {
     updateUserInfo({ avatar: image });
-    updateState('avatar', image);
   };
 
   return (
@@ -32,16 +30,16 @@ const Avatar = () => {
         <ImageContainer>
           <ThumbnailPicker
             onImageChoose={onImageChoose}
-            avatarSource={onboardingState.avatar}
+            avatarSource={user.avatar}
             size={125}
           />
           <Name>
-            {`${onboardingState.firstName} ${onboardingState.lastName}`}
+            {`${user.firstName} ${user.lastName}`}
           </Name>
         </ImageContainer>
         <OnboardingNavButtons
           onNext={nextScreen}
-          isInvalid={!onboardingState.avatar}
+          isInvalid={!user.avatar}
         />
       </PageContainer>
     </SafeView>
