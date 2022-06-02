@@ -64,6 +64,7 @@ const authContainer = () => {
     const userProfile = await onVert(code);
     if (userProfile) {
       navigateBasedOnUser(userProfile);
+      return true;
     }
   };
 
