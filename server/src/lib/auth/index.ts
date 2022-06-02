@@ -64,8 +64,8 @@ class Auth {
     });
 
     const operation = {
-      name: 'Locomotion'
-    }; //TODO should get from operations settings when ready
+      name: 'Locomotion',
+    }; // TODO should get from operations settings when ready
 
     const externalCode = `${Math.round(Math.random() * 9999)}0000`.substring(0, 4);
 
