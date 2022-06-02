@@ -58,7 +58,6 @@ const UserContextProvider = ({ children }: { children: any }) => {
   }, []);
 
   const verifyEmail = async (userId: string) => {
-    console.log('verification')
     await sendEmailVerification(userId);
   };
 

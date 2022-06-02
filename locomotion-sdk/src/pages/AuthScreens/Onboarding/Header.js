@@ -20,7 +20,7 @@ const Header = ({ title, page }) => {
   };
 
   const goBack = () => {
-    navigation.goBack()
+    navigation.goBack();
   };
   return (
     <PageHeader

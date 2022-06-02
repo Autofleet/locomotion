@@ -21,7 +21,7 @@ import WebView from '../../WebView';
 import { getLoginSettings } from '../../../context/user/api';
 import Mixpanel from '../../../services/Mixpanel';
 import { OnboardingContext } from '../../../context/onboarding';
-import { ONBOARDING_PAGE_NAMES } from '../../../pages/routes';
+import { ONBOARDING_PAGE_NAMES } from '../../routes';
 
 const StartScreen = () => {
   const { nextScreen } = useContext(OnboardingContext);

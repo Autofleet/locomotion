@@ -45,8 +45,8 @@ const OnboardingContextProvider = ({ children }: { children: any }) => {
   const navigateToScreen = (screen: string) => navigation.navigate('AuthScreens', { screen });
 
   const nextScreen = (currentScreen: string) => {
-    const currentIndex = SCREEN_ORDER.indexOf(currentScreen)
-    navigateToScreen(SCREEN_ORDER[currentIndex + 1])
+    const currentIndex = SCREEN_ORDER.indexOf(currentScreen);
+    navigateToScreen(SCREEN_ORDER[currentIndex + 1]);
   };
 
   const navigateBasedOnUser = (user: any) => {
