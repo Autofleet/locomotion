@@ -27,6 +27,7 @@ const Main = () => {
           margin: 0,
           backgroundColor: theme.pageBackgroundColor,
         },
+        drawerType: 'front',
       }}
     >
       <Drawer.Screen

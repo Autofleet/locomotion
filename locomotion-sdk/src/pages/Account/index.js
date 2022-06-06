@@ -158,7 +158,7 @@ export default ({
       >
         <PageHeader
           title={i18n.t('onboarding.pageTitle')}
-          onIconPress={() => navigation.toggleDrawer()}
+          onIconPress={() => navigation.navigate(MAIN_ROUTES.HOME)}
           iconSide={menuSide}
         />
         <AccountHeader />

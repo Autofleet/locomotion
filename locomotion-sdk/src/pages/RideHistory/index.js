@@ -1,6 +1,6 @@
-import React, { Fragment, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigation, useRoute } from '@react-navigation/native';
-import SafeView from '../../Components/SafeView';
+import { MAIN_ROUTES } from '../routes';
 import i18n from '../../I18n';
 import PageHeader from '../../Components/PageHeader';
 import {
@@ -24,9 +24,6 @@ export default ({ menuSide }) => {
   const [rides, setRides] = useState(null);
   const navigation = useNavigation();
   const route = useRoute();
-  const toggleMenu = () => {
-    navigation.toggleDrawer();
-  };
   const getRides = async () => {
     const history = await getRidesHistory();
     if (history && history.rides) {
@@ -52,7 +49,7 @@ export default ({ menuSide }) => {
       <PageContent>
         <PageHeader
           title={i18n.t('rideHistory.pageTitle')}
-          onIconPress={() => toggleMenu()}
+          onIconPress={() => navigation.navigate(MAIN_ROUTES.HOME)}
           iconSide={menuSide}
         />
         {rides && rides.length > 0

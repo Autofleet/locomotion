@@ -5,8 +5,7 @@ import {
   Header, HeaderText, HeaderIconContainer, HeaderIcon, SkipButton, SkipButtonText,
 } from './styled';
 import i18n from '../../I18n';
-
-const HamburgerIconSource = require('../../assets/menu.png');
+import backArrow from '../../assets/arrow-back.png';
 
 const PageHeader = ({
   title, icon, onIconPress, iconSide, displayIcon, width, showSkipButton, onPressSkip,
@@ -34,7 +33,7 @@ export default PageHeader;
 
 PageHeader.defaultProps = {
   title: '',
-  icon: HamburgerIconSource,
+  icon: backArrow,
   iconSide: 'left',
   onIconPress: () => null,
   height: '25px',
