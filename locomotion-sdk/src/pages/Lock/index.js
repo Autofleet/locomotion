@@ -1,12 +1,13 @@
 import React, { useEffect, useRef } from 'react';
+import { APP_ROUTES } from '../routes';
 import Auth from '../../services/auth';
 import SubmitButton from '../../Components/RoundedButton';
+
 import {
   LockTextContainer, ButtonContainer, SubText, HeaderText, Text, Container,
 } from './styled';
 import I18n from '../../I18n';
 import UserService from '../../services/user';
-import { NAVIGATION_CONTAINERS } from '../routes';
 
 const useInterval = (callback, delay) => {
   const savedCallback = useRef();
@@ -36,7 +37,7 @@ export default ({ navigation }) => {
     }
 
     if (userData.active === true) {
-      navigation.navigate(NAVIGATION_CONTAINERS.AUTH_SCREENS);
+      navigation.navigate(APP_ROUTES.AUTH_SCREENS);
     }
   }, 5000);
 

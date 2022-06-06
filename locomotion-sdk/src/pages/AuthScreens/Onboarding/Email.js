@@ -1,5 +1,6 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import * as yup from 'yup';
+import { useIsFocused, useRoute } from '@react-navigation/native';
 import TextInput from '../../../Components/TextInput';
 import OnboardingNavButtons from './OnboardingNavButtons';
 import { OnboardingContext } from '../../../context/onboarding';
@@ -7,15 +8,22 @@ import { ErrorText, PageContainer, SafeView } from './styles';
 import i18n from '../../../I18n';
 import Header from './Header';
 import ScreenText from './ScreenText';
-import { ONBOARDING_PAGE_NAMES } from '../../routes';
+import { MAIN_ROUTES, ONBOARDING_PAGE_NAMES } from '../../routes';
 import { UserContext } from '../../../context/user';
 
 
-const Email = () => {
+const Email = ({ navigation }) => {
+  const route = useRoute();
   const { nextScreen } = useContext(OnboardingContext);
   const { updateState, updateUserInfo, user } = useContext(UserContext);
   const [errorText, setErrorText] = useState(false);
-  const [email, setEmail] = useState('');
+  const [email, setEmail] = useState(user.email);
+
+  const isFocused = useIsFocused();
+
+  useEffect(() => {
+    setEmail(user.email);
+  }, [isFocused]);
 
   const onNext = async () => {
     try {
@@ -62,7 +70,11 @@ const Email = () => {
         <OnboardingNavButtons
           isInvalid={!user.email}
           onFail={() => setErrorText(i18n.t('onboarding.pages.email.error'))}
-          onNext={onNext}
+          onNext={
+            (route.params && route.params.editAccount
+              ? () => navigation.navigate(MAIN_ROUTES.ACCOUNT)
+              : onNext)
+          }
         />
       </PageContainer>
     </SafeView>

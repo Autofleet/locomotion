@@ -1,4 +1,5 @@
 import React, { useState, useContext } from 'react';
+import { useRoute } from '@react-navigation/native';
 import TextInput from '../../../Components/TextInput';
 import OnboardingNavButtons from './OnboardingNavButtons';
 import { OnboardingContext } from '../../../context/onboarding';
@@ -6,10 +7,11 @@ import { ErrorText, PageContainer, SafeView } from './styles';
 import i18n from '../../../I18n';
 import Header from './Header';
 import ScreenText from './ScreenText';
-import { ONBOARDING_PAGE_NAMES } from '../../routes';
+import { MAIN_ROUTES, ONBOARDING_PAGE_NAMES } from '../../routes';
 import { UserContext } from '../../../context/user';
 
-const Name = () => {
+const Name = ({ navigation }) => {
+  const route = useRoute();
   const { nextScreen } = useContext(OnboardingContext);
   const { updateUserInfo, user } = useContext(UserContext);
   const [showErrorText, setShowErrorText] = useState(false);
@@ -48,7 +50,11 @@ const Name = () => {
         <OnboardingNavButtons
           isInvalid={!user.firstName || !user.lastName}
           onFail={() => setShowErrorText(true)}
-          onNext={() => nextScreen(ONBOARDING_PAGE_NAMES.NAME)}
+          onNext={
+            () => (route.params && route.params.editAccount
+              ? navigation.navigate(MAIN_ROUTES.ACCOUNT)
+              : nextScreen(ONBOARDING_PAGE_NAMES.NAME))
+          }
         />
       </PageContainer>
     </SafeView>

@@ -1,5 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
 import React, { useContext } from 'react';
+import { APP_ROUTES } from '../../../routes';
 import i18n from '../../../../I18n';
 import logo from '../../../../assets/autofleetLogo.png';
 import OnboardingNavButtons from '../OnboardingNavButtons';
@@ -11,8 +12,6 @@ import {
   InfoContainer, LogoContainer, Logo, OperationName, OperationSubName,
 } from '../../StartScreen/styles';
 import { UserContext } from '../../../../context/user';
-import { NAVIGATION_CONTAINERS } from '../../../routes';
-
 
 const Welcome = () => {
   const { updateUserInfo, user } = useContext(UserContext);
@@ -25,7 +24,7 @@ const Welcome = () => {
 
   const onNext = () => {
     updateUserInfo({ didCompleteOnboarding: true });
-    navigation.navigate(NAVIGATION_CONTAINERS.MAIN_APP);
+    navigation.navigate(APP_ROUTES.MAIN_APP);
   };
   return (
     <SafeView>
