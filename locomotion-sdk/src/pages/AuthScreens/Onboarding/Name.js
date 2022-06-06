@@ -7,10 +7,10 @@ import { ErrorText, PageContainer, SafeView } from './styles';
 import i18n from '../../../I18n';
 import Header from './Header';
 import ScreenText from './ScreenText';
-import { ONBOARDING_PAGE_NAMES } from '../../routes';
+import { MAIN_ROUTES, ONBOARDING_PAGE_NAMES } from '../../routes';
 import { UserContext } from '../../../context/user';
 
-const Name = () => {
+const Name = ({ navigation }) => {
   const route = useRoute();
   const { nextScreen } = useContext(OnboardingContext);
   const { updateUserInfo, user } = useContext(UserContext);
@@ -51,8 +51,9 @@ const Name = () => {
           isInvalid={!user.firstName || !user.lastName}
           onFail={() => setShowErrorText(true)}
           onNext={
-            () => (route.params && route.params.nextScreen
-              ? route.params.nextScreen() : nextScreen(ONBOARDING_PAGE_NAMES.NAME))
+            () => (route.params && route.params.editAccount
+              ? navigation.navigate(MAIN_ROUTES.ACCOUNT)
+              : nextScreen(ONBOARDING_PAGE_NAMES.NAME))
           }
         />
       </PageContainer>

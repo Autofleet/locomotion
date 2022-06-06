@@ -1,6 +1,7 @@
 import React, { useEffect, useContext } from 'react';
 import { useRoute } from '@react-navigation/native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { TouchableOpacity, View } from 'react-native';
 import { AUTH_ROUTES, MAIN_ROUTES } from '../routes';
 
 import ThumbnailPicker from '../../Components/ThumbnailPicker';
@@ -10,7 +11,7 @@ import {
   AccountHeaderMainContainer, AccountHeaderMainText,
   AccountHeaderSubText, ErrorText,
   Arrow, CardContainer, CardContantContainer, CardsContainer, CardsTitle, CardText, CardTitle,
-  Container, FlexCenterContainer, LogoutContainer,
+  Container, FlexCenterContainer, LogoutContainer, ArrowContainer,
 } from './styled';
 import i18n from '../../I18n';
 import PageHeader from '../../Components/PageHeader';
@@ -51,14 +52,21 @@ const AccountHeader = () => {
   );
 };
 
-const Card = ({ children, ...props }) => (
-  <CardContainer {...props}>
-    <CardContantContainer>
-      {children}
-    </CardContantContainer>
-    <Arrow />
-  </CardContainer>
-);
+const Card = ({ children, onPress, ...props }) => {
+  const MainContainer = onPress ? TouchableOpacity : View;
+  return (
+    <MainContainer onPress={onPress} {...props}>
+      <CardContainer>
+        <CardContantContainer>
+          {children}
+        </CardContantContainer>
+        <ArrowContainer>
+          {onPress ? <Arrow /> : undefined}
+        </ArrowContainer>
+      </CardContainer>
+    </MainContainer>
+  );
+};
 
 const AccountContent = ({ navigation }) => {
   const { user } = useContext(UserContext);
@@ -72,7 +80,7 @@ const AccountContent = ({ navigation }) => {
         <Card
           onPress={() => {
             navigation.navigate(AUTH_ROUTES.NAME, {
-              nextScreen: () => navigation.navigate(MAIN_ROUTES.ACCOUNT),
+              editAccount: true,
             });
           }}
         >
@@ -91,7 +99,13 @@ const AccountContent = ({ navigation }) => {
             {user ? `${user.phoneNumber}` : ''}
           </CardText>
         </Card>
-        <Card>
+        <Card
+          onPress={() => {
+            navigation.navigate(AUTH_ROUTES.EMAIL, {
+              editAccount: true,
+            });
+          }}
+        >
           <CardTitle>
             Email
           </CardTitle>

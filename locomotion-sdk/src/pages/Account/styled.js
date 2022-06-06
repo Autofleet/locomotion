@@ -35,10 +35,13 @@ export const LogoutContainer = styled.TouchableOpacity`
   width: 90%;
 `;
 
-export const Arrow = styled.Image.attrs({ source: ArrowIconSource })`
-  opacity: 0.4;
+export const ArrowContainer = styled.View`
   margin-right: 10px;
   margin-left: auto;
+`;
+
+export const Arrow = styled.Image.attrs({ source: ArrowIconSource })`
+  opacity: 0.4;
   width: 10px;
   height: 10px;
 `;
@@ -66,7 +69,7 @@ export const CardText = styled.Text`
   font-size: 16px;
 `;
 
-export const CardContainer = styled.TouchableOpacity`
+export const CardContainer = styled.View`
   flex-direction: row;
   vertical-align: center;
   justify-content: center;
