@@ -83,7 +83,6 @@ export const FormGroup = styled.label`
     ${({ disabled }) => disabled && 'opacity: 0.3'};
   `;
 
-
 export const FormGroupLabel = styled.span`
     display: block;
     margin-bottom: 6px;
@@ -124,6 +123,5 @@ export default props => (
 
     </InputGroup>
   </FormGroup>
-
 
 );

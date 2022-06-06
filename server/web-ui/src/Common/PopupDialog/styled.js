@@ -10,7 +10,6 @@ export const PopupContainer = styled.div`
   max-width: ${props => props.maxWidth || 'unset'};
 `;
 
-
 export const Content = styled.div`
   flex: 1;
   flex-grow: 0;
@@ -29,4 +28,3 @@ export const Body = styled.div`
     padding: 0 14px;
   }
 `;
-

@@ -8,4 +8,3 @@ const MyDialogs = {
 };
 
 export default popupName => MyDialogs[popupName];
-

@@ -1,4 +1,6 @@
 import React from 'react';
+import PropTypes from 'prop-types';
+import { Field, FieldArray, Form } from 'formik';
 import {
   NumberInput,
   SettingsPanel,
@@ -9,8 +11,6 @@ import {
   SettingsContainer,
   SaveSettingsContainer,
 } from './styled';
-import PropTypes from 'prop-types';
-import { Field, FieldArray, Form } from 'formik';
 import i18n from '../../i18n';
 import Toggle from '../../Common/Toggle';
 import InputWithLabel from '../../Common/InputWithLabel';
@@ -32,12 +32,12 @@ const SettingsForm = ({
             value="MANUAL_APPROVAL"
             checked={values.MANUAL_APPROVAL}
             onChange={(event) => {
-                                if (event.target.checked) {
-                                    setFieldValue('MANUAL_APPROVAL', true);
-                                } else {
-                                    setFieldValue('MANUAL_APPROVAL', false);
-                                }
-                            }}
+              if (event.target.checked) {
+                setFieldValue('MANUAL_APPROVAL', true);
+              } else {
+                setFieldValue('MANUAL_APPROVAL', false);
+              }
+            }}
           />
         </SettingsPanelItem>
 

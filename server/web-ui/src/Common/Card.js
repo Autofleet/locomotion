@@ -1,6 +1,5 @@
 import styled from 'styled-components';
 
-
 export default styled.div`
   border-radius: 3px;
   border: 1px solid #1e1e1e;

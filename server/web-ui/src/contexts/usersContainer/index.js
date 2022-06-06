@@ -5,7 +5,6 @@ import { getUsers, update, remove, add } from './api';
 const useUsers = () => {
   const [usersMap, setUsersMap] = useState([]);
 
-
   const loadUsers = async () => {
     const usersData = await getUsers();
     setUsersMap(usersData);
@@ -40,7 +39,6 @@ const useUsers = () => {
     }
   };
 
-
   const AddUser = async (data) => {
     const addUser = await add(data);
     if (addUser) {
@@ -57,7 +55,6 @@ const useUsers = () => {
 
   const getUser = userId => usersMap.find(user => user.id === userId);
 
-
   return {
     loadUsers,
     usersMap,
@@ -70,4 +67,3 @@ const useUsers = () => {
 };
 
 export default createContainer(useUsers);
-

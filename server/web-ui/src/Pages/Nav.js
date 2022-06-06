@@ -1,10 +1,10 @@
 import React from 'react';
 import styled from 'styled-components';
-import i18n from '../i18n';
-import logoSrc from '../assets/logo.png';
 import {
   NavLink,
 } from 'react-router-dom';
+import i18n from '../i18n';
+import logoSrc from '../assets/logo.png';
 import PoweredByBase from '../Common/PoweredBy';
 
 export const navWidthPx = 280;
@@ -85,4 +85,3 @@ export default () => (
     <PoweredBy />
   </NavContainer>
 );
-

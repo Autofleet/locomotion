@@ -55,8 +55,8 @@ export default () => {
         <SvgIcon
           svg={deleteIcon}
           onClick={() => {
-                workingHours.deleteSlot(id);
-            }}
+            workingHours.deleteSlot(id);
+          }}
         />
       </Buttons>
     ),
@@ -96,7 +96,6 @@ export default () => {
         />
 
       </Body>
-
 
     </Fragment>
   );

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import propsTypes from 'prop-types';
-import BasicTable from '../';
+import BasicTable from '..';
 
 const margin = 0;
 const Table = styled(BasicTable)`
@@ -98,7 +98,6 @@ const StripTable = (props) => {
       };
     },
 
-
   }) : {};
 
   return (
@@ -116,9 +115,7 @@ const StripTable = (props) => {
   );
 };
 
-
 export default StripTable;
-
 
 StripTable.defaultProps = {
   SubComponent: undefined,

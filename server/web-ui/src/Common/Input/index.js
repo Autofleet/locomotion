@@ -48,7 +48,6 @@ export const Input = styled.input`
   ${({ withPadding }) => withPadding && 'padding: 0 20px;'}
 `;
 
-
 Input.defaultProps = { // eslint-disable-line
   withBorder: false,
   withHover: false,
@@ -69,7 +68,6 @@ const CompoundInputContainer = styled.div`
 
   ${({ withBorder }) => withBorder && borderStyles}
 `;
-
 
 const InputRightContainer = styled.div`
   margin-right: 16px;

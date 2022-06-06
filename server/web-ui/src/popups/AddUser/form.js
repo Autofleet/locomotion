@@ -53,13 +53,13 @@ const AddUserForm = ({
         padding="0px"
         width="80vw"
         title={editMode
-        ? i18n.t('users.addUser.ManagementDriversEditDriverPopupTitle')
-        : i18n.t('users.addUser.ManagementDriversAddDriverPopupTitle')
+          ? i18n.t('users.addUser.ManagementDriversEditDriverPopupTitle')
+          : i18n.t('users.addUser.ManagementDriversAddDriverPopupTitle')
       }
         closeButtonTitle={i18n.t('users.addUser.closeBtn')}
         submitButtonTitle={editMode
-        ? i18n.t('users.addUser.saveBtn')
-        : i18n.t('users.addUser.createBtn')
+          ? i18n.t('users.addUser.saveBtn')
+          : i18n.t('users.addUser.createBtn')
       }
         {...{ onCancel }}
         maxWidth="750px"
@@ -117,12 +117,12 @@ const AddUserForm = ({
                   value="toggle_active"
                   checked={values.active}
                   onChange={(event) => {
-                      if (event.target.checked) {
-                        setFieldValue('active', true);
-                      } else {
-                        setFieldValue('active', false);
-                      }
-                    }}
+                    if (event.target.checked) {
+                      setFieldValue('active', true);
+                    } else {
+                      setFieldValue('active', false);
+                    }
+                  }}
                 />
               </ToggleContainer>
             </RightSidePopupForm>

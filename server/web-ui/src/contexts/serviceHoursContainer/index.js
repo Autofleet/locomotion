@@ -5,7 +5,6 @@ import { getUsers, update, remove, add, getSlots } from './api';
 const useServiceHours = () => {
   const [slotsMap, setSlotsMap] = useState([]);
 
-
   const loadServiceHours = async () => {
     const slotsData = await getSlots();
     setSlotsMap(slotsData);
@@ -55,7 +54,6 @@ const useServiceHours = () => {
     }
   };
 
-
   const getUser = userId => usersMap.find(user => user.id === userId);
 
  */
@@ -68,4 +66,3 @@ const useServiceHours = () => {
 };
 
 export default createContainer(useServiceHours);
-

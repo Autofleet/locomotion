@@ -34,4 +34,3 @@ const useSettings = () => {
 };
 
 export default createContainer(useSettings);
-

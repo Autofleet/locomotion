@@ -132,8 +132,8 @@ export default ({ children }) => {
             displayLoader={isLoading}
             darkLoader={false}
             onClick={async (event) => {
-                await login(userName, password);
-              }}
+              await login(userName, password);
+            }}
             disabled={isLoading}
           />
         </SubmitContainer>
@@ -147,4 +147,3 @@ export default ({ children }) => {
     </LoginContainer>
   );
 };
-

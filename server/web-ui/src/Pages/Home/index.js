@@ -67,19 +67,19 @@ export default () => {
         <SvgIcon
           svg={editIcon}
           onClick={() => {
-              const userData = users.getUser(id);
-              setChosenUser(userData);
-              setPopupState('EditUser');
-            }}
+            const userData = users.getUser(id);
+            setChosenUser(userData);
+            setPopupState('EditUser');
+          }}
         />
         <SvgIcon
           svg={deleteIcon}
           disableClass={active}
           onClick={() => {
-              if (!active) {
-                users.deleteUser(id);
-              }
-            }}
+            if (!active) {
+              users.deleteUser(id);
+            }
+          }}
         />
       </Buttons>
     ),
@@ -95,12 +95,12 @@ export default () => {
           value={`toggle_${id}`}
           checked={active === true}
           onChange={(event) => {
-              if (event.target.checked) {
-                users.setUserState(id, true);
-              } else {
-                users.setUserState(id, false);
-              }
-            }}
+            if (event.target.checked) {
+              users.setUserState(id, true);
+            } else {
+              users.setUserState(id, false);
+            }
+          }}
         />
       </section>
     ),
@@ -141,9 +141,7 @@ export default () => {
           initialValues={chosenUser}
         />
 
-
       </Body>
-
 
     </Fragment>
   );

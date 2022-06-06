@@ -32,7 +32,7 @@ const AddUser = ({
       onSubmit={async (values, actions) => {
         console.log(values);
 
- actions.setSubmitting(true);
+        actions.setSubmitting(true);
         try {
           await workingHours.AddSlot(values);
         } catch (error) {
@@ -70,4 +70,3 @@ AddUser.propTypes = {
   onCancel: PropTypes.func,
   initialValues: PropTypes.shape({}).isRequired,
 };
-
