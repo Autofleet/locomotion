@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Field, FieldArray, Form } from 'formik';
+import { Field, Form } from 'formik';
 import {
   NumberInput,
   SettingsPanel,

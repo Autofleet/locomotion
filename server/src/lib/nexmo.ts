@@ -1,7 +1,7 @@
 import Promise from 'bluebird';
 import Nexmo from 'nexmo';
 
-Nexmo.CHECK_STATUS_SUCSSES = '0';
+// Nexmo.CHECK_STATUS_SUCSSES = '0';
 
 class NexmoService {
   virtualNumber: string;

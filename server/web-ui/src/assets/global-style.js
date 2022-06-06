@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Style = props => (
+const Style = () => (
   <style>
     {`
     @import url("https://fonts.googleapis.com/css?family=Montserrat|Montserrat:bold");

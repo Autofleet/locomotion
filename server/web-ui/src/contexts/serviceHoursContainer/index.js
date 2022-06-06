@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { createContainer } from 'unstated-next';
-import { getUsers, update, remove, add, getSlots } from './api';
+import { remove, add, getSlots } from './api';
 
 const useServiceHours = () => {
   const [slotsMap, setSlotsMap] = useState([]);

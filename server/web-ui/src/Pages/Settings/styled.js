@@ -1,7 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
 import { omit } from 'lodash';
-import { Input } from '../../Common/Input';
 import Button from '../../Common/Button';
 import { LabelText } from '../../Common/Toggle/styled';
 

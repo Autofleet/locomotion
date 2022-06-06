@@ -13,4 +13,4 @@ export const find = async (id) => {
 
 export const remove = async id => (await networkService.delete(`/api/v1/admin/users/${id}`)).data;
 
-export const verifyUser = async inviteId => (await networkService.post(`/api/v1/invite/${inviteId}/verify`)).data;
+export const verifyUser = async inviteId => networkService.post(`/api/v1/invite/${inviteId}/verify`);

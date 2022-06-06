@@ -1,17 +1,13 @@
 import React, { Fragment, useEffect, useState } from 'react';
 import { Redirect } from 'react-router-dom';
-import moment from 'moment';
 import i18n from '../../i18n';
 import Nav from '../Nav';
 import { H1 } from '../../Common/Header';
 import Table from '../../Common/Table/themes/strips';
-import Toggle from '../../Common/Toggle';
 import Popup from '../../Common/Popup';
-import { generateAvatarById } from '../../Services/avatar';
-import { Body, Content, Buttons, ApplyButton, Avatar, SvgBase, avatarSize } from './styled';
+import { Body, Content, Buttons, ApplyButton } from './styled';
 import serviceHoursContainer from '../../contexts/serviceHoursContainer';
 import { ReactComponent as deleteIcon } from '../../assets/delete.svg';
-import { ReactComponent as editIcon } from '../../assets/edit.svg';
 import SvgIcon from '../../Common/SvgIcon';
 
 const daysOfWeek = [
@@ -41,7 +37,6 @@ export default () => {
   }
 
   const [popupState, setPopupState] = useState('');
-  const [chosenUser, setChosenUser] = useState('');
 
   const workingHours = serviceHoursContainer.useContainer();
 

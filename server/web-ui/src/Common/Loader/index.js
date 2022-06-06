@@ -15,7 +15,7 @@ const options = isDark => ({
   },
 });
 
-const Loader = ({ isDark, ...props }) => (
+const Loader = ({ ...props }) => (
   <Lottie
     options={options(props.isDark)}
     height={15}

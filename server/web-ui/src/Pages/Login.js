@@ -79,7 +79,7 @@ const PoweredBy = styled(PoweredByBase)`
   width: 92%;
 `;
 
-export default ({ children }) => {
+export default () => {
   const [userName, setUserName] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -131,7 +131,7 @@ export default ({ children }) => {
             title={i18n.t('login.buttonTitle')}
             displayLoader={isLoading}
             darkLoader={false}
-            onClick={async (event) => {
+            onClick={async () => {
               await login(userName, password);
             }}
             disabled={isLoading}

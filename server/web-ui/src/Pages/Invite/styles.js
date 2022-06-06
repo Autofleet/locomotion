@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
 export const TextContain = styled.div`
 flex-grow: 1;
@@ -8,8 +8,7 @@ text-align: center;
 `;
 
 export const Container = styled.div`
-height: 100%;
-width: 100%;
+height: 100vh;
 background-color: #f1f2f6;
 display: flex;
 align-items: center;

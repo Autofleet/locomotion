@@ -73,7 +73,7 @@ export default () => {
 
               const { ...otherValues } = diff(settings.settingsList, values);
               try {
-                Object.keys(otherValues).map(async (key, index) => {
+                Object.keys(otherValues).map(async (key) => {
                   await settings.UpdateSetting(key, otherValues[key]);
                 });
               } catch (error) {
