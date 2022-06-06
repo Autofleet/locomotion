@@ -38,7 +38,7 @@ const Avatar = () => {
           </Name>
         </ImageContainer>
         <OnboardingNavButtons
-          onNext={nextScreen}
+          onNext={() => nextScreen(ONBOARDING_PAGE_NAMES.AVATAR)}
           isInvalid={!user.avatar}
         />
       </PageContainer>

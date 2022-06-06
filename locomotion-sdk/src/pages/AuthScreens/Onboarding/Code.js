@@ -18,8 +18,12 @@ const Code = () => {
   const navigation = useNavigation();
   const [code, setCode] = useState('');
   const [showErrorText, setShowErrorText] = useState(false);
+  const [loading, setLoading] = useState(false);
   const onVertCodeChange = (value) => {
     setShowErrorText(false);
+    if (value.length === 4) {
+      setLoading(true);
+    }
     setCode(value);
   };
 
@@ -27,6 +31,7 @@ const Code = () => {
     const input = v || code;
     setCode(input);
     const response = await verifyCode(input);
+    setLoading(false);
     if (!response) {
       return setShowErrorText(true);
     }
@@ -56,7 +61,7 @@ const Code = () => {
           </ResendButton>
         </ResendContainer>
         <OnboardingNavButtons
-          isInvalid={showErrorText || code.length < 4}
+          isInvalid={showErrorText || code.length < 4 || loading}
           onFail={() => setShowErrorText(true)}
         />
       </PageContainer>

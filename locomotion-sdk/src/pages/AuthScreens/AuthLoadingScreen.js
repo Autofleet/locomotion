@@ -3,6 +3,7 @@ import {
   Text,
   View,
 } from 'react-native';
+import { NAVIGATION_CONTAINERS, ONBOARDING_PAGE_NAMES } from '../routes';
 import AppSettings from '../../services/app-settings';
 import Auth from '../../services/auth';
 import { getUserDetails } from '../../context/user/api';
@@ -10,7 +11,7 @@ import { OnboardingContext } from '../../context/onboarding';
 import PaymentsContext from '../../context/payments';
 import { UserContext } from '../../context/user';
 
-const INITIAL_USER_STATE = {
+export const INITIAL_USER_STATE = {
   phoneNumber: '',
   firstName: '',
   lastName: '',
@@ -53,22 +54,18 @@ const AuthLoadingScreen = ({ navigation }) => {
 
         await saveUser(userData);
 
-        const nonUserNav = (screen) => {
-          navigation.replace('AuthScreens', { screen, params: { showHeaderIcon: false } });
-        };
-
         if (!userData.active) {
-          return nonUserNav('Lock');
+          return navigation.replace(NAVIGATION_CONTAINERS.AUTH_SCREENS, { screen: ONBOARDING_PAGE_NAMES.LOCK, params: { showHeaderIcon: false } });
         }
 
         if (!userData.didCompleteOnboarding) {
           return navigateBasedOnUser(userData);
         }
 
-        return navigation.replace('MainApp');
+        return navigation.replace(NAVIGATION_CONTAINERS.MAIN_APP);
       }
       setUser(INITIAL_USER_STATE);
-      navigation.replace('AuthScreens');
+      navigation.replace(NAVIGATION_CONTAINERS.AUTH_SCREENS);
     }
 
     if (!user) { // Load app state

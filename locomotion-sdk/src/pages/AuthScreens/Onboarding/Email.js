@@ -20,7 +20,7 @@ const Email = () => {
   const onNext = async () => {
     try {
       await updateUserInfo({ email });
-      nextScreen();
+      nextScreen(ONBOARDING_PAGE_NAMES.EMAIL);
     } catch (e) {
       setErrorText(i18n.t('onboarding.pages.email.inUseError'));
     }

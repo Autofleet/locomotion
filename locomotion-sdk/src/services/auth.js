@@ -1,6 +1,7 @@
 import jwtDecode from 'jwt-decode';
 import StorageService from './storage';
 import AppSettings from './app-settings';
+import { NAVIGATION_CONTAINERS } from '../pages/routes';
 
 class Auth {
   static jwtVerify(token) {
@@ -47,7 +48,7 @@ class Auth {
     //   console.log('Bad logout request', e)
     // }
     await AppSettings.destroy();
-    return navigation.replace('AuthScreens', { screen: 'Login' });
+    return navigation.replace(NAVIGATION_CONTAINERS.AUTH_SCREENS, { screen: 'Login' });
   }
 
   onFaildAuth(cb) {

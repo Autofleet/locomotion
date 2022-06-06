@@ -11,7 +11,7 @@ const Card = () => {
   const { nextScreen } = useContext(OnboardingContext);
 
   const onDone = async () => {
-    nextScreen();
+    nextScreen(ONBOARDING_PAGE_NAMES.CARD);
   };
   return (
     <SafeView>

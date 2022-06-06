@@ -1,3 +1,4 @@
+import { ONBOARDING_PAGE_NAMES } from '../pages/routes';
 import { getUserDetails } from '../context/user/api';
 import Auth from './auth';
 
@@ -14,7 +15,7 @@ const UserService = {
     }
 
     if (userData.active === false) {
-      navigation.navigate('Lock');
+      navigation.navigate(ONBOARDING_PAGE_NAMES.LOCK);
     }
 
     return userData;
