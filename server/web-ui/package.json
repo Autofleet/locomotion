@@ -76,7 +76,7 @@
       "object-curly-newline": 0,
       "no-mixed-operators": 0,
       "@typescript-eslint/no-unused-vars": "warn",
-      "indent": 0
+      "indent": "warn"
     },
     "globals": {
       "document": true,
