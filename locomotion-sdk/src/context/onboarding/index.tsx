@@ -2,7 +2,7 @@ import { useNavigation, useRoute } from '@react-navigation/native';
 import React, {
   createContext, useContext, useEffect, useState,
 } from 'react';
-import { ONBOARDING_PAGE_NAMES } from '../../pages/routes';
+import { NAVIGATION_CONTAINERS, ONBOARDING_PAGE_NAMES } from '../../pages/routes';
 import { UserContext } from '../user';
 
 interface OnboardingContextInterface {
@@ -42,7 +42,7 @@ const OnboardingContextProvider = ({ children }: { children: any }) => {
     [ONBOARDING_PAGE_NAMES.CARD]: false,
   });
 
-  const navigateToScreen = (screen: string) => navigation.navigate('AuthScreens', { screen });
+  const navigateToScreen = (screen: string) => navigation.navigate(NAVIGATION_CONTAINERS.AUTH_SCREENS, { screen });
 
   const nextScreen = (currentScreen: string) => {
     const currentIndex = SCREEN_ORDER.indexOf(currentScreen);
@@ -64,7 +64,7 @@ const OnboardingContextProvider = ({ children }: { children: any }) => {
       }
       return navigateToScreen(keyToScreen.welcome);
     }
-    return navigation.navigate('MainApp');
+    return navigation.navigate(NAVIGATION_CONTAINERS.MAIN_APP);
   };
 
   const verifyCode = async (code: string) => {
