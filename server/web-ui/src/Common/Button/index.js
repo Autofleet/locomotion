@@ -1,6 +1,6 @@
 import React from 'react';
 import propsTypes from 'prop-types';
-import Loader from '../../Common/Loader';
+import Loader from '../Loader';
 
 const Button = ({
   title,

@@ -1,5 +1,5 @@
-import network from '../Services/network';
 import { useEffect, useReducer, useCallback } from 'react';
+import network from '../Services/network';
 
 const dataFetchReducer = (state, action) => {
   switch (action.type) {

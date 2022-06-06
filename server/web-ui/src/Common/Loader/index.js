@@ -6,7 +6,6 @@ import Lottie from 'react-lottie';
 import * as animationData from './loader.json';
 import * as darkAnimationData from './dark-loader.json';
 
-
 const options = isDark => ({
   loop: true,
   autoplay: true,

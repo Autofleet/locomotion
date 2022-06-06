@@ -9,7 +9,7 @@
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
     "axios": "^0.19.0",
-    "eslint": "^6.8.0",
+    "eslint": "^8.17.0",
     "formik": "^2.1.4",
     "i18next": "^19.1.0",
     "jsonwebtoken": "^8.5.1",
@@ -44,9 +44,10 @@
     "lint": "./node_modules/.bin/eslint src",
     "init": "echo 'RUN'"
   },
+  "babel": {},
   "eslintConfig": {
-    "parser": "babel-eslint",
-    "extends": "airbnb",
+    "parser": "@babel/eslint-parser",
+    "extends": "airbnb-base",
     "env": {
       "jest": true,
       "browser": true
@@ -55,9 +56,9 @@
       "func-names": "warn",
       "no-undef": "warn",
       "no-unused-vars": "warn",
-      "react/prop-types": "warn",
+      "react/prop-types": 0,
       "no-use-before-define": "warn",
-      "react/default-props-match-prop-types": "warn",
+      "react/default-props-match-prop-types": 0,
       "no-useless-escape": "warn",
       "max-len": "warn",
       "import/first": "warn",
@@ -68,7 +69,11 @@
       "jsx-a11y/click-events-have-key-events": 0,
       "jsx-a11y/no-static-element-interactions": 0,
       "jsx-a11y/no-noninteractive-element-interactions": 0,
-      "import/prefer-default-export": 0
+      "import/prefer-default-export": 0,
+      "arrow-parens": 0,
+      "operator-linebreak": 0,
+      "implicit-arrow-linebreak": 0,
+      "object-curly-newline": 0
     },
     "globals": {
       "document": true,
@@ -99,6 +104,6 @@
   },
   "proxy": "http://localhost:8085",
   "devDependencies": {
-    "babel-eslint": "^10.0.3"
+    "@babel/eslint-parser": "^7.18.2"
   }
 }

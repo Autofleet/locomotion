@@ -79,4 +79,3 @@ AddUser.propTypes = {
   onCancel: PropTypes.func,
   initialValues: PropTypes.shape({}).isRequired,
 };
-

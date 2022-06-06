@@ -40,7 +40,7 @@ const PopupDialog = ({
         <Content>
           {type === 'error' ?
             <ErrorImage alt="" src="https://res.cloudinary.com/autofleet/image/upload/v1533651669/Control-Center/error.png" />
-        : undefined}
+            : undefined}
 
           {children}
         </Content>
