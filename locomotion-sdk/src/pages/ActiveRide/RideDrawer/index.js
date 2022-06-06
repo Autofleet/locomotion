@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import moment from 'moment';
 
+import { MAIN_ROUTES } from '../../routes';
 import I18n from '../../../I18n';
 import {
   Drawer,
@@ -127,7 +128,7 @@ const RideDrawer = ({
         isOpen={futureOrdersState}
       />
       {!allowRideOrder
-        ? <AddPaymentBar onPress={() => navigation.navigate('Payment')}>{I18n.t('payments.setPaymentBanner')}</AddPaymentBar> : null}
+        ? <AddPaymentBar onPress={() => navigation.navigate(MAIN_ROUTES.PAYMENT)}>{I18n.t('payments.setPaymentBanner')}</AddPaymentBar> : null}
       <FutureRides
         futureRides={futureRides}
         isOpen={futureOrdersState}

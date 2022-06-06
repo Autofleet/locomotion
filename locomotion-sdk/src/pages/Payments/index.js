@@ -10,6 +10,7 @@ import ConfirmationPopup from '../../popups/ConfirmationPopup';
 import CreditCardsList from './credit-cards';
 import { NewCreditForm } from '../../Components/NewCreditForm';
 import { PageContainer } from '../styles';
+import { MAIN_ROUTES } from '../routes';
 
 export default ({ navigation, menuSide }) => {
   const usePayments = PaymentsContext.useContainer();
@@ -55,7 +56,7 @@ export default ({ navigation, menuSide }) => {
       <PageContent>
         <PageHeader
           title={i18n.t('payments.pageTitle')}
-          onIconPress={() => toggleMenu()}
+          onIconPress={() => navigation.navigate(MAIN_ROUTES.HOME)}
           iconSide={menuSide}
         />
         {pageLoading ? <FullPageLoader autoPlay loop /> : null}

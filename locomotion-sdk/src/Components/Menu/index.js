@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { ROUTES } from '../../pages/routes';
+import { MAIN_ROUTES } from '../../pages/routes';
 import Thumbnail from '../Thumbnail';
 import i18n from '../../I18n';
 import {
@@ -39,7 +39,7 @@ const DrawerHeader = ({ onIconPress, navigation }) => {
       </HeaderMainText>
       <HeaderLink
         onPress={() => {
-          navigation.navigate(ROUTES.ACCOUNT);
+          navigation.navigate(MAIN_ROUTES.ACCOUNT);
         }}
       >
         <HeaderText>
@@ -85,33 +85,33 @@ export const DrawerContentComponent = ({ navigation, state }) => {
         title={i18n.t('menu.home')}
         icon={HomeIconSource}
         onPress={() => {
-          navigation.navigate(ROUTES.HOME);
+          navigation.navigate(MAIN_ROUTES.HOME);
         }}
-        focused={route === ROUTES.HOME}
+        focused={route === MAIN_ROUTES.HOME}
       />
       <DrawerLabel
         title={i18n.t('menu.trips')}
         icon={CarIconSource}
         onPress={() => {
-          navigation.navigate(ROUTES.RIDE_HISTORY);
+          navigation.navigate(MAIN_ROUTES.RIDE_HISTORY);
         }}
-        focused={route === ROUTES.RIDE_HISTORY}
+        focused={route === MAIN_ROUTES.RIDE_HISTORY}
       />
       <DrawerLabel
         title={i18n.t('menu.paymentsSettings')}
         icon={CreditCardIconSource}
         onPress={() => {
-          navigation.navigate(ROUTES.PAYMENT);
+          navigation.navigate(MAIN_ROUTES.PAYMENT);
         }}
-        focused={route === ROUTES.PAYMENT}
+        focused={route === MAIN_ROUTES.PAYMENT}
       />
       <DrawerLabel
         title={i18n.t('menu.support')}
         icon={HelpIconSource}
         onPress={() => {
-          navigation.navigate(ROUTES.CONTACT_US);
+          navigation.navigate(MAIN_ROUTES.CONTACT_US);
         }}
-        focused={route === ROUTES.CONTACT_US}
+        focused={route === MAIN_ROUTES.CONTACT_US}
       />
     </StyledSafeAreaView>
   );

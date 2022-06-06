@@ -24,7 +24,7 @@ import { OnboardingContext } from '../../../context/onboarding';
 import { ONBOARDING_PAGE_NAMES } from '../../routes';
 
 const StartScreen = () => {
-  const { nextScreen } = useContext(OnboardingContext);
+  const { nextScreen: next, clearUser } = useContext(OnboardingContext);
   const [webViewWindow, setWebViewWindow] = useState(null);
   const route = useRoute();
   const [settings, setSettings] = useState({
@@ -32,6 +32,11 @@ const StartScreen = () => {
     privacyUrl: null,
     contactUsUrl: null,
   });
+
+  const nextScreen = (currentScreen) => {
+    clearUser();
+    next(currentScreen);
+  };
 
   const loadSettings = async () => {
     const newSettings = await getLoginSettings();

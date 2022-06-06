@@ -2,6 +2,7 @@ import React, { Fragment, useState, useEffect } from 'react';
 import { useRoute } from '@react-navigation/native';
 import { WebView } from 'react-native-webview';
 import Config from 'react-native-config';
+import { MAIN_ROUTES } from '../routes';
 import i18n from '../../I18n';
 import SafeView from '../../Components/SafeView';
 import PageHeader from '../../Components/PageHeader';
@@ -34,7 +35,7 @@ export default ({ navigation, menuSide }) => {
       <SafeView style={{ height: '100%', width: '100%' }}>
         <PageHeader
           title={i18n.t('contactUs.pageTitle')}
-          onIconPress={() => navigation.toggleDrawer()}
+          onIconPress={() => navigation.navigate(MAIN_ROUTES.HOME)}
           iconSide={menuSide}
         />
         { uri ? (

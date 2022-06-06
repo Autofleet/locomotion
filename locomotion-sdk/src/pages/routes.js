@@ -1,4 +1,11 @@
-export const ROUTES = {
+
+export const APP_ROUTES = {
+  AUTH_SCREENS: 'AuthScreens',
+  MAIN_APP: 'MainApp',
+  AUTH_LOADING: 'AuthLoading',
+};
+
+export const MAIN_ROUTES = {
   HOME: 'Home',
   RIDE_HISTORY: 'RideHistory',
   PAYMENT: 'Payment',
@@ -8,19 +15,17 @@ export const ROUTES = {
   WEBVIEW: 'webview',
 };
 
-export const NAVIGATION_CONTAINERS = {
-  MAIN_APP: 'MainApp',
-  AUTH_SCREENS: 'AuthScreens',
-};
-
-export const ONBOARDING_PAGE_NAMES = {
+export const AUTH_ROUTES = {
   START: 'Start',
   PHONE: 'Phone',
   CODE: 'Code',
   NAME: 'Name',
+  ADD_CARD: 'AddCard',
   CARD: 'AddCard',
   AVATAR: 'Avatar',
   EMAIL: 'Email',
   WELCOME: 'Welcome',
   LOCK: 'Lock',
 };
+
+export const ONBOARDING_PAGE_NAMES = AUTH_ROUTES;

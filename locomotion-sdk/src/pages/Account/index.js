@@ -1,7 +1,8 @@
 import React, { useEffect, useContext } from 'react';
 import { useRoute } from '@react-navigation/native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { ROUTES } from '../routes';
+import { TouchableOpacity, View } from 'react-native';
+import { AUTH_ROUTES, MAIN_ROUTES } from '../routes';
 
 import ThumbnailPicker from '../../Components/ThumbnailPicker';
 import {
@@ -10,7 +11,7 @@ import {
   AccountHeaderMainContainer, AccountHeaderMainText,
   AccountHeaderSubText, ErrorText,
   Arrow, CardContainer, CardContantContainer, CardsContainer, CardsTitle, CardText, CardTitle,
-  Container, FlexCenterContainer, LogoutContainer,
+  Container, FlexCenterContainer, LogoutContainer, ArrowContainer, VerifyContainer, VerifyText, CardTitleContainer,
 } from './styled';
 import i18n from '../../I18n';
 import PageHeader from '../../Components/PageHeader';
@@ -51,14 +52,39 @@ const AccountHeader = () => {
   );
 };
 
-const Card = ({ children, ...props }) => (
-  <CardContainer {...props}>
-    <CardContantContainer>
-      {children}
-    </CardContantContainer>
-    <Arrow />
-  </CardContainer>
-);
+const Card = ({
+  title, children, onPress, verified, ...props
+}) => {
+  const MainContainer = onPress ? TouchableOpacity : View;
+  return (
+    <MainContainer onPress={onPress} {...props}>
+      <CardContainer>
+        <CardContantContainer>
+          <CardTitleContainer>
+            <CardTitle>
+              {title}
+            </CardTitle>
+            {verified ? (
+              <View>
+                <VerifyContainer>
+                  <VerifyText>
+                    Verified
+                  </VerifyText>
+                </VerifyContainer>
+              </View>
+            ) : undefined}
+          </CardTitleContainer>
+          <CardText>
+            {children}
+          </CardText>
+        </CardContantContainer>
+        <ArrowContainer>
+          {onPress ? <Arrow /> : undefined}
+        </ArrowContainer>
+      </CardContainer>
+    </MainContainer>
+  );
+};
 
 const AccountContent = ({ navigation }) => {
   const { user } = useContext(UserContext);
@@ -70,47 +96,45 @@ const AccountContent = ({ navigation }) => {
           Account information
         </CardsTitle>
         <Card
-          onPress={() => {
-            navigation.navigate('Name');
-          }}
+          title="Name"
+          onPress={() => navigation.navigate(AUTH_ROUTES.NAME, {
+            editAccount: true,
+          })}
         >
-          <CardTitle>
-            Name
-          </CardTitle>
-          <CardText>
-            {user ? `${user.firstName} ${user.lastName}` : ''}
-          </CardText>
+          {user ? `${user.firstName} ${user.lastName}` : ''}
         </Card>
-        <Card>
-          <CardTitle>
-            Phone number
-          </CardTitle>
-          <CardText>
-            {user ? `${user.phoneNumber}` : ''}
-          </CardText>
+        <Card
+          title="Phone number"
+        >
+          {user ? `${user.phoneNumber}` : ''}
         </Card>
-        <Card>
-          <CardTitle>
-            Email
-          </CardTitle>
-          <CardText>
-            {user ? `${user.email}` : ''}
-          </CardText>
+        <Card
+          verified={user && user.isEmailVerified}
+          title="Email"
+          onPress={() => navigation.navigate(AUTH_ROUTES.EMAIL, {
+            editAccount: true,
+          })}
+        >
+          {user ? `${user.email}` : ''}
         </Card>
-
         <CardsTitle>
           Payment Preferences
         </CardsTitle>
-        <Card>
-          <CardTitle>
-            Default tip
-          </CardTitle>
-          <CardText>
-            5%
-          </CardText>
+        <Card
+          title="Default tip"
+        >
+          5%
         </Card>
-
       </CardsContainer>
+
+      <LogoutContainer
+        onPress={() => {
+          navigation.navigate(MAIN_ROUTES.LOGOUT);
+        }}
+      >
+        <ErrorText>{i18n.t('menu.logout')}</ErrorText>
+      </LogoutContainer>
+
     </Container>
   );
 };
@@ -134,17 +158,10 @@ export default ({
       >
         <PageHeader
           title={i18n.t('onboarding.pageTitle')}
-          onIconPress={() => navigation.toggleDrawer()}
+          onIconPress={() => navigation.navigate(MAIN_ROUTES.HOME)}
           iconSide={menuSide}
         />
         <AccountHeader />
-        <LogoutContainer
-          onPress={() => {
-            navigation.navigate(ROUTES.LOGOUT);
-          }}
-        >
-          <ErrorText>{i18n.t('menu.logout')}</ErrorText>
-        </LogoutContainer>
         <AccountContent
           navigation={navigation}
         />
