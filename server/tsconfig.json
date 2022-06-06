@@ -1,5 +1,5 @@
 {
-    "types": ["@dicebear/avatars/typings/svgson"],
+    "types": ["@dicebear/avatars/typings/svgson", "node"],
     "compilerOptions": {
         "incremental": true,
         "module": "commonjs",
