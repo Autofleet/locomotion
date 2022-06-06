@@ -43,7 +43,6 @@ const Input = styled.input`
   ${({ withPadding }) => withPadding && 'padding: 0 20px;'}
 `;
 
-
 Input.defaultProps = { // eslint-disable-line
   withBorder: false,
   withHover: false,

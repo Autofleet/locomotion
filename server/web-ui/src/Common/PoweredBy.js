@@ -1,7 +1,7 @@
 import styled from 'styled-components';
+import React from 'react';
 import i18n from '../i18n';
 import afLogoSrc from '../assets/af-logo.png';
-import React from 'react';
 
 const PoweredByLink = styled.a`
   color: #b9bbbe;

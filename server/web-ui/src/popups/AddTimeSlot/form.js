@@ -2,13 +2,13 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Field, FieldArray, Form } from 'formik';
 import TimeField from 'react-simple-timefield';
+import momentTz from 'moment-timezone';
 import i18n from '../../i18n';
 import InputWithLabel, { PhoneInput } from '../../Common/InputWithLabel';
 import Toggle from '../../Common/Toggle';
 import PopupDialog from '../../Common/PopupDialog';
 import { ReactComponent as PlusIcon } from '../../assets/plus.svg';
 import Drop from '../../Common/DropDown';
-import momentTz from 'moment-timezone';
 
 import {
   ImageUploaderContainer,
