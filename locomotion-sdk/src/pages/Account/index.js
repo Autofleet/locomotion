@@ -11,7 +11,7 @@ import {
   AccountHeaderMainContainer, AccountHeaderMainText,
   AccountHeaderSubText, ErrorText,
   Arrow, CardContainer, CardContantContainer, CardsContainer, CardsTitle, CardText, CardTitle,
-  Container, FlexCenterContainer, LogoutContainer, ArrowContainer,
+  Container, FlexCenterContainer, LogoutContainer, ArrowContainer, VerifyContainer, VerifyText, CardTitleContainer,
 } from './styled';
 import i18n from '../../I18n';
 import PageHeader from '../../Components/PageHeader';
@@ -52,13 +52,31 @@ const AccountHeader = () => {
   );
 };
 
-const Card = ({ children, onPress, ...props }) => {
+const Card = ({
+  title, children, onPress, verified, ...props
+}) => {
   const MainContainer = onPress ? TouchableOpacity : View;
   return (
     <MainContainer onPress={onPress} {...props}>
       <CardContainer>
         <CardContantContainer>
-          {children}
+          <CardTitleContainer>
+            <CardTitle>
+              {title}
+            </CardTitle>
+            {verified ? (
+              <View>
+                <VerifyContainer>
+                  <VerifyText>
+                    Verified
+                  </VerifyText>
+                </VerifyContainer>
+              </View>
+            ) : undefined}
+          </CardTitleContainer>
+          <CardText>
+            {children}
+          </CardText>
         </CardContantContainer>
         <ArrowContainer>
           {onPress ? <Arrow /> : undefined}
@@ -78,55 +96,45 @@ const AccountContent = ({ navigation }) => {
           Account information
         </CardsTitle>
         <Card
-          onPress={() => {
-            navigation.navigate(AUTH_ROUTES.NAME, {
-              editAccount: true,
-            });
-          }}
+          title="Name"
+          onPress={() => navigation.navigate(AUTH_ROUTES.NAME, {
+            editAccount: true,
+          })}
         >
-          <CardTitle>
-            Name
-          </CardTitle>
-          <CardText>
-            {user ? `${user.firstName} ${user.lastName}` : ''}
-          </CardText>
-        </Card>
-        <Card>
-          <CardTitle>
-            Phone number
-          </CardTitle>
-          <CardText>
-            {user ? `${user.phoneNumber}` : ''}
-          </CardText>
+          {user ? `${user.firstName} ${user.lastName}` : ''}
         </Card>
         <Card
-          onPress={() => {
-            navigation.navigate(AUTH_ROUTES.EMAIL, {
-              editAccount: true,
-            });
-          }}
+          title="Phone number"
         >
-          <CardTitle>
-            Email
-          </CardTitle>
-          <CardText>
-            {user ? `${user.email}` : ''}
-          </CardText>
+          {user ? `${user.phoneNumber}` : ''}
         </Card>
-
+        <Card
+          verified
+          title="Email"
+          onPress={() => navigation.navigate(AUTH_ROUTES.EMAIL, {
+            editAccount: true,
+          })}
+        >
+          {user ? `${user.email}` : ''}
+        </Card>
         <CardsTitle>
           Payment Preferences
         </CardsTitle>
-        <Card>
-          <CardTitle>
-            Default tip
-          </CardTitle>
-          <CardText>
-            5%
-          </CardText>
+        <Card
+          title="Default tip"
+        >
+          5%
         </Card>
-
       </CardsContainer>
+
+      <LogoutContainer
+        onPress={() => {
+          navigation.navigate(MAIN_ROUTES.LOGOUT);
+        }}
+      >
+        <ErrorText>{i18n.t('menu.logout')}</ErrorText>
+      </LogoutContainer>
+
     </Container>
   );
 };
@@ -154,13 +162,6 @@ export default ({
           iconSide={menuSide}
         />
         <AccountHeader />
-        <LogoutContainer
-          onPress={() => {
-            navigation.navigate(MAIN_ROUTES.LOGOUT);
-          }}
-        >
-          <ErrorText>{i18n.t('menu.logout')}</ErrorText>
-        </LogoutContainer>
         <AccountContent
           navigation={navigation}
         />

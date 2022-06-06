@@ -29,21 +29,38 @@ export const Container = styled.View`
   text-align: center;
   align-items: center;
   background-color: #F9F9F9;
+  padding-left: 5px;
 `;
 
 export const LogoutContainer = styled.TouchableOpacity`
   width: 90%;
 `;
 
+export const VerifyText = styled.Text`
+  color: white;
+  font-size: 12px;
+`;
+
+export const VerifyContainer = styled.View`
+  background-color: #2dc36a;
+  border-radius: 24px;
+  padding: 5px 10px;
+`;
+
 export const ArrowContainer = styled.View`
+  flex-direction: row;
   margin-right: 10px;
   margin-left: auto;
+  vertical-align: center;
+  justify-content: center;
+  align-items: center;
 `;
 
 export const Arrow = styled.Image.attrs({ source: ArrowIconSource })`
   opacity: 0.4;
   width: 10px;
   height: 10px;
+  padding: 5px 10px;
 `;
 
 
@@ -52,6 +69,7 @@ export const CardsContainer = styled.View`
 `;
 
 export const CardContantContainer = styled.View`
+  width: 90%;
 `;
 
 export const CardsTitle = styled.Text`
@@ -61,8 +79,17 @@ export const CardsTitle = styled.Text`
   padding: 30px 10px 15px;
 `;
 
+export const CardTitleContainer = styled.View`
+  flex-direction: row;
+  justify-content: space-between;
+  vertical-align: center;
+`;
+
 export const CardTitle = styled.Text`
   font-size: 12px;
+  align-self: center;
+  vertical-align: center;
+  padding: 10px 0;
 `;
 
 export const CardText = styled.Text`
