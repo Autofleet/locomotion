@@ -15,7 +15,7 @@ const Phone = () => {
   const { nextScreen } = useContext(OnboardingContext);
   const { updateState, user, updateUserInfo } = useContext(UserContext);
   const [showErrorText, setShowErrorText] = useState(false);
-  console.log(user);
+
   const onPhoneNumberChange = (phoneNumber, countryCode) => {
     setShowErrorText(false);
     if (phoneNumber.length < 9) {
@@ -30,7 +30,7 @@ const Phone = () => {
         phoneNumber: user.phoneNumber,
       });
       updateUserInfo({ phoneNumber: user.phoneNumber });
-      nextScreen();
+      nextScreen(ONBOARDING_PAGE_NAMES.PHONE);
     } catch (e) {
       console.log('Bad login with response', e);
       setShowErrorText(e.message);

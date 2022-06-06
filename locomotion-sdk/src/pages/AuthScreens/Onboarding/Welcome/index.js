@@ -11,6 +11,7 @@ import {
   InfoContainer, LogoContainer, Logo, OperationName, OperationSubName,
 } from '../../StartScreen/styles';
 import { UserContext } from '../../../../context/user';
+import { NAVIGATION_CONTAINERS } from '../../../routes';
 
 
 const Welcome = () => {
@@ -24,7 +25,7 @@ const Welcome = () => {
 
   const onNext = () => {
     updateUserInfo({ didCompleteOnboarding: true });
-    navigation.navigate('MainApp');
+    navigation.navigate(NAVIGATION_CONTAINERS.MAIN_APP);
   };
   return (
     <SafeView>

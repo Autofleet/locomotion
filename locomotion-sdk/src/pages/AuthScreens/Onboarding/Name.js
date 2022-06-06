@@ -48,7 +48,7 @@ const Name = () => {
         <OnboardingNavButtons
           isInvalid={!user.firstName || !user.lastName}
           onFail={() => setShowErrorText(true)}
-          onNext={() => nextScreen()}
+          onNext={() => nextScreen(ONBOARDING_PAGE_NAMES.NAME)}
         />
       </PageContainer>
     </SafeView>

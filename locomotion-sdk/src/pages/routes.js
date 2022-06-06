@@ -8,6 +8,11 @@ export const ROUTES = {
   WEBVIEW: 'webview',
 };
 
+export const NAVIGATION_CONTAINERS = {
+  MAIN_APP: 'MainApp',
+  AUTH_SCREENS: 'AuthScreens',
+};
+
 export const ONBOARDING_PAGE_NAMES = {
   START: 'Start',
   PHONE: 'Phone',
