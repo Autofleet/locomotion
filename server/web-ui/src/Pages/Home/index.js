@@ -52,5 +52,99 @@ export default () => {
   if (!localStorage.token) {
     return <Redirect to="/login" />;
   }
-  return <Redirect to="/invite/c54f19aa-bef2-48f4-b19f-763d364fb6b5" />;
+
+  const [popupState, setPopupState] = useState('');
+  const [chosenUser, setChosenUser] = useState('');
+
+  const users = usersContainer.useContainer();
+  const columns = [...makeColumns(), {
+    Header: '',
+    id: 'buttons',
+    minWidth: 90,
+    accessor: ({ id, active }) => ({ id, active }),
+    Cell: ({ value: { id, active } }) => ( // eslint-disable-line react/prop-types
+      <Buttons>
+        <SvgIcon
+          svg={editIcon}
+          onClick={() => {
+              const userData = users.getUser(id);
+              setChosenUser(userData);
+              setPopupState('EditUser');
+            }}
+        />
+        <SvgIcon
+          svg={deleteIcon}
+          disableClass={active}
+          onClick={() => {
+              if (!active) {
+                users.deleteUser(id);
+              }
+            }}
+        />
+      </Buttons>
+    ),
+  },
+  {
+    Header: '',
+    id: 'toggle',
+    minWidth: 50,
+    accessor: ({ id, active }) => ({ id, active }),
+    Cell: ({ value: { id, active } }) => ( // eslint-disable-line react/prop-types
+      <section>
+        <Toggle
+          value={`toggle_${id}`}
+          checked={active === true}
+          onChange={(event) => {
+              if (event.target.checked) {
+                users.setUserState(id, true);
+              } else {
+                users.setUserState(id, false);
+              }
+            }}
+        />
+      </section>
+    ),
+  }];
+  useEffect(() => {
+    users.loadUsers();
+  }, []);
+
+  return (
+    <Fragment>
+      <Body>
+        <Nav />
+        <Content>
+          <H1>
+            {i18n.t('users.users')}
+          </H1>
+          <Table
+            columns={columns}
+            data={users.usersMap}
+          />
+        </Content>
+        <Popup
+          name="AddUser"
+          isVisible={popupState === 'AddUser'}
+          chosenUser={chosenUser}
+          onClose={() => setPopupState(false)}
+          popupName={popupState}
+          initialValues={{ active: true }}
+        />
+
+        <Popup
+          name="EditUser"
+          editMode
+          isVisible={popupState === 'EditUser'}
+          chosenUser={chosenUser}
+          onClose={() => setPopupState(false)}
+          popupName={popupState}
+          initialValues={chosenUser}
+        />
+
+
+      </Body>
+
+
+    </Fragment>
+  );
 };
