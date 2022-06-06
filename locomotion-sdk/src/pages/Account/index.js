@@ -109,7 +109,7 @@ const AccountContent = ({ navigation }) => {
           {user ? `${user.phoneNumber}` : ''}
         </Card>
         <Card
-          verified
+          verified={user && user.isEmailVerified}
           title="Email"
           onPress={() => navigation.navigate(AUTH_ROUTES.EMAIL, {
             editAccount: true,
