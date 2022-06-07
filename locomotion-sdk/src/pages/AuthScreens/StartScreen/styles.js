@@ -33,7 +33,7 @@ width: 140px;
 export const Logo = styled.Image`
   width: 100%;
   height: undefined;
-  aspect-ratio: 1.75;
+  aspect-ratio: 1.8;
 `;
 
 export const OperationName = styled.Text`

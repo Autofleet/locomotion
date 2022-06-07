@@ -23,6 +23,7 @@ interface UserContextInterface {
   getUserFromStorage: () => void,
   updateUserInfo: (values: {}) => Promise<void>,
   onVert: (code: string) => Promise<boolean | User>,
+  removeChangesToUser: () => Promise<void>,
 }
 
 export const UserContext = createContext<UserContextInterface>({
@@ -32,6 +33,7 @@ export const UserContext = createContext<UserContextInterface>({
   getUserFromStorage: () => {},
   updateUserInfo: async (values: {}) => {},
   onVert: async (code: string) => false,
+  removeChangesToUser: async () => {},
 });
 
 const UserContextProvider = ({ children }: { children: any }) => {
@@ -44,6 +46,10 @@ const UserContextProvider = ({ children }: { children: any }) => {
       ...values,
     };
     setUser(newUser);
+  };
+
+  const removeChangesToUser = async () => {
+    getUserFromStorage()
   };
 
   const getUserFromStorage = async () => {
@@ -115,6 +121,7 @@ const UserContextProvider = ({ children }: { children: any }) => {
         getUserFromStorage,
         updateUserInfo,
         onVert,
+        removeChangesToUser,
       }}
     >
       {children}

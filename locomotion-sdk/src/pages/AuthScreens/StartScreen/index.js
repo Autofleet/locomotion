@@ -22,9 +22,11 @@ import { getLoginSettings } from '../../../context/user/api';
 import Mixpanel from '../../../services/Mixpanel';
 import { OnboardingContext } from '../../../context/onboarding';
 import { ONBOARDING_PAGE_NAMES } from '../../routes';
+import { UserContext } from '../../../context/user';
 
 const StartScreen = () => {
-  const { nextScreen: next, clearUser } = useContext(OnboardingContext);
+  const { nextScreen: next } = useContext(OnboardingContext);
+  const { setUser } = useContext(UserContext)
   const [webViewWindow, setWebViewWindow] = useState(null);
   const route = useRoute();
   const [settings, setSettings] = useState({
@@ -34,7 +36,7 @@ const StartScreen = () => {
   });
 
   const nextScreen = (currentScreen) => {
-    clearUser();
+    setUser({})
     next(currentScreen);
   };
 

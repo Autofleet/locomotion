@@ -10,11 +10,9 @@ interface OnboardingContextInterface {
   navigateBasedOnUser: (user: any) => void,
   requiredOnboarding: {},
   nextScreen: (currentScreen: string) => void,
-  clearUser: () => void,
 }
 
 export const OnboardingContext = createContext<OnboardingContextInterface>({
-  clearUser: async () => {},
   verifyCode: async (code) => {},
   navigateBasedOnUser: (user) => {},
   requiredOnboarding: {},
@@ -61,10 +59,6 @@ const OnboardingContextProvider = ({ children }: { children: any }) => {
     navigateToScreen(SCREEN_ORDER[currentIndex + 1]);
   };
 
-  const clearUser = () => {
-    setUser({});
-  };
-
   const navigateBasedOnUser = (user: any) => {
     setUser(user);
     let unfinishedScreen;
@@ -98,7 +92,6 @@ const OnboardingContextProvider = ({ children }: { children: any }) => {
         navigateBasedOnUser,
         requiredOnboarding,
         nextScreen,
-        clearUser,
       }}
     >
       {children}
