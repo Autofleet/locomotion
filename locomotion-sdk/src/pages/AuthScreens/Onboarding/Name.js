@@ -22,7 +22,7 @@ const Name = ({ navigation }) => {
   };
 
   const onComplete = () => {
-    updateUserInfo(user);
+    await updateUserInfo(user);
     if (route.params && route.params.editAccount) {
       navigation.navigate(MAIN_ROUTES.ACCOUNT);
     } else {
