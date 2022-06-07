@@ -29,7 +29,7 @@ router.post('/:id/verify', async (req, res) => {
     if (!response) {
       return res.status(404).json({ status: 'ERROR', error: 'Invitation expired' });
     }
-    return res.json(response);
+    return res.json({ status: 'OK', user: response });
   } catch (e) {
     return res.status(500).json({ status: 'ERROR', error: e });
   }

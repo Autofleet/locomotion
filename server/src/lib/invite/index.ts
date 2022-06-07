@@ -10,7 +10,7 @@ export const getInvite = (id) => Invite.findOne({
 
 export const confirmInvite = async (invite: Invite, user) => {
   const now: Date = new Date();
-  const operationSettings: any = {}; // user.operationId to get settings
+  const operationSettings: any = {}; // TODO user.operationId to get settings
 
   const expireTime = operationSettings.inviteExpireTime || DEFAULT_INVITE_EXPIRE_TIME_HOURS;
   if (moment(invite.sentAt).add(expireTime, 'hours').isAfter(now)) {
