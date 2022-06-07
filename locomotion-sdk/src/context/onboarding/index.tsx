@@ -10,11 +10,9 @@ interface OnboardingContextInterface {
   navigateBasedOnUser: (user: any) => void,
   requiredOnboarding: {},
   nextScreen: (currentScreen: string) => void,
-  clearUser: () => void,
 }
 
 export const OnboardingContext = createContext<OnboardingContextInterface>({
-  clearUser: async () => {},
   verifyCode: async (code) => {},
   navigateBasedOnUser: (user) => {},
   requiredOnboarding: {},
@@ -25,17 +23,17 @@ const SCREEN_ORDER = [
   ONBOARDING_PAGE_NAMES.START,
   ONBOARDING_PAGE_NAMES.PHONE,
   ONBOARDING_PAGE_NAMES.CODE,
-  ONBOARDING_PAGE_NAMES.NAME,
   ONBOARDING_PAGE_NAMES.EMAIL,
+  ONBOARDING_PAGE_NAMES.NAME,
   ONBOARDING_PAGE_NAMES.AVATAR,
   ONBOARDING_PAGE_NAMES.CARD,
   ONBOARDING_PAGE_NAMES.WELCOME,
 ];
 
 const keyToScreen: any = {
+  email: ONBOARDING_PAGE_NAMES.EMAIL,
   firstName: ONBOARDING_PAGE_NAMES.NAME,
   lastName: ONBOARDING_PAGE_NAMES.NAME,
-  email: ONBOARDING_PAGE_NAMES.EMAIL,
   avatar: ONBOARDING_PAGE_NAMES.AVATAR,
   cards: ONBOARDING_PAGE_NAMES.CARD,
   welcome: ONBOARDING_PAGE_NAMES.WELCOME,
@@ -59,10 +57,6 @@ const OnboardingContextProvider = ({ children }: { children: any }) => {
   const nextScreen = (currentScreen: string) => {
     const currentIndex = SCREEN_ORDER.indexOf(currentScreen);
     navigateToScreen(SCREEN_ORDER[currentIndex + 1]);
-  };
-
-  const clearUser = () => {
-    setUser({});
   };
 
   const navigateBasedOnUser = (user: any) => {
@@ -98,7 +92,6 @@ const OnboardingContextProvider = ({ children }: { children: any }) => {
         navigateBasedOnUser,
         requiredOnboarding,
         nextScreen,
-        clearUser,
       }}
     >
       {children}

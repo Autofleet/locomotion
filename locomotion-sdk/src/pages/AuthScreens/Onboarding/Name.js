@@ -13,12 +13,21 @@ import { UserContext } from '../../../context/user';
 const Name = ({ navigation }) => {
   const route = useRoute();
   const { nextScreen } = useContext(OnboardingContext);
-  const { updateUserInfo, user } = useContext(UserContext);
+  const { updateUserInfo, user, updateState } = useContext(UserContext);
   const [showErrorText, setShowErrorText] = useState(false);
 
   const inputChange = field => (value) => {
     setShowErrorText(false);
-    updateUserInfo({ [field]: value });
+    updateState({ [field]: value });
+  };
+
+  const onComplete = async () => {
+    await updateUserInfo(user);
+    if (route.params && route.params.editAccount) {
+      navigation.navigate(MAIN_ROUTES.ACCOUNT);
+    } else {
+      nextScreen(ONBOARDING_PAGE_NAMES.NAME);
+    }
   };
 
   return (
@@ -50,11 +59,7 @@ const Name = ({ navigation }) => {
         <OnboardingNavButtons
           isInvalid={!user.firstName || !user.lastName}
           onFail={() => setShowErrorText(true)}
-          onNext={
-            () => (route.params && route.params.editAccount
-              ? navigation.navigate(MAIN_ROUTES.ACCOUNT)
-              : nextScreen(ONBOARDING_PAGE_NAMES.NAME))
-          }
+          onNext={onComplete}
         />
       </PageContainer>
     </SafeView>

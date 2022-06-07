@@ -1,8 +1,4 @@
 import React, { useContext, useEffect } from 'react';
-import {
-  Text,
-  View,
-} from 'react-native';
 import { APP_ROUTES, AUTH_ROUTES } from '../routes';
 import AppSettings from '../../services/app-settings';
 import Auth from '../../services/auth';
@@ -54,13 +50,6 @@ const AuthLoadingScreen = ({ navigation }) => {
 
         await saveUser(userData);
 
-        const nonUserNav = (screen) => {
-          navigation.replace(
-            APP_ROUTES.AUTH_SCREENS,
-            { screen, params: { showHeaderIcon: false } },
-          );
-        };
-
         if (!userData.active) {
           return navigation.replace(AUTH_ROUTES.LOCK, { params: { showHeaderIcon: false } });
         }
@@ -81,9 +70,7 @@ const AuthLoadingScreen = ({ navigation }) => {
   };
   useEffect(init, []);
   return (
-    <View>
-      <Text>Loading</Text>
-    </View>
+    <></>
   );
 };
 export default AuthLoadingScreen;
