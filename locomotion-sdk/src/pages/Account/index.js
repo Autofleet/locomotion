@@ -8,10 +8,24 @@ import ThumbnailPicker from '../../Components/ThumbnailPicker';
 import {
   AccountHeaderContainer,
   AccountHeaderIndicatorContainer,
-  AccountHeaderMainContainer, AccountHeaderMainText,
-  AccountHeaderSubText, ErrorText,
-  Arrow, CardContainer, CardContantContainer, CardsContainer, CardsTitle, CardText, CardTitle,
-  Container, FlexCenterContainer, LogoutContainer, ArrowContainer, VerifyContainer, VerifyText, CardTitleContainer,
+  AccountHeaderMainContainer,
+  AccountHeaderMainText,
+  AccountHeaderSubText,
+  Arrow,
+  CardContainer,
+  CardContantContainer,
+  CardsContainer,
+  CardsTitle,
+  CardText,
+  CardTitle,
+  Container,
+  FlexCenterContainer,
+  LogoutContainer,
+  ArrowContainer,
+  VerifyContainer,
+  VerifyText,
+  CardTitleContainer,
+  LogoutText,
 } from './styled';
 import i18n from '../../I18n';
 import PageHeader from '../../Components/PageHeader';
@@ -21,8 +35,6 @@ import { UserContext } from '../../context/user';
 
 const AccountHeader = () => {
   const { user } = useContext(UserContext);
-
-
   return (
     <AccountHeaderContainer>
       <FlexCenterContainer>
@@ -38,12 +50,12 @@ const AccountHeader = () => {
         <AccountHeaderIndicatorContainer>
           <AccountHeaderMainContainer>
             <AccountHeaderSubText>
-              12 Trips
+              {/* todo 12 Trips */}
             </AccountHeaderSubText>
           </AccountHeaderMainContainer>
           <AccountHeaderMainContainer>
             <AccountHeaderSubText>
-              200 Miles
+              {/* todo 200 Miles */}
             </AccountHeaderSubText>
           </AccountHeaderMainContainer>
         </AccountHeaderIndicatorContainer>
@@ -53,7 +65,7 @@ const AccountHeader = () => {
 };
 
 const Card = ({
-  title, children, onPress, verified, ...props
+  title, children, onPress, verified, showUnverified, ...props
 }) => {
   const MainContainer = onPress ? TouchableOpacity : View;
   return (
@@ -68,11 +80,23 @@ const Card = ({
               <View>
                 <VerifyContainer>
                   <VerifyText>
-                    Verified
+                    {i18n.t('onboarding.verified')}
                   </VerifyText>
                 </VerifyContainer>
               </View>
-            ) : undefined}
+            ) : (
+              <>
+                {showUnverified ? (
+                  <View>
+                    <VerifyContainer unverified>
+                      <VerifyText>
+                        {i18n.t('onboarding.unverified')}
+                      </VerifyText>
+                    </VerifyContainer>
+                  </View>
+                ) : undefined}
+              </>
+            )}
           </CardTitleContainer>
           <CardText>
             {children}
@@ -88,15 +112,14 @@ const Card = ({
 
 const AccountContent = ({ navigation }) => {
   const { user } = useContext(UserContext);
-
   return (
     <Container>
       <CardsContainer>
         <CardsTitle>
-          Account information
+          {i18n.t('onboarding.accountInformation')}
         </CardsTitle>
         <Card
-          title="Name"
+          title={i18n.t('onboarding.namePlaceholder')}
           onPress={() => navigation.navigate(AUTH_ROUTES.NAME, {
             editAccount: true,
           })}
@@ -104,37 +127,30 @@ const AccountContent = ({ navigation }) => {
           {user ? `${user.firstName} ${user.lastName}` : ''}
         </Card>
         <Card
-          title="Phone number"
+          title={i18n.t('onboarding.phonePlaceholder')}
         >
           {user ? `${user.phoneNumber}` : ''}
         </Card>
         <Card
           verified={user && user.isEmailVerified}
-          title="Email"
+          showUnverified
+          title={i18n.t('onboarding.emailPlaceholder')}
           onPress={() => navigation.navigate(AUTH_ROUTES.EMAIL, {
             editAccount: true,
           })}
         >
           {user ? `${user.email}` : ''}
         </Card>
-        <CardsTitle>
-          Payment Preferences
-        </CardsTitle>
-        <Card
-          title="Default tip"
-        >
-          5%
-        </Card>
       </CardsContainer>
-
-      <LogoutContainer
-        onPress={() => {
-          navigation.navigate(MAIN_ROUTES.LOGOUT);
-        }}
-      >
-        <ErrorText>{i18n.t('menu.logout')}</ErrorText>
-      </LogoutContainer>
-
+      <Container>
+        <LogoutContainer
+          onPress={() => {
+            navigation.navigate(MAIN_ROUTES.LOGOUT);
+          }}
+        >
+          <LogoutText>{i18n.t('menu.logout')}</LogoutText>
+        </LogoutContainer>
+      </Container>
     </Container>
   );
 };

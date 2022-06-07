@@ -33,18 +33,24 @@ export const Container = styled.View`
 `;
 
 export const LogoutContainer = styled.TouchableOpacity`
-  width: 90%;
+`;
+
+export const LogoutText = styled.Text`
+  font-size: 14px;
+  text-decoration: underline;
 `;
 
 export const VerifyText = styled.Text`
   color: white;
+  font-weight: bold;
   font-size: 12px;
 `;
 
 export const VerifyContainer = styled.View`
-  background-color: #2dc36a;
   border-radius: 24px;
   padding: 5px 10px;
+  margin-top: 5px;
+  background-color: ${({ unverified }) => (unverified ? '#f35657' : '#2dc36a')};
 `;
 
 export const ArrowContainer = styled.View`
@@ -83,17 +89,18 @@ export const CardTitleContainer = styled.View`
   flex-direction: row;
   justify-content: space-between;
   vertical-align: center;
+  padding-right: 10px;
 `;
 
 export const CardTitle = styled.Text`
-  font-size: 12px;
+  font-size: 14px;
   align-self: center;
   vertical-align: center;
   padding: 10px 0;
 `;
 
 export const CardText = styled.Text`
-  font-size: 16px;
+  font-size: 18px;
 `;
 
 export const CardContainer = styled.View`
@@ -112,7 +119,7 @@ export const AccountHeaderContainer = styled.View`
   flex: 1;
   width: 100%;
   flex-direction: row;
-  padding: 20px 10px 0;
+  padding: 20px 0 20px 20px;
 `;
 
 export const FlexCenterContainer = styled.View`
