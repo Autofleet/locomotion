@@ -21,7 +21,7 @@ const Name = ({ navigation }) => {
     updateState({ [field]: value });
   };
 
-  const onComplete = () => {
+  const onComplete = async () => {
     await updateUserInfo(user);
     if (route.params && route.params.editAccount) {
       navigation.navigate(MAIN_ROUTES.ACCOUNT);
