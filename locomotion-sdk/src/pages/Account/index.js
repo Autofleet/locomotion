@@ -50,12 +50,12 @@ const AccountHeader = () => {
         <AccountHeaderIndicatorContainer>
           <AccountHeaderMainContainer>
             <AccountHeaderSubText>
-              12 Trips
+              {/* todo 12 Trips */}
             </AccountHeaderSubText>
           </AccountHeaderMainContainer>
           <AccountHeaderMainContainer>
             <AccountHeaderSubText>
-              200 Miles
+              {/* todo 200 Miles */}
             </AccountHeaderSubText>
           </AccountHeaderMainContainer>
         </AccountHeaderIndicatorContainer>
@@ -80,7 +80,7 @@ const Card = ({
               <View>
                 <VerifyContainer>
                   <VerifyText>
-                    Verified
+                    {i18n.t('menu.logout')}
                   </VerifyText>
                 </VerifyContainer>
               </View>
@@ -119,7 +119,7 @@ const AccountContent = ({ navigation }) => {
           Account information
         </CardsTitle>
         <Card
-          title="Name"
+          title={i18n.t('onboarding.namePlaceholder')}
           onPress={() => navigation.navigate(AUTH_ROUTES.NAME, {
             editAccount: true,
           })}
@@ -127,14 +127,14 @@ const AccountContent = ({ navigation }) => {
           {user ? `${user.firstName} ${user.lastName}` : ''}
         </Card>
         <Card
-          title="Phone number"
+          title={i18n.t('onboarding.phonePlaceholder')}
         >
           {user ? `${user.phoneNumber}` : ''}
         </Card>
         <Card
           verified={user && user.isEmailVerified}
           showUnverified
-          title="Email"
+          title={i18n.t('onboarding.emailPlaceholder')}
           onPress={() => navigation.navigate(AUTH_ROUTES.EMAIL, {
             editAccount: true,
           })}

@@ -71,6 +71,7 @@
         "lastNamePlaceholder": "Last name",
         "fullNameError": "Please fill all fields",
         "emailPlaceholder": "Email",
+        "namePlaceholder": "Name",
         "validations": {
             "required": {
                 "firstName": "First name is required",
