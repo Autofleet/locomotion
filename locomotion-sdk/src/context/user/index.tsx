@@ -49,7 +49,7 @@ const UserContextProvider = ({ children }: { children: any }) => {
   };
 
   const removeChangesToUser = async () => {
-    getUserFromStorage()
+    getUserFromStorage();
   };
 
   const getUserFromStorage = async () => {

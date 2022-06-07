@@ -23,7 +23,7 @@ const Header = ({ title, page }) => {
   };
 
   const goBack = () => {
-    removeChangesToUser()
+    removeChangesToUser();
     navigation.goBack();
   };
   return (

@@ -26,7 +26,7 @@ import { UserContext } from '../../../context/user';
 
 const StartScreen = () => {
   const { nextScreen: next } = useContext(OnboardingContext);
-  const { setUser } = useContext(UserContext)
+  const { setUser } = useContext(UserContext);
   const [webViewWindow, setWebViewWindow] = useState(null);
   const route = useRoute();
   const [settings, setSettings] = useState({
@@ -36,7 +36,7 @@ const StartScreen = () => {
   });
 
   const nextScreen = (currentScreen) => {
-    setUser({})
+    setUser({});
     next(currentScreen);
   };
 

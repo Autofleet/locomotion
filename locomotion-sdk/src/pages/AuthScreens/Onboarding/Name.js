@@ -18,17 +18,17 @@ const Name = ({ navigation }) => {
 
   const inputChange = field => (value) => {
     setShowErrorText(false);
-    updateState({ [field]: value })
+    updateState({ [field]: value });
   };
 
   const onComplete = () => {
     updateUserInfo(user);
     if (route.params && route.params.editAccount) {
-      navigation.navigate(MAIN_ROUTES.ACCOUNT)
+      navigation.navigate(MAIN_ROUTES.ACCOUNT);
     } else {
-      nextScreen(ONBOARDING_PAGE_NAMES.NAME)
+      nextScreen(ONBOARDING_PAGE_NAMES.NAME);
     }
-  }
+  };
 
   return (
     <SafeView>
