@@ -71,7 +71,11 @@
         "lastNamePlaceholder": "Last name",
         "fullNameError": "Please fill all fields",
         "emailPlaceholder": "Email",
+        "phonePlaceholder": "Phone number",
         "namePlaceholder": "Name",
+        "accountInformation": "Account information",
+        "verified": "Verified",
+        "unverified": "Unverified",
         "validations": {
             "required": {
                 "firstName": "First name is required",

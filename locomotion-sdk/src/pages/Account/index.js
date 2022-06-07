@@ -80,7 +80,7 @@ const Card = ({
               <View>
                 <VerifyContainer>
                   <VerifyText>
-                    {i18n.t('menu.logout')}
+                    {i18n.t('onboarding.verified')}
                   </VerifyText>
                 </VerifyContainer>
               </View>
@@ -90,7 +90,7 @@ const Card = ({
                   <View>
                     <VerifyContainer unverified>
                       <VerifyText>
-                        Unverified
+                        {i18n.t('onboarding.unverified')}
                       </VerifyText>
                     </VerifyContainer>
                   </View>
@@ -116,7 +116,7 @@ const AccountContent = ({ navigation }) => {
     <Container>
       <CardsContainer>
         <CardsTitle>
-          Account information
+          {i18n.t('onboarding.accountInformation')}
         </CardsTitle>
         <Card
           title={i18n.t('onboarding.namePlaceholder')}
