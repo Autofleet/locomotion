@@ -1,9 +1,8 @@
 import React, {
-  useContext, useEffect,
+  useContext,
 } from 'react';
 import { useNavigation } from '@react-navigation/native';
 
-import geo from '../../services/geo';
 import RidePageContextProvider, { RidePageContext } from './ridePageContext';
 import {
   PageContainer,
@@ -16,10 +15,6 @@ import FutureRideCanceledPopup from '../../popups/FutureRideCanceled';
 
 const RidePage = ({ menuSide, mapSettings }) => {
   const navigation = useNavigation();
-
-  useEffect(() => {
-    geo.init();
-  }, []);
 
   const {
     activeRideState,

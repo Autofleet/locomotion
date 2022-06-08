@@ -1,4 +1,4 @@
-import { Alert, PermissionsAndroid, Platform } from 'react-native';
+import { Platform, PermissionsAndroid, Alert } from 'react-native';
 import Config from 'react-native-config';
 import RNLocation from 'react-native-location';
 import moment from 'moment';
@@ -24,65 +24,51 @@ const currentLocationNative = async () => {
   });
 };
 
-const prepareCoords = locations => ({
-  coords: { latitude: locations[0].latitude, longitude: locations[0].longitude },
-  timestamp: new Date(),
-});
-
 class Geo {
   constructor() {
     this.watchCbs = {};
     this.locationWatcher = false;
     this.lastLocation = null;
-  }
 
-  init() {
-    this.configure();
-    this.requestPermission();
-    this.checkPermission();
-  }
+    RNLocation.configure({
+      distanceFilter: 1,
+      desiredAccuracy: {
+        ios: 'bestForNavigation',
+        android: 'highAccuracy',
+      },
+      // Android only
+      androidProvider: 'playServices',
+      interval: 5000,
+      maxWaitTime: 5000,
+      // iOS Only
+      activityType: 'other',
+    });
 
-  configure = () => RNLocation.configure({
-    distanceFilter: 1,
-    desiredAccuracy: {
-      ios: 'bestForNavigation',
-      android: 'highAccuracy',
-    },
-    // Android only
-    androidProvider: 'playServices',
-    interval: 5000,
-    maxWaitTime: 5000,
-    // iOS Only
-    activityType: 'other',
-  });
-
-  checkPermission = () => RNLocation.checkPermission({
-    ios: 'always',
-    android: {
-      detail: 'fine',
-    },
-  });
-
-  requestPermission = async () => {
-    const granted = await RNLocation.requestPermission({
+    RNLocation.requestPermission({
       ios: 'whenInUse',
       android: {
         detail: 'fine',
       },
+    }).then((granted) => {
+      if (granted) {
+        this.locationSubscription = RNLocation.subscribeToLocationUpdates((locations) => {
+          const location = this.prepareCoords(locations);
+          this.handleLocation(location);
+          this.locationSubscription();
+        });
+      }
     });
-    if (granted) {
-      this.locationSubscription = RNLocation.subscribeToLocationUpdates(this.handleLocation);
-    }
-  };
 
-  handleLocation = (locations) => {
-    const location = prepareCoords(locations);
-    console.error({ location });
-    this.lastLocation = Object.assign({}, location);
-    this.locationSubscription();
-  };
+    RNLocation.checkPermission({
+      ios: 'always',
+      android: {
+        detail: 'fine',
+      },
+    });
+  }
 
-  currentLocation = async () => {
+  // eslint-disable-next-line class-methods-use-this
+  async currentLocation() {
     if (this.lastLocation) {
       if (moment(this.lastLocation.timestamp).isAfter(moment().subtract(500, 'millisecond'))) {
         return this.lastLocation;
@@ -90,16 +76,27 @@ class Geo {
     }
     const rnLastLocation = await RNLocation.getLatestLocation();
     if (rnLastLocation) {
-      return prepareCoords([rnLastLocation]);
+      return this.prepareCoords([rnLastLocation]);
     }
 
     const location = await currentLocationNative();
-    return prepareCoords([location]);
+    return this.prepareCoords([location]);
+  }
+
+  handleLocation = (location) => {
+    const newLocation = Object.assign({}, location);
+    this.lastLocation = newLocation;
+    return location;
   };
+
+  handleLocationError = (error) => {
+    Object.keys(this.watchCbs).forEach(key => this.watchCbs[key].onError(error));
+  };
+
+  prepareCoords = locations => ({ coords: { latitude: locations[0].latitude, longitude: locations[0].longitude }, timestamp: new Date() })
 }
 
 const GeoService = new Geo();
-
 export default GeoService;
 
 export const { decodeGmPath } = Geo;
