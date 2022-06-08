@@ -28,7 +28,7 @@ const Phone = () => {
       await loginApi({
         phoneNumber: user.phoneNumber,
       });
-      updateUserInfo({ phoneNumber: user.phoneNumber });
+      await updateUserInfo({ phoneNumber: user.phoneNumber });
       nextScreen(ONBOARDING_PAGE_NAMES.PHONE);
     } catch (e) {
       console.log('Bad login with response', e);
