@@ -1,5 +1,5 @@
 import React, {
-  useEffect,
+  useEffect, useEffect,
 } from 'react';
 import { useNavigation } from '@react-navigation/native';
 
@@ -19,6 +19,11 @@ import BottomSheet from './RideDrawer/AddressSelector';
 
 const RidePage = ({ menuSide, mapSettings }) => {
   const navigation = useNavigation();
+
+  useEffect(() => {
+    geo.init();
+  }, []);
+
   const mapRef = React.useRef();
   useEffect(() => {
     geo.init();
