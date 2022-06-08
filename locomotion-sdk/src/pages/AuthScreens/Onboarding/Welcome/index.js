@@ -22,7 +22,7 @@ const Welcome = () => {
   }; // replace with operation settings
   const navigation = useNavigation();
 
-  const onNext = () => {
+  const onNext = async () => {
     await updateUserInfo({ didCompleteOnboarding: true });
     navigation.navigate(APP_ROUTES.MAIN_APP);
   };
