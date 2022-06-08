@@ -1,8 +1,9 @@
 import React, {
-  useContext,
+  useContext, useEffect,
 } from 'react';
 import { useNavigation } from '@react-navigation/native';
 
+import geo from '../../services/geo';
 import RidePageContextProvider, { RidePageContext } from './ridePageContext';
 import {
   PageContainer,
@@ -16,6 +17,10 @@ import AvailabilityContextProvider from '../../context/availability';
 
 const RidePage = ({ menuSide, mapSettings }) => {
   const navigation = useNavigation();
+
+  useEffect(() => {
+    geo.init();
+  }, []);
 
   const {
     activeRideState,
