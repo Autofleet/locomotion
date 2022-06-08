@@ -17,7 +17,7 @@ const Name = ({ navigation }) => {
   const [showErrorText, setShowErrorText] = useState(false);
   const isFirstNameValid = user.firstName && user.firstName.trim();
   const isLastNameValid = user.lastName && user.lastName.trim();
-  
+
   const inputChange = field => (value) => {
     setShowErrorText(false);
     updateState({ [field]: value });

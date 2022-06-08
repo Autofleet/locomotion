@@ -15,10 +15,10 @@ const Phone = () => {
   const { nextScreen } = useContext(OnboardingContext);
   const { updateState, user, updateUserInfo } = useContext(UserContext);
   const [showErrorText, setShowErrorText] = useState(false);
-  const [isInvalid, setIsInvalid] = useState()
+  const [isInvalid, setIsInvalid] = useState();
   const onPhoneNumberChange = (phoneNumber, countryCode) => {
     setShowErrorText(false);
-    setIsInvalid(phoneNumber.length < 9)
+    setIsInvalid(phoneNumber.length < 9);
     updateState({ phoneNumber: countryCode + phoneNumber });
   };
 
