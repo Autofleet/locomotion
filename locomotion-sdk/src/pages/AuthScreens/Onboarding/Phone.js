@@ -1,5 +1,4 @@
 import React, { useContext, useState } from 'react';
-import { useNavigation } from '@react-navigation/native';
 import i18n from '../../../I18n';
 import OnboardingNavButtons from './OnboardingNavButtons';
 import { OnboardingContext } from '../../../context/onboarding';
