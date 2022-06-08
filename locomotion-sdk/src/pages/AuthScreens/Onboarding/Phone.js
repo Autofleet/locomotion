@@ -1,5 +1,4 @@
 import React, { useContext, useState } from 'react';
-import { useNavigation } from '@react-navigation/native';
 import i18n from '../../../I18n';
 import OnboardingNavButtons from './OnboardingNavButtons';
 import { OnboardingContext } from '../../../context/onboarding';
@@ -10,26 +9,26 @@ import { loginApi } from '../../../context/user/api';
 import PhoneNumberInput from '../../../Components/PhoneNumberInput';
 import { ONBOARDING_PAGE_NAMES } from '../../routes';
 import { UserContext } from '../../../context/user';
+import AppSettings from '../../../services/app-settings';
 
 const Phone = () => {
   const { nextScreen } = useContext(OnboardingContext);
   const { updateState, user, updateUserInfo } = useContext(UserContext);
   const [showErrorText, setShowErrorText] = useState(false);
-
+  const [isInvalid, setIsInvalid] = useState();
   const onPhoneNumberChange = (phoneNumber, countryCode) => {
     setShowErrorText(false);
-    if (phoneNumber.length < 9) {
-      return updateState({ phoneNumber: '' });
-    }
+    setIsInvalid(phoneNumber.length < 9);
     updateState({ phoneNumber: countryCode + phoneNumber });
   };
 
   const onSubmitPhoneNumber = async () => {
     try {
+      await AppSettings.destroy();
       await loginApi({
         phoneNumber: user.phoneNumber,
       });
-      updateUserInfo({ phoneNumber: user.phoneNumber });
+      await updateUserInfo({ phoneNumber: user.phoneNumber });
       nextScreen(ONBOARDING_PAGE_NAMES.PHONE);
     } catch (e) {
       console.log('Bad login with response', e);
@@ -46,6 +45,7 @@ const Phone = () => {
           subText={i18n.t('onboarding.pages.phone.subText')}
         />
         <PhoneNumberInput
+          value={user.phoneNumber}
           onPhoneNumberChange={onPhoneNumberChange}
           autoFocus
           defaultCode="IL"
@@ -53,7 +53,7 @@ const Phone = () => {
         />
         {showErrorText && <ErrorText>{showErrorText}</ErrorText>}
         <OnboardingNavButtons
-          isInvalid={!user.phoneNumber}
+          isInvalid={isInvalid}
           onNext={onSubmitPhoneNumber}
           onFail={() => setShowErrorText(i18n.t('login.invalidPhoneNumberError'))}
         />

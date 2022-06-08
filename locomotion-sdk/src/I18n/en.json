@@ -19,7 +19,7 @@
         "submitVertButton": "Verify",
         "phoneNumberError": "Oops! Seems like something went wrong",
         "invalidPhoneNumberError": "Phone number is not valid",
-        "vertError": "Sorry, seems like the verification is incorrect. Please make sure you've typed it correctly.",
+        "vertError": "Sorry, seems like the verification code is incorrect. Please make sure you've typed it correctly.",
         "resendButton": "Start over",
         "introText": "Please enter your phone number to signup to Locomotion. You will receive an SMS with a verification code.",
         "termsWebViewTitle": "Terms and conditions",

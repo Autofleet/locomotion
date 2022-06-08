@@ -22,8 +22,8 @@ const Welcome = () => {
   }; // replace with operation settings
   const navigation = useNavigation();
 
-  const onNext = () => {
-    updateUserInfo({ didCompleteOnboarding: true });
+  const onNext = async () => {
+    await updateUserInfo({ didCompleteOnboarding: true });
     navigation.navigate(APP_ROUTES.MAIN_APP);
   };
   return (

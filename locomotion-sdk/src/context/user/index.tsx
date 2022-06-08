@@ -105,6 +105,7 @@ const UserContextProvider = ({ children }: { children: any }) => {
       const userProfile = vertResponse.userProfile || {};
       Mixpanel.setUser(userProfile);
       const cards = await getCardInfo();
+      await updateUserInfo(userProfile);
       return { ...userProfile, cards };
     } catch (e) {
       console.log('Bad vert with request', e);

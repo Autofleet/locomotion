@@ -23,6 +23,7 @@ import Mixpanel from '../../../services/Mixpanel';
 import { OnboardingContext } from '../../../context/onboarding';
 import { ONBOARDING_PAGE_NAMES } from '../../routes';
 import { UserContext } from '../../../context/user';
+import { INITIAL_USER_STATE } from '../AuthLoadingScreen';
 
 const StartScreen = () => {
   const { nextScreen: next } = useContext(OnboardingContext);
@@ -36,7 +37,7 @@ const StartScreen = () => {
   });
 
   const nextScreen = (currentScreen) => {
-    setUser({});
+    setUser(INITIAL_USER_STATE);
     next(currentScreen);
   };
 
