@@ -52,9 +52,6 @@ export const NewCreditForm = ({ onDone, canSkip = false, PageText }) => {
         <PageText />
         <MainCardForm
           autofocus
-          placeholders={{
-            number: '4242 4242 4242 4242',
-          }}
           cardStyle={{
             backgroundColor: '#FFFFFF',
             textColor: '#000000',
