@@ -77,7 +77,6 @@ class Geo {
 
   handleLocation = (locations) => {
     const location = prepareCoords(locations);
-    console.error({ location });
     this.lastLocation = Object.assign({}, location);
     this.locationSubscription();
   };
