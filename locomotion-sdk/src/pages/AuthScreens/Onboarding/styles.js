@@ -53,3 +53,8 @@ font-size: ${FONT_STYLES.SIZE.EXTRA_LARGE};
 margin: 20px;
 font-weight: 600;
 `;
+
+export const InputContainer = styled.View`
+  margin: 15px auto;
+  width: 100%
+`;

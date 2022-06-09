@@ -3,7 +3,7 @@ import { useRoute } from '@react-navigation/native';
 import TextInput from '../../../Components/TextInput';
 import OnboardingNavButtons from './OnboardingNavButtons';
 import { OnboardingContext } from '../../../context/onboarding';
-import { ErrorText, PageContainer, SafeView } from './styles';
+import { ErrorText, PageContainer, SafeView, InputContainer } from './styles';
 import i18n from '../../../I18n';
 import Header from './Header';
 import ScreenText from './ScreenText';
@@ -38,6 +38,7 @@ const Name = ({ navigation }) => {
           text={i18n.t('onboarding.pages.name.text')}
           subText={i18n.t('onboarding.pages.name.subText')}
         />
+        <InputContainer>
         <TextInput
           placeholder={i18n.t('onboarding.firstNamePlaceholder')}
           autoFocus
@@ -46,7 +47,9 @@ const Name = ({ navigation }) => {
           autoCapitalize="words"
           error={showErrorText && !user.firstName}
           fullBorder
-        />
+          />
+          </InputContainer>
+          <InputContainer>
         <TextInput
           placeholder={i18n.t('onboarding.lastNamePlaceholder')}
           onChangeText={inputChange('lastName')}
@@ -54,7 +57,8 @@ const Name = ({ navigation }) => {
           autoCapitalize="words"
           error={showErrorText && !user.lastName}
           fullBorder
-        />
+          />
+          </InputContainer>
         {showErrorText && <ErrorText>{i18n.t('onboarding.fullNameError')}</ErrorText>}
         <OnboardingNavButtons
           isInvalid={!user.firstName || !user.lastName}
