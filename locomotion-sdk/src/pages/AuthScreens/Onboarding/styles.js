@@ -63,3 +63,8 @@ export const InputContainer = styled.View`
   margin: 15px auto;
   width: 100%
 `;
+
+export const InputContainer = styled.View`
+  margin: 15px auto;
+  width: 100%
+`;

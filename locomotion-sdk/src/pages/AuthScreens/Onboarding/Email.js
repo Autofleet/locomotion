@@ -62,15 +62,14 @@ const Email = ({ navigation }) => {
           subText={i18n.t('onboarding.pages.email.subText')}
         />
         <InputContainer>
-          <TextInput
+        <TextInput
             autoFocus
             placeholder={i18n.t('onboarding.pages.email.placeholder')}
             onChangeText={onChange}
             value={email}
-            autoCapitalize="none"
-            fullBorder
+            autoCapitalize="none"fullBorder
           />
-        </InputContainer>
+          </InputContainer>
         {errorText && <ErrorText>{errorText}</ErrorText>}
         <OnboardingNavButtons
           isInvalid={!user.email}
