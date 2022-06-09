@@ -13,9 +13,9 @@ import AppSettings from '../../../services/app-settings';
 
 const Phone = () => {
   const { nextScreen } = useContext(OnboardingContext);
-  const { updateState, user, updateUserInfo } = useContext(UserContext);
+  const { updateState, user } = useContext(UserContext);
   const [showErrorText, setShowErrorText] = useState(false);
-  const [isInvalid, setIsInvalid] = useState();
+  const [isInvalid, setIsInvalid] = useState(true);
   const onPhoneNumberChange = (phoneNumber, countryCode) => {
     setShowErrorText(false);
     setIsInvalid(phoneNumber.length < 9);
@@ -28,7 +28,7 @@ const Phone = () => {
       await loginApi({
         phoneNumber: user.phoneNumber,
       });
-      await updateUserInfo({ phoneNumber: user.phoneNumber });
+      updateState({ phoneNumber: user.phoneNumber });
       nextScreen(ONBOARDING_PAGE_NAMES.PHONE);
     } catch (e) {
       console.log('Bad login with response', e);
