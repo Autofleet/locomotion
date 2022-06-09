@@ -9,7 +9,11 @@ const Sight = styled.Image`
 `;
 
 const DisplayButton = styled(Button)`
-  background-color: unset;
+  background-color: ${({ theme }) => theme.pageBackgroundColor};
+  border-radius: 8px;
+  shadow-offset: 0px 0px;
+  shadow-color: #04214f;
+  shadow-opacity: 0.4;
 `;
 
 export default styled(({ displayButton, onPress }) => (
