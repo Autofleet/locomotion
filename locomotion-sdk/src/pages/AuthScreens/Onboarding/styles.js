@@ -58,3 +58,8 @@ ${FONT_SIZES.H1};
 ${FONT_WEIGHTS.BOLD};
 margin: 20px;
 `;
+
+export const InputContainer = styled.View`
+  margin: 15px auto;
+  width: 100%
+`;

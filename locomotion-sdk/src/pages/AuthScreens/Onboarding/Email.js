@@ -4,7 +4,7 @@ import { useIsFocused, useRoute } from '@react-navigation/native';
 import TextInput from '../../../Components/TextInput';
 import OnboardingNavButtons from './OnboardingNavButtons';
 import { OnboardingContext } from '../../../context/onboarding';
-import { ErrorText, PageContainer, SafeView } from './styles';
+import { ErrorText, PageContainer, SafeView,InputContainer } from './styles';
 import i18n from '../../../I18n';
 import Header from './Header';
 import ScreenText from './ScreenText';
@@ -59,6 +59,7 @@ const Email = ({ navigation }) => {
           text={i18n.t('onboarding.pages.email.text')}
           subText={i18n.t('onboarding.pages.email.subText')}
         />
+        <InputContainer>
         <TextInput
           autoFocus
           placeholder={i18n.t('onboarding.pages.email.placeholder')}
@@ -66,7 +67,8 @@ const Email = ({ navigation }) => {
           value={email}
           autoCapitalize="none"
           fullBorder
-        />
+          />
+          </InputContainer>
         {errorText && <ErrorText>{errorText}</ErrorText>}
         <OnboardingNavButtons
           isInvalid={!user.email}

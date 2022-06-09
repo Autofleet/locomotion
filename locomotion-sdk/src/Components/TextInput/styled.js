@@ -20,6 +20,5 @@ height: 40px;
 width: ${({ width }) => (width || '100%')};
 ${({ fullBorder, isFocused }) => (fullBorder ? fullBorderStyles(isFocused) : bottomBorderStyles)}
 border-color: ${({ error }) => (error ? ERROR_COLOR : '#333333')};
-margin: 15px auto;
 color: ${({ error }) => (error ? ERROR_COLOR : '#333333')};
 `;
