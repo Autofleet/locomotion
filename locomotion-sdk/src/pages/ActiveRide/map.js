@@ -8,7 +8,7 @@ import MapView, { Polyline, Marker } from 'react-native-maps';
 import Config from 'react-native-config';
 import CheapRuler from 'cheap-ruler';
 
-import { RidePageContext } from './ridePageContext';
+import { RidePageContext } from '../../context/ridePageContext';
 import { getPosition } from '../../services/geo';
 import {
   VehicleDot, MapButtonsContainer,
@@ -18,9 +18,9 @@ import { Context as ThemeContext, THEME_MOD } from '../../context/theme';
 import StationsMap from './StationsMap';
 import MyLocationButton from '../../Components/ShowMyLocationButton';
 
-export default ({
+export default React.forwardRef(({
   mapSettings,
-}) => {
+}, ref) => {
   const { isDarkMode } = useContext(ThemeContext);
   const mapInstance = useRef();
 
@@ -147,6 +147,11 @@ export default ({
     }
   }, [mapRegion]);
 
+
+  React.useImperativeHandle(ref, () => ({
+    focusCurrentLocation,
+  }));
+
   return (
     <>
       <MapView
@@ -223,12 +228,6 @@ export default ({
           ) : null}
         <VehicleMarker />
       </MapView>
-      <MapButtonsContainer>
-        <MyLocationButton
-          onPress={() => focusCurrentLocation()}
-          displayButton
-        />
-      </MapButtonsContainer>
     </>
   );
-};
+});
