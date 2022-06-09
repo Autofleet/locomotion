@@ -1,5 +1,5 @@
 import React, {
-  useEffect, useEffect,
+  useContext, useEffect,
 } from 'react';
 import { useNavigation } from '@react-navigation/native';
 
@@ -19,12 +19,11 @@ import BottomSheet from './RideDrawer/AddressSelector';
 
 const RidePage = ({ menuSide, mapSettings }) => {
   const navigation = useNavigation();
-
+  const mapRef = React.useRef();
   useEffect(() => {
     geo.init();
   }, []);
 
-  const mapRef = React.useRef();
   useEffect(() => {
     geo.init();
   }, []);
@@ -34,19 +33,6 @@ const RidePage = ({ menuSide, mapSettings }) => {
       <PageContainer>
         <MainMap ref={mapRef} mapSettings={mapSettings} />
         <Header navigation={navigation} menuSide={menuSide} />
-        {/*       <RideDrawer
-        navigation={navigation}
-        focusCurrentLocation={() => {
-          if (mapRef && mapRef.current) {
-            mapRef.current.focusCurrentLocation();
-          }
-        }}
-        />
-        <RideSummaryPopup />
-        <FutureRideCanceledPopup
-        onClose={() => {
-        }}
-      /> */}
         <BottomSheet />
       </PageContainer>
     </>

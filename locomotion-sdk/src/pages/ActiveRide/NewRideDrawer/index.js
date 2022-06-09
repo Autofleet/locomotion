@@ -6,16 +6,17 @@ import InputWithHistoryCard from '../../../Components/WhereTo/InputWithHistoryCa
 const NewRideDrawer = ({
   focusCurrentLocation,
 }) => (
-  <>
-    <DrawerContainer>
-      <MapButtonsContainer>
-        <MyLocationButton
-          onPress={() => focusCurrentLocation()}
-          displayButton
-        />
-      </MapButtonsContainer>
-    </DrawerContainer>
-  </>
+  <DrawerContainer>
+    <MapButtonsContainer>
+      <MyLocationButton
+        onPress={() => focusCurrentLocation()}
+        displayButton
+      />
+    </MapButtonsContainer>
+    <DrawerContentContainer>
+      <InputWithHistoryCard />
+    </DrawerContentContainer>
+  </DrawerContainer>
 );
 
 export default NewRideDrawer;
