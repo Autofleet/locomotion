@@ -156,7 +156,8 @@
         "dropoffPlaceholder": "Click on stations or enter address",
         "pickupTitle": "Boarding",
         "dropoffTitle": "Exit",
-        "addressPlaceholder": "Enter Address"
+        "addressPlaceholder": "Enter Address",
+        "whereTo": "Where To?"
     },
     "popups": {
         "photoUpload": {
