@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { Button, PermissionsAndroid, SafeAreaView, StatusBar, StyleSheet, Text, View } from "react-native";
 import propsTypes from 'prop-types';
 /* eslint-disable class-methods-use-this */
 import {
-  Platform, ActionSheetIOS, UIManager, findNodeHandle,
+  Platform, ActionSheetIOS, UIManager, findNodeHandle, PermissionsAndroid,
 } from 'react-native';
 import ImageResizer from 'react-native-image-resizer';
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
@@ -12,7 +11,7 @@ import Thumbnail from '../Thumbnail';
 import { ImageUpload } from '../../context/user/api';
 
 const ThumbnailPicker = (props) => {
-  const [isCameraGranted, setIsCameraGranted] = useState(false)
+  const [isCameraGranted, setIsCameraGranted] = useState(false);
   const onCancel = () => {
     console.log('User cancelled image picker');
   };
@@ -69,15 +68,15 @@ const ThumbnailPicker = (props) => {
   const insurePermission = async () => {
     if (!isCameraGranted) {
       const granted = await PermissionsAndroid.request(
-        PermissionsAndroid.PERMISSIONS.CAMERA
+        PermissionsAndroid.PERMISSIONS.CAMERA,
       );
       if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-        console.log("You can use the camera");
+        console.log('You can use the camera');
       } else {
-        console.log("Camera permission denied");
+        console.log('Camera permission denied');
       }
-  }
-}
+    }
+  };
 
 
   const showImagePicker = (event) => {
@@ -102,7 +101,7 @@ const ThumbnailPicker = (props) => {
           }
 
           if (buttonIndex === 0) {
-            await insurePermission()
+            await insurePermission();
             launchCamera(pickerOptions, imageCallback);
           }
 
@@ -134,13 +133,13 @@ const ThumbnailPicker = (props) => {
     }
   };
 
-  const camera = async  () => {
-    const isGranted = await PermissionsAndroid.check(PermissionsAndroid.PERMISSIONS.CAMERA)
-    setIsCameraGranted(isGranted)
-  }
+  const camera = async () => {
+    const isGranted = await PermissionsAndroid.check(PermissionsAndroid.PERMISSIONS.CAMERA);
+    setIsCameraGranted(isGranted);
+  };
   useEffect(() => {
-    camera()
-  }, [])
+    camera();
+  }, []);
 
   return (
     <Thumbnail
