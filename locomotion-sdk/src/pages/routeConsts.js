@@ -14,7 +14,7 @@ import ContactUs from './ContactUs';
 import Account from './Account';
 import Payments from './Payments';
 import RideHistory from './RideHistory';
-import { AUTH_ROUTES, MAIN_ROUTES } from './routes';
+import { MAIN_ROUTES } from './routes';
 
 export const ROUTES_COMPS = {
   [MAIN_ROUTES.HOME]: ActiveRide,
@@ -23,29 +23,26 @@ export const ROUTES_COMPS = {
   [MAIN_ROUTES.ACCOUNT]: Account,
   [MAIN_ROUTES.CONTACT_US]: ContactUs,
   [MAIN_ROUTES.WEBVIEW]: WebViewPage,
-};
-
-export const AUTH_ROUTES_COMPS = {
-  [AUTH_ROUTES.START]: StartScreen,
-  [AUTH_ROUTES.PHONE]: Phone,
-  [AUTH_ROUTES.CODE]: Code,
-  [AUTH_ROUTES.NAME]: Name,
-  [AUTH_ROUTES.ADD_CARD]: Card,
-  [AUTH_ROUTES.AVATAR]: Avatar,
-  [AUTH_ROUTES.EMAIL]: Email,
-  [AUTH_ROUTES.WELCOME]: Welcome,
-  [AUTH_ROUTES.LOCK]: Lock,
+  [MAIN_ROUTES.START]: StartScreen,
+  [MAIN_ROUTES.PHONE]: Phone,
+  [MAIN_ROUTES.CODE]: Code,
+  [MAIN_ROUTES.NAME]: Name,
+  [MAIN_ROUTES.ADD_CARD]: Card,
+  [MAIN_ROUTES.AVATAR]: Avatar,
+  [MAIN_ROUTES.EMAIL]: Email,
+  [MAIN_ROUTES.WELCOME]: Welcome,
+  [MAIN_ROUTES.LOCK]: Lock,
 };
 
 export const profileStack = ({ stack: Stack }) => (
   <>
-    <Stack.Screen name={AUTH_ROUTES.WELCOME} component={AUTH_ROUTES_COMPS[AUTH_ROUTES.WELCOME]} />
-    <Stack.Screen name={AUTH_ROUTES.LOCK} component={AUTH_ROUTES_COMPS[AUTH_ROUTES.LOCK]} />
-    <Stack.Screen name={AUTH_ROUTES.PHONE} component={AUTH_ROUTES_COMPS[AUTH_ROUTES.PHONE]} />
-    <Stack.Screen name={AUTH_ROUTES.CODE} component={AUTH_ROUTES_COMPS[AUTH_ROUTES.CODE]} />
-    <Stack.Screen name={AUTH_ROUTES.NAME} component={AUTH_ROUTES_COMPS[AUTH_ROUTES.NAME]} />
-    <Stack.Screen name={AUTH_ROUTES.AVATAR} component={AUTH_ROUTES_COMPS[AUTH_ROUTES.AVATAR]} />
-    <Stack.Screen name={AUTH_ROUTES.ADD_CARD} component={AUTH_ROUTES_COMPS[AUTH_ROUTES.ADD_CARD]} />
-    <Stack.Screen name={AUTH_ROUTES.EMAIL} component={AUTH_ROUTES_COMPS[AUTH_ROUTES.EMAIL]} />
+    <Stack.Screen name={MAIN_ROUTES.WELCOME} component={ROUTES_COMPS[MAIN_ROUTES.WELCOME]} />
+    <Stack.Screen name={MAIN_ROUTES.LOCK} component={ROUTES_COMPS[MAIN_ROUTES.LOCK]} />
+    <Stack.Screen name={MAIN_ROUTES.PHONE} component={ROUTES_COMPS[MAIN_ROUTES.PHONE]} />
+    <Stack.Screen name={MAIN_ROUTES.CODE} component={ROUTES_COMPS[MAIN_ROUTES.CODE]} />
+    <Stack.Screen name={MAIN_ROUTES.NAME} component={ROUTES_COMPS[MAIN_ROUTES.NAME]} />
+    <Stack.Screen name={MAIN_ROUTES.AVATAR} component={ROUTES_COMPS[MAIN_ROUTES.AVATAR]} />
+    <Stack.Screen name={MAIN_ROUTES.ADD_CARD} component={ROUTES_COMPS[MAIN_ROUTES.ADD_CARD]} />
+    <Stack.Screen name={MAIN_ROUTES.EMAIL} component={ROUTES_COMPS[MAIN_ROUTES.EMAIL]} />
   </>
 );

@@ -5,17 +5,17 @@ import { SafeView } from './styles';
 import Header from './Header';
 import ScreenText from './ScreenText';
 import { OnboardingContext } from '../../../context/onboarding';
-import { AUTH_ROUTES } from '../../routes';
+import { MAIN_ROUTES } from '../../routes';
 
 const Card = () => {
   const { nextScreen } = useContext(OnboardingContext);
 
   const onDone = async () => {
-    nextScreen(AUTH_ROUTES.CARD);
+    nextScreen(MAIN_ROUTES.CARD);
   };
   return (
     <SafeView>
-      <Header title={i18n.t('onboarding.pages.code.title')} page={AUTH_ROUTES.CARD} />
+      <Header title={i18n.t('onboarding.pages.code.title')} page={MAIN_ROUTES.CARD} />
       <AddCard
         onDone={onDone}
         canSkip={false}

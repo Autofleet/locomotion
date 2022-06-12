@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import propsTypes from 'prop-types';
 /* eslint-disable class-methods-use-this */
 import {
-  Platform, ActionSheetIOS, UIManager, findNodeHandle,
+  Platform, ActionSheetIOS, UIManager, findNodeHandle, PermissionsAndroid,
 } from 'react-native';
 import ImageResizer from 'react-native-image-resizer';
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
@@ -64,6 +64,15 @@ const ThumbnailPicker = (props) => {
     handleImage(response[0]);
   };
 
+  const insurePermission = async () => {
+    const isCameraGranted = await PermissionsAndroid.check(PermissionsAndroid.PERMISSIONS.CAMERA);
+    if (!isCameraGranted) {
+      await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.CAMERA,
+      );
+    }
+  };
+
 
   const showImagePicker = (event) => {
     const options = [i18n.t('popups.photoUpload.takePhoto'), i18n.t('popups.photoUpload.choosePhoto')];
@@ -81,12 +90,13 @@ const ThumbnailPicker = (props) => {
         findNodeHandle(event.target),
         options,
         () => null,
-        (action, buttonIndex) => {
+        async (action, buttonIndex) => {
           if (action !== 'itemSelected') {
             return;
           }
 
           if (buttonIndex === 0) {
+            await insurePermission();
             launchCamera(pickerOptions, imageCallback);
           }
 

@@ -1,5 +1,5 @@
 import React, { useContext, useEffect } from 'react';
-import { APP_ROUTES, AUTH_ROUTES } from '../routes';
+import { APP_ROUTES, MAIN_ROUTES } from '../routes';
 import AppSettings from '../../services/app-settings';
 import Auth from '../../services/auth';
 import { getUserDetails } from '../../context/user/api';
@@ -51,7 +51,7 @@ const AuthLoadingScreen = ({ navigation }) => {
         await saveUser(userData);
 
         if (!userData.active) {
-          return navigation.replace(AUTH_ROUTES.LOCK, { params: { showHeaderIcon: false } });
+          return navigation.replace(MAIN_ROUTES.LOCK, { params: { showHeaderIcon: false } });
         }
 
         if (!userData.didCompleteOnboarding) {
@@ -61,7 +61,7 @@ const AuthLoadingScreen = ({ navigation }) => {
         return navigation.replace(APP_ROUTES.MAIN_APP);
       }
       setUser(INITIAL_USER_STATE);
-      navigation.replace(APP_ROUTES.AUTH_SCREENS);
+      navigation.navigate(MAIN_ROUTES.START);
     }
 
     if (!user) { // Load app state

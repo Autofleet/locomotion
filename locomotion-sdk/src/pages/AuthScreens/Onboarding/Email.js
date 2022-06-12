@@ -8,7 +8,7 @@ import { ErrorText, PageContainer, SafeView } from './styles';
 import i18n from '../../../I18n';
 import Header from './Header';
 import ScreenText from './ScreenText';
-import { MAIN_ROUTES, ONBOARDING_PAGE_NAMES } from '../../routes';
+import { MAIN_ROUTES } from '../../routes';
 import { UserContext } from '../../../context/user';
 
 
@@ -27,8 +27,8 @@ const Email = ({ navigation }) => {
 
   const onNext = async () => {
     try {
-      await updateUserInfo({ email });
-      nextScreen(ONBOARDING_PAGE_NAMES.EMAIL);
+      await updateUserInfo({ email: email.toLowerCase() });
+      nextScreen(MAIN_ROUTES.EMAIL);
     } catch (e) {
       setErrorText(i18n.t('onboarding.pages.email.inUseError'));
     }
@@ -53,7 +53,7 @@ const Email = ({ navigation }) => {
 
   return (
     <SafeView>
-      <Header title={i18n.t('onboarding.pages.email.title')} page={ONBOARDING_PAGE_NAMES.EMAIL} />
+      <Header title={i18n.t('onboarding.pages.email.title')} page={MAIN_ROUTES.EMAIL} />
       <PageContainer>
         <ScreenText
           text={i18n.t('onboarding.pages.email.text')}
@@ -64,6 +64,7 @@ const Email = ({ navigation }) => {
           placeholder={i18n.t('onboarding.pages.email.placeholder')}
           onChangeText={onChange}
           value={email}
+          autoCapitalize="none"
           fullBorder
         />
         {errorText && <ErrorText>{errorText}</ErrorText>}

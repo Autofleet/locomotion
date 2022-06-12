@@ -1,6 +1,5 @@
 
 export const APP_ROUTES = {
-  AUTH_SCREENS: 'AuthScreens',
   MAIN_APP: 'MainApp',
   AUTH_LOADING: 'AuthLoading',
 };
@@ -13,9 +12,6 @@ export const MAIN_ROUTES = {
   CONTACT_US: 'ContactUs',
   LOGOUT: 'Logout',
   WEBVIEW: 'webview',
-};
-
-export const AUTH_ROUTES = {
   START: 'Start',
   PHONE: 'Phone',
   CODE: 'Code',
@@ -27,5 +23,3 @@ export const AUTH_ROUTES = {
   WELCOME: 'Welcome',
   LOCK: 'Lock',
 };
-
-export const ONBOARDING_PAGE_NAMES = AUTH_ROUTES;
