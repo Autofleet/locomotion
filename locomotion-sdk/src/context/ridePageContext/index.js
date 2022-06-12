@@ -6,6 +6,7 @@ import polyline from '@mapbox/polyline';
 import moment from 'moment';
 import Config from 'react-native-config';
 
+import { getUserTerritories } from '../user/api';
 import { getPosition } from '../../services/geo';
 import { getTogglePopupsState } from '../state';
 import UserService from '../../services/user';
@@ -54,6 +55,8 @@ const RidePageContextProvider = ({ navigation, children }) => {
 
   const [disableAutoLocationFocus, setDisableAutoLocationFocus] = useState(false);
   const [activeRideState, setActiveRide] = useState(null);
+  const [territory, setTerritory] = useState(null);
+  const [showTerritory, setShowTerritory] = useState(null);
   const [activeSpState, setActiveSp] = useState(null);
   const [mapMarkers, setMapMarkers] = useState([]);
   const [displayMatchInfo, setDisplayMatchInfo] = useState(false);
@@ -73,6 +76,15 @@ const RidePageContextProvider = ({ navigation, children }) => {
   const [stations, setStations] = useState([]);
   const [rideSummaryData, setRideSummaryData] = useState({});
   const [autoStationUpdate, setAutoStationUpdate] = useState(null);
+
+  const loadTerritory = async () => {
+    if (!territory) {
+      const t = await getUserTerritories();
+      setTerritory(t);
+      return t;
+    }
+    return territory;
+  };
 
   const stopAutoStationUpdate = () => clearInterval(autoStationUpdate);
   const notificationsHandler = {
@@ -420,6 +432,10 @@ const RidePageContextProvider = ({ navigation, children }) => {
         closeAddressViewer,
         bookValidation,
         stopAutoStationUpdate,
+        territory,
+        loadTerritory,
+        showTerritory,
+        setShowTerritory,
       }}
     >
       {children}
