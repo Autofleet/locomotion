@@ -1,8 +1,7 @@
 import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { profileStack, ROUTES_COMPS } from './routeConsts';
+import { ROUTES_COMPS } from './routeConsts';
 import { APP_ROUTES, MAIN_ROUTES } from './routes';
-import Auth from './Auth';
 import Main from './Main';
 import AuthLoadingScreen from './AuthScreens/AuthLoadingScreen';
 

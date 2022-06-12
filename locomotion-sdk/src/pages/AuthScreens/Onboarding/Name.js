@@ -24,7 +24,11 @@ const Name = ({ navigation }) => {
   };
 
   const onComplete = async () => {
-    await updateUserInfo(user);
+    const sanitizedNames = {
+      firstName: user.firstName.trim(),
+      lastName: user.lastName.trim()
+    }
+    await updateUserInfo({...user, ...sanitizedNames});
     if (route.params && route.params.editAccount) {
       navigation.navigate(MAIN_ROUTES.ACCOUNT);
     } else {
