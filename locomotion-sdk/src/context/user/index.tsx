@@ -102,7 +102,7 @@ const UserContextProvider = ({ children }: { children: any }) => {
       }
 
       auth.updateTokens(vertResponse.refreshToken, vertResponse.accessToken);
-      const userProfile = vertResponse.userProfile || {};
+      const userProfile = vertResponse.clientProfile || {};
       Mixpanel.setUser(userProfile);
       const cards = await getCardInfo();
       return { ...userProfile, cards };
