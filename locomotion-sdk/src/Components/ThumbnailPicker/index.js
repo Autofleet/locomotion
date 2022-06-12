@@ -11,7 +11,6 @@ import Thumbnail from '../Thumbnail';
 import { ImageUpload } from '../../context/user/api';
 
 const ThumbnailPicker = (props) => {
-  const [isCameraGranted, setIsCameraGranted] = useState(false);
   const onCancel = () => {
     console.log('User cancelled image picker');
   };
@@ -66,6 +65,7 @@ const ThumbnailPicker = (props) => {
   };
 
   const insurePermission = async () => {
+    const isCameraGranted = await PermissionsAndroid.check(PermissionsAndroid.PERMISSIONS.CAMERA);
     if (!isCameraGranted) {
       const granted = await PermissionsAndroid.request(
         PermissionsAndroid.PERMISSIONS.CAMERA,
@@ -132,14 +132,6 @@ const ThumbnailPicker = (props) => {
       );
     }
   };
-
-  const camera = async () => {
-    const isGranted = await PermissionsAndroid.check(PermissionsAndroid.PERMISSIONS.CAMERA);
-    setIsCameraGranted(isGranted);
-  };
-  useEffect(() => {
-    camera();
-  }, []);
 
   return (
     <Thumbnail
