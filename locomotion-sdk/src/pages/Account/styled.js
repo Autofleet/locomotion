@@ -1,3 +1,4 @@
+import Button from '../../Components/Button';
 import styled from 'styled-components';
 import ArrowIconSource from '../../assets/arrowright.png';
 
@@ -32,7 +33,7 @@ export const Container = styled.View`
   padding-left: 5px;
 `;
 
-export const LogoutContainer = styled.TouchableOpacity`
+export const LogoutContainer = styled(Button)`
 `;
 
 export const LogoutText = styled.Text`

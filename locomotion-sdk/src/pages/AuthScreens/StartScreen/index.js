@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { Trans } from 'react-i18next';
-import { useRoute } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import logo from '../../../assets/logo.png';
 import i18n from '../../../I18n';
 import {
@@ -20,14 +20,13 @@ import { SafeView } from '../Onboarding/styles';
 import WebView from '../../WebView';
 import { getLoginSettings } from '../../../context/user/api';
 import Mixpanel from '../../../services/Mixpanel';
-import { OnboardingContext } from '../../../context/onboarding';
-import { ONBOARDING_PAGE_NAMES } from '../../routes';
+import { MAIN_ROUTES } from '../../routes';
 import { UserContext } from '../../../context/user';
 import { INITIAL_USER_STATE } from '../AuthLoadingScreen';
 
 const StartScreen = () => {
-  const { nextScreen: next } = useContext(OnboardingContext);
   const { setUser } = useContext(UserContext);
+  const navigation = useNavigation();
   const [webViewWindow, setWebViewWindow] = useState(null);
   const route = useRoute();
   const [settings, setSettings] = useState({
@@ -36,9 +35,9 @@ const StartScreen = () => {
     contactUsUrl: null,
   });
 
-  const nextScreen = (currentScreen) => {
+  const nextScreen = () => {
     setUser(INITIAL_USER_STATE);
-    next(currentScreen);
+    navigation.navigate(MAIN_ROUTES.PHONE);
   };
 
   const loadSettings = async () => {
@@ -80,12 +79,12 @@ const StartScreen = () => {
             <ButtonsContainer>
               <StartButton
                 dark
-                onPress={() => nextScreen(ONBOARDING_PAGE_NAMES.START)}
+                onPress={() => nextScreen()}
               >
                 <ButtonText dark>{i18n.t('login.signUp')}</ButtonText>
               </StartButton>
               <StartButton
-                onPress={() => nextScreen(ONBOARDING_PAGE_NAMES.START)}
+                onPress={() => nextScreen()}
               >
                 <ButtonText>{i18n.t('login.login')}</ButtonText>
               </StartButton>
