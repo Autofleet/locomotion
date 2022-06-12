@@ -1,5 +1,5 @@
-import Button from '../../Components/Button';
 import styled from 'styled-components';
+import Button from '../../Components/Button';
 import ArrowIconSource from '../../assets/arrowright.png';
 
 export const ErrorText = styled.Text`

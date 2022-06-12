@@ -48,6 +48,7 @@ class Auth {
     //   console.log('Bad logout request', e)
     // }
     await AppSettings.destroy();
+    navigation.popToTop()
     return navigation.replace(MAIN_ROUTES.START);
   }
 
