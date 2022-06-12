@@ -27,7 +27,7 @@ const Email = ({ navigation }) => {
 
   const onNext = async () => {
     try {
-      await updateUserInfo({ email });
+      await updateUserInfo({ email: email.toLowerCase() });
       nextScreen(MAIN_ROUTES.EMAIL);
     } catch (e) {
       setErrorText(i18n.t('onboarding.pages.email.inUseError'));
@@ -64,6 +64,7 @@ const Email = ({ navigation }) => {
           placeholder={i18n.t('onboarding.pages.email.placeholder')}
           onChangeText={onChange}
           value={email}
+          autoCapitalize='none'
           fullBorder
         />
         {errorText && <ErrorText>{errorText}</ErrorText>}
