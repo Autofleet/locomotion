@@ -64,7 +64,7 @@ const Email = ({ navigation }) => {
           placeholder={i18n.t('onboarding.pages.email.placeholder')}
           onChangeText={onChange}
           value={email}
-          autoCapitalize='none'
+          autoCapitalize="none"
           fullBorder
         />
         {errorText && <ErrorText>{errorText}</ErrorText>}
