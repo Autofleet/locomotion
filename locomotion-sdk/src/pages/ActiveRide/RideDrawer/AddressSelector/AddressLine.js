@@ -1,11 +1,11 @@
 import React, {
-  useCallback, useEffect, useMemo, useRef, useState,
-} from 'react';
-import { View, Text, StyleSheet } from 'react-native';
-import styled from 'styled-components';
-import TextInput from '../../../../Components/TextInput';
-import i18n from '../../../../I18n';
-import SvgIcon from '../../../../Components/SvgIcon';
+    useCallback, useEffect, useMemo, useRef, useState,
+  } from 'react';
+  import { View, Text, StyleSheet } from 'react-native';
+  import styled from 'styled-components';
+  import TextInput from '../../../../Components/TextInput';
+  import i18n from '../../../../I18n';
+  import SvgIcon from '../../../../Components/SvgIcon';
 
 
 import HistoryIcon from '../../../../assets/history.png';
@@ -16,7 +16,7 @@ const ICONS = {
 
 const DEFAULT_ICON = ICONS.history;
 
-const Row = styled.View`
+  const Row = styled.View`
     width: 100%;
     min-height: 50px;
     flex-direction: row;

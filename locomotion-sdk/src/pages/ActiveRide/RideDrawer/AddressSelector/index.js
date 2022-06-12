@@ -106,8 +106,8 @@ const AddressSelectorBottomSheet = () => {
             </HistoryContainer>
           </ContentContainer>
         </SafeView>
-      </Container>
-    </BottomSheet>
+    </Container>
+      </BottomSheet>
   );
 };
 
