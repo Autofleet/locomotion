@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { Button, PermissionsAndroid, SafeAreaView, StatusBar, StyleSheet, Text, View } from "react-native";
 import propsTypes from 'prop-types';
 /* eslint-disable class-methods-use-this */
 import {
@@ -11,6 +12,7 @@ import Thumbnail from '../Thumbnail';
 import { ImageUpload } from '../../context/user/api';
 
 const ThumbnailPicker = (props) => {
+  const [isCameraGranted, setIsCameraGranted] = useState(false)
   const onCancel = () => {
     console.log('User cancelled image picker');
   };
@@ -64,6 +66,19 @@ const ThumbnailPicker = (props) => {
     handleImage(response[0]);
   };
 
+  const insurePermission = async () => {
+    if (!isCameraGranted) {
+      const granted = await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.CAMERA
+      );
+      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+        console.log("You can use the camera");
+      } else {
+        console.log("Camera permission denied");
+      }
+  }
+}
+
 
   const showImagePicker = (event) => {
     const options = [i18n.t('popups.photoUpload.takePhoto'), i18n.t('popups.photoUpload.choosePhoto')];
@@ -81,12 +96,13 @@ const ThumbnailPicker = (props) => {
         findNodeHandle(event.target),
         options,
         () => null,
-        (action, buttonIndex) => {
+        async (action, buttonIndex) => {
           if (action !== 'itemSelected') {
             return;
           }
 
           if (buttonIndex === 0) {
+            await insurePermission()
             launchCamera(pickerOptions, imageCallback);
           }
 
@@ -117,6 +133,14 @@ const ThumbnailPicker = (props) => {
       );
     }
   };
+
+  const camera = async  () => {
+    const isGranted = await PermissionsAndroid.check(PermissionsAndroid.PERMISSIONS.CAMERA)
+    setIsCameraGranted(isGranted)
+  }
+  useEffect(() => {
+    camera()
+  }, [])
 
   return (
     <Thumbnail
