@@ -48,7 +48,7 @@ const Email = ({ navigation }) => {
       updateState({ email: '' });
       return;
     }
-    updateState({ email });
+    updateState({ email: value });
   };
 
   return (

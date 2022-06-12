@@ -70,7 +70,7 @@ class Geo {
   // eslint-disable-next-line class-methods-use-this
   async currentLocation() {
     if (this.lastLocation) {
-      if (moment(this.lastLocation.timestamp).isAfter(moment().subtract(500, 'millisecond'))) {
+      if (moment(this.lastLocation.timestamp).isAfter(moment().subtract(1, 'minute'))) {
         return this.lastLocation;
       }
     }

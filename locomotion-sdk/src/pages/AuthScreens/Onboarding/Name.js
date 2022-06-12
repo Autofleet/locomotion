@@ -15,6 +15,8 @@ const Name = ({ navigation }) => {
   const { nextScreen } = useContext(OnboardingContext);
   const { updateUserInfo, user, updateState } = useContext(UserContext);
   const [showErrorText, setShowErrorText] = useState(false);
+  const isFirstNameValid = user.firstName && user.firstName.trim();
+  const isLastNameValid = user.lastName && user.lastName.trim();
 
   const inputChange = field => (value) => {
     setShowErrorText(false);
@@ -44,7 +46,7 @@ const Name = ({ navigation }) => {
           onChangeText={inputChange('firstName')}
           value={user.firstName}
           autoCapitalize="words"
-          error={showErrorText && !user.firstName}
+          error={showErrorText && !isFirstNameValid}
           fullBorder
         />
         <TextInput
@@ -52,12 +54,12 @@ const Name = ({ navigation }) => {
           onChangeText={inputChange('lastName')}
           value={user.lastName}
           autoCapitalize="words"
-          error={showErrorText && !user.lastName}
+          error={showErrorText && !isLastNameValid}
           fullBorder
         />
         {showErrorText && <ErrorText>{i18n.t('onboarding.fullNameError')}</ErrorText>}
         <OnboardingNavButtons
-          isInvalid={!user.firstName || !user.lastName}
+          isInvalid={!isFirstNameValid || !isLastNameValid}
           onFail={() => setShowErrorText(true)}
           onNext={onComplete}
         />

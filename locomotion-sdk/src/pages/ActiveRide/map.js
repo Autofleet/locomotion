@@ -17,11 +17,15 @@ import mapDarkMode from '../../assets/mapDarkMode.json';
 import { Context as ThemeContext, THEME_MOD } from '../../context/theme';
 import StationsMap from './StationsMap';
 import MyLocationButton from '../../Components/ShowMyLocationButton';
+// import AvailabilityContextProvider, { AvailabilityContext } from '../../context/availability';
 
 export default ({
   mapSettings,
 }) => {
   const { isDarkMode } = useContext(ThemeContext);
+  // const {
+  //   availabilityVehicles,
+  // } = useContext(AvailabilityContext);
   const mapInstance = useRef();
 
   const {
@@ -215,7 +219,7 @@ export default ({
 
         {activeSpState && displayMatchInfo
           ? (
-            <Polyline
+            <Polyline 
               strokeWidth={3}
               strokeColor="#8ac1ff"
               coordinates={activeSpState.polyline}

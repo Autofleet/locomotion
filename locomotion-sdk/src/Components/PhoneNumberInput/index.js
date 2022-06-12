@@ -6,7 +6,7 @@ import codes from './codes.json';
 
 
 const PhoneNumberInput = ({
-  onPhoneNumberChange, defaultCode, autoFocus, error,
+  onPhoneNumberChange, defaultCode, autoFocus, error, value,
 }) => {
   const [isFocused, setIsFocused] = useState(false);
   const initialCode = codes.find(v => v.code === defaultCode);
@@ -18,6 +18,7 @@ const PhoneNumberInput = ({
 
   return (
     <PhoneInput
+      value={value}
       autoFocus={autoFocus}
       defaultCode={defaultCode}
       onChangeText={v => onPhoneNumberChange(v, countryCode)}
