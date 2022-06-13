@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import { BottomSheetTextInput } from '@gorhom/bottom-sheet';
 
 import { ERROR_COLOR } from '../../services/sharedStyles';
+
 const bottomBorderStyles = `
 border-bottom-color: #e2e2e2;
 border-bottom-width: 1px;
@@ -25,12 +26,10 @@ export const Input = styled.TextInput`
 `;
 
 export const BottomSheetInput = styled(BottomSheetTextInput)`
-    width: 100%;
     padding: 0px 8px;
     height: 40px;
-    width: ${({ width }) => (width || '100%')};
+    flex: 1;
     ${({ fullBorder, isFocused }) => (fullBorder ? fullBorderStyles(isFocused) : bottomBorderStyles)}
     border-color: ${({ error }) => (error ? ERROR_COLOR : '#333333')};
     color: ${({ error }) => (error ? ERROR_COLOR : '#333333')};
 `;
-

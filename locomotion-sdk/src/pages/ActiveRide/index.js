@@ -1,10 +1,12 @@
 import React, {
   useEffect,
 } from 'react';
+import { View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
 import geo from '../../services/geo';
 import RidePageContextProvider from '../../context/ridePageContext';
+import NewRidePageContextProvider from '../../context/newRideContext';
 import {
   PageContainer,
 } from './styled';
@@ -13,7 +15,8 @@ import RideDrawer from './NewRideDrawer';
 import MainMap from './map';
 import RideSummaryPopup from '../../popups/RideSummaryPopup';
 import FutureRideCanceledPopup from '../../popups/FutureRideCanceled';
-import BottomSheet from './RideDrawer/AddressSelector'
+import BottomSheet from './RideDrawer/BottomSheet';
+import AddressSelector from './RideDrawer/AddressSelector';
 
 
 const RidePage = ({ menuSide, mapSettings }) => {
@@ -25,10 +28,10 @@ const RidePage = ({ menuSide, mapSettings }) => {
 
   return (
     <>
-    <PageContainer>
-      <MainMap ref={mapRef} mapSettings={mapSettings} />
-      <Header navigation={navigation} menuSide={menuSide} />
-{/*       <RideDrawer
+      <PageContainer>
+        <MainMap ref={mapRef} mapSettings={mapSettings} />
+        <Header navigation={navigation} menuSide={menuSide} />
+        {/*       <RideDrawer
         navigation={navigation}
         focusCurrentLocation={() => {
           if (mapRef && mapRef.current) {
@@ -41,16 +44,20 @@ const RidePage = ({ menuSide, mapSettings }) => {
         onClose={() => {
         }}
       /> */}
-      <BottomSheet></BottomSheet>
-    </PageContainer>
-      </>
+        <BottomSheet>
+          <AddressSelector />
+        </BottomSheet>
+      </PageContainer>
+    </>
   );
 };
 
 export default props => (
-  <RidePageContextProvider {...props}>
-    <RidePage
-      {...props}
-    />
-  </RidePageContextProvider>
+  <NewRidePageContextProvider {...props}>
+    <RidePageContextProvider {...props}>
+      <RidePage
+        {...props}
+      />
+    </RidePageContextProvider>
+  </NewRidePageContextProvider>
 );
