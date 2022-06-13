@@ -18,7 +18,7 @@ const usePayments = () => {
   };
 
   const detachPaymentMethod = async (paymentMethodId) => {
-    const { data: paymentMethodsData } = await network.post('/api/v1/me/customers/'+ paymentMethodId  +'/detach');
+    const { data: paymentMethodsData } = await network.post(`/api/v1/me/customers/${paymentMethodId}/detach`);
     return paymentMethodsData;
   };
 

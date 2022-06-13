@@ -17,15 +17,16 @@ import mapDarkMode from '../../assets/mapDarkMode.json';
 import { Context as ThemeContext, THEME_MOD } from '../../context/theme';
 import StationsMap from './StationsMap';
 import MyLocationButton from '../../Components/ShowMyLocationButton';
-// import AvailabilityContextProvider, { AvailabilityContext } from '../../context/availability';
+import AvailabilityContextProvider, { AvailabilityContext } from '../../context/availability';
+import AvailabilityVehicle from './AvailabilityVehicle';
 
 export default ({
   mapSettings,
 }) => {
   const { isDarkMode } = useContext(ThemeContext);
-  // const {
-  //   availabilityVehicles,
-  // } = useContext(AvailabilityContext);
+  const {
+    availabilityVehicles,
+  } = useContext(AvailabilityContext);
   const mapInstance = useRef();
 
   const {
@@ -128,6 +129,11 @@ export default ({
     return null;
   };
 
+  const buildAvailabilityVehicles = () => {
+    console.log('buildAvailabilityVehicles', availabilityVehicles);
+    return availabilityVehicles.map(vehicle => <AvailabilityVehicle location={vehicle.location} id={vehicle.id} />);
+  };
+
   const initialLocation = async () => {
     try {
       const geoData = await getPosition();
@@ -219,13 +225,14 @@ export default ({
 
         {activeSpState && displayMatchInfo
           ? (
-            <Polyline 
+            <Polyline
               strokeWidth={3}
               strokeColor="#8ac1ff"
               coordinates={activeSpState.polyline}
             />
           ) : null}
         <VehicleMarker />
+        {buildAvailabilityVehicles()}
       </MapView>
       <MapButtonsContainer>
         <MyLocationButton

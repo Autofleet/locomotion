@@ -12,6 +12,7 @@ import RideDrawer from './RideDrawer';
 import MainMap from './map';
 import RideSummaryPopup from '../../popups/RideSummaryPopup';
 import FutureRideCanceledPopup from '../../popups/FutureRideCanceled';
+import AvailabilityContextProvider from '../../context/availability';
 
 const RidePage = ({ menuSide, mapSettings }) => {
   const navigation = useNavigation();
@@ -85,8 +86,10 @@ const RidePage = ({ menuSide, mapSettings }) => {
 
 export default props => (
   <RidePageContextProvider {...props}>
-    <RidePage
-      {...props}
-    />
+    <AvailabilityContextProvider>
+      <RidePage
+        {...props}
+      />
+    </AvailabilityContextProvider>
   </RidePageContextProvider>
 );

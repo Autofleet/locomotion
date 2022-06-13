@@ -1,5 +1,5 @@
 import React, { createContext, useEffect, useState } from 'react';
-// import { getPosition } from '../../services/geo';
+import { getPosition } from '../../services/geo';
 import * as availabilityApi from './api';
 
 
@@ -19,42 +19,46 @@ interface AvailabilityContextInterface {
 }
 
 export const AvailabilityContext = createContext<AvailabilityContextInterface>({
-    availabilityVehicles: [],
+  availabilityVehicles: [],
 });
 
 const AvailabilityContextProvider = ({ children }: { children: any }) => {
-  // const [availabilityVehicles, setAvailabilityVehicles] = useState<AvailabilityVehicles[]>([]);
-  // const [availabilityVehiclesInterval, setAvailabilityVehiclesInterval] = useState<NodeJS.Timeout | null>(null);
+  const [availabilityVehicles, setAvailabilityVehicles] = useState<AvailabilityVehicles[]>([]);
+  const [availabilityVehiclesInterval, setAvailabilityVehiclesInterval] = useState<NodeJS.Timeout | null>(null);
 
   const getVehicles = async () => {
-      // const {
-      //     coords
-      // } = await getPosition();
-      // console.log('location', coords);
-    // await fetchVehicles(lat, lng);
-    // setAvailabilityVehiclesInterval(setInterval(async () => {
-    //     await fetchVehicles(lat, lng);
-    // }, 5000));
+    const {
+      coords,
+    } = await getPosition();
+    const {
+      latitude: lat, longitude: lng,
+    } = coords;
+    await fetchVehicles(lat, lng);
+    setAvailabilityVehiclesInterval(setInterval(async () => {
+      await fetchVehicles(lat, lng);
+    }, 5000));
   };
 
-    const fetchVehicles = async (lat: string, lng: string) => {
-        const vehicles = await availabilityApi.getVehicles(lat, lng);
-        // setAvailabilityVehicles(vehicles);
+  const fetchVehicles = async (lat: string, lng: string) => {
+    if (lat && lng) {
+      const { vehicles } = await availabilityApi.getVehicles(lat, lng);
+      setAvailabilityVehicles(vehicles);
     }
+  };
 
-  // useEffect(() => {
-  //   getVehicles();
-  //   return () => {
-  //       if (availabilityVehiclesInterval) {
-  //           clearInterval(availabilityVehiclesInterval);
-  //       }
-  //   }
-  // }, []);
+  useEffect(() => {
+    getVehicles();
+    return () => {
+      if (availabilityVehiclesInterval) {
+        clearInterval(availabilityVehiclesInterval);
+      }
+    };
+  }, []);
 
   return (
-    <AvailabilityContext.Provider 
+    <AvailabilityContext.Provider
       value={{
-        availabilityVehicles: [],
+        availabilityVehicles,
       }}
     >
       {children}
