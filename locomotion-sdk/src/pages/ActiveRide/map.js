@@ -18,7 +18,7 @@ import { Context as ThemeContext, THEME_MOD } from '../../context/theme';
 import StationsMap from './StationsMap';
 import MyLocationButton from '../../Components/ShowMyLocationButton';
 import AvailabilityContextProvider, { AvailabilityContext } from '../../context/availability';
-import AvailabilityVehicle from './AvailabilityVehicle';
+import AvailabilityVehicle from '../../Components/AvailabilityVehicle';
 
 export default ({
   mapSettings,

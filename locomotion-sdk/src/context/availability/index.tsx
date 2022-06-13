@@ -3,6 +3,27 @@ import { getPosition } from '../../services/geo';
 import * as availabilityApi from './api';
 
 
+const vehiclesMockData1 = [
+  {
+    id: '31414',
+    location: {
+      bearing: 0,
+      lat: '32.070635',
+      lng: '34.7908332',
+    },
+  },
+];
+const vehiclesMockData2 = [
+  {
+    id: '31414',
+    location: {
+      bearing: 0,
+      lat: '32.0718747',
+      lng: '34.7839004',
+    },
+  },
+];
+
 interface AvailabilityLocation {
     lat: string;
     lng: string;
@@ -24,7 +45,7 @@ export const AvailabilityContext = createContext<AvailabilityContextInterface>({
 
 const AvailabilityContextProvider = ({ children }: { children: any }) => {
   const [availabilityVehicles, setAvailabilityVehicles] = useState<AvailabilityVehicles[]>([]);
-  const [availabilityVehiclesInterval, setAvailabilityVehiclesInterval] = useState<any | null>(null);
+  const [availabilityVehiclesInterval, setAvailabilityVehiclesInterval] = useState<NodeJS.Timeout | null>(null);
 
   const getVehicles = async () => {
     const {
@@ -42,7 +63,7 @@ const AvailabilityContextProvider = ({ children }: { children: any }) => {
   const fetchVehicles = async (lat: string, lng: string) => {
     if (lat && lng) {
       const { vehicles } = await availabilityApi.getVehicles(lat, lng);
-      setAvailabilityVehicles(vehicles);
+      setAvailabilityVehicles(Math.random() >= 0.5 ? vehiclesMockData1 : vehiclesMockData2);
     }
   };
 

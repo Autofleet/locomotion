@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { View } from 'react-native';
 import styled from 'styled-components';
 import { MarkerAnimated, AnimatedRegion } from 'react-native-maps';
-import SvgIcon from '../../../Components/SvgIcon';
-import carIcon from '../../../assets/map/car.svg';
+import SvgIcon from '../SvgIcon';
+import carIcon from '../../assets/map/car.svg';
 
 interface Location {
     lat: number;
@@ -17,6 +17,13 @@ interface AvailabilityVehicleProps {
 }
 
 const AvailabilityVehicleContainer = styled(View)``;
+
+const areEqual = (prev: AvailabilityVehicleProps, next: AvailabilityVehicleProps) => 
+  prev.id === next.id &&
+  prev.location.lat === next.location.lat &&
+  prev.location.lng === next.location.lng &&
+  prev.location.bearing === next.location.bearing;
+
 
 const AvailabilityVehicle = (props: AvailabilityVehicleProps) => {
   const [locationAnimated] = useState(new AnimatedRegion({
@@ -46,4 +53,4 @@ const AvailabilityVehicle = (props: AvailabilityVehicleProps) => {
   );
 };
 
-export default AvailabilityVehicle;
+export default React.memo(AvailabilityVehicle, areEqual);
