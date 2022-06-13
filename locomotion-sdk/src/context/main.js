@@ -1,4 +1,5 @@
 import React from 'react';
+import GeoContextContextProvider from './geo';
 import I18n from '../I18n';
 import SettingsContext from './settings';
 import PaymentsContext from './payments';
@@ -54,17 +55,19 @@ export const MainProvider = ({ children, LoginPage, i18n }) => {
 
   return (
     <StateProvider initialState={initialState} reducer={reducer}>
-      <SettingsContext.Provider>
-        <PaymentsContext.Provider>
-          <ThemeProvider>
-            <UserContextProvider>
-              <OnboardingContextProvider>
-                {children}
-              </OnboardingContextProvider>
-            </UserContextProvider>
-          </ThemeProvider>
-        </PaymentsContext.Provider>
-      </SettingsContext.Provider>
+      <GeoContextContextProvider>
+        <SettingsContext.Provider>
+          <PaymentsContext.Provider>
+            <ThemeProvider>
+              <UserContextProvider>
+                <OnboardingContextProvider>
+                  {children}
+                </OnboardingContextProvider>
+              </UserContextProvider>
+            </ThemeProvider>
+          </PaymentsContext.Provider>
+        </SettingsContext.Provider>
+      </GeoContextContextProvider>
     </StateProvider>
   );
 };

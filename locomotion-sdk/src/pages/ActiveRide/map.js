@@ -1,27 +1,22 @@
 import React, {
-  useState, useEffect, useRef, useContext,
+  useContext, useEffect, useRef, useState,
 } from 'react';
-import {
-  StyleSheet, Platform,
-} from 'react-native';
-import MapView, { Polyline, Marker } from 'react-native-maps';
+import { Platform, StyleSheet } from 'react-native';
+import MapView, { Marker, Polygon, Polyline } from 'react-native-maps';
 import Config from 'react-native-config';
 import CheapRuler from 'cheap-ruler';
 
-import { RidePageContext } from '../../context/ridePageContext';
+import { RidePageContext, GeoContextContext } from '../../context';
 import { getPosition } from '../../services/geo';
-import {
-  VehicleDot, MapButtonsContainer,
-} from './styled';
+import { VehicleDot } from './styled';
 import mapDarkMode from '../../assets/mapDarkMode.json';
 import { Context as ThemeContext, THEME_MOD } from '../../context/theme';
 import StationsMap from './StationsMap';
-import MyLocationButton from '../../Components/ShowMyLocationButton';
 
 export default React.forwardRef(({
   mapSettings,
 }, ref) => {
-  const { isDarkMode } = useContext(ThemeContext);
+  const { isDarkMode, primaryColor } = useContext(ThemeContext);
   const mapInstance = useRef();
 
   const {
@@ -36,6 +31,10 @@ export default React.forwardRef(({
     rideOffer,
     stopAutoStationUpdate,
   } = useContext(RidePageContext);
+  const {
+    territory,
+    showTerritory,
+  } = useContext(GeoContextContext);
 
   const [mapRegion, setMapRegion] = useState({
     latitudeDelta: 0.015,
@@ -226,6 +225,19 @@ export default React.forwardRef(({
               coordinates={activeSpState.polyline}
             />
           ) : null}
+
+        {showTerritory && territory && territory.length ? territory
+          .map(t => t.polygon.coordinates.map(poly => (
+            <Polygon
+              key={`Polygon#${t.id}#${poly[1]}#${poly[0]}`}
+              strokeWidth={2}
+              strokeColor={`${primaryColor}`}
+              fillColor={`${primaryColor}40`}
+              coordinates={poly.map(p => (
+                { latitude: parseFloat(p[1]), longitude: parseFloat(p[0]) }
+              ))}
+            />
+          ))) : null}
         <VehicleMarker />
       </MapView>
     </>
