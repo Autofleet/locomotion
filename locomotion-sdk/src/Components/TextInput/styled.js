@@ -25,12 +25,10 @@ export const Input = styled.TextInput`
 `;
 
 export const BottomSheetInput = styled(BottomSheetTextInput)`
-    width: 100%;
     padding: 0px 8px;
     height: 40px;
-    width: ${({ width }) => (width || '100%')};
+    flex: 1;
     ${({ fullBorder, isFocused }) => (fullBorder ? fullBorderStyles(isFocused) : bottomBorderStyles)}
     border-color: ${({ error }) => (error ? ERROR_COLOR : '#333333')};
     color: ${({ error }) => (error ? ERROR_COLOR : '#333333')};
 `;
-

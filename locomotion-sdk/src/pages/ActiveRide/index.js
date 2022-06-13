@@ -1,10 +1,12 @@
 import React, {
   useContext, useEffect,
 } from 'react';
+import { View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
 import geo from '../../services/geo';
 import RidePageContextProvider from '../../context/ridePageContext';
+import NewRidePageContextProvider from '../../context/newRideContext';
 import {
   PageContainer,
 } from './styled';
@@ -14,7 +16,8 @@ import MainMap from './map';
 import RideSummaryPopup from '../../popups/RideSummaryPopup';
 import FutureRideCanceledPopup from '../../popups/FutureRideCanceled';
 import AvailabilityContextProvider from '../../context/availability';
-import BottomSheet from './RideDrawer/AddressSelector';
+import BottomSheet from './RideDrawer/BottomSheet';
+import AddressSelector from './RideDrawer/AddressSelector';
 
 
 const RidePage = ({ menuSide, mapSettings }) => {
@@ -40,11 +43,13 @@ const RidePage = ({ menuSide, mapSettings }) => {
 };
 
 export default props => (
-  <RidePageContextProvider {...props}>
-    <AvailabilityContextProvider>
+  <NewRidePageContextProvider {...props}>
+    <RidePageContextProvider {...props}>
+      <AvailabilityContextProvider>
       <RidePage
         {...props}
       />
     </AvailabilityContextProvider>
-  </RidePageContextProvider>
+    </RidePageContextProvider>
+  </NewRidePageContextProvider>
 );
