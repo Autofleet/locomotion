@@ -42,6 +42,12 @@ class Geo {
     this.checkPermission();
   }
 
+  initAsync = async () => {
+    await this.configure();
+    await this.requestPermission();
+    await this.checkPermission();
+  };
+
   configure = () => RNLocation.configure({
     distanceFilter: 1,
     desiredAccuracy: {

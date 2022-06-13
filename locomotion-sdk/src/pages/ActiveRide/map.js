@@ -2,13 +2,11 @@ import React, {
   useContext, useEffect, useRef, useState,
 } from 'react';
 import { Platform, StyleSheet } from 'react-native';
-import MapView, {
-  Marker, Polygon, Polyline,
-} from 'react-native-maps';
+import MapView, { Marker, Polygon, Polyline } from 'react-native-maps';
 import Config from 'react-native-config';
 import CheapRuler from 'cheap-ruler';
 
-import { RidePageContext } from '../../context/ridePageContext';
+import { RidePageContext, GeoContextContext } from '../../context';
 import { getPosition } from '../../services/geo';
 import { VehicleDot } from './styled';
 import mapDarkMode from '../../assets/mapDarkMode.json';
@@ -38,9 +36,11 @@ export default React.forwardRef(({
     setRequestStopPoints,
     rideOffer,
     stopAutoStationUpdate,
+  } = useContext(RidePageContext);
+  const {
     territory,
     showTerritory,
-  } = useContext(RidePageContext);
+  } = useContext(GeoContextContext);
 
   const [mapRegion, setMapRegion] = useState({
     latitudeDelta: 0.015,
