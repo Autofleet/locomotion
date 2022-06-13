@@ -129,9 +129,7 @@ export default ({
     return null;
   };
 
-  const buildAvailabilityVehicles = () => {
-    return availabilityVehicles.map(vehicle => <AvailabilityVehicle location={vehicle.location} id={vehicle.id} />);
-  };
+  const buildAvailabilityVehicles = () => availabilityVehicles.map(vehicle => <AvailabilityVehicle location={vehicle.location} id={vehicle.id} />);
 
   const initialLocation = async () => {
     try {

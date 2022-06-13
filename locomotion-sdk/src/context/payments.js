@@ -1,3 +1,5 @@
+import React, { useState, useEffect } from 'react';
+import { createContainer } from 'unstated-next';
 import network from '../services/network';
 
 const usePayments = () => {
@@ -54,3 +56,6 @@ const usePayments = () => {
     paymentMethods,
     detachPaymentMethod,
   };
+};
+
+export default createContainer(usePayments);
