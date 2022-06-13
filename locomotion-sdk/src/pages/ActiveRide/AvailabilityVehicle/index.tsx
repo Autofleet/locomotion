@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
+import { View } from 'react-native';
 import styled from 'styled-components';
-import MapView, { Marker } from 'react-native-maps';
+import { MarkerAnimated, AnimatedRegion } from 'react-native-maps';
 import SvgIcon from '../../../Components/SvgIcon';
 import carIcon from '../../../assets/map/car.svg';
 
 interface Location {
-    lat: string;
-    lng: string;
+    lat: number;
+    lng: number;
     bearing: number;
 }
 
@@ -15,16 +16,16 @@ interface AvailabilityVehicleProps {
     id: string;
 }
 
-const AvailabilityVehicleContainer = styled.View``;
+const AvailabilityVehicleContainer = styled(View)``;
 
 const AvailabilityVehicle = (props: AvailabilityVehicleProps) => {
-  const [locationAnimated] = useState(new MapView.AnimatedRegion({
+  const [locationAnimated] = useState(new AnimatedRegion({
     latitude: props.location.lat,
     latitudeDelta: 0.1,
     longitude: props.location.lng,
     longitudeDelta: 0.1,
-    useNativeDriver: false,
   }));
+  
   useEffect(() => {
     locationAnimated.timing({
       latitude: props.location.lat,
@@ -36,12 +37,11 @@ const AvailabilityVehicle = (props: AvailabilityVehicleProps) => {
 
   return (
     <AvailabilityVehicleContainer key={props.id}>
-      <Marker.Animated
-        useNativeDriver={false}
+      <MarkerAnimated
         coordinate={locationAnimated}
       >
         <SvgIcon svg={carIcon} />
-      </Marker.Animated>
+      </MarkerAnimated>
     </AvailabilityVehicleContainer>
   );
 };
