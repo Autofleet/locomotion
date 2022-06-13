@@ -9,7 +9,7 @@ import {
 import i18n from '../../../I18n';
 import Header from './Header';
 import ScreenText from './ScreenText';
-import { ONBOARDING_PAGE_NAMES } from '../../routes';
+import { MAIN_ROUTES } from '../../routes';
 import { UserContext } from '../../../context/user';
 
 const Code = () => {
@@ -38,7 +38,7 @@ const Code = () => {
   };
   return (
     <SafeView>
-      <Header title={i18n.t('onboarding.pages.code.title')} page={ONBOARDING_PAGE_NAMES.CODE} />
+      <Header title={i18n.t('onboarding.pages.code.title')} page={MAIN_ROUTES.CODE} />
       <PageContainer>
         <ScreenText
           text={i18n.t('onboarding.pages.code.text')}

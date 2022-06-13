@@ -7,7 +7,7 @@ import Header from './Header';
 import ScreenText from './ScreenText/index';
 import { loginApi } from '../../../context/user/api';
 import PhoneNumberInput from '../../../Components/PhoneNumberInput';
-import { ONBOARDING_PAGE_NAMES } from '../../routes';
+import { MAIN_ROUTES } from '../../routes';
 import { UserContext } from '../../../context/user';
 import AppSettings from '../../../services/app-settings';
 
@@ -29,7 +29,7 @@ const Phone = () => {
         phoneNumber: user.phoneNumber,
       });
       updateState({ phoneNumber: user.phoneNumber });
-      nextScreen(ONBOARDING_PAGE_NAMES.PHONE);
+      nextScreen(MAIN_ROUTES.PHONE);
     } catch (e) {
       console.log('Bad login with response', e);
       setShowErrorText(e.message);
@@ -38,7 +38,7 @@ const Phone = () => {
 
   return (
     <SafeView>
-      <Header title={i18n.t('onboarding.pages.phone.title')} page={ONBOARDING_PAGE_NAMES.PHONE} />
+      <Header title={i18n.t('onboarding.pages.phone.title')} page={MAIN_ROUTES.PHONE} />
       <PageContainer>
         <ScreenText
           text={i18n.t('onboarding.pages.phone.text')}

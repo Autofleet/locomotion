@@ -8,7 +8,7 @@ import {
 import Header from './Header';
 import ScreenText from './ScreenText/index';
 import ThumbnailPicker from '../../../Components/ThumbnailPicker';
-import { ONBOARDING_PAGE_NAMES } from '../../routes';
+import { MAIN_ROUTES } from '../../routes';
 import { UserContext } from '../../../context/user';
 
 const Avatar = () => {
@@ -21,7 +21,7 @@ const Avatar = () => {
 
   return (
     <SafeView>
-      <Header title={i18n.t('onboarding.pages.avatar.title')} page={ONBOARDING_PAGE_NAMES.AVATAR} />
+      <Header title={i18n.t('onboarding.pages.avatar.title')} page={MAIN_ROUTES.AVATAR} />
       <PageContainer>
         <ScreenText
           text={i18n.t('onboarding.pages.avatar.text')}
@@ -38,7 +38,7 @@ const Avatar = () => {
           </Name>
         </ImageContainer>
         <OnboardingNavButtons
-          onNext={() => nextScreen(ONBOARDING_PAGE_NAMES.AVATAR)}
+          onNext={() => nextScreen(MAIN_ROUTES.AVATAR)}
           isInvalid={!user.avatar}
         />
       </PageContainer>

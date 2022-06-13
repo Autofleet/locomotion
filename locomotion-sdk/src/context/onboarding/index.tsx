@@ -2,7 +2,7 @@ import { useNavigation } from '@react-navigation/native';
 import React, {
   createContext, useContext, useState,
 } from 'react';
-import { APP_ROUTES, ONBOARDING_PAGE_NAMES } from '../../pages/routes';
+import { APP_ROUTES, MAIN_ROUTES } from '../../pages/routes';
 import { UserContext } from '../user';
 
 interface OnboardingContextInterface {
@@ -20,23 +20,23 @@ export const OnboardingContext = createContext<OnboardingContextInterface>({
 });
 
 const SCREEN_ORDER = [
-  ONBOARDING_PAGE_NAMES.START,
-  ONBOARDING_PAGE_NAMES.PHONE,
-  ONBOARDING_PAGE_NAMES.CODE,
-  ONBOARDING_PAGE_NAMES.EMAIL,
-  ONBOARDING_PAGE_NAMES.NAME,
-  ONBOARDING_PAGE_NAMES.AVATAR,
-  ONBOARDING_PAGE_NAMES.CARD,
-  ONBOARDING_PAGE_NAMES.WELCOME,
+  MAIN_ROUTES.START,
+  MAIN_ROUTES.PHONE,
+  MAIN_ROUTES.CODE,
+  MAIN_ROUTES.EMAIL,
+  MAIN_ROUTES.NAME,
+  MAIN_ROUTES.AVATAR,
+  MAIN_ROUTES.CARD,
+  MAIN_ROUTES.WELCOME,
 ];
 
 const keyToScreen: any = {
-  email: ONBOARDING_PAGE_NAMES.EMAIL,
-  firstName: ONBOARDING_PAGE_NAMES.NAME,
-  lastName: ONBOARDING_PAGE_NAMES.NAME,
-  avatar: ONBOARDING_PAGE_NAMES.AVATAR,
-  cards: ONBOARDING_PAGE_NAMES.CARD,
-  welcome: ONBOARDING_PAGE_NAMES.WELCOME,
+  email: MAIN_ROUTES.EMAIL,
+  firstName: MAIN_ROUTES.NAME,
+  lastName: MAIN_ROUTES.NAME,
+  avatar: MAIN_ROUTES.AVATAR,
+  cards: MAIN_ROUTES.CARD,
+  welcome: MAIN_ROUTES.WELCOME,
 };
 
 const OnboardingContextProvider = ({ children }: { children: any }) => {
@@ -44,12 +44,12 @@ const OnboardingContextProvider = ({ children }: { children: any }) => {
   const navigation: any = useNavigation();
 
   const [requiredOnboarding] = useState({
-    [ONBOARDING_PAGE_NAMES.PHONE]: true,
-    [ONBOARDING_PAGE_NAMES.CODE]: true,
-    [ONBOARDING_PAGE_NAMES.NAME]: true,
-    [ONBOARDING_PAGE_NAMES.EMAIL]: true,
-    [ONBOARDING_PAGE_NAMES.AVATAR]: false,
-    [ONBOARDING_PAGE_NAMES.CARD]: false,
+    [MAIN_ROUTES.PHONE]: true,
+    [MAIN_ROUTES.CODE]: true,
+    [MAIN_ROUTES.NAME]: true,
+    [MAIN_ROUTES.EMAIL]: true,
+    [MAIN_ROUTES.AVATAR]: false,
+    [MAIN_ROUTES.CARD]: false,
   });
 
   const navigateToScreen = (screen: string) => navigation.navigate(screen);

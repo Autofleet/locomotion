@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import { APP_ROUTES } from '../routes';
+import { MAIN_ROUTES } from '../routes';
 import Auth from '../../services/auth';
 import SubmitButton from '../../Components/RoundedButton';
 
@@ -37,7 +37,7 @@ export default ({ navigation }) => {
     }
 
     if (userData.active === true) {
-      navigation.navigate(APP_ROUTES.AUTH_SCREENS);
+      navigation.navigate(MAIN_ROUTES.START);
     }
   }, 5000);
 

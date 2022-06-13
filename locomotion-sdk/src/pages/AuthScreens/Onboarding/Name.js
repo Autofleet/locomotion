@@ -7,7 +7,7 @@ import { ErrorText, PageContainer, SafeView } from './styles';
 import i18n from '../../../I18n';
 import Header from './Header';
 import ScreenText from './ScreenText';
-import { MAIN_ROUTES, ONBOARDING_PAGE_NAMES } from '../../routes';
+import { MAIN_ROUTES } from '../../routes';
 import { UserContext } from '../../../context/user';
 
 const Name = ({ navigation }) => {
@@ -24,17 +24,21 @@ const Name = ({ navigation }) => {
   };
 
   const onComplete = async () => {
-    await updateUserInfo(user);
+    const sanitizedNames = {
+      firstName: user.firstName.trim(),
+      lastName: user.lastName.trim(),
+    };
+    await updateUserInfo({ ...user, ...sanitizedNames });
     if (route.params && route.params.editAccount) {
       navigation.navigate(MAIN_ROUTES.ACCOUNT);
     } else {
-      nextScreen(ONBOARDING_PAGE_NAMES.NAME);
+      nextScreen(MAIN_ROUTES.NAME);
     }
   };
 
   return (
     <SafeView>
-      <Header title={i18n.t('onboarding.pages.name.title')} page={ONBOARDING_PAGE_NAMES.NAME} />
+      <Header title={i18n.t('onboarding.pages.name.title')} page={MAIN_ROUTES.NAME} />
       <PageContainer>
         <ScreenText
           text={i18n.t('onboarding.pages.name.text')}

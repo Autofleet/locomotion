@@ -2,7 +2,7 @@ import React, { useEffect, useContext } from 'react';
 import { useRoute } from '@react-navigation/native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { TouchableOpacity, View } from 'react-native';
-import { AUTH_ROUTES, MAIN_ROUTES } from '../routes';
+import { MAIN_ROUTES } from '../routes';
 
 import ThumbnailPicker from '../../Components/ThumbnailPicker';
 import {
@@ -120,7 +120,7 @@ const AccountContent = ({ navigation }) => {
         </CardsTitle>
         <Card
           title={i18n.t('onboarding.namePlaceholder')}
-          onPress={() => navigation.navigate(AUTH_ROUTES.NAME, {
+          onPress={() => navigation.navigate(MAIN_ROUTES.NAME, {
             editAccount: true,
           })}
         >
@@ -135,7 +135,7 @@ const AccountContent = ({ navigation }) => {
           verified={user && user.isEmailVerified}
           showUnverified
           title={i18n.t('onboarding.emailPlaceholder')}
-          onPress={() => navigation.navigate(AUTH_ROUTES.EMAIL, {
+          onPress={() => navigation.navigate(MAIN_ROUTES.EMAIL, {
             editAccount: true,
           })}
         >
