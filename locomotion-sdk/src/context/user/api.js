@@ -14,6 +14,11 @@ export const getUserDetails = async () => {
   return data;
 };
 
+export const getUserTerritories = async () => {
+  const { data } = await network.get('api/v1/me/territories');
+  return data;
+};
+
 export const loginVert = async (body) => {
   const { data } = await network.post('api/v1/login/vert', body);
   return data;
