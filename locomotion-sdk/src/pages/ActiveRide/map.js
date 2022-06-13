@@ -130,7 +130,6 @@ export default ({
   };
 
   const buildAvailabilityVehicles = () => {
-    console.log('buildAvailabilityVehicles', availabilityVehicles);
     return availabilityVehicles.map(vehicle => <AvailabilityVehicle location={vehicle.location} id={vehicle.id} />);
   };
 
