@@ -1,0 +1,42 @@
+import React, { createContext, useState } from 'react';
+
+export interface GeoContext {
+  // phoneNumber?: string;
+  // firstName?: string;
+  // lastName?: string;
+  // avatar?: string;
+  // email?: string;
+  // pushToken?: string;
+  // pushGeoContextId?: string;
+  // cards?: any;
+}
+
+interface GeoContextContextInterface {
+  // setGeoContext: (user: GeoContext | null) => void,
+  // user: GeoContext | null,
+  // updateState: (field: string, value: any) => void,
+  // getGeoContextFromStorage: () => void,
+  // updateGeoContextInfo: (values: {}) => Promise<void>,
+  // onVert: (code: string) => Promise<boolean | GeoContext>,
+  // removeChangesToGeoContext: () => Promise<void>,
+}
+
+export const GeoContextContext = createContext<GeoContextContextInterface | null>(null);
+
+const GeoContextContextProvider = ({ children }: { children: any }) => {
+  const [user, setGeoContext] = useState<GeoContext | null>(null);
+
+  return (
+    <GeoContextContext.Provider
+      value={{
+        setGeoContext: u => setGeoContext(u),
+        user,
+      }}
+    >
+      {children}
+    </GeoContextContext.Provider>
+  );
+};
+
+
+export default GeoContextContextProvider;

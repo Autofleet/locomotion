@@ -1,7 +1,6 @@
 import React, { useContext, useEffect } from 'react';
 import { useNavigation } from '@react-navigation/native';
-import geo from '../../services/geo';
-import RidePageContextProvider, { RidePageContext } from '../../context/ridePageContext';
+import { GeoContextContext, RidePageContextProvider } from '../../context';
 import {
   PageContainer,
 } from './styled';
@@ -9,15 +8,13 @@ import Header from '../../Components/Header';
 import MainMap from './map';
 import BottomSheet from './RideDrawer/AddressSelector';
 
-
 const RidePage = ({ menuSide, mapSettings }) => {
-  const { loadTerritory } = useContext(RidePageContext);
+  const { initGeoService } = useContext(GeoContextContext);
   const navigation = useNavigation();
   const mapRef = React.useRef();
 
   useEffect(() => {
-    geo.init();
-    loadTerritory();
+    initGeoService();
   }, []);
 
   return (
