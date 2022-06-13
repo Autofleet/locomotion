@@ -7,12 +7,12 @@ import moment from 'moment';
 import Config from 'react-native-config';
 
 import { getPosition } from '../../services/geo';
-import { getTogglePopupsState } from '../../context/state';
+import { getTogglePopupsState } from '../state';
 import UserService from '../../services/user';
 import OneSignal from '../../services/one-signal';
-import settingsContext from '../../context/settings';
+import settingsContext from '../settings';
 import Mixpanel from '../../services/Mixpanel';
-import { getStationsApi } from '../../context/places/api';
+import { getStationsApi } from '../places/api';
 import {
   cancelFutureRideApi,
   cancelRideApi,
@@ -22,7 +22,7 @@ import {
   getPreRideDetails,
   getRideSummary,
   sendRating,
-} from '../../context/rides/api';
+} from '../rides/api';
 
 const STATION_AUTOREFRESH_INTERVAL = 60000;
 
