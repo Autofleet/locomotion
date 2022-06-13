@@ -25,6 +25,7 @@ const SvgIcon = ({
       width={width}
       height={height}
       margin={margin}
+      noBg
     >
       <Icon />
     </IconContainer>

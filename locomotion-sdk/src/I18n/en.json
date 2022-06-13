@@ -1,4 +1,7 @@
 {
+    "rideDetails": {
+        "timeUntilArrival": "In {{minutes}} min"
+    },
     "general": {
         "back": "Back",
         "next": "Continue",

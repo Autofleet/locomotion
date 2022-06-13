@@ -25,6 +25,7 @@ import StopPointsCard from './StopPointsCard';
 import OfferCard from './OfferCard';
 import RideStatusHeader from './RideStatusHeader';
 import FutureRides, { FutureOrdersButton } from './FutureRides';
+import RideOptions from './RideOptions';
 
 const getRideState = (activeRide) => { // false, driverOnTheWay, driverArrived, onBoard
   if (!activeRide) {
@@ -120,157 +121,165 @@ const RideDrawer = ({
       setAllowRideOrder(false);
     }
   }, [usePayments.paymentMethods]);
+
   return (
     <DrawerContainer>
-      <FutureOrdersButton
-        futureRides={futureRides}
-        onPress={() => setFutureOrdersState(!futureOrdersState)}
-        isOpen={futureOrdersState}
-      />
-      {!allowRideOrder
-        ? <AddPaymentBar onPress={() => navigation.navigate(MAIN_ROUTES.PAYMENT)}>{I18n.t('payments.setPaymentBanner')}</AddPaymentBar> : null}
-      <FutureRides
-        futureRides={futureRides}
-        isOpen={futureOrdersState}
-        onCancel={cancelFutureRide}
-        onPress={() => setFutureOrdersState(!futureOrdersState)}
-      />
-      <Drawer>
-        <MessageCard
-          title={I18n.t('popups.rideCancel.main')}
-          subTitle={I18n.t('popups.rideCancel.sub')}
-          id="rideCancel"
-        />
-
-        <MessageCard
-          id="rideRejected"
-          title={I18n.t('popups.rideRejected.main')}
-          subTitle={I18n.t('popups.rideRejected.sub')}
-        />
-
-        {!isPopupOpen('ridePopupsStatus') && !futureOrdersState
-          ? (
-            <>
-              <RideStatusHeader
-                rideState={rideState}
-                pickupEta={pickupEta}
-                dropoffEta={dropoffEta}
-                arrivingReminderMin={useSettings.settingsList.ARRIVE_REMINDER_MIN}
-                arrivingPush={activeRide ? activeRide.arrivingPush : null}
-              />
-
-              {rideState && (pickupEta <= useSettings.settingsList.ARRIVE_REMINDER_MIN || (activeRide && activeRide.arrivingPush !== null) || rideState !== 'driverOnTheWay')
-                ? (
-                  <>
-                    <RideCard activeRide={activeRide} rideState={rideState} />
-                    {rideState !== 'onBoard' && rideState !== 'driverArrived'
-                      ? (
-                        <DrawerButtonContainer>
-                          <RoundedButton
-                            data-test-id="CancelRidePriceButton"
-                            onPress={buttonAction}
-                            hollow
-                          >
-                            {I18n.t('home.cancelRidePriceButton')}
-                          </RoundedButton>
-                        </DrawerButtonContainer>
-                      ) : null}
-                  </>
-                )
-                : rideState
-                  ? (
-                    <>
-                      <StopPointsEtaCard
-                        origin={origin}
-                        destination={destination}
-                        rideState={rideState}
-                        requestStopPoints={requestStopPoints}
-                        pickupEtaDrift={useSettings.settingsList.DISPLAY_ETA_DRIFT}
-                        dropoffEtaDrift={useSettings.settingsList.DISPLAY_MAX_ETA_DRIFT}
-                      />
-                      <DrawerButtonContainer>
-                        <RoundedButton
-                          data-test-id="CancelRideButton"
-                          onPress={buttonAction}
-                          hollow
-                        >
-                          {I18n.t('home.cancelRideButton')}
-                        </RoundedButton>
-                      </DrawerButtonContainer>
-                    </>
-                  )
-                  : null
-              }
-
-              {!rideState && !rideOffer ? (
-                <>
-                  <StopPointsCard
-                    origin={origin}
-                    destination={destination}
-                    rideState={rideState}
-                    requestStopPoints={requestStopPoints}
-                    onNumberOfPassengerChange={onNumberOfPassengerChange}
-                    numberOfPassenger={numberOfPassenger}
-                    openLocationSelect={openLocationSelect}
-                    readyToBook={readyToBook}
-                    onLocationSelect={onLocationSelect}
-                    closeAddressViewer={closeAddressViewer}
-                    loading={loading}
-                    onRideSchedule={onRideSchedule}
-                    disableFutureBooking={disableFutureBooking}
+    <RideOptions
+                    
                   />
-                  {/* <Switch onChange={(active) => setRideType(active ? 'pool' : 'private')} active={rideType === 'pool'} /> */}
-                  {/* preRideDetails.eta || preRideDetails.estimatePrice ? ( <PreRideBox {...preRideDetails} /> ) : null */}
-                </>
-              ) : null }
+                  </DrawerContainer>
+  )
+  // return (
+  //   <DrawerContainer>
+  //     <FutureOrdersButton
+  //       futureRides={futureRides}
+  //       onPress={() => setFutureOrdersState(!futureOrdersState)}
+  //       isOpen={futureOrdersState}
+  //     />
+  //     {!allowRideOrder
+  //       ? <AddPaymentBar onPress={() => navigation.navigate(MAIN_ROUTES.PAYMENT)}>{I18n.t('payments.setPaymentBanner')}</AddPaymentBar> : null}
+  //     <FutureRides
+  //       futureRides={futureRides}
+  //       isOpen={futureOrdersState}
+  //       onCancel={cancelFutureRide}
+  //       onPress={() => setFutureOrdersState(!futureOrdersState)}
+  //     />
+  //     <Drawer>
+  //       <MessageCard
+  //         title={I18n.t('popups.rideCancel.main')}
+  //         subTitle={I18n.t('popups.rideCancel.sub')}
+  //         id="rideCancel"
+  //       />
 
-              {!rideState && rideOffer ? (
-                <>
-                  <OfferCard
-                    origin={origin}
-                    destination={destination}
-                    rideState={rideState}
-                    requestStopPoints={requestStopPoints}
-                    pickupEtaDrift={useSettings.settingsList.DISPLAY_ETA_DRIFT}
-                    dropoffEtaDrift={useSettings.settingsList.DISPLAY_MAX_ETA_DRIFT}
-                    rideOffer={rideOffer}
-                    etaMediumThreshold={useSettings.settingsList.ETA_MEDIUM_THRESHOLD}
-                    etaHighThreshold={useSettings.settingsList.ETA_HIGH_THRESHOLD}
-                    offerExpired={offerExpired}
-                    onVerified={buttonAction}
-                    onRenewOffer={buttonAction}
-                    cancelOffer={cancelOffer}
-                    setLoading={setLoading}
-                    loading={loading}
-                  />
-                </>
-              ) : null }
-            </>
-          ) : null}
-      </Drawer>
+  //       <MessageCard
+  //         id="rideRejected"
+  //         title={I18n.t('popups.rideRejected.main')}
+  //         subTitle={I18n.t('popups.rideRejected.sub')}
+  //       />
 
-      {!rideState && !isPopupOpen('ridePopupsStatus') && !rideOffer
-        ? (
-          <>
-            <RideButtonContainer>
-              {!futureOrdersState && (
-              <RoundedButton
-                data-test-id={rideState ? 'CancelRideButton' : 'LetsRideButton'}
-                onPress={buttonAction}
-                hollow={!readyToBook || !allowRideOrder}
-                setLoading={setLoading}
-                disabled={!readyToBook || !allowRideOrder}
-              >
-                {I18n.t(rideState ? 'home.cancelRideButton' : 'home.letsRideButton')}
-              </RoundedButton>
-              )}
-            </RideButtonContainer>
-          </>
-        )
-        : null
-    }
-    </DrawerContainer>
-  );
+  //       {!isPopupOpen('ridePopupsStatus') && !futureOrdersState
+  //         ? (
+  //           <>
+  //             <RideStatusHeader
+  //               rideState={rideState}
+  //               pickupEta={pickupEta}
+  //               dropoffEta={dropoffEta}
+  //               arrivingReminderMin={useSettings.settingsList.ARRIVE_REMINDER_MIN}
+  //               arrivingPush={activeRide ? activeRide.arrivingPush : null}
+  //             />
+
+  //             {rideState && (pickupEta <= useSettings.settingsList.ARRIVE_REMINDER_MIN || (activeRide && activeRide.arrivingPush !== null) || rideState !== 'driverOnTheWay')
+  //               ? (
+  //                 <>
+  //                   <RideCard activeRide={activeRide} rideState={rideState} />
+  //                   {rideState !== 'onBoard' && rideState !== 'driverArrived'
+  //                     ? (
+  //                       <DrawerButtonContainer>
+  //                         <RoundedButton
+  //                           data-test-id="CancelRidePriceButton"
+  //                           onPress={buttonAction}
+  //                           hollow
+  //                         >
+  //                           {I18n.t('home.cancelRidePriceButton')}
+  //                         </RoundedButton>
+  //                       </DrawerButtonContainer>
+  //                     ) : null}
+  //                 </>
+  //               )
+  //               : rideState
+  //                 ? (
+  //                   <>
+  //                     <StopPointsEtaCard
+  //                       origin={origin}
+  //                       destination={destination}
+  //                       rideState={rideState}
+  //                       requestStopPoints={requestStopPoints}
+  //                       pickupEtaDrift={useSettings.settingsList.DISPLAY_ETA_DRIFT}
+  //                       dropoffEtaDrift={useSettings.settingsList.DISPLAY_MAX_ETA_DRIFT}
+  //                     />
+  //                     <DrawerButtonContainer>
+  //                       <RoundedButton
+  //                         data-test-id="CancelRideButton"
+  //                         onPress={buttonAction}
+  //                         hollow
+  //                       >
+  //                         {I18n.t('home.cancelRideButton')}
+  //                       </RoundedButton>
+  //                     </DrawerButtonContainer>
+  //                   </>
+  //                 )
+  //                 : null
+  //             }
+
+  //             {!rideState && !rideOffer ? (
+  //               <>
+  //                 <StopPointsCard
+  //                   origin={origin}
+  //                   destination={destination}
+  //                   rideState={rideState}
+  //                   requestStopPoints={requestStopPoints}
+  //                   onNumberOfPassengerChange={onNumberOfPassengerChange}
+  //                   numberOfPassenger={numberOfPassenger}
+  //                   openLocationSelect={openLocationSelect}
+  //                   readyToBook={readyToBook}
+  //                   onLocationSelect={onLocationSelect}
+  //                   closeAddressViewer={closeAddressViewer}
+  //                   loading={loading}
+  //                   onRideSchedule={onRideSchedule}
+  //                   disableFutureBooking={disableFutureBooking}
+  //                 />
+  //                 {/* <Switch onChange={(active) => setRideType(active ? 'pool' : 'private')} active={rideType === 'pool'} /> */}
+  //                 {/* preRideDetails.eta || preRideDetails.estimatePrice ? ( <PreRideBox {...preRideDetails} /> ) : null */}
+  //               </>
+  //             ) : null }
+
+  //             {!rideState && rideOffer ? (
+  //               <>
+  //                 <OfferCard
+  //                   origin={origin}
+  //                   destination={destination}
+  //                   rideState={rideState}
+  //                   requestStopPoints={requestStopPoints}
+  //                   pickupEtaDrift={useSettings.settingsList.DISPLAY_ETA_DRIFT}
+  //                   dropoffEtaDrift={useSettings.settingsList.DISPLAY_MAX_ETA_DRIFT}
+  //                   rideOffer={rideOffer}
+  //                   etaMediumThreshold={useSettings.settingsList.ETA_MEDIUM_THRESHOLD}
+  //                   etaHighThreshold={useSettings.settingsList.ETA_HIGH_THRESHOLD}
+  //                   offerExpired={offerExpired}
+  //                   onVerified={buttonAction}
+  //                   onRenewOffer={buttonAction}
+  //                   cancelOffer={cancelOffer}
+  //                   setLoading={setLoading}
+  //                   loading={loading}
+  //                 />
+  //               </>
+  //             ) : null }
+  //           </>
+  //         ) : null}
+  //     </Drawer>
+
+  //     {!rideState && !isPopupOpen('ridePopupsStatus') && !rideOffer
+  //       ? (
+  //         <>
+  //           <RideButtonContainer>
+  //             {!futureOrdersState && (
+  //             <RoundedButton
+  //               data-test-id={rideState ? 'CancelRideButton' : 'LetsRideButton'}
+  //               onPress={buttonAction}
+  //               hollow={!readyToBook || !allowRideOrder}
+  //               setLoading={setLoading}
+  //               disabled={!readyToBook || !allowRideOrder}
+  //             >
+  //               {I18n.t(rideState ? 'home.cancelRideButton' : 'home.letsRideButton')}
+  //             </RoundedButton>
+  //             )}
+  //           </RideButtonContainer>
+  //         </>
+  //       )
+  //       : null
+  //   }
+  //   </DrawerContainer>
+  // );
 };
 
 export default RideDrawer;
