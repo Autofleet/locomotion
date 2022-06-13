@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import { BottomSheetTextInput } from '@gorhom/bottom-sheet';
 
 import { ERROR_COLOR } from '../../context/theme';
+
 const bottomBorderStyles = `
 border-bottom-color: #e2e2e2;
 border-bottom-width: 1px;
@@ -33,4 +34,3 @@ export const BottomSheetInput = styled(BottomSheetTextInput)`
     border-color: ${({ error }) => (error ? ERROR_COLOR : '#333333')};
     color: ${({ error }) => (error ? ERROR_COLOR : '#333333')};
 `;
-

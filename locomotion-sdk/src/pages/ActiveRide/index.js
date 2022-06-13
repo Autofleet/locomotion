@@ -14,7 +14,7 @@ import MainMap from './map';
 import RideSummaryPopup from '../../popups/RideSummaryPopup';
 import FutureRideCanceledPopup from '../../popups/FutureRideCanceled';
 import AvailabilityContextProvider from '../../context/availability';
-import BottomSheet from './RideDrawer/AddressSelector'
+import BottomSheet from './RideDrawer/AddressSelector';
 
 
 const RidePage = ({ menuSide, mapSettings }) => {
@@ -26,10 +26,10 @@ const RidePage = ({ menuSide, mapSettings }) => {
 
   return (
     <>
-    <PageContainer>
-      <MainMap ref={mapRef} mapSettings={mapSettings} />
-      <Header navigation={navigation} menuSide={menuSide} />
-{/*       <RideDrawer
+      <PageContainer>
+        <MainMap ref={mapRef} mapSettings={mapSettings} />
+        <Header navigation={navigation} menuSide={menuSide} />
+        {/*       <RideDrawer
         navigation={navigation}
         focusCurrentLocation={() => {
           if (mapRef && mapRef.current) {
@@ -42,9 +42,9 @@ const RidePage = ({ menuSide, mapSettings }) => {
         onClose={() => {
         }}
       /> */}
-      <BottomSheet></BottomSheet>
-    </PageContainer>
-      </>
+        <BottomSheet />
+      </PageContainer>
+    </>
   );
 };
 

@@ -2,15 +2,15 @@ import React, {
   useCallback, useEffect, useMemo, useRef, useState,
 } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import BottomSheet, { useBottomSheetDynamicSnapPoints, BottomSheetView} from '@gorhom/bottom-sheet';
-import { useBottomSheet } from '@gorhom/bottom-sheet';
+import BottomSheet, { useBottomSheetDynamicSnapPoints, BottomSheetView, useBottomSheet } from '@gorhom/bottom-sheet';
 
 import styled from 'styled-components';
 import SafeView from '../../../../Components/SafeView';
 import TextInput from '../../../../Components/TextInput';
 import i18n from '../../../../I18n';
-import AddressRow from './AddressLine'
-import SearchBar from './SearchBar'
+import AddressRow from './AddressLine';
+import SearchBar from './SearchBar';
+
 const Container = styled(BottomSheetView)`
   flex: 1;
 `;
@@ -33,29 +33,29 @@ const HistoryContainer = styled.View`
 
 const historyText = [
   {
-    text: "57th Street",
-    subText: "New York, NY, USA",
-    icon: "history",
+    text: '57th Street',
+    subText: 'New York, NY, USA',
+    icon: 'history',
     lat: 32.444,
-    lng: 34.555
+    lng: 34.555,
   },
   {
-    text: "57th Street",
-    subText: "New York, NY, USA",
-    icon: "history",
+    text: '57th Street',
+    subText: 'New York, NY, USA',
+    icon: 'history',
     lat: 32.444,
-    lng: 34.555
+    lng: 34.555,
   },
   {
-    text: "57th Strexxxxxet",
-    subText: "New York, NY, USA",
-    icon: "history",
+    text: '57th Strexxxxxet',
+    subText: 'New York, NY, USA',
+    icon: 'history',
     lat: 32.444,
-    lng: 34.555
-  }
-]
+    lng: 34.555,
+  },
+];
 const AddressSelectorBottomSheet = () => {
-  const [isExpanded, setIsExpanded] = useState(false)
+  const [isExpanded, setIsExpanded] = useState(false);
   const bottomSheetRef = useRef(null);
   const snapPoints = useMemo(() => ['CONTENT_HEIGHT', '100%'], []);
 
@@ -67,49 +67,47 @@ const AddressSelectorBottomSheet = () => {
   } = useBottomSheetDynamicSnapPoints(snapPoints);
 
   const handleSheetChanges = useCallback((index) => {
-    const newIsExpanded = index === (animatedSnapPoints.value.length - 1)
-    if(isExpanded !== newIsExpanded) {
-      setIsExpanded(newIsExpanded)
+    const newIsExpanded = index === (animatedSnapPoints.value.length - 1);
+    if (isExpanded !== newIsExpanded) {
+      setIsExpanded(newIsExpanded);
     }
   }, []);
 
   const onSearchFocus = () => {
-    bottomSheetRef.current.expand()
-  }
+    bottomSheetRef.current.expand();
+  };
 
   useEffect(() => {
-    console.log(`isExpanded`,isExpanded);
-
-  }, [isExpanded])
+    console.log('isExpanded', isExpanded);
+  }, [isExpanded]);
 
 
   return (
     <BottomSheet
-    ref={bottomSheetRef}
-    index={0}
-    snapPoints={animatedSnapPoints}
-    onChange={handleSheetChanges}
-    handleHeight={animatedHandleHeight}
-    contentHeight={animatedContentHeight}
+      ref={bottomSheetRef}
+      index={0}
+      snapPoints={animatedSnapPoints}
+      onChange={handleSheetChanges}
+      handleHeight={animatedHandleHeight}
+      contentHeight={animatedContentHeight}
     >
-        <Container>
+      <Container>
         <SafeView>
-        <ContentContainer
-
-        onLayout={handleContentLayout}
-      >
-        <InputContainer>
-            <SearchBar
-              onFocus={onSearchFocus}
-            />
+          <ContentContainer
+            onLayout={handleContentLayout}
+          >
+            <InputContainer>
+              <SearchBar
+                onFocus={onSearchFocus}
+              />
             </InputContainer>
             <HistoryContainer>
-            {historyText.map(h => <AddressRow {...h} />)}
+              {historyText.map(h => <AddressRow {...h} />)}
             </HistoryContainer>
-        </ContentContainer>
+          </ContentContainer>
         </SafeView>
-    </Container>
-      </BottomSheet>
+      </Container>
+    </BottomSheet>
   );
 };
 

@@ -1,22 +1,22 @@
 import React, {
-    useCallback, useEffect, useMemo, useRef, useState,
-  } from 'react';
-  import { View, Text, StyleSheet } from 'react-native';
-  import styled from 'styled-components';
-  import TextInput from '../../../../Components/TextInput';
-  import i18n from '../../../../I18n';
-  import SvgIcon from '../../../../Components/SvgIcon'
+  useCallback, useEffect, useMemo, useRef, useState,
+} from 'react';
+import { View, Text, StyleSheet } from 'react-native';
+import styled from 'styled-components';
+import TextInput from '../../../../Components/TextInput';
+import i18n from '../../../../I18n';
+import SvgIcon from '../../../../Components/SvgIcon';
 
 
-  import HistoryIcon from '../../../../assets/history.png';
+import HistoryIcon from '../../../../assets/history.png';
 
-  const ICONS = {
-      'history': HistoryIcon
-  }
+const ICONS = {
+  history: HistoryIcon,
+};
 
-  const DEFAULT_ICON = ICONS['history']
+const DEFAULT_ICON = ICONS.history;
 
-  const Row = styled.View`
+const Row = styled.View`
     width: 100%;
     min-height: 50px;
     flex-direction: row;
@@ -33,7 +33,7 @@ const IconContainer = styled.View`
     margin-right: 15px;
 `;
 
-const Icon = styled.Image.attrs(({ icon }) => ({source: ICONS[icon] || DEFAULT_ICON}))`
+const Icon = styled.Image.attrs(({ icon }) => ({ source: ICONS[icon] || DEFAULT_ICON }))`
   width: 25px;
   height: 25px;
 `;
@@ -45,25 +45,23 @@ const AddressContainer = styled.View`
 `;
 
 const AddressText = styled.Text`
-    color: ${({subtext}) => !subtext ? '#333333' : '#666666'};
+    color: ${({ subtext }) => (!subtext ? '#333333' : '#666666')};
     font-weight: 500;
     font-size: 14px;
     line-height: 20px;
-`
+`;
 
 
-  const AddressRow = ({text, subText, icon}) => {
-    return (
-        <Row>
-            <IconContainer>
-               <Icon icon={icon}></Icon>
-            </IconContainer>
-            <AddressContainer>
-                <AddressText>{text}</AddressText>
-                <AddressText subtext>{subText}</AddressText>
-            </AddressContainer>
-        </Row>
-    );
-  };
+const AddressRow = ({ text, subText, icon }) => (
+  <Row>
+    <IconContainer>
+      <Icon icon={icon} />
+    </IconContainer>
+    <AddressContainer>
+      <AddressText>{text}</AddressText>
+      <AddressText subtext>{subText}</AddressText>
+    </AddressContainer>
+  </Row>
+);
 
-  export default AddressRow;
+export default AddressRow;
