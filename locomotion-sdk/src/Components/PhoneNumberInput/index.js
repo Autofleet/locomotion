@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import PhoneInput from 'react-native-phone-number-input';
 import i18n from '../../I18n';
-import { ERROR_COLOR } from '../../services/sharedStyles';
+import { ERROR_COLOR } from '../../context/theme';
 import codes from './codes.json';
 
 

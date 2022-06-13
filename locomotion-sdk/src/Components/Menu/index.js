@@ -29,7 +29,7 @@ const DrawerHeader = ({ onIconPress, navigation }) => {
     <Header>
       {user && (
         <Thumbnail
-          size={80}
+          size={60}
           source={user.avatar}
         />
       )}

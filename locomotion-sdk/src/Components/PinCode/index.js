@@ -2,8 +2,7 @@ import React, { useContext, useState } from 'react';
 import propsTypes from 'prop-types';
 import SmoothPinCodeInput from 'react-native-smooth-pincode-input';
 import styled from 'styled-components';
-import { ERROR_COLOR } from '../../services/sharedStyles';
-import { Context } from '../../context/theme';
+import { Context, ERROR_COLOR } from '../../context/theme';
 
 const MainView = styled.View`
     flex-direction: row;

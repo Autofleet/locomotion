@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { ERROR_COLOR } from '../../services/sharedStyles';
+import { ERROR_COLOR } from '../../context/theme';
 
 const bottomBorderStyles = `
 border-bottom-color: #e2e2e2;

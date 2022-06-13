@@ -1,11 +1,12 @@
 import styled from 'styled-components';
 import { BaseText } from '../../../Components/BaseText';
-import { ERROR_COLOR, FONT_STYLES } from '../../../services/sharedStyles';
+import { ERROR_COLOR, FONT_SIZES, FONT_WEIGHTS } from '../../../context/theme';
 import Button from '../../../Components/Button';
 
 export const ErrorText = styled.Text`
   color: ${ERROR_COLOR};
-  font-size: ${FONT_STYLES.SIZE.SMALL};
+  ${FONT_SIZES.MEDIUM};
+  ${FONT_WEIGHTS.MEDIUM};
   margin-top: 15px;
   width: 80%;
   text-align: center;
@@ -32,10 +33,14 @@ opacity: .7;
 
 export const ResendText = styled(BaseText)`
 color: #707070;
+${FONT_SIZES.LARGE};
+${FONT_WEIGHTS.REGULAR}
 `;
 
 export const ResendButton = styled(BaseText)`
   text-decoration: underline;
+  ${FONT_SIZES.LARGE};
+  ${FONT_WEIGHTS.REGULAR};
   ${({ theme }) => `
   text-decoration-color: ${theme.primaryColor};
   color: ${theme.primaryColor};
@@ -49,7 +54,7 @@ justify-content: flex-start;
 align-items: center;
 `;
 export const Name = styled(BaseText)`
-font-size: ${FONT_STYLES.SIZE.EXTRA_LARGE};
+${FONT_SIZES.H1};
+${FONT_WEIGHTS.BOLD};
 margin: 20px;
-font-weight: 600;
 `;

@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import Button from '../../Components/Button';
 import ArrowIconSource from '../../assets/arrowright.png';
+import { FONT_SIZES, FONT_WEIGHTS } from '../../context/theme';
 
 export const ErrorText = styled.Text`
   color: #cc0d28;
@@ -34,6 +35,7 @@ export const Container = styled.View`
 `;
 
 export const LogoutContainer = styled(Button)`
+background-color: transparent;
 `;
 
 export const LogoutText = styled.Text`
@@ -81,8 +83,9 @@ export const CardContantContainer = styled.View`
 
 export const CardsTitle = styled.Text`
   width: 100%;
-  font-size: 12px;
-  font-weight: bold;
+  ${FONT_SIZES.MEDIUM};
+  ${FONT_WEIGHTS.BOLD};
+  color: #333333;
   padding: 30px 10px 15px;
 `;
 
@@ -94,14 +97,21 @@ export const CardTitleContainer = styled.View`
 `;
 
 export const CardTitle = styled.Text`
-  font-size: 14px;
+  color: '#333333';
+  opacity: 0.8;
+  ${FONT_SIZES.MEDIUM};
+  ${FONT_WEIGHTS.SEMI_BOLD}
   align-self: center;
   vertical-align: center;
   padding: 10px 0;
 `;
 
 export const CardText = styled.Text`
-  font-size: 18px;
+  ${FONT_SIZES.H3};
+  ${FONT_WEIGHTS.REGULAR};
+  color: '#333333';
+  opacity: 0.8;
+
 `;
 
 export const CardContainer = styled.View`
@@ -135,13 +145,13 @@ export const AccountHeaderMainContainer = styled(FlexCenterContainer)`
 `;
 
 export const AccountHeaderMainText = styled.Text`
-  color: ${({ theme }) => theme.primaryColor};
-  font-size: 22px;
-  font-weight: bold;
+${FONT_SIZES.H1};
+${FONT_WEIGHTS.BOLD};
 `;
 
 export const AccountHeaderSubText = styled.Text`
-  font-size: 14px;
+  ${FONT_SIZES.H2};
+  ${FONT_WEIGHTS.SEMI_BOLD};
 `;
 
 export const AccountHeaderIndicatorContainer = styled.View`
