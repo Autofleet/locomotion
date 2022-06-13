@@ -18,11 +18,10 @@ interface AvailabilityVehicleProps {
 
 const AvailabilityVehicleContainer = styled(View)``;
 
-const areEqual = (prev: AvailabilityVehicleProps, next: AvailabilityVehicleProps) => 
-  prev.id === next.id &&
-  prev.location.lat === next.location.lat &&
-  prev.location.lng === next.location.lng &&
-  prev.location.bearing === next.location.bearing;
+const areEqual = (prev: AvailabilityVehicleProps, next: AvailabilityVehicleProps) => prev.id === next.id
+  && prev.location.lat === next.location.lat
+  && prev.location.lng === next.location.lng
+  && prev.location.bearing === next.location.bearing;
 
 
 const AvailabilityVehicle = (props: AvailabilityVehicleProps) => {
@@ -32,7 +31,7 @@ const AvailabilityVehicle = (props: AvailabilityVehicleProps) => {
     longitude: props.location.lng,
     longitudeDelta: 0.1,
   }));
-  
+
   useEffect(() => {
     locationAnimated.timing({
       latitude: props.location.lat,

@@ -10,10 +10,10 @@
     "@jridgewell/gen-mapping" "^0.1.0"
     "@jridgewell/trace-mapping" "^0.3.9"
 
-"@autofleet/locomotion-sdk@^1.7.16":
-  "integrity" "sha512-OIWtBaKsBGR0WcfZDTr2ekRkwKu1fN94WDqYec2Lk+FyvRErG9/45v/G2TmRNmsW2nKTP8zGyEf6WpfeTc5HzQ=="
-  "resolved" "https://registry.npmjs.org/@autofleet/locomotion-sdk/-/locomotion-sdk-1.7.16.tgz"
-  "version" "1.7.16"
+"@autofleet/locomotion-sdk@^1.7.17":
+  "integrity" "sha512-6yUbqOxP7Be8DWPQYg0RQDKjbd0MGtUkLEh9WVtSuLZHpzIKLfUn7Fl2hTMbni7KXTNmeyrp1Qek45Zl7b+XgA=="
+  "resolved" "https://registry.npmjs.org/@autofleet/locomotion-sdk/-/locomotion-sdk-1.7.17.tgz"
+  "version" "1.7.17"
   dependencies:
     "@react-navigation/drawer" "^6.3.0"
     "@react-navigation/native" "^6.0.10"
