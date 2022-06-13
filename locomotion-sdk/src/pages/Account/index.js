@@ -39,7 +39,7 @@ const AccountHeader = () => {
     <AccountHeaderContainer>
       <FlexCenterContainer>
         <ThumbnailPicker
-          size={125}
+          size={100}
           avatarSource={user.avatar}
         />
       </FlexCenterContainer>

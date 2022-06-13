@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { FONT_STYLES } from '../../../../services/sharedStyles';
+import { FONT_SIZES, FONT_WEIGHTS } from '../../../../context/theme';
 
 export const TextContainer = styled.View`
 display: flex;
@@ -8,12 +8,13 @@ margin-bottom: 40px;
 `;
 
 export const Text = styled.Text`
-font-size: ${FONT_STYLES.SIZE.LARGE};
-font-weight: 500;
+${FONT_SIZES.H2};
+${FONT_WEIGHTS.SEMI_BOLD};
 margin: 5px 0;
 `;
 
 export const SubText = styled.Text`
-font-size: ${FONT_STYLES.SIZE.MEDIUM};
-opacity: .6;
+${FONT_SIZES.LARGE};
+${FONT_WEIGHTS.REGULAR};
+opacity: .8;
 `;
