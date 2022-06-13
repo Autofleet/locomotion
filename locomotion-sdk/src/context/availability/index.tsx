@@ -24,7 +24,7 @@ export const AvailabilityContext = createContext<AvailabilityContextInterface>({
 
 const AvailabilityContextProvider = ({ children }: { children: any }) => {
   const [availabilityVehicles, setAvailabilityVehicles] = useState<AvailabilityVehicles[]>([]);
-  const [availabilityVehiclesInterval, setAvailabilityVehiclesInterval] = useState<NodeJS.Timeout | null>(null);
+  const [availabilityVehiclesInterval, setAvailabilityVehiclesInterval] = useState<any | null>(null);
 
   const getVehicles = async () => {
     const {
