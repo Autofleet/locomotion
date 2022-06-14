@@ -27,7 +27,7 @@ export default ({ navigation, menuSide }) => {
   };
 
   const loadCustomerData = async () => {
-    await usePayments.loadCustomer();
+    await usePayments.getOrFetchCustomer();
     setPageLoading(false);
   };
 

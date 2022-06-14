@@ -21,16 +21,12 @@ export const NewCreditForm = ({ onDone, canSkip = false, PageText }) => {
   const [errorMessage, setErrorMessage] = useState('');
 
   const handlePayPress = async () => {
-    let customerData = usePayments.customer;
-    console.log('customerData', customerData);
-    if (!usePayments.customer) {
-      customerData = await usePayments.createCustomer();
-    }
-    const createIntent = await usePayments.setup();
+    const customerData = await usePayments.getOrFetchCustomer();
+    const { clientSecret } = await usePayments.setup();
     const billingDetails = {
       email: customerData.email,
     };
-    const { setupIntent, error } = await confirmSetupIntent(createIntent.clientSecret, {
+    const { setupIntent, error } = await confirmSetupIntent(clientSecret, {
       paymentMethodType: 'Card',
       paymentMethod: {
         billingDetails,
@@ -78,13 +74,13 @@ export const NewCreditForm = ({ onDone, canSkip = false, PageText }) => {
         keyboardVerticalOffset={100}
       >
         <SubmitContainer>
-          {canSkip ? (
+          {canSkip && (
             <SkipSubmitContainer>
               <SubmitButton onPress={() => onDone()} disabled={loading}>
                 {i18n.t('payments.skipForNow')}
               </SubmitButton>
             </SkipSubmitContainer>
-          ) : (<></>)}
+          )}
           <SubmitButton
             onPress={() => handlePayPress()}
             disabled={!formReady}

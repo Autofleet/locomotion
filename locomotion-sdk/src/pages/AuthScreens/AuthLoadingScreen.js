@@ -39,9 +39,9 @@ const AuthLoadingScreen = ({ navigation }) => {
         }
 
         const userData = response;
-        let cards = null;
+        const cards = null;
         try {
-          ({cards: paymentMethods} = await usePayments.loadCustomer());
+          ({ cards: paymentMethods } = await usePayments.loadCustomer());
         } catch (e) {
           console.log(e);
         }
