@@ -14,7 +14,7 @@ import carIcon from '../../../../assets/geo_location.svg';
 
 const ICONS = {
   history: HistoryIcon,
-location: GeoIcon,
+  location: GeoIcon,
 };
 
 const DEFAULT_ICON = ICONS.history;
@@ -74,24 +74,24 @@ const AddressRow = ({ text, subText, icon }) => (
     </AddressContainer>
   </Row>
 );
-const AddressRow = ({
-  text,
-  subText,
-  icon = null,
-  border = true,
-  actionButton = false,
-}) => (
-  <Row border>
-    <IconContainer>
-      {icon ? <Icon icon={icon} /> : null}
-      {/* <SvgIcon svg={carIcon} width={30} height="30px" stroke="red" fill="green" /> */}
-    </IconContainer>
-    <AddressContainer>
-      {actionButton ? <ActionText>{text}</ActionText> : <AddressText>{text}</AddressText>}
-      {subText ? <AddressText subtext>{subText}</AddressText> : null}
-    </AddressContainer>
-  </Row>
-);
+// const AddressRow = ({
+//   text,
+//   subText,
+//   icon = null,
+//   border = true,
+//   actionButton = false,
+// }) => (
+//   <Row border>
+//     <IconContainer>
+//       {icon ? <Icon icon={icon} /> : null}
+//       {/* <SvgIcon svg={carIcon} width={30} height="30px" stroke="red" fill="green" /> */}
+//     </IconContainer>
+//     <AddressContainer>
+//       {actionButton ? <ActionText>{text}</ActionText> : <AddressText>{text}</AddressText>}
+//       {subText ? <AddressText subtext>{subText}</AddressText> : null}
+//     </AddressContainer>
+//   </Row>
+// );
 
 
 export default AddressRow;

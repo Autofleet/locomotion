@@ -47,26 +47,26 @@ const Name = ({ navigation }) => {
           subText={i18n.t('onboarding.pages.name.subText')}
         />
         <InputContainer>
-        <TextInput
+          <TextInput
             placeholder={i18n.t('onboarding.firstNamePlaceholder')}
             autoFocus
             onChangeText={inputChange('firstName')}
             value={user.firstName}
             autoCapitalize="words"
             error={showErrorText && !isFirstNameValid}
-          fullBorder
+            fullBorder
           />
-          </InputContainer>
-          <InputContainer>
+        </InputContainer>
+        <InputContainer>
           <TextInput
             placeholder={i18n.t('onboarding.lastNamePlaceholder')}
             onChangeText={inputChange('lastName')}
             value={user.lastName}
             autoCapitalize="words"
             error={showErrorText && !isLastNameValid}
-          fullBorder
+            fullBorder
           />
-          </InputContainer>
+        </InputContainer>
         {showErrorText && <ErrorText>{i18n.t('onboarding.fullNameError')}</ErrorText>}
         <OnboardingNavButtons
           isInvalid={!isFirstNameValid || !isLastNameValid}

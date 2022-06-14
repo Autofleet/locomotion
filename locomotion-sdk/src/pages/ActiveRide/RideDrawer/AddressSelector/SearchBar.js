@@ -141,7 +141,7 @@ const SearchBar = ({
             onInputFocus(e.target, i);
           }}
           onBlur={onInputBlur}
-          key={`input_${i}`}
+          key={`input_${s.id}`}
         />
       </Row>
     );

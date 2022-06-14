@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react';import { View } from 'react-native';
+import React, { useContext, useEffect } from 'react'; import { View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { GeoContextContext, RidePageContextProvider } from '../../context';
 import NewRidePageContextProvider from '../../context/newRideContext';
@@ -20,10 +20,6 @@ const RidePage = ({ menuSide, mapSettings }) => {
     initGeoService();
   }, []);
 
-  useEffect(() => {
-    geo.init();
-  }, []);
-
   return (
     <>
       <PageContainer>
@@ -39,10 +35,10 @@ export default props => (
   <NewRidePageContextProvider {...props}>
     <RidePageContextProvider {...props}>
       <AvailabilityContextProvider>
-      <RidePage
-        {...props}
-      />
-    </AvailabilityContextProvider>
+        <RidePage
+          {...props}
+        />
+      </AvailabilityContextProvider>
     </RidePageContextProvider>
   </NewRidePageContextProvider>
 );

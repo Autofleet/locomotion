@@ -2,15 +2,17 @@ import React, {
   useCallback, useEffect, useMemo, useRef, useState, useContext,
 } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import BottomSheet, { useBottomSheetDynamicSnapPoints, BottomSheetView, useBottomSheet } from '@gorhom/bottom-sheet';
+import BottomSheet, {
+  useBottomSheetDynamicSnapPoints,
+  BottomSheetView,
+  useBottomSheet,
+  BottomSheetScrollView,
+} from '@gorhom/bottom-sheet';
 
 import styled from 'styled-components';
 import SafeView from '../../../../Components/SafeView';
 import TextInput from '../../../../Components/TextInput';
 import i18n from '../../../../I18n';
-import AddressRow from './AddressLine';
-import SearchBar from './SearchBar';
-
 import AddressRow from './AddressLine';
 import SearchBar from './SearchBar';
 import { RidePageContext } from '../../../../context/newRideContext';
