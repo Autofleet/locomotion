@@ -1,3 +1,4 @@
+// eslint-disable-next-line import/no-extraneous-dependencies
 import { point, polygon, booleanPointInPolygon } from '@turf/turf';
 import Mixpanel from '../../services/Mixpanel';
 
