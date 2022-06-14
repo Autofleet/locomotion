@@ -27,10 +27,7 @@ export default ({ navigation, menuSide }) => {
   };
 
   const loadCustomerData = async () => {
-    const customer = await usePayments.loadCustomer();
-    if (customer) {
-      await usePayments.getPaymentMethods();
-    }
+    await usePayments.getOrFetchCustomer();
     setPageLoading(false);
   };
 
@@ -41,7 +38,7 @@ export default ({ navigation, menuSide }) => {
   const detachCard = async () => {
     setLoading(true);
     await usePayments.detachPaymentMethod(methodForDelete);
-    await usePayments.getPaymentMethods();
+    await usePayments.loadCustomer();
     setLoading(false);
     togglePopup('removeCard', false);
   };
