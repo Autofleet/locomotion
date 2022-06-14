@@ -8,13 +8,16 @@ import i18n from '../../../../I18n';
 import SvgIcon from '../../../../Components/SvgIcon';
 
 
-import HistoryIcon from '../../../../assets/history.png';
-import GeoIcon from '../../../../assets/geo_location.png';
-import carIcon from '../../../../assets/geo_location.svg';
+import HistoryIcon from '../../../../assets/recent_search.svg';
+//import GeoIcon from '../../../../assets/geo_location.png';
+import GeoIcon from '../../../../assets/geo_location.svg';
+import LocationPinIcon from '../../../../assets/location_pin.svg';
+
 
 const ICONS = {
   history: HistoryIcon,
   location: GeoIcon,
+  locationPin: LocationPinIcon
 };
 
 const DEFAULT_ICON = ICONS.history;
@@ -38,9 +41,12 @@ const IconContainer = styled.View`
     margin-right: 15px;
 `;
 
-const Icon = styled.Image.attrs(({ icon }) => ({ source: ICONS[icon] || DEFAULT_ICON }))`
-  width: 25px;
-  height: 25px;
+const Icon = styled(SvgIcon).attrs(({ actionButton, theme }) => ({
+  stroke: actionButton ? theme.primaryColor : theme.textColor,
+  fill: actionButton ? theme.primaryColor : theme.textColor
+}))`
+  width: 20px;
+  height: 20px;
 `;
 
 const AddressContainer = styled.View`
@@ -63,35 +69,23 @@ const ActionText = styled.Text`
     line-height: 20px;
 `;
 
-const AddressRow = ({ text, subText, icon }) => (
-  <Row>
-    <IconContainer>
-      <Icon icon={icon} />
-    </IconContainer>
-    <AddressContainer>
-      <AddressText>{text}</AddressText>
-      <AddressText subtext>{subText}</AddressText>
-    </AddressContainer>
-  </Row>
-);
-// const AddressRow = ({
-//   text,
-//   subText,
-//   icon = null,
-//   border = true,
-//   actionButton = false,
-// }) => (
-//   <Row border>
-//     <IconContainer>
-//       {icon ? <Icon icon={icon} /> : null}
-//       {/* <SvgIcon svg={carIcon} width={30} height="30px" stroke="red" fill="green" /> */}
-//     </IconContainer>
-//     <AddressContainer>
-//       {actionButton ? <ActionText>{text}</ActionText> : <AddressText>{text}</AddressText>}
-//       {subText ? <AddressText subtext>{subText}</AddressText> : null}
-//     </AddressContainer>
-//   </Row>
-// );
+ const AddressRow = ({
+   text,
+   subText,
+   icon = null,
+   border = true,
+   actionButton = false,
+ }) => (
+   <Row border>
+     <IconContainer>
+      <Icon svg={ICONS[icon]} actionButton={actionButton} />
+     </IconContainer>
+     <AddressContainer>
+       {actionButton ? <ActionText>{text}</ActionText> : <AddressText>{text}</AddressText>}
+       {subText ? <AddressText subtext>{subText}</AddressText> : null}
+     </AddressContainer>
+   </Row>
+ );
 
 
 export default AddressRow;

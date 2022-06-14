@@ -16,18 +16,13 @@ import i18n from '../../../../I18n';
 import AddressRow from './AddressLine';
 import SearchBar from './SearchBar';
 import { RidePageContext } from '../../../../context/newRideContext';
+import {BottomSheetContext} from '../../../../context/bottomSheetContext';
 
 const Container = styled(BottomSheetView)`
   flex: 1;
 `;
 
-const ContentContainer = styled(BottomSheetView)`
-  align-items: center;
-  flex-direction: column;
-  padding: 0px 30px 20px 30px;
-  width: 100%;
 
-`;
 
 const InputContainer = styled.View`
   width: 100%;
@@ -71,16 +66,19 @@ const historyText = [
     lng: 34.555,
   },
 ];
-const AddressSelectorBottomSheet = () => {
-  const [isExpanded, setIsExpanded] = useState(false);
+const AddressSelectorBottomSheet = ({bottomSheetRef}) => {
+  //const [isExpanded, setIsExpanded] = useState(false);
   const [contentHeight, setContentHeight] = useState('33%');
   const [historyResults, setHistoryResults] = useState(historyText);
   const [resultsList, setResultsList] = useState([]);
-  const bottomSheetRef = useRef(null);
+  //const bottomSheetRef = useRef(null);
   const userContext = useContext(RidePageContext);
-  const snapPoints = useMemo(() => ['CONTENT_HEIGHT', '100%'], []);
 
   const {
+    isExpanded
+  } = useContext(BottomSheetContext);
+
+/*   const {
     animatedHandleHeight,
     animatedSnapPoints,
     animatedContentHeight,
@@ -90,7 +88,7 @@ const AddressSelectorBottomSheet = () => {
   const handleSheetChanges = useCallback((index) => {
     const newIsExpanded = index === (animatedSnapPoints.value.length - 1);
     setIsExpanded(newIsExpanded);
-  }, []);
+  }, []); */
 
   const onSearchFocus = () => {
     bottomSheetRef.current.expand();
@@ -103,11 +101,6 @@ const AddressSelectorBottomSheet = () => {
   useEffect(() => {
     console.log('isExpanded', isExpanded);
   }, [isExpanded]);
-
-
-  useEffect(() => {
-    console.log('animatedContentHeight', animatedContentHeight);
-  }, [animatedContentHeight]);
 
 
   useEffect(() => {
@@ -141,10 +134,11 @@ const AddressSelectorBottomSheet = () => {
       contentHeight={animatedContentHeight}
     > */
 
-    <SafeView>
-      <ContentContainer
+    /*<SafeView>
+       <ContentContainer
         onLayout={handleContentLayout}
-      >
+      > */
+      <>
         <InputContainer>
           <SearchBar
             onFocus={onSearchFocus}
@@ -160,6 +154,12 @@ const AddressSelectorBottomSheet = () => {
             icon="location"
             actionButton
           />
+          <AddressRow
+            border={false}
+            text={i18n.t('addressView.setLocationOnMap')}
+            icon="locationPin"
+            actionButton
+          />
           <BottomSheetScrollView onLayout={(event) => {
             if (event.nativeEvent.layout.height > 0) {
               setContentHeight(event.nativeEvent.layout.height);
@@ -169,8 +169,9 @@ const AddressSelectorBottomSheet = () => {
             {resultsList.map(h => <AddressRow {...h} />)}
           </BottomSheetScrollView>
         </HistoryContainer>
-      </ContentContainer>
-    </SafeView>
+        </>
+/*       </ContentContainer>
+    </SafeView> */
 
   /* </BottomSheet> */
   );

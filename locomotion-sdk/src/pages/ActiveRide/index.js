@@ -1,7 +1,8 @@
-import React, { useContext, useEffect } from 'react'; import { View } from 'react-native';
+import React, { useContext, useEffect,useRef } from 'react'; import { View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { GeoContextContext, RidePageContextProvider } from '../../context';
 import NewRidePageContextProvider from '../../context/newRideContext';
+import BottomSheetContextProvider from '../../context/bottomSheetContext';
 import {
   PageContainer,
 } from './styled';
@@ -14,7 +15,9 @@ import AddressSelector from './RideDrawer/AddressSelector';
 const RidePage = ({ menuSide, mapSettings }) => {
   const { initGeoService } = useContext(GeoContextContext);
   const navigation = useNavigation();
-  const mapRef = React.useRef();
+  const mapRef = useRef();
+  const  bottomSheetRef = useRef(null);
+  //const [isExpanded, setIsExpanded] = useState(false);
 
   useEffect(() => {
     initGeoService();
@@ -25,20 +28,27 @@ const RidePage = ({ menuSide, mapSettings }) => {
       <PageContainer>
         <MainMap ref={mapRef} mapSettings={mapSettings} />
         <Header navigation={navigation} menuSide={menuSide} />
-        <BottomSheet />
+        <BottomSheet
+          ref={bottomSheetRef}
+    //      setIsExpanded={setIsExpanded}
+        >
+          <AddressSelector bottomSheetRef={bottomSheetRef} ></AddressSelector>
+        </BottomSheet>
       </PageContainer>
     </>
   );
 };
 
 export default props => (
-  <NewRidePageContextProvider {...props}>
-    <RidePageContextProvider {...props}>
-      <AvailabilityContextProvider>
-        <RidePage
-          {...props}
-        />
-      </AvailabilityContextProvider>
-    </RidePageContextProvider>
-  </NewRidePageContextProvider>
+  <BottomSheetContextProvider {...props}>
+    <NewRidePageContextProvider {...props}>
+      <RidePageContextProvider {...props}>
+        <AvailabilityContextProvider>
+          <RidePage
+            {...props}
+            />
+        </AvailabilityContextProvider>
+      </RidePageContextProvider>
+    </NewRidePageContextProvider>
+  </BottomSheetContextProvider>
 );
