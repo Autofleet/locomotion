@@ -7,12 +7,13 @@ import moment from 'moment';
 import Config from 'react-native-config';
 
 import { getPosition } from '../../services/geo';
-import { getTogglePopupsState } from '../../context/state';
+import { getTogglePopupsState } from '../state';
 import UserService from '../../services/user';
+
 import OneSignal from '../../services/one-signal';
-import settingsContext from '../../context/settings';
+import settingsContext from '../settings';
 import Mixpanel from '../../services/Mixpanel';
-import { getStationsApi } from '../../context/places/api';
+import { getStationsApi, getPlacesByLocation } from '../places/api';
 import {
   cancelFutureRideApi,
   cancelRideApi,
@@ -22,7 +23,7 @@ import {
   getPreRideDetails,
   getRideSummary,
   sendRating,
-} from '../../context/rides/api';
+} from '../rides/api';
 
 const STATION_AUTOREFRESH_INTERVAL = 60000;
 
@@ -52,6 +53,93 @@ const RidePageContextProvider = ({ navigation, children }) => {
   const route = useRoute();
   const useSettings = settingsContext.useContainer();
 
+  const [requestStopPoints, setRequestStopPoints] = useState([]);
+  const [coords, setCoords] = useState();
+
+
+  useEffect(() => {
+    if (requestStopPoints.length === 0) {
+      const sps = [{
+        type: 'pickup',
+        location: null,
+        useDefaultLocation: true,
+      },
+      {
+        type: 'dropoff',
+        location: null,
+        useDefaultLocation: false,
+      }];
+      setRequestStopPoints(sps);
+    }
+  }, []);
+
+
+  const loadAddress = async (input) => {
+    console.log('loadAddress', input);
+
+    let location = null;
+    try {
+      location = { lat: coords.latitude, lng: coords.longitude };
+      const data = await getPlacesByLocation({
+        input,
+        location,
+      });
+      console.log('data', data);
+
+      return data;
+    } catch (error) {
+      console.log('Got error while try to get places', error);
+      return undefined;
+    }
+  };
+
+
+  useEffect(() => {
+    initCurrentLocation();
+  }, []);
+
+  const initCurrentLocation = async () => {
+    const location = await getPosition();
+    if (location) {
+      setCoords(location.coords);
+    }
+  };
+
+  /*   const enrichPlaceWithLocation = async (place) => {
+    const data = await getLocation({
+      placeId: place.placeid || place.place_id,
+    });
+    place = { ...place, ...data };
+    return place;
+  }; */
+
+  /*   const setPlace = async (place) => {
+    if (!place.lat && (place.placeid || place.place_id)) {
+      place = await enrichPlaceWithLocation(place);
+    }
+    if (Config.DONT_USE_STATIONS || place.station) {
+      if (props.onLocationSelect) {
+        props.onLocationSelect({
+          ...place,
+          type: addressListItems.type,
+        });
+      }
+      setAddressListItems({
+        type: addressListItems.type,
+        list: [],
+      });
+    } else {
+      setAddressListItems({
+        type: addressListItems.type,
+        list: [],
+      });
+      setSearchValue(place.description, props.type, true, place);
+    }
+  }; */
+
+  // Old
+
+
   const [disableAutoLocationFocus, setDisableAutoLocationFocus] = useState(false);
   const [activeRideState, setActiveRide] = useState(null);
   const [activeSpState, setActiveSp] = useState(null);
@@ -61,11 +149,6 @@ const RidePageContextProvider = ({ navigation, children }) => {
   const [preRideDetails, setPreRideDetails] = useState({});
   const [numberOfPassengers, setNumberOfPassengers] = useState(1);
   const [, togglePopup] = getTogglePopupsState();
-  const [requestStopPoints, setRequestStopPoints] = useState({
-    openEdit: false,
-    selectedType: 'pickup',
-    scheduledTo: null,
-  });
   const [rideType, setRideType] = useState('pool');
   const [rideOffer, setRideOffer] = useState(null);
   const [offerExpired, setOfferExpired] = useState(false);
@@ -123,7 +206,7 @@ const RidePageContextProvider = ({ navigation, children }) => {
         // pickup failed -> show ride canceled
         togglePopup('rideCancel', true);
       }
-      getStations();
+      // getStations();
       setActiveSp(null);
       setActiveRide(null);
     }
@@ -133,19 +216,19 @@ const RidePageContextProvider = ({ navigation, children }) => {
     loadActiveRide();
   }, 5000);
 
-  if (Config.STATIONS_REFRESH_RATE) {
+  /*   if (Config.STATIONS_REFRESH_RATE) {
     useInterval(() => {
       if (!rideOffer && (!requestStopPoints.pickup || !requestStopPoints.dropoff)) {
         getStations();
       }
     }, Config.STATIONS_REFRESH_RATE * 60000);
-  }
+  } */
 
   useInterval(() => {
     UserService.getUser(navigation);
   }, 10000);
 
-  useEffect(() => {
+  /*   useEffect(() => {
     Mixpanel.pageView(route.name);
     UserService.getUser(navigation);
     getStations();
@@ -158,7 +241,7 @@ const RidePageContextProvider = ({ navigation, children }) => {
     return () => {
       stopAutoStationUpdate();
     };
-  }, []);
+  }, []); */
 
   useEffect(() => {
     if (!activeRideState) {
@@ -168,7 +251,7 @@ const RidePageContextProvider = ({ navigation, children }) => {
     calculatePickupEta(origin);
   }, [activeRideState]);
 
-  useEffect(() => {
+  /*   useEffect(() => {
     if (stations.length) {
       setClosestStations(stations[0]);
       const markersList = stations.map(station => ({
@@ -178,9 +261,9 @@ const RidePageContextProvider = ({ navigation, children }) => {
 
       setMapMarkers(markersList);
     }
-  }, [stations]);
+  }, [stations]); */
 
-  useEffect(() => {
+  /*   useEffect(() => {
     let offerTimeout;
     if (rideOffer) {
       setOfferExpired(false);
@@ -190,7 +273,7 @@ const RidePageContextProvider = ({ navigation, children }) => {
     } else {
       clearTimeout(offerTimer);
     }
-  }, [rideOffer]);
+  }, [rideOffer]); */
 
   const bookValidation = state => state && state.dropoff && state.dropoff.lat
     && state.pickup && state.pickup.lat;
@@ -223,7 +306,7 @@ const RidePageContextProvider = ({ navigation, children }) => {
   };
 
   const getStations = async () => {
-    try {
+    /*     try {
       const { coords } = await getPosition();
       if (coords.latitude && coords.longitude) {
         const { latitude: lat, longitude: lng } = coords;
@@ -235,7 +318,7 @@ const RidePageContextProvider = ({ navigation, children }) => {
       }
     } catch (e) {
       console.log('Error getting station position', e);
-    }
+    } */
   };
 
   const onLocationSelect = (location) => {
@@ -371,9 +454,13 @@ const RidePageContextProvider = ({ navigation, children }) => {
     }
   };
 
+
   return (
     <RidePageContext.Provider
       value={{
+        loadAddress,
+
+
         disableAutoLocationFocus,
         setDisableAutoLocationFocus,
         activeRideState,

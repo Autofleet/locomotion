@@ -1,18 +1,14 @@
 import React, {
-  useState, useEffect, useRef, useContext,
+  useContext, useEffect, useRef, useState,
 } from 'react';
-import {
-  StyleSheet, Platform,
-} from 'react-native';
-import MapView, { Polyline, Marker } from 'react-native-maps';
+import { Platform, StyleSheet } from 'react-native';
+import MapView, { Marker, Polygon, Polyline } from 'react-native-maps';
 import Config from 'react-native-config';
 import CheapRuler from 'cheap-ruler';
 
-import { RidePageContext } from './ridePageContext';
+import { RidePageContext, RideStateContextContext } from '../../context';
 import { getPosition } from '../../services/geo';
-import {
-  VehicleDot, MapButtonsContainer,
-} from './styled';
+import { VehicleDot } from './styled';
 import mapDarkMode from '../../assets/mapDarkMode.json';
 import { Context as ThemeContext, THEME_MOD } from '../../context/theme';
 import StationsMap from './StationsMap';
@@ -20,10 +16,10 @@ import MyLocationButton from '../../Components/ShowMyLocationButton';
 import AvailabilityContextProvider, { AvailabilityContext } from '../../context/availability';
 import AvailabilityVehicle from '../../Components/AvailabilityVehicle';
 
-export default ({
+export default React.forwardRef(({
   mapSettings,
-}) => {
-  const { isDarkMode } = useContext(ThemeContext);
+}, ref) => {
+  const { isDarkMode, primaryColor } = useContext(ThemeContext);
   const {
     availabilityVehicles,
   } = useContext(AvailabilityContext);
@@ -41,6 +37,10 @@ export default ({
     rideOffer,
     stopAutoStationUpdate,
   } = useContext(RidePageContext);
+  const {
+    territory,
+    showOutOfTerritory,
+  } = useContext(RideStateContextContext);
 
   const [mapRegion, setMapRegion] = useState({
     latitudeDelta: 0.015,
@@ -154,6 +154,11 @@ export default ({
     }
   }, [mapRegion]);
 
+
+  React.useImperativeHandle(ref, () => ({
+    focusCurrentLocation,
+  }));
+
   return (
     <>
       <MapView
@@ -228,15 +233,22 @@ export default ({
               coordinates={activeSpState.polyline}
             />
           ) : null}
+
+        {showOutOfTerritory && territory && territory.length ? territory
+          .map(t => t.polygon.coordinates.map(poly => (
+            <Polygon
+              key={`Polygon#${t.id}#${poly[1]}#${poly[0]}`}
+              strokeWidth={2}
+              strokeColor={`${primaryColor}`}
+              fillColor={`${primaryColor}40`}
+              coordinates={poly.map(p => (
+                { latitude: parseFloat(p[1]), longitude: parseFloat(p[0]) }
+              ))}
+            />
+          ))) : null}
         <VehicleMarker />
         {buildAvailabilityVehicles()}
       </MapView>
-      <MapButtonsContainer>
-        <MyLocationButton
-          onPress={() => focusCurrentLocation()}
-          displayButton
-        />
-      </MapButtonsContainer>
     </>
   );
-};
+});

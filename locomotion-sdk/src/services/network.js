@@ -70,6 +70,7 @@ class Network {
           this.axios.defaults.headers.common.Authorization = `Bearer ${accessToken}`;
         }
         this.axios.defaults.headers.common['x-loco-ds-id'] = Config.OPERATION_ID;
+        this.axios.defaults.headers.common['x-loco-op-id'] = Config.OPERATION_ID;
         return this.axios[method](...args).catch((e) => {
           if ((e.response && e.response.status === 401) || (e.response && e.response.status === 403)) {
             console.log('Got unauthorized response move to logout flow');
