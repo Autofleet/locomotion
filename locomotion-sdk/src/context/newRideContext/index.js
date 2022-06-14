@@ -25,6 +25,8 @@ import {
   sendRating,
 } from '../rides/api';
 
+import { getPlaces, getGeocode, getPlaceDetails } from './google-api';
+
 const STATION_AUTOREFRESH_INTERVAL = 60000;
 
 function useInterval(callback, delay) {
@@ -55,6 +57,9 @@ const RidePageContextProvider = ({ navigation, children }) => {
 
   const [requestStopPoints, setRequestStopPoints] = useState([]);
   const [coords, setCoords] = useState();
+  const [searchTerm, setSearchTerm] = useState(null);
+  const [selectedInputIndex, setSelectedInputIndex] = useState(null);
+  const [selectedInputTarget, setSelectedInputTarget] = useState(null);
 
 
   useEffect(() => {
@@ -79,12 +84,11 @@ const RidePageContextProvider = ({ navigation, children }) => {
 
     let location = null;
     try {
-      location = { lat: coords.latitude, lng: coords.longitude };
-      const data = await getPlacesByLocation({
+      location = `${coords.latitude},${coords.longitude}`;
+      const data = await getPlaces({
         input,
         location,
       });
-      console.log('data', data);
 
       return data;
     } catch (error) {
@@ -93,6 +97,42 @@ const RidePageContextProvider = ({ navigation, children }) => {
     }
   };
 
+  const reverseLocationGeocode = async () => {
+    try {
+      const location = `${coords.latitude},${coords.longitude}`;
+      const data = await getGeocode({
+        latlng: location,
+      });
+
+      return data;
+    } catch (error) {
+      console.log('Got error while try to get places', error);
+      return undefined;
+    }
+  };
+
+  const enrichPlaceWithLocation = async (placeId) => {
+    try {
+      const data = await getPlaceDetails(placeId);
+      return data;
+    } catch (error) {
+      console.log('Got error while try to get places', error);
+      return undefined;
+    }
+  };
+
+
+  const onAddressSelected = async (selectedItem) => {
+    reqSps[selectedInputIndex].description = selectedItem.fullText;
+    const enrichedPlace = await enrichPlaceWithLocation(selectedItem.placeId);
+    console.log('enrichedPlace', enrichedPlace);
+
+    const reqSps = [...requestStopPoints];
+    /* selectedInputIndex
+    selectedInputTarget
+    inputValues  */
+    console.log('enrichedPlace', enrichedPlace);
+  };
 
   useEffect(() => {
     initCurrentLocation();
@@ -459,8 +499,17 @@ const RidePageContextProvider = ({ navigation, children }) => {
     <RidePageContext.Provider
       value={{
         loadAddress,
-
-
+        reverseLocationGeocode,
+        enrichPlaceWithLocation,
+        searchTerm,
+        setSearchTerm,
+        selectedInputIndex,
+        setSelectedInputIndex,
+        selectedInputTarget,
+        setSelectedInputTarget,
+        onAddressSelected,
+        requestStopPoints,
+        /*
         disableAutoLocationFocus,
         setDisableAutoLocationFocus,
         activeRideState,
@@ -506,7 +555,7 @@ const RidePageContextProvider = ({ navigation, children }) => {
         openLocationSelect,
         closeAddressViewer,
         bookValidation,
-        stopAutoStationUpdate,
+        stopAutoStationUpdate, */
       }}
     >
       {children}

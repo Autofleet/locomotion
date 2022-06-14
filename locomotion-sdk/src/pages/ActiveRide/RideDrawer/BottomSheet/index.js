@@ -1,25 +1,26 @@
 import React, {
-  useCallback, useEffect, useMemo, useRef, useState, useContext,forwardRef
+  useCallback, useEffect, useMemo, useRef, useState, useContext, forwardRef,
 } from 'react';
 import BottomSheet, {
   useBottomSheetDynamicSnapPoints,
-  BottomSheetView
+  BottomSheetView,
 } from '@gorhom/bottom-sheet';
-import styled from 'styled-components'
+import styled from 'styled-components';
 import SafeView from '../../../../Components/SafeView';
-import {BottomSheetContext} from '../../../../context/bottomSheetContext';
+import { BottomSheetContext } from '../../../../context/bottomSheetContext';
 
 const ContentContainer = styled(BottomSheetView)`
   align-items: center;
   flex-direction: column;
   padding: 0px 30px 20px 30px;
   width: 100%;
+  display: flex;
 
 `;
 
-const BottomSheetComponent = forwardRef(({children}, ref) => {
+const BottomSheetComponent = forwardRef(({ children }, ref) => {
   const snapPoints = useMemo(() => ['CONTENT_HEIGHT', '100%'], []);
-  const {getSnapPoints,setSnapPointIndex} = useContext(BottomSheetContext);
+  const { getSnapPoints, setSnapPointIndex } = useContext(BottomSheetContext);
 
 
   const {
@@ -29,8 +30,8 @@ const BottomSheetComponent = forwardRef(({children}, ref) => {
     handleContentLayout,
   } = useBottomSheetDynamicSnapPoints(getSnapPoints());
 
-    const handleSheetChanges = useCallback((index) => {
-      setSnapPointIndex(index)
+  const handleSheetChanges = useCallback((index) => {
+    setSnapPointIndex(index);
   }, []);
 
 
@@ -44,13 +45,13 @@ const BottomSheetComponent = forwardRef(({children}, ref) => {
       contentHeight={animatedContentHeight}
     >
       <SafeView>
-      <ContentContainer
-        onLayout={handleContentLayout}
-      >
-      {children}
+        <ContentContainer
+          onLayout={handleContentLayout}
+        >
+          {children}
 
-      </ContentContainer>
-    </SafeView>
+        </ContentContainer>
+      </SafeView>
 
     </BottomSheet>
   );

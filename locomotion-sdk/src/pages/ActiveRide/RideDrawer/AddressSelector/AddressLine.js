@@ -9,7 +9,7 @@ import SvgIcon from '../../../../Components/SvgIcon';
 
 
 import HistoryIcon from '../../../../assets/recent_search.svg';
-//import GeoIcon from '../../../../assets/geo_location.png';
+// import GeoIcon from '../../../../assets/geo_location.png';
 import GeoIcon from '../../../../assets/geo_location.svg';
 import LocationPinIcon from '../../../../assets/location_pin.svg';
 
@@ -17,7 +17,7 @@ import LocationPinIcon from '../../../../assets/location_pin.svg';
 const ICONS = {
   history: HistoryIcon,
   location: GeoIcon,
-  locationPin: LocationPinIcon
+  locationPin: LocationPinIcon,
 };
 
 const DEFAULT_ICON = ICONS.history;
@@ -43,7 +43,7 @@ const IconContainer = styled.View`
 
 const Icon = styled(SvgIcon).attrs(({ actionButton, theme }) => ({
   stroke: actionButton ? theme.primaryColor : theme.textColor,
-  fill: actionButton ? theme.primaryColor : theme.textColor
+  fill: actionButton ? theme.primaryColor : theme.textColor,
 }))`
   width: 20px;
   height: 20px;
@@ -69,23 +69,29 @@ const ActionText = styled.Text`
     line-height: 20px;
 `;
 
- const AddressRow = ({
-   text,
-   subText,
-   icon = null,
-   border = true,
-   actionButton = false,
- }) => (
-   <Row border>
-     <IconContainer>
-      <Icon svg={ICONS[icon]} actionButton={actionButton} />
-     </IconContainer>
-     <AddressContainer>
-       {actionButton ? <ActionText>{text}</ActionText> : <AddressText>{text}</AddressText>}
-       {subText ? <AddressText subtext>{subText}</AddressText> : null}
-     </AddressContainer>
-   </Row>
- );
-
+const AddressRow = ({
+  text,
+  subText,
+  icon = null,
+  border = true,
+  actionButton = false,
+  onPress,
+}) => {
+  const finalIcon = ICONS[icon];
+  return (
+    <Row
+      border
+      onPress={onPress}
+    >
+      <IconContainer>
+        {finalIcon ? <Icon svg={finalIcon} actionButton={actionButton} /> : null}
+      </IconContainer>
+      <AddressContainer>
+        {actionButton ? <ActionText>{text}</ActionText> : <AddressText>{text}</AddressText>}
+        {subText ? <AddressText subtext>{subText}</AddressText> : null}
+      </AddressContainer>
+    </Row>
+  );
+};
 
 export default AddressRow;

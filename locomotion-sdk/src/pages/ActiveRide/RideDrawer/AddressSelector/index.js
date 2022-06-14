@@ -1,7 +1,9 @@
 import React, {
   useCallback, useEffect, useMemo, useRef, useState, useContext,
 } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import {
+  View, Text, StyleSheet, ScrollView,
+} from 'react-native';
 import BottomSheet, {
   useBottomSheetDynamicSnapPoints,
   BottomSheetView,
@@ -16,12 +18,11 @@ import i18n from '../../../../I18n';
 import AddressRow from './AddressLine';
 import SearchBar from './SearchBar';
 import { RidePageContext } from '../../../../context/newRideContext';
-import {BottomSheetContext} from '../../../../context/bottomSheetContext';
+import { BottomSheetContext } from '../../../../context/bottomSheetContext';
 
 const Container = styled(BottomSheetView)`
   flex: 1;
 `;
-
 
 
 const InputContainer = styled.View`
@@ -32,7 +33,6 @@ const InputContainer = styled.View`
 const HistoryContainer = styled(BottomSheetView)`
   margin-bottom: 10px;
   width: 100%;
-  flex: 1;
 `;
 
 
@@ -66,19 +66,26 @@ const historyText = [
     lng: 34.555,
   },
 ];
-const AddressSelectorBottomSheet = ({bottomSheetRef}) => {
-  //const [isExpanded, setIsExpanded] = useState(false);
+const AddressSelectorBottomSheet = ({ bottomSheetRef }) => {
+  // const [isExpanded, setIsExpanded] = useState(false);
   const [contentHeight, setContentHeight] = useState('33%');
-  const [historyResults, setHistoryResults] = useState(historyText);
+  const [historyResults, setHistoryResults] = useState([]);
   const [resultsList, setResultsList] = useState([]);
-  //const bottomSheetRef = useRef(null);
+  // const bottomSheetRef = useRef(null);
   const userContext = useContext(RidePageContext);
 
   const {
-    isExpanded
+    isExpanded,
   } = useContext(BottomSheetContext);
 
-/*   const {
+  const loadHistory = async () => {
+    setHistoryResults(historyText);
+  };
+
+  useEffect(() => {
+    loadHistory();
+  }, []);
+  /*   const {
     animatedHandleHeight,
     animatedSnapPoints,
     animatedContentHeight,
@@ -99,29 +106,33 @@ const AddressSelectorBottomSheet = ({bottomSheetRef}) => {
   };
 
   useEffect(() => {
-    console.log('isExpanded', isExpanded);
-  }, [isExpanded]);
-
-
-  useEffect(() => {
-    console.log(historyResults);
-
     setResultsList(historyResults);
   }, []);
 
   const onSearchTerm = async (searchTerm) => {
-    console.log('HEREEE');
+    console.log('onSearchTerm', searchTerm);
 
-    if (searchTerm && searchTerm !== '') {
+    if (searchTerm === null || searchTerm === '') {
+      setResultsList(historyResults);
+    } else {
       const results = await userContext.loadAddress(searchTerm);
+      console.log(results);
+
       const parsed = parseSearchResults(results);
       setResultsList(parsed);
     }
   };
 
+  const onCurrentLocation = async () => {
+    const results = await userContext.reverseLocationGeocode();
+    console.log('results', results);
+  };
+
   const parseSearchResults = results => results.map(r => ({
     text: r.structured_formatting.main_text,
     subText: r.structured_formatting.secondary_text,
+    fullText: `${r.structured_formatting.main_text},${r.structured_formatting.secondary_text}`,
+    placeId: r.place_id,
   }));
 
   return (
@@ -134,43 +145,51 @@ const AddressSelectorBottomSheet = ({bottomSheetRef}) => {
       contentHeight={animatedContentHeight}
     > */
 
-    /*<SafeView>
+    /* <SafeView>
        <ContentContainer
         onLayout={handleContentLayout}
       > */
-      <>
-        <InputContainer>
-          <SearchBar
-            onFocus={onSearchFocus}
-            isExpanded={isExpanded}
-            onBack={onBack}
-            onSearch={onSearchTerm}
-          />
-        </InputContainer>
-        <HistoryContainer>
-          <AddressRow
-            border={false}
-            text={i18n.t('addressView.currentLocation')}
-            icon="location"
-            actionButton
-          />
-          <AddressRow
-            border={false}
-            text={i18n.t('addressView.setLocationOnMap')}
-            icon="locationPin"
-            actionButton
-          />
-          <BottomSheetScrollView onLayout={(event) => {
+    <>
+      <InputContainer>
+        <SearchBar
+          onFocus={onSearchFocus}
+          isExpanded={isExpanded}
+          onBack={onBack}
+          onSearch={onSearchTerm}
+        />
+      </InputContainer>
+      <HistoryContainer>
+        {isExpanded
+          ? (
+            <>
+              <AddressRow
+                border={false}
+                text={i18n.t('addressView.currentLocation')}
+                icon="location"
+                actionButton
+                onPress={onCurrentLocation}
+              />
+              <AddressRow
+                border={false}
+                text={i18n.t('addressView.setLocationOnMap')}
+                icon="locationPin"
+                actionButton
+              />
+            </>
+          )
+          : null}
+        <View
+          onLayout={(event) => {
             if (event.nativeEvent.layout.height > 0) {
               setContentHeight(event.nativeEvent.layout.height);
             }
           }}
-          >
-            {resultsList.map(h => <AddressRow {...h} />)}
-          </BottomSheetScrollView>
-        </HistoryContainer>
-        </>
-/*       </ContentContainer>
+        >
+          {resultsList.map(h => <AddressRow {...h} onPress={() => userContext.onAddressSelected(h)} />)}
+        </View>
+      </HistoryContainer>
+    </>
+  /*       </ContentContainer>
     </SafeView> */
 
   /* </BottomSheet> */

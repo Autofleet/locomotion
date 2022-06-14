@@ -1,4 +1,4 @@
-import React, { useContext, useEffect,useRef } from 'react'; import { View } from 'react-native';
+import React, { useContext, useEffect, useRef } from 'react'; import { View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { GeoContextContext, RidePageContextProvider } from '../../context';
 import NewRidePageContextProvider from '../../context/newRideContext';
@@ -16,8 +16,8 @@ const RidePage = ({ menuSide, mapSettings }) => {
   const { initGeoService } = useContext(GeoContextContext);
   const navigation = useNavigation();
   const mapRef = useRef();
-  const  bottomSheetRef = useRef(null);
-  //const [isExpanded, setIsExpanded] = useState(false);
+  const bottomSheetRef = useRef(null);
+  // const [isExpanded, setIsExpanded] = useState(false);
 
   useEffect(() => {
     initGeoService();
@@ -32,7 +32,7 @@ const RidePage = ({ menuSide, mapSettings }) => {
           ref={bottomSheetRef}
     //      setIsExpanded={setIsExpanded}
         >
-          <AddressSelector bottomSheetRef={bottomSheetRef} ></AddressSelector>
+          <AddressSelector bottomSheetRef={bottomSheetRef} />
         </BottomSheet>
       </PageContainer>
     </>
@@ -46,7 +46,7 @@ export default props => (
         <AvailabilityContextProvider>
           <RidePage
             {...props}
-            />
+          />
         </AvailabilityContextProvider>
       </RidePageContextProvider>
     </NewRidePageContextProvider>

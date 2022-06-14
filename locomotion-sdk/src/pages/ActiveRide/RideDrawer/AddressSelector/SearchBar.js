@@ -71,28 +71,24 @@ const SearchBar = ({
   onBack,
   onSearch,
 }) => {
-  const [searchTerm, setSearchTerm] = useState(null);
-  const [selectedInputIndex, setSelectedInputIndex] = useState(null);
-  const [selectedInputTarget, setSelectedInputTarget] = useState(null);
-  const [inputValues, setInputValues] = useState([]);
+  const {
+    searchTerm,
+    setSearchTerm,
+    selectedInputIndex,
+    setSelectedInputIndex,
+    selectedInputTarget,
+    setSelectedInputTarget,
+    requestStopPoints,
+  } = useContext(RidePageContext);
 
   const pickupRef = useRef(null);
 
   const debouncedSearch = React.useRef(
     debounce(async (text, i) => {
-      const newValues = [...inputValues];
-      newValues[i] = text;
       setSearchTerm(text);
-      setInputValues(newValues);
     }, 300),
   ).current;
 
-
-  const userContext = useContext(RidePageContext);
-
-  useEffect(() => {
-    console.log(userContext.requestStopPoints);
-  }, [userContext.requestStopPoints]);
 
   const getSpPlaceholder = (sp) => {
     if (!isExpanded || !sp.useDefaultLocation) {
@@ -113,19 +109,11 @@ const SearchBar = ({
   };
 
   useEffect(() => {
-    console.log('searchTerm', searchTerm);
     onSearch(searchTerm);
-    /*     if (searchTerm && requestStopPoints[selectedInputIndex]) {
-      console.log('innnn');
-
-      const currentSps = requestStopPoints;
-      currentSps[selectedInputIndex].description = searchTerm;
-      setRequestStopPoints(currentSps);
-    } */
   }, [searchTerm]);
 
 
-  const buildSps = () => userContext.requestStopPoints.map((s, i) => {
+  const buildSps = () => requestStopPoints.map((s, i) => {
     const placeholder = getSpPlaceholder(s);
     const rowProps = i === 0 ? {} : { isExpanded, margin: true };
 
@@ -135,7 +123,7 @@ const SearchBar = ({
           placeholder={i18n.t(placeholder)}
           onChangeText={text => debouncedSearch(text, i)}
           fullBorder
-          value={userContext.requestStopPoints[i].description}
+          value={requestStopPoints[i].description}
           placeholderTextColor="#929395"
           onFocus={(e) => {
             onInputFocus(e.target, i);
