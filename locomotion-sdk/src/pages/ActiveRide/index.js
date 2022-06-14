@@ -1,27 +1,23 @@
-import React, {
-  useEffect,
-} from 'react';
+import React, { useContext, useEffect } from 'react'; import { View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-
-import geo from '../../services/geo';
-import RidePageContextProvider from '../../context/ridePageContext';
+import { GeoContextContext, RidePageContextProvider } from '../../context';
+import NewRidePageContextProvider from '../../context/newRideContext';
 import {
   PageContainer,
 } from './styled';
 import Header from '../../Components/Header';
-import RideDrawer from './NewRideDrawer';
 import MainMap from './map';
-import RideSummaryPopup from '../../popups/RideSummaryPopup';
-import FutureRideCanceledPopup from '../../popups/FutureRideCanceled';
 import AvailabilityContextProvider from '../../context/availability';
-import BottomSheet from './RideDrawer/AddressSelector';
-
+import BottomSheet from './RideDrawer/BottomSheet';
+import AddressSelector from './RideDrawer/AddressSelector';
 
 const RidePage = ({ menuSide, mapSettings }) => {
+  const { initGeoService } = useContext(GeoContextContext);
   const navigation = useNavigation();
   const mapRef = React.useRef();
+
   useEffect(() => {
-    geo.init();
+    initGeoService();
   }, []);
 
   return (
@@ -29,19 +25,6 @@ const RidePage = ({ menuSide, mapSettings }) => {
       <PageContainer>
         <MainMap ref={mapRef} mapSettings={mapSettings} />
         <Header navigation={navigation} menuSide={menuSide} />
-        {/*       <RideDrawer
-        navigation={navigation}
-        focusCurrentLocation={() => {
-          if (mapRef && mapRef.current) {
-            mapRef.current.focusCurrentLocation();
-          }
-        }}
-        />
-        <RideSummaryPopup />
-        <FutureRideCanceledPopup
-        onClose={() => {
-        }}
-      /> */}
         <BottomSheet />
       </PageContainer>
     </>
@@ -49,11 +32,13 @@ const RidePage = ({ menuSide, mapSettings }) => {
 };
 
 export default props => (
-  <RidePageContextProvider {...props}>
-    <AvailabilityContextProvider>
-      <RidePage
-        {...props}
-      />
-    </AvailabilityContextProvider>
-  </RidePageContextProvider>
+  <NewRidePageContextProvider {...props}>
+    <RidePageContextProvider {...props}>
+      <AvailabilityContextProvider>
+        <RidePage
+          {...props}
+        />
+      </AvailabilityContextProvider>
+    </RidePageContextProvider>
+  </NewRidePageContextProvider>
 );

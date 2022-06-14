@@ -24,4 +24,8 @@ export default class RideApi extends BaseApi {
   rating(id, options) {
     return this.network.put(`/api/v1/rides/${id}`, options);
   }
+
+  getTerritories() {
+    return this.network.get(`/api/v1/business-models/${process.env.BUSINESS_MODEL_ID}/territories`);
+  }
 }
