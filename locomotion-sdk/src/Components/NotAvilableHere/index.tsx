@@ -25,7 +25,7 @@ const MainContent = styled(View)`
   padding-bottom: 20px;
 `;
 
-const CardText = styled.view`
+const CardText = styled(View)`
   flex: 3;
 `;
 
@@ -50,7 +50,7 @@ const ButtonTitle = styled(Text)`
   `};
 `;
 
-export default () => (
+export default ({ onSetAnotherLocation } : { onSetAnotherLocation: any }) => (
   <Container>
     <MainContent>
       <CardText>
@@ -59,7 +59,7 @@ export default () => (
       </CardText>
       <CardImage />
     </MainContent>
-    <OtherButton>
+    <OtherButton onPress={onSetAnotherLocation}>
       <ButtonTitle>Set another pickup location</ButtonTitle>
     </OtherButton>
   </Container>

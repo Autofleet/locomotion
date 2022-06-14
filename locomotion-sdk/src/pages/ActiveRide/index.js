@@ -1,6 +1,7 @@
 import React, { useContext, useEffect } from 'react'; import { View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { GeoContextContext, RidePageContextProvider } from '../../context';
+import NotAvilableHere from '../../Components/NotAvilableHere';
+import { RideStateContextContext, RidePageContextProvider } from '../../context';
 import NewRidePageContextProvider from '../../context/newRideContext';
 import {
   PageContainer,
@@ -9,10 +10,9 @@ import Header from '../../Components/Header';
 import MainMap from './map';
 import AvailabilityContextProvider from '../../context/availability';
 import BottomSheet from './RideDrawer/BottomSheet';
-import AddressSelector from './RideDrawer/AddressSelector';
 
 const RidePage = ({ menuSide, mapSettings }) => {
-  const { initGeoService } = useContext(GeoContextContext);
+  const { initGeoService, showOutOfTerritory } = useContext(RideStateContextContext);
   const navigation = useNavigation();
   const mapRef = React.useRef();
 
@@ -25,7 +25,15 @@ const RidePage = ({ menuSide, mapSettings }) => {
       <PageContainer>
         <MainMap ref={mapRef} mapSettings={mapSettings} />
         <Header navigation={navigation} menuSide={menuSide} />
-        <BottomSheet />
+        <BottomSheet>
+          {showOutOfTerritory ? (
+            <NotAvilableHere onSetAnotherLocation={() => ({})} />
+          ) : (
+            <>
+
+            </>
+          )}
+        </BottomSheet>
       </PageContainer>
     </>
   );
