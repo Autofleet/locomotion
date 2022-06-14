@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { FONT_STYLES } from '../../../../services/sharedStyles';
+import { FONT_SIZES, FONT_WEIGHTS } from '../../../../context/theme';
 
 export const WelcomeText = styled.Text`
 font-size: 35px;
@@ -8,7 +8,8 @@ margin: 10px 0;
 text-align: center;
 `;
 export const WelcomeSubText = styled.Text`
-font-size: ${FONT_STYLES.SIZE.MEDIUM};
+${FONT_SIZES.LARGE};
+${FONT_WEIGHTS.REGULAR};
 margin: 10px 0;
 text-align: center;
 opacity: .6;

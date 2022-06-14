@@ -1,6 +1,7 @@
 {
     "rideDetails": {
-        "timeUntilArrival": "In {{minutes}} min"
+        "timeUntilArrival": "In {{minutes}} min",
+        "unavailable": "Not available"
     },
     "general": {
         "back": "Back",

@@ -6,12 +6,17 @@ import { ServiceOptionsContainer } from "./styles";
 
 export interface ServiceDetailsInterface {
     name: string;
-    eta: Moment;
-    price: string;
-    availableSeats: number;
+    eta?: Moment;
+    price?: string;
+    availableSeats?: number;
     tag?: string;
     iconUrl: ImageURISource;
     description?: string;
+}
+
+export const TAG_OPTIONS = {
+    FASTEST: 'Fastest',
+    CHEAPEST: 'Cheapest'
 }
 
 const serviceOptions: ServiceDetailsInterface[] = [
@@ -20,21 +25,23 @@ const serviceOptions: ServiceDetailsInterface[] = [
         eta: moment(Date.now()).add(30, 'm'),
         price: '$32.30',
         availableSeats: 4,
-        tag: 'fastest',
+        tag: TAG_OPTIONS.FASTEST,
         iconUrl: 'https://res.cloudinary.com/autofleet/image/upload/w_700,h_500,c_thumb,q_auto/vehicle-images/Minivan/minivan_green.png',
-        description: "this is a description for a service"
+        description: "this is a description for a service",
+        
     },
     {
         name: 'Premium',
-        eta: moment(Date.now()).add(30, 'm'),
-        price: '$32.30',
+        eta: moment(Date.now()).add(15, 'm'),
+        // price: '$32.30',
         availableSeats: 4,
         iconUrl: 'https://res.cloudinary.com/autofleet/image/upload/w_700,h_500,c_thumb,q_auto/vehicle-images/Minivan/minivan_green.png',
         description: "this is a description for a service"
     },
     {
         name: 'Premium',
-        eta: moment(Date.now()).add(30, 'm'),
+        tag: TAG_OPTIONS.CHEAPEST,
+        eta: moment(Date.now()).add(10, 'm'),
         price: '$32.30',
         availableSeats: 4,
         iconUrl: 'https://res.cloudinary.com/autofleet/image/upload/w_700,h_500,c_thumb,q_auto/vehicle-images/Minivan/minivan_green.png',
@@ -45,7 +52,7 @@ const ServiceOptions = () => {
     <ServiceOptionsContainer>
         <>
         {serviceOptions.map((option) => {
-            return <ServiceCard service={option} selected={true} />
+            return <ServiceCard service={option} selected={false} />
         })}
         </>
     </ServiceOptionsContainer>

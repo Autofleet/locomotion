@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { FONT_STYLES } from '../../../../services/sharedStyles';
+import { FONT_SIZES, FONT_WEIGHTS } from '../../../../context/theme';
 import Button from '../../../../Components/Button';
 
 export const NavButton = styled(Button)`
@@ -13,5 +13,6 @@ margin-top: 40px;
 export const ButtonText = styled.Text`
   margin: auto;
   color: ${({ theme }) => theme.primaryButtonTextColor};
-  font-size: ${FONT_STYLES.SIZE.LARGE};
+  ${FONT_SIZES.H3};
+  ${FONT_WEIGHTS.REGULAR};
 `;

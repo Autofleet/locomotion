@@ -1,6 +1,7 @@
 import { SafeAreaView } from 'react-native';
 import styled from 'styled-components';
 import Button from '../Button';
+import { FONT_SIZES, FONT_WEIGHTS } from '../../context/theme';
 
 export const DrawerIcon = styled.Image`
   width: 23px;
@@ -13,8 +14,8 @@ export const LabelText = styled.Text`
   color: ${({ theme }) => theme.textColor};
   height: 30px;
   line-height: 30px;
-  font-size: 18px;
-  font-weight: ${({ focused }) => (focused ? '700' : '400')};
+  ${FONT_SIZES.H2}
+  ${({ focused }) => (focused ? FONT_WEIGHTS.SEMI_BOLD : FONT_WEIGHTS.REGULAR)};
 `;
 
 export const StyledSafeAreaView = styled(SafeAreaView)`
@@ -46,7 +47,8 @@ export const BaseHeaderText = styled.Text`
 
 export const HeaderText = styled(BaseHeaderText)`
   color: ${({ theme }) => theme.primaryColor};
-  font-size: 14px;
+  ${FONT_SIZES.LARGE}
+  ${FONT_WEIGHTS.REGULAR}
 `;
 
 export const HeaderMainText = styled(BaseHeaderText)`

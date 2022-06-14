@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import Button from '../Button';
 
-export const IconContainer = styled(Button)`
+export const IconContainer = styled.TouchableOpacity`
     margin: ${({ margin }) => (margin ? `${margin}` : '0')};
     width: ${({ width }) => (width ? `${width}` : '16px')};
     height: ${({ height }) => (height ? `${height}` : '16px')};

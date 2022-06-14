@@ -3,6 +3,12 @@ import { initReactI18next } from 'react-i18next';
 
 import en from './en.json';
 
+const ns: any = ['translation'];
+const defaultNS: any = 'translation';
+const interpolation: any = {
+  escapeValue: false, // not needed for react
+};
+
 i18n
   .use(initReactI18next)
   .init({
@@ -11,11 +17,9 @@ i18n
       en: {
         translation: en,
       },
-      ns: ['translation'],
-      defaultNS: 'translation',
-      interpolation: {
-        escapeValue: false, // not needed for react
-      },
+      ns,
+      defaultNS,
+      interpolation,
     },
   });
 

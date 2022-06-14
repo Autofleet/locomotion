@@ -1,13 +1,12 @@
+import Button from '../../../../../../Components/Button';
 import styled from 'styled-components/native';
+import { FONT_SIZES, FONT_WEIGHTS } from '../../../../../../context/theme';
 
-type ThemeProp = {
-    theme: any;
-}
 type CardContainerProps = {
     selected: boolean;
     theme: any;
 }
-export const CardContainer = styled.View<CardContainerProps>`
+export const CardContainer = styled(Button)<CardContainerProps>`
 width: 100%;
 height: 70px;
 border-radius: 8px;
@@ -17,17 +16,28 @@ flex-direction: row;
 padding: 5px;
 `;
 
-export const CarIcon = styled.Image`
+export const CarContainer = styled.View`
 width: 20%;
+height: 100%;
+padding: 5px;
+`;
+
+export const CarIcon = styled.Image`
+width: 100%;
 height: 100%;
 `;
 
-export const ServiceDetails = styled.View`
+type ServiceDetailsProps = {
+    unavailable: boolean;
+}
+
+export const ServiceDetails = styled.View<ServiceDetailsProps>`
 width: 80%;
 height: 100%;
 display: flex;
 flex-direction: column;
 justify-content: center;
+opacity: ${({unavailable}) => unavailable ? .4 : 1};
 `
 
 export const TopRow = styled.View`
@@ -44,27 +54,17 @@ flex-direction: row;
 justify-content: space-between;
 align-items: center;
 width: 100%;
-height: 15px;
+height: 16px;
 `
 
 export const Title = styled.Text`
-font-size: 20px;
-`
-
-export const Tag = styled.View<ThemeProp>`
-background-color: ${({theme}) => theme.primaryColor};
-border-radius: 8px;
-padding: 2px 8px;
-`
-
-export const TagText = styled.Text<ThemeProp>`
-font-size: 12px;
-color: white;
+${FONT_SIZES.H3};
+${FONT_WEIGHTS.MEDIUM};
 `
 
 export const Price = styled.Text`
-font-size: 20px;
-
+${FONT_SIZES.LARGE};
+${FONT_WEIGHTS.MEDIUM};
 `
 
 export const TimeDetails = styled.View`
@@ -99,5 +99,6 @@ export const AvailableSeats = styled.Text`
 `
 export const Description = styled.Text`
 opacity: .5;
-font-size: 12px;
+${FONT_SIZES.MEDIUM};
+${FONT_WEIGHTS.REGULAR};
 `
