@@ -1,6 +1,7 @@
-import React, { Fragment, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { View } from 'react-native';
 import Modal from 'react-native-modal';
+import { RidePageContext } from '../../context/ridePageContext';
 import i18n from '../../I18n';
 import {
   SummaryContainer,
@@ -28,9 +29,15 @@ const durationIconSource = require('../../assets/duration.png');
 const distanceIconSource = require('../../assets/distance.png');
 const priceIconSource = require('../../assets/price.png');
 
-export default ({
-  closeAfter, onClose, rideSummaryData, onRating,
-}) => {
+export default ({ closeAfter }) => {
+  const {
+    rideSummaryData,
+    setRideSummaryData,
+    onRating,
+  } = useContext(RidePageContext);
+  const onClose = () => {
+    setRideSummaryData({});
+  };
   const [rating, setRating] = useState(false);
   const [ratingSent, setRatingSent] = useState(false);
   const [isPopupOpen, togglePopup, popupData] = getTogglePopupsState();

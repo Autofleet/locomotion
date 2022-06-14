@@ -46,8 +46,4 @@ export const VehicleDot = ({ source }) => (
 `;
  */
 export const MapButtonsContainer = styled.View`
-  position: absolute;
-  top: 25%;
-  width: 50px;
-  left: 20px;
 `;

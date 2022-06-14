@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { FONT_STYLES } from '../../../services/sharedStyles';
+import { FONT_SIZES, FONT_WEIGHTS } from '../../../context/theme';
 import Button from '../../../Components/Button';
 
 export const PageContainer = styled.View`
@@ -10,12 +10,14 @@ flex: 1;
 width: 100%;
 padding: 30px;
 `;
+
 export const ButtonsContainer = styled.View`
 display: flex;
 flex-direction: column;
 width: 100%;
 margin-bottom: 50px;
 `;
+
 export const InfoContainer = styled.View`
 flex: 1;
 width: 100%;
@@ -60,22 +62,24 @@ export const StartButton = styled(Button)`
 
 export const ButtonText = styled.Text`
   color: ${({ dark }) => (dark ? '#ffffff' : '#333333')};
-  font-size: ${FONT_STYLES.SIZE.LARGE};
+  ${FONT_SIZES.MEDIUM};
+  ${FONT_WEIGHTS.MEDIUM};
   margin: auto;
 `;
   // color: ${({ theme }) => theme.primaryButtonTextColor};
 
 export const TermsText = styled.Text`
   color: ${({ theme }) => theme.textColor};
-  font-size: ${FONT_STYLES.SIZE.SMALL};
+  ${FONT_SIZES.MEDIUM};
+  ${FONT_WEIGHTS.LIGHT};
   text-align: center;
   width: 200px;
 `;
 
 export const TermsLink = styled.Text`
-  font-size: ${FONT_STYLES.SIZE.SMALL};
+  ${FONT_SIZES.MEDIUM};
+  ${FONT_WEIGHTS.LIGHT};
   text-align: center;
-  font-weight: 500;
   color: ${({ theme }) => theme.primaryColor};
   padding: 2px;
   text-decoration: underline;

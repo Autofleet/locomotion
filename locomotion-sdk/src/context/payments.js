@@ -46,4 +46,5 @@ const usePayments = () => {
     detachPaymentMethod,
   };
 };
+
 export default createContainer(usePayments);

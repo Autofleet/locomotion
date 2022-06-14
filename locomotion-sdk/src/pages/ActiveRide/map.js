@@ -8,7 +8,7 @@ import MapView, { Polyline, Marker } from 'react-native-maps';
 import Config from 'react-native-config';
 import CheapRuler from 'cheap-ruler';
 
-import { RidePageContext } from './ridePageContext';
+import { RidePageContext } from '../../context/ridePageContext';
 import { getPosition } from '../../services/geo';
 import {
   VehicleDot, MapButtonsContainer,
@@ -17,11 +17,16 @@ import mapDarkMode from '../../assets/mapDarkMode.json';
 import { Context as ThemeContext, THEME_MOD } from '../../context/theme';
 import StationsMap from './StationsMap';
 import MyLocationButton from '../../Components/ShowMyLocationButton';
+import AvailabilityContextProvider, { AvailabilityContext } from '../../context/availability';
+import AvailabilityVehicle from '../../Components/AvailabilityVehicle';
 
-export default ({
+export default React.forwardRef(({
   mapSettings,
-}) => {
+}, ref) => {
   const { isDarkMode } = useContext(ThemeContext);
+  const {
+    availabilityVehicles,
+  } = useContext(AvailabilityContext);
   const mapInstance = useRef();
 
   const {
@@ -124,6 +129,8 @@ export default ({
     return null;
   };
 
+  const buildAvailabilityVehicles = () => availabilityVehicles.map(vehicle => <AvailabilityVehicle location={vehicle.location} id={vehicle.id} />);
+
   const initialLocation = async () => {
     try {
       const geoData = await getPosition();
@@ -146,6 +153,11 @@ export default ({
       focusCurrentLocation();
     }
   }, [mapRegion]);
+
+
+  React.useImperativeHandle(ref, () => ({
+    focusCurrentLocation,
+  }));
 
   return (
     <>
@@ -222,13 +234,8 @@ export default ({
             />
           ) : null}
         <VehicleMarker />
+        {buildAvailabilityVehicles()}
       </MapView>
-      <MapButtonsContainer>
-        <MyLocationButton
-          onPress={() => focusCurrentLocation()}
-          displayButton
-        />
-      </MapButtonsContainer>
     </>
   );
-};
+});

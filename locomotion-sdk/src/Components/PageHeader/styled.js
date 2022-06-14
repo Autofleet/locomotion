@@ -1,16 +1,16 @@
 import styled from 'styled-components';
-import { FONT_STYLES } from '../../services/sharedStyles';
+import { FONT_SIZES, FONT_WEIGHTS } from '../../context/theme';
 import Button from '../Button';
 
 const HEADER_PADDING = 15;
 export const HeaderText = styled.Text`
   color: ${({ theme }) => theme.textColor};
-  font-weight: bold;
   text-align: center;
-  font-size: 16px;
   position: absolute;
   width: 100%;
   padding: ${HEADER_PADDING}px;
+  ${FONT_SIZES.H3}
+  ${FONT_WEIGHTS.SEMI_BOLD}
 `;
 
 export const HeaderIconContainer = styled(Button)(({ side, theme }) => `
@@ -42,7 +42,7 @@ padding: ${HEADER_PADDING}px;
 `;
 
 export const SkipButtonText = styled.Text`
-color: #24aaf2;
-font-size: ${FONT_STYLES.SIZE.MEDIUM};
-font-weight: 800;
+  color: #24aaf2;
+  ${FONT_SIZES.H3}
+  ${FONT_WEIGHTS.SEMI_BOLD}
 `;
