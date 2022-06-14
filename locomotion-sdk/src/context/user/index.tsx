@@ -80,7 +80,7 @@ const UserContextProvider = ({ children }: { children: any }) => {
 
   const getCardInfo = async () => {
     try {
-      const methods = await usePayments.getPaymentMethods();
+      const methods = await usePayments.paymentMethods;
       if (methods.length) {
         return methods;
       }

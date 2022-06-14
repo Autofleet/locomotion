@@ -3,56 +3,45 @@ import { createContainer } from 'unstated-next';
 import network from '../services/network';
 
 const usePayments = () => {
-  const [customerSecret, setCustomerSecret] = useState(null);
   const [customer, setCustomer] = useState(null);
   const [paymentMethods, setPaymentMethods] = useState(null);
 
   const getCustomer = async () => {
-    const { data: clientData } = await network.get('/api/v1/me/payments/customer');
+    const { data: clientData } = await network.get('/api/v1/me/customers');
     return clientData;
   };
 
   const loadCustomer = async () => {
     const customerData = await getCustomer();
-    if (customerData.isExist) {
-      setCustomer(customerData.customer);
-      return customerData;
-    }
-    return null;
+    setCustomer(customerData);
+    setPaymentMethods(customerData.paymentMethods)
+    return customerData;
   };
 
-  const createCustomer = async () => {
-    const { data: clientData } = await network.post('/api/v1/me/payments/customer');
-    setCustomer(clientData.client);
-    return clientData;
-  };
+  // const createCustomer = async () => {
+  //   const { data: clientData } = await network.post('/api/v1/me/customers');
+  //   setCustomer(clientData);
+  //   return clientData;
+  // };
 
-  const createIntent = async () => {
-    const { data: intent } = await network.post('/api/v1/me/payments/intent');
+  const setup = async () => {
+    const { data: intent } = await network.post('/api/v1/me/customers/setup');
     console.log('createIntent', intent);
     return intent;
   };
 
-  const getPaymentMethods = async () => {
-    const { data: paymentMethodsData } = await network.get('/api/v1/me/payments/methods');
-    setPaymentMethods(paymentMethodsData);
-    return paymentMethodsData;
-  };
-
+  
   const detachPaymentMethod = async (paymentMethodId) => {
-    const { data: paymentMethodsData } = await network.post('/api/v1/me/payments/detach', { paymentMethodId });
+    const { data: paymentMethodsData } = await network.post('/api/v1/me/customers/' + paymentMethodId + '/detach');
     return paymentMethodsData;
   };
 
 
   return {
     getCustomer,
-    createCustomer,
-    customerSecret,
     customer,
     loadCustomer,
-    createIntent,
-    getPaymentMethods,
+    setup,
     paymentMethods,
     detachPaymentMethod,
   };

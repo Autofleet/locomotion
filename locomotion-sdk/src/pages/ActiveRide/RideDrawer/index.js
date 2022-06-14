@@ -81,7 +81,7 @@ const RideDrawer = ({
   const useSettings = settingsContext.useContainer();
 
   const getPaymentMethodStatus = async () => {
-    await usePayments.getPaymentMethods();
+    await usePayments.loadCustomer();
   };
   useEffect(() => {
     useSettings.getSettings();

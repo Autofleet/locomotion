@@ -26,7 +26,7 @@ export const NewCreditForm = ({ onDone, canSkip = false, PageText }) => {
     if (!usePayments.customer) {
       customerData = await usePayments.createCustomer();
     }
-    const createIntent = await usePayments.createIntent();
+    const createIntent = await usePayments.setup();
     const billingDetails = {
       email: customerData.email,
     };
@@ -42,7 +42,6 @@ export const NewCreditForm = ({ onDone, canSkip = false, PageText }) => {
       setErrorMessage(error.message);
     } else {
       await onDone();
-      await usePayments.getPaymentMethods();
     }
   };
 
