@@ -42,6 +42,12 @@ class Geo {
     this.checkPermission();
   }
 
+  initAsync = async () => {
+    await this.configure();
+    await this.requestPermission();
+    await this.checkPermission();
+  };
+
   configure = () => RNLocation.configure({
     distanceFilter: 1,
     desiredAccuracy: {
@@ -77,6 +83,7 @@ class Geo {
 
   handleLocation = (locations) => {
     const location = prepareCoords(locations);
+    console.error({ location });
     this.lastLocation = Object.assign({}, location);
     this.locationSubscription();
   };

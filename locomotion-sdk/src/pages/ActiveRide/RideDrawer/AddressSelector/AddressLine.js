@@ -9,22 +9,27 @@ import SvgIcon from '../../../../Components/SvgIcon';
 
 
 import HistoryIcon from '../../../../assets/history.png';
+import GeoIcon from '../../../../assets/geo_location.png';
+import carIcon from '../../../../assets/geo_location.svg';
 
 const ICONS = {
   history: HistoryIcon,
+  location: GeoIcon,
 };
 
 const DEFAULT_ICON = ICONS.history;
 
-const Row = styled.View`
+const Row = styled.TouchableOpacity`
     width: 100%;
     min-height: 50px;
     flex-direction: row;
     justify-content: flex-start;
     align-items: center;
-    border-bottom-color: #f1f2f6;
-    border-bottom-width: 2px;
     padding: 10px 0px;
+    ${({ border }) => border && `
+      border-bottom-color: #f1f2f6;
+      border-bottom-width: 2px;
+    `}
   `;
 
 const IconContainer = styled.View`
@@ -45,12 +50,18 @@ const AddressContainer = styled.View`
 `;
 
 const AddressText = styled.Text`
-    color: ${({ subtext }) => (!subtext ? '#333333' : '#666666')};
+    color: ${({ subtext, actionButton, theme }) => (!subtext ? (actionButton ? theme.primaryColor : theme.textColor) : '#666666')};
     font-weight: 500;
     font-size: 14px;
     line-height: 20px;
 `;
 
+const ActionText = styled.Text`
+    color: ${({ subtext, actionButton, theme }) => theme.primaryColor};
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 20px;
+`;
 
 const AddressRow = ({ text, subText, icon }) => (
   <Row>
@@ -63,5 +74,24 @@ const AddressRow = ({ text, subText, icon }) => (
     </AddressContainer>
   </Row>
 );
+// const AddressRow = ({
+//   text,
+//   subText,
+//   icon = null,
+//   border = true,
+//   actionButton = false,
+// }) => (
+//   <Row border>
+//     <IconContainer>
+//       {icon ? <Icon icon={icon} /> : null}
+//       {/* <SvgIcon svg={carIcon} width={30} height="30px" stroke="red" fill="green" /> */}
+//     </IconContainer>
+//     <AddressContainer>
+//       {actionButton ? <ActionText>{text}</ActionText> : <AddressText>{text}</AddressText>}
+//       {subText ? <AddressText subtext>{subText}</AddressText> : null}
+//     </AddressContainer>
+//   </Row>
+// );
+
 
 export default AddressRow;

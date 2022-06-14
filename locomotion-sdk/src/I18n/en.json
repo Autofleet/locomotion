@@ -157,7 +157,9 @@
         "pickupTitle": "Boarding",
         "dropoffTitle": "Exit",
         "addressPlaceholder": "Enter Address",
-        "whereTo": "Where To?"
+        "whereTo": "Where To?",
+        "currentLocation": "Current location",
+        "setLocationOnMap": "Set location on map"
     },
     "popups": {
         "photoUpload": {
