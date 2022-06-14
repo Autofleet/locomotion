@@ -6,7 +6,7 @@ import MapView, { Marker, Polygon, Polyline } from 'react-native-maps';
 import Config from 'react-native-config';
 import CheapRuler from 'cheap-ruler';
 
-import { RidePageContext, GeoContextContext } from '../../context';
+import { RidePageContext, RideStateContextContext } from '../../context';
 import { getPosition } from '../../services/geo';
 import { VehicleDot } from './styled';
 import mapDarkMode from '../../assets/mapDarkMode.json';
@@ -39,8 +39,8 @@ export default React.forwardRef(({
   } = useContext(RidePageContext);
   const {
     territory,
-    showTerritory,
-  } = useContext(GeoContextContext);
+    showOutOfTerritory,
+  } = useContext(RideStateContextContext);
 
   const [mapRegion, setMapRegion] = useState({
     latitudeDelta: 0.015,
@@ -234,7 +234,7 @@ export default React.forwardRef(({
             />
           ) : null}
 
-        {showTerritory && territory && territory.length ? territory
+        {showOutOfTerritory && territory && territory.length ? territory
           .map(t => t.polygon.coordinates.map(poly => (
             <Polygon
               key={`Polygon#${t.id}#${poly[1]}#${poly[0]}`}
