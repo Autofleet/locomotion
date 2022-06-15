@@ -15,11 +15,11 @@ const Card = () => {
   };
   return (
     <SafeView>
-      <Header title={i18n.t('onboarding.pages.code.title')} page={MAIN_ROUTES.CARD} />
+      <Header title={i18n.t('onboarding.pages.card.title')} page={MAIN_ROUTES.CARD} />
       <AddCard
         onDone={onDone}
         canSkip={false}
-        PageText={() => <ScreenText text={i18n.t('onboarding.pages.code.text')} />}
+        PageText={() => <ScreenText text={i18n.t('onboarding.pages.card.text')} />}
       />
     </SafeView>
 
