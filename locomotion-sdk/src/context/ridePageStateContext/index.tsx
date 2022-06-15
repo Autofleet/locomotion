@@ -3,14 +3,14 @@ import geo, { getPosition } from '../../services/geo';
 import { getUserTerritories } from '../user/api';
 import pointInPolygon from './pointInPolygon';
 
-interface GeoContextContextInterface {
+interface RideStateContextContextInterface {
 }
 
-export const GeoContextContext = createContext<GeoContextContextInterface | null>(null);
+export const RideStateContextContext = createContext<RideStateContextContextInterface | null>(null);
 
-const GeoContextContextProvider = ({ children }: { children: any }) => {
+const RideStateContextContextProvider = ({ children }: { children: any }) => {
   const [territory, setTerritory] = useState(null);
-  const [showTerritory, setShowTerritory] = useState<boolean | undefined>(true);
+  const [showOutOfTerritory, setShowOutOfTerritory] = useState<boolean | undefined>(false);
 
   const loadTerritory = async (checkTerritory = false) => {
     let t = territory;
@@ -21,7 +21,7 @@ const GeoContextContextProvider = ({ children }: { children: any }) => {
     if (checkTerritory) {
       const position = await getPosition();
       const isInsidePoly = await pointInPolygon(t, position);
-      setShowTerritory(!isInsidePoly);
+      setShowOutOfTerritory(!isInsidePoly);
     }
     return t;
   };
@@ -32,19 +32,19 @@ const GeoContextContextProvider = ({ children }: { children: any }) => {
   };
 
   return (
-    <GeoContextContext.Provider
+    <RideStateContextContext.Provider
       value={{
         territory,
         loadTerritory,
-        showTerritory,
-        setShowTerritory,
+        showOutOfTerritory,
+        setShowOutOfTerritory,
         initGeoService,
       }}
     >
       {children}
-    </GeoContextContext.Provider>
+    </RideStateContextContext.Provider>
   );
 };
 
 
-export default GeoContextContextProvider;
+export default RideStateContextContextProvider;
