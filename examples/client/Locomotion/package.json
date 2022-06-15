@@ -15,7 +15,7 @@
     "dev": "npx nodemon --exec 'npm run symlink' --watch ../../../locomotion-sdk/src -e js,ts,tsx,jsx --delay 2.5"
   },
   "dependencies": {
-    "@autofleet/locomotion-sdk": "^1.7.18",
+    "@autofleet/locomotion-sdk": "^1.7.19",
     "@gorhom/bottom-sheet": "^4.3.1",
     "@mapbox/polyline": "^1.1.0",
     "@react-native-async-storage/async-storage": "^1.17.3",
