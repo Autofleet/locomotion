@@ -3,7 +3,7 @@ import i18n from "../../../../../../I18n";
 import moment from "moment";
 import Seat from '../../../../../../assets/seat.svg'
 import React, { useContext } from "react";
-import { ServiceDetailsInterface, TAG_OPTIONS } from "..";
+import { ServiceDetailsInterface, TAG_OPTIONS } from "../../../../../../context/rideServicesContext/mockServiceEstimations";
 import { Context as ThemeContext } from '../../../../../../context/theme';
 import { Circle, AvailableSeats, 
     Capacity, CardContainer, 

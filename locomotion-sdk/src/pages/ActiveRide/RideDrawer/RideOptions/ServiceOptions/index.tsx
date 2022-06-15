@@ -1,57 +1,25 @@
-import moment, { Moment } from "moment";
-import React from "react";
-import { ImageURISource } from 'react-native'
+import { ServiceDetailsInterface } from "context/rideServicesContext/mockServiceEstimations";
+import React, { useContext, useEffect, useState } from "react";
+import { RideServicesContext } from "../../../../../context/rideServicesContext";
 import ServiceCard from "./ServiceCard";
 import { ServiceOptionsContainer } from "./styles";
 
-export interface ServiceDetailsInterface {
-    name: string;
-    eta?: Moment;
-    price?: string;
-    availableSeats?: number;
-    tag?: string;
-    iconUrl: ImageURISource;
-    description?: string;
-}
-
-export const TAG_OPTIONS = {
-    FASTEST: 'Fastest',
-    CHEAPEST: 'Cheapest'
-}
-
-const serviceOptions: ServiceDetailsInterface[] = [
-    {
-        name: 'Premium',
-        eta: moment(Date.now()).add(30, 'm'),
-        price: '$32.30',
-        availableSeats: 4,
-        tag: TAG_OPTIONS.FASTEST,
-        iconUrl: 'https://res.cloudinary.com/autofleet/image/upload/w_700,h_500,c_thumb,q_auto/vehicle-images/Minivan/minivan_green.png',
-        description: "this is a description for a service",
-        
-    },
-    {
-        name: 'Premium',
-        eta: moment(Date.now()).add(15, 'm'),
-        // price: '$32.30',
-        availableSeats: 4,
-        iconUrl: 'https://res.cloudinary.com/autofleet/image/upload/w_700,h_500,c_thumb,q_auto/vehicle-images/Minivan/minivan_green.png',
-        description: "this is a description for a service"
-    },
-    {
-        name: 'Premium',
-        tag: TAG_OPTIONS.CHEAPEST,
-        eta: moment(Date.now()).add(10, 'm'),
-        price: '$32.30',
-        availableSeats: 4,
-        iconUrl: 'https://res.cloudinary.com/autofleet/image/upload/w_700,h_500,c_thumb,q_auto/vehicle-images/Minivan/minivan_green.png',
-    }
-]
 const ServiceOptions = () => {
+    const { getServiceEstimations } = useContext(RideServicesContext);
+    const [serviceEstimations, setServiceEstimations] = useState<ServiceDetailsInterface[]>([])
+
+    const generateServiceEstimationsState = () => {
+        const estimations = getServiceEstimations()
+        setServiceEstimations(estimations)
+    }
+
+    useEffect(() => {
+        generateServiceEstimationsState()
+    })
   return (
-    <ServiceOptionsContainer>
+    <ServiceOptionsContainer alwaysBounceVertical={false}>
         <>
-        {serviceOptions.map((option) => {
+        {serviceEstimations.map((option) => {
             return <ServiceCard service={option} selected={false} />
         })}
         </>

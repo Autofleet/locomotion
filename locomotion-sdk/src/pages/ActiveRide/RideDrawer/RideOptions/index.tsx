@@ -3,7 +3,6 @@ import RideDetails from "./RideDetails";
 import ServiceOptions from "./ServiceOptions";
 
 const RideOptions = () => {
-  console.log('RideOptions')
   return (
     <Fragment>
       <ServiceOptions />

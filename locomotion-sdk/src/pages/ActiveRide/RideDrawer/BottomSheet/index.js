@@ -9,7 +9,7 @@ const BottomSheetComponent = ({ children }) => {
   const [isExpanded, setIsExpanded] = useState(false);
 
   const bottomSheetRef = useRef(null);
-  const snapPoints = useMemo(() => ['33%', '100%'], []);
+  const snapPoints = useMemo(() => ['33%', '95%'], []);
 
   const {
     animatedHandleHeight,

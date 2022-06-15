@@ -10,6 +10,8 @@ import Header from '../../Components/Header';
 import MainMap from './map';
 import AvailabilityContextProvider from '../../context/availability';
 import BottomSheet from './RideDrawer/BottomSheet';
+import RideOptions from './RideDrawer/RideOptions';
+import RideServicesContextProvider from '../../context/rideServicesContext';
 
 const RidePage = ({ menuSide, mapSettings }) => {
   const { initGeoService, showOutOfTerritory } = useContext(RideStateContextContext);
@@ -30,7 +32,7 @@ const RidePage = ({ menuSide, mapSettings }) => {
             <NotAvilableHere onSetAnotherLocation={() => ({})} />
           ) : (
             <>
-
+              <RideOptions />
             </>
           )}
         </BottomSheet>
@@ -42,11 +44,13 @@ const RidePage = ({ menuSide, mapSettings }) => {
 export default props => (
   <NewRidePageContextProvider {...props}>
     <RidePageContextProvider {...props}>
+      <RideServicesContextProvider>
       <AvailabilityContextProvider>
         <RidePage
           {...props}
         />
       </AvailabilityContextProvider>
+      </RideServicesContextProvider>
     </RidePageContextProvider>
   </NewRidePageContextProvider>
 );
