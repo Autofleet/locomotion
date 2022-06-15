@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react'; import { View } from 'react-native';
+import React, { useContext, useEffect } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import NotAvilableHere from '../../Components/NotAvilableHere';
 import { RideStateContextContext, RidePageContextProvider } from '../../context';

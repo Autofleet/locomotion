@@ -1,5 +1,5 @@
 import Mixpanel from 'react-native-mixpanel';
-import { getDeviceId } from 'react-native-device-info';
+import { getDeviceId } from './device';
 
 export const getElementName = props => props['data-test-id'] || props.id;
 
