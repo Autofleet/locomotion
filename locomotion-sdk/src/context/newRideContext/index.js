@@ -26,6 +26,7 @@ import {
 } from '../rides/api';
 
 import { getPlaces, getGeocode, getPlaceDetails } from './google-api';
+import StorageService from '../../services/storage';
 
 const STATION_AUTOREFRESH_INTERVAL = 60000;
 
@@ -55,41 +56,82 @@ const RidePageContextProvider = ({ navigation, children }) => {
   const route = useRoute();
   const useSettings = settingsContext.useContainer();
 
-  const [requestStopPoints, setRequestStopPoints] = useState([]);
+  const [requestStopPoints, setRequestStopPoints] = useState([{
+    type: 'pickup',
+    location: null,
+    useDefaultLocation: true,
+  },
+  {
+    type: 'dropoff',
+    location: null,
+    useDefaultLocation: false,
+  }]);
   const [coords, setCoords] = useState();
+  const [currentGeocode, setCurrentGeocode] = useState(null);
   const [searchTerm, setSearchTerm] = useState(null);
   const [selectedInputIndex, setSelectedInputIndex] = useState(null);
   const [selectedInputTarget, setSelectedInputTarget] = useState(null);
+  const [searchResults, setSearchResults] = useState(null);
+  const [isReadyForSubmit, setIsReadyForSubmit] = useState(false);
 
 
   useEffect(() => {
-    if (requestStopPoints.length === 0) {
-      const sps = [{
-        type: 'pickup',
-        location: null,
-        useDefaultLocation: true,
-      },
-      {
-        type: 'dropoff',
-        location: null,
-        useDefaultLocation: false,
-      }];
-      setRequestStopPoints(sps);
-    }
+    initLocation();
   }, []);
 
+  useEffect(() => {
+    initSps();
+  }, [coords]);
+
+  /*   useEffect(() => {
+    if (requestStopPoints.length && requestStopPoints.every(r => r.location && r.description)) {
+      setIsReadyForSubmit(true);
+    } else {
+      setIsReadyForSubmit(false);
+    }
+  }, [requestStopPoints]); */
+
+  const initLocation = async () => {
+    const location = await getCurrentLocation();
+    setCoords(location);
+  };
+
+  const initSps = async () => {
+    const currentAddress = await reverseLocationGeocode();
+    if (currentAddress) {
+      const sps = [...requestStopPoints];
+      if (currentAddress) {
+        sps[0].description = currentAddress.description;
+        sps[0].location = currentAddress.location;
+      }
+      setRequestStopPoints(sps);
+    }
+  };
+
+  const updateRequestSp = (data) => {
+    const reqSps = [...requestStopPoints];
+    reqSps[selectedInputIndex] = {
+      ...reqSps[selectedInputIndex],
+      ...data,
+    };
+
+    setRequestStopPoints(reqSps);
+  };
+
+  const setSpCurrentLocation = () => {
+    updateRequestSp(currentGeocode);
+  };
 
   const loadAddress = async (input) => {
-    console.log('loadAddress', input);
-
+    const currentCoords = await getCurrentLocation();
     let location = null;
     try {
-      location = `${coords.latitude},${coords.longitude}`;
+      location = `${currentCoords.latitude},${currentCoords.longitude}`;
       const data = await getPlaces({
         input,
         location,
       });
-
+      //setSearchResults(data);
       return data;
     } catch (error) {
       console.log('Got error while try to get places', error);
@@ -99,12 +141,21 @@ const RidePageContextProvider = ({ navigation, children }) => {
 
   const reverseLocationGeocode = async () => {
     try {
-      const location = `${coords.latitude},${coords.longitude}`;
+      const currentCoords = await getCurrentLocation();
+      console.log('currentCoords', currentCoords);
+
+      const location = `${currentCoords.latitude},${currentCoords.longitude}`;
       const data = await getGeocode({
         latlng: location,
       });
+      console.log(data);
 
-      return data;
+      const geoLocation = {
+        description: data.results[0].formatted_address,
+        location: data.results[0].geometry.location,
+      };
+
+      return geoLocation;
     } catch (error) {
       console.log('Got error while try to get places', error);
       return undefined;
@@ -122,27 +173,59 @@ const RidePageContextProvider = ({ navigation, children }) => {
   };
 
 
+  useEffect(() => {
+    console.log(`searchResults`,searchResults);
+
+  }, [searchResults])
   const onAddressSelected = async (selectedItem) => {
-    reqSps[selectedInputIndex].description = selectedItem.fullText;
+    console.log(selectedItem);
+
     const enrichedPlace = await enrichPlaceWithLocation(selectedItem.placeId);
     console.log('enrichedPlace', enrichedPlace);
 
     const reqSps = [...requestStopPoints];
-    /* selectedInputIndex
-    selectedInputTarget
-    inputValues  */
+    reqSps[selectedInputIndex] = {
+      ...reqSps[selectedInputIndex],
+      description: selectedItem.fullText,
+      location: enrichedPlace,
+    };
+
+    setRequestStopPoints(reqSps);
     console.log('enrichedPlace', enrichedPlace);
+    resetSearchResults();
   };
 
-  useEffect(() => {
-    initCurrentLocation();
-  }, []);
+  const resetSearchResults = () => setSearchResults(null);
 
-  const initCurrentLocation = async () => {
+  const getCurrentLocation = async () => {
     const location = await getPosition();
-    if (location) {
-      setCoords(location.coords);
+    return location.coords;
+  };
+
+  const searchAddress = async (searchText) => {
+    if (searchText === null || searchText === '') {
+      resetSearchResults();
+    } else {
+      const results = await loadAddress(searchText);
+      const parsed = parseSearchResults(results);
+      setSearchResults(parsed);
     }
+  };
+
+  const onCurrentLocation = async () => {
+    const results = await reverseLocationGeocode();
+    console.log('results', results);
+  };
+
+  const parseSearchResults = results => results.map(r => ({
+    text: r.structured_formatting.main_text,
+    subText: r.structured_formatting.secondary_text,
+    fullText: `${r.structured_formatting.main_text},${r.structured_formatting.secondary_text}`,
+    placeId: r.place_id,
+  }));
+
+  const getLocalStorageAddreses = async () => {
+
   };
 
   /*   const enrichPlaceWithLocation = async (place) => {
@@ -252,9 +335,6 @@ const RidePageContextProvider = ({ navigation, children }) => {
     }
   };
 
-  useInterval(() => {
-    loadActiveRide();
-  }, 5000);
 
   /*   if (Config.STATIONS_REFRESH_RATE) {
     useInterval(() => {
@@ -264,9 +344,6 @@ const RidePageContextProvider = ({ navigation, children }) => {
     }, Config.STATIONS_REFRESH_RATE * 60000);
   } */
 
-  useInterval(() => {
-    UserService.getUser(navigation);
-  }, 10000);
 
   /*   useEffect(() => {
     Mixpanel.pageView(route.name);
@@ -283,13 +360,6 @@ const RidePageContextProvider = ({ navigation, children }) => {
     };
   }, []); */
 
-  useEffect(() => {
-    if (!activeRideState) {
-      return;
-    }
-    const origin = activeRideState.stopPoints[0];
-    calculatePickupEta(origin);
-  }, [activeRideState]);
 
   /*   useEffect(() => {
     if (stations.length) {
@@ -509,6 +579,11 @@ const RidePageContextProvider = ({ navigation, children }) => {
         setSelectedInputTarget,
         onAddressSelected,
         requestStopPoints,
+        searchResults,
+        searchAddress,
+        updateRequestSp,
+        setSpCurrentLocation,
+        isReadyForSubmit,
         /*
         disableAutoLocationFocus,
         setDisableAutoLocationFocus,

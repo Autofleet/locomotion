@@ -24,25 +24,25 @@ const RidePage = ({ menuSide, mapSettings }) => {
     initGeoService();
   }, []);
 
-
   return (
-
-    <PageContainer>
-      <MainMap ref={mapRef} mapSettings={mapSettings} />
-      <Header navigation={navigation} menuSide={menuSide} />
-      <BottomSheet
-        ref={bottomSheetRef}
-      >
-        {showOutOfTerritory ? (
-          <NotAvilableHere onSetAnotherLocation={() => ({})} />
-        ) : (
-          <>
-            <AddressSelector bottomSheetRef={bottomSheetRef} />
-          </>
-        )}
-      </BottomSheet>
-    </PageContainer>
-
+    <>
+      <PageContainer>
+        <MainMap ref={mapRef} mapSettings={mapSettings} />
+        <Header navigation={navigation} menuSide={menuSide} />
+        <BottomSheet
+          ref={bottomSheetRef}
+    //      setIsExpanded={setIsExpanded}
+        >
+          {showOutOfTerritory ? (
+            <NotAvilableHere onSetAnotherLocation={() => ({})} />
+          ) : (
+            <>
+              <AddressSelector bottomSheetRef={bottomSheetRef} />
+            </>
+          )}
+        </BottomSheet>
+      </PageContainer>
+    </>
   );
 };
 

@@ -79,13 +79,14 @@ const SearchBar = ({
     selectedInputTarget,
     setSelectedInputTarget,
     requestStopPoints,
+    updateRequestSp,
   } = useContext(RidePageContext);
 
   const pickupRef = useRef(null);
 
   const debouncedSearch = React.useRef(
     debounce(async (text, i) => {
-      setSearchTerm(text);
+      onSearch(text);
     }, 300),
   ).current;
 
@@ -109,19 +110,21 @@ const SearchBar = ({
   };
 
   useEffect(() => {
-    onSearch(searchTerm);
+    debouncedSearch(searchTerm);
   }, [searchTerm]);
-
 
   const buildSps = () => requestStopPoints.map((s, i) => {
     const placeholder = getSpPlaceholder(s);
-    const rowProps = i === 0 ? {} : { isExpanded, margin: true };
+    const rowProps = i === 0 ? { isExpanded } : { margin: true };
 
     return (
       <Row {...rowProps}>
         <BottomSheetInput
           placeholder={i18n.t(placeholder)}
-          onChangeText={text => debouncedSearch(text, i)}
+          onChangeText={(text) => {
+            updateRequestSp({ description: text });
+            setSearchTerm(text);
+          }}
           fullBorder
           value={requestStopPoints[i].description}
           placeholderTextColor="#929395"
@@ -130,6 +133,7 @@ const SearchBar = ({
           }}
           onBlur={onInputBlur}
           key={`input_${s.id}`}
+          autoCorrect={false}
         />
       </Row>
     );

@@ -34,7 +34,6 @@ const BottomSheetComponent = forwardRef(({ children }, ref) => {
     setSnapPointIndex(index);
   }, []);
 
-
   return (
     <BottomSheet
       ref={ref}
