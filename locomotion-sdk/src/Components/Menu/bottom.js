@@ -19,16 +19,15 @@ export const BottomFlexContainer = styled.View`
 `;
 
 export const BottomText = styled.Text`
-  font-size: 14px;
   padding: 5px;
+  color: ${({ theme }) => theme.disabledColor};
   ${FONT_SIZES.SMALL}
   ${FONT_WEIGHTS.LIGHT}
 `;
 
 export const BottomTextBold = styled.Text`
-  font-size: 16px;
   ${FONT_SIZES.SMALL}
-  ${FONT_WEIGHTS.BOLD}
+  ${FONT_WEIGHTS.MEDIUM}
 `;
 
 const appVersion = getVersion();

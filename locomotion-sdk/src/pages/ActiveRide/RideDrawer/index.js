@@ -292,4 +292,3 @@ const RideDrawer = ({ navigation }) => {
 };
 
 export default RideDrawer;
-console.disableYellowBox = true;
