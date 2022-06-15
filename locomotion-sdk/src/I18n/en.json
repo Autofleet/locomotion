@@ -67,6 +67,7 @@
         },
         "pageTitle": "Your profile",
         "submit": "Save",
+        "paymentMethodPlaceholder": "Payment method",
         "firstNamePlaceholder": "First name",
         "lastNamePlaceholder": "Last name",
         "fullNameError": "Please fill all fields",
@@ -207,7 +208,7 @@
         "trips": "Ride History",
         "paymentsSettings": "Payment",
         "account": "Account",
-        "support": "Help and feedback",
+        "support": "Contact us",
         "logout": "Logout"
     },
     "contactUs": {

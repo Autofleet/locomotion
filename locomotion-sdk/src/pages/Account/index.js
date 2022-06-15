@@ -2,6 +2,7 @@ import React, { useEffect, useContext } from 'react';
 import { useRoute } from '@react-navigation/native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { TouchableOpacity, View } from 'react-native';
+import PaymentsContext from '../../context/payments';
 import { MAIN_ROUTES } from '../routes';
 
 import ThumbnailPicker from '../../Components/ThumbnailPicker';
@@ -112,6 +113,8 @@ const Card = ({
 
 const AccountContent = ({ navigation }) => {
   const { user } = useContext(UserContext);
+  const { paymentMethods } = PaymentsContext.useContainer();
+
   return (
     <Container>
       <CardsContainer>
@@ -127,6 +130,7 @@ const AccountContent = ({ navigation }) => {
           {user ? `${user.firstName} ${user.lastName}` : ''}
         </Card>
         <Card
+          verified
           title={i18n.t('onboarding.phonePlaceholder')}
         >
           {user ? `${user.phoneNumber}` : ''}
@@ -141,8 +145,14 @@ const AccountContent = ({ navigation }) => {
         >
           {user ? `${user.email}` : ''}
         </Card>
-      </CardsContainer>
-      <Container>
+        <Card
+          title={i18n.t('onboarding.paymentMethodPlaceholder')}
+          onPress={() => navigation.navigate(MAIN_ROUTES.PAYMENT, {
+            back: true,
+          })}
+        >
+          {paymentMethods && paymentMethods.length ? `${paymentMethods[0].card.exp_month} / ${paymentMethods[0].card.exp_year}` : 'none'}
+        </Card>
         <LogoutContainer
           onPress={() => {
             navigation.navigate(MAIN_ROUTES.LOGOUT);
@@ -150,7 +160,7 @@ const AccountContent = ({ navigation }) => {
         >
           <LogoutText>{i18n.t('menu.logout')}</LogoutText>
         </LogoutContainer>
-      </Container>
+      </CardsContainer>
     </Container>
   );
 };

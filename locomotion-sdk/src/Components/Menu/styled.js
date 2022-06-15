@@ -19,7 +19,13 @@ export const LabelText = styled.Text`
 `;
 
 export const StyledSafeAreaView = styled(SafeAreaView)`
+  height: 100%;
   background-color: ${({ theme }) => theme.pageBackgroundColor};
+`;
+
+export const DrawerLabelsContainer = styled.View`
+  flex-direction: column;
+  justify-content: flex-start;
 `;
 
 export const StyledDrawerLabel = styled.TouchableOpacity`
@@ -41,19 +47,19 @@ export const HeaderIconContainer = styled(Button).attrs({ noBg: true })`
 `;
 
 export const BaseHeaderText = styled.Text`
-  font-weight: bold;
   padding: 5px;
-`;
-
-export const HeaderText = styled(BaseHeaderText)`
-  color: ${({ theme }) => theme.primaryColor};
   ${FONT_SIZES.LARGE}
   ${FONT_WEIGHTS.REGULAR}
 `;
 
+export const HeaderText = styled(BaseHeaderText)`
+  color: ${({ theme }) => theme.primaryColor};
+`;
+
 export const HeaderMainText = styled(BaseHeaderText)`
-  font-size: 22px;
-  padding-top: 10px;
+  padding-top: 15px;
+  ${FONT_SIZES.H1}
+  ${FONT_WEIGHTS.BOLD}
 `;
 
 export const Header = styled.View`
