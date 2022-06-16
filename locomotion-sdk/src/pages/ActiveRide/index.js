@@ -26,7 +26,6 @@ const RidePage = ({ menuSide, mapSettings }) => {
         <MainMap ref={mapRef} mapSettings={mapSettings} />
         <Header navigation={navigation} menuSide={menuSide} />
         <BottomSheet>
-          <NotAvailableHere onButtonPress={() => ({})} />
           {showOutOfTerritory ? (
             <NotAvailableHere onButtonPress={() => ({})} />
           ) : (
