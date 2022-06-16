@@ -1,6 +1,6 @@
 import React, { useContext, useEffect } from 'react';
 import { useNavigation } from '@react-navigation/native';
-import NotAvilableHere from '../../Components/NotAvilableHere';
+import { NotAvailableHere } from '../../Components/BsPages';
 import { RideStateContextContext, RidePageContextProvider } from '../../context';
 import NewRidePageContextProvider from '../../context/newRideContext';
 import {
@@ -27,7 +27,7 @@ const RidePage = ({ menuSide, mapSettings }) => {
         <Header navigation={navigation} menuSide={menuSide} />
         <BottomSheet>
           {showOutOfTerritory ? (
-            <NotAvilableHere onSetAnotherLocation={() => ({})} />
+            <NotAvailableHere onSetAnotherLocation={() => ({})} />
           ) : (
             <>
 
