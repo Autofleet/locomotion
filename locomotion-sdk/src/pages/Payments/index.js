@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useRoute } from '@react-navigation/native';
 import { getTogglePopupsState } from '../../context/state';
 import i18n from '../../I18n';
 import PageHeader from '../../Components/PageHeader';
@@ -13,6 +14,7 @@ import { PageContainer } from '../styles';
 import { MAIN_ROUTES } from '../routes';
 
 export default ({ navigation, menuSide }) => {
+  const route = useRoute();
   const usePayments = PaymentsContext.useContainer();
 
   const [pageLoading, setPageLoading] = useState(true);
@@ -53,7 +55,9 @@ export default ({ navigation, menuSide }) => {
       <PageContent>
         <PageHeader
           title={i18n.t('payments.pageTitle')}
-          onIconPress={() => navigation.navigate(MAIN_ROUTES.HOME)}
+          onIconPress={() => (route.params && route.params
+            .back ? navigation.navigate(MAIN_ROUTES.ACCOUNT)
+            : navigation.navigate(MAIN_ROUTES.HOME))}
           iconSide={menuSide}
         />
         {pageLoading ? <FullPageLoader autoPlay loop /> : null}
