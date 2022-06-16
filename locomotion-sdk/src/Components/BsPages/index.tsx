@@ -3,6 +3,7 @@ import { Text, View } from 'react-native';
 import styled from 'styled-components';
 import { FONT_SIZES, FONT_WEIGHTS } from '../../context/theme';
 import Button from '../Button';
+import i18n from '../../I18n';
 
 const OtherButton = styled(Button)`
   width: 100%;
@@ -19,6 +20,7 @@ const Container = styled(View)`
 const MainContent = styled(View)`
   flex: 1;
   width: 100%;
+  display: flex;
   flex-direction: row;
   padding: 20px 0;
 `;
@@ -28,7 +30,9 @@ const CardText = styled(View)`
 `;
 
 const CardImage = styled(View)`
-  flex: 1;
+  flex: 3;
+  justify-content: center;
+  align-items: center;
 `;
 
 const Title = styled(Text)`
@@ -51,14 +55,14 @@ const ButtonTitle = styled(Text)`
 `;
 
 const BsPage = ({
-  onSetAnotherLocation,
+  onButtonPress,
   image,
   children,
   TitleText,
   SubTitleText,
   ButtonText,
 }: {
-  onSetAnotherLocation: any,
+  onButtonPress: any,
   image: any,
   children?: any,
   TitleText: string,
@@ -78,7 +82,7 @@ const BsPage = ({
       ) : undefined}
     </MainContent>
     {children}
-    <OtherButton onPress={onSetAnotherLocation}>
+    <OtherButton onPress={onButtonPress}>
       <ButtonTitle>{ButtonText}</ButtonTitle>
     </OtherButton>
   </Container>
@@ -92,22 +96,18 @@ export default BsPage;
 
 export const NotAvailableHere = (props: any) => (
   <BsPage
-    TitleText="We are Sorry!"
-    ButtonText="Set another pickup location"
-    SubTitleText="Autofleet is not available in your area"
-    image={(
-      <SubTitle>(Image)</SubTitle>
-    )}
+    TitleText={i18n.t('bottomSheetContent.notAvailableHere.titleText')}
+    ButtonText={i18n.t('bottomSheetContent.notAvailableHere.buttonText')}
+    SubTitleText={i18n.t('bottomSheetContent.notAvailableHere.subTitleText')}
     {...props}
   />
 );
 
-
 export const ConfirmPickup = (props: any) => (
   <BsPage
-    TitleText="Confirm pickup"
-    ButtonText="Confirm and request"
-    SubTitleText="Drag map or edit address to set your pickup"
+    TitleText={i18n.t('bottomSheetContent.confirmPickup.titleText')}
+    ButtonText={i18n.t('bottomSheetContent.confirmPickup.buttonText')}
+    SubTitleText={i18n.t('bottomSheetContent.confirmPickup.subTitleText')}
     {...props}
   />
 );
