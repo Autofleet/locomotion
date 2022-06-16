@@ -91,10 +91,6 @@ const AddressSelectorBottomSheet = ({ bottomSheetRef }) => {
     loadHistory();
   }, []);
 
-  useEffect(() => {
-    bottomSheetRef.current.collapse();
-  }, [userContext.isFormReady]);
-
   const onSearchFocus = () => {
     if (!isExpanded) {
       bottomSheetRef.current.expand();
@@ -139,7 +135,7 @@ const AddressSelectorBottomSheet = ({ bottomSheetRef }) => {
             </>
           )
           : null}
-        <View>
+        <View style={{ height: 400 }}>
           {(userContext.searchResults || historyResults).map(h => <AddressRow {...h} onPress={() => userContext.onAddressSelected(h)} />)}
         </View>
       </HistoryContainer>

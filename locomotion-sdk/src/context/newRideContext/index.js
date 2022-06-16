@@ -242,8 +242,10 @@ const RidePageContextProvider = ({ navigation, children }) => {
     const isSpsReady = requestStopPoints.every(r => r.location && r.location.lat && r.location.lng && r.description);
     if (requestStopPoints.length && isSpsReady) {
       console.log('READY SEND REQUEST');
+      setIsReadyForSubmit(true);
     } else {
       console.log('NOT READY');
+      setIsReadyForSubmit(false);
     }
   };
 
