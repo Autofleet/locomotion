@@ -17,12 +17,16 @@ export default ({ navigation, menuSide }) => {
   const route = useRoute();
   const usePayments = PaymentsContext.useContainer();
 
+  const {
+    paymentMethods,
+  } = usePayments;
   const [pageLoading, setPageLoading] = useState(true);
   const [loading, setLoading] = useState(false);
   const [methodForDelete, setMethodForDelete] = useState(null);
   const [, togglePopup] = getTogglePopupsState();
-  const [showList, setShowList] = useState(usePayments
-    .paymentMethods && usePayments.paymentMethods.length > 0);
+  const [showList, setShowList] = useState(
+    paymentMethods && paymentMethods.length > 0,
+  );
 
   const toggleMenu = () => {
     navigation.toggleDrawer();
