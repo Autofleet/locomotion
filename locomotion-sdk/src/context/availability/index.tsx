@@ -33,10 +33,10 @@ const AvailabilityContextProvider = ({ children }: { children: any }) => {
     const {
       latitude: lat, longitude: lng,
     } = coords;
-    await fetchVehicles(lat, lng);
     setAvailabilityVehiclesInterval(setInterval(async () => {
       await fetchVehicles(lat, lng);
     }, 5000));
+    await fetchVehicles(lat, lng);
   };
 
   const fetchVehicles = async (lat: string, lng: string) => {

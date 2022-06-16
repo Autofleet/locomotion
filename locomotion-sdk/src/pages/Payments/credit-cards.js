@@ -1,3 +1,4 @@
+import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 
 import i18n from '../../I18n';
@@ -29,13 +30,11 @@ export default ({
         <CreditCardContainer key={`paymentMethods#${pm.id}`}>
           <CreditCardRow>
             <CreditCardImage />
-            <CreditCardRowText>{pm.card.brand}</CreditCardRowText>
+            <CreditCardRowText>{pm.brand}</CreditCardRowText>
             <CreditCardRowText>
-              {pm.card.exp_month}
-              /
-              {pm.card.exp_year}
+              {moment(pm.expiresAt).format('MM/YY')}
             </CreditCardRowText>
-            <CreditCardRowText>{pm.card.last4}</CreditCardRowText>
+            <CreditCardRowText>{pm.lastFour}</CreditCardRowText>
           </CreditCardRow>
           <DeleteCreditCard disabled={loading}>
             <DeleteCreditCardText
