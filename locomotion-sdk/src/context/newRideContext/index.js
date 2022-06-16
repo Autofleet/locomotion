@@ -77,33 +77,51 @@ const RidePageContextProvider = ({ navigation, children }) => {
 
   useEffect(() => {
     initLocation();
+    initCurrentLocation();
   }, []);
 
   useEffect(() => {
     initSps();
-  }, [coords]);
-
-  /*   useEffect(() => {
-    if (requestStopPoints.length && requestStopPoints.every(r => r.location && r.description)) {
-      setIsReadyForSubmit(true);
-    } else {
-      setIsReadyForSubmit(false);
-    }
-  }, [requestStopPoints]); */
+  }, [currentGeocode]);
 
   const initLocation = async () => {
     const location = await getCurrentLocation();
     setCoords(location);
   };
 
-  const initSps = async () => {
+  const getCurrentLocationAddress = async () => {
     const currentAddress = await reverseLocationGeocode();
     if (currentAddress) {
-      const sps = [...requestStopPoints];
-      if (currentAddress) {
-        sps[0].description = currentAddress.description;
-        sps[0].location = currentAddress.location;
-      }
+      const locationData = {
+        description: currentAddress.description,
+        location: currentAddress.location,
+      };
+      return locationData;
+    }
+
+    return null;
+  };
+
+  const initCurrentLocation = async () => {
+    const locationData = await getCurrentLocationAddress();
+    setCurrentGeocode(locationData);
+  };
+
+  const initSps = async () => {
+    const currentAddress = currentGeocode || await getCurrentLocationAddress();
+    if (currentGeocode) {
+      const sps = [...requestStopPoints].map((s) => {
+        if (s.useDefaultLocation) {
+          return {
+            ...s,
+            description: currentAddress.description,
+            location: currentAddress.location,
+          };
+        }
+
+        return s;
+      });
+
       setRequestStopPoints(sps);
     }
   };
@@ -118,7 +136,13 @@ const RidePageContextProvider = ({ navigation, children }) => {
     setRequestStopPoints(reqSps);
   };
 
-  const setSpCurrentLocation = () => {
+  const setSpCurrentLocation = async () => {
+    console.log('currentGeocode', currentGeocode);
+    if (!currentGeocode) {
+      const addressData = await getCurrentLocationAddress();
+      updateRequestSp(currentGeocode);
+      return true;
+    }
     updateRequestSp(currentGeocode);
   };
 
@@ -131,7 +155,7 @@ const RidePageContextProvider = ({ navigation, children }) => {
         input,
         location,
       });
-      //setSearchResults(data);
+      // setSearchResults(data);
       return data;
     } catch (error) {
       console.log('Got error while try to get places', error);
@@ -172,17 +196,8 @@ const RidePageContextProvider = ({ navigation, children }) => {
     }
   };
 
-
-  useEffect(() => {
-    console.log(`searchResults`,searchResults);
-
-  }, [searchResults])
   const onAddressSelected = async (selectedItem) => {
-    console.log(selectedItem);
-
     const enrichedPlace = await enrichPlaceWithLocation(selectedItem.placeId);
-    console.log('enrichedPlace', enrichedPlace);
-
     const reqSps = [...requestStopPoints];
     reqSps[selectedInputIndex] = {
       ...reqSps[selectedInputIndex],
@@ -191,8 +206,8 @@ const RidePageContextProvider = ({ navigation, children }) => {
     };
 
     setRequestStopPoints(reqSps);
-    console.log('enrichedPlace', enrichedPlace);
     resetSearchResults();
+    selectedInputTarget.blur();
   };
 
   const resetSearchResults = () => setSearchResults(null);
@@ -212,11 +227,6 @@ const RidePageContextProvider = ({ navigation, children }) => {
     }
   };
 
-  const onCurrentLocation = async () => {
-    const results = await reverseLocationGeocode();
-    console.log('results', results);
-  };
-
   const parseSearchResults = results => results.map(r => ({
     text: r.structured_formatting.main_text,
     subText: r.structured_formatting.secondary_text,
@@ -226,6 +236,15 @@ const RidePageContextProvider = ({ navigation, children }) => {
 
   const getLocalStorageAddreses = async () => {
 
+  };
+
+  const checkFormSps = () => {
+    const isSpsReady = requestStopPoints.every(r => r.location && r.location.lat && r.location.lng && r.description);
+    if (requestStopPoints.length && isSpsReady) {
+      console.log('READY SEND REQUEST');
+    } else {
+      console.log('NOT READY');
+    }
   };
 
   /*   const enrichPlaceWithLocation = async (place) => {
@@ -584,6 +603,7 @@ const RidePageContextProvider = ({ navigation, children }) => {
         updateRequestSp,
         setSpCurrentLocation,
         isReadyForSubmit,
+        checkFormSps,
         /*
         disableAutoLocationFocus,
         setDisableAutoLocationFocus,

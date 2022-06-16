@@ -24,11 +24,10 @@ import { BottomSheetContext } from '../../../../context/bottomSheetContext';
 const Container = styled(BottomSheetView)`
   display: flex;
   width: 100%;
-  background: red;
 `;
 
 const Container2 = styled(BottomSheetView)`
-  flex: 1;
+
 `;
 
 const InputContainer = styled.View`
@@ -109,8 +108,9 @@ const AddressSelectorBottomSheet = ({ bottomSheetRef }) => {
   const onCurrentLocation = async () => {
     userContext.setSpCurrentLocation();
   };
+
   return (
-    <Container>
+    <>
       <InputContainer>
         <SearchBar
           onFocus={onSearchFocus}
@@ -139,11 +139,11 @@ const AddressSelectorBottomSheet = ({ bottomSheetRef }) => {
             </>
           )
           : null}
-      <Container2>
-        {(userContext.searchResults || historyResults).map(h => <AddressRow {...h} onPress={() => userContext.onAddressSelected(h)} />)}
-      </Container2>
+        <View>
+          {(userContext.searchResults || historyResults).map(h => <AddressRow {...h} onPress={() => userContext.onAddressSelected(h)} />)}
+        </View>
       </HistoryContainer>
-    </Container>
+    </>
   );
 };
 

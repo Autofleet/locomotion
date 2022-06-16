@@ -80,6 +80,7 @@ const SearchBar = ({
     setSelectedInputTarget,
     requestStopPoints,
     updateRequestSp,
+    checkFormSps,
   } = useContext(RidePageContext);
 
   const pickupRef = useRef(null);
@@ -107,6 +108,7 @@ const SearchBar = ({
 
   const onInputBlur = () => {
     setSearchTerm(null);
+    checkFormSps();
   };
 
   useEffect(() => {

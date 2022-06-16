@@ -14,7 +14,7 @@ const ContentContainer = styled(BottomSheetView)`
   flex-direction: column;
   padding: 0px 30px 20px 30px;
   width: 100%;
-  display: flex;
+  flex: 1;
 
 `;
 
