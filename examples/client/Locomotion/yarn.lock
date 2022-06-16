@@ -10,15 +10,17 @@
     "@jridgewell/gen-mapping" "^0.1.0"
     "@jridgewell/trace-mapping" "^0.3.9"
 
-"@autofleet/locomotion-sdk@^1.7.19":
-  "integrity" "sha512-/x7TGLo1LPU7clxS/tOyh4TvXg4cQ5v8v+R1ezqqgeZBGLZpd4JV6PSeFAAKEnprJ9q/BW3t3c/FlTcifHq4gw=="
-  "resolved" "https://registry.npmjs.org/@autofleet/locomotion-sdk/-/locomotion-sdk-1.7.19.tgz"
-  "version" "1.7.19"
+"@autofleet/locomotion-sdk@^1.7.20":
+  "integrity" "sha512-l+gq1rWrmhb2bnjMXKvBT/IIXiJKmws+GLX78zkQKnfkJv2VPI1Spdr26Ry1sQxqnk3PpbTTAOOygIoKGIhaLw=="
+  "resolved" "https://registry.npmjs.org/@autofleet/locomotion-sdk/-/locomotion-sdk-1.7.20.tgz"
+  "version" "1.7.20"
   dependencies:
     "@gorhom/bottom-sheet" "^4"
     "@react-navigation/drawer" "^6.3.0"
     "@react-navigation/native" "^6.0.10"
     "@react-navigation/native-stack" "^6.6.2"
+    "@turf/boolean-point-in-polygon" "^6.5.0"
+    "@turf/turf" "^6.5.0"
     "axios" "^0.27.2"
     "cheap-ruler" "^3.0.1"
     "currency-symbol-map" "^5.0.1"
@@ -7935,9 +7937,9 @@
   "version" "1.0.0"
 
 "react-i18next@^11.7.2":
-  "integrity" "sha512-4H4fK9vWsQtPP0iAdqzGfdPKLaSXpCjuh1xaGsejX/CO8tx8zCnrOnlQhMgrJf+OlUfzth5YaDPXYGp3RHxV1g=="
-  "resolved" "https://registry.npmjs.org/react-i18next/-/react-i18next-11.17.1.tgz"
-  "version" "11.17.1"
+  "integrity" "sha512-/HG4XSResWDY450cFmoUqLgCYDu8VYMFISGcMnZlxRSV05naj3+F7DoebwnPu6z/akA3Wd0Xe7KGTYdywL9z9g=="
+  "resolved" "https://registry.npmjs.org/react-i18next/-/react-i18next-11.17.2.tgz"
+  "version" "11.17.2"
   dependencies:
     "@babel/runtime" "^7.14.5"
     "html-escaper" "^2.0.2"
