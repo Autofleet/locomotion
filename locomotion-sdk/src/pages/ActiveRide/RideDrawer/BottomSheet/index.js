@@ -1,41 +1,59 @@
 import React, {
-  useCallback, useEffect, useMemo, useRef, useState, useContext, Children,
+  useCallback, useEffect, useMemo, useRef, useState, useContext, forwardRef,
 } from 'react';
 import BottomSheet, {
   useBottomSheetDynamicSnapPoints,
+  BottomSheetView,
 } from '@gorhom/bottom-sheet';
+import styled from 'styled-components';
+import SafeView from '../../../../Components/SafeView';
+import { BottomSheetContext } from '../../../../context/bottomSheetContext';
 
-const BottomSheetComponent = ({ children }) => {
-  const [isExpanded, setIsExpanded] = useState(false);
+const ContentContainer = styled(BottomSheetView)`
+  align-items: center;
+  flex-direction: column;
+  padding: 0px 30px 20px 30px;
+  width: 100%;
+  flex: 1;
 
-  const bottomSheetRef = useRef(null);
-  const snapPoints = useMemo(() => ['33%', '95%'], []);
+`;
+
+const BottomSheetComponent = forwardRef(({ children }, ref) => {
+  const snapPoints = useMemo(() => ['CONTENT_HEIGHT', '95%'], []);
+  const { getSnapPoints, setSnapPointIndex } = useContext(BottomSheetContext);
+
 
   const {
     animatedHandleHeight,
     animatedSnapPoints,
     animatedContentHeight,
     handleContentLayout,
-  } = useBottomSheetDynamicSnapPoints(snapPoints);
+  } = useBottomSheetDynamicSnapPoints(getSnapPoints());
 
   const handleSheetChanges = useCallback((index) => {
-    const newIsExpanded = index === (animatedSnapPoints.value.length - 1);
-    setIsExpanded(newIsExpanded);
+    setSnapPointIndex(index);
   }, []);
-
 
   return (
     <BottomSheet
-      ref={bottomSheetRef}
+      ref={ref}
       index={0}
-      snapPoints={snapPoints}
+      snapPoints={animatedSnapPoints}
       onChange={handleSheetChanges}
       handleHeight={animatedHandleHeight}
       contentHeight={animatedContentHeight}
     >
-      {children}
+      <SafeView>
+        <ContentContainer
+          onLayout={handleContentLayout}
+        >
+          {children}
+
+        </ContentContainer>
+      </SafeView>
+
     </BottomSheet>
   );
-};
+});
 
 export default BottomSheetComponent;

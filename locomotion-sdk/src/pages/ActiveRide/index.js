@@ -1,8 +1,10 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useRef } from 'react';
+import { View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import NotAvilableHere from '../../Components/NotAvilableHere';
 import { RideStateContextContext, RidePageContextProvider } from '../../context';
 import NewRidePageContextProvider from '../../context/newRideContext';
+import BottomSheetContextProvider from '../../context/bottomSheetContext';
 import {
   PageContainer,
 } from './styled';
@@ -12,11 +14,14 @@ import AvailabilityContextProvider from '../../context/availability';
 import BottomSheet from './RideDrawer/BottomSheet';
 import RideOptions from './RideDrawer/RideOptions';
 import RideServicesContextProvider from '../../context/rideServicesContext';
+import AddressSelector from './RideDrawer/AddressSelector';
 
 const RidePage = ({ menuSide, mapSettings }) => {
   const { initGeoService, showOutOfTerritory } = useContext(RideStateContextContext);
   const navigation = useNavigation();
-  const mapRef = React.useRef();
+  const mapRef = useRef();
+  const bottomSheetRef = useRef(null);
+  // const [isExpanded, setIsExpanded] = useState(false);
 
   useEffect(() => {
     initGeoService();
@@ -27,12 +32,15 @@ const RidePage = ({ menuSide, mapSettings }) => {
       <PageContainer>
         <MainMap ref={mapRef} mapSettings={mapSettings} />
         <Header navigation={navigation} menuSide={menuSide} />
-        <BottomSheet>
+        <BottomSheet
+          ref={bottomSheetRef}
+    //      setIsExpanded={setIsExpanded}
+        >
           {showOutOfTerritory ? (
             <NotAvilableHere onSetAnotherLocation={() => ({})} />
           ) : (
             <>
-              <RideOptions />
+              <AddressSelector bottomSheetRef={bottomSheetRef} />
             </>
           )}
         </BottomSheet>
@@ -42,15 +50,17 @@ const RidePage = ({ menuSide, mapSettings }) => {
 };
 
 export default props => (
-  <NewRidePageContextProvider {...props}>
-    <RidePageContextProvider {...props}>
+  <BottomSheetContextProvider {...props}>
+    <NewRidePageContextProvider {...props}>
+      <RidePageContextProvider {...props}>
       <RideServicesContextProvider>
-      <AvailabilityContextProvider>
-        <RidePage
-          {...props}
-        />
-      </AvailabilityContextProvider>
+        <AvailabilityContextProvider>
+          <RidePage
+            {...props}
+          />
+        </AvailabilityContextProvider>
       </RideServicesContextProvider>
-    </RidePageContextProvider>
-  </NewRidePageContextProvider>
+      </RidePageContextProvider>
+    </NewRidePageContextProvider>
+  </BottomSheetContextProvider>
 );

@@ -128,10 +128,10 @@ const RidePageContextProvider = ({ navigation, children }) => {
       setActiveRide(null);
     }
   };
-
+  /*
   useInterval(() => {
     loadActiveRide();
-  }, 5000);
+  }, 5000); */
 
   if (Config.STATIONS_REFRESH_RATE) {
     useInterval(() => {

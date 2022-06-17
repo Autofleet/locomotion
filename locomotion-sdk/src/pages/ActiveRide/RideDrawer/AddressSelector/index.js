@@ -1,12 +1,15 @@
 import React, {
   useCallback, useEffect, useMemo, useRef, useState, useContext,
 } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import {
+  View, Text, StyleSheet, ScrollView,
+} from 'react-native';
 import BottomSheet, {
   useBottomSheetDynamicSnapPoints,
   BottomSheetView,
   useBottomSheet,
   BottomSheetScrollView,
+  BottomSheetBackdrop,
 } from '@gorhom/bottom-sheet';
 
 import styled from 'styled-components';
@@ -16,16 +19,14 @@ import i18n from '../../../../I18n';
 import AddressRow from './AddressLine';
 import SearchBar from './SearchBar';
 import { RidePageContext } from '../../../../context/newRideContext';
+import { BottomSheetContext } from '../../../../context/bottomSheetContext';
 
 const Container = styled(BottomSheetView)`
-  flex: 1;
+  display: flex;
+  width: 100%;
 `;
 
-const ContentContainer = styled(BottomSheetView)`
-  align-items: center;
-  flex-direction: column;
-  padding: 0px 30px 20px 30px;
-  width: 100%;
+const Container2 = styled(BottomSheetView)`
 
 `;
 
@@ -34,10 +35,9 @@ const InputContainer = styled.View`
   display: flex;
 `;
 
-const HistoryContainer = styled(BottomSheetView)`
+const HistoryContainer = styled.View`
   margin-bottom: 10px;
   width: 100%;
-  flex: 1;
 `;
 
 
@@ -71,108 +71,75 @@ const historyText = [
     lng: 34.555,
   },
 ];
-const AddressSelectorBottomSheet = () => {
-  const [isExpanded, setIsExpanded] = useState(false);
+const AddressSelectorBottomSheet = ({ bottomSheetRef }) => {
+  // const [isExpanded, setIsExpanded] = useState(false);
   const [contentHeight, setContentHeight] = useState('33%');
-  const [historyResults, setHistoryResults] = useState(historyText);
-  const [resultsList, setResultsList] = useState([]);
-  const bottomSheetRef = useRef(null);
+  const [resultsList, setResultsList] = useState(null);
+  // const bottomSheetRef = useRef(null);
   const userContext = useContext(RidePageContext);
-  const snapPoints = useMemo(() => ['CONTENT_HEIGHT', '100%'], []);
 
   const {
-    animatedHandleHeight,
-    animatedSnapPoints,
-    animatedContentHeight,
-    handleContentLayout,
-  } = useBottomSheetDynamicSnapPoints(snapPoints);
+    isExpanded,
+    historyResults,
+  } = useContext(BottomSheetContext);
 
-  const handleSheetChanges = useCallback((index) => {
-    const newIsExpanded = index === (animatedSnapPoints.value.length - 1);
-    setIsExpanded(newIsExpanded);
+  const loadHistory = async () => {
+    setHistoryResults(historyText);
+  };
+
+  useEffect(() => {
+    loadHistory();
   }, []);
 
   const onSearchFocus = () => {
-    bottomSheetRef.current.expand();
+    if (!isExpanded) {
+      bottomSheetRef.current.expand();
+    }
   };
 
   const onBack = () => {
     bottomSheetRef.current.collapse();
   };
 
-  useEffect(() => {
-    console.log('isExpanded', isExpanded);
-  }, [isExpanded]);
-
-
-  useEffect(() => {
-    console.log('animatedContentHeight', animatedContentHeight);
-  }, [animatedContentHeight]);
-
-
-  useEffect(() => {
-    console.log(historyResults);
-
-    setResultsList(historyResults);
-  }, []);
-
-  const onSearchTerm = async (searchTerm) => {
-    console.log('HEREEE');
-
-    if (searchTerm && searchTerm !== '') {
-      const results = await userContext.loadAddress(searchTerm);
-      const parsed = parseSearchResults(results);
-      setResultsList(parsed);
-    }
+  const onCurrentLocation = async () => {
+    userContext.setSpCurrentLocation();
   };
 
-  const parseSearchResults = results => results.map(r => ({
-    text: r.structured_formatting.main_text,
-    subText: r.structured_formatting.secondary_text,
-  }));
-
   return (
-  /*     <BottomSheet
-      ref={bottomSheetRef}
-      index={0}
-      snapPoints={animatedSnapPoints}
-      onChange={handleSheetChanges}
-      handleHeight={animatedHandleHeight}
-      contentHeight={animatedContentHeight}
-    > */
-
-    <SafeView>
-      <ContentContainer
-        onLayout={handleContentLayout}
-      >
-        <InputContainer>
-          <SearchBar
-            onFocus={onSearchFocus}
-            isExpanded={isExpanded}
-            onBack={onBack}
-            onSearch={onSearchTerm}
-          />
-        </InputContainer>
-        <HistoryContainer>
-          <AddressRow
-            border={false}
-            text={i18n.t('addressView.currentLocation')}
-            icon="location"
-            actionButton
-          />
-          <BottomSheetScrollView onLayout={(event) => {
-            if (event.nativeEvent.layout.height > 0) {
-              setContentHeight(event.nativeEvent.layout.height);
-            }
-          }}
-          >
-            {resultsList.map(h => <AddressRow {...h} />)}
-          </BottomSheetScrollView>
-        </HistoryContainer>
-      </ContentContainer>
-    </SafeView>
-
-  /* </BottomSheet> */
+    <>
+      <InputContainer>
+        <SearchBar
+          onFocus={onSearchFocus}
+          isExpanded={isExpanded}
+          onBack={onBack}
+          onSearch={userContext.searchAddress}
+        />
+      </InputContainer>
+      <HistoryContainer>
+        {isExpanded
+          ? (
+            <>
+              <AddressRow
+                border={false}
+                text={i18n.t('addressView.currentLocation')}
+                icon="location"
+                actionButton
+                onPress={onCurrentLocation}
+              />
+              <AddressRow
+                border={false}
+                text={i18n.t('addressView.setLocationOnMap')}
+                icon="locationPin"
+                actionButton
+              />
+            </>
+          )
+          : null}
+        <View>
+          {(userContext.searchResults || historyResults).map(h => <AddressRow {...h} onPress={() => userContext.onAddressSelected(h)} />)}
+        </View>
+      </HistoryContainer>
+    </>
   );
 };
 
