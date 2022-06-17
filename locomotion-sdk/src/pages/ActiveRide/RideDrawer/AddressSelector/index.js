@@ -136,7 +136,7 @@ const AddressSelectorBottomSheet = ({ bottomSheetRef }) => {
           )
           : null}
         <View>
-          {(userContext.searchResults || historyResults).map(h => <AddressRow {...h} onPress={() => userContext.onAddressSelected(h)} />)}
+          {(userContext.searchResults || userContext.historyResults).map(h => <AddressRow {...h} onPress={() => userContext.onAddressSelected(h)} />)}
         </View>
       </HistoryContainer>
     </>

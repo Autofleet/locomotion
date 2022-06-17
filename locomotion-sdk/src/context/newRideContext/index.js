@@ -51,6 +51,7 @@ function useInterval(callback, delay) {
 }
 
 export const RidePageContext = createContext(null);
+const HISTORY_RECORDS_NUM = 10;
 
 const RidePageContextProvider = ({ navigation, children }) => {
   const route = useRoute();
@@ -79,6 +80,7 @@ const RidePageContextProvider = ({ navigation, children }) => {
   useEffect(() => {
     initLocation();
     initCurrentLocation();
+    getLastAddresses();
   }, []);
 
   useEffect(() => {
@@ -204,8 +206,8 @@ const RidePageContextProvider = ({ navigation, children }) => {
       ...reqSps[selectedInputIndex],
       description: selectedItem.fullText,
       location: enrichedPlace,
+      placeId: selectedItem.placeId,
     };
-
     setRequestStopPoints(reqSps);
     resetSearchResults();
     selectedInputTarget.blur();
@@ -235,8 +237,18 @@ const RidePageContextProvider = ({ navigation, children }) => {
     placeId: r.place_id,
   }));
 
-  const getLocalStorageAddreses = async () => {
+  const saveLastAddresses = async (item) => {
+    const histroy = await getLastAddresses();
+    const filteredHistory = histroy.filter(h => h.placeId !== item.placeId);
+    filteredHistory.unshift(item);
 
+    await StorageService.save({ lastAddresses: filteredHistory.slice(0, HISTORY_RECORDS_NUM) });
+  };
+
+  const getLastAddresses = async () => {
+    const histroy = await StorageService.get('lastAddresses') || [];
+    setHistoryResults(histroy);
+    return histroy;
   };
 
   const checkFormSps = () => {
@@ -607,6 +619,7 @@ const RidePageContextProvider = ({ navigation, children }) => {
         setSpCurrentLocation,
         isReadyForSubmit,
         checkFormSps,
+        historyResults,
         /*
         disableAutoLocationFocus,
         setDisableAutoLocationFocus,
