@@ -71,28 +71,26 @@ const SearchBar = ({
   onBack,
   onSearch,
 }) => {
-  const [searchTerm, setSearchTerm] = useState(null);
-  const [selectedInputIndex, setSelectedInputIndex] = useState(null);
-  const [selectedInputTarget, setSelectedInputTarget] = useState(null);
-  const [inputValues, setInputValues] = useState([]);
+  const {
+    searchTerm,
+    setSearchTerm,
+    selectedInputIndex,
+    setSelectedInputIndex,
+    selectedInputTarget,
+    setSelectedInputTarget,
+    requestStopPoints,
+    updateRequestSp,
+    checkFormSps,
+  } = useContext(RidePageContext);
 
   const pickupRef = useRef(null);
 
   const debouncedSearch = React.useRef(
     debounce(async (text, i) => {
-      const newValues = [...inputValues];
-      newValues[i] = text;
-      setSearchTerm(text);
-      setInputValues(newValues);
+      onSearch(text);
     }, 300),
   ).current;
 
-
-  const userContext = useContext(RidePageContext);
-
-  useEffect(() => {
-    console.log(userContext.requestStopPoints);
-  }, [userContext.requestStopPoints]);
 
   const getSpPlaceholder = (sp) => {
     if (!isExpanded || !sp.useDefaultLocation) {
@@ -110,38 +108,34 @@ const SearchBar = ({
 
   const onInputBlur = () => {
     setSearchTerm(null);
+    checkFormSps();
   };
 
   useEffect(() => {
-    console.log('searchTerm', searchTerm);
-    onSearch(searchTerm);
-    /*     if (searchTerm && requestStopPoints[selectedInputIndex]) {
-      console.log('innnn');
-
-      const currentSps = requestStopPoints;
-      currentSps[selectedInputIndex].description = searchTerm;
-      setRequestStopPoints(currentSps);
-    } */
+    debouncedSearch(searchTerm);
   }, [searchTerm]);
 
-
-  const buildSps = () => userContext.requestStopPoints.map((s, i) => {
+  const buildSps = () => requestStopPoints.map((s, i) => {
     const placeholder = getSpPlaceholder(s);
-    const rowProps = i === 0 ? {} : { isExpanded, margin: true };
+    const rowProps = i === 0 ? { isExpanded } : { margin: true };
 
     return (
       <Row {...rowProps}>
         <BottomSheetInput
           placeholder={i18n.t(placeholder)}
-          onChangeText={text => debouncedSearch(text, i)}
+          onChangeText={(text) => {
+            updateRequestSp({ description: text });
+            setSearchTerm(text);
+          }}
           fullBorder
-          value={userContext.requestStopPoints[i].description}
+          value={requestStopPoints[i].description}
           placeholderTextColor="#929395"
           onFocus={(e) => {
             onInputFocus(e.target, i);
           }}
           onBlur={onInputBlur}
           key={`input_${s.id}`}
+          autoCorrect={false}
         />
       </Row>
     );
@@ -153,7 +147,14 @@ const SearchBar = ({
   };
 
   return (
-    <SearchContainer>
+    <View style={{
+      flex: 1,
+      paddingBottom: 12,
+      flexDirection: 'row',
+      borderBottomColor: '#f1f2f6',
+      borderBottomWidth: 2,
+    }}
+    >
       <BackButton
         isExpanded={isExpanded}
         onBack={onBackPress}
@@ -163,7 +164,7 @@ const SearchBar = ({
           {buildSps()}
         </Row>
       </InputContainer>
-    </SearchContainer>
+    </View>
   );
 };
 
