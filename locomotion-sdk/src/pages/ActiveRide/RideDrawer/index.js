@@ -100,7 +100,7 @@ const RideDrawer = ({ navigation }) => {
   const useSettings = settingsContext.useContainer();
 
   const getPaymentMethodStatus = async () => {
-    await usePayments.getPaymentMethods();
+    await usePayments.loadCustomer();
   };
   useEffect(() => {
     useSettings.getSettings();
@@ -133,7 +133,10 @@ const RideDrawer = ({ navigation }) => {
   }, [futureRides]);
 
   useEffect(() => {
-    if (usePayments.paymentMethods && usePayments.paymentMethods.length > 0) {
+    const {
+      paymentMethods,
+    } = usePayments;
+    if (paymentMethods && paymentMethods.length > 0) {
       setAllowRideOrder(true);
     } else {
       setAllowRideOrder(false);
@@ -294,4 +297,3 @@ const RideDrawer = ({ navigation }) => {
 };
 
 export default RideDrawer;
-console.disableYellowBox = true;
