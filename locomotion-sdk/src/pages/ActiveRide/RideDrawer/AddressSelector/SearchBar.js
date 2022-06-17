@@ -147,7 +147,14 @@ const SearchBar = ({
   };
 
   return (
-    <SearchContainer>
+    <View style={{
+      flex: 1,
+      paddingBottom: 12,
+      flexDirection: 'row',
+      borderBottomColor: '#f1f2f6',
+      borderBottomWidth: 2,
+    }}
+    >
       <BackButton
         isExpanded={isExpanded}
         onBack={onBackPress}
@@ -157,7 +164,7 @@ const SearchBar = ({
           {buildSps()}
         </Row>
       </InputContainer>
-    </SearchContainer>
+    </View>
   );
 };
 

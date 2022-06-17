@@ -73,6 +73,7 @@ const RidePageContextProvider = ({ navigation, children }) => {
   const [selectedInputTarget, setSelectedInputTarget] = useState(null);
   const [searchResults, setSearchResults] = useState(null);
   const [isReadyForSubmit, setIsReadyForSubmit] = useState(false);
+  const [historyResults, setHistoryResults] = useState([]);
 
 
   useEffect(() => {

@@ -74,13 +74,13 @@ const historyText = [
 const AddressSelectorBottomSheet = ({ bottomSheetRef }) => {
   // const [isExpanded, setIsExpanded] = useState(false);
   const [contentHeight, setContentHeight] = useState('33%');
-  const [historyResults, setHistoryResults] = useState([]);
   const [resultsList, setResultsList] = useState(null);
   // const bottomSheetRef = useRef(null);
   const userContext = useContext(RidePageContext);
 
   const {
     isExpanded,
+    historyResults,
   } = useContext(BottomSheetContext);
 
   const loadHistory = async () => {
@@ -135,7 +135,7 @@ const AddressSelectorBottomSheet = ({ bottomSheetRef }) => {
             </>
           )
           : null}
-        <View style={{ height: 400 }}>
+        <View>
           {(userContext.searchResults || historyResults).map(h => <AddressRow {...h} onPress={() => userContext.onAddressSelected(h)} />)}
         </View>
       </HistoryContainer>
