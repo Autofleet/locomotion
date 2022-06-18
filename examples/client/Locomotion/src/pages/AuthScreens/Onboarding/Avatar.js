@@ -1,4 +1,4 @@
-import React, {useContext} from 'react';
+import React, {useContext, useState} from 'react';
 import i18n from '../../../I18n';
 import OnboardingNavButtons from './OnboardingNavButtons';
 import {OnboardingContext} from '../../../context/onboarding';
@@ -10,11 +10,13 @@ import {MAIN_ROUTES} from '../../routes';
 import {UserContext} from '../../../context/user';
 
 const Avatar = () => {
+  const [photoSelected, setPhotoSelected] = useState(false);
   const {nextScreen} = useContext(OnboardingContext);
   const {updateUserInfo, user} = useContext(UserContext);
 
   const onImageChoose = image => {
     updateUserInfo({avatar: image});
+    setPhotoSelected(true);
   };
 
   return (
@@ -22,6 +24,7 @@ const Avatar = () => {
       <Header
         title={i18n.t('onboarding.pages.avatar.title')}
         page={MAIN_ROUTES.AVATAR}
+        showSkipButton={!photoSelected}
       />
       <PageContainer>
         <ScreenText
