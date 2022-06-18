@@ -34,11 +34,20 @@ import {PageContainer} from '../styles';
 import {UserContext} from '../../context/user';
 
 const AccountHeader = () => {
-  const {user} = useContext(UserContext);
+  const {updateUserInfo, user} = useContext(UserContext);
+
+  const onImageChoose = image => {
+    updateUserInfo({avatar: image});
+  };
+
   return (
     <AccountHeaderContainer>
       <FlexCenterContainer>
-        <ThumbnailPicker size={125} avatarSource={user.avatar} />
+        <ThumbnailPicker
+          onImageChoose={onImageChoose}
+          size={125}
+          avatarSource={user.avatar}
+        />
       </FlexCenterContainer>
       <AccountHeaderMainContainer>
         <AccountHeaderMainText>

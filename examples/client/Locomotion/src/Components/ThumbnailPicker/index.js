@@ -15,6 +15,7 @@ import Thumbnail from '../Thumbnail';
 import {ImageUpload} from '../../context/user/api';
 
 const ThumbnailPicker = props => {
+  const [loading, setLoading] = useState(false);
   const onCancel = () => {
     console.log('User cancelled image picker');
   };
@@ -39,6 +40,7 @@ const ThumbnailPicker = props => {
   };
 
   const uploadImage = async data => {
+    setLoading(true);
     const newImage = await ImageResizer.createResizedImage(
       data.uri,
       180,
@@ -56,8 +58,10 @@ const ThumbnailPicker = props => {
     const response = await ImageUpload(formData);
 
     if (response.status) {
+      setLoading(false);
       return response.url;
     }
+    setLoading(false);
     return false;
   };
 
@@ -143,6 +147,7 @@ const ThumbnailPicker = props => {
       onPress={showImagePicker}
       size={props.size || 180}
       source={props.avatarSource}
+      showLoader={loading}
     />
   );
 };

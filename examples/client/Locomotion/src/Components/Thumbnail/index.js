@@ -1,12 +1,14 @@
 import React from 'react';
 import {Image, StyleSheet} from 'react-native';
 import FastImage from 'react-native-fast-image';
+import LottieView from 'lottie-react-native';
 import propsTypes from 'prop-types';
 import styled from 'styled-components';
 import Button from '../Button';
 import avatarIcon from './default.png';
 import editIcon from './edit_btn.png';
 import addIcon from './add_btn.png';
+import lightLoader from '../../assets/loader.json';
 
 const modes = {
   edit: editIcon,
@@ -59,10 +61,25 @@ const myThumbnail = props => {
         onPress={props.onPress}
         style={[styles.croper, borderRadius]}
         data-test-id="ImagePickerButton">
-        <ImageComponent
-          style={[styles.image, borderRadiusSmall]}
-          source={props.source ? {uri: props.source} : avatarIcon}
-        />
+        {props.showLoader ? (
+          <LottieView
+            style={undefined}
+            ref={animation => {
+              this.animation = animation;
+              if (animation) {
+                animation.play();
+              }
+            }}
+            source={lightLoader}
+            autoPlay
+            loop
+          />
+        ) : (
+          <ImageComponent
+            style={[styles.image, borderRadiusSmall]}
+            source={props.source ? {uri: props.source} : avatarIcon}
+          />
+        )}
       </Button>
       {props.mode in modes && (
         <Button
@@ -88,6 +105,7 @@ myThumbnail.defaultProps = {
   onPress: () => null,
   mode: 'preview',
   source: null,
+  showLoader: false,
 };
 
 myThumbnail.propTypes = {
@@ -95,4 +113,5 @@ myThumbnail.propTypes = {
   onPress: propsTypes.func,
   mode: propsTypes.string,
   source: Image.propTypes.source,
+  showLoader: propsTypes.bool,
 };
