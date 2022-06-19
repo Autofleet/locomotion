@@ -28,7 +28,6 @@ import {
   VerifyText,
   CardTitleContainer,
   LogoutText,
-  NoPaymentMethodsText,
 } from './styled';
 import i18n from '../../I18n';
 import PageHeader from '../../Components/PageHeader';

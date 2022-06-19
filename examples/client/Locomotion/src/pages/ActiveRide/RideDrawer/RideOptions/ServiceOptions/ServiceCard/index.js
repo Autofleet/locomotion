@@ -48,7 +48,11 @@ const ServiceCard = ({ selected, service }) => {
           <Title>
             {service.name}
           </Title>
-          {service.tag && <Tag containerStyles={tagStyles[service.tag].container} text={service.tag} textColor={tagStyles[service.tag].textColor} />}
+          {service.tag
+            ? <Tag containerStyles={tagStyles[service.tag].container}
+              text={service.tag}
+              textColor={tagStyles[service.tag].textColor} />
+            : null}
           <Price>
             {service.price || unavailableText}
           </Price>

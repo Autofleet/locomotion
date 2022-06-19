@@ -29,7 +29,9 @@ const RidePage = ({ menuSide, mapSettings }) => {
   }, []);
 
   useEffect(() => {
-    bottomSheetRef.current.collapse();
+    if (serviceEstimations) {
+      bottomSheetRef.current.collapse();
+    }
   }, [serviceEstimations]);
 
   return (

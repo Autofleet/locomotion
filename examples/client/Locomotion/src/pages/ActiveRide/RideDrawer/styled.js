@@ -176,8 +176,6 @@ export const DrawerContainer = styled.View`
   shadow-offset: 0px 0px;
   shadow-color: #04214f;
   shadow-opacity: 0.4;
-  background-color: white;
-  height: 300px;
 `;
 
 const PaymentBarContainer = styled.TouchableOpacity`

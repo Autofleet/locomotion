@@ -1,4 +1,7 @@
 {
+    "rideDetails": {
+        "unavailable": "Not available"
+    },
     "general": {
         "back": "Back",
         "next": "Continue",

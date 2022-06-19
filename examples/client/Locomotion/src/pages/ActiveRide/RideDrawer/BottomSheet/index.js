@@ -10,12 +10,7 @@ import SafeView from '../../../../Components/SafeView';
 import { BottomSheetContext } from '../../../../context/bottomSheetContext';
 
 const ContentContainer = styled(BottomSheetView)`
-  align-items: center;
-  flex-direction: column;
-  padding: 0px 30px 20px 30px;
-  width: 100%;
   flex: 1;
-
 `;
 
 const BottomSheetComponent = forwardRef(({ children }, ref) => {

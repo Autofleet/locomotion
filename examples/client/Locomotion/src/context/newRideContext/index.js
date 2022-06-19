@@ -74,7 +74,7 @@ const RidePageContextProvider = ({ navigation, children }) => {
       eta: estimationResult.minPickupEta,
       price: estimationResult.priceAmount,
       availableSeats: service.maxPassengers || 4,
-      tag: TAG_OPTIONS.FASTEST,
+      tag: null,
       iconUrl: service.icon,
       description: service.displayDescription,
     };
