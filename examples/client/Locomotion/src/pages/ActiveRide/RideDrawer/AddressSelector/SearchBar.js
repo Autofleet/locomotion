@@ -129,6 +129,7 @@ const SearchBar = ({
     const rowProps = i === 0 ? { isExpanded } : { setMargin: true };
 
     return (
+      // eslint-disable-next-line react/no-array-index-key
       <Row {...rowProps} key={`row${i}`}>
         <BottomSheetInput
           placeholder={i18n.t(placeholder)}

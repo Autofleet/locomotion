@@ -6620,7 +6620,7 @@
   "version" "0.4.1"
 
 "json-stable-stringify-without-jsonify@^1.0.1":
-  "integrity" "sha512-Bdboy+l7tA3OGW6FjyFHWkP5LuByj1Tk33Ljyq0axyzdk9//JSi2u3fP1QSmd1KNwq6VOKYGlAu87CisVir6Pw=="
+  "integrity" "sha1-nbe1lJatPzz+8wp1FC0tkwrXJlE="
   "resolved" "https://registry.npmjs.org/json-stable-stringify-without-jsonify/-/json-stable-stringify-without-jsonify-1.0.1.tgz"
   "version" "1.0.1"
 
@@ -8367,6 +8367,13 @@
     "css-select" "^4.2.1"
     "css-tree" "^1.0.0-alpha.39"
 
+"react-native-swipe-verify@^0.1.6":
+  "integrity" "sha512-oV3k1Jr5h6ET07Il5/5Xsa59rn3Dj1FObJwhuMU5CJQyrvyjXf+eNPgQ/L6ZAUXUppiLfyatmRgs3w0ZU9M1nw=="
+  "resolved" "https://registry.npmjs.org/react-native-swipe-verify/-/react-native-swipe-verify-0.1.6.tgz"
+  "version" "0.1.6"
+  dependencies:
+    "prop-types" "^15.6.2"
+
 "react-native-table-component@^1.2.2":
   "integrity" "sha512-7bbsi5431iWcjj3toASh8lFHGi6AG/+MTd4M7GuksXKxx/CFs/Qwv1Ys7D2wgyuYKe3hxWNfSVrteFj0tOYXYw=="
   "resolved" "https://registry.npmjs.org/react-native-table-component/-/react-native-table-component-1.2.2.tgz"
@@ -9519,7 +9526,7 @@
     "minimatch" "^3.0.4"
 
 "text-table@^0.2.0":
-  "integrity" "sha512-N+8UisAXDGk8PFXP4HAzVR9nbfmVJ3zYLAWiTIoqC5v5isinhr+r5uaO8+7r3BMfuNIufIsA7RdpVgacC2cSpw=="
+  "integrity" "sha1-f17oI66AUgfACvLfSoTsP8+lcLQ="
   "resolved" "https://registry.npmjs.org/text-table/-/text-table-0.2.0.tgz"
   "version" "0.2.0"
 
