@@ -1,0 +1,52 @@
+{
+  "parser": "babel-eslint",
+  "extends": "airbnb",
+  "plugins": ["react", "jsx-a11y", "import"],
+  "rules": {
+      "func-names": [
+          "error",
+          "never"
+      ],
+      "linebreak-style": ["off"],
+      "no-undef": ["error"],
+      "react/destructuring-assignment": 1,
+      "consistent-return": 1,
+      "no-param-reassign": 1,
+      "import/no-unresolved": 1,
+      "max-len": 1,
+      "no-case-declarations": 1,
+      "react/no-this-in-sfc": 1,
+      "no-empty": 1,
+      "no-plusplus": 1,
+      "default-case": 1,
+      "react/no-unused-prop-types": 1,
+      "no-unreachable": 1,
+      "no-return-assign": 1,
+      "no-nested-ternary": 1,
+      "array-callback-return": 1,
+      "react/forbid-prop-types": 1,
+      "no-use-before-define": 1,
+      "import/prefer-default-export": 1,
+      "import/extensions": 1,
+      "import/named": 1,
+      "no-unused-vars": 1,
+      "react/prop-types": 1,
+      "react/sort-comp": ["off"],
+      "react/prefer-stateless-function": ["off"],
+      "react/jsx-filename-extension": 0,
+      "react/no-typos": ["off"],
+      "global-require": ["off"],
+      "jsx-a11y/anchor-is-valid": ["off"],
+      "react/jsx-no-bind": ["off"],
+      "no-restricted-syntax": "warn"
+  },
+  "globals": {
+      "navigator": true,
+      "fetch": true,
+      "this.props.navigation": true,
+      "FormData": true,
+      "WebSocket": true,
+      "it": true
+  },
+  "ignorePatterns": ["dist/*", "node_modules/", "jest.config.js", "**/*.d.*", "**/*.test.*", "src/test/", "src/storybook"]
+}

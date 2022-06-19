@@ -1,24 +1,27 @@
 {
+    "rideDetails": {
+        "timeUntilArrival": "In {{minutes}} min"
+    },
     "general": {
         "back": "Back",
         "next": "Continue",
-        "cancel": "cancel",
+        "cancel": "Cancel",
         "skip": "Skip"
     },
     "login": {
         "getStarted": "Get started!",
         "signUp": "Sign up",
         "login": "Log in",
-        "noAccountError": "No account exists with that number",
-        "accountAlreadyExistsError": "An account already exists with that number",
-        "onBoardingPageTitle": "Please add your name and upload a photo to continue",
+        "noAccountError": "No account exists with that number.",
+        "accountAlreadyExistsError": "An account already exists with that number.",
+        "onBoardingPageTitle": "Please add your name and upload a photo to continue.",
         "phoneNumberPlaceholder": "Phone number",
         "loginPageInstructions": "Enter your phone number",
         "verificationCodeInstructions": "Enter the code you received",
         "submitPhoneNumberButton": "Login",
         "submitVertButton": "Verify",
-        "phoneNumberError": "Oops! Seems like something went wrong",
-        "invalidPhoneNumberError": "Phone number is not valid",
+        "phoneNumberError": "Oops! Seems like something went wrong.",
+        "invalidPhoneNumberError": "Phone number is not valid.",
         "vertError": "Sorry, seems like the verification code is incorrect. Please make sure you've typed it correctly.",
         "resendButton": "Start over",
         "introText": "Please enter your phone number to signup to Locomotion. You will receive an SMS with a verification code.",
@@ -31,33 +34,37 @@
             "phone": {
                 "title": "Phone Number",
                 "text": "Enter mobile phone number",
-                "subText": "we'll send a verification code to this number",
+                "subText": "We'll send a verification code to this number",
                 "placeholder": "(000) 123 - 4567"
             },
             "code": {
-                "title": "verification",
+                "title": "Verification",
                 "text": "Please enter code",
                 "subText": "A code has been sent to  {{phoneNumber}}",
-                "resendCodeText": "didn't receive an SMS? ",
+                "resendCodeText": "Didn't receive an SMS?",
                 "resendCodeButton": "Resend"
             },
             "name": {
                 "title": "Personal Details",
                 "text": "What's your name?",
-                "subText": "Let us know the best way to address you"
+                "subText": "Let us know the best way to address you."
             },
             "avatar": {
                 "title": "Personal Details",
                 "text": "Add a photo",
-                "subText": "Help us identify you during pickups"
+                "subText": "Help us identify you during pickups."
             },
             "email": {
                 "title": "Personal Details",
                 "text": "Enter your Email address",
-                "subText": "This is where we'll send you receipts",
+                "subText": "This is where we'll send your receipts.",
                 "placeholder": "ex. John@email.com",
                 "error": "Please enter a valid email address",
                 "inUseError": "Email is already in use"
+            },
+            "card": {
+                "title": "Payment Method",
+                "text": "Credit Card Information"
             },
             "welcome": {
                 "text": "Welcome aboard, {{firstName}}!",
@@ -182,7 +189,7 @@
             "submit": "Submit"
         },
         "rideCancel": {
-            "main": "Your ride has been canceled",
+            "main": "Your ride has been canceled.",
             "sub": "Sorry it didn't work this time, please try again soon!"
         },
         "rideOver": {
@@ -191,14 +198,14 @@
         },
         "rideRejected": {
             "main": "Sorry, we couldn't find a driver for you",
-            "sub": "All our drivers are busy right now. Please try again in a few minutes"
+            "sub": "All our drivers are busy right now. Please try again in a few minutes."
         },
         "selectNumberOfPassenger": {
-            "main": "Select number of passenger"
+            "main": "Select number of passengers"
         },
         "futureRideCanceled": {
             "title": "Your ride has been canceled",
-            "subTitle": "Sorry it didn't work out this time, please create an order to try again"
+            "subTitle": "Sorry it didn't work out this time, please create an order to try again."
         },
         "defaultFooterButton": "OK"
     },
