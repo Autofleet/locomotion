@@ -17,13 +17,13 @@ const SvgIcon = ({
   height={height}
   width={width}
       >
-  <Svg 
+  <Svg
     width={width}
     height={height}
     stroke={stroke}
     fill={fill}
   />
-</IconContainer>
+</IconContainer>;
 
 export default SvgIcon;
 
