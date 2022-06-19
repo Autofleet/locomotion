@@ -1,11 +1,12 @@
 import React, { createContext, useEffect, useState } from 'react';
 import AppSettings from '../../services/app-settings';
-import { loginVert, sendEmailVerification, updateUser } from './api';
+import { getUserDetails, loginVert, sendEmailVerification, updateUser } from './api';
 import auth from '../../services/auth';
 import Mixpanel from '../../services/Mixpanel';
 import PaymentsContext from '../payments';
 
 export interface User {
+  id: string; 
   phoneNumber?: string;
   firstName?: string;
   lastName?: string;
@@ -24,6 +25,8 @@ interface UserContextInterface {
   updateUserInfo: (values: {}) => Promise<void>,
   onVert: (code: string) => Promise<boolean | User>,
   removeChangesToUser: () => Promise<void>,
+  verifyEmail: () => Promise<void>,
+  getUserFromServer: () => Promise<void>
 }
 
 export const UserContext = createContext<UserContextInterface>({
@@ -34,11 +37,17 @@ export const UserContext = createContext<UserContextInterface>({
   updateUserInfo: async (values: {}) => {},
   onVert: async (code: string) => false,
   removeChangesToUser: async () => {},
+  verifyEmail: async () => {},
+  getUserFromServer: async () => {}
 });
 
 const UserContextProvider = ({ children }: { children: any }) => {
   const usePayments = PaymentsContext.useContainer();
   const [user, setUser] = useState<User | null>(null);
+
+  const getUserFromServer = () => {
+    return getUserDetails()
+  }
 
   const updateState = (values: any) => {
     const newUser: User = {
@@ -63,8 +72,8 @@ const UserContextProvider = ({ children }: { children: any }) => {
     getUserFromStorage();
   }, []);
 
-  const verifyEmail = async (userId: string) => {
-    await sendEmailVerification(userId);
+  const verifyEmail = async () => {
+    await sendEmailVerification(user && user.id);
   };
 
   const updateUserInfo = async (values: any) => {
@@ -72,9 +81,6 @@ const UserContextProvider = ({ children }: { children: any }) => {
     const newUser = await updateUser(values);
     if (newUser.didCompleteOnboarding) {
       AppSettings.update({ userProfile: newUser });
-    }
-    if (values.email && !newUser.isEmailVerified) {
-      verifyEmail(newUser.id);
     }
   };
 
@@ -123,6 +129,8 @@ const UserContextProvider = ({ children }: { children: any }) => {
         updateUserInfo,
         onVert,
         removeChangesToUser,
+        verifyEmail,
+        getUserFromServer
       }}
     >
       {children}

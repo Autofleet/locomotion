@@ -230,6 +230,7 @@
         }
     },
     "payments": {
+        "noMethod": "none",
         "pageTitle": "Payments",
         "submitCard": "Add card",
         "skipForNow": "Skip for now",

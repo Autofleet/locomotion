@@ -27,6 +27,7 @@ import {
 
 import { getPlaces, getGeocode, getPlaceDetails } from './google-api';
 import StorageService from '../../services/storage';
+import { getServices } from './api';
 
 const STATION_AUTOREFRESH_INTERVAL = 60000;
 

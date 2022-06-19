@@ -164,3 +164,8 @@ export const AccountHeaderIndicatorContainer = styled.View`
   flex-direction: row;
   vertical-align: center;
 `;
+
+export const NoPaymentMethodsText = styled.Text`
+width: 100%;
+text-align: center;
+`

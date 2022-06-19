@@ -28,6 +28,7 @@ import {
   VerifyText,
   CardTitleContainer,
   LogoutText,
+  NoPaymentMethodsText
 } from './styled';
 import i18n from '../../I18n';
 import PageHeader from '../../Components/PageHeader';
@@ -159,7 +160,8 @@ const AccountContent = ({ navigation }) => {
            }
             </Card>
           ))
-          : 'none'}
+          : 
+          <NoPaymentMethodsText>{i18n.t('payments.noMethod')}</NoPaymentMethodsText>}
         <LogoutContainer
           onPress={() => {
             navigation.navigate(MAIN_ROUTES.LOGOUT);
