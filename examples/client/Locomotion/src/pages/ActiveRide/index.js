@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useRef } from 'react';
 import { View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import NotAvilableHere from '../../Components/NotAvilableHere';
+import { NotAvailableHere } from '../../Components/BsPages';
 import { RideStateContextContext, RidePageContextProvider } from '../../context';
 import NewRidePageContextProvider, { RidePageContext } from '../../context/newRideContext';
 import BottomSheetContextProvider from '../../context/bottomSheetContext';
@@ -44,7 +44,7 @@ const RidePage = ({ menuSide, mapSettings }) => {
     //      setIsExpanded={setIsExpanded}
         >
           {showOutOfTerritory ? (
-            <NotAvilableHere onSetAnotherLocation={() => ({})} />
+            <NotAvailableHere onButtonPress={() => ({})} />
           ) : (
             <>
               {!serviceEstimations

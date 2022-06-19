@@ -9,16 +9,17 @@ interface RideStateContextContextInterface {
 export const RideStateContextContext = createContext<RideStateContextContextInterface | null>(null);
 
 const RideStateContextContextProvider = ({ children }: { children: any }) => {
-  const [territory, setTerritory] = useState(null);
+  const [territory, setTerritory] = useState<Array<any> | null>(null);
   const [showOutOfTerritory, setShowOutOfTerritory] = useState<boolean | undefined>(false);
 
   const loadTerritory = async (checkTerritory = false) => {
     let t = territory;
     if (!t) {
       t = await getUserTerritories();
+      t = t && t.flat();
       setTerritory(t);
     }
-    if (checkTerritory) {
+    if (t && checkTerritory) {
       const position = await getPosition();
       const isInsidePoly = await pointInPolygon(t, position);
       setShowOutOfTerritory(!isInsidePoly);

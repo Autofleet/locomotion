@@ -9,11 +9,7 @@ const BottomSheetProvider = ({ navigation, children }) => {
   const [snapPointsState, setSnapPointsState] = useState(['CONTENT_HEIGHT', '100%']);
   const [snapPointIndex, setSnapPointIndex] = useState(0);
   const snapPoints = useMemo(() => snapPointsState, []);
-  const getSnapPoints = () => {
-    console.log('getSnapPointsgetSnapPointsgetSnapPoints');
-
-    return useMemo(() => snapPointsState, []);
-  };
+  const getSnapPoints = () => useMemo(() => snapPointsState, []);
 
   useEffect(() => {
     const newIsExpanded = snapPointIndex === (snapPointsState.length - 1);
