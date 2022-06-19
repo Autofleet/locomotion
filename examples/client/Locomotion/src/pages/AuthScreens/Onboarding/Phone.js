@@ -16,11 +16,10 @@ const Phone = () => {
   const { updateState, user } = useContext(UserContext);
   const [showErrorText, setShowErrorText] = useState(false);
   const [isInvalid, setIsInvalid] = useState(true);
-  const onPhoneNumberChange = (phoneNumber, countryCode, isValid) => {
-    const clearedPhoneNumber = phoneNumber.replace(/\D/g, '');
+  const onPhoneNumberChange = (phoneNumber, isValid) => {
     setShowErrorText(false);
     setIsInvalid(!isValid);
-    updateState({ phoneNumber: countryCode + clearedPhoneNumber });
+    updateState({ phoneNumber });
   };
 
   const onSubmitPhoneNumber = async () => {

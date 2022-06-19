@@ -24,11 +24,9 @@ const PhoneNumberInput = ({
   const onChangeText = (v) => {
     const numberValue = `+${countryCode}${v}`;
     asYouTypePhoneNUmber.input(numberValue);
-    const isValidChartsOnly = asYouTypePhoneNUmber.getNumberValue() === numberValue;
     return onPhoneNumberChange(
-      v,
-      countryCode,
-      asYouTypePhoneNUmber.isValid() && isValidChartsOnly,
+      asYouTypePhoneNUmber.getNumberValue(),
+      asYouTypePhoneNUmber.isValid(),
     );
   };
 
