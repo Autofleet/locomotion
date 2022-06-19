@@ -28,6 +28,10 @@ const RidePage = ({ menuSide, mapSettings }) => {
     initGeoService();
   }, []);
 
+  useEffect(() => {
+    bottomSheetRef.current.collapse();
+  }, [serviceEstimations])
+
   return (
     <>
       <PageContainer>
@@ -41,7 +45,7 @@ const RidePage = ({ menuSide, mapSettings }) => {
             <NotAvilableHere onSetAnotherLocation={() => ({})} />
           ) : (
             <>
-              {true ? 
+              {!serviceEstimations ? 
               <AddressSelector bottomSheetRef={bottomSheetRef} />
               :
               <RideOptions />

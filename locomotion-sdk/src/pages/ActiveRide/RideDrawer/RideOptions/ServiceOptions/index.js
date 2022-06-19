@@ -6,7 +6,7 @@ import { ServiceOptionsContainer } from "./styles";
 const ServiceOptions = () => {
 const { serviceEstimations } = useContext(RidePageContext)
 
-  return (
+return (
     <ServiceOptionsContainer alwaysBounceVertical={false}>
         <>
         {serviceEstimations.map((option) => {

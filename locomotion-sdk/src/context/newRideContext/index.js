@@ -1,7 +1,6 @@
 import React, {
   useState, useEffect, useRef, createContext,
 } from 'react';
-import randomstring from 'randomstring';
 import { getPosition } from '../../services/geo';
 import { getPlaces, getGeocode, getPlaceDetails } from './google-api';
 import StorageService from '../../services/storage';
@@ -74,7 +73,7 @@ const RidePageContextProvider = ({ navigation, children }) => {
         name: service.displayName,
         eta: estimationResult.minPickupEta,
         price: estimationResult.priceAmount,
-        availableSeats: 4,//get from vehicle type?,
+        availableSeats: service.maxPassengers || 4,
         tag: TAG_OPTIONS.FASTEST,
         iconUrl: service.icon,
         description: service.displayDescription,
@@ -83,7 +82,14 @@ const RidePageContextProvider = ({ navigation, children }) => {
   }
 
   const getServiceEstimations = async () => {
-    const estimations = await createServiceEstimations(requestStopPoints);
+    const formattedStopPoints = requestStopPoints.map((sp) => {
+      return {
+        type: sp.type,
+        lat: sp.location.lat,
+        lng: sp.location.lng
+      }
+    })
+    const estimations = await createServiceEstimations(formattedStopPoints);
     const services = await getServices()
     const formattedEstimations = formatEstimations(services, estimations)
     setServiceEstimations(formattedEstimations)
