@@ -2,7 +2,7 @@ import React, {
   useCallback, useEffect, useMemo, useRef, useState, useContext,
 } from 'react';
 import {
-  View, Text, StyleSheet, LayoutAnimation,
+  View, Text, StyleSheet, LayoutAnimation, Animated, Platform, UIManager,
 } from 'react-native';
 import styled from 'styled-components';
 import { debounce } from 'lodash';
@@ -27,7 +27,7 @@ const InputContainer = styled(View)`
     flex: 1;
 `;
 
-const Row = styled(View)`
+const Row = styled(Animated.View)`
     flex: 1;
     ${({ setMargin }) => setMargin && `
         margin-top: 12px;
@@ -47,6 +47,7 @@ const BackButtonContainer = styled.TouchableOpacity`
     margin-right: 8px;
     justify-content: center;
     align-items: center;
+
 `;
 
 const ArrowImage = styled.Image.attrs({ source: backImage })`
@@ -64,6 +65,13 @@ const BackButton = ({ isExpanded, onBack }) => {
     </BackButtonContainer>
   );
 };
+
+if (
+  Platform.OS === 'android'
+  && UIManager.setLayoutAnimationEnabledExperimental
+) {
+  UIManager.setLayoutAnimationEnabledExperimental(true);
+}
 
 const SearchBar = ({
   isExpanded,
@@ -115,6 +123,7 @@ const SearchBar = ({
     debouncedSearch(searchTerm);
   }, [searchTerm]);
 
+
   const buildSps = () => requestStopPoints.map((s, i) => {
     const placeholder = getSpPlaceholder(s);
     const rowProps = i === 0 ? { isExpanded } : { setMargin: true };
@@ -141,28 +150,81 @@ const SearchBar = ({
   });
 
   const onBackPress = () => {
-    selectedInputTarget.blur();
+    console.log('BACK PRESS');
+    if (selectedInputTarget) {
+      selectedInputTarget.blur();
+    }
     onBack();
   };
 
+
+  useEffect(() => {
+    if (isExpanded) {
+      LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
+    } else {
+      LayoutAnimation.configureNext(LayoutAnimation.create(
+        500,
+        LayoutAnimation.Presets.easeOut,
+        LayoutAnimation.Properties.scaleXY,
+      ));
+      if (selectedInputTarget) {
+        selectedInputTarget.blur();
+      }
+    }
+  }, [isExpanded]);
   return (
-    <View style={{
-      flex: 1,
-      paddingBottom: 12,
-      flexDirection: 'row',
-      borderBottomColor: '#f1f2f6',
-      borderBottomWidth: 2,
-    }}
+    <View
+      style={{
+        flex: 1,
+        paddingBottom: 12,
+        flexDirection: 'row',
+        borderBottomColor: '#f1f2f6',
+        borderBottomWidth: 2,
+      }}
     >
-      <BackButton
-        isExpanded={isExpanded}
-        onBack={onBackPress}
-      />
-      <InputContainer>
-        <Row>
-          {buildSps()}
-        </Row>
-      </InputContainer>
+      {isExpanded
+        ? (
+          <BackButton
+            isExpanded
+            onBack={onBackPress}
+          />
+        ) : null}
+      <View
+        style={{
+          flexDirection: 'column',
+          justifyContent: 'space-between',
+          flex: 1,
+        }}
+      >
+
+        {requestStopPoints.map((s, i) => {
+          const placeholder = getSpPlaceholder(s);
+          const rowProps = i === 0 ? { isExpanded } : { margin: true };
+          return (
+            <Row
+              {...rowProps}
+            >
+              <BottomSheetInput
+                placeholder={i18n.t(placeholder)}
+                onChangeText={(text) => {
+                  updateRequestSp({ description: text });
+                  setSearchTerm(text);
+                }}
+                fullBorder
+                value={requestStopPoints[i].description}
+                placeholderTextColor="#929395"
+                onFocus={(e) => {
+                  onInputFocus(e.target, i);
+                }}
+                onBlur={onInputBlur}
+                key={`input_${s.id}`}
+                autoCorrect={false}
+              />
+            </Row>
+          );
+        })}
+
+      </View>
     </View>
   );
 };
