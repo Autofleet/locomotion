@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import propsTypes from 'prop-types';
 /* eslint-disable class-methods-use-this */
 import {
@@ -9,23 +9,23 @@ import {
   PermissionsAndroid,
 } from 'react-native';
 import ImageResizer from 'react-native-image-resizer';
-import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
+import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 import i18n from '../../I18n';
 import Thumbnail from '../Thumbnail';
-import {ImageUpload} from '../../context/user/api';
+import { ImageUpload } from '../../context/user/api';
 
-const ThumbnailPicker = props => {
+const ThumbnailPicker = (props) => {
   const [loading, setLoading] = useState(false);
   const onCancel = () => {
     console.log('User cancelled image picker');
   };
 
-  const onError = error => {
+  const onError = (error) => {
     console.log('ImagePicker Error: ', error);
   };
 
-  const onSelectPicture = response => {
-    const {assets, errorCode, didCancel} = response;
+  const onSelectPicture = (response) => {
+    const { assets, errorCode, didCancel } = response;
     if (didCancel) {
       onCancel();
     }
@@ -39,7 +39,7 @@ const ThumbnailPicker = props => {
     }
   };
 
-  const uploadImage = async data => {
+  const uploadImage = async (data) => {
     setLoading(true);
     const newImage = await ImageResizer.createResizedImage(
       data.uri,
@@ -65,13 +65,13 @@ const ThumbnailPicker = props => {
     return false;
   };
 
-  const handleImage = async data => {
+  const handleImage = async (data) => {
     console.log('Data of the uploaded image', data);
     const uploadPromise = await uploadImage(data);
     props.onImageChoose(uploadPromise);
   };
 
-  const onSuccess = response => {
+  const onSuccess = (response) => {
     handleImage(response[0]);
   };
 
@@ -84,7 +84,7 @@ const ThumbnailPicker = props => {
     }
   };
 
-  const showImagePicker = event => {
+  const showImagePicker = (event) => {
     const options = [
       i18n.t('popups.photoUpload.takePhoto'),
       i18n.t('popups.photoUpload.choosePhoto'),
@@ -124,7 +124,7 @@ const ThumbnailPicker = props => {
           options: [i18n.t('general.cancel'), ...options],
           cancelButtonIndex: 0,
         },
-        buttonIndex => {
+        (buttonIndex) => {
           if (buttonIndex === 0) {
             onCancel();
           }

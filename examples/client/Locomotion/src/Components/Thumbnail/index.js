@@ -1,5 +1,5 @@
 import React from 'react';
-import {Image, StyleSheet} from 'react-native';
+import { Image, StyleSheet } from 'react-native';
 import FastImage from 'react-native-fast-image';
 import LottieView from 'lottie-react-native';
 import propsTypes from 'prop-types';
@@ -16,7 +16,7 @@ const modes = {
 };
 
 const Container = styled.View``;
-const myThumbnail = props => {
+const myThumbnail = (props) => {
   const defaultStyles = {
     linearGradient: {
       padding: 3,
@@ -50,21 +50,21 @@ const myThumbnail = props => {
   defaultStyles.linearGradient.height = props.size;
   defaultStyles.linearGradient = Object.assign(defaultStyles.linearGradient);
   const styles = StyleSheet.create(defaultStyles);
-  const ImageComponent =
-    props.source && props.source.substring(0, 4) === 'http' ? FastImage : Image;
-  const borderRadius = {borderRadius: props.size / 2};
-  const borderRadiusSmall = {borderRadius: (props.size - 10) / 2};
+  const ImageComponent = props.source && props.source.substring(0, 4) === 'http' ? FastImage : Image;
+  const borderRadius = { borderRadius: props.size / 2 };
+  const borderRadiusSmall = { borderRadius: (props.size - 10) / 2 };
   return (
-    <Container style={{width: props.size, height: props.size}}>
+    <Container style={{ width: props.size, height: props.size }}>
       <Button
         noBg
         onPress={props.onPress}
         style={[styles.croper, borderRadius]}
-        data-test-id="ImagePickerButton">
+        data-test-id="ImagePickerButton"
+      >
         {props.showLoader ? (
           <LottieView
             style={undefined}
-            ref={animation => {
+            ref={(animation) => {
               this.animation = animation;
               if (animation) {
                 animation.play();
@@ -77,7 +77,7 @@ const myThumbnail = props => {
         ) : (
           <ImageComponent
             style={[styles.image, borderRadiusSmall]}
-            source={props.source ? {uri: props.source} : avatarIcon}
+            source={props.source ? { uri: props.source } : avatarIcon}
           />
         )}
       </Button>
@@ -86,7 +86,8 @@ const myThumbnail = props => {
           noBg
           onPress={props.onPress}
           style={styles.iconContainer}
-          data-test-id={`${props.mode}ImageButton`}>
+          data-test-id={`${props.mode}ImageButton`}
+        >
           <Image
             onPress={props.onPress}
             style={styles.icon}

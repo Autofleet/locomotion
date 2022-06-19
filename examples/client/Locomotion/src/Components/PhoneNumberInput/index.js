@@ -1,8 +1,8 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import PhoneInput from 'react-native-phone-number-input';
-import {AsYouType} from 'libphonenumber-js';
+import { AsYouType } from 'libphonenumber-js';
 import i18n from '../../I18n';
-import {ERROR_COLOR} from '../../services/sharedStyles';
+import { ERROR_COLOR } from '../../context/theme';
 import codes from './codes.json';
 
 const PhoneNumberInput = ({
@@ -17,15 +17,14 @@ const PhoneNumberInput = ({
   const [countryCode, setCountryCode] = useState(initialCode.dialCode);
   const asYouTypePhoneNUmber = new AsYouType();
 
-  const onChangeCountry = v => {
+  const onChangeCountry = (v) => {
     setCountryCode(v.callingCode[0]);
   };
 
-  const onChangeText = v => {
+  const onChangeText = (v) => {
     const numberValue = `+${countryCode}${v}`;
     asYouTypePhoneNUmber.input(numberValue);
-    const isValidChartsOnly =
-      asYouTypePhoneNUmber.getNumberValue() === numberValue;
+    const isValidChartsOnly = asYouTypePhoneNUmber.getNumberValue() === numberValue;
     return onPhoneNumberChange(
       v,
       countryCode,
