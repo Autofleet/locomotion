@@ -2,6 +2,8 @@
 import { point, polygon, booleanPointInPolygon } from '@turf/turf';
 import Mixpanel from '../../services/Mixpanel';
 
+const ERROR_MSG = 'unable to calc pointInPolygon';
+
 export default async (polys: any, position: any) => {
   if (position) {
     try {
@@ -11,8 +13,8 @@ export default async (polys: any, position: any) => {
       const poly = polygon(t.flat());
       return booleanPointInPolygon(pt, poly);
     } catch (e) {
-      console.error(e);
-      Mixpanel.trackWithProperties('unable to calc pointInPolygon', { e });
+      console.error(ERROR_MSG, e);
+      Mixpanel.trackWithProperties(ERROR_MSG, { e });
     }
   }
 };

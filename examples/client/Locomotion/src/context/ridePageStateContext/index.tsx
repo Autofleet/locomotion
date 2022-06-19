@@ -9,14 +9,14 @@ interface RideStateContextContextInterface {
 export const RideStateContextContext = createContext<RideStateContextContextInterface | null>(null);
 
 const RideStateContextContextProvider = ({ children }: { children: any }) => {
-  const [territory, setTerritory] = useState(null);
+  const [territory, setTerritory] = useState<Array<any> | null>(null);
   const [showOutOfTerritory, setShowOutOfTerritory] = useState<boolean | undefined>(false);
 
   const loadTerritory = async (checkTerritory = false) => {
     let t = territory;
     if (!t) {
       t = await getUserTerritories();
-      setTerritory(t);
+      setTerritory(t && t.flat());
     }
     if (checkTerritory) {
       const position = await getPosition();
