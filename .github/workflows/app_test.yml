@@ -3,8 +3,8 @@ name: App Test
 on:
   push:
     paths:
-    - 'locomotion-sdk/**'
-    - '.github/workflows/sdk.yml'
+    - 'examples/client/Locomotion/**'
+    - '.github/workflows/app_test.yml'
 
 defaults:
   run:
@@ -19,7 +19,7 @@ jobs:
       - name: Use Node.js 14
         uses: actions/setup-node@v1
         with:
-          node-version: 14
+          node-version: 16
           always-auth: true
           registry-url: https://registry.npmjs.org
           
