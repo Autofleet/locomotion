@@ -51,7 +51,7 @@ const DrawerLabel = ({
   onPress, focused, tintColor, title, icon, lastItem,
 }) => (
   <StyledDrawerLabel focused={focused} onPress={onPress} lastItem={lastItem}>
-    <DrawerIcon source={icon} focused={focused} fill="#fff" style={{ fill: '#fff' }} />
+    <DrawerIcon source={icon} focused={focused} fill="#fff" />
     <LabelText color={tintColor} focused={focused}>{title}</LabelText>
   </StyledDrawerLabel>
 );

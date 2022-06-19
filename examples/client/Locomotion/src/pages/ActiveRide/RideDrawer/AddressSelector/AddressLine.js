@@ -84,7 +84,7 @@ const AddressRow = ({
       onPress={onPress}
     >
       <IconContainer>
-        {finalIcon ? <Icon svg={finalIcon} actionButton={actionButton} /> : null}
+        {finalIcon ? <Icon Svg={finalIcon} actionButton={actionButton} /> : null}
       </IconContainer>
       <AddressContainer>
         {actionButton ? <ActionText>{text}</ActionText> : <AddressText>{text}</AddressText>}

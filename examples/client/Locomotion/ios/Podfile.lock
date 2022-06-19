@@ -155,15 +155,15 @@ PODS:
     - nanopb/encode (= 2.30908.0)
   - nanopb/decode (2.30908.0)
   - nanopb/encode (2.30908.0)
-  - OneSignalXCFramework (3.11.1):
-    - OneSignalXCFramework/OneSignalCore (= 3.11.1)
-    - OneSignalXCFramework/OneSignalExtension (= 3.11.1)
-    - OneSignalXCFramework/OneSignalOutcomes (= 3.11.1)
-  - OneSignalXCFramework/OneSignalCore (3.11.1)
-  - OneSignalXCFramework/OneSignalExtension (3.11.1):
+  - OneSignalXCFramework (3.11.2):
+    - OneSignalXCFramework/OneSignalCore (= 3.11.2)
+    - OneSignalXCFramework/OneSignalExtension (= 3.11.2)
+    - OneSignalXCFramework/OneSignalOutcomes (= 3.11.2)
+  - OneSignalXCFramework/OneSignalCore (3.11.2)
+  - OneSignalXCFramework/OneSignalExtension (3.11.2):
     - OneSignalXCFramework/OneSignalCore
     - OneSignalXCFramework/OneSignalOutcomes
-  - OneSignalXCFramework/OneSignalOutcomes (3.11.1):
+  - OneSignalXCFramework/OneSignalOutcomes (3.11.2):
     - OneSignalXCFramework/OneSignalCore
   - OpenSSL-Universal (1.1.1100)
   - PromisesObjC (2.1.0)
@@ -395,8 +395,8 @@ PODS:
   - react-native-mixpanel (1.2.5):
     - Mixpanel (~> 3.6.0)
     - React
-  - react-native-onesignal (4.3.10):
-    - OneSignalXCFramework (= 3.11.1)
+  - react-native-onesignal (4.3.11):
+    - OneSignalXCFramework (= 3.11.2)
     - React (< 1.0.0, >= 0.13.0)
   - react-native-safe-area-context (4.3.1):
     - RCT-Folly
@@ -483,10 +483,10 @@ PODS:
     - React-Core
     - SDWebImage (~> 5.11.1)
     - SDWebImageWebPCoder (~> 0.8.4)
-  - RNFBApp (14.11.0):
+  - RNFBApp (14.11.1):
     - Firebase/CoreOnly (= 8.15.0)
     - React-Core
-  - RNFBCrashlytics (14.11.0):
+  - RNFBCrashlytics (14.11.1):
     - Firebase/Crashlytics (= 8.15.0)
     - React-Core
     - RNFBApp
@@ -827,7 +827,7 @@ SPEC CHECKSUMS:
   lottie-react-native: a501112fa980529ccb80b9f3ee117a7f98c6af3a
   Mixpanel: de8296d8568806ab17bfced0f823c908b808e1e0
   nanopb: a0ba3315591a9ae0a16a309ee504766e90db0c96
-  OneSignalXCFramework: 8bdcaa3b7f6082565bf29c5481435376a33e94f2
+  OneSignalXCFramework: 81ceac017a290f23793443323090cfbe888f74ea
   OpenSSL-Universal: ebc357f1e6bc71fa463ccb2fe676756aff50e88c
   PromisesObjC: 99b6f43f9e1044bd87a95a60beff28c2c44ddb72
   RCT-Folly: 4d8508a426467c48885f1151029bc15fa5d7b3b8
@@ -851,7 +851,7 @@ SPEC CHECKSUMS:
   react-native-location: 9c53c0957756f7d70e8fdc76b1c7ed85867c8d0b
   react-native-maps: 8b8bfada2c86205a7f5a07dd1f92f29b33ea83aa
   react-native-mixpanel: 3e21f895f4e439f680cee7e236711db273cb273d
-  react-native-onesignal: 28e3ad45e18073665c57ee249624915ea21a6cf8
+  react-native-onesignal: ba9632b0065917f9efa7bba0179859fc8f728849
   react-native-safe-area-context: d768fdafd416b4c0bdc7bef4240c9ee53909baf3
   react-native-webview: 82b5140bc71c8325f34cc47afd9c514177633a3a
   React-perflogger: 30ab8d6db10e175626069e742eead3ebe8f24fd5
@@ -871,8 +871,8 @@ SPEC CHECKSUMS:
   RNDateTimePicker: 47ab186e06826a4af7051b8a8199fac9477f339e
   RNDeviceInfo: af47a7d1a09d64c8cbb8b0c883db9bca422a9813
   RNFastImage: 1f2cab428712a4baaf78d6169eaec7f622556dd7
-  RNFBApp: b1b5a80a676a07dea17e778bda7c1e8b69b2f5ec
-  RNFBCrashlytics: 357955a1564721ca9001960e57b395c6a319f9be
+  RNFBApp: 9646e09d041ea159b84584865212e4cf33acd179
+  RNFBCrashlytics: f2b5e456c4969bdec60482e83d973d873ff17f1d
   RNGestureHandler: 61628a2c859172551aa2100d3e73d1e57878392f
   RNReanimated: 64573e25e078ae6bec03b891586d50b9ec284393
   RNScreens: 40a2cb40a02a609938137a1e0acfbf8fc9eebf19

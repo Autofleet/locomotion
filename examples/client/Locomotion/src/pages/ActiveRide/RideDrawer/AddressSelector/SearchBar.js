@@ -2,13 +2,10 @@ import React, {
   useCallback, useEffect, useMemo, useRef, useState, useContext,
 } from 'react';
 import {
-  View, Text, StyleSheet, LayoutAnimation,
+  View, Text, StyleSheet, LayoutAnimation, Animated, Platform, UIManager,
 } from 'react-native';
 import styled from 'styled-components';
 import { debounce } from 'lodash';
-import Animated, {
-  FadeInDown, LightSpeedInRight, Layout, FadeOut, Transition,
-} from 'react-native-reanimated';
 import BottomSheetInput from '../../../../Components/TextInput/BottomSheetInput';
 import i18n from '../../../../I18n';
 import { RidePageContext } from '../../../../context/newRideContext';
@@ -24,15 +21,15 @@ const SearchContainer = styled.View`
     border-bottom-width: 2px;
   `;
 
-const InputContainer = styled.View`
+const InputContainer = styled(View)`
     flex-direction: column;
     justify-content: space-between;
     flex: 1;
 `;
 
-const Row = styled.View`
+const Row = styled(Animated.View)`
     flex: 1;
-    ${({ margin }) => margin && `
+    ${({ setMargin }) => setMargin && `
         margin-top: 12px;
     `}
 
@@ -68,6 +65,13 @@ const BackButton = ({ isExpanded, onBack }) => {
     </BackButtonContainer>
   );
 };
+
+if (
+  Platform.OS === 'android'
+  && UIManager.setLayoutAnimationEnabledExperimental
+) {
+  UIManager.setLayoutAnimationEnabledExperimental(true);
+}
 
 const SearchBar = ({
   isExpanded,
@@ -122,10 +126,10 @@ const SearchBar = ({
 
   const buildSps = () => requestStopPoints.map((s, i) => {
     const placeholder = getSpPlaceholder(s);
-    const rowProps = i === 0 ? { isExpanded } : { margin: true };
+    const rowProps = i === 0 ? { isExpanded } : { setMargin: true };
 
     return (
-      <Row {...rowProps}>
+      <Row {...rowProps} key={'row' + i}>
         <BottomSheetInput
           placeholder={i18n.t(placeholder)}
           onChangeText={(text) => {
@@ -139,7 +143,6 @@ const SearchBar = ({
             onInputFocus(e.target, i);
           }}
           onBlur={onInputBlur}
-          key={`input_${s.id}`}
           autoCorrect={false}
         />
       </Row>
@@ -148,11 +151,27 @@ const SearchBar = ({
 
   const onBackPress = () => {
     console.log('BACK PRESS');
-
-    selectedInputTarget.blur();
+    if (selectedInputTarget) {
+      selectedInputTarget.blur();
+    }
     onBack();
   };
 
+
+  useEffect(() => {
+    if (isExpanded) {
+      LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
+    } else {
+      LayoutAnimation.configureNext(LayoutAnimation.create(
+        500,
+        LayoutAnimation.Presets.easeOut,
+        LayoutAnimation.Properties.scaleXY,
+      ));
+      if (selectedInputTarget) {
+        selectedInputTarget.blur();
+      }
+    }
+  }, [isExpanded]);
   return (
     <View
       style={{
@@ -163,28 +182,27 @@ const SearchBar = ({
         borderBottomWidth: 2,
       }}
     >
-      <BackButton
-        isExpanded={isExpanded}
-        onBack={onBackPress}
-      />
+      {isExpanded
+        ? (
+          <BackButton
+            isExpanded
+            onBack={onBackPress}
+          />
+        ) : null}
       <View
         style={{
           flexDirection: 'column',
           justifyContent: 'space-between',
           flex: 1,
         }}
-        layout={Transition}
       >
 
         {requestStopPoints.map((s, i) => {
           const placeholder = getSpPlaceholder(s);
           const rowProps = i === 0 ? { isExpanded } : { margin: true };
-
           return (
             <Row
               {...rowProps}
-              entering={LightSpeedInRight}
-              exit={FadeOut}
             >
               <BottomSheetInput
                 placeholder={i18n.t(placeholder)}

@@ -1,36 +1,30 @@
 import React from 'react';
 import propTypes from 'prop-types';
-import styled from 'styled-components';
 import { IconContainer } from './styled';
 
 const SvgIcon = ({
-  svg,
+  Svg,
   stroke,
   fill,
   width,
   height,
   margin,
   onPress,
-}) => {
-  const Icon = styled(svg)`
-  width: ${width};
-  height: ${height};
-  stroke: ${stroke};
-  fill: ${fill};
-  `;
-  return (
-    <IconContainer
+}) => <IconContainer
       onPress={onPress}
       disabled={!onPress}
-      width={width}
-      height={height}
       margin={margin}
       noBg
+      height={height}
+      width={width}
     >
-      <Icon />
-    </IconContainer>
-  );
-};
+      <Svg
+      width={width}
+      height={height}
+      stroke={stroke}
+      fill={fill}
+      />
+    </IconContainer>;
 
 export default SvgIcon;
 
@@ -38,8 +32,8 @@ SvgIcon.defaultProps = {
   svg: '',
   stroke: null,
   fill: null,
-  width: '20px',
-  height: '20px',
+  width: 20,
+  height: 20,
   margin: null,
   onPress: undefined,
 };
@@ -48,8 +42,8 @@ SvgIcon.propTypes = {
   svg: propTypes.string,
   stroke: propTypes.string,
   fill: propTypes.string,
-  width: propTypes.string,
-  height: propTypes.string,
+  width: propTypes.number,
+  height: propTypes.number,
   margin: propTypes.string,
   onPress: propTypes.func,
 };
