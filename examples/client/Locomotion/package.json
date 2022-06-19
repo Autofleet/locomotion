@@ -66,6 +66,7 @@
     "react-native-svg-transformer": "^1.0.0",
     "react-native-table-component": "^1.2.2",
     "react-native-webview": "^11.18.2",
+    "short-uuid": "^4.2.0",
     "styled-components": "^5.3.5",
     "unstated-next": "^1.1.0",
     "yup": "^0.32.11"

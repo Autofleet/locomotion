@@ -113,7 +113,6 @@ const SearchBar = ({
   };
 
   const onInputBlur = () => {
-    // setSearchTerm(null);
     checkFormSps();
   };
 
@@ -125,10 +124,10 @@ const SearchBar = ({
   const buildSps = () => requestStopPoints.map((s, i) => {
     const placeholder = getSpPlaceholder(s);
     const rowProps = i === 0 ? { isExpanded } : { setMargin: true };
-
     return (
-      // eslint-disable-next-line react/no-array-index-key
-      <Row {...rowProps} key={`row${i}`}>
+      <Row
+        {...rowProps}
+      >
         <BottomSheetInput
           placeholder={i18n.t(placeholder)}
           onChangeText={(text) => {
@@ -142,6 +141,7 @@ const SearchBar = ({
             onInputFocus(e.target, i);
           }}
           onBlur={onInputBlur}
+          key={`input_${s.id}`}
           autoCorrect={false}
         />
       </Row>
@@ -150,6 +150,7 @@ const SearchBar = ({
 
   const onBackPress = () => {
     console.log('BACK PRESS');
+    setSearchTerm(null);
     if (selectedInputTarget) {
       selectedInputTarget.blur();
     }
@@ -198,32 +199,7 @@ const SearchBar = ({
         }}
       >
 
-        {requestStopPoints.map((s, i) => {
-          const placeholder = getSpPlaceholder(s);
-          const rowProps = i === 0 ? { isExpanded } : { setMargin: true };
-          return (
-            <Row
-              {...rowProps}
-            >
-              <BottomSheetInput
-                placeholder={i18n.t(placeholder)}
-                onChangeText={(text) => {
-                  updateRequestSp({ description: text });
-                  setSearchTerm(text);
-                }}
-                fullBorder
-                value={requestStopPoints[i].description}
-                placeholderTextColor="#929395"
-                onFocus={(e) => {
-                  onInputFocus(e.target, i);
-                }}
-                onBlur={onInputBlur}
-                key={`input_${s.id}`}
-                autoCorrect={false}
-              />
-            </Row>
-          );
-        })}
+        {buildSps()}
 
       </View>
     </View>
