@@ -246,5 +246,17 @@
   "operation": {
     "name": "Locomotion",
     "subName": "Rider app"
+  },
+  "bottomSheetContent": {
+    "confirmPickup": {
+      "titleText": "Confirm pickup",
+      "buttonText": "Confirm and request",
+      "subTitleText": "Drag map or edit address to set your pickup"
+    },
+    "notAvailableHere": {
+      "titleText": "We are Sorry!",
+      "buttonText": "Set another pickup location",
+      "subTitleText": "Autofleet is not available in your area"
+    }
   }
 }
