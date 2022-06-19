@@ -2,6 +2,8 @@ import React, { useEffect, useContext } from 'react';
 import { useRoute } from '@react-navigation/native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { TouchableOpacity, View } from 'react-native';
+import moment from 'moment';
+import PaymentsContext from '../../context/payments';
 import { MAIN_ROUTES } from '../routes';
 
 import ThumbnailPicker from '../../Components/ThumbnailPicker';
@@ -109,10 +111,13 @@ const Card = ({
 
 const AccountContent = ({ navigation }) => {
   const { user } = useContext(UserContext);
+  const { paymentMethods } = PaymentsContext.useContainer();
   return (
     <Container>
       <CardsContainer>
-        <CardsTitle>{i18n.t('onboarding.accountInformation')}</CardsTitle>
+        <CardsTitle>
+          {i18n.t('onboarding.accountInformation')}
+        </CardsTitle>
         <Card
           title={i18n.t('onboarding.namePlaceholder')}
           onPress={() => navigation.navigate(MAIN_ROUTES.NAME, {
@@ -122,7 +127,10 @@ const AccountContent = ({ navigation }) => {
         >
           {user ? `${user.firstName} ${user.lastName}` : ''}
         </Card>
-        <Card title={i18n.t('onboarding.phonePlaceholder')}>
+        <Card
+          verified
+          title={i18n.t('onboarding.phonePlaceholder')}
+        >
           {user ? `${user.phoneNumber}` : ''}
         </Card>
         <Card
@@ -136,8 +144,20 @@ const AccountContent = ({ navigation }) => {
         >
           {user ? `${user.email}` : ''}
         </Card>
-      </CardsContainer>
-      <Container>
+        {paymentMethods && paymentMethods.length
+          ? paymentMethods.map(pm => (
+            <Card
+              title={i18n.t('onboarding.paymentMethodPlaceholder')}
+              onPress={() => navigation.navigate(MAIN_ROUTES.PAYMENT, {
+                back: true,
+              })}
+            >
+              {
+             moment(pm.expiresAt).format('MM/YY')
+           }
+            </Card>
+          ))
+          : 'none'}
         <LogoutContainer
           onPress={() => {
             navigation.navigate(MAIN_ROUTES.LOGOUT);
@@ -145,7 +165,7 @@ const AccountContent = ({ navigation }) => {
         >
           <LogoutText>{i18n.t('menu.logout')}</LogoutText>
         </LogoutContainer>
-      </Container>
+      </CardsContainer>
     </Container>
   );
 };
