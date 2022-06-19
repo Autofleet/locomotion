@@ -15,6 +15,7 @@ export default async (polys: any, position: any) => {
     } catch (e) {
       console.error(ERROR_MSG, e);
       Mixpanel.trackWithProperties(ERROR_MSG, { e });
+      return true;
     }
   }
 };

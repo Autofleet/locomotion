@@ -16,9 +16,10 @@ const RideStateContextContextProvider = ({ children }: { children: any }) => {
     let t = territory;
     if (!t) {
       t = await getUserTerritories();
-      setTerritory(t && t.flat());
+      t = t && t.flat();
+      setTerritory(t);
     }
-    if (checkTerritory) {
+    if (t && checkTerritory) {
       const position = await getPosition();
       const isInsidePoly = await pointInPolygon(t, position);
       setShowOutOfTerritory(!isInsidePoly);
