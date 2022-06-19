@@ -63,6 +63,7 @@
     "react-native-smooth-pincode-input": "^1.0.9",
     "react-native-svg": "^12.3.0",
     "react-native-svg-transformer": "^1.0.0",
+    "react-native-swipe-verify": "^0.1.6",
     "react-native-table-component": "^1.2.2",
     "react-native-webview": "^11.18.2",
     "styled-components": "^5.3.5",

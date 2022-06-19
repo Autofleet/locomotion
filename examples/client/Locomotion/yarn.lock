@@ -8362,6 +8362,12 @@
     "css-select" "^4.2.1"
     "css-tree" "^1.0.0-alpha.39"
 
+"react-native-swipe-verify@^0.1.6":
+  "integrity" "sha512-oV3k1Jr5h6ET07Il5/5Xsa59rn3Dj1FObJwhuMU5CJQyrvyjXf+eNPgQ/L6ZAUXUppiLfyatmRgs3w0ZU9M1nw=="
+  "resolved" "https://registry.npmjs.org/react-native-swipe-verify/-/react-native-swipe-verify-0.1.6.tgz"
+  "version" "0.1.6"
+  dependencies:
+
 "react-native-table-component@^1.2.2":
   "integrity" "sha512-7bbsi5431iWcjj3toASh8lFHGi6AG/+MTd4M7GuksXKxx/CFs/Qwv1Ys7D2wgyuYKe3hxWNfSVrteFj0tOYXYw=="
   "resolved" "https://registry.npmjs.org/react-native-table-component/-/react-native-table-component-1.2.2.tgz"
