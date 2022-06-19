@@ -199,7 +199,7 @@ const SearchBar = ({
 
         {requestStopPoints.map((s, i) => {
           const placeholder = getSpPlaceholder(s);
-          const rowProps = i === 0 ? { isExpanded } : { margin: true };
+          const rowProps = i === 0 ? { isExpanded } : { setMargin: true };
           return (
             <Row
               {...rowProps}
