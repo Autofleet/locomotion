@@ -1,8 +1,8 @@
-import React, {useEffect, useContext} from 'react';
-import {useRoute} from '@react-navigation/native';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
-import {TouchableOpacity, View} from 'react-native';
-import {MAIN_ROUTES} from '../routes';
+import React, { useEffect, useContext } from 'react';
+import { useRoute } from '@react-navigation/native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { TouchableOpacity, View } from 'react-native';
+import { MAIN_ROUTES } from '../routes';
 
 import ThumbnailPicker from '../../Components/ThumbnailPicker';
 import {
@@ -30,14 +30,14 @@ import {
 import i18n from '../../I18n';
 import PageHeader from '../../Components/PageHeader';
 import Mixpanel from '../../services/Mixpanel';
-import {PageContainer} from '../styles';
-import {UserContext} from '../../context/user';
+import { PageContainer } from '../styles';
+import { UserContext } from '../../context/user';
 
 const AccountHeader = () => {
-  const {updateUserInfo, user} = useContext(UserContext);
+  const { updateUserInfo, user } = useContext(UserContext);
 
-  const onImageChoose = image => {
-    updateUserInfo({avatar: image});
+  const onImageChoose = (image) => {
+    updateUserInfo({ avatar: image });
   };
 
   return (
@@ -107,19 +107,19 @@ const Card = ({
   );
 };
 
-const AccountContent = ({navigation}) => {
-  const {user} = useContext(UserContext);
+const AccountContent = ({ navigation }) => {
+  const { user } = useContext(UserContext);
   return (
     <Container>
       <CardsContainer>
         <CardsTitle>{i18n.t('onboarding.accountInformation')}</CardsTitle>
         <Card
           title={i18n.t('onboarding.namePlaceholder')}
-          onPress={() =>
-            navigation.navigate(MAIN_ROUTES.NAME, {
-              editAccount: true,
-            })
-          }>
+          onPress={() => navigation.navigate(MAIN_ROUTES.NAME, {
+            editAccount: true,
+          })
+          }
+        >
           {user ? `${user.firstName} ${user.lastName}` : ''}
         </Card>
         <Card title={i18n.t('onboarding.phonePlaceholder')}>
@@ -129,11 +129,11 @@ const AccountContent = ({navigation}) => {
           verified={user && user.isEmailVerified}
           showUnverified
           title={i18n.t('onboarding.emailPlaceholder')}
-          onPress={() =>
-            navigation.navigate(MAIN_ROUTES.EMAIL, {
-              editAccount: true,
-            })
-          }>
+          onPress={() => navigation.navigate(MAIN_ROUTES.EMAIL, {
+            editAccount: true,
+          })
+          }
+        >
           {user ? `${user.email}` : ''}
         </Card>
       </CardsContainer>
@@ -141,7 +141,8 @@ const AccountContent = ({navigation}) => {
         <LogoutContainer
           onPress={() => {
             navigation.navigate(MAIN_ROUTES.LOGOUT);
-          }}>
+          }}
+        >
           <LogoutText>{i18n.t('menu.logout')}</LogoutText>
         </LogoutContainer>
       </Container>
@@ -149,7 +150,7 @@ const AccountContent = ({navigation}) => {
   );
 };
 
-export default ({navigation, menuSide}) => {
+export default ({ navigation, menuSide }) => {
   const route = useRoute();
 
   useEffect(() => {

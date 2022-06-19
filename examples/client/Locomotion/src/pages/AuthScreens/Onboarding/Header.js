@@ -1,13 +1,13 @@
-import React, {useContext} from 'react';
-import {useNavigation, useRoute} from '@react-navigation/native';
+import React, { useContext } from 'react';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import PageHeader from '../../../Components/PageHeader';
 import backArrow from '../../../assets/arrow-back.png';
-import {OnboardingContext} from '../../../context/onboarding';
-import {UserContext} from '../../../context/user';
+import { OnboardingContext } from '../../../context/onboarding';
+import { UserContext } from '../../../context/user';
 
-const Header = ({title, page, showSkipButton}) => {
-  const {nextScreen, requiredOnboarding} = useContext(OnboardingContext);
-  const {removeChangesToUser} = useContext(UserContext);
+const Header = ({ title, page, showSkipButton }) => {
+  const { nextScreen, requiredOnboarding } = useContext(OnboardingContext);
+  const { removeChangesToUser } = useContext(UserContext);
   const navigation = useNavigation();
   const route = useRoute();
 

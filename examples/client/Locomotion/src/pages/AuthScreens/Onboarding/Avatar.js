@@ -1,21 +1,23 @@
-import React, {useContext, useState} from 'react';
+import React, { useContext, useState } from 'react';
 import i18n from '../../../I18n';
 import OnboardingNavButtons from './OnboardingNavButtons';
-import {OnboardingContext} from '../../../context/onboarding';
-import {ImageContainer, Name, PageContainer, SafeView} from './styles';
+import { OnboardingContext } from '../../../context/onboarding';
+import {
+  ImageContainer, Name, PageContainer, SafeView,
+} from './styles';
 import Header from './Header';
 import ScreenText from './ScreenText/index';
 import ThumbnailPicker from '../../../Components/ThumbnailPicker';
-import {MAIN_ROUTES} from '../../routes';
-import {UserContext} from '../../../context/user';
+import { MAIN_ROUTES } from '../../routes';
+import { UserContext } from '../../../context/user';
 
 const Avatar = () => {
   const [photoSelected, setPhotoSelected] = useState(false);
-  const {nextScreen} = useContext(OnboardingContext);
-  const {updateUserInfo, user} = useContext(UserContext);
+  const { nextScreen } = useContext(OnboardingContext);
+  const { updateUserInfo, user } = useContext(UserContext);
 
-  const onImageChoose = image => {
-    updateUserInfo({avatar: image});
+  const onImageChoose = (image) => {
+    updateUserInfo({ avatar: image });
     setPhotoSelected(true);
   };
 
