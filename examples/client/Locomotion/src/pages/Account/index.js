@@ -159,7 +159,7 @@ const AccountContent = ({ navigation }) => {
            }
             </Card>
           ))
-          : 'none'}
+          : undefined}
         <LogoutContainer
           onPress={() => {
             navigation.navigate(MAIN_ROUTES.LOGOUT);
