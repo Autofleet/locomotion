@@ -5,7 +5,7 @@ import Config from 'react-native-config';
 
 const {
   FORCE_DARK_MODE = false,
-  DARK_MODE_ENABLED = true,
+  DARK_MODE_ENABLED = false,
   PRIMARY_COLOR = undefined,
   SECONDARY_COLOR = undefined,
 } = Config;
