@@ -3,7 +3,7 @@ import { View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import NotAvilableHere from '../../Components/NotAvilableHere';
 import { RideStateContextContext, RidePageContextProvider } from '../../context';
-import NewRidePageContextProvider from '../../context/newRideContext';
+import NewRidePageContextProvider, { RidePageContext } from '../../context/newRideContext';
 import BottomSheetContextProvider from '../../context/bottomSheetContext';
 import {
   PageContainer,
@@ -13,11 +13,12 @@ import MainMap from './map';
 import AvailabilityContextProvider from '../../context/availability';
 import BottomSheet from './RideDrawer/BottomSheet';
 import RideOptions from './RideDrawer/RideOptions';
-import RideServicesContextProvider from '../../context/rideServicesContext';
 import AddressSelector from './RideDrawer/AddressSelector';
 
 const RidePage = ({ menuSide, mapSettings }) => {
   const { initGeoService, showOutOfTerritory } = useContext(RideStateContextContext);
+  const { serviceEstimations } = useContext(RidePageContext);
+
   const navigation = useNavigation();
   const mapRef = useRef();
   const bottomSheetRef = useRef(null);
@@ -40,7 +41,11 @@ const RidePage = ({ menuSide, mapSettings }) => {
             <NotAvilableHere onSetAnotherLocation={() => ({})} />
           ) : (
             <>
+              {true ? 
               <AddressSelector bottomSheetRef={bottomSheetRef} />
+              :
+              <RideOptions />
+              }
             </>
           )}
         </BottomSheet>
@@ -53,13 +58,11 @@ export default props => (
   <BottomSheetContextProvider {...props}>
     <NewRidePageContextProvider {...props}>
       <RidePageContextProvider {...props}>
-      <RideServicesContextProvider>
         <AvailabilityContextProvider>
           <RidePage
             {...props}
           />
         </AvailabilityContextProvider>
-      </RideServicesContextProvider>
       </RidePageContextProvider>
     </NewRidePageContextProvider>
   </BottomSheetContextProvider>

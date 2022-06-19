@@ -2,11 +2,7 @@ import Button from '../../../../../../Components/Button';
 import styled from 'styled-components/native';
 import { FONT_SIZES, FONT_WEIGHTS } from '../../../../../../context/theme';
 
-type CardContainerProps = {
-    selected: boolean;
-    theme: any;
-}
-export const CardContainer = styled(Button)<CardContainerProps>`
+export const CardContainer = styled(Button)`
 width: 100%;
 height: 70px;
 border-radius: 8px;
@@ -27,11 +23,7 @@ width: 100%;
 height: 100%;
 `;
 
-type ServiceDetailsProps = {
-    unavailable: boolean;
-}
-
-export const ServiceDetails = styled.View<ServiceDetailsProps>`
+export const ServiceDetails = styled.View`
 width: 80%;
 height: 100%;
 display: flex;

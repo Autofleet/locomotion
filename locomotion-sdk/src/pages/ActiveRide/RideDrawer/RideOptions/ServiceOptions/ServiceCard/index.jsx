@@ -3,7 +3,7 @@ import i18n from "../../../../../../I18n";
 import moment from "moment";
 import Seat from '../../../../../../assets/seat.svg'
 import React, { useContext } from "react";
-import { ServiceDetailsInterface, TAG_OPTIONS } from "../../../../../../context/rideServicesContext/mockServiceEstimations";
+import { TAG_OPTIONS } from "../../../../../../context/newRideContext/services";
 import { Context as ThemeContext } from '../../../../../../context/theme';
 import { Circle, AvailableSeats, 
     Capacity, CardContainer, 
@@ -14,12 +14,12 @@ import { Circle, AvailableSeats,
     TopRow, CarContainer } from "./styled";
 import Tag from "../../../../../../Components/Tag";
 
-const ServiceCard = ({ selected, service }: { selected: boolean, service: ServiceDetailsInterface }) => {
+const ServiceCard = ({ selected, service }) => {
 const theme = useContext(ThemeContext);
 const unavailable = !service.price
 const timeUntilArrival = i18n.t('rideDetails.timeUntilArrival', {minutes: moment.duration(moment(service.eta).diff(moment())).minutes().toString()})
 const unavailableText = i18n.t('rideDetails.unavailable')
-console.log(unavailable)
+
 const tagStyles = {
     [TAG_OPTIONS.FASTEST]: {
         container: {
