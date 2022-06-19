@@ -1,5 +1,5 @@
 import React from 'react';
-import {LocomotionRouter} from '@autofleet/locomotion-sdk';
+import LocomotionRouter from './src/LocomotionRouter';
 // import de from './src/I18n/en.json';
 
 const App = () => (
