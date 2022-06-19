@@ -1,5 +1,5 @@
 /* eslint-disable no-nested-ternary */
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import moment from 'moment';
 
 import { MAIN_ROUTES } from '../../routes';
@@ -25,6 +25,7 @@ import StopPointsCard from './StopPointsCard';
 import OfferCard from './OfferCard';
 import RideStatusHeader from './RideStatusHeader';
 import FutureRides, { FutureOrdersButton } from './FutureRides';
+import { RidePageContext } from '../../../context/ridePageContext';
 
 const getRideState = (activeRide) => { // false, driverOnTheWay, driverArrived, onBoard
   if (!activeRide) {
@@ -39,13 +40,30 @@ const getRideState = (activeRide) => { // false, driverOnTheWay, driverArrived, 
   return 'driverOnTheWay';
 };
 
-const RideDrawer = ({
-  activeRide, openLocationSelect, requestStopPoints, setRideType,
-  cancelRide, createRide, readyToBook, rideType, preRideDetails,
-  onNumberOfPassengerChange, numberOfPassenger, createOffer, rideOffer,
-  cancelOffer, offerExpired, onLocationSelect, closeAddressViewer, onRideSchedule,
-  futureRides, cancelFutureRide, createFutureOffer, navigation,
-}) => {
+const RideDrawer = ({ navigation }) => {
+  const {
+    futureRides,
+    rideOffer,
+    offerExpired,
+    createOffer,
+    cancelOffer,
+    cancelRide,
+    createRide,
+    cancelFutureRide,
+    createFutureOffer,
+    onRideSchedule,
+    onLocationSelect,
+    openLocationSelect,
+    closeAddressViewer,
+    activeRideState: activeRide,
+    numberOfPassengers: numberOfPassenger,
+    setNumberOfPassengers: onNumberOfPassengerChange,
+    requestStopPoints,
+    bookValidation,
+  } = useContext(RidePageContext);
+
+  const readyToBook = bookValidation(requestStopPoints);
+
   const [origin, destination] = activeRide ? activeRide.stopPoints || [] : [];
   const [isPopupOpen, togglePopup] = getTogglePopupsState();
   const [appSettings, setAppSettings] = useState({});
@@ -81,7 +99,7 @@ const RideDrawer = ({
   const useSettings = settingsContext.useContainer();
 
   const getPaymentMethodStatus = async () => {
-    await usePayments.getPaymentMethods();
+    await usePayments.loadCustomer();
   };
   useEffect(() => {
     useSettings.getSettings();
@@ -114,7 +132,10 @@ const RideDrawer = ({
   }, [futureRides]);
 
   useEffect(() => {
-    if (usePayments.paymentMethods && usePayments.paymentMethods.length > 0) {
+    const {
+      paymentMethods,
+    } = usePayments;
+    if (paymentMethods && paymentMethods.length > 0) {
       setAllowRideOrder(true);
     } else {
       setAllowRideOrder(false);
@@ -274,4 +295,3 @@ const RideDrawer = ({
 };
 
 export default RideDrawer;
-console.disableYellowBox = true;

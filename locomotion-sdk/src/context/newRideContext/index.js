@@ -7,12 +7,13 @@ import moment from 'moment';
 import Config from 'react-native-config';
 
 import { getPosition } from '../../services/geo';
-import { getTogglePopupsState } from '../../context/state';
+import { getTogglePopupsState } from '../state';
 import UserService from '../../services/user';
+
 import OneSignal from '../../services/one-signal';
-import settingsContext from '../../context/settings';
+import settingsContext from '../settings';
 import Mixpanel from '../../services/Mixpanel';
-import { getStationsApi } from '../../context/places/api';
+import { getStationsApi, getPlacesByLocation } from '../places/api';
 import {
   cancelFutureRideApi,
   cancelRideApi,
@@ -22,7 +23,10 @@ import {
   getPreRideDetails,
   getRideSummary,
   sendRating,
-} from '../../context/rides/api';
+} from '../rides/api';
+
+import { getPlaces, getGeocode, getPlaceDetails } from './google-api';
+import StorageService from '../../services/storage';
 
 const STATION_AUTOREFRESH_INTERVAL = 60000;
 
@@ -47,10 +51,251 @@ function useInterval(callback, delay) {
 }
 
 export const RidePageContext = createContext(null);
+const HISTORY_RECORDS_NUM = 10;
 
 const RidePageContextProvider = ({ navigation, children }) => {
   const route = useRoute();
   const useSettings = settingsContext.useContainer();
+
+  const [requestStopPoints, setRequestStopPoints] = useState([{
+    type: 'pickup',
+    location: null,
+    useDefaultLocation: true,
+  },
+  {
+    type: 'dropoff',
+    location: null,
+    useDefaultLocation: false,
+  }]);
+  const [coords, setCoords] = useState();
+  const [currentGeocode, setCurrentGeocode] = useState(null);
+  const [searchTerm, setSearchTerm] = useState(null);
+  const [selectedInputIndex, setSelectedInputIndex] = useState(null);
+  const [selectedInputTarget, setSelectedInputTarget] = useState(null);
+  const [searchResults, setSearchResults] = useState(null);
+  const [isReadyForSubmit, setIsReadyForSubmit] = useState(false);
+  const [historyResults, setHistoryResults] = useState([]);
+
+
+  useEffect(() => {
+    initLocation();
+    initCurrentLocation();
+    getLastAddresses();
+  }, []);
+
+  useEffect(() => {
+    initSps();
+  }, [currentGeocode]);
+
+  const initLocation = async () => {
+    const location = await getCurrentLocation();
+    setCoords(location);
+  };
+
+  const getCurrentLocationAddress = async () => {
+    const currentAddress = await reverseLocationGeocode();
+    if (currentAddress) {
+      const locationData = {
+        description: currentAddress.description,
+        location: currentAddress.location,
+      };
+      return locationData;
+    }
+
+    return null;
+  };
+
+  const initCurrentLocation = async () => {
+    const locationData = await getCurrentLocationAddress();
+    setCurrentGeocode(locationData);
+  };
+
+  const initSps = async () => {
+    const currentAddress = currentGeocode || await getCurrentLocationAddress();
+    if (currentGeocode) {
+      const sps = [...requestStopPoints].map((s) => {
+        if (s.useDefaultLocation) {
+          return {
+            ...s,
+            description: currentAddress.description,
+            location: currentAddress.location,
+          };
+        }
+
+        return s;
+      });
+
+      setRequestStopPoints(sps);
+    }
+  };
+
+  const updateRequestSp = (data) => {
+    const reqSps = [...requestStopPoints];
+    reqSps[selectedInputIndex] = {
+      ...reqSps[selectedInputIndex],
+      ...data,
+    };
+
+    setRequestStopPoints(reqSps);
+  };
+
+  const setSpCurrentLocation = async () => {
+    console.log('currentGeocode', currentGeocode);
+    if (!currentGeocode) {
+      const addressData = await getCurrentLocationAddress();
+      updateRequestSp(currentGeocode);
+      return true;
+    }
+    updateRequestSp(currentGeocode);
+  };
+
+  const loadAddress = async (input) => {
+    const currentCoords = await getCurrentLocation();
+    let location = null;
+    try {
+      location = `${currentCoords.latitude},${currentCoords.longitude}`;
+      const data = await getPlaces({
+        input,
+        location,
+      });
+      // setSearchResults(data);
+      return data;
+    } catch (error) {
+      console.log('Got error while try to get places', error);
+      return undefined;
+    }
+  };
+
+  const reverseLocationGeocode = async () => {
+    try {
+      const currentCoords = await getCurrentLocation();
+      console.log('currentCoords', currentCoords);
+
+      const location = `${currentCoords.latitude},${currentCoords.longitude}`;
+      const data = await getGeocode({
+        latlng: location,
+      });
+      console.log(data);
+
+      const geoLocation = {
+        description: data.results[0].formatted_address,
+        location: data.results[0].geometry.location,
+      };
+
+      return geoLocation;
+    } catch (error) {
+      console.log('Got error while try to get places', error);
+      return undefined;
+    }
+  };
+
+  const enrichPlaceWithLocation = async (placeId) => {
+    try {
+      const data = await getPlaceDetails(placeId);
+      return data;
+    } catch (error) {
+      console.log('Got error while try to get places', error);
+      return undefined;
+    }
+  };
+
+  const onAddressSelected = async (selectedItem) => {
+    const enrichedPlace = await enrichPlaceWithLocation(selectedItem.placeId);
+    const reqSps = [...requestStopPoints];
+    reqSps[selectedInputIndex] = {
+      ...reqSps[selectedInputIndex],
+      description: selectedItem.fullText,
+      location: enrichedPlace,
+      placeId: selectedItem.placeId,
+    };
+    setRequestStopPoints(reqSps);
+    resetSearchResults();
+    selectedInputTarget.blur();
+  };
+
+  const resetSearchResults = () => setSearchResults(null);
+
+  const getCurrentLocation = async () => {
+    const location = await getPosition();
+    return location.coords;
+  };
+
+  const searchAddress = async (searchText) => {
+    if (searchText === null || searchText === '') {
+      resetSearchResults();
+    } else {
+      const results = await loadAddress(searchText);
+      const parsed = parseSearchResults(results);
+      setSearchResults(parsed);
+    }
+  };
+
+  const parseSearchResults = results => results.map(r => ({
+    text: r.structured_formatting.main_text,
+    subText: r.structured_formatting.secondary_text,
+    fullText: `${r.structured_formatting.main_text},${r.structured_formatting.secondary_text}`,
+    placeId: r.place_id,
+  }));
+
+  const saveLastAddresses = async (item) => {
+    const histroy = await getLastAddresses();
+    const filteredHistory = histroy.filter(h => h.placeId !== item.placeId);
+    filteredHistory.unshift(item);
+
+    await StorageService.save({ lastAddresses: filteredHistory.slice(0, HISTORY_RECORDS_NUM) });
+  };
+
+  const getLastAddresses = async () => {
+    const histroy = await StorageService.get('lastAddresses') || [];
+    setHistoryResults(histroy);
+    return histroy;
+  };
+
+  const checkFormSps = () => {
+    const isSpsReady = requestStopPoints.every(r => r.location && r.location.lat && r.location.lng && r.description);
+    if (requestStopPoints.length && isSpsReady) {
+      console.log('READY SEND REQUEST');
+      setIsReadyForSubmit(true);
+    } else {
+      console.log('NOT READY');
+      setIsReadyForSubmit(false);
+    }
+  };
+
+  /*   const enrichPlaceWithLocation = async (place) => {
+    const data = await getLocation({
+      placeId: place.placeid || place.place_id,
+    });
+    place = { ...place, ...data };
+    return place;
+  }; */
+
+  /*   const setPlace = async (place) => {
+    if (!place.lat && (place.placeid || place.place_id)) {
+      place = await enrichPlaceWithLocation(place);
+    }
+    if (Config.DONT_USE_STATIONS || place.station) {
+      if (props.onLocationSelect) {
+        props.onLocationSelect({
+          ...place,
+          type: addressListItems.type,
+        });
+      }
+      setAddressListItems({
+        type: addressListItems.type,
+        list: [],
+      });
+    } else {
+      setAddressListItems({
+        type: addressListItems.type,
+        list: [],
+      });
+      setSearchValue(place.description, props.type, true, place);
+    }
+  }; */
+
+  // Old
+
 
   const [disableAutoLocationFocus, setDisableAutoLocationFocus] = useState(false);
   const [activeRideState, setActiveRide] = useState(null);
@@ -61,11 +306,6 @@ const RidePageContextProvider = ({ navigation, children }) => {
   const [preRideDetails, setPreRideDetails] = useState({});
   const [numberOfPassengers, setNumberOfPassengers] = useState(1);
   const [, togglePopup] = getTogglePopupsState();
-  const [requestStopPoints, setRequestStopPoints] = useState({
-    openEdit: false,
-    selectedType: 'pickup',
-    scheduledTo: null,
-  });
   const [rideType, setRideType] = useState('pool');
   const [rideOffer, setRideOffer] = useState(null);
   const [offerExpired, setOfferExpired] = useState(false);
@@ -123,29 +363,23 @@ const RidePageContextProvider = ({ navigation, children }) => {
         // pickup failed -> show ride canceled
         togglePopup('rideCancel', true);
       }
-      getStations();
+      // getStations();
       setActiveSp(null);
       setActiveRide(null);
     }
   };
 
-  useInterval(() => {
-    loadActiveRide();
-  }, 5000);
 
-  if (Config.STATIONS_REFRESH_RATE) {
+  /*   if (Config.STATIONS_REFRESH_RATE) {
     useInterval(() => {
       if (!rideOffer && (!requestStopPoints.pickup || !requestStopPoints.dropoff)) {
         getStations();
       }
     }, Config.STATIONS_REFRESH_RATE * 60000);
-  }
+  } */
 
-  useInterval(() => {
-    UserService.getUser(navigation);
-  }, 10000);
 
-  useEffect(() => {
+  /*   useEffect(() => {
     Mixpanel.pageView(route.name);
     UserService.getUser(navigation);
     getStations();
@@ -158,17 +392,10 @@ const RidePageContextProvider = ({ navigation, children }) => {
     return () => {
       stopAutoStationUpdate();
     };
-  }, []);
+  }, []); */
 
-  useEffect(() => {
-    if (!activeRideState) {
-      return;
-    }
-    const origin = activeRideState.stopPoints[0];
-    calculatePickupEta(origin);
-  }, [activeRideState]);
 
-  useEffect(() => {
+  /*   useEffect(() => {
     if (stations.length) {
       setClosestStations(stations[0]);
       const markersList = stations.map(station => ({
@@ -178,9 +405,9 @@ const RidePageContextProvider = ({ navigation, children }) => {
 
       setMapMarkers(markersList);
     }
-  }, [stations]);
+  }, [stations]); */
 
-  useEffect(() => {
+  /*   useEffect(() => {
     let offerTimeout;
     if (rideOffer) {
       setOfferExpired(false);
@@ -190,7 +417,7 @@ const RidePageContextProvider = ({ navigation, children }) => {
     } else {
       clearTimeout(offerTimer);
     }
-  }, [rideOffer]);
+  }, [rideOffer]); */
 
   const bookValidation = state => state && state.dropoff && state.dropoff.lat
     && state.pickup && state.pickup.lat;
@@ -223,7 +450,7 @@ const RidePageContextProvider = ({ navigation, children }) => {
   };
 
   const getStations = async () => {
-    try {
+    /*     try {
       const { coords } = await getPosition();
       if (coords.latitude && coords.longitude) {
         const { latitude: lat, longitude: lng } = coords;
@@ -235,7 +462,7 @@ const RidePageContextProvider = ({ navigation, children }) => {
       }
     } catch (e) {
       console.log('Error getting station position', e);
-    }
+    } */
   };
 
   const onLocationSelect = (location) => {
@@ -371,9 +598,29 @@ const RidePageContextProvider = ({ navigation, children }) => {
     }
   };
 
+
   return (
     <RidePageContext.Provider
       value={{
+        loadAddress,
+        reverseLocationGeocode,
+        enrichPlaceWithLocation,
+        searchTerm,
+        setSearchTerm,
+        selectedInputIndex,
+        setSelectedInputIndex,
+        selectedInputTarget,
+        setSelectedInputTarget,
+        onAddressSelected,
+        requestStopPoints,
+        searchResults,
+        searchAddress,
+        updateRequestSp,
+        setSpCurrentLocation,
+        isReadyForSubmit,
+        checkFormSps,
+        historyResults,
+        /*
         disableAutoLocationFocus,
         setDisableAutoLocationFocus,
         activeRideState,
@@ -419,7 +666,7 @@ const RidePageContextProvider = ({ navigation, children }) => {
         openLocationSelect,
         closeAddressViewer,
         bookValidation,
-        stopAutoStationUpdate,
+        stopAutoStationUpdate, */
       }}
     >
       {children}

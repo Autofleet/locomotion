@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useRoute } from '@react-navigation/native';
 import { getTogglePopupsState } from '../../context/state';
 import i18n from '../../I18n';
 import PageHeader from '../../Components/PageHeader';
@@ -13,24 +14,26 @@ import { PageContainer } from '../styles';
 import { MAIN_ROUTES } from '../routes';
 
 export default ({ navigation, menuSide }) => {
+  const route = useRoute();
   const usePayments = PaymentsContext.useContainer();
 
+  const {
+    paymentMethods,
+  } = usePayments;
   const [pageLoading, setPageLoading] = useState(true);
   const [loading, setLoading] = useState(false);
   const [methodForDelete, setMethodForDelete] = useState(null);
   const [, togglePopup] = getTogglePopupsState();
-  const [showList, setShowList] = useState(usePayments
-    .paymentMethods && usePayments.paymentMethods.length > 0);
+  const [showList, setShowList] = useState(
+    paymentMethods && paymentMethods.length > 0,
+  );
 
   const toggleMenu = () => {
     navigation.toggleDrawer();
   };
 
   const loadCustomerData = async () => {
-    const customer = await usePayments.loadCustomer();
-    if (customer) {
-      await usePayments.getPaymentMethods();
-    }
+    await usePayments.getOrFetchCustomer();
     setPageLoading(false);
   };
 
@@ -41,7 +44,7 @@ export default ({ navigation, menuSide }) => {
   const detachCard = async () => {
     setLoading(true);
     await usePayments.detachPaymentMethod(methodForDelete);
-    await usePayments.getPaymentMethods();
+    await usePayments.loadCustomer();
     setLoading(false);
     togglePopup('removeCard', false);
   };
@@ -56,7 +59,9 @@ export default ({ navigation, menuSide }) => {
       <PageContent>
         <PageHeader
           title={i18n.t('payments.pageTitle')}
-          onIconPress={() => navigation.navigate(MAIN_ROUTES.HOME)}
+          onIconPress={() => (route.params && route.params
+            .back ? navigation.navigate(MAIN_ROUTES.ACCOUNT)
+            : navigation.navigate(MAIN_ROUTES.HOME))}
           iconSide={menuSide}
         />
         {pageLoading ? <FullPageLoader autoPlay loop /> : null}

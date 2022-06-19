@@ -1,4 +1,5 @@
 import React, { useContext } from 'react';
+import Bottom from './bottom';
 import { MAIN_ROUTES } from '../../pages/routes';
 import Thumbnail from '../Thumbnail';
 import i18n from '../../I18n';
@@ -7,29 +8,25 @@ import {
   DrawerIcon,
   LabelText,
   StyledSafeAreaView,
-  HeaderIconContainer,
   HeaderText,
   HeaderMainText,
   Header,
   HeaderLink,
+  DrawerLabelsContainer,
 } from './styled';
 import { UserContext } from '../../context/user';
 
-const CarIconSource = require('../../assets/menuItems/car.png');
+const History = require('../../assets/history.png');
 const HelpIconSource = require('../../assets/menuItems/help.png');
 const CreditCardIconSource = require('../../assets/menuItems/creditcard.png');
-const HomeIconSource = require('../../assets/menuItems/home.png');
 
-const closeIconSource = require('../../assets/x.png');
-
-
-const DrawerHeader = ({ onIconPress, navigation }) => {
+const DrawerHeader = ({ navigation }) => {
   const { user } = useContext(UserContext);
   return (
     <Header>
       {user && (
         <Thumbnail
-          size={80}
+          size={60}
           source={user.avatar}
         />
       )}
@@ -46,17 +43,6 @@ const DrawerHeader = ({ onIconPress, navigation }) => {
           {i18n.t('menu.account')}
         </HeaderText>
       </HeaderLink>
-
-      <HeaderIconContainer
-        onPress={onIconPress}
-        data-test-id="NavigationPanelButton"
-      >
-        <DrawerIcon
-          source={closeIconSource}
-          height="18px"
-          width="18px"
-        />
-      </HeaderIconContainer>
     </Header>
   );
 };
@@ -77,42 +63,34 @@ export const DrawerContentComponent = ({ navigation, state }) => {
   };
   return (
     <StyledSafeAreaView>
-      <DrawerHeader
-        navigation={navigation}
-        onIconPress={() => closeComponent()}
-      />
-      <DrawerLabel
-        title={i18n.t('menu.home')}
-        icon={HomeIconSource}
-        onPress={() => {
-          navigation.navigate(MAIN_ROUTES.HOME);
-        }}
-        focused={route === MAIN_ROUTES.HOME}
-      />
-      <DrawerLabel
-        title={i18n.t('menu.trips')}
-        icon={CarIconSource}
-        onPress={() => {
-          navigation.navigate(MAIN_ROUTES.RIDE_HISTORY);
-        }}
-        focused={route === MAIN_ROUTES.RIDE_HISTORY}
-      />
-      <DrawerLabel
-        title={i18n.t('menu.paymentsSettings')}
-        icon={CreditCardIconSource}
-        onPress={() => {
-          navigation.navigate(MAIN_ROUTES.PAYMENT);
-        }}
-        focused={route === MAIN_ROUTES.PAYMENT}
-      />
-      <DrawerLabel
-        title={i18n.t('menu.support')}
-        icon={HelpIconSource}
-        onPress={() => {
-          navigation.navigate(MAIN_ROUTES.CONTACT_US);
-        }}
-        focused={route === MAIN_ROUTES.CONTACT_US}
-      />
+      <DrawerHeader navigation={navigation} />
+      <DrawerLabelsContainer>
+        <DrawerLabel
+          title={i18n.t('menu.trips')}
+          icon={History}
+          onPress={() => {
+            navigation.navigate(MAIN_ROUTES.RIDE_HISTORY);
+          }}
+          focused={route === MAIN_ROUTES.RIDE_HISTORY}
+        />
+        <DrawerLabel
+          title={i18n.t('menu.paymentsSettings')}
+          icon={CreditCardIconSource}
+          onPress={() => {
+            navigation.navigate(MAIN_ROUTES.PAYMENT);
+          }}
+          focused={route === MAIN_ROUTES.PAYMENT}
+        />
+        <DrawerLabel
+          title={i18n.t('menu.support')}
+          icon={HelpIconSource}
+          onPress={() => {
+            navigation.navigate(MAIN_ROUTES.CONTACT_US);
+          }}
+          focused={route === MAIN_ROUTES.CONTACT_US}
+        />
+      </DrawerLabelsContainer>
+      <Bottom />
     </StyledSafeAreaView>
   );
 };

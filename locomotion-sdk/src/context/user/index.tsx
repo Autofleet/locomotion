@@ -78,9 +78,9 @@ const UserContextProvider = ({ children }: { children: any }) => {
     }
   };
 
-  const getCardInfo = async () => {
+  const getCardInfo = () => {
     try {
-      const methods = await usePayments.getPaymentMethods();
+      const methods = usePayments.paymentMethods;
       if (methods.length) {
         return methods;
       }
@@ -102,7 +102,7 @@ const UserContextProvider = ({ children }: { children: any }) => {
       }
 
       auth.updateTokens(vertResponse.refreshToken, vertResponse.accessToken);
-      const userProfile = vertResponse.userProfile || {};
+      const userProfile = vertResponse.clientProfile || {};
       Mixpanel.setUser(userProfile);
       const cards = await getCardInfo();
       await updateUserInfo(userProfile);

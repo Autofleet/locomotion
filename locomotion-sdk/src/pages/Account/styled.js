@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import Button from '../../Components/Button';
 import ArrowIconSource from '../../assets/arrowright.png';
+import { FONT_SIZES, FONT_WEIGHTS } from '../../context/theme';
 
 export const ErrorText = styled.Text`
   color: #cc0d28;
@@ -34,6 +35,10 @@ export const Container = styled.View`
 `;
 
 export const LogoutContainer = styled(Button)`
+  text-align: center;
+  align-items: center;
+  background-color: ${({ theme }) => theme.pageBackgroundColor};
+  padding: 20px;
 `;
 
 export const LogoutText = styled.Text`
@@ -49,8 +54,10 @@ export const VerifyText = styled.Text`
 
 export const VerifyContainer = styled.View`
   border-radius: 24px;
-  padding: 5px 10px;
-  margin-top: 5px;
+  padding-top: 5px;
+  padding-right: 10px;
+  padding-left: 10px;
+  padding-bottom: 5px;
   background-color: ${({ unverified }) => (unverified ? '#f35657' : '#2dc36a')};
 `;
 
@@ -73,6 +80,7 @@ export const Arrow = styled.Image.attrs({ source: ArrowIconSource })`
 
 export const CardsContainer = styled.View`
   width: 100%;
+  height: auto;
 `;
 
 export const CardContantContainer = styled.View`
@@ -81,8 +89,9 @@ export const CardContantContainer = styled.View`
 
 export const CardsTitle = styled.Text`
   width: 100%;
-  font-size: 12px;
-  font-weight: bold;
+  ${FONT_SIZES.MEDIUM};
+  ${FONT_WEIGHTS.BOLD};
+  color: #333333;
   padding: 30px 10px 15px;
 `;
 
@@ -94,14 +103,21 @@ export const CardTitleContainer = styled.View`
 `;
 
 export const CardTitle = styled.Text`
-  font-size: 14px;
+  color: #333333;
+  opacity: 0.8;
   align-self: center;
   vertical-align: center;
-  padding: 10px 0;
+  padding-bottom: 5px;
+  ${FONT_SIZES.LARGE};
+  ${FONT_WEIGHTS.SEMI_BOLD}
 `;
 
 export const CardText = styled.Text`
-  font-size: 18px;
+  ${FONT_SIZES.H2};
+  ${FONT_WEIGHTS.REGULAR};
+  color: #333333;
+  opacity: 0.8;
+
 `;
 
 export const CardContainer = styled.View`
@@ -111,8 +127,8 @@ export const CardContainer = styled.View`
   align-items: center;
   width: 100%;
   padding: 15px;
-  border-bottom-width: 3px;
-  border-bottom-color: #f9f9f9;
+  border-bottom-width: 1px;
+  border-bottom-color: #e2e2e2;
   background-color: ${({ theme }) => theme.pageBackgroundColor};
 `;
 
@@ -135,13 +151,13 @@ export const AccountHeaderMainContainer = styled(FlexCenterContainer)`
 `;
 
 export const AccountHeaderMainText = styled.Text`
-  color: ${({ theme }) => theme.primaryColor};
-  font-size: 22px;
-  font-weight: bold;
+  ${FONT_SIZES.H1};
+  ${FONT_WEIGHTS.BOLD};
 `;
 
 export const AccountHeaderSubText = styled.Text`
-  font-size: 14px;
+  ${FONT_SIZES.H2};
+  ${FONT_WEIGHTS.SEMI_BOLD};
 `;
 
 export const AccountHeaderIndicatorContainer = styled.View`

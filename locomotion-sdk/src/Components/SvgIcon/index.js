@@ -15,8 +15,8 @@ const SvgIcon = ({
   const Icon = styled(svg)`
   width: ${width};
   height: ${height};
-  stroke: ${stroke || '#6f6f6f'};
-  fill: ${fill || '#6f6f6f'};
+  stroke: ${stroke};
+  fill: ${fill};
   `;
   return (
     <IconContainer

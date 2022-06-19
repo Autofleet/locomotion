@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 15 15">
+    <g data-name="Ellipse 78" transform="translate(1.5 1.5)" style="stroke-width:2px;fill:none">
+        <circle cx="6" cy="6" style="stroke:none" r="6"/>
+        <circle cx="6" cy="6" style="fill:none" r="5"/>
+    </g>
+    <circle data-name="Ellipse 77" cx="2" cy="2" transform="translate(5.5 5.5)" r="2"/>
+    <path data-name="Line 23" transform="translate(7.25)" style="stroke-width:2px;fill:none" d="M0 0v3"/>
+    <path data-name="Line 25" transform="translate(7.25 12)" style="stroke-width:2px;fill:none" d="M0 0v3"/>
+    <path data-name="Line 24" transform="translate(0 7.5)" style="stroke-width:2px;fill:none" d="M3 0H0"/>
+    <path data-name="Line 26" transform="translate(12 7.5)" style="stroke-width:2px;fill:none" d="M3 0H0"/>
+</svg>
