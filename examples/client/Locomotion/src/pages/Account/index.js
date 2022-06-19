@@ -36,12 +36,18 @@ import { PageContainer } from '../styles';
 import { UserContext } from '../../context/user';
 
 const AccountHeader = () => {
-  const { user } = useContext(UserContext);
+  const { updateUserInfo, user } = useContext(UserContext);
+
+  const onImageChoose = (image) => {
+    updateUserInfo({ avatar: image });
+  };
+
   return (
     <AccountHeaderContainer>
       <FlexCenterContainer>
         <ThumbnailPicker
-          size={100}
+          onImageChoose={onImageChoose}
+          size={125}
           avatarSource={user.avatar}
         />
       </FlexCenterContainer>
@@ -51,14 +57,10 @@ const AccountHeader = () => {
         </AccountHeaderMainText>
         <AccountHeaderIndicatorContainer>
           <AccountHeaderMainContainer>
-            <AccountHeaderSubText>
-              {/* todo 12 Trips */}
-            </AccountHeaderSubText>
+            <AccountHeaderSubText>{/* todo 12 Trips */}</AccountHeaderSubText>
           </AccountHeaderMainContainer>
           <AccountHeaderMainContainer>
-            <AccountHeaderSubText>
-              {/* todo 200 Miles */}
-            </AccountHeaderSubText>
+            <AccountHeaderSubText>{/* todo 200 Miles */}</AccountHeaderSubText>
           </AccountHeaderMainContainer>
         </AccountHeaderIndicatorContainer>
       </AccountHeaderMainContainer>
@@ -67,7 +69,12 @@ const AccountHeader = () => {
 };
 
 const Card = ({
-  title, children, onPress, verified, showUnverified, ...props
+  title,
+  children,
+  onPress,
+  verified,
+  showUnverified,
+  ...props
 }) => {
   const MainContainer = onPress ? TouchableOpacity : View;
   return (
@@ -75,15 +82,11 @@ const Card = ({
       <CardContainer>
         <CardContantContainer>
           <CardTitleContainer>
-            <CardTitle>
-              {title}
-            </CardTitle>
+            <CardTitle>{title}</CardTitle>
             {verified ? (
               <View>
                 <VerifyContainer>
-                  <VerifyText>
-                    {i18n.t('onboarding.verified')}
-                  </VerifyText>
+                  <VerifyText>{i18n.t('onboarding.verified')}</VerifyText>
                 </VerifyContainer>
               </View>
             ) : (
@@ -91,22 +94,16 @@ const Card = ({
                 {showUnverified ? (
                   <View>
                     <VerifyContainer unverified>
-                      <VerifyText>
-                        {i18n.t('onboarding.unverified')}
-                      </VerifyText>
+                      <VerifyText>{i18n.t('onboarding.unverified')}</VerifyText>
                     </VerifyContainer>
                   </View>
                 ) : undefined}
               </>
             )}
           </CardTitleContainer>
-          <CardText>
-            {children}
-          </CardText>
+          <CardText>{children}</CardText>
         </CardContantContainer>
-        <ArrowContainer>
-          {onPress ? <Arrow /> : undefined}
-        </ArrowContainer>
+        <ArrowContainer>{onPress ? <Arrow /> : undefined}</ArrowContainer>
       </CardContainer>
     </MainContainer>
   );
@@ -115,7 +112,6 @@ const Card = ({
 const AccountContent = ({ navigation }) => {
   const { user } = useContext(UserContext);
   const { paymentMethods } = PaymentsContext.useContainer();
-
   return (
     <Container>
       <CardsContainer>
@@ -126,7 +122,8 @@ const AccountContent = ({ navigation }) => {
           title={i18n.t('onboarding.namePlaceholder')}
           onPress={() => navigation.navigate(MAIN_ROUTES.NAME, {
             editAccount: true,
-          })}
+          })
+          }
         >
           {user ? `${user.firstName} ${user.lastName}` : ''}
         </Card>
@@ -142,7 +139,8 @@ const AccountContent = ({ navigation }) => {
           title={i18n.t('onboarding.emailPlaceholder')}
           onPress={() => navigation.navigate(MAIN_ROUTES.EMAIL, {
             editAccount: true,
-          })}
+          })
+          }
         >
           {user ? `${user.email}` : ''}
         </Card>
@@ -159,7 +157,7 @@ const AccountContent = ({ navigation }) => {
            }
             </Card>
           ))
-          : 'none'}
+          : null}
         <LogoutContainer
           onPress={() => {
             navigation.navigate(MAIN_ROUTES.LOGOUT);
@@ -172,9 +170,7 @@ const AccountContent = ({ navigation }) => {
   );
 };
 
-export default ({
-  navigation, menuSide,
-}) => {
+export default ({ navigation, menuSide }) => {
   const route = useRoute();
 
   useEffect(() => {
@@ -185,19 +181,14 @@ export default ({
 
   return (
     <PageContainer>
-      <KeyboardAwareScrollView
-        extraScrollHeight={20}
-        enableOnAndroid
-      >
+      <KeyboardAwareScrollView extraScrollHeight={20} enableOnAndroid>
         <PageHeader
           title={i18n.t('onboarding.pageTitle')}
           onIconPress={() => navigation.navigate(MAIN_ROUTES.HOME)}
           iconSide={menuSide}
         />
         <AccountHeader />
-        <AccountContent
-          navigation={navigation}
-        />
+        <AccountContent navigation={navigation} />
       </KeyboardAwareScrollView>
     </PageContainer>
   );

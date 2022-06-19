@@ -1,15 +1,12 @@
 import React, {
-  useCallback, useEffect, useMemo, useRef, useState, useContext,
+  useEffect, useContext,
 } from 'react';
 import {
-  View, Text, StyleSheet, ScrollView,
+  View,
 } from 'react-native';
-import BottomSheet, {
-  useBottomSheetDynamicSnapPoints,
+import {
   BottomSheetView,
   useBottomSheet,
-  BottomSheetScrollView,
-  BottomSheetBackdrop,
 } from '@gorhom/bottom-sheet';
 
 import styled from 'styled-components';
@@ -26,9 +23,6 @@ const Container = styled(BottomSheetView)`
   width: 100%;
 `;
 
-const Container2 = styled(BottomSheetView)`
-
-`;
 
 const InputContainer = styled.View`
   width: 100%;
@@ -76,8 +70,10 @@ const AddressSelectorBottomSheet = ({ bottomSheetRef }) => {
 
   const {
     isExpanded,
-    historyResults,
   } = useContext(BottomSheetContext);
+
+  const { expand, collapse } = useBottomSheet();
+
 
   const loadHistory = async () => {
     userContext.getLastAddresses();
@@ -89,18 +85,17 @@ const AddressSelectorBottomSheet = ({ bottomSheetRef }) => {
 
   const onSearchFocus = () => {
     if (!isExpanded) {
-      bottomSheetRef.current.expand();
+      expand();
     }
   };
 
   const onBack = () => {
-    bottomSheetRef.current.collapse();
+    collapse();
   };
 
   const onCurrentLocation = async () => {
     userContext.setSpCurrentLocation();
   };
-
   return (
     <>
       <InputContainer>
