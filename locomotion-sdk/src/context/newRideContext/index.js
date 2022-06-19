@@ -1,14 +1,24 @@
 import React, {
   useState, useEffect, useRef, createContext,
 } from 'react';
-import { useRoute } from '@react-navigation/native';
+import randomstring from 'randomstring';
 import { getPosition } from '../../services/geo';
-import settingsContext from '../settings';
 import { getPlaces, getGeocode, getPlaceDetails } from './google-api';
 import StorageService from '../../services/storage';
 import { createServiceEstimations, getServices } from './api';
 
 const STATION_AUTOREFRESH_INTERVAL = 60000;
+
+const makeid = (length) => {
+  let result = '';
+  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  const charactersLength = characters.length;
+  for (let i = 0; i < length; i++) {
+    result += characters.charAt(Math.floor(Math.random()
+* charactersLength));
+  }
+  return result;
+};
 
 function useInterval(callback, delay) {
   const savedCallback = useRef();
@@ -38,6 +48,13 @@ const RidePageContextProvider = ({ navigation, children }) => {
     type: 'pickup',
     location: null,
     useDefaultLocation: true,
+    id: makeid(5),
+  },
+  {
+    type: 'dropoff',
+    location: null,
+    useDefaultLocation: false,
+    id: makeid(5),
   }]);
   const [coords, setCoords] = useState();
   const [currentGeocode, setCurrentGeocode] = useState(null);
