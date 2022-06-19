@@ -72,10 +72,6 @@ const historyText = [
   },
 ];
 const AddressSelectorBottomSheet = ({ bottomSheetRef }) => {
-  // const [isExpanded, setIsExpanded] = useState(false);
-  const [contentHeight, setContentHeight] = useState('33%');
-  const [resultsList, setResultsList] = useState(null);
-  // const bottomSheetRef = useRef(null);
   const userContext = useContext(RidePageContext);
 
   const {
@@ -84,7 +80,7 @@ const AddressSelectorBottomSheet = ({ bottomSheetRef }) => {
   } = useContext(BottomSheetContext);
 
   const loadHistory = async () => {
-    setHistoryResults(historyText);
+    userContext.getLastAddresses();
   };
 
   useEffect(() => {
@@ -136,7 +132,7 @@ const AddressSelectorBottomSheet = ({ bottomSheetRef }) => {
           )
           : null}
         <View>
-          {(userContext.searchResults || historyResults || []).map(h => <AddressRow {...h} onPress={() => userContext.onAddressSelected(h)} />)}
+          {(userContext.searchResults || userContext.historyResults).map(h => <AddressRow {...h} onPress={() => userContext.onAddressSelected(h)} />)}
         </View>
       </HistoryContainer>
     </>
