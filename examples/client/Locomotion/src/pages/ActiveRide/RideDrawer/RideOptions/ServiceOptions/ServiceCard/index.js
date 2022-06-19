@@ -49,9 +49,13 @@ const ServiceCard = ({ selected, service }) => {
             {service.name}
           </Title>
           {service.tag
-            ? <Tag containerStyles={tagStyles[service.tag].container}
-              text={service.tag}
-              textColor={tagStyles[service.tag].textColor} />
+            ? (
+              <Tag
+                containerStyles={tagStyles[service.tag].container}
+                text={service.tag}
+                textColor={tagStyles[service.tag].textColor}
+              />
+            )
             : null}
           <Price>
             {service.price || unavailableText}
