@@ -8,7 +8,7 @@ on:
 
 defaults:
   run:
-    working-directory: locomotion-sdk
+    working-directory: examples/client/Locomotion
 
 jobs:
   lint:
