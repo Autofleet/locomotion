@@ -25,7 +25,7 @@ const PhoneNumberInput = ({
     const numberValue = `+${countryCode}${v}`;
     asYouTypePhoneNUmber.input(numberValue);
     return onPhoneNumberChange(
-      asYouTypePhoneNUmber.getNumberValue(),
+      asYouTypePhoneNUmber.getNumberValue().replace('+', ''),
       asYouTypePhoneNUmber.isValid(),
     );
   };

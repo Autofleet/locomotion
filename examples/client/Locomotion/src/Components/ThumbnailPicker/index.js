@@ -66,7 +66,6 @@ const ThumbnailPicker = (props) => {
   };
 
   const handleImage = async (data) => {
-    console.log('Data of the uploaded image', data);
     const uploadPromise = await uploadImage(data);
     props.onImageChoose(uploadPromise);
   };
