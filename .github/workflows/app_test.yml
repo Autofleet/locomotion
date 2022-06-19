@@ -24,6 +24,6 @@ jobs:
           registry-url: https://registry.npmjs.org
           
       - name: Install NPM dependencies
-        run: npm install -D
+        run: npm install
 
       - run: npm run linter
