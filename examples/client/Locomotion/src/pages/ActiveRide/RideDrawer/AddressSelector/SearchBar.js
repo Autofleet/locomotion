@@ -21,15 +21,15 @@ const SearchContainer = styled.View`
     border-bottom-width: 2px;
   `;
 
-const InputContainer = styled.View`
+const InputContainer = styled(View)`
     flex-direction: column;
     justify-content: space-between;
     flex: 1;
 `;
 
-const Row = styled.View`
+const Row = styled(View)`
     flex: 1;
-    ${({ margin }) => margin && `
+    ${({ setMargin }) => setMargin && `
         margin-top: 12px;
     `}
 
@@ -117,10 +117,10 @@ const SearchBar = ({
 
   const buildSps = () => requestStopPoints.map((s, i) => {
     const placeholder = getSpPlaceholder(s);
-    const rowProps = i === 0 ? { isExpanded } : { margin: true };
+    const rowProps = i === 0 ? { isExpanded } : { setMargin: true };
 
     return (
-      <Row {...rowProps}>
+      <Row {...rowProps} key={'row' + i}>
         <BottomSheetInput
           placeholder={i18n.t(placeholder)}
           onChangeText={(text) => {
@@ -134,7 +134,6 @@ const SearchBar = ({
             onInputFocus(e.target, i);
           }}
           onBlur={onInputBlur}
-          key={`input_${s.id}`}
           autoCorrect={false}
         />
       </Row>

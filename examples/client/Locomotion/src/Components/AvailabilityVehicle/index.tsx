@@ -6,14 +6,14 @@ import SvgIcon from '../SvgIcon';
 import carIcon from '../../assets/map/car.svg';
 
 interface Location {
-    lat: number;
-    lng: number;
-    bearing: number;
+  lat: number;
+  lng: number;
+  bearing: number;
 }
 
 interface AvailabilityVehicleProps {
-    location: Location;
-    id: string;
+  location: Location;
+  id: string;
 }
 
 const AvailabilityVehicleContainer = styled(View)``;
@@ -46,7 +46,7 @@ const AvailabilityVehicle = (props: AvailabilityVehicleProps) => {
       <MarkerAnimated
         coordinate={locationAnimated}
       >
-        <SvgIcon svg={carIcon} />
+        <SvgIcon Svg={carIcon} height={48} width={48} />
       </MarkerAnimated>
     </AvailabilityVehicleContainer>
   );
