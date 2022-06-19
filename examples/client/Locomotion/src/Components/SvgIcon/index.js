@@ -10,21 +10,23 @@ const SvgIcon = ({
   height,
   margin,
   onPress,
-}) => <IconContainer
-      onPress={onPress}
-      disabled={!onPress}
-      margin={margin}
-      noBg
-      height={height}
-      width={width}
-    >
-      <Svg
+}) => (
+  <IconContainer
+    onPress={onPress}
+    disabled={!onPress}
+    margin={margin}
+    noBg
+    height={height}
+    width={width}
+  >
+    <Svg
       width={width}
       height={height}
       stroke={stroke}
       fill={fill}
-      />
-    </IconContainer>;
+    />
+  </IconContainer>
+);
 
 export default SvgIcon;
 

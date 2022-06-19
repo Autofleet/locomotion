@@ -129,7 +129,10 @@ const SearchBar = ({
     const rowProps = i === 0 ? { isExpanded } : { setMargin: true };
 
     return (
-      <Row {...rowProps} key={'row' + i}>
+      <Row
+        {...rowProps}
+        key={s.id}
+      >
         <BottomSheetInput
           placeholder={i18n.t(placeholder)}
           onChangeText={(text) => {
