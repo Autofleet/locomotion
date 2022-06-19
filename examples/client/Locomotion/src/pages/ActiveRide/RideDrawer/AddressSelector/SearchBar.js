@@ -6,6 +6,9 @@ import {
 } from 'react-native';
 import styled from 'styled-components';
 import { debounce } from 'lodash';
+import Animated, {
+  FadeInDown, LightSpeedInRight, Layout, FadeOut, Transition,
+} from 'react-native-reanimated';
 import BottomSheetInput from '../../../../Components/TextInput/BottomSheetInput';
 import i18n from '../../../../I18n';
 import { RidePageContext } from '../../../../context/newRideContext';
@@ -47,6 +50,7 @@ const BackButtonContainer = styled.TouchableOpacity`
     margin-right: 8px;
     justify-content: center;
     align-items: center;
+
 `;
 
 const ArrowImage = styled.Image.attrs({ source: backImage })`
@@ -115,6 +119,7 @@ const SearchBar = ({
     debouncedSearch(searchTerm);
   }, [searchTerm]);
 
+
   const buildSps = () => requestStopPoints.map((s, i) => {
     const placeholder = getSpPlaceholder(s);
     const rowProps = i === 0 ? { isExpanded } : { setMargin: true };
@@ -141,28 +146,66 @@ const SearchBar = ({
   });
 
   const onBackPress = () => {
+    console.log('BACK PRESS');
+
     selectedInputTarget.blur();
     onBack();
   };
 
   return (
-    <View style={{
-      flex: 1,
-      paddingBottom: 12,
-      flexDirection: 'row',
-      borderBottomColor: '#f1f2f6',
-      borderBottomWidth: 2,
-    }}
+    <View
+      style={{
+        flex: 1,
+        paddingBottom: 12,
+        flexDirection: 'row',
+        borderBottomColor: '#f1f2f6',
+        borderBottomWidth: 2,
+      }}
     >
       <BackButton
         isExpanded={isExpanded}
         onBack={onBackPress}
       />
-      <InputContainer>
-        <Row>
-          {buildSps()}
-        </Row>
-      </InputContainer>
+      <View
+        style={{
+          flexDirection: 'column',
+          justifyContent: 'space-between',
+          flex: 1,
+        }}
+        layout={Transition}
+      >
+
+        {requestStopPoints.map((s, i) => {
+          const placeholder = getSpPlaceholder(s);
+          const rowProps = i === 0 ? { isExpanded } : { margin: true };
+
+          return (
+            <Row
+              {...rowProps}
+              entering={LightSpeedInRight}
+              exit={FadeOut}
+            >
+              <BottomSheetInput
+                placeholder={i18n.t(placeholder)}
+                onChangeText={(text) => {
+                  updateRequestSp({ description: text });
+                  setSearchTerm(text);
+                }}
+                fullBorder
+                value={requestStopPoints[i].description}
+                placeholderTextColor="#929395"
+                onFocus={(e) => {
+                  onInputFocus(e.target, i);
+                }}
+                onBlur={onInputBlur}
+                key={`input_${s.id}`}
+                autoCorrect={false}
+              />
+            </Row>
+          );
+        })}
+
+      </View>
     </View>
   );
 };
