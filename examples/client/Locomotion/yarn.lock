@@ -8367,6 +8367,7 @@
   "resolved" "https://registry.npmjs.org/react-native-swipe-verify/-/react-native-swipe-verify-0.1.6.tgz"
   "version" "0.1.6"
   dependencies:
+    "prop-types" "^15.6.2"
 
 "react-native-table-component@^1.2.2":
   "integrity" "sha512-7bbsi5431iWcjj3toASh8lFHGi6AG/+MTd4M7GuksXKxx/CFs/Qwv1Ys7D2wgyuYKe3hxWNfSVrteFj0tOYXYw=="
