@@ -30,7 +30,7 @@ const RidePage = ({ menuSide, mapSettings }) => {
 
   useEffect(() => {
     bottomSheetRef.current.collapse();
-  }, [serviceEstimations])
+  }, [serviceEstimations]);
 
   return (
     <>
@@ -45,10 +45,9 @@ const RidePage = ({ menuSide, mapSettings }) => {
             <NotAvilableHere onSetAnotherLocation={() => ({})} />
           ) : (
             <>
-              {!serviceEstimations ? 
-              <AddressSelector bottomSheetRef={bottomSheetRef} />
-              :
-              <RideOptions />
+              {!serviceEstimations
+                ? <AddressSelector bottomSheetRef={bottomSheetRef} />
+                : <RideOptions />
               }
             </>
           )}

@@ -1,10 +1,7 @@
-import React, { Fragment } from "react";
+import React, { Fragment } from 'react';
 
-const RideDetails = () => {
-  return (
-    <Fragment>
-    </Fragment>
-  )
-}
+const RideDetails = () => (
+  <Fragment />
+);
 
 export default RideDetails;

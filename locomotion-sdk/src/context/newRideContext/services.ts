@@ -1,4 +1,4 @@
 export const TAG_OPTIONS = {
-    FASTEST: 'Fastest',
-    CHEAPEST: 'Cheapest'
-}
+  FASTEST: 'Fastest',
+  CHEAPEST: 'Cheapest',
+};

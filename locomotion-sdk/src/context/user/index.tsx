@@ -1,12 +1,14 @@
 import React, { createContext, useEffect, useState } from 'react';
 import AppSettings from '../../services/app-settings';
-import { getUserDetails, loginVert, sendEmailVerification, updateUser } from './api';
+import {
+  getUserDetails, loginVert, sendEmailVerification, updateUser,
+} from './api';
 import auth from '../../services/auth';
 import Mixpanel from '../../services/Mixpanel';
 import PaymentsContext from '../payments';
 
 export interface User {
-  id: string; 
+  id: string;
   phoneNumber?: string;
   firstName?: string;
   lastName?: string;
@@ -38,16 +40,14 @@ export const UserContext = createContext<UserContextInterface>({
   onVert: async (code: string) => false,
   removeChangesToUser: async () => {},
   verifyEmail: async () => {},
-  getUserFromServer: async () => {}
+  getUserFromServer: async () => {},
 });
 
 const UserContextProvider = ({ children }: { children: any }) => {
   const usePayments = PaymentsContext.useContainer();
   const [user, setUser] = useState<User | null>(null);
 
-  const getUserFromServer = () => {
-    return getUserDetails()
-  }
+  const getUserFromServer = () => getUserDetails();
 
   const updateState = (values: any) => {
     const newUser: User = {
@@ -130,7 +130,7 @@ const UserContextProvider = ({ children }: { children: any }) => {
         onVert,
         removeChangesToUser,
         verifyEmail,
-        getUserFromServer
+        getUserFromServer,
       }}
     >
       {children}

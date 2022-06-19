@@ -13,7 +13,7 @@ const PhoneNumberInput = ({
   const [countryCode, setCountryCode] = useState(initialCode.dialCode);
 
   const onChangeCountry = (v) => {
-    onPhoneNumberChange(value, v.callingCode[0])
+    onPhoneNumberChange(value, v.callingCode[0]);
     setCountryCode(v.callingCode[0]);
   };
 

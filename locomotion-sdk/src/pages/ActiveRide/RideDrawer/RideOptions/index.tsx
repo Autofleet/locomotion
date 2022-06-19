@@ -1,16 +1,14 @@
-import React, { Fragment } from "react";
-import RideDetails from "./RideDetails";
-import ServiceOptions from "./ServiceOptions";
+import React, { Fragment } from 'react';
+import RideDetails from './RideDetails';
+import ServiceOptions from './ServiceOptions';
 
-const RideOptions = () => {
-  return (
-    <Fragment>
-      <ServiceOptions />
+const RideOptions = () => (
+  <Fragment>
+    <ServiceOptions />
 
-      <RideDetails />
+    <RideDetails />
 
-    </Fragment>
-  )
-}
+  </Fragment>
+);
 
 export default RideOptions;

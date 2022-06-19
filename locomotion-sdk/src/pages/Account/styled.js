@@ -168,4 +168,4 @@ export const AccountHeaderIndicatorContainer = styled.View`
 export const NoPaymentMethodsText = styled.Text`
 width: 100%;
 text-align: center;
-`
+`;

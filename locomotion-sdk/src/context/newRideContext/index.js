@@ -5,6 +5,7 @@ import { getPosition } from '../../services/geo';
 import { getPlaces, getGeocode, getPlaceDetails } from './google-api';
 import StorageService from '../../services/storage';
 import { createServiceEstimations, getServices } from './api';
+import { TAG_OPTIONS } from './services';
 
 const STATION_AUTOREFRESH_INTERVAL = 60000;
 
@@ -63,37 +64,33 @@ const RidePageContextProvider = ({ navigation, children }) => {
   const [searchResults, setSearchResults] = useState(null);
   const [isReadyForSubmit, setIsReadyForSubmit] = useState(false);
   const [historyResults, setHistoryResults] = useState([]);
-  const [serviceEstimations, setServiceEstimations] = useState(null)
+  const [serviceEstimations, setServiceEstimations] = useState(null);
 
-  const formatEstimations = (services, estimations) => {
-    return services.map((service) => {
-      const estimationForService = estimations.find((estimation) => estimation.serviceId === service.id)
-      const estimationResult = estimationForService && estimationForService.results[0] 
-      return {
-        name: service.displayName,
-        eta: estimationResult.minPickupEta,
-        price: estimationResult.priceAmount,
-        availableSeats: service.maxPassengers || 4,
-        tag: TAG_OPTIONS.FASTEST,
-        iconUrl: service.icon,
-        description: service.displayDescription,
-      }
-    })
-  }
+  const formatEstimations = (services, estimations) => services.map((service) => {
+    const estimationForService = estimations.find(estimation => estimation.serviceId === service.id);
+    const estimationResult = estimationForService && estimationForService.results[0];
+    return {
+      name: service.displayName,
+      eta: estimationResult.minPickupEta,
+      price: estimationResult.priceAmount,
+      availableSeats: service.maxPassengers || 4,
+      tag: TAG_OPTIONS.FASTEST,
+      iconUrl: service.icon,
+      description: service.displayDescription,
+    };
+  });
 
   const getServiceEstimations = async () => {
-    const formattedStopPoints = requestStopPoints.map((sp) => {
-      return {
-        type: sp.type,
-        lat: sp.location.lat,
-        lng: sp.location.lng
-      }
-    })
+    const formattedStopPoints = requestStopPoints.map(sp => ({
+      type: sp.type,
+      lat: sp.location.lat,
+      lng: sp.location.lng,
+    }));
     const estimations = await createServiceEstimations(formattedStopPoints);
-    const services = await getServices()
-    const formattedEstimations = formatEstimations(services, estimations)
-    setServiceEstimations(formattedEstimations)
-  }
+    const services = await getServices();
+    const formattedEstimations = formatEstimations(services, estimations);
+    setServiceEstimations(formattedEstimations);
+  };
 
   useEffect(() => {
     initLocation();
@@ -228,7 +225,7 @@ const RidePageContextProvider = ({ navigation, children }) => {
     };
     setRequestStopPoints(reqSps);
     resetSearchResults();
-    selectedInputTarget && selectedInputTarget.blur();
+    selectedInputTarget.blur();
   };
 
   const resetSearchResults = () => setSearchResults(null);
@@ -274,7 +271,7 @@ const RidePageContextProvider = ({ navigation, children }) => {
     if (requestStopPoints.length && isSpsReady) {
       console.log('READY SEND REQUEST');
       setIsReadyForSubmit(true);
-      await getServiceEstimations()
+      await getServiceEstimations();
     } else {
       console.log('NOT READY');
       setIsReadyForSubmit(false);
@@ -303,7 +300,7 @@ const RidePageContextProvider = ({ navigation, children }) => {
         isReadyForSubmit,
         checkFormSps,
         historyResults,
-        serviceEstimations
+        serviceEstimations,
       }}
     >
       {children}
