@@ -1,28 +1,31 @@
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import propsTypes from 'prop-types';
 /* eslint-disable class-methods-use-this */
 import {
-  Platform, ActionSheetIOS, UIManager, findNodeHandle, PermissionsAndroid,
+  Platform,
+  ActionSheetIOS,
+  UIManager,
+  findNodeHandle,
+  PermissionsAndroid,
 } from 'react-native';
 import ImageResizer from 'react-native-image-resizer';
-import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
+import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import i18n from '../../I18n';
 import Thumbnail from '../Thumbnail';
-import { ImageUpload } from '../../context/user/api';
+import {ImageUpload} from '../../context/user/api';
 
-const ThumbnailPicker = (props) => {
+const ThumbnailPicker = props => {
+  const [loading, setLoading] = useState(false);
   const onCancel = () => {
     console.log('User cancelled image picker');
   };
 
-  const onError = (error) => {
+  const onError = error => {
     console.log('ImagePicker Error: ', error);
   };
 
-  const onSelectPicture = (response) => {
-    const {
-      assets, errorCode, didCancel,
-    } = response;
+  const onSelectPicture = response => {
+    const {assets, errorCode, didCancel} = response;
     if (didCancel) {
       onCancel();
     }
@@ -36,8 +39,15 @@ const ThumbnailPicker = (props) => {
     }
   };
 
-  const uploadImage = async (data) => {
-    const newImage = await ImageResizer.createResizedImage(data.uri, 180, 180, 'PNG', 80);
+  const uploadImage = async data => {
+    setLoading(true);
+    const newImage = await ImageResizer.createResizedImage(
+      data.uri,
+      180,
+      180,
+      'PNG',
+      80,
+    );
     const formData = new FormData();
     formData.append('avatar', {
       uri: newImage.uri,
@@ -48,34 +58,37 @@ const ThumbnailPicker = (props) => {
     const response = await ImageUpload(formData);
 
     if (response.status) {
+      setLoading(false);
       return response.url;
     }
+    setLoading(false);
     return false;
   };
 
-  const handleImage = async (data) => {
+  const handleImage = async data => {
     console.log('Data of the uploaded image', data);
     const uploadPromise = await uploadImage(data);
     props.onImageChoose(uploadPromise);
   };
 
-
-  const onSuccess = (response) => {
+  const onSuccess = response => {
     handleImage(response[0]);
   };
 
   const insurePermission = async () => {
-    const isCameraGranted = await PermissionsAndroid.check(PermissionsAndroid.PERMISSIONS.CAMERA);
+    const isCameraGranted = await PermissionsAndroid.check(
+      PermissionsAndroid.PERMISSIONS.CAMERA,
+    );
     if (!isCameraGranted) {
-      await PermissionsAndroid.request(
-        PermissionsAndroid.PERMISSIONS.CAMERA,
-      );
+      await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.CAMERA);
     }
   };
 
-
-  const showImagePicker = (event) => {
-    const options = [i18n.t('popups.photoUpload.takePhoto'), i18n.t('popups.photoUpload.choosePhoto')];
+  const showImagePicker = event => {
+    const options = [
+      i18n.t('popups.photoUpload.takePhoto'),
+      i18n.t('popups.photoUpload.choosePhoto'),
+    ];
     const pickerOptions = {
       mediaType: 'photo',
       cameraType: 'back',
@@ -111,7 +124,7 @@ const ThumbnailPicker = (props) => {
           options: [i18n.t('general.cancel'), ...options],
           cancelButtonIndex: 0,
         },
-        (buttonIndex) => {
+        buttonIndex => {
           if (buttonIndex === 0) {
             onCancel();
           }
@@ -134,6 +147,7 @@ const ThumbnailPicker = (props) => {
       onPress={showImagePicker}
       size={props.size || 180}
       source={props.avatarSource}
+      showLoader={loading}
     />
   );
 };
