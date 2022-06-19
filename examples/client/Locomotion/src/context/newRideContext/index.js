@@ -1,7 +1,6 @@
 import React, {
   useState, useEffect, useRef, createContext,
 } from 'react';
-import randomstring from 'randomstring';
 import { getPosition } from '../../services/geo';
 import { getPlaces, getGeocode, getPlaceDetails } from './google-api';
 import StorageService from '../../services/storage';
