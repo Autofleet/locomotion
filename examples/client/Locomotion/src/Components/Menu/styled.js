@@ -39,7 +39,7 @@ export const StyledDrawerLabel = styled.TouchableOpacity`
 export const HeaderLink = styled.TouchableOpacity`
 `;
 
-export const HeaderIconContainer = styled(Button).attrs({ noBg: true })`
+export const HeaderIconContainer = styled(Button).attrs({ noBackground: true })`
   padding: 5px;
   position: absolute;
   top: 6px;

@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import Mixpanel from '../../services/Mixpanel';
 
 const Container = styled.TouchableOpacity`
-  ${({ noBg, theme }) => (!noBg ? `background-color: ${theme.primaryColor};` : '')}
+  ${({ noBackground, theme }) => (!noBackground ? `background-color: ${theme.primaryColor};` : '')}
 `;
 
 const Button = props => (
