@@ -1,5 +1,5 @@
 import MccMncList from 'mcc-mnc-list';
-import CarrierInfo from 'react-native-carrier-info'; 
+import CarrierInfo from 'react-native-carrier-info';
 
 const defaultCountryCode = 'IL';
 const getMccMnc = async () => {
@@ -20,7 +20,7 @@ const getIsoCodeByList = (mccMnc) => {
 export const getInputIsoCode = async () => {
   const [mmcMnc, mobileIso] = await Promise.all([
     getMccMnc(),
-    getMobileIsoCode()
+    getMobileIsoCode(),
   ]);
 
   const IsoByMncMcc = mmcMnc ? getIsoCodeByList(mmcMnc) : null;

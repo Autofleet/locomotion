@@ -33,13 +33,13 @@ const PhoneNumberInput = ({
 
   const setIsoCode = async () => {
     const mobileIso = await getInputIsoCode();
-    console.log('mobileIso', mobileIso)
+    console.log('mobileIso', mobileIso);
     setCountryCode(mobileIso);
-  }
+  };
 
   useEffect(() => {
     setIsoCode();
-  }, [])
+  }, []);
 
   return (
     <PhoneInput
