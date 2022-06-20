@@ -18,7 +18,7 @@ import Tag from '../../../../../../Components/Tag';
 
 const ServiceCard = ({ selected, service }) => {
   const theme = useContext(ThemeContext);
-  const unavailable = !service.price;
+  const unavailable = !service.eta;
   const timeUntilArrival = i18n.t('rideDetails.timeUntilArrival', { minutes: moment.duration(moment(service.eta).diff(moment())).minutes().toString() });
   const unavailableText = i18n.t('rideDetails.unavailable');
 
@@ -76,7 +76,7 @@ const ServiceCard = ({ selected, service }) => {
             <AvailableSeats>
               {service.availableSeats}
             </AvailableSeats>
-            <SvgIcon svg={Seat} />
+            <SvgIcon Svg={Seat} width="15px" height="15px" />
           </Capacity>
         </Row>
         )}

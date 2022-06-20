@@ -4,7 +4,7 @@ import { FONT_SIZES, FONT_WEIGHTS } from '../../../../../../context/theme';
 
 export const CardContainer = styled(Button)`
 width: 100%;
-height: 70px;
+height: 75px;
 border-radius: 8px;
 border: ${({ selected, theme }) => (selected ? `2px solid ${theme.primaryColor}` : 'none')};
 display: flex;
@@ -19,7 +19,7 @@ padding: 5px;
 `;
 
 export const CarIcon = styled.Image`
-width: 100%;
+width: auto;
 height: 100%;
 `;
 
@@ -38,6 +38,7 @@ flex-direction: row;
 justify-content: space-between;
 align-items: center;
 width: 100%;
+height: 22px;
 `;
 
 export const Row = styled.View`
@@ -46,7 +47,7 @@ flex-direction: row;
 justify-content: space-between;
 align-items: center;
 width: 100%;
-height: 16px;
+height: 18px;
 `;
 
 export const Title = styled.Text`

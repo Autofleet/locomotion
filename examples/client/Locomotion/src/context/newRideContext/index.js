@@ -67,12 +67,15 @@ const RidePageContextProvider = ({ navigation, children }) => {
   const [serviceEstimations, setServiceEstimations] = useState(null);
 
   const formatEstimations = (services, estimations) => services.map((service) => {
+    console.log(estimations);
+    console.log(services);
     const estimationForService = estimations.find(estimation => estimation.serviceId === service.id);
+    console.log(estimationForService);
     const estimationResult = estimationForService && estimationForService.results[0];
     return {
       name: service.displayName,
-      eta: estimationResult.minPickupEta,
-      price: estimationResult.priceAmount,
+      eta: (estimationResult || {}).minPickupEta,
+      price: (estimationResult || {}).priceAmount,
       availableSeats: service.maxPassengers || 4,
       tag: null,
       iconUrl: service.icon,
@@ -89,6 +92,7 @@ const RidePageContextProvider = ({ navigation, children }) => {
     const estimations = await createServiceEstimations(formattedStopPoints);
     const services = await getServices();
     const formattedEstimations = formatEstimations(services, estimations);
+    console.log(formattedEstimations);
     setServiceEstimations(formattedEstimations);
   };
 
