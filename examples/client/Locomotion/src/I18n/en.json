@@ -1,4 +1,10 @@
 {
+    "services": {
+        "tags": {
+            "fastest": "Fastest",
+            "cheapest": "Cheapest"
+        }
+    },
     "rideDetails": {
         "unavailable": "Not available",
         "timeUntilArrival": "In {{minutes}} min"
