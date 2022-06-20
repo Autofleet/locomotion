@@ -66,12 +66,10 @@ const BackButton = ({ isExpanded, onBack }) => {
   );
 };
 
-if (
-  Platform.OS === 'android'
-  && UIManager.setLayoutAnimationEnabledExperimental
+/* if (Platform.OS === 'android' && UIManager.setLayoutAnimationEnabledExperimental
 ) {
   UIManager.setLayoutAnimationEnabledExperimental(true);
-}
+} */
 
 const SearchBar = ({
   isExpanded,
@@ -115,7 +113,7 @@ const SearchBar = ({
   };
 
   const onInputBlur = () => {
-    setSearchTerm(null);
+    // setSearchTerm(null);
     checkFormSps();
   };
 
@@ -129,8 +127,10 @@ const SearchBar = ({
     const rowProps = i === 0 ? { isExpanded } : { setMargin: true };
 
     return (
-      // eslint-disable-next-line react/no-array-index-key
-      <Row {...rowProps} key={`row${i}`}>
+      <Row
+        {...rowProps}
+        key={s.id}
+      >
         <BottomSheetInput
           placeholder={i18n.t(placeholder)}
           onChangeText={(text) => {
@@ -158,13 +158,15 @@ const SearchBar = ({
     onBack();
   };
 
-
+  /*
   useEffect(() => {
     if (isExpanded) {
-      LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
+      LayoutAnimation.configureNext(LayoutAnimation.create(
+        LayoutAnimation.Presets.spring,
+      ));
     } else {
       LayoutAnimation.configureNext(LayoutAnimation.create(
-        500,
+        200,
         LayoutAnimation.Presets.easeOut,
         LayoutAnimation.Properties.scaleXY,
       ));
@@ -172,7 +174,7 @@ const SearchBar = ({
         selectedInputTarget.blur();
       }
     }
-  }, [isExpanded]);
+  }, [isExpanded]); */
   return (
     <View
       style={{

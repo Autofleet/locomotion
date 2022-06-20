@@ -34,6 +34,10 @@ const HistoryContainer = styled.View`
   width: 100%;
 `;
 
+const AddressContainer = styled.View`
+  padding: 0px 30px 20px 30px;
+`;
+
 
 const AddressActionsText = styled.Text`
     color: ${({ theme }) => theme.primaryColor};
@@ -97,7 +101,7 @@ const AddressSelectorBottomSheet = ({ bottomSheetRef }) => {
     userContext.setSpCurrentLocation();
   };
   return (
-    <>
+    <AddressContainer>
       <InputContainer>
         <SearchBar
           onFocus={onSearchFocus}
@@ -130,7 +134,7 @@ const AddressSelectorBottomSheet = ({ bottomSheetRef }) => {
           {(userContext.searchResults || userContext.historyResults).map(h => <AddressRow {...h} onPress={() => userContext.onAddressSelected(h)} />)}
         </View>
       </HistoryContainer>
-    </>
+    </AddressContainer>
   );
 };
 

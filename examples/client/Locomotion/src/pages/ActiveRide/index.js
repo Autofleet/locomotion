@@ -3,7 +3,7 @@ import { View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { NotAvailableHere } from '../../Components/BsPages';
 import { RideStateContextContext, RidePageContextProvider } from '../../context';
-import NewRidePageContextProvider from '../../context/newRideContext';
+import NewRidePageContextProvider, { RidePageContext } from '../../context/newRideContext';
 import BottomSheetContextProvider from '../../context/bottomSheetContext';
 import {
   PageContainer,
@@ -12,10 +12,13 @@ import Header from '../../Components/Header';
 import MainMap from './map';
 import AvailabilityContextProvider from '../../context/availability';
 import BottomSheet from './RideDrawer/BottomSheet';
+import RideOptions from './RideDrawer/RideOptions';
 import AddressSelector from './RideDrawer/AddressSelector';
 
 const RidePage = ({ menuSide, mapSettings }) => {
   const { initGeoService, showOutOfTerritory } = useContext(RideStateContextContext);
+  const { serviceEstimations } = useContext(RidePageContext);
+
   const navigation = useNavigation();
   const mapRef = useRef();
   const bottomSheetRef = useRef(null);
@@ -24,6 +27,12 @@ const RidePage = ({ menuSide, mapSettings }) => {
   useEffect(() => {
     initGeoService();
   }, []);
+
+  useEffect(() => {
+    if (serviceEstimations) {
+      bottomSheetRef.current.collapse();
+    }
+  }, [serviceEstimations]);
 
   return (
     <>
@@ -38,7 +47,10 @@ const RidePage = ({ menuSide, mapSettings }) => {
             <NotAvailableHere onButtonPress={() => ({})} />
           ) : (
             <>
-              <AddressSelector bottomSheetRef={bottomSheetRef} />
+              {!serviceEstimations
+                ? <AddressSelector bottomSheetRef={bottomSheetRef} />
+                : <RideOptions />
+              }
             </>
           )}
         </BottomSheet>
