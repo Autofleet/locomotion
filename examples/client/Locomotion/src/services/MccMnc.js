@@ -14,7 +14,7 @@ const getMobileIsoCode = async () => {
 
 const getIsoCodeByList = (mccMnc) => {
   const result = MccMncList.filter({ mccmnc: mccMnc });
-  return result[0]?.countryCode;
+  return result && result[0]?.countryCode;
 };
 
 export const getInputIsoCode = async () => {

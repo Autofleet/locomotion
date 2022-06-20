@@ -34,7 +34,6 @@ const PhoneNumberInput = ({
 
   const setIsoCode = async () => {
     const mobileIso = await getInputIsoCode();
-    console.log('mobileIso', mobileIso);
     setCountryCode(mobileIso);
   };
 
