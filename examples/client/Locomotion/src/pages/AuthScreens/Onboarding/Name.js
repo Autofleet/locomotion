@@ -1,4 +1,5 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useRef } from 'react';
+import { ScrollView } from 'react-native';
 import { useRoute } from '@react-navigation/native';
 import TextInput from '../../../Components/TextInput';
 import OnboardingNavButtons from './OnboardingNavButtons';
@@ -15,6 +16,7 @@ import { UserContext } from '../../../context/user';
 const Name = ({ navigation }) => {
   const route = useRoute();
   const { nextScreen } = useContext(OnboardingContext);
+  const secondTextInput = useRef(null);
   const { updateUserInfo, user, updateState } = useContext(UserContext);
   const [showErrorText, setShowErrorText] = useState(false);
   const isFirstNameValid = user.firstName && user.firstName.trim();
@@ -25,7 +27,12 @@ const Name = ({ navigation }) => {
     updateState({ [field]: value });
   };
 
+  const isInvalid = !isFirstNameValid || !isLastNameValid;
+
   const onComplete = async () => {
+    if (isInvalid) {
+      return;
+    }
     const sanitizedNames = {
       firstName: user.firstName.trim(),
       lastName: user.lastName.trim(),
@@ -40,40 +47,47 @@ const Name = ({ navigation }) => {
 
   return (
     <SafeView>
-      <Header title={i18n.t('onboarding.pages.name.title')} page={MAIN_ROUTES.NAME} />
-      <PageContainer>
-        <ScreenText
-          text={i18n.t('onboarding.pages.name.text')}
-          subText={i18n.t('onboarding.pages.name.subText')}
-        />
-        <InputContainer>
-          <TextInput
-            placeholder={i18n.t('onboarding.firstNamePlaceholder')}
-            autoFocus
-            onChangeText={inputChange('firstName')}
-            value={user.firstName}
-            autoCapitalize="words"
-            error={showErrorText && !isFirstNameValid}
-            fullBorder
+      <ScrollView>
+        <Header title={i18n.t('onboarding.pages.name.title')} page={MAIN_ROUTES.NAME} />
+        <PageContainer>
+          <ScreenText
+            text={i18n.t('onboarding.pages.name.text')}
+            subText={i18n.t('onboarding.pages.name.subText')}
           />
-        </InputContainer>
-        <InputContainer>
-          <TextInput
-            placeholder={i18n.t('onboarding.lastNamePlaceholder')}
-            onChangeText={inputChange('lastName')}
-            value={user.lastName}
-            autoCapitalize="words"
-            error={showErrorText && !isLastNameValid}
-            fullBorder
+          <InputContainer>
+            <TextInput
+              placeholder={i18n.t('onboarding.firstNamePlaceholder')}
+              autoFocus
+              onChangeText={inputChange('firstName')}
+              value={user.firstName}
+              autoCapitalize="words"
+              error={showErrorText && !isFirstNameValid}
+              returnKeyType="next"
+              onSubmitEditing={() => { secondTextInput.current.focus(); }}
+              fullBorder
+            />
+          </InputContainer>
+          <InputContainer>
+            <TextInput
+              placeholder={i18n.t('onboarding.lastNamePlaceholder')}
+              onChangeText={inputChange('lastName')}
+              value={user.lastName}
+              autoCapitalize="words"
+              returnKeyType="done"
+              onSubmitEditing={() => { onComplete(); }}
+              error={showErrorText && !isLastNameValid}
+              inputRef={secondTextInput}
+              fullBorder
+            />
+          </InputContainer>
+          {showErrorText && <ErrorText>{i18n.t('onboarding.fullNameError')}</ErrorText>}
+          <OnboardingNavButtons
+            isInvalid={isInvalid}
+            onFail={() => setShowErrorText(true)}
+            onNext={onComplete}
           />
-        </InputContainer>
-        {showErrorText && <ErrorText>{i18n.t('onboarding.fullNameError')}</ErrorText>}
-        <OnboardingNavButtons
-          isInvalid={!isFirstNameValid || !isLastNameValid}
-          onFail={() => setShowErrorText(true)}
-          onNext={onComplete}
-        />
-      </PageContainer>
+        </PageContainer>
+      </ScrollView>
     </SafeView>
   );
 };
