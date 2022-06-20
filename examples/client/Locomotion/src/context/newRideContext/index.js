@@ -127,7 +127,6 @@ const RidePageContextProvider = ({ navigation, children }) => {
   };
 
   const setSpCurrentLocation = async () => {
-    console.log('currentGeocode', currentGeocode);
     if (!currentGeocode) {
       const addressData = await getCurrentLocationAddress();
       updateRequestSp(currentGeocode);
@@ -143,6 +142,9 @@ const RidePageContextProvider = ({ navigation, children }) => {
       location = `${currentCoords.latitude},${currentCoords.longitude}`;
       const data = await getPlaces({
         input,
+        region: 'il',
+        origin: location,
+        radius: 20000,
         location,
       });
       // setSearchResults(data);
@@ -162,7 +164,6 @@ const RidePageContextProvider = ({ navigation, children }) => {
       const data = await getGeocode({
         latlng: location,
       });
-      console.log(data);
 
       const geoLocation = {
         description: data.results[0].formatted_address,

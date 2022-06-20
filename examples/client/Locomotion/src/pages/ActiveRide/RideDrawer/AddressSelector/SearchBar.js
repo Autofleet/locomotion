@@ -28,7 +28,6 @@ const InputContainer = styled(View)`
 `;
 
 const Row = styled(Animated.View)`
-    flex: 1;
     ${({ setMargin }) => setMargin && `
         margin-top: 12px;
     `}
@@ -36,6 +35,7 @@ const Row = styled(Animated.View)`
     ${({ isExpanded }) => isExpanded === false && `
         display: none;
     `}
+
 `;
 
 
@@ -177,7 +177,6 @@ const SearchBar = ({
   return (
     <View
       style={{
-        flex: 1,
         paddingBottom: 12,
         flexDirection: 'row',
         borderBottomColor: '#f1f2f6',
