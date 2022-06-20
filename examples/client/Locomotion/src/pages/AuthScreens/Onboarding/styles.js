@@ -57,7 +57,7 @@ export const Name = styled(BaseText)`
 ${FONT_SIZES.H1};
 ${FONT_WEIGHTS.BOLD};
 margin: 20px;
-max-width: 50%;
+max-width: 55%;
 `;
 
 export const InputContainer = styled.View`
