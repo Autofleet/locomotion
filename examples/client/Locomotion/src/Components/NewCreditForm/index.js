@@ -3,7 +3,7 @@ import {
   CardForm as MainCardForm,
   useStripe,
 } from '@stripe/stripe-react-native';
-import { KeyboardAvoidingView, Platform } from 'react-native';
+import { KeyboardAvoidingView, Platform, ScrollView } from 'react-native';
 import i18n from '../../I18n';
 import PaymentsContext from '../../context/payments';
 import SubmitButton from '../RoundedButton';
@@ -43,7 +43,7 @@ export const NewCreditForm = ({ onDone, canSkip = false, PageText }) => {
   };
 
   return (
-    <>
+    <ScrollView>
       <CreditForm>
         <PageText />
         <MainCardForm
@@ -93,6 +93,6 @@ export const NewCreditForm = ({ onDone, canSkip = false, PageText }) => {
 
       </KeyboardAvoidingView>
 
-    </>
+    </ScrollView>
   );
 };

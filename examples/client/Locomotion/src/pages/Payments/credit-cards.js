@@ -47,7 +47,7 @@ export default ({
       ))}
       {onAddClick ? (
         <CreditCardContainer onPress={onAddClick}>
-          <CreditCardRowText>add new</CreditCardRowText>
+          <CreditCardRowText>{i18n.t('payments.addPaymentMethod')}</CreditCardRowText>
         </CreditCardContainer>
       ) : undefined}
     </CardsListContainer>
