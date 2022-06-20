@@ -19,7 +19,7 @@ export default ({ isVisible }) => {
   };
 
   return (
-    <Modal isVisible={isVisible || true}>
+    <Modal isVisible={isVisible}>
       <SummaryContainer>
         <View style={{ flex: 2, textAlign: 'left', width: '80%' }}>
           <FlexCont justifyContent="space-between">
