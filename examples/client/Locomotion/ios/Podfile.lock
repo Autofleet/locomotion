@@ -365,6 +365,8 @@ PODS:
   - React-jsinspector (0.68.1)
   - React-logger (0.68.1):
     - glog
+  - react-native-carrier-info (1.1.2):
+    - React
   - react-native-config (1.4.5):
     - react-native-config/App (= 1.4.5)
   - react-native-config/App (1.4.5):
@@ -593,6 +595,7 @@ DEPENDENCIES:
   - React-jsiexecutor (from `../node_modules/react-native/ReactCommon/jsiexecutor`)
   - React-jsinspector (from `../node_modules/react-native/ReactCommon/jsinspector`)
   - React-logger (from `../node_modules/react-native/ReactCommon/logger`)
+  - react-native-carrier-info (from `../node_modules/react-native-carrier-info`)
   - react-native-config (from `../node_modules/react-native-config`)
   - "react-native-geolocation (from `../node_modules/@react-native-community/geolocation`)"
   - react-native-google-maps (from `../node_modules/react-native-maps`)
@@ -712,6 +715,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/jsinspector"
   React-logger:
     :path: "../node_modules/react-native/ReactCommon/logger"
+  react-native-carrier-info:
+    :path: "../node_modules/react-native-carrier-info"
   react-native-config:
     :path: "../node_modules/react-native-config"
   react-native-geolocation:
@@ -834,6 +839,7 @@ SPEC CHECKSUMS:
   React-jsiexecutor: 4a4bae5671b064a2248a690cf75957669489d08c
   React-jsinspector: 218a2503198ff28a085f8e16622a8d8f507c8019
   React-logger: f79dd3cc0f9b44f5611c6c7862badd891a862cf8
+  react-native-carrier-info: 1e6299256bd7ceaa36f851b30e071b2b4fc406ad
   react-native-config: 6502b1879f97ed5ac570a029961fc35ea606cd14
   react-native-geolocation: cbd9d6bd06bac411eed2671810f454d4908484a8
   react-native-google-maps: 8231ffa015bf8b222c2e2661fa9163cdb609a224
@@ -882,4 +888,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: e4576f7f62f91d5f76ab3196459068445fe2bef9
 
-COCOAPODS: 1.11.3
+COCOAPODS: 1.11.2
