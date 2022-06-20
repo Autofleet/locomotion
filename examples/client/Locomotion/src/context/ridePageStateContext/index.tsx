@@ -3,14 +3,13 @@ import geo, { getPosition } from '../../services/geo';
 import { getUserTerritories } from '../user/api';
 import pointInPolygon from './pointInPolygon';
 
-interface RideStateContextContextInterface {
-}
-
-export const RideStateContextContext = createContext<RideStateContextContextInterface | null>(null);
+export const RideStateContextContext = createContext<any | null>(null);
 
 const RideStateContextContextProvider = ({ children }: { children: any }) => {
   const [territory, setTerritory] = useState<Array<any> | null>(null);
   const [showOutOfTerritory, setShowOutOfTerritory] = useState<boolean | undefined>(false);
+  const [selectLocationMode, setSelectLocationMode] = useState<boolean | undefined>(false);
+  const [lastSelectedLocation, saveSelectedLocation] = useState<any | undefined>(false);
 
   const loadTerritory = async (checkTerritory = false) => {
     let t = territory;
@@ -40,6 +39,10 @@ const RideStateContextContextProvider = ({ children }: { children: any }) => {
         showOutOfTerritory,
         setShowOutOfTerritory,
         initGeoService,
+        selectLocationMode,
+        setSelectLocationMode,
+        lastSelectedLocation,
+        saveSelectedLocation,
       }}
     >
       {children}
