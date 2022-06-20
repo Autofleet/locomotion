@@ -39,7 +39,7 @@ const Avatar = () => {
             avatarSource={user.avatar}
             size={125}
           />
-          <Name>{`${user.firstName} ${user.lastName}`}</Name>
+          <Name numberOfLines={1}>{`${user.firstName} ${user.lastName}`}</Name>
         </ImageContainer>
         <OnboardingNavButtons
           onNext={() => nextScreen(MAIN_ROUTES.AVATAR)}

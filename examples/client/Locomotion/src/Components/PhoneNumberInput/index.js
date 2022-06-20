@@ -18,6 +18,7 @@ const PhoneNumberInput = ({
   const asYouTypePhoneNUmber = new AsYouType();
 
   const onChangeCountry = (v) => {
+    onPhoneNumberChange(value, v.callingCode[0]);
     setCountryCode(v.callingCode[0]);
   };
 
