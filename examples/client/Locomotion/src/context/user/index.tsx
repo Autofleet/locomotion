@@ -73,7 +73,7 @@ const UserContextProvider = ({ children }: { children: any }) => {
   }, []);
 
   const verifyEmail = async () => {
-    await sendEmailVerification(user && user.id);
+    await sendEmailVerification();
   };
 
   const updateUserInfo = async (values: any) => {

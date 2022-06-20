@@ -5,7 +5,7 @@ import { getPosition } from '../../services/geo';
 import { getPlaces, getGeocode, getPlaceDetails } from './google-api';
 import StorageService from '../../services/storage';
 import { createServiceEstimations, getServices } from './api';
-import { TAG_OPTIONS } from './services';
+import { formatEstimationsResult, formatStopPointsForEstimations, TAG_OPTIONS } from './services';
 
 const STATION_AUTOREFRESH_INTERVAL = 60000;
 
@@ -66,28 +66,24 @@ const RidePageContextProvider = ({ navigation, children }) => {
   const [historyResults, setHistoryResults] = useState([]);
   const [serviceEstimations, setServiceEstimations] = useState(null);
 
-  const formatEstimations = (services, estimations) => services.map((service) => {
-    const estimationForService = estimations.find(estimation => estimation.serviceId === service.id);
-    const estimationResult = estimationForService && estimationForService.results[0];
-    return {
-      name: service.displayName,
-      eta: (estimationResult || {}).minPickupEta,
-      price: (estimationResult || {}).priceAmount,
-      availableSeats: service.maxPassengers || 4,
-      tag: null,
-      iconUrl: service.icon,
-      description: service.displayDescription,
-    };
-  });
+  const formatEstimations = (services, estimations) => {
+    const estimationsMap = {};
+    estimations.map((e) => {
+      estimationsMap[e.serviceId] = e;
+    });
+    return services.map((service) => {
+      const estimationForService = estimationsMap[service.id];
+      const estimationResult = estimationForService && estimationForService.results[0];
+      return formatEstimationsResult(service, estimationResult);
+    });
+  };
 
   const getServiceEstimations = async () => {
-    const formattedStopPoints = requestStopPoints.map(sp => ({
-      type: sp.type,
-      lat: sp.location.lat,
-      lng: sp.location.lng,
-    }));
-    const estimations = await createServiceEstimations(formattedStopPoints);
-    const services = await getServices();
+    const formattedStopPoints = formatStopPointsForEstimations(requestStopPoints);
+    const [estimations, services] = await Promise.all([
+      createServiceEstimations(formattedStopPoints),
+      getServices(),
+    ]);
     const formattedEstimations = formatEstimations(services, estimations);
     setServiceEstimations(formattedEstimations);
   };

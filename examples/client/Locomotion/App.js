@@ -1,8 +1,6 @@
 import React from 'react';
-import { LogBox } from 'react-native';
 import LocomotionRouter from './src/LocomotionRouter';
 // import de from './src/I18n/en.json';
-LogBox.ignoreAllLogs();
 
 const App = () => (
   <LocomotionRouter

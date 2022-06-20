@@ -30,7 +30,7 @@ export default ({
       {isPopupOpen(id)
         ? (
           <MessageContainer>
-            <CloseContainer noBg onPress={() => closePopup()} data-test-id="CloseMessageCardButton">
+            <CloseContainer noBackground onPress={() => closePopup()} data-test-id="CloseMessageCardButton">
               <ResetInputIcon />
             </CloseContainer>
             <View style={{ flex: 2, textAlign: 'left', maxWidth: '80%' }}>

@@ -1,4 +1,4 @@
-import styled from 'styled-components/native';
+import styled from 'styled-components';
 import Button from '../../../../../../Components/Button';
 import { FONT_SIZES, FONT_WEIGHTS } from '../../../../../../context/theme';
 

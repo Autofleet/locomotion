@@ -15,7 +15,6 @@ const SvgIcon = ({
     onPress={onPress}
     disabled={!onPress}
     margin={margin}
-    noBg
     height={height}
     width={width}
   >

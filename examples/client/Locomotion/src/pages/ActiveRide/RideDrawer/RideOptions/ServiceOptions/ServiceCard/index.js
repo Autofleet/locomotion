@@ -39,7 +39,7 @@ const ServiceCard = ({ selected, service }) => {
     },
   };
   return (
-    <CardContainer theme={theme} selected={selected} noBg>
+    <CardContainer theme={theme} selected={selected} noBackground>
       <CarContainer>
         <CarIcon source={{ uri: service.iconUrl }} />
       </CarContainer>
@@ -76,7 +76,7 @@ const ServiceCard = ({ selected, service }) => {
             <AvailableSeats>
               {service.availableSeats}
             </AvailableSeats>
-            <SvgIcon Svg={Seat} width="15px" height="15px" />
+            <SvgIcon Svg={Seat} width={15} height={15} />
           </Capacity>
         </Row>
         )}
