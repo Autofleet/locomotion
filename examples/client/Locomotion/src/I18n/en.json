@@ -226,11 +226,12 @@
         }
     },
     "payments": {
-        "pageTitle": "Payments",
+        "pageTitle": "Payments Method",
         "submitCard": "Add card",
         "skipForNow": "Skip for now",
         "balance": "Balance",
         "deleteCard": "Remove",
+        "addPaymentMethod": "Add New",
         "newCardDetails": "Please add your payment details",
         "setPaymentBanner": "Set payment method",
         "popups": {
