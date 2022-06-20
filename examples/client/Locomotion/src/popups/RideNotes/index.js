@@ -13,13 +13,13 @@ import { FlexCont } from '../../Components/Flex';
 
 const MAX_SIZE = 100;
 
-export default ({isVisible}) => {
+export default ({ isVisible }) => {
   const [currentText, updateText] = useState('');
   const onSubmit = async () => {
   };
 
   return (
-    <Modal isVisible={isVisible}>
+    <Modal isVisible={isVisible || true}>
       <SummaryContainer>
         <View style={{ flex: 2, textAlign: 'left', width: '80%' }}>
           <FlexCont justifyContent="space-between">
