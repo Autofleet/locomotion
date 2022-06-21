@@ -9,7 +9,7 @@ const ServiceOptions = () => {
   return (
     <ServiceOptionsContainer alwaysBounceVertical={false}>
       <>
-        {serviceEstimations.map(option => <ServiceCard service={option} selected={false} />)}
+        {serviceEstimations.map(option => <ServiceCard service={option} />)}
       </>
     </ServiceOptionsContainer>
   );
