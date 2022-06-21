@@ -40,7 +40,29 @@ function useInterval(callback, delay) {
   }, [delay]);
 }
 
-export const RidePageContext = createContext(null);
+export const RidePageContext = createContext({
+  loadAddress: () => {},
+  reverseLocationGeocode: () => {},
+  enrichPlaceWithLocation: () => {},
+  searchTerm: '',
+  setSearchTerm: () => {},
+  selectedInputIndex: null,
+  setSelectedInputIndex: () => {},
+  selectedInputTarget: null,
+  setSelectedInputTarget: () => {},
+  onAddressSelected: () => {},
+  requestStopPoints: [],
+  searchResults: [],
+  searchAddress: null,
+  updateRequestSp: () => {},
+  setSpCurrentLocation: () => {},
+  isReadyForSubmit: false,
+  checkFormSps: () => {},
+  historyResults: [],
+  serviceEstimations: [],
+  ride: {},
+  updateRide: () => {},
+});
 const HISTORY_RECORDS_NUM = 10;
 
 const RidePageContextProvider = ({ navigation, children }) => {
@@ -65,6 +87,7 @@ const RidePageContextProvider = ({ navigation, children }) => {
   const [isReadyForSubmit, setIsReadyForSubmit] = useState(false);
   const [historyResults, setHistoryResults] = useState([]);
   const [serviceEstimations, setServiceEstimations] = useState(null);
+  const [ride, setRide] = useState({});
 
   const formatEstimations = (services, estimations) => {
     const estimationsMap = {};
@@ -273,7 +296,13 @@ const RidePageContextProvider = ({ navigation, children }) => {
       setIsReadyForSubmit(false);
     }
   };
-
+  
+  const updateRide = (newRide) => {
+    setRide({
+      ...ride,
+      newRide,
+    })
+  }
 
   return (
     <RidePageContext.Provider
@@ -297,6 +326,8 @@ const RidePageContextProvider = ({ navigation, children }) => {
         checkFormSps,
         historyResults,
         serviceEstimations,
+        ride,
+        updateRide,
       }}
     >
       {children}

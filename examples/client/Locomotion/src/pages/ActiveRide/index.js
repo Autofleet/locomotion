@@ -47,7 +47,7 @@ const RidePage = ({ menuSide, mapSettings }) => {
             <NotAvailableHere onButtonPress={() => ({})} />
           ) : (
             <>
-              {!serviceEstimations
+              {![]
                 ? <AddressSelector bottomSheetRef={bottomSheetRef} />
                 : <RideOptions />
               }

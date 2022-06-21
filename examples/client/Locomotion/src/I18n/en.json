@@ -268,6 +268,15 @@
       "titleText": "We are Sorry!",
       "buttonText": "Set another pickup location",
       "subTitleText": "Autofleet is not available in your area"
+    },
+    "ride": {
+        "now": "Now",
+        "notes": {
+            "edit": "Edit note",
+            "add": "Note to driver"
+        },
+        "rider": "Rider",
+        "riders": "Riders"
     }
   }
 }

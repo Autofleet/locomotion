@@ -16,7 +16,7 @@ import {
 } from './styled';
 import Tag from '../../../../../../Components/Tag';
 
-const ServiceCard = ({ selected, service }) => {
+const ServiceCard = ({ selected, service, onSelect }) => {
   const theme = useContext(ThemeContext);
   const unavailable = !service.eta;
   const timeUntilArrival = i18n.t('rideDetails.timeUntilArrival', { minutes: moment.duration(moment(service.eta).diff(moment())).minutes().toString() });
@@ -39,7 +39,9 @@ const ServiceCard = ({ selected, service }) => {
     },
   };
   return (
-    <CardContainer theme={theme} selected={selected} noBackground>
+    <CardContainer theme={theme} selected={selected} noBackground onPress={() => {
+      onSelect(service.id)
+    }}>
       <CarContainer>
         <CarIcon source={{ uri: service.iconUrl }} />
       </CarContainer>
