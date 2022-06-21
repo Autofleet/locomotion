@@ -7,6 +7,7 @@ import {
 import {
   BottomSheetView,
   useBottomSheet,
+  BottomSheetScrollView,
 } from '@gorhom/bottom-sheet';
 
 import styled from 'styled-components';
@@ -31,6 +32,7 @@ const InputContainer = styled.View`
 
 const HistoryContainer = styled.View`
   margin-bottom: 10px;
+  flex: 1;
   width: 100%;
 `;
 
@@ -46,29 +48,14 @@ const AddressActionsText = styled.Text`
     line-height: 20px;
 `;
 
-const historyText = [
-  {
-    text: '57th Street',
-    subText: 'New York, NY, USA',
-    icon: 'history',
-    lat: 32.444,
-    lng: 34.555,
-  },
-  {
-    text: '57th Street',
-    subText: 'New York, NY, USA',
-    icon: 'history',
-    lat: 32.444,
-    lng: 34.555,
-  },
-  {
-    text: '57th Strexxxxxet',
-    subText: 'New York, NY, USA',
-    icon: 'history',
-    lat: 32.444,
-    lng: 34.555,
-  },
-];
+const ContentContainer = styled.View`
+  align-items: center;
+  flex-direction: column;
+  padding: 0px 30px 40px 30px;
+  width: 100%;
+  flex: 1;
+
+`;
 const AddressSelectorBottomSheet = ({ bottomSheetRef }) => {
   const userContext = useContext(RidePageContext);
 
@@ -80,7 +67,7 @@ const AddressSelectorBottomSheet = ({ bottomSheetRef }) => {
 
 
   const loadHistory = async () => {
-    userContext.getLastAddresses();
+    userContext.loadHistory();
   };
 
   useEffect(() => {
@@ -101,15 +88,13 @@ const AddressSelectorBottomSheet = ({ bottomSheetRef }) => {
     userContext.setSpCurrentLocation();
   };
   return (
-    <AddressContainer>
-      <InputContainer>
-        <SearchBar
-          onFocus={onSearchFocus}
-          isExpanded={isExpanded}
-          onBack={onBack}
-          onSearch={userContext.searchAddress}
-        />
-      </InputContainer>
+    <ContentContainer>
+      <SearchBar
+        onFocus={onSearchFocus}
+        isExpanded={isExpanded}
+        onBack={onBack}
+        onSearch={userContext.searchAddress}
+      />
       <HistoryContainer>
         {isExpanded
           ? (
@@ -130,11 +115,12 @@ const AddressSelectorBottomSheet = ({ bottomSheetRef }) => {
             </>
           )
           : null}
-        <View>
+        <BottomSheetScrollView contentContainerStyle={{ overflow: 'visible' }}>
           {(userContext.searchResults || userContext.historyResults).map(h => <AddressRow {...h} onPress={() => userContext.onAddressSelected(h)} />)}
-        </View>
+        </BottomSheetScrollView>
       </HistoryContainer>
-    </AddressContainer>
+    </ContentContainer>
+
   );
 };
 

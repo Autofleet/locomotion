@@ -253,7 +253,7 @@ export default React.forwardRef(({
           ) : null}
 
         {showOutOfTerritory && territory && territory.length ? territory
-          .map(t => t.polygon.coordinates.map(poly => (
+          .map(t => (t.polygon && t.polygon.coordinates ? t.polygon.coordinates : []).map(poly => (
             <Polygon
               key={`Polygon#${t.id}#${poly[1]}#${poly[0]}`}
               strokeWidth={2}

@@ -28,7 +28,6 @@ const InputContainer = styled(View)`
 `;
 
 const Row = styled(Animated.View)`
-    flex: 1;
     ${({ setMargin }) => setMargin && `
         margin-top: 12px;
     `}
@@ -36,6 +35,7 @@ const Row = styled(Animated.View)`
     ${({ isExpanded }) => isExpanded === false && `
         display: none;
     `}
+
 `;
 
 
@@ -113,7 +113,6 @@ const SearchBar = ({
   };
 
   const onInputBlur = () => {
-    // setSearchTerm(null);
     checkFormSps();
   };
 
@@ -125,7 +124,6 @@ const SearchBar = ({
   const buildSps = () => requestStopPoints.map((s, i) => {
     const placeholder = getSpPlaceholder(s);
     const rowProps = i === 0 ? { isExpanded } : { setMargin: true };
-
     return (
       <Row
         {...rowProps}
@@ -144,6 +142,7 @@ const SearchBar = ({
             onInputFocus(e.target, i);
           }}
           onBlur={onInputBlur}
+          key={`input_${s.id}`}
           autoCorrect={false}
         />
       </Row>
@@ -151,19 +150,19 @@ const SearchBar = ({
   });
 
   const onBackPress = () => {
-    console.log('BACK PRESS');
+    setSearchTerm(null);
     if (selectedInputTarget) {
       selectedInputTarget.blur();
     }
     onBack();
   };
 
-  /*
-  useEffect(() => {
+
+  /*   useEffect(() => {
     if (isExpanded) {
-      LayoutAnimation.configureNext(LayoutAnimation.create(
+      LayoutAnimation.configureNext(
         LayoutAnimation.Presets.spring,
-      ));
+      );
     } else {
       LayoutAnimation.configureNext(LayoutAnimation.create(
         200,
@@ -175,10 +174,10 @@ const SearchBar = ({
       }
     }
   }, [isExpanded]); */
+
   return (
     <View
       style={{
-        flex: 1,
         paddingBottom: 12,
         flexDirection: 'row',
         borderBottomColor: '#f1f2f6',
@@ -200,32 +199,7 @@ const SearchBar = ({
         }}
       >
 
-        {requestStopPoints.map((s, i) => {
-          const placeholder = getSpPlaceholder(s);
-          const rowProps = i === 0 ? { isExpanded } : { setMargin: true };
-          return (
-            <Row
-              {...rowProps}
-            >
-              <BottomSheetInput
-                placeholder={i18n.t(placeholder)}
-                onChangeText={(text) => {
-                  updateRequestSp({ description: text });
-                  setSearchTerm(text);
-                }}
-                fullBorder
-                value={requestStopPoints[i].description}
-                placeholderTextColor="#929395"
-                onFocus={(e) => {
-                  onInputFocus(e.target, i);
-                }}
-                onBlur={onInputBlur}
-                key={`input_${s.id}`}
-                autoCorrect={false}
-              />
-            </Row>
-          );
-        })}
+        {buildSps()}
 
       </View>
     </View>

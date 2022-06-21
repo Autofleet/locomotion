@@ -1,6 +1,7 @@
 import React, {
   useCallback, useEffect, useMemo, useRef, useState, useContext, forwardRef,
 } from 'react';
+import { View } from 'react-native';
 import BottomSheet, {
   useBottomSheetDynamicSnapPoints,
   BottomSheetView,
@@ -16,18 +17,20 @@ const ContentContainer = styled(BottomSheetView)`
 
 const BottomSheetComponent = forwardRef(({ children }, ref) => {
   const snapPoints = useMemo(() => ['CONTENT_HEIGHT', '95%'], []);
-  const { getSnapPoints, setSnapPointIndex } = useContext(BottomSheetContext);
-
-
   const {
-    animatedHandleHeight,
-    animatedSnapPoints,
-    animatedContentHeight,
-    handleContentLayout,
-  } = useBottomSheetDynamicSnapPoints(getSnapPoints());
+    setSnapPointIndex,
+    sheetState,
+    setIsExpanded,
+  } = useContext(BottomSheetContext);
 
   const handleSheetChanges = useCallback((index) => {
     setSnapPointIndex(index);
+  }, []);
+
+  const onAnimate = useCallback((from, to) => {
+    if (from !== -1) {
+      setIsExpanded(to > from);
+    }
   }, []);
 
   return (
@@ -36,18 +39,17 @@ const BottomSheetComponent = forwardRef(({ children }, ref) => {
       <BottomSheet
         ref={ref}
         index={0}
-        snapPoints={animatedSnapPoints}
+        snapPoints={snapPoints}
         onChange={handleSheetChanges}
-        handleHeight={animatedHandleHeight}
-        contentHeight={animatedContentHeight}
+        onAnimate={onAnimate}
       >
-        <SafeView>
-          <ContentContainer
-            onLayout={handleContentLayout}
-          >
-            {children}
-
-          </ContentContainer>
+        <SafeView
+          style={{
+            flex: 1,
+            flexDirection: 'column',
+          }}
+        >
+          {children}
         </SafeView>
 
       </BottomSheet>
