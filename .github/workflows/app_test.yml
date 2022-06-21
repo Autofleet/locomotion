@@ -26,4 +26,8 @@ jobs:
       - name: Install NPM dependencies
         run: npm install
 
-      - run: npm run linter
+      - name: Validate Lint
+        run: npm run linter
+
+      - name: Run E2E
+        run: npm run e2e

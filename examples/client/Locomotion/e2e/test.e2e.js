@@ -5,6 +5,8 @@ describe('Detox Demo', () => {
     });
   
     it('should have header with  title Detox Demo', async () => {
-        console.log('hello');
+    console.log('hello');
+    //   await expect(element(by.id('demo-header'))).toBeVisible();
+    //   await expect(element(by.id('demo-header'))).toHaveText('Detox Demo');
     });
   });
