@@ -3,7 +3,7 @@ import React, { useContext } from 'react';
 import SvgIcon from '../../../../../../Components/SvgIcon';
 import i18n from '../../../../../../I18n';
 import Seat from '../../../../../../assets/seat.svg';
-import { TAG_OPTIONS } from '../../../../../../context/newRideContext/services';
+import { TAG_OPTIONS } from '../../../../../../context/newRideContext/utils';
 import { Context as ThemeContext } from '../../../../../../context/theme';
 import {
   Circle, AvailableSeats,

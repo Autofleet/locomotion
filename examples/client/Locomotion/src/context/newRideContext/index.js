@@ -8,7 +8,7 @@ import StorageService from '../../services/storage';
 import { createServiceEstimations, getServices } from './api';
 import {
   formatEstimationsResult, formatStopPointsForEstimations, getEstimationTags, TAG_OPTIONS,
-} from './services';
+} from './utils';
 
 const STATION_AUTOREFRESH_INTERVAL = 60000;
 
