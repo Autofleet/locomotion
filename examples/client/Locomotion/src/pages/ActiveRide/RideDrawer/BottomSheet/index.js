@@ -16,11 +16,11 @@ const ContentContainer = styled(BottomSheetView)`
 `;
 
 const BottomSheetComponent = forwardRef(({ children }, ref) => {
-  const snapPoints = useMemo(() => ['25%', '95%'], []);
   const {
     setSnapPointIndex,
     sheetState,
     setIsExpanded,
+    snapPoints,
   } = useContext(BottomSheetContext);
 
   const handleSheetChanges = useCallback((index) => {

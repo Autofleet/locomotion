@@ -10,6 +10,8 @@ border: ${({ selected, theme }) => (selected ? `2px solid ${theme.primaryColor}`
 display: flex;
 flex-direction: row;
 padding: 5px;
+background-color: #ffffff;
+${({ selected }) => (selected && 'box-shadow: 0 0 4px #211c1c1c')};
 `;
 
 export const CarContainer = styled.View`
