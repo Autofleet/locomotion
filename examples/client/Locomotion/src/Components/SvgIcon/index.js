@@ -8,25 +8,13 @@ const SvgIcon = ({
   fill,
   width,
   height,
-  margin,
-  onPress,
-  containerStyle,
 }) => (
-  <IconContainer
-    onPress={onPress}
-    disabled={!onPress}
-    margin={margin}
-    height={height}
+  <Svg
     width={width}
-    style={containerStyle}
-  >
-    <Svg
-      width={width}
-      height={height}
-      stroke={stroke}
-      fill={fill}
-    />
-  </IconContainer>
+    height={height}
+    stroke={stroke}
+    fill={fill}
+  />
 );
 
 export default SvgIcon;

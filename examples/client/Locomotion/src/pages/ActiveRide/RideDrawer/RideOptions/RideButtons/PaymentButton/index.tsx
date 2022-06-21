@@ -1,9 +1,10 @@
 import React from 'react';
 import { Text } from 'react-native';
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import { PaymentIcon } from 'react-native-payment-icons';
 import styled from 'styled-components';
 import SvgIcon from '../../../../../../Components/SvgIcon';
 import { FONT_SIZES, FONT_WEIGHTS } from '../../../../../../context/theme';
+import { Brand } from '../../../../../../context/payments/interface';
 
 const TimeText = styled(Text)`
     ${FONT_SIZES.LARGE}
@@ -11,22 +12,25 @@ const TimeText = styled(Text)`
     color: #333;
     margin: 5px;
 `;
-
-interface NoteButtonProps {
+interface PaymentButtonProps {
     icon: string;
     title: string;
+    brand?: Brand;
 }
 
-const NoteButton = ({
+const PaymentButton = ({
     icon,
     title,
-}: NoteButtonProps) => {
+    brand
+}: PaymentButtonProps) => {
     return (
         <>
-            <SvgIcon stroke="#333" Svg={icon} height={15} width={15} />
+            {brand ? 
+            <PaymentIcon type={brand} />
+            : <SvgIcon Svg={icon} height={15} width={15} />}
             <TimeText>{title}</TimeText>
         </>
     )
 };
 
-export default NoteButton;
+export default PaymentButton;

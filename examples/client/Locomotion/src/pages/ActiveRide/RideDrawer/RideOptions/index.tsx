@@ -21,13 +21,13 @@ const RideOptions = () => {
     setPopupToShow(null);
   }
   return (
-  <Fragment>
+  <>
     <ServiceOptions />
     <RideButtons 
       displayPassenger={false} 
       setPopupName={setPopupName}
     />
-    <RideNotes 
+    <RideNotes
       isVisible={popupToShow === 'notes'} 
       onSubmit={(text: string) =>{
         console.log('text', text)
@@ -40,8 +40,8 @@ const RideOptions = () => {
         clearPopup();
       }}
     />
-    <ChoosePaymentMethod isVisible={popupToShow === 'payment'} />
-  </Fragment>
+    <ChoosePaymentMethod isVisible={popupToShow === 'payment'} onCancel={() => clearPopup()}/>
+  </>
 )};
 
 export default RideOptions;

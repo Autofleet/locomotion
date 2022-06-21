@@ -10,12 +10,7 @@ const ServiceOptions = () => {
   return (
     <ServiceOptionsContainer alwaysBounceVertical={false}>
       <>
-        {(serviceEstimations || []).map(option => 
-        <ServiceCard 
-          onSelect={(id) => setSelectedService(id)} 
-          service={option}
-          selected={selectedService === option.id} 
-        />)}
+        {(serviceEstimations || []).map(option => <ServiceCard service={option} />)}
       </>
     </ServiceOptionsContainer>
   );

@@ -1,6 +1,7 @@
 import React, {
   useState, useEffect, useRef, createContext,
 } from 'react';
+import shortid from 'shortid';
 import { getPosition } from '../../services/geo';
 import { getPlaces, getGeocode, getPlaceDetails } from './google-api';
 import StorageService from '../../services/storage';
@@ -8,17 +9,6 @@ import { createServiceEstimations, getServices } from './api';
 import { formatEstimationsResult, formatStopPointsForEstimations, TAG_OPTIONS } from './services';
 
 const STATION_AUTOREFRESH_INTERVAL = 60000;
-
-const makeid = (length) => {
-  let result = '';
-  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-  const charactersLength = characters.length;
-  for (let i = 0; i < length; i++) {
-    result += characters.charAt(Math.floor(Math.random()
-* charactersLength));
-  }
-  return result;
-};
 
 function useInterval(callback, delay) {
   const savedCallback = useRef();
@@ -73,13 +63,13 @@ const RidePageContextProvider = ({ navigation, children }) => {
     type: 'pickup',
     location: null,
     useDefaultLocation: true,
-    id: makeid(5),
+    id: shortid.generate(),
   },
   {
     type: 'dropoff',
     location: null,
     useDefaultLocation: false,
-    id: makeid(5),
+    id: shortid.generate(),
   }]);
   const [coords, setCoords] = useState();
   const [currentGeocode, setCurrentGeocode] = useState(null);
@@ -91,6 +81,7 @@ const RidePageContextProvider = ({ navigation, children }) => {
   const [historyResults, setHistoryResults] = useState([]);
   const [serviceEstimations, setServiceEstimations] = useState(null);
   const [ride, setRide] = useState({});
+  const [chosenService, setChosenService] = useState(null);
 
   const formatEstimations = (services, estimations) => {
     const estimationsMap = {};
@@ -111,13 +102,13 @@ const RidePageContextProvider = ({ navigation, children }) => {
       getServices(),
     ]);
     const formattedEstimations = formatEstimations(services, estimations);
+    setChosenService(formattedEstimations.find(e => e.eta));
     setServiceEstimations(formattedEstimations);
   };
 
   useEffect(() => {
     initLocation();
     initCurrentLocation();
-    getLastAddresses();
   }, []);
 
   useEffect(() => {
@@ -177,7 +168,6 @@ const RidePageContextProvider = ({ navigation, children }) => {
   };
 
   const setSpCurrentLocation = async () => {
-    console.log('currentGeocode', currentGeocode);
     if (!currentGeocode) {
       const addressData = await getCurrentLocationAddress();
       updateRequestSp(currentGeocode);
@@ -193,6 +183,9 @@ const RidePageContextProvider = ({ navigation, children }) => {
       location = `${currentCoords.latitude},${currentCoords.longitude}`;
       const data = await getPlaces({
         input,
+        region: 'il',
+        origin: location,
+        radius: 20000,
         location,
       });
       // setSearchResults(data);
@@ -212,7 +205,6 @@ const RidePageContextProvider = ({ navigation, children }) => {
       const data = await getGeocode({
         latlng: location,
       });
-      console.log(data);
 
       const geoLocation = {
         description: data.results[0].formatted_address,
@@ -242,11 +234,13 @@ const RidePageContextProvider = ({ navigation, children }) => {
     reqSps[selectedInputIndex] = {
       ...reqSps[selectedInputIndex],
       description: selectedItem.fullText,
+      streetAddress: selectedItem.text,
       location: enrichedPlace,
       placeId: selectedItem.placeId,
     };
     setRequestStopPoints(reqSps);
     resetSearchResults();
+    saveLastAddresses(selectedItem);
     selectedInputTarget.blur();
   };
 
@@ -274,18 +268,25 @@ const RidePageContextProvider = ({ navigation, children }) => {
     placeId: r.place_id,
   }));
 
-  const saveLastAddresses = async (item) => {
-    const histroy = await getLastAddresses();
-    const filteredHistory = histroy.filter(h => h.placeId !== item.placeId);
-    filteredHistory.unshift(item);
+  const clearHistory = async () => {
+    await StorageService.save({ lastAddresses: [] });
+  };
 
+  const saveLastAddresses = async (item) => {
+    const history = await getLastAddresses();
+    const filteredHistory = (history || []).filter(h => h.placeId !== item.placeId);
+    filteredHistory.unshift(item);
     await StorageService.save({ lastAddresses: filteredHistory.slice(0, HISTORY_RECORDS_NUM) });
   };
 
   const getLastAddresses = async () => {
-    const histroy = await StorageService.get('lastAddresses') || [];
-    setHistoryResults(histroy);
-    return histroy;
+    const history = await StorageService.get('lastAddresses') || [];
+    return history;
+  };
+
+  const loadHistory = async () => {
+    const history = await getLastAddresses();
+    setHistoryResults(history);
   };
 
   const checkFormSps = async () => {
@@ -328,9 +329,12 @@ const RidePageContextProvider = ({ navigation, children }) => {
         isReadyForSubmit,
         checkFormSps,
         historyResults,
+        loadHistory,
         serviceEstimations,
         ride,
         updateRide,
+        chosenService,
+        setChosenService,
       }}
     >
       {children}

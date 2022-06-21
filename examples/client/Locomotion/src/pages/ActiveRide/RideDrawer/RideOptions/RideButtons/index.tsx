@@ -9,6 +9,7 @@ import editNote from '../../../../../assets/bottomSheet/edit_note.svg'
 import creditCardIcon from '../../../../../assets/bottomSheet/credit_card_icon.svg';
 import PaymentButton from './PaymentButton';
 import PaymentsContext from '../../../../../context/payments';
+import { PaymentMethodInterface } from 'context/payments/interface';
 
 interface RideButtonsProps {
     displayPassenger: boolean;
@@ -25,6 +26,8 @@ const RideButtons = ({
     
     const {
         paymentMethods
+    }: {
+        paymentMethods: PaymentMethodInterface[]
     } = PaymentsContext.useContainer();
 
     const renderFutureBooking = () => 
@@ -52,23 +55,35 @@ const RideButtons = ({
 
     const renderPaymentButton = () => {
         const ridePaymentMethod = ride.paymentMethodId;
-        const selectedPaymentMethod = paymentMethods.find((pm: any) => pm.id === ridePaymentMethod);
+        const selectedPaymentMethod: PaymentMethodInterface | undefined =
+             paymentMethods.find((pm) => pm.id === ridePaymentMethod);
+        return (
         <ButtonContainer>
-
+            <TouchableOpacityContainer onPress={() => {
+                setPopupName('payment')
+            }}>
+            <PaymentButton
+                brand={selectedPaymentMethod?.brand}
+                icon={creditCardIcon}
+                title={selectedPaymentMethod?.name || i18n.t('bottomSheetContent.ride.addPayment')} />
+            </TouchableOpacityContainer>
         </ButtonContainer>
+        )
     };
 
     return (
         <Container>
             <RowContainer>
+                <>
                 {renderFutureBooking()}
                 {displayPassenger ? <></> : renderRideNotes()}
+                </>
             </RowContainer>
             <RowContainer>
-                {displayPassenger && renderRideNotes()}
-                <ButtonContainer>
-                    <FutureBookingButton />
-                </ButtonContainer>
+                <>
+                    {displayPassenger && renderRideNotes()}
+                    {renderPaymentButton()}
+                </>
             </RowContainer>
         </Container>
     );

@@ -10,6 +10,7 @@ const RideStateContextContextProvider = ({ children }: { children: any }) => {
   const [showOutOfTerritory, setShowOutOfTerritory] = useState<boolean | undefined>(false);
   const [selectLocationMode, setSelectLocationMode] = useState<boolean | undefined>(false);
   const [lastSelectedLocation, saveSelectedLocation] = useState<any | undefined>(false);
+  const [isUserLocationFocused, setIsUserLocationFocused] = useState(true);
 
   const loadTerritory = async (checkTerritory = false) => {
     let t = territory;
@@ -43,6 +44,8 @@ const RideStateContextContextProvider = ({ children }: { children: any }) => {
         setSelectLocationMode,
         lastSelectedLocation,
         saveSelectedLocation,
+        isUserLocationFocused,
+        setIsUserLocationFocused,
       }}
     >
       {children}
