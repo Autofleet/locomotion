@@ -51,7 +51,6 @@ const Phone = () => {
           value={user.phoneNumber}
           onPhoneNumberChange={onPhoneNumberChange}
           autoFocus
-          defaultCode="IL"
           error={showErrorText}
         />
         {showErrorText && <ErrorText>{showErrorText}</ErrorText>}
