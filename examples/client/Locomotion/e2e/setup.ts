@@ -1,4 +1,5 @@
-import { device } from 'detox';
 beforeAll(async () => {
+  console.log('before launch');
   await device.launchApp();
+  console.log('after launch');
 });
