@@ -25,10 +25,12 @@ export default ({
     [stopPointTypes.STOP_POINT_PICKUP]: {
       toolTipText: etaText,
       icon: pickupIcon,
+      displayName: i18n.t('rideDetails.type.pickup'),
     },
     [stopPointTypes.STOP_POINT_DROPOFF]: {
       toolTipText: stopPoint.streetAddress,
       icon: dropoffIcon,
+      displayName: i18n.t('rideDetails.type.dropoff'),
     },
   };
 
@@ -46,7 +48,7 @@ export default ({
       <InfoBox>
         <Type>
           <TypeText>
-            {stopPoint.type}
+            {typeDetails[stopPoint.type].displayName}
           </TypeText>
         </Type>
         <SubText numberOfLines={1}>

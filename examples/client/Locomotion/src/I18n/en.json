@@ -8,7 +8,11 @@
     "rideDetails": {
         "unavailable": "Not available",
         "timeUntilArrival": "In {{minutes}} min",
-        "toolTipEta": "Eta {{minutes}} min"
+        "toolTipEta": "Eta {{minutes}} min",
+        "type": {
+            "pickup": "Pickup",
+            "dropoff": "Drop off" 
+        }
     },
     "general": {
         "back": "Back",
