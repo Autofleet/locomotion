@@ -6913,6 +6913,11 @@
   dependencies:
     "object-visit" "^1.0.0"
 
+"mcc-mnc-list@^1.1.8":
+  "integrity" "sha512-+I8YA4iTnEP/qqGPfW7bf0byViPugeX/CyYGxprjr9kiXot0j1i5zPri8kAp0aNAwHXGj8Nam2OfRc5L5E6EbA=="
+  "resolved" "https://registry.npmjs.org/mcc-mnc-list/-/mcc-mnc-list-1.1.8.tgz"
+  "version" "1.1.8"
+
 "mdn-data@2.0.14":
   "integrity" "sha512-dn6wd0uw5GsdswPFfsgMp5NSB0/aDe6fK94YJV/AJDYXL6HVLWBsxeq7js7Ad+mU2K9LAlwpk6kN2D5mwCPVow=="
   "resolved" "https://registry.npmjs.org/mdn-data/-/mdn-data-2.0.14.tgz"
@@ -8165,6 +8170,11 @@
   dependencies:
     "prop-types" "^15.7.2"
 
+"react-native-carrier-info@^1.1.2":
+  "integrity" "sha512-MnE0cUUDXBqp6MVB4jcF7OnzYNNUsmVJ+b3or9DiqLLGNW4Qfdx7+sGUgHhLbPVeIz55ZuU/uEpZO33CMy5uug=="
+  "resolved" "https://registry.npmjs.org/react-native-carrier-info/-/react-native-carrier-info-1.1.2.tgz"
+  "version" "1.1.2"
+
 "react-native-codegen@^0.0.13":
   "integrity" "sha512-rCh1P+s0Q4N6vNgS97ckafbhJRztz22+0l0VZoyQC06F07J98kI5cUByH0ATypPRIdpkMbAZc59DoPdDFc01bg=="
   "resolved" "https://registry.npmjs.org/react-native-codegen/-/react-native-codegen-0.0.13.tgz"
@@ -8391,7 +8401,7 @@
     "escape-string-regexp" "2.0.0"
     "invariant" "2.2.4"
 
-"react-native@*", "react-native@^0.0.0-0 || 0.60 - 0.68 || 1000.0.0", "react-native@>= 0.46", "react-native@>= 0.51", "react-native@>=0.42.0", "react-native@>=0.46", "react-native@>=0.48.4", "react-native@>=0.50.0", "react-native@>=0.55", "react-native@>=0.57", "react-native@>=0.59.0", "react-native@>=0.60.0", "react-native@>=0.65.0", "react-native@>=v0.40.0", "react-native@0.68.1":
+"react-native@*", "react-native@^0.0.0-0 || 0.60 - 0.68 || 1000.0.0", "react-native@>= 0.46", "react-native@>= 0.51", "react-native@>=0.4.2", "react-native@>=0.42.0", "react-native@>=0.46", "react-native@>=0.48.4", "react-native@>=0.50.0", "react-native@>=0.55", "react-native@>=0.57", "react-native@>=0.59.0", "react-native@>=0.60.0", "react-native@>=0.65.0", "react-native@>=v0.40.0", "react-native@0.68.1":
   "integrity" "sha512-5gfvslo5NO2Ece2k/q41eVOK3ca4u1QAOf+qM+auvOiUA4/QR5Yr0WfSGbRpUr2GaFgv7qP11F4+elCravg7uQ=="
   "resolved" "https://registry.npmjs.org/react-native/-/react-native-0.68.1.tgz"
   "version" "0.68.1"
