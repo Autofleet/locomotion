@@ -22,3 +22,8 @@ export const ButtonContainer = styled(View)`
     flex: 1;
     margin: 3px;
 `;
+
+export const TouchableOpacityContainer = styled(TouchableOpacity)`
+    flex-direction: row;
+    align-items: center;
+`;

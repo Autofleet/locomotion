@@ -60,8 +60,11 @@ export const RidePageContext = createContext({
   checkFormSps: () => {},
   historyResults: [],
   serviceEstimations: [],
-  ride: {},
-  updateRide: () => {},
+  ride: {
+    notes: '',
+    paymentMethodId: null,
+  },
+  updateRide: (ride) => {},
 });
 const HISTORY_RECORDS_NUM = 10;
 
@@ -300,7 +303,7 @@ const RidePageContextProvider = ({ navigation, children }) => {
   const updateRide = (newRide) => {
     setRide({
       ...ride,
-      newRide,
+      ...newRide,
     })
   }
 

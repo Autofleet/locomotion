@@ -15,19 +15,17 @@ const TimeText = styled(Text)`
 interface NoteButtonProps {
     icon: string;
     title: string;
-    onPress: Function;
 }
 
 const NoteButton = ({
     icon,
     title,
-    onPress
 }: NoteButtonProps) => {
     return (
-        <TouchableOpacity onPress={onPress}>
+        <>
             <SvgIcon stroke="#24aaf2" fill="#24aaf2" Svg={icon} height={15} width={15} />
             <TimeText>{title}</TimeText>
-        </TouchableOpacity>
+        </>
     )
 };
 

@@ -31,8 +31,7 @@ const BottomSheetComponent = forwardRef(({ children }, ref) => {
   }, []);
 
   return (
-    <>
-      <RideNotes />
+    <>      
       <BottomSheet
         ref={ref}
         index={0}
