@@ -7,7 +7,7 @@ import {
   BottomSheetView,
   BottomSheetScrollView,
 } from '@gorhom/bottom-sheet';
-import NotAvilableHere from '../../Components/NotAvilableHere';
+
 import { NotAvailableHere } from '../../Components/BsPages';
 import { RideStateContextContext, RidePageContextProvider } from '../../context';
 import NewRidePageContextProvider, { RidePageContext } from '../../context/newRideContext';

@@ -1,7 +1,7 @@
 import React, {
   useState, useEffect, useRef, createContext,
 } from 'react';
-import shortUuid from 'short-uuid';
+import shortid from 'short-uuid';
 import { getPosition } from '../../services/geo';
 import { getPlaces, getGeocode, getPlaceDetails } from './google-api';
 import StorageService from '../../services/storage';
@@ -38,13 +38,13 @@ const RidePageContextProvider = ({ navigation, children }) => {
     type: 'pickup',
     location: null,
     useDefaultLocation: true,
-    id: shortUuid(5),
+    id: shortid.generate(),
   },
   {
     type: 'dropoff',
     location: null,
     useDefaultLocation: false,
-    id: shortUuid(5),
+    id: shortid.generate(),
   }]);
   const [coords, setCoords] = useState();
   const [currentGeocode, setCurrentGeocode] = useState(null);
