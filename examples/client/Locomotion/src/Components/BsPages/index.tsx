@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useContext, useEffect } from 'react';
 import { Text, View } from 'react-native';
 import styled from 'styled-components';
+import { RideStateContextContext } from '../../context';
 import i18n from '../../I18n';
 import { FONT_SIZES, FONT_WEIGHTS } from '../../context/theme';
 import Button from '../Button';
@@ -103,11 +104,17 @@ export const NotAvailableHere = (props: any) => (
   />
 );
 
-export const ConfirmPickup = (props: any) => (
-  <BsPage
-    TitleText={i18n.t('bottomSheetContent.confirmPickup.titleText')}
-    ButtonText={i18n.t('bottomSheetContent.confirmPickup.buttonText')}
-    SubTitleText={i18n.t('bottomSheetContent.confirmPickup.subTitleText')}
-    {...props}
-  />
-);
+export const ConfirmPickup = (props: any) => {
+  const { setSelectLocationMode } = useContext(RideStateContextContext);
+  useEffect(() => {
+    setSelectLocationMode(true);
+  }, []);
+  return (
+    <BsPage
+      TitleText={i18n.t('bottomSheetContent.confirmPickup.titleText')}
+      ButtonText={i18n.t('bottomSheetContent.confirmPickup.buttonText')}
+      SubTitleText={i18n.t('bottomSheetContent.confirmPickup.subTitleText')}
+      {...props}
+    />
+  );
+};

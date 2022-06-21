@@ -7,6 +7,7 @@ import BottomSheet, {
 } from '@gorhom/bottom-sheet';
 import styled from 'styled-components';
 import SafeView from '../../../../Components/SafeView';
+import RideNotes from '../../../../popups/RideNotes';
 import { BottomSheetContext } from '../../../../context/bottomSheetContext';
 
 const ContentContainer = styled(BottomSheetView)`
@@ -30,24 +31,27 @@ const BottomSheetComponent = forwardRef(({ children }, ref) => {
   }, []);
 
   return (
-    <BottomSheet
-      ref={ref}
-      index={0}
-      snapPoints={animatedSnapPoints}
-      onChange={handleSheetChanges}
-      handleHeight={animatedHandleHeight}
-      contentHeight={animatedContentHeight}
-    >
-      <SafeView>
-        <ContentContainer
-          onLayout={handleContentLayout}
-        >
-          {children}
+    <>
+      <RideNotes />
+      <BottomSheet
+        ref={ref}
+        index={0}
+        snapPoints={animatedSnapPoints}
+        onChange={handleSheetChanges}
+        handleHeight={animatedHandleHeight}
+        contentHeight={animatedContentHeight}
+      >
+        <SafeView>
+          <ContentContainer
+            onLayout={handleContentLayout}
+          >
+            {children}
 
-        </ContentContainer>
-      </SafeView>
+          </ContentContainer>
+        </SafeView>
 
-    </BottomSheet>
+      </BottomSheet>
+    </>
   );
 });
 

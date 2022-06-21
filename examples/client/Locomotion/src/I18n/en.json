@@ -177,6 +177,12 @@
             "takePhoto":  "Take Photo...",
             "choosePhoto": "Choose from Library..."
         },
+        "rideNotes": {
+            "title": "Add a note to driver",
+            "placeholder": "How to find me, Flights, info, etc.",
+            "save": "Save",
+            "cancel": "Cancel"
+        },
         "rideSummary": {
             "thanksForRideHeadline": "Thanks for your ride!",
             "rideDataHeadline": "",
