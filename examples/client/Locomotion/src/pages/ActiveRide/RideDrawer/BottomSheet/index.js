@@ -17,9 +17,6 @@ const ContentContainer = styled(BottomSheetView)`
 
 const BottomSheetComponent = forwardRef(({ children }, ref) => {
   const snapPoints = useMemo(() => ['CONTENT_HEIGHT', '95%'], []);
-  const { getSnapPoints, setSnapPointIndex } = useContext(BottomSheetContext);
-
-
   const {
     setSnapPointIndex,
     sheetState,
@@ -52,13 +49,13 @@ const BottomSheetComponent = forwardRef(({ children }, ref) => {
         onChange={handleSheetChanges}
         onAnimate={onAnimate}
       >
-        <SafeView>
-          <ContentContainer
-            onLayout={handleContentLayout}
-          >
-            {children}
-
-          </ContentContainer>
+        <SafeView
+          style={{
+            flex: 1,
+            flexDirection: 'column',
+          }}
+        >
+          {children}
         </SafeView>
 
       </BottomSheet>
