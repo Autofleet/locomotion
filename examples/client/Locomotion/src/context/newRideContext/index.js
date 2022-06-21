@@ -1,22 +1,12 @@
 import React, {
   useState, useEffect, useRef, createContext,
 } from 'react';
+import shortUuid from 'short-uuid';
 import { getPosition } from '../../services/geo';
 import { getPlaces, getGeocode, getPlaceDetails } from './google-api';
 import StorageService from '../../services/storage';
 
 const STATION_AUTOREFRESH_INTERVAL = 60000;
-
-const makeid = (length) => {
-  let result = '';
-  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-  const charactersLength = characters.length;
-  for (let i = 0; i < length; i++) {
-    result += characters.charAt(Math.floor(Math.random()
-* charactersLength));
-  }
-  return result;
-};
 
 function useInterval(callback, delay) {
   const savedCallback = useRef();
@@ -46,13 +36,13 @@ const RidePageContextProvider = ({ navigation, children }) => {
     type: 'pickup',
     location: null,
     useDefaultLocation: true,
-    id: makeid(5),
+    id: shortUuid(5),
   },
   {
     type: 'dropoff',
     location: null,
     useDefaultLocation: false,
-    id: makeid(5),
+    id: shortUuid(5),
   }]);
   const [coords, setCoords] = useState();
   const [currentGeocode, setCurrentGeocode] = useState(null);
