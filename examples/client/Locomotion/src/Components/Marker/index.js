@@ -1,5 +1,4 @@
 import React, { useContext } from 'react';
-import { stopPoint as stopPointTypes } from '@autofleet/common-types';
 import { Platform } from 'react-native';
 import Config from 'react-native-config';
 import { Marker } from 'react-native-maps';
@@ -13,6 +12,7 @@ import {
 import { RidePageContext } from '../../context/newRideContext';
 import i18n from '../../I18n';
 import SvgIcon from '../SvgIcon';
+import { STOP_POINT_TYPES } from '../../lib/commonTypes';
 
 export default ({
   stopPoint,
@@ -22,12 +22,12 @@ export default ({
   const minutesUntilPickup = moment.duration(moment(chosenService.eta).diff(moment())).minutes().toString();
   const etaText = i18n.t('rideDetails.toolTipEta', { minutes: minutesUntilPickup });
   const typeDetails = {
-    [stopPointTypes.STOP_POINT_PICKUP]: {
+    [STOP_POINT_TYPES.STOP_POINT_PICKUP]: {
       toolTipText: etaText,
       icon: pickupIcon,
       displayName: i18n.t('rideDetails.type.pickup'),
     },
-    [stopPointTypes.STOP_POINT_DROPOFF]: {
+    [STOP_POINT_TYPES.STOP_POINT_DROPOFF]: {
       toolTipText: stopPoint.streetAddress,
       icon: dropoffIcon,
       displayName: i18n.t('rideDetails.type.dropoff'),
