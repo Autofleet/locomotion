@@ -113,72 +113,72 @@ export default React.forwardRef(({
 
   return (
     <>
-        <MapView
-          provider={Config.MAP_PROVIDER}
-          showsUserLocation
-          style={StyleSheet.absoluteFillObject}
-          showsMyLocationButton={false}
-          loadingEnabled
-          showsCompass={false}
-          key="map"
-          followsUserLocation={isUserLocationFocused}
-          moveOnMarkerPress={false}
-          onRegionChange={(event) => {
-            if (selectLocationMode) {
-              const { latitude, longitude } = event;
-              saveSelectedLocation({
-                latitude: latitude.toFixed(6),
-                longitude: longitude.toFixed(6),
-              });
-            }
-          }}
-          onPanDrag={() => (
-            !isUserLocationFocused === false ? setIsUserLocationFocused(false) : null
-          )}
-          onUserLocationChange={(event) => {
-            if ((Platform.OS === 'ios' && !Config.MAP_PROVIDER !== 'google') || !isUserLocationFocused) {
-              return; // Follow user location works for iOS
-            }
-            const { coordinate } = event.nativeEvent;
+      <MapView
+        provider={Config.MAP_PROVIDER}
+        showsUserLocation
+        style={StyleSheet.absoluteFillObject}
+        showsMyLocationButton={false}
+        loadingEnabled
+        showsCompass={false}
+        key="map"
+        followsUserLocation={isUserLocationFocused}
+        moveOnMarkerPress={false}
+        onRegionChange={(event) => {
+          if (selectLocationMode) {
+            const { latitude, longitude } = event;
+            saveSelectedLocation({
+              latitude: latitude.toFixed(6),
+              longitude: longitude.toFixed(6),
+            });
+          }
+        }}
+        onPanDrag={() => (
+          !isUserLocationFocused === false ? setIsUserLocationFocused(false) : null
+        )}
+        onUserLocationChange={(event) => {
+          if ((Platform.OS === 'ios' && !Config.MAP_PROVIDER !== 'google') || !isUserLocationFocused) {
+            return; // Follow user location works for iOS
+          }
+          const { coordinate } = event.nativeEvent;
 
-            setMapRegion(oldMapRegion => ({
-              ...oldMapRegion,
-              ...coordinate,
-            }));
+          setMapRegion(oldMapRegion => ({
+            ...oldMapRegion,
+            ...coordinate,
+          }));
 
-            if (isUserLocationFocused) {
-              focusCurrentLocation();
-            }
-          }}
-          ref={mapInstance}
-          userInterfaceStyle={isDarkMode ? THEME_MOD.DARK : undefined}
-          customMapStyle={isDarkMode ? mapDarkMode : undefined}
-          {...mapSettings}
-        >
-          {chosenService && requestStopPoints.filter(sp => !!sp.location).length > 1
-            ? requestStopPoints
-              .filter(sp => !!sp.location)
-              .map(sp => (<StationsMap stopPoint={sp} />))
-            : null}
-          {showOutOfTerritory && territory && territory.length ? territory
-            .map(t => t.polygon.coordinates.map(poly => (
-              <Polygon
-                key={`Polygon#${t.id}#${poly[1]}#${poly[0]}`}
-                strokeWidth={2}
-                strokeColor={`${primaryColor}`}
-                fillColor={`${primaryColor}40`}
-                coordinates={poly.map(p => (
-                  { latitude: parseFloat(p[1]), longitude: parseFloat(p[0]) }
-                ))}
-              />
-            ))) : null}
-          {buildAvailabilityVehicles()}
-        </MapView>
-        {selectLocationMode && (
+          if (isUserLocationFocused) {
+            focusCurrentLocation();
+          }
+        }}
+        ref={mapInstance}
+        userInterfaceStyle={isDarkMode ? THEME_MOD.DARK : undefined}
+        customMapStyle={isDarkMode ? mapDarkMode : undefined}
+        {...mapSettings}
+      >
+        {chosenService && requestStopPoints.filter(sp => !!sp.location).length > 1
+          ? requestStopPoints
+            .filter(sp => !!sp.location)
+            .map(sp => (<StationsMap stopPoint={sp} />))
+          : null}
+        {showOutOfTerritory && territory && territory.length ? territory
+          .map(t => t.polygon.coordinates.map(poly => (
+            <Polygon
+              key={`Polygon#${t.id}#${poly[1]}#${poly[0]}`}
+              strokeWidth={2}
+              strokeColor={`${primaryColor}`}
+              fillColor={`${primaryColor}40`}
+              coordinates={poly.map(p => (
+                { latitude: parseFloat(p[1]), longitude: parseFloat(p[0]) }
+              ))}
+            />
+          ))) : null}
+        {buildAvailabilityVehicles()}
+      </MapView>
+      {selectLocationMode && (
         <LocationMarkerContainer pointerEvents="none">
           <LocationMarker />
         </LocationMarkerContainer>
-        )}
+      )}
     </>
   );
 });

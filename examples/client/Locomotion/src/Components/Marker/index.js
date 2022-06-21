@@ -35,33 +35,34 @@ export default ({
   };
 
   return (
-  <Marker
-    coordinate={{ latitude: parseFloat(lat), longitude: parseFloat(lng) }}
-    onPress={(e) => {
-      Mixpanel.trackElementClick({ id: 'SelectStationButton' });
-    }}
-    key={stopPoint.id}
-    zIndex={999}
-    tracksViewChanges={Platform.OS === 'ios' && Config.MAP_PROVIDER === 'google'}
-  >
-  <MarkerContainer>
-      <InfoBox>
-        <Type>
-          <TypeText>
-            {typeDetails[stopPoint.type].displayName}
-          </TypeText>
-        </Type>
-        <SubText numberOfLines={1}>
-          {typeDetails[stopPoint.type].toolTipText}
-        </SubText>
-      </InfoBox>
-      <IconContainer>
-        <SvgIcon
-          Svg={typeDetails[stopPoint.type].icon}
-          width={20}
-          height={20}/>
+    <Marker
+      coordinate={{ latitude: parseFloat(lat), longitude: parseFloat(lng) }}
+      onPress={(e) => {
+        Mixpanel.trackElementClick({ id: 'SelectStationButton' });
+      }}
+      key={stopPoint.id}
+      zIndex={999}
+      tracksViewChanges={Platform.OS === 'ios' && Config.MAP_PROVIDER === 'google'}
+    >
+      <MarkerContainer>
+        <InfoBox>
+          <Type>
+            <TypeText>
+              {typeDetails[stopPoint.type].displayName}
+            </TypeText>
+          </Type>
+          <SubText numberOfLines={1}>
+            {typeDetails[stopPoint.type].toolTipText}
+          </SubText>
+        </InfoBox>
+        <IconContainer>
+          <SvgIcon
+            Svg={typeDetails[stopPoint.type].icon}
+            width={20}
+            height={20}
+          />
         </IconContainer>
-    </MarkerContainer>
-</Marker>
+      </MarkerContainer>
+    </Marker>
   );
 };

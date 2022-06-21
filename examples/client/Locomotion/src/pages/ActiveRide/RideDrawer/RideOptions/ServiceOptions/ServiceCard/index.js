@@ -46,7 +46,8 @@ const ServiceCard = ({ service }) => {
       selected={chosenService.id === service.id}
       noBackground
       disabled={unavailable}
-      onPress={() => setChosenService(service)}>
+      onPress={() => setChosenService(service)}
+    >
       <CarContainer>
         <CarIcon source={{ uri: service.iconUrl }} />
       </CarContainer>
