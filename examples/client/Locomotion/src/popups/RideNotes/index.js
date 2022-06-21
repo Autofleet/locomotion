@@ -15,8 +15,7 @@ const MAX_SIZE = 100;
 
 export default ({ isVisible }) => {
   const [currentText, updateText] = useState('');
-  const onSubmit = async () => {
-  };
+  const onSubmit = () => null;
 
   return (
     <Modal isVisible={isVisible}>

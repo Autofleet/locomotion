@@ -19,10 +19,10 @@ class NotificationsService {
     OneSignal.disablePush(false);
 
     if (Platform.OS === 'ios') {
-      OneSignal.promptForPushNotificationsWithUserResponse(() => {});
+      OneSignal.promptForPushNotificationsWithUserResponse(() => null);
     }
     OneSignal.addSubscriptionObserver(this.subscriptionObserverHandler);
-  }
+  };
 
   subscriptionObserverHandler = async (data) => {
     const { to } = data;
@@ -36,7 +36,7 @@ class NotificationsService {
         });
       }
     }
-  }
+  };
 
   onOpened = (openResult) => {
     const { additionalData } = openResult.notification.payload;
@@ -46,11 +46,11 @@ class NotificationsService {
         method();
       }
     }
-  }
+  };
 
   triggerOnNotification = (payload) => {
     console.log('new notification', payload);
-  }
+  };
 
   registerOnServer = async ({ pushUserId, pushToken }) => {
     const pushUserData = {

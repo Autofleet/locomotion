@@ -10,7 +10,7 @@ class Auth {
     return decoded.exp && decoded.exp > now;
   }
 
-  loginRefresh = async (network, body) => network.post('api/v1/login/refresh', body)
+  loginRefresh = async (network, body) => network.post('api/v1/login/refresh', body);
 
   getAT = async (network) => {
     const { accessToken, refreshToken } = await StorageService.get(['accessToken', 'refreshToken']);
@@ -38,7 +38,7 @@ class Auth {
       }
     }
     return accessToken;
-  }
+  };
 
   logout = async (navigation) => {
     // TODO: call server on logout
@@ -50,7 +50,7 @@ class Auth {
     await AppSettings.destroy();
     navigation.popToTop();
     return navigation.replace(MAIN_ROUTES.START);
-  }
+  };
 
   onFaildAuth(cb) {
     this.onFaildAuthCallback = cb;
@@ -63,7 +63,7 @@ class Auth {
   updateTokens = (rt, at) => StorageService.save({
     accessToken: at,
     refreshToken: rt,
-  })
+  });
 }
 
 export default new Auth();

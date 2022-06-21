@@ -86,7 +86,7 @@ const SearchBar = ({
     setSelectedInputTarget,
     requestStopPoints,
     updateRequestSp,
-    checkFormSps,
+    validateRequestedStopPoints,
   } = useContext(RidePageContext);
 
   const pickupRef = useRef(null);
@@ -110,10 +110,6 @@ const SearchBar = ({
     setSelectedInputTarget(target);
     setSelectedInputIndex(index);
     onFocus();
-  };
-
-  const onInputBlur = () => {
-    checkFormSps();
   };
 
   useEffect(() => {
@@ -141,7 +137,6 @@ const SearchBar = ({
           onFocus={(e) => {
             onInputFocus(e.target, i);
           }}
-          onBlur={onInputBlur}
           key={`input_${s.id}`}
           autoCorrect={false}
         />

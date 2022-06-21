@@ -116,7 +116,7 @@ const AddressSelectorBottomSheet = ({ bottomSheetRef }) => {
           )
           : null}
         <BottomSheetScrollView contentContainerStyle={{ overflow: 'visible' }}>
-          {(userContext.searchResults || userContext.historyResults).map(h => <AddressRow {...h} onPress={() => userContext.onAddressSelected(h)} />)}
+          {(userContext.searchResults || userContext.historyResults).map(h => <AddressRow {...h} onPress={() => userContext.onAddressSelected(h, true)} />)}
         </BottomSheetScrollView>
       </HistoryContainer>
     </ContentContainer>

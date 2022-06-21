@@ -3,8 +3,8 @@ import { View } from 'react-native';
 import styled from 'styled-components';
 import LottieView from 'lottie-react-native';
 
-const creditCardImage = require('../../assets/menuItems/creditcard.png');
-const darkLoader = require('../../assets/loaders/dark-loader.json');
+import creditCardImage from '../../assets/menuItems/creditcard.png';
+import darkLoader from '../../assets/loaders/dark-loader.json';
 
 export const CreditFormText = styled.Text`
   color: #1e273d;

@@ -8,8 +8,6 @@ import StorageService from '../../services/storage';
 import { createServiceEstimations, getServices } from './api';
 import { formatEstimationsResult, formatStopPointsForEstimations, TAG_OPTIONS } from './services';
 
-const STATION_AUTOREFRESH_INTERVAL = 60000;
-
 function useInterval(callback, delay) {
   const savedCallback = useRef();
 
@@ -53,6 +51,7 @@ const RidePageContextProvider = ({ navigation, children }) => {
   const [selectedInputTarget, setSelectedInputTarget] = useState(null);
   const [searchResults, setSearchResults] = useState(null);
   const [isReadyForSubmit, setIsReadyForSubmit] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [historyResults, setHistoryResults] = useState([]);
   const [serviceEstimations, setServiceEstimations] = useState(null);
   const [chosenService, setChosenService] = useState(null);
@@ -193,6 +192,7 @@ const RidePageContextProvider = ({ navigation, children }) => {
   };
 
   const enrichPlaceWithLocation = async (placeId) => {
+    console.log({ placeId });
     try {
       const data = await getPlaceDetails(placeId);
       return data;
@@ -202,8 +202,9 @@ const RidePageContextProvider = ({ navigation, children }) => {
     }
   };
 
-  const onAddressSelected = async (selectedItem) => {
+  const onAddressSelected = async (selectedItem, loadRide) => {
     const enrichedPlace = await enrichPlaceWithLocation(selectedItem.placeId);
+    console.log({ enrichedPlace, selectedInputIndex });
     const reqSps = [...requestStopPoints];
     reqSps[selectedInputIndex] = {
       ...reqSps[selectedInputIndex],
@@ -212,10 +213,14 @@ const RidePageContextProvider = ({ navigation, children }) => {
       location: enrichedPlace,
       placeId: selectedItem.placeId,
     };
+    console.log({ enrichedPlace, selectedInputIndex });
     setRequestStopPoints(reqSps);
     resetSearchResults();
     saveLastAddresses(selectedItem);
-    selectedInputTarget.blur();
+
+    if (loadRide) {
+      validateRequestedStopPoints(reqSps);
+    }
   };
 
   const resetSearchResults = () => setSearchResults(null);
@@ -242,10 +247,6 @@ const RidePageContextProvider = ({ navigation, children }) => {
     placeId: r.place_id,
   }));
 
-  const clearHistory = async () => {
-    await StorageService.save({ lastAddresses: [] });
-  };
-
   const saveLastAddresses = async (item) => {
     const history = await getLastAddresses();
     const filteredHistory = (history || []).filter(h => h.placeId !== item.placeId);
@@ -263,23 +264,42 @@ const RidePageContextProvider = ({ navigation, children }) => {
     setHistoryResults(history);
   };
 
-  const checkFormSps = async () => {
-    const isSpsReady = requestStopPoints.every(r => r.location && r.location.lat && r.location.lng && r.description);
-    if (requestStopPoints.length && isSpsReady) {
-      console.log('READY SEND REQUEST');
-      setIsReadyForSubmit(true);
-      await getServiceEstimations();
-    } else {
-      console.log('NOT READY');
-      setIsReadyForSubmit(false);
+  const validateRequestedStopPoints = async (reqSps) => {
+    try {
+      const stopPoints = reqSps;
+      const isSpsReady = stopPoints.every(r => r.location && r.location.lat && r.location.lng && r.description);
+      if (stopPoints.length && isSpsReady) {
+        setIsReadyForSubmit(true);
+        setIsLoading(true);
+        await getServiceEstimations();
+        setIsLoading(false);
+      } else {
+        setIsReadyForSubmit(false);
+      }
+    } catch (e) {
+      setIsLoading(false);
+      console.error(e);
     }
   };
 
+  const requestRide = async () => {
+    console.log({
+      serviceId: chosenService.id,
+      stopPoints: requestStopPoints.map(sp => ({
+        lat: sp.location.lat,
+        lng: sp.location.lng,
+        description: sp.description,
+        type: sp.type,
+      })),
+    });
+  };
 
   return (
     <RidePageContext.Provider
       value={{
+        requestRide,
         loadAddress,
+        isLoading,
         reverseLocationGeocode,
         enrichPlaceWithLocation,
         searchTerm,
@@ -295,7 +315,7 @@ const RidePageContextProvider = ({ navigation, children }) => {
         updateRequestSp,
         setSpCurrentLocation,
         isReadyForSubmit,
-        checkFormSps,
+        validateRequestedStopPoints,
         historyResults,
         loadHistory,
         serviceEstimations,

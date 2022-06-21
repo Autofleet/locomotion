@@ -1,3 +1,4 @@
+/* eslint-disable class-methods-use-this */
 import Mixpanel from 'react-native-mixpanel';
 import { getDeviceId } from './device';
 
@@ -15,7 +16,7 @@ class MixpanelService {
       await Mixpanel.sharedInstanceWithToken('token', true);
       this.isInit = true;
     }
-  }
+  };
 
   setUser = async (user) => {
     const uniqueId = (user && user.id) || getDeviceId();
@@ -27,25 +28,25 @@ class MixpanelService {
         id: user.id,
       });
     }
-  }
+  };
 
   trackWithProperties = (event, props) => {
     if (this.isInit) {
       Mixpanel.trackWithProperties(event, props);
     }
-  }
+  };
 
   pageView = (pageName, properties = {}) => {
     this.trackWithProperties(`Page View - ${pageName}`, { page_name: pageName, event_type: 'page_view', ...properties });
-  }
+  };
 
   setEvent = (eventName, properties = {}) => {
     this.trackWithProperties(eventName, { event_name: eventName, event_type: 'event', ...properties });
-  }
+  };
 
   clickEvent = (eventName, properties = {}) => {
     this.trackWithProperties(`Click - ${eventName}`, { event_name: eventName, event_type: 'click', ...properties });
-  }
+  };
 
   trackElementClick = (props, properties = {}) => {
     const elmName = getElementName(props);
@@ -53,16 +54,16 @@ class MixpanelService {
     if (elmName) {
       this.clickEvent(eventName, properties);
     }
-  }
+  };
 
   resetIdentifier = async () => {
     await Mixpanel.clearSuperProperties();
     await Mixpanel.reset();
-  }
+  };
 
   registerSuperProperties = (properties) => {
     Mixpanel.registerSuperProperties(properties);
-  }
+  };
 
   demoMode = (isDemoUser) => {
     if (isDemoUser) {
@@ -71,7 +72,7 @@ class MixpanelService {
       Mixpanel.setOnce({ demo_user: isDemoUser });
       Mixpanel.registerSuperProperties({ demo_user: isDemoUser });
     }
-  }
+  };
 }
 
 export default new MixpanelService();
