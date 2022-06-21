@@ -57,11 +57,11 @@ const ServiceCard = ({ service }) => {
             {service.name}
           </Title>
           {service.tags.map(tag => tag && (
-              <Tag
-                containerStyles={tagStyles[tag].container}
-                text={tag}
-                textColor={tagStyles[tag].textColor}
-              />
+          <Tag
+            containerStyles={tagStyles[tag].container}
+            text={tag}
+            textColor={tagStyles[tag].textColor}
+          />
           ))
             }
           <Price>
