@@ -29,13 +29,7 @@ const BottomSheetComponent = forwardRef(({ children }, ref) => {
 
   const onAnimate = useCallback((from, to) => {
     if (from !== -1) {
-      if (to > from) {
-        setIsExpanded(true);
-      }
-
-      if (from > to) {
-        setIsExpanded(false);
-      }
+      setIsExpanded(to > from);
     }
   }, []);
 
