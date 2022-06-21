@@ -157,12 +157,12 @@ const SearchBar = ({
     onBack();
   };
 
-  /*
-  useEffect(() => {
+
+  /*   useEffect(() => {
     if (isExpanded) {
-      LayoutAnimation.configureNext(LayoutAnimation.create(
+      LayoutAnimation.configureNext(
         LayoutAnimation.Presets.spring,
-      ));
+      );
     } else {
       LayoutAnimation.configureNext(LayoutAnimation.create(
         200,
@@ -174,6 +174,7 @@ const SearchBar = ({
       }
     }
   }, [isExpanded]); */
+
   return (
     <View
       style={{

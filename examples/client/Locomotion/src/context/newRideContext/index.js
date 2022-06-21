@@ -67,7 +67,6 @@ const RidePageContextProvider = ({ navigation, children }) => {
   useEffect(() => {
     initLocation();
     initCurrentLocation();
-    getLastAddresses();
   }, []);
 
   useEffect(() => {
@@ -198,6 +197,7 @@ const RidePageContextProvider = ({ navigation, children }) => {
     };
     setRequestStopPoints(reqSps);
     resetSearchResults();
+    saveLastAddresses(selectedItem);
     selectedInputTarget.blur();
   };
 
@@ -225,18 +225,29 @@ const RidePageContextProvider = ({ navigation, children }) => {
     placeId: r.place_id,
   }));
 
-  const saveLastAddresses = async (item) => {
-    const histroy = await getLastAddresses();
-    const filteredHistory = histroy.filter(h => h.placeId !== item.placeId);
-    filteredHistory.unshift(item);
+  const clearHistory = async () => {
+    await StorageService.save({ lastAddresses: [] });
+  };
+  // clearHistory();
 
+  const saveLastAddresses = async (item) => {
+    console.log('IN SAVEEE', item);
+
+    const history = await getLastAddresses();
+    const filteredHistory = (history || []).filter(h => h.placeId !== item.placeId);
+    filteredHistory.unshift(item);
     await StorageService.save({ lastAddresses: filteredHistory.slice(0, HISTORY_RECORDS_NUM) });
   };
 
   const getLastAddresses = async () => {
-    const histroy = await StorageService.get('lastAddresses') || [];
-    setHistoryResults(histroy);
-    return histroy;
+    const history = await StorageService.get('lastAddresses') || [];
+    console.log('histroy getLastAddresses', history);
+    return history;
+  };
+
+  const loadHistory = async () => {
+    const history = await getLastAddresses();
+    setHistoryResults(history);
   };
 
   const checkFormSps = () => {
@@ -272,6 +283,7 @@ const RidePageContextProvider = ({ navigation, children }) => {
         isReadyForSubmit,
         checkFormSps,
         historyResults,
+        loadHistory,
       }}
     >
       {children}

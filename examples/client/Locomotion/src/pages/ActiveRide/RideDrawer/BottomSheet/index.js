@@ -13,10 +13,27 @@ import { BottomSheetContext } from '../../../../context/bottomSheetContext';
 
 const BottomSheetComponent = forwardRef(({ children }, ref) => {
   const snapPoints = useMemo(() => ['25%', '100%'], []);
-  const { getSnapPoints, setSnapPointIndex } = useContext(BottomSheetContext);
+  const {
+    setSnapPointIndex,
+    sheetState,
+    setSheetState,
+    setIsExpanded,
+  } = useContext(BottomSheetContext);
 
   const handleSheetChanges = useCallback((index) => {
     setSnapPointIndex(index);
+  }, []);
+
+  const onAnimate = useCallback((from, to) => {
+    if (from !== -1) {
+      if (to > from) {
+        setIsExpanded(true);
+      }
+
+      if (from > to) {
+        setIsExpanded(false);
+      }
+    }
   }, []);
 
   return (
@@ -25,6 +42,7 @@ const BottomSheetComponent = forwardRef(({ children }, ref) => {
       index={0}
       snapPoints={snapPoints}
       onChange={handleSheetChanges}
+      onAnimate={onAnimate}
     >
       <SafeView
         style={{

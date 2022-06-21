@@ -33,6 +33,7 @@ const InputContainer = styled.View`
 const HistoryContainer = styled.View`
   margin-bottom: 10px;
   flex: 1;
+  width: 100%;
 `;
 
 
@@ -62,7 +63,7 @@ const AddressSelectorBottomSheet = ({ bottomSheetRef }) => {
 
 
   const loadHistory = async () => {
-    userContext.getLastAddresses();
+    userContext.loadHistory();
   };
 
   useEffect(() => {
