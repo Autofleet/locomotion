@@ -55,13 +55,9 @@ export const MarkerToolTipText = styled.Text`
 `;
 
 export const MarkerContainer = styled.View`
-  display: flex;
-  align-items: center;
-  padding: 2px;
 `;
 
 export const InfoBox = styled.View`
-   min-width: 100px;
    height: 50px;
    display: flex;
    flex-direction: column;
@@ -69,7 +65,7 @@ export const InfoBox = styled.View`
    border-radius: 8px;
    padding: 5px;
    align-items: center;
-   margin-bottom: 100px;
+    margin-top: -45px;
 `;
 
 export const Type = styled.View`
@@ -86,6 +82,12 @@ export const SubText = styled.Text`
     ${FONT_SIZES.LARGE}
     ${FONT_WEIGHTS.REGULAR}
     padding: 5px;
+    max-width: 150px;
+`;
+
+export const IconContainer = styled.View`
+left: 40%;
+margin-top: 5px;
 `;
 
 export const TypeText = styled.Text`

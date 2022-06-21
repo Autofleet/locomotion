@@ -16,7 +16,7 @@ const ContentContainer = styled(BottomSheetView)`
 `;
 
 const BottomSheetComponent = forwardRef(({ children }, ref) => {
-  const snapPoints = useMemo(() => ['CONTENT_HEIGHT', '95%'], []);
+  const snapPoints = useMemo(() => ['25%', '95%'], []);
   const {
     setSnapPointIndex,
     sheetState,
