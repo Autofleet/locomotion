@@ -1,15 +1,13 @@
 import React, {
-  useCallback, useEffect, useMemo, useRef, useState, useContext,
+  useEffect, useContext,
 } from 'react';
 import {
-  View, Text, StyleSheet, ScrollView,
+  View,
 } from 'react-native';
-import BottomSheet, {
-  useBottomSheetDynamicSnapPoints,
+import {
   BottomSheetView,
   useBottomSheet,
   BottomSheetScrollView,
-  BottomSheetBackdrop,
 } from '@gorhom/bottom-sheet';
 
 import styled from 'styled-components';
@@ -26,9 +24,6 @@ const Container = styled(BottomSheetView)`
   width: 100%;
 `;
 
-const Container2 = styled(BottomSheetView)`
-
-`;
 
 const InputContainer = styled.View`
   width: 100%;
@@ -37,7 +32,12 @@ const InputContainer = styled.View`
 
 const HistoryContainer = styled.View`
   margin-bottom: 10px;
+  flex: 1;
   width: 100%;
+`;
+
+const AddressContainer = styled.View`
+  padding: 0px 30px 20px 30px;
 `;
 
 
@@ -48,39 +48,26 @@ const AddressActionsText = styled.Text`
     line-height: 20px;
 `;
 
-const historyText = [
-  {
-    text: '57th Street',
-    subText: 'New York, NY, USA',
-    icon: 'history',
-    lat: 32.444,
-    lng: 34.555,
-  },
-  {
-    text: '57th Street',
-    subText: 'New York, NY, USA',
-    icon: 'history',
-    lat: 32.444,
-    lng: 34.555,
-  },
-  {
-    text: '57th Strexxxxxet',
-    subText: 'New York, NY, USA',
-    icon: 'history',
-    lat: 32.444,
-    lng: 34.555,
-  },
-];
+const ContentContainer = styled.View`
+  align-items: center;
+  flex-direction: column;
+  padding: 0px 30px 40px 30px;
+  width: 100%;
+  flex: 1;
+
+`;
 const AddressSelectorBottomSheet = ({ bottomSheetRef }) => {
   const userContext = useContext(RidePageContext);
 
   const {
     isExpanded,
-    historyResults,
   } = useContext(BottomSheetContext);
 
+  const { expand, collapse } = useBottomSheet();
+
+
   const loadHistory = async () => {
-    userContext.getLastAddresses();
+    userContext.loadHistory();
   };
 
   useEffect(() => {
@@ -89,28 +76,25 @@ const AddressSelectorBottomSheet = ({ bottomSheetRef }) => {
 
   const onSearchFocus = () => {
     if (!isExpanded) {
-      bottomSheetRef.current.expand();
+      expand();
     }
   };
 
   const onBack = () => {
-    bottomSheetRef.current.collapse();
+    collapse();
   };
 
   const onCurrentLocation = async () => {
     userContext.setSpCurrentLocation();
   };
-
   return (
-    <>
-      <InputContainer>
-        <SearchBar
-          onFocus={onSearchFocus}
-          isExpanded={isExpanded}
-          onBack={onBack}
-          onSearch={userContext.searchAddress}
-        />
-      </InputContainer>
+    <ContentContainer>
+      <SearchBar
+        onFocus={onSearchFocus}
+        isExpanded={isExpanded}
+        onBack={onBack}
+        onSearch={userContext.searchAddress}
+      />
       <HistoryContainer>
         {isExpanded
           ? (
@@ -131,11 +115,12 @@ const AddressSelectorBottomSheet = ({ bottomSheetRef }) => {
             </>
           )
           : null}
-        <View>
+        <BottomSheetScrollView contentContainerStyle={{ overflow: 'visible' }}>
           {(userContext.searchResults || userContext.historyResults).map(h => <AddressRow {...h} onPress={() => userContext.onAddressSelected(h)} />)}
-        </View>
+        </BottomSheetScrollView>
       </HistoryContainer>
-    </>
+    </ContentContainer>
+
   );
 };
 

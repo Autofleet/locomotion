@@ -1,14 +1,14 @@
 import React, {
   useContext, useEffect, useRef, useState,
 } from 'react';
-import { Platform, StyleSheet } from 'react-native';
+import { Platform, StyleSheet, View } from 'react-native';
 import MapView, { Marker, Polygon, Polyline } from 'react-native-maps';
 import Config from 'react-native-config';
 import CheapRuler from 'cheap-ruler';
 
 import { RidePageContext, RideStateContextContext } from '../../context';
 import { getPosition } from '../../services/geo';
-import { VehicleDot } from './styled';
+import { VehicleDot, LocationMarker, LocationMarkerContainer } from './styled';
 import mapDarkMode from '../../assets/mapDarkMode.json';
 import { Context as ThemeContext, THEME_MOD } from '../../context/theme';
 import StationsMap from './StationsMap';
@@ -40,6 +40,8 @@ export default React.forwardRef(({
   const {
     territory,
     showOutOfTerritory,
+    selectLocationMode,
+    saveSelectedLocation,
   } = useContext(RideStateContextContext);
 
   const [mapRegion, setMapRegion] = useState({
@@ -129,7 +131,12 @@ export default React.forwardRef(({
     return null;
   };
 
-  const buildAvailabilityVehicles = () => availabilityVehicles.map(vehicle => <AvailabilityVehicle location={vehicle.location} id={vehicle.id} />);
+  const buildAvailabilityVehicles = () => availabilityVehicles.map(vehicle => (
+    <AvailabilityVehicle
+      location={vehicle.location}
+      id={vehicle.id}
+    />
+  ));
 
   const initialLocation = async () => {
     try {
@@ -171,7 +178,18 @@ export default React.forwardRef(({
         key="map"
         followsUserLocation={!disableAutoLocationFocus}
         moveOnMarkerPress={false}
-        onPanDrag={() => (disableAutoLocationFocus === false ? setDisableAutoLocationFocus(true) : null)}
+        onRegionChange={(event) => {
+          if (selectLocationMode) {
+            const { latitude, longitude } = event;
+            saveSelectedLocation({
+              latitude: latitude.toFixed(6),
+              longitude: longitude.toFixed(6),
+            });
+          }
+        }}
+        onPanDrag={() => (
+          disableAutoLocationFocus === false ? setDisableAutoLocationFocus(true) : null
+        )}
         onUserLocationChange={(event) => {
           if ((Platform.OS === 'ios' && !Config.MAP_PROVIDER !== 'google') || !showsUserLocation || disableAutoLocationFocus) {
             return; // Follow user location works for iOS
@@ -235,7 +253,7 @@ export default React.forwardRef(({
           ) : null}
 
         {showOutOfTerritory && territory && territory.length ? territory
-          .map(t => t.polygon.coordinates.map(poly => (
+          .map(t => (t.polygon && t.polygon.coordinates ? t.polygon.coordinates : []).map(poly => (
             <Polygon
               key={`Polygon#${t.id}#${poly[1]}#${poly[0]}`}
               strokeWidth={2}
@@ -249,6 +267,11 @@ export default React.forwardRef(({
         <VehicleMarker />
         {buildAvailabilityVehicles()}
       </MapView>
+      {selectLocationMode && (
+        <LocationMarkerContainer pointerEvents="none">
+          <LocationMarker />
+        </LocationMarkerContainer>
+      )}
     </>
   );
 });

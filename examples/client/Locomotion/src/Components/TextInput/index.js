@@ -8,6 +8,7 @@ const TextInput = (props) => {
       onFocus={() => setIsFocused(true)}
       onBlur={() => setIsFocused(false)}
       isFocused={isFocused}
+      ref={props.inputRef}
       {...props}
     />
   );

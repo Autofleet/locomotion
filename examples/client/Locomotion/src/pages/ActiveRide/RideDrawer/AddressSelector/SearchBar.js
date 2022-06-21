@@ -2,7 +2,7 @@ import React, {
   useCallback, useEffect, useMemo, useRef, useState, useContext,
 } from 'react';
 import {
-  View, Text, StyleSheet, LayoutAnimation,
+  View, Text, StyleSheet, LayoutAnimation, Animated, Platform, UIManager,
 } from 'react-native';
 import styled from 'styled-components';
 import { debounce } from 'lodash';
@@ -27,8 +27,7 @@ const InputContainer = styled(View)`
     flex: 1;
 `;
 
-const Row = styled(View)`
-    flex: 1;
+const Row = styled(Animated.View)`
     ${({ setMargin }) => setMargin && `
         margin-top: 12px;
     `}
@@ -36,6 +35,7 @@ const Row = styled(View)`
     ${({ isExpanded }) => isExpanded === false && `
         display: none;
     `}
+
 `;
 
 
@@ -47,6 +47,7 @@ const BackButtonContainer = styled.TouchableOpacity`
     margin-right: 8px;
     justify-content: center;
     align-items: center;
+
 `;
 
 const ArrowImage = styled.Image.attrs({ source: backImage })`
@@ -64,6 +65,11 @@ const BackButton = ({ isExpanded, onBack }) => {
     </BackButtonContainer>
   );
 };
+
+/* if (Platform.OS === 'android' && UIManager.setLayoutAnimationEnabledExperimental
+) {
+  UIManager.setLayoutAnimationEnabledExperimental(true);
+} */
 
 const SearchBar = ({
   isExpanded,
@@ -107,7 +113,6 @@ const SearchBar = ({
   };
 
   const onInputBlur = () => {
-    setSearchTerm(null);
     checkFormSps();
   };
 
@@ -115,12 +120,15 @@ const SearchBar = ({
     debouncedSearch(searchTerm);
   }, [searchTerm]);
 
+
   const buildSps = () => requestStopPoints.map((s, i) => {
     const placeholder = getSpPlaceholder(s);
     const rowProps = i === 0 ? { isExpanded } : { setMargin: true };
-
     return (
-      <Row {...rowProps} key={'row' + i}>
+      <Row
+        {...rowProps}
+        key={s.id}
+      >
         <BottomSheetInput
           placeholder={i18n.t(placeholder)}
           onChangeText={(text) => {
@@ -134,6 +142,7 @@ const SearchBar = ({
             onInputFocus(e.target, i);
           }}
           onBlur={onInputBlur}
+          key={`input_${s.id}`}
           autoCorrect={false}
         />
       </Row>
@@ -141,28 +150,58 @@ const SearchBar = ({
   });
 
   const onBackPress = () => {
-    selectedInputTarget.blur();
+    setSearchTerm(null);
+    if (selectedInputTarget) {
+      selectedInputTarget.blur();
+    }
     onBack();
   };
 
+
+  /*   useEffect(() => {
+    if (isExpanded) {
+      LayoutAnimation.configureNext(
+        LayoutAnimation.Presets.spring,
+      );
+    } else {
+      LayoutAnimation.configureNext(LayoutAnimation.create(
+        200,
+        LayoutAnimation.Presets.easeOut,
+        LayoutAnimation.Properties.scaleXY,
+      ));
+      if (selectedInputTarget) {
+        selectedInputTarget.blur();
+      }
+    }
+  }, [isExpanded]); */
+
   return (
-    <View style={{
-      flex: 1,
-      paddingBottom: 12,
-      flexDirection: 'row',
-      borderBottomColor: '#f1f2f6',
-      borderBottomWidth: 2,
-    }}
+    <View
+      style={{
+        paddingBottom: 12,
+        flexDirection: 'row',
+        borderBottomColor: '#f1f2f6',
+        borderBottomWidth: 2,
+      }}
     >
-      <BackButton
-        isExpanded={isExpanded}
-        onBack={onBackPress}
-      />
-      <InputContainer>
-        <Row>
-          {buildSps()}
-        </Row>
-      </InputContainer>
+      {isExpanded
+        ? (
+          <BackButton
+            isExpanded
+            onBack={onBackPress}
+          />
+        ) : null}
+      <View
+        style={{
+          flexDirection: 'column',
+          justifyContent: 'space-between',
+          flex: 1,
+        }}
+      >
+
+        {buildSps()}
+
+      </View>
     </View>
   );
 };
