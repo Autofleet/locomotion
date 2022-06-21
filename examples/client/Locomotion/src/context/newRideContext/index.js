@@ -65,6 +65,7 @@ const RidePageContextProvider = ({ navigation, children }) => {
   const [isReadyForSubmit, setIsReadyForSubmit] = useState(false);
   const [historyResults, setHistoryResults] = useState([]);
   const [serviceEstimations, setServiceEstimations] = useState(null);
+  const [chosenService, setChosenService] = useState(null);
 
   const formatEstimations = (services, estimations) => {
     const estimationsMap = {};
@@ -85,6 +86,7 @@ const RidePageContextProvider = ({ navigation, children }) => {
       getServices(),
     ]);
     const formattedEstimations = formatEstimations(services, estimations);
+    setChosenService(formattedEstimations.find(e => e.eta));
     setServiceEstimations(formattedEstimations);
   };
 
@@ -216,6 +218,7 @@ const RidePageContextProvider = ({ navigation, children }) => {
     reqSps[selectedInputIndex] = {
       ...reqSps[selectedInputIndex],
       description: selectedItem.fullText,
+      streetAddress: selectedItem.text,
       location: enrichedPlace,
       placeId: selectedItem.placeId,
     };
@@ -297,6 +300,8 @@ const RidePageContextProvider = ({ navigation, children }) => {
         checkFormSps,
         historyResults,
         serviceEstimations,
+        chosenService,
+        setChosenService,
       }}
     >
       {children}

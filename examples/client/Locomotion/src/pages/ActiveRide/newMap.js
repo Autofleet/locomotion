@@ -2,25 +2,22 @@ import React, {
   useContext, useEffect, useRef, useState,
 } from 'react';
 import { Platform, StyleSheet } from 'react-native';
-import MapView, { Marker, Polygon, Polyline } from 'react-native-maps';
+import MapView, { Polygon } from 'react-native-maps';
 import Config from 'react-native-config';
-import CheapRuler from 'cheap-ruler';
-import { RidePageContext as NewRidePageContext } from '../../context/newRideContext';
-
-import { RideStateContextContext, RidePageContext } from '../../context';
+import { RidePageContext } from '../../context/newRideContext';
+import { RideStateContextContext } from '../../context';
 import { getPosition } from '../../services/geo';
-import { VehicleDot } from './styled';
+import { LocationMarker, LocationMarkerContainer } from './styled';
 import mapDarkMode from '../../assets/mapDarkMode.json';
 import { Context as ThemeContext, THEME_MOD } from '../../context/theme';
-import StationsMap from './StationsMap';
-import MyLocationButton from '../../Components/ShowMyLocationButton';
-import AvailabilityContextProvider, { AvailabilityContext } from '../../context/availability';
+import { AvailabilityContext } from '../../context/availability';
 import AvailabilityVehicle from '../../Components/AvailabilityVehicle';
+import StationsMap from '../../Components/Marker';
 
 const MAP_EDGE_PADDING = {
   top: 80,
   right: 100,
-  bottom: 250,
+  bottom: 400,
   left: 100,
 };
 export default React.forwardRef(({
@@ -33,96 +30,38 @@ export default React.forwardRef(({
   const mapInstance = useRef();
 
   const {
-    disableAutoLocationFocus,
-    setDisableAutoLocationFocus,
-    activeRideState,
-    activeSpState,
-    displayMatchInfo,
-  } = useContext(RidePageContext);
-  const {
+    isUserLocationFocused,
+    setIsUserLocationFocused,
     territory,
     showOutOfTerritory,
+    selectLocationMode,
+    saveSelectedLocation,
   } = useContext(RideStateContextContext);
 
-  const { requestStopPoints: newRequestStopPoints } = useContext(NewRidePageContext);
+  const { requestStopPoints, chosenService } = useContext(RidePageContext);
 
   const [mapRegion, setMapRegion] = useState({
     latitudeDelta: 0.015,
     longitudeDelta: 0.015,
   });
 
-  const showsUserLocation = !activeRideState || (activeRideState && !activeRideState.stopPoints[0].completedAt);
-
-  const focusMarkers = () => {
-    if (!activeRideState) {
-      return;
-    }
-    const activeSp = activeRideState.stopPoints.find(sp => sp.state === 'pending' || sp.state === 'arrived');
-
-    const additional = [];
-    if (activeRideState && activeSp.type === 'pickup' && !activeSp.completedAt && mapRegion.latitude && mapRegion.longitude) {
-      additional.push({ latitude: mapRegion.latitude, longitude: mapRegion.longitude });
-    }
-
-    if (activeRideState.vehicle && activeRideState.vehicle.location && displayMatchInfo) {
-      additional.push({
-        latitude: parseFloat(activeRideState.vehicle.location.lat),
-        longitude: parseFloat(activeRideState.vehicle.location.lng),
-      });
-    }
-
-    mapInstance.current.fitToCoordinates([
-      { latitude: parseFloat(activeSp.lat), longitude: parseFloat(activeSp.lng) },
-      ...additional,
-    ], {
-      edgePadding: MAP_EDGE_PADDING,
-    });
-  };
-
   const focusCurrentLocation = () => {
-    setDisableAutoLocationFocus(false);
-    if (mapRegion.longitude && mapRegion.latitude && !activeRideState) {
+    if (mapRegion.longitude && mapRegion.latitude) {
       mapInstance.current.animateToRegion({
         latitude: mapRegion.latitude,
         longitude: mapRegion.longitude,
         latitudeDelta: mapRegion.latitudeDelta,
         longitudeDelta: mapRegion.longitudeDelta,
       }, 1000);
-    } else if (activeRideState && activeRideState.vehicle && activeRideState.vehicle.location) {
-      focusMarkers();
     }
-  };
-
-  const VehicleMarker = () => {
-    if (activeRideState && activeRideState.vehicle && activeRideState.vehicle.location && displayMatchInfo) {
-      let newPoint;
-      const { lat, lng } = activeRideState.vehicle.location;
-      const fixLat = Number(Number(lat).toFixed(5));
-      const fixLng = Number(Number(lng).toFixed(5));
-      if (activeSpState && activeSpState.polyline) {
-        const ruler = new CheapRuler(fixLat, 'meters');
-        const line = activeSpState.polyline.map(t => [t.longitude, t.latitude]);
-        newPoint = ruler.pointOnLine(
-          line,
-          [fixLng, fixLat],
-        ).point;
-      } else {
-        newPoint = [fixLat, fixLng];
-      }
-      return (
-          <Marker coordinate={{ latitude: newPoint[1], longitude: newPoint[0] }}>
-            <VehicleDot />
-          </Marker>
-      );
-    }
-    return null;
   };
 
   const buildAvailabilityVehicles = () => availabilityVehicles.map(vehicle => (
-        <AvailabilityVehicle
-          location={vehicle.location}
-          id={vehicle.id}
-        />));
+    <AvailabilityVehicle
+      location={vehicle.location}
+      id={vehicle.id}
+    />
+  ));
 
   const initialLocation = async () => {
     try {
@@ -141,19 +80,19 @@ export default React.forwardRef(({
   }, []);
 
 
-  //   useEffect(() => {
-  //     if (!disableAutoLocationFocus) {
-  //       focusCurrentLocation();
-  //     }
-  //   }, [mapRegion]);
+  useEffect(() => {
+    if (isUserLocationFocused) {
+      focusCurrentLocation();
+    }
+  }, [mapRegion]);
 
 
-  //   React.useImperativeHandle(ref, () => ({
-  //     focusCurrentLocation,
-  //   }));
+  React.useImperativeHandle(ref, () => ({
+    focusCurrentLocation,
+  }));
 
   const showInputPointsOnMap = () => {
-    const coordsToFit = newRequestStopPoints
+    const coordsToFit = requestStopPoints
       .filter((sp => sp.location))
       .map(sp => (
         {
@@ -167,29 +106,37 @@ export default React.forwardRef(({
       });
   };
   useEffect(() => {
-    if (newRequestStopPoints.filter((sp => sp.location)).length > 1) {
+    if (requestStopPoints.filter((sp => sp.location)).length > 1) {
       showInputPointsOnMap();
     }
-  }, [newRequestStopPoints]);
+  }, [requestStopPoints]);
 
   return (
     <>
         <MapView
           provider={Config.MAP_PROVIDER}
-          showsUserLocation={showsUserLocation}
+          showsUserLocation
           style={StyleSheet.absoluteFillObject}
           showsMyLocationButton={false}
           loadingEnabled
           showsCompass={false}
           key="map"
-          followsUserLocation={!disableAutoLocationFocus}
+          followsUserLocation={isUserLocationFocused}
           moveOnMarkerPress={false}
+          onRegionChange={(event) => {
+            if (selectLocationMode) {
+              const { latitude, longitude } = event;
+              saveSelectedLocation({
+                latitude: latitude.toFixed(6),
+                longitude: longitude.toFixed(6),
+              });
+            }
+          }}
           onPanDrag={() => (
-            disableAutoLocationFocus === false
-              ? setDisableAutoLocationFocus(true)
-              : null)}
+            !isUserLocationFocused === false ? setIsUserLocationFocused(false) : null
+          )}
           onUserLocationChange={(event) => {
-            if ((Platform.OS === 'ios' && !Config.MAP_PROVIDER !== 'google') || !showsUserLocation || disableAutoLocationFocus) {
+            if ((Platform.OS === 'ios' && !Config.MAP_PROVIDER !== 'google') || !isUserLocationFocused) {
               return; // Follow user location works for iOS
             }
             const { coordinate } = event.nativeEvent;
@@ -199,8 +146,7 @@ export default React.forwardRef(({
               ...coordinate,
             }));
 
-            if (!disableAutoLocationFocus) {
-              console.log('focusCurrentLocation');
+            if (isUserLocationFocused) {
               focusCurrentLocation();
             }
           }}
@@ -209,7 +155,11 @@ export default React.forwardRef(({
           customMapStyle={isDarkMode ? mapDarkMode : undefined}
           {...mapSettings}
         >
-
+          {chosenService && requestStopPoints.filter(sp => !!sp.location).length > 1
+            ? requestStopPoints
+              .filter(sp => !!sp.location)
+              .map(sp => (<StationsMap stopPoint={sp} />))
+            : null}
           {showOutOfTerritory && territory && territory.length ? territory
             .map(t => t.polygon.coordinates.map(poly => (
               <Polygon
@@ -222,9 +172,13 @@ export default React.forwardRef(({
                 ))}
               />
             ))) : null}
-          <VehicleMarker />
           {buildAvailabilityVehicles()}
         </MapView>
+        {selectLocationMode && (
+        <LocationMarkerContainer pointerEvents="none">
+          <LocationMarker />
+        </LocationMarkerContainer>
+        )}
     </>
   );
 });

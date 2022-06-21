@@ -7,7 +7,8 @@
     },
     "rideDetails": {
         "unavailable": "Not available",
-        "timeUntilArrival": "In {{minutes}} min"
+        "timeUntilArrival": "In {{minutes}} min",
+        "toolTipEta": "Eta {{minutes}} min"
     },
     "general": {
         "back": "Back",

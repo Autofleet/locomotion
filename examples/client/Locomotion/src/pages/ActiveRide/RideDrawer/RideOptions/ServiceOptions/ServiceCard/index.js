@@ -15,9 +15,11 @@ import {
   TopRow, CarContainer,
 } from './styled';
 import Tag from '../../../../../../Components/Tag';
+import { RidePageContext } from '../../../../../../context/newRideContext';
 
-const ServiceCard = ({ selected, service }) => {
+const ServiceCard = ({ service }) => {
   const theme = useContext(ThemeContext);
+  const { setChosenService, chosenService } = useContext(RidePageContext);
   const unavailable = !service.eta;
   const timeUntilArrival = i18n.t('rideDetails.timeUntilArrival', { minutes: moment.duration(moment(service.eta).diff(moment())).minutes().toString() });
   const unavailableText = i18n.t('rideDetails.unavailable');
@@ -39,7 +41,12 @@ const ServiceCard = ({ selected, service }) => {
     },
   };
   return (
-    <CardContainer theme={theme} selected={selected} noBackground>
+    <CardContainer
+      theme={theme}
+      selected={chosenService.id === service.id}
+      noBackground
+      disabled={unavailable}
+      onPress={() => setChosenService(service)}>
       <CarContainer>
         <CarIcon source={{ uri: service.iconUrl }} />
       </CarContainer>

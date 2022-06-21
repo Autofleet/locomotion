@@ -9,7 +9,7 @@ import {
   PageContainer,
 } from './styled';
 import Header from '../../Components/Header';
-import MainMap from './map';
+import MainMap from './newMap';
 import AvailabilityContextProvider from '../../context/availability';
 import BottomSheet from './RideDrawer/BottomSheet';
 import RideOptions from './RideDrawer/RideOptions';
