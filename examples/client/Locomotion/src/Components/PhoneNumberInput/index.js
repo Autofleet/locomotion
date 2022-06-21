@@ -18,11 +18,6 @@ const PhoneNumberInput = ({
   const [countryCode, setCountryCode] = useState(initialCode.dialCode);
   const asYouTypePhoneNUmber = new AsYouType();
 
-  const onChangeCountry = (v) => {
-    onPhoneNumberChange(value, v.callingCode[0]);
-    setCountryCode(v.callingCode[0]);
-  };
-
   const onChangeText = (v) => {
     const numberValue = `+${countryCode}${v}`;
     asYouTypePhoneNUmber.input(numberValue);
@@ -31,6 +26,16 @@ const PhoneNumberInput = ({
       asYouTypePhoneNUmber.isValid(),
     );
   };
+
+  const onChangeCountry = (v) => {
+    setCountryCode(v.callingCode[0]);
+  };
+
+  useEffect(() => {
+    if (value) {
+      onChangeText(value.substring(countryCode.length));
+    }
+  }, [countryCode]);
 
   const setIsoCode = async () => {
     const mobileIso = await getInputIsoCode();
