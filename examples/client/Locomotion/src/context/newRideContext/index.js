@@ -1,7 +1,7 @@
 import React, {
   useState, useEffect, useRef, createContext,
 } from 'react';
-import shortid from 'short-uuid';
+import shortid from 'shortid';
 import { getPosition } from '../../services/geo';
 import { getPlaces, getGeocode, getPlaceDetails } from './google-api';
 import StorageService from '../../services/storage';
