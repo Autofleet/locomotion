@@ -15,6 +15,7 @@ const PhoneNumberInput = ({
 }) => {
   const [isFocused, setIsFocused] = useState(false);
   const initialCode = codes.find(v => v.code === defaultCode);
+  const [prevCountryCode, setPrevCountryCode] = useState(initialCode.dialCode);
   const [countryCode, setCountryCode] = useState(initialCode.dialCode);
   const asYouTypePhoneNUmber = new AsYouType();
 
@@ -27,19 +28,24 @@ const PhoneNumberInput = ({
     );
   };
 
+  const changeCountryCode = (newCountryCode) => {
+    setPrevCountryCode(countryCode);
+    setCountryCode(newCountryCode);
+  };
+
   const onChangeCountry = (v) => {
-    setCountryCode(v.callingCode[0]);
+    changeCountryCode(v.callingCode[0]);
   };
 
   useEffect(() => {
     if (value) {
-      onChangeText(value.substring(countryCode.length));
+      onChangeText(value.substring(prevCountryCode.length));
     }
   }, [countryCode]);
 
   const setIsoCode = async () => {
     const mobileIso = await getInputIsoCode();
-    setCountryCode(mobileIso);
+    changeCountryCode(mobileIso);
   };
 
   useEffect(() => {
