@@ -8289,6 +8289,11 @@
   dependencies:
     "invariant" "^2.2.2"
 
+"react-native-payment-icons@^1.0.11":
+  "integrity" "sha512-HY/g704+J25tLtjNfsQBiYF8OLtbPSaLN4ZY3quSJahRD+Zo1d8rd1cszeXSRb7WJYBNRJ2VDhH8mk2yhVByNQ=="
+  "resolved" "https://registry.npmjs.org/react-native-payment-icons/-/react-native-payment-icons-1.0.11.tgz"
+  "version" "1.0.11"
+
 "react-native-phone-number-input@^2.1.0":
   "integrity" "sha512-EItzeDH6QUw6Kd1uwqFgcUl1YstxULB1M3HuCMHTvHVLoPE3ddjiuHyx+EHs0+4FcZtaXLQzLuC4cC/c4XIEuA=="
   "resolved" "https://registry.npmjs.org/react-native-phone-number-input/-/react-native-phone-number-input-2.1.0.tgz"
@@ -8364,7 +8369,7 @@
     "@svgr/plugin-svgo" "^6.1.2"
     "path-dirname" "^1.0.2"
 
-"react-native-svg@^12.3.0", "react-native-svg@>=12.0.0":
+"react-native-svg@*", "react-native-svg@^12.3.0", "react-native-svg@>=12.0.0":
   "integrity" "sha512-ESG1g1j7/WLD7X3XRFTQHVv0r6DpbHNNcdusngAODIxG88wpTWUZkhcM3A2HJTb+BbXTFDamHv7FwtRKWQ/ALg=="
   "resolved" "https://registry.npmjs.org/react-native-svg/-/react-native-svg-12.3.0.tgz"
   "version" "12.3.0"

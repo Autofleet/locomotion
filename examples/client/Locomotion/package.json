@@ -58,6 +58,7 @@
     "react-native-mixpanel": "^1.2.5",
     "react-native-modal": "^13.0.1",
     "react-native-onesignal": "^4.3.9",
+    "react-native-payment-icons": "^1.0.11",
     "react-native-phone-number-input": "^2.1.0",
     "react-native-picker-select": "^8.0.4",
     "react-native-reanimated": "^2.8.0",

@@ -7,7 +7,7 @@ import BottomSheet, {
 } from '@gorhom/bottom-sheet';
 import styled from 'styled-components';
 import SafeView from '../../../../Components/SafeView';
-import RideNotes from '../../../../popups/RideNotes';
+import ChoosePaymentMethod from '../../../../popups/ChoosePaymentMethod';
 import { BottomSheetContext } from '../../../../context/bottomSheetContext';
 
 const ContentContainer = styled(BottomSheetView)`
@@ -17,7 +17,6 @@ const ContentContainer = styled(BottomSheetView)`
 const BottomSheetComponent = forwardRef(({ children }, ref) => {
   const snapPoints = useMemo(() => ['CONTENT_HEIGHT', '95%'], []);
   const { getSnapPoints, setSnapPointIndex } = useContext(BottomSheetContext);
-
 
   const {
     animatedHandleHeight,
@@ -29,7 +28,6 @@ const BottomSheetComponent = forwardRef(({ children }, ref) => {
   const handleSheetChanges = useCallback((index) => {
     setSnapPointIndex(index);
   }, []);
-
   return (
     <>      
       <BottomSheet

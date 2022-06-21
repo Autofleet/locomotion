@@ -3,6 +3,7 @@ import RideButtons from './RideButtons';
 import ServiceOptions from './ServiceOptions';
 import RideNotes from '../../../../popups/RideNotes';
 import { RidePageContext } from '../../../../context/newRideContext';
+import ChoosePaymentMethod from '../../../../popups/ChoosePaymentMethod';
 
 type popupNames = 'notes' | 'payment' | 'passenger';
 
@@ -39,6 +40,7 @@ const RideOptions = () => {
         clearPopup();
       }}
     />
+    <ChoosePaymentMethod isVisible={popupToShow === 'payment'} />
   </Fragment>
 )};
 
