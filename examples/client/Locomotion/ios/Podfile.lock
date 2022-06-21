@@ -374,6 +374,8 @@ PODS:
   - React-jsinspector (0.68.1)
   - React-logger (0.68.1):
     - glog
+  - react-native-carrier-info (1.1.2):
+    - React
   - react-native-config (1.4.6):
     - react-native-config/App (= 1.4.6)
   - react-native-config/App (1.4.6):
@@ -846,6 +848,7 @@ SPEC CHECKSUMS:
   React-jsiexecutor: 4a4bae5671b064a2248a690cf75957669489d08c
   React-jsinspector: 218a2503198ff28a085f8e16622a8d8f507c8019
   React-logger: f79dd3cc0f9b44f5611c6c7862badd891a862cf8
+  react-native-carrier-info: 1e6299256bd7ceaa36f851b30e071b2b4fc406ad
   react-native-config: 7cd105e71d903104e8919261480858940a6b9c0e
   react-native-geolocation: 205c5f619aea7bd54067b7b51e0781cae2f37151
   react-native-google-maps: 8231ffa015bf8b222c2e2661fa9163cdb609a224
@@ -894,4 +897,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: e4576f7f62f91d5f76ab3196459068445fe2bef9
 
-COCOAPODS: 1.11.2
+COCOAPODS: 1.11.3
