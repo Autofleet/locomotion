@@ -49,7 +49,7 @@ const RidePage = ({ menuSide, mapSettings }) => {
       <BottomSheet
         ref={bottomSheetRef}
       >
-        {showOutOfTerritory && false ? (
+        {showOutOfTerritory ? (
           <NotAvilableHere onSetAnotherLocation={() => ({})} />
         ) : (
           <AddressSelector bottomSheetRef={bottomSheetRef} />
