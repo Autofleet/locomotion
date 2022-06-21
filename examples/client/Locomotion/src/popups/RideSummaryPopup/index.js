@@ -67,7 +67,7 @@ export default ({ closeAfter }) => {
   const Star = (props) => {
     const source = props.isOn ? lightStarIconSource : starIconSource;
     return (
-      <Button noBg {...props} data-test-id="RattingButton"><StarIcon source={source} isOn={props.isOn} /></Button>
+      <Button noBackground {...props} data-test-id="RattingButton"><StarIcon source={source} isOn={props.isOn} /></Button>
     );
   };
 

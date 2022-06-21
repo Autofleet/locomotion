@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import PhoneInput from 'react-native-phone-number-input';
 import { AsYouType } from 'libphonenumber-js';
+import { getInputIsoCode } from '../../services/MccMnc';
 import i18n from '../../I18n';
 import { ERROR_COLOR } from '../../context/theme';
 import codes from './codes.json';
@@ -18,6 +19,7 @@ const PhoneNumberInput = ({
   const asYouTypePhoneNUmber = new AsYouType();
 
   const onChangeCountry = (v) => {
+    onPhoneNumberChange(value, v.callingCode[0]);
     setCountryCode(v.callingCode[0]);
   };
 
@@ -29,6 +31,15 @@ const PhoneNumberInput = ({
       asYouTypePhoneNUmber.isValid(),
     );
   };
+
+  const setIsoCode = async () => {
+    const mobileIso = await getInputIsoCode();
+    setCountryCode(mobileIso);
+  };
+
+  useEffect(() => {
+    setIsoCode();
+  }, []);
 
   return (
     <PhoneInput

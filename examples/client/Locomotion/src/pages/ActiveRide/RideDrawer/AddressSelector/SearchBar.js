@@ -127,6 +127,7 @@ const SearchBar = ({
     return (
       <Row
         {...rowProps}
+        key={s.id}
       >
         <BottomSheetInput
           placeholder={i18n.t(placeholder)}

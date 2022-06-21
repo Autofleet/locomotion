@@ -5,6 +5,8 @@ import shortUuid from 'short-uuid';
 import { getPosition } from '../../services/geo';
 import { getPlaces, getGeocode, getPlaceDetails } from './google-api';
 import StorageService from '../../services/storage';
+import { createServiceEstimations, getServices } from './api';
+import { formatEstimationsResult, formatStopPointsForEstimations, TAG_OPTIONS } from './services';
 
 const STATION_AUTOREFRESH_INTERVAL = 60000;
 
@@ -52,7 +54,29 @@ const RidePageContextProvider = ({ navigation, children }) => {
   const [searchResults, setSearchResults] = useState(null);
   const [isReadyForSubmit, setIsReadyForSubmit] = useState(false);
   const [historyResults, setHistoryResults] = useState([]);
+  const [serviceEstimations, setServiceEstimations] = useState(null);
 
+  const formatEstimations = (services, estimations) => {
+    const estimationsMap = {};
+    estimations.map((e) => {
+      estimationsMap[e.serviceId] = e;
+    });
+    return services.map((service) => {
+      const estimationForService = estimationsMap[service.id];
+      const estimationResult = estimationForService && estimationForService.results[0];
+      return formatEstimationsResult(service, estimationResult);
+    });
+  };
+
+  const getServiceEstimations = async () => {
+    const formattedStopPoints = formatStopPointsForEstimations(requestStopPoints);
+    const [estimations, services] = await Promise.all([
+      createServiceEstimations(formattedStopPoints),
+      getServices(),
+    ]);
+    const formattedEstimations = formatEstimations(services, estimations);
+    setServiceEstimations(formattedEstimations);
+  };
 
   useEffect(() => {
     initLocation();
@@ -236,11 +260,12 @@ const RidePageContextProvider = ({ navigation, children }) => {
     setHistoryResults(history);
   };
 
-  const checkFormSps = () => {
+  const checkFormSps = async () => {
     const isSpsReady = requestStopPoints.every(r => r.location && r.location.lat && r.location.lng && r.description);
     if (requestStopPoints.length && isSpsReady) {
       console.log('READY SEND REQUEST');
       setIsReadyForSubmit(true);
+      await getServiceEstimations();
     } else {
       console.log('NOT READY');
       setIsReadyForSubmit(false);
@@ -270,6 +295,7 @@ const RidePageContextProvider = ({ navigation, children }) => {
         checkFormSps,
         historyResults,
         loadHistory,
+        serviceEstimations,
       }}
     >
       {children}

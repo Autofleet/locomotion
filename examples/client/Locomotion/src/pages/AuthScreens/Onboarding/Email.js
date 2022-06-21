@@ -17,7 +17,9 @@ import { UserContext } from '../../../context/user';
 const Email = ({ navigation }) => {
   const route = useRoute();
   const { nextScreen } = useContext(OnboardingContext);
-  const { updateState, updateUserInfo, user } = useContext(UserContext);
+  const {
+    updateState, updateUserInfo, user, verifyEmail, getUserFromServer,
+  } = useContext(UserContext);
   const [errorText, setErrorText] = useState(false);
   const [email, setEmail] = useState(user.email);
 
@@ -30,8 +32,13 @@ const Email = ({ navigation }) => {
   const onNext = async () => {
     try {
       await updateUserInfo({ email: email.toLowerCase() });
+      await verifyEmail();
       nextScreen(MAIN_ROUTES.EMAIL);
     } catch (e) {
+      const savedUser = await getUserFromServer();
+      if (savedUser.email === email.toLowerCase()) {
+        return nextScreen(MAIN_ROUTES.EMAIL);
+      }
       setErrorText(i18n.t('onboarding.pages.email.inUseError'));
     }
   };

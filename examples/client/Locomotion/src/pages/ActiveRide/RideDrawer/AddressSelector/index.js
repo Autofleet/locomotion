@@ -36,6 +36,10 @@ const HistoryContainer = styled.View`
   width: 100%;
 `;
 
+const AddressContainer = styled.View`
+  padding: 0px 30px 20px 30px;
+`;
+
 
 const AddressActionsText = styled.Text`
     color: ${({ theme }) => theme.primaryColor};

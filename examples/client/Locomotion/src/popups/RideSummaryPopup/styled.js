@@ -34,7 +34,7 @@ export const SummarySubTitle = styled.Text`
   padding-bottom: 15px;
 `;
 
-export const CloseContainer = styled(Button).attrs({ noBg: true })`
+export const CloseContainer = styled(Button).attrs({ noBackground: true })`
     position: absolute;
     right: 15px;
     top: 15px;

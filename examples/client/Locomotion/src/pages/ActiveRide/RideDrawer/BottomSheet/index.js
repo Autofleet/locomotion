@@ -8,11 +8,18 @@ import BottomSheet, {
 } from '@gorhom/bottom-sheet';
 import styled from 'styled-components';
 import SafeView from '../../../../Components/SafeView';
+import RideNotes from '../../../../popups/RideNotes';
 import { BottomSheetContext } from '../../../../context/bottomSheetContext';
 
+const ContentContainer = styled(BottomSheetView)`
+  flex: 1;
+`;
 
 const BottomSheetComponent = forwardRef(({ children }, ref) => {
-  const snapPoints = useMemo(() => ['25%', '100%'], []);
+  const snapPoints = useMemo(() => ['CONTENT_HEIGHT', '95%'], []);
+  const { getSnapPoints, setSnapPointIndex } = useContext(BottomSheetContext);
+
+
   const {
     setSnapPointIndex,
     sheetState,
@@ -36,23 +43,26 @@ const BottomSheetComponent = forwardRef(({ children }, ref) => {
   }, []);
 
   return (
-    <BottomSheet
-      ref={ref}
-      index={0}
-      snapPoints={snapPoints}
-      onChange={handleSheetChanges}
-      onAnimate={onAnimate}
-    >
-      <SafeView
-        style={{
-          flex: 1,
-          flexDirection: 'column',
-        }}
+    <>
+      <RideNotes />
+      <BottomSheet
+        ref={ref}
+        index={0}
+        snapPoints={snapPoints}
+        onChange={handleSheetChanges}
+        onAnimate={onAnimate}
       >
-        {children}
-      </SafeView>
+        <SafeView>
+          <ContentContainer
+            onLayout={handleContentLayout}
+          >
+            {children}
 
-    </BottomSheet>
+          </ContentContainer>
+        </SafeView>
+
+      </BottomSheet>
+    </>
   );
 });
 

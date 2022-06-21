@@ -1,15 +1,16 @@
 import React, { useContext, useEffect, useRef } from 'react';
 import { useNavigation } from '@react-navigation/native';
 
-import { LogBox, StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import {
   useBottomSheetDynamicSnapPoints,
   BottomSheetView,
   BottomSheetScrollView,
 } from '@gorhom/bottom-sheet';
 import NotAvilableHere from '../../Components/NotAvilableHere';
+import { NotAvailableHere } from '../../Components/BsPages';
 import { RideStateContextContext, RidePageContextProvider } from '../../context';
-import NewRidePageContextProvider from '../../context/newRideContext';
+import NewRidePageContextProvider, { RidePageContext } from '../../context/newRideContext';
 import BottomSheetContextProvider from '../../context/bottomSheetContext';
 import {
   PageContainer,
@@ -18,6 +19,7 @@ import Header from '../../Components/Header';
 import MainMap from './map';
 import AvailabilityContextProvider from '../../context/availability';
 import BottomSheet from './RideDrawer/BottomSheet';
+import RideOptions from './RideDrawer/RideOptions';
 import AddressSelector from './RideDrawer/AddressSelector';
 
 // import de from './src/I18n/en.json';
@@ -34,6 +36,8 @@ const styles = StyleSheet.create({
 
 const RidePage = ({ menuSide, mapSettings }) => {
   const { initGeoService, showOutOfTerritory } = useContext(RideStateContextContext);
+  const { serviceEstimations } = useContext(RidePageContext);
+
   const navigation = useNavigation();
   const mapRef = useRef();
   const bottomSheetRef = useRef(null);
@@ -41,6 +45,12 @@ const RidePage = ({ menuSide, mapSettings }) => {
   useEffect(() => {
     initGeoService();
   }, []);
+
+  useEffect(() => {
+    if (serviceEstimations) {
+      bottomSheetRef.current.collapse();
+    }
+  }, [serviceEstimations]);
 
   return (
     <PageContainer>
@@ -50,9 +60,11 @@ const RidePage = ({ menuSide, mapSettings }) => {
         ref={bottomSheetRef}
       >
         {showOutOfTerritory ? (
-          <NotAvilableHere onSetAnotherLocation={() => ({})} />
+          <NotAvailableHere onButtonPress={() => ({})} />
         ) : (
-          <AddressSelector bottomSheetRef={bottomSheetRef} />
+          !serviceEstimations
+            ? <AddressSelector bottomSheetRef={bottomSheetRef} />
+            : <RideOptions />
         )}
       </BottomSheet>
     </PageContainer>
