@@ -8,6 +8,7 @@ import BottomSheet, {
 import styled from 'styled-components';
 import SafeView from '../../../../Components/SafeView';
 import RideNotes from '../../../../popups/RideNotes';
+import ChoosePaymentMethod from '../../../../popups/ChoosePaymentMethod';
 import { BottomSheetContext } from '../../../../context/bottomSheetContext';
 
 const ContentContainer = styled(BottomSheetView)`
@@ -20,6 +21,7 @@ const ContentContainer = styled(BottomSheetView)`
 `;
 
 const BottomSheetComponent = forwardRef(({ children }, ref) => {
+  const [paymentMethodPopupOpen, setPaymentMethodPopupOpen] = useState(true);
   const snapPoints = useMemo(() => ['CONTENT_HEIGHT', '100%'], []);
   const { getSnapPoints, setSnapPointIndex } = useContext(BottomSheetContext);
 
@@ -34,10 +36,10 @@ const BottomSheetComponent = forwardRef(({ children }, ref) => {
   const handleSheetChanges = useCallback((index) => {
     setSnapPointIndex(index);
   }, []);
-
   return (
     <>
       <RideNotes />
+      <ChoosePaymentMethod isVisible={paymentMethodPopupOpen} setIsVisible={setPaymentMethodPopupOpen} />
       <BottomSheet
         ref={ref}
         index={0}

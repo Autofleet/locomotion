@@ -10,6 +10,7 @@ const SvgIcon = ({
   height,
   margin,
   onPress,
+  containerStyle,
 }) => (
   <IconContainer
     onPress={onPress}
@@ -17,6 +18,7 @@ const SvgIcon = ({
     margin={margin}
     height={height}
     width={width}
+    style={containerStyle}
   >
     <Svg
       width={width}

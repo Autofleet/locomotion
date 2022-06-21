@@ -35,6 +35,7 @@ const RoundedButton = ({
       hollow={hollow}
       disabled={(loadingState || disabled)}
       type={type}
+      style={style}
       useCancelTextButton={useCancelTextButton}
     >
       <ButtonTextContainer>

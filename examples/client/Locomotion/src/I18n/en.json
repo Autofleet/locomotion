@@ -173,6 +173,12 @@
             "save": "Save",
             "cancel": "Cancel"
         },
+        "choosePaymentMethod": {
+            "title": "Choose payment method",
+            "placeholder": "How to find me, Flights, info, etc.",
+            "save": "Save",
+            "cancel": "Cancel"
+        },
         "rideSummary": {
             "thanksForRideHeadline": "Thanks for your ride!",
             "rideDataHeadline": "",
@@ -234,6 +240,9 @@
     "payments": {
         "pageTitle": "Payments Method",
         "submitCard": "Add card",
+        "addNewCreditCard": "Add New Credit Card",
+        "expired": "expired",
+        "hasOutstandingBalance": "Outstanding Balance",
         "skipForNow": "Skip for now",
         "balance": "Balance",
         "deleteCard": "Remove",
