@@ -20,7 +20,6 @@ const PhoneNumberInput = ({
     const numberValue = `${v}`;
     asYouTypePhoneNumber.input(numberValue);
     const number = asYouTypePhoneNumber.getNumberValue();
-    console.log({number})
     return onPhoneNumberChange(
       number && number.replace('+', ''),
       asYouTypePhoneNumber.isValid(),
