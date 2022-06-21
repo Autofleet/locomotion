@@ -2,12 +2,6 @@ import React, { useContext, useEffect, useRef } from 'react';
 import { useNavigation } from '@react-navigation/native';
 
 import { StyleSheet, View } from 'react-native';
-import {
-  useBottomSheetDynamicSnapPoints,
-  BottomSheetView,
-  BottomSheetScrollView,
-} from '@gorhom/bottom-sheet';
-
 import { NotAvailableHere } from '../../Components/BsPages';
 import { RideStateContextContext, RidePageContextProvider } from '../../context';
 import NewRidePageContextProvider, { RidePageContext } from '../../context/newRideContext';
@@ -16,7 +10,7 @@ import {
   PageContainer,
 } from './styled';
 import Header from '../../Components/Header';
-import MainMap from './map';
+import MainMap from './newMap';
 import AvailabilityContextProvider from '../../context/availability';
 import BottomSheet from './RideDrawer/BottomSheet';
 import RideOptions from './RideDrawer/RideOptions';

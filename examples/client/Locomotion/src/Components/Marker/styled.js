@@ -1,6 +1,7 @@
 
 import React from 'react';
 import styled from 'styled-components';
+import { FONT_SIZES, FONT_WEIGHTS } from '../../context/theme';
 
 export const PointDot = styled.View`
   border-color: #fff;
@@ -54,7 +55,43 @@ export const MarkerToolTipText = styled.Text`
 `;
 
 export const MarkerContainer = styled.View`
-  display: flex;
+`;
+
+export const InfoBox = styled.View`
+   height: 50px;
+   display: flex;
+   flex-direction: column;
+   background-color: #e3e3e3;
+   border-radius: 8px;
+   padding: 5px;
+   align-items: center;
+    margin-top: -45px;
+`;
+
+export const Type = styled.View`
+  height: 50%;
+  width: 100%;
+  margin: 0 auto;
+  background-color: #ffffff;
+  border-radius: 8px;
   align-items: center;
-  padding: 2px;
+`;
+
+export const SubText = styled.Text`
+    height: 50%;
+    ${FONT_SIZES.LARGE}
+    ${FONT_WEIGHTS.REGULAR}
+    padding: 5px;
+    max-width: 150px;
+`;
+
+export const IconContainer = styled.View`
+left: 40%;
+margin-top: 5px;
+`;
+
+export const TypeText = styled.Text`
+${FONT_SIZES.LARGE}
+${FONT_WEIGHTS.SEMI_BOLD}
+margin: 0 auto;
 `;

@@ -6,6 +6,7 @@ export const TAG_OPTIONS = {
 };
 
 export const formatEstimationsResult = (service, estimationResult) => ({
+  id: service.id,
   name: service.displayName,
   eta: (estimationResult || {}).minPickupEta,
   price: (estimationResult || {}).priceAmount,

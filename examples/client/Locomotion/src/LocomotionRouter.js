@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { LogBox } from 'react-native';
 import Config from 'react-native-config';
 import { initStripe } from '@stripe/stripe-react-native';
 import 'react-native-gesture-handler';
@@ -7,6 +8,7 @@ import { MainProvider } from './context';
 import MainRouter from './pages';
 import RidePopups from './popups/RidePopups';
 
+LogBox.ignoreAllLogs();
 const STRIPE_PUBLISHER_KEY = Config.STRIPE_PUBLISHER_KEY || '';
 
 export default (props) => {
