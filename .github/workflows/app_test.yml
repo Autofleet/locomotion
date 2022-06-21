@@ -11,7 +11,7 @@ defaults:
     working-directory: examples/client/Locomotion
 
 jobs:
-  lint:
+  Test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
