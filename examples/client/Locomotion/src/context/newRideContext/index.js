@@ -218,11 +218,8 @@ const RidePageContextProvider = ({ navigation, children }) => {
   const clearHistory = async () => {
     await StorageService.save({ lastAddresses: [] });
   };
-  // clearHistory();
 
   const saveLastAddresses = async (item) => {
-    console.log('IN SAVEEE', item);
-
     const history = await getLastAddresses();
     const filteredHistory = (history || []).filter(h => h.placeId !== item.placeId);
     filteredHistory.unshift(item);
@@ -231,7 +228,6 @@ const RidePageContextProvider = ({ navigation, children }) => {
 
   const getLastAddresses = async () => {
     const history = await StorageService.get('lastAddresses') || [];
-    console.log('histroy getLastAddresses', history);
     return history;
   };
 

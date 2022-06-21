@@ -6,7 +6,6 @@ export const BottomSheetContext = createContext();
 
 const BottomSheetProvider = ({ navigation, children }) => {
   const [isExpanded, setIsExpanded] = useState(false);
-  const [sheetState, setSheetState] = useState('collapsed');
 
   const [snapPointsState, setSnapPointsState] = useState(['CONTENT_HEIGHT', '100%']);
   const [snapPointIndex, setSnapPointIndex] = useState(0);
@@ -26,8 +25,6 @@ const BottomSheetProvider = ({ navigation, children }) => {
         getSnapPoints,
         snapPointIndex,
         setSnapPointIndex,
-        sheetState,
-        setSheetState,
         setIsExpanded,
       }}
     >

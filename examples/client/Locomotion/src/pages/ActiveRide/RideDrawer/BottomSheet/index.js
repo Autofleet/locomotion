@@ -16,7 +16,6 @@ const BottomSheetComponent = forwardRef(({ children }, ref) => {
   const {
     setSnapPointIndex,
     sheetState,
-    setSheetState,
     setIsExpanded,
   } = useContext(BottomSheetContext);
 

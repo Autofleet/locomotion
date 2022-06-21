@@ -149,7 +149,6 @@ const SearchBar = ({
   });
 
   const onBackPress = () => {
-    console.log('BACK PRESS');
     setSearchTerm(null);
     if (selectedInputTarget) {
       selectedInputTarget.blur();
