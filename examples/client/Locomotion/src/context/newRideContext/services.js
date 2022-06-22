@@ -18,6 +18,6 @@ export const formatEstimationsResult = (service, estimationResult) => ({
 
 export const formatStopPointsForEstimations = requestStopPoints => requestStopPoints.map(sp => ({
   type: sp.type,
-  lat: sp.location.lat,
-  lng: sp.location.lng,
+  lat: sp.lat,
+  lng: sp.lng,
 }));
