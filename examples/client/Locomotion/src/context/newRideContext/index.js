@@ -71,13 +71,15 @@ const latLngToAddress = async (lat, lng) => {
 const RidePageContextProvider = ({ navigation, children }) => {
   const [requestStopPoints, setRequestStopPoints] = useState([{
     type: 'pickup',
-    location: null,
+    lat: null,
+    lng: null,
     useDefaultLocation: true,
     id: shortid.generate(),
   },
   {
     type: 'dropoff',
-    location: null,
+    lat: null,
+    lng: null,
     useDefaultLocation: false,
     id: shortid.generate(),
   }]);
@@ -136,7 +138,8 @@ const RidePageContextProvider = ({ navigation, children }) => {
     if (currentAddress) {
       const locationData = {
         description: currentAddress.description,
-        location: currentAddress.location,
+        lat: currentAddress.lat,
+        lng: currentAddress.lng,
       };
       return locationData;
     }
@@ -157,7 +160,8 @@ const RidePageContextProvider = ({ navigation, children }) => {
           return {
             ...s,
             description: currentAddress.description,
-            location: currentAddress.location,
+            lat: currentAddress.lat,
+            lng: currentAddress.lng,
           };
         }
 
@@ -210,16 +214,16 @@ const RidePageContextProvider = ({ navigation, children }) => {
   const reverseLocationGeocode = async () => {
     try {
       const currentCoords = await getCurrentLocation();
-      console.log('currentCoords', currentCoords);
-
       const location = `${currentCoords.latitude},${currentCoords.longitude}`;
       const data = await getGeocode({
         latlng: location,
       });
 
+      const { lat, lng } = data.results[0].geometry.location;
       const geoLocation = {
         description: data.results[0].formatted_address,
-        location: data.results[0].geometry.location,
+        lat,
+        lng,
       };
 
       return geoLocation;
@@ -246,8 +250,9 @@ const RidePageContextProvider = ({ navigation, children }) => {
       ...reqSps[selectedInputIndex],
       description: selectedItem.fullText,
       streetAddress: selectedItem.text,
-      location: enrichedPlace,
       placeId: selectedItem.placeId,
+      lat: enrichedPlace.lat,
+      lng: enrichedPlace.lng,
     };
     setRequestStopPoints(reqSps);
     resetSearchResults();
@@ -301,7 +306,7 @@ const RidePageContextProvider = ({ navigation, children }) => {
   };
 
   const checkFormSps = async () => {
-    const isSpsReady = requestStopPoints.every(r => r.location && r.location.lat && r.location.lng && r.description);
+    const isSpsReady = requestStopPoints.every(r => r.lat && r.lng && r.description);
     if (requestStopPoints.length && isSpsReady) {
       console.log('READY SEND REQUEST');
       setIsReadyForSubmit(true);
