@@ -66,7 +66,7 @@ const RidePageContextProvider = ({ navigation, children }) => {
     });
     const formattedServices = services.map((service) => {
       const estimationForService = estimationsMap[service.id];
-      const estimationResult = estimationForService && estimationForService.results[0];
+      const estimationResult = estimationForService && estimationForService.results.length && estimationForService.results[0];
       return formatEstimationsResult(service, estimationResult);
     });
     return formattedServices.sort((a, b) => a.priority - b.priority);
