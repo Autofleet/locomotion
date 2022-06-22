@@ -6,7 +6,9 @@ import { getPosition } from '../../services/geo';
 import { getPlaces, getGeocode, getPlaceDetails } from './google-api';
 import StorageService from '../../services/storage';
 import { createServiceEstimations, getServices } from './api';
-import { formatEstimationsResult, formatStopPointsForEstimations, TAG_OPTIONS } from './services';
+import {
+  formatEstimationsResult, formatStopPointsForEstimations, getEstimationTags, TAG_OPTIONS,
+} from './utils';
 
 const STATION_AUTOREFRESH_INTERVAL = 60000;
 
@@ -59,7 +61,7 @@ const RidePageContextProvider = ({ navigation, children }) => {
   const [serviceEstimations, setServiceEstimations] = useState(null);
   const [chosenService, setChosenService] = useState(null);
 
-  const formatEstimations = (services, estimations) => {
+  const formatEstimations = (services, estimations, tags) => {
     const estimationsMap = {};
     estimations.map((e) => {
       estimationsMap[e.serviceId] = e;
@@ -67,7 +69,7 @@ const RidePageContextProvider = ({ navigation, children }) => {
     const formattedServices = services.map((service) => {
       const estimationForService = estimationsMap[service.id];
       const estimationResult = estimationForService && estimationForService.results.length && estimationForService.results[0];
-      return formatEstimationsResult(service, estimationResult);
+      return formatEstimationsResult(service, estimationResult, tags);
     });
     return formattedServices.sort((a, b) => a.priority - b.priority);
   };
@@ -78,7 +80,8 @@ const RidePageContextProvider = ({ navigation, children }) => {
       createServiceEstimations(formattedStopPoints),
       getServices(),
     ]);
-    const formattedEstimations = formatEstimations(services, estimations);
+    const tags = getEstimationTags(estimations);
+    const formattedEstimations = formatEstimations(services, estimations, tags);
     setChosenService(formattedEstimations.find(e => e.eta));
     setServiceEstimations(formattedEstimations);
   };
