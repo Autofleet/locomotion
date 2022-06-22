@@ -1,3 +1,4 @@
+/* eslint-disable no-mixed-operators */
 import React, { useState } from 'react';
 import { TouchableOpacity, View, Text } from 'react-native';
 import moment from 'moment';
