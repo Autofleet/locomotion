@@ -42,6 +42,7 @@ const BottomSheetComponent = forwardRef(({ children }, ref) => {
         snapPoints={snapPoints}
         onChange={handleSheetChanges}
         onAnimate={onAnimate}
+        android_keyboardInputMode="adjustResize"
       >
         <SafeView
           style={{
