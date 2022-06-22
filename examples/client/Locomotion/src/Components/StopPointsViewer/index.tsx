@@ -19,6 +19,7 @@ const StopPointsViewer = ({ goBackToAddressSelector }) => {
         Svg={backArrow}
         width={ICON_SIZE}
         height={ICON_SIZE}
+        style={{ transform: [{ rotate: '180deg' }] }}
       />
       <StreetAddress numberOfLines={1}>
         {lastSp.streetAddress}

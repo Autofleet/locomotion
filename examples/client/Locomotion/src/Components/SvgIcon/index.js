@@ -10,12 +10,14 @@ const SvgIcon = ({
   height,
   margin,
   onPress,
+  style,
 }) => (
   <Svg
     width={width}
     height={height}
     stroke={stroke}
     fill={fill}
+    style={style}
   />
 );
 
@@ -29,6 +31,7 @@ SvgIcon.defaultProps = {
   height: 20,
   margin: null,
   onPress: undefined,
+  style: {},
 };
 
 SvgIcon.propTypes = {
@@ -39,4 +42,5 @@ SvgIcon.propTypes = {
   height: propTypes.number,
   margin: propTypes.string,
   onPress: propTypes.func,
+  style: propTypes.object,
 };
