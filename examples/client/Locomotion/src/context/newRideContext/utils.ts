@@ -6,7 +6,7 @@ export const TAG_OPTIONS = {
   CHEAPEST: i18n.t('services.tags.cheapest'),
 };
 
-export const getEstimationTags = (estimations) => {
+export const getEstimationTags = (estimations: any[]) => {
   const tags: any = {
     fastest: {},
     cheapest: {},
@@ -31,7 +31,7 @@ export const getEstimationTags = (estimations) => {
   };
 };
 
-export const formatEstimationsResult = (service, estimationResult, tags) => {
+export const formatEstimationsResult = (service: any, estimationResult: any, tags: any) => {
   const estimation = estimationResult || {};
   return {
     id: service.id,
@@ -47,7 +47,7 @@ export const formatEstimationsResult = (service, estimationResult, tags) => {
   };
 };
 
-export const formatStopPointsForEstimations = requestStopPoints => requestStopPoints.map(sp => ({
+export const formatStopPointsForEstimations = (requestStopPoints: any[]) => requestStopPoints.map(sp => ({
   type: sp.type,
   lat: sp.lat,
   lng: sp.lng,

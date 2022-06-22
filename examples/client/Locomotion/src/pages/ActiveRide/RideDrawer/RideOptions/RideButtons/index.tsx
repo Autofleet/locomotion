@@ -15,11 +15,12 @@ import { PaymentMethodInterface } from '../../../../../context/payments/interfac
 import * as NavigationService from '../../../../../services/navigation';
 import { MAIN_ROUTES } from '../../../../routes';
 import { RideStateContextContext } from '../../../../../context/ridePageStateContext';
+import { popupNames } from '../utils';
 
 
 interface RideButtonsProps {
     displayPassenger: boolean;
-    setPopupName: () => void;
+    setPopupName: (popupName: popupNames) => void;
 }
 
 const RideButtons = ({
