@@ -6,8 +6,9 @@ import ServiceOptions from './ServiceOptions';
 import RideNotes from '../../../../popups/RideNotes';
 import { RidePageContext } from '../../../../context/newRideContext';
 import ChoosePaymentMethod from '../../../../popups/ChoosePaymentMethod';
-import { BottomSheetContext } from '../../../../context/bottomSheetContext';
 import { popupNames } from './utils';
+import { BottomSheetContext, SNAP_POINT_STATES } from '../../../../context/bottomSheetContext';
+
 
 const RideOptions = () => {
   const [popupToShow, setPopupToShow] = useState<popupNames | null>(null);
@@ -35,7 +36,7 @@ const RideOptions = () => {
         setPopupName={setPopupName}
       />
     ));
-    setSnapPointsState(['50%', '100%']);
+    setSnapPointsState(SNAP_POINT_STATES.SERVICE_ESTIMATIONS);
     return () => {
       setFooterComponent(null);
     };

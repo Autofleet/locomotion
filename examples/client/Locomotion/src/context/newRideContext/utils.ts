@@ -1,9 +1,40 @@
 import moment from 'moment';
+import shortid from 'shortid';
 import i18n from '../../I18n';
+import { getGeocode } from './google-api';
 
 export const TAG_OPTIONS = {
   FASTEST: i18n.t('services.tags.fastest'),
   CHEAPEST: i18n.t('services.tags.cheapest'),
+};
+
+export const INITIAL_STOP_POINTS = [{
+  type: 'pickup',
+  lat: null,
+  lng: null,
+  useDefaultLocation: true,
+  id: shortid.generate(),
+},
+{
+  type: 'dropoff',
+  lat: null,
+  lng: null,
+  useDefaultLocation: false,
+  id: shortid.generate(),
+}];
+
+
+export const buildStreetAddress = (data: any) => {
+  const streetAddress: any = {};
+  data.results[0].address_components.map((ac: any) => {
+    if (ac.types.includes('street_number')) {
+      streetAddress.number = ac.long_name;
+    }
+    if (ac.types.includes('route')) {
+      streetAddress.name = ac.long_name;
+    }
+  });
+  return `${streetAddress.name} ${streetAddress.number}`;
 };
 
 export const getEstimationTags = (estimations: any[]) => {
@@ -31,6 +62,14 @@ export const getEstimationTags = (estimations: any[]) => {
   };
 };
 
+export const latLngToAddress = async (lat: string, lng: string) => {
+  const location = `${lat},${lng}`;
+  const data = await getGeocode({
+    latlng: location,
+  });
+  return data.results[0].formatted_address;
+};
+
 export const formatEstimationsResult = (service: any, estimationResult: any, tags: any) => {
   const estimation = estimationResult || {};
   return {
@@ -40,7 +79,7 @@ export const formatEstimationsResult = (service: any, estimationResult: any, tag
     price: estimation.priceAmount,
     currency: estimation.priceCurrency,
     availableSeats: service.maxPassengers || 4,
-    tag: Object.entries(tags).map(([key, value]) => value === service.id && key),
+    tags: Object.entries(tags).map(([key, value]) => value === service.id && key),
     iconUrl: service.icon,
     description: service.displayDescription,
     priority: service.priority,

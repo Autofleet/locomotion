@@ -4,7 +4,7 @@ import React, {
 import { Platform, StyleSheet } from 'react-native';
 import MapView, { Polygon } from 'react-native-maps';
 import Config from 'react-native-config';
-import { RidePageContext, latLngToAddress } from '../../context/newRideContext';
+import { RidePageContext } from '../../context/newRideContext';
 import { RideStateContextContext } from '../../context';
 import { getPosition } from '../../services/geo';
 import { LocationMarker, LocationMarkerContainer } from './styled';
@@ -13,6 +13,7 @@ import { Context as ThemeContext, THEME_MOD } from '../../context/theme';
 import { AvailabilityContext } from '../../context/availability';
 import AvailabilityVehicle from '../../Components/AvailabilityVehicle';
 import StationsMap from '../../Components/Marker';
+import { latLngToAddress } from '../../context/newRideContext/utils';
 
 const MAP_EDGE_PADDING = {
   top: 80,
@@ -94,7 +95,7 @@ export default React.forwardRef(({
 
   const showInputPointsOnMap = () => {
     const coordsToFit = requestStopPoints
-      .filter((sp => sp.location))
+      .filter((sp => sp.lat))
       .map(sp => (
         {
           latitude: parseFloat(sp.lat),
@@ -107,7 +108,7 @@ export default React.forwardRef(({
       });
   };
   useEffect(() => {
-    if (requestStopPoints.filter((sp => sp.location)).length > 1) {
+    if (requestStopPoints.filter((sp => sp.lat)).length > 1) {
       showInputPointsOnMap();
     }
   }, [requestStopPoints]);
@@ -160,9 +161,9 @@ export default React.forwardRef(({
         customMapStyle={isDarkMode ? mapDarkMode : undefined}
         {...mapSettings}
       >
-        {chosenService && requestStopPoints.filter(sp => !!sp.location).length > 1
+        {chosenService && requestStopPoints.filter(sp => !!sp.lat).length > 1
           ? requestStopPoints
-            .filter(sp => !!sp.location)
+            .filter(sp => !!sp.lat)
             .map(sp => (<StationsMap stopPoint={sp} />))
           : null}
         {showOutOfTerritory && territory && territory.length ? territory

@@ -17,7 +17,7 @@ import i18n from '../../../../I18n';
 import AddressRow from './AddressLine';
 import SearchBar from './SearchBar';
 import { RidePageContext } from '../../../../context/newRideContext';
-import { BottomSheetContext } from '../../../../context/bottomSheetContext';
+import { BottomSheetContext, SNAP_POINT_STATES } from '../../../../context/bottomSheetContext';
 
 const Container = styled(BottomSheetView)`
   display: flex;
@@ -56,11 +56,12 @@ const ContentContainer = styled.View`
   flex: 1;
 
 `;
-const AddressSelectorBottomSheet = ({ bottomSheetRef }) => {
+const AddressSelectorBottomSheet = () => {
   const userContext = useContext(RidePageContext);
 
   const {
     isExpanded,
+    setSnapPointsState,
   } = useContext(BottomSheetContext);
 
   const { expand, collapse } = useBottomSheet();
@@ -76,6 +77,7 @@ const AddressSelectorBottomSheet = ({ bottomSheetRef }) => {
 
   const onSearchFocus = () => {
     if (!isExpanded) {
+      setSnapPointsState(SNAP_POINT_STATES.ADDRESS_SELECTOR);
       expand();
     }
   };
@@ -112,12 +114,12 @@ const AddressSelectorBottomSheet = ({ bottomSheetRef }) => {
                 icon="locationPin"
                 actionButton
               />
+              <BottomSheetScrollView contentContainerStyle={{ overflow: 'visible' }}>
+                {(userContext.searchResults || userContext.historyResults).map(h => <AddressRow {...h} onPress={() => userContext.onAddressSelected(h)} />)}
+              </BottomSheetScrollView>
             </>
           )
           : null}
-        <BottomSheetScrollView contentContainerStyle={{ overflow: 'visible' }}>
-          {(userContext.searchResults || userContext.historyResults).map(h => <AddressRow {...h} onPress={() => userContext.onAddressSelected(h, true)} />)}
-        </BottomSheetScrollView>
       </HistoryContainer>
     </ContentContainer>
 

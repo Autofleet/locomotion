@@ -86,7 +86,7 @@ const SearchBar = ({
     setSelectedInputTarget,
     requestStopPoints,
     updateRequestSp,
-    validateRequestedStopPoints,
+    initSps,
   } = useContext(RidePageContext);
 
   const pickupRef = useRef(null);
@@ -145,6 +145,7 @@ const SearchBar = ({
   });
 
   const onBackPress = () => {
+    initSps();
     setSearchTerm(null);
     if (selectedInputTarget) {
       selectedInputTarget.blur();

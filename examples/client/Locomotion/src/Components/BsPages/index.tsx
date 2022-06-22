@@ -6,7 +6,7 @@ import { RidePageContext } from '../../context/newRideContext';
 import i18n from '../../I18n';
 import { FONT_SIZES, FONT_WEIGHTS } from '../../context/theme';
 import Button from '../Button';
-import { BottomSheetContext } from '../../context/bottomSheetContext';
+import { BottomSheetContext, SNAP_POINT_STATES } from '../../context/bottomSheetContext';
 
 const OtherButton = styled(Button)`
   width: 100%;
@@ -119,7 +119,7 @@ export const ConfirmPickup = (props: any) => {
   useEffect(() => {
     setSelectLocationMode(true);
     setSnapPointIndex(0);
-    setSnapPointsState(['25%']);
+    setSnapPointsState(SNAP_POINT_STATES.CONFIRM_PICKUP);
   }, []);
 
   return (
