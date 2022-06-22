@@ -96,8 +96,8 @@ export default React.forwardRef(({
       .filter((sp => sp.location))
       .map(sp => (
         {
-          latitude: parseFloat(sp.location.lat),
-          longitude: parseFloat(sp.location.lng),
+          latitude: parseFloat(sp.lat),
+          longitude: parseFloat(sp.lng),
         }
       ));
     mapInstance.current.fitToCoordinates(coordsToFit,
