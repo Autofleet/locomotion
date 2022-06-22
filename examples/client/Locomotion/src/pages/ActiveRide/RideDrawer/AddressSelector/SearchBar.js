@@ -87,8 +87,9 @@ const SearchBar = ({
     requestStopPoints,
     updateRequestSp,
     checkFormSps,
-    fillLoadSkeleton,
   } = useContext(RidePageContext);
+
+  const pickupRef = useRef(null);
 
   const debouncedSearch = React.useRef(
     debounce(async (text, i) => {
@@ -116,7 +117,6 @@ const SearchBar = ({
   };
 
   useEffect(() => {
-    fillLoadSkeleton();
     debouncedSearch(searchTerm);
   }, [searchTerm]);
 
