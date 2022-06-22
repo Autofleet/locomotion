@@ -101,7 +101,8 @@ const RidePageContextProvider = ({ navigation, children }) => {
     if (currentAddress) {
       const locationData = {
         description: currentAddress.description,
-        location: currentAddress.location,
+        lat: currentAddress.lat,
+        lng: currentAddress.lng,
       };
       return locationData;
     }
@@ -122,7 +123,8 @@ const RidePageContextProvider = ({ navigation, children }) => {
           return {
             ...s,
             description: currentAddress.description,
-            location: currentAddress.location,
+            lat: currentAddress.lat,
+            lng: currentAddress.lng,
           };
         }
 
