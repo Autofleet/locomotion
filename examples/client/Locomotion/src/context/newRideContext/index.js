@@ -1,12 +1,11 @@
 import React, {
   useState, useEffect, useRef, createContext,
 } from 'react';
-import shortid from 'shortid';
 import { getPosition } from '../../services/geo';
 import { getPlaces, getGeocode, getPlaceDetails } from './google-api';
 import StorageService from '../../services/storage';
 import { createServiceEstimations, getServices } from './api';
-import { formatEstimationsResult, formatStopPointsForEstimations, TAG_OPTIONS } from './services';
+import { formatEstimationsResult, formatStopPointsForEstimations, INITIAL_STOP_POINTS } from './services';
 
 const STATION_AUTOREFRESH_INTERVAL = 60000;
 
@@ -34,18 +33,7 @@ export const RidePageContext = createContext(null);
 const HISTORY_RECORDS_NUM = 10;
 
 const RidePageContextProvider = ({ navigation, children }) => {
-  const [requestStopPoints, setRequestStopPoints] = useState([{
-    type: 'pickup',
-    location: null,
-    useDefaultLocation: true,
-    id: shortid.generate(),
-  },
-  {
-    type: 'dropoff',
-    location: null,
-    useDefaultLocation: false,
-    id: shortid.generate(),
-  }]);
+  const [requestStopPoints, setRequestStopPoints] = useState(INITIAL_STOP_POINTS);
   const [coords, setCoords] = useState();
   const [currentGeocode, setCurrentGeocode] = useState(null);
   const [searchTerm, setSearchTerm] = useState(null);
@@ -98,6 +86,7 @@ const RidePageContextProvider = ({ navigation, children }) => {
     const currentAddress = await reverseLocationGeocode();
     if (currentAddress) {
       const locationData = {
+        streetAddress: currentAddress.streetAddress,
         description: currentAddress.description,
         location: currentAddress.location,
       };
@@ -115,10 +104,11 @@ const RidePageContextProvider = ({ navigation, children }) => {
   const initSps = async () => {
     const currentAddress = currentGeocode || await getCurrentLocationAddress();
     if (currentGeocode) {
-      const sps = [...requestStopPoints].map((s) => {
+      const sps = [...INITIAL_STOP_POINTS].map((s) => {
         if (s.useDefaultLocation) {
           return {
             ...s,
+            streetAddress: currentAddress.streetAddress,
             description: currentAddress.description,
             location: currentAddress.location,
           };
@@ -170,6 +160,19 @@ const RidePageContextProvider = ({ navigation, children }) => {
     }
   };
 
+  const buildStreetAddress = (data) => {
+    const streetAddress = {};
+    data.results[0].address_components.map((ac) => {
+      if (ac.types.contains('street_number')) {
+        streetAddress.number = ac.long_name;
+      }
+      if (ac.types.contains('route')) {
+        streetAddress.name = ac.long_name;
+      }
+    });
+    return `${streetAddress.name} ${streetAddress.number}`;
+  };
+
   const reverseLocationGeocode = async () => {
     try {
       const currentCoords = await getCurrentLocation();
@@ -181,6 +184,7 @@ const RidePageContextProvider = ({ navigation, children }) => {
       });
 
       const geoLocation = {
+        streetAddress: buildStreetAddress(data),
         description: data.results[0].formatted_address,
         location: data.results[0].geometry.location,
       };
@@ -301,6 +305,8 @@ const RidePageContextProvider = ({ navigation, children }) => {
         serviceEstimations,
         chosenService,
         setChosenService,
+        setServiceEstimations,
+        initSps,
       }}
     >
       {children}

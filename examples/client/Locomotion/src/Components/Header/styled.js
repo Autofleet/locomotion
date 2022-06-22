@@ -2,9 +2,6 @@ import styled from 'styled-components';
 import Button from '../Button';
 
 export const HeaderView = styled.View`
-  align-self: flex-start;
-  margin-top: 14px;
-  margin-left: 20px;
   shadow-offset: 0px 0px;
   shadow-color: #04214f;
   shadow-opacity: 0.4;
@@ -21,4 +18,12 @@ export const HeaderView = styled.View`
 
 export const ButtonHeaderView = styled(Button)`
   background-color: unset;
+`;
+
+export const Container = styled.View`
+padding: 10px 20px;
+display: flex;
+flex-direction: row;
+justify-content: space-between;
+align-items: center;
 `;

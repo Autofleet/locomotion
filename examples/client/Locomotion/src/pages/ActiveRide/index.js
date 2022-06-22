@@ -15,6 +15,7 @@ import AvailabilityContextProvider from '../../context/availability';
 import BottomSheet from './RideDrawer/BottomSheet';
 import RideOptions from './RideDrawer/RideOptions';
 import AddressSelector from './RideDrawer/AddressSelector';
+import AddressHeader from '../../Components/Header/AddressHeader';
 
 // import de from './src/I18n/en.json';
 
@@ -30,7 +31,7 @@ const styles = StyleSheet.create({
 
 const RidePage = ({ menuSide, mapSettings }) => {
   const { initGeoService, showOutOfTerritory } = useContext(RideStateContextContext);
-  const { serviceEstimations } = useContext(RidePageContext);
+  const { serviceEstimations, setServiceEstimations } = useContext(RidePageContext);
 
   const navigation = useNavigation();
   const mapRef = useRef();
@@ -46,10 +47,20 @@ const RidePage = ({ menuSide, mapSettings }) => {
     }
   }, [serviceEstimations]);
 
+  const goBackToAddress = () => {
+    setServiceEstimations(null);
+    bottomSheetRef.current.expand();
+  };
   return (
     <PageContainer>
-      <MainMap ref={mapRef} mapSettings={mapSettings} />
-      <Header navigation={navigation} menuSide={menuSide} />
+      <MainMap
+        ref={mapRef}
+        mapSettings={mapSettings} />
+      {!serviceEstimations
+        ? <Header
+          navigation={navigation}
+          menuSide={menuSide} />
+        : <AddressHeader backToAddress={goBackToAddress} />}
       <BottomSheet
         ref={bottomSheetRef}
       >
@@ -57,7 +68,7 @@ const RidePage = ({ menuSide, mapSettings }) => {
           <NotAvailableHere onButtonPress={() => ({})} />
         ) : (
           !serviceEstimations
-            ? <AddressSelector bottomSheetRef={bottomSheetRef} />
+            ? <AddressSelector />
             : <RideOptions />
         )}
       </BottomSheet>

@@ -56,7 +56,7 @@ const ContentContainer = styled.View`
   flex: 1;
 
 `;
-const AddressSelectorBottomSheet = ({ bottomSheetRef }) => {
+const AddressSelectorBottomSheet = () => {
   const userContext = useContext(RidePageContext);
 
   const {
