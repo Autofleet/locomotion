@@ -70,7 +70,7 @@ export const formatEstimationsResult = (service, estimationResult, tags) => {
     price: estimation.priceAmount,
     currency: estimation.priceCurrency,
     availableSeats: service.maxPassengers || 4,
-    tag: Object.entries(tags).map(([key, value]) => value === service.id && key),
+    tags: Object.entries(tags).map(([key, value]) => value === service.id && key),
     iconUrl: service.icon,
     description: service.displayDescription,
     priority: service.priority,
