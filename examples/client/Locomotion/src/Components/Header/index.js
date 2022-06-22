@@ -4,7 +4,7 @@ import SvgIcon from '../SvgIcon';
 import SafeView from '../SafeView';
 
 const Header = ({
-  children, menuSide = 'left', onPressIcon, icon,
+  children, onPressIcon, icon,
 }) => (
   <SafeView>
     <Container>
@@ -12,7 +12,7 @@ const Header = ({
         onPress={onPressIcon}
         data-test-id="headerButton"
       >
-        <HeaderView menuSide={menuSide}>
+        <HeaderView>
           <SvgIcon
             Svg={icon}
             height={20}

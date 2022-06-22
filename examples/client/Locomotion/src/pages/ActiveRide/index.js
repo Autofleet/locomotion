@@ -31,7 +31,7 @@ const styles = StyleSheet.create({
 });
 
 
-const RidePage = ({ menuSide, mapSettings }) => {
+const RidePage = ({ mapSettings }) => {
   const { initGeoService, showOutOfTerritory } = useContext(RideStateContextContext);
   const { serviceEstimations, setServiceEstimations, initSps } = useContext(RidePageContext);
 
@@ -69,14 +69,12 @@ const RidePage = ({ menuSide, mapSettings }) => {
           <Header
             icon={hamburgerIcon}
             onPressIcon={navigation.openDrawer}
-            menuSide={menuSide}
           />
         )
         : (
           <Header
             icon={backArrow}
             onPressIcon={backToMap}
-            menuSide={menuSide}
           >
             <StopPointsViewer goBackToAddressSelector={goBackToAddress} />
           </Header>

@@ -12,12 +12,6 @@ export const HeaderView = styled.View`
   align-items: center;
   display: flex;
   justify-content: center;
-
-  ${({ menuSide }) => (menuSide === 'right' ? `
-  align-self: flex-end;
-  margin-right: 14px;
-  margin-left: 0;
-  ` : '')}
 `;
 
 export const ButtonHeaderView = styled(Button)`
