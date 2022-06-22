@@ -13,7 +13,7 @@ import mapDarkMode from '../../assets/mapDarkMode.json';
 import { Context as ThemeContext, THEME_MOD } from '../../context/theme';
 import StationsMap from './StationsMap';
 import MyLocationButton from '../../Components/ShowMyLocationButton';
-import AvailabilityContextProvider, { AvailabilityContext } from '../../context/availability';
+import { AvailabilityContext } from '../../context/availability';
 import AvailabilityVehicle from '../../Components/AvailabilityVehicle';
 
 export default React.forwardRef(({
@@ -42,6 +42,7 @@ export default React.forwardRef(({
     showOutOfTerritory,
     selectLocationMode,
     saveSelectedLocation,
+    currentBsPage,
   } = useContext(RideStateContextContext);
 
   const [mapRegion, setMapRegion] = useState({
@@ -131,12 +132,12 @@ export default React.forwardRef(({
     return null;
   };
 
-  const buildAvailabilityVehicles = () => availabilityVehicles.map(vehicle => (
+  const buildAvailabilityVehicles = () => {currentBsPage === 'main' ? availabilityVehicles.map(vehicle => (
     <AvailabilityVehicle
       location={vehicle.location}
       id={vehicle.id}
     />
-  ));
+  )) : null};
 
   const initialLocation = async () => {
     try {
@@ -181,10 +182,14 @@ export default React.forwardRef(({
         onRegionChange={(event) => {
           if (selectLocationMode) {
             const { latitude, longitude } = event;
+            const lat = latitude.toFixed(6);
+            const lng = latitude.toFixed(6);
+
             saveSelectedLocation({
-              latitude: latitude.toFixed(6),
-              longitude: longitude.toFixed(6),
+              lat,
+              lng,
             });
+            
           }
         }}
         onPanDrag={() => (

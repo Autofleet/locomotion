@@ -1,6 +1,6 @@
 export type Brand = "code" | "alipay" | "amex" | "american-express" | "cvv" | "diners-club" | "diners" | "discover" | "elo" | "generic" | "hiper" | "hipercard" | "jcb" | "maestro" | "mastercard" |  "visa";
 export interface PaymentMethodInterface {
-    brand: string;
+    brand: Brand;
     createdAt: Date;
     customerId: string;
     deletedAt: Date | null;

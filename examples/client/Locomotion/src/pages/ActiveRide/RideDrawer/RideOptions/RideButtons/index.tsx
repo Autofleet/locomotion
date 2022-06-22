@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import FutureBookingButton from './FutureBookingButton';
-import { Container, RowContainer, ButtonContainer, TouchableOpacityContainer } from './styled';
+import { Container, RowContainer, ButtonContainer, TouchableOpacityContainer, ButtonText, StyledButton } from './styled';
 import { RidePageContext } from '../../../../../context/newRideContext';
 import NoteButton from './NoteButton';
 import i18n from '../../../../../I18n';
@@ -9,7 +9,11 @@ import editNote from '../../../../../assets/bottomSheet/edit_note.svg'
 import creditCardIcon from '../../../../../assets/bottomSheet/credit_card_icon.svg';
 import PaymentButton from './PaymentButton';
 import PaymentsContext from '../../../../../context/payments';
-import { PaymentMethodInterface } from 'context/payments/interface';
+import { PaymentMethodInterface } from '../../../../../context/payments/interface';
+import * as NavigationService from '../../../../../services/navigation';
+import { MAIN_ROUTES } from '../../../../../pages/routes';
+import { RideStateContextContext } from '../../../../../context/ridePageStateContext';
+
 
 interface RideButtonsProps {
     displayPassenger: boolean;
@@ -22,8 +26,13 @@ const RideButtons = ({
 }: RideButtonsProps) => {
     const {
         ride,
+        chosenService,
     } = useContext(RidePageContext);
     
+    const {
+        setCurrentBsPage,
+    } = useContext(RideStateContextContext)
+
     const {
         paymentMethods
     }: {
@@ -85,6 +94,13 @@ const RideButtons = ({
                     {renderPaymentButton()}
                 </>
             </RowContainer>
+                <StyledButton data-test-id="selectService"
+                // disabled={!chosenService}
+                 onPress={() => {
+                    setCurrentBsPage('selectLocationOnMap')
+                }}>
+                    <ButtonText>{i18n.t('general.select').toString()}</ButtonText>
+                </StyledButton>
         </Container>
     );
 };

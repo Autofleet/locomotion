@@ -1,8 +1,6 @@
 import React, { useContext, useEffect, useRef } from 'react';
 import { useNavigation } from '@react-navigation/native';
-
-import { StyleSheet, View } from 'react-native';
-import { NotAvailableHere } from '../../Components/BsPages';
+import { ConfirmPickup, NotAvailableHere } from '../../Components/BsPages';
 import { RideStateContextContext, RidePageContextProvider } from '../../context';
 import NewRidePageContextProvider, { RidePageContext } from '../../context/newRideContext';
 import BottomSheetContextProvider from '../../context/bottomSheetContext';
@@ -16,21 +14,21 @@ import BottomSheet from './RideDrawer/BottomSheet';
 import RideOptions from './RideDrawer/RideOptions';
 import AddressSelector from './RideDrawer/AddressSelector';
 
-// import de from './src/I18n/en.json';
-
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    flexGrow: 1,
-  },
-
-});
 
 
 const RidePage = ({ menuSide, mapSettings }) => {
-  const { initGeoService, showOutOfTerritory } = useContext(RideStateContextContext);
+  const { initGeoService, showOutOfTerritory, currentBsPage } = useContext(RideStateContextContext);
   const { serviceEstimations } = useContext(RidePageContext);
+  const BS_PAGE_TO_COMP = {
+    'main': () => (showOutOfTerritory ? (
+      <NotAvailableHere onButtonPress={() => ({})} />
+    ) : (
+      !true
+        ? <AddressSelector bottomSheetRef={bottomSheetRef} />
+        : <RideOptions />
+    )),
+    'selectLocationOnMap': () => <ConfirmPickup />
+  };
 
   const navigation = useNavigation();
   const mapRef = useRef();
@@ -53,13 +51,9 @@ const RidePage = ({ menuSide, mapSettings }) => {
       <BottomSheet
         ref={bottomSheetRef}
       >
-        {false ? (
-          <NotAvailableHere onButtonPress={() => ({})} />
-        ) : (
-          !true
-            ? <AddressSelector bottomSheetRef={bottomSheetRef} />
-            : <RideOptions />
-        )}
+        {
+          BS_PAGE_TO_COMP[currentBsPage]()
+        }
       </BottomSheet>
     </PageContainer>
   );

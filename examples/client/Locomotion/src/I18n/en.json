@@ -18,7 +18,8 @@
         "back": "Back",
         "next": "Continue",
         "cancel": "cancel",
-        "skip": "Skip"
+        "skip": "Skip",
+        "select": "Select"
     },
     "login": {
         "getStarted": "Get started!",

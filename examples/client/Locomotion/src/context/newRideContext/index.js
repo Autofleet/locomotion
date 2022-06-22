@@ -53,10 +53,20 @@ export const RidePageContext = createContext({
   ride: {
     notes: '',
     paymentMethodId: null,
+    serviceTypeId: null,
   },
   updateRide: (ride) => {},
+  chosenService: null,
 });
 const HISTORY_RECORDS_NUM = 10;
+
+const latLngToAddress = async (lat, lng) => {
+  const reverseGeocodeService = new google.maps.Geocoder();
+  const latLng = new google.maps.LatLng({ lat, lng });
+  const response = await reverseGeocodeService.geocode({ location: latLng });
+  return response?.results[0]?.formatted_address;
+};
+
 
 const RidePageContextProvider = ({ navigation, children }) => {
   const [requestStopPoints, setRequestStopPoints] = useState([{
@@ -82,6 +92,7 @@ const RidePageContextProvider = ({ navigation, children }) => {
   const [serviceEstimations, setServiceEstimations] = useState(null);
   const [ride, setRide] = useState({});
   const [chosenService, setChosenService] = useState(null);
+  const [lastSelectedLocation, saveSelectedLocation] = useState(false);
 
   const formatEstimations = (services, estimations) => {
     const estimationsMap = {};
@@ -335,6 +346,8 @@ const RidePageContextProvider = ({ navigation, children }) => {
         updateRide,
         chosenService,
         setChosenService,
+        lastSelectedLocation,
+        saveSelectedLocation
       }}
     >
       {children}
