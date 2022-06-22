@@ -57,14 +57,18 @@ export const RidePageContext = createContext({
   },
   updateRide: (ride) => {},
   chosenService: null,
+  lastSelectedLocation: null
 });
 const HISTORY_RECORDS_NUM = 10;
 
-const latLngToAddress = async (lat, lng) => {
-  const reverseGeocodeService = new google.maps.Geocoder();
-  const latLng = new google.maps.LatLng({ lat, lng });
-  const response = await reverseGeocodeService.geocode({ location: latLng });
-  return response?.results[0]?.formatted_address;
+export const latLngToAddress = async (lat, lng) => {
+  const location = `${lat},${lng}`;
+  const data = await getGeocode({
+    latlng: location,
+  });
+
+  console.log('data', data)
+  return data.results[0].formatted_address;
 };
 
 

@@ -21,6 +21,7 @@ const BottomSheetComponent = forwardRef(({ children }, ref) => {
     sheetState,
     setIsExpanded,
     snapPoints,
+    snapPointIndex
   } = useContext(BottomSheetContext);
 
   const handleSheetChanges = useCallback((index) => {
@@ -37,7 +38,7 @@ const BottomSheetComponent = forwardRef(({ children }, ref) => {
     <>      
       <BottomSheet
         ref={ref}
-        index={0}
+        index={snapPointIndex}
         snapPoints={snapPoints}
         onChange={handleSheetChanges}
         onAnimate={onAnimate}

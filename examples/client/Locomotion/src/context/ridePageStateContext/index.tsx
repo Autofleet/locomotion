@@ -11,8 +11,6 @@ interface RidePageStateContextProps {
   initGeoService: Function;
   selectLocationMode: boolean | undefined;
   setSelectLocationMode: Function;
-  lastSelectedLocation: any;
-  saveSelectedLocation: Function;
   isUserLocationFocused: boolean
   setIsUserLocationFocused: Function;
   currentBsPage: BsPages;
@@ -25,8 +23,6 @@ export const RideStateContextContext = createContext<RidePageStateContextProps>(
   setShowOutOfTerritory: (outOfTerritory: boolean) => {},
   initGeoService: () => {},
   setSelectLocationMode: (mode: boolean) => {},
-  lastSelectedLocation: {},
-  saveSelectedLocation: (location: any) => {},
   isUserLocationFocused: false,
   setIsUserLocationFocused: (isLocationFocused: boolean) => {},
   currentBsPage: 'main',
@@ -39,7 +35,6 @@ const RideStateContextContextProvider = ({ children }: { children: any }) => {
   const [territory, setTerritory] = useState<Array<any> | null>(null);
   const [showOutOfTerritory, setShowOutOfTerritory] = useState<boolean | undefined>(false);
   const [selectLocationMode, setSelectLocationMode] = useState<boolean | undefined>(false);
-  
   const [isUserLocationFocused, setIsUserLocationFocused] = useState(true);
   const [currentBsPage, setCurrentBsPage] = useState<BsPages>('main');
 
@@ -73,8 +68,6 @@ const RideStateContextContextProvider = ({ children }: { children: any }) => {
         initGeoService,
         selectLocationMode,
         setSelectLocationMode,
-        lastSelectedLocation,
-        saveSelectedLocation,
         isUserLocationFocused,
         setIsUserLocationFocused,
         currentBsPage,
