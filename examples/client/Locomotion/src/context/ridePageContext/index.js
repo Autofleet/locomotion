@@ -196,13 +196,7 @@ const RidePageContextProvider = ({ navigation, children }) => {
     && state.pickup && state.pickup.lat;
 
   const loadPreRideDetails = async (origin, destination) => {
-    return;
-    try {
-      const data = await getPreRideDetails({ origin, destination });
-      setPreRideDetails(data);
-    } catch (error) {
-      console.log('Got error while try to get pre detail on a ride', error);
-    }
+
   };
 
   const calculatePickupEta = (origin) => {

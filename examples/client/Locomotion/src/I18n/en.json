@@ -18,7 +18,8 @@
         "back": "Back",
         "next": "Continue",
         "cancel": "cancel",
-        "skip": "Skip"
+        "skip": "Skip",
+        "select": "Select"
     },
     "login": {
         "getStarted": "Get started!",
@@ -188,6 +189,12 @@
             "save": "Save",
             "cancel": "Cancel"
         },
+        "choosePaymentMethod": {
+            "title": "Choose payment method",
+            "placeholder": "How to find me, Flights, info, etc.",
+            "save": "Save",
+            "cancel": "Cancel"
+        },
         "rideSummary": {
             "thanksForRideHeadline": "Thanks for your ride!",
             "rideDataHeadline": "",
@@ -249,6 +256,9 @@
     "payments": {
         "pageTitle": "Payments Method",
         "submitCard": "Add card",
+        "addNewCreditCard": "Add New Credit Card",
+        "expired": "expired",
+        "hasOutstandingBalance": "Outstanding Balance",
         "skipForNow": "Skip for now",
         "balance": "Balance",
         "deleteCard": "Remove",
@@ -279,6 +289,16 @@
       "titleText": "We are Sorry!",
       "buttonText": "Set another pickup location",
       "subTitleText": "Autofleet is not available in your area"
+    },
+    "ride": {
+        "now": "Now",
+        "notes": {
+            "edit": "Edit note",
+            "add": "Note to driver"
+        },
+        "rider": "Rider",
+        "riders": "Riders",
+        "addPayment": "Add Payment"
     }
   }
 }

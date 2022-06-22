@@ -32,8 +32,46 @@ function useInterval(callback, delay) {
   }, [delay]);
 }
 
-export const RidePageContext = createContext(null);
+export const RidePageContext = createContext({
+  loadAddress: () => {},
+  reverseLocationGeocode: () => {},
+  enrichPlaceWithLocation: () => {},
+  searchTerm: '',
+  setSearchTerm: () => {},
+  selectedInputIndex: null,
+  setSelectedInputIndex: () => {},
+  selectedInputTarget: null,
+  setSelectedInputTarget: () => {},
+  onAddressSelected: () => {},
+  requestStopPoints: [],
+  searchResults: [],
+  searchAddress: null,
+  updateRequestSp: () => {},
+  setSpCurrentLocation: () => {},
+  isReadyForSubmit: false,
+  checkFormSps: () => {},
+  historyResults: [],
+  serviceEstimations: [],
+  ride: {
+    notes: '',
+    paymentMethodId: null,
+    serviceTypeId: null,
+  },
+  updateRide: (ride) => {},
+  chosenService: null,
+  lastSelectedLocation: null,
+});
 const HISTORY_RECORDS_NUM = 10;
+
+export const latLngToAddress = async (lat, lng) => {
+  const location = `${lat},${lng}`;
+  const data = await getGeocode({
+    latlng: location,
+  });
+  console.log(data.results[0]);
+  return data.results[0].formatted_address;
+};
+
 
 const RidePageContextProvider = ({ navigation, children }) => {
   const [requestStopPoints, setRequestStopPoints] = useState([{
@@ -59,7 +97,9 @@ const RidePageContextProvider = ({ navigation, children }) => {
   const [isReadyForSubmit, setIsReadyForSubmit] = useState(false);
   const [historyResults, setHistoryResults] = useState([]);
   const [serviceEstimations, setServiceEstimations] = useState(null);
+  const [ride, setRide] = useState({});
   const [chosenService, setChosenService] = useState(null);
+  const [lastSelectedLocation, saveSelectedLocation] = useState(false);
 
   const formatEstimations = (services, estimations, tags) => {
     const estimationsMap = {};
@@ -284,6 +324,12 @@ const RidePageContextProvider = ({ navigation, children }) => {
     }
   };
 
+  const updateRide = (newRide) => {
+    setRide({
+      ...ride,
+      ...newRide,
+    });
+  };
 
   return (
     <RidePageContext.Provider
@@ -308,8 +354,12 @@ const RidePageContextProvider = ({ navigation, children }) => {
         historyResults,
         loadHistory,
         serviceEstimations,
+        ride,
+        updateRide,
         chosenService,
         setChosenService,
+        lastSelectedLocation,
+        saveSelectedLocation,
       }}
     >
       {children}
