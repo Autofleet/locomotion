@@ -3,7 +3,7 @@ import { Image } from 'react-native';
 import SafeView from '../SafeView';
 import { HeaderView, ButtonHeaderView } from './styled';
 
-const HamburgerIconSource = require('../../assets/menu.png');
+import HamburgerIconSource from '../../assets/menu.png';
 
 
 const Header = ({ navigation, menuSide }) => (

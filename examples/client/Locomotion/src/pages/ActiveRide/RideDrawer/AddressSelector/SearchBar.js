@@ -10,7 +10,7 @@ import BottomSheetInput from '../../../../Components/TextInput/BottomSheetInput'
 import i18n from '../../../../I18n';
 import { RidePageContext } from '../../../../context/newRideContext';
 
-const backImage = require('../../../../assets/arrow-back.png');
+import backImage from '../../../../assets/arrow-back.png';
 
 
 const SearchContainer = styled.View`

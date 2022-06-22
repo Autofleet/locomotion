@@ -10,8 +10,8 @@ import {
   ButtonText, DrawerButtonContainer, SliderContainer, styleSchemed,
 } from './styled';
 
-const arrowIcon = require('../../assets/slider-arrow.png');
-const checkIcon = require('../../assets/check.png');
+import arrowIcon from '../../assets/slider-arrow.png';
+import checkIcon from '../../assets/check.png';
 
 const Button = ({
   children, style, hollow, setLoading, onVerified, text, verifiedText, ...props

@@ -4,10 +4,8 @@ import styled from 'styled-components';
 import moment from 'moment';
 import i18n from '../../../../I18n';
 
-const PassengerAmountIconSource = require('../../../../assets/ppl.png');
-const PlusIconSource = require('../../../../assets/plus.png');
-const MinusIconSource = require('../../../../assets/minus.png');
-const ClockIconSource = require('../../../../assets/clock.png');
+import PassengerAmountIconSource from '../../../../assets/ppl.png';
+import ClockIconSource from '../../../../assets/clock.png';
 
 const MAX_NUMBER_OF_PASSENGER = 5;
 const MIN_NUMBER_OF_PASSENGER = 1;
