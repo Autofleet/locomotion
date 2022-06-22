@@ -76,7 +76,7 @@ const AddressRow = ({
   border = true,
   actionButton = false,
   onPress,
-  isLoading
+  isLoading,
 }) => {
   const finalIcon = ICONS[icon];
   return (
@@ -85,19 +85,20 @@ const AddressRow = ({
         {finalIcon ? <Icon Svg={finalIcon} actionButton={actionButton} /> : null}
       </IconContainer>
       <AddressContainer>
-      {isLoading ? (
-        <SkeletonContent
-        containerStyle={{}}
-        isLoading
-        layout={[
-          { width: 180, height: 20, marginBottom: 6 },
-          { width: 220, height: 20},
-        ]}
-      /> ) : (
-      <>
-        {actionButton ? <ActionText>{text}</ActionText> : <AddressText>{text}</AddressText>}
-        {subText ? <AddressText subtext>{subText}</AddressText> : null}
-      </>
+        {isLoading ? (
+          <SkeletonContent
+            containerStyle={{}}
+            isLoading
+            layout={[
+              { width: 180, height: 20, marginBottom: 6 },
+              { width: 220, height: 20 },
+            ]}
+          />
+        ) : (
+          <>
+            {actionButton ? <ActionText>{text}</ActionText> : <AddressText>{text}</AddressText>}
+            {subText ? <AddressText subtext>{subText}</AddressText> : null}
+          </>
         )
       }
       </AddressContainer>
