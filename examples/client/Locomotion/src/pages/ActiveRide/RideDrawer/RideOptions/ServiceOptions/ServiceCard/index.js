@@ -1,4 +1,5 @@
 import moment from 'moment';
+import getSymbolFromCurrency from 'currency-symbol-map';
 import React, { useContext } from 'react';
 import SvgIcon from '../../../../../../Components/SvgIcon';
 import i18n from '../../../../../../I18n';
@@ -23,7 +24,7 @@ const ServiceCard = ({ service }) => {
   const unavailable = !service.eta;
   const timeUntilArrival = i18n.t('rideDetails.timeUntilArrival', { minutes: moment.duration(moment(service.eta).diff(moment())).minutes().toString() });
   const unavailableText = i18n.t('rideDetails.unavailable');
-
+  const serviceDisplayPrice = `${getSymbolFromCurrency(service.currency)}${service.price}`;
   const tagStyles = {
     [TAG_OPTIONS.FASTEST]: {
       container: {
@@ -65,7 +66,7 @@ const ServiceCard = ({ service }) => {
           ))
             }
           <Price>
-            {service.price || unavailableText}
+            {service.price ? serviceDisplayPrice : unavailableText}
           </Price>
         </TopRow>
         {!unavailable && (

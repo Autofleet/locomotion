@@ -31,16 +31,21 @@ export const getEstimationTags = (estimations) => {
   };
 };
 
-export const formatEstimationsResult = (service, estimationResult, tags) => ({
-  id: service.id,
-  name: service.displayName,
-  eta: (estimationResult || {}).minPickupEta,
-  price: (estimationResult || {}).priceAmount,
-  availableSeats: service.maxPassengers || 4,
-  tags: Object.entries(tags).map(([key, value]) => value === service.id && key),
-  iconUrl: service.icon,
-  description: service.displayDescription,
-});
+export const formatEstimationsResult = (service, estimationResult, tags) => {
+  const estimation = estimationResult || {};
+  return {
+    id: service.id,
+    name: service.displayName,
+    eta: estimation.minPickupEta,
+    price: estimation.priceAmount,
+    currency: estimation.priceCurrency,
+    availableSeats: service.maxPassengers || 4,
+    tag: Object.entries(tags).map(([key, value]) => value === service.id && key),
+    iconUrl: service.icon,
+    description: service.displayDescription,
+    priority: service.priority,
+  };
+};
 
 export const formatStopPointsForEstimations = requestStopPoints => requestStopPoints.map(sp => ({
   type: sp.type,
