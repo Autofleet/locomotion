@@ -9,6 +9,7 @@ const BottomSheetProvider = ({ navigation, children }) => {
 
   const [snapPointsState, setSnapPointsState] = useState(['25%', '100%']);
   const [snapPointIndex, setSnapPointIndex] = useState(0);
+  const [footerComponent, setFooterComponent] = useState(null);
   const snapPoints = useMemo(() => snapPointsState, [snapPointsState]);
 
   useEffect(() => {
@@ -25,6 +26,8 @@ const BottomSheetProvider = ({ navigation, children }) => {
         setSnapPointIndex,
         setIsExpanded,
         setSnapPointsState,
+        setFooterComponent,
+        footerComponent,
       }}
     >
       {children}

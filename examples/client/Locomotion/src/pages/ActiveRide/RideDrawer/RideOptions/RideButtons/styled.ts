@@ -3,10 +3,12 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 import styled from 'styled-components';
 import { FONT_SIZES, FONT_WEIGHTS } from '../../../../../context/theme';
 import Button from '../../../../../Components/Button';
+
 export const Container = styled(View)`
-    margin: 0px 15px;
+    padding: 0px 15px;
     display: flex;
     height: 150px;
+    background-color: white;
 `;
 
 export const RowContainer = styled(View)`

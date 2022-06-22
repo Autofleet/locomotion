@@ -1,10 +1,10 @@
 import React, {
   useCallback, useEffect, useMemo, useRef, useState, useContext, forwardRef,
 } from 'react';
-import { View } from 'react-native';
 import BottomSheet, {
   useBottomSheetDynamicSnapPoints,
   BottomSheetView,
+  BottomSheetFooter,
 } from '@gorhom/bottom-sheet';
 import styled from 'styled-components';
 import SafeView from '../../../../Components/SafeView';
@@ -21,7 +21,8 @@ const BottomSheetComponent = forwardRef(({ children }, ref) => {
     sheetState,
     setIsExpanded,
     snapPoints,
-    snapPointIndex
+    snapPointIndex,
+    footerComponent
   } = useContext(BottomSheetContext);
 
   const handleSheetChanges = useCallback((index) => {
@@ -34,6 +35,16 @@ const BottomSheetComponent = forwardRef(({ children }, ref) => {
     }
   }, []);
 
+  const renderFooter = useCallback(
+    props => (
+      footerComponent && <BottomSheetFooter {...props} bottomInset={24}>
+          {footerComponent}
+      </BottomSheetFooter>
+    ),
+    [footerComponent]
+  );
+
+
   return (
     <>      
       <BottomSheet
@@ -42,6 +53,7 @@ const BottomSheetComponent = forwardRef(({ children }, ref) => {
         snapPoints={snapPoints}
         onChange={handleSheetChanges}
         onAnimate={onAnimate}
+        footerComponent={renderFooter}
       >
         <SafeView
           style={{

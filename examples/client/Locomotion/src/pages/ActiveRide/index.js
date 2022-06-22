@@ -23,7 +23,7 @@ const RidePage = ({ menuSide, mapSettings }) => {
     'main': () => (showOutOfTerritory ? (
       <NotAvailableHere onButtonPress={() => ({})} />
     ) : (
-      !true
+      !serviceEstimations
         ? <AddressSelector bottomSheetRef={bottomSheetRef} />
         : <RideOptions />
     )),
