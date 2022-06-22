@@ -93,11 +93,11 @@ export default React.forwardRef(({
 
   const showInputPointsOnMap = () => {
     const coordsToFit = requestStopPoints
-      .filter((sp => sp.location))
+      .filter((sp => sp.lat))
       .map(sp => (
         {
-          latitude: parseFloat(sp.location.lat),
-          longitude: parseFloat(sp.location.lng),
+          latitude: parseFloat(sp.lat),
+          longitude: parseFloat(sp.lng),
         }
       ));
     mapInstance.current.fitToCoordinates(coordsToFit,
@@ -106,7 +106,7 @@ export default React.forwardRef(({
       });
   };
   useEffect(() => {
-    if (requestStopPoints.filter((sp => sp.location)).length > 1) {
+    if (requestStopPoints.filter((sp => sp.lat)).length > 1) {
       showInputPointsOnMap();
     }
   }, [requestStopPoints]);
@@ -155,9 +155,9 @@ export default React.forwardRef(({
         customMapStyle={isDarkMode ? mapDarkMode : undefined}
         {...mapSettings}
       >
-        {chosenService && requestStopPoints.filter(sp => !!sp.location).length > 1
+        {chosenService && requestStopPoints.filter(sp => !!sp.lat).length > 1
           ? requestStopPoints
-            .filter(sp => !!sp.location)
+            .filter(sp => !!sp.lat)
             .map(sp => (<StationsMap stopPoint={sp} />))
           : null}
         {showOutOfTerritory && territory && territory.length ? territory

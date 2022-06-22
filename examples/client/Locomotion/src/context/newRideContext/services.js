@@ -8,13 +8,15 @@ export const TAG_OPTIONS = {
 
 export const INITIAL_STOP_POINTS = [{
   type: 'pickup',
-  location: null,
+  lat: null,
+  lng: null,
   useDefaultLocation: true,
   id: shortid.generate(),
 },
 {
   type: 'dropoff',
-  location: null,
+  lat: null,
+  lng: null,
   useDefaultLocation: false,
   id: shortid.generate(),
 }];
@@ -32,6 +34,6 @@ export const formatEstimationsResult = (service, estimationResult) => ({
 
 export const formatStopPointsForEstimations = requestStopPoints => requestStopPoints.map(sp => ({
   type: sp.type,
-  lat: sp.location.lat,
-  lng: sp.location.lng,
+  lat: sp.lat,
+  lng: sp.lng,
 }));

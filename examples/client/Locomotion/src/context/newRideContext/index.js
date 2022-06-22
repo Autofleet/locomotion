@@ -32,7 +32,7 @@ function useInterval(callback, delay) {
 export const RidePageContext = createContext(null);
 const HISTORY_RECORDS_NUM = 10;
 
-const RidePageContextProvider = ({ navigation, children }) => {
+const RidePageContextProvider = ({ children }) => {
   const [requestStopPoints, setRequestStopPoints] = useState(INITIAL_STOP_POINTS);
   const [coords, setCoords] = useState();
   const [currentGeocode, setCurrentGeocode] = useState(null);
@@ -88,7 +88,8 @@ const RidePageContextProvider = ({ navigation, children }) => {
       const locationData = {
         streetAddress: currentAddress.streetAddress,
         description: currentAddress.description,
-        location: currentAddress.location,
+        lat: currentAddress.lat,
+        lng: currentAddress.lng,
       };
       return locationData;
     }
@@ -110,7 +111,8 @@ const RidePageContextProvider = ({ navigation, children }) => {
             ...s,
             streetAddress: currentAddress.streetAddress,
             description: currentAddress.description,
-            location: currentAddress.location,
+            lat: currentAddress.lat,
+            lng: currentAddress.lng,
           };
         }
 
@@ -176,17 +178,17 @@ const RidePageContextProvider = ({ navigation, children }) => {
   const reverseLocationGeocode = async () => {
     try {
       const currentCoords = await getCurrentLocation();
-      console.log('currentCoords', currentCoords);
-
       const location = `${currentCoords.latitude},${currentCoords.longitude}`;
       const data = await getGeocode({
         latlng: location,
       });
 
+      const { lat, lng } = data.results[0].geometry.location;
       const geoLocation = {
         streetAddress: buildStreetAddress(data),
         description: data.results[0].formatted_address,
-        location: data.results[0].geometry.location,
+        lat,
+        lng,
       };
 
       return geoLocation;
@@ -213,8 +215,9 @@ const RidePageContextProvider = ({ navigation, children }) => {
       ...reqSps[selectedInputIndex],
       description: selectedItem.fullText,
       streetAddress: selectedItem.text,
-      location: enrichedPlace,
       placeId: selectedItem.placeId,
+      lat: enrichedPlace.lat,
+      lng: enrichedPlace.lng,
     };
     setRequestStopPoints(reqSps);
     resetSearchResults();
@@ -268,7 +271,7 @@ const RidePageContextProvider = ({ navigation, children }) => {
   };
 
   const checkFormSps = async () => {
-    const isSpsReady = requestStopPoints.every(r => r.location && r.location.lat && r.location.lng && r.description);
+    const isSpsReady = requestStopPoints.every(r => r.lat && r.lng && r.description);
     if (requestStopPoints.length && isSpsReady) {
       console.log('READY SEND REQUEST');
       setIsReadyForSubmit(true);
