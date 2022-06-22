@@ -14,6 +14,7 @@ export const formatEstimationsResult = (service, estimationResult) => ({
   tag: null,
   iconUrl: service.icon,
   description: service.displayDescription,
+  priority: service.priority,
 });
 
 export const formatStopPointsForEstimations = requestStopPoints => requestStopPoints.map(sp => ({
