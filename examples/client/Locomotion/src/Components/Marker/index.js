@@ -18,7 +18,7 @@ export default ({
   stopPoint,
 }) => {
   const { chosenService } = useContext(RidePageContext);
-  const { lat, lng } = stopPoint.location;
+  const { lat, lng } = stopPoint;
   const minutesUntilPickup = moment.duration(moment(chosenService.eta).diff(moment())).minutes().toString();
   const etaText = i18n.t('rideDetails.toolTipEta', { minutes: minutesUntilPickup });
   const typeDetails = {
