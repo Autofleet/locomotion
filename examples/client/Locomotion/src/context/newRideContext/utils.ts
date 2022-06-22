@@ -7,7 +7,7 @@ export const TAG_OPTIONS = {
 };
 
 export const getEstimationTags = (estimations) => {
-  const tags = {
+  const tags: any = {
     fastest: {},
     cheapest: {},
   };
