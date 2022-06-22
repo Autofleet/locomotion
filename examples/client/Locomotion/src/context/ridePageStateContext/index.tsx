@@ -2,6 +2,7 @@ import React, { createContext, useState } from 'react';
 import geo, { getPosition } from '../../services/geo';
 import { getUserTerritories } from '../user/api';
 import pointInPolygon from './pointInPolygon';
+
 type BsPages = 'main' | 'selectLocationOnMap' | 'payment';
 interface RidePageStateContextProps {
   territory: any;
@@ -11,7 +12,7 @@ interface RidePageStateContextProps {
   initGeoService: Function;
   selectLocationMode: boolean | undefined;
   setSelectLocationMode: Function;
-  isUserLocationFocused: boolean
+  isUserLocationFocused: boolean;
   setIsUserLocationFocused: Function;
   currentBsPage: BsPages;
   setCurrentBsPage: Function;
@@ -28,7 +29,7 @@ export const RideStateContextContext = createContext<RidePageStateContextProps>(
   currentBsPage: 'main',
   setCurrentBsPage: (page: BsPages) => {},
   selectLocationMode: false,
-  showOutOfTerritory: false
+  showOutOfTerritory: false,
 });
 
 const RideStateContextContextProvider = ({ children }: { children: any }) => {
@@ -71,7 +72,7 @@ const RideStateContextContextProvider = ({ children }: { children: any }) => {
         isUserLocationFocused,
         setIsUserLocationFocused,
         currentBsPage,
-        setCurrentBsPage
+        setCurrentBsPage,
       }}
     >
       {children}
