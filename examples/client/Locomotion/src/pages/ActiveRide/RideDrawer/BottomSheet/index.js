@@ -1,14 +1,14 @@
 import React, {
   useCallback, useEffect, useMemo, useRef, useState, useContext, forwardRef,
 } from 'react';
-import { View } from 'react-native';
 import BottomSheet, {
   useBottomSheetDynamicSnapPoints,
   BottomSheetView,
+  BottomSheetFooter,
 } from '@gorhom/bottom-sheet';
 import styled from 'styled-components';
 import SafeView from '../../../../Components/SafeView';
-import RideNotes from '../../../../popups/RideNotes';
+import ChoosePaymentMethod from '../../../../popups/ChoosePaymentMethod';
 import { BottomSheetContext } from '../../../../context/bottomSheetContext';
 
 const ContentContainer = styled(BottomSheetView)`
@@ -21,6 +21,8 @@ const BottomSheetComponent = forwardRef(({ children }, ref) => {
     sheetState,
     setIsExpanded,
     snapPoints,
+    snapPointIndex,
+    footerComponent,
   } = useContext(BottomSheetContext);
 
   const handleSheetChanges = useCallback((index) => {
@@ -33,16 +35,27 @@ const BottomSheetComponent = forwardRef(({ children }, ref) => {
     }
   }, []);
 
+  const renderFooter = useCallback(
+    props => (
+      footerComponent && (
+      <BottomSheetFooter {...props} bottomInset={24}>
+        {footerComponent}
+      </BottomSheetFooter>
+      )
+    ),
+    [footerComponent],
+  );
+
+
   return (
     <>
-      <RideNotes />
       <BottomSheet
         ref={ref}
-        index={0}
+        index={snapPointIndex}
         snapPoints={snapPoints}
         onChange={handleSheetChanges}
         onAnimate={onAnimate}
-        android_keyboardInputMode="adjustResize"
+        footerComponent={renderFooter}
       >
         <SafeView
           style={{

@@ -4,11 +4,17 @@ import React, {
 
 export const BottomSheetContext = createContext();
 
+export const SNAP_POINT_STATES = {
+  ADDRESS_SELECTOR: ['15%', '100%'],
+  SERVICE_ESTIMATIONS: ['50%', '95%'],
+  CONFIRM_PICKUP: ['25%'],
+};
 const BottomSheetProvider = ({ navigation, children }) => {
   const [isExpanded, setIsExpanded] = useState(false);
 
-  const [snapPointsState, setSnapPointsState] = useState(['25%', '100%']);
+  const [snapPointsState, setSnapPointsState] = useState(SNAP_POINT_STATES.ADDRESS_SELECTOR);
   const [snapPointIndex, setSnapPointIndex] = useState(0);
+  const [footerComponent, setFooterComponent] = useState(null);
   const snapPoints = useMemo(() => snapPointsState, [snapPointsState]);
 
   useEffect(() => {
@@ -25,6 +31,8 @@ const BottomSheetProvider = ({ navigation, children }) => {
         setSnapPointIndex,
         setIsExpanded,
         setSnapPointsState,
+        setFooterComponent,
+        footerComponent,
       }}
     >
       {children}

@@ -87,8 +87,10 @@ const SearchBar = ({
     requestStopPoints,
     updateRequestSp,
     checkFormSps,
-    fillLoadSkeleton,
+    initSps,
   } = useContext(RidePageContext);
+
+  const pickupRef = useRef(null);
 
   const debouncedSearch = React.useRef(
     debounce(async (text, i) => {
@@ -116,7 +118,6 @@ const SearchBar = ({
   };
 
   useEffect(() => {
-    fillLoadSkeleton();
     debouncedSearch(searchTerm);
   }, [searchTerm]);
 
@@ -150,6 +151,7 @@ const SearchBar = ({
   });
 
   const onBackPress = () => {
+    initSps();
     setSearchTerm(null);
     if (selectedInputTarget) {
       selectedInputTarget.blur();

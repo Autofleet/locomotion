@@ -1,11 +1,9 @@
 import React, { useContext, useEffect, useRef } from 'react';
 import { useNavigation } from '@react-navigation/native';
-
-import { StyleSheet, View } from 'react-native';
-import { NotAvailableHere } from '../../Components/BsPages';
+import { ConfirmPickup, NotAvailableHere } from '../../Components/BsPages';
 import { RideStateContextContext, RidePageContextProvider } from '../../context';
 import NewRidePageContextProvider, { RidePageContext } from '../../context/newRideContext';
-import BottomSheetContextProvider from '../../context/bottomSheetContext';
+import BottomSheetContextProvider, { BottomSheetContext, SNAP_POINT_STATES } from '../../context/bottomSheetContext';
 import {
   PageContainer,
 } from './styled';
@@ -15,22 +13,25 @@ import AvailabilityContextProvider from '../../context/availability';
 import BottomSheet from './RideDrawer/BottomSheet';
 import RideOptions from './RideDrawer/RideOptions';
 import AddressSelector from './RideDrawer/AddressSelector';
-
-// import de from './src/I18n/en.json';
-
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    flexGrow: 1,
-  },
-
-});
+import StopPointsViewer from '../../Components/StopPointsViewer';
+import hamburgerIcon from '../../assets/hamburger.svg';
+import backArrow from '../../assets/arrow-back.svg';
 
 
-const RidePage = ({ menuSide, mapSettings }) => {
-  const { initGeoService, showOutOfTerritory } = useContext(RideStateContextContext);
-  const { serviceEstimations } = useContext(RidePageContext);
+const RidePage = ({ mapSettings }) => {
+  const { initGeoService, showOutOfTerritory, currentBsPage } = useContext(RideStateContextContext);
+  const { serviceEstimations, setServiceEstimations, initSps } = useContext(RidePageContext);
+  const { setSnapPointsState, setSnapPointIndex } = useContext(BottomSheetContext);
+  const BS_PAGE_TO_COMP = {
+    main: () => (showOutOfTerritory ? (
+      <NotAvailableHere onButtonPress={() => ({})} />
+    ) : (
+      !serviceEstimations
+        ? <AddressSelector />
+        : <RideOptions />
+    )),
+    selectLocationOnMap: () => <ConfirmPickup />,
+  };
 
   const navigation = useNavigation();
   const mapRef = useRef();
@@ -46,20 +47,45 @@ const RidePage = ({ menuSide, mapSettings }) => {
     }
   }, [serviceEstimations]);
 
+  const goBackToAddress = () => {
+    setServiceEstimations(null);
+    setSnapPointsState(SNAP_POINT_STATES.ADDRESS_SELECTOR);
+    bottomSheetRef.current.expand();
+  };
+
+  const backToMap = () => {
+    setServiceEstimations(null);
+    initSps();
+    setSnapPointIndex(0);
+    setSnapPointsState(SNAP_POINT_STATES.ADDRESS_SELECTOR);
+  };
   return (
     <PageContainer>
-      <MainMap ref={mapRef} mapSettings={mapSettings} />
-      <Header navigation={navigation} menuSide={menuSide} />
+      <MainMap
+        ref={mapRef}
+        mapSettings={mapSettings}
+      />
+      {!serviceEstimations
+        ? (
+          <Header
+            icon={hamburgerIcon}
+            onPressIcon={navigation.openDrawer}
+          />
+        )
+        : (
+          <Header
+            icon={backArrow}
+            onPressIcon={backToMap}
+          >
+            <StopPointsViewer goBackToAddressSelector={goBackToAddress} />
+          </Header>
+        )}
       <BottomSheet
         ref={bottomSheetRef}
       >
-        {showOutOfTerritory ? (
-          <NotAvailableHere onButtonPress={() => ({})} />
-        ) : (
-          !serviceEstimations
-            ? <AddressSelector bottomSheetRef={bottomSheetRef} />
-            : <RideOptions />
-        )}
+        {
+          BS_PAGE_TO_COMP[currentBsPage]()
+        }
       </BottomSheet>
     </PageContainer>
   );

@@ -13,9 +13,10 @@ import { Context as ThemeContext, THEME_MOD } from '../../context/theme';
 import { AvailabilityContext } from '../../context/availability';
 import AvailabilityVehicle from '../../Components/AvailabilityVehicle';
 import StationsMap from '../../Components/Marker';
+import { latLngToAddress } from '../../context/newRideContext/utils';
 
 const MAP_EDGE_PADDING = {
-  top: 80,
+  top: 120,
   right: 100,
   bottom: 400,
   left: 100,
@@ -35,10 +36,11 @@ export default React.forwardRef(({
     territory,
     showOutOfTerritory,
     selectLocationMode,
-    saveSelectedLocation,
+    currentBsPage,
   } = useContext(RideStateContextContext);
 
-  const { requestStopPoints, chosenService } = useContext(RidePageContext);
+  const isMainPage = currentBsPage === 'main';
+  const { requestStopPoints, chosenService, saveSelectedLocation } = useContext(RidePageContext);
 
   const [mapRegion, setMapRegion] = useState({
     latitudeDelta: 0.015,
@@ -56,12 +58,12 @@ export default React.forwardRef(({
     }
   };
 
-  const buildAvailabilityVehicles = () => availabilityVehicles.map(vehicle => (
+  const buildAvailabilityVehicles = () => (isMainPage ? availabilityVehicles.map(vehicle => (
     <AvailabilityVehicle
       location={vehicle.location}
       id={vehicle.id}
     />
-  ));
+  )) : null);
 
   const initialLocation = async () => {
     try {
@@ -93,7 +95,7 @@ export default React.forwardRef(({
 
   const showInputPointsOnMap = () => {
     const coordsToFit = requestStopPoints
-      .filter((sp => sp.location))
+      .filter((sp => sp.lat))
       .map(sp => (
         {
           latitude: parseFloat(sp.lat),
@@ -106,7 +108,7 @@ export default React.forwardRef(({
       });
   };
   useEffect(() => {
-    if (requestStopPoints.filter((sp => sp.location)).length > 1) {
+    if (requestStopPoints.filter((sp => sp.lat)).length > 1) {
       showInputPointsOnMap();
     }
   }, [requestStopPoints]);
@@ -115,7 +117,7 @@ export default React.forwardRef(({
     <>
       <MapView
         provider={Config.MAP_PROVIDER}
-        showsUserLocation
+        showsUserLocation={isMainPage}
         style={StyleSheet.absoluteFillObject}
         showsMyLocationButton={false}
         loadingEnabled
@@ -123,12 +125,16 @@ export default React.forwardRef(({
         key="map"
         followsUserLocation={isUserLocationFocused}
         moveOnMarkerPress={false}
-        onRegionChange={(event) => {
+        onRegionChangeComplete={async (event) => {
           if (selectLocationMode) {
             const { latitude, longitude } = event;
+            const lat = latitude.toFixed(6);
+            const lng = longitude.toFixed(6);
+            const description = await latLngToAddress(lat, lng);
             saveSelectedLocation({
-              latitude: latitude.toFixed(6),
-              longitude: longitude.toFixed(6),
+              lat,
+              lng,
+              description,
             });
           }
         }}
@@ -155,9 +161,9 @@ export default React.forwardRef(({
         customMapStyle={isDarkMode ? mapDarkMode : undefined}
         {...mapSettings}
       >
-        {chosenService && requestStopPoints.filter(sp => !!sp.location).length > 1
+        {chosenService && requestStopPoints.filter(sp => !!sp.lat).length > 1
           ? requestStopPoints
-            .filter(sp => !!sp.location)
+            .filter(sp => !!sp.lat)
             .map(sp => (<StationsMap stopPoint={sp} />))
           : null}
         {showOutOfTerritory && territory && territory.length ? territory

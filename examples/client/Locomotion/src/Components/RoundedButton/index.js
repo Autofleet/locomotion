@@ -5,7 +5,6 @@ import { ButtonTextContainer, StyledButton, SubmitButtonText } from './styled';
 
 const RoundedButton = ({
   onPress,
-  children,
   style,
   hollow,
   setLoading,
@@ -35,6 +34,7 @@ const RoundedButton = ({
       hollow={hollow}
       disabled={(loadingState || disabled)}
       type={type}
+      style={style}
       useCancelTextButton={useCancelTextButton}
     >
       <ButtonTextContainer>
@@ -53,7 +53,7 @@ const RoundedButton = ({
             type={type}
             useCancelTextButton={useCancelTextButton}
           >
-            {children}
+            {props.children}
           </SubmitButtonText>
         )}
       </ButtonTextContainer>
@@ -67,6 +67,7 @@ RoundedButton.defaultProps = {
   onPress: () => null,
   disabled: false,
   useCancelTextButton: false,
+  setLoading: null,
 };
 
 RoundedButton.propTypes = {
@@ -75,6 +76,7 @@ RoundedButton.propTypes = {
   onPress: propsTypes.func,
   disabled: propsTypes.bool,
   useCancelTextButton: propsTypes.bool,
+  setLoading: propsTypes.func,
 };
 
 export default RoundedButton;
