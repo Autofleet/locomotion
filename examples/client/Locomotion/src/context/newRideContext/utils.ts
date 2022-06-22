@@ -22,6 +22,20 @@ export const INITIAL_STOP_POINTS = [{
   id: shortid.generate(),
 }];
 
+
+export const buildStreetAddress = (data) => {
+  const streetAddress: any = {};
+  data.results[0].address_components.map((ac) => {
+    if (ac.types.includes('street_number')) {
+      streetAddress.number = ac.long_name;
+    }
+    if (ac.types.includes('route')) {
+      streetAddress.name = ac.long_name;
+    }
+  });
+  return `${streetAddress.name} ${streetAddress.number}`;
+};
+
 export const getEstimationTags = (estimations) => {
   const tags: any = {
     fastest: {},

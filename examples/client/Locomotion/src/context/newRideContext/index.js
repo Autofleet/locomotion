@@ -6,6 +6,7 @@ import { getPlaces, getGeocode, getPlaceDetails } from './google-api';
 import StorageService from '../../services/storage';
 import { createServiceEstimations, getServices } from './api';
 import {
+  buildStreetAddress,
   formatEstimationsResult, formatStopPointsForEstimations, getEstimationTags, INITIAL_STOP_POINTS,
 } from './utils';
 
@@ -166,18 +167,6 @@ const RidePageContextProvider = ({ children }) => {
     }
   };
 
-  const buildStreetAddress = (data) => {
-    const streetAddress = {};
-    data.results[0].address_components.map((ac) => {
-      if (ac.types.includes('street_number')) {
-        streetAddress.number = ac.long_name;
-      }
-      if (ac.types.includes('route')) {
-        streetAddress.name = ac.long_name;
-      }
-    });
-    return `${streetAddress.name} ${streetAddress.number}`;
-  };
 
   const reverseLocationGeocode = async () => {
     try {
