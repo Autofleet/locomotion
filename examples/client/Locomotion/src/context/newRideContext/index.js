@@ -208,9 +208,6 @@ const RidePageContextProvider = ({ navigation, children }) => {
   };
 
   const onAddressSelected = async (selectedItem) => {
-    if (selectedItem.isLoading) {
-      return null;
-    }
     const enrichedPlace = await enrichPlaceWithLocation(selectedItem.placeId);
     const reqSps = [...requestStopPoints];
     reqSps[selectedInputIndex] = {
@@ -284,11 +281,6 @@ const RidePageContextProvider = ({ navigation, children }) => {
     }
   };
 
-  const fillLoadSkeleton = () => {
-    const filledArray = new Array(4).fill({ isLoading: true });
-    setSearchResults(filledArray);
-  };
-
 
   return (
     <RidePageContext.Provider
@@ -315,7 +307,6 @@ const RidePageContextProvider = ({ navigation, children }) => {
         serviceEstimations,
         chosenService,
         setChosenService,
-        fillLoadSkeleton,
       }}
     >
       {children}
