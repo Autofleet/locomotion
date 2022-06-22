@@ -1,3 +1,4 @@
+/* eslint-disable class-methods-use-this */
 import jwtDecode from 'jwt-decode';
 import StorageService from './storage';
 import AppSettings from './app-settings';

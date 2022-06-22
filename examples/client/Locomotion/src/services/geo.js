@@ -1,3 +1,4 @@
+/* eslint-disable class-methods-use-this */
 import { Alert, PermissionsAndroid, Platform } from 'react-native';
 import Config from 'react-native-config';
 import RNLocation from 'react-native-location';
