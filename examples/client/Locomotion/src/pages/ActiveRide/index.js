@@ -15,7 +15,9 @@ import AvailabilityContextProvider from '../../context/availability';
 import BottomSheet from './RideDrawer/BottomSheet';
 import RideOptions from './RideDrawer/RideOptions';
 import AddressSelector from './RideDrawer/AddressSelector';
-import AddressHeader from '../../Components/Header/AddressHeader';
+import StopPointsViewer from '../../Components/StopPointsViewer';
+import hamburgerIcon from '../../assets/hamburger.svg';
+import backArrow from '../../assets/arrow-back.svg';
 
 // import de from './src/I18n/en.json';
 
@@ -31,7 +33,7 @@ const styles = StyleSheet.create({
 
 const RidePage = ({ menuSide, mapSettings }) => {
   const { initGeoService, showOutOfTerritory } = useContext(RideStateContextContext);
-  const { serviceEstimations, setServiceEstimations } = useContext(RidePageContext);
+  const { serviceEstimations, setServiceEstimations, initSps } = useContext(RidePageContext);
 
   const navigation = useNavigation();
   const mapRef = useRef();
@@ -51,6 +53,11 @@ const RidePage = ({ menuSide, mapSettings }) => {
     setServiceEstimations(null);
     bottomSheetRef.current.expand();
   };
+
+  const backToMap = () => {
+    setServiceEstimations(null);
+    initSps();
+  };
   return (
     <PageContainer>
       <MainMap
@@ -58,9 +65,16 @@ const RidePage = ({ menuSide, mapSettings }) => {
         mapSettings={mapSettings} />
       {!serviceEstimations
         ? <Header
-          navigation={navigation}
+          icon={hamburgerIcon}
+          onPressIcon={navigation.openDrawer}
           menuSide={menuSide} />
-        : <AddressHeader backToAddress={goBackToAddress} />}
+        : <Header
+          icon={backArrow}
+          onPressIcon={backToMap}
+          menuSide={menuSide}
+            >
+            <StopPointsViewer goBackToAddressSelector={goBackToAddress} />
+          </Header>}
       <BottomSheet
         ref={bottomSheetRef}
       >

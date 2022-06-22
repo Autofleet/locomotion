@@ -6,8 +6,12 @@ export const HeaderView = styled.View`
   shadow-color: #04214f;
   shadow-opacity: 0.4;
   background-color: ${({ theme }) => theme.pageBackgroundColor};
-  padding: 5px;
   border-radius: 8px;
+  width: 40px;
+  height: 40px;
+  align-items: center;
+  display: flex;
+  justify-content: center;
 
   ${({ menuSide }) => (menuSide === 'right' ? `
   align-self: flex-end;

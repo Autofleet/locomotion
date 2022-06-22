@@ -5,21 +5,20 @@ import backArrow from '../../assets/arrow-back.svg';
 import editIcon from '../../assets/edit-icon.svg';
 import { Container, StreetAddress } from './styled';
 
-const StopPointsViewer = () => {
+const StopPointsViewer = ({ goBackToAddressSelector }) => {
   const { requestStopPoints } = useContext(RidePageContext);
-  console.log(requestStopPoints);
   const firstSp = requestStopPoints[0];
   const lastSp = requestStopPoints[requestStopPoints.length - 1];
   return (
-        <Container>
-            <StreetAddress>
+        <Container onPress={goBackToAddressSelector}>
+            <StreetAddress numberOfLines={1}>
                 {firstSp.streetAddress}
             </StreetAddress>
-            <SvgIcon Svg={backArrow} width={25} height={25}/>
-            <StreetAddress>
+            <SvgIcon Svg={backArrow} width={15} height={15}/>
+            <StreetAddress numberOfLines={1}>
                 {lastSp.streetAddress}
             </StreetAddress>
-            <SvgIcon Svg={editIcon} width={25} height={25} />
+            <SvgIcon Svg={editIcon} width={15} height={15} />
         </Container>
   );
 };

@@ -163,10 +163,10 @@ const RidePageContextProvider = ({ navigation, children }) => {
   const buildStreetAddress = (data) => {
     const streetAddress = {};
     data.results[0].address_components.map((ac) => {
-      if (ac.types.contains('street_number')) {
+      if (ac.types.includes('street_number')) {
         streetAddress.number = ac.long_name;
       }
-      if (ac.types.contains('route')) {
+      if (ac.types.includes('route')) {
         streetAddress.name = ac.long_name;
       }
     });
