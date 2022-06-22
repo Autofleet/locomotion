@@ -1,3 +1,4 @@
+/* eslint-disable class-methods-use-this */
 import { Platform } from 'react-native';
 import OneSignal from 'react-native-onesignal'; // Import package from node modules
 import Config from 'react-native-config';
