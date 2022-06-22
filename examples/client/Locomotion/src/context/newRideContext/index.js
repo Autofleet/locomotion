@@ -57,7 +57,7 @@ export const RidePageContext = createContext({
   },
   updateRide: (ride) => {},
   chosenService: null,
-  lastSelectedLocation: null
+  lastSelectedLocation: null,
 });
 const HISTORY_RECORDS_NUM = 10;
 
@@ -67,7 +67,7 @@ export const latLngToAddress = async (lat, lng) => {
     latlng: location,
   });
 
-  console.log('data', data)
+  console.log('data', data);
   return data.results[0].formatted_address;
 };
 
@@ -320,13 +320,13 @@ const RidePageContextProvider = ({ navigation, children }) => {
       setIsReadyForSubmit(false);
     }
   };
-  
+
   const updateRide = (newRide) => {
     setRide({
       ...ride,
       ...newRide,
-    })
-  }
+    });
+  };
 
   return (
     <RidePageContext.Provider
@@ -356,7 +356,7 @@ const RidePageContextProvider = ({ navigation, children }) => {
         chosenService,
         setChosenService,
         lastSelectedLocation,
-        saveSelectedLocation
+        saveSelectedLocation,
       }}
     >
       {children}

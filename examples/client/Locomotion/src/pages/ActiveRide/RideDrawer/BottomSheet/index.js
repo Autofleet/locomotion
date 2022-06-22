@@ -22,7 +22,7 @@ const BottomSheetComponent = forwardRef(({ children }, ref) => {
     setIsExpanded,
     snapPoints,
     snapPointIndex,
-    footerComponent
+    footerComponent,
   } = useContext(BottomSheetContext);
 
   const handleSheetChanges = useCallback((index) => {
@@ -37,16 +37,18 @@ const BottomSheetComponent = forwardRef(({ children }, ref) => {
 
   const renderFooter = useCallback(
     props => (
-      footerComponent && <BottomSheetFooter {...props} bottomInset={24}>
-          {footerComponent}
+      footerComponent && (
+      <BottomSheetFooter {...props} bottomInset={24}>
+        {footerComponent}
       </BottomSheetFooter>
+      )
     ),
-    [footerComponent]
+    [footerComponent],
   );
 
 
   return (
-    <>      
+    <>
       <BottomSheet
         ref={ref}
         index={snapPointIndex}

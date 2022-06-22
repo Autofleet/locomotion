@@ -19,18 +19,16 @@ interface PaymentButtonProps {
 }
 
 const PaymentButton = ({
-    icon,
-    title,
-    brand
-}: PaymentButtonProps) => {
-    return (
-        <>
-            {brand ? 
-            <PaymentIcon type={brand} />
-            : <SvgIcon Svg={icon} height={15} width={15} />}
-            <TimeText>{title}</TimeText>
-        </>
-    )
-};
+  icon,
+  title,
+  brand,
+}: PaymentButtonProps) => (
+  <>
+    {brand
+      ? <PaymentIcon type={brand} />
+      : <SvgIcon Svg={icon} height={15} width={15} />}
+    <TimeText>{title}</TimeText>
+  </>
+);
 
 export default PaymentButton;

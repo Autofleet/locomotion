@@ -196,7 +196,7 @@ const RidePageContextProvider = ({ navigation, children }) => {
     && state.pickup && state.pickup.lat;
 
   const loadPreRideDetails = async (origin, destination) => {
-    return;
+
   };
 
   const calculatePickupEta = (origin) => {

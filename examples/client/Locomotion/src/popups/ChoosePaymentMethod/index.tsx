@@ -8,7 +8,7 @@ import {
   SummaryContainer,
   Title,
   Container,
-  Footer
+  Footer,
 } from './styled';
 import RoundedButton from '../../Components/RoundedButton';
 import { FlexCont } from '../../Components/Flex';
@@ -30,47 +30,52 @@ const PaymentMethodPopup = ({ isVisible, onCancel }: PaymentMethodPopupProps) =>
   const {
     ride,
     updateRide,
-  } = useContext(RidePageContext)
+  } = useContext(RidePageContext);
   const usePayments = PaymentsContext.useContainer();
   const navigation = useNavigation<Nav>();
-  
+
   return (
     <Modal isVisible={isVisible}>
       <SummaryContainer>
         <Container>
-            <View>
-              <Title>{i18n.t('popups.choosePaymentMethod.title')}</Title>
-            </View>
           <View>
-            {[...usePayments.paymentMethods].map((paymentMethod: PaymentMethodInterface, i) =>
-              <PaymentMethod 
-              {...paymentMethod} 
-              selected={ride.paymentMethodId === paymentMethod.id} 
+            <Title>{i18n.t('popups.choosePaymentMethod.title')}</Title>
+          </View>
+          <View>
+            {[...usePayments.paymentMethods].map((paymentMethod: PaymentMethodInterface, i) => (
+              <PaymentMethod
+                {...paymentMethod}
+                selected={ride.paymentMethodId === paymentMethod.id}
+                onPress={() => {
+                  updateRide({
+                    paymentMethodId: paymentMethod.id,
+                  });
+                  onCancel();
+                }}
+              />
+            ))}
+            <PaymentMethod
+              addNew
               onPress={() => {
-                updateRide({
-                  paymentMethodId: paymentMethod.id
-                });
                 onCancel();
-              }}/>)}
-            <PaymentMethod addNew onPress={() => { 
-              onCancel();
-              navigation.navigate(MAIN_ROUTES.PAYMENT); 
-            }} />
+                navigation.navigate(MAIN_ROUTES.PAYMENT);
+              }}
+            />
           </View>
           <Footer>
-          <FlexCont style={{ justifyContent: 'center'}}>
-            <RoundedButton
-              type="confirm"
-              hollow={false}
-              disabled={false}
-              useCancelTextButton={false}
-              setLoading={null}
-              style={{}}
-              onPress={() => onCancel()}
-            >
-              {i18n.t('popups.rideNotes.save')}
-            </RoundedButton>
-          </FlexCont>
+            <FlexCont style={{ justifyContent: 'center' }}>
+              <RoundedButton
+                type="confirm"
+                hollow={false}
+                disabled={false}
+                useCancelTextButton={false}
+                setLoading={null}
+                style={{}}
+                onPress={() => onCancel()}
+              >
+                {i18n.t('popups.rideNotes.save')}
+              </RoundedButton>
+            </FlexCont>
           </Footer>
         </Container>
       </SummaryContainer>

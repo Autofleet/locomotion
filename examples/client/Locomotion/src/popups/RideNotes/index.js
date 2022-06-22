@@ -16,7 +16,7 @@ const MAX_SIZE = 100;
 
 export default ({ isVisible, onSubmit, onCancel }) => {
   const {
-    ride
+    ride,
   } = useContext(RidePageContext);
   const [currentText, updateText] = useState(ride.notes || '');
 

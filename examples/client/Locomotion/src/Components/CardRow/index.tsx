@@ -73,35 +73,38 @@ function capitalizeFirstLetter(string) {
 export default (paymentMethod: any) => (
   <TouchableOpacity onPress={paymentMethod.onPress}>
     <Container selected={paymentMethod.selected}>
-        <ImageContainer>
-          {paymentMethod.addNew ? 
-          <>
-            <PlusContainer><PlusText>+</PlusText></PlusContainer>
-          </>
-          :
-          (
+      <ImageContainer>
+        {paymentMethod.addNew
+          ? (
             <>
-            <PaymentIcon type={paymentMethod.brand} />
-            {paymentMethod.selected ? <SvgIcon Svg={selected} containerStyle={style} /> : null}
+              <PlusContainer><PlusText>+</PlusText></PlusContainer>
+            </>
+          )
+          : (
+            <>
+              <PaymentIcon type={paymentMethod.brand} />
+              {paymentMethod.selected ? <SvgIcon Svg={selected} containerStyle={style} /> : null}
             </>
           )
         }
-          
-        </ImageContainer>
-        <TextContainer>
-        {paymentMethod.addNew ? 
-          <>
-            <Type>{i18n.t('payments.addNewCreditCard')}</Type>
-          </>
+
+      </ImageContainer>
+      <TextContainer>
+        {paymentMethod.addNew
+          ? (
+            <>
+              <Type>{i18n.t('payments.addNewCreditCard')}</Type>
+            </>
+          )
           : (
             <>
-            <Type>{capitalizeFirstLetter(paymentMethod.brand)}</Type>
-            {paymentMethod.lastFour ? <Description>{`**** ${capitalizeFirstLetter(paymentMethod.lastFour)}`}</Description> : null}
-            {true || (paymentMethod && moment(paymentMethod.expiresAt).isBefore(moment())) ? <Error>{i18n.t('payments.expired')}</Error> : null}
-            {true || (paymentMethod && paymentMethod.hasOutstandingBalance) ? <Error>{i18n.t('payments.hasOutstandingBalance')}</Error> : null}
+              <Type>{capitalizeFirstLetter(paymentMethod.brand)}</Type>
+              {paymentMethod.lastFour ? <Description>{`**** ${capitalizeFirstLetter(paymentMethod.lastFour)}`}</Description> : null}
+              {true || (paymentMethod && moment(paymentMethod.expiresAt).isBefore(moment())) ? <Error>{i18n.t('payments.expired')}</Error> : null}
+              {true || (paymentMethod && paymentMethod.hasOutstandingBalance) ? <Error>{i18n.t('payments.hasOutstandingBalance')}</Error> : null}
             </>
           )}
-        </TextContainer>
+      </TextContainer>
     </Container>
   </TouchableOpacity>
 );

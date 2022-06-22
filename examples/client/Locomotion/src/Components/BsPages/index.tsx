@@ -128,6 +128,8 @@ export const ConfirmPickup = (props: any) => {
       ButtonText={i18n.t('bottomSheetContent.confirmPickup.buttonText')}
       SubTitleText={i18n.t('bottomSheetContent.confirmPickup.subTitleText')}
       {...props}
-    ><AddressInput>{lastSelectedLocation.description}</AddressInput></BsPage>
+    >
+      <AddressInput>{lastSelectedLocation.description}</AddressInput>
+    </BsPage>
   );
 };

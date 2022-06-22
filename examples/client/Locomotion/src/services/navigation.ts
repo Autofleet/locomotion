@@ -2,9 +2,9 @@
 import { CommonActions, NavigationContainerRef, StackActions } from '@react-navigation/native';
 import Mixpanel from './Mixpanel';
 
-let myNavigator: NavigationContainerRef<ReactNavigation.RootParamList>;
+let myNavigator: any;
 
-export const setTopLevelNavigator = (navigatorRef: NavigationContainerRef<ReactNavigation.RootParamList>) => {
+export const setTopLevelNavigator = (navigatorRef: any) => {
   myNavigator = navigatorRef;
 };
 

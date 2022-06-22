@@ -2,7 +2,7 @@ import React from 'react';
 import { Text } from 'react-native';
 import styled from 'styled-components';
 import SvgIcon from '../../../../../../Components/SvgIcon';
-import clock from '../../../../../../assets/bottomSheet/clock.svg'
+import clock from '../../../../../../assets/bottomSheet/clock.svg';
 import i18n from '../../../../../../I18n';
 import { FONT_SIZES, FONT_WEIGHTS } from '../../../../../../context/theme';
 
@@ -14,13 +14,13 @@ const TimeText = styled(Text)`
 `;
 
 const FutureBookingButton = () => {
- const nowText = i18n.t('bottomSheetContent.ride.now');
-    return (
-        <>
-            <SvgIcon fill="#333" Svg={clock} height={15} width={15} />
-            <TimeText>{nowText}</TimeText>
-        </>
-    )
+  const nowText = i18n.t('bottomSheetContent.ride.now');
+  return (
+    <>
+      <SvgIcon fill="#333" Svg={clock} height={15} width={15} />
+      <TimeText>{nowText}</TimeText>
+    </>
+  );
 };
 
 export default FutureBookingButton;

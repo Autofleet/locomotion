@@ -15,19 +15,18 @@ import RideOptions from './RideDrawer/RideOptions';
 import AddressSelector from './RideDrawer/AddressSelector';
 
 
-
 const RidePage = ({ menuSide, mapSettings }) => {
   const { initGeoService, showOutOfTerritory, currentBsPage } = useContext(RideStateContextContext);
   const { serviceEstimations } = useContext(RidePageContext);
   const BS_PAGE_TO_COMP = {
-    'main': () => (showOutOfTerritory ? (
+    main: () => (showOutOfTerritory ? (
       <NotAvailableHere onButtonPress={() => ({})} />
     ) : (
       !serviceEstimations
         ? <AddressSelector bottomSheetRef={bottomSheetRef} />
         : <RideOptions />
     )),
-    'selectLocationOnMap': () => <ConfirmPickup />
+    selectLocationOnMap: () => <ConfirmPickup />,
   };
 
   const navigation = useNavigation();

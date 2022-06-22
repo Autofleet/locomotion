@@ -4,7 +4,7 @@ import React, {
 import { Platform, StyleSheet } from 'react-native';
 import MapView, { Polygon } from 'react-native-maps';
 import Config from 'react-native-config';
-import { RidePageContext } from '../../context/newRideContext';
+import { RidePageContext, latLngToAddress } from '../../context/newRideContext';
 import { RideStateContextContext } from '../../context';
 import { getPosition } from '../../services/geo';
 import { LocationMarker, LocationMarkerContainer } from './styled';
@@ -13,7 +13,6 @@ import { Context as ThemeContext, THEME_MOD } from '../../context/theme';
 import { AvailabilityContext } from '../../context/availability';
 import AvailabilityVehicle from '../../Components/AvailabilityVehicle';
 import StationsMap from '../../Components/Marker';
-import { latLngToAddress } from '../../context/newRideContext';
 
 const MAP_EDGE_PADDING = {
   top: 80,
@@ -36,10 +35,10 @@ export default React.forwardRef(({
     territory,
     showOutOfTerritory,
     selectLocationMode,
-    currentBsPage
+    currentBsPage,
   } = useContext(RideStateContextContext);
 
-    const { requestStopPoints, chosenService, saveSelectedLocation } = useContext(RidePageContext);
+  const { requestStopPoints, chosenService, saveSelectedLocation } = useContext(RidePageContext);
 
   const [mapRegion, setMapRegion] = useState({
     latitudeDelta: 0.015,
@@ -57,12 +56,12 @@ export default React.forwardRef(({
     }
   };
 
-  const buildAvailabilityVehicles = () => currentBsPage === 'main' ? availabilityVehicles.map(vehicle => (
+  const buildAvailabilityVehicles = () => (currentBsPage === 'main' ? availabilityVehicles.map(vehicle => (
     <AvailabilityVehicle
       location={vehicle.location}
       id={vehicle.id}
     />
-  )) : null;
+  )) : null);
 
   const initialLocation = async () => {
     try {
@@ -129,7 +128,7 @@ export default React.forwardRef(({
             const { latitude, longitude } = event;
             const lat = latitude.toFixed(6);
             const lng = longitude.toFixed(6);
-            const description = await latLngToAddress(lat, lng)
+            const description = await latLngToAddress(lat, lng);
             saveSelectedLocation({
               lat,
               lng,
