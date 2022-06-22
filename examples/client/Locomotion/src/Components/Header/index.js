@@ -7,19 +7,21 @@ const Header = ({
   children, menuSide = 'left', onPressIcon, icon,
 }) => (
   <SafeView>
-      <Container>
-        <ButtonHeaderView
-          onPress={onPressIcon}
-          data-test-id="headerButton">
-          <HeaderView menuSide={menuSide}>
-            <SvgIcon
-              Svg={icon}
-              height={20}
-              width={20} />
-          </HeaderView>
-        </ButtonHeaderView>
-        {children}
-      </Container>
+    <Container>
+      <ButtonHeaderView
+        onPress={onPressIcon}
+        data-test-id="headerButton"
+      >
+        <HeaderView menuSide={menuSide}>
+          <SvgIcon
+            Svg={icon}
+            height={20}
+            width={20}
+          />
+        </HeaderView>
+      </ButtonHeaderView>
+      {children}
+    </Container>
   </SafeView>
 );
 

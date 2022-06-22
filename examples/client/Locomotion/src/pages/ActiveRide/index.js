@@ -62,19 +62,25 @@ const RidePage = ({ menuSide, mapSettings }) => {
     <PageContainer>
       <MainMap
         ref={mapRef}
-        mapSettings={mapSettings} />
+        mapSettings={mapSettings}
+      />
       {!serviceEstimations
-        ? <Header
-          icon={hamburgerIcon}
-          onPressIcon={navigation.openDrawer}
-          menuSide={menuSide} />
-        : <Header
-          icon={backArrow}
-          onPressIcon={backToMap}
-          menuSide={menuSide}
-            >
+        ? (
+          <Header
+            icon={hamburgerIcon}
+            onPressIcon={navigation.openDrawer}
+            menuSide={menuSide}
+          />
+        )
+        : (
+          <Header
+            icon={backArrow}
+            onPressIcon={backToMap}
+            menuSide={menuSide}
+          >
             <StopPointsViewer goBackToAddressSelector={goBackToAddress} />
-          </Header>}
+          </Header>
+        )}
       <BottomSheet
         ref={bottomSheetRef}
       >

@@ -10,16 +10,16 @@ const StopPointsViewer = ({ goBackToAddressSelector }) => {
   const firstSp = requestStopPoints[0];
   const lastSp = requestStopPoints[requestStopPoints.length - 1];
   return (
-        <Container onPress={goBackToAddressSelector}>
-            <StreetAddress numberOfLines={1}>
-                {firstSp.streetAddress}
-            </StreetAddress>
-            <SvgIcon Svg={backArrow} width={15} height={15}/>
-            <StreetAddress numberOfLines={1}>
-                {lastSp.streetAddress}
-            </StreetAddress>
-            <SvgIcon Svg={editIcon} width={15} height={15} />
-        </Container>
+    <Container onPress={goBackToAddressSelector}>
+      <StreetAddress numberOfLines={1}>
+        {firstSp.streetAddress}
+      </StreetAddress>
+      <SvgIcon Svg={backArrow} width={15} height={15} />
+      <StreetAddress numberOfLines={1}>
+        {lastSp.streetAddress}
+      </StreetAddress>
+      <SvgIcon Svg={editIcon} width={15} height={15} />
+    </Container>
   );
 };
 
