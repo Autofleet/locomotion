@@ -19,7 +19,7 @@ import { RidePageContext } from '../../context/newRideContext';
 
 interface PaymentMethodPopupProps {
   isVisible: boolean;
-  onCancel: Function;
+  onCancel: () => void;
 }
 
 type Nav = {

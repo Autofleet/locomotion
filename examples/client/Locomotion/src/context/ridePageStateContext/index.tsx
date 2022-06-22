@@ -6,28 +6,28 @@ import pointInPolygon from './pointInPolygon';
 type BsPages = 'main' | 'selectLocationOnMap' | 'payment';
 interface RidePageStateContextProps {
   territory: any;
-  loadTerritory: Function;
+  loadTerritory: () => void;
   showOutOfTerritory: boolean | undefined;
-  setShowOutOfTerritory: Function;
-  initGeoService: Function;
+  setShowOutOfTerritory: (outOfTerritory: boolean) => void;
+  initGeoService: () => void;
   selectLocationMode: boolean | undefined;
-  setSelectLocationMode: Function;
+  setSelectLocationMode: (mode: boolean) => void;
   isUserLocationFocused: boolean;
-  setIsUserLocationFocused: Function;
+  setIsUserLocationFocused: (isLocationFocused: boolean) => void;
   currentBsPage: BsPages;
-  setCurrentBsPage: Function;
+  setCurrentBsPage: (page: BsPages) => void;
 }
 
 export const RideStateContextContext = createContext<RidePageStateContextProps>({
   territory: {},
-  loadTerritory: () => {},
-  setShowOutOfTerritory: (outOfTerritory: boolean) => {},
-  initGeoService: () => {},
-  setSelectLocationMode: (mode: boolean) => {},
+  loadTerritory: () => undefined,
+  setShowOutOfTerritory: (outOfTerritory: boolean) => undefined,
+  initGeoService: () => undefined,
+  setSelectLocationMode: (mode: boolean) => undefined,
   isUserLocationFocused: false,
-  setIsUserLocationFocused: (isLocationFocused: boolean) => {},
+  setIsUserLocationFocused: (isLocationFocused: boolean) => undefined,
   currentBsPage: 'main',
-  setCurrentBsPage: (page: BsPages) => {},
+  setCurrentBsPage: (page: BsPages) => undefined,
   selectLocationMode: false,
   showOutOfTerritory: false,
 });

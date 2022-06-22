@@ -24,7 +24,7 @@ interface UserContextInterface {
   user: User | null,
   updateState: (field: string, value: any) => void,
   getUserFromStorage: () => void,
-  updateUserInfo: (values: {}) => Promise<void>,
+  updateUserInfo: (values: any) => Promise<void>,
   onVert: (code: string) => Promise<boolean | User>,
   removeChangesToUser: () => Promise<void>,
   verifyEmail: () => Promise<void>,
@@ -32,15 +32,15 @@ interface UserContextInterface {
 }
 
 export const UserContext = createContext<UserContextInterface>({
-  setUser: (user: User | null) => {},
+  setUser: (user: User | null) => null,
   user: null,
-  updateState: (field: string, value: any) => {},
-  getUserFromStorage: () => {},
-  updateUserInfo: async (values: {}) => {},
+  updateState: (field: string, value: any) => null,
+  getUserFromStorage: () => null,
+  updateUserInfo: async (values: any) => undefined,
   onVert: async (code: string) => false,
-  removeChangesToUser: async () => {},
-  verifyEmail: async () => {},
-  getUserFromServer: async () => {},
+  removeChangesToUser: async () => undefined,
+  verifyEmail: async () => undefined,
+  getUserFromServer: async () => undefined,
 });
 
 const UserContextProvider = ({ children }: { children: any }) => {

@@ -70,7 +70,7 @@ ConfirmationPopup.defaultProps = {
   useCancelTextButton: false,
   type: 'confirm',
   closeAfter: null,
-  onClose: () => {},
+  onClose: () => null,
 };
 
 ConfirmationPopup.propTypes = {

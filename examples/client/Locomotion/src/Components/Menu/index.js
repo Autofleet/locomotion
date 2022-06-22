@@ -16,9 +16,9 @@ import {
 } from './styled';
 import { UserContext } from '../../context/user';
 
-const History = require('../../assets/history.png');
-const HelpIconSource = require('../../assets/menuItems/help.png');
-const CreditCardIconSource = require('../../assets/menuItems/creditcard.png');
+import History from '../../assets/history.png';
+import HelpIconSource from '../../assets/menuItems/help.png';
+import CreditCardIconSource from '../../assets/menuItems/creditcard.png';
 
 const DrawerHeader = ({ navigation }) => {
   const { user } = useContext(UserContext);

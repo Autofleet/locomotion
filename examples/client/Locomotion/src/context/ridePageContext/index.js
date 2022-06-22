@@ -195,10 +195,6 @@ const RidePageContextProvider = ({ navigation, children }) => {
   const bookValidation = state => state && state.dropoff && state.dropoff.lat
     && state.pickup && state.pickup.lat;
 
-  const loadPreRideDetails = async (origin, destination) => {
-
-  };
-
   const calculatePickupEta = (origin) => {
     if (origin.completedAt) {
       setDisplayMatchInfo(true);
@@ -238,11 +234,6 @@ const RidePageContextProvider = ({ navigation, children }) => {
       [location.type]: location,
       openEdit: false,
     };
-    const bookValid = bookValidation(newState);
-
-    if (bookValid) {
-      loadPreRideDetails(newState.pickup, newState.dropoff);
-    }
 
     setRequestStopPoints(newState);
   };

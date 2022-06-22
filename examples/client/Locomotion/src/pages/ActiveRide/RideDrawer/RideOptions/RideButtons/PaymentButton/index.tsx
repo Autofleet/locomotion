@@ -18,6 +18,7 @@ interface PaymentButtonProps {
     brand?: Brand;
 }
 
+
 const PaymentButton = ({
   icon,
   title,
@@ -32,3 +33,7 @@ const PaymentButton = ({
 );
 
 export default PaymentButton;
+
+PaymentButton.defaultProps = {
+  brand: null,
+};

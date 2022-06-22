@@ -28,7 +28,7 @@ class Network {
   static defaultSettings = {
     baseURL: '/',
     timeout: 2500,
-  }
+  };
 
   constructor(settings = {}) {
     this.settings = Object.assign(Network.defaultSettings, settings);

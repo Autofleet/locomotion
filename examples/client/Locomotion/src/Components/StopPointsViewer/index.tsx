@@ -6,10 +6,15 @@ import editIcon from '../../assets/edit-icon.svg';
 import { Container, StreetAddress } from './styled';
 
 const ICON_SIZE = 15;
-const StopPointsViewer = ({ goBackToAddressSelector }) => {
+
+interface StopPointsViewerProps {
+  goBackToAddressSelector: () => void
+}
+
+const StopPointsViewer = ({ goBackToAddressSelector }: StopPointsViewerProps) => {
   const { requestStopPoints } = useContext(RidePageContext);
-  const firstSp = requestStopPoints[0];
-  const lastSp = requestStopPoints[requestStopPoints.length - 1];
+  const firstSp: any = requestStopPoints[0];
+  const lastSp: any = requestStopPoints[requestStopPoints.length - 1];
   return (
     <Container onPress={goBackToAddressSelector}>
       <StreetAddress numberOfLines={1}>
