@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { createContainer } from 'unstated-next';
-import network from '../services/network';
+import network from '../../services/network';
 
 const BASE_PATH = '/api/v1/me/costumers';
 

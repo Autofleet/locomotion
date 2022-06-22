@@ -8,8 +8,6 @@ const SvgIcon = ({
   fill,
   width,
   height,
-  margin,
-  onPress,
 }) => (
   <Svg
     width={width}

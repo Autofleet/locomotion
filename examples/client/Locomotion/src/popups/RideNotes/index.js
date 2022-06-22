@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { View } from 'react-native';
 import Modal from 'react-native-modal';
 import i18n from '../../I18n';
@@ -10,12 +10,15 @@ import {
 } from './styled';
 import RoundedButton from '../../Components/RoundedButton';
 import { FlexCont } from '../../Components/Flex';
+import { RidePageContext } from '../../context/newRideContext';
 
 const MAX_SIZE = 100;
 
-export default ({ isVisible }) => {
-  const [currentText, updateText] = useState('');
-  const onSubmit = () => null;
+export default ({ isVisible, onSubmit, onCancel }) => {
+  const {
+    ride,
+  } = useContext(RidePageContext);
+  const [currentText, updateText] = useState(ride.notes || '');
 
   return (
     <Modal isVisible={isVisible}>
@@ -30,6 +33,7 @@ export default ({ isVisible }) => {
             </View>
           </FlexCont>
           <StyledTextArea
+            value={currentText}
             multiline
             numberOfLines={7}
             textAlignVertical="top"
@@ -43,7 +47,7 @@ export default ({ isVisible }) => {
                 width="100%"
                 hollow
                 data-test-id="SubmitRideSummaryPopupButton"
-                onPress={() => onSubmit()}
+                onPress={() => onCancel()}
               >
                 {i18n.t('popups.rideNotes.cancel')}
               </RoundedButton>
@@ -51,7 +55,7 @@ export default ({ isVisible }) => {
             <FlexCont paddingStart={5}>
               <RoundedButton
                 data-test-id="SubmitRideSummaryPopupButton2"
-                onPress={() => onSubmit()}
+                onPress={() => onSubmit(currentText)}
               >
                 {i18n.t('popups.rideNotes.save')}
               </RoundedButton>

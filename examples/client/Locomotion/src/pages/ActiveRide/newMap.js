@@ -4,7 +4,7 @@ import React, {
 import { Platform, StyleSheet } from 'react-native';
 import MapView, { Polygon } from 'react-native-maps';
 import Config from 'react-native-config';
-import { RidePageContext } from '../../context/newRideContext';
+import { RidePageContext, latLngToAddress } from '../../context/newRideContext';
 import { RideStateContextContext } from '../../context';
 import { getPosition } from '../../services/geo';
 import { LocationMarker, LocationMarkerContainer } from './styled';
@@ -35,10 +35,11 @@ export default React.forwardRef(({
     territory,
     showOutOfTerritory,
     selectLocationMode,
-    saveSelectedLocation,
+    currentBsPage,
   } = useContext(RideStateContextContext);
 
-  const { requestStopPoints, chosenService } = useContext(RidePageContext);
+  const isMainPage = currentBsPage === 'main';
+  const { requestStopPoints, chosenService, saveSelectedLocation } = useContext(RidePageContext);
 
   const [mapRegion, setMapRegion] = useState({
     latitudeDelta: 0.015,
@@ -56,12 +57,12 @@ export default React.forwardRef(({
     }
   };
 
-  const buildAvailabilityVehicles = () => availabilityVehicles.map(vehicle => (
+  const buildAvailabilityVehicles = () => (isMainPage ? availabilityVehicles.map(vehicle => (
     <AvailabilityVehicle
       location={vehicle.location}
       id={vehicle.id}
     />
-  ));
+  )) : null);
 
   const initialLocation = async () => {
     try {
@@ -96,8 +97,8 @@ export default React.forwardRef(({
       .filter((sp => sp.location))
       .map(sp => (
         {
-          latitude: parseFloat(sp.location.lat),
-          longitude: parseFloat(sp.location.lng),
+          latitude: parseFloat(sp.lat),
+          longitude: parseFloat(sp.lng),
         }
       ));
     mapInstance.current.fitToCoordinates(coordsToFit,
@@ -115,7 +116,7 @@ export default React.forwardRef(({
     <>
       <MapView
         provider={Config.MAP_PROVIDER}
-        showsUserLocation
+        showsUserLocation={isMainPage}
         style={StyleSheet.absoluteFillObject}
         showsMyLocationButton={false}
         loadingEnabled
@@ -123,12 +124,16 @@ export default React.forwardRef(({
         key="map"
         followsUserLocation={isUserLocationFocused}
         moveOnMarkerPress={false}
-        onRegionChange={(event) => {
+        onRegionChangeComplete={async (event) => {
           if (selectLocationMode) {
             const { latitude, longitude } = event;
+            const lat = latitude.toFixed(6);
+            const lng = longitude.toFixed(6);
+            const description = await latLngToAddress(lat, lng);
             saveSelectedLocation({
-              latitude: latitude.toFixed(6),
-              longitude: longitude.toFixed(6),
+              lat,
+              lng,
+              description,
             });
           }
         }}

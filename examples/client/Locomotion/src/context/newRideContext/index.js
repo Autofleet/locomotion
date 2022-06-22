@@ -6,41 +6,63 @@ import { getPosition } from '../../services/geo';
 import { getPlaces, getGeocode, getPlaceDetails } from './google-api';
 import StorageService from '../../services/storage';
 import { createServiceEstimations, getServices } from './api';
-import { formatEstimationsResult, formatStopPointsForEstimations, TAG_OPTIONS } from './services';
+import {
+  formatEstimationsResult, formatStopPointsForEstimations, getEstimationTags, TAG_OPTIONS,
+} from './utils';
 
-function useInterval(callback, delay) {
-  const savedCallback = useRef();
-
-  // Remember the latest callback.
-  useEffect(() => {
-    savedCallback.current = callback;
-  }, [callback]);
-
-  // Set up the interval.
-  useEffect(() => {
-    function tick() {
-      savedCallback.current();
-    }
-    if (delay !== null) {
-      const id = setInterval(tick, delay);
-      return () => clearInterval(id);
-    }
-  }, [delay]);
-}
-
-export const RidePageContext = createContext(null);
+export const RidePageContext = createContext({
+  loadAddress: () => undefined,
+  reverseLocationGeocode: () => undefined,
+  enrichPlaceWithLocation: () => undefined,
+  searchTerm: '',
+  setSearchTerm: () => undefined,
+  selectedInputIndex: null,
+  setSelectedInputIndex: () => undefined,
+  selectedInputTarget: null,
+  setSelectedInputTarget: () => undefined,
+  onAddressSelected: () => undefined,
+  requestStopPoints: [],
+  searchResults: [],
+  searchAddress: null,
+  updateRequestSp: () => undefined,
+  setSpCurrentLocation: () => undefined,
+  isReadyForSubmit: false,
+  checkFormSps: () => undefined,
+  historyResults: [],
+  serviceEstimations: [],
+  ride: {
+    notes: '',
+    paymentMethodId: null,
+    serviceTypeId: null,
+  },
+  updateRide: ride => undefined,
+  chosenService: null,
+  lastSelectedLocation: null,
+});
 const HISTORY_RECORDS_NUM = 10;
+
+export const latLngToAddress = async (lat, lng) => {
+  const location = `${lat},${lng}`;
+  const data = await getGeocode({
+    latlng: location,
+  });
+  console.log(data.results[0]);
+  return data.results[0].formatted_address;
+};
+
 
 const RidePageContextProvider = ({ navigation, children }) => {
   const [requestStopPoints, setRequestStopPoints] = useState([{
     type: 'pickup',
-    location: null,
+    lat: null,
+    lng: null,
     useDefaultLocation: true,
     id: shortid.generate(),
   },
   {
     type: 'dropoff',
-    location: null,
+    lat: null,
+    lng: null,
     useDefaultLocation: false,
     id: shortid.generate(),
   }]);
@@ -54,18 +76,21 @@ const RidePageContextProvider = ({ navigation, children }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [historyResults, setHistoryResults] = useState([]);
   const [serviceEstimations, setServiceEstimations] = useState(null);
+  const [ride, setRide] = useState({});
   const [chosenService, setChosenService] = useState(null);
+  const [lastSelectedLocation, saveSelectedLocation] = useState(false);
 
-  const formatEstimations = (services, estimations) => {
+  const formatEstimations = (services, estimations, tags) => {
     const estimationsMap = {};
     estimations.map((e) => {
       estimationsMap[e.serviceId] = e;
     });
-    return services.map((service) => {
+    const formattedServices = services.map((service) => {
       const estimationForService = estimationsMap[service.id];
-      const estimationResult = estimationForService && estimationForService.results[0];
-      return formatEstimationsResult(service, estimationResult);
+      const estimationResult = estimationForService && estimationForService.results.length && estimationForService.results[0];
+      return formatEstimationsResult(service, estimationResult, tags);
     });
+    return formattedServices.sort((a, b) => a.priority - b.priority);
   };
 
   const getServiceEstimations = async () => {
@@ -74,7 +99,8 @@ const RidePageContextProvider = ({ navigation, children }) => {
       createServiceEstimations(formattedStopPoints),
       getServices(),
     ]);
-    const formattedEstimations = formatEstimations(services, estimations);
+    const tags = getEstimationTags(estimations);
+    const formattedEstimations = formatEstimations(services, estimations, tags);
     setChosenService(formattedEstimations.find(e => e.eta));
     setServiceEstimations(formattedEstimations);
   };
@@ -98,7 +124,8 @@ const RidePageContextProvider = ({ navigation, children }) => {
     if (currentAddress) {
       const locationData = {
         description: currentAddress.description,
-        location: currentAddress.location,
+        lat: currentAddress.lat,
+        lng: currentAddress.lng,
       };
       return locationData;
     }
@@ -119,7 +146,8 @@ const RidePageContextProvider = ({ navigation, children }) => {
           return {
             ...s,
             description: currentAddress.description,
-            location: currentAddress.location,
+            lat: currentAddress.lat,
+            lng: currentAddress.lng,
           };
         }
 
@@ -172,16 +200,16 @@ const RidePageContextProvider = ({ navigation, children }) => {
   const reverseLocationGeocode = async () => {
     try {
       const currentCoords = await getCurrentLocation();
-      console.log('currentCoords', currentCoords);
-
       const location = `${currentCoords.latitude},${currentCoords.longitude}`;
       const data = await getGeocode({
         latlng: location,
       });
 
+      const { lat, lng } = data.results[0].geometry.location;
       const geoLocation = {
         description: data.results[0].formatted_address,
-        location: data.results[0].geometry.location,
+        lat,
+        lng,
       };
 
       return geoLocation;
@@ -210,8 +238,9 @@ const RidePageContextProvider = ({ navigation, children }) => {
       ...reqSps[selectedInputIndex],
       description: selectedItem.fullText,
       streetAddress: selectedItem.text,
-      location: enrichedPlace,
       placeId: selectedItem.placeId,
+      lat: enrichedPlace.lat,
+      lng: enrichedPlace.lng,
     };
     console.log({ enrichedPlace, selectedInputIndex });
     setRequestStopPoints(reqSps);
@@ -294,6 +323,13 @@ const RidePageContextProvider = ({ navigation, children }) => {
     });
   };
 
+  const updateRide = (newRide) => {
+    setRide({
+      ...ride,
+      ...newRide,
+    });
+  };
+
   return (
     <RidePageContext.Provider
       value={{
@@ -319,8 +355,12 @@ const RidePageContextProvider = ({ navigation, children }) => {
         historyResults,
         loadHistory,
         serviceEstimations,
+        ride,
+        updateRide,
         chosenService,
         setChosenService,
+        lastSelectedLocation,
+        saveSelectedLocation,
       }}
     >
       {children}

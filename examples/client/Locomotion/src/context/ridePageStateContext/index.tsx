@@ -3,14 +3,41 @@ import geo, { getPosition } from '../../services/geo';
 import { getUserTerritories } from '../user/api';
 import pointInPolygon from './pointInPolygon';
 
-export const RideStateContextContext = createContext<any | null>(null);
+type BsPages = 'main' | 'selectLocationOnMap' | 'payment';
+interface RidePageStateContextProps {
+  territory: any;
+  loadTerritory: () => void;
+  showOutOfTerritory: boolean | undefined;
+  setShowOutOfTerritory: (outOfTerritory: boolean) => void;
+  initGeoService: () => void;
+  selectLocationMode: boolean | undefined;
+  setSelectLocationMode: (mode: boolean) => void;
+  isUserLocationFocused: boolean;
+  setIsUserLocationFocused: (isLocationFocused: boolean) => void;
+  currentBsPage: BsPages;
+  setCurrentBsPage: (page: BsPages) => void;
+}
+
+export const RideStateContextContext = createContext<RidePageStateContextProps>({
+  territory: {},
+  loadTerritory: () => undefined,
+  setShowOutOfTerritory: (outOfTerritory: boolean) => undefined,
+  initGeoService: () => undefined,
+  setSelectLocationMode: (mode: boolean) => undefined,
+  isUserLocationFocused: false,
+  setIsUserLocationFocused: (isLocationFocused: boolean) => undefined,
+  currentBsPage: 'main',
+  setCurrentBsPage: (page: BsPages) => undefined,
+  selectLocationMode: false,
+  showOutOfTerritory: false,
+});
 
 const RideStateContextContextProvider = ({ children }: { children: any }) => {
   const [territory, setTerritory] = useState<Array<any> | null>(null);
   const [showOutOfTerritory, setShowOutOfTerritory] = useState<boolean | undefined>(false);
   const [selectLocationMode, setSelectLocationMode] = useState<boolean | undefined>(false);
-  const [lastSelectedLocation, saveSelectedLocation] = useState<any | undefined>(false);
   const [isUserLocationFocused, setIsUserLocationFocused] = useState(true);
+  const [currentBsPage, setCurrentBsPage] = useState<BsPages>('main');
 
   const loadTerritory = async (checkTerritory = false) => {
     let t = territory;
@@ -42,10 +69,10 @@ const RideStateContextContextProvider = ({ children }: { children: any }) => {
         initGeoService,
         selectLocationMode,
         setSelectLocationMode,
-        lastSelectedLocation,
-        saveSelectedLocation,
         isUserLocationFocused,
         setIsUserLocationFocused,
+        currentBsPage,
+        setCurrentBsPage,
       }}
     >
       {children}
