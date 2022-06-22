@@ -56,6 +56,7 @@ const BottomSheetComponent = forwardRef(({ children }, ref) => {
         onChange={handleSheetChanges}
         onAnimate={onAnimate}
         footerComponent={renderFooter}
+        android_keyboardInputMode="adjustResize"
       >
         <SafeView
           style={{

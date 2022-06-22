@@ -105,11 +105,12 @@ const RidePageContextProvider = ({ navigation, children }) => {
     estimations.map((e) => {
       estimationsMap[e.serviceId] = e;
     });
-    return services.map((service) => {
+    const formattedServices = services.map((service) => {
       const estimationForService = estimationsMap[service.id];
-      const estimationResult = estimationForService && estimationForService.results[0];
+      const estimationResult = estimationForService && estimationForService.results.length && estimationForService.results[0];
       return formatEstimationsResult(service, estimationResult);
     });
+    return formattedServices.sort((a, b) => a.priority - b.priority);
   };
 
   const getServiceEstimations = async () => {
@@ -248,6 +249,9 @@ const RidePageContextProvider = ({ navigation, children }) => {
   };
 
   const onAddressSelected = async (selectedItem) => {
+    if (selectedItem.isLoading) {
+      return null;
+    }
     const enrichedPlace = await enrichPlaceWithLocation(selectedItem.placeId);
     const reqSps = [...requestStopPoints];
     reqSps[selectedInputIndex] = {
@@ -327,6 +331,11 @@ const RidePageContextProvider = ({ navigation, children }) => {
       ...newRide,
     });
   };
+  const fillLoadSkeleton = () => {
+    const filledArray = new Array(4).fill({ isLoading: true });
+    setSearchResults(filledArray);
+  };
+
 
   return (
     <RidePageContext.Provider
@@ -357,6 +366,7 @@ const RidePageContextProvider = ({ navigation, children }) => {
         setChosenService,
         lastSelectedLocation,
         saveSelectedLocation,
+        fillLoadSkeleton,
       }}
     >
       {children}
