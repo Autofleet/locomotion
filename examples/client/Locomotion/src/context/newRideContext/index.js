@@ -5,7 +5,9 @@ import { getPosition } from '../../services/geo';
 import { getPlaces, getGeocode, getPlaceDetails } from './google-api';
 import StorageService from '../../services/storage';
 import { createServiceEstimations, getServices } from './api';
-import { formatEstimationsResult, formatStopPointsForEstimations, INITIAL_STOP_POINTS } from './services';
+import {
+  formatEstimationsResult, formatStopPointsForEstimations, getEstimationTags, INITIAL_STOP_POINTS,
+} from './utils';
 
 const STATION_AUTOREFRESH_INTERVAL = 60000;
 
@@ -45,16 +47,17 @@ const RidePageContextProvider = ({ children }) => {
   const [serviceEstimations, setServiceEstimations] = useState(null);
   const [chosenService, setChosenService] = useState(null);
 
-  const formatEstimations = (services, estimations) => {
+  const formatEstimations = (services, estimations, tags) => {
     const estimationsMap = {};
     estimations.map((e) => {
       estimationsMap[e.serviceId] = e;
     });
-    return services.map((service) => {
+    const formattedServices = services.map((service) => {
       const estimationForService = estimationsMap[service.id];
-      const estimationResult = estimationForService && estimationForService.results[0];
-      return formatEstimationsResult(service, estimationResult);
+      const estimationResult = estimationForService && estimationForService.results.length && estimationForService.results[0];
+      return formatEstimationsResult(service, estimationResult, tags);
     });
+    return formattedServices.sort((a, b) => a.priority - b.priority);
   };
 
   const getServiceEstimations = async () => {
@@ -63,7 +66,8 @@ const RidePageContextProvider = ({ children }) => {
       createServiceEstimations(formattedStopPoints),
       getServices(),
     ]);
-    const formattedEstimations = formatEstimations(services, estimations);
+    const tags = getEstimationTags(estimations);
+    const formattedEstimations = formatEstimations(services, estimations, tags);
     setChosenService(formattedEstimations.find(e => e.eta));
     setServiceEstimations(formattedEstimations);
   };

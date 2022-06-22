@@ -1,9 +1,10 @@
 import moment from 'moment';
+import getSymbolFromCurrency from 'currency-symbol-map';
 import React, { useContext } from 'react';
 import SvgIcon from '../../../../../../Components/SvgIcon';
 import i18n from '../../../../../../I18n';
 import Seat from '../../../../../../assets/seat.svg';
-import { TAG_OPTIONS } from '../../../../../../context/newRideContext/services';
+import { TAG_OPTIONS } from '../../../../../../context/newRideContext/utils';
 import { Context as ThemeContext } from '../../../../../../context/theme';
 import {
   Circle, AvailableSeats,
@@ -23,7 +24,7 @@ const ServiceCard = ({ service }) => {
   const unavailable = !service.eta;
   const timeUntilArrival = i18n.t('rideDetails.timeUntilArrival', { minutes: moment.duration(moment(service.eta).diff(moment())).minutes().toString() });
   const unavailableText = i18n.t('rideDetails.unavailable');
-
+  const serviceDisplayPrice = `${getSymbolFromCurrency(service.currency)}${service.price}`;
   const tagStyles = {
     [TAG_OPTIONS.FASTEST]: {
       container: {
@@ -56,17 +57,16 @@ const ServiceCard = ({ service }) => {
           <Title>
             {service.name}
           </Title>
-          {service.tag
-            ? (
-              <Tag
-                containerStyles={tagStyles[service.tag].container}
-                text={service.tag}
-                textColor={tagStyles[service.tag].textColor}
-              />
-            )
-            : null}
+          {service.tags.map(tag => tag && (
+          <Tag
+            containerStyles={tagStyles[tag].container}
+            text={tag}
+            textColor={tagStyles[tag].textColor}
+          />
+          ))
+            }
           <Price>
-            {service.price || unavailableText}
+            {service.price ? serviceDisplayPrice : unavailableText}
           </Price>
         </TopRow>
         {!unavailable && (
