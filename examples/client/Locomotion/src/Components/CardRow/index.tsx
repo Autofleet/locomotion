@@ -11,9 +11,9 @@ import { Start, StartCapital } from '../../lib/text-direction';
 type ContainerProps = {
   children: React.ReactNode,
   selected: boolean,
-} 
+};
 
-const Container = styled(View)<ContainerProps>`
+const Container = styled(View) < ContainerProps > `
   flex-direction: row;
   justify-content: center;
   padding: 16px 0px;
@@ -113,4 +113,3 @@ export default (paymentMethod: any) => (
     </Container>
   </TouchableOpacity>
 );
-
