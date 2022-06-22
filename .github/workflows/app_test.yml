@@ -27,3 +27,5 @@ jobs:
         run: npm install
 
       - run: npm run linter
+
+      - run: npm run ts

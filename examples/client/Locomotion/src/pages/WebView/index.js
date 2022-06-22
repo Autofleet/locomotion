@@ -2,7 +2,7 @@ import React, { Fragment } from 'react';
 import { WebView } from 'react-native-webview';
 import PageHeader from '../../Components/PageHeader';
 
-const closeIconSource = require('../../assets/x.png');
+import closeIconSource from '../../assets/x.png';
 
 export default ({
   navigation, uri, title, onIconPress, menuSide = 'right',

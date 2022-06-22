@@ -10,7 +10,7 @@ import BottomSheetInput from '../../../../Components/TextInput/BottomSheetInput'
 import i18n from '../../../../I18n';
 import { RidePageContext } from '../../../../context/newRideContext';
 
-const backImage = require('../../../../assets/arrow-back.png');
+import backImage from '../../../../assets/arrow-back.png';
 
 
 const SearchContainer = styled.View`
@@ -86,7 +86,6 @@ const SearchBar = ({
     setSelectedInputTarget,
     requestStopPoints,
     updateRequestSp,
-    checkFormSps,
     initSps,
   } = useContext(RidePageContext);
 
@@ -111,10 +110,6 @@ const SearchBar = ({
     setSelectedInputTarget(target);
     setSelectedInputIndex(index);
     onFocus();
-  };
-
-  const onInputBlur = () => {
-    checkFormSps();
   };
 
   useEffect(() => {
@@ -142,7 +137,6 @@ const SearchBar = ({
           onFocus={(e) => {
             onInputFocus(e.target, i);
           }}
-          onBlur={onInputBlur}
           key={`input_${s.id}`}
           autoCorrect={false}
         />

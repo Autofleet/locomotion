@@ -5,9 +5,9 @@ import i18n from '../../../../I18n';
 import { getTogglePopupsState } from '../../../../context/state';
 import Button from '../../../../Components/Button';
 
-const PassengerAmountIconSource = require('../../../../assets/ppl.png');
-const PlusIconSource = require('../../../../assets/plus.png');
-const MinusIconSource = require('../../../../assets/minus.png');
+import PassengerAmountIconSource from '../../../../assets/ppl.png';
+import PlusIconSource from '../../../../assets/plus.png';
+import MinusIconSource from '../../../../assets/minus.png';
 
 const MAX_NUMBER_OF_PASSENGER = 5;
 const MIN_NUMBER_OF_PASSENGER = 1;

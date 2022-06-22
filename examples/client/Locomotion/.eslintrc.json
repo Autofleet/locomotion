@@ -1,7 +1,16 @@
 {
-  "parser": "babel-eslint",
-  "extends": "airbnb",
-  "plugins": ["react", "jsx-a11y", "import"],
+  "parser": "@typescript-eslint/parser",
+  "extends": [
+    "airbnb",
+    "plugin:@typescript-eslint/eslint-recommended",
+    "plugin:@typescript-eslint/recommended"
+  ],
+  "plugins": ["react", "jsx-a11y", "import", "@typescript-eslint"],
+  "overrides": [
+    {
+      "files": ["*.ts", "*.tsx"]
+    }
+  ],
   "rules": {
       "func-names": [
           "error",

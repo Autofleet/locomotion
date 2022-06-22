@@ -14,7 +14,7 @@ type ContainerProps = {
   selected: boolean,
 };
 
-const Container = styled(View) < ContainerProps > `
+const Container = styled(View) < ContainerProps >`
   flex-direction: row;
   justify-content: center;
   padding: 16px 0px;

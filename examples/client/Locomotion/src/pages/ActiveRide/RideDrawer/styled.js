@@ -5,7 +5,7 @@ import i18n from '../../../I18n';
 
 import Button from '../../../Components/Button';
 
-const ArrowIconSource = require('../../../assets/white-chevron-right.png');
+import ArrowIconSource from '../../../assets/white-chevron-right.png';
 
 export const Drawer = styled.View`
  /*  position: absolute;

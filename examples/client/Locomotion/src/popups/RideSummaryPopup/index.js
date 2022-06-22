@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
 import React, { useContext, useEffect, useState } from 'react';
 import { View } from 'react-native';
 import Modal from 'react-native-modal';

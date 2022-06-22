@@ -6,9 +6,9 @@ import ServiceOptions from './ServiceOptions';
 import RideNotes from '../../../../popups/RideNotes';
 import { RidePageContext } from '../../../../context/newRideContext';
 import ChoosePaymentMethod from '../../../../popups/ChoosePaymentMethod';
+import { popupNames } from './utils';
 import { BottomSheetContext, SNAP_POINT_STATES } from '../../../../context/bottomSheetContext';
 
-type popupNames = 'notes' | 'payment' | 'passenger';
 
 const RideOptions = () => {
   const [popupToShow, setPopupToShow] = useState<popupNames | null>(null);

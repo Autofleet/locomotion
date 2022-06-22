@@ -120,7 +120,6 @@ const AddressSelectorBottomSheet = () => {
             </>
           )
           : null}
-
       </HistoryContainer>
     </ContentContainer>
 

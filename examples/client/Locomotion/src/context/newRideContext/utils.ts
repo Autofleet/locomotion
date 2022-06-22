@@ -24,9 +24,9 @@ export const INITIAL_STOP_POINTS = [{
 }];
 
 
-export const buildStreetAddress = (data) => {
+export const buildStreetAddress = (data: any) => {
   const streetAddress: any = {};
-  data.results[0].address_components.map((ac) => {
+  data.results[0].address_components.map((ac: any) => {
     if (ac.types.includes('street_number')) {
       streetAddress.number = ac.long_name;
     }
@@ -37,7 +37,7 @@ export const buildStreetAddress = (data) => {
   return `${streetAddress.name} ${streetAddress.number}`;
 };
 
-export const getEstimationTags = (estimations) => {
+export const getEstimationTags = (estimations: any[]) => {
   const tags: any = {
     fastest: {},
     cheapest: {},
@@ -62,7 +62,7 @@ export const getEstimationTags = (estimations) => {
   };
 };
 
-export const latLngToAddress = async (lat, lng) => {
+export const latLngToAddress = async (lat: string, lng: string) => {
   const location = `${lat},${lng}`;
   const data = await getGeocode({
     latlng: location,
@@ -70,7 +70,7 @@ export const latLngToAddress = async (lat, lng) => {
   return data.results[0].formatted_address;
 };
 
-export const formatEstimationsResult = (service, estimationResult, tags) => {
+export const formatEstimationsResult = (service: any, estimationResult: any, tags: any) => {
   const estimation = estimationResult || {};
   return {
     id: service.id,
@@ -86,7 +86,7 @@ export const formatEstimationsResult = (service, estimationResult, tags) => {
   };
 };
 
-export const formatStopPointsForEstimations = requestStopPoints => requestStopPoints.map(sp => ({
+export const formatStopPointsForEstimations = (requestStopPoints: any[]) => requestStopPoints.map(sp => ({
   type: sp.type,
   lat: sp.lat,
   lng: sp.lng,
