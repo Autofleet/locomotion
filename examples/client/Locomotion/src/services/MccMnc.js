@@ -18,11 +18,16 @@ const getIsoCodeByList = (mccMnc) => {
 };
 
 export const getInputIsoCode = async () => {
-  const [mmcMnc, mobileIso] = await Promise.all([
-    getMccMnc(),
-    getMobileIsoCode(),
-  ]);
+  try {
+    const [mmcMnc, mobileIso] = await Promise.all([
+      getMccMnc(),
+      getMobileIsoCode(),
+    ]);
 
-  const IsoByMncMcc = mmcMnc ? getIsoCodeByList(mmcMnc) : null;
-  return IsoByMncMcc || mobileIso || defaultCountryCode;
+    const IsoByMncMcc = mmcMnc ? getIsoCodeByList(mmcMnc) : null;
+    return IsoByMncMcc || mobileIso || defaultCountryCode;
+  } catch (error) {
+    console.error('cannot get iso code', error);
+    return defaultCountryCode;
+  }
 };

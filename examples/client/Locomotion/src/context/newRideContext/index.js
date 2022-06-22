@@ -91,6 +91,10 @@ const RidePageContextProvider = ({ children }) => {
     initSps();
   }, [currentGeocode]);
 
+  useEffect(() => {
+    checkFormSps();
+  }, [requestStopPoints]);
+
   const initLocation = async () => {
     const location = await getCurrentLocation();
     setCoords(location);
@@ -139,8 +143,9 @@ const RidePageContextProvider = ({ children }) => {
 
   const updateRequestSp = (data) => {
     const reqSps = [...requestStopPoints];
-    reqSps[selectedInputIndex] = {
-      ...reqSps[selectedInputIndex],
+    const index = selectedInputIndex || requestStopPoints.length - 1;
+    reqSps[index] = {
+      ...reqSps[index],
       ...data,
     };
 
@@ -149,7 +154,7 @@ const RidePageContextProvider = ({ children }) => {
 
   const setSpCurrentLocation = async () => {
     if (!currentGeocode) {
-      const addressData = await getCurrentLocationAddress();
+      await getCurrentLocationAddress();
       updateRequestSp(currentGeocode);
       return true;
     }
@@ -253,7 +258,7 @@ const RidePageContextProvider = ({ children }) => {
   const parseSearchResults = results => results.map(r => ({
     text: r.structured_formatting.main_text,
     subText: r.structured_formatting.secondary_text,
-    fullText: `${r.structured_formatting.main_text},${r.structured_formatting.secondary_text}`,
+    fullText: `${r.structured_formatting.main_text}, ${r.structured_formatting.secondary_text}`,
     placeId: r.place_id,
   }));
 
@@ -311,6 +316,16 @@ const RidePageContextProvider = ({ children }) => {
     });
   };
 
+  const checkFormSps = async () => {
+    const isSpsReady = requestStopPoints.every(r => r.lat && r.lng && r.description);
+    if (requestStopPoints.length && isSpsReady) {
+      setIsReadyForSubmit(true);
+      await getServiceEstimations();
+    } else {
+      setIsReadyForSubmit(false);
+    }
+  };
+
   return (
     <RidePageContext.Provider
       value={{
@@ -344,6 +359,7 @@ const RidePageContextProvider = ({ children }) => {
         initSps,
         lastSelectedLocation,
         saveSelectedLocation,
+        checkFormSps,
       }}
     >
       {children}
