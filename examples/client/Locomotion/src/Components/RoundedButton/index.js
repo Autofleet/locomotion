@@ -76,6 +76,7 @@ RoundedButton.propTypes = {
   onPress: propsTypes.func,
   disabled: propsTypes.bool,
   useCancelTextButton: propsTypes.bool,
+  setLoading: propsTypes.func,
 };
 
 export default RoundedButton;
