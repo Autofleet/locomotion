@@ -35,6 +35,10 @@ const Main = () => {
         component={ROUTES_COMPS[MAIN_ROUTES.HOME]}
       />
       <Drawer.Screen
+        name={MAIN_ROUTES.COMPLETED_RIDE_OVERVIEW_PAGE}
+        component={ROUTES_COMPS[MAIN_ROUTES.COMPLETED_RIDE_OVERVIEW_PAGE]}
+      />
+      <Drawer.Screen
         name={MAIN_ROUTES.RIDE_HISTORY}
         component={ROUTES_COMPS[MAIN_ROUTES.RIDE_HISTORY]}
       />

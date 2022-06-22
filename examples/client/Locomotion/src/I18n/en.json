@@ -11,7 +11,7 @@
         "toolTipEta": "Eta {{minutes}} min",
         "type": {
             "pickup": "Pickup",
-            "dropoff": "Drop off" 
+            "dropoff": "Drop off"
         }
     },
     "general": {
@@ -256,7 +256,25 @@
             "startTitle": "Start",
             "stopTitle": "Stop",
             "price": "Price"
-        }
+        },
+      "ridesDurationHours": "{{ridesDurationHours}} Hours",
+      "ridesDurationMinutes": "{{ridesDurationMinutes}} Min",
+      "todayTitle": "Today",
+      "actualDistance": "{{actualDistance}} KM",
+      "rangeDateTimePicker": {
+        "selectEndDate": "Select end date",
+        "selectStartDate": "Select start date",
+        "cancelText": "Cancel",
+        "confirmText": "Select"
+      },
+      "fewSeconds": "Few seconds",
+      "noActivity": "No rides",
+      "noActivityYet": "No rides yet",
+      "noActivitySub": "Take your first ride and see it here!",
+      "rideCard": {
+        "rideJourney": "Ride journey",
+        "driverRating": "Driver rating"
+      }
     },
     "payments": {
         "pageTitle": "Payments Method",
@@ -311,5 +329,9 @@
         "riders": "Riders",
         "addPayment": "Add Payment"
     }
+  },
+  "stopPointsTypes": {
+    "dropoff": "Dropoff",
+    "pickup": "Pickup"
   }
 }

@@ -45,4 +45,5 @@ const deviceStorage = {
   },
 };
 
+export default deviceStorage;
 module.exports = deviceStorage;
