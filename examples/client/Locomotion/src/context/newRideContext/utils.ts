@@ -1,6 +1,7 @@
 import moment from 'moment';
 import shortid from 'shortid';
 import i18n from '../../I18n';
+import { getGeocode } from './google-api';
 
 export const TAG_OPTIONS = {
   FASTEST: i18n.t('services.tags.fastest'),
@@ -59,6 +60,14 @@ export const getEstimationTags = (estimations) => {
     [TAG_OPTIONS.CHEAPEST]: tags.cheapest.serviceId,
     [TAG_OPTIONS.FASTEST]: tags.fastest.serviceId,
   };
+};
+
+export const latLngToAddress = async (lat, lng) => {
+  const location = `${lat},${lng}`;
+  const data = await getGeocode({
+    latlng: location,
+  });
+  return data.results[0].formatted_address;
 };
 
 export const formatEstimationsResult = (service, estimationResult, tags) => {

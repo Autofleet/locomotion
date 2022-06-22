@@ -1,11 +1,9 @@
 import React, { useContext, useEffect, useRef } from 'react';
 import { useNavigation } from '@react-navigation/native';
-
-import { StyleSheet, View } from 'react-native';
-import { NotAvailableHere } from '../../Components/BsPages';
+import { ConfirmPickup, NotAvailableHere } from '../../Components/BsPages';
 import { RideStateContextContext, RidePageContextProvider } from '../../context';
 import NewRidePageContextProvider, { RidePageContext } from '../../context/newRideContext';
-import BottomSheetContextProvider from '../../context/bottomSheetContext';
+import BottomSheetContextProvider, { BottomSheetContext, SNAP_POINT_STATES } from '../../context/bottomSheetContext';
 import {
   PageContainer,
 } from './styled';
@@ -19,21 +17,21 @@ import StopPointsViewer from '../../Components/StopPointsViewer';
 import hamburgerIcon from '../../assets/hamburger.svg';
 import backArrow from '../../assets/arrow-back.svg';
 
-// import de from './src/I18n/en.json';
-
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    flexGrow: 1,
-  },
-
-});
-
 
 const RidePage = ({ mapSettings }) => {
-  const { initGeoService, showOutOfTerritory } = useContext(RideStateContextContext);
+  const { initGeoService, showOutOfTerritory, currentBsPage } = useContext(RideStateContextContext);
   const { serviceEstimations, setServiceEstimations, initSps } = useContext(RidePageContext);
+  const { setSnapPointsState, setSnapPointIndex } = useContext(BottomSheetContext);
+  const BS_PAGE_TO_COMP = {
+    main: () => (showOutOfTerritory ? (
+      <NotAvailableHere onButtonPress={() => ({})} />
+    ) : (
+      !serviceEstimations
+        ? <AddressSelector />
+        : <RideOptions />
+    )),
+    selectLocationOnMap: () => <ConfirmPickup />,
+  };
 
   const navigation = useNavigation();
   const mapRef = useRef();
@@ -51,12 +49,15 @@ const RidePage = ({ mapSettings }) => {
 
   const goBackToAddress = () => {
     setServiceEstimations(null);
+    setSnapPointsState(SNAP_POINT_STATES.ADDRESS_SELECTOR);
     bottomSheetRef.current.expand();
   };
 
   const backToMap = () => {
     setServiceEstimations(null);
     initSps();
+    setSnapPointIndex(0);
+    setSnapPointsState(SNAP_POINT_STATES.ADDRESS_SELECTOR);
   };
   return (
     <PageContainer>
@@ -82,13 +83,9 @@ const RidePage = ({ mapSettings }) => {
       <BottomSheet
         ref={bottomSheetRef}
       >
-        {showOutOfTerritory ? (
-          <NotAvailableHere onButtonPress={() => ({})} />
-        ) : (
-          !serviceEstimations
-            ? <AddressSelector />
-            : <RideOptions />
-        )}
+        {
+          BS_PAGE_TO_COMP[currentBsPage]()
+        }
       </BottomSheet>
     </PageContainer>
   );

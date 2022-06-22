@@ -41,7 +41,7 @@ const ServiceCard = ({ service }) => {
       textColor: theme.primaryColor,
     },
   };
-  console.log(service);
+
   return (
     <CardContainer
       theme={theme}

@@ -32,7 +32,35 @@ function useInterval(callback, delay) {
   }, [delay]);
 }
 
-export const RidePageContext = createContext(null);
+export const RidePageContext = createContext({
+  loadAddress: () => {},
+  reverseLocationGeocode: () => {},
+  enrichPlaceWithLocation: () => {},
+  searchTerm: '',
+  setSearchTerm: () => {},
+  selectedInputIndex: null,
+  setSelectedInputIndex: () => {},
+  selectedInputTarget: null,
+  setSelectedInputTarget: () => {},
+  onAddressSelected: () => {},
+  requestStopPoints: [],
+  searchResults: [],
+  searchAddress: null,
+  updateRequestSp: () => {},
+  setSpCurrentLocation: () => {},
+  isReadyForSubmit: false,
+  checkFormSps: () => {},
+  historyResults: [],
+  serviceEstimations: [],
+  ride: {
+    notes: '',
+    paymentMethodId: null,
+    serviceTypeId: null,
+  },
+  updateRide: (ride) => {},
+  chosenService: null,
+  lastSelectedLocation: null,
+});
 const HISTORY_RECORDS_NUM = 10;
 
 const RidePageContextProvider = ({ children }) => {
@@ -46,7 +74,9 @@ const RidePageContextProvider = ({ children }) => {
   const [isReadyForSubmit, setIsReadyForSubmit] = useState(false);
   const [historyResults, setHistoryResults] = useState([]);
   const [serviceEstimations, setServiceEstimations] = useState(null);
+  const [ride, setRide] = useState({});
   const [chosenService, setChosenService] = useState(null);
+  const [lastSelectedLocation, saveSelectedLocation] = useState(false);
 
   const formatEstimations = (services, estimations, tags) => {
     const estimationsMap = {};
@@ -275,6 +305,12 @@ const RidePageContextProvider = ({ children }) => {
     }
   };
 
+  const updateRide = (newRide) => {
+    setRide({
+      ...ride,
+      ...newRide,
+    });
+  };
 
   return (
     <RidePageContext.Provider
@@ -299,10 +335,14 @@ const RidePageContextProvider = ({ children }) => {
         historyResults,
         loadHistory,
         serviceEstimations,
+        ride,
+        updateRide,
         chosenService,
         setChosenService,
         setServiceEstimations,
         initSps,
+        lastSelectedLocation,
+        saveSelectedLocation,
       }}
     >
       {children}
