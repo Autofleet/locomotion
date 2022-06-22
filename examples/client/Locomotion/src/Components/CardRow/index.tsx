@@ -114,4 +114,3 @@ export default (paymentMethod: any) => (
   </TouchableOpacity>
 );
 
-// {"brand": "visa", "createdAt": "2022-06-20T07:34:04.506Z", "customerId": "596950b9-4199-470d-9968-ac9db79a37d3", "deletedAt": null, "expiresAt": "2034-12-31T23:59:59.999Z", "hasOutstandingBalance": false, "id": "97f00c47-7eeb-4854-bdbc-aeec26ad449f", "isDefault": false, "isExpired": false, "lastFour": "4242", "name": "visa", "stripeId": "pm_1LCf7XIaHOVjSfrG0KbEBC6r", "updatedAt": "2022-06-20T07:34:04.506Z"}

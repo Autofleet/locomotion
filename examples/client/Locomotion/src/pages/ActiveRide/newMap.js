@@ -38,6 +38,7 @@ export default React.forwardRef(({
     currentBsPage,
   } = useContext(RideStateContextContext);
 
+  const isMainPage = currentBsPage === 'main';
   const { requestStopPoints, chosenService, saveSelectedLocation } = useContext(RidePageContext);
 
   const [mapRegion, setMapRegion] = useState({
@@ -56,7 +57,7 @@ export default React.forwardRef(({
     }
   };
 
-  const buildAvailabilityVehicles = () => (currentBsPage === 'main' ? availabilityVehicles.map(vehicle => (
+  const buildAvailabilityVehicles = () => (isMainPage ? availabilityVehicles.map(vehicle => (
     <AvailabilityVehicle
       location={vehicle.location}
       id={vehicle.id}
@@ -115,7 +116,7 @@ export default React.forwardRef(({
     <>
       <MapView
         provider={Config.MAP_PROVIDER}
-        showsUserLocation={currentBsPage === 'main'}
+        showsUserLocation={isMainPage}
         style={StyleSheet.absoluteFillObject}
         showsMyLocationButton={false}
         loadingEnabled

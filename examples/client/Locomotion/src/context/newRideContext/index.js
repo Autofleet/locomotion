@@ -66,8 +66,7 @@ export const latLngToAddress = async (lat, lng) => {
   const data = await getGeocode({
     latlng: location,
   });
-
-  console.log('data', data);
+  console.log(data.results[0]);
   return data.results[0].formatted_address;
 };
 

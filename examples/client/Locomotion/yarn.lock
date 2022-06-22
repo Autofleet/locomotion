@@ -8261,7 +8261,7 @@
     "prop-types" "^15.6.2"
     "react-native-iphone-x-helper" "^1.0.3"
 
-"react-native-linear-gradient@^2.5.6":
+"react-native-linear-gradient@^2.5.1", "react-native-linear-gradient@^2.5.6":
   "integrity" "sha512-HDwEaXcQIuXXCV70O+bK1rizFong3wj+5Q/jSyifKFLg0VWF95xh8XQgfzXwtq0NggL9vNjPKXa016KuFu+VFg=="
   "resolved" "https://registry.npmjs.org/react-native-linear-gradient/-/react-native-linear-gradient-2.5.6.tgz"
   "version" "2.5.6"
@@ -8320,7 +8320,7 @@
     "@react-native-picker/picker" "^1.8.3"
     "lodash.isequal" "^4.5.0"
 
-"react-native-reanimated@^2.8.0", "react-native-reanimated@>= 1.0.0", "react-native-reanimated@>=2.0.0", "react-native-reanimated@>=2.2.0":
+"react-native-reanimated@^2.1.0", "react-native-reanimated@^2.8.0", "react-native-reanimated@>= 1.0.0", "react-native-reanimated@>=2.0.0", "react-native-reanimated@>=2.2.0":
   "integrity" "sha512-kJvf/UWLBMaGCs9X66MKq5zdFMgwx8D0nHnolbHR7s8ZnbLdb7TlQ/yuzIXqn/9wABfnwtNRI3CyaP1aHWMmZg=="
   "resolved" "https://registry.npmjs.org/react-native-reanimated/-/react-native-reanimated-2.8.0.tgz"
   "version" "2.8.0"
@@ -8332,6 +8332,15 @@
     "lodash.isequal" "^4.5.0"
     "setimmediate" "^1.0.5"
     "string-hash-64" "^1.0.3"
+
+"react-native-redash@^16.0.11":
+  "integrity" "sha512-dhmeYbQ/usGzxZSGZmzmRuIFF2LrtJUKqgseKgf9Jdj0JQ7VM20m/LqTg60+wjxeiyAh2D/vKsQ2U7rMkuoplQ=="
+  "resolved" "https://registry.npmjs.org/react-native-redash/-/react-native-redash-16.3.0.tgz"
+  "version" "16.3.0"
+  dependencies:
+    "abs-svg-path" "^0.1.1"
+    "normalize-svg-path" "^1.0.1"
+    "parse-svg-path" "^0.1.2"
 
 "react-native-redash@^16.1.1":
   "integrity" "sha512-dhmeYbQ/usGzxZSGZmzmRuIFF2LrtJUKqgseKgf9Jdj0JQ7VM20m/LqTg60+wjxeiyAh2D/vKsQ2U7rMkuoplQ=="
@@ -8361,6 +8370,13 @@
   dependencies:
     "react-freeze" "^1.0.0"
     "warn-once" "^0.1.0"
+
+"react-native-skeleton-content-nonexpo@^1.0.13":
+  "integrity" "sha512-aHku9Av12ySvSBhIt1xh/DwdHpsWfV9Xi8y1egg3HFd25JCDAg6YBOSrsQD+cJW2Dei0v8UkcnCn5ULSrgqRzQ=="
+  "resolved" "https://registry.npmjs.org/react-native-skeleton-content-nonexpo/-/react-native-skeleton-content-nonexpo-1.0.13.tgz"
+  "version" "1.0.13"
+  dependencies:
+    "react-native-redash" "^16.0.11"
 
 "react-native-smooth-pincode-input@^1.0.9":
   "integrity" "sha512-4V4tyUGJaze55FHuJW/gYVOD3fc4Pd7cTIrv7liTRIXR49y09C2O3XqJUdgNR+UwTgLrTt/8L2lvEuEVUk3kig=="
