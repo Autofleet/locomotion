@@ -51,14 +51,16 @@ export default ({
             </TypeText>
           </Type>
           <SubContainer>
-          {checkIfSpIsNext() && <SvgIcon
-            Svg={typeDetails[stopPoint.type].icon}
-            width={16}
-            height={16}
-          />}
-          <SubText numberOfLines={1}>
-            {checkIfSpIsNext() ? etaText : stopPoint.streetAddress}
-          </SubText>
+            {checkIfSpIsNext() && (
+            <SvgIcon
+              Svg={typeDetails[stopPoint.type].icon}
+              width={16}
+              height={16}
+            />
+            )}
+            <SubText numberOfLines={1}>
+              {checkIfSpIsNext() ? etaText : stopPoint.streetAddress}
+            </SubText>
           </SubContainer>
         </InfoBox>
         <IconContainer>
