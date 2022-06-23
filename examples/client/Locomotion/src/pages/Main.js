@@ -16,7 +16,7 @@ const Main = () => {
   const { setUser } = useContext(UserContext);
   return (
     <Drawer.Navigator
-      initialRouteName={MAIN_ROUTES.HOME}
+      initialRouteName={MAIN_ROUTES.POST_RIDE}
       drawerContent={props => (<DrawerContentComponent {...props} />)}
       screenOptions={{
         inactiveBackgroundColor: '#ffffff',
@@ -53,6 +53,10 @@ const Main = () => {
       <Drawer.Screen
         name={MAIN_ROUTES.WEBVIEW}
         component={ROUTES_COMPS[MAIN_ROUTES.WEBVIEW]}
+      />
+      <Drawer.Screen
+        name={MAIN_ROUTES.POST_RIDE}
+        component={ROUTES_COMPS[MAIN_ROUTES.POST_RIDE]}
       />
       <Drawer.Screen
         name={MAIN_ROUTES.LOGOUT}

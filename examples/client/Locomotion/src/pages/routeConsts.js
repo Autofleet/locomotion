@@ -14,6 +14,7 @@ import ContactUs from './ContactUs';
 import Account from './Account';
 import Payments from './Payments';
 import RideHistory from './RideHistory';
+import PostRide from './PostRide';
 import { MAIN_ROUTES } from './routes';
 
 export const ROUTES_COMPS = {
@@ -32,6 +33,8 @@ export const ROUTES_COMPS = {
   [MAIN_ROUTES.EMAIL]: Email,
   [MAIN_ROUTES.WELCOME]: Welcome,
   [MAIN_ROUTES.LOCK]: Lock,
+  [MAIN_ROUTES.POST_RIDE]: PostRide,
+
 };
 
 export const profileStack = ({ stack: Stack }) => (
