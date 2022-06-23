@@ -1,10 +1,11 @@
 import React, {
   useState, useEffect, useRef, createContext,
 } from 'react';
+import _ from 'lodash';
 import { getPosition } from '../../services/geo';
 import { getPlaces, getGeocode, getPlaceDetails } from './google-api';
 import StorageService from '../../services/storage';
-import { createServiceEstimations, getServices } from './api';
+import * as rideApi from './api';
 import {
   buildStreetAddress,
   formatEstimationsResult, formatStopPointsForEstimations, getEstimationTags, INITIAL_STOP_POINTS,
@@ -12,7 +13,7 @@ import {
 
 export const RidePageContext = createContext({
   loadAddress: () => undefined,
-  reverseLocationGeocode: () => undefined,
+  reverseLocationGeocode: (lat, lng) => undefined,
   enrichPlaceWithLocation: () => undefined,
   searchTerm: '',
   setSearchTerm: () => undefined,
@@ -24,7 +25,7 @@ export const RidePageContext = createContext({
   requestStopPoints: [],
   searchResults: [],
   searchAddress: null,
-  updateRequestSp: () => undefined,
+  updateRequestSp: sp => undefined,
   setSpCurrentLocation: () => undefined,
   isReadyForSubmit: false,
   checkFormSps: () => undefined,
@@ -38,6 +39,9 @@ export const RidePageContext = createContext({
   updateRide: ride => undefined,
   chosenService: null,
   lastSelectedLocation: null,
+  getCurrentLocationAddress: () => undefined,
+  saveSelectedLocation: sp => undefined,
+  requestRide: () => undefined,
 });
 
 const HISTORY_RECORDS_NUM = 10;
@@ -74,8 +78,8 @@ const RidePageContextProvider = ({ children }) => {
   const getServiceEstimations = async () => {
     const formattedStopPoints = formatStopPointsForEstimations(requestStopPoints);
     const [estimations, services] = await Promise.all([
-      createServiceEstimations(formattedStopPoints),
-      getServices(),
+      rideApi.createServiceEstimations(formattedStopPoints),
+      rideApi.getServices(),
     ]);
     const tags = getEstimationTags(estimations);
     const formattedEstimations = formatEstimations(services, estimations, tags);
@@ -144,7 +148,7 @@ const RidePageContextProvider = ({ children }) => {
 
   const updateRequestSp = (data) => {
     const reqSps = [...requestStopPoints];
-    const index = selectedInputIndex || requestStopPoints.length - 1;
+    const index = _.isNil(selectedInputIndex) ? requestStopPoints.length - 1 : selectedInputIndex;
     reqSps[index] = {
       ...reqSps[index],
       ...data,
@@ -183,10 +187,16 @@ const RidePageContextProvider = ({ children }) => {
   };
 
 
-  const reverseLocationGeocode = async () => {
+  const reverseLocationGeocode = async (pinLat, pinLng) => {
     try {
-      const currentCoords = await getCurrentLocation();
-      const location = `${currentCoords.latitude},${currentCoords.longitude}`;
+      let location;
+      if (pinLat && pinLng) {
+        location = `${pinLat},${pinLng}`;
+      } else {
+        const currentCoords = await getCurrentLocation();
+        location = `${currentCoords.latitude},${currentCoords.longitude}`;
+      }
+
       const data = await getGeocode({
         latlng: location,
       });
@@ -301,15 +311,19 @@ const RidePageContextProvider = ({ children }) => {
   };
 
   const requestRide = async () => {
-    console.log({
+    const formattedRide = {
       serviceId: chosenService.id,
-      stopPoints: requestStopPoints.map(sp => ({
-        lat: sp.location.lat,
-        lng: sp.location.lng,
-        description: sp.description,
+      paymentMethodId: ride.paymentMethodId,
+      stopPoints: requestStopPoints.map((sp, i) => ({
+        lat: Number(sp.lat),
+        lng: Number(sp.lng),
+        description: sp.description || sp.streetAddress,
         type: sp.type,
+        ...(i === 0 && { notes: ride.notes }),
       })),
-    });
+    };
+
+    await rideApi.createRide(formattedRide);
   };
 
   const updateRide = (newRide) => {
@@ -370,6 +384,7 @@ const RidePageContextProvider = ({ children }) => {
         lastSelectedLocation,
         saveSelectedLocation,
         checkFormSps,
+        getCurrentLocationAddress,
         fillLoadSkeleton,
       }}
     >
