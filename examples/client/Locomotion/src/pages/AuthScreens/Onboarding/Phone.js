@@ -32,7 +32,7 @@ const Phone = () => {
       nextScreen(MAIN_ROUTES.PHONE);
     } catch (e) {
       console.log('Bad login with response', e);
-      setShowErrorText(e.message);
+      setShowErrorText(i18n.t('login.invalidPhoneNumberError'));
     }
   };
 
