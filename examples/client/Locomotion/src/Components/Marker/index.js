@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { Platform } from 'react-native';
 import Config from 'react-native-config';
 import { Marker } from 'react-native-maps';
@@ -19,7 +19,7 @@ export default ({
 }) => {
   const { chosenService } = useContext(RidePageContext);
   const { lat, lng } = stopPoint;
-  const minutesUntilPickup = moment.duration(moment(chosenService.eta).diff(moment())).minutes().toString();
+  const [minutesUntilPickup] = useState(moment.duration(moment(chosenService.eta).diff(moment())).minutes().toString());
   const etaText = i18n.t('rideDetails.toolTipEta', { minutes: minutesUntilPickup });
   const typeDetails = {
     [STOP_POINT_TYPES.STOP_POINT_PICKUP]: {

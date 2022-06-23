@@ -22,9 +22,6 @@ import { AvailabilityContext } from '../../../../../../context/availability';
 const ServiceCard = ({ service }) => {
   const theme = useContext(ThemeContext);
   const { setChosenService, chosenService } = useContext(RidePageContext);
-  /* this line is needed to keep the cards refreshing on
-  the same interval as the markers on the map so the eta matches */
-  const { availabilityVehicles } = useContext(AvailabilityContext);
   const unavailable = !service.eta;
   const minutesUntilPickup = moment.duration(moment(service.eta).diff(moment())).minutes().toString();
   const timeUntilArrival = i18n.t('rideDetails.timeUntilArrival', { minutes: minutesUntilPickup });
