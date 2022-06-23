@@ -10,17 +10,16 @@ const ServiceOptions = () => {
 
   return (
     <ServiceOptionsContainer alwaysBounceVertical={false}>
-      {true
-        ? (serviceEstimations || []).map(option => <ServiceCard service={option} />)
-        : <SkeletonContent
+      {(serviceEstimations || []).map(option => <ServiceCard service={option} />)}
+        <SkeletonContent
           containerStyle={{}}
-          isLoading
+          isLoading={!serviceEstimations}
           layout={[
             serviceCardSkeleton,
             serviceCardSkeleton,
             serviceCardSkeleton,
           ]}
-      />}
+      />
     </ServiceOptionsContainer>
   );
 };
