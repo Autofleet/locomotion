@@ -8,6 +8,8 @@ import { RidePageContext } from '../../../../context/newRideContext';
 import ChoosePaymentMethod from '../../../../popups/ChoosePaymentMethod';
 import { popupNames } from './utils';
 import { BottomSheetContext, SNAP_POINT_STATES } from '../../../../context/bottomSheetContext';
+import payments from '../../../../context/payments';
+import { PaymentMethodInterface } from '../../../../context/payments/interface';
 
 
 const RideOptions = () => {
@@ -20,6 +22,10 @@ const RideOptions = () => {
     setFooterComponent,
     setSnapPointsState,
   } = useContext(BottomSheetContext);
+
+  const {
+    getClientDefaultMethod
+  } = payments.useContainer();
 
   const setPopupName = (popupName: popupNames) => {
     setPopupToShow(popupName);
@@ -36,6 +42,15 @@ const RideOptions = () => {
         setPopupName={setPopupName}
       />
     ));
+
+    const paymentMethod: PaymentMethodInterface = getClientDefaultMethod();
+    if (paymentMethod) {
+      updateRide({
+        paymentMethodId: paymentMethod.id
+      });
+    }
+
+    
     setSnapPointsState(SNAP_POINT_STATES.SERVICE_ESTIMATIONS);
     return () => {
       setFooterComponent(null);

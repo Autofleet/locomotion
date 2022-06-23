@@ -1,9 +1,7 @@
 import React, {
   useEffect, useContext,
 } from 'react';
-import {
-  View,
-} from 'react-native';
+
 import {
   BottomSheetView,
   useBottomSheet,
@@ -11,41 +9,18 @@ import {
 } from '@gorhom/bottom-sheet';
 
 import styled from 'styled-components';
-import SafeView from '../../../../Components/SafeView';
-import TextInput from '../../../../Components/TextInput';
 import i18n from '../../../../I18n';
 import AddressRow from './AddressLine';
 import SearchBar from './SearchBar';
 import { RidePageContext } from '../../../../context/newRideContext';
 import { BottomSheetContext, SNAP_POINT_STATES } from '../../../../context/bottomSheetContext';
-
-const Container = styled(BottomSheetView)`
-  display: flex;
-  width: 100%;
-`;
-
-
-const InputContainer = styled.View`
-  width: 100%;
-  display: flex;
-`;
+import { BS_PAGES } from '../../../../context/ridePageStateContext/utils';
+import { RideStateContextContext } from '../../../../context/ridePageStateContext';
 
 const HistoryContainer = styled.View`
   margin-bottom: 10px;
   flex: 1;
   width: 100%;
-`;
-
-const AddressContainer = styled.View`
-  padding: 0px 30px 20px 30px;
-`;
-
-
-const AddressActionsText = styled.Text`
-    color: ${({ theme }) => theme.primaryColor};
-    font-weight: 500;
-    font-size: 14px;
-    line-height: 20px;
 `;
 
 const ContentContainer = styled.View`
@@ -60,8 +35,13 @@ const AddressSelectorBottomSheet = () => {
   const userContext = useContext(RidePageContext);
 
   const {
+    setCurrentBsPage,
+  } = useContext(RideStateContextContext)
+
+  const {
     isExpanded,
     setSnapPointsState,
+    setSnapPointIndex
   } = useContext(BottomSheetContext);
 
   const { expand, collapse } = useBottomSheet();
@@ -89,6 +69,12 @@ const AddressSelectorBottomSheet = () => {
   const onCurrentLocation = async () => {
     userContext.setSpCurrentLocation();
   };
+
+  const onSetLocationOnMap = async () => {
+    setCurrentBsPage(BS_PAGES.SET_LOCATION_ON_MAP);
+    setSnapPointIndex(0);
+    collapse();
+  };
   return (
     <ContentContainer>
       <SearchBar
@@ -113,6 +99,7 @@ const AddressSelectorBottomSheet = () => {
                 text={i18n.t('addressView.setLocationOnMap')}
                 icon="locationPin"
                 actionButton
+                onPress={onSetLocationOnMap}
               />
               <BottomSheetScrollView contentContainerStyle={{ overflow: 'visible' }}>
                 {(userContext.searchResults || userContext.historyResults).map(h => <AddressRow {...h} onPress={() => userContext.onAddressSelected(h)} />)}

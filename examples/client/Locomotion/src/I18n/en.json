@@ -290,6 +290,12 @@
       "buttonText": "Set another pickup location",
       "subTitleText": "Autofleet is not available in your area"
     },
+    "noPayment": {
+        "titleText": "No payment set",
+        "buttonText": "Add payment method",
+        "secondaryButtonText": "Cancel",
+        "subTitleText": "Without setting a payment method, you won't be able to make a ride request"
+      },
     "ride": {
         "now": "Now",
         "notes": {

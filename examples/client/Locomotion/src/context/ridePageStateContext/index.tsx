@@ -2,16 +2,14 @@ import React, { createContext, useState } from 'react';
 import geo, { getPosition } from '../../services/geo';
 import { getUserTerritories } from '../user/api';
 import pointInPolygon from './pointInPolygon';
+import { BsPages, BS_PAGES } from './utils';
 
-type BsPages = 'main' | 'selectLocationOnMap' | 'payment';
 interface RidePageStateContextProps {
   territory: any;
   loadTerritory: () => void;
   showOutOfTerritory: boolean | undefined;
   setShowOutOfTerritory: (outOfTerritory: boolean) => void;
   initGeoService: () => void;
-  selectLocationMode: boolean | undefined;
-  setSelectLocationMode: (mode: boolean) => void;
   isUserLocationFocused: boolean;
   setIsUserLocationFocused: (isLocationFocused: boolean) => void;
   currentBsPage: BsPages;
@@ -23,21 +21,18 @@ export const RideStateContextContext = createContext<RidePageStateContextProps>(
   loadTerritory: () => undefined,
   setShowOutOfTerritory: (outOfTerritory: boolean) => undefined,
   initGeoService: () => undefined,
-  setSelectLocationMode: (mode: boolean) => undefined,
   isUserLocationFocused: false,
   setIsUserLocationFocused: (isLocationFocused: boolean) => undefined,
-  currentBsPage: 'main',
+  currentBsPage: BS_PAGES.ADDRESS_SELECTOR,
   setCurrentBsPage: (page: BsPages) => undefined,
-  selectLocationMode: false,
   showOutOfTerritory: false,
 });
 
 const RideStateContextContextProvider = ({ children }: { children: any }) => {
   const [territory, setTerritory] = useState<Array<any> | null>(null);
   const [showOutOfTerritory, setShowOutOfTerritory] = useState<boolean | undefined>(false);
-  const [selectLocationMode, setSelectLocationMode] = useState<boolean | undefined>(false);
   const [isUserLocationFocused, setIsUserLocationFocused] = useState(true);
-  const [currentBsPage, setCurrentBsPage] = useState<BsPages>('main');
+  const [currentBsPage, setCurrentBsPage] = useState<BsPages>(BS_PAGES.ADDRESS_SELECTOR);
 
   const loadTerritory = async (checkTerritory = false) => {
     let t = territory;
@@ -67,8 +62,6 @@ const RideStateContextContextProvider = ({ children }: { children: any }) => {
         showOutOfTerritory,
         setShowOutOfTerritory,
         initGeoService,
-        selectLocationMode,
-        setSelectLocationMode,
         isUserLocationFocused,
         setIsUserLocationFocused,
         currentBsPage,
