@@ -45,7 +45,7 @@ const ServiceCard = ({ service }) => {
   return (
     <CardContainer
       theme={theme}
-      selected={chosenService.id === service.id}
+      selected={chosenService && chosenService.id === service.id}
       noBackground
       disabled={unavailable}
       onPress={() => setChosenService(service)}

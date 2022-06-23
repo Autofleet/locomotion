@@ -315,9 +315,9 @@ const RidePageContextProvider = ({ children }) => {
       serviceId: chosenService.id,
       paymentMethodId: ride.paymentMethodId,
       stopPoints: requestStopPoints.map((sp, i) => ({
-        lat: sp.lat,
-        lng: sp.lng,
-        description: sp.description,
+        lat: Number(sp.lat),
+        lng: Number(sp.lng),
+        description: sp.description || sp.streetAddress,
         type: sp.type,
         ...(i === 0 && { notes: ride.notes }),
       })),

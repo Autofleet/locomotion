@@ -11,6 +11,6 @@ export const getServices = async () => {
 };
 
 export const createRide = async (ride) => {
-  const { data } = await network.post('api/v1/rides', ride);
+  const { data } = await network.post('api/v1/client-rides', ride);
   return data;
 };
