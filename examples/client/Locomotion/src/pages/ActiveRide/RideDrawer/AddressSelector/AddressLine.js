@@ -3,6 +3,7 @@ import React, {
 } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import styled from 'styled-components';
+import SkeletonContent from 'react-native-skeleton-content-nonexpo';
 import TextInput from '../../../../Components/TextInput';
 import i18n from '../../../../I18n';
 import SvgIcon from '../../../../Components/SvgIcon';
@@ -76,6 +77,7 @@ const AddressRow = ({
   border = true,
   actionButton = false,
   onPress,
+  isLoading = false,
 }) => {
   const finalIcon = ICONS[icon];
   return (
@@ -87,8 +89,21 @@ const AddressRow = ({
         {finalIcon ? <Icon Svg={finalIcon} actionButton={actionButton} /> : null}
       </IconContainer>
       <AddressContainer>
-        {actionButton ? <ActionText>{text}</ActionText> : <AddressText>{text}</AddressText>}
-        {subText ? <AddressText subtext>{subText}</AddressText> : null}
+        {isLoading ? (
+          <SkeletonContent
+            containerStyle={{}}
+            isLoading
+            layout={[
+              { width: 180, height: 20, marginBottom: 6 },
+              { width: 220, height: 20 },
+            ]}
+          />
+        ) : (
+          <>
+            {actionButton ? <ActionText>{text}</ActionText> : <AddressText>{text}</AddressText>}
+            {subText ? <AddressText subtext>{subText}</AddressText> : null}
+          </>
+        )}
       </AddressContainer>
     </Row>
   );
