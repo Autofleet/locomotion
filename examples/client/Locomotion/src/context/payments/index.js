@@ -28,12 +28,6 @@ const usePayments = () => {
     return loadCustomer();
   };
 
-  // const createCustomer = async () => {
-  //   const { data: clientData } = await network.post('/api/v1/me/customers');
-  //   setCustomer(clientData);
-  //   return clientData;
-  // };
-
   const setup = async () => {
     const { data: intent } = await network.post(`${BASE_PATH}/setup`);
     return intent;
@@ -45,6 +39,10 @@ const usePayments = () => {
     return paymentMethodsData;
   };
 
+  const clientHasValidPaymentMethods = () => paymentMethods.length > 0 && paymentMethods.some(pm => !pm.isExpired);
+
+  const getClientDefaultMethod = () => (paymentMethods || []).find(pm => pm.isDefault) || paymentMethods[0];
+
 
   return {
     getCustomer,
@@ -54,6 +52,8 @@ const usePayments = () => {
     paymentMethods,
     detachPaymentMethod,
     getOrFetchCustomer,
+    clientHasValidPaymentMethods,
+    getClientDefaultMethod,
   };
 };
 

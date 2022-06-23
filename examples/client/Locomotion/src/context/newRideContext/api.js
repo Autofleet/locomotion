@@ -17,3 +17,8 @@ export const getServices = async () => {
     console.log(e);
   }
 };
+
+export const createRide = async (ride) => {
+  const { data } = await network.post('api/v1/client-rides', ride);
+  return data;
+};
