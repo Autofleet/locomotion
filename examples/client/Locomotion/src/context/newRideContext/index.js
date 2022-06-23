@@ -229,13 +229,13 @@ const RidePageContextProvider = ({ children }) => {
       lng: enrichedPlace.lng,
     };
     console.log({ enrichedPlace, selectedInputIndex });
-    setRequestStopPoints(reqSps);
     resetSearchResults();
     saveLastAddresses(selectedItem);
 
     if (loadRide) {
       validateRequestedStopPoints(reqSps);
     }
+    setRequestStopPoints(reqSps);
   };
 
   const resetSearchResults = () => setSearchResults(null);
@@ -280,22 +280,32 @@ const RidePageContextProvider = ({ children }) => {
   };
 
   const validateRequestedStopPoints = async (reqSps) => {
+    const stopPoints = reqSps;
+    const isSpsReady = stopPoints.every(r => r.location && r.location.lat && r.location.lng && r.description);
+    if (stopPoints.length && isSpsReady) {
+      setIsReadyForSubmit(true);
+    } else {
+      setIsReadyForSubmit(false);
+    }
+  };
+
+  const tryServiceEstimations = async () => {
     try {
-      const stopPoints = reqSps;
-      const isSpsReady = stopPoints.every(r => r.location && r.location.lat && r.location.lng && r.description);
-      if (stopPoints.length && isSpsReady) {
-        setIsReadyForSubmit(true);
-        setIsLoading(true);
-        await getServiceEstimations();
-        setIsLoading(false);
-      } else {
-        setIsReadyForSubmit(false);
-      }
+      setIsLoading(true);
+      await getServiceEstimations();
+      setIsLoading(false);
     } catch (e) {
       setIsLoading(false);
       console.error(e);
     }
   };
+
+  useEffect(() => {
+    console.log('here', isReadyForSubmit);
+    if (isReadyForSubmit) {
+      tryServiceEstimations();
+    }
+  }, [isReadyForSubmit]);
 
   const requestRide = async () => {
     console.log({
@@ -320,7 +330,6 @@ const RidePageContextProvider = ({ children }) => {
     const isSpsReady = requestStopPoints.every(r => r.lat && r.lng && r.description);
     if (requestStopPoints.length && isSpsReady) {
       setIsReadyForSubmit(true);
-      await getServiceEstimations();
     } else {
       setIsReadyForSubmit(false);
     }

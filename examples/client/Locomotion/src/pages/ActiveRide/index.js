@@ -20,13 +20,15 @@ import backArrow from '../../assets/arrow-back.svg';
 
 const RidePage = ({ mapSettings }) => {
   const { initGeoService, showOutOfTerritory, currentBsPage } = useContext(RideStateContextContext);
-  const { serviceEstimations, setServiceEstimations, initSps } = useContext(RidePageContext);
+  const {
+    serviceEstimations, setServiceEstimations, initSps, isLoading,
+  } = useContext(RidePageContext);
   const { setSnapPointsState, setSnapPointIndex } = useContext(BottomSheetContext);
   const BS_PAGE_TO_COMP = {
     main: () => (showOutOfTerritory ? (
       <NotAvailableHere onButtonPress={() => ({})} />
     ) : (
-      !serviceEstimations
+      !isLoading && !serviceEstimations
         ? <AddressSelector />
         : <RideOptions />
     )),
@@ -42,10 +44,11 @@ const RidePage = ({ mapSettings }) => {
   }, []);
 
   useEffect(() => {
-    if (serviceEstimations) {
+    if (isLoading) {
+      setSnapPointsState(SNAP_POINT_STATES.SERVICE_ESTIMATIONS);
       bottomSheetRef.current.collapse();
     }
-  }, [serviceEstimations]);
+  }, [isLoading]);
 
   const goBackToAddress = () => {
     setServiceEstimations(null);

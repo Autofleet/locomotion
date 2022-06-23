@@ -1,5 +1,5 @@
 import React, {
-  Fragment, useContext, useEffect, useState,
+  useContext, useEffect, useState,
 } from 'react';
 import RideButtons from './RideButtons';
 import ServiceOptions from './ServiceOptions';
@@ -7,7 +7,7 @@ import RideNotes from '../../../../popups/RideNotes';
 import { RidePageContext } from '../../../../context/newRideContext';
 import ChoosePaymentMethod from '../../../../popups/ChoosePaymentMethod';
 import { popupNames } from './utils';
-import { BottomSheetContext, SNAP_POINT_STATES } from '../../../../context/bottomSheetContext';
+import { BottomSheetContext } from '../../../../context/bottomSheetContext';
 
 
 const RideOptions = () => {
@@ -36,7 +36,6 @@ const RideOptions = () => {
         setPopupName={setPopupName}
       />
     ));
-    setSnapPointsState(SNAP_POINT_STATES.SERVICE_ESTIMATIONS);
     return () => {
       setFooterComponent(null);
     };
