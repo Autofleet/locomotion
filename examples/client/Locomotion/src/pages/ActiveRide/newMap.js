@@ -133,7 +133,6 @@ export default React.forwardRef(({
             const { latitude, longitude } = event;
             const lat = latitude.toFixed(6);
             const lng = longitude.toFixed(6);
-            console.log('reverseLocationGeocode', lat, lng);
             const spData = await reverseLocationGeocode(lat, lng);
             saveSelectedLocation(spData);
           }
