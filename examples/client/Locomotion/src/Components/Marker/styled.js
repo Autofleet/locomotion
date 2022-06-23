@@ -82,11 +82,10 @@ export const Type = styled.View`
 `;
 
 export const SubText = styled.Text`
-    height: 50%;
     ${FONT_SIZES.LARGE}
     ${FONT_WEIGHTS.REGULAR}
-    padding: 5px;
     max-width: 150px;
+    margin-left: 5px;
 `;
 
 export const IconContainer = styled.View`
@@ -98,4 +97,12 @@ export const TypeText = styled.Text`
 ${FONT_SIZES.LARGE}
 ${FONT_WEIGHTS.SEMI_BOLD}
 margin: 0 auto;
+`;
+
+export const SubContainer = styled.View`
+display: flex;
+flex-direction: row;
+align-items: center;
+height: 50%;
+padding: 0 5px;
 `;
