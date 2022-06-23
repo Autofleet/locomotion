@@ -43,6 +43,7 @@ export const RidePageContext = createContext({
   saveSelectedLocation: sp => undefined,
   requestRide: () => undefined,
 });
+
 const HISTORY_RECORDS_NUM = 10;
 
 const RidePageContextProvider = ({ children }) => {
@@ -227,8 +228,10 @@ const RidePageContextProvider = ({ children }) => {
   };
 
   const onAddressSelected = async (selectedItem, loadRide) => {
+    if (selectedItem.isLoading) {
+      return null;
+    }
     const enrichedPlace = await enrichPlaceWithLocation(selectedItem.placeId);
-    console.log({ enrichedPlace, selectedInputIndex });
     const reqSps = [...requestStopPoints];
     reqSps[selectedInputIndex] = {
       ...reqSps[selectedInputIndex],
@@ -340,6 +343,13 @@ const RidePageContextProvider = ({ children }) => {
     }
   };
 
+  const fillLoadSkeleton = () => {
+    const filledArray = new Array(4).fill({ isLoading: true });
+    if (!searchResults || !searchResults.length || (searchResults.length && !searchResults[0].isLoading)) {
+      setSearchResults(filledArray);
+    }
+  };
+
   return (
     <RidePageContext.Provider
       value={{
@@ -375,6 +385,7 @@ const RidePageContextProvider = ({ children }) => {
         saveSelectedLocation,
         checkFormSps,
         getCurrentLocationAddress,
+        fillLoadSkeleton,
       }}
     >
       {children}
