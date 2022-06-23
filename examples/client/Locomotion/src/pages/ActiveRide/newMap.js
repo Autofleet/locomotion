@@ -17,7 +17,7 @@ import { latLngToAddress } from '../../context/newRideContext/utils';
 import { BS_PAGES } from '../../context/ridePageStateContext/utils';
 
 const MAP_EDGE_PADDING = {
-  top: 80,
+  top: 120,
   right: 100,
   bottom: 400,
   left: 100,

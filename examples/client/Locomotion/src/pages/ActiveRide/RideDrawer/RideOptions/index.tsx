@@ -1,5 +1,5 @@
 import React, {
-  Fragment, useContext, useEffect, useState,
+  useContext, useEffect, useState,
 } from 'react';
 import RideButtons from './RideButtons';
 import ServiceOptions from './ServiceOptions';

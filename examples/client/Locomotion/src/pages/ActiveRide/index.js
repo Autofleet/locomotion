@@ -25,7 +25,7 @@ const RidePage = ({ mapSettings }) => {
     initGeoService, showOutOfTerritory, currentBsPage, setCurrentBsPage,
   } = useContext(RideStateContextContext);
   const {
-    serviceEstimations, setServiceEstimations, initSps, requestStopPoints, requestRide,
+    serviceEstimations, setServiceEstimations, initSps, isLoading, requestStopPoints, requestRide,
   } = useContext(RidePageContext);
   const { setSnapPointsState, setSnapPointIndex } = useContext(BottomSheetContext);
   const {
@@ -35,7 +35,7 @@ const RidePage = ({ mapSettings }) => {
     [BS_PAGES.ADDRESS_SELECTOR]: () => (showOutOfTerritory ? (
       <NotAvailableHere onButtonPress={() => ({})} />
     ) : (
-      !serviceEstimations
+      !isLoading && !serviceEstimations
         ? <AddressSelector />
         : <RideOptions />
     )),
@@ -69,10 +69,11 @@ const RidePage = ({ mapSettings }) => {
   }, []);
 
   useEffect(() => {
-    if (serviceEstimations) {
+    if (isLoading) {
+      setSnapPointsState(SNAP_POINT_STATES.SERVICE_ESTIMATIONS);
       bottomSheetRef.current.collapse();
     }
-  }, [serviceEstimations]);
+  }, [isLoading]);
 
   const resetStateToAddressSelector = () => {
     setServiceEstimations(null);
