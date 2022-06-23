@@ -108,7 +108,7 @@ const BsPage = ({
     <MainContent>
       <CardText>
         <Title>{TitleText}</Title>
-        <SubTitle numberOfLines={2} >{SubTitleText}</SubTitle>
+        <SubTitle numberOfLines={2}>{SubTitleText}</SubTitle>
       </CardText>
       {image ? (
         <CardImage>
@@ -120,9 +120,11 @@ const BsPage = ({
     <OtherButton onPress={onButtonPress}>
       <ButtonTitle>{ButtonText}</ButtonTitle>
     </OtherButton>
-    {SecondaryButtonText && <SecondaryButton onPress={onSecondaryButtonPress}>
+    {SecondaryButtonText && (
+    <SecondaryButton onPress={onSecondaryButtonPress}>
       <SecondaryButtonTitle>{SecondaryButtonText}</SecondaryButtonTitle>
-    </SecondaryButton>}
+    </SecondaryButton>
+    )}
   </Container>
 );
 
@@ -142,13 +144,13 @@ export const NotAvailableHere = (props: any) => (
 );
 
 export const ConfirmPickup = (props: any) => {
-  const { 
-     lastSelectedLocation,
-     getCurrentLocationAddress,
-     saveSelectedLocation,
-     updateRequestSp,
-     setSelectedInputIndex
-  }: { 
+  const {
+    lastSelectedLocation,
+    getCurrentLocationAddress,
+    saveSelectedLocation,
+    updateRequestSp,
+    setSelectedInputIndex,
+  }: {
     lastSelectedLocation: any,
     getCurrentLocationAddress: any,
     saveSelectedLocation: any,
@@ -160,13 +162,13 @@ export const ConfirmPickup = (props: any) => {
   const { collapse } = useBottomSheet();
 
   const setInitialLocation = async () => {
-      if (props.initialLocation) {
-        saveSelectedLocation(props.initialLocation);  
-        setSelectedInputIndex(0);
-      } else {
-        const sp = await getCurrentLocationAddress();
-        saveSelectedLocation(sp);
-      }
+    if (props.initialLocation) {
+      saveSelectedLocation(props.initialLocation);
+      setSelectedInputIndex(0);
+    } else {
+      const sp = await getCurrentLocationAddress();
+      saveSelectedLocation(sp);
+    }
   };
 
   useEffect(() => {
@@ -197,11 +199,11 @@ export const NoPayment = (props: any) => {
   const { setSnapPointsState } = useContext(BottomSheetContext);
   const { setCurrentBsPage } = useContext(RideStateContextContext);
   const { requestRide } = useContext(RidePageContext);
-  
+
   const {
     paymentMethods,
-    clientHasValidPaymentMethods
-  } = payments.useContainer()
+    clientHasValidPaymentMethods,
+  } = payments.useContainer();
 
   const proceedIfPaymentMethodsAreValid = () => {
     if (clientHasValidPaymentMethods()) {
@@ -215,21 +217,22 @@ export const NoPayment = (props: any) => {
 
   useEffect(() => {
     proceedIfPaymentMethodsAreValid();
-  }, [paymentMethods])
+  }, [paymentMethods]);
 
   return (
-  <BsPage
-    TitleText={i18n.t('bottomSheetContent.noPayment.titleText')}
-    ButtonText={i18n.t('bottomSheetContent.noPayment.buttonText')}
-    SubTitleText={i18n.t('bottomSheetContent.noPayment.subTitleText')}
-    SecondaryButtonText={i18n.t('bottomSheetContent.noPayment.secondaryButtonText')}
-    onSecondaryButtonPress={() => {
-      setSnapPointsState(SNAP_POINT_STATES.ADDRESS_SELECTOR);
-      setCurrentBsPage(BS_PAGES.ADDRESS_SELECTOR);
-    }}
-    onButtonPress={() => {
-      navigationService.navigate(MAIN_ROUTES.PAYMENT);
-    }}
-    {...props}
-  />
-)};
+    <BsPage
+      TitleText={i18n.t('bottomSheetContent.noPayment.titleText')}
+      ButtonText={i18n.t('bottomSheetContent.noPayment.buttonText')}
+      SubTitleText={i18n.t('bottomSheetContent.noPayment.subTitleText')}
+      SecondaryButtonText={i18n.t('bottomSheetContent.noPayment.secondaryButtonText')}
+      onSecondaryButtonPress={() => {
+        setSnapPointsState(SNAP_POINT_STATES.ADDRESS_SELECTOR);
+        setCurrentBsPage(BS_PAGES.ADDRESS_SELECTOR);
+      }}
+      onButtonPress={() => {
+        navigationService.navigate(MAIN_ROUTES.PAYMENT);
+      }}
+      {...props}
+    />
+  );
+};

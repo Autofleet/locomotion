@@ -21,11 +21,15 @@ import payments from '../../context/payments';
 
 
 const RidePage = ({ mapSettings }) => {
-  const { initGeoService, showOutOfTerritory, currentBsPage, setCurrentBsPage } = useContext(RideStateContextContext);
-  const { serviceEstimations, setServiceEstimations, initSps, requestStopPoints, requestRide } = useContext(RidePageContext);
+  const {
+    initGeoService, showOutOfTerritory, currentBsPage, setCurrentBsPage,
+  } = useContext(RideStateContextContext);
+  const {
+    serviceEstimations, setServiceEstimations, initSps, requestStopPoints, requestRide,
+  } = useContext(RidePageContext);
   const { setSnapPointsState, setSnapPointIndex } = useContext(BottomSheetContext);
   const {
-    clientHasValidPaymentMethods
+    clientHasValidPaymentMethods,
   } = payments.useContainer();
   const BS_PAGE_TO_COMP = {
     [BS_PAGES.ADDRESS_SELECTOR]: () => (showOutOfTerritory ? (
@@ -35,17 +39,25 @@ const RidePage = ({ mapSettings }) => {
         ? <AddressSelector />
         : <RideOptions />
     )),
-    [BS_PAGES.CONFIRM_PICKUP]: () => <ConfirmPickup initialLocation={requestStopPoints[0]} onButtonPress={() => {
-      if (clientHasValidPaymentMethods()) {
-        requestRide();
-      } else {
-        setCurrentBsPage(BS_PAGES.NO_PAYMENT);
-      }
-    }} />,
-    [BS_PAGES.SET_LOCATION_ON_MAP]: () => <ConfirmPickup onButtonPress={() => {
-      setCurrentBsPage(BS_PAGES.ADDRESS_SELECTOR);
-    }} />,
-    [BS_PAGES.NO_PAYMENT]: () => <NoPayment />
+    [BS_PAGES.CONFIRM_PICKUP]: () => (
+      <ConfirmPickup
+        initialLocation={requestStopPoints[0]}
+        onButtonPress={() => {
+          if (clientHasValidPaymentMethods()) {
+            requestRide();
+          } else {
+            setCurrentBsPage(BS_PAGES.NO_PAYMENT);
+          }
+        }}
+      />
+    ),
+    [BS_PAGES.SET_LOCATION_ON_MAP]: () => (
+      <ConfirmPickup onButtonPress={() => {
+        setCurrentBsPage(BS_PAGES.ADDRESS_SELECTOR);
+      }}
+      />
+    ),
+    [BS_PAGES.NO_PAYMENT]: () => <NoPayment />,
   };
 
   const navigation = useNavigation();
@@ -66,7 +78,7 @@ const RidePage = ({ mapSettings }) => {
     setServiceEstimations(null);
     setSnapPointsState(SNAP_POINT_STATES.ADDRESS_SELECTOR);
     setCurrentBsPage(BS_PAGES.ADDRESS_SELECTOR);
-  }
+  };
 
   const goBackToAddress = () => {
     resetStateToAddressSelector();

@@ -39,14 +39,9 @@ const usePayments = () => {
     return paymentMethodsData;
   };
 
-  const clientHasValidPaymentMethods = () => {
-    return paymentMethods.length > 0 && paymentMethods.some(pm => !pm.isExpired);
-  }
+  const clientHasValidPaymentMethods = () => paymentMethods.length > 0 && paymentMethods.some(pm => !pm.isExpired);
 
-  const getClientDefaultMethod = () => {
-    // temp
-    return (paymentMethods || []).find(pm => pm.isDefault) || paymentMethods[0];
-  }
+  const getClientDefaultMethod = () => (paymentMethods || []).find(pm => pm.isDefault) || paymentMethods[0];
 
 
   return {

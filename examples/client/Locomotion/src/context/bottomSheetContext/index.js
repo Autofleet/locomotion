@@ -1,7 +1,7 @@
 import React, {
   useState, useEffect, useRef, createContext, useCallback, useMemo,
 } from 'react';
-import {BS_PAGES} from '../ridePageStateContext/utils';
+import { BS_PAGES } from '../ridePageStateContext/utils';
 
 export const BottomSheetContext = createContext();
 

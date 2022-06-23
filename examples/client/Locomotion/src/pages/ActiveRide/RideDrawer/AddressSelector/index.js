@@ -36,12 +36,12 @@ const AddressSelectorBottomSheet = () => {
 
   const {
     setCurrentBsPage,
-  } = useContext(RideStateContextContext)
+  } = useContext(RideStateContextContext);
 
   const {
     isExpanded,
     setSnapPointsState,
-    setSnapPointIndex
+    setSnapPointIndex,
   } = useContext(BottomSheetContext);
 
   const { expand, collapse } = useBottomSheet();

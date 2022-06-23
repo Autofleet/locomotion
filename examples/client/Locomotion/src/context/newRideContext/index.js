@@ -25,7 +25,7 @@ export const RidePageContext = createContext({
   requestStopPoints: [],
   searchResults: [],
   searchAddress: null,
-  updateRequestSp: (sp) => undefined,
+  updateRequestSp: sp => undefined,
   setSpCurrentLocation: () => undefined,
   isReadyForSubmit: false,
   checkFormSps: () => undefined,
@@ -40,8 +40,8 @@ export const RidePageContext = createContext({
   chosenService: null,
   lastSelectedLocation: null,
   getCurrentLocationAddress: () => undefined,
-  saveSelectedLocation: (sp) => undefined,
-  requestRide: () => undefined
+  saveSelectedLocation: sp => undefined,
+  requestRide: () => undefined,
 });
 const HISTORY_RECORDS_NUM = 10;
 
@@ -195,7 +195,7 @@ const RidePageContextProvider = ({ children }) => {
         const currentCoords = await getCurrentLocation();
         location = `${currentCoords.latitude},${currentCoords.longitude}`;
       }
-      
+
       const data = await getGeocode({
         latlng: location,
       });
@@ -316,7 +316,7 @@ const RidePageContextProvider = ({ children }) => {
         lng: sp.lng,
         description: sp.description,
         type: sp.type,
-        ...(i === 0 && { notes: ride.notes })
+        ...(i === 0 && { notes: ride.notes }),
       })),
     };
 

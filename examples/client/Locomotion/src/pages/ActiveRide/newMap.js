@@ -41,7 +41,9 @@ export default React.forwardRef(({
 
   const isMainPage = currentBsPage === BS_PAGES.ADDRESS_SELECTOR;
   const isConfirmPickup = [BS_PAGES.CONFIRM_PICKUP, BS_PAGES.SET_LOCATION_ON_MAP].includes(currentBsPage);
-  const { requestStopPoints, chosenService, saveSelectedLocation, reverseLocationGeocode } = useContext(RidePageContext);
+  const {
+    requestStopPoints, chosenService, saveSelectedLocation, reverseLocationGeocode,
+  } = useContext(RidePageContext);
 
   const [mapRegion, setMapRegion] = useState({
     latitudeDelta: 0.015,
@@ -131,7 +133,7 @@ export default React.forwardRef(({
             const { latitude, longitude } = event;
             const lat = latitude.toFixed(6);
             const lng = longitude.toFixed(6);
-            console.log('reverseLocationGeocode', lat, lng)
+            console.log('reverseLocationGeocode', lat, lng);
             const spData = await reverseLocationGeocode(lat, lng);
             saveSelectedLocation(spData);
           }
