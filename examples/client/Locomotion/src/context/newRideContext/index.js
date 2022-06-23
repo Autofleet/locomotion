@@ -28,7 +28,6 @@ export const RidePageContext = createContext({
   updateRequestSp: sp => undefined,
   setSpCurrentLocation: () => undefined,
   isReadyForSubmit: false,
-  checkFormSps: () => undefined,
   historyResults: [],
   serviceEstimations: [],
   ride: {
@@ -87,6 +86,16 @@ const RidePageContextProvider = ({ children }) => {
     setServiceEstimations(formattedEstimations);
   };
 
+  const validateRequestedStopPoints = async (reqSps) => {
+    const stopPoints = reqSps;
+    const isSpsReady = stopPoints.every(r => r.lat && r.lng && r.description);
+    if (stopPoints.length && isSpsReady) {
+      setIsReadyForSubmit(true);
+    } else {
+      setIsReadyForSubmit(false);
+    }
+  };
+
   useEffect(() => {
     initLocation();
     initCurrentLocation();
@@ -97,7 +106,7 @@ const RidePageContextProvider = ({ children }) => {
   }, [currentGeocode]);
 
   useEffect(() => {
-    checkFormSps();
+    validateRequestedStopPoints(requestStopPoints);
   }, [requestStopPoints]);
 
   const initLocation = async () => {
@@ -292,16 +301,6 @@ const RidePageContextProvider = ({ children }) => {
     setHistoryResults(history);
   };
 
-  const validateRequestedStopPoints = async (reqSps) => {
-    const stopPoints = reqSps;
-    const isSpsReady = stopPoints.every(r => r.location && r.location.lat && r.location.lng && r.description);
-    if (stopPoints.length && isSpsReady) {
-      setIsReadyForSubmit(true);
-    } else {
-      setIsReadyForSubmit(false);
-    }
-  };
-
   const tryServiceEstimations = async () => {
     try {
       setIsLoading(true);
@@ -314,7 +313,6 @@ const RidePageContextProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    console.log('here', isReadyForSubmit);
     if (isReadyForSubmit) {
       tryServiceEstimations();
     }
@@ -341,15 +339,6 @@ const RidePageContextProvider = ({ children }) => {
       ...ride,
       ...newRide,
     });
-  };
-
-  const checkFormSps = async () => {
-    const isSpsReady = requestStopPoints.every(r => r.lat && r.lng && r.description);
-    if (requestStopPoints.length && isSpsReady) {
-      setIsReadyForSubmit(true);
-    } else {
-      setIsReadyForSubmit(false);
-    }
   };
 
   const fillLoadSkeleton = () => {
@@ -392,7 +381,6 @@ const RidePageContextProvider = ({ children }) => {
         initSps,
         lastSelectedLocation,
         saveSelectedLocation,
-        checkFormSps,
         getCurrentLocationAddress,
         fillLoadSkeleton,
       }}
