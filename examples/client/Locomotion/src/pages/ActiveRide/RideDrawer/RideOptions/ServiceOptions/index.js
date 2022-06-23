@@ -11,14 +11,14 @@ const ServiceOptions = () => {
   return (
     <ServiceOptionsContainer alwaysBounceVertical={false}>
       {(serviceEstimations || []).map(option => <ServiceCard service={option} />)}
-        <SkeletonContent
-          containerStyle={{}}
-          isLoading={!serviceEstimations}
-          layout={[
-            serviceCardSkeleton,
-            serviceCardSkeleton,
-            serviceCardSkeleton,
-          ]}
+      <SkeletonContent
+        containerStyle={{}}
+        isLoading={!serviceEstimations}
+        layout={[
+          serviceCardSkeleton,
+          serviceCardSkeleton,
+          serviceCardSkeleton,
+        ]}
       />
     </ServiceOptionsContainer>
   );
