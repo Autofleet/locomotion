@@ -4,7 +4,6 @@ import ServiceCard from './ServiceCard';
 import { ServiceOptionsContainer } from './styles';
 
 const ServiceOptions = () => {
-  const [selectedService, setSelectedService] = useState(null);
   const { serviceEstimations } = useContext(RidePageContext);
 
   return (

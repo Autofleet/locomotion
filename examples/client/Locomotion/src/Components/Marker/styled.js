@@ -61,19 +61,23 @@ export const InfoBox = styled.View`
    height: 50px;
    display: flex;
    flex-direction: column;
-   background-color: #e3e3e3;
+   background-color: #f0f0f0;
    border-radius: 8px;
-   padding: 5px;
+   padding: 3px;
    align-items: center;
     margin-top: -45px;
+    shadow-offset: 0px 0px;
+  shadow-color: #04214f;
+  shadow-opacity: 0.4;
 `;
 
 export const Type = styled.View`
   height: 50%;
   width: 100%;
-  margin: 0 auto;
+  display: flex;
+  justify-content: center;
   background-color: #ffffff;
-  border-radius: 8px;
+  border-radius: 4px;
   align-items: center;
 `;
 

@@ -17,12 +17,17 @@ import {
 } from './styled';
 import Tag from '../../../../../../Components/Tag';
 import { RidePageContext } from '../../../../../../context/newRideContext';
+import { AvailabilityContext } from '../../../../../../context/availability';
 
 const ServiceCard = ({ service }) => {
   const theme = useContext(ThemeContext);
   const { setChosenService, chosenService } = useContext(RidePageContext);
+  /* this line is needed to keep the cards refreshing on
+  the same interval as the markers on the map so the eta matches */
+  const { availabilityVehicles } = useContext(AvailabilityContext);
   const unavailable = !service.eta;
-  const timeUntilArrival = i18n.t('rideDetails.timeUntilArrival', { minutes: moment.duration(moment(service.eta).diff(moment())).minutes().toString() });
+  const minutesUntilPickup = moment.duration(moment(service.eta).diff(moment())).minutes().toString();
+  const timeUntilArrival = i18n.t('rideDetails.timeUntilArrival', { minutes: minutesUntilPickup });
   const unavailableText = i18n.t('rideDetails.unavailable');
   const serviceDisplayPrice = `${getSymbolFromCurrency(service.currency)}${service.price}`;
   const tagStyles = {
