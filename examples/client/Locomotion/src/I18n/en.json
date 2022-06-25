@@ -179,6 +179,11 @@
         "setLocationOnMap": "Set location on map"
     },
     "popups": {
+        "genericError": {
+            "title": "Error",
+            "text": "Something went wrong. Please try again and contact support if the issue isn't solved",
+            "buttonText": "OK"
+        },
         "photoUpload": {
             "takePhoto":  "Take Photo...",
             "choosePhoto": "Choose from Library..."
