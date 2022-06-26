@@ -7,19 +7,22 @@ import { serviceCardSkeleton } from './ServiceCard/skeleton';
 
 const ServiceOptions = () => {
   const { serviceEstimations } = useContext(RidePageContext);
-
+  const isDebuggingEnabled = (typeof atob !== 'undefined');
   return (
     <ServiceOptionsContainer alwaysBounceVertical={false}>
       {(serviceEstimations || []).map(option => <ServiceCard service={option} />)}
-      <SkeletonContent
-        containerStyle={{}}
-        isLoading={!serviceEstimations}
-        layout={[
-          serviceCardSkeleton,
-          serviceCardSkeleton,
-          serviceCardSkeleton,
-        ]}
-      />
+      {!isDebuggingEnabled
+        ? (
+          <SkeletonContent
+            containerStyle={{}}
+            isLoading={!serviceEstimations}
+            layout={[
+              serviceCardSkeleton,
+              serviceCardSkeleton,
+              serviceCardSkeleton,
+            ]}
+          />
+        ) : null}
     </ServiceOptionsContainer>
   );
 };
