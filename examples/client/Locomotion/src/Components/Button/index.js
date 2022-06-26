@@ -9,6 +9,7 @@ const Container = styled.TouchableOpacity`
 
 const LoaderContainer = styled.View`
 height: 70%;
+width: 100%;
 margin: auto 0;
 `;
 

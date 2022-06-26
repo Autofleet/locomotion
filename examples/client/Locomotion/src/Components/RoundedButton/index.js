@@ -33,29 +33,20 @@ const RoundedButton = ({
       onPress={onPressWithLoading}
       hollow={hollow}
       disabled={(loadingState || disabled)}
+      isLoading={loadingState}
       type={type}
       style={style}
       useCancelTextButton={useCancelTextButton}
     >
       <ButtonTextContainer>
-        {loadingState ? (
-          <Loader
-            dark={hollow}
-            lottieViewStyle={{
-              width: 80,
-              height: 12,
-            }}
-          />
-        ) : (
-          <SubmitButtonText
-            hollow={hollow}
-            disabled={disabled}
-            type={type}
-            useCancelTextButton={useCancelTextButton}
-          >
-            {props.children}
-          </SubmitButtonText>
-        )}
+        <SubmitButtonText
+          hollow={hollow}
+          disabled={disabled}
+          type={type}
+          useCancelTextButton={useCancelTextButton}
+        >
+          {props.children}
+        </SubmitButtonText>
       </ButtonTextContainer>
     </StyledButton>
   );
