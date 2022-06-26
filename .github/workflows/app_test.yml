@@ -1,0 +1,31 @@
+name: App Test
+
+on:
+  push:
+    paths:
+    - 'examples/client/Locomotion/**'
+    - '.github/workflows/app_test.yml'
+
+defaults:
+  run:
+    working-directory: examples/client/Locomotion
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Use Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: 14
+          always-auth: true
+          registry-url: https://registry.npmjs.org
+          
+      - name: Install NPM dependencies
+        run: npm install
+
+      - run: npm run linter
+
+      - run: npm run ts

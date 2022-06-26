@@ -25,6 +25,7 @@ import StopPointsCard from './StopPointsCard';
 import OfferCard from './OfferCard';
 import RideStatusHeader from './RideStatusHeader';
 import FutureRides, { FutureOrdersButton } from './FutureRides';
+import RideOptions from './RideOptions';
 import { RidePageContext } from '../../../context/ridePageContext';
 
 const getRideState = (activeRide) => { // false, driverOnTheWay, driverArrived, onBoard
@@ -141,6 +142,7 @@ const RideDrawer = ({ navigation }) => {
       setAllowRideOrder(false);
     }
   }, [usePayments.paymentMethods]);
+
   return (
     <DrawerContainer>
       <FutureOrdersButton

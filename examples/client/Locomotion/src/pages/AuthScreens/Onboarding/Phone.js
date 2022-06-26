@@ -16,10 +16,10 @@ const Phone = () => {
   const { updateState, user } = useContext(UserContext);
   const [showErrorText, setShowErrorText] = useState(false);
   const [isInvalid, setIsInvalid] = useState(true);
-  const onPhoneNumberChange = (phoneNumber, countryCode) => {
+  const onPhoneNumberChange = (phoneNumber, isValid) => {
     setShowErrorText(false);
-    setIsInvalid(phoneNumber.length < 9);
-    updateState({ phoneNumber: countryCode + phoneNumber });
+    setIsInvalid(!isValid);
+    updateState({ phoneNumber });
   };
 
   const onSubmitPhoneNumber = async () => {
@@ -32,13 +32,16 @@ const Phone = () => {
       nextScreen(MAIN_ROUTES.PHONE);
     } catch (e) {
       console.log('Bad login with response', e);
-      setShowErrorText(e.message);
+      setShowErrorText(i18n.t('login.invalidPhoneNumberError'));
     }
   };
 
   return (
     <SafeView>
-      <Header title={i18n.t('onboarding.pages.phone.title')} page={MAIN_ROUTES.PHONE} />
+      <Header
+        title={i18n.t('onboarding.pages.phone.title')}
+        page={MAIN_ROUTES.PHONE}
+      />
       <PageContainer>
         <ScreenText
           text={i18n.t('onboarding.pages.phone.text')}
@@ -48,14 +51,14 @@ const Phone = () => {
           value={user.phoneNumber}
           onPhoneNumberChange={onPhoneNumberChange}
           autoFocus
-          defaultCode="IL"
           error={showErrorText}
         />
         {showErrorText && <ErrorText>{showErrorText}</ErrorText>}
         <OnboardingNavButtons
           isInvalid={isInvalid}
           onNext={onSubmitPhoneNumber}
-          onFail={() => setShowErrorText(i18n.t('login.invalidPhoneNumberError'))}
+          onFail={() => setShowErrorText(i18n.t('login.invalidPhoneNumberError'))
+          }
         />
       </PageContainer>
     </SafeView>

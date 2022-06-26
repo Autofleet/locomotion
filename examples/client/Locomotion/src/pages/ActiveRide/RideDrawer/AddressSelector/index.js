@@ -1,86 +1,54 @@
 import React, {
-  useCallback, useEffect, useMemo, useRef, useState, useContext,
+  useEffect, useContext,
 } from 'react';
+
 import {
-  View, Text, StyleSheet, ScrollView,
-} from 'react-native';
-import BottomSheet, {
-  useBottomSheetDynamicSnapPoints,
   BottomSheetView,
   useBottomSheet,
   BottomSheetScrollView,
-  BottomSheetBackdrop,
 } from '@gorhom/bottom-sheet';
 
 import styled from 'styled-components';
-import SafeView from '../../../../Components/SafeView';
-import TextInput from '../../../../Components/TextInput';
 import i18n from '../../../../I18n';
 import AddressRow from './AddressLine';
 import SearchBar from './SearchBar';
 import { RidePageContext } from '../../../../context/newRideContext';
-import { BottomSheetContext } from '../../../../context/bottomSheetContext';
-
-const Container = styled(BottomSheetView)`
-  display: flex;
-  width: 100%;
-`;
-
-const Container2 = styled(BottomSheetView)`
-
-`;
-
-const InputContainer = styled.View`
-  width: 100%;
-  display: flex;
-`;
+import { BottomSheetContext, SNAP_POINT_STATES } from '../../../../context/bottomSheetContext';
+import { BS_PAGES } from '../../../../context/ridePageStateContext/utils';
+import { RideStateContextContext } from '../../../../context/ridePageStateContext';
 
 const HistoryContainer = styled.View`
   margin-bottom: 10px;
+  flex: 1;
   width: 100%;
 `;
 
+const ContentContainer = styled.View`
+  align-items: center;
+  flex-direction: column;
+  padding: 0px 30px 40px 30px;
+  width: 100%;
+  flex: 1;
 
-const AddressActionsText = styled.Text`
-    color: ${({ theme }) => theme.primaryColor};
-    font-weight: 500;
-    font-size: 14px;
-    line-height: 20px;
 `;
-
-const historyText = [
-  {
-    text: '57th Street',
-    subText: 'New York, NY, USA',
-    icon: 'history',
-    lat: 32.444,
-    lng: 34.555,
-  },
-  {
-    text: '57th Street',
-    subText: 'New York, NY, USA',
-    icon: 'history',
-    lat: 32.444,
-    lng: 34.555,
-  },
-  {
-    text: '57th Strexxxxxet',
-    subText: 'New York, NY, USA',
-    icon: 'history',
-    lat: 32.444,
-    lng: 34.555,
-  },
-];
-const AddressSelectorBottomSheet = ({ bottomSheetRef }) => {
+const AddressSelectorBottomSheet = () => {
   const userContext = useContext(RidePageContext);
 
   const {
+    setCurrentBsPage,
+  } = useContext(RideStateContextContext);
+
+  const {
     isExpanded,
-    historyResults,
+    setSnapPointsState,
+    setSnapPointIndex,
   } = useContext(BottomSheetContext);
 
+  const { expand, collapse } = useBottomSheet();
+
+
   const loadHistory = async () => {
-    userContext.getLastAddresses();
+    userContext.loadHistory();
   };
 
   useEffect(() => {
@@ -89,28 +57,32 @@ const AddressSelectorBottomSheet = ({ bottomSheetRef }) => {
 
   const onSearchFocus = () => {
     if (!isExpanded) {
-      bottomSheetRef.current.expand();
+      setSnapPointsState(SNAP_POINT_STATES.ADDRESS_SELECTOR);
+      expand();
     }
   };
 
   const onBack = () => {
-    bottomSheetRef.current.collapse();
+    collapse();
   };
 
   const onCurrentLocation = async () => {
     userContext.setSpCurrentLocation();
   };
 
+  const onSetLocationOnMap = async () => {
+    setCurrentBsPage(BS_PAGES.SET_LOCATION_ON_MAP);
+    setSnapPointIndex(0);
+    collapse();
+  };
   return (
-    <>
-      <InputContainer>
-        <SearchBar
-          onFocus={onSearchFocus}
-          isExpanded={isExpanded}
-          onBack={onBack}
-          onSearch={userContext.searchAddress}
-        />
-      </InputContainer>
+    <ContentContainer>
+      <SearchBar
+        onFocus={onSearchFocus}
+        isExpanded={isExpanded}
+        onBack={onBack}
+        onSearch={userContext.searchAddress}
+      />
       <HistoryContainer>
         {isExpanded
           ? (
@@ -127,15 +99,17 @@ const AddressSelectorBottomSheet = ({ bottomSheetRef }) => {
                 text={i18n.t('addressView.setLocationOnMap')}
                 icon="locationPin"
                 actionButton
+                onPress={onSetLocationOnMap}
               />
+              <BottomSheetScrollView contentContainerStyle={{ overflow: 'visible' }}>
+                {(userContext.searchResults || userContext.historyResults).map(h => <AddressRow {...h} onPress={() => userContext.onAddressSelected(h)} />)}
+              </BottomSheetScrollView>
             </>
           )
           : null}
-        <View>
-          {(userContext.searchResults || userContext.historyResults).map(h => <AddressRow {...h} onPress={() => userContext.onAddressSelected(h)} />)}
-        </View>
       </HistoryContainer>
-    </>
+    </ContentContainer>
+
   );
 };
 

@@ -195,16 +195,6 @@ const RidePageContextProvider = ({ navigation, children }) => {
   const bookValidation = state => state && state.dropoff && state.dropoff.lat
     && state.pickup && state.pickup.lat;
 
-  const loadPreRideDetails = async (origin, destination) => {
-    return;
-    try {
-      const data = await getPreRideDetails({ origin, destination });
-      setPreRideDetails(data);
-    } catch (error) {
-      console.log('Got error while try to get pre detail on a ride', error);
-    }
-  };
-
   const calculatePickupEta = (origin) => {
     if (origin.completedAt) {
       setDisplayMatchInfo(true);
@@ -244,11 +234,6 @@ const RidePageContextProvider = ({ navigation, children }) => {
       [location.type]: location,
       openEdit: false,
     };
-    const bookValid = bookValidation(newState);
-
-    if (bookValid) {
-      loadPreRideDetails(newState.pickup, newState.dropoff);
-    }
 
     setRequestStopPoints(newState);
   };

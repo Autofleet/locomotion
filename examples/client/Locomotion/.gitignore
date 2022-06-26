@@ -126,3 +126,5 @@ typings/
 .next
 
 watchmanScript.sh
+
+*.tsbuildinfo

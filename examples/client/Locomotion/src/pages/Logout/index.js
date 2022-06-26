@@ -1,10 +1,6 @@
-import React, { Fragment, useState, useEffect } from 'react';
-import { Image, View } from 'react-native';
+import React, { Fragment, useEffect } from 'react';
 import propTypes from 'prop-types';
 import Auth from '../../services/auth';
-
-
-const LogoIconSource = require('../../assets/logo.png');
 
 const Login = ({ navigation, logo }) => {
   useEffect(() => {

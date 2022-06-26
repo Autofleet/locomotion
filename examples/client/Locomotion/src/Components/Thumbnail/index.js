@@ -1,23 +1,21 @@
 import React from 'react';
-import {
-  Image, StyleSheet,
-} from 'react-native';
+import { Image, StyleSheet } from 'react-native';
 import FastImage from 'react-native-fast-image';
+import LottieView from 'lottie-react-native';
 import propsTypes from 'prop-types';
 import styled from 'styled-components';
 import Button from '../Button';
 import avatarIcon from './default.png';
 import editIcon from './edit_btn.png';
 import addIcon from './add_btn.png';
-
+import lightLoader from '../../assets/loader.json';
 
 const modes = {
   edit: editIcon,
   add: addIcon,
 };
 
-const Container = styled.View`
-`;
+const Container = styled.View``;
 const myThumbnail = (props) => {
   const defaultStyles = {
     linearGradient: {
@@ -56,33 +54,46 @@ const myThumbnail = (props) => {
   const borderRadius = { borderRadius: props.size / 2 };
   const borderRadiusSmall = { borderRadius: (props.size - 10) / 2 };
   return (
-    <Container
-      style={{ width: props.size, height: props.size }}
-    >
+    <Container style={{ width: props.size, height: props.size }}>
       <Button
-        noBg
+        noBackground
         onPress={props.onPress}
         style={[styles.croper, borderRadius]}
         data-test-id="ImagePickerButton"
       >
-        <ImageComponent
-          style={[styles.image, borderRadiusSmall]}
-          source={props.source ? { uri: props.source } : avatarIcon}
-        />
+        {props.showLoader ? (
+          <LottieView
+            style={undefined}
+            ref={(animation) => {
+              this.animation = animation;
+              if (animation) {
+                animation.play();
+              }
+            }}
+            source={lightLoader}
+            autoPlay
+            loop
+          />
+        ) : (
+          <ImageComponent
+            style={[styles.image, borderRadiusSmall]}
+            source={props.source ? { uri: props.source } : avatarIcon}
+          />
+        )}
       </Button>
       {props.mode in modes && (
-      <Button
-        noBg
-        onPress={props.onPress}
-        style={styles.iconContainer}
-        data-test-id={`${props.mode}ImageButton`}
-      >
-        <Image
+        <Button
+          noBackground
           onPress={props.onPress}
-          style={styles.icon}
-          source={modes[props.mode]}
-        />
-      </Button>
+          style={styles.iconContainer}
+          data-test-id={`${props.mode}ImageButton`}
+        >
+          <Image
+            onPress={props.onPress}
+            style={styles.icon}
+            source={modes[props.mode]}
+          />
+        </Button>
       )}
     </Container>
   );
@@ -90,12 +101,12 @@ const myThumbnail = (props) => {
 
 export default myThumbnail;
 
-
 myThumbnail.defaultProps = {
   size: 220,
   onPress: () => null,
   mode: 'preview',
   source: null,
+  showLoader: false,
 };
 
 myThumbnail.propTypes = {
@@ -103,4 +114,5 @@ myThumbnail.propTypes = {
   onPress: propsTypes.func,
   mode: propsTypes.string,
   source: Image.propTypes.source,
+  showLoader: propsTypes.bool,
 };

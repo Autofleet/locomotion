@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
 import React, { useContext, useEffect, useState } from 'react';
 import { View } from 'react-native';
 import Modal from 'react-native-modal';
@@ -67,7 +68,7 @@ export default ({ closeAfter }) => {
   const Star = (props) => {
     const source = props.isOn ? lightStarIconSource : starIconSource;
     return (
-      <Button noBg {...props} data-test-id="RattingButton"><StarIcon source={source} isOn={props.isOn} /></Button>
+      <Button noBackground {...props} data-test-id="RattingButton"><StarIcon source={source} isOn={props.isOn} /></Button>
     );
   };
 

@@ -28,7 +28,6 @@ export const Input = styled.TextInput`
 export const BottomSheetInput = styled(BottomSheetTextInput)`
     padding: 0px 8px;
     height: 40px;
-    flex: 1;
     ${({ fullBorder, isFocused }) => (fullBorder ? fullBorderStyles(isFocused) : bottomBorderStyles)}
     border-color: ${({ error }) => (error ? ERROR_COLOR : '#333333')};
     color: ${({ error }) => (error ? ERROR_COLOR : '#333333')};

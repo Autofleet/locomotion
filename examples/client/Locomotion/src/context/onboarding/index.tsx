@@ -8,32 +8,32 @@ import { UserContext } from '../user';
 interface OnboardingContextInterface {
   verifyCode: (code: string) => Promise<boolean | void>,
   navigateBasedOnUser: (user: any) => void,
-  requiredOnboarding: {},
+  requiredOnboarding: any,
   nextScreen: (currentScreen: string) => void,
 }
 
 export const OnboardingContext = createContext<OnboardingContextInterface>({
-  verifyCode: async (code) => {},
-  navigateBasedOnUser: (user) => {},
+  verifyCode: async code => undefined,
+  navigateBasedOnUser: user => undefined,
   requiredOnboarding: {},
-  nextScreen: (currentScreen: string) => {},
+  nextScreen: (currentScreen: string) => undefined,
 });
 
 const SCREEN_ORDER = [
   MAIN_ROUTES.START,
   MAIN_ROUTES.PHONE,
   MAIN_ROUTES.CODE,
-  MAIN_ROUTES.EMAIL,
   MAIN_ROUTES.NAME,
+  MAIN_ROUTES.EMAIL,
   MAIN_ROUTES.AVATAR,
   MAIN_ROUTES.CARD,
   MAIN_ROUTES.WELCOME,
 ];
 
 const keyToScreen: any = {
-  email: MAIN_ROUTES.EMAIL,
   firstName: MAIN_ROUTES.NAME,
   lastName: MAIN_ROUTES.NAME,
+  email: MAIN_ROUTES.EMAIL,
   avatar: MAIN_ROUTES.AVATAR,
   cards: MAIN_ROUTES.CARD,
   welcome: MAIN_ROUTES.WELCOME,

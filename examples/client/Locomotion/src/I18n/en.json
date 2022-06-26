@@ -1,14 +1,30 @@
 {
+    "services": {
+        "tags": {
+            "fastest": "Fastest",
+            "cheapest": "Cheapest"
+        }
+    },
+    "rideDetails": {
+        "unavailable": "Not available",
+        "timeUntilArrival": "In {{minutes}} min",
+        "toolTipEta": "Eta {{minutes}} min",
+        "type": {
+            "pickup": "Pickup",
+            "dropoff": "Drop off" 
+        }
+    },
     "general": {
         "back": "Back",
         "next": "Continue",
         "cancel": "cancel",
-        "skip": "Skip"
+        "skip": "Skip",
+        "select": "Select"
     },
     "login": {
         "getStarted": "Get started!",
         "signUp": "Sign up",
-        "login": "Log in",
+        "login": "Log In",
         "noAccountError": "No account exists with that number",
         "accountAlreadyExistsError": "An account already exists with that number",
         "onBoardingPageTitle": "Please add your name and upload a photo to continue",
@@ -167,6 +183,18 @@
             "takePhoto":  "Take Photo...",
             "choosePhoto": "Choose from Library..."
         },
+        "rideNotes": {
+            "title": "Add a note to driver",
+            "placeholder": "How to find me, Flights, info, etc.",
+            "save": "Save",
+            "cancel": "Cancel"
+        },
+        "choosePaymentMethod": {
+            "title": "Choose payment method",
+            "placeholder": "How to find me, Flights, info, etc.",
+            "save": "Save",
+            "cancel": "Cancel"
+        },
         "rideSummary": {
             "thanksForRideHeadline": "Thanks for your ride!",
             "rideDataHeadline": "",
@@ -226,11 +254,15 @@
         }
     },
     "payments": {
-        "pageTitle": "Payments",
+        "pageTitle": "Payments Method",
         "submitCard": "Add card",
+        "addNewCreditCard": "Add New Credit Card",
+        "expired": "expired",
+        "hasOutstandingBalance": "Outstanding Balance",
         "skipForNow": "Skip for now",
         "balance": "Balance",
         "deleteCard": "Remove",
+        "addPaymentMethod": "Add New",
         "newCardDetails": "Please add your payment details",
         "setPaymentBanner": "Set payment method",
         "popups": {
@@ -257,6 +289,22 @@
       "titleText": "We are Sorry!",
       "buttonText": "Set another pickup location",
       "subTitleText": "Autofleet is not available in your area"
+    },
+    "noPayment": {
+        "titleText": "No payment set",
+        "buttonText": "Add payment method",
+        "secondaryButtonText": "Cancel",
+        "subTitleText": "Without setting a payment method, you won't be able to make a ride request"
+      },
+    "ride": {
+        "now": "Now",
+        "notes": {
+            "edit": "Edit note",
+            "add": "Note to driver"
+        },
+        "rider": "Rider",
+        "riders": "Riders",
+        "addPayment": "Add Payment"
     }
   }
 }
