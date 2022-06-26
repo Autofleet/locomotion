@@ -1,34 +1,49 @@
 import { merge } from 'lodash';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import moment from 'moment';
+
+const isExpired = expireAt => moment().isAfter(expireAt);
+
 
 const deviceStorage = {
-  get(key) {
-    if (!Array.isArray(key)) {
-      return AsyncStorage.getItem(key).then(value => JSON.parse(value));
+  getValueFromObject(key, obj) {
+    if (obj) {
+      const {
+        value,
+        expireAt,
+      } = JSON.parse(obj);
+
+      if (!expireAt) {
+        if (isExpired(expireAt)) {
+          this.delete(key);
+        } else {
+          return value;
+        }
+      }
     }
-    return AsyncStorage.multiGet(key).then((values) => {
-      const result = {};
-      values.forEach((value) => {
-        result[value[0]] = JSON.parse(value[1]);
-      });
-      return result;
+
+    return undefined;
+  },
+  async get(key) {
+    if (!Array.isArray(key)) {
+      return this.getValueFromObject(key, AsyncStorage.getItem(key));
+    }
+    const values = await AsyncStorage.multiGet(key);
+    const result = {};
+    values.forEach((value) => {
+      const [valueKey, valueObj] = value;
+      result[valueKey] = this.getValueFromObject(valueKey, valueObj);
     });
+    return result;
   },
 
-  save(object) {
-    const pairs = Object.keys(object).map(pKey => [pKey, JSON.stringify(object[pKey])]);
+  save(object, ttlInSeconds = 0) {
+    const pairs = Object.keys(object).map(pKey => [pKey, JSON.stringify({
+      value: object[pKey],
+      ...(ttlInSeconds !== 0 && { expireAt: moment().add(ttlInSeconds, 'seconds') }),
+    })]);
     return AsyncStorage.multiSet(pairs);
   },
-
-  update(object) {
-    const keys = Object.keys(object);
-    return deviceStorage.get(keys).then((items) => {
-      const newItems = merge({}, Object.assign(items), object);
-      // stringify for all values
-      return deviceStorage.save(newItems);
-    });
-  },
-
   delete(key) {
     if (Array.isArray(key)) {
       return AsyncStorage.multiRemove(key);

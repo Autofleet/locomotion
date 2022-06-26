@@ -8,7 +8,7 @@ const { SERVER_HOST } = Config;
 const AppSettings = {
   update: async (settings) => {
     AppSettings.settings = settings;
-    Storage.update({ [keyName]: settings });
+    // Storage.update({ [keyName]: settings });
   },
   getSettings: async () => {
     if (AppSettings.settings) {
