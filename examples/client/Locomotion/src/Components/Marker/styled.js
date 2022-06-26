@@ -61,28 +61,31 @@ export const InfoBox = styled.View`
    height: 50px;
    display: flex;
    flex-direction: column;
-   background-color: #e3e3e3;
+   background-color: #f0f0f0;
    border-radius: 8px;
-   padding: 5px;
+   padding: 3px;
    align-items: center;
     margin-top: -45px;
+    shadow-offset: 0px 0px;
+  shadow-color: #04214f;
+  shadow-opacity: 0.4;
 `;
 
 export const Type = styled.View`
   height: 50%;
   width: 100%;
-  margin: 0 auto;
+  display: flex;
+  justify-content: center;
   background-color: #ffffff;
-  border-radius: 8px;
+  border-radius: 4px;
   align-items: center;
 `;
 
 export const SubText = styled.Text`
-    height: 50%;
     ${FONT_SIZES.LARGE}
     ${FONT_WEIGHTS.REGULAR}
-    padding: 5px;
     max-width: 150px;
+    margin-left: 5px;
 `;
 
 export const IconContainer = styled.View`
@@ -94,4 +97,15 @@ export const TypeText = styled.Text`
 ${FONT_SIZES.LARGE}
 ${FONT_WEIGHTS.SEMI_BOLD}
 margin: 0 auto;
+`;
+
+export const SubContainer = styled.View`
+display: flex;
+flex-direction: row;
+align-items: center;
+height: 50%;
+padding: 0 5px;
+`;
+
+export const PulseContainer = styled.View`
 `;

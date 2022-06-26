@@ -1,10 +1,11 @@
 import React, {
   useState, useEffect, useRef, createContext,
 } from 'react';
+import _ from 'lodash';
 import { getPosition } from '../../services/geo';
 import { getPlaces, getGeocode, getPlaceDetails } from './google-api';
 import StorageService from '../../services/storage';
-import { createServiceEstimations, getServices } from './api';
+import * as rideApi from './api';
 import {
   buildStreetAddress,
   formatEstimationsResult, formatStopPointsForEstimations, getEstimationTags, INITIAL_STOP_POINTS,
@@ -12,7 +13,7 @@ import {
 
 export const RidePageContext = createContext({
   loadAddress: () => undefined,
-  reverseLocationGeocode: () => undefined,
+  reverseLocationGeocode: (lat, lng) => undefined,
   enrichPlaceWithLocation: () => undefined,
   searchTerm: '',
   setSearchTerm: () => undefined,
@@ -24,10 +25,9 @@ export const RidePageContext = createContext({
   requestStopPoints: [],
   searchResults: [],
   searchAddress: null,
-  updateRequestSp: () => undefined,
+  updateRequestSp: sp => undefined,
   setSpCurrentLocation: () => undefined,
   isReadyForSubmit: false,
-  checkFormSps: () => undefined,
   historyResults: [],
   serviceEstimations: [],
   ride: {
@@ -38,6 +38,10 @@ export const RidePageContext = createContext({
   updateRide: ride => undefined,
   chosenService: null,
   lastSelectedLocation: null,
+  getCurrentLocationAddress: () => undefined,
+  saveSelectedLocation: sp => undefined,
+  requestRide: () => undefined,
+  stopRequestInterval: () => undefined,
 });
 
 const HISTORY_RECORDS_NUM = 10;
@@ -57,7 +61,11 @@ const RidePageContextProvider = ({ children }) => {
   const [ride, setRide] = useState({});
   const [chosenService, setChosenService] = useState(null);
   const [lastSelectedLocation, saveSelectedLocation] = useState(false);
+  const intervalRef = useRef();
 
+  const stopRequestInterval = () => {
+    clearInterval(intervalRef.current);
+  };
   const formatEstimations = (services, estimations, tags) => {
     const estimationsMap = {};
     estimations.map((e) => {
@@ -74,13 +82,23 @@ const RidePageContextProvider = ({ children }) => {
   const getServiceEstimations = async () => {
     const formattedStopPoints = formatStopPointsForEstimations(requestStopPoints);
     const [estimations, services] = await Promise.all([
-      createServiceEstimations(formattedStopPoints),
-      getServices(),
+      rideApi.createServiceEstimations(formattedStopPoints),
+      rideApi.getServices(),
     ]);
     const tags = getEstimationTags(estimations);
     const formattedEstimations = formatEstimations(services, estimations, tags);
     setChosenService(formattedEstimations.find(e => e.eta));
     setServiceEstimations(formattedEstimations);
+  };
+
+  const validateRequestedStopPoints = async (reqSps) => {
+    const stopPoints = reqSps;
+    const isSpsReady = stopPoints.every(r => r.lat && r.lng && r.description);
+    if (stopPoints.length && isSpsReady) {
+      setIsReadyForSubmit(true);
+    } else {
+      setIsReadyForSubmit(false);
+    }
   };
 
   useEffect(() => {
@@ -93,7 +111,7 @@ const RidePageContextProvider = ({ children }) => {
   }, [currentGeocode]);
 
   useEffect(() => {
-    checkFormSps();
+    validateRequestedStopPoints(requestStopPoints);
   }, [requestStopPoints]);
 
   const initLocation = async () => {
@@ -144,7 +162,7 @@ const RidePageContextProvider = ({ children }) => {
 
   const updateRequestSp = (data) => {
     const reqSps = [...requestStopPoints];
-    const index = selectedInputIndex || requestStopPoints.length - 1;
+    const index = _.isNil(selectedInputIndex) ? requestStopPoints.length - 1 : selectedInputIndex;
     reqSps[index] = {
       ...reqSps[index],
       ...data,
@@ -183,10 +201,16 @@ const RidePageContextProvider = ({ children }) => {
   };
 
 
-  const reverseLocationGeocode = async () => {
+  const reverseLocationGeocode = async (pinLat, pinLng) => {
     try {
-      const currentCoords = await getCurrentLocation();
-      const location = `${currentCoords.latitude},${currentCoords.longitude}`;
+      let location;
+      if (pinLat && pinLng) {
+        location = `${pinLat},${pinLng}`;
+      } else {
+        const currentCoords = await getCurrentLocation();
+        location = `${currentCoords.latitude},${currentCoords.longitude}`;
+      }
+
       const data = await getGeocode({
         latlng: location,
       });
@@ -232,13 +256,13 @@ const RidePageContextProvider = ({ children }) => {
       lng: enrichedPlace.lng,
     };
     console.log({ enrichedPlace, selectedInputIndex });
-    setRequestStopPoints(reqSps);
     resetSearchResults();
     saveLastAddresses(selectedItem);
 
     if (loadRide) {
       validateRequestedStopPoints(reqSps);
     }
+    setRequestStopPoints(reqSps);
   };
 
   const resetSearchResults = () => setSearchResults(null);
@@ -282,34 +306,45 @@ const RidePageContextProvider = ({ children }) => {
     setHistoryResults(history);
   };
 
-  const validateRequestedStopPoints = async (reqSps) => {
+  const tryServiceEstimations = async () => {
     try {
-      const stopPoints = reqSps;
-      const isSpsReady = stopPoints.every(r => r.location && r.location.lat && r.location.lng && r.description);
-      if (stopPoints.length && isSpsReady) {
-        setIsReadyForSubmit(true);
-        setIsLoading(true);
+      setIsLoading(true);
+      await getServiceEstimations();
+      intervalRef.current = setInterval(async () => {
         await getServiceEstimations();
-        setIsLoading(false);
-      } else {
-        setIsReadyForSubmit(false);
-      }
+      }, 120000);
     } catch (e) {
       setIsLoading(false);
       console.error(e);
     }
   };
 
+  useEffect(() => {
+    if (serviceEstimations) {
+      setIsLoading(false);
+    }
+  }, [serviceEstimations]);
+
+  useEffect(() => {
+    if (isReadyForSubmit) {
+      tryServiceEstimations();
+    }
+  }, [isReadyForSubmit]);
+
   const requestRide = async () => {
-    console.log({
+    const formattedRide = {
       serviceId: chosenService.id,
-      stopPoints: requestStopPoints.map(sp => ({
-        lat: sp.location.lat,
-        lng: sp.location.lng,
-        description: sp.description,
+      paymentMethodId: ride.paymentMethodId,
+      stopPoints: requestStopPoints.map((sp, i) => ({
+        lat: Number(sp.lat),
+        lng: Number(sp.lng),
+        description: sp.description || sp.streetAddress,
         type: sp.type,
+        ...(i === 0 && { notes: ride.notes }),
       })),
-    });
+    };
+
+    await rideApi.createRide(formattedRide);
   };
 
   const updateRide = (newRide) => {
@@ -317,16 +352,6 @@ const RidePageContextProvider = ({ children }) => {
       ...ride,
       ...newRide,
     });
-  };
-
-  const checkFormSps = async () => {
-    const isSpsReady = requestStopPoints.every(r => r.lat && r.lng && r.description);
-    if (requestStopPoints.length && isSpsReady) {
-      setIsReadyForSubmit(true);
-      await getServiceEstimations();
-    } else {
-      setIsReadyForSubmit(false);
-    }
   };
 
   const fillLoadSkeleton = () => {
@@ -369,8 +394,9 @@ const RidePageContextProvider = ({ children }) => {
         initSps,
         lastSelectedLocation,
         saveSelectedLocation,
-        checkFormSps,
+        getCurrentLocationAddress,
         fillLoadSkeleton,
+        stopRequestInterval,
       }}
     >
       {children}

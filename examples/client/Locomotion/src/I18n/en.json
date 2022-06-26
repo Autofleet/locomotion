@@ -179,6 +179,11 @@
         "setLocationOnMap": "Set location on map"
     },
     "popups": {
+        "genericError": {
+            "title": "Error",
+            "text": "Something went wrong. Please try again and contact support if the issue isn't solved",
+            "buttonText": "OK"
+        },
         "photoUpload": {
             "takePhoto":  "Take Photo...",
             "choosePhoto": "Choose from Library..."
@@ -300,6 +305,12 @@
       "buttonText": "Set another pickup location",
       "subTitleText": "Autofleet is not available in your area"
     },
+    "noPayment": {
+        "titleText": "No payment set",
+        "buttonText": "Add payment method",
+        "secondaryButtonText": "Cancel",
+        "subTitleText": "Without setting a payment method, you won't be able to make a ride request"
+      },
     "ride": {
         "now": "Now",
         "notes": {

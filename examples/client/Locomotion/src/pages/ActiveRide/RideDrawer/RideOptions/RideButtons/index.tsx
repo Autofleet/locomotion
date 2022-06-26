@@ -39,7 +39,7 @@ const RideButtons = ({
   const {
     paymentMethods,
   }: {
-        paymentMethods: PaymentMethodInterface[]
+        paymentMethods: PaymentMethodInterface[],
     } = PaymentsContext.useContainer();
 
   const renderFutureBooking = () => (
@@ -102,9 +102,9 @@ const RideButtons = ({
       </RowContainer>
       <StyledButton
         data-test-id="selectService"
-                // disabled={!chosenService}
+        disabled={!chosenService}
         onPress={() => {
-          setCurrentBsPage('selectLocationOnMap');
+          setCurrentBsPage('CONFIRM_PICKUP');
         }}
       >
         <ButtonText>{i18n.t('general.select').toString()}</ButtonText>

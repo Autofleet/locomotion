@@ -7,9 +7,9 @@ import BottomSheet, {
   BottomSheetFooter,
 } from '@gorhom/bottom-sheet';
 import styled from 'styled-components';
-import SafeView from '../../../../Components/SafeView';
-import ChoosePaymentMethod from '../../../../popups/ChoosePaymentMethod';
-import { BottomSheetContext } from '../../../../context/bottomSheetContext';
+import SafeView from '../SafeView';
+import ChoosePaymentMethod from '../../popups/ChoosePaymentMethod';
+import { BottomSheetContext } from '../../context/bottomSheetContext';
 
 const ContentContainer = styled(BottomSheetView)`
   flex: 1;
