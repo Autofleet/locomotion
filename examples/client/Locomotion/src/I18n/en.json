@@ -258,7 +258,9 @@
         "ratingHeadline": "How was your ride?",
         "tip": {
             "title": "Add a tip for",
-            "subTitle": "Your ride was"
+            "subTitle": "Your ride was",
+            "noTip": "No tip",
+            "customTip": "Set custom amount"
         }
     },
     "payments": {

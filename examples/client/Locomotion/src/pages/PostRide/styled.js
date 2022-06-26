@@ -38,11 +38,14 @@ export const StarIcon = styled.Image(({ isOn, theme }) => `
 export const PageContent = styled(View)`
     width: 100%;
     height: 100%;
+    padding: 0px;
+    display: flex;
+    flex-direction: column;
 `;
 
 
 export const RatingContainer = styled(View)`
-  margin-top: 30px;
+  padding: 30px 0px;
   border-bottom-width: 1px ;
   border-bottom-color: #e2e2e2;
 `;
@@ -50,4 +53,10 @@ export const RatingContainer = styled(View)`
 
 export const TipsContainer = styled(View)`
   padding: 30px;
+`;
+
+export const SubmitContainer = styled(View)`
+  padding: 0px 30px 70px 30px;
+  flex: 1;
+  justify-content: flex-end;
 `;

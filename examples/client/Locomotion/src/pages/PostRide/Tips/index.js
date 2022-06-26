@@ -1,10 +1,10 @@
 
 import React, { useEffect, useState } from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, TouchableOpacity } from 'react-native';
 import styled from 'styled-components';
 import Thumbnail from '../../../Components/Thumbnail';
 import i18n from '../../../I18n';
-import Button from '../../../Components/RoundedButton';
+import SelectableButton from '../../../Components/SelectableButton';
 
 const Container = styled.View`
   flex-direction: column;
@@ -25,6 +25,8 @@ const SubTitle = styled.Text`
 
 const DetailsContainer = styled.View`
   flex-direction: row;
+  justify-content: space-between;
+  width: 100%;
 `;
 
 const Column = styled.View`
@@ -45,19 +47,46 @@ const StyledThumbnail = styled(View)`
   border-radius: 100;
 `;
 
-const Tips = ({ driver, ridePrice, thumbnailImage }) => {
-  console.log();
+const CustomTipText = styled.Text`
+  color: ${({ theme }) => theme.primaryColor};
+  padding: 10px;
+  font-size: 16px;
+`;
 
+const CustomTipContainer = styled.View`
+  display: flex;
+  width: 100%;
+  align-items: center;
+`;
+
+const CustomTip = ({ onPress, children }) => (
+  <CustomTipContainer>
+    <TouchableOpacity onPress={onPress}>
+      <CustomTipText>{children}</CustomTipText>
+    </TouchableOpacity>
+  </CustomTipContainer>
+);
+
+const Tips = ({ driver = { firstName: 'Timmy' }, ridePrice = 33, thumbnailImage }) => {
+  const [selectedTip, setSelectedTip] = useState(null);
+  const settings = {
+    percentageThreshold: 30,
+    percentage: [10, 15, 20],
+    fixedPrice: [1, 2, 5],
+  };
+  const isPercentage = ridePrice >= settings.percentageThreshold;
+  const buttons = isPercentage ? settings.percentage : settings.fixedPrice;
+  const tipSuffix = isPercentage ? '%' : '$';
 
   return (
     <Container>
       <DetailsContainer>
         <Column>
           <Title>
-            {`${i18n.t('postRide.tip.title')} Timmy`}
+            {`${i18n.t('postRide.tip.title')} ${driver.firstName}`}
           </Title>
           <SubTitle>
-            {`${i18n.t('postRide.tip.subTitle')} $21.50`}
+            {`${i18n.t('postRide.tip.subTitle')} ${ridePrice}$`}
           </SubTitle>
         </Column>
         <ThumbnailContainer>
@@ -66,7 +95,19 @@ const Tips = ({ driver, ridePrice, thumbnailImage }) => {
           </StyledThumbnail>
         </ThumbnailContainer>
       </DetailsContainer>
-      <DetailsContainer />
+      <DetailsContainer style={{ marginTop: 30 }}>
+        {buttons.map(b => (
+          <SelectableButton selected={b === selectedTip} onPress={() => setSelectedTip(b)}>
+            {`${b}${tipSuffix}`}
+          </SelectableButton>
+        ))}
+      </DetailsContainer>
+      <DetailsContainer style={{ marginTop: 5 }}>
+        <SelectableButton onPress={() => setSelectedTip(null)}>{`${i18n.t('postRide.tip.noTip')}`}</SelectableButton>
+      </DetailsContainer>
+      <DetailsContainer style={{ marginTop: 30 }}>
+        <CustomTip>{i18n.t('postRide.tip.customTip')}</CustomTip>
+      </DetailsContainer>
 
 
     </Container>

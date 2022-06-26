@@ -9,12 +9,13 @@ import {
   SummaryStarsTitle,
   RatingContainer,
   TipsContainer,
+  SubmitContainer,
 } from './styled';
 import Mixpanel from '../../services/Mixpanel';
 import { PageContainer } from '../styles';
 import StarRating from './StarRating';
 import Tips from './Tips';
-
+import Button from '../../Components/RoundedButton';
 
 export default ({ menuSide }) => {
   const navigation = useNavigation();
@@ -52,6 +53,9 @@ export default ({ menuSide }) => {
         <TipsContainer>
           <Tips />
         </TipsContainer>
+        <SubmitContainer>
+          <Button>Continue</Button>
+        </SubmitContainer>
       </PageContent>
     </PageContainer>
   );
