@@ -18,6 +18,7 @@ import hamburgerIcon from '../../assets/hamburger.svg';
 import backArrow from '../../assets/arrow-back.svg';
 import { BS_PAGES } from '../../context/ridePageStateContext/utils';
 import payments from '../../context/payments';
+import GenericError from '../../popups/GenericError';
 
 
 const RidePage = ({ mapSettings }) => {

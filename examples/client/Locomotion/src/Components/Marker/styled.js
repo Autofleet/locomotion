@@ -106,3 +106,6 @@ align-items: center;
 height: 50%;
 padding: 0 5px;
 `;
+
+export const PulseContainer = styled.View`
+`;

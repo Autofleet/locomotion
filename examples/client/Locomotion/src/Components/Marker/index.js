@@ -1,4 +1,7 @@
 import React, { useContext, useState } from 'react';
+import {
+  PulseIndicator,
+} from 'react-native-indicators';
 import { Platform } from 'react-native';
 import Config from 'react-native-config';
 import { Marker } from 'react-native-maps';
@@ -7,7 +10,7 @@ import dropoffIcon from '../../assets/map/markers/dropoffIcon.svg';
 import pickupIcon from '../../assets/map/markers/pickupIcon.svg';
 import Mixpanel from '../../services/Mixpanel';
 import {
-  InfoBox, Type, SubText, TypeText, MarkerContainer, IconContainer, SubContainer,
+  InfoBox, Type, SubText, TypeText, MarkerContainer, IconContainer, SubContainer, PulseContainer,
 } from './styled';
 import { RidePageContext } from '../../context/newRideContext';
 import i18n from '../../I18n';
@@ -52,11 +55,9 @@ export default ({
           </Type>
           <SubContainer>
             {checkIfSpIsNext() && (
-            <SvgIcon
-              Svg={typeDetails[stopPoint.type].icon}
-              width={16}
-              height={16}
-            />
+              <PulseContainer>
+                <PulseIndicator color="#2dc36a" size={18} />
+              </PulseContainer>
             )}
             <SubText numberOfLines={1}>
               {checkIfSpIsNext() ? etaText : stopPoint.streetAddress}
