@@ -2,7 +2,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { View } from 'react-native';
 import Modal from 'react-native-modal';
-import { RidePageContext } from '../../context/ridePageContext';
+import { OldRidePageContext } from '../../context/ridePageContext';
 import i18n from '../../I18n';
 import {
   SummaryContainer,
@@ -35,7 +35,7 @@ export default ({ closeAfter }) => {
     rideSummaryData,
     setRideSummaryData,
     onRating,
-  } = useContext(RidePageContext);
+  } = useContext(OldRidePageContext);
   const onClose = () => {
     setRideSummaryData({});
   };

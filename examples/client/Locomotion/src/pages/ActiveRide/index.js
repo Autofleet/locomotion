@@ -127,14 +127,14 @@ const RidePage = ({ mapSettings }) => {
 
 export default props => (
   <BottomSheetContextProvider {...props}>
-    <NewRidePageContextProvider {...props}>
-      <RidePageContextProvider {...props}>
+    <RidePageContextProvider {...props}>
+      <NewRidePageContextProvider {...props}>
         <AvailabilityContextProvider>
           <RidePage
             {...props}
           />
         </AvailabilityContextProvider>
-      </RidePageContextProvider>
-    </NewRidePageContextProvider>
+      </NewRidePageContextProvider>
+    </RidePageContextProvider>
   </BottomSheetContextProvider>
 );

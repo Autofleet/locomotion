@@ -26,7 +26,7 @@ import OfferCard from './OfferCard';
 import RideStatusHeader from './RideStatusHeader';
 import FutureRides, { FutureOrdersButton } from './FutureRides';
 import RideOptions from './RideOptions';
-import { RidePageContext } from '../../../context/ridePageContext';
+import { OldRidePageContext } from '../../../context/ridePageContext';
 
 const getRideState = (activeRide) => { // false, driverOnTheWay, driverArrived, onBoard
   if (!activeRide) {
@@ -61,7 +61,7 @@ const RideDrawer = ({ navigation }) => {
     setNumberOfPassengers: onNumberOfPassengerChange,
     requestStopPoints,
     bookValidation,
-  } = useContext(RidePageContext);
+  } = useContext(OldRidePageContext);
 
   const readyToBook = bookValidation(requestStopPoints);
 

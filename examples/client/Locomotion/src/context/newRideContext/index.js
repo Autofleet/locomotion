@@ -1,7 +1,8 @@
 import React, {
-  useState, useEffect, useRef, createContext,
+  useState, useEffect, useRef, createContext, useContext,
 } from 'react';
 import _ from 'lodash';
+import { RideStateContext } from '../ridePageStateContext';
 import { getPosition } from '../../services/geo';
 import { getPlaces, getGeocode, getPlaceDetails } from './google-api';
 import StorageService from '../../services/storage';
@@ -46,6 +47,7 @@ export const RidePageContext = createContext({
 const HISTORY_RECORDS_NUM = 10;
 
 const RidePageContextProvider = ({ children }) => {
+  const { checkStopPointsInTerritory } = useContext(RideStateContext);
   const [requestStopPoints, setRequestStopPoints] = useState(INITIAL_STOP_POINTS);
   const [coords, setCoords] = useState();
   const [currentGeocode, setCurrentGeocode] = useState(null);
@@ -89,7 +91,8 @@ const RidePageContextProvider = ({ children }) => {
   const validateRequestedStopPoints = async (reqSps) => {
     const stopPoints = reqSps;
     const isSpsReady = stopPoints.every(r => r.lat && r.lng && r.description);
-    if (stopPoints.length && isSpsReady) {
+    const areStopPointsInTerritory = await checkStopPointsInTerritory(stopPoints);
+    if (stopPoints.length && isSpsReady && areStopPointsInTerritory) {
       setIsReadyForSubmit(true);
     } else {
       setIsReadyForSubmit(false);

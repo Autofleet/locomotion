@@ -46,9 +46,9 @@ function useInterval(callback, delay) {
   }, [delay]);
 }
 
-export const RidePageContext = createContext(null);
+export const OldRidePageContext = createContext(null);
 
-const RidePageContextProvider = ({ navigation, children }) => {
+const OldRidePageContextProvider = ({ navigation, children }) => {
   const route = useRoute();
   const useSettings = settingsContext.useContainer();
 
@@ -357,7 +357,7 @@ const RidePageContextProvider = ({ navigation, children }) => {
   };
 
   return (
-    <RidePageContext.Provider
+    <OldRidePageContext.Provider
       value={{
         disableAutoLocationFocus,
         setDisableAutoLocationFocus,
@@ -408,8 +408,8 @@ const RidePageContextProvider = ({ navigation, children }) => {
       }}
     >
       {children}
-    </RidePageContext.Provider>
+    </OldRidePageContext.Provider>
   );
 };
 
-export default RidePageContextProvider;
+export default OldRidePageContextProvider;
