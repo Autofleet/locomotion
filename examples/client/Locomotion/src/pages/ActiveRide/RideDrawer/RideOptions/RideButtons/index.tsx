@@ -14,7 +14,7 @@ import PaymentsContext from '../../../../../context/payments';
 import { PaymentMethodInterface } from '../../../../../context/payments/interface';
 import * as NavigationService from '../../../../../services/navigation';
 import { MAIN_ROUTES } from '../../../../routes';
-import { RideStateContextContext } from '../../../../../context/ridePageStateContext';
+import { RideStateContext } from '../../../../../context/ridePageStateContext';
 import { popupNames } from '../utils';
 
 
@@ -34,7 +34,7 @@ const RideButtons = ({
 
   const {
     setCurrentBsPage,
-  } = useContext(RideStateContextContext);
+  } = useContext(RideStateContext);
 
   const {
     paymentMethods,

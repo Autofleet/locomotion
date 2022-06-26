@@ -1,5 +1,5 @@
 import React from 'react';
-import RideStateContextContextProvider from './ridePageStateContext';
+import RideStateContextProvider from './ridePageStateContext';
 import I18n from '../I18n';
 import SettingsContext from './settings';
 import PaymentsContext from './payments';
@@ -55,7 +55,7 @@ export const MainProvider = ({ children, LoginPage, i18n }) => {
 
   return (
     <StateProvider initialState={initialState} reducer={reducer}>
-      <RideStateContextContextProvider>
+      <RideStateContextProvider>
         <SettingsContext.Provider>
           <PaymentsContext.Provider>
             <ThemeProvider>
@@ -67,7 +67,7 @@ export const MainProvider = ({ children, LoginPage, i18n }) => {
             </ThemeProvider>
           </PaymentsContext.Provider>
         </SettingsContext.Provider>
-      </RideStateContextContextProvider>
+      </RideStateContextProvider>
     </StateProvider>
   );
 };

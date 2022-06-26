@@ -15,7 +15,7 @@ import SearchBar from './SearchBar';
 import { RidePageContext } from '../../../../context/newRideContext';
 import { BottomSheetContext, SNAP_POINT_STATES } from '../../../../context/bottomSheetContext';
 import { BS_PAGES } from '../../../../context/ridePageStateContext/utils';
-import { RideStateContextContext } from '../../../../context/ridePageStateContext';
+import { RideStateContext } from '../../../../context/ridePageStateContext';
 
 const HistoryContainer = styled.View`
   margin-bottom: 10px;
@@ -36,7 +36,7 @@ const AddressSelectorBottomSheet = () => {
 
   const {
     setCurrentBsPage,
-  } = useContext(RideStateContextContext);
+  } = useContext(RideStateContext);
 
   const {
     isExpanded,

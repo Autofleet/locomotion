@@ -16,7 +16,7 @@ interface RidePageStateContextProps {
   setCurrentBsPage: (page: BsPages) => void;
 }
 
-export const RideStateContextContext = createContext<RidePageStateContextProps>({
+export const RideStateContext = createContext<RidePageStateContextProps>({
   territory: {},
   loadTerritory: () => undefined,
   setShowOutOfTerritory: (outOfTerritory: boolean) => undefined,
@@ -28,7 +28,7 @@ export const RideStateContextContext = createContext<RidePageStateContextProps>(
   showOutOfTerritory: false,
 });
 
-const RideStateContextContextProvider = ({ children }: { children: any }) => {
+const RideStateContextProvider = ({ children }: { children: any }) => {
   const [territory, setTerritory] = useState<Array<any> | null>(null);
   const [showOutOfTerritory, setShowOutOfTerritory] = useState<boolean | undefined>(false);
   const [isUserLocationFocused, setIsUserLocationFocused] = useState(true);
@@ -55,7 +55,7 @@ const RideStateContextContextProvider = ({ children }: { children: any }) => {
   };
 
   return (
-    <RideStateContextContext.Provider
+    <RideStateContext.Provider
       value={{
         territory,
         loadTerritory,
@@ -69,9 +69,9 @@ const RideStateContextContextProvider = ({ children }: { children: any }) => {
       }}
     >
       {children}
-    </RideStateContextContext.Provider>
+    </RideStateContext.Provider>
   );
 };
 
 
-export default RideStateContextContextProvider;
+export default RideStateContextProvider;

@@ -7,7 +7,7 @@ import i18n from '../../I18n';
 import { FONT_SIZES, FONT_WEIGHTS } from '../../context/theme';
 import Button from '../Button';
 import { BottomSheetContext, SNAP_POINT_STATES } from '../../context/bottomSheetContext';
-import { RideStateContextContext } from '../../context/ridePageStateContext';
+import { RideStateContext } from '../../context/ridePageStateContext';
 import { BS_PAGES } from '../../context/ridePageStateContext/utils';
 import { MAIN_ROUTES } from '../../pages/routes';
 import * as navigationService from '../../services/navigation';
@@ -202,7 +202,7 @@ export const NoPayment = (props: any) => {
 
   const {
     paymentMethods,
-    clientHasValidPaymentMethods,
+    clientHasValidPaymentMethods,RideStateContext
   } = payments.useContainer();
 
   const proceedIfPaymentMethodsAreValid = () => {
