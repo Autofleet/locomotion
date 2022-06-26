@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 
+import { FONT_SIZES, FONT_WEIGHTS } from '../context/theme';
 import i18n from '../I18n';
 import { linkColor } from '../assets/style-settings';
 import Button from '../Components/Button';
@@ -21,16 +22,13 @@ export const Content = styled.View`
 `;
 
 export const Title = styled.Text`
-  text-align: center;
-  font-size: 16px;
-  margin-bottom: 10px;
-  color: #0a0a0a;
+  ${FONT_SIZES.H2}
+  ${FONT_WEIGHTS.SEMI_BOLD}
 `;
 
 export const SubTitle = styled.Text`
-  font-size: 14px;
-  text-align: center;
-  color: #838383;
+  ${FONT_SIZES.LARGE}
+  ${FONT_WEIGHTS.LIGHT}
 `;
 
 const FooterButtonText = styled.Text`
