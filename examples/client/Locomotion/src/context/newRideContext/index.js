@@ -42,6 +42,7 @@ export const RidePageContext = createContext({
   saveSelectedLocation: sp => undefined,
   requestRide: () => undefined,
   rideRequestLoading: false,
+  stopRequestInterval: () => undefined,
 });
 
 const HISTORY_RECORDS_NUM = 10;
@@ -62,7 +63,11 @@ const RidePageContextProvider = ({ children }) => {
   const [chosenService, setChosenService] = useState(null);
   const [lastSelectedLocation, saveSelectedLocation] = useState(false);
   const [rideRequestLoading, setRideRequestLoading] = useState(false);
+  const intervalRef = useRef();
 
+  const stopRequestInterval = () => {
+    clearInterval(intervalRef.current);
+  };
   const formatEstimations = (services, estimations, tags) => {
     const estimationsMap = {};
     estimations.map((e) => {
@@ -307,12 +312,20 @@ const RidePageContextProvider = ({ children }) => {
     try {
       setIsLoading(true);
       await getServiceEstimations();
-      setIsLoading(false);
+      intervalRef.current = setInterval(async () => {
+        await getServiceEstimations();
+      }, 120000);
     } catch (e) {
       setIsLoading(false);
       console.error(e);
     }
   };
+
+  useEffect(() => {
+    if (serviceEstimations) {
+      setIsLoading(false);
+    }
+  }, [serviceEstimations]);
 
   useEffect(() => {
     if (isReadyForSubmit) {
@@ -388,6 +401,7 @@ const RidePageContextProvider = ({ children }) => {
         getCurrentLocationAddress,
         fillLoadSkeleton,
         rideRequestLoading,
+        stopRequestInterval,
       }}
     >
       {children}
