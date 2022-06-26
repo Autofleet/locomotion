@@ -1,9 +1,15 @@
 import React from 'react';
 import styled from 'styled-components';
+import Loader from '../Loader';
 import Mixpanel from '../../services/Mixpanel';
 
 const Container = styled.TouchableOpacity`
   ${({ noBackground, theme }) => (!noBackground ? `background-color: ${theme.primaryColor};` : '')}
+`;
+
+const LoaderContainer = styled.View`
+height: 70%;
+margin: auto 0;
 `;
 
 const Button = props => (
@@ -15,7 +21,16 @@ const Button = props => (
         return props.onPress(e);
       }
     }}
-  />
+  >
+    {props.isLoading ? (
+      <LoaderContainer>
+        <Loader lottieViewStyle={{
+          height: '100%', width: '100%', alignItems: 'center', justifyContent: 'center',
+        }}
+        />
+      </LoaderContainer>
+    ) : props.children}
+  </Container>
 );
 
 

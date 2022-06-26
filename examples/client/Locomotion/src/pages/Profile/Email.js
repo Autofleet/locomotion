@@ -1,17 +1,17 @@
 import React, { useContext, useEffect, useState } from 'react';
 import * as yup from 'yup';
 import { useIsFocused, useRoute } from '@react-navigation/native';
-import TextInput from '../../../Components/TextInput';
-import OnboardingNavButtons from './OnboardingNavButtons';
-import { OnboardingContext } from '../../../context/onboarding';
+import TextInput from '../../Components/TextInput';
+import SaveButton from './SaveButton';
+import { OnboardingContext } from '../../context/onboarding';
 import {
   ErrorText, PageContainer, SafeView, InputContainer,
 } from './styles';
-import i18n from '../../../I18n';
+import i18n from '../../I18n';
 import Header from './Header';
 import ScreenText from './ScreenText';
-import { MAIN_ROUTES } from '../../routes';
-import { UserContext } from '../../../context/user';
+import { MAIN_ROUTES } from '../routes';
+import { UserContext } from '../../context/user';
 
 
 const Email = ({ navigation }) => {
@@ -79,7 +79,7 @@ const Email = ({ navigation }) => {
           />
         </InputContainer>
         {errorText && <ErrorText>{errorText}</ErrorText>}
-        <OnboardingNavButtons
+        <SaveButton
           isInvalid={!user.email}
           onFail={() => setErrorText(i18n.t('onboarding.pages.email.error'))}
           onNext={

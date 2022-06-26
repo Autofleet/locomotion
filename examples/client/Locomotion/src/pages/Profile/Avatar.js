@@ -1,15 +1,15 @@
 import React, { useContext, useState } from 'react';
-import i18n from '../../../I18n';
-import OnboardingNavButtons from './OnboardingNavButtons';
-import { OnboardingContext } from '../../../context/onboarding';
+import i18n from '../../I18n';
+import SaveButton from './SaveButton';
+import { OnboardingContext } from '../../context/onboarding';
 import {
   ImageContainer, Name, PageContainer, SafeView,
 } from './styles';
 import Header from './Header';
 import ScreenText from './ScreenText/index';
-import ThumbnailPicker from '../../../Components/ThumbnailPicker';
-import { MAIN_ROUTES } from '../../routes';
-import { UserContext } from '../../../context/user';
+import ThumbnailPicker from '../../Components/ThumbnailPicker';
+import { MAIN_ROUTES } from '../routes';
+import { UserContext } from '../../context/user';
 
 const Avatar = () => {
   const [photoSelected, setPhotoSelected] = useState(false);
@@ -41,7 +41,7 @@ const Avatar = () => {
           />
           <Name numberOfLines={1}>{`${user.firstName} ${user.lastName}`}</Name>
         </ImageContainer>
-        <OnboardingNavButtons
+        <SaveButton
           onNext={() => nextScreen(MAIN_ROUTES.AVATAR)}
           isInvalid={!user.avatar}
         />

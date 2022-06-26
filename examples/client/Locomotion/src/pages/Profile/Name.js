@@ -1,17 +1,17 @@
 import React, { useState, useContext, useRef } from 'react';
 import { ScrollView } from 'react-native';
 import { useRoute } from '@react-navigation/native';
-import TextInput from '../../../Components/TextInput';
-import OnboardingNavButtons from './OnboardingNavButtons';
-import { OnboardingContext } from '../../../context/onboarding';
+import TextInput from '../../Components/TextInput';
+import SaveButton from './SaveButton';
+import { OnboardingContext } from '../../context/onboarding';
 import {
   ErrorText, PageContainer, SafeView, InputContainer,
 } from './styles';
-import i18n from '../../../I18n';
+import i18n from '../../I18n';
 import Header from './Header';
 import ScreenText from './ScreenText';
-import { MAIN_ROUTES } from '../../routes';
-import { UserContext } from '../../../context/user';
+import { MAIN_ROUTES } from '../routes';
+import { UserContext } from '../../context/user';
 
 const Name = ({ navigation }) => {
   const route = useRoute();
@@ -81,7 +81,7 @@ const Name = ({ navigation }) => {
             />
           </InputContainer>
           {showErrorText && <ErrorText>{i18n.t('onboarding.fullNameError')}</ErrorText>}
-          <OnboardingNavButtons
+          <SaveButton
             isInvalid={isInvalid}
             onFail={() => setShowErrorText(true)}
             onNext={onComplete}

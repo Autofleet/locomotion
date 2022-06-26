@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { FONT_SIZES, FONT_WEIGHTS } from '../../../../context/theme';
+import { FONT_SIZES, FONT_WEIGHTS } from '../../../context/theme';
 
 export const WelcomeText = styled.Text`
 font-size: 35px;

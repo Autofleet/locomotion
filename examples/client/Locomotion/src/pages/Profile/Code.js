@@ -1,16 +1,16 @@
 import React, { useContext, useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
-import PinCode from '../../../Components/PinCode';
-import OnboardingNavButtons from './OnboardingNavButtons';
-import { OnboardingContext } from '../../../context/onboarding';
+import PinCode from '../../Components/PinCode';
+import SaveButton from './SaveButton';
+import { OnboardingContext } from '../../context/onboarding';
 import {
   ErrorText, PageContainer, ResendButton, ResendContainer, ResendText, SafeView,
 } from './styles';
-import i18n from '../../../I18n';
+import i18n from '../../I18n';
 import Header from './Header';
 import ScreenText from './ScreenText';
-import { MAIN_ROUTES } from '../../routes';
-import { UserContext } from '../../../context/user';
+import { MAIN_ROUTES } from '../routes';
+import { UserContext } from '../../context/user';
 
 const Code = () => {
   const { verifyCode } = useContext(OnboardingContext);
@@ -31,11 +31,12 @@ const Code = () => {
     const input = v || code;
     setCode(input);
     const response = await verifyCode(input);
-    setLoading(false);
     if (!response) {
+      setLoading(false);
       return setShowErrorText(true);
     }
   };
+
   return (
     <SafeView>
       <Header title={i18n.t('onboarding.pages.code.title')} page={MAIN_ROUTES.CODE} />
@@ -60,7 +61,8 @@ const Code = () => {
             {i18n.t('onboarding.pages.code.resendCodeButton')}
           </ResendButton>
         </ResendContainer>
-        <OnboardingNavButtons
+        <SaveButton
+          isLoading={!showErrorText && code.length === 4 && loading}
           isInvalid={showErrorText || code.length < 4 || loading}
           onFail={() => setShowErrorText(true)}
         />
