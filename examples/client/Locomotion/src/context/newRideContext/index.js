@@ -312,7 +312,7 @@ const RidePageContextProvider = ({ children }) => {
       await getServiceEstimations();
       intervalRef.current = setInterval(async () => {
         await getServiceEstimations();
-      }, 5000);
+      }, 120000);
     } catch (e) {
       setIsLoading(false);
       console.error(e);
