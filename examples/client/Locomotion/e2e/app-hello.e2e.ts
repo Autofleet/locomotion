@@ -1,11 +1,13 @@
 import { device,expect } from 'detox';
-
+//@ts-nocheck
 describe('Example (hello)', () => {
   beforeEach(async () => {
+    console.log('in test before each');
     await device.reloadReactNative();
   });
 
   it('should have welcome screen', async () => {
+    console.log('in test welcome');
     await expect(element(by.id('welcome'))).toBeVisible();
   });
 
