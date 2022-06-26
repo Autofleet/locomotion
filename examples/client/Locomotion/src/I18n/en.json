@@ -255,7 +255,11 @@
     },
     "postRide": {
         "pageTitle": "Ride finished",
-        "ratingHeadline": "How was your ride?"
+        "ratingHeadline": "How was your ride?",
+        "tip": {
+            "title": "Add a tip for",
+            "subTitle": "Your ride was"
+        }
     },
     "payments": {
         "pageTitle": "Payments Method",

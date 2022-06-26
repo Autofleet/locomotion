@@ -6,22 +6,15 @@ import i18n from '../../I18n';
 import PageHeader from '../../Components/PageHeader';
 import {
   PageContent,
-  SummaryTitle,
-  SummarySubTitle,
-  SummaryItems,
-  SummaryItem,
-  SummaryItemIcon,
-  SummaryItemTitle,
-  SummaryItemText,
-  SummaryStarsSubTitle,
   SummaryStarsTitle,
   RatingContainer,
-
-
+  TipsContainer,
 } from './styled';
 import Mixpanel from '../../services/Mixpanel';
 import { PageContainer } from '../styles';
 import StarRating from './StarRating';
+import Tips from './Tips';
+
 
 export default ({ menuSide }) => {
   const navigation = useNavigation();
@@ -55,15 +48,10 @@ export default ({ menuSide }) => {
         <RatingContainer>
           <SummaryStarsTitle>{i18n.t('postRide.ratingHeadline')}</SummaryStarsTitle>
           <StarRating onUpdate={onRatingUpdate} />
-          {/*  <RoundedButton
-            data-test-id="SubmitRideSummaryPopupButton"
-            onPress={() => onSubmit()}
-          >
-            {i18n.t('popups.rideSummary.submit')}
-          </RoundedButton>
-          { ratingSent ? <SummaryStarsSubTitle>{i18n.t('popups.rideSummary.ratingPost')}</SummaryStarsSubTitle> : null}
- */}
         </RatingContainer>
+        <TipsContainer>
+          <Tips />
+        </TipsContainer>
       </PageContent>
     </PageContainer>
   );
