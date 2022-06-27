@@ -380,6 +380,8 @@ PODS:
     - react-native-config/App (= 1.4.6)
   - react-native-config/App (1.4.6):
     - React-Core
+  - react-native-date-picker (4.2.2):
+    - React-Core
   - react-native-geolocation (2.1.0):
     - React-Core
   - react-native-google-maps (0.31.1):
@@ -606,6 +608,7 @@ DEPENDENCIES:
   - React-logger (from `../node_modules/react-native/ReactCommon/logger`)
   - react-native-carrier-info (from `../node_modules/react-native-carrier-info`)
   - react-native-config (from `../node_modules/react-native-config`)
+  - react-native-date-picker (from `../node_modules/react-native-date-picker`)
   - "react-native-geolocation (from `../node_modules/@react-native-community/geolocation`)"
   - react-native-google-maps (from `../node_modules/react-native-maps`)
   - react-native-image-picker (from `../node_modules/react-native-image-picker`)
@@ -728,6 +731,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-carrier-info"
   react-native-config:
     :path: "../node_modules/react-native-config"
+  react-native-date-picker:
+    :path: "../node_modules/react-native-date-picker"
   react-native-geolocation:
     :path: "../node_modules/@react-native-community/geolocation"
   react-native-google-maps:
@@ -850,6 +855,7 @@ SPEC CHECKSUMS:
   React-logger: f79dd3cc0f9b44f5611c6c7862badd891a862cf8
   react-native-carrier-info: 1e6299256bd7ceaa36f851b30e071b2b4fc406ad
   react-native-config: 7cd105e71d903104e8919261480858940a6b9c0e
+  react-native-date-picker: 9088350e06918f7d842a34c171acadc66583cb94
   react-native-geolocation: 205c5f619aea7bd54067b7b51e0781cae2f37151
   react-native-google-maps: 8231ffa015bf8b222c2e2661fa9163cdb609a224
   react-native-image-picker: 9f9eb160a4f4fc0702f9d0a60fa453b413258ef8

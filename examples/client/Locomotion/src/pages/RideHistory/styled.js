@@ -1,6 +1,6 @@
-
 import { View, Text, Dimensions } from 'react-native';
 import styled from 'styled-components';
+import CalendarSvg from '../../assets/calendar.svg';
 
 export const PageContent = styled(View)`
     width: 100%;
@@ -35,3 +35,9 @@ export const NoRidesTitleSubText = styled(Text)`
     font-size: 16px;
     font-weight: 400;
 `;
+
+export const CalendarSvgIcon = styled(CalendarSvg).attrs(({ theme }) => ({
+  width: '20px',
+  height: '20px',
+  fill: theme.primaryColor,
+}))``;
