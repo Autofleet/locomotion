@@ -1,11 +1,11 @@
-import { Text, View } from 'react-native';
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import { Text, View, TouchableOpacity } from 'react-native';
 import styled from 'styled-components';
 import { FONT_SIZES, FONT_WEIGHTS } from '../../../../../context/theme';
 import Button from '../../../../../Components/Button';
 
 export const Container = styled(View)`
-    padding: 0px 15px;
+    padding: 0 30px;
+    margin-bottom: 5px;
     display: flex;
     height: 150px;
     background-color: white;
@@ -13,26 +13,21 @@ export const Container = styled(View)`
 
 export const RowContainer = styled(View)`
     flex-direction: row;
-    justify-content: space-between;
-    flex: 1;
-    margin-bottom: 5px;
+width: 100%;
+height: 30%;
+margin-bottom: 2%;
+justify-content: space-between;
 `;
 
-export const ButtonContainer = styled(View)`
+export const ButtonContainer = styled(TouchableOpacity)`
     flex-direction: row;
     border: 1px solid #f1f2f6;
-    padding: 0 10px;
     border-radius: 8px;
     align-items: center;
-    flex: 1;
-    margin: 3px;
     height: 100%;
-`;
-
-export const TouchableOpacityContainer = styled(TouchableOpacity)`
-    flex-direction: row;
-    align-items: center;
-    height: 100%;
+    display: flex;
+    width: 48%;
+    padding: 0 5px;
 `;
 
 export const ButtonText = styled(Text)`
@@ -47,5 +42,4 @@ width: 100%;
 height: 50px;
 background-color: ${({ disabled, theme }) => (disabled ? '#bcbcbc' : theme.primaryColor)};
 border-radius: 8px;
-margin-top: 10px;
 `;
