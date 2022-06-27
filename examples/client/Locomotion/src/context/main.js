@@ -55,19 +55,17 @@ export const MainProvider = ({ children, LoginPage, i18n }) => {
 
   return (
     <StateProvider initialState={initialState} reducer={reducer}>
-      <RideStateContextContextProvider>
-        <SettingsContext.Provider>
-          <PaymentsContext.Provider>
-            <ThemeProvider>
-              <UserContextProvider>
-                <OnboardingContextProvider>
-                  {children}
-                </OnboardingContextProvider>
-              </UserContextProvider>
-            </ThemeProvider>
-          </PaymentsContext.Provider>
-        </SettingsContext.Provider>
-      </RideStateContextContextProvider>
+      <SettingsContext.Provider>
+        <PaymentsContext.Provider>
+          <ThemeProvider>
+            <UserContextProvider>
+              <OnboardingContextProvider>
+                {children}
+              </OnboardingContextProvider>
+            </UserContextProvider>
+          </ThemeProvider>
+        </PaymentsContext.Provider>
+      </SettingsContext.Provider>
     </StateProvider>
   );
 };

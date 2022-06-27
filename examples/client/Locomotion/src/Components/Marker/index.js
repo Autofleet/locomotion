@@ -20,9 +20,11 @@ import { STOP_POINT_TYPES } from '../../lib/commonTypes';
 export default ({
   stopPoint,
 }) => {
-  const { chosenService, requestStopPoints } = useContext(RidePageContext);
+  const { chosenService } = useContext(RidePageContext);
   const { lat, lng } = stopPoint;
-  const [minutesUntilPickup] = useState(moment.duration(moment(stopPoint.eta || chosenService.eta).diff(moment())).minutes().toString());
+  const eta = stopPoint.eta || (chosenService && chosenService.eta);
+  const etaInMinutes = moment.duration(moment(eta).diff(moment())).minutes().toString();
+  const [minutesUntilPickup] = useState(etaInMinutes);
   const etaText = i18n.t('rideDetails.toolTipEta', { minutes: minutesUntilPickup });
   const typeDetails = {
     [STOP_POINT_TYPES.STOP_POINT_PICKUP]: {
@@ -35,7 +37,7 @@ export default ({
     },
   };
 
-  const checkIfSpIsNext = () => stopPoint.type === STOP_POINT_TYPES.STOP_POINT_PICKUP;
+  const checkIfSpIsNext = () => eta && stopPoint.type === STOP_POINT_TYPES.STOP_POINT_PICKUP;
   return (
     <Marker
       coordinate={{ latitude: parseFloat(lat), longitude: parseFloat(lng) }}
