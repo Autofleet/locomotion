@@ -19,6 +19,8 @@ const deviceStorage = {
         } else {
           return value;
         }
+      } else {
+        return value;
       }
     }
 
