@@ -25,7 +25,7 @@ const deviceStorage = {
 
     return undefined;
   },
-  async get(key: string) {
+  async get(key: string | string[]) {
     if (!Array.isArray(key)) {
       const item = await AsyncStorage.getItem(key);
       return this.getValueFromObject(key, item);
