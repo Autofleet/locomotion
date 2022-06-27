@@ -10,6 +10,8 @@ import {
   buildStreetAddress,
   formatEstimationsResult, formatStopPointsForEstimations, getEstimationTags, INITIAL_STOP_POINTS,
 } from './utils';
+import settings from '../settings';
+import SETTINGS_KEYS from '../settings/keys';
 import { RideStateContextContext } from '../ridePageStateContext';
 
 export const RidePageContext = createContext({
@@ -47,11 +49,11 @@ export const RidePageContext = createContext({
 });
 
 const HISTORY_RECORDS_NUM = 10;
+let SERVICE_ESTIMATIONS_INTERVAL_IN_SECONDS;
 
 const RidePageContextProvider = ({ children }) => {
   const { checkStopPointsInTerritory } = useContext(RideStateContextContext);
   const [requestStopPoints, setRequestStopPoints] = useState(INITIAL_STOP_POINTS);
-  const [coords, setCoords] = useState();
   const [currentGeocode, setCurrentGeocode] = useState(null);
   const [searchTerm, setSearchTerm] = useState(null);
   const [selectedInputIndex, setSelectedInputIndex] = useState(null);
@@ -66,6 +68,7 @@ const RidePageContextProvider = ({ children }) => {
   const [lastSelectedLocation, saveSelectedLocation] = useState(false);
   const [rideRequestLoading, setRideRequestLoading] = useState(false);
   const intervalRef = useRef();
+  const { getSettingByKey } = settings.useContainer();
 
   const stopRequestInterval = () => {
     clearInterval(intervalRef.current);
@@ -106,9 +109,15 @@ const RidePageContextProvider = ({ children }) => {
     }
   };
 
+  const getServiceEstimationsFetchingInterval = async () => {
+    SERVICE_ESTIMATIONS_INTERVAL_IN_SECONDS = await getSettingByKey(
+      SETTINGS_KEYS.SERVICE_ESTIMATIONS_INTERVAL_IN_SECONDS,
+    );
+  };
+
   useEffect(() => {
-    initLocation();
     initCurrentLocation();
+    getServiceEstimationsFetchingInterval();
   }, []);
 
   useEffect(() => {
@@ -118,11 +127,6 @@ const RidePageContextProvider = ({ children }) => {
   useEffect(() => {
     validateRequestedStopPoints(requestStopPoints);
   }, [requestStopPoints]);
-
-  const initLocation = async () => {
-    const location = await getCurrentLocation();
-    setCoords(location);
-  };
 
   const getCurrentLocationAddress = async () => {
     const currentAddress = await reverseLocationGeocode();
@@ -317,7 +321,7 @@ const RidePageContextProvider = ({ children }) => {
       await getServiceEstimations();
       intervalRef.current = setInterval(async () => {
         await getServiceEstimations();
-      }, 120000);
+      }, (SERVICE_ESTIMATIONS_INTERVAL_IN_SECONDS * 1000));
     } catch (e) {
       setIsLoading(false);
       console.error(e);
@@ -339,8 +343,9 @@ const RidePageContextProvider = ({ children }) => {
   const requestRide = async () => {
     setRideRequestLoading(true);
     const formattedRide = {
-      serviceId: chosenService.id,
+      serviceTypeId: chosenService.id,
       paymentMethodId: ride.paymentMethodId,
+      rideType: 'passenger',
       stopPoints: requestStopPoints.map((sp, i) => ({
         lat: Number(sp.lat),
         lng: Number(sp.lng),

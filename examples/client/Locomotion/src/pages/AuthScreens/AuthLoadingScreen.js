@@ -1,11 +1,11 @@
 import React, { useContext, useEffect } from 'react';
 import { APP_ROUTES, MAIN_ROUTES } from '../routes';
-import AppSettings from '../../services/app-settings';
 import Auth from '../../services/auth';
 import { getUserDetails } from '../../context/user/api';
 import { OnboardingContext } from '../../context/onboarding';
 import PaymentsContext from '../../context/payments';
 import { UserContext } from '../../context/user';
+import { StorageService } from '../../services';
 
 export const INITIAL_USER_STATE = {
   phoneNumber: '',
@@ -23,16 +23,16 @@ const AuthLoadingScreen = ({ navigation }) => {
   const { navigateBasedOnUser } = useContext(OnboardingContext);
   const usePayments = PaymentsContext.useContainer();
 
-  const saveUser = (userProfile) => {
-    setUser(userProfile);
-    return AppSettings.update({ userProfile });
+  const saveUser = (clientProfile) => {
+    setUser(clientProfile);
+    return StorageService.save({ clientProfile });
   };
 
   const init = () => {
     async function getFromStorage() {
-      const payload = await AppSettings.getSettings();
+      const clientProfile = await StorageService.get('clientProfile');
 
-      if (payload.userProfile) {
+      if (clientProfile) {
         const response = await getUserDetails();
         if (!response) {
           Auth.logout(navigation);
