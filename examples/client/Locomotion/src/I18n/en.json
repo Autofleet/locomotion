@@ -265,7 +265,14 @@
             "title": "Add a tip for",
             "subTitle": "Your ride was",
             "noTip": "No tip",
-            "customTip": "Set custom amount"
+            "setCustomTip": "Set custom amount",
+            "customTip": {
+                "title": "Custom amount",
+                "subTitle": "Enter other amount",
+                "submit": "Set",
+                "cancel": "Cancel",
+                "inputPlaceholder":"amount..."
+            }
         }
     },
     "payments": {

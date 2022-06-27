@@ -1,4 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, {
+  useEffect, useState, useRef, useContext,
+} from 'react';
 import { View } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { MAIN_ROUTES } from '../routes';
@@ -16,23 +18,35 @@ import { PageContainer } from '../styles';
 import StarRating from './StarRating';
 import Tips from './Tips';
 import Button from '../../Components/RoundedButton';
+import BottomSheet from '../../Components/BottomSheet';
+import BottomSheetContextProvider, { BottomSheetContext, SNAP_POINT_STATES } from '../../context/bottomSheetContext';
+import CustomTip from './Tips/CustomTip';
 
-export default ({ menuSide }) => {
+const PostRidePage = ({ menuSide }) => {
   const navigation = useNavigation();
   const route = useRoute();
   const [rating, setRating] = useState(null);
 
+  const bottomSheetRef = useRef(null);
+  const {
+    snapPoints,
+    setSnapPointsState,
+    setSnapPointIndex,
+  } = useContext(BottomSheetContext);
+
   useEffect(() => {
+    setSnapPointsState(['40%']);
+    // setSnapPointIndex(-1);
     Mixpanel.pageView(route.name);
   }, []);
 
-  useEffect(() => {
+  /*   useEffect(() => {
     const unsubscribe = navigation.addListener('willFocus', () => {
 
     });
 
     return unsubscribe;
-  }, [navigation]);
+  }, [navigation]); */
 
   const onRatingUpdate = (selectedRating) => {
     setRating(selectedRating);
@@ -51,12 +65,26 @@ export default ({ menuSide }) => {
           <StarRating onUpdate={onRatingUpdate} />
         </RatingContainer>
         <TipsContainer>
-          <Tips />
+          <Tips onCustom={() => setSnapPointIndex(0)} />
         </TipsContainer>
         <SubmitContainer>
           <Button>Continue</Button>
         </SubmitContainer>
       </PageContent>
+      <BottomSheet
+        ref={bottomSheetRef}
+        enablePanDownToClose
+
+      >
+        <CustomTip />
+      </BottomSheet>
     </PageContainer>
   );
 };
+
+
+export default props => (
+  <BottomSheetContextProvider {...props}>
+    <PostRidePage {...props} />
+  </BottomSheetContextProvider>
+);

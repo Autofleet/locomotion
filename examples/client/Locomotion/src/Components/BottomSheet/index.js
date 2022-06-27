@@ -15,7 +15,7 @@ const ContentContainer = styled(BottomSheetView)`
   flex: 1;
 `;
 
-const BottomSheetComponent = forwardRef(({ children }, ref) => {
+const BottomSheetComponent = forwardRef(({ children, enablePanDownToClose = false }, ref) => {
   const {
     setSnapPointIndex,
     sheetState,
@@ -46,7 +46,6 @@ const BottomSheetComponent = forwardRef(({ children }, ref) => {
     [footerComponent],
   );
 
-
   return (
     <>
       <BottomSheet
@@ -56,6 +55,18 @@ const BottomSheetComponent = forwardRef(({ children }, ref) => {
         onChange={handleSheetChanges}
         onAnimate={onAnimate}
         footerComponent={renderFooter}
+        enablePanDownToClose={enablePanDownToClose}
+        style={{
+          shadowColor: '#000',
+          shadowOffset: {
+            width: 0,
+            height: 2,
+          },
+          shadowOpacity: 0.25,
+          shadowRadius: 3.84,
+
+          elevation: 5,
+        }}
       >
         <SafeView
           style={{

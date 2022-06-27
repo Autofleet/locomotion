@@ -67,7 +67,9 @@ const CustomTip = ({ onPress, children }) => (
   </CustomTipContainer>
 );
 
-const Tips = ({ driver = { firstName: 'Timmy' }, ridePrice = 33, thumbnailImage }) => {
+const Tips = ({
+  driver = { firstName: 'Timmy' }, ridePrice = 33, thumbnailImage, onCustom,
+}) => {
   const [selectedTip, setSelectedTip] = useState(null);
   const settings = {
     percentageThreshold: 30,
@@ -106,7 +108,7 @@ const Tips = ({ driver = { firstName: 'Timmy' }, ridePrice = 33, thumbnailImage 
         <SelectableButton onPress={() => setSelectedTip(null)}>{`${i18n.t('postRide.tip.noTip')}`}</SelectableButton>
       </DetailsContainer>
       <DetailsContainer style={{ marginTop: 30 }}>
-        <CustomTip>{i18n.t('postRide.tip.customTip')}</CustomTip>
+        <CustomTip onPress={onCustom}>{i18n.t('postRide.tip.setCustomTip')}</CustomTip>
       </DetailsContainer>
 
 

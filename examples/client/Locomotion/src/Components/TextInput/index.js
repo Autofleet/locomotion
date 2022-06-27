@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { Input } from './styled';
+import { View } from 'react-native';
+import { Input, InputIconContainer, InputIcon } from './styled';
 
 const TextInput = (props) => {
   const [isFocused, setIsFocused] = useState(false);
@@ -14,6 +15,32 @@ const TextInput = (props) => {
   );
 };
 
+
+export const TextInputWithIcon = (props) => {
+  const [isFocused, setIsFocused] = useState(false);
+  const {
+    children,
+    onFocus,
+    fullBorder,
+  } = props;
+
+  return (
+    <InputIconContainer isFocused={isFocused} fullBorder={fullBorder}>
+      <InputIcon>
+        {children}
+      </InputIcon>
+      <View style={{ flex: 1 }}>
+        <TextInput
+          style={{ textAlign: 'left' }}
+          onFocus={() => setIsFocused(true)}
+          onBlur={() => setIsFocused(false)}
+          ref={props.inputRef}
+          {...props}
+        />
+      </View>
+    </InputIconContainer>
+  );
+};
 export default TextInput;
 
 // width: ${({ width }) => (width || '100%')};

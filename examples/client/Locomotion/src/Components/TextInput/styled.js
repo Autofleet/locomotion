@@ -1,3 +1,5 @@
+import React from 'react';
+import { Text } from 'react-native';
 import styled from 'styled-components';
 import { BottomSheetTextInput } from '@gorhom/bottom-sheet';
 
@@ -31,4 +33,26 @@ export const BottomSheetInput = styled(BottomSheetTextInput)`
     ${({ fullBorder, isFocused }) => (fullBorder ? fullBorderStyles(isFocused) : bottomBorderStyles)}
     border-color: ${({ error }) => (error ? ERROR_COLOR : '#333333')};
     color: ${({ error }) => (error ? ERROR_COLOR : '#333333')};
+`;
+
+
+export const InputIconContainer = styled.View`
+    flex-direction: row;
+    flex: 1;
+    border-radius: 8px;
+    background: red;
+
+    ${({ fullBorder, isFocused }) => (fullBorder ? fullBorderStyles(isFocused) : bottomBorderStyles)}
+    border-color: ${({ error }) => (error ? ERROR_COLOR : 'transparent')};
+
+`;
+
+export const InputIcon = styled.View`
+    width: 40px;
+    height: 40px;
+    background: #f1f2f6;
+    borderBottomStartRadius: 8px;
+    borderTopStartRadius: 8px;
+    justify-content: center;
+    ${({ fullBorder, isFocused }) => (fullBorder ? fullBorderStyles(isFocused) : bottomBorderStyles)}
 `;
