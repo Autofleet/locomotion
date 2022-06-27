@@ -35,7 +35,6 @@ export default React.forwardRef(({
     isUserLocationFocused,
     setIsUserLocationFocused,
     territory,
-    showOutOfTerritory,
     currentBsPage,
   } = useContext(RideStateContextContext);
 
@@ -160,12 +159,12 @@ export default React.forwardRef(({
         customMapStyle={isDarkMode ? mapDarkMode : undefined}
         {...mapSettings}
       >
-        {chosenService && requestStopPoints.filter(sp => !!sp.lat).length > 1
+        {requestStopPoints.filter(sp => !!sp.lat).length > 1
           ? requestStopPoints
             .filter(sp => !!sp.lat)
             .map(sp => (<StationsMap stopPoint={sp} />))
           : null}
-        {showOutOfTerritory && territory && territory.length ? territory
+        {currentBsPage === BS_PAGES.NOT_IN_TERRITORY && territory && territory.length ? territory
           .map(t => t.polygon.coordinates.map(poly => (
             <Polygon
               key={`Polygon#${t.id}#${poly[1]}#${poly[0]}`}
