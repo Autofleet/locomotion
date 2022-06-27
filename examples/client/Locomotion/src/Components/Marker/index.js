@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Platform } from 'react-native';
 import Config from 'react-native-config';
 import { Marker } from 'react-native-maps';
@@ -22,8 +22,7 @@ export default ({
   const { chosenService } = useContext(RidePageContext);
   const { lat, lng } = stopPoint;
   const eta = stopPoint.eta || (chosenService && chosenService.eta);
-  const etaInMinutes = moment.duration(moment(eta).diff(moment())).minutes().toString();
-  const [minutesUntilPickup] = useState(etaInMinutes);
+  const [minutesUntilPickup, setMinutesUntilPickup] = useState();
   const etaText = i18n.t('rideDetails.toolTipEta', { minutes: minutesUntilPickup });
   const typeDetails = {
     [STOP_POINT_TYPES.STOP_POINT_PICKUP]: {
@@ -36,6 +35,10 @@ export default ({
     },
   };
 
+  useEffect(() => {
+    const etaInMinutes = moment.duration(moment(eta).diff(moment())).minutes().toString();
+    setMinutesUntilPickup(etaInMinutes);
+  }, [chosenService]);
   const checkIfSpIsNext = () => eta && stopPoint.type === STOP_POINT_TYPES.STOP_POINT_PICKUP;
   return (
     <Marker
