@@ -7,7 +7,6 @@ import ThemeProvider from './theme';
 import UserContextProvider from './user';
 import OnboardingContextProvider from './onboarding';
 import { StateProvider } from './state';
-import AppSettings from '../services/app-settings';
 
 
 export const MainProvider = ({ children, LoginPage, i18n }) => {
@@ -22,26 +21,9 @@ export const MainProvider = ({ children, LoginPage, i18n }) => {
     }
   }
 
-  const saveState = async (state) => {
-    try {
-      await AppSettings.update(state);
-    } catch (e) {
-      console.error('Got error while try to save state', e);
-    }
-  };
-
   const reducer = (state, action) => {
     if (action && action.type) {
       switch (action.type) {
-        case 'saveState':
-          const newState = {
-            ...state,
-            ...action.payload,
-          };
-
-          saveState(newState);
-          return newState;
-
         case 'changeState':
           return {
             ...state,

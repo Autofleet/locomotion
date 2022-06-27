@@ -105,11 +105,15 @@ const RidePageContextProvider = ({ children }) => {
     }
   };
 
-  useEffect(() => {
-    initCurrentLocation();
+  const getServiceEstimationsFetchingInterval = async () => {
     SERVICE_ESTIMATIONS_INTERVAL_IN_SECONDS = await getSettingByKey(
       SETTINGS_KEYS.SERVICE_ESTIMATIONS_INTERVAL_IN_SECONDS,
     );
+  };
+
+  useEffect(() => {
+    initCurrentLocation();
+    getServiceEstimationsFetchingInterval();
   }, []);
 
   useEffect(() => {
@@ -334,8 +338,9 @@ const RidePageContextProvider = ({ children }) => {
 
   const requestRide = async () => {
     const formattedRide = {
-      serviceId: chosenService.id,
+      serviceTypeId: chosenService.id,
       paymentMethodId: ride.paymentMethodId,
+      rideType: 'passenger',
       stopPoints: requestStopPoints.map((sp, i) => ({
         lat: Number(sp.lat),
         lng: Number(sp.lng),

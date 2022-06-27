@@ -1,12 +1,11 @@
-import { merge } from 'lodash';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import moment from 'moment';
+import bluebird from 'bluebird';
 
-const isExpired = expireAt => moment().isAfter(expireAt);
-
+const isExpired = (expireAt: Date) => moment().isAfter(expireAt);
 
 const deviceStorage = {
-  getValueFromObject(key, obj) {
+  getValueFromObject(key: string, obj: any) {
     if (obj) {
       const {
         value,
@@ -26,27 +25,27 @@ const deviceStorage = {
 
     return undefined;
   },
-  async get(key) {
+  async get(key: string) {
     if (!Array.isArray(key)) {
-      return this.getValueFromObject(key, AsyncStorage.getItem(key));
+      const item = await AsyncStorage.getItem(key);
+      return this.getValueFromObject(key, item);
     }
     const values = await AsyncStorage.multiGet(key);
-    const result = {};
-    values.forEach((value) => {
+    const result: any = {};
+    await bluebird.map(values, async (value) => {
       const [valueKey, valueObj] = value;
-      result[valueKey] = this.getValueFromObject(valueKey, valueObj);
+      result[valueKey] = await this.getValueFromObject(valueKey, valueObj);
     });
     return result;
   },
-
-  save(object, ttlInSeconds = 0) {
-    const pairs = Object.keys(object).map(pKey => [pKey, JSON.stringify({
+  save(object: any, ttlInSeconds = 0) {
+    const pairs: any[] = Object.keys(object).map(pKey => [pKey, JSON.stringify({
       value: object[pKey],
       ...(ttlInSeconds !== 0 && { expireAt: moment().add(ttlInSeconds, 'seconds') }),
     })]);
     return AsyncStorage.multiSet(pairs);
   },
-  delete(key) {
+  delete(key: string) {
     if (Array.isArray(key)) {
       return AsyncStorage.multiRemove(key);
     }
@@ -62,4 +61,4 @@ const deviceStorage = {
   },
 };
 
-module.exports = deviceStorage;
+export default deviceStorage;

@@ -21,7 +21,7 @@ const useSettings = () => {
     return value;
   };
 
-  const getMultipleSettingByKey = (keys) => {
+  const getMultipleSettingByKey = async (keys) => {
     const keyValueMap = await StorageService.get(keys);
     const cachedKeys = Object.keys(keyValueMap);
     const keysAfterCache = cachedKeys.map((cacheKey) => {
