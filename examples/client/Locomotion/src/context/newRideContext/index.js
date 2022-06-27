@@ -44,6 +44,8 @@ export const RidePageContext = createContext({
   requestRide: () => undefined,
   rideRequestLoading: false,
   stopRequestInterval: () => undefined,
+  serviceRequestFailed: false,
+  setServiceRequestFailed: () => undefined,
 });
 
 const HISTORY_RECORDS_NUM = 10;
@@ -65,6 +67,7 @@ const RidePageContextProvider = ({ children }) => {
   const [chosenService, setChosenService] = useState(null);
   const [lastSelectedLocation, saveSelectedLocation] = useState(false);
   const [rideRequestLoading, setRideRequestLoading] = useState(false);
+  const [serviceRequestFailed, setServiceRequestFailed] = useState(false);
   const intervalRef = useRef();
 
   const stopRequestInterval = () => {
@@ -319,7 +322,9 @@ const RidePageContextProvider = ({ children }) => {
         await getServiceEstimations();
       }, 120000);
     } catch (e) {
+      setServiceRequestFailed(true);
       setIsLoading(false);
+      setIsReadyForSubmit(false);
       console.error(e);
     }
   };
@@ -405,6 +410,8 @@ const RidePageContextProvider = ({ children }) => {
         fillLoadSkeleton,
         rideRequestLoading,
         stopRequestInterval,
+        serviceRequestFailed,
+        setServiceRequestFailed,
       }}
     >
       {children}

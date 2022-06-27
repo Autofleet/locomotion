@@ -9,6 +9,7 @@ import {
 } from '@gorhom/bottom-sheet';
 
 import styled from 'styled-components';
+import GenericErrorPopup from '../../../../popups/GenericError';
 import i18n from '../../../../I18n';
 import AddressRow from './AddressLine';
 import SearchBar from './SearchBar';
@@ -42,6 +43,7 @@ const AddressSelectorBottomSheet = () => {
     isExpanded,
     setSnapPointsState,
     setSnapPointIndex,
+    setIsExpanded,
   } = useContext(BottomSheetContext);
 
   const { expand, collapse } = useBottomSheet();
@@ -51,16 +53,21 @@ const AddressSelectorBottomSheet = () => {
     userContext.loadHistory();
   };
 
-  useEffect(() => {
-    loadHistory();
-  }, []);
-
   const onSearchFocus = () => {
     if (!isExpanded) {
       setSnapPointsState(SNAP_POINT_STATES.ADDRESS_SELECTOR);
       expand();
     }
   };
+
+  useEffect(() => {
+    loadHistory();
+    if (userContext.serviceRequestFailed) {
+      setIsExpanded(true);
+      setSnapPointsState(SNAP_POINT_STATES.ADDRESS_SELECTOR);
+      expand();
+    }
+  }, []);
 
   const onBack = () => {
     collapse();
@@ -108,8 +115,11 @@ const AddressSelectorBottomSheet = () => {
           )
           : null}
       </HistoryContainer>
+      <GenericErrorPopup
+        isVisible={userContext.serviceRequestFailed}
+        closePopup={() => userContext.setServiceRequestFailed(false)}
+      />
     </ContentContainer>
-
   );
 };
 
