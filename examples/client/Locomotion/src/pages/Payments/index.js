@@ -54,14 +54,22 @@ export default ({ navigation, menuSide }) => {
     setMethodForDelete(methodId);
   };
 
+  const onPressBack = () => {
+    if (!showList) {
+      return setShowList(true);
+    }
+    if (route.params && route.params.back) {
+      navigation.navigate(MAIN_ROUTES.ACCOUNT);
+    } else {
+      navigation.navigate(MAIN_ROUTES.HOME);
+    }
+  };
   return (
     <PageContainer>
       <PageContent>
         <PageHeader
           title={i18n.t('payments.pageTitle')}
-          onIconPress={() => (route.params && route.params
-            .back ? navigation.navigate(MAIN_ROUTES.ACCOUNT)
-            : navigation.navigate(MAIN_ROUTES.HOME))}
+          onIconPress={onPressBack}
           iconSide={menuSide}
         />
         {pageLoading ? <FullPageLoader autoPlay loop /> : null}
@@ -77,10 +85,7 @@ export default ({ navigation, menuSide }) => {
           <CardContainer>
             <NewCreditForm
               PageText={() => <CreditFormText>{i18n.t('payments.newCardDetails')}</CreditFormText>}
-              onDone={async () => {
-                await loadCustomerData();
-                return setShowList(true);
-              }}
+              onDone={async () => setShowList(true)}
             />
           </CardContainer>
         )}

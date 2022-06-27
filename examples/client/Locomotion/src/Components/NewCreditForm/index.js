@@ -37,8 +37,8 @@ export const NewCreditForm = ({ onDone, canSkip = false, PageText }) => {
       console.error(error);
       setErrorMessage(error.message);
     } else {
-      await onDone();
       await usePayments.loadCustomer();
+      await onDone();
     }
   };
 
