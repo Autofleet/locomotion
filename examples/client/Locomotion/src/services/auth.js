@@ -19,7 +19,6 @@ class Auth {
       return '';
     }
 
-    console.log('getAT', accessToken, Auth.jwtVerify(accessToken));
     if (!accessToken || !Auth.jwtVerify(accessToken)) {
       // call server
       let response;

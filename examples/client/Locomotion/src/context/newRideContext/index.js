@@ -317,7 +317,7 @@ const RidePageContextProvider = ({ children }) => {
       await getServiceEstimations();
       intervalRef.current = setInterval(async () => {
         await getServiceEstimations();
-      }, (SERVICE_ESTIMATIONS_INTERVAL_IN_SECONDS * 1000) || 120000);
+      }, (SERVICE_ESTIMATIONS_INTERVAL_IN_SECONDS * 1000));
     } catch (e) {
       setIsLoading(false);
       console.error(e);

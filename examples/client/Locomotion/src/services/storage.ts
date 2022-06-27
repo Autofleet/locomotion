@@ -12,7 +12,7 @@ const deviceStorage = {
         expireAt,
       } = JSON.parse(obj);
 
-      if (!expireAt) {
+      if (expireAt) {
         if (isExpired(expireAt)) {
           this.delete(key);
         } else {
