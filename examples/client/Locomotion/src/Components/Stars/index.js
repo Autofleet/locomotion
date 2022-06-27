@@ -18,7 +18,7 @@ export const StarIcon = styled(StarSvg).attrs((({
 }) => ({
   height,
   width,
-  stroke: 'red',
+  stroke: theme.primaryColor,
   fill: isOn ? theme.primaryColor : theme.pageBackgroundColor,
 })))`
   margin: 3px;
