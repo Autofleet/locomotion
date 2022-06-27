@@ -1,17 +1,17 @@
 import { useNavigation } from '@react-navigation/native';
 import React, { useContext } from 'react';
-import { APP_ROUTES } from '../../../routes';
-import i18n from '../../../../I18n';
-import logo from '../../../../assets/autofleetLogo.png';
-import OnboardingNavButtons from '../OnboardingNavButtons';
+import { APP_ROUTES } from '../../routes';
+import i18n from '../../../I18n';
+import logo from '../../../assets/autofleetLogo.png';
+import SaveButton from '../SaveButton';
 import {
   WelcomeSubText, WelcomeText, PageContainer, TextContainer,
 } from './styles';
 import { SafeView } from '../styles';
 import {
   InfoContainer, LogoContainer, Logo, OperationName, OperationSubName,
-} from '../../StartScreen/styles';
-import { UserContext } from '../../../../context/user';
+} from '../../AuthScreens/StartScreen/styles';
+import { UserContext } from '../../../context/user';
 
 const Welcome = () => {
   const { updateUserInfo, user } = useContext(UserContext);
@@ -43,7 +43,7 @@ const Welcome = () => {
             {i18n.t('onboarding.pages.welcome.subText')}
           </WelcomeSubText>
         </TextContainer>
-        <OnboardingNavButtons buttonText={i18n.t('onboarding.pages.welcome.buttonText')} onNext={onNext} />
+        <SaveButton buttonText={i18n.t('onboarding.pages.welcome.buttonText')} onNext={onNext} />
       </PageContainer>
     </SafeView>
   );

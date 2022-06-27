@@ -1,6 +1,6 @@
 import styled from 'styled-components';
-import { FONT_SIZES, FONT_WEIGHTS } from '../../../../context/theme';
-import Button from '../../../../Components/Button';
+import { FONT_SIZES, FONT_WEIGHTS } from '../../../context/theme';
+import Button from '../../../Components/Button';
 
 export const NavButton = styled(Button)`
 width: 100%;

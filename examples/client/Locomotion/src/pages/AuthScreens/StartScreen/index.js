@@ -16,7 +16,7 @@ import {
   OperationSubName,
   InfoContainer,
 } from './styles';
-import { SafeView } from '../Onboarding/styles';
+import SafeView from '../../../Components/SafeView';
 import WebView from '../../WebView';
 import { getLoginSettings } from '../../../context/user/api';
 import Mixpanel from '../../../services/Mixpanel';
@@ -65,7 +65,10 @@ const StartScreen = () => {
   };
 
   return (
-    <SafeView>
+    <SafeView style={{
+      flex: 1,
+    }}
+    >
       <PageContainer>
         {!webViewWindow ? (
           <>

@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { FONT_SIZES, FONT_WEIGHTS } from '../../../../context/theme';
+import { FONT_SIZES, FONT_WEIGHTS } from '../../../context/theme';
 
 export const TextContainer = styled.View`
 display: flex;
