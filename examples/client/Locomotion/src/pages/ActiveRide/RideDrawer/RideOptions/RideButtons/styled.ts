@@ -27,7 +27,7 @@ export const ButtonContainer = styled(TouchableOpacity)`
     height: 100%;
     display: flex;
     width: 48%;
-    padding: 0 5px;
+    padding: 0 15px;
 `;
 
 export const ButtonText = styled(Text)`
