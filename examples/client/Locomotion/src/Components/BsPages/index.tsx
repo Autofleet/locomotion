@@ -2,6 +2,7 @@ import React, { useContext, useEffect } from 'react';
 import { Text, View } from 'react-native';
 import styled from 'styled-components';
 import { useBottomSheet } from '@gorhom/bottom-sheet';
+import SvgIcon from '../SvgIcon';
 import { RidePageContext } from '../../context/newRideContext';
 import i18n from '../../I18n';
 import { FONT_SIZES, FONT_WEIGHTS } from '../../context/theme';
@@ -12,6 +13,7 @@ import { BS_PAGES } from '../../context/ridePageStateContext/utils';
 import { MAIN_ROUTES } from '../../pages/routes';
 import * as navigationService from '../../services/navigation';
 import payments from '../../context/payments';
+import errorIcon from '../../assets/error-icon.svg';
 
 const OtherButton = styled(Button)`
   width: 100%;
@@ -52,6 +54,11 @@ const CardImage = styled(View)`
   align-items: center;
 `;
 
+const TitleContainer = styled(View)`
+display: flex;
+flex-direction: row;
+`;
+
 const Title = styled(Text)`
   padding-bottom: 3px;
   ${FONT_SIZES.H2}
@@ -90,6 +97,7 @@ const BsPage = ({
   onButtonPress,
   image,
   children,
+  titleIcon,
   TitleText,
   SubTitleText,
   ButtonText,
@@ -100,6 +108,7 @@ const BsPage = ({
   onButtonPress: any,
   image: any,
   children?: any,
+  titleIcon?: any,
   TitleText: string,
   SubTitleText: string,
   ButtonText: string,
@@ -109,7 +118,10 @@ const BsPage = ({
   <Container>
     <MainContent>
       <CardText>
-        <Title>{TitleText}</Title>
+        <TitleContainer>
+          {titleIcon && <SvgIcon Svg={titleIcon} style={{ marginRight: 5 }} />}
+          <Title>{TitleText}</Title>
+        </TitleContainer>
         <SubTitle numberOfLines={2}>{SubTitleText}</SubTitle>
       </CardText>
       {image ? (
@@ -132,6 +144,7 @@ const BsPage = ({
 
 BsPage.defaultProps = {
   children: undefined,
+  titleIcon: undefined,
 };
 
 export default BsPage;
@@ -226,6 +239,7 @@ export const NoPayment = (props: any) => {
 
   return (
     <BsPage
+      titleIcon={errorIcon}
       TitleText={i18n.t('bottomSheetContent.noPayment.titleText')}
       ButtonText={i18n.t('bottomSheetContent.noPayment.buttonText')}
       SubTitleText={i18n.t('bottomSheetContent.noPayment.subTitleText')}
