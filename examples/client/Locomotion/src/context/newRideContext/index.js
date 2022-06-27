@@ -1,5 +1,5 @@
 import React, {
-  useState, useEffect, useRef, createContext,
+  useState, useEffect, useRef, createContext, useContext,
 } from 'react';
 import _ from 'lodash';
 import { getPosition } from '../../services/geo';
@@ -12,6 +12,7 @@ import {
 } from './utils';
 import settings from '../settings';
 import SETTINGS_KEYS from '../settings/keys';
+import { RideStateContextContext } from '../ridePageStateContext';
 
 export const RidePageContext = createContext({
   loadAddress: () => undefined,
@@ -43,6 +44,7 @@ export const RidePageContext = createContext({
   getCurrentLocationAddress: () => undefined,
   saveSelectedLocation: sp => undefined,
   requestRide: () => undefined,
+  rideRequestLoading: false,
   stopRequestInterval: () => undefined,
 });
 
@@ -50,6 +52,7 @@ const HISTORY_RECORDS_NUM = 10;
 let SERVICE_ESTIMATIONS_INTERVAL_IN_SECONDS;
 
 const RidePageContextProvider = ({ children }) => {
+  const { checkStopPointsInTerritory } = useContext(RideStateContextContext);
   const [requestStopPoints, setRequestStopPoints] = useState(INITIAL_STOP_POINTS);
   const [currentGeocode, setCurrentGeocode] = useState(null);
   const [searchTerm, setSearchTerm] = useState(null);
@@ -63,7 +66,7 @@ const RidePageContextProvider = ({ children }) => {
   const [ride, setRide] = useState({});
   const [chosenService, setChosenService] = useState(null);
   const [lastSelectedLocation, saveSelectedLocation] = useState(false);
-
+  const [rideRequestLoading, setRideRequestLoading] = useState(false);
   const intervalRef = useRef();
   const { getSettingByKey } = settings.useContainer();
 
@@ -98,7 +101,8 @@ const RidePageContextProvider = ({ children }) => {
   const validateRequestedStopPoints = async (reqSps) => {
     const stopPoints = reqSps;
     const isSpsReady = stopPoints.every(r => r.lat && r.lng && r.description);
-    if (stopPoints.length && isSpsReady) {
+    const areStopPointsInTerritory = await checkStopPointsInTerritory(stopPoints);
+    if (stopPoints.length && isSpsReady && areStopPointsInTerritory) {
       setIsReadyForSubmit(true);
     } else {
       setIsReadyForSubmit(false);
@@ -337,6 +341,7 @@ const RidePageContextProvider = ({ children }) => {
   }, [isReadyForSubmit]);
 
   const requestRide = async () => {
+    setRideRequestLoading(true);
     const formattedRide = {
       serviceTypeId: chosenService.id,
       paymentMethodId: ride.paymentMethodId,
@@ -351,6 +356,7 @@ const RidePageContextProvider = ({ children }) => {
     };
 
     await rideApi.createRide(formattedRide);
+    setRideRequestLoading(false);
   };
 
   const updateRide = (newRide) => {
@@ -402,6 +408,7 @@ const RidePageContextProvider = ({ children }) => {
         saveSelectedLocation,
         getCurrentLocationAddress,
         fillLoadSkeleton,
+        rideRequestLoading,
         stopRequestInterval,
       }}
     >

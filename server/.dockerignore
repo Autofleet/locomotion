@@ -1,5 +1,0 @@
-node_modules
-web-ui/node_modules
-web-ui/build
-.env
-dist

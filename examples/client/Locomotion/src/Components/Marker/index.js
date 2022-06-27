@@ -1,7 +1,4 @@
-import React, { useContext, useState } from 'react';
-import {
-  PulseIndicator,
-} from 'react-native-indicators';
+import React, { useContext, useEffect, useState } from 'react';
 import { Platform } from 'react-native';
 import Config from 'react-native-config';
 import { Marker } from 'react-native-maps';
@@ -16,13 +13,16 @@ import { RidePageContext } from '../../context/newRideContext';
 import i18n from '../../I18n';
 import SvgIcon from '../SvgIcon';
 import { STOP_POINT_TYPES } from '../../lib/commonTypes';
+import Loader from '../Loader';
+import pulse from '../../assets/marker-pulse.json';
 
 export default ({
   stopPoint,
 }) => {
-  const { chosenService, requestStopPoints } = useContext(RidePageContext);
+  const { chosenService } = useContext(RidePageContext);
   const { lat, lng } = stopPoint;
-  const [minutesUntilPickup] = useState(moment.duration(moment(stopPoint.eta || chosenService.eta).diff(moment())).minutes().toString());
+  const eta = stopPoint.eta || (chosenService && chosenService.eta);
+  const [minutesUntilPickup, setMinutesUntilPickup] = useState();
   const etaText = i18n.t('rideDetails.toolTipEta', { minutes: minutesUntilPickup });
   const typeDetails = {
     [STOP_POINT_TYPES.STOP_POINT_PICKUP]: {
@@ -35,7 +35,11 @@ export default ({
     },
   };
 
-  const checkIfSpIsNext = () => stopPoint.type === STOP_POINT_TYPES.STOP_POINT_PICKUP;
+  useEffect(() => {
+    const etaInMinutes = moment.duration(moment(eta).diff(moment())).minutes().toString();
+    setMinutesUntilPickup(etaInMinutes);
+  }, [chosenService]);
+  const checkIfSpIsNext = () => eta && stopPoint.type === STOP_POINT_TYPES.STOP_POINT_PICKUP;
   return (
     <Marker
       coordinate={{ latitude: parseFloat(lat), longitude: parseFloat(lng) }}
@@ -55,9 +59,9 @@ export default ({
           </Type>
           <SubContainer>
             {checkIfSpIsNext() && (
-              <PulseContainer>
-                <PulseIndicator color="#2dc36a" size={18} />
-              </PulseContainer>
+            <PulseContainer>
+              <Loader sourceProp={pulse} lottieViewStyle={{ width: 24, height: 24 }} />
+            </PulseContainer>
             )}
             <SubText numberOfLines={1}>
               {checkIfSpIsNext() ? etaText : stopPoint.streetAddress}

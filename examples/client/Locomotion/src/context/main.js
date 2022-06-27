@@ -1,5 +1,5 @@
 import React from 'react';
-import RideStateContextContextProvider from './ridePageStateContext';
+import { RideHistoryContextProvider } from './rideHistory';
 import I18n from '../I18n';
 import SettingsContext from './settings';
 import PaymentsContext from './payments';
@@ -37,19 +37,19 @@ export const MainProvider = ({ children, LoginPage, i18n }) => {
 
   return (
     <StateProvider initialState={initialState} reducer={reducer}>
-      <RideStateContextContextProvider>
-        <SettingsContext.Provider>
-          <PaymentsContext.Provider>
-            <ThemeProvider>
-              <UserContextProvider>
-                <OnboardingContextProvider>
+      <SettingsContext.Provider>
+        <PaymentsContext.Provider>
+          <ThemeProvider>
+            <UserContextProvider>
+              <OnboardingContextProvider>
+                <RideHistoryContextProvider>
                   {children}
-                </OnboardingContextProvider>
-              </UserContextProvider>
-            </ThemeProvider>
-          </PaymentsContext.Provider>
-        </SettingsContext.Provider>
-      </RideStateContextContextProvider>
+                </RideHistoryContextProvider>
+              </OnboardingContextProvider>
+            </UserContextProvider>
+          </ThemeProvider>
+        </PaymentsContext.Provider>
+      </SettingsContext.Provider>
     </StateProvider>
   );
 };
