@@ -108,4 +108,5 @@ padding: 0 5px;
 `;
 
 export const PulseContainer = styled.View`
+width: 16px;
 `;
