@@ -1,5 +1,5 @@
 import React from 'react';
-import RideStateContextContextProvider from './ridePageStateContext';
+import { RideHistoryContextProvider } from './rideHistory';
 import I18n from '../I18n';
 import SettingsContext from './settings';
 import PaymentsContext from './payments';
@@ -60,7 +60,9 @@ export const MainProvider = ({ children, LoginPage, i18n }) => {
           <ThemeProvider>
             <UserContextProvider>
               <OnboardingContextProvider>
-                {children}
+                <RideHistoryContextProvider>
+                  {children}
+                </RideHistoryContextProvider>
               </OnboardingContextProvider>
             </UserContextProvider>
           </ThemeProvider>

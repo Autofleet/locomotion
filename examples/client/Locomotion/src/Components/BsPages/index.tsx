@@ -94,6 +94,7 @@ const BsPage = ({
   SubTitleText,
   ButtonText,
   SecondaryButtonText,
+  isLoading,
 }: {
   onSecondaryButtonPress: any,
   onButtonPress: any,
@@ -103,6 +104,7 @@ const BsPage = ({
   SubTitleText: string,
   ButtonText: string,
   SecondaryButtonText: string,
+  isLoading: boolean;
 }) => (
   <Container>
     <MainContent>
@@ -117,7 +119,7 @@ const BsPage = ({
       ) : undefined}
     </MainContent>
     {children}
-    <OtherButton onPress={onButtonPress}>
+    <OtherButton onPress={onButtonPress} isLoading={isLoading}>
       <ButtonTitle>{ButtonText}</ButtonTitle>
     </OtherButton>
     {SecondaryButtonText && (
@@ -150,12 +152,14 @@ export const ConfirmPickup = (props: any) => {
     saveSelectedLocation,
     updateRequestSp,
     setSelectedInputIndex,
+    rideRequestLoading,
   }: {
     lastSelectedLocation: any,
     getCurrentLocationAddress: any,
     saveSelectedLocation: any,
     updateRequestSp: any,
     setSelectedInputIndex: any,
+    rideRequestLoading: boolean,
   } = useContext(RidePageContext);
 
   const { setSnapPointsState } = useContext(BottomSheetContext);
@@ -182,6 +186,7 @@ export const ConfirmPickup = (props: any) => {
       TitleText={i18n.t('bottomSheetContent.confirmPickup.titleText')}
       ButtonText={i18n.t('bottomSheetContent.confirmPickup.buttonText')}
       SubTitleText={i18n.t('bottomSheetContent.confirmPickup.subTitleText')}
+      isLoading={rideRequestLoading}
       {...props}
       onButtonPress={() => {
         updateRequestSp(lastSelectedLocation);

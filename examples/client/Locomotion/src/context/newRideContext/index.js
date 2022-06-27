@@ -42,6 +42,7 @@ export const RidePageContext = createContext({
   getCurrentLocationAddress: () => undefined,
   saveSelectedLocation: sp => undefined,
   requestRide: () => undefined,
+  rideRequestLoading: false,
   stopRequestInterval: () => undefined,
 });
 
@@ -63,6 +64,7 @@ const RidePageContextProvider = ({ children }) => {
   const [ride, setRide] = useState({});
   const [chosenService, setChosenService] = useState(null);
   const [lastSelectedLocation, saveSelectedLocation] = useState(false);
+  const [rideRequestLoading, setRideRequestLoading] = useState(false);
   const intervalRef = useRef();
 
   const stopRequestInterval = () => {
@@ -335,6 +337,7 @@ const RidePageContextProvider = ({ children }) => {
   }, [isReadyForSubmit]);
 
   const requestRide = async () => {
+    setRideRequestLoading(true);
     const formattedRide = {
       serviceId: chosenService.id,
       paymentMethodId: ride.paymentMethodId,
@@ -348,6 +351,7 @@ const RidePageContextProvider = ({ children }) => {
     };
 
     await rideApi.createRide(formattedRide);
+    setRideRequestLoading(false);
   };
 
   const updateRide = (newRide) => {
@@ -399,6 +403,7 @@ const RidePageContextProvider = ({ children }) => {
         saveSelectedLocation,
         getCurrentLocationAddress,
         fillLoadSkeleton,
+        rideRequestLoading,
         stopRequestInterval,
       }}
     >

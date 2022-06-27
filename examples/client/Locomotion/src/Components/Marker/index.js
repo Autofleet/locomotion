@@ -1,7 +1,4 @@
 import React, { useContext, useState } from 'react';
-import {
-  PulseIndicator,
-} from 'react-native-indicators';
 import { Platform } from 'react-native';
 import Config from 'react-native-config';
 import { Marker } from 'react-native-maps';
@@ -16,6 +13,8 @@ import { RidePageContext } from '../../context/newRideContext';
 import i18n from '../../I18n';
 import SvgIcon from '../SvgIcon';
 import { STOP_POINT_TYPES } from '../../lib/commonTypes';
+import Loader from '../Loader';
+import pulse from '../../assets/marker-pulse.json';
 
 export default ({
   stopPoint,
@@ -57,9 +56,9 @@ export default ({
           </Type>
           <SubContainer>
             {checkIfSpIsNext() && (
-              <PulseContainer>
-                <PulseIndicator color="#2dc36a" size={18} />
-              </PulseContainer>
+            <PulseContainer>
+              <Loader sourceProp={pulse} lottieViewStyle={{ width: 24, height: 24 }} />
+            </PulseContainer>
             )}
             <SubText numberOfLines={1}>
               {checkIfSpIsNext() ? etaText : stopPoint.streetAddress}

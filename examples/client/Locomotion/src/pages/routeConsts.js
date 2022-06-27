@@ -1,23 +1,25 @@
 import React from 'react';
 import StartScreen from './AuthScreens/StartScreen';
-import Phone from './AuthScreens/Onboarding/Phone';
-import Code from './AuthScreens/Onboarding/Code';
-import Name from './AuthScreens/Onboarding/Name';
-import Card from './AuthScreens/Onboarding/Card';
-import Avatar from './AuthScreens/Onboarding/Avatar';
-import Email from './AuthScreens/Onboarding/Email';
-import Welcome from './AuthScreens/Onboarding/Welcome';
+import Phone from './Profile/Phone';
+import Code from './Profile/Code';
+import Name from './Profile/Name';
+import Card from './Profile/Card';
+import Avatar from './Profile/Avatar';
+import Email from './Profile/Email';
+import Welcome from './Profile/Welcome';
 import Lock from './Lock';
 import WebViewPage from './WebViewPage';
 import ActiveRide from './ActiveRide';
 import ContactUs from './ContactUs';
 import Account from './Account';
 import Payments from './Payments';
+import CompletedRideOverviewPage from './RideHistory/CompletedRideOverviewPage';
 import RideHistory from './RideHistory';
 import { MAIN_ROUTES } from './routes';
 
 export const ROUTES_COMPS = {
   [MAIN_ROUTES.HOME]: ActiveRide,
+  [MAIN_ROUTES.COMPLETED_RIDE_OVERVIEW_PAGE]: CompletedRideOverviewPage,
   [MAIN_ROUTES.RIDE_HISTORY]: RideHistory,
   [MAIN_ROUTES.PAYMENT]: Payments,
   [MAIN_ROUTES.ACCOUNT]: Account,

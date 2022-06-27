@@ -10,7 +10,7 @@ import {
 import Header from '../../Components/Header';
 import MainMap from './newMap';
 import AvailabilityContextProvider from '../../context/availability';
-import BottomSheet from './RideDrawer/BottomSheet';
+import BottomSheet from '../../Components/BottomSheet';
 import RideOptions from './RideDrawer/RideOptions';
 import AddressSelector from './RideDrawer/AddressSelector';
 import StopPointsViewer from '../../Components/StopPointsViewer';
