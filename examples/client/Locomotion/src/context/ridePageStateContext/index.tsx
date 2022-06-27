@@ -32,7 +32,7 @@ const RideStateContextContextProvider = ({ children }: { children: any }) => {
   const [territory, setTerritory] = useState<Array<any> | null>(null);
   const [showOutOfTerritory, setShowOutOfTerritory] = useState<boolean | undefined>(false);
   const [isUserLocationFocused, setIsUserLocationFocused] = useState(true);
-  const [currentBsPage, setCurrentBsPage] = useState<BsPages>(BS_PAGES.ADDRESS_SELECTOR);
+  const [currentBsPage, setCurrentBsPage] = useState<BsPages>(BS_PAGES.NO_PAYMENT);
 
   const loadTerritory = async (checkTerritory = false) => {
     let t = territory;

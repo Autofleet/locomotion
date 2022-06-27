@@ -26,7 +26,6 @@ const Loader = ({ inSlider = false, dark, lottieViewStyle }) => {
       <LottieView
         style={lottieViewStyle || undefined}
         ref={(animation) => {
-          this.animation = animation;
           if (animation) {
             animation.play();
           }
