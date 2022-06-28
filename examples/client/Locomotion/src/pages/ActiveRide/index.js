@@ -25,7 +25,7 @@ const RidePage = ({ mapSettings }) => {
   const mapRef = useRef();
   const bottomSheetRef = useRef(null);
   const {
-    initGeoService, currentBsPage, setCurrentBsPage,
+    currentBsPage, setCurrentBsPage,
   } = useContext(RideStateContextContext);
   const {
     serviceEstimations,
@@ -96,10 +96,6 @@ const RidePage = ({ mapSettings }) => {
     ),
     [BS_PAGES.NO_PAYMENT]: () => <NoPayment />,
   };
-
-  useEffect(() => {
-    initGeoService();
-  }, []);
 
   useEffect(() => {
     if (isLoading) {
