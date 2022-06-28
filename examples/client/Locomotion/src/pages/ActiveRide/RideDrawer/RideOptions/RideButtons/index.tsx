@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import FutureBookingButton from './FutureBookingButton';
 import {
-  Container, RowContainer, ButtonContainer, TouchableOpacityContainer, ButtonText, StyledButton,
+  Container, RowContainer, ButtonContainer, ButtonText, StyledButton, HALF_WIDTH,
 } from './styled';
 import { RidePageContext } from '../../../../../context/newRideContext';
 import NoteButton from './NoteButton';
@@ -12,8 +12,6 @@ import creditCardIcon from '../../../../../assets/bottomSheet/credit_card_icon.s
 import PaymentButton from './PaymentButton';
 import PaymentsContext from '../../../../../context/payments';
 import { PaymentMethodInterface } from '../../../../../context/payments/interface';
-import * as NavigationService from '../../../../../services/navigation';
-import { MAIN_ROUTES } from '../../../../routes';
 import { RideStateContextContext } from '../../../../../context/ridePageStateContext';
 import { popupNames } from '../utils';
 
@@ -43,7 +41,7 @@ const RideButtons = ({
     } = PaymentsContext.useContainer();
 
   const renderFutureBooking = () => (
-    <ButtonContainer>
+    <ButtonContainer disabled>
       <FutureBookingButton />
     </ButtonContainer>
   );
@@ -51,18 +49,16 @@ const RideButtons = ({
   const renderRideNotes = () => {
     const rideHasNotes = ride?.notes;
     return (
-      <ButtonContainer>
-        <TouchableOpacityContainer onPress={() => {
-          setPopupName('notes');
-        }}
-        >
-          <NoteButton
-            icon={rideHasNotes ? editNote : plus}
-            title={i18n.t(rideHasNotes
-              ? 'bottomSheetContent.ride.notes.edit'
-              : 'bottomSheetContent.ride.notes.add')}
-          />
-        </TouchableOpacityContainer>
+      <ButtonContainer onPress={() => {
+        setPopupName('notes');
+      }}
+      >
+        <NoteButton
+          icon={rideHasNotes ? editNote : plus}
+          title={i18n.t(rideHasNotes
+            ? 'bottomSheetContent.ride.notes.edit'
+            : 'bottomSheetContent.ride.notes.add')}
+        />
       </ButtonContainer>
     );
   };
@@ -71,17 +67,17 @@ const RideButtons = ({
     const ridePaymentMethod = ride?.paymentMethodId;
     const selectedPaymentMethod: PaymentMethodInterface | undefined = paymentMethods.find(pm => pm.id === ridePaymentMethod);
     return (
-      <ButtonContainer>
-        <TouchableOpacityContainer onPress={() => {
+      <ButtonContainer
+        onPress={() => {
           setPopupName('payment');
         }}
-        >
-          <PaymentButton
-            brand={selectedPaymentMethod?.brand}
-            icon={creditCardIcon}
-            title={selectedPaymentMethod?.name || i18n.t('bottomSheetContent.ride.addPayment')}
-          />
-        </TouchableOpacityContainer>
+        style={{ width: displayPassenger ? HALF_WIDTH : '100%' }}
+      >
+        <PaymentButton
+          brand={selectedPaymentMethod?.brand}
+          icon={creditCardIcon}
+          title={selectedPaymentMethod?.name || i18n.t('bottomSheetContent.ride.addPayment')}
+        />
       </ButtonContainer>
     );
   };

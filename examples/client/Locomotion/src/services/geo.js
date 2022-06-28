@@ -64,7 +64,7 @@ class Geo {
   });
 
   checkPermission = () => RNLocation.checkPermission({
-    ios: 'always',
+    ios: 'whenInUse',
     android: {
       detail: 'fine',
     },
@@ -111,16 +111,21 @@ export default GeoService;
 
 export const { decodeGmPath } = Geo;
 
+const DEFAULT_COORDS = {
+  coords: {
+    latitude: parseFloat(Config.DEFAULT_LATITUDE),
+    longitude: parseFloat(Config.DEFAULT_LONGITUDE),
+  },
+};
 export const getPosition = async () => {
   try {
-    return GeoService.currentLocation();
+    const granted = await GeoService.checkPermission();
+    if (granted) {
+      return GeoService.currentLocation();
+    }
+    return DEFAULT_COORDS;
   } catch (e) {
     console.log('Error getting location', e);
-    return {
-      coords: {
-        latitude: parseFloat(Config.DEFAULT_LATITUDE),
-        longitude: parseFloat(Config.DEFAULT_LONGITUDE),
-      },
-    };
+    return DEFAULT_COORDS;
   }
 };
