@@ -37,12 +37,12 @@ const PhoneNumberInput = ({
 
   return defaultCode ? (
     <PhoneInput
-      testID="phoneNumber"
       value={value}
       autoFocus={autoFocus}
       defaultCode={defaultCode}
       onChangeFormattedText={onChangeText}
       textInputProps={{
+        testID: "phoneNumber",
         onFocus: () => setIsFocused(true),
         onBlur: () => setIsFocused(false),
       }}
