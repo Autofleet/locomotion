@@ -17,22 +17,14 @@ const BottomSheetProvider = ({ children }) => {
   const [isExpanded, setIsExpanded] = useState(false);
 
   const [snapPointsState, setSnapPointsState] = useState(SNAP_POINT_STATES[BS_PAGES.ADDRESS_SELECTOR]);
-  const [snapPointIndex, setSnapPointIndex] = useState(0);
   const [footerComponent, setFooterComponent] = useState(null);
   const snapPoints = useMemo(() => snapPointsState, [snapPointsState]);
-
-  useEffect(() => {
-    const newIsExpanded = snapPointIndex === (snapPointsState.length - 1);
-    setIsExpanded(newIsExpanded);
-  }, [snapPointIndex]);
 
   return (
     <BottomSheetContext.Provider
       value={{
         snapPoints,
         isExpanded,
-        snapPointIndex,
-        setSnapPointIndex,
         setIsExpanded,
         setSnapPointsState,
         setFooterComponent,

@@ -36,7 +36,7 @@ const RidePage = ({ mapSettings }) => {
     requestRide,
     setChosenService,
   } = useContext(RidePageContext);
-  const { setSnapPointsState, setSnapPointIndex } = useContext(BottomSheetContext);
+  const { setSnapPointsState, snapPoints } = useContext(BottomSheetContext);
   const {
     clientHasValidPaymentMethods,
   } = payments.useContainer();
@@ -48,6 +48,14 @@ const RidePage = ({ mapSettings }) => {
     setCurrentBsPage(BS_PAGES.ADDRESS_SELECTOR);
   };
 
+  useEffect(() => {
+    console.log(currentBsPage, snapPoints)
+if (currentBsPage === BS_PAGES.ADDRESS_SELECTOR) {
+bottomSheetRef.current.expand();
+}
+
+  }, [currentBsPage])
+
   const goBackToAddress = () => {
     resetStateToAddressSelector();
     bottomSheetRef.current.expand();
@@ -56,7 +64,6 @@ const RidePage = ({ mapSettings }) => {
   const backToMap = () => {
     resetStateToAddressSelector();
     initSps();
-    setSnapPointIndex(0);
   };
 
   const addressSelectorPage = () => {

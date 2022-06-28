@@ -41,7 +41,6 @@ const AddressSelectorBottomSheet = () => {
   const {
     isExpanded,
     setSnapPointsState,
-    setSnapPointIndex,
   } = useContext(BottomSheetContext);
 
   const { expand, collapse } = useBottomSheet();
@@ -72,7 +71,6 @@ const AddressSelectorBottomSheet = () => {
 
   const onSetLocationOnMap = async () => {
     setCurrentBsPage(BS_PAGES.SET_LOCATION_ON_MAP);
-    setSnapPointIndex(0);
     collapse();
   };
   return (
