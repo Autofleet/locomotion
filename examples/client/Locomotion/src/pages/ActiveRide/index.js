@@ -1,6 +1,8 @@
 import React, { useContext, useEffect, useRef } from 'react';
 import { useNavigation } from '@react-navigation/native';
-import { ConfirmPickup, NoPayment, NotAvailableHere } from '../../Components/BsPages';
+import {
+  ConfirmPickup, NoPayment, NotAvailableHere, ConfirmingRide, NoAvailableVehicles, ActiveRide,
+} from '../../Components/BsPages';
 import { RideStateContextContext, RideStateContextContextProvider } from '../../context';
 import NewRidePageContextProvider, { RidePageContext } from '../../context/newRideContext';
 import BottomSheetContextProvider, { BottomSheetContext, SNAP_POINT_STATES } from '../../context/bottomSheetContext';
@@ -95,6 +97,9 @@ const RidePage = ({ mapSettings }) => {
       />
     ),
     [BS_PAGES.NO_PAYMENT]: () => <NoPayment />,
+    [BS_PAGES.CONFIRMING_RIDE]: () => <ConfirmingRide />,
+    [BS_PAGES.NO_AVAILABLE_VEHICLES]: () => <NoAvailableVehicles />,
+    [BS_PAGES.ACTIVE_RIDE]: () => <ActiveRide />,
   };
 
   useEffect(() => {
