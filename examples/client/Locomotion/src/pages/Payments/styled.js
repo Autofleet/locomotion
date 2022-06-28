@@ -1,10 +1,8 @@
 import React from 'react';
 import { View } from 'react-native';
 import styled from 'styled-components';
-import LottieView from 'lottie-react-native';
 
 import creditCardImage from '../../assets/menuItems/creditcard.png';
-import darkLoader from '../../assets/loaders/dark-loader.json';
 
 export const CreditFormText = styled.Text`
   color: #1e273d;
@@ -99,36 +97,6 @@ export const DeleteCreditCardText = styled.Text`
     color: ${'#f03a5f'};
     text-align: right;
 `;
-
-const FullPageLoaderWrapper = styled.View`
-  width: 100%;
-  height: 100%;
-  background-color: ${({ theme }) => theme.pageBackgroundColor};
-  position: absolute;
-  z-index: 99999;
-`;
-
-const LoaderContainer = styled.View`
-    align-self: center;
-    position: absolute;
-    top: 50%;
-    margin-top: -8px;
-`;
-
-export const FullPageLoader = props => (
-  <FullPageLoaderWrapper>
-    <LoaderContainer>
-      <LottieView
-        style={{
-          width: 15,
-          height: 15,
-        }}
-        source={darkLoader}
-        {...props}
-      />
-    </LoaderContainer>
-  </FullPageLoaderWrapper>
-);
 
 export const CardsListContainer = styled.View`
    flex: 1;

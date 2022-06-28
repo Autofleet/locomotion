@@ -13,11 +13,11 @@
     </defs>
     <g data-name="Group 5015" transform="translate(-43.397 -190.396)">
         <g style="filter:url(#08f8p1ssua)">
-            <rect data-name="Rectangle 2970" width="30" height="30" rx="15" transform="translate(52.4 196.4)" style="fill:#24aaf2"/>
+            <rect data-name="Rectangle 2970" width="30" height="30" rx="15" transform="translate(52.4 196.4)" />
         </g>
         <rect data-name="Rectangle 2971" width="24" height="24" rx="12" transform="translate(55.397 199.396)" style="fill:#fff"/>
         <g data-name="Group 5043" style="clip-path:url(#1hz21aqrgb)" transform="translate(59.057 204.98)">
-            <path data-name="Path 1502" d="M16.679 3.161a.53.53 0 0 0-.54-.483h-1.414L13.864.794A1.376 1.376 0 0 0 12.61 0H4.071a1.374 1.374 0 0 0-1.254.794l-.861 1.883H.542A.53.53 0 0 0 0 3.161a.953.953 0 0 0 .965.985h.319l-.184.412A5.373 5.373 0 0 0 .608 6.8V11a.556.556 0 0 0 .564.549h2.2A.556.556 0 0 0 3.939 11V9.241h8.8V11a.556.556 0 0 0 .564.549h2.2a.556.556 0 0 0 .569-.549V6.8a5.373 5.373 0 0 0-.488-2.237l-.184-.417h.319a.953.953 0 0 0 .965-.985" style="fill:#24aaf2"/>
+            <path data-name="Path 1502" d="M16.679 3.161a.53.53 0 0 0-.54-.483h-1.414L13.864.794A1.376 1.376 0 0 0 12.61 0H4.071a1.374 1.374 0 0 0-1.254.794l-.861 1.883H.542A.53.53 0 0 0 0 3.161a.953.953 0 0 0 .965.985h.319l-.184.412A5.373 5.373 0 0 0 .608 6.8V11a.556.556 0 0 0 .564.549h2.2A.556.556 0 0 0 3.939 11V9.241h8.8V11a.556.556 0 0 0 .564.549h2.2a.556.556 0 0 0 .569-.549V6.8a5.373 5.373 0 0 0-.488-2.237l-.184-.417h.319a.953.953 0 0 0 .965-.985" style=""/>
             <path data-name="Path 1503" d="M13.97 1.525a.4.4 0 0 0-.369-.237H5.194a.4.4 0 0 0-.369.237L3.406 4.761a.181.181 0 0 0 .171.252h11.64a.182.182 0 0 0 .171-.252L13.97 1.525" transform="translate(-1.058 -.425)" style="fill:#fff"/>
             <path data-name="Path 1504" d="M5.31 9.486a.96.96 0 1 1-.959-.934.947.947 0 0 1 .959.934" transform="translate(-1.058 -2.819)" style="fill:#fff"/>
             <path data-name="Path 1505" d="M19.979 9.486a.96.96 0 1 1-.959-.934.947.947 0 0 1 .959.934" transform="translate(-5.632 -2.819)" style="fill:#fff"/>

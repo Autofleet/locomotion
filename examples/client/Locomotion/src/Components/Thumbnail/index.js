@@ -8,7 +8,7 @@ import Button from '../Button';
 import avatarIcon from './default.png';
 import editIcon from './edit_btn.png';
 import addIcon from './add_btn.png';
-import lightLoader from '../../assets/loader.json';
+import lightLoader from '../../assets/loaders/light-loader.json';
 
 const modes = {
   edit: editIcon,

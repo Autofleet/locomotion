@@ -8,9 +8,8 @@ const Container = styled.TouchableOpacity`
 `;
 
 const LoaderContainer = styled.View`
-height: 70%;
-width: 100%;
-margin: auto 0;
+  flex: 1;
+  justify-content: center;
 `;
 
 const Button = props => (
@@ -25,9 +24,10 @@ const Button = props => (
   >
     {props.isLoading ? (
       <LoaderContainer>
-        <Loader lottieViewStyle={{
-          height: '100%', width: '100%', alignItems: 'center', justifyContent: 'center',
-        }}
+        <Loader
+          lottieViewStyle={{
+            height: 15, width: 15,
+          }}
         />
       </LoaderContainer>
     ) : props.children}
