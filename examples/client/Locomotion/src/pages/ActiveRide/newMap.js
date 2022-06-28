@@ -98,8 +98,8 @@ export default React.forwardRef(({
   }, [mapRegion]);
 
   useEffect(() => {
-    if (currentBsPage  === BS_PAGES.CONFIRM_PICKUP) {
-      const pickupStopPoint = requestStopPoints.find((sp) => sp.type === STOP_POINT_TYPES.STOP_POINT_PICKUP)
+    if (currentBsPage === BS_PAGES.CONFIRM_PICKUP) {
+      const pickupStopPoint = requestStopPoints.find(sp => sp.type === STOP_POINT_TYPES.STOP_POINT_PICKUP);
       mapInstance.current.animateToRegion({
         latitude: pickupStopPoint.lat,
         longitude: pickupStopPoint.lng,
@@ -107,7 +107,7 @@ export default React.forwardRef(({
         longitudeDelta: 0.001,
       }, 1000);
     }
-  },  [currentBsPage])
+  }, [currentBsPage]);
   React.useImperativeHandle(ref, () => ({
     focusCurrentLocation,
   }));
