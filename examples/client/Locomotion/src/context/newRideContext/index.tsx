@@ -92,7 +92,7 @@ export const RidePageContext = createContext<RidePageContextInterface>({
   setServiceEstimations: () => undefined,
   initSps: () => undefined,
   fillLoadSkeleton: () => undefined,
-  requestRide: () => undefined
+  requestRide: () => undefined,
 });
 
 const HISTORY_RECORDS_NUM = 10;
