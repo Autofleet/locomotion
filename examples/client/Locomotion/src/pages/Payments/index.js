@@ -24,13 +24,8 @@ export default ({ navigation, menuSide }) => {
   const [loading, setLoading] = useState(false);
   const [methodForDelete, setMethodForDelete] = useState(null);
   const [, togglePopup] = getTogglePopupsState();
-  const [showList, setShowList] = useState(
-    paymentMethods && paymentMethods.length > 0,
-  );
-
-  const toggleMenu = () => {
-    navigation.toggleDrawer();
-  };
+  const hasPaymentMethods = paymentMethods && paymentMethods.length > 0;
+  const [showList, setShowList] = useState(hasPaymentMethods);
 
   const loadCustomerData = async () => {
     await usePayments.getOrFetchCustomer();
@@ -47,6 +42,9 @@ export default ({ navigation, menuSide }) => {
     await usePayments.loadCustomer();
     setLoading(false);
     togglePopup('removeCard', false);
+    if (paymentMethods.length <= 1) {
+      setShowList(false);
+    }
   };
 
   const onRemoveMethod = async (methodId) => {
@@ -55,7 +53,7 @@ export default ({ navigation, menuSide }) => {
   };
 
   const onPressBack = () => {
-    if (!showList) {
+    if (!showList && hasPaymentMethods) {
       return setShowList(true);
     }
     if (route.params && route.params.back) {
@@ -85,7 +83,10 @@ export default ({ navigation, menuSide }) => {
           <CardContainer>
             <NewCreditForm
               PageText={() => <CreditFormText>{i18n.t('payments.newCardDetails')}</CreditFormText>}
-              onDone={async () => setShowList(true)}
+              onDone={() => (
+                route.params && route.params.rideFlow
+                  ? navigation.navigate(MAIN_ROUTES.HOME)
+                  : setShowList(true))}
             />
           </CardContainer>
         )}

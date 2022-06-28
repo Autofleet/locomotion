@@ -34,7 +34,7 @@ export const RidePageContext = createContext({
   ride: {
     notes: '',
     paymentMethodId: null,
-    serviceTypeId: null,
+    serviceId: null,
   },
   updateRide: ride => undefined,
   chosenService: null,

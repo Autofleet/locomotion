@@ -224,7 +224,9 @@ export const NoPayment = (props: any) => {
   } = payments.useContainer();
 
   const proceedIfPaymentMethodsAreValid = () => {
+    console.log('1 here');
     if (clientHasValidPaymentMethods()) {
+      console.log('2 here');
       requestRide();
     }
   };
@@ -234,6 +236,7 @@ export const NoPayment = (props: any) => {
   }, []);
 
   useEffect(() => {
+    console.log(paymentMethods);
     proceedIfPaymentMethodsAreValid();
   }, [paymentMethods]);
 
@@ -249,7 +252,7 @@ export const NoPayment = (props: any) => {
         setCurrentBsPage(BS_PAGES.ADDRESS_SELECTOR);
       }}
       onButtonPress={() => {
-        navigationService.navigate(MAIN_ROUTES.PAYMENT);
+        navigationService.navigate(MAIN_ROUTES.PAYMENT, { rideFlow: true });
       }}
       {...props}
     />
