@@ -10,7 +10,7 @@ import { BsPages, BS_PAGES } from './utils';
 interface RidePageStateContextProps {
   territory: any;
   loadTerritory: () => void;
-  initGeoService: () => void;
+  initGeoService: () => Promise<void>;
   isUserLocationFocused: boolean;
   setIsUserLocationFocused: (isLocationFocused: boolean) => void;
   currentBsPage: BsPages;
@@ -21,7 +21,7 @@ interface RidePageStateContextProps {
 export const RideStateContextContext = createContext<RidePageStateContextProps>({
   territory: {},
   loadTerritory: () => undefined,
-  initGeoService: () => undefined,
+  initGeoService: async () => undefined,
   isUserLocationFocused: false,
   setIsUserLocationFocused: (isLocationFocused: boolean) => undefined,
   currentBsPage: BS_PAGES.ADDRESS_SELECTOR,

@@ -21,6 +21,7 @@ export const NewCreditForm = ({ onDone, canSkip = false, PageText }) => {
   const [errorMessage, setErrorMessage] = useState('');
 
   const handlePayPress = async () => {
+    setLoading(true);
     const customerData = await usePayments.getOrFetchCustomer();
     const { clientSecret } = await usePayments.setup();
     const billingDetails = {
@@ -37,8 +38,12 @@ export const NewCreditForm = ({ onDone, canSkip = false, PageText }) => {
       console.error(error);
       setErrorMessage(error.message);
     } else {
-      await onDone();
-      await usePayments.loadCustomer();
+      await new Promise(resolve => setTimeout(async () => {
+        await usePayments.loadCustomer();
+        setLoading(false);
+        await onDone();
+        resolve();
+      }, 500));
     }
   };
 
@@ -84,8 +89,7 @@ export const NewCreditForm = ({ onDone, canSkip = false, PageText }) => {
           )}
           <SubmitButton
             onPress={() => handlePayPress()}
-            disabled={!formReady}
-            setLoading={setLoading}
+            disabled={!formReady || loading}
           >
             {i18n.t('payments.submitCard')}
           </SubmitButton>
