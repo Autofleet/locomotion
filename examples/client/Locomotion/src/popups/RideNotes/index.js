@@ -18,7 +18,11 @@ export default ({ isVisible, onSubmit, onCancel }) => {
   const {
     ride,
   } = useContext(RidePageContext);
-  const [currentText, updateText] = useState(ride.notes || '');
+  const [currentText, updateText] = useState('');
+
+  useEffect(() => {
+    updateText(ride.notes || '');
+  }, [isVisible]);
 
   return (
     <Modal isVisible={isVisible}>

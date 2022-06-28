@@ -36,6 +36,7 @@ export default React.forwardRef(({
     setIsUserLocationFocused,
     territory,
     currentBsPage,
+    initGeoService,
   } = useContext(RideStateContextContext);
 
   const isMainPage = currentBsPage === BS_PAGES.ADDRESS_SELECTOR;
@@ -79,8 +80,13 @@ export default React.forwardRef(({
     }
   };
 
+  const initLocation = async () => {
+    await initGeoService();
+    await initialLocation();
+  };
+
   useEffect(() => {
-    initialLocation();
+    initLocation();
   }, []);
 
 

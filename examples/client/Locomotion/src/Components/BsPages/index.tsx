@@ -248,7 +248,7 @@ export const NoPayment = (props: any) => {
         changeBsPage(BS_PAGES.ADDRESS_SELECTOR);
       }}
       onButtonPress={() => {
-        navigationService.navigate(MAIN_ROUTES.PAYMENT);
+        navigationService.navigate(MAIN_ROUTES.PAYMENT, { rideFlow: true });
       }}
       {...props}
     />

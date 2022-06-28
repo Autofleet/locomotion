@@ -47,7 +47,7 @@ const Name = ({ navigation }) => {
 
   return (
     <SafeView>
-      <ScrollView>
+      <ScrollView keyboardShouldPersistTaps="handled">
         <Header title={i18n.t('onboarding.pages.name.title')} page={MAIN_ROUTES.NAME} />
         <PageContainer>
           <ScreenText

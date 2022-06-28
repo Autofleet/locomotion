@@ -9,6 +9,7 @@ import {
 } from '@gorhom/bottom-sheet';
 
 import styled from 'styled-components';
+import GenericErrorPopup from '../../../../popups/GenericError';
 import i18n from '../../../../I18n';
 import AddressRow from './AddressLine';
 import SearchBar from './SearchBar';
@@ -51,10 +52,6 @@ const AddressSelectorBottomSheet = () => {
     userContext.loadHistory();
   };
 
-  useEffect(() => {
-    loadHistory();
-  }, []);
-
   const onSearchFocus = () => {
     if (!isExpanded) {
       setSnapPointsState(SNAP_POINT_STATES.ADDRESS_SELECTOR);
@@ -62,6 +59,15 @@ const AddressSelectorBottomSheet = () => {
       expand();
     }
   };
+
+  useEffect(() => {
+    loadHistory();
+    if (userContext.serviceRequestFailed) {
+      setIsExpanded(true);
+      setSnapPointsState(SNAP_POINT_STATES.ADDRESS_SELECTOR);
+      expand();
+    }
+  }, []);
 
   const onBack = () => {
     collapse();
@@ -83,7 +89,7 @@ const AddressSelectorBottomSheet = () => {
         onBack={onBack}
         onSearch={userContext.searchAddress}
       />
-      <HistoryContainer>
+      <HistoryContainer keyboardShouldPersistTaps="handled">
         {isExpanded
           ? (
             <>
@@ -101,15 +107,18 @@ const AddressSelectorBottomSheet = () => {
                 actionButton
                 onPress={onSetLocationOnMap}
               />
-              <BottomSheetScrollView contentContainerStyle={{ overflow: 'visible' }}>
+              <BottomSheetScrollView keyboardShouldPersistTaps="handled" contentContainerStyle={{ overflow: 'visible' }}>
                 {(userContext.searchResults || userContext.historyResults).map(h => <AddressRow {...h} onPress={() => userContext.onAddressSelected(h)} />)}
               </BottomSheetScrollView>
             </>
           )
           : null}
       </HistoryContainer>
+      <GenericErrorPopup
+        isVisible={userContext.serviceRequestFailed}
+        closePopup={() => userContext.setServiceRequestFailed(false)}
+      />
     </ContentContainer>
-
   );
 };
 
