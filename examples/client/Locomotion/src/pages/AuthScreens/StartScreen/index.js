@@ -81,6 +81,7 @@ const StartScreen = () => {
             </InfoContainer>
             <ButtonsContainer>
               <StartButton
+                testID="loginButton"
                 dark
                 onPress={() => nextScreen()}
               >
