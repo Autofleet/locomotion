@@ -225,7 +225,7 @@ export const NoPayment = (props: any) => {
 
   const proceedIfPaymentMethodsAreValid = () => {
     if (clientHasValidPaymentMethods()) {
-      setCurrentBsPage(BS_PAGES.CONFIRM_PICKUP);
+      requestRide();
     }
   };
 
