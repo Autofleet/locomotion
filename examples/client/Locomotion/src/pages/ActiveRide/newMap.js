@@ -15,6 +15,7 @@ import AvailabilityVehicle from '../../Components/AvailabilityVehicle';
 import StationsMap from '../../Components/Marker';
 import { latLngToAddress } from '../../context/newRideContext/utils';
 import { BS_PAGES } from '../../context/ridePageStateContext/utils';
+import { STOP_POINT_TYPES } from '../../lib/commonTypes';
 
 const MAP_EDGE_PADDING = {
   top: 120,
@@ -96,7 +97,19 @@ export default React.forwardRef(({
     }
   }, [mapRegion]);
 
-
+  useEffect(() => {
+    if (currentBsPage  === BS_PAGES.CONFIRM_PICKUP) {
+      const pickupStopPoint = requestStopPoints.find((sp) => sp.type === STOP_POINT_TYPES.STOP_POINT_PICKUP)
+      mapInstance.current.fitToCoordinates([{
+        latitude: parseFloat(pickupStopPoint.lat + .001),
+        longitude: parseFloat(pickupStopPoint.lng + .001),
+      },
+      {
+        latitude: parseFloat(pickupStopPoint.lat - .001),
+        longitude: parseFloat(pickupStopPoint.lng - .001),
+      }]);
+    }
+  },  [currentBsPage])
   React.useImperativeHandle(ref, () => ({
     focusCurrentLocation,
   }));
@@ -165,7 +178,7 @@ export default React.forwardRef(({
         customMapStyle={isDarkMode ? mapDarkMode : undefined}
         {...mapSettings}
       >
-        {requestStopPoints.filter(sp => !!sp.lat).length > 1
+        {currentBsPage !== BS_PAGES.CONFIRM_PICKUP && requestStopPoints.filter(sp => !!sp.lat).length > 1
           ? requestStopPoints
             .filter(sp => !!sp.lat)
             .map(sp => (<StationsMap stopPoint={sp} />))
