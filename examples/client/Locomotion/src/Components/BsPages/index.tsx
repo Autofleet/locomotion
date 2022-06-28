@@ -224,10 +224,8 @@ export const NoPayment = (props: any) => {
   } = payments.useContainer();
 
   const proceedIfPaymentMethodsAreValid = () => {
-    console.log('1 here');
     if (clientHasValidPaymentMethods()) {
-      console.log('2 here');
-      requestRide();
+      setCurrentBsPage(BS_PAGES.CONFIRM_PICKUP);
     }
   };
 
@@ -236,7 +234,6 @@ export const NoPayment = (props: any) => {
   }, []);
 
   useEffect(() => {
-    console.log(paymentMethods);
     proceedIfPaymentMethodsAreValid();
   }, [paymentMethods]);
 
