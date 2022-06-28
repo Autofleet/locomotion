@@ -1,5 +1,5 @@
 import React, {
-  useState, useEffect, useRef, createContext, useCallback, useMemo,
+  useState, useEffect, createContext, useMemo,
 } from 'react';
 import { BS_PAGES } from '../ridePageStateContext/utils';
 
@@ -12,6 +12,9 @@ export const SNAP_POINT_STATES = {
   [BS_PAGES.SET_LOCATION_ON_MAP]: ['30%', '30%'],
   [BS_PAGES.NO_PAYMENT]: ['30%', '30%'],
   [BS_PAGES.NOT_IN_TERRITORY]: ['30%', '30%'],
+  [BS_PAGES.CONFIRMING_RIDE]: ['30%', '30%'],
+  [BS_PAGES.NO_AVAILABLE_VEHICLES]: ['30%', '30%'],
+  [BS_PAGES.ACTIVE_RIDE]: ['30%', '30%'],
 };
 const BottomSheetProvider = ({ children }) => {
   const [isExpanded, setIsExpanded] = useState(false);
