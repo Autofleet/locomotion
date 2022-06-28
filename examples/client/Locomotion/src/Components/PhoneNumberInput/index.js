@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import PhoneInput from 'react-native-phone-number-input';
+import PhoneInput from 'gery-react-native-phone-number-input';
 import Config from 'react-native-config';
 import { AsYouType } from 'libphonenumber-js';
 import { getInputIsoCode } from '../../services/MccMnc';
@@ -37,12 +37,12 @@ const PhoneNumberInput = ({
 
   return defaultCode ? (
     <PhoneInput
+      testID="phoneNumber"
       value={value}
       autoFocus={autoFocus}
       defaultCode={defaultCode}
       onChangeFormattedText={onChangeText}
       textInputProps={{
-        testID: "phoneNumber",
         onFocus: () => setIsFocused(true),
         onBlur: () => setIsFocused(false),
       }}

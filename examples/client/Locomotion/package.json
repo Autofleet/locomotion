@@ -35,6 +35,7 @@
     "bluebird": "^3.7.2",
     "cheap-ruler": "^3.0.2",
     "currency-symbol-map": "^5.1.0",
+    "gery-react-native-phone-number-input": "^2.1.1",
     "i18next": "^19.7.0",
     "jwt-decode": "^3.1.2",
     "libphonenumber-js": "^1.10.6",
