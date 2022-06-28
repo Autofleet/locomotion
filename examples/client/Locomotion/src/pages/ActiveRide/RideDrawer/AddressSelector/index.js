@@ -58,7 +58,7 @@ const AddressSelectorBottomSheet = () => {
   const onSearchFocus = () => {
     if (!isExpanded) {
       setSnapPointsState(SNAP_POINT_STATES.ADDRESS_SELECTOR);
-      setIsExpanded(true)
+      setIsExpanded(true);
       expand();
     }
   };

@@ -36,12 +36,12 @@ const RideStateContextContextProvider = ({ children }: { children: any }) => {
   const { setSnapPointsState, setIsExpanded } = useContext(BottomSheetContext);
 
   const changeBsPage = (pageName: BsPages) => {
-    setIsExpanded(false)
-    setSnapPointsState(SNAP_POINT_STATES[pageName])
-    setCurrentBsPage(pageName)
-  }
+    setIsExpanded(false);
+    setSnapPointsState(SNAP_POINT_STATES[pageName]);
+    setCurrentBsPage(pageName);
+  };
   const setNotInTerritory = () => {
-    changeBsPage(BS_PAGES.NOT_IN_TERRITORY)
+    changeBsPage(BS_PAGES.NOT_IN_TERRITORY);
   };
   const loadTerritory = async (checkTerritory = false) => {
     let t = territory;

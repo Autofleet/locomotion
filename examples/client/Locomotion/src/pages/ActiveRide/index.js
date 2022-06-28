@@ -44,12 +44,12 @@ const RidePage = ({ mapSettings }) => {
   const resetStateToAddressSelector = () => {
     setServiceEstimations(null);
     setChosenService(null);
-    changeBsPage(BS_PAGES.ADDRESS_SELECTOR)
+    changeBsPage(BS_PAGES.ADDRESS_SELECTOR);
   };
 
   const goBackToAddress = () => {
     resetStateToAddressSelector();
-    setIsExpanded(true)
+    setIsExpanded(true);
     bottomSheetRef.current.expand();
   };
 
@@ -82,14 +82,14 @@ const RidePage = ({ mapSettings }) => {
           if (clientHasValidPaymentMethods()) {
             requestRide();
           } else {
-            changeBsPage(BS_PAGES.NO_PAYMENT)
+            changeBsPage(BS_PAGES.NO_PAYMENT);
           }
         }}
       />
     ),
     [BS_PAGES.SET_LOCATION_ON_MAP]: () => (
       <ConfirmPickup onButtonPress={() => {
-        changeBsPage(BS_PAGES.ADDRESS_SELECTOR)
+        changeBsPage(BS_PAGES.ADDRESS_SELECTOR);
       }}
       />
     ),

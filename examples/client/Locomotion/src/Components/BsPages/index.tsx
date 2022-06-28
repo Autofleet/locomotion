@@ -245,7 +245,7 @@ export const NoPayment = (props: any) => {
       SubTitleText={i18n.t('bottomSheetContent.noPayment.subTitleText')}
       SecondaryButtonText={i18n.t('bottomSheetContent.noPayment.secondaryButtonText')}
       onSecondaryButtonPress={() => {
-        changeBsPage(BS_PAGES.ADDRESS_SELECTOR)
+        changeBsPage(BS_PAGES.ADDRESS_SELECTOR);
       }}
       onButtonPress={() => {
         navigationService.navigate(MAIN_ROUTES.PAYMENT);
