@@ -100,14 +100,12 @@ export default React.forwardRef(({
   useEffect(() => {
     if (currentBsPage  === BS_PAGES.CONFIRM_PICKUP) {
       const pickupStopPoint = requestStopPoints.find((sp) => sp.type === STOP_POINT_TYPES.STOP_POINT_PICKUP)
-      mapInstance.current.fitToCoordinates([{
-        latitude: parseFloat(pickupStopPoint.lat + .001),
-        longitude: parseFloat(pickupStopPoint.lng + .001),
-      },
-      {
-        latitude: parseFloat(pickupStopPoint.lat - .001),
-        longitude: parseFloat(pickupStopPoint.lng - .001),
-      }]);
+      mapInstance.current.animateToRegion({
+        latitude: pickupStopPoint.lat,
+        longitude: pickupStopPoint.lng,
+        latitudeDelta: 0.001,
+        longitudeDelta: 0.001,
+      }, 1000);
     }
   },  [currentBsPage])
   React.useImperativeHandle(ref, () => ({
