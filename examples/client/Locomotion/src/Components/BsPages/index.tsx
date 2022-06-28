@@ -215,7 +215,7 @@ export const ConfirmPickup = (props: any) => {
 
 export const NoPayment = (props: any) => {
   const { setSnapPointsState } = useContext(BottomSheetContext);
-  const { setCurrentBsPage } = useContext(RideStateContextContext);
+  const { changeBsPage } = useContext(RideStateContextContext);
   const { requestRide } = useContext(RidePageContext);
 
   const {
@@ -245,8 +245,7 @@ export const NoPayment = (props: any) => {
       SubTitleText={i18n.t('bottomSheetContent.noPayment.subTitleText')}
       SecondaryButtonText={i18n.t('bottomSheetContent.noPayment.secondaryButtonText')}
       onSecondaryButtonPress={() => {
-        setSnapPointsState(SNAP_POINT_STATES.ADDRESS_SELECTOR);
-        setCurrentBsPage(BS_PAGES.ADDRESS_SELECTOR);
+        changeBsPage(BS_PAGES.ADDRESS_SELECTOR)
       }}
       onButtonPress={() => {
         navigationService.navigate(MAIN_ROUTES.PAYMENT);
