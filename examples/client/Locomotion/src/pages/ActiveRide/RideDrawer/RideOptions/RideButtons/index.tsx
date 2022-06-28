@@ -49,7 +49,7 @@ const RideButtons = ({
   );
 
   const renderRideNotes = () => {
-    const rideHasNotes = ride.notes;
+    const rideHasNotes = ride?.notes;
     return (
       <ButtonContainer>
         <TouchableOpacityContainer onPress={() => {
@@ -68,7 +68,7 @@ const RideButtons = ({
   };
 
   const renderPaymentButton = () => {
-    const ridePaymentMethod = ride.paymentMethodId;
+    const ridePaymentMethod = ride?.paymentMethodId;
     const selectedPaymentMethod: PaymentMethodInterface | undefined = paymentMethods.find(pm => pm.id === ridePaymentMethod);
     return (
       <ButtonContainer>

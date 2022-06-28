@@ -45,7 +45,7 @@ const PaymentMethodPopup = ({ isVisible, onCancel }: PaymentMethodPopupProps) =>
             {[...usePayments.paymentMethods].map((paymentMethod: PaymentMethodInterface, i) => (
               <PaymentMethod
                 {...paymentMethod}
-                selected={ride.paymentMethodId === paymentMethod.id}
+                selected={ride?.paymentMethodId === paymentMethod.id}
                 onPress={() => {
                   updateRide({
                     paymentMethodId: paymentMethod.id,

@@ -137,9 +137,11 @@ const BsPage = ({
       ) : undefined}
     </MainContent>
     {children}
-    {ButtonText && <OtherButton onPress={onButtonPress} isLoading={isLoading}>
+    {ButtonText && (
+    <OtherButton onPress={onButtonPress} isLoading={isLoading}>
       <ButtonTitle>{ButtonText}</ButtonTitle>
-    </OtherButton>}
+    </OtherButton>
+    )}
     {SecondaryButtonText && (
     <SecondaryButton onPress={onSecondaryButtonPress}>
       <SecondaryButtonTitle>{SecondaryButtonText}</SecondaryButtonTitle>
@@ -278,7 +280,7 @@ export const ConfirmingRide = (props: any) => {
         <Loader
           dark
           lottieViewStyle={{
-            height: '100%', width: '100%', alignItems: 'center', justifyContent: 'center'
+            height: '100%', width: '100%', alignItems: 'center', justifyContent: 'center',
           }}
           sourceProp={null}
         />
@@ -317,7 +319,7 @@ export const ActiveRide = (props: any) => {
       TitleText={i18n.t('bottomSheetContent.confirmingRide.titleText')}
       {...props}
     >
-      <Text>{ride.id}</Text>
+      <Text>{ride?.id}</Text>
     </BsPage>
   );
 };

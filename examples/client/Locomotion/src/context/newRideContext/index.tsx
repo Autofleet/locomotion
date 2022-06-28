@@ -49,10 +49,15 @@ interface RidePageContextInterface {
   lastSelectedLocation: any;
   getCurrentLocationAddress: () => any;
   saveSelectedLocation: (sp: any) => void;
-  requestRide?: () => void;
+  requestRide: () => void;
   rideRequestLoading: boolean;
   stopRequestInterval: () => void;
   isLoading: boolean;
+  loadHistory: () => void;
+  setChosenService: Dispatch<any | null>;
+  setServiceEstimations: Dispatch<any | null>;
+  initSps: () => void;
+  fillLoadSkeleton: () => void;
 }
 
 export const RidePageContext = createContext<RidePageContextInterface>({
@@ -81,7 +86,13 @@ export const RidePageContext = createContext<RidePageContextInterface>({
   saveSelectedLocation: (sp: any) => undefined,
   rideRequestLoading: false,
   stopRequestInterval: () => undefined,
-  isLoading: false
+  isLoading: false,
+  loadHistory: () => undefined,
+  setChosenService: () => undefined,
+  setServiceEstimations: () => undefined,
+  initSps: () => undefined,
+  fillLoadSkeleton: () => undefined,
+  requestRide: () => undefined
 });
 
 const HISTORY_RECORDS_NUM = 10;
@@ -240,13 +251,13 @@ const RidePageContextProvider = ({ children }: {
   const updateRequestSp = (data: any[]) => {
     const reqSps = [...requestStopPoints];
     const index = _.isNil(selectedInputIndex) ? requestStopPoints.length - 1 : selectedInputIndex;
-      reqSps[index || 0] = {
-        ...reqSps[index || 0],
-        ...data,
-      };
+    reqSps[index || 0] = {
+      ...reqSps[index || 0],
+      ...data,
+    };
 
     setRequestStopPoints(reqSps);
-};
+  };
 
   const setSpCurrentLocation = async () => {
     if (!currentGeocode) {
@@ -380,7 +391,7 @@ const RidePageContextProvider = ({ children }: {
 
   const requestRide = async (): Promise<void> => {
     setRideRequestLoading(true);
-    
+
     setCurrentBsPage(BS_PAGES.CONFIRMING_RIDE);
     const formattedRide = {
       serviceId: chosenService?.id,
@@ -395,8 +406,8 @@ const RidePageContextProvider = ({ children }: {
       })),
     };
     try {
-      const ride = await rideApi.createRide(formattedRide);
-      setRide(ride);
+      const afRide = await rideApi.createRide(formattedRide);
+      setRide(afRide);
       setCurrentBsPage(BS_PAGES.ACTIVE_RIDE);
     } catch (e) {
       // TODO: error handling
@@ -421,7 +432,8 @@ const RidePageContextProvider = ({ children }: {
     });
   };
 
-  return (<RidePageContext.Provider
+  return (
+    <RidePageContext.Provider
       value={{
         requestRide,
         loadAddress,
@@ -441,7 +453,6 @@ const RidePageContextProvider = ({ children }: {
         updateRequestSp,
         setSpCurrentLocation,
         isReadyForSubmit,
-        validateRequestedStopPoints,
         historyResults,
         loadHistory,
         serviceEstimations,
@@ -460,7 +471,8 @@ const RidePageContextProvider = ({ children }: {
       }}
     >
       {children}
-    </RidePageContext.Provider>);
+    </RidePageContext.Provider>
+  );
 };
 
 export default RidePageContextProvider;
