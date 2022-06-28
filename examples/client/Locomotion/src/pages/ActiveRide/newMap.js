@@ -81,7 +81,6 @@ export default React.forwardRef(({
   };
 
   const initLocation = async () => {
-    console.log('here');
     await initGeoService();
     await initialLocation();
   };

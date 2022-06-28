@@ -3,6 +3,8 @@ import styled from 'styled-components';
 import { FONT_SIZES, FONT_WEIGHTS } from '../../../../../context/theme';
 import Button from '../../../../../Components/Button';
 
+export const HALF_WIDTH = '48%';
+
 export const Container = styled(View)`
     padding: 0 30px;
     margin-bottom: 5px;
@@ -26,7 +28,7 @@ export const ButtonContainer = styled(TouchableOpacity)`
     align-items: center;
     height: 100%;
     display: flex;
-    width: 48%;
+    width: ${HALF_WIDTH};
     padding: 0 15px;
 `;
 

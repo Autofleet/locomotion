@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import FutureBookingButton from './FutureBookingButton';
 import {
-  Container, RowContainer, ButtonContainer, ButtonText, StyledButton,
+  Container, RowContainer, ButtonContainer, ButtonText, StyledButton, HALF_WIDTH,
 } from './styled';
 import { RidePageContext } from '../../../../../context/newRideContext';
 import NoteButton from './NoteButton';
@@ -12,8 +12,6 @@ import creditCardIcon from '../../../../../assets/bottomSheet/credit_card_icon.s
 import PaymentButton from './PaymentButton';
 import PaymentsContext from '../../../../../context/payments';
 import { PaymentMethodInterface } from '../../../../../context/payments/interface';
-import * as NavigationService from '../../../../../services/navigation';
-import { MAIN_ROUTES } from '../../../../routes';
 import { RideStateContextContext } from '../../../../../context/ridePageStateContext';
 import { popupNames } from '../utils';
 
@@ -73,7 +71,7 @@ const RideButtons = ({
         onPress={() => {
           setPopupName('payment');
         }}
-        style={{ width: displayPassenger ? '48%' : '100%' }}
+        style={{ width: displayPassenger ? HALF_WIDTH : '100%' }}
       >
         <PaymentButton
           brand={selectedPaymentMethod?.brand}
