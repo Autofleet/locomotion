@@ -13,11 +13,11 @@ flex-direction: row;
 padding: 5px;
 background-color: #ffffff;
 ${({ selected }) => (selected && 'box-shadow: 0 0 4px #211c1c1c')};
-opacity: ${({ unavailable }) => (unavailable ? 0.4 : 1)};
 `;
 
 export const CarContainer = styled.View`
 width: 20%;
+opacity: ${({ unavailable }) => (unavailable ? 0.4 : 1)};
 `;
 
 export const CarIcon = styled.Image`
@@ -29,6 +29,7 @@ width: 80%;
 display: flex;
 flex-direction: column;
 justify-content: center;
+opacity: ${({ unavailable }) => (unavailable ? 0.4 : 1)};
 `;
 
 export const Row = styled.View`

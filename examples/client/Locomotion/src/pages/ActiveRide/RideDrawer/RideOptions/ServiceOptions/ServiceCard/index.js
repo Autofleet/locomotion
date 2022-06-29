@@ -55,7 +55,7 @@ const ServiceCard = ({ service }) => {
       disabled={unavailable}
       onPress={() => setChosenService(service)}
     >
-      <CarContainer>
+      <CarContainer unavailable={unavailable}>
         <CarIcon
           resizeMode="contain"
           source={{ uri: service.iconUrl }}

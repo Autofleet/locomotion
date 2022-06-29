@@ -95,7 +95,7 @@ export default (paymentMethod: any) => (
                     style={{
                       position: 'absolute',
                       right: 0,
-                      bottom: 5,
+                      bottom: '15%',
                     }}
                     Svg={selected}
                   />
