@@ -8,6 +8,7 @@ import i18n from '../../I18n';
 import SvgIcon from '../SvgIcon';
 import selected from '../../assets/selected-v.svg';
 import { Start, StartCapital } from '../../lib/text-direction';
+import cashIcon from '../../assets/cash.svg';
 
 type ContainerProps = {
   children: React.ReactNode,
@@ -72,7 +73,9 @@ const style = {
 };
 
 function capitalizeFirstLetter(string: string) {
-  return string.charAt(0).toUpperCase() + string.slice(1);
+  console.log('shirrrrrr', string);
+
+  return string?.charAt(0).toUpperCase() + string?.slice(1);
 }
 
 
@@ -88,7 +91,7 @@ export default (paymentMethod: any) => (
           )
           : (
             <>
-              <PaymentIcon type={paymentMethod.brand} />
+              {paymentMethod.brand === 'cash' ? <SvgIcon Svg={cashIcon} /> : <PaymentIcon type={paymentMethod.brand} />}
               {paymentMethod.selected
                 ? (
                   <SvgIcon
@@ -117,8 +120,8 @@ export default (paymentMethod: any) => (
             <>
               <Type>{capitalizeFirstLetter(paymentMethod.brand)}</Type>
               {paymentMethod.lastFour ? <Description>{`**** ${capitalizeFirstLetter(paymentMethod.lastFour)}`}</Description> : null}
-              {true || (paymentMethod && moment(paymentMethod.expiresAt).isBefore(moment())) ? <Error>{i18n.t('payments.expired').toString()}</Error> : null}
-              {true || (paymentMethod && paymentMethod.hasOutstandingBalance) ? <Error>{i18n.t('payments.hasOutstandingBalance').toString()}</Error> : null}
+              {true || (paymentMethod && paymentMethod.brand !== 'cash' && moment(paymentMethod.expiresAt).isBefore(moment())) ? <Error>{i18n.t('payments.expired').toString()}</Error> : null}
+              {true || (paymentMethod && paymentMethod.brand !== 'cash' && paymentMethod.hasOutstandingBalance) ? <Error>{i18n.t('payments.hasOutstandingBalance').toString()}</Error> : null}
             </>
           )}
       </TextContainer>

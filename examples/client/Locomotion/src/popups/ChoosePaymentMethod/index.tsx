@@ -32,6 +32,7 @@ const PaymentMethodPopup = ({ isVisible, onCancel }: PaymentMethodPopupProps) =>
     updateRide,
   } = useContext(RidePageContext);
   const usePayments = PaymentsContext.useContainer();
+  
   const navigation = useNavigation<Nav>();
 
   return (

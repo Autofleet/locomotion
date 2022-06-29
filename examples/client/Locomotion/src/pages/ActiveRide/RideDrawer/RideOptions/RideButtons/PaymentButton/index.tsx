@@ -5,6 +5,7 @@ import styled from 'styled-components';
 import SvgIcon from '../../../../../../Components/SvgIcon';
 import { FONT_SIZES, FONT_WEIGHTS } from '../../../../../../context/theme';
 import { Brand } from '../../../../../../context/payments/interface';
+import cashIcon from '../../../../../../assets/cash.svg';
 
 const TimeText = styled(Text)`
     ${FONT_SIZES.LARGE}
@@ -25,8 +26,9 @@ const PaymentButton = ({
   brand,
 }: PaymentButtonProps) => (
   <>
-    {brand
+    {brand ? (brand !== 'cash'
       ? <PaymentIcon type={brand} />
+      : <SvgIcon Svg={cashIcon} height={15} width={15} />)
       : <SvgIcon Svg={icon} height={15} width={15} />}
     <TimeText>{title}</TimeText>
   </>
