@@ -1,3 +1,4 @@
+/* eslint-disable no-nested-ternary */
 /* eslint-disable no-mixed-operators */
 import React, { useState } from 'react';
 import { TouchableOpacity, View, Text } from 'react-native';
@@ -14,6 +15,8 @@ type ContainerProps = {
   children: React.ReactNode,
   selected: boolean,
 };
+
+const CASH_METHOD_ID = 'cash';
 
 const Container = styled(View) < ContainerProps >`
   flex-direction: row;
@@ -72,11 +75,33 @@ const style = {
   [StartCapital()]: 28,
 };
 
-function capitalizeFirstLetter(string: string) {
-  console.log('shirrrrrr', string);
+const CashSelected = (
+  <SvgIcon
+    style={{
+      position: 'absolute',
+      right: 0,
+      bottom: 0,
+    }}
+    Svg={selected}
+  />
+);
 
+const CreditCardSelected = (
+  <SvgIcon
+    style={{
+      position: 'absolute',
+      right: 0,
+      bottom: 5,
+    }}
+    Svg={selected}
+  />
+);
+
+function capitalizeFirstLetter(string: string) {
   return string?.charAt(0).toUpperCase() + string?.slice(1);
 }
+
+const isCashPaymentMethod = paymentMethod => paymentMethod.id === CASH_METHOD_ID;
 
 
 export default (paymentMethod: any) => (
@@ -91,19 +116,8 @@ export default (paymentMethod: any) => (
           )
           : (
             <>
-              {paymentMethod.brand === 'cash' ? <SvgIcon Svg={cashIcon} /> : <PaymentIcon type={paymentMethod.brand} />}
-              {paymentMethod.selected
-                ? (
-                  <SvgIcon
-                    style={{
-                      position: 'absolute',
-                      right: 0,
-                      bottom: 5,
-                    }}
-                    Svg={selected}
-                  />
-                )
-                : null}
+              {isCashPaymentMethod(paymentMethod) ? <SvgIcon Svg={cashIcon} width="40px" height="25px" /> : <PaymentIcon type={paymentMethod.brand} />}
+              {paymentMethod.selected ? (isCashPaymentMethod(paymentMethod) ? CashSelected : CreditCardSelected) : null }
             </>
           )
         }
@@ -120,8 +134,8 @@ export default (paymentMethod: any) => (
             <>
               <Type>{capitalizeFirstLetter(paymentMethod.brand)}</Type>
               {paymentMethod.lastFour ? <Description>{`**** ${capitalizeFirstLetter(paymentMethod.lastFour)}`}</Description> : null}
-              {true || (paymentMethod && paymentMethod.brand !== 'cash' && moment(paymentMethod.expiresAt).isBefore(moment())) ? <Error>{i18n.t('payments.expired').toString()}</Error> : null}
-              {true || (paymentMethod && paymentMethod.brand !== 'cash' && paymentMethod.hasOutstandingBalance) ? <Error>{i18n.t('payments.hasOutstandingBalance').toString()}</Error> : null}
+              {!isCashPaymentMethod(paymentMethod) && (true || (paymentMethod && moment(paymentMethod.expiresAt).isBefore(moment()))) ? <Error>{i18n.t('payments.expired').toString()}</Error> : null}
+              {!isCashPaymentMethod(paymentMethod) && (true || (paymentMethod && !isCashPaymentMethod(paymentMethod) && paymentMethod.hasOutstandingBalance)) ? <Error>{i18n.t('payments.hasOutstandingBalance').toString()}</Error> : null}
             </>
           )}
       </TextContainer>
