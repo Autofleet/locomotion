@@ -1,46 +1,34 @@
+import { Platform } from 'react-native';
 import styled from 'styled-components';
 import Button from '../../../../../../Components/Button';
 import { FONT_SIZES, FONT_WEIGHTS } from '../../../../../../context/theme';
 
 export const CardContainer = styled(Button)`
 width: 100%;
-height: 75px;
+min-height: 75px;
 border-radius: 8px;
-border: ${({ selected, theme }) => (selected ? `2px solid ${theme.primaryColor}` : 'none')};
+border: ${({ selected, theme }) => (selected ? `2px solid ${theme.primaryColor}` : '2px solid white')};
 display: flex;
 flex-direction: row;
 padding: 5px;
 background-color: #ffffff;
 ${({ selected }) => (selected && 'box-shadow: 0 0 4px #211c1c1c')};
+opacity: ${({ unavailable }) => (unavailable ? 0.4 : 1)};
 `;
 
 export const CarContainer = styled.View`
 width: 20%;
-height: 100%;
-padding: 5px;
 `;
 
 export const CarIcon = styled.Image`
-width: auto;
-height: 100%;
+flex: 1;
 `;
 
 export const ServiceDetails = styled.View`
 width: 80%;
-height: 100%;
 display: flex;
 flex-direction: column;
 justify-content: center;
-opacity: ${({ unavailable }) => (unavailable ? 0.4 : 1)};
-`;
-
-export const TopRow = styled.View`
-display: flex;
-flex-direction: row;
-justify-content: space-between;
-align-items: center;
-width: 100%;
-height: 22px;
 `;
 
 export const Row = styled.View`
@@ -49,7 +37,6 @@ flex-direction: row;
 justify-content: space-between;
 align-items: center;
 width: 100%;
-height: 18px;
 `;
 
 export const Title = styled.Text`

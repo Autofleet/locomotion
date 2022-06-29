@@ -13,7 +13,7 @@ import {
   Row, Price,
   ServiceDetails, TimeDetails,
   Title, Description,
-  TopRow, CarContainer,
+  CarContainer,
 } from './styled';
 import Tag from '../../../../../../Components/Tag';
 import { RidePageContext } from '../../../../../../context/newRideContext';
@@ -30,6 +30,9 @@ const ServiceCard = ({ service }) => {
   const tagStyles = {
     [TAG_OPTIONS.FASTEST]: {
       container: {
+        borderWidth: 1,
+        borderStyle: 'solid',
+        borderColor: theme.primaryColor,
         backgroundColor: theme.primaryColor,
       },
       textColor: theme.primaryButtonTextColor,
@@ -53,10 +56,13 @@ const ServiceCard = ({ service }) => {
       onPress={() => setChosenService(service)}
     >
       <CarContainer>
-        <CarIcon source={{ uri: service.iconUrl }} />
+        <CarIcon
+          resizeMode="contain"
+          source={{ uri: service.iconUrl }}
+        />
       </CarContainer>
       <ServiceDetails unavailable={unavailable}>
-        <TopRow>
+        <Row>
           <Title>
             {service.name}
           </Title>
@@ -71,7 +77,7 @@ const ServiceCard = ({ service }) => {
           <Price>
             {service.price ? serviceDisplayPrice : unavailableText}
           </Price>
-        </TopRow>
+        </Row>
         {!unavailable && (
         <Row>
           <TimeDetails>
