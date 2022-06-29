@@ -70,7 +70,7 @@ const Email = ({ navigation }) => {
         />
         <InputContainer>
           <TextInput
-            textID="email"
+            testID="email"
             autoFocus
             placeholder={i18n.t('onboarding.pages.email.placeholder')}
             onChangeText={onChange}
