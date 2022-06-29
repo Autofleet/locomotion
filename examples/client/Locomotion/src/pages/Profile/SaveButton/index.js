@@ -11,10 +11,10 @@ const SaveButton = ({
     setLoading(true);
     if (isInvalid) {
       onFail();
-      setLoading(false);
     } else if (onNext) {
       await onNext();
     }
+    setLoading(false);
   };
   useEffect(() => {
     setLoading(!!isLoading);
