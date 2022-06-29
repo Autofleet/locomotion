@@ -1,7 +1,10 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, {
+  useContext, useEffect, useMemo, useState,
+} from 'react';
 import { View } from 'react-native';
 import styled from 'styled-components';
 import { MarkerAnimated, AnimatedRegion } from 'react-native-maps';
+import { Context as ThemeContext } from '../../context/theme';
 import SvgIcon from '../SvgIcon';
 import carIcon from '../../assets/map/car.svg';
 
@@ -25,6 +28,8 @@ const areEqual = (prev: AvailabilityVehicleProps, next: AvailabilityVehicleProps
 
 
 const AvailabilityVehicle = (props: AvailabilityVehicleProps) => {
+  const { primaryColor } = useContext(ThemeContext);
+
   const [locationAnimated] = useState(new AnimatedRegion({
     latitude: props.location.lat,
     latitudeDelta: 0.1,
@@ -46,7 +51,7 @@ const AvailabilityVehicle = (props: AvailabilityVehicleProps) => {
       <MarkerAnimated
         coordinate={locationAnimated}
       >
-        <SvgIcon Svg={carIcon} height={48} width={48} />
+        <SvgIcon Svg={carIcon} height={48} width={48} fill={primaryColor} />
       </MarkerAnimated>
     </AvailabilityVehicleContainer>
   );

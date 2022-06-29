@@ -1,15 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import { useRoute } from '@react-navigation/native';
+import FullPageLoader from '../../Components/FullPageLoader';
 import { getTogglePopupsState } from '../../context/state';
 import i18n from '../../I18n';
 import PageHeader from '../../Components/PageHeader';
 import {
-  FullPageLoader, PageContent, CreditFormText, CardContainer,
+  PageContent, CreditFormText, CardContainer,
 } from './styled';
 import PaymentsContext from '../../context/payments';
 import ConfirmationPopup from '../../popups/ConfirmationPopup';
 import CreditCardsList from './credit-cards';
-import { NewCreditForm } from '../../Components/NewCreditForm';
+import NewCreditForm from '../../Components/NewCreditForm';
 import { PageContainer } from '../styles';
 import { MAIN_ROUTES } from '../routes';
 

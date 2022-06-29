@@ -6,6 +6,7 @@ import { OnboardingContext } from '../../context/onboarding';
 import PaymentsContext from '../../context/payments';
 import { UserContext } from '../../context/user';
 import { StorageService } from '../../services';
+import FullPageLoader from '../../Components/FullPageLoader';
 
 export const INITIAL_USER_STATE = {
   phoneNumber: '',
@@ -70,7 +71,9 @@ const AuthLoadingScreen = ({ navigation }) => {
   };
   useEffect(init, []);
   return (
-    <></>
+    <>
+      <FullPageLoader />
+    </>
   );
 };
 export default AuthLoadingScreen;

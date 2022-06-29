@@ -1,23 +1,29 @@
-import React, { Fragment, useEffect } from 'react';
+import React, { useContext, useEffect } from 'react';
 import propTypes from 'prop-types';
+import { INITIAL_USER_STATE } from '../AuthScreens/AuthLoadingScreen';
+import { UserContext } from '../../context/user';
 import Auth from '../../services/auth';
+import FullPageLoader from '../../Components/FullPageLoader';
 
-const Login = ({ navigation, logo }) => {
+const Logout = ({ navigation }) => {
+  const { setUser } = useContext(UserContext);
+
   useEffect(() => {
+    setUser(INITIAL_USER_STATE);
     Auth.logout(navigation);
   }, []);
 
   return (
-    <Fragment />
+    <FullPageLoader />
   );
 };
 
-export default Login;
+export default Logout;
 
-Login.defaultProps = {
+Logout.defaultProps = {
   navigation: undefined,
 };
 
-Login.propTypes = {
+Logout.propTypes = {
   navigation: propTypes.shape({}),
 };
