@@ -2,6 +2,7 @@
 import { Alert, PermissionsAndroid, Platform } from 'react-native';
 import Config from 'react-native-config';
 import RNLocation from 'react-native-location';
+import Geolocation from '@react-native-community/geolocation';
 import moment from 'moment';
 
 const currentLocationNative = async () => {
@@ -14,14 +15,10 @@ const currentLocationNative = async () => {
     }
   }
   return new Promise((resolve, reject) => {
-    if (navigator && navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        resolve, reject,
-        { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 },
-      );
-    } else {
-      reject();
-    }
+    Geolocation.getCurrentPosition(
+      resolve, reject,
+      { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 * 60 * 2 },
+    );
   });
 };
 
