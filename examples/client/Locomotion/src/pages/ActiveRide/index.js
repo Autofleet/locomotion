@@ -112,12 +112,12 @@ const RidePage = ({ mapSettings }) => {
   const focusCurrentLocation = async () => {
     const { coords } = await getPosition();
     mapRef.current.animateToRegion({
-      latitude: coords.latitude - (parseFloat(snapPoints[0])/10000),
+      latitude: coords.latitude - (parseFloat(snapPoints[0]) / 10000),
       longitude: coords.longitude,
       latitudeDelta: 0.015,
       longitudeDelta: 0.015,
     }, 1000);
-  }
+  };
 
   return (
     <PageContainer>

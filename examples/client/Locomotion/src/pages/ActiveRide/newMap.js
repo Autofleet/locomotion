@@ -120,7 +120,7 @@ export default React.forwardRef(({
           longitude: parseFloat(sp.lng),
         }
       ));
-      ref.current.fitToCoordinates(coordsToFit,
+    ref.current.fitToCoordinates(coordsToFit,
       {
         edgePadding: MAP_EDGE_PADDING,
       });
