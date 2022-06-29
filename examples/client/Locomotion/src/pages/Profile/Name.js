@@ -56,6 +56,7 @@ const Name = ({ navigation }) => {
           />
           <InputContainer>
             <TextInput
+              testID="firstNameInput"
               placeholder={i18n.t('onboarding.firstNamePlaceholder')}
               autoFocus
               onChangeText={inputChange('firstName')}
@@ -69,6 +70,7 @@ const Name = ({ navigation }) => {
           </InputContainer>
           <InputContainer>
             <TextInput
+              testID="lastNameInput"
               placeholder={i18n.t('onboarding.lastNamePlaceholder')}
               onChangeText={inputChange('lastName')}
               value={user.lastName}
