@@ -6,10 +6,6 @@ const keyName = 'settings';
 const { SERVER_HOST } = Config;
 
 const AppSettings = {
-  update: async (settings) => {
-    AppSettings.settings = settings;
-    Storage.update({ [keyName]: settings });
-  },
   getSettings: async () => {
     if (AppSettings.settings) {
       console.log('Return from cache delete me');
@@ -18,10 +14,7 @@ const AppSettings = {
     const res = await Storage.get(keyName);
     return res || {};
   },
-  getServerUrl: async () => SERVER_HOST, // const { serverUrl } = await AppSettings.getSettings();
-  // return serverUrl && serverUrl.length > 0 ? serverUrl : SERVER_HOST;
-
-
+  getServerUrl: async () => SERVER_HOST,
   destroy: () => Storage.clear(),
 };
 

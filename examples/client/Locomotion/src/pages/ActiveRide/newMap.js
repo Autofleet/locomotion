@@ -15,6 +15,7 @@ import AvailabilityVehicle from '../../Components/AvailabilityVehicle';
 import StationsMap from '../../Components/Marker';
 import { latLngToAddress } from '../../context/newRideContext/utils';
 import { BS_PAGES } from '../../context/ridePageStateContext/utils';
+import { STOP_POINT_TYPES } from '../../lib/commonTypes';
 
 const MAP_EDGE_PADDING = {
   top: 120,
@@ -35,24 +36,24 @@ export default React.forwardRef(({
     isUserLocationFocused,
     setIsUserLocationFocused,
     territory,
-    showOutOfTerritory,
     currentBsPage,
+    initGeoService,
   } = useContext(RideStateContextContext);
 
   const isMainPage = currentBsPage === BS_PAGES.ADDRESS_SELECTOR;
-  const isConfirmPickup = [BS_PAGES.CONFIRM_PICKUP, BS_PAGES.SET_LOCATION_ON_MAP].includes(currentBsPage);
+  const isConfirmPickupPage = currentBsPage === BS_PAGES.CONFIRM_PICKUP;
+  const isChooseLocationOnMap = [BS_PAGES.CONFIRM_PICKUP, BS_PAGES.SET_LOCATION_ON_MAP].includes(currentBsPage);
   const {
     requestStopPoints, chosenService, saveSelectedLocation, reverseLocationGeocode,
   } = useContext(RidePageContext);
-
   const [mapRegion, setMapRegion] = useState({
     latitudeDelta: 0.015,
     longitudeDelta: 0.015,
   });
 
   const focusCurrentLocation = () => {
-    if (mapRegion.longitude && mapRegion.latitude) {
-      mapInstance.current.animateToRegion({
+    if (mapRegion.longitude && mapRegion.latitude && ref.current) {
+      ref.current.animateToRegion({
         latitude: mapRegion.latitude,
         longitude: mapRegion.longitude,
         latitudeDelta: mapRegion.latitudeDelta,
@@ -80,9 +81,16 @@ export default React.forwardRef(({
     }
   };
 
+  const initLocation = async () => {
+    await initGeoService();
+    await initialLocation();
+  };
+
   useEffect(() => {
-    initialLocation();
-  }, []);
+    if (ref.current) {
+      initLocation();
+    }
+  }, [ref.current]);
 
 
   useEffect(() => {
@@ -91,10 +99,17 @@ export default React.forwardRef(({
     }
   }, [mapRegion]);
 
-
-  React.useImperativeHandle(ref, () => ({
-    focusCurrentLocation,
-  }));
+  useEffect(() => {
+    if (currentBsPage === BS_PAGES.CONFIRM_PICKUP) {
+      const pickupStopPoint = requestStopPoints.find(sp => sp.type === STOP_POINT_TYPES.STOP_POINT_PICKUP);
+      ref.current.animateToRegion({
+        latitude: pickupStopPoint.lat,
+        longitude: pickupStopPoint.lng,
+        latitudeDelta: 0.001,
+        longitudeDelta: 0.001,
+      }, 1000);
+    }
+  }, [currentBsPage]);
 
   const showInputPointsOnMap = () => {
     const coordsToFit = requestStopPoints
@@ -105,7 +120,7 @@ export default React.forwardRef(({
           longitude: parseFloat(sp.lng),
         }
       ));
-    mapInstance.current.fitToCoordinates(coordsToFit,
+    ref.current.fitToCoordinates(coordsToFit,
       {
         edgePadding: MAP_EDGE_PADDING,
       });
@@ -129,7 +144,7 @@ export default React.forwardRef(({
         followsUserLocation={isUserLocationFocused}
         moveOnMarkerPress={false}
         onRegionChangeComplete={async (event) => {
-          if (isConfirmPickup) {
+          if (isChooseLocationOnMap) {
             const { latitude, longitude } = event;
             const lat = latitude.toFixed(6);
             const lng = longitude.toFixed(6);
@@ -155,17 +170,17 @@ export default React.forwardRef(({
             focusCurrentLocation();
           }
         }}
-        ref={mapInstance}
+        ref={ref}
         userInterfaceStyle={isDarkMode ? THEME_MOD.DARK : undefined}
         customMapStyle={isDarkMode ? mapDarkMode : undefined}
         {...mapSettings}
       >
-        {chosenService && requestStopPoints.filter(sp => !!sp.lat).length > 1
+        {!isConfirmPickupPage && requestStopPoints.filter(sp => !!sp.lat).length > 1
           ? requestStopPoints
             .filter(sp => !!sp.lat)
             .map(sp => (<StationsMap stopPoint={sp} />))
           : null}
-        {showOutOfTerritory && territory && territory.length ? territory
+        {currentBsPage === BS_PAGES.NOT_IN_TERRITORY && territory && territory.length ? territory
           .map(t => t.polygon.coordinates.map(poly => (
             <Polygon
               key={`Polygon#${t.id}#${poly[1]}#${poly[0]}`}
@@ -179,7 +194,7 @@ export default React.forwardRef(({
           ))) : null}
         {buildAvailabilityVehicles()}
       </MapView>
-      {isConfirmPickup && (
+      {isChooseLocationOnMap && (
         <LocationMarkerContainer pointerEvents="none">
           <LocationMarker />
         </LocationMarkerContainer>

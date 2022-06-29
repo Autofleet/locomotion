@@ -1,7 +1,8 @@
 import React, { useContext, useEffect } from 'react';
-import { Text, View } from 'react-native';
+import { Image, Text, View } from 'react-native';
 import styled from 'styled-components';
 import { useBottomSheet } from '@gorhom/bottom-sheet';
+import SvgIcon from '../SvgIcon';
 import { RidePageContext } from '../../context/newRideContext';
 import i18n from '../../I18n';
 import { FONT_SIZES, FONT_WEIGHTS } from '../../context/theme';
@@ -12,6 +13,8 @@ import { BS_PAGES } from '../../context/ridePageStateContext/utils';
 import { MAIN_ROUTES } from '../../pages/routes';
 import * as navigationService from '../../services/navigation';
 import payments from '../../context/payments';
+import errorIcon from '../../assets/error-icon.svg';
+import Loader from '../Loader';
 
 const OtherButton = styled(Button)`
   width: 100%;
@@ -52,6 +55,11 @@ const CardImage = styled(View)`
   align-items: center;
 `;
 
+const TitleContainer = styled(View)`
+display: flex;
+flex-direction: row;
+`;
+
 const Title = styled(Text)`
   padding-bottom: 3px;
   ${FONT_SIZES.H2}
@@ -81,8 +89,13 @@ const SecondaryButtonTitle = styled(Text)`
   `};
 `;
 
-const AddressInput = styled(Text)`
+const AddressInput = styled(Text)``;
 
+const LoaderContainer = styled(View)`
+height: 25px;
+width: 100%;
+margin: auto 0;
+margin-top: 25px;
 `;
 
 const BsPage = ({
@@ -90,24 +103,31 @@ const BsPage = ({
   onButtonPress,
   image,
   children,
+  titleIcon,
   TitleText,
   SubTitleText,
   ButtonText,
   SecondaryButtonText,
+  isLoading,
 }: {
   onSecondaryButtonPress: any,
   onButtonPress: any,
   image: any,
   children?: any,
+  titleIcon?: any,
   TitleText: string,
   SubTitleText: string,
   ButtonText: string,
   SecondaryButtonText: string,
+  isLoading: boolean;
 }) => (
   <Container>
     <MainContent>
       <CardText>
-        <Title>{TitleText}</Title>
+        <TitleContainer>
+          {titleIcon && <SvgIcon Svg={titleIcon} style={{ marginRight: 5 }} />}
+          <Title>{TitleText}</Title>
+        </TitleContainer>
         <SubTitle numberOfLines={2}>{SubTitleText}</SubTitle>
       </CardText>
       {image ? (
@@ -117,9 +137,11 @@ const BsPage = ({
       ) : undefined}
     </MainContent>
     {children}
-    <OtherButton onPress={onButtonPress}>
+    {ButtonText && (
+    <OtherButton onPress={onButtonPress} isLoading={isLoading}>
       <ButtonTitle>{ButtonText}</ButtonTitle>
     </OtherButton>
+    )}
     {SecondaryButtonText && (
     <SecondaryButton onPress={onSecondaryButtonPress}>
       <SecondaryButtonTitle>{SecondaryButtonText}</SecondaryButtonTitle>
@@ -130,6 +152,7 @@ const BsPage = ({
 
 BsPage.defaultProps = {
   children: undefined,
+  titleIcon: undefined,
 };
 
 export default BsPage;
@@ -150,12 +173,14 @@ export const ConfirmPickup = (props: any) => {
     saveSelectedLocation,
     updateRequestSp,
     setSelectedInputIndex,
+    rideRequestLoading,
   }: {
     lastSelectedLocation: any,
     getCurrentLocationAddress: any,
     saveSelectedLocation: any,
     updateRequestSp: any,
     setSelectedInputIndex: any,
+    rideRequestLoading: boolean,
   } = useContext(RidePageContext);
 
   const { setSnapPointsState } = useContext(BottomSheetContext);
@@ -182,6 +207,7 @@ export const ConfirmPickup = (props: any) => {
       TitleText={i18n.t('bottomSheetContent.confirmPickup.titleText')}
       ButtonText={i18n.t('bottomSheetContent.confirmPickup.buttonText')}
       SubTitleText={i18n.t('bottomSheetContent.confirmPickup.subTitleText')}
+      isLoading={rideRequestLoading}
       {...props}
       onButtonPress={() => {
         updateRequestSp(lastSelectedLocation);
@@ -197,7 +223,7 @@ export const ConfirmPickup = (props: any) => {
 
 export const NoPayment = (props: any) => {
   const { setSnapPointsState } = useContext(BottomSheetContext);
-  const { setCurrentBsPage } = useContext(RideStateContextContext);
+  const { changeBsPage } = useContext(RideStateContextContext);
   const { requestRide } = useContext(RidePageContext);
 
   const {
@@ -221,18 +247,78 @@ export const NoPayment = (props: any) => {
 
   return (
     <BsPage
+      titleIcon={errorIcon}
       TitleText={i18n.t('bottomSheetContent.noPayment.titleText')}
       ButtonText={i18n.t('bottomSheetContent.noPayment.buttonText')}
       SubTitleText={i18n.t('bottomSheetContent.noPayment.subTitleText')}
       SecondaryButtonText={i18n.t('bottomSheetContent.noPayment.secondaryButtonText')}
       onSecondaryButtonPress={() => {
-        setSnapPointsState(SNAP_POINT_STATES.ADDRESS_SELECTOR);
-        setCurrentBsPage(BS_PAGES.ADDRESS_SELECTOR);
+        changeBsPage(BS_PAGES.ADDRESS_SELECTOR);
       }}
       onButtonPress={() => {
-        navigationService.navigate(MAIN_ROUTES.PAYMENT);
+        navigationService.navigate(MAIN_ROUTES.PAYMENT, { rideFlow: true });
       }}
       {...props}
     />
+  );
+};
+
+export const ConfirmingRide = (props: any) => {
+  const { setSnapPointsState } = useContext(BottomSheetContext);
+
+  useEffect(() => {
+    setSnapPointsState(SNAP_POINT_STATES.CONFIRMING_RIDE);
+  }, []);
+
+  return (
+    <BsPage
+      TitleText={i18n.t('bottomSheetContent.confirmingRide.titleText')}
+      {...props}
+    >
+      <LoaderContainer>
+        <Loader
+          dark
+          lottieViewStyle={{
+            height: '100%', width: '100%', alignItems: 'center', justifyContent: 'center',
+          }}
+          sourceProp={null}
+        />
+      </LoaderContainer>
+    </BsPage>
+  );
+};
+
+export const NoAvailableVehicles = (props: any) => {
+  const { setSnapPointsState } = useContext(BottomSheetContext);
+
+  useEffect(() => {
+    setSnapPointsState(SNAP_POINT_STATES.NO_AVAILABLE_VEHICLES);
+  }, []);
+
+  return (
+    <BsPage
+      TitleText={i18n.t('bottomSheetContent.noAvailableVehicles.titleText')}
+      ButtonText={i18n.t('bottomSheetContent.noAvailableVehicles.buttonText')}
+      SubTitleText={i18n.t('bottomSheetContent.noAvailableVehicles.subTitleText')}
+      {...props}
+    />
+  );
+};
+
+export const ActiveRide = (props: any) => {
+  const { setSnapPointsState } = useContext(BottomSheetContext);
+  const { ride } = useContext(RidePageContext);
+
+  useEffect(() => {
+    setSnapPointsState(SNAP_POINT_STATES.ACTIVE_RIDE);
+  }, []);
+
+  return (
+    <BsPage
+      TitleText={i18n.t('bottomSheetContent.confirmingRide.titleText')}
+      {...props}
+    >
+      <Text>{ride?.id}</Text>
+    </BsPage>
   );
 };

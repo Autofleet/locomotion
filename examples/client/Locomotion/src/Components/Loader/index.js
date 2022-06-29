@@ -2,17 +2,18 @@ import React from 'react';
 import styled from 'styled-components';
 import LottieView from 'lottie-react-native';
 import { View } from 'react-native';
-import darkLoader from '../../assets/dark-loader.json';
-import lightLoader from '../../assets/loader.json';
-import sliderLoader from '../../assets/slider-loader.json';
+import darkLoader from '../../assets/loaders/dark-loader.json';
+import lightLoader from '../../assets/loaders/light-loader.json';
+import sliderLoader from '../../assets/loaders/slider-loader.json';
 
 const LoadingWrapper = styled.View`
   width: 100%;
   align-items: center;
-  margin-top: 3px;
 `;
 
-const Loader = ({ inSlider = false, dark, lottieViewStyle }) => {
+const Loader = ({
+  inSlider = false, dark, lottieViewStyle, sourceProp,
+}) => {
   const Wrapper = inSlider ? View : LoadingWrapper;
   let source;
   if (inSlider) {
@@ -26,12 +27,11 @@ const Loader = ({ inSlider = false, dark, lottieViewStyle }) => {
       <LottieView
         style={lottieViewStyle || undefined}
         ref={(animation) => {
-          this.animation = animation;
           if (animation) {
             animation.play();
           }
         }}
-        source={source}
+        source={sourceProp || source}
         autoPlay
         loop
       />

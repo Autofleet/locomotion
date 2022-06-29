@@ -1,11 +1,13 @@
 import React, { createContext, useEffect, useState } from 'react';
-import AppSettings from '../../services/app-settings';
+import { StorageService } from '../../services';
 import {
   getUserDetails, loginVert, sendEmailVerification, updateUser,
 } from './api';
 import auth from '../../services/auth';
 import Mixpanel from '../../services/Mixpanel';
 import PaymentsContext from '../payments';
+
+const storageKey = 'clientProfile';
 
 export interface User {
   id: string;
@@ -62,9 +64,9 @@ const UserContextProvider = ({ children }: { children: any }) => {
   };
 
   const getUserFromStorage = async () => {
-    const settings = await AppSettings.getSettings();
-    if (settings.userProfile) {
-      setUser(settings.userProfile);
+    const clientProfile = await StorageService.get(storageKey);
+    if (clientProfile) {
+      setUser(clientProfile);
     }
   };
 
@@ -80,7 +82,7 @@ const UserContextProvider = ({ children }: { children: any }) => {
     updateState(values);
     const newUser = await updateUser(values);
     if (newUser.didCompleteOnboarding) {
-      AppSettings.update({ userProfile: newUser });
+      StorageService.save({ [storageKey]: newUser });
     }
   };
 

@@ -1,7 +1,0 @@
-{
-  "pushNotifications": {
-    "driverArriving": "Your car reaches your pickup \"{{stopPoint}}\" in {{etaMinutes}} minutes",
-    "driverArrivingHeading": "Your car arrives soon"
-  }
-
-}

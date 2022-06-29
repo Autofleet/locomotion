@@ -20,7 +20,9 @@ ${isFocused && `
 
 `;
 
-export const Input = styled.TextInput`
+export const Input = styled.TextInput.attrs(props => ({
+  placeholderTextColor: props.theme.disabledColor,
+}))`
     width: 100%;
     padding: 0px 8px;
     height: 40px;

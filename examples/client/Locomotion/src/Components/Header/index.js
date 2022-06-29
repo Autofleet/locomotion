@@ -1,6 +1,6 @@
 import React from 'react';
-import { ButtonHeaderView, Container, HeaderView } from './styled';
-import SvgIcon from '../SvgIcon';
+import SquareSvgButton from '../SquareSvgButton';
+import { Container } from './styled';
 import SafeView from '../SafeView';
 
 const Header = ({
@@ -8,18 +8,10 @@ const Header = ({
 }) => (
   <SafeView>
     <Container>
-      <ButtonHeaderView
+      <SquareSvgButton
         onPress={onPressIcon}
-        data-test-id="headerButton"
-      >
-        <HeaderView>
-          <SvgIcon
-            Svg={icon}
-            height={20}
-            width={20}
-          />
-        </HeaderView>
-      </ButtonHeaderView>
+        icon={icon}
+      />
       {children}
     </Container>
   </SafeView>

@@ -1,5 +1,5 @@
 import React from 'react';
-import RideStateContextContextProvider from './ridePageStateContext';
+import { RideHistoryContextProvider } from './rideHistory';
 import I18n from '../I18n';
 import SettingsContext from './settings';
 import PaymentsContext from './payments';
@@ -7,7 +7,6 @@ import ThemeProvider from './theme';
 import UserContextProvider from './user';
 import OnboardingContextProvider from './onboarding';
 import { StateProvider } from './state';
-import AppSettings from '../services/app-settings';
 
 
 export const MainProvider = ({ children, LoginPage, i18n }) => {
@@ -22,26 +21,9 @@ export const MainProvider = ({ children, LoginPage, i18n }) => {
     }
   }
 
-  const saveState = async (state) => {
-    try {
-      await AppSettings.update(state);
-    } catch (e) {
-      console.error('Got error while try to save state', e);
-    }
-  };
-
   const reducer = (state, action) => {
     if (action && action.type) {
       switch (action.type) {
-        case 'saveState':
-          const newState = {
-            ...state,
-            ...action.payload,
-          };
-
-          saveState(newState);
-          return newState;
-
         case 'changeState':
           return {
             ...state,
@@ -55,19 +37,19 @@ export const MainProvider = ({ children, LoginPage, i18n }) => {
 
   return (
     <StateProvider initialState={initialState} reducer={reducer}>
-      <RideStateContextContextProvider>
-        <SettingsContext.Provider>
-          <PaymentsContext.Provider>
-            <ThemeProvider>
-              <UserContextProvider>
-                <OnboardingContextProvider>
+      <SettingsContext.Provider>
+        <PaymentsContext.Provider>
+          <ThemeProvider>
+            <UserContextProvider>
+              <OnboardingContextProvider>
+                <RideHistoryContextProvider>
                   {children}
-                </OnboardingContextProvider>
-              </UserContextProvider>
-            </ThemeProvider>
-          </PaymentsContext.Provider>
-        </SettingsContext.Provider>
-      </RideStateContextContextProvider>
+                </RideHistoryContextProvider>
+              </OnboardingContextProvider>
+            </UserContextProvider>
+          </ThemeProvider>
+        </PaymentsContext.Provider>
+      </SettingsContext.Provider>
     </StateProvider>
   );
 };

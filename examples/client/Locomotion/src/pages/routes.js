@@ -9,6 +9,7 @@ export const MAIN_ROUTES = {
   RIDE_HISTORY: 'RideHistory',
   PAYMENT: 'Payment',
   ACCOUNT: 'Account',
+  COMPLETED_RIDE_OVERVIEW_PAGE: 'CompletedRideOverviewPage',
   CONTACT_US: 'ContactUs',
   LOGOUT: 'Logout',
   WEBVIEW: 'webview',

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import {
   CardForm as MainCardForm,
   useStripe,
@@ -8,11 +8,12 @@ import i18n from '../../I18n';
 import PaymentsContext from '../../context/payments';
 import SubmitButton from '../RoundedButton';
 import {
-  CreditForm, ErrorMessage, SkipSubmitContainer, SubmitContainer,
+  CreditForm, ErrorMessage, SkipSubmitContainer, SubmitContainer, MainCardFormContainer,
 } from './styled';
+import { Context as ThemeContext } from '../../context/theme';
 
-// eslint-disable-next-line import/prefer-default-export
-export const NewCreditForm = ({ onDone, canSkip = false, PageText }) => {
+const NewCreditForm = ({ onDone, canSkip = false, PageText }) => {
+  const theme = useContext(ThemeContext);
   const { confirmSetupIntent } = useStripe();
   const usePayments = PaymentsContext.useContainer();
 
@@ -21,6 +22,7 @@ export const NewCreditForm = ({ onDone, canSkip = false, PageText }) => {
   const [errorMessage, setErrorMessage] = useState('');
 
   const handlePayPress = async () => {
+    setLoading(true);
     const customerData = await usePayments.getOrFetchCustomer();
     const { clientSecret } = await usePayments.setup();
     const billingDetails = {
@@ -37,8 +39,12 @@ export const NewCreditForm = ({ onDone, canSkip = false, PageText }) => {
       console.error(error);
       setErrorMessage(error.message);
     } else {
-      await onDone();
-      await usePayments.loadCustomer();
+      await new Promise(resolve => setTimeout(async () => {
+        await usePayments.loadCustomer();
+        setLoading(false);
+        await onDone();
+        resolve();
+      }, 500));
     }
   };
 
@@ -49,8 +55,9 @@ export const NewCreditForm = ({ onDone, canSkip = false, PageText }) => {
         <MainCardForm
           autofocus
           cardStyle={{
-            backgroundColor: '#FFFFFF',
-            textColor: '#000000',
+            backgroundColor: theme.pageBackgroundColor,
+            textColor: theme.textColor,
+            placeholderColor: theme.disabledColor,
           }}
           style={{
             width: '100%',
@@ -84,8 +91,7 @@ export const NewCreditForm = ({ onDone, canSkip = false, PageText }) => {
           )}
           <SubmitButton
             onPress={() => handlePayPress()}
-            disabled={!formReady}
-            setLoading={setLoading}
+            disabled={!formReady || loading}
           >
             {i18n.t('payments.submitCard')}
           </SubmitButton>
@@ -96,3 +102,5 @@ export const NewCreditForm = ({ onDone, canSkip = false, PageText }) => {
     </ScrollView>
   );
 };
+
+export default NewCreditForm;
