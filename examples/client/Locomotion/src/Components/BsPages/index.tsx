@@ -15,6 +15,7 @@ import * as navigationService from '../../services/navigation';
 import payments from '../../context/payments';
 import errorIcon from '../../assets/error-icon.svg';
 import Loader from '../Loader';
+import DriverCard from '../DriverCard';
 
 const OtherButton = styled(Button)`
   width: 100%;
@@ -319,7 +320,12 @@ export const ActiveRide = (props: any) => {
       TitleText={i18n.t('bottomSheetContent.confirmingRide.titleText')}
       {...props}
     >
-      <Text>{ride?.id}</Text>
+      <>
+        <DriverCard 
+          showRating={false} 
+          ride={ride}
+        />
+      </>
     </BsPage>
   );
 };

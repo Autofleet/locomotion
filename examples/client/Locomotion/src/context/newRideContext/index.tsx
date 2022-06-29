@@ -17,11 +17,15 @@ import { BS_PAGES } from '../ridePageStateContext/utils';
 
 type Dispatch<A> = (value: A) => void;
 
-interface Ride {
+export interface RideInterface {
   id?: string;
   notes?: string;
   paymentMethodId?: string;
   serviceTypeId?: string;
+  driver?: any;
+  stopPoints?: any[];
+  vehicle?: any;
+  rating?: number;
 }
 
 interface RidePageContextInterface {
@@ -43,7 +47,7 @@ interface RidePageContextInterface {
   isReadyForSubmit: boolean;
   historyResults: any[];
   serviceEstimations: any[];
-  ride?: Ride;
+  ride?: RideInterface;
   updateRide: (ride: any) => void;
   chosenService: any;
   lastSelectedLocation: any;
@@ -116,7 +120,7 @@ const RidePageContextProvider = ({ children }: {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [historyResults, setHistoryResults] = useState([]);
   const [serviceEstimations, setServiceEstimations] = useState<any | null>(null);
-  const [ride, setRide] = useState<Ride>({});
+  const [ride, setRide] = useState<RideInterface>({});
   const [chosenService, setChosenService] = useState<any | null>(null);
   const [lastSelectedLocation, saveSelectedLocation] = useState(false);
   const [rideRequestLoading, setRideRequestLoading] = useState(false);
@@ -169,6 +173,13 @@ const RidePageContextProvider = ({ children }: {
       SETTINGS_KEYS.SERVICE_ESTIMATIONS_INTERVAL_IN_SECONDS,
     );
   };
+
+  const loadActiveRide = async () => {
+    const activeRide = await rideApi.getActiveRides();
+    if (activeRide) {
+      setRide(activeRide);
+    }
+  }
 
   useEffect(() => {
     initCurrentLocation();
