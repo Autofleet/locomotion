@@ -8,34 +8,26 @@ export const BottomSheetContext = createContext();
 export const SNAP_POINT_STATES = {
   [BS_PAGES.ADDRESS_SELECTOR]: ['15%', '100%'],
   [BS_PAGES.SERVICE_ESTIMATIONS]: ['50%', '95%'],
-  [BS_PAGES.CONFIRM_PICKUP]: ['30%'],
-  [BS_PAGES.SET_LOCATION_ON_MAP]: ['30%'],
-  [BS_PAGES.NO_PAYMENT]: ['30%'],
-  [BS_PAGES.NOT_IN_TERRITORY]: ['30%'],
-  [BS_PAGES.CONFIRMING_RIDE]: ['30%'],
-  [BS_PAGES.NO_AVAILABLE_VEHICLES]: ['30%'],
-  [BS_PAGES.ACTIVE_RIDE]: ['30%'],
+  [BS_PAGES.CONFIRM_PICKUP]: ['30%', '30%'],
+  [BS_PAGES.SET_LOCATION_ON_MAP]: ['30%', '30%'],
+  [BS_PAGES.NO_PAYMENT]: ['30%', '30%'],
+  [BS_PAGES.NOT_IN_TERRITORY]: ['30%', '30%'],
+  [BS_PAGES.CONFIRMING_RIDE]: ['30%', '30%'],
+  [BS_PAGES.NO_AVAILABLE_VEHICLES]: ['30%', '30%'],
+  [BS_PAGES.ACTIVE_RIDE]: ['30%', '30%'],
 };
 const BottomSheetProvider = ({ children }) => {
   const [isExpanded, setIsExpanded] = useState(false);
 
   const [snapPointsState, setSnapPointsState] = useState(SNAP_POINT_STATES[BS_PAGES.ADDRESS_SELECTOR]);
-  const [snapPointIndex, setSnapPointIndex] = useState(0);
   const [footerComponent, setFooterComponent] = useState(null);
   const snapPoints = useMemo(() => snapPointsState, [snapPointsState]);
-
-  useEffect(() => {
-    const newIsExpanded = snapPointIndex === (snapPointsState.length - 1);
-    setIsExpanded(newIsExpanded);
-  }, [snapPointIndex]);
 
   return (
     <BottomSheetContext.Provider
       value={{
         snapPoints,
         isExpanded,
-        snapPointIndex,
-        setSnapPointIndex,
         setIsExpanded,
         setSnapPointsState,
         setFooterComponent,

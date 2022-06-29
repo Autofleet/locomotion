@@ -14,8 +14,8 @@ interface RidePageStateContextProps {
   isUserLocationFocused: boolean;
   setIsUserLocationFocused: (isLocationFocused: boolean) => void;
   currentBsPage: BsPages;
-  setCurrentBsPage: (page: BsPages) => void;
   checkStopPointsInTerritory: (sp: any) => Promise<boolean>;
+  changeBsPage: (pageName: BsPages) => void;
 }
 
 export const RideStateContextContext = createContext<RidePageStateContextProps>({
@@ -25,20 +25,23 @@ export const RideStateContextContext = createContext<RidePageStateContextProps>(
   isUserLocationFocused: false,
   setIsUserLocationFocused: (isLocationFocused: boolean) => undefined,
   currentBsPage: BS_PAGES.ADDRESS_SELECTOR,
-  setCurrentBsPage: (page: BsPages) => undefined,
   checkStopPointsInTerritory: async () => false,
+  changeBsPage: () => undefined,
 });
 
 const RideStateContextContextProvider = ({ children }: { children: any }) => {
   const [territory, setTerritory] = useState<Array<any> | null>(null);
   const [isUserLocationFocused, setIsUserLocationFocused] = useState(true);
   const [currentBsPage, setCurrentBsPage] = useState<BsPages>(BS_PAGES.ADDRESS_SELECTOR);
-  const { setSnapPointsState, setSnapPointIndex } = useContext(BottomSheetContext);
+  const { setSnapPointsState, setIsExpanded } = useContext(BottomSheetContext);
 
+  const changeBsPage = (pageName: BsPages) => {
+    setIsExpanded(false);
+    setSnapPointsState(SNAP_POINT_STATES[pageName]);
+    setCurrentBsPage(pageName);
+  };
   const setNotInTerritory = () => {
-    setCurrentBsPage(BS_PAGES.NOT_IN_TERRITORY);
-    setSnapPointIndex(0);
-    setSnapPointsState(SNAP_POINT_STATES[BS_PAGES.NOT_IN_TERRITORY]);
+    changeBsPage(BS_PAGES.NOT_IN_TERRITORY);
   };
   const loadTerritory = async (checkTerritory = false) => {
     let t = territory;
@@ -90,8 +93,8 @@ const RideStateContextContextProvider = ({ children }: { children: any }) => {
         isUserLocationFocused,
         setIsUserLocationFocused,
         currentBsPage,
-        setCurrentBsPage,
         checkStopPointsInTerritory,
+        changeBsPage,
       }}
     >
       {children}

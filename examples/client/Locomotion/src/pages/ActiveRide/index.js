@@ -28,7 +28,7 @@ const RidePage = ({ mapSettings }) => {
   const mapRef = useRef();
   const bottomSheetRef = useRef(null);
   const {
-    currentBsPage, setCurrentBsPage,
+    currentBsPage, changeBsPage,
   } = useContext(RideStateContextContext);
   const {
     serviceEstimations,
@@ -39,7 +39,7 @@ const RidePage = ({ mapSettings }) => {
     requestRide,
     setChosenService,
   } = useContext(RidePageContext);
-  const { setSnapPointsState, setSnapPointIndex, snapPoints } = useContext(BottomSheetContext);
+  const { setSnapPointsState, setIsExpanded, snapPoints } = useContext(BottomSheetContext);
   const {
     clientHasValidPaymentMethods,
   } = payments.useContainer();
@@ -47,19 +47,18 @@ const RidePage = ({ mapSettings }) => {
   const resetStateToAddressSelector = () => {
     setServiceEstimations(null);
     setChosenService(null);
-    setSnapPointsState(SNAP_POINT_STATES.ADDRESS_SELECTOR);
-    setCurrentBsPage(BS_PAGES.ADDRESS_SELECTOR);
+    changeBsPage(BS_PAGES.ADDRESS_SELECTOR);
   };
 
   const goBackToAddress = () => {
     resetStateToAddressSelector();
+    setIsExpanded(true);
     bottomSheetRef.current.expand();
   };
 
   const backToMap = () => {
     resetStateToAddressSelector();
     initSps();
-    setSnapPointIndex(0);
   };
 
   const addressSelectorPage = () => {
@@ -86,14 +85,14 @@ const RidePage = ({ mapSettings }) => {
           if (clientHasValidPaymentMethods()) {
             requestRide();
           } else {
-            setCurrentBsPage(BS_PAGES.NO_PAYMENT);
+            changeBsPage(BS_PAGES.NO_PAYMENT);
           }
         }}
       />
     ),
     [BS_PAGES.SET_LOCATION_ON_MAP]: () => (
       <ConfirmPickup onButtonPress={() => {
-        setCurrentBsPage(BS_PAGES.ADDRESS_SELECTOR);
+        changeBsPage(BS_PAGES.ADDRESS_SELECTOR);
       }}
       />
     ),

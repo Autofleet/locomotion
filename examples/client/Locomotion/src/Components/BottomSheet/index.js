@@ -13,17 +13,11 @@ import targetIcon from '../../assets/target.svg';
 
 const BottomSheetComponent = forwardRef(({ children, focusCurrentLocation }, ref) => {
   const {
-    setSnapPointIndex,
     setIsExpanded,
     snapPoints,
-    snapPointIndex,
     footerComponent,
     isExpanded,
   } = useContext(BottomSheetContext);
-
-  const handleSheetChanges = useCallback((index) => {
-    setSnapPointIndex(index);
-  }, []);
 
   const onAnimate = useCallback((from, to) => {
     if (from !== -1) {
@@ -51,9 +45,7 @@ const BottomSheetComponent = forwardRef(({ children, focusCurrentLocation }, ref
       />
       <BottomSheet
         ref={ref}
-        index={snapPointIndex}
         snapPoints={snapPoints}
-        onChange={handleSheetChanges}
         onAnimate={onAnimate}
         footerComponent={renderFooter}
       >

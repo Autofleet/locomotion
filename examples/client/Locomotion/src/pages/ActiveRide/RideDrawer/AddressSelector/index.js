@@ -36,13 +36,12 @@ const AddressSelectorBottomSheet = () => {
   const userContext = useContext(RidePageContext);
 
   const {
-    setCurrentBsPage,
+    changeBsPage,
   } = useContext(RideStateContextContext);
 
   const {
     isExpanded,
     setSnapPointsState,
-    setSnapPointIndex,
     setIsExpanded,
   } = useContext(BottomSheetContext);
 
@@ -56,6 +55,7 @@ const AddressSelectorBottomSheet = () => {
   const onSearchFocus = () => {
     if (!isExpanded) {
       setSnapPointsState(SNAP_POINT_STATES.ADDRESS_SELECTOR);
+      setIsExpanded(true);
       expand();
     }
   };
@@ -78,8 +78,7 @@ const AddressSelectorBottomSheet = () => {
   };
 
   const onSetLocationOnMap = async () => {
-    setCurrentBsPage(BS_PAGES.SET_LOCATION_ON_MAP);
-    setSnapPointIndex(0);
+    changeBsPage(BS_PAGES.SET_LOCATION_ON_MAP);
     collapse();
   };
   return (

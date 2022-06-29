@@ -14,6 +14,7 @@ import PaymentsContext from '../../../../../context/payments';
 import { PaymentMethodInterface } from '../../../../../context/payments/interface';
 import { RideStateContextContext } from '../../../../../context/ridePageStateContext';
 import { popupNames } from '../utils';
+import { BS_PAGES } from '../../../../../context/ridePageStateContext/utils';
 
 
 interface RideButtonsProps {
@@ -31,7 +32,7 @@ const RideButtons = ({
   } = useContext(RidePageContext);
 
   const {
-    setCurrentBsPage,
+    changeBsPage,
   } = useContext(RideStateContextContext);
 
   const {
@@ -100,7 +101,7 @@ const RideButtons = ({
         data-test-id="selectService"
         disabled={!chosenService}
         onPress={() => {
-          setCurrentBsPage('CONFIRM_PICKUP');
+          changeBsPage(BS_PAGES.CONFIRM_PICKUP);
         }}
       >
         <ButtonText>{i18n.t('general.select').toString()}</ButtonText>
