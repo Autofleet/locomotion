@@ -2,6 +2,7 @@
 import { Alert, PermissionsAndroid, Platform } from 'react-native';
 import Config from 'react-native-config';
 import RNLocation from 'react-native-location';
+import Geolocation from '@react-native-community/geolocation';
 import moment from 'moment';
 
 const currentLocationNative = async () => {
@@ -14,14 +15,10 @@ const currentLocationNative = async () => {
     }
   }
   return new Promise((resolve, reject) => {
-    if (navigator && navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        resolve, reject,
-        { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 },
-      );
-    } else {
-      reject();
-    }
+    Geolocation.getCurrentPosition(
+      resolve, reject,
+      { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 * 60 * 2 },
+    );
   });
 };
 
@@ -84,9 +81,8 @@ class Geo {
 
   handleLocation = (locations) => {
     const location = prepareCoords(locations);
-    console.log({ location });
+    console.debug('handleLocation', { location });
     this.lastLocation = Object.assign({}, location);
-    this.locationSubscription();
   };
 
   currentLocation = async () => {
@@ -119,13 +115,16 @@ const DEFAULT_COORDS = {
 };
 export const getPosition = async () => {
   try {
+    console.debug('getPosition started');
     const granted = await GeoService.checkPermission();
-    if (granted) {
-      return GeoService.currentLocation();
+    console.debug('getPosition -> GeoService.checkPermission:', granted);
+    if (!granted) {
+      return DEFAULT_COORDS;
     }
-    return DEFAULT_COORDS;
+    console.debug('getPosition -> GeoService.currentLocation');
+    return GeoService.currentLocation();
   } catch (e) {
-    console.log('Error getting location', e);
+    console.error('Error getting location', e);
     return DEFAULT_COORDS;
   }
 };
