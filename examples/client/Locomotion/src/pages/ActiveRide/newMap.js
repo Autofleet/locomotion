@@ -41,7 +41,7 @@ export default React.forwardRef(({
   } = useContext(RideStateContextContext);
 
   const isMainPage = currentBsPage === BS_PAGES.ADDRESS_SELECTOR;
-  const isConfirmPickupPage = currentBsPage === BS_PAGES.CONFIRM_PICKUP
+  const isConfirmPickupPage = currentBsPage === BS_PAGES.CONFIRM_PICKUP;
   const isChooseLocationOnMap = [BS_PAGES.CONFIRM_PICKUP, BS_PAGES.SET_LOCATION_ON_MAP].includes(currentBsPage);
   const {
     requestStopPoints, chosenService, saveSelectedLocation, reverseLocationGeocode,
