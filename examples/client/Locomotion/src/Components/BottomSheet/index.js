@@ -1,28 +1,24 @@
 import React, {
-  useCallback, useEffect, useMemo, useRef, useState, useContext, forwardRef,
+  useCallback, useContext, forwardRef,
 } from 'react';
 import BottomSheet, {
-  useBottomSheetDynamicSnapPoints,
   BottomSheetView,
   BottomSheetFooter,
 } from '@gorhom/bottom-sheet';
 import styled from 'styled-components';
+import SquareSvgButton from '../../Components/SquareSvgButton';
 import SafeView from '../SafeView';
-import ChoosePaymentMethod from '../../popups/ChoosePaymentMethod';
 import { BottomSheetContext } from '../../context/bottomSheetContext';
+import targetIcon from '../../assets/target.svg';
 
-const ContentContainer = styled(BottomSheetView)`
-  flex: 1;
-`;
-
-const BottomSheetComponent = forwardRef(({ children }, ref) => {
+const BottomSheetComponent = forwardRef(({ children, focusCurrentLocation }, ref) => {
   const {
     setSnapPointIndex,
-    sheetState,
     setIsExpanded,
     snapPoints,
     snapPointIndex,
     footerComponent,
+    isExpanded,
   } = useContext(BottomSheetContext);
 
   const handleSheetChanges = useCallback((index) => {
@@ -46,9 +42,13 @@ const BottomSheetComponent = forwardRef(({ children }, ref) => {
     [footerComponent],
   );
 
-
   return (
     <>
+      <SquareSvgButton
+        onPress={focusCurrentLocation}
+        icon={targetIcon}
+        style={{ position: 'absolute', bottom: `${parseFloat(snapPoints[isExpanded ? 1 : 0]) + 2}%`, right: 20 }}
+      />
       <BottomSheet
         ref={ref}
         index={snapPointIndex}

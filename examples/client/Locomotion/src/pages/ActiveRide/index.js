@@ -20,6 +20,7 @@ import hamburgerIcon from '../../assets/hamburger.svg';
 import backArrow from '../../assets/arrow-back.svg';
 import { BS_PAGES } from '../../context/ridePageStateContext/utils';
 import payments from '../../context/payments';
+import { getPosition } from '../../services/geo';
 
 
 const RidePage = ({ mapSettings }) => {
@@ -38,7 +39,7 @@ const RidePage = ({ mapSettings }) => {
     requestRide,
     setChosenService,
   } = useContext(RidePageContext);
-  const { setSnapPointsState, setSnapPointIndex } = useContext(BottomSheetContext);
+  const { setSnapPointsState, setSnapPointIndex, snapPoints } = useContext(BottomSheetContext);
   const {
     clientHasValidPaymentMethods,
   } = payments.useContainer();
@@ -109,6 +110,16 @@ const RidePage = ({ mapSettings }) => {
     }
   }, [isLoading]);
 
+  const focusCurrentLocation = async () => {
+    const { coords } = await getPosition();
+    mapRef.current.animateToRegion({
+      latitude: coords.latitude - (parseFloat(snapPoints[0])/10000),
+      longitude: coords.longitude,
+      latitudeDelta: 0.015,
+      longitudeDelta: 0.015,
+    }, 1000);
+  }
+
   return (
     <PageContainer>
       <MainMap
@@ -132,6 +143,7 @@ const RidePage = ({ mapSettings }) => {
         )}
       <BottomSheet
         ref={bottomSheetRef}
+        focusCurrentLocation={focusCurrentLocation}
       >
         {
           BS_PAGE_TO_COMP[currentBsPage]()
