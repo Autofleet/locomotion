@@ -17,17 +17,11 @@ const ContentContainer = styled(BottomSheetView)`
 
 const BottomSheetComponent = forwardRef(({ children }, ref) => {
   const {
-    setSnapPointIndex,
     sheetState,
     setIsExpanded,
     snapPoints,
-    snapPointIndex,
     footerComponent,
   } = useContext(BottomSheetContext);
-
-  const handleSheetChanges = useCallback((index) => {
-    setSnapPointIndex(index);
-  }, []);
 
   const onAnimate = useCallback((from, to) => {
     if (from !== -1) {
@@ -51,9 +45,7 @@ const BottomSheetComponent = forwardRef(({ children }, ref) => {
     <>
       <BottomSheet
         ref={ref}
-        index={snapPointIndex}
         snapPoints={snapPoints}
-        onChange={handleSheetChanges}
         onAnimate={onAnimate}
         footerComponent={renderFooter}
       >

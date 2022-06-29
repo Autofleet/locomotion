@@ -105,7 +105,7 @@ let SERVICE_ESTIMATIONS_INTERVAL_IN_SECONDS: number;
 const RidePageContextProvider = ({ children }: {
   children: any
 }) => {
-  const { checkStopPointsInTerritory, setCurrentBsPage } = useContext(RideStateContextContext);
+  const { checkStopPointsInTerritory, changeBsPage } = useContext(RideStateContextContext);
   const [requestStopPoints, setRequestStopPoints] = useState(INITIAL_STOP_POINTS);
   const [currentGeocode, setCurrentGeocode] = useState<any | null>(null);
   const [searchTerm, setSearchTerm] = useState<string | null>(null);
@@ -142,6 +142,7 @@ const RidePageContextProvider = ({ children }: {
   };
 
   const getServiceEstimations = async () => {
+    setIsReadyForSubmit(false);
     const formattedStopPoints = formatStopPointsForEstimations(requestStopPoints);
     const [estimations, services] = await Promise.all([
       rideApi.createServiceEstimations(formattedStopPoints),
@@ -399,7 +400,7 @@ const RidePageContextProvider = ({ children }: {
   const requestRide = async (): Promise<void> => {
     setRideRequestLoading(true);
 
-    setCurrentBsPage(BS_PAGES.CONFIRMING_RIDE);
+    changeBsPage(BS_PAGES.CONFIRMING_RIDE);
     const formattedRide = {
       serviceId: chosenService?.id,
       paymentMethodId: ride.paymentMethodId,
@@ -415,10 +416,10 @@ const RidePageContextProvider = ({ children }: {
     try {
       const afRide = await rideApi.createRide(formattedRide);
       setRide(afRide);
-      setCurrentBsPage(BS_PAGES.ACTIVE_RIDE);
+      changeBsPage(BS_PAGES.ACTIVE_RIDE);
     } catch (e) {
       // TODO: error handling
-      setCurrentBsPage(BS_PAGES.NO_AVAILABLE_VEHICLES);
+      changeBsPage(BS_PAGES.NO_AVAILABLE_VEHICLES);
     } finally {
       setRideRequestLoading(false);
     }
