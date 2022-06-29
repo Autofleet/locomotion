@@ -73,6 +73,7 @@ export default ({ navigation, menuSide }) => {
         />
         {pageLoading ? <FullPageLoader autoPlay loop /> : null}
         {/* <Balance customer={usePayments.customer} /> */}
+        
         {showList ? (
           <CreditCardsList
             paymentMethods={usePayments.paymentMethods}
