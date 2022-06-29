@@ -157,9 +157,11 @@ const RidePageContextProvider = ({ children }: {
   const validateRequestedStopPoints = async (reqSps: any[]) => {
     const stopPoints = reqSps;
     const isSpsReady = stopPoints.every(r => r.lat && r.lng && r.description);
-    const areStopPointsInTerritory = await checkStopPointsInTerritory(stopPoints);
-    if (stopPoints.length && isSpsReady && areStopPointsInTerritory) {
-      setIsReadyForSubmit(true);
+    if (stopPoints.length && isSpsReady) {
+      const areStopPointsInTerritory = await checkStopPointsInTerritory(stopPoints);
+      if (areStopPointsInTerritory) {
+        setIsReadyForSubmit(true);
+      }
     } else {
       setIsReadyForSubmit(false);
     }

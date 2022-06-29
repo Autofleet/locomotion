@@ -13,10 +13,6 @@ import i18n from '../../I18n';
 import PageHeader from '../../Components/PageHeader';
 import {
   CalendarSvgIcon,
-  NoRidesMessageContainer,
-  NoRidesTitle,
-  NoRidesTitleSubText,
-  NoRidesTitleText,
   PageContent,
 } from './styled';
 import Mixpanel from '../../services/Mixpanel';
@@ -26,16 +22,6 @@ import {
   DD_MMMM_YYYY, endOfDayTime, startOfDayTime, YYYY_MM_DD,
 } from './consts';
 import RangeDateTimePicker from './RangeDateTimePicker';
-
-
-const NoRidesMessage = () => (
-  <NoRidesMessageContainer>
-    <NoRidesTitle>
-      <NoRidesTitleText>{i18n.t('rideHistory.noRides')}</NoRidesTitleText>
-      <NoRidesTitleSubText>{i18n.t('rideHistory.noRidesSubText')}</NoRidesTitleSubText>
-    </NoRidesTitle>
-  </NoRidesMessageContainer>
-);
 
 const getCustomFilter = filterId => ({
   [filterId]: {
@@ -134,8 +120,13 @@ const Page = ({ menuSide }) => {
           />
         </View>
         {showLoader ? (
-          <CenterContainer addTop>
-            <Loader />
+          <CenterContainer top>
+            <Loader
+              dark
+              lottieViewStyle={{
+                height: 15, width: 15,
+              }}
+            />
           </CenterContainer>
         ) : (
           <RidesList activeFilter={filter} rides={rides} />

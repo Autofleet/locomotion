@@ -84,9 +84,8 @@ class Geo {
 
   handleLocation = (locations) => {
     const location = prepareCoords(locations);
-    console.log({ location });
+    console.debug('handleLocation', { location });
     this.lastLocation = Object.assign({}, location);
-    this.locationSubscription();
   };
 
   currentLocation = async () => {
@@ -119,13 +118,16 @@ const DEFAULT_COORDS = {
 };
 export const getPosition = async () => {
   try {
+    console.debug('getPosition started');
     const granted = await GeoService.checkPermission();
-    if (granted) {
-      return GeoService.currentLocation();
+    console.debug('getPosition -> GeoService.checkPermission:', granted);
+    if (!granted) {
+      return DEFAULT_COORDS;
     }
-    return DEFAULT_COORDS;
+    console.debug('getPosition -> GeoService.currentLocation');
+    return GeoService.currentLocation();
   } catch (e) {
-    console.log('Error getting location', e);
+    console.error('Error getting location', e);
     return DEFAULT_COORDS;
   }
 };
