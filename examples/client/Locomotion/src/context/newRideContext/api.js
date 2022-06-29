@@ -29,3 +29,8 @@ export const getActiveRide = async () => {
   const { data } = await network.get('api/v1/rides/active');
   return data;
 };
+
+export const getRide = async (rideId) => {
+  const { data } = await network.get('api/v1/rides/' + rideId);
+  return data;
+};

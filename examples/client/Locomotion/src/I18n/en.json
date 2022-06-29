@@ -349,5 +349,12 @@
   "stopPointsTypes": {
     "dropoff": "Dropoff",
     "pickup": "Pickup"
-  }
+  },
+  "activeRide": {
+    "pickup": {
+        "pending": "Meeting at pickup point"
+    }
+  },
+  "min": "{{ min }} min",
+  "now": "Now"
 }

@@ -15,7 +15,7 @@ import * as navigationService from '../../services/navigation';
 import payments from '../../context/payments';
 import errorIcon from '../../assets/error-icon.svg';
 import Loader from '../Loader';
-import DriverCard from '../DriverCard';
+import ActiveRideContent from './ActiveRide';
 
 const OtherButton = styled(Button)`
   width: 100%;
@@ -123,7 +123,7 @@ const BsPage = ({
   isLoading: boolean;
 }) => (
   <Container>
-    <MainContent>
+    {TitleText && <MainContent>
       <CardText>
         <TitleContainer>
           {titleIcon && <SvgIcon Svg={titleIcon} style={{ marginRight: 5 }} />}
@@ -136,7 +136,7 @@ const BsPage = ({
           {image}
         </CardImage>
       ) : undefined}
-    </MainContent>
+    </MainContent>}
     {children}
     {ButtonText && (
     <OtherButton onPress={onButtonPress} isLoading={isLoading}>
@@ -308,7 +308,6 @@ export const NoAvailableVehicles = (props: any) => {
 
 export const ActiveRide = (props: any) => {
   const { setSnapPointsState } = useContext(BottomSheetContext);
-  const { ride } = useContext(RidePageContext);
 
   useEffect(() => {
     setSnapPointsState(SNAP_POINT_STATES.ACTIVE_RIDE);
@@ -316,15 +315,9 @@ export const ActiveRide = (props: any) => {
 
   return (
     <BsPage
-      TitleText={i18n.t('bottomSheetContent.confirmingRide.titleText')}
       {...props}
     >
-      <>
-        <DriverCard 
-          showRating={false} 
-          ride={ride}
-        />
-      </>
+      <ActiveRideContent />
     </BsPage>
   );
 };

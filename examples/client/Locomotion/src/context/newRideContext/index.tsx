@@ -14,6 +14,7 @@ import settings from '../settings';
 import SETTINGS_KEYS from '../settings/keys';
 import { RideStateContextContext } from '../ridePageStateContext';
 import { BS_PAGES } from '../ridePageStateContext/utils';
+import { RIDE_STATES } from '../../lib/commonTypes';
 
 type Dispatch<A> = (value: A) => void;
 
@@ -47,7 +48,7 @@ interface RidePageContextInterface {
   isReadyForSubmit: boolean;
   historyResults: any[];
   serviceEstimations: any[];
-  ride?: RideInterface;
+  ride: RideInterface;
   updateRide: (ride: any) => void;
   chosenService: any;
   lastSelectedLocation: any;
@@ -101,6 +102,7 @@ export const RidePageContext = createContext<RidePageContextInterface>({
   requestRide: () => undefined,
   serviceRequestFailed: false,
   setServiceRequestFailed: () => undefined,
+  ride: {}
 });
 
 const HISTORY_RECORDS_NUM = 10;
@@ -175,16 +177,24 @@ const RidePageContextProvider = ({ children }: {
     );
   };
 
+  const loadRide = () => {
+    if (ride && ride.id) {
+      
+    }
+  }
+
   const loadActiveRide = async () => {
-    const activeRide = await rideApi.getActiveRides();
+    const activeRide = await rideApi.getActiveRide();
     if (activeRide) {
       setRide(activeRide);
+      changeBsPage(BS_PAGES.ACTIVE_RIDE)
     }
   }
 
   useEffect(() => {
     initCurrentLocation();
     getServiceEstimationsFetchingInterval();
+    loadActiveRide();
   }, []);
 
   useEffect(() => {
@@ -426,8 +436,10 @@ const RidePageContextProvider = ({ children }: {
     };
     try {
       const afRide = await rideApi.createRide(formattedRide);
+      if (afRide.state === RIDE_STATES.REJECTED) {
+        throw new Error();
+      }
       setRide(afRide);
-      changeBsPage(BS_PAGES.ACTIVE_RIDE);
     } catch (e) {
       // TODO: error handling
       changeBsPage(BS_PAGES.NO_AVAILABLE_VEHICLES);
@@ -444,7 +456,7 @@ const RidePageContextProvider = ({ children }: {
     }
   };
 
-  const updateRide = (newRide: Ride) => {
+  const updateRide = (newRide: RideInterface) => {
     setRide({
       ...ride,
       ...newRide,

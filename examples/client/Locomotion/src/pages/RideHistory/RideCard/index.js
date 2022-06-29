@@ -93,7 +93,7 @@ const RideView = ({ ride }) => {
       />
       {ride.driver && (
         <DriverCard
-          showRating
+          activeRide={false}
           ride={ride}
         />
       )}
