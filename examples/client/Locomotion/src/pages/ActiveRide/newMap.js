@@ -52,8 +52,8 @@ export default React.forwardRef(({
   });
 
   const focusCurrentLocation = () => {
-    if (mapRegion.longitude && mapRegion.latitude) {
-      mapInstance.current.animateToRegion({
+    if (mapRegion.longitude && mapRegion.latitude && ref.current) {
+      ref.current.animateToRegion({
         latitude: mapRegion.latitude,
         longitude: mapRegion.longitude,
         latitudeDelta: mapRegion.latitudeDelta,
@@ -87,8 +87,10 @@ export default React.forwardRef(({
   };
 
   useEffect(() => {
-    initLocation();
-  }, []);
+    if (ref.current) {
+      initLocation();
+    }
+  }, [ref.current]);
 
 
   useEffect(() => {
@@ -100,7 +102,7 @@ export default React.forwardRef(({
   useEffect(() => {
     if (currentBsPage === BS_PAGES.CONFIRM_PICKUP) {
       const pickupStopPoint = requestStopPoints.find(sp => sp.type === STOP_POINT_TYPES.STOP_POINT_PICKUP);
-      mapInstance.current.animateToRegion({
+      ref.current.animateToRegion({
         latitude: pickupStopPoint.lat,
         longitude: pickupStopPoint.lng,
         latitudeDelta: 0.001,
@@ -108,9 +110,6 @@ export default React.forwardRef(({
       }, 1000);
     }
   }, [currentBsPage]);
-  React.useImperativeHandle(ref, () => ({
-    focusCurrentLocation,
-  }));
 
   const showInputPointsOnMap = () => {
     const coordsToFit = requestStopPoints
@@ -121,7 +120,7 @@ export default React.forwardRef(({
           longitude: parseFloat(sp.lng),
         }
       ));
-    mapInstance.current.fitToCoordinates(coordsToFit,
+    ref.current.fitToCoordinates(coordsToFit,
       {
         edgePadding: MAP_EDGE_PADDING,
       });
@@ -171,7 +170,7 @@ export default React.forwardRef(({
             focusCurrentLocation();
           }
         }}
-        ref={mapInstance}
+        ref={ref}
         userInterfaceStyle={isDarkMode ? THEME_MOD.DARK : undefined}
         customMapStyle={isDarkMode ? mapDarkMode : undefined}
         {...mapSettings}
