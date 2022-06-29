@@ -20,7 +20,12 @@ const PageHeader = ({
     <HeaderText>{title}</HeaderText>
     {showSkipButton
       && (
-      <SkipButton noBackground onPress={onPressSkip}>
+      <SkipButton
+        testID="skipButton"
+        noBackground
+        onPress={onPressSkip}
+      >
+
         <SkipButtonText>
           {i18n.t('general.skip')}
         </SkipButtonText>
