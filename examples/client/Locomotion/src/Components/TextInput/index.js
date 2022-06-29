@@ -1,6 +1,8 @@
-import React, { useState } from 'react';
+import React, { forwardRef, useState } from 'react';
 import { View } from 'react-native';
-import { Input, InputIconContainer, InputIcon } from './styled';
+import {
+  Input, InputIconContainer, InputIcon, Icon,
+} from './styled';
 
 const TextInput = (props) => {
   const [isFocused, setIsFocused] = useState(false);
@@ -16,39 +18,40 @@ const TextInput = (props) => {
 };
 
 
-export const TextInputWithIcon = (props) => {
+export const TextInputWithIcon = forwardRef((props, ref) => {
   const [isFocused, setIsFocused] = useState(false);
+
   const {
-    children,
-    onFocus,
+    inputIcon,
+    onFocus = () => null,
+    onBlur = () => null,
     fullBorder,
+    error,
   } = props;
 
   return (
-    <InputIconContainer isFocused={isFocused} fullBorder={fullBorder}>
+    <InputIconContainer error={error} isFocused={isFocused} fullBorder>
       <InputIcon>
-        {children}
+        <Icon>
+          {inputIcon}
+        </Icon>
       </InputIcon>
       <View style={{ flex: 1 }}>
         <TextInput
           style={{ textAlign: 'left' }}
-          onFocus={() => setIsFocused(true)}
-          onBlur={() => setIsFocused(false)}
-          ref={props.inputRef}
           {...props}
+          onFocus={() => {
+            onFocus();
+            setIsFocused(true);
+          }}
+          onBlur={() => {
+            onBlur();
+            setIsFocused(false);
+          }}
+          inputRef={ref}
         />
       </View>
     </InputIconContainer>
   );
-};
+});
 export default TextInput;
-
-// width: ${({ width }) => (width || '100%')};
-// border-bottom-width: 1px;
-// margin: 15px auto;
-// ${({ theme }) => `
-//     border-bottom-color: ${theme.isDarkMode ? '#fff' : '#e2e2e2'};
-//     color: ${theme.textColor};
-//     ${commonInputStyleWithTheme(theme)}
-//   `}
-// `;

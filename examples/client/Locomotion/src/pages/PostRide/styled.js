@@ -53,10 +53,11 @@ export const RatingContainer = styled(View)`
 
 export const TipsContainer = styled(View)`
   padding: 30px;
+  flex: 1;
 `;
 
 export const SubmitContainer = styled(View)`
   padding: 0px 30px 70px 30px;
-  flex: 1;
-  justify-content: flex-end;
+  max-height: 100px;
+  flex:1;
 `;

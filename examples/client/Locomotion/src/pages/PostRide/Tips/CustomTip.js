@@ -1,7 +1,9 @@
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
 import styled from 'styled-components';
+import { useBottomSheet } from '@gorhom/bottom-sheet';
+import * as yup from 'yup';
 import i18n from '../../../I18n';
 import { TextInputWithIcon } from '../../../Components/TextInput';
 import RoundedButton from '../../../Components/RoundedButton';
@@ -48,22 +50,78 @@ const ErrorText = styled.Text`
   color: #f35657;
 
 `;
+const isValidNumber = async (number) => {
+  try {
+    const newNumber = await numberSchema.validate(number);
+    return newNumber;
+    return true;
+  } catch (e) {
+    return false;
+  }
+};
+const numberSchema = yup.number().required().positive()
+  .transform(value => value);
+
 const Tips = ({
-
+  isPercentage,
+  customAmount,
+  onSubmit,
+  tipSuffix,
 }) => {
-  const [selectedTip, setSelectedTip] = useState(null);
-  const [customTip, setCustomTip] = useState('');
+  const [customTip, setCustomTip] = useState(customAmount);
+  const [isValid, setIsValid] = useState(null);
+  const { expand, forceClose } = useBottomSheet();
+  const inputRef = useRef(null);
 
-
-  const isOnlyDigits = str => /^[+-]?\d+(\.\d+)?$/.test(str);
   //  const isPercentage = ridePrice >= settings.percentageThreshold;
   //  const buttons = isPercentage ? settings.percentage : settings.fixedPrice;
   //  const tipSuffix = isPercentage ? '%' : '$';
   //
 
+
+  const submitValue = async () => {
+    const validatedNumber = await isValidNumber(customTip);
+    if (validatedNumber) {
+      onSubmit(validatedNumber);
+      // setCustomTip(parsedValue);
+      forceClose();
+    }
+  };
+  const onCancel = () => {
+    inputRef.current.blur();
+    forceClose();
+  };
+
+  const validateTip = async (tip) => {
+    if (tip === '' || !tip) {
+      setIsValid(null);
+      return null;
+    }
+    const validatedNumber = await isValidNumber(tip);
+
+    if (!validatedNumber) {
+      setIsValid(false);
+      return false;
+    }
+
+    if (validatedNumber < 0) {
+      setIsValid(false);
+      return false;
+    }
+
+    setIsValid(true);
+    return true;
+  };
+
   useEffect(() => {
-    console.log(isOnlyDigits(customTip));
+    validateTip(customTip);
   }, [customTip]);
+
+  useEffect(() => {
+    inputRef.current.clear();
+  }, [customAmount]);
+
+
   return (
     <Container>
       <DetailsContainer>
@@ -77,15 +135,12 @@ const Tips = ({
         </Column>
       </DetailsContainer>
       <DetailsContainer style={{ marginTop: 25 }}>
-        {/*         <BottomSheetInput
-          style={{ width: '100%' }}
-          fullBorder
-          placeholderTextColor="#929395"
-          autoCorrect={false}
-        /> */}
         <TextInputWithIcon
-          style={{ width: '100%' }}
+          inputIcon={tipSuffix}
+          ref={inputRef}
+          error={!isValid && isValid !== null}
           fullBorder
+          style={{ width: '100%' }}
           placeholderTextColor="#929395"
           autoCorrect={false}
           type="number"
@@ -95,43 +150,39 @@ const Tips = ({
             setCustomTip(text);
           }}
           onFocus={(e) => {
-
+            expand();
           }}
-        >
-          {/* <Icon>{tipSuffix}</Icon> */}
-        </TextInputWithIcon>
+        />
       </DetailsContainer>
       <DetailsContainer>
 
         <ErrorContainer>
-          <ErrorText>Please enter a valid amount</ErrorText>
+          {!isValid && isValid !== null ? <ErrorText>Please enter a valid amount</ErrorText> : null}
         </ErrorContainer>
       </DetailsContainer>
 
       <DetailsContainer style={{ marginTop: 15 }}>
         <View style={{ flex: 1, paddingRight: 10 }}>
-
           <RoundedButton
             type="confirm"
             hollow
             disabled={false}
             useCancelTextButton={false}
             setLoading={null}
-            style={{}}
+            onPress={onCancel}
           >
             {i18n.t('postRide.tip.customTip.cancel')}
 
           </RoundedButton>
         </View>
         <View style={{ flex: 1, paddingLeft: 10 }}>
-
           <RoundedButton
             type="confirm"
             hollow={false}
-            disabled
+            disabled={!isValid}
             useCancelTextButton={false}
             setLoading={null}
-            style={{}}
+            onPress={() => submitValue(customTip)}
           >
             {i18n.t('postRide.tip.customTip.submit')}
           </RoundedButton>

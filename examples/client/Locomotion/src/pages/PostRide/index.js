@@ -26,32 +26,21 @@ const PostRidePage = ({ menuSide }) => {
   const navigation = useNavigation();
   const route = useRoute();
   const [rating, setRating] = useState(null);
-
-  const bottomSheetRef = useRef(null);
-  const {
-    snapPoints,
-    setSnapPointsState,
-    setSnapPointIndex,
-  } = useContext(BottomSheetContext);
+  const [customTip, setCustomTip] = useState(null);
+  const [rideTip, setRideTip] = useState(null);
 
   useEffect(() => {
-    setSnapPointsState(['40%']);
-    // setSnapPointIndex(-1);
     Mixpanel.pageView(route.name);
   }, []);
 
-  /*   useEffect(() => {
-    const unsubscribe = navigation.addListener('willFocus', () => {
-
-    });
-
-    return unsubscribe;
-  }, [navigation]); */
 
   const onRatingUpdate = (selectedRating) => {
     setRating(selectedRating);
   };
 
+  const onSelectTip = () => {
+    // setRideTip()
+  };
   return (
     <PageContainer>
       <PageHeader
@@ -64,27 +53,25 @@ const PostRidePage = ({ menuSide }) => {
           <SummaryStarsTitle>{i18n.t('postRide.ratingHeadline')}</SummaryStarsTitle>
           <StarRating onUpdate={onRatingUpdate} />
         </RatingContainer>
-        <TipsContainer>
-          <Tips onCustom={() => setSnapPointIndex(0)} />
+
+        <TipsContainer style={{
+          zIndex: 5,
+          elevation: 5,
+          flex: 2,
+        }}
+        >
+          <Tips />
         </TipsContainer>
         <SubmitContainer>
-          <Button>Continue</Button>
+          <Button>{i18n.t('postRide.submit')}</Button>
         </SubmitContainer>
       </PageContent>
-      <BottomSheet
-        ref={bottomSheetRef}
-        enablePanDownToClose
-
-      >
-        <CustomTip />
-      </BottomSheet>
     </PageContainer>
   );
 };
 
 
 export default props => (
-  <BottomSheetContextProvider {...props}>
-    <PostRidePage {...props} />
-  </BottomSheetContextProvider>
+
+  <PostRidePage {...props} />
 );

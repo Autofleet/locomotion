@@ -10,7 +10,7 @@ const colors = theme => ({
 });
 
 export const SubmitButtonText = styled.Text`
-  font-size: 18px;
+  font-size: 16px;
   text-align: center;
   width: 100%;
   line-height: 20px;
@@ -25,15 +25,14 @@ export const StyledButton = styled.TouchableOpacity`
   flex: 1;
   padding: 5px;
   height:  50px;
-
 `}
 `;
 
 export const ButtonTextContainer = styled.View`
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
+  justify-content: space-between;
   flex: 1;
+  align-items: center;
+  flex-direction: row;
   background-color: #f1f2f6;
   border-radius: 8px;
   border-color: ${({ theme, selected }) => (selected ? theme.primaryColor : 'transparent')};
