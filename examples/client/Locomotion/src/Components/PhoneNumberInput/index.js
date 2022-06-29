@@ -37,11 +37,14 @@ const PhoneNumberInput = ({
 
   return defaultCode ? (
     <PhoneInput
+      testID="phoneNumber"
       value={value}
       autoFocus={autoFocus}
       defaultCode={defaultCode}
       onChangeFormattedText={onChangeText}
       textInputProps={{
+        accessible: true,
+        accessibilityLabel: 'phoneNumber',
         onFocus: () => setIsFocused(true),
         onBlur: () => setIsFocused(false),
       }}
