@@ -102,7 +102,7 @@ export default React.forwardRef(({
   useEffect(() => {
     if (currentBsPage === BS_PAGES.CONFIRM_PICKUP) {
       const pickupStopPoint = requestStopPoints.find(sp => sp.type === STOP_POINT_TYPES.STOP_POINT_PICKUP);
-      mapInstance.current.animateToRegion({
+      ref.current.animateToRegion({
         latitude: pickupStopPoint.lat,
         longitude: pickupStopPoint.lng,
         latitudeDelta: 0.001,
