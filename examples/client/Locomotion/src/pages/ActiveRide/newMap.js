@@ -41,11 +41,11 @@ export default React.forwardRef(({
   } = useContext(RideStateContextContext);
 
   const isMainPage = currentBsPage === BS_PAGES.ADDRESS_SELECTOR;
-  const isConfirmPickup = [BS_PAGES.CONFIRM_PICKUP, BS_PAGES.SET_LOCATION_ON_MAP].includes(currentBsPage);
+  const isConfirmPickupPage = currentBsPage === BS_PAGES.CONFIRM_PICKUP
+  const isChooseLocationOnMap = [BS_PAGES.CONFIRM_PICKUP, BS_PAGES.SET_LOCATION_ON_MAP].includes(currentBsPage);
   const {
     requestStopPoints, chosenService, saveSelectedLocation, reverseLocationGeocode,
   } = useContext(RidePageContext);
-
   const [mapRegion, setMapRegion] = useState({
     latitudeDelta: 0.015,
     longitudeDelta: 0.015,
@@ -145,7 +145,7 @@ export default React.forwardRef(({
         followsUserLocation={isUserLocationFocused}
         moveOnMarkerPress={false}
         onRegionChangeComplete={async (event) => {
-          if (isConfirmPickup) {
+          if (isChooseLocationOnMap) {
             const { latitude, longitude } = event;
             const lat = latitude.toFixed(6);
             const lng = longitude.toFixed(6);
@@ -176,7 +176,7 @@ export default React.forwardRef(({
         customMapStyle={isDarkMode ? mapDarkMode : undefined}
         {...mapSettings}
       >
-        {currentBsPage !== BS_PAGES.CONFIRM_PICKUP && requestStopPoints.filter(sp => !!sp.lat).length > 1
+        {!isConfirmPickupPage && requestStopPoints.filter(sp => !!sp.lat).length > 1
           ? requestStopPoints
             .filter(sp => !!sp.lat)
             .map(sp => (<StationsMap stopPoint={sp} />))
@@ -195,7 +195,7 @@ export default React.forwardRef(({
           ))) : null}
         {buildAvailabilityVehicles()}
       </MapView>
-      {isConfirmPickup && (
+      {isChooseLocationOnMap && (
         <LocationMarkerContainer pointerEvents="none">
           <LocationMarker />
         </LocationMarkerContainer>
