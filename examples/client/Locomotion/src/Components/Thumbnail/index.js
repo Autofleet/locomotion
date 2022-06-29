@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Image, StyleSheet } from 'react-native';
 import FastImage from 'react-native-fast-image';
 import LottieView from 'lottie-react-native';
@@ -6,9 +6,11 @@ import propsTypes from 'prop-types';
 import styled from 'styled-components';
 import Button from '../Button';
 import avatarIcon from './default.png';
-import editIcon from './edit_btn.png';
-import addIcon from './add_btn.png';
-import lightLoader from '../../assets/loaders/light-loader.json';
+import editIcon from './edit.svg';
+import addIcon from './add.svg';
+import SvgIcon from '../SvgIcon';
+import Loader from '../Loader';
+import { Context as ThemeContext } from '../../context/theme';
 
 const modes = {
   edit: editIcon,
@@ -17,6 +19,8 @@ const modes = {
 
 const Container = styled.View``;
 const myThumbnail = (props) => {
+  const { primaryColor } = useContext(ThemeContext);
+
   const defaultStyles = {
     linearGradient: {
       padding: 3,
@@ -62,17 +66,10 @@ const myThumbnail = (props) => {
         data-test-id="ImagePickerButton"
       >
         {props.showLoader ? (
-          <LottieView
-            style={undefined}
-            ref={(animation) => {
-              this.animation = animation;
-              if (animation) {
-                animation.play();
-              }
+          <Loader
+            lottieViewStyle={{
+              height: 15, width: 15,
             }}
-            source={lightLoader}
-            autoPlay
-            loop
           />
         ) : (
           <ImageComponent
@@ -88,11 +85,7 @@ const myThumbnail = (props) => {
           style={styles.iconContainer}
           data-test-id={`${props.mode}ImageButton`}
         >
-          <Image
-            onPress={props.onPress}
-            style={styles.icon}
-            source={modes[props.mode]}
-          />
+          <SvgIcon Svg={modes[props.mode]} height={48} width={48} fill={primaryColor} />
         </Button>
       )}
     </Container>
