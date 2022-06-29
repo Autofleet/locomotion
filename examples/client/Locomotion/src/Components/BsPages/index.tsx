@@ -1,5 +1,5 @@
 import React, { useContext, useEffect } from 'react';
-import { Text, View } from 'react-native';
+import { Image, Text, View } from 'react-native';
 import styled from 'styled-components';
 import { useBottomSheet } from '@gorhom/bottom-sheet';
 import SvgIcon from '../SvgIcon';
@@ -14,6 +14,7 @@ import { MAIN_ROUTES } from '../../pages/routes';
 import * as navigationService from '../../services/navigation';
 import payments from '../../context/payments';
 import errorIcon from '../../assets/error-icon.svg';
+import Loader from '../Loader';
 
 const OtherButton = styled(Button)`
   width: 100%;
@@ -88,8 +89,13 @@ const SecondaryButtonTitle = styled(Text)`
   `};
 `;
 
-const AddressInput = styled(Text)`
+const AddressInput = styled(Text)``;
 
+const LoaderContainer = styled(View)`
+height: 25px;
+width: 100%;
+margin: auto 0;
+margin-top: 25px;
 `;
 
 const BsPage = ({
@@ -131,9 +137,11 @@ const BsPage = ({
       ) : undefined}
     </MainContent>
     {children}
+    {ButtonText && (
     <OtherButton onPress={onButtonPress} isLoading={isLoading}>
       <ButtonTitle>{ButtonText}</ButtonTitle>
     </OtherButton>
+    )}
     {SecondaryButtonText && (
     <SecondaryButton onPress={onSecondaryButtonPress}>
       <SecondaryButtonTitle>{SecondaryButtonText}</SecondaryButtonTitle>
@@ -215,7 +223,7 @@ export const ConfirmPickup = (props: any) => {
 
 export const NoPayment = (props: any) => {
   const { setSnapPointsState } = useContext(BottomSheetContext);
-  const { setCurrentBsPage } = useContext(RideStateContextContext);
+  const { changeBsPage } = useContext(RideStateContextContext);
   const { requestRide } = useContext(RidePageContext);
 
   const {
@@ -245,13 +253,72 @@ export const NoPayment = (props: any) => {
       SubTitleText={i18n.t('bottomSheetContent.noPayment.subTitleText')}
       SecondaryButtonText={i18n.t('bottomSheetContent.noPayment.secondaryButtonText')}
       onSecondaryButtonPress={() => {
-        setSnapPointsState(SNAP_POINT_STATES.ADDRESS_SELECTOR);
-        setCurrentBsPage(BS_PAGES.ADDRESS_SELECTOR);
+        changeBsPage(BS_PAGES.ADDRESS_SELECTOR);
       }}
       onButtonPress={() => {
         navigationService.navigate(MAIN_ROUTES.PAYMENT, { rideFlow: true });
       }}
       {...props}
     />
+  );
+};
+
+export const ConfirmingRide = (props: any) => {
+  const { setSnapPointsState } = useContext(BottomSheetContext);
+
+  useEffect(() => {
+    setSnapPointsState(SNAP_POINT_STATES.CONFIRMING_RIDE);
+  }, []);
+
+  return (
+    <BsPage
+      TitleText={i18n.t('bottomSheetContent.confirmingRide.titleText')}
+      {...props}
+    >
+      <LoaderContainer>
+        <Loader
+          dark
+          lottieViewStyle={{
+            height: '100%', width: '100%', alignItems: 'center', justifyContent: 'center',
+          }}
+          sourceProp={null}
+        />
+      </LoaderContainer>
+    </BsPage>
+  );
+};
+
+export const NoAvailableVehicles = (props: any) => {
+  const { setSnapPointsState } = useContext(BottomSheetContext);
+
+  useEffect(() => {
+    setSnapPointsState(SNAP_POINT_STATES.NO_AVAILABLE_VEHICLES);
+  }, []);
+
+  return (
+    <BsPage
+      TitleText={i18n.t('bottomSheetContent.noAvailableVehicles.titleText')}
+      ButtonText={i18n.t('bottomSheetContent.noAvailableVehicles.buttonText')}
+      SubTitleText={i18n.t('bottomSheetContent.noAvailableVehicles.subTitleText')}
+      {...props}
+    />
+  );
+};
+
+export const ActiveRide = (props: any) => {
+  const { setSnapPointsState } = useContext(BottomSheetContext);
+  const { ride } = useContext(RidePageContext);
+
+  useEffect(() => {
+    setSnapPointsState(SNAP_POINT_STATES.ACTIVE_RIDE);
+  }, []);
+
+  return (
+    <BsPage
+      TitleText={i18n.t('bottomSheetContent.confirmingRide.titleText')}
+      {...props}
+    >
+      <Text>{ride?.id}</Text>
+    </BsPage>
   );
 };

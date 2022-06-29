@@ -83,6 +83,10 @@
                 "text": "Welcome aboard, {{firstName}}!",
                 "subText": "We are glad to have you riding with us.",
                 "buttonText": "Let's go!"
+            },
+            "card": {
+                "title": "Payment Method",
+                "text": "Credit card information"
             }
         },
         "pageTitle": "Your profile",
@@ -307,6 +311,9 @@
     "subName": "Rider app"
   },
   "bottomSheetContent": {
+    "confirmingRide": {
+        "titleText": "Confirming your ride"
+    },
     "confirmPickup": {
       "titleText": "Confirm pickup",
       "buttonText": "Confirm and request",
@@ -321,8 +328,13 @@
         "titleText": "No payment set",
         "buttonText": "Add payment method",
         "secondaryButtonText": "Cancel",
-        "subTitleText": "Without setting a payment method, you won't be able to make a ride request."
-      },
+        "subTitleText": "Without setting a payment method, you won't be able to make a ride request"
+    },
+    "noAvailableVehicles": {
+        "titleText": "We are really busy",
+        "buttonText": "Order again",
+        "subTitleText": "Please try again in a few minutes"
+    },
     "ride": {
         "now": "Now",
         "notes": {

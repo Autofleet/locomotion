@@ -13,72 +13,124 @@ import {
 import settings from '../settings';
 import SETTINGS_KEYS from '../settings/keys';
 import { RideStateContextContext } from '../ridePageStateContext';
+import { BS_PAGES } from '../ridePageStateContext/utils';
 
-export const RidePageContext = createContext({
-  loadAddress: () => undefined,
-  reverseLocationGeocode: (lat, lng) => undefined,
-  enrichPlaceWithLocation: () => undefined,
+type Dispatch<A> = (value: A) => void;
+
+interface Ride {
+  id?: string;
+  notes?: string;
+  paymentMethodId?: string;
+  serviceTypeId?: string;
+}
+
+interface RidePageContextInterface {
+  loadAddress: (input: any) => void;
+  reverseLocationGeocode: (lat: number, lng: number) => any;
+  enrichPlaceWithLocation: (placeId: string) => any;
+  searchTerm: string | null;
+  setSearchTerm: Dispatch<string | null>;
+  selectedInputIndex: number | null;
+  setSelectedInputIndex: Dispatch<number | null>;
+  selectedInputTarget: any;
+  setSelectedInputTarget: Dispatch<any | null>;
+  onAddressSelected: (item: any, loadRide: boolean) => void;
+  requestStopPoints: any[];
+  searchResults: any;
+  searchAddress: (searchText: string) => void;
+  updateRequestSp: (sp: any) => void;
+  setSpCurrentLocation: () => void;
+  isReadyForSubmit: boolean;
+  historyResults: any[];
+  serviceEstimations: any[];
+  ride?: Ride;
+  updateRide: (ride: any) => void;
+  chosenService: any;
+  lastSelectedLocation: any;
+  getCurrentLocationAddress: () => any;
+  saveSelectedLocation: (sp: any) => void;
+  requestRide: () => void;
+  rideRequestLoading: boolean;
+  stopRequestInterval: () => void;
+  isLoading: boolean;
+  loadHistory: () => void;
+  setChosenService: Dispatch<any | null>;
+  setServiceEstimations: Dispatch<any | null>;
+  initSps: () => void;
+  fillLoadSkeleton: () => void;
+  serviceRequestFailed: boolean;
+  setServiceRequestFailed: Dispatch<boolean>
+}
+
+export const RidePageContext = createContext<RidePageContextInterface>({
+  loadAddress: (input: any) => undefined,
+  reverseLocationGeocode: (lat: number, lng: number) => undefined,
+  enrichPlaceWithLocation: (placeId: string) => undefined,
   searchTerm: '',
   setSearchTerm: () => undefined,
   selectedInputIndex: null,
   setSelectedInputIndex: () => undefined,
   selectedInputTarget: null,
   setSelectedInputTarget: () => undefined,
-  onAddressSelected: () => undefined,
+  onAddressSelected: (item: any, loadRide: boolean) => undefined,
   requestStopPoints: [],
   searchResults: [],
-  searchAddress: null,
-  updateRequestSp: sp => undefined,
+  searchAddress: (searchText: string) => undefined,
+  updateRequestSp: (sp: any) => undefined,
   setSpCurrentLocation: () => undefined,
   isReadyForSubmit: false,
   historyResults: [],
   serviceEstimations: [],
-  ride: {
-    notes: '',
-    paymentMethodId: null,
-    serviceId: null,
-  },
-  updateRide: ride => undefined,
+  updateRide: (ride: any) => undefined,
   chosenService: null,
   lastSelectedLocation: null,
   getCurrentLocationAddress: () => undefined,
-  saveSelectedLocation: sp => undefined,
-  requestRide: () => undefined,
+  saveSelectedLocation: (sp: any) => undefined,
   rideRequestLoading: false,
   stopRequestInterval: () => undefined,
+  isLoading: false,
+  loadHistory: () => undefined,
+  setChosenService: () => undefined,
+  setServiceEstimations: () => undefined,
+  initSps: () => undefined,
+  fillLoadSkeleton: () => undefined,
+  requestRide: () => undefined,
   serviceRequestFailed: false,
   setServiceRequestFailed: () => undefined,
 });
 
 const HISTORY_RECORDS_NUM = 10;
-let SERVICE_ESTIMATIONS_INTERVAL_IN_SECONDS;
+let SERVICE_ESTIMATIONS_INTERVAL_IN_SECONDS: number;
 
-const RidePageContextProvider = ({ children }) => {
-  const { checkStopPointsInTerritory } = useContext(RideStateContextContext);
+const RidePageContextProvider = ({ children }: {
+  children: any
+}) => {
+  const { checkStopPointsInTerritory, changeBsPage } = useContext(RideStateContextContext);
   const [requestStopPoints, setRequestStopPoints] = useState(INITIAL_STOP_POINTS);
-  const [currentGeocode, setCurrentGeocode] = useState(null);
-  const [searchTerm, setSearchTerm] = useState(null);
-  const [selectedInputIndex, setSelectedInputIndex] = useState(null);
-  const [selectedInputTarget, setSelectedInputTarget] = useState(null);
-  const [searchResults, setSearchResults] = useState(null);
+  const [currentGeocode, setCurrentGeocode] = useState<any | null>(null);
+  const [searchTerm, setSearchTerm] = useState<string | null>(null);
+  const [selectedInputIndex, setSelectedInputIndex] = useState<number | null>(null);
+  const [selectedInputTarget, setSelectedInputTarget] = useState<any | null>(null);
+  const [searchResults, setSearchResults] = useState<any[] | null>(null);
   const [isReadyForSubmit, setIsReadyForSubmit] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [historyResults, setHistoryResults] = useState([]);
-  const [serviceEstimations, setServiceEstimations] = useState(null);
-  const [ride, setRide] = useState({});
-  const [chosenService, setChosenService] = useState(null);
+  const [serviceEstimations, setServiceEstimations] = useState<any | null>(null);
+  const [ride, setRide] = useState<Ride>({});
+  const [chosenService, setChosenService] = useState<any | null>(null);
   const [lastSelectedLocation, saveSelectedLocation] = useState(false);
   const [rideRequestLoading, setRideRequestLoading] = useState(false);
-  const [serviceRequestFailed, setServiceRequestFailed] = useState(false);
-  const intervalRef = useRef();
+  const [serviceRequestFailed, setServiceRequestFailed] = useState<boolean>(false);
+  const intervalRef = useRef<any>();
+
   const { getSettingByKey } = settings.useContainer();
 
   const stopRequestInterval = () => {
     clearInterval(intervalRef.current);
   };
-  const formatEstimations = (services, estimations, tags) => {
-    const estimationsMap = {};
-    estimations.map((e) => {
+  const formatEstimations = (services: any[], estimations: any, tags: any): any => {
+    const estimationsMap: any = {};
+    estimations.map((e: any) => {
       estimationsMap[e.serviceId] = e;
     });
     const formattedServices = services.map((service) => {
@@ -90,6 +142,7 @@ const RidePageContextProvider = ({ children }) => {
   };
 
   const getServiceEstimations = async () => {
+    setIsReadyForSubmit(false);
     const formattedStopPoints = formatStopPointsForEstimations(requestStopPoints);
     const [estimations, services] = await Promise.all([
       rideApi.createServiceEstimations(formattedStopPoints),
@@ -97,11 +150,11 @@ const RidePageContextProvider = ({ children }) => {
     ]);
     const tags = getEstimationTags(estimations);
     const formattedEstimations = formatEstimations(services, estimations, tags);
-    setChosenService(formattedEstimations.find(e => e.eta));
+    setChosenService(formattedEstimations.find((e: any) => e.eta));
     setServiceEstimations(formattedEstimations);
   };
 
-  const validateRequestedStopPoints = async (reqSps) => {
+  const validateRequestedStopPoints = async (reqSps: any[]) => {
     const stopPoints = reqSps;
     const isSpsReady = stopPoints.every(r => r.lat && r.lng && r.description);
     const areStopPointsInTerritory = await checkStopPointsInTerritory(stopPoints);
@@ -131,7 +184,36 @@ const RidePageContextProvider = ({ children }) => {
     validateRequestedStopPoints(requestStopPoints);
   }, [requestStopPoints]);
 
-  const getCurrentLocationAddress = async () => {
+  const reverseLocationGeocode = async (pinLat: number | null = null, pinLng: number | null = null): Promise<any | undefined> => {
+    try {
+      let location;
+      if (pinLat && pinLng) {
+        location = `${pinLat},${pinLng}`;
+      } else {
+        const currentCoords = await getCurrentLocation();
+        location = `${currentCoords.latitude},${currentCoords.longitude}`;
+      }
+
+      const data = await getGeocode({
+        latlng: location,
+      });
+
+      const { lat, lng } = data.results[0].geometry.location;
+      const geoLocation = {
+        streetAddress: buildStreetAddress(data),
+        description: data.results[0].formatted_address,
+        lat,
+        lng,
+      };
+
+      return geoLocation;
+    } catch (error) {
+      console.log('Got error while try to get places', error);
+      return undefined;
+    }
+  };
+
+  const getCurrentLocationAddress = async (): Promise<any | null> => {
     const currentAddress = await reverseLocationGeocode();
     if (currentAddress) {
       const locationData = {
@@ -172,11 +254,11 @@ const RidePageContextProvider = ({ children }) => {
     }
   };
 
-  const updateRequestSp = (data) => {
+  const updateRequestSp = (data: any[]) => {
     const reqSps = [...requestStopPoints];
     const index = _.isNil(selectedInputIndex) ? requestStopPoints.length - 1 : selectedInputIndex;
-    reqSps[index] = {
-      ...reqSps[index],
+    reqSps[index || 0] = {
+      ...reqSps[index || 0],
       ...data,
     };
 
@@ -192,7 +274,7 @@ const RidePageContextProvider = ({ children }) => {
     updateRequestSp(currentGeocode);
   };
 
-  const loadAddress = async (input) => {
+  const loadAddress = async (input: any) => {
     const currentCoords = await getCurrentLocation();
     let location = null;
     try {
@@ -212,37 +294,7 @@ const RidePageContextProvider = ({ children }) => {
     }
   };
 
-
-  const reverseLocationGeocode = async (pinLat, pinLng) => {
-    try {
-      let location;
-      if (pinLat && pinLng) {
-        location = `${pinLat},${pinLng}`;
-      } else {
-        const currentCoords = await getCurrentLocation();
-        location = `${currentCoords.latitude},${currentCoords.longitude}`;
-      }
-
-      const data = await getGeocode({
-        latlng: location,
-      });
-
-      const { lat, lng } = data.results[0].geometry.location;
-      const geoLocation = {
-        streetAddress: buildStreetAddress(data),
-        description: data.results[0].formatted_address,
-        lat,
-        lng,
-      };
-
-      return geoLocation;
-    } catch (error) {
-      console.log('Got error while try to get places', error);
-      return undefined;
-    }
-  };
-
-  const enrichPlaceWithLocation = async (placeId) => {
+  const enrichPlaceWithLocation = async (placeId: string) => {
     console.log({ placeId });
     try {
       const data = await getPlaceDetails(placeId);
@@ -253,14 +305,14 @@ const RidePageContextProvider = ({ children }) => {
     }
   };
 
-  const onAddressSelected = async (selectedItem, loadRide) => {
+  const onAddressSelected = async (selectedItem: any, loadRide: boolean) => {
     if (selectedItem.isLoading) {
       return null;
     }
     const enrichedPlace = await enrichPlaceWithLocation(selectedItem.placeId);
     const reqSps = [...requestStopPoints];
-    reqSps[selectedInputIndex] = {
-      ...reqSps[selectedInputIndex],
+    reqSps[selectedInputIndex || 0] = {
+      ...reqSps[selectedInputIndex || 0],
       description: selectedItem.fullText,
       streetAddress: selectedItem.text,
       placeId: selectedItem.placeId,
@@ -284,7 +336,7 @@ const RidePageContextProvider = ({ children }) => {
     return location.coords;
   };
 
-  const searchAddress = async (searchText) => {
+  const searchAddress = async (searchText: string) => {
     if (searchText === null || searchText === '') {
       resetSearchResults();
     } else {
@@ -294,15 +346,15 @@ const RidePageContextProvider = ({ children }) => {
     }
   };
 
-  const parseSearchResults = results => results.map(r => ({
+  const parseSearchResults = (results: any[]) => results.map(r => ({
     text: r.structured_formatting.main_text,
     subText: r.structured_formatting.secondary_text,
     fullText: `${r.structured_formatting.main_text}, ${r.structured_formatting.secondary_text}`,
     placeId: r.place_id,
   }));
 
-  const saveLastAddresses = async (item) => {
-    const history = await getLastAddresses();
+  const saveLastAddresses = async (item: any) => {
+    const history: any[] = await getLastAddresses();
     const filteredHistory = (history || []).filter(h => h.placeId !== item.placeId);
     filteredHistory.unshift(item);
     await StorageService.save({ lastAddresses: filteredHistory.slice(0, HISTORY_RECORDS_NUM) });
@@ -345,10 +397,12 @@ const RidePageContextProvider = ({ children }) => {
     }
   }, [isReadyForSubmit]);
 
-  const requestRide = async () => {
+  const requestRide = async (): Promise<void> => {
     setRideRequestLoading(true);
+
+    changeBsPage(BS_PAGES.CONFIRMING_RIDE);
     const formattedRide = {
-      serviceTypeId: chosenService.id,
+      serviceId: chosenService?.id,
       paymentMethodId: ride.paymentMethodId,
       rideType: 'passenger',
       stopPoints: requestStopPoints.map((sp, i) => ({
@@ -359,23 +413,31 @@ const RidePageContextProvider = ({ children }) => {
         ...(i === 0 && { notes: ride.notes }),
       })),
     };
-
-    await rideApi.createRide(formattedRide);
-    setRideRequestLoading(false);
+    try {
+      const afRide = await rideApi.createRide(formattedRide);
+      setRide(afRide);
+      changeBsPage(BS_PAGES.ACTIVE_RIDE);
+    } catch (e) {
+      // TODO: error handling
+      changeBsPage(BS_PAGES.NO_AVAILABLE_VEHICLES);
+    } finally {
+      setRideRequestLoading(false);
+    }
   };
 
-  const updateRide = (newRide) => {
-    setRide({
-      ...ride,
-      ...newRide,
-    });
-  };
 
   const fillLoadSkeleton = () => {
     const filledArray = new Array(4).fill({ isLoading: true });
     if (!searchResults || !searchResults.length || (searchResults.length && !searchResults[0].isLoading)) {
       setSearchResults(filledArray);
     }
+  };
+
+  const updateRide = (newRide: Ride) => {
+    setRide({
+      ...ride,
+      ...newRide,
+    });
   };
 
   return (
@@ -399,7 +461,6 @@ const RidePageContextProvider = ({ children }) => {
         updateRequestSp,
         setSpCurrentLocation,
         isReadyForSubmit,
-        validateRequestedStopPoints,
         historyResults,
         loadHistory,
         serviceEstimations,
