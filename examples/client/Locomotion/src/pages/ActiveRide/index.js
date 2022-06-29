@@ -20,6 +20,7 @@ import hamburgerIcon from '../../assets/hamburger.svg';
 import backArrow from '../../assets/arrow-back.svg';
 import { BS_PAGES } from '../../context/ridePageStateContext/utils';
 import payments from '../../context/payments';
+import { getPosition } from '../../services/geo';
 
 
 const RidePage = ({ mapSettings }) => {
@@ -27,7 +28,7 @@ const RidePage = ({ mapSettings }) => {
   const mapRef = useRef();
   const bottomSheetRef = useRef(null);
   const {
-    currentBsPage, setCurrentBsPage,
+    currentBsPage, changeBsPage,
   } = useContext(RideStateContextContext);
   const {
     serviceEstimations,
@@ -38,7 +39,7 @@ const RidePage = ({ mapSettings }) => {
     requestRide,
     setChosenService,
   } = useContext(RidePageContext);
-  const { setSnapPointsState, setSnapPointIndex } = useContext(BottomSheetContext);
+  const { setSnapPointsState, setIsExpanded, snapPoints } = useContext(BottomSheetContext);
   const {
     clientHasValidPaymentMethods,
   } = payments.useContainer();
@@ -46,19 +47,18 @@ const RidePage = ({ mapSettings }) => {
   const resetStateToAddressSelector = () => {
     setServiceEstimations(null);
     setChosenService(null);
-    setSnapPointsState(SNAP_POINT_STATES.ADDRESS_SELECTOR);
-    setCurrentBsPage(BS_PAGES.ADDRESS_SELECTOR);
+    changeBsPage(BS_PAGES.ADDRESS_SELECTOR);
   };
 
   const goBackToAddress = () => {
     resetStateToAddressSelector();
+    setIsExpanded(true);
     bottomSheetRef.current.expand();
   };
 
   const backToMap = () => {
     resetStateToAddressSelector();
     initSps();
-    setSnapPointIndex(0);
   };
 
   const addressSelectorPage = () => {
@@ -85,14 +85,14 @@ const RidePage = ({ mapSettings }) => {
           if (clientHasValidPaymentMethods()) {
             requestRide();
           } else {
-            setCurrentBsPage(BS_PAGES.NO_PAYMENT);
+            changeBsPage(BS_PAGES.NO_PAYMENT);
           }
         }}
       />
     ),
     [BS_PAGES.SET_LOCATION_ON_MAP]: () => (
       <ConfirmPickup onButtonPress={() => {
-        setCurrentBsPage(BS_PAGES.ADDRESS_SELECTOR);
+        changeBsPage(BS_PAGES.ADDRESS_SELECTOR);
       }}
       />
     ),
@@ -108,6 +108,16 @@ const RidePage = ({ mapSettings }) => {
       bottomSheetRef.current.collapse();
     }
   }, [isLoading]);
+
+  const focusCurrentLocation = async () => {
+    const { coords } = await getPosition();
+    mapRef.current.animateToRegion({
+      latitude: coords.latitude - (parseFloat(snapPoints[0]) / 10000),
+      longitude: coords.longitude,
+      latitudeDelta: 0.015,
+      longitudeDelta: 0.015,
+    }, 1000);
+  };
 
   return (
     <PageContainer>
@@ -132,6 +142,7 @@ const RidePage = ({ mapSettings }) => {
         )}
       <BottomSheet
         ref={bottomSheetRef}
+        focusCurrentLocation={focusCurrentLocation}
       >
         {
           BS_PAGE_TO_COMP[currentBsPage]()
