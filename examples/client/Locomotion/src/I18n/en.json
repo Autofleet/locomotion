@@ -19,7 +19,8 @@
         "next": "Continue",
         "cancel": "Cancel",
         "skip": "Skip",
-        "select": "Select"
+        "select": "Select",
+        "now": "Now"
     },
     "login": {
         "getStarted": "Get started!",

@@ -66,6 +66,7 @@ export default React.forwardRef(({
     <AvailabilityVehicle
       location={vehicle.location}
       id={vehicle.id}
+      key={vehicle.id}
     />
   )) : null);
 
@@ -178,7 +179,7 @@ export default React.forwardRef(({
         {!isConfirmPickupPage && requestStopPoints.filter(sp => !!sp.lat).length > 1
           ? requestStopPoints
             .filter(sp => !!sp.lat)
-            .map(sp => (<StationsMap stopPoint={sp} />))
+            .map(sp => (<StationsMap stopPoint={sp} key={sp.id} />))
           : null}
         {currentBsPage === BS_PAGES.NOT_IN_TERRITORY && territory && territory.length ? territory
           .map(t => t.polygon.coordinates.map(poly => (

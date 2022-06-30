@@ -36,10 +36,6 @@ const PinCode = ({
           borderBottomWidth: 2,
           borderColor: error ? ERROR_COLOR : '#333333',
         }}
-        textStyle={{
-          fontWeight: '600',
-          fontSize: 40,
-        }}
         cellStyleFocused={{
           color: theme.textColor,
           borderColor: theme.primaryColor,

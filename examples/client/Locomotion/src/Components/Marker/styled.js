@@ -65,8 +65,7 @@ export const InfoBox = styled.View`
    border-radius: 8px;
    padding: 3px;
    align-items: center;
-    margin-top: -45px;
-    shadow-offset: 0px 0px;
+  shadow-offset: 0px 0px;
   shadow-color: #04214f;
   shadow-opacity: 0.4;
 `;

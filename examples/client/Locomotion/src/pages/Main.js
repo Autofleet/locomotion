@@ -60,7 +60,7 @@ const Main = () => {
       />
       <Drawer.Screen
         name={MAIN_ROUTES.LOGOUT}
-        component={(({ navigation }) => {
+        children={(({ navigation }) => {
           setUser(INITIAL_USER_STATE);
           Auth.logout(navigation);
           return (<View />);

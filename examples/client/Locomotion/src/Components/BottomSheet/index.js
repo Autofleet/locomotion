@@ -1,5 +1,5 @@
 import React, {
-  useCallback, useContext, forwardRef, useEffect, useState,
+  useCallback, useContext, forwardRef,
 } from 'react';
 import BottomSheet, {
   BottomSheetView,
@@ -17,7 +17,6 @@ const BottomSheetComponent = forwardRef(({ children, focusCurrentLocation }, ref
     footerComponent,
     isExpanded,
   } = useContext(BottomSheetContext);
-  const [targetHeight, setTargetHeight] = useState();
 
   const onAnimate = useCallback((from, to) => {
     if (from !== -1) {
@@ -36,23 +35,12 @@ const BottomSheetComponent = forwardRef(({ children, focusCurrentLocation }, ref
     [footerComponent],
   );
 
-  const getDistanceFromBottom = () => {
-    if (typeof (snapPoints[0]) === 'number') {
-      return setTargetHeight(snapPoints[0] + 20);
-    }
-    setTargetHeight(`${parseFloat(snapPoints[isExpanded ? 1 : 0]) + 2}%`);
-  };
-
-  useEffect(() => {
-    getDistanceFromBottom();
-  }, [snapPoints]);
-
   return (
     <>
       <SquareSvgButton
         onPress={focusCurrentLocation}
         icon={targetIcon}
-        style={{ position: 'absolute', bottom: targetHeight, right: 20 }}
+        style={{ position: 'absolute', bottom: `${parseFloat(snapPoints[isExpanded ? 1 : 0]) + 2}%`, right: 20 }}
       />
       <BottomSheet
         android_keyboardInputMode="adjustResize"

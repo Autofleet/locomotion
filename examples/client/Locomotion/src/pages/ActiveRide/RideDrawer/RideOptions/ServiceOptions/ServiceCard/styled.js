@@ -53,7 +53,6 @@ ${FONT_WEIGHTS.MEDIUM};
 export const TimeDetails = styled.View`
 display: flex;
 flex-direction: row;
-width: 100px;
 justify-content: space-between;
 align-items: center;
 `;
