@@ -21,11 +21,13 @@ const Container = styled(View) < ContainerProps >`
   background-color: ${(props: any) => (props.selected ? '#rgba(36, 170, 242, 0.2)' : '#fff')};
   min-height: 70px;
   width: 100%;
+  align-items: center;
 `;
 
 const ImageContainer = styled(View)`
   justify-content: center;
   position: relative;
+  background-color: red;
 `;
 
 const margin = `margin-${Start()}`;
@@ -58,11 +60,14 @@ const PlusContainer = styled(View)`
   width: 20px;
   height: 20px;
   border-radius: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `;
 
 const PlusText = styled(Text)`
   color: #fff;
-  text-align: center;
+  line-height: 16px;
 `;
 
 
@@ -95,7 +100,7 @@ export default (paymentMethod: any) => (
                     style={{
                       position: 'absolute',
                       right: 0,
-                      bottom: '15%',
+                      bottom: -10,
                     }}
                     Svg={selected}
                   />
