@@ -60,7 +60,7 @@ interface RidePageContextInterface {
   fillLoadSkeleton: () => void;
   serviceRequestFailed: boolean;
   setServiceRequestFailed: Dispatch<boolean>;
-  patchRideRating: (rating: number) => Promise<boolean>;
+  patchRideRating: (rating: number) => any;
 }
 
 export const RidePageContext = createContext<RidePageContextInterface>({
@@ -442,13 +442,17 @@ const RidePageContextProvider = ({ children }: {
     });
   };
 
-  const patchRideRating = async (rating: number): Promise<boolean> => {
-    const updatedRide = await rideApi.patchRide('752dd8ac-aa7c-4a48-9683-0fc76bde990e', { rating });
-    updateRide(updatedRide);
-    if (updatedRide) {
-      return true;
+  const patchRideRating = async (rating: number): Promise<any> => {
+    try {
+      const updatedRide = await rideApi.patchRide(ride.id, { rating });
+      updateRide(updatedRide);
+      if (updatedRide) {
+        return true;
+      }
+      return false;
+    } catch (e) {
+      return false;
     }
-    return false;
   };
 
   return (
