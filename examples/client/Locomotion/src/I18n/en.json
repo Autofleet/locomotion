@@ -257,6 +257,7 @@
     },
     "rideHistory": {
         "pageTitle": "Rides History",
+        "tripPageTitle": "Trip details",
         "noRides": "No results found",
         "noRidesSubText": "",
         "ridesTable": {
