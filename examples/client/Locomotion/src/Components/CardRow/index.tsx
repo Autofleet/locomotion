@@ -132,7 +132,17 @@ export default (paymentMethod: any) => (
           )
           : (
             <>
-              <Type>{capitalizeFirstLetter(paymentMethod.brand)}</Type>
+              {isCashPaymentMethod(paymentMethod)
+                ? (
+                  <Type>
+                    {i18n.t('payments.cashMethodBrand').toString()}
+                  </Type>
+                )
+                : (
+                  <Type>
+                    {capitalizeFirstLetter(paymentMethod.brand)}
+                  </Type>
+                )}
               {paymentMethod.lastFour ? <Description>{`**** ${capitalizeFirstLetter(paymentMethod.lastFour)}`}</Description> : null}
               {!isCashPaymentMethod(paymentMethod) && paymentMethod && moment(paymentMethod.expiresAt).isBefore(moment()) ? <Error>{i18n.t('payments.expired').toString()}</Error> : null}
               {!isCashPaymentMethod(paymentMethod) && paymentMethod && paymentMethod.hasOutstandingBalance ? <Error>{i18n.t('payments.hasOutstandingBalance').toString()}</Error> : null}

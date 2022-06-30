@@ -1,7 +1,7 @@
 import { PaymentMethodInterface } from '../../context/payments/interface';
 
 const cashPaymentMethod : PaymentMethodInterface = {
-  brand: 'cash',
+  brand: 'generic',
   createdAt: new Date(),
   customerId: '',
   expiresAt: new Date(2100, 9, 9),

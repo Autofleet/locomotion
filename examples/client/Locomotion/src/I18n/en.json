@@ -303,7 +303,8 @@
                 "confirmText": "Remove",
                 "cancelText": "Back"
             }
-        }
+        },
+        "cashMethodBrand": "Cash"
     },
   "currency": "€",
   "operation": {
