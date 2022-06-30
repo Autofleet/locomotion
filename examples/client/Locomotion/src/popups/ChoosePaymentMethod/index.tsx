@@ -1,5 +1,5 @@
-import React, { useContext, useState } from 'react';
-import { View, Text } from 'react-native';
+import React, { useContext } from 'react';
+import { View } from 'react-native';
 import Modal from 'react-native-modal';
 import { useNavigation } from '@react-navigation/native';
 import i18n from '../../I18n';
@@ -14,7 +14,6 @@ import RoundedButton from '../../Components/RoundedButton';
 import { FlexCont } from '../../Components/Flex';
 import PaymentMethod from '../../Components/CardRow';
 import PaymentsContext from '../../context/payments';
-import { PaymentMethodInterface } from '../../context/payments/interface';
 import { RidePageContext } from '../../context/newRideContext';
 
 interface PaymentMethodPopupProps {
@@ -24,6 +23,12 @@ interface PaymentMethodPopupProps {
 
 type Nav = {
   navigate: (value: string) => void;
+}
+
+const cashPaymentMethod = {
+  id: 'cash',
+  name: 'Cash',
+  brand: 'cash'
 }
 
 const PaymentMethodPopup = ({ isVisible, onCancel }: PaymentMethodPopupProps) => {
@@ -43,7 +48,7 @@ const PaymentMethodPopup = ({ isVisible, onCancel }: PaymentMethodPopupProps) =>
             <Title>{i18n.t('popups.choosePaymentMethod.title')}</Title>
           </View>
           <View>
-            {[...usePayments.paymentMethods].map((paymentMethod: PaymentMethodInterface, i) => (
+            {[...usePayments.paymentMethods, cashPaymentMethod].map((paymentMethod: any, i) => (
               <PaymentMethod
                 {...paymentMethod}
                 selected={ride?.paymentMethodId === paymentMethod.id}

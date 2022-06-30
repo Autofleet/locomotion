@@ -1,6 +1,6 @@
 /* eslint-disable no-nested-ternary */
 /* eslint-disable no-mixed-operators */
-import React, { useState } from 'react';
+import React from 'react';
 import { TouchableOpacity, View, Text } from 'react-native';
 import moment from 'moment';
 import styled from 'styled-components';
@@ -134,8 +134,8 @@ export default (paymentMethod: any) => (
             <>
               <Type>{capitalizeFirstLetter(paymentMethod.brand)}</Type>
               {paymentMethod.lastFour ? <Description>{`**** ${capitalizeFirstLetter(paymentMethod.lastFour)}`}</Description> : null}
-              {!isCashPaymentMethod(paymentMethod) && (true || (paymentMethod && moment(paymentMethod.expiresAt).isBefore(moment()))) ? <Error>{i18n.t('payments.expired').toString()}</Error> : null}
-              {!isCashPaymentMethod(paymentMethod) && (true || (paymentMethod && !isCashPaymentMethod(paymentMethod) && paymentMethod.hasOutstandingBalance)) ? <Error>{i18n.t('payments.hasOutstandingBalance').toString()}</Error> : null}
+              {!isCashPaymentMethod(paymentMethod) && paymentMethod && moment(paymentMethod.expiresAt).isBefore(moment()) ? <Error>{i18n.t('payments.expired').toString()}</Error> : null}
+              {!isCashPaymentMethod(paymentMethod) && paymentMethod && paymentMethod.hasOutstandingBalance ? <Error>{i18n.t('payments.hasOutstandingBalance').toString()}</Error> : null}
             </>
           )}
       </TextContainer>

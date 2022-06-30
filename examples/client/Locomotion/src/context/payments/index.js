@@ -16,7 +16,7 @@ const usePayments = () => {
   const loadCustomer = async () => {
     const customerData = await getCustomer();
     setCustomer(customerData);
-    setPaymentMethods([...customerData.paymentMethods, {id: 'cash', name: 'Cash', brand: 'cash'}]);
+    setPaymentMethods(customerData.paymentMethods);
     return customerData;
   };
 
