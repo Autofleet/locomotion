@@ -19,16 +19,28 @@ export default ({
   onAddClick = undefined,
 }) => {
   const [loading, setLoading] = useState(false);
+  const [isCashEnabled, setIsCashEnabled] = useState(false);
   const usePayments = PaymentsContext.useContainer();
+
 
   useEffect(() => {
     setLoading(loadingState);
   }, [loading]);
 
+  useEffect(() => {
+    const getIsCashEnabled = async () => {
+      const result = await usePayments.isCashPaymentEnabled();
+      setIsCashEnabled(result);
+    };
+
+    getIsCashEnabled();
+  });
+
+
   return (
     <CardsListContainer>
       <View>
-        {(usePayments.isCashEnabled ? [...usePayments.paymentMethods, cashPaymentMethod] : usePayments.paymentMethods).map((paymentMethod : any, i) => (
+        {(isCashEnabled ? [...usePayments.paymentMethods, cashPaymentMethod] : usePayments.paymentMethods).map((paymentMethod : any, i) => (
           <PaymentMethodsContainer>
             <CreditCardsContainer>
               <PaymentMethod {...paymentMethod} />

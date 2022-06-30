@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { View } from 'react-native';
 import Modal from 'react-native-modal';
 import { useNavigation } from '@react-navigation/native';
@@ -31,8 +31,19 @@ const PaymentMethodPopup = ({ isVisible, onCancel }: PaymentMethodPopupProps) =>
     ride,
     updateRide,
   } = useContext(RidePageContext);
+  const [isCashEnabled, setIsCashEnabled] = useState(false);
+
   const usePayments = PaymentsContext.useContainer();
   const navigation = useNavigation<Nav>();
+
+  useEffect(() => {
+    const getIsCashEnabled = async () => {
+      const result = await usePayments.isCashPaymentEnabled();
+      setIsCashEnabled(result);
+    };
+
+    getIsCashEnabled();
+  });
 
   return (
     <Modal isVisible={isVisible}>
@@ -42,7 +53,7 @@ const PaymentMethodPopup = ({ isVisible, onCancel }: PaymentMethodPopupProps) =>
             <Title>{i18n.t('popups.choosePaymentMethod.title')}</Title>
           </View>
           <View>
-            {(usePayments.isCashEnabled ? [...usePayments.paymentMethods, cashPaymentMethod] : usePayments.paymentMethods).map((paymentMethod: any, i) => (
+            {(isCashEnabled ? [...usePayments.paymentMethods, cashPaymentMethod] : usePayments.paymentMethods).map((paymentMethod: any, i) => (
               <PaymentMethod
                 {...paymentMethod}
                 selected={ride?.paymentMethodId === paymentMethod.id}
