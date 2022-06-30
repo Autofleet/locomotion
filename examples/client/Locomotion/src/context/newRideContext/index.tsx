@@ -98,7 +98,7 @@ export const RidePageContext = createContext<RidePageContextInterface>({
   requestRide: () => undefined,
   serviceRequestFailed: false,
   setServiceRequestFailed: () => undefined,
-  patchRideRating: async () => Promise<boolean>,
+  patchRideRating: (rating: number) => undefined,
 });
 
 const HISTORY_RECORDS_NUM = 10;
