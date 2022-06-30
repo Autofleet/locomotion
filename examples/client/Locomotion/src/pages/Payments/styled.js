@@ -103,3 +103,13 @@ export const CardsListContainer = styled.View`
    flex-direction: column;
    justify-content: flex-start;
 `;
+
+export const PaymentMethodsContainer = styled.View`
+    display: flex;
+    flex: 1;
+    height: 100px;
+`;
+
+export const CreditCardsContainer = styled.View`
+    flex: 1;
+`;

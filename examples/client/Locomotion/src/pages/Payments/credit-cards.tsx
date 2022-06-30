@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { View } from 'react-native';
-
-import settings from '../../context/settings';
 import i18n from '../../I18n';
 import {
   DeleteCreditCard,
   DeleteCreditCardText,
   CardsListContainer,
+  PaymentMethodsContainer,
+  CreditCardsContainer,
 } from './styled';
 
 import PaymentMethod from '../../Components/CardRow';
@@ -29,10 +29,10 @@ export default ({
     <CardsListContainer>
       <View>
         {(usePayments.isCashEnabled ? [...usePayments.paymentMethods, cashPaymentMethod] : usePayments.paymentMethods).map((paymentMethod : any, i) => (
-          <View style={{ display: 'flex', height: 100, flexDirection: 'row' }}>
-            <View style={{ flex: 1 }}>
+          <PaymentMethodsContainer>
+            <CreditCardsContainer>
               <PaymentMethod {...paymentMethod} />
-            </View>
+            </CreditCardsContainer>
             {paymentMethod.id !== cashPaymentMethod.id
             && (
             <View>
@@ -43,7 +43,7 @@ export default ({
               </DeleteCreditCard>
             </View>
             )}
-          </View>
+          </PaymentMethodsContainer>
         ))}
 
       </View>
