@@ -101,7 +101,7 @@ function capitalizeFirstLetter(string: string) {
   return string?.charAt(0).toUpperCase() + string?.slice(1);
 }
 
-const isCashPaymentMethod = paymentMethod => paymentMethod.id === CASH_METHOD_ID;
+const isCashPaymentMethod = (paymentMethod: any) => paymentMethod.id === CASH_METHOD_ID;
 
 
 export default (paymentMethod: any) => (
@@ -116,7 +116,7 @@ export default (paymentMethod: any) => (
           )
           : (
             <>
-              {isCashPaymentMethod(paymentMethod) ? <SvgIcon Svg={cashIcon} width="40px" height="25px" /> : <PaymentIcon type={paymentMethod.brand} />}
+              {isCashPaymentMethod(paymentMethod) ? <SvgIcon Svg={cashIcon} width={40} height={25} /> : <PaymentIcon type={paymentMethod.brand} />}
               {paymentMethod.selected ? (isCashPaymentMethod(paymentMethod) ? CashSelected : CreditCardSelected) : null }
             </>
           )

@@ -17,7 +17,7 @@ const TimeText = styled(Text)`
 interface PaymentButtonProps {
     icon: string;
     title: string;
-    brand?: Brand;
+    brand?: Brand | undefined;
     id?: string;
 }
 
