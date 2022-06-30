@@ -58,7 +58,10 @@ export default ({
           <SubContainer>
             {checkIfSpIsNext() && (
             <PulseContainer>
-              <Loader sourceProp={pulse} lottieViewStyle={{ width: 24, height: 24 }} />
+              <Loader
+                sourceProp={pulse}
+                lottieViewStyle={{ width: 24, height: 24, marginRight: 5 }}
+              />
             </PulseContainer>
             )}
             <SubText numberOfLines={1}>

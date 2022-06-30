@@ -84,7 +84,6 @@ export const SubText = styled.Text`
     ${FONT_SIZES.LARGE}
     ${FONT_WEIGHTS.REGULAR}
     max-width: 150px;
-    margin-left: 5px;
 `;
 
 export const IconContainer = styled.View`
