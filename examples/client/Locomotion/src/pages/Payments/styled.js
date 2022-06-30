@@ -87,7 +87,7 @@ export const CreditCardRowText = styled.Text`
 `;
 
 export const DeleteCreditCard = styled.TouchableOpacity`
-    margin-top: 5px;
+    margin: 25px;
     align-self: flex-end;
     padding: 5px;
     opacity: ${({ disabled }) => (disabled ? 0.5 : 1)};

@@ -25,8 +25,7 @@ import { FlexCont } from '../../Components/Flex';
 import { RidePageContext } from '../../context/newRideContext';
 
 export default ({
-  paymentMethods = [],
-  onDetach = () => null,
+  onDetach = (id: string) => null,
   loadingState = false,
   onAddClick = undefined,
 }) => {
@@ -46,11 +45,26 @@ export default ({
   return (
     <CardsListContainer>
       <View>
-        {[...usePayments.paymentMethods].map((paymentMethod, i) => (
-          <PaymentMethod
+     
+        {[...usePayments.paymentMethods].map((paymentMethod : PaymentMethodInterface, i) => (
+             <View style={{display: 'flex', height: 100, flexDirection: 'row'}} >
+               <View style={{flex: 1}}>
+          <PaymentMethod 
             {...paymentMethod}
           />
-        ))}
+          </View>
+          <View style={{ flex: 1}}>
+          <DeleteCreditCard disabled={loading}>
+            <DeleteCreditCardText
+              onPress={() => onDetach(paymentMethod.id)}
+            >
+              {i18n.t('payments.deleteCard')}
+            </DeleteCreditCardText>
+          </DeleteCreditCard>   
+</View>
+            </View>
+))}
+
       </View>
       {onAddClick ? (
         <PaymentMethod
