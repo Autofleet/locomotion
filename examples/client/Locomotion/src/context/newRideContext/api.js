@@ -24,3 +24,13 @@ export const createRide = async (ride) => {
   const { data } = await network.post('api/v1/client-rides', ride);
   return data;
 };
+
+export const patchRide = async (rideId, newData) => {
+  try {
+    const { data } = await network.patch(`api/v1/rides/${rideId}`, newData);
+    return data;
+  } catch (e) {
+    console.error(e);
+    throw new Error(e);
+  }
+};

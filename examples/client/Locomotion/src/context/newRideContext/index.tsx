@@ -59,7 +59,8 @@ interface RidePageContextInterface {
   initSps: () => void;
   fillLoadSkeleton: () => void;
   serviceRequestFailed: boolean;
-  setServiceRequestFailed: Dispatch<boolean>
+  setServiceRequestFailed: Dispatch<boolean>;
+  patchRideRating: (rating: number) => Promise<boolean>;
 }
 
 export const RidePageContext = createContext<RidePageContextInterface>({
@@ -97,6 +98,7 @@ export const RidePageContext = createContext<RidePageContextInterface>({
   requestRide: () => undefined,
   serviceRequestFailed: false,
   setServiceRequestFailed: () => undefined,
+  patchRideRating: async () => Promise<boolean>,
 });
 
 const HISTORY_RECORDS_NUM = 10;
@@ -440,6 +442,15 @@ const RidePageContextProvider = ({ children }: {
     });
   };
 
+  const patchRideRating = async (rating: number): Promise<void> => {
+    const updatedRide = await rideApi.patchRide('752dd8ac-aa7c-4a48-9683-0fc76bde990e', { rating });
+    updateRide(updatedRide);
+    if (updatedRide) {
+      return true;
+    }
+    return false;
+  };
+
   return (
     <RidePageContext.Provider
       value={{
@@ -478,6 +489,7 @@ const RidePageContextProvider = ({ children }: {
         stopRequestInterval,
         serviceRequestFailed,
         setServiceRequestFailed,
+        patchRideRating,
       }}
     >
       {children}

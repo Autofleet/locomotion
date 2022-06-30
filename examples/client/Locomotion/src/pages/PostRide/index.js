@@ -18,16 +18,25 @@ import { PageContainer } from '../styles';
 import StarRating from './StarRating';
 import Tips from './Tips';
 import Button from '../../Components/RoundedButton';
-import BottomSheet from '../../Components/BottomSheet';
-import BottomSheetContextProvider, { BottomSheetContext, SNAP_POINT_STATES } from '../../context/bottomSheetContext';
-import CustomTip from './Tips/CustomTip';
+import settings from '../../context/settings';
+import SETTINGS_KEYS from '../../context/settings/keys';
+import NewRidePageContextProvider, { RidePageContext } from '../../context/newRideContext';
 
 const PostRidePage = ({ menuSide }) => {
   const navigation = useNavigation();
   const route = useRoute();
   const [rating, setRating] = useState(null);
-  const [customTip, setCustomTip] = useState(null);
   const [rideTip, setRideTip] = useState(null);
+  const [tipSettings, setTipSettings] = useState({
+    percentageThreshold: 30,
+    percentage: [10, 15, 20],
+    fixedPrice: [1, 2, 5],
+  });
+  const {
+    patchRideRating,
+  } = useContext(RidePageContext);
+
+  const { getSettingByKey } = settings.useContainer();
 
   useEffect(() => {
     Mixpanel.pageView(route.name);
@@ -38,8 +47,29 @@ const PostRidePage = ({ menuSide }) => {
     setRating(selectedRating);
   };
 
-  const onSelectTip = () => {
-    // setRideTip()
+  const onSelectTip = (tipAmount) => {
+    setRideTip(tipAmount);
+  };
+
+  const initSettings = async () => {
+    const setting = await getSettingByKey(
+      SETTINGS_KEYS.POST_RIDE_TIP_SETTINGS,
+    );
+    setTipSettings(setting);
+  };
+
+  useEffect(() => {
+    initSettings();
+  }, []);
+
+  const onSubmit = async () => {
+    if (rating) {
+      try {
+        patchRideRating(rating);
+      } catch (e) {
+        console.log(e);
+      }
+    }
   };
   return (
     <PageContainer>
@@ -60,10 +90,10 @@ const PostRidePage = ({ menuSide }) => {
           flex: 2,
         }}
         >
-          <Tips />
+          <Tips tipSettings={tipSettings} onSelectTip={onSelectTip} />
         </TipsContainer>
         <SubmitContainer>
-          <Button>{i18n.t('postRide.submit')}</Button>
+          <Button onPress={onSubmit}>{i18n.t('postRide.submit')}</Button>
         </SubmitContainer>
       </PageContent>
     </PageContainer>
@@ -72,6 +102,8 @@ const PostRidePage = ({ menuSide }) => {
 
 
 export default props => (
+  <NewRidePageContextProvider {...props}>
 
-  <PostRidePage {...props} />
+    <PostRidePage {...props} />
+  </NewRidePageContextProvider>
 );

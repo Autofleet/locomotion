@@ -29,8 +29,8 @@ export const cancelRideApi = async () => {
   await network.post('api/v1/me/rides/cancel-active-ride');
 };
 
-export const sendRating = async (body) => {
-  await network.post('api/v1/me/rides/rating', body);
+export const patchRide = async (rideId, data) => {
+  await network.patch(`api/v1/rides/${rideId}`, data);
 };
 
 export const cancelFutureRideApi = async (rideId) => {

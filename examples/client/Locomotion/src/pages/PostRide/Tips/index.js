@@ -88,25 +88,18 @@ const NoTipTextButton = ({ onPress, children }) => (
 );
 
 const Tips = ({
-  driver = { firstName: 'Timmy' }, ridePrice = 33, thumbnailImage,
+  driver = { firstName: 'Timmy' }, ridePrice = 33, thumbnailImage, tipSettings,
 }) => {
   const [selectedTip, setSelectedTip] = useState(null);
   const [customTip, setCustomTip] = useState(null);
 
-  const settings = {
-    percentageThreshold: 30,
-    percentage: [10, 15, 20],
-    fixedPrice: [1, 2, 5],
-  };
-  const isPercentage = ridePrice >= settings.percentageThreshold;
-  const buttons = isPercentage ? settings.percentage : settings.fixedPrice;
+  const isPercentage = ridePrice >= tipSettings.percentageThreshold;
+  const buttons = isPercentage ? tipSettings.percentage : tipSettings.fixedPrice;
   const tipSuffix = isPercentage ? '%' : '$';
 
   const bottomSheetRef = useRef(null);
   const {
-    snapPoints,
     setSnapPointsState,
-    setSnapPointIndex,
   } = useContext(BottomSheetContext);
 
   useEffect(() => {
@@ -156,7 +149,7 @@ const Tips = ({
         <DetailsContainer style={{ marginTop: 5 }}>
           <SelectableButton
             selected={!!customTip}
-            onPress={() => bottomSheetRef.current.expand()}
+            onPress={() => bottomSheetRef.current.snapToIndex(0)}
             label={i18n.t('postRide.tip.customTip.title')}
             value={`${customTip}${tipSuffix}`}
           >
@@ -168,6 +161,7 @@ const Tips = ({
       <BottomSheet
         ref={bottomSheetRef}
         enablePanDownToClose
+        index={-1}
         style={{
           zIndex: 3,
           elevation: 5,

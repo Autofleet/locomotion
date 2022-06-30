@@ -15,7 +15,12 @@ const ContentContainer = styled(BottomSheetView)`
   flex: 1;
 `;
 
-const BottomSheetComponent = forwardRef(({ children, enablePanDownToClose = false, focusCurrentLocation }, ref) => {
+const BottomSheetComponent = forwardRef(({
+  children,
+  enablePanDownToClose = false,
+  focusCurrentLocation,
+  index = 1,
+}, ref) => {
   const {
     setIsExpanded,
     snapPoints,
@@ -53,6 +58,7 @@ const BottomSheetComponent = forwardRef(({ children, enablePanDownToClose = fals
         onAnimate={onAnimate}
         footerComponent={renderFooter}
         enablePanDownToClose={enablePanDownToClose}
+        index={index}
         style={{
           shadowColor: '#000',
           shadowOffset: {
