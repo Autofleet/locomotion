@@ -27,7 +27,6 @@ const Container = styled(View) < ContainerProps >`
 const ImageContainer = styled(View)`
   justify-content: center;
   position: relative;
-  background-color: red;
 `;
 
 const margin = `margin-${Start()}`;
