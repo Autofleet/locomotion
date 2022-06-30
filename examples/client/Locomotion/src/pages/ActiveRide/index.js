@@ -109,7 +109,19 @@ const RidePage = ({ mapSettings }) => {
     }
   }, [isLoading]);
 
+  const checkPermissions = async () => {
+    let granted = await geo.checkPermission()
+    if (!granted) {
+      granted = await geo.requestPermission()
+    }
+    return granted
+  }
+
   const focusCurrentLocation = async () => {
+    const granted = await checkPermissions()
+    if (!granted) {
+      return 
+    }
     const { coords } = await getPosition();
     mapRef.current.animateToRegion({
       latitude: coords.latitude - (parseFloat(snapPoints[0]) / 10000),
