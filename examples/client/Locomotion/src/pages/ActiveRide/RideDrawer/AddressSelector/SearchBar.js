@@ -80,10 +80,12 @@ const SearchBar = ({
   const {
     searchTerm,
     setSearchTerm,
+    selectedInputIndex,
     setSelectedInputIndex,
     selectedInputTarget,
     setSelectedInputTarget,
     requestStopPoints,
+    updateRequestSp,
     initSps,
     fillLoadSkeleton,
   } = useContext(RidePageContext);
@@ -126,6 +128,11 @@ const SearchBar = ({
         <BottomSheetInput
           placeholder={i18n.t(placeholder)}
           onChangeText={(text) => {
+            updateRequestSp({
+              description: text,
+              lat: null,
+              lng: null,
+            });
             setSearchTerm(text);
           }}
           fullBorder
