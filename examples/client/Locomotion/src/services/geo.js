@@ -24,6 +24,7 @@ const currentLocationNative = async () => {
 
 const prepareCoords = locations => ({
   coords: { latitude: locations[0].latitude, longitude: locations[0].longitude },
+  speed: locations[0].speed,
   timestamp: new Date(),
 });
 
@@ -91,13 +92,12 @@ class Geo {
         return this.lastLocation;
       }
     }
-    const rnLastLocation = await RNLocation.getLatestLocation();
+    const rnLastLocation = await RNLocation.getLatestLocation({ timeout: 10000 });
     if (rnLastLocation) {
       return prepareCoords([rnLastLocation]);
     }
-
     const location = await currentLocationNative();
-    return prepareCoords([location]);
+    return prepareCoords([location.coords || location]);
   };
 }
 
@@ -115,13 +115,10 @@ const DEFAULT_COORDS = {
 };
 export const getPosition = async () => {
   try {
-    console.debug('getPosition started');
     const granted = await GeoService.checkPermission();
-    console.debug('getPosition -> GeoService.checkPermission:', granted);
     if (!granted) {
       return DEFAULT_COORDS;
     }
-    console.debug('getPosition -> GeoService.currentLocation');
     return GeoService.currentLocation();
   } catch (e) {
     console.error('Error getting location', e);
