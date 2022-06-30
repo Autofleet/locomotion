@@ -2,9 +2,9 @@ import React from 'react';
 import styled from 'styled-components';
 import LottieView from 'lottie-react-native';
 import { View } from 'react-native';
-import darkLoader from '../../assets/dark-loader.json';
-import lightLoader from '../../assets/loader.json';
-import sliderLoader from '../../assets/slider-loader.json';
+import darkLoader from '../../assets/loaders/dark-loader.json';
+import lightLoader from '../../assets/loaders/light-loader.json';
+import sliderLoader from '../../assets/loaders/slider-loader.json';
 
 const LoadingWrapper = styled.View`
   width: 100%;

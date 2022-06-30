@@ -1,26 +1,14 @@
 import React, { useContext } from 'react';
-import { View } from 'react-native';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { DrawerContentComponent, DrawerLabel } from '../Components/Menu';
 import { Context as ThemeContext } from '../context/theme';
-import Auth from '../services/auth';
 import { ROUTES_COMPS } from './routeConsts';
 import { MAIN_ROUTES } from './routes';
-import { UserContext } from '../context/user';
-import { INITIAL_USER_STATE } from './AuthScreens/AuthLoadingScreen';
 
 const Drawer = createDrawerNavigator();
 
 const Main = () => {
   const theme = useContext(ThemeContext);
-  const { setUser } = useContext(UserContext);
-
-  const logout = ({ navigation }) => {
-    setUser(INITIAL_USER_STATE);
-    Auth.logout(navigation);
-    return (<View />);
-  };
-
   return (
     <Drawer.Navigator
       initialRouteName={MAIN_ROUTES.HOME}
@@ -67,9 +55,8 @@ const Main = () => {
       />
       <Drawer.Screen
         name={MAIN_ROUTES.LOGOUT}
-      >
-        {navigation => logout(navigation)}
-      </Drawer.Screen>
+        component={ROUTES_COMPS[MAIN_ROUTES.LOGOUT]}
+      />
     </Drawer.Navigator>
   );
 };

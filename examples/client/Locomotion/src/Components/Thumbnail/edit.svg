@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="38" height="38" viewBox="0 0 38 38">
+    <circle data-name="Ellipse 17" cx="19" cy="19" r="19" style=""/>
+    <g data-name="Edit">
+        <path data-name="Union 47" d="M.036 13.112H0V1a1 1 0 0 1 1-1h2.812a1 1 0 0 1 1 1V13.114H4.8l-2.39 2.622z" transform="rotate(45 -5.768 32.064)" style="fill:#fff"/>
+        <path data-name="Subtraction 24" d="M0 3.6V1a1 1 0 0 1 1-1h2.809a1 1 0 0 1 1 1v1.934a1 1 0 0 1-.061.344 1 1 0 0 0-.939-.655H1A1 1 0 0 0 0 3.6z" transform="rotate(45 -1.55 33.818)" style="fill:#fff"/>
+    </g>
+</svg>

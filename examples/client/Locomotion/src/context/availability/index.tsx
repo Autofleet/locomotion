@@ -1,4 +1,6 @@
 import React, { createContext, useEffect, useState } from 'react';
+import { useIsFocused } from '@react-navigation/native';
+import useInterval from '../../lib/useInterval';
 import { getPosition } from '../../services/geo';
 import * as availabilityApi from './api';
 
@@ -24,36 +26,38 @@ export const AvailabilityContext = createContext<AvailabilityContextInterface>({
 
 const AvailabilityContextProvider = ({ children }: { children: any }) => {
   const [availabilityVehicles, setAvailabilityVehicles] = useState<AvailabilityVehicles[]>([]);
-  const [availabilityVehiclesInterval, setAvailabilityVehiclesInterval] = useState<any | null>(null);
 
   const getVehicles = async () => {
-    const {
-      coords,
-    } = await getPosition();
-    const {
-      latitude: lat, longitude: lng,
-    } = coords;
-    setAvailabilityVehiclesInterval(setInterval(async () => {
-      await fetchVehicles(lat, lng);
-    }, 5000));
-    await fetchVehicles(lat, lng);
-  };
-
-  const fetchVehicles = async (lat: string, lng: string) => {
-    if (lat && lng) {
-      const { vehicles } = await availabilityApi.getVehicles(lat, lng);
-      setAvailabilityVehicles(vehicles);
+    try {
+      let coords;
+      try {
+        ({ coords } = await getPosition());
+      } catch (e) {
+        console.error('no pos', e);
+      }
+      const {
+        latitude: lat, longitude: lng,
+      } = coords || {};
+      if (lat && lng) {
+        const { vehicles } = await availabilityApi.getVehicles(lat, lng);
+        await setAvailabilityVehicles(vehicles);
+      }
+    } catch (e) {
+      console.error('setAvailabilityVehicles', e);
     }
   };
 
+  const isFocused = useIsFocused();
+
+  useInterval(() => {
+    if (isFocused) {
+      getVehicles();
+    }
+  }, 5000);
+
   useEffect(() => {
     getVehicles();
-    return () => {
-      if (availabilityVehiclesInterval) {
-        clearInterval(availabilityVehiclesInterval);
-      }
-    };
-  }, []);
+  }, [isFocused]);
 
   return (
     <AvailabilityContext.Provider

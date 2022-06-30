@@ -8,6 +8,7 @@ import Avatar from './Profile/Avatar';
 import Email from './Profile/Email';
 import Welcome from './Profile/Welcome';
 import Lock from './Lock';
+import Logout from './Logout';
 import WebViewPage from './WebViewPage';
 import ActiveRide from './ActiveRide';
 import ContactUs from './ContactUs';
@@ -34,6 +35,7 @@ export const ROUTES_COMPS = {
   [MAIN_ROUTES.EMAIL]: Email,
   [MAIN_ROUTES.WELCOME]: Welcome,
   [MAIN_ROUTES.LOCK]: Lock,
+  [MAIN_ROUTES.LOGOUT]: Logout,
 };
 
 export const profileStack = ({ stack: Stack }) => (
