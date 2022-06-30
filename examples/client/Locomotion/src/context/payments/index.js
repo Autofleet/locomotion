@@ -1,6 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { createContainer } from 'unstated-next';
+import { getByKey } from '../../context/settings/api';
 import network from '../../services/network';
+import SETTINGS_KEYS from '../settings/keys';
 
 const BASE_PATH = '/api/v1/me/costumers';
 
@@ -42,6 +44,7 @@ const usePayments = () => {
   const clientHasValidPaymentMethods = () => paymentMethods.length > 0 && paymentMethods.some(pm => !pm.isExpired);
 
   const getClientDefaultMethod = () => (paymentMethods || []).find(pm => pm.isDefault) || paymentMethods[0];
+  const isCashPaymentEnabled = () => getByKey(SETTINGS_KEYS.CASH_ENABLED);
 
 
   return {
@@ -54,6 +57,7 @@ const usePayments = () => {
     getOrFetchCustomer,
     clientHasValidPaymentMethods,
     getClientDefaultMethod,
+    isCashPaymentEnabled,
   };
 };
 

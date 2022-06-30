@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { View } from 'react-native';
 
+import settings from '../../context/settings';
 import i18n from '../../I18n';
 import {
   DeleteCreditCard,
@@ -27,7 +28,7 @@ export default ({
   return (
     <CardsListContainer>
       <View>
-        {[...usePayments.paymentMethods, cashPaymentMethod].map((paymentMethod : any, i) => (
+        {(usePayments.isCashEnabled ? [...usePayments.paymentMethods, cashPaymentMethod] : usePayments.paymentMethods).map((paymentMethod : any, i) => (
           <View style={{ display: 'flex', height: 100, flexDirection: 'row' }}>
             <View style={{ flex: 1 }}>
               <PaymentMethod {...paymentMethod} />

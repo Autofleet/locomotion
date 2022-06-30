@@ -42,7 +42,7 @@ const PaymentMethodPopup = ({ isVisible, onCancel }: PaymentMethodPopupProps) =>
             <Title>{i18n.t('popups.choosePaymentMethod.title')}</Title>
           </View>
           <View>
-            {[...usePayments.paymentMethods, cashPaymentMethod].map((paymentMethod: any, i) => (
+            {(usePayments.isCashEnabled ? [...usePayments.paymentMethods, cashPaymentMethod] : usePayments.paymentMethods).map((paymentMethod: any, i) => (
               <PaymentMethod
                 {...paymentMethod}
                 selected={ride?.paymentMethodId === paymentMethod.id}
