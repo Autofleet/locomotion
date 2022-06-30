@@ -5,7 +5,6 @@ import Thumbnail from '../Thumbnail';
 import i18n from '../../I18n';
 import {
   StyledDrawerLabel,
-  DrawerIcon,
   LabelText,
   StyledSafeAreaView,
   HeaderText,
@@ -16,9 +15,10 @@ import {
 } from './styled';
 import { UserContext } from '../../context/user';
 
-import History from '../../assets/history.png';
-import HelpIconSource from '../../assets/menuItems/help.png';
-import CreditCardIconSource from '../../assets/menuItems/creditcard.png';
+import History from '../../assets/history.svg';
+import HelpIconSource from '../../assets/help.svg';
+import CreditCardIconSource from '../../assets/credit-card.svg';
+import SvgIcon from '../SvgIcon';
 
 const DrawerHeader = ({ navigation }) => {
   const { user } = useContext(UserContext);
@@ -51,7 +51,7 @@ const DrawerLabel = ({
   onPress, focused, tintColor, title, icon, lastItem,
 }) => (
   <StyledDrawerLabel focused={focused} onPress={onPress} lastItem={lastItem}>
-    <DrawerIcon source={icon} focused={focused} fill="#fff" />
+    <SvgIcon Svg={icon} width={23} height={23} style={{ marginRight: 15 }} />
     <LabelText color={tintColor} focused={focused}>{title}</LabelText>
   </StyledDrawerLabel>
 );
