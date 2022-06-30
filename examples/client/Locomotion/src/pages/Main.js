@@ -14,6 +14,13 @@ const Drawer = createDrawerNavigator();
 const Main = () => {
   const theme = useContext(ThemeContext);
   const { setUser } = useContext(UserContext);
+
+  const logout = ({ navigation }) => {
+    setUser(INITIAL_USER_STATE);
+    Auth.logout(navigation);
+    return (<View />);
+  };
+
   return (
     <Drawer.Navigator
       initialRouteName={MAIN_ROUTES.HOME}
@@ -60,12 +67,9 @@ const Main = () => {
       />
       <Drawer.Screen
         name={MAIN_ROUTES.LOGOUT}
-        children={(({ navigation }) => {
-          setUser(INITIAL_USER_STATE);
-          Auth.logout(navigation);
-          return (<View />);
-        })}
-      />
+      >
+        {navigation => logout(navigation)}
+      </Drawer.Screen>
     </Drawer.Navigator>
   );
 };
