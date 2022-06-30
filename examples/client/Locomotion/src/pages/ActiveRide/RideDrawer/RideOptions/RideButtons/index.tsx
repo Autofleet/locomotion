@@ -67,9 +67,7 @@ const RideButtons = ({
 
   const renderPaymentButton = () => {
     const ridePaymentMethod = ride?.paymentMethodId;
-    
     const selectedPaymentMethod: PaymentMethodInterface | undefined = [...paymentMethods, cashPaymentMethod].find(pm => pm.id === ridePaymentMethod);
-    console.log('iddddd', ridePaymentMethod);
 
     return (
       <ButtonContainer

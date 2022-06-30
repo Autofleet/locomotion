@@ -19,7 +19,7 @@ export default ({
 }) => {
   const [loading, setLoading] = useState(false);
   const usePayments = PaymentsContext.useContainer();
-  
+
   useEffect(() => {
     setLoading(loadingState);
   }, [loading]);
@@ -27,32 +27,30 @@ export default ({
   return (
     <CardsListContainer>
       <View>
-     
         {[...usePayments.paymentMethods, cashPaymentMethod].map((paymentMethod : any, i) => (
-             <View style={{display: 'flex', height: 100, flexDirection: 'row'}} >
-               <View style={{flex: 1}}>
-          <PaymentMethod 
-            {...paymentMethod}
-          />
-          </View>
-          {paymentMethod.id !== cashPaymentMethod.id && <View>
-          <DeleteCreditCard disabled={loading}>
-            <DeleteCreditCardText
-              onPress={() => onDetach(paymentMethod.id)}
-            >
-              {i18n.t('payments.deleteCard')}
-            </DeleteCreditCardText>
-          </DeleteCreditCard>   
-</View>}
+          <View style={{ display: 'flex', height: 100, flexDirection: 'row' }}>
+            <View style={{ flex: 1 }}>
+              <PaymentMethod {...paymentMethod} />
             </View>
-))}
+            {paymentMethod.id !== cashPaymentMethod.id
+            && (
+            <View>
+              <DeleteCreditCard disabled={loading}>
+                <DeleteCreditCardText onPress={() => onDetach(paymentMethod.id)}>
+                  {i18n.t('payments.deleteCard')}
+                </DeleteCreditCardText>
+              </DeleteCreditCard>
+            </View>
+            )}
+          </View>
+        ))}
 
       </View>
       {onAddClick ? (
         <PaymentMethod
-        addNew
-        onPress={onAddClick}
-      />
+          addNew
+          onPress={onAddClick}
+        />
       ) : undefined}
     </CardsListContainer>
   );
