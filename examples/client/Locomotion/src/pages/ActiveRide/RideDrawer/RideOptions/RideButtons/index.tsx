@@ -15,6 +15,7 @@ import { PaymentMethodInterface } from '../../../../../context/payments/interfac
 import { RideStateContextContext } from '../../../../../context/ridePageStateContext';
 import { popupNames } from '../utils';
 import { BS_PAGES } from '../../../../../context/ridePageStateContext/utils';
+import cashPaymentMethod from '../../../../../pages/Payments/cashPaymentMethod';
 
 
 interface RideButtonsProps {
@@ -66,7 +67,10 @@ const RideButtons = ({
 
   const renderPaymentButton = () => {
     const ridePaymentMethod = ride?.paymentMethodId;
-    const selectedPaymentMethod: PaymentMethodInterface | undefined = paymentMethods.find(pm => pm.id === ridePaymentMethod);
+    
+    const selectedPaymentMethod: PaymentMethodInterface | undefined = [...paymentMethods, cashPaymentMethod].find(pm => pm.id === ridePaymentMethod);
+    console.log('iddddd', ridePaymentMethod);
+
     return (
       <ButtonContainer
         onPress={() => {
@@ -78,6 +82,7 @@ const RideButtons = ({
           brand={selectedPaymentMethod?.brand}
           icon={creditCardIcon}
           title={selectedPaymentMethod?.name || i18n.t('bottomSheetContent.ride.addPayment')}
+          id={selectedPaymentMethod?.id}
         />
       </ButtonContainer>
     );

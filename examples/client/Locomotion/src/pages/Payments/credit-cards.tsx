@@ -10,7 +10,7 @@ import {
 
 import PaymentMethod from '../../Components/CardRow';
 import PaymentsContext from '../../context/payments';
-import { PaymentMethodInterface } from '../../context/payments/interface';
+import cashPaymentMethod from './cashPaymentMethod';
 
 export default ({
   onDetach = (id: string) => null,
@@ -19,13 +19,6 @@ export default ({
 }) => {
   const [loading, setLoading] = useState(false);
   const usePayments = PaymentsContext.useContainer();
-
-
-const cashPaymentMethod = {
-  id: 'cash',
-  name: 'Cash',
-  brand: 'cash'
-}
   
   useEffect(() => {
     setLoading(loadingState);
@@ -42,7 +35,7 @@ const cashPaymentMethod = {
             {...paymentMethod}
           />
           </View>
-          <View style={{ flex: 1}}>
+          {paymentMethod.id !== cashPaymentMethod.id && <View>
           <DeleteCreditCard disabled={loading}>
             <DeleteCreditCardText
               onPress={() => onDetach(paymentMethod.id)}
@@ -50,7 +43,7 @@ const cashPaymentMethod = {
               {i18n.t('payments.deleteCard')}
             </DeleteCreditCardText>
           </DeleteCreditCard>   
-</View>
+</View>}
             </View>
 ))}
 

@@ -15,6 +15,7 @@ import { FlexCont } from '../../Components/Flex';
 import PaymentMethod from '../../Components/CardRow';
 import PaymentsContext from '../../context/payments';
 import { RidePageContext } from '../../context/newRideContext';
+import cashPaymentMethod from '../../pages/Payments/cashPaymentMethod';
 
 interface PaymentMethodPopupProps {
   isVisible: boolean;
@@ -23,12 +24,6 @@ interface PaymentMethodPopupProps {
 
 type Nav = {
   navigate: (value: string) => void;
-}
-
-const cashPaymentMethod = {
-  id: 'cash',
-  name: 'Cash',
-  brand: 'cash'
 }
 
 const PaymentMethodPopup = ({ isVisible, onCancel }: PaymentMethodPopupProps) => {
