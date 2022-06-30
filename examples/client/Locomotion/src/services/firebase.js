@@ -1,4 +1,4 @@
-import crashlytics from '@react-native-firebase/crashlytics';
+// import crashlytics from '@react-native-firebase/crashlytics';
 
 class Firebase {
   constructor(enable = false) {

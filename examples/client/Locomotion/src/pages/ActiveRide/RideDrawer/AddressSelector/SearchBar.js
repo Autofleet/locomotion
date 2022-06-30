@@ -124,6 +124,7 @@ const SearchBar = ({
       <Row
         {...rowProps}
         key={s.id}
+        useNativeDriver
       >
         <BottomSheetInput
           placeholder={i18n.t(placeholder)}

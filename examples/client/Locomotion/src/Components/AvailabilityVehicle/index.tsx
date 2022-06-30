@@ -29,6 +29,7 @@ const areEqual = (prev: AvailabilityVehicleProps, next: AvailabilityVehicleProps
 
 const AvailabilityVehicle = (props: AvailabilityVehicleProps) => {
   const { primaryColor } = useContext(ThemeContext);
+  const [tracksViewChanges, setTracksViewChanges] = useState(true);
 
   const [locationAnimated] = useState(new AnimatedRegion({
     latitude: props.location.lat,
@@ -46,9 +47,17 @@ const AvailabilityVehicle = (props: AvailabilityVehicleProps) => {
     }).start();
   }, [props.location]);
 
+  useEffect(() => {
+    const timeout = setTimeout(() => setTracksViewChanges(false), 500);
+    return () => {
+      clearTimeout(timeout);
+    };
+  });
+
   return (
     <AvailabilityVehicleContainer key={props.id}>
       <MarkerAnimated
+        tracksViewChanges={tracksViewChanges}
         coordinate={locationAnimated}
       >
         <SvgIcon Svg={carIcon} height={48} width={48} fill={primaryColor} />
