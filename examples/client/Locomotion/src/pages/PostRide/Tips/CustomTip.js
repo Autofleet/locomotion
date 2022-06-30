@@ -73,17 +73,11 @@ const Tips = ({
   const { expand, forceClose } = useBottomSheet();
   const inputRef = useRef(null);
 
-  //  const isPercentage = ridePrice >= settings.percentageThreshold;
-  //  const buttons = isPercentage ? settings.percentage : settings.fixedPrice;
-  //  const tipSuffix = isPercentage ? '%' : '$';
-  //
-
 
   const submitValue = async () => {
     const validatedNumber = await isValidNumber(customTip);
     if (validatedNumber) {
       onSubmit(validatedNumber);
-      // setCustomTip(parsedValue);
       forceClose();
     }
   };

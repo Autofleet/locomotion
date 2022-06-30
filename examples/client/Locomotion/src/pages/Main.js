@@ -11,7 +11,7 @@ const Main = () => {
   const theme = useContext(ThemeContext);
   return (
     <Drawer.Navigator
-      initialRouteName={MAIN_ROUTES.POST_RIDE}
+      initialRouteName={MAIN_ROUTES.HOME}
       drawerContent={props => (<DrawerContentComponent {...props} />)}
       screenOptions={{
         inactiveBackgroundColor: '#ffffff',

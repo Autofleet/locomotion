@@ -3,8 +3,9 @@ import React, { useEffect, useState } from 'react';
 import { SummaryStars, StarIcon } from './styled';
 import Button from '../../Components/Button';
 
-const starIconSource = require('../../assets/star.png');
-const lightStarIconSource = require('../../assets/lightStar.png');
+import starIconSource from '../../assets/star.png';
+
+import lightStarIconSource from '../../assets/lightStar.png';
 
 
 const Star = (props) => {
