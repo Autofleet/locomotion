@@ -214,13 +214,13 @@ const RidePageContextProvider = ({ children }: {
   useInterval(async () => {
     if (ride?.id) {
       const rideLoaded = await rideApi.getRide(ride?.id);
+      const formattedRide = await formatRide(rideLoaded);
+      setRide(formattedRide);
       if (ride.state !== rideLoaded.state) {
         changeBsPage(rideLoaded.state === RIDE_STATES.REJECTED
           ? BS_PAGES.NO_AVAILABLE_VEHICLES
           : BS_PAGES.ACTIVE_RIDE);
       }
-      const formattedRide = await formatRide(rideLoaded);
-      setRide(formattedRide);
     }
   }, 5000);
 
