@@ -1,7 +1,10 @@
 import network from '../../services/network';
 
 export const getByKey = async (key: string) => {
+  
   const { data } = await network.get(`/api/v1/settings/${key}`);
+  console.log(`result get by key ${key}: ${data}`);
+
   return data;
 };
 

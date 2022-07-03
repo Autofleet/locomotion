@@ -287,6 +287,7 @@
       }
     },
     "payments": {
+        "select": "Select",
         "pageTitle": "Payments Method",
         "submitCard": "Add card",
         "addNewCreditCard": "Add New Credit Card",

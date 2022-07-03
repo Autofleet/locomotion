@@ -5,6 +5,7 @@ import { TouchableOpacity, View, Text } from 'react-native';
 import moment from 'moment';
 import styled from 'styled-components';
 import { PaymentIcon } from 'react-native-payment-icons';
+import cashPaymentMethod from '../../pages/Payments/cashPaymentMethod';
 import i18n from '../../I18n';
 import SvgIcon from '../SvgIcon';
 import selected from '../../assets/selected-v.svg';
@@ -15,8 +16,6 @@ type ContainerProps = {
   children: React.ReactNode,
   selected: boolean,
 };
-
-const CASH_METHOD_ID = 'cash';
 
 const Container = styled(View) < ContainerProps >`
   flex-direction: row;
@@ -105,7 +104,7 @@ function capitalizeFirstLetter(string: string) {
   return string?.charAt(0).toUpperCase() + string?.slice(1);
 }
 
-const isCashPaymentMethod = (paymentMethod: any) => paymentMethod.id === CASH_METHOD_ID;
+const isCashPaymentMethod = (paymentMethod: any) => paymentMethod.id === cashPaymentMethod.id;
 
 
 export default (paymentMethod: any) => (
@@ -139,7 +138,7 @@ export default (paymentMethod: any) => (
               {isCashPaymentMethod(paymentMethod)
                 ? (
                   <Type>
-                    {i18n.t('payments.cashMethodBrand').toString()}
+                    {paymentMethod.name}
                   </Type>
                 )
                 : (

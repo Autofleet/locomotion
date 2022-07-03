@@ -10,7 +10,7 @@ const cashPaymentMethod : PaymentMethodInterface = {
   isDefault: false,
   isExpired: false,
   lastFour: '',
-  name: 'Cash',
+  name: 'Pay with cash',
   stripeId: '',
   updatedAt: new Date(),
   deletedAt: null,

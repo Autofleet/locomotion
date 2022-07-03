@@ -43,17 +43,15 @@ const PaymentMethodPopup = ({ isVisible, onCancel }: PaymentMethodPopupProps) =>
   };
   const [isCashEnabled, setIsCashEnabled] = useState(false);
 
-  const usePayments = PaymentsContext.useContainer();
-  const navigation = useNavigation<Nav>();
-
   useEffect(() => {
     const getIsCashEnabled = async () => {
       const result = await usePayments.isCashPaymentEnabled();
-      setIsCashEnabled(result);
+
+      setIsCashEnabled(result === 'true');
     };
 
     getIsCashEnabled();
-  });
+  }, [usePayments]);
 
   return (
     <Modal isVisible={isVisible}>
@@ -91,7 +89,7 @@ const PaymentMethodPopup = ({ isVisible, onCancel }: PaymentMethodPopupProps) =>
                 style={{}}
                 onPress={() => onSave()}
               >
-                {i18n.t('popups.rideNotes.save')}
+                {i18n.t('payments.select')}
               </RoundedButton>
             </FlexCont>
           </Footer>

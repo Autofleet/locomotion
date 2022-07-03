@@ -30,11 +30,11 @@ export default ({
   useEffect(() => {
     const getIsCashEnabled = async () => {
       const result = await usePayments.isCashPaymentEnabled();
-      setIsCashEnabled(result);
+      setIsCashEnabled(result === 'true');
     };
 
     getIsCashEnabled();
-  });
+  }, [usePayments]);
 
 
   return (
@@ -47,13 +47,11 @@ export default ({
             </CreditCardsContainer>
             {paymentMethod.id !== cashPaymentMethod.id
             && (
-            <View>
               <DeleteCreditCard disabled={loading}>
                 <DeleteCreditCardText onPress={() => onDetach(paymentMethod.id)}>
                   {i18n.t('payments.deleteCard')}
                 </DeleteCreditCardText>
               </DeleteCreditCard>
-            </View>
             )}
           </PaymentMethodsContainer>
         ))}

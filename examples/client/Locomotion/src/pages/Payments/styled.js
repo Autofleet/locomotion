@@ -87,6 +87,7 @@ export const CreditCardRowText = styled.Text`
 `;
 
 export const DeleteCreditCard = styled.TouchableOpacity`
+display: flex;
     margin: 25px;
     align-self: flex-end;
     padding: 5px;
@@ -106,10 +107,12 @@ export const CardsListContainer = styled.View`
 
 export const PaymentMethodsContainer = styled.View`
     display: flex;
-    flex: 1;
-    height: 100px;
+    flex-direction: row;
 `;
 
 export const CreditCardsContainer = styled.View`
-    flex: 1;
+display: flex;
+flex-direction: row;
+max-width: 70%;
+    /* flex: 1; */
 `;
