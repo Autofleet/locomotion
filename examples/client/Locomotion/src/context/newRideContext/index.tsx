@@ -137,14 +137,13 @@ const RidePageContextProvider = ({ children }: {
   const [serviceRequestFailed, setServiceRequestFailed] = useState<boolean>(false);
   const intervalRef = useRef<any>();
 
-  const formatRide = async (ride: RideInterface) => {
-    // const serviceType = ride.serviceType || await rideApi.getService(ride.serviceTypeId)
-    return {
-      ...ride,
-      stopPoints: formatSps(ride.stopPoints),
-      // serviceType 
-    }
-  }
+  // const serviceType = ride.serviceType || await rideApi.getService(ride.serviceTypeId)
+  const formatRide = async (rideToFormat: RideInterface) => ({
+    ...rideToFormat,
+    stopPoints: formatSps(rideToFormat.stopPoints),
+    // serviceType
+  });
+
 
   const { getSettingByKey } = settings.useContainer();
 
