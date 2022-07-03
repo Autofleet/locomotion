@@ -23,7 +23,7 @@ const NoteButton = ({
 }: NoteButtonProps) => (
   <>
     <SvgIcon stroke="#333" Svg={icon} height={15} width={15} />
-    <TimeText>{title}</TimeText>
+    <TimeText numberOfLines={1}>{title}</TimeText>
   </>
 );
 

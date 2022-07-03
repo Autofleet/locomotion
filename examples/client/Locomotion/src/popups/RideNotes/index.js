@@ -27,45 +27,36 @@ export default ({ isVisible, onSubmit, onCancel }) => {
   return (
     <Modal isVisible={isVisible}>
       <SummaryContainer>
-        <View style={{ flex: 2, textAlign: 'left', width: '80%' }}>
-          <FlexCont justifyContent="space-between">
-            <View>
-              <Title>{i18n.t('popups.rideNotes.title')}</Title>
-            </View>
-            <View>
-              <Counter>{`${currentText.length}/${MAX_SIZE}`}</Counter>
-            </View>
-          </FlexCont>
-          <StyledTextArea
-            value={currentText}
-            multiline
-            numberOfLines={7}
-            textAlignVertical="top"
-            placeholder={i18n.t('popups.rideNotes.placeholder')}
-            maxLength={MAX_SIZE}
-            onChangeText={updateText}
-          />
-          <FlexCont>
-            <FlexCont paddingEnd={5}>
-              <RoundedButton
-                width="100%"
-                hollow
-                data-test-id="SubmitRideSummaryPopupButton"
-                onPress={() => onCancel()}
-              >
-                {i18n.t('popups.rideNotes.cancel')}
-              </RoundedButton>
-            </FlexCont>
-            <FlexCont paddingStart={5}>
-              <RoundedButton
-                data-test-id="SubmitRideSummaryPopupButton2"
-                onPress={() => onSubmit(currentText)}
-              >
-                {i18n.t('popups.rideNotes.save')}
-              </RoundedButton>
-            </FlexCont>
-          </FlexCont>
-        </View>
+        <FlexCont justifyContent="space-between">
+          <Title>{i18n.t('popups.rideNotes.title')}</Title>
+          <Counter>{`${currentText.length}/${MAX_SIZE}`}</Counter>
+        </FlexCont>
+        <StyledTextArea
+          value={currentText}
+          multiline
+          numberOfLines={7}
+          textAlignVertical="top"
+          placeholder={i18n.t('popups.rideNotes.placeholder')}
+          maxLength={MAX_SIZE}
+          onChangeText={updateText}
+        />
+        <FlexCont>
+          <RoundedButton
+            width="48%"
+            hollow
+            data-test-id="SubmitRideSummaryPopupButton"
+            onPress={() => onCancel()}
+          >
+            {i18n.t('popups.rideNotes.cancel')}
+          </RoundedButton>
+          <RoundedButton
+            width="48%"
+            data-test-id="SubmitRideSummaryPopupButton2"
+            onPress={() => onSubmit(currentText)}
+          >
+            {i18n.t('popups.rideNotes.save')}
+          </RoundedButton>
+        </FlexCont>
       </SummaryContainer>
     </Modal>
   );
