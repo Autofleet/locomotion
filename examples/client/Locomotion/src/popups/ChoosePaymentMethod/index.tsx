@@ -43,9 +43,6 @@ const PaymentMethodPopup = ({ isVisible, onCancel }: PaymentMethodPopupProps) =>
   };
   const [isCashEnabled, setIsCashEnabled] = useState(false);
 
-  const usePayments = PaymentsContext.useContainer();
-  const navigation = useNavigation<Nav>();
-
   useEffect(() => {
     const getIsCashEnabled = async () => {
       const result = await usePayments.isCashPaymentEnabled();
