@@ -181,3 +181,11 @@ export const DayTitleContainer = styled.View`
 
 export const RideViewTitleContainer = styled.View`
 `;
+
+export const DriverCardContainer = styled.View`
+padding-left: 20px;
+`;
+
+export const StopPointsVerticalViewContainer = styled.View`
+padding: 0 20px;
+`;

@@ -343,12 +343,22 @@
         },
         "rider": "Rider",
         "riders": "Riders",
-        "addPayment": "Add Payment"
+        "addPayment": "Add Payment",
+        "contactDriver": "Contact driver",
+        "shareRide": "Share ride",
+        "cancelRide": "Cancel ride"
     }
   },
   "stopPointsTypes": {
     "dropoff": "Dropoff",
     "pickup": "Pickup"
+  },
+  "stopPoints": {
+    "states": {
+        "arrived": "Arrived",
+        "completed": "Completed",
+        "pending": "Pending"
+    }
   },
   "activeRide": {
     "pickup": {

@@ -1,6 +1,10 @@
-import { Image, Text, View } from 'react-native';
+import {
+  Image, Text, View, TouchableOpacity,
+} from 'react-native';
 import styled from 'styled-components';
 import { FONT_SIZES, FONT_WEIGHTS } from '../../../context/theme';
+
+export const HALF_WIDTH = '49%';
 
 export const TopContainer = styled(View)`
     flex-direction: row;
@@ -65,4 +69,31 @@ export const StopPointTimeText = styled(Text)`
 
 export const PulseContainer = styled(View)`
     margin-right: 5px;
+`;
+
+export const StopPointsVerticalViewContainer = styled(View)`
+    margin-top: 20px;
+`;
+
+export const ButtonsContainer = styled(View)`
+    margin-top: 20px;
+`;
+
+export const RowContainer = styled(View)`
+    flex-direction: row;
+    width: 100%;
+    margin-bottom: 2%;
+    height: 40px;
+    justify-content: space-between;
+`;
+
+export const ButtonContainer = styled(TouchableOpacity)`
+    flex-direction: row;
+    border: 1px solid #f1f2f6;
+    border-radius: 8px;
+    align-items: center;
+    height: 100%;
+    display: flex;
+    width: ${HALF_WIDTH};
+    padding: 0 15px;
 `;

@@ -21,3 +21,10 @@ export const RIDE_STATES = {
   ACTIVE: 'active',
   FAILED: 'failed',
 };
+
+export const RIDE_ACTIVE_STATES = [
+  RIDE_STATES.PENDING,
+  RIDE_STATES.MATCHING,
+  RIDE_STATES.DISPATCHED,
+  RIDE_STATES.ACTIVE,
+];

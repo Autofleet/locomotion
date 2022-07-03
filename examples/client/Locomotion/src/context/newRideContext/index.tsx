@@ -1,6 +1,7 @@
 import React, {
   useState, useEffect, useRef, createContext, useContext,
 } from 'react';
+import Config from 'react-native-config';
 import _ from 'lodash';
 import { getPosition } from '../../services/geo';
 import { getPlaces, getGeocode, getPlaceDetails } from './google-api';
@@ -15,6 +16,8 @@ import SETTINGS_KEYS from '../settings/keys';
 import { RideStateContextContext } from '../ridePageStateContext';
 import { BS_PAGES } from '../ridePageStateContext/utils';
 import { RIDE_STATES } from '../../lib/commonTypes';
+import useInterval from '../../lib/useInterval';
+import { formatSps } from '../../lib/ride/utils';
 
 type Dispatch<A> = (value: A) => void;
 
@@ -27,6 +30,9 @@ export interface RideInterface {
   stopPoints?: any[];
   vehicle?: any;
   rating?: number;
+  state?: string;
+  trackerUrl?: string;
+  serviceType?: any;
 }
 
 interface RidePageContextInterface {
@@ -64,7 +70,8 @@ interface RidePageContextInterface {
   initSps: () => void;
   fillLoadSkeleton: () => void;
   serviceRequestFailed: boolean;
-  setServiceRequestFailed: Dispatch<boolean>
+  setServiceRequestFailed: Dispatch<boolean>;
+  trackRide: () => Promise<string>;
 }
 
 export const RidePageContext = createContext<RidePageContextInterface>({
@@ -102,7 +109,8 @@ export const RidePageContext = createContext<RidePageContextInterface>({
   requestRide: () => undefined,
   serviceRequestFailed: false,
   setServiceRequestFailed: () => undefined,
-  ride: {}
+  ride: {},
+  trackRide: async () => '',
 });
 
 const HISTORY_RECORDS_NUM = 10;
@@ -128,6 +136,15 @@ const RidePageContextProvider = ({ children }: {
   const [rideRequestLoading, setRideRequestLoading] = useState(false);
   const [serviceRequestFailed, setServiceRequestFailed] = useState<boolean>(false);
   const intervalRef = useRef<any>();
+
+  const formatRide = async (ride: RideInterface) => {
+    // const serviceType = ride.serviceType || await rideApi.getService(ride.serviceTypeId)
+    return {
+      ...ride,
+      stopPoints: formatSps(ride.stopPoints),
+      // serviceType 
+    }
+  }
 
   const { getSettingByKey } = settings.useContainer();
 
@@ -179,25 +196,34 @@ const RidePageContextProvider = ({ children }: {
     );
   };
 
-  const loadRide = () => {
-    if (ride && ride.id) {
-      
-    }
-  }
 
   const loadActiveRide = async () => {
     const activeRide = await rideApi.getActiveRide();
     if (activeRide) {
-      setRide(activeRide);
-      changeBsPage(BS_PAGES.ACTIVE_RIDE)
+      const formattedRide = await formatRide(activeRide);
+      setRide(formattedRide);
+      changeBsPage(BS_PAGES.ACTIVE_RIDE);
     }
-  }
+  };
 
   useEffect(() => {
     initCurrentLocation();
     getServiceEstimationsFetchingInterval();
     loadActiveRide();
   }, []);
+
+  useInterval(async () => {
+    if (ride?.id) {
+      const rideLoaded = await rideApi.getRide(ride?.id);
+      if (ride.state !== rideLoaded.state) {
+        changeBsPage(rideLoaded.state === RIDE_STATES.REJECTED
+          ? BS_PAGES.NO_AVAILABLE_VEHICLES
+          : BS_PAGES.ACTIVE_RIDE);
+      }
+      const formattedRide = await formatRide(rideLoaded);
+      setRide(formattedRide);
+    }
+  }, 5000);
 
   useEffect(() => {
     initSps();
@@ -424,7 +450,7 @@ const RidePageContextProvider = ({ children }: {
     setRideRequestLoading(true);
 
     changeBsPage(BS_PAGES.CONFIRMING_RIDE);
-    const formattedRide = {
+    const rideToCreate = {
       serviceId: chosenService?.id,
       paymentMethodId: ride.paymentMethodId,
       rideType: 'passenger',
@@ -437,11 +463,12 @@ const RidePageContextProvider = ({ children }: {
       })),
     };
     try {
-      const afRide = await rideApi.createRide(formattedRide);
+      const afRide = await rideApi.createRide(rideToCreate);
       if (afRide.state === RIDE_STATES.REJECTED) {
         throw new Error();
       }
-      setRide(afRide);
+      const formattedRide = await formatRide(afRide);
+      setRide(formattedRide);
     } catch (e) {
       // TODO: error handling
       changeBsPage(BS_PAGES.NO_AVAILABLE_VEHICLES);
@@ -463,6 +490,20 @@ const RidePageContextProvider = ({ children }: {
       ...ride,
       ...newRide,
     });
+  };
+
+  const trackRide = async () => {
+    if (!ride.trackerUrl) {
+      const trackData = await rideApi.track(ride.id);
+      const trackerUrl = `${Config.trackerUrl}/${trackData.id}`;
+      setRide({
+        ...ride,
+        trackerUrl,
+      });
+      return trackerUrl;
+    }
+
+    return ride.trackerUrl;
   };
 
   return (
@@ -503,6 +544,7 @@ const RidePageContextProvider = ({ children }: {
         stopRequestInterval,
         serviceRequestFailed,
         setServiceRequestFailed,
+        trackRide,
       }}
     >
       {children}

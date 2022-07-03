@@ -18,8 +18,10 @@ import {
   RideViewSecTextContainer,
   MainRideViewSectionContainer,
   RideViewSectionTitleText,
+  DriverCardContainer,
+  StopPointsVerticalViewContainer,
 } from './styled';
-import StopPointsVerticalView from '../StopPointsVerticalView';
+import StopPointsVerticalView from '../../../Components/StopPointsVerticalView';
 import Map from './Map';
 import i18n from '../../../I18n';
 import { MMMM_DD_YYYY } from '../consts';
@@ -88,15 +90,19 @@ const RideView = ({ ride }) => {
           </RideViewSectionTitleText>
         </RideViewTitleContainer>
       </RideViewSectionContainer>
-      <StopPointsVerticalView
-        ride={ride}
-      />
-      {ride.driver && (
+      <StopPointsVerticalViewContainer>
+        <StopPointsVerticalView
+          ride={ride}
+        />
+      </StopPointsVerticalViewContainer>
+      <DriverCardContainer>
+        {ride.driver && (
         <DriverCard
           activeRide={false}
           ride={ride}
         />
-      )}
+        )}
+      </DriverCardContainer>
     </RideViewContainer>
   );
 };

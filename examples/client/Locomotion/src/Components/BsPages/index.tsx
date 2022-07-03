@@ -123,7 +123,8 @@ const BsPage = ({
   isLoading: boolean;
 }) => (
   <Container>
-    {TitleText && <MainContent>
+    {TitleText && (
+    <MainContent>
       <CardText>
         <TitleContainer>
           {titleIcon && <SvgIcon Svg={titleIcon} style={{ marginRight: 5 }} />}
@@ -136,7 +137,8 @@ const BsPage = ({
           {image}
         </CardImage>
       ) : undefined}
-    </MainContent>}
+    </MainContent>
+    )}
     {children}
     {ButtonText && (
     <OtherButton onPress={onButtonPress} isLoading={isLoading}>
