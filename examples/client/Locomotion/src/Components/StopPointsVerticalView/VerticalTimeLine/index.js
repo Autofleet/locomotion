@@ -1,5 +1,5 @@
 import React from 'react';
-import { STOP_POINT_TYPES } from '../../../../lib/commonTypes';
+import { STOP_POINT_TYPES } from '../../../lib/commonTypes';
 import {
   BottomTimeLine,
   Content,
@@ -13,7 +13,7 @@ import {
 } from './styled';
 import {
   PickupIconMarker, DropoffIconMarker,
-} from '../../marker';
+} from '../../../pages/RideHistory/marker';
 
 const VerticalTimeLineCard = ({
   sp: { type },

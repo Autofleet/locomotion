@@ -23,7 +23,9 @@ export default ({
   const { lat, lng } = stopPoint;
   const eta = stopPoint.eta || (chosenService && chosenService.eta);
   const [minutesUntilPickup, setMinutesUntilPickup] = useState();
-  const etaText = i18n.t('rideDetails.toolTipEta', { minutes: minutesUntilPickup });
+  const etaText = minutesUntilPickup > 1
+    ? i18n.t('rideDetails.toolTipEta', { minutes: minutesUntilPickup })
+    : i18n.t('general.now');
   const typeDetails = {
     [STOP_POINT_TYPES.STOP_POINT_PICKUP]: {
       icon: pickupIcon,
@@ -41,16 +43,12 @@ export default ({
   }, [chosenService]);
   const checkIfSpIsNext = () => eta && stopPoint.type === STOP_POINT_TYPES.STOP_POINT_PICKUP;
   return (
-    <Marker
-      coordinate={{ latitude: parseFloat(lat), longitude: parseFloat(lng) }}
-      onPress={(e) => {
-        Mixpanel.trackElementClick({ id: 'SelectStationButton' });
-      }}
-      key={stopPoint.id}
-      zIndex={999}
-      tracksViewChanges={Platform.OS === 'ios' && Config.MAP_PROVIDER === 'google'}
-    >
-      <MarkerContainer>
+    <MarkerContainer>
+      <Marker
+        coordinate={{ latitude: parseFloat(lat), longitude: parseFloat(lng) }}
+        zIndex={999}
+        tracksViewChanges={Platform.OS === 'ios' && Config.MAP_PROVIDER === 'google'}
+      >
         <InfoBox>
           <Type>
             <TypeText>
@@ -60,7 +58,10 @@ export default ({
           <SubContainer>
             {checkIfSpIsNext() && (
             <PulseContainer>
-              <Loader sourceProp={pulse} lottieViewStyle={{ width: 24, height: 24 }} />
+              <Loader
+                sourceProp={pulse}
+                lottieViewStyle={{ width: 24, height: 24, marginRight: 5 }}
+              />
             </PulseContainer>
             )}
             <SubText numberOfLines={1}>
@@ -75,7 +76,8 @@ export default ({
             height={20}
           />
         </IconContainer>
-      </MarkerContainer>
-    </Marker>
+      </Marker>
+    </MarkerContainer>
+
   );
 };

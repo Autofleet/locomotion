@@ -1,15 +1,26 @@
 import React from 'react';
 import moment from 'moment';
-import i18n from '../../../I18n';
+import i18n from '../../I18n';
 import VerticalTimeLineCard from './VerticalTimeLine';
 import { ContentSubTitle, ContentTitle, PanelContentContainer } from './styled';
-import getOrdinal from '../getOrdinal';
+import { getOrdinal, getMinDifferent } from '../../lib/ride/utils';
+import { RIDE_ACTIVE_STATES, STOP_POINT_STATES } from '../../lib/commonTypes';
 
 const getEtaText = eta => moment(eta).format('HH:mm');
 
+const stopPointText = sp => (sp.state === STOP_POINT_STATES.PENDING
+  ? getEtaText(sp.plannedArrivalTime)
+  : i18n.t(`stopPoints.states${sp.state}`));
+
 const MAX_DESC_LIMIT = 50;
 
-const Index = ({ ride: { stopPoints } }) => {
+const Index = ({ ride }) => {
+  const {
+    state,
+    stopPoints,
+  } = ride;
+  const rideIsActive = RIDE_ACTIVE_STATES.includes(state);
+
   if (stopPoints
     && stopPoints.length) {
     return (
@@ -32,7 +43,10 @@ const Index = ({ ride: { stopPoints } }) => {
             )}
             underContent={(
               <ContentTitle>
-                {getEtaText(sp.completedAt || sp.arrivedAt)}
+                {rideIsActive
+                  ? stopPointText(sp)
+                  : getEtaText(sp.completedAt || sp.arrivedAt)
+                }
               </ContentTitle>
             )}
           />

@@ -35,16 +35,15 @@ const NewCreditForm = ({ onDone, canSkip = false, PageText }) => {
       },
     });
 
+    await usePayments.createPaymentMethod(setupIntent.paymentMethodId);
+
     if (error) {
       console.error(error);
       setErrorMessage(error.message);
     } else {
-      await new Promise(resolve => setTimeout(async () => {
-        await usePayments.loadCustomer();
-        setLoading(false);
-        await onDone();
-        resolve();
-      }, 500));
+      await usePayments.loadCustomer();
+      setLoading(false);
+      await onDone();
     }
   };
 
