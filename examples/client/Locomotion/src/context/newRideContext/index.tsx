@@ -509,7 +509,7 @@ const RidePageContextProvider = ({ children }: {
   const trackRide = async () => {
     if (!ride.trackerUrl) {
       const trackData = await rideApi.track(ride.id);
-      const trackerUrl = `${Config.trackerUrl}/${trackData.id}`;
+      const trackerUrl = `${Config.TRACKER_URL}/${trackData.id}`;
       setRide({
         ...ride,
         trackerUrl,
