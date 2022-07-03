@@ -3,11 +3,12 @@ import React, {
 } from 'react';
 import { StyleSheet } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
+import { useIsFocused } from '@react-navigation/native';
 import { STOP_POINT_TYPES } from '../../../lib/commonTypes';
 import { DropoffIconMarker, PickupIconMarker } from '../marker';
 import { MarkerTitle } from './styled';
 import i18n from '../../../I18n';
-import getOrdinal from '../getOrdinal';
+import { getOrdinal } from '../../../lib/ride/utils';
 
 const mapStyle = {
   ...StyleSheet.absoluteFillObject,
@@ -40,6 +41,7 @@ const Map = forwardRef(({
   ride: { stopPoints },
 }, ref) => {
   const mapInstance = useRef();
+  const isFocused = useIsFocused();
 
 
   useEffect(() => {
@@ -60,7 +62,7 @@ const Map = forwardRef(({
     return () => {
       clearTimeout(timeout);
     };
-  }, [mapInstance, stopPoints]);
+  }, [mapInstance, stopPoints, isFocused]);
 
   useImperativeHandle(ref, () => ({
     fitToCoordinates: ({ lat, lng }) => setImmediate(() => {

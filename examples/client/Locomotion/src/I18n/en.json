@@ -19,7 +19,8 @@
         "next": "Continue",
         "cancel": "Cancel",
         "skip": "Skip",
-        "select": "Select"
+        "select": "Select",
+        "now": "Now"
     },
     "login": {
         "getStarted": "Get started!",
@@ -257,6 +258,7 @@
     },
     "rideHistory": {
         "pageTitle": "Rides History",
+        "tripPageTitle": "Trip details",
         "noRides": "No results found",
         "noRidesSubText": "",
         "ridesTable": {
@@ -344,11 +346,28 @@
         },
         "rider": "Rider",
         "riders": "Riders",
-        "addPayment": "Add Payment"
+        "addPayment": "Add Payment",
+        "contactDriver": "Contact driver",
+        "shareRide": "Share ride",
+        "cancelRide": "Cancel ride"
     }
   },
   "stopPointsTypes": {
     "dropoff": "Dropoff",
     "pickup": "Pickup"
-  }
+  },
+  "stopPoints": {
+    "states": {
+        "arrived": "Arrived",
+        "completed": "Completed",
+        "pending": "Pending"
+    }
+  },
+  "activeRide": {
+    "pickup": {
+        "pending": "Meeting at pickup point"
+    }
+  },
+  "min": "{{ min }} min",
+  "now": "Now"
 }

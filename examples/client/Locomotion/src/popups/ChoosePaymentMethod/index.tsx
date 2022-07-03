@@ -31,6 +31,16 @@ const PaymentMethodPopup = ({ isVisible, onCancel }: PaymentMethodPopupProps) =>
     ride,
     updateRide,
   } = useContext(RidePageContext);
+  const [payment, setPayment] = useState(ride?.paymentMethodId);
+  const usePayments = PaymentsContext.useContainer();
+  const navigation = useNavigation<Nav>();
+
+  const onSave = () => {
+    updateRide({
+      paymentMethodId: payment,
+    });
+    onCancel();
+  };
   const [isCashEnabled, setIsCashEnabled] = useState(false);
 
   const usePayments = PaymentsContext.useContainer();
@@ -56,12 +66,9 @@ const PaymentMethodPopup = ({ isVisible, onCancel }: PaymentMethodPopupProps) =>
             {(isCashEnabled ? [...usePayments.paymentMethods, cashPaymentMethod] : usePayments.paymentMethods).map((paymentMethod: any, i) => (
               <PaymentMethod
                 {...paymentMethod}
-                selected={ride?.paymentMethodId === paymentMethod.id}
+                selected={payment === paymentMethod.id}
                 onPress={() => {
-                  updateRide({
-                    paymentMethodId: paymentMethod.id,
-                  });
-                  onCancel();
+                  setPayment(paymentMethod.id);
                 }}
               />
             ))}
@@ -82,7 +89,7 @@ const PaymentMethodPopup = ({ isVisible, onCancel }: PaymentMethodPopupProps) =>
                 useCancelTextButton={false}
                 setLoading={null}
                 style={{}}
-                onPress={() => onCancel()}
+                onPress={() => onSave()}
               >
                 {i18n.t('popups.rideNotes.save')}
               </RoundedButton>

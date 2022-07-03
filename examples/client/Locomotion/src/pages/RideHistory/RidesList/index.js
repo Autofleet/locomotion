@@ -22,24 +22,22 @@ const RideCardInList = ({
   showSpacer,
 }) => {
   const navigation = useNavigation();
-  const Content = () => (
-    <RideListView
-      ride={ride}
-      showSpacer={showSpacer}
-      onPress={() => navigation.navigate(MAIN_ROUTES.COMPLETED_RIDE_OVERVIEW_PAGE, {
-        rideId: ride.id,
-      })}
-    />
-  );
-  return (lastItem ? (
+  return (
     <>
-      {!showBottomLoader ? (<Content />) : (
+      <RideListView
+        ride={ride}
+        showSpacer={showSpacer}
+        onPress={() => navigation.navigate(MAIN_ROUTES.COMPLETED_RIDE_OVERVIEW_PAGE, {
+          rideId: ride.id,
+        })}
+      />
+      {lastItem && showBottomLoader ? (
         <CenterContainer>
-          <Loader />
+          <Loader dark lottieViewStyle={{ width: 24, height: 24 }} />
         </CenterContainer>
-      )}
+      ) : null}
     </>
-  ) : <Content />);
+  );
 };
 
 const RidesView = ({ rides }) => {

@@ -5,7 +5,6 @@ import BottomSheet, {
   BottomSheetView,
   BottomSheetFooter,
 } from '@gorhom/bottom-sheet';
-import styled from 'styled-components';
 import SquareSvgButton from '../../Components/SquareSvgButton';
 import SafeView from '../SafeView';
 import { BottomSheetContext } from '../../context/bottomSheetContext';
@@ -44,6 +43,7 @@ const BottomSheetComponent = forwardRef(({ children, focusCurrentLocation }, ref
         style={{ position: 'absolute', bottom: `${parseFloat(snapPoints[isExpanded ? 1 : 0]) + 2}%`, right: 20 }}
       />
       <BottomSheet
+        android_keyboardInputMode="adjustResize"
         ref={ref}
         snapPoints={snapPoints}
         onAnimate={onAnimate}

@@ -30,7 +30,6 @@ export default React.forwardRef(({
   const {
     availabilityVehicles,
   } = useContext(AvailabilityContext);
-  const mapInstance = useRef();
 
   const {
     isUserLocationFocused,
@@ -44,7 +43,7 @@ export default React.forwardRef(({
   const isConfirmPickupPage = currentBsPage === BS_PAGES.CONFIRM_PICKUP;
   const isChooseLocationOnMap = [BS_PAGES.CONFIRM_PICKUP, BS_PAGES.SET_LOCATION_ON_MAP].includes(currentBsPage);
   const {
-    requestStopPoints, chosenService, saveSelectedLocation, reverseLocationGeocode,
+    requestStopPoints, saveSelectedLocation, reverseLocationGeocode,
   } = useContext(RidePageContext);
   const [mapRegion, setMapRegion] = useState({
     latitudeDelta: 0.015,
@@ -66,6 +65,7 @@ export default React.forwardRef(({
     <AvailabilityVehicle
       location={vehicle.location}
       id={vehicle.id}
+      key={vehicle.id}
     />
   )) : null);
 
@@ -102,12 +102,18 @@ export default React.forwardRef(({
   useEffect(() => {
     if (currentBsPage === BS_PAGES.CONFIRM_PICKUP) {
       const pickupStopPoint = requestStopPoints.find(sp => sp.type === STOP_POINT_TYPES.STOP_POINT_PICKUP);
-      ref.current.animateToRegion({
+      ref.current.fitToCoordinates([{
+        latitude: pickupStopPoint.lat - 0.001,
+        longitude: pickupStopPoint.lng - 0.001,
+      }, {
         latitude: pickupStopPoint.lat,
         longitude: pickupStopPoint.lng,
-        latitudeDelta: 0.001,
-        longitudeDelta: 0.001,
-      }, 1000);
+      }, {
+        latitude: pickupStopPoint.lat + 0.001,
+        longitude: pickupStopPoint.lng + 0.001,
+      }], {
+        animated: false,
+      });
     }
   }, [currentBsPage]);
 
@@ -178,7 +184,7 @@ export default React.forwardRef(({
         {!isConfirmPickupPage && requestStopPoints.filter(sp => !!sp.lat).length > 1
           ? requestStopPoints
             .filter(sp => !!sp.lat)
-            .map(sp => (<StationsMap stopPoint={sp} />))
+            .map(sp => (<StationsMap stopPoint={sp} key={sp.id} />))
           : null}
         {currentBsPage === BS_PAGES.NOT_IN_TERRITORY && territory && territory.length ? territory
           .map(t => t.polygon.coordinates.map(poly => (
