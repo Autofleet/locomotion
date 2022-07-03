@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import propsTypes from 'prop-types';
 import Loader from '../Loader';
 import { ButtonTextContainer, StyledButton, SubmitButtonText } from './styled';
+import SvgIcon from '../SvgIcon';
 
 const RoundedButton = ({
   onPress,
@@ -11,6 +12,7 @@ const RoundedButton = ({
   disabled,
   type,
   useCancelTextButton,
+  icon,
   ...props
 }) => {
   const [loadingState, setLoadingState] = useState(false);
@@ -38,6 +40,7 @@ const RoundedButton = ({
       style={style}
       useCancelTextButton={useCancelTextButton}
     >
+      <SvgIcon Svg={icon} width={12} height={12} />
       <ButtonTextContainer>
         <SubmitButtonText
           hollow={hollow}

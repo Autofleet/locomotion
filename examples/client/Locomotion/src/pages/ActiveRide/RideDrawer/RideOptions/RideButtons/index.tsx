@@ -1,4 +1,6 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
+import DatePicker from 'react-native-date-picker';
+import moment from 'moment';
 import FutureBookingButton from './FutureBookingButton';
 import {
   Container, RowContainer, ButtonContainer, ButtonText, StyledButton, HALF_WIDTH,
@@ -29,8 +31,9 @@ const RideButtons = ({
   const {
     ride,
     chosenService,
+    updateRide,
   } = useContext(RidePageContext);
-
+  const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
   const {
     changeBsPage,
   } = useContext(RideStateContextContext);
@@ -41,11 +44,33 @@ const RideButtons = ({
         paymentMethods: PaymentMethodInterface[],
     } = PaymentsContext.useContainer();
 
-  const renderFutureBooking = () => (
-    <ButtonContainer disabled>
-      <FutureBookingButton />
-    </ButtonContainer>
-  );
+  const renderFutureBooking = () => {
+    const maxDate = moment().add(7, 'days').toDate();
+    const minDate = moment().add(5, 'minutes').toDate(); // setting - Dispatch Future Rides Immediately
+    const close = () => {
+      setIsDatePickerOpen(false);
+    };
+    return (
+      <ButtonContainer onPress={() => setIsDatePickerOpen(true)}>
+        <FutureBookingButton />
+        <DatePicker
+          open={isDatePickerOpen}
+          date={new Date(ride?.afterTime || Date())}
+          maximumDate={maxDate}
+          minimumDate={minDate}
+          mode="datetime"
+          title={i18n.t('bottomSheetContent.ride.chosePickupTime')}
+          onCancel={close}
+          onConfirm={(date) => {
+            updateRide({ afterTime: date.getTime() });
+            changeBsPage(BS_PAGES.CONFIRM_PICKUP_TIME);
+            close();
+          }}
+          modal
+        />
+      </ButtonContainer>
+    );
+  };
 
   const renderRideNotes = () => {
     const rideHasNotes = ride?.notes;

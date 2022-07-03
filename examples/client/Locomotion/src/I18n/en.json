@@ -312,6 +312,11 @@
     "subName": "Rider app"
   },
   "bottomSheetContent": {
+    "confirmPickupTime": {
+        "titleText": "Scheduled ride",
+        "buttonText": "Set pick up time",
+        "pickupText": "Pick up on {{date}}, at {{time}}"
+    },
     "confirmingRide": {
         "titleText": "Confirming your ride"
     },
@@ -344,7 +349,8 @@
         },
         "rider": "Rider",
         "riders": "Riders",
-        "addPayment": "Add Payment"
+        "addPayment": "Add Payment",
+        "chosePickupTime": "Time of departure"
     }
   },
   "stopPointsTypes": {

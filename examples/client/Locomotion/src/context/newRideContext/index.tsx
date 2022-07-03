@@ -22,6 +22,7 @@ interface Ride {
   notes?: string;
   paymentMethodId?: string;
   serviceTypeId?: string;
+  afterTime?: string;
 }
 
 interface RidePageContextInterface {

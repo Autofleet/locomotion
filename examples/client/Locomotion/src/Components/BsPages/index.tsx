@@ -1,7 +1,9 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Image, Text, View } from 'react-native';
 import styled from 'styled-components';
 import { useBottomSheet } from '@gorhom/bottom-sheet';
+import moment from 'moment';
+import DatePicker from 'react-native-date-picker';
 import SvgIcon from '../SvgIcon';
 import { RidePageContext } from '../../context/newRideContext';
 import i18n from '../../I18n';
@@ -15,6 +17,9 @@ import * as navigationService from '../../services/navigation';
 import payments from '../../context/payments';
 import errorIcon from '../../assets/error-icon.svg';
 import Loader from '../Loader';
+import RoundedButton from '../RoundedButton';
+import { MewRidePageContext } from '../..';
+import timeIcon from '../../assets/calendar.svg';
 
 const OtherButton = styled(Button)`
   width: 100%;
@@ -156,6 +161,48 @@ BsPage.defaultProps = {
 };
 
 export default BsPage;
+
+export const ConfirmPickupTime = (props: any) => {
+  const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
+  const { ride, updateRide } = useContext(MewRidePageContext);
+  const {
+    changeBsPage,
+  } = useContext(RideStateContextContext);
+  const date = moment(ride?.afterTime).format('ddd, MMM Do');
+  const time = moment(ride?.afterTime).format('HH:mm');
+  const maxDate = moment().add(7, 'days').toDate();
+  const minDate = moment().add(5, 'minutes').toDate(); // setting - Dispatch Future Rides Immediately
+  return (
+    <BsPage
+      TitleText={i18n.t('bottomSheetContent.confirmPickupTime.titleText')}
+      ButtonText={i18n.t('bottomSheetContent.confirmPickupTime.buttonText')}
+      onButtonPress={() => changeBsPage(BS_PAGES.SERVICE_ESTIMATIONS)}
+      {...props}
+    >
+      <RoundedButton
+        onPress={() => setIsDatePickerOpen(true)}
+        hollow
+        icon={timeIcon}
+      >
+        {i18n.t('bottomSheetContent.confirmPickupTime.pickupText', { date, time })}
+      </RoundedButton>
+      <DatePicker
+        open={isDatePickerOpen}
+        date={new Date(ride?.afterTime || Date())}
+        maximumDate={maxDate}
+        minimumDate={minDate}
+        mode="datetime"
+        title={i18n.t('bottomSheetContent.ride.chosePickupTime')}
+        onCancel={() => setIsDatePickerOpen(false)}
+        onConfirm={(newDate: Date) => {
+          updateRide({ afterTime: newDate.getTime() });
+          setIsDatePickerOpen(false);
+        }}
+        modal
+      />
+    </BsPage>
+  );
+};
 
 export const NotAvailableHere = (props: any) => (
   <BsPage

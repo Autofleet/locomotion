@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useRef } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import {
-  ConfirmPickup, NoPayment, NotAvailableHere, ConfirmingRide, NoAvailableVehicles, ActiveRide,
+  ConfirmPickup, NoPayment, NotAvailableHere, ConfirmingRide, NoAvailableVehicles, ActiveRide, ConfirmPickupTime,
 } from '../../Components/BsPages';
 import { RideStateContextContext, RideStateContextContextProvider } from '../../context';
 import NewRidePageContextProvider, { RidePageContext } from '../../context/newRideContext';
@@ -71,6 +71,12 @@ const RidePage = ({ mapSettings }) => {
   };
 
   const BS_PAGE_TO_COMP = {
+    [BS_PAGES.CONFIRM_PICKUP_TIME]: () => (
+      <ConfirmPickupTime onButtonPress={() => {
+        changeBsPage(BS_PAGES.SERVICE_ESTIMATIONS);
+      }}
+      />
+    ),
     [BS_PAGES.NOT_IN_TERRITORY]: () => (
       <NotAvailableHere onButtonPress={() => {
         goBackToAddress();
