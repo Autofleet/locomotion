@@ -5,6 +5,7 @@ import BottomSheet, {
   BottomSheetView,
   BottomSheetFooter,
 } from '@gorhom/bottom-sheet';
+import styled from 'styled-components';
 import SquareSvgButton from '../../Components/SquareSvgButton';
 import SafeView from '../SafeView';
 import { BottomSheetContext } from '../../context/bottomSheetContext';
