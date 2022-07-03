@@ -5,6 +5,7 @@ import React, {
 import { View, Text, TouchableOpacity } from 'react-native';
 import styled from 'styled-components';
 import { useBottomSheet } from '@gorhom/bottom-sheet';
+import getSymbolFromCurrency from 'currency-symbol-map';
 import Thumbnail from '../../../Components/Thumbnail';
 import i18n from '../../../I18n';
 import SelectableButton from '../../../Components/SelectableButton';
@@ -88,14 +89,21 @@ const NoTipTextButton = ({ onPress, children }) => (
 );
 
 const Tips = ({
-  driver = { firstName: 'Timmy' }, ridePrice = 33, thumbnailImage, tipSettings,
+  driver = { firstName: 'Timmy' },
+  ridePrice = 20,
+  thumbnailImage,
+  tipSettings,
+  onSelectTip,
+  ride,
 }) => {
   const [selectedTip, setSelectedTip] = useState(null);
   const [customTip, setCustomTip] = useState(null);
 
   const isPercentage = ridePrice >= tipSettings.percentageThreshold;
   const buttons = isPercentage ? tipSettings.percentage : tipSettings.fixedPrice;
-  const tipSuffix = isPercentage ? '%' : '$';
+
+  const serviceDisplayPrice = getSymbolFromCurrency(ride.priceCurrenct || 'USD');
+  const tipSuffix = isPercentage ? '%' : serviceDisplayPrice;
 
   const bottomSheetRef = useRef(null);
   const {
@@ -121,6 +129,31 @@ const Tips = ({
     setCustomTip(value);
     setSelectedTip(null);
   };
+
+  const calculateTipAmount = () => {
+    let calculatedTip = 0;
+    if (!customTip && !selectedTip) {
+      return calculatedTip;
+    }
+
+    calculatedTip = customTip || selectedTip;
+    if (isPercentage) {
+      calculatedTip = ridePrice * (customTip || selectedTip) / 100;
+    }
+
+
+    return calculatedTip.toFixed(2);
+  };
+
+  useEffect(() => {
+    onSelectTip(calculateTipAmount());
+  }, [selectedTip, customTip]);
+
+
+  console.log('serviceDisplayPrice', serviceDisplayPrice);
+  console.log(ride);
+
+
   return (
     <>
       <Container>
@@ -142,7 +175,7 @@ const Tips = ({
         <DetailsContainer style={{ marginTop: 30 }}>
           {buttons.map(b => (
             <SelectableButton selected={b === selectedTip} onPress={() => onTipPressed(b)}>
-              {`${b}${tipSuffix}`}
+              {`${b} ${tipSuffix}`}
             </SelectableButton>
           ))}
         </DetailsContainer>
@@ -151,7 +184,7 @@ const Tips = ({
             selected={!!customTip}
             onPress={() => bottomSheetRef.current.snapToIndex(0)}
             label={i18n.t('postRide.tip.customTip.title')}
-            value={`${customTip}${tipSuffix}`}
+            value={`${customTip} ${tipSuffix}`}
           >
             {!customTip ? i18n.t('postRide.tip.setCustomTip') : null}
           </SelectableButton>
