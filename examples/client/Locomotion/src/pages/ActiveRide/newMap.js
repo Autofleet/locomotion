@@ -1,6 +1,7 @@
 import React, {
   useContext, useEffect, useRef, useState,
 } from 'react';
+import polyline from '@mapbox/polyline';
 import { Platform, StyleSheet } from 'react-native';
 import MapView, { Polygon, Polyline } from 'react-native-maps';
 import Config from 'react-native-config';
@@ -43,8 +44,9 @@ export default React.forwardRef(({
   const isConfirmPickupPage = currentBsPage === BS_PAGES.CONFIRM_PICKUP;
   const isChooseLocationOnMap = [BS_PAGES.CONFIRM_PICKUP, BS_PAGES.SET_LOCATION_ON_MAP].includes(currentBsPage);
   const {
-    requestStopPoints, saveSelectedLocation, reverseLocationGeocode, activeRideState,
+    requestStopPoints, saveSelectedLocation, reverseLocationGeocode, ride,
   } = useContext(RidePageContext);
+  const [rideStopPoints, setRideStopPoints] = useState();
   const [mapRegion, setMapRegion] = useState({
     latitudeDelta: 0.015,
     longitudeDelta: 0.015,
@@ -136,8 +138,25 @@ export default React.forwardRef(({
       showInputPointsOnMap();
     }
   }, [requestStopPoints]);
-  const BluePolyline = React.memo(({ polyline }) => <Polyline strokeColor="rgba(85,195,255, 0.8)" strokeWidth={7} coordinates={polyline} />);
-  console.log(activeRideState);
+
+  const addStreetAddressToStopPoints = async () => {
+    const formattedStopPoints = await Promise.all(ride.stopPoints.map(async (sp) => {
+      const { streetAddress } = await reverseLocationGeocode(sp.lat, sp.lng);
+      return {
+        ...sp,
+        streetAddress,
+      };
+    }));
+    setRideStopPoints(formattedStopPoints);
+  };
+
+  useEffect(() => {
+    if (ride && ride.stopPoints) {
+      addStreetAddressToStopPoints();
+    }
+  }, [ride.stopPoints]);
+
+  const stopPoints = rideStopPoints || requestStopPoints || [];
   return (
     <>
       <MapView
@@ -182,15 +201,16 @@ export default React.forwardRef(({
         customMapStyle={isDarkMode ? mapDarkMode : undefined}
         {...mapSettings}
       >
-        {activeRideState && (
-        <Polyline
-          strokeColor="rgba(85,195,255, 0.8)"
-          strokeWidth={7}
-          coordinates={activeRideState.vehicle.state.route}
-        />
+        {rideStopPoints && (
+          <Polyline
+            strokeColor={primaryColor}
+            strokeWidth={7}
+            coordinates={polyline.decode(ride.stopPoints[0].polyline)
+              .map(tuple => ({ latitude: tuple[0], longitude: tuple[1] }))}
+          />
         )}
-        {!isConfirmPickupPage && requestStopPoints.filter(sp => !!sp.lat).length > 1
-          ? requestStopPoints
+        {!isConfirmPickupPage && stopPoints.filter(sp => !!sp.lat).length > 1
+          ? stopPoints
             .filter(sp => !!sp.lat)
             .map(sp => (<StationsMap stopPoint={sp} key={sp.id} />))
           : null}
