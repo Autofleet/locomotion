@@ -9,6 +9,7 @@ import {
 } from '@gorhom/bottom-sheet';
 
 import styled from 'styled-components';
+import GenericErrorPopup from '../../../../popups/GenericError';
 import i18n from '../../../../I18n';
 import AddressRow from './AddressLine';
 import SearchBar from './SearchBar';
@@ -35,13 +36,13 @@ const AddressSelectorBottomSheet = () => {
   const userContext = useContext(RidePageContext);
 
   const {
-    setCurrentBsPage,
+    changeBsPage,
   } = useContext(RideStateContextContext);
 
   const {
     isExpanded,
     setSnapPointsState,
-    setSnapPointIndex,
+    setIsExpanded,
   } = useContext(BottomSheetContext);
 
   const { expand, collapse } = useBottomSheet();
@@ -51,16 +52,22 @@ const AddressSelectorBottomSheet = () => {
     userContext.loadHistory();
   };
 
-  useEffect(() => {
-    loadHistory();
-  }, []);
-
   const onSearchFocus = () => {
     if (!isExpanded) {
       setSnapPointsState(SNAP_POINT_STATES.ADDRESS_SELECTOR);
+      setIsExpanded(true);
       expand();
     }
   };
+
+  useEffect(() => {
+    loadHistory();
+    if (userContext.serviceRequestFailed) {
+      setIsExpanded(true);
+      setSnapPointsState(SNAP_POINT_STATES.ADDRESS_SELECTOR);
+      expand();
+    }
+  }, []);
 
   const onBack = () => {
     collapse();
@@ -71,8 +78,7 @@ const AddressSelectorBottomSheet = () => {
   };
 
   const onSetLocationOnMap = async () => {
-    setCurrentBsPage(BS_PAGES.SET_LOCATION_ON_MAP);
-    setSnapPointIndex(0);
+    changeBsPage(BS_PAGES.SET_LOCATION_ON_MAP);
     collapse();
   };
   return (
@@ -83,7 +89,7 @@ const AddressSelectorBottomSheet = () => {
         onBack={onBack}
         onSearch={userContext.searchAddress}
       />
-      <HistoryContainer>
+      <HistoryContainer keyboardShouldPersistTaps="handled">
         {isExpanded
           ? (
             <>
@@ -101,15 +107,18 @@ const AddressSelectorBottomSheet = () => {
                 actionButton
                 onPress={onSetLocationOnMap}
               />
-              <BottomSheetScrollView contentContainerStyle={{ overflow: 'visible' }}>
-                {(userContext.searchResults || userContext.historyResults).map(h => <AddressRow {...h} onPress={() => userContext.onAddressSelected(h)} />)}
+              <BottomSheetScrollView keyboardShouldPersistTaps="handled" contentContainerStyle={{ overflow: 'visible' }}>
+                {(userContext.searchResults || userContext.historyResults).map(h => <AddressRow {...h} key={h.placeId} onPress={() => userContext.onAddressSelected(h)} />)}
               </BottomSheetScrollView>
             </>
           )
           : null}
       </HistoryContainer>
+      <GenericErrorPopup
+        isVisible={userContext.serviceRequestFailed}
+        closePopup={() => userContext.setServiceRequestFailed(false)}
+      />
     </ContentContainer>
-
   );
 };
 

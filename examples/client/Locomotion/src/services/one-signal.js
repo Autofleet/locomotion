@@ -3,8 +3,8 @@ import { Platform } from 'react-native';
 import OneSignal from 'react-native-onesignal'; // Import package from node modules
 import Config from 'react-native-config';
 import network from './network';
-import AppSettings from './app-settings';
 import { updateUser } from '../context/user/api';
+import { StorageService } from '.';
 
 
 class NotificationsService {
@@ -29,8 +29,8 @@ class NotificationsService {
     const { to } = data;
     const { pushToken, userId } = to;
     if (pushToken && userId) {
-      const { userProfile } = await AppSettings.getSettings();
-      if (userProfile.pushUserId !== userId || userProfile.pushToken !== pushToken) {
+      const clientProfile = await StorageService.get('clientProfile');
+      if (clientProfile.pushUserId !== userId || clientProfile.pushToken !== pushToken) {
         this.registerOnServer({
           pushToken,
           pushUserId: userId,

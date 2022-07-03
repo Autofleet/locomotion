@@ -2,6 +2,7 @@
 import { Alert, PermissionsAndroid, Platform } from 'react-native';
 import Config from 'react-native-config';
 import RNLocation from 'react-native-location';
+import Geolocation from '@react-native-community/geolocation';
 import moment from 'moment';
 
 const currentLocationNative = async () => {
@@ -14,19 +15,16 @@ const currentLocationNative = async () => {
     }
   }
   return new Promise((resolve, reject) => {
-    if (navigator && navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        resolve, reject,
-        { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 },
-      );
-    } else {
-      reject();
-    }
+    Geolocation.getCurrentPosition(
+      resolve, reject,
+      { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 * 60 * 2 },
+    );
   });
 };
 
 const prepareCoords = locations => ({
   coords: { latitude: locations[0].latitude, longitude: locations[0].longitude },
+  speed: locations[0].speed,
   timestamp: new Date(),
 });
 
@@ -64,7 +62,7 @@ class Geo {
   });
 
   checkPermission = () => RNLocation.checkPermission({
-    ios: 'always',
+    ios: 'whenInUse',
     android: {
       detail: 'fine',
     },
@@ -84,9 +82,8 @@ class Geo {
 
   handleLocation = (locations) => {
     const location = prepareCoords(locations);
-    console.log({ location });
+    console.debug('handleLocation', { location });
     this.lastLocation = Object.assign({}, location);
-    this.locationSubscription();
   };
 
   currentLocation = async () => {
@@ -95,13 +92,12 @@ class Geo {
         return this.lastLocation;
       }
     }
-    const rnLastLocation = await RNLocation.getLatestLocation();
+    const rnLastLocation = await RNLocation.getLatestLocation({ timeout: 10000 });
     if (rnLastLocation) {
       return prepareCoords([rnLastLocation]);
     }
-
     const location = await currentLocationNative();
-    return prepareCoords([location]);
+    return prepareCoords([location.coords || location]);
   };
 }
 
@@ -111,16 +107,21 @@ export default GeoService;
 
 export const { decodeGmPath } = Geo;
 
+const DEFAULT_COORDS = {
+  coords: {
+    latitude: parseFloat(Config.DEFAULT_LATITUDE),
+    longitude: parseFloat(Config.DEFAULT_LONGITUDE),
+  },
+};
 export const getPosition = async () => {
   try {
+    const granted = await GeoService.checkPermission();
+    if (!granted) {
+      return DEFAULT_COORDS;
+    }
     return GeoService.currentLocation();
   } catch (e) {
-    console.log('Error getting location', e);
-    return {
-      coords: {
-        latitude: parseFloat(Config.DEFAULT_LATITUDE),
-        longitude: parseFloat(Config.DEFAULT_LONGITUDE),
-      },
-    };
+    console.error('Error getting location', e);
+    return DEFAULT_COORDS;
   }
 };

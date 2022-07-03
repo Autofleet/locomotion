@@ -80,6 +80,7 @@ const AddressRow = ({
   isLoading = false,
 }) => {
   const finalIcon = ICONS[icon];
+  const isDebuggingEnabled = (typeof atob !== 'undefined');
   return (
     <Row
       border
@@ -89,7 +90,7 @@ const AddressRow = ({
         {finalIcon ? <Icon Svg={finalIcon} actionButton={actionButton} /> : null}
       </IconContainer>
       <AddressContainer>
-        {isLoading ? (
+        {isLoading && !isDebuggingEnabled ? (
           <SkeletonContent
             containerStyle={{}}
             isLoading

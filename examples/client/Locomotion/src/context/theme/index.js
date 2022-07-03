@@ -21,10 +21,10 @@ const {
 export const darkTheme = {
   primaryColor: '#38a7fc',
   secondaryColor: '#08902d',
-  primaryButtonTextColor: '#fff',
+  primaryButtonTextColor: '#ffffff',
   disabledColor: '#bcbcbc',
 
-  textColor: '#fff',
+  textColor: '#ffffff',
   pageBackgroundColor: '#24292E',
 };
 
@@ -32,12 +32,12 @@ export const lightTheme = {
   primaryColor: PRIMARY_COLOR || '#38a7fc',
   // primaryColor: '#f00',
   secondaryColor: SECONDARY_COLOR || '#08902d',
-  primaryButtonTextColor: '#fff',
+  primaryButtonTextColor: '#ffffff',
   disabledColor: '#bcbcbc',
 
   /** for dark mode: */
-  textColor: '#000',
-  pageBackgroundColor: '#fff',
+  textColor: '#000000',
+  pageBackgroundColor: '#ffffff',
 };
 
 export const THEME_MOD = {

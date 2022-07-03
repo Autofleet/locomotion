@@ -16,15 +16,17 @@ type ContainerProps = {
 
 const Container = styled(View) < ContainerProps >`
   flex-direction: row;
-  justify-content: center;
-  padding: 16px 0px;
+  justify-content: flex-start;
+  padding: 20px;
   background-color: ${(props: any) => (props.selected ? '#rgba(36, 170, 242, 0.2)' : '#fff')};
   min-height: 70px;
   width: 100%;
+  align-items: center;
 `;
 
 const ImageContainer = styled(View)`
   justify-content: center;
+  position: relative;
 `;
 
 const margin = `margin-${Start()}`;
@@ -32,6 +34,7 @@ const margin = `margin-${Start()}`;
 const TextContainer = styled(View)`
   justify-content: center;
   ${margin}: 16px;
+  width: 80%;
 `;
 
 const Type = styled(Text)`
@@ -55,14 +58,15 @@ const PlusContainer = styled(View)`
   background-color: #000;
   width: 20px;
   height: 20px;
-  margin: 0 7px;
-  margin-left: 33px;
   border-radius: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `;
 
 const PlusText = styled(Text)`
   color: #fff;
-  text-align: center;
+  line-height: 16px;
 `;
 
 
@@ -89,7 +93,18 @@ export default (paymentMethod: any) => (
           : (
             <>
               <PaymentIcon type={paymentMethod.brand} />
-              {paymentMethod.selected ? <SvgIcon Svg={selected} /> : null}
+              {paymentMethod.selected
+                ? (
+                  <SvgIcon
+                    style={{
+                      position: 'absolute',
+                      right: 0,
+                      bottom: -10,
+                    }}
+                    Svg={selected}
+                  />
+                )
+                : null}
             </>
           )
         }

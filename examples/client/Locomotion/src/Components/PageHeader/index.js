@@ -8,7 +8,7 @@ import i18n from '../../I18n';
 import backArrow from '../../assets/arrow-back.png';
 
 const PageHeader = ({
-  title, icon, onIconPress, iconSide, displayIcon, width, showSkipButton, onPressSkip,
+  title, icon, onIconPress, iconSide, displayIcon, width, showSkipButton, onPressSkip, action,
 }) => (
   <Header>
     {displayIcon !== false
@@ -20,12 +20,18 @@ const PageHeader = ({
     <HeaderText>{title}</HeaderText>
     {showSkipButton
       && (
-      <SkipButton noBackground onPress={onPressSkip}>
+      <SkipButton
+        testID="skipButton"
+        noBackground
+        onPress={onPressSkip}
+      >
+
         <SkipButtonText>
           {i18n.t('general.skip')}
         </SkipButtonText>
       </SkipButton>
       )}
+    {action}
   </Header>
 );
 

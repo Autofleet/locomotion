@@ -65,8 +65,7 @@ export const InfoBox = styled.View`
    border-radius: 8px;
    padding: 3px;
    align-items: center;
-    margin-top: -45px;
-    shadow-offset: 0px 0px;
+  shadow-offset: 0px 0px;
   shadow-color: #04214f;
   shadow-opacity: 0.4;
 `;
@@ -85,7 +84,6 @@ export const SubText = styled.Text`
     ${FONT_SIZES.LARGE}
     ${FONT_WEIGHTS.REGULAR}
     max-width: 150px;
-    margin-left: 5px;
 `;
 
 export const IconContainer = styled.View`
@@ -105,4 +103,8 @@ flex-direction: row;
 align-items: center;
 height: 50%;
 padding: 0 5px;
+`;
+
+export const PulseContainer = styled.View`
+width: 16px;
 `;

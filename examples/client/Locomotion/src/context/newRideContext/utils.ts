@@ -14,6 +14,9 @@ export const INITIAL_STOP_POINTS = [{
   lng: null,
   useDefaultLocation: true,
   id: shortid.generate(),
+  description: null,
+  streetAddress: null,
+  placeId: null,
 },
 {
   type: 'dropoff',
@@ -21,6 +24,9 @@ export const INITIAL_STOP_POINTS = [{
   lng: null,
   useDefaultLocation: false,
   id: shortid.generate(),
+  description: null,
+  streetAddress: null,
+  placeId: null,
 }];
 
 

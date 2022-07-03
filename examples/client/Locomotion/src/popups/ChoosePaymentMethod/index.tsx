@@ -31,8 +31,16 @@ const PaymentMethodPopup = ({ isVisible, onCancel }: PaymentMethodPopupProps) =>
     ride,
     updateRide,
   } = useContext(RidePageContext);
+  const [payment, setPayment] = useState(ride?.paymentMethodId);
   const usePayments = PaymentsContext.useContainer();
   const navigation = useNavigation<Nav>();
+
+  const onSave = () => {
+    updateRide({
+      paymentMethodId: payment,
+    });
+    onCancel();
+  };
 
   return (
     <Modal isVisible={isVisible}>
@@ -45,12 +53,9 @@ const PaymentMethodPopup = ({ isVisible, onCancel }: PaymentMethodPopupProps) =>
             {[...usePayments.paymentMethods].map((paymentMethod: PaymentMethodInterface, i) => (
               <PaymentMethod
                 {...paymentMethod}
-                selected={ride.paymentMethodId === paymentMethod.id}
+                selected={payment === paymentMethod.id}
                 onPress={() => {
-                  updateRide({
-                    paymentMethodId: paymentMethod.id,
-                  });
-                  onCancel();
+                  setPayment(paymentMethod.id);
                 }}
               />
             ))}
@@ -71,7 +76,7 @@ const PaymentMethodPopup = ({ isVisible, onCancel }: PaymentMethodPopupProps) =>
                 useCancelTextButton={false}
                 setLoading={null}
                 style={{}}
-                onPress={() => onCancel()}
+                onPress={() => onSave()}
               >
                 {i18n.t('popups.rideNotes.save')}
               </RoundedButton>

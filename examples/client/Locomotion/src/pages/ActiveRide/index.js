@@ -1,7 +1,9 @@
 import React, { useContext, useEffect, useRef } from 'react';
 import { useNavigation } from '@react-navigation/native';
-import { ConfirmPickup, NoPayment, NotAvailableHere } from '../../Components/BsPages';
-import { RideStateContextContext, RidePageContextProvider } from '../../context';
+import {
+  ConfirmPickup, NoPayment, NotAvailableHere, ConfirmingRide, NoAvailableVehicles, ActiveRide,
+} from '../../Components/BsPages';
+import { RideStateContextContext, RideStateContextContextProvider } from '../../context';
 import NewRidePageContextProvider, { RidePageContext } from '../../context/newRideContext';
 import BottomSheetContextProvider, { BottomSheetContext, SNAP_POINT_STATES } from '../../context/bottomSheetContext';
 import {
@@ -10,7 +12,7 @@ import {
 import Header from '../../Components/Header';
 import MainMap from './newMap';
 import AvailabilityContextProvider from '../../context/availability';
-import BottomSheet from './RideDrawer/BottomSheet';
+import BottomSheet from '../../Components/BottomSheet';
 import RideOptions from './RideDrawer/RideOptions';
 import AddressSelector from './RideDrawer/AddressSelector';
 import StopPointsViewer from '../../Components/StopPointsViewer';
@@ -18,27 +20,64 @@ import hamburgerIcon from '../../assets/hamburger.svg';
 import backArrow from '../../assets/arrow-back.svg';
 import { BS_PAGES } from '../../context/ridePageStateContext/utils';
 import payments from '../../context/payments';
+import { getPosition } from '../../services/geo';
 
 
 const RidePage = ({ mapSettings }) => {
+  const navigation = useNavigation();
+  const mapRef = useRef();
+  const bottomSheetRef = useRef(null);
   const {
-    initGeoService, showOutOfTerritory, currentBsPage, setCurrentBsPage,
+    currentBsPage, changeBsPage,
   } = useContext(RideStateContextContext);
   const {
-    serviceEstimations, setServiceEstimations, initSps, isLoading, requestStopPoints, requestRide,
+    serviceEstimations,
+    setServiceEstimations,
+    initSps,
+    isLoading,
+    requestStopPoints,
+    requestRide,
+    setChosenService,
   } = useContext(RidePageContext);
-  const { setSnapPointsState, setSnapPointIndex } = useContext(BottomSheetContext);
+  const { setSnapPointsState, setIsExpanded, snapPoints } = useContext(BottomSheetContext);
   const {
     clientHasValidPaymentMethods,
   } = payments.useContainer();
+
+  const resetStateToAddressSelector = () => {
+    setServiceEstimations(null);
+    setChosenService(null);
+    changeBsPage(BS_PAGES.ADDRESS_SELECTOR);
+  };
+
+  const goBackToAddress = () => {
+    resetStateToAddressSelector();
+    setIsExpanded(true);
+    bottomSheetRef.current.expand();
+  };
+
+  const backToMap = () => {
+    resetStateToAddressSelector();
+    initSps();
+  };
+
+  const addressSelectorPage = () => {
+    if (!isLoading && !serviceEstimations) {
+      return (
+        <AddressSelector />
+      );
+    }
+    return <RideOptions />;
+  };
+
   const BS_PAGE_TO_COMP = {
-    [BS_PAGES.ADDRESS_SELECTOR]: () => (showOutOfTerritory ? (
-      <NotAvailableHere onButtonPress={() => ({})} />
-    ) : (
-      !isLoading && !serviceEstimations
-        ? <AddressSelector />
-        : <RideOptions />
-    )),
+    [BS_PAGES.NOT_IN_TERRITORY]: () => (
+      <NotAvailableHere onButtonPress={() => {
+        goBackToAddress();
+      }}
+      />
+    ),
+    [BS_PAGES.ADDRESS_SELECTOR]: addressSelectorPage,
     [BS_PAGES.CONFIRM_PICKUP]: () => (
       <ConfirmPickup
         initialLocation={requestStopPoints[0]}
@@ -46,27 +85,22 @@ const RidePage = ({ mapSettings }) => {
           if (clientHasValidPaymentMethods()) {
             requestRide();
           } else {
-            setCurrentBsPage(BS_PAGES.NO_PAYMENT);
+            changeBsPage(BS_PAGES.NO_PAYMENT);
           }
         }}
       />
     ),
     [BS_PAGES.SET_LOCATION_ON_MAP]: () => (
       <ConfirmPickup onButtonPress={() => {
-        setCurrentBsPage(BS_PAGES.ADDRESS_SELECTOR);
+        changeBsPage(BS_PAGES.ADDRESS_SELECTOR);
       }}
       />
     ),
     [BS_PAGES.NO_PAYMENT]: () => <NoPayment />,
+    [BS_PAGES.CONFIRMING_RIDE]: () => <ConfirmingRide />,
+    [BS_PAGES.NO_AVAILABLE_VEHICLES]: () => <NoAvailableVehicles />,
+    [BS_PAGES.ACTIVE_RIDE]: () => <ActiveRide />,
   };
-
-  const navigation = useNavigation();
-  const mapRef = useRef();
-  const bottomSheetRef = useRef(null);
-
-  useEffect(() => {
-    initGeoService();
-  }, []);
 
   useEffect(() => {
     if (isLoading) {
@@ -75,21 +109,14 @@ const RidePage = ({ mapSettings }) => {
     }
   }, [isLoading]);
 
-  const resetStateToAddressSelector = () => {
-    setServiceEstimations(null);
-    setSnapPointsState(SNAP_POINT_STATES.ADDRESS_SELECTOR);
-    setCurrentBsPage(BS_PAGES.ADDRESS_SELECTOR);
-  };
-
-  const goBackToAddress = () => {
-    resetStateToAddressSelector();
-    bottomSheetRef.current.expand();
-  };
-
-  const backToMap = () => {
-    resetStateToAddressSelector();
-    initSps();
-    setSnapPointIndex(0);
+  const focusCurrentLocation = async () => {
+    const { coords } = await getPosition();
+    mapRef.current.animateToRegion({
+      latitude: coords.latitude - (parseFloat(snapPoints[0]) / 10000),
+      longitude: coords.longitude,
+      latitudeDelta: 0.015,
+      longitudeDelta: 0.015,
+    }, 1000);
   };
 
   return (
@@ -115,6 +142,7 @@ const RidePage = ({ mapSettings }) => {
         )}
       <BottomSheet
         ref={bottomSheetRef}
+        focusCurrentLocation={focusCurrentLocation}
       >
         {
           BS_PAGE_TO_COMP[currentBsPage]()
@@ -126,14 +154,14 @@ const RidePage = ({ mapSettings }) => {
 
 export default props => (
   <BottomSheetContextProvider {...props}>
-    <NewRidePageContextProvider {...props}>
-      <RidePageContextProvider {...props}>
+    <RideStateContextContextProvider {...props}>
+      <NewRidePageContextProvider {...props}>
         <AvailabilityContextProvider>
           <RidePage
             {...props}
           />
         </AvailabilityContextProvider>
-      </RidePageContextProvider>
-    </NewRidePageContextProvider>
+      </NewRidePageContextProvider>
+    </RideStateContextContextProvider>
   </BottomSheetContextProvider>
 );
