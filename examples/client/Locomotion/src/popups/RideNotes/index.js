@@ -10,18 +10,16 @@ import {
 } from './styled';
 import RoundedButton from '../../Components/RoundedButton';
 import { FlexCont } from '../../Components/Flex';
-import { RidePageContext } from '../../context/newRideContext';
 
 const MAX_SIZE = 100;
 
-export default ({ isVisible, onSubmit, onCancel }) => {
-  const {
-    ride,
-  } = useContext(RidePageContext);
+export default ({
+  isVisible, onSubmit, onCancel, notes,
+}) => {
   const [currentText, updateText] = useState('');
 
   useEffect(() => {
-    updateText(ride.notes || '');
+    updateText(notes || '');
   }, [isVisible]);
 
   return (
