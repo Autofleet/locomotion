@@ -14,7 +14,7 @@ export const SNAP_POINT_STATES = {
   [BS_PAGES.NOT_IN_TERRITORY]: ['30%', '30%'],
   [BS_PAGES.CONFIRMING_RIDE]: ['30%', '30%'],
   [BS_PAGES.NO_AVAILABLE_VEHICLES]: ['30%', '30%'],
-  [BS_PAGES.ACTIVE_RIDE]: ['30%', '30%'],
+  [BS_PAGES.ACTIVE_RIDE]: ['30%', '95%'],
 };
 const BottomSheetProvider = ({ children }) => {
   const [isExpanded, setIsExpanded] = useState(false);

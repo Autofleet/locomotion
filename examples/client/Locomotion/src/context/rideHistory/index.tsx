@@ -4,6 +4,7 @@ import network from '../../services/network';
 import Mixpanel from '../../services/Mixpanel';
 import i18n from '../../I18n';
 import StorageService from '../../services/storage';
+import { formatSps } from '../../lib/ride/utils';
 // import mock from './mock';
 
 export const PAGE_SIZE = 10;
@@ -65,24 +66,6 @@ const getDuration = (stopPoints: Array<any>) => {
   ];
 };
 
-const formatSps = function (stopPoints: any) {
-  const orderDesc: any = {};
-
-  const getOrdinalDescForSp = (sp: any) => {
-    const val = orderDesc[sp.type] || 0;
-    orderDesc[sp.type] = (
-      val + 1
-    );
-    return val;
-  };
-
-  return stopPoints
-    .sort((sp1: any, sp2: any) => sp1.orderInParent - sp2.orderInParent)
-    .map((sp: any) => ({
-      ...sp,
-      ordinalDesc: getOrdinalDescForSp(sp),
-    }));
-};
 
 const formatRides = (data: any) => data.map((r: any) => {
   const sortedSps = formatSps(r.stopPoints);

@@ -5,7 +5,6 @@ import Thumbnail from '../Thumbnail';
 import i18n from '../../I18n';
 import {
   StyledDrawerLabel,
-  DrawerIcon,
   LabelText,
   StyledSafeAreaView,
   HeaderText,
@@ -16,11 +15,12 @@ import {
 } from './styled';
 import { UserContext } from '../../context/user';
 
-import History from '../../assets/history.png';
-import HelpIconSource from '../../assets/menuItems/help.png';
-import CreditCardIconSource from '../../assets/menuItems/creditcard.png';
+import History from '../../assets/history.svg';
+import HelpIconSource from '../../assets/help.svg';
+import CreditCardIconSource from '../../assets/credit-card.svg';
+import SvgIcon from '../SvgIcon';
 
-const DrawerHeader = ({ navigation }) => {
+const DrawerHeader = ({ navigateTo }) => {
   const { user } = useContext(UserContext);
   return (
     <Header>
@@ -34,11 +34,7 @@ const DrawerHeader = ({ navigation }) => {
       <HeaderMainText>
         {user ? `${user.firstName} ${user.lastName}` : ''}
       </HeaderMainText>
-      <HeaderLink
-        onPress={() => {
-          navigation.navigate(MAIN_ROUTES.ACCOUNT);
-        }}
-      >
+      <HeaderLink onPress={() => navigateTo(MAIN_ROUTES.ACCOUNT)}>
         <HeaderText>
           {i18n.t('menu.account')}
         </HeaderText>
@@ -51,42 +47,37 @@ const DrawerLabel = ({
   onPress, focused, tintColor, title, icon, lastItem,
 }) => (
   <StyledDrawerLabel focused={focused} onPress={onPress} lastItem={lastItem}>
-    <DrawerIcon source={icon} focused={focused} fill="#fff" />
+    <SvgIcon Svg={icon} width={23} height={23} style={{ marginRight: 15 }} />
     <LabelText color={tintColor} focused={focused}>{title}</LabelText>
   </StyledDrawerLabel>
 );
 
 export const DrawerContentComponent = ({ navigation, state }) => {
   const route = state.routes[state.index].name;
-  const closeComponent = () => {
+  const navigateTo = (page) => {
     navigation.closeDrawer();
+    navigation.navigate(page);
   };
   return (
     <StyledSafeAreaView>
-      <DrawerHeader navigation={navigation} />
+      <DrawerHeader navigateTo={p => navigateTo(p)} />
       <DrawerLabelsContainer>
         <DrawerLabel
           title={i18n.t('menu.trips')}
           icon={History}
-          onPress={() => {
-            navigation.navigate(MAIN_ROUTES.RIDE_HISTORY);
-          }}
+          onPress={() => navigateTo(MAIN_ROUTES.RIDE_HISTORY)}
           focused={route === MAIN_ROUTES.RIDE_HISTORY}
         />
         <DrawerLabel
           title={i18n.t('menu.paymentsSettings')}
           icon={CreditCardIconSource}
-          onPress={() => {
-            navigation.navigate(MAIN_ROUTES.PAYMENT);
-          }}
+          onPress={() => navigateTo(MAIN_ROUTES.PAYMENT)}
           focused={route === MAIN_ROUTES.PAYMENT}
         />
         <DrawerLabel
           title={i18n.t('menu.support')}
           icon={HelpIconSource}
-          onPress={() => {
-            navigation.navigate(MAIN_ROUTES.CONTACT_US);
-          }}
+          onPress={() => navigateTo(MAIN_ROUTES.CONTACT_US)}
           focused={route === MAIN_ROUTES.CONTACT_US}
         />
       </DrawerLabelsContainer>

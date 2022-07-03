@@ -1,6 +1,5 @@
 import React, { createRef } from 'react';
 import moment from 'moment';
-import Stars, { StarIcon } from '../../../Components/Stars';
 import {
   DaySecTitleSubText,
   DaySecTitleText,
@@ -15,22 +14,18 @@ import {
   BlankContainer,
   MapRideViewContainer,
   RideViewTitleContainer,
-  RatingBarContainer,
   RideViewContainer,
   RideViewSecTextContainer,
   MainRideViewSectionContainer,
   RideViewSectionTitleText,
-  DriverRatingContainer,
-  DriverAvatarContainer,
-  DriverAvatar,
-  DriverDetailContainer,
-  DriverDetailText,
-  DriverSectionContainer,
+  DriverCardContainer,
+  StopPointsVerticalViewContainer,
 } from './styled';
-import StopPointsVerticalView from '../StopPointsVerticalView';
+import StopPointsVerticalView from '../../../Components/StopPointsVerticalView';
 import Map from './Map';
 import i18n from '../../../I18n';
 import { MMMM_DD_YYYY } from '../consts';
+import DriverCard from '../../../Components/DriverCard';
 
 const RideTitleCard = ({ ride, page }) => (
   <>
@@ -73,11 +68,6 @@ export const RideListView = ({
   </>
 );
 
-const formatDriverRating = rating => rating && rating.toFixed(1);
-const MAX_NAME_LENGTH = 20;
-
-const formatDriverName = name => name && name.substring(0, MAX_NAME_LENGTH);
-
 const RideView = ({ ride }) => {
   const map = createRef();
   return (
@@ -100,38 +90,19 @@ const RideView = ({ ride }) => {
           </RideViewSectionTitleText>
         </RideViewTitleContainer>
       </RideViewSectionContainer>
-      <StopPointsVerticalView
-        ride={ride}
-      />
-      {ride.driver && (
-        <DriverSectionContainer>
-          <RideViewTitleContainer>
-            <RideViewSectionTitleText>
-              {i18n.t('rideHistory.rideCard.driverRating')}
-            </RideViewSectionTitleText>
-          </RideViewTitleContainer>
-          <DriverRatingContainer>
-            <DriverAvatarContainer>
-              <DriverAvatar source={{ uri: ride.driver.avatar }} />
-            </DriverAvatarContainer>
-            <DriverAvatarContainer>
-              <DriverDetailContainer>
-                <StarIcon isOn height="8px" width="8px" />
-                <DriverDetailText>{formatDriverRating(ride.driver.rating)}</DriverDetailText>
-              </DriverDetailContainer>
-              <DriverDetailContainer>
-                <DriverDetailText>
-                  {formatDriverName(ride.driver.firstName || '')}
-                  {formatDriverName(ride.driver.lastName || '')}
-                </DriverDetailText>
-              </DriverDetailContainer>
-            </DriverAvatarContainer>
-            <RatingBarContainer>
-              <Stars rating={ride.rating || 0} />
-            </RatingBarContainer>
-          </DriverRatingContainer>
-        </DriverSectionContainer>
-      )}
+      <StopPointsVerticalViewContainer>
+        <StopPointsVerticalView
+          ride={ride}
+        />
+      </StopPointsVerticalViewContainer>
+      <DriverCardContainer>
+        {ride.driver && (
+        <DriverCard
+          activeRide={false}
+          ride={ride}
+        />
+        )}
+      </DriverCardContainer>
     </RideViewContainer>
   );
 };

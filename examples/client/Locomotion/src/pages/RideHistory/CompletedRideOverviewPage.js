@@ -26,7 +26,7 @@ const Page = ({ menuSide }) => {
   const { rideId } = (route.params || {});
 
   useBackHandler(() => {
-    navigation.navigate('ActivityPage');
+    navigation.navigate(MAIN_ROUTES.RIDE_HISTORY);
     return true;
   });
 
@@ -43,8 +43,8 @@ const Page = ({ menuSide }) => {
     <PageContainer>
       <PageContent>
         <PageHeader
-          title="Trip details"
-          onIconPress={() => navigation.navigate(MAIN_ROUTES.HOME)}
+          title={i18n.t('rideHistory.tripPageTitle')}
+          onIconPress={() => navigation.navigate(MAIN_ROUTES.RIDE_HISTORY)}
           iconSide={menuSide}
         />
         {ride ? (

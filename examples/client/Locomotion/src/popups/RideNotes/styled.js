@@ -7,14 +7,12 @@ import { TextArea } from '../../Components/TextArea';
 import { End } from '../../lib/text-direction';
 
 export const SummaryContainer = styled.View`
-  padding: 20px 0;
-  height: 298;
+  padding: 20px;
   background-color: white;
   justify-content: center;
   align-items: center;
   border-radius: 2;
   border-color: rgba(0, 0, 0, 0.1);
-  overflow: hidden;
 `;
 
 export const Title = styled.Text`
