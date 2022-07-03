@@ -128,7 +128,11 @@ const SearchBar = ({
         <BottomSheetInput
           placeholder={i18n.t(placeholder)}
           onChangeText={(text) => {
-            updateRequestSp({ description: text });
+            updateRequestSp({
+              description: text,
+              lat: null,
+              lng: null,
+            });
             setSearchTerm(text);
           }}
           fullBorder
