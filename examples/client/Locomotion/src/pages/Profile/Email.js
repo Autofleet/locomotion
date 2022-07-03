@@ -29,15 +29,23 @@ const Email = ({ navigation }) => {
     setEmail(user.email);
   }, [isFocused]);
 
+  const navigateToNextScreen = () => {
+    if (route.params && route.params.editAccount) {
+      navigation.navigate(MAIN_ROUTES.ACCOUNT);
+    } else {
+      nextScreen(MAIN_ROUTES.EMAIL);
+    }
+  };
+
   const onNext = async () => {
     try {
       await updateUserInfo({ email: email.toLowerCase() });
       await verifyEmail();
-      nextScreen(MAIN_ROUTES.EMAIL);
+      navigateToNextScreen();
     } catch (e) {
       const savedUser = await getUserFromServer();
       if (savedUser.email === email.toLowerCase()) {
-        return nextScreen(MAIN_ROUTES.EMAIL);
+        return navigateToNextScreen();
       }
       setErrorText(i18n.t('onboarding.pages.email.inUseError'));
     }
@@ -83,11 +91,7 @@ const Email = ({ navigation }) => {
         <SaveButton
           isInvalid={!user.email}
           onFail={() => setErrorText(i18n.t('onboarding.pages.email.error'))}
-          onNext={
-            (route.params && route.params.editAccount
-              ? () => navigation.navigate(MAIN_ROUTES.ACCOUNT)
-              : onNext)
-          }
+          onNext={onNext}
         />
       </PageContainer>
     </SafeView>
