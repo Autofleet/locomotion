@@ -2,7 +2,7 @@ import React, {
   useContext, useEffect, useRef, useState,
 } from 'react';
 import { Platform, StyleSheet } from 'react-native';
-import MapView, { Polygon } from 'react-native-maps';
+import MapView, { Polygon, Polyline } from 'react-native-maps';
 import Config from 'react-native-config';
 import { RidePageContext } from '../../context/newRideContext';
 import { RideStateContextContext } from '../../context';
@@ -43,7 +43,7 @@ export default React.forwardRef(({
   const isConfirmPickupPage = currentBsPage === BS_PAGES.CONFIRM_PICKUP;
   const isChooseLocationOnMap = [BS_PAGES.CONFIRM_PICKUP, BS_PAGES.SET_LOCATION_ON_MAP].includes(currentBsPage);
   const {
-    requestStopPoints, saveSelectedLocation, reverseLocationGeocode,
+    requestStopPoints, saveSelectedLocation, reverseLocationGeocode, activeRideState,
   } = useContext(RidePageContext);
   const [mapRegion, setMapRegion] = useState({
     latitudeDelta: 0.015,
@@ -136,7 +136,8 @@ export default React.forwardRef(({
       showInputPointsOnMap();
     }
   }, [requestStopPoints]);
-
+  const BluePolyline = React.memo(({ polyline }) => <Polyline strokeColor="rgba(85,195,255, 0.8)" strokeWidth={7} coordinates={polyline} />);
+  console.log(activeRideState);
   return (
     <>
       <MapView
@@ -181,6 +182,13 @@ export default React.forwardRef(({
         customMapStyle={isDarkMode ? mapDarkMode : undefined}
         {...mapSettings}
       >
+        {activeRideState && (
+        <Polyline
+          strokeColor="rgba(85,195,255, 0.8)"
+          strokeWidth={7}
+          coordinates={activeRideState.vehicle.state.route}
+        />
+        )}
         {!isConfirmPickupPage && requestStopPoints.filter(sp => !!sp.lat).length > 1
           ? requestStopPoints
             .filter(sp => !!sp.lat)

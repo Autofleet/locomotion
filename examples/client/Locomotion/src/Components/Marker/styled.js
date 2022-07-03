@@ -55,6 +55,7 @@ export const MarkerToolTipText = styled.Text`
 `;
 
 export const MarkerContainer = styled.View`
+margin-top: -20px;
 `;
 
 export const InfoBox = styled.View`
