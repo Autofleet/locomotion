@@ -4,7 +4,7 @@ import {
   Container, RowContainer, ButtonContainer, ButtonText, StyledButton, HALF_WIDTH,
 } from './styled';
 import { RidePageContext } from '../../../../../context/newRideContext';
-import NoteButton from './NoteButton';
+import NoteButton from '../../../../../Components/GenericRideButton';
 import i18n from '../../../../../I18n';
 import plus from '../../../../../assets/bottomSheet/plus.svg';
 import editNote from '../../../../../assets/bottomSheet/edit_note.svg';
