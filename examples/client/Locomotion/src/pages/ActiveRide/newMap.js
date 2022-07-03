@@ -102,8 +102,14 @@ export default React.forwardRef(({
     if (currentBsPage === BS_PAGES.CONFIRM_PICKUP) {
       const pickupStopPoint = requestStopPoints.find(sp => sp.type === STOP_POINT_TYPES.STOP_POINT_PICKUP);
       ref.current.fitToCoordinates([{
+        latitude: pickupStopPoint.lat - 0.001,
+        longitude: pickupStopPoint.lng - 0.001,
+      }, {
         latitude: pickupStopPoint.lat,
         longitude: pickupStopPoint.lng,
+      }, {
+        latitude: pickupStopPoint.lat + 0.001,
+        longitude: pickupStopPoint.lng + 0.001,
       }], {
         animated: false,
       });
