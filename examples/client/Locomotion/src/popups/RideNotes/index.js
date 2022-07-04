@@ -1,4 +1,6 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, {
+  useContext, useEffect, useRef, useState,
+} from 'react';
 import { View } from 'react-native';
 import Modal from 'react-native-modal';
 import i18n from '../../I18n';
@@ -17,9 +19,13 @@ export default ({
   isVisible, onSubmit, onCancel, notes,
 }) => {
   const [currentText, updateText] = useState('');
+  const inputRef = useRef();
 
   useEffect(() => {
     updateText(notes || '');
+    if (inputRef.current) {
+      inputRef.current.focus();
+    }
   }, [isVisible]);
 
   return (
@@ -30,6 +36,7 @@ export default ({
           <Counter>{`${currentText.length}/${MAX_SIZE}`}</Counter>
         </FlexCont>
         <StyledTextArea
+          ref={inputRef}
           value={currentText}
           multiline
           numberOfLines={7}
