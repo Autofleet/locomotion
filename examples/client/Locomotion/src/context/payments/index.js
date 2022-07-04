@@ -44,7 +44,10 @@ const usePayments = () => {
   const clientHasValidPaymentMethods = () => paymentMethods.length > 0 && paymentMethods.some(pm => !pm.isExpired);
 
   const getClientDefaultMethod = () => (paymentMethods || []).find(pm => pm.isDefault) || paymentMethods[0];
-  const isCashPaymentEnabled = () => getByKey(SETTINGS_KEYS.CASH_ENABLED);
+  const isCashPaymentEnabled = () => {
+    console.log('got to isCashPaymentEnabled');
+    return getByKey(SETTINGS_KEYS.CASH_ENABLED);
+  };
 
   const createPaymentMethod = async (paymentMethodId) => {
     const { data: paymentMethod } = await network.post(`${BASE_PATH}/${paymentMethodId}`);
