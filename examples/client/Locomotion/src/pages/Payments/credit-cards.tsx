@@ -40,7 +40,7 @@ export default ({
   return (
     <CardsListContainer>
       <View>
-        {(isCashEnabled ? [...usePayments.paymentMethods, cashPaymentMethod] : usePayments.paymentMethods).map((paymentMethod : any, i) => (
+        {(isCashEnabled ? [...usePayments.paymentMethods, cashPaymentMethod] : usePayments.paymentMethods).map((paymentMethod : any) => (
           <PaymentMethodsContainer>
             <CreditCardsContainer>
               <PaymentMethod {...paymentMethod} />
