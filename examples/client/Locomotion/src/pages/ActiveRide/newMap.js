@@ -155,6 +155,8 @@ export default React.forwardRef(({
   useEffect(() => {
     if (ride && ride.stopPoints) {
       addStreetAddressToStopPoints();
+    } else {
+      setRideStopPoints(null);
     }
   }, [ride.stopPoints]);
 
