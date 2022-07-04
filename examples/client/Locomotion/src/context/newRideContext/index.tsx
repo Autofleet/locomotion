@@ -22,6 +22,8 @@ import { formatSps } from '../../lib/ride/utils';
 type Dispatch<A> = (value: A) => void;
 
 export interface RideInterface {
+  priceCurrency?: any;
+  priceAmount?: any;
   id?: string;
   notes?: string;
   paymentMethodId?: string;
@@ -72,6 +74,7 @@ interface RidePageContextInterface {
   serviceRequestFailed: boolean;
   setServiceRequestFailed: Dispatch<boolean>;
   trackRide: () => Promise<string>;
+  postRideSubmit: (rideId: string, rating: number | null, tip: number | null) => any;
 }
 
 export const RidePageContext = createContext<RidePageContextInterface>({
@@ -111,6 +114,8 @@ export const RidePageContext = createContext<RidePageContextInterface>({
   setServiceRequestFailed: () => undefined,
   ride: {},
   trackRide: async () => '',
+  postRideSubmit: (rideId: string, rating: number | null, tip: number | null) => undefined,
+
 });
 
 const HISTORY_RECORDS_NUM = 10;
@@ -302,9 +307,10 @@ const RidePageContextProvider = ({ children }: {
     }
   };
 
-  const updateRequestSp = (data: any[]) => {
+  const updateRequestSp = (data: any[], index?: number) => {
     const reqSps = [...requestStopPoints];
-    const index = _.isNil(selectedInputIndex) ? requestStopPoints.length - 1 : selectedInputIndex;
+    index = index
+    || (_.isNil(selectedInputIndex) ? requestStopPoints.length - 1 : selectedInputIndex);
     reqSps[index || 0] = {
       ...reqSps[index || 0],
       ...data,
@@ -491,6 +497,46 @@ const RidePageContextProvider = ({ children }: {
     });
   };
 
+  const patchRideRating = async (rideId: string, rating: number|null): Promise<any> => {
+    if (!rating) {
+      return null;
+    }
+
+    try {
+      const updatedRide = await rideApi.patchRide(rideId, { rating });
+      updateRide(updatedRide);
+      if (updatedRide) {
+        return true;
+      }
+      return false;
+    } catch (e) {
+      return false;
+    }
+  };
+
+  const chargeTip = async (rideId: string, tip:number|null): Promise<any> => {
+    // TODO: implement
+    if (!tip) {
+      return null;
+    }
+
+    try {
+      return true;
+    } catch (e) {
+      return false;
+    }
+  };
+
+  const postRideSubmit = async (rideId:string, rating:number|null, tip:number|null): Promise<boolean> => {
+    console.log('Post Ride Data', { rideId, rating, tip });
+    await Promise.all([
+      chargeTip(rideId, tip),
+      patchRideRating(rideId, rating),
+    ]);
+
+    return true;
+  };
+
   const trackRide = async () => {
     if (!ride.trackerUrl) {
       const trackData = await rideApi.track(ride.id);
@@ -544,6 +590,7 @@ const RidePageContextProvider = ({ children }: {
         serviceRequestFailed,
         setServiceRequestFailed,
         trackRide,
+        postRideSubmit,
       }}
     >
       {children}

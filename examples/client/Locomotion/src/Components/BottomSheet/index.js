@@ -5,12 +5,22 @@ import BottomSheet, {
   BottomSheetView,
   BottomSheetFooter,
 } from '@gorhom/bottom-sheet';
+import styled from 'styled-components';
 import SquareSvgButton from '../../Components/SquareSvgButton';
 import SafeView from '../SafeView';
 import { BottomSheetContext } from '../../context/bottomSheetContext';
 import targetIcon from '../../assets/target.svg';
 
-const BottomSheetComponent = forwardRef(({ children, focusCurrentLocation }, ref) => {
+const ContentContainer = styled(BottomSheetView)`
+  flex: 1;
+`;
+
+const BottomSheetComponent = forwardRef(({
+  children,
+  enablePanDownToClose = false,
+  focusCurrentLocation,
+  index = 1,
+}, ref) => {
   const {
     setIsExpanded,
     snapPoints,
@@ -48,6 +58,19 @@ const BottomSheetComponent = forwardRef(({ children, focusCurrentLocation }, ref
         snapPoints={snapPoints}
         onAnimate={onAnimate}
         footerComponent={renderFooter}
+        enablePanDownToClose={enablePanDownToClose}
+        index={index}
+        style={{
+          shadowColor: '#000',
+          shadowOffset: {
+            width: 0,
+            height: 2,
+          },
+          shadowOpacity: 0.25,
+          shadowRadius: 3.84,
+          elevation: 5,
+          zIndex: 5,
+        }}
       >
         <SafeView
           style={{

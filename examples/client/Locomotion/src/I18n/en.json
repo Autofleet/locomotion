@@ -287,6 +287,25 @@
         "driverRating": "Driver rating"
       }
     },
+    "postRide": {
+        "pageTitle": "Ride finished",
+        "ratingHeadline": "How was your ride?",
+        "submit": "Continue",
+        "tip": {
+            "title": "Add a tip for",
+            "subTitle": "Your ride was",
+            "noTip": "No tip",
+            "setCustomTip": "Set custom amount",
+            "customTip": {
+                "title": "Custom amount",
+                "subTitle": "Enter other amount",
+                "submit": "Set",
+                "cancel": "Cancel",
+                "inputPlaceholder":"amount...",
+                "invalidAmountError": "Please enter a valid amount"
+            }
+        }
+    },
     "payments": {
         "select": "Select",
         "pageTitle": "Payments Method",

@@ -74,6 +74,7 @@ export default ({
             Svg={typeDetails[stopPoint.type].icon}
             width={20}
             height={20}
+            style={{ top: Platform.OS === 'ios' ? -35 : 0 }}
           />
         </IconContainer>
       </Marker>

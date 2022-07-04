@@ -1,8 +1,9 @@
 import React, {
   useContext, useEffect, useRef, useState,
 } from 'react';
+import polyline from '@mapbox/polyline';
 import { Platform, StyleSheet } from 'react-native';
-import MapView, { Polygon } from 'react-native-maps';
+import MapView, { Polygon, Polyline } from 'react-native-maps';
 import Config from 'react-native-config';
 import { RidePageContext } from '../../context/newRideContext';
 import { RideStateContextContext } from '../../context';
@@ -15,7 +16,9 @@ import AvailabilityVehicle from '../../Components/AvailabilityVehicle';
 import StationsMap from '../../Components/Marker';
 import { latLngToAddress } from '../../context/newRideContext/utils';
 import { BS_PAGES } from '../../context/ridePageStateContext/utils';
-import { STOP_POINT_TYPES } from '../../lib/commonTypes';
+import { STOP_POINT_STATES, STOP_POINT_TYPES } from '../../lib/commonTypes';
+import PrecedingStopPointMarker from '../../Components/PrecedingStopPointMarker';
+import { getSubLineStringAfterLocationFromDecodedPolyline } from '../../lib/polyline/utils';
 
 const MAP_EDGE_PADDING = {
   top: 120,
@@ -43,8 +46,9 @@ export default React.forwardRef(({
   const isConfirmPickupPage = currentBsPage === BS_PAGES.CONFIRM_PICKUP;
   const isChooseLocationOnMap = [BS_PAGES.CONFIRM_PICKUP, BS_PAGES.SET_LOCATION_ON_MAP].includes(currentBsPage);
   const {
-    requestStopPoints, saveSelectedLocation, reverseLocationGeocode,
+    requestStopPoints, saveSelectedLocation, reverseLocationGeocode, ride,
   } = useContext(RidePageContext);
+  const [rideStopPoints, setRideStopPoints] = useState();
   const [mapRegion, setMapRegion] = useState({
     latitudeDelta: 0.015,
     longitudeDelta: 0.015,
@@ -137,6 +141,38 @@ export default React.forwardRef(({
     }
   }, [requestStopPoints]);
 
+  const addStreetAddressToStopPoints = async () => {
+    const formattedStopPoints = await Promise.all(ride.stopPoints.map(async (sp) => {
+      const { streetAddress } = await reverseLocationGeocode(sp.lat, sp.lng);
+      return {
+        ...sp,
+        streetAddress,
+      };
+    }));
+    setRideStopPoints(formattedStopPoints);
+  };
+
+  useEffect(() => {
+    if (ride && ride.stopPoints) {
+      addStreetAddressToStopPoints();
+    }
+  }, [ride.stopPoints]);
+
+  const stopPoints = rideStopPoints || requestStopPoints || [];
+
+  const getCurrentStopPoint = (sps) => {
+    const pickup = sps.find(sp => sp.type === STOP_POINT_TYPES.STOP_POINT_PICKUP
+      && sp.state === STOP_POINT_STATES.PENDING);
+    return pickup || sps[sps.length - 1];
+  };
+
+  const precedingStopPoints = getCurrentStopPoint(stopPoints).precedingStops;
+
+  const polylineList = rideStopPoints && getSubLineStringAfterLocationFromDecodedPolyline(
+    polyline.decode(getCurrentStopPoint(stopPoints).polyline),
+    { latitude: ride.vehicle.location.lat, longitude: ride.vehicle.location.lng },
+  ).map(p => ({ latitude: p[0], longitude: p[1] }));
+
   return (
     <>
       <MapView
@@ -181,8 +217,25 @@ export default React.forwardRef(({
         customMapStyle={isDarkMode ? mapDarkMode : undefined}
         {...mapSettings}
       >
-        {!isConfirmPickupPage && requestStopPoints.filter(sp => !!sp.lat).length > 1
-          ? requestStopPoints
+        {rideStopPoints && (
+        <AvailabilityVehicle
+          location={ride.vehicle.location}
+          id={ride.vehicle.id}
+          key={ride.vehicle.id}
+        />
+        )}
+        {rideStopPoints && !!precedingStopPoints.length
+          && precedingStopPoints.map(sp => <PrecedingStopPointMarker key={sp.id} stopPoint={sp} />)
+        }
+        {rideStopPoints && (
+          <Polyline
+            strokeColor={primaryColor}
+            strokeWidth={7}
+            coordinates={polylineList}
+          />
+        )}
+        {!isConfirmPickupPage && stopPoints.filter(sp => !!sp.lat).length > 1
+          ? stopPoints
             .filter(sp => !!sp.lat)
             .map(sp => (<StationsMap stopPoint={sp} key={sp.id} />))
           : null}
