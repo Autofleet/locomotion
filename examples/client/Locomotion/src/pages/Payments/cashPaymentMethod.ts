@@ -1,3 +1,4 @@
+import i18n from '../../I18n';
 import { PaymentMethodInterface } from '../../context/payments/interface';
 
 const cashPaymentMethod : PaymentMethodInterface = {
@@ -6,11 +7,11 @@ const cashPaymentMethod : PaymentMethodInterface = {
   customerId: '',
   expiresAt: new Date(2100, 9, 9),
   hasOutstandingBalance: false,
-  id: 'cash',
+  id: i18n.t('payments.cash'),
   isDefault: false,
   isExpired: false,
   lastFour: '',
-  name: 'Pay with cash',
+  name: i18n.t('payments.payWithCash'),
   stripeId: '',
   updatedAt: new Date(),
   deletedAt: null,

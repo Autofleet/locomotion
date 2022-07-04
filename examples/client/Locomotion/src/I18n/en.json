@@ -319,6 +319,8 @@
         "addPaymentMethod": "Add New",
         "newCardDetails": "Please add your payment details",
         "setPaymentBanner": "Set payment method",
+        "payWithCash": "Pay with Cash",
+        "cash": "cash",
         "popups": {
             "removeCard": {
                 "title": "Remove payment method",
