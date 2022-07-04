@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import propsTypes from 'prop-types';
 import Loader from '../Loader';
 import { ButtonTextContainer, StyledButton, SubmitButtonText } from './styled';
 import SvgIcon from '../SvgIcon';
+import { Context as ThemeContext } from '../../context/theme';
 
 const RoundedButton = ({
   onPress,
@@ -16,7 +17,7 @@ const RoundedButton = ({
   ...props
 }) => {
   const [loadingState, setLoadingState] = useState(false);
-
+  const theme = useContext(ThemeContext);
   const onPressWithLoading = async (args) => {
     setLoadingState(true);
     await onPress(args);
@@ -40,7 +41,15 @@ const RoundedButton = ({
       style={style}
       useCancelTextButton={useCancelTextButton}
     >
-      <SvgIcon Svg={icon} width={12} height={12} />
+      {icon && (
+        <SvgIcon
+          Svg={icon}
+          width={15}
+          height={15}
+          fill={theme.primaryColor}
+          style={{ margin: 10 }}
+        />
+      )}
       <ButtonTextContainer>
         <SubmitButtonText
           hollow={hollow}

@@ -67,15 +67,15 @@ const RidePage = ({ mapSettings }) => {
         <AddressSelector />
       );
     }
-    return <RideOptions />;
+    return changeBsPage(BS_PAGES.SERVICE_ESTIMATIONS);
   };
 
   const BS_PAGE_TO_COMP = {
+    [BS_PAGES.SERVICE_ESTIMATIONS]: () => (
+      <RideOptions />
+    ),
     [BS_PAGES.CONFIRM_PICKUP_TIME]: () => (
-      <ConfirmPickupTime onButtonPress={() => {
-        changeBsPage(BS_PAGES.SERVICE_ESTIMATIONS);
-      }}
-      />
+      <ConfirmPickupTime />
     ),
     [BS_PAGES.NOT_IN_TERRITORY]: () => (
       <NotAvailableHere onButtonPress={() => {

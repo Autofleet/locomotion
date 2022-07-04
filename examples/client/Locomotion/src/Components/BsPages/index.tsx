@@ -173,18 +173,25 @@ export const ConfirmPickupTime = (props: any) => {
   const date = moment(ride?.afterTime).format('ddd, MMM Do');
   const time = moment(ride?.afterTime).format('HH:mm');
   const maxDate = moment().add(7, 'days').toDate();
-  const minDate = moment().add(5, 'minutes').toDate(); // setting - Dispatch Future Rides Immediately
+  const minDate = moment().add(0, 'minutes').toDate(); // setting - Dispatch Future Rides Immediately
   return (
     <BsPage
       TitleText={i18n.t('bottomSheetContent.confirmPickupTime.titleText')}
       ButtonText={i18n.t('bottomSheetContent.confirmPickupTime.buttonText')}
-      onButtonPress={() => changeBsPage(BS_PAGES.SERVICE_ESTIMATIONS)}
+      onButtonPress={() => {
+        changeBsPage(BS_PAGES.SERVICE_ESTIMATIONS);
+      }}
       {...props}
     >
       <RoundedButton
         onPress={() => setIsDatePickerOpen(true)}
         hollow
         icon={timeIcon}
+        style={{
+          justifyContent: 'flex-start',
+          alignItems: 'center',
+          borderColor: '#f1f2f6',
+        }}
       >
         {i18n.t('bottomSheetContent.confirmPickupTime.pickupText', { date, time })}
       </RoundedButton>

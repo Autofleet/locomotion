@@ -70,5 +70,4 @@ export const ButtonTextContainer = styled.View`
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  flex: 1;
 `;
