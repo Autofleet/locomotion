@@ -46,8 +46,7 @@ const PaymentMethodPopup = ({ isVisible, onCancel }: PaymentMethodPopupProps) =>
   useEffect(() => {
     const getIsCashEnabled = async () => {
       const result = await usePayments.isCashPaymentEnabled();
-
-      setIsCashEnabled(result === 'true');
+      setIsCashEnabled(result.value);
     };
 
     getIsCashEnabled();
