@@ -47,11 +47,13 @@ const BottomSheetComponent = forwardRef(({
 
   return (
     <>
+      {!isExpanded && (
       <SquareSvgButton
         onPress={focusCurrentLocation}
         icon={targetIcon}
-        style={{ position: 'absolute', bottom: `${parseFloat(snapPoints[isExpanded ? 1 : 0]) + 2}%`, right: 20 }}
+        style={{ position: 'absolute', bottom: `${parseFloat(snapPoints[0]) + 2}%`, right: 20 }}
       />
+      )}
       <BottomSheet
         android_keyboardInputMode="adjustResize"
         ref={ref}
