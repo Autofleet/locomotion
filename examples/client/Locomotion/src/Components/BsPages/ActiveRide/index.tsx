@@ -114,59 +114,64 @@ const ActiveRideContent = () => {
 
   return (
     <>
-      <TopContainer>
-        <DriverCardContainer>
-          <DriverCard
-            activeRide
-            ride={ride}
+      {ride
+      && (
+        <>
+          <TopContainer>
+            <DriverCardContainer>
+              <DriverCard
+                activeRide
+                ride={ride}
+              />
+            </DriverCardContainer>
+            <VehicleDetails>
+              <VehicleImage source={{ uri: vehicle.image }} />
+              <VehiclePlateContainer>
+                <VehiclePlateText>{vehicle.licensePlate}</VehiclePlateText>
+              </VehiclePlateContainer>
+            </VehicleDetails>
+          </TopContainer>
+          <StopPointTextContainer>
+            <StopPointText>
+              {getTextBasedOnStopPoints()}
+            </StopPointText>
+            <StopPointsTimeContainer>
+              <PulseContainer>
+                <Loader dark={false} sourceProp={pulse} lottieViewStyle={{ width: 24, height: 24 }} />
+              </PulseContainer>
+              <StopPointTimeText>{getMinDifferent()}</StopPointTimeText>
+            </StopPointsTimeContainer>
+          </StopPointTextContainer>
+          <ButtonsContainer>
+            <RowContainer>
+              {renderContactDriver()}
+              {renderRideNotes()}
+            </RowContainer>
+            <RowContainer>
+              {renderCancelRide()}
+              {renderShareRide()}
+            </RowContainer>
+          </ButtonsContainer>
+          <StopPointsVerticalViewContainer>
+            <StopPointsVerticalView
+              ride={ride}
+            />
+          </StopPointsVerticalViewContainer>
+          <RideNotes
+            notes={firstSpNotCompleted?.notes}
+            isVisible={popupToShow === 'notes'}
+            onSubmit={(text: string) => {
+            //   updateRide({
+            //     notes: text,
+            //   });
+              clearPopup();
+            }}
+            onCancel={() => {
+              clearPopup();
+            }}
           />
-        </DriverCardContainer>
-        <VehicleDetails>
-          <VehicleImage source={{ uri: vehicle.image }} />
-          <VehiclePlateContainer>
-            <VehiclePlateText>{vehicle.licensePlate}</VehiclePlateText>
-          </VehiclePlateContainer>
-        </VehicleDetails>
-      </TopContainer>
-      <StopPointTextContainer>
-        <StopPointText>
-          {getTextBasedOnStopPoints()}
-        </StopPointText>
-        <StopPointsTimeContainer>
-          <PulseContainer>
-            <Loader dark={false} sourceProp={pulse} lottieViewStyle={{ width: 24, height: 24 }} />
-          </PulseContainer>
-          <StopPointTimeText>{getMinDifferent()}</StopPointTimeText>
-        </StopPointsTimeContainer>
-      </StopPointTextContainer>
-      <ButtonsContainer>
-        <RowContainer>
-          {renderContactDriver()}
-          {renderRideNotes()}
-        </RowContainer>
-        <RowContainer>
-          {renderCancelRide()}
-          {renderShareRide()}
-        </RowContainer>
-      </ButtonsContainer>
-      <StopPointsVerticalViewContainer>
-        <StopPointsVerticalView
-          ride={ride}
-        />
-      </StopPointsVerticalViewContainer>
-      <RideNotes
-        notes={firstSpNotCompleted?.notes}
-        isVisible={popupToShow === 'notes'}
-        onSubmit={(text: string) => {
-        //   updateRide({
-        //     notes: text,
-        //   });
-          clearPopup();
-        }}
-        onCancel={() => {
-          clearPopup();
-        }}
-      />
+        </>
+      )}
     </>
   );
 };

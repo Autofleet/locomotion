@@ -16,6 +16,7 @@ export const SNAP_POINT_STATES = {
   [BS_PAGES.NO_AVAILABLE_VEHICLES]: ['30%', '30%'],
   [BS_PAGES.CONFIRM_PICKUP_TIME]: ['30%', '30%'],
   [BS_PAGES.ACTIVE_RIDE]: ['30%', '95%'],
+  [BS_PAGES.CUSTOM_TIP]: ['70%', '100%'],
 };
 const BottomSheetProvider = ({ children }) => {
   const [isExpanded, setIsExpanded] = useState(false);

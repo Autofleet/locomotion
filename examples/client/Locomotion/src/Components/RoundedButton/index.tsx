@@ -10,8 +10,8 @@ interface ButtonProps {
   disabled?: boolean;
   useCancelTextButton?: boolean;
   setLoading?: (state: boolean) => void;
-  style: any;
-  icon: any;
+  style?: any;
+  icon?: any;
   children?: any;
 }
 

@@ -22,6 +22,8 @@ import { formatSps } from '../../lib/ride/utils';
 type Dispatch<A> = (value: A) => void;
 
 export interface RideInterface {
+  priceCurrency?: any;
+  priceAmount?: any;
   id?: string;
   notes?: string;
   paymentMethodId?: string;
@@ -73,6 +75,7 @@ interface RidePageContextInterface {
   serviceRequestFailed: boolean;
   setServiceRequestFailed: Dispatch<boolean>;
   trackRide: () => Promise<string>;
+  postRideSubmit: (rideId: string, rating: number | null, tip: number | null) => any;
 }
 
 export const RidePageContext = createContext<RidePageContextInterface>({
@@ -112,6 +115,8 @@ export const RidePageContext = createContext<RidePageContextInterface>({
   setServiceRequestFailed: () => undefined,
   ride: {},
   trackRide: async () => '',
+  postRideSubmit: (rideId: string, rating: number | null, tip: number | null) => undefined,
+
 });
 
 const HISTORY_RECORDS_NUM = 10;
@@ -165,16 +170,24 @@ const RidePageContextProvider = ({ children }: {
   };
 
   const getServiceEstimations = async () => {
+    setIsLoading(true);
     setIsReadyForSubmit(false);
-    const formattedStopPoints = formatStopPointsForEstimations(requestStopPoints);
-    const [estimations, services] = await Promise.all([
-      rideApi.createServiceEstimations(formattedStopPoints),
-      rideApi.getServices(),
-    ]);
-    const tags = getEstimationTags(estimations);
-    const formattedEstimations = formatEstimations(services, estimations, tags);
-    setChosenService(formattedEstimations.find((e: any) => e.eta));
-    setServiceEstimations(formattedEstimations);
+    try {
+      const formattedStopPoints = formatStopPointsForEstimations(requestStopPoints);
+      const [estimations, services] = await Promise.all([
+        rideApi.createServiceEstimations(formattedStopPoints),
+        rideApi.getServices(),
+      ]);
+      const tags = getEstimationTags(estimations);
+      const formattedEstimations = formatEstimations(services, estimations, tags);
+      setChosenService(formattedEstimations.find((e: any) => e.eta));
+      setServiceEstimations(formattedEstimations);
+    } catch (e) {
+      setServiceRequestFailed(true);
+      setIsReadyForSubmit(false);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const validateRequestedStopPoints = async (reqSps: any[]) => {
@@ -422,24 +435,15 @@ const RidePageContextProvider = ({ children }: {
 
   const tryServiceEstimations = async () => {
     try {
-      setIsLoading(true);
       await getServiceEstimations();
       intervalRef.current = setInterval(async () => {
         await getServiceEstimations();
       }, (SERVICE_ESTIMATIONS_INTERVAL_IN_SECONDS * 1000));
     } catch (e) {
       setServiceRequestFailed(true);
-      setIsLoading(false);
       setIsReadyForSubmit(false);
-      console.error(e);
     }
   };
-
-  useEffect(() => {
-    if (serviceEstimations) {
-      setIsLoading(false);
-    }
-  }, [serviceEstimations]);
 
   useEffect(() => {
     if (isReadyForSubmit) {
@@ -491,6 +495,46 @@ const RidePageContextProvider = ({ children }: {
       ...ride,
       ...newRide,
     });
+  };
+
+  const patchRideRating = async (rideId: string, rating: number|null): Promise<any> => {
+    if (!rating) {
+      return null;
+    }
+
+    try {
+      const updatedRide = await rideApi.patchRide(rideId, { rating });
+      updateRide(updatedRide);
+      if (updatedRide) {
+        return true;
+      }
+      return false;
+    } catch (e) {
+      return false;
+    }
+  };
+
+  const chargeTip = async (rideId: string, tip:number|null): Promise<any> => {
+    // TODO: implement
+    if (!tip) {
+      return null;
+    }
+
+    try {
+      return true;
+    } catch (e) {
+      return false;
+    }
+  };
+
+  const postRideSubmit = async (rideId:string, rating:number|null, tip:number|null): Promise<boolean> => {
+    console.log('Post Ride Data', { rideId, rating, tip });
+    await Promise.all([
+      chargeTip(rideId, tip),
+      patchRideRating(rideId, rating),
+    ]);
+
+    return true;
   };
 
   const trackRide = async () => {
@@ -546,6 +590,7 @@ const RidePageContextProvider = ({ children }: {
         serviceRequestFailed,
         setServiceRequestFailed,
         trackRide,
+        postRideSubmit,
       }}
     >
       {children}

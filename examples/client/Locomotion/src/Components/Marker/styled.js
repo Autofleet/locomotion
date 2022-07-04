@@ -1,5 +1,6 @@
 
 import React from 'react';
+import { Platform } from 'react-native';
 import styled from 'styled-components';
 import { FONT_SIZES, FONT_WEIGHTS } from '../../context/theme';
 
@@ -58,6 +59,7 @@ export const MarkerContainer = styled.View`
 `;
 
 export const InfoBox = styled.View`
+  ${Platform.OS === 'ios' && 'top: -35px'};
    height: 50px;
    display: flex;
    flex-direction: column;

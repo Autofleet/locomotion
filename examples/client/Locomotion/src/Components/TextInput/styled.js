@@ -1,7 +1,8 @@
+import React from 'react';
+import { Text, View } from 'react-native';
 import styled from 'styled-components';
 import { BottomSheetTextInput } from '@gorhom/bottom-sheet';
 
-import { View } from 'react-native';
 import { ERROR_COLOR } from '../../context/theme';
 
 const bottomBorderStyles = `
@@ -12,7 +13,10 @@ border-bottom-width: 1px;
 const fullBorderStyles = isFocused => `
 backgroundColor: #f1f2f6;
 borderRadius: 8px;
-${isFocused && 'border: 1px solid #333333'};
+${isFocused && `
+    border-width: 1px
+    border-color: #333333
+`};
 
 `;
 

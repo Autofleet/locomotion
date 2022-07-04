@@ -54,6 +54,10 @@ const Main = () => {
         component={ROUTES_COMPS[MAIN_ROUTES.WEBVIEW]}
       />
       <Drawer.Screen
+        name={MAIN_ROUTES.POST_RIDE}
+        component={ROUTES_COMPS[MAIN_ROUTES.POST_RIDE]}
+      />
+      <Drawer.Screen
         name={MAIN_ROUTES.LOGOUT}
         component={ROUTES_COMPS[MAIN_ROUTES.LOGOUT]}
       />

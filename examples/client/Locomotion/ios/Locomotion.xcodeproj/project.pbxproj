@@ -72,6 +72,7 @@
 		9E257F24285767AD000F4EB2 /* Inter-ExtraBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Inter-ExtraBold.ttf"; path = "../../../../locomotion-sdk/src/assets/fonts/Inter-ExtraBold.ttf"; sourceTree = "<group>"; };
 		ABC57D5443BA4AB7AE7EA145 /* Inter-ExtraBold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Inter-ExtraBold.ttf"; path = "../src/assets/fonts/Inter-ExtraBold.ttf"; sourceTree = "<group>"; };
 		AE4C4563282D04BF007CCCE7 /* Locomotion-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Locomotion-Bridging-Header.h"; sourceTree = "<group>"; };
+		EC5ACF6D2871CBBE00B2D6D7 /* Locomotion.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = Locomotion.entitlements; path = Locomotion/Locomotion.entitlements; sourceTree = "<group>"; };
 		EC8EB49F2811511C005D40A9 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
@@ -132,6 +133,7 @@
 		13B07FAE1A68108700A75B9A /* Locomotion */ = {
 			isa = PBXGroup;
 			children = (
+				EC5ACF6D2871CBBE00B2D6D7 /* Locomotion.entitlements */,
 				EC8EB49F2811511C005D40A9 /* GoogleService-Info.plist */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.mm */,
@@ -580,6 +582,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = Locomotion/Locomotion.entitlements;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 7K92DGCAEB;
 				ENABLE_BITCODE = NO;
@@ -609,6 +612,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = Locomotion/Locomotion.entitlements;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 7K92DGCAEB;
 				INFOPLIST_FILE = Locomotion/Info.plist;
