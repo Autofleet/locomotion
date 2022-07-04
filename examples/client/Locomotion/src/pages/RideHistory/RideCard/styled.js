@@ -101,12 +101,12 @@ export const RideViewSecTextContainer = styled.View`
 `;
 
 export const CenterContainer = styled.View`
-  ${({ top }) => top && 'margin-top: 50%;'}
+  margin-top: ${({ addTop }) => (addTop ? '50%' : '0')};
   align-self: center;
 `;
 
 export const BaseText = styled.Text`
-  padding-top: 5px
+  padding-top: 5px;
 `;
 
 export const NoRidesListContainer = styled(BaseText)`
@@ -116,7 +116,7 @@ export const NoRidesListContainer = styled(BaseText)`
 `;
 
 export const NoRidesInList = () => (
-  <CenterContainer top>
+  <CenterContainer addTop>
     <NoRidesImage />
     <NoRidesListContainer>
       {i18n.t('activityPage.noActivity')}
