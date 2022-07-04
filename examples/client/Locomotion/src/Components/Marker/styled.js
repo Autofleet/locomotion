@@ -59,8 +59,7 @@ export const MarkerContainer = styled.View`
 `;
 
 export const InfoBox = styled.View`
-  margin-top: ${Platform.OS === 'ios' ? '-45px' : '100px'};
-  top: 10px;
+  ${Platform.OS === 'ios' && 'top: -35px'};
    height: 50px;
    display: flex;
    flex-direction: column;
