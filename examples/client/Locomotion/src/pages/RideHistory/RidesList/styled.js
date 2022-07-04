@@ -24,12 +24,12 @@ export const RideViewTextContainer = styled.View`
 `;
 
 export const CenterContainer = styled.View`
-  ${({ addTop: top }) => top && 'margin-top: 50%;'}
+  margin-top: ${({ addTop }) => (addTop ? '50%' : '0')};
   align-self: center;
 `;
 
 export const BaseText = styled.Text`
-  padding-top: 5px
+  padding-top: 5px;
 `;
 
 export const NoRidesListContainer = styled(BaseText)`
@@ -45,7 +45,7 @@ export const SubNoRidesListContainer = styled(BaseText)`
 `;
 
 export const NoRidesInList = ({ yet }) => (
-  <CenterContainer addTop>
+  <CenterContainer>
     <NoRidesImage />
     {yet ? (
       <>
