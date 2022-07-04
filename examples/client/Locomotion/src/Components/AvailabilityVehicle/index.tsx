@@ -19,7 +19,9 @@ interface AvailabilityVehicleProps {
   id: string;
 }
 
-const AvailabilityVehicleContainer = styled(View)``;
+const AvailabilityVehicleContainer = styled(View)`
+z-index: 100;
+`;
 
 const areEqual = (prev: AvailabilityVehicleProps, next: AvailabilityVehicleProps) => prev.id === next.id
   && prev.location.lat === next.location.lat

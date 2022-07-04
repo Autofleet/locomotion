@@ -1,5 +1,6 @@
 
 import React from 'react';
+import { Platform } from 'react-native';
 import styled from 'styled-components';
 import { FONT_SIZES, FONT_WEIGHTS } from '../../context/theme';
 
@@ -55,10 +56,11 @@ export const MarkerToolTipText = styled.Text`
 `;
 
 export const MarkerContainer = styled.View`
-margin-top: -20px;
 `;
 
 export const InfoBox = styled.View`
+  margin-top: ${Platform.OS === 'ios' ? '-45px' : '100px'};
+  top: 10px;
    height: 50px;
    display: flex;
    flex-direction: column;
