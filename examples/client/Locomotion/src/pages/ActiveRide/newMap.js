@@ -16,7 +16,7 @@ import AvailabilityVehicle from '../../Components/AvailabilityVehicle';
 import StationsMap from '../../Components/Marker';
 import { latLngToAddress } from '../../context/newRideContext/utils';
 import { BS_PAGES } from '../../context/ridePageStateContext/utils';
-import { STOP_POINT_STATES, STOP_POINT_TYPES } from '../../lib/commonTypes';
+import { RIDE_STATES, STOP_POINT_STATES, STOP_POINT_TYPES } from '../../lib/commonTypes';
 import PrecedingStopPointMarker from '../../Components/PrecedingStopPointMarker';
 import { getSubLineStringAfterLocationFromDecodedPolyline } from '../../lib/polyline/utils';
 
@@ -41,7 +41,7 @@ export default React.forwardRef(({
     currentBsPage,
     initGeoService,
   } = useContext(RideStateContextContext);
-
+  const rideDispatched = (ride || {}).state === RIDE_STATES.DISPATCHED;
   const isMainPage = currentBsPage === BS_PAGES.ADDRESS_SELECTOR;
   const isConfirmPickupPage = currentBsPage === BS_PAGES.CONFIRM_PICKUP;
   const isChooseLocationOnMap = [BS_PAGES.CONFIRM_PICKUP, BS_PAGES.SET_LOCATION_ON_MAP].includes(currentBsPage);
@@ -153,7 +153,7 @@ export default React.forwardRef(({
   };
 
   useEffect(() => {
-    if (ride && ride.stopPoints) {
+    if (rideDispatched) {
       addStreetAddressToStopPoints();
     } else {
       setRideStopPoints(null);
@@ -169,9 +169,9 @@ export default React.forwardRef(({
   };
 
   const precedingStopPoints = getCurrentStopPoint(stopPoints).precedingStops;
-  const hasRide = ride && ride.vehicle && ride.vehicle.location && rideStopPoints;
-  const polylineList = hasRide && getCurrentStopPoint(rideStopPoints).polyline && getSubLineStringAfterLocationFromDecodedPolyline(
-    polyline.decode(getCurrentStopPoint(rideStopPoints).polyline),
+
+  const polylineList = rideDispatched && getSubLineStringAfterLocationFromDecodedPolyline(
+    polyline.decode(getCurrentStopPoint(stopPoints).polyline),
     { latitude: ride.vehicle.location.lat, longitude: ride.vehicle.location.lng },
   ).map(p => ({ latitude: p[0], longitude: p[1] }));
 
@@ -219,17 +219,17 @@ export default React.forwardRef(({
         customMapStyle={isDarkMode ? mapDarkMode : undefined}
         {...mapSettings}
       >
-        {hasRide && (
+        {rideDispatched && (
         <AvailabilityVehicle
           location={ride.vehicle.location}
           id={ride.vehicle.id}
           key={ride.vehicle.id}
         />
         )}
-        {hasRide && !!(precedingStopPoints || []).length
+        {rideDispatched && !!precedingStopPoints.length
           && precedingStopPoints.map(sp => <PrecedingStopPointMarker key={sp.id} stopPoint={sp} />)
         }
-        {rideStopPoints && polylineList && (
+        {rideDispatched && polylineList && (
           <Polyline
             strokeColor={primaryColor}
             strokeWidth={7}
