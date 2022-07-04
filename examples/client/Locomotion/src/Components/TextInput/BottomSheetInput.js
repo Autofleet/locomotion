@@ -1,11 +1,11 @@
 import React, { forwardRef } from 'react';
 import { TouchableOpacity } from 'react-native';
 import SvgIcon from '../SvgIcon';
-import { BottomSheetInput, IconContainer } from './styled';
+import { BottomSheetInput, IconContainer, BottomSheetInputContainer } from './styled';
 import cancel from '../../assets/bottomSheet/cancel.svg';
 
 const BottomSheetInputField = forwardRef((props, ref) => (
-  <>
+  <BottomSheetInputContainer>
     <BottomSheetInput
       {...props}
       ref={ref}
@@ -28,7 +28,7 @@ const BottomSheetInputField = forwardRef((props, ref) => (
       </TouchableOpacity>
     </IconContainer>
     )}
-  </>
+  </BottomSheetInputContainer>
 ));
 
 export default BottomSheetInputField;
