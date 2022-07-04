@@ -22,11 +22,11 @@ import settings from '../../context/settings';
 import SETTINGS_KEYS from '../../context/settings/keys';
 import NewRidePageContextProvider, { RidePageContext } from '../../context/newRideContext';
 
-const PostRidePage = ({ menuSide }: { menuSide: string }) => {
+const PostRidePage = ({ menuSide }) => {
   const navigation = useNavigation();
   const route = useRoute();
-  const [rating, setRating] = useState<number|null>(null);
-  const [rideTip, setRideTip] = useState<number|null>(null);
+  const [rating, setRating] = useState(null);
+  const [rideTip, setRideTip] = useState(null);
   const [tipSettings, setTipSettings] = useState({
     percentageThreshold: 30,
     percentage: [10, 15, 20],
@@ -34,7 +34,9 @@ const PostRidePage = ({ menuSide }: { menuSide: string }) => {
   });
   const {
     postRideSubmit,
-    ride,
+    ride = {
+      driver: {},
+    },
   } = useContext(RidePageContext);
 
   const { getSettingByKey } = settings.useContainer();
@@ -44,12 +46,11 @@ const PostRidePage = ({ menuSide }: { menuSide: string }) => {
   }, []);
 
 
-  const onRatingUpdate = (selectedRating: number) => {
+  const onRatingUpdate = (selectedRating) => {
     setRating(selectedRating);
   };
 
-  const onSelectTip = (tipAmount: number|null) => {
-    console.log('tipAmount', tipAmount);
+  const onSelectTip = (tipAmount) => {
     setRideTip(tipAmount);
   };
 
@@ -73,7 +74,7 @@ const PostRidePage = ({ menuSide }: { menuSide: string }) => {
       }
     }
   };
-  console.log(ride);
+
   return (
     <PageContainer>
       <PageHeader
@@ -112,7 +113,6 @@ const PostRidePage = ({ menuSide }: { menuSide: string }) => {
 
 export default props => (
   <NewRidePageContextProvider {...props}>
-
     <PostRidePage {...props} />
   </NewRidePageContextProvider>
 );

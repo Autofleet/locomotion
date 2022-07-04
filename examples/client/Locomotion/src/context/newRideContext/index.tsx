@@ -22,8 +22,8 @@ import { formatSps } from '../../lib/ride/utils';
 type Dispatch<A> = (value: A) => void;
 
 export interface RideInterface {
-  priceCurrency: any;
-  priceAmount: any;
+  priceCurrency?: any;
+  priceAmount?: any;
   id?: string;
   notes?: string;
   paymentMethodId?: string;
