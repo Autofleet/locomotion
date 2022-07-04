@@ -19,7 +19,7 @@ const BottomSheetComponent = forwardRef(({
   children,
   enablePanDownToClose = false,
   focusCurrentLocation,
-  index = 1,
+  index = 0,
 }, ref) => {
   const {
     setIsExpanded,
