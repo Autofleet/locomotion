@@ -24,7 +24,7 @@ const RoundedButton = ({
   type,
   useCancelTextButton,
   icon,
-  children
+  children,
   ...props
 }: ButtonProps) => {
   const [loadingState, setLoadingState] = useState(false);
