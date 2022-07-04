@@ -111,7 +111,8 @@ const Card = ({
 
 const AccountContent = ({ navigation }) => {
   const { user } = useContext(UserContext);
-  const { paymentMethods } = PaymentsContext.useContainer();
+  const { getClientDefaultMethod } = PaymentsContext.useContainer();
+  const defaultPaymentMethod = getClientDefaultMethod();
   return (
     <Container>
       <CardsContainer>
@@ -144,20 +145,19 @@ const AccountContent = ({ navigation }) => {
         >
           {user ? `${user.email}` : ''}
         </Card>
-        {paymentMethods && paymentMethods.length
-          ? paymentMethods.map(pm => (
-            <Card
-              title={i18n.t('onboarding.paymentMethodPlaceholder')}
-              onPress={() => navigation.navigate(MAIN_ROUTES.PAYMENT, {
-                back: true,
-              })}
-            >
-              {
-             moment(pm.expiresAt).format('MM/YY')
-           }
-            </Card>
-          ))
-          : null}
+        <CardsTitle>
+          {i18n.t('onboarding.paymentInformation')}
+        </CardsTitle>
+        <Card
+          title={i18n.t('onboarding.paymentMethodPlaceholder')}
+          onPress={() => navigation.navigate(MAIN_ROUTES.PAYMENT, {
+            back: true,
+          })}
+        >
+          {
+            moment(defaultPaymentMethod.expiresAt).format('MM/YY')
+          }
+        </Card>
         <LogoutContainer
           onPress={() => {
             navigation.navigate(MAIN_ROUTES.LOGOUT);
