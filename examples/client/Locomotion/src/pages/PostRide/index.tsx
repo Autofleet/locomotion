@@ -22,18 +22,19 @@ import settings from '../../context/settings';
 import SETTINGS_KEYS from '../../context/settings/keys';
 import NewRidePageContextProvider, { RidePageContext } from '../../context/newRideContext';
 
-const PostRidePage = ({ menuSide }) => {
+const PostRidePage = ({ menuSide }: { menuSide: string }) => {
   const navigation = useNavigation();
   const route = useRoute();
-  const [rating, setRating] = useState(null);
-  const [rideTip, setRideTip] = useState(null);
+  const [rating, setRating] = useState<number|null>(null);
+  const [rideTip, setRideTip] = useState<number|null>(null);
   const [tipSettings, setTipSettings] = useState({
     percentageThreshold: 30,
     percentage: [10, 15, 20],
     fixedPrice: [1, 2, 5],
   });
   const {
-    patchRideRating,
+    postRideSubmit,
+    ride,
   } = useContext(RidePageContext);
 
   const { getSettingByKey } = settings.useContainer();
@@ -43,11 +44,12 @@ const PostRidePage = ({ menuSide }) => {
   }, []);
 
 
-  const onRatingUpdate = (selectedRating) => {
+  const onRatingUpdate = (selectedRating: number) => {
     setRating(selectedRating);
   };
 
-  const onSelectTip = (tipAmount) => {
+  const onSelectTip = (tipAmount: number|null) => {
+    console.log('tipAmount', tipAmount);
     setRideTip(tipAmount);
   };
 
@@ -65,12 +67,13 @@ const PostRidePage = ({ menuSide }) => {
   const onSubmit = async () => {
     if (rating) {
       try {
-        patchRideRating(rating);
+        postRideSubmit(ride.id, rating, rideTip);
       } catch (e) {
         console.log(e);
       }
     }
   };
+  console.log(ride);
   return (
     <PageContainer>
       <PageHeader
@@ -90,7 +93,13 @@ const PostRidePage = ({ menuSide }) => {
           flex: 2,
         }}
         >
-          <Tips tipSettings={tipSettings} onSelectTip={onSelectTip} />
+          <Tips
+            tipSettings={tipSettings}
+            onSelectTip={onSelectTip}
+            driver={{ firstName: ride?.driver?.firstName, avatar: ride?.driver?.avatar }}
+            ridePrice={ride?.priceAmount}
+            priceCurrency={ride?.priceCurrency}
+          />
         </TipsContainer>
         <SubmitContainer>
           <Button onPress={onSubmit}>{i18n.t('postRide.submit')}</Button>

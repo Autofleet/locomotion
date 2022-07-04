@@ -2,7 +2,9 @@
 import React, {
   useEffect, useState, useRef, useContext,
 } from 'react';
-import { View, Text, TouchableOpacity } from 'react-native';
+import {
+  View, Text, TouchableOpacity, Image,
+} from 'react-native';
 import styled from 'styled-components';
 import { useBottomSheet } from '@gorhom/bottom-sheet';
 import getSymbolFromCurrency from 'currency-symbol-map';
@@ -26,7 +28,7 @@ const TipSectionContainer = styled.View`
 
 const Container = styled.View`
   flex-direction: column;
-  padding: 30px;
+  padding: 30px 0px;
   flex: 1;
 `;
 
@@ -35,6 +37,7 @@ const Title = styled.Text`
   color: #333333;
   font-weight: 600;
   margin-bottom: 8px;
+
 `;
 
 const SubTitle = styled.Text`
@@ -80,6 +83,13 @@ const NoCustomTipContainer = styled.View`
   margin-top: 5px;
 `;
 
+
+export const DriverAvatar = styled(Image)`
+  width: 60px;
+  height: 60px;
+  border-radius: 100px;
+ `;
+
 const NoTipTextButton = ({ onPress, children }) => (
   <NoCustomTipContainer>
     <TouchableOpacity onPress={onPress}>
@@ -89,12 +99,11 @@ const NoTipTextButton = ({ onPress, children }) => (
 );
 
 const Tips = ({
-  driver = { firstName: 'Timmy' },
-  ridePrice = 20,
-  thumbnailImage,
+  driver,
+  ridePrice,
   tipSettings,
   onSelectTip,
-  ride,
+  priceCurrency,
 }) => {
   const [selectedTip, setSelectedTip] = useState(null);
   const [customTip, setCustomTip] = useState(null);
@@ -102,7 +111,7 @@ const Tips = ({
   const isPercentage = ridePrice >= tipSettings.percentageThreshold;
   const buttons = isPercentage ? tipSettings.percentage : tipSettings.fixedPrice;
 
-  const serviceDisplayPrice = getSymbolFromCurrency(ride.priceCurrenct || 'USD');
+  const serviceDisplayPrice = getSymbolFromCurrency(priceCurrency || 'USD');
   const tipSuffix = isPercentage ? '%' : serviceDisplayPrice;
 
   const bottomSheetRef = useRef(null);
@@ -151,8 +160,6 @@ const Tips = ({
 
 
   console.log('serviceDisplayPrice', serviceDisplayPrice);
-  console.log(ride);
-
 
   return (
     <>
@@ -163,12 +170,12 @@ const Tips = ({
               {`${i18n.t('postRide.tip.title')} ${driver.firstName}`}
             </Title>
             <SubTitle>
-              {`${i18n.t('postRide.tip.subTitle')} ${ridePrice}$`}
+              {`${i18n.t('postRide.tip.subTitle')} ${ridePrice}${serviceDisplayPrice}`}
             </SubTitle>
           </Column>
           <ThumbnailContainer>
             <StyledThumbnail>
-              <Thumbnail size={55} />
+              <DriverAvatar size={60} source={{ uri: driver.avatar }} />
             </StyledThumbnail>
           </ThumbnailContainer>
         </DetailsContainer>
