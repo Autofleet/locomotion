@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { createContainer } from 'unstated-next';
 import network from '../../services/network';
 
-const BASE_PATH = '/api/v1/me/costumers';
+const BASE_PATH = '/api/v1/me/customers';
 
 const usePayments = () => {
   const [customer, setCustomer] = useState(null);
@@ -43,6 +43,10 @@ const usePayments = () => {
 
   const getClientDefaultMethod = () => (paymentMethods || []).find(pm => pm.isDefault) || paymentMethods[0];
 
+  const createPaymentMethod = async (paymentMethodId) => {
+    const { data: paymentMethod } = await network.post(`${BASE_PATH}/${paymentMethodId}`);
+    return paymentMethod;
+  };
 
   return {
     getCustomer,
@@ -54,6 +58,7 @@ const usePayments = () => {
     getOrFetchCustomer,
     clientHasValidPaymentMethods,
     getClientDefaultMethod,
+    createPaymentMethod,
   };
 };
 

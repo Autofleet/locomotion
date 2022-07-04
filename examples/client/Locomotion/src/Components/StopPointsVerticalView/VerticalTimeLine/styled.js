@@ -45,7 +45,6 @@ export const BaseTimeLine = styled.View`
 `;
 
 export const BottomTimeLine = styled(BaseTimeLine)`
-  flex: 1;
   padding-top: 12px;
   ${({ last }) => `${last ? '' : `
     borderLeftWidth: 1px;

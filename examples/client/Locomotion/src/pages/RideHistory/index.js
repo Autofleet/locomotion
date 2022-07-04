@@ -120,7 +120,7 @@ const Page = ({ menuSide }) => {
           />
         </View>
         {showLoader ? (
-          <CenterContainer top>
+          <CenterContainer addTop>
             <Loader
               dark
               lottieViewStyle={{

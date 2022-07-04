@@ -13,7 +13,7 @@ import {
   Row, Price,
   ServiceDetails, TimeDetails,
   Title, Description,
-  TopRow, CarContainer,
+  CarContainer,
 } from './styled';
 import Tag from '../../../../../../Components/Tag';
 import { RidePageContext } from '../../../../../../context/newRideContext';
@@ -24,12 +24,17 @@ const ServiceCard = ({ service }) => {
   const { setChosenService, chosenService } = useContext(RidePageContext);
   const unavailable = !service.eta;
   const minutesUntilPickup = moment.duration(moment(service.eta).diff(moment())).minutes().toString();
-  const timeUntilArrival = i18n.t('rideDetails.timeUntilArrival', { minutes: minutesUntilPickup });
+  const timeUntilArrival = minutesUntilPickup > 1
+    ? i18n.t('rideDetails.toolTipEta', { minutes: minutesUntilPickup })
+    : i18n.t('general.now');
   const unavailableText = i18n.t('rideDetails.unavailable');
   const serviceDisplayPrice = `${getSymbolFromCurrency(service.currency)}${service.price}`;
   const tagStyles = {
     [TAG_OPTIONS.FASTEST]: {
       container: {
+        borderWidth: 1,
+        borderStyle: 'solid',
+        borderColor: theme.primaryColor,
         backgroundColor: theme.primaryColor,
       },
       textColor: theme.primaryButtonTextColor,
@@ -52,16 +57,20 @@ const ServiceCard = ({ service }) => {
       disabled={unavailable}
       onPress={() => setChosenService(service)}
     >
-      <CarContainer>
-        <CarIcon source={{ uri: service.iconUrl }} />
+      <CarContainer unavailable={unavailable}>
+        <CarIcon
+          resizeMode="contain"
+          source={{ uri: service.iconUrl }}
+        />
       </CarContainer>
       <ServiceDetails unavailable={unavailable}>
-        <TopRow>
+        <Row>
           <Title>
             {service.name}
           </Title>
           {service.tags.map(tag => tag && (
           <Tag
+            key={tag.title}
             containerStyles={tagStyles[tag].container}
             text={tag}
             textColor={tagStyles[tag].textColor}
@@ -71,7 +80,7 @@ const ServiceCard = ({ service }) => {
           <Price>
             {service.price ? serviceDisplayPrice : unavailableText}
           </Price>
-        </TopRow>
+        </Row>
         {!unavailable && (
         <Row>
           <TimeDetails>

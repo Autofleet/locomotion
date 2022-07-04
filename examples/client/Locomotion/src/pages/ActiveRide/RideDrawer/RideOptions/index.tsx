@@ -16,6 +16,7 @@ const RideOptions = () => {
   const [popupToShow, setPopupToShow] = useState<popupNames | null>(null);
   const {
     updateRide,
+    ride,
   } = useContext(RidePageContext);
 
   const {
@@ -62,6 +63,7 @@ const RideOptions = () => {
       <ServiceOptions />
       <RideNotes
         isVisible={popupToShow === 'notes'}
+        notes={ride?.notes}
         onSubmit={(text: string) => {
           updateRide({
             notes: text,

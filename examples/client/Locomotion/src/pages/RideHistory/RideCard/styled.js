@@ -48,10 +48,6 @@ export const RideViewSectionContainer = styled(BaseRideViewContainer)`
   padding: 5px 20px;
 `;
 
-export const DriverSectionContainer = styled(BaseRideViewContainer)`
-  padding-right: 30px;
-  padding-left: 20px;
-`;
 
 export const RideViewContainer = styled.ScrollView.attrs(({
   contentContainerStyle: {
@@ -66,14 +62,6 @@ export const MapRideViewContainer = styled(BaseRideViewContainer)`
   height: 200px;
 `;
 
-export const RideViewTitleContainer = styled.View`
-`;
-
-export const DriverRatingContainer = styled.View`
-  flex-direction: row;
-  padding-top: 5px;
-  align-items: center;
-`;
 
 export const DriverAvatarContainer = styled.View`
 `;
@@ -94,11 +82,6 @@ export const DriverAvatar = styled.Image`
   border-color: #a7a7a7;
  `;
 
-export const RatingBarContainer = styled.View`
-  padding-top: 5px;
-  margin-left: auto;
-`;
-
 export const RideDrillDownContainer = styled.View`
   flex: 1;
   justify-content: center;
@@ -118,12 +101,12 @@ export const RideViewSecTextContainer = styled.View`
 `;
 
 export const CenterContainer = styled.View`
-  ${({ top }) => top && 'margin-top: 50%;'}
+  margin-top: ${({ addTop }) => (addTop ? '50%' : '0')};
   align-self: center;
 `;
 
 export const BaseText = styled.Text`
-  padding-top: 5px
+  padding-top: 5px;
 `;
 
 export const NoRidesListContainer = styled(BaseText)`
@@ -133,7 +116,7 @@ export const NoRidesListContainer = styled(BaseText)`
 `;
 
 export const NoRidesInList = () => (
-  <CenterContainer top>
+  <CenterContainer addTop>
     <NoRidesImage />
     <NoRidesListContainer>
       {i18n.t('activityPage.noActivity')}
@@ -194,4 +177,15 @@ export const DayTitleContainer = styled.View`
   justify-content: space-between;
   padding: 15px;
   background-color: white;
+`;
+
+export const RideViewTitleContainer = styled.View`
+`;
+
+export const DriverCardContainer = styled.View`
+padding-left: 20px;
+`;
+
+export const StopPointsVerticalViewContainer = styled.View`
+padding: 0 20px;
 `;

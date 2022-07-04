@@ -8,7 +8,7 @@ import { STOP_POINT_TYPES } from '../../../lib/commonTypes';
 import { DropoffIconMarker, PickupIconMarker } from '../marker';
 import { MarkerTitle } from './styled';
 import i18n from '../../../I18n';
-import getOrdinal from '../getOrdinal';
+import { getOrdinal } from '../../../lib/ride/utils';
 
 const mapStyle = {
   ...StyleSheet.absoluteFillObject,
