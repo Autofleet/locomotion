@@ -169,9 +169,9 @@ export default React.forwardRef(({
   };
 
   const precedingStopPoints = getCurrentStopPoint(stopPoints).precedingStops;
-
-  const polylineList = rideStopPoints && getSubLineStringAfterLocationFromDecodedPolyline(
-    polyline.decode(getCurrentStopPoint(stopPoints).polyline),
+  const hasRide = ride && ride.vehicle && ride.vehicle.location && rideStopPoints;
+  const polylineList = hasRide && getCurrentStopPoint(rideStopPoints).polyline && getSubLineStringAfterLocationFromDecodedPolyline(
+    polyline.decode(getCurrentStopPoint(rideStopPoints).polyline),
     { latitude: ride.vehicle.location.lat, longitude: ride.vehicle.location.lng },
   ).map(p => ({ latitude: p[0], longitude: p[1] }));
 
@@ -219,17 +219,17 @@ export default React.forwardRef(({
         customMapStyle={isDarkMode ? mapDarkMode : undefined}
         {...mapSettings}
       >
-        {rideStopPoints && (
+        {hasRide && (
         <AvailabilityVehicle
           location={ride.vehicle.location}
           id={ride.vehicle.id}
           key={ride.vehicle.id}
         />
         )}
-        {rideStopPoints && !!precedingStopPoints.length
+        {hasRide && !!(precedingStopPoints || []).length
           && precedingStopPoints.map(sp => <PrecedingStopPointMarker key={sp.id} stopPoint={sp} />)
         }
-        {rideStopPoints && (
+        {rideStopPoints && polylineList && (
           <Polyline
             strokeColor={primaryColor}
             strokeWidth={7}
