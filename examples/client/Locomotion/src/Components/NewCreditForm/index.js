@@ -48,7 +48,7 @@ const NewCreditForm = ({ onDone, canSkip = false, PageText }) => {
   };
 
   return (
-    <ScrollView>
+    <ScrollView keyboardShouldPersistTaps="handle">
       <CreditForm>
         <PageText />
         <MainCardForm
