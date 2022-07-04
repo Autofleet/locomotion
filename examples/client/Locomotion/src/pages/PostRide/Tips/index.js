@@ -120,7 +120,7 @@ const Tips = ({
   } = useContext(BottomSheetContext);
 
   useEffect(() => {
-    setSnapPointsState(['70%', '100%']);
+    setSnapPointsState(SNAP_POINT_STATES.CUSTOM_TIP);
   }, []);
 
 
@@ -147,9 +147,8 @@ const Tips = ({
 
     calculatedTip = customTip || selectedTip;
     if (isPercentage) {
-      calculatedTip = ridePrice * (customTip || selectedTip) / 100;
+      calculatedTip = ridePrice * (calculatedTip) / 100;
     }
-
 
     return calculatedTip.toFixed(2);
   };
@@ -157,9 +156,6 @@ const Tips = ({
   useEffect(() => {
     onSelectTip(calculateTipAmount());
   }, [selectedTip, customTip]);
-
-
-  console.log('serviceDisplayPrice', serviceDisplayPrice);
 
   return (
     <>

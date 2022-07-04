@@ -4,7 +4,7 @@ import propsTypes from 'prop-types';
 import Loader from '../Loader';
 import { ButtonTextContainer, StyledButton, SubmitButtonText } from './styled';
 
-const RoundedButton = ({
+const SelectableButton = ({
   onPress,
   style,
   selected,
@@ -46,12 +46,12 @@ const RoundedButton = ({
   </StyledButton>
 );
 
-RoundedButton.defaultProps = {
+SelectableButton.defaultProps = {
   selected: false,
 };
 
-RoundedButton.propTypes = {
+SelectableButton.propTypes = {
   selected: propsTypes.bool,
 };
 
-export default RoundedButton;
+export default SelectableButton;

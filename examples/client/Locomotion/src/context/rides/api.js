@@ -25,10 +25,6 @@ export const createOfferApi = async (body) => {
   return data;
 };
 
-export const cancelRideApi = async () => {
-  await network.post('api/v1/me/rides/cancel-active-ride');
-};
-
 export const patchRide = async (rideId, data) => {
   await network.patch(`api/v1/rides/${rideId}`, data);
 };

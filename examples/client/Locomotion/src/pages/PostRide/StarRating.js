@@ -16,6 +16,7 @@ const Star = (props) => {
 };
 
 const StarRating = ({ onUpdate }) => {
+  const starsArray = [1, 2, 3, 4, 5];
   const [rating, setRating] = useState(null);
 
   const updateRating = async (rate) => {
@@ -28,11 +29,7 @@ const StarRating = ({ onUpdate }) => {
 
   return (
     <SummaryStars>
-      <Star isOn={rating >= 1} onPress={() => updateRating(1)} />
-      <Star isOn={rating >= 2} onPress={() => updateRating(2)} />
-      <Star isOn={rating >= 3} onPress={() => updateRating(3)} />
-      <Star isOn={rating >= 4} onPress={() => updateRating(4)} />
-      <Star isOn={rating >= 5} onPress={() => updateRating(5)} />
+      {starsArray.map(starValue => (<Star isOn={rating >= starValue} onPress={() => updateRating(starValue)} />))}
     </SummaryStars>
   );
 };

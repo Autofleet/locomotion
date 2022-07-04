@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import { useBottomSheet } from '@gorhom/bottom-sheet';
 import * as yup from 'yup';
 import i18n from '../../../I18n';
-import { TextInputWithIcon } from '../../../Components/TextInput';
+import TextInputWithIcon from '../../../Components/TextInputWithIcon';
 import RoundedButton from '../../../Components/RoundedButton';
 
 const Container = styled.View`
@@ -50,17 +50,21 @@ const ErrorText = styled.Text`
   color: #f35657;
 
 `;
+
+const ButtonsContainer = styled.View`
+  flex: 1;
+  padding-right: 10px;
+`;
+
+const numberSchema = yup.number().required().positive().transform(value => value);
 const isValidNumber = async (number) => {
   try {
     const newNumber = await numberSchema.validate(number);
     return newNumber;
-    return true;
   } catch (e) {
     return false;
   }
 };
-const numberSchema = yup.number().required().positive()
-  .transform(value => value);
 
 const Tips = ({
   isPercentage,
@@ -151,12 +155,12 @@ const Tips = ({
       <DetailsContainer>
 
         <ErrorContainer>
-          {!isValid && isValid !== null ? <ErrorText>Please enter a valid amount</ErrorText> : null}
+          {!isValid && isValid !== null ? <ErrorText>{i18n.t('postRide.tip.customTip.invalidAmountError')}</ErrorText> : null}
         </ErrorContainer>
       </DetailsContainer>
 
       <DetailsContainer style={{ marginTop: 15 }}>
-        <View style={{ flex: 1, paddingRight: 10 }}>
+        <ButtonsContainer>
           <RoundedButton
             type="confirm"
             hollow
@@ -168,8 +172,8 @@ const Tips = ({
             {i18n.t('postRide.tip.customTip.cancel')}
 
           </RoundedButton>
-        </View>
-        <View style={{ flex: 1, paddingLeft: 10 }}>
+        </ButtonsContainer>
+        <ButtonsContainer>
           <RoundedButton
             type="confirm"
             hollow={false}
@@ -180,7 +184,7 @@ const Tips = ({
           >
             {i18n.t('postRide.tip.customTip.submit')}
           </RoundedButton>
-        </View>
+        </ButtonsContainer>
 
       </DetailsContainer>
 

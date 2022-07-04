@@ -301,7 +301,8 @@
                 "subTitle": "Enter other amount",
                 "submit": "Set",
                 "cancel": "Cancel",
-                "inputPlaceholder":"amount..."
+                "inputPlaceholder":"amount...",
+                "invalidAmountError": "Please enter a valid amount"
             }
         }
     },

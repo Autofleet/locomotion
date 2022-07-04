@@ -1,10 +1,5 @@
-import React from 'react';
-import {
-  View, Text, Image, TouchableOpacity,
-} from 'react-native';
+import { View } from 'react-native';
 import styled from 'styled-components';
-import xIcon from '../../assets/x.png';
-import Button from '../../Components/Button';
 
 
 export const SummaryStarsTitle = styled.Text`
@@ -53,7 +48,9 @@ export const RatingContainer = styled(View)`
 
 export const TipsContainer = styled(View)`
   padding: 30px;
-  flex: 1;
+  z-Index: 5;
+  elevation: 5;
+  flex: 2;
 `;
 
 export const SubmitContainer = styled(View)`

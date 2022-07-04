@@ -6,7 +6,7 @@ export const createServiceEstimations = async (stopPoints) => {
     return data;
   } catch (e) {
     console.error(e);
-    throw new Error(e);
+    throw e;
   }
 };
 
@@ -16,7 +16,7 @@ export const getServices = async () => {
     return data;
   } catch (e) {
     console.error(e);
-    throw new Error(e);
+    throw e;
   }
 };
 
@@ -26,7 +26,7 @@ export const getService = async (serviceId) => {
     return data;
   } catch (e) {
     console.error(e);
-    throw new Error(e);
+    throw e;
   }
 };
 
@@ -41,7 +41,7 @@ export const patchRide = async (rideId, newData) => {
     return data;
   } catch (e) {
     console.error(e);
-    throw new Error(e);
+    throw e;
   }
 };
 

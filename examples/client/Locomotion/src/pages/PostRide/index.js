@@ -88,12 +88,7 @@ const PostRidePage = ({ menuSide }) => {
           <StarRating onUpdate={onRatingUpdate} />
         </RatingContainer>
 
-        <TipsContainer style={{
-          zIndex: 5,
-          elevation: 5,
-          flex: 2,
-        }}
-        >
+        <TipsContainer>
           <Tips
             tipSettings={tipSettings}
             onSelectTip={onSelectTip}
