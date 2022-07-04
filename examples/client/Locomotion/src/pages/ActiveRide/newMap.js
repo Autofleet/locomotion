@@ -41,14 +41,15 @@ export default React.forwardRef(({
     currentBsPage,
     initGeoService,
   } = useContext(RideStateContextContext);
-  const rideDispatched = (ride || {}).state === RIDE_STATES.DISPATCHED;
   const isMainPage = currentBsPage === BS_PAGES.ADDRESS_SELECTOR;
   const isConfirmPickupPage = currentBsPage === BS_PAGES.CONFIRM_PICKUP;
   const isChooseLocationOnMap = [BS_PAGES.CONFIRM_PICKUP, BS_PAGES.SET_LOCATION_ON_MAP].includes(currentBsPage);
   const {
     requestStopPoints, saveSelectedLocation, reverseLocationGeocode, ride,
   } = useContext(RidePageContext);
+  const rideDispatched = (ride || {}).state === RIDE_STATES.DISPATCHED;
   const [rideStopPoints, setRideStopPoints] = useState();
+  const rideWithStopPoints = rideDispatched && rideStopPoints;
   const [mapRegion, setMapRegion] = useState({
     latitudeDelta: 0.015,
     longitudeDelta: 0.015,
@@ -155,11 +156,9 @@ export default React.forwardRef(({
   useEffect(() => {
     if (rideDispatched) {
       addStreetAddressToStopPoints();
-    } else {
-      setRideStopPoints(null);
     }
   }, [ride.stopPoints]);
-
+  console.log(ride);
   const stopPoints = rideStopPoints || requestStopPoints || [];
 
   const getCurrentStopPoint = (sps) => {
@@ -170,7 +169,7 @@ export default React.forwardRef(({
 
   const precedingStopPoints = getCurrentStopPoint(stopPoints).precedingStops;
 
-  const polylineList = rideDispatched && getSubLineStringAfterLocationFromDecodedPolyline(
+  const polylineList = rideWithStopPoints && getSubLineStringAfterLocationFromDecodedPolyline(
     polyline.decode(getCurrentStopPoint(stopPoints).polyline),
     { latitude: ride.vehicle.location.lat, longitude: ride.vehicle.location.lng },
   ).map(p => ({ latitude: p[0], longitude: p[1] }));
@@ -219,17 +218,17 @@ export default React.forwardRef(({
         customMapStyle={isDarkMode ? mapDarkMode : undefined}
         {...mapSettings}
       >
-        {rideDispatched && (
+        {rideWithStopPoints && (
         <AvailabilityVehicle
           location={ride.vehicle.location}
           id={ride.vehicle.id}
           key={ride.vehicle.id}
         />
         )}
-        {rideDispatched && !!precedingStopPoints.length
+        {rideWithStopPoints && !!precedingStopPoints.length
           && precedingStopPoints.map(sp => <PrecedingStopPointMarker key={sp.id} stopPoint={sp} />)
         }
-        {rideDispatched && polylineList && (
+        {rideWithStopPoints && (
           <Polyline
             strokeColor={primaryColor}
             strokeWidth={7}

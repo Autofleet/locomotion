@@ -113,6 +113,7 @@ const RidePage = ({ mapSettings }) => {
 
   useEffect(() => {
     if (currentBsPage === BS_PAGES.ACTIVE_RIDE && ride.state === RIDE_STATES.CANCELED) {
+      setServiceEstimations(null);
       changeBsPage(BS_PAGES.ADDRESS_SELECTOR);
     }
   }, [ride]);
