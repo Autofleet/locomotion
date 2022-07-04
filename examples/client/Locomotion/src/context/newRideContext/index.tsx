@@ -169,16 +169,24 @@ const RidePageContextProvider = ({ children }: {
   };
 
   const getServiceEstimations = async () => {
+    setIsLoading(true);
     setIsReadyForSubmit(false);
-    const formattedStopPoints = formatStopPointsForEstimations(requestStopPoints);
-    const [estimations, services] = await Promise.all([
-      rideApi.createServiceEstimations(formattedStopPoints),
-      rideApi.getServices(),
-    ]);
-    const tags = getEstimationTags(estimations);
-    const formattedEstimations = formatEstimations(services, estimations, tags);
-    setChosenService(formattedEstimations.find((e: any) => e.eta));
-    setServiceEstimations(formattedEstimations);
+    try {
+      const formattedStopPoints = formatStopPointsForEstimations(requestStopPoints);
+      const [estimations, services] = await Promise.all([
+        rideApi.createServiceEstimations(formattedStopPoints),
+        rideApi.getServices(),
+      ]);
+      const tags = getEstimationTags(estimations);
+      const formattedEstimations = formatEstimations(services, estimations, tags);
+      setChosenService(formattedEstimations.find((e: any) => e.eta));
+      setServiceEstimations(formattedEstimations);
+    } catch (e) {
+      setServiceRequestFailed(true);
+      setIsReadyForSubmit(false);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const validateRequestedStopPoints = async (reqSps: any[]) => {
@@ -426,24 +434,15 @@ const RidePageContextProvider = ({ children }: {
 
   const tryServiceEstimations = async () => {
     try {
-      setIsLoading(true);
       await getServiceEstimations();
       intervalRef.current = setInterval(async () => {
         await getServiceEstimations();
       }, (SERVICE_ESTIMATIONS_INTERVAL_IN_SECONDS * 1000));
     } catch (e) {
       setServiceRequestFailed(true);
-      setIsLoading(false);
       setIsReadyForSubmit(false);
-      console.error(e);
     }
   };
-
-  useEffect(() => {
-    if (serviceEstimations) {
-      setIsLoading(false);
-    }
-  }, [serviceEstimations]);
 
   useEffect(() => {
     if (isReadyForSubmit) {
