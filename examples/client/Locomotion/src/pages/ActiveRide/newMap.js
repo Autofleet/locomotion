@@ -217,6 +217,13 @@ export default React.forwardRef(({
         customMapStyle={isDarkMode ? mapDarkMode : undefined}
         {...mapSettings}
       >
+        {rideStopPoints && (
+        <AvailabilityVehicle
+          location={ride.vehicle.location}
+          id={ride.vehicle.id}
+          key={ride.vehicle.id}
+        />
+        )}
         {rideStopPoints && !!precedingStopPoints.length
           && precedingStopPoints.map(sp => <PrecedingStopPointMarker key={sp.id} stopPoint={sp} />)
         }
