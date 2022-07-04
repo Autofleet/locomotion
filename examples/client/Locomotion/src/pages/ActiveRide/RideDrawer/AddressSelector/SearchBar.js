@@ -166,22 +166,11 @@ const SearchBar = ({
   });
 
 
-  /*   useEffect(() => {
-    if (isExpanded) {
-      LayoutAnimation.configureNext(
-        LayoutAnimation.Presets.spring,
-      );
-    } else {
-      LayoutAnimation.configureNext(LayoutAnimation.create(
-        200,
-        LayoutAnimation.Presets.easeOut,
-        LayoutAnimation.Properties.scaleXY,
-      ));
-      if (selectedInputTarget) {
-        selectedInputTarget.blur();
-      }
+  useEffect(() => {
+    if (selectedInputTarget) {
+      selectedInputTarget.blur();
     }
-  }, [isExpanded]); */
+  }, [isExpanded]);
 
   return (
     <View
