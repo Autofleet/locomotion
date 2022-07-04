@@ -1,9 +1,8 @@
 import React from 'react';
-import { Text } from 'react-native';
+import { Text, View } from 'react-native';
 import styled from 'styled-components';
 import { BottomSheetTextInput } from '@gorhom/bottom-sheet';
 
-import { View } from 'react-native';
 import { ERROR_COLOR } from '../../context/theme';
 
 const bottomBorderStyles = `
