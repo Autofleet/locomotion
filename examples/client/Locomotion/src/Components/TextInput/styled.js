@@ -34,10 +34,16 @@ export const Input = styled.TextInput.attrs(props => ({
 
 export const BottomSheetInput = styled(BottomSheetTextInput)`
   padding: 0px 8px;
+  padding-right: 30;
   height: 40px;
   ${({ fullBorder, isFocused }) => (fullBorder ? fullBorderStyles(isFocused) : bottomBorderStyles)}
   border-color: ${({ error }) => (error ? ERROR_COLOR : '#333333')};
   color: ${({ error }) => (error ? ERROR_COLOR : '#333333')};
+  flex: 1;
+`;
+
+export const BottomSheetInputContainer = styled(View)`
+  flex-direction: row;
 `;
 
 export const IconContainer = styled(View)`

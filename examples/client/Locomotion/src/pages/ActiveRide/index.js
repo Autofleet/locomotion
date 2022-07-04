@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useRef } from 'react';
 import { useNavigation } from '@react-navigation/native';
+import { RIDE_STATES } from '../../lib/commonTypes';
 import {
   ConfirmPickup, NoPayment, NotAvailableHere, ConfirmingRide, NoAvailableVehicles, ActiveRide,
 } from '../../Components/BsPages';
@@ -38,6 +39,7 @@ const RidePage = ({ mapSettings }) => {
     requestStopPoints,
     requestRide,
     setChosenService,
+    ride,
   } = useContext(RidePageContext);
   const { setSnapPointsState, setIsExpanded, snapPoints } = useContext(BottomSheetContext);
   const {
@@ -109,6 +111,12 @@ const RidePage = ({ mapSettings }) => {
     }
   }, [isLoading]);
 
+  useEffect(() => {
+    if (currentBsPage === BS_PAGES.ACTIVE_RIDE && ride.state === RIDE_STATES.CANCELED) {
+      setServiceEstimations(null);
+      changeBsPage(BS_PAGES.ADDRESS_SELECTOR);
+    }
+  }, [ride]);
   const focusCurrentLocation = async () => {
     const { coords } = await getPosition();
     mapRef.current.animateToRegion({

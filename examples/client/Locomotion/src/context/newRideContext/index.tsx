@@ -452,7 +452,7 @@ const RidePageContextProvider = ({ children }: {
 
   const requestRide = async (): Promise<void> => {
     setRideRequestLoading(true);
-
+    setServiceEstimations(null);
     changeBsPage(BS_PAGES.CONFIRMING_RIDE);
     const rideToCreate = {
       serviceId: chosenService?.id,
