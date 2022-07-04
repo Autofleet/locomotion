@@ -1,9 +1,19 @@
 import React, { useContext, useEffect, useState } from 'react';
-import propsTypes from 'prop-types';
-import Loader from '../Loader';
 import { ButtonTextContainer, StyledButton, SubmitButtonText } from './styled';
 import SvgIcon from '../SvgIcon';
 import { Context as ThemeContext } from '../../context/theme';
+
+interface ButtonProps {
+  type?: string;
+  hollow?: boolean;
+  onPress: (args?: any) => void;
+  disabled?: boolean;
+  useCancelTextButton?: boolean;
+  setLoading?: (state: boolean) => void;
+  style: any;
+  icon: any;
+  children?: any;
+}
 
 const RoundedButton = ({
   onPress,
@@ -14,11 +24,12 @@ const RoundedButton = ({
   type,
   useCancelTextButton,
   icon,
+  children
   ...props
-}) => {
+}: ButtonProps) => {
   const [loadingState, setLoadingState] = useState(false);
   const theme = useContext(ThemeContext);
-  const onPressWithLoading = async (args) => {
+  const onPressWithLoading = async (args: any) => {
     setLoadingState(true);
     await onPress(args);
     return setLoadingState(false);
@@ -57,7 +68,7 @@ const RoundedButton = ({
           type={type}
           useCancelTextButton={useCancelTextButton}
         >
-          {props.children}
+          {children}
         </SubmitButtonText>
       </ButtonTextContainer>
     </StyledButton>
@@ -67,19 +78,10 @@ const RoundedButton = ({
 RoundedButton.defaultProps = {
   type: 'confirm',
   hollow: false,
-  onPress: () => null,
   disabled: false,
   useCancelTextButton: false,
   setLoading: null,
-};
-
-RoundedButton.propTypes = {
-  type: propsTypes.string,
-  hollow: propsTypes.bool,
-  onPress: propsTypes.func,
-  disabled: propsTypes.bool,
-  useCancelTextButton: propsTypes.bool,
-  setLoading: propsTypes.func,
+  children: null,
 };
 
 export default RoundedButton;
