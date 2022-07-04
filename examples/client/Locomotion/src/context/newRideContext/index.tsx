@@ -219,13 +219,13 @@ const RidePageContextProvider = ({ children }: {
   useInterval(async () => {
     if (ride?.id) {
       const rideLoaded = await rideApi.getRide(ride?.id);
+      const formattedRide = await formatRide(rideLoaded);
+      setRide(formattedRide);
       if (ride.state !== rideLoaded.state) {
         changeBsPage(rideLoaded.state === RIDE_STATES.REJECTED
           ? BS_PAGES.NO_AVAILABLE_VEHICLES
           : BS_PAGES.ACTIVE_RIDE);
       }
-      const formattedRide = await formatRide(rideLoaded);
-      setRide(formattedRide);
     }
   }, 5000);
 
@@ -307,9 +307,10 @@ const RidePageContextProvider = ({ children }: {
     }
   };
 
-  const updateRequestSp = (data: any[]) => {
+  const updateRequestSp = (data: any[], index?: number) => {
     const reqSps = [...requestStopPoints];
-    const index = _.isNil(selectedInputIndex) ? requestStopPoints.length - 1 : selectedInputIndex;
+    index = index
+    || (_.isNil(selectedInputIndex) ? requestStopPoints.length - 1 : selectedInputIndex);
     reqSps[index || 0] = {
       ...reqSps[index || 0],
       ...data,

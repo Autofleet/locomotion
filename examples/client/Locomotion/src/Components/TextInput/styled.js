@@ -3,6 +3,7 @@ import { Text } from 'react-native';
 import styled from 'styled-components';
 import { BottomSheetTextInput } from '@gorhom/bottom-sheet';
 
+import { View } from 'react-native';
 import { ERROR_COLOR } from '../../context/theme';
 
 const bottomBorderStyles = `
@@ -33,11 +34,17 @@ export const Input = styled.TextInput.attrs(props => ({
 `;
 
 export const BottomSheetInput = styled(BottomSheetTextInput)`
-    padding: 0px 8px;
-    height: 40px;
-    ${({ fullBorder, isFocused }) => (fullBorder ? fullBorderStyles(isFocused) : bottomBorderStyles)}
-    border-color: ${({ error }) => (error ? ERROR_COLOR : '#333333')};
-    color: ${({ error }) => (error ? ERROR_COLOR : '#333333')};
+  padding: 0px 8px;
+  height: 40px;
+  ${({ fullBorder, isFocused }) => (fullBorder ? fullBorderStyles(isFocused) : bottomBorderStyles)}
+  border-color: ${({ error }) => (error ? ERROR_COLOR : '#333333')};
+  color: ${({ error }) => (error ? ERROR_COLOR : '#333333')};
+`;
+
+export const IconContainer = styled(View)`
+  position: absolute;
+  right: 15;
+  top: 15;
 `;
 
 

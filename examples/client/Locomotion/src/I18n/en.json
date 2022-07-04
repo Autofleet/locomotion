@@ -100,6 +100,7 @@
         "phonePlaceholder": "Phone number",
         "namePlaceholder": "Name",
         "accountInformation": "Account information",
+        "paymentInformation": "Payment information",
         "verified": "Verified",
         "unverified": "Unverified",
         "validations": {

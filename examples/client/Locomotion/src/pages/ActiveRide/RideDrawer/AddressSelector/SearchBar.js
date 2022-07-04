@@ -132,7 +132,7 @@ const SearchBar = ({
               description: text,
               lat: null,
               lng: null,
-            });
+            }, i);
             setSearchTerm(text);
           }}
           fullBorder
@@ -143,6 +143,14 @@ const SearchBar = ({
           }}
           key={`input_${s.id}`}
           autoCorrect={false}
+          clear={() => {
+            updateRequestSp({
+              description: null,
+              lat: null,
+              lng: null,
+            }, i);
+            setSearchTerm(null);
+          }}
         />
       </Row>
     );
