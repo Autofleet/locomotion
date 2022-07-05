@@ -27,7 +27,7 @@ const PaymentButton = ({
   <>
     {brand
       ? <PaymentIcon type={brand} />
-      : <SvgIcon Svg={icon} height={15} width={15} />}
+      : <SvgIcon fill="#38a7fc" Svg={icon} height={15} width={15} />}
     <TimeText>{title}</TimeText>
   </>
 );
