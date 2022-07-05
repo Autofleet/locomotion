@@ -33,8 +33,8 @@ interface UserContextInterface {
   removeChangesToUser: () => Promise<void>,
   verifyEmail: () => Promise<void>,
   getUserFromServer: () => Promise<void>,
-  locationGranted: boolean,
-  setLocationGranted: Dispatch<SetStateAction<boolean>>,
+  locationGranted: boolean | undefined,
+  setLocationGranted: Dispatch<SetStateAction<any>>,
 }
 
 export const UserContext = createContext<UserContextInterface>({
