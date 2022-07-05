@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import {
   Image, Linking, Text, View,
 } from 'react-native';
@@ -168,16 +168,26 @@ BsPage.defaultProps = {
 
 export default BsPage;
 
-export const LocationRequest = (props: any) => (
-  <BsPage
-    TitleText={i18n.t('bottomSheetContent.locationRequest.titleText')}
-    ButtonText={i18n.t('bottomSheetContent.locationRequest.buttonText')}
-    SecondaryButtonText={i18n.t('bottomSheetContent.locationRequest.secondaryButtonText')}
-    SubTitleText={i18n.t('bottomSheetContent.locationRequest.subTitleText')}
-    onButtonPress={Linking.openSettings}
-    {...props}
-  />
-);
+export const LocationRequest = (props: any) => {
+  const [operation, setOperation] = useState();
+
+  const getOperationName = async () => {
+    // get operation name
+  };
+  useEffect(() => {
+    getOperationName();
+  }, []);
+  return (
+    <BsPage
+      TitleText={i18n.t('bottomSheetContent.locationRequest.titleText')}
+      ButtonText={i18n.t('bottomSheetContent.locationRequest.buttonText')}
+      SecondaryButtonText={i18n.t('bottomSheetContent.locationRequest.secondaryButtonText')}
+      SubTitleText={i18n.t('bottomSheetContent.locationRequest.subTitleText', { operation })}
+      onButtonPress={Linking.openSettings}
+      {...props}
+    />
+  );
+};
 
 export const NotAvailableHere = (props: any) => (
   <BsPage
