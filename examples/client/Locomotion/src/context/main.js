@@ -7,7 +7,7 @@ import ThemeProvider from './theme';
 import UserContextProvider from './user';
 import OnboardingContextProvider from './onboarding';
 import { StateProvider } from './state';
-
+import BottomSheetContextProvider from './bottomSheetContext';
 
 export const MainProvider = ({ children, LoginPage, i18n }) => {
   const initialState = null;
@@ -37,19 +37,21 @@ export const MainProvider = ({ children, LoginPage, i18n }) => {
 
   return (
     <StateProvider initialState={initialState} reducer={reducer}>
-      <SettingsContext.Provider>
-        <PaymentsContext.Provider>
-          <ThemeProvider>
-            <UserContextProvider>
-              <OnboardingContextProvider>
-                <RideHistoryContextProvider>
-                  {children}
-                </RideHistoryContextProvider>
-              </OnboardingContextProvider>
-            </UserContextProvider>
-          </ThemeProvider>
-        </PaymentsContext.Provider>
-      </SettingsContext.Provider>
+      <BottomSheetContextProvider>
+        <SettingsContext.Provider>
+          <PaymentsContext.Provider>
+            <ThemeProvider>
+              <UserContextProvider>
+                <OnboardingContextProvider>
+                  <RideHistoryContextProvider>
+                    {children}
+                  </RideHistoryContextProvider>
+                </OnboardingContextProvider>
+              </UserContextProvider>
+            </ThemeProvider>
+          </PaymentsContext.Provider>
+        </SettingsContext.Provider>
+      </BottomSheetContextProvider>
     </StateProvider>
   );
 };
