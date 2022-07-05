@@ -3,6 +3,7 @@ import React, {
 } from 'react';
 import Config from 'react-native-config';
 import _ from 'lodash';
+import { UserContext } from '../user';
 import { getPosition } from '../../services/geo';
 import { getPlaces, getGeocode, getPlaceDetails } from './google-api';
 import StorageService from '../../services/storage';
@@ -124,6 +125,7 @@ let SERVICE_ESTIMATIONS_INTERVAL_IN_SECONDS: number;
 const RidePageContextProvider = ({ children }: {
   children: any
 }) => {
+  const { locationGranted } = useContext(UserContext);
   const { checkStopPointsInTerritory, changeBsPage } = useContext(RideStateContextContext);
   const [requestStopPoints, setRequestStopPoints] = useState(INITIAL_STOP_POINTS);
   const [currentGeocode, setCurrentGeocode] = useState<any | null>(null);
@@ -219,7 +221,6 @@ const RidePageContextProvider = ({ children }: {
   };
 
   useEffect(() => {
-    initCurrentLocation();
     getServiceEstimationsFetchingInterval();
     loadActiveRide();
   }, []);
@@ -290,9 +291,15 @@ const RidePageContextProvider = ({ children }: {
   };
 
   const initCurrentLocation = async () => {
-    const locationData = await getCurrentLocationAddress();
-    setCurrentGeocode(locationData);
+    if (locationGranted) {
+      const locationData = await getCurrentLocationAddress();
+      setCurrentGeocode(locationData);
+    }
   };
+
+  useEffect(() => {
+    initCurrentLocation();
+  }, [locationGranted]);
 
   const initSps = async () => {
     const currentAddress = currentGeocode || await getCurrentLocationAddress();
@@ -337,10 +344,12 @@ const RidePageContextProvider = ({ children }: {
   };
 
   const loadAddress = async (input: any) => {
-    const currentCoords = await getCurrentLocation();
-    let location = null;
+    let currentCoords;
+    if (locationGranted) {
+      currentCoords = await getCurrentLocation();
+    }
     try {
-      location = `${currentCoords.latitude},${currentCoords.longitude}`;
+      const location = currentCoords ? `${currentCoords.latitude},${currentCoords.longitude}` : null;
       const data = await getPlaces({
         input,
         region: 'il',
@@ -394,7 +403,7 @@ const RidePageContextProvider = ({ children }: {
   const resetSearchResults = () => setSearchResults(null);
 
   const getCurrentLocation = async () => {
-    const location = await getPosition();
+    const location = await getPosition(changeBsPage);
     return location.coords;
   };
 

@@ -5,6 +5,7 @@ import polyline from '@mapbox/polyline';
 import { Platform, StyleSheet } from 'react-native';
 import MapView, { Polygon, Polyline } from 'react-native-maps';
 import Config from 'react-native-config';
+import { UserContext } from '../../context/user';
 import { RidePageContext } from '../../context/newRideContext';
 import { RideStateContextContext } from '../../context';
 import { getPosition } from '../../services/geo';
@@ -29,6 +30,7 @@ const MAP_EDGE_PADDING = {
 export default React.forwardRef(({
   mapSettings,
 }, ref) => {
+  const { setLocationGranted } = useContext(UserContext);
   const { isDarkMode, primaryColor } = useContext(ThemeContext);
   const {
     availabilityVehicles,
@@ -40,6 +42,7 @@ export default React.forwardRef(({
     territory,
     currentBsPage,
     initGeoService,
+    changeBsPage,
   } = useContext(RideStateContextContext);
   const isMainPage = currentBsPage === BS_PAGES.ADDRESS_SELECTOR;
   const isConfirmPickupPage = currentBsPage === BS_PAGES.CONFIRM_PICKUP;
@@ -76,7 +79,7 @@ export default React.forwardRef(({
 
   const initialLocation = async () => {
     try {
-      const geoData = await getPosition();
+      const geoData = await getPosition(changeBsPage, setLocationGranted);
       setMapRegion(oldMapRegion => ({
         ...oldMapRegion,
         ...geoData.coords,
@@ -158,7 +161,7 @@ export default React.forwardRef(({
       addStreetAddressToStopPoints();
     }
   }, [ride.stopPoints]);
-  console.log(ride);
+
   const stopPoints = rideStopPoints || requestStopPoints || [];
 
   const getCurrentStopPoint = (sps) => {

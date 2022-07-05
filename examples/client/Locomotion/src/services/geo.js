@@ -4,6 +4,7 @@ import Config from 'react-native-config';
 import RNLocation from 'react-native-location';
 import Geolocation from '@react-native-community/geolocation';
 import moment from 'moment';
+import { BS_PAGES } from '../context/ridePageStateContext/utils';
 
 const currentLocationNative = async () => {
   if (Platform.OS === 'android') {
@@ -113,10 +114,14 @@ const DEFAULT_COORDS = {
     longitude: parseFloat(Config.DEFAULT_LONGITUDE),
   },
 };
-export const getPosition = async () => {
+export const getPosition = async (changeBsPage, setUserPermissionState) => {
   try {
     const granted = await GeoService.checkPermission();
+    if (setUserPermissionState) {
+      setUserPermissionState(granted);
+    }
     if (!granted) {
+      changeBsPage(BS_PAGES.LOCATION_REQUEST);
       return DEFAULT_COORDS;
     }
     return GeoService.currentLocation();

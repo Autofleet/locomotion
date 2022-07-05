@@ -1,4 +1,6 @@
-import React, { createContext, useEffect, useState } from 'react';
+import React, {
+  createContext, Dispatch, SetStateAction, useEffect, useState,
+} from 'react';
 import { StorageService } from '../../services';
 import {
   getUserDetails, loginVert, sendEmailVerification, updateUser,
@@ -30,7 +32,9 @@ interface UserContextInterface {
   onVert: (code: string) => Promise<boolean | User>,
   removeChangesToUser: () => Promise<void>,
   verifyEmail: () => Promise<void>,
-  getUserFromServer: () => Promise<void>
+  getUserFromServer: () => Promise<void>,
+  locationGranted: boolean,
+  setLocationGranted: Dispatch<SetStateAction<boolean>>,
 }
 
 export const UserContext = createContext<UserContextInterface>({
@@ -43,10 +47,13 @@ export const UserContext = createContext<UserContextInterface>({
   removeChangesToUser: async () => undefined,
   verifyEmail: async () => undefined,
   getUserFromServer: async () => undefined,
+  locationGranted: false,
+  setLocationGranted: () => undefined,
 });
 
 const UserContextProvider = ({ children }: { children: any }) => {
   const usePayments = PaymentsContext.useContainer();
+  const [locationGranted, setLocationGranted] = useState();
   const [user, setUser] = useState<User | null>(null);
 
   const getUserFromServer = () => getUserDetails();
@@ -133,6 +140,8 @@ const UserContextProvider = ({ children }: { children: any }) => {
         removeChangesToUser,
         verifyEmail,
         getUserFromServer,
+        locationGranted,
+        setLocationGranted,
       }}
     >
       {children}

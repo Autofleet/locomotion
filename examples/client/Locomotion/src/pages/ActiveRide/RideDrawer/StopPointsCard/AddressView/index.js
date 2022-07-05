@@ -1,8 +1,9 @@
 import React, {
-  useState, useEffect,
+  useState, useEffect, useContext,
 } from 'react';
 import { ScrollView, View } from 'react-native';
 import Config from 'react-native-config';
+import { UserContext } from '../../../../../context/user';
 import { getPosition } from '../../../../../services/geo';
 
 import I18n from '../../../../../I18n';
@@ -18,6 +19,7 @@ import {
   StationIcon,
 } from './styled';
 import { getLocation, getPlacesByLocation } from '../../../../../context/places/api';
+import { RideStateContextContext } from '../../../../..';
 
 export default (props) => {
   const [searchText, setSearchText] = useState(
@@ -25,14 +27,17 @@ export default (props) => {
       && props.requestStopPoints[props.type].description,
   );
   const [addressListItems, setAddressListItems] = useState(null);
+  const { setLocationGranted } = useContext(UserContext);
   const [coords, setCoords] = useState({});
-
+  const {
+    changeBsPage,
+  } = useContext(RideStateContextContext);
   useEffect(() => {
     initCurrentLocation();
   }, []);
 
   const initCurrentLocation = async () => {
-    const { coords: newCord } = await getPosition();
+    const { coords: newCord } = await getPosition(changeBsPage, setLocationGranted);
     setCoords(newCord);
   };
 

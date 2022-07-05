@@ -1,7 +1,9 @@
-import React, { createContext, useEffect, useState } from 'react';
+import React, {
+  createContext, useEffect, useState, useContext,
+} from 'react';
 import { useIsFocused } from '@react-navigation/native';
 import useInterval from '../../lib/useInterval';
-import { getPosition } from '../../services/geo';
+import geo, { getPosition } from '../../services/geo';
 import * as availabilityApi from './api';
 
 
@@ -28,22 +30,25 @@ const AvailabilityContextProvider = ({ children }: { children: any }) => {
   const [availabilityVehicles, setAvailabilityVehicles] = useState<AvailabilityVehicles[]>([]);
 
   const getVehicles = async () => {
-    try {
-      let coords;
+    const granted = await geo.checkPermission();
+    if (granted) {
       try {
-        ({ coords } = await getPosition());
+        let coords;
+        try {
+          ({ coords } = await getPosition());
+        } catch (e) {
+          console.error('no pos', e);
+        }
+        const {
+          latitude: lat, longitude: lng,
+        } = coords || {};
+        if (lat && lng) {
+          const { vehicles } = await availabilityApi.getVehicles(lat, lng);
+          await setAvailabilityVehicles(vehicles);
+        }
       } catch (e) {
-        console.error('no pos', e);
+        console.error('setAvailabilityVehicles', e);
       }
-      const {
-        latitude: lat, longitude: lng,
-      } = coords || {};
-      if (lat && lng) {
-        const { vehicles } = await availabilityApi.getVehicles(lat, lng);
-        await setAvailabilityVehicles(vehicles);
-      }
-    } catch (e) {
-      console.error('setAvailabilityVehicles', e);
     }
   };
 

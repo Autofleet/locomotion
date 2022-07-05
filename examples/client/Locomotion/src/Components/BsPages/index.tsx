@@ -1,5 +1,7 @@
 import React, { useContext, useEffect } from 'react';
-import { Image, Text, View } from 'react-native';
+import {
+  Image, Linking, Text, View,
+} from 'react-native';
 import styled from 'styled-components';
 import { useBottomSheet } from '@gorhom/bottom-sheet';
 import SvgIcon from '../SvgIcon';
@@ -34,7 +36,8 @@ const SecondaryButton = styled(Button).attrs({ noBackground: true })`
 
 const Container = styled(View)`
   width: 100%;
-  padding: 10px 20px;
+  padding: 10px 20px 30px;
+  flex: 1;
 `;
 
 const MainContent = styled(View)`
@@ -42,7 +45,6 @@ const MainContent = styled(View)`
   width: 100%;
   display: flex;
   flex-direction: row;
-  margin-bottom: 60px;
 `;
 
 const CardText = styled(View)`
@@ -159,6 +161,17 @@ BsPage.defaultProps = {
 };
 
 export default BsPage;
+
+export const LocationRequest = (props: any) => (
+  <BsPage
+    TitleText={i18n.t('bottomSheetContent.locationRequest.titleText')}
+    ButtonText={i18n.t('bottomSheetContent.locationRequest.buttonText')}
+    SecondaryButtonText={i18n.t('bottomSheetContent.locationRequest.secondaryButtonText')}
+    SubTitleText={i18n.t('bottomSheetContent.locationRequest.subTitleText')}
+    onButtonPress={Linking.openSettings}
+    {...props}
+  />
+);
 
 export const NotAvailableHere = (props: any) => (
   <BsPage
