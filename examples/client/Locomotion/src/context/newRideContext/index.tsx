@@ -239,10 +239,6 @@ const RidePageContextProvider = ({ children }: {
   }, 5000);
 
   useEffect(() => {
-    initSps();
-  }, [currentGeocode]);
-
-  useEffect(() => {
     validateRequestedStopPoints(requestStopPoints);
   }, [requestStopPoints]);
 
@@ -322,6 +318,12 @@ const RidePageContextProvider = ({ children }: {
       setRequestStopPoints(sps);
     }
   };
+
+  useEffect(() => {
+    if (requestStopPoints.filter((sp => sp.lat)).length <= 1) {
+      initSps();
+    }
+  }, [currentGeocode]);
 
   const updateRequestSp = (data: any[], index?: number) => {
     const reqSps = [...requestStopPoints];

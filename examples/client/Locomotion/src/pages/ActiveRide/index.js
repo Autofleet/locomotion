@@ -73,10 +73,13 @@ const RidePage = ({ mapSettings }) => {
         <AddressSelector />
       );
     }
-    return <RideOptions />;
+    return changeBsPage(BS_PAGES.SERVICE_ESTIMATIONS);
   };
 
   const BS_PAGE_TO_COMP = {
+    [BS_PAGES.SERVICE_ESTIMATIONS]: () => (
+      <RideOptions />
+    ),
     [BS_PAGES.LOCATION_REQUEST]: () => (
       <LocationRequest
         onSecondaryButtonPress={goBackToAddress}
@@ -149,10 +152,13 @@ const RidePage = ({ mapSettings }) => {
       && locationGranted !== undefined
       && currentBsPage === BS_PAGES.ADDRESS_SELECTOR) {
       changeBsPage(BS_PAGES.LOCATION_REQUEST);
+    } if (locationGranted) {
+      focusCurrentLocation();
     }
   }, [locationGranted]);
 
   useEffect(() => {
+    checkLocationPermission();
     const subscription = AppState.addEventListener('change', (nextAppState) => {
       if (
         nextAppState === 'active'

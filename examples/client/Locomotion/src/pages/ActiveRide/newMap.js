@@ -30,7 +30,6 @@ const MAP_EDGE_PADDING = {
 export default React.forwardRef(({
   mapSettings,
 }, ref) => {
-  const { setLocationGranted } = useContext(UserContext);
   const { isDarkMode, primaryColor } = useContext(ThemeContext);
   const {
     availabilityVehicles,
@@ -99,13 +98,6 @@ export default React.forwardRef(({
       initLocation();
     }
   }, [ref.current]);
-
-
-  useEffect(() => {
-    if (isUserLocationFocused) {
-      focusCurrentLocation();
-    }
-  }, [mapRegion]);
 
   useEffect(() => {
     if (currentBsPage === BS_PAGES.CONFIRM_PICKUP) {
