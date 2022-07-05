@@ -35,7 +35,10 @@ const AvailabilityContextProvider = ({ children }: { children: any }) => {
       try {
         let coords;
         try {
-          ({ coords } = await getPosition());
+          const location = await getPosition();
+          if (location) {
+            ({ coords } = location);
+          }
         } catch (e) {
           console.error('no pos', e);
         }

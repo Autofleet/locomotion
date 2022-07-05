@@ -8,7 +8,7 @@ import Config from 'react-native-config';
 import { UserContext } from '../../context/user';
 import { RidePageContext } from '../../context/newRideContext';
 import { RideStateContextContext } from '../../context';
-import { getPosition } from '../../services/geo';
+import { DEFAULT_COORDS, getPosition } from '../../services/geo';
 import { LocationMarker, LocationMarkerContainer } from './styled';
 import mapDarkMode from '../../assets/mapDarkMode.json';
 import { Context as ThemeContext, THEME_MOD } from '../../context/theme';
@@ -78,10 +78,10 @@ export default React.forwardRef(({
 
   const initialLocation = async () => {
     try {
-      const geoData = await getPosition(changeBsPage);
+      const geoData = await getPosition();
       setMapRegion(oldMapRegion => ({
         ...oldMapRegion,
-        ...geoData.coords,
+        ...(geoData || DEFAULT_COORDS).coords,
       }));
     } catch (e) {
       console.log('Init location error', e);

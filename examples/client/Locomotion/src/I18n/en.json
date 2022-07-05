@@ -341,7 +341,7 @@
         "titleText": "Update location services",
         "buttonText": "Turn on location permissions",
         "secondaryButtonText": "Enter pickup location",
-        "subTitleText": "{{operation}} meeds your location to find nearby rides"
+        "subTitleText": "{{operation}} needs your location to find nearby rides"
     },
     "confirmingRide": {
         "titleText": "Confirming your ride"

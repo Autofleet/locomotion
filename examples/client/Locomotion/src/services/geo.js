@@ -108,22 +108,21 @@ export default GeoService;
 
 export const { decodeGmPath } = Geo;
 
-const DEFAULT_COORDS = {
+export const DEFAULT_COORDS = {
   coords: {
     latitude: parseFloat(Config.DEFAULT_LATITUDE),
     longitude: parseFloat(Config.DEFAULT_LONGITUDE),
   },
 };
-export const getPosition = async (changeBsPage) => {
+export const getPosition = async () => {
   try {
     const granted = await GeoService.checkPermission();
     if (!granted) {
-      changeBsPage(BS_PAGES.LOCATION_REQUEST);
-      return DEFAULT_COORDS;
+      return false;
     }
     return GeoService.currentLocation();
   } catch (e) {
     console.error('Error getting location', e);
-    return DEFAULT_COORDS;
+    return false;
   }
 };

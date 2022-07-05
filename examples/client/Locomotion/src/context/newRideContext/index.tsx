@@ -4,7 +4,7 @@ import React, {
 import Config from 'react-native-config';
 import _ from 'lodash';
 import { UserContext } from '../user';
-import { getPosition } from '../../services/geo';
+import { getPosition, DEFAULT_COORDS } from '../../services/geo';
 import { getPlaces, getGeocode, getPlaceDetails } from './google-api';
 import StorageService from '../../services/storage';
 import * as rideApi from './api';
@@ -406,7 +406,11 @@ const RidePageContextProvider = ({ children }: {
   const resetSearchResults = () => setSearchResults(null);
 
   const getCurrentLocation = async () => {
-    const location = await getPosition(changeBsPage);
+    const location = await getPosition();
+    if (!location) {
+      changeBsPage(BS_PAGES.LOCATION_REQUEST);
+      return DEFAULT_COORDS.coords;
+    }
     return location.coords;
   };
 

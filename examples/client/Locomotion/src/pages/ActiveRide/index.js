@@ -23,7 +23,7 @@ import hamburgerIcon from '../../assets/hamburger.svg';
 import backArrow from '../../assets/arrow-back.svg';
 import { BS_PAGES } from '../../context/ridePageStateContext/utils';
 import payments from '../../context/payments';
-import geo, { getPosition } from '../../services/geo';
+import geo, { DEFAULT_COORDS, getPosition } from '../../services/geo';
 
 
 const RidePage = ({ mapSettings, navigation }) => {
@@ -129,7 +129,8 @@ const RidePage = ({ mapSettings, navigation }) => {
     }
   }, [ride]);
   const focusCurrentLocation = async () => {
-    const { coords } = await getPosition(changeBsPage);
+    const location = await getPosition();
+    const { coords } = (location || DEFAULT_COORDS);
     mapRef.current.animateToRegion({
       latitude: coords.latitude - (parseFloat(snapPoints[0]) / 10000),
       longitude: coords.longitude,
@@ -151,9 +152,8 @@ const RidePage = ({ mapSettings, navigation }) => {
       && locationGranted !== undefined
       && currentBsPage === BS_PAGES.ADDRESS_SELECTOR) {
       changeBsPage(BS_PAGES.LOCATION_REQUEST);
-    } if (locationGranted) {
-      focusCurrentLocation();
     }
+    focusCurrentLocation();
   }, [locationGranted]);
 
   useEffect(() => {
