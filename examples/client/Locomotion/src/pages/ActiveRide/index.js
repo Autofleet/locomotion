@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useRef } from 'react';
-import { useNavigation } from '@react-navigation/native';
+import { useIsFocused } from '@react-navigation/native';
+import { RIDE_STATES } from '../../lib/commonTypes';
 import {
   ConfirmPickup, NoPayment, NotAvailableHere, ConfirmingRide, NoAvailableVehicles, ActiveRide,
 } from '../../Components/BsPages';
@@ -23,8 +24,7 @@ import payments from '../../context/payments';
 import { getPosition } from '../../services/geo';
 
 
-const RidePage = ({ mapSettings }) => {
-  const navigation = useNavigation();
+const RidePage = ({ mapSettings, navigation }) => {
   const mapRef = useRef();
   const bottomSheetRef = useRef(null);
   const {
@@ -38,6 +38,7 @@ const RidePage = ({ mapSettings }) => {
     requestStopPoints,
     requestRide,
     setChosenService,
+    ride,
   } = useContext(RidePageContext);
   const { setSnapPointsState, setIsExpanded, snapPoints } = useContext(BottomSheetContext);
   const {
@@ -109,6 +110,12 @@ const RidePage = ({ mapSettings }) => {
     }
   }, [isLoading]);
 
+  useEffect(() => {
+    if (currentBsPage === BS_PAGES.ACTIVE_RIDE && ride.state === RIDE_STATES.CANCELED) {
+      setServiceEstimations(null);
+      changeBsPage(BS_PAGES.ADDRESS_SELECTOR);
+    }
+  }, [ride]);
   const focusCurrentLocation = async () => {
     const { coords } = await getPosition();
     mapRef.current.animateToRegion({
@@ -118,6 +125,14 @@ const RidePage = ({ mapSettings }) => {
       longitudeDelta: 0.015,
     }, 1000);
   };
+
+  const isFocused = useIsFocused();
+
+  useEffect(() => {
+    if (isFocused) {
+      navigation.closeDrawer();
+    }
+  }, [isFocused]);
 
   return (
     <PageContainer>

@@ -1,16 +1,8 @@
-import React, {
-  useCallback, useEffect, useMemo, useRef, useState,
-} from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import React from 'react';
 import styled from 'styled-components';
 import SkeletonContent from 'react-native-skeleton-content-nonexpo';
-import TextInput from '../../../../Components/TextInput';
-import i18n from '../../../../I18n';
 import SvgIcon from '../../../../Components/SvgIcon';
-
-
 import HistoryIcon from '../../../../assets/recent_search.svg';
-// import GeoIcon from '../../../../assets/geo_location.png';
 import GeoIcon from '../../../../assets/geo_location.svg';
 import LocationPinIcon from '../../../../assets/location_pin.svg';
 
@@ -20,8 +12,6 @@ const ICONS = {
   location: GeoIcon,
   locationPin: LocationPinIcon,
 };
-
-const DEFAULT_ICON = ICONS.history;
 
 const Row = styled.TouchableOpacity`
     width: 100%;
@@ -45,10 +35,7 @@ const IconContainer = styled.View`
 const Icon = styled(SvgIcon).attrs(({ actionButton, theme }) => ({
   stroke: actionButton ? theme.primaryColor : theme.textColor,
   fill: actionButton ? theme.primaryColor : theme.textColor,
-}))`
-  width: 20px;
-  height: 20px;
-`;
+}))``;
 
 const AddressContainer = styled.View`
     flex-direction: column;
@@ -64,7 +51,7 @@ const AddressText = styled.Text`
 `;
 
 const ActionText = styled.Text`
-    color: ${({ subtext, actionButton, theme }) => theme.primaryColor};
+    color: ${({ theme }) => theme.primaryColor};
     font-weight: 500;
     font-size: 14px;
     line-height: 20px;
@@ -74,12 +61,11 @@ const AddressRow = ({
   text,
   subText,
   icon = null,
-  border = true,
   actionButton = false,
   onPress,
   isLoading = false,
 }) => {
-  const finalIcon = ICONS[icon];
+  const finalIcon = ICONS[icon] || HistoryIcon;
   const isDebuggingEnabled = (typeof atob !== 'undefined');
   return (
     <Row
@@ -87,7 +73,9 @@ const AddressRow = ({
       onPress={onPress}
     >
       <IconContainer>
-        {finalIcon ? <Icon Svg={finalIcon} actionButton={actionButton} /> : null}
+        {finalIcon
+          ? <Icon Svg={finalIcon} height={20} width={20} actionButton={actionButton} />
+          : null}
       </IconContainer>
       <AddressContainer>
         {isLoading && !isDebuggingEnabled ? (
