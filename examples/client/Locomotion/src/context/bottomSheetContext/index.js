@@ -1,6 +1,7 @@
 import React, {
-  useState, useEffect, createContext, useMemo,
+  useState, useEffect, createContext, useMemo, useRef,
 } from 'react';
+import { View, Text } from 'react-native';
 import { BS_PAGES } from '../ridePageStateContext/utils';
 
 export const BottomSheetContext = createContext();
@@ -19,10 +20,15 @@ export const SNAP_POINT_STATES = {
 };
 const BottomSheetProvider = ({ children }) => {
   const [isExpanded, setIsExpanded] = useState(false);
-
+  const [childrenState, setChildrenState] = useState(<></>);
+  const bottomSheetRef = useRef(null);
   const [snapPointsState, setSnapPointsState] = useState(SNAP_POINT_STATES[BS_PAGES.ADDRESS_SELECTOR]);
   const [footerComponent, setFooterComponent] = useState(null);
   const snapPoints = useMemo(() => snapPointsState, [snapPointsState]);
+
+  const setComponent = (Component) => {
+    setChildrenState(Component);
+  };
 
   return (
     <BottomSheetContext.Provider
@@ -33,6 +39,9 @@ const BottomSheetProvider = ({ children }) => {
         setSnapPointsState,
         setFooterComponent,
         footerComponent,
+        childrenState,
+        setComponent,
+        bottomSheetRef,
       }}
     >
       {children}

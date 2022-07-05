@@ -3,15 +3,12 @@ import React, {
   useEffect, useState, useRef, useContext,
 } from 'react';
 import {
-  View, Text, TouchableOpacity, Image,
+  View, TouchableOpacity, Image, Text,
 } from 'react-native';
 import styled from 'styled-components';
-import { useBottomSheet } from '@gorhom/bottom-sheet';
 import getSymbolFromCurrency from 'currency-symbol-map';
-import Thumbnail from '../../../Components/Thumbnail';
 import i18n from '../../../I18n';
 import SelectableButton from '../../../Components/SelectableButton';
-import { SubmitButtonText } from '../../../Components/SelectableButton/styled';
 import BottomSheet from '../../../Components/BottomSheet';
 import BottomSheetContextProvider, { BottomSheetContext, SNAP_POINT_STATES } from '../../../context/bottomSheetContext';
 import CustomTip from './CustomTip';
@@ -114,9 +111,10 @@ const Tips = ({
   const serviceDisplayPrice = getSymbolFromCurrency(priceCurrency || 'USD');
   const tipSuffix = isPercentage ? '%' : serviceDisplayPrice;
 
-  const bottomSheetRef = useRef(null);
   const {
     setSnapPointsState,
+    setComponent,
+    bottomSheetRef,
   } = useContext(BottomSheetContext);
 
   useEffect(() => {
@@ -157,6 +155,15 @@ const Tips = ({
     onSelectTip(calculateTipAmount());
   }, [selectedTip, customTip]);
 
+
+  useEffect(() => {
+    setComponent(<CustomTip
+      customAmount={customTip}
+      onSubmit={value => onCustomTipSet(value)}
+      tipSuffix={tipSuffix}
+    />);
+  }, []);
+
   return (
     <>
       <Container>
@@ -194,7 +201,7 @@ const Tips = ({
         </DetailsContainer>
         <NoTipTextButton onPress={resetTip}>{`${i18n.t('postRide.tip.noTip')}`}</NoTipTextButton>
       </Container>
-      <BottomSheet
+      {/*       <BottomSheet
         ref={bottomSheetRef}
         enablePanDownToClose
         index={-1}
@@ -208,7 +215,7 @@ const Tips = ({
           onSubmit={value => onCustomTipSet(value)}
           tipSuffix={tipSuffix}
         />
-      </BottomSheet>
+      </BottomSheet> */}
     </>
 
   );
@@ -216,7 +223,7 @@ const Tips = ({
 
 
 export default props => (
-  <BottomSheetContextProvider {...props}>
-    <Tips {...props} />
-  </BottomSheetContextProvider>
+
+  <Tips {...props} />
+
 );

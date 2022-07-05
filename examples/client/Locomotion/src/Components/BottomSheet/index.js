@@ -1,5 +1,5 @@
 import React, {
-  useCallback, useContext, forwardRef,
+  useCallback, useContext, forwardRef, useEffect,
 } from 'react';
 import BottomSheet, {
   BottomSheetView,
@@ -20,6 +20,7 @@ const BottomSheetComponent = forwardRef(({
   enablePanDownToClose = false,
   focusCurrentLocation,
   index = 1,
+  childComponent,
 }, ref) => {
   const {
     setIsExpanded,
@@ -78,7 +79,7 @@ const BottomSheetComponent = forwardRef(({
             flexDirection: 'column',
           }}
         >
-          {children}
+          {childComponent}
         </SafeView>
 
       </BottomSheet>
