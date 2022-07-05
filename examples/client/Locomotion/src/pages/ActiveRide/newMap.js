@@ -79,7 +79,7 @@ export default React.forwardRef(({
 
   const initialLocation = async () => {
     try {
-      const geoData = await getPosition(changeBsPage, setLocationGranted);
+      const geoData = await getPosition(changeBsPage);
       setMapRegion(oldMapRegion => ({
         ...oldMapRegion,
         ...geoData.coords,

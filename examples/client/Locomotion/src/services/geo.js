@@ -114,12 +114,9 @@ const DEFAULT_COORDS = {
     longitude: parseFloat(Config.DEFAULT_LONGITUDE),
   },
 };
-export const getPosition = async (changeBsPage, setUserPermissionState) => {
+export const getPosition = async (changeBsPage) => {
   try {
     const granted = await GeoService.checkPermission();
-    if (setUserPermissionState) {
-      setUserPermissionState(granted);
-    }
     if (!granted) {
       changeBsPage(BS_PAGES.LOCATION_REQUEST);
       return DEFAULT_COORDS;
