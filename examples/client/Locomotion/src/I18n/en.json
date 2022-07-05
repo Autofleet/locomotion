@@ -343,7 +343,8 @@
     "confirmPickup": {
       "titleText": "Confirm pickup",
       "buttonText": "Confirm and request",
-      "subTitleText": "Drag map or edit address to set your pickup"
+      "subTitleText": "Drag the map to set the location",
+      "noAddress": "Address not found. Please choose another location."
     },
     "notAvailableHere": {
       "titleText": "We are Sorry!",
