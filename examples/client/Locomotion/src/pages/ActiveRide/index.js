@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useRef } from 'react';
-import { useNavigation } from '@react-navigation/native';
+import { useIsFocused } from '@react-navigation/native';
 import { RIDE_STATES } from '../../lib/commonTypes';
 import {
   ConfirmPickup, NoPayment, NotAvailableHere, ConfirmingRide, NoAvailableVehicles, ActiveRide,
@@ -24,8 +24,7 @@ import payments from '../../context/payments';
 import { getPosition } from '../../services/geo';
 
 
-const RidePage = ({ mapSettings }) => {
-  const navigation = useNavigation();
+const RidePage = ({ mapSettings, navigation }) => {
   const mapRef = useRef();
   const bottomSheetRef = useRef(null);
   const {
@@ -126,6 +125,15 @@ const RidePage = ({ mapSettings }) => {
       longitudeDelta: 0.015,
     }, 1000);
   };
+
+  const isFocused = useIsFocused();
+
+  useEffect(() => {
+    console.log('isFocused', isFocused);
+    if (isFocused) {
+      navigation.closeDrawer();
+    }
+  }, [isFocused]);
 
   return (
     <PageContainer>
