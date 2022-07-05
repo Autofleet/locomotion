@@ -307,6 +307,7 @@
         }
     },
     "payments": {
+        "select": "Select",
         "pageTitle": "Payments Method",
         "submitCard": "Add card",
         "addNewCreditCard": "Add New Credit Card",
@@ -318,6 +319,8 @@
         "addPaymentMethod": "Add New",
         "newCardDetails": "Please add your payment details",
         "setPaymentBanner": "Set payment method",
+        "payWithCash": "Pay with Cash",
+        "cash": "cash",
         "popups": {
             "removeCard": {
                 "title": "Remove payment method",
@@ -325,7 +328,8 @@
                 "confirmText": "Remove",
                 "cancelText": "Back"
             }
-        }
+        },
+        "cashMethodBrand": "Cash"
     },
   "currency": "€",
   "operation": {
@@ -339,7 +343,8 @@
     "confirmPickup": {
       "titleText": "Confirm pickup",
       "buttonText": "Confirm and request",
-      "subTitleText": "Drag map or edit address to set your pickup"
+      "subTitleText": "Drag the map to set the location",
+      "noAddress": "Address not found. Please choose another location."
     },
     "notAvailableHere": {
       "titleText": "We are Sorry!",

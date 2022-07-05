@@ -40,7 +40,10 @@ export const buildStreetAddress = (data: any) => {
       streetAddress.name = ac.long_name;
     }
   });
-  return `${streetAddress.name} ${streetAddress.number}`;
+  if (!streetAddress.name && !streetAddress.number) {
+    return undefined;
+  }
+  return `${streetAddress.name || ''} ${streetAddress.number || ''}`;
 };
 
 export const getEstimationTags = (estimations: any[]) => {

@@ -52,7 +52,7 @@ const RideStateContextContextProvider = ({ children }: { children: any }) => {
     }
     if (t && checkTerritory) {
       const position = await getPosition();
-      const isInsidePoly = await pointInPolygon(t, position);
+      const isInsidePoly = pointInPolygon(t, position);
       if (!isInsidePoly) {
         setNotInTerritory();
       }
@@ -61,21 +61,17 @@ const RideStateContextContextProvider = ({ children }: { children: any }) => {
   };
 
   const checkStopPointsInTerritory = async (stopPoints: any[]) => {
-    let isInTerritory = true;
-    await Promise.all(stopPoints.map(async (sp) => {
-      const isInsidePoly = await pointInPolygon(territory, {
-        coords: {
-          latitude: sp.lat,
-          longitude: sp.lng,
-        },
-      });
-      if (!isInsidePoly) {
-        isInTerritory = false;
-      }
+    const isInTerritory = stopPoints.every(sp => pointInPolygon(territory, {
+      coords: {
+        latitude: sp.lat,
+        longitude: sp.lng,
+      },
     }));
+
     if (!isInTerritory) {
       setNotInTerritory();
     }
+
     return isInTerritory;
   };
 
