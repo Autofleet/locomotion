@@ -1,5 +1,5 @@
 import React, { useContext, useEffect } from 'react';
-import { Image, Text, View } from 'react-native';
+import { Text, View } from 'react-native';
 import styled from 'styled-components';
 import { useBottomSheet } from '@gorhom/bottom-sheet';
 import SvgIcon from '../SvgIcon';
@@ -14,6 +14,7 @@ import { MAIN_ROUTES } from '../../pages/routes';
 import * as navigationService from '../../services/navigation';
 import payments from '../../context/payments';
 import errorIcon from '../../assets/error-icon.svg';
+import outOfTerritoryIcon from '../../assets/bottomSheet/out_of_territory.svg';
 import Loader from '../Loader';
 import ActiveRideContent from './ActiveRide';
 
@@ -21,7 +22,6 @@ const OtherButton = styled(Button)`
   width: 100%;
   height: 50px;
   border-radius: 8px;
-  margin-top: 20px;
 `;
 
 
@@ -35,13 +35,14 @@ const SecondaryButton = styled(Button).attrs({ noBackground: true })`
 const Container = styled(View)`
   width: 100%;
   padding: 10px 20px;
+  flex: 1;
 `;
 
 const MainContent = styled(View)`
   flex: 1;
   width: 100%;
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   margin-bottom: 60px;
 `;
 
@@ -50,7 +51,7 @@ const CardText = styled(View)`
   height: 30px;
 `;
 
-const CardImage = styled(View)`
+const ImageContainer = styled(View)`
   flex: 3;
   justify-content: center;
   align-items: center;
@@ -99,10 +100,21 @@ margin: auto 0;
 margin-top: 25px;
 `;
 
+const Header = styled(View)`
+  display: flex;
+  flex: 1;
+  flex-direction: row;
+`;
+
+const Footer = styled(View)`
+  width: 100%;
+  margin-bottom: 20;
+`;
+
 const BsPage = ({
   onSecondaryButtonPress,
   onButtonPress,
-  image,
+  Image,
   children,
   titleIcon,
   TitleText,
@@ -113,43 +125,49 @@ const BsPage = ({
 }: {
   onSecondaryButtonPress: any,
   onButtonPress: any,
-  image: any,
+  Image: any,
   children?: any,
   titleIcon?: any,
   TitleText: string,
   SubTitleText: string,
   ButtonText: string,
   SecondaryButtonText: string,
-  isLoading: boolean;
+  isLoading: boolean,
 }) => (
   <Container>
-    {TitleText && (
     <MainContent>
-      <CardText>
-        <TitleContainer>
-          {titleIcon && <SvgIcon Svg={titleIcon} style={{ marginRight: 5 }} />}
-          <Title>{TitleText}</Title>
-        </TitleContainer>
-        <SubTitle numberOfLines={2}>{SubTitleText}</SubTitle>
-      </CardText>
-      {image ? (
-        <CardImage>
-          {image}
-        </CardImage>
-      ) : undefined}
+      <>
+        {TitleText && (
+          <Header>
+            <CardText>
+              <TitleContainer>
+                {titleIcon && <SvgIcon Svg={titleIcon} style={{ marginRight: 5 }} />}
+                <Title>{TitleText}</Title>
+              </TitleContainer>
+              <SubTitle numberOfLines={2}>{SubTitleText}</SubTitle>
+            </CardText>
+            {Image ? (
+              <ImageContainer>
+                {Image}
+              </ImageContainer>
+            ) : undefined}
+          </Header>
+        )}
+        {children}
+      </>
     </MainContent>
-    )}
-    {children}
-    {ButtonText && (
-    <OtherButton onPress={onButtonPress} isLoading={isLoading}>
-      <ButtonTitle>{ButtonText}</ButtonTitle>
-    </OtherButton>
-    )}
-    {SecondaryButtonText && (
-    <SecondaryButton onPress={onSecondaryButtonPress}>
-      <SecondaryButtonTitle>{SecondaryButtonText}</SecondaryButtonTitle>
-    </SecondaryButton>
-    )}
+    <Footer>
+      {ButtonText && (
+      <OtherButton onPress={onButtonPress} isLoading={isLoading}>
+        <ButtonTitle>{ButtonText}</ButtonTitle>
+      </OtherButton>
+      )}
+      {SecondaryButtonText && (
+      <SecondaryButton onPress={onSecondaryButtonPress}>
+        <SecondaryButtonTitle>{SecondaryButtonText}</SecondaryButtonTitle>
+      </SecondaryButton>
+      )}
+    </Footer>
   </Container>
 );
 
@@ -160,14 +178,24 @@ BsPage.defaultProps = {
 
 export default BsPage;
 
-export const NotAvailableHere = (props: any) => (
-  <BsPage
-    TitleText={i18n.t('bottomSheetContent.notAvailableHere.titleText')}
-    ButtonText={i18n.t('bottomSheetContent.notAvailableHere.buttonText')}
-    SubTitleText={i18n.t('bottomSheetContent.notAvailableHere.subTitleText')}
-    {...props}
-  />
-);
+export const NotAvailableHere = (props: any) => {
+  const { setSnapPointsState } = useContext(BottomSheetContext);
+
+  useEffect(() => {
+    setSnapPointsState(SNAP_POINT_STATES.NOT_IN_TERRITORY);
+  }, []);
+
+
+  return (
+    <BsPage
+      TitleText={i18n.t('bottomSheetContent.notAvailableHere.titleText')}
+      ButtonText={i18n.t('bottomSheetContent.notAvailableHere.buttonText')}
+      SubTitleText={i18n.t('bottomSheetContent.notAvailableHere.subTitleText')}
+      Image={<SvgIcon Svg={outOfTerritoryIcon} height={85} width={140} />}
+      {...props}
+    />
+  );
+};
 
 export const ConfirmPickup = (props: any) => {
   const {
