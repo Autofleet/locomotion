@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { View } from 'react-native';
-import { Promise } from 'bluebird';
 import i18n from '../../I18n';
 import {
   DeleteCreditCard,
