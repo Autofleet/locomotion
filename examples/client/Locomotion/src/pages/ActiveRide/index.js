@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useRef } from 'react';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useIsFocused } from '@react-navigation/native';
 import { AppState } from 'react-native';
 import { UserContext } from '../../context/user';
 import { RIDE_STATES } from '../../lib/commonTypes';
@@ -26,8 +26,7 @@ import payments from '../../context/payments';
 import geo, { getPosition } from '../../services/geo';
 
 
-const RidePage = ({ mapSettings }) => {
-  const navigation = useNavigation();
+const RidePage = ({ mapSettings, navigation }) => {
   const mapRef = useRef();
   const appState = useRef(AppState.currentState);
   const bottomSheetRef = useRef(null);
@@ -171,6 +170,15 @@ const RidePage = ({ mapSettings }) => {
       subscription.remove();
     };
   }, []);
+
+  const isFocused = useIsFocused();
+
+  useEffect(() => {
+    if (isFocused) {
+      navigation.closeDrawer();
+    }
+  }, [isFocused]);
+
 
   return (
     <PageContainer>
