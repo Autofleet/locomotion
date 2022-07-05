@@ -26,6 +26,15 @@ const MAP_EDGE_PADDING = {
   bottom: 400,
   left: 100,
 };
+
+const PAGES_TO_SHOW_MARKER = [
+  BS_PAGES.ADDRESS_SELECTOR,
+  BS_PAGES.SERVICE_ESTIMATIONS,
+  BS_PAGES.NO_PAYMENT,
+  BS_PAGES.NOT_IN_TERRITORY,
+  BS_PAGES.NO_AVAILABLE_VEHICLES,
+  BS_PAGES.ACTIVE_RIDE,
+  BS_PAGES.CUSTOM_TIP];
 export default React.forwardRef(({
   mapSettings,
 }, ref) => {
@@ -235,7 +244,7 @@ export default React.forwardRef(({
             coordinates={polylineList}
           />
         )}
-        {!isConfirmPickupPage && stopPoints.filter(sp => !!sp.lat).length > 1
+        {PAGES_TO_SHOW_MARKER.includes(currentBsPage) && stopPoints.filter(sp => !!sp.lat).length > 1
           ? stopPoints
             .filter(sp => !!sp.lat)
             .map(sp => (<StationsMap stopPoint={sp} key={sp.id} />))
