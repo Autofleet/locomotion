@@ -20,7 +20,7 @@ import hamburgerIcon from '../../assets/hamburger.svg';
 import backArrow from '../../assets/arrow-back.svg';
 import { BS_PAGES } from '../../context/ridePageStateContext/utils';
 import payments from '../../context/payments';
-import { getPosition } from '../../services/geo';
+import geo, { getPosition } from '../../services/geo';
 
 
 const RidePage = ({ mapSettings }) => {
@@ -109,7 +109,19 @@ const RidePage = ({ mapSettings }) => {
     }
   }, [isLoading]);
 
+  const checkPermissions = async () => {
+    let granted = await geo.checkPermission();
+    if (!granted) {
+      granted = await geo.requestPermission();
+    }
+    return granted;
+  };
+
   const focusCurrentLocation = async () => {
+    const granted = await checkPermissions();
+    if (!granted) {
+      return;
+    }
     const { coords } = await getPosition();
     mapRef.current.animateToRegion({
       latitude: coords.latitude - (parseFloat(snapPoints[0]) / 10000),
