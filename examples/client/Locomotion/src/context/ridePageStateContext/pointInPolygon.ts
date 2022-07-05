@@ -3,7 +3,7 @@ import Mixpanel from '../../services/Mixpanel';
 
 const ERROR_MSG = 'unable to calc pointInPolygon';
 
-const pointInPolygon = async (polys: any, position: any) => {
+const pointInPolygon = (polys: any, position: any) => {
   console.debug('pointInPolygon', { position });
   if (position && polys) {
     try {

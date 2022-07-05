@@ -5,6 +5,7 @@ import Mixpanel from '../../services/Mixpanel';
 
 const Container = styled.TouchableOpacity`
   ${({ noBackground, theme }) => (!noBackground ? `background-color: ${theme.primaryColor};` : '')}
+  ${({ disabled }) => (disabled ? 'opacity: 0.5;' : '')}
 `;
 
 const LoaderContainer = styled.View`
@@ -16,9 +17,11 @@ const Button = props => (
   <Container
     {...props}
     onPress={(e) => { /* eslint-disable-line consistent-return */
-      if (props.onPress) {
-        Mixpanel.trackElementClick(props);
-        return props.onPress(e);
+      if (!props.disabled) {
+        if (props.onPress) {
+          Mixpanel.trackElementClick(props);
+          return props.onPress(e);
+        }
       }
     }}
   >

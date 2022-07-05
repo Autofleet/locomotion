@@ -245,7 +245,8 @@ const RidePageContextProvider = ({ children }: {
     validateRequestedStopPoints(requestStopPoints);
   }, [requestStopPoints]);
 
-  const reverseLocationGeocode = async (pinLat: number | null = null, pinLng: number | null = null): Promise<any | undefined> => {
+  const reverseLocationGeocode = async (pinLat: number | null = null, pinLng: number | null = null)
+    : Promise<any | undefined> => {
     try {
       let location;
       if (pinLat && pinLng) {

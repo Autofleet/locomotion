@@ -110,6 +110,7 @@ const BsPage = ({
   ButtonText,
   SecondaryButtonText,
   isLoading,
+  buttonDisabled,
 }: {
   onSecondaryButtonPress: any,
   onButtonPress: any,
@@ -121,6 +122,7 @@ const BsPage = ({
   ButtonText: string,
   SecondaryButtonText: string,
   isLoading: boolean;
+  buttonDisabled: boolean;
 }) => (
   <Container>
     {TitleText && (
@@ -141,7 +143,11 @@ const BsPage = ({
     )}
     {children}
     {ButtonText && (
-    <OtherButton onPress={onButtonPress} isLoading={isLoading}>
+    <OtherButton
+      disabled={buttonDisabled}
+      onPress={onButtonPress}
+      isLoading={isLoading}
+    >
       <ButtonTitle>{ButtonText}</ButtonTitle>
     </OtherButton>
     )}
@@ -218,8 +224,9 @@ export const ConfirmPickup = (props: any) => {
           props.onButtonPress();
         }
       }}
+      buttonDisabled={!lastSelectedLocation?.streetAddress}
     >
-      <AddressInput>{lastSelectedLocation?.streetAddress}</AddressInput>
+      <AddressInput>{lastSelectedLocation?.streetAddress || i18n.t('bottomSheetContent.confirmPickup.noAddress')}</AddressInput>
     </BsPage>
   );
 };
