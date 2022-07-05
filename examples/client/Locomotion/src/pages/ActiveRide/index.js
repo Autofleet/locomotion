@@ -129,7 +129,6 @@ const RidePage = ({ mapSettings, navigation }) => {
   const isFocused = useIsFocused();
 
   useEffect(() => {
-    console.log('isFocused', isFocused);
     if (isFocused) {
       navigation.closeDrawer();
     }
