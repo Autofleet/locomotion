@@ -2,8 +2,9 @@ import React, {
   createContext, useEffect, useState, useContext,
 } from 'react';
 import { useIsFocused } from '@react-navigation/native';
+import { UserContext } from '../user';
 import useInterval from '../../lib/useInterval';
-import geo, { getPosition } from '../../services/geo';
+import { getPosition } from '../../services/geo';
 import * as availabilityApi from './api';
 
 
@@ -28,10 +29,9 @@ export const AvailabilityContext = createContext<AvailabilityContextInterface>({
 
 const AvailabilityContextProvider = ({ children }: { children: any }) => {
   const [availabilityVehicles, setAvailabilityVehicles] = useState<AvailabilityVehicles[]>([]);
-
+  const { locationGranted } = useContext(UserContext);
   const getVehicles = async () => {
-    const granted = await geo.checkPermission();
-    if (granted) {
+    if (locationGranted) {
       try {
         let coords;
         try {

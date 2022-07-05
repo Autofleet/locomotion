@@ -1,7 +1,6 @@
 import React, {
   createContext, useContext, useEffect, useState,
 } from 'react';
-import { UserContext } from '../user';
 import { BottomSheetContext, SNAP_POINT_STATES } from '../bottomSheetContext';
 import geo, { getPosition } from '../../services/geo';
 import { getUserTerritories } from '../user/api';
@@ -35,7 +34,6 @@ const RideStateContextContextProvider = ({ children }: { children: any }) => {
   const [isUserLocationFocused, setIsUserLocationFocused] = useState(true);
   const [currentBsPage, setCurrentBsPage] = useState<BsPages>(BS_PAGES.ADDRESS_SELECTOR);
   const { setSnapPointsState, setIsExpanded } = useContext(BottomSheetContext);
-  const { setLocationGranted } = useContext(UserContext);
 
   const changeBsPage = (pageName: BsPages) => {
     setIsExpanded(false);
@@ -53,7 +51,7 @@ const RideStateContextContextProvider = ({ children }: { children: any }) => {
       setTerritory(t);
     }
     if (t && checkTerritory) {
-      const position = await getPosition(changeBsPage, setLocationGranted);
+      const position = await getPosition(changeBsPage);
       const isInsidePoly = await pointInPolygon(t, position);
       if (!isInsidePoly) {
         setNotInTerritory();
