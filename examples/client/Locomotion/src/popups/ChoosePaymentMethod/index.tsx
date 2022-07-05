@@ -73,7 +73,7 @@ const PaymentMethodPopup = ({ isVisible, onCancel }: PaymentMethodPopupProps) =>
               addNew
               onPress={() => {
                 onCancel();
-                navigation.navigate(MAIN_ROUTES.ADD_CARD);
+                navigation.navigate(MAIN_ROUTES.PAYMENT);
               }}
             />
           </View>
