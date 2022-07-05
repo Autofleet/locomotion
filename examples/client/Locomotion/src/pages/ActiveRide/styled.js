@@ -55,9 +55,9 @@ export const LocationMarkerContainer = styled.View`
 `;
 
 export const LocationMarker = styled(Icon).attrs(({ theme }) => ({
-  height: '60px',
+  height: '80px',
   fill: theme.primaryColor,
   stroke: theme.pageBackgroundColor,
-  width: '30px',
+  width: '40px',
   viewBox: '-1 0 13 10',
 }))``;

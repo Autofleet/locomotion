@@ -15,6 +15,7 @@ import * as navigationService from '../../services/navigation';
 import payments from '../../context/payments';
 import errorIcon from '../../assets/error-icon.svg';
 import outOfTerritoryIcon from '../../assets/bottomSheet/out_of_territory.svg';
+import locationIcon from '../../assets/location_pin.svg';
 import Loader from '../Loader';
 import ActiveRideContent from './ActiveRide';
 
@@ -91,7 +92,9 @@ const SecondaryButtonTitle = styled(Text)`
   `};
 `;
 
-const AddressInput = styled(Text)``;
+const AddressInput = styled(Text)`
+margin-left: 5;
+`;
 
 const LoaderContainer = styled(View)`
 height: 25px;
@@ -109,6 +112,11 @@ const Header = styled(View)`
 const Footer = styled(View)`
   width: 100%;
   margin-bottom: 20;
+`;
+
+const AddressContainer = styled(View)`
+flex-direction: row;
+align-items: center;
 `;
 
 const BsPage = ({
@@ -250,7 +258,10 @@ export const ConfirmPickup = (props: any) => {
       }}
       buttonDisabled={!lastSelectedLocation?.streetAddress}
     >
-      <AddressInput>{lastSelectedLocation?.streetAddress || i18n.t('bottomSheetContent.confirmPickup.noAddress')}</AddressInput>
+      <AddressContainer>
+        <SvgIcon Svg={locationIcon} height={20} width={10} fill="#333" />
+        <AddressInput>{lastSelectedLocation?.streetAddress || i18n.t('bottomSheetContent.confirmPickup.noAddress')}</AddressInput>
+      </AddressContainer>
     </BsPage>
   );
 };
