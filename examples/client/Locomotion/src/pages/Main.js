@@ -42,6 +42,10 @@ const Main = () => {
         component={ROUTES_COMPS[MAIN_ROUTES.PAYMENT]}
       />
       <Drawer.Screen
+        name={MAIN_ROUTES.CARD_DETAILS}
+        component={ROUTES_COMPS[MAIN_ROUTES.CARD_DETAILS]}
+      />
+      <Drawer.Screen
         name={MAIN_ROUTES.ACCOUNT}
         component={ROUTES_COMPS[MAIN_ROUTES.ACCOUNT]}
       />
