@@ -5,6 +5,7 @@ import { TouchableOpacity, View, Text } from 'react-native';
 import moment from 'moment';
 import styled from 'styled-components';
 import { PaymentIcon } from 'react-native-payment-icons';
+import { capitalizeFirstLetter, getLastFourForamtted } from '../../pages/Payments/cardDetailUtils';
 import cashPaymentMethod from '../../pages/Payments/cashPaymentMethod';
 import i18n from '../../I18n';
 import SvgIcon from '../SvgIcon';
@@ -100,10 +101,6 @@ const CreditCardSelected = (
   />
 );
 
-function capitalizeFirstLetter(string: string) {
-  return string?.charAt(0).toUpperCase() + string?.slice(1);
-}
-
 const isCashPaymentMethod = (paymentMethod: any) => paymentMethod.id === cashPaymentMethod.id;
 
 
@@ -146,7 +143,7 @@ export default (paymentMethod: any) => (
                     {capitalizeFirstLetter(paymentMethod.brand)}
                   </Type>
                 )}
-              {paymentMethod.lastFour ? <Description>{`**** ${capitalizeFirstLetter(paymentMethod.lastFour)}`}</Description> : null}
+              {paymentMethod.lastFour ? <Description>{getLastFourForamtted(paymentMethod.lastFour)}</Description> : null}
               {paymentMethod && !isCashPaymentMethod(paymentMethod) && moment(paymentMethod.expiresAt).isBefore(moment()) ? <Error>{i18n.t('payments.expired').toString()}</Error> : null}
               {paymentMethod && !isCashPaymentMethod(paymentMethod) && paymentMethod.hasOutstandingBalance ? <Error>{i18n.t('payments.hasOutstandingBalance').toString()}</Error> : null}
             </>

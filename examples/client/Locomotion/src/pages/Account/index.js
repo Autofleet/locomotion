@@ -68,7 +68,7 @@ const AccountHeader = () => {
   );
 };
 
-const Card = ({
+export const Card = ({
   title,
   children,
   onPress,

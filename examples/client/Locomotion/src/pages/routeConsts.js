@@ -18,7 +18,7 @@ import CompletedRideOverviewPage from './RideHistory/CompletedRideOverviewPage';
 import RideHistory from './RideHistory';
 import PostRide from './PostRide';
 import { MAIN_ROUTES } from './routes';
-import CardDetails from './Payments/CardDetails';
+import CardDetails from '../Components/CardDetails';
 
 export const ROUTES_COMPS = {
   [MAIN_ROUTES.HOME]: ActiveRide,
@@ -52,6 +52,5 @@ export const profileStack = ({ stack: Stack }) => (
     <Stack.Screen name={MAIN_ROUTES.AVATAR} component={ROUTES_COMPS[MAIN_ROUTES.AVATAR]} />
     <Stack.Screen name={MAIN_ROUTES.ADD_CARD} component={ROUTES_COMPS[MAIN_ROUTES.ADD_CARD]} />
     <Stack.Screen name={MAIN_ROUTES.EMAIL} component={ROUTES_COMPS[MAIN_ROUTES.EMAIL]} />
-    <Stack.Screen name={MAIN_ROUTES.CARD_DETAILS} component={ROUTES_COMPS[MAIN_ROUTES.CARD_DETAILS]} />
   </>
 );
