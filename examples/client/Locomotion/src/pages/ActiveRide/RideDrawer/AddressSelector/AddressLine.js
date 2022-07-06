@@ -64,11 +64,13 @@ const AddressRow = ({
   actionButton = false,
   onPress,
   isLoading = false,
+  testID,
 }) => {
   const finalIcon = ICONS[icon] || HistoryIcon;
   const isDebuggingEnabled = (typeof atob !== 'undefined');
   return (
     <Row
+      testID={testID}
       border
       onPress={onPress}
     >
