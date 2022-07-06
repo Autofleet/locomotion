@@ -17,7 +17,6 @@ export default ({
   onDetach = (id: string) => null,
   loadingState = false,
   onAddClick = undefined,
-  isCashEnabled = false,
 }) => {
   const [loading, setLoading] = useState(false);
   const usePayments = PaymentsContext.useContainer();
@@ -30,7 +29,7 @@ export default ({
   return (
     <CardsListContainer>
       <View>
-        {(isCashEnabled ? [...usePayments.paymentMethods, cashPaymentMethod] : usePayments.paymentMethods).map((paymentMethod : any) => (
+        {usePayments.paymentMethods.map((paymentMethod : any) => (
           <PaymentMethodsContainer>
             <CreditCardsContainer>
               <PaymentMethod {...paymentMethod} />
