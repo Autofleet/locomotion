@@ -23,7 +23,7 @@ import Loader from '../Loader';
 import ActiveRideContent from './ActiveRide';
 
 const OtherButton = styled(Button)`
-  background-color: ${({ warning }) => (warning ? ERROR_COLOR : undefined)};
+  background-color: ${({ warning, theme }) => (warning ? ERROR_COLOR : theme.primaryColor)};
   height: 50px;
   border-radius: 8px;
   flex-grow: 1;
@@ -109,6 +109,7 @@ const Header = styled(View)`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  margin-bottom: 10px;
 `;
 
 const Footer = styled(View)`
