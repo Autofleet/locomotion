@@ -33,8 +33,7 @@ const PAGES_TO_SHOW_SP_MARKERS = [
   BS_PAGES.NO_PAYMENT,
   BS_PAGES.NOT_IN_TERRITORY,
   BS_PAGES.NO_AVAILABLE_VEHICLES,
-  BS_PAGES.ACTIVE_RIDE,
-  BS_PAGES.CUSTOM_TIP];
+  BS_PAGES.ACTIVE_RIDE];
 export default React.forwardRef(({
   mapSettings,
 }, ref) => {
