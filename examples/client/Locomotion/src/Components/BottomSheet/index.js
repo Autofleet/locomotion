@@ -6,6 +6,7 @@ import BottomSheet, {
   BottomSheetFooter,
 } from '@gorhom/bottom-sheet';
 import styled from 'styled-components';
+import { UserContext } from '../../context/user';
 import SquareSvgButton from '../../Components/SquareSvgButton';
 import SafeView from '../SafeView';
 import { BottomSheetContext } from '../../context/bottomSheetContext';
@@ -27,7 +28,7 @@ const BottomSheetComponent = forwardRef(({
     footerComponent,
     isExpanded,
   } = useContext(BottomSheetContext);
-
+  const { locationGranted } = useContext(UserContext);
   const onAnimate = useCallback((from, to) => {
     if (from !== -1) {
       setIsExpanded(to > from);
@@ -45,9 +46,14 @@ const BottomSheetComponent = forwardRef(({
     [footerComponent],
   );
 
+  const snapPointsAreTheSame = () => {
+    const firstSnapPoint = snapPoints[0];
+    return snapPoints.every(snap => snap === firstSnapPoint);
+  };
+
   return (
     <>
-      {!isExpanded && (
+      {!isExpanded && locationGranted && (
       <SquareSvgButton
         onPress={focusCurrentLocation}
         icon={targetIcon}
@@ -62,6 +68,9 @@ const BottomSheetComponent = forwardRef(({
         footerComponent={renderFooter}
         enablePanDownToClose={enablePanDownToClose}
         index={index}
+        handleIndicatorStyle={{
+          ...(snapPointsAreTheSame() && { display: 'none' }),
+        }}
         style={{
           shadowColor: '#000',
           shadowOffset: {

@@ -3,9 +3,11 @@ import React, {
 } from 'react';
 import Config from 'react-native-config';
 import _ from 'lodash';
-import { getPosition } from '../../services/geo';
+import { UserContext } from '../user';
+import { getPosition, DEFAULT_COORDS } from '../../services/geo';
 import { getPlaces, getGeocode, getPlaceDetails } from './google-api';
 import StorageService from '../../services/storage';
+import * as navigationService from '../../services/navigation';
 import * as rideApi from './api';
 import {
   buildStreetAddress,
@@ -18,6 +20,7 @@ import { BS_PAGES } from '../ridePageStateContext/utils';
 import { RIDE_STATES } from '../../lib/commonTypes';
 import useInterval from '../../lib/useInterval';
 import { formatSps } from '../../lib/ride/utils';
+import { MAIN_ROUTES } from '../../pages/routes';
 
 type Dispatch<A> = (value: A) => void;
 
@@ -124,6 +127,7 @@ let SERVICE_ESTIMATIONS_INTERVAL_IN_SECONDS: number;
 const RidePageContextProvider = ({ children }: {
   children: any
 }) => {
+  const { locationGranted } = useContext(UserContext);
   const { checkStopPointsInTerritory, changeBsPage } = useContext(RideStateContextContext);
   const [requestStopPoints, setRequestStopPoints] = useState(INITIAL_STOP_POINTS);
   const [currentGeocode, setCurrentGeocode] = useState<any | null>(null);
@@ -141,6 +145,19 @@ const RidePageContextProvider = ({ children }: {
   const [rideRequestLoading, setRideRequestLoading] = useState(false);
   const [serviceRequestFailed, setServiceRequestFailed] = useState<boolean>(false);
   const intervalRef = useRef<any>();
+
+  const RIDE_STATES_TO_SCREENS = {
+    [RIDE_STATES.PENDING]: () => { changeBsPage(BS_PAGES.CONFIRMING_RIDE); },
+    [RIDE_STATES.MATCHING]: () => { changeBsPage(BS_PAGES.CONFIRMING_RIDE); },
+    [RIDE_STATES.REJECTED]: () => { changeBsPage(BS_PAGES.NO_AVAILABLE_VEHICLES); },
+    [RIDE_STATES.COMPLETED]: () => {
+      navigationService.navigate(MAIN_ROUTES.COMPLETED_RIDE_OVERVIEW_PAGE);
+    },
+    [RIDE_STATES.DISPATCHED]: () => { changeBsPage(BS_PAGES.ACTIVE_RIDE); },
+    [RIDE_STATES.ACTIVE]: () => { changeBsPage(BS_PAGES.ACTIVE_RIDE); },
+    // [RIDE_STATES.FAILED]: () => {},
+    // [RIDE_STATES.CANCELED]: () => {},
+  };
 
   // const serviceType = ride.serviceType || await rideApi.getService(ride.serviceTypeId)
   const formatRide = async (rideToFormat: RideInterface) => ({
@@ -219,7 +236,6 @@ const RidePageContextProvider = ({ children }: {
   };
 
   useEffect(() => {
-    initCurrentLocation();
     getServiceEstimationsFetchingInterval();
     loadActiveRide();
   }, []);
@@ -230,16 +246,13 @@ const RidePageContextProvider = ({ children }: {
       const formattedRide = await formatRide(rideLoaded);
       setRide(formattedRide);
       if (ride.state !== rideLoaded.state) {
-        changeBsPage(rideLoaded.state === RIDE_STATES.REJECTED
-          ? BS_PAGES.NO_AVAILABLE_VEHICLES
-          : BS_PAGES.ACTIVE_RIDE);
+        const screenFunction = RIDE_STATES_TO_SCREENS[rideLoaded.state];
+        if (screenFunction) {
+          screenFunction();
+        }
       }
     }
   }, 5000);
-
-  useEffect(() => {
-    initSps();
-  }, [currentGeocode]);
 
   useEffect(() => {
     validateRequestedStopPoints(requestStopPoints);
@@ -291,9 +304,15 @@ const RidePageContextProvider = ({ children }: {
   };
 
   const initCurrentLocation = async () => {
-    const locationData = await getCurrentLocationAddress();
-    setCurrentGeocode(locationData);
+    if (locationGranted) {
+      const locationData = await getCurrentLocationAddress();
+      setCurrentGeocode(locationData);
+    }
   };
+
+  useEffect(() => {
+    initCurrentLocation();
+  }, [locationGranted]);
 
   const initSps = async () => {
     const currentAddress = currentGeocode || await getCurrentLocationAddress();
@@ -315,6 +334,12 @@ const RidePageContextProvider = ({ children }: {
       setRequestStopPoints(sps);
     }
   };
+
+  useEffect(() => {
+    if (requestStopPoints.filter((sp => sp.lat)).length <= 1) {
+      initSps();
+    }
+  }, [currentGeocode]);
 
   const updateRequestSp = (data: any[], index?: number) => {
     const reqSps = [...requestStopPoints];
@@ -338,10 +363,12 @@ const RidePageContextProvider = ({ children }: {
   };
 
   const loadAddress = async (input: any) => {
-    const currentCoords = await getCurrentLocation();
-    let location = null;
+    let currentCoords;
+    if (locationGranted) {
+      currentCoords = await getCurrentLocation();
+    }
     try {
-      location = `${currentCoords.latitude},${currentCoords.longitude}`;
+      const location = currentCoords ? `${currentCoords.latitude},${currentCoords.longitude}` : null;
       const data = await getPlaces({
         input,
         region: 'il',
@@ -396,6 +423,10 @@ const RidePageContextProvider = ({ children }: {
 
   const getCurrentLocation = async () => {
     const location = await getPosition();
+    if (!location) {
+      changeBsPage(BS_PAGES.LOCATION_REQUEST);
+      return DEFAULT_COORDS.coords;
+    }
     return location.coords;
   };
 

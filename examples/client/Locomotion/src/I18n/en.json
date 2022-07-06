@@ -39,8 +39,8 @@
         "vertError": "Sorry, seems like the verification code is incorrect. Please make sure you've typed it correctly.",
         "resendButton": "Start over",
         "introText": "Please enter your phone number to signup for Locomotion. You will receive an SMS with a verification code.",
-        "termsWebViewTitle": "Terms and conditions",
-        "privacyWebViewTitle": "data protection guidelines",
+        "termsWebViewTitle": "Terms and Conditions",
+        "privacyWebViewTitle": "Data Protection Guidelines",
         "termsAgreement": "By proceeding you agree to the <0>Terms of use</0> and <1>Privacy Policy</1>"
     },
     "onboarding": {
@@ -48,13 +48,13 @@
             "phone": {
                 "title": "Phone Number",
                 "text": "Enter mobile phone number",
-                "subText": "We'll send a verification code to this number",
+                "subText": "We'll send a verification code to this number.",
                 "placeholder": "(000) 123 - 4567"
             },
             "code": {
                 "title": "Verification",
                 "text": "Please enter code",
-                "subText": "A code has been sent to {{phoneNumber}}",
+                "subText": "A code has been sent to {{phoneNumber}}.",
                 "resendCodeText": "Didn't receive an SMS? ",
                 "resendCodeButton": "Resend"
             },
@@ -70,7 +70,7 @@
             "avatar": {
                 "title": "Personal Details",
                 "text": "Add a photo",
-                "subText": "Help us identify you during pickups"
+                "subText": "Help us identify you during pickups."
             },
             "email": {
                 "title": "Personal Details",
@@ -105,12 +105,12 @@
         "unverified": "Unverified",
         "validations": {
             "required": {
-                "firstName": "First name is required",
-                "lastName": "Last name is required",
-                "email": "Email is required"
+                "firstName": "First name is required.",
+                "lastName": "Last name is required.",
+                "email": "Email is required."
             },
             "email": {
-                "email": "Email must be valid"
+                "email": "Email must be valid."
             }
 
         }
@@ -129,10 +129,10 @@
         "chooseDropoff": "Choose Dropoff",
         "passengersNumber": "Passengers",
         "rideStates": {
-            "driverOnTheWay": "Your ride has been booked",
-            "driverOnTheWayEta": "Time till boarding: {{pickupEta}} Minutes",
-            "driverOnTheWaySoon": "Time till boarding: Less then 1 minute",
-            "onBoard": "Remaining ride time: app. {{dropoffEta}} minutes",
+            "driverOnTheWay": "Your ride has been booked.",
+            "driverOnTheWayEta": "Time until boarding: {{pickupEta}} Minutes",
+            "driverOnTheWaySoon": "Time until boarding: Less then 1 minute",
+            "onBoard": "Remaining ride time: app. {{dropoffEta}} Minutes",
             "onBoardSoon": "Arriving soon",
             "driverArrived": "Your driver has arrived"
         },
@@ -345,6 +345,12 @@
     "subName": "Rider app"
   },
   "bottomSheetContent": {
+    "locationRequest": {
+        "titleText": "Update location services",
+        "buttonText": "Turn on location permissions",
+        "secondaryButtonText": "Enter pickup location",
+        "subTitleText": "{{operation}} needs your location to find nearby rides"
+    },
     "confirmingRide": {
         "titleText": "Confirming your ride"
     },
