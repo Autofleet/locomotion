@@ -95,7 +95,7 @@ const RidePage = ({ mapSettings, navigation }) => {
       <ConfirmPickup
         initialLocation={requestStopPoints[0]}
         onButtonPress={() => {
-          if (clientHasValidPaymentMethods()) {
+          if (clientHasValidPaymentMethods() || ride.paymentMethodId === 'cash') {
             requestRide();
           } else {
             changeBsPage(BS_PAGES.NO_PAYMENT);

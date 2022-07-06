@@ -7,6 +7,7 @@ import { UserContext } from '../user';
 import { getPosition, DEFAULT_COORDS } from '../../services/geo';
 import { getPlaces, getGeocode, getPlaceDetails } from './google-api';
 import StorageService from '../../services/storage';
+import * as navigationService from '../../services/navigation';
 import * as rideApi from './api';
 import {
   buildStreetAddress,
@@ -19,6 +20,7 @@ import { BS_PAGES } from '../ridePageStateContext/utils';
 import { RIDE_STATES } from '../../lib/commonTypes';
 import useInterval from '../../lib/useInterval';
 import { formatSps } from '../../lib/ride/utils';
+import { MAIN_ROUTES } from '../../pages/routes';
 
 type Dispatch<A> = (value: A) => void;
 
@@ -144,6 +146,19 @@ const RidePageContextProvider = ({ children }: {
   const [serviceRequestFailed, setServiceRequestFailed] = useState<boolean>(false);
   const intervalRef = useRef<any>();
 
+  const RIDE_STATES_TO_SCREENS = {
+    [RIDE_STATES.PENDING]: () => { changeBsPage(BS_PAGES.CONFIRMING_RIDE); },
+    [RIDE_STATES.MATCHING]: () => { changeBsPage(BS_PAGES.CONFIRMING_RIDE); },
+    [RIDE_STATES.REJECTED]: () => { changeBsPage(BS_PAGES.NO_AVAILABLE_VEHICLES); },
+    [RIDE_STATES.COMPLETED]: () => {
+      navigationService.navigate(MAIN_ROUTES.COMPLETED_RIDE_OVERVIEW_PAGE);
+    },
+    [RIDE_STATES.DISPATCHED]: () => { changeBsPage(BS_PAGES.ACTIVE_RIDE); },
+    [RIDE_STATES.ACTIVE]: () => { changeBsPage(BS_PAGES.ACTIVE_RIDE); },
+    // [RIDE_STATES.FAILED]: () => {},
+    // [RIDE_STATES.CANCELED]: () => {},
+  };
+
   // const serviceType = ride.serviceType || await rideApi.getService(ride.serviceTypeId)
   const formatRide = async (rideToFormat: RideInterface) => ({
     ...rideToFormat,
@@ -231,9 +246,10 @@ const RidePageContextProvider = ({ children }: {
       const formattedRide = await formatRide(rideLoaded);
       setRide(formattedRide);
       if (ride.state !== rideLoaded.state) {
-        changeBsPage(rideLoaded.state === RIDE_STATES.REJECTED
-          ? BS_PAGES.NO_AVAILABLE_VEHICLES
-          : BS_PAGES.ACTIVE_RIDE);
+        const screenFunction = RIDE_STATES_TO_SCREENS[rideLoaded.state];
+        if (screenFunction) {
+          screenFunction();
+        }
       }
     }
   }, 5000);
