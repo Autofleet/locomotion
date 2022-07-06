@@ -85,7 +85,10 @@ const ButtonTitle = styled(Text)`
   `};
 `;
 
-const SecondaryButtonTitle = styled(Text)<{warning: boolean}>`
+type SecondaryButtonTitleInterface = {
+  warning: boolean | undefined;
+}
+const SecondaryButtonTitle = styled(Text)<SecondaryButtonTitleInterface>`
   margin: auto;
   ${FONT_SIZES.H2}
   color: ${({ warning, theme }) => (warning ? '#333333' : theme.primaryColor)};
