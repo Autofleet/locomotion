@@ -31,7 +31,7 @@ const Page = ({ menuSide }) => {
   });
 
   useEffect(() => {
-    const find = rides.find(({ id }) => (id === rideId));
+    const find = rides && rides.find(({ id }) => (id === rideId));
     if (find) {
       setRide(find);
     } else {

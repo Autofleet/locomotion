@@ -10,7 +10,7 @@ const getEtaText = eta => moment(eta).format('HH:mm');
 
 const stopPointText = sp => (sp.state === STOP_POINT_STATES.PENDING
   ? getEtaText(sp.plannedArrivalTime)
-  : i18n.t(`stopPoints.states${sp.state}`));
+  : i18n.t(`stopPoints.states.${sp.state}`));
 
 const MAX_DESC_LIMIT = 50;
 

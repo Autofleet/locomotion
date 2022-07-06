@@ -22,6 +22,8 @@ import share from '../../../assets/bottomSheet/share.svg';
 import cancel from '../../../assets/bottomSheet/cancel.svg';
 import RideNotes from '../../../popups/RideNotes';
 
+const DEFAULT_VEHICLE_IMAGE = 'https://res.cloudinary.com/autofleet/image/upload/w_700,h_500,c_thumb,q_auto/vehicle-images/Minivan/minivan_blue.png';
+
 const ActiveRideContent = () => {
   const { ride, trackRide } = useContext(RidePageContext);
   const [popupToShow, setPopupToShow] = useState<string | null>(null);
@@ -125,9 +127,9 @@ const ActiveRideContent = () => {
               />
             </DriverCardContainer>
             <VehicleDetails>
-              <VehicleImage source={{ uri: vehicle.image }} />
+              <VehicleImage source={{ uri: (vehicle && vehicle.image) || DEFAULT_VEHICLE_IMAGE }} />
               <VehiclePlateContainer>
-                <VehiclePlateText>{vehicle.licensePlate}</VehiclePlateText>
+                <VehiclePlateText>{(vehicle && vehicle.licensePlate) || ''}</VehiclePlateText>
               </VehiclePlateContainer>
             </VehicleDetails>
           </TopContainer>

@@ -22,10 +22,11 @@ import settings from '../../context/settings';
 import SETTINGS_KEYS from '../../context/settings/keys';
 import NewRidePageContextProvider, { RidePageContext } from '../../context/newRideContext';
 
-const PostRidePage = ({ menuSide }) => {
+const PostRidePage = ({ menuSide, route }) => {
   const navigation = useNavigation();
-  const route = useRoute();
+  const router = useRoute();
   const [rating, setRating] = useState(null);
+  const [ride, setRide] = useState({});
   const [rideTip, setRideTip] = useState(null);
   const [tipSettings, setTipSettings] = useState({
     percentageThreshold: 30,
@@ -34,18 +35,15 @@ const PostRidePage = ({ menuSide }) => {
   });
   const {
     postRideSubmit,
-    ride = {
-      driver: {},
-    },
+    getRideFromApi,
   } = useContext(RidePageContext);
 
   const { getSettingByKey } = settings.useContainer();
 
   useEffect(() => {
-    Mixpanel.pageView(route.name);
+    Mixpanel.pageView(router.name);
   }, []);
-
-
+  console.log(ride);
   const onRatingUpdate = (selectedRating) => {
     setRating(selectedRating);
   };
@@ -61,8 +59,15 @@ const PostRidePage = ({ menuSide }) => {
     setTipSettings(setting);
   };
 
+  const loadRide = async () => {
+    const rideData = await getRideFromApi(route.params.rideId);
+    console.log({ rideData });
+    setRide(rideData);
+  };
+
   useEffect(() => {
     initSettings();
+    loadRide();
   }, []);
 
   const onSubmit = async () => {

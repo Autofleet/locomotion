@@ -2,6 +2,7 @@ import React, {
   useState, useEffect, useRef, createContext, useContext,
 } from 'react';
 import Config from 'react-native-config';
+import { useNavigation } from '@react-navigation/native';
 import _ from 'lodash';
 import { UserContext } from '../user';
 import { getPosition, DEFAULT_COORDS } from '../../services/geo';
@@ -17,7 +18,7 @@ import settings from '../settings';
 import SETTINGS_KEYS from '../settings/keys';
 import { RideStateContextContext } from '../ridePageStateContext';
 import { BS_PAGES } from '../ridePageStateContext/utils';
-import { RIDE_STATES } from '../../lib/commonTypes';
+import { RIDE_STATES, RIDE_FINAL_STATES } from '../../lib/commonTypes';
 import useInterval from '../../lib/useInterval';
 import { formatSps } from '../../lib/ride/utils';
 import { MAIN_ROUTES } from '../../pages/routes';
@@ -118,7 +119,6 @@ export const RidePageContext = createContext<RidePageContextInterface>({
   ride: {},
   trackRide: async () => '',
   postRideSubmit: (rideId: string, rating: number | null, tip: number | null) => undefined,
-
 });
 
 const HISTORY_RECORDS_NUM = 10;
@@ -128,6 +128,7 @@ const RidePageContextProvider = ({ children }: {
   children: any
 }) => {
   const { locationGranted } = useContext(UserContext);
+  const navigation = useNavigation();
   const { checkStopPointsInTerritory, changeBsPage } = useContext(RideStateContextContext);
   const [requestStopPoints, setRequestStopPoints] = useState(INITIAL_STOP_POINTS);
   const [currentGeocode, setCurrentGeocode] = useState<any | null>(null);
@@ -150,13 +151,13 @@ const RidePageContextProvider = ({ children }: {
     [RIDE_STATES.PENDING]: () => { changeBsPage(BS_PAGES.CONFIRMING_RIDE); },
     [RIDE_STATES.MATCHING]: () => { changeBsPage(BS_PAGES.CONFIRMING_RIDE); },
     [RIDE_STATES.REJECTED]: () => { changeBsPage(BS_PAGES.NO_AVAILABLE_VEHICLES); },
-    [RIDE_STATES.COMPLETED]: () => {
-      navigationService.navigate(MAIN_ROUTES.COMPLETED_RIDE_OVERVIEW_PAGE);
+    [RIDE_STATES.COMPLETED]: (ride) => {
+      navigation.navigate(MAIN_ROUTES.POST_RIDE, { rideId: ride.id });
+      changeBsPage(BS_PAGES.ADDRESS_SELECTOR);
+      setServiceEstimations(null);
     },
     [RIDE_STATES.DISPATCHED]: () => { changeBsPage(BS_PAGES.ACTIVE_RIDE); },
     [RIDE_STATES.ACTIVE]: () => { changeBsPage(BS_PAGES.ACTIVE_RIDE); },
-    // [RIDE_STATES.FAILED]: () => {},
-    // [RIDE_STATES.CANCELED]: () => {},
   };
 
   // const serviceType = ride.serviceType || await rideApi.getService(ride.serviceTypeId)
@@ -244,19 +245,25 @@ const RidePageContextProvider = ({ children }: {
     if (ride?.id) {
       const rideLoaded = await rideApi.getRide(ride?.id);
       const formattedRide = await formatRide(rideLoaded);
-      setRide(formattedRide);
       if (ride.state !== rideLoaded.state) {
         const screenFunction = RIDE_STATES_TO_SCREENS[rideLoaded.state];
         if (screenFunction) {
-          screenFunction();
+          screenFunction(ride);
         }
       }
+      if (RIDE_FINAL_STATES.includes(ride?.state || '')) {
+        setRide({});
+      }
+      setRide(formattedRide);
     }
   }, 5000);
+
 
   useEffect(() => {
     validateRequestedStopPoints(requestStopPoints);
   }, [requestStopPoints]);
+
+  const getRideFromApi = rideId => rideApi.getRide(rideId);
 
   const reverseLocationGeocode = async (pinLat: number | null = null, pinLng: number | null = null)
     : Promise<any | undefined> => {
@@ -622,6 +629,7 @@ const RidePageContextProvider = ({ children }: {
         setServiceRequestFailed,
         trackRide,
         postRideSubmit,
+        getRideFromApi,
       }}
     >
       {children}
