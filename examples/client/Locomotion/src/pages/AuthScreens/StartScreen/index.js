@@ -85,7 +85,7 @@ const StartScreen = () => {
                 dark
                 onPress={() => nextScreen()}
               >
-                <ButtonText dark>{i18n.t('login.login')}</ButtonText>
+                <ButtonText dark>{i18n.t('login.getStarted')}</ButtonText>
               </StartButton>
             </ButtonsContainer>
             <TermsText>

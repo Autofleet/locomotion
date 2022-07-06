@@ -31,8 +31,8 @@ const PaymentButton = ({
   <>
     {id ? (id !== cashPaymentMethod.id
       ? <PaymentIcon type={brand || 'generic'} />
-      : <SvgIcon Svg={cashIcon} height={15} width={15} />)
-      : <SvgIcon Svg={icon} height={15} width={15} />}
+      : <SvgIcon fill="#38a7fc" Svg={cashIcon} height={15} width={15} />)
+      : <SvgIcon fill="#38a7fc" Svg={icon} height={15} width={15} />}
     <TimeText>{title}</TimeText>
   </>
 );

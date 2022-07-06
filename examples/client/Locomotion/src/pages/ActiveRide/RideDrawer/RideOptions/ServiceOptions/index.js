@@ -9,6 +9,7 @@ const ServiceOptions = () => {
   const { serviceEstimations, stopRequestInterval } = useContext(RidePageContext);
   const isDebuggingEnabled = (typeof atob !== 'undefined');
   useEffect(() => () => stopRequestInterval(), []);
+
   return (
     <ServiceOptionsContainer alwaysBounceVertical={false}>
       {(serviceEstimations || []).map(option => <ServiceCard service={option} key={option.name} />)}
