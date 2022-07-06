@@ -177,7 +177,6 @@ const SearchBar = ({
 
   return (
     <View
-      testID="bottomSheet"
       style={{
         paddingBottom: 12,
         flexDirection: 'row',
