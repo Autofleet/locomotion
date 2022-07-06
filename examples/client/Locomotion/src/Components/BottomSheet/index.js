@@ -83,7 +83,15 @@ const BottomSheetComponent = forwardRef(({
           zIndex: 5,
         }}
       >
-        {children}
+        <SafeView
+          style={{
+            flex: 1,
+            flexDirection: 'column',
+          }}
+        >
+          {children}
+        </SafeView>
+
       </BottomSheet>
     </>
   );
