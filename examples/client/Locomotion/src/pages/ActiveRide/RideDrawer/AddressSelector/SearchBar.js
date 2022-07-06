@@ -126,7 +126,8 @@ const SearchBar = ({
         key={s.id}
       >
         <BottomSheetInput
-          testID={`address_input_${i}`}
+          accessible
+          accessibilityLabel={`address_input_${i}`}
           placeholder={i18n.t(placeholder)}
           onChangeText={(text) => {
             updateRequestSp({
