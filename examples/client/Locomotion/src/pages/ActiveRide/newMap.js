@@ -158,7 +158,7 @@ export default React.forwardRef(({
       addStreetAddressToStopPoints();
     }
   }, [ride.stopPoints]);
-  console.log(ride);
+
   const stopPoints = rideStopPoints || requestStopPoints || [];
 
   const getCurrentStopPoint = (sps) => {

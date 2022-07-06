@@ -61,6 +61,7 @@ const PostRidePage = ({ menuSide }) => {
     setTipSettings(setting);
   };
 
+  console.log(ride);
   useEffect(() => {
     initSettings();
   }, []);
@@ -68,7 +69,7 @@ const PostRidePage = ({ menuSide }) => {
   const onSubmit = async () => {
     if (rating) {
       try {
-        postRideSubmit(ride.id, rating, rideTip);
+        postRideSubmit(ride.id, ride.priceCalculationId, rating, rideTip);
       } catch (e) {
         console.log(e);
       }

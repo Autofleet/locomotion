@@ -59,3 +59,12 @@ export const track = async (rideId) => {
   const { data } = await network.put(`api/v2/rides/${rideId}/track`);
   return data;
 };
+
+export const additionalCharge = async (pricingCalculationId, amount, chargeFor) => {
+  try {
+    const response = await network.post(`https://api.autofleet.io/api/v1/price-calculation/${pricingCalculationId}/additional-charges`, { amount, chargeFor });
+    return response.data;
+  } catch (e) {
+    console.log(e);
+  }
+};
