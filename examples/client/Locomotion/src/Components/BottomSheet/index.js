@@ -46,6 +46,11 @@ const BottomSheetComponent = forwardRef(({
     [footerComponent],
   );
 
+  const snapPointsAreTheSame = () => {
+    const firstSnapPoint = snapPoints[0];
+    return snapPoints.every(snap => snap === firstSnapPoint);
+  };
+
   return (
     <>
       {!isExpanded && locationGranted && (
@@ -63,6 +68,9 @@ const BottomSheetComponent = forwardRef(({
         footerComponent={renderFooter}
         enablePanDownToClose={enablePanDownToClose}
         index={index}
+        handleIndicatorStyle={{
+          ...(snapPointsAreTheSame() && { display: 'none' }),
+        }}
         style={{
           shadowColor: '#000',
           shadowOffset: {
@@ -75,15 +83,7 @@ const BottomSheetComponent = forwardRef(({
           zIndex: 5,
         }}
       >
-        <SafeView
-          style={{
-            flex: 1,
-            flexDirection: 'column',
-          }}
-        >
-          {children}
-        </SafeView>
-
+        {children}
       </BottomSheet>
     </>
   );

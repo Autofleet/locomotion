@@ -17,7 +17,7 @@ const FutureBookingButton = () => {
   const nowText = i18n.t('bottomSheetContent.ride.now');
   return (
     <>
-      <SvgIcon fill="#333" Svg={clock} height={15} width={15} />
+      <SvgIcon fill="#38a7fc" Svg={clock} height={15} width={15} />
       <TimeText>{nowText}</TimeText>
     </>
   );
