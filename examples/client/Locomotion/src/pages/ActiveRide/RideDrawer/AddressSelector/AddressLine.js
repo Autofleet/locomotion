@@ -76,7 +76,7 @@ const AddressRow = ({
           ? (
             <Icon
               Svg={finalIcon}
-              height={20}
+              height={21}
               width={20}
               actionButton={actionButton}
             />
