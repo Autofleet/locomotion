@@ -64,7 +64,7 @@ export default ({
   return (
     <KeyboardAwareScrollView extraScrollHeight={20} enableOnAndroid>
       <PageHeader
-        title="Payment method details"
+        title={i18n.t('payments.cardDetails.title')}
         onIconPress={() => navigation.navigate(MAIN_ROUTES.PAYMENT)}
         iconSide=""
         displayIcon={undefined}
@@ -75,11 +75,11 @@ export default ({
       <>
         <Container>
           <CardsContainer>
-            <CardsTitle style={{ boxShadow: '100px' }}>
-              Credit Card informatiion
+            <CardsTitle>
+            {i18n.t('payments.cardDetails.cardsTitle')}
             </CardsTitle>
             <Card
-              title={i18n.t('onboarding.namePlaceholder')}
+              title={i18n.t('payments.cardDetails.nickname')}
               onPress={undefined}
               verified={undefined}
               showUnverified={undefined}
@@ -90,7 +90,7 @@ export default ({
             <Card
               verified={false}
               showUnverified={false}
-              title="Card Number"
+              title={i18n.t('payments.cardDetails.number')}
               onPress={undefined}
             >
               {getLastFourForamttedShortLong(paymentMethod?.lastFour)}
@@ -99,7 +99,7 @@ export default ({
             <Card
               verified={false}
               showUnverified={false}
-              title="Balance"
+              title={i18n.t('payments.cardDetails.balance')}
               onPress={undefined}
             >
               Oustanding balance of TODO
