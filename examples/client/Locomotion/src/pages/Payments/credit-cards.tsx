@@ -35,7 +35,7 @@ export default ({
         {(isCashEnabled ? [...usePayments.paymentMethods, cashPaymentMethod] : usePayments.paymentMethods).map((paymentMethod : any) => (
           <PaymentMethodsContainer>
             <CreditCardsContainer>
-              <PaymentMethod {...paymentMethod} onPress={() => navigate(MAIN_ROUTES.CARD_DETAILS, { ...paymentMethod, onDetach })} />
+              <PaymentMethod {...paymentMethod} onPress={() => navigate(MAIN_ROUTES.CARD_DETAILS, { paymentMethod, onDetach })} />
             </CreditCardsContainer>
             {paymentMethod.id !== cashPaymentMethod.id
             && (
