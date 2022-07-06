@@ -1,7 +1,10 @@
-import React, { useContext, useEffect } from 'react';
-import { Text, View } from 'react-native';
+import React, { useContext, useEffect, useState } from 'react';
+import {
+  Linking, Text, View,
+} from 'react-native';
 import styled from 'styled-components';
 import { useBottomSheet } from '@gorhom/bottom-sheet';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import SvgIcon from '../SvgIcon';
 import { RidePageContext } from '../../context/newRideContext';
 import i18n from '../../I18n';
@@ -33,27 +36,22 @@ const SecondaryButton = styled(Button).attrs({ noBackground: true })`
   margin-top: 10px;
 `;
 
-const Container = styled(View)`
+const Container = styled(SafeAreaView)`
   width: 100%;
-  padding: 10px 20px;
-  flex: 1;
+  padding: 0px 20px;
+  height: 100%;
 `;
 
 const MainContent = styled(View)`
   flex: 1;
   width: 100%;
-  display: flex;
-  flex-direction: column;
-  margin-bottom: 60px;
+  margin-bottom: 5px;
 `;
 
 const CardText = styled(View)`
-  flex: 3;
-  height: 30px;
 `;
 
 const ImageContainer = styled(View)`
-  flex: 3;
   justify-content: center;
   align-items: center;
 `;
@@ -73,7 +71,6 @@ const Title = styled(Text)`
 const SubTitle = styled(Text)`
   ${FONT_SIZES.LARGE}
   color: ${({ theme }) => theme.disabledColor};
-  height: 35px;
 `;
 
 const ButtonTitle = styled(Text)`
@@ -105,13 +102,12 @@ margin-top: 25px;
 
 const Header = styled(View)`
   display: flex;
-  flex: 1;
   flex-direction: row;
+  justify-content: space-between;
 `;
 
 const Footer = styled(View)`
   width: 100%;
-  margin-bottom: 20;
 `;
 
 const AddressContainer = styled(View)`
@@ -132,7 +128,7 @@ const BsPage = ({
   isLoading,
   buttonDisabled,
 }: {
-  onSecondaryButtonPress: any,
+  onSecondaryButtonPress?: any,
   onButtonPress: any,
   Image: any,
   children?: any,
@@ -140,16 +136,16 @@ const BsPage = ({
   TitleText: string,
   SubTitleText: string,
   ButtonText: string,
-  SecondaryButtonText: string,
-  isLoading: boolean;
-  buttonDisabled: boolean;
+  SecondaryButtonText?: string,
+  isLoading?: boolean;
+  buttonDisabled?: boolean;
 }) => (
-  <Container>
+  <Container edges={['bottom']}>
     <MainContent>
       <>
         {TitleText && (
           <Header>
-            <CardText>
+            <CardText style={{ width: Image ? '50%' : '100%' }}>
               <TitleContainer>
                 {titleIcon && <SvgIcon Svg={titleIcon} style={{ marginRight: 5 }} />}
                 <Title>{TitleText}</Title>
@@ -184,9 +180,34 @@ const BsPage = ({
 BsPage.defaultProps = {
   children: undefined,
   titleIcon: undefined,
+  onSecondaryButtonPress: () => undefined,
+  SecondaryButtonText: undefined,
+  isLoading: false,
+  buttonDisabled: false,
 };
 
 export default BsPage;
+
+export const LocationRequest = (props: any) => {
+  const [operation, setOperation] = useState();
+
+  const getOperationName = async () => {
+    // get operation name
+  };
+  useEffect(() => {
+    getOperationName();
+  }, []);
+  return (
+    <BsPage
+      TitleText={i18n.t('bottomSheetContent.locationRequest.titleText')}
+      ButtonText={i18n.t('bottomSheetContent.locationRequest.buttonText')}
+      SecondaryButtonText={i18n.t('bottomSheetContent.locationRequest.secondaryButtonText')}
+      SubTitleText={i18n.t('bottomSheetContent.locationRequest.subTitleText', { operation })}
+      onButtonPress={Linking.openSettings}
+      {...props}
+    />
+  );
+};
 
 export const NotAvailableHere = (props: any) => {
   const { setSnapPointsState } = useContext(BottomSheetContext);
