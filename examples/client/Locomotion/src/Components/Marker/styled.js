@@ -55,9 +55,6 @@ export const MarkerToolTipText = styled.Text`
     flex: 1;
 `;
 
-export const MarkerContainer = styled.View`
-`;
-
 export const InfoBox = styled.View`
   ${Platform.OS === 'ios' && 'top: -35px'};
    height: 50px;

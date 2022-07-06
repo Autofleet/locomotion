@@ -3,7 +3,8 @@ import React, {
 } from 'react';
 import Config from 'react-native-config';
 import _ from 'lodash';
-import { getPosition } from '../../services/geo';
+import { UserContext } from '../user';
+import { getPosition, DEFAULT_COORDS } from '../../services/geo';
 import { getPlaces, getGeocode, getPlaceDetails } from './google-api';
 import StorageService from '../../services/storage';
 import * as rideApi from './api';
@@ -124,6 +125,7 @@ let SERVICE_ESTIMATIONS_INTERVAL_IN_SECONDS: number;
 const RidePageContextProvider = ({ children }: {
   children: any
 }) => {
+  const { locationGranted } = useContext(UserContext);
   const { checkStopPointsInTerritory, changeBsPage } = useContext(RideStateContextContext);
   const [requestStopPoints, setRequestStopPoints] = useState(INITIAL_STOP_POINTS);
   const [currentGeocode, setCurrentGeocode] = useState<any | null>(null);
@@ -219,7 +221,6 @@ const RidePageContextProvider = ({ children }: {
   };
 
   useEffect(() => {
-    initCurrentLocation();
     getServiceEstimationsFetchingInterval();
     loadActiveRide();
   }, []);
@@ -236,10 +237,6 @@ const RidePageContextProvider = ({ children }: {
       }
     }
   }, 5000);
-
-  useEffect(() => {
-    initSps();
-  }, [currentGeocode]);
 
   useEffect(() => {
     validateRequestedStopPoints(requestStopPoints);
@@ -291,9 +288,15 @@ const RidePageContextProvider = ({ children }: {
   };
 
   const initCurrentLocation = async () => {
-    const locationData = await getCurrentLocationAddress();
-    setCurrentGeocode(locationData);
+    if (locationGranted) {
+      const locationData = await getCurrentLocationAddress();
+      setCurrentGeocode(locationData);
+    }
   };
+
+  useEffect(() => {
+    initCurrentLocation();
+  }, [locationGranted]);
 
   const initSps = async () => {
     const currentAddress = currentGeocode || await getCurrentLocationAddress();
@@ -315,6 +318,12 @@ const RidePageContextProvider = ({ children }: {
       setRequestStopPoints(sps);
     }
   };
+
+  useEffect(() => {
+    if (requestStopPoints.filter((sp => sp.lat)).length <= 1) {
+      initSps();
+    }
+  }, [currentGeocode]);
 
   const updateRequestSp = (data: any[], index?: number) => {
     const reqSps = [...requestStopPoints];
@@ -338,10 +347,12 @@ const RidePageContextProvider = ({ children }: {
   };
 
   const loadAddress = async (input: any) => {
-    const currentCoords = await getCurrentLocation();
-    let location = null;
+    let currentCoords;
+    if (locationGranted) {
+      currentCoords = await getCurrentLocation();
+    }
     try {
-      location = `${currentCoords.latitude},${currentCoords.longitude}`;
+      const location = currentCoords ? `${currentCoords.latitude},${currentCoords.longitude}` : null;
       const data = await getPlaces({
         input,
         region: 'il',
@@ -396,6 +407,10 @@ const RidePageContextProvider = ({ children }: {
 
   const getCurrentLocation = async () => {
     const location = await getPosition();
+    if (!location) {
+      changeBsPage(BS_PAGES.LOCATION_REQUEST);
+      return DEFAULT_COORDS.coords;
+    }
     return location.coords;
   };
 

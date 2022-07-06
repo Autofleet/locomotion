@@ -4,6 +4,7 @@ import Config from 'react-native-config';
 import RNLocation from 'react-native-location';
 import Geolocation from '@react-native-community/geolocation';
 import moment from 'moment';
+import { BS_PAGES } from '../context/ridePageStateContext/utils';
 
 const currentLocationNative = async () => {
   if (Platform.OS === 'android') {
@@ -107,7 +108,7 @@ export default GeoService;
 
 export const { decodeGmPath } = Geo;
 
-const DEFAULT_COORDS = {
+export const DEFAULT_COORDS = {
   coords: {
     latitude: parseFloat(Config.DEFAULT_LATITUDE),
     longitude: parseFloat(Config.DEFAULT_LONGITUDE),
@@ -117,11 +118,11 @@ export const getPosition = async () => {
   try {
     const granted = await GeoService.checkPermission();
     if (!granted) {
-      return DEFAULT_COORDS;
+      return false;
     }
     return GeoService.currentLocation();
   } catch (e) {
     console.error('Error getting location', e);
-    return DEFAULT_COORDS;
+    return false;
   }
 };

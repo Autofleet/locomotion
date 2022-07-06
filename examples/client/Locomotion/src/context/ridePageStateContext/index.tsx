@@ -2,7 +2,7 @@ import React, {
   createContext, useContext, useEffect, useState,
 } from 'react';
 import { BottomSheetContext, SNAP_POINT_STATES } from '../bottomSheetContext';
-import geo, { getPosition } from '../../services/geo';
+import geo, { DEFAULT_COORDS, getPosition } from '../../services/geo';
 import { getUserTerritories } from '../user/api';
 import pointInPolygon from './pointInPolygon';
 import { BsPages, BS_PAGES } from './utils';
@@ -31,7 +31,7 @@ export const RideStateContextContext = createContext<RidePageStateContextProps>(
 
 const RideStateContextContextProvider = ({ children }: { children: any }) => {
   const [territory, setTerritory] = useState<Array<any> | null>(null);
-  const [isUserLocationFocused, setIsUserLocationFocused] = useState(true);
+  const [isUserLocationFocused, setIsUserLocationFocused] = useState(false);
   const [currentBsPage, setCurrentBsPage] = useState<BsPages>(BS_PAGES.ADDRESS_SELECTOR);
   const { setSnapPointsState, setIsExpanded } = useContext(BottomSheetContext);
 
@@ -52,7 +52,7 @@ const RideStateContextContextProvider = ({ children }: { children: any }) => {
     }
     if (t && checkTerritory) {
       const position = await getPosition();
-      const isInsidePoly = pointInPolygon(t, position);
+      const isInsidePoly = pointInPolygon(t, (position || DEFAULT_COORDS));
       if (!isInsidePoly) {
         setNotInTerritory();
       }

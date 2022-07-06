@@ -21,7 +21,7 @@ const GenericRideButton = ({
   title,
 }: GenericRideButtonProps) => (
   <>
-    <SvgIcon stroke="#333" fill="#333" Svg={icon} height={15} width={15} />
+    <SvgIcon stroke="#38a7fc" fill="#38a7fc" Svg={icon} height={15} width={15} />
     <TimeText numberOfLines={1}>{title}</TimeText>
   </>
 );

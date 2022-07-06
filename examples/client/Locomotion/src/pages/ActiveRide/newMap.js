@@ -1,20 +1,20 @@
 import React, {
-  useContext, useEffect, useRef, useState,
+  useContext, useEffect, useState,
 } from 'react';
 import polyline from '@mapbox/polyline';
 import { Platform, StyleSheet } from 'react-native';
 import MapView, { Polygon, Polyline } from 'react-native-maps';
 import Config from 'react-native-config';
+import { UserContext } from '../../context/user';
 import { RidePageContext } from '../../context/newRideContext';
 import { RideStateContextContext } from '../../context';
-import { getPosition } from '../../services/geo';
+import { DEFAULT_COORDS, getPosition } from '../../services/geo';
 import { LocationMarker, LocationMarkerContainer } from './styled';
 import mapDarkMode from '../../assets/mapDarkMode.json';
 import { Context as ThemeContext, THEME_MOD } from '../../context/theme';
 import { AvailabilityContext } from '../../context/availability';
 import AvailabilityVehicle from '../../Components/AvailabilityVehicle';
 import StationsMap from '../../Components/Marker';
-import { latLngToAddress } from '../../context/newRideContext/utils';
 import { BS_PAGES } from '../../context/ridePageStateContext/utils';
 import { RIDE_STATES, STOP_POINT_STATES, STOP_POINT_TYPES } from '../../lib/commonTypes';
 import PrecedingStopPointMarker from '../../Components/PrecedingStopPointMarker';
@@ -26,6 +26,14 @@ const MAP_EDGE_PADDING = {
   bottom: 400,
   left: 100,
 };
+
+const PAGES_TO_SHOW_SP_MARKERS = [
+  BS_PAGES.ADDRESS_SELECTOR,
+  BS_PAGES.SERVICE_ESTIMATIONS,
+  BS_PAGES.NO_PAYMENT,
+  BS_PAGES.NOT_IN_TERRITORY,
+  BS_PAGES.NO_AVAILABLE_VEHICLES,
+  BS_PAGES.ACTIVE_RIDE];
 export default React.forwardRef(({
   mapSettings,
 }, ref) => {
@@ -40,6 +48,7 @@ export default React.forwardRef(({
     territory,
     currentBsPage,
     initGeoService,
+    changeBsPage,
   } = useContext(RideStateContextContext);
   const isMainPage = currentBsPage === BS_PAGES.ADDRESS_SELECTOR;
   const isConfirmPickupPage = currentBsPage === BS_PAGES.CONFIRM_PICKUP;
@@ -79,7 +88,7 @@ export default React.forwardRef(({
       const geoData = await getPosition();
       setMapRegion(oldMapRegion => ({
         ...oldMapRegion,
-        ...geoData.coords,
+        ...(geoData || DEFAULT_COORDS).coords,
       }));
     } catch (e) {
       console.log('Init location error', e);
@@ -96,13 +105,6 @@ export default React.forwardRef(({
       initLocation();
     }
   }, [ref.current]);
-
-
-  useEffect(() => {
-    if (isUserLocationFocused) {
-      focusCurrentLocation();
-    }
-  }, [mapRegion]);
 
   useEffect(() => {
     if (currentBsPage === BS_PAGES.CONFIRM_PICKUP) {
@@ -158,7 +160,7 @@ export default React.forwardRef(({
       addStreetAddressToStopPoints();
     }
   }, [ride.stopPoints]);
-  console.log(ride);
+
   const stopPoints = rideStopPoints || requestStopPoints || [];
 
   const getCurrentStopPoint = (sps) => {
@@ -235,7 +237,7 @@ export default React.forwardRef(({
             coordinates={polylineList}
           />
         )}
-        {!isConfirmPickupPage && stopPoints.filter(sp => !!sp.lat).length > 1
+        {PAGES_TO_SHOW_SP_MARKERS.includes(currentBsPage) && stopPoints.filter(sp => !!sp.lat).length > 1
           ? stopPoints
             .filter(sp => !!sp.lat)
             .map(sp => (<StationsMap stopPoint={sp} key={sp.id} />))
