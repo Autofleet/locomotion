@@ -2,8 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { useRoute } from '@react-navigation/native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { View } from 'react-native';
-import { Text } from '../../pages/Profile/ScreenText/styles';
-import { FONT_WEIGHTS } from '../../context/theme';
 import ConfirmationPopup from '../../popups/ConfirmationPopup';
 import { getLastFourForamttedShortLong } from '../../pages/Payments/cardDetailUtils';
 import { MAIN_ROUTES } from '../../pages/routes';
@@ -13,7 +11,6 @@ import {
   CardsTitle,
   Container,
   LogoutContainer,
-  CardText,
 } from '../../pages/Account/styled';
 import i18n from '../../I18n';
 import PageHeader from '../PageHeader';
@@ -21,7 +18,7 @@ import { PaymentMethodInterface } from '../../context/payments/interface';
 import { getTogglePopupsState } from '../../context/state';
 import PaymentsContext from '../../context/payments';
 import deleteIcon from '../../assets/delete.svg';
-import SvgIcon from '../SvgIcon';
+import { DeleteIcon, DeleteText } from './styled';
 
 
 export default ({
@@ -29,7 +26,6 @@ export default ({
   navigation = undefined,
 }) => {
   const [loading, setLoading] = useState(false);
-  const [isEnabled, setIsEnabled] = useState(false);
   const [methodForDelete, setMethodForDelete] = useState(null);
   const [, togglePopup] = getTogglePopupsState();
   const usePayments = PaymentsContext.useContainer();
@@ -56,10 +52,6 @@ export default ({
 
   const paymentMethod = route?.params?.paymentMethod as PaymentMethodInterface;
 
-  useEffect(() => {
-    setIsEnabled(paymentMethod.isDefault);
-  }, [paymentMethod]);
-
 
   return (
     <KeyboardAwareScrollView extraScrollHeight={20} enableOnAndroid>
@@ -76,7 +68,7 @@ export default ({
         <Container>
           <CardsContainer>
             <CardsTitle>
-            {i18n.t('payments.cardDetails.cardsTitle')}
+              {i18n.t('payments.cardDetails.cardsTitle')}
             </CardsTitle>
             <Card
               title={i18n.t('payments.cardDetails.nickname')}
@@ -102,7 +94,7 @@ export default ({
               title={i18n.t('payments.cardDetails.balance')}
               onPress={undefined}
             >
-              Oustanding balance of TODO
+              {i18n.t('payments.cardDetails.outstandingBalanceText')}
             </Card>
             <LogoutContainer
               onPress={async () => {
@@ -113,13 +105,10 @@ export default ({
                 display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', width: '100%',
               }}
               >
-                <SvgIcon Svg={deleteIcon} style={{ marginRight: 10, marginTop: 8 }} fill="red" />
-                <Text style={{
-                  display: 'flex', color: '#f35657', fontFamily: 'Inter-Regular', fontWeight: '600', justifyContent: 'flex-start',
-                }}
-                >
-                  Delete payment method
-                </Text>
+                <DeleteIcon Svg={deleteIcon} />
+                <DeleteText>
+                  {i18n.t('payments.cardDetails.deleteText')}
+                </DeleteText>
               </View>
             </LogoutContainer>
           </CardsContainer>

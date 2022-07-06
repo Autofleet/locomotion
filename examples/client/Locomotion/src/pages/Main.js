@@ -33,7 +33,7 @@ const InnerHome = () => {
         name="innerHome"
         component={ROUTES_COMPS[MAIN_ROUTES.HOME]}
       />
-      <Drawer.Screen
+      {/* <Drawer.Screen
         name={MAIN_ROUTES.COMPLETED_RIDE_OVERVIEW_PAGE}
         component={ROUTES_COMPS[MAIN_ROUTES.COMPLETED_RIDE_OVERVIEW_PAGE]}
       />
@@ -68,7 +68,7 @@ const InnerHome = () => {
       <Drawer.Screen
         name={MAIN_ROUTES.LOGOUT}
         component={ROUTES_COMPS[MAIN_ROUTES.LOGOUT]}
-      />
+      /> */}
     </Drawer.Navigator>
   );
 };
@@ -113,6 +113,10 @@ const Main = () => (
     <Stack.Screen
       name={MAIN_ROUTES.POST_RIDE}
       component={ROUTES_COMPS[MAIN_ROUTES.POST_RIDE]}
+    />
+    <Drawer.Screen
+      name={MAIN_ROUTES.CARD_DETAILS}
+      component={ROUTES_COMPS[MAIN_ROUTES.CARD_DETAILS]}
     />
     <Stack.Screen
       name={MAIN_ROUTES.LOGOUT}

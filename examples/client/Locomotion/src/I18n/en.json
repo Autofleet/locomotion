@@ -313,7 +313,8 @@
             "nickname": "Card Nickname",
             "number": "Card Number",
             "balance": "Balance",
-            "delete": "Delete payment method"
+            "deleteText": "Delete payment method",
+            "outstandingBalanceText": "Outstanding balance of"
         },
         "select": "Select",
         "pageTitle": "Payments Method",
