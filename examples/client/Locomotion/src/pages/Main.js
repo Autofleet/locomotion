@@ -33,42 +33,6 @@ const InnerHome = () => {
         name="innerHome"
         component={ROUTES_COMPS[MAIN_ROUTES.HOME]}
       />
-      {/* <Drawer.Screen
-        name={MAIN_ROUTES.COMPLETED_RIDE_OVERVIEW_PAGE}
-        component={ROUTES_COMPS[MAIN_ROUTES.COMPLETED_RIDE_OVERVIEW_PAGE]}
-      />
-      <Drawer.Screen
-        name={MAIN_ROUTES.RIDE_HISTORY}
-        component={ROUTES_COMPS[MAIN_ROUTES.RIDE_HISTORY]}
-      />
-      <Drawer.Screen
-        name={MAIN_ROUTES.PAYMENT}
-        component={ROUTES_COMPS[MAIN_ROUTES.PAYMENT]}
-      />
-      <Drawer.Screen
-        name={MAIN_ROUTES.CARD_DETAILS}
-        component={ROUTES_COMPS[MAIN_ROUTES.CARD_DETAILS]}
-      />
-      <Drawer.Screen
-        name={MAIN_ROUTES.ACCOUNT}
-        component={ROUTES_COMPS[MAIN_ROUTES.ACCOUNT]}
-      />
-      <Drawer.Screen
-        name={MAIN_ROUTES.CONTACT_US}
-        component={ROUTES_COMPS[MAIN_ROUTES.CONTACT_US]}
-      />
-      <Drawer.Screen
-        name={MAIN_ROUTES.WEBVIEW}
-        component={ROUTES_COMPS[MAIN_ROUTES.WEBVIEW]}
-      />
-      <Drawer.Screen
-        name={MAIN_ROUTES.POST_RIDE}
-        component={ROUTES_COMPS[MAIN_ROUTES.POST_RIDE]}
-      />
-      <Drawer.Screen
-        name={MAIN_ROUTES.LOGOUT}
-        component={ROUTES_COMPS[MAIN_ROUTES.LOGOUT]}
-      /> */}
     </Drawer.Navigator>
   );
 };
