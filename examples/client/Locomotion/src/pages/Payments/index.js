@@ -26,14 +26,11 @@ export default ({ navigation, menuSide }) => {
   const [methodForDelete, setMethodForDelete] = useState(null);
   const [, togglePopup] = getTogglePopupsState();
   const hasPaymentMethods = paymentMethods && paymentMethods.length > 0;
-  const [isCashEnabled, setIsCashEnabled] = useState(false);
   const [showList, setShowList] = useState(hasPaymentMethods);
 
   const loadCustomerData = async () => {
     await usePayments.getOrFetchCustomer();
     setPageLoading(false);
-    const result = await usePayments.isCashPaymentEnabled();
-    setIsCashEnabled(result.value);
   };
 
   useEffect(() => {
@@ -78,7 +75,6 @@ export default ({ navigation, menuSide }) => {
         {/* <Balance customer={usePayments.customer} /> */}
         {showList ? (
           <CreditCardsList
-            isCashEnabled={isCashEnabled}
             paymentMethods={usePayments.paymentMethods}
             onDetach={onRemoveMethod}
             loadingState={loading}
