@@ -1,6 +1,7 @@
 import React, { useContext, useState } from 'react';
 import moment from 'moment';
 import { Share } from 'react-native';
+import RidePaymentDetails from '../../RidePaymentDetails';
 import { RidePageContext } from '../../../context/newRideContext';
 import DriverCard from '../../DriverCard';
 import {
@@ -21,6 +22,7 @@ import phone from '../../../assets/bottomSheet/phone.svg';
 import share from '../../../assets/bottomSheet/share.svg';
 import cancel from '../../../assets/bottomSheet/cancel.svg';
 import RideNotes from '../../../popups/RideNotes';
+import ServiceTypeDetails from '../../ServiceTypeDetails';
 
 const ActiveRideContent = () => {
   const { ride, trackRide } = useContext(RidePageContext);
@@ -152,11 +154,17 @@ const ActiveRideContent = () => {
               {renderShareRide()}
             </RowContainer>
           </ButtonsContainer>
-          <StopPointsVerticalViewContainer>
-            <StopPointsVerticalView
-              ride={ride}
-            />
-          </StopPointsVerticalViewContainer>
+          <StopPointsVerticalView
+            ride={ride}
+          />
+          <RidePaymentDetails
+            payment={ride.payment}
+            priceAmount={ride.priceAmount}
+            priceCurrency={ride.priceCurrency}
+          />
+          <ServiceTypeDetails
+            serviceType={ride.serviceType}
+          />
           <RideNotes
             notes={firstSpNotCompleted?.notes}
             isVisible={popupToShow === 'notes'}

@@ -108,7 +108,14 @@ const isCashPaymentMethod = (paymentMethod: any) => paymentMethod.id === cashPay
 
 
 export default (paymentMethod: any) => (
-  <TouchableOpacity onPress={paymentMethod.onPress}>
+  <TouchableOpacity
+    activeOpacity={paymentMethod.onPress ? 0 : 1}
+    onPress={() => {
+      if (paymentMethod.onPress) {
+        paymentMethod.onPress();
+      }
+    }}
+  >
     <Container selected={paymentMethod.selected}>
       <ImageContainer>
         {paymentMethod.addNew

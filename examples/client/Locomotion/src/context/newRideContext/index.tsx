@@ -30,7 +30,7 @@ export interface RideInterface {
   id?: string;
   notes?: string;
   paymentMethodId?: string;
-  serviceTypeId?: string;
+  serviceId?: string;
   driver?: any;
   stopPoints?: any[];
   vehicle?: any;
@@ -38,6 +38,7 @@ export interface RideInterface {
   state?: string;
   trackerUrl?: string;
   serviceType?: any;
+  payment?: any;
 }
 
 interface RidePageContextInterface {
@@ -159,12 +160,15 @@ const RidePageContextProvider = ({ children }: {
     // [RIDE_STATES.CANCELED]: () => {},
   };
 
-  // const serviceType = ride.serviceType || await rideApi.getService(ride.serviceTypeId)
-  const formatRide = async (rideToFormat: RideInterface) => ({
-    ...rideToFormat,
-    stopPoints: formatSps(rideToFormat.stopPoints),
-    // serviceType
-  });
+  const formatRide = async (rideToFormat: RideInterface) => {
+    const serviceType = rideToFormat.serviceType
+      || await rideApi.getService(rideToFormat.serviceId);
+    return {
+      ...rideToFormat,
+      stopPoints: formatSps(rideToFormat.stopPoints),
+      serviceType,
+    };
+  };
 
 
   const { getSettingByKey } = settings.useContainer();
@@ -179,7 +183,8 @@ const RidePageContextProvider = ({ children }: {
     });
     const formattedServices = services.map((service) => {
       const estimationForService = estimationsMap[service.id];
-      const estimationResult = estimationForService && estimationForService.results.length && estimationForService.results[0];
+      const estimationResult = estimationForService?.results?.length
+        && estimationForService.results[0];
       return formatEstimationsResult(service, estimationResult, tags);
     });
     return formattedServices.sort((a, b) => a.priority - b.priority);

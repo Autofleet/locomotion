@@ -87,14 +87,6 @@ export const CardContantContainer = styled.View`
   width: 90%;
 `;
 
-export const CardsTitle = styled.Text`
-  width: 100%;
-  ${FONT_SIZES.MEDIUM};
-  ${FONT_WEIGHTS.BOLD};
-  color: #333333;
-  padding: 30px 10px 15px;
-`;
-
 export const CardTitleContainer = styled.View`
   flex-direction: row;
   justify-content: space-between;
