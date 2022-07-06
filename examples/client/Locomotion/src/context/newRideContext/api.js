@@ -56,7 +56,7 @@ export const getRide = async (rideId) => {
 };
 
 export const cancelRide = async (rideId) => {
-  const { data } = await network.put(`api/v1/rides/${rideId}/cancel`);
+  const { data } = await network.put(`api/v1/client-rides/${rideId}/cancel`);
   return data;
 };
 

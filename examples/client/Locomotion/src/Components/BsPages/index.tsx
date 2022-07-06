@@ -26,17 +26,13 @@ const OtherButton = styled(Button)`
   background-color: ${({ warning, theme }) => (warning ? ERROR_COLOR : theme.primaryColor)};
   height: 50px;
   border-radius: 8px;
-  flex-grow: 1;
-  margin: 5px;
 `;
 
 
 const SecondaryButton = styled(Button).attrs({ noBackground: true })`
   height: 50px;
   border-radius: 8px;
-  border: ${({ warning }) => (warning ? `2px solid ${ERROR_COLOR}` : undefined)};
-  flex-grow: 1;
-  margin: 5px;
+  border: ${({ warning }) => (warning ? `2px solid ${ERROR_COLOR}` : 'none')};
 `;
 
 const Container = styled(SafeAreaView)`
@@ -112,10 +108,13 @@ const Header = styled(View)`
   margin-bottom: 10px;
 `;
 
-const Footer = styled(View)`
+type FooterInterface = {
+  fullWidthButtons: boolean | undefined;
+}
+const Footer = styled(View)<FooterInterface>`
   width: 100%;
   display: flex;
-  flex-direction: row;
+  flex-direction: ${({ fullWidthButtons }) => (fullWidthButtons ? 'column' : 'row')};
   justify-content: space-between;
   align-items: center;
 `;
@@ -138,6 +137,7 @@ const BsPage = ({
   isLoading,
   buttonDisabled,
   warning,
+  fullWidthButtons,
 }: {
   onSecondaryButtonPress?: any,
   onButtonPress: any,
@@ -151,11 +151,14 @@ const BsPage = ({
   isLoading?: boolean;
   buttonDisabled?: boolean;
   warning?: boolean
-}) => (
-  <Container edges={['bottom']}>
-    <MainContent>
-      <>
-        {TitleText && (
+  fullWidthButtons?: boolean;
+}) => {
+  const buttonWidth = fullWidthButtons ? '100%' : '48%';
+  return (
+    <Container edges={['bottom']}>
+      <MainContent>
+        <>
+          {TitleText && (
           <Header>
             <CardText style={{ width: Image ? '50%' : '100%' }}>
               <TitleContainer>
@@ -170,24 +173,35 @@ const BsPage = ({
               </ImageContainer>
             ) : undefined}
           </Header>
+          )}
+          {children}
+        </>
+      </MainContent>
+      <Footer fullWidthButtons={fullWidthButtons}>
+        {ButtonText && (
+        <OtherButton
+          style={{ width: buttonWidth }}
+          disabled={buttonDisabled}
+          onPress={onButtonPress}
+          isLoading={isLoading}
+          warning={warning}
+        >
+          <ButtonTitle>{ButtonText}</ButtonTitle>
+        </OtherButton>
         )}
-        {children}
-      </>
-    </MainContent>
-    <Footer>
-      {ButtonText && (
-      <OtherButton disabled={buttonDisabled} onPress={onButtonPress} isLoading={isLoading} warning={warning}>
-        <ButtonTitle>{ButtonText}</ButtonTitle>
-      </OtherButton>
-      )}
-      {SecondaryButtonText && (
-      <SecondaryButton warning={warning} onPress={onSecondaryButtonPress}>
-        <SecondaryButtonTitle warning={warning}>{SecondaryButtonText}</SecondaryButtonTitle>
-      </SecondaryButton>
-      )}
-    </Footer>
-  </Container>
-);
+        {SecondaryButtonText && (
+        <SecondaryButton
+          style={{ width: buttonWidth }}
+          warning={warning}
+          onPress={onSecondaryButtonPress}
+        >
+          <SecondaryButtonTitle warning={warning}>{SecondaryButtonText}</SecondaryButtonTitle>
+        </SecondaryButton>
+        )}
+      </Footer>
+    </Container>
+  );
+};
 
 BsPage.defaultProps = {
   children: undefined,
@@ -197,6 +211,7 @@ BsPage.defaultProps = {
   isLoading: false,
   buttonDisabled: false,
   warning: false,
+  fullWidthButtons: false,
 };
 
 export default BsPage;
@@ -217,6 +232,7 @@ export const LocationRequest = (props: any) => {
       SecondaryButtonText={i18n.t('bottomSheetContent.locationRequest.secondaryButtonText')}
       SubTitleText={i18n.t('bottomSheetContent.locationRequest.subTitleText', { operation })}
       onButtonPress={Linking.openSettings}
+      fullWidthButtons
       {...props}
     />
   );
@@ -301,6 +317,7 @@ export const ConfirmPickup = (props: any) => {
       ButtonText={i18n.t('bottomSheetContent.confirmPickup.buttonText')}
       SubTitleText={i18n.t('bottomSheetContent.confirmPickup.subTitleText')}
       isLoading={rideRequestLoading}
+      fullWidthButtons
       {...props}
       onButtonPress={() => {
         updateRequestSp(lastSelectedLocation);
