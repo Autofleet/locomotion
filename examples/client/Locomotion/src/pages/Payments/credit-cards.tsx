@@ -37,14 +37,6 @@ export default ({
             <CreditCardsContainer>
               <PaymentMethod {...paymentMethod} onPress={() => navigate(MAIN_ROUTES.CARD_DETAILS, { paymentMethod, onDetach })} />
             </CreditCardsContainer>
-            {paymentMethod.id !== cashPaymentMethod.id
-            && (
-              <DeleteCreditCard disabled={loading}>
-                <DeleteCreditCardText onPress={() => onDetach(paymentMethod.id)}>
-                  {i18n.t('payments.deleteCard')}
-                </DeleteCreditCardText>
-              </DeleteCreditCard>
-            )}
           </PaymentMethodsContainer>
         ))}
         {onAddClick ? (
