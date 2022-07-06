@@ -1,9 +1,10 @@
-<svg xmlns="http://www.w3.org/2000/svg" 
-height="18px" viewBox="0 0 24 24" width="18px" fill="#000000">
-<path fill-rule="evenodd" stroke-width="2px" stroke-linecap="butt" stroke-linejoin="miter" fill="none"
- d="M4.000,3.999 L9.999,3.999 C11.104,3.999 11.999,4.895 11.999,5.999 L10.999,12.999 C10.999,14.104 10.104,15.000 8.999,15.000 L4.999,15.000 C3.895,15.000 2.999,14.104 2.999,12.999 L1.999,5.999 C1.999,4.895 2.895,3.999 4.000,3.999 Z"/>
-<path fill-rule="evenodd" stroke-width="2px" stroke-linecap="butt" stroke-linejoin="miter" fill="none"
- d="M4.000,3.999 L4.000,2.000 C4.000,1.447 4.446,0.999 4.999,0.999 L8.999,0.999 C9.551,0.999 9.999,1.447 9.999,2.000 L9.999,3.999 "/>
-<path fill-rule="evenodd" stroke-width="2px" stroke-linecap="butt" stroke-linejoin="miter" fill="none"
- d="M0.998,3.999 L12.999,3.999 L12.999,5.999 L0.998,5.999 L0.998,3.999 Z"/>
+<svg xmlns="http://www.w3.org/2000/svg" width="12" height="17" viewBox="0 0 12 17">
+    <g data-name="Group 5135">
+        <path data-name="Rectangle 3060" d="M0 0h10v10a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V0z" transform="translate(1 5)" style="fill:#f35657"/>
+        <path data-name="Rectangle 3061" d="M1 0h10a1 1 0 0 1 1 1v1H0V1a1 1 0 0 1 1-1z" transform="translate(0 2)" style="fill:#f35657"/>
+        <g data-name="Rectangle 3062" style="stroke:#f35657;fill:#f35657">
+            <path d="M2 0h2a2 2 0 0 1 2 2 1 1 0 0 1-1 1H1a1 1 0 0 1-1-1 2 2 0 0 1 2-2z" style="stroke:none" transform="translate(3)"/>
+            <path d="M2 .5h2A1.5 1.5 0 0 1 5.5 2a.5.5 0 0 1-.5.5H1A.5.5 0 0 1 .5 2 1.5 1.5 0 0 1 2 .5z" style="fill:#f35657" transform="translate(3)"/>
+        </g>
+    </g>
 </svg>
