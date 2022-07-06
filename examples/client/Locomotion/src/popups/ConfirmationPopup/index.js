@@ -1,49 +1,32 @@
-import React, { Fragment, useEffect, useState } from 'react';
-import { View, TouchableOpacity, Text } from 'react-native';
+import React from 'react';
 import Modal from 'react-native-modal';
 import propsTypes from 'prop-types';
-import i18n from '../../I18n';
 import {
   PopupContainer,
   SummaryTitle,
-  CloseContainer,
-  ResetInputIcon,
   SubmitContainer,
   ContentContainer,
   Content,
 } from './styled';
-import { getTogglePopupsState } from '../../context/state';
 import RoundedButton from '../../Components/RoundedButton';
 
 const ConfirmationPopup = ({
-  name,
   title,
   text,
   confirmText,
   cancelText,
   useCancelTextButton,
   type,
-  closeAfter,
   onClose,
   onSubmit,
+  isVisible,
 }) => {
-  const [isPopupOpen, togglePopup, popupData] = getTogglePopupsState();
-
   const closePopup = () => {
-    if (onClose) {
-      onClose();
-    }
-    togglePopup(name, false);
+    onClose();
   };
 
-  useEffect(() => {
-    if (closeAfter) {
-      setTimeout(closePopup, closeAfter);
-    }
-  }, []);
-
   return (
-    <Modal isVisible={isPopupOpen(name)}>
+    <Modal isVisible={isVisible}>
       <PopupContainer>
         <ContentContainer>
           <SummaryTitle>{title}</SummaryTitle>
@@ -69,7 +52,6 @@ ConfirmationPopup.defaultProps = {
   cancelText: 'Cancel',
   useCancelTextButton: false,
   type: 'confirm',
-  closeAfter: null,
   onClose: () => null,
 };
 
@@ -80,6 +62,5 @@ ConfirmationPopup.propTypes = {
   cancelText: propsTypes.string,
   useCancelTextButton: propsTypes.bool,
   type: propsTypes.string,
-  closeAfter: propsTypes.number,
   onClose: propsTypes.func,
 };

@@ -4,7 +4,14 @@ import { AppState } from 'react-native';
 import { UserContext } from '../../context/user';
 import { RIDE_STATES } from '../../lib/commonTypes';
 import {
-  ConfirmPickup, NoPayment, NotAvailableHere, ConfirmingRide, NoAvailableVehicles, ActiveRide, LocationRequest,
+  ConfirmPickup,
+  NoPayment,
+  NotAvailableHere,
+  ConfirmingRide,
+  NoAvailableVehicles,
+  ActiveRide,
+  LocationRequest,
+  CancelRide,
 } from '../../Components/BsPages';
 import { RideStateContextContext, RideStateContextContextProvider } from '../../context';
 import NewRidePageContextProvider, { RidePageContext } from '../../context/newRideContext';
@@ -76,6 +83,9 @@ const RidePage = ({ mapSettings, navigation }) => {
   };
 
   const BS_PAGE_TO_COMP = {
+    [BS_PAGES.CANCEL_RIDE]: () => (
+      <CancelRide />
+    ),
     [BS_PAGES.SERVICE_ESTIMATIONS]: () => (
       <RideOptions />
     ),

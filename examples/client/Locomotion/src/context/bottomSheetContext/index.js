@@ -17,6 +17,7 @@ export const SNAP_POINT_STATES = {
   [BS_PAGES.ACTIVE_RIDE]: ['30%', '95%'],
   [BS_PAGES.CUSTOM_TIP]: ['70%', '100%'],
   [BS_PAGES.LOCATION_REQUEST]: ['30%', '30%'],
+  [BS_PAGES.CANCEL_RIDE]: ['30%', '30%'],
 };
 const BottomSheetProvider = ({ children }) => {
   const [isExpanded, setIsExpanded] = useState(false);
