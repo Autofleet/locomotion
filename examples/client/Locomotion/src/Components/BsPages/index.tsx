@@ -164,7 +164,7 @@ const BsPage = ({
     </MainContent>
     <Footer>
       {ButtonText && (
-      <OtherButton disabled={buttonDisabled} onPress={onButtonPress} isLoading={isLoading}>
+      <OtherButton testID="confirmPickup" disabled={buttonDisabled} onPress={onButtonPress} isLoading={isLoading}>
         <ButtonTitle>{ButtonText}</ButtonTitle>
       </OtherButton>
       )}
