@@ -21,8 +21,9 @@ import Button from '../../Components/RoundedButton';
 import settings from '../../context/settings';
 import SETTINGS_KEYS from '../../context/settings/keys';
 import NewRidePageContextProvider, { RidePageContext } from '../../context/newRideContext';
-// import closeIcon from '../../assets/close-x.svg';
+import closeIcon from '../../assets/x.png';
 import BottomSheetContextProvider, { BottomSheetContext } from '../../context/bottomSheetContext';
+import { isCashPaymentMethod } from '../../lib/ride/utils';
 
 const PostRidePage = ({ menuSide, route }) => {
   const navigation = useNavigation();
@@ -74,9 +75,12 @@ const PostRidePage = ({ menuSide, route }) => {
 
   const onSubmit = async () => {
     try {
-      postRideSubmit(ride.id, ride.priceCalculationId, rating, rideTip);
+      await postRideSubmit(ride.id, rating, rideTip);
+      navigation.navigate(MAIN_ROUTES.HOME);
+      return true;
     } catch (e) {
       console.log(e);
+      return false;
     }
   };
 
@@ -90,6 +94,7 @@ const PostRidePage = ({ menuSide, route }) => {
         title={i18n.t('postRide.pageTitle')}
         onIconPress={() => navigation.navigate(MAIN_ROUTES.HOME)}
         iconSide={menuSide}
+        icon={closeIcon}
       />
       <PageContent>
         <RatingContainer>
@@ -98,13 +103,16 @@ const PostRidePage = ({ menuSide, route }) => {
         </RatingContainer>
 
         <TipsContainer>
-          <Tips
-            tipSettings={tipSettings}
-            onSelectTip={onSelectTip}
-            driver={{ firstName: ride?.driver?.firstName, avatar: ride?.driver?.avatar }}
-            ridePrice={ride?.priceAmount}
-            priceCurrency={ride?.priceCurrency}
-          />
+          {!isCashPaymentMethod
+            ? (
+              <Tips
+                tipSettings={tipSettings}
+                onSelectTip={onSelectTip}
+                driver={{ firstName: ride?.driver?.firstName, avatar: ride?.driver?.avatar }}
+                ridePrice={ride?.priceAmount}
+                priceCurrency={ride?.priceCurrency}
+              />
+            ) : null}
         </TipsContainer>
         <SubmitContainer>
           <Button onPress={onSubmit} disabled={isExpanded}>{i18n.t('postRide.submit')}</Button>

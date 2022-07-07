@@ -17,6 +17,7 @@ const BottomSheetComponent = forwardRef(({
   focusCurrentLocation,
   index = 0,
   closeable = false,
+  showCompass = false,
 }, ref) => {
   const {
     setIsExpanded,
@@ -51,7 +52,7 @@ const BottomSheetComponent = forwardRef(({
 
   return (
     <>
-      {!isExpanded && locationGranted && (
+      {!isExpanded && locationGranted && showCompass && (
       <SquareSvgButton
         onPress={focusCurrentLocation}
         icon={targetIcon}
