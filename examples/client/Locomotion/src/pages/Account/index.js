@@ -1,8 +1,8 @@
 import React, { useEffect, useContext } from 'react';
 import { useRoute } from '@react-navigation/native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { TouchableOpacity, View } from 'react-native';
 import moment from 'moment';
+import Card from '../../Components/InformationCard';
 import PaymentsContext from '../../context/payments';
 import { MAIN_ROUTES } from '../routes';
 
@@ -13,19 +13,10 @@ import {
   AccountHeaderMainContainer,
   AccountHeaderMainText,
   AccountHeaderSubText,
-  Arrow,
-  CardContainer,
-  CardContantContainer,
   CardsContainer,
-  CardText,
-  CardTitle,
   Container,
   FlexCenterContainer,
   LogoutContainer,
-  ArrowContainer,
-  VerifyContainer,
-  VerifyText,
-  CardTitleContainer,
   LogoutText,
 } from './styled';
 import i18n from '../../I18n';
@@ -65,47 +56,6 @@ const AccountHeader = () => {
         </AccountHeaderIndicatorContainer>
       </AccountHeaderMainContainer>
     </AccountHeaderContainer>
-  );
-};
-
-const Card = ({
-  title,
-  children,
-  onPress,
-  verified,
-  showUnverified,
-  ...props
-}) => {
-  const MainContainer = onPress ? TouchableOpacity : View;
-  return (
-    <MainContainer onPress={onPress} {...props}>
-      <CardContainer>
-        <CardContantContainer>
-          <CardTitleContainer>
-            <CardTitle>{title}</CardTitle>
-            {verified ? (
-              <View>
-                <VerifyContainer>
-                  <VerifyText>{i18n.t('onboarding.verified')}</VerifyText>
-                </VerifyContainer>
-              </View>
-            ) : (
-              <>
-                {showUnverified ? (
-                  <View>
-                    <VerifyContainer unverified>
-                      <VerifyText>{i18n.t('onboarding.unverified')}</VerifyText>
-                    </VerifyContainer>
-                  </View>
-                ) : undefined}
-              </>
-            )}
-          </CardTitleContainer>
-          <CardText>{children}</CardText>
-        </CardContantContainer>
-        <ArrowContainer>{onPress ? <Arrow /> : undefined}</ArrowContainer>
-      </CardContainer>
-    </MainContainer>
   );
 };
 

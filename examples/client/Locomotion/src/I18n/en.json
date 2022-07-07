@@ -303,6 +303,15 @@
         }
     },
     "payments": {
+        "cardDetails": {
+            "cardsTitle": "Credit Card information",
+            "title": "Payment method details",
+            "nickname": "Card Nickname",
+            "number": "Card Number",
+            "balance": "Balance",
+            "deleteText": "Delete payment method",
+            "outstandingBalanceText": "Outstanding balance of"
+        },
         "select": "Select",
         "pageTitle": "Payments Method",
         "submitCard": "Add card",
