@@ -4,6 +4,7 @@ import React, {
 import { useIsFocused } from '@react-navigation/native';
 import { AppState } from 'react-native';
 import { UserContext } from '../../context/user';
+import { STOP_POINT_TYPES } from '../../lib/commonTypes';
 import {
   ConfirmPickup,
   NoPayment,
@@ -33,9 +34,9 @@ import { BS_PAGES } from '../../context/ridePageStateContext/utils';
 import payments from '../../context/payments';
 import geo, { DEFAULT_COORDS, getPosition } from '../../services/geo';
 
-
 const RidePage = ({ mapSettings, navigation }) => {
   const { locationGranted, setLocationGranted } = useContext(UserContext);
+  const [addressSelectorFocus, setAddressSelectorFocus] = useState(null);
   const mapRef = useRef();
   const bottomSheetRef = useRef(null);
   const {
@@ -56,14 +57,15 @@ const RidePage = ({ mapSettings, navigation }) => {
     clientHasValidPaymentMethods,
   } = payments.useContainer();
 
-  const resetStateToAddressSelector = () => {
+  const resetStateToAddressSelector = (selected = null) => {
     setServiceEstimations(null);
     setChosenService(null);
     changeBsPage(BS_PAGES.ADDRESS_SELECTOR);
+    setAddressSelectorFocus(selected);
   };
 
-  const goBackToAddress = () => {
-    resetStateToAddressSelector();
+  const goBackToAddress = (selected) => {
+    resetStateToAddressSelector(selected);
     setIsExpanded(true);
     bottomSheetRef.current.expand();
   };
@@ -76,7 +78,7 @@ const RidePage = ({ mapSettings, navigation }) => {
   const addressSelectorPage = () => {
     if (!isLoading && !serviceEstimations) {
       return (
-        <AddressSelector />
+        <AddressSelector addressSelectorFocus={addressSelectorFocus} />
       );
     }
     return changeBsPage(BS_PAGES.SERVICE_ESTIMATIONS);
