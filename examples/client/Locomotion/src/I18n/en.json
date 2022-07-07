@@ -224,10 +224,6 @@
             "priceValue": "{{price}} €",
             "submit": "Submit"
         },
-        "rideCancel": {
-            "main": "Your ride has been canceled.",
-            "sub": "Sorry it didn't work out this time, please try again soon!"
-        },
         "rideOver": {
             "main": "You've arrived!",
             "sub": "Thanks for riding with us, see you soon!"
@@ -354,6 +350,12 @@
     },
     "confirmingRide": {
         "titleText": "Confirming your ride"
+    },
+    "cancelRide": {
+        "titleText": "Are you sure you want to cancel?",
+        "subTitleText": "You may be charged a fee for cancelling this ride",
+        "buttonText": "Cancel Ride",
+        "secondaryButtonText": "Keep Riding"
     },
     "confirmPickup": {
       "titleText": "Confirm pickup",

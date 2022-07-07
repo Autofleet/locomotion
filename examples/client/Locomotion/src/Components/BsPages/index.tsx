@@ -8,7 +8,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import SvgIcon from '../SvgIcon';
 import { RidePageContext } from '../../context/newRideContext';
 import i18n from '../../I18n';
-import { FONT_SIZES, FONT_WEIGHTS } from '../../context/theme';
+import { ERROR_COLOR, FONT_SIZES, FONT_WEIGHTS } from '../../context/theme';
 import Button from '../Button';
 import { BottomSheetContext, SNAP_POINT_STATES } from '../../context/bottomSheetContext';
 import { RideStateContextContext } from '../../context/ridePageStateContext';
@@ -23,17 +23,16 @@ import Loader from '../Loader';
 import ActiveRideContent from './ActiveRide';
 
 const OtherButton = styled(Button)`
-  width: 100%;
+  background-color: ${({ warning, theme }) => (warning ? ERROR_COLOR : theme.primaryColor)};
   height: 50px;
   border-radius: 8px;
 `;
 
 
 const SecondaryButton = styled(Button).attrs({ noBackground: true })`
-  width: 100%;
   height: 50px;
   border-radius: 8px;
-  margin-top: 10px;
+  border: ${({ warning }) => (warning ? `2px solid ${ERROR_COLOR}` : 'none')};
 `;
 
 const Container = styled(SafeAreaView)`
@@ -59,6 +58,7 @@ const ImageContainer = styled(View)`
 const TitleContainer = styled(View)`
 display: flex;
 flex-direction: row;
+margin-bottom: 5px;
 `;
 
 const Title = styled(Text)`
@@ -81,12 +81,13 @@ const ButtonTitle = styled(Text)`
   `};
 `;
 
-const SecondaryButtonTitle = styled(Text)`
+type SecondaryButtonTitleInterface = {
+  warning: boolean | undefined;
+}
+const SecondaryButtonTitle = styled(Text)<SecondaryButtonTitleInterface>`
   margin: auto;
   ${FONT_SIZES.H2}
-  ${({ theme }:{ theme: any }) => `
-    color: ${theme.primaryColor}
-  `};
+  color: ${({ warning, theme }) => (warning ? '#333333' : theme.primaryColor)};
 `;
 
 const AddressInput = styled(Text)`
@@ -104,10 +105,18 @@ const Header = styled(View)`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  margin-bottom: 10px;
 `;
 
-const Footer = styled(View)`
+type FooterInterface = {
+  fullWidthButtons: boolean | undefined;
+}
+const Footer = styled(View)<FooterInterface>`
   width: 100%;
+  display: flex;
+  flex-direction: ${({ fullWidthButtons }) => (fullWidthButtons ? 'column' : 'row')};
+  justify-content: space-between;
+  align-items: center;
 `;
 
 const AddressContainer = styled(View)`
@@ -127,6 +136,8 @@ const BsPage = ({
   SecondaryButtonText,
   isLoading,
   buttonDisabled,
+  warning,
+  fullWidthButtons,
 }: {
   onSecondaryButtonPress?: any,
   onButtonPress: any,
@@ -139,11 +150,15 @@ const BsPage = ({
   SecondaryButtonText?: string,
   isLoading?: boolean;
   buttonDisabled?: boolean;
-}) => (
-  <Container edges={['bottom']}>
-    <MainContent>
-      <>
-        {TitleText && (
+  warning?: boolean
+  fullWidthButtons?: boolean;
+}) => {
+  const buttonWidth = fullWidthButtons ? '100%' : '48%';
+  return (
+    <Container edges={['bottom']}>
+      <MainContent>
+        <>
+          {TitleText && (
           <Header>
             <CardText style={{ width: Image ? '50%' : '100%' }}>
               <TitleContainer>
@@ -158,24 +173,35 @@ const BsPage = ({
               </ImageContainer>
             ) : undefined}
           </Header>
+          )}
+          {children}
+        </>
+      </MainContent>
+      <Footer fullWidthButtons={fullWidthButtons}>
+        {ButtonText && (
+        <OtherButton
+          style={{ width: buttonWidth }}
+          disabled={buttonDisabled}
+          onPress={onButtonPress}
+          isLoading={isLoading}
+          warning={warning}
+        >
+          <ButtonTitle>{ButtonText}</ButtonTitle>
+        </OtherButton>
         )}
-        {children}
-      </>
-    </MainContent>
-    <Footer>
-      {ButtonText && (
-      <OtherButton disabled={buttonDisabled} onPress={onButtonPress} isLoading={isLoading}>
-        <ButtonTitle>{ButtonText}</ButtonTitle>
-      </OtherButton>
-      )}
-      {SecondaryButtonText && (
-      <SecondaryButton onPress={onSecondaryButtonPress}>
-        <SecondaryButtonTitle>{SecondaryButtonText}</SecondaryButtonTitle>
-      </SecondaryButton>
-      )}
-    </Footer>
-  </Container>
-);
+        {SecondaryButtonText && (
+        <SecondaryButton
+          style={{ width: buttonWidth }}
+          warning={warning}
+          onPress={onSecondaryButtonPress}
+        >
+          <SecondaryButtonTitle warning={warning}>{SecondaryButtonText}</SecondaryButtonTitle>
+        </SecondaryButton>
+        )}
+      </Footer>
+    </Container>
+  );
+};
 
 BsPage.defaultProps = {
   children: undefined,
@@ -184,6 +210,8 @@ BsPage.defaultProps = {
   SecondaryButtonText: undefined,
   isLoading: false,
   buttonDisabled: false,
+  warning: false,
+  fullWidthButtons: false,
 };
 
 export default BsPage;
@@ -204,6 +232,25 @@ export const LocationRequest = (props: any) => {
       SecondaryButtonText={i18n.t('bottomSheetContent.locationRequest.secondaryButtonText')}
       SubTitleText={i18n.t('bottomSheetContent.locationRequest.subTitleText', { operation })}
       onButtonPress={Linking.openSettings}
+      fullWidthButtons
+      {...props}
+    />
+  );
+};
+
+export const CancelRide = (props: any) => {
+  const { cancelRide } = useContext(RidePageContext);
+  const { changeBsPage } = useContext(RideStateContextContext);
+
+  return (
+    <BsPage
+      TitleText={i18n.t('bottomSheetContent.cancelRide.titleText')}
+      ButtonText={i18n.t('bottomSheetContent.cancelRide.buttonText')}
+      SubTitleText={i18n.t('bottomSheetContent.cancelRide.subTitleText')}
+      SecondaryButtonText={i18n.t('bottomSheetContent.cancelRide.secondaryButtonText')}
+      onButtonPress={cancelRide}
+      onSecondaryButtonPress={() => changeBsPage(BS_PAGES.ACTIVE_RIDE)}
+      warning
       {...props}
     />
   );
@@ -270,6 +317,7 @@ export const ConfirmPickup = (props: any) => {
       ButtonText={i18n.t('bottomSheetContent.confirmPickup.buttonText')}
       SubTitleText={i18n.t('bottomSheetContent.confirmPickup.subTitleText')}
       isLoading={rideRequestLoading}
+      fullWidthButtons
       {...props}
       onButtonPress={() => {
         updateRequestSp(lastSelectedLocation);
