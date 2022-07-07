@@ -1,5 +1,9 @@
-import React, { useCallback, useContext, useEffect } from 'react';
-import { Animated, View } from 'react-native';
+import React, {
+  useCallback, useEffect, useMemo, useRef, useState, useContext,
+} from 'react';
+import {
+  View, Text, StyleSheet, LayoutAnimation, Animated, Platform, UIManager,
+} from 'react-native';
 import styled from 'styled-components';
 import { debounce } from 'lodash';
 import BottomSheetInput from '../../../../Components/TextInput/BottomSheetInput';
@@ -72,7 +76,6 @@ const SearchBar = ({
   onFocus = () => null,
   onBack,
   onSearch,
-  isSelected,
 }) => {
   const {
     searchTerm,
@@ -115,10 +118,9 @@ const SearchBar = ({
 
 
   const buildSps = () => requestStopPoints.map((s, i) => {
-    const { type, description } = requestStopPoints[i];
     const placeholder = getSpPlaceholder(s);
     const rowProps = i === 0 ? { isExpanded } : { setMargin: true };
-    const autoFocus = isExpanded && type === isSelected;
+    console.log(requestStopPoints[i].description);
     return (
       <Row
         {...rowProps}
@@ -135,7 +137,7 @@ const SearchBar = ({
             setSearchTerm(text);
           }}
           fullBorder
-          value={description || ''}
+          value={requestStopPoints[i].description}
           placeholderTextColor="#929395"
           onFocus={(e) => {
             onInputFocus(e.target, i);
@@ -150,10 +152,6 @@ const SearchBar = ({
             }, i);
             setSearchTerm(null);
           }}
-          autoFocus={autoFocus}
-          selection={autoFocus ? {
-            start: 0, end: description ? description.length : 0,
-          } : undefined}
         />
       </Row>
     );
