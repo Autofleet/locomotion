@@ -1,8 +1,7 @@
 import React, {
-  useCallback, useContext, forwardRef,
+  useCallback, useContext, forwardRef, useEffect,
 } from 'react';
 import BottomSheet, {
-  BottomSheetView,
   BottomSheetFooter,
 } from '@gorhom/bottom-sheet';
 import styled from 'styled-components';
@@ -11,10 +10,6 @@ import SquareSvgButton from '../../Components/SquareSvgButton';
 import SafeView from '../SafeView';
 import { BottomSheetContext } from '../../context/bottomSheetContext';
 import targetIcon from '../../assets/target.svg';
-
-const ContentContainer = styled(BottomSheetView)`
-  flex: 1;
-`;
 
 const BottomSheetComponent = forwardRef(({
   children,

@@ -17,6 +17,7 @@ import { PaymentMethodInterface } from '../../context/payments/interface';
 import PaymentsContext from '../../context/payments';
 import deleteIcon from '../../assets/delete.svg';
 import { DeleteContainer, DeleteIcon, DeleteText } from './styled';
+import { PageContainer } from '../../pages/styles';
 
 type CardDetailsRouteParams = {
   paymentMethod: PaymentMethodInterface
@@ -55,71 +56,72 @@ const CardDetails = ({
   const { paymentMethod } = params;
 
   return (
-    <KeyboardAwareScrollView extraScrollHeight={20} enableOnAndroid>
-      <PageHeader
-        title={i18n.t('payments.cardDetails.title')}
-        onIconPress={() => navigation.navigate(MAIN_ROUTES.PAYMENT)}
-        iconSide=""
-        displayIcon={undefined}
-        showSkipButton={undefined}
-        onPressSkip={undefined}
-        action={undefined}
-      />
-      <>
-        <Container>
-          <CardsContainer>
-            <CardsTitle>
-              {i18n.t('payments.cardDetails.cardsTitle')}
-            </CardsTitle>
-            {paymentMethod && paymentMethod.name
-              ? (
-                <Card
-                  title={i18n.t('payments.cardDetails.nickname')}
-                >
-                  {paymentMethod.name}
-
-                </Card>
-              )
-              : undefined}
-            <Card
-              title={i18n.t('payments.cardDetails.number')}
-            >
-              {getLastFourForamttedLong(paymentMethod?.lastFour)}
-
-            </Card>
-            <Card
-              title={i18n.t('payments.cardDetails.balance')}
-            >
-              {`${i18n.t('payments.cardDetails.outstandingBalanceText')}`}
-            </Card>
-            <LogoutContainer
-              onPress={async () => {
-                await onRemoveMethod(paymentMethod?.id);
-              }}
-            >
-              <DeleteContainer>
-                <DeleteIcon Svg={deleteIcon} />
-                <DeleteText>
-                  {i18n.t('payments.cardDetails.deleteText')}
-                </DeleteText>
-              </DeleteContainer>
-            </LogoutContainer>
-          </CardsContainer>
-        </Container>
-        <ConfirmationPopup
-          isVisible={isCancelPopupVisible}
-          title={i18n.t('payments.popups.removeCard.title')}
-          text={i18n.t('payments.popups.removeCard.text')}
-          confirmText={i18n.t('payments.popups.removeCard.confirmText')}
-          cancelText={i18n.t('payments.popups.removeCard.cancelText')}
-          type="cancel"
-          useCancelTextButton
-          onSubmit={() => detachCard()}
-          onClose={() => setIsCancelPopupVisible(false)}
+    <PageContainer>
+      <KeyboardAwareScrollView extraScrollHeight={20} enableOnAndroid>
+        <PageHeader
+          title={i18n.t('payments.cardDetails.title')}
+          onIconPress={() => navigation.navigate(MAIN_ROUTES.PAYMENT)}
+          iconSide=""
+          displayIcon={undefined}
+          showSkipButton={undefined}
+          onPressSkip={undefined}
+          action={undefined}
         />
-      </>
-    </KeyboardAwareScrollView>
+        <>
+          <Container>
+            <CardsContainer>
+              <CardsTitle>
+                {i18n.t('payments.cardDetails.cardsTitle')}
+              </CardsTitle>
+              {paymentMethod && paymentMethod.name
+                ? (
+                  <Card
+                    title={i18n.t('payments.cardDetails.nickname')}
+                  >
+                    {paymentMethod.name}
 
+                  </Card>
+                )
+                : undefined}
+              <Card
+                title={i18n.t('payments.cardDetails.number')}
+              >
+                {getLastFourForamttedLong(paymentMethod?.lastFour)}
+
+              </Card>
+              <Card
+                title={i18n.t('payments.cardDetails.balance')}
+              >
+                {`${i18n.t('payments.cardDetails.outstandingBalanceText')}`}
+              </Card>
+              <LogoutContainer
+                onPress={async () => {
+                  await onRemoveMethod(paymentMethod?.id);
+                }}
+              >
+                <DeleteContainer>
+                  <DeleteIcon Svg={deleteIcon} />
+                  <DeleteText>
+                    {i18n.t('payments.cardDetails.deleteText')}
+                  </DeleteText>
+                </DeleteContainer>
+              </LogoutContainer>
+            </CardsContainer>
+          </Container>
+          <ConfirmationPopup
+            isVisible={isCancelPopupVisible}
+            title={i18n.t('payments.popups.removeCard.title')}
+            text={i18n.t('payments.popups.removeCard.text')}
+            confirmText={i18n.t('payments.popups.removeCard.confirmText')}
+            cancelText={i18n.t('payments.popups.removeCard.cancelText')}
+            type="cancel"
+            useCancelTextButton
+            onSubmit={() => detachCard()}
+            onClose={() => setIsCancelPopupVisible(false)}
+          />
+        </>
+      </KeyboardAwareScrollView>
+    </PageContainer>
   );
 };
 

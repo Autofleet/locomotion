@@ -10,6 +10,8 @@ import { popupNames } from './utils';
 import { BottomSheetContext, SNAP_POINT_STATES } from '../../../../context/bottomSheetContext';
 import payments from '../../../../context/payments';
 import { PaymentMethodInterface } from '../../../../context/payments/interface';
+import { RideStateContextContext } from '../../../../context/ridePageStateContext';
+import { BS_PAGES } from '../../../../context/ridePageStateContext/utils';
 
 
 const RideOptions = () => {
@@ -21,8 +23,11 @@ const RideOptions = () => {
 
   const {
     setFooterComponent,
-    setSnapPointsState,
   } = useContext(BottomSheetContext);
+
+  const {
+    changeBsPage,
+  } = useContext(RideStateContextContext);
 
   const {
     getClientDefaultMethod,
@@ -52,7 +57,7 @@ const RideOptions = () => {
     }
 
 
-    setSnapPointsState(SNAP_POINT_STATES.SERVICE_ESTIMATIONS);
+    changeBsPage(BS_PAGES.SERVICE_ESTIMATIONS);
     return () => {
       setFooterComponent(null);
     };

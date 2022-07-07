@@ -51,7 +51,9 @@ const RidePage = ({ mapSettings, navigation }) => {
     setChosenService,
     ride,
   } = useContext(RidePageContext);
-  const { setSnapPointsState, setIsExpanded, snapPoints } = useContext(BottomSheetContext);
+  const {
+    setIsExpanded, snapPoints, isExpanded,
+  } = useContext(BottomSheetContext);
   const {
     clientHasValidPaymentMethods,
   } = payments.useContainer();
@@ -127,13 +129,6 @@ const RidePage = ({ mapSettings, navigation }) => {
     [BS_PAGES.NO_AVAILABLE_VEHICLES]: () => <NoAvailableVehicles />,
     [BS_PAGES.ACTIVE_RIDE]: () => <ActiveRide />,
   };
-
-  useEffect(() => {
-    if (isLoading) {
-      setSnapPointsState(SNAP_POINT_STATES.SERVICE_ESTIMATIONS);
-      bottomSheetRef.current.collapse();
-    }
-  }, [isLoading]);
 
   const focusCurrentLocation = async () => {
     const location = await getPosition();
