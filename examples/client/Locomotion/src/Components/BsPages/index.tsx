@@ -338,7 +338,7 @@ export const ConfirmPickup = (props: any) => {
 export const NoPayment = (props: any) => {
   const { setSnapPointsState } = useContext(BottomSheetContext);
   const { changeBsPage } = useContext(RideStateContextContext);
-  const { requestRide } = useContext(RidePageContext);
+  const { requestRide, ride } = useContext(RidePageContext);
 
   const {
     paymentMethods,
@@ -346,7 +346,7 @@ export const NoPayment = (props: any) => {
   } = payments.useContainer();
 
   const proceedIfPaymentMethodsAreValid = () => {
-    if (clientHasValidPaymentMethods()) {
+    if (clientHasValidPaymentMethods() || ride.paymentMethodId === 'cash') {
       requestRide();
     }
   };

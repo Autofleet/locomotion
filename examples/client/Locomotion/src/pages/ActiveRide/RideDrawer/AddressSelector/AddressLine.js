@@ -27,8 +27,6 @@ const Row = styled.TouchableOpacity`
   `;
 
 const IconContainer = styled.View`
-    width: 25px;
-    height: 25px;
     margin-right: 15px;
 `;
 
@@ -64,8 +62,9 @@ const AddressRow = ({
   actionButton = false,
   onPress,
   isLoading = false,
+  isHistory,
 }) => {
-  const finalIcon = ICONS[icon] || HistoryIcon;
+  const finalIcon = ICONS[icon] || (isHistory && HistoryIcon);
   const isDebuggingEnabled = (typeof atob !== 'undefined');
   return (
     <Row
@@ -74,7 +73,14 @@ const AddressRow = ({
     >
       <IconContainer>
         {finalIcon
-          ? <Icon Svg={finalIcon} height={20} width={20} actionButton={actionButton} />
+          ? (
+            <Icon
+              Svg={finalIcon}
+              height={21}
+              width={20}
+              actionButton={actionButton}
+            />
+          )
           : null}
       </IconContainer>
       <AddressContainer>
