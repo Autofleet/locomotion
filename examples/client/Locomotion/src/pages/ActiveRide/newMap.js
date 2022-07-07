@@ -162,6 +162,9 @@ export default React.forwardRef(({
     if (rideDispatched || rideActive) {
       addStreetAddressToStopPoints();
     }
+    if (ride.state === RIDE_STATES.COMPLETED) {
+      setRideStopPoints(null);
+    }
   }, [ride.stopPoints]);
 
   const stopPoints = rideStopPoints || requestStopPoints || [];
