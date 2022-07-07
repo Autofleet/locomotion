@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { Button, View } from 'react-native';
 import { PaymentMethodInterface } from 'context/payments/interface';
+import { Text } from '../Profile/ScreenText/styles';
+import { HeaderLink } from '../../Components/Menu/styled';
+import { HeaderText } from '../../Components/PageHeader/styled';
 import { MAIN_ROUTES } from '../routes';
 import i18n from '../../I18n';
 import {
@@ -22,21 +25,24 @@ import cashPaymentMethod from './cashPaymentMethod';
 
 
 export default ({
-  onDetach = (id: string) => null,
   loadingState = false,
   onAddClick = undefined,
 }) => {
   const usePayments = PaymentsContext.useContainer();
   const [loading, setLoading] = useState(false);
-  const [defaultMethod, setDefaultMethod] = useState(usePayments.getClientDefaultMethod());
+  const [defaultMethod, setDefaultMethod] = useState({});
   const [showChoosePayment, setShowChoosePayment] = useState(false);
 
+  const setDefaultPayment = () => {
+    setLoading(true);
+    const defaultPaymentMethod = usePayments.getClientDefaultMethod();
+    const methodToSet = { ...defaultPaymentMethod, mark: true };
+    setDefaultMethod(methodToSet);
+    setLoading(false);
+  };
 
   useEffect(() => {
-    setLoading(true);
-    const defaultPaymentMethod = usePayments.paymentMethods.find(({ isDefault }) => isDefault) || usePayments.paymentMethods[0];
-    setDefaultMethod(defaultPaymentMethod);
-    setLoading(false);
+    setDefaultPayment();
   }, [usePayments]);
 
   useEffect(() => {
@@ -54,7 +60,11 @@ export default ({
                 <CardContantContainer>
                   <CardTitleContainer>
                     <CardTitle>Default payment method</CardTitle>
-                    <Button title="change" onPress={() => setShowChoosePayment(true)} />
+                    <HeaderLink onPress={() => setShowChoosePayment(true)}>
+                      <Text style={{ color: '#24aaf2' }}>
+                        {i18n.t('payments.changeDefault')}
+                      </Text>
+                    </HeaderLink>
                   </CardTitleContainer>
                   <PaymentMethod
                     {...defaultMethod}
@@ -72,7 +82,7 @@ export default ({
                     <CardTitle>other payment method</CardTitle>
                   </CardTitleContainer>
                   {usePayments.paymentMethods.map(
-                    paymentMethod => (paymentMethod.id !== defaultMethod.id
+                    (paymentMethod : any) => (paymentMethod.id !== defaultMethod.id
                       ? (
                         <PaymentMethod
                           {...paymentMethod}
@@ -105,6 +115,8 @@ export default ({
 
             await usePayments.updatePaymentMethod(defaultMethod?.id, { isDefault: false });
             await usePayments.updatePaymentMethod(payment, { isDefault: true });
+            await usePayments.loadCustomer();
+            // setDefaultPayment();
           }}
         />
 

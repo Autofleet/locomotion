@@ -63,6 +63,7 @@ const PaymentMethodPopup = ({ isVisible, onCancel, onSubmit }: PaymentMethodPopu
               <PaymentMethod
                 {...paymentMethod}
                 selected={payment === paymentMethod.id}
+                mark={payment === paymentMethod.id}
                 onPress={() => {
                   setPayment(paymentMethod.id);
                 }}

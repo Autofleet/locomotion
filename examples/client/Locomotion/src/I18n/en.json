@@ -312,6 +312,7 @@
             "deleteText": "Delete payment method",
             "outstandingBalanceText": "Outstanding balance of"
         },
+        "changeDefault": "Change",
         "select": "Select",
         "pageTitle": "Payments Method",
         "submitCard": "Add card",

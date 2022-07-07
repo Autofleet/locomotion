@@ -124,7 +124,7 @@ export default (paymentMethod: any) => (
           : (
             <>
               {isCashPaymentMethod(paymentMethod) ? <SvgIcon Svg={cashIcon} width={40} height={25} /> : <PaymentIcon type={paymentMethod.brand} />}
-              {paymentMethod.selected ? (isCashPaymentMethod(paymentMethod) ? CashSelected : CreditCardSelected) : null }
+              {paymentMethod.mark ? (isCashPaymentMethod(paymentMethod) ? CashSelected : CreditCardSelected) : null }
             </>
           )
         }
