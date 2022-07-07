@@ -74,7 +74,15 @@ const RideOptions = () => {
           clearPopup();
         }}
       />
-      <ChoosePaymentMethod isVisible={popupToShow === 'payment'} onCancel={() => clearPopup()} />
+      <ChoosePaymentMethod
+        isVisible={popupToShow === 'payment'}
+        onCancel={() => clearPopup()}
+        onSubmit={(payment: any) => {
+          updateRide({
+            paymentMethodId: payment,
+          });
+        }}
+      />
     </>
   );
 };

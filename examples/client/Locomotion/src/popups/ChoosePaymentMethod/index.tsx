@@ -20,27 +20,26 @@ import cashPaymentMethod from '../../pages/Payments/cashPaymentMethod';
 interface PaymentMethodPopupProps {
   isVisible: boolean;
   onCancel: () => void;
+  onSubmit: (payment: string | undefined) => void;
 }
 
 type Nav = {
   navigate: (value: string) => void;
 }
 
-const PaymentMethodPopup = ({ isVisible, onCancel }: PaymentMethodPopupProps) => {
+const PaymentMethodPopup = ({ isVisible, onCancel, onSubmit }: PaymentMethodPopupProps) => {
   const {
     ride,
-    updateRide,
   } = useContext(RidePageContext);
   const [payment, setPayment] = useState(ride?.paymentMethodId);
   const usePayments = PaymentsContext.useContainer();
   const navigation = useNavigation<Nav>();
 
   const onSave = () => {
-    updateRide({
-      paymentMethodId: payment,
-    });
+    onSubmit(payment);
     onCancel();
   };
+
   const [isCashEnabled, setIsCashEnabled] = useState(false);
 
   useEffect(() => {
@@ -96,6 +95,10 @@ const PaymentMethodPopup = ({ isVisible, onCancel }: PaymentMethodPopupProps) =>
       </SummaryContainer>
     </Modal>
   );
+};
+
+PaymentMethodPopup.defaultProps = {
+  customOnSave: null,
 };
 
 export default PaymentMethodPopup;
