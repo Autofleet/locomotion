@@ -21,7 +21,7 @@ export default ({
 }) => {
   const { chosenService } = useContext(RidePageContext);
   const { lat, lng } = stopPoint;
-  const eta = stopPoint.plannedArrivalTime || (chosenService && chosenService.plannedArrivalTime);
+  const eta = stopPoint.plannedArrivalTime || (chosenService && chosenService.eta);
   const [minutesUntilPickup, setMinutesUntilPickup] = useState();
   const etaText = minutesUntilPickup > 1
     ? i18n.t('rideDetails.toolTipEta', { minutes: minutesUntilPickup })
