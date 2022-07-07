@@ -1,12 +1,19 @@
 import React, {
   useContext, useEffect, useRef, useState,
 } from 'react';
-import { useNavigation, useIsFocused } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import { AppState } from 'react-native';
 import { UserContext } from '../../context/user';
-import { RIDE_STATES, STOP_POINT_TYPES } from '../../lib/commonTypes';
+import { RIDE_STATES } from '../../lib/commonTypes';
 import {
-  ConfirmPickup, NoPayment, NotAvailableHere, ConfirmingRide, NoAvailableVehicles, ActiveRide,
+  ConfirmPickup,
+  NoPayment,
+  NotAvailableHere,
+  ConfirmingRide,
+  NoAvailableVehicles,
+  ActiveRide,
+  LocationRequest,
+  CancelRide,
 } from '../../Components/BsPages';
 import { RideStateContextContext, RideStateContextContextProvider } from '../../context';
 import NewRidePageContextProvider, { RidePageContext } from '../../context/newRideContext';
@@ -28,7 +35,7 @@ import payments from '../../context/payments';
 import { getPosition } from '../../services/geo';
 
 
-const RidePage = ({ mapSettings }) => {
+const RidePage = ({ mapSettings, navigation }) => {
   const navigation = useNavigation();
   const [addressSelectorFocus, setAddressSelectorFocus] = useState(STOP_POINT_TYPES.STOP_POINT_PICKUP);
   const mapRef = useRef();
@@ -50,15 +57,14 @@ const RidePage = ({ mapSettings }) => {
     clientHasValidPaymentMethods,
   } = payments.useContainer();
 
-  const resetStateToAddressSelector = (selected = null) => {
+  const resetStateToAddressSelector = () => {
     setServiceEstimations(null);
     setChosenService(null);
     changeBsPage(BS_PAGES.ADDRESS_SELECTOR);
-    setAddressSelectorFocus(selected);
   };
 
-  const goBackToAddress = (selected) => {
-    resetStateToAddressSelector(selected);
+  const goBackToAddress = () => {
+    resetStateToAddressSelector();
     setIsExpanded(true);
     bottomSheetRef.current.expand();
   };
@@ -71,13 +77,24 @@ const RidePage = ({ mapSettings }) => {
   const addressSelectorPage = () => {
     if (!isLoading && !serviceEstimations) {
       return (
-        <AddressSelector addressSelectorFocus={addressSelectorFocus} />
+        <AddressSelector />
       );
     }
     return <RideOptions />;
   };
 
   const BS_PAGE_TO_COMP = {
+    [BS_PAGES.CANCEL_RIDE]: () => (
+      <CancelRide />
+    ),
+    [BS_PAGES.SERVICE_ESTIMATIONS]: () => (
+      <RideOptions />
+    ),
+    [BS_PAGES.LOCATION_REQUEST]: () => (
+      <LocationRequest
+        onSecondaryButtonPress={goBackToAddress}
+      />
+    ),
     [BS_PAGES.NOT_IN_TERRITORY]: () => (
       <NotAvailableHere onButtonPress={() => {
         goBackToAddress();
