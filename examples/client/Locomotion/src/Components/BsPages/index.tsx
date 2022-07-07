@@ -117,6 +117,7 @@ const Footer = styled(View)<FooterInterface>`
   flex-direction: ${({ fullWidthButtons }) => (fullWidthButtons ? 'column' : 'row')};
   justify-content: space-between;
   align-items: center;
+  margin-bottom: 5px;
 `;
 
 const AddressContainer = styled(View)`
@@ -271,6 +272,7 @@ export const NotAvailableHere = (props: any) => {
       ButtonText={i18n.t('bottomSheetContent.notAvailableHere.buttonText')}
       SubTitleText={i18n.t('bottomSheetContent.notAvailableHere.subTitleText')}
       Image={<SvgIcon Svg={outOfTerritoryIcon} height={85} width={140} />}
+      fullWidthButtons
       {...props}
     />
   );
