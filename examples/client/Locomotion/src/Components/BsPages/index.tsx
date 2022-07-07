@@ -180,6 +180,7 @@ const BsPage = ({
       <Footer fullWidthButtons={fullWidthButtons}>
         {ButtonText && (
         <OtherButton
+          testID="confirmPickup"
           style={{ width: buttonWidth }}
           disabled={buttonDisabled}
           onPress={onButtonPress}
