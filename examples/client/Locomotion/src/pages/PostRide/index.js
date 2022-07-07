@@ -103,16 +103,13 @@ const PostRidePage = ({ menuSide, route }) => {
         </RatingContainer>
 
         <TipsContainer>
-          {!isCashPaymentMethod
-            ? (
-              <Tips
-                tipSettings={tipSettings}
-                onSelectTip={onSelectTip}
-                driver={{ firstName: ride?.driver?.firstName, avatar: ride?.driver?.avatar }}
-                ridePrice={ride?.priceAmount}
-                priceCurrency={ride?.priceCurrency}
-              />
-            ) : null}
+          <Tips
+            tipSettings={tipSettings}
+            onSelectTip={onSelectTip}
+            driver={{ firstName: ride?.driver?.firstName, avatar: ride?.driver?.avatar }}
+            ridePrice={ride?.priceAmount}
+            priceCurrency={ride?.priceCurrency}
+          />
         </TipsContainer>
         <SubmitContainer>
           <Button onPress={onSubmit} disabled={isExpanded}>{i18n.t('postRide.submit')}</Button>
