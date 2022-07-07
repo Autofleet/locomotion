@@ -27,6 +27,7 @@ import Map from './Map';
 import i18n from '../../../I18n';
 import { MMMM_DD_YYYY } from '../consts';
 import DriverCard from '../../../Components/DriverCard';
+import { getCurrencySymbol } from '../../../context/newRideContext/utils';
 
 const RideTitleCard = ({ ride, page }) => (
   <>
@@ -41,8 +42,7 @@ const RideTitleCard = ({ ride, page }) => (
     </RideViewTextContainer>
     <RideViewSecTextContainer>
       <DaySecTitleText>
-        {ride.priceAmount || 0}
-        {ride.priceCurrency === 'USD' ? '$' : ride.priceCurrency}
+        {`${getCurrencySymbol(ride.priceCurrency)}${ride.priceAmount}`}
       </DaySecTitleText>
       <DaySecTitleSubText>
         {(ride.plannedDistance / 1000).toFixed(1)}

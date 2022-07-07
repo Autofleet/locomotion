@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import Loader from '../Loader';
 import Mixpanel from '../../services/Mixpanel';
@@ -13,29 +13,35 @@ const LoaderContainer = styled.View`
   justify-content: center;
 `;
 
-const Button = props => (
-  <Container
-    {...props}
-    onPress={(e) => { /* eslint-disable-line consistent-return */
-      if (!props.disabled) {
-        if (props.onPress) {
-          Mixpanel.trackElementClick(props);
-          return props.onPress(e);
+const Button = (props) => {
+  const [isLoadingInternal, setIsLoadingInternal] = useState(false);
+
+  return (
+    <Container
+      {...props}
+      onPress={async (e) => {
+        if (!props.disabled) {
+          if (props.onPress) {
+            setIsLoadingInternal(true);
+            Mixpanel.trackElementClick(props);
+            await props.onPress(e);
+            setIsLoadingInternal(false);
+          }
         }
-      }
-    }}
-  >
-    {props.isLoading ? (
-      <LoaderContainer>
-        <Loader
-          lottieViewStyle={{
-            height: 15, width: 15,
-          }}
-        />
-      </LoaderContainer>
-    ) : props.children}
-  </Container>
-);
+      }}
+    >
+      {props.isLoading || isLoadingInternal ? (
+        <LoaderContainer>
+          <Loader
+            lottieViewStyle={{
+              height: 15, width: 15,
+            }}
+          />
+        </LoaderContainer>
+      ) : props.children}
+    </Container>
+  );
+};
 
 
 export default Button;

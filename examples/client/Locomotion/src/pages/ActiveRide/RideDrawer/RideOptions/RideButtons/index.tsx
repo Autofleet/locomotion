@@ -109,7 +109,7 @@ const RideButtons = ({
           changeBsPage(BS_PAGES.CONFIRM_PICKUP);
         }}
       >
-        <ButtonText>{i18n.t('general.select').toString()}</ButtonText>
+        <ButtonText testID="select">{i18n.t('general.select').toString()}</ButtonText>
       </StyledButton>
     </Container>
   );

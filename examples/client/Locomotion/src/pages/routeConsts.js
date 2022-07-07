@@ -18,6 +18,7 @@ import CompletedRideOverviewPage from './RideHistory/CompletedRideOverviewPage';
 import RideHistory from './RideHistory';
 import PostRide from './PostRide';
 import { MAIN_ROUTES } from './routes';
+import CardDetails from '../Components/CardDetails';
 
 export const ROUTES_COMPS = {
   [MAIN_ROUTES.HOME]: ActiveRide,
@@ -38,6 +39,7 @@ export const ROUTES_COMPS = {
   [MAIN_ROUTES.LOCK]: Lock,
   [MAIN_ROUTES.POST_RIDE]: PostRide,
   [MAIN_ROUTES.LOGOUT]: Logout,
+  [MAIN_ROUTES.CARD_DETAILS]: CardDetails,
 };
 
 export const profileStack = ({ stack: Stack }) => (
