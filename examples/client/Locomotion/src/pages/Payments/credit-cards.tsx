@@ -28,7 +28,7 @@ export default ({
 }) => {
   const usePayments = PaymentsContext.useContainer();
   const [loading, setLoading] = useState(false);
-  const [defaultMethod, setDefaultMethod] = useState({});
+  const [defaultMethod, setDefaultMethod] = useState({ ...usePayments.getClientDefaultMethod(), mark: true });
   const [showChoosePayment, setShowChoosePayment] = useState(false);
 
   const setDefaultPayment = () => {
@@ -52,7 +52,7 @@ export default ({
     <CardsListContainer>
       <View>
         <PaymentMethodsContainer>
-          {defaultMethod && defaultMethod?.id !== cashPaymentMethod.id
+          {defaultMethod && defaultMethod.id !== cashPaymentMethod.id
             ? (
               <CardContainer>
                 <CardContantContainer>
