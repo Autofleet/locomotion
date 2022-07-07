@@ -110,6 +110,7 @@ export default ({
         ) : undefined}
         <ChoosePaymentMethod
           isVisible={showChoosePayment}
+          showCash={false}
           onCancel={() => { setShowChoosePayment(false); }}
           onSubmit={async (payment) => {
             const chosenDefault = usePayments.paymentMethods.find(({ id }) => id === payment) || defaultMethod;

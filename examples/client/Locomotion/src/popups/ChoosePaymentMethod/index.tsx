@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { View } from 'react-native';
+import PropTypes from 'prop-types';
 import Modal from 'react-native-modal';
 import { useNavigation } from '@react-navigation/native';
 import i18n from '../../I18n';
@@ -21,13 +22,16 @@ interface PaymentMethodPopupProps {
   isVisible: boolean;
   onCancel: () => void;
   onSubmit: (payment: string | undefined) => void;
+  showCash: boolean
 }
 
 type Nav = {
   navigate: (value: string) => void;
 }
 
-const PaymentMethodPopup = ({ isVisible, onCancel, onSubmit }: PaymentMethodPopupProps) => {
+const PaymentMethodPopup = ({
+  isVisible, onCancel, onSubmit, showCash,
+}: PaymentMethodPopupProps) => {
   const {
     ride,
   } = useContext(RidePageContext);
@@ -98,8 +102,14 @@ const PaymentMethodPopup = ({ isVisible, onCancel, onSubmit }: PaymentMethodPopu
   );
 };
 
+PaymentMethodPopup.propTypes = {
+  onSave: PropTypes.func,
+  showCash: PropTypes.bool,
+};
+
 PaymentMethodPopup.defaultProps = {
-  customOnSave: null,
+  onSave: null,
+  showCash: true,
 };
 
 export default PaymentMethodPopup;
