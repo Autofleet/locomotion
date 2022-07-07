@@ -21,7 +21,7 @@ export const TimeLineContent = styled(FlexContainer)`
 `;
 
 export const Content = styled(FlexContainer)`
-  flex: 5;
+  flex: 3;
   align-self: center;
   flex-direction: column;
 `;

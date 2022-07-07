@@ -1,8 +1,9 @@
-import React, { useContext, useEffect, useRef } from 'react';
-import { useNavigation, useIsFocused } from '@react-navigation/native';
+import React, {
+  useContext, useEffect, useRef, useState,
+} from 'react';
+import { useIsFocused } from '@react-navigation/native';
 import { AppState } from 'react-native';
 import { UserContext } from '../../context/user';
-import { RIDE_STATES } from '../../lib/commonTypes';
 import {
   ConfirmPickup,
   NoPayment,
@@ -34,10 +35,9 @@ import geo, { DEFAULT_COORDS, getPosition } from '../../services/geo';
 
 
 const RidePage = ({ mapSettings, navigation }) => {
-  const mapRef = useRef();
-  const appState = useRef(AppState.currentState);
-  const bottomSheetRef = useRef(null);
   const { locationGranted, setLocationGranted } = useContext(UserContext);
+  const mapRef = useRef();
+  const bottomSheetRef = useRef(null);
   const {
     currentBsPage, changeBsPage,
   } = useContext(RideStateContextContext);
@@ -132,12 +132,6 @@ const RidePage = ({ mapSettings, navigation }) => {
     }
   }, [isLoading]);
 
-  useEffect(() => {
-    if (currentBsPage === BS_PAGES.ACTIVE_RIDE && ride.state === RIDE_STATES.CANCELED) {
-      setServiceEstimations(null);
-      changeBsPage(BS_PAGES.ADDRESS_SELECTOR);
-    }
-  }, [ride]);
   const focusCurrentLocation = async () => {
     const location = await getPosition();
     const { coords } = (location || DEFAULT_COORDS);
@@ -189,7 +183,6 @@ const RidePage = ({ mapSettings, navigation }) => {
     }
   }, [isFocused]);
 
-
   return (
     <PageContainer>
       <MainMap
@@ -216,7 +209,7 @@ const RidePage = ({ mapSettings, navigation }) => {
         focusCurrentLocation={focusCurrentLocation}
       >
         {
-          BS_PAGE_TO_COMP[currentBsPage]()
+          BS_PAGE_TO_COMP[currentBsPage] ? BS_PAGE_TO_COMP[currentBsPage]() : null
         }
       </BottomSheet>
     </PageContainer>

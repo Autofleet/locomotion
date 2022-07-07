@@ -117,6 +117,7 @@ const Tips = ({
   const bottomSheetRef = useRef(null);
   const {
     setSnapPointsState,
+    isExpanded,
   } = useContext(BottomSheetContext);
 
   useEffect(() => {
@@ -198,6 +199,7 @@ const Tips = ({
         ref={bottomSheetRef}
         enablePanDownToClose
         index={-1}
+        closeable
         style={{
           zIndex: 3,
           elevation: 5,
@@ -216,7 +218,7 @@ const Tips = ({
 
 
 export default props => (
-  <BottomSheetContextProvider {...props}>
-    <Tips {...props} />
-  </BottomSheetContextProvider>
+
+  <Tips {...props} />
+
 );
