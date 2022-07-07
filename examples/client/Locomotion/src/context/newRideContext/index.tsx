@@ -219,13 +219,21 @@ const RidePageContextProvider = ({ children }: {
       const formattedEstimations = formatEstimations(services, estimations, tags);
       setChosenService(formattedEstimations.find((e: any) => e.eta));
       setServiceEstimations(formattedEstimations);
+      setIsLoading(false);
     } catch (e) {
+      setIsLoading(false);
       setServiceRequestFailed(true);
       setIsReadyForSubmit(false);
     } finally {
       setIsLoading(false);
     }
   };
+  useEffect(() => {
+    if (serviceRequestFailed) {
+      changeBsPage(BS_PAGES.ADDRESS_SELECTOR);
+      stopRequestInterval();
+    }
+  }, [serviceRequestFailed]);
 
   const validateRequestedStopPoints = async (reqSps: any[]) => {
     const stopPoints = reqSps;
@@ -492,15 +500,10 @@ const RidePageContextProvider = ({ children }: {
   };
 
   const tryServiceEstimations = async () => {
-    try {
+    await getServiceEstimations();
+    intervalRef.current = setInterval(async () => {
       await getServiceEstimations();
-      intervalRef.current = setInterval(async () => {
-        await getServiceEstimations();
-      }, (SERVICE_ESTIMATIONS_INTERVAL_IN_SECONDS * 1000));
-    } catch (e) {
-      setServiceRequestFailed(true);
-      setIsReadyForSubmit(false);
-    }
+    }, (SERVICE_ESTIMATIONS_INTERVAL_IN_SECONDS * 1000));
   };
 
   useEffect(() => {
