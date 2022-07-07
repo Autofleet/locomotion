@@ -2,6 +2,7 @@ import React, { useContext, useState } from 'react';
 import moment from 'moment';
 import { Share } from 'react-native';
 import RidePaymentDetails from '../../RidePaymentDetails';
+import { BS_PAGES } from '../../../context/ridePageStateContext/utils';
 import { RidePageContext } from '../../../context/newRideContext';
 import DriverCard from '../../DriverCard';
 import {
@@ -23,9 +24,11 @@ import share from '../../../assets/bottomSheet/share.svg';
 import cancel from '../../../assets/bottomSheet/cancel.svg';
 import RideNotes from '../../../popups/RideNotes';
 import ServiceTypeDetails from '../../ServiceTypeDetails';
+import { RideStateContextContext } from '../../../context/ridePageStateContext';
 
 const ActiveRideContent = () => {
   const { ride, trackRide } = useContext(RidePageContext);
+  const { changeBsPage } = useContext(RideStateContextContext);
   const [popupToShow, setPopupToShow] = useState<string | null>(null);
 
   const {
@@ -80,7 +83,7 @@ const ActiveRideContent = () => {
 
   const renderCancelRide = () => (
     <ButtonContainer onPress={() => {
-      // setPopupToShow('notes');
+      changeBsPage(BS_PAGES.CANCEL_RIDE);
     }}
     >
       <GenericRideButton

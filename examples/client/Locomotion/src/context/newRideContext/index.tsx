@@ -79,6 +79,7 @@ interface RidePageContextInterface {
   setServiceRequestFailed: Dispatch<boolean>;
   trackRide: () => Promise<string>;
   postRideSubmit: (rideId: string, rating: number | null, tip: number | null) => any;
+  cancelRide: () => Promise<void>;
 }
 
 export const RidePageContext = createContext<RidePageContextInterface>({
@@ -119,7 +120,7 @@ export const RidePageContext = createContext<RidePageContextInterface>({
   ride: {},
   trackRide: async () => '',
   postRideSubmit: (rideId: string, rating: number | null, tip: number | null) => undefined,
-
+  cancelRide: async () => undefined,
 });
 
 const HISTORY_RECORDS_NUM = 10;
@@ -587,6 +588,17 @@ const RidePageContextProvider = ({ children }: {
     return ride.trackerUrl;
   };
 
+  const cleanRideState = () => {
+    initSps();
+    setRide({});
+    changeBsPage(BS_PAGES.ADDRESS_SELECTOR);
+  };
+
+  const cancelRide = async () => {
+    await rideApi.cancelRide(ride?.id);
+    cleanRideState();
+  };
+
   return (
     <RidePageContext.Provider
       value={{
@@ -627,6 +639,7 @@ const RidePageContextProvider = ({ children }: {
         setServiceRequestFailed,
         trackRide,
         postRideSubmit,
+        cancelRide,
       }}
     >
       {children}
