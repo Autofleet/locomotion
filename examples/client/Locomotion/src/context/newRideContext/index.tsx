@@ -79,6 +79,8 @@ interface RidePageContextInterface {
   setServiceRequestFailed: Dispatch<boolean>;
   trackRide: () => Promise<string>;
   postRideSubmit: (rideId: string, rating: number | null, tip: number | null) => any;
+  cancelRide: () => Promise<void>;
+  getRideFromApi: (rideId: string) => Promise<RideInterface>;
 }
 
 export const RidePageContext = createContext<RidePageContextInterface>({
@@ -119,6 +121,8 @@ export const RidePageContext = createContext<RidePageContextInterface>({
   ride: {},
   trackRide: async () => '',
   postRideSubmit: (rideId: string, rating: number | null, tip: number | null) => undefined,
+  cancelRide: async () => undefined,
+  getRideFromApi: async () => ({}),
 });
 
 const HISTORY_RECORDS_NUM = 10;
@@ -263,7 +267,7 @@ const RidePageContextProvider = ({ children }: {
     validateRequestedStopPoints(requestStopPoints);
   }, [requestStopPoints]);
 
-  const getRideFromApi = rideId => rideApi.getRide(rideId);
+  const getRideFromApi = (rideId: string): Promise<RideInterface> => rideApi.getRide(rideId);
 
   const reverseLocationGeocode = async (pinLat: number | null = null, pinLng: number | null = null)
     : Promise<any | undefined> => {
@@ -589,6 +593,17 @@ const RidePageContextProvider = ({ children }: {
     return ride.trackerUrl;
   };
 
+  const cleanRideState = () => {
+    initSps();
+    setRide({});
+    changeBsPage(BS_PAGES.ADDRESS_SELECTOR);
+  };
+
+  const cancelRide = async () => {
+    await rideApi.cancelRide(ride?.id);
+    cleanRideState();
+  };
+
   return (
     <RidePageContext.Provider
       value={{
@@ -630,6 +645,7 @@ const RidePageContextProvider = ({ children }: {
         trackRide,
         postRideSubmit,
         getRideFromApi,
+        cancelRide,
       }}
     >
       {children}

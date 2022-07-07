@@ -9,7 +9,6 @@ import {
 } from '@gorhom/bottom-sheet';
 
 import styled from 'styled-components';
-import { STOP_POINT_TYPES } from '../../../../lib/commonTypes';
 import GenericErrorPopup from '../../../../popups/GenericError';
 import i18n from '../../../../I18n';
 import AddressRow from './AddressLine';
@@ -33,7 +32,7 @@ const ContentContainer = styled.View`
   flex: 1;
 
 `;
-const AddressSelectorBottomSheet = ({ addressSelectorFocus }) => {
+const AddressSelectorBottomSheet = () => {
   const userContext = useContext(RidePageContext);
 
   const {
@@ -89,7 +88,6 @@ const AddressSelectorBottomSheet = ({ addressSelectorFocus }) => {
         isExpanded={isExpanded}
         onBack={onBack}
         onSearch={userContext.searchAddress}
-        isSelected={addressSelectorFocus}
       />
       <HistoryContainer keyboardShouldPersistTaps="handled">
         {isExpanded
