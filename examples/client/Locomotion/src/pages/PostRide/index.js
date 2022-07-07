@@ -103,7 +103,7 @@ const PostRidePage = ({ menuSide, route }) => {
         </RatingContainer>
 
         <TipsContainer>
-          {!isCashPaymentMethod
+          {!isCashPaymentMethod(ride.payment.paymentMethod)
             ? (
               <Tips
                 tipSettings={tipSettings}
