@@ -66,6 +66,9 @@ export const getEstimationTags = (estimations: any[]) => {
       };
     }
   });
+  if (tags.cheapest.serviceId === tags.fastest.serviceId) {
+    tags.cheapest.serviceId = null;
+  }
   return {
     [TAG_OPTIONS.CHEAPEST]: tags.cheapest.serviceId,
     [TAG_OPTIONS.FASTEST]: tags.fastest.serviceId,
@@ -89,7 +92,7 @@ export const formatEstimationsResult = (service: any, estimationResult: any, tag
     price: estimation.priceAmount,
     currency: estimation.priceCurrency,
     availableSeats: service.maxPassengers || 4,
-    tags: Object.entries(tags).map(([key, value]) => value === service.id && key),
+    tag: Object.entries(tags).find(([key, value]) => value === service.id && key),
     iconUrl: service.icon,
     description: service.displayDescription,
     priority: service.priority,

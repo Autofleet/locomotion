@@ -21,7 +21,7 @@ import { AvailabilityContext } from '../../../../../../context/availability';
 
 const ServiceCard = ({ service }) => {
   const theme = useContext(ThemeContext);
-  const { setChosenService, chosenService } = useContext(RidePageContext);
+  const { setChosenService, chosenService, serviceEstimations } = useContext(RidePageContext);
   const unavailable = !service.eta;
   const minutesUntilPickup = moment.duration(moment(service.eta).diff(moment())).minutes().toString();
   const timeUntilArrival = minutesUntilPickup > 1
@@ -68,14 +68,14 @@ const ServiceCard = ({ service }) => {
           <Title>
             {service.name}
           </Title>
-          {service.tags.map(tag => tag && (
+          {serviceEstimations.filter(s => s.price).length > 1 && (
           <Tag
-            key={tag.title}
-            containerStyles={tagStyles[tag].container}
-            text={tag}
-            textColor={tagStyles[tag].textColor}
+            key={service.tag.title}
+            containerStyles={tagStyles[service.tag].container}
+            text={service.tag}
+            textColor={tagStyles[service.tag].textColor}
           />
-          ))
+          )
             }
           <Price>
             {service.price ? serviceDisplayPrice : unavailableText}
