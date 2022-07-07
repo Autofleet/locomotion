@@ -1,14 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useRoute } from '@react-navigation/native';
 import FullPageLoader from '../../Components/FullPageLoader';
-import { getTogglePopupsState } from '../../context/state';
 import i18n from '../../I18n';
 import PageHeader from '../../Components/PageHeader';
 import {
   PageContent, CreditFormText, CardContainer,
 } from './styled';
 import PaymentsContext from '../../context/payments';
-import ConfirmationPopup from '../../popups/ConfirmationPopup';
 import CreditCardsList from './credit-cards';
 import NewCreditForm from '../../Components/NewCreditForm';
 import { PageContainer } from '../styles';
@@ -23,38 +21,17 @@ export default ({ navigation, menuSide }) => {
   } = usePayments;
   const [pageLoading, setPageLoading] = useState(true);
   const [loading, setLoading] = useState(false);
-  const [methodForDelete, setMethodForDelete] = useState(null);
-  const [, togglePopup] = getTogglePopupsState();
   const hasPaymentMethods = paymentMethods && paymentMethods.length > 0;
-  const [isCashEnabled, setIsCashEnabled] = useState(false);
   const [showList, setShowList] = useState(hasPaymentMethods);
 
   const loadCustomerData = async () => {
     await usePayments.getOrFetchCustomer();
     setPageLoading(false);
-    const result = await usePayments.isCashPaymentEnabled();
-    setIsCashEnabled(result.value);
   };
 
   useEffect(() => {
     loadCustomerData();
   }, []);
-
-  const detachCard = async () => {
-    setLoading(true);
-    await usePayments.detachPaymentMethod(methodForDelete);
-    await usePayments.loadCustomer();
-    setLoading(false);
-    togglePopup('removeCard', false);
-    if (paymentMethods.length <= 1) {
-      setShowList(false);
-    }
-  };
-
-  const onRemoveMethod = async (methodId) => {
-    togglePopup('removeCard', true);
-    setMethodForDelete(methodId);
-  };
 
   const onPressBack = () => {
     if (!showList && hasPaymentMethods) {
@@ -78,9 +55,7 @@ export default ({ navigation, menuSide }) => {
         {/* <Balance customer={usePayments.customer} /> */}
         {showList ? (
           <CreditCardsList
-            isCashEnabled={isCashEnabled}
             paymentMethods={usePayments.paymentMethods}
-            onDetach={onRemoveMethod}
             loadingState={loading}
             onAddClick={() => setShowList(false)}
           />
@@ -95,16 +70,6 @@ export default ({ navigation, menuSide }) => {
             />
           </CardContainer>
         )}
-        <ConfirmationPopup
-          name="removeCard"
-          title={i18n.t('payments.popups.removeCard.title')}
-          text={i18n.t('payments.popups.removeCard.text')}
-          confirmText={i18n.t('payments.popups.removeCard.confirmText')}
-          cancelText={i18n.t('payments.popups.removeCard.cancelText')}
-          type="cancel"
-          useCancelTextButton
-          onSubmit={() => detachCard()}
-        />
       </PageContent>
     </PageContainer>
   );

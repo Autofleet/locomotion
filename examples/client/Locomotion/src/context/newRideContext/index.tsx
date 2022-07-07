@@ -2,6 +2,7 @@ import React, {
   useState, useEffect, useRef, createContext, useContext,
 } from 'react';
 import Config from 'react-native-config';
+import { useNavigation } from '@react-navigation/native';
 import _ from 'lodash';
 import { UserContext } from '../user';
 import { getPosition, DEFAULT_COORDS } from '../../services/geo';
@@ -16,11 +17,15 @@ import settings from '../settings';
 import SETTINGS_KEYS from '../settings/keys';
 import { RideStateContextContext } from '../ridePageStateContext';
 import { BS_PAGES } from '../ridePageStateContext/utils';
-import { RIDE_STATES } from '../../lib/commonTypes';
+import { RIDE_STATES, RIDE_FINAL_STATES } from '../../lib/commonTypes';
 import useInterval from '../../lib/useInterval';
 import { formatSps } from '../../lib/ride/utils';
+import { MAIN_ROUTES } from '../../pages/routes';
 
 type Dispatch<A> = (value: A) => void;
+type Nav = {
+  navigate: (value: string, object: any) => void;
+}
 
 export interface RideInterface {
   priceCurrency?: any;
@@ -28,7 +33,7 @@ export interface RideInterface {
   id?: string;
   notes?: string;
   paymentMethodId?: string;
-  serviceTypeId?: string;
+  serviceId?: string;
   driver?: any;
   stopPoints?: any[];
   vehicle?: any;
@@ -36,6 +41,7 @@ export interface RideInterface {
   state?: string;
   trackerUrl?: string;
   serviceType?: any;
+  payment?: any;
 }
 
 interface RidePageContextInterface {
@@ -75,7 +81,9 @@ interface RidePageContextInterface {
   serviceRequestFailed: boolean;
   setServiceRequestFailed: Dispatch<boolean>;
   trackRide: () => Promise<string>;
-  postRideSubmit: (rideId: string, rating: number | null, tip: number | null) => any;
+  postRideSubmit: (rideId: string, priceCalculationId:string, rating: number | null, tip: number | null) => any;
+  cancelRide: () => Promise<void>;
+  getRideFromApi: (rideId: string) => Promise<RideInterface>;
 }
 
 export const RidePageContext = createContext<RidePageContextInterface>({
@@ -115,8 +123,9 @@ export const RidePageContext = createContext<RidePageContextInterface>({
   setServiceRequestFailed: () => undefined,
   ride: {},
   trackRide: async () => '',
-  postRideSubmit: (rideId: string, rating: number | null, tip: number | null) => undefined,
-
+  postRideSubmit: (rideId: string, priceCalculationId:string, rating: number | null, tip: number | null) => undefined,
+  cancelRide: async () => undefined,
+  getRideFromApi: async () => ({}),
 });
 
 const HISTORY_RECORDS_NUM = 10;
@@ -126,6 +135,7 @@ const RidePageContextProvider = ({ children }: {
   children: any
 }) => {
   const { locationGranted } = useContext(UserContext);
+  const navigation = useNavigation<Nav>();
   const { checkStopPointsInTerritory, changeBsPage } = useContext(RideStateContextContext);
   const [requestStopPoints, setRequestStopPoints] = useState(INITIAL_STOP_POINTS);
   const [currentGeocode, setCurrentGeocode] = useState<any | null>(null);
@@ -144,12 +154,28 @@ const RidePageContextProvider = ({ children }: {
   const [serviceRequestFailed, setServiceRequestFailed] = useState<boolean>(false);
   const intervalRef = useRef<any>();
 
-  // const serviceType = ride.serviceType || await rideApi.getService(ride.serviceTypeId)
-  const formatRide = async (rideToFormat: RideInterface) => ({
-    ...rideToFormat,
-    stopPoints: formatSps(rideToFormat.stopPoints),
-    // serviceType
-  });
+  const RIDE_STATES_TO_SCREENS = {
+    [RIDE_STATES.PENDING]: () => { changeBsPage(BS_PAGES.CONFIRMING_RIDE); },
+    [RIDE_STATES.MATCHING]: () => { changeBsPage(BS_PAGES.CONFIRMING_RIDE); },
+    [RIDE_STATES.REJECTED]: () => { changeBsPage(BS_PAGES.NO_AVAILABLE_VEHICLES); },
+    [RIDE_STATES.COMPLETED]: (completedRide: any) => {
+      navigation.navigate(MAIN_ROUTES.POST_RIDE, { rideId: completedRide.id });
+      changeBsPage(BS_PAGES.ADDRESS_SELECTOR);
+      setServiceEstimations(null);
+    },
+    [RIDE_STATES.DISPATCHED]: () => { changeBsPage(BS_PAGES.ACTIVE_RIDE); },
+    [RIDE_STATES.ACTIVE]: () => { changeBsPage(BS_PAGES.ACTIVE_RIDE); },
+  };
+
+  const formatRide = async (rideToFormat: RideInterface) => {
+    const serviceType = rideToFormat.serviceType
+      || await rideApi.getService(rideToFormat.serviceId);
+    return {
+      ...rideToFormat,
+      stopPoints: formatSps(rideToFormat.stopPoints),
+      serviceType,
+    };
+  };
 
 
   const { getSettingByKey } = settings.useContainer();
@@ -164,7 +190,8 @@ const RidePageContextProvider = ({ children }: {
     });
     const formattedServices = services.map((service) => {
       const estimationForService = estimationsMap[service.id];
-      const estimationResult = estimationForService && estimationForService.results.length && estimationForService.results[0];
+      const estimationResult = estimationForService?.results?.length
+        && estimationForService.results[0];
       return formatEstimationsResult(service, estimationResult, tags);
     });
     return formattedServices.sort((a, b) => a.priority - b.priority);
@@ -229,18 +256,25 @@ const RidePageContextProvider = ({ children }: {
     if (ride?.id) {
       const rideLoaded = await rideApi.getRide(ride?.id);
       const formattedRide = await formatRide(rideLoaded);
-      setRide(formattedRide);
       if (ride.state !== rideLoaded.state) {
-        changeBsPage(rideLoaded.state === RIDE_STATES.REJECTED
-          ? BS_PAGES.NO_AVAILABLE_VEHICLES
-          : BS_PAGES.ACTIVE_RIDE);
+        const screenFunction = RIDE_STATES_TO_SCREENS[rideLoaded.state];
+        if (screenFunction) {
+          screenFunction(ride);
+        }
       }
+      if (RIDE_FINAL_STATES.includes(ride?.state || '')) {
+        setRide({});
+      }
+      setRide(formattedRide);
     }
   }, 5000);
+
 
   useEffect(() => {
     validateRequestedStopPoints(requestStopPoints);
   }, [requestStopPoints]);
+
+  const getRideFromApi = (rideId: string): Promise<RideInterface> => rideApi.getRide(rideId);
 
   const reverseLocationGeocode = async (pinLat: number | null = null, pinLng: number | null = null)
     : Promise<any | undefined> => {
@@ -529,23 +563,27 @@ const RidePageContextProvider = ({ children }: {
     }
   };
 
-  const chargeTip = async (rideId: string, tip:number|null): Promise<any> => {
+  const chargeTip = async (priceCalculationId: string, tip:number|null): Promise<any> => {
     // TODO: implement
     if (!tip) {
       return null;
     }
 
     try {
+      const tipChargeResponse = await rideApi.additionalCharge(priceCalculationId, tip, 'tip');
       return true;
     } catch (e) {
+      console.log(e);
       return false;
     }
   };
 
-  const postRideSubmit = async (rideId:string, rating:number|null, tip:number|null): Promise<boolean> => {
-    console.log('Post Ride Data', { rideId, rating, tip });
+  const postRideSubmit = async (rideId:string, priceCalculationId: string, rating:number|null, tip:number|null): Promise<boolean> => {
+    console.log('Post Ride Data', {
+      rideId, priceCalculationId, rating, tip,
+    });
     await Promise.all([
-      chargeTip(rideId, tip),
+      chargeTip(priceCalculationId, tip),
       patchRideRating(rideId, rating),
     ]);
 
@@ -564,6 +602,17 @@ const RidePageContextProvider = ({ children }: {
     }
 
     return ride.trackerUrl;
+  };
+
+  const cleanRideState = () => {
+    initSps();
+    setRide({});
+    changeBsPage(BS_PAGES.ADDRESS_SELECTOR);
+  };
+
+  const cancelRide = async () => {
+    await rideApi.cancelRide(ride?.id);
+    cleanRideState();
   };
 
   return (
@@ -606,6 +655,8 @@ const RidePageContextProvider = ({ children }: {
         setServiceRequestFailed,
         trackRide,
         postRideSubmit,
+        getRideFromApi,
+        cancelRide,
       }}
     >
       {children}

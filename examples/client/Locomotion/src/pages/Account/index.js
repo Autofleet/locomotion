@@ -1,8 +1,8 @@
 import React, { useEffect, useContext } from 'react';
 import { useRoute } from '@react-navigation/native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { TouchableOpacity, View } from 'react-native';
 import moment from 'moment';
+import Card from '../../Components/InformationCard';
 import PaymentsContext from '../../context/payments';
 import { MAIN_ROUTES } from '../routes';
 
@@ -13,24 +13,15 @@ import {
   AccountHeaderMainContainer,
   AccountHeaderMainText,
   AccountHeaderSubText,
-  Arrow,
-  CardContainer,
-  CardContantContainer,
   CardsContainer,
-  CardsTitle,
-  CardText,
-  CardTitle,
   Container,
   FlexCenterContainer,
   LogoutContainer,
-  ArrowContainer,
-  VerifyContainer,
-  VerifyText,
-  CardTitleContainer,
   LogoutText,
 } from './styled';
 import i18n from '../../I18n';
 import PageHeader from '../../Components/PageHeader';
+import CardsTitle from '../../Components/CardsTitle';
 import Mixpanel from '../../services/Mixpanel';
 import { PageContainer } from '../styles';
 import { UserContext } from '../../context/user';
@@ -68,47 +59,6 @@ const AccountHeader = () => {
   );
 };
 
-const Card = ({
-  title,
-  children,
-  onPress,
-  verified,
-  showUnverified,
-  ...props
-}) => {
-  const MainContainer = onPress ? TouchableOpacity : View;
-  return (
-    <MainContainer onPress={onPress} {...props}>
-      <CardContainer>
-        <CardContantContainer>
-          <CardTitleContainer>
-            <CardTitle>{title}</CardTitle>
-            {verified ? (
-              <View>
-                <VerifyContainer>
-                  <VerifyText>{i18n.t('onboarding.verified')}</VerifyText>
-                </VerifyContainer>
-              </View>
-            ) : (
-              <>
-                {showUnverified ? (
-                  <View>
-                    <VerifyContainer unverified>
-                      <VerifyText>{i18n.t('onboarding.unverified')}</VerifyText>
-                    </VerifyContainer>
-                  </View>
-                ) : undefined}
-              </>
-            )}
-          </CardTitleContainer>
-          <CardText>{children}</CardText>
-        </CardContantContainer>
-        <ArrowContainer>{onPress ? <Arrow /> : undefined}</ArrowContainer>
-      </CardContainer>
-    </MainContainer>
-  );
-};
-
 const AccountContent = ({ navigation }) => {
   const { user } = useContext(UserContext);
   const { getClientDefaultMethod } = PaymentsContext.useContainer();
@@ -116,9 +66,7 @@ const AccountContent = ({ navigation }) => {
   return (
     <Container>
       <CardsContainer>
-        <CardsTitle>
-          {i18n.t('onboarding.accountInformation')}
-        </CardsTitle>
+        <CardsTitle title={i18n.t('onboarding.accountInformation')} />
         <Card
           title={i18n.t('onboarding.namePlaceholder')}
           onPress={() => navigation.navigate(MAIN_ROUTES.NAME, {
@@ -147,9 +95,7 @@ const AccountContent = ({ navigation }) => {
         </Card>
         {defaultPaymentMethod && (
           <>
-            <CardsTitle>
-              {i18n.t('onboarding.paymentInformation')}
-            </CardsTitle>
+            <CardsTitle title={i18n.t('onboarding.paymentInformation')} />
             <Card
               title={i18n.t('onboarding.paymentMethodPlaceholder')}
               onPress={() => navigation.navigate(MAIN_ROUTES.PAYMENT, {

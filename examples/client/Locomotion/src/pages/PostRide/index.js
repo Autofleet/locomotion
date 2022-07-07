@@ -21,11 +21,14 @@ import Button from '../../Components/RoundedButton';
 import settings from '../../context/settings';
 import SETTINGS_KEYS from '../../context/settings/keys';
 import NewRidePageContextProvider, { RidePageContext } from '../../context/newRideContext';
+// import closeIcon from '../../assets/close-x.svg';
+import BottomSheetContextProvider, { BottomSheetContext } from '../../context/bottomSheetContext';
 
-const PostRidePage = ({ menuSide }) => {
+const PostRidePage = ({ menuSide, route }) => {
   const navigation = useNavigation();
-  const route = useRoute();
+  const router = useRoute();
   const [rating, setRating] = useState(null);
+  const [ride, setRide] = useState({});
   const [rideTip, setRideTip] = useState(null);
   const [tipSettings, setTipSettings] = useState({
     percentageThreshold: 30,
@@ -34,18 +37,15 @@ const PostRidePage = ({ menuSide }) => {
   });
   const {
     postRideSubmit,
-    ride = {
-      driver: {},
-    },
+    getRideFromApi,
   } = useContext(RidePageContext);
 
   const { getSettingByKey } = settings.useContainer();
 
   useEffect(() => {
-    Mixpanel.pageView(route.name);
+    Mixpanel.pageView(router.name);
   }, []);
-
-
+  console.log(ride);
   const onRatingUpdate = (selectedRating) => {
     setRating(selectedRating);
   };
@@ -61,19 +61,28 @@ const PostRidePage = ({ menuSide }) => {
     setTipSettings(setting);
   };
 
+  const loadRide = async () => {
+    const rideData = await getRideFromApi(route.params.rideId);
+    console.log({ rideData });
+    setRide(rideData);
+  };
+
   useEffect(() => {
     initSettings();
+    loadRide();
   }, []);
 
   const onSubmit = async () => {
-    if (rating) {
-      try {
-        postRideSubmit(ride.id, rating, rideTip);
-      } catch (e) {
-        console.log(e);
-      }
+    try {
+      postRideSubmit(ride.id, ride.priceCalculationId, rating, rideTip);
+    } catch (e) {
+      console.log(e);
     }
   };
+
+  const {
+    isExpanded,
+  } = useContext(BottomSheetContext);
 
   return (
     <PageContainer>
@@ -98,7 +107,7 @@ const PostRidePage = ({ menuSide }) => {
           />
         </TipsContainer>
         <SubmitContainer>
-          <Button onPress={onSubmit}>{i18n.t('postRide.submit')}</Button>
+          <Button onPress={onSubmit} disabled={isExpanded}>{i18n.t('postRide.submit')}</Button>
         </SubmitContainer>
       </PageContent>
     </PageContainer>
@@ -107,7 +116,10 @@ const PostRidePage = ({ menuSide }) => {
 
 
 export default props => (
-  <NewRidePageContextProvider {...props}>
-    <PostRidePage {...props} />
-  </NewRidePageContextProvider>
+  <BottomSheetContextProvider {...props}>
+
+    <NewRidePageContextProvider {...props}>
+      <PostRidePage {...props} />
+    </NewRidePageContextProvider>
+  </BottomSheetContextProvider>
 );

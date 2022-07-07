@@ -1,9 +1,7 @@
 import React, {
-  useCallback, useEffect, useMemo, useRef, useState, useContext,
+  useCallback, useContext, useEffect, useRef,
 } from 'react';
-import {
-  View, Text, StyleSheet, LayoutAnimation, Animated, Platform, UIManager,
-} from 'react-native';
+import { Animated, View } from 'react-native';
 import styled from 'styled-components';
 import { debounce } from 'lodash';
 import BottomSheetInput from '../../../../Components/TextInput/BottomSheetInput';
@@ -76,6 +74,7 @@ const SearchBar = ({
   onFocus = () => null,
   onBack,
   onSearch,
+  isSelected,
 }) => {
   const {
     searchTerm,
@@ -116,11 +115,23 @@ const SearchBar = ({
     debouncedSearch(searchTerm);
   }, [searchTerm]);
 
+  const inputRef = useRef();
+
+  useEffect(() => {
+    if (isSelected) {
+      if (inputRef && inputRef.current) {
+        inputRef.current.focus();
+      }
+    } else {
+      inputRef.current = null;
+    }
+  }, [isSelected]);
 
   const buildSps = () => requestStopPoints.map((s, i) => {
+    const { type, description } = requestStopPoints[i];
     const placeholder = getSpPlaceholder(s);
     const rowProps = i === 0 ? { isExpanded } : { setMargin: true };
-    console.log(requestStopPoints[i].description);
+    const autoFocus = isExpanded && type === isSelected;
     return (
       <Row
         {...rowProps}
@@ -139,7 +150,7 @@ const SearchBar = ({
             setSearchTerm(text);
           }}
           fullBorder
-          value={requestStopPoints[i].description}
+          value={description || ''}
           placeholderTextColor="#929395"
           onFocus={(e) => {
             onInputFocus(e.target, i);
@@ -154,6 +165,12 @@ const SearchBar = ({
             }, i);
             setSearchTerm(null);
           }}
+          ref={(ref) => {
+            if (autoFocus) {
+              inputRef.current = ref;
+            }
+          }}
+          selectTextOnFocus
         />
       </Row>
     );
@@ -170,7 +187,7 @@ const SearchBar = ({
 
 
   useEffect(() => {
-    if (selectedInputTarget) {
+    if (!isExpanded && selectedInputTarget) {
       selectedInputTarget.blur();
     }
   }, [isExpanded]);
