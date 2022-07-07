@@ -120,7 +120,6 @@ const SearchBar = ({
   const buildSps = () => requestStopPoints.map((s, i) => {
     const placeholder = getSpPlaceholder(s);
     const rowProps = i === 0 ? { isExpanded } : { setMargin: true };
-    console.log(requestStopPoints[i].description);
     return (
       <Row
         {...rowProps}

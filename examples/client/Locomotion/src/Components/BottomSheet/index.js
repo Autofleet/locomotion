@@ -21,6 +21,7 @@ const BottomSheetComponent = forwardRef(({
   enablePanDownToClose = false,
   focusCurrentLocation,
   index = 0,
+  closeable = false,
 }, ref) => {
   const {
     setIsExpanded,
@@ -30,7 +31,9 @@ const BottomSheetComponent = forwardRef(({
   } = useContext(BottomSheetContext);
   const { locationGranted } = useContext(UserContext);
   const onAnimate = useCallback((from, to) => {
-    if (from !== -1) {
+    if (!closeable && from !== -1) {
+      setIsExpanded(to > from);
+    } else if (closeable && from !== -1) {
       setIsExpanded(to > from);
     }
   }, []);

@@ -21,6 +21,8 @@ import Button from '../../Components/RoundedButton';
 import settings from '../../context/settings';
 import SETTINGS_KEYS from '../../context/settings/keys';
 import NewRidePageContextProvider, { RidePageContext } from '../../context/newRideContext';
+// import closeIcon from '../../assets/close-x.svg';
+import BottomSheetContextProvider, { BottomSheetContext } from '../../context/bottomSheetContext';
 
 const PostRidePage = ({ menuSide, route }) => {
   const navigation = useNavigation();
@@ -80,6 +82,10 @@ const PostRidePage = ({ menuSide, route }) => {
     }
   };
 
+  const {
+    isExpanded,
+  } = useContext(BottomSheetContext);
+
   return (
     <PageContainer>
       <PageHeader
@@ -103,7 +109,7 @@ const PostRidePage = ({ menuSide, route }) => {
           />
         </TipsContainer>
         <SubmitContainer>
-          <Button onPress={onSubmit}>{i18n.t('postRide.submit')}</Button>
+          <Button onPress={onSubmit} disabled={isExpanded}>{i18n.t('postRide.submit')}</Button>
         </SubmitContainer>
       </PageContent>
     </PageContainer>
@@ -112,7 +118,10 @@ const PostRidePage = ({ menuSide, route }) => {
 
 
 export default props => (
-  <NewRidePageContextProvider {...props}>
-    <PostRidePage {...props} />
-  </NewRidePageContextProvider>
+  <BottomSheetContextProvider {...props}>
+
+    <NewRidePageContextProvider {...props}>
+      <PostRidePage {...props} />
+    </NewRidePageContextProvider>
+  </BottomSheetContextProvider>
 );
