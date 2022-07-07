@@ -1,8 +1,17 @@
 import React, { useContext, useEffect, useRef } from 'react';
-import { useIsFocused } from '@react-navigation/native';
+import { useNavigation, useIsFocused } from '@react-navigation/native';
+import { AppState } from 'react-native';
+import { UserContext } from '../../context/user';
 import { RIDE_STATES } from '../../lib/commonTypes';
 import {
-  ConfirmPickup, NoPayment, NotAvailableHere, ConfirmingRide, NoAvailableVehicles, ActiveRide,
+  ConfirmPickup,
+  NoPayment,
+  NotAvailableHere,
+  ConfirmingRide,
+  NoAvailableVehicles,
+  ActiveRide,
+  LocationRequest,
+  CancelRide,
 } from '../../Components/BsPages';
 import { RideStateContextContext, RideStateContextContextProvider } from '../../context';
 import NewRidePageContextProvider, { RidePageContext } from '../../context/newRideContext';
@@ -21,12 +30,14 @@ import hamburgerIcon from '../../assets/hamburger.svg';
 import backArrow from '../../assets/arrow-back.svg';
 import { BS_PAGES } from '../../context/ridePageStateContext/utils';
 import payments from '../../context/payments';
-import { getPosition } from '../../services/geo';
+import geo, { DEFAULT_COORDS, getPosition } from '../../services/geo';
 
 
 const RidePage = ({ mapSettings, navigation }) => {
   const mapRef = useRef();
+  const appState = useRef(AppState.currentState);
   const bottomSheetRef = useRef(null);
+  const { locationGranted, setLocationGranted } = useContext(UserContext);
   const {
     currentBsPage, changeBsPage,
   } = useContext(RideStateContextContext);
@@ -68,10 +79,21 @@ const RidePage = ({ mapSettings, navigation }) => {
         <AddressSelector />
       );
     }
-    return <RideOptions />;
+    return changeBsPage(BS_PAGES.SERVICE_ESTIMATIONS);
   };
 
   const BS_PAGE_TO_COMP = {
+    [BS_PAGES.CANCEL_RIDE]: () => (
+      <CancelRide />
+    ),
+    [BS_PAGES.SERVICE_ESTIMATIONS]: () => (
+      <RideOptions />
+    ),
+    [BS_PAGES.LOCATION_REQUEST]: () => (
+      <LocationRequest
+        onSecondaryButtonPress={goBackToAddress}
+      />
+    ),
     [BS_PAGES.NOT_IN_TERRITORY]: () => (
       <NotAvailableHere onButtonPress={() => {
         goBackToAddress();
@@ -83,7 +105,7 @@ const RidePage = ({ mapSettings, navigation }) => {
       <ConfirmPickup
         initialLocation={requestStopPoints[0]}
         onButtonPress={() => {
-          if (clientHasValidPaymentMethods()) {
+          if (clientHasValidPaymentMethods() || ride.paymentMethodId === 'cash') {
             requestRide();
           } else {
             changeBsPage(BS_PAGES.NO_PAYMENT);
@@ -117,7 +139,8 @@ const RidePage = ({ mapSettings, navigation }) => {
     }
   }, [ride]);
   const focusCurrentLocation = async () => {
-    const { coords } = await getPosition();
+    const location = await getPosition();
+    const { coords } = (location || DEFAULT_COORDS);
     mapRef.current.animateToRegion({
       latitude: coords.latitude - (parseFloat(snapPoints[0]) / 10000),
       longitude: coords.longitude,
@@ -126,6 +149,38 @@ const RidePage = ({ mapSettings, navigation }) => {
     }, 1000);
   };
 
+  const checkLocationPermission = async () => {
+    const granted = await geo.checkPermission();
+    setLocationGranted(granted);
+  };
+
+  useEffect(() => {
+    if (locationGranted && currentBsPage === BS_PAGES.LOCATION_REQUEST) {
+      changeBsPage(BS_PAGES.ADDRESS_SELECTOR);
+      bottomSheetRef.current.collapse();
+    } else if (!locationGranted
+      && locationGranted !== undefined
+      && currentBsPage === BS_PAGES.ADDRESS_SELECTOR) {
+      changeBsPage(BS_PAGES.LOCATION_REQUEST);
+    }
+    focusCurrentLocation();
+  }, [locationGranted]);
+
+  useEffect(() => {
+    checkLocationPermission();
+    const subscription = AppState.addEventListener('change', (nextAppState) => {
+      if (
+        nextAppState === 'active'
+      ) {
+        checkLocationPermission();
+      }
+    });
+
+    return () => {
+      subscription.remove();
+    };
+  }, []);
+
   const isFocused = useIsFocused();
 
   useEffect(() => {
@@ -133,6 +188,7 @@ const RidePage = ({ mapSettings, navigation }) => {
       navigation.closeDrawer();
     }
   }, [isFocused]);
+
 
   return (
     <PageContainer>

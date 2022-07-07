@@ -108,7 +108,10 @@ const AddressSelectorBottomSheet = () => {
                 onPress={onSetLocationOnMap}
               />
               <BottomSheetScrollView keyboardShouldPersistTaps="handled" contentContainerStyle={{ overflow: 'visible' }}>
-                {(userContext.searchResults || userContext.historyResults).map(h => <AddressRow {...h} key={h.placeId} onPress={() => userContext.onAddressSelected(h)} />)}
+                {
+                  userContext.searchResults ? userContext.searchResults.map(h => <AddressRow {...h} key={h.placeId} onPress={() => userContext.onAddressSelected(h)} />)
+                    : userContext.historyResults.map(h => <AddressRow {...h} isHistory key={h.placeId} onPress={() => userContext.onAddressSelected(h)} />)
+                }
               </BottomSheetScrollView>
             </>
           )

@@ -17,7 +17,6 @@ import {
   CardContainer,
   CardContantContainer,
   CardsContainer,
-  CardsTitle,
   CardText,
   CardTitle,
   Container,
@@ -31,6 +30,7 @@ import {
 } from './styled';
 import i18n from '../../I18n';
 import PageHeader from '../../Components/PageHeader';
+import CardsTitle from '../../Components/CardsTitle';
 import Mixpanel from '../../services/Mixpanel';
 import { PageContainer } from '../styles';
 import { UserContext } from '../../context/user';
@@ -116,9 +116,7 @@ const AccountContent = ({ navigation }) => {
   return (
     <Container>
       <CardsContainer>
-        <CardsTitle>
-          {i18n.t('onboarding.accountInformation')}
-        </CardsTitle>
+        <CardsTitle title={i18n.t('onboarding.accountInformation')} />
         <Card
           title={i18n.t('onboarding.namePlaceholder')}
           onPress={() => navigation.navigate(MAIN_ROUTES.NAME, {
@@ -147,9 +145,7 @@ const AccountContent = ({ navigation }) => {
         </Card>
         {defaultPaymentMethod && (
           <>
-            <CardsTitle>
-              {i18n.t('onboarding.paymentInformation')}
-            </CardsTitle>
+            <CardsTitle title={i18n.t('onboarding.paymentInformation')} />
             <Card
               title={i18n.t('onboarding.paymentMethodPlaceholder')}
               onPress={() => navigation.navigate(MAIN_ROUTES.PAYMENT, {

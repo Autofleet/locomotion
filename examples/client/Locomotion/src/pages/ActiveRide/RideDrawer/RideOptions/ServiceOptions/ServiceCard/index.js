@@ -4,7 +4,7 @@ import React, { useContext } from 'react';
 import SvgIcon from '../../../../../../Components/SvgIcon';
 import i18n from '../../../../../../I18n';
 import Seat from '../../../../../../assets/seat.svg';
-import { TAG_OPTIONS } from '../../../../../../context/newRideContext/utils';
+import { getCurrencySymbol, TAG_OPTIONS } from '../../../../../../context/newRideContext/utils';
 import { Context as ThemeContext } from '../../../../../../context/theme';
 import {
   Circle, AvailableSeats,
@@ -28,7 +28,7 @@ const ServiceCard = ({ service }) => {
     ? i18n.t('rideDetails.toolTipEta', { minutes: minutesUntilPickup })
     : i18n.t('general.now');
   const unavailableText = i18n.t('rideDetails.unavailable');
-  const serviceDisplayPrice = `${getSymbolFromCurrency(service.currency)}${service.price}`;
+  const serviceDisplayPrice = `${getCurrencySymbol(service.currency)}${service.price}`;
   const tagStyles = {
     [TAG_OPTIONS.FASTEST]: {
       container: {
