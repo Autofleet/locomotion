@@ -21,7 +21,7 @@ import deleteIcon from '../../assets/delete.svg';
 import { DeleteIcon, DeleteText } from './styled';
 
 
-export default ({
+const CardDetails = ({
   loadingState = false,
   navigation = undefined,
 }) => {
@@ -57,7 +57,7 @@ export default ({
     <KeyboardAwareScrollView extraScrollHeight={20} enableOnAndroid>
       <PageHeader
         title={i18n.t('payments.cardDetails.title')}
-        onIconPress={() => navigation.navigate(MAIN_ROUTES.PAYMENT)}
+        onIconPress={() => navigation?.navigate(MAIN_ROUTES.PAYMENT)}
         iconSide=""
         displayIcon={undefined}
         showSkipButton={undefined}
@@ -128,3 +128,6 @@ export default ({
 
   );
 };
+
+
+export default CardDetails;
