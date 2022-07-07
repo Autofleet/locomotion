@@ -21,7 +21,7 @@ import Button from '../../Components/RoundedButton';
 import settings from '../../context/settings';
 import SETTINGS_KEYS from '../../context/settings/keys';
 import NewRidePageContextProvider, { RidePageContext } from '../../context/newRideContext';
-// import closeIcon from '../../assets/close-x.svg';
+import closeIcon from '../../assets/x.png';
 import BottomSheetContextProvider, { BottomSheetContext } from '../../context/bottomSheetContext';
 
 const PostRidePage = ({ menuSide, route }) => {
@@ -92,6 +92,7 @@ const PostRidePage = ({ menuSide, route }) => {
         title={i18n.t('postRide.pageTitle')}
         onIconPress={() => navigation.navigate(MAIN_ROUTES.HOME)}
         iconSide={menuSide}
+        icon={closeIcon}
       />
       <PageContent>
         <RatingContainer>
