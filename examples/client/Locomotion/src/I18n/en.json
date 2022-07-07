@@ -286,7 +286,7 @@
     "postRide": {
         "pageTitle": "Ride finished",
         "ratingHeadline": "How was your ride?",
-        "submit": "Continue",
+        "submit": "Rate & Tip",
         "tip": {
             "title": "Add a tip for",
             "subTitle": "Your ride was",
