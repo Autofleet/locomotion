@@ -4,7 +4,6 @@ import React, {
 import { useIsFocused } from '@react-navigation/native';
 import { AppState } from 'react-native';
 import { UserContext } from '../../context/user';
-import { STOP_POINT_TYPES } from '../../lib/commonTypes';
 import {
   ConfirmPickup,
   NoPayment,
