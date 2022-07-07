@@ -407,6 +407,9 @@
   "activeRide": {
     "pickup": {
         "pending": "Meeting at pickup point"
+    },
+    "dropoff": {
+        "pending": "Dropoff ETA"
     }
   },
   "min": "{{ min }} min",

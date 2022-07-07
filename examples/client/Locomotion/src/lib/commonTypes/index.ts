@@ -28,3 +28,6 @@ export const RIDE_ACTIVE_STATES = [
   RIDE_STATES.DISPATCHED,
   RIDE_STATES.ACTIVE,
 ];
+
+export const RIDE_FINAL_STATES = Object.values(RIDE_STATES)
+  .filter(state => !RIDE_ACTIVE_STATES.find(as => as === state));
