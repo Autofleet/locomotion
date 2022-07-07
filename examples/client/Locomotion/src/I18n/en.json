@@ -401,5 +401,11 @@
     }
   },
   "min": "{{ min }} min",
-  "now": "Now"
+  "now": "Now",
+  "ride": {
+    "journey": "Ride journey",
+    "paymentMethod": "Payment method",
+    "viewDetails": "View details",
+    "serviceType": "Service Type"
+  }
 }
