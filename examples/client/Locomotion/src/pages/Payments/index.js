@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useRoute } from '@react-navigation/native';
 import FullPageLoader from '../../Components/FullPageLoader';
-import { getTogglePopupsState } from '../../context/state';
 import i18n from '../../I18n';
 import PageHeader from '../../Components/PageHeader';
 import {
@@ -24,7 +23,7 @@ export default ({ navigation, menuSide }) => {
   const [pageLoading, setPageLoading] = useState(true);
   const [loading, setLoading] = useState(false);
   const [methodForDelete, setMethodForDelete] = useState(null);
-  const [, togglePopup] = getTogglePopupsState();
+  const [isRemoveCardPopupVisible, setIsRemoveCardPopupVisible] = useState(false);
   const hasPaymentMethods = paymentMethods && paymentMethods.length > 0;
   const [showList, setShowList] = useState(hasPaymentMethods);
 
@@ -42,14 +41,14 @@ export default ({ navigation, menuSide }) => {
     await usePayments.detachPaymentMethod(methodForDelete);
     await usePayments.loadCustomer();
     setLoading(false);
-    togglePopup('removeCard', false);
+    setIsRemoveCardPopupVisible(false);
     if (paymentMethods.length <= 1) {
       setShowList(false);
     }
   };
 
   const onRemoveMethod = async (methodId) => {
-    togglePopup('removeCard', true);
+    setIsRemoveCardPopupVisible(true);
     setMethodForDelete(methodId);
   };
 
@@ -92,7 +91,7 @@ export default ({ navigation, menuSide }) => {
           </CardContainer>
         )}
         <ConfirmationPopup
-          name="removeCard"
+          isVisible={isRemoveCardPopupVisible}
           title={i18n.t('payments.popups.removeCard.title')}
           text={i18n.t('payments.popups.removeCard.text')}
           confirmText={i18n.t('payments.popups.removeCard.confirmText')}
@@ -100,6 +99,7 @@ export default ({ navigation, menuSide }) => {
           type="cancel"
           useCancelTextButton
           onSubmit={() => detachCard()}
+          onClose={() => setIsRemoveCardPopupVisible(false)}
         />
       </PageContent>
     </PageContainer>
