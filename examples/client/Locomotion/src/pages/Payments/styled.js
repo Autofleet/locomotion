@@ -107,7 +107,7 @@ export const CardsListContainer = styled.View`
 
 export const PaymentMethodsContainer = styled.View`
     display: flex;
-    flex-direction: row;
+    /* flex-direction: row; */
 `;
 
 export const CreditCardsContainer = styled.View`
