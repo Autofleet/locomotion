@@ -12,3 +12,10 @@ justify-content: flex-start;
 export const DeleteIcon = styled(SvgIcon)`
 margin-right: 8px;
 `;
+
+export const DeleteContainer = styled.View`
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  width: 100%;
+`;

@@ -18,7 +18,7 @@ import { PaymentMethodInterface } from '../../context/payments/interface';
 import { getTogglePopupsState } from '../../context/state';
 import PaymentsContext from '../../context/payments';
 import deleteIcon from '../../assets/delete.svg';
-import { DeleteIcon, DeleteText } from './styled';
+import { DeleteContainer, DeleteIcon, DeleteText } from './styled';
 
 
 const CardDetails = ({
@@ -94,22 +94,19 @@ const CardDetails = ({
               title={i18n.t('payments.cardDetails.balance')}
               onPress={undefined}
             >
-              {i18n.t('payments.cardDetails.outstandingBalanceText')}
+              {`${i18n.t('payments.cardDetails.outstandingBalanceText')} 3.12$`}
             </Card>
             <LogoutContainer
               onPress={async () => {
                 await onRemoveMethod(paymentMethod?.id);
               }}
             >
-              <View style={{
-                display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', width: '100%',
-              }}
-              >
+              <DeleteContainer>
                 <DeleteIcon Svg={deleteIcon} />
                 <DeleteText>
                   {i18n.t('payments.cardDetails.deleteText')}
                 </DeleteText>
-              </View>
+              </DeleteContainer>
             </LogoutContainer>
           </CardsContainer>
         </Container>
