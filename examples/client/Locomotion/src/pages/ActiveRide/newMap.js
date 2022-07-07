@@ -172,9 +172,11 @@ export default React.forwardRef(({
     return pickup || sps[sps.length - 1];
   };
 
-  const precedingStopPoints = getCurrentStopPoint(stopPoints).precedingStops;
+  const currentStopPoint = getCurrentStopPoint(stopPoints);
+  const precedingStopPoints = (currentStopPoint || {}).precedingStops;
 
-  const polylineList = rideWithStopPoints && getCurrentStopPoint(stopPoints).polyline && getSubLineStringAfterLocationFromDecodedPolyline(
+  const polylineList = rideWithStopPoints && currentStopPoint
+     && currentStopPoint.polyline && getSubLineStringAfterLocationFromDecodedPolyline(
     polyline.decode(getCurrentStopPoint(stopPoints).polyline),
     { latitude: ride.vehicle.location.lat, longitude: ride.vehicle.location.lng },
   ).map(p => ({ latitude: p[0], longitude: p[1] }));

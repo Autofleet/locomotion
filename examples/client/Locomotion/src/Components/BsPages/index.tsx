@@ -416,18 +416,10 @@ export const NoAvailableVehicles = (props: any) => {
   );
 };
 
-export const ActiveRide = (props: any) => {
-  const { setSnapPointsState } = useContext(BottomSheetContext);
-
-  useEffect(() => {
-    setSnapPointsState(SNAP_POINT_STATES.ACTIVE_RIDE);
-  }, []);
-
-  return (
-    <BsPage
-      {...props}
-    >
-      <ActiveRideContent />
-    </BsPage>
-  );
-};
+export const ActiveRide = (props: any) => (
+  <BsPage
+    {...props}
+  >
+    <ActiveRideContent />
+  </BsPage>
+);

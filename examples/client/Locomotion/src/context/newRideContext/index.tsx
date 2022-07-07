@@ -24,7 +24,7 @@ import { MAIN_ROUTES } from '../../pages/routes';
 
 type Dispatch<A> = (value: A) => void;
 type Nav = {
-  navigate: (value: string, object: any) => void;
+  navigate: (value: string, object?: any) => void;
 }
 
 export interface RideInterface {
@@ -154,6 +154,16 @@ const RidePageContextProvider = ({ children }: {
   const [serviceRequestFailed, setServiceRequestFailed] = useState<boolean>(false);
   const intervalRef = useRef<any>();
 
+  const stopRequestInterval = () => {
+    clearInterval(intervalRef.current);
+  };
+
+  const cleanRideState = () => {
+    initSps();
+    setRide({});
+    changeBsPage(BS_PAGES.ADDRESS_SELECTOR);
+  };
+
   const RIDE_STATES_TO_SCREENS = {
     [RIDE_STATES.PENDING]: () => { changeBsPage(BS_PAGES.CONFIRMING_RIDE); },
     [RIDE_STATES.MATCHING]: () => { changeBsPage(BS_PAGES.CONFIRMING_RIDE); },
@@ -162,13 +172,15 @@ const RidePageContextProvider = ({ children }: {
       navigation.navigate(MAIN_ROUTES.POST_RIDE, { rideId: completedRide.id });
       changeBsPage(BS_PAGES.ADDRESS_SELECTOR);
       setServiceEstimations(null);
+      stopRequestInterval();
+      cleanRideState();
     },
     [RIDE_STATES.DISPATCHED]: () => { changeBsPage(BS_PAGES.ACTIVE_RIDE); },
     [RIDE_STATES.ACTIVE]: () => { changeBsPage(BS_PAGES.ACTIVE_RIDE); },
   };
 
   const formatRide = async (rideToFormat: RideInterface) => {
-    const serviceType = rideToFormat.serviceType
+    const serviceType = ride.serviceType
       || await rideApi.getService(rideToFormat.serviceId);
     return {
       ...rideToFormat,
@@ -177,12 +189,9 @@ const RidePageContextProvider = ({ children }: {
     };
   };
 
-
   const { getSettingByKey } = settings.useContainer();
 
-  const stopRequestInterval = () => {
-    clearInterval(intervalRef.current);
-  };
+
   const formatEstimations = (services: any[], estimations: any, tags: any): any => {
     const estimationsMap: any = {};
     estimations.map((e: any) => {
@@ -503,6 +512,7 @@ const RidePageContextProvider = ({ children }: {
   const requestRide = async (): Promise<void> => {
     setRideRequestLoading(true);
     setServiceEstimations(null);
+    stopRequestInterval();
     changeBsPage(BS_PAGES.CONFIRMING_RIDE);
     const rideToCreate = {
       serviceId: chosenService?.id,
@@ -583,10 +593,13 @@ const RidePageContextProvider = ({ children }: {
       rideId, priceCalculationId, rating, tip,
     });
     await Promise.all([
-      chargeTip(priceCalculationId, tip),
-      patchRideRating(rideId, rating),
+      tip ? chargeTip(priceCalculationId, tip) : () => null,
+      rating ? patchRideRating(rideId, rating) : () => null,
     ]);
 
+    cleanRideState();
+    navigation.navigate(MAIN_ROUTES.HOME);
+    changeBsPage(BS_PAGES.ADDRESS_SELECTOR);
     return true;
   };
 
@@ -604,11 +617,6 @@ const RidePageContextProvider = ({ children }: {
     return ride.trackerUrl;
   };
 
-  const cleanRideState = () => {
-    initSps();
-    setRide({});
-    changeBsPage(BS_PAGES.ADDRESS_SELECTOR);
-  };
 
   const cancelRide = async () => {
     await rideApi.cancelRide(ride?.id);
