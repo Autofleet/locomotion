@@ -207,6 +207,7 @@ const RidePage = ({ mapSettings, navigation }) => {
       <BottomSheet
         ref={bottomSheetRef}
         focusCurrentLocation={focusCurrentLocation}
+        showCompass
       >
         {
           BS_PAGE_TO_COMP[currentBsPage] ? BS_PAGE_TO_COMP[currentBsPage]() : null
