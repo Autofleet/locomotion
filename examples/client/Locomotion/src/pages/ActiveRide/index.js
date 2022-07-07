@@ -1,5 +1,10 @@
-import React, { useContext, useEffect, useRef } from 'react';
-import { useNavigation } from '@react-navigation/native';
+import React, {
+  useContext, useEffect, useRef, useState,
+} from 'react';
+import { useNavigation, useIsFocused } from '@react-navigation/native';
+import { AppState } from 'react-native';
+import { UserContext } from '../../context/user';
+import { RIDE_STATES, STOP_POINT_TYPES } from '../../lib/commonTypes';
 import {
   ConfirmPickup, NoPayment, NotAvailableHere, ConfirmingRide, NoAvailableVehicles, ActiveRide,
 } from '../../Components/BsPages';
@@ -25,6 +30,7 @@ import { getPosition } from '../../services/geo';
 
 const RidePage = ({ mapSettings }) => {
   const navigation = useNavigation();
+  const [addressSelectorFocus, setAddressSelectorFocus] = useState(STOP_POINT_TYPES.STOP_POINT_PICKUP);
   const mapRef = useRef();
   const bottomSheetRef = useRef(null);
   const {
@@ -44,14 +50,15 @@ const RidePage = ({ mapSettings }) => {
     clientHasValidPaymentMethods,
   } = payments.useContainer();
 
-  const resetStateToAddressSelector = () => {
+  const resetStateToAddressSelector = (selected = null) => {
     setServiceEstimations(null);
     setChosenService(null);
     changeBsPage(BS_PAGES.ADDRESS_SELECTOR);
+    setAddressSelectorFocus(selected);
   };
 
-  const goBackToAddress = () => {
-    resetStateToAddressSelector();
+  const goBackToAddress = (selected) => {
+    resetStateToAddressSelector(selected);
     setIsExpanded(true);
     bottomSheetRef.current.expand();
   };
@@ -64,7 +71,7 @@ const RidePage = ({ mapSettings }) => {
   const addressSelectorPage = () => {
     if (!isLoading && !serviceEstimations) {
       return (
-        <AddressSelector />
+        <AddressSelector addressSelectorFocus={addressSelectorFocus} />
       );
     }
     return <RideOptions />;
