@@ -17,7 +17,7 @@ const StopPointsViewer = ({ goBackToAddressSelector }: StopPointsViewerProps) =>
   const firstSp: any = requestStopPoints[0];
   const lastSp: any = requestStopPoints[requestStopPoints.length - 1];
   return (
-    <Container onPress={goBackToAddressSelector}>
+    <Container>
       <StreetAddressContainer
         onPress={() => goBackToAddressSelector(STOP_POINT_TYPES.STOP_POINT_PICKUP)}
       >
