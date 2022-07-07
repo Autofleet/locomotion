@@ -7,7 +7,7 @@ import {
 
 const Card = ({
   title = '',
-  children = undefined,
+  children = {},
   onPress = null,
   verified = false,
   showUnverified = false,
