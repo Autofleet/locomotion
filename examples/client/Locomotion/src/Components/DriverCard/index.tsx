@@ -45,7 +45,7 @@ const DriverCard = ({
       <DriverAvatarContainer>
         <DriverDetailContainer>
           <StarIcon isOn height="8px" width="8px" />
-          <DriverRatingText>{formatDriverRating(ride?.driver?.rating || 5)}</DriverRatingText>
+          <DriverRatingText>{formatDriverRating(ride?.driver?.rating)}</DriverRatingText>
         </DriverDetailContainer>
         <DriverDetailContainer>
           <DriverDetailText activeRide={activeRide}>

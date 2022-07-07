@@ -8,7 +8,6 @@ import { UserContext } from '../user';
 import { getPosition, DEFAULT_COORDS } from '../../services/geo';
 import { getPlaces, getGeocode, getPlaceDetails } from './google-api';
 import StorageService from '../../services/storage';
-import * as navigationService from '../../services/navigation';
 import * as rideApi from './api';
 import {
   buildStreetAddress,
@@ -24,6 +23,9 @@ import { formatSps } from '../../lib/ride/utils';
 import { MAIN_ROUTES } from '../../pages/routes';
 
 type Dispatch<A> = (value: A) => void;
+type Nav = {
+  navigate: (value: string) => void;
+}
 
 export interface RideInterface {
   priceCurrency?: any;
@@ -132,7 +134,7 @@ const RidePageContextProvider = ({ children }: {
   children: any
 }) => {
   const { locationGranted } = useContext(UserContext);
-  const navigation = useNavigation();
+  const navigation = useNavigation<Nav>();
   const { checkStopPointsInTerritory, changeBsPage } = useContext(RideStateContextContext);
   const [requestStopPoints, setRequestStopPoints] = useState(INITIAL_STOP_POINTS);
   const [currentGeocode, setCurrentGeocode] = useState<any | null>(null);
@@ -155,8 +157,8 @@ const RidePageContextProvider = ({ children }: {
     [RIDE_STATES.PENDING]: () => { changeBsPage(BS_PAGES.CONFIRMING_RIDE); },
     [RIDE_STATES.MATCHING]: () => { changeBsPage(BS_PAGES.CONFIRMING_RIDE); },
     [RIDE_STATES.REJECTED]: () => { changeBsPage(BS_PAGES.NO_AVAILABLE_VEHICLES); },
-    [RIDE_STATES.COMPLETED]: (ride) => {
-      navigation.navigate(MAIN_ROUTES.POST_RIDE, { rideId: ride.id });
+    [RIDE_STATES.COMPLETED]: (completedRide: any) => {
+      navigation.navigate(MAIN_ROUTES.POST_RIDE, { rideId: completedRide.id });
       changeBsPage(BS_PAGES.ADDRESS_SELECTOR);
       setServiceEstimations(null);
     },

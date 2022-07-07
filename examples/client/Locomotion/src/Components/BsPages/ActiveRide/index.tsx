@@ -130,9 +130,9 @@ const ActiveRideContent = () => {
               />
             </DriverCardContainer>
             <VehicleDetails>
-              <VehicleImage source={{ uri: (vehicle && vehicle.image) || DEFAULT_VEHICLE_IMAGE }} />
+              <VehicleImage source={{ uri: (vehicle?.image) || DEFAULT_VEHICLE_IMAGE }} />
               <VehiclePlateContainer>
-                <VehiclePlateText>{(vehicle && vehicle.licensePlate) || ''}</VehiclePlateText>
+                <VehiclePlateText>{(vehicle?.licensePlate) || ''}</VehiclePlateText>
               </VehiclePlateContainer>
             </VehicleDetails>
           </TopContainer>
