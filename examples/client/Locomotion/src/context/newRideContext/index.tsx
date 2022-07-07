@@ -172,8 +172,6 @@ const RidePageContextProvider = ({ children }: {
       navigation.navigate(MAIN_ROUTES.POST_RIDE, { rideId: completedRide.id });
       changeBsPage(BS_PAGES.ADDRESS_SELECTOR);
       setServiceEstimations(null);
-      initSps();
-      setRide({});
       stopRequestInterval();
       cleanRideState();
     },
