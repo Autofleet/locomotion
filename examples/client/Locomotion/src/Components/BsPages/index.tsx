@@ -283,13 +283,6 @@ export const ConfirmPickup = (props: any) => {
     updateRequestSp,
     setSelectedInputIndex,
     rideRequestLoading,
-  }: {
-    lastSelectedLocation: any,
-    getCurrentLocationAddress: any,
-    saveSelectedLocation: any,
-    updateRequestSp: any,
-    setSelectedInputIndex: any,
-    rideRequestLoading: boolean,
   } = useContext(RidePageContext);
 
   const { setSnapPointsState } = useContext(BottomSheetContext);
@@ -311,10 +304,12 @@ export const ConfirmPickup = (props: any) => {
     setInitialLocation();
   }, []);
 
+  const titleText = props.isConfirmPickup ? 'confirmPickupTitle' : 'confirmLocationTitle';
+
   return (
     <BsPage
-      TitleText={i18n.t('bottomSheetContent.confirmPickup.titleText')}
-      ButtonText={i18n.t('bottomSheetContent.confirmPickup.buttonText')}
+      TitleText={i18n.t(`bottomSheetContent.confirmPickup.${titleText}`)}
+      ButtonText={i18n.t(`bottomSheetContent.confirmPickup.${props.isConfirmPickup ? 'buttonTextWithRequest' : 'buttonText'}`)}
       SubTitleText={i18n.t('bottomSheetContent.confirmPickup.subTitleText')}
       isLoading={rideRequestLoading}
       fullWidthButtons

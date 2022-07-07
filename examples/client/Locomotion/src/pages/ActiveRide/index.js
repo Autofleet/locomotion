@@ -103,6 +103,7 @@ const RidePage = ({ mapSettings, navigation }) => {
     [BS_PAGES.ADDRESS_SELECTOR]: addressSelectorPage,
     [BS_PAGES.CONFIRM_PICKUP]: () => (
       <ConfirmPickup
+        isConfirmPickup
         initialLocation={requestStopPoints[0]}
         onButtonPress={() => {
           if (clientHasValidPaymentMethods() || ride.paymentMethodId === 'cash') {
@@ -116,6 +117,7 @@ const RidePage = ({ mapSettings, navigation }) => {
     [BS_PAGES.SET_LOCATION_ON_MAP]: () => (
       <ConfirmPickup onButtonPress={() => {
         changeBsPage(BS_PAGES.ADDRESS_SELECTOR);
+        setIsExpanded(true);
       }}
       />
     ),
