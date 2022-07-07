@@ -410,6 +410,7 @@ export const NoAvailableVehicles = (props: any) => {
       TitleText={i18n.t('bottomSheetContent.noAvailableVehicles.titleText')}
       ButtonText={i18n.t('bottomSheetContent.noAvailableVehicles.buttonText')}
       SubTitleText={i18n.t('bottomSheetContent.noAvailableVehicles.subTitleText')}
+      fullWidthButtons
       {...props}
     />
   );
