@@ -35,7 +35,7 @@ import payments from '../../context/payments';
 import { getPosition } from '../../services/geo';
 
 
-const RidePage = ({ mapSettings, navigation }) => {
+const RidePage = ({ mapSettings }) => {
   const navigation = useNavigation();
   const [addressSelectorFocus, setAddressSelectorFocus] = useState(STOP_POINT_TYPES.STOP_POINT_PICKUP);
   const mapRef = useRef();
