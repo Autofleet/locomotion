@@ -358,8 +358,10 @@
         "secondaryButtonText": "Keep Riding"
     },
     "confirmPickup": {
-      "titleText": "Confirm pickup",
-      "buttonText": "Confirm and request",
+      "confirmPickupTitle": "Confirm pickup",
+      "confirmLocationTitle": "Confirm location",
+      "buttonText": "Confirm",
+      "buttonTextWithRequest": "Confirm and request",
       "subTitleText": "Drag the map to set the location",
       "noAddress": "Address not found. Please choose another location."
     },
