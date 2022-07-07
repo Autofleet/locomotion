@@ -171,7 +171,6 @@ const SearchBar = ({
 
   useEffect(() => {
     if (selectedInputTarget) {
-      console.error({ selectedInputTarget });
       selectedInputTarget.blur();
     }
   }, [isExpanded]);
