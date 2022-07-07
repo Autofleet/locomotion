@@ -224,8 +224,6 @@ const RidePageContextProvider = ({ children }: {
       setIsLoading(false);
       setServiceRequestFailed(true);
       setIsReadyForSubmit(false);
-    } finally {
-      setIsLoading(false);
     }
   };
   useEffect(() => {
