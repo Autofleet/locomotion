@@ -1,9 +1,9 @@
-import { Text } from 'react-native';
+import { Text, View } from 'react-native';
 import styled from 'styled-components';
 import { FONT_SIZES, FONT_WEIGHTS } from '../../context/theme';
 import Button from '../Button';
 
-export const Container = styled(Button)`
+export const Container = styled(View)`
 height: 40px;
 width: 85%;
 shadow-offset: 0px 0px;
@@ -18,8 +18,14 @@ align-items: center;
 justify-content: space-between;
 `;
 
-export const StreetAddress = styled(Text)`
-${FONT_SIZES.MEDIUM}
-${FONT_WEIGHTS.REGULAR}
-width: 40%;
+export const StreetAddressContainer = styled(Button)`
+  width: 40%;
+  background-color: ${({ theme }) => theme.pageBackgroundColor};
+`;
+
+export const StreetAddress = styled(Text).attrs({
+  numberOfLines: 1,
+})`
+  ${FONT_SIZES.MEDIUM}
+  ${FONT_WEIGHTS.REGULAR}
 `;

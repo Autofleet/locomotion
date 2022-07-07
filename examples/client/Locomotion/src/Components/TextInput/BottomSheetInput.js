@@ -10,26 +10,24 @@ const BottomSheetInputField = forwardRef((props, ref) => (
       {...props}
       ref={ref}
     />
-    {!!props.value && !!props.value.length > 0 && (
-    <TouchableOpacity onPress={() => {
-      if (props.clear) {
-        props.clear();
-      }
-    }}
-    >
+    {props.value && props.value.length > 0 ? (
       <IconContainer>
-
-        <SvgIcon
-          Svg={cancel}
-          fill="#333"
-          stroke="#333"
-          height={10}
-          width={10}
-        />
+        <TouchableOpacity onPress={() => {
+          if (props.clear) {
+            props.clear();
+          }
+        }}
+        >
+          <SvgIcon
+            Svg={cancel}
+            fill="#333"
+            stroke="#333"
+            height={10}
+            width={10}
+          />
+        </TouchableOpacity>
       </IconContainer>
-    </TouchableOpacity>
-
-    )}
+    ) : undefined}
   </BottomSheetInputContainer>
 ));
 
