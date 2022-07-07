@@ -23,7 +23,7 @@ export default ({ navigation, menuSide }) => {
   const [pageLoading, setPageLoading] = useState(true);
   const [loading, setLoading] = useState(false);
   const [methodForDelete, setMethodForDelete] = useState(null);
-  const [isCancelPopupVisible, setIsCancelPopupVisible] = useState(false);
+  const [isRemoveCardPopupVisible, setIsRemoveCardPopupVisible] = useState(false);
   const hasPaymentMethods = paymentMethods && paymentMethods.length > 0;
   const [showList, setShowList] = useState(hasPaymentMethods);
 
@@ -41,14 +41,14 @@ export default ({ navigation, menuSide }) => {
     await usePayments.detachPaymentMethod(methodForDelete);
     await usePayments.loadCustomer();
     setLoading(false);
-    setIsCancelPopupVisible(false);
+    setIsRemoveCardPopupVisible(false);
     if (paymentMethods.length <= 1) {
       setShowList(false);
     }
   };
 
   const onRemoveMethod = async (methodId) => {
-    setIsCancelPopupVisible(true);
+    setIsRemoveCardPopupVisible(true);
     setMethodForDelete(methodId);
   };
 
@@ -91,7 +91,7 @@ export default ({ navigation, menuSide }) => {
           </CardContainer>
         )}
         <ConfirmationPopup
-          isVisible={isCancelPopupVisible}
+          isVisible={isRemoveCardPopupVisible}
           title={i18n.t('payments.popups.removeCard.title')}
           text={i18n.t('payments.popups.removeCard.text')}
           confirmText={i18n.t('payments.popups.removeCard.confirmText')}
@@ -99,7 +99,7 @@ export default ({ navigation, menuSide }) => {
           type="cancel"
           useCancelTextButton
           onSubmit={() => detachCard()}
-          onClose={() => setIsCancelPopupVisible(false)}
+          onClose={() => setIsRemoveCardPopupVisible(false)}
         />
       </PageContent>
     </PageContainer>
