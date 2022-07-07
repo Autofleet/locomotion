@@ -81,7 +81,7 @@ interface RidePageContextInterface {
   serviceRequestFailed: boolean;
   setServiceRequestFailed: Dispatch<boolean>;
   trackRide: () => Promise<string>;
-  postRideSubmit: (rideId: string, rating: number | null, tip: number | null) => any;
+  postRideSubmit: (rideId: string, priceCalculationId:string, rating: number | null, tip: number | null) => any;
   cancelRide: () => Promise<void>;
   getRideFromApi: (rideId: string) => Promise<RideInterface>;
 }
@@ -123,7 +123,7 @@ export const RidePageContext = createContext<RidePageContextInterface>({
   setServiceRequestFailed: () => undefined,
   ride: {},
   trackRide: async () => '',
-  postRideSubmit: (rideId: string, rating: number | null, tip: number | null) => undefined,
+  postRideSubmit: (rideId: string, priceCalculationId:string, rating: number | null, tip: number | null) => undefined,
   cancelRide: async () => undefined,
   getRideFromApi: async () => ({}),
 });
@@ -563,23 +563,27 @@ const RidePageContextProvider = ({ children }: {
     }
   };
 
-  const chargeTip = async (rideId: string, tip:number|null): Promise<any> => {
+  const chargeTip = async (priceCalculationId: string, tip:number|null): Promise<any> => {
     // TODO: implement
     if (!tip) {
       return null;
     }
 
     try {
+      const tipChargeResponse = await rideApi.additionalCharge(priceCalculationId, tip, 'tip');
       return true;
     } catch (e) {
+      console.log(e);
       return false;
     }
   };
 
-  const postRideSubmit = async (rideId:string, rating:number|null, tip:number|null): Promise<boolean> => {
-    console.log('Post Ride Data', { rideId, rating, tip });
+  const postRideSubmit = async (rideId:string, priceCalculationId: string, rating:number|null, tip:number|null): Promise<boolean> => {
+    console.log('Post Ride Data', {
+      rideId, priceCalculationId, rating, tip,
+    });
     await Promise.all([
-      chargeTip(rideId, tip),
+      chargeTip(priceCalculationId, tip),
       patchRideRating(rideId, rating),
     ]);
 

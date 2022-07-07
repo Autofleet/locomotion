@@ -64,3 +64,8 @@ export const track = async (rideId) => {
   const { data } = await network.put(`api/v2/rides/${rideId}/track`);
   return data;
 };
+
+export const additionalCharge = async (pricingCalculationId, amount, chargeFor) => {
+  const { data } = await network.post(`api/v1/price-calculation/${pricingCalculationId}/additional-charges`, { amount, chargeFor });
+  return data;
+};

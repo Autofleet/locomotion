@@ -74,11 +74,9 @@ const PostRidePage = ({ menuSide, route }) => {
 
   const onSubmit = async () => {
     try {
-      await postRideSubmit(ride.id, rating, rideTip);
-      return true;
+      postRideSubmit(ride.id, ride.priceCalculationId, rating, rideTip);
     } catch (e) {
       console.log(e);
-      return false;
     }
   };
 
