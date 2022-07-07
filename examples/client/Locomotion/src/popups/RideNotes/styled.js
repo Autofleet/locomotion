@@ -33,4 +33,5 @@ export const Counter = styled.Text`
 
 export const StyledTextArea = styled(TextArea)`
   margin-bottom: 20px;
+  padding: 8px;
 `;

@@ -181,6 +181,16 @@ const RidePage = ({ mapSettings, navigation }) => {
     }
   }, [isFocused]);
 
+  useEffect(() => {
+    if (bottomSheetRef && bottomSheetRef.current) {
+      if (isExpanded) {
+        bottomSheetRef.current.expand();
+      } else {
+        bottomSheetRef.current.collapse();
+      }
+    }
+  }, [isExpanded]);
+
   return (
     <PageContainer>
       <MainMap
