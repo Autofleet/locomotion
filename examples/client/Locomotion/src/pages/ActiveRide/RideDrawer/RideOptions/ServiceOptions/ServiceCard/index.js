@@ -13,7 +13,7 @@ import {
   Row, Price,
   ServiceDetails, TimeDetails,
   Title, Description,
-  CarContainer,
+  CarContainer, TitleContainer,
 } from './styled';
 import Tag from '../../../../../../Components/Tag';
 import { RidePageContext } from '../../../../../../context/newRideContext';
@@ -65,18 +65,20 @@ const ServiceCard = ({ service }) => {
       </CarContainer>
       <ServiceDetails unavailable={unavailable}>
         <Row>
-          <Title>
-            {service.name}
-          </Title>
-          {serviceEstimations.filter(s => s.price).length > 1 && (
-          <Tag
-            key={service.tag.title}
-            containerStyles={tagStyles[service.tag].container}
-            text={service.tag}
-            textColor={tagStyles[service.tag].textColor}
-          />
-          )
+          <TitleContainer>
+            <Title>
+              {service.name}
+            </Title>
+            {serviceEstimations.filter(s => s.price).length > 1 && service.tag && (
+            <Tag
+              key={service.tag}
+              containerStyles={tagStyles[service.tag].container}
+              text={service.tag}
+              textColor={tagStyles[service.tag].textColor}
+            />
+            )
             }
+          </TitleContainer>
           <Price>
             {service.price ? serviceDisplayPrice : unavailableText}
           </Price>
