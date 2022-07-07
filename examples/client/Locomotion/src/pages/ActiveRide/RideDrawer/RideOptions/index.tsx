@@ -49,7 +49,7 @@ const RideOptions = () => {
       />
     ));
 
-    const paymentMethod: PaymentMethodInterface = getClientDefaultMethod();
+    const paymentMethod: PaymentMethodInterface | undefined = getClientDefaultMethod();
     if (paymentMethod) {
       updateRide({
         paymentMethodId: paymentMethod.id,

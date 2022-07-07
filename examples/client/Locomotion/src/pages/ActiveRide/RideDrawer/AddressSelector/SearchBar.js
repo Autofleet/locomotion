@@ -138,6 +138,8 @@ const SearchBar = ({
         key={s.id}
       >
         <BottomSheetInput
+          accessible
+          accessibilityLabel={`address_input_${i}`}
           placeholder={i18n.t(placeholder)}
           onChangeText={(text) => {
             updateRequestSp({

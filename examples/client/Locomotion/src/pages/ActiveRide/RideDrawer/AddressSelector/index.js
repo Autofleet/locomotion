@@ -112,7 +112,7 @@ const AddressSelectorBottomSheet = ({ addressSelectorFocus }) => {
               <BottomSheetScrollView keyboardShouldPersistTaps="handled" contentContainerStyle={{ overflow: 'visible' }}>
                 {
                   userContext.searchResults ? userContext.searchResults.map(h => <AddressRow {...h} key={h.placeId} onPress={() => userContext.onAddressSelected(h)} />)
-                    : userContext.historyResults.map(h => <AddressRow {...h} isHistory key={h.placeId} onPress={() => userContext.onAddressSelected(h)} />)
+                    : userContext.historyResults.map((h, i) => <AddressRow testID={`searchResults_${i}`} {...h} isHistory key={h.placeId} onPress={() => userContext.onAddressSelected(h)} />)
                 }
               </BottomSheetScrollView>
             </>

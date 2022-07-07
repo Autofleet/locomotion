@@ -89,6 +89,7 @@ const NewCreditForm = ({ onDone, canSkip = false, PageText }) => {
             </SkipSubmitContainer>
           )}
           <SubmitButton
+            testID="submitCardButton"
             onPress={() => handlePayPress()}
             disabled={!formReady || loading}
           >
