@@ -24,7 +24,7 @@ import { MAIN_ROUTES } from '../../pages/routes';
 
 type Dispatch<A> = (value: A) => void;
 type Nav = {
-  navigate: (value: string) => void;
+  navigate: (value: string, object: any) => void;
 }
 
 export interface RideInterface {
