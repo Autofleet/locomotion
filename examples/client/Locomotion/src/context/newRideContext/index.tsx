@@ -119,7 +119,7 @@ export const RidePageContext = createContext<RidePageContextInterface>({
   setServiceRequestFailed: () => undefined,
   ride: {},
   trackRide: async () => '',
-  postRideSubmit: (rideId: string, rating: number | null, tip: number | null) => undefined,
+  postRideSubmit: (rideId: string, priceCalculationId:string, rating: number | null, tip: number | null) => undefined,
   cancelRide: async () => undefined,
 });
 
