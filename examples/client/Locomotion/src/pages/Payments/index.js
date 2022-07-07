@@ -7,7 +7,6 @@ import {
   PageContent, CreditFormText, CardContainer,
 } from './styled';
 import PaymentsContext from '../../context/payments';
-import ConfirmationPopup from '../../popups/ConfirmationPopup';
 import CreditCardsList from './credit-cards';
 import NewCreditForm from '../../Components/NewCreditForm';
 import { PageContainer } from '../styles';
@@ -22,8 +21,6 @@ export default ({ navigation, menuSide }) => {
   } = usePayments;
   const [pageLoading, setPageLoading] = useState(true);
   const [loading, setLoading] = useState(false);
-  const [methodForDelete, setMethodForDelete] = useState(null);
-  const [isRemoveCardPopupVisible, setIsRemoveCardPopupVisible] = useState(false);
   const hasPaymentMethods = paymentMethods && paymentMethods.length > 0;
   const [showList, setShowList] = useState(hasPaymentMethods);
 
@@ -73,17 +70,6 @@ export default ({ navigation, menuSide }) => {
             />
           </CardContainer>
         )}
-        <ConfirmationPopup
-          isVisible={isRemoveCardPopupVisible}
-          title={i18n.t('payments.popups.removeCard.title')}
-          text={i18n.t('payments.popups.removeCard.text')}
-          confirmText={i18n.t('payments.popups.removeCard.confirmText')}
-          cancelText={i18n.t('payments.popups.removeCard.cancelText')}
-          type="cancel"
-          useCancelTextButton
-          onSubmit={() => detachCard()}
-          onClose={() => setIsRemoveCardPopupVisible(false)}
-        />
       </PageContent>
     </PageContainer>
   );
