@@ -1,20 +1,17 @@
 import React, { useEffect, useState } from 'react';
-import { Button, View } from 'react-native';
-import { PaymentMethodInterface } from 'context/payments/interface';
-import { Text } from '../Profile/ScreenText/styles';
+import { View } from 'react-native';
 import { HeaderLink } from '../../Components/Menu/styled';
-import { HeaderText } from '../../Components/PageHeader/styled';
 import { MAIN_ROUTES } from '../routes';
 import i18n from '../../I18n';
 import {
-  DeleteCreditCard,
-  DeleteCreditCardText,
   CardsListContainer,
   PaymentMethodsContainer,
-  CreditCardsContainer,
+  MethodCard,
+  ChevronIcon,
+  ChangeButton,
 } from './styled';
 import {
-  Arrow, ArrowContainer, CardContainer, CardContantContainer, CardText, CardTitle, CardTitleContainer, VerifyContainer, VerifyText,
+  CardContainer, CardContantContainer, CardTitle, CardTitleContainer,
 } from '../../Components/InformationCard/styled';
 
 import PaymentMethod from '../../Components/CardRow';
@@ -22,6 +19,7 @@ import PaymentsContext from '../../context/payments';
 import { navigate } from '../../services/navigation';
 import ChoosePaymentMethod from '../../popups/ChoosePaymentMethod';
 import cashPaymentMethod from './cashPaymentMethod';
+import chevronIcon from '../../assets/chevron.svg';
 
 
 export default ({
@@ -61,15 +59,18 @@ export default ({
                   <CardTitleContainer>
                     <CardTitle>Default payment method</CardTitle>
                     <HeaderLink onPress={() => setShowChoosePayment(true)}>
-                      <Text style={{ color: '#24aaf2' }}>
+                      <ChangeButton style={{ color: '#24aaf2' }}>
                         {i18n.t('payments.changeDefault')}
-                      </Text>
+                      </ChangeButton>
                     </HeaderLink>
                   </CardTitleContainer>
-                  <PaymentMethod
-                    {...defaultMethod}
-                    onPress={() => navigate(MAIN_ROUTES.CARD_DETAILS, { paymentMethod: defaultMethod })}
-                  />
+                  <MethodCard>
+                    <PaymentMethod
+                      {...defaultMethod}
+                      onPress={() => navigate(MAIN_ROUTES.CARD_DETAILS, { paymentMethod: defaultMethod })}
+                    />
+                    <ChevronIcon Svg={chevronIcon} stroke="#d7d7d7" style={{ marginTop: 25 }} />
+                  </MethodCard>
                 </CardContantContainer>
               </CardContainer>
             ) : undefined}
@@ -84,10 +85,13 @@ export default ({
                   {usePayments.paymentMethods.map(
                     (paymentMethod : any) => (paymentMethod.id !== defaultMethod.id
                       ? (
-                        <PaymentMethod
-                          {...paymentMethod}
-                          onPress={() => navigate(MAIN_ROUTES.CARD_DETAILS, { paymentMethod })}
-                        />
+                        <MethodCard>
+                          <PaymentMethod
+                            {...paymentMethod}
+                            onPress={() => navigate(MAIN_ROUTES.CARD_DETAILS, { paymentMethod })}
+                          />
+                          <ChevronIcon Svg={chevronIcon} stroke="#d7d7d7" style={{ marginTop: 25 }} />
+                        </MethodCard>
                       )
                       : undefined),
                   )}
@@ -116,7 +120,6 @@ export default ({
             await usePayments.updatePaymentMethod(defaultMethod?.id, { isDefault: false });
             await usePayments.updatePaymentMethod(payment, { isDefault: true });
             await usePayments.loadCustomer();
-            // setDefaultPayment();
           }}
         />
 

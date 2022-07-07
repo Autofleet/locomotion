@@ -1,6 +1,8 @@
 import React from 'react';
 import { View } from 'react-native';
 import styled from 'styled-components';
+import { Text } from '../Profile/ScreenText/styles';
+import SvgIcon from '../../Components/SvgIcon';
 
 import creditCardImage from '../../assets/menuItems/creditcard.png';
 
@@ -107,12 +109,26 @@ export const CardsListContainer = styled.View`
 
 export const PaymentMethodsContainer = styled.View`
     display: flex;
-    /* flex-direction: row; */
 `;
 
 export const CreditCardsContainer = styled.View`
 display: flex;
 flex-direction: row;
 max-width: 70%;
-    /* flex: 1; */
+`;
+
+export const MethodCard = styled.View`
+display: flex;
+flex-direction: row;
+justify-content: space-between;
+`;
+
+export const ChevronIcon = styled(SvgIcon)`
+margin-top: '25px';
+`;
+
+export const ChangeButton = styled(Text)`
+margin-left: 110;
+margin-bottom: 20;
+color: '#24aaf2'
 `;
