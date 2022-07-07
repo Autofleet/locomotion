@@ -76,10 +76,10 @@ const CardDetails = ({
               {paymentMethod && paymentMethod.name
                 ? (
                   <Card
+                    onPress={null}
                     title={i18n.t('payments.cardDetails.nickname')}
                   >
                     {paymentMethod.name}
-
                   </Card>
                 )
                 : undefined}
