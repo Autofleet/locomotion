@@ -1,5 +1,6 @@
 import React, { createRef } from 'react';
 import moment from 'moment';
+import RidePaymentDetails from '../../../Components/RidePaymentDetails';
 import {
   DaySecTitleSubText,
   DaySecTitleText,
@@ -82,17 +83,16 @@ const RideView = ({ ride }) => {
         <RideTitleCard page ride={ride} />
         <BlankContainer />
       </MainRideViewSectionContainer>
-
-      <RideViewSectionContainer>
-        <RideViewTitleContainer>
-          <RideViewSectionTitleText>
-            {i18n.t('rideHistory.rideCard.rideJourney')}
-          </RideViewSectionTitleText>
-        </RideViewTitleContainer>
-      </RideViewSectionContainer>
       <StopPointsVerticalViewContainer>
         <StopPointsVerticalView
           ride={ride}
+        />
+      </StopPointsVerticalViewContainer>
+      <StopPointsVerticalViewContainer>
+        <RidePaymentDetails
+          payment={ride.payment}
+          priceAmount={ride.priceAmount}
+          priceCurrency={ride.priceCurrency}
         />
       </StopPointsVerticalViewContainer>
       <DriverCardContainer>

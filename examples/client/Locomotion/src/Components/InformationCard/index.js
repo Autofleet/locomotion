@@ -1,6 +1,6 @@
-import i18n from 'I18n';
 import React from 'react';
 import { TouchableOpacity, View } from 'react-native';
+import i18n from '../../I18n';
 import {
   Arrow, ArrowContainer, CardContainer, CardContantContainer, CardText, CardTitle, CardTitleContainer, VerifyContainer, VerifyText,
 } from './styled';
