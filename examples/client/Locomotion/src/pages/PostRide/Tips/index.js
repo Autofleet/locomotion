@@ -158,6 +158,13 @@ const Tips = ({
     onSelectTip(calculateTipAmount());
   }, [selectedTip, customTip]);
 
+  const formatCurrency = (value) => {
+    if (isPercentage) {
+      return `${value}${tipSuffix}`;
+    }
+
+    return `${tipSuffix}${value}`;
+  };
   return (
     <>
       <Container>
@@ -167,7 +174,7 @@ const Tips = ({
               {`${i18n.t('postRide.tip.title')} ${driver.firstName}`}
             </Title>
             <SubTitle>
-              {`${i18n.t('postRide.tip.subTitle')} ${ridePrice}${serviceDisplayPrice}`}
+              {`${i18n.t('postRide.tip.subTitle')} ${serviceDisplayPrice}${ridePrice}`}
             </SubTitle>
           </Column>
           <ThumbnailContainer>
@@ -179,7 +186,7 @@ const Tips = ({
         <DetailsContainer style={{ marginTop: 30 }}>
           {buttons.map(b => (
             <SelectableButton selected={b === selectedTip} onPress={() => onTipPressed(b)}>
-              {`${b} ${tipSuffix}`}
+              {formatCurrency(b)}
             </SelectableButton>
           ))}
         </DetailsContainer>
