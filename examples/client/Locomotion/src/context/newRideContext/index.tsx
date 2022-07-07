@@ -606,8 +606,8 @@ const RidePageContextProvider = ({ children }: {
 
   const cleanRideState = () => {
     initSps();
-    setRide({});
     changeBsPage(BS_PAGES.ADDRESS_SELECTOR);
+    setRide({});
   };
 
   const cancelRide = async () => {
