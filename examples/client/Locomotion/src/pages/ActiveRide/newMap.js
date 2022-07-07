@@ -33,7 +33,9 @@ const PAGES_TO_SHOW_SP_MARKERS = [
   BS_PAGES.NO_PAYMENT,
   BS_PAGES.NOT_IN_TERRITORY,
   BS_PAGES.NO_AVAILABLE_VEHICLES,
-  BS_PAGES.ACTIVE_RIDE];
+  BS_PAGES.ACTIVE_RIDE,
+  BS_PAGES.CANCEL_RIDE,
+];
 export default React.forwardRef(({
   mapSettings,
 }, ref) => {
@@ -57,8 +59,9 @@ export default React.forwardRef(({
     requestStopPoints, saveSelectedLocation, reverseLocationGeocode, ride,
   } = useContext(RidePageContext);
   const rideDispatched = (ride || {}).state === RIDE_STATES.DISPATCHED;
+  const rideActive = (ride || {}).state === RIDE_STATES.ACTIVE;
   const [rideStopPoints, setRideStopPoints] = useState();
-  const rideWithStopPoints = rideDispatched && rideStopPoints;
+  const rideWithStopPoints = (rideDispatched || rideActive) && rideStopPoints;
   const [mapRegion, setMapRegion] = useState({
     latitudeDelta: 0.015,
     longitudeDelta: 0.015,
@@ -156,7 +159,7 @@ export default React.forwardRef(({
   };
 
   useEffect(() => {
-    if (rideDispatched) {
+    if (rideDispatched || rideActive) {
       addStreetAddressToStopPoints();
     }
   }, [ride.stopPoints]);
@@ -171,7 +174,7 @@ export default React.forwardRef(({
 
   const precedingStopPoints = getCurrentStopPoint(stopPoints).precedingStops;
 
-  const polylineList = rideWithStopPoints && getSubLineStringAfterLocationFromDecodedPolyline(
+  const polylineList = rideWithStopPoints && getCurrentStopPoint(stopPoints).polyline && getSubLineStringAfterLocationFromDecodedPolyline(
     polyline.decode(getCurrentStopPoint(stopPoints).polyline),
     { latitude: ride.vehicle.location.lat, longitude: ride.vehicle.location.lng },
   ).map(p => ({ latitude: p[0], longitude: p[1] }));
@@ -239,7 +242,7 @@ export default React.forwardRef(({
         )}
         {PAGES_TO_SHOW_SP_MARKERS.includes(currentBsPage) && stopPoints.filter(sp => !!sp.lat).length > 1
           ? stopPoints
-            .filter(sp => !!sp.lat)
+            .filter(sp => !!sp.lat && sp.state !== STOP_POINT_STATES.COMPLETED)
             .map(sp => (<StationsMap stopPoint={sp} key={sp.id} />))
           : null}
         {currentBsPage === BS_PAGES.NOT_IN_TERRITORY && territory && territory.length ? territory

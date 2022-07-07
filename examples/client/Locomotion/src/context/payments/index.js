@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { createContainer } from 'unstated-next';
+import cashPaymentMethod from '../../pages/Payments/cashPaymentMethod';
 import { getByKey } from '../../context/settings/api';
 import network from '../../services/network';
 import SETTINGS_KEYS from '../settings/keys';
@@ -43,7 +44,14 @@ const usePayments = () => {
 
   const clientHasValidPaymentMethods = () => paymentMethods.length > 0 && paymentMethods.some(pm => !pm.isExpired);
 
-  const getClientDefaultMethod = () => (paymentMethods || []).find(pm => pm.isDefault) || paymentMethods[0];
+  const getClientDefaultMethod = () => {
+    if (paymentMethods && paymentMethods.length) {
+      return (paymentMethods || []).find(pm => pm.isDefault) || paymentMethods[0];
+    } if (isCashPaymentEnabled) {
+      return cashPaymentMethod;
+    }
+  };
+
   const isCashPaymentEnabled = () => getByKey(SETTINGS_KEYS.CASH_ENABLED);
 
   const createPaymentMethod = async (paymentMethodId) => {

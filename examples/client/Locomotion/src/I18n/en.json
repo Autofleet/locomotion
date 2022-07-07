@@ -303,6 +303,15 @@
         }
     },
     "payments": {
+        "cardDetails": {
+            "cardsTitle": "Credit Card information",
+            "title": "Payment method details",
+            "nickname": "Card Nickname",
+            "number": "Card Number",
+            "balance": "Balance",
+            "deleteText": "Delete payment method",
+            "outstandingBalanceText": "Outstanding balance of"
+        },
         "select": "Select",
         "pageTitle": "Payments Method",
         "submitCard": "Add card",
@@ -349,8 +358,10 @@
         "secondaryButtonText": "Keep Riding"
     },
     "confirmPickup": {
-      "titleText": "Confirm pickup",
-      "buttonText": "Confirm and request",
+      "confirmPickupTitle": "Confirm pickup",
+      "confirmLocationTitle": "Confirm location",
+      "buttonText": "Confirm",
+      "buttonTextWithRequest": "Confirm and request",
       "subTitleText": "Drag the map to set the location",
       "noAddress": "Address not found. Please choose another location."
     },
