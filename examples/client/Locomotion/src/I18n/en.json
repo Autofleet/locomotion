@@ -408,9 +408,11 @@
   },
   "activeRide": {
     "pickup": {
+        "arrived": "Your driver has arrived",
         "pending": "Meeting at pickup point"
     },
     "dropoff": {
+        "arrived": "Dropoff ETA",
         "pending": "Dropoff ETA"
     }
   },
