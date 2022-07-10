@@ -4,7 +4,7 @@ import {
   Container, RowContainer, ButtonContainer, ButtonText, StyledButton, HALF_WIDTH,
 } from './styled';
 import { RidePageContext } from '../../../../../context/newRideContext';
-import NoteButton from './NoteButton';
+import NoteButton from '../../../../../Components/GenericRideButton';
 import i18n from '../../../../../I18n';
 import plus from '../../../../../assets/bottomSheet/plus.svg';
 import editNote from '../../../../../assets/bottomSheet/edit_note.svg';
@@ -15,6 +15,7 @@ import { PaymentMethodInterface } from '../../../../../context/payments/interfac
 import { RideStateContextContext } from '../../../../../context/ridePageStateContext';
 import { popupNames } from '../utils';
 import { BS_PAGES } from '../../../../../context/ridePageStateContext/utils';
+import cashPaymentMethod from '../../../../../pages/Payments/cashPaymentMethod';
 
 
 interface RideButtonsProps {
@@ -66,7 +67,10 @@ const RideButtons = ({
 
   const renderPaymentButton = () => {
     const ridePaymentMethod = ride?.paymentMethodId;
-    const selectedPaymentMethod: PaymentMethodInterface | undefined = paymentMethods.find(pm => pm.id === ridePaymentMethod);
+    const selectedPaymentMethod: PaymentMethodInterface | undefined = ridePaymentMethod === cashPaymentMethod.id
+      ? cashPaymentMethod
+      : paymentMethods.find(pm => pm.id === ridePaymentMethod);
+
     return (
       <ButtonContainer
         onPress={() => {
@@ -77,7 +81,8 @@ const RideButtons = ({
         <PaymentButton
           brand={selectedPaymentMethod?.brand}
           icon={creditCardIcon}
-          title={selectedPaymentMethod?.name || i18n.t('bottomSheetContent.ride.addPayment')}
+          title={selectedPaymentMethod?.name === cashPaymentMethod.name ? 'Cash' : (selectedPaymentMethod?.name || i18n.t('bottomSheetContent.ride.addPayment'))}
+          id={selectedPaymentMethod?.id}
         />
       </ButtonContainer>
     );
@@ -104,7 +109,7 @@ const RideButtons = ({
           changeBsPage(BS_PAGES.CONFIRM_PICKUP);
         }}
       >
-        <ButtonText>{i18n.t('general.select').toString()}</ButtonText>
+        <ButtonText testID="select">{i18n.t('general.select').toString()}</ButtonText>
       </StyledButton>
     </Container>
   );

@@ -1,5 +1,6 @@
 import moment from 'moment';
 import shortid from 'shortid';
+import getSymbolFromCurrency from 'currency-symbol-map';
 import i18n from '../../I18n';
 import { getGeocode } from './google-api';
 
@@ -40,7 +41,10 @@ export const buildStreetAddress = (data: any) => {
       streetAddress.name = ac.long_name;
     }
   });
-  return `${streetAddress.name} ${streetAddress.number}`;
+  if (!streetAddress.name && !streetAddress.number) {
+    return undefined;
+  }
+  return `${streetAddress.name || ''} ${streetAddress.number || ''}`;
 };
 
 export const getEstimationTags = (estimations: any[]) => {
@@ -97,3 +101,6 @@ export const formatStopPointsForEstimations = (requestStopPoints: any[]) => requ
   lat: sp.lat,
   lng: sp.lng,
 }));
+
+
+export const getCurrencySymbol = (currency: string) => getSymbolFromCurrency(currency);

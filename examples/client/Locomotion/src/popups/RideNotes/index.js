@@ -1,4 +1,6 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, {
+  useContext, useEffect, useRef, useState,
+} from 'react';
 import { View } from 'react-native';
 import Modal from 'react-native-modal';
 import i18n from '../../I18n';
@@ -10,18 +12,20 @@ import {
 } from './styled';
 import RoundedButton from '../../Components/RoundedButton';
 import { FlexCont } from '../../Components/Flex';
-import { RidePageContext } from '../../context/newRideContext';
 
 const MAX_SIZE = 100;
 
-export default ({ isVisible, onSubmit, onCancel }) => {
-  const {
-    ride,
-  } = useContext(RidePageContext);
+export default ({
+  isVisible, onSubmit, onCancel, notes,
+}) => {
   const [currentText, updateText] = useState('');
+  const inputRef = useRef();
 
   useEffect(() => {
-    updateText(ride.notes || '');
+    updateText(notes || '');
+    if (inputRef.current) {
+      inputRef.current.focus();
+    }
   }, [isVisible]);
 
   return (
@@ -32,6 +36,7 @@ export default ({ isVisible, onSubmit, onCancel }) => {
           <Counter>{`${currentText.length}/${MAX_SIZE}`}</Counter>
         </FlexCont>
         <StyledTextArea
+          ref={inputRef}
           value={currentText}
           multiline
           numberOfLines={7}

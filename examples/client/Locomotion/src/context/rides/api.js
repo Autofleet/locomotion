@@ -1,7 +1,7 @@
 import network from '../../services/network';
 
 export const getActiveRides = async (params) => {
-  const { data } = await network.get('api/v1/me/rides/active', { params });
+  const { data } = await network.get('api/v1/rides/active', { params });
   return data;
 };
 
@@ -25,12 +25,8 @@ export const createOfferApi = async (body) => {
   return data;
 };
 
-export const cancelRideApi = async () => {
-  await network.post('api/v1/me/rides/cancel-active-ride');
-};
-
-export const sendRating = async (body) => {
-  await network.post('api/v1/me/rides/rating', body);
+export const patchRide = async (rideId, data) => {
+  await network.patch(`api/v1/rides/${rideId}`, data);
 };
 
 export const cancelFutureRideApi = async (rideId) => {

@@ -1,6 +1,6 @@
 <svg data-name="Credit card icon" xmlns="http://www.w3.org/2000/svg" width="14" height="10" viewBox="0 0 14 10">
     <g data-name="Group 5009">
-        <rect data-name="Rectangle 2932" width="14" height="10" rx="1" style="fill:#333"/>
+        <rect data-name="Rectangle 2932" width="14" height="10" rx="1"/>
         <path data-name="Rectangle 2931" transform="rotate(180 6.563 2.188)" style="fill:#fff" d="M0 0h12.25v2.188H0z"/>
         <path data-name="Rectangle 2961" transform="rotate(180 6.563 4.461)" style="fill:#fff" d="M0 0h4.375v1.279H0z"/>
     </g>

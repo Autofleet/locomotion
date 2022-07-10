@@ -1,3 +1,5 @@
+import React from 'react';
+import { Text, View } from 'react-native';
 import styled from 'styled-components';
 import { BottomSheetTextInput } from '@gorhom/bottom-sheet';
 
@@ -11,7 +13,10 @@ border-bottom-width: 1px;
 const fullBorderStyles = isFocused => `
 backgroundColor: #f1f2f6;
 borderRadius: 8px;
-${isFocused && 'border: 1px solid #333333'};
+${isFocused && `
+    border-width: 1px
+    border-color: #333333
+`};
 
 `;
 
@@ -28,9 +33,22 @@ export const Input = styled.TextInput.attrs(props => ({
 `;
 
 export const BottomSheetInput = styled(BottomSheetTextInput)`
-    padding: 0px 8px;
-    height: 40px;
-    ${({ fullBorder, isFocused }) => (fullBorder ? fullBorderStyles(isFocused) : bottomBorderStyles)}
-    border-color: ${({ error }) => (error ? ERROR_COLOR : '#333333')};
-    color: ${({ error }) => (error ? ERROR_COLOR : '#333333')};
+  padding: 0px 8px;
+  padding-right: 30;
+  height: 40px;
+  ${({ fullBorder, isFocused }) => (fullBorder ? fullBorderStyles(isFocused) : bottomBorderStyles)}
+  border-color: ${({ error }) => (error ? ERROR_COLOR : '#333333')};
+  color: ${({ error }) => (error ? ERROR_COLOR : '#333333')};
+  flex: 1;
+`;
+
+export const BottomSheetInputContainer = styled(View)`
+  flex-direction: row;
+`;
+
+export const IconContainer = styled(View)`
+  position: absolute;
+  right: 7;
+  top: 7;
+  padding: 8px;
 `;

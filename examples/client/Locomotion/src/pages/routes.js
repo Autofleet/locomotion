@@ -23,4 +23,6 @@ export const MAIN_ROUTES = {
   EMAIL: 'Email',
   WELCOME: 'Welcome',
   LOCK: 'Lock',
+  POST_RIDE: 'PostRide',
+  CARD_DETAILS: 'CardDetails',
 };

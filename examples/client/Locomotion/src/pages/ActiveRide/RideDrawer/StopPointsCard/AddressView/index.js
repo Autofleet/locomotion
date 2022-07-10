@@ -1,9 +1,8 @@
 import React, {
-  useState, useEffect,
+  useState, useContext,
 } from 'react';
 import { ScrollView, View } from 'react-native';
 import Config from 'react-native-config';
-import { getPosition } from '../../../../../services/geo';
 
 import I18n from '../../../../../I18n';
 import {
@@ -18,23 +17,15 @@ import {
   StationIcon,
 } from './styled';
 import { getLocation, getPlacesByLocation } from '../../../../../context/places/api';
+import { RidePageContext } from '../../../../../context/newRideContext';
 
 export default (props) => {
   const [searchText, setSearchText] = useState(
     props.requestStopPoints[props.type]
       && props.requestStopPoints[props.type].description,
   );
+  const { currentGeocode } = useContext(RidePageContext);
   const [addressListItems, setAddressListItems] = useState(null);
-  const [coords, setCoords] = useState({});
-
-  useEffect(() => {
-    initCurrentLocation();
-  }, []);
-
-  const initCurrentLocation = async () => {
-    const { coords: newCord } = await getPosition();
-    setCoords(newCord);
-  };
 
   const enrichPlaceWithLocation = async (place) => {
     const data = await getLocation({
@@ -77,7 +68,7 @@ export default (props) => {
           lng: selectedPlace.lng,
         };
       } else {
-        location = { lat: coords.latitude, lng: coords.longitude };
+        location = { lat: currentGeocode.latitude, lng: currentGeocode.longitude };
       }
 
       const data = await getPlacesByLocation({

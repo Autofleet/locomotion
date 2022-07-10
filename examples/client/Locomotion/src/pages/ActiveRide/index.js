@@ -1,7 +1,18 @@
-import React, { useContext, useEffect, useRef } from 'react';
-import { useNavigation } from '@react-navigation/native';
+import React, {
+  useContext, useEffect, useRef, useState,
+} from 'react';
+import { useIsFocused } from '@react-navigation/native';
+import { AppState } from 'react-native';
+import { UserContext } from '../../context/user';
 import {
-  ConfirmPickup, NoPayment, NotAvailableHere, ConfirmingRide, NoAvailableVehicles, ActiveRide,
+  ConfirmPickup,
+  NoPayment,
+  NotAvailableHere,
+  ConfirmingRide,
+  NoAvailableVehicles,
+  ActiveRide,
+  LocationRequest,
+  CancelRide,
 } from '../../Components/BsPages';
 import { RideStateContextContext, RideStateContextContextProvider } from '../../context';
 import NewRidePageContextProvider, { RidePageContext } from '../../context/newRideContext';
@@ -20,11 +31,11 @@ import hamburgerIcon from '../../assets/hamburger.svg';
 import backArrow from '../../assets/arrow-back.svg';
 import { BS_PAGES } from '../../context/ridePageStateContext/utils';
 import payments from '../../context/payments';
-import { getPosition } from '../../services/geo';
+import geo, { DEFAULT_COORDS, getPosition } from '../../services/geo';
 
-
-const RidePage = ({ mapSettings }) => {
-  const navigation = useNavigation();
+const RidePage = ({ mapSettings, navigation }) => {
+  const { locationGranted, setLocationGranted } = useContext(UserContext);
+  const [addressSelectorFocus, setAddressSelectorFocus] = useState(null);
   const mapRef = useRef();
   const bottomSheetRef = useRef(null);
   const {
@@ -38,20 +49,24 @@ const RidePage = ({ mapSettings }) => {
     requestStopPoints,
     requestRide,
     setChosenService,
+    ride,
   } = useContext(RidePageContext);
-  const { setSnapPointsState, setIsExpanded, snapPoints } = useContext(BottomSheetContext);
+  const {
+    setIsExpanded, snapPoints, isExpanded,
+  } = useContext(BottomSheetContext);
   const {
     clientHasValidPaymentMethods,
   } = payments.useContainer();
 
-  const resetStateToAddressSelector = () => {
+  const resetStateToAddressSelector = (selected = null) => {
     setServiceEstimations(null);
     setChosenService(null);
     changeBsPage(BS_PAGES.ADDRESS_SELECTOR);
+    setAddressSelectorFocus(selected);
   };
 
-  const goBackToAddress = () => {
-    resetStateToAddressSelector();
+  const goBackToAddress = (selected) => {
+    resetStateToAddressSelector(selected);
     setIsExpanded(true);
     bottomSheetRef.current.expand();
   };
@@ -64,13 +79,24 @@ const RidePage = ({ mapSettings }) => {
   const addressSelectorPage = () => {
     if (!isLoading && !serviceEstimations) {
       return (
-        <AddressSelector />
+        <AddressSelector addressSelectorFocus={addressSelectorFocus} />
       );
     }
-    return <RideOptions />;
+    return changeBsPage(BS_PAGES.SERVICE_ESTIMATIONS);
   };
 
   const BS_PAGE_TO_COMP = {
+    [BS_PAGES.CANCEL_RIDE]: () => (
+      <CancelRide />
+    ),
+    [BS_PAGES.SERVICE_ESTIMATIONS]: () => (
+      <RideOptions />
+    ),
+    [BS_PAGES.LOCATION_REQUEST]: () => (
+      <LocationRequest
+        onSecondaryButtonPress={goBackToAddress}
+      />
+    ),
     [BS_PAGES.NOT_IN_TERRITORY]: () => (
       <NotAvailableHere onButtonPress={() => {
         goBackToAddress();
@@ -80,9 +106,10 @@ const RidePage = ({ mapSettings }) => {
     [BS_PAGES.ADDRESS_SELECTOR]: addressSelectorPage,
     [BS_PAGES.CONFIRM_PICKUP]: () => (
       <ConfirmPickup
+        isConfirmPickup
         initialLocation={requestStopPoints[0]}
         onButtonPress={() => {
-          if (clientHasValidPaymentMethods()) {
+          if (clientHasValidPaymentMethods() || ride.paymentMethodId === 'cash') {
             requestRide();
           } else {
             changeBsPage(BS_PAGES.NO_PAYMENT);
@@ -93,6 +120,7 @@ const RidePage = ({ mapSettings }) => {
     [BS_PAGES.SET_LOCATION_ON_MAP]: () => (
       <ConfirmPickup onButtonPress={() => {
         changeBsPage(BS_PAGES.ADDRESS_SELECTOR);
+        setIsExpanded(true);
       }}
       />
     ),
@@ -102,15 +130,9 @@ const RidePage = ({ mapSettings }) => {
     [BS_PAGES.ACTIVE_RIDE]: () => <ActiveRide />,
   };
 
-  useEffect(() => {
-    if (isLoading) {
-      setSnapPointsState(SNAP_POINT_STATES.SERVICE_ESTIMATIONS);
-      bottomSheetRef.current.collapse();
-    }
-  }, [isLoading]);
-
   const focusCurrentLocation = async () => {
-    const { coords } = await getPosition();
+    const location = await getPosition();
+    const { coords } = (location || DEFAULT_COORDS);
     mapRef.current.animateToRegion({
       latitude: coords.latitude - (parseFloat(snapPoints[0]) / 10000),
       longitude: coords.longitude,
@@ -118,6 +140,56 @@ const RidePage = ({ mapSettings }) => {
       longitudeDelta: 0.015,
     }, 1000);
   };
+
+  const checkLocationPermission = async () => {
+    const granted = await geo.checkPermission();
+    setLocationGranted(granted);
+  };
+
+  useEffect(() => {
+    if (locationGranted && currentBsPage === BS_PAGES.LOCATION_REQUEST) {
+      changeBsPage(BS_PAGES.ADDRESS_SELECTOR);
+      bottomSheetRef.current.collapse();
+    } else if (!locationGranted
+      && locationGranted !== undefined
+      && currentBsPage === BS_PAGES.ADDRESS_SELECTOR) {
+      changeBsPage(BS_PAGES.LOCATION_REQUEST);
+    }
+    focusCurrentLocation();
+  }, [locationGranted]);
+
+  useEffect(() => {
+    checkLocationPermission();
+    const subscription = AppState.addEventListener('change', (nextAppState) => {
+      if (
+        nextAppState === 'active'
+      ) {
+        checkLocationPermission();
+      }
+    });
+
+    return () => {
+      subscription.remove();
+    };
+  }, []);
+
+  const isFocused = useIsFocused();
+
+  useEffect(() => {
+    if (isFocused) {
+      navigation.closeDrawer();
+    }
+  }, [isFocused]);
+
+  useEffect(() => {
+    if (bottomSheetRef && bottomSheetRef.current) {
+      if (isExpanded) {
+        bottomSheetRef.current.expand();
+      } else {
+        bottomSheetRef.current.collapse();
+      }
+    }
+  }, [isExpanded]);
 
   return (
     <PageContainer>
@@ -145,7 +217,7 @@ const RidePage = ({ mapSettings }) => {
         focusCurrentLocation={focusCurrentLocation}
       >
         {
-          BS_PAGE_TO_COMP[currentBsPage]()
+          BS_PAGE_TO_COMP[currentBsPage] ? BS_PAGE_TO_COMP[currentBsPage]() : null
         }
       </BottomSheet>
     </PageContainer>

@@ -1,5 +1,5 @@
-import React, { useContext, useState } from 'react';
-import { View, Text } from 'react-native';
+import React, { useContext, useEffect, useState } from 'react';
+import { View } from 'react-native';
 import Modal from 'react-native-modal';
 import { useNavigation } from '@react-navigation/native';
 import i18n from '../../I18n';
@@ -14,8 +14,8 @@ import RoundedButton from '../../Components/RoundedButton';
 import { FlexCont } from '../../Components/Flex';
 import PaymentMethod from '../../Components/CardRow';
 import PaymentsContext from '../../context/payments';
-import { PaymentMethodInterface } from '../../context/payments/interface';
 import { RidePageContext } from '../../context/newRideContext';
+import cashPaymentMethod from '../../pages/Payments/cashPaymentMethod';
 
 interface PaymentMethodPopupProps {
   isVisible: boolean;
@@ -41,6 +41,16 @@ const PaymentMethodPopup = ({ isVisible, onCancel }: PaymentMethodPopupProps) =>
     });
     onCancel();
   };
+  const [isCashEnabled, setIsCashEnabled] = useState(false);
+
+  useEffect(() => {
+    const getIsCashEnabled = async () => {
+      const result = await usePayments.isCashPaymentEnabled();
+      setIsCashEnabled(result.value);
+    };
+
+    getIsCashEnabled();
+  }, [usePayments]);
 
   return (
     <Modal isVisible={isVisible}>
@@ -50,7 +60,7 @@ const PaymentMethodPopup = ({ isVisible, onCancel }: PaymentMethodPopupProps) =>
             <Title>{i18n.t('popups.choosePaymentMethod.title')}</Title>
           </View>
           <View>
-            {[...usePayments.paymentMethods].map((paymentMethod: PaymentMethodInterface, i) => (
+            {(isCashEnabled ? [...usePayments.paymentMethods, cashPaymentMethod] : usePayments.paymentMethods).map((paymentMethod: any, i) => (
               <PaymentMethod
                 {...paymentMethod}
                 selected={payment === paymentMethod.id}
@@ -78,7 +88,7 @@ const PaymentMethodPopup = ({ isVisible, onCancel }: PaymentMethodPopupProps) =>
                 style={{}}
                 onPress={() => onSave()}
               >
-                {i18n.t('popups.rideNotes.save')}
+                {i18n.t('payments.select')}
               </RoundedButton>
             </FlexCont>
           </Footer>

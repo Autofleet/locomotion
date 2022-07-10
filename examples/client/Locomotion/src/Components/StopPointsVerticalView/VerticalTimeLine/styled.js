@@ -18,13 +18,10 @@ export const MainContainer = styled.View`
 export const TimeLineContent = styled(FlexContainer)`
   flex: 1;
   padding: 5px;
-  borderBottomWidth: ${({ last }) => (last ? '0' : '1')}px;
-  borderBottomColor: #dedede;
-  borderStyle: solid;
 `;
 
 export const Content = styled(FlexContainer)`
-  flex: 5;
+  flex: 3;
   align-self: center;
   flex-direction: column;
 `;
@@ -45,7 +42,6 @@ export const BaseTimeLine = styled.View`
 `;
 
 export const BottomTimeLine = styled(BaseTimeLine)`
-  flex: 1;
   padding-top: 12px;
   ${({ last }) => `${last ? '' : `
     borderLeftWidth: 1px;
