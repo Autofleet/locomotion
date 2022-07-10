@@ -9,7 +9,9 @@ export const TAG_OPTIONS = {
   CHEAPEST: i18n.t('services.tags.cheapest'),
 };
 
-export const RIDE_POPUPS = {
+export type RidePopupNames = 'FAILED_SERVICE_REQUEST';
+
+export const RIDE_POPUPS: {[key: string]: RidePopupNames} = {
   FAILED_SERVICE_REQUEST: 'FAILED_SERVICE_REQUEST',
 };
 

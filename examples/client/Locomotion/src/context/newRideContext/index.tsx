@@ -11,7 +11,11 @@ import StorageService from '../../services/storage';
 import * as rideApi from './api';
 import {
   buildStreetAddress,
-  formatEstimationsResult, formatStopPointsForEstimations, getEstimationTags, INITIAL_STOP_POINTS, RIDE_POPUPS,
+  formatEstimationsResult,
+  formatStopPointsForEstimations,
+  getEstimationTags,
+  INITIAL_STOP_POINTS,
+  RIDE_POPUPS, RidePopupNames,
 } from './utils';
 import settings from '../settings';
 import SETTINGS_KEYS from '../settings/keys';
@@ -79,7 +83,7 @@ interface RidePageContextInterface {
   initSps: () => void;
   fillLoadSkeleton: () => void;
   ridePopup: string | null;
-  setRidePopup: Dispatch<string | null>;
+  setRidePopup: Dispatch<RidePopupNames | null>;
   trackRide: () => Promise<string>;
   postRideSubmit: (rideId: string, priceCalculationId:string, rating: number | null, tip: number | null) => any;
   cancelRide: () => Promise<void>;
@@ -151,7 +155,7 @@ const RidePageContextProvider = ({ children }: {
   const [chosenService, setChosenService] = useState<any | null>(null);
   const [lastSelectedLocation, saveSelectedLocation] = useState(false);
   const [rideRequestLoading, setRideRequestLoading] = useState(false);
-  const [ridePopup, setRidePopup] = useState<string | null>(null);
+  const [ridePopup, setRidePopup] = useState<RidePopupNames | null>(null);
   const intervalRef = useRef<any>();
 
   const stopRequestInterval = () => {
