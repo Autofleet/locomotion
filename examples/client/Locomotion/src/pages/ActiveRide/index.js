@@ -32,6 +32,8 @@ import backArrow from '../../assets/arrow-back.svg';
 import { BS_PAGES } from '../../context/ridePageStateContext/utils';
 import payments from '../../context/payments';
 import geo, { DEFAULT_COORDS, getPosition } from '../../services/geo';
+import SquareSvgButton from '../../Components/SquareSvgButton';
+import targetIcon from '../../assets/target.svg';
 
 const RidePage = ({ mapSettings, navigation }) => {
   const { locationGranted, setLocationGranted } = useContext(UserContext);
@@ -212,6 +214,13 @@ const RidePage = ({ mapSettings, navigation }) => {
             <StopPointsViewer goBackToAddressSelector={goBackToAddress} />
           </Header>
         )}
+      {!isExpanded && locationGranted && (
+        <SquareSvgButton
+          onPress={focusCurrentLocation}
+          icon={targetIcon}
+          style={{ position: 'absolute', bottom: `${parseFloat(snapPoints[0]) + 2}%`, right: 20 }}
+        />
+      )}
       <BottomSheet
         ref={bottomSheetRef}
         focusCurrentLocation={focusCurrentLocation}

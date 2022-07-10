@@ -47,6 +47,7 @@ export interface RideInterface {
   trackerUrl?: string;
   serviceType?: any;
   payment?: any;
+  cancelable?: boolean;
 }
 
 interface RidePageContextInterface {
@@ -252,7 +253,6 @@ const RidePageContextProvider = ({ children }: {
       SETTINGS_KEYS.SERVICE_ESTIMATIONS_INTERVAL_IN_SECONDS,
     );
   };
-
 
   const loadActiveRide = async () => {
     const activeRide = await rideApi.getActiveRide();
