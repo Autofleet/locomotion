@@ -507,7 +507,6 @@ const RidePageContextProvider = ({ children }: {
   };
 
   useEffect(() => {
-    console.log('isReadyForSubmit', isReadyForSubmit);
     if (isReadyForSubmit) {
       tryServiceEstimations();
     }
