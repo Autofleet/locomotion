@@ -91,6 +91,7 @@ interface RidePageContextInterface {
   getCallNumbers: () => Promise<void>;
   getRideFromApi: (rideId: string) => Promise<RideInterface>;
   cleanRideState: () => void;
+  setRide: Dispatch<RideInterface | null>
 }
 
 export const RidePageContext = createContext<RidePageContextInterface>({
@@ -135,6 +136,7 @@ export const RidePageContext = createContext<RidePageContextInterface>({
   getCallNumbers: async () => undefined,
   getRideFromApi: async () => ({}),
   cleanRideState: () => undefined,
+  setRide: () => undefined,
 });
 
 const HISTORY_RECORDS_NUM = 10;
@@ -679,6 +681,7 @@ const RidePageContextProvider = ({ children }: {
         loadHistory,
         serviceEstimations,
         ride,
+        setRide,
         updateRide,
         chosenService,
         setChosenService,
