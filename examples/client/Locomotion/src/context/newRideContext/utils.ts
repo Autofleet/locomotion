@@ -9,10 +9,11 @@ export const TAG_OPTIONS = {
   CHEAPEST: i18n.t('services.tags.cheapest'),
 };
 
-export type RidePopupNames = 'FAILED_SERVICE_REQUEST';
+export type RidePopupNames = 'FAILED_SERVICE_REQUEST' | 'RIDE_CANCELED_BY_DISPATCHER';
 
 export const RIDE_POPUPS: {[key: string]: RidePopupNames} = {
   FAILED_SERVICE_REQUEST: 'FAILED_SERVICE_REQUEST',
+  RIDE_CANCELED_BY_DISPATCHER: 'RIDE_CANCELED_BY_DISPATCHER',
 };
 
 export const INITIAL_STOP_POINTS = [{

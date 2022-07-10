@@ -3,6 +3,8 @@ import React, {
 } from 'react';
 import { useIsFocused } from '@react-navigation/native';
 import { AppState } from 'react-native';
+import { RIDE_STATES } from '../../lib/commonTypes';
+import { RIDE_POPUPS } from '../../context/newRideContext/utils';
 import { UserContext } from '../../context/user';
 import {
   ConfirmPickup,
@@ -32,9 +34,10 @@ import backArrow from '../../assets/arrow-back.svg';
 import { BS_PAGES } from '../../context/ridePageStateContext/utils';
 import payments from '../../context/payments';
 import geo, { DEFAULT_COORDS, getPosition } from '../../services/geo';
+import RideCanceledPopup from '../../popups/RideCanceledPopup';
 
 const RidePage = ({ mapSettings, navigation }) => {
-  const { locationGranted, setLocationGranted } = useContext(UserContext);
+  const { locationGranted, setLocationGranted, user } = useContext(UserContext);
   const [addressSelectorFocus, setAddressSelectorFocus] = useState(null);
   const mapRef = useRef();
   const bottomSheetRef = useRef(null);
@@ -50,6 +53,10 @@ const RidePage = ({ mapSettings, navigation }) => {
     requestRide,
     setChosenService,
     ride,
+    setRidePopup,
+    ridePopup,
+    cleanRideState,
+    setRide,
   } = useContext(RidePageContext);
   const {
     setIsExpanded, snapPoints, isExpanded,
@@ -191,6 +198,12 @@ const RidePage = ({ mapSettings, navigation }) => {
     }
   }, [isExpanded]);
 
+  useEffect(() => {
+    if (ride.state === RIDE_STATES.CANCELED && ride.canceledBY !== user.id) {
+      setRidePopup(RIDE_POPUPS.RIDE_CANCELED_BY_DISPATCHER);
+    }
+  }, [ride.state]);
+
   return (
     <PageContainer>
       <MainMap
@@ -220,6 +233,20 @@ const RidePage = ({ mapSettings, navigation }) => {
           BS_PAGE_TO_COMP[currentBsPage] ? BS_PAGE_TO_COMP[currentBsPage]() : null
         }
       </BottomSheet>
+      <RideCanceledPopup
+        isVisible={ridePopup === RIDE_POPUPS.RIDE_CANCELED_BY_DISPATCHER}
+        onCancel={() => {
+          backToMap();
+          cleanRideState();
+          setRidePopup(null);
+        }}
+        onBackToOrder={() => {
+          setRide({});
+          changeBsPage(BS_PAGES.SERVICE_ESTIMATIONS);
+          setRidePopup(null);
+        }
+        }
+      />
     </PageContainer>
   );
 };
