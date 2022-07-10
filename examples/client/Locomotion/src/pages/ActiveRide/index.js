@@ -126,7 +126,11 @@ const RidePage = ({ mapSettings, navigation }) => {
     ),
     [BS_PAGES.NO_PAYMENT]: () => <NoPayment />,
     [BS_PAGES.CONFIRMING_RIDE]: () => <ConfirmingRide />,
-    [BS_PAGES.NO_AVAILABLE_VEHICLES]: () => <NoAvailableVehicles />,
+    [BS_PAGES.NO_AVAILABLE_VEHICLES]: () => (
+      <NoAvailableVehicles
+        onButtonPress={() => changeBsPage(BS_PAGES.SERVICE_ESTIMATIONS)}
+      />
+    ),
     [BS_PAGES.ACTIVE_RIDE]: () => <ActiveRide />,
   };
 
