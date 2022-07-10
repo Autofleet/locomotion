@@ -8,6 +8,7 @@ import { UserContext } from '../user';
 import { getPosition, DEFAULT_COORDS } from '../../services/geo';
 import { getPlaces, getGeocode, getPlaceDetails } from './google-api';
 import StorageService from '../../services/storage';
+import Mixpanel from '../../services/Mixpanel';
 import * as rideApi from './api';
 import {
   buildStreetAddress,
@@ -87,6 +88,7 @@ interface RidePageContextInterface {
   trackRide: () => Promise<string>;
   postRideSubmit: (rideId: string, priceCalculationId:string, rating: number | null, tip: number | null) => any;
   cancelRide: () => Promise<void>;
+  getCallNumbers: () => Promise<void>;
   getRideFromApi: (rideId: string) => Promise<RideInterface>;
 }
 
@@ -129,6 +131,7 @@ export const RidePageContext = createContext<RidePageContextInterface>({
   trackRide: async () => '',
   postRideSubmit: (rideId: string, priceCalculationId:string, rating: number | null, tip: number | null) => undefined,
   cancelRide: async () => undefined,
+  getCallNumbers: async () => undefined,
   getRideFromApi: async () => ({}),
 });
 
@@ -622,6 +625,33 @@ const RidePageContextProvider = ({ children }: {
     cleanRideState();
   };
 
+  const getCallNumbers = async () => {
+    const rideId = ride?.id;
+    const stopPoint = ride?.stopPoints && ride.stopPoints[0];
+    if (stopPoint) {
+      const { id: spId } = stopPoint || {};
+      let number;
+      const stopPointFromServer = await rideApi.getStopPoint(rideId, spId);
+      number = stopPointFromServer.maskedDriverPhoneNumber;
+      if (!number) {
+        Mixpanel.setEvent('getting masked-phones', {
+          ride: rideId,
+          id: spId,
+        });
+        const maskSpRes = await rideApi.maskStopPointPhones(rideId, spId);
+        if (maskSpRes && maskSpRes.sp) {
+          number = maskSpRes.sp.maskedDriverPhoneNumber;
+          Mixpanel.setEvent(`got masked-phones: ${number}`);
+        } else {
+          number = stopPoint.metadata.contactPersonPhone;
+        }
+      }
+      Mixpanel.setEvent('tel', { number });
+      return number;
+    }
+    return null;
+  };
+
   return (
     <RidePageContext.Provider
       value={{
@@ -664,6 +694,7 @@ const RidePageContextProvider = ({ children }: {
         postRideSubmit,
         getRideFromApi,
         cancelRide,
+        getCallNumbers,
       }}
     >
       {children}

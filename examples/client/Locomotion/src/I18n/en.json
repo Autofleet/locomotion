@@ -392,7 +392,12 @@
         "addPayment": "Add Payment",
         "contactDriver": "Contact driver",
         "shareRide": "Share ride",
-        "cancelRide": "Cancel ride"
+        "cancelRide": "Cancel ride",
+        "phoneCallOptions": {
+          "call": "Call",
+          "sms": "SMS",
+          "cancel": "Cancel"
+        }
     }
   },
   "stopPointsTypes": {
