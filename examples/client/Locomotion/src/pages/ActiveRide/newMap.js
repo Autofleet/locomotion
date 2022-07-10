@@ -149,7 +149,7 @@ export default React.forwardRef(({
   const { stopPoints } = ride;
 
   const currentStopPoint = getFirstPendingStopPoint(stopPoints);
-  const precedingStopPoints = (currentStopPoint || {}).precedingStops;
+  const precedingStopPoints = (currentStopPoint || {}).precedingStops || [];
 
   const polylineList = stopPoints && currentStopPoint
      && currentStopPoint.polyline && getSubLineStringAfterLocationFromDecodedPolyline(
@@ -203,7 +203,7 @@ export default React.forwardRef(({
         customMapStyle={isDarkMode ? mapDarkMode : undefined}
         {...mapSettings}
       >
-        {ride.vehicle && (
+        {ride.vehicle && ride.vehicle.location && (
         <AvailabilityVehicle
           location={ride.vehicle.location}
           id={ride.vehicle.id}
@@ -221,8 +221,8 @@ export default React.forwardRef(({
           />
         )}
         {PAGES_TO_SHOW_SP_MARKERS.includes(currentBsPage)
-          && stopPoints.filter(sp => !!sp.lat).length > 1
-          ? stopPoints
+          && finalStopPoints.filter(sp => !!sp.lat).length > 1
+          ? finalStopPoints
             .filter(sp => !!sp.lat && sp.state !== STOP_POINT_STATES.COMPLETED)
             .map(sp => (<StationsMap stopPoint={sp} key={sp.id} />))
           : null}
