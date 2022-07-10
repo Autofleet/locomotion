@@ -34,7 +34,7 @@ const CallContactPersonMasked = ({ onError }: { onError: any}) => {
       UIManager.showPopupMenu(
         findNodeHandle(elementRef.current) as number,
         options,
-        () => {},
+        () => undefined,
         (action, buttonIndex) => {
           if (buttonIndex === 0) {
             callPhone(number);
