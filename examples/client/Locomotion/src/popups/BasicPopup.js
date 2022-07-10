@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { KeyboardAvoidingView } from 'react-native';
 import Modal from 'react-native-modal';
 import {
   ModalContainer, Content, FooterButton, Title, SubTitle,
@@ -23,14 +24,16 @@ export default ({
 
   return (
     <Modal isVisible={isPopupOpen(id) || false}>
-      <ModalContainer>
-        <Content>
-          <Title>{title}</Title>
-          <SubTitle>{subTitle}</SubTitle>
-          {content || undefined}
-        </Content>
-        <FooterButton onPress={closePopup} data-test-id="PopupFooterButton" />
-      </ModalContainer>
+      <KeyboardAvoidingView style={{ flex: 1, justifyContent: 'flex-end' }} behavior="padding">
+        <ModalContainer>
+          <Content>
+            <Title>{title}</Title>
+            <SubTitle>{subTitle}</SubTitle>
+            {content || undefined}
+          </Content>
+          <FooterButton onPress={closePopup} data-test-id="PopupFooterButton" />
+        </ModalContainer>
+      </KeyboardAvoidingView>
     </Modal>
   );
 };
