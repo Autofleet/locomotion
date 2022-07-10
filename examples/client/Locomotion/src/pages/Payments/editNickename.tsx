@@ -13,13 +13,12 @@ import SaveButton from '../Profile/SaveButton';
 
 const EditCardName = ({ navigation }) => {
   const route = useRoute();
-  const secondTextInput = useRef(null);
   const usePayments = PaymentsContext.useContainer();
   const [nickname, setNickname] = useState(route.params?.name);
   const [showErrorText, setShowErrorText] = useState(false);
 
   const onComplete = async () => {
-    await usePayments.updatePaymentMethod(route.params?.id, { name: route.params?.name });
+    await usePayments.updatePaymentMethod(route.params?.id, { name: nickname });
   };
 
   return (
@@ -28,13 +27,11 @@ const EditCardName = ({ navigation }) => {
         <Header title={i18n.t('onboarding.pages.name.title')} page={undefined} showSkipButton={false} />
         <PageContainer>
           <ScreenText
-            text={i18n.t('onboarding.pages.name.text')}
-            subText={i18n.t('onboarding.pages.name.subText')}
+            text={i18n.t('Set Card Nickname')}
           />
           <InputContainer>
             <TextInput
-              testID="firstNameInput"
-              placeholder={i18n.t('onboarding.firstNamePlaceholder')}
+              placeholder="Name"
               autoFocus
               onChangeText={v => setNickname(v)}
               value={nickname}
