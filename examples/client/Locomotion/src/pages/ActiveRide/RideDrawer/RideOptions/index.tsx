@@ -17,7 +17,7 @@ import { BS_PAGES } from '../../../../context/ridePageStateContext/utils';
 const RideOptions = () => {
   const [popupToShow, setPopupToShow] = useState<popupNames | null>(null);
   const {
-    updateRide,
+    updateRidePayload,
     ride,
   } = useContext(RidePageContext);
 
@@ -51,7 +51,7 @@ const RideOptions = () => {
 
     const paymentMethod: PaymentMethodInterface | undefined = getClientDefaultMethod();
     if (paymentMethod) {
-      updateRide({
+      updateRidePayload({
         paymentMethodId: paymentMethod.id,
       });
     }
@@ -70,7 +70,7 @@ const RideOptions = () => {
         isVisible={popupToShow === 'notes'}
         notes={ride?.notes}
         onSubmit={(text: string) => {
-          updateRide({
+          updateRidePayload({
             notes: text,
           });
           clearPopup();
