@@ -11,7 +11,11 @@ import StorageService from '../../services/storage';
 import * as rideApi from './api';
 import {
   buildStreetAddress,
-  formatEstimationsResult, formatStopPointsForEstimations, getEstimationTags, INITIAL_STOP_POINTS,
+  formatEstimationsResult,
+  formatStopPointsForEstimations,
+  getEstimationTags,
+  INITIAL_STOP_POINTS,
+  RIDE_POPUPS, RidePopupNames,
 } from './utils';
 import settings from '../settings';
 import SETTINGS_KEYS from '../settings/keys';
@@ -78,8 +82,8 @@ interface RidePageContextInterface {
   setServiceEstimations: Dispatch<any | null>;
   initSps: () => void;
   fillLoadSkeleton: () => void;
-  serviceRequestFailed: boolean;
-  setServiceRequestFailed: Dispatch<boolean>;
+  ridePopup: string | null;
+  setRidePopup: Dispatch<RidePopupNames | null>;
   trackRide: () => Promise<string>;
   postRideSubmit: (rideId: string, priceCalculationId:string, rating: number | null, tip: number | null) => any;
   cancelRide: () => Promise<void>;
@@ -119,8 +123,8 @@ export const RidePageContext = createContext<RidePageContextInterface>({
   initSps: () => undefined,
   fillLoadSkeleton: () => undefined,
   requestRide: () => undefined,
-  serviceRequestFailed: false,
-  setServiceRequestFailed: () => undefined,
+  ridePopup: null,
+  setRidePopup: () => undefined,
   ride: {},
   trackRide: async () => '',
   postRideSubmit: (rideId: string, priceCalculationId:string, rating: number | null, tip: number | null) => undefined,
@@ -151,7 +155,7 @@ const RidePageContextProvider = ({ children }: {
   const [chosenService, setChosenService] = useState<any | null>(null);
   const [lastSelectedLocation, saveSelectedLocation] = useState(false);
   const [rideRequestLoading, setRideRequestLoading] = useState(false);
-  const [serviceRequestFailed, setServiceRequestFailed] = useState<boolean>(false);
+  const [ridePopup, setRidePopup] = useState<RidePopupNames | null>(null);
   const intervalRef = useRef<any>();
 
   const stopRequestInterval = () => {
@@ -220,7 +224,7 @@ const RidePageContextProvider = ({ children }: {
       setChosenService(formattedEstimations.find((e: any) => e.eta));
       setServiceEstimations(formattedEstimations);
     } catch (e) {
-      setServiceRequestFailed(true);
+      setRidePopup(RIDE_POPUPS.FAILED_SERVICE_REQUEST);
       setIsReadyForSubmit(false);
     } finally {
       setIsLoading(false);
@@ -492,15 +496,10 @@ const RidePageContextProvider = ({ children }: {
   };
 
   const tryServiceEstimations = async () => {
-    try {
+    await getServiceEstimations();
+    intervalRef.current = setInterval(async () => {
       await getServiceEstimations();
-      intervalRef.current = setInterval(async () => {
-        await getServiceEstimations();
-      }, (SERVICE_ESTIMATIONS_INTERVAL_IN_SECONDS * 1000));
-    } catch (e) {
-      setServiceRequestFailed(true);
-      setIsReadyForSubmit(false);
-    }
+    }, (SERVICE_ESTIMATIONS_INTERVAL_IN_SECONDS * 1000));
   };
 
   useEffect(() => {
@@ -659,8 +658,8 @@ const RidePageContextProvider = ({ children }: {
         fillLoadSkeleton,
         rideRequestLoading,
         stopRequestInterval,
-        serviceRequestFailed,
-        setServiceRequestFailed,
+        ridePopup,
+        setRidePopup,
         trackRide,
         postRideSubmit,
         getRideFromApi,
