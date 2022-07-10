@@ -69,7 +69,7 @@ interface RidePageContextInterface {
   historyResults: any[];
   serviceEstimations: any[];
   ride: RideInterface;
-  updateRide: (ride: any) => void;
+  updateRidePayload: (ride: any) => void;
   chosenService: any;
   lastSelectedLocation: any;
   getCurrentLocationAddress: () => any;
@@ -90,6 +90,7 @@ interface RidePageContextInterface {
   cancelRide: () => Promise<void>;
   getCallNumbers: () => Promise<void>;
   getRideFromApi: (rideId: string) => Promise<RideInterface>;
+  updateRide: (rideId: string | undefined, ride: RideInterface) => Promise<void>;
 }
 
 export const RidePageContext = createContext<RidePageContextInterface>({
@@ -111,7 +112,7 @@ export const RidePageContext = createContext<RidePageContextInterface>({
   isReadyForSubmit: false,
   historyResults: [],
   serviceEstimations: [],
-  updateRide: (ride: any) => undefined,
+  updateRidePayload: (ride: any) => undefined,
   chosenService: null,
   lastSelectedLocation: null,
   getCurrentLocationAddress: () => undefined,
@@ -133,6 +134,7 @@ export const RidePageContext = createContext<RidePageContextInterface>({
   cancelRide: async () => undefined,
   getCallNumbers: async () => undefined,
   getRideFromApi: async () => ({}),
+  updateRide: async (rideId: string | undefined, ride: RideInterface) => undefined,
 });
 
 const HISTORY_RECORDS_NUM = 10;
@@ -185,8 +187,8 @@ const RidePageContextProvider = ({ children }: {
   };
 
   const formatRide = async (rideToFormat: RideInterface) => {
-    const serviceType = ride.serviceType
-      || await rideApi.getService(rideToFormat.serviceId);
+    const serviceType = rideToFormat.serviceId ? ride.serviceType
+      || await rideApi.getService(rideToFormat.serviceId) : null;
     return {
       ...rideToFormat,
       stopPoints: formatSps(rideToFormat.stopPoints),
@@ -220,6 +222,7 @@ const RidePageContextProvider = ({ children }: {
         rideApi.createServiceEstimations(formattedStopPoints),
         rideApi.getServices(),
       ]);
+
       const tags = getEstimationTags(estimations);
       const formattedEstimations = formatEstimations(services, estimations, tags);
       setChosenService(formattedEstimations.find((e: any) => e.eta));
@@ -505,7 +508,6 @@ const RidePageContextProvider = ({ children }: {
   };
 
   useEffect(() => {
-    console.log('isReadyForSubmit', isReadyForSubmit);
     if (isReadyForSubmit) {
       tryServiceEstimations();
     }
@@ -551,7 +553,7 @@ const RidePageContextProvider = ({ children }: {
     }
   };
 
-  const updateRide = (newRide: RideInterface) => {
+  const updateRidePayload = (newRide: RideInterface) => {
     setRide({
       ...ride,
       ...newRide,
@@ -565,7 +567,7 @@ const RidePageContextProvider = ({ children }: {
 
     try {
       const updatedRide = await rideApi.patchRide(rideId, { rating });
-      updateRide(updatedRide);
+      updateRidePayload(updatedRide);
       if (updatedRide) {
         return true;
       }
@@ -603,6 +605,10 @@ const RidePageContextProvider = ({ children }: {
     navigation.navigate(MAIN_ROUTES.HOME);
     changeBsPage(BS_PAGES.ADDRESS_SELECTOR);
     return true;
+  };
+
+  const updateRide = async (rideId: string | undefined, newRide: RideInterface) => {
+    await rideApi.patchRide(rideId, newRide);
   };
 
   const trackRide = async () => {
@@ -677,7 +683,7 @@ const RidePageContextProvider = ({ children }: {
         loadHistory,
         serviceEstimations,
         ride,
-        updateRide,
+        updateRidePayload,
         chosenService,
         setChosenService,
         setServiceEstimations,
@@ -694,6 +700,7 @@ const RidePageContextProvider = ({ children }: {
         postRideSubmit,
         getRideFromApi,
         cancelRide,
+        updateRide,
         getCallNumbers,
       }}
     >
