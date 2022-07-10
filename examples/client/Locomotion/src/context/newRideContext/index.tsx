@@ -216,7 +216,6 @@ const RidePageContextProvider = ({ children }: {
 
   const getServiceEstimations = async () => {
     setIsLoading(true);
-    setIsReadyForSubmit(false);
     try {
       const formattedStopPoints = formatStopPointsForEstimations(requestStopPoints);
       const [estimations, services] = await Promise.all([
