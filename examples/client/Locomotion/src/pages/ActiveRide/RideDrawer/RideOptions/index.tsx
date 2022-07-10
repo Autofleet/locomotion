@@ -1,6 +1,7 @@
 import React, {
   useContext, useEffect, useState,
 } from 'react';
+import { RIDE_POPUPS } from '../../../../context/newRideContext/utils';
 import RideButtons from './RideButtons';
 import ServiceOptions from './ServiceOptions';
 import RideNotes from '../../../../popups/RideNotes';
@@ -19,6 +20,8 @@ const RideOptions = () => {
   const {
     updateRidePayload,
     ride,
+    ridePopup,
+    stopRequestInterval,
   } = useContext(RidePageContext);
 
   const {
@@ -56,12 +59,18 @@ const RideOptions = () => {
       });
     }
 
-
     changeBsPage(BS_PAGES.SERVICE_ESTIMATIONS);
     return () => {
       setFooterComponent(null);
     };
   }, []);
+
+  useEffect(() => {
+    if (ridePopup === RIDE_POPUPS.FAILED_SERVICE_REQUEST) {
+      changeBsPage(BS_PAGES.ADDRESS_SELECTOR);
+      stopRequestInterval();
+    }
+  }, [ridePopup]);
 
   return (
     <>
