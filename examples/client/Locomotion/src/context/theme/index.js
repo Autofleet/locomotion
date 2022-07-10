@@ -29,7 +29,7 @@ export const darkTheme = {
 };
 
 export const lightTheme = {
-  primaryColor: PRIMARY_COLOR || '#38a7fc',
+  primaryColor: '#FF0000', // PRIMARY_COLOR || '#38a7fc',
   // primaryColor: '#f00',
   secondaryColor: SECONDARY_COLOR || '#08902d',
   primaryButtonTextColor: '#ffffff',
