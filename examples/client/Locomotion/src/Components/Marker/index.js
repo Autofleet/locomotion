@@ -74,7 +74,7 @@ export default ({
             </PulseContainer>
           )}
           <SubText numberOfLines={1}>
-            {checkIfSpIsNext() ? etaText : stopPoint.streetAddress}
+            {checkIfSpIsNext() ? etaText : stopPoint.streetAddress || stopPoint.description}
           </SubText>
         </SubContainer>
       </InfoBox>

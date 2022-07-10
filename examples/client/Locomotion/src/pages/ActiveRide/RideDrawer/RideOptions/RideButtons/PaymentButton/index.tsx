@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Text } from 'react-native';
 import { PaymentIcon } from 'react-native-payment-icons';
-import styled from 'styled-components';
+import styled, { ThemeContext } from 'styled-components';
 import cashPaymentMethod from '../../../../../../pages/Payments/cashPaymentMethod';
 import SvgIcon from '../../../../../../Components/SvgIcon';
 import { FONT_SIZES, FONT_WEIGHTS } from '../../../../../../context/theme';
@@ -27,15 +27,18 @@ const PaymentButton = ({
   title,
   brand,
   id,
-}: PaymentButtonProps) => (
-  <>
-    {id ? (id !== cashPaymentMethod.id
-      ? <PaymentIcon type={brand || 'generic'} />
-      : <SvgIcon fill="#38a7fc" Svg={cashIcon} height={15} width={15} />)
-      : <SvgIcon fill="#38a7fc" Svg={icon} height={15} width={15} />}
-    <TimeText>{title}</TimeText>
-  </>
-);
+}: PaymentButtonProps) => {
+  const { primaryColor } = useContext(ThemeContext);
+  return (
+    <>
+      {id ? (id !== cashPaymentMethod.id
+        ? <PaymentIcon type={brand || 'generic'} />
+        : <SvgIcon fill={primaryColor} Svg={cashIcon} height={15} width={15} />)
+        : <SvgIcon fill={primaryColor} Svg={icon} height={15} width={15} />}
+      <TimeText>{title}</TimeText>
+    </>
+  );
+};
 
 export default PaymentButton;
 
