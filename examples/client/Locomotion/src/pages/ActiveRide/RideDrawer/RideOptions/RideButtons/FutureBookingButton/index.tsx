@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Text } from 'react-native';
-import styled from 'styled-components';
+import styled, { ThemeContext } from 'styled-components';
 import SvgIcon from '../../../../../../Components/SvgIcon';
 import clock from '../../../../../../assets/bottomSheet/clock.svg';
 import i18n from '../../../../../../I18n';
@@ -15,9 +15,11 @@ const TimeText = styled(Text)`
 
 const FutureBookingButton = () => {
   const nowText = i18n.t('bottomSheetContent.ride.now');
+  const { primaryColor } = useContext(ThemeContext);
+
   return (
     <>
-      <SvgIcon fill="#38a7fc" Svg={clock} height={15} width={15} />
+      <SvgIcon fill={primaryColor} Svg={clock} height={15} width={15} />
       <TimeText>{nowText}</TimeText>
     </>
   );

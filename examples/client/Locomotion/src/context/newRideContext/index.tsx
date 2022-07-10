@@ -180,8 +180,6 @@ const RidePageContextProvider = ({ children }: {
     [RIDE_STATES.COMPLETED]: (completedRide: any) => {
       navigation.navigate(MAIN_ROUTES.POST_RIDE, { rideId: completedRide.id });
       changeBsPage(BS_PAGES.ADDRESS_SELECTOR);
-      setServiceEstimations(null);
-      stopRequestInterval();
       cleanRideState();
     },
     [RIDE_STATES.DISPATCHED]: () => { changeBsPage(BS_PAGES.ACTIVE_RIDE); },
@@ -311,7 +309,7 @@ const RidePageContextProvider = ({ children }: {
 
       const { lat, lng } = data.results[0].geometry.location;
       const geoLocation = {
-        streetAddress: buildStreetAddress(data),
+        streetAddress: buildStreetAddress(data) || data.results[0].formatted_address,
         description: data.results[0].formatted_address,
         lat,
         lng,
@@ -445,7 +443,6 @@ const RidePageContextProvider = ({ children }: {
       lat: enrichedPlace.lat,
       lng: enrichedPlace.lng,
     };
-    console.log({ enrichedPlace, selectedInputIndex });
     resetSearchResults();
     saveLastAddresses(selectedItem);
 
@@ -503,11 +500,14 @@ const RidePageContextProvider = ({ children }: {
   const tryServiceEstimations = async () => {
     await getServiceEstimations();
     intervalRef.current = setInterval(async () => {
-      await getServiceEstimations();
+      if (intervalRef.current) {
+        await getServiceEstimations();
+      }
     }, (SERVICE_ESTIMATIONS_INTERVAL_IN_SECONDS * 1000));
   };
 
   useEffect(() => {
+    console.log('isReadyForSubmit', isReadyForSubmit);
     if (isReadyForSubmit) {
       tryServiceEstimations();
     }
@@ -515,8 +515,8 @@ const RidePageContextProvider = ({ children }: {
 
   const requestRide = async (): Promise<void> => {
     setRideRequestLoading(true);
-    setServiceEstimations(null);
     stopRequestInterval();
+    setServiceEstimations(null);
     changeBsPage(BS_PAGES.CONFIRMING_RIDE);
     const rideToCreate = {
       serviceId: chosenService?.id,
@@ -525,7 +525,7 @@ const RidePageContextProvider = ({ children }: {
       stopPoints: requestStopPoints.map((sp, i) => ({
         lat: Number(sp.lat),
         lng: Number(sp.lng),
-        description: sp.description || sp.streetAddress,
+        description: sp.streetAddress || sp.description,
         type: sp.type,
         ...(i === 0 && { notes: ride.notes }),
       })),
