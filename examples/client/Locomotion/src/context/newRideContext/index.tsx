@@ -8,10 +8,15 @@ import { UserContext } from '../user';
 import { getPosition, DEFAULT_COORDS } from '../../services/geo';
 import { getPlaces, getGeocode, getPlaceDetails } from './google-api';
 import StorageService from '../../services/storage';
+import Mixpanel from '../../services/Mixpanel';
 import * as rideApi from './api';
 import {
   buildStreetAddress,
-  formatEstimationsResult, formatStopPointsForEstimations, getEstimationTags, INITIAL_STOP_POINTS,
+  formatEstimationsResult,
+  formatStopPointsForEstimations,
+  getEstimationTags,
+  INITIAL_STOP_POINTS,
+  RIDE_POPUPS, RidePopupNames,
 } from './utils';
 import settings from '../settings';
 import SETTINGS_KEYS from '../settings/keys';
@@ -78,11 +83,12 @@ interface RidePageContextInterface {
   setServiceEstimations: Dispatch<any | null>;
   initSps: () => void;
   fillLoadSkeleton: () => void;
-  serviceRequestFailed: boolean;
-  setServiceRequestFailed: Dispatch<boolean>;
+  ridePopup: string | null;
+  setRidePopup: Dispatch<RidePopupNames | null>;
   trackRide: () => Promise<string>;
   postRideSubmit: (rideId: string, priceCalculationId:string, rating: number | null, tip: number | null) => any;
   cancelRide: () => Promise<void>;
+  getCallNumbers: () => Promise<void>;
   getRideFromApi: (rideId: string) => Promise<RideInterface>;
 }
 
@@ -119,12 +125,13 @@ export const RidePageContext = createContext<RidePageContextInterface>({
   initSps: () => undefined,
   fillLoadSkeleton: () => undefined,
   requestRide: () => undefined,
-  serviceRequestFailed: false,
-  setServiceRequestFailed: () => undefined,
+  ridePopup: null,
+  setRidePopup: () => undefined,
   ride: {},
   trackRide: async () => '',
   postRideSubmit: (rideId: string, priceCalculationId:string, rating: number | null, tip: number | null) => undefined,
   cancelRide: async () => undefined,
+  getCallNumbers: async () => undefined,
   getRideFromApi: async () => ({}),
 });
 
@@ -151,7 +158,7 @@ const RidePageContextProvider = ({ children }: {
   const [chosenService, setChosenService] = useState<any | null>(null);
   const [lastSelectedLocation, saveSelectedLocation] = useState(false);
   const [rideRequestLoading, setRideRequestLoading] = useState(false);
-  const [serviceRequestFailed, setServiceRequestFailed] = useState<boolean>(false);
+  const [ridePopup, setRidePopup] = useState<RidePopupNames | null>(null);
   const intervalRef = useRef<any>();
 
   const stopRequestInterval = () => {
@@ -171,8 +178,6 @@ const RidePageContextProvider = ({ children }: {
     [RIDE_STATES.COMPLETED]: (completedRide: any) => {
       navigation.navigate(MAIN_ROUTES.POST_RIDE, { rideId: completedRide.id });
       changeBsPage(BS_PAGES.ADDRESS_SELECTOR);
-      setServiceEstimations(null);
-      stopRequestInterval();
       cleanRideState();
     },
     [RIDE_STATES.DISPATCHED]: () => { changeBsPage(BS_PAGES.ACTIVE_RIDE); },
@@ -220,7 +225,7 @@ const RidePageContextProvider = ({ children }: {
       setChosenService(formattedEstimations.find((e: any) => e.eta));
       setServiceEstimations(formattedEstimations);
     } catch (e) {
-      setServiceRequestFailed(true);
+      setRidePopup(RIDE_POPUPS.FAILED_SERVICE_REQUEST);
       setIsReadyForSubmit(false);
     } finally {
       setIsLoading(false);
@@ -302,7 +307,7 @@ const RidePageContextProvider = ({ children }: {
 
       const { lat, lng } = data.results[0].geometry.location;
       const geoLocation = {
-        streetAddress: buildStreetAddress(data),
+        streetAddress: buildStreetAddress(data) || data.results[0].formatted_address,
         description: data.results[0].formatted_address,
         lat,
         lng,
@@ -436,7 +441,6 @@ const RidePageContextProvider = ({ children }: {
       lat: enrichedPlace.lat,
       lng: enrichedPlace.lng,
     };
-    console.log({ enrichedPlace, selectedInputIndex });
     resetSearchResults();
     saveLastAddresses(selectedItem);
 
@@ -492,18 +496,16 @@ const RidePageContextProvider = ({ children }: {
   };
 
   const tryServiceEstimations = async () => {
-    try {
-      await getServiceEstimations();
-      intervalRef.current = setInterval(async () => {
+    await getServiceEstimations();
+    intervalRef.current = setInterval(async () => {
+      if (intervalRef.current) {
         await getServiceEstimations();
-      }, (SERVICE_ESTIMATIONS_INTERVAL_IN_SECONDS * 1000));
-    } catch (e) {
-      setServiceRequestFailed(true);
-      setIsReadyForSubmit(false);
-    }
+      }
+    }, (SERVICE_ESTIMATIONS_INTERVAL_IN_SECONDS * 1000));
   };
 
   useEffect(() => {
+    console.log('isReadyForSubmit', isReadyForSubmit);
     if (isReadyForSubmit) {
       tryServiceEstimations();
     }
@@ -511,8 +513,8 @@ const RidePageContextProvider = ({ children }: {
 
   const requestRide = async (): Promise<void> => {
     setRideRequestLoading(true);
-    setServiceEstimations(null);
     stopRequestInterval();
+    setServiceEstimations(null);
     changeBsPage(BS_PAGES.CONFIRMING_RIDE);
     const rideToCreate = {
       serviceId: chosenService?.id,
@@ -521,7 +523,7 @@ const RidePageContextProvider = ({ children }: {
       stopPoints: requestStopPoints.map((sp, i) => ({
         lat: Number(sp.lat),
         lng: Number(sp.lng),
-        description: sp.description || sp.streetAddress,
+        description: sp.streetAddress || sp.description,
         type: sp.type,
         ...(i === 0 && { notes: ride.notes }),
       })),
@@ -623,6 +625,33 @@ const RidePageContextProvider = ({ children }: {
     cleanRideState();
   };
 
+  const getCallNumbers = async () => {
+    const rideId = ride?.id;
+    const stopPoint = ride?.stopPoints && ride.stopPoints[0];
+    if (stopPoint) {
+      const { id: spId } = stopPoint || {};
+      let number;
+      const stopPointFromServer = await rideApi.getStopPoint(rideId, spId);
+      number = stopPointFromServer.maskedDriverPhoneNumber;
+      if (!number) {
+        Mixpanel.setEvent('getting masked-phones', {
+          ride: rideId,
+          id: spId,
+        });
+        const maskSpRes = await rideApi.maskStopPointPhones(rideId, spId);
+        if (maskSpRes && maskSpRes.sp) {
+          number = maskSpRes.sp.maskedDriverPhoneNumber;
+          Mixpanel.setEvent(`got masked-phones: ${number}`);
+        } else {
+          number = stopPoint.metadata.contactPersonPhone;
+        }
+      }
+      Mixpanel.setEvent('tel', { number });
+      return number;
+    }
+    return null;
+  };
+
   return (
     <RidePageContext.Provider
       value={{
@@ -659,12 +688,13 @@ const RidePageContextProvider = ({ children }: {
         fillLoadSkeleton,
         rideRequestLoading,
         stopRequestInterval,
-        serviceRequestFailed,
-        setServiceRequestFailed,
+        ridePopup,
+        setRidePopup,
         trackRide,
         postRideSubmit,
         getRideFromApi,
         cancelRide,
+        getCallNumbers,
       }}
     >
       {children}

@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Text } from 'react-native';
-import styled from 'styled-components';
+import styled, { ThemeContext } from 'styled-components';
 import SvgIcon from '../SvgIcon';
 import { FONT_SIZES, FONT_WEIGHTS } from '../../context/theme';
 
@@ -19,11 +19,14 @@ interface GenericRideButtonProps {
 const GenericRideButton = ({
   icon,
   title,
-}: GenericRideButtonProps) => (
-  <>
-    <SvgIcon stroke="#38a7fc" fill="#38a7fc" Svg={icon} height={15} width={15} />
-    <TimeText numberOfLines={1}>{title}</TimeText>
-  </>
-);
+}: GenericRideButtonProps) => {
+  const { primaryColor } = useContext(ThemeContext);
+  return (
+    <>
+      <SvgIcon stroke={primaryColor} fill={primaryColor} Svg={icon} height={15} width={15} />
+      <TimeText numberOfLines={1}>{title}</TimeText>
+    </>
+  );
+};
 
 export default GenericRideButton;
