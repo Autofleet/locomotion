@@ -29,7 +29,7 @@ import Call from './call';
 const DEFAULT_VEHICLE_IMAGE = 'https://res.cloudinary.com/autofleet/image/upload/w_700,h_500,c_thumb,q_auto/vehicle-images/Minivan/minivan_blue.png';
 
 const ActiveRideContent = () => {
-  const { ride, trackRide } = useContext(RidePageContext);
+  const { ride, trackRide, updateRide } = useContext(RidePageContext);
   const { changeBsPage, setGenericErrorPopup } = useContext(RideStateContextContext);
   const [popupToShow, setPopupToShow] = useState<string | null>(null);
 
@@ -168,9 +168,12 @@ const ActiveRideContent = () => {
             notes={firstSpNotCompleted?.notes}
             isVisible={popupToShow === 'notes'}
             onSubmit={(text: string) => {
-            //   updateRide({
-            //     notes: text,
-            //   });
+              updateRide(ride.id, {
+                stopPoints: [{
+                  id: firstSpNotCompleted.id,
+                  notes: text,
+                }],
+              });
               clearPopup();
             }}
             onCancel={() => {
