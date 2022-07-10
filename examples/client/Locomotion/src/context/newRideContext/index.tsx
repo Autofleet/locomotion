@@ -302,7 +302,7 @@ const RidePageContextProvider = ({ children }: {
 
       const { lat, lng } = data.results[0].geometry.location;
       const geoLocation = {
-        streetAddress: buildStreetAddress(data),
+        streetAddress: buildStreetAddress(data) || data.results[0].formatted_address,
         description: data.results[0].formatted_address,
         lat,
         lng,
@@ -436,7 +436,6 @@ const RidePageContextProvider = ({ children }: {
       lat: enrichedPlace.lat,
       lng: enrichedPlace.lng,
     };
-    console.log({ enrichedPlace, selectedInputIndex });
     resetSearchResults();
     saveLastAddresses(selectedItem);
 
@@ -521,7 +520,7 @@ const RidePageContextProvider = ({ children }: {
       stopPoints: requestStopPoints.map((sp, i) => ({
         lat: Number(sp.lat),
         lng: Number(sp.lng),
-        description: sp.description || sp.streetAddress,
+        description: sp.streetAddress || sp.description,
         type: sp.type,
         ...(i === 0 && { notes: ride.notes }),
       })),
