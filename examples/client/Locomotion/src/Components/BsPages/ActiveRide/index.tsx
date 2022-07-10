@@ -30,7 +30,7 @@ const DEFAULT_VEHICLE_IMAGE = 'https://res.cloudinary.com/autofleet/image/upload
 
 const ActiveRideContent = () => {
   const { ride, trackRide } = useContext(RidePageContext);
-  const { changeBsPage } = useContext(RideStateContextContext);
+  const { changeBsPage, setGenericErrorPopup } = useContext(RideStateContextContext);
   const [popupToShow, setPopupToShow] = useState<string | null>(null);
 
   const {
@@ -141,7 +141,11 @@ const ActiveRideContent = () => {
           </StopPointTextContainer>
           <ButtonsContainer>
             <RowContainer>
-              <Call />
+              <Call
+                onError={() => {
+                  setGenericErrorPopup({});
+                }}
+              />
               {renderRideNotes()}
             </RowContainer>
             <RowContainer>
