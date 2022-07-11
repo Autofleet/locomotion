@@ -319,7 +319,7 @@ export const ConfirmPickup = (props: any) => {
       onButtonPress={() => {
         updateRequestSp(lastSelectedLocation);
         if (props.onButtonPress) {
-          props.onButtonPress();
+          props.onButtonPress(lastSelectedLocation);
         }
       }}
       buttonDisabled={!lastSelectedLocation?.streetAddress}
