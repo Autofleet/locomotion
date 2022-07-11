@@ -22,7 +22,7 @@ import settings from '../settings';
 import SETTINGS_KEYS from '../settings/keys';
 import { RideStateContextContext } from '../ridePageStateContext';
 import { BS_PAGES } from '../ridePageStateContext/utils';
-import { RIDE_STATES, RIDE_FINAL_STATES } from '../../lib/commonTypes';
+import { RIDE_STATES, RIDE_FINAL_STATES, STOP_POINT_TYPES } from '../../lib/commonTypes';
 import useInterval from '../../lib/useInterval';
 import { formatSps } from '../../lib/ride/utils';
 import { MAIN_ROUTES } from '../../pages/routes';
@@ -66,7 +66,6 @@ interface RidePageContextInterface {
   searchAddress: (searchText: string) => void;
   updateRequestSp: (sp: any) => void;
   setSpCurrentLocation: () => void;
-  isReadyForSubmit: boolean;
   historyResults: any[];
   serviceEstimations: any[];
   ride: RideInterface;
@@ -75,7 +74,7 @@ interface RidePageContextInterface {
   lastSelectedLocation: any;
   getCurrentLocationAddress: () => any;
   saveSelectedLocation: (sp: any) => void;
-  requestRide: () => void;
+  requestRide: (pickup?: any) => void;
   rideRequestLoading: boolean;
   stopRequestInterval: () => void;
   isLoading: boolean;
@@ -110,7 +109,6 @@ export const RidePageContext = createContext<RidePageContextInterface>({
   searchAddress: (searchText: string) => undefined,
   updateRequestSp: (sp: any) => undefined,
   setSpCurrentLocation: () => undefined,
-  isReadyForSubmit: false,
   historyResults: [],
   serviceEstimations: [],
   updateRidePayload: (ride: any) => undefined,
@@ -126,7 +124,7 @@ export const RidePageContext = createContext<RidePageContextInterface>({
   setServiceEstimations: () => undefined,
   initSps: () => undefined,
   fillLoadSkeleton: () => undefined,
-  requestRide: () => undefined,
+  requestRide: (pickup?: any) => undefined,
   ridePopup: null,
   setRidePopup: () => undefined,
   ride: {},
@@ -153,7 +151,6 @@ const RidePageContextProvider = ({ children }: {
   const [selectedInputIndex, setSelectedInputIndex] = useState<number | null>(null);
   const [selectedInputTarget, setSelectedInputTarget] = useState<any | null>(null);
   const [searchResults, setSearchResults] = useState<any[] | null>(null);
-  const [isReadyForSubmit, setIsReadyForSubmit] = useState(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [historyResults, setHistoryResults] = useState([]);
   const [serviceEstimations, setServiceEstimations] = useState<any | null>(null);
@@ -229,22 +226,31 @@ const RidePageContextProvider = ({ children }: {
       setServiceEstimations(formattedEstimations);
     } catch (e) {
       setRidePopup(RIDE_POPUPS.FAILED_SERVICE_REQUEST);
-      setIsReadyForSubmit(false);
     } finally {
       setIsLoading(false);
     }
   };
 
-  const validateRequestedStopPoints = async (reqSps: any[]) => {
+
+  const tryServiceEstimations = async () => {
+    await getServiceEstimations();
+    intervalRef.current = setInterval(async () => {
+      if (intervalRef.current) {
+        await getServiceEstimations();
+      }
+    }, (SERVICE_ESTIMATIONS_INTERVAL_IN_SECONDS * 1000));
+  };
+
+  const validateStopPoints = (stopPoints: any[]) => checkStopPointsInTerritory(stopPoints);
+
+  const validateRequestedStopPoints = (reqSps: any[]) => {
     const stopPoints = reqSps;
     const isSpsReady = stopPoints.every(r => r.lat && r.lng && r.description);
     if (stopPoints.length && isSpsReady) {
-      const areStopPointsInTerritory = await checkStopPointsInTerritory(stopPoints);
+      const areStopPointsInTerritory = validateStopPoints(stopPoints);
       if (areStopPointsInTerritory) {
-        setIsReadyForSubmit(true);
+        tryServiceEstimations();
       }
-    } else {
-      setIsReadyForSubmit(false);
     }
   };
 
@@ -497,22 +503,15 @@ const RidePageContextProvider = ({ children }: {
     setHistoryResults(history);
   };
 
-  const tryServiceEstimations = async () => {
-    await getServiceEstimations();
-    intervalRef.current = setInterval(async () => {
-      if (intervalRef.current) {
-        await getServiceEstimations();
+  const requestRide = async (pickupLocation?: any): Promise<void> => {
+    let stopPoints = requestStopPoints;
+    if (pickupLocation) {
+      if (!validateStopPoints([pickupLocation])) {
+        return;
       }
-    }, (SERVICE_ESTIMATIONS_INTERVAL_IN_SECONDS * 1000));
-  };
 
-  useEffect(() => {
-    if (isReadyForSubmit) {
-      tryServiceEstimations();
+      stopPoints = [{ ...pickupLocation, type: STOP_POINT_TYPES.STOP_POINT_PICKUP }, ...stopPoints.slice(1)];
     }
-  }, [isReadyForSubmit]);
-
-  const requestRide = async (): Promise<void> => {
     setRideRequestLoading(true);
     stopRequestInterval();
     setServiceEstimations(null);
@@ -521,7 +520,7 @@ const RidePageContextProvider = ({ children }: {
       serviceId: chosenService?.id,
       paymentMethodId: ride.paymentMethodId,
       rideType: 'passenger',
-      stopPoints: requestStopPoints.map((sp, i) => ({
+      stopPoints: stopPoints.map((sp, i) => ({
         lat: Number(sp.lat),
         lng: Number(sp.lng),
         description: sp.streetAddress || sp.description,
@@ -677,7 +676,6 @@ const RidePageContextProvider = ({ children }: {
         searchAddress,
         updateRequestSp,
         setSpCurrentLocation,
-        isReadyForSubmit,
         historyResults,
         loadHistory,
         serviceEstimations,
