@@ -1,5 +1,6 @@
 require_relative '../node_modules/react-native/scripts/react_native_pods'
 require_relative '../node_modules/@react-native-community/cli-platform-ios/native_modules'
+# $RNFirebaseAsStaticFramework = true
 
 platform :ios, '12.0'
 install! 'cocoapods', :deterministic_uuids => false
@@ -28,9 +29,11 @@ target 'Locomotion' do
 
   # Enables Flipper.
   #
-  # Note that if you have use_frameworks! enabled, Flipper will not work and
+  # Note that if you have use_frameworks! / use_modular_headers! enabled, Flipper will not work and
   # you should disable the next line.
-  use_flipper!()
+  # use_flipper!()
+  
+  # use_frameworks!
 
   post_install do |installer|
     react_native_post_install(installer)
