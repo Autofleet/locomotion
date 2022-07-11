@@ -116,6 +116,7 @@ const Footer = styled(View)<FooterInterface>`
   width: 100%;
   display: flex;
   flex-direction: ${({ fullWidthButtons }) => (fullWidthButtons ? 'column' : 'row')};
+  margin-bottom: 10px;
   justify-content: space-between;
   align-items: center;
 `;
