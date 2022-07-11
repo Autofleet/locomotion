@@ -241,6 +241,7 @@ export const LocationRequest = (props: any) => {
 };
 
 export const CancelRide = (props: any) => {
+  const [isLoading, setIsLoading] = useState(false);
   const { cancelRide } = useContext(RidePageContext);
   const { changeBsPage } = useContext(RideStateContextContext);
 
@@ -250,7 +251,11 @@ export const CancelRide = (props: any) => {
       ButtonText={i18n.t('bottomSheetContent.cancelRide.buttonText')}
       SubTitleText={i18n.t('bottomSheetContent.cancelRide.subTitleText')}
       SecondaryButtonText={i18n.t('bottomSheetContent.cancelRide.secondaryButtonText')}
-      onButtonPress={cancelRide}
+      isLoading={isLoading}
+      onButtonPress={() => {
+        setIsLoading(true);
+        cancelRide();
+      }}
       onSecondaryButtonPress={() => changeBsPage(BS_PAGES.ACTIVE_RIDE)}
       warning
       {...props}
@@ -272,6 +277,7 @@ export const NotAvailableHere = (props: any) => {
       ButtonText={i18n.t('bottomSheetContent.notAvailableHere.buttonText')}
       SubTitleText={i18n.t('bottomSheetContent.notAvailableHere.subTitleText')}
       Image={<SvgIcon Svg={outOfTerritoryIcon} height={85} width={140} />}
+      fullWidthButtons
       {...props}
     />
   );

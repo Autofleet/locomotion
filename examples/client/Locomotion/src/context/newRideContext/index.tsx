@@ -92,9 +92,10 @@ interface RidePageContextInterface {
   cancelRide: () => Promise<void>;
   getCallNumbers: () => Promise<void>;
   getRideFromApi: (rideId: string) => Promise<RideInterface>;
-  cleanRideState: () => void;
+  cleanFullRideState: () => void;
   setRide: Dispatch<RideInterface>;
   updateRide: (rideId: string | undefined, ride: RideInterface) => Promise<void>;
+  resetRide: () => void;
 }
 
 export const RidePageContext = createContext<RidePageContextInterface>({
@@ -138,9 +139,10 @@ export const RidePageContext = createContext<RidePageContextInterface>({
   cancelRide: async () => undefined,
   getCallNumbers: async () => undefined,
   getRideFromApi: async () => ({}),
-  cleanRideState: () => undefined,
+  cleanFullRideState: () => undefined,
   setRide: () => undefined,
   updateRide: async (rideId: string | undefined, ride: RideInterface) => undefined,
+  resetRide: () => undefined,
 });
 
 const HISTORY_RECORDS_NUM = 10;
@@ -168,14 +170,20 @@ const RidePageContextProvider = ({ children }: {
   const [rideRequestLoading, setRideRequestLoading] = useState(false);
   const [ridePopup, setRidePopup] = useState<RidePopupNames | null>(null);
   const intervalRef = useRef<any>();
+  const rideIntervalRef = useRef<any>();
 
   const stopRequestInterval = () => {
     clearInterval(intervalRef.current);
   };
 
-  const cleanRideState = () => {
-    initSps();
+  const resetRide = () => {
     setRide({});
+    clearInterval(rideIntervalRef.current);
+  };
+
+  const cleanFullRideState = () => {
+    resetRide();
+    initSps();
     changeBsPage(BS_PAGES.ADDRESS_SELECTOR);
   };
 
@@ -186,16 +194,16 @@ const RidePageContextProvider = ({ children }: {
     [RIDE_STATES.COMPLETED]: (completedRide: any) => {
       navigation.navigate(MAIN_ROUTES.POST_RIDE, { rideId: completedRide.id });
       changeBsPage(BS_PAGES.ADDRESS_SELECTOR);
-      cleanRideState();
+      cleanFullRideState();
     },
     [RIDE_STATES.DISPATCHED]: () => { changeBsPage(BS_PAGES.ACTIVE_RIDE); },
     [RIDE_STATES.ACTIVE]: () => { changeBsPage(BS_PAGES.ACTIVE_RIDE); },
     [RIDE_STATES.CANCELED]: (canceledRide: any) => {
-      console.log('canceledRide', canceledRide);
       if (canceledRide.canceledBy !== user?.id) {
         setRidePopup(RIDE_POPUPS.RIDE_CANCELED_BY_DISPATCHER);
       } else {
-        cleanRideState();
+        setServiceEstimations(null);
+        cleanFullRideState();
       }
     },
   };
@@ -282,7 +290,7 @@ const RidePageContextProvider = ({ children }: {
     loadActiveRide();
   }, []);
 
-  useInterval(async () => {
+  rideIntervalRef.current = useInterval(async () => {
     if (ride?.id) {
       const rideLoaded = await rideApi.getRide(ride?.id);
       const formattedRide = await formatRide(rideLoaded);
@@ -293,7 +301,7 @@ const RidePageContextProvider = ({ children }: {
         }
       }
       if (RIDE_FINAL_STATES.includes(ride?.state || '')) {
-        setRide({});
+        resetRide();
       }
       setRide(formattedRide);
     }
@@ -614,7 +622,7 @@ const RidePageContextProvider = ({ children }: {
       rating ? patchRideRating(rideId, rating) : () => null,
     ]);
 
-    cleanRideState();
+    cleanFullRideState();
     navigation.navigate(MAIN_ROUTES.HOME);
     changeBsPage(BS_PAGES.ADDRESS_SELECTOR);
     return true;
@@ -715,7 +723,8 @@ const RidePageContextProvider = ({ children }: {
         getRideFromApi,
         cancelRide,
         getCallNumbers,
-        cleanRideState,
+        cleanFullRideState,
+        resetRide,
       }}
     >
       {children}

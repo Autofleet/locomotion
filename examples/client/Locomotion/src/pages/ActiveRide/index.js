@@ -57,8 +57,8 @@ const RidePage = ({ mapSettings, navigation }) => {
     ride,
     setRidePopup,
     ridePopup,
-    cleanRideState,
-    setRide,
+    cleanFullRideState,
+    resetRide,
   } = useContext(RidePageContext);
   const {
     setIsExpanded, snapPoints, isExpanded,
@@ -244,11 +244,11 @@ const RidePage = ({ mapSettings, navigation }) => {
         isVisible={ridePopup === RIDE_POPUPS.RIDE_CANCELED_BY_DISPATCHER}
         onCancel={() => {
           backToMap();
-          cleanRideState();
+          cleanFullRideState();
           setRidePopup(null);
         }}
         onSubmit={() => {
-          setRide({});
+          resetRide();
           changeBsPage(BS_PAGES.SERVICE_ESTIMATIONS);
           setRidePopup(null);
         }
