@@ -238,7 +238,7 @@ export default React.forwardRef(({
         {rideWithStopPoints && !!precedingStopPoints.length
           && precedingStopPoints.map(sp => <PrecedingStopPointMarker key={sp.id} stopPoint={sp} />)
         }
-        {rideWithStopPoints && (
+        {rideWithStopPoints && polylineList && (
           <Polyline
             strokeColor={primaryColor}
             strokeWidth={7}
