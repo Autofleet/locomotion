@@ -73,9 +73,12 @@ const ActiveRideContent = () => {
 
   const renderCancelRide = () => (
     <ButtonContainer
+      disabled={!ride.cancelable}
       testID="cancelRideButton"
       onPress={() => {
-        changeBsPage(BS_PAGES.CANCEL_RIDE);
+        if (ride.cancelable) {
+          changeBsPage(BS_PAGES.CANCEL_RIDE);
+        }
       }}
     >
       <GenericRideButton

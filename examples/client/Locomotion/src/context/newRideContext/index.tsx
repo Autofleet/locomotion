@@ -48,6 +48,7 @@ export interface RideInterface {
   serviceType?: any;
   payment?: any;
   canceledBy?: string;
+  cancelable?: boolean;
 }
 
 interface RidePageContextInterface {
@@ -235,6 +236,7 @@ const RidePageContextProvider = ({ children }: {
         rideApi.createServiceEstimations(formattedStopPoints),
         rideApi.getServices(),
       ]);
+
       const tags = getEstimationTags(estimations);
       const formattedEstimations = formatEstimations(services, estimations, tags);
       setChosenService(formattedEstimations.find((e: any) => e.eta));
@@ -265,7 +267,6 @@ const RidePageContextProvider = ({ children }: {
       SETTINGS_KEYS.SERVICE_ESTIMATIONS_INTERVAL_IN_SECONDS,
     );
   };
-
 
   const loadActiveRide = async () => {
     const activeRide = await rideApi.getActiveRide();

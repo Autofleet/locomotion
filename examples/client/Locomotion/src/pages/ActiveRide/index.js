@@ -35,6 +35,8 @@ import { BS_PAGES } from '../../context/ridePageStateContext/utils';
 import payments from '../../context/payments';
 import geo, { DEFAULT_COORDS, getPosition } from '../../services/geo';
 import RideCanceledPopup from '../../popups/RideCanceledPopup';
+import SquareSvgButton from '../../Components/SquareSvgButton';
+import targetIcon from '../../assets/target.svg';
 
 const RidePage = ({ mapSettings, navigation }) => {
   const { locationGranted, setLocationGranted, user } = useContext(UserContext);
@@ -133,7 +135,11 @@ const RidePage = ({ mapSettings, navigation }) => {
     ),
     [BS_PAGES.NO_PAYMENT]: () => <NoPayment />,
     [BS_PAGES.CONFIRMING_RIDE]: () => <ConfirmingRide />,
-    [BS_PAGES.NO_AVAILABLE_VEHICLES]: () => <NoAvailableVehicles />,
+    [BS_PAGES.NO_AVAILABLE_VEHICLES]: () => (
+      <NoAvailableVehicles
+        onButtonPress={() => changeBsPage(BS_PAGES.SERVICE_ESTIMATIONS)}
+      />
+    ),
     [BS_PAGES.ACTIVE_RIDE]: () => <ActiveRide />,
   };
 
@@ -219,6 +225,13 @@ const RidePage = ({ mapSettings, navigation }) => {
             <StopPointsViewer goBackToAddressSelector={goBackToAddress} />
           </Header>
         )}
+      {!isExpanded && locationGranted && (
+        <SquareSvgButton
+          onPress={focusCurrentLocation}
+          icon={targetIcon}
+          style={{ position: 'absolute', bottom: `${parseFloat(snapPoints[0]) + 2}%`, right: 20 }}
+        />
+      )}
       <BottomSheet
         ref={bottomSheetRef}
         focusCurrentLocation={focusCurrentLocation}
