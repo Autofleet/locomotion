@@ -193,6 +193,14 @@ const RidePage = ({ mapSettings, navigation }) => {
     }
   }, [isFocused]);
 
+  const getRequestSpsFromRide = () => Promise.all(ride.stopPoints.map(async (sp) => {
+    const res = await reverseLocationGeocode(sp.lat, sp.lng);
+    return {
+      ...res,
+      type: sp.type,
+    };
+  }));
+
   useEffect(() => {
     if (bottomSheetRef && bottomSheetRef.current) {
       if (isExpanded) {
@@ -249,13 +257,7 @@ const RidePage = ({ mapSettings, navigation }) => {
         onSubmit={async () => {
           changeBsPage(BS_PAGES.SERVICE_ESTIMATIONS);
           setRidePopup(null);
-          const sps = await Promise.all(ride.stopPoints.map(async (sp) => {
-            const res = await reverseLocationGeocode(sp.lat, sp.lng);
-            return {
-              ...res,
-              type: sp.type,
-            };
-          }));
+          const sps = await getRequestSpsFromRide();
           setRequestStopPoints(sps);
           setRide({});
         }
