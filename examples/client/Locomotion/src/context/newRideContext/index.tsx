@@ -241,13 +241,13 @@ const RidePageContextProvider = ({ children }: {
     }, (SERVICE_ESTIMATIONS_INTERVAL_IN_SECONDS * 1000));
   };
 
-  const validateStopPoints = (stopPoints: any[]) => checkStopPointsInTerritory(stopPoints);
+  const validateStopPointInTerritory = (stopPoints: any[]) => checkStopPointsInTerritory(stopPoints);
 
   const validateRequestedStopPoints = (reqSps: any[]) => {
     const stopPoints = reqSps;
     const isSpsReady = stopPoints.every(r => r.lat && r.lng && r.description);
     if (stopPoints.length && isSpsReady) {
-      const areStopPointsInTerritory = validateStopPoints(stopPoints);
+      const areStopPointsInTerritory = validateStopPointInTerritory(stopPoints);
       if (areStopPointsInTerritory) {
         tryServiceEstimations();
       }
@@ -506,7 +506,7 @@ const RidePageContextProvider = ({ children }: {
   const requestRide = async (pickupLocation?: any): Promise<void> => {
     let stopPoints = requestStopPoints;
     if (pickupLocation) {
-      if (!validateStopPoints([pickupLocation])) {
+      if (!validateStopPointInTerritory([pickupLocation])) {
         return;
       }
 
