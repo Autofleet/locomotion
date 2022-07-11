@@ -96,4 +96,5 @@ export const ButtonContainer = styled(TouchableOpacity)`
     display: flex;
     width: ${HALF_WIDTH};
     padding: 0 15px;
+    opacity: ${props => (props.disabled ? 0.5 : 1)};
 `;
