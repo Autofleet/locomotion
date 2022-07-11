@@ -166,7 +166,6 @@ const RidePageContextProvider = ({ children }: {
   const [rideRequestLoading, setRideRequestLoading] = useState(false);
   const [ridePopup, setRidePopup] = useState<RidePopupNames | null>(null);
   const intervalRef = useRef<any>();
-  const rideIntervalRef = useRef<any>();
 
   const stopRequestInterval = () => {
     clearInterval(intervalRef.current);
@@ -174,7 +173,6 @@ const RidePageContextProvider = ({ children }: {
 
   const resetRide = () => {
     setRide({});
-    clearInterval(rideIntervalRef.current);
   };
 
   const cleanFullRideState = () => {
@@ -290,7 +288,7 @@ const RidePageContextProvider = ({ children }: {
     loadActiveRide();
   }, []);
 
-  rideIntervalRef.current = useInterval(async () => {
+  useInterval(async () => {
     if (ride?.id) {
       const rideLoaded = await rideApi.getRide(ride?.id);
       const formattedRide = await formatRide(rideLoaded);
