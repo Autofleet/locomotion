@@ -55,7 +55,7 @@ export default ({
     <CardsListContainer>
       <View>
         <PaymentMethodsContainer>
-          {defaultMethod && defaultMethod.id !== cashPaymentMethod.id
+          {defaultMethod.id !== cashPaymentMethod.id
             ? (
               <Section
                 onPress={() => navigate(MAIN_ROUTES.CARD_DETAILS, { paymentMethod: defaultMethod })}
@@ -65,7 +65,7 @@ export default ({
               />
             ) : undefined}
 
-          {usePayments.paymentMethods.length > 1 && defaultMethod
+          {usePayments.paymentMethods.length > 1
             ? (
               <Section
                 showChangeButton={false}
@@ -73,7 +73,6 @@ export default ({
                   { paymentMethod })}
                 paymentMethods={usePayments.paymentMethods
                   .filter(({ id }) => id !== defaultMethod.id)}
-                onPressChange={undefined}
               />
             ) : undefined}
         </PaymentMethodsContainer>
@@ -95,14 +94,12 @@ export default ({
               return;
             }
 
-            await usePayments.updatePaymentMethod(defaultMethod?.id, { isDefault: false });
             await usePayments.updatePaymentMethod(payment, { isDefault: true });
             await usePayments.loadCustomer();
           }}
         />
 
       </View>
-
     </CardsListContainer>
   );
 };

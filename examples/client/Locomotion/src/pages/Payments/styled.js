@@ -130,5 +130,5 @@ margin-top: '25px';
 export const ChangeButton = styled(Text)`
 margin-left: 110;
 margin-bottom: 20;
-color: '#24aaf2'
+color: #24aaf2;
 `;
