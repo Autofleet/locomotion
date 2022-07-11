@@ -162,6 +162,11 @@ const RidePageContextProvider = ({ children }: {
     clearInterval(intervalRef.current);
   };
 
+  const cleanRequestStopPoints = () => {
+    setRequestStopPoints([]);
+    setChosenService(null);
+  };
+
   const cleanRideState = () => {
     initSps();
     setRide({});
@@ -177,8 +182,14 @@ const RidePageContextProvider = ({ children }: {
       changeBsPage(BS_PAGES.ADDRESS_SELECTOR);
       cleanRideState();
     },
-    [RIDE_STATES.DISPATCHED]: () => { changeBsPage(BS_PAGES.ACTIVE_RIDE); },
-    [RIDE_STATES.ACTIVE]: () => { changeBsPage(BS_PAGES.ACTIVE_RIDE); },
+    [RIDE_STATES.DISPATCHED]: () => {
+      cleanRequestStopPoints();
+      changeBsPage(BS_PAGES.ACTIVE_RIDE);
+    },
+    [RIDE_STATES.ACTIVE]: () => {
+      cleanRequestStopPoints();
+      changeBsPage(BS_PAGES.ACTIVE_RIDE);
+    },
   };
 
   const formatRide = async (rideToFormat: RideInterface) => {
@@ -269,23 +280,24 @@ const RidePageContextProvider = ({ children }: {
   }, []);
 
   useInterval(async () => {
-    if (ride?.id) {
-      const rideLoaded = await rideApi.getRide(ride?.id);
-      const formattedRide = await formatRide(rideLoaded);
-      if (ride.state !== rideLoaded.state) {
-        const screenFunction = RIDE_STATES_TO_SCREENS[rideLoaded.state];
-        if (screenFunction) {
-          screenFunction(ride);
+    if (!rideRequestLoading) {
+      if (ride?.id) {
+        const rideLoaded = await rideApi.getRide(ride?.id);
+        const formattedRide = await formatRide(rideLoaded);
+        if (ride.state !== rideLoaded.state) {
+          const screenFunction = RIDE_STATES_TO_SCREENS[rideLoaded.state];
+          if (screenFunction) {
+            screenFunction(ride);
+          }
         }
+        if (!RIDE_FINAL_STATES.includes(ride?.state || '')) {
+          setRide(formattedRide);
+        }
+      } else {
+        loadActiveRide();
       }
-      if (RIDE_FINAL_STATES.includes(ride?.state || '')) {
-        setRide({});
-      }
-      setRide(formattedRide);
-    } else {
-      loadActiveRide();
     }
-  }, 5000);
+  }, 3000);
 
 
   useEffect(() => {
