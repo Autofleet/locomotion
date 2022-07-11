@@ -59,6 +59,11 @@ const usePayments = () => {
     return paymentMethod;
   };
 
+  const updatePaymentMethod = async (paymentMethodId, values) => {
+    const { data: paymentMethod } = await network.patch(`${BASE_PATH}/${paymentMethodId}`, values);
+    return paymentMethod;
+  };
+
   return {
     getCustomer,
     customer,
@@ -71,6 +76,7 @@ const usePayments = () => {
     getClientDefaultMethod,
     isCashPaymentEnabled,
     createPaymentMethod,
+    updatePaymentMethod,
   };
 };
 
