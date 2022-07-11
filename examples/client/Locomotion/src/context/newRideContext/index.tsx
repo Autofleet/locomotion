@@ -287,6 +287,8 @@ const RidePageContextProvider = ({ children }: {
         setRide({});
       }
       setRide(formattedRide);
+    } else {
+      loadActiveRide();
     }
   }, 5000);
 
