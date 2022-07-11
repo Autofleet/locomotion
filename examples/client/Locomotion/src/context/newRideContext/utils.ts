@@ -61,6 +61,9 @@ export const getEstimationTags = (estimations: any[]) => {
   };
   estimations.map((estimation) => {
     const e = estimation.results[0];
+    if (!e) {
+      return;
+    }
     if (tags.fastest) {
       if ((!tags.fastest.eta || moment(e.minPickupEta).isBefore(tags.fastest.eta))) {
         tags.fastest = {
