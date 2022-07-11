@@ -100,8 +100,8 @@ const RidePage = ({ mapSettings, navigation }) => {
       />
     ),
     [BS_PAGES.NOT_IN_TERRITORY]: () => (
-      <NotAvailableHere onButtonPress={() => {
-        goBackToAddress();
+      <NotAvailableHere fullWidthButtons onButtonPress={() => {
+        resetStateToAddressSelector();
       }}
       />
     ),
