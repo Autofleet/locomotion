@@ -222,6 +222,7 @@ const RidePageContextProvider = ({ children }: {
         rideApi.createServiceEstimations(formattedStopPoints),
         rideApi.getServices(),
       ]);
+
       const tags = getEstimationTags(estimations);
       const formattedEstimations = formatEstimations(services, estimations, tags);
       setChosenService(formattedEstimations.find((e: any) => e.eta));
