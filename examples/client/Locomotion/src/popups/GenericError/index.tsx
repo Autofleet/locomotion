@@ -10,7 +10,7 @@ import {
 
 interface GenericErrorProps {
   isVisible: boolean;
-  closePopup: SetStateAction<boolean>;
+  closePopup: any | SetStateAction<boolean>;
   title?: string;
   text?: string;
   buttonText?: string

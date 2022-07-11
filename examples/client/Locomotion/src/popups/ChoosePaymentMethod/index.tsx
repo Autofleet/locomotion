@@ -29,14 +29,14 @@ type Nav = {
 const PaymentMethodPopup = ({ isVisible, onCancel }: PaymentMethodPopupProps) => {
   const {
     ride,
-    updateRide,
+    updateRidePayload,
   } = useContext(RidePageContext);
   const [payment, setPayment] = useState(ride?.paymentMethodId);
   const usePayments = PaymentsContext.useContainer();
   const navigation = useNavigation<Nav>();
 
   const onSave = () => {
-    updateRide({
+    updateRidePayload({
       paymentMethodId: payment,
     });
     onCancel();

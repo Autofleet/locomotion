@@ -19,18 +19,18 @@ import StopPointsVerticalView from '../../StopPointsVerticalView';
 import GenericRideButton from '../../GenericRideButton';
 import plus from '../../../assets/bottomSheet/plus.svg';
 import editNote from '../../../assets/bottomSheet/edit_note.svg';
-import phone from '../../../assets/bottomSheet/phone.svg';
 import share from '../../../assets/bottomSheet/share.svg';
 import cancel from '../../../assets/bottomSheet/cancel.svg';
 import RideNotes from '../../../popups/RideNotes';
 import ServiceTypeDetails from '../../ServiceTypeDetails';
 import { RideStateContextContext } from '../../../context/ridePageStateContext';
+import Call from './call';
 
 const DEFAULT_VEHICLE_IMAGE = 'https://res.cloudinary.com/autofleet/image/upload/w_700,h_500,c_thumb,q_auto/vehicle-images/Minivan/minivan_blue.png';
 
 const ActiveRideContent = () => {
-  const { ride, trackRide } = useContext(RidePageContext);
-  const { changeBsPage } = useContext(RideStateContextContext);
+  const { ride, trackRide, updateRide } = useContext(RidePageContext);
+  const { changeBsPage, setGenericErrorPopup } = useContext(RideStateContextContext);
   const [popupToShow, setPopupToShow] = useState<string | null>(null);
 
   const {
@@ -71,23 +71,14 @@ const ActiveRideContent = () => {
     );
   };
 
-  const renderContactDriver = () => (
-    <ButtonContainer onPress={() => {
-      // setPopupToShow('notes');
-    }}
-    >
-      <GenericRideButton
-        icon={phone}
-        title={i18n.t('bottomSheetContent.ride.contactDriver')}
-      />
-    </ButtonContainer>
-  );
-
   const renderCancelRide = () => (
     <ButtonContainer
+      disabled={!ride.cancelable}
       testID="cancelRideButton"
       onPress={() => {
-        changeBsPage(BS_PAGES.CANCEL_RIDE);
+        if (ride.cancelable) {
+          changeBsPage(BS_PAGES.CANCEL_RIDE);
+        }
       }}
     >
       <GenericRideButton
@@ -153,7 +144,11 @@ const ActiveRideContent = () => {
           </StopPointTextContainer>
           <ButtonsContainer>
             <RowContainer>
-              {renderContactDriver()}
+              <Call
+                onError={() => {
+                  setGenericErrorPopup({});
+                }}
+              />
               {renderRideNotes()}
             </RowContainer>
             <RowContainer>
@@ -176,9 +171,12 @@ const ActiveRideContent = () => {
             notes={firstSpNotCompleted?.notes}
             isVisible={popupToShow === 'notes'}
             onSubmit={(text: string) => {
-            //   updateRide({
-            //     notes: text,
-            //   });
+              updateRide(ride.id, {
+                stopPoints: [{
+                  id: firstSpNotCompleted.id,
+                  notes: text,
+                }],
+              });
               clearPopup();
             }}
             onCancel={() => {
