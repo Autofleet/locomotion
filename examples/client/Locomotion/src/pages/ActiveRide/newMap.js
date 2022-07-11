@@ -236,18 +236,13 @@ export default React.forwardRef(({
                 isNext={firstSpNotCompleted.id === sp.id}
               />
             ))
-          : (
-            <>
-              <Text>asfasf</Text>
-            </>
-          )}
+          : null}
         {currentBsPage === BS_PAGES.NOT_IN_TERRITORY && territory && territory.length ? territory
           .map(t => t.polygon.coordinates.map(poly => (
             <Polygon
               key={`Polygon#${t.id}#${poly[1]}#${poly[0]}`}
-              strokeWidth={2}
-              strokeColor={`${primaryColor}`}
-              fillColor={`${primaryColor}40`}
+              strokeColor="transparent"
+              fillColor="#26333333"
               coordinates={poly.map(p => (
                 { latitude: parseFloat(p[1]), longitude: parseFloat(p[0]) }
               ))}
