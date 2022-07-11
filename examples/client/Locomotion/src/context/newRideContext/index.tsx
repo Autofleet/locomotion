@@ -95,6 +95,7 @@ interface RidePageContextInterface {
   setRide: Dispatch<RideInterface>;
   updateRide: (rideId: string | undefined, ride: RideInterface) => Promise<void>;
   resetRide: () => void;
+  validateRequestedStopPoints: (reqSps: any[]) => void;
 }
 
 export const RidePageContext = createContext<RidePageContextInterface>({
@@ -141,6 +142,7 @@ export const RidePageContext = createContext<RidePageContextInterface>({
   setRide: () => undefined,
   updateRide: async (rideId: string | undefined, ride: RideInterface) => undefined,
   resetRide: () => undefined,
+  validateRequestedStopPoints: (reqSps: any[]) => undefined,
 });
 
 const HISTORY_RECORDS_NUM = 10;
@@ -250,7 +252,6 @@ const RidePageContextProvider = ({ children }: {
       setIsLoading(false);
     }
   };
-
 
   const tryServiceEstimations = async () => {
     await getServiceEstimations();
@@ -721,6 +722,7 @@ const RidePageContextProvider = ({ children }: {
         getCallNumbers,
         cleanFullRideState,
         resetRide,
+        validateRequestedStopPoints,
       }}
     >
       {children}

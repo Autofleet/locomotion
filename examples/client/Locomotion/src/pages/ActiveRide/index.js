@@ -59,6 +59,7 @@ const RidePage = ({ mapSettings, navigation }) => {
     ridePopup,
     cleanFullRideState,
     resetRide,
+    validateRequestedStopPoints,
   } = useContext(RidePageContext);
   const {
     setIsExpanded, snapPoints, isExpanded,
@@ -251,6 +252,7 @@ const RidePage = ({ mapSettings, navigation }) => {
           resetRide();
           changeBsPage(BS_PAGES.SERVICE_ESTIMATIONS);
           setRidePopup(null);
+          validateRequestedStopPoints(requestStopPoints);
         }
         }
       />
