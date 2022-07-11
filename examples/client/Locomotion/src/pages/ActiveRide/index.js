@@ -1,8 +1,8 @@
 import React, {
   useContext, useEffect, useRef, useState,
 } from 'react';
-import { useIsFocused } from '@react-navigation/native';
-import { AppState } from 'react-native';
+import { useIsFocused, useFocusEffect } from '@react-navigation/native';
+import { AppState, BackHandler } from 'react-native';
 import { RIDE_STATES } from '../../lib/commonTypes';
 import { RIDE_POPUPS } from '../../context/newRideContext/utils';
 import { UserContext } from '../../context/user';
@@ -168,6 +168,21 @@ const RidePage = ({ mapSettings, navigation }) => {
     }
     focusCurrentLocation();
   }, [locationGranted]);
+
+  useFocusEffect(
+    React.useCallback(() => {
+      const onBackPress = () => {
+        if (serviceEstimations) {
+          resetStateToAddressSelector();
+          return true;
+        }
+        return false;
+      };
+      BackHandler.addEventListener('hardwareBackPress', onBackPress);
+
+      return () => BackHandler.removeEventListener('hardwareBackPress', onBackPress);
+    }, []),
+  );
 
   useEffect(() => {
     checkLocationPermission();
