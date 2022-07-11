@@ -223,12 +223,13 @@ const RidePageContextProvider = ({ children }: {
         rideApi.createServiceEstimations(formattedStopPoints),
         rideApi.getServices(),
       ]);
-
+      console.log(estimations);
       const tags = getEstimationTags(estimations);
       const formattedEstimations = formatEstimations(services, estimations, tags);
       setChosenService(formattedEstimations.find((e: any) => e.eta));
       setServiceEstimations(formattedEstimations);
     } catch (e) {
+      console.log(e);
       setRidePopup(RIDE_POPUPS.FAILED_SERVICE_REQUEST);
       setIsReadyForSubmit(false);
     } finally {
