@@ -272,6 +272,7 @@ export const NotAvailableHere = (props: any) => {
       ButtonText={i18n.t('bottomSheetContent.notAvailableHere.buttonText')}
       SubTitleText={i18n.t('bottomSheetContent.notAvailableHere.subTitleText')}
       Image={<SvgIcon Svg={outOfTerritoryIcon} height={85} width={140} />}
+      fullWidthButtons
       {...props}
     />
   );
