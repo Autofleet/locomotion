@@ -138,7 +138,7 @@ export const RidePageContext = createContext<RidePageContextInterface>({
   setRide: () => undefined,
   updateRide: async (rideId: string | undefined, ride: RideInterface) => undefined,
   validateRequestedStopPoints: (reqSps: any[]) => undefined,
-  setRequestStopPoints: ([]) => undefined,
+  setRequestStopPoints: (sps: any) => undefined,
 });
 
 const HISTORY_RECORDS_NUM = 10;
