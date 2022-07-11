@@ -64,7 +64,6 @@ const PostRidePage = ({ menuSide, route }) => {
 
   const loadRide = async () => {
     const rideData = await getRideFromApi(route.params.rideId);
-    console.log({ rideData });
     setRide(rideData);
   };
 
@@ -122,9 +121,6 @@ const PostRidePage = ({ menuSide, route }) => {
 
 export default props => (
   <BottomSheetContextProvider {...props}>
-
-    <NewRidePageContextProvider {...props}>
-      <PostRidePage {...props} />
-    </NewRidePageContextProvider>
+    <PostRidePage {...props} />
   </BottomSheetContextProvider>
 );

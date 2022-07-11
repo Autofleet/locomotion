@@ -2,7 +2,7 @@ import React, {
   useContext, useEffect, useState,
 } from 'react';
 import polyline from '@mapbox/polyline';
-import { Platform, StyleSheet } from 'react-native';
+import { Platform, StyleSheet, Text } from 'react-native';
 import MapView, { Polygon, Polyline } from 'react-native-maps';
 import Config from 'react-native-config';
 import { UserContext } from '../../context/user';
@@ -60,6 +60,7 @@ export default React.forwardRef(({
   const isChooseLocationOnMap = [BS_PAGES.CONFIRM_PICKUP, BS_PAGES.SET_LOCATION_ON_MAP].includes(currentBsPage);
   const {
     requestStopPoints, saveSelectedLocation, reverseLocationGeocode, ride,
+    chosenService,
   } = useContext(RidePageContext);
   const [mapRegion, setMapRegion] = useState({
     latitudeDelta: 0.015,
@@ -158,6 +159,8 @@ export default React.forwardRef(({
   ).map(p => ({ latitude: p[0], longitude: p[1] }));
 
   const finalStopPoints = stopPoints || requestStopPoints;
+  const firstSpNotCompleted = (stopPoints
+    && stopPoints.find(p => p.state !== STOP_POINT_STATES.COMPLETED)) || requestStopPoints[0];
 
   return (
     <>
@@ -223,9 +226,20 @@ export default React.forwardRef(({
         {PAGES_TO_SHOW_SP_MARKERS.includes(currentBsPage)
           && finalStopPoints.filter(sp => !!sp.lat).length > 1
           ? finalStopPoints
-            .filter(sp => !!sp.lat && sp.state !== STOP_POINT_STATES.COMPLETED)
-            .map(sp => (<StationsMap stopPoint={sp} key={sp.id} />))
-          : null}
+            .filter(sp => !!sp.lat)
+            .map(sp => (
+              <StationsMap
+                chosenService={chosenService}
+                stopPoint={sp}
+                key={sp.id}
+                isNext={firstSpNotCompleted.id === sp.id}
+              />
+            ))
+          : (
+            <>
+              <Text>asfasf</Text>
+            </>
+          )}
         {currentBsPage === BS_PAGES.NOT_IN_TERRITORY && territory && territory.length ? territory
           .map(t => t.polygon.coordinates.map(poly => (
             <Polygon
