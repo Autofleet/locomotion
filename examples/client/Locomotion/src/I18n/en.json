@@ -303,6 +303,8 @@
         }
     },
     "payments": {
+        "defaultMethodTitle": "Default payment method",
+        "otherMethodsTitle": "Other payment methods",
         "cardDetails": {
             "cardsTitle": "Credit Card information",
             "title": "Payment method details",

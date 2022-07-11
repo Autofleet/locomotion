@@ -92,7 +92,7 @@ const RideOptions = () => {
         isVisible={popupToShow === 'payment'}
         onCancel={() => clearPopup()}
         onSubmit={(payment: any) => {
-          updateRide({
+          updateRidePayload({
             paymentMethodId: payment,
           });
         }}
