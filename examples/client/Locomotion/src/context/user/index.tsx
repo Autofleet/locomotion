@@ -1,6 +1,8 @@
 import React, {
   createContext, Dispatch, SetStateAction, useEffect, useState,
 } from 'react';
+import crashlytics from '@react-native-firebase/crashlytics';
+import Config from 'react-native-config';
 import { StorageService } from '../../services';
 import {
   getUserDetails, loginVert, sendEmailVerification, updateUser,
@@ -119,6 +121,13 @@ const UserContextProvider = ({ children }: { children: any }) => {
       auth.updateTokens(vertResponse.refreshToken, vertResponse.accessToken);
       const userProfile = vertResponse.clientProfile || {};
       Mixpanel.setUser(userProfile);
+
+      await Promise.all([
+        crashlytics().setUserId(userProfile.id),
+        crashlytics().setAttributes({
+          demandSourceId: Config.OPERATION_ID,
+        }),
+      ]);
       const cards = await getCardInfo();
       await updateUserInfo(userProfile);
       return { ...userProfile, cards };
