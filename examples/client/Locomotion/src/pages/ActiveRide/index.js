@@ -198,12 +198,6 @@ const RidePage = ({ mapSettings, navigation }) => {
     }
   }, [isExpanded]);
 
-  useEffect(() => {
-    if (ride.state === RIDE_STATES.CANCELED && ride.canceledBy !== user.id) {
-      setRidePopup(RIDE_POPUPS.RIDE_CANCELED_BY_DISPATCHER);
-    }
-  }, [ride.state]);
-
   return (
     <PageContainer>
       <MainMap
@@ -240,7 +234,7 @@ const RidePage = ({ mapSettings, navigation }) => {
           cleanRideState();
           setRidePopup(null);
         }}
-        onBackToOrder={() => {
+        onSubmit={() => {
           setRide({});
           changeBsPage(BS_PAGES.SERVICE_ESTIMATIONS);
           setRidePopup(null);

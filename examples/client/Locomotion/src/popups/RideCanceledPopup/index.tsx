@@ -10,13 +10,13 @@ import {
 interface RideCanceledProps {
   isVisible: boolean;
   onCancel: any;
-  onBackToOrder: any;
+  onSubmit: any;
 }
 
 const RideCanceledPopup = ({
   isVisible,
   onCancel,
-  onBackToOrder,
+  onSubmit,
 }: RideCanceledProps) => (
   <Modal isVisible={isVisible}>
     <Container>
@@ -25,7 +25,7 @@ const RideCanceledPopup = ({
         <SubTitle>{i18n.t('popups.rideCanceled.text')}</SubTitle>
       </TextContainer>
       <ButtonContainer>
-        <RoundedButton onPress={onBackToOrder} style={{ marginBottom: 10 }}>
+        <RoundedButton onPress={onSubmit} style={{ marginBottom: 10 }}>
           {i18n.t('popups.rideCanceled.buttonText')}
         </RoundedButton>
         <RoundedButton onPress={onCancel} hollow>

@@ -47,6 +47,7 @@ export interface RideInterface {
   trackerUrl?: string;
   serviceType?: any;
   payment?: any;
+  canceledBy?: string;
 }
 
 interface RidePageContextInterface {
@@ -147,7 +148,7 @@ let SERVICE_ESTIMATIONS_INTERVAL_IN_SECONDS: number;
 const RidePageContextProvider = ({ children }: {
   children: any
 }) => {
-  const { locationGranted } = useContext(UserContext);
+  const { locationGranted, user } = useContext(UserContext);
   const navigation = useNavigation<Nav>();
   const { checkStopPointsInTerritory, changeBsPage } = useContext(RideStateContextContext);
   const [requestStopPoints, setRequestStopPoints] = useState(INITIAL_STOP_POINTS);
@@ -188,6 +189,14 @@ const RidePageContextProvider = ({ children }: {
     },
     [RIDE_STATES.DISPATCHED]: () => { changeBsPage(BS_PAGES.ACTIVE_RIDE); },
     [RIDE_STATES.ACTIVE]: () => { changeBsPage(BS_PAGES.ACTIVE_RIDE); },
+    [RIDE_STATES.CANCELED]: (canceledRide: any) => {
+      console.log('canceledRide', canceledRide);
+      if (canceledRide.canceledBy !== user?.id) {
+        setRidePopup(RIDE_POPUPS.RIDE_CANCELED_BY_DISPATCHER);
+      } else {
+        cleanRideState();
+      }
+    },
   };
 
   const formatRide = async (rideToFormat: RideInterface) => {
@@ -279,7 +288,7 @@ const RidePageContextProvider = ({ children }: {
       if (ride.state !== rideLoaded.state) {
         const screenFunction = RIDE_STATES_TO_SCREENS[rideLoaded.state];
         if (screenFunction) {
-          screenFunction(ride);
+          screenFunction(rideLoaded);
         }
       }
       if (RIDE_FINAL_STATES.includes(ride?.state || '')) {
@@ -631,7 +640,6 @@ const RidePageContextProvider = ({ children }: {
 
   const cancelRide = async () => {
     await rideApi.cancelRide(ride?.id);
-    cleanRideState();
   };
 
   const getCallNumbers = async () => {
@@ -705,7 +713,6 @@ const RidePageContextProvider = ({ children }: {
         postRideSubmit,
         getRideFromApi,
         cancelRide,
-        updateRide,
         getCallNumbers,
         cleanRideState,
       }}
