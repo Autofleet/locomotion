@@ -545,6 +545,7 @@ const RidePageContextProvider = ({ children }: {
       setRide(formattedRide);
     } catch (e) {
       // TODO: error handling
+      tryServiceEstimations();
       changeBsPage(BS_PAGES.NO_AVAILABLE_VEHICLES);
     } finally {
       setRideRequestLoading(false);
