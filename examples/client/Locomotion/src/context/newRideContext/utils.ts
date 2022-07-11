@@ -9,6 +9,12 @@ export const TAG_OPTIONS = {
   CHEAPEST: i18n.t('services.tags.cheapest'),
 };
 
+export type RidePopupNames = 'FAILED_SERVICE_REQUEST';
+
+export const RIDE_POPUPS: {[key: string]: RidePopupNames} = {
+  FAILED_SERVICE_REQUEST: 'FAILED_SERVICE_REQUEST',
+};
+
 export const INITIAL_STOP_POINTS = [{
   type: 'pickup',
   lat: null,
@@ -52,23 +58,38 @@ export const getEstimationTags = (estimations: any[]) => {
     fastest: {},
     cheapest: {},
   };
-  estimations.map((e) => {
-    if (!tags.fastest.eta || moment(e.minPickupEta).isBefore(tags.fastest.eta)) {
-      tags.fastest = {
-        eta: e.eta,
-        serviceId: e.serviceId,
-      };
+  estimations.map((estimation) => {
+    const e = estimation.results[0];
+    if (!e) {
+      return;
     }
-    if (!tags.cheapest.eta || e.priceAmount < tags.cheapest.price) {
-      tags.cheapest = {
-        price: e.priceAmount,
-        serviceId: e.serviceId,
-      };
+    if (tags.fastest) {
+      if ((!tags.fastest.eta || moment(e.minPickupEta).isBefore(tags.fastest.eta))) {
+        tags.fastest = {
+          eta: e.maxPickupEta,
+          serviceId: e.serviceId,
+        };
+      } else if (moment(e.minPickupEta).isSame(tags.fastest.eta)) {
+        tags.fastest = null;
+      }
+    }
+    if (tags.cheapest) {
+      if (!tags.cheapest.eta || e.priceAmount < tags.cheapest.price) {
+        tags.cheapest = {
+          price: e.priceAmount,
+          serviceId: e.serviceId,
+        };
+      } else if (e.priceAmount === tags.cheapest.price) {
+        tags.cheapest = null;
+      }
     }
   });
+  if (tags.cheapest && tags.cheapest?.serviceId === tags.fastest?.serviceId) {
+    tags.cheapest.serviceId = null;
+  }
   return {
-    [TAG_OPTIONS.CHEAPEST]: tags.cheapest.serviceId,
-    [TAG_OPTIONS.FASTEST]: tags.fastest.serviceId,
+    [TAG_OPTIONS.CHEAPEST]: tags.cheapest?.serviceId,
+    [TAG_OPTIONS.FASTEST]: tags.fastest?.serviceId,
   };
 };
 
@@ -89,7 +110,7 @@ export const formatEstimationsResult = (service: any, estimationResult: any, tag
     price: estimation.priceAmount,
     currency: estimation.priceCurrency,
     availableSeats: service.maxPassengers || 4,
-    tags: Object.entries(tags).map(([key, value]) => value === service.id && key),
+    tag: (Object.entries(tags).find(([, value]) => value === service.id) || [])[0],
     iconUrl: service.icon,
     description: service.displayDescription,
     priority: service.priority,

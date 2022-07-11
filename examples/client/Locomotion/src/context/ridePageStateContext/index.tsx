@@ -6,6 +6,7 @@ import geo, { DEFAULT_COORDS, getPosition } from '../../services/geo';
 import { getUserTerritories } from '../user/api';
 import pointInPolygon from './pointInPolygon';
 import { BsPages, BS_PAGES } from './utils';
+import GenericErrorPopup from '../../popups/GenericError';
 
 interface RidePageStateContextProps {
   territory: any;
@@ -14,8 +15,9 @@ interface RidePageStateContextProps {
   isUserLocationFocused: boolean;
   setIsUserLocationFocused: (isLocationFocused: boolean) => void;
   currentBsPage: BsPages;
-  checkStopPointsInTerritory: (sp: any) => Promise<boolean>;
+  checkStopPointsInTerritory: (sp: any) => boolean;
   changeBsPage: (pageName: BsPages) => void;
+  setGenericErrorPopup: (error: any) => void;
 }
 
 export const RideStateContextContext = createContext<RidePageStateContextProps>({
@@ -25,11 +27,13 @@ export const RideStateContextContext = createContext<RidePageStateContextProps>(
   isUserLocationFocused: false,
   setIsUserLocationFocused: (isLocationFocused: boolean) => undefined,
   currentBsPage: BS_PAGES.ADDRESS_SELECTOR,
-  checkStopPointsInTerritory: async () => false,
+  checkStopPointsInTerritory: () => false,
   changeBsPage: () => undefined,
+  setGenericErrorPopup: () => undefined,
 });
 
 const RideStateContextContextProvider = ({ children }: { children: any }) => {
+  const [genericErrorPopup, setGenericErrorPopup] = useState<any | null>(null);
   const [territory, setTerritory] = useState<Array<any> | null>(null);
   const [isUserLocationFocused, setIsUserLocationFocused] = useState(false);
   const [currentBsPage, setCurrentBsPage] = useState<BsPages>(BS_PAGES.ADDRESS_SELECTOR);
@@ -60,7 +64,7 @@ const RideStateContextContextProvider = ({ children }: { children: any }) => {
     return t;
   };
 
-  const checkStopPointsInTerritory = async (stopPoints: any[]) => {
+  const checkStopPointsInTerritory = (stopPoints: any[]) => {
     const isInTerritory = stopPoints.every(sp => pointInPolygon(territory, {
       coords: {
         latitude: sp.lat,
@@ -91,9 +95,16 @@ const RideStateContextContextProvider = ({ children }: { children: any }) => {
         currentBsPage,
         checkStopPointsInTerritory,
         changeBsPage,
+        setGenericErrorPopup,
       }}
     >
       {children}
+      <GenericErrorPopup
+        isVisible={!!genericErrorPopup}
+        closePopup={() => {
+          setGenericErrorPopup(null);
+        }}
+      />
     </RideStateContextContext.Provider>
   );
 };

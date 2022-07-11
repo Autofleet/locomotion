@@ -18,6 +18,7 @@ import * as navigationService from '../../services/navigation';
 import payments from '../../context/payments';
 import errorIcon from '../../assets/error-icon.svg';
 import outOfTerritoryIcon from '../../assets/bottomSheet/out_of_territory.svg';
+import busyImage from '../../assets/bottomSheet/busy.svg';
 import locationIcon from '../../assets/location_pin.svg';
 import Loader from '../Loader';
 import ActiveRideContent from './ActiveRide';
@@ -281,7 +282,6 @@ export const ConfirmPickup = (props: any) => {
     lastSelectedLocation,
     getCurrentLocationAddress,
     saveSelectedLocation,
-    updateRequestSp,
     setSelectedInputIndex,
     rideRequestLoading,
   } = useContext(RidePageContext);
@@ -316,9 +316,8 @@ export const ConfirmPickup = (props: any) => {
       fullWidthButtons
       {...props}
       onButtonPress={() => {
-        updateRequestSp(lastSelectedLocation);
         if (props.onButtonPress) {
-          props.onButtonPress();
+          props.onButtonPress(lastSelectedLocation);
         }
       }}
       buttonDisabled={!lastSelectedLocation?.streetAddress}
@@ -411,6 +410,7 @@ export const NoAvailableVehicles = (props: any) => {
       ButtonText={i18n.t('bottomSheetContent.noAvailableVehicles.buttonText')}
       SubTitleText={i18n.t('bottomSheetContent.noAvailableVehicles.subTitleText')}
       fullWidthButtons
+      Image={<SvgIcon Svg={busyImage} height={85} width={140} />}
       {...props}
     />
   );

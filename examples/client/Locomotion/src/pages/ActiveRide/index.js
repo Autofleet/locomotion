@@ -32,6 +32,8 @@ import backArrow from '../../assets/arrow-back.svg';
 import { BS_PAGES } from '../../context/ridePageStateContext/utils';
 import payments from '../../context/payments';
 import geo, { DEFAULT_COORDS, getPosition } from '../../services/geo';
+import SquareSvgButton from '../../Components/SquareSvgButton';
+import targetIcon from '../../assets/target.svg';
 
 const RidePage = ({ mapSettings, navigation }) => {
   const { locationGranted, setLocationGranted } = useContext(UserContext);
@@ -45,11 +47,11 @@ const RidePage = ({ mapSettings, navigation }) => {
     serviceEstimations,
     setServiceEstimations,
     initSps,
-    isLoading,
     requestStopPoints,
     requestRide,
     setChosenService,
     ride,
+    updateRequestSp,
   } = useContext(RidePageContext);
   const {
     setIsExpanded, snapPoints, isExpanded,
@@ -76,15 +78,6 @@ const RidePage = ({ mapSettings, navigation }) => {
     initSps();
   };
 
-  const addressSelectorPage = () => {
-    if (!isLoading && !serviceEstimations) {
-      return (
-        <AddressSelector addressSelectorFocus={addressSelectorFocus} />
-      );
-    }
-    return changeBsPage(BS_PAGES.SERVICE_ESTIMATIONS);
-  };
-
   const BS_PAGE_TO_COMP = {
     [BS_PAGES.CANCEL_RIDE]: () => (
       <CancelRide />
@@ -103,14 +96,16 @@ const RidePage = ({ mapSettings, navigation }) => {
       }}
       />
     ),
-    [BS_PAGES.ADDRESS_SELECTOR]: addressSelectorPage,
+    [BS_PAGES.ADDRESS_SELECTOR]: () => (
+      <AddressSelector addressSelectorFocus={addressSelectorFocus} />
+    ),
     [BS_PAGES.CONFIRM_PICKUP]: () => (
       <ConfirmPickup
         isConfirmPickup
         initialLocation={requestStopPoints[0]}
-        onButtonPress={() => {
+        onButtonPress={(pickupLocation) => {
           if (clientHasValidPaymentMethods() || ride.paymentMethodId === 'cash') {
-            requestRide();
+            requestRide(pickupLocation);
           } else {
             changeBsPage(BS_PAGES.NO_PAYMENT);
           }
@@ -118,7 +113,8 @@ const RidePage = ({ mapSettings, navigation }) => {
       />
     ),
     [BS_PAGES.SET_LOCATION_ON_MAP]: () => (
-      <ConfirmPickup onButtonPress={() => {
+      <ConfirmPickup onButtonPress={(sp) => {
+        updateRequestSp(sp);
         changeBsPage(BS_PAGES.ADDRESS_SELECTOR);
         setIsExpanded(true);
       }}
@@ -126,7 +122,11 @@ const RidePage = ({ mapSettings, navigation }) => {
     ),
     [BS_PAGES.NO_PAYMENT]: () => <NoPayment />,
     [BS_PAGES.CONFIRMING_RIDE]: () => <ConfirmingRide />,
-    [BS_PAGES.NO_AVAILABLE_VEHICLES]: () => <NoAvailableVehicles />,
+    [BS_PAGES.NO_AVAILABLE_VEHICLES]: () => (
+      <NoAvailableVehicles
+        onButtonPress={() => changeBsPage(BS_PAGES.SERVICE_ESTIMATIONS)}
+      />
+    ),
     [BS_PAGES.ACTIVE_RIDE]: () => <ActiveRide />,
   };
 
@@ -212,6 +212,13 @@ const RidePage = ({ mapSettings, navigation }) => {
             <StopPointsViewer goBackToAddressSelector={goBackToAddress} />
           </Header>
         )}
+      {!isExpanded && locationGranted && (
+        <SquareSvgButton
+          onPress={focusCurrentLocation}
+          icon={targetIcon}
+          style={{ position: 'absolute', bottom: `${parseFloat(snapPoints[0]) + 2}%`, right: 20 }}
+        />
+      )}
       <BottomSheet
         ref={bottomSheetRef}
         focusCurrentLocation={focusCurrentLocation}

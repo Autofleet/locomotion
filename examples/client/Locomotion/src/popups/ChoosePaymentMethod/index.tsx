@@ -63,15 +63,17 @@ const PaymentMethodPopup = ({
             <Title>{i18n.t('popups.choosePaymentMethod.title')}</Title>
           </View>
           <View>
-            {(isCashEnabled && showCash ? [...usePayments.paymentMethods, cashPaymentMethod] : usePayments.paymentMethods).map((paymentMethod: any, i) => (
-              <PaymentMethod
-                {...paymentMethod}
-                selected={payment === paymentMethod.id}
-                mark={payment === paymentMethod.id}
-                onPress={() => {
-                  setPayment(paymentMethod.id);
-                }}
-              />
+            {(isCashEnabled && showCash
+              ? [...usePayments.paymentMethods, cashPaymentMethod]
+              : usePayments.paymentMethods).map((paymentMethod: any, i) => (
+                <PaymentMethod
+                  {...paymentMethod}
+                  selected={payment === paymentMethod.id}
+                  mark={payment === paymentMethod.id}
+                  onPress={() => {
+                    setPayment(paymentMethod.id);
+                  }}
+                />
             ))}
             <PaymentMethod
               addNew

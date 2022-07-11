@@ -36,6 +36,11 @@ const PAGES_TO_SHOW_SP_MARKERS = [
   BS_PAGES.ACTIVE_RIDE,
   BS_PAGES.CANCEL_RIDE,
 ];
+
+
+const getFirstPendingStopPoint = sps => (sps || []).find(sp => sp.state
+  === STOP_POINT_STATES.PENDING);
+
 export default React.forwardRef(({
   mapSettings,
 }, ref) => {
@@ -50,18 +55,12 @@ export default React.forwardRef(({
     territory,
     currentBsPage,
     initGeoService,
-    changeBsPage,
   } = useContext(RideStateContextContext);
   const isMainPage = currentBsPage === BS_PAGES.ADDRESS_SELECTOR;
-  const isConfirmPickupPage = currentBsPage === BS_PAGES.CONFIRM_PICKUP;
   const isChooseLocationOnMap = [BS_PAGES.CONFIRM_PICKUP, BS_PAGES.SET_LOCATION_ON_MAP].includes(currentBsPage);
   const {
     requestStopPoints, saveSelectedLocation, reverseLocationGeocode, ride,
   } = useContext(RidePageContext);
-  const rideDispatched = (ride || {}).state === RIDE_STATES.DISPATCHED;
-  const rideActive = (ride || {}).state === RIDE_STATES.ACTIVE;
-  const [rideStopPoints, setRideStopPoints] = useState();
-  const rideWithStopPoints = (rideDispatched || rideActive) && rideStopPoints;
   const [mapRegion, setMapRegion] = useState({
     latitudeDelta: 0.015,
     longitudeDelta: 0.015,
@@ -147,42 +146,18 @@ export default React.forwardRef(({
     }
   }, [requestStopPoints]);
 
-  const addStreetAddressToStopPoints = async () => {
-    const formattedStopPoints = await Promise.all(ride.stopPoints.map(async (sp) => {
-      const { streetAddress } = await reverseLocationGeocode(sp.lat, sp.lng);
-      return {
-        ...sp,
-        streetAddress,
-      };
-    }));
-    setRideStopPoints(formattedStopPoints);
-  };
+  const { stopPoints } = ride;
 
-  useEffect(() => {
-    if (rideDispatched || rideActive) {
-      addStreetAddressToStopPoints();
-    }
-    if (ride.state === RIDE_STATES.COMPLETED) {
-      setRideStopPoints(null);
-    }
-  }, [ride.stopPoints]);
+  const currentStopPoint = getFirstPendingStopPoint(stopPoints);
+  const precedingStopPoints = (currentStopPoint || {}).precedingStops || [];
 
-  const stopPoints = rideStopPoints || requestStopPoints || [];
-
-  const getCurrentStopPoint = (sps) => {
-    const pickup = sps.find(sp => sp.type === STOP_POINT_TYPES.STOP_POINT_PICKUP
-      && sp.state === STOP_POINT_STATES.PENDING);
-    return pickup || sps[sps.length - 1];
-  };
-
-  const currentStopPoint = getCurrentStopPoint(stopPoints);
-  const precedingStopPoints = (currentStopPoint || {}).precedingStops;
-
-  const polylineList = rideWithStopPoints && currentStopPoint
+  const polylineList = stopPoints && currentStopPoint
      && currentStopPoint.polyline && getSubLineStringAfterLocationFromDecodedPolyline(
-    polyline.decode(getCurrentStopPoint(stopPoints).polyline),
+    polyline.decode(currentStopPoint.polyline),
     { latitude: ride.vehicle.location.lat, longitude: ride.vehicle.location.lng },
   ).map(p => ({ latitude: p[0], longitude: p[1] }));
+
+  const finalStopPoints = stopPoints || requestStopPoints;
 
   return (
     <>
@@ -228,25 +203,26 @@ export default React.forwardRef(({
         customMapStyle={isDarkMode ? mapDarkMode : undefined}
         {...mapSettings}
       >
-        {rideWithStopPoints && (
+        {ride.vehicle && ride.vehicle.location && (
         <AvailabilityVehicle
           location={ride.vehicle.location}
           id={ride.vehicle.id}
           key={ride.vehicle.id}
         />
         )}
-        {rideWithStopPoints && !!precedingStopPoints.length
+        {finalStopPoints && !!precedingStopPoints.length
           && precedingStopPoints.map(sp => <PrecedingStopPointMarker key={sp.id} stopPoint={sp} />)
         }
-        {rideWithStopPoints && (
+        {finalStopPoints && polylineList && (
           <Polyline
             strokeColor={primaryColor}
             strokeWidth={7}
             coordinates={polylineList}
           />
         )}
-        {PAGES_TO_SHOW_SP_MARKERS.includes(currentBsPage) && stopPoints.filter(sp => !!sp.lat).length > 1
-          ? stopPoints
+        {PAGES_TO_SHOW_SP_MARKERS.includes(currentBsPage)
+          && finalStopPoints.filter(sp => !!sp.lat).length > 1
+          ? finalStopPoints
             .filter(sp => !!sp.lat && sp.state !== STOP_POINT_STATES.COMPLETED)
             .map(sp => (<StationsMap stopPoint={sp} key={sp.id} />))
           : null}

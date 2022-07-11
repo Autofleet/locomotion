@@ -13,7 +13,7 @@ import {
   Row, Price,
   ServiceDetails, TimeDetails,
   Title, Description,
-  CarContainer,
+  CarContainer, TitleContainer,
 } from './styled';
 import Tag from '../../../../../../Components/Tag';
 import { RidePageContext } from '../../../../../../context/newRideContext';
@@ -21,7 +21,7 @@ import { AvailabilityContext } from '../../../../../../context/availability';
 
 const ServiceCard = ({ service }) => {
   const theme = useContext(ThemeContext);
-  const { setChosenService, chosenService } = useContext(RidePageContext);
+  const { setChosenService, chosenService, serviceEstimations } = useContext(RidePageContext);
   const unavailable = !service.eta;
   const minutesUntilPickup = moment.duration(moment(service.eta).diff(moment())).minutes().toString();
   const timeUntilArrival = minutesUntilPickup > 1
@@ -65,18 +65,20 @@ const ServiceCard = ({ service }) => {
       </CarContainer>
       <ServiceDetails unavailable={unavailable}>
         <Row>
-          <Title>
-            {service.name}
-          </Title>
-          {service.tags.map(tag => tag && (
-          <Tag
-            key={tag.title}
-            containerStyles={tagStyles[tag].container}
-            text={tag}
-            textColor={tagStyles[tag].textColor}
-          />
-          ))
+          <TitleContainer>
+            <Title>
+              {service.name}
+            </Title>
+            {serviceEstimations.filter(s => s.price).length > 1 && service.tag && (
+            <Tag
+              key={service.tag}
+              containerStyles={tagStyles[service.tag].container}
+              text={service.tag}
+              textColor={tagStyles[service.tag].textColor}
+            />
+            )
             }
+          </TitleContainer>
           <Price>
             {service.price ? serviceDisplayPrice : unavailableText}
           </Price>
