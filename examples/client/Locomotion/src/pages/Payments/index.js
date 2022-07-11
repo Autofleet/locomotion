@@ -45,7 +45,7 @@ export default ({ navigation, menuSide }) => {
   };
   return (
     <PageContainer>
-      <PageContent style={{ backgroundColor: '#f9f9f9' }}>
+      <PageContent>
         <PageHeader
           title={i18n.t('payments.pageTitle')}
           onIconPress={onPressBack}

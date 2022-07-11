@@ -101,64 +101,64 @@ const CreditCardSelected = (
   />
 );
 
-const isCashPaymentMethod = (paymentMethod: any) => paymentMethod.id === cashPaymentMethod.id;
-
-
-export default (paymentMethod: any) => (
-  <TouchableOpacity
-    activeOpacity={paymentMethod.onPress ? 0 : 1}
-    onPress={() => {
-      if (paymentMethod.onPress) {
-        paymentMethod.onPress();
-      }
-    }}
-  >
-    <Container selected={paymentMethod.selected}>
-      <ImageContainer>
-        {paymentMethod.addNew
-          ? (
-            <>
-              <PlusContainer><PlusText>+</PlusText></PlusContainer>
-            </>
-          )
-          : (
-            <>
-              {isCashPaymentMethod(paymentMethod)
-                ? <SvgIcon Svg={cashIcon} width={40} height={25} />
-                : <PaymentIcon type={paymentMethod.brand} />}
-              {paymentMethod.mark ? (isCashPaymentMethod(paymentMethod)
-                ? CashSelected : CreditCardSelected) : null }
-            </>
-          )
+export default (paymentMethod: any) => {
+  const isCashPaymentMethod = paymentMethod.id === cashPaymentMethod.id;
+  return (
+    <TouchableOpacity
+      activeOpacity={paymentMethod.onPress ? 0 : 1}
+      onPress={() => {
+        if (paymentMethod.onPress) {
+          paymentMethod.onPress();
+        }
+      }}
+    >
+      <Container selected={paymentMethod.selected}>
+        <ImageContainer>
+          {paymentMethod.addNew
+            ? (
+              <>
+                <PlusContainer><PlusText>+</PlusText></PlusContainer>
+              </>
+            )
+            : (
+              <>
+                {isCashPaymentMethod
+                  ? <SvgIcon Svg={cashIcon} width={40} height={25} />
+                  : <PaymentIcon type={paymentMethod.brand} />}
+                {paymentMethod.mark ? (isCashPaymentMethod
+                  ? CashSelected : CreditCardSelected) : null }
+              </>
+            )
         }
 
-      </ImageContainer>
-      <TextContainer>
-        {paymentMethod.addNew
-          ? (
-            <>
-              <Type>{i18n.t('payments.addNewCreditCard').toString()}</Type>
-            </>
-          )
-          : (
-            <>
-              {isCashPaymentMethod(paymentMethod)
-                ? (
-                  <Type>
-                    {paymentMethod.name}
-                  </Type>
-                )
-                : (
-                  <Type>
-                    {capitalizeFirstLetter(paymentMethod.brand)}
-                  </Type>
-                )}
-              {paymentMethod.lastFour ? <Description>{getLastFourForamttedShort(paymentMethod.lastFour)}</Description> : null}
-              {paymentMethod && !isCashPaymentMethod(paymentMethod) && moment(paymentMethod.expiresAt).isBefore(moment()) ? <Error>{i18n.t('payments.expired').toString()}</Error> : null}
-              {paymentMethod && !isCashPaymentMethod(paymentMethod) && paymentMethod.hasOutstandingBalance ? <Error>{i18n.t('payments.hasOutstandingBalance').toString()}</Error> : null}
-            </>
-          )}
-      </TextContainer>
-    </Container>
-  </TouchableOpacity>
-);
+        </ImageContainer>
+        <TextContainer>
+          {paymentMethod.addNew
+            ? (
+              <>
+                <Type>{i18n.t('payments.addNewCreditCard').toString()}</Type>
+              </>
+            )
+            : (
+              <>
+                {isCashPaymentMethod
+                  ? (
+                    <Type>
+                      {paymentMethod.name}
+                    </Type>
+                  )
+                  : (
+                    <Type>
+                      {capitalizeFirstLetter(paymentMethod.brand)}
+                    </Type>
+                  )}
+                {paymentMethod.lastFour ? <Description>{getLastFourForamttedShort(paymentMethod.lastFour)}</Description> : null}
+                {paymentMethod && !isCashPaymentMethod && moment(paymentMethod.expiresAt).isBefore(moment()) ? <Error>{i18n.t('payments.expired').toString()}</Error> : null}
+                {paymentMethod && !isCashPaymentMethod && paymentMethod.hasOutstandingBalance ? <Error>{i18n.t('payments.hasOutstandingBalance').toString()}</Error> : null}
+              </>
+            )}
+        </TextContainer>
+      </Container>
+    </TouchableOpacity>
+  );
+};

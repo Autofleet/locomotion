@@ -20,7 +20,7 @@ const Section = ({
   onPress,
   paymentMethods,
   showChangeButton = false,
-  onPressChange,
+  onPressChange = () => { console.log('no onPressChange'); },
 }) => (
   <CardContainer>
     <CardContantContainer>
@@ -31,7 +31,7 @@ const Section = ({
         <HeaderLink onPress={onPressChange}>
           {showChangeButton
             ? (
-              <ChangeButton style={{ color: '#24aaf2' }}>
+              <ChangeButton>
                 {i18n.t('payments.changeDefault')}
               </ChangeButton>
             )

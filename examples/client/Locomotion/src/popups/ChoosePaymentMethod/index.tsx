@@ -35,12 +35,12 @@ const PaymentMethodPopup = ({
   const {
     ride,
   } = useContext(RidePageContext);
-  const [payment, setPayment] = useState(ride?.paymentMethodId);
+  const [paymentId, setPaymentId] = useState(ride?.paymentMethodId);
   const usePayments = PaymentsContext.useContainer();
   const navigation = useNavigation<Nav>();
 
   const onSave = () => {
-    onSubmit(payment);
+    onSubmit(paymentId);
     onCancel();
   };
 
@@ -68,10 +68,10 @@ const PaymentMethodPopup = ({
               : usePayments.paymentMethods).map((paymentMethod: any, i) => (
                 <PaymentMethod
                   {...paymentMethod}
-                  selected={payment === paymentMethod.id}
-                  mark={payment === paymentMethod.id}
+                  selected={paymentId === paymentMethod.id}
+                  mark={paymentId === paymentMethod.id}
                   onPress={() => {
-                    setPayment(paymentMethod.id);
+                    setPaymentId(paymentMethod.id);
                   }}
                 />
             ))}
