@@ -74,7 +74,11 @@ const PostRidePage = ({ menuSide, route }) => {
 
   const onSubmit = async () => {
     try {
-      await postRideSubmit(ride.id, rating, rideTip);
+      await postRideSubmit(ride.id, {
+        rating,
+        tip: rideTip,
+        priceCalculationId: ride.priceCalculationId,
+      });
       navigation.navigate(MAIN_ROUTES.HOME);
       return true;
     } catch (e) {
