@@ -228,7 +228,6 @@ const RidePageContextProvider = ({ children }: {
       setChosenService(formattedEstimations.find((e: any) => e.eta));
       setServiceEstimations(formattedEstimations);
     } catch (e) {
-      console.log(e);
       setRidePopup(RIDE_POPUPS.FAILED_SERVICE_REQUEST);
       setIsReadyForSubmit(false);
     } finally {
