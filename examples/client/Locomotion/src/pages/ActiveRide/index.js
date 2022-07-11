@@ -47,11 +47,11 @@ const RidePage = ({ mapSettings, navigation }) => {
     serviceEstimations,
     setServiceEstimations,
     initSps,
-    isLoading,
     requestStopPoints,
     requestRide,
     setChosenService,
     ride,
+    updateRequestSp,
   } = useContext(RidePageContext);
   const {
     setIsExpanded, snapPoints, isExpanded,
@@ -78,15 +78,6 @@ const RidePage = ({ mapSettings, navigation }) => {
     initSps();
   };
 
-  const addressSelectorPage = () => {
-    if (!isLoading && !serviceEstimations) {
-      return (
-        <AddressSelector addressSelectorFocus={addressSelectorFocus} />
-      );
-    }
-    return changeBsPage(BS_PAGES.SERVICE_ESTIMATIONS);
-  };
-
   const BS_PAGE_TO_COMP = {
     [BS_PAGES.CANCEL_RIDE]: () => (
       <CancelRide />
@@ -105,7 +96,9 @@ const RidePage = ({ mapSettings, navigation }) => {
       }}
       />
     ),
-    [BS_PAGES.ADDRESS_SELECTOR]: addressSelectorPage,
+    [BS_PAGES.ADDRESS_SELECTOR]: () => (
+      <AddressSelector addressSelectorFocus={addressSelectorFocus} />
+    ),
     [BS_PAGES.CONFIRM_PICKUP]: () => (
       <ConfirmPickup
         isConfirmPickup
@@ -120,7 +113,8 @@ const RidePage = ({ mapSettings, navigation }) => {
       />
     ),
     [BS_PAGES.SET_LOCATION_ON_MAP]: () => (
-      <ConfirmPickup onButtonPress={() => {
+      <ConfirmPickup onButtonPress={(sp) => {
+        updateRequestSp(sp);
         changeBsPage(BS_PAGES.ADDRESS_SELECTOR);
         setIsExpanded(true);
       }}

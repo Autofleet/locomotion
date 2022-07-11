@@ -77,7 +77,6 @@ interface RidePageContextInterface {
   requestRide: (pickup?: any) => void;
   rideRequestLoading: boolean;
   stopRequestInterval: () => void;
-  isLoading: boolean;
   loadHistory: () => void;
   setChosenService: Dispatch<any | null>;
   setServiceEstimations: Dispatch<any | null>;
@@ -118,7 +117,6 @@ export const RidePageContext = createContext<RidePageContextInterface>({
   saveSelectedLocation: (sp: any) => undefined,
   rideRequestLoading: false,
   stopRequestInterval: () => undefined,
-  isLoading: false,
   loadHistory: () => undefined,
   setChosenService: () => undefined,
   setServiceEstimations: () => undefined,
@@ -151,7 +149,6 @@ const RidePageContextProvider = ({ children }: {
   const [selectedInputIndex, setSelectedInputIndex] = useState<number | null>(null);
   const [selectedInputTarget, setSelectedInputTarget] = useState<any | null>(null);
   const [searchResults, setSearchResults] = useState<any[] | null>(null);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [historyResults, setHistoryResults] = useState([]);
   const [serviceEstimations, setServiceEstimations] = useState<any | null>(null);
   const [ride, setRide] = useState<RideInterface>({});
@@ -212,7 +209,7 @@ const RidePageContextProvider = ({ children }: {
   };
 
   const getServiceEstimations = async () => {
-    setIsLoading(true);
+    changeBsPage(BS_PAGES.SERVICE_ESTIMATIONS);
     try {
       const formattedStopPoints = formatStopPointsForEstimations(requestStopPoints);
       const [estimations, services] = await Promise.all([
@@ -225,8 +222,6 @@ const RidePageContextProvider = ({ children }: {
       setServiceEstimations(formattedEstimations);
     } catch (e) {
       setRidePopup(RIDE_POPUPS.FAILED_SERVICE_REQUEST);
-    } finally {
-      setIsLoading(false);
     }
   };
 
@@ -287,6 +282,8 @@ const RidePageContextProvider = ({ children }: {
         setRide({});
       }
       setRide(formattedRide);
+    } else {
+      loadActiveRide();
     }
   }, 5000);
 
@@ -660,7 +657,6 @@ const RidePageContextProvider = ({ children }: {
       value={{
         requestRide,
         loadAddress,
-        isLoading,
         reverseLocationGeocode,
         enrichPlaceWithLocation,
         searchTerm,
