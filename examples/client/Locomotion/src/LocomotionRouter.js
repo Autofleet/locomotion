@@ -5,10 +5,12 @@ import { initStripe } from '@stripe/stripe-react-native';
 import 'react-native-gesture-handler';
 import crashlytics from '@react-native-firebase/crashlytics';
 import { NavigationContainer } from '@react-navigation/native';
-import { MainProvider } from './context';
+import { MainProvider, RideStateContextContextProvider } from './context';
 import MainRouter from './pages';
 import RidePopups from './popups/RidePopups';
 import { setTopLevelNavigator } from './services/navigation';
+import NewRidePageContextProvider from './context/newRideContext';
+import BottomSheetContextProvider from './context/bottomSheetContext';
 
 LogBox.ignoreAllLogs();
 const STRIPE_PUBLISHER_KEY = Config.STRIPE_PUBLISHER_KEY || '';
@@ -34,9 +36,15 @@ export default (props) => {
       }}
     >
       <MainProvider {...props}>
-        <MainRouter {...props} />
-        {props.children}
-        <RidePopups />
+        <BottomSheetContextProvider {...props}>
+          <RideStateContextContextProvider {...props}>
+            <NewRidePageContextProvider {...props}>
+              <MainRouter {...props} />
+              {props.children}
+              <RidePopups />
+            </NewRidePageContextProvider>
+          </RideStateContextContextProvider>
+        </BottomSheetContextProvider>
       </MainProvider>
     </NavigationContainer>
   );
