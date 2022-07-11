@@ -1,6 +1,7 @@
 import React, { useState, useContext, useRef } from 'react';
 import { ScrollView } from 'react-native';
 import { useRoute } from '@react-navigation/native';
+import { MAIN_ROUTES } from '../routes';
 import PaymentsContext from '../../context/payments';
 import TextInput from '../../Components/TextInput';
 import {
@@ -19,6 +20,8 @@ const EditCardName = ({ navigation }) => {
 
   const onComplete = async () => {
     await usePayments.updatePaymentMethod(route.params?.id, { name: nickname });
+    await usePayments.loadCustomer();
+    navigation.navigate(MAIN_ROUTES.PAYMENT);
   };
 
   return (
@@ -28,6 +31,7 @@ const EditCardName = ({ navigation }) => {
         <PageContainer>
           <ScreenText
             text={i18n.t('Set Card Nickname')}
+            subText={undefined}
           />
           <InputContainer>
             <TextInput

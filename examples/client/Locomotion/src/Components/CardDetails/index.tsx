@@ -26,7 +26,7 @@ type CardDetailsRouteParams = {
 
 const CardDetails = ({
   loadingState = false,
-  navigation = { navigate: (route: string) => null },
+  navigation = { navigate: (route: string, object?: any | undefined) => null },
 }) => {
   const [loading, setLoading] = useState(false);
   const [methodForDelete, setMethodForDelete] = useState(null);
@@ -77,7 +77,7 @@ const CardDetails = ({
                 ? (
                   <Card
                     onPress={() => {
-                      navigation.navigate(MAIN_ROUTES.EDIT_NICKNAME);
+                      navigation.navigate(MAIN_ROUTES.EDIT_NICKNAME, { ...paymentMethod });
                     }}
                     title={i18n.t('payments.cardDetails.nickname')}
                   >

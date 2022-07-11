@@ -150,7 +150,7 @@ export default (paymentMethod: any) => (
                 )
                 : (
                   <Type>
-                    {capitalizeFirstLetter(paymentMethod.brand)}
+                    {capitalizeFirstLetter(paymentMethod.name)}
                   </Type>
                 )}
               {paymentMethod.lastFour ? <Description>{getLastFourForamttedShort(paymentMethod.lastFour)}</Description> : null}
