@@ -2,6 +2,8 @@ import { useNavigation } from '@react-navigation/native';
 import React, {
   createContext, useContext, useState,
 } from 'react';
+import settings from '../settings';
+import SETTINGS_KEYS from '../settings/keys';
 import { APP_ROUTES, MAIN_ROUTES } from '../../pages/routes';
 import { UserContext } from '../user';
 
@@ -42,8 +44,9 @@ const keyToScreen: any = {
 const OnboardingContextProvider = ({ children }: { children: any }) => {
   const { setUser, onVert } = useContext(UserContext);
   const navigation: any = useNavigation();
+  const { getSettingByKey } = settings.useContainer();
 
-  const [requiredOnboarding] = useState({
+  const [requiredOnboarding, setRequiredOnboarding] = useState({
     [MAIN_ROUTES.PHONE]: true,
     [MAIN_ROUTES.CODE]: true,
     [MAIN_ROUTES.NAME]: true,
@@ -54,21 +57,52 @@ const OnboardingContextProvider = ({ children }: { children: any }) => {
 
   const navigateToScreen = (screen: string) => navigation.navigate(screen);
 
-  const nextScreen = (currentScreen: string) => {
-    const currentIndex = SCREEN_ORDER.indexOf(currentScreen);
-    navigateToScreen(SCREEN_ORDER[currentIndex + 1]);
-  };
+  const shouldShowCardPage = async () => {
+    const cardPageSettings = await getSettingByKey(
+      SETTINGS_KEYS.CARD_PAGE_SETTINGS,
+    );
 
-  const navigateBasedOnUser = (user: any) => {
-    setUser(user);
-    let unfinishedScreen;
-    for (const key of Object.keys(keyToScreen)) {
-      if (!user[key]) {
-        unfinishedScreen = keyToScreen[key];
-        break;
+    if (cardPageSettings) {
+      const {
+        showCardPage,
+        canSkipCardPage,
+      } = cardPageSettings;
+      if (showCardPage) {
+        setRequiredOnboarding({
+          ...requiredOnboarding,
+          [MAIN_ROUTES.CARD]: !canSkipCardPage,
+        });
+
+        return true;
       }
     }
+
+    return false;
+  };
+
+  const nextScreen = async (currentScreen: string) => {
+    const currentIndex = SCREEN_ORDER.indexOf(currentScreen);
+    let nextScreenToShow = SCREEN_ORDER[currentIndex + 1];
+
+    if (nextScreenToShow === MAIN_ROUTES.CARD) {
+      const showCardPage = await shouldShowCardPage();
+      if (!showCardPage) {
+        nextScreenToShow = SCREEN_ORDER[currentIndex + 2];
+      }
+    }
+    navigateToScreen(nextScreenToShow);
+  };
+
+  const navigateBasedOnUser = async (user: any) => {
+    setUser(user);
     if (!user.didCompleteOnboarding) {
+      let unfinishedScreen: string | undefined = Object.keys(keyToScreen).find(key => !user[key]);
+      if (unfinishedScreen === MAIN_ROUTES.CARD) {
+        const showCardPage = await shouldShowCardPage();
+        if (!showCardPage) {
+          unfinishedScreen = undefined;
+        }
+      }
       if (unfinishedScreen) {
         return navigateToScreen(unfinishedScreen);
       }
