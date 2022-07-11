@@ -51,6 +51,8 @@ const RidePage = ({ mapSettings, navigation }) => {
     requestRide,
     setChosenService,
     ride,
+    updateRequestSp,
+    lastSelectedLocation,
   } = useContext(RidePageContext);
   const {
     setIsExpanded, snapPoints, isExpanded,
@@ -113,6 +115,7 @@ const RidePage = ({ mapSettings, navigation }) => {
     ),
     [BS_PAGES.SET_LOCATION_ON_MAP]: () => (
       <ConfirmPickup onButtonPress={() => {
+        updateRequestSp(lastSelectedLocation);
         changeBsPage(BS_PAGES.ADDRESS_SELECTOR);
         setIsExpanded(true);
       }}
