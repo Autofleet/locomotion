@@ -86,7 +86,7 @@ interface RidePageContextInterface {
   ridePopup: string | null;
   setRidePopup: Dispatch<RidePopupNames | null>;
   trackRide: () => Promise<string>;
-  postRideSubmit: (rideId: string, priceCalculationId:string, rating: number | null, tip: number | null) => any;
+  postRideSubmit: (rideId: string, ridePayload: any) => any;
   cancelRide: () => Promise<void>;
   getCallNumbers: () => Promise<void>;
   getRideFromApi: (rideId: string) => Promise<RideInterface>;
@@ -131,7 +131,7 @@ export const RidePageContext = createContext<RidePageContextInterface>({
   setRidePopup: () => undefined,
   ride: {},
   trackRide: async () => '',
-  postRideSubmit: (rideId: string, priceCalculationId:string, rating: number | null, tip: number | null) => undefined,
+  postRideSubmit: (rideId: string, ridePayload: any) => undefined,
   cancelRide: async () => undefined,
   getCallNumbers: async () => undefined,
   getRideFromApi: async () => ({}),
@@ -611,7 +611,8 @@ const RidePageContextProvider = ({ children }: {
     }
   };
 
-  const postRideSubmit = async (rideId:string, priceCalculationId: string, rating:number|null, tip:number|null): Promise<boolean> => {
+  const postRideSubmit = async (rideId: string, ridePayload: any): Promise<boolean> => {
+    const { priceCalculationId, rating, tip } = ridePayload;
     console.log('Post Ride Data', {
       rideId, priceCalculationId, rating, tip,
     });
