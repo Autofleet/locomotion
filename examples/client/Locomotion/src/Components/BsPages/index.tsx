@@ -288,7 +288,6 @@ export const ConfirmPickup = (props: any) => {
     lastSelectedLocation,
     getCurrentLocationAddress,
     saveSelectedLocation,
-    updateRequestSp,
     setSelectedInputIndex,
     rideRequestLoading,
   } = useContext(RidePageContext);
@@ -323,7 +322,6 @@ export const ConfirmPickup = (props: any) => {
       fullWidthButtons
       {...props}
       onButtonPress={() => {
-        updateRequestSp(lastSelectedLocation);
         if (props.onButtonPress) {
           props.onButtonPress(lastSelectedLocation);
         }
