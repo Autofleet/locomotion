@@ -53,7 +53,7 @@ export interface RideInterface {
 
 interface RidePageContextInterface {
   loadAddress: (input: any) => void;
-  reverseLocationGeocode: (lat: number, lng: number) => any;
+  reverseLocationGeocode: (lat: number, lng: number) => Promise<any>;
   enrichPlaceWithLocation: (placeId: string) => any;
   searchTerm: string | null;
   setSearchTerm: Dispatch<string | null>;
@@ -90,16 +90,15 @@ interface RidePageContextInterface {
   cancelRide: () => Promise<void>;
   getCallNumbers: () => Promise<void>;
   getRideFromApi: (rideId: string) => Promise<RideInterface>;
-  cleanFullRideState: () => void;
   setRide: Dispatch<RideInterface>;
   updateRide: (rideId: string | undefined, ride: RideInterface) => Promise<void>;
-  resetRide: () => void;
   validateRequestedStopPoints: (reqSps: any[]) => void;
+  setRequestStopPoints: (sps: any) => void;
 }
 
 export const RidePageContext = createContext<RidePageContextInterface>({
   loadAddress: (input: any) => undefined,
-  reverseLocationGeocode: (lat: number, lng: number) => undefined,
+  reverseLocationGeocode: async (lat: number, lng: number) => undefined,
   enrichPlaceWithLocation: (placeId: string) => undefined,
   searchTerm: '',
   setSearchTerm: () => undefined,
@@ -136,11 +135,10 @@ export const RidePageContext = createContext<RidePageContextInterface>({
   cancelRide: async () => undefined,
   getCallNumbers: async () => undefined,
   getRideFromApi: async () => ({}),
-  cleanFullRideState: () => undefined,
   setRide: () => undefined,
   updateRide: async (rideId: string | undefined, ride: RideInterface) => undefined,
-  resetRide: () => undefined,
   validateRequestedStopPoints: (reqSps: any[]) => undefined,
+  setRequestStopPoints: ([]) => undefined,
 });
 
 const HISTORY_RECORDS_NUM = 10;
@@ -171,14 +169,14 @@ const RidePageContextProvider = ({ children }: {
     clearInterval(intervalRef.current);
   };
 
-  const resetRide = () => {
-    setRide({});
+  const cleanRequestStopPoints = () => {
+    setRequestStopPoints([]);
+    setChosenService(null);
   };
 
-  const cleanFullRideState = () => {
-    resetRide();
+  const cleanRideState = () => {
     initSps();
-    changeBsPage(BS_PAGES.ADDRESS_SELECTOR);
+    setRide({});
   };
 
   const RIDE_STATES_TO_SCREENS = {
@@ -188,16 +186,21 @@ const RidePageContextProvider = ({ children }: {
     [RIDE_STATES.COMPLETED]: (completedRide: any) => {
       navigation.navigate(MAIN_ROUTES.POST_RIDE, { rideId: completedRide.id });
       changeBsPage(BS_PAGES.ADDRESS_SELECTOR);
-      cleanFullRideState();
+      cleanRideState();
     },
-    [RIDE_STATES.DISPATCHED]: () => { changeBsPage(BS_PAGES.ACTIVE_RIDE); },
-    [RIDE_STATES.ACTIVE]: () => { changeBsPage(BS_PAGES.ACTIVE_RIDE); },
+    [RIDE_STATES.DISPATCHED]: () => {
+      cleanRequestStopPoints();
+      changeBsPage(BS_PAGES.ACTIVE_RIDE);
+    },
+    [RIDE_STATES.ACTIVE]: () => {
+      cleanRequestStopPoints();
+      changeBsPage(BS_PAGES.ACTIVE_RIDE);
+    },
     [RIDE_STATES.CANCELED]: (canceledRide: any) => {
       if (canceledRide.canceledBy !== user?.id) {
         setRidePopup(RIDE_POPUPS.RIDE_CANCELED_BY_DISPATCHER);
       } else {
-        setServiceEstimations(null);
-        cleanFullRideState();
+        cleanRideState();
       }
     },
   };
@@ -289,23 +292,24 @@ const RidePageContextProvider = ({ children }: {
   }, []);
 
   useInterval(async () => {
-    if (ride?.id) {
-      const rideLoaded = await rideApi.getRide(ride?.id);
-      const formattedRide = await formatRide(rideLoaded);
-      if (ride.state !== rideLoaded.state) {
-        const screenFunction = RIDE_STATES_TO_SCREENS[rideLoaded.state];
-        if (screenFunction) {
-          screenFunction(rideLoaded);
+    if (!rideRequestLoading) {
+      if (ride?.id) {
+        const rideLoaded = await rideApi.getRide(ride?.id);
+        const formattedRide = await formatRide(rideLoaded);
+        if (ride.state !== rideLoaded.state) {
+          const screenFunction = RIDE_STATES_TO_SCREENS[rideLoaded.state];
+          if (screenFunction) {
+            screenFunction(rideLoaded);
+          }
         }
+        if (!RIDE_FINAL_STATES.includes(ride?.state || '')) {
+          setRide(formattedRide);
+        }
+      } else {
+        loadActiveRide();
       }
-      if (RIDE_FINAL_STATES.includes(ride?.state || '')) {
-        resetRide();
-      }
-      setRide(formattedRide);
-    } else {
-      loadActiveRide();
     }
-  }, 5000);
+  }, 3000);
 
 
   useEffect(() => {
@@ -615,7 +619,7 @@ const RidePageContextProvider = ({ children }: {
       rating ? patchRideRating(rideId, rating) : () => null,
     ]);
 
-    cleanFullRideState();
+    cleanRideState();
     navigation.navigate(MAIN_ROUTES.HOME);
     changeBsPage(BS_PAGES.ADDRESS_SELECTOR);
     return true;
@@ -714,9 +718,8 @@ const RidePageContextProvider = ({ children }: {
         getRideFromApi,
         cancelRide,
         getCallNumbers,
-        cleanFullRideState,
-        resetRide,
         validateRequestedStopPoints,
+        setRequestStopPoints,
       }}
     >
       {children}

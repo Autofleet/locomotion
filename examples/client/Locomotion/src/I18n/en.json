@@ -309,6 +309,8 @@
         }
     },
     "payments": {
+        "defaultMethodTitle": "Default payment method",
+        "otherMethodsTitle": "Other payment methods",
         "cardDetails": {
             "cardsTitle": "Credit Card information",
             "title": "Payment method details",
@@ -318,6 +320,7 @@
             "deleteText": "Delete payment method",
             "outstandingBalanceText": "Outstanding balance of"
         },
+        "changeDefault": "Change",
         "select": "Select",
         "pageTitle": "Payments Method",
         "submitCard": "Add card",

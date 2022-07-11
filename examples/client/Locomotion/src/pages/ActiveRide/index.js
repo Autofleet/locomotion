@@ -56,10 +56,10 @@ const RidePage = ({ mapSettings, navigation }) => {
     ride,
     setRidePopup,
     ridePopup,
-    cleanFullRideState,
-    resetRide,
-    validateRequestedStopPoints,
+    reverseLocationGeocode,
     updateRequestSp,
+    setRide,
+    setRequestStopPoints,
   } = useContext(RidePageContext);
   const {
     setIsExpanded, snapPoints, isExpanded,
@@ -239,14 +239,21 @@ const RidePage = ({ mapSettings, navigation }) => {
         isVisible={ridePopup === RIDE_POPUPS.RIDE_CANCELED_BY_DISPATCHER}
         onCancel={() => {
           backToMap();
-          cleanFullRideState();
           setRidePopup(null);
+          setRide({});
         }}
-        onSubmit={() => {
-          resetRide();
+        onSubmit={async () => {
           changeBsPage(BS_PAGES.SERVICE_ESTIMATIONS);
           setRidePopup(null);
-          validateRequestedStopPoints(requestStopPoints);
+          const sps = await Promise.all(ride.stopPoints.map(async (sp) => {
+            const res = await reverseLocationGeocode(sp.lat, sp.lng);
+            return {
+              ...res,
+              type: sp.type,
+            };
+          }));
+          setRequestStopPoints(sps);
+          setRide({});
         }
         }
       />
@@ -255,15 +262,10 @@ const RidePage = ({ mapSettings, navigation }) => {
 };
 
 export default props => (
-  <BottomSheetContextProvider {...props}>
-    <RideStateContextContextProvider {...props}>
-      <NewRidePageContextProvider {...props}>
-        <AvailabilityContextProvider>
-          <RidePage
-            {...props}
-          />
-        </AvailabilityContextProvider>
-      </NewRidePageContextProvider>
-    </RideStateContextContextProvider>
-  </BottomSheetContextProvider>
+
+  <AvailabilityContextProvider>
+    <RidePage
+      {...props}
+    />
+  </AvailabilityContextProvider>
 );
