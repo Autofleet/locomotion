@@ -46,7 +46,7 @@ const PostRidePage = ({ menuSide, route }) => {
   useEffect(() => {
     Mixpanel.pageView(router.name);
   }, []);
-  console.log(ride);
+
   const onRatingUpdate = (selectedRating) => {
     setRating(selectedRating);
   };

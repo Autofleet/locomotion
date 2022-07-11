@@ -3,6 +3,8 @@ import React, {
 } from 'react';
 import { useIsFocused } from '@react-navigation/native';
 import { AppState } from 'react-native';
+import { RIDE_STATES } from '../../lib/commonTypes';
+import { RIDE_POPUPS } from '../../context/newRideContext/utils';
 import { UserContext } from '../../context/user';
 import {
   ConfirmPickup,
@@ -32,11 +34,12 @@ import backArrow from '../../assets/arrow-back.svg';
 import { BS_PAGES } from '../../context/ridePageStateContext/utils';
 import payments from '../../context/payments';
 import geo, { DEFAULT_COORDS, getPosition } from '../../services/geo';
+import RideCanceledPopup from '../../popups/RideCanceledPopup';
 import SquareSvgButton from '../../Components/SquareSvgButton';
 import targetIcon from '../../assets/target.svg';
 
 const RidePage = ({ mapSettings, navigation }) => {
-  const { locationGranted, setLocationGranted } = useContext(UserContext);
+  const { locationGranted, setLocationGranted, user } = useContext(UserContext);
   const [addressSelectorFocus, setAddressSelectorFocus] = useState(null);
   const mapRef = useRef();
   const bottomSheetRef = useRef(null);
@@ -51,7 +54,11 @@ const RidePage = ({ mapSettings, navigation }) => {
     requestRide,
     setChosenService,
     ride,
+    setRidePopup,
+    ridePopup,
     updateRequestSp,
+    setRide,
+    setRequestStopPoints,
   } = useContext(RidePageContext);
   const {
     setIsExpanded, snapPoints, isExpanded,
@@ -185,6 +192,14 @@ const RidePage = ({ mapSettings, navigation }) => {
     }
   }, [isFocused]);
 
+  const getRequestSpsFromRide = () => ride.stopPoints.map(sp => ({
+    lat: sp.lat,
+    lng: sp.lng,
+    streetAddress: sp.description,
+    description: sp.description,
+    type: sp.type,
+  }));
+
   useEffect(() => {
     if (bottomSheetRef && bottomSheetRef.current) {
       if (isExpanded) {
@@ -231,6 +246,22 @@ const RidePage = ({ mapSettings, navigation }) => {
           BS_PAGE_TO_COMP[currentBsPage] ? BS_PAGE_TO_COMP[currentBsPage]() : null
         }
       </BottomSheet>
+      <RideCanceledPopup
+        isVisible={ridePopup === RIDE_POPUPS.RIDE_CANCELED_BY_DISPATCHER}
+        onCancel={() => {
+          backToMap();
+          setRidePopup(null);
+          setRide({});
+        }}
+        onSubmit={() => {
+          changeBsPage(BS_PAGES.SERVICE_ESTIMATIONS);
+          setRidePopup(null);
+          const sps = getRequestSpsFromRide();
+          setRequestStopPoints(sps);
+          setRide({});
+        }
+        }
+      />
     </PageContainer>
   );
 };
