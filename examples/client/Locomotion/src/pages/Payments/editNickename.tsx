@@ -30,7 +30,7 @@ const EditCardName = ({ navigation }) => {
         <Header title={i18n.t('onboarding.pages.name.title')} page={undefined} showSkipButton={false} />
         <PageContainer>
           <ScreenText
-            text={i18n.t('Set Card Nickname')}
+            text={i18n.t('payments.setCardName')}
             subText={undefined}
           />
           <InputContainer>
