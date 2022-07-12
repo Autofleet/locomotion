@@ -104,7 +104,7 @@ const RidePage = ({ mapSettings, navigation }) => {
       <NotAvailableHere
         fullWidthButtons
         onButtonPress={() => {
-          resetStateToAddressSelector();
+          goBackToAddress();
         }}
       />
     ),
