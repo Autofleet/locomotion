@@ -23,10 +23,6 @@ const ServiceCard = ({ service }) => {
   const theme = useContext(ThemeContext);
   const { setChosenService, chosenService, serviceEstimations } = useContext(RidePageContext);
   const unavailable = !service.eta;
-  const minutesUntilPickup = moment.duration(moment(service.eta).diff(moment())).minutes().toString();
-  const timeUntilArrival = minutesUntilPickup > 1
-    ? i18n.t('rideDetails.toolTipEta', { minutes: minutesUntilPickup })
-    : i18n.t('general.now');
   const unavailableText = i18n.t('rideDetails.unavailable');
   const serviceDisplayPrice = `${getCurrencySymbol(service.currency)}${service.price}`;
   const tagStyles = {
@@ -47,6 +43,13 @@ const ServiceCard = ({ service }) => {
       },
       textColor: theme.primaryColor,
     },
+  };
+
+  const getEta = () => {
+    const minutesUntilPickup = moment(service.eta).diff(moment(), 'minutes');
+    return minutesUntilPickup < 1
+      ? i18n.t('general.now')
+      : i18n.t('rideDetails.toolTipEta', { minutes: minutesUntilPickup });
   };
 
   return (
@@ -91,7 +94,7 @@ const ServiceCard = ({ service }) => {
             </Eta>
             <Circle />
             <Eta>
-              {timeUntilArrival}
+              {getEta()}
             </Eta>
           </TimeDetails>
           <Capacity>
