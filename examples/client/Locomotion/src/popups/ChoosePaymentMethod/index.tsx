@@ -35,8 +35,8 @@ const PaymentMethodPopup = ({
   const {
     ride,
   } = useContext(RidePageContext);
-  const [paymentId, setPaymentId] = useState(ride?.paymentMethodId);
   const usePayments = PaymentsContext.useContainer();
+  const [paymentId, setPaymentId] = useState(usePayments.getClientDefaultMethod()?.id);
   const navigation = useNavigation<Nav>();
 
   const onSave = () => {
