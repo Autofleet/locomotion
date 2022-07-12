@@ -290,7 +290,6 @@ const RidePage = ({ mapSettings, navigation }) => {
 };
 
 export default props => (
-
   <AvailabilityContextProvider>
     <RidePage
       {...props}

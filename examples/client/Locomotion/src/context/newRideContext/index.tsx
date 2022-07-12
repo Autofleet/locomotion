@@ -286,6 +286,9 @@ const RidePageContextProvider = ({ children }: {
       const formattedRide = await formatRide(activeRide);
       setRide(formattedRide);
       changeBsPage(BS_PAGES.ACTIVE_RIDE);
+    } else {
+      cleanRideState();
+      changeBsPage(BS_PAGES.ADDRESS_SELECTOR);
     }
   };
 
@@ -295,25 +298,34 @@ const RidePageContextProvider = ({ children }: {
   }, []);
 
   useInterval(async () => {
-    if (!rideRequestLoading) {
-      if (ride?.id) {
-        const rideLoaded = await rideApi.getRide(ride?.id);
-        const formattedRide = await formatRide(rideLoaded);
-        if (ride.state !== rideLoaded.state) {
-          const screenFunction = RIDE_STATES_TO_SCREENS[rideLoaded.state];
-          if (screenFunction) {
-            screenFunction(rideLoaded);
+    if (user?.id) {
+      if (!rideRequestLoading) {
+        if (ride?.id) {
+          try {
+            const rideLoaded = await rideApi.getRide(ride?.id);
+            const formattedRide = await formatRide(rideLoaded);
+            if (ride.state !== rideLoaded.state) {
+              const screenFunction = RIDE_STATES_TO_SCREENS[rideLoaded.state];
+              if (screenFunction) {
+                screenFunction(rideLoaded);
+              }
+            }
+            if (!RIDE_FINAL_STATES.includes(rideLoaded?.state || '')) {
+              setRide(formattedRide);
+            }
+          } catch (e) {
+            cleanRideState();
+            changeBsPage(BS_PAGES.ADDRESS_SELECTOR);
           }
+        } else {
+          loadActiveRide();
         }
-        if (!RIDE_FINAL_STATES.includes(rideLoaded?.state || '')) {
-          setRide(formattedRide);
-        }
-      } else {
-        loadActiveRide();
       }
+    } else {
+      cleanRideState();
+      changeBsPage(BS_PAGES.ADDRESS_SELECTOR);
     }
-  }, 3000);
-
+  }, 4000);
 
   useEffect(() => {
     validateRequestedStopPoints(requestStopPoints);

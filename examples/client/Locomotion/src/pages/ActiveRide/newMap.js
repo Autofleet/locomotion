@@ -19,12 +19,13 @@ import { BS_PAGES } from '../../context/ridePageStateContext/utils';
 import { RIDE_STATES, STOP_POINT_STATES, STOP_POINT_TYPES } from '../../lib/commonTypes';
 import PrecedingStopPointMarker from '../../Components/PrecedingStopPointMarker';
 import { getSubLineStringAfterLocationFromDecodedPolyline } from '../../lib/polyline/utils';
+import { BottomSheetContext } from '../../context/bottomSheetContext';
 
 const MAP_EDGE_PADDING = {
-  top: 120,
-  right: 100,
-  bottom: 400,
-  left: 100,
+  top: 20,
+  right: 20,
+  bottom: 20,
+  left: 20,
 };
 
 const PAGES_TO_SHOW_SP_MARKERS = [
@@ -57,8 +58,12 @@ export default React.forwardRef(({
     currentBsPage,
     initGeoService,
   } = useContext(RideStateContextContext);
+  const {
+    snapPoints,
+  } = useContext(BottomSheetContext);
   const isMainPage = currentBsPage === BS_PAGES.ADDRESS_SELECTOR;
-  const isChooseLocationOnMap = [BS_PAGES.CONFIRM_PICKUP, BS_PAGES.SET_LOCATION_ON_MAP].includes(currentBsPage);
+  const isChooseLocationOnMap = [BS_PAGES.CONFIRM_PICKUP, BS_PAGES.SET_LOCATION_ON_MAP]
+    .includes(currentBsPage);
   const {
     requestStopPoints, saveSelectedLocation, reverseLocationGeocode, ride,
     chosenService,
@@ -71,7 +76,7 @@ export default React.forwardRef(({
   const focusCurrentLocation = () => {
     if (mapRegion.longitude && mapRegion.latitude && ref.current) {
       ref.current.animateToRegion({
-        latitude: mapRegion.latitude,
+        latitude: mapRegion.latitude - parseFloat(snapPoints[0]) / 10000,
         longitude: mapRegion.longitude,
         latitudeDelta: mapRegion.latitudeDelta,
         longitudeDelta: mapRegion.longitudeDelta,
@@ -112,19 +117,21 @@ export default React.forwardRef(({
 
   useEffect(() => {
     if (currentBsPage === BS_PAGES.CONFIRM_PICKUP) {
-      const pickupStopPoint = requestStopPoints.find(sp => sp.type === STOP_POINT_TYPES.STOP_POINT_PICKUP);
-      ref.current.fitToCoordinates([{
-        latitude: pickupStopPoint.lat - 0.001,
-        longitude: pickupStopPoint.lng - 0.001,
-      }, {
-        latitude: pickupStopPoint.lat,
-        longitude: pickupStopPoint.lng,
-      }, {
-        latitude: pickupStopPoint.lat + 0.001,
-        longitude: pickupStopPoint.lng + 0.001,
-      }], {
-        animated: false,
-      });
+      const [pickupStopPoint] = requestStopPoints;
+      if (pickupStopPoint) {
+        ref.current.fitToCoordinates([{
+          latitude: pickupStopPoint.lat - 0.001,
+          longitude: pickupStopPoint.lng - 0.001,
+        }, {
+          latitude: pickupStopPoint.lat,
+          longitude: pickupStopPoint.lng,
+        }, {
+          latitude: pickupStopPoint.lat + 0.001,
+          longitude: pickupStopPoint.lng + 0.001,
+        }], {
+          animated: false,
+        });
+      }
     }
   }, [currentBsPage]);
 
@@ -133,15 +140,18 @@ export default React.forwardRef(({
       .filter((sp => sp.lat))
       .map(sp => (
         {
-          latitude: parseFloat(sp.lat),
+          latitude: sp.lat - parseFloat(snapPoints[0]) / 10000,
           longitude: parseFloat(sp.lng),
         }
       ));
-    ref.current.fitToCoordinates(coordsToFit,
-      {
-        edgePadding: MAP_EDGE_PADDING,
-      });
+    if (coordsToFit.length > 0) {
+      ref.current.fitToCoordinates(coordsToFit,
+        {
+          edgePadding: MAP_EDGE_PADDING,
+        });
+    }
   };
+
   useEffect(() => {
     if (requestStopPoints.filter((sp => sp.lat)).length > 1) {
       showInputPointsOnMap();

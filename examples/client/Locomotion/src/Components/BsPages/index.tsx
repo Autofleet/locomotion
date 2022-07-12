@@ -57,9 +57,9 @@ const ImageContainer = styled(View)`
 `;
 
 const TitleContainer = styled(View)`
-display: flex;
-flex-direction: row;
-margin-bottom: 5px;
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 5px;
 `;
 
 const Title = styled(Text)`
@@ -92,14 +92,14 @@ const SecondaryButtonTitle = styled(Text)<SecondaryButtonTitleInterface>`
 `;
 
 const AddressInput = styled(Text)`
-margin-left: 5;
+  margin-left: 5;
 `;
 
 const LoaderContainer = styled(View)`
-height: 25px;
-width: 100%;
-margin: auto 0;
-margin-top: 25px;
+  height: 25px;
+  width: 100%;
+  margin: auto 0;
+  margin-top: 25px;
 `;
 
 const Header = styled(View)`
@@ -122,8 +122,8 @@ const Footer = styled(View)<FooterInterface>`
 `;
 
 const AddressContainer = styled(View)`
-flex-direction: row;
-align-items: center;
+  flex-direction: row;
+  align-items: center;
 `;
 
 const BsPage = ({
