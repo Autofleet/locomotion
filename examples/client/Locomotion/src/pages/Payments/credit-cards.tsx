@@ -34,7 +34,7 @@ export default ({
 
   useEffect(() => {
     setDefaultPayment();
-  }, []);
+  }, [usePayments.paymentMethods]);
 
   useEffect(() => {
     setLoading(loadingState);
