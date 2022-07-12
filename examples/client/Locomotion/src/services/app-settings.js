@@ -15,7 +15,7 @@ const AppSettings = {
     return res || {};
   },
   getServerUrl: async () => SERVER_HOST,
-  destroy: () => Storage.clear(),
+  destroy: async () => Storage.clear(),
 };
 
 export default AppSettings;

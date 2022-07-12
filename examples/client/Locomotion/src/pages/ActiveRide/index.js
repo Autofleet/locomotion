@@ -39,7 +39,7 @@ import SquareSvgButton from '../../Components/SquareSvgButton';
 import targetIcon from '../../assets/target.svg';
 
 const RidePage = ({ mapSettings, navigation }) => {
-  const { locationGranted, setLocationGranted, user } = useContext(UserContext);
+  const { locationGranted, setLocationGranted } = useContext(UserContext);
   const [addressSelectorFocus, setAddressSelectorFocus] = useState(null);
   const mapRef = useRef();
   const bottomSheetRef = useRef(null);
@@ -59,6 +59,7 @@ const RidePage = ({ mapSettings, navigation }) => {
     updateRequestSp,
     setRide,
     setRequestStopPoints,
+    tryServiceEstimations,
   } = useContext(RidePageContext);
   const {
     setIsExpanded, snapPoints, isExpanded,
@@ -76,7 +77,9 @@ const RidePage = ({ mapSettings, navigation }) => {
 
   const goBackToAddress = (selected) => {
     resetStateToAddressSelector(selected);
-    setIsExpanded(true);
+    setTimeout(() => {
+      setIsExpanded(true);
+    }, 100);
     bottomSheetRef.current.expand();
   };
 
@@ -133,7 +136,10 @@ const RidePage = ({ mapSettings, navigation }) => {
     [BS_PAGES.CONFIRMING_RIDE]: () => <ConfirmingRide />,
     [BS_PAGES.NO_AVAILABLE_VEHICLES]: () => (
       <NoAvailableVehicles
-        onButtonPress={() => changeBsPage(BS_PAGES.SERVICE_ESTIMATIONS)}
+        onButtonPress={() => {
+          tryServiceEstimations();
+          changeBsPage(BS_PAGES.SERVICE_ESTIMATIONS);
+        }}
       />
     ),
     [BS_PAGES.ACTIVE_RIDE]: () => <ActiveRide />,
@@ -284,7 +290,6 @@ const RidePage = ({ mapSettings, navigation }) => {
 };
 
 export default props => (
-
   <AvailabilityContextProvider>
     <RidePage
       {...props}

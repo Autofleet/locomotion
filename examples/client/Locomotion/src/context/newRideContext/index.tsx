@@ -94,6 +94,7 @@ interface RidePageContextInterface {
   updateRide: (rideId: string | undefined, ride: RideInterface) => Promise<void>;
   validateRequestedStopPoints: (reqSps: any[]) => void;
   setRequestStopPoints: (sps: any) => void;
+  tryServiceEstimations: () => Promise<void>;
 }
 
 export const RidePageContext = createContext<RidePageContextInterface>({
@@ -139,6 +140,7 @@ export const RidePageContext = createContext<RidePageContextInterface>({
   updateRide: async (rideId: string | undefined, ride: RideInterface) => undefined,
   validateRequestedStopPoints: (reqSps: any[]) => undefined,
   setRequestStopPoints: (sps: any) => undefined,
+  tryServiceEstimations: async () => undefined,
 });
 
 const HISTORY_RECORDS_NUM = 10;
@@ -201,6 +203,7 @@ const RidePageContextProvider = ({ children }: {
         setRidePopup(RIDE_POPUPS.RIDE_CANCELED_BY_DISPATCHER);
       } else {
         cleanRideState();
+        changeBsPage(BS_PAGES.ADDRESS_SELECTOR);
       }
     },
   };
@@ -283,6 +286,9 @@ const RidePageContextProvider = ({ children }: {
       const formattedRide = await formatRide(activeRide);
       setRide(formattedRide);
       changeBsPage(BS_PAGES.ACTIVE_RIDE);
+    } else {
+      cleanRideState();
+      changeBsPage(BS_PAGES.ADDRESS_SELECTOR);
     }
   };
 
@@ -292,25 +298,34 @@ const RidePageContextProvider = ({ children }: {
   }, []);
 
   useInterval(async () => {
-    if (!rideRequestLoading) {
-      if (ride?.id) {
-        const rideLoaded = await rideApi.getRide(ride?.id);
-        const formattedRide = await formatRide(rideLoaded);
-        if (ride.state !== rideLoaded.state) {
-          const screenFunction = RIDE_STATES_TO_SCREENS[rideLoaded.state];
-          if (screenFunction) {
-            screenFunction(rideLoaded);
+    if (user?.id) {
+      if (!rideRequestLoading) {
+        if (ride?.id) {
+          try {
+            const rideLoaded = await rideApi.getRide(ride?.id);
+            const formattedRide = await formatRide(rideLoaded);
+            if (ride.state !== rideLoaded.state) {
+              const screenFunction = RIDE_STATES_TO_SCREENS[rideLoaded.state];
+              if (screenFunction) {
+                screenFunction(rideLoaded);
+              }
+            }
+            if (!RIDE_FINAL_STATES.includes(rideLoaded?.state || '')) {
+              setRide(formattedRide);
+            }
+          } catch (e) {
+            cleanRideState();
+            changeBsPage(BS_PAGES.ADDRESS_SELECTOR);
           }
+        } else {
+          loadActiveRide();
         }
-        if (!RIDE_FINAL_STATES.includes(ride?.state || '')) {
-          setRide(formattedRide);
-        }
-      } else {
-        loadActiveRide();
       }
+    } else {
+      cleanRideState();
+      changeBsPage(BS_PAGES.ADDRESS_SELECTOR);
     }
-  }, 3000);
-
+  }, 4000);
 
   useEffect(() => {
     validateRequestedStopPoints(requestStopPoints);
@@ -556,8 +571,6 @@ const RidePageContextProvider = ({ children }: {
       const formattedRide = await formatRide(afRide);
       setRide(formattedRide);
     } catch (e) {
-      // TODO: error handling
-      tryServiceEstimations();
       changeBsPage(BS_PAGES.NO_AVAILABLE_VEHICLES);
     } finally {
       setRideRequestLoading(false);
@@ -722,6 +735,7 @@ const RidePageContextProvider = ({ children }: {
         getCallNumbers,
         validateRequestedStopPoints,
         setRequestStopPoints,
+        tryServiceEstimations,
       }}
     >
       {children}

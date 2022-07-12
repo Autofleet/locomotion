@@ -2,7 +2,7 @@ import { useNavigation } from '@react-navigation/native';
 import React, { useContext } from 'react';
 import { APP_ROUTES } from '../../routes';
 import i18n from '../../../I18n';
-import logo from '../../../assets/autofleetLogo.png';
+import logo from '../../../assets/welcomeLogo.png';
 import SaveButton from '../SaveButton';
 import {
   WelcomeSubText, WelcomeText, PageContainer, TextContainer,

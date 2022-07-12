@@ -1,5 +1,5 @@
 import React, {
-  useContext, useEffect, useRef, useState,
+  useEffect, useRef, useState,
 } from 'react';
 import { KeyboardAvoidingView, SafeAreaView } from 'react-native';
 import Modal from 'react-native-modal';
@@ -23,9 +23,11 @@ export default ({
 
   useEffect(() => {
     updateText(notes || '');
-    if (inputRef.current) {
-      inputRef.current.focus();
-    }
+    setTimeout(() => {
+      if (inputRef.current) {
+        inputRef.current.focus();
+      }
+    }, 100);
   }, [isVisible]);
 
   return (
@@ -38,6 +40,7 @@ export default ({
               <Counter>{`${currentText.length}/${MAX_SIZE}`}</Counter>
             </FlexCont>
             <StyledTextArea
+              autoFocus={false}
               ref={inputRef}
               value={currentText}
               multiline
