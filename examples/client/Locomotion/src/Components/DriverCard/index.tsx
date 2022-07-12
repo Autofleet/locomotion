@@ -14,6 +14,7 @@ import {
   DriverSectionContainer,
   DriverRatingText,
   VehicleModelNameText,
+  DriverDetailsContainer,
 } from './styled';
 
 interface DriverCardProps {
@@ -42,15 +43,14 @@ const DriverCard = ({
       <DriverAvatarContainer>
         <DriverAvatar source={{ uri: ride?.driver?.avatar }} />
       </DriverAvatarContainer>
-      <DriverAvatarContainer>
+      <DriverDetailsContainer>
         <DriverDetailContainer>
           <StarIcon isOn height="8px" width="8px" />
           <DriverRatingText>{formatDriverRating(ride?.driver?.rating)}</DriverRatingText>
         </DriverDetailContainer>
         <DriverDetailContainer>
-          <DriverDetailText activeRide={activeRide}>
-            {formatDriverName(ride.driver?.firstName || '')}
-            {formatDriverName(ride.driver?.lastName || '')}
+          <DriverDetailText numberOfLines={1} activeRide={activeRide}>
+            AAAAAQA TEST - Pizza
           </DriverDetailText>
         </DriverDetailContainer>
         {activeRide && (
@@ -60,7 +60,7 @@ const DriverCard = ({
           </VehicleModelNameText>
         </DriverDetailContainer>
         )}
-      </DriverAvatarContainer>
+      </DriverDetailsContainer>
       {!activeRide && (
       <RatingBarContainer>
         <Stars rating={ride.rating || 0} />
