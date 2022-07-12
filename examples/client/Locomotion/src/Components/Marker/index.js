@@ -45,6 +45,7 @@ const StopPointMarker = ({
   };
 
   const etaText = () => {
+    console.log(stopPoint);
     const { state } = stopPoint;
     if (state === STOP_POINT_STATES.COMPLETED) {
       return i18n.t('stopPoints.states.completed');
@@ -60,7 +61,11 @@ const StopPointMarker = ({
       }
     }
 
-    return stopPoint.streetAddress || stopPoint.description;
+    if (stopPoint.plannedArrivalTime) {
+      return moment(stopPoint.plannedArrivalTime).format('h:mm A');
+    }
+
+    return stopPoint.plannedArrivalTime || stopPoint.streetAddress || stopPoint.description;
   };
 
 
