@@ -326,7 +326,6 @@ const RidePageContextProvider = ({ children }: {
       changeBsPage(BS_PAGES.ADDRESS_SELECTOR);
     }
   }, 4000);
-  // 0526686970
 
   useEffect(() => {
     validateRequestedStopPoints(requestStopPoints);
