@@ -39,7 +39,7 @@ interface UserContextInterface {
   getUserFromServer: () => Promise<void>,
   locationGranted: boolean | undefined,
   setLocationGranted: Dispatch<SetStateAction<any>>,
-  updatePushToken: () => Promise<void>,
+  updatePushToken: () => Promise<boolean | null>,
 }
 
 export const UserContext = createContext<UserContextInterface>({
@@ -54,7 +54,7 @@ export const UserContext = createContext<UserContextInterface>({
   getUserFromServer: async () => undefined,
   locationGranted: false,
   setLocationGranted: () => undefined,
-  updatePushToken: () => undefined,
+  updatePushToken: async () => false,
 });
 
 const UserContextProvider = ({ children }: { children: any }) => {
@@ -96,9 +96,9 @@ const UserContextProvider = ({ children }: { children: any }) => {
     }
 
     if (
-      user.pushTokenId !== deviceState.pushToken
-      || user.pushUserId !== deviceState.userId
-      || user.isPushEnabled !== deviceState.isSubscribed
+      user?.pushTokenId !== deviceState.pushToken
+      || user?.pushUserId !== deviceState.userId
+      || user?.isPushEnabled !== deviceState.isSubscribed
     ) {
       await updateUserInfo({
         pushTokenId: deviceState.pushToken,
