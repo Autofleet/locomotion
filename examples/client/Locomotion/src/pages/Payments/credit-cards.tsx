@@ -20,15 +20,13 @@ export default ({
 }) => {
   const usePayments = PaymentsContext.useContainer();
   const [loading, setLoading] = useState(false);
-  const [defaultMethod, setDefaultMethod] = useState({
-    ...usePayments.getClientDefaultMethod(),
-    mark: true,
-  });
+  const [defaultMethod, setDefaultMethod] = useState({ id: null });
   const [showChoosePayment, setShowChoosePayment] = useState(false);
 
-  const setDefaultPayment = () => {
+  const setDefaultPayment = async () => {
     setLoading(true);
-    const defaultPaymentMethod = usePayments.getClientDefaultMethod();
+    const { paymentMethods } = await usePayments.loadCustomer();
+    const defaultPaymentMethod = paymentMethods.find((x:any) => x.isDefault);
     const methodToSet = { ...defaultPaymentMethod, mark: true };
     setDefaultMethod(methodToSet);
     setLoading(false);
@@ -36,7 +34,7 @@ export default ({
 
   useEffect(() => {
     setDefaultPayment();
-  }, [usePayments]);
+  }, []);
 
   useEffect(() => {
     setLoading(loadingState);
@@ -47,7 +45,7 @@ export default ({
     <CardsListContainer>
       <View>
         <PaymentMethodsContainer>
-          {defaultMethod.id !== cashPaymentMethod.id
+          { defaultMethod?.id && defaultMethod?.id !== cashPaymentMethod.id
             ? (
               <Section
                 title={i18n.t('payments.defaultMethodTitle')}
