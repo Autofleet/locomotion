@@ -20,13 +20,14 @@ const Section = ({
   onPress,
   paymentMethods,
   showChangeButton = false,
+  title,
   onPressChange = () => { console.log('no onPressChange'); },
 }) => (
   <CardContainer>
     <CardContantContainer>
       <CardTitleContainer>
         <CardTitle>
-          {i18n.t('payments.defaultMethodTitle')}
+          {title}
         </CardTitle>
         <HeaderLink onPress={onPressChange}>
           {showChangeButton

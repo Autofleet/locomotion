@@ -8,7 +8,7 @@ export const BottomSheetContext = createContext();
 export const SNAP_POINT_STATES = {
   [BS_PAGES.ADDRESS_SELECTOR]: ['15%', '100%'],
   [BS_PAGES.SERVICE_ESTIMATIONS]: ['50%', '100%'],
-  [BS_PAGES.CONFIRM_PICKUP]: ['30%'],
+  [BS_PAGES.CONFIRM_PICKUP]: ['30%', '30.000001%'],
   [BS_PAGES.SET_LOCATION_ON_MAP]: ['30%'],
   [BS_PAGES.NO_PAYMENT]: ['30%'],
   [BS_PAGES.NOT_IN_TERRITORY]: ['30%'],

@@ -189,6 +189,12 @@
         "setLocationOnMap": "Set location on map"
     },
     "popups": {
+        "rideCanceled": {
+            "title": "Ride canceled",
+            "text": "Your ride has been canceled",
+            "buttonText": "Order same ride",
+            "closeButtonText": "Go back to map"
+        },
         "genericError": {
             "title": "Error",
             "text": "Something went wrong. Please try again and contact support if the issue isn't solved",

@@ -1,19 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { View } from 'react-native';
-import { degreesToRadians } from '@turf/turf';
-import { HeaderLink } from '../../Components/Menu/styled';
 import { MAIN_ROUTES } from '../routes';
 import i18n from '../../I18n';
 import {
   CardsListContainer,
   PaymentMethodsContainer,
-  MethodCard,
-  ChevronIcon,
-  ChangeButton,
 } from './styled';
-import {
-  CardContainer, CardContantContainer, CardTitle, CardTitleContainer,
-} from '../../Components/InformationCard/styled';
 
 import PaymentMethod from '../../Components/CardRow';
 import PaymentsContext from '../../context/payments';
@@ -58,6 +50,7 @@ export default ({
           {defaultMethod.id !== cashPaymentMethod.id
             ? (
               <Section
+                title={i18n.t('payments.defaultMethodTitle')}
                 onPress={() => navigate(MAIN_ROUTES.CARD_DETAILS, { paymentMethod: defaultMethod })}
                 paymentMethods={[defaultMethod]}
                 showChangeButton
@@ -68,6 +61,7 @@ export default ({
           {usePayments.paymentMethods.length > 1
             ? (
               <Section
+                title={i18n.t('payments.otherMethodsTitle')}
                 showChangeButton={false}
                 onPress={(paymentMethod: any) => navigate(MAIN_ROUTES.CARD_DETAILS,
                   { paymentMethod })}

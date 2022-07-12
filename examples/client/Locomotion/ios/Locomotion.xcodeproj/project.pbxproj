@@ -75,6 +75,7 @@
 		EC5ACF6D2871CBBE00B2D6D7 /* Locomotion.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = Locomotion.entitlements; path = Locomotion/Locomotion.entitlements; sourceTree = "<group>"; };
 		EC8EB49F2811511C005D40A9 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
+		F95C9198287C4D81008094F5 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -133,6 +134,7 @@
 		13B07FAE1A68108700A75B9A /* Locomotion */ = {
 			isa = PBXGroup;
 			children = (
+				F95C9198287C4D81008094F5 /* GoogleService-Info.plist */,
 				EC5ACF6D2871CBBE00B2D6D7 /* Locomotion.entitlements */,
 				EC8EB49F2811511C005D40A9 /* GoogleService-Info.plist */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,

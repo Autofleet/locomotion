@@ -87,11 +87,6 @@ const PaymentMethodPopup = ({
             <FlexCont style={{ justifyContent: 'center' }}>
               <RoundedButton
                 type="confirm"
-                hollow={false}
-                disabled={false}
-                useCancelTextButton={false}
-                setLoading={null}
-                style={{}}
                 onPress={() => onSave()}
               >
                 {i18n.t('payments.select')}

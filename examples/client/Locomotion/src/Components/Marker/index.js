@@ -15,7 +15,7 @@ import { STOP_POINT_TYPES, STOP_POINT_STATES } from '../../lib/commonTypes';
 import Loader from '../Loader';
 import pulse from '../../assets/marker-pulse.json';
 
-export default ({
+const StopPointMarker = ({
   stopPoint,
   key,
   isNext,
@@ -52,10 +52,12 @@ export default ({
 
     if (isNext) {
       const eta = stopPoint.plannedArrivalTime || (chosenService && chosenService.eta);
-      const minutesUntilPickup = moment(eta).diff(moment(), 'minutes');
-      return minutesUntilPickup < 1
-        ? i18n.t('general.now')
-        : i18n.t('rideDetails.toolTipEta', { minutes: minutesUntilPickup });
+      if (eta) {
+        const minutesUntilPickup = moment(eta).diff(moment(), 'minutes');
+        return minutesUntilPickup < 1
+          ? i18n.t('general.now')
+          : i18n.t('rideDetails.toolTipEta', { minutes: minutesUntilPickup });
+      }
     }
 
     return stopPoint.streetAddress || stopPoint.description;
@@ -95,3 +97,5 @@ export default ({
     </Marker>
   );
 };
+
+export default StopPointMarker;

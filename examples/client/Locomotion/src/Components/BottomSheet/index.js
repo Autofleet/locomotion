@@ -41,7 +41,7 @@ const BottomSheetComponent = forwardRef(({
 
   const snapPointsAreTheSame = () => {
     const firstSnapPoint = snapPoints[0];
-    return snapPoints.every(snap => snap === firstSnapPoint);
+    return snapPoints.every(snap => Math.round(parseFloat(snap)) === Math.round(parseFloat(firstSnapPoint)));
   };
 
   return (
