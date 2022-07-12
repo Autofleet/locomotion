@@ -12,14 +12,24 @@ import Header from '../Profile/Header';
 import ScreenText from '../Profile/ScreenText';
 import SaveButton from '../Profile/SaveButton';
 
-const EditCardName = ({ navigation }) => {
-  const route = useRoute();
+type Params = {
+  name: string,
+  id: string
+}
+
+type Route = {
+  params?: Readonly<object | undefined> | Params
+}
+
+
+const EditCardName = ({ navigation } : any) => {
+  const route : Route = useRoute();
   const usePayments = PaymentsContext.useContainer();
-  const [nickname, setNickname] = useState(route.params?.name);
+  const [nickname, setNickname] = useState((route.params as Params).name);
   const [showErrorText, setShowErrorText] = useState(false);
 
   const onComplete = async () => {
-    await usePayments.updatePaymentMethod(route.params?.id, { name: nickname });
+    await usePayments.updatePaymentMethod((route.params as Params).id, { name: nickname });
     await usePayments.loadCustomer();
     navigation.navigate(MAIN_ROUTES.PAYMENT);
   };
@@ -27,7 +37,7 @@ const EditCardName = ({ navigation }) => {
   return (
     <SafeView>
       <ScrollView keyboardShouldPersistTaps="handled">
-        <Header title={i18n.t('onboarding.pages.name.title')} page={undefined} showSkipButton={false} />
+        <Header title={i18n.t('onboarding.pages.name.title')} showSkipButton={false} />
         <PageContainer>
           <ScreenText
             text={i18n.t('payments.setCardName')}
@@ -37,7 +47,7 @@ const EditCardName = ({ navigation }) => {
             <TextInput
               placeholder="Name"
               autoFocus
-              onChangeText={v => setNickname(v)}
+              onChangeText={(v : string) => setNickname(v)}
               value={nickname}
               autoCapitalize="words"
               error={nickname === ''}
