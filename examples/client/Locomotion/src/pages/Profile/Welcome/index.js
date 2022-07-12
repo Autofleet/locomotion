@@ -1,5 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
 import React, { useContext } from 'react';
+import Config from 'react-native-config';
 import { APP_ROUTES } from '../../routes';
 import i18n from '../../../I18n';
 import logo from '../../../assets/welcomeLogo.png';
@@ -29,7 +30,7 @@ const Welcome = () => {
             <Logo source={logo} />
           </LogoContainer>
           <OperationName>
-            {i18n.t('onboarding.pages.welcome.name')}
+            {Config.OPERATION_NAME || 'autofleet'}
           </OperationName>
         </InfoContainer>
         <TextContainer>
