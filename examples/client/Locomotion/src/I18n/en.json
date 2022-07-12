@@ -83,7 +83,8 @@
             "welcome": {
                 "text": "Welcome aboard, {{firstName}}!",
                 "subText": "We are glad to have you riding with us.",
-                "buttonText": "Let's go!"
+                "buttonText": "Let's go!",
+                "name": "Locomotion"
             },
             "card": {
                 "title": "Payment Method",

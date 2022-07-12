@@ -15,11 +15,6 @@ import { UserContext } from '../../../context/user';
 
 const Welcome = () => {
   const { updateUserInfo, user } = useContext(UserContext);
-  const operation = {
-    name: 'autofleet',
-    subName: 'Rider app',
-    logo,
-  }; // replace with operation settings
   const navigation = useNavigation();
 
   const onNext = async () => {
@@ -31,9 +26,11 @@ const Welcome = () => {
       <PageContainer>
         <InfoContainer>
           <LogoContainer>
-            <Logo source={operation.logo} />
+            <Logo source={logo} />
           </LogoContainer>
-          <OperationName>{operation.name}</OperationName>
+          <OperationName>
+            {i18n.t('onboarding.pages.welcome.name')}
+          </OperationName>
         </InfoContainer>
         <TextContainer>
           <WelcomeText>
