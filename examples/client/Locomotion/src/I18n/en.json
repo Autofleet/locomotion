@@ -377,7 +377,7 @@
     },
     "notAvailableHere": {
       "titleText": "We are Sorry!",
-      "buttonText": "Set another pickup location",
+      "buttonText": "Choose another address",
       "subTitleText": "Autofleet is not available in your area"
     },
     "noPayment": {
