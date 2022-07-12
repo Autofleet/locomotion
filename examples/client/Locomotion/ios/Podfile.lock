@@ -92,7 +92,16 @@ PODS:
     - nanopb/encode (= 2.30908.0)
   - nanopb/decode (2.30908.0)
   - nanopb/encode (2.30908.0)
-  - OneSignalXCFramework (3.10.3)
+  - OneSignalXCFramework (3.11.2):
+    - OneSignalXCFramework/OneSignalCore (= 3.11.2)
+    - OneSignalXCFramework/OneSignalExtension (= 3.11.2)
+    - OneSignalXCFramework/OneSignalOutcomes (= 3.11.2)
+  - OneSignalXCFramework/OneSignalCore (3.11.2)
+  - OneSignalXCFramework/OneSignalExtension (3.11.2):
+    - OneSignalXCFramework/OneSignalCore
+    - OneSignalXCFramework/OneSignalOutcomes
+  - OneSignalXCFramework/OneSignalOutcomes (3.11.2):
+    - OneSignalXCFramework/OneSignalCore
   - PromisesObjC (2.1.1)
   - RCT-Folly (2021.06.28.00-v2):
     - boost
@@ -714,7 +723,7 @@ SPEC CHECKSUMS:
   lottie-react-native: 3d07640d3ad4b632d92ceecd454956a2e5e591ab
   Mixpanel: de8296d8568806ab17bfced0f823c908b808e1e0
   nanopb: a0ba3315591a9ae0a16a309ee504766e90db0c96
-  OneSignalXCFramework: 4efd7bd68c2b14920955b3f14b5b75bbf8fb662c
+  OneSignalXCFramework: 81ceac017a290f23793443323090cfbe888f74ea
   PromisesObjC: ab77feca74fa2823e7af4249b8326368e61014cb
   RCT-Folly: 4d8508a426467c48885f1151029bc15fa5d7b3b8
   RCTRequired: 00581111c53531e39e3c6346ef0d2c0cf52a5a37

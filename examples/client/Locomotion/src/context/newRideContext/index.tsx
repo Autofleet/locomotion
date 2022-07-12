@@ -94,6 +94,7 @@ interface RidePageContextInterface {
   updateRide: (rideId: string | undefined, ride: RideInterface) => Promise<void>;
   validateRequestedStopPoints: (reqSps: any[]) => void;
   setRequestStopPoints: (sps: any) => void;
+  tryServiceEstimations: () => Promise<void>;
 }
 
 export const RidePageContext = createContext<RidePageContextInterface>({
@@ -139,6 +140,7 @@ export const RidePageContext = createContext<RidePageContextInterface>({
   updateRide: async (rideId: string | undefined, ride: RideInterface) => undefined,
   validateRequestedStopPoints: (reqSps: any[]) => undefined,
   setRequestStopPoints: (sps: any) => undefined,
+  tryServiceEstimations: async () => undefined,
 });
 
 const HISTORY_RECORDS_NUM = 10;
@@ -201,6 +203,7 @@ const RidePageContextProvider = ({ children }: {
         setRidePopup(RIDE_POPUPS.RIDE_CANCELED_BY_DISPATCHER);
       } else {
         cleanRideState();
+        changeBsPage(BS_PAGES.ADDRESS_SELECTOR);
       }
     },
   };
@@ -302,7 +305,7 @@ const RidePageContextProvider = ({ children }: {
             screenFunction(rideLoaded);
           }
         }
-        if (!RIDE_FINAL_STATES.includes(ride?.state || '')) {
+        if (!RIDE_FINAL_STATES.includes(rideLoaded?.state || '')) {
           setRide(formattedRide);
         }
       } else {
@@ -556,8 +559,6 @@ const RidePageContextProvider = ({ children }: {
       const formattedRide = await formatRide(afRide);
       setRide(formattedRide);
     } catch (e) {
-      // TODO: error handling
-      tryServiceEstimations();
       changeBsPage(BS_PAGES.NO_AVAILABLE_VEHICLES);
     } finally {
       setRideRequestLoading(false);
@@ -722,6 +723,7 @@ const RidePageContextProvider = ({ children }: {
         getCallNumbers,
         validateRequestedStopPoints,
         setRequestStopPoints,
+        tryServiceEstimations,
       }}
     >
       {children}

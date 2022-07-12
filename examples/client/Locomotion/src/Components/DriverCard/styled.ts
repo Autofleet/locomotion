@@ -15,8 +15,7 @@ export const RatingBarContainer = styled(View)`
   margin-left: auto;
 `;
 
-export const DriverAvatarContainer = styled(View)`
-`;
+export const DriverAvatarContainer = styled(View)``;
 
 export const DriverDetailContainer = styled(View)`
   padding-left: 10px;
@@ -37,8 +36,9 @@ export const DriverAvatar = styled(Image)`
   width: 60px;
   height: 60px;
   border-radius: 100px;
-  border-width: 1px;
-  border-color: #a7a7a7;
+  border-color: ${({ theme }) => theme.primaryColor};
+  border-width: 4;
+  border-radius: 100;
  `;
 
 
