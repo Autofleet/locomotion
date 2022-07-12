@@ -22,10 +22,10 @@ import { getSubLineStringAfterLocationFromDecodedPolyline } from '../../lib/poly
 import { BottomSheetContext } from '../../context/bottomSheetContext';
 
 const MAP_EDGE_PADDING = {
-  top: 20,
-  right: 20,
-  bottom: 20,
-  left: 20,
+  top: 140,
+  right: 100,
+  bottom: 400,
+  left: 100,
 };
 
 const PAGES_TO_SHOW_SP_MARKERS = [
@@ -140,7 +140,7 @@ export default React.forwardRef(({
       .filter((sp => sp.lat))
       .map(sp => (
         {
-          latitude: sp.lat - parseFloat(snapPoints[0]) / 10000,
+          latitude: parseFloat(sp.lat),
           longitude: parseFloat(sp.lng),
         }
       ));
