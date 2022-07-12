@@ -76,7 +76,9 @@ const RidePage = ({ mapSettings, navigation }) => {
 
   const goBackToAddress = (selected) => {
     resetStateToAddressSelector(selected);
-    setIsExpanded(true);
+    setTimeout(() => {
+      setIsExpanded(true);
+    }, 100);
     bottomSheetRef.current.expand();
   };
 
