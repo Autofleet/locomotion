@@ -197,21 +197,6 @@ export default React.forwardRef(({
         onPanDrag={() => (
           !isUserLocationFocused === false ? setIsUserLocationFocused(false) : null
         )}
-        onUserLocationChange={(event) => {
-          if ((Platform.OS === 'ios' && !Config.MAP_PROVIDER !== 'google') || !isUserLocationFocused) {
-            return; // Follow user location works for iOS
-          }
-          const { coordinate } = event.nativeEvent;
-
-          setMapRegion(oldMapRegion => ({
-            ...oldMapRegion,
-            ...coordinate,
-          }));
-
-          if (isUserLocationFocused) {
-            focusCurrentLocation();
-          }
-        }}
         ref={ref}
         userInterfaceStyle={isDarkMode ? THEME_MOD.DARK : undefined}
         customMapStyle={isDarkMode ? mapDarkMode : undefined}
