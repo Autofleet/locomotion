@@ -50,7 +50,8 @@ const DriverCard = ({
         </DriverDetailContainer>
         <DriverDetailContainer>
           <DriverDetailText numberOfLines={1} activeRide={activeRide}>
-            AAAAAQA TEST - Pizza
+            {formatDriverName(ride.driver?.firstName || '')}
+            {formatDriverName(ride.driver?.lastName || '')}
           </DriverDetailText>
         </DriverDetailContainer>
         {activeRide && (
