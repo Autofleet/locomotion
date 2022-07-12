@@ -1,5 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
 import React, { useContext } from 'react';
+import Config from 'react-native-config';
 import { APP_ROUTES } from '../../routes';
 import i18n from '../../../I18n';
 import logo from '../../../assets/welcomeLogo.png';
@@ -15,11 +16,6 @@ import { UserContext } from '../../../context/user';
 
 const Welcome = () => {
   const { updateUserInfo, user } = useContext(UserContext);
-  const operation = {
-    name: 'autofleet',
-    subName: 'Rider app',
-    logo,
-  }; // replace with operation settings
   const navigation = useNavigation();
 
   const onNext = async () => {
@@ -31,9 +27,11 @@ const Welcome = () => {
       <PageContainer>
         <InfoContainer>
           <LogoContainer>
-            <Logo source={operation.logo} />
+            <Logo source={logo} />
           </LogoContainer>
-          <OperationName>{operation.name}</OperationName>
+          <OperationName>
+            {Config.OPERATION_NAME}
+          </OperationName>
         </InfoContainer>
         <TextContainer>
           <WelcomeText>

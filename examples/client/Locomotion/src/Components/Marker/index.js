@@ -60,6 +60,10 @@ const StopPointMarker = ({
       }
     }
 
+    if (stopPoint.plannedArrivalTime) {
+      return moment(stopPoint.plannedArrivalTime).format('h:mm A');
+    }
+
     return stopPoint.streetAddress || stopPoint.description;
   };
 

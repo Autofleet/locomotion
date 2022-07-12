@@ -37,9 +37,10 @@ import geo, { DEFAULT_COORDS, getPosition } from '../../services/geo';
 import RideCanceledPopup from '../../popups/RideCanceledPopup';
 import SquareSvgButton from '../../Components/SquareSvgButton';
 import targetIcon from '../../assets/target.svg';
+import OneSignal from '../../services/one-signal';
 
 const RidePage = ({ mapSettings, navigation }) => {
-  const { locationGranted, setLocationGranted } = useContext(UserContext);
+  const { locationGranted, setLocationGranted, updatePushToken } = useContext(UserContext);
   const [addressSelectorFocus, setAddressSelectorFocus] = useState(null);
   const mapRef = useRef();
   const bottomSheetRef = useRef(null);
@@ -104,7 +105,7 @@ const RidePage = ({ mapSettings, navigation }) => {
       <NotAvailableHere
         fullWidthButtons
         onButtonPress={() => {
-          resetStateToAddressSelector();
+          goBackToAddress();
         }}
       />
     ),
@@ -232,6 +233,11 @@ const RidePage = ({ mapSettings, navigation }) => {
       }
     }
   }, [isExpanded]);
+
+  useEffect(() => {
+    OneSignal.init();
+    updatePushToken();
+  }, []);
 
   return (
     <PageContainer>

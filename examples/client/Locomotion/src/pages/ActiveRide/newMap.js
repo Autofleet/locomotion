@@ -22,10 +22,10 @@ import { getSubLineStringAfterLocationFromDecodedPolyline } from '../../lib/poly
 import { BottomSheetContext } from '../../context/bottomSheetContext';
 
 const MAP_EDGE_PADDING = {
-  top: 20,
-  right: 20,
-  bottom: 20,
-  left: 20,
+  top: 140,
+  right: 100,
+  bottom: 400,
+  left: 100,
 };
 
 const PAGES_TO_SHOW_SP_MARKERS = [
@@ -140,7 +140,7 @@ export default React.forwardRef(({
       .filter((sp => sp.lat))
       .map(sp => (
         {
-          latitude: sp.lat - parseFloat(snapPoints[0]) / 10000,
+          latitude: parseFloat(sp.lat),
           longitude: parseFloat(sp.lng),
         }
       ));
@@ -197,21 +197,6 @@ export default React.forwardRef(({
         onPanDrag={() => (
           !isUserLocationFocused === false ? setIsUserLocationFocused(false) : null
         )}
-        onUserLocationChange={(event) => {
-          if ((Platform.OS === 'ios' && !Config.MAP_PROVIDER !== 'google') || !isUserLocationFocused) {
-            return; // Follow user location works for iOS
-          }
-          const { coordinate } = event.nativeEvent;
-
-          setMapRegion(oldMapRegion => ({
-            ...oldMapRegion,
-            ...coordinate,
-          }));
-
-          if (isUserLocationFocused) {
-            focusCurrentLocation();
-          }
-        }}
         ref={ref}
         userInterfaceStyle={isDarkMode ? THEME_MOD.DARK : undefined}
         customMapStyle={isDarkMode ? mapDarkMode : undefined}
