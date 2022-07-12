@@ -18,7 +18,6 @@ const BottomSheetInputField = forwardRef((props, ref) => (
     }}
     >
       <IconContainer>
-
         <SvgIcon
           Svg={cancel}
           fill="#333"
