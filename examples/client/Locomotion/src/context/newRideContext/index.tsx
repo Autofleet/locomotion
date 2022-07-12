@@ -164,7 +164,7 @@ const RidePageContextProvider = ({ children }: {
   const [rideRequestLoading, setRideRequestLoading] = useState(false);
   const [ridePopup, setRidePopup] = useState<RidePopupNames | null>(null);
   const intervalRef = useRef<any>();
-  console.log(ride);
+
   const stopRequestInterval = () => {
     clearInterval(intervalRef.current);
   };
