@@ -30,7 +30,7 @@ const Welcome = () => {
             <Logo source={logo} />
           </LogoContainer>
           <OperationName>
-            {Config.OPERATION_NAME || 'autofleet'}
+            {Config.OPERATION_NAME}
           </OperationName>
         </InfoContainer>
         <TextContainer>
