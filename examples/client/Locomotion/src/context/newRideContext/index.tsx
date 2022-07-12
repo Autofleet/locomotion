@@ -164,7 +164,7 @@ const RidePageContextProvider = ({ children }: {
   const [rideRequestLoading, setRideRequestLoading] = useState(false);
   const [ridePopup, setRidePopup] = useState<RidePopupNames | null>(null);
   const intervalRef = useRef<any>();
-
+  console.log(ride);
   const stopRequestInterval = () => {
     clearInterval(intervalRef.current);
   };
@@ -201,6 +201,7 @@ const RidePageContextProvider = ({ children }: {
         setRidePopup(RIDE_POPUPS.RIDE_CANCELED_BY_DISPATCHER);
       } else {
         cleanRideState();
+        changeBsPage(BS_PAGES.ADDRESS_SELECTOR);
       }
     },
   };
@@ -302,7 +303,7 @@ const RidePageContextProvider = ({ children }: {
             screenFunction(rideLoaded);
           }
         }
-        if (!RIDE_FINAL_STATES.includes(ride?.state || '')) {
+        if (!RIDE_FINAL_STATES.includes(rideLoaded?.state || '')) {
           setRide(formattedRide);
         }
       } else {
