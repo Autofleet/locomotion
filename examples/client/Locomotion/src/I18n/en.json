@@ -309,6 +309,7 @@
         }
     },
     "payments": {
+        "setCardName": "Set Card Name",
         "defaultMethodTitle": "Default payment method",
         "otherMethodsTitle": "Other payment methods",
         "cardDetails": {
