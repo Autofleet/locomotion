@@ -74,7 +74,7 @@ const StartScreen = () => {
           <>
             <InfoContainer>
               <LogoContainer>
-                <Logo source={logo} />
+                <Logo resizeMode="contain" source={logo} />
               </LogoContainer>
               <OperationName>{i18n.t('operation.name', '')}</OperationName>
               <OperationSubName>{i18n.t('operation.subName', '')}</OperationSubName>
