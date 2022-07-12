@@ -16,7 +16,7 @@ interface RidePageStateContextProps {
   isUserLocationFocused: boolean;
   setIsUserLocationFocused: (isLocationFocused: boolean) => void;
   currentBsPage: BsPages;
-  checkStopPointsInTerritory: (sp: any) => Promise<boolean>;
+  checkStopPointsInTerritory: (sp: any) => boolean;
   changeBsPage: (pageName: BsPages) => void;
   setGenericErrorPopup: (error: any) => void;
 }
@@ -28,7 +28,7 @@ export const RideStateContextContext = createContext<RidePageStateContextProps>(
   isUserLocationFocused: false,
   setIsUserLocationFocused: (isLocationFocused: boolean) => undefined,
   currentBsPage: BS_PAGES.ADDRESS_SELECTOR,
-  checkStopPointsInTerritory: async () => false,
+  checkStopPointsInTerritory: () => false,
   changeBsPage: () => undefined,
   setGenericErrorPopup: () => undefined,
 });
