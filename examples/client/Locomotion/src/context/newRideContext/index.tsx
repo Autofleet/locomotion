@@ -203,6 +203,7 @@ const RidePageContextProvider = ({ children }: {
         setRidePopup(RIDE_POPUPS.RIDE_CANCELED_BY_DISPATCHER);
       } else {
         cleanRideState();
+        changeBsPage(BS_PAGES.ADDRESS_SELECTOR);
       }
     },
   };
@@ -297,7 +298,7 @@ const RidePageContextProvider = ({ children }: {
   }, []);
 
   useInterval(async () => {
-    if (user) {
+    if (user?.id) {
       if (!rideRequestLoading) {
         if (ride?.id) {
           try {
@@ -309,7 +310,7 @@ const RidePageContextProvider = ({ children }: {
                 screenFunction(rideLoaded);
               }
             }
-            if (!RIDE_FINAL_STATES.includes(ride?.state || '')) {
+            if (!RIDE_FINAL_STATES.includes(rideLoaded?.state || '')) {
               setRide(formattedRide);
             }
           } catch (e) {
@@ -322,9 +323,10 @@ const RidePageContextProvider = ({ children }: {
       }
     } else {
       cleanRideState();
+      changeBsPage(BS_PAGES.ADDRESS_SELECTOR);
     }
   }, 4000);
-
+  // 0526686970
 
   useEffect(() => {
     validateRequestedStopPoints(requestStopPoints);
