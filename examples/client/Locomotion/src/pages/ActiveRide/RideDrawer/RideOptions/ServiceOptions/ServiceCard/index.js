@@ -1,10 +1,9 @@
 import moment from 'moment';
-import getSymbolFromCurrency from 'currency-symbol-map';
 import React, { useContext } from 'react';
 import SvgIcon from '../../../../../../Components/SvgIcon';
 import i18n from '../../../../../../I18n';
 import Seat from '../../../../../../assets/seat.svg';
-import { getCurrencySymbol, TAG_OPTIONS } from '../../../../../../context/newRideContext/utils';
+import { getFormattedPrice, TAG_OPTIONS } from '../../../../../../context/newRideContext/utils';
 import { Context as ThemeContext } from '../../../../../../context/theme';
 import {
   Circle, AvailableSeats,
@@ -17,14 +16,13 @@ import {
 } from './styled';
 import Tag from '../../../../../../Components/Tag';
 import { RidePageContext } from '../../../../../../context/newRideContext';
-import { AvailabilityContext } from '../../../../../../context/availability';
 
 const ServiceCard = ({ service }) => {
   const theme = useContext(ThemeContext);
   const { setChosenService, chosenService, serviceEstimations } = useContext(RidePageContext);
   const unavailable = !service.eta;
   const unavailableText = i18n.t('rideDetails.unavailable');
-  const serviceDisplayPrice = new Intl.NumberFormat('en-IN', { style: 'currency', currency: service.currency }).format(service.price);
+  const serviceDisplayPrice = getFormattedPrice(service.currency, service.price);
   const tagStyles = {
     [TAG_OPTIONS.FASTEST]: {
       container: {
