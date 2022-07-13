@@ -583,6 +583,7 @@
 			baseConfigurationReference = 696204FB26E0B163288A662A /* Pods-Locomotion.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Locomotion/Locomotion.entitlements;
 				CURRENT_PROJECT_VERSION = 1;
@@ -613,6 +614,7 @@
 			baseConfigurationReference = 55610BD25FC1E81B65311466 /* Pods-Locomotion.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Locomotion/Locomotion.entitlements;
 				CURRENT_PROJECT_VERSION = 1;
