@@ -24,7 +24,7 @@ const ServiceCard = ({ service }) => {
   const { setChosenService, chosenService, serviceEstimations } = useContext(RidePageContext);
   const unavailable = !service.eta;
   const unavailableText = i18n.t('rideDetails.unavailable');
-  const serviceDisplayPrice = `${getCurrencySymbol(service.currency)}${service.price}`;
+  const serviceDisplayPrice = new Intl.NumberFormat('en-IN', { style: 'currency', currency: service.currency }).format(service.price);
   const tagStyles = {
     [TAG_OPTIONS.FASTEST]: {
       container: {
@@ -83,7 +83,7 @@ const ServiceCard = ({ service }) => {
             }
           </TitleContainer>
           <Price>
-            {service.price ? serviceDisplayPrice : unavailableText}
+            {service.price !== undefined ? serviceDisplayPrice : unavailableText}
           </Price>
         </Row>
         {!unavailable && (
