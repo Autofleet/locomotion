@@ -28,14 +28,11 @@ justify-content: center;
 `;
 
 export const LogoContainer = styled.View`
-height: 80px;
-width: 140px;
+width: 100%;
 `;
 
 export const Logo = styled.Image`
   width: 100%;
-  height: undefined;
-  aspect-ratio: 1.8;
 `;
 
 export const OperationName = styled.Text`

@@ -27,7 +27,7 @@ const Welcome = () => {
       <PageContainer>
         <InfoContainer>
           <LogoContainer>
-            <Logo source={logo} />
+            <Logo resizeMode="contain" source={logo} />
           </LogoContainer>
           <OperationName>
             {Config.OPERATION_NAME}
