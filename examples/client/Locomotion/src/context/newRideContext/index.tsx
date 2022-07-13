@@ -25,7 +25,8 @@ import { BS_PAGES } from '../ridePageStateContext/utils';
 import { RIDE_STATES, RIDE_FINAL_STATES, STOP_POINT_TYPES } from '../../lib/commonTypes';
 import useInterval from '../../lib/useInterval';
 import { formatSps } from '../../lib/ride/utils';
-import { MAIN_ROUTES } from '../../pages/routes';
+import { APP_ROUTES, MAIN_ROUTES } from '../../pages/routes';
+import { navigate } from '../../services/navigation';
 
 type Dispatch<A> = (value: A) => void;
 type Nav = {
@@ -635,7 +636,7 @@ const RidePageContextProvider = ({ children }: {
     ]);
 
     cleanRideState();
-    navigation.navigate(MAIN_ROUTES.HOME);
+    navigate(MAIN_ROUTES.HOME, {}, APP_ROUTES.MAIN_APP);
     changeBsPage(BS_PAGES.ADDRESS_SELECTOR);
     return true;
   };
