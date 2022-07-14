@@ -7,7 +7,6 @@ import {
 } from 'react-native';
 import styled from 'styled-components';
 import { useBottomSheet } from '@gorhom/bottom-sheet';
-import getSymbolFromCurrency from 'currency-symbol-map';
 import Thumbnail from '../../../Components/Thumbnail';
 import i18n from '../../../I18n';
 import SelectableButton from '../../../Components/SelectableButton';
@@ -15,6 +14,7 @@ import { SubmitButtonText } from '../../../Components/SelectableButton/styled';
 import BottomSheet from '../../../Components/BottomSheet';
 import BottomSheetContextProvider, { BottomSheetContext, SNAP_POINT_STATES } from '../../../context/bottomSheetContext';
 import CustomTip from './CustomTip';
+import { getFormattedPrice } from '../../../context/newRideContext/utils';
 
 const TipSectionContainer = styled.View`
  width: 100%;
@@ -111,7 +111,7 @@ const Tips = ({
   const isPercentage = ridePrice >= tipSettings.percentageThreshold;
   const buttons = isPercentage ? tipSettings.percentage : tipSettings.fixedPrice;
 
-  const serviceDisplayPrice = getSymbolFromCurrency(priceCurrency || 'USD');
+  const serviceDisplayPrice = getFormattedPrice(priceCurrency, ridePrice);
   const tipSuffix = isPercentage ? '%' : serviceDisplayPrice;
 
   const bottomSheetRef = useRef(null);
@@ -174,7 +174,7 @@ const Tips = ({
               {`${i18n.t('postRide.tip.title')} ${driver.firstName}`}
             </Title>
             <SubTitle>
-              {`${i18n.t('postRide.tip.subTitle')} ${serviceDisplayPrice}${ridePrice}`}
+              {`${i18n.t('postRide.tip.subTitle')} ${serviceDisplayPrice}`}
             </SubTitle>
           </Column>
           <ThumbnailContainer>

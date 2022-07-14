@@ -1,6 +1,5 @@
 import moment from 'moment';
 import shortid from 'shortid';
-import getSymbolFromCurrency from 'currency-symbol-map';
 import i18n from '../../I18n';
 import { getGeocode } from './google-api';
 
@@ -124,5 +123,9 @@ export const formatStopPointsForEstimations = (requestStopPoints: any[]) => requ
   lng: sp.lng,
 }));
 
-
-export const getCurrencySymbol = (currency: string) => getSymbolFromCurrency(currency);
+export const getFormattedPrice = (priceCurrency: string, priceAmount: number) => {
+  if (!priceCurrency) {
+    return i18n.t('rideDetails.noCharge');
+  }
+  return new Intl.NumberFormat('en-IN', { style: 'currency', currency: (priceCurrency) }).format(priceAmount);
+};
