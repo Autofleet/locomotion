@@ -5,8 +5,11 @@ import { getUserDetails } from '../../context/user/api';
 import { OnboardingContext } from '../../context/onboarding';
 import PaymentsContext from '../../context/payments';
 import { UserContext } from '../../context/user';
+import settings from '../../context/settings';
+import SETTINGS_KEYS from '../../context/settings/keys';
 import { StorageService } from '../../services';
 import FullPageLoader from '../../Components/FullPageLoader';
+import { checkVersionAndForceUpdateIfNeeded } from '../../services/VersionCheck';
 
 export const INITIAL_USER_STATE = {
   phoneNumber: '',
@@ -22,6 +25,8 @@ export const INITIAL_USER_STATE = {
 const AuthLoadingScreen = ({ navigation }) => {
   const { setUser, user } = useContext(UserContext);
   const { navigateBasedOnUser } = useContext(OnboardingContext);
+  const { getSettingByKey } = settings.useContainer();
+
   const usePayments = PaymentsContext.useContainer();
 
   const saveUser = (clientProfile) => {
@@ -29,11 +34,19 @@ const AuthLoadingScreen = ({ navigation }) => {
     return StorageService.save({ clientProfile });
   };
 
+  const versionCheck = async () => {
+    const minAppVersion = await getSettingByKey(
+      SETTINGS_KEYS.MIN_APP_VERSION,
+    );
+
+    await checkVersionAndForceUpdateIfNeeded(minAppVersion);
+  };
+
   const init = () => {
     async function getFromStorage() {
       const clientProfile = await StorageService.get('clientProfile');
-
       if (clientProfile) {
+        await versionCheck();
         const response = await getUserDetails();
         if (!response) {
           Auth.logout(navigation);
@@ -64,6 +77,7 @@ const AuthLoadingScreen = ({ navigation }) => {
       setUser(INITIAL_USER_STATE);
       navigation.navigate(MAIN_ROUTES.START);
     }
+
 
     if (!user) { // Load app state
       getFromStorage();

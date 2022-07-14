@@ -21,7 +21,7 @@ const RidePaymentDetails = ({
     <CardsTitle title={i18n.t('ride.paymentMethod')} />
     <PaymentRow>
       <CardRowContainer>
-        <CardRow {...payment.paymentMethod} name={i18n.t('payments.cash')} />
+        <CardRow name={i18n.t('payments.cash')} {...payment.paymentMethod} />
       </CardRowContainer>
       <RidePriceDetails>
         <PriceText>{`${getCurrencySymbol(priceCurrency)}${priceAmount}`}</PriceText>
