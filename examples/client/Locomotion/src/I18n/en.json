@@ -419,7 +419,8 @@
     "states": {
         "arrived": "Arrived",
         "completed": "Completed",
-        "pending": "Pending"
+        "pending": "Pending",
+        "canceled": "Canceled"
     }
   },
   "activeRide": {
