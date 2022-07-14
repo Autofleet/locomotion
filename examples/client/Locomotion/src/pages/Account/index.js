@@ -2,6 +2,7 @@ import React, { useEffect, useContext } from 'react';
 import { useRoute } from '@react-navigation/native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import moment from 'moment';
+import cashPaymentMethod from '../../pages/Payments/cashPaymentMethod';
 import Card from '../../Components/InformationCard';
 import PaymentsContext from '../../context/payments';
 import { MAIN_ROUTES } from '../routes';
@@ -93,7 +94,7 @@ const AccountContent = ({ navigation }) => {
         >
           {user ? `${user.email}` : ''}
         </Card>
-        {defaultPaymentMethod && (
+        {defaultPaymentMethod && defaultPaymentMethod.id !== cashPaymentMethod.id ? (
           <>
             <CardsTitle title={i18n.t('onboarding.paymentInformation')} />
             <Card
@@ -107,7 +108,7 @@ const AccountContent = ({ navigation }) => {
           }
             </Card>
           </>
-        )}
+        ) : undefined}
         <LogoutContainer
           onPress={() => {
             navigation.navigate(MAIN_ROUTES.LOGOUT);
