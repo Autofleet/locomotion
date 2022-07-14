@@ -18,6 +18,7 @@ import { RideStateContextContext } from '../../../../../context/ridePageStateCon
 import { popupNames } from '../utils';
 import { BS_PAGES } from '../../../../../context/ridePageStateContext/utils';
 import cashPaymentMethod from '../../../../../pages/Payments/cashPaymentMethod';
+import { MAX_DATE_FUTURE_RIDE, MIN_DATE_FUTURE_RIDE } from '../../../../../context/newRideContext/utils';
 
 
 interface RideButtonsProps {
@@ -46,8 +47,6 @@ const RideButtons = ({
     } = PaymentsContext.useContainer();
 
   const renderFutureBooking = () => {
-    const maxDate = moment().add(7, 'days').toDate();
-    const minDate = moment().add(0, 'minutes').toDate(); // setting - Dispatch Future Rides Immediately
     const close = () => {
       setIsDatePickerOpen(false);
     };
@@ -57,8 +56,8 @@ const RideButtons = ({
         <DatePicker
           open={isDatePickerOpen}
           date={new Date(ride?.afterTime || Date())}
-          maximumDate={maxDate}
-          minimumDate={minDate}
+          maximumDate={MAX_DATE_FUTURE_RIDE}
+          minimumDate={MIN_DATE_FUTURE_RIDE}
           mode="datetime"
           title={i18n.t('bottomSheetContent.ride.chosePickupTime')}
           onCancel={close}
