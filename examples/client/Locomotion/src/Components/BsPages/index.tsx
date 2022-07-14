@@ -226,7 +226,7 @@ export default BsPage;
 
 export const ConfirmPickupTime = (props: any) => {
   const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
-  const { ride, updateRide } = useContext(MewRidePageContext);
+  const { ride, updateRidePayload } = useContext(MewRidePageContext);
   const {
     changeBsPage,
   } = useContext(RideStateContextContext);
@@ -238,6 +238,7 @@ export const ConfirmPickupTime = (props: any) => {
     <BsPage
       TitleText={i18n.t('bottomSheetContent.confirmPickupTime.titleText')}
       ButtonText={i18n.t('bottomSheetContent.confirmPickupTime.buttonText')}
+      fullWidthButtons
       onButtonPress={() => {
         changeBsPage(BS_PAGES.SERVICE_ESTIMATIONS);
       }}
@@ -264,7 +265,7 @@ export const ConfirmPickupTime = (props: any) => {
         title={i18n.t('bottomSheetContent.ride.chosePickupTime')}
         onCancel={() => setIsDatePickerOpen(false)}
         onConfirm={(newDate: Date) => {
-          updateRide(ride.id, { afterTime: newDate.getTime() });
+          updateRidePayload({ afterTime: newDate.getTime() });
           setIsDatePickerOpen(false);
         }}
         modal
