@@ -22,7 +22,7 @@ const StopPointsViewer = ({ goBackToAddressSelector }: StopPointsViewerProps) =>
         onPress={() => goBackToAddressSelector(STOP_POINT_TYPES.STOP_POINT_PICKUP)}
       >
         <StreetAddress>
-          {firstSp.streetAddress}
+          {firstSp?.streetAddress}
         </StreetAddress>
       </StreetAddressContainer>
       <SvgIcon
