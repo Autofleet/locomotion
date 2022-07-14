@@ -27,6 +27,7 @@ import { MewRidePageContext } from '../..';
 import timeIcon from '../../assets/calendar.svg';
 import ActiveRideContent from './ActiveRide';
 import RoundedButton from '../RoundedButton';
+import { MAX_DATE_FUTURE_RIDE, MIN_DATE_FUTURE_RIDE } from '../../context/newRideContext/utils';
 
 const OtherButton = styled(Button)`
   background-color: ${({ warning, theme }) => (warning ? ERROR_COLOR : theme.primaryColor)};
@@ -232,8 +233,6 @@ export const ConfirmPickupTime = (props: any) => {
   } = useContext(RideStateContextContext);
   const date = moment(ride?.afterTime).format('ddd, MMM Do');
   const time = moment(ride?.afterTime).format('HH:mm');
-  const maxDate = moment().add(7, 'days').toDate();
-  const minDate = moment().add(0, 'minutes').toDate(); // setting - Dispatch Future Rides Immediately
   return (
     <BsPage
       TitleText={i18n.t('bottomSheetContent.confirmPickupTime.titleText')}
@@ -259,8 +258,8 @@ export const ConfirmPickupTime = (props: any) => {
       <DatePicker
         open={isDatePickerOpen}
         date={new Date(ride?.afterTime || Date())}
-        maximumDate={maxDate}
-        minimumDate={minDate}
+        maximumDate={MAX_DATE_FUTURE_RIDE}
+        minimumDate={MIN_DATE_FUTURE_RIDE}
         mode="datetime"
         title={i18n.t('bottomSheetContent.ride.chosePickupTime')}
         onCancel={() => setIsDatePickerOpen(false)}
