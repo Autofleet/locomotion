@@ -2,7 +2,7 @@ import { useNavigation } from '@react-navigation/native';
 import React, {
   createContext, useContext, useState,
 } from 'react';
-import { navigate } from '../../services/navigation';
+import * as navigationService from '../../services/navigation';
 import { APP_ROUTES, MAIN_ROUTES } from '../../pages/routes';
 import { UserContext } from '../user';
 
@@ -75,7 +75,7 @@ const OnboardingContextProvider = ({ children }: { children: any }) => {
       }
       return navigateToScreen(keyToScreen.welcome);
     }
-    return navigate(MAIN_ROUTES.HOME, {}, APP_ROUTES.MAIN_APP);
+    return navigationService.navigate(MAIN_ROUTES.HOME, {}, APP_ROUTES.MAIN_APP);
   };
 
   const verifyCode = async (code: string) => {

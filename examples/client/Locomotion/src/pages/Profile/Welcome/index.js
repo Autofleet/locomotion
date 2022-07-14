@@ -1,6 +1,5 @@
 import { useNavigation } from '@react-navigation/native';
 import React, { useContext } from 'react';
-import Config from 'react-native-config';
 import { APP_ROUTES } from '../../routes';
 import i18n from '../../../I18n';
 import logo from '../../../assets/welcomeLogo.png';
@@ -10,7 +9,7 @@ import {
 } from './styles';
 import { SafeView } from '../styles';
 import {
-  InfoContainer, LogoContainer, Logo, OperationName, OperationSubName,
+  InfoContainer, LogoContainer, Logo,
 } from '../../AuthScreens/StartScreen/styles';
 import { UserContext } from '../../../context/user';
 
@@ -29,9 +28,6 @@ const Welcome = () => {
           <LogoContainer>
             <Logo resizeMode="contain" source={logo} />
           </LogoContainer>
-          <OperationName>
-            {Config.OPERATION_NAME}
-          </OperationName>
         </InfoContainer>
         <TextContainer>
           <WelcomeText>

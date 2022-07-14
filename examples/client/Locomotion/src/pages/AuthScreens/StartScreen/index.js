@@ -12,8 +12,6 @@ import {
   TermsLink,
   LogoContainer,
   Logo,
-  OperationName,
-  OperationSubName,
   InfoContainer,
 } from './styles';
 import SafeView from '../../../Components/SafeView';
@@ -76,8 +74,6 @@ const StartScreen = () => {
               <LogoContainer>
                 <Logo resizeMode="contain" source={logo} />
               </LogoContainer>
-              <OperationName>{i18n.t('operation.name', '')}</OperationName>
-              <OperationSubName>{i18n.t('operation.subName', '')}</OperationSubName>
             </InfoContainer>
             <ButtonsContainer>
               <StartButton
