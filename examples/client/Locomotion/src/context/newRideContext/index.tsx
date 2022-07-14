@@ -556,6 +556,7 @@ const RidePageContextProvider = ({ children }: {
       serviceId: chosenService?.id,
       paymentMethodId: ride.paymentMethodId,
       rideType: 'passenger',
+      ...(ride.afterTime && { scheduledTo: ride.afterTime }),
       stopPoints: stopPoints.map((sp, i) => ({
         lat: Number(sp.lat),
         lng: Number(sp.lng),

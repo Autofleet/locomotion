@@ -47,7 +47,7 @@ const RideButtons = ({
 
   const renderFutureBooking = () => {
     const maxDate = moment().add(7, 'days').toDate();
-    const minDate = moment().add(5, 'minutes').toDate(); // setting - Dispatch Future Rides Immediately
+    const minDate = moment().add(0, 'minutes').toDate(); // setting - Dispatch Future Rides Immediately
     const close = () => {
       setIsDatePickerOpen(false);
     };
