@@ -9,6 +9,7 @@
         "unavailable": "Not available",
         "timeUntilArrival": "In {{minutes}} min",
         "toolTipEta": "Eta {{minutes}} min",
+        "noCharge": "No charge",
         "type": {
             "pickup": "Pickup",
             "dropoff": "Drop off"

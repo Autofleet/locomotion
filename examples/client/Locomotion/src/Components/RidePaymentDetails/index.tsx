@@ -1,6 +1,6 @@
 import React from 'react';
 import { TouchableOpacity } from 'react-native';
-import { getCurrencySymbol } from '../../context/newRideContext/utils';
+import { getFormattedPrice } from '../../context/newRideContext/utils';
 import CardRow from '../CardRow';
 import CardsTitle from '../CardsTitle';
 import i18n from '../../I18n';
@@ -24,7 +24,7 @@ const RidePaymentDetails = ({
         <CardRow {...payment.paymentMethod} name={i18n.t('payments.cash')} />
       </CardRowContainer>
       <RidePriceDetails>
-        <PriceText>{`${getCurrencySymbol(priceCurrency)}${priceAmount}`}</PriceText>
+        <PriceText>{getFormattedPrice(priceCurrency, priceAmount)}</PriceText>
         <TouchableOpacity>
           <ViewDetails>
             {i18n.t('ride.viewDetails').toString()}

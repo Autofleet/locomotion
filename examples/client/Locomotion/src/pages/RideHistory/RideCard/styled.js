@@ -97,7 +97,7 @@ export const RideViewTextContainer = styled.View`
 `;
 
 export const RideViewSecTextContainer = styled.View`
-  flex: 2;
+  flex: 3;
 `;
 
 export const CenterContainer = styled.View`
