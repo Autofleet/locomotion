@@ -15,17 +15,6 @@ interface ButtonProps {
   children?: any;
 }
 
-interface ButtonProps {
-  type?: string;
-  hollow?: boolean;
-  onPress: (args?: any) => void;
-  disabled?: boolean;
-  useCancelTextButton?: boolean;
-  setLoading?: (state: boolean) => void;
-  style?: any;
-  children?: any;
-}
-
 const RoundedButton = ({
   onPress,
   style,
@@ -95,6 +84,7 @@ RoundedButton.defaultProps = {
   setLoading: null,
   style: {},
   children: null,
+  icon: null,
 };
 
 export default RoundedButton;
