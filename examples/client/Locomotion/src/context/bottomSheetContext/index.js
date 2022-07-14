@@ -25,6 +25,7 @@ const BottomSheetProvider = ({ children }) => {
 
   const [snapPointsState, setSnapPointsState] = useState(SNAP_POINT_STATES[BS_PAGES.ADDRESS_SELECTOR]);
   const [footerComponent, setFooterComponent] = useState(null);
+  const [topBarText, setTopBarText] = useState('');
   const snapPoints = useMemo(() => snapPointsState, [snapPointsState]);
 
   return (
@@ -36,6 +37,8 @@ const BottomSheetProvider = ({ children }) => {
         setSnapPointsState,
         setFooterComponent,
         footerComponent,
+        topBarText,
+        setTopBarText,
       }}
     >
       {children}

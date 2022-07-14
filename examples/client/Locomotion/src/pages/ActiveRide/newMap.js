@@ -5,6 +5,7 @@ import polyline from '@mapbox/polyline';
 import { Platform, StyleSheet, Text } from 'react-native';
 import MapView, { Polygon, Polyline } from 'react-native-maps';
 import Config from 'react-native-config';
+import moment from 'moment';
 import { UserContext } from '../../context/user';
 import { RidePageContext } from '../../context/newRideContext';
 import { RideStateContextContext } from '../../context';
@@ -20,6 +21,7 @@ import { RIDE_STATES, STOP_POINT_STATES, STOP_POINT_TYPES } from '../../lib/comm
 import PrecedingStopPointMarker from '../../Components/PrecedingStopPointMarker';
 import { getSubLineStringAfterLocationFromDecodedPolyline } from '../../lib/polyline/utils';
 import { BottomSheetContext } from '../../context/bottomSheetContext';
+import i18n from '../../I18n';
 
 const MAP_EDGE_PADDING = {
   top: 140,
@@ -173,6 +175,33 @@ export default React.forwardRef(({
   const firstSpNotCompleted = (stopPoints
     && stopPoints.find(p => p.state !== STOP_POINT_STATES.COMPLETED)) || requestStopPoints[0];
 
+
+  const getStopPointEtaText = (stopPoint, isNext) => {
+    const { state } = stopPoint;
+    if (state === STOP_POINT_STATES.COMPLETED) {
+      return i18n.t('stopPoints.states.completed');
+    }
+
+    if (isNext) {
+      if (ride.afterTime) {
+        return moment(ride.afterTime).format('MMM D, h:mm A');
+      }
+      const eta = stopPoint.plannedArrivalTime || (chosenService && chosenService.eta);
+      if (eta) {
+        const minutesUntilPickup = moment(eta).diff(moment(), 'minutes');
+        return minutesUntilPickup < 1
+          ? i18n.t('general.now')
+          : i18n.t('rideDetails.toolTipEta', { minutes: minutesUntilPickup });
+      }
+    }
+
+    if (stopPoint.plannedArrivalTime) {
+      return moment(stopPoint.plannedArrivalTime).format('h:mm A');
+    }
+
+    return stopPoint.streetAddress || stopPoint.description;
+  };
+
   return (
     <>
       <MapView
@@ -223,14 +252,18 @@ export default React.forwardRef(({
           && finalStopPoints.filter(sp => !!sp.lat).length > 1
           ? finalStopPoints
             .filter(sp => !!sp.lat)
-            .map(sp => (
-              <StationsMap
-                chosenService={chosenService}
-                stopPoint={sp}
-                key={sp.id}
-                isNext={firstSpNotCompleted.id === sp.id}
-              />
-            ))
+            .map((sp) => {
+              const isNext = firstSpNotCompleted.id === sp.id;
+              return (
+                <StationsMap
+                  stopPoint={sp}
+                  key={sp.id}
+                  isNext={isNext}
+                  etaText={getStopPointEtaText(sp, isNext)}
+                  isFutureRide={ride.afterTime}
+                />
+              );
+            })
           : null}
         {currentBsPage === BS_PAGES.NOT_IN_TERRITORY && territory && territory.length ? territory
           .map(t => t.polygon.coordinates.map(poly => (

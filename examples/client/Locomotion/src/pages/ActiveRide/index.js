@@ -64,7 +64,7 @@ const RidePage = ({ mapSettings, navigation }) => {
     tryServiceEstimations,
   } = useContext(RidePageContext);
   const {
-    setIsExpanded, snapPoints, isExpanded,
+    setIsExpanded, snapPoints, isExpanded, topBarText,
   } = useContext(BottomSheetContext);
   const {
     clientHasValidPaymentMethods,
@@ -73,6 +73,7 @@ const RidePage = ({ mapSettings, navigation }) => {
   const resetStateToAddressSelector = (selected = null) => {
     setServiceEstimations(null);
     setChosenService(null);
+    setRide({});
     changeBsPage(BS_PAGES.ADDRESS_SELECTOR);
     setAddressSelectorFocus(selected);
   };
@@ -268,7 +269,12 @@ const RidePage = ({ mapSettings, navigation }) => {
         <SquareSvgButton
           onPress={focusCurrentLocation}
           icon={targetIcon}
-          style={{ position: 'absolute', bottom: `${parseFloat(snapPoints[0]) + 2}%`, right: 20 }}
+          style={{
+            position: 'absolute',
+            marginBottom: topBarText ? 40 : 0,
+            bottom: `${parseFloat(snapPoints[0]) + 2}%`,
+            right: 20,
+          }}
         />
       )}
       <BottomSheet
