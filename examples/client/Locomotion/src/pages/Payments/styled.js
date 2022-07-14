@@ -1,6 +1,8 @@
 import React from 'react';
 import { View } from 'react-native';
 import styled from 'styled-components';
+import { Text } from '../Profile/ScreenText/styles';
+import SvgIcon from '../../Components/SvgIcon';
 
 import creditCardImage from '../../assets/menuItems/creditcard.png';
 
@@ -87,7 +89,8 @@ export const CreditCardRowText = styled.Text`
 `;
 
 export const DeleteCreditCard = styled.TouchableOpacity`
-    margin-top: 5px;
+display: flex;
+    margin: 25px;
     align-self: flex-end;
     padding: 5px;
     opacity: ${({ disabled }) => (disabled ? 0.5 : 1)};
@@ -102,4 +105,30 @@ export const CardsListContainer = styled.View`
    flex: 1;
    flex-direction: column;
    justify-content: flex-start;
+`;
+
+export const PaymentMethodsContainer = styled.View`
+    display: flex;
+`;
+
+export const CreditCardsContainer = styled.View`
+display: flex;
+flex-direction: row;
+max-width: 70%;
+`;
+
+export const MethodCard = styled.View`
+display: flex;
+flex-direction: row;
+justify-content: space-between;
+`;
+
+export const ChevronIcon = styled(SvgIcon)`
+margin-top: '25px';
+`;
+
+export const ChangeButton = styled(Text)`
+margin-left: 110;
+margin-bottom: 20;
+color: #24aaf2;
 `;

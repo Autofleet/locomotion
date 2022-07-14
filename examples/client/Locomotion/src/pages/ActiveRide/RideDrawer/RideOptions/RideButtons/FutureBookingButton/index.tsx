@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { Text } from 'react-native';
-import styled from 'styled-components';
 import moment from 'moment';
+import styled, { ThemeContext } from 'styled-components';
 import SvgIcon from '../../../../../../Components/SvgIcon';
 import clock from '../../../../../../assets/bottomSheet/clock.svg';
 import i18n from '../../../../../../I18n';
@@ -17,10 +17,13 @@ const TimeText = styled(Text)`
 const FutureBookingButton = () => {
   const { ride } = useContext(RidePageContext);
   const nowText = i18n.t('bottomSheetContent.ride.now');
+  const { primaryColor } = useContext(ThemeContext);
+  const isFutureRide = ride?.afterTime;
+  const chosenTime = isFutureRide && moment(ride.afterTime).format('DD.MM.YY, HH:mm');
   return (
     <>
-      <SvgIcon fill="#333" Svg={clock} height={15} width={15} />
-      <TimeText>{ride?.afterTime ? moment(ride.afterTime).format('DD.MM.YY, HH:mm') : nowText}</TimeText>
+      <SvgIcon fill={primaryColor} Svg={clock} height={15} width={15} />
+      <TimeText>{isFutureRide ? chosenTime : nowText}</TimeText>
     </>
   );
 };

@@ -4,7 +4,7 @@ import React, { useContext } from 'react';
 import SvgIcon from '../../../../../../Components/SvgIcon';
 import i18n from '../../../../../../I18n';
 import Seat from '../../../../../../assets/seat.svg';
-import { TAG_OPTIONS } from '../../../../../../context/newRideContext/utils';
+import { getCurrencySymbol, TAG_OPTIONS } from '../../../../../../context/newRideContext/utils';
 import { Context as ThemeContext } from '../../../../../../context/theme';
 import {
   Circle, AvailableSeats,
@@ -13,7 +13,7 @@ import {
   Row, Price,
   ServiceDetails, TimeDetails,
   Title, Description,
-  CarContainer,
+  CarContainer, TitleContainer,
 } from './styled';
 import Tag from '../../../../../../Components/Tag';
 import { RidePageContext } from '../../../../../../context/newRideContext';
@@ -21,14 +21,10 @@ import { AvailabilityContext } from '../../../../../../context/availability';
 
 const ServiceCard = ({ service }) => {
   const theme = useContext(ThemeContext);
-  const { setChosenService, chosenService } = useContext(RidePageContext);
+  const { setChosenService, chosenService, serviceEstimations } = useContext(RidePageContext);
   const unavailable = !service.eta;
-  const minutesUntilPickup = moment.duration(moment(service.eta).diff(moment())).minutes().toString();
-  const timeUntilArrival = minutesUntilPickup > 1
-    ? i18n.t('rideDetails.toolTipEta', { minutes: minutesUntilPickup })
-    : i18n.t('general.now');
   const unavailableText = i18n.t('rideDetails.unavailable');
-  const serviceDisplayPrice = `${getSymbolFromCurrency(service.currency)}${service.price}`;
+  const serviceDisplayPrice = `${getCurrencySymbol(service.currency)}${service.price}`;
   const tagStyles = {
     [TAG_OPTIONS.FASTEST]: {
       container: {
@@ -49,6 +45,13 @@ const ServiceCard = ({ service }) => {
     },
   };
 
+  const getEta = () => {
+    const minutesUntilPickup = moment(service.eta).diff(moment(), 'minutes');
+    return minutesUntilPickup < 1
+      ? i18n.t('general.now')
+      : i18n.t('rideDetails.toolTipEta', { minutes: minutesUntilPickup });
+  };
+
   return (
     <CardContainer
       theme={theme}
@@ -65,18 +68,20 @@ const ServiceCard = ({ service }) => {
       </CarContainer>
       <ServiceDetails unavailable={unavailable}>
         <Row>
-          <Title>
-            {service.name}
-          </Title>
-          {service.tags.map(tag => tag && (
-          <Tag
-            key={tag.title}
-            containerStyles={tagStyles[tag].container}
-            text={tag}
-            textColor={tagStyles[tag].textColor}
-          />
-          ))
+          <TitleContainer>
+            <Title>
+              {service.name}
+            </Title>
+            {serviceEstimations.filter(s => s.price).length > 1 && service.tag && (
+            <Tag
+              key={service.tag}
+              containerStyles={tagStyles[service.tag].container}
+              text={service.tag}
+              textColor={tagStyles[service.tag].textColor}
+            />
+            )
             }
+          </TitleContainer>
           <Price>
             {service.price ? serviceDisplayPrice : unavailableText}
           </Price>
@@ -89,7 +94,7 @@ const ServiceCard = ({ service }) => {
             </Eta>
             <Circle />
             <Eta>
-              {timeUntilArrival}
+              {getEta()}
             </Eta>
           </TimeDetails>
           <Capacity>

@@ -1,9 +1,7 @@
 import React, {
-  useCallback, useEffect, useMemo, useRef, useState, useContext,
+  useCallback, useContext, useEffect, useRef,
 } from 'react';
-import {
-  View, Text, StyleSheet, LayoutAnimation, Animated, Platform, UIManager,
-} from 'react-native';
+import { Animated, View } from 'react-native';
 import styled from 'styled-components';
 import { debounce } from 'lodash';
 import BottomSheetInput from '../../../../Components/TextInput/BottomSheetInput';
@@ -76,6 +74,7 @@ const SearchBar = ({
   onFocus = () => null,
   onBack,
   onSearch,
+  isSelected,
 }) => {
   const {
     searchTerm,
@@ -116,16 +115,31 @@ const SearchBar = ({
     debouncedSearch(searchTerm);
   }, [searchTerm]);
 
+  const inputRef = useRef();
+
+  useEffect(() => {
+    if (isSelected) {
+      if (inputRef && inputRef.current) {
+        inputRef.current.focus();
+      }
+    } else {
+      inputRef.current = null;
+    }
+  }, [isSelected]);
 
   const buildSps = () => requestStopPoints.map((s, i) => {
+    const { type, description } = requestStopPoints[i];
     const placeholder = getSpPlaceholder(s);
     const rowProps = i === 0 ? { isExpanded } : { setMargin: true };
+    const autoFocus = isExpanded && type === isSelected;
     return (
       <Row
         {...rowProps}
         key={s.id}
       >
         <BottomSheetInput
+          accessible
+          accessibilityLabel={`address_input_${i}`}
           placeholder={i18n.t(placeholder)}
           onChangeText={(text) => {
             updateRequestSp({
@@ -136,7 +150,7 @@ const SearchBar = ({
             setSearchTerm(text);
           }}
           fullBorder
-          value={requestStopPoints[i].description}
+          value={description || ''}
           placeholderTextColor="#929395"
           onFocus={(e) => {
             onInputFocus(e.target, i);
@@ -151,6 +165,12 @@ const SearchBar = ({
             }, i);
             setSearchTerm(null);
           }}
+          ref={(ref) => {
+            if (autoFocus) {
+              inputRef.current = ref;
+            }
+          }}
+          selectTextOnFocus
         />
       </Row>
     );
@@ -166,22 +186,11 @@ const SearchBar = ({
   });
 
 
-  /*   useEffect(() => {
-    if (isExpanded) {
-      LayoutAnimation.configureNext(
-        LayoutAnimation.Presets.spring,
-      );
-    } else {
-      LayoutAnimation.configureNext(LayoutAnimation.create(
-        200,
-        LayoutAnimation.Presets.easeOut,
-        LayoutAnimation.Properties.scaleXY,
-      ));
-      if (selectedInputTarget) {
-        selectedInputTarget.blur();
-      }
+  useEffect(() => {
+    if (!isExpanded && selectedInputTarget) {
+      selectedInputTarget.blur();
     }
-  }, [isExpanded]); */
+  }, [isExpanded]);
 
   return (
     <View

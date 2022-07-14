@@ -3,12 +3,12 @@ import React, {
 } from 'react';
 
 import {
-  BottomSheetView,
   useBottomSheet,
   BottomSheetScrollView,
 } from '@gorhom/bottom-sheet';
 
 import styled from 'styled-components';
+import { RIDE_POPUPS } from '../../../../context/newRideContext/utils';
 import GenericErrorPopup from '../../../../popups/GenericError';
 import i18n from '../../../../I18n';
 import AddressRow from './AddressLine';
@@ -32,7 +32,7 @@ const ContentContainer = styled.View`
   flex: 1;
 
 `;
-const AddressSelectorBottomSheet = () => {
+const AddressSelectorBottomSheet = ({ addressSelectorFocus }) => {
   const userContext = useContext(RidePageContext);
 
   const {
@@ -62,11 +62,6 @@ const AddressSelectorBottomSheet = () => {
 
   useEffect(() => {
     loadHistory();
-    if (userContext.serviceRequestFailed) {
-      setIsExpanded(true);
-      setSnapPointsState(SNAP_POINT_STATES.ADDRESS_SELECTOR);
-      expand();
-    }
   }, []);
 
   const onBack = () => {
@@ -88,6 +83,7 @@ const AddressSelectorBottomSheet = () => {
         isExpanded={isExpanded}
         onBack={onBack}
         onSearch={userContext.searchAddress}
+        isSelected={addressSelectorFocus}
       />
       <HistoryContainer keyboardShouldPersistTaps="handled">
         {isExpanded
@@ -108,15 +104,22 @@ const AddressSelectorBottomSheet = () => {
                 onPress={onSetLocationOnMap}
               />
               <BottomSheetScrollView keyboardShouldPersistTaps="handled" contentContainerStyle={{ overflow: 'visible' }}>
-                {(userContext.searchResults || userContext.historyResults).map(h => <AddressRow {...h} key={h.placeId} onPress={() => userContext.onAddressSelected(h)} />)}
+                {
+                  userContext.searchResults ? userContext.searchResults.map((h, i) => <AddressRow testID={`searchResults_${i}`} {...h} key={h.placeId} onPress={() => userContext.onAddressSelected(h)} />)
+                    : userContext.historyResults.map((h, i) => <AddressRow testID={`searchResults_${i}`} {...h} isHistory key={h.placeId} onPress={() => userContext.onAddressSelected(h)} />)
+                }
               </BottomSheetScrollView>
             </>
           )
           : null}
       </HistoryContainer>
       <GenericErrorPopup
-        isVisible={userContext.serviceRequestFailed}
-        closePopup={() => userContext.setServiceRequestFailed(false)}
+        isVisible={userContext.ridePopup === RIDE_POPUPS.FAILED_SERVICE_REQUEST}
+        closePopup={() => {
+          userContext.setRidePopup(null);
+          setIsExpanded(true);
+          expand();
+        }}
       />
     </ContentContainer>
   );

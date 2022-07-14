@@ -1,31 +1,48 @@
 import React, {
-  useContext, useEffect, useRef, useState,
+  useContext, useEffect, useState,
 } from 'react';
 import polyline from '@mapbox/polyline';
-import { Platform, StyleSheet } from 'react-native';
+import { Platform, StyleSheet, Text } from 'react-native';
 import MapView, { Polygon, Polyline } from 'react-native-maps';
 import Config from 'react-native-config';
+import { UserContext } from '../../context/user';
 import { RidePageContext } from '../../context/newRideContext';
 import { RideStateContextContext } from '../../context';
-import { getPosition } from '../../services/geo';
+import { DEFAULT_COORDS, getPosition } from '../../services/geo';
 import { LocationMarker, LocationMarkerContainer } from './styled';
 import mapDarkMode from '../../assets/mapDarkMode.json';
 import { Context as ThemeContext, THEME_MOD } from '../../context/theme';
 import { AvailabilityContext } from '../../context/availability';
 import AvailabilityVehicle from '../../Components/AvailabilityVehicle';
 import StationsMap from '../../Components/Marker';
-import { latLngToAddress } from '../../context/newRideContext/utils';
 import { BS_PAGES } from '../../context/ridePageStateContext/utils';
-import { STOP_POINT_STATES, STOP_POINT_TYPES } from '../../lib/commonTypes';
+import { RIDE_STATES, STOP_POINT_STATES, STOP_POINT_TYPES } from '../../lib/commonTypes';
 import PrecedingStopPointMarker from '../../Components/PrecedingStopPointMarker';
 import { getSubLineStringAfterLocationFromDecodedPolyline } from '../../lib/polyline/utils';
+import { BottomSheetContext } from '../../context/bottomSheetContext';
 
 const MAP_EDGE_PADDING = {
-  top: 120,
+  top: 140,
   right: 100,
   bottom: 400,
   left: 100,
 };
+
+const PAGES_TO_SHOW_SP_MARKERS = [
+  BS_PAGES.ADDRESS_SELECTOR,
+  BS_PAGES.SERVICE_ESTIMATIONS,
+  BS_PAGES.NO_PAYMENT,
+  BS_PAGES.NOT_IN_TERRITORY,
+  BS_PAGES.NO_AVAILABLE_VEHICLES,
+  BS_PAGES.ACTIVE_RIDE,
+  BS_PAGES.CANCEL_RIDE,
+  BS_PAGES.CONFIRMING_RIDE,
+];
+
+
+const getFirstPendingStopPoint = sps => (sps || []).find(sp => sp.state
+  === STOP_POINT_STATES.PENDING);
+
 export default React.forwardRef(({
   mapSettings,
 }, ref) => {
@@ -41,14 +58,16 @@ export default React.forwardRef(({
     currentBsPage,
     initGeoService,
   } = useContext(RideStateContextContext);
-
+  const {
+    snapPoints,
+  } = useContext(BottomSheetContext);
   const isMainPage = currentBsPage === BS_PAGES.ADDRESS_SELECTOR;
-  const isConfirmPickupPage = currentBsPage === BS_PAGES.CONFIRM_PICKUP;
-  const isChooseLocationOnMap = [BS_PAGES.CONFIRM_PICKUP, BS_PAGES.SET_LOCATION_ON_MAP].includes(currentBsPage);
+  const isChooseLocationOnMap = [BS_PAGES.CONFIRM_PICKUP, BS_PAGES.SET_LOCATION_ON_MAP]
+    .includes(currentBsPage);
   const {
     requestStopPoints, saveSelectedLocation, reverseLocationGeocode, ride,
+    chosenService,
   } = useContext(RidePageContext);
-  const [rideStopPoints, setRideStopPoints] = useState();
   const [mapRegion, setMapRegion] = useState({
     latitudeDelta: 0.015,
     longitudeDelta: 0.015,
@@ -57,7 +76,7 @@ export default React.forwardRef(({
   const focusCurrentLocation = () => {
     if (mapRegion.longitude && mapRegion.latitude && ref.current) {
       ref.current.animateToRegion({
-        latitude: mapRegion.latitude,
+        latitude: mapRegion.latitude - parseFloat(snapPoints[0]) / 10000,
         longitude: mapRegion.longitude,
         latitudeDelta: mapRegion.latitudeDelta,
         longitudeDelta: mapRegion.longitudeDelta,
@@ -78,7 +97,7 @@ export default React.forwardRef(({
       const geoData = await getPosition();
       setMapRegion(oldMapRegion => ({
         ...oldMapRegion,
-        ...geoData.coords,
+        ...(geoData || DEFAULT_COORDS).coords,
       }));
     } catch (e) {
       console.log('Init location error', e);
@@ -96,28 +115,23 @@ export default React.forwardRef(({
     }
   }, [ref.current]);
 
-
-  useEffect(() => {
-    if (isUserLocationFocused) {
-      focusCurrentLocation();
-    }
-  }, [mapRegion]);
-
   useEffect(() => {
     if (currentBsPage === BS_PAGES.CONFIRM_PICKUP) {
-      const pickupStopPoint = requestStopPoints.find(sp => sp.type === STOP_POINT_TYPES.STOP_POINT_PICKUP);
-      ref.current.fitToCoordinates([{
-        latitude: pickupStopPoint.lat - 0.001,
-        longitude: pickupStopPoint.lng - 0.001,
-      }, {
-        latitude: pickupStopPoint.lat,
-        longitude: pickupStopPoint.lng,
-      }, {
-        latitude: pickupStopPoint.lat + 0.001,
-        longitude: pickupStopPoint.lng + 0.001,
-      }], {
-        animated: false,
-      });
+      const [pickupStopPoint] = requestStopPoints;
+      if (pickupStopPoint) {
+        ref.current.fitToCoordinates([{
+          latitude: pickupStopPoint.lat - 0.001,
+          longitude: pickupStopPoint.lng - 0.001,
+        }, {
+          latitude: pickupStopPoint.lat,
+          longitude: pickupStopPoint.lng,
+        }, {
+          latitude: pickupStopPoint.lat + 0.001,
+          longitude: pickupStopPoint.lng + 0.001,
+        }], {
+          animated: false,
+        });
+      }
     }
   }, [currentBsPage]);
 
@@ -130,48 +144,34 @@ export default React.forwardRef(({
           longitude: parseFloat(sp.lng),
         }
       ));
-    ref.current.fitToCoordinates(coordsToFit,
-      {
-        edgePadding: MAP_EDGE_PADDING,
-      });
+    if (coordsToFit.length > 0) {
+      ref.current.fitToCoordinates(coordsToFit,
+        {
+          edgePadding: MAP_EDGE_PADDING,
+        });
+    }
   };
+
   useEffect(() => {
     if (requestStopPoints.filter((sp => sp.lat)).length > 1) {
       showInputPointsOnMap();
     }
   }, [requestStopPoints]);
 
-  const addStreetAddressToStopPoints = async () => {
-    const formattedStopPoints = await Promise.all(ride.stopPoints.map(async (sp) => {
-      const { streetAddress } = await reverseLocationGeocode(sp.lat, sp.lng);
-      return {
-        ...sp,
-        streetAddress,
-      };
-    }));
-    setRideStopPoints(formattedStopPoints);
-  };
+  const { stopPoints } = ride;
 
-  useEffect(() => {
-    if (ride && ride.stopPoints) {
-      addStreetAddressToStopPoints();
-    }
-  }, [ride.stopPoints]);
+  const currentStopPoint = getFirstPendingStopPoint(stopPoints);
+  const precedingStopPoints = (currentStopPoint || {}).precedingStops || [];
 
-  const stopPoints = rideStopPoints || requestStopPoints || [];
-
-  const getCurrentStopPoint = (sps) => {
-    const pickup = sps.find(sp => sp.type === STOP_POINT_TYPES.STOP_POINT_PICKUP
-      && sp.state === STOP_POINT_STATES.PENDING);
-    return pickup || sps[sps.length - 1];
-  };
-
-  const precedingStopPoints = getCurrentStopPoint(stopPoints).precedingStops;
-
-  const polylineList = rideStopPoints && getSubLineStringAfterLocationFromDecodedPolyline(
-    polyline.decode(getCurrentStopPoint(stopPoints).polyline),
+  const polylineList = stopPoints && currentStopPoint
+     && currentStopPoint.polyline && getSubLineStringAfterLocationFromDecodedPolyline(
+    polyline.decode(currentStopPoint.polyline),
     { latitude: ride.vehicle.location.lat, longitude: ride.vehicle.location.lng },
   ).map(p => ({ latitude: p[0], longitude: p[1] }));
+
+  const finalStopPoints = stopPoints || requestStopPoints;
+  const firstSpNotCompleted = (stopPoints
+    && stopPoints.find(p => p.state !== STOP_POINT_STATES.COMPLETED)) || requestStopPoints[0];
 
   return (
     <>
@@ -197,55 +197,47 @@ export default React.forwardRef(({
         onPanDrag={() => (
           !isUserLocationFocused === false ? setIsUserLocationFocused(false) : null
         )}
-        onUserLocationChange={(event) => {
-          if ((Platform.OS === 'ios' && !Config.MAP_PROVIDER !== 'google') || !isUserLocationFocused) {
-            return; // Follow user location works for iOS
-          }
-          const { coordinate } = event.nativeEvent;
-
-          setMapRegion(oldMapRegion => ({
-            ...oldMapRegion,
-            ...coordinate,
-          }));
-
-          if (isUserLocationFocused) {
-            focusCurrentLocation();
-          }
-        }}
         ref={ref}
         userInterfaceStyle={isDarkMode ? THEME_MOD.DARK : undefined}
         customMapStyle={isDarkMode ? mapDarkMode : undefined}
         {...mapSettings}
       >
-        {rideStopPoints && (
+        {ride.vehicle && ride.vehicle.location && (
         <AvailabilityVehicle
           location={ride.vehicle.location}
           id={ride.vehicle.id}
           key={ride.vehicle.id}
         />
         )}
-        {rideStopPoints && !!precedingStopPoints.length
+        {finalStopPoints && !!precedingStopPoints.length
           && precedingStopPoints.map(sp => <PrecedingStopPointMarker key={sp.id} stopPoint={sp} />)
         }
-        {rideStopPoints && (
+        {finalStopPoints && polylineList && (
           <Polyline
             strokeColor={primaryColor}
             strokeWidth={7}
             coordinates={polylineList}
           />
         )}
-        {!isConfirmPickupPage && stopPoints.filter(sp => !!sp.lat).length > 1
-          ? stopPoints
+        {PAGES_TO_SHOW_SP_MARKERS.includes(currentBsPage)
+          && finalStopPoints.filter(sp => !!sp.lat).length > 1
+          ? finalStopPoints
             .filter(sp => !!sp.lat)
-            .map(sp => (<StationsMap stopPoint={sp} key={sp.id} />))
+            .map(sp => (
+              <StationsMap
+                chosenService={chosenService}
+                stopPoint={sp}
+                key={sp.id}
+                isNext={firstSpNotCompleted.id === sp.id}
+              />
+            ))
           : null}
         {currentBsPage === BS_PAGES.NOT_IN_TERRITORY && territory && territory.length ? territory
           .map(t => t.polygon.coordinates.map(poly => (
             <Polygon
               key={`Polygon#${t.id}#${poly[1]}#${poly[0]}`}
-              strokeWidth={2}
-              strokeColor={`${primaryColor}`}
-              fillColor={`${primaryColor}40`}
+              strokeColor="transparent"
+              fillColor="#26333333"
               coordinates={poly.map(p => (
                 { latitude: parseFloat(p[1]), longitude: parseFloat(p[0]) }
               ))}

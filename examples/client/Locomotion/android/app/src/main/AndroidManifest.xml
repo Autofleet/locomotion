@@ -31,4 +31,14 @@
         android:value="AIzaSyB-c9iBOz8CmNyynP74oH5RIFtdClfFlXw"/>
       <uses-library android:name="org.apache.http.legacy" android:required="false"/>
     </application>
+  <queries>
+    <intent>
+      <action android:name="android.intent.action.VIEW" />
+      <data android:scheme="sms"/>
+    </intent>
+    <intent>
+      <action android:name="android.intent.action.VIEW" />
+      <data android:scheme="tel"/>
+    </intent>
+  </queries>
 </manifest>

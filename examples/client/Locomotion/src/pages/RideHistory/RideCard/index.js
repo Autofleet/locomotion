@@ -1,5 +1,6 @@
 import React, { createRef } from 'react';
 import moment from 'moment';
+import RidePaymentDetails from '../../../Components/RidePaymentDetails';
 import {
   DaySecTitleSubText,
   DaySecTitleText,
@@ -26,6 +27,7 @@ import Map from './Map';
 import i18n from '../../../I18n';
 import { MMMM_DD_YYYY } from '../consts';
 import DriverCard from '../../../Components/DriverCard';
+import { getCurrencySymbol } from '../../../context/newRideContext/utils';
 
 const RideTitleCard = ({ ride, page }) => (
   <>
@@ -40,8 +42,7 @@ const RideTitleCard = ({ ride, page }) => (
     </RideViewTextContainer>
     <RideViewSecTextContainer>
       <DaySecTitleText>
-        {ride.priceAmount || 0}
-        {ride.priceCurrency === 'USD' ? '$' : ride.priceCurrency}
+        {`${getCurrencySymbol(ride.priceCurrency)}${ride.priceAmount}`}
       </DaySecTitleText>
       <DaySecTitleSubText>
         {(ride.plannedDistance / 1000).toFixed(1)}
@@ -82,17 +83,16 @@ const RideView = ({ ride }) => {
         <RideTitleCard page ride={ride} />
         <BlankContainer />
       </MainRideViewSectionContainer>
-
-      <RideViewSectionContainer>
-        <RideViewTitleContainer>
-          <RideViewSectionTitleText>
-            {i18n.t('rideHistory.rideCard.rideJourney')}
-          </RideViewSectionTitleText>
-        </RideViewTitleContainer>
-      </RideViewSectionContainer>
       <StopPointsVerticalViewContainer>
         <StopPointsVerticalView
           ride={ride}
+        />
+      </StopPointsVerticalViewContainer>
+      <StopPointsVerticalViewContainer>
+        <RidePaymentDetails
+          payment={ride.payment}
+          priceAmount={ride.priceAmount}
+          priceCurrency={ride.priceCurrency}
         />
       </StopPointsVerticalViewContainer>
       <DriverCardContainer>

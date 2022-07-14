@@ -55,7 +55,27 @@ export const getRide = async (rideId) => {
   return data;
 };
 
+export const cancelRide = async (rideId) => {
+  const { data } = await network.put(`api/v1/client-rides/${rideId}/cancel`);
+  return data;
+};
+
 export const track = async (rideId) => {
   const { data } = await network.put(`api/v2/rides/${rideId}/track`);
+  return data;
+};
+
+export const additionalCharge = async (pricingCalculationId, amount, chargeFor) => {
+  const { data } = await network.post(`api/v1/price-calculation/${pricingCalculationId}/additional-charges`, { amount, chargeFor });
+  return data;
+};
+
+export const getStopPoint = async (rideId, stopPointId) => {
+  const { data } = await network.get(`/api/v1/rides/${rideId}/stop-points/${stopPointId}`);
+  return data;
+};
+
+export const maskStopPointPhones = async (rideId, stopPointId) => {
+  const { data } = await network.get(`/api/v2/ride/${rideId}/stop-points/${stopPointId}/masked-phones`);
   return data;
 };

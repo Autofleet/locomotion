@@ -23,7 +23,7 @@ const NewCreditForm = ({ onDone, canSkip = false, PageText }) => {
 
   const handlePayPress = async () => {
     setLoading(true);
-    const customerData = await usePayments.getOrFetchCustomer();
+    const customerData = await usePayments.loadCustomer();
     const { clientSecret } = await usePayments.setup();
     const billingDetails = {
       email: customerData.email,
@@ -35,12 +35,12 @@ const NewCreditForm = ({ onDone, canSkip = false, PageText }) => {
       },
     });
 
-    await usePayments.createPaymentMethod(setupIntent.paymentMethodId);
 
     if (error) {
       console.error(error);
       setErrorMessage(error.message);
     } else {
+      await usePayments.createPaymentMethod(setupIntent.paymentMethodId);
       await usePayments.loadCustomer();
       setLoading(false);
       await onDone();
@@ -89,6 +89,7 @@ const NewCreditForm = ({ onDone, canSkip = false, PageText }) => {
             </SkipSubmitContainer>
           )}
           <SubmitButton
+            testID="submitCardButton"
             onPress={() => handlePayPress()}
             disabled={!formReady || loading}
           >

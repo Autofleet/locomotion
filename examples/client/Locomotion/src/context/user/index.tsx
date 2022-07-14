@@ -1,4 +1,8 @@
-import React, { createContext, useEffect, useState } from 'react';
+import React, {
+  createContext, Dispatch, SetStateAction, useEffect, useState,
+} from 'react';
+import crashlytics from '@react-native-firebase/crashlytics';
+import Config from 'react-native-config';
 import { StorageService } from '../../services';
 import {
   getUserDetails, loginVert, sendEmailVerification, updateUser,
@@ -6,6 +10,7 @@ import {
 import auth from '../../services/auth';
 import Mixpanel from '../../services/Mixpanel';
 import PaymentsContext from '../payments';
+import OneSignal from '../../services/one-signal';
 
 const storageKey = 'clientProfile';
 
@@ -16,9 +21,10 @@ export interface User {
   lastName?: string;
   avatar?: string;
   email?: string;
-  pushToken?: string;
-  pushUserId?: string;
+  pushTokenId: string | null;
+  pushUserId?: string | null;
   cards?: any;
+  isPushEnabled: boolean;
 }
 
 interface UserContextInterface {
@@ -30,7 +36,10 @@ interface UserContextInterface {
   onVert: (code: string) => Promise<boolean | User>,
   removeChangesToUser: () => Promise<void>,
   verifyEmail: () => Promise<void>,
-  getUserFromServer: () => Promise<void>
+  getUserFromServer: () => Promise<void>,
+  locationGranted: boolean | undefined,
+  setLocationGranted: Dispatch<SetStateAction<any>>,
+  updatePushToken: () => Promise<boolean | null>,
 }
 
 export const UserContext = createContext<UserContextInterface>({
@@ -43,10 +52,14 @@ export const UserContext = createContext<UserContextInterface>({
   removeChangesToUser: async () => undefined,
   verifyEmail: async () => undefined,
   getUserFromServer: async () => undefined,
+  locationGranted: false,
+  setLocationGranted: () => undefined,
+  updatePushToken: async () => false,
 });
 
 const UserContextProvider = ({ children }: { children: any }) => {
   const usePayments = PaymentsContext.useContainer();
+  const [locationGranted, setLocationGranted] = useState();
   const [user, setUser] = useState<User | null>(null);
 
   const getUserFromServer = () => getUserDetails();
@@ -72,7 +85,29 @@ const UserContextProvider = ({ children }: { children: any }) => {
 
   useEffect(() => {
     getUserFromStorage();
+    OneSignal.init();
   }, []);
+
+  const updatePushToken = async () => {
+    const deviceState = await OneSignal.getDeviceState();
+    if (!deviceState) {
+      await updateUserInfo({ pushTokenId: null });
+      return null;
+    }
+
+    if (
+      user?.pushTokenId !== deviceState.pushToken
+      || user?.pushUserId !== deviceState.userId
+      || user?.isPushEnabled !== deviceState.isSubscribed
+    ) {
+      await updateUserInfo({
+        pushTokenId: deviceState.pushToken,
+        isPushEnabled: deviceState.isSubscribed,
+        pushUserId: deviceState.userId,
+      });
+    }
+    return true;
+  };
 
   const verifyEmail = async () => {
     await sendEmailVerification();
@@ -112,6 +147,13 @@ const UserContextProvider = ({ children }: { children: any }) => {
       auth.updateTokens(vertResponse.refreshToken, vertResponse.accessToken);
       const userProfile = vertResponse.clientProfile || {};
       Mixpanel.setUser(userProfile);
+
+      await Promise.all([
+        crashlytics().setUserId(userProfile.id),
+        crashlytics().setAttributes({
+          demandSourceId: Config.OPERATION_ID,
+        }),
+      ]);
       const cards = await getCardInfo();
       await updateUserInfo(userProfile);
       return { ...userProfile, cards };
@@ -133,6 +175,9 @@ const UserContextProvider = ({ children }: { children: any }) => {
         removeChangesToUser,
         verifyEmail,
         getUserFromServer,
+        locationGranted,
+        setLocationGranted,
+        updatePushToken,
       }}
     >
       {children}

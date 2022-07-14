@@ -12,8 +12,6 @@ import {
   TermsLink,
   LogoContainer,
   Logo,
-  OperationName,
-  OperationSubName,
   InfoContainer,
 } from './styles';
 import SafeView from '../../../Components/SafeView';
@@ -74,10 +72,8 @@ const StartScreen = () => {
           <>
             <InfoContainer>
               <LogoContainer>
-                <Logo source={logo} />
+                <Logo resizeMode="contain" source={logo} />
               </LogoContainer>
-              <OperationName>{i18n.t('operation.name', '')}</OperationName>
-              <OperationSubName>{i18n.t('operation.subName', '')}</OperationSubName>
             </InfoContainer>
             <ButtonsContainer>
               <StartButton
@@ -85,7 +81,7 @@ const StartScreen = () => {
                 dark
                 onPress={() => nextScreen()}
               >
-                <ButtonText dark>{i18n.t('login.login')}</ButtonText>
+                <ButtonText dark>{i18n.t('login.getStarted')}</ButtonText>
               </StartButton>
             </ButtonsContainer>
             <TermsText>

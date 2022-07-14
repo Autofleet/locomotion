@@ -15,6 +15,17 @@ interface ButtonProps {
   children?: any;
 }
 
+interface ButtonProps {
+  type?: string;
+  hollow?: boolean;
+  onPress: (args?: any) => void;
+  disabled?: boolean;
+  useCancelTextButton?: boolean;
+  setLoading?: (state: boolean) => void;
+  style?: any;
+  children?: any;
+}
+
 const RoundedButton = ({
   onPress,
   style,
@@ -29,6 +40,7 @@ const RoundedButton = ({
 }: ButtonProps) => {
   const [loadingState, setLoadingState] = useState(false);
   const theme = useContext(ThemeContext);
+
   const onPressWithLoading = async (args: any) => {
     setLoadingState(true);
     await onPress(args);
@@ -81,6 +93,7 @@ RoundedButton.defaultProps = {
   disabled: false,
   useCancelTextButton: false,
   setLoading: null,
+  style: {},
   children: null,
 };
 

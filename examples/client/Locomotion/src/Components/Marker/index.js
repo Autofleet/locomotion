@@ -7,78 +7,99 @@ import dropoffIcon from '../../assets/map/markers/dropoffIcon.svg';
 import pickupIcon from '../../assets/map/markers/pickupIcon.svg';
 import Mixpanel from '../../services/Mixpanel';
 import {
-  InfoBox, Type, SubText, TypeText, MarkerContainer, IconContainer, SubContainer, PulseContainer,
+  InfoBox, Type, SubText, TypeText, IconContainer, SubContainer, PulseContainer,
 } from './styled';
-import { RidePageContext } from '../../context/newRideContext';
 import i18n from '../../I18n';
 import SvgIcon from '../SvgIcon';
-import { STOP_POINT_TYPES } from '../../lib/commonTypes';
+import { STOP_POINT_TYPES, STOP_POINT_STATES } from '../../lib/commonTypes';
 import Loader from '../Loader';
 import pulse from '../../assets/marker-pulse.json';
 
-export default ({
+const StopPointMarker = ({
   stopPoint,
+  key,
+  isNext,
+  chosenService,
 }) => {
-  const { chosenService } = useContext(RidePageContext);
   const { lat, lng } = stopPoint;
-  const eta = stopPoint.eta || (chosenService && chosenService.eta);
-  const [minutesUntilPickup, setMinutesUntilPickup] = useState();
-  const etaText = minutesUntilPickup > 1
-    ? i18n.t('rideDetails.toolTipEta', { minutes: minutesUntilPickup })
-    : i18n.t('general.now');
+
   const typeDetails = {
     [STOP_POINT_TYPES.STOP_POINT_PICKUP]: {
-      icon: pickupIcon,
+      Icon: <SvgIcon
+        Svg={pickupIcon}
+        width={20}
+        height={20}
+        style={{ top: Platform.OS === 'ios' ? -35 : 0 }}
+      />,
       displayName: i18n.t('rideDetails.type.pickup'),
     },
     [STOP_POINT_TYPES.STOP_POINT_DROPOFF]: {
-      icon: dropoffIcon,
+      Icon: <SvgIcon
+        Svg={dropoffIcon}
+        width={25}
+        height={50}
+        style={{ top: Platform.OS === 'ios' ? -35 : 0 }}
+      />,
       displayName: i18n.t('rideDetails.type.dropoff'),
     },
   };
 
-  useEffect(() => {
-    const etaInMinutes = moment.duration(moment(eta).diff(moment())).minutes().toString();
-    setMinutesUntilPickup(etaInMinutes);
-  }, [chosenService]);
-  const checkIfSpIsNext = () => eta && stopPoint.type === STOP_POINT_TYPES.STOP_POINT_PICKUP;
+  const etaText = () => {
+    const { state } = stopPoint;
+    if (state === STOP_POINT_STATES.COMPLETED) {
+      return i18n.t('stopPoints.states.completed');
+    }
+
+    if (isNext) {
+      const eta = stopPoint.plannedArrivalTime || (chosenService && chosenService.eta);
+      if (eta) {
+        const minutesUntilPickup = moment(eta).diff(moment(), 'minutes');
+        return minutesUntilPickup < 1
+          ? i18n.t('general.now')
+          : i18n.t('rideDetails.toolTipEta', { minutes: minutesUntilPickup });
+      }
+    }
+
+    if (stopPoint.plannedArrivalTime) {
+      return moment(stopPoint.plannedArrivalTime).format('h:mm A');
+    }
+
+    return stopPoint.streetAddress || stopPoint.description;
+  };
+
+
   return (
-    <MarkerContainer>
-      <Marker
-        coordinate={{ latitude: parseFloat(lat), longitude: parseFloat(lng) }}
-        zIndex={999}
-        tracksViewChanges={Platform.OS === 'ios' && Config.MAP_PROVIDER === 'google'}
-      >
-        <InfoBox>
-          <Type>
-            <TypeText>
-              {typeDetails[stopPoint.type].displayName}
-            </TypeText>
-          </Type>
-          <SubContainer>
-            {checkIfSpIsNext() && (
+    <Marker
+      key={key}
+      coordinate={{ latitude: parseFloat(lat), longitude: parseFloat(lng) }}
+      zIndex={999}
+      tracksViewChanges={Platform.OS === 'ios' && Config.MAP_PROVIDER === 'google'}
+    >
+      <InfoBox>
+        <Type>
+          <TypeText>
+            {typeDetails[stopPoint.type].displayName}
+          </TypeText>
+        </Type>
+        <SubContainer>
+          {isNext && (
             <PulseContainer>
               <Loader
                 sourceProp={pulse}
                 lottieViewStyle={{ width: 24, height: 24, marginRight: 5 }}
               />
             </PulseContainer>
-            )}
-            <SubText numberOfLines={1}>
-              {checkIfSpIsNext() ? etaText : stopPoint.streetAddress}
-            </SubText>
-          </SubContainer>
-        </InfoBox>
-        <IconContainer>
-          <SvgIcon
-            Svg={typeDetails[stopPoint.type].icon}
-            width={20}
-            height={20}
-            style={{ top: Platform.OS === 'ios' ? -35 : 0 }}
-          />
-        </IconContainer>
-      </Marker>
-    </MarkerContainer>
-
+          )}
+          <SubText numberOfLines={1}>
+            {etaText()}
+          </SubText>
+        </SubContainer>
+      </InfoBox>
+      <IconContainer>
+        {typeDetails[stopPoint.type].Icon}
+      </IconContainer>
+    </Marker>
   );
 };
+
+export default StopPointMarker;

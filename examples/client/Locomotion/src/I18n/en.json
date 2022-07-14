@@ -39,8 +39,8 @@
         "vertError": "Sorry, seems like the verification code is incorrect. Please make sure you've typed it correctly.",
         "resendButton": "Start over",
         "introText": "Please enter your phone number to signup for Locomotion. You will receive an SMS with a verification code.",
-        "termsWebViewTitle": "Terms and conditions",
-        "privacyWebViewTitle": "data protection guidelines",
+        "termsWebViewTitle": "Terms and Conditions",
+        "privacyWebViewTitle": "Data Protection Guidelines",
         "termsAgreement": "By proceeding you agree to the <0>Terms of use</0> and <1>Privacy Policy</1>"
     },
     "onboarding": {
@@ -48,13 +48,13 @@
             "phone": {
                 "title": "Phone Number",
                 "text": "Enter mobile phone number",
-                "subText": "We'll send a verification code to this number",
+                "subText": "We'll send a verification code to this number.",
                 "placeholder": "(000) 123 - 4567"
             },
             "code": {
                 "title": "Verification",
                 "text": "Please enter code",
-                "subText": "A code has been sent to {{phoneNumber}}",
+                "subText": "A code has been sent to {{phoneNumber}}.",
                 "resendCodeText": "Didn't receive an SMS? ",
                 "resendCodeButton": "Resend"
             },
@@ -70,7 +70,7 @@
             "avatar": {
                 "title": "Personal Details",
                 "text": "Add a photo",
-                "subText": "Help us identify you during pickups"
+                "subText": "Help us identify you during pickups."
             },
             "email": {
                 "title": "Personal Details",
@@ -105,12 +105,12 @@
         "unverified": "Unverified",
         "validations": {
             "required": {
-                "firstName": "First name is required",
-                "lastName": "Last name is required",
-                "email": "Email is required"
+                "firstName": "First name is required.",
+                "lastName": "Last name is required.",
+                "email": "Email is required."
             },
             "email": {
-                "email": "Email must be valid"
+                "email": "Email must be valid."
             }
 
         }
@@ -129,10 +129,10 @@
         "chooseDropoff": "Choose Dropoff",
         "passengersNumber": "Passengers",
         "rideStates": {
-            "driverOnTheWay": "Your ride has been booked",
-            "driverOnTheWayEta": "Time till boarding: {{pickupEta}} Minutes",
-            "driverOnTheWaySoon": "Time till boarding: Less then 1 minute",
-            "onBoard": "Remaining ride time: app. {{dropoffEta}} minutes",
+            "driverOnTheWay": "Your ride has been booked.",
+            "driverOnTheWayEta": "Time until boarding: {{pickupEta}} Minutes",
+            "driverOnTheWaySoon": "Time until boarding: Less then 1 minute",
+            "onBoard": "Remaining ride time: app. {{dropoffEta}} Minutes",
             "onBoardSoon": "Arriving soon",
             "driverArrived": "Your driver has arrived"
         },
@@ -189,6 +189,12 @@
         "setLocationOnMap": "Set location on map"
     },
     "popups": {
+        "rideCanceled": {
+            "title": "Ride canceled",
+            "text": "Your ride has been canceled",
+            "buttonText": "Order same ride",
+            "closeButtonText": "Go back to map"
+        },
         "genericError": {
             "title": "Error",
             "text": "Something went wrong. Please try again and contact support if the issue isn't solved",
@@ -223,10 +229,6 @@
             "distanceValue": "{{distance}} km",
             "priceValue": "{{price}} €",
             "submit": "Submit"
-        },
-        "rideCancel": {
-            "main": "Your ride has been canceled.",
-            "sub": "Sorry it didn't work out this time, please try again soon!"
         },
         "rideOver": {
             "main": "You've arrived!",
@@ -290,7 +292,7 @@
     "postRide": {
         "pageTitle": "Ride finished",
         "ratingHeadline": "How was your ride?",
-        "submit": "Continue",
+        "submit": "Rate & Tip",
         "tip": {
             "title": "Add a tip for",
             "subTitle": "Your ride was",
@@ -307,6 +309,20 @@
         }
     },
     "payments": {
+        "setCardName": "Set Card Name",
+        "defaultMethodTitle": "Default payment method",
+        "otherMethodsTitle": "Other payment methods",
+        "cardDetails": {
+            "cardsTitle": "Credit Card information",
+            "title": "Payment method details",
+            "nickname": "Card Nickname",
+            "number": "Card Number",
+            "balance": "Balance",
+            "deleteText": "Delete payment method",
+            "outstandingBalanceText": "Outstanding balance of"
+        },
+        "changeDefault": "Change",
+        "select": "Select",
         "pageTitle": "Payments Method",
         "submitCard": "Add card",
         "addNewCreditCard": "Add New Credit Card",
@@ -318,6 +334,8 @@
         "addPaymentMethod": "Add New",
         "newCardDetails": "Please add your payment details",
         "setPaymentBanner": "Set payment method",
+        "payWithCash": "Pay with Cash",
+        "cash": "cash",
         "popups": {
             "removeCard": {
                 "title": "Remove payment method",
@@ -325,7 +343,8 @@
                 "confirmText": "Remove",
                 "cancelText": "Back"
             }
-        }
+        },
+        "cashMethodBrand": "Cash"
     },
   "currency": "€",
   "operation": {
@@ -338,17 +357,32 @@
         "buttonText": "Set pick up time",
         "pickupText": "Pick up on {{date}}, at {{time}}"
     },
+    "locationRequest": {
+        "titleText": "Update location services",
+        "buttonText": "Turn on location permissions",
+        "secondaryButtonText": "Enter pickup location",
+        "subTitleText": "{{operation}} needs your location to find nearby rides"
+    },
     "confirmingRide": {
         "titleText": "Confirming your ride"
     },
+    "cancelRide": {
+        "titleText": "Are you sure you want to cancel?",
+        "subTitleText": "You may be charged a fee for cancelling this ride",
+        "buttonText": "Cancel Ride",
+        "secondaryButtonText": "Keep Riding"
+    },
     "confirmPickup": {
-      "titleText": "Confirm pickup",
-      "buttonText": "Confirm and request",
-      "subTitleText": "Drag map or edit address to set your pickup"
+      "confirmPickupTitle": "Confirm pickup",
+      "confirmLocationTitle": "Confirm location",
+      "buttonText": "Confirm",
+      "buttonTextWithRequest": "Confirm and request",
+      "subTitleText": "Drag the map to set the location",
+      "noAddress": "Address not found. Please choose another location."
     },
     "notAvailableHere": {
       "titleText": "We are Sorry!",
-      "buttonText": "Set another pickup location",
+      "buttonText": "Choose another address",
       "subTitleText": "Autofleet is not available in your area"
     },
     "noPayment": {
@@ -374,7 +408,12 @@
         "chosePickupTime": "Time of departure",
         "contactDriver": "Contact driver",
         "shareRide": "Share ride",
-        "cancelRide": "Cancel ride"
+        "cancelRide": "Cancel ride",
+        "phoneCallOptions": {
+          "call": "Call",
+          "sms": "SMS",
+          "cancel": "Cancel"
+        }
     }
   },
   "stopPointsTypes": {
@@ -390,9 +429,20 @@
   },
   "activeRide": {
     "pickup": {
+        "arrived": "Your driver has arrived",
         "pending": "Meeting at pickup point"
+    },
+    "dropoff": {
+        "arrived": "Dropoff ETA",
+        "pending": "Dropoff ETA"
     }
   },
   "min": "{{ min }} min",
-  "now": "Now"
+  "now": "Now",
+  "ride": {
+    "journey": "Ride journey",
+    "paymentMethod": "Payment method",
+    "viewDetails": "View details",
+    "serviceType": "Service Type"
+  }
 }

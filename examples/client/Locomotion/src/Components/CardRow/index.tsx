@@ -1,13 +1,17 @@
+/* eslint-disable no-nested-ternary */
 /* eslint-disable no-mixed-operators */
-import React, { useState } from 'react';
+import React from 'react';
 import { TouchableOpacity, View, Text } from 'react-native';
 import moment from 'moment';
 import styled from 'styled-components';
 import { PaymentIcon } from 'react-native-payment-icons';
+import { capitalizeFirstLetter, getLastFourForamttedShort } from '../../pages/Payments/cardDetailUtils';
+import cashPaymentMethod from '../../pages/Payments/cashPaymentMethod';
 import i18n from '../../I18n';
 import SvgIcon from '../SvgIcon';
 import selected from '../../assets/selected-v.svg';
 import { Start, StartCapital } from '../../lib/text-direction';
+import cashIcon from '../../assets/cash.svg';
 
 type ContainerProps = {
   children: React.ReactNode,
@@ -75,13 +79,40 @@ const style = {
   [StartCapital()]: 28,
 };
 
-function capitalizeFirstLetter(string: string) {
-  return string.charAt(0).toUpperCase() + string.slice(1);
-}
+const CashSelected = (
+  <SvgIcon
+    style={{
+      position: 'absolute',
+      right: 0,
+      bottom: 0,
+    }}
+    Svg={selected}
+  />
+);
+
+const CreditCardSelected = (
+  <SvgIcon
+    style={{
+      position: 'absolute',
+      right: 0,
+      bottom: 5,
+    }}
+    Svg={selected}
+  />
+);
+
+const isCashPaymentMethod = (paymentMethod: any) => paymentMethod.id === cashPaymentMethod.id;
 
 
-export default (paymentMethod: any) => (
-  <TouchableOpacity onPress={paymentMethod.onPress}>
+const CardRow = (paymentMethod: any) => (
+  <TouchableOpacity
+    activeOpacity={paymentMethod.onPress ? 0 : 1}
+    onPress={() => {
+      if (paymentMethod.onPress) {
+        paymentMethod.onPress();
+      }
+    }}
+  >
     <Container selected={paymentMethod.selected}>
       <ImageContainer>
         {paymentMethod.addNew
@@ -92,19 +123,11 @@ export default (paymentMethod: any) => (
           )
           : (
             <>
-              <PaymentIcon type={paymentMethod.brand} />
-              {paymentMethod.selected
-                ? (
-                  <SvgIcon
-                    style={{
-                      position: 'absolute',
-                      right: 0,
-                      bottom: -10,
-                    }}
-                    Svg={selected}
-                  />
-                )
-                : null}
+              {isCashPaymentMethod(paymentMethod)
+                ? <SvgIcon Svg={cashIcon} width={40} height={25} />
+                : <PaymentIcon type={paymentMethod.brand} />}
+              {paymentMethod.mark ? (isCashPaymentMethod(paymentMethod)
+                ? CashSelected : CreditCardSelected) : null }
             </>
           )
         }
@@ -119,13 +142,27 @@ export default (paymentMethod: any) => (
           )
           : (
             <>
-              <Type>{capitalizeFirstLetter(paymentMethod.brand)}</Type>
-              {paymentMethod.lastFour ? <Description>{`**** ${capitalizeFirstLetter(paymentMethod.lastFour)}`}</Description> : null}
-              {true || (paymentMethod && moment(paymentMethod.expiresAt).isBefore(moment())) ? <Error>{i18n.t('payments.expired').toString()}</Error> : null}
-              {true || (paymentMethod && paymentMethod.hasOutstandingBalance) ? <Error>{i18n.t('payments.hasOutstandingBalance').toString()}</Error> : null}
+              {isCashPaymentMethod(paymentMethod)
+                ? (
+                  <Type>
+                    {paymentMethod.name}
+                  </Type>
+                )
+                : (
+                  <Type>
+                    {capitalizeFirstLetter(paymentMethod.name)}
+                  </Type>
+                )}
+              {paymentMethod.lastFour
+                ? <Description>{getLastFourForamttedShort(paymentMethod.lastFour)}</Description>
+                : null}
+              {paymentMethod && !isCashPaymentMethod(paymentMethod) && moment(paymentMethod.expiresAt).isBefore(moment()) ? <Error>{i18n.t('payments.expired').toString()}</Error> : null}
+              {paymentMethod && !isCashPaymentMethod(paymentMethod) && paymentMethod.hasOutstandingBalance ? <Error>{i18n.t('payments.hasOutstandingBalance').toString()}</Error> : null}
             </>
           )}
       </TextContainer>
     </Container>
   </TouchableOpacity>
 );
+
+export default CardRow;

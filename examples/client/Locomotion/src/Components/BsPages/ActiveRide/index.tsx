@@ -1,6 +1,8 @@
 import React, { useContext, useState } from 'react';
 import moment from 'moment';
 import { Share } from 'react-native';
+import RidePaymentDetails from '../../RidePaymentDetails';
+import { BS_PAGES } from '../../../context/ridePageStateContext/utils';
 import { RidePageContext } from '../../../context/newRideContext';
 import DriverCard from '../../DriverCard';
 import {
@@ -17,13 +19,18 @@ import StopPointsVerticalView from '../../StopPointsVerticalView';
 import GenericRideButton from '../../GenericRideButton';
 import plus from '../../../assets/bottomSheet/plus.svg';
 import editNote from '../../../assets/bottomSheet/edit_note.svg';
-import phone from '../../../assets/bottomSheet/phone.svg';
 import share from '../../../assets/bottomSheet/share.svg';
 import cancel from '../../../assets/bottomSheet/cancel.svg';
 import RideNotes from '../../../popups/RideNotes';
+import ServiceTypeDetails from '../../ServiceTypeDetails';
+import { RideStateContextContext } from '../../../context/ridePageStateContext';
+import Call from './call';
+
+const DEFAULT_VEHICLE_IMAGE = 'https://res.cloudinary.com/autofleet/image/upload/w_700,h_500,c_thumb,q_auto/vehicle-images/Minivan/minivan_blue.png';
 
 const ActiveRideContent = () => {
-  const { ride, trackRide } = useContext(RidePageContext);
+  const { ride, trackRide, updateRide } = useContext(RidePageContext);
+  const { changeBsPage, setGenericErrorPopup } = useContext(RideStateContextContext);
   const [popupToShow, setPopupToShow] = useState<string | null>(null);
 
   const {
@@ -64,22 +71,15 @@ const ActiveRideContent = () => {
     );
   };
 
-  const renderContactDriver = () => (
-    <ButtonContainer onPress={() => {
-      // setPopupToShow('notes');
-    }}
-    >
-      <GenericRideButton
-        icon={phone}
-        title={i18n.t('bottomSheetContent.ride.contactDriver')}
-      />
-    </ButtonContainer>
-  );
-
   const renderCancelRide = () => (
-    <ButtonContainer onPress={() => {
-      // setPopupToShow('notes');
-    }}
+    <ButtonContainer
+      disabled={!ride.cancelable}
+      testID="cancelRideButton"
+      onPress={() => {
+        if (ride.cancelable) {
+          changeBsPage(BS_PAGES.CANCEL_RIDE);
+        }
+      }}
     >
       <GenericRideButton
         icon={cancel}
@@ -125,9 +125,9 @@ const ActiveRideContent = () => {
               />
             </DriverCardContainer>
             <VehicleDetails>
-              <VehicleImage source={{ uri: vehicle.image }} />
+              <VehicleImage resizeMode="contain" source={{ uri: (vehicle?.image) || DEFAULT_VEHICLE_IMAGE }} />
               <VehiclePlateContainer>
-                <VehiclePlateText>{vehicle.licensePlate}</VehiclePlateText>
+                <VehiclePlateText>{(vehicle?.licensePlate) || ''}</VehiclePlateText>
               </VehiclePlateContainer>
             </VehicleDetails>
           </TopContainer>
@@ -144,7 +144,11 @@ const ActiveRideContent = () => {
           </StopPointTextContainer>
           <ButtonsContainer>
             <RowContainer>
-              {renderContactDriver()}
+              <Call
+                onError={() => {
+                  setGenericErrorPopup({});
+                }}
+              />
               {renderRideNotes()}
             </RowContainer>
             <RowContainer>
@@ -152,18 +156,27 @@ const ActiveRideContent = () => {
               {renderShareRide()}
             </RowContainer>
           </ButtonsContainer>
-          <StopPointsVerticalViewContainer>
-            <StopPointsVerticalView
-              ride={ride}
-            />
-          </StopPointsVerticalViewContainer>
+          <StopPointsVerticalView
+            ride={ride}
+          />
+          <RidePaymentDetails
+            payment={ride.payment}
+            priceAmount={ride.priceAmount}
+            priceCurrency={ride.priceCurrency}
+          />
+          <ServiceTypeDetails
+            serviceType={ride.serviceType}
+          />
           <RideNotes
             notes={firstSpNotCompleted?.notes}
             isVisible={popupToShow === 'notes'}
             onSubmit={(text: string) => {
-            //   updateRide({
-            //     notes: text,
-            //   });
+              updateRide(ride.id, {
+                stopPoints: [{
+                  id: firstSpNotCompleted.id,
+                  notes: text,
+                }],
+              });
               clearPopup();
             }}
             onCancel={() => {

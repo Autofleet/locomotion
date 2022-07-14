@@ -21,11 +21,15 @@ import Button from '../../Components/RoundedButton';
 import settings from '../../context/settings';
 import SETTINGS_KEYS from '../../context/settings/keys';
 import NewRidePageContextProvider, { RidePageContext } from '../../context/newRideContext';
+import closeIcon from '../../assets/x.png';
+import BottomSheetContextProvider, { BottomSheetContext } from '../../context/bottomSheetContext';
+import { isCashPaymentMethod } from '../../lib/ride/utils';
 
-const PostRidePage = ({ menuSide }) => {
+const PostRidePage = ({ menuSide, route }) => {
   const navigation = useNavigation();
-  const route = useRoute();
+  const router = useRoute();
   const [rating, setRating] = useState(null);
+  const [ride, setRide] = useState({});
   const [rideTip, setRideTip] = useState(null);
   const [tipSettings, setTipSettings] = useState({
     percentageThreshold: 30,
@@ -34,17 +38,14 @@ const PostRidePage = ({ menuSide }) => {
   });
   const {
     postRideSubmit,
-    ride = {
-      driver: {},
-    },
+    getRideFromApi,
   } = useContext(RidePageContext);
 
   const { getSettingByKey } = settings.useContainer();
 
   useEffect(() => {
-    Mixpanel.pageView(route.name);
+    Mixpanel.pageView(router.name);
   }, []);
-
 
   const onRatingUpdate = (selectedRating) => {
     setRating(selectedRating);
@@ -61,19 +62,34 @@ const PostRidePage = ({ menuSide }) => {
     setTipSettings(setting);
   };
 
+  const loadRide = async () => {
+    const rideData = await getRideFromApi(route.params.rideId);
+    setRide(rideData);
+  };
+
   useEffect(() => {
     initSettings();
+    loadRide();
   }, []);
 
   const onSubmit = async () => {
-    if (rating) {
-      try {
-        postRideSubmit(ride.id, rating, rideTip);
-      } catch (e) {
-        console.log(e);
-      }
+    try {
+      await postRideSubmit(ride.id, {
+        rating,
+        tip: rideTip,
+        priceCalculationId: ride.priceCalculationId,
+      });
+      navigation.navigate(MAIN_ROUTES.HOME);
+      return true;
+    } catch (e) {
+      console.log(e);
+      return false;
     }
   };
+
+  const {
+    isExpanded,
+  } = useContext(BottomSheetContext);
 
   return (
     <PageContainer>
@@ -81,6 +97,7 @@ const PostRidePage = ({ menuSide }) => {
         title={i18n.t('postRide.pageTitle')}
         onIconPress={() => navigation.navigate(MAIN_ROUTES.HOME)}
         iconSide={menuSide}
+        icon={closeIcon}
       />
       <PageContent>
         <RatingContainer>
@@ -98,7 +115,7 @@ const PostRidePage = ({ menuSide }) => {
           />
         </TipsContainer>
         <SubmitContainer>
-          <Button onPress={onSubmit}>{i18n.t('postRide.submit')}</Button>
+          <Button onPress={onSubmit} disabled={isExpanded}>{i18n.t('postRide.submit')}</Button>
         </SubmitContainer>
       </PageContent>
     </PageContainer>
@@ -107,7 +124,7 @@ const PostRidePage = ({ menuSide }) => {
 
 
 export default props => (
-  <NewRidePageContextProvider {...props}>
+  <BottomSheetContextProvider {...props}>
     <PostRidePage {...props} />
-  </NewRidePageContextProvider>
+  </BottomSheetContextProvider>
 );

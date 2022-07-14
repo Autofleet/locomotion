@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect } from 'react';
 import SkeletonContent from 'react-native-skeleton-content-nonexpo';
 import { RidePageContext } from '../../../../../context/newRideContext';
 import ServiceCard from './ServiceCard';
@@ -9,6 +9,7 @@ const ServiceOptions = () => {
   const { serviceEstimations, stopRequestInterval } = useContext(RidePageContext);
   const isDebuggingEnabled = (typeof atob !== 'undefined');
   useEffect(() => () => stopRequestInterval(), []);
+
   return (
     <ServiceOptionsContainer alwaysBounceVertical={false}>
       {(serviceEstimations || []).map(option => <ServiceCard service={option} key={option.name} />)}
