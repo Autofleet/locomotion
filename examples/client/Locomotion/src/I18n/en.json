@@ -354,6 +354,12 @@
     "subName": "Rider app"
   },
   "bottomSheetContent": {
+    "confirmFutureRide": {
+        "titleText": "Your upcoming ride has been scheduled",
+        "buttonText": "Done",
+        "pickupText": "From {{address}}",
+        "dropOffText": "To {{address}}"
+    },
     "confirmPickupTime": {
         "titleText": "Scheduled ride",
         "buttonText": "Set pick up time",

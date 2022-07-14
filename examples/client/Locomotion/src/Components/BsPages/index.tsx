@@ -7,10 +7,13 @@ import { useBottomSheet } from '@gorhom/bottom-sheet';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import moment from 'moment';
 import DatePicker from 'react-native-date-picker';
+import { STOP_POINT_TYPES } from '../../lib/commonTypes';
 import SvgIcon from '../SvgIcon';
 import { RidePageContext } from '../../context/newRideContext';
 import i18n from '../../I18n';
-import { ERROR_COLOR, FONT_SIZES, FONT_WEIGHTS } from '../../context/theme';
+import {
+  Context as ThemeContext, ERROR_COLOR, FONT_SIZES, FONT_WEIGHTS,
+} from '../../context/theme';
 import Button from '../Button';
 import { BottomSheetContext, SNAP_POINT_STATES } from '../../context/bottomSheetContext';
 import { RideStateContextContext } from '../../context/ridePageStateContext';
@@ -35,6 +38,21 @@ const OtherButton = styled(Button)`
   border-radius: 8px;
 `;
 
+const TextRowWithIcon = styled(View)`
+display: flex;
+flex-direction: row;
+justify-content: flex-start;
+align-items: center;
+border: 1px solid #f1f2f6;
+padding: 15px;
+border-radius: 8px;
+margin: 5px 0;
+`;
+
+const BasicText = styled(Text)`
+${FONT_SIZES.LARGE};
+color: #333333;
+`;
 
 const SecondaryButton = styled(Button).attrs({ noBackground: true })`
   height: 50px;
@@ -315,6 +333,52 @@ export const CancelRide = (props: any) => {
       warning
       {...props}
     />
+  );
+};
+
+export const ConfirmFutureRide = (props: any) => {
+  const { ride } = useContext(MewRidePageContext);
+  const theme = useContext(ThemeContext);
+  const date = moment(ride?.afterTime).format('ddd, MMM Do');
+  const time = moment(ride?.afterTime).format('HH:mm');
+  const pickup = (ride?.stopPoints || [])
+    .find(sp => sp.type === STOP_POINT_TYPES.STOP_POINT_PICKUP);
+  const dropOff = (ride?.stopPoints || [])
+    .find(sp => sp.type === STOP_POINT_TYPES.STOP_POINT_DROPOFF);
+  const dateText = i18n.t('bottomSheetContent.confirmPickupTime.pickupText', { date, time });
+  const pickupText = i18n.t('bottomSheetContent.confirmFutureRide.pickupText', { address: pickup?.description });
+  const dropOffText = i18n.t('bottomSheetContent.confirmFutureRide.dropOffText', { address: dropOff?.description });
+
+  return (
+    <BsPage
+      TitleText={i18n.t('bottomSheetContent.confirmFutureRide.titleText')}
+      ButtonText={i18n.t('bottomSheetContent.confirmFutureRide.buttonText')}
+      fullWidthButtons
+      {...props}
+    >
+      <TextRowWithIcon>
+        <SvgIcon
+          Svg={timeIcon}
+          width={15}
+          height={15}
+          fill={theme.primaryColor}
+          style={{ marginRight: 10 }}
+        />
+        <BasicText>
+          {dateText}
+        </BasicText>
+      </TextRowWithIcon>
+      <TextRowWithIcon>
+        <BasicText>
+          {pickupText}
+        </BasicText>
+      </TextRowWithIcon>
+      <TextRowWithIcon>
+        <BasicText>
+          {dropOffText}
+        </BasicText>
+      </TextRowWithIcon>
+    </BsPage>
   );
 };
 

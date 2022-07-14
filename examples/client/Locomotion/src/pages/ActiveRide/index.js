@@ -16,6 +16,7 @@ import {
   LocationRequest,
   CancelRide,
   ConfirmPickupTime,
+  ConfirmFutureRide,
 } from '../../Components/BsPages';
 import { RideStateContextContext, RideStateContextContextProvider } from '../../context';
 import NewRidePageContextProvider, { RidePageContext } from '../../context/newRideContext';
@@ -92,6 +93,11 @@ const RidePage = ({ mapSettings, navigation }) => {
   };
 
   const BS_PAGE_TO_COMP = {
+    [BS_PAGES.CONFIRM_FUTURE_RIDE]: () => (
+      <ConfirmFutureRide
+        onButtonPress={backToMap}
+      />
+    ),
     [BS_PAGES.CANCEL_RIDE]: () => (
       <CancelRide />
     ),

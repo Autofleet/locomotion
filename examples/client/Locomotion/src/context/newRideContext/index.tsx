@@ -184,7 +184,13 @@ const RidePageContextProvider = ({ children }: {
   };
 
   const RIDE_STATES_TO_SCREENS = {
-    [RIDE_STATES.PENDING]: () => { changeBsPage(BS_PAGES.CONFIRMING_RIDE); },
+    [RIDE_STATES.PENDING]: () => {
+      const pickupAfterTime = ride.stopPoints?.find(sp => sp.type === STOP_POINT_TYPES.STOP_POINT_PICKUP).afterTime;
+      if (pickupAfterTime && moment(pickupAfterTime).isAfter(moment())) {
+        return changeBsPage(BS_PAGES.CONFIRM_FUTURE_RIDE);
+      }
+      changeBsPage(BS_PAGES.CONFIRMING_RIDE);
+    },
     [RIDE_STATES.MATCHING]: () => { changeBsPage(BS_PAGES.CONFIRMING_RIDE); },
     [RIDE_STATES.REJECTED]: () => { changeBsPage(BS_PAGES.NO_AVAILABLE_VEHICLES); },
     [RIDE_STATES.COMPLETED]: (completedRide: any) => {
