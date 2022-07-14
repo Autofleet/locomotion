@@ -4,6 +4,7 @@ import React, {
 import Config from 'react-native-config';
 import { useNavigation } from '@react-navigation/native';
 import _ from 'lodash';
+import moment from 'moment';
 import { UserContext } from '../user';
 import { getPosition, DEFAULT_COORDS } from '../../services/geo';
 import { getPlaces, getGeocode, getPlaceDetails } from './google-api';
