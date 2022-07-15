@@ -27,7 +27,7 @@
     "@react-navigation/drawer": "^6.4.1",
     "@react-navigation/native": "^6.0.10",
     "@react-navigation/native-stack": "^6.6.2",
-    "@stripe/stripe-react-native": "^0.13.0",
+    "@stripe/stripe-react-native": "^0.13.1",
     "@turf/boolean-point-in-polygon": "^6.5.0",
     "@turf/turf": "^6.5.0",
     "@types/googlemaps": "^3.43.3",
@@ -73,10 +73,12 @@
     "react-native-svg": "^12.3.0",
     "react-native-svg-transformer": "^1.0.0",
     "react-native-table-component": "^1.2.2",
+    "react-native-v8": "^1.4.5",
     "react-native-webview": "^11.18.2",
     "shortid": "^2.2.16",
     "styled-components": "^5.3.5",
     "unstated-next": "^1.1.0",
+    "v8-android-jit": "^10.100.0",
     "yup": "0.28.5"
   },
   "peerDependencies": {
