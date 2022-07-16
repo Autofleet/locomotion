@@ -63,6 +63,14 @@ const AccountContent = ({ navigation }) => {
   const { user } = useContext(UserContext);
   const { getClientDefaultMethod } = PaymentsContext.useContainer();
   const defaultPaymentMethod = getClientDefaultMethod();
+  const emailIsVerified = user?.isEmailVerified;
+  const onEmailPress = () => (emailIsVerified
+    ? navigation.navigate(MAIN_ROUTES.EMAIL, {
+      editAccount: true,
+    })
+    : navigation.navigate(MAIN_ROUTES.EMAIL_CODE, {
+      editAccount: true,
+    }));
   return (
     <Container>
       <CardsContainer>
@@ -83,13 +91,10 @@ const AccountContent = ({ navigation }) => {
           {user ? `${user.phoneNumber}` : ''}
         </Card>
         <Card
-          verified={user && user.isEmailVerified}
+          verified={emailIsVerified}
           showUnverified
           title={i18n.t('onboarding.emailPlaceholder')}
-          onPress={() => navigation.navigate(MAIN_ROUTES.EMAIL, {
-            editAccount: true,
-          })
-          }
+          onPress={onEmailPress}
         >
           {user ? `${user.email}` : ''}
         </Card>

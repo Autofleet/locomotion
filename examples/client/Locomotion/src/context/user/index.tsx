@@ -5,7 +5,7 @@ import crashlytics from '@react-native-firebase/crashlytics';
 import Config from 'react-native-config';
 import { StorageService } from '../../services';
 import {
-  getUserDetails, loginVert, sendEmailVerification, updateUser,
+  getUserDetails, loginVert, sendEmailVerification, updateUser, emailVerify,
 } from './api';
 import auth from '../../services/auth';
 import Mixpanel from '../../services/Mixpanel';
@@ -32,6 +32,8 @@ interface UserContextInterface {
   getUserFromStorage: () => void,
   updateUserInfo: (values: any) => Promise<void>,
   onVert: (code: string) => Promise<boolean | User>,
+  onEmailVert: (code: string) => Promise<boolean>,
+  updateUserFromServer: () => Promise<void>,
   removeChangesToUser: () => Promise<void>,
   verifyEmail: () => Promise<void>,
   getUserFromServer: () => Promise<void>,
@@ -46,6 +48,8 @@ export const UserContext = createContext<UserContextInterface>({
   getUserFromStorage: () => null,
   updateUserInfo: async (values: any) => undefined,
   onVert: async (code: string) => false,
+  onEmailVert: async (code: string) => false,
+  updateUserFromServer: async () => undefined,
   removeChangesToUser: async () => undefined,
   verifyEmail: async () => undefined,
   getUserFromServer: async () => undefined,
@@ -59,6 +63,10 @@ const UserContextProvider = ({ children }: { children: any }) => {
   const [user, setUser] = useState<User | null>(null);
 
   const getUserFromServer = () => getUserDetails();
+
+  const updateUserFromServer = async () => {
+    setUser(await getUserDetails());
+  };
 
   const updateState = (values: any) => {
     const newUser: User = {
@@ -87,9 +95,9 @@ const UserContextProvider = ({ children }: { children: any }) => {
     await sendEmailVerification();
   };
 
-  const updateUserInfo = async (values: any) => {
+  const updateUserInfo = async (values: any, { updateServer = true } = {}) => {
     updateState(values);
-    const newUser = await updateUser(values);
+    const newUser = updateServer ? await updateUser(values) : values;
     if (newUser.didCompleteOnboarding) {
       StorageService.save({ [storageKey]: newUser });
     }
@@ -104,6 +112,15 @@ const UserContextProvider = ({ children }: { children: any }) => {
     } catch (e) {
       console.error(e);
     }
+  };
+
+  const onEmailVert = async (code: string) => {
+    const vertResponse = await emailVerify({
+      email: user?.email,
+      code,
+    });
+
+    return vertResponse.status === 'OK';
   };
 
   const onVert = async (code: string) => {
@@ -129,7 +146,7 @@ const UserContextProvider = ({ children }: { children: any }) => {
         }),
       ]);
       const cards = await getCardInfo();
-      await updateUserInfo(userProfile);
+      await updateUserInfo(userProfile, { updateServer: false });
       return { ...userProfile, cards };
     } catch (e) {
       console.log('Bad vert with request', e);
@@ -146,6 +163,8 @@ const UserContextProvider = ({ children }: { children: any }) => {
         getUserFromStorage,
         updateUserInfo,
         onVert,
+        onEmailVert,
+        updateUserFromServer,
         removeChangesToUser,
         verifyEmail,
         getUserFromServer,

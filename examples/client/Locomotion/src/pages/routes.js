@@ -16,6 +16,7 @@ export const MAIN_ROUTES = {
   START: 'Start',
   PHONE: 'Phone',
   CODE: 'Code',
+  EMAIL_CODE: 'EmailCode',
   NAME: 'Name',
   ADD_CARD: 'AddCard',
   CARD: 'AddCard',
