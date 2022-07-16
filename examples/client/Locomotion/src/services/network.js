@@ -54,7 +54,6 @@ class Network {
       return response;
     }, (error) => {
       try {
-        console.log(error);
         console.error(`Request rejected [${error.config.method}] ${error.config.url}: ${error}`, formatResponseLog(error.response));
       } catch (e) {
         console.error('Error in interceptors->error log', e, error);
