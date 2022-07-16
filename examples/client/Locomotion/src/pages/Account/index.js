@@ -104,7 +104,7 @@ const AccountContent = ({ navigation }) => {
               })}
             >
               {
-            moment(defaultPaymentMethod.expiresAt).format('MM/YY')
+            moment.utc(defaultPaymentMethod.expiresAt).format('MM/YY')
           }
             </Card>
           </>
