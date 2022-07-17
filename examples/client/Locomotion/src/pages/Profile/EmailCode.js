@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import PinCode from '../../Components/PinCode';
 import SaveButton from './SaveButton';
 import { OnboardingContext } from '../../context/onboarding';
@@ -12,7 +12,11 @@ import ScreenText from './ScreenText';
 import { MAIN_ROUTES } from '../routes';
 import { UserContext } from '../../context/user';
 
+const CODE_LENGTH = 4;
+
 const Code = () => {
+  const route = useRoute();
+  const { nextScreen } = useContext(OnboardingContext);
   const { user, onEmailVert, updateUserFromServer } = useContext(UserContext);
   const navigation = useNavigation();
   const [code, setCode] = useState('');
@@ -20,7 +24,7 @@ const Code = () => {
   const [loading, setLoading] = useState(false);
   const onVertCodeChange = (value) => {
     setShowErrorText(false);
-    if (value.length === 4) {
+    if (value.length === CODE_LENGTH) {
       setLoading(true);
     }
     setCode(value);
@@ -35,9 +39,13 @@ const Code = () => {
       return setShowErrorText(true);
     }
     await updateUserFromServer();
-    navigation.navigate(MAIN_ROUTES.ACCOUNT, {
-      editAccount: true,
-    });
+    if (route.params && route.params.editAccount) {
+      navigation.navigate(MAIN_ROUTES.ACCOUNT, {
+        editAccount: true,
+      });
+    } else {
+      nextScreen(MAIN_ROUTES.EMAIL_CODE);
+    }
   };
 
   return (
@@ -67,8 +75,8 @@ const Code = () => {
           </ResendButton>
         </ResendContainer>
         <SaveButton
-          isLoading={!showErrorText && code.length === 4 && loading}
-          isInvalid={showErrorText || code.length < 4 || loading}
+          isLoading={!showErrorText && code.length === CODE_LENGTH && loading}
+          isInvalid={showErrorText || code.length < CODE_LENGTH || loading}
           onFail={() => setShowErrorText(true)}
         />
       </PageContainer>
