@@ -65,7 +65,6 @@ const OnboardingContextProvider = ({ children }: { children: any }) => {
       SETTINGS_KEYS.CARD_PAGE_SETTINGS,
     );
 
-    console.log('nextScreenToShow', cardPageSettings);
     if (cardPageSettings) {
       const {
         showCardPage,
@@ -79,9 +78,11 @@ const OnboardingContextProvider = ({ children }: { children: any }) => {
 
         return true;
       }
+
+      return false;
     }
 
-    return false;
+    return true;
   };
 
   const nextScreen = async (currentScreen: string) => {
