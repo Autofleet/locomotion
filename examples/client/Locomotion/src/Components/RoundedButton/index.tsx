@@ -52,6 +52,7 @@ const RoundedButton = ({
       type={type}
       style={style}
       useCancelTextButton={useCancelTextButton}
+      withIcon={!!icon}
     >
       {icon && (
         <SvgIcon
