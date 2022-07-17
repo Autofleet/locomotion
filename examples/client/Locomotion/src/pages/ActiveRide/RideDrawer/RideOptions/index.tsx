@@ -34,10 +34,6 @@ const RideOptions = () => {
     changeBsPage,
   } = useContext(RideStateContextContext);
 
-  const {
-    getClientDefaultMethod,
-  } = payments.useContainer();
-
   const setPopupName = (popupName: popupNames) => {
     setPopupToShow(popupName);
   };
@@ -49,7 +45,7 @@ const RideOptions = () => {
 
   useEffect(() => {
     const updateClient = async () => {
-      await payments.useContainer().loadCustomer();
+      await usePayments.loadCustomer();
     };
 
     updateClient();

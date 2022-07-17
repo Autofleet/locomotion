@@ -55,7 +55,6 @@ const usePayments = () => {
     }
   };
 
-
   const createPaymentMethod = async (paymentMethodId) => {
     const { data: paymentMethod } = await network.post(`${BASE_PATH}/${paymentMethodId}`);
     return paymentMethod;
