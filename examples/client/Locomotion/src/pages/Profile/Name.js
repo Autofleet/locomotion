@@ -5,13 +5,14 @@ import TextInput from '../../Components/TextInput';
 import SaveButton from './SaveButton';
 import { OnboardingContext } from '../../context/onboarding';
 import {
-  ErrorText, PageContainer, SafeView, InputContainer,
+  ErrorText, SafeView, InputContainer,
 } from './styles';
 import i18n from '../../I18n';
 import Header from './Header';
 import ScreenText from './ScreenText';
 import { MAIN_ROUTES } from '../routes';
 import { UserContext } from '../../context/user';
+import { PageContainer, ContentContainer } from '../styles';
 
 const Name = ({ navigation }) => {
   const route = useRoute();
@@ -46,10 +47,10 @@ const Name = ({ navigation }) => {
   };
 
   return (
-    <SafeView>
-      <ScrollView keyboardShouldPersistTaps="handled">
+    <ScrollView keyboardShouldPersistTaps="handled">
+      <PageContainer>
         <Header title={i18n.t('onboarding.pages.name.title')} page={MAIN_ROUTES.NAME} />
-        <PageContainer>
+        <ContentContainer>
           <ScreenText
             text={i18n.t('onboarding.pages.name.text')}
             subText={i18n.t('onboarding.pages.name.subText')}
@@ -88,9 +89,9 @@ const Name = ({ navigation }) => {
             onFail={() => setShowErrorText(true)}
             onNext={onComplete}
           />
-        </PageContainer>
-      </ScrollView>
-    </SafeView>
+        </ContentContainer>
+      </PageContainer>
+    </ScrollView>
   );
 };
 

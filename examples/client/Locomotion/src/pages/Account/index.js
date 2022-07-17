@@ -140,12 +140,12 @@ export default ({ navigation, menuSide }) => {
 
   return (
     <PageContainer>
+      <PageHeader
+        title={i18n.t('onboarding.pageTitle')}
+        onIconPress={() => navigation.navigate(MAIN_ROUTES.HOME)}
+        iconSide={menuSide}
+      />
       <KeyboardAwareScrollView extraScrollHeight={20} enableOnAndroid>
-        <PageHeader
-          title={i18n.t('onboarding.pageTitle')}
-          onIconPress={() => navigation.navigate(MAIN_ROUTES.HOME)}
-          iconSide={menuSide}
-        />
         <AccountHeader />
         <AccountContent navigation={navigation} />
       </KeyboardAwareScrollView>
