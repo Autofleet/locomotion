@@ -22,7 +22,7 @@ export default ({ navigation, menuSide }) => {
   const [pageLoading, setPageLoading] = useState(true);
   const [loading, setLoading] = useState(false);
   const hasPaymentMethods = paymentMethods && paymentMethods.length > 0;
-  const [showList, setShowList] = useState(true);
+  const [showList, setShowList] = useState(hasPaymentMethods);
 
   const loadCustomerData = async () => {
     await usePayments.getOrFetchCustomer();
