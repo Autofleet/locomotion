@@ -153,7 +153,7 @@ const RidePageContextProvider = ({ children }: {
 }) => {
   const { locationGranted, user } = useContext(UserContext);
   const navigation = useNavigation<Nav>();
-  const { checkStopPointsInTerritory, changeBsPage } = useContext(RideStateContextContext);
+  const { checkStopPointsInTerritory, changeBsPage, currentBsPage } = useContext(RideStateContextContext);
   const [requestStopPoints, setRequestStopPoints] = useState(INITIAL_STOP_POINTS);
   const [currentGeocode, setCurrentGeocode] = useState<any | null>(null);
   const [searchTerm, setSearchTerm] = useState<string | null>(null);
@@ -184,10 +184,16 @@ const RidePageContextProvider = ({ children }: {
   };
 
   const RIDE_STATES_TO_SCREENS = {
-    [RIDE_STATES.PENDING]: () => {
-      const pickupAfterTime = ride.stopPoints?.find(sp => sp.type === STOP_POINT_TYPES.STOP_POINT_PICKUP).afterTime;
-      if (pickupAfterTime && moment(pickupAfterTime).isAfter(moment())) {
-        return changeBsPage(BS_PAGES.CONFIRM_FUTURE_RIDE);
+    [RIDE_STATES.PENDING]: (formattedRide: any) => {
+      const pickupAfterTime = (formattedRide || ride)
+        .stopPoints?.find((sp: any) => sp.type === STOP_POINT_TYPES.STOP_POINT_PICKUP).afterTime;
+      const hasFutureRide = pickupAfterTime && moment(pickupAfterTime).isAfter(moment());
+      if (hasFutureRide) {
+        if (currentBsPage === BS_PAGES.CONFIRMING_RIDE) {
+          return changeBsPage(BS_PAGES.CONFIRM_FUTURE_RIDE);
+        }
+        changeBsPage(BS_PAGES.ADDRESS_SELECTOR);
+        return cleanRideState();
       }
       changeBsPage(BS_PAGES.CONFIRMING_RIDE);
     },
@@ -293,7 +299,10 @@ const RidePageContextProvider = ({ children }: {
     if (activeRide) {
       const formattedRide = await formatRide(activeRide);
       setRide(formattedRide);
-      changeBsPage(BS_PAGES.ACTIVE_RIDE);
+      const screenFunction = RIDE_STATES_TO_SCREENS[formattedRide?.state || ''];
+      if (screenFunction) {
+        screenFunction(formattedRide);
+      }
     } else {
       cleanRideState();
       changeBsPage(BS_PAGES.ADDRESS_SELECTOR);
@@ -305,6 +314,7 @@ const RidePageContextProvider = ({ children }: {
     loadActiveRide();
   }, []);
 
+  const getPickupStopPoint = rideToCheck => rideToCheck.stopPoints.find(sp => sp.type === STOP_POINT_TYPES.STOP_POINT_PICKUP);
   useInterval(async () => {
     if (user?.id) {
       if (!rideRequestLoading) {
@@ -312,7 +322,9 @@ const RidePageContextProvider = ({ children }: {
           try {
             const rideLoaded = await rideApi.getRide(ride?.id);
             const formattedRide = await formatRide(rideLoaded);
-            if (ride.state !== rideLoaded.state) {
+            const newPendingState = getPickupStopPoint(ride).afterTime !== getPickupStopPoint(rideLoaded).afterTime;
+            console.log(newPendingState);
+            if (ride.state !== rideLoaded.state || newPendingState) {
               const screenFunction = RIDE_STATES_TO_SCREENS[rideLoaded.state];
               if (screenFunction) {
                 screenFunction(rideLoaded);
