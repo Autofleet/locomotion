@@ -11,7 +11,7 @@ import RidePopups from './popups/RidePopups';
 import { setTopLevelNavigator } from './services/navigation';
 import NewRidePageContextProvider from './context/newRideContext';
 import BottomSheetContextProvider from './context/bottomSheetContext';
-import FutureRidesProvider from 'context/futureRides';
+import FutureRidesProvider from './context/futureRides';
 
 LogBox.ignoreAllLogs();
 const STRIPE_PUBLISHER_KEY = Config.STRIPE_PUBLISHER_KEY || '';
