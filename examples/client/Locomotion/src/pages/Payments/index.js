@@ -22,12 +22,13 @@ export default ({ navigation, menuSide }) => {
   const [pageLoading, setPageLoading] = useState(true);
   const [loading, setLoading] = useState(false);
   const hasPaymentMethods = paymentMethods && paymentMethods.length > 0;
-  const [showList, setShowList] = useState(hasPaymentMethods);
+  const [showList, setShowList] = useState(!route.params?.showAdd);
 
   const loadCustomerData = async () => {
     await usePayments.getOrFetchCustomer();
     setPageLoading(false);
   };
+
 
   useEffect(() => {
     loadCustomerData();
@@ -63,10 +64,13 @@ export default ({ navigation, menuSide }) => {
           <CardContainer>
             <NewCreditForm
               PageText={() => <CreditFormText>{i18n.t('payments.newCardDetails')}</CreditFormText>}
-              onDone={() => (
-                route.params && route.params.rideFlow
-                  ? navigation.navigate(MAIN_ROUTES.HOME)
-                  : setShowList(true))}
+              onDone={() => {
+                if (route.params && route.params.rideFlow) {
+                  navigation.navigate(MAIN_ROUTES.HOME);
+                } else {
+                  setShowList(true);
+                }
+              }}
             />
           </CardContainer>
         )}
