@@ -7,6 +7,7 @@ import { getUserTerritories } from '../user/api';
 import pointInPolygon from './pointInPolygon';
 import { BsPages, BS_PAGES } from './utils';
 import GenericErrorPopup from '../../popups/GenericError';
+import { getActiveRide } from '../newRideContext/api';
 
 interface RidePageStateContextProps {
   territory: any;
@@ -55,10 +56,13 @@ const RideStateContextContextProvider = ({ children }: { children: any }) => {
       setTerritory(t);
     }
     if (t && checkTerritory) {
-      const position = await getPosition();
-      const isInsidePoly = pointInPolygon(t, (position || DEFAULT_COORDS));
-      if (!isInsidePoly) {
-        setNotInTerritory();
+      const activeRide = await getActiveRide();
+      if (!activeRide) {
+        const position = await getPosition();
+        const isInsidePoly = pointInPolygon(t, (position || DEFAULT_COORDS));
+        if (!isInsidePoly) {
+          setNotInTerritory();
+        }
       }
     }
     return t;
