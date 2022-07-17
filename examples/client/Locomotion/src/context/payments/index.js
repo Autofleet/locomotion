@@ -50,7 +50,7 @@ const usePayments = () => {
       return (paymentMethods || []).find(pm => pm.isDefault) || paymentMethods[0];
     }
     const cashEnabled = isCashPaymentEnabled();
-    if (cashEnabled === 'true') {
+    if (cashEnabled) {
       return cashPaymentMethod;
     }
   };
