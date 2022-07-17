@@ -50,14 +50,14 @@ const StartScreen = () => {
 
   const openTerms = () => {
     setWebViewWindow({
-      uri: settings.termsUrl,
+      uri: settings.termsOfUseUrl,
       title: i18n.t('login.termsWebViewTitle'),
     });
   };
 
   const openPrivacy = () => {
     setWebViewWindow({
-      uri: settings.privacyUrl,
+      uri: settings.privacyPolicyUrl,
       title: i18n.t('login.privacyWebViewTitle'),
     });
   };

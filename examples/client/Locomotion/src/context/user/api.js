@@ -1,4 +1,6 @@
 import network from '../../services/network';
+import * as settingsApi from '../settings/api';
+
 
 export const ImageUpload = async (formData) => {
   const { data } = await network.post('api/v1/me/image-upload', formData, {
@@ -31,11 +33,6 @@ export const loginApi = async (body) => {
 
 export const updateUser = async (body) => {
   const { data } = await network.patch('api/v1/me', body);
-  return data;
-};
-
-export const getLoginSettings = async () => {
-  const { data } = await network.get('/api/v1/login/settings');
   return data;
 };
 

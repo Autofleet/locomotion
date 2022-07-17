@@ -94,7 +94,7 @@ const CardDetails = ({
               <Card
                 title={i18n.t('payments.cardDetails.balance')}
               >
-                {`${i18n.t('payments.cardDetails.outstandingBalanceText')}`}
+                {i18n.t('payments.cardDetails.outstandingBalanceText')}
               </Card>
               <LogoutContainer
                 onPress={async () => {
