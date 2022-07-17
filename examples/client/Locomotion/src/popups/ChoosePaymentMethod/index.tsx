@@ -75,7 +75,7 @@ const PaymentMethodPopup = ({
     };
 
     getIsCashEnabled();
-  }, [usePayments.paymentMethods]);
+  }, []);
 
   return (
     <Modal
