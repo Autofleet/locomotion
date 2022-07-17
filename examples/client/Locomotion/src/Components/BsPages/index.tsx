@@ -248,8 +248,6 @@ export const ConfirmPickupTime = (props: any) => {
         hollow
         icon={timeIcon}
         style={{
-          justifyContent: 'flex-start',
-          alignItems: 'center',
           borderColor: '#f1f2f6',
         }}
       >
