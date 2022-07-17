@@ -78,12 +78,10 @@ const PaymentMethodPopup = ({
             }}
           >
             <SvgIcon Svg={closeXIcon} />
-
           </CloseButton>
         </TitleView>
         <CardsScrollView>
           <Container>
-
             <View>
               {(isCashEnabled && showCash
                 ? [...usePayments.paymentMethods, cashPaymentMethod]
