@@ -28,8 +28,8 @@ const StartScreen = () => {
   const [webViewWindow, setWebViewWindow] = useState(null);
   const route = useRoute();
   const [settings, setSettings] = useState({
-    termsUrl: null,
-    privacyUrl: null,
+    termsOfUseUrl: null,
+    privacyPolicyUrl: null,
     contactUsUrl: null,
   });
 
