@@ -33,7 +33,7 @@ interface PaymentMethodPopupProps {
 }
 
 type Nav = {
-  navigate: (value: string) => void;
+  navigate: (value: string, params?: any) => void;
 }
 
 const PaymentMethodPopup = ({
@@ -116,7 +116,7 @@ const PaymentMethodPopup = ({
                 addNew
                 onPress={() => {
                   onCancel();
-                  navigation.navigate(MAIN_ROUTES.PAYMENT);
+                  navigation.navigate(MAIN_ROUTES.PAYMENT, { showAdd: true, rideFlow });
                 }}
               />
             </View>

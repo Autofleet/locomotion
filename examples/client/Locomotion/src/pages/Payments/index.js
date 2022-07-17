@@ -21,26 +21,18 @@ export default ({ navigation, menuSide }) => {
   } = usePayments;
   const [pageLoading, setPageLoading] = useState(true);
   const [loading, setLoading] = useState(false);
-  let hasPaymentMethods = paymentMethods && paymentMethods.length > 0;
-  const [showList, setShowList] = useState(hasPaymentMethods);
+  const hasPaymentMethods = paymentMethods && paymentMethods.length > 0;
+  const [showList, setShowList] = useState(true);
 
   const loadCustomerData = async () => {
     await usePayments.getOrFetchCustomer();
     setPageLoading(false);
   };
 
+
   useEffect(() => {
     loadCustomerData();
   }, []);
-
-  useEffect(() => {
-    const updateShowList = async () => {
-      hasPaymentMethods = paymentMethods && paymentMethods.length > 0;
-      setShowList(hasPaymentMethods);
-    };
-
-    updateShowList();
-  }, [usePayments.paymentMethods]);
 
   const onPressBack = () => {
     if (!showList && hasPaymentMethods) {
@@ -72,11 +64,10 @@ export default ({ navigation, menuSide }) => {
           <CardContainer>
             <NewCreditForm
               PageText={() => <CreditFormText>{i18n.t('payments.newCardDetails')}</CreditFormText>}
-              onDone={async () => {
+              onDone={() => {
                 if (route.params && route.params.rideFlow) {
                   navigation.navigate(MAIN_ROUTES.HOME);
                 } else {
-                  await usePayments.loadCustomer();
                   setShowList(true);
                 }
               }}
