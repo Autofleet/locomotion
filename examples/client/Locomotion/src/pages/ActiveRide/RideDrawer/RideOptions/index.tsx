@@ -113,7 +113,9 @@ const RideOptions = () => {
         }}
       />
       <ChoosePaymentMethod
-        selected={ride.paymentMethodId || usePayments.getClientDefaultMethod()?.id}
+        selected={ride?.paymentMethodId?.length
+          && usePayments.paymentMethods.includes(ride?.paymentMethodId as never)
+          ? ride.paymentMethodId : usePayments.getClientDefaultMethod()?.id}
         rideFlow
         isVisible={popupToShow === 'payment'}
         onCancel={() => clearPopup()}

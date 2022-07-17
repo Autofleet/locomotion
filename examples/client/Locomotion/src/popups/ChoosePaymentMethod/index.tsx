@@ -41,7 +41,19 @@ const PaymentMethodPopup = ({
 }: PaymentMethodPopupProps) => {
   const usePayments = PaymentsContext.useContainer();
   const [paymentId, setPaymentId] = useState(usePayments.getClientDefaultMethod()?.id);
-  const [selectedPaymentId, setSelectedPaymentId] = useState<string | undefined>(selected);
+  const [selectedPaymentId, setSelectedPaymentId] = useState<string | undefined>(selected
+    || usePayments.getClientDefaultMethod()?.id);
+
+  useEffect(() => {
+    usePayments.getOrFetchCustomer();
+  }, []);
+
+  useEffect(() => {
+    setSelectedPaymentId(selected
+      || usePayments.getClientDefaultMethod()?.id);
+  }, [usePayments.paymentMethods]);
+
+
   const navigation = useNavigation<Nav>();
 
   const onSave = () => {
@@ -74,7 +86,8 @@ const PaymentMethodPopup = ({
           <CloseButton
             onPress={() => {
               onCancel();
-              setSelectedPaymentId(selected);
+              setSelectedPaymentId(selected
+                || usePayments.getClientDefaultMethod()?.id);
               rideFlow
                 ? navigation.navigate(MAIN_ROUTES.HOME)
                 : navigation.navigate(MAIN_ROUTES.PAYMENT);
