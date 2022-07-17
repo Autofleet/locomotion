@@ -249,8 +249,8 @@ export const ConfirmPickupTime = (props: any) => {
   const {
     changeBsPage,
   } = useContext(RideStateContextContext);
-  const date = moment(ride?.afterTime).format('ddd, MMM Do');
-  const time = moment(ride?.afterTime).format('HH:mm');
+  const date = moment(ride?.scheduledTo).format('ddd, MMM Do');
+  const time = moment(ride?.scheduledTo).format('HH:mm');
   return (
     <BsPage
       TitleText={i18n.t('bottomSheetContent.confirmPickupTime.titleText')}
@@ -273,14 +273,14 @@ export const ConfirmPickupTime = (props: any) => {
       </RoundedButton>
       <DatePicker
         open={isDatePickerOpen}
-        date={moment(ride?.afterTime).toDate()}
+        date={moment(ride?.scheduledTo).toDate()}
         maximumDate={MAX_DATE_FUTURE_RIDE}
         minimumDate={MIN_DATE_FUTURE_RIDE}
         mode="datetime"
         title={i18n.t('bottomSheetContent.ride.chosePickupTime')}
         onCancel={() => setIsDatePickerOpen(false)}
         onConfirm={(newDate: Date) => {
-          updateRidePayload({ afterTime: newDate.getTime() });
+          updateRidePayload({ scheduledTo: newDate.getTime() });
           setIsDatePickerOpen(false);
         }}
         modal
@@ -337,8 +337,8 @@ export const CancelRide = (props: any) => {
 export const ConfirmFutureRide = (props: any) => {
   const { ride } = useContext(MewRidePageContext);
   const theme = useContext(ThemeContext);
-  const date = moment(ride?.afterTime).format('ddd, MMM Do');
-  const time = moment(ride?.afterTime).format('HH:mm');
+  const date = moment(ride?.scheduledTo).format('ddd, MMM Do');
+  const time = moment(ride?.scheduledTo).format('HH:mm');
   const pickup = (ride?.stopPoints || [])
     .find(sp => sp.type === STOP_POINT_TYPES.STOP_POINT_PICKUP);
   const dropOff = (ride?.stopPoints || [])

@@ -1,15 +1,14 @@
 import React from 'react';
 import styled from 'styled-components';
-import activitiy from '../../../assets/activitiy.png';
 import I18n from '../../../I18n';
 import { FONT_SIZES, FONT_WEIGHTS } from '../../../context/theme';
+import noRides from '../../../assets/no_rides.png';
 
 export const NoRidesImage = styled.Image.attrs({
-  source: activitiy,
-  resizeMode: 'cover',
+  source: noRides,
 })`
-  width: 176px;
-  height: 120.3px;
+  width: 157px;
+  height: 171px;
   align-self: center;
 `;
 
@@ -26,6 +25,7 @@ export const RideViewTextContainer = styled.View`
 export const CenterContainer = styled.View`
   margin-top: ${({ addTop }) => (addTop ? '50%' : '0')};
   align-self: center;
+  align-content: center;
 `;
 
 export const BaseText = styled.Text`
@@ -44,23 +44,15 @@ export const SubNoRidesListContainer = styled(BaseText)`
   font-size: 16px;
 `;
 
-export const NoRidesInList = ({ yet }) => (
-  <CenterContainer>
+export const NoRidesInList = () => (
+  <CenterContainer addTop>
     <NoRidesImage />
-    {yet ? (
-      <>
-        <NoRidesListContainer>
-          {I18n.t('rideHistory.noActivityYet')}
-        </NoRidesListContainer>
-        <SubNoRidesListContainer>
-          {I18n.t('rideHistory.noActivitySub')}
-        </SubNoRidesListContainer>
-      </>
-    ) : (
-      <NoRidesListContainer>
-        {I18n.t('rideHistory.noActivity')}
-      </NoRidesListContainer>
-    )}
+    <NoRidesListContainer>
+      {I18n.t('rideHistory.noActivityYet')}
+    </NoRidesListContainer>
+    <SubNoRidesListContainer>
+      {I18n.t('rideHistory.noActivitySub')}
+    </SubNoRidesListContainer>
   </CenterContainer>
 );
 

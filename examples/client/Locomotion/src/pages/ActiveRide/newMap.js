@@ -184,8 +184,8 @@ export default React.forwardRef(({
     }
 
     if (isNext) {
-      if (ride.afterTime) {
-        return moment(ride.afterTime).format('MMM D, h:mm A');
+      if (ride.scheduledTo) {
+        return moment(ride.scheduledTo).format('MMM D, h:mm A');
       }
       const eta = stopPoint.plannedArrivalTime || (chosenService && chosenService.eta);
       if (eta) {
@@ -261,7 +261,7 @@ export default React.forwardRef(({
                   key={sp.id}
                   isNext={isNext}
                   etaText={getStopPointEtaText(sp, isNext)}
-                  isFutureRide={ride.afterTime}
+                  isFutureRide={ride.scheduledTo}
                 />
               );
             })

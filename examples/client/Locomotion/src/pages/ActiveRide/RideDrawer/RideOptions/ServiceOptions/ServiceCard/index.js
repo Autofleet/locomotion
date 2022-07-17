@@ -22,7 +22,7 @@ const ServiceCard = ({ service }) => {
   const {
     setChosenService, chosenService, serviceEstimations, ride,
   } = useContext(RidePageContext);
-  const isFutureRide = ride.afterTime;
+  const isFutureRide = ride.scheduledTo;
   const unavailable = !service.eta;
   const unavailableText = i18n.t('rideDetails.unavailable');
   const serviceDisplayPrice = getFormattedPrice(service.currency, service.price);

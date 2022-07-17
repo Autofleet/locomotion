@@ -53,8 +53,8 @@ export const StyledButton = styled(Button)`
       width: ${width || '100%'};
       height: ${height || '50px'};
       ${withIcon
-    ? `justifyContent: flex-start;
-      alignItems: center`
+    ? `justify-content: flex-start;
+      align-items: center`
     : ''}
 
       background-color: ${colors(theme)[type][hollow ? 'hollow' : 'primary'].background};
@@ -74,4 +74,5 @@ export const ButtonTextContainer = styled.View`
   justify-content: center;
   align-items: center;
   flex-direction: column;
+  ${({ withIcon }) => (!withIcon ? 'flex: 1' : '')}
 `;

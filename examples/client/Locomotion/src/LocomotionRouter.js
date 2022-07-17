@@ -11,6 +11,7 @@ import RidePopups from './popups/RidePopups';
 import { setTopLevelNavigator } from './services/navigation';
 import NewRidePageContextProvider from './context/newRideContext';
 import BottomSheetContextProvider from './context/bottomSheetContext';
+import FutureRidesProvider from 'context/futureRides';
 
 LogBox.ignoreAllLogs();
 const STRIPE_PUBLISHER_KEY = Config.STRIPE_PUBLISHER_KEY || '';
@@ -38,11 +39,13 @@ export default (props) => {
       <MainProvider {...props}>
         <BottomSheetContextProvider {...props}>
           <RideStateContextContextProvider {...props}>
+            <FutureRidesProvider {...props}>
             <NewRidePageContextProvider {...props}>
               <MainRouter {...props} />
               {props.children}
               <RidePopups />
             </NewRidePageContextProvider>
+            </FutureRidesProvider>
           </RideStateContextContextProvider>
         </BottomSheetContextProvider>
       </MainProvider>

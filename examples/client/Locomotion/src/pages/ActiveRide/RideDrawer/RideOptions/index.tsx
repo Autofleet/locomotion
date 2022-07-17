@@ -75,7 +75,7 @@ const RideOptions = () => {
   }, [ridePopup]);
 
   useEffect(() => {
-    if (ride.afterTime) {
+    if (ride.scheduledTo) {
       setTopBarText(i18n.t('home.futureRides.rideFareEstimationNotice'));
     }
 
@@ -98,6 +98,7 @@ const RideOptions = () => {
         }}
       />
       <ChoosePaymentMethod
+        rideFlow
         isVisible={popupToShow === 'payment'}
         onCancel={() => clearPopup()}
         onSubmit={(payment: any) => {

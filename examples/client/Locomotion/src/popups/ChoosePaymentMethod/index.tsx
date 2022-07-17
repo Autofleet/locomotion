@@ -1,8 +1,10 @@
-import React, { useContext, useEffect, useState } from 'react';
+/* eslint-disable no-unused-expressions */
+import React, { useEffect, useState } from 'react';
 import { View } from 'react-native';
 import PropTypes from 'prop-types';
 import Modal from 'react-native-modal';
 import { useNavigation } from '@react-navigation/native';
+import SvgIcon from '../../Components/SvgIcon';
 import i18n from '../../I18n';
 import { MAIN_ROUTES } from '../../pages/routes';
 import {
@@ -10,19 +12,23 @@ import {
   Title,
   Container,
   Footer,
+  TitleView,
+  CloseButton,
+  CardsScrollView,
+  SelectButton,
 } from './styled';
-import RoundedButton from '../../Components/RoundedButton';
 import { FlexCont } from '../../Components/Flex';
 import PaymentMethod from '../../Components/CardRow';
 import PaymentsContext from '../../context/payments';
-import { RidePageContext } from '../../context/newRideContext';
 import cashPaymentMethod from '../../pages/Payments/cashPaymentMethod';
+import closeXIcon from '../../assets/close-x.svg';
 
 interface PaymentMethodPopupProps {
   isVisible: boolean;
   onCancel: () => void;
   onSubmit: (payment: string | undefined) => void;
   showCash: boolean
+  rideFlow: boolean
 }
 
 type Nav = {
@@ -30,11 +36,8 @@ type Nav = {
 }
 
 const PaymentMethodPopup = ({
-  isVisible, onCancel, onSubmit, showCash,
+  isVisible, onCancel, onSubmit, showCash, rideFlow,
 }: PaymentMethodPopupProps) => {
-  const {
-    ride,
-  } = useContext(RidePageContext);
   const usePayments = PaymentsContext.useContainer();
   const [paymentId, setPaymentId] = useState(usePayments.getClientDefaultMethod()?.id);
   const navigation = useNavigation<Nav>();
@@ -56,44 +59,60 @@ const PaymentMethodPopup = ({
   }, [usePayments]);
 
   return (
-    <Modal isVisible={isVisible}>
+    <Modal
+      isVisible={isVisible}
+    >
       <SummaryContainer>
-        <Container>
-          <View>
-            <Title>{i18n.t('popups.choosePaymentMethod.title')}</Title>
-          </View>
-          <View>
-            {(isCashEnabled && showCash
-              ? [...usePayments.paymentMethods, cashPaymentMethod]
-              : usePayments.paymentMethods).map((paymentMethod: any, i) => (
-                <PaymentMethod
-                  {...paymentMethod}
-                  selected={paymentId === paymentMethod.id}
-                  mark={paymentId === paymentMethod.id}
-                  onPress={() => {
-                    setPaymentId(paymentMethod.id);
-                  }}
-                />
-            ))}
-            <PaymentMethod
-              addNew
-              onPress={() => {
-                onCancel();
-                navigation.navigate(MAIN_ROUTES.PAYMENT);
-              }}
-            />
-          </View>
-          <Footer>
-            <FlexCont style={{ justifyContent: 'center' }}>
-              <RoundedButton
-                type="confirm"
-                onPress={() => onSave()}
-              >
-                {i18n.t('payments.select')}
-              </RoundedButton>
-            </FlexCont>
-          </Footer>
-        </Container>
+        <TitleView>
+          <Title>{i18n.t('popups.choosePaymentMethod.title')}</Title>
+          <CloseButton
+            onPress={() => {
+              onCancel();
+              rideFlow
+                ? navigation.navigate(MAIN_ROUTES.HOME)
+                : navigation.navigate(MAIN_ROUTES.PAYMENT);
+            }}
+          >
+            <SvgIcon Svg={closeXIcon} />
+
+          </CloseButton>
+        </TitleView>
+        <CardsScrollView>
+          <Container>
+
+            <View>
+              {(isCashEnabled && showCash
+                ? [...usePayments.paymentMethods, cashPaymentMethod]
+                : usePayments.paymentMethods).map((paymentMethod: any, i) => (
+                  <PaymentMethod
+                    {...paymentMethod}
+                    selected={paymentId === paymentMethod.id}
+                    mark={paymentId === paymentMethod.id}
+                    onPress={() => {
+                      setPaymentId(paymentMethod.id);
+                    }}
+                  />
+              ))}
+              <PaymentMethod
+                addNew
+                onPress={() => {
+                  onCancel();
+                  navigation.navigate(MAIN_ROUTES.PAYMENT);
+                }}
+              />
+            </View>
+          </Container>
+        </CardsScrollView>
+        <Footer>
+          <FlexCont style={{ justifyContent: 'center' }}>
+            <SelectButton
+              type="confirm"
+              onPress={() => onSave()}
+            >
+              {i18n.t('payments.select')}
+            </SelectButton>
+          </FlexCont>
+        </Footer>
       </SummaryContainer>
     </Modal>
   );
@@ -102,11 +121,13 @@ const PaymentMethodPopup = ({
 PaymentMethodPopup.propTypes = {
   onSave: PropTypes.func,
   showCash: PropTypes.bool,
+  rideFlow: PropTypes.bool,
 };
 
 PaymentMethodPopup.defaultProps = {
   onSave: null,
   showCash: true,
+  rideFlow: false,
 };
 
 export default PaymentMethodPopup;

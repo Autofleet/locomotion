@@ -18,8 +18,8 @@ const FutureBookingButton = () => {
   const { ride } = useContext(RidePageContext);
   const nowText = i18n.t('bottomSheetContent.ride.now');
   const { primaryColor } = useContext(ThemeContext);
-  const isFutureRide = ride?.afterTime;
-  const chosenTime = isFutureRide && moment(ride.afterTime).format('DD.MM.YY, HH:mm');
+  const isFutureRide = ride?.scheduledTo;
+  const chosenTime = isFutureRide && moment(ride.scheduledTo).format('DD.MM.YY, HH:mm');
   return (
     <>
       <SvgIcon fill={primaryColor} Svg={clock} height={15} width={15} />

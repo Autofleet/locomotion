@@ -18,6 +18,7 @@ const MainRouter = () => (
     <Stack.Screen name={MAIN_ROUTES.START} component={ROUTES_COMPS[MAIN_ROUTES.START]} />
     <Stack.Screen name={MAIN_ROUTES.WELCOME} component={ROUTES_COMPS[MAIN_ROUTES.WELCOME]} />
     <Stack.Screen name={MAIN_ROUTES.LOCK} component={ROUTES_COMPS[MAIN_ROUTES.LOCK]} />
+    <Stack.Screen name={MAIN_ROUTES.EMAIL_CODE} component={ROUTES_COMPS[MAIN_ROUTES.EMAIL_CODE]} />
     <Stack.Screen name={MAIN_ROUTES.PHONE} component={ROUTES_COMPS[MAIN_ROUTES.PHONE]} />
     <Stack.Screen name={MAIN_ROUTES.CODE} component={ROUTES_COMPS[MAIN_ROUTES.CODE]} />
     <Stack.Screen name={MAIN_ROUTES.NAME} component={ROUTES_COMPS[MAIN_ROUTES.NAME]} />

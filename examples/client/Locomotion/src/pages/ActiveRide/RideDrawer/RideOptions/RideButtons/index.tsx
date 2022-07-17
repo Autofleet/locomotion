@@ -55,14 +55,14 @@ const RideButtons = ({
         <FutureBookingButton />
         <DatePicker
           open={isDatePickerOpen}
-          date={moment(ride?.afterTime).toDate()}
+          date={moment(ride?.scheduledTo).toDate()}
           maximumDate={MAX_DATE_FUTURE_RIDE}
           minimumDate={MIN_DATE_FUTURE_RIDE}
           mode="datetime"
           title={i18n.t('bottomSheetContent.ride.chosePickupTime')}
           onCancel={close}
           onConfirm={(date) => {
-            updateRidePayload({ afterTime: date.getTime() });
+            updateRidePayload({ scheduledTo: date.getTime() });
             changeBsPage(BS_PAGES.CONFIRM_PICKUP_TIME);
             close();
           }}
@@ -91,9 +91,10 @@ const RideButtons = ({
 
   const renderPaymentButton = () => {
     const ridePaymentMethod = ride?.paymentMethodId;
-    const selectedPaymentMethod: PaymentMethodInterface | undefined = ridePaymentMethod === cashPaymentMethod.id
-      ? cashPaymentMethod
-      : paymentMethods.find(pm => pm.id === ridePaymentMethod);
+    const selectedPaymentMethod:
+     PaymentMethodInterface | undefined = ridePaymentMethod === cashPaymentMethod.id
+       ? cashPaymentMethod
+       : paymentMethods.find(pm => pm.id === ridePaymentMethod);
 
     return (
       <ButtonContainer
