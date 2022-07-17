@@ -56,6 +56,10 @@ const PaymentMethodPopup = ({
     };
 
     getIsCashEnabled();
+  }, [usePayments.paymentMethods]);
+
+  useEffect(() => {
+    setPaymentId(usePayments.getClientDefaultMethod()?.id);
   }, [usePayments]);
 
   return (

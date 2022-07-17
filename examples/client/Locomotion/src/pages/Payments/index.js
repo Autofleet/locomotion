@@ -21,7 +21,7 @@ export default ({ navigation, menuSide }) => {
   } = usePayments;
   const [pageLoading, setPageLoading] = useState(true);
   const [loading, setLoading] = useState(false);
-  const hasPaymentMethods = paymentMethods && paymentMethods.length > 0;
+  let hasPaymentMethods = paymentMethods && paymentMethods.length > 0;
   const [showList, setShowList] = useState(hasPaymentMethods);
 
   const loadCustomerData = async () => {
@@ -32,6 +32,15 @@ export default ({ navigation, menuSide }) => {
   useEffect(() => {
     loadCustomerData();
   }, []);
+
+  useEffect(() => {
+    const updateShowList = async () => {
+      hasPaymentMethods = paymentMethods && paymentMethods.length > 0;
+      setShowList(hasPaymentMethods);
+    };
+
+    updateShowList();
+  }, [usePayments.paymentMethods]);
 
   const onPressBack = () => {
     if (!showList && hasPaymentMethods) {
