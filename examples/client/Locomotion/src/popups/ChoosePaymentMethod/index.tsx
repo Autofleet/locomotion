@@ -41,12 +41,23 @@ const PaymentMethodPopup = ({
 }: PaymentMethodPopupProps) => {
   const usePayments = PaymentsContext.useContainer();
   const [paymentId, setPaymentId] = useState(usePayments.getClientDefaultMethod()?.id);
-  const [selectedPaymentId, setSelectedPaymentId] = useState<string | undefined>(selected
-    || usePayments.getClientDefaultMethod()?.id);
+  const [selectedPaymentId, setSelectedPaymentId] = useState<string | undefined>(selected);
 
   useEffect(() => {
     usePayments.getOrFetchCustomer();
   }, []);
+
+  useEffect(() => {
+    const updateDefaultPaymentMethod = async () => {
+      const paymentMethod = await usePayments.getClientDefaultMethod();
+      setSelectedPaymentId(selected
+      || paymentMethod?.id);
+    };
+
+
+    updateDefaultPaymentMethod();
+  }, [usePayments.paymentMethods]);
+
 
   useEffect(() => {
     setSelectedPaymentId(selected

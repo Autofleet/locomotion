@@ -60,12 +60,17 @@ const RideOptions = () => {
   }, []);
 
   useEffect(() => {
-    const paymentMethod: PaymentMethodInterface | undefined = usePayments.getClientDefaultMethod();
-    if (paymentMethod) {
-      updateRidePayload({
-        paymentMethodId: paymentMethod.id,
-      });
-    }
+    const updateDefaultPaymentMethod = async () => {
+      const paymentMethod: PaymentMethodInterface |
+       undefined = await usePayments.getClientDefaultMethod();
+      if (paymentMethod) {
+        updateRidePayload({
+          paymentMethodId: paymentMethod.id,
+        });
+      }
+    };
+
+    updateDefaultPaymentMethod();
   }, [usePayments.paymentMethods]);
 
   useEffect(() => {
@@ -75,13 +80,6 @@ const RideOptions = () => {
         setPopupName={setPopupName}
       />
     ));
-
-    const paymentMethod: PaymentMethodInterface | undefined = usePayments.getClientDefaultMethod();
-    if (paymentMethod) {
-      updateRidePayload({
-        paymentMethodId: paymentMethod.id,
-      });
-    }
 
     changeBsPage(BS_PAGES.SERVICE_ESTIMATIONS);
     return () => {

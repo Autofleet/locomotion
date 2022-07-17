@@ -46,7 +46,7 @@ const AuthLoadingScreen = ({ navigation }) => {
     async function getFromStorage() {
       const clientProfile = await StorageService.get('clientProfile');
       if (clientProfile) {
-        await versionCheck();
+        // await versionCheck();
         const response = await getUserDetails();
         if (!response) {
           Auth.logout(navigation);

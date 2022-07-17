@@ -45,13 +45,13 @@ const usePayments = () => {
   };
 
   const clientHasValidPaymentMethods = () => paymentMethods.length > 0 && paymentMethods.some(pm => !pm.isExpired);
-  const isCashPaymentEnabled = () => useSettings.getSettingByKey(SETTINGS_KEYS.CASH_ENABLED);
+  const isCashPaymentEnabled = async () => useSettings.getSettingByKey(SETTINGS_KEYS.CASH_ENABLED);
 
-  const getClientDefaultMethod = () => {
+  const getClientDefaultMethod = async () => {
     if (paymentMethods && paymentMethods.length) {
       return (paymentMethods || []).find(pm => pm.isDefault) || paymentMethods[0];
     }
-    const cashEnabled = isCashPaymentEnabled();
+    const cashEnabled = await isCashPaymentEnabled();
     if (cashEnabled) {
       return cashPaymentMethod;
     }
