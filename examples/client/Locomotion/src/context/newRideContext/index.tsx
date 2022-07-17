@@ -25,7 +25,8 @@ import { BS_PAGES } from '../ridePageStateContext/utils';
 import { RIDE_STATES, RIDE_FINAL_STATES, STOP_POINT_TYPES } from '../../lib/commonTypes';
 import useInterval from '../../lib/useInterval';
 import { formatSps } from '../../lib/ride/utils';
-import { MAIN_ROUTES } from '../../pages/routes';
+import { APP_ROUTES, MAIN_ROUTES } from '../../pages/routes';
+import * as navigationService from '../../services/navigation';
 
 type Dispatch<A> = (value: A) => void;
 type Nav = {
@@ -144,7 +145,6 @@ export const RidePageContext = createContext<RidePageContextInterface>({
 });
 
 const HISTORY_RECORDS_NUM = 10;
-let SERVICE_ESTIMATIONS_INTERVAL_IN_SECONDS: number;
 
 const RidePageContextProvider = ({ children }: {
   children: any
@@ -251,13 +251,19 @@ const RidePageContextProvider = ({ children }: {
     }
   };
 
+
+  const getServiceEstimationsFetchingInterval = () => getSettingByKey(
+    SETTINGS_KEYS.SERVICE_ESTIMATIONS_INTERVAL_IN_SECONDS,
+  );
+
   const tryServiceEstimations = async () => {
+    const serviceEstimationsInterval = await getServiceEstimationsFetchingInterval();
     await getServiceEstimations();
     intervalRef.current = setInterval(async () => {
       if (intervalRef.current) {
         await getServiceEstimations(false);
       }
-    }, ((SERVICE_ESTIMATIONS_INTERVAL_IN_SECONDS || 60) * 1000));
+    }, ((serviceEstimationsInterval || 60) * 1000));
   };
 
   const validateStopPointInTerritory = (stopPoints: any[]) => checkStopPointsInTerritory(stopPoints);
@@ -273,11 +279,6 @@ const RidePageContextProvider = ({ children }: {
     }
   };
 
-  const getServiceEstimationsFetchingInterval = async () => {
-    SERVICE_ESTIMATIONS_INTERVAL_IN_SECONDS = await getSettingByKey(
-      SETTINGS_KEYS.SERVICE_ESTIMATIONS_INTERVAL_IN_SECONDS,
-    );
-  };
 
   const loadActiveRide = async () => {
     const activeRide = await rideApi.getActiveRide();
@@ -292,37 +293,33 @@ const RidePageContextProvider = ({ children }: {
   };
 
   useEffect(() => {
-    getServiceEstimationsFetchingInterval();
-    loadActiveRide();
+    if (user?.id) {
+      loadActiveRide();
+    }
   }, []);
 
   useInterval(async () => {
-    if (user?.id) {
-      if (!rideRequestLoading) {
-        if (ride?.id) {
-          try {
-            const rideLoaded = await rideApi.getRide(ride?.id);
-            const formattedRide = await formatRide(rideLoaded);
-            if (ride.state !== rideLoaded.state) {
-              const screenFunction = RIDE_STATES_TO_SCREENS[rideLoaded.state];
-              if (screenFunction) {
-                screenFunction(rideLoaded);
-              }
+    if (user?.id && !rideRequestLoading) {
+      if (ride?.id) {
+        try {
+          const rideLoaded = await rideApi.getRide(ride?.id);
+          const formattedRide = await formatRide(rideLoaded);
+          if (ride.state !== rideLoaded.state) {
+            const screenFunction = RIDE_STATES_TO_SCREENS[rideLoaded.state];
+            if (screenFunction) {
+              screenFunction(rideLoaded);
             }
-            if (!RIDE_FINAL_STATES.includes(rideLoaded?.state || '')) {
-              setRide(formattedRide);
-            }
-          } catch (e) {
-            cleanRideState();
-            changeBsPage(BS_PAGES.ADDRESS_SELECTOR);
           }
-        } else {
-          loadActiveRide();
+          if (!RIDE_FINAL_STATES.includes(rideLoaded?.state || '')) {
+            setRide(formattedRide);
+          }
+        } catch (e) {
+          cleanRideState();
+          changeBsPage(BS_PAGES.ADDRESS_SELECTOR);
         }
+      } else {
+        loadActiveRide();
       }
-    } else {
-      cleanRideState();
-      changeBsPage(BS_PAGES.ADDRESS_SELECTOR);
     }
   }, 4000);
 
@@ -634,7 +631,7 @@ const RidePageContextProvider = ({ children }: {
     ]);
 
     cleanRideState();
-    navigation.navigate(MAIN_ROUTES.HOME);
+    navigationService.navigate(MAIN_ROUTES.HOME, {}, APP_ROUTES.MAIN_APP);
     changeBsPage(BS_PAGES.ADDRESS_SELECTOR);
     return true;
   };

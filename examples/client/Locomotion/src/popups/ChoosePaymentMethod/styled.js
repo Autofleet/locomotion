@@ -1,6 +1,27 @@
-import { View } from 'react-native';
+import { View, ScrollView } from 'react-native';
 import styled from 'styled-components';
+import RoundedButton from '../../Components/RoundedButton';
+import Button from '../../Components/Button';
 import { TextArea } from '../../Components/TextArea';
+
+export const SelectButton = styled(RoundedButton)`
+  margin: 10px;
+`;
+
+export const CloseButton = styled(Button)`
+  height: 0;
+  width: 0
+`;
+
+export const CardsScrollView = styled(ScrollView)`
+  max-height: 400px;
+  margin-bottom: 50px;
+`;
+
+export const TitleView = styled.View`
+  display: flex;
+  flex-direction: row;
+`;
 
 export const SummaryContainer = styled.View`
   flex: 1;
@@ -10,8 +31,9 @@ export const SummaryContainer = styled.View`
   background-color: white;
   justify-content: center;
   align-items: center;
-  border-radius: 2px;
+  border-radius: 12px;
   border-color: rgba(0, 0, 0, 0.1);
+  max-height: 450px;
 `;
 
 export const Title = styled.Text`

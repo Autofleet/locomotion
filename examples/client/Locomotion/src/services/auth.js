@@ -1,5 +1,6 @@
 /* eslint-disable class-methods-use-this */
 import jwtDecode from 'jwt-decode';
+import RNRestart from 'react-native-restart';
 import StorageService from './storage';
 import AppSettings from './app-settings';
 import { MAIN_ROUTES } from '../pages/routes';
@@ -50,7 +51,8 @@ class Auth {
     // }
     await AppSettings.destroy();
     navigation.popToTop();
-    return navigation.replace(MAIN_ROUTES.START);
+    navigation.replace(MAIN_ROUTES.START);
+    RNRestart.Restart();
   };
 
   onFaildAuth(cb) {

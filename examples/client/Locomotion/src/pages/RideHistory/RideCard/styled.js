@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import i18n from '../../../I18n';
 import blackRightArrow from '../../../assets/arrowright.png';
-import activity from '../../../assets/activitiy.png';
+import noRides from '../../../assets/no_rides.png';
 import { FONT_SIZES, FONT_WEIGHTS } from '../../../context/theme';
 
 export const RideDrillDownIcon = styled.Image.attrs({
@@ -15,12 +15,12 @@ export const RideDrillDownIcon = styled.Image.attrs({
   align-self: center;
 `;
 
+
 export const NoRidesImage = styled.Image.attrs({
-  source: activity,
-  resizeMode: 'cover',
+  source: noRides,
 })`
-  width: 176px;
-  height: 120.3px;
+  width: 157px;
+  height: 171px;
   align-self: center;
 `;
 
@@ -97,7 +97,7 @@ export const RideViewTextContainer = styled.View`
 `;
 
 export const RideViewSecTextContainer = styled.View`
-  flex: 2;
+  flex: 3;
 `;
 
 export const CenterContainer = styled.View`
