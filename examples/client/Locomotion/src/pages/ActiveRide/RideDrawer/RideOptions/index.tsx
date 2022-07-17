@@ -49,7 +49,7 @@ const RideOptions = () => {
     };
 
     updateClient();
-  });
+  }, []);
 
   const loadCustomerData = async () => {
     await usePayments.getOrFetchCustomer();

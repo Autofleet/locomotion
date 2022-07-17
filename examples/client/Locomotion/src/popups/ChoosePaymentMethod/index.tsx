@@ -60,7 +60,7 @@ const PaymentMethodPopup = ({
 
   useEffect(() => {
     setPaymentId(usePayments.getClientDefaultMethod()?.id);
-  }, [usePayments]);
+  }, [usePayments.paymentMethods]);
 
   return (
     <Modal
