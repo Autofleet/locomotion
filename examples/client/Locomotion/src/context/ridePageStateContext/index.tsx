@@ -36,7 +36,7 @@ const RideStateContextContextProvider = ({ children }: { children: any }) => {
   const [genericErrorPopup, setGenericErrorPopup] = useState<any | null>(null);
   const [territory, setTerritory] = useState<Array<any> | null>(null);
   const [isUserLocationFocused, setIsUserLocationFocused] = useState(false);
-  const [currentBsPage, setCurrentBsPage] = useState<BsPages>(BS_PAGES.ADDRESS_SELECTOR);
+  const [currentBsPage, setCurrentBsPage] = useState<BsPages>(BS_PAGES.NO_AVAILABLE_VEHICLES);
   const { setSnapPointsState, setIsExpanded } = useContext(BottomSheetContext);
 
   const changeBsPage = (pageName: BsPages) => {

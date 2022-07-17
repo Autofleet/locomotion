@@ -2,13 +2,10 @@ import React from 'react';
 import styled from 'styled-components';
 import I18n from '../../../I18n';
 import { FONT_SIZES, FONT_WEIGHTS } from '../../../context/theme';
-import noRides from '../../../assets/no_rides.png';
+import noRides from '../../../assets/no_rides.svg';
+import SvgIcon from '../../../Components/SvgIcon';
 
-export const NoRidesImage = styled.Image.attrs({
-  source: noRides,
-})`
-  width: 157px;
-  height: 171px;
+export const NoRidesImageContainer = styled.View`
   align-self: center;
 `;
 
@@ -46,7 +43,9 @@ export const SubNoRidesListContainer = styled(BaseText)`
 
 export const NoRidesInList = () => (
   <CenterContainer addTop>
-    <NoRidesImage />
+    <NoRidesImageContainer>
+      <SvgIcon Svg={noRides} width={157} height={171} fill="red" />
+    </NoRidesImageContainer>
     <NoRidesListContainer>
       {I18n.t('rideHistory.noActivityYet')}
     </NoRidesListContainer>
