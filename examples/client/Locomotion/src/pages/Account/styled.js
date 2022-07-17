@@ -104,3 +104,17 @@ export const AccountHeaderIndicatorContainer = styled.View`
   flex-direction: row;
   vertical-align: center;
 `;
+
+export const Type = styled.Text`
+    ${FONT_SIZES.H2};
+  ${FONT_WEIGHTS.REGULAR};
+  color: #333333;
+  opacity: 0.8;
+  margin-left: 10px;
+`;
+
+export const PaymentMethodContent = styled.View`
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+`;

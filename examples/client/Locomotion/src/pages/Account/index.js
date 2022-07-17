@@ -2,6 +2,7 @@ import React, { useEffect, useContext } from 'react';
 import { useRoute } from '@react-navigation/native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import moment from 'moment';
+import { PaymentIcon } from 'react-native-payment-icons';
 import cashPaymentMethod from '../../pages/Payments/cashPaymentMethod';
 import Card from '../../Components/InformationCard';
 import PaymentsContext from '../../context/payments';
@@ -19,6 +20,8 @@ import {
   FlexCenterContainer,
   LogoutContainer,
   LogoutText,
+  Type,
+  PaymentMethodContent,
 } from './styled';
 import i18n from '../../I18n';
 import PageHeader from '../../Components/PageHeader';
@@ -107,9 +110,10 @@ const AccountContent = ({ navigation }) => {
                 back: true,
               })}
             >
-              {
-            moment.utc(defaultPaymentMethod.expiresAt).format('MM/YY')
-          }
+              <PaymentMethodContent>
+                <PaymentIcon type={defaultPaymentMethod.brand} />
+                <Type>{defaultPaymentMethod.name}</Type>
+              </PaymentMethodContent>
             </Card>
           </>
         ) : undefined}
