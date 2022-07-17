@@ -338,12 +338,16 @@ PODS:
   - react-native-onesignal (4.3.11):
     - OneSignalXCFramework (= 3.11.2)
     - React (< 1.0.0, >= 0.13.0)
+  - react-native-restart (0.0.24):
+    - React-Core
   - react-native-safe-area-context (4.3.1):
     - RCT-Folly
     - RCTRequired
     - RCTTypeSafety
     - React
     - ReactCommon/turbomodule/core
+  - react-native-version-check (3.4.3):
+    - React
   - react-native-webview (11.22.3):
     - React-Core
   - React-perflogger (0.68.1)
@@ -528,7 +532,9 @@ DEPENDENCIES:
   - react-native-maps (from `../node_modules/react-native-maps`)
   - react-native-mixpanel (from `../node_modules/react-native-mixpanel`)
   - react-native-onesignal (from `../node_modules/react-native-onesignal`)
+  - react-native-restart (from `../node_modules/react-native-restart`)
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
+  - react-native-version-check (from `../node_modules/react-native-version-check`)
   - react-native-webview (from `../node_modules/react-native-webview`)
   - React-perflogger (from `../node_modules/react-native/ReactCommon/reactperflogger`)
   - React-RCTActionSheet (from `../node_modules/react-native/Libraries/ActionSheetIOS`)
@@ -646,8 +652,12 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-mixpanel"
   react-native-onesignal:
     :path: "../node_modules/react-native-onesignal"
+  react-native-restart:
+    :path: "../node_modules/react-native-restart"
   react-native-safe-area-context:
     :path: "../node_modules/react-native-safe-area-context"
+  react-native-version-check:
+    :path: "../node_modules/react-native-version-check"
   react-native-webview:
     :path: "../node_modules/react-native-webview"
   React-perflogger:
@@ -749,7 +759,9 @@ SPEC CHECKSUMS:
   react-native-maps: 8b8bfada2c86205a7f5a07dd1f92f29b33ea83aa
   react-native-mixpanel: 3e21f895f4e439f680cee7e236711db273cb273d
   react-native-onesignal: ba9632b0065917f9efa7bba0179859fc8f728849
+  react-native-restart: 8af4579c94638f38bd9074ec477ebf087de87dc5
   react-native-safe-area-context: d768fdafd416b4c0bdc7bef4240c9ee53909baf3
+  react-native-version-check: ecc2bfeb57459db83351020610af16cd1d3abcbd
   react-native-webview: af3da2648aad4d2eabdac457ebeeb6e4158ea82f
   React-perflogger: 30ab8d6db10e175626069e742eead3ebe8f24fd5
   React-RCTActionSheet: 4b45da334a175b24dabe75f856b98fed3dfd6201
@@ -784,6 +796,6 @@ SPEC CHECKSUMS:
   StripeUICore: a8e24a6c91a5c99075c7a490d45695fb912876e8
   Yoga: 17cd9a50243093b547c1e539c749928dd68152da
 
-PODFILE CHECKSUM: b5364bb415d2d07edb4e760764a3024a92a9074c
+PODFILE CHECKSUM: d859fddd9dce5c4590211de172a11ed2517eef69
 
 COCOAPODS: 1.11.3

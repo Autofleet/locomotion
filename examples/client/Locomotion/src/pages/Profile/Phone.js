@@ -19,9 +19,7 @@ const Phone = ({ navigation }) => {
   const [renderId, setRenderId] = useState(0);
   const [isInvalid, setIsInvalid] = useState(true);
 
-  console.log('render', user);
   const onPhoneNumberChange = (phoneNumber, isValid) => {
-    console.log('onPhoneNumberChange');
     setShowErrorText(false);
     setIsInvalid(!isValid);
     updateState({ phoneNumber });

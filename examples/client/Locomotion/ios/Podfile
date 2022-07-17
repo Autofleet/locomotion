@@ -22,6 +22,8 @@ target 'Locomotion' do
     :app_path => "#{Pod::Config.instance.installation_root}/.."
   )
 
+  pod 'react-native-version-check', :path => '../node_modules/react-native-version-check'
+
   target 'LocomotionTests' do
     inherit! :complete
     # Pods for testing

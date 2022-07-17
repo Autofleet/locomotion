@@ -4,8 +4,10 @@ import CardsTitle from '../CardsTitle';
 import i18n from '../../I18n';
 import VerticalTimeLineCard from './VerticalTimeLine';
 import { ContentSubTitle, ContentTitle, PanelContentContainer } from './styled';
-import { getOrdinal, getMinDifferent } from '../../lib/ride/utils';
-import { RIDE_ACTIVE_STATES, STOP_POINT_STATES } from '../../lib/commonTypes';
+import { getOrdinal } from '../../lib/ride/utils';
+import {
+  RIDE_ACTIVE_STATES, RIDE_STATES, STOP_POINT_STATES,
+} from '../../lib/commonTypes';
 
 const getEtaText = eta => moment(eta).format('HH:mm');
 
@@ -20,7 +22,7 @@ const Index = ({ ride }) => {
     state,
     stopPoints,
   } = ride;
-  const rideIsActive = RIDE_ACTIVE_STATES.includes(state);
+  const rideIsActive = [...RIDE_ACTIVE_STATES, RIDE_STATES.CANCELED].includes(state);
 
   if (stopPoints
     && stopPoints.length) {

@@ -4,6 +4,14 @@ import { StorageService } from '../../services';
 import * as settingsApi from './api';
 
 const FIVE_MINS_IN_SECONDS = 5 * 60;
+const fieldNameToSettingKeyMap = {
+  contactUsUrl: 'riderApp.contactUsUrl',
+  termsOfUseUrl: 'riderApp.termsOfUseUrl',
+  privacyPolicyUrl: 'riderApp.privacyPolicyUrl',
+  contactEmail: 'riderApp.contactEmail',
+  contactPhone: 'riderApp.contactPhone',
+};
+
 
 const useSettings = () => {
   const [settingsList, setSettingsList] = useState({});
@@ -26,10 +34,11 @@ const useSettings = () => {
     const cachedKeys = Object.keys(keyValueMap);
     const keysAfterCache = cachedKeys.map((cacheKey) => {
       const value = keyValueMap[cacheKey];
-      if (value === undefined) {
+      if (value === undefined || !cachedKeys.includes(cacheKey)) {
         return cacheKey;
       }
     });
+
     const settingMap = {};
     const values = await settingsApi.getMultipleByKeys(keysAfterCache);
     // eslint-disable-next-line array-callback-return
@@ -41,6 +50,21 @@ const useSettings = () => {
       ...settingMap,
       ...keyValueMap,
     };
+  };
+
+  const getLoginSettings = async () => {
+    const loginSettings = await getMultipleSettingByKey(Object.values(fieldNameToSettingKeyMap));
+    const formattedResult = {};
+
+    // this format meant for us not changing a lot of code in case changing settings keys
+    Object.keys(loginSettings).map((key) => {
+      const fieldName = Object.keys(fieldNameToSettingKeyMap)
+        .find(field => fieldNameToSettingKeyMap[field] === key);
+      formattedResult[fieldName] = loginSettings[key];
+      return formattedResult;
+    });
+
+    return formattedResult;
   };
 
   const getSettings = async () => {
@@ -74,6 +98,7 @@ const useSettings = () => {
     workingHours,
     getSettingByKey,
     getMultipleSettingByKey,
+    getLoginSettings,
   };
 };
 export default createContainer(useSettings);

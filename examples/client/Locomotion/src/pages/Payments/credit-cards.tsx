@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View } from 'react-native';
+import { ScrollView, View } from 'react-native';
 import { MAIN_ROUTES } from '../routes';
 import i18n from '../../I18n';
 import {
@@ -45,28 +45,31 @@ export default ({
     <CardsListContainer>
       <View>
         <PaymentMethodsContainer>
-          { defaultMethod?.id && defaultMethod?.id !== cashPaymentMethod.id
-            ? (
-              <Section
-                title={i18n.t('payments.defaultMethodTitle')}
-                onPress={() => navigate(MAIN_ROUTES.CARD_DETAILS, { paymentMethod: defaultMethod })}
-                paymentMethods={[defaultMethod]}
-                showChangeButton
-                onPressChange={() => setShowChoosePayment(true)}
-              />
-            ) : undefined}
+          <ScrollView>
+            { defaultMethod?.id && defaultMethod?.id !== cashPaymentMethod.id
+              ? (
+                <Section
+                  title={i18n.t('payments.defaultMethodTitle')}
+                  onPress={() => navigate(MAIN_ROUTES.CARD_DETAILS,
+                    { paymentMethod: defaultMethod })}
+                  paymentMethods={[defaultMethod]}
+                  showChangeButton
+                  onPressChange={() => setShowChoosePayment(true)}
+                />
+              ) : undefined}
 
-          {usePayments.paymentMethods.length > 1
-            ? (
-              <Section
-                title={i18n.t('payments.otherMethodsTitle')}
-                showChangeButton={false}
-                onPress={(paymentMethod: any) => navigate(MAIN_ROUTES.CARD_DETAILS,
-                  { paymentMethod })}
-                paymentMethods={usePayments.paymentMethods
-                  .filter(({ id }) => id !== defaultMethod.id)}
-              />
-            ) : undefined}
+            {usePayments.paymentMethods.length > 1
+              ? (
+                <Section
+                  title={i18n.t('payments.otherMethodsTitle')}
+                  showChangeButton={false}
+                  onPress={(paymentMethod: any) => navigate(MAIN_ROUTES.CARD_DETAILS,
+                    { paymentMethod })}
+                  paymentMethods={usePayments.paymentMethods
+                    .filter(({ id }) => id !== defaultMethod.id)}
+                />
+              ) : undefined}
+          </ScrollView>
         </PaymentMethodsContainer>
 
         {onAddClick ? (
