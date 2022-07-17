@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import i18n from '../../../I18n';
 import blackRightArrow from '../../../assets/arrowright.png';
-import noRides from '../../../assets/no_rides.png';
+import noRides from '../../../assets/no_rides.svg';
 import { FONT_SIZES, FONT_WEIGHTS } from '../../../context/theme';
 
 export const RideDrillDownIcon = styled.Image.attrs({

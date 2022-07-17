@@ -1,14 +1,11 @@
-import React from 'react';
-import styled from 'styled-components';
+import React, { useContext } from 'react';
+import styled, { ThemeContext } from 'styled-components';
 import I18n from '../../../I18n';
 import { FONT_SIZES, FONT_WEIGHTS } from '../../../context/theme';
-import noRides from '../../../assets/no_rides.png';
+import noRides from '../../../assets/no_rides.svg';
+import SvgIcon from '../../../Components/SvgIcon';
 
-export const NoRidesImage = styled.Image.attrs({
-  source: noRides,
-})`
-  width: 157px;
-  height: 171px;
+export const NoRidesImageContainer = styled.View`
   align-self: center;
 `;
 
@@ -44,17 +41,22 @@ export const SubNoRidesListContainer = styled(BaseText)`
   font-size: 16px;
 `;
 
-export const NoRidesInList = () => (
-  <CenterContainer addTop>
-    <NoRidesImage />
-    <NoRidesListContainer>
-      {I18n.t('rideHistory.noActivityYet')}
-    </NoRidesListContainer>
-    <SubNoRidesListContainer>
-      {I18n.t('rideHistory.noActivitySub')}
-    </SubNoRidesListContainer>
-  </CenterContainer>
-);
+export const NoRidesInList = () => {
+  const { primaryColor } = useContext(ThemeContext);
+  return (
+    <CenterContainer addTop>
+      <NoRidesImageContainer>
+        <SvgIcon Svg={noRides} width={157} height={171} fill={primaryColor} />
+      </NoRidesImageContainer>
+      <NoRidesListContainer>
+        {I18n.t('rideHistory.noActivityYet')}
+      </NoRidesListContainer>
+      <SubNoRidesListContainer>
+        {I18n.t('rideHistory.noActivitySub')}
+      </SubNoRidesListContainer>
+    </CenterContainer>
+  );
+};
 
 export const DayTitleText = styled(BaseText)`
   font-size: 16px;
