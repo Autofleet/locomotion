@@ -3,13 +3,14 @@ import i18n from '../../I18n';
 import SaveButton from './SaveButton';
 import { OnboardingContext } from '../../context/onboarding';
 import {
-  ImageContainer, Name, PageContainer, SafeView,
+  ImageContainer, Name, SafeView,
 } from './styles';
 import Header from './Header';
 import ScreenText from './ScreenText/index';
 import ThumbnailPicker from '../../Components/ThumbnailPicker';
 import { MAIN_ROUTES } from '../routes';
 import { UserContext } from '../../context/user';
+import { PageContainer, ContentContainer } from '../styles';
 
 const Avatar = () => {
   const { updateUserInfo, user } = useContext(UserContext);
@@ -21,12 +22,13 @@ const Avatar = () => {
   };
 
   return (
-    <SafeView>
+
+    <PageContainer>
       <Header
         title={i18n.t('onboarding.pages.avatar.title')}
         page={MAIN_ROUTES.AVATAR}
       />
-      <PageContainer>
+      <ContentContainer>
         <ScreenText
           text={i18n.t('onboarding.pages.avatar.text')}
           subText={i18n.t('onboarding.pages.avatar.subText')}
@@ -46,8 +48,8 @@ const Avatar = () => {
           }}
           isInvalid={!photoSelected}
         />
-      </PageContainer>
-    </SafeView>
+      </ContentContainer>
+    </PageContainer>
   );
 };
 

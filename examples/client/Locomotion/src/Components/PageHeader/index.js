@@ -1,6 +1,6 @@
 import React from 'react';
 import propsTypes from 'prop-types';
-import { View } from 'react-native';
+import { Platform, View } from 'react-native';
 import {
   Header, HeaderText, HeaderIconContainer, HeaderIcon, SkipButton, SkipButtonText,
 } from './styled';
@@ -10,7 +10,7 @@ import backArrow from '../../assets/arrow-back.png';
 const PageHeader = ({
   title, icon, onIconPress, iconSide, displayIcon, width, showSkipButton, onPressSkip, action,
 }) => (
-  <Header>
+  <Header style={Platform.OS === 'android' ? { shadowColor: '#000' } : {}}>
     {displayIcon !== false
       ? (
         <HeaderIconContainer side={iconSide} onPress={onIconPress} data-test-id="NavigationPanelButton">
