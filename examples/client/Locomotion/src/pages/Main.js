@@ -82,6 +82,10 @@ const Main = () => (
       name={MAIN_ROUTES.CARD_DETAILS}
       component={ROUTES_COMPS[MAIN_ROUTES.CARD_DETAILS]}
     />
+    <Drawer.Screen
+      name={MAIN_ROUTES.EDIT_NICKNAME}
+      component={ROUTES_COMPS[MAIN_ROUTES.EDIT_NICKNAME]}
+    />
     <Stack.Screen
       name={MAIN_ROUTES.LOGOUT}
       component={ROUTES_COMPS[MAIN_ROUTES.LOGOUT]}

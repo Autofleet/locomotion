@@ -104,7 +104,7 @@ const CreditCardSelected = (
 const isCashPaymentMethod = (paymentMethod: any) => paymentMethod.id === cashPaymentMethod.id;
 
 
-export default (paymentMethod: any) => (
+const CardRow = (paymentMethod: any) => (
   <TouchableOpacity
     activeOpacity={paymentMethod.onPress ? 0 : 1}
     onPress={() => {
@@ -123,8 +123,11 @@ export default (paymentMethod: any) => (
           )
           : (
             <>
-              {isCashPaymentMethod(paymentMethod) ? <SvgIcon Svg={cashIcon} width={40} height={25} /> : <PaymentIcon type={paymentMethod.brand} />}
-              {paymentMethod.selected ? (isCashPaymentMethod(paymentMethod) ? CashSelected : CreditCardSelected) : null }
+              {isCashPaymentMethod(paymentMethod)
+                ? <SvgIcon Svg={cashIcon} width={40} height={25} />
+                : <PaymentIcon type={paymentMethod.brand} />}
+              {paymentMethod.mark ? (isCashPaymentMethod(paymentMethod)
+                ? CashSelected : CreditCardSelected) : null }
             </>
           )
         }
@@ -147,10 +150,12 @@ export default (paymentMethod: any) => (
                 )
                 : (
                   <Type>
-                    {capitalizeFirstLetter(paymentMethod.brand)}
+                    {capitalizeFirstLetter(paymentMethod.name)}
                   </Type>
                 )}
-              {paymentMethod.lastFour ? <Description>{getLastFourForamttedShort(paymentMethod.lastFour)}</Description> : null}
+              {paymentMethod.lastFour
+                ? <Description>{getLastFourForamttedShort(paymentMethod.lastFour)}</Description>
+                : null}
               {paymentMethod && !isCashPaymentMethod(paymentMethod) && moment(paymentMethod.expiresAt).isBefore(moment()) ? <Error>{i18n.t('payments.expired').toString()}</Error> : null}
               {paymentMethod && !isCashPaymentMethod(paymentMethod) && paymentMethod.hasOutstandingBalance ? <Error>{i18n.t('payments.hasOutstandingBalance').toString()}</Error> : null}
             </>
@@ -159,3 +164,5 @@ export default (paymentMethod: any) => (
     </Container>
   </TouchableOpacity>
 );
+
+export default CardRow;

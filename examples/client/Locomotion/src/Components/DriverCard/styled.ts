@@ -7,7 +7,7 @@ const BaseRideViewContainer = styled(View)`
 `;
 
 const BaseText = styled(Text)`
-  padding-top: 5px
+  padding-top: 5px;
 `;
 
 export const RatingBarContainer = styled(View)`
@@ -15,7 +15,12 @@ export const RatingBarContainer = styled(View)`
   margin-left: auto;
 `;
 
+export const DriverDetailsContainer = styled(View)`
+width: 75%;
+`;
+
 export const DriverAvatarContainer = styled(View)`
+width: 25%;
 `;
 
 export const DriverDetailContainer = styled(View)`
@@ -37,13 +42,13 @@ export const DriverAvatar = styled(Image)`
   width: 60px;
   height: 60px;
   border-radius: 100px;
-  border-width: 1px;
-  border-color: #a7a7a7;
+  border-color: ${({ theme }) => theme.primaryColor};
+  border-width: 4;
+  border-radius: 100;
  `;
 
 
 export const DriverSectionContainer = styled(BaseRideViewContainer)`
-  padding-right: 30px;
 `;
 
 

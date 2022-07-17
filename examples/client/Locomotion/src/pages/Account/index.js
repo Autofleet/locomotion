@@ -2,6 +2,7 @@ import React, { useEffect, useContext } from 'react';
 import { useRoute } from '@react-navigation/native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import moment from 'moment';
+import cashPaymentMethod from '../../pages/Payments/cashPaymentMethod';
 import Card from '../../Components/InformationCard';
 import PaymentsContext from '../../context/payments';
 import { MAIN_ROUTES } from '../routes';
@@ -63,6 +64,14 @@ const AccountContent = ({ navigation }) => {
   const { user } = useContext(UserContext);
   const { getClientDefaultMethod } = PaymentsContext.useContainer();
   const defaultPaymentMethod = getClientDefaultMethod();
+  const emailIsVerified = user?.isEmailVerified;
+  const onEmailPress = () => (emailIsVerified
+    ? navigation.navigate(MAIN_ROUTES.EMAIL, {
+      editAccount: true,
+    })
+    : navigation.navigate(MAIN_ROUTES.EMAIL_CODE, {
+      editAccount: true,
+    }));
   return (
     <Container>
       <CardsContainer>
@@ -77,23 +86,19 @@ const AccountContent = ({ navigation }) => {
           {user ? `${user.firstName} ${user.lastName}` : ''}
         </Card>
         <Card
-          verified
           title={i18n.t('onboarding.phonePlaceholder')}
         >
           {user ? `${user.phoneNumber}` : ''}
         </Card>
         <Card
-          verified={user && user.isEmailVerified}
+          verified={emailIsVerified}
           showUnverified
           title={i18n.t('onboarding.emailPlaceholder')}
-          onPress={() => navigation.navigate(MAIN_ROUTES.EMAIL, {
-            editAccount: true,
-          })
-          }
+          onPress={onEmailPress}
         >
           {user ? `${user.email}` : ''}
         </Card>
-        {defaultPaymentMethod && (
+        {defaultPaymentMethod && defaultPaymentMethod.id !== cashPaymentMethod.id ? (
           <>
             <CardsTitle title={i18n.t('onboarding.paymentInformation')} />
             <Card
@@ -103,11 +108,11 @@ const AccountContent = ({ navigation }) => {
               })}
             >
               {
-            moment(defaultPaymentMethod.expiresAt).format('MM/YY')
+            moment.utc(defaultPaymentMethod.expiresAt).format('MM/YY')
           }
             </Card>
           </>
-        )}
+        ) : undefined}
         <LogoutContainer
           onPress={() => {
             navigation.navigate(MAIN_ROUTES.LOGOUT);

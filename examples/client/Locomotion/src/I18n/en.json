@@ -9,6 +9,7 @@
         "unavailable": "Not available",
         "timeUntilArrival": "In {{minutes}} min",
         "toolTipEta": "Eta {{minutes}} min",
+        "noCharge": "No charge",
         "type": {
             "pickup": "Pickup",
             "dropoff": "Drop off"
@@ -56,6 +57,13 @@
                 "text": "Please enter code",
                 "subText": "A code has been sent to {{phoneNumber}}.",
                 "resendCodeText": "Didn't receive an SMS? ",
+                "resendCodeButton": "Resend"
+            },
+            "emailCode": {
+                "title": "Verification",
+                "text": "Please enter code",
+                "subText": "A code has been sent to the mail:  \n{{email}}.",
+                "resendCodeText": "Didn't receive an email? ",
                 "resendCodeButton": "Resend"
             },
             "name": {
@@ -189,6 +197,12 @@
         "setLocationOnMap": "Set location on map"
     },
     "popups": {
+        "rideCanceled": {
+            "title": "Ride canceled",
+            "text": "Your ride has been canceled",
+            "buttonText": "Order same ride",
+            "closeButtonText": "Go back to map"
+        },
         "genericError": {
             "title": "Error",
             "text": "Something went wrong. Please try again and contact support if the issue isn't solved",
@@ -246,12 +260,17 @@
         "home": "Home",
         "trips": "Ride History",
         "paymentsSettings": "Payment",
-        "account": "Account",
+        "account": "User Profile",
         "support": "Contact us",
         "logout": "Logout"
     },
     "contactUs": {
-        "pageTitle": "Contact us"
+        "pageTitle": "Contact us",
+        "learnMore": "Learn more",
+        "legalTitle": "Legal",
+        "privacyPolicy": "Privacy Policy",
+        "termsOfUse": "Terms of use",
+        "contactInformationTitle": "Contact information"
     },
     "rideHistory": {
         "pageTitle": "Rides History",
@@ -303,6 +322,9 @@
         }
     },
     "payments": {
+        "setCardName": "Set Card Name",
+        "defaultMethodTitle": "Default payment method",
+        "otherMethodsTitle": "Other payment methods",
         "cardDetails": {
             "cardsTitle": "Credit Card information",
             "title": "Payment method details",
@@ -312,6 +334,7 @@
             "deleteText": "Delete payment method",
             "outstandingBalanceText": "Outstanding balance of"
         },
+        "changeDefault": "Change",
         "select": "Select",
         "pageTitle": "Payments Method",
         "submitCard": "Add card",
@@ -367,7 +390,7 @@
     },
     "notAvailableHere": {
       "titleText": "We are Sorry!",
-      "buttonText": "Set another pickup location",
+      "buttonText": "Choose another address",
       "subTitleText": "Autofleet is not available in your area"
     },
     "noPayment": {
@@ -392,7 +415,12 @@
         "addPayment": "Add Payment",
         "contactDriver": "Contact driver",
         "shareRide": "Share ride",
-        "cancelRide": "Cancel ride"
+        "cancelRide": "Cancel ride",
+        "phoneCallOptions": {
+          "call": "Call",
+          "sms": "SMS",
+          "cancel": "Cancel"
+        }
     }
   },
   "stopPointsTypes": {
@@ -403,7 +431,8 @@
     "states": {
         "arrived": "Arrived",
         "completed": "Completed",
-        "pending": "Pending"
+        "pending": "Pending",
+        "canceled": "Canceled"
     }
   },
   "activeRide": {
@@ -423,5 +452,10 @@
     "paymentMethod": "Payment method",
     "viewDetails": "View details",
     "serviceType": "Service Type"
+  },
+  "updateVersion": {
+    "title": "{{ appName }} needs an update!",
+    "body": "Hey, looks like you have an older version of the app.\nPlease update to get the latest features and best experience.",
+    "buttonText": "Update now"
   }
 }

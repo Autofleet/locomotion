@@ -12,13 +12,12 @@ import { MAIN_ROUTES } from '../routes';
 import { UserContext } from '../../context/user';
 
 const Avatar = () => {
-  const [photoSelected, setPhotoSelected] = useState(false);
-  const { nextScreen } = useContext(OnboardingContext);
   const { updateUserInfo, user } = useContext(UserContext);
+  const [photoSelected, setPhotoSelected] = useState(user.avatar);
+  const { nextScreen } = useContext(OnboardingContext);
 
   const onImageChoose = (image) => {
-    updateUserInfo({ avatar: image });
-    setPhotoSelected(true);
+    setPhotoSelected(image);
   };
 
   return (
@@ -26,7 +25,6 @@ const Avatar = () => {
       <Header
         title={i18n.t('onboarding.pages.avatar.title')}
         page={MAIN_ROUTES.AVATAR}
-        showSkipButton={!photoSelected}
       />
       <PageContainer>
         <ScreenText
@@ -36,14 +34,17 @@ const Avatar = () => {
         <ImageContainer>
           <ThumbnailPicker
             onImageChoose={onImageChoose}
-            avatarSource={user.avatar}
+            avatarSource={photoSelected}
             size={125}
           />
           <Name numberOfLines={1}>{`${user.firstName} ${user.lastName}`}</Name>
         </ImageContainer>
         <SaveButton
-          onNext={() => nextScreen(MAIN_ROUTES.AVATAR)}
-          isInvalid={!user.avatar}
+          onNext={() => {
+            updateUserInfo({ avatar: photoSelected });
+            nextScreen(MAIN_ROUTES.AVATAR);
+          }}
+          isInvalid={!photoSelected}
         />
       </PageContainer>
     </SafeView>

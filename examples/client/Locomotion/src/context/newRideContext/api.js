@@ -69,3 +69,13 @@ export const additionalCharge = async (pricingCalculationId, amount, chargeFor) 
   const { data } = await network.post(`api/v1/price-calculation/${pricingCalculationId}/additional-charges`, { amount, chargeFor });
   return data;
 };
+
+export const getStopPoint = async (rideId, stopPointId) => {
+  const { data } = await network.get(`/api/v1/rides/${rideId}/stop-points/${stopPointId}`);
+  return data;
+};
+
+export const maskStopPointPhones = async (rideId, stopPointId) => {
+  const { data } = await network.get(`/api/v2/ride/${rideId}/stop-points/${stopPointId}/masked-phones`);
+  return data;
+};

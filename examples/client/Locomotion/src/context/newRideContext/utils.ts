@@ -1,12 +1,18 @@
 import moment from 'moment';
 import shortid from 'shortid';
-import getSymbolFromCurrency from 'currency-symbol-map';
 import i18n from '../../I18n';
 import { getGeocode } from './google-api';
 
 export const TAG_OPTIONS = {
   FASTEST: i18n.t('services.tags.fastest'),
   CHEAPEST: i18n.t('services.tags.cheapest'),
+};
+
+export type RidePopupNames = 'FAILED_SERVICE_REQUEST' | 'RIDE_CANCELED_BY_DISPATCHER';
+
+export const RIDE_POPUPS: {[key: string]: RidePopupNames} = {
+  FAILED_SERVICE_REQUEST: 'FAILED_SERVICE_REQUEST',
+  RIDE_CANCELED_BY_DISPATCHER: 'RIDE_CANCELED_BY_DISPATCHER',
 };
 
 export const INITIAL_STOP_POINTS = [{
@@ -52,23 +58,38 @@ export const getEstimationTags = (estimations: any[]) => {
     fastest: {},
     cheapest: {},
   };
-  estimations.map((e) => {
-    if (!tags.fastest.eta || moment(e.minPickupEta).isBefore(tags.fastest.eta)) {
-      tags.fastest = {
-        eta: e.eta,
-        serviceId: e.serviceId,
-      };
+  estimations.map((estimation) => {
+    const e = estimation.results[0];
+    if (!e) {
+      return;
     }
-    if (!tags.cheapest.eta || e.priceAmount < tags.cheapest.price) {
-      tags.cheapest = {
-        price: e.priceAmount,
-        serviceId: e.serviceId,
-      };
+    if (tags.fastest) {
+      if ((!tags.fastest.eta || moment(e.minPickupEta).isBefore(tags.fastest.eta))) {
+        tags.fastest = {
+          eta: e.maxPickupEta,
+          serviceId: e.serviceId,
+        };
+      } else if (moment(e.minPickupEta).isSame(tags.fastest.eta)) {
+        tags.fastest = null;
+      }
+    }
+    if (tags.cheapest) {
+      if (!tags.cheapest.eta || e.priceAmount < tags.cheapest.price) {
+        tags.cheapest = {
+          price: e.priceAmount,
+          serviceId: e.serviceId,
+        };
+      } else if (e.priceAmount === tags.cheapest.price) {
+        tags.cheapest = null;
+      }
     }
   });
+  if (tags.cheapest && tags.cheapest?.serviceId === tags.fastest?.serviceId) {
+    tags.cheapest.serviceId = null;
+  }
   return {
-    [TAG_OPTIONS.CHEAPEST]: tags.cheapest.serviceId,
-    [TAG_OPTIONS.FASTEST]: tags.fastest.serviceId,
+    [TAG_OPTIONS.CHEAPEST]: tags.cheapest?.serviceId,
+    [TAG_OPTIONS.FASTEST]: tags.fastest?.serviceId,
   };
 };
 
@@ -89,7 +110,7 @@ export const formatEstimationsResult = (service: any, estimationResult: any, tag
     price: estimation.priceAmount,
     currency: estimation.priceCurrency,
     availableSeats: service.maxPassengers || 4,
-    tags: Object.entries(tags).map(([key, value]) => value === service.id && key),
+    tag: (Object.entries(tags).find(([, value]) => value === service.id) || [])[0],
     iconUrl: service.icon,
     description: service.displayDescription,
     priority: service.priority,
@@ -102,5 +123,9 @@ export const formatStopPointsForEstimations = (requestStopPoints: any[]) => requ
   lng: sp.lng,
 }));
 
-
-export const getCurrencySymbol = (currency: string) => getSymbolFromCurrency(currency);
+export const getFormattedPrice = (priceCurrency: string, priceAmount: number) => {
+  if (!priceCurrency) {
+    return i18n.t('rideDetails.noCharge');
+  }
+  return new Intl.NumberFormat('en-IN', { style: 'currency', currency: (priceCurrency) }).format(priceAmount);
+};

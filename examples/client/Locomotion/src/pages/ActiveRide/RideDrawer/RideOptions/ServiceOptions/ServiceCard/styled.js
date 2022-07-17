@@ -3,6 +3,10 @@ import styled from 'styled-components';
 import Button from '../../../../../../Components/Button';
 import { FONT_SIZES, FONT_WEIGHTS } from '../../../../../../context/theme';
 
+export const TitleContainer = styled.View`
+display: flex;
+flex-direction: row;
+`;
 export const CardContainer = styled(Button)`
 width: 100%;
 min-height: 75px;
@@ -43,6 +47,7 @@ width: 100%;
 export const Title = styled.Text`
 ${FONT_SIZES.H3};
 ${FONT_WEIGHTS.MEDIUM};
+margin-right: 5px;
 `;
 
 export const Price = styled.Text`

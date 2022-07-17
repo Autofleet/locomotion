@@ -12,8 +12,6 @@ import {
   TermsLink,
   LogoContainer,
   Logo,
-  OperationName,
-  OperationSubName,
   InfoContainer,
 } from './styles';
 import SafeView from '../../../Components/SafeView';
@@ -52,14 +50,14 @@ const StartScreen = () => {
 
   const openTerms = () => {
     setWebViewWindow({
-      uri: settings.termsUrl,
+      uri: settings.termsOfUseUrl,
       title: i18n.t('login.termsWebViewTitle'),
     });
   };
 
   const openPrivacy = () => {
     setWebViewWindow({
-      uri: settings.privacyUrl,
+      uri: settings.privacyPolicyUrl,
       title: i18n.t('login.privacyWebViewTitle'),
     });
   };
@@ -74,10 +72,8 @@ const StartScreen = () => {
           <>
             <InfoContainer>
               <LogoContainer>
-                <Logo source={logo} />
+                <Logo resizeMode="contain" source={logo} />
               </LogoContainer>
-              <OperationName>{i18n.t('operation.name', '')}</OperationName>
-              <OperationSubName>{i18n.t('operation.subName', '')}</OperationSubName>
             </InfoContainer>
             <ButtonsContainer>
               <StartButton

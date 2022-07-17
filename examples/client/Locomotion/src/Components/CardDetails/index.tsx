@@ -26,7 +26,7 @@ type CardDetailsRouteParams = {
 
 const CardDetails = ({
   loadingState = false,
-  navigation = { navigate: (route: string) => null },
+  navigation = { navigate: (route: string, object?: any | undefined) => null },
 }) => {
   const [loading, setLoading] = useState(false);
   const [methodForDelete, setMethodForDelete] = useState(null);
@@ -76,10 +76,12 @@ const CardDetails = ({
               {paymentMethod && paymentMethod.name
                 ? (
                   <Card
+                    onPress={() => {
+                      navigation.navigate(MAIN_ROUTES.EDIT_NICKNAME, { ...paymentMethod });
+                    }}
                     title={i18n.t('payments.cardDetails.nickname')}
                   >
                     {paymentMethod.name}
-
                   </Card>
                 )
                 : undefined}
@@ -92,7 +94,7 @@ const CardDetails = ({
               <Card
                 title={i18n.t('payments.cardDetails.balance')}
               >
-                {`${i18n.t('payments.cardDetails.outstandingBalanceText')}`}
+                {i18n.t('payments.cardDetails.outstandingBalanceText')}
               </Card>
               <LogoutContainer
                 onPress={async () => {

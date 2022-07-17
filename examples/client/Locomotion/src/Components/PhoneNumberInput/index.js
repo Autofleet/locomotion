@@ -37,6 +37,7 @@ const PhoneNumberInput = ({
 
   return defaultCode ? (
     <PhoneInput
+      key={defaultCode}
       testID="phoneNumber"
       value={value}
       autoFocus={autoFocus}
