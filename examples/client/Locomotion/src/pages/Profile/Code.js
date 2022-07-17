@@ -12,6 +12,8 @@ import ScreenText from './ScreenText';
 import { MAIN_ROUTES } from '../routes';
 import { UserContext } from '../../context/user';
 
+const CODE_LENGTH = 4;
+
 const Code = () => {
   const { verifyCode } = useContext(OnboardingContext);
   const { user } = useContext(UserContext);
@@ -21,7 +23,7 @@ const Code = () => {
   const [loading, setLoading] = useState(false);
   const onVertCodeChange = (value) => {
     setShowErrorText(false);
-    if (value.length === 4) {
+    if (value.length === CODE_LENGTH) {
       setLoading(true);
     }
     setCode(value);
@@ -62,8 +64,8 @@ const Code = () => {
           </ResendButton>
         </ResendContainer>
         <SaveButton
-          isLoading={!showErrorText && code.length === 4 && loading}
-          isInvalid={showErrorText || code.length < 4 || loading}
+          isLoading={!showErrorText && code.length === CODE_LENGTH && loading}
+          isInvalid={showErrorText || code.length < CODE_LENGTH || loading}
           onFail={() => setShowErrorText(true)}
         />
       </PageContainer>
