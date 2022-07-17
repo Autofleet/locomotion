@@ -258,7 +258,12 @@
         "logout": "Logout"
     },
     "contactUs": {
-        "pageTitle": "Contact us"
+        "pageTitle": "Contact us",
+        "learnMore": "Learn more",
+        "legalTitle": "Legal",
+        "privacyPolicy": "Privacy Policy",
+        "termsOfUse": "Terms of use",
+        "contactInformationTitle": "Contact information"
     },
     "rideHistory": {
         "pageTitle": "Rides History",
