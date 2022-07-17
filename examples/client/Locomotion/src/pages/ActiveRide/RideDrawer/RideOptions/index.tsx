@@ -16,7 +16,9 @@ import { BS_PAGES } from '../../../../context/ridePageStateContext/utils';
 
 
 const RideOptions = () => {
+  const usePayments = payments.useContainer();
   const [popupToShow, setPopupToShow] = useState<popupNames | null>(null);
+
   const {
     updateRidePayload,
     ride,
@@ -44,6 +46,32 @@ const RideOptions = () => {
     setPopupToShow(null);
   };
 
+
+  useEffect(() => {
+    const updateClient = async () => {
+      await payments.useContainer().loadCustomer();
+    };
+
+    updateClient();
+  });
+
+  const loadCustomerData = async () => {
+    await usePayments.getOrFetchCustomer();
+  };
+
+  useEffect(() => {
+    loadCustomerData();
+  }, []);
+
+  useEffect(() => {
+    const paymentMethod: PaymentMethodInterface | undefined = usePayments.getClientDefaultMethod();
+    if (paymentMethod) {
+      updateRidePayload({
+        paymentMethodId: paymentMethod.id,
+      });
+    }
+  }, [usePayments.paymentMethods]);
+
   useEffect(() => {
     setFooterComponent(() => (
       <RideButtons
@@ -52,7 +80,7 @@ const RideOptions = () => {
       />
     ));
 
-    const paymentMethod: PaymentMethodInterface | undefined = getClientDefaultMethod();
+    const paymentMethod: PaymentMethodInterface | undefined = usePayments.getClientDefaultMethod();
     if (paymentMethod) {
       updateRidePayload({
         paymentMethodId: paymentMethod.id,

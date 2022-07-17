@@ -17,6 +17,7 @@ const usePayments = () => {
   };
 
   const loadCustomer = async () => {
+    console.log('loading customer');
     const customerData = await getCustomer();
     setCustomer(customerData);
     setPaymentMethods(customerData.paymentMethods);
@@ -43,16 +44,18 @@ const usePayments = () => {
   };
 
   const clientHasValidPaymentMethods = () => paymentMethods.length > 0 && paymentMethods.some(pm => !pm.isExpired);
+  const isCashPaymentEnabled = () => getByKey(SETTINGS_KEYS.CASH_ENABLED);
 
   const getClientDefaultMethod = () => {
     if (paymentMethods && paymentMethods.length) {
       return (paymentMethods || []).find(pm => pm.isDefault) || paymentMethods[0];
-    } if (isCashPaymentEnabled) {
+    }
+    const cashEnabled = isCashPaymentEnabled();
+    if (cashEnabled === 'true') {
       return cashPaymentMethod;
     }
   };
 
-  const isCashPaymentEnabled = () => getByKey(SETTINGS_KEYS.CASH_ENABLED);
 
   const createPaymentMethod = async (paymentMethodId) => {
     const { data: paymentMethod } = await network.post(`${BASE_PATH}/${paymentMethodId}`);
