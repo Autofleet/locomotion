@@ -59,6 +59,13 @@
                 "resendCodeText": "Didn't receive an SMS? ",
                 "resendCodeButton": "Resend"
             },
+            "emailCode": {
+                "title": "Verification",
+                "text": "Please enter code",
+                "subText": "A code has been sent to the mail:  \n{{email}}.",
+                "resendCodeText": "Didn't receive an email? ",
+                "resendCodeButton": "Resend"
+            },
             "name": {
                 "title": "Personal Details",
                 "text": "What's your name?",

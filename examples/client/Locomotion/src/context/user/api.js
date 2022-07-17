@@ -26,6 +26,11 @@ export const loginVert = async (body) => {
   return data;
 };
 
+export const emailVerify = async (body) => {
+  const { data } = await network.post('api/v1/me/verify-email', body);
+  return data;
+};
+
 export const loginApi = async (body) => {
   const { data } = await network.post('api/v1/login', body);
   return data;
