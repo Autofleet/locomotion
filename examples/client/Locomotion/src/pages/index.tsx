@@ -4,6 +4,7 @@ import { ROUTES_COMPS } from './routeConsts';
 import { APP_ROUTES, MAIN_ROUTES } from './routes';
 import Main from './Main';
 import AuthLoadingScreen from './AuthScreens/AuthLoadingScreen';
+import { View } from 'react-native';
 
 const APP_ROUTES_COMPS = {
   [APP_ROUTES.MAIN_APP]: Main,
@@ -13,6 +14,11 @@ const APP_ROUTES_COMPS = {
 const Stack = createNativeStackNavigator();
 
 const MainRouter = () => (
+  <View
+      style={{
+        flex: 1,
+        backgroundColor: 'white',
+      }}>
   <Stack.Navigator initialRouteName={APP_ROUTES.AUTH_LOADING} screenOptions={{ headerShown: false }} id="authStack">
     <Stack.Screen name={APP_ROUTES.AUTH_LOADING} component={APP_ROUTES_COMPS[APP_ROUTES.AUTH_LOADING]} />
     <Stack.Screen name={MAIN_ROUTES.START} component={ROUTES_COMPS[MAIN_ROUTES.START]} />
@@ -28,6 +34,7 @@ const MainRouter = () => (
     <Stack.Screen name={APP_ROUTES.MAIN_APP} component={APP_ROUTES_COMPS[APP_ROUTES.MAIN_APP]} />
     <Stack.Screen name={MAIN_ROUTES.POST_RIDE} component={ROUTES_COMPS[MAIN_ROUTES.POST_RIDE]} />
   </Stack.Navigator>
+  </View>
 );
 
 export default MainRouter;
