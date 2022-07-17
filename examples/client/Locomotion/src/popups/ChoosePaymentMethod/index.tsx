@@ -71,11 +71,12 @@ const PaymentMethodPopup = ({
   useEffect(() => {
     const getIsCashEnabled = async () => {
       const result = await usePayments.isCashPaymentEnabled();
+
       setIsCashEnabled(result);
     };
 
     getIsCashEnabled();
-  }, []);
+  }, [usePayments.paymentMethods]);
 
   return (
     <Modal

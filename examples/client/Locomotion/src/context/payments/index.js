@@ -54,6 +54,7 @@ const usePayments = () => {
     }
     const cashEnabled = await isCashPaymentEnabled();
     if (cashEnabled) {
+      console.log('cadh is default');
       return cashPaymentMethod;
     }
   };

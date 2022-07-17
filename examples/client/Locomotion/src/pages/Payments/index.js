@@ -22,7 +22,7 @@ export default ({ navigation, menuSide }) => {
   const [pageLoading, setPageLoading] = useState(true);
   const [loading, setLoading] = useState(false);
   const hasPaymentMethods = paymentMethods && paymentMethods.length > 0;
-  const [showList, setShowList] = useState(hasPaymentMethods);
+  const [showList, setShowList] = useState(!route.params?.showAdd);
 
   const loadCustomerData = async () => {
     await usePayments.getOrFetchCustomer();
