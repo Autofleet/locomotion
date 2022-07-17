@@ -4,10 +4,12 @@ import cashPaymentMethod from '../../pages/Payments/cashPaymentMethod';
 import { getByKey } from '../../context/settings/api';
 import network from '../../services/network';
 import SETTINGS_KEYS from '../settings/keys';
+import SettingContext from '../settings';
 
 const BASE_PATH = '/api/v1/me/customers';
 
 const usePayments = () => {
+  const useSettings = SettingContext.useContainer();
   const [customer, setCustomer] = useState(null);
   const [paymentMethods, setPaymentMethods] = useState([]);
 
@@ -43,7 +45,7 @@ const usePayments = () => {
   };
 
   const clientHasValidPaymentMethods = () => paymentMethods.length > 0 && paymentMethods.some(pm => !pm.isExpired);
-  const isCashPaymentEnabled = () => getByKey(SETTINGS_KEYS.CASH_ENABLED);
+  const isCashPaymentEnabled = () => useSettings.getSettingByKey(SETTINGS_KEYS.CASH_ENABLED);
 
   const getClientDefaultMethod = () => {
     if (paymentMethods && paymentMethods.length) {
