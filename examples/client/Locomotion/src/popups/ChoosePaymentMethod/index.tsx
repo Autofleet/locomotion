@@ -29,7 +29,7 @@ interface PaymentMethodPopupProps {
   onSubmit: (payment: string | undefined) => void;
   showCash: boolean;
   rideFlow: boolean;
-  selected: string;
+  selected: any;
 }
 
 type Nav = {
@@ -40,7 +40,7 @@ const PaymentMethodPopup = ({
   isVisible, onCancel, onSubmit, showCash, rideFlow, selected,
 }: PaymentMethodPopupProps) => {
   const usePayments = PaymentsContext.useContainer();
-  const [paymentId, setPaymentId] = useState(usePayments.getClientDefaultMethod()?.id);
+  const [paymentId, setPaymentId] = useState<string | undefined>(undefined);
   const [selectedPaymentId, setSelectedPaymentId] = useState<string | undefined>(selected);
 
   useEffect(() => {
@@ -52,18 +52,12 @@ const PaymentMethodPopup = ({
       const paymentMethod = await usePayments.getClientDefaultMethod();
       setSelectedPaymentId(selected
       || paymentMethod?.id);
+      setPaymentId(paymentMethod?.id);
     };
 
 
     updateDefaultPaymentMethod();
   }, [usePayments.paymentMethods]);
-
-
-  useEffect(() => {
-    setSelectedPaymentId(selected
-      || usePayments.getClientDefaultMethod()?.id);
-  }, [usePayments.paymentMethods]);
-
 
   const navigation = useNavigation<Nav>();
 
@@ -77,14 +71,10 @@ const PaymentMethodPopup = ({
   useEffect(() => {
     const getIsCashEnabled = async () => {
       const result = await usePayments.isCashPaymentEnabled();
-      setIsCashEnabled(result.value);
+      setIsCashEnabled(result);
     };
 
     getIsCashEnabled();
-  }, [usePayments.paymentMethods]);
-
-  useEffect(() => {
-    setPaymentId(usePayments.getClientDefaultMethod()?.id);
   }, [usePayments.paymentMethods]);
 
   return (
@@ -95,10 +85,10 @@ const PaymentMethodPopup = ({
         <TitleView>
           <Title>{i18n.t('popups.choosePaymentMethod.title')}</Title>
           <CloseButton
-            onPress={() => {
+            onPress={async () => {
               onCancel();
               setSelectedPaymentId(selected
-                || usePayments.getClientDefaultMethod()?.id);
+                || (await usePayments.getClientDefaultMethod())?.id);
               rideFlow
                 ? navigation.navigate(MAIN_ROUTES.HOME)
                 : navigation.navigate(MAIN_ROUTES.PAYMENT);

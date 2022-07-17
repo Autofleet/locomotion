@@ -17,6 +17,7 @@ import { BS_PAGES } from '../../../../context/ridePageStateContext/utils';
 
 const RideOptions = () => {
   const usePayments = payments.useContainer();
+  const [defaultPaymentMethod, setDefaultPaymentMethod] = useState<PaymentMethodInterface | undefined>(undefined);
   const [popupToShow, setPopupToShow] = useState<popupNames | null>(null);
 
   const {
@@ -67,6 +68,7 @@ const RideOptions = () => {
         updateRidePayload({
           paymentMethodId: paymentMethod.id,
         });
+        setDefaultPaymentMethod(paymentMethod);
       }
     };
 
@@ -113,7 +115,7 @@ const RideOptions = () => {
       <ChoosePaymentMethod
         selected={ride?.paymentMethodId?.length
           && usePayments.paymentMethods.includes(ride?.paymentMethodId as never)
-          ? ride.paymentMethodId : usePayments.getClientDefaultMethod()?.id}
+          ? ride.paymentMethodId : defaultPaymentMethod?.id}
         rideFlow
         isVisible={popupToShow === 'payment'}
         onCancel={() => clearPopup()}

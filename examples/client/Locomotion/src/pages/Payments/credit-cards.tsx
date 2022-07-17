@@ -79,7 +79,7 @@ export default ({
           />
         ) : undefined}
         <ChoosePaymentMethod
-          selected={defaultMethod}
+          selected={defaultMethod?.id}
           isVisible={showChoosePayment}
           showCash={false}
           onCancel={() => { setShowChoosePayment(false); }}

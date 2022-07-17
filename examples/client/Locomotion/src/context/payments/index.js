@@ -44,7 +44,8 @@ const usePayments = () => {
     return paymentMethodsData;
   };
 
-  const clientHasValidPaymentMethods = () => paymentMethods.length > 0 && paymentMethods.some(pm => !pm.isExpired);
+  const clientHasValidPaymentMethods = () => paymentMethods.length > 0
+  && paymentMethods.some(pm => !pm.isExpired);
   const isCashPaymentEnabled = async () => useSettings.getSettingByKey(SETTINGS_KEYS.CASH_ENABLED);
 
   const getClientDefaultMethod = async () => {
