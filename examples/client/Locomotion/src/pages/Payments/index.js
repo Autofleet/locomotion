@@ -36,7 +36,7 @@ export default ({ navigation, menuSide }) => {
   useEffect(() => {
     const updateShowList = async () => {
       hasPaymentMethods = paymentMethods && paymentMethods.length > 0;
-      showList(hasPaymentMethods);
+      setShowList(hasPaymentMethods);
     };
 
     updateShowList();
