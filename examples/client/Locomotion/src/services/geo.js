@@ -83,7 +83,6 @@ class Geo {
 
   handleLocation = (locations) => {
     const location = prepareCoords(locations);
-    console.debug('handleLocation', { location });
     this.lastLocation = Object.assign({}, location);
   };
 

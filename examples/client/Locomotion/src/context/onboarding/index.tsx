@@ -4,6 +4,7 @@ import React, {
 } from 'react';
 import settings from '../settings';
 import SETTINGS_KEYS from '../settings/keys';
+import * as navigationService from '../../services/navigation';
 import { APP_ROUTES, MAIN_ROUTES } from '../../pages/routes';
 import { UserContext } from '../user';
 
@@ -27,6 +28,7 @@ const SCREEN_ORDER = [
   MAIN_ROUTES.CODE,
   MAIN_ROUTES.NAME,
   MAIN_ROUTES.EMAIL,
+  MAIN_ROUTES.EMAIL_CODE,
   MAIN_ROUTES.AVATAR,
   MAIN_ROUTES.CARD,
   MAIN_ROUTES.WELCOME,
@@ -51,6 +53,7 @@ const OnboardingContextProvider = ({ children }: { children: any }) => {
     [MAIN_ROUTES.CODE]: true,
     [MAIN_ROUTES.NAME]: true,
     [MAIN_ROUTES.EMAIL]: true,
+    [MAIN_ROUTES.EMAIL_CODE]: true,
     [MAIN_ROUTES.AVATAR]: false,
     [MAIN_ROUTES.CARD]: false,
   });
@@ -62,6 +65,7 @@ const OnboardingContextProvider = ({ children }: { children: any }) => {
       SETTINGS_KEYS.CARD_PAGE_SETTINGS,
     );
 
+    console.log('nextScreenToShow', cardPageSettings);
     if (cardPageSettings) {
       const {
         showCardPage,
@@ -96,19 +100,17 @@ const OnboardingContextProvider = ({ children }: { children: any }) => {
   const navigateBasedOnUser = async (user: any) => {
     setUser(user);
     if (!user.didCompleteOnboarding) {
-      let unfinishedScreen: string | undefined = Object.keys(keyToScreen).find(key => !user[key]);
+      const screenKey: string | undefined = Object.keys(keyToScreen).find(key => !user[key]);
+      let unfinishedScreen = screenKey ? keyToScreen[screenKey] : keyToScreen.welcome;
       if (unfinishedScreen === MAIN_ROUTES.CARD) {
         const showCardPage = await shouldShowCardPage();
         if (!showCardPage) {
-          unfinishedScreen = undefined;
+          unfinishedScreen = keyToScreen.welcome;
         }
       }
-      if (unfinishedScreen) {
-        return navigateToScreen(unfinishedScreen);
-      }
-      return navigateToScreen(keyToScreen.welcome);
+      return navigateToScreen(unfinishedScreen);
     }
-    return navigation.navigate(APP_ROUTES.MAIN_APP);
+    return navigationService.navigate(MAIN_ROUTES.HOME, {}, APP_ROUTES.MAIN_APP);
   };
 
   const verifyCode = async (code: string) => {

@@ -46,7 +46,7 @@ const PostRidePage = ({ menuSide, route }) => {
   useEffect(() => {
     Mixpanel.pageView(router.name);
   }, []);
-  console.log(ride);
+
   const onRatingUpdate = (selectedRating) => {
     setRating(selectedRating);
   };
@@ -64,7 +64,6 @@ const PostRidePage = ({ menuSide, route }) => {
 
   const loadRide = async () => {
     const rideData = await getRideFromApi(route.params.rideId);
-    console.log({ rideData });
     setRide(rideData);
   };
 
@@ -75,7 +74,11 @@ const PostRidePage = ({ menuSide, route }) => {
 
   const onSubmit = async () => {
     try {
-      await postRideSubmit(ride.id, rating, rideTip);
+      await postRideSubmit(ride.id, {
+        rating,
+        tip: rideTip,
+        priceCalculationId: ride.priceCalculationId,
+      });
       navigation.navigate(MAIN_ROUTES.HOME);
       return true;
     } catch (e) {
@@ -122,9 +125,6 @@ const PostRidePage = ({ menuSide, route }) => {
 
 export default props => (
   <BottomSheetContextProvider {...props}>
-
-    <NewRidePageContextProvider {...props}>
-      <PostRidePage {...props} />
-    </NewRidePageContextProvider>
+    <PostRidePage {...props} />
   </BottomSheetContextProvider>
 );

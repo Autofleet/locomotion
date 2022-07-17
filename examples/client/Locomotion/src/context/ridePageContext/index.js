@@ -9,7 +9,6 @@ import Config from 'react-native-config';
 import { getPosition } from '../../services/geo';
 import { getTogglePopupsState } from '../state';
 import UserService from '../../services/user';
-import OneSignal from '../../services/one-signal';
 import settingsContext from '../settings';
 import Mixpanel from '../../services/Mixpanel';
 import { getStationsApi } from '../places/api';
@@ -131,7 +130,6 @@ const RidePageContextProvider = ({ navigation, children }) => {
     UserService.getUser(navigation);
     getStations();
     loadActiveRide();
-    OneSignal.init(notificationsHandler);
     setAutoStationUpdate(setInterval(() => {
       getStations();
     }, STATION_AUTOREFRESH_INTERVAL));

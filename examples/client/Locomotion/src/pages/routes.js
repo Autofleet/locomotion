@@ -16,6 +16,7 @@ export const MAIN_ROUTES = {
   START: 'Start',
   PHONE: 'Phone',
   CODE: 'Code',
+  EMAIL_CODE: 'EmailCode',
   NAME: 'Name',
   ADD_CARD: 'AddCard',
   CARD: 'AddCard',
@@ -25,4 +26,5 @@ export const MAIN_ROUTES = {
   LOCK: 'Lock',
   POST_RIDE: 'PostRide',
   CARD_DETAILS: 'CardDetails',
+  EDIT_NICKNAME: 'EditNickname',
 };

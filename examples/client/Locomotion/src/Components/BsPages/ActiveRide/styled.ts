@@ -8,15 +8,16 @@ export const HALF_WIDTH = '49%';
 
 export const TopContainer = styled(View)`
     flex-direction: row;
+    width: 100%;
+    height: 70px;
 `;
 
 export const VehicleDetails = styled(View)`
-    width: 92px;
+width: 30%;
 `;
 
 export const VehicleImage = styled(Image)`
-    width: 92px;
-    height: 69px;
+    flex: 1;
 `;
 
 export const VehiclePlateContainer = styled(View)`
@@ -37,7 +38,7 @@ export const VehiclePlateText = styled(Text)`
 `;
 
 export const DriverCardContainer = styled(View)`
-    flex: 1;
+    width: 70%;
 `;
 
 export const StopPointTextContainer = styled(View)`

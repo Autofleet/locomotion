@@ -1,4 +1,5 @@
 import React, { useContext, useState } from 'react';
+import { useIsFocused } from '@react-navigation/native';
 import i18n from '../../I18n';
 import SaveButton from './SaveButton';
 import { OnboardingContext } from '../../context/onboarding';
@@ -11,11 +12,13 @@ import { MAIN_ROUTES } from '../routes';
 import { UserContext } from '../../context/user';
 import AppSettings from '../../services/app-settings';
 
-const Phone = () => {
+const Phone = ({ navigation }) => {
   const { nextScreen } = useContext(OnboardingContext);
   const { updateState, user } = useContext(UserContext);
   const [showErrorText, setShowErrorText] = useState(false);
+  const [renderId, setRenderId] = useState(0);
   const [isInvalid, setIsInvalid] = useState(true);
+
   const onPhoneNumberChange = (phoneNumber, isValid) => {
     setShowErrorText(false);
     setIsInvalid(!isValid);
@@ -36,6 +39,20 @@ const Phone = () => {
     }
   };
 
+  // Force render the component when the focus changes
+  useState(() => {
+    const didBlurSubscription = navigation.addListener(
+      'focus',
+      () => {
+        setRenderId(Math.random());
+      },
+    );
+
+    return () => {
+      didBlurSubscription.remove();
+    };
+  }, []);
+
   return (
     <SafeView>
       <Header
@@ -48,6 +65,7 @@ const Phone = () => {
           subText={i18n.t('onboarding.pages.phone.subText')}
         />
         <PhoneNumberInput
+          key={renderId}
           value={user.phoneNumber}
           onPhoneNumberChange={onPhoneNumberChange}
           autoFocus

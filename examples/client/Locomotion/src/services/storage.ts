@@ -1,6 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import moment from 'moment';
 import bluebird from 'bluebird';
+import { Platform } from 'react-native';
 
 const isExpired = (expireAt: Date) => moment().isAfter(expireAt);
 
@@ -56,8 +57,14 @@ const deviceStorage = {
     return AsyncStorage.getAllKeys();
   },
 
-  clear() {
-    return AsyncStorage.clear();
+  async clear() {
+    const asyncStorageKeys = await AsyncStorage.getAllKeys();
+    if (Platform.OS === 'android') {
+      return AsyncStorage.clear();
+    }
+    if (Platform.OS === 'ios') {
+      return AsyncStorage.multiRemove(asyncStorageKeys);
+    }
   },
 };
 

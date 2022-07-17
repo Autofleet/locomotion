@@ -57,9 +57,9 @@ const ImageContainer = styled(View)`
 `;
 
 const TitleContainer = styled(View)`
-display: flex;
-flex-direction: row;
-margin-bottom: 5px;
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 5px;
 `;
 
 const Title = styled(Text)`
@@ -92,14 +92,14 @@ const SecondaryButtonTitle = styled(Text)<SecondaryButtonTitleInterface>`
 `;
 
 const AddressInput = styled(Text)`
-margin-left: 5;
+  margin-left: 5;
 `;
 
 const LoaderContainer = styled(View)`
-height: 25px;
-width: 100%;
-margin: auto 0;
-margin-top: 25px;
+  height: 25px;
+  width: 100%;
+  margin: auto 0;
+  margin-top: 25px;
 `;
 
 const Header = styled(View)`
@@ -116,13 +116,14 @@ const Footer = styled(View)<FooterInterface>`
   width: 100%;
   display: flex;
   flex-direction: ${({ fullWidthButtons }) => (fullWidthButtons ? 'column' : 'row')};
+  margin-bottom: 10px;
   justify-content: space-between;
   align-items: center;
 `;
 
 const AddressContainer = styled(View)`
-flex-direction: row;
-align-items: center;
+  flex-direction: row;
+  align-items: center;
 `;
 
 const BsPage = ({
@@ -241,6 +242,7 @@ export const LocationRequest = (props: any) => {
 };
 
 export const CancelRide = (props: any) => {
+  const [isLoading, setIsLoading] = useState(false);
   const { cancelRide } = useContext(RidePageContext);
   const { changeBsPage } = useContext(RideStateContextContext);
 
@@ -250,7 +252,11 @@ export const CancelRide = (props: any) => {
       ButtonText={i18n.t('bottomSheetContent.cancelRide.buttonText')}
       SubTitleText={i18n.t('bottomSheetContent.cancelRide.subTitleText')}
       SecondaryButtonText={i18n.t('bottomSheetContent.cancelRide.secondaryButtonText')}
-      onButtonPress={cancelRide}
+      isLoading={isLoading}
+      onButtonPress={() => {
+        setIsLoading(true);
+        cancelRide();
+      }}
       onSecondaryButtonPress={() => changeBsPage(BS_PAGES.ACTIVE_RIDE)}
       warning
       {...props}
@@ -272,6 +278,7 @@ export const NotAvailableHere = (props: any) => {
       ButtonText={i18n.t('bottomSheetContent.notAvailableHere.buttonText')}
       SubTitleText={i18n.t('bottomSheetContent.notAvailableHere.subTitleText')}
       Image={<SvgIcon Svg={outOfTerritoryIcon} height={85} width={140} />}
+      fullWidthButtons
       {...props}
     />
   );
@@ -282,7 +289,6 @@ export const ConfirmPickup = (props: any) => {
     lastSelectedLocation,
     getCurrentLocationAddress,
     saveSelectedLocation,
-    updateRequestSp,
     setSelectedInputIndex,
     rideRequestLoading,
   } = useContext(RidePageContext);
@@ -317,7 +323,6 @@ export const ConfirmPickup = (props: any) => {
       fullWidthButtons
       {...props}
       onButtonPress={() => {
-        updateRequestSp(lastSelectedLocation);
         if (props.onButtonPress) {
           props.onButtonPress(lastSelectedLocation);
         }

@@ -5,7 +5,7 @@ import backArrow from '../../assets/arrow-back.png';
 import { OnboardingContext } from '../../context/onboarding';
 import { UserContext } from '../../context/user';
 
-const Header = ({ title, page, showSkipButton }) => {
+const Header = ({ title, page = undefined, showSkipButton }) => {
   const { nextScreen, requiredOnboarding } = useContext(OnboardingContext);
   const { removeChangesToUser } = useContext(UserContext);
   const navigation = useNavigation();

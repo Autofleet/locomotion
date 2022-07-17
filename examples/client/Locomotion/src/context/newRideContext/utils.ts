@@ -1,6 +1,5 @@
 import moment from 'moment';
 import shortid from 'shortid';
-import getSymbolFromCurrency from 'currency-symbol-map';
 import i18n from '../../I18n';
 import { getGeocode } from './google-api';
 
@@ -9,10 +8,11 @@ export const TAG_OPTIONS = {
   CHEAPEST: i18n.t('services.tags.cheapest'),
 };
 
-export type RidePopupNames = 'FAILED_SERVICE_REQUEST';
+export type RidePopupNames = 'FAILED_SERVICE_REQUEST' | 'RIDE_CANCELED_BY_DISPATCHER';
 
 export const RIDE_POPUPS: {[key: string]: RidePopupNames} = {
   FAILED_SERVICE_REQUEST: 'FAILED_SERVICE_REQUEST',
+  RIDE_CANCELED_BY_DISPATCHER: 'RIDE_CANCELED_BY_DISPATCHER',
 };
 
 export const INITIAL_STOP_POINTS = [{
@@ -123,5 +123,9 @@ export const formatStopPointsForEstimations = (requestStopPoints: any[]) => requ
   lng: sp.lng,
 }));
 
-
-export const getCurrencySymbol = (currency: string) => getSymbolFromCurrency(currency);
+export const getFormattedPrice = (priceCurrency: string, priceAmount: number) => {
+  if (!priceCurrency) {
+    return i18n.t('rideDetails.noCharge');
+  }
+  return new Intl.NumberFormat('en-IN', { style: 'currency', currency: (priceCurrency) }).format(priceAmount);
+};

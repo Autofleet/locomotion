@@ -9,23 +9,20 @@ import Mixpanel from '../../services/Mixpanel';
 import {
   InfoBox, Type, SubText, TypeText, IconContainer, SubContainer, PulseContainer,
 } from './styled';
-import { RidePageContext } from '../../context/newRideContext';
 import i18n from '../../I18n';
 import SvgIcon from '../SvgIcon';
-import { STOP_POINT_TYPES } from '../../lib/commonTypes';
+import { STOP_POINT_TYPES, STOP_POINT_STATES } from '../../lib/commonTypes';
 import Loader from '../Loader';
 import pulse from '../../assets/marker-pulse.json';
 
-export default ({
+const StopPointMarker = ({
   stopPoint,
+  key,
+  isNext,
+  chosenService,
 }) => {
-  const { chosenService } = useContext(RidePageContext);
   const { lat, lng } = stopPoint;
-  const eta = stopPoint.plannedArrivalTime || (chosenService && chosenService.eta);
-  const [minutesUntilPickup, setMinutesUntilPickup] = useState();
-  const etaText = minutesUntilPickup > 1
-    ? i18n.t('rideDetails.toolTipEta', { minutes: minutesUntilPickup })
-    : i18n.t('general.now');
+
   const typeDetails = {
     [STOP_POINT_TYPES.STOP_POINT_PICKUP]: {
       Icon: <SvgIcon
@@ -47,13 +44,33 @@ export default ({
     },
   };
 
-  useEffect(() => {
-    const etaInMinutes = moment.duration(moment(eta).diff(moment())).minutes().toString();
-    setMinutesUntilPickup(etaInMinutes);
-  }, [chosenService]);
-  const checkIfSpIsNext = () => eta && stopPoint.type === STOP_POINT_TYPES.STOP_POINT_PICKUP;
+  const etaText = () => {
+    const { state } = stopPoint;
+    if (state === STOP_POINT_STATES.COMPLETED) {
+      return i18n.t('stopPoints.states.completed');
+    }
+
+    if (isNext) {
+      const eta = stopPoint.plannedArrivalTime || (chosenService && chosenService.eta);
+      if (eta) {
+        const minutesUntilPickup = moment(eta).diff(moment(), 'minutes');
+        return minutesUntilPickup < 1
+          ? i18n.t('general.now')
+          : i18n.t('rideDetails.toolTipEta', { minutes: minutesUntilPickup });
+      }
+    }
+
+    if (stopPoint.plannedArrivalTime) {
+      return moment(stopPoint.plannedArrivalTime).format('h:mm A');
+    }
+
+    return stopPoint.streetAddress || stopPoint.description;
+  };
+
+
   return (
     <Marker
+      key={key}
       coordinate={{ latitude: parseFloat(lat), longitude: parseFloat(lng) }}
       zIndex={999}
       tracksViewChanges={Platform.OS === 'ios' && Config.MAP_PROVIDER === 'google'}
@@ -65,7 +82,7 @@ export default ({
           </TypeText>
         </Type>
         <SubContainer>
-          {checkIfSpIsNext() && (
+          {isNext && (
             <PulseContainer>
               <Loader
                 sourceProp={pulse}
@@ -74,7 +91,7 @@ export default ({
             </PulseContainer>
           )}
           <SubText numberOfLines={1}>
-            {checkIfSpIsNext() ? etaText : stopPoint.streetAddress || stopPoint.description}
+            {etaText()}
           </SubText>
         </SubContainer>
       </InfoBox>
@@ -84,3 +101,5 @@ export default ({
     </Marker>
   );
 };
+
+export default StopPointMarker;
