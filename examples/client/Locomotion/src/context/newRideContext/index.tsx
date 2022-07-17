@@ -235,20 +235,19 @@ const RidePageContextProvider = ({ children }: {
     return formattedServices.sort((a, b) => a.priority - b.priority);
   };
 
-  const getServiceEstimations = async () => {
+  const getServiceEstimations = async (throwError = true) => {
     changeBsPage(BS_PAGES.SERVICE_ESTIMATIONS);
     try {
       const formattedStopPoints = formatStopPointsForEstimations(requestStopPoints);
-      const [estimations, services] = await Promise.all([
-        rideApi.createServiceEstimations(formattedStopPoints),
-        rideApi.getServices(),
-      ]);
+      const { estimations, services } = await rideApi.createServiceEstimations(formattedStopPoints);
       const tags = getEstimationTags(estimations);
       const formattedEstimations = formatEstimations(services, estimations, tags);
       setChosenService(formattedEstimations.find((e: any) => e.eta));
       setServiceEstimations(formattedEstimations);
     } catch (e) {
-      setRidePopup(RIDE_POPUPS.FAILED_SERVICE_REQUEST);
+      if (throwError) {
+        setRidePopup(RIDE_POPUPS.FAILED_SERVICE_REQUEST);
+      }
     }
   };
 
@@ -262,7 +261,7 @@ const RidePageContextProvider = ({ children }: {
     await getServiceEstimations();
     intervalRef.current = setInterval(async () => {
       if (intervalRef.current) {
-        await getServiceEstimations();
+        await getServiceEstimations(false);
       }
     }, ((serviceEstimationsInterval || 60) * 1000));
   };
