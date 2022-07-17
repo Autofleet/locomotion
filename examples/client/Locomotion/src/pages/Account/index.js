@@ -85,7 +85,6 @@ const AccountContent = ({ navigation }) => {
           {user ? `${user.firstName} ${user.lastName}` : ''}
         </Card>
         <Card
-          verified
           title={i18n.t('onboarding.phonePlaceholder')}
         >
           {user ? `${user.phoneNumber}` : ''}
