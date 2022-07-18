@@ -21,7 +21,7 @@ const colors = theme => ({
     hollow: {
       background: '#ffffff',
       border: '#f03a5f',
-      text: '#f03a5f',
+      text: '#333333',
     },
   },
 });

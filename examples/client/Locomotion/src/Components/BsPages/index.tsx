@@ -8,6 +8,7 @@ import { useBottomSheet } from '@gorhom/bottom-sheet';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import moment from 'moment';
 import DatePicker from 'react-native-date-picker';
+import TextRowWithIcon from '../../Components/TextRowWithIcon';
 import { FutureRidesContext } from '../../context/futureRides';
 import { STOP_POINT_TYPES } from '../../lib/commonTypes';
 import SvgIcon from '../SvgIcon';
@@ -38,22 +39,6 @@ const OtherButton = styled(Button)`
   background-color: ${({ warning, theme }) => (warning ? ERROR_COLOR : theme.primaryColor)};
   height: 50px;
   border-radius: 8px;
-`;
-
-const TextRowWithIcon = styled(View)`
-display: flex;
-flex-direction: row;
-justify-content: flex-start;
-align-items: center;
-border: 1px solid #f1f2f6;
-padding: 15px;
-border-radius: 8px;
-margin: 5px 0;
-`;
-
-const BasicText = styled(Text)`
-${FONT_SIZES.LARGE};
-color: #333333;
 `;
 
 const SecondaryButton = styled(Button).attrs({ noBackground: true })`
@@ -346,28 +331,9 @@ export const ConfirmFutureRide = (props: any) => {
       fullWidthButtons
       {...props}
     >
-      <TextRowWithIcon>
-        <SvgIcon
-          Svg={timeIcon}
-          width={15}
-          height={15}
-          fill={theme.primaryColor}
-          style={{ marginRight: 10 }}
-        />
-        <BasicText>
-          {dateText}
-        </BasicText>
-      </TextRowWithIcon>
-      <TextRowWithIcon>
-        <BasicText>
-          {pickupText}
-        </BasicText>
-      </TextRowWithIcon>
-      <TextRowWithIcon>
-        <BasicText>
-          {dropOffText}
-        </BasicText>
-      </TextRowWithIcon>
+      <TextRowWithIcon text={dateText} icon={timeIcon} />
+      <TextRowWithIcon text={pickupText} />
+      <TextRowWithIcon text={dropOffText} />
     </BsPage>
   );
 };

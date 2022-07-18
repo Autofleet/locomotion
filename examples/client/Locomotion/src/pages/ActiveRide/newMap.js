@@ -145,6 +145,7 @@ export default React.forwardRef(({
         longitude: sp.lng,
       })), {
         animated: false,
+        edgePadding: MAP_EDGE_PADDING,
       });
     }
   }, [currentBsPage]);

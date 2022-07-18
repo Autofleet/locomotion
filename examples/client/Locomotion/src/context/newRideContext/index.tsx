@@ -99,6 +99,7 @@ interface RidePageContextInterface {
   validateRequestedStopPoints: (reqSps: any[]) => void;
   setRequestStopPoints: (sps: any) => void;
   tryServiceEstimations: () => Promise<void>;
+  getService: (serviceId: string) => Promise<any>
 }
 
 export const RidePageContext = createContext<RidePageContextInterface>({
@@ -145,6 +146,7 @@ export const RidePageContext = createContext<RidePageContextInterface>({
   validateRequestedStopPoints: (reqSps: any[]) => undefined,
   setRequestStopPoints: (sps: any) => undefined,
   tryServiceEstimations: async () => undefined,
+  getService: async (serviceId: string) => ({}),
 });
 
 const HISTORY_RECORDS_NUM = 10;
@@ -257,6 +259,8 @@ const RidePageContextProvider = ({ children }: {
       }
     }
   };
+
+  const getService = async (serviceId: string) => rideApi.getService(serviceId);
 
 
   const getServiceEstimationsFetchingInterval = () => getSettingByKey(
@@ -746,6 +750,7 @@ const RidePageContextProvider = ({ children }: {
         validateRequestedStopPoints,
         setRequestStopPoints,
         tryServiceEstimations,
+        getService,
       }}
     >
       {children}
