@@ -70,7 +70,7 @@ const Email = ({ navigation }) => {
 
   return (
     <PageContainer>
-      <Header title={i18n.t('onboarding.pages.email.title')} page={MAIN_ROUTES.EMAIL_CODE} />
+      <Header title={i18n.t('onboarding.pages.email.title')} page={MAIN_ROUTES.EMAIL_CODE} showSkipButton={!(route.params && route.params.editAccount)} />
       <ContentContainer>
         <ScreenText
           text={i18n.t('onboarding.pages.email.text')}
