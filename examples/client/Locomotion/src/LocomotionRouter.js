@@ -42,11 +42,11 @@ export default (props) => {
         <BottomSheetContextProvider {...props}>
           <RideStateContextContextProvider {...props}>
             <FutureRidesProvider {...props}>
-            <NewRidePageContextProvider {...props}>
-              <MainRouter {...props} />
-              {props.children}
-              <RidePopups />
-            </NewRidePageContextProvider>
+              <NewRidePageContextProvider {...props}>
+                <MainRouter {...props} />
+                {props.children}
+                <RidePopups />
+              </NewRidePageContextProvider>
             </FutureRidesProvider>
           </RideStateContextContextProvider>
         </BottomSheetContextProvider>
