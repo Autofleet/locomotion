@@ -25,6 +25,11 @@ class NotificationsService {
     OneSignal.addSubscriptionObserver(this.subscriptionObserverHandler);
   };
 
+  getDeviceState = async () => {
+    const deviceState = await OneSignal.getDeviceState();
+    return deviceState;
+  };
+
   subscriptionObserverHandler = async (data) => {
     const { to } = data;
     const { pushToken, userId } = to;
@@ -40,13 +45,13 @@ class NotificationsService {
   };
 
   onOpened = (openResult) => {
-    const { additionalData } = openResult.notification.payload;
+    /* const { additionalData } = openResult.notification.payload;
     if (additionalData && additionalData.type) {
       const method = this.notificationsHandlers[additionalData.type];
       if (method) {
         method();
       }
-    }
+    } */
   };
 
   triggerOnNotification = (payload) => {

@@ -9,6 +9,7 @@
         "unavailable": "Not available",
         "timeUntilArrival": "In {{minutes}} min",
         "toolTipEta": "Eta {{minutes}} min",
+        "noCharge": "No charge",
         "type": {
             "pickup": "Pickup",
             "dropoff": "Drop off"
@@ -259,12 +260,17 @@
         "home": "Home",
         "trips": "Ride History",
         "paymentsSettings": "Payment",
-        "account": "Account",
+        "account": "User Profile",
         "support": "Contact us",
         "logout": "Logout"
     },
     "contactUs": {
-        "pageTitle": "Contact us"
+        "pageTitle": "Contact us",
+        "learnMore": "Learn more",
+        "legalTitle": "Legal",
+        "privacyPolicy": "Privacy Policy",
+        "termsOfUse": "Terms of use",
+        "contactInformationTitle": "Contact information"
     },
     "rideHistory": {
         "pageTitle": "Rides History",
@@ -316,6 +322,7 @@
         }
     },
     "payments": {
+        "setCardName": "Set Card Name",
         "defaultMethodTitle": "Default payment method",
         "otherMethodsTitle": "Other payment methods",
         "cardDetails": {
@@ -383,7 +390,7 @@
     },
     "notAvailableHere": {
       "titleText": "We are Sorry!",
-      "buttonText": "Set another pickup location",
+      "buttonText": "Choose another address",
       "subTitleText": "Autofleet is not available in your area"
     },
     "noPayment": {
@@ -424,7 +431,8 @@
     "states": {
         "arrived": "Arrived",
         "completed": "Completed",
-        "pending": "Pending"
+        "pending": "Pending",
+        "canceled": "Canceled"
     }
   },
   "activeRide": {
@@ -444,5 +452,10 @@
     "paymentMethod": "Payment method",
     "viewDetails": "View details",
     "serviceType": "Service Type"
+  },
+  "updateVersion": {
+    "title": "{{ appName }} needs an update!",
+    "body": "Hey, looks like you have an older version of the app.\nPlease update to get the latest features and best experience.",
+    "buttonText": "Update now"
   }
 }

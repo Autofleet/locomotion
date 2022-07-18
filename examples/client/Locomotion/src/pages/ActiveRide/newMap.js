@@ -19,9 +19,10 @@ import { BS_PAGES } from '../../context/ridePageStateContext/utils';
 import { RIDE_STATES, STOP_POINT_STATES, STOP_POINT_TYPES } from '../../lib/commonTypes';
 import PrecedingStopPointMarker from '../../Components/PrecedingStopPointMarker';
 import { getSubLineStringAfterLocationFromDecodedPolyline } from '../../lib/polyline/utils';
+import { BottomSheetContext } from '../../context/bottomSheetContext';
 
 const MAP_EDGE_PADDING = {
-  top: 120,
+  top: 140,
   right: 100,
   bottom: 400,
   left: 100,
@@ -57,8 +58,12 @@ export default React.forwardRef(({
     currentBsPage,
     initGeoService,
   } = useContext(RideStateContextContext);
+  const {
+    snapPoints,
+  } = useContext(BottomSheetContext);
   const isMainPage = currentBsPage === BS_PAGES.ADDRESS_SELECTOR;
-  const isChooseLocationOnMap = [BS_PAGES.CONFIRM_PICKUP, BS_PAGES.SET_LOCATION_ON_MAP].includes(currentBsPage);
+  const isChooseLocationOnMap = [BS_PAGES.CONFIRM_PICKUP, BS_PAGES.SET_LOCATION_ON_MAP]
+    .includes(currentBsPage);
   const {
     requestStopPoints, saveSelectedLocation, reverseLocationGeocode, ride,
     chosenService,
@@ -71,7 +76,7 @@ export default React.forwardRef(({
   const focusCurrentLocation = () => {
     if (mapRegion.longitude && mapRegion.latitude && ref.current) {
       ref.current.animateToRegion({
-        latitude: mapRegion.latitude,
+        latitude: mapRegion.latitude - parseFloat(snapPoints[0]) / 10000,
         longitude: mapRegion.longitude,
         latitudeDelta: mapRegion.latitudeDelta,
         longitudeDelta: mapRegion.longitudeDelta,
@@ -112,19 +117,21 @@ export default React.forwardRef(({
 
   useEffect(() => {
     if (currentBsPage === BS_PAGES.CONFIRM_PICKUP) {
-      const pickupStopPoint = requestStopPoints.find(sp => sp.type === STOP_POINT_TYPES.STOP_POINT_PICKUP);
-      ref.current.fitToCoordinates([{
-        latitude: pickupStopPoint.lat - 0.001,
-        longitude: pickupStopPoint.lng - 0.001,
-      }, {
-        latitude: pickupStopPoint.lat,
-        longitude: pickupStopPoint.lng,
-      }, {
-        latitude: pickupStopPoint.lat + 0.001,
-        longitude: pickupStopPoint.lng + 0.001,
-      }], {
-        animated: false,
-      });
+      const [pickupStopPoint] = requestStopPoints;
+      if (pickupStopPoint) {
+        ref.current.fitToCoordinates([{
+          latitude: pickupStopPoint.lat - 0.001,
+          longitude: pickupStopPoint.lng - 0.001,
+        }, {
+          latitude: pickupStopPoint.lat,
+          longitude: pickupStopPoint.lng,
+        }, {
+          latitude: pickupStopPoint.lat + 0.001,
+          longitude: pickupStopPoint.lng + 0.001,
+        }], {
+          animated: false,
+        });
+      }
     }
   }, [currentBsPage]);
 
@@ -137,11 +144,14 @@ export default React.forwardRef(({
           longitude: parseFloat(sp.lng),
         }
       ));
-    ref.current.fitToCoordinates(coordsToFit,
-      {
-        edgePadding: MAP_EDGE_PADDING,
-      });
+    if (coordsToFit.length > 0) {
+      ref.current.fitToCoordinates(coordsToFit,
+        {
+          edgePadding: MAP_EDGE_PADDING,
+        });
+    }
   };
+
   useEffect(() => {
     if (requestStopPoints.filter((sp => sp.lat)).length > 1) {
       showInputPointsOnMap();
@@ -187,21 +197,6 @@ export default React.forwardRef(({
         onPanDrag={() => (
           !isUserLocationFocused === false ? setIsUserLocationFocused(false) : null
         )}
-        onUserLocationChange={(event) => {
-          if ((Platform.OS === 'ios' && !Config.MAP_PROVIDER !== 'google') || !isUserLocationFocused) {
-            return; // Follow user location works for iOS
-          }
-          const { coordinate } = event.nativeEvent;
-
-          setMapRegion(oldMapRegion => ({
-            ...oldMapRegion,
-            ...coordinate,
-          }));
-
-          if (isUserLocationFocused) {
-            focusCurrentLocation();
-          }
-        }}
         ref={ref}
         userInterfaceStyle={isDarkMode ? THEME_MOD.DARK : undefined}
         customMapStyle={isDarkMode ? mapDarkMode : undefined}

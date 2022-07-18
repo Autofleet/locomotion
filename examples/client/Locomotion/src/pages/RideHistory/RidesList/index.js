@@ -1,7 +1,6 @@
 import React, { useContext, useState } from 'react';
 import { FlatList, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { FILTERS } from '../filters';
 import { MAIN_ROUTES } from '../../routes';
 import { rideHistoryContext as ridesContext } from '../../../context/rideHistory';
 import {
@@ -91,7 +90,7 @@ const RidesList = React.memo(({
     {rides && rides.length ? (
       <RidesView rides={rides} />
     ) : (
-      <NoRidesInList yet={FILTERS.today.id === activeFilter} />
+      <NoRidesInList />
     )}
   </>
 ));

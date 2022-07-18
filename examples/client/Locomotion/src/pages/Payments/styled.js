@@ -109,6 +109,7 @@ export const CardsListContainer = styled.View`
 
 export const PaymentMethodsContainer = styled.View`
     display: flex;
+    max-height: 90%;
 `;
 
 export const CreditCardsContainer = styled.View`

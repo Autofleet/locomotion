@@ -10,6 +10,7 @@ import {
 import auth from '../../services/auth';
 import Mixpanel from '../../services/Mixpanel';
 import PaymentsContext from '../payments';
+import OneSignal from '../../services/one-signal';
 
 const storageKey = 'clientProfile';
 
@@ -20,9 +21,10 @@ export interface User {
   lastName?: string;
   avatar?: string;
   email?: string;
-  pushToken?: string;
-  pushUserId?: string;
+  pushTokenId: string | null;
+  pushUserId?: string | null;
   cards?: any;
+  isPushEnabled: boolean;
 }
 
 interface UserContextInterface {
@@ -39,6 +41,7 @@ interface UserContextInterface {
   getUserFromServer: () => Promise<void>,
   locationGranted: boolean | undefined,
   setLocationGranted: Dispatch<SetStateAction<any>>,
+  updatePushToken: () => Promise<boolean | null>,
 }
 
 export const UserContext = createContext<UserContextInterface>({
@@ -55,6 +58,7 @@ export const UserContext = createContext<UserContextInterface>({
   getUserFromServer: async () => undefined,
   locationGranted: false,
   setLocationGranted: () => undefined,
+  updatePushToken: async () => false,
 });
 
 const UserContextProvider = ({ children }: { children: any }) => {
@@ -89,7 +93,29 @@ const UserContextProvider = ({ children }: { children: any }) => {
 
   useEffect(() => {
     getUserFromStorage();
+    OneSignal.init();
   }, []);
+
+  const updatePushToken = async () => {
+    const deviceState = await OneSignal.getDeviceState();
+    if (!deviceState) {
+      await updateUserInfo({ pushTokenId: null });
+      return null;
+    }
+
+    if (
+      user?.pushTokenId !== deviceState.pushToken
+      || user?.pushUserId !== deviceState.userId
+      || user?.isPushEnabled !== deviceState.isSubscribed
+    ) {
+      await updateUserInfo({
+        pushTokenId: deviceState.pushToken,
+        isPushEnabled: deviceState.isSubscribed,
+        pushUserId: deviceState.userId,
+      });
+    }
+    return true;
+  };
 
   const verifyEmail = async () => {
     await sendEmailVerification();
@@ -170,6 +196,7 @@ const UserContextProvider = ({ children }: { children: any }) => {
         getUserFromServer,
         locationGranted,
         setLocationGranted,
+        updatePushToken,
       }}
     >
       {children}

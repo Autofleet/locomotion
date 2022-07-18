@@ -26,4 +26,5 @@ export const MAIN_ROUTES = {
   LOCK: 'Lock',
   POST_RIDE: 'PostRide',
   CARD_DETAILS: 'CardDetails',
+  EDIT_NICKNAME: 'EditNickname',
 };

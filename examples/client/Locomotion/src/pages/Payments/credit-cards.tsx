@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View } from 'react-native';
+import { ScrollView, View } from 'react-native';
 import { MAIN_ROUTES } from '../routes';
 import i18n from '../../I18n';
 import {
@@ -20,15 +20,13 @@ export default ({
 }) => {
   const usePayments = PaymentsContext.useContainer();
   const [loading, setLoading] = useState(false);
-  const [defaultMethod, setDefaultMethod] = useState({
-    ...usePayments.getClientDefaultMethod(),
-    mark: true,
-  });
+  const [defaultMethod, setDefaultMethod] = useState({ id: null });
   const [showChoosePayment, setShowChoosePayment] = useState(false);
 
-  const setDefaultPayment = () => {
+  const setDefaultPayment = async () => {
     setLoading(true);
-    const defaultPaymentMethod = usePayments.getClientDefaultMethod();
+    const { paymentMethods } = await usePayments.getOrFetchCustomer();
+    const defaultPaymentMethod = paymentMethods.find((x:any) => x.isDefault);
     const methodToSet = { ...defaultPaymentMethod, mark: true };
     setDefaultMethod(methodToSet);
     setLoading(false);
@@ -36,7 +34,7 @@ export default ({
 
   useEffect(() => {
     setDefaultPayment();
-  }, [usePayments]);
+  }, [usePayments.paymentMethods]);
 
   useEffect(() => {
     setLoading(loadingState);
@@ -47,28 +45,31 @@ export default ({
     <CardsListContainer>
       <View>
         <PaymentMethodsContainer>
-          {defaultMethod.id !== cashPaymentMethod.id
-            ? (
-              <Section
-                title={i18n.t('payments.defaultMethodTitle')}
-                onPress={() => navigate(MAIN_ROUTES.CARD_DETAILS, { paymentMethod: defaultMethod })}
-                paymentMethods={[defaultMethod]}
-                showChangeButton
-                onPressChange={() => setShowChoosePayment(true)}
-              />
-            ) : undefined}
+          <ScrollView>
+            { defaultMethod?.id && defaultMethod?.id !== cashPaymentMethod.id
+              ? (
+                <Section
+                  title={i18n.t('payments.defaultMethodTitle')}
+                  onPress={() => navigate(MAIN_ROUTES.CARD_DETAILS,
+                    { paymentMethod: defaultMethod })}
+                  paymentMethods={[defaultMethod]}
+                  showChangeButton
+                  onPressChange={() => setShowChoosePayment(true)}
+                />
+              ) : undefined}
 
-          {usePayments.paymentMethods.length > 1
-            ? (
-              <Section
-                title={i18n.t('payments.otherMethodsTitle')}
-                showChangeButton={false}
-                onPress={(paymentMethod: any) => navigate(MAIN_ROUTES.CARD_DETAILS,
-                  { paymentMethod })}
-                paymentMethods={usePayments.paymentMethods
-                  .filter(({ id }) => id !== defaultMethod.id)}
-              />
-            ) : undefined}
+            {usePayments.paymentMethods.length > 1
+              ? (
+                <Section
+                  title={i18n.t('payments.otherMethodsTitle')}
+                  showChangeButton={false}
+                  onPress={(paymentMethod: any) => navigate(MAIN_ROUTES.CARD_DETAILS,
+                    { paymentMethod })}
+                  paymentMethods={usePayments.paymentMethods
+                    .filter(({ id }) => id !== defaultMethod.id)}
+                />
+              ) : undefined}
+          </ScrollView>
         </PaymentMethodsContainer>
 
         {onAddClick ? (
@@ -78,6 +79,7 @@ export default ({
           />
         ) : undefined}
         <ChoosePaymentMethod
+          selected={defaultMethod?.id}
           isVisible={showChoosePayment}
           showCash={false}
           onCancel={() => { setShowChoosePayment(false); }}

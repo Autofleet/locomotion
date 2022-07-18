@@ -37,9 +37,10 @@ import geo, { DEFAULT_COORDS, getPosition } from '../../services/geo';
 import RideCanceledPopup from '../../popups/RideCanceledPopup';
 import SquareSvgButton from '../../Components/SquareSvgButton';
 import targetIcon from '../../assets/target.svg';
+import OneSignal from '../../services/one-signal';
 
 const RidePage = ({ mapSettings, navigation }) => {
-  const { locationGranted, setLocationGranted, user } = useContext(UserContext);
+  const { locationGranted, setLocationGranted, updatePushToken } = useContext(UserContext);
   const [addressSelectorFocus, setAddressSelectorFocus] = useState(null);
   const mapRef = useRef();
   const bottomSheetRef = useRef(null);
@@ -59,6 +60,7 @@ const RidePage = ({ mapSettings, navigation }) => {
     updateRequestSp,
     setRide,
     setRequestStopPoints,
+    tryServiceEstimations,
   } = useContext(RidePageContext);
   const {
     setIsExpanded, snapPoints, isExpanded,
@@ -76,7 +78,9 @@ const RidePage = ({ mapSettings, navigation }) => {
 
   const goBackToAddress = (selected) => {
     resetStateToAddressSelector(selected);
-    setIsExpanded(true);
+    setTimeout(() => {
+      setIsExpanded(true);
+    }, 100);
     bottomSheetRef.current.expand();
   };
 
@@ -101,7 +105,7 @@ const RidePage = ({ mapSettings, navigation }) => {
       <NotAvailableHere
         fullWidthButtons
         onButtonPress={() => {
-          resetStateToAddressSelector();
+          goBackToAddress();
         }}
       />
     ),
@@ -133,7 +137,10 @@ const RidePage = ({ mapSettings, navigation }) => {
     [BS_PAGES.CONFIRMING_RIDE]: () => <ConfirmingRide />,
     [BS_PAGES.NO_AVAILABLE_VEHICLES]: () => (
       <NoAvailableVehicles
-        onButtonPress={() => changeBsPage(BS_PAGES.SERVICE_ESTIMATIONS)}
+        onButtonPress={() => {
+          tryServiceEstimations();
+          changeBsPage(BS_PAGES.SERVICE_ESTIMATIONS);
+        }}
       />
     ),
     [BS_PAGES.ACTIVE_RIDE]: () => <ActiveRide />,
@@ -227,6 +234,11 @@ const RidePage = ({ mapSettings, navigation }) => {
     }
   }, [isExpanded]);
 
+  useEffect(() => {
+    OneSignal.init();
+    updatePushToken();
+  }, []);
+
   return (
     <PageContainer>
       <MainMap
@@ -284,7 +296,6 @@ const RidePage = ({ mapSettings, navigation }) => {
 };
 
 export default props => (
-
   <AvailabilityContextProvider>
     <RidePage
       {...props}

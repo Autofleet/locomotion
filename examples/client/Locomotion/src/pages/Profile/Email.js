@@ -5,14 +5,14 @@ import TextInput from '../../Components/TextInput';
 import SaveButton from './SaveButton';
 import { OnboardingContext } from '../../context/onboarding';
 import {
-  ErrorText, PageContainer, SafeView, InputContainer,
+  ErrorText, SafeView, InputContainer,
 } from './styles';
 import i18n from '../../I18n';
 import Header from './Header';
 import ScreenText from './ScreenText';
 import { MAIN_ROUTES } from '../routes';
 import { UserContext } from '../../context/user';
-
+import { PageContainer, ContentContainer } from '../styles';
 
 const Email = ({ navigation }) => {
   const route = useRoute();
@@ -93,8 +93,8 @@ const Email = ({ navigation }) => {
           onFail={() => setErrorText(i18n.t('onboarding.pages.email.error'))}
           onNext={onNext}
         />
-      </PageContainer>
-    </SafeView>
+      </ContentContainer>
+    </PageContainer>
   );
 };
 

@@ -1,7 +1,9 @@
-import React, { useEffect, useContext } from 'react';
+import React, { useEffect, useContext, useState } from 'react';
 import { useRoute } from '@react-navigation/native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import moment from 'moment';
+import { PaymentIcon } from 'react-native-payment-icons';
+import cashPaymentMethod from '../../pages/Payments/cashPaymentMethod';
 import Card from '../../Components/InformationCard';
 import PaymentsContext from '../../context/payments';
 import { MAIN_ROUTES } from '../routes';
@@ -18,6 +20,8 @@ import {
   FlexCenterContainer,
   LogoutContainer,
   LogoutText,
+  Type,
+  PaymentMethodContent,
 } from './styled';
 import i18n from '../../I18n';
 import PageHeader from '../../Components/PageHeader';
@@ -60,9 +64,18 @@ const AccountHeader = () => {
 };
 
 const AccountContent = ({ navigation }) => {
+  const [defaultPaymentMethod, setDefaultPaymentMethod] = useState(null);
+
   const { user } = useContext(UserContext);
   const { getClientDefaultMethod } = PaymentsContext.useContainer();
-  const defaultPaymentMethod = getClientDefaultMethod();
+  useEffect(() => {
+    const updateDefault = async () => {
+      const newDefault = await getClientDefaultMethod();
+      setDefaultPaymentMethod(newDefault);
+    };
+
+    updateDefault();
+  }, []);
   const emailIsVerified = user?.isEmailVerified;
   const onEmailPress = () => (emailIsVerified
     ? navigation.navigate(MAIN_ROUTES.EMAIL, {
@@ -97,7 +110,7 @@ const AccountContent = ({ navigation }) => {
         >
           {user ? `${user.email}` : ''}
         </Card>
-        {defaultPaymentMethod && (
+        {defaultPaymentMethod && defaultPaymentMethod.id !== cashPaymentMethod.id ? (
           <>
             <CardsTitle title={i18n.t('onboarding.paymentInformation')} />
             <Card
@@ -106,12 +119,13 @@ const AccountContent = ({ navigation }) => {
                 back: true,
               })}
             >
-              {
-            moment(defaultPaymentMethod.expiresAt).format('MM/YY')
-          }
+              <PaymentMethodContent>
+                <PaymentIcon type={defaultPaymentMethod.brand} />
+                <Type>{defaultPaymentMethod.name}</Type>
+              </PaymentMethodContent>
             </Card>
           </>
-        )}
+        ) : undefined}
         <LogoutContainer
           onPress={() => {
             navigation.navigate(MAIN_ROUTES.LOGOUT);
@@ -135,12 +149,12 @@ export default ({ navigation, menuSide }) => {
 
   return (
     <PageContainer>
+      <PageHeader
+        title={i18n.t('onboarding.pageTitle')}
+        onIconPress={() => navigation.navigate(MAIN_ROUTES.HOME)}
+        iconSide={menuSide}
+      />
       <KeyboardAwareScrollView extraScrollHeight={20} enableOnAndroid>
-        <PageHeader
-          title={i18n.t('onboarding.pageTitle')}
-          onIconPress={() => navigation.navigate(MAIN_ROUTES.HOME)}
-          iconSide={menuSide}
-        />
         <AccountHeader />
         <AccountContent navigation={navigation} />
       </KeyboardAwareScrollView>

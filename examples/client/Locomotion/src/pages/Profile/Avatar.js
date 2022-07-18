@@ -3,32 +3,32 @@ import i18n from '../../I18n';
 import SaveButton from './SaveButton';
 import { OnboardingContext } from '../../context/onboarding';
 import {
-  ImageContainer, Name, PageContainer, SafeView,
+  ImageContainer, Name, SafeView,
 } from './styles';
 import Header from './Header';
 import ScreenText from './ScreenText/index';
 import ThumbnailPicker from '../../Components/ThumbnailPicker';
 import { MAIN_ROUTES } from '../routes';
 import { UserContext } from '../../context/user';
+import { PageContainer, ContentContainer } from '../styles';
 
 const Avatar = () => {
-  const [photoSelected, setPhotoSelected] = useState(false);
-  const { nextScreen } = useContext(OnboardingContext);
   const { updateUserInfo, user } = useContext(UserContext);
+  const [photoSelected, setPhotoSelected] = useState(user.avatar);
+  const { nextScreen } = useContext(OnboardingContext);
 
   const onImageChoose = (image) => {
-    updateUserInfo({ avatar: image });
-    setPhotoSelected(true);
+    setPhotoSelected(image);
   };
 
   return (
-    <SafeView>
+
+    <PageContainer>
       <Header
         title={i18n.t('onboarding.pages.avatar.title')}
         page={MAIN_ROUTES.AVATAR}
-        showSkipButton={!photoSelected}
       />
-      <PageContainer>
+      <ContentContainer>
         <ScreenText
           text={i18n.t('onboarding.pages.avatar.text')}
           subText={i18n.t('onboarding.pages.avatar.subText')}
@@ -36,17 +36,20 @@ const Avatar = () => {
         <ImageContainer>
           <ThumbnailPicker
             onImageChoose={onImageChoose}
-            avatarSource={user.avatar}
+            avatarSource={photoSelected}
             size={125}
           />
           <Name numberOfLines={1}>{`${user.firstName} ${user.lastName}`}</Name>
         </ImageContainer>
         <SaveButton
-          onNext={() => nextScreen(MAIN_ROUTES.AVATAR)}
-          isInvalid={!user.avatar}
+          onNext={() => {
+            updateUserInfo({ avatar: photoSelected });
+            nextScreen(MAIN_ROUTES.AVATAR);
+          }}
+          isInvalid={!photoSelected}
         />
-      </PageContainer>
-    </SafeView>
+      </ContentContainer>
+    </PageContainer>
   );
 };
 

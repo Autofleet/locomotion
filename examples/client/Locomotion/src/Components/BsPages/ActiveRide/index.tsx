@@ -25,6 +25,7 @@ import RideNotes from '../../../popups/RideNotes';
 import ServiceTypeDetails from '../../ServiceTypeDetails';
 import { RideStateContextContext } from '../../../context/ridePageStateContext';
 import Call from './call';
+import ShareButton from './share';
 
 const DEFAULT_VEHICLE_IMAGE = 'https://res.cloudinary.com/autofleet/image/upload/w_700,h_500,c_thumb,q_auto/vehicle-images/Minivan/minivan_blue.png';
 
@@ -90,22 +91,14 @@ const ActiveRideContent = () => {
 
   const onShare = async () => {
     const trackerUrl = await trackRide();
-    const result = await Share.share({
+    await Share.share({
       message: trackerUrl,
       url: trackerUrl,
     });
   };
 
   const renderShareRide = () => (
-    <ButtonContainer onPress={() => {
-      onShare();
-    }}
-    >
-      <GenericRideButton
-        icon={share}
-        title={i18n.t('bottomSheetContent.ride.shareRide')}
-      />
-    </ButtonContainer>
+    <ShareButton />
   );
 
   const clearPopup = () => {
@@ -125,7 +118,7 @@ const ActiveRideContent = () => {
               />
             </DriverCardContainer>
             <VehicleDetails>
-              <VehicleImage source={{ uri: (vehicle?.image) || DEFAULT_VEHICLE_IMAGE }} />
+              <VehicleImage resizeMode="contain" source={{ uri: (vehicle?.image) || DEFAULT_VEHICLE_IMAGE }} />
               <VehiclePlateContainer>
                 <VehiclePlateText>{(vehicle?.licensePlate) || ''}</VehiclePlateText>
               </VehiclePlateContainer>
