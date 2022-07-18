@@ -365,6 +365,11 @@
     "subName": "Rider app"
   },
   "bottomSheetContent": {
+    "confirmPickupTime": {
+        "titleText": "Scheduled ride",
+        "buttonText": "Set pick up time",
+        "pickupText": "Pick up on {{date}}, at {{time}}"
+    },
     "locationRequest": {
         "titleText": "Update location services",
         "buttonText": "Turn on location permissions",
@@ -414,6 +419,7 @@
         "rider": "Rider",
         "riders": "Riders",
         "addPayment": "Add Payment",
+        "chosePickupTime": "Time of departure",
         "contactDriver": "Contact driver",
         "shareRide": "Share ride",
         "cancelRide": "Cancel ride",

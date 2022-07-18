@@ -15,6 +15,7 @@ import {
   ActiveRide,
   LocationRequest,
   CancelRide,
+  ConfirmPickupTime,
 } from '../../Components/BsPages';
 import { RideStateContextContext, RideStateContextContextProvider } from '../../context';
 import NewRidePageContextProvider, { RidePageContext } from '../../context/newRideContext';
@@ -100,6 +101,9 @@ const RidePage = ({ mapSettings, navigation }) => {
     ),
     [BS_PAGES.SERVICE_ESTIMATIONS]: () => (
       <RideOptions />
+    ),
+    [BS_PAGES.CONFIRM_PICKUP_TIME]: () => (
+      <ConfirmPickupTime />
     ),
     [BS_PAGES.LOCATION_REQUEST]: () => (
       <LocationRequest

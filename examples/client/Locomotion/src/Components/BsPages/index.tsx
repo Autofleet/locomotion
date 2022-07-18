@@ -6,6 +6,8 @@ import Config from 'react-native-config';
 import styled, { ThemeContext } from 'styled-components';
 import { useBottomSheet } from '@gorhom/bottom-sheet';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import moment from 'moment';
+import DatePicker from 'react-native-date-picker';
 import SvgIcon from '../SvgIcon';
 import { RidePageContext } from '../../context/newRideContext';
 import i18n from '../../I18n';
@@ -22,7 +24,11 @@ import outOfTerritoryIcon from '../../assets/bottomSheet/out_of_territory.svg';
 import busyImage from '../../assets/bottomSheet/busy.svg';
 import locationIcon from '../../assets/location_pin.svg';
 import Loader from '../Loader';
+import { MewRidePageContext } from '../..';
+import timeIcon from '../../assets/calendar.svg';
 import ActiveRideContent from './ActiveRide';
+import RoundedButton from '../RoundedButton';
+import { MAX_DATE_FUTURE_RIDE, MIN_DATE_FUTURE_RIDE } from '../../context/newRideContext/utils';
 
 const OtherButton = styled(Button)`
   background-color: ${({ warning, theme }) => (warning ? ERROR_COLOR : theme.primaryColor)};
@@ -220,6 +226,52 @@ BsPage.defaultProps = {
 };
 
 export default BsPage;
+
+export const ConfirmPickupTime = (props: any) => {
+  const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
+  const { ride, updateRidePayload } = useContext(MewRidePageContext);
+  const {
+    changeBsPage,
+  } = useContext(RideStateContextContext);
+  const date = moment(ride?.afterTime).format('ddd, MMM Do');
+  const time = moment(ride?.afterTime).format('HH:mm');
+  return (
+    <BsPage
+      TitleText={i18n.t('bottomSheetContent.confirmPickupTime.titleText')}
+      ButtonText={i18n.t('bottomSheetContent.confirmPickupTime.buttonText')}
+      fullWidthButtons
+      onButtonPress={() => {
+        changeBsPage(BS_PAGES.SERVICE_ESTIMATIONS);
+      }}
+      {...props}
+    >
+      <RoundedButton
+        onPress={() => setIsDatePickerOpen(true)}
+        hollow
+        icon={timeIcon}
+        style={{
+          borderColor: '#f1f2f6',
+        }}
+      >
+        {i18n.t('bottomSheetContent.confirmPickupTime.pickupText', { date, time })}
+      </RoundedButton>
+      <DatePicker
+        open={isDatePickerOpen}
+        date={moment(ride?.afterTime).toDate()}
+        maximumDate={MAX_DATE_FUTURE_RIDE}
+        minimumDate={MIN_DATE_FUTURE_RIDE}
+        mode="datetime"
+        title={i18n.t('bottomSheetContent.ride.chosePickupTime')}
+        onCancel={() => setIsDatePickerOpen(false)}
+        onConfirm={(newDate: Date) => {
+          updateRidePayload({ afterTime: newDate.getTime() });
+          setIsDatePickerOpen(false);
+        }}
+        modal
+      />
+    </BsPage>
+  );
+};
 
 export const LocationRequest = (props: any) => (
   <BsPage

@@ -1,4 +1,6 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
+import DatePicker from 'react-native-date-picker';
+import moment from 'moment';
 import FutureBookingButton from './FutureBookingButton';
 import {
   Container, RowContainer, ButtonContainer, ButtonText, StyledButton, HALF_WIDTH,
@@ -16,6 +18,7 @@ import { RideStateContextContext } from '../../../../../context/ridePageStateCon
 import { popupNames } from '../utils';
 import { BS_PAGES } from '../../../../../context/ridePageStateContext/utils';
 import cashPaymentMethod from '../../../../../pages/Payments/cashPaymentMethod';
+import { MAX_DATE_FUTURE_RIDE, MIN_DATE_FUTURE_RIDE } from '../../../../../context/newRideContext/utils';
 
 
 interface RideButtonsProps {
@@ -30,8 +33,9 @@ const RideButtons = ({
   const {
     ride,
     chosenService,
+    updateRidePayload,
   } = useContext(RidePageContext);
-
+  const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
   const {
     changeBsPage,
   } = useContext(RideStateContextContext);
@@ -42,11 +46,31 @@ const RideButtons = ({
         paymentMethods: PaymentMethodInterface[],
     } = PaymentsContext.useContainer();
 
-  const renderFutureBooking = () => (
-    <ButtonContainer disabled>
-      <FutureBookingButton />
-    </ButtonContainer>
-  );
+  const renderFutureBooking = () => {
+    const close = () => {
+      setIsDatePickerOpen(false);
+    };
+    return (
+      <ButtonContainer onPress={() => setIsDatePickerOpen(true)}>
+        <FutureBookingButton />
+        <DatePicker
+          open={isDatePickerOpen}
+          date={moment(ride?.afterTime).toDate()}
+          maximumDate={MAX_DATE_FUTURE_RIDE}
+          minimumDate={MIN_DATE_FUTURE_RIDE}
+          mode="datetime"
+          title={i18n.t('bottomSheetContent.ride.chosePickupTime')}
+          onCancel={close}
+          onConfirm={(date) => {
+            updateRidePayload({ afterTime: date.getTime() });
+            changeBsPage(BS_PAGES.CONFIRM_PICKUP_TIME);
+            close();
+          }}
+          modal
+        />
+      </ButtonContainer>
+    );
+  };
 
   const renderRideNotes = () => {
     const rideHasNotes = ride?.notes;
