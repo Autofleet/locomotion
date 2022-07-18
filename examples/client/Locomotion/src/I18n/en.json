@@ -61,7 +61,7 @@
             "emailCode": {
                 "title": "Verification",
                 "text": "Please enter code",
-                "subText": "A code has been sent to the mail:  \n{{email}}.",
+                "subText": "Please enter the 4-digit code below into the app to validate your email address.",
                 "resendCodeText": "Didn't receive an email? ",
                 "resendCodeButton": "Resend"
             },
