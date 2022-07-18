@@ -4,10 +4,10 @@ import React, {
 import { Platform } from 'react-native';
 import Config from 'react-native-config';
 import { Marker } from 'react-native-maps';
+import { ThemeContext } from 'styled-components';
 import clockIcon from '../../assets/bottomSheet/clock.svg';
 import dropoffIcon from '../../assets/map/markers/dropoffIcon.svg';
 import pickupIcon from '../../assets/map/markers/pickupIcon.svg';
-import { Context as ThemeContext } from '../../context/theme';
 import Mixpanel from '../../services/Mixpanel';
 import {
   InfoBox, Type, SubText, TypeText, IconContainer, SubContainer, PulseContainer,

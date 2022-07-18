@@ -3,7 +3,7 @@ import {
   Linking, Text, View,
 } from 'react-native';
 import Config from 'react-native-config';
-import styled from 'styled-components';
+import styled, { ThemeContext } from 'styled-components';
 import { useBottomSheet } from '@gorhom/bottom-sheet';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import moment from 'moment';
@@ -14,9 +14,7 @@ import { STOP_POINT_TYPES } from '../../lib/commonTypes';
 import SvgIcon from '../SvgIcon';
 import { RidePageContext } from '../../context/newRideContext';
 import i18n from '../../I18n';
-import {
-  Context as ThemeContext, ERROR_COLOR, FONT_SIZES, FONT_WEIGHTS,
-} from '../../context/theme';
+import { ERROR_COLOR, FONT_SIZES, FONT_WEIGHTS } from '../../context/theme';
 import Button from '../Button';
 import { BottomSheetContext, SNAP_POINT_STATES } from '../../context/bottomSheetContext';
 import { RideStateContextContext } from '../../context/ridePageStateContext';
@@ -315,17 +313,25 @@ export const CancelRide = (props: any) => {
 
 export const ConfirmFutureRide = (props: any) => {
   const { newFutureRide } = useContext(FutureRidesContext);
-  const theme = useContext(ThemeContext);
-  const date = moment(newFutureRide?.scheduledTo).format('ddd, MMM Do');
-  const time = moment(newFutureRide?.scheduledTo).format('HH:mm');
-  const pickup = (newFutureRide?.stopPoints || [])
-    .find(sp => sp.type === STOP_POINT_TYPES.STOP_POINT_PICKUP);
-  const dropOff = (newFutureRide?.stopPoints || [])
-    .find(sp => sp.type === STOP_POINT_TYPES.STOP_POINT_DROPOFF);
-  const dateText = i18n.t('bottomSheetContent.confirmPickupTime.pickupText', { date, time });
-  const pickupText = i18n.t('bottomSheetContent.confirmFutureRide.pickupText', { address: pickup?.description });
-  const dropOffText = i18n.t('bottomSheetContent.confirmFutureRide.dropOffText', { address: dropOff?.description });
 
+  const getDateDisplay = () => {
+    const date = moment(newFutureRide?.scheduledTo).format('ddd, MMM Do');
+    const time = moment(newFutureRide?.scheduledTo).format('HH:mm');
+    const dateText = i18n.t('bottomSheetContent.confirmPickupTime.pickupText', { date, time });
+    return <TextRowWithIcon text={dateText} icon={timeIcon} />;
+  };
+  const getPickupDisplay = () => {
+    const pickup = (newFutureRide?.stopPoints || [])
+      .find(sp => sp.type === STOP_POINT_TYPES.STOP_POINT_PICKUP);
+    const pickupText = i18n.t('bottomSheetContent.confirmFutureRide.pickupText', { address: pickup?.description });
+    return <TextRowWithIcon text={pickupText} />;
+  };
+  const getDropOffDisplay = () => {
+    const dropOff = (newFutureRide?.stopPoints || [])
+      .find(sp => sp.type === STOP_POINT_TYPES.STOP_POINT_DROPOFF);
+    const dropOffText = i18n.t('bottomSheetContent.confirmFutureRide.dropOffText', { address: dropOff?.description });
+    return <TextRowWithIcon text={dropOffText} />;
+  };
   return (
     <BsPage
       TitleText={i18n.t('bottomSheetContent.confirmFutureRide.titleText')}
@@ -333,9 +339,9 @@ export const ConfirmFutureRide = (props: any) => {
       fullWidthButtons
       {...props}
     >
-      <TextRowWithIcon text={dateText} icon={timeIcon} />
-      <TextRowWithIcon text={pickupText} />
-      <TextRowWithIcon text={dropOffText} />
+      {getDateDisplay()}
+      {getPickupDisplay()}
+      {getDropOffDisplay()}
     </BsPage>
   );
 };

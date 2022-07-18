@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { Text, View } from 'react-native';
-import styled from 'styled-components';
-import { FONT_SIZES, Context as ThemeContext } from '../../context/theme';
+import styled, { ThemeContext } from 'styled-components';
+import { FONT_SIZES } from '../../context/theme';
 import SvgIcon from '../SvgIcon';
 
 const Container = styled(View)`
