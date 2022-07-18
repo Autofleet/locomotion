@@ -61,7 +61,7 @@ const FutureRidesView = ({ menuSide }) => {
           return (
             <RideCard
               ride={ride}
-              onPress={onPressCancel}
+              onPress={() => onPressCancel(ride)}
               serviceName={service.displayName}
               paymentMethod={ride.payment.paymentMethod}
               scheduledTo={ride.scheduledTo || ''}
@@ -81,14 +81,14 @@ const FutureRidesView = ({ menuSide }) => {
         }}
       >
         <CancelRide
-          onButtonPress={() => {
+          onButtonPress={async () => {
             closeBottomSheet();
+            await cancelRide(rideToCancel?.id);
+            await loadFutureRides();
             if (futureRides.length === 1) {
               changeBsPage(BS_PAGES.ADDRESS_SELECTOR);
               NavigationService.navigate(MAIN_ROUTES.HOME);
             }
-            cancelRide(rideToCancel?.id);
-            loadFutureRides();
           }}
           onSecondaryButtonPress={() => {
             closeBottomSheet();
