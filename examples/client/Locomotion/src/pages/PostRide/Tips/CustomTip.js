@@ -146,7 +146,7 @@ const Tips = ({
           style={{ width: '100%' }}
           placeholderTextColor="#929395"
           autoCorrect={false}
-          type="number"
+          keyboardType="decimal-pad"
           placeholder={i18n.t('postRide.tip.customTip.inputPlaceholder')}
           value={customTip}
           onChangeText={(text) => {
