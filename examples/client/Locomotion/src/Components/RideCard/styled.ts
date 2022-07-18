@@ -20,4 +20,6 @@ ${FONT_WEIGHTS.MEDIUM}
 export const ServiceType = styled(Text)`
 ${FONT_SIZES.MEDIUM}
 ${FONT_WEIGHTS.LIGHT}
+opacity: .7;
+margin-top: 5px;
 `;
