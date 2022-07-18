@@ -7,6 +7,7 @@ import { useBottomSheet } from '@gorhom/bottom-sheet';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import moment from 'moment';
 import DatePicker from 'react-native-date-picker';
+import { FutureRidesContext } from '../../context/futureRides';
 import { STOP_POINT_TYPES } from '../../lib/commonTypes';
 import SvgIcon from '../SvgIcon';
 import { RidePageContext } from '../../context/newRideContext';
@@ -335,13 +336,13 @@ export const CancelRide = (props: any) => {
 };
 
 export const ConfirmFutureRide = (props: any) => {
-  const { ride } = useContext(MewRidePageContext);
+  const { newFutureRide } = useContext(FutureRidesContext);
   const theme = useContext(ThemeContext);
-  const date = moment(ride?.scheduledTo).format('ddd, MMM Do');
-  const time = moment(ride?.scheduledTo).format('HH:mm');
-  const pickup = (ride?.stopPoints || [])
+  const date = moment(newFutureRide?.scheduledTo).format('ddd, MMM Do');
+  const time = moment(newFutureRide?.scheduledTo).format('HH:mm');
+  const pickup = (newFutureRide?.stopPoints || [])
     .find(sp => sp.type === STOP_POINT_TYPES.STOP_POINT_PICKUP);
-  const dropOff = (ride?.stopPoints || [])
+  const dropOff = (newFutureRide?.stopPoints || [])
     .find(sp => sp.type === STOP_POINT_TYPES.STOP_POINT_DROPOFF);
   const dateText = i18n.t('bottomSheetContent.confirmPickupTime.pickupText', { date, time });
   const pickupText = i18n.t('bottomSheetContent.confirmFutureRide.pickupText', { address: pickup?.description });

@@ -155,7 +155,7 @@ const RidePageContextProvider = ({ children }: {
   const { locationGranted, user } = useContext(UserContext);
   const navigation = useNavigation<Nav>();
   const { checkStopPointsInTerritory, changeBsPage, currentBsPage } = useContext(RideStateContextContext);
-  const { setNewFutureRide } = useContext(FutureRidesContext);
+  const { setNewFutureRide, loadFutureRides } = useContext(FutureRidesContext);
   const [requestStopPoints, setRequestStopPoints] = useState(INITIAL_STOP_POINTS);
   const [currentGeocode, setCurrentGeocode] = useState<any | null>(null);
   const [searchTerm, setSearchTerm] = useState<string | null>(null);
@@ -196,8 +196,9 @@ const RidePageContextProvider = ({ children }: {
       changeBsPage(BS_PAGES.ADDRESS_SELECTOR);
       cleanRideState();
     },
-    [RIDE_STATES.DISPATCHED]: () => {
+    [RIDE_STATES.DISPATCHED]: (newRide: any) => {
       cleanRequestStopPoints();
+      setRide(newRide);
       changeBsPage(BS_PAGES.ACTIVE_RIDE);
     },
     [RIDE_STATES.ACTIVE]: () => {
@@ -574,6 +575,7 @@ const RidePageContextProvider = ({ children }: {
         throw new Error();
       }
       if (afRide.scheduledTo) {
+        loadFutureRides();
         setNewFutureRide(afRide);
         changeBsPage(BS_PAGES.CONFIRM_FUTURE_RIDE);
       }

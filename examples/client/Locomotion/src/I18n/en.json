@@ -169,7 +169,9 @@
             "openBookingsButton": "{{openBookings}} open Bookings",
             "closeButton": "Close",
             "cancelButton": "Cancel",
-            "rideFareEstimationNotice": "The fairs shown are estimated and may change based on conditions during the ride"
+            "rideFareEstimationNotice": "The fairs shown are estimated and may change based on conditions during the ride",
+            "oneUpcomingRide": "Upcoming ride",
+            "multipleUpcomingRides": "Upcoming rides"
         },
         "RideScheduler": {
             "timeSelectionTitle": "I want to start",

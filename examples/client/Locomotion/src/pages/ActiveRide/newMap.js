@@ -2,11 +2,11 @@ import React, {
   useContext, useEffect, useState,
 } from 'react';
 import polyline from '@mapbox/polyline';
-import { Platform, StyleSheet, Text } from 'react-native';
+import { StyleSheet } from 'react-native';
 import MapView, { Polygon, Polyline } from 'react-native-maps';
 import Config from 'react-native-config';
 import moment from 'moment';
-import { UserContext } from '../../context/user';
+import { FutureRidesContext } from '../../context/futureRides';
 import { RidePageContext } from '../../context/newRideContext';
 import { RideStateContextContext } from '../../context';
 import { DEFAULT_COORDS, getPosition } from '../../services/geo';
@@ -17,7 +17,7 @@ import { AvailabilityContext } from '../../context/availability';
 import AvailabilityVehicle from '../../Components/AvailabilityVehicle';
 import StationsMap from '../../Components/Marker';
 import { BS_PAGES } from '../../context/ridePageStateContext/utils';
-import { RIDE_STATES, STOP_POINT_STATES, STOP_POINT_TYPES } from '../../lib/commonTypes';
+import { STOP_POINT_STATES } from '../../lib/commonTypes';
 import PrecedingStopPointMarker from '../../Components/PrecedingStopPointMarker';
 import { getSubLineStringAfterLocationFromDecodedPolyline } from '../../lib/polyline/utils';
 import { BottomSheetContext } from '../../context/bottomSheetContext';
@@ -71,6 +71,9 @@ export default React.forwardRef(({
     requestStopPoints, saveSelectedLocation, reverseLocationGeocode, ride,
     chosenService,
   } = useContext(RidePageContext);
+  const {
+    newFutureRide,
+  } = useContext(FutureRidesContext);
   const [mapRegion, setMapRegion] = useState({
     latitudeDelta: 0.015,
     longitudeDelta: 0.015,
@@ -135,6 +138,14 @@ export default React.forwardRef(({
           animated: false,
         });
       }
+    }
+    if (currentBsPage === BS_PAGES.CONFIRM_FUTURE_RIDE) {
+      ref.current.fitToCoordinates(newFutureRide.stopPoints.map(sp => ({
+        latitude: sp.lat,
+        longitude: sp.lng,
+      })), {
+        animated: false,
+      });
     }
   }, [currentBsPage]);
 
