@@ -7,6 +7,7 @@ import cashPaymentMethod from '../../pages/Payments/cashPaymentMethod';
 import Card from '../../Components/InformationCard';
 import PaymentsContext from '../../context/payments';
 import { MAIN_ROUTES } from '../routes';
+import PaymentMethodInterface from '../../context/payments/interface';
 
 import ThumbnailPicker from '../../Components/ThumbnailPicker';
 import {
@@ -67,15 +68,19 @@ const AccountContent = ({ navigation }) => {
   const [defaultPaymentMethod, setDefaultPaymentMethod] = useState(null);
 
   const { user } = useContext(UserContext);
-  const { getClientDefaultMethod } = PaymentsContext.useContainer();
-  useEffect(() => {
-    const updateDefault = async () => {
-      const newDefault = await getClientDefaultMethod();
-      setDefaultPaymentMethod(newDefault);
-    };
+  const usePayments = PaymentsContext.useContainer();
 
+
+  const updateDefault = async () => {
+    const { paymentMethods } = await usePayments.getOrFetchCustomer();
+    const defaultMethod = paymentMethods.find(x => x.isDefault);
+    const methodToSet = { ...defaultMethod, mark: true };
+    setDefaultPaymentMethod(methodToSet);
+  };
+  useEffect(() => {
     updateDefault();
-  }, []);
+  }, [usePayments.paymentMethods]);
+
   const emailIsVerified = user?.isEmailVerified;
   const onEmailPress = () => (emailIsVerified
     ? navigation.navigate(MAIN_ROUTES.EMAIL, {
