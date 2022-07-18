@@ -25,7 +25,7 @@ export default ({
 
   const setDefaultPayment = async () => {
     setLoading(true);
-    const { paymentMethods } = await usePayments.loadCustomer();
+    const { paymentMethods } = await usePayments.getOrFetchCustomer();
     const defaultPaymentMethod = paymentMethods.find((x:any) => x.isDefault);
     const methodToSet = { ...defaultPaymentMethod, mark: true };
     setDefaultMethod(methodToSet);
@@ -79,6 +79,7 @@ export default ({
           />
         ) : undefined}
         <ChoosePaymentMethod
+          selected={defaultMethod?.id}
           isVisible={showChoosePayment}
           showCash={false}
           onCancel={() => { setShowChoosePayment(false); }}

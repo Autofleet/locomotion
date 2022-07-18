@@ -34,16 +34,17 @@ const useSettings = () => {
     const cachedKeys = Object.keys(keyValueMap);
     const keysAfterCache = cachedKeys.map((cacheKey) => {
       const value = keyValueMap[cacheKey];
-      if (value === undefined || !cachedKeys.includes(cacheKey)) {
+      if (value === undefined) {
         return cacheKey;
       }
     });
-
     const settingMap = {};
     const values = await settingsApi.getMultipleByKeys(keysAfterCache);
     // eslint-disable-next-line array-callback-return
     keys.map((key, idx) => {
-      settingMap[key] = values[idx];
+      if (key !== null) {
+        settingMap[key] = values[idx];
+      }
     });
     await StorageService.save(settingMap);
     return {

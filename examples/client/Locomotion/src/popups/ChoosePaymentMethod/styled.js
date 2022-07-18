@@ -3,14 +3,14 @@ import styled from 'styled-components';
 import RoundedButton from '../../Components/RoundedButton';
 import Button from '../../Components/Button';
 import { TextArea } from '../../Components/TextArea';
+import { FONT_SIZES, FONT_WEIGHTS } from '../../context/theme';
 
 export const SelectButton = styled(RoundedButton)`
   margin: 10px;
 `;
 
 export const CloseButton = styled(Button)`
-  height: 0;
-  width: 0
+  flex: 1;
 `;
 
 export const CardsScrollView = styled(ScrollView)`
@@ -20,14 +20,17 @@ export const CardsScrollView = styled(ScrollView)`
 
 export const TitleView = styled.View`
   display: flex;
+  padding: 0px 20px;
   flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  margin: 20px 0px;
 `;
 
 export const SummaryContainer = styled.View`
   flex: 1;
   flex-shrink: 1;
   max-height: 450px;
-  padding: 20px 0;
   background-color: white;
   justify-content: center;
   align-items: center;
@@ -37,11 +40,10 @@ export const SummaryContainer = styled.View`
 `;
 
 export const Title = styled.Text`
-  margin: 0px 20px;
-  font-size: 20px;
+  ${FONT_SIZES.H2}
   color: black;
-  font-weight: 500;
-  margin-bottom: 15px;
+  ${FONT_WEIGHTS.SEMI_BOLD};
+  flex: 10;
 `;
 
 export const StyledTextArea = styled(TextArea)`

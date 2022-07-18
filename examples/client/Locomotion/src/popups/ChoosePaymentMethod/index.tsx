@@ -27,19 +27,38 @@ interface PaymentMethodPopupProps {
   isVisible: boolean;
   onCancel: () => void;
   onSubmit: (payment: string | undefined) => void;
-  showCash: boolean
-  rideFlow: boolean
+  showCash: boolean;
+  rideFlow: boolean;
+  selected: any;
 }
 
 type Nav = {
-  navigate: (value: string) => void;
+  navigate: (value: string, params?: any) => void;
 }
 
 const PaymentMethodPopup = ({
-  isVisible, onCancel, onSubmit, showCash, rideFlow,
+  isVisible, onCancel, onSubmit, showCash, rideFlow, selected,
 }: PaymentMethodPopupProps) => {
   const usePayments = PaymentsContext.useContainer();
-  const [paymentId, setPaymentId] = useState(usePayments.getClientDefaultMethod()?.id);
+  const [paymentId, setPaymentId] = useState<string | undefined>(undefined);
+  const [selectedPaymentId, setSelectedPaymentId] = useState<string | undefined>(selected);
+
+  useEffect(() => {
+    usePayments.getOrFetchCustomer();
+  }, []);
+
+  useEffect(() => {
+    const updateDefaultPaymentMethod = async () => {
+      const paymentMethod = await usePayments.getClientDefaultMethod();
+      setSelectedPaymentId(selected
+      || paymentMethod?.id);
+      setPaymentId(paymentMethod?.id);
+    };
+
+
+    updateDefaultPaymentMethod();
+  }, [usePayments.paymentMethods]);
+
   const navigation = useNavigation<Nav>();
 
   const onSave = () => {
@@ -52,11 +71,12 @@ const PaymentMethodPopup = ({
   useEffect(() => {
     const getIsCashEnabled = async () => {
       const result = await usePayments.isCashPaymentEnabled();
-      setIsCashEnabled(result.value);
+
+      setIsCashEnabled(result);
     };
 
     getIsCashEnabled();
-  }, [usePayments]);
+  }, [usePayments.paymentMethods]);
 
   return (
     <Modal
@@ -66,30 +86,32 @@ const PaymentMethodPopup = ({
         <TitleView>
           <Title>{i18n.t('popups.choosePaymentMethod.title')}</Title>
           <CloseButton
-            onPress={() => {
+            noBackground
+            onPress={async () => {
               onCancel();
+              setSelectedPaymentId(selected
+                || (await usePayments.getClientDefaultMethod())?.id);
               rideFlow
                 ? navigation.navigate(MAIN_ROUTES.HOME)
                 : navigation.navigate(MAIN_ROUTES.PAYMENT);
             }}
           >
-            <SvgIcon Svg={closeXIcon} />
-
+            <SvgIcon Svg={closeXIcon} width={10} height={10} fill="#333" />
           </CloseButton>
         </TitleView>
         <CardsScrollView>
           <Container>
-
             <View>
               {(isCashEnabled && showCash
                 ? [...usePayments.paymentMethods, cashPaymentMethod]
                 : usePayments.paymentMethods).map((paymentMethod: any, i) => (
                   <PaymentMethod
                     {...paymentMethod}
-                    selected={paymentId === paymentMethod.id}
-                    mark={paymentId === paymentMethod.id}
+                    selected={selectedPaymentId === paymentMethod.id}
+                    mark={selectedPaymentId === paymentMethod.id}
                     onPress={() => {
                       setPaymentId(paymentMethod.id);
+                      setSelectedPaymentId(paymentMethod.id);
                     }}
                   />
               ))}
@@ -97,7 +119,7 @@ const PaymentMethodPopup = ({
                 addNew
                 onPress={() => {
                   onCancel();
-                  navigation.navigate(MAIN_ROUTES.PAYMENT);
+                  navigation.navigate(MAIN_ROUTES.PAYMENT, { showAdd: true, rideFlow });
                 }}
               />
             </View>
@@ -107,7 +129,9 @@ const PaymentMethodPopup = ({
           <FlexCont style={{ justifyContent: 'center' }}>
             <SelectButton
               type="confirm"
-              onPress={() => onSave()}
+              onPress={() => {
+                onSave();
+              }}
             >
               {i18n.t('payments.select')}
             </SelectButton>
@@ -122,12 +146,14 @@ PaymentMethodPopup.propTypes = {
   onSave: PropTypes.func,
   showCash: PropTypes.bool,
   rideFlow: PropTypes.bool,
+  selected: PropTypes.string,
 };
 
 PaymentMethodPopup.defaultProps = {
   onSave: null,
   showCash: true,
   rideFlow: false,
+  selected: null,
 };
 
 export default PaymentMethodPopup;

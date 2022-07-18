@@ -2,7 +2,8 @@ import React, { useContext, useEffect, useState } from 'react';
 import {
   Linking, Text, View,
 } from 'react-native';
-import styled from 'styled-components';
+import Config from 'react-native-config';
+import styled, { ThemeContext } from 'styled-components';
 import { useBottomSheet } from '@gorhom/bottom-sheet';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import moment from 'moment';
@@ -200,6 +201,7 @@ const BsPage = ({
         )}
         {SecondaryButtonText && (
         <SecondaryButton
+          disabled={buttonDisabled}
           style={{ width: buttonWidth }}
           warning={warning}
           onPress={onSecondaryButtonPress}
@@ -271,27 +273,17 @@ export const ConfirmPickupTime = (props: any) => {
   );
 };
 
-export const LocationRequest = (props: any) => {
-  const [operation, setOperation] = useState();
-
-  const getOperationName = async () => {
-    // get operation name
-  };
-  useEffect(() => {
-    getOperationName();
-  }, []);
-  return (
-    <BsPage
-      TitleText={i18n.t('bottomSheetContent.locationRequest.titleText')}
-      ButtonText={i18n.t('bottomSheetContent.locationRequest.buttonText')}
-      SecondaryButtonText={i18n.t('bottomSheetContent.locationRequest.secondaryButtonText')}
-      SubTitleText={i18n.t('bottomSheetContent.locationRequest.subTitleText', { operation })}
-      onButtonPress={Linking.openSettings}
-      fullWidthButtons
-      {...props}
-    />
-  );
-};
+export const LocationRequest = (props: any) => (
+  <BsPage
+    TitleText={i18n.t('bottomSheetContent.locationRequest.titleText')}
+    ButtonText={i18n.t('bottomSheetContent.locationRequest.buttonText')}
+    SecondaryButtonText={i18n.t('bottomSheetContent.locationRequest.secondaryButtonText')}
+    SubTitleText={i18n.t('bottomSheetContent.locationRequest.subTitleText', { operation: Config.OPERATION_NAME })}
+    onButtonPress={Linking.openSettings}
+    fullWidthButtons
+    {...props}
+  />
+);
 
 export const CancelRide = (props: any) => {
   const [isLoading, setIsLoading] = useState(false);
@@ -311,6 +303,7 @@ export const CancelRide = (props: any) => {
       }}
       onSecondaryButtonPress={() => changeBsPage(BS_PAGES.ACTIVE_RIDE)}
       warning
+      buttonDisabled={isLoading}
       {...props}
     />
   );
@@ -318,18 +311,17 @@ export const CancelRide = (props: any) => {
 
 export const NotAvailableHere = (props: any) => {
   const { setSnapPointsState } = useContext(BottomSheetContext);
-
+  const { primaryColor } = useContext(ThemeContext);
   useEffect(() => {
     setSnapPointsState(SNAP_POINT_STATES.NOT_IN_TERRITORY);
   }, []);
-
 
   return (
     <BsPage
       TitleText={i18n.t('bottomSheetContent.notAvailableHere.titleText')}
       ButtonText={i18n.t('bottomSheetContent.notAvailableHere.buttonText')}
       SubTitleText={i18n.t('bottomSheetContent.notAvailableHere.subTitleText')}
-      Image={<SvgIcon Svg={outOfTerritoryIcon} height={85} width={140} />}
+      Image={<SvgIcon Svg={outOfTerritoryIcon} height={85} width={140} fill={primaryColor} />}
       fullWidthButtons
       {...props}
     />
@@ -433,7 +425,8 @@ export const NoPayment = (props: any) => {
 
 export const ConfirmingRide = (props: any) => {
   const { setSnapPointsState } = useContext(BottomSheetContext);
-
+  const { changeBsPage } = useContext(RideStateContextContext);
+  const { ride } = useContext(RidePageContext);
   useEffect(() => {
     setSnapPointsState(SNAP_POINT_STATES.CONFIRMING_RIDE);
   }, []);
@@ -441,6 +434,9 @@ export const ConfirmingRide = (props: any) => {
   return (
     <BsPage
       TitleText={i18n.t('bottomSheetContent.confirmingRide.titleText')}
+      SecondaryButtonText={ride?.id ? i18n.t('bottomSheetContent.confirmingRide.secondaryButtonText') : null}
+      onSecondaryButtonPress={() => changeBsPage(BS_PAGES.CANCEL_RIDE)}
+      fullWidthButtons
       {...props}
     >
       <LoaderContainer>
@@ -458,6 +454,7 @@ export const ConfirmingRide = (props: any) => {
 
 export const NoAvailableVehicles = (props: any) => {
   const { setSnapPointsState } = useContext(BottomSheetContext);
+  const { primaryColor } = useContext(ThemeContext);
 
   useEffect(() => {
     setSnapPointsState(SNAP_POINT_STATES.NO_AVAILABLE_VEHICLES);
@@ -469,7 +466,7 @@ export const NoAvailableVehicles = (props: any) => {
       ButtonText={i18n.t('bottomSheetContent.noAvailableVehicles.buttonText')}
       SubTitleText={i18n.t('bottomSheetContent.noAvailableVehicles.subTitleText')}
       fullWidthButtons
-      Image={<SvgIcon Svg={busyImage} height={85} width={140} />}
+      Image={<SvgIcon Svg={busyImage} height={85} width={140} fill={primaryColor} />}
       {...props}
     />
   );
