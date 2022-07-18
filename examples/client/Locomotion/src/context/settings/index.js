@@ -32,21 +32,23 @@ const useSettings = () => {
   const getMultipleSettingByKey = async (keys) => {
     const keyValueMap = await StorageService.get(keys);
     const cachedKeys = Object.keys(keyValueMap);
-    const keysAfterCache = cachedKeys.map((cacheKey) => {
+    const keysAfterCache = cachedKeys.filter((cacheKey) => {
       const value = keyValueMap[cacheKey];
-      if (value === undefined) {
-        return cacheKey;
-      }
+      return !Object.keys(keyValueMap).includes(cacheKey);
     });
     const settingMap = {};
-    const values = await settingsApi.getMultipleByKeys(keysAfterCache);
-    // eslint-disable-next-line array-callback-return
-    keys.map((key, idx) => {
-      if (key !== null) {
-        settingMap[key] = values[idx];
-      }
+    if (keysAfterCache.length > 0) {
+      const values = await settingsApi.getMultipleByKeys(keysAfterCache);
+      // eslint-disable-next-line array-callback-return
+      keys.map((key, idx) => {
+        if (key !== null) {
+          settingMap[key] = values[idx];
+        }
+      });
+      await StorageService.save(settingMap);
+    }
+
     });
-    await StorageService.save(settingMap);
     return {
       ...settingMap,
       ...keyValueMap,
