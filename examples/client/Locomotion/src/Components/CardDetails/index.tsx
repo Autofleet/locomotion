@@ -76,9 +76,6 @@ const CardDetails = ({
               {paymentMethod && paymentMethod.name
                 ? (
                   <Card
-                    onPress={() => {
-                      navigation.navigate(MAIN_ROUTES.EDIT_NICKNAME, { ...paymentMethod });
-                    }}
                     title={i18n.t('payments.cardDetails.nickname')}
                   >
                     {paymentMethod.name}

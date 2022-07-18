@@ -9,7 +9,9 @@ export type InformationCardProps = {
   children?: any,
   onPress?: () => void,
   verified?: boolean,
-  showUnverified?: boolean
+  showUnverified?: boolean,
+  icon?: any,
+  onIconPress?: () => void
 }
 
 const InformationCard = ({
@@ -18,6 +20,8 @@ const InformationCard = ({
   onPress = undefined,
   verified = false,
   showUnverified = false,
+  icon = undefined,
+  onIconPress,
   ...props
 }: InformationCardProps) => (
   onPress
@@ -28,6 +32,8 @@ const InformationCard = ({
           onPress={onPress}
           verified={verified}
           showUnverified={showUnverified}
+          icon={icon}
+          onIconPress={onIconPress}
         >
           {children}
         </Card>
@@ -40,6 +46,8 @@ const InformationCard = ({
           onPress={onPress}
           verified={verified}
           showUnverified={showUnverified}
+          icon={icon}
+          onIconPress={onIconPress}
         >
           {children}
         </Card>
@@ -55,6 +63,8 @@ InformationCard.defaultProps = {
   onPress: undefined,
   verified: false,
   showUnverified: false,
+  icon: undefined,
+  onIconPress: undefined,
 };
 
 InformationCard.propTypes = {
@@ -63,6 +73,7 @@ InformationCard.propTypes = {
   onPress: propsTypes.func,
   verified: propsTypes.bool,
   showUnverified: propsTypes.bool,
+  onIconPress: propsTypes.func,
 };
 
 export default InformationCard;

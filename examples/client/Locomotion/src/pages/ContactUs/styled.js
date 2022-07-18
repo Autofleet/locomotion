@@ -6,15 +6,15 @@ import SvgIcon from '../../Components/SvgIcon';
 import { Text } from '../Profile/ScreenText/styles';
 
 export const LearnMoreIcon = styled(SvgIcon)`
-margin-top: 10px;
+margin-top: 8px;
 transform: rotate(135deg);
 `;
 
 export const LearnMoreButton = styled(Button)`
   min-width: 100%;
-  padding-left: 110px;
   flex-direction: row;
   background-color: white;
+  justify-content: center;
 `;
 
 export const LearnMoreText = styled(Text)`
@@ -28,4 +28,14 @@ width: 100%;
 
 export const ContactUsPageLogoContainer = styled(LogoContainer)`
 max-height: 200px;
+padding: 20px;
+display: flex;
+justify-content: center;
+align-items: center;
+`;
+
+export const ContactUsLogo = styled.Image`
+position: relative;
+display: flex;
+  
 `;
