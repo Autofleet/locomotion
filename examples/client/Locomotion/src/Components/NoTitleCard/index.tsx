@@ -8,25 +8,30 @@ import {
 type NoTitleCardProps = {
     onPress: () => void | undefined,
     children: any,
+    showArrow: boolean,
 }
 
-const NoTitleCard = ({ onPress, children, ...props } : NoTitleCardProps) => (
+const NoTitleCard = ({
+  onPress, children, showArrow, ...props
+} : NoTitleCardProps) => (
   <TouchableOpacity onPress={onPress} {...props}>
     <CardContainer>
       <CardContantContainer>
         <CardText style={{ marginVertical: 10 }}>{children}</CardText>
       </CardContantContainer>
-      <ArrowContainer>{onPress !== undefined ? <Arrow /> : undefined}</ArrowContainer>
+      <ArrowContainer>{showArrow ? <Arrow /> : undefined}</ArrowContainer>
     </CardContainer>
   </TouchableOpacity>
 );
 
 NoTitleCard.defaultProps = {
   onPress: undefined,
+  showArrow: false,
 };
 
 NoTitleCard.propTypes = {
   onPress: propsTypes.func,
+  showArrow: propsTypes.bool,
 };
 
 export default NoTitleCard;

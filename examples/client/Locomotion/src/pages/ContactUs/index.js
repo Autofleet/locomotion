@@ -101,7 +101,7 @@ export default ({ navigation, menuSide }) => {
                 >
                   <Text>{settings.contactPhone}</Text>
                 </Card>
-                <NoTitleCard>
+                <NoTitleCard onPress={() => openContactUs()}>
                   <LearnMoreButton onPress={() => openContactUs()}>
                     <LearnMoreText>{i18n.t('contactUs.learnMore')}</LearnMoreText>
                     <LearnMoreIcon Svg={arrowBack} fill="#24aaf2" />
@@ -110,12 +110,12 @@ export default ({ navigation, menuSide }) => {
               </CardsContainer>
               <CardsContainer>
                 <CardsTitle title={i18n.t('contactUs.legalTitle')} />
-                <NoTitleCard onPress={() => openPrivacy()}>
+                <NoTitleCard showArrow onPress={() => openPrivacy()}>
                   <Text>
                     {i18n.t('contactUs.privacyPolicy')}
                   </Text>
                 </NoTitleCard>
-                <NoTitleCard onPress={() => openTerms()}>
+                <NoTitleCard showArrow onPress={() => openTerms()}>
                   <Text>{i18n.t('contactUs.termsOfUse')}</Text>
                 </NoTitleCard>
               </CardsContainer>

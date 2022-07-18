@@ -12,9 +12,9 @@ transform: rotate(135deg);
 
 export const LearnMoreButton = styled(Button)`
   min-width: 100%;
-  padding-left: 110px;
   flex-direction: row;
   background-color: white;
+  justify-content: center;
 `;
 
 export const LearnMoreText = styled(Text)`
