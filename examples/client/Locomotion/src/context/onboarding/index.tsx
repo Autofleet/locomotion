@@ -53,7 +53,7 @@ const OnboardingContextProvider = ({ children }: { children: any }) => {
     [MAIN_ROUTES.CODE]: true,
     [MAIN_ROUTES.NAME]: true,
     [MAIN_ROUTES.EMAIL]: true,
-    [MAIN_ROUTES.EMAIL_CODE]: true,
+    [MAIN_ROUTES.EMAIL_CODE]: false,
     [MAIN_ROUTES.AVATAR]: false,
     [MAIN_ROUTES.CARD]: false,
   });

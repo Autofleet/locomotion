@@ -1,3 +1,4 @@
+import { unitsFactors } from '@turf/turf';
 import { useState } from 'react';
 import { createContainer } from 'unstated-next';
 import { StorageService } from '../../services';
@@ -32,24 +33,23 @@ const useSettings = () => {
   const getMultipleSettingByKey = async (keys) => {
     const keyValueMap = await StorageService.get(keys);
     const cachedKeys = Object.keys(keyValueMap);
-    const keysAfterCache = cachedKeys.map((cacheKey) => {
-      const value = keyValueMap[cacheKey];
-      if (value === undefined) {
-        return cacheKey;
-      }
-    });
+    const keysAfterCache = cachedKeys.filter(cacheKey => !Object.keys(keyValueMap)
+      .includes(cacheKey) || keyValueMap[cacheKey] === undefined);
     const settingMap = {};
-    const values = await settingsApi.getMultipleByKeys(keysAfterCache);
-    // eslint-disable-next-line array-callback-return
-    keys.map((key, idx) => {
-      if (key !== null) {
-        settingMap[key] = values[idx];
-      }
-    });
-    await StorageService.save(settingMap);
+    if (keysAfterCache.length > 0) {
+      const values = await settingsApi.getMultipleByKeys(keysAfterCache);
+      // eslint-disable-next-line array-callback-return
+      keys.map((key, idx) => {
+        if (key !== null) {
+          settingMap[key] = values[idx];
+        }
+      });
+      await StorageService.save(settingMap);
+    }
+
     return {
-      ...settingMap,
       ...keyValueMap,
+      ...settingMap,
     };
   };
 

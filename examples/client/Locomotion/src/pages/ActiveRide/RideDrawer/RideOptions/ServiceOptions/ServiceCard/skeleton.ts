@@ -2,7 +2,9 @@
 export const serviceCardSkeleton = {
   flexDirection: 'row',
   width: '100%',
-  padding: 20,
+  paddingLeft: 20,
+  paddingRight: 20,
+  paddingBottom: 30,
   alignItems: 'center',
   children: [
     {

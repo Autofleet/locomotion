@@ -297,7 +297,7 @@ const RidePage = ({ mapSettings, navigation }) => {
       <MapOverlayButtons
         style={{
           marginBottom: topBarText ? 40 : 0,
-          bottom: `${parseFloat(snapPoints[0]) + 2}%`,
+          bottom: parseFloat(snapPoints[0]) + 25,
         }}
       >
         {currentBsPage === BS_PAGES.ADDRESS_SELECTOR

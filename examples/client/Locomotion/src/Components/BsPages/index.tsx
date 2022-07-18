@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import {
-  Linking, Text, View,
+  Linking, Platform, Text, View,
 } from 'react-native';
 import Config from 'react-native-config';
 import styled, { ThemeContext } from 'styled-components';
@@ -125,7 +125,8 @@ const Footer = styled(View)<FooterInterface>`
   width: 100%;
   display: flex;
   flex-direction: ${({ fullWidthButtons }) => (fullWidthButtons ? 'column' : 'row')};
-  margin-bottom: 10px;
+  margin-bottom: ${Platform.OS === 'android'
+    ? '10px' : '0px'};
   justify-content: space-between;
   align-items: center;
 `;
