@@ -12,6 +12,7 @@ import SvgIcon from '../SvgIcon';
 import selected from '../../assets/selected-v.svg';
 import { Start, StartCapital } from '../../lib/text-direction';
 import cashIcon from '../../assets/cash.svg';
+import chevronIcon from '../../assets/chevron.svg';
 
 type ContainerProps = {
   children: React.ReactNode,
@@ -79,28 +80,6 @@ const style = {
   [StartCapital()]: 28,
 };
 
-const CashSelected = (
-  <SvgIcon
-    style={{
-      position: 'absolute',
-      right: 0,
-      bottom: 0,
-    }}
-    Svg={selected}
-  />
-);
-
-const CreditCardSelected = (
-  <SvgIcon
-    style={{
-      position: 'absolute',
-      right: 0,
-      bottom: 5,
-    }}
-    Svg={selected}
-  />
-);
-
 const isCashPaymentMethod = (paymentMethod: any) => paymentMethod.id === cashPaymentMethod.id;
 
 
@@ -126,8 +105,16 @@ const CardRow = (paymentMethod: any) => (
               {isCashPaymentMethod(paymentMethod)
                 ? <SvgIcon Svg={cashIcon} width={40} height={25} />
                 : <PaymentIcon type={paymentMethod.brand} />}
-              {paymentMethod.mark ? (isCashPaymentMethod(paymentMethod)
-                ? CashSelected : CreditCardSelected) : null }
+              {paymentMethod.mark ? (
+                <SvgIcon
+                  style={{
+                    position: 'absolute',
+                    right: -7,
+                    bottom: -7,
+                  }}
+                  Svg={selected}
+                />
+              ) : null }
             </>
           )
         }
@@ -161,6 +148,7 @@ const CardRow = (paymentMethod: any) => (
             </>
           )}
       </TextContainer>
+      {paymentMethod.showArrow && <SvgIcon Svg={chevronIcon} stroke="#d7d7d7" />}
     </Container>
   </TouchableOpacity>
 );

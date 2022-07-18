@@ -4,6 +4,7 @@ import React, {
 import Config from 'react-native-config';
 import { useNavigation } from '@react-navigation/native';
 import _ from 'lodash';
+import moment from 'moment';
 import { UserContext } from '../user';
 import { getPosition, DEFAULT_COORDS } from '../../services/geo';
 import { getPlaces, getGeocode, getPlaceDetails } from './google-api';
@@ -40,6 +41,7 @@ export interface RideInterface {
   notes?: string;
   paymentMethodId?: string;
   serviceId?: string;
+  afterTime?: number;
   driver?: any;
   stopPoints?: any[];
   vehicle?: any;
@@ -552,6 +554,7 @@ const RidePageContextProvider = ({ children }: {
       serviceId: chosenService?.id,
       paymentMethodId: ride.paymentMethodId,
       rideType: 'passenger',
+      ...(ride.afterTime && { scheduledTo: ride.afterTime }),
       stopPoints: stopPoints.map((sp, i) => ({
         lat: Number(sp.lat),
         lng: Number(sp.lng),

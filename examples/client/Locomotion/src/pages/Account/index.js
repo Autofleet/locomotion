@@ -1,4 +1,4 @@
-import React, { useEffect, useContext } from 'react';
+import React, { useEffect, useContext, useState } from 'react';
 import { useRoute } from '@react-navigation/native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import moment from 'moment';
@@ -64,9 +64,18 @@ const AccountHeader = () => {
 };
 
 const AccountContent = ({ navigation }) => {
+  const [defaultPaymentMethod, setDefaultPaymentMethod] = useState(null);
+
   const { user } = useContext(UserContext);
   const { getClientDefaultMethod } = PaymentsContext.useContainer();
-  const defaultPaymentMethod = getClientDefaultMethod();
+  useEffect(() => {
+    const updateDefault = async () => {
+      const newDefault = await getClientDefaultMethod();
+      setDefaultPaymentMethod(newDefault);
+    };
+
+    updateDefault();
+  }, []);
   const emailIsVerified = user?.isEmailVerified;
   const onEmailPress = () => (emailIsVerified
     ? navigation.navigate(MAIN_ROUTES.EMAIL, {
@@ -140,12 +149,12 @@ export default ({ navigation, menuSide }) => {
 
   return (
     <PageContainer>
+      <PageHeader
+        title={i18n.t('onboarding.pageTitle')}
+        onIconPress={() => navigation.navigate(MAIN_ROUTES.HOME)}
+        iconSide={menuSide}
+      />
       <KeyboardAwareScrollView extraScrollHeight={20} enableOnAndroid>
-        <PageHeader
-          title={i18n.t('onboarding.pageTitle')}
-          onIconPress={() => navigation.navigate(MAIN_ROUTES.HOME)}
-          iconSide={menuSide}
-        />
         <AccountHeader />
         <AccountContent navigation={navigation} />
       </KeyboardAwareScrollView>

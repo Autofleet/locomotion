@@ -4,13 +4,14 @@ import PinCode from '../../Components/PinCode';
 import SaveButton from './SaveButton';
 import { OnboardingContext } from '../../context/onboarding';
 import {
-  ErrorText, PageContainer, ResendButton, ResendContainer, ResendText, SafeView,
+  ErrorText, ResendButton, ResendContainer, ResendText,
 } from './styles';
 import i18n from '../../I18n';
 import Header from './Header';
 import ScreenText from './ScreenText';
 import { MAIN_ROUTES } from '../routes';
 import { UserContext } from '../../context/user';
+import { PageContainer, ContentContainer } from '../styles';
 
 const CODE_LENGTH = 4;
 
@@ -49,9 +50,9 @@ const Code = () => {
   };
 
   return (
-    <SafeView>
+    <PageContainer>
       <Header title={i18n.t('onboarding.pages.emailCode.title')} page={MAIN_ROUTES.EMAIL_CODE} />
-      <PageContainer>
+      <ContentContainer>
         <ScreenText
           text={i18n.t('onboarding.pages.emailCode.text')}
           subText={i18n.t('onboarding.pages.emailCode.subText', { email: user.email })}
@@ -79,8 +80,8 @@ const Code = () => {
           isInvalid={showErrorText || code.length < CODE_LENGTH || loading}
           onFail={() => setShowErrorText(true)}
         />
-      </PageContainer>
-    </SafeView>
+      </ContentContainer>
+    </PageContainer>
   );
 };
 

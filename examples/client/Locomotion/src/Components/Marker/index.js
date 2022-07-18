@@ -38,7 +38,7 @@ const StopPointMarker = ({
         Svg={dropoffIcon}
         width={25}
         height={50}
-        style={{ top: Platform.OS === 'ios' ? -35 : 0 }}
+        style={{ top: Platform.OS === 'ios' ? -45 : 0 }}
       />,
       displayName: i18n.t('rideDetails.type.dropoff'),
     },
