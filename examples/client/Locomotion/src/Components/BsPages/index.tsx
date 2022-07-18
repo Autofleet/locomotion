@@ -3,7 +3,7 @@ import {
   Linking, Text, View,
 } from 'react-native';
 import Config from 'react-native-config';
-import styled, { ThemeContext } from 'styled-components';
+import styled from 'styled-components';
 import { useBottomSheet } from '@gorhom/bottom-sheet';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import moment from 'moment';
