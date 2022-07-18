@@ -10,7 +10,7 @@ const BottomSheetInputField = forwardRef((props, ref) => (
       {...props}
       ref={ref}
     />
-    {!!props.value && !!props.value.length > 0 && (
+    {!!props.value && props.value.length > 0 && (
     <TouchableOpacity onPress={() => {
       if (props.clear) {
         props.clear();

@@ -17,7 +17,10 @@ import { BS_PAGES } from '../../../../context/ridePageStateContext/utils';
 
 
 const RideOptions = () => {
+  const usePayments = payments.useContainer();
+  const [defaultPaymentMethod, setDefaultPaymentMethod] = useState<PaymentMethodInterface | undefined>(undefined);
   const [popupToShow, setPopupToShow] = useState<popupNames | null>(null);
+
   const {
     updateRidePayload,
     ride,
@@ -34,10 +37,6 @@ const RideOptions = () => {
     changeBsPage,
   } = useContext(RideStateContextContext);
 
-  const {
-    getClientDefaultMethod,
-  } = payments.useContainer();
-
   const setPopupName = (popupName: popupNames) => {
     setPopupToShow(popupName);
   };
@@ -46,6 +45,38 @@ const RideOptions = () => {
     setPopupToShow(null);
   };
 
+
+  useEffect(() => {
+    const updateClient = async () => {
+      await usePayments.loadCustomer();
+    };
+
+    updateClient();
+  }, []);
+
+  const loadCustomerData = async () => {
+    await usePayments.getOrFetchCustomer();
+  };
+
+  useEffect(() => {
+    loadCustomerData();
+  }, []);
+
+  useEffect(() => {
+    const updateDefaultPaymentMethod = async () => {
+      const paymentMethod: PaymentMethodInterface |
+       undefined = await usePayments.getClientDefaultMethod();
+      if (paymentMethod) {
+        updateRidePayload({
+          paymentMethodId: paymentMethod.id,
+        });
+        setDefaultPaymentMethod(paymentMethod);
+      }
+    };
+
+    updateDefaultPaymentMethod();
+  }, [usePayments.paymentMethods]);
+
   useEffect(() => {
     setFooterComponent(() => (
       <RideButtons
@@ -53,13 +84,6 @@ const RideOptions = () => {
         setPopupName={setPopupName}
       />
     ));
-
-    const paymentMethod: PaymentMethodInterface | undefined = getClientDefaultMethod();
-    if (paymentMethod) {
-      updateRidePayload({
-        paymentMethodId: paymentMethod.id,
-      });
-    }
 
     changeBsPage(BS_PAGES.SERVICE_ESTIMATIONS);
     return () => {
@@ -98,6 +122,9 @@ const RideOptions = () => {
         }}
       />
       <ChoosePaymentMethod
+        selected={ride?.paymentMethodId?.length
+          && usePayments.paymentMethods.includes(ride?.paymentMethodId as never)
+          ? ride.paymentMethodId : defaultPaymentMethod?.id}
         rideFlow
         isVisible={popupToShow === 'payment'}
         onCancel={() => clearPopup()}

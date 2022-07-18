@@ -423,8 +423,9 @@ const RidePageContextProvider = ({ children }: {
 
   const updateRequestSp = (data: any[], index?: number) => {
     const reqSps = [...requestStopPoints];
-    index = index
-    || (_.isNil(selectedInputIndex) ? requestStopPoints.length - 1 : selectedInputIndex);
+    if (_.isNil(index)) {
+      index = (_.isNil(selectedInputIndex) ? requestStopPoints.length - 1 : selectedInputIndex);
+    }
     reqSps[index || 0] = {
       ...reqSps[index || 0],
       ...data,

@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import { LogBox } from 'react-native';
 import Config from 'react-native-config';
+import { enableScreens } from 'react-native-screens';
 import { initStripe } from '@stripe/stripe-react-native';
 import 'react-native-gesture-handler';
 import crashlytics from '@react-native-firebase/crashlytics';
@@ -25,6 +26,7 @@ export default (props) => {
       publishableKey: STRIPE_PUBLISHER_KEY,
       merchantIdentifier: 'merchant.identifier',
     });
+    enableScreens(false);
   }, []);
 
   return (
