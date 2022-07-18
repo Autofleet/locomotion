@@ -23,6 +23,7 @@ import {
   ContactUsPageLogoContainer,
   ContactUsPageView, LearnMoreButton, LearnMoreIcon, LearnMoreText,
 } from './styled';
+import { ScrollView } from 'react-native-gesture-handler';
 
 export default ({ navigation, menuSide }) => {
   const route = useRoute();
@@ -79,47 +80,49 @@ export default ({ navigation, menuSide }) => {
               onIconPress={() => navigation.navigate(MAIN_ROUTES.HOME)}
               iconSide={menuSide}
             />
-            <ContactUsPageLogoContainer>
-              <ContactUsLogo resizeMode="cover" source={logo} />
-            </ContactUsPageLogoContainer>
-            <Container>
-              <CardsContainer>
-                <CardsTitle title={i18n.t('contactUs.contactInformationTitle')} />
-                <Card
-                  icon={copyIcon}
-                  onIconPress={() => {
-                    if (settings.contactEmail) { Clipboard.setString(settings.contactEmail); }
-                  }}
-                  title={i18n.t('onboarding.emailPlaceholder')}
-                >
-                  <Text>{settings.contactEmail}</Text>
-                </Card>
-                <Card
-                  icon={phoneIcon}
-                  onIconPress={() => (settings.contactPhone ? Linking.openURL(`tel:${settings.contactPhone}`) : undefined)}
-                  title={i18n.t('onboarding.phonePlaceholder')}
-                >
-                  <Text>{settings.contactPhone}</Text>
-                </Card>
-                <NoTitleCard onPress={() => openContactUs()}>
-                  <LearnMoreButton onPress={() => openContactUs()}>
-                    <LearnMoreText>{i18n.t('contactUs.learnMore')}</LearnMoreText>
-                    <LearnMoreIcon Svg={arrowBack} fill="#24aaf2" />
-                  </LearnMoreButton>
-                </NoTitleCard>
-              </CardsContainer>
-              <CardsContainer>
-                <CardsTitle title={i18n.t('contactUs.legalTitle')} />
-                <NoTitleCard showArrow onPress={() => openPrivacy()}>
-                  <Text>
-                    {i18n.t('contactUs.privacyPolicy')}
-                  </Text>
-                </NoTitleCard>
-                <NoTitleCard showArrow onPress={() => openTerms()}>
-                  <Text>{i18n.t('contactUs.termsOfUse')}</Text>
-                </NoTitleCard>
-              </CardsContainer>
-            </Container>
+            <ScrollView>
+              <ContactUsPageLogoContainer>
+                <ContactUsLogo resizeMode="cover" source={logo} />
+              </ContactUsPageLogoContainer>
+              <Container>
+                <CardsContainer>
+                  <CardsTitle title={i18n.t('contactUs.contactInformationTitle')} />
+                  <Card
+                    icon={copyIcon}
+                    onIconPress={() => {
+                      if (settings.contactEmail) { Clipboard.setString(settings.contactEmail); }
+                    }}
+                    title={i18n.t('onboarding.emailPlaceholder')}
+                  >
+                    <Text>{settings.contactEmail}</Text>
+                  </Card>
+                  <Card
+                    icon={phoneIcon}
+                    onIconPress={() => (settings.contactPhone ? Linking.openURL(`tel:${settings.contactPhone}`) : undefined)}
+                    title={i18n.t('onboarding.phonePlaceholder')}
+                  >
+                    <Text>{settings.contactPhone}</Text>
+                  </Card>
+                  <NoTitleCard onPress={() => openContactUs()}>
+                    <LearnMoreButton onPress={() => openContactUs()}>
+                      <LearnMoreText>{i18n.t('contactUs.learnMore')}</LearnMoreText>
+                      <LearnMoreIcon Svg={arrowBack} fill="#24aaf2" />
+                    </LearnMoreButton>
+                  </NoTitleCard>
+                </CardsContainer>
+                <CardsContainer>
+                  <CardsTitle title={i18n.t('contactUs.legalTitle')} />
+                  <NoTitleCard showArrow onPress={() => openPrivacy()}>
+                    <Text>
+                      {i18n.t('contactUs.privacyPolicy')}
+                    </Text>
+                  </NoTitleCard>
+                  <NoTitleCard showArrow onPress={() => openTerms()}>
+                    <Text>{i18n.t('contactUs.termsOfUse')}</Text>
+                  </NoTitleCard>
+                </CardsContainer>
+              </Container>
+            </ScrollView>
           </ContactUsPageView>
         </>
       ) : (
