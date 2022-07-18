@@ -35,7 +35,7 @@ const StopPointsViewer = ({ goBackToAddressSelector }: StopPointsViewerProps) =>
         onPress={() => goBackToAddressSelector(STOP_POINT_TYPES.STOP_POINT_DROPOFF)}
       >
         <StreetAddress>
-          {lastSp.streetAddress}
+          {lastSp?.streetAddress}
         </StreetAddress>
       </StreetAddressContainer>
       <SvgIcon
