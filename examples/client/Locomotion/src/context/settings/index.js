@@ -1,3 +1,4 @@
+import { unitsFactors } from '@turf/turf';
 import { useState } from 'react';
 import { createContainer } from 'unstated-next';
 import { StorageService } from '../../services';
@@ -32,10 +33,8 @@ const useSettings = () => {
   const getMultipleSettingByKey = async (keys) => {
     const keyValueMap = await StorageService.get(keys);
     const cachedKeys = Object.keys(keyValueMap);
-    const keysAfterCache = cachedKeys.filter((cacheKey) => {
-      const value = keyValueMap[cacheKey];
-      return !Object.keys(keyValueMap).includes(cacheKey);
-    });
+    const keysAfterCache = cachedKeys.filter(cacheKey => !Object.keys(keyValueMap)
+      .includes(cacheKey) || keyValueMap[cacheKey] === undefined);
     const settingMap = {};
     if (keysAfterCache.length > 0) {
       const values = await settingsApi.getMultipleByKeys(keysAfterCache);
@@ -48,10 +47,9 @@ const useSettings = () => {
       await StorageService.save(settingMap);
     }
 
-    });
     return {
-      ...settingMap,
       ...keyValueMap,
+      ...settingMap,
     };
   };
 
