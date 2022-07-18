@@ -38,10 +38,15 @@ import RideCanceledPopup from '../../popups/RideCanceledPopup';
 import SquareSvgButton from '../../Components/SquareSvgButton';
 import targetIcon from '../../assets/target.svg';
 import OneSignal from '../../services/one-signal';
+import settings from '../../context/settings';
+import SETTINGS_KEYS from '../../context/settings/keys';
+import { checkVersionAndForceUpdateIfNeeded } from '../../services/VersionCheck';
+
 
 const RidePage = ({ mapSettings, navigation }) => {
   const { locationGranted, setLocationGranted, updatePushToken } = useContext(UserContext);
   const [addressSelectorFocus, setAddressSelectorFocus] = useState(null);
+  const { getSettingByKey } = settings.useContainer();
   const mapRef = useRef();
   const bottomSheetRef = useRef(null);
   const {
@@ -193,13 +198,26 @@ const RidePage = ({ mapSettings, navigation }) => {
     }, []),
   );
 
+  const versionCheck = async () => {
+    const minAppVersion = await getSettingByKey(
+      SETTINGS_KEYS.MIN_APP_VERSION,
+    );
+
+    await checkVersionAndForceUpdateIfNeeded(minAppVersion);
+  };
+
+  const initChecks = async () => {
+    await versionCheck();
+    await checkLocationPermission();
+  };
+
   useEffect(() => {
-    checkLocationPermission();
+    initChecks();
     const subscription = AppState.addEventListener('change', (nextAppState) => {
       if (
         nextAppState === 'active'
       ) {
-        checkLocationPermission();
+        initChecks();
       }
     });
 
