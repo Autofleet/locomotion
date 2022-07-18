@@ -48,7 +48,7 @@ export const BottomSheetInputContainer = styled(View)`
 
 export const IconContainer = styled(View)`
   position: absolute;
-  right: 3;
-  top: 1;
-  padding: 14px;
+  right: -1;
+  top: -1;
+  padding: 16px;
 `;
