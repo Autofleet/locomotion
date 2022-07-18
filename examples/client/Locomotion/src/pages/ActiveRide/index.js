@@ -286,7 +286,7 @@ const RidePage = ({ mapSettings, navigation }) => {
         <SquareSvgButton
           onPress={focusCurrentLocation}
           icon={targetIcon}
-          style={{ position: 'absolute', bottom: `${parseFloat(snapPoints[0]) + 2}%`, right: 20 }}
+          style={{ position: 'absolute', bottom: parseFloat(snapPoints[0] + 25), right: 20 }}
         />
       )}
       <BottomSheet
