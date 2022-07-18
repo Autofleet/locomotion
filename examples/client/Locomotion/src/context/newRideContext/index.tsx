@@ -42,7 +42,7 @@ export interface RideInterface {
   notes?: string;
   paymentMethodId?: string;
   serviceId?: string;
-  scheduledTo?: number;
+  scheduledTo?: string;
   driver?: any;
   stopPoints?: any[];
   vehicle?: any;
@@ -91,7 +91,7 @@ interface RidePageContextInterface {
   setRidePopup: Dispatch<RidePopupNames | null>;
   trackRide: () => Promise<string>;
   postRideSubmit: (rideId: string, ridePayload: any) => any;
-  cancelRide: () => Promise<void>;
+  cancelRide: (rideId?: string) => Promise<void>;
   getCallNumbers: () => Promise<void>;
   getRideFromApi: (rideId: string) => Promise<RideInterface>;
   setRide: Dispatch<RideInterface>;
@@ -99,7 +99,8 @@ interface RidePageContextInterface {
   validateRequestedStopPoints: (reqSps: any[]) => void;
   setRequestStopPoints: (sps: any) => void;
   tryServiceEstimations: () => Promise<void>;
-  getService: (serviceId: string) => Promise<any>
+  getService: (serviceId: string) => Promise<any>;
+  getServices: () => Promise<any[]>;
 }
 
 export const RidePageContext = createContext<RidePageContextInterface>({
@@ -147,6 +148,7 @@ export const RidePageContext = createContext<RidePageContextInterface>({
   setRequestStopPoints: (sps: any) => undefined,
   tryServiceEstimations: async () => undefined,
   getService: async (serviceId: string) => ({}),
+  getServices: async () => [],
 });
 
 const HISTORY_RECORDS_NUM = 10;
@@ -262,6 +264,7 @@ const RidePageContextProvider = ({ children }: {
 
   const getService = async (serviceId: string) => rideApi.getService(serviceId);
 
+  const getServices = async () => rideApi.getServices();
 
   const getServiceEstimationsFetchingInterval = () => getSettingByKey(
     SETTINGS_KEYS.SERVICE_ESTIMATIONS_INTERVAL_IN_SECONDS,
@@ -673,8 +676,8 @@ const RidePageContextProvider = ({ children }: {
   };
 
 
-  const cancelRide = async () => {
-    await rideApi.cancelRide(ride?.id);
+  const cancelRide = async (rideId?: string) => {
+    await rideApi.cancelRide(rideId || ride?.id);
   };
 
   const getCallNumbers = async () => {
@@ -751,6 +754,7 @@ const RidePageContextProvider = ({ children }: {
         setRequestStopPoints,
         tryServiceEstimations,
         getService,
+        getServices,
       }}
     >
       {children}

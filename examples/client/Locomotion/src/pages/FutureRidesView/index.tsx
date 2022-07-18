@@ -1,4 +1,7 @@
-import React, { useContext, useRef } from 'react';
+import React, {
+  useContext, useRef, useState, useEffect,
+} from 'react';
+import bottomSheet from '@gorhom/bottom-sheet/lib/typescript/components/bottomSheet';
 import { FutureRidesContext } from '../../context/futureRides';
 import { PageContainer } from '../styles';
 import { ContentContainer } from './styled';
@@ -9,15 +12,41 @@ import { MAIN_ROUTES } from '../routes';
 import RideCard from '../../Components/RideCard';
 import BottomSheetComponent from '../../Components/BottomSheet';
 import { CancelRide } from '../../Components/BsPages';
+import { RideStateContextContext } from '../..';
+import { RideInterface, RidePageContext } from '../../context/newRideContext';
+import { BS_PAGES } from '../../context/ridePageStateContext/utils';
 
 const FutureRidesView = ({ menuSide }) => {
-  const bottomSheetRef = useRef(null);
+  const [rideToCancel, setRideToCancel] = useState<RideInterface | null>(null);
+  const [services, setServices] = useState<any[]>([]);
+  const bottomSheetRef = useRef<bottomSheet>(null);
   const {
-    futureRides,
+    futureRides, loadFutureRides,
   } = useContext(FutureRidesContext);
-  const onPressCancel = () => {
-    bottomSheetRef?.current.snapToIndex(0);
+  const { changeBsPage } = useContext(RideStateContextContext);
+  const { cancelRide, getServices } = useContext(RidePageContext);
+  const onPressCancel = (ride: RideInterface) => {
+    setRideToCancel(ride);
+    changeBsPage(BS_PAGES.CANCEL_RIDE);
+    if (bottomSheetRef?.current) {
+      bottomSheetRef?.current.snapToIndex(0);
+    }
   };
+
+  const closeBottomSheet = () => {
+    if (bottomSheetRef?.current) {
+      bottomSheetRef.current.forceClose();
+    }
+  };
+
+  const loadServices = async () => {
+    const res = await getServices();
+    setServices(res);
+  };
+
+  useEffect(() => {
+    loadServices();
+  }, []);
   return (
     <PageContainer>
       <PageHeader
@@ -25,9 +54,22 @@ const FutureRidesView = ({ menuSide }) => {
         onIconPress={() => NavigationService.navigate(MAIN_ROUTES.HOME)}
         iconSide={menuSide}
       />
+      {!!services.length && (
       <ContentContainer>
-        {(futureRides || []).map(ride => <RideCard ride={ride} />)}
+        {(futureRides || []).map((ride) => {
+          const service = services.find(s => s.id === ride.serviceId);
+          return (
+            <RideCard
+              ride={ride}
+              onPress={onPressCancel}
+              serviceName={service.displayName}
+              paymentMethod={ride.payment.paymentMethod}
+              scheduledTo={ride.scheduledTo || ''}
+            />
+          );
+        })}
       </ContentContainer>
+      )}
       <BottomSheetComponent
         ref={bottomSheetRef}
         enablePanDownToClose
@@ -38,7 +80,20 @@ const FutureRidesView = ({ menuSide }) => {
           elevation: 5,
         }}
       >
-        <CancelRide />
+        <CancelRide
+          onButtonPress={() => {
+            closeBottomSheet();
+            if (futureRides.length === 1) {
+              changeBsPage(BS_PAGES.ADDRESS_SELECTOR);
+              NavigationService.navigate(MAIN_ROUTES.HOME);
+            }
+            cancelRide(rideToCancel?.id);
+            loadFutureRides();
+          }}
+          onSecondaryButtonPress={() => {
+            closeBottomSheet();
+          }}
+        />
       </BottomSheetComponent>
     </PageContainer>
   );

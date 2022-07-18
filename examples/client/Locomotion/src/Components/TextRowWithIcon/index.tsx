@@ -24,22 +24,35 @@ interface TextRowWithIconProps {
     text: string;
     icon?: any;
     style?: Record<string, unknown>;
+    Image?: any
 }
 
-const TextRowWithIcon = ({ text, icon, style }: TextRowWithIconProps) => {
+const TextRowWithIcon = ({
+  text, icon, style, Image,
+}: TextRowWithIconProps) => {
   const theme = useContext(ThemeContext);
+  const getImage = () => {
+    if (icon) {
+      return (
+        <SvgIcon
+          Svg={icon}
+          width={15}
+          height={15}
+          fill={theme.primaryColor}
+        />
+      );
+    }
+    if (Image) {
+      return <Image />;
+    }
+  };
   return (
     <Container style={style}>
-      {icon && (
-      <SvgIcon
-        Svg={icon}
-        width={15}
-        height={15}
-        fill={theme.primaryColor}
-        style={{ marginRight: 10 }}
-      />
-      )}
-      <BasicText>
+      {getImage()}
+      <BasicText style={{
+        ...((Image || icon) && { marginLeft: 10 }),
+      }}
+      >
         {text}
       </BasicText>
     </Container>
@@ -49,6 +62,7 @@ const TextRowWithIcon = ({ text, icon, style }: TextRowWithIconProps) => {
 TextRowWithIcon.defaultProps = {
   icon: null,
   style: {},
+  Image: null,
 };
 
 export default TextRowWithIcon;

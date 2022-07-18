@@ -5,9 +5,9 @@ import { FONT_SIZES, FONT_WEIGHTS } from '../../context/theme';
 export const CardContainer = styled(View)`
 padding: 20px;
 shadow-offset: 0px 10px;
-shadow-color: #04214f;
-shadow-opacity: 0.1;
-shadow-radius: 5;
+shadow-color: #ededed;
+shadow-opacity: 0.7;
+shadow-radius: 10;
 background-color: #ffffff;
 margin-bottom: 20px;
 `;
