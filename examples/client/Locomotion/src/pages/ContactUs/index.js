@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useRoute } from '@react-navigation/native';
 import { Linking } from 'react-native';
+import Clipboard from '@react-native-community/clipboard';
+import NoTitleCard from '../../Components/NoTitleCard';
 import { MAIN_ROUTES } from '../routes';
 import i18n from '../../I18n';
 import WebView from '../WebView';
@@ -11,11 +13,13 @@ import { Container, CardsContainer } from '../Account/styled';
 import Card from '../../Components/InformationCard';
 import CardsTitle from '../../Components/CardsTitle';
 import { Text } from '../Profile/ScreenText/styles';
-import { Logo } from '../AuthScreens/StartScreen/styles';
 import logo from '../../assets/contactUsLogo.png';
 import settingsContext from '../../context/settings';
 import arrowBack from '../../assets/arrow-back-learn-more.svg';
+import phoneIcon from '../../assets/phone.svg';
+import copyIcon from '../../assets/copy.svg';
 import {
+  ContactUsLogo,
   ContactUsPageLogoContainer,
   ContactUsPageView, LearnMoreButton, LearnMoreIcon, LearnMoreText,
 } from './styled';
@@ -70,46 +74,50 @@ export default ({ navigation, menuSide }) => {
         <>
           <ContactUsPageView>
             <PageHeader
+              showShadow={false}
               title={i18n.t('contactUs.pageTitle')}
               onIconPress={() => navigation.navigate(MAIN_ROUTES.HOME)}
               iconSide={menuSide}
             />
             <ContactUsPageLogoContainer>
-              <Logo resizeMode="contain" source={logo} />
+              <ContactUsLogo resizeMode="cover" source={logo} />
             </ContactUsPageLogoContainer>
             <Container>
               <CardsContainer>
                 <CardsTitle title={i18n.t('contactUs.contactInformationTitle')} />
                 <Card
+                  icon={copyIcon}
+                  onIconPress={() => {
+                    if (settings.contactEmail) { Clipboard.setString(settings.contactEmail); }
+                  }}
                   title={i18n.t('onboarding.emailPlaceholder')}
                 >
                   <Text>{settings.contactEmail}</Text>
                 </Card>
                 <Card
+                  icon={phoneIcon}
+                  onIconPress={() => (settings.contactPhone ? Linking.openURL(`tel:${settings.contactPhone}`) : undefined)}
                   title={i18n.t('onboarding.phonePlaceholder')}
                 >
                   <Text>{settings.contactPhone}</Text>
-
                 </Card>
-                <Card>
-                  <LearnMoreButton
-                    onPress={() => openContactUs()}
-                  >
+                <NoTitleCard>
+                  <LearnMoreButton onPress={() => openContactUs()}>
                     <LearnMoreText>{i18n.t('contactUs.learnMore')}</LearnMoreText>
                     <LearnMoreIcon Svg={arrowBack} fill="#24aaf2" />
                   </LearnMoreButton>
-                </Card>
+                </NoTitleCard>
               </CardsContainer>
               <CardsContainer>
                 <CardsTitle title={i18n.t('contactUs.legalTitle')} />
-                <Card onPress={() => openPrivacy()}>
+                <NoTitleCard onPress={() => openPrivacy()}>
                   <Text>
                     {i18n.t('contactUs.privacyPolicy')}
                   </Text>
-                </Card>
-                <Card onPress={() => openTerms()}>
+                </NoTitleCard>
+                <NoTitleCard onPress={() => openTerms()}>
                   <Text>{i18n.t('contactUs.termsOfUse')}</Text>
-                </Card>
+                </NoTitleCard>
               </CardsContainer>
             </Container>
           </ContactUsPageView>

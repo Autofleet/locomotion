@@ -8,9 +8,9 @@ import i18n from '../../I18n';
 import backArrow from '../../assets/arrow-back.png';
 
 const PageHeader = ({
-  title, icon, onIconPress, iconSide, displayIcon, width, showSkipButton, onPressSkip, action,
+  title, icon, onIconPress, iconSide, displayIcon, width, showSkipButton, onPressSkip, action, showShadow,
 }) => (
-  <Header style={Platform.OS === 'android' ? { shadowColor: '#000' } : {}}>
+  <Header style={Platform.OS === 'android' && showShadow ? { shadowColor: '#000' } : {}} showShadow={showShadow}>
     {displayIcon !== false
       ? (
         <HeaderIconContainer side={iconSide} onPress={onIconPress} data-test-id="NavigationPanelButton">
@@ -44,6 +44,7 @@ PageHeader.defaultProps = {
   onIconPress: () => null,
   height: '25px',
   width: '25px',
+  showShadow: true,
 };
 
 PageHeader.propTypes = {
@@ -53,4 +54,5 @@ PageHeader.propTypes = {
   onIconPress: propsTypes.func,
   width: propsTypes.string,
   height: propsTypes.string,
+  showShadow: propsTypes.bool,
 };
