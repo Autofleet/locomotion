@@ -31,7 +31,9 @@ const Email = ({ navigation }) => {
 
   const navigateToNextScreen = () => {
     if (route.params && route.params.editAccount) {
-      navigation.navigate(MAIN_ROUTES.EMAIL_CODE);
+      navigation.navigate(MAIN_ROUTES.EMAIL_CODE, {
+        editAccount: route.params.editAccount,
+      });
     } else {
       nextScreen(MAIN_ROUTES.EMAIL);
     }
@@ -70,7 +72,7 @@ const Email = ({ navigation }) => {
 
   return (
     <PageContainer>
-      <Header title={i18n.t('onboarding.pages.email.title')} page={MAIN_ROUTES.EMAIL_CODE} showSkipButton={!(route.params && route.params.editAccount)} />
+      <Header title={i18n.t('onboarding.pages.email.title')} page={MAIN_ROUTES.EMAIL} />
       <ContentContainer>
         <ScreenText
           text={i18n.t('onboarding.pages.email.text')}
