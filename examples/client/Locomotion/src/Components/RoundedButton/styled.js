@@ -46,12 +46,16 @@ export const SubmitButtonText = styled.Text`
 
 export const StyledButton = styled(Button)`
   ${({
-    disabled, theme, hollow, type = 'confirm', useCancelTextButton, width, height, marginTop,
+    disabled, theme, hollow, type = 'confirm', useCancelTextButton, width, height, marginTop, withIcon,
   }) => `
       flex-direction: row;
       border-radius: 8px;
       width: ${width || '100%'};
       height: ${height || '50px'};
+      ${withIcon
+    ? `justify-content: flex-start;
+      align-items: center`
+    : ''}
 
       background-color: ${colors(theme)[type][hollow ? 'hollow' : 'primary'].background};
       ${marginTop ? `margin-top: ${marginTop};` : ''}

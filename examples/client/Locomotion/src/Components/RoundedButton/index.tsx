@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
-import propsTypes from 'prop-types';
-import Loader from '../Loader';
+import React, { useContext, useEffect, useState } from 'react';
 import { ButtonTextContainer, StyledButton, SubmitButtonText } from './styled';
+import SvgIcon from '../SvgIcon';
+import { Context as ThemeContext } from '../../context/theme';
 
 interface ButtonProps {
   type?: string;
@@ -11,6 +11,7 @@ interface ButtonProps {
   useCancelTextButton?: boolean;
   setLoading?: (state: boolean) => void;
   style?: any;
+  icon?: any;
   children?: any;
 }
 
@@ -22,9 +23,12 @@ const RoundedButton = ({
   disabled,
   type,
   useCancelTextButton,
+  icon,
+  children,
   ...props
 }: ButtonProps) => {
   const [loadingState, setLoadingState] = useState(false);
+  const theme = useContext(ThemeContext);
 
   const onPressWithLoading = async (args: any) => {
     setLoadingState(true);
@@ -48,7 +52,17 @@ const RoundedButton = ({
       type={type}
       style={style}
       useCancelTextButton={useCancelTextButton}
+      withIcon={!!icon}
     >
+      {icon && (
+        <SvgIcon
+          Svg={icon}
+          width={15}
+          height={15}
+          fill={theme.primaryColor}
+          style={{ margin: 10 }}
+        />
+      )}
       <ButtonTextContainer>
         <SubmitButtonText
           hollow={hollow}
@@ -56,7 +70,7 @@ const RoundedButton = ({
           type={type}
           useCancelTextButton={useCancelTextButton}
         >
-          {props.children}
+          {children}
         </SubmitButtonText>
       </ButtonTextContainer>
     </StyledButton>
@@ -71,6 +85,7 @@ RoundedButton.defaultProps = {
   setLoading: null,
   style: {},
   children: null,
+  icon: null,
 };
 
 export default RoundedButton;

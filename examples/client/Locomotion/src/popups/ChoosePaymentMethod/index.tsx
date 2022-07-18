@@ -86,6 +86,7 @@ const PaymentMethodPopup = ({
         <TitleView>
           <Title>{i18n.t('popups.choosePaymentMethod.title')}</Title>
           <CloseButton
+            noBackground
             onPress={async () => {
               onCancel();
               setSelectedPaymentId(selected
@@ -95,7 +96,7 @@ const PaymentMethodPopup = ({
                 : navigation.navigate(MAIN_ROUTES.PAYMENT);
             }}
           >
-            <SvgIcon Svg={closeXIcon} />
+            <SvgIcon Svg={closeXIcon} width={10} height={10} fill="#333" />
           </CloseButton>
         </TitleView>
         <CardsScrollView>
