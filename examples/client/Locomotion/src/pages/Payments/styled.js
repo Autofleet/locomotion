@@ -1,6 +1,7 @@
 import React from 'react';
 import { View } from 'react-native';
 import styled from 'styled-components';
+import { FONT_SIZES } from '../../context/theme';
 import { Text } from '../Profile/ScreenText/styles';
 import SvgIcon from '../../Components/SvgIcon';
 
@@ -124,12 +125,21 @@ flex-direction: row;
 justify-content: space-between;
 `;
 
-export const ChevronIcon = styled(SvgIcon)`
-margin-top: '25px';
+export const ChangeButton = styled(Text)`
+padding-bottom: 5;
+color: #24aaf2;
+${FONT_SIZES.LARGE}
 `;
 
-export const ChangeButton = styled(Text)`
-margin-left: 110;
-margin-bottom: 20;
-color: #24aaf2;
+
+export const PaymentCardContainer = styled.View`
+  flex-direction: row;
+  vertical-align: center;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  padding: 15px 0px;
+  border-bottom-width: 1px;
+  border-bottom-color: #e2e2e2;
+  background-color: ${({ theme }) => theme.pageBackgroundColor};
 `;
