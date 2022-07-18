@@ -386,7 +386,8 @@
         "subTitleText": "{{operation}} needs your location to find nearby rides"
     },
     "confirmingRide": {
-        "titleText": "Confirming your ride"
+        "titleText": "Confirming your ride",
+        "secondaryButtonText": "Cancel ride"
     },
     "cancelRide": {
         "titleText": "Are you sure you want to cancel?",
