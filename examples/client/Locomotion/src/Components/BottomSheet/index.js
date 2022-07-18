@@ -57,6 +57,7 @@ const BottomSheetComponent = forwardRef(({
         ...(snapPointsAreTheSame() && { display: 'none' }),
       }}
       style={{
+        backgroundColor: 'white',
         shadowColor: '#000',
         shadowOffset: {
           width: 0,

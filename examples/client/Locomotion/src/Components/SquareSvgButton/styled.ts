@@ -6,6 +6,7 @@ export const ButtonContainer = styled(Button)`
   shadow-offset: 0px 0px;
   shadow-color: #04214f;
   shadow-opacity: 0.4;
+  elevation: 3;
   background-color: ${({ theme }) => theme.pageBackgroundColor};
   border-radius: 8px;
   width: 40px;
