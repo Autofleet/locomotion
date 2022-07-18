@@ -69,9 +69,9 @@ const Email = ({ navigation }) => {
   };
 
   return (
-    <SafeView>
-      <Header title={i18n.t('onboarding.pages.email.title')} page={MAIN_ROUTES.EMAIL_CODE} showSkipButton={!(route.params && route.params.editAccount)} />
-      <PageContainer>
+    <PageContainer>
+      <Header title={i18n.t('onboarding.pages.email.title')} page={MAIN_ROUTES.EMAIL_CODE} showSkipButton={!(route.params && route.params.editAccount)}/>
+      <ContentContainer>
         <ScreenText
           text={i18n.t('onboarding.pages.email.text')}
           subText={i18n.t('onboarding.pages.email.subText')}
