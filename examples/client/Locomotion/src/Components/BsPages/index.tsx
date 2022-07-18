@@ -195,6 +195,7 @@ const BsPage = ({
         )}
         {SecondaryButtonText && (
         <SecondaryButton
+          disabled={buttonDisabled}
           style={{ width: buttonWidth }}
           warning={warning}
           onPress={onSecondaryButtonPress}
@@ -250,6 +251,7 @@ export const CancelRide = (props: any) => {
       }}
       onSecondaryButtonPress={() => changeBsPage(BS_PAGES.ACTIVE_RIDE)}
       warning
+      buttonDisabled={isLoading}
       {...props}
     />
   );
@@ -261,7 +263,6 @@ export const NotAvailableHere = (props: any) => {
   useEffect(() => {
     setSnapPointsState(SNAP_POINT_STATES.NOT_IN_TERRITORY);
   }, []);
-
 
   return (
     <BsPage
@@ -372,7 +373,8 @@ export const NoPayment = (props: any) => {
 
 export const ConfirmingRide = (props: any) => {
   const { setSnapPointsState } = useContext(BottomSheetContext);
-
+  const { changeBsPage } = useContext(RideStateContextContext);
+  const { ride } = useContext(RidePageContext);
   useEffect(() => {
     setSnapPointsState(SNAP_POINT_STATES.CONFIRMING_RIDE);
   }, []);
@@ -380,6 +382,9 @@ export const ConfirmingRide = (props: any) => {
   return (
     <BsPage
       TitleText={i18n.t('bottomSheetContent.confirmingRide.titleText')}
+      SecondaryButtonText={ride?.id ? i18n.t('bottomSheetContent.confirmingRide.secondaryButtonText') : null}
+      onSecondaryButtonPress={() => changeBsPage(BS_PAGES.CANCEL_RIDE)}
+      fullWidthButtons
       {...props}
     >
       <LoaderContainer>
