@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
+// @ts-nocheck
 import React, {
   useCallback, useContext, forwardRef, useEffect,
 } from 'react';
@@ -6,11 +8,13 @@ import BottomSheet, {
   BottomSheetHandle,
 } from '@gorhom/bottom-sheet';
 import styled from 'styled-components';
+import { Text, View } from 'react-native';
 import { UserContext } from '../../context/user';
+// eslint-disable-next-line import/no-unresolved
 import SafeView from '../SafeView';
 import { BottomSheetContext } from '../../context/bottomSheetContext';
 
-const BottomSheetTopInfo = styled.View`
+const BottomSheetTopInfo = styled(View)`
 background-color: #989898;
 position: absolute;
 height: 40px;
@@ -22,25 +26,32 @@ border-top-right-radius: 8px;
 justify-content: center;
 `;
 
-const InfoText = styled.Text`
+const InfoText = styled(Text)`
 color: #ffffff;
 text-align: center;
 max-width: 80%;
 `;
 
+interface BottomSheetProps {
+  children?: any,
+  enablePanDownToClose?: boolean,
+  index?: number,
+  closeable?: boolean
+}
+
 const BottomSheetComponent = forwardRef(({
   children,
-  enablePanDownToClose = false,
-  index = 0,
-  closeable = false,
-}, ref) => {
+  enablePanDownToClose,
+  index,
+  closeable,
+}: BottomSheetProps, ref) => {
   const {
     setIsExpanded,
     snapPoints,
     footerComponent,
     topBarText,
   } = useContext(BottomSheetContext);
-  const onAnimate = useCallback((from, to) => {
+  const onAnimate = useCallback((from: any, to: any) => {
     if (!closeable && from !== -1) {
       setIsExpanded(to > from);
     } else if (closeable) {
@@ -49,7 +60,7 @@ const BottomSheetComponent = forwardRef(({
   }, []);
 
   const renderFooter = useCallback(
-    props => (
+    (props: any) => (
       footerComponent && (
       <BottomSheetFooter {...props} bottomInset={24}>
         {footerComponent}
@@ -61,7 +72,7 @@ const BottomSheetComponent = forwardRef(({
 
   const snapPointsAreTheSame = () => {
     const firstSnapPoint = snapPoints[0];
-    return snapPoints.every(snap => Math.round(parseFloat(snap)) === Math.round(parseFloat(firstSnapPoint)));
+    return snapPoints.every((snap: any) => Math.round(parseFloat(snap)) === Math.round(parseFloat(firstSnapPoint)));
   };
 
   const getTopBar = () => (
@@ -81,7 +92,6 @@ const BottomSheetComponent = forwardRef(({
       ref={ref}
       snapPoints={snapPoints}
       onAnimate={onAnimate}
-      backgroundStyle={topBarText ? { borderRadius: 0 } : {}}
       footerComponent={renderFooter}
       enablePanDownToClose={enablePanDownToClose}
       index={index}
@@ -97,6 +107,7 @@ const BottomSheetComponent = forwardRef(({
         shadowRadius: 3.84,
         elevation: 5,
         zIndex: 999,
+        borderRadius: topBarText ? 0 : 8,
       }}
     >
       <SafeView
@@ -111,5 +122,10 @@ const BottomSheetComponent = forwardRef(({
     </BottomSheet>
   );
 });
-
+BottomSheetComponent.defaultProps = {
+  children: null,
+  enablePanDownToClose: false,
+  index: 0,
+  closeable: false,
+};
 export default BottomSheetComponent;

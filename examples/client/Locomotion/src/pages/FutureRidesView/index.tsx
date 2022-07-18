@@ -16,7 +16,10 @@ import { RideStateContextContext } from '../..';
 import { RideInterface, RidePageContext } from '../../context/newRideContext';
 import { BS_PAGES } from '../../context/ridePageStateContext/utils';
 
-const FutureRidesView = ({ menuSide }) => {
+interface FutureRidesViewProps {
+  menuSide: 'right' | 'left';
+}
+const FutureRidesView = ({ menuSide }: FutureRidesViewProps) => {
   const [rideToCancel, setRideToCancel] = useState<RideInterface | null>(null);
   const [services, setServices] = useState<any[]>([]);
   const bottomSheetRef = useRef<bottomSheet>(null);
@@ -75,10 +78,6 @@ const FutureRidesView = ({ menuSide }) => {
         enablePanDownToClose
         index={-1}
         closeable
-        style={{
-          zIndex: 3,
-          elevation: 5,
-        }}
       >
         <CancelRide
           onButtonPress={async () => {

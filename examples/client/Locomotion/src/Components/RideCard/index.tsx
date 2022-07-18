@@ -10,10 +10,14 @@ import StopPointsVerticalView from '../StopPointsVerticalView';
 
 interface CardComponentProps {
     name: string;
-    brand: string;
+    brand: any;
 }
 const CardComponent = ({ name, brand }: CardComponentProps) => (
-  <TextRowWithIcon text={name} Image={() => <PaymentIcon type={brand} />} style={{ marginTop: 10, marginBottom: 10 }} />
+  <TextRowWithIcon
+    text={name}
+    Image={() => <PaymentIcon type={brand} />}
+    style={{ marginTop: 10, marginBottom: 10 }}
+  />
 );
 
 interface RideCardProps {
