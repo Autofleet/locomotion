@@ -79,6 +79,13 @@ export default React.forwardRef(({
     longitudeDelta: 0.015,
   });
 
+  const focusMapToCoordinates = (coords, animated, padding = {}) => {
+    ref.current.fitToCoordinates(coords, {
+      animated,
+      edgePadding: padding,
+    });
+  };
+
   const focusCurrentLocation = () => {
     if (mapRegion.longitude && mapRegion.latitude && ref.current) {
       ref.current.animateToRegion({
@@ -125,7 +132,7 @@ export default React.forwardRef(({
     if (currentBsPage === BS_PAGES.CONFIRM_PICKUP) {
       const [pickupStopPoint] = requestStopPoints;
       if (pickupStopPoint) {
-        ref.current.fitToCoordinates([{
+        focusMapToCoordinates([{
           latitude: pickupStopPoint.lat - 0.001,
           longitude: pickupStopPoint.lng - 0.001,
         }, {
@@ -134,19 +141,14 @@ export default React.forwardRef(({
         }, {
           latitude: pickupStopPoint.lat + 0.001,
           longitude: pickupStopPoint.lng + 0.001,
-        }], {
-          animated: false,
-        });
+        }]);
       }
     }
     if (currentBsPage === BS_PAGES.CONFIRM_FUTURE_RIDE) {
-      ref.current.fitToCoordinates(newFutureRide.stopPoints.map(sp => ({
+      focusMapToCoordinates(newFutureRide.stopPoints.map(sp => ({
         latitude: sp.lat,
         longitude: sp.lng,
-      })), {
-        animated: false,
-        edgePadding: MAP_EDGE_PADDING,
-      });
+      })), false, MAP_EDGE_PADDING);
     }
   }, [currentBsPage]);
 
@@ -160,10 +162,7 @@ export default React.forwardRef(({
         }
       ));
     if (coordsToFit.length > 0) {
-      ref.current.fitToCoordinates(coordsToFit,
-        {
-          edgePadding: MAP_EDGE_PADDING,
-        });
+      focusMapToCoordinates(coordsToFit, false, MAP_EDGE_PADDING);
     }
   };
 

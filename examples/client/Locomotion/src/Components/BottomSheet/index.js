@@ -87,6 +87,7 @@ const BottomSheetComponent = forwardRef(({
       index={index}
       handleComponent={getTopBar}
       style={{
+        backgroundColor: 'white',
         shadowColor: '#000',
         shadowOffset: {
           width: 0,
