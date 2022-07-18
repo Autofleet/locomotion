@@ -216,6 +216,7 @@ const Tips = ({
           customAmount={customTip}
           onSubmit={value => onCustomTipSet(value)}
           tipSuffix={tipSuffix}
+          isExpanded={isExpanded}
         />
       </BottomSheet>
     </>
