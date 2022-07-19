@@ -469,12 +469,23 @@ export const ConfirmingRide = (props: any) => {
     setSnapPointsState(SNAP_POINT_STATES.CONFIRMING_RIDE);
   }, []);
 
+  const getTitleText = () => {
+    if (ride?.scheduledTo) {
+      return i18n.t('bottomSheetContent.confirmingFutureRide.titleText');
+    }
+    return i18n.t('bottomSheetContent.confirmingRide.titleText');
+  };
+
+  const SubTitleText = ride?.scheduledTo
+    ? i18n.t('bottomSheetContent.confirmingFutureRide.subTitleText',
+      { date: moment(ride.scheduledTo).format('MMM D, h:mm A') })
+    : null;
   return (
     <BsPage
-      TitleText={i18n.t(`bottomSheetContent.${ride?.scheduledTo ? 'confirmingFutureRide' : 'confirmingRide'}.titleText`)}
+      TitleText={getTitleText()}
       SecondaryButtonText={ride?.id ? i18n.t('bottomSheetContent.confirmingRide.secondaryButtonText') : null}
       onSecondaryButtonPress={() => changeBsPage(BS_PAGES.CANCEL_RIDE)}
-      SubTitleText={ride?.scheduledTo ? i18n.t('bottomSheetContent.confirmingFutureRide.subTitleText', { date: moment(ride.scheduledTo).format('MMM D, h:mm A') }) : null}
+      SubTitleText={SubTitleText}
       fullWidthButtons
       {...props}
     >
