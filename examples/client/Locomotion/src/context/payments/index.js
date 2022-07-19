@@ -68,6 +68,11 @@ const usePayments = () => {
     return paymentMethod;
   };
 
+  const getOutstandingBalance = async (paymentMethodId) => {
+    const { data: balance } = await network.get(`${BASE_PATH}/${paymentMethodId}`);
+    return balance;
+  };
+
   return {
     getCustomer,
     customer,
@@ -81,6 +86,7 @@ const usePayments = () => {
     isCashPaymentEnabled,
     createPaymentMethod,
     updatePaymentMethod,
+    getOutstandingBalance,
   };
 };
 

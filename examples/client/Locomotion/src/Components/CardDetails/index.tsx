@@ -31,6 +31,7 @@ const CardDetails = ({
   const [loading, setLoading] = useState(false);
   const [methodForDelete, setMethodForDelete] = useState(null);
   const [isCancelPopupVisible, setIsCancelPopupVisible] = useState(false);
+  const [outstandingBalance, setOutstandingBalance] = useState(null);
   const usePayments = PaymentsContext.useContainer();
   const route = useRoute();
 
@@ -46,6 +47,14 @@ const CardDetails = ({
     setLoading(false);
     setIsCancelPopupVisible(false);
     navigation.navigate(MAIN_ROUTES.PAYMENT);
+  };
+
+  const getOutstandingBalance = async () => {
+    setLoading(true);
+    const balance = await usePayments.getOutstandingBalance(methodForDelete);
+    setOutstandingBalance(balance);
+    setLoading(false);
+    return balance;
   };
 
   useEffect(() => {
@@ -88,22 +97,26 @@ const CardDetails = ({
                 {getLastFourForamttedLong(paymentMethod?.lastFour)}
 
               </Card>
-              <Card
-                title={i18n.t('payments.cardDetails.balance')}
-              >
-                {i18n.t('payments.cardDetails.outstandingBalanceText')}
-              </Card>
+              {paymentMethod?.hasOutstandingBalance ? (
+                <Card
+                  title={i18n.t('payments.cardDetails.balance')}
+                >
+                  {`${i18n.t('payments.cardDetails.outstandingBalanceText')}${outstandingBalance}`}
+                </Card>
+              ) : undefined}
               <LogoutContainer
                 onPress={async () => {
                   await onRemoveMethod(paymentMethod?.id);
                 }}
               >
-                <DeleteContainer>
-                  <DeleteIcon Svg={deleteIcon} />
-                  <DeleteText>
-                    {i18n.t('payments.cardDetails.deleteText')}
-                  </DeleteText>
-                </DeleteContainer>
+                {paymentMethod?.hasOutstandingBalance ? (
+                  <DeleteContainer>
+                    <DeleteIcon Svg={deleteIcon} />
+                    <DeleteText>
+                      {i18n.t('payments.cardDetails.deleteText')}
+                    </DeleteText>
+                  </DeleteContainer>
+                ) : undefined}
               </LogoutContainer>
             </CardsContainer>
           </Container>
