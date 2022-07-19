@@ -7,7 +7,7 @@ import closeIconSource from '../../assets/x.png';
 export default ({
   navigation, uri, title, onIconPress, menuSide = 'right',
 }) => (
-  <Fragment>
+  <>
     <PageHeader
       title={title}
       onIconPress={onIconPress}
@@ -21,5 +21,5 @@ export default ({
         useWebKit
       />
     ) : null}
-  </Fragment>
+  </>
 );
