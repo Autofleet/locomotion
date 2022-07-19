@@ -106,13 +106,16 @@ const PostRidePage = ({ menuSide, route }) => {
         </RatingContainer>
 
         <TipsContainer>
-          <Tips
-            tipSettings={tipSettings}
-            onSelectTip={onSelectTip}
-            driver={{ firstName: ride?.driver?.firstName, avatar: ride?.driver?.avatar }}
-            ridePrice={ride?.priceAmount}
-            priceCurrency={ride?.priceCurrency}
-          />
+          {ride?.priceCurrency && ride?.priceAmount
+            ? (
+              <Tips
+                tipSettings={tipSettings}
+                onSelectTip={onSelectTip}
+                driver={{ firstName: ride?.driver?.firstName, avatar: ride?.driver?.avatar }}
+                ridePrice={ride?.priceAmount}
+                priceCurrency={ride?.priceCurrency}
+              />
+            ) : null}
         </TipsContainer>
         <SubmitContainer>
           <Button onPress={onSubmit} disabled={isExpanded}>{i18n.t('postRide.submit')}</Button>
