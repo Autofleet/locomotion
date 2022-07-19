@@ -2,7 +2,9 @@ import React, {
   useContext, useEffect, useRef, useState,
 } from 'react';
 import { useIsFocused, useFocusEffect } from '@react-navigation/native';
-import { AppState, BackHandler, View } from 'react-native';
+import {
+  AppState, BackHandler, Platform, View,
+} from 'react-native';
 import { FutureRidesContext } from '../../context/futureRides';
 import FutureRidesButton from '../../Components/FutureRidesButton';
 import { RIDE_STATES } from '../../lib/commonTypes';
@@ -308,6 +310,7 @@ const RidePage = ({ mapSettings, navigation }) => {
           <SquareSvgButton
             onPress={focusCurrentLocation}
             icon={targetIcon}
+            style={Platform.OS === 'android' ? { shadowColor: '#000' } : {}}
           />
         )}
       </MapOverlayButtons>
