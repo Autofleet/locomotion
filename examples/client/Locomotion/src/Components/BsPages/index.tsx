@@ -469,12 +469,10 @@ export const ConfirmingRide = (props: any) => {
     setSnapPointsState(SNAP_POINT_STATES.CONFIRMING_RIDE);
   }, []);
 
-  const getTitleText = () => {
-    if (ride?.scheduledTo) {
-      return i18n.t('bottomSheetContent.confirmingFutureRide.titleText');
-    }
-    return i18n.t('bottomSheetContent.confirmingRide.titleText');
-  };
+  const TitleText = ride?.scheduledTo
+    ? i18n.t('bottomSheetContent.confirmingFutureRide.titleText')
+    : i18n.t('bottomSheetContent.confirmingRide.titleText');
+
 
   const SubTitleText = ride?.scheduledTo
     ? i18n.t('bottomSheetContent.confirmingFutureRide.subTitleText',
@@ -482,7 +480,7 @@ export const ConfirmingRide = (props: any) => {
     : null;
   return (
     <BsPage
-      TitleText={getTitleText()}
+      TitleText={TitleText}
       SecondaryButtonText={ride?.id ? i18n.t('bottomSheetContent.confirmingRide.secondaryButtonText') : null}
       onSecondaryButtonPress={() => changeBsPage(BS_PAGES.CANCEL_RIDE)}
       SubTitleText={SubTitleText}
