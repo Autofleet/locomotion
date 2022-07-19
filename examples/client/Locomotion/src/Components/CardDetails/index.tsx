@@ -102,20 +102,20 @@ const CardDetails = ({
                   {`${i18n.t('payments.cardDetails.outstandingBalanceText')} ${paymentMethod.outstandingBalance.amount}${getCurrencySymbol(paymentMethod.outstandingBalance.currency)}`}
                 </Card>
               ) : undefined}
-              <LogoutContainer
-                onPress={async () => {
-                  await onRemoveMethod(paymentMethod?.id);
-                }}
-              >
-                {!(paymentMethod?.hasOutstandingBalance) ? (
+              {!(paymentMethod?.hasOutstandingBalance) ? (
+                <LogoutContainer
+                  onPress={async () => {
+                    await onRemoveMethod(paymentMethod?.id);
+                  }}
+                >
                   <DeleteContainer>
                     <DeleteIcon Svg={deleteIcon} />
                     <DeleteText>
                       {i18n.t('payments.cardDetails.deleteText')}
                     </DeleteText>
                   </DeleteContainer>
-                ) : undefined}
-              </LogoutContainer>
+                </LogoutContainer>
+              ) : undefined}
             </CardsContainer>
           </Container>
           <ConfirmationPopup
