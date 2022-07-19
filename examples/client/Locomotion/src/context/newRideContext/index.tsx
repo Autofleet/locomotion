@@ -243,7 +243,17 @@ const RidePageContextProvider = ({ children }: {
         && estimationForService.results[0];
       return formatEstimationsResult(service, estimationResult, tags);
     });
-    return formattedServices.sort((a, b) => a.priority - b.priority);
+
+    return formattedServices.sort((a, b) => {
+      if (
+        (a.serviceAvailabilitiesNumber !== 0 && b.serviceAvailabilitiesNumber !== 0)
+        || (a.serviceAvailabilitiesNumber === 0 && b.serviceAvailabilitiesNumber === 0)
+      ) {
+        return a.priority - b.priority;
+      }
+
+      return a.serviceAvailabilitiesNumber === 0 ? -1 : 1;
+    });
   };
 
   const getServiceEstimations = async (throwError = true) => {

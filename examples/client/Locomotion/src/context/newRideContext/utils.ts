@@ -117,6 +117,7 @@ export const formatEstimationsResult = (service: any, estimationResult: any, tag
     iconUrl: service.icon,
     description: service.displayDescription,
     priority: service.priority,
+    serviceAvailabilitiesNumber: service.serviceAvailabilities.length,
   };
 };
 
