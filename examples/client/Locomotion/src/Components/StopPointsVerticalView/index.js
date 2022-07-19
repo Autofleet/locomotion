@@ -12,7 +12,7 @@ import {
 const getEtaText = eta => moment(eta).format('HH:mm');
 
 const stopPointText = (sp, isFutureRide) => {
-  if (sp.type === STOP_POINT_TYPES.STOP_POINT_DROPOFF && isFutureRide) {
+  if (isFutureRide) {
     return '';
   }
   if (sp.state === STOP_POINT_STATES.PENDING) {

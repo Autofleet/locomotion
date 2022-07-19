@@ -1,7 +1,6 @@
 import React, { Fragment } from 'react';
 import i18n from '../I18n';
 import BasicPopup from './BasicPopup';
-import RideSummaryPopup from './RideSummaryPopup';
 
 export default () => (
   <Fragment>

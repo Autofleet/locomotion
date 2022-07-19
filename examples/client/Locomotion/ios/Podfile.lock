@@ -310,6 +310,8 @@ PODS:
   - React-jsinspector (0.68.1)
   - React-logger (0.68.1):
     - glog
+  - react-native-background-timer (2.4.1):
+    - React-Core
   - react-native-carrier-info (1.1.2):
     - React
   - react-native-config (1.4.6):
@@ -523,6 +525,7 @@ DEPENDENCIES:
   - React-jsiexecutor (from `../node_modules/react-native/ReactCommon/jsiexecutor`)
   - React-jsinspector (from `../node_modules/react-native/ReactCommon/jsinspector`)
   - React-logger (from `../node_modules/react-native/ReactCommon/logger`)
+  - react-native-background-timer (from `../node_modules/react-native-background-timer`)
   - react-native-carrier-info (from `../node_modules/react-native-carrier-info`)
   - react-native-config (from `../node_modules/react-native-config`)
   - react-native-date-picker (from `../node_modules/react-native-date-picker`)
@@ -633,6 +636,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/jsinspector"
   React-logger:
     :path: "../node_modules/react-native/ReactCommon/logger"
+  react-native-background-timer:
+    :path: "../node_modules/react-native-background-timer"
   react-native-carrier-info:
     :path: "../node_modules/react-native-carrier-info"
   react-native-config:
@@ -753,6 +758,7 @@ SPEC CHECKSUMS:
   React-jsiexecutor: 4a4bae5671b064a2248a690cf75957669489d08c
   React-jsinspector: 218a2503198ff28a085f8e16622a8d8f507c8019
   React-logger: f79dd3cc0f9b44f5611c6c7862badd891a862cf8
+  react-native-background-timer: 117fffdc9b0d6f144444bb49029f94275a45fdb5
   react-native-carrier-info: 1e6299256bd7ceaa36f851b30e071b2b4fc406ad
   react-native-config: 7cd105e71d903104e8919261480858940a6b9c0e
   react-native-date-picker: 9088350e06918f7d842a34c171acadc66583cb94
@@ -802,6 +808,6 @@ SPEC CHECKSUMS:
   StripeUICore: a8e24a6c91a5c99075c7a490d45695fb912876e8
   Yoga: 17cd9a50243093b547c1e539c749928dd68152da
 
-PODFILE CHECKSUM: d859fddd9dce5c4590211de172a11ed2517eef69
+PODFILE CHECKSUM: 63ce2c63830fc102f46f30536bbf67688ed01f4b
 
 COCOAPODS: 1.11.3

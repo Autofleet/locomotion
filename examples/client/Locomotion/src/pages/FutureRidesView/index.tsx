@@ -50,10 +50,11 @@ const FutureRidesView = ({ menuSide }: FutureRidesViewProps) => {
   useEffect(() => {
     loadServices();
   }, []);
+
   return (
     <PageContainer>
       <PageHeader
-        title={i18n.t('postRide.pageTitle')}
+        title={i18n.t('futureRides.pageTitle')}
         onIconPress={() => NavigationService.navigate(MAIN_ROUTES.HOME)}
         iconSide={menuSide}
       />

@@ -280,6 +280,12 @@
         "tripPageTitle": "Trip details",
         "noRides": "No results found",
         "noRidesSubText": "",
+        "ride": {
+            "states": {
+                "canceled": "Canceled",
+                "failed": "Canceled"
+            }
+        },
         "ridesTable": {
             "timeTitle": "Time",
             "startTitle": "Start",
@@ -304,6 +310,9 @@
         "rideJourney": "Ride journey",
         "driverRating": "Driver rating"
       }
+    },
+    "futureRides": {
+        "pageTitle": "Upcoming rides"
     },
     "postRide": {
         "pageTitle": "Ride finished",
@@ -387,6 +396,11 @@
     },
     "confirmingRide": {
         "titleText": "Confirming your ride",
+        "secondaryButtonText": "Cancel ride"
+    },
+    "confirmingFutureRide": {
+        "titleText": "Confirming your scheduled ride",
+        "subTitleText": "For {{date}}",
         "secondaryButtonText": "Cancel ride"
     },
     "cancelRide": {
