@@ -61,11 +61,6 @@ const CardDetails = ({
         <PageHeader
           title={i18n.t('payments.cardDetails.title')}
           onIconPress={() => navigation.navigate(MAIN_ROUTES.PAYMENT)}
-          iconSide=""
-          displayIcon={undefined}
-          showSkipButton={undefined}
-          onPressSkip={undefined}
-          action={undefined}
         />
         <>
           <Container>

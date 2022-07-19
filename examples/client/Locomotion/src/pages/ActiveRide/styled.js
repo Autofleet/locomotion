@@ -61,3 +61,12 @@ export const LocationMarker = styled(Icon).attrs(({ theme }) => ({
   width: '40px',
   viewBox: '-1 0 13 10',
 }))``;
+
+export const MapOverlayButtons = styled.View`
+position: absolute;
+width: 100%;
+padding: 0 20px;
+display: flex;
+flex-direction: row;
+justify-content: space-between;
+`;

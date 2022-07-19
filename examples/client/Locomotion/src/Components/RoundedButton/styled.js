@@ -21,7 +21,7 @@ const colors = theme => ({
     hollow: {
       background: '#ffffff',
       border: '#f03a5f',
-      text: '#f03a5f',
+      text: '#333333',
     },
   },
 });
@@ -74,5 +74,5 @@ export const ButtonTextContainer = styled.View`
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  flex: 1;
+  ${({ withIcon }) => (!withIcon ? 'flex: 1' : '')}
 `;

@@ -168,7 +168,10 @@
         "futureRides": {
             "openBookingsButton": "{{openBookings}} open Bookings",
             "closeButton": "Close",
-            "cancelButton": "Cancel"
+            "cancelButton": "Cancel",
+            "rideFareEstimationNotice": "The fairs shown are estimated and may change based on conditions during the ride",
+            "oneUpcomingRide": "Upcoming ride",
+            "multipleUpcomingRides": "Upcoming rides"
         },
         "RideScheduler": {
             "timeSelectionTitle": "I want to start",
@@ -371,6 +374,12 @@
     "subName": "Rider app"
   },
   "bottomSheetContent": {
+    "confirmFutureRide": {
+        "titleText": "Your upcoming ride has been scheduled",
+        "buttonText": "Done",
+        "pickupText": "From {{address}}",
+        "dropOffText": "To {{address}}"
+    },
     "confirmPickupTime": {
         "titleText": "Scheduled ride",
         "buttonText": "Set pick up time",

@@ -8,6 +8,9 @@ import { useBottomSheet } from '@gorhom/bottom-sheet';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import moment from 'moment';
 import DatePicker from 'react-native-date-picker';
+import TextRowWithIcon from '../../Components/TextRowWithIcon';
+import { FutureRidesContext } from '../../context/futureRides';
+import { STOP_POINT_TYPES } from '../../lib/commonTypes';
 import SvgIcon from '../SvgIcon';
 import { RidePageContext } from '../../context/newRideContext';
 import i18n from '../../I18n';
@@ -35,7 +38,6 @@ const OtherButton = styled(Button)`
   height: 50px;
   border-radius: 8px;
 `;
-
 
 const SecondaryButton = styled(Button).attrs({ noBackground: true })`
   height: 50px;
@@ -234,8 +236,8 @@ export const ConfirmPickupTime = (props: any) => {
   const {
     changeBsPage,
   } = useContext(RideStateContextContext);
-  const date = moment(ride?.afterTime).format('ddd, MMM Do');
-  const time = moment(ride?.afterTime).format('HH:mm');
+  const date = moment(ride?.scheduledTo).format('ddd, MMM Do');
+  const time = moment(ride?.scheduledTo).format('HH:mm');
   return (
     <BsPage
       TitleText={i18n.t('bottomSheetContent.confirmPickupTime.titleText')}
@@ -258,14 +260,14 @@ export const ConfirmPickupTime = (props: any) => {
       </RoundedButton>
       <DatePicker
         open={isDatePickerOpen}
-        date={moment(ride?.afterTime).toDate()}
+        date={moment(ride?.scheduledTo).toDate()}
         maximumDate={MAX_DATE_FUTURE_RIDE}
         minimumDate={MIN_DATE_FUTURE_RIDE}
         mode="datetime"
         title={i18n.t('bottomSheetContent.ride.chosePickupTime')}
         onCancel={() => setIsDatePickerOpen(false)}
         onConfirm={(newDate: Date) => {
-          updateRidePayload({ afterTime: newDate.getTime() });
+          updateRidePayload({ scheduledTo: newDate.getTime() });
           setIsDatePickerOpen(false);
         }}
         modal
@@ -307,6 +309,41 @@ export const CancelRide = (props: any) => {
       buttonDisabled={isLoading}
       {...props}
     />
+  );
+};
+
+export const ConfirmFutureRide = (props: any) => {
+  const { newFutureRide } = useContext(FutureRidesContext);
+
+  const getDateDisplay = () => {
+    const date = moment(newFutureRide?.scheduledTo).format('ddd, MMM Do');
+    const time = moment(newFutureRide?.scheduledTo).format('HH:mm');
+    const dateText = i18n.t('bottomSheetContent.confirmPickupTime.pickupText', { date, time });
+    return <TextRowWithIcon text={dateText} icon={timeIcon} />;
+  };
+  const getPickupDisplay = () => {
+    const pickup = (newFutureRide?.stopPoints || [])
+      .find(sp => sp.type === STOP_POINT_TYPES.STOP_POINT_PICKUP);
+    const pickupText = i18n.t('bottomSheetContent.confirmFutureRide.pickupText', { address: pickup?.description });
+    return <TextRowWithIcon text={pickupText} />;
+  };
+  const getDropOffDisplay = () => {
+    const dropOff = (newFutureRide?.stopPoints || [])
+      .find(sp => sp.type === STOP_POINT_TYPES.STOP_POINT_DROPOFF);
+    const dropOffText = i18n.t('bottomSheetContent.confirmFutureRide.dropOffText', { address: dropOff?.description });
+    return <TextRowWithIcon text={dropOffText} />;
+  };
+  return (
+    <BsPage
+      TitleText={i18n.t('bottomSheetContent.confirmFutureRide.titleText')}
+      ButtonText={i18n.t('bottomSheetContent.confirmFutureRide.buttonText')}
+      fullWidthButtons
+      {...props}
+    >
+      {getDateDisplay()}
+      {getPickupDisplay()}
+      {getDropOffDisplay()}
+    </BsPage>
   );
 };
 

@@ -27,4 +27,5 @@ export const MAIN_ROUTES = {
   POST_RIDE: 'PostRide',
   CARD_DETAILS: 'CardDetails',
   EDIT_NICKNAME: 'EditNickname',
+  FUTURE_RIDES: 'FutureRides',
 };

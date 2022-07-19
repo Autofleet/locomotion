@@ -35,7 +35,7 @@ const RideTitleCard = ({ ride, page }) => (
   <>
     <RideViewTextContainer>
       <DayTitleText bigText={page}>
-        {moment(ride.lastMatchAttempt).format(MMMM_DD_YYYY)}
+        {moment(ride.scheduledTo || ride.createdAt).format(MMMM_DD_YYYY)}
       </DayTitleText>
       {ride.state === RIDE_STATES.COMPLETED ? (
         <DayTitleSubText noCap>

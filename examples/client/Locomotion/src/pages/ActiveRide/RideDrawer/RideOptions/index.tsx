@@ -1,6 +1,7 @@
 import React, {
   useContext, useEffect, useState,
 } from 'react';
+import i18n from '../../../../I18n';
 import { RIDE_POPUPS } from '../../../../context/newRideContext/utils';
 import RideButtons from './RideButtons';
 import ServiceOptions from './ServiceOptions';
@@ -29,6 +30,7 @@ const RideOptions = () => {
 
   const {
     setFooterComponent,
+    setTopBarText,
   } = useContext(BottomSheetContext);
 
   const {
@@ -96,6 +98,13 @@ const RideOptions = () => {
     }
   }, [ridePopup]);
 
+  useEffect(() => {
+    if (ride.scheduledTo) {
+      setTopBarText(i18n.t('home.futureRides.rideFareEstimationNotice'));
+    }
+
+    return () => setTopBarText('');
+  }, [ride]);
   return (
     <>
       <ServiceOptions />
