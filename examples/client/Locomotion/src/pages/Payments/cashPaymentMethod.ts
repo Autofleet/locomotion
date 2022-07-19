@@ -15,7 +15,7 @@ const cashPaymentMethod : PaymentMethodInterface = {
   stripeId: '',
   updatedAt: new Date(),
   deletedAt: null,
-  outstandingBalance: 0,
+  outstandingBalance: { amount: 0, currency: 'USD' },
 };
 
 export default cashPaymentMethod;
