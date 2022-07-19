@@ -10,7 +10,7 @@ import {
   CardsContainer,
   CardsTitle,
   Container,
-  LogoutContainer,
+  LogoutContainer as DeletePaymentContainer,
 } from '../../pages/Account/styled';
 import i18n from '../../I18n';
 import PageHeader from '../PageHeader';
@@ -103,7 +103,7 @@ const CardDetails = ({
                 </Card>
               ) : undefined}
 
-              <LogoutContainer
+              <DeletePaymentContainer
                 disabled={paymentMethod?.hasOutstandingBalance}
                 onPress={async () => {
                   await onRemoveMethod(paymentMethod?.id);
@@ -115,7 +115,7 @@ const CardDetails = ({
                     {i18n.t('payments.cardDetails.deleteText')}
                   </DeleteText>
                 </DeleteContainer>
-              </LogoutContainer>
+              </DeletePaymentContainer>
             </CardsContainer>
           </Container>
           <ConfirmationPopup
