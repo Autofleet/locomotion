@@ -24,6 +24,8 @@ target 'Locomotion' do
 
   pod 'react-native-version-check', :path => '../node_modules/react-native-version-check'
 
+  pod 'react-native-background-timer', :path => '../node_modules/react-native-background-timer'
+
   target 'LocomotionTests' do
     inherit! :complete
     # Pods for testing

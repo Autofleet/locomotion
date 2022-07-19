@@ -15,7 +15,7 @@ const mapStyle = {
 };
 
 const SpMarker = ({
-  lat, lng, type, ordinalDesc,
+  lat, lng, type, ordinalDesc, disableMarkers,
 }) => (
   <Marker
     key={`Marker#${lat}#${lng}#${type}`}
@@ -32,13 +32,14 @@ const SpMarker = ({
         i18n.t(`stopPointsTypes.${type}`)
       }`}
     </MarkerTitle>
-    {type === STOP_POINT_TYPES.STOP_POINT_PICKUP ? <PickupIconMarker onMap /> : undefined}
-    {type === STOP_POINT_TYPES.STOP_POINT_DROPOFF ? <DropoffIconMarker onMap /> : undefined}
+    {type === STOP_POINT_TYPES.STOP_POINT_PICKUP ? <PickupIconMarker disableMarkers={disableMarkers} onMap /> : undefined}
+    {type === STOP_POINT_TYPES.STOP_POINT_DROPOFF ? <DropoffIconMarker disableMarkers={disableMarkers} onMap /> : undefined}
   </Marker>
 );
 
 const Map = forwardRef(({
   ride: { stopPoints },
+  disableMarkers,
 }, ref) => {
   const mapInstance = useRef();
   const isFocused = useIsFocused();
@@ -96,6 +97,7 @@ const Map = forwardRef(({
           {...{
             lat, lng, type, ordinalDesc,
           }}
+          disableMarkers
         />
       ) : (<></>)))}
     </MapView>
