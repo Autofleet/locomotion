@@ -311,6 +311,9 @@
         "driverRating": "Driver rating"
       }
     },
+    "futureRides": {
+        "pageTitle": "Upcoming rides"
+    },
     "postRide": {
         "pageTitle": "Ride finished",
         "ratingHeadline": "How was your ride?",
@@ -398,6 +401,11 @@
     },
     "confirmingRide": {
         "titleText": "Confirming your ride",
+        "secondaryButtonText": "Cancel ride"
+    },
+    "confirmingFutureRide": {
+        "titleText": "Confirming your scheduled ride",
+        "subTitleText": "For {{date}}",
         "secondaryButtonText": "Cancel ride"
     },
     "cancelRide": {
