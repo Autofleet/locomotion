@@ -1,13 +1,11 @@
 import React, { useEffect, useContext, useState } from 'react';
 import { useRoute } from '@react-navigation/native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import moment from 'moment';
 import { PaymentIcon } from 'react-native-payment-icons';
 import cashPaymentMethod from '../../pages/Payments/cashPaymentMethod';
 import Card from '../../Components/InformationCard';
 import PaymentsContext from '../../context/payments';
 import { MAIN_ROUTES } from '../routes';
-import PaymentMethodInterface from '../../context/payments/interface';
 
 import ThumbnailPicker from '../../Components/ThumbnailPicker';
 import {
