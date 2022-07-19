@@ -16,48 +16,40 @@ import {
 } from './styles';
 import SafeView from '../../../Components/SafeView';
 import WebView from '../../WebView';
-import { getLoginSettings } from '../../../context/user/api';
 import Mixpanel from '../../../services/Mixpanel';
 import { MAIN_ROUTES } from '../../routes';
 import { UserContext } from '../../../context/user';
 import { INITIAL_USER_STATE } from '../AuthLoadingScreen';
+import Settings from '../../../context/settings';
+import SETTING_KEYS from '../../../context/settings/keys';
 
 const StartScreen = () => {
   const { setUser } = useContext(UserContext);
+  const { getSettingByKey } = Settings.useContainer();
   const navigation = useNavigation();
   const [webViewWindow, setWebViewWindow] = useState(null);
   const route = useRoute();
-  const [settings, setSettings] = useState({
-    termsUrl: null,
-    privacyUrl: null,
-    contactUsUrl: null,
-  });
-
   const nextScreen = () => {
     setUser(INITIAL_USER_STATE);
     navigation.navigate(MAIN_ROUTES.PHONE);
   };
 
-  const loadSettings = async () => {
-    const newSettings = await getLoginSettings();
-    setSettings(newSettings);
-  };
-
   useEffect(() => {
     Mixpanel.pageView(route.name);
-    loadSettings();
   }, []);
 
-  const openTerms = () => {
+  const openTerms = async () => {
+    const termsOfUseUrl = await getSettingByKey(SETTING_KEYS.TERMS_OF_USE_URL);
     setWebViewWindow({
-      uri: settings.termsOfUseUrl,
+      uri: termsOfUseUrl,
       title: i18n.t('login.termsWebViewTitle'),
     });
   };
 
-  const openPrivacy = () => {
+  const openPrivacy = async () => {
+    const privacyPolicyUrl = await getSettingByKey(SETTING_KEYS.PRIVACY_POLICY_URL);
     setWebViewWindow({
-      uri: settings.privacyPolicyUrl,
+      uri: privacyPolicyUrl,
       title: i18n.t('login.privacyWebViewTitle'),
     });
   };
@@ -65,10 +57,11 @@ const StartScreen = () => {
   return (
     <SafeView style={{
       flex: 1,
+      backgroundColor: 'white',
     }}
     >
-      <PageContainer>
-        {!webViewWindow ? (
+      {!webViewWindow ? (
+        <PageContainer>
           <>
             <InfoContainer>
               <LogoContainer>
@@ -103,14 +96,15 @@ const StartScreen = () => {
               </Trans>
             </TermsText>
           </>
-        ) : (
-          <WebView
-            {...webViewWindow}
-            onIconPress={() => setWebViewWindow(null)}
-          />
-        )}
-      </PageContainer>
+        </PageContainer>
+      ) : (
+        <WebView
+          {...webViewWindow}
+          onIconPress={() => setWebViewWindow(null)}
+        />
+      )}
     </SafeView>
+
   );
 };
 
