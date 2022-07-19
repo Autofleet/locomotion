@@ -99,6 +99,12 @@ const BottomSheetComponent = forwardRef(({
       style={{
         backgroundColor: 'white',
         shadowColor: '#000',
+        shadowOffset: {
+          width: 0,
+          height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
         elevation: 10,
         zIndex: 999,
         borderRadius: topBarText ? 0 : 8,
