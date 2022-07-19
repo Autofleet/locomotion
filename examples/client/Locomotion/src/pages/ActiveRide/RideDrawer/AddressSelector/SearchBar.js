@@ -9,6 +9,7 @@ import i18n from '../../../../I18n';
 import { RidePageContext } from '../../../../context/newRideContext';
 
 import backImage from '../../../../assets/arrow-back.png';
+import { UserContext } from '../../../../context/user';
 
 
 const SearchContainer = styled.View`
@@ -89,6 +90,10 @@ const SearchBar = ({
     fillLoadSkeleton,
   } = useContext(RidePageContext);
 
+  const {
+    locationGranted,
+  } = useContext(UserContext);
+
   const debouncedSearch = React.useRef(
     debounce(async (text, i) => {
       onSearch(text);
@@ -101,7 +106,11 @@ const SearchBar = ({
       return 'addressView.whereTo';
     }
 
-    return 'addressView.currentLocation';
+    if (locationGranted) {
+      return 'addressView.currentLocation';
+    }
+
+    return '';
   };
 
   const onInputFocus = (target, index) => {

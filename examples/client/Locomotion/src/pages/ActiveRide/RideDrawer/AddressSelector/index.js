@@ -17,6 +17,7 @@ import { RidePageContext } from '../../../../context/newRideContext';
 import { BottomSheetContext, SNAP_POINT_STATES } from '../../../../context/bottomSheetContext';
 import { BS_PAGES } from '../../../../context/ridePageStateContext/utils';
 import { RideStateContextContext } from '../../../../context/ridePageStateContext';
+import { UserContext } from '../../../../context/user';
 
 const HistoryContainer = styled.View`
   margin-bottom: 10px;
@@ -34,7 +35,7 @@ const ContentContainer = styled.View`
 `;
 const AddressSelectorBottomSheet = ({ addressSelectorFocus }) => {
   const userContext = useContext(RidePageContext);
-
+  const { locationGranted } = useContext(UserContext);
   const {
     changeBsPage,
   } = useContext(RideStateContextContext);
@@ -89,20 +90,24 @@ const AddressSelectorBottomSheet = ({ addressSelectorFocus }) => {
         {isExpanded
           ? (
             <>
-              <AddressRow
-                border={false}
-                text={i18n.t('addressView.currentLocation')}
-                icon="location"
-                actionButton
-                onPress={onCurrentLocation}
-              />
-              <AddressRow
-                border={false}
-                text={i18n.t('addressView.setLocationOnMap')}
-                icon="locationPin"
-                actionButton
-                onPress={onSetLocationOnMap}
-              />
+              {locationGranted ? (
+                <AddressRow
+                  border={false}
+                  text={i18n.t('addressView.currentLocation')}
+                  icon="location"
+                  actionButton
+                  onPress={onCurrentLocation}
+                />
+              ) : null}
+              {locationGranted ? (
+                <AddressRow
+                  border={false}
+                  text={i18n.t('addressView.setLocationOnMap')}
+                  icon="locationPin"
+                  actionButton
+                  onPress={onSetLocationOnMap}
+                />
+              ) : null}
               <BottomSheetScrollView keyboardShouldPersistTaps="handled" contentContainerStyle={{ overflow: 'visible' }}>
                 {
                   userContext.searchResults ? userContext.searchResults.map((h, i) => <AddressRow testID={`searchResults_${i}`} {...h} key={h.placeId} onPress={() => userContext.onAddressSelected(h)} />)
