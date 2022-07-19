@@ -2,7 +2,9 @@ import React, {
   useContext, useEffect, useRef, useState,
 } from 'react';
 import { useIsFocused, useFocusEffect } from '@react-navigation/native';
-import { AppState, BackHandler } from 'react-native';
+import { AppState, BackHandler, View } from 'react-native';
+import { FutureRidesContext } from '../../context/futureRides';
+import FutureRidesButton from '../../Components/FutureRidesButton';
 import { RIDE_STATES } from '../../lib/commonTypes';
 import { RIDE_POPUPS } from '../../context/newRideContext/utils';
 import { UserContext } from '../../context/user';
@@ -16,12 +18,13 @@ import {
   LocationRequest,
   CancelRide,
   ConfirmPickupTime,
+  ConfirmFutureRide,
 } from '../../Components/BsPages';
 import { RideStateContextContext, RideStateContextContextProvider } from '../../context';
 import NewRidePageContextProvider, { RidePageContext } from '../../context/newRideContext';
 import BottomSheetContextProvider, { BottomSheetContext, SNAP_POINT_STATES } from '../../context/bottomSheetContext';
 import {
-  PageContainer,
+  PageContainer, MapOverlayButtons,
 } from './styled';
 import Header from '../../Components/Header';
 import MainMap from './newMap';
@@ -69,15 +72,19 @@ const RidePage = ({ mapSettings, navigation }) => {
     tryServiceEstimations,
   } = useContext(RidePageContext);
   const {
-    setIsExpanded, snapPoints, isExpanded,
+    setIsExpanded, snapPoints, isExpanded, topBarText,
   } = useContext(BottomSheetContext);
   const {
     clientHasValidPaymentMethods,
   } = payments.useContainer();
+  const {
+    futureRides,
+  } = useContext(FutureRidesContext);
 
   const resetStateToAddressSelector = (selected = null) => {
     setServiceEstimations(null);
     setChosenService(null);
+    setRide({});
     changeBsPage(BS_PAGES.ADDRESS_SELECTOR);
     setAddressSelectorFocus(selected);
   };
@@ -96,6 +103,11 @@ const RidePage = ({ mapSettings, navigation }) => {
   };
 
   const BS_PAGE_TO_COMP = {
+    [BS_PAGES.CONFIRM_FUTURE_RIDE]: () => (
+      <ConfirmFutureRide
+        onButtonPress={backToMap}
+      />
+    ),
     [BS_PAGES.CANCEL_RIDE]: () => (
       <CancelRide />
     ),
@@ -282,13 +294,23 @@ const RidePage = ({ mapSettings, navigation }) => {
             <StopPointsViewer goBackToAddressSelector={goBackToAddress} />
           </Header>
         )}
-      {!isExpanded && locationGranted && (
-        <SquareSvgButton
-          onPress={focusCurrentLocation}
-          icon={targetIcon}
-          style={{ position: 'absolute', bottom: parseFloat(snapPoints[0] + 25), right: 20 }}
-        />
-      )}
+      <MapOverlayButtons
+        style={{
+          marginBottom: topBarText ? 40 : 0,
+          bottom: parseFloat(snapPoints[0]) + 25,
+        }}
+      >
+        {currentBsPage === BS_PAGES.ADDRESS_SELECTOR
+        && !isExpanded && futureRides.length ? (
+          <FutureRidesButton />
+          ) : <View />}
+        {!isExpanded && locationGranted && (
+          <SquareSvgButton
+            onPress={focusCurrentLocation}
+            icon={targetIcon}
+          />
+        )}
+      </MapOverlayButtons>
       <BottomSheet
         ref={bottomSheetRef}
         focusCurrentLocation={focusCurrentLocation}

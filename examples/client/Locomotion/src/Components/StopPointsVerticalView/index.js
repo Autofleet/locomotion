@@ -6,14 +6,21 @@ import VerticalTimeLineCard from './VerticalTimeLine';
 import { ContentSubTitle, ContentTitle, PanelContentContainer } from './styled';
 import { getOrdinal } from '../../lib/ride/utils';
 import {
-  RIDE_ACTIVE_STATES, RIDE_STATES, STOP_POINT_STATES,
+  RIDE_ACTIVE_STATES, RIDE_STATES, STOP_POINT_STATES, STOP_POINT_TYPES,
 } from '../../lib/commonTypes';
 
 const getEtaText = eta => moment(eta).format('HH:mm');
 
-const stopPointText = sp => (sp.state === STOP_POINT_STATES.PENDING
-  ? getEtaText(sp.plannedArrivalTime)
-  : i18n.t(`stopPoints.states.${sp.state}`));
+const stopPointText = (sp, isFutureRide) => {
+  if (sp.type === STOP_POINT_TYPES.STOP_POINT_DROPOFF && isFutureRide) {
+    return '';
+  }
+  if (sp.state === STOP_POINT_STATES.PENDING) {
+    return getEtaText((sp.plannedArrivalTime || sp.afterTime));
+  }
+
+  return i18n.t(`stopPoints.states.${sp.state}`);
+};
 
 const MAX_DESC_LIMIT = 50;
 
@@ -23,7 +30,7 @@ const Index = ({ ride }) => {
     stopPoints,
   } = ride;
   const rideIsActive = [...RIDE_ACTIVE_STATES, RIDE_STATES.CANCELED].includes(state);
-
+  const isFutureRide = stopPoints[0].afterTime;
   if (stopPoints
     && stopPoints.length) {
     return (
@@ -39,7 +46,7 @@ const Index = ({ ride }) => {
               content={(
                 <>
                   <ContentTitle>
-                    {`${sp.ordinalDesc !== 0 ? `${getOrdinal(sp.ordinalDesc + 1)} ` : ''}${i18n.t(`stopPointsTypes.${sp.type}`)}`}
+                    {`${sp.ordinalDesc ? `${getOrdinal(sp.ordinalDesc + 1)} ` : ''}${i18n.t(`stopPointsTypes.${sp.type}`)}`}
                   </ContentTitle>
                   <ContentSubTitle>
                     {(sp.description || '').slice(0, MAX_DESC_LIMIT)}
@@ -49,7 +56,7 @@ const Index = ({ ride }) => {
               underContent={(
                 <ContentTitle>
                   {rideIsActive
-                    ? stopPointText(sp)
+                    ? stopPointText(sp, isFutureRide)
                     : getEtaText(sp.completedAt || sp.arrivedAt)
                 }
                 </ContentTitle>

@@ -1,8 +1,11 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, {
+  useContext, useEffect, useMemo, useState,
+} from 'react';
 import { Platform } from 'react-native';
 import Config from 'react-native-config';
 import { Marker } from 'react-native-maps';
-import moment from 'moment';
+import { ThemeContext } from 'styled-components';
+import clockIcon from '../../assets/bottomSheet/clock.svg';
 import dropoffIcon from '../../assets/map/markers/dropoffIcon.svg';
 import pickupIcon from '../../assets/map/markers/pickupIcon.svg';
 import Mixpanel from '../../services/Mixpanel';
@@ -19,10 +22,11 @@ const StopPointMarker = ({
   stopPoint,
   key,
   isNext,
-  chosenService,
+  etaText,
+  isFutureRide,
 }) => {
   const { lat, lng } = stopPoint;
-
+  const theme = useContext(ThemeContext);
   const typeDetails = {
     [STOP_POINT_TYPES.STOP_POINT_PICKUP]: {
       Icon: <SvgIcon
@@ -44,29 +48,29 @@ const StopPointMarker = ({
     },
   };
 
-  const etaText = () => {
-    const { state } = stopPoint;
-    if (state === STOP_POINT_STATES.COMPLETED) {
-      return i18n.t('stopPoints.states.completed');
+  const getMarkerIcon = () => {
+    if (isFutureRide && isNext) {
+      return (
+        <SvgIcon
+          Svg={clockIcon}
+          width={12}
+          height={12}
+          fill={theme.primaryColor}
+          style={{ marginRight: 5 }}
+        />
+      );
     }
-
     if (isNext) {
-      const eta = stopPoint.plannedArrivalTime || (chosenService && chosenService.eta);
-      if (eta) {
-        const minutesUntilPickup = moment(eta).diff(moment(), 'minutes');
-        return minutesUntilPickup < 1
-          ? i18n.t('general.now')
-          : i18n.t('rideDetails.toolTipEta', { minutes: minutesUntilPickup });
-      }
+      return (
+        <PulseContainer>
+          <Loader
+            sourceProp={pulse}
+            lottieViewStyle={{ width: 24, height: 24, marginRight: 5 }}
+          />
+        </PulseContainer>
+      );
     }
-
-    if (stopPoint.plannedArrivalTime) {
-      return moment(stopPoint.plannedArrivalTime).format('h:mm A');
-    }
-
-    return stopPoint.streetAddress || stopPoint.description;
   };
-
 
   return (
     <Marker
@@ -82,16 +86,9 @@ const StopPointMarker = ({
           </TypeText>
         </Type>
         <SubContainer>
-          {isNext && (
-            <PulseContainer>
-              <Loader
-                sourceProp={pulse}
-                lottieViewStyle={{ width: 24, height: 24, marginRight: 5 }}
-              />
-            </PulseContainer>
-          )}
+          {getMarkerIcon()}
           <SubText numberOfLines={1}>
-            {etaText()}
+            {etaText}
           </SubText>
         </SubContainer>
       </InfoBox>

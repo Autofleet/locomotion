@@ -63,7 +63,7 @@ const RoundedButton = ({
           style={{ margin: 10 }}
         />
       )}
-      <ButtonTextContainer>
+      <ButtonTextContainer withIcon={!!icon}>
         <SubmitButtonText
           hollow={hollow}
           disabled={disabled}

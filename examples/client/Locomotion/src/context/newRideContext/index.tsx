@@ -5,6 +5,7 @@ import Config from 'react-native-config';
 import { useNavigation } from '@react-navigation/native';
 import _ from 'lodash';
 import moment from 'moment';
+import { FutureRidesContext } from '../futureRides';
 import { UserContext } from '../user';
 import { getPosition, DEFAULT_COORDS } from '../../services/geo';
 import { getPlaces, getGeocode, getPlaceDetails } from './google-api';
@@ -41,7 +42,7 @@ export interface RideInterface {
   notes?: string;
   paymentMethodId?: string;
   serviceId?: string;
-  afterTime?: number;
+  scheduledTo?: string;
   driver?: any;
   stopPoints?: any[];
   vehicle?: any;
@@ -90,7 +91,7 @@ interface RidePageContextInterface {
   setRidePopup: Dispatch<RidePopupNames | null>;
   trackRide: () => Promise<string>;
   postRideSubmit: (rideId: string, ridePayload: any) => any;
-  cancelRide: () => Promise<void>;
+  cancelRide: (rideId?: string) => Promise<void>;
   getCallNumbers: () => Promise<void>;
   getRideFromApi: (rideId: string) => Promise<RideInterface>;
   setRide: Dispatch<RideInterface>;
@@ -98,6 +99,8 @@ interface RidePageContextInterface {
   validateRequestedStopPoints: (reqSps: any[]) => void;
   setRequestStopPoints: (sps: any) => void;
   tryServiceEstimations: () => Promise<void>;
+  getService: (serviceId: string) => Promise<any>;
+  getServices: () => Promise<any[]>;
 }
 
 export const RidePageContext = createContext<RidePageContextInterface>({
@@ -144,6 +147,8 @@ export const RidePageContext = createContext<RidePageContextInterface>({
   validateRequestedStopPoints: (reqSps: any[]) => undefined,
   setRequestStopPoints: (sps: any) => undefined,
   tryServiceEstimations: async () => undefined,
+  getService: async (serviceId: string) => ({}),
+  getServices: async () => [],
 });
 
 const HISTORY_RECORDS_NUM = 10;
@@ -153,7 +158,8 @@ const RidePageContextProvider = ({ children }: {
 }) => {
   const { locationGranted, user } = useContext(UserContext);
   const navigation = useNavigation<Nav>();
-  const { checkStopPointsInTerritory, changeBsPage } = useContext(RideStateContextContext);
+  const { checkStopPointsInTerritory, changeBsPage, currentBsPage } = useContext(RideStateContextContext);
+  const { setNewFutureRide, loadFutureRides } = useContext(FutureRidesContext);
   const [requestStopPoints, setRequestStopPoints] = useState(INITIAL_STOP_POINTS);
   const [currentGeocode, setCurrentGeocode] = useState<any | null>(null);
   const [searchTerm, setSearchTerm] = useState<string | null>(null);
@@ -184,7 +190,9 @@ const RidePageContextProvider = ({ children }: {
   };
 
   const RIDE_STATES_TO_SCREENS = {
-    [RIDE_STATES.PENDING]: () => { changeBsPage(BS_PAGES.CONFIRMING_RIDE); },
+    [RIDE_STATES.PENDING]: () => {
+      changeBsPage(BS_PAGES.CONFIRMING_RIDE);
+    },
     [RIDE_STATES.MATCHING]: () => { changeBsPage(BS_PAGES.CONFIRMING_RIDE); },
     [RIDE_STATES.REJECTED]: () => { changeBsPage(BS_PAGES.NO_AVAILABLE_VEHICLES); },
     [RIDE_STATES.COMPLETED]: (completedRide: any) => {
@@ -192,8 +200,9 @@ const RidePageContextProvider = ({ children }: {
       changeBsPage(BS_PAGES.ADDRESS_SELECTOR);
       cleanRideState();
     },
-    [RIDE_STATES.DISPATCHED]: () => {
+    [RIDE_STATES.DISPATCHED]: (newRide: any) => {
       cleanRequestStopPoints();
+      setRide(newRide);
       changeBsPage(BS_PAGES.ACTIVE_RIDE);
     },
     [RIDE_STATES.ACTIVE]: () => {
@@ -234,7 +243,17 @@ const RidePageContextProvider = ({ children }: {
         && estimationForService.results[0];
       return formatEstimationsResult(service, estimationResult, tags);
     });
-    return formattedServices.sort((a, b) => a.priority - b.priority);
+
+    return formattedServices.sort((a, b) => {
+      if (
+        (a.serviceAvailabilitiesNumber !== 0 && b.serviceAvailabilitiesNumber !== 0)
+        || (a.serviceAvailabilitiesNumber === 0 && b.serviceAvailabilitiesNumber === 0)
+      ) {
+        return a.priority - b.priority;
+      }
+
+      return a.serviceAvailabilitiesNumber === 0 ? -1 : 1;
+    });
   };
 
   const getServiceEstimations = async (throwError = true) => {
@@ -253,6 +272,9 @@ const RidePageContextProvider = ({ children }: {
     }
   };
 
+  const getService = async (serviceId: string) => rideApi.getService(serviceId);
+
+  const getServices = async () => rideApi.getServices();
 
   const getServiceEstimationsFetchingInterval = () => getSettingByKey(
     SETTINGS_KEYS.SERVICE_ESTIMATIONS_INTERVAL_IN_SECONDS,
@@ -286,8 +308,10 @@ const RidePageContextProvider = ({ children }: {
     const activeRide = await rideApi.getActiveRide();
     if (activeRide) {
       const formattedRide = await formatRide(activeRide);
-      setRide(formattedRide);
-      changeBsPage(BS_PAGES.ACTIVE_RIDE);
+      const screenFunction = RIDE_STATES_TO_SCREENS[formattedRide?.state || ''];
+      if (screenFunction) {
+        screenFunction(formattedRide);
+      }
     } else {
       cleanRideState();
       changeBsPage(BS_PAGES.ADDRESS_SELECTOR);
@@ -513,12 +537,19 @@ const RidePageContextProvider = ({ children }: {
     }
   };
 
-  const parseSearchResults = (results: any[]) => results.map(r => ({
-    text: r.structured_formatting.main_text,
-    subText: r.structured_formatting.secondary_text,
-    fullText: `${r.structured_formatting.main_text}, ${r.structured_formatting.secondary_text}`,
-    placeId: r.place_id,
-  }));
+  const parseSearchResults = (results: any[]) => results.map((r) => {
+    let formatedAddress = r.structured_formatting.main_text;
+    if (r.structured_formatting.secondary_text) {
+      formatedAddress = `${formatedAddress}, ${r.structured_formatting.secondary_text}`;
+    }
+
+    return {
+      text: r.structured_formatting.main_text,
+      subText: r.structured_formatting.secondary_text,
+      fullText: formatedAddress,
+      placeId: r.place_id,
+    };
+  });
 
   const saveLastAddresses = async (item: any) => {
     const history: any[] = await getLastAddresses();
@@ -554,7 +585,7 @@ const RidePageContextProvider = ({ children }: {
       serviceId: chosenService?.id,
       paymentMethodId: ride.paymentMethodId,
       rideType: 'passenger',
-      ...(ride.afterTime && { scheduledTo: ride.afterTime }),
+      ...(ride.scheduledTo && { scheduledTo: ride.scheduledTo }),
       stopPoints: stopPoints.map((sp, i) => ({
         lat: Number(sp.lat),
         lng: Number(sp.lng),
@@ -568,8 +599,11 @@ const RidePageContextProvider = ({ children }: {
       if (afRide.state === RIDE_STATES.REJECTED) {
         throw new Error();
       }
-      const formattedRide = await formatRide(afRide);
-      setRide(formattedRide);
+      if (afRide.scheduledTo) {
+        loadFutureRides();
+        setNewFutureRide(afRide);
+        changeBsPage(BS_PAGES.CONFIRM_FUTURE_RIDE);
+      }
     } catch (e) {
       changeBsPage(BS_PAGES.NO_AVAILABLE_VEHICLES);
     } finally {
@@ -659,8 +693,8 @@ const RidePageContextProvider = ({ children }: {
   };
 
 
-  const cancelRide = async () => {
-    await rideApi.cancelRide(ride?.id);
+  const cancelRide = async (rideId?: string) => {
+    await rideApi.cancelRide(rideId || ride?.id);
   };
 
   const getCallNumbers = async () => {
@@ -736,6 +770,8 @@ const RidePageContextProvider = ({ children }: {
         validateRequestedStopPoints,
         setRequestStopPoints,
         tryServiceEstimations,
+        getService,
+        getServices,
       }}
     >
       {children}

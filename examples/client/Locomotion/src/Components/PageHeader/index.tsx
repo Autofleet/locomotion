@@ -7,9 +7,21 @@ import {
 import i18n from '../../I18n';
 import backArrow from '../../assets/arrow-back.png';
 
+interface PageHeaderProps {
+  title: string,
+  icon?: any,
+  onIconPress?: () => void,
+  iconSide?: 'right' | 'left',
+  displayIcon?: boolean,
+  width?: number,
+  showSkipButton?: boolean,
+  onPressSkip?: () => void,
+  action?: any,
+}
+
 const PageHeader = ({
   title, icon, onIconPress, iconSide, displayIcon, width, showSkipButton, onPressSkip, action,
-}) => (
+}: PageHeaderProps) => (
   <Header style={Platform.OS === 'android' ? { shadowColor: '#000' } : {}}>
     {displayIcon !== false
       ? (
@@ -38,19 +50,12 @@ const PageHeader = ({
 export default PageHeader;
 
 PageHeader.defaultProps = {
-  title: '',
   icon: backArrow,
   iconSide: 'left',
   onIconPress: () => null,
-  height: '25px',
   width: '25px',
-};
-
-PageHeader.propTypes = {
-  title: propsTypes.string,
-  icon: propsTypes.string,
-  iconSide: propsTypes.string,
-  onIconPress: propsTypes.func,
-  width: propsTypes.string,
-  height: propsTypes.string,
+  displayIcon: true,
+  showSkipButton: false,
+  onPressSkip: null,
+  action: null,
 };

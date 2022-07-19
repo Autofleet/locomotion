@@ -36,7 +36,8 @@ export const Header = styled.View`
   justify-content: space-between;
   position: relative;
   elevation: 10;
-  box-shadow:  0px 5px 5px rgba(0,0,0,0.05);
+  box-shadow: 0px 5px 5px rgba(0,0,0,0.05);
+  z-index: 999;
 `;
 
 export const SkipButton = styled(Button)`

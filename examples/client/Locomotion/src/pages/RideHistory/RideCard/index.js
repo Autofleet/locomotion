@@ -33,10 +33,10 @@ const RideTitleCard = ({ ride, page }) => (
   <>
     <RideViewTextContainer>
       <DayTitleText bigText={page}>
-        {moment(ride.lastMatchAttempt).format(MMMM_DD_YYYY)}
+        {moment(ride.scheduledTo || ride.createdAt).format(MMMM_DD_YYYY)}
       </DayTitleText>
       <DayTitleSubText noCap>
-        {`${moment(ride.lastMatchAttempt).format('HH:mm')
+        {`${moment(ride.scheduledTo || ride.createdAt).format('HH:mm')
         } · ${ride.appDuration}`}
       </DayTitleSubText>
     </RideViewTextContainer>

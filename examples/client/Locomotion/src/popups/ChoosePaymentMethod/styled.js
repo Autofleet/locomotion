@@ -10,7 +10,10 @@ export const SelectButton = styled(RoundedButton)`
 `;
 
 export const CloseButton = styled(Button)`
-  flex: 1;
+  flex: 2;
+  height: 30;
+  align-items: center;
+  justify-content: center;
 `;
 
 export const CardsScrollView = styled(ScrollView)`

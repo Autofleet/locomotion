@@ -93,7 +93,6 @@ const UserContextProvider = ({ children }: { children: any }) => {
 
   useEffect(() => {
     getUserFromStorage();
-    OneSignal.init();
   }, []);
 
   const updatePushToken = async () => {
