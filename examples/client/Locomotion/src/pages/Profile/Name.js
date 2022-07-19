@@ -1,4 +1,4 @@
-import React, { useState, useContext, useRef } from 'react';
+import React, { useState, useContext, useRef, useEffect } from 'react';
 import { ScrollView } from 'react-native';
 import { useRoute } from '@react-navigation/native';
 import TextInput from '../../Components/TextInput';
@@ -18,15 +18,12 @@ const Name = ({ navigation }) => {
   const route = useRoute();
   const { nextScreen } = useContext(OnboardingContext);
   const secondTextInput = useRef(null);
-  const { updateUserInfo, user, updateState } = useContext(UserContext);
+  const { updateUserInfo, user } = useContext(UserContext);
   const [showErrorText, setShowErrorText] = useState(false);
-  const isFirstNameValid = user.firstName && user.firstName.trim();
-  const isLastNameValid = user.lastName && user.lastName.trim();
-
-  const inputChange = field => (value) => {
-    setShowErrorText(false);
-    updateState({ [field]: value });
-  };
+  const [firstName, setFirstName] = useState(user.firstName);
+  const [lastName, setLastName] = useState(user.lastName);
+  const isFirstNameValid = firstName && firstName.trim();
+  const isLastNameValid = lastName && lastName.trim();
 
   const isInvalid = !isFirstNameValid || !isLastNameValid;
 
@@ -35,16 +32,22 @@ const Name = ({ navigation }) => {
       return;
     }
     const sanitizedNames = {
-      firstName: user.firstName.trim(),
-      lastName: user.lastName.trim(),
+      firstName: firstName.trim(),
+      lastName: lastName.trim(),
     };
-    await updateUserInfo({ ...user, ...sanitizedNames });
+    await updateUserInfo(sanitizedNames);
     if (route.params && route.params.editAccount) {
       navigation.navigate(MAIN_ROUTES.ACCOUNT);
     } else {
       nextScreen(MAIN_ROUTES.NAME);
     }
   };
+
+  // useEffect(() => {
+  //   return () => {
+
+  //   }
+  // }, [])
 
   return (
     <ScrollView keyboardShouldPersistTaps="handled">
@@ -60,8 +63,10 @@ const Name = ({ navigation }) => {
               testID="firstNameInput"
               placeholder={i18n.t('onboarding.firstNamePlaceholder')}
               autoFocus
-              onChangeText={inputChange('firstName')}
-              value={user.firstName}
+              onChangeText={(value) => {
+                setFirstName(value);
+              }}
+              value={firstName}
               autoCapitalize="words"
               error={showErrorText && !isFirstNameValid}
               returnKeyType="next"
@@ -73,8 +78,10 @@ const Name = ({ navigation }) => {
             <TextInput
               testID="lastNameInput"
               placeholder={i18n.t('onboarding.lastNamePlaceholder')}
-              onChangeText={inputChange('lastName')}
-              value={user.lastName}
+              onChangeText={(value) => {
+                setLastName(value);
+              }}
+              value={lastName}
               autoCapitalize="words"
               returnKeyType="done"
               onSubmitEditing={() => { onComplete(); }}
