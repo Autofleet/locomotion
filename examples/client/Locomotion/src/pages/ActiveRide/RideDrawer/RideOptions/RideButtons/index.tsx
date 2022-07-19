@@ -18,7 +18,7 @@ import { RideStateContextContext } from '../../../../../context/ridePageStateCon
 import { popupNames } from '../utils';
 import { BS_PAGES } from '../../../../../context/ridePageStateContext/utils';
 import cashPaymentMethod from '../../../../../pages/Payments/cashPaymentMethod';
-import { MAX_DATE_FUTURE_RIDE, MIN_DATE_FUTURE_RIDE } from '../../../../../context/newRideContext/utils';
+import { getFutureRideMaxDate, getFutureRideMinDate } from '../../../../../context/newRideContext/utils';
 
 
 interface RideButtonsProps {
@@ -56,8 +56,8 @@ const RideButtons = ({
         <DatePicker
           open={isDatePickerOpen}
           date={moment(ride?.scheduledTo).toDate()}
-          maximumDate={MAX_DATE_FUTURE_RIDE}
-          minimumDate={MIN_DATE_FUTURE_RIDE}
+          maximumDate={getFutureRideMaxDate()}
+          minimumDate={getFutureRideMinDate()}
           mode="datetime"
           title={i18n.t('bottomSheetContent.ride.chosePickupTime')}
           onCancel={close}

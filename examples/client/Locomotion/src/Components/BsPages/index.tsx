@@ -31,7 +31,7 @@ import { MewRidePageContext } from '../..';
 import timeIcon from '../../assets/calendar.svg';
 import ActiveRideContent from './ActiveRide';
 import RoundedButton from '../RoundedButton';
-import { MAX_DATE_FUTURE_RIDE, MIN_DATE_FUTURE_RIDE } from '../../context/newRideContext/utils';
+import { getFutureRideMaxDate, getFutureRideMinDate } from '../../context/newRideContext/utils';
 
 const OtherButton = styled(Button)`
   background-color: ${({ warning, theme }) => (warning ? ERROR_COLOR : theme.primaryColor)};
@@ -261,8 +261,8 @@ export const ConfirmPickupTime = (props: any) => {
       <DatePicker
         open={isDatePickerOpen}
         date={moment(ride?.scheduledTo).toDate()}
-        maximumDate={MAX_DATE_FUTURE_RIDE}
-        minimumDate={MIN_DATE_FUTURE_RIDE}
+        maximumDate={getFutureRideMaxDate()}
+        minimumDate={getFutureRideMinDate()}
         mode="datetime"
         title={i18n.t('bottomSheetContent.ride.chosePickupTime')}
         onCancel={() => setIsDatePickerOpen(false)}
@@ -471,9 +471,10 @@ export const ConfirmingRide = (props: any) => {
 
   return (
     <BsPage
-      TitleText={i18n.t('bottomSheetContent.confirmingRide.titleText')}
+      TitleText={i18n.t(`bottomSheetContent.${ride?.scheduledTo ? 'confirmingFutureRide' : 'confirmingRide'}.titleText`)}
       SecondaryButtonText={ride?.id ? i18n.t('bottomSheetContent.confirmingRide.secondaryButtonText') : null}
       onSecondaryButtonPress={() => changeBsPage(BS_PAGES.CANCEL_RIDE)}
+      SubTitleText={ride?.scheduledTo ? i18n.t('bottomSheetContent.confirmingFutureRide.subTitleText', { date: moment(ride.scheduledTo).format('MMM D, h:mm A') }) : null}
       fullWidthButtons
       {...props}
     >

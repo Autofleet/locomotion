@@ -14,6 +14,10 @@ padding: 10px;
 background-color: #ffffff;
 border-radius: 8px;
 align-items: center;
+shadow-offset: 0px 0px;
+shadow-color: #04214f;
+shadow-opacity: 0.4;
+elevation: 3;
 `;
 
 export const UpcomingText = styled(Text)`
