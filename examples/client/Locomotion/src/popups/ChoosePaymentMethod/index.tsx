@@ -96,7 +96,12 @@ const PaymentMethodPopup = ({
                 : navigation.navigate(MAIN_ROUTES.PAYMENT);
             }}
           >
-            <SvgIcon Svg={closeXIcon} width={10} height={10} fill="#333" />
+            <SvgIcon
+              Svg={closeXIcon}
+              width={11}
+              height={11}
+              fill="#333"
+            />
           </CloseButton>
         </TitleView>
         <CardsScrollView>
