@@ -69,7 +69,7 @@ const usePayments = () => {
   };
 
   return {
-  getCustomer,
+    getCustomer,
     customer,
     loadCustomer,
     setup,
