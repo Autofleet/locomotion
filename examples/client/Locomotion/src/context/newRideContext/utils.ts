@@ -133,3 +133,9 @@ export const getFormattedPrice = (priceCurrency: string, priceAmount: number) =>
   }
   return new Intl.NumberFormat('en-IN', { style: 'currency', currency: (priceCurrency) }).format(priceAmount);
 };
+
+
+export const getCurrencySymbol = (priceCurrency: string) => {
+  const currency = new Intl.NumberFormat('en-IN', { style: 'currency', currency: (priceCurrency), maximumFractionDigits: 0 }).format(0);
+  return currency[0];
+};

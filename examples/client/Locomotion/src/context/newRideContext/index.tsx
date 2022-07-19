@@ -537,12 +537,19 @@ const RidePageContextProvider = ({ children }: {
     }
   };
 
-  const parseSearchResults = (results: any[]) => results.map(r => ({
-    text: r.structured_formatting.main_text,
-    subText: r.structured_formatting.secondary_text,
-    fullText: `${r.structured_formatting.main_text}, ${r.structured_formatting.secondary_text}`,
-    placeId: r.place_id,
-  }));
+  const parseSearchResults = (results: any[]) => results.map((r) => {
+    let formatedAddress = r.structured_formatting.main_text;
+    if (r.structured_formatting.secondary_text) {
+      formatedAddress = `${formatedAddress}, ${r.structured_formatting.secondary_text}`;
+    }
+
+    return {
+      text: r.structured_formatting.main_text,
+      subText: r.structured_formatting.secondary_text,
+      fullText: formatedAddress,
+      placeId: r.place_id,
+    };
+  });
 
   const saveLastAddresses = async (item: any) => {
     const history: any[] = await getLastAddresses();
