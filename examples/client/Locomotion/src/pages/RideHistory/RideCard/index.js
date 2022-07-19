@@ -21,6 +21,7 @@ import {
   RideViewSectionTitleText,
   DriverCardContainer,
   StopPointsVerticalViewContainer,
+  RideStateText,
 } from './styled';
 import StopPointsVerticalView from '../../../Components/StopPointsVerticalView';
 import Map from './Map';
@@ -28,6 +29,7 @@ import i18n from '../../../I18n';
 import { MMMM_DD_YYYY } from '../consts';
 import DriverCard from '../../../Components/DriverCard';
 import { getFormattedPrice } from '../../../context/newRideContext/utils';
+import { RIDE_STATES } from '../../../lib/commonTypes';
 
 const RideTitleCard = ({ ride, page }) => (
   <>
@@ -35,10 +37,12 @@ const RideTitleCard = ({ ride, page }) => (
       <DayTitleText bigText={page}>
         {moment(ride.lastMatchAttempt).format(MMMM_DD_YYYY)}
       </DayTitleText>
-      <DayTitleSubText noCap>
-        {`${moment(ride.lastMatchAttempt).format('HH:mm')
-        } · ${ride.appDuration}`}
-      </DayTitleSubText>
+      {ride.state === RIDE_STATES.COMPLETED ? (
+        <DayTitleSubText noCap>
+          {`${moment(ride.lastMatchAttempt).format('HH:mm')
+          } · ${ride.appDuration}`}
+        </DayTitleSubText>
+      ) : <RideStateText>{i18n.t(`rideHistory.ride.states.${ride.state}`)}</RideStateText>}
     </RideViewTextContainer>
     <RideViewSecTextContainer>
       <DaySecTitleText>
@@ -75,6 +79,7 @@ const RideView = ({ ride }) => {
     <RideViewContainer>
       <MapRideViewContainer>
         <Map
+          disableMarkers={ride.state !== RIDE_STATES.COMPLETED}
           ref={map}
           ride={ride}
         />
@@ -96,7 +101,7 @@ const RideView = ({ ride }) => {
         />
       </StopPointsVerticalViewContainer>
       <DriverCardContainer>
-        {ride.driver && (
+        {ride.driver && ride.state === RIDE_STATES.COMPLETED && (
         <DriverCard
           activeRide={false}
           ride={ride}
