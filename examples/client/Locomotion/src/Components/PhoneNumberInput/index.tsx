@@ -12,12 +12,12 @@ const PhoneNumberInput = ({
   autoFocus,
   error,
   value,
-}) => {
+}: any) => {
   const [isFocused, setIsFocused] = useState(false);
   const [defaultCode, setDefaultCode] = useState(null);
   const asYouTypePhoneNumber = new AsYouType();
 
-  const onChangeText = (v) => {
+  const onChangeText = (v: any) => {
     const numberValue = `${v}`;
     asYouTypePhoneNumber.input(numberValue);
     const number = asYouTypePhoneNumber.getNumberValue();
@@ -50,12 +50,12 @@ const PhoneNumberInput = ({
   return defaultCode ? (
     <PhoneInput
       key={defaultCode}
-      testID="phoneNumber"
       value={cleanNumber(value)}
       autoFocus={autoFocus}
       defaultCode={defaultCode}
       onChangeFormattedText={onChangeText}
       textInputProps={{
+        testID: 'phoneNumber',
         accessible: true,
         accessibilityLabel: 'phoneNumber',
         onFocus: () => setIsFocused(true),
