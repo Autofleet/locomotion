@@ -1,6 +1,5 @@
 import React from 'react';
 import { Text } from 'react-native';
-import { TouchableOpacity } from 'react-native-gesture-handler';
 import styled from 'styled-components';
 import SvgIcon from '../../../../../../Components/SvgIcon';
 import { FONT_SIZES, FONT_WEIGHTS } from '../../../../../../context/theme';

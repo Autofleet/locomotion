@@ -22,6 +22,7 @@ import { MAIN_ROUTES } from './routes';
 import CardDetails from '../Components/CardDetails';
 import EditCardName from './Payments/editNickename';
 import FutureRidesView from './FutureRidesView';
+import RidePriceBreakDown from './RidePriceBreakdown';
 
 export const ROUTES_COMPS = {
   [MAIN_ROUTES.HOME]: ActiveRide,
@@ -46,6 +47,7 @@ export const ROUTES_COMPS = {
   [MAIN_ROUTES.CARD_DETAILS]: CardDetails,
   [MAIN_ROUTES.EDIT_NICKNAME]: EditCardName,
   [MAIN_ROUTES.FUTURE_RIDES]: FutureRidesView,
+  [MAIN_ROUTES.RIDE_PRICE_BREAKDOWN]: RidePriceBreakDown
 };
 
 export const profileStack = ({ stack: Stack }) => (
