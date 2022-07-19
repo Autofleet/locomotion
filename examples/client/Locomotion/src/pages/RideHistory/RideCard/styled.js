@@ -189,3 +189,8 @@ padding-left: 20px;
 export const StopPointsVerticalViewContainer = styled.View`
 padding: 0 20px;
 `;
+
+export const RideStateText = styled.Text`
+${FONT_SIZES.MEDIUM};
+${FONT_WEIGHTS.REGULAR};
+`;
