@@ -7,7 +7,7 @@ import {
 } from 'react-native';
 import { FutureRidesContext } from '../../context/futureRides';
 import FutureRidesButton from '../../Components/FutureRidesButton';
-import { RIDE_STATES } from '../../lib/commonTypes';
+import { RIDE_STATES, STOP_POINT_TYPES } from '../../lib/commonTypes';
 import { RIDE_POPUPS } from '../../context/newRideContext/utils';
 import { UserContext } from '../../context/user';
 import {
@@ -121,7 +121,7 @@ const RidePage = ({ mapSettings, navigation }) => {
     ),
     [BS_PAGES.LOCATION_REQUEST]: () => (
       <LocationRequest
-        onSecondaryButtonPress={goBackToAddress}
+        onSecondaryButtonPress={() => goBackToAddress(STOP_POINT_TYPES.STOP_POINT_PICKUP)}
       />
     ),
     [BS_PAGES.NOT_IN_TERRITORY]: () => (
