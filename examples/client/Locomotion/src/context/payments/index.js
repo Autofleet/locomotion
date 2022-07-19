@@ -20,7 +20,6 @@ const usePayments = () => {
 
   const loadCustomer = async () => {
     const customerData = await getCustomer();
-    console.log('c:', customerData);
     setCustomer(customerData);
     setPaymentMethods(customerData.paymentMethods);
     return customerData;
