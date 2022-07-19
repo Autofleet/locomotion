@@ -28,12 +28,12 @@ const TipSectionContainer = styled.View`
 
 const Container = styled.View`
   flex-direction: column;
-  padding: 30px 0px;
+  padding: 0px 0px;
   flex: 1;
 `;
 
 const Title = styled.Text`
-  font-size: 20px;
+  font-size: 18px;
   color: #333333;
   font-weight: 600;
   margin-bottom: 8px;
