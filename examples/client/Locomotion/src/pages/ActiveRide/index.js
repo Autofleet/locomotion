@@ -3,6 +3,7 @@ import React, {
 } from 'react';
 import { useIsFocused, useFocusEffect } from '@react-navigation/native';
 import { AppState, BackHandler, View } from 'react-native';
+import { PortalProvider } from '@gorhom/portal';
 import { FutureRidesContext } from '../../context/futureRides';
 import FutureRidesButton from '../../Components/FutureRidesButton';
 import { RIDE_STATES } from '../../lib/commonTypes';
@@ -311,14 +312,16 @@ const RidePage = ({ mapSettings, navigation }) => {
           />
         )}
       </MapOverlayButtons>
-      <BottomSheet
-        ref={bottomSheetRef}
-        focusCurrentLocation={focusCurrentLocation}
-      >
-        {
+      <PortalProvider>
+        <BottomSheet
+          ref={bottomSheetRef}
+          focusCurrentLocation={focusCurrentLocation}
+        >
+          {
           BS_PAGE_TO_COMP[currentBsPage] ? BS_PAGE_TO_COMP[currentBsPage]() : null
         }
-      </BottomSheet>
+        </BottomSheet>
+      </PortalProvider>
       <RideCanceledPopup
         isVisible={ridePopup === RIDE_POPUPS.RIDE_CANCELED_BY_DISPATCHER}
         onCancel={() => {
