@@ -136,6 +136,9 @@ export const getFormattedPrice = (priceCurrency: string, priceAmount: number) =>
 
 
 export const getCurrencySymbol = (priceCurrency: string) => {
+  if (!priceCurrency) {
+    return '';
+  }
   const currency = new Intl.NumberFormat('en-IN', { style: 'currency', currency: (priceCurrency), maximumFractionDigits: 0 }).format(0);
   return currency[0];
 };
