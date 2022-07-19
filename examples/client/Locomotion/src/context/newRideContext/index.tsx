@@ -25,7 +25,7 @@ import SETTINGS_KEYS from '../settings/keys';
 import { RideStateContextContext } from '../ridePageStateContext';
 import { BS_PAGES } from '../ridePageStateContext/utils';
 import { RIDE_STATES, RIDE_FINAL_STATES, STOP_POINT_TYPES } from '../../lib/commonTypes';
-import useInterval from '../../lib/useInterval';
+import useBackgroundInterval from '../../lib/useBackgroundInterval';
 import { formatSps } from '../../lib/ride/utils';
 import { APP_ROUTES, MAIN_ROUTES } from '../../pages/routes';
 import * as navigationService from '../../services/navigation';
@@ -193,7 +193,10 @@ const RidePageContextProvider = ({ children }: {
     [RIDE_STATES.PENDING]: () => {
       changeBsPage(BS_PAGES.CONFIRMING_RIDE);
     },
-    [RIDE_STATES.MATCHING]: () => { changeBsPage(BS_PAGES.CONFIRMING_RIDE); },
+    [RIDE_STATES.MATCHING]: (matchingRide: RideInterface) => {
+      setRide(matchingRide);
+      changeBsPage(BS_PAGES.CONFIRMING_RIDE);
+    },
     [RIDE_STATES.REJECTED]: () => { changeBsPage(BS_PAGES.NO_AVAILABLE_VEHICLES); },
     [RIDE_STATES.COMPLETED]: (completedRide: any) => {
       navigation.navigate(MAIN_ROUTES.POST_RIDE, { rideId: completedRide.id });
@@ -324,7 +327,7 @@ const RidePageContextProvider = ({ children }: {
     }
   }, []);
 
-  useInterval(async () => {
+  useBackgroundInterval(async () => {
     if (user?.id && !rideRequestLoading) {
       if (ride?.id) {
         try {
