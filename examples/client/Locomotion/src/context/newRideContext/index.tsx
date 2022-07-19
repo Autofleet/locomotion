@@ -25,7 +25,7 @@ import SETTINGS_KEYS from '../settings/keys';
 import { RideStateContextContext } from '../ridePageStateContext';
 import { BS_PAGES } from '../ridePageStateContext/utils';
 import { RIDE_STATES, RIDE_FINAL_STATES, STOP_POINT_TYPES } from '../../lib/commonTypes';
-import useInterval from '../../lib/useInterval';
+import useBackgroundInterval from '../../lib/useBackgroundInterval';
 import { formatSps } from '../../lib/ride/utils';
 import { APP_ROUTES, MAIN_ROUTES } from '../../pages/routes';
 import * as navigationService from '../../services/navigation';
@@ -324,7 +324,7 @@ const RidePageContextProvider = ({ children }: {
     }
   }, []);
 
-  useInterval(async () => {
+  useBackgroundInterval(async () => {
     if (user?.id && !rideRequestLoading) {
       if (ride?.id) {
         try {

@@ -119,9 +119,11 @@ const SearchBar = ({
 
   useEffect(() => {
     if (isSelected) {
-      if (inputRef && inputRef.current) {
-        setTimeout(() => inputRef.current.focus(), 100);
-      }
+      setTimeout(() => {
+        if (inputRef && inputRef.current) {
+          inputRef.current.focus();
+        }
+      }, 250);
     } else {
       inputRef.current = null;
     }
