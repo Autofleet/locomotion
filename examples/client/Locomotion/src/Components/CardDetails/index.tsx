@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useRoute } from '@react-navigation/native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { getCurrencySymbol } from '../../context/newRideContext/utils';
 import ConfirmationPopup from '../../popups/ConfirmationPopup';
 import { getLastFourForamttedLong } from '../../pages/Payments/cardDetailUtils';
 import { MAIN_ROUTES } from '../../pages/routes';
@@ -98,7 +99,7 @@ const CardDetails = ({
                 <Card
                   title={i18n.t('payments.cardDetails.balance')}
                 >
-                  {`${i18n.t('payments.cardDetails.outstandingBalanceText')} ${paymentMethod.outstandingBalance.amount}${paymentMethod.outstandingBalance.currency}`}
+                  {`${i18n.t('payments.cardDetails.outstandingBalanceText')} ${paymentMethod.outstandingBalance.amount}${getCurrencySymbol(paymentMethod.outstandingBalance.currency)}`}
                 </Card>
               ) : undefined}
               <LogoutContainer
