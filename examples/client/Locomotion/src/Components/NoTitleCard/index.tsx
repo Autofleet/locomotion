@@ -1,6 +1,6 @@
 import React from 'react';
 import propsTypes from 'prop-types';
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import { TouchableOpacity } from 'react-native';
 import {
   ArrowContainer, CardContainer, CardContantContainer, CardText, Arrow,
 } from '../InformationCard/styled';

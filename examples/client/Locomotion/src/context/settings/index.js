@@ -3,14 +3,15 @@ import { useState } from 'react';
 import { createContainer } from 'unstated-next';
 import { StorageService } from '../../services';
 import * as settingsApi from './api';
+import settingsKeys from './keys';
 
 const FIVE_MINS_IN_SECONDS = 5 * 60;
 const fieldNameToSettingKeyMap = {
-  contactUsUrl: 'riderApp.contactUsUrl',
-  termsOfUseUrl: 'riderApp.termsOfUseUrl',
-  privacyPolicyUrl: 'riderApp.privacyPolicyUrl',
-  contactEmail: 'riderApp.contactEmail',
-  contactPhone: 'riderApp.contactPhone',
+  contactUsUrl: settingsKeys.CONTACT_US_URL,
+  termsOfUseUrl: settingsKeys.TERMS_OF_USE_URL,
+  privacyPolicyUrl: settingsKeys.PRIVACY_POLICY_URL,
+  contactEmail: settingsKeys.CONTACT_EMAIL,
+  contactPhone: settingsKeys.CONTACT_PHONE,
 };
 
 
@@ -38,7 +39,6 @@ const useSettings = () => {
     const settingMap = {};
     if (keysAfterCache.length > 0) {
       const values = await settingsApi.getMultipleByKeys(keysAfterCache);
-      // eslint-disable-next-line array-callback-return
       keys.map((key, idx) => {
         if (key !== null) {
           settingMap[key] = values[idx];
@@ -80,6 +80,12 @@ const useSettings = () => {
     setWorkingHours(prepWorkingHours);
   };
 
+  const getAppSettings = async () => {
+    const appSettings = await settingsApi.getAppSettings();
+    await StorageService.save(appSettings);
+    return appSettings;
+  };
+
   const prepareWorkingHours = (workingHoursData) => {
     const preparedworkingHours = {};
     workingHoursData.map((timeSlot) => {
@@ -100,6 +106,7 @@ const useSettings = () => {
     getSettingByKey,
     getMultipleSettingByKey,
     getLoginSettings,
+    getAppSettings,
   };
 };
 export default createContainer(useSettings);

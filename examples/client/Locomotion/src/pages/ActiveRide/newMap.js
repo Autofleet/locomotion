@@ -42,6 +42,17 @@ const PAGES_TO_SHOW_SP_MARKERS = [
   BS_PAGES.CONFIRM_FUTURE_RIDE,
 ];
 
+const PAGES_TO_SHOW_MY_LOCATION = [
+  BS_PAGES.ADDRESS_SELECTOR,
+  BS_PAGES.SERVICE_ESTIMATIONS,
+  BS_PAGES.NOT_IN_TERRITORY,
+  BS_PAGES.ACTIVE_RIDE,
+  BS_PAGES.CANCEL_RIDE,
+  BS_PAGES.CONFIRM_FUTURE_RIDE,
+  BS_PAGES.SET_LOCATION_ON_MAP,
+  BS_PAGES.CONFIRM_PICKUP,
+];
+
 
 const getFirstPendingStopPoint = sps => (sps || []).find(sp => sp.state
   === STOP_POINT_STATES.PENDING);
@@ -218,7 +229,7 @@ export default React.forwardRef(({
     <>
       <MapView
         provider={Config.MAP_PROVIDER}
-        showsUserLocation={isMainPage}
+        showsUserLocation={PAGES_TO_SHOW_MY_LOCATION.includes(currentBsPage)}
         style={StyleSheet.absoluteFillObject}
         showsMyLocationButton={false}
         loadingEnabled
