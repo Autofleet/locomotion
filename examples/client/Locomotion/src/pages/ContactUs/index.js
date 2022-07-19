@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useRoute } from '@react-navigation/native';
-import { Linking } from 'react-native';
+import { Linking, Platform } from 'react-native';
 import Clipboard from '@react-native-community/clipboard';
 import { ScrollView } from 'react-native-gesture-handler';
 import NoTitleCard from '../../Components/NoTitleCard';
@@ -81,7 +81,7 @@ export default ({ navigation, menuSide }) => {
               iconSide={menuSide}
             />
             <ScrollView>
-              <ContactUsPageLogoContainer>
+              <ContactUsPageLogoContainer style={Platform.OS === 'android' ? { shadowColor: '#000' } : {}}>
                 <ContactUsLogo resizeMode="cover" source={logo} />
               </ContactUsPageLogoContainer>
               <Container>

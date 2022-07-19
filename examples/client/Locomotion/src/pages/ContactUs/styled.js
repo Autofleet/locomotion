@@ -32,6 +32,10 @@ padding: 20px;
 display: flex;
 justify-content: center;
 align-items: center;
+background-color: white;
+elevation: 10;
+  box-shadow: 0px 5px 5px rgba(0,0,0,0.05);
+z-index: 1;
 `;
 
 export const ContactUsLogo = styled.Image`

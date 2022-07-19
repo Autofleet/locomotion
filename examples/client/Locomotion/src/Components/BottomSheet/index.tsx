@@ -105,7 +105,7 @@ const BottomSheetComponent = forwardRef(({
         },
         shadowOpacity: 0.25,
         shadowRadius: 3.84,
-        elevation: 5,
+        elevation: 10,
         zIndex: 999,
         borderRadius: topBarText ? 0 : 8,
       }}
