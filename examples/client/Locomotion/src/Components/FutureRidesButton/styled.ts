@@ -5,7 +5,7 @@ import { FONT_SIZES } from '../../context/theme';
 
 
 export const Container = styled(Button)`
-width: 45%;
+max-width: 45%;
 display: flex;
 flex-direction: row;
 justify-content: flex-start;

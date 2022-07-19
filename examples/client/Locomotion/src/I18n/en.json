@@ -305,6 +305,9 @@
         "driverRating": "Driver rating"
       }
     },
+    "futureRides": {
+        "pageTitle": "Upcoming rides"
+    },
     "postRide": {
         "pageTitle": "Ride finished",
         "ratingHeadline": "How was your ride?",
