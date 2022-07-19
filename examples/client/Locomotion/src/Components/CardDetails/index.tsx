@@ -31,7 +31,6 @@ const CardDetails = ({
   const [loading, setLoading] = useState(false);
   const [methodForDelete, setMethodForDelete] = useState(null);
   const [isCancelPopupVisible, setIsCancelPopupVisible] = useState(false);
-  const [outstandingBalance, setOutstandingBalance] = useState(null);
   const usePayments = PaymentsContext.useContainer();
   const route = useRoute();
 
@@ -49,13 +48,16 @@ const CardDetails = ({
     navigation.navigate(MAIN_ROUTES.PAYMENT);
   };
 
-  const getOutstandingBalance = async () => {
+  const loadCustomer = async () => {
     setLoading(true);
-    const balance = await usePayments.getOutstandingBalance(methodForDelete);
-    setOutstandingBalance(balance);
+    // loadCustomer to have current card balance
+    await usePayments.loadCustomer();
     setLoading(false);
-    return balance;
   };
+
+  useEffect(() => {
+    loadCustomer();
+  }, []);
 
   useEffect(() => {
     setLoading(loadingState);
@@ -96,7 +98,7 @@ const CardDetails = ({
                 <Card
                   title={i18n.t('payments.cardDetails.balance')}
                 >
-                  {`${i18n.t('payments.cardDetails.outstandingBalanceText')}${outstandingBalance}`}
+                  {`${i18n.t('payments.cardDetails.outstandingBalanceText')} ${paymentMethod.outstandingBalance.amount}${paymentMethod.outstandingBalance.currency}`}
                 </Card>
               ) : undefined}
               <LogoutContainer
@@ -104,7 +106,7 @@ const CardDetails = ({
                   await onRemoveMethod(paymentMethod?.id);
                 }}
               >
-                {paymentMethod?.hasOutstandingBalance ? (
+                {!(paymentMethod?.hasOutstandingBalance) ? (
                   <DeleteContainer>
                     <DeleteIcon Svg={deleteIcon} />
                     <DeleteText>

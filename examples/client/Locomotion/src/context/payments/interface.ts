@@ -1,4 +1,8 @@
 export type Brand = 'code' | 'alipay' | 'amex' | 'american-express' | 'cvv' | 'diners-club' | 'diners' | 'discover' | 'elo' | 'generic' | 'hiper' | 'hipercard' | 'jcb' | 'maestro' | 'mastercard' | 'visa';
+export type Balace = {
+    amount: number,
+    currency: string
+};
 export interface PaymentMethodInterface {
     brand: Brand;
     createdAt: Date;
@@ -13,4 +17,5 @@ export interface PaymentMethodInterface {
     name: string;
     stripeId: string;
     updatedAt: Date;
+    outstandingBalance: Balace
 }

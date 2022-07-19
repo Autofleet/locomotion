@@ -20,6 +20,7 @@ const usePayments = () => {
 
   const loadCustomer = async () => {
     const customerData = await getCustomer();
+    console.log('c:', customerData);
     setCustomer(customerData);
     setPaymentMethods(customerData.paymentMethods);
     return customerData;
@@ -69,7 +70,7 @@ const usePayments = () => {
   };
 
   const getOutstandingBalance = async (paymentMethodId) => {
-    const { data: balance } = await network.get(`${BASE_PATH}/${paymentMethodId}`);
+    const { data: balance } = await network.get(`${BASE_PATH}/${paymentMethodId}/outstanding-balance`);
     return balance;
   };
 
