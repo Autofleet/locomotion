@@ -12,8 +12,9 @@ const FutureRidesButton = () => {
   const { futureRides } = useContext(FutureRidesContext);
   const theme = useContext(ThemeContext);
   const text = futureRides.length > 1
-    ? i18n.t('home.futureRides.oneUpcomingRide')
-    : i18n.t('home.futureRides.multipleUpcomingRides');
+    ? i18n.t('home.futureRides.multipleUpcomingRides')
+    : i18n.t('home.futureRides.oneUpcomingRide');
+
 
   return (
     <Container onPress={() => NavigationService.navigate(MAIN_ROUTES.FUTURE_RIDES)}>

@@ -23,3 +23,10 @@ ${FONT_WEIGHTS.LIGHT}
 opacity: .7;
 margin-top: 5px;
 `;
+
+export const DateContainer = styled(View)`
+display: flex;
+flex-direction: row;
+align-items: center;
+justify-content: space-between;
+`;

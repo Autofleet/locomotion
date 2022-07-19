@@ -97,14 +97,14 @@ const RideOptions = () => {
       stopRequestInterval();
     }
   }, [ridePopup]);
+  // logic for showing top banner for estimated fare
+  // useEffect(() => {
+  //   if (ride.scheduledTo) {
+  //     setTopBarText(i18n.t('home.futureRides.rideFareEstimationNotice'));
+  //   }
 
-  useEffect(() => {
-    if (ride.scheduledTo) {
-      setTopBarText(i18n.t('home.futureRides.rideFareEstimationNotice'));
-    }
-
-    return () => setTopBarText('');
-  }, [ride]);
+  //   return () => setTopBarText('');
+  // }, [ride]);
   return (
     <>
       <ServiceOptions />

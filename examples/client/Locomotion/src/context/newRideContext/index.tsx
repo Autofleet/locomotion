@@ -193,7 +193,10 @@ const RidePageContextProvider = ({ children }: {
     [RIDE_STATES.PENDING]: () => {
       changeBsPage(BS_PAGES.CONFIRMING_RIDE);
     },
-    [RIDE_STATES.MATCHING]: () => { changeBsPage(BS_PAGES.CONFIRMING_RIDE); },
+    [RIDE_STATES.MATCHING]: (matchingRide: RideInterface) => {
+      setRide(matchingRide);
+      changeBsPage(BS_PAGES.CONFIRMING_RIDE);
+    },
     [RIDE_STATES.REJECTED]: () => { changeBsPage(BS_PAGES.NO_AVAILABLE_VEHICLES); },
     [RIDE_STATES.COMPLETED]: (completedRide: any) => {
       navigation.navigate(MAIN_ROUTES.POST_RIDE, { rideId: completedRide.id });

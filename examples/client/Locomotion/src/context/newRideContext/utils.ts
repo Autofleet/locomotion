@@ -3,8 +3,8 @@ import shortid from 'shortid';
 import i18n from '../../I18n';
 import { getGeocode } from './google-api';
 
-export const MIN_DATE_FUTURE_RIDE = moment().add(60, 'minutes').toDate();
-export const MAX_DATE_FUTURE_RIDE = moment().add(7, 'days').toDate();
+export const getFutureRideMinDate = () => moment().add(60, 'minutes').toDate();
+export const getFutureRideMaxDate = () => moment().add(7, 'days').toDate();
 
 export const TAG_OPTIONS = {
   FASTEST: i18n.t('services.tags.fastest'),
