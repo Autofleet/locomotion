@@ -374,6 +374,11 @@
     "subName": "Rider app"
   },
   "bottomSheetContent": {
+    "futureRideLimit": {
+        "titleText": "Scheduled ride limit reached",
+        "buttonText": "Back to order",
+        "subTitleText": "Hey, looks like you're trying to schedule multiple rides that are too close together. Please select another time and try again."
+    },
     "confirmFutureRide": {
         "titleText": "Your upcoming ride has been scheduled",
         "buttonText": "Done",

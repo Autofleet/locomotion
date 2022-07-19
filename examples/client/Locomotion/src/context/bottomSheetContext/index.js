@@ -22,10 +22,11 @@ export const SNAP_POINT_STATES = {
   [BS_PAGES.LOCATION_REQUEST]: [STATIC_SNAP_POINTS],
   [BS_PAGES.CANCEL_RIDE]: [STATIC_SNAP_POINTS],
   [BS_PAGES.CONFIRM_FUTURE_RIDE]: [350],
+  [BS_PAGES.GENERIC_ERROR]: [STATIC_SNAP_POINTS],
 };
 const BottomSheetProvider = ({ children }) => {
   const [isExpanded, setIsExpanded] = useState(false);
-
+  const [genericErrorDetails, setGenericErrorDetails] = useState({});
   const [snapPointsState, setSnapPointsState] = useState(SNAP_POINT_STATES[BS_PAGES.ADDRESS_SELECTOR]);
   const [footerComponent, setFooterComponent] = useState(null);
   const [topBarText, setTopBarText] = useState('');
@@ -42,6 +43,8 @@ const BottomSheetProvider = ({ children }) => {
         footerComponent,
         topBarText,
         setTopBarText,
+        genericErrorDetails,
+        setGenericErrorDetails,
       }}
     >
       {children}

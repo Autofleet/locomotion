@@ -19,6 +19,7 @@ import {
   CancelRide,
   ConfirmPickupTime,
   ConfirmFutureRide,
+  GenericError,
 } from '../../Components/BsPages';
 import { RideStateContextContext, RideStateContextContextProvider } from '../../context';
 import NewRidePageContextProvider, { RidePageContext } from '../../context/newRideContext';
@@ -121,6 +122,9 @@ const RidePage = ({ mapSettings, navigation }) => {
       <LocationRequest
         onSecondaryButtonPress={goBackToAddress}
       />
+    ),
+    [BS_PAGES.GENERIC_ERROR]: () => (
+      <GenericError />
     ),
     [BS_PAGES.NOT_IN_TERRITORY]: () => (
       <NotAvailableHere

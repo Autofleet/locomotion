@@ -276,6 +276,20 @@ export const ConfirmPickupTime = (props: any) => {
   );
 };
 
+export const GenericError = (props: any) => {
+  const { genericErrorDetails } = useContext(BottomSheetContext);
+  return (
+    <BsPage
+      TitleText={genericErrorDetails.titleText}
+      ButtonText={genericErrorDetails.buttonText}
+      SubTitleText={genericErrorDetails.subTitleText}
+      onButtonPress={genericErrorDetails.buttonPress}
+      fullWidthButtons
+      {...props}
+    />
+  );
+};
+
 export const LocationRequest = (props: any) => (
   <BsPage
     TitleText={i18n.t('bottomSheetContent.locationRequest.titleText')}
