@@ -177,7 +177,7 @@ const BsPage = ({
                 {titleIcon && <SvgIcon Svg={titleIcon} style={{ marginRight: 5 }} />}
                 <Title>{TitleText}</Title>
               </TitleContainer>
-              <SubTitle numberOfLines={2}>{SubTitleText}</SubTitle>
+              <SubTitle>{SubTitleText}</SubTitle>
             </CardText>
             {Image ? (
               <ImageContainer>

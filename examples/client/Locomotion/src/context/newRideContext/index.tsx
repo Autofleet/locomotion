@@ -581,7 +581,10 @@ const RidePageContextProvider = ({ children }: {
         titleText: i18n.t('bottomSheetContent.futureRideLimit.titleText'),
         buttonText: i18n.t('bottomSheetContent.futureRideLimit.buttonText'),
         subTitleText: i18n.t('bottomSheetContent.futureRideLimit.subTitleText'),
-        buttonPress: () => changeBsPage(BS_PAGES.SERVICE_ESTIMATIONS),
+        buttonPress: () => {
+          tryServiceEstimations();
+          changeBsPage(BS_PAGES.SERVICE_ESTIMATIONS);
+        },
       });
       changeBsPage(BS_PAGES.GENERIC_ERROR);
     },
@@ -616,7 +619,7 @@ const RidePageContextProvider = ({ children }: {
     try {
       const afRide = await rideApi.createRide(rideToCreate);
       if (afRide.state === RIDE_STATES.REJECTED) {
-        throw new Error();
+        throw new Error(RIDE_FAILED_REASONS.BUSY);
       }
       if (afRide.scheduledTo) {
         loadFutureRides();
@@ -624,6 +627,7 @@ const RidePageContextProvider = ({ children }: {
         changeBsPage(BS_PAGES.CONFIRM_FUTURE_RIDE);
       }
     } catch (e: any) {
+      console.log(e);
       FAILED_TO_CREATE_RIDE_ACTIONS[e.message]();
     } finally {
       setRideRequestLoading(false);
