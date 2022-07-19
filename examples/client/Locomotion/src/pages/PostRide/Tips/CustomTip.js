@@ -67,16 +67,23 @@ const isValidNumber = async (number) => {
 };
 
 const Tips = ({
-  isPercentage,
   customAmount,
   onSubmit,
   tipSuffix,
+  isExpanded,
 }) => {
   const [customTip, setCustomTip] = useState(customAmount);
   const [isValid, setIsValid] = useState(null);
   const { expand, forceClose } = useBottomSheet();
   const inputRef = useRef(null);
 
+  useEffect(() => {
+    if (isExpanded) {
+      inputRef.current.focus();
+    } else {
+      inputRef.current.blur();
+    }
+  }, [isExpanded]);
 
   const submitValue = async () => {
     const validatedNumber = await isValidNumber(customTip);
@@ -86,7 +93,6 @@ const Tips = ({
     }
   };
   const onCancel = () => {
-    inputRef.current.blur();
     forceClose();
   };
 
@@ -119,7 +125,6 @@ const Tips = ({
     inputRef.current.clear();
   }, [customAmount]);
 
-
   return (
     <Container>
       <DetailsContainer>
@@ -141,7 +146,7 @@ const Tips = ({
           style={{ width: '100%' }}
           placeholderTextColor="#929395"
           autoCorrect={false}
-          type="number"
+          keyboardType="decimal-pad"
           placeholder={i18n.t('postRide.tip.customTip.inputPlaceholder')}
           value={customTip}
           onChangeText={(text) => {

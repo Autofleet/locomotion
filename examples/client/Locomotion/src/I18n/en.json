@@ -280,6 +280,12 @@
         "tripPageTitle": "Trip details",
         "noRides": "No results found",
         "noRidesSubText": "",
+        "ride": {
+            "states": {
+                "canceled": "Canceled",
+                "failed": "Canceled"
+            }
+        },
         "ridesTable": {
             "timeTitle": "Time",
             "startTitle": "Start",

@@ -48,7 +48,11 @@ export const BottomSheetInputContainer = styled(View)`
 
 export const IconContainer = styled(View)`
   position: absolute;
-  right: -1;
-  top: -1;
+  right: -2;
+  top: -2;
   padding: 16px;
+  z-index: 1;
+`;
+
+export const TouchableIconContainer = styled.TouchableOpacity`
 `;

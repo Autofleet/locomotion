@@ -14,7 +14,7 @@ import { SubmitButtonText } from '../../../Components/SelectableButton/styled';
 import BottomSheet from '../../../Components/BottomSheet';
 import BottomSheetContextProvider, { BottomSheetContext, SNAP_POINT_STATES } from '../../../context/bottomSheetContext';
 import CustomTip from './CustomTip';
-import { getFormattedPrice } from '../../../context/newRideContext/utils';
+import { getFormattedPrice, getCurrencySymbol } from '../../../context/newRideContext/utils';
 
 const TipSectionContainer = styled.View`
  width: 100%;
@@ -97,7 +97,6 @@ const NoTipTextButton = ({ onPress, children }) => (
     </TouchableOpacity>
   </NoCustomTipContainer>
 );
-
 const Tips = ({
   driver,
   ridePrice,
@@ -110,9 +109,9 @@ const Tips = ({
 
   const isPercentage = ridePrice >= tipSettings.percentageThreshold;
   const buttons = isPercentage ? tipSettings.percentage : tipSettings.fixedPrice;
-
   const serviceDisplayPrice = getFormattedPrice(priceCurrency, ridePrice);
-  const tipSuffix = isPercentage ? '%' : serviceDisplayPrice;
+
+  const tipSuffix = isPercentage ? '%' : getCurrencySymbol(priceCurrency);
 
   const bottomSheetRef = useRef(null);
   const {
@@ -163,7 +162,7 @@ const Tips = ({
       return `${value}${tipSuffix}`;
     }
 
-    return `${tipSuffix}${value}`;
+    return getFormattedPrice(priceCurrency, value);
   };
   return (
     <>
@@ -195,7 +194,7 @@ const Tips = ({
             selected={!!customTip}
             onPress={() => bottomSheetRef.current.snapToIndex(0)}
             label={i18n.t('postRide.tip.customTip.title')}
-            value={`${customTip} ${tipSuffix}`}
+            value={customTip ? getFormattedPrice(priceCurrency, customTip) : null}
           >
             {!customTip ? i18n.t('postRide.tip.setCustomTip') : null}
           </SelectableButton>
@@ -216,6 +215,7 @@ const Tips = ({
           customAmount={customTip}
           onSubmit={value => onCustomTipSet(value)}
           tipSuffix={tipSuffix}
+          isExpanded={isExpanded}
         />
       </BottomSheet>
     </>

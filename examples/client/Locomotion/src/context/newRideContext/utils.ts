@@ -117,6 +117,7 @@ export const formatEstimationsResult = (service: any, estimationResult: any, tag
     iconUrl: service.icon,
     description: service.displayDescription,
     priority: service.priority,
+    serviceAvailabilitiesNumber: service.serviceAvailabilities.length,
   };
 };
 
@@ -131,4 +132,13 @@ export const getFormattedPrice = (priceCurrency: string, priceAmount: number) =>
     return i18n.t('rideDetails.noCharge');
   }
   return new Intl.NumberFormat('en-IN', { style: 'currency', currency: (priceCurrency) }).format(priceAmount);
+};
+
+
+export const getCurrencySymbol = (priceCurrency: string) => {
+  if (!priceCurrency) {
+    return '';
+  }
+  const currency = new Intl.NumberFormat('en-IN', { style: 'currency', currency: (priceCurrency), maximumFractionDigits: 0 }).format(0);
+  return currency[0];
 };

@@ -3,10 +3,11 @@ import SvgIcon from '../SvgIcon';
 
 export const DeleteText = styled.Text`
 display: flex;
-color: #f35657;
+color: ${({ hasOutstansingBalance }) => (hasOutstansingBalance ? '#bcbcbc' : '#f35657')};
 font-family: Inter-Regular;
 font-weight: 600;
 justify-content: flex-start;
+margin-top: 2px;
 `;
 
 export const DeleteIcon = styled(SvgIcon)`

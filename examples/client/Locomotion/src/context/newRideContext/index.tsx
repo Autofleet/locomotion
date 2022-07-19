@@ -25,7 +25,7 @@ import SETTINGS_KEYS from '../settings/keys';
 import { RideStateContextContext } from '../ridePageStateContext';
 import { BS_PAGES } from '../ridePageStateContext/utils';
 import { RIDE_STATES, RIDE_FINAL_STATES, STOP_POINT_TYPES } from '../../lib/commonTypes';
-import useInterval from '../../lib/useInterval';
+import useBackgroundInterval from '../../lib/useBackgroundInterval';
 import { formatSps } from '../../lib/ride/utils';
 import { APP_ROUTES, MAIN_ROUTES } from '../../pages/routes';
 import * as navigationService from '../../services/navigation';
@@ -246,7 +246,17 @@ const RidePageContextProvider = ({ children }: {
         && estimationForService.results[0];
       return formatEstimationsResult(service, estimationResult, tags);
     });
-    return formattedServices.sort((a, b) => a.priority - b.priority);
+
+    return formattedServices.sort((a, b) => {
+      if (
+        (a.serviceAvailabilitiesNumber !== 0 && b.serviceAvailabilitiesNumber !== 0)
+        || (a.serviceAvailabilitiesNumber === 0 && b.serviceAvailabilitiesNumber === 0)
+      ) {
+        return a.priority - b.priority;
+      }
+
+      return a.serviceAvailabilitiesNumber === 0 ? -1 : 1;
+    });
   };
 
   const getServiceEstimations = async (throwError = true) => {
@@ -317,7 +327,7 @@ const RidePageContextProvider = ({ children }: {
     }
   }, []);
 
-  useInterval(async () => {
+  useBackgroundInterval(async () => {
     if (user?.id && !rideRequestLoading) {
       if (ride?.id) {
         try {
@@ -530,12 +540,19 @@ const RidePageContextProvider = ({ children }: {
     }
   };
 
-  const parseSearchResults = (results: any[]) => results.map(r => ({
-    text: r.structured_formatting.main_text,
-    subText: r.structured_formatting.secondary_text,
-    fullText: `${r.structured_formatting.main_text}, ${r.structured_formatting.secondary_text}`,
-    placeId: r.place_id,
-  }));
+  const parseSearchResults = (results: any[]) => results.map((r) => {
+    let formatedAddress = r.structured_formatting.main_text;
+    if (r.structured_formatting.secondary_text) {
+      formatedAddress = `${formatedAddress}, ${r.structured_formatting.secondary_text}`;
+    }
+
+    return {
+      text: r.structured_formatting.main_text,
+      subText: r.structured_formatting.secondary_text,
+      fullText: formatedAddress,
+      placeId: r.place_id,
+    };
+  });
 
   const saveLastAddresses = async (item: any) => {
     const history: any[] = await getLastAddresses();
