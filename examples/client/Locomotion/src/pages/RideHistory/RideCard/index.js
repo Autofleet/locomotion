@@ -7,7 +7,7 @@ import {
   DayTitleSubText,
   DayTitleText,
   RideDrillDownIcon,
-  RideViewSectionContainer,
+  TitleContainer,
   RideViewSpacer,
   RideViewTextContainer,
   TouchableRideViewContainer,
@@ -30,32 +30,53 @@ import { MMMM_DD_YYYY } from '../consts';
 import DriverCard from '../../../Components/DriverCard';
 import { getFormattedPrice } from '../../../context/newRideContext/utils';
 import { RIDE_STATES } from '../../../lib/commonTypes';
+import TextButton from '../../../Components/TextButton';
 
-const RideTitleCard = ({ ride, page }) => (
-  <>
-    <RideViewTextContainer>
-      <DayTitleText bigText={page}>
-        {moment(ride.scheduledTo || ride.createdAt).format(MMMM_DD_YYYY)}
-      </DayTitleText>
-      {ride.state === RIDE_STATES.COMPLETED ? (
-        <DayTitleSubText noCap>
-          {`${moment(ride.lastMatchAttempt).format('HH:mm')
-          } · ${ride.appDuration}`}
+const RideTitleCard = ({ ride, page }) => {
+  const getTipButton = () => {
+    if (ride.tip) {
+      console.log(ride);
+      const price = getFormattedPrice(ride.tip);
+      const priceText = i18n.t('rideHistory.rideCard.tip', { price });
+      return (
+        <DayTitleSubText>
+          {priceText}
         </DayTitleSubText>
-      ) : <RideStateText>{i18n.t(`rideHistory.ride.states.${ride.state}`)}</RideStateText>}
-    </RideViewTextContainer>
-    <RideViewSecTextContainer>
-      <DaySecTitleText>
-        {getFormattedPrice(ride.priceCurrency, ride.priceAmount)}
-      </DaySecTitleText>
-      <DaySecTitleSubText>
-        {(ride.plannedDistance / 1000).toFixed(1)}
-        {' '}
-        KM
-      </DaySecTitleSubText>
-    </RideViewSecTextContainer>
-  </>
-);
+      );
+    }
+    return <TextButton onPress={() => {}} text={i18n.t('rideHistory.rideCard.addTip')} />;
+  };
+  return (
+    <TitleContainer>
+      <RideViewTextContainer>
+        <DayTitleText bigText={page}>
+          {moment(ride.scheduledTo || ride.createdAt).format(MMMM_DD_YYYY)}
+        </DayTitleText>
+        {ride.state === RIDE_STATES.COMPLETED ? (
+          <DayTitleSubText noCap>
+            {`${moment(ride.lastMatchAttempt).format('HH:mm')
+            } · ${ride.appDuration}`}
+          </DayTitleSubText>
+        ) : <RideStateText>{i18n.t(`rideHistory.ride.states.${ride.state}`)}</RideStateText>}
+      </RideViewTextContainer>
+      <RideViewSecTextContainer>
+        <DaySecTitleText>
+          {getFormattedPrice(ride.priceCurrency, ride.priceAmount)}
+        </DaySecTitleText>
+        {page
+          ? getTipButton()
+          : (
+            <DaySecTitleSubText>
+              {(ride.plannedDistance / 1000).toFixed(1)}
+              {' '}
+              KM
+            </DaySecTitleSubText>
+          )
+    }
+      </RideViewSecTextContainer>
+    </TitleContainer>
+  );
+};
 
 export const RideListView = ({
   ride, showSpacer, onPress,

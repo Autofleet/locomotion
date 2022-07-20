@@ -61,6 +61,13 @@ export const MapRideViewContainer = styled(BaseRideViewContainer)`
   height: 200px;
 `;
 
+export const TitleContainer = styled.View`
+display: flex;
+justify-content: space-between;
+flex-direction: row;
+flex: 1;
+align-items: center;
+`;
 
 export const DriverAvatarContainer = styled.View`
 `;
@@ -82,7 +89,6 @@ export const DriverAvatar = styled.Image`
  `;
 
 export const RideDrillDownContainer = styled.View`
-  flex: 1;
   justify-content: center;
   padding-left: 15px;
 `;
@@ -92,11 +98,9 @@ export const BlankContainer = styled.View`
 `;
 
 export const RideViewTextContainer = styled.View`
-  flex: 6;
 `;
 
 export const RideViewSecTextContainer = styled.View`
-  flex: 3;
 `;
 
 export const CenterContainer = styled.View`
@@ -168,7 +172,6 @@ export const DaySecTitleText = styled(BaseText)`
 `;
 
 export const DaySecTitleSubText = styled(BaseText)`
-  text-align: right;
 `;
 
 export const DayTitleContainer = styled.View`

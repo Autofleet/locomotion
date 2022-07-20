@@ -310,7 +310,8 @@
         "rideJourney": "Ride journey",
         "driverRating": "Driver rating",
         "rateRide": "Tap to rate your ride",
-        "addTip": "Add a tip"
+        "addTip": "Add a tip",
+        "tip": "Tip {{price}}"
       }
     },
     "futureRides": {

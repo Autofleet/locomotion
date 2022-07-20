@@ -1,4 +1,5 @@
 import React from 'react';
+import TextButton from '../TextButton';
 import CardsTitle from '../CardsTitle';
 import { RideInterface } from '../../context/newRideContext';
 import i18n from '../../I18n';
@@ -14,8 +15,6 @@ import {
   DriverRatingText,
   VehicleModelNameText,
   DriverDetailsContainer,
-  TextButton,
-  ButtonText,
 } from './styled';
 
 interface DriverCardProps {
@@ -41,11 +40,7 @@ const DriverCard = ({
       );
     }
     return (
-      <TextButton noBackground onPress={() => {}}>
-        <ButtonText>
-          {i18n.t('rideHistory.rideCard.rateRide')}
-        </ButtonText>
-      </TextButton>
+      <TextButton onPress={() => {}} text={i18n.t('rideHistory.rideCard.rateRide')} />
     );
   };
   return (
