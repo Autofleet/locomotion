@@ -67,7 +67,8 @@ export type PriceCalculation = {
   totalPrice: number,
   currency: string,
   additionalCharges: AdditionalCharge[],
-  items: {pricingRule: any, name: string, price: number}
+  items: [{pricingRule: any, name: string, price: number}],
+  distanceUnit: string
 };
 
 interface RidePageContextInterface {
@@ -747,7 +748,7 @@ const RidePageContextProvider = ({ children }: {
     const apiRide = await getRideFromApi(id || ride.id || '');
     console.log('heyyyyyyyyyyyy2');
     const calculation = await rideApi.getPriceCalculation(apiRide?.priceCalculationId);
-    console.log('heyyyyyyyyyyyy3');
+    console.log('heyyyyyyyyyyyy3', calculation);
     return calculation;
   };
 

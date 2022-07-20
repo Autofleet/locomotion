@@ -47,7 +47,7 @@ export const ROUTES_COMPS = {
   [MAIN_ROUTES.CARD_DETAILS]: CardDetails,
   [MAIN_ROUTES.EDIT_NICKNAME]: EditCardName,
   [MAIN_ROUTES.FUTURE_RIDES]: FutureRidesView,
-  [MAIN_ROUTES.RIDE_PRICE_BREAKDOWN]: RidePriceBreakDown
+  [MAIN_ROUTES.RIDE_PRICE_BREAKDOWN]: RidePriceBreakDown,
 };
 
 export const profileStack = ({ stack: Stack }) => (

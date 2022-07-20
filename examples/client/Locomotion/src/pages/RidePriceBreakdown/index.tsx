@@ -56,6 +56,17 @@ const RidePriceBreakDown = () => {
   const getSymbol = () => getCurrencySymbol(priceCalculation?.currency);
   const getPriceWithCurrency = (amount:number) => `${getSymbol()}${amount.toFixed(2)}`;
   const getTip = () => priceCalculation?.additionalCharges?.find(({ chargeFor }) => chargeFor === 'tip');
+  const getTotalPrice = () => getPriceWithCurrency(
+    (priceCalculation?.totalPrice || 0)
+   + (priceCalculation?.additionalCharges?.reduce((s, { amount }) => s + amount, 0) || 0)
+    + (priceCalculation?.discount || 0),
+  );
+
+  const calculationTypeToUnit = {
+    fixed: '',
+    duration: 'min',
+    distance: priceCalculation?.distanceUnit,
+  };
 
   useEffect(() => {
     updatePriceCalculation();
@@ -94,12 +105,15 @@ const RidePriceBreakDown = () => {
                 flexDirection: 'column',
               }}
               >
-
-                {priceCalculation?.surgePrice && priceCalculation?.surgePrice !== 0 ? <PriceCard name="Surge Price" text={getPriceWithCurrency(priceCalculation?.surgePrice || 0)} /> : undefined}
-                {priceCalculation?.discount && priceCalculation?.discount !== 0 ? <PriceCard name="Discount" text={getPriceWithCurrency(priceCalculation?.discount || 0)} /> : undefined}
+                {priceCalculation?.surgePrice && priceCalculation?.surgePrice !== 0
+                  ? <PriceCard name="Surge Price" text={getPriceWithCurrency(priceCalculation?.surgePrice || 0)} />
+                  : undefined}
+                {priceCalculation?.discount && priceCalculation?.discount !== 0
+                  ? <PriceCard name="Discount" text={getPriceWithCurrency(priceCalculation?.discount || 0)} />
+                  : undefined}
                 {priceCalculation?.items?.map(item => (
                   <PriceCard
-                    name={`${item.pricingRule.name} - ${getPriceWithCurrency(item.pricingRule.price)} ${item.pricingRule.calculationType === 'distance' ? 'per KM ' : 'per min '}`}
+                    name={`${item.pricingRule.name} - ${getPriceWithCurrency(item.pricingRule.price)} per ${calculationTypeToUnit[item.pricingRule.calculationType]}`}
                     text={getPriceWithCurrency(item.price)}
                   />
                 ))}
@@ -113,12 +127,10 @@ const RidePriceBreakDown = () => {
             <NoTitleCard>
               <NoTitlePriceCard
                 name="Total"
-                text={getPriceWithCurrency((priceCalculation?.totalPrice || 0)
-                   + (getTip()?.amount || 0))}
+                text={getTotalPrice()}
               />
             </NoTitleCard>
           </View>
-
         )}
       </ScrollView>
     </PageContainer>
