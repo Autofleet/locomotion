@@ -28,29 +28,31 @@ const RidePriceBreakDown = () => {
 
   const updatePriceCalculation = async () => {
     setLoading(true);
-    const calculation = await getRidePriceCalculation();
+    const calculation = await getRidePriceCalculation(route.params?.rideId);
+    console.log('calculation123: ', calculation);
+
     setPriceCalculation(calculation);
     setLoading(false);
   };
 
   const updateRideFromApi = async () => {
     setLoading(true);
-    const result = await getRideFromApi(ride.id || '');
+    const result = await getRideFromApi(route.params?.rideId || ride.id || '');
     setPaymentMethod(result.payment?.paymentMethod);
     setLoading(false);
   };
 
   const getSymbol = () => getCurrencySymbol(priceCalculation?.currency);
-  const getPriceWithCurrency = (amount:number) => `${amount}${getSymbol()}`;
+  const getPriceWithCurrency = (amount:number) => `${getSymbol()}${amount}`;
   const getTip = () => priceCalculation?.additionalCharges?.find(({ chargeFor }) => chargeFor === 'tip');
 
   useEffect(() => {
     updatePriceCalculation();
-  }, [ride.paymentMethodId]);
+  }, []);
 
   useEffect(() => {
     updateRideFromApi();
-  }, [ride.paymentMethodId]);
+  }, []);
   return (
     <PageContainer>
 
@@ -71,8 +73,8 @@ const RidePriceBreakDown = () => {
             </InformationCard>
             <InformationCard title="Payment Breakdown">
               <View style={{ flexDirection: 'column' }}>
-                {priceCalculation?.surgePrice !== 0 ? <PriceCard name="Surge Price" text={getPriceWithCurrency(priceCalculation?.surgePrice || 0)} /> : undefined}
-                {priceCalculation?.discount !== 0 ? <PriceCard name="Discount" text={getPriceWithCurrency(priceCalculation?.discount || 0)} /> : undefined}
+                {priceCalculation?.surgePrice && priceCalculation?.surgePrice !== 0 ? <PriceCard name="Surge Price" text={getPriceWithCurrency(priceCalculation?.surgePrice || 0)} /> : undefined}
+                {priceCalculation?.discount && priceCalculation?.discount !== 0 ? <PriceCard name="Discount" text={getPriceWithCurrency(priceCalculation?.discount || 0)} /> : undefined}
                 {priceCalculation?.items?.map(item => (
                   <PriceCard
                     name={`${item.pricingRule.name} - ${getPriceWithCurrency(item.pricingRule.price)} ${item.pricingRule.calculationType === 'distance' ? 'per KM ' : 'per min '}`}

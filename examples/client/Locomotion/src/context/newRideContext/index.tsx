@@ -740,9 +740,13 @@ const RidePageContextProvider = ({ children }: {
     return null;
   };
 
-  const getRidePriceCalculation = async () => {
-    const apiRide = await getRideFromApi(ride.id || '');
+  const getRidePriceCalculation = async (id) => {
+    console.log('heyyyyyyyyyyyy');
+
+    const apiRide = await getRideFromApi(id || ride.id || '');
+    console.log('heyyyyyyyyyyyy2');
     const calculation = await rideApi.getPriceCalculation(apiRide?.priceCalculationId);
+    console.log('heyyyyyyyyyyyy3');
     return calculation;
   };
 
