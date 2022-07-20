@@ -97,17 +97,6 @@ export default React.forwardRef(({
     });
   };
 
-  const focusCurrentLocation = () => {
-    if (mapRegion.longitude && mapRegion.latitude && ref.current) {
-      ref.current.animateToRegion({
-        latitude: mapRegion.latitude - parseFloat(snapPoints[0]) / 10000,
-        longitude: mapRegion.longitude,
-        latitudeDelta: mapRegion.latitudeDelta,
-        longitudeDelta: mapRegion.longitudeDelta,
-      }, 1000);
-    }
-  };
-
   const buildAvailabilityVehicles = () => (isMainPage ? availabilityVehicles.map(vehicle => (
     <AvailabilityVehicle
       location={vehicle.location}
@@ -143,16 +132,12 @@ export default React.forwardRef(({
     if (currentBsPage === BS_PAGES.CONFIRM_PICKUP) {
       const [pickupStopPoint] = requestStopPoints;
       if (pickupStopPoint) {
-        focusMapToCoordinates([{
-          latitude: pickupStopPoint.lat - 0.001,
-          longitude: pickupStopPoint.lng - 0.001,
-        }, {
+        ref.current.animateToRegion({
           latitude: pickupStopPoint.lat,
           longitude: pickupStopPoint.lng,
-        }, {
-          latitude: pickupStopPoint.lat + 0.001,
-          longitude: pickupStopPoint.lng + 0.001,
-        }]);
+          latitudeDelta: 0.001,
+          longitudeDelta: 0.001,
+        }, 1000);
       }
     }
     if (currentBsPage === BS_PAGES.CONFIRM_FUTURE_RIDE) {

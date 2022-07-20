@@ -173,12 +173,9 @@ const RidePage = ({ mapSettings, navigation }) => {
   const focusCurrentLocation = async () => {
     const location = await getPosition();
     const { coords } = (location || DEFAULT_COORDS);
-    let { latitude } = coords;
-    if (![BS_PAGES.CONFIRM_PICKUP, BS_PAGES.SET_LOCATION_ON_MAP].includes(currentBsPage)) {
-      latitude -= parseFloat(snapPoints[0]) / 10000;
-    }
+
     mapRef.current.animateToRegion({
-      latitude,
+      latitude: coords.latitude,
       longitude: coords.longitude,
       latitudeDelta: 0.015,
       longitudeDelta: 0.015,
