@@ -8,7 +8,7 @@ import TextInput from '../../Components/TextInput';
 import SaveButton from './SaveButton';
 import { OnboardingContext } from '../../context/onboarding';
 import {
-  ErrorText, SafeView, InputContainer, BaseErrorText
+  ErrorText, SafeView, InputContainer, BaseErrorText,
 } from './styles';
 import i18n from '../../I18n';
 import Header from './Header';
@@ -49,7 +49,7 @@ const Name = ({ navigation }) => {
     };
     try {
       await nameSchema.validate(sanitizedNames, {
-        abortEarly: false
+        abortEarly: false,
       });
       await updateUserInfo(sanitizedNames);
       if (route.params && route.params.editAccount) {
@@ -63,12 +63,12 @@ const Name = ({ navigation }) => {
         innerErrors = {
           ...innerErrors,
           [path]: message,
-        }
+        };
       });
       setErrors(innerErrors);
     }
   };
-  
+
   return (
     <ScrollView keyboardShouldPersistTaps="handled">
       <PageContainer>
