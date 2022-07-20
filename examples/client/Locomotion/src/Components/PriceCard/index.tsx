@@ -8,9 +8,12 @@ type PriceCardProps = {
 }
 
 const PriceCard = ({ name, text } : PriceCardProps) => (
-  <View style={{ flexDirection: 'row', width: '100%', marginBottom: 5 }}>
-    <SubText style={{ width: '80%' }}>{name}</SubText>
-    <SubText style={{ textAlign: 'right', width: '30%' }}>
+  <View style={{
+    flexDirection: 'row', marginVertical: 5, marginLeft: 15, width: '110%', justifyContent: 'space-between',
+  }}
+  >
+    <SubText>{name}</SubText>
+    <SubText style={{ textAlign: 'right' }}>
       {text}
     </SubText>
   </View>

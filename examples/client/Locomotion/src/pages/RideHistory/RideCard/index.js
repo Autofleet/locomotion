@@ -94,7 +94,11 @@ const RideView = ({ ride }) => {
         />
       </StopPointsVerticalViewContainer>
       <StopPointsVerticalViewContainer>
-        <RidePaymentDetails rideId={ride.id} paymentMethod={ride.payment.paymentMethod} />
+        <RidePaymentDetails
+          rideId={ride.id}
+          paymentMethod={ride.payment.paymentMethod}
+          rideHistory
+        />
       </StopPointsVerticalViewContainer>
       <DriverCardContainer>
         {ride.driver && ride.state === RIDE_STATES.COMPLETED && (

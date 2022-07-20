@@ -6,7 +6,6 @@ import {
   Arrow, ArrowContainer, CardContainer, CardContantContainer, CardText, CardTitle, CardTitleContainer, VerifyContainer, VerifyText,
 } from './styled';
 import { InformationCardProps } from '../InformationCard';
-import { ButtonContainer } from '../../pages/Lock/styled';
 
 const Card = ({
   title,
@@ -39,7 +38,7 @@ const Card = ({
           </>
         )}
       </CardTitleContainer>
-      <CardText>{children}</CardText>
+      {children ? <CardText>{children}</CardText> : undefined}
     </CardContantContainer>
     {icon ? <TouchableOpacity onPress={onIconPress}><SvgIcon Svg={icon} fill="#333" /></TouchableOpacity>
       : <ArrowContainer>{onPress ? <Arrow /> : undefined}</ArrowContainer>}

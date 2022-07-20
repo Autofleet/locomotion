@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { View } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { useNavigation, useRoute } from '@react-navigation/native';
+import NoTitlePriceCard from '../../Components/PriceCard/NoTitlePriceCard';
 import { MAIN_ROUTES } from '../routes';
 import PriceCard from '../../Components/PriceCard';
 import NoTitleCard from '../../Components/NoTitleCard';
@@ -68,24 +69,32 @@ const RidePriceBreakDown = () => {
 
       <PageHeader
         title={i18n.t('Payment breakdown')}
-        onIconPress={() => (params.rideHistory
-          ? navigation.navigate(MAIN_ROUTES.RIDE_HISTORY)
-          : navigation.navigate(MAIN_ROUTES.HOME))}
+        onIconPress={
+          () => navigation.navigate(params.rideHistory
+            ? MAIN_ROUTES.COMPLETED_RIDE_OVERVIEW_PAGE
+            : MAIN_ROUTES.HOME)}
       />
       <ScrollView>
         {loading ? (
           <Loader />
         ) : (
-          <>
-            <InformationCard title="Paymnet method">
-              <View>
-                <CreditCardRowContainer>
-                  <CardRow {...paymentMethod} />
-                </CreditCardRowContainer>
-              </View>
-            </InformationCard>
+          <View style={{ width: '90%', marginLeft: 15 }}>
+            <View>
+              <InformationCard title="Paymnet method">
+                <View>
+                  <CreditCardRowContainer>
+                    <CardRow {...paymentMethod} />
+                  </CreditCardRowContainer>
+                </View>
+              </InformationCard>
+            </View>
+
             <InformationCard title="Payment Breakdown">
-              <View style={{ flexDirection: 'column' }}>
+              <View style={{
+                flexDirection: 'column',
+              }}
+              >
+
                 {priceCalculation?.surgePrice && priceCalculation?.surgePrice !== 0 ? <PriceCard name="Surge Price" text={getPriceWithCurrency(priceCalculation?.surgePrice || 0)} /> : undefined}
                 {priceCalculation?.discount && priceCalculation?.discount !== 0 ? <PriceCard name="Discount" text={getPriceWithCurrency(priceCalculation?.discount || 0)} /> : undefined}
                 {priceCalculation?.items?.map(item => (
@@ -98,17 +107,18 @@ const RidePriceBreakDown = () => {
             </InformationCard>
             {getTip() ? (
               <NoTitleCard>
-                <PriceCard name="Tip" text={getPriceWithCurrency((getTip()?.amount || 0))} />
+                <NoTitlePriceCard name="Tip" text={getPriceWithCurrency((getTip()?.amount || 0))} />
               </NoTitleCard>
             ) : undefined}
             <NoTitleCard>
-              <PriceCard
+              <NoTitlePriceCard
                 name="Total"
                 text={getPriceWithCurrency((priceCalculation?.totalPrice || 0)
                    + (getTip()?.amount || 0))}
               />
             </NoTitleCard>
-          </>
+          </View>
+
         )}
       </ScrollView>
     </PageContainer>

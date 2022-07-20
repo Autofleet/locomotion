@@ -15,7 +15,7 @@ type Nav = {
   navigate: (value: string, object?: any) => void;
 }
 
-const RidePaymentDetails = ({ rideId, paymentMethod }) => {
+const RidePaymentDetails = ({ rideId, paymentMethod, rideHistory = false }) => {
   const navigation = useNavigation<Nav>();
   const [totalAmount, setTotalAmount] = useState(0);
   const [currency, setCurrency] = useState('USD');
@@ -44,7 +44,7 @@ const RidePaymentDetails = ({ rideId, paymentMethod }) => {
         <RidePriceDetails>
           <PriceText>{getFormattedPrice(currency, totalAmount)}</PriceText>
           <TouchableOpacity onPress={() => navigation.navigate(MAIN_ROUTES.RIDE_PRICE_BREAKDOWN,
-            { rideId })}
+            { rideId, rideHistory })}
           >
             <ViewDetails>
               {i18n.t('ride.viewDetails').toString()}
