@@ -26,7 +26,7 @@ const InformationCard = ({
 }: InformationCardProps) => (
   onPress
     ? (
-      <TouchableOpacity onPress={onPress} {...props}>
+      <TouchableOpacity onPress={onPress} {...props} style={{ flex: 1 }}>
         <Card
           title={title}
           onPress={onPress}
@@ -69,7 +69,10 @@ InformationCard.defaultProps = {
 
 InformationCard.propTypes = {
   title: propsTypes.string,
-  children: propsTypes.string,
+  children: propsTypes.oneOfType([
+    propsTypes.arrayOf(propsTypes.node),
+    propsTypes.node,
+  ]),
   onPress: propsTypes.func,
   verified: propsTypes.bool,
   showUnverified: propsTypes.bool,

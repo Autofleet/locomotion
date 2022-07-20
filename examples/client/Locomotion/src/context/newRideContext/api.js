@@ -70,6 +70,11 @@ export const additionalCharge = async (pricingCalculationId, amount, chargeFor) 
   return data;
 };
 
+export const getPriceCalculation = async (pricingCalculationId) => {
+  const { data } = await network.get(`api/v1/price-calculation/${pricingCalculationId}`);
+  return data;
+};
+
 export const getStopPoint = async (rideId, stopPointId) => {
   const { data } = await network.get(`/api/v1/rides/${rideId}/stop-points/${stopPointId}`);
   return data;

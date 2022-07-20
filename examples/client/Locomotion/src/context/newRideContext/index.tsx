@@ -101,6 +101,7 @@ interface RidePageContextInterface {
   tryServiceEstimations: () => Promise<void>;
   getService: (serviceId: string) => Promise<any>;
   getServices: () => Promise<any[]>;
+  getRidePriceCalculation: (id: string) => Promise<any>;
 }
 
 export const RidePageContext = createContext<RidePageContextInterface>({
@@ -149,6 +150,7 @@ export const RidePageContext = createContext<RidePageContextInterface>({
   tryServiceEstimations: async () => undefined,
   getService: async (serviceId: string) => ({}),
   getServices: async () => [],
+  getRidePriceCalculation: async (id: string) => undefined,
 });
 
 const HISTORY_RECORDS_NUM = 10;
@@ -724,6 +726,11 @@ const RidePageContextProvider = ({ children }: {
     return null;
   };
 
+  const getRidePriceCalculation = async (id) => {
+    const calculation = await rideApi.getPriceCalculation(id);
+    return calculation;
+  };
+
   return (
     <RidePageContext.Provider
       value={{
@@ -772,6 +779,7 @@ const RidePageContextProvider = ({ children }: {
         tryServiceEstimations,
         getService,
         getServices,
+        getRidePriceCalculation,
       }}
     >
       {children}
