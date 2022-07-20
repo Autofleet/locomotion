@@ -3,6 +3,11 @@ import shortid from 'shortid';
 import i18n from '../../I18n';
 import { getGeocode } from './google-api';
 
+export const RIDE_FAILED_REASONS = {
+  BUSY: 'BUSY',
+  USER_FUTURE_RIDE_INTERVAL_LIMIT_REACHED: 'USER_FUTURE_RIDE_INTERVAL_LIMIT_REACHED',
+};
+
 export const getFutureRideMinDate = () => moment().add(60, 'minutes').toDate();
 export const getFutureRideMaxDate = () => moment().add(7, 'days').toDate();
 

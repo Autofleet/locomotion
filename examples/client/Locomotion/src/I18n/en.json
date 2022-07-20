@@ -379,6 +379,11 @@
     "subName": "Rider app"
   },
   "bottomSheetContent": {
+    "futureRideLimit": {
+        "titleText": "Scheduled ride limit reached",
+        "buttonText": "Back to order",
+        "subTitleText": "Hey, looks like you're trying to schedule multiple rides that are too close together. Please select another time and try again."
+    },
     "confirmFutureRide": {
         "titleText": "Your upcoming ride has been scheduled",
         "buttonText": "Done",
@@ -409,7 +414,8 @@
         "titleText": "Are you sure you want to cancel?",
         "subTitleText": "You may be charged a fee for cancelling this ride",
         "buttonText": "Cancel Ride",
-        "secondaryButtonText": "Keep Riding"
+        "secondaryButtonText": "Keep Riding",
+        "secondaryButtonTextFuture": "Keep Ride"
     },
     "confirmPickup": {
       "confirmPickupTitle": "Confirm pickup",

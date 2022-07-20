@@ -5,6 +5,7 @@ import Config from 'react-native-config';
 import { useNavigation } from '@react-navigation/native';
 import _ from 'lodash';
 import moment from 'moment';
+import i18n from '../../I18n';
 import { FutureRidesContext } from '../futureRides';
 import { UserContext } from '../user';
 import { getPosition, DEFAULT_COORDS } from '../../services/geo';
@@ -18,7 +19,7 @@ import {
   formatStopPointsForEstimations,
   getEstimationTags,
   INITIAL_STOP_POINTS,
-  RIDE_POPUPS, RidePopupNames,
+  RIDE_POPUPS, RidePopupNames, RIDE_FAILED_REASONS,
 } from './utils';
 import settings from '../settings';
 import SETTINGS_KEYS from '../settings/keys';
@@ -29,6 +30,7 @@ import useBackgroundInterval from '../../lib/useBackgroundInterval';
 import { formatSps } from '../../lib/ride/utils';
 import { APP_ROUTES, MAIN_ROUTES } from '../../pages/routes';
 import * as navigationService from '../../services/navigation';
+import { BottomSheetContext } from '../bottomSheetContext';
 
 type Dispatch<A> = (value: A) => void;
 type Nav = {
@@ -158,6 +160,7 @@ const RidePageContextProvider = ({ children }: {
 }) => {
   const { locationGranted, user } = useContext(UserContext);
   const navigation = useNavigation<Nav>();
+  const { setGenericErrorDetails } = useContext(BottomSheetContext);
   const { checkStopPointsInTerritory, changeBsPage, currentBsPage } = useContext(RideStateContextContext);
   const { setNewFutureRide, loadFutureRides } = useContext(FutureRidesContext);
   const [requestStopPoints, setRequestStopPoints] = useState(INITIAL_STOP_POINTS);
@@ -571,6 +574,22 @@ const RidePageContextProvider = ({ children }: {
     setHistoryResults(history);
   };
 
+  const FAILED_TO_CREATE_RIDE_ACTIONS = {
+    [RIDE_FAILED_REASONS.BUSY]: () => { changeBsPage(BS_PAGES.NO_AVAILABLE_VEHICLES); },
+    [RIDE_FAILED_REASONS.USER_FUTURE_RIDE_INTERVAL_LIMIT_REACHED]: () => {
+      setGenericErrorDetails({
+        titleText: i18n.t('bottomSheetContent.futureRideLimit.titleText'),
+        buttonText: i18n.t('bottomSheetContent.futureRideLimit.buttonText'),
+        subTitleText: i18n.t('bottomSheetContent.futureRideLimit.subTitleText'),
+        buttonPress: () => {
+          tryServiceEstimations();
+          changeBsPage(BS_PAGES.SERVICE_ESTIMATIONS);
+        },
+      });
+      changeBsPage(BS_PAGES.GENERIC_ERROR);
+    },
+  };
+
   const requestRide = async (pickupLocation?: any): Promise<void> => {
     let stopPoints = requestStopPoints;
     if (pickupLocation) {
@@ -600,15 +619,20 @@ const RidePageContextProvider = ({ children }: {
     try {
       const afRide = await rideApi.createRide(rideToCreate);
       if (afRide.state === RIDE_STATES.REJECTED) {
-        throw new Error();
+        throw new Error(RIDE_FAILED_REASONS.BUSY);
       }
       if (afRide.scheduledTo) {
         loadFutureRides();
         setNewFutureRide(afRide);
         changeBsPage(BS_PAGES.CONFIRM_FUTURE_RIDE);
       }
-    } catch (e) {
-      changeBsPage(BS_PAGES.NO_AVAILABLE_VEHICLES);
+    } catch (e: any) {
+      const key = e.message || e.response?.data?.errors[0];
+      if (FAILED_TO_CREATE_RIDE_ACTIONS[key]) {
+        FAILED_TO_CREATE_RIDE_ACTIONS[key]();
+      } else {
+        changeBsPage(BS_PAGES.NO_AVAILABLE_VEHICLES);
+      }
     } finally {
       setRideRequestLoading(false);
     }

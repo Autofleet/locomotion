@@ -49,7 +49,7 @@ export const LocationMarkerContainer = styled.View`
   justify-content: center;
   background-color: transparent;
   top: 0;
-  bottom: 0;
+  bottom: 45;
   left: 0;
   right: 0;
 `;

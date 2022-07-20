@@ -54,7 +54,8 @@ const Email = ({ navigation }) => {
   };
 
   const emailSchema = yup.object().shape({
-    email: yup.string().required().email(),
+    // eslint-disable-next-line no-useless-escape
+    email: yup.string().required().email().matches(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/),
   });
 
   const onChange = async (value) => {

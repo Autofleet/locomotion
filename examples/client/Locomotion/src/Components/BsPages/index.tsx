@@ -177,7 +177,7 @@ const BsPage = ({
                 {titleIcon && <SvgIcon Svg={titleIcon} style={{ marginRight: 5 }} />}
                 <Title>{TitleText}</Title>
               </TitleContainer>
-              <SubTitle numberOfLines={2}>{SubTitleText}</SubTitle>
+              <SubTitle>{SubTitleText}</SubTitle>
             </CardText>
             {Image ? (
               <ImageContainer>
@@ -273,6 +273,20 @@ export const ConfirmPickupTime = (props: any) => {
         modal
       />
     </BsPage>
+  );
+};
+
+export const GenericError = (props: any) => {
+  const { genericErrorDetails } = useContext(BottomSheetContext);
+  return (
+    <BsPage
+      TitleText={genericErrorDetails.titleText}
+      ButtonText={genericErrorDetails.buttonText}
+      SubTitleText={genericErrorDetails.subTitleText}
+      onButtonPress={genericErrorDetails.buttonPress}
+      fullWidthButtons
+      {...props}
+    />
   );
 };
 
