@@ -59,7 +59,7 @@ export const StartButton = styled(Button)`
 
 export const ButtonText = styled.Text`
   color: ${({ dark }) => (dark ? '#ffffff' : '#333333')};
-  ${FONT_SIZES.MEDIUM};
+  ${FONT_SIZES.LARGE};
   ${FONT_WEIGHTS.MEDIUM};
   margin: auto;
 `;

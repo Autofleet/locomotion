@@ -18,6 +18,7 @@ import { BottomSheetContext, SNAP_POINT_STATES } from '../../../../context/botto
 import { BS_PAGES } from '../../../../context/ridePageStateContext/utils';
 import { RideStateContextContext } from '../../../../context/ridePageStateContext';
 import { UserContext } from '../../../../context/user';
+import { FONT_SIZES, FONT_WEIGHTS } from '../../../../context/theme';
 
 const HistoryContainer = styled.View`
   margin-bottom: 10px;
@@ -31,11 +32,17 @@ const ContentContainer = styled.View`
   padding: 0px 30px 40px 30px;
   width: 100%;
   flex: 1;
+`;
 
+const WelcomeText = styled.Text`
+  ${FONT_SIZES.H1};
+  ${FONT_WEIGHTS.SEMI_BOLD};
+  align-self: flex-start;
+  margin-bottom: 5px;
 `;
 const AddressSelectorBottomSheet = ({ addressSelectorFocus }) => {
   const userContext = useContext(RidePageContext);
-  const { locationGranted } = useContext(UserContext);
+  const { locationGranted, user } = useContext(UserContext);
   const {
     changeBsPage,
   } = useContext(RideStateContextContext);
@@ -79,6 +86,13 @@ const AddressSelectorBottomSheet = ({ addressSelectorFocus }) => {
   };
   return (
     <ContentContainer>
+      {!isExpanded ? (
+        <WelcomeText>
+          {i18n.t('addressView.welcomeText', {
+            name: user?.firstName,
+          })}
+        </WelcomeText>
+      ) : null}
       <SearchBar
         onFocus={onSearchFocus}
         isExpanded={isExpanded}
@@ -116,7 +130,18 @@ const AddressSelectorBottomSheet = ({ addressSelectorFocus }) => {
               </BottomSheetScrollView>
             </>
           )
-          : null}
+          : (userContext.historyResults.map((h, i) => (
+            <AddressRow
+              testID={`searchResults_${i}`}
+              {...h}
+              isHistory
+              key={h.placeId}
+              onPress={() => {
+                userContext.onAddressSelected(h, false, 1);
+              }}
+            />
+          )))
+          }
       </HistoryContainer>
       <GenericErrorPopup
         isVisible={userContext.ridePopup === RIDE_POPUPS.FAILED_SERVICE_REQUEST}

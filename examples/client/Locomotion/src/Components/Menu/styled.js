@@ -44,6 +44,9 @@ export const BaseHeaderText = styled.Text`
 
 export const HeaderText = styled(BaseHeaderText)`
   color: ${({ theme }) => theme.primaryColor};
+  color: #24aaf2;
+  text-decoration: underline;
+  text-decoration-color: #24aaf2;
 `;
 
 export const HeaderMainText = styled(BaseHeaderText)`
