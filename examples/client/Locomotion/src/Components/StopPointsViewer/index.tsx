@@ -1,4 +1,5 @@
 import React, { useContext } from 'react';
+import { TouchableOpacity } from 'react-native';
 import { STOP_POINT_TYPES } from '../../lib/commonTypes';
 import { RidePageContext } from '../../context/newRideContext';
 import SvgIcon from '../SvgIcon';
@@ -38,11 +39,15 @@ const StopPointsViewer = ({ goBackToAddressSelector }: StopPointsViewerProps) =>
           {lastSp?.streetAddress}
         </StreetAddress>
       </StreetAddressContainer>
-      <SvgIcon
-        Svg={editIcon}
-        width={ICON_SIZE}
-        height={ICON_SIZE}
-      />
+      <TouchableOpacity
+        onPress={() => goBackToAddressSelector(STOP_POINT_TYPES.STOP_POINT_DROPOFF)}
+      >
+        <SvgIcon
+          Svg={editIcon}
+          width={ICON_SIZE}
+          height={ICON_SIZE}
+        />
+      </TouchableOpacity>
     </Container>
   );
 };
