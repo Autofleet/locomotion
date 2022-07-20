@@ -101,7 +101,7 @@ const Tips = ({
   ridePrice,
   tipSettings,
   onSelectTip,
-  priceCurrency,
+  priceCurrency = null,
 }) => {
   const [selectedTip, setSelectedTip] = useState(null);
   const [customTip, setCustomTip] = useState(null);

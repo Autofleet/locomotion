@@ -144,6 +144,6 @@ export const getCurrencySymbol = (priceCurrency: string) => {
   if (!priceCurrency) {
     return '';
   }
-  const currency = new Intl.NumberFormat('en-IN', { style: 'currency', currency: (priceCurrency), maximumFractionDigits: 0 }).format(0);
+  const currency = new Intl.NumberFormat('en-IN', { style: 'currency', currency: (priceCurrency) }).format(0);
   return currency[0];
 };
