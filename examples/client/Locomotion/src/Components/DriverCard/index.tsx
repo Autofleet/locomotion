@@ -41,7 +41,7 @@ const DriverCard = ({
       );
     }
     return (
-      <TextButton noBackground>
+      <TextButton noBackground onPress={() => {}}>
         <ButtonText>
           {i18n.t('rideHistory.rideCard.rateRide')}
         </ButtonText>
