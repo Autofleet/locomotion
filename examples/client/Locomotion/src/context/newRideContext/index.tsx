@@ -63,13 +63,18 @@ type AdditionalCharge = {
   chargeFor: string,
 }
 
+type CalculationTypes = 'fixed' |'distance' | 'duration';
+
 export type PriceCalculation = {
   surgePrice: number,
   discount: number,
   totalPrice: number,
   currency: string,
   additionalCharges: AdditionalCharge[],
-  items: [{pricingRule: any, name: string, price: number}],
+  items: [{pricingRule:
+     {calculationType: CalculationTypes, price: number, name: string},
+     name: string,
+     price: number}],
   distanceUnit: string
 };
 

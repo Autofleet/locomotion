@@ -71,7 +71,7 @@ export const additionalCharge = async (pricingCalculationId, amount, chargeFor) 
 };
 
 export const getPriceCalculation = async (pricingCalculationId) => {
-  const { data } = await network.get(`api/v1/price-calculation/${pricingCalculationId}`);
+  const { data } = await network.get(`api/v1/pricing-calculation/${pricingCalculationId}`);
   return data;
 };
 

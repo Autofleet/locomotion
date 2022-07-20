@@ -87,7 +87,7 @@ const RidePriceBreakDown = () => {
       />
       <ScrollView>
         {loading ? (
-          <Loader />
+          <Loader lottieViewStyle={undefined} sourceProp={undefined} />
         ) : (
           <View style={{ width: '90%', marginLeft: 15 }}>
             <View>

@@ -2,6 +2,8 @@ import React from 'react';
 import styled from 'styled-components';
 import LottieView from 'lottie-react-native';
 import { View } from 'react-native';
+import propsTypes from 'prop-types';
+import { any } from 'bluebird';
 import darkLoader from '../../assets/loaders/dark-loader.json';
 import lightLoader from '../../assets/loaders/light-loader.json';
 import sliderLoader from '../../assets/loaders/slider-loader.json';
@@ -14,8 +16,8 @@ const LoadingWrapper = styled.View`
 const Loader = ({
   inSlider = false,
   dark = false,
-  lottieViewStyle = undefined,
-  sourceProp = undefined,
+  lottieViewStyle,
+  sourceProp,
 }) => {
   const Wrapper = inSlider ? View : LoadingWrapper;
   let source;

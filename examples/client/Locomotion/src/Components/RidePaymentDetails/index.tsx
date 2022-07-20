@@ -1,4 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
+import propsTypes from 'prop-types';
 import { TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { MAIN_ROUTES } from '../../pages/routes';
@@ -10,12 +11,23 @@ import { RidePageContext } from '../../context/newRideContext';
 import {
   PaymentRow, RidePriceDetails, PriceText, ViewDetails, CardRowContainer,
 } from './styled';
+import { PaymentMethodInterface } from '../../context/payments/interface';
 
 type Nav = {
   navigate: (value: string, object?: any) => void;
+
 }
 
-const RidePaymentDetails = ({ rideId, paymentMethod, rideHistory = false }) => {
+const RidePaymentDetails = ({
+  rideId,
+  paymentMethod,
+  rideHistory = false,
+} :{
+  rideId: string,
+  paymentMethod: PaymentMethodInterface,
+  rideHistory: boolean
+
+}) => {
   const navigation = useNavigation<Nav>();
   const [totalAmount, setTotalAmount] = useState(0);
   const [currency, setCurrency] = useState('USD');
@@ -39,7 +51,7 @@ const RidePaymentDetails = ({ rideId, paymentMethod, rideHistory = false }) => {
       <CardsTitle title={i18n.t('ride.paymentMethod')} />
       <PaymentRow>
         <CardRowContainer>
-          <CardRow name={i18n.t('payments.cash')} {...paymentMethod} />
+          <CardRow {...paymentMethod} />
         </CardRowContainer>
         <RidePriceDetails>
           <PriceText>{getFormattedPrice(currency, totalAmount)}</PriceText>
@@ -57,5 +69,12 @@ const RidePaymentDetails = ({ rideId, paymentMethod, rideHistory = false }) => {
   );
 };
 
+RidePaymentDetails.propTypes = {
+  rideHistory: propsTypes.bool,
+};
+
+RidePaymentDetails.defaultProps = {
+  rideHistory: false,
+};
 
 export default RidePaymentDetails;

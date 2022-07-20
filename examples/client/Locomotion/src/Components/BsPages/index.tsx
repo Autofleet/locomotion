@@ -507,7 +507,7 @@ export const ConfirmingRide = (props: any) => {
           lottieViewStyle={{
             height: '100%', width: '100%', alignItems: 'center', justifyContent: 'center',
           }}
-          sourceProp={null}
+          sourceProp={undefined}
         />
       </LoaderContainer>
     </BsPage>
