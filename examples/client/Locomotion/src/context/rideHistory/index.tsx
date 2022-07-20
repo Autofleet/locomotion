@@ -67,7 +67,7 @@ const getDuration = (stopPoints: Array<any>) => {
 };
 
 
-const formatRides = (data: any) => data.map((r: any) => {
+export const formatRides = (data: any) => data.map((r: any) => {
   const sortedSps = formatSps(r.stopPoints);
   const [appDuration, appDurationHours, appDurationMinutes] = getDuration(sortedSps);
   return ({
@@ -206,6 +206,7 @@ export const RideHistoryContextProvider = ({ children }: any) => {
         savedParams,
         loadMoreRides,
         savedFilterScrollPos,
+        setRides,
         saveFilterScrollPos: (pos: any) => saveFilterScrollPos(pos),
       }}
     >

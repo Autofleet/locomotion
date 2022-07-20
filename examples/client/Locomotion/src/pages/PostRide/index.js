@@ -3,7 +3,10 @@ import React, {
 } from 'react';
 import { View } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
-import { MAIN_ROUTES } from '../routes';
+import { formatRides, rideHistoryContext } from '../../context/rideHistory';
+import FullPageLoader from '../../Components/FullPageLoader';
+import { getPriceCalculation } from '../../context/futureRides/api';
+import { APP_ROUTES, MAIN_ROUTES } from '../routes';
 import i18n from '../../I18n';
 import PageHeader from '../../Components/PageHeader';
 import {
@@ -24,12 +27,17 @@ import NewRidePageContextProvider, { RidePageContext } from '../../context/newRi
 import closeIcon from '../../assets/x.png';
 import BottomSheetContextProvider, { BottomSheetContext } from '../../context/bottomSheetContext';
 import { isCashPaymentMethod } from '../../lib/ride/utils';
+import { RideStateContextContext } from '../..';
+import { BS_PAGES } from '../../context/ridePageStateContext/utils';
+import * as navigationService from '../../services/navigation';
 
 const PostRidePage = ({ menuSide, route }) => {
   const navigation = useNavigation();
   const router = useRoute();
+  const { rideId, priceCalculationId } = route?.params;
   const [rating, setRating] = useState(null);
-  const [ride, setRide] = useState({});
+  const [ride, setRide] = useState(null);
+  const [tipFromDb, setTipFromDb] = useState();
   const [rideTip, setRideTip] = useState(null);
   const [tipSettings, setTipSettings] = useState({
     percentageThreshold: 30,
@@ -39,8 +47,12 @@ const PostRidePage = ({ menuSide, route }) => {
   const {
     postRideSubmit,
     getRideFromApi,
+    cleanRideState,
   } = useContext(RidePageContext);
-
+  const { changeBsPage } = useContext(RideStateContextContext);
+  const {
+    rides: pastRides, setRides: setPastRides,
+  } = useContext(rideHistoryContext);
   const { getSettingByKey } = settings.useContainer();
 
   useEffect(() => {
@@ -63,7 +75,14 @@ const PostRidePage = ({ menuSide, route }) => {
   };
 
   const loadRide = async () => {
-    const rideData = await getRideFromApi(route.params.rideId);
+    const [rideData, priceCalculation] = await Promise.all(
+      [
+        getRideFromApi(rideId),
+        ...(priceCalculationId && [getPriceCalculation(priceCalculationId)]),
+      ],
+    );
+    const tipObj = priceCalculation.additionalCharges.find(charge => charge.chargeFor === 'tip');
+    setTipFromDb((tipObj || {}).amount);
     setRide(rideData);
   };
 
@@ -72,6 +91,17 @@ const PostRidePage = ({ menuSide, route }) => {
     loadRide();
   }, []);
 
+  const nextPage = () => {
+    if (priceCalculationId) {
+      const [formattedRide] = formatRides([ride]);
+      const newRidesHistory = pastRides.map(pr => (pr.id === ride.id ? formattedRide : pr));
+      setPastRides(newRidesHistory);
+      return navigation.goBack();
+    }
+    cleanRideState();
+    navigationService.navigate(MAIN_ROUTES.HOME, {}, APP_ROUTES.MAIN_APP);
+    changeBsPage(BS_PAGES.ADDRESS_SELECTOR);
+  };
   const onSubmit = async () => {
     try {
       await postRideSubmit(ride.id, {
@@ -79,7 +109,7 @@ const PostRidePage = ({ menuSide, route }) => {
         tip: rideTip,
         priceCalculationId: ride.priceCalculationId,
       });
-      navigation.navigate(MAIN_ROUTES.HOME);
+      nextPage();
       return true;
     } catch (e) {
       console.log(e);
@@ -91,37 +121,51 @@ const PostRidePage = ({ menuSide, route }) => {
     isExpanded,
   } = useContext(BottomSheetContext);
 
+  const getButtonText = () => {
+    if (priceCalculationId) {
+      return i18n.t('postRide.submitForPast');
+    }
+    return i18n.t('postRide.submit');
+  };
   return (
-    <PageContainer>
-      <PageHeader
-        title={i18n.t('postRide.pageTitle')}
-        onIconPress={() => navigation.navigate(MAIN_ROUTES.HOME)}
-        iconSide={menuSide}
-        icon={closeIcon}
-      />
-      <PageContent>
-        <RatingContainer>
-          <SummaryStarsTitle>{i18n.t('postRide.ratingHeadline')}</SummaryStarsTitle>
-          <StarRating onUpdate={onRatingUpdate} />
-        </RatingContainer>
+    <>
+      {ride ? (
+        <PageContainer>
+          <PageHeader
+            title={i18n.t('postRide.pageTitle')}
+            onIconPress={nextPage}
+            iconSide={menuSide}
+            icon={closeIcon}
+          />
+          <PageContent>
+            {!ride.rating && (
+            <RatingContainer>
+              <SummaryStarsTitle>{i18n.t('postRide.ratingHeadline')}</SummaryStarsTitle>
+              <StarRating onUpdate={onRatingUpdate} />
+            </RatingContainer>
+            )}
 
-        <TipsContainer>
-          {ride?.priceCurrency && ride?.priceAmount
-            ? (
-              <Tips
-                tipSettings={tipSettings}
-                onSelectTip={onSelectTip}
-                driver={{ firstName: ride?.driver?.firstName, avatar: ride?.driver?.avatar }}
-                ridePrice={ride?.priceAmount}
-                priceCurrency={ride?.priceCurrency}
-              />
-            ) : null}
-        </TipsContainer>
-        <SubmitContainer>
-          <Button onPress={onSubmit} disabled={isExpanded}>{i18n.t('postRide.submit')}</Button>
-        </SubmitContainer>
-      </PageContent>
-    </PageContainer>
+            {!(priceCalculationId && tipFromDb) && (
+            <TipsContainer>
+              {ride?.priceCurrency && ride?.priceAmount
+                ? (
+                  <Tips
+                    tipSettings={tipSettings}
+                    onSelectTip={onSelectTip}
+                    driver={{ firstName: ride?.driver?.firstName, avatar: ride?.driver?.avatar }}
+                    ridePrice={ride?.priceAmount}
+                    priceCurrency={ride?.priceCurrency}
+                  />
+                ) : null}
+            </TipsContainer>
+            )}
+            <SubmitContainer>
+              <Button onPress={onSubmit} disabled={isExpanded}>{getButtonText()}</Button>
+            </SubmitContainer>
+          </PageContent>
+        </PageContainer>
+      ) : <FullPageLoader />}
+    </>
   );
 };
 

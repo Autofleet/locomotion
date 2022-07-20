@@ -321,6 +321,8 @@
         "pageTitle": "Ride finished",
         "ratingHeadline": "How was your ride?",
         "submit": "Rate & Tip",
+        "submitForPast": "Done",
+        "notRated": "Ride not rated",
         "tip": {
             "title": "Add a tip for",
             "subTitle": "Your ride was",

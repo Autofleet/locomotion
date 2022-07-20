@@ -1,4 +1,5 @@
 import React from 'react';
+import moment from 'moment';
 import TextButton from '../TextButton';
 import CardsTitle from '../CardsTitle';
 import { RideInterface } from '../../context/newRideContext';
@@ -15,7 +16,10 @@ import {
   DriverRatingText,
   VehicleModelNameText,
   DriverDetailsContainer,
+  NotRated,
 } from './styled';
+import * as NavigationService from '../../services/navigation';
+import { MAIN_ROUTES } from '../../pages/routes';
 
 interface DriverCardProps {
     activeRide: boolean;
@@ -39,8 +43,15 @@ const DriverCard = ({
         </RatingBarContainer>
       );
     }
+    if (moment(moment()).diff(ride.scheduledTo || ride.createdAt, 'days') > 5) {
+      return (
+        <NotRated>
+          {i18n.t('postRide.notRated')}
+        </NotRated>
+      );
+    }
     return (
-      <TextButton onPress={() => {}} text={i18n.t('rideHistory.rideCard.rateRide')} />
+      <TextButton onPress={() => { NavigationService.navigate(MAIN_ROUTES.POST_RIDE, { rideId: ride.id, priceCalculationId: ride.priceCalculationId }); }} text={i18n.t('rideHistory.rideCard.rateRide')} />
     );
   };
   return (

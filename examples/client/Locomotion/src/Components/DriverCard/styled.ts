@@ -71,3 +71,9 @@ export const VehicleModelNameText = styled(Text)`
     ${FONT_WEIGHTS.REGULAR};
     color: ${({ theme }) => theme.disabledColor};
 `;
+
+export const NotRated = styled(Text)`
+${FONT_SIZES.H2}
+${FONT_WEIGHTS.SEMI_BOLD}
+color: #bcbcbc;
+`;
