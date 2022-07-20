@@ -18,7 +18,7 @@ import {
   RideViewContainer,
   RideViewSecTextContainer,
   MainRideViewSectionContainer,
-  RideViewSectionTitleText,
+  DetailsContainer,
   DriverCardContainer,
   StopPointsVerticalViewContainer,
   RideStateText,
@@ -84,30 +84,32 @@ const RideView = ({ ride }) => {
           ride={ride}
         />
       </MapRideViewContainer>
-      <MainRideViewSectionContainer>
-        <RideTitleCard page ride={ride} />
-        <BlankContainer />
-      </MainRideViewSectionContainer>
-      <StopPointsVerticalViewContainer>
-        <StopPointsVerticalView
-          ride={ride}
-        />
-      </StopPointsVerticalViewContainer>
-      <StopPointsVerticalViewContainer>
-        <RidePaymentDetails
-          payment={ride.payment}
-          priceAmount={ride.priceAmount}
-          priceCurrency={ride.priceCurrency}
-        />
-      </StopPointsVerticalViewContainer>
-      <DriverCardContainer>
-        {ride.driver && ride.state === RIDE_STATES.COMPLETED && (
-        <DriverCard
-          activeRide={false}
-          ride={ride}
-        />
-        )}
-      </DriverCardContainer>
+      <DetailsContainer>
+        <MainRideViewSectionContainer>
+          <RideTitleCard page ride={ride} />
+          <BlankContainer />
+        </MainRideViewSectionContainer>
+        <StopPointsVerticalViewContainer>
+          <StopPointsVerticalView
+            ride={ride}
+          />
+        </StopPointsVerticalViewContainer>
+        <StopPointsVerticalViewContainer>
+          <RidePaymentDetails
+            payment={ride.payment}
+            priceAmount={ride.priceAmount}
+            priceCurrency={ride.priceCurrency}
+          />
+        </StopPointsVerticalViewContainer>
+        <DriverCardContainer>
+          {ride.driver && ride.state === RIDE_STATES.COMPLETED && (
+          <DriverCard
+            activeRide={false}
+            ride={ride}
+          />
+          )}
+        </DriverCardContainer>
+      </DetailsContainer>
     </RideViewContainer>
   );
 };

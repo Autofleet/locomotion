@@ -8,7 +8,7 @@ const StyledCardsTitle = styled(Text)`
   ${FONT_SIZES.MEDIUM};
   ${FONT_WEIGHTS.BOLD};
   color: #333333;
-  padding: 30px 0px 15px;
+  padding: 30px 0px 5px;
 `;
 
 const CardsTitle = ({

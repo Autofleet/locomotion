@@ -1,5 +1,6 @@
 import { Image, Text, View } from 'react-native';
 import styled from 'styled-components';
+import Button from '../Button';
 import { FONT_SIZES, FONT_WEIGHTS } from '../../context/theme';
 
 const BaseRideViewContainer = styled(View)`
@@ -16,11 +17,10 @@ export const RatingBarContainer = styled(View)`
 `;
 
 export const DriverDetailsContainer = styled(View)`
-width: 75%;
+flex-grow: 1;
 `;
 
 export const DriverAvatarContainer = styled(View)`
-max-width: 25%;
 `;
 
 export const DriverDetailContainer = styled(View)`
@@ -71,4 +71,14 @@ export const VehicleModelNameText = styled(Text)`
     ${FONT_SIZES.MEDIUM};
     ${FONT_WEIGHTS.REGULAR};
     color: ${({ theme }) => theme.disabledColor};
+`;
+
+export const TextButton = styled(Button)`
+
+`;
+
+export const ButtonText = styled(Text)`
+color: ${({ theme }) => theme.primaryColor};
+${FONT_SIZES.H3}
+${FONT_WEIGHTS.REGULAR}
 `;

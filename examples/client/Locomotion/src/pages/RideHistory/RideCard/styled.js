@@ -40,7 +40,6 @@ export const BaseRideViewContainer = styled.View`
 `;
 
 export const MainRideViewSectionContainer = styled(BaseRideViewContainer)`
-  padding: 20px;
   flex-direction: row;
 `;
 
@@ -183,14 +182,16 @@ export const RideViewTitleContainer = styled.View`
 `;
 
 export const DriverCardContainer = styled.View`
-padding-left: 20px;
 `;
 
 export const StopPointsVerticalViewContainer = styled.View`
-padding: 0 20px;
 `;
 
 export const RideStateText = styled.Text`
 ${FONT_SIZES.MEDIUM};
 ${FONT_WEIGHTS.REGULAR};
+`;
+
+export const DetailsContainer = styled.View`
+padding: 20px;
 `;

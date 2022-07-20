@@ -308,7 +308,9 @@
       "noActivitySub": "Take your first ride and see it here!",
       "rideCard": {
         "rideJourney": "Ride journey",
-        "driverRating": "Driver rating"
+        "driverRating": "Driver rating",
+        "rateRide": "Tap to rate your ride",
+        "addTip": "Add a tip"
       }
     },
     "futureRides": {
