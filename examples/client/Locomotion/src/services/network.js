@@ -79,7 +79,7 @@ class Network {
             Auth.logout();
             return null;
           }
-          throw e.response;
+          throw e;
         });
       };
       return true;

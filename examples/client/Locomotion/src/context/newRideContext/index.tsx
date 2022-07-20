@@ -627,8 +627,12 @@ const RidePageContextProvider = ({ children }: {
         changeBsPage(BS_PAGES.CONFIRM_FUTURE_RIDE);
       }
     } catch (e: any) {
-      const key = e.message || e.data?.errors[0];
-      FAILED_TO_CREATE_RIDE_ACTIONS[key]();
+      const key = e.message || e.response?.data?.errors[0];
+      if (FAILED_TO_CREATE_RIDE_ACTIONS[key]) {
+        FAILED_TO_CREATE_RIDE_ACTIONS[key]();
+      } else {
+        changeBsPage(BS_PAGES.NO_AVAILABLE_VEHICLES);
+      }
     } finally {
       setRideRequestLoading(false);
     }
