@@ -53,6 +53,7 @@ export interface RideInterface {
   payment?: any;
   canceledBy?: string;
   cancelable?: boolean;
+  priceCalculationId?: string;
 }
 
 type AdditionalCharge = {
@@ -115,7 +116,7 @@ interface RidePageContextInterface {
   tryServiceEstimations: () => Promise<void>;
   getService: (serviceId: string) => Promise<any>;
   getServices: () => Promise<any[]>;
-  getRidePriceCalculation: () => Promise<PriceCalculation | undefined>;
+  getRidePriceCalculation: (id: string) => Promise<PriceCalculation | undefined>;
 }
 
 export const RidePageContext = createContext<RidePageContextInterface>({
@@ -740,7 +741,7 @@ const RidePageContextProvider = ({ children }: {
     return null;
   };
 
-  const getRidePriceCalculation = async (id) => {
+  const getRidePriceCalculation = async (id:string) => {
     console.log('heyyyyyyyyyyyy');
 
     const apiRide = await getRideFromApi(id || ride.id || '');

@@ -156,11 +156,7 @@ const ActiveRideContent = () => {
           <StopPointsVerticalView
             ride={ride}
           />
-          <RidePaymentDetails
-            payment={ride.payment}
-            priceAmount={ride.priceAmount}
-            priceCurrency={ride.priceCurrency}
-          />
+          <RidePaymentDetails rideId={ride.id} paymentMethod={ride.payment.paymentMethod} />
           <ServiceTypeDetails
             serviceType={ride.serviceType}
           />

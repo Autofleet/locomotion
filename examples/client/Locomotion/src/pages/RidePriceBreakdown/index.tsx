@@ -1,7 +1,8 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { View } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
-import { useRoute } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
+import { MAIN_ROUTES } from '../routes';
 import PriceCard from '../../Components/PriceCard';
 import NoTitleCard from '../../Components/NoTitleCard';
 import Loader from '../../Components/Loader';
@@ -15,8 +16,19 @@ import i18n from '../../I18n';
 import { CreditCardRowContainer } from './styled';
 import { PaymentMethodInterface } from '../../context/payments/interface';
 
+type RidePriceBreakdownParams = {
+  rideId: string,
+  rideHistory: boolean
+}
+
+type Nav = {
+  navigate: (value: string, object?: any) => void;
+}
+
 const RidePriceBreakDown = () => {
+  const navigation = useNavigation<Nav>();
   const route = useRoute();
+  const params : RidePriceBreakdownParams = route.params as RidePriceBreakdownParams;
   const [loading, setLoading] = useState<boolean>(true);
   const [priceCalculation, setPriceCalculation] = useState<PriceCalculation>();
   const [paymentMethod, setPaymentMethod] = useState<PaymentMethodInterface>();
@@ -28,22 +40,20 @@ const RidePriceBreakDown = () => {
 
   const updatePriceCalculation = async () => {
     setLoading(true);
-    const calculation = await getRidePriceCalculation(route.params?.rideId);
-    console.log('calculation123: ', calculation);
-
+    const calculation = await getRidePriceCalculation(params.rideId);
     setPriceCalculation(calculation);
     setLoading(false);
   };
 
   const updateRideFromApi = async () => {
     setLoading(true);
-    const result = await getRideFromApi(route.params?.rideId || ride.id || '');
+    const result = await getRideFromApi(params.rideId || ride.id || '');
     setPaymentMethod(result.payment?.paymentMethod);
     setLoading(false);
   };
 
   const getSymbol = () => getCurrencySymbol(priceCalculation?.currency);
-  const getPriceWithCurrency = (amount:number) => `${getSymbol()}${amount}`;
+  const getPriceWithCurrency = (amount:number) => `${getSymbol()}${amount.toFixed(2)}`;
   const getTip = () => priceCalculation?.additionalCharges?.find(({ chargeFor }) => chargeFor === 'tip');
 
   useEffect(() => {
@@ -58,6 +68,9 @@ const RidePriceBreakDown = () => {
 
       <PageHeader
         title={i18n.t('Payment breakdown')}
+        onIconPress={() => (params.rideHistory
+          ? navigation.navigate(MAIN_ROUTES.RIDE_HISTORY)
+          : navigation.navigate(MAIN_ROUTES.HOME))}
       />
       <ScrollView>
         {loading ? (
