@@ -17,16 +17,18 @@ import { MAIN_ROUTES } from '../routes';
 import { UserContext } from '../../context/user';
 import { PageContainer, ContentContainer } from '../styles';
 
+const MAX_LENGTH = 40;
+
 const nameSchema = yup.object().shape({
   firstName: yup
     .string()
-    .matches(/^[A-Za-z ]*$/, 'Name should be only letters')
-    .max(40)
+    .label('First name')
+    .max(MAX_LENGTH)
     .required(),
   lastName: yup
     .string()
-    .matches(/^[A-Za-z ]*$/, 'Name should be only letters')
-    .max(40)
+    .label('Last name')
+    .max(MAX_LENGTH)
     .required(),
 });
 
