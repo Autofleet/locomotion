@@ -278,8 +278,8 @@ const RidePage = ({ mapSettings, navigation }) => {
   }, []);
 
   return (
-    <PortalProvider>
-      <PageContainer>
+    <PageContainer>
+      <PortalProvider>
         <MainMap
           ref={mapRef}
           mapSettings={mapSettings}
@@ -310,11 +310,11 @@ const RidePage = ({ mapSettings, navigation }) => {
           <FutureRidesButton />
             ) : <View />}
           {!isExpanded && locationGranted && (
-          <SquareSvgButton
-            onPress={focusCurrentLocation}
-            icon={targetIcon}
-            style={Platform.OS === 'android' ? { shadowColor: '#000' } : {}}
-          />
+            <SquareSvgButton
+              onPress={focusCurrentLocation}
+              icon={targetIcon}
+              style={Platform.OS === 'android' ? { shadowColor: '#000' } : {}}
+            />
           )}
         </MapOverlayButtons>
         <BottomSheet
@@ -341,8 +341,8 @@ const RidePage = ({ mapSettings, navigation }) => {
           }
         }
         />
-      </PageContainer>
-    </PortalProvider>
+      </PortalProvider>
+    </PageContainer>
   );
 };
 
