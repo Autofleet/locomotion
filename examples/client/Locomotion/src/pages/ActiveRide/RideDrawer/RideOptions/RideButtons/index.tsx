@@ -35,16 +35,19 @@ const RideButtons = ({
     chosenService,
     updateRidePayload,
   } = useContext(RidePageContext);
-  const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
   const {
     changeBsPage,
   } = useContext(RideStateContextContext);
 
   const {
     paymentMethods,
+    getClientOutstandingBalanceCard,
   }: {
         paymentMethods: PaymentMethodInterface[],
+        getClientOutstandingBalanceCard: () => PaymentMethodInterface,
     } = PaymentsContext.useContainer();
+
+  const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
 
   const renderFutureBooking = () => {
     const close = () => {
@@ -129,7 +132,7 @@ const RideButtons = ({
       </RowContainer>
       <StyledButton
         data-test-id="selectService"
-        disabled={!chosenService}
+        disabled={!chosenService || !!getClientOutstandingBalanceCard()}
         onPress={() => {
           changeBsPage(BS_PAGES.CONFIRM_PICKUP);
         }}

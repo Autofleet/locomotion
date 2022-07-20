@@ -629,13 +629,16 @@ const RidePageContextProvider = ({ children }: {
         loadFutureRides();
         setNewFutureRide(afRide);
         changeBsPage(BS_PAGES.CONFIRM_FUTURE_RIDE);
+      } else {
+        const formattedRide = await formatRide(afRide);
+        setRide(formattedRide);
       }
     } catch (e: any) {
       const key = e.message || e.response?.data?.errors[0];
       if (FAILED_TO_CREATE_RIDE_ACTIONS[key]) {
         FAILED_TO_CREATE_RIDE_ACTIONS[key]();
       } else {
-        changeBsPage(BS_PAGES.NO_AVAILABLE_VEHICLES);
+        FAILED_TO_CREATE_RIDE_ACTIONS[RIDE_FAILED_REASONS.BUSY]();
       }
     } finally {
       setRideRequestLoading(false);
