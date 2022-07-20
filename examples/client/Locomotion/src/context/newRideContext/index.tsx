@@ -55,6 +55,20 @@ export interface RideInterface {
   cancelable?: boolean;
 }
 
+type AdditionalCharge = {
+  amount: number,
+  chargeFor: string,
+}
+
+export type PriceCalculation = {
+  surgePrice: number,
+  discount: number,
+  totalPrice: number,
+  currency: string,
+  additionalCharges: AdditionalCharge[],
+  items: {pricingRule: any, name: string, price: number}
+};
+
 interface RidePageContextInterface {
   loadAddress: (input: any) => void;
   reverseLocationGeocode: (lat: number, lng: number) => Promise<any>;
@@ -101,7 +115,7 @@ interface RidePageContextInterface {
   tryServiceEstimations: () => Promise<void>;
   getService: (serviceId: string) => Promise<any>;
   getServices: () => Promise<any[]>;
-  getRidePriceCalculation: (id: string) => Promise<any>;
+  getRidePriceCalculation: () => Promise<PriceCalculation | undefined>;
 }
 
 export const RidePageContext = createContext<RidePageContextInterface>({
@@ -150,7 +164,7 @@ export const RidePageContext = createContext<RidePageContextInterface>({
   tryServiceEstimations: async () => undefined,
   getService: async (serviceId: string) => ({}),
   getServices: async () => [],
-  getRidePriceCalculation: async (id: string) => undefined,
+  getRidePriceCalculation: async () => undefined,
 });
 
 const HISTORY_RECORDS_NUM = 10;
@@ -726,8 +740,9 @@ const RidePageContextProvider = ({ children }: {
     return null;
   };
 
-  const getRidePriceCalculation = async (id) => {
-    const calculation = await rideApi.getPriceCalculation(id);
+  const getRidePriceCalculation = async () => {
+    const apiRide = await getRideFromApi(ride.id || '');
+    const calculation = await rideApi.getPriceCalculation(apiRide?.priceCalculationId);
     return calculation;
   };
 

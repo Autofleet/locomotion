@@ -95,6 +95,7 @@ const RideView = ({ ride }) => {
       </StopPointsVerticalViewContainer>
       <StopPointsVerticalViewContainer>
         <RidePaymentDetails
+          rideId={ride.id}
           payment={ride.payment}
           priceAmount={ride.priceAmount}
           priceCurrency={ride.priceCurrency}

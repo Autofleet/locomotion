@@ -130,7 +130,11 @@ const ActiveRideContent = () => {
             </StopPointText>
             <StopPointsTimeContainer>
               <PulseContainer>
-                <Loader dark={false} sourceProp={pulse} lottieViewStyle={{ width: 24, height: 24 }} />
+                <Loader
+                  dark={false}
+                  sourceProp={pulse}
+                  lottieViewStyle={{ width: 24, height: 24 }}
+                />
               </PulseContainer>
               <StopPointTimeText>{getMinDifferent()}</StopPointTimeText>
             </StopPointsTimeContainer>

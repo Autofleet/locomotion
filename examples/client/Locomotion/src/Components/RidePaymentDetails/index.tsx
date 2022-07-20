@@ -15,6 +15,7 @@ type Nav = {
 }
 
 const RidePaymentDetails = ({
+  rideId,
   payment,
   priceAmount,
   priceCurrency,
@@ -33,7 +34,9 @@ const RidePaymentDetails = ({
         </CardRowContainer>
         <RidePriceDetails>
           <PriceText>{getFormattedPrice(priceCurrency, priceAmount)}</PriceText>
-          <TouchableOpacity onPress={() => navigation.navigate(MAIN_ROUTES.RIDE_PRICE_BREAKDOWN)}>
+          <TouchableOpacity onPress={() => navigation.navigate(MAIN_ROUTES.RIDE_PRICE_BREAKDOWN,
+            { rideId })}
+          >
             <ViewDetails>
               {i18n.t('ride.viewDetails').toString()}
             </ViewDetails>
