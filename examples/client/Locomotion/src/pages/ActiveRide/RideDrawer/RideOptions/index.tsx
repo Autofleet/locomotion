@@ -1,6 +1,7 @@
 import React, {
   useContext, useEffect, useState,
 } from 'react';
+import { Portal } from '@gorhom/portal';
 import i18n from '../../../../I18n';
 import { RIDE_POPUPS } from '../../../../context/newRideContext/utils';
 import RideButtons from './RideButtons';
@@ -97,43 +98,46 @@ const RideOptions = () => {
       stopRequestInterval();
     }
   }, [ridePopup]);
+  // logic for showing top banner for estimated fare
+  // useEffect(() => {
+  //   if (ride.scheduledTo) {
+  //     setTopBarText(i18n.t('home.futureRides.rideFareEstimationNotice'));
+  //   }
 
-  useEffect(() => {
-    if (ride.scheduledTo) {
-      setTopBarText(i18n.t('home.futureRides.rideFareEstimationNotice'));
-    }
-
-    return () => setTopBarText('');
-  }, [ride]);
+  //   return () => setTopBarText('');
+  // }, [ride]);
   return (
     <>
       <ServiceOptions />
-      <RideNotes
-        isVisible={popupToShow === 'notes'}
-        notes={ride?.notes}
-        onSubmit={(text: string) => {
-          updateRidePayload({
-            notes: text,
-          });
-          clearPopup();
-        }}
-        onCancel={() => {
-          clearPopup();
-        }}
-      />
-      <ChoosePaymentMethod
-        selected={ride?.paymentMethodId?.length
+      <Portal>
+        <RideNotes
+          isVisible={popupToShow === 'notes'}
+          notes={ride?.notes}
+          onSubmit={(text: string) => {
+            updateRidePayload({
+              notes: text,
+            });
+            clearPopup();
+          }}
+          onCancel={() => {
+            clearPopup();
+          }}
+        />
+
+        <ChoosePaymentMethod
+          selected={ride?.paymentMethodId?.length
           && usePayments.paymentMethods.includes(ride?.paymentMethodId as never)
-          ? ride.paymentMethodId : defaultPaymentMethod?.id}
-        rideFlow
-        isVisible={popupToShow === 'payment'}
-        onCancel={() => clearPopup()}
-        onSubmit={(payment: any) => {
-          updateRidePayload({
-            paymentMethodId: payment,
-          });
-        }}
-      />
+            ? ride.paymentMethodId : defaultPaymentMethod?.id}
+          rideFlow
+          isVisible={popupToShow === 'payment'}
+          onCancel={() => clearPopup()}
+          onSubmit={(payment: any) => {
+            updateRidePayload({
+              paymentMethodId: payment,
+            });
+          }}
+        />
+      </Portal>
     </>
   );
 };

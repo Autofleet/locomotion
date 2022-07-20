@@ -50,11 +50,15 @@ const FutureRidesView = ({ menuSide }: FutureRidesViewProps) => {
   useEffect(() => {
     loadServices();
   }, []);
+
   return (
     <PageContainer>
       <PageHeader
-        title={i18n.t('postRide.pageTitle')}
-        onIconPress={() => NavigationService.navigate(MAIN_ROUTES.HOME)}
+        title={i18n.t('futureRides.pageTitle')}
+        onIconPress={() => {
+          changeBsPage(BS_PAGES.ADDRESS_SELECTOR);
+          NavigationService.navigate(MAIN_ROUTES.HOME);
+        }}
         iconSide={menuSide}
       />
       {!!services.length && (
@@ -80,6 +84,7 @@ const FutureRidesView = ({ menuSide }: FutureRidesViewProps) => {
         closeable
       >
         <CancelRide
+          secondaryButtonText={i18n.t('bottomSheetContent.cancelRide.secondaryButtonTextFuture')}
           onButtonPress={async () => {
             closeBottomSheet();
             await cancelRide(rideToCancel?.id);

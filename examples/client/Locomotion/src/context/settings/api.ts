@@ -15,7 +15,7 @@ export const getMultipleByKeys = async (keys: string[]) => {
 };
 
 export const getAppSettings = async () => {
-  const { data } = await network.get('/api/v1/me/app-settings');
+  const { data } = await network.get('/api/v1/app-settings');
   return data;
 };
 

@@ -3,8 +3,13 @@ import shortid from 'shortid';
 import i18n from '../../I18n';
 import { getGeocode } from './google-api';
 
-export const MIN_DATE_FUTURE_RIDE = moment().add(60, 'minutes').toDate();
-export const MAX_DATE_FUTURE_RIDE = moment().add(7, 'days').toDate();
+export const RIDE_FAILED_REASONS = {
+  BUSY: 'BUSY',
+  USER_FUTURE_RIDE_INTERVAL_LIMIT_REACHED: 'USER_FUTURE_RIDE_INTERVAL_LIMIT_REACHED',
+};
+
+export const getFutureRideMinDate = () => moment().add(60, 'minutes').toDate();
+export const getFutureRideMaxDate = () => moment().add(7, 'days').toDate();
 
 export const TAG_OPTIONS = {
   FASTEST: i18n.t('services.tags.fastest'),
@@ -139,6 +144,6 @@ export const getCurrencySymbol = (priceCurrency?: string) => {
   if (!priceCurrency) {
     return '';
   }
-  const currency = new Intl.NumberFormat('en-IN', { style: 'currency', currency: (priceCurrency), maximumFractionDigits: 0 }).format(0);
+  const currency = new Intl.NumberFormat('en-IN', { style: 'currency', currency: (priceCurrency) }).format(0);
   return currency[0];
 };
