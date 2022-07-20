@@ -78,11 +78,13 @@ const PostRidePage = ({ menuSide, route }) => {
     const [rideData, priceCalculation] = await Promise.all(
       [
         getRideFromApi(rideId),
-        ...(priceCalculationId && [getPriceCalculation(priceCalculationId)]),
+        ...[(priceCalculationId && getPriceCalculation(priceCalculationId))],
       ],
     );
-    const tipObj = priceCalculation.additionalCharges.find(charge => charge.chargeFor === 'tip');
-    setTipFromDb((tipObj || {}).amount);
+    if (priceCalculation) {
+      const tipObj = priceCalculation.additionalCharges.find(charge => charge.chargeFor === 'tip');
+      setTipFromDb((tipObj || {}).amount);
+    }
     setRide(rideData);
   };
 
