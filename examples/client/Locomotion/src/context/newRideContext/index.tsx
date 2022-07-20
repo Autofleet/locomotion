@@ -223,6 +223,10 @@ const RidePageContextProvider = ({ children }: {
         changeBsPage(BS_PAGES.ADDRESS_SELECTOR);
       }
     },
+    [RIDE_STATES.FAILED]: () => {
+      setRidePopup(RIDE_POPUPS.RIDE_CANCELED_BY_DISPATCHER);
+      cleanRideState();
+    },
   };
 
   const formatRide = async (rideToFormat: RideInterface) => {
