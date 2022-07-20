@@ -25,7 +25,7 @@ export const INITIAL_USER_STATE = {
 const AuthLoadingScreen = ({ navigation }) => {
   const { setUser, user } = useContext(UserContext);
   const { navigateBasedOnUser } = useContext(OnboardingContext);
-  const { getSettingByKey } = settings.useContainer();
+  const { getSettingByKey, getAppSettings } = settings.useContainer();
 
   const usePayments = PaymentsContext.useContainer();
 
@@ -42,11 +42,10 @@ const AuthLoadingScreen = ({ navigation }) => {
     await checkVersionAndForceUpdateIfNeeded(minAppVersion);
   };
 
-  const init = () => {
+  const init = async () => {
     async function getFromStorage() {
       const clientProfile = await StorageService.get('clientProfile');
       if (clientProfile) {
-        await versionCheck();
         const response = await getUserDetails();
         if (!response) {
           Auth.logout(navigation);
@@ -78,12 +77,15 @@ const AuthLoadingScreen = ({ navigation }) => {
       navigation.navigate(MAIN_ROUTES.START);
     }
 
-
+    await getAppSettings();
+    // await versionCheck();
     if (!user) { // Load app state
       getFromStorage();
     }
   };
-  useEffect(init, []);
+  useEffect(() => {
+    init();
+  }, []);
   return (
     <>
       <FullPageLoader />

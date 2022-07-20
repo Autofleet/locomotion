@@ -20,7 +20,7 @@ width: 75%;
 `;
 
 export const DriverAvatarContainer = styled(View)`
-width: 25%;
+max-width: 25%;
 `;
 
 export const DriverDetailContainer = styled(View)`

@@ -41,7 +41,9 @@ const FutureRidesProvider = ({ children }: { children: any }) => {
   }, 30000);
 
   useEffect(() => {
-    loadFutureRides();
+    if (user?.id) {
+      loadFutureRides();
+    }
   }, []);
 
   return (
