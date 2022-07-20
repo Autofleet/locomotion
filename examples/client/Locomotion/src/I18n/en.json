@@ -412,7 +412,8 @@
         "titleText": "Are you sure you want to cancel?",
         "subTitleText": "You may be charged a fee for cancelling this ride",
         "buttonText": "Cancel Ride",
-        "secondaryButtonText": "Keep Riding"
+        "secondaryButtonText": "Keep Riding",
+        "secondaryButtonTextFuture": "Keep Ride"
     },
     "confirmPickup": {
       "confirmPickupTitle": "Confirm pickup",

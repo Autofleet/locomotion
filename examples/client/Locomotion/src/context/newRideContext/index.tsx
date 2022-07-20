@@ -627,8 +627,8 @@ const RidePageContextProvider = ({ children }: {
         changeBsPage(BS_PAGES.CONFIRM_FUTURE_RIDE);
       }
     } catch (e: any) {
-      console.log(e);
-      FAILED_TO_CREATE_RIDE_ACTIONS[e.message]();
+      const key = e.message || e.data?.errors[0];
+      FAILED_TO_CREATE_RIDE_ACTIONS[key]();
     } finally {
       setRideRequestLoading(false);
     }

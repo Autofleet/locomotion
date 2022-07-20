@@ -44,7 +44,7 @@ const FutureRidesProvider = ({ children }: { children: any }) => {
     if (user?.id) {
       loadFutureRides();
     }
-  }, []);
+  }, [user?.id]);
 
   return (
     <FutureRidesContext.Provider
