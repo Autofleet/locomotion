@@ -503,7 +503,7 @@ const RidePageContextProvider = ({ children }: {
     }
   };
 
-  const onAddressSelected = async (selectedItem: any, loadRide: boolean, index: number) => {
+  const onAddressSelected = async (selectedItem: any, loadRide: boolean, index?: number) => {
     if (selectedItem.isLoading) {
       return null;
     }

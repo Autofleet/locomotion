@@ -44,7 +44,7 @@ const RideButtons = ({
     getClientOutstandingBalanceCard,
   }: {
         paymentMethods: PaymentMethodInterface[],
-        getClientOutstandingBalanceCard: () => PaymentMethodInterface,
+        getClientOutstandingBalanceCard: () => PaymentMethodInterface | undefined,
     } = PaymentsContext.useContainer();
 
   const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
