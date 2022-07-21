@@ -111,6 +111,8 @@ const RidePage = ({ mapSettings, navigation }) => {
       initSps();
     } else if (serviceEstimations) {
       changeBsPage(BS_PAGES.SERVICE_ESTIMATIONS);
+    } else if (currentBsPage === BS_PAGES.CONFIRM_FUTURE_RIDE) {
+      resetStateToAddressSelector();
     } else {
       // sorry
       setAddressSelectorFocus(selectedInputIndex === 0
