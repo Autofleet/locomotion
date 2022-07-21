@@ -111,6 +111,8 @@ const RidePage = ({ mapSettings, navigation }) => {
       initSps();
     } else if (serviceEstimations) {
       changeBsPage(BS_PAGES.SERVICE_ESTIMATIONS);
+    } else if (currentBsPage === BS_PAGES.CONFIRM_PICKUP_TIME) {
+      changeBsPage(BS_PAGES.SERVICE_ESTIMATIONS);
     } else {
       // sorry
       setAddressSelectorFocus(selectedInputIndex === 0
@@ -313,13 +315,6 @@ const RidePage = ({ mapSettings, navigation }) => {
     },
   };
 
-  const onPressHeaderBack = () => {
-    if (currentBsPage === BS_PAGES.CONFIRM_PICKUP_TIME) {
-      return changeBsPage(BS_PAGES.SERVICE_ESTIMATIONS);
-    }
-    return backToMap();
-  };
-
   const topMessageKey = Object.keys(MESSAGE_MAP).find(key => MESSAGE_MAP[key].condition());
   const topMessage = MESSAGE_MAP[topMessageKey];
 
@@ -335,7 +330,7 @@ const RidePage = ({ mapSettings, navigation }) => {
             <>
               <Header
                 icon={backArrow}
-                onPressIcon={onPressHeaderBack}
+                onPressIcon={backToMap}
               >
 
                 <StopPointsViewer goBackToAddressSelector={goBackToAddress} />
