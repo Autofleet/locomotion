@@ -13,7 +13,6 @@
 # Uncomment the line if you want fastlane to automatically update itself
 # update_fastlane
 
-default_platform(:android)
 lane :generate do
     Fastlane::LaneManager.cruise_lane("ios", "icons")
     Fastlane::LaneManager.cruise_lane("android", "icons")
