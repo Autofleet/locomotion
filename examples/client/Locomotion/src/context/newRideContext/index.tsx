@@ -67,7 +67,7 @@ interface RidePageContextInterface {
   setSelectedInputIndex: Dispatch<number | null>;
   selectedInputTarget: any;
   setSelectedInputTarget: Dispatch<any | null>;
-  onAddressSelected: (item: any, loadRide: boolean) => void;
+  onAddressSelected: (item: any, loadRide: boolean, index?: number) => void;
   requestStopPoints: any[];
   searchResults: any;
   searchAddress: (searchText: string) => void;
@@ -115,7 +115,7 @@ export const RidePageContext = createContext<RidePageContextInterface>({
   setSelectedInputIndex: () => undefined,
   selectedInputTarget: null,
   setSelectedInputTarget: () => undefined,
-  onAddressSelected: (item: any, loadRide: boolean) => undefined,
+  onAddressSelected: (item: any, loadRide: boolean, index?: number) => undefined,
   requestStopPoints: [],
   searchResults: [],
   searchAddress: (searchText: string) => undefined,
@@ -503,14 +503,14 @@ const RidePageContextProvider = ({ children }: {
     }
   };
 
-  const onAddressSelected = async (selectedItem: any, loadRide: boolean) => {
+  const onAddressSelected = async (selectedItem: any, loadRide: boolean, index?: number) => {
     if (selectedItem.isLoading) {
       return null;
     }
     const enrichedPlace = await enrichPlaceWithLocation(selectedItem.placeId);
     const reqSps = [...requestStopPoints];
-    reqSps[selectedInputIndex || 0] = {
-      ...reqSps[selectedInputIndex || 0],
+    reqSps[index || selectedInputIndex || 0] = {
+      ...reqSps[index || selectedInputIndex || 0],
       description: selectedItem.fullText,
       streetAddress: selectedItem.text,
       placeId: selectedItem.placeId,
@@ -629,13 +629,16 @@ const RidePageContextProvider = ({ children }: {
         loadFutureRides();
         setNewFutureRide(afRide);
         changeBsPage(BS_PAGES.CONFIRM_FUTURE_RIDE);
+      } else {
+        const formattedRide = await formatRide(afRide);
+        setRide(formattedRide);
       }
     } catch (e: any) {
       const key = e.message || e.response?.data?.errors[0];
       if (FAILED_TO_CREATE_RIDE_ACTIONS[key]) {
         FAILED_TO_CREATE_RIDE_ACTIONS[key]();
       } else {
-        changeBsPage(BS_PAGES.NO_AVAILABLE_VEHICLES);
+        FAILED_TO_CREATE_RIDE_ACTIONS[RIDE_FAILED_REASONS.BUSY]();
       }
     } finally {
       setRideRequestLoading(false);

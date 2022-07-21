@@ -73,13 +73,13 @@ const TitleContainer = styled(View)`
 
 const Title = styled(Text)`
   padding-bottom: 3px;
-  ${FONT_SIZES.H2}
+  ${FONT_SIZES.H1}
   ${FONT_WEIGHTS.MEDIUM}
   color: #333;
 `;
 
 const SubTitle = styled(Text)`
-  ${FONT_SIZES.LARGE}
+  ${FONT_SIZES.H3}
   color: ${({ theme }) => theme.disabledColor};
 `;
 
@@ -102,6 +102,7 @@ const SecondaryButtonTitle = styled(Text)<SecondaryButtonTitleInterface>`
 
 const AddressInput = styled(Text)`
   margin-left: 5;
+  ${FONT_SIZES.H3}
 `;
 
 const LoaderContainer = styled(View)`
@@ -126,7 +127,7 @@ const Footer = styled(View)<FooterInterface>`
   display: flex;
   flex-direction: ${({ fullWidthButtons }) => (fullWidthButtons ? 'column' : 'row')};
   margin-bottom: ${Platform.OS === 'android'
-    ? '10px' : '0px'};
+    ? '35px' : '10px'};
   justify-content: space-between;
   align-items: center;
 `;
@@ -463,10 +464,7 @@ export const NoPayment = (props: any) => {
       TitleText={i18n.t('bottomSheetContent.noPayment.titleText')}
       ButtonText={i18n.t('bottomSheetContent.noPayment.buttonText')}
       SubTitleText={i18n.t('bottomSheetContent.noPayment.subTitleText')}
-      SecondaryButtonText={i18n.t('bottomSheetContent.noPayment.secondaryButtonText')}
-      onSecondaryButtonPress={() => {
-        changeBsPage(BS_PAGES.ADDRESS_SELECTOR);
-      }}
+      fullWidthButtons
       onButtonPress={() => {
         navigationService.navigate(MAIN_ROUTES.PAYMENT, { rideFlow: true });
       }}

@@ -42,8 +42,10 @@ export const LogoutContainer = styled(Button)`
 `;
 
 export const LogoutText = styled.Text`
-  font-size: 14px;
+  ${FONT_SIZES.LARGE}
+  color: #24aaf2;
   text-decoration: underline;
+  text-decoration-color: #24aaf2;
 `;
 
 export const VerifyContainer = styled.View`
@@ -60,13 +62,13 @@ export const CardsContainer = styled.View`
   height: auto;
 `;
 
-export const CardContantContainer = styled.View`
+export const CardContentContainer = styled.View`
   width: 90%;
 `;
 
 export const CardsTitle = styled.Text`
   width: 100%;
-  ${FONT_SIZES.MEDIUM};
+  ${FONT_SIZES.H3};
   ${FONT_WEIGHTS.BOLD};
   color: #333333;
   padding: 30px 10px 15px;

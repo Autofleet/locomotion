@@ -49,6 +49,8 @@ import OneSignal from '../../services/one-signal';
 import settings from '../../context/settings';
 import SETTINGS_KEYS from '../../context/settings/keys';
 import { checkVersionAndForceUpdateIfNeeded } from '../../services/VersionCheck';
+import TopMessage from './TopMessage';
+import i18n from '../../I18n';
 
 
 const BLACK_OVERLAY_SCREENS = [BS_PAGES.CANCEL_RIDE]
@@ -76,12 +78,14 @@ const RidePage = ({ mapSettings, navigation }) => {
     setRide,
     setRequestStopPoints,
     tryServiceEstimations,
+    selectedInputIndex,
   } = useContext(RidePageContext);
   const {
     setIsExpanded, snapPoints, isExpanded, topBarText,
   } = useContext(BottomSheetContext);
   const {
     clientHasValidPaymentMethods,
+    getClientOutstandingBalanceCard,
   } = payments.useContainer();
   const {
     futureRides,
@@ -104,8 +108,22 @@ const RidePage = ({ mapSettings, navigation }) => {
   };
 
   const backToMap = () => {
-    resetStateToAddressSelector();
-    initSps();
+    if (currentBsPage === BS_PAGES.SERVICE_ESTIMATIONS) {
+      resetStateToAddressSelector();
+      initSps();
+    } else if (serviceEstimations) {
+      changeBsPage(BS_PAGES.SERVICE_ESTIMATIONS);
+    } else {
+      // sorry
+      setAddressSelectorFocus(selectedInputIndex === 0
+        ? STOP_POINT_TYPES.STOP_POINT_PICKUP
+        : STOP_POINT_TYPES.STOP_POINT_DROPOFF);
+      setTimeout(() => {
+        setIsExpanded(true);
+      }, 100);
+      bottomSheetRef.current.expand();
+      changeBsPage(BS_PAGES.ADDRESS_SELECTOR);
+    }
   };
 
   const BS_PAGE_TO_COMP = {
@@ -175,13 +193,12 @@ const RidePage = ({ mapSettings, navigation }) => {
     ),
     [BS_PAGES.ACTIVE_RIDE]: () => <ActiveRide />,
   };
-
   const focusCurrentLocation = async () => {
     const location = await getPosition();
     const { coords } = (location || DEFAULT_COORDS);
-
     mapRef.current.animateToRegion({
-      latitude: coords.latitude,
+      // I really don't know why this is needed, but it works
+      latitude: coords.latitude - parseFloat(50) / 10000,
       longitude: coords.longitude,
       latitudeDelta: 0.015,
       longitudeDelta: 0.015,
@@ -279,6 +296,28 @@ const RidePage = ({ mapSettings, navigation }) => {
     updatePushToken();
   }, []);
 
+  const MESSAGE_MAP = {
+    OUTSTANDING_BALANCE: {
+      text: () => {
+        const creditCard = getClientOutstandingBalanceCard();
+        return i18n.t('activeRide.topMessage.outstandBalanceCreditCard', {
+          name: creditCard.name,
+        });
+      },
+      condition: () => {
+        const creditCard = getClientOutstandingBalanceCard();
+        return creditCard && currentBsPage === BS_PAGES.SERVICE_ESTIMATIONS;
+      },
+    },
+    PRECEDING_STOPS: {
+      condition: () => ride?.stopPoints && ride?.stopPoints[0]?.precedingStops?.length,
+      text: () => i18n.t('activeRide.topMessage.precedingStops'),
+    },
+  };
+
+  const topMessageKey = Object.keys(MESSAGE_MAP).find(key => MESSAGE_MAP[key].condition());
+  const topMessage = MESSAGE_MAP[topMessageKey];
+
   return (
     <PageContainer>
       <PortalProvider>
@@ -286,20 +325,27 @@ const RidePage = ({ mapSettings, navigation }) => {
           ref={mapRef}
           mapSettings={mapSettings}
         />
-        {!serviceEstimations
+        {serviceEstimations || currentBsPage === BS_PAGES.SET_LOCATION_ON_MAP
           ? (
-            <Header
-              icon={hamburgerIcon}
-              onPressIcon={navigation.openDrawer}
-            />
+            <>
+              <Header
+                icon={backArrow}
+                onPressIcon={backToMap}
+              >
+
+                <StopPointsViewer goBackToAddressSelector={goBackToAddress} />
+              </Header>
+              {topMessage ? <TopMessage text={topMessage.text()} /> : null}
+            </>
           )
           : (
-            <Header
-              icon={backArrow}
-              onPressIcon={backToMap}
-            >
-              <StopPointsViewer goBackToAddressSelector={goBackToAddress} />
-            </Header>
+            <>
+              <Header
+                icon={hamburgerIcon}
+                onPressIcon={navigation.openDrawer}
+              />
+              {topMessage ? <TopMessage text={topMessage.text()} /> : null}
+            </>
           )}
         <MapOverlayButtons
           style={{
@@ -324,8 +370,8 @@ const RidePage = ({ mapSettings, navigation }) => {
           focusCurrentLocation={focusCurrentLocation}
         >
           {
-          BS_PAGE_TO_COMP[currentBsPage] ? BS_PAGE_TO_COMP[currentBsPage]() : null
-        }
+BS_PAGE_TO_COMP[currentBsPage] ? BS_PAGE_TO_COMP[currentBsPage]() : null
+          }
         </BottomSheet>
         {BLACK_OVERLAY_SCREENS.includes(currentBsPage) ? <BlackOverlay bottomSheetHeight={snapPoints[0]} /> : null}
         <RideCanceledPopup

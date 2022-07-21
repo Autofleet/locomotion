@@ -13,6 +13,6 @@ margin-top: 40px;
 export const ButtonText = styled.Text`
   margin: auto;
   color: ${({ theme }) => theme.primaryButtonTextColor};
-  ${FONT_SIZES.H3};
+  ${FONT_SIZES.H2};
   ${FONT_WEIGHTS.REGULAR};
 `;

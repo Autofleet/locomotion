@@ -87,6 +87,7 @@ const Email = ({ navigation }) => {
             onChangeText={onChange}
             value={email}
             autoCapitalize="none"
+            autoCorrect={false}
             fullBorder
           />
         </InputContainer>
