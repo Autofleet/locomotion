@@ -106,6 +106,8 @@ interface RidePageContextInterface {
   getService: (serviceId: string) => Promise<any>;
   getServices: () => Promise<any[]>;
   cleanRideState: () => void;
+  setUnconfirmedPickupTime: Dispatch<number | null>;
+  unconfirmedPickupTime: number | null;
 }
 
 export const RidePageContext = createContext<RidePageContextInterface>({
@@ -155,6 +157,8 @@ export const RidePageContext = createContext<RidePageContextInterface>({
   getService: async (serviceId: string) => ({}),
   getServices: async () => [],
   cleanRideState: () => undefined,
+  setUnconfirmedPickupTime: () => undefined,
+  unconfirmedPickupTime: null,
 });
 
 const HISTORY_RECORDS_NUM = 10;
@@ -180,6 +184,7 @@ const RidePageContextProvider = ({ children }: {
   const [lastSelectedLocation, saveSelectedLocation] = useState(false);
   const [rideRequestLoading, setRideRequestLoading] = useState(false);
   const [ridePopup, setRidePopup] = useState<RidePopupNames | null>(null);
+  const [unconfirmedPickupTime, setUnconfirmedPickupTime] = useState<number | null>(null);
   const intervalRef = useRef<any>();
 
   const stopRequestInterval = () => {
@@ -807,6 +812,8 @@ const RidePageContextProvider = ({ children }: {
         getService,
         getServices,
         cleanRideState,
+        setUnconfirmedPickupTime,
+        unconfirmedPickupTime,
       }}
     >
       {children}

@@ -313,6 +313,13 @@ const RidePage = ({ mapSettings, navigation }) => {
     },
   };
 
+  const onPressHeaderBack = () => {
+    if (currentBsPage === BS_PAGES.CONFIRM_PICKUP_TIME) {
+      return changeBsPage(BS_PAGES.SERVICE_ESTIMATIONS);
+    }
+    return backToMap();
+  };
+
   const topMessageKey = Object.keys(MESSAGE_MAP).find(key => MESSAGE_MAP[key].condition());
   const topMessage = MESSAGE_MAP[topMessageKey];
 
@@ -328,7 +335,7 @@ const RidePage = ({ mapSettings, navigation }) => {
             <>
               <Header
                 icon={backArrow}
-                onPressIcon={backToMap}
+                onPressIcon={onPressHeaderBack}
               >
 
                 <StopPointsViewer goBackToAddressSelector={goBackToAddress} />
