@@ -53,7 +53,6 @@ const PAGES_TO_SHOW_MY_LOCATION = [
   BS_PAGES.CONFIRM_PICKUP,
 ];
 
-
 const getFirstPendingStopPoint = sps => (sps || []).find(sp => sp.state
   === STOP_POINT_STATES.PENDING);
 
@@ -240,11 +239,11 @@ export default React.forwardRef(({
         {...mapSettings}
       >
         {ride.vehicle && ride.vehicle.location && (
-        <AvailabilityVehicle
-          location={ride.vehicle.location}
-          id={ride.vehicle.id}
-          key={ride.vehicle.id}
-        />
+          <AvailabilityVehicle
+            location={ride.vehicle.location}
+            id={ride.vehicle.id}
+            key={ride.vehicle.id}
+          />
         )}
         {finalStopPoints && !!precedingStopPoints.length
           && precedingStopPoints.map(sp => <PrecedingStopPointMarker key={sp.id} stopPoint={sp} />)
@@ -252,7 +251,7 @@ export default React.forwardRef(({
         {finalStopPoints && polylineList && (
           <Polyline
             strokeColor={primaryColor}
-            strokeWidth={7}
+            strokeWidth={5}
             coordinates={polylineList}
           />
         )}

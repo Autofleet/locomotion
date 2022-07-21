@@ -28,7 +28,7 @@ import { RideStateContextContext, RideStateContextContextProvider } from '../../
 import NewRidePageContextProvider, { RidePageContext } from '../../context/newRideContext';
 import BottomSheetContextProvider, { BottomSheetContext, SNAP_POINT_STATES } from '../../context/bottomSheetContext';
 import {
-  PageContainer, MapOverlayButtons,
+  PageContainer, MapOverlayButtons, BlackOverlay,
 } from './styled';
 import Header from '../../Components/Header';
 import MainMap from './newMap';
@@ -50,6 +50,8 @@ import settings from '../../context/settings';
 import SETTINGS_KEYS from '../../context/settings/keys';
 import { checkVersionAndForceUpdateIfNeeded } from '../../services/VersionCheck';
 
+
+const BLACK_OVERLAY_SCREENS = [BS_PAGES.CANCEL_RIDE]
 
 const RidePage = ({ mapSettings, navigation }) => {
   const { locationGranted, setLocationGranted, updatePushToken } = useContext(UserContext);
@@ -325,6 +327,7 @@ const RidePage = ({ mapSettings, navigation }) => {
           BS_PAGE_TO_COMP[currentBsPage] ? BS_PAGE_TO_COMP[currentBsPage]() : null
         }
         </BottomSheet>
+        {BLACK_OVERLAY_SCREENS.includes(currentBsPage) ? <BlackOverlay bottomSheetHeight={snapPoints[0]} /> : null}
         <RideCanceledPopup
           isVisible={ridePopup === RIDE_POPUPS.RIDE_CANCELED_BY_DISPATCHER}
           onCancel={() => {
