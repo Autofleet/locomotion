@@ -23,7 +23,7 @@ export const VehicleImage = styled(Image)`
 export const VehiclePlateContainer = styled(View)`
     position: absolute;
     background-color: white;
-    top: 50px;
+    top: 45px;
     box-shadow: 0px 5px 5px rgba(0,0,0,0.05);
     border-radius: 4px;
     width: 100%;
@@ -31,8 +31,8 @@ export const VehiclePlateContainer = styled(View)`
 `;
 
 export const VehiclePlateText = styled(Text)`
-    ${FONT_SIZES.MEDIUM};
-    ${FONT_WEIGHTS.REGULAR};
+    ${FONT_SIZES.LARGE};
+    ${FONT_WEIGHTS.BOLD};
     opacity: 0.7;
     text-align: center;
 `;

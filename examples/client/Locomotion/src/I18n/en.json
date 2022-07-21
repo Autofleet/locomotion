@@ -8,7 +8,7 @@
     "rideDetails": {
         "unavailable": "Not available",
         "timeUntilArrival": "In {{minutes}} min",
-        "toolTipEta": "Eta {{minutes}} min",
+        "toolTipEta": "ETA {{minutes}} min",
         "noCharge": "No charge",
         "type": {
             "pickup": "Pickup",
@@ -195,9 +195,10 @@
         "pickupTitle": "Boarding",
         "dropoffTitle": "Exit",
         "addressPlaceholder": "Enter Address",
-        "whereTo": "Where To?",
-        "currentLocation": "Current location",
-        "setLocationOnMap": "Set location on map"
+        "whereTo": "Enter your destination",
+        "currentLocation": "Enter address",
+        "setLocationOnMap": "Set location on map",
+        "welcomeText": "Hey {{ name }}, where to?"
     },
     "popups": {
         "rideCanceled": {
@@ -417,7 +418,7 @@
         "titleText": "Are you sure you want to cancel?",
         "subTitleText": "You may be charged a fee for cancelling this ride",
         "buttonText": "Cancel Ride",
-        "secondaryButtonText": "Keep Riding",
+        "secondaryButtonText": "Keep Ride",
         "secondaryButtonTextFuture": "Keep Ride"
     },
     "confirmPickup": {
@@ -473,7 +474,8 @@
         "arrived": "Arrived",
         "completed": "Completed",
         "pending": "Pending",
-        "canceled": "Canceled"
+        "canceled": "Canceled",
+        "failed": "Canceled"
     }
   },
   "activeRide": {
@@ -484,6 +486,9 @@
     "dropoff": {
         "arrived": "Dropoff ETA",
         "pending": "Dropoff ETA"
+    },
+    "topMessage": {
+        "outstandBalanceCreditCard": "You can't order rides at the moment. There is an outstanding payment on {{ name }}. Please contact support to clear this balance."
     }
   },
   "min": "{{ min }} min",

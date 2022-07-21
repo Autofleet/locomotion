@@ -62,7 +62,7 @@ const BottomSheetComponent = forwardRef(({
   const renderFooter = useCallback(
     (props: any) => (
       footerComponent && (
-      <BottomSheetFooter {...props} bottomInset={24}>
+      <BottomSheetFooter {...props}>
         {footerComponent}
       </BottomSheetFooter>
       )

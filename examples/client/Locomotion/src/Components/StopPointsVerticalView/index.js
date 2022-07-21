@@ -29,7 +29,7 @@ const Index = ({ ride }) => {
     state,
     stopPoints,
   } = ride;
-  const rideIsActive = [...RIDE_ACTIVE_STATES, RIDE_STATES.CANCELED].includes(state);
+  const rideIsActive = [...RIDE_ACTIVE_STATES, RIDE_STATES.CANCELED, RIDE_STATES.FAILED].includes(state);
   const isFutureRide = stopPoints[0].afterTime;
   if (stopPoints
     && stopPoints.length) {
