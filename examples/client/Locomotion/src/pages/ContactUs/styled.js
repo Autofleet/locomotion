@@ -6,7 +6,6 @@ import SvgIcon from '../../Components/SvgIcon';
 import { Text } from '../Profile/ScreenText/styles';
 
 export const LearnMoreIcon = styled(SvgIcon)`
-margin-top: 6px;
 transform: rotate(135deg);
 `;
 
