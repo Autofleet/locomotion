@@ -469,7 +469,8 @@
         "arrived": "Arrived",
         "completed": "Completed",
         "pending": "Pending",
-        "canceled": "Canceled"
+        "canceled": "Canceled",
+        "failed": "Canceled"
     }
   },
   "activeRide": {
@@ -480,6 +481,9 @@
     "dropoff": {
         "arrived": "Dropoff ETA",
         "pending": "Dropoff ETA"
+    },
+    "topMessage": {
+        "outstandBalanceCreditCard": "You can't order rides at the moment. There is an outstanding payment on {{ name }}. Please contact support to clear this balance."
     }
   },
   "min": "{{ min }} min",
