@@ -285,6 +285,8 @@ export const GenericError = (props: any) => {
       ButtonText={genericErrorDetails.buttonText}
       SubTitleText={genericErrorDetails.subTitleText}
       onButtonPress={genericErrorDetails.buttonPress}
+      SecondaryButtonText={genericErrorDetails.secondaryButtonText}
+      onSecondaryButtonPress={genericErrorDetails.secondaryButtonPress}
       fullWidthButtons
       {...props}
     />
@@ -436,7 +438,6 @@ export const ConfirmPickup = (props: any) => {
 
 export const NoPayment = (props: any) => {
   const { setSnapPointsState } = useContext(BottomSheetContext);
-  const { changeBsPage } = useContext(RideStateContextContext);
   const { requestRide, ride } = useContext(RidePageContext);
 
   const {

@@ -592,6 +592,51 @@ const RidePageContextProvider = ({ children }: {
       });
       changeBsPage(BS_PAGES.GENERIC_ERROR);
     },
+    // mocks for now
+    [RIDE_FAILED_REASONS.USER_HAS_OUTSTANDING_BALANCE]: () => {
+      setGenericErrorDetails({
+        titleText: i18n.t('bottomSheetContent.outstandingBalance.titleText'),
+        buttonText: i18n.t('bottomSheetContent.outstandingBalance.buttonText'),
+        subTitleText: i18n.t('bottomSheetContent.outstandingBalance.subTitleText'),
+        buttonPress: () => {
+          changeBsPage(BS_PAGES.SERVICE_ESTIMATIONS);
+        },
+      });
+      changeBsPage(BS_PAGES.GENERIC_ERROR);
+    },
+    [RIDE_FAILED_REASONS.CASH_NOT_ALLOWED]: () => {
+      setGenericErrorDetails({
+        titleText: i18n.t('bottomSheetContent.outstandingBalance.titleText'),
+        buttonText: i18n.t('bottomSheetContent.outstandingBalance.buttonText'),
+        subTitleText: i18n.t('bottomSheetContent.outstandingBalance.subTitleText'),
+        buttonPress: () => {
+          changeBsPage(BS_PAGES.SERVICE_ESTIMATIONS);
+        },
+      });
+      changeBsPage(BS_PAGES.GENERIC_ERROR);
+    },
+    [RIDE_FAILED_REASONS.PAYMENT_METHOD_EXPIRED]: () => {
+      setGenericErrorDetails({
+        titleText: i18n.t('bottomSheetContent.outstandingBalance.titleText'),
+        buttonText: i18n.t('bottomSheetContent.outstandingBalance.buttonText'),
+        subTitleText: i18n.t('bottomSheetContent.outstandingBalance.subTitleText'),
+        buttonPress: () => {
+          changeBsPage(BS_PAGES.SERVICE_ESTIMATIONS);
+        },
+      });
+      changeBsPage(BS_PAGES.GENERIC_ERROR);
+    },
+    [RIDE_FAILED_REASONS.COULD_NOT_CREATE_PAYMENT_INTENT]: () => {
+      setGenericErrorDetails({
+        titleText: i18n.t('bottomSheetContent.outstandingBalance.titleText'),
+        buttonText: i18n.t('bottomSheetContent.outstandingBalance.buttonText'),
+        subTitleText: i18n.t('bottomSheetContent.outstandingBalance.subTitleText'),
+        buttonPress: () => {
+          changeBsPage(BS_PAGES.SERVICE_ESTIMATIONS);
+        },
+      });
+      changeBsPage(BS_PAGES.GENERIC_ERROR);
+    },
   };
 
   const requestRide = async (pickupLocation?: any): Promise<void> => {
