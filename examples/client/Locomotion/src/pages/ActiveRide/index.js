@@ -53,7 +53,7 @@ import TopMessage from './TopMessage';
 import i18n from '../../I18n';
 
 
-const BLACK_OVERLAY_SCREENS = [BS_PAGES.CANCEL_RIDE]
+const BLACK_OVERLAY_SCREENS = [BS_PAGES.CANCEL_RIDE];
 
 const RidePage = ({ mapSettings, navigation }) => {
   const { locationGranted, setLocationGranted, updatePushToken } = useContext(UserContext);
