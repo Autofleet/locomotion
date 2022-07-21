@@ -50,6 +50,7 @@ import settings from '../../context/settings';
 import SETTINGS_KEYS from '../../context/settings/keys';
 import { checkVersionAndForceUpdateIfNeeded } from '../../services/VersionCheck';
 import TopMessage from './TopMessage';
+import i18n from '../../I18n';
 
 
 const RidePage = ({ mapSettings, navigation }) => {
@@ -293,6 +294,28 @@ const RidePage = ({ mapSettings, navigation }) => {
     updatePushToken();
   }, []);
 
+  const MESSAGE_MAP = {
+    OUTSTANDING_BALANCE: {
+      text: () => {
+        const creditCard = getClientOutstandingBalanceCard();
+        return i18n.t('activeRide.topMessage.outstandBalanceCreditCard', {
+          name: creditCard.name,
+        });
+      },
+      condition: () => {
+        const creditCard = getClientOutstandingBalanceCard();
+        return creditCard && currentBsPage === BS_PAGES.SERVICE_ESTIMATIONS;
+      },
+    },
+    PRECEDING_STOPS: {
+      condition: () => ride?.stopPoints && ride?.stopPoints[0]?.precedingStops?.length,
+      text: () => i18n.t('activeRide.topMessage.precedingStops'),
+    },
+  };
+
+  const topMessageKey = Object.keys(MESSAGE_MAP).find(key => MESSAGE_MAP[key].condition());
+  const topMessage = MESSAGE_MAP[topMessageKey];
+
   return (
     <PageContainer>
       <PortalProvider>
@@ -310,14 +333,17 @@ const RidePage = ({ mapSettings, navigation }) => {
 
                 <StopPointsViewer goBackToAddressSelector={goBackToAddress} />
               </Header>
-              <TopMessage />
+              {topMessage ? <TopMessage text={topMessage.text()} /> : null}
             </>
           )
           : (
-            <Header
-              icon={hamburgerIcon}
-              onPressIcon={navigation.openDrawer}
-            />
+            <>
+              <Header
+                icon={hamburgerIcon}
+                onPressIcon={navigation.openDrawer}
+              />
+              {topMessage ? <TopMessage text={topMessage.text()} /> : null}
+            </>
           )}
         <MapOverlayButtons
           style={{

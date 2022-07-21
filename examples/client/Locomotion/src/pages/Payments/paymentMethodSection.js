@@ -2,7 +2,7 @@
 import React from 'react';
 import { View } from 'react-native';
 import {
-  CardContantContainer, CardTitleContainer, CardTitle,
+  CardContentContainer, CardTitleContainer, CardTitle,
 } from '../../Components/InformationCard/styled';
 import i18n from '../../I18n';
 import {
@@ -39,7 +39,7 @@ const Section = ({
             : undefined}
         </HeaderLink>
       </CardTitleContainer>
-      <CardContantContainer>
+      <CardContentContainer>
         {paymentMethods.map(paymentMethod => (
           <MethodCard>
             <PaymentMethod
@@ -50,7 +50,7 @@ const Section = ({
           </MethodCard>
         ))
       }
-      </CardContantContainer>
+      </CardContentContainer>
     </View>
   </PaymentCardContainer>
 );

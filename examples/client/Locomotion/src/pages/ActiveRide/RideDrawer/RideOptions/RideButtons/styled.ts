@@ -6,10 +6,10 @@ import Button from '../../../../../Components/Button';
 export const HALF_WIDTH = '48%';
 
 export const Container = styled(View)`
-    padding: 0 30px;
-    margin-bottom: 5px;
+    padding: 0 20px;
+    padding-bottom: 48px;
     display: flex;
-    height: 150px;
+    height: 198px;
     background-color: white;
 `;
 

@@ -3,7 +3,6 @@ import styled from 'styled-components';
 import { FONT_SIZES, FONT_WEIGHTS } from '../../../context/theme';
 
 export const Container = styled(View)`
-    align-self: flex-end;
     margin: 0 20px;
     padding: 10px;
     shadow-offset: 0px 0px;
