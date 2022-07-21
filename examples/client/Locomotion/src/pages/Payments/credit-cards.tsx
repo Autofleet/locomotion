@@ -5,6 +5,7 @@ import i18n from '../../I18n';
 import {
   CardsListContainer,
   PaymentMethodsContainer,
+  BottomContainer,
 } from './styled';
 
 import PaymentMethod from '../../Components/CardRow';
@@ -73,10 +74,12 @@ export default ({
         </PaymentMethodsContainer>
 
         {onAddClick ? (
-          <PaymentMethod
-            addNew
-            onPress={onAddClick}
-          />
+          <BottomContainer>
+            <PaymentMethod
+              addNew
+              onPress={onAddClick}
+            />
+          </BottomContainer>
         ) : undefined}
         <ChoosePaymentMethod
           selected={defaultMethod?.id}

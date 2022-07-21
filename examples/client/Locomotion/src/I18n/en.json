@@ -309,7 +309,10 @@
       "noActivitySub": "Take your first ride and see it here!",
       "rideCard": {
         "rideJourney": "Ride journey",
-        "driverRating": "Driver rating"
+        "driverRating": "Driver rating",
+        "rateRide": "Tap to rate your ride",
+        "addTip": "Add a tip",
+        "tip": "Tip {{price}}"
       }
     },
     "futureRides": {
@@ -319,6 +322,8 @@
         "pageTitle": "Ride finished",
         "ratingHeadline": "How was your ride?",
         "submit": "Rate & Tip",
+        "submitForPast": "Done",
+        "notRated": "Ride not rated",
         "tip": {
             "title": "Add a tip for",
             "subTitle": "Your ride was",

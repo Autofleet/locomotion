@@ -16,11 +16,10 @@ export const RatingBarContainer = styled(View)`
 `;
 
 export const DriverDetailsContainer = styled(View)`
-width: 75%;
+flex-grow: 1;
 `;
 
 export const DriverAvatarContainer = styled(View)`
-max-width: 25%;
 `;
 
 export const DriverDetailContainer = styled(View)`
@@ -71,4 +70,10 @@ export const VehicleModelNameText = styled(Text)`
     ${FONT_SIZES.MEDIUM};
     ${FONT_WEIGHTS.REGULAR};
     color: ${({ theme }) => theme.disabledColor};
+`;
+
+export const NotRated = styled(Text)`
+${FONT_SIZES.H2}
+${FONT_WEIGHTS.SEMI_BOLD}
+color: #bcbcbc;
 `;

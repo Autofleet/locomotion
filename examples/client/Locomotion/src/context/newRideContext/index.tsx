@@ -55,6 +55,8 @@ export interface RideInterface {
   payment?: any;
   canceledBy?: string;
   cancelable?: boolean;
+  createdAt?: string;
+  priceCalculationId?: string;
 }
 
 interface RidePageContextInterface {
@@ -103,6 +105,7 @@ interface RidePageContextInterface {
   tryServiceEstimations: () => Promise<void>;
   getService: (serviceId: string) => Promise<any>;
   getServices: () => Promise<any[]>;
+  cleanRideState: () => void;
 }
 
 export const RidePageContext = createContext<RidePageContextInterface>({
@@ -151,6 +154,7 @@ export const RidePageContext = createContext<RidePageContextInterface>({
   tryServiceEstimations: async () => undefined,
   getService: async (serviceId: string) => ({}),
   getServices: async () => [],
+  cleanRideState: () => undefined,
 });
 
 const HISTORY_RECORDS_NUM = 10;
@@ -701,10 +705,6 @@ const RidePageContextProvider = ({ children }: {
       tip ? chargeTip(priceCalculationId, tip) : () => null,
       rating ? patchRideRating(rideId, rating) : () => null,
     ]);
-
-    cleanRideState();
-    navigationService.navigate(MAIN_ROUTES.HOME, {}, APP_ROUTES.MAIN_APP);
-    changeBsPage(BS_PAGES.ADDRESS_SELECTOR);
     return true;
   };
 
@@ -806,6 +806,7 @@ const RidePageContextProvider = ({ children }: {
         tryServiceEstimations,
         getService,
         getServices,
+        cleanRideState,
       }}
     >
       {children}
