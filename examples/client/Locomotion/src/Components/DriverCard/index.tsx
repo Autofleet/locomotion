@@ -44,9 +44,10 @@ const DriverCard = ({
       );
     }
     if (moment(moment()).diff(ride.scheduledTo || ride.createdAt, 'days') > 5) {
+      const notRatedText = i18n.t('postRide.notRated');
       return (
         <NotRated>
-          {i18n.t('postRide.notRated')}
+          {notRatedText}
         </NotRated>
       );
     }
