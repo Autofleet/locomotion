@@ -56,6 +56,7 @@ export interface RideInterface {
   canceledBy?: string;
   cancelable?: boolean;
   createdAt?: string;
+  priceCalculationId?: string;
 }
 
 interface RidePageContextInterface {
