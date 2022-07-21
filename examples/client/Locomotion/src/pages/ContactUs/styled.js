@@ -6,7 +6,7 @@ import SvgIcon from '../../Components/SvgIcon';
 import { Text } from '../Profile/ScreenText/styles';
 
 export const LearnMoreIcon = styled(SvgIcon)`
-margin-top: 8px;
+margin-top: 6px;
 transform: rotate(135deg);
 `;
 
@@ -15,6 +15,8 @@ export const LearnMoreButton = styled(Button)`
   flex-direction: row;
   background-color: white;
   justify-content: center;
+  text-align: center;
+  align-items: center;
 `;
 
 export const LearnMoreText = styled(Text)`

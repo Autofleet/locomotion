@@ -23,8 +23,8 @@ const BottomSheetInputField = forwardRef((props, ref) => (
           Svg={cancel}
           fill="#333"
           stroke="#333"
-          height={11}
-          width={11}
+          height={12}
+          width={12}
         />
       </IconContainer>
     </TouchableIconContainer>

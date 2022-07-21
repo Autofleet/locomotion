@@ -72,8 +72,9 @@ const AccountContent = ({ navigation }) => {
   const updateDefault = async () => {
     const { paymentMethods } = await usePayments.getOrFetchCustomer();
     const defaultMethod = paymentMethods.find(x => x.isDefault);
-    const methodToSet = { ...defaultMethod, mark: true };
-    setDefaultPaymentMethod(methodToSet);
+    if (defaultMethod) {
+      setDefaultPaymentMethod({ ...defaultMethod, mark: true });
+    }
   };
   useEffect(() => {
     updateDefault();

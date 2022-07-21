@@ -8,7 +8,7 @@ margin-bottom: 40px;
 `;
 
 export const Text = styled.Text`
-${FONT_SIZES.H2};
+${FONT_SIZES.H3};
 ${FONT_WEIGHTS.SEMI_BOLD};
 margin: 5px 0;
 `;
