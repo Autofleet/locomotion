@@ -270,7 +270,7 @@ const RidePageContextProvider = ({ children }: {
     changeBsPage(BS_PAGES.SERVICE_ESTIMATIONS);
     try {
       const formattedStopPoints = formatStopPointsForEstimations(requestStopPoints);
-      const { estimations, services } = await rideApi.createServiceEstimations(formattedStopPoints);
+      const { estimations, services } = await rideApi.createServiceEstimations(formattedStopPoints, ride.scheduledTo);
       const tags = getEstimationTags(estimations);
       const formattedEstimations = formatEstimations(services, estimations, tags);
       setChosenService(formattedEstimations.find((e: any) => e.eta));
