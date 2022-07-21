@@ -6,3 +6,6 @@ server/web-ui/build
 **/.DS_STORE
 *.apk
 examples/client/Locomotion/android/app/*.json
+examples/client/Locomotion/fastlane/report.xml
+examples/client/Locomotion/fastlane/README.md
+examples/client/Locomotion/bucket
