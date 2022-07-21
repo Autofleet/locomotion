@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import moment from 'moment';
 import { PaymentIcon } from 'react-native-payment-icons';
-import { RideInterface } from '../../context/newRideContext';
+import { RideInterface, PriceCalculation, RidePageContext } from '../../context/newRideContext';
 import i18n from '../../I18n';
 import RoundedButton from '../RoundedButton';
 import TextRowWithIcon from '../TextRowWithIcon';
@@ -10,6 +10,7 @@ import {
 } from './styled';
 import StopPointsVerticalView from '../StopPointsVerticalView';
 import { getFormattedPrice } from '../../context/newRideContext/utils';
+
 
 interface CardComponentProps {
     name: string;
@@ -33,25 +34,42 @@ interface RideCardProps {
 
 const RideCard = ({
   ride, onPress, serviceName, paymentMethod, scheduledTo,
-}: RideCardProps) => (
-  <CardContainer>
-    <DateContainer>
-      <RideDate>
-        {moment(scheduledTo).format('MMMM DD, YYYY, h:mm A')}
-      </RideDate>
-      <RideDate>
-        {getFormattedPrice(ride.priceCurrency, ride.priceAmount)}
-      </RideDate>
-    </DateContainer>
-    <ServiceType>
-      {serviceName}
-    </ServiceType>
-    <StopPointsVerticalView ride={ride} />
-    <CardComponent name={paymentMethod.name} brand={paymentMethod.brand} />
-    <RoundedButton onPress={onPress} hollow type="cancel">
-      {i18n.t('home.cancelRideButton')}
-    </RoundedButton>
-  </CardContainer>
-);
+}: RideCardProps) => {
+  const [totalPriceWithCurrency, seTotalPriceWithCurrency] = useState();
+  const {
+    getRideTotalPriceWithCurrency,
+  } = useContext(RidePageContext);
+
+  const updateTotalPrice = async () => {
+    const price = await getRideTotalPriceWithCurrency(ride.id);
+
+    seTotalPriceWithCurrency(price);
+  };
+
+  useEffect(() => {
+    updateTotalPrice();
+  }, [ride]);
+
+    <CardContainer>
+      <DateContainer>
+        <RideDate>
+          {moment(scheduledTo).format('MMMM DD, YYYY, h:mm A')}
+        </RideDate>
+        <RideDate>
+          {ride.state === 'canceled'
+            ? getFormattedPrice(totalPriceWithCurrency?.currency || 'USD', 0)
+            : getFormattedPrice(totalPriceWithCurrency?.currency || 'USD', totalPriceWithCurrency?.amount || 0)}
+        </RideDate>
+      </DateContainer>
+      <ServiceType>
+        {serviceName}
+      </ServiceType>
+      <StopPointsVerticalView ride={ride} />
+      <CardComponent name={paymentMethod.name} brand={paymentMethod.brand} />
+      <RoundedButton onPress={onPress} hollow type="cancel">
+        {i18n.t('home.cancelRideButton')}
+      </RoundedButton>
+    </CardContainer>;
+};
 
 export default RideCard;

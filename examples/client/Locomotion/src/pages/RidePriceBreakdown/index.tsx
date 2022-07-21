@@ -109,7 +109,7 @@ const RidePriceBreakDown = () => {
                   ? <PriceCard name="Surge Price" text={getPriceWithCurrency(priceCalculation?.surgePrice || 0)} />
                   : undefined}
                 {priceCalculation?.discount && priceCalculation?.discount !== 0
-                  ? <PriceCard name="Discount" text={getPriceWithCurrency(priceCalculation?.discount || 0)} />
+                  ? <PriceCard name="Discount" text={`-${getPriceWithCurrency(Math.abs(priceCalculation?.discount) || 0)}`} />
                   : undefined}
                 {priceCalculation?.items?.map(item => (
                   <PriceCard

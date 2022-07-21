@@ -124,7 +124,8 @@ interface RidePageContextInterface {
   tryServiceEstimations: () => Promise<void>;
   getService: (serviceId: string) => Promise<any>;
   getServices: () => Promise<any[]>;
-  getRidePriceCalculation: (id: string) => Promise<PriceCalculation | undefined>;
+  getRidePriceCalculation: (id: string | undefined) => Promise<PriceCalculation | undefined>;
+  getRideTotalPriceWithCurrency: (rideId : string | undefined) => Promise<{ amount: number; currency: string; } | undefined>;
 }
 
 export const RidePageContext = createContext<RidePageContextInterface>({
@@ -174,6 +175,7 @@ export const RidePageContext = createContext<RidePageContextInterface>({
   getService: async (serviceId: string) => ({}),
   getServices: async () => [],
   getRidePriceCalculation: async () => undefined,
+  getRideTotalPriceWithCurrency: async () => undefined,
 });
 
 const HISTORY_RECORDS_NUM = 10;
@@ -199,6 +201,7 @@ const RidePageContextProvider = ({ children }: {
   const [lastSelectedLocation, saveSelectedLocation] = useState(false);
   const [rideRequestLoading, setRideRequestLoading] = useState(false);
   const [ridePopup, setRidePopup] = useState<RidePopupNames | null>(null);
+  // const [priceCalculation, setPriceCalculation] = useState<PriceCalculation | null>(null);
   const intervalRef = useRef<any>();
 
   const stopRequestInterval = () => {
@@ -778,19 +781,44 @@ const RidePageContextProvider = ({ children }: {
     return null;
   };
 
-  const getRidePriceCalculation = async (id:string) => {
-    console.log('heyyyyyyyyyyyy');
+  const getRidePriceCalculation = async (id:string | undefined) => {
+    // if (id) {
+    //   const apiRide = await getRideFromApi(id);
+    //   const calculation = await rideApi.getPriceCalculation(apiRide?.priceCalculationId);
+    //   return calculation;
+    // } if (priceCalculation) {
+    //   return priceCalculation;
+    // }
+    // const apiRide = await getRideFromApi(ride.id || '');
+    // const calculation = await rideApi.getPriceCalculation(apiRide?.priceCalculationId);
+    // setPriceCalculation(calculation);
 
+
+    // return calculation;
     const apiRide = await getRideFromApi(id || ride.id || '');
-    console.log('heyyyyyyyyyyyy2');
     const calculation = await rideApi.getPriceCalculation(apiRide?.priceCalculationId);
-    console.log('heyyyyyyyyyyyy3', calculation);
     return calculation;
+  };
+
+  const getRideTotalPriceWithCurrency = async (rideId: string) => {
+    if (!rideId) {
+      return { amount: 0, currency: '' };
+    }
+    const apiRide = await getRideFromApi(rideId);
+    const calculation = (await rideApi.getPriceCalculation(apiRide?.priceCalculationId)) as PriceCalculation;
+    return {
+      amount:
+      (calculation?.totalPrice || 0)
+     + (calculation?.additionalCharges?.reduce((s, { amount }) => s + amount, 0) || 0)
+      + (calculation?.discount || 0),
+      currency: calculation.currency,
+    };
   };
 
   return (
     <RidePageContext.Provider
       value={{
+        getRideTotalPriceWithCurrency,
         requestRide,
         loadAddress,
         reverseLocationGeocode,

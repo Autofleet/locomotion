@@ -22,6 +22,8 @@ const RidePaymentDetails = ({
   rideId,
   paymentMethod,
   rideHistory = false,
+  state,
+  currency,
 } :{
   rideId: string,
   paymentMethod: PaymentMethodInterface,
@@ -30,16 +32,17 @@ const RidePaymentDetails = ({
 }) => {
   const navigation = useNavigation<Nav>();
   const [totalAmount, setTotalAmount] = useState(0);
-  const [currency, setCurrency] = useState('USD');
   const {
     getRidePriceCalculation,
   } = useContext(RidePageContext);
   const updatePriceCalculation = async () => {
+    if (state === 'canceled') {
+      return { amount: 0, currency };
+    }
     const calculation = await getRidePriceCalculation(rideId);
     setTotalAmount((calculation?.totalPrice || 0)
      + (calculation?.discount || 0)
      + (calculation?.additionalCharges.find(({ chargeFor }) => chargeFor === 'tip')?.amount || 0));
-    setCurrency(calculation?.currency || 'USD');
   };
 
   useEffect(() => {
@@ -58,9 +61,11 @@ const RidePaymentDetails = ({
           <TouchableOpacity onPress={() => navigation.navigate(MAIN_ROUTES.RIDE_PRICE_BREAKDOWN,
             { rideId, rideHistory })}
           >
-            <ViewDetails>
-              {i18n.t('ride.viewDetails').toString()}
-            </ViewDetails>
+            {state !== 'canceled' ? (
+              <ViewDetails>
+                {i18n.t('ride.viewDetails').toString()}
+              </ViewDetails>
+            ) : undefined}
           </TouchableOpacity>
         </RidePriceDetails>
       </PaymentRow>
@@ -71,10 +76,12 @@ const RidePaymentDetails = ({
 
 RidePaymentDetails.propTypes = {
   rideHistory: propsTypes.bool,
+  state: propsTypes.string,
 };
 
 RidePaymentDetails.defaultProps = {
   rideHistory: false,
+  state: 'pending',
 };
 
 export default RidePaymentDetails;
