@@ -233,7 +233,13 @@ export default BsPage;
 
 export const ConfirmPickupTime = (props: any) => {
   const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
-  const { unconfirmedPickupTime, updateRidePayload, setUnconfirmedPickupTime } = useContext(MewRidePageContext);
+  const {
+    unconfirmedPickupTime,
+    updateRidePayload,
+    setUnconfirmedPickupTime,
+    tryServiceEstimations,
+    setServiceEstimations,
+  } = useContext(MewRidePageContext);
   const {
     changeBsPage,
   } = useContext(RideStateContextContext);
@@ -246,6 +252,8 @@ export const ConfirmPickupTime = (props: any) => {
       fullWidthButtons
       onButtonPress={() => {
         updateRidePayload({ scheduledTo: unconfirmedPickupTime });
+        setServiceEstimations(null);
+        tryServiceEstimations();
         changeBsPage(BS_PAGES.SERVICE_ESTIMATIONS);
       }}
       {...props}
@@ -286,6 +294,8 @@ export const GenericError = (props: any) => {
       ButtonText={genericErrorDetails.buttonText}
       SubTitleText={genericErrorDetails.subTitleText}
       onButtonPress={genericErrorDetails.buttonPress}
+      SecondaryButtonText={genericErrorDetails.secondaryButtonText}
+      onSecondaryButtonPress={genericErrorDetails.secondaryButtonPress}
       fullWidthButtons
       {...props}
     />
@@ -437,7 +447,6 @@ export const ConfirmPickup = (props: any) => {
 
 export const NoPayment = (props: any) => {
   const { setSnapPointsState } = useContext(BottomSheetContext);
-  const { changeBsPage } = useContext(RideStateContextContext);
   const { requestRide, ride } = useContext(RidePageContext);
 
   const {

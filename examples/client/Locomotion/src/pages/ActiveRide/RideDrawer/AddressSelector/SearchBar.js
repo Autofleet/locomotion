@@ -80,7 +80,6 @@ const SearchBar = ({
   const {
     searchTerm,
     setSearchTerm,
-    selectedInputIndex,
     setSelectedInputIndex,
     selectedInputTarget,
     setSelectedInputTarget,

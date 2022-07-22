@@ -53,8 +53,8 @@ const ServiceCard = ({ service }) => {
       : i18n.t('rideDetails.toolTipEta', { minutes: minutesUntilPickup });
   };
 
-  const getDescription = () => (
-    <Description>
+  const getDescription = forFutureRidesView => (
+    <Description style={{ ...(forFutureRidesView && { width: '80%' }) }} numberOfLines={2}>
       {service.description}
     </Description>
   );
@@ -110,7 +110,7 @@ const ServiceCard = ({ service }) => {
                 </Eta>
               </TimeDetails>
             )
-            : getDescription()}
+            : getDescription(isFutureRide)}
           <Capacity>
             <AvailableSeats>
               {service.availableSeats}

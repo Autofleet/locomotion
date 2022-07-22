@@ -2,7 +2,7 @@ import React from 'react';
 import propsTypes from 'prop-types';
 import { TouchableOpacity } from 'react-native';
 import {
-  ArrowContainer, CardContainer, CardContentContainer, CardText, Arrow,
+  ArrowContainer, CardContainer, CardText, Arrow,
 } from '../InformationCard/styled';
 
 type NoTitleCardProps = {
@@ -16,9 +16,7 @@ const NoTitleCard = ({
 } : NoTitleCardProps) => (
   <TouchableOpacity onPress={onPress} {...props}>
     <CardContainer>
-      <CardContentContainer>
-        <CardText style={{ marginVertical: 10 }}>{children}</CardText>
-      </CardContentContainer>
+      <CardText style={{ marginVertical: 10 }}>{children}</CardText>
       <ArrowContainer>{showArrow ? <Arrow /> : undefined}</ArrowContainer>
     </CardContainer>
   </TouchableOpacity>

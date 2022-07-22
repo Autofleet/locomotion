@@ -28,7 +28,7 @@ import { RideStateContextContext, RideStateContextContextProvider } from '../../
 import NewRidePageContextProvider, { RidePageContext } from '../../context/newRideContext';
 import BottomSheetContextProvider, { BottomSheetContext, SNAP_POINT_STATES } from '../../context/bottomSheetContext';
 import {
-  PageContainer, MapOverlayButtons,
+  PageContainer, MapOverlayButtons, BlackOverlay,
 } from './styled';
 import Header from '../../Components/Header';
 import MainMap from './newMap';
@@ -52,6 +52,8 @@ import { checkVersionAndForceUpdateIfNeeded } from '../../services/VersionCheck'
 import TopMessage from './TopMessage';
 import i18n from '../../I18n';
 
+
+const BLACK_OVERLAY_SCREENS = [BS_PAGES.CANCEL_RIDE];
 
 const RidePage = ({ mapSettings, navigation }) => {
   const { locationGranted, setLocationGranted, updatePushToken } = useContext(UserContext);
@@ -109,10 +111,10 @@ const RidePage = ({ mapSettings, navigation }) => {
     if (currentBsPage === BS_PAGES.SERVICE_ESTIMATIONS) {
       resetStateToAddressSelector();
       initSps();
-    } else if (serviceEstimations) {
+    } else if (serviceEstimations || currentBsPage === BS_PAGES.CONFIRM_PICKUP_TIME) {
       changeBsPage(BS_PAGES.SERVICE_ESTIMATIONS);
-    } else if (currentBsPage === BS_PAGES.CONFIRM_PICKUP_TIME) {
-      changeBsPage(BS_PAGES.SERVICE_ESTIMATIONS);
+    } else if (currentBsPage === BS_PAGES.CONFIRM_FUTURE_RIDE) {
+      resetStateToAddressSelector();
     } else {
       // sorry
       setAddressSelectorFocus(selectedInputIndex === 0
@@ -373,6 +375,7 @@ const RidePage = ({ mapSettings, navigation }) => {
 BS_PAGE_TO_COMP[currentBsPage] ? BS_PAGE_TO_COMP[currentBsPage]() : null
           }
         </BottomSheet>
+        {BLACK_OVERLAY_SCREENS.includes(currentBsPage) ? <BlackOverlay bottomSheetHeight={snapPoints[0]} /> : null}
         <RideCanceledPopup
           isVisible={ridePopup === RIDE_POPUPS.RIDE_CANCELED_BY_DISPATCHER}
           onCancel={() => {
