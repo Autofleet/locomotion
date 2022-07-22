@@ -233,7 +233,9 @@ export default BsPage;
 
 export const ConfirmPickupTime = (props: any) => {
   const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
-  const { ride, updateRidePayload } = useContext(MewRidePageContext);
+  const {
+    ride, updateRidePayload, tryServiceEstimations, setServiceEstimations,
+  } = useContext(MewRidePageContext);
   const {
     changeBsPage,
   } = useContext(RideStateContextContext);
@@ -245,6 +247,8 @@ export const ConfirmPickupTime = (props: any) => {
       ButtonText={i18n.t('bottomSheetContent.confirmPickupTime.buttonText')}
       fullWidthButtons
       onButtonPress={() => {
+        setServiceEstimations(null);
+        tryServiceEstimations();
         changeBsPage(BS_PAGES.SERVICE_ESTIMATIONS);
       }}
       {...props}
