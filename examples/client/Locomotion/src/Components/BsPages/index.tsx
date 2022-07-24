@@ -270,7 +270,7 @@ export const ConfirmPickupTime = (props: any) => {
       </RoundedButton>
       <DatePicker
         open={isDatePickerOpen}
-        date={moment(unconfirmedPickupTime).toDate()}
+        date={moment(unconfirmedPickupTime).add(unconfirmedPickupTime ? 0 : 1, 'hours').toDate()}
         maximumDate={getFutureRideMaxDate()}
         minimumDate={getFutureRideMinDate()}
         mode="datetime"

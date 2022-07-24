@@ -58,7 +58,7 @@ const RideButtons = ({
         <FutureBookingButton />
         <DatePicker
           open={isDatePickerOpen}
-          date={moment(ride?.scheduledTo).toDate()}
+          date={moment(ride?.scheduledTo).add(ride?.scheduledTo ? 0 : 1, 'hours').toDate()}
           maximumDate={getFutureRideMaxDate()}
           minimumDate={getFutureRideMinDate()}
           mode="datetime"
