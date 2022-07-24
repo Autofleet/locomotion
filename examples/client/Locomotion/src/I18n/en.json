@@ -488,7 +488,8 @@
         "pending": "Dropoff ETA"
     },
     "topMessage": {
-        "outstandBalanceCreditCard": "You can't order rides at the moment. There is an outstanding payment on {{ name }}. Please contact support to clear this balance."
+        "outstandBalanceCreditCard": "You can't order rides at the moment. There is an outstanding payment on {{ name }}. Please contact support to clear this balance.",
+        "precedingStops": "Your driver is completing a stop nearby"
     }
   },
   "min": "{{ min }} min",
