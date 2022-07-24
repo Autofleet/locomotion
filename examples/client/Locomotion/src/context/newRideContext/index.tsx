@@ -220,8 +220,9 @@ const RidePageContextProvider = ({ children }: {
       setRide(newRide);
       changeBsPage(BS_PAGES.ACTIVE_RIDE);
     },
-    [RIDE_STATES.ACTIVE]: () => {
+    [RIDE_STATES.ACTIVE]: (activeRide: any) => {
       cleanRequestStopPoints();
+      setRide(activeRide);
       changeBsPage(BS_PAGES.ACTIVE_RIDE);
     },
     [RIDE_STATES.CANCELED]: (canceledRide: any) => {
