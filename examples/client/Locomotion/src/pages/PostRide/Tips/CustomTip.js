@@ -182,7 +182,7 @@ const Tips = ({
           <RoundedButton
             type="confirm"
             hollow={false}
-            disabled={!isValid}
+            disabled={!isValid || !customTip}
             useCancelTextButton={false}
             setLoading={null}
             onPress={() => submitValue(customTip)}
