@@ -5,10 +5,14 @@ import { ButtonContainer } from './styled';
 interface ButtonProps {
     onPress: any,
     icon: any,
-    style: Record<string, unknown>
+    style: Record<string, unknown>,
+    noLoader: boolean,
 }
-const SquareSvgButton = ({ onPress, icon, style }: ButtonProps) => (
+const SquareSvgButton = ({
+  onPress, icon, style, noLoader,
+}: ButtonProps) => (
   <ButtonContainer
+    noLoader={noLoader}
     onPress={onPress}
     data-test-id="headerButton"
     style={style}

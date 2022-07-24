@@ -363,6 +363,7 @@ const RidePage = ({ mapSettings, navigation }) => {
             ) : <View />}
           {!isExpanded && locationGranted && (
             <SquareSvgButton
+              noLoader
               onPress={focusCurrentLocation}
               icon={targetIcon}
               style={Platform.OS === 'android' ? { shadowColor: '#000' } : {}}
