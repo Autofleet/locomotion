@@ -43,7 +43,8 @@ const DriverCard = ({
         </RatingBarContainer>
       );
     }
-    if (moment(moment()).diff(ride.scheduledTo || ride.createdAt, 'days') > 5) {
+    const isMoreThenFiveDaysSince = moment(moment()).diff(ride.scheduledTo || ride.createdAt, 'days') > 5;
+    if (isMoreThenFiveDaysSince) {
       const notRatedText = i18n.t('postRide.notRated');
       return (
         <NotRated>
