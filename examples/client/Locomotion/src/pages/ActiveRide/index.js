@@ -108,13 +108,13 @@ const RidePage = ({ mapSettings, navigation }) => {
   };
 
   const backToMap = () => {
-    if (currentBsPage === BS_PAGES.SERVICE_ESTIMATIONS) {
+    if (currentBsPage === BS_PAGES.SERVICE_ESTIMATIONS
+      || currentBsPage === BS_PAGES.CONFIRM_FUTURE_RIDE
+      || currentBsPage === BS_PAGES.ACTIVE_RIDE) {
       resetStateToAddressSelector();
       initSps();
     } else if (serviceEstimations || currentBsPage === BS_PAGES.CONFIRM_PICKUP_TIME) {
       changeBsPage(BS_PAGES.SERVICE_ESTIMATIONS);
-    } else if (currentBsPage === BS_PAGES.CONFIRM_FUTURE_RIDE) {
-      resetStateToAddressSelector();
     } else {
       // sorry
       setAddressSelectorFocus(selectedInputIndex === 0
