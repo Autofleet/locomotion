@@ -33,7 +33,7 @@ const RideButtons = ({
   const {
     ride,
     chosenService,
-    updateRidePayload,
+    setUnconfirmedPickupTime,
   } = useContext(RidePageContext);
   const {
     changeBsPage,
@@ -65,7 +65,7 @@ const RideButtons = ({
           title={i18n.t('bottomSheetContent.ride.chosePickupTime')}
           onCancel={close}
           onConfirm={(date) => {
-            updateRidePayload({ scheduledTo: date.getTime() });
+            setUnconfirmedPickupTime(date.getTime());
             changeBsPage(BS_PAGES.CONFIRM_PICKUP_TIME);
             close();
           }}

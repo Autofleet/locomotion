@@ -111,7 +111,7 @@ const RidePage = ({ mapSettings, navigation }) => {
     if (currentBsPage === BS_PAGES.SERVICE_ESTIMATIONS) {
       resetStateToAddressSelector();
       initSps();
-    } else if (serviceEstimations) {
+    } else if (serviceEstimations || currentBsPage === BS_PAGES.CONFIRM_PICKUP_TIME) {
       changeBsPage(BS_PAGES.SERVICE_ESTIMATIONS);
     } else if (currentBsPage === BS_PAGES.CONFIRM_FUTURE_RIDE) {
       resetStateToAddressSelector();

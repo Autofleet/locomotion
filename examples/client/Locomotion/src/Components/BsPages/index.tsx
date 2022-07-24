@@ -234,19 +234,24 @@ export default BsPage;
 export const ConfirmPickupTime = (props: any) => {
   const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
   const {
-    ride, updateRidePayload, tryServiceEstimations, setServiceEstimations,
+    unconfirmedPickupTime,
+    updateRidePayload,
+    setUnconfirmedPickupTime,
+    tryServiceEstimations,
+    setServiceEstimations,
   } = useContext(MewRidePageContext);
   const {
     changeBsPage,
   } = useContext(RideStateContextContext);
-  const date = moment(ride?.scheduledTo).format('ddd, MMM Do');
-  const time = moment(ride?.scheduledTo).format('HH:mm');
+  const date = moment(unconfirmedPickupTime).format('ddd, MMM Do');
+  const time = moment(unconfirmedPickupTime).format('HH:mm');
   return (
     <BsPage
       TitleText={i18n.t('bottomSheetContent.confirmPickupTime.titleText')}
       ButtonText={i18n.t('bottomSheetContent.confirmPickupTime.buttonText')}
       fullWidthButtons
       onButtonPress={() => {
+        updateRidePayload({ scheduledTo: unconfirmedPickupTime });
         setServiceEstimations(null);
         tryServiceEstimations();
         changeBsPage(BS_PAGES.SERVICE_ESTIMATIONS);
@@ -265,14 +270,14 @@ export const ConfirmPickupTime = (props: any) => {
       </RoundedButton>
       <DatePicker
         open={isDatePickerOpen}
-        date={moment(ride?.scheduledTo).toDate()}
+        date={moment(unconfirmedPickupTime).toDate()}
         maximumDate={getFutureRideMaxDate()}
         minimumDate={getFutureRideMinDate()}
         mode="datetime"
         title={i18n.t('bottomSheetContent.ride.chosePickupTime')}
         onCancel={() => setIsDatePickerOpen(false)}
         onConfirm={(newDate: Date) => {
-          updateRidePayload({ scheduledTo: newDate.getTime() });
+          setUnconfirmedPickupTime(newDate.getTime());
           setIsDatePickerOpen(false);
         }}
         modal
