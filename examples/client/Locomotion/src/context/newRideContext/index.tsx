@@ -370,7 +370,7 @@ const RidePageContextProvider = ({ children }: {
 
   useEffect(() => {
     validateRequestedStopPoints(requestStopPoints);
-  }, [requestStopPoints, ride.scheduledTo]);
+  }, [requestStopPoints]);
 
   const getRideFromApi = (rideId: string): Promise<RideInterface> => rideApi.getRide(rideId);
 
