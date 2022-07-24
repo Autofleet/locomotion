@@ -108,9 +108,11 @@ const RidePage = ({ mapSettings, navigation }) => {
   };
 
   const backToMap = () => {
-    if (currentBsPage === BS_PAGES.SERVICE_ESTIMATIONS
-      || currentBsPage === BS_PAGES.CONFIRM_FUTURE_RIDE
-      || currentBsPage === BS_PAGES.ACTIVE_RIDE) {
+    if ([
+      BS_PAGES.SERVICE_ESTIMATIONS,
+      BS_PAGES.CONFIRM_FUTURE_RIDE,
+      BS_PAGES.ACTIVE_RIDE,
+    ].includes(currentBsPage)) {
       resetStateToAddressSelector();
       initSps();
     } else if (serviceEstimations || currentBsPage === BS_PAGES.CONFIRM_PICKUP_TIME) {
