@@ -383,6 +383,11 @@
     "subName": "Rider app"
   },
   "bottomSheetContent": {
+    "futureRideLimitOnAsap": {
+        "titleText": "Upcoming scheduled ride",
+        "buttonText": "Back to order",
+        "subTitleText": "Hey, you have an upcoming scheduled ride. To create a ride now, cancel your scheduled ride and try again."
+    },
     "futureRideLimit": {
         "titleText": "Scheduled ride limit reached",
         "buttonText": "Back to order",

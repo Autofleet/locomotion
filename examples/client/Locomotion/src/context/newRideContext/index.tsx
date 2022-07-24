@@ -597,10 +597,11 @@ const RidePageContextProvider = ({ children }: {
   const FAILED_TO_CREATE_RIDE_ACTIONS = {
     [RIDE_FAILED_REASONS.BUSY]: () => { changeBsPage(BS_PAGES.NO_AVAILABLE_VEHICLES); },
     [RIDE_FAILED_REASONS.USER_FUTURE_RIDE_INTERVAL_LIMIT_REACHED]: () => {
+      const bsContent = ride.scheduledTo ? 'futureRideLimit' : 'futureRideLimitOnAsap';
       setGenericErrorDetails({
-        titleText: i18n.t('bottomSheetContent.futureRideLimit.titleText'),
-        buttonText: i18n.t('bottomSheetContent.futureRideLimit.buttonText'),
-        subTitleText: i18n.t('bottomSheetContent.futureRideLimit.subTitleText'),
+        titleText: i18n.t(`bottomSheetContent.${bsContent}.titleText`),
+        buttonText: i18n.t(`bottomSheetContent.${bsContent}.buttonText`),
+        subTitleText: i18n.t(`bottomSheetContent.${bsContent}.subTitleText`),
         buttonPress: () => {
           tryServiceEstimations();
           changeBsPage(BS_PAGES.SERVICE_ESTIMATIONS);
