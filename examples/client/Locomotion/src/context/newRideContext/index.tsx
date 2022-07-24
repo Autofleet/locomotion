@@ -372,7 +372,7 @@ const RidePageContextProvider = ({ children }: {
     validateRequestedStopPoints(requestStopPoints);
   }, [requestStopPoints]);
 
-  const getRideFromApi = (rideId: string): Promise<RideInterface> => rideApi.getRide(rideId);
+  const getRideFromApi = async (rideId: string): Promise<RideInterface> => formatRide(await rideApi.getRide(rideId));
 
   const reverseLocationGeocode = async (pinLat: number | null = null, pinLng: number | null = null)
     : Promise<any | undefined> => {

@@ -30,9 +30,9 @@ const Index = ({ ride }) => {
     stopPoints,
   } = ride;
   const rideIsActive = [...RIDE_ACTIVE_STATES, RIDE_STATES.CANCELED, RIDE_STATES.FAILED].includes(state);
-  const isFutureRide = stopPoints[0].afterTime;
   if (stopPoints
     && stopPoints.length) {
+    const isFutureRide = stopPoints[0].afterTime;
     return (
       <>
         <CardsTitle title={i18n.t('ride.journey')} />

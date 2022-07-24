@@ -36,6 +36,7 @@ import { RIDE_STATES } from '../../../lib/commonTypes';
 import TextButton from '../../../Components/TextButton';
 import * as NavigationService from '../../../services/navigation';
 import { MAIN_ROUTES } from '../../routes';
+import ServiceTypeDetails from '../../../Components/ServiceTypeDetails';
 
 const RideTitleCard = ({
   ride, page, showTip, tip,
@@ -155,6 +156,9 @@ const RideView = ({ ride }) => {
               />
               )}
             </DriverCardContainer>
+            <ServiceTypeDetails
+              serviceType={ride.serviceType}
+            />
           </DetailsContainer>
         </RideViewContainer>
       )
