@@ -6,7 +6,6 @@ import {
   Arrow, ArrowContainer, CardContainer, CardContentContainer, CardText, CardTitle, CardTitleContainer, VerifyContainer, VerifyText,
 } from './styled';
 import { InformationCardProps } from '../InformationCard';
-import { ButtonContainer } from '../../pages/Lock/styled';
 
 const Card = ({
   title,

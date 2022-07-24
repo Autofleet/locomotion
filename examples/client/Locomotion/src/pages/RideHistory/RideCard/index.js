@@ -123,49 +123,44 @@ const RideView = ({ ride }) => {
     }
   });
   return (
-    <>
-      {tip || tip === undefined ? (
-        <RideViewContainer>
-          <MapRideViewContainer>
-            <Map
-              disableMarkers={ride.state !== RIDE_STATES.COMPLETED}
-              ref={map}
-              ride={ride}
-            />
-          </MapRideViewContainer>
-          <DetailsContainer>
-            <MainRideViewSectionContainer>
-              <RideTitleCard page ride={ride} showTip tip={tip} />
-              <BlankContainer />
-            </MainRideViewSectionContainer>
-            <StopPointsVerticalViewContainer>
-              <StopPointsVerticalView
-                ride={ride}
-              />
-            </StopPointsVerticalViewContainer>
-            <StopPointsVerticalViewContainer>
-              <RidePaymentDetails
-                payment={ride.payment}
-                priceAmount={ride.priceAmount}
-                priceCurrency={ride.priceCurrency}
-              />
-            </StopPointsVerticalViewContainer>
-            <DriverCardContainer>
-              {ride.driver && ride.state === RIDE_STATES.COMPLETED && (
-              <DriverCard
-                activeRide={false}
-                ride={ride}
-              />
-              )}
-            </DriverCardContainer>
-            <ServiceTypeDetails
-              serviceType={ride.serviceType}
-            />
-          </DetailsContainer>
-        </RideViewContainer>
-      )
-        : <FullPageLoader />}
-    </>
+    <RideViewContainer>
+      <MapRideViewContainer>
+        <Map
+          disableMarkers={ride.state !== RIDE_STATES.COMPLETED}
+          ref={map}
+          ride={ride}
+        />
+      </MapRideViewContainer>
+      <DetailsContainer>
+        <MainRideViewSectionContainer>
+          {tip || tip === undefined ? (<RideTitleCard page ride={ride} showTip tip={tip} />) : null}
+          <BlankContainer />
+        </MainRideViewSectionContainer>
+        <StopPointsVerticalViewContainer>
+          <StopPointsVerticalView
+            ride={ride}
+          />
+        </StopPointsVerticalViewContainer>
+        <StopPointsVerticalViewContainer>
+          <RidePaymentDetails
+            payment={ride.payment}
+            priceAmount={ride.priceAmount}
+            priceCurrency={ride.priceCurrency}
+          />
+        </StopPointsVerticalViewContainer>
+        <DriverCardContainer>
+          {ride.driver && ride.state === RIDE_STATES.COMPLETED && (
+          <DriverCard
+            activeRide={false}
+            ride={ride}
+          />
+          )}
+        </DriverCardContainer>
+        <ServiceTypeDetails
+          serviceType={ride.serviceType}
+        />
+      </DetailsContainer>
+    </RideViewContainer>
   );
 };
 

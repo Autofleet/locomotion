@@ -47,7 +47,7 @@ const RideCard = ({
       {serviceName}
     </ServiceType>
     <StopPointsVerticalView ride={ride} />
-    <CardComponent name={paymentMethod.name} brand={paymentMethod.brand} />
+    {paymentMethod && <CardComponent name={paymentMethod.name} brand={paymentMethod.brand} />}
     <RoundedButton onPress={onPress} hollow type="cancel">
       {i18n.t('home.cancelRideButton')}
     </RoundedButton>

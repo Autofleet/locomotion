@@ -70,7 +70,7 @@ const FutureRidesView = ({ menuSide }: FutureRidesViewProps) => {
               ride={ride}
               onPress={() => onPressCancel(ride)}
               serviceName={service.displayName}
-              paymentMethod={ride.payment.paymentMethod}
+              paymentMethod={ride?.payment?.paymentMethod}
               scheduledTo={ride.scheduledTo || ''}
             />
           );
