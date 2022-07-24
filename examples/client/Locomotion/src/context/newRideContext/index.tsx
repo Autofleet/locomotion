@@ -220,8 +220,9 @@ const RidePageContextProvider = ({ children }: {
       setRide(newRide);
       changeBsPage(BS_PAGES.ACTIVE_RIDE);
     },
-    [RIDE_STATES.ACTIVE]: () => {
+    [RIDE_STATES.ACTIVE]: (activeRide: any) => {
       cleanRequestStopPoints();
+      setRide(activeRide);
       changeBsPage(BS_PAGES.ACTIVE_RIDE);
     },
     [RIDE_STATES.CANCELED]: (canceledRide: any) => {
@@ -592,7 +593,7 @@ const RidePageContextProvider = ({ children }: {
     const history = await getLastAddresses();
     setHistoryResults(history);
   };
-
+  console.log('ride', ride);
   const FAILED_TO_CREATE_RIDE_ACTIONS = {
     [RIDE_FAILED_REASONS.BUSY]: () => { changeBsPage(BS_PAGES.NO_AVAILABLE_VEHICLES); },
     [RIDE_FAILED_REASONS.USER_FUTURE_RIDE_INTERVAL_LIMIT_REACHED]: () => {
