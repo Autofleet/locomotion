@@ -50,8 +50,9 @@ const RideTitleCard = ({
         </DayTitleSubText>
       );
     }
+    const isLessThenFiveDaysSince = moment(moment()).diff(ride.scheduledTo || ride.createdAt, 'days') < 5;
     if (ride.state === RIDE_STATES.COMPLETED
-      && moment(moment()).diff(ride.scheduledTo || ride.createdAt, 'days') < 5) {
+      && isLessThenFiveDaysSince) {
       return <TextButton onPress={() => { NavigationService.navigate(MAIN_ROUTES.POST_RIDE, { rideId: ride.id, priceCalculationId: ride.priceCalculationId }); }} text={i18n.t('rideHistory.rideCard.addTip')} />;
     }
   };
