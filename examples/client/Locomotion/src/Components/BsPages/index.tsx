@@ -384,7 +384,9 @@ export const NotAvailableHere = (props: any) => {
     <BsPage
       TitleText={i18n.t('bottomSheetContent.notAvailableHere.titleText')}
       ButtonText={i18n.t('bottomSheetContent.notAvailableHere.buttonText')}
-      SubTitleText={i18n.t('bottomSheetContent.notAvailableHere.subTitleText')}
+      SubTitleText={i18n.t('bottomSheetContent.notAvailableHere.subTitleText', {
+        appName: Config.OPERATION_NAME,
+      })}
       Image={<SvgIcon Svg={outOfTerritoryIcon} height={85} width={140} fill={primaryColor} />}
       fullWidthButtons
       {...props}
