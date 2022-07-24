@@ -372,6 +372,13 @@ const RidePageContextProvider = ({ children }: {
     validateRequestedStopPoints(requestStopPoints);
   }, [requestStopPoints]);
 
+  useEffect(() => {
+    if (unconfirmedPickupTime) {
+      validateRequestedStopPoints(requestStopPoints);
+      setUnconfirmedPickupTime(null);
+    }
+  }, [ride.scheduledTo]);
+
   const getRideFromApi = (rideId: string): Promise<RideInterface> => rideApi.getRide(rideId);
 
   const reverseLocationGeocode = async (pinLat: number | null = null, pinLng: number | null = null)
