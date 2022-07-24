@@ -688,7 +688,7 @@ const RidePageContextProvider = ({ children }: {
         setRide(formattedRide);
       }
     } catch (e: any) {
-      const key = e.message || e.response?.data?.errors[0];
+      const key = e.response?.data?.errors[0] || e.message;
       if (FAILED_TO_CREATE_RIDE_ACTIONS[key]) {
         FAILED_TO_CREATE_RIDE_ACTIONS[key]();
       } else {
