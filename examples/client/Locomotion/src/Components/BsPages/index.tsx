@@ -253,7 +253,6 @@ export const ConfirmPickupTime = (props: any) => {
       onButtonPress={() => {
         updateRidePayload({ scheduledTo: unconfirmedPickupTime });
         setServiceEstimations(null);
-        tryServiceEstimations();
         changeBsPage(BS_PAGES.SERVICE_ESTIMATIONS);
       }}
       {...props}
