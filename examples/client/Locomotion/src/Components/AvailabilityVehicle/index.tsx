@@ -1,12 +1,14 @@
 import React, {
   useContext, useEffect, useState, useRef,
 } from 'react';
-import { Platform, View } from 'react-native';
+import {
+  Animated, Easing, Platform, Text, View,
+} from 'react-native';
 import styled from 'styled-components';
 import { MarkerAnimated, AnimatedRegion } from 'react-native-maps';
 import { Context as ThemeContext } from '../../context/theme';
 import SvgIcon from '../SvgIcon';
-import carIcon from '../../assets/map/car.svg';
+import carIcon from '../../assets/map/Autofleet_Car_Icon.svg';
 
 interface Location {
   lat: number;
@@ -65,14 +67,59 @@ const AvailabilityVehicle = ({
     }
   }, [location]);
 
+  const spinValue = new Animated.Value(0);
+
+  useEffect(() => {
+    if (location.bearing) {
+      setTimeout(() => {
+        console.log('here');
+        Animated.timing(
+          spinValue,
+          {
+            toValue: 1,
+            duration: 3000,
+            easing: Easing.linear, // Easing is an additional import from react-native
+            useNativeDriver: true, // To make use of native driver for performance
+          },
+        ).start(() => {
+          console.log('here2');
+        });
+      }, 3000);
+    }
+  }, [location.bearing]);
+
+  // Next, interpolate beginning and end values (in this case 0 and 1)
+  const spin = spinValue.interpolate({
+    inputRange: [0, 1],
+    outputRange: ['1deg', '180deg'],
+  });
+  console.log(spin);
   return (
-    <MarkerAnimated
-      key={id}
-      ref={markerRef}
-      coordinate={locationAnimated}
+    <Animated.View
+      style={{ transform: [{ rotate: spin }] }}
     >
-      <SvgIcon Svg={carIcon} height={48} width={48} fill={primaryColor} />
-    </MarkerAnimated>
+      <View style={{ width: 20, height: 20, position: 'relative' }}>
+
+        <MarkerAnimated
+          key={id}
+          ref={markerRef}
+          coordinate={locationAnimated}
+          style={{ position: 'absolute' }}
+        >
+
+          <View>
+            <SvgIcon
+              Svg={carIcon}
+              height={48}
+              width={48}
+              fill={primaryColor}
+            />
+          </View>
+        </MarkerAnimated>
+      </View>
+
+    </Animated.View>
+
   );
 };
 
