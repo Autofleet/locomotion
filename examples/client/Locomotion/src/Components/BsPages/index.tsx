@@ -369,10 +369,11 @@ export const ConfirmFutureRide = (props: any) => {
 };
 
 export const NotAvailableHere = (props: any) => {
-  const { setSnapPointsState } = useContext(BottomSheetContext);
+  const { setSnapPointsState, setIsExpanded } = useContext(BottomSheetContext);
   const { primaryColor } = useContext(ThemeContext);
   useEffect(() => {
     setSnapPointsState(SNAP_POINT_STATES.NOT_IN_TERRITORY);
+    setIsExpanded(false);
   }, []);
 
   return (
