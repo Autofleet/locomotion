@@ -39,7 +39,6 @@
         "invalidPhoneNumberError": "Phone number is not valid.",
         "vertError": "Sorry, seems like the verification code is incorrect. Please make sure you've typed it correctly.",
         "resendButton": "Start over",
-        "introText": "Please enter your phone number to signup for Locomotion. You will receive an SMS with a verification code.",
         "termsWebViewTitle": "Terms and Conditions",
         "privacyWebViewTitle": "Data Protection Guidelines",
         "termsAgreement": "By proceeding you agree to the <0>Terms of use</0> and <1>Privacy Policy</1>"
@@ -186,7 +185,7 @@
     "lock": {
         "header": "Your signup has been recorded",
         "text": "We have received your registration and will review it as soon as possible",
-        "subText": "You will immediately receive a notification when your registration is completed and you are ready to use Locomotion",
+        "subText": "You will immediately receive a notification when your registration is completed and you are ready to use {{ appName }}",
         "submitText": " Login to different account"
     },
     "addressView": {
@@ -437,7 +436,7 @@
     "notAvailableHere": {
       "titleText": "We are Sorry!",
       "buttonText": "Choose another address",
-      "subTitleText": "Autofleet is not available in your area"
+      "subTitleText": "{{ appName }} is not available in your area"
     },
     "noPayment": {
         "titleText": "No payment set",
