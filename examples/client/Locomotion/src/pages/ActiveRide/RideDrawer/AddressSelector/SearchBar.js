@@ -9,6 +9,7 @@ import i18n from '../../../../I18n';
 import { RidePageContext } from '../../../../context/newRideContext';
 
 import backImage from '../../../../assets/arrow-back.png';
+import { UserContext } from '../../../../context/user';
 
 
 const SearchContainer = styled.View`
@@ -39,7 +40,7 @@ const Row = styled(Animated.View)`
 
 const BackButtonContainer = styled.TouchableOpacity`
     width: 40px;
-    height: 40px;
+    height: 50px;
     border-radius: 8px;
     background-color: #f1f2f6;
     margin-right: 8px;
@@ -79,7 +80,6 @@ const SearchBar = ({
   const {
     searchTerm,
     setSearchTerm,
-    selectedInputIndex,
     setSelectedInputIndex,
     selectedInputTarget,
     setSelectedInputTarget,
@@ -88,6 +88,10 @@ const SearchBar = ({
     initSps,
     fillLoadSkeleton,
   } = useContext(RidePageContext);
+
+  const {
+    locationGranted,
+  } = useContext(UserContext);
 
   const debouncedSearch = React.useRef(
     debounce(async (text, i) => {
@@ -101,7 +105,11 @@ const SearchBar = ({
       return 'addressView.whereTo';
     }
 
-    return 'addressView.currentLocation';
+    if (locationGranted) {
+      return 'addressView.currentLocation';
+    }
+
+    return '';
   };
 
   const onInputFocus = (target, index) => {
@@ -119,9 +127,11 @@ const SearchBar = ({
 
   useEffect(() => {
     if (isSelected) {
-      if (inputRef && inputRef.current) {
-        inputRef.current.focus();
-      }
+      setTimeout(() => {
+        if (inputRef && inputRef.current) {
+          inputRef.current.focus();
+        }
+      }, 250);
     } else {
       inputRef.current = null;
     }
@@ -151,7 +161,7 @@ const SearchBar = ({
           }}
           fullBorder
           value={description || ''}
-          placeholderTextColor="#929395"
+          placeholderTextColor={isExpanded ? '#929395' : '#333333'}
           onFocus={(e) => {
             onInputFocus(e.target, i);
           }}

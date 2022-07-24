@@ -3,7 +3,7 @@ import { useIsFocused } from '@react-navigation/native';
 import i18n from '../../I18n';
 import SaveButton from './SaveButton';
 import { OnboardingContext } from '../../context/onboarding';
-import { ErrorText, PageContainer, SafeView } from './styles';
+import { ErrorText } from './styles';
 import Header from './Header';
 import ScreenText from './ScreenText/index';
 import { loginApi } from '../../context/user/api';
@@ -11,6 +11,7 @@ import PhoneNumberInput from '../../Components/PhoneNumberInput';
 import { MAIN_ROUTES } from '../routes';
 import { UserContext } from '../../context/user';
 import AppSettings from '../../services/app-settings';
+import { PageContainer, ContentContainer } from '../styles';
 
 const Phone = ({ navigation }) => {
   const { nextScreen } = useContext(OnboardingContext);
@@ -54,12 +55,12 @@ const Phone = ({ navigation }) => {
   }, []);
 
   return (
-    <SafeView>
+    <PageContainer>
       <Header
         title={i18n.t('onboarding.pages.phone.title')}
         page={MAIN_ROUTES.PHONE}
       />
-      <PageContainer>
+      <ContentContainer>
         <ScreenText
           text={i18n.t('onboarding.pages.phone.text')}
           subText={i18n.t('onboarding.pages.phone.subText')}
@@ -78,8 +79,8 @@ const Phone = ({ navigation }) => {
           onFail={() => setShowErrorText(i18n.t('login.invalidPhoneNumberError'))
           }
         />
-      </PageContainer>
-    </SafeView>
+      </ContentContainer>
+    </PageContainer>
   );
 };
 

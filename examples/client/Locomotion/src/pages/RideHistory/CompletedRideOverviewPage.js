@@ -1,5 +1,5 @@
-import React, { useEffect, useContext, useState } from 'react';
-import { useNavigation, useRoute } from '@react-navigation/native';
+import React, { useContext, useState } from 'react';
+import { useNavigation, useRoute, useFocusEffect } from '@react-navigation/native';
 import { MAIN_ROUTES } from '../routes';
 import i18n from '../../I18n';
 import PageHeader from '../../Components/PageHeader';
@@ -7,21 +7,18 @@ import {
   PageContent,
 } from './styled';
 import Mixpanel from '../../services/Mixpanel';
-import { rideHistoryContext, RideHistoryContextProvider } from '../../context/rideHistory';
+import { RidePageContext } from '../../context/newRideContext';
 import { PageContainer } from '../styles';
 import RideView from './RideCard';
 import useBackHandler from '../../lib/useBackHandler';
+import { formatRides } from '../../context/rideHistory';
 
 const Page = ({ menuSide }) => {
-  const { rides } = useContext(rideHistoryContext);
+  const { getRideFromApi } = useContext(RidePageContext);
 
   const navigation = useNavigation();
   const route = useRoute();
   const [ride, setRide] = useState();
-
-  useEffect(() => {
-    Mixpanel.pageView(route.name);
-  }, []);
 
   const { rideId } = (route.params || {});
 
@@ -30,14 +27,18 @@ const Page = ({ menuSide }) => {
     return true;
   });
 
-  useEffect(() => {
-    const find = rides && rides.find(({ id }) => (id === rideId));
-    if (find) {
-      setRide(find);
-    } else {
-      navigation.navigate(MAIN_ROUTES.HOME);
-    }
-  }, [rideId]);
+  const getRideInfo = async () => {
+    const res = await getRideFromApi(rideId);
+    const [formattedRide] = formatRides([res]);
+    setRide(formattedRide);
+  };
+
+  useFocusEffect(
+    React.useCallback(() => {
+      getRideInfo();
+      Mixpanel.pageView(route.name);
+    }, [rideId]),
+  );
 
   return (
     <PageContainer>

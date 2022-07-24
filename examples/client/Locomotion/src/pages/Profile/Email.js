@@ -5,14 +5,14 @@ import TextInput from '../../Components/TextInput';
 import SaveButton from './SaveButton';
 import { OnboardingContext } from '../../context/onboarding';
 import {
-  ErrorText, PageContainer, SafeView, InputContainer,
+  ErrorText, SafeView, InputContainer,
 } from './styles';
 import i18n from '../../I18n';
 import Header from './Header';
 import ScreenText from './ScreenText';
 import { MAIN_ROUTES } from '../routes';
 import { UserContext } from '../../context/user';
-
+import { PageContainer, ContentContainer } from '../styles';
 
 const Email = ({ navigation }) => {
   const route = useRoute();
@@ -31,7 +31,9 @@ const Email = ({ navigation }) => {
 
   const navigateToNextScreen = () => {
     if (route.params && route.params.editAccount) {
-      navigation.navigate(MAIN_ROUTES.EMAIL_CODE);
+      navigation.navigate(MAIN_ROUTES.EMAIL_CODE, {
+        editAccount: route.params.editAccount,
+      });
     } else {
       nextScreen(MAIN_ROUTES.EMAIL);
     }
@@ -52,7 +54,8 @@ const Email = ({ navigation }) => {
   };
 
   const emailSchema = yup.object().shape({
-    email: yup.string().required().email(),
+    // eslint-disable-next-line no-useless-escape
+    email: yup.string().required().email().matches(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/),
   });
 
   const onChange = async (value) => {
@@ -69,9 +72,9 @@ const Email = ({ navigation }) => {
   };
 
   return (
-    <SafeView>
-      <Header title={i18n.t('onboarding.pages.email.title')} page={MAIN_ROUTES.EMAIL_CODE} />
-      <PageContainer>
+    <PageContainer>
+      <Header title={i18n.t('onboarding.pages.email.title')} page={MAIN_ROUTES.EMAIL} />
+      <ContentContainer>
         <ScreenText
           text={i18n.t('onboarding.pages.email.text')}
           subText={i18n.t('onboarding.pages.email.subText')}
@@ -84,6 +87,7 @@ const Email = ({ navigation }) => {
             onChangeText={onChange}
             value={email}
             autoCapitalize="none"
+            autoCorrect={false}
             fullBorder
           />
         </InputContainer>
@@ -93,8 +97,8 @@ const Email = ({ navigation }) => {
           onFail={() => setErrorText(i18n.t('onboarding.pages.email.error'))}
           onNext={onNext}
         />
-      </PageContainer>
-    </SafeView>
+      </ContentContainer>
+    </PageContainer>
   );
 };
 

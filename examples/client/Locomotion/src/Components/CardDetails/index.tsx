@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useRoute } from '@react-navigation/native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { getCurrencySymbol } from '../../context/newRideContext/utils';
 import ConfirmationPopup from '../../popups/ConfirmationPopup';
 import { getLastFourForamttedLong } from '../../pages/Payments/cardDetailUtils';
 import { MAIN_ROUTES } from '../../pages/routes';
@@ -9,7 +10,7 @@ import {
   CardsContainer,
   CardsTitle,
   Container,
-  LogoutContainer,
+  LogoutContainer as DeletePaymentContainer,
 } from '../../pages/Account/styled';
 import i18n from '../../I18n';
 import PageHeader from '../PageHeader';
@@ -48,6 +49,17 @@ const CardDetails = ({
     navigation.navigate(MAIN_ROUTES.PAYMENT);
   };
 
+  const loadCustomer = async () => {
+    setLoading(true);
+    // loadCustomer to have current card balance
+    await usePayments.loadCustomer();
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    loadCustomer();
+  }, []);
+
   useEffect(() => {
     setLoading(loadingState);
   }, [loading]);
@@ -61,11 +73,6 @@ const CardDetails = ({
         <PageHeader
           title={i18n.t('payments.cardDetails.title')}
           onIconPress={() => navigation.navigate(MAIN_ROUTES.PAYMENT)}
-          iconSide=""
-          displayIcon={undefined}
-          showSkipButton={undefined}
-          onPressSkip={undefined}
-          action={undefined}
         />
         <>
           <Container>
@@ -76,9 +83,6 @@ const CardDetails = ({
               {paymentMethod && paymentMethod.name
                 ? (
                   <Card
-                    onPress={() => {
-                      navigation.navigate(MAIN_ROUTES.EDIT_NICKNAME, { ...paymentMethod });
-                    }}
                     title={i18n.t('payments.cardDetails.nickname')}
                   >
                     {paymentMethod.name}
@@ -91,23 +95,27 @@ const CardDetails = ({
                 {getLastFourForamttedLong(paymentMethod?.lastFour)}
 
               </Card>
-              <Card
-                title={i18n.t('payments.cardDetails.balance')}
-              >
-                {i18n.t('payments.cardDetails.outstandingBalanceText')}
-              </Card>
-              <LogoutContainer
+              {paymentMethod?.hasOutstandingBalance ? (
+                <Card
+                  title={i18n.t('payments.cardDetails.balance')}
+                >
+                  {`${i18n.t('payments.cardDetails.outstandingBalanceText')} ${paymentMethod.outstandingBalance.amount}${getCurrencySymbol(paymentMethod.outstandingBalance.currency)}`}
+                </Card>
+              ) : undefined}
+
+              <DeletePaymentContainer
+                disabled={paymentMethod?.hasOutstandingBalance}
                 onPress={async () => {
                   await onRemoveMethod(paymentMethod?.id);
                 }}
               >
                 <DeleteContainer>
-                  <DeleteIcon Svg={deleteIcon} />
-                  <DeleteText>
+                  <DeleteIcon Svg={deleteIcon} fill={paymentMethod?.hasOutstandingBalance ? '#bcbcbc' : '#f35657'} />
+                  <DeleteText hasOutstansingBalance={paymentMethod?.hasOutstandingBalance}>
                     {i18n.t('payments.cardDetails.deleteText')}
                   </DeleteText>
                 </DeleteContainer>
-              </LogoutContainer>
+              </DeletePaymentContainer>
             </CardsContainer>
           </Container>
           <ConfirmationPopup

@@ -19,7 +19,10 @@ import { RidePageContext } from '../../../../../../context/newRideContext';
 
 const ServiceCard = ({ service }) => {
   const theme = useContext(ThemeContext);
-  const { setChosenService, chosenService, serviceEstimations } = useContext(RidePageContext);
+  const {
+    setChosenService, chosenService, serviceEstimations, ride,
+  } = useContext(RidePageContext);
+  const isFutureRide = ride.scheduledTo;
   const unavailable = !service.eta;
   const unavailableText = i18n.t('rideDetails.unavailable');
   const serviceDisplayPrice = getFormattedPrice(service.currency, service.price);
@@ -50,6 +53,12 @@ const ServiceCard = ({ service }) => {
       : i18n.t('rideDetails.toolTipEta', { minutes: minutesUntilPickup });
   };
 
+  const getDescription = forFutureRidesView => (
+    <Description style={{ ...(forFutureRidesView && { width: '80%' }) }} numberOfLines={2}>
+      {service.description}
+    </Description>
+  );
+
   return (
     <CardContainer
       theme={theme}
@@ -70,7 +79,10 @@ const ServiceCard = ({ service }) => {
             <Title>
               {service.name}
             </Title>
-            {serviceEstimations.filter(s => s.price).length > 1 && service.tag && (
+            {serviceEstimations.filter(s => s.price).length > 1
+            && service.tag
+            && !(isFutureRide && service.tag === TAG_OPTIONS.FASTEST)
+            && (
             <Tag
               key={service.tag}
               containerStyles={tagStyles[service.tag].container}
@@ -86,15 +98,19 @@ const ServiceCard = ({ service }) => {
         </Row>
         {!unavailable && (
         <Row>
-          <TimeDetails>
-            <Eta>
-              {moment(service.eta).format('HH:mm')}
-            </Eta>
-            <Circle />
-            <Eta>
-              {getEta()}
-            </Eta>
-          </TimeDetails>
+          {!isFutureRide
+            ? (
+              <TimeDetails>
+                <Eta>
+                  {moment(service.eta).format('HH:mm')}
+                </Eta>
+                <Circle />
+                <Eta>
+                  {getEta()}
+                </Eta>
+              </TimeDetails>
+            )
+            : getDescription(isFutureRide)}
           <Capacity>
             <AvailableSeats>
               {service.availableSeats}
@@ -103,11 +119,9 @@ const ServiceCard = ({ service }) => {
           </Capacity>
         </Row>
         )}
-        {service.description && (
+        {service.description && !isFutureRide && (
         <Row>
-          <Description>
-            {service.description}
-          </Description>
+          {getDescription()}
         </Row>
         )}
       </ServiceDetails>

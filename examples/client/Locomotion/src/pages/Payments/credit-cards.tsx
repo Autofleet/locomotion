@@ -5,6 +5,7 @@ import i18n from '../../I18n';
 import {
   CardsListContainer,
   PaymentMethodsContainer,
+  BottomContainer,
 } from './styled';
 
 import PaymentMethod from '../../Components/CardRow';
@@ -25,7 +26,7 @@ export default ({
 
   const setDefaultPayment = async () => {
     setLoading(true);
-    const { paymentMethods } = await usePayments.loadCustomer();
+    const { paymentMethods } = await usePayments.getOrFetchCustomer();
     const defaultPaymentMethod = paymentMethods.find((x:any) => x.isDefault);
     const methodToSet = { ...defaultPaymentMethod, mark: true };
     setDefaultMethod(methodToSet);
@@ -73,12 +74,15 @@ export default ({
         </PaymentMethodsContainer>
 
         {onAddClick ? (
-          <PaymentMethod
-            addNew
-            onPress={onAddClick}
-          />
+          <BottomContainer>
+            <PaymentMethod
+              addNew
+              onPress={onAddClick}
+            />
+          </BottomContainer>
         ) : undefined}
         <ChoosePaymentMethod
+          selected={defaultMethod?.id}
           isVisible={showChoosePayment}
           showCash={false}
           onCancel={() => { setShowChoosePayment(false); }}

@@ -3,12 +3,15 @@ import { BaseText } from '../../Components/BaseText';
 import { ERROR_COLOR, FONT_SIZES, FONT_WEIGHTS } from '../../context/theme';
 import Button from '../../Components/Button';
 
-export const ErrorText = styled.Text`
+export const BaseErrorText = styled.Text`
   color: ${ERROR_COLOR};
   ${FONT_SIZES.MEDIUM};
   ${FONT_WEIGHTS.MEDIUM};
   margin-top: 15px;
   width: 80%;
+`;
+
+export const ErrorText = styled(BaseErrorText)`
   text-align: center;
   align-self: center;
 `;
@@ -16,12 +19,6 @@ export const ErrorText = styled.Text`
 export const SafeView = styled.SafeAreaView`
 flex: 1;
 background-color: white;
-`;
-
-export const PageContainer = styled.View`
-flex: 1;
-padding: 35px 30px;
-  background-color: ${({ theme }) => theme.pageBackgroundColor};
 `;
 
 export const ResendContainer = styled.Text`

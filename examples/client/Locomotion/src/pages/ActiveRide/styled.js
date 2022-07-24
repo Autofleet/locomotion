@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Dimensions } from 'react-native';
 import styled from 'styled-components';
 import vehicleIcon from '../../assets/car-icon.png';
 import Icon from '../../assets/location_pin.svg';
@@ -49,7 +49,7 @@ export const LocationMarkerContainer = styled.View`
   justify-content: center;
   background-color: transparent;
   top: 0;
-  bottom: 0;
+  bottom: 45;
   left: 0;
   right: 0;
 `;
@@ -61,3 +61,21 @@ export const LocationMarker = styled(Icon).attrs(({ theme }) => ({
   width: '40px',
   viewBox: '-1 0 13 10',
 }))``;
+
+export const MapOverlayButtons = styled.View`
+position: absolute;
+width: 100%;
+padding: 0 20px;
+display: flex;
+flex-direction: row;
+justify-content: space-between;
+`;
+
+export const BlackOverlay = styled.View`
+width: 100%;
+height: ${({ bottomSheetHeight }) => Dimensions.get('window').height - bottomSheetHeight};
+background-color: #333;
+opacity: 0.7;
+z-index: 99;
+position: absolute;
+`;

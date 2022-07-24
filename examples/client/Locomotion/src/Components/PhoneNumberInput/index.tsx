@@ -4,6 +4,7 @@ import Config from 'react-native-config';
 import { AsYouType } from 'libphonenumber-js';
 import { getInputIsoCode } from '../../services/MccMnc';
 import i18n from '../../I18n';
+import codes from './codes.json';
 import { ERROR_COLOR } from '../../context/theme';
 
 const PhoneNumberInput = ({
@@ -11,12 +12,12 @@ const PhoneNumberInput = ({
   autoFocus,
   error,
   value,
-}) => {
+}: any) => {
   const [isFocused, setIsFocused] = useState(false);
   const [defaultCode, setDefaultCode] = useState(null);
   const asYouTypePhoneNumber = new AsYouType();
 
-  const onChangeText = (v) => {
+  const onChangeText = (v: any) => {
     const numberValue = `${v}`;
     asYouTypePhoneNumber.input(numberValue);
     const number = asYouTypePhoneNumber.getNumberValue();
@@ -31,6 +32,17 @@ const PhoneNumberInput = ({
     setDefaultCode(Config.OVERWRITE_COUNTRY_CODE || mobileIso);
   };
 
+  const cleanNumber = (number: string) => {
+    if (!number) {
+      return '';
+    }
+    const numberCode = codes.find(c => c.code === defaultCode)?.dialCode;
+    if (numberCode && number.startsWith(numberCode)) {
+      return number.replace(numberCode, '');
+    }
+    return number;
+  };
+
   useEffect(() => {
     setIsoCode();
   }, []);
@@ -38,12 +50,12 @@ const PhoneNumberInput = ({
   return defaultCode ? (
     <PhoneInput
       key={defaultCode}
-      testID="phoneNumber"
-      value={value}
+      value={cleanNumber(value)}
       autoFocus={autoFocus}
       defaultCode={defaultCode}
       onChangeFormattedText={onChangeText}
       textInputProps={{
+        testID: 'phoneNumber',
         accessible: true,
         accessibilityLabel: 'phoneNumber',
         onFocus: () => setIsFocused(true),

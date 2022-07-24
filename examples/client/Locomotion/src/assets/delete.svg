@@ -1,10 +1,10 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="12" height="17" viewBox="0 0 12 17">
     <g data-name="Group 5135">
-        <path data-name="Rectangle 3060" d="M0 0h10v10a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V0z" transform="translate(1 5)" style="fill:#f35657"/>
-        <path data-name="Rectangle 3061" d="M1 0h10a1 1 0 0 1 1 1v1H0V1a1 1 0 0 1 1-1z" transform="translate(0 2)" style="fill:#f35657"/>
-        <g data-name="Rectangle 3062" style="stroke:#f35657;fill:#f35657">
+        <path data-name="Rectangle 3060" d="M0 0h10v10a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V0z" transform="translate(1 5)"/>
+        <path data-name="Rectangle 3061" d="M1 0h10a1 1 0 0 1 1 1v1H0V1a1 1 0 0 1 1-1z" transform="translate(0 2)"/>
+        <g data-name="Rectangle 3062">
             <path d="M2 0h2a2 2 0 0 1 2 2 1 1 0 0 1-1 1H1a1 1 0 0 1-1-1 2 2 0 0 1 2-2z" style="stroke:none" transform="translate(3)"/>
-            <path d="M2 .5h2A1.5 1.5 0 0 1 5.5 2a.5.5 0 0 1-.5.5H1A.5.5 0 0 1 .5 2 1.5 1.5 0 0 1 2 .5z" style="fill:#f35657" transform="translate(3)"/>
+            <path d="M2 .5h2A1.5 1.5 0 0 1 5.5 2a.5.5 0 0 1-.5.5H1A.5.5 0 0 1 .5 2 1.5 1.5 0 0 1 2 .5z" transform="translate(3)"/>
         </g>
     </g>
 </svg>

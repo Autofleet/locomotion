@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import Button from '../Button';
 
 export const Container = styled.View`
-padding: 10px 20px;
+padding: 15px 20px;
 display: flex;
 flex-direction: row;
 justify-content: space-between;

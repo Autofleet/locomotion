@@ -1,10 +1,16 @@
 import React, { useContext, useEffect, useState } from 'react';
 import {
-  Linking, Text, View,
+  Linking, Platform, Text, View,
 } from 'react-native';
-import styled from 'styled-components';
+import Config from 'react-native-config';
+import styled, { ThemeContext } from 'styled-components';
 import { useBottomSheet } from '@gorhom/bottom-sheet';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import moment from 'moment';
+import DatePicker from 'react-native-date-picker';
+import TextRowWithIcon from '../../Components/TextRowWithIcon';
+import { FutureRidesContext } from '../../context/futureRides';
+import { STOP_POINT_TYPES } from '../../lib/commonTypes';
 import SvgIcon from '../SvgIcon';
 import { RidePageContext } from '../../context/newRideContext';
 import i18n from '../../I18n';
@@ -21,14 +27,17 @@ import outOfTerritoryIcon from '../../assets/bottomSheet/out_of_territory.svg';
 import busyImage from '../../assets/bottomSheet/busy.svg';
 import locationIcon from '../../assets/location_pin.svg';
 import Loader from '../Loader';
+import { MewRidePageContext } from '../..';
+import timeIcon from '../../assets/calendar.svg';
 import ActiveRideContent from './ActiveRide';
+import RoundedButton from '../RoundedButton';
+import { getFutureRideMaxDate, getFutureRideMinDate } from '../../context/newRideContext/utils';
 
 const OtherButton = styled(Button)`
   background-color: ${({ warning, theme }) => (warning ? ERROR_COLOR : theme.primaryColor)};
   height: 50px;
   border-radius: 8px;
 `;
-
 
 const SecondaryButton = styled(Button).attrs({ noBackground: true })`
   height: 50px;
@@ -64,13 +73,13 @@ const TitleContainer = styled(View)`
 
 const Title = styled(Text)`
   padding-bottom: 3px;
-  ${FONT_SIZES.H2}
+  ${FONT_SIZES.H1}
   ${FONT_WEIGHTS.MEDIUM}
   color: #333;
 `;
 
 const SubTitle = styled(Text)`
-  ${FONT_SIZES.LARGE}
+  ${FONT_SIZES.H3}
   color: ${({ theme }) => theme.disabledColor};
 `;
 
@@ -93,6 +102,7 @@ const SecondaryButtonTitle = styled(Text)<SecondaryButtonTitleInterface>`
 
 const AddressInput = styled(Text)`
   margin-left: 5;
+  ${FONT_SIZES.H3}
 `;
 
 const LoaderContainer = styled(View)`
@@ -116,7 +126,8 @@ const Footer = styled(View)<FooterInterface>`
   width: 100%;
   display: flex;
   flex-direction: ${({ fullWidthButtons }) => (fullWidthButtons ? 'column' : 'row')};
-  margin-bottom: 10px;
+  margin-bottom: ${Platform.OS === 'android'
+    ? '35px' : '10px'};
   justify-content: space-between;
   align-items: center;
 `;
@@ -167,7 +178,7 @@ const BsPage = ({
                 {titleIcon && <SvgIcon Svg={titleIcon} style={{ marginRight: 5 }} />}
                 <Title>{TitleText}</Title>
               </TitleContainer>
-              <SubTitle numberOfLines={2}>{SubTitleText}</SubTitle>
+              <SubTitle>{SubTitleText}</SubTitle>
             </CardText>
             {Image ? (
               <ImageContainer>
@@ -194,6 +205,7 @@ const BsPage = ({
         )}
         {SecondaryButtonText && (
         <SecondaryButton
+          disabled={buttonDisabled}
           style={{ width: buttonWidth }}
           warning={warning}
           onPress={onSecondaryButtonPress}
@@ -219,27 +231,83 @@ BsPage.defaultProps = {
 
 export default BsPage;
 
-export const LocationRequest = (props: any) => {
-  const [operation, setOperation] = useState();
-
-  const getOperationName = async () => {
-    // get operation name
-  };
-  useEffect(() => {
-    getOperationName();
-  }, []);
+export const ConfirmPickupTime = (props: any) => {
+  const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
+  const {
+    ride, updateRidePayload, tryServiceEstimations, setServiceEstimations,
+  } = useContext(MewRidePageContext);
+  const {
+    changeBsPage,
+  } = useContext(RideStateContextContext);
+  const date = moment(ride?.scheduledTo).format('ddd, MMM Do');
+  const time = moment(ride?.scheduledTo).format('HH:mm');
   return (
     <BsPage
-      TitleText={i18n.t('bottomSheetContent.locationRequest.titleText')}
-      ButtonText={i18n.t('bottomSheetContent.locationRequest.buttonText')}
-      SecondaryButtonText={i18n.t('bottomSheetContent.locationRequest.secondaryButtonText')}
-      SubTitleText={i18n.t('bottomSheetContent.locationRequest.subTitleText', { operation })}
-      onButtonPress={Linking.openSettings}
+      TitleText={i18n.t('bottomSheetContent.confirmPickupTime.titleText')}
+      ButtonText={i18n.t('bottomSheetContent.confirmPickupTime.buttonText')}
+      fullWidthButtons
+      onButtonPress={() => {
+        setServiceEstimations(null);
+        tryServiceEstimations();
+        changeBsPage(BS_PAGES.SERVICE_ESTIMATIONS);
+      }}
+      {...props}
+    >
+      <RoundedButton
+        onPress={() => setIsDatePickerOpen(true)}
+        hollow
+        icon={timeIcon}
+        style={{
+          borderColor: '#f1f2f6',
+        }}
+      >
+        {i18n.t('bottomSheetContent.confirmPickupTime.pickupText', { date, time })}
+      </RoundedButton>
+      <DatePicker
+        open={isDatePickerOpen}
+        date={moment(ride?.scheduledTo).toDate()}
+        maximumDate={getFutureRideMaxDate()}
+        minimumDate={getFutureRideMinDate()}
+        mode="datetime"
+        title={i18n.t('bottomSheetContent.ride.chosePickupTime')}
+        onCancel={() => setIsDatePickerOpen(false)}
+        onConfirm={(newDate: Date) => {
+          updateRidePayload({ scheduledTo: newDate.getTime() });
+          setIsDatePickerOpen(false);
+        }}
+        modal
+      />
+    </BsPage>
+  );
+};
+
+export const GenericError = (props: any) => {
+  const { genericErrorDetails } = useContext(BottomSheetContext);
+  return (
+    <BsPage
+      TitleText={genericErrorDetails.titleText}
+      ButtonText={genericErrorDetails.buttonText}
+      SubTitleText={genericErrorDetails.subTitleText}
+      onButtonPress={genericErrorDetails.buttonPress}
+      SecondaryButtonText={genericErrorDetails.secondaryButtonText}
+      onSecondaryButtonPress={genericErrorDetails.secondaryButtonPress}
       fullWidthButtons
       {...props}
     />
   );
 };
+
+export const LocationRequest = (props: any) => (
+  <BsPage
+    TitleText={i18n.t('bottomSheetContent.locationRequest.titleText')}
+    ButtonText={i18n.t('bottomSheetContent.locationRequest.buttonText')}
+    SecondaryButtonText={i18n.t('bottomSheetContent.locationRequest.secondaryButtonText')}
+    SubTitleText={i18n.t('bottomSheetContent.locationRequest.subTitleText', { operation: Config.OPERATION_NAME })}
+    onButtonPress={Linking.openSettings}
+    fullWidthButtons
+    {...props}
+  />
+);
 
 export const CancelRide = (props: any) => {
   const [isLoading, setIsLoading] = useState(false);
@@ -259,25 +327,60 @@ export const CancelRide = (props: any) => {
       }}
       onSecondaryButtonPress={() => changeBsPage(BS_PAGES.ACTIVE_RIDE)}
       warning
+      buttonDisabled={isLoading}
       {...props}
     />
   );
 };
 
+export const ConfirmFutureRide = (props: any) => {
+  const { newFutureRide } = useContext(FutureRidesContext);
+
+  const getDateDisplay = () => {
+    const date = moment(newFutureRide?.scheduledTo).format('ddd, MMM Do');
+    const time = moment(newFutureRide?.scheduledTo).format('HH:mm');
+    const dateText = i18n.t('bottomSheetContent.confirmPickupTime.pickupText', { date, time });
+    return <TextRowWithIcon text={dateText} icon={timeIcon} />;
+  };
+  const getPickupDisplay = () => {
+    const pickup = (newFutureRide?.stopPoints || [])
+      .find(sp => sp.type === STOP_POINT_TYPES.STOP_POINT_PICKUP);
+    const pickupText = i18n.t('bottomSheetContent.confirmFutureRide.pickupText', { address: pickup?.description });
+    return <TextRowWithIcon text={pickupText} />;
+  };
+  const getDropOffDisplay = () => {
+    const dropOff = (newFutureRide?.stopPoints || [])
+      .find(sp => sp.type === STOP_POINT_TYPES.STOP_POINT_DROPOFF);
+    const dropOffText = i18n.t('bottomSheetContent.confirmFutureRide.dropOffText', { address: dropOff?.description });
+    return <TextRowWithIcon text={dropOffText} />;
+  };
+  return (
+    <BsPage
+      TitleText={i18n.t('bottomSheetContent.confirmFutureRide.titleText')}
+      ButtonText={i18n.t('bottomSheetContent.confirmFutureRide.buttonText')}
+      fullWidthButtons
+      {...props}
+    >
+      {getDateDisplay()}
+      {getPickupDisplay()}
+      {getDropOffDisplay()}
+    </BsPage>
+  );
+};
+
 export const NotAvailableHere = (props: any) => {
   const { setSnapPointsState } = useContext(BottomSheetContext);
-
+  const { primaryColor } = useContext(ThemeContext);
   useEffect(() => {
     setSnapPointsState(SNAP_POINT_STATES.NOT_IN_TERRITORY);
   }, []);
-
 
   return (
     <BsPage
       TitleText={i18n.t('bottomSheetContent.notAvailableHere.titleText')}
       ButtonText={i18n.t('bottomSheetContent.notAvailableHere.buttonText')}
       SubTitleText={i18n.t('bottomSheetContent.notAvailableHere.subTitleText')}
-      Image={<SvgIcon Svg={outOfTerritoryIcon} height={85} width={140} />}
+      Image={<SvgIcon Svg={outOfTerritoryIcon} height={85} width={140} fill={primaryColor} />}
       fullWidthButtons
       {...props}
     />
@@ -339,7 +442,6 @@ export const ConfirmPickup = (props: any) => {
 
 export const NoPayment = (props: any) => {
   const { setSnapPointsState } = useContext(BottomSheetContext);
-  const { changeBsPage } = useContext(RideStateContextContext);
   const { requestRide, ride } = useContext(RidePageContext);
 
   const {
@@ -367,10 +469,7 @@ export const NoPayment = (props: any) => {
       TitleText={i18n.t('bottomSheetContent.noPayment.titleText')}
       ButtonText={i18n.t('bottomSheetContent.noPayment.buttonText')}
       SubTitleText={i18n.t('bottomSheetContent.noPayment.subTitleText')}
-      SecondaryButtonText={i18n.t('bottomSheetContent.noPayment.secondaryButtonText')}
-      onSecondaryButtonPress={() => {
-        changeBsPage(BS_PAGES.ADDRESS_SELECTOR);
-      }}
+      fullWidthButtons
       onButtonPress={() => {
         navigationService.navigate(MAIN_ROUTES.PAYMENT, { rideFlow: true });
       }}
@@ -381,14 +480,28 @@ export const NoPayment = (props: any) => {
 
 export const ConfirmingRide = (props: any) => {
   const { setSnapPointsState } = useContext(BottomSheetContext);
-
+  const { changeBsPage } = useContext(RideStateContextContext);
+  const { ride } = useContext(RidePageContext);
   useEffect(() => {
     setSnapPointsState(SNAP_POINT_STATES.CONFIRMING_RIDE);
   }, []);
 
+  const TitleText = ride?.scheduledTo
+    ? i18n.t('bottomSheetContent.confirmingFutureRide.titleText')
+    : i18n.t('bottomSheetContent.confirmingRide.titleText');
+
+
+  const SubTitleText = ride?.scheduledTo
+    ? i18n.t('bottomSheetContent.confirmingFutureRide.subTitleText',
+      { date: moment(ride.scheduledTo).format('MMM D, h:mm A') })
+    : null;
   return (
     <BsPage
-      TitleText={i18n.t('bottomSheetContent.confirmingRide.titleText')}
+      TitleText={TitleText}
+      SecondaryButtonText={ride?.id ? i18n.t('bottomSheetContent.confirmingRide.secondaryButtonText') : null}
+      onSecondaryButtonPress={() => changeBsPage(BS_PAGES.CANCEL_RIDE)}
+      SubTitleText={SubTitleText}
+      fullWidthButtons
       {...props}
     >
       <LoaderContainer>
@@ -406,6 +519,7 @@ export const ConfirmingRide = (props: any) => {
 
 export const NoAvailableVehicles = (props: any) => {
   const { setSnapPointsState } = useContext(BottomSheetContext);
+  const { primaryColor } = useContext(ThemeContext);
 
   useEffect(() => {
     setSnapPointsState(SNAP_POINT_STATES.NO_AVAILABLE_VEHICLES);
@@ -417,7 +531,7 @@ export const NoAvailableVehicles = (props: any) => {
       ButtonText={i18n.t('bottomSheetContent.noAvailableVehicles.buttonText')}
       SubTitleText={i18n.t('bottomSheetContent.noAvailableVehicles.subTitleText')}
       fullWidthButtons
-      Image={<SvgIcon Svg={busyImage} height={85} width={140} />}
+      Image={<SvgIcon Svg={busyImage} height={85} width={140} fill={primaryColor} />}
       {...props}
     />
   );

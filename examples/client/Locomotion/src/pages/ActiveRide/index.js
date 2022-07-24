@@ -2,8 +2,13 @@ import React, {
   useContext, useEffect, useRef, useState,
 } from 'react';
 import { useIsFocused, useFocusEffect } from '@react-navigation/native';
-import { AppState, BackHandler } from 'react-native';
-import { RIDE_STATES } from '../../lib/commonTypes';
+import { PortalProvider } from '@gorhom/portal';
+import {
+  AppState, BackHandler, Platform, View,
+} from 'react-native';
+import { FutureRidesContext } from '../../context/futureRides';
+import FutureRidesButton from '../../Components/FutureRidesButton';
+import { RIDE_STATES, STOP_POINT_TYPES } from '../../lib/commonTypes';
 import { RIDE_POPUPS } from '../../context/newRideContext/utils';
 import { UserContext } from '../../context/user';
 import {
@@ -15,12 +20,15 @@ import {
   ActiveRide,
   LocationRequest,
   CancelRide,
+  ConfirmPickupTime,
+  ConfirmFutureRide,
+  GenericError,
 } from '../../Components/BsPages';
 import { RideStateContextContext, RideStateContextContextProvider } from '../../context';
 import NewRidePageContextProvider, { RidePageContext } from '../../context/newRideContext';
 import BottomSheetContextProvider, { BottomSheetContext, SNAP_POINT_STATES } from '../../context/bottomSheetContext';
 import {
-  PageContainer,
+  PageContainer, MapOverlayButtons, BlackOverlay,
 } from './styled';
 import Header from '../../Components/Header';
 import MainMap from './newMap';
@@ -38,10 +46,19 @@ import RideCanceledPopup from '../../popups/RideCanceledPopup';
 import SquareSvgButton from '../../Components/SquareSvgButton';
 import targetIcon from '../../assets/target.svg';
 import OneSignal from '../../services/one-signal';
+import settings from '../../context/settings';
+import SETTINGS_KEYS from '../../context/settings/keys';
+import { checkVersionAndForceUpdateIfNeeded } from '../../services/VersionCheck';
+import TopMessage from './TopMessage';
+import i18n from '../../I18n';
+
+
+const BLACK_OVERLAY_SCREENS = [BS_PAGES.CANCEL_RIDE];
 
 const RidePage = ({ mapSettings, navigation }) => {
   const { locationGranted, setLocationGranted, updatePushToken } = useContext(UserContext);
   const [addressSelectorFocus, setAddressSelectorFocus] = useState(null);
+  const { getSettingByKey } = settings.useContainer();
   const mapRef = useRef();
   const bottomSheetRef = useRef(null);
   const {
@@ -61,17 +78,23 @@ const RidePage = ({ mapSettings, navigation }) => {
     setRide,
     setRequestStopPoints,
     tryServiceEstimations,
+    selectedInputIndex,
   } = useContext(RidePageContext);
   const {
-    setIsExpanded, snapPoints, isExpanded,
+    setIsExpanded, snapPoints, isExpanded, topBarText,
   } = useContext(BottomSheetContext);
   const {
     clientHasValidPaymentMethods,
+    getClientOutstandingBalanceCard,
   } = payments.useContainer();
+  const {
+    futureRides,
+  } = useContext(FutureRidesContext);
 
   const resetStateToAddressSelector = (selected = null) => {
     setServiceEstimations(null);
     setChosenService(null);
+    setRide({});
     changeBsPage(BS_PAGES.ADDRESS_SELECTOR);
     setAddressSelectorFocus(selected);
   };
@@ -85,21 +108,48 @@ const RidePage = ({ mapSettings, navigation }) => {
   };
 
   const backToMap = () => {
-    resetStateToAddressSelector();
-    initSps();
+    if (currentBsPage === BS_PAGES.SERVICE_ESTIMATIONS) {
+      resetStateToAddressSelector();
+      initSps();
+    } else if (serviceEstimations) {
+      changeBsPage(BS_PAGES.SERVICE_ESTIMATIONS);
+    } else if (currentBsPage === BS_PAGES.CONFIRM_FUTURE_RIDE) {
+      resetStateToAddressSelector();
+    } else {
+      // sorry
+      setAddressSelectorFocus(selectedInputIndex === 0
+        ? STOP_POINT_TYPES.STOP_POINT_PICKUP
+        : STOP_POINT_TYPES.STOP_POINT_DROPOFF);
+      setTimeout(() => {
+        setIsExpanded(true);
+      }, 100);
+      bottomSheetRef.current.expand();
+      changeBsPage(BS_PAGES.ADDRESS_SELECTOR);
+    }
   };
 
   const BS_PAGE_TO_COMP = {
+    [BS_PAGES.CONFIRM_FUTURE_RIDE]: () => (
+      <ConfirmFutureRide
+        onButtonPress={backToMap}
+      />
+    ),
     [BS_PAGES.CANCEL_RIDE]: () => (
       <CancelRide />
     ),
     [BS_PAGES.SERVICE_ESTIMATIONS]: () => (
       <RideOptions />
     ),
+    [BS_PAGES.CONFIRM_PICKUP_TIME]: () => (
+      <ConfirmPickupTime />
+    ),
     [BS_PAGES.LOCATION_REQUEST]: () => (
       <LocationRequest
-        onSecondaryButtonPress={goBackToAddress}
+        onSecondaryButtonPress={() => goBackToAddress(STOP_POINT_TYPES.STOP_POINT_PICKUP)}
       />
+    ),
+    [BS_PAGES.GENERIC_ERROR]: () => (
+      <GenericError />
     ),
     [BS_PAGES.NOT_IN_TERRITORY]: () => (
       <NotAvailableHere
@@ -145,16 +195,12 @@ const RidePage = ({ mapSettings, navigation }) => {
     ),
     [BS_PAGES.ACTIVE_RIDE]: () => <ActiveRide />,
   };
-
   const focusCurrentLocation = async () => {
     const location = await getPosition();
     const { coords } = (location || DEFAULT_COORDS);
-    let { latitude } = coords;
-    if (![BS_PAGES.CONFIRM_PICKUP, BS_PAGES.SET_LOCATION_ON_MAP].includes(currentBsPage)) {
-      latitude -= parseFloat(snapPoints[0]) / 10000;
-    }
     mapRef.current.animateToRegion({
-      latitude,
+      // I really don't know why this is needed, but it works
+      latitude: coords.latitude - parseFloat(50) / 10000,
       longitude: coords.longitude,
       latitudeDelta: 0.015,
       longitudeDelta: 0.015,
@@ -193,13 +239,26 @@ const RidePage = ({ mapSettings, navigation }) => {
     }, []),
   );
 
+  const versionCheck = async () => {
+    const minAppVersion = await getSettingByKey(
+      SETTINGS_KEYS.MIN_APP_VERSION,
+    );
+
+    await checkVersionAndForceUpdateIfNeeded(minAppVersion);
+  };
+
+  const initChecks = async () => {
+    await versionCheck();
+    await checkLocationPermission();
+  };
+
   useEffect(() => {
-    checkLocationPermission();
+    initChecks();
     const subscription = AppState.addEventListener('change', (nextAppState) => {
       if (
         nextAppState === 'active'
       ) {
-        checkLocationPermission();
+        initChecks();
       }
     });
 
@@ -239,58 +298,101 @@ const RidePage = ({ mapSettings, navigation }) => {
     updatePushToken();
   }, []);
 
+  const MESSAGE_MAP = {
+    OUTSTANDING_BALANCE: {
+      text: () => {
+        const creditCard = getClientOutstandingBalanceCard();
+        return i18n.t('activeRide.topMessage.outstandBalanceCreditCard', {
+          name: creditCard.name,
+        });
+      },
+      condition: () => {
+        const creditCard = getClientOutstandingBalanceCard();
+        return creditCard && currentBsPage === BS_PAGES.SERVICE_ESTIMATIONS;
+      },
+    },
+    PRECEDING_STOPS: {
+      condition: () => ride?.stopPoints && ride?.stopPoints[0]?.precedingStops?.length,
+      text: () => i18n.t('activeRide.topMessage.precedingStops'),
+    },
+  };
+
+  const topMessageKey = Object.keys(MESSAGE_MAP).find(key => MESSAGE_MAP[key].condition());
+  const topMessage = MESSAGE_MAP[topMessageKey];
+
   return (
     <PageContainer>
-      <MainMap
-        ref={mapRef}
-        mapSettings={mapSettings}
-      />
-      {!serviceEstimations
-        ? (
-          <Header
-            icon={hamburgerIcon}
-            onPressIcon={navigation.openDrawer}
-          />
-        )
-        : (
-          <Header
-            icon={backArrow}
-            onPressIcon={backToMap}
-          >
-            <StopPointsViewer goBackToAddressSelector={goBackToAddress} />
-          </Header>
-        )}
-      {!isExpanded && locationGranted && (
-        <SquareSvgButton
-          onPress={focusCurrentLocation}
-          icon={targetIcon}
-          style={{ position: 'absolute', bottom: `${parseFloat(snapPoints[0]) + 2}%`, right: 20 }}
+      <PortalProvider>
+        <MainMap
+          ref={mapRef}
+          mapSettings={mapSettings}
         />
-      )}
-      <BottomSheet
-        ref={bottomSheetRef}
-        focusCurrentLocation={focusCurrentLocation}
-      >
-        {
-          BS_PAGE_TO_COMP[currentBsPage] ? BS_PAGE_TO_COMP[currentBsPage]() : null
+        {serviceEstimations || currentBsPage === BS_PAGES.SET_LOCATION_ON_MAP
+          ? (
+            <>
+              <Header
+                icon={backArrow}
+                onPressIcon={backToMap}
+              >
+
+                <StopPointsViewer goBackToAddressSelector={goBackToAddress} />
+              </Header>
+              {topMessage ? <TopMessage text={topMessage.text()} /> : null}
+            </>
+          )
+          : (
+            <>
+              <Header
+                icon={hamburgerIcon}
+                onPressIcon={navigation.openDrawer}
+              />
+              {topMessage ? <TopMessage text={topMessage.text()} /> : null}
+            </>
+          )}
+        <MapOverlayButtons
+          style={{
+            marginBottom: topBarText ? 40 : 0,
+            bottom: parseFloat(snapPoints[0]) + 25,
+          }}
+        >
+          {currentBsPage === BS_PAGES.ADDRESS_SELECTOR
+        && !isExpanded && futureRides.length ? (
+          <FutureRidesButton />
+            ) : <View />}
+          {!isExpanded && locationGranted && (
+            <SquareSvgButton
+              onPress={focusCurrentLocation}
+              icon={targetIcon}
+              style={Platform.OS === 'android' ? { shadowColor: '#000' } : {}}
+            />
+          )}
+        </MapOverlayButtons>
+        <BottomSheet
+          ref={bottomSheetRef}
+          focusCurrentLocation={focusCurrentLocation}
+        >
+          {
+BS_PAGE_TO_COMP[currentBsPage] ? BS_PAGE_TO_COMP[currentBsPage]() : null
+          }
+        </BottomSheet>
+        {BLACK_OVERLAY_SCREENS.includes(currentBsPage) ? <BlackOverlay bottomSheetHeight={snapPoints[0]} /> : null}
+        <RideCanceledPopup
+          isVisible={ridePopup === RIDE_POPUPS.RIDE_CANCELED_BY_DISPATCHER}
+          onCancel={() => {
+            backToMap();
+            setRidePopup(null);
+            setRide({});
+          }}
+          onSubmit={() => {
+            changeBsPage(BS_PAGES.SERVICE_ESTIMATIONS);
+            setRidePopup(null);
+            const sps = getRequestSpsFromRide();
+            setRequestStopPoints(sps);
+            setRide({});
+          }
         }
-      </BottomSheet>
-      <RideCanceledPopup
-        isVisible={ridePopup === RIDE_POPUPS.RIDE_CANCELED_BY_DISPATCHER}
-        onCancel={() => {
-          backToMap();
-          setRidePopup(null);
-          setRide({});
-        }}
-        onSubmit={() => {
-          changeBsPage(BS_PAGES.SERVICE_ESTIMATIONS);
-          setRidePopup(null);
-          const sps = getRequestSpsFromRide();
-          setRequestStopPoints(sps);
-          setRide({});
-        }
-        }
-      />
+        />
+      </PortalProvider>
     </PageContainer>
   );
 };

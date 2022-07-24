@@ -4,10 +4,12 @@ import cashPaymentMethod from '../../pages/Payments/cashPaymentMethod';
 import { getByKey } from '../../context/settings/api';
 import network from '../../services/network';
 import SETTINGS_KEYS from '../settings/keys';
+import SettingContext from '../settings';
 
 const BASE_PATH = '/api/v1/me/customers';
 
 const usePayments = () => {
+  const useSettings = SettingContext.useContainer();
   const [customer, setCustomer] = useState(null);
   const [paymentMethods, setPaymentMethods] = useState([]);
 
@@ -42,17 +44,20 @@ const usePayments = () => {
     return paymentMethodsData;
   };
 
-  const clientHasValidPaymentMethods = () => paymentMethods.length > 0 && paymentMethods.some(pm => !pm.isExpired);
+  const clientHasValidPaymentMethods = () => paymentMethods.length > 0
+  && paymentMethods.some(pm => !pm.isExpired);
 
-  const getClientDefaultMethod = () => {
+  const isCashPaymentEnabled = async () => useSettings.getSettingByKey(SETTINGS_KEYS.CASH_ENABLED);
+
+  const getClientDefaultMethod = async () => {
     if (paymentMethods && paymentMethods.length) {
       return (paymentMethods || []).find(pm => pm.isDefault) || paymentMethods[0];
-    } if (isCashPaymentEnabled) {
+    }
+    const cashEnabled = await isCashPaymentEnabled();
+    if (cashEnabled) {
       return cashPaymentMethod;
     }
   };
-
-  const isCashPaymentEnabled = () => getByKey(SETTINGS_KEYS.CASH_ENABLED);
 
   const createPaymentMethod = async (paymentMethodId) => {
     const { data: paymentMethod } = await network.post(`${BASE_PATH}/${paymentMethodId}`);
@@ -63,6 +68,8 @@ const usePayments = () => {
     const { data: paymentMethod } = await network.patch(`${BASE_PATH}/${paymentMethodId}`, values);
     return paymentMethod;
   };
+
+  const getClientOutstandingBalanceCard = () => paymentMethods.find(pm => pm.hasOutstandingBalance);
 
   return {
     getCustomer,
@@ -77,6 +84,7 @@ const usePayments = () => {
     isCashPaymentEnabled,
     createPaymentMethod,
     updatePaymentMethod,
+    getClientOutstandingBalanceCard,
   };
 };
 

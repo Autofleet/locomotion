@@ -8,7 +8,7 @@ margin: 10px 0;
 text-align: center;
 `;
 export const WelcomeSubText = styled.Text`
-${FONT_SIZES.LARGE};
+${FONT_SIZES.H3};
 ${FONT_WEIGHTS.REGULAR};
 margin: 10px 0;
 text-align: center;

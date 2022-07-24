@@ -1,16 +1,15 @@
 /* eslint-disable react/prop-types */
 import React from 'react';
+import { View } from 'react-native';
 import {
-  CardContantContainer, CardTitleContainer,
-  CardContainer, CardTitle,
+  CardContentContainer, CardTitleContainer, CardTitle,
 } from '../../Components/InformationCard/styled';
 import i18n from '../../I18n';
 import {
   MethodCard,
-  ChevronIcon,
   ChangeButton,
+  PaymentCardContainer,
 } from './styled';
-import chevronIcon from '../../assets/chevron.svg';
 import { HeaderLink } from '../../Components/Menu/styled';
 
 import PaymentMethod from '../../Components/CardRow';
@@ -23,8 +22,8 @@ const Section = ({
   title,
   onPressChange = () => { console.log('no onPressChange'); },
 }) => (
-  <CardContainer>
-    <CardContantContainer>
+  <PaymentCardContainer>
+    <View>
       <CardTitleContainer>
         <CardTitle>
           {title}
@@ -40,18 +39,20 @@ const Section = ({
             : undefined}
         </HeaderLink>
       </CardTitleContainer>
-      {paymentMethods.map(paymentMethod => (
-        <MethodCard>
-          <PaymentMethod
-            {...paymentMethod}
-            onPress={() => onPress(paymentMethod)}
-          />
-          <ChevronIcon Svg={chevronIcon} stroke="#d7d7d7" style={{ marginTop: 25 }} />
-        </MethodCard>
-      ))
+      <CardContentContainer>
+        {paymentMethods.map(paymentMethod => (
+          <MethodCard>
+            <PaymentMethod
+              {...paymentMethod}
+              onPress={() => onPress(paymentMethod)}
+              showArrow
+            />
+          </MethodCard>
+        ))
       }
-    </CardContantContainer>
-  </CardContainer>
+      </CardContentContainer>
+    </View>
+  </PaymentCardContainer>
 );
 
 export default Section;

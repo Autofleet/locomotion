@@ -4,6 +4,9 @@ import React, {
 import Config from 'react-native-config';
 import { useNavigation } from '@react-navigation/native';
 import _ from 'lodash';
+import moment from 'moment';
+import i18n from '../../I18n';
+import { FutureRidesContext } from '../futureRides';
 import { UserContext } from '../user';
 import { getPosition, DEFAULT_COORDS } from '../../services/geo';
 import { getPlaces, getGeocode, getPlaceDetails } from './google-api';
@@ -16,17 +19,18 @@ import {
   formatStopPointsForEstimations,
   getEstimationTags,
   INITIAL_STOP_POINTS,
-  RIDE_POPUPS, RidePopupNames,
+  RIDE_POPUPS, RidePopupNames, RIDE_FAILED_REASONS,
 } from './utils';
 import settings from '../settings';
 import SETTINGS_KEYS from '../settings/keys';
 import { RideStateContextContext } from '../ridePageStateContext';
 import { BS_PAGES } from '../ridePageStateContext/utils';
 import { RIDE_STATES, RIDE_FINAL_STATES, STOP_POINT_TYPES } from '../../lib/commonTypes';
-import useInterval from '../../lib/useInterval';
+import useBackgroundInterval from '../../lib/useBackgroundInterval';
 import { formatSps } from '../../lib/ride/utils';
 import { APP_ROUTES, MAIN_ROUTES } from '../../pages/routes';
 import * as navigationService from '../../services/navigation';
+import { BottomSheetContext } from '../bottomSheetContext';
 
 type Dispatch<A> = (value: A) => void;
 type Nav = {
@@ -40,6 +44,7 @@ export interface RideInterface {
   notes?: string;
   paymentMethodId?: string;
   serviceId?: string;
+  scheduledTo?: string;
   driver?: any;
   stopPoints?: any[];
   vehicle?: any;
@@ -50,6 +55,8 @@ export interface RideInterface {
   payment?: any;
   canceledBy?: string;
   cancelable?: boolean;
+  createdAt?: string;
+  priceCalculationId?: string;
 }
 
 interface RidePageContextInterface {
@@ -62,7 +69,7 @@ interface RidePageContextInterface {
   setSelectedInputIndex: Dispatch<number | null>;
   selectedInputTarget: any;
   setSelectedInputTarget: Dispatch<any | null>;
-  onAddressSelected: (item: any, loadRide: boolean) => void;
+  onAddressSelected: (item: any, loadRide: boolean, index?: number) => void;
   requestStopPoints: any[];
   searchResults: any;
   searchAddress: (searchText: string) => void;
@@ -88,7 +95,7 @@ interface RidePageContextInterface {
   setRidePopup: Dispatch<RidePopupNames | null>;
   trackRide: () => Promise<string>;
   postRideSubmit: (rideId: string, ridePayload: any) => any;
-  cancelRide: () => Promise<void>;
+  cancelRide: (rideId?: string) => Promise<void>;
   getCallNumbers: () => Promise<void>;
   getRideFromApi: (rideId: string) => Promise<RideInterface>;
   setRide: Dispatch<RideInterface>;
@@ -96,6 +103,9 @@ interface RidePageContextInterface {
   validateRequestedStopPoints: (reqSps: any[]) => void;
   setRequestStopPoints: (sps: any) => void;
   tryServiceEstimations: () => Promise<void>;
+  getService: (serviceId: string) => Promise<any>;
+  getServices: () => Promise<any[]>;
+  cleanRideState: () => void;
 }
 
 export const RidePageContext = createContext<RidePageContextInterface>({
@@ -108,7 +118,7 @@ export const RidePageContext = createContext<RidePageContextInterface>({
   setSelectedInputIndex: () => undefined,
   selectedInputTarget: null,
   setSelectedInputTarget: () => undefined,
-  onAddressSelected: (item: any, loadRide: boolean) => undefined,
+  onAddressSelected: (item: any, loadRide: boolean, index?: number) => undefined,
   requestStopPoints: [],
   searchResults: [],
   searchAddress: (searchText: string) => undefined,
@@ -142,6 +152,9 @@ export const RidePageContext = createContext<RidePageContextInterface>({
   validateRequestedStopPoints: (reqSps: any[]) => undefined,
   setRequestStopPoints: (sps: any) => undefined,
   tryServiceEstimations: async () => undefined,
+  getService: async (serviceId: string) => ({}),
+  getServices: async () => [],
+  cleanRideState: () => undefined,
 });
 
 const HISTORY_RECORDS_NUM = 10;
@@ -151,7 +164,9 @@ const RidePageContextProvider = ({ children }: {
 }) => {
   const { locationGranted, user } = useContext(UserContext);
   const navigation = useNavigation<Nav>();
-  const { checkStopPointsInTerritory, changeBsPage } = useContext(RideStateContextContext);
+  const { setGenericErrorDetails } = useContext(BottomSheetContext);
+  const { checkStopPointsInTerritory, changeBsPage, currentBsPage } = useContext(RideStateContextContext);
+  const { setNewFutureRide, loadFutureRides } = useContext(FutureRidesContext);
   const [requestStopPoints, setRequestStopPoints] = useState(INITIAL_STOP_POINTS);
   const [currentGeocode, setCurrentGeocode] = useState<any | null>(null);
   const [searchTerm, setSearchTerm] = useState<string | null>(null);
@@ -182,16 +197,22 @@ const RidePageContextProvider = ({ children }: {
   };
 
   const RIDE_STATES_TO_SCREENS = {
-    [RIDE_STATES.PENDING]: () => { changeBsPage(BS_PAGES.CONFIRMING_RIDE); },
-    [RIDE_STATES.MATCHING]: () => { changeBsPage(BS_PAGES.CONFIRMING_RIDE); },
+    [RIDE_STATES.PENDING]: () => {
+      changeBsPage(BS_PAGES.CONFIRMING_RIDE);
+    },
+    [RIDE_STATES.MATCHING]: (matchingRide: RideInterface) => {
+      setRide(matchingRide);
+      changeBsPage(BS_PAGES.CONFIRMING_RIDE);
+    },
     [RIDE_STATES.REJECTED]: () => { changeBsPage(BS_PAGES.NO_AVAILABLE_VEHICLES); },
     [RIDE_STATES.COMPLETED]: (completedRide: any) => {
       navigation.navigate(MAIN_ROUTES.POST_RIDE, { rideId: completedRide.id });
       changeBsPage(BS_PAGES.ADDRESS_SELECTOR);
       cleanRideState();
     },
-    [RIDE_STATES.DISPATCHED]: () => {
+    [RIDE_STATES.DISPATCHED]: (newRide: any) => {
       cleanRequestStopPoints();
+      setRide(newRide);
       changeBsPage(BS_PAGES.ACTIVE_RIDE);
     },
     [RIDE_STATES.ACTIVE]: () => {
@@ -205,6 +226,10 @@ const RidePageContextProvider = ({ children }: {
         cleanRideState();
         changeBsPage(BS_PAGES.ADDRESS_SELECTOR);
       }
+    },
+    [RIDE_STATES.FAILED]: () => {
+      setRidePopup(RIDE_POPUPS.RIDE_CANCELED_BY_DISPATCHER);
+      cleanRideState();
     },
   };
 
@@ -232,26 +257,38 @@ const RidePageContextProvider = ({ children }: {
         && estimationForService.results[0];
       return formatEstimationsResult(service, estimationResult, tags);
     });
-    return formattedServices.sort((a, b) => a.priority - b.priority);
+
+    return formattedServices.sort((a, b) => {
+      if (
+        (a.serviceAvailabilitiesNumber !== 0 && b.serviceAvailabilitiesNumber !== 0)
+        || (a.serviceAvailabilitiesNumber === 0 && b.serviceAvailabilitiesNumber === 0)
+      ) {
+        return a.priority - b.priority;
+      }
+
+      return a.serviceAvailabilitiesNumber === 0 ? -1 : 1;
+    });
   };
 
-  const getServiceEstimations = async () => {
+  const getServiceEstimations = async (throwError = true) => {
     changeBsPage(BS_PAGES.SERVICE_ESTIMATIONS);
     try {
       const formattedStopPoints = formatStopPointsForEstimations(requestStopPoints);
-      const [estimations, services] = await Promise.all([
-        rideApi.createServiceEstimations(formattedStopPoints),
-        rideApi.getServices(),
-      ]);
+      const { estimations, services } = await rideApi.createServiceEstimations(formattedStopPoints, ride.scheduledTo);
       const tags = getEstimationTags(estimations);
       const formattedEstimations = formatEstimations(services, estimations, tags);
       setChosenService(formattedEstimations.find((e: any) => e.eta));
       setServiceEstimations(formattedEstimations);
     } catch (e) {
-      setRidePopup(RIDE_POPUPS.FAILED_SERVICE_REQUEST);
+      if (throwError) {
+        setRidePopup(RIDE_POPUPS.FAILED_SERVICE_REQUEST);
+      }
     }
   };
 
+  const getService = async (serviceId: string) => rideApi.getService(serviceId);
+
+  const getServices = async () => rideApi.getServices();
 
   const getServiceEstimationsFetchingInterval = () => getSettingByKey(
     SETTINGS_KEYS.SERVICE_ESTIMATIONS_INTERVAL_IN_SECONDS,
@@ -262,7 +299,7 @@ const RidePageContextProvider = ({ children }: {
     await getServiceEstimations();
     intervalRef.current = setInterval(async () => {
       if (intervalRef.current) {
-        await getServiceEstimations();
+        await getServiceEstimations(false);
       }
     }, ((serviceEstimationsInterval || 60) * 1000));
   };
@@ -285,8 +322,10 @@ const RidePageContextProvider = ({ children }: {
     const activeRide = await rideApi.getActiveRide();
     if (activeRide) {
       const formattedRide = await formatRide(activeRide);
-      setRide(formattedRide);
-      changeBsPage(BS_PAGES.ACTIVE_RIDE);
+      const screenFunction = RIDE_STATES_TO_SCREENS[formattedRide?.state || ''];
+      if (screenFunction) {
+        screenFunction(formattedRide);
+      }
     } else {
       cleanRideState();
       changeBsPage(BS_PAGES.ADDRESS_SELECTOR);
@@ -299,7 +338,7 @@ const RidePageContextProvider = ({ children }: {
     }
   }, []);
 
-  useInterval(async () => {
+  useBackgroundInterval(async () => {
     if (user?.id && !rideRequestLoading) {
       if (ride?.id) {
         try {
@@ -415,8 +454,9 @@ const RidePageContextProvider = ({ children }: {
 
   const updateRequestSp = (data: any[], index?: number) => {
     const reqSps = [...requestStopPoints];
-    index = index
-    || (_.isNil(selectedInputIndex) ? requestStopPoints.length - 1 : selectedInputIndex);
+    if (_.isNil(index)) {
+      index = (_.isNil(selectedInputIndex) ? requestStopPoints.length - 1 : selectedInputIndex);
+    }
     reqSps[index || 0] = {
       ...reqSps[index || 0],
       ...data,
@@ -467,14 +507,14 @@ const RidePageContextProvider = ({ children }: {
     }
   };
 
-  const onAddressSelected = async (selectedItem: any, loadRide: boolean) => {
+  const onAddressSelected = async (selectedItem: any, loadRide: boolean, index?: number) => {
     if (selectedItem.isLoading) {
       return null;
     }
     const enrichedPlace = await enrichPlaceWithLocation(selectedItem.placeId);
     const reqSps = [...requestStopPoints];
-    reqSps[selectedInputIndex || 0] = {
-      ...reqSps[selectedInputIndex || 0],
+    reqSps[index || selectedInputIndex || 0] = {
+      ...reqSps[index || selectedInputIndex || 0],
       description: selectedItem.fullText,
       streetAddress: selectedItem.text,
       placeId: selectedItem.placeId,
@@ -511,12 +551,19 @@ const RidePageContextProvider = ({ children }: {
     }
   };
 
-  const parseSearchResults = (results: any[]) => results.map(r => ({
-    text: r.structured_formatting.main_text,
-    subText: r.structured_formatting.secondary_text,
-    fullText: `${r.structured_formatting.main_text}, ${r.structured_formatting.secondary_text}`,
-    placeId: r.place_id,
-  }));
+  const parseSearchResults = (results: any[]) => results.map((r) => {
+    let formatedAddress = r.structured_formatting.main_text;
+    if (r.structured_formatting.secondary_text) {
+      formatedAddress = `${formatedAddress}, ${r.structured_formatting.secondary_text}`;
+    }
+
+    return {
+      text: r.structured_formatting.main_text,
+      subText: r.structured_formatting.secondary_text,
+      fullText: formatedAddress,
+      placeId: r.place_id,
+    };
+  });
 
   const saveLastAddresses = async (item: any) => {
     const history: any[] = await getLastAddresses();
@@ -533,6 +580,67 @@ const RidePageContextProvider = ({ children }: {
   const loadHistory = async () => {
     const history = await getLastAddresses();
     setHistoryResults(history);
+  };
+
+  const FAILED_TO_CREATE_RIDE_ACTIONS = {
+    [RIDE_FAILED_REASONS.BUSY]: () => { changeBsPage(BS_PAGES.NO_AVAILABLE_VEHICLES); },
+    [RIDE_FAILED_REASONS.USER_FUTURE_RIDE_INTERVAL_LIMIT_REACHED]: () => {
+      setGenericErrorDetails({
+        titleText: i18n.t('bottomSheetContent.futureRideLimit.titleText'),
+        buttonText: i18n.t('bottomSheetContent.futureRideLimit.buttonText'),
+        subTitleText: i18n.t('bottomSheetContent.futureRideLimit.subTitleText'),
+        buttonPress: () => {
+          tryServiceEstimations();
+          changeBsPage(BS_PAGES.SERVICE_ESTIMATIONS);
+        },
+      });
+      changeBsPage(BS_PAGES.GENERIC_ERROR);
+    },
+    // mocks for now
+    [RIDE_FAILED_REASONS.USER_HAS_OUTSTANDING_BALANCE]: () => {
+      setGenericErrorDetails({
+        titleText: i18n.t('bottomSheetContent.outstandingBalance.titleText'),
+        buttonText: i18n.t('bottomSheetContent.outstandingBalance.buttonText'),
+        subTitleText: i18n.t('bottomSheetContent.outstandingBalance.subTitleText'),
+        buttonPress: () => {
+          changeBsPage(BS_PAGES.SERVICE_ESTIMATIONS);
+        },
+      });
+      changeBsPage(BS_PAGES.GENERIC_ERROR);
+    },
+    [RIDE_FAILED_REASONS.CASH_NOT_ALLOWED]: () => {
+      setGenericErrorDetails({
+        titleText: i18n.t('bottomSheetContent.outstandingBalance.titleText'),
+        buttonText: i18n.t('bottomSheetContent.outstandingBalance.buttonText'),
+        subTitleText: i18n.t('bottomSheetContent.outstandingBalance.subTitleText'),
+        buttonPress: () => {
+          changeBsPage(BS_PAGES.SERVICE_ESTIMATIONS);
+        },
+      });
+      changeBsPage(BS_PAGES.GENERIC_ERROR);
+    },
+    [RIDE_FAILED_REASONS.PAYMENT_METHOD_EXPIRED]: () => {
+      setGenericErrorDetails({
+        titleText: i18n.t('bottomSheetContent.outstandingBalance.titleText'),
+        buttonText: i18n.t('bottomSheetContent.outstandingBalance.buttonText'),
+        subTitleText: i18n.t('bottomSheetContent.outstandingBalance.subTitleText'),
+        buttonPress: () => {
+          changeBsPage(BS_PAGES.SERVICE_ESTIMATIONS);
+        },
+      });
+      changeBsPage(BS_PAGES.GENERIC_ERROR);
+    },
+    [RIDE_FAILED_REASONS.COULD_NOT_CREATE_PAYMENT_INTENT]: () => {
+      setGenericErrorDetails({
+        titleText: i18n.t('bottomSheetContent.outstandingBalance.titleText'),
+        buttonText: i18n.t('bottomSheetContent.outstandingBalance.buttonText'),
+        subTitleText: i18n.t('bottomSheetContent.outstandingBalance.subTitleText'),
+        buttonPress: () => {
+          changeBsPage(BS_PAGES.SERVICE_ESTIMATIONS);
+        },
+      });
+      changeBsPage(BS_PAGES.GENERIC_ERROR);
+    },
   };
 
   const requestRide = async (pickupLocation?: any): Promise<void> => {
@@ -552,6 +660,7 @@ const RidePageContextProvider = ({ children }: {
       serviceId: chosenService?.id,
       paymentMethodId: ride.paymentMethodId,
       rideType: 'passenger',
+      ...(ride.scheduledTo && { scheduledTo: ride.scheduledTo }),
       stopPoints: stopPoints.map((sp, i) => ({
         lat: Number(sp.lat),
         lng: Number(sp.lng),
@@ -563,12 +672,23 @@ const RidePageContextProvider = ({ children }: {
     try {
       const afRide = await rideApi.createRide(rideToCreate);
       if (afRide.state === RIDE_STATES.REJECTED) {
-        throw new Error();
+        throw new Error(RIDE_FAILED_REASONS.BUSY);
       }
-      const formattedRide = await formatRide(afRide);
-      setRide(formattedRide);
-    } catch (e) {
-      changeBsPage(BS_PAGES.NO_AVAILABLE_VEHICLES);
+      if (afRide.scheduledTo) {
+        loadFutureRides();
+        setNewFutureRide(afRide);
+        changeBsPage(BS_PAGES.CONFIRM_FUTURE_RIDE);
+      } else {
+        const formattedRide = await formatRide(afRide);
+        setRide(formattedRide);
+      }
+    } catch (e: any) {
+      const key = e.message || e.response?.data?.errors[0];
+      if (FAILED_TO_CREATE_RIDE_ACTIONS[key]) {
+        FAILED_TO_CREATE_RIDE_ACTIONS[key]();
+      } else {
+        FAILED_TO_CREATE_RIDE_ACTIONS[RIDE_FAILED_REASONS.BUSY]();
+      }
     } finally {
       setRideRequestLoading(false);
     }
@@ -630,10 +750,6 @@ const RidePageContextProvider = ({ children }: {
       tip ? chargeTip(priceCalculationId, tip) : () => null,
       rating ? patchRideRating(rideId, rating) : () => null,
     ]);
-
-    cleanRideState();
-    navigationService.navigate(MAIN_ROUTES.HOME, {}, APP_ROUTES.MAIN_APP);
-    changeBsPage(BS_PAGES.ADDRESS_SELECTOR);
     return true;
   };
 
@@ -656,8 +772,8 @@ const RidePageContextProvider = ({ children }: {
   };
 
 
-  const cancelRide = async () => {
-    await rideApi.cancelRide(ride?.id);
+  const cancelRide = async (rideId?: string) => {
+    await rideApi.cancelRide(rideId || ride?.id);
   };
 
   const getCallNumbers = async () => {
@@ -733,6 +849,9 @@ const RidePageContextProvider = ({ children }: {
         validateRequestedStopPoints,
         setRequestStopPoints,
         tryServiceEstimations,
+        getService,
+        getServices,
+        cleanRideState,
       }}
     >
       {children}

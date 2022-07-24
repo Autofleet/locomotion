@@ -35,6 +35,9 @@ export const Header = styled.View`
   flex-direction: row;
   justify-content: space-between;
   position: relative;
+  elevation: 10;
+  box-shadow: 0px 5px 5px rgba(0,0,0,0.05);
+  z-index: 999;
 `;
 
 export const SkipButton = styled(Button)`

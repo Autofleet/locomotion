@@ -3,6 +3,18 @@ import shortid from 'shortid';
 import i18n from '../../I18n';
 import { getGeocode } from './google-api';
 
+export const RIDE_FAILED_REASONS = {
+  BUSY: 'BUSY',
+  USER_FUTURE_RIDE_INTERVAL_LIMIT_REACHED: 'USER_FUTURE_RIDE_INTERVAL_LIMIT_REACHED',
+  USER_HAS_OUTSTANDING_BALANCE: 'USER_HAS_OUTSTANDING_BALANCE',
+  CASH_NOT_ALLOWED: 'CASH_NOT_ALLOWED',
+  PAYMENT_METHOD_EXPIRED: 'PAYMENT_METHOD_EXPIRED',
+  COULD_NOT_CREATE_PAYMENT_INTENT: 'COULD_NOT_CREATE_PAYMENT_INTENT',
+};
+
+export const getFutureRideMinDate = () => moment().add(60, 'minutes').toDate();
+export const getFutureRideMaxDate = () => moment().add(7, 'days').toDate();
+
 export const TAG_OPTIONS = {
   FASTEST: i18n.t('services.tags.fastest'),
   CHEAPEST: i18n.t('services.tags.cheapest'),
@@ -114,6 +126,7 @@ export const formatEstimationsResult = (service: any, estimationResult: any, tag
     iconUrl: service.icon,
     description: service.displayDescription,
     priority: service.priority,
+    serviceAvailabilitiesNumber: service.serviceAvailabilities.length,
   };
 };
 
@@ -128,4 +141,13 @@ export const getFormattedPrice = (priceCurrency: string, priceAmount: number) =>
     return i18n.t('rideDetails.noCharge');
   }
   return new Intl.NumberFormat('en-IN', { style: 'currency', currency: (priceCurrency) }).format(priceAmount);
+};
+
+
+export const getCurrencySymbol = (priceCurrency: string) => {
+  if (!priceCurrency) {
+    return '';
+  }
+  const currency = new Intl.NumberFormat('en-IN', { style: 'currency', currency: (priceCurrency) }).format(0);
+  return currency[0];
 };

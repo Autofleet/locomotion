@@ -310,6 +310,8 @@ PODS:
   - React-jsinspector (0.68.1)
   - React-logger (0.68.1):
     - glog
+  - react-native-background-timer (2.4.1):
+    - React-Core
   - react-native-carrier-info (1.1.2):
     - React
   - react-native-config (1.4.6):
@@ -417,6 +419,8 @@ PODS:
     - React-perflogger (= 0.68.1)
   - RNCAsyncStorage (1.17.6):
     - React-Core
+  - RNCClipboard (1.5.1):
+    - React-Core
   - RNCPicker (2.4.2):
     - React-Core
   - RNDateTimePicker (6.1.3):
@@ -521,6 +525,7 @@ DEPENDENCIES:
   - React-jsiexecutor (from `../node_modules/react-native/ReactCommon/jsiexecutor`)
   - React-jsinspector (from `../node_modules/react-native/ReactCommon/jsinspector`)
   - React-logger (from `../node_modules/react-native/ReactCommon/logger`)
+  - react-native-background-timer (from `../node_modules/react-native-background-timer`)
   - react-native-carrier-info (from `../node_modules/react-native-carrier-info`)
   - react-native-config (from `../node_modules/react-native-config`)
   - react-native-date-picker (from `../node_modules/react-native-date-picker`)
@@ -549,6 +554,7 @@ DEPENDENCIES:
   - React-runtimeexecutor (from `../node_modules/react-native/ReactCommon/runtimeexecutor`)
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
   - "RNCAsyncStorage (from `../node_modules/@react-native-async-storage/async-storage`)"
+  - "RNCClipboard (from `../node_modules/@react-native-community/clipboard`)"
   - "RNCPicker (from `../node_modules/@react-native-picker/picker`)"
   - "RNDateTimePicker (from `../node_modules/@react-native-community/datetimepicker`)"
   - RNDeviceInfo (from `../node_modules/react-native-device-info`)
@@ -630,6 +636,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/jsinspector"
   React-logger:
     :path: "../node_modules/react-native/ReactCommon/logger"
+  react-native-background-timer:
+    :path: "../node_modules/react-native-background-timer"
   react-native-carrier-info:
     :path: "../node_modules/react-native-carrier-info"
   react-native-config:
@@ -686,6 +694,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon"
   RNCAsyncStorage:
     :path: "../node_modules/@react-native-async-storage/async-storage"
+  RNCClipboard:
+    :path: "../node_modules/@react-native-community/clipboard"
   RNCPicker:
     :path: "../node_modules/@react-native-picker/picker"
   RNDateTimePicker:
@@ -748,6 +758,7 @@ SPEC CHECKSUMS:
   React-jsiexecutor: 4a4bae5671b064a2248a690cf75957669489d08c
   React-jsinspector: 218a2503198ff28a085f8e16622a8d8f507c8019
   React-logger: f79dd3cc0f9b44f5611c6c7862badd891a862cf8
+  react-native-background-timer: 117fffdc9b0d6f144444bb49029f94275a45fdb5
   react-native-carrier-info: 1e6299256bd7ceaa36f851b30e071b2b4fc406ad
   react-native-config: 7cd105e71d903104e8919261480858940a6b9c0e
   react-native-date-picker: 9088350e06918f7d842a34c171acadc66583cb94
@@ -776,6 +787,7 @@ SPEC CHECKSUMS:
   React-runtimeexecutor: 7285b499d0339104b2813a1f58ad1ada4adbd6c0
   ReactCommon: bf2888a826ceedf54b99ad1b6182d1bc4a8a3984
   RNCAsyncStorage: 86050d31a1cdc564876f68d8e342688b29f9b186
+  RNCClipboard: 5e299c6df8e0c98f3d7416b86ae563d3a9f768a3
   RNCPicker: 0250e95ad170569a96f5b0555cdd5e65b9084dca
   RNDateTimePicker: 47ab186e06826a4af7051b8a8199fac9477f339e
   RNDeviceInfo: af47a7d1a09d64c8cbb8b0c883db9bca422a9813
@@ -796,6 +808,6 @@ SPEC CHECKSUMS:
   StripeUICore: a8e24a6c91a5c99075c7a490d45695fb912876e8
   Yoga: 17cd9a50243093b547c1e539c749928dd68152da
 
-PODFILE CHECKSUM: d859fddd9dce5c4590211de172a11ed2517eef69
+PODFILE CHECKSUM: 50539d97ec8b96690bc9018577cef6dd28ad1580
 
 COCOAPODS: 1.11.3

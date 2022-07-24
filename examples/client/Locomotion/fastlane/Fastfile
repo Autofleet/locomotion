@@ -14,30 +14,213 @@
 # update_fastlane
 
 lane :generate do
-  Fastlane::LaneManager.cruise_lane("ios", "icons")
-  Fastlane::LaneManager.cruise_lane("android", "icons")
+    Fastlane::LaneManager.cruise_lane("ios", "icons")
+    Fastlane::LaneManager.cruise_lane("android", "icons")
+  end
+
+def get_version(type, version)
+  oldArr = version.split('.').map{|v| v.to_i}
+  if type == "patch"
+    version = "#{oldArr[0]}.#{oldArr[1]}.#{oldArr[2] + 1}"
+  elsif type == "minor"
+      version = "#{oldArr[0]}.#{oldArr[1] + 1}.0"
+  elsif type == "major"
+      version = "#{oldArr[0] + 1}.0.0"
+  end
+
+  version
+end
+
+def get_google_version_code(track, json_key, package_name)
+  v = google_play_track_version_codes(
+    track: track, 
+    package_name: package_name,
+    json_key: json_key
+  )
+
+  if v.empty? then
+    v = nil
+  else
+    v = v[0]
+  end
+
+  v
+end
+
+def get_google_play_version_code(json_key, package_name)
+  v = get_google_version_code('beta', json_key, package_name)
+
+  if v.nil? then
+    v = get_google_version_code('production', json_key, package_name)
+  end
+
+  if v.nil? then
+    v = 1
+  end
+  v
+end
+
+def get_android_udid()
+  devices = (sh 'adb devices').split("\n")
+  uuid = devices[1].split(" ")[0]
+end
+
+def build_source_map(platform)
+  sh "cd .. && react-native bundle --platform #{platform} --dev false --entry-file index.js --bundle-output #{platform}-release.bundle --sourcemap-output #{platform}-release.bundle.map"
 end
 
 platform :ios do
-  desc "Generate new icons assets"
-  lane :icons do
-    appicon(
-      appicon_devices: [:iphone, :ios_marketing],
-      appicon_path: "./ios/Locomotion/Images.xcassets/",
-      appicon_image_file: './fastlane/assets/app-icon.png'
-    )
+
+  desc "Update identifier"
+  lane :update_identifier do |options|
+  
+  update_app_identifier(
+    xcodeproj: "ios/Locomotion.xcodeproj", # Optional path to xcodeproj, will use the first .xcodeproj if not set
+    plist_path: "Locomotion/Info.plist", # Path to info plist file, relative to xcodeproj
+    app_identifier: options[:identifier], # The App Identifier
+  )
+  set_info_plist_value(
+    path: "ios/Locomotion/Info.plist",
+    key: "CFBundleDisplayName", 
+    value: options[:display_name]
+  )
   end
 
+  desc "bump version"
+  lane :bump do |options|
+    xcodeproj = "./ios/driver_app.xcodeproj"
+    workspace = "./ios/driver_app.xcworkspace"
+    new_version = options[:version]
+
+    api_key = app_store_connect_api_key(
+      key_id: options[:key_id],
+      issuer_id: options[:issuer_id],
+      key_content: options[:key_content],
+    )
+
+    last_build_number = latest_testflight_build_number(version: new_version, initial_build_number: 0)
+    build_number = last_build_number + 1
+
+    increment_build_number(xcodeproj: xcodeproj, build_number: build_number)
+    increment_version_number(xcodeproj: xcodeproj, version_number: new_version )
+  end
+  desc "update app name"
+  lane :name do |options|
+    set_info_plist_value(
+      path: "./ios/Locomotion/Info.plist",
+      key: "CFBundleDisplayName", 
+      value: options[:new_name]
+    )
+  end
+  desc "set version"
+  lane :set_version do |options|
+      xcodeproj = "./ios/Locomotion.xcodeproj"
+      workspace = "./ios/Locomotion.xcworkspace"
+      new_version = options[:version]
+      
+      increment_version_number(xcodeproj: xcodeproj, version_number: new_version )
+  end
 end
 
 platform :android do
+
+  
   desc "Generate new icons assets"
-  lane :icons do
-    android_appicon(
-      appicon_image_file: './fastlane/assets/app-icon.png',
-      appicon_icon_types: [:launcher],
-      appicon_path: './android/app/src/main/res/mipmap'
+  lane :icons do |options|
+      android_appicon(
+        appicon_image_file: './fastlane/assets/app-icon.png',
+        appicon_icon_types: [:launcher, :splash_port, :splash_land],
+        generate_rounded: true,
+        appicon_path: './app-android/android/app/src/main/res/mipmap'
+      )
+  end
+
+  desc "Generate new app name"
+  lane :name do |options|
+    android_change_app_name(newName: options[:new_name], manifest: "./app-android/android/app/src/main/AndroidManifest.xml")
+  end
+    
+  desc "Build apk"
+  lane :build_apk do |options|
+    sh 'cd ../app-android/android && ./gradlew app:assembleRelease --stacktrace' 
+  end
+
+  lane :build_bundle do |options|
+    sh 'cd ../app-android/android && ./gradlew app:bundleRelease'
+  end
+
+  lane :build_releases do |options|
+    build_apk
+    build_bundle
+  end
+
+  lane :bump_version do |options|
+    gradle_file = './app-android/android/app/build.gradle'
+    json_key = './app-android/android/app/playstore-auth.json'
+    version  = options[:version]
+    version_code_number = get_google_play_version_code(json_key, options[:package_name]) + 1
+
+    puts ENV['IOS_KEY_ID']
+    puts ENV['IOS_ISSUER_ID']
+    android_set_version_name(
+      version_name: version,
+      gradle_file: gradle_file
+    )
+
+    android_set_version_code(
+      version_code: version_code_number,
+      gradle_file: gradle_file
     )
   end
 
+  desc "Submit a new Beta Build to Crashlytics Beta"
+  lane :beta_release do |options|
+    ensure_git_status_clean
+
+    bump_version(type: options[:bump])
+    build_apk
+    test
+    git_commit(path: [gradle_file], message: "Android Version Bump #{version}-#{version_code_number}")
+    build_bundle
+    release_android
+    add_git_tag(
+      tag: version
+    )
+
+  end
+  
+  lane :release_android do |options|
+    json_key = './app-android/android/app/playstore-auth.json'
+    upload_to_play_store(
+    track: options[:type] == 'production' ? 'production' : 'beta',
+    release_status: "completed",
+    json_key: json_key,
+    package_name: options[:package_name],
+    aab: options[:aab_path] || './app-android/android/app/build/outputs/bundle/release/app-release.aab',
+    skip_upload_screenshots: true,
+    skip_upload_metadata: true,
+    skip_upload_images: true,
+    skip_upload_apk: true
+  )
+  end
+
+  desc "Testing android device"
+  lane :test do |options|
+    wdfile = options[:config] || "wdio"
+    sh "cd .. && ./node_modules/.bin/wdio ./#{wdfile}.conf.js --suite vaas"
+    sh "cd .. && ./node_modules/.bin/wdio ./#{wdfile}.conf.js --suite raas"
+  end
+
+  lane :build_and_release do |options|
+    build_bundle
+    release_android(type: options[:type], package_name: options[:package_name])
+  end
+
+
 end
+
+lane :upload_source_map do |options|
+  build_source_map(options[:platform])
+  upload_source_map(options[:platform], options[:version])
+end
+

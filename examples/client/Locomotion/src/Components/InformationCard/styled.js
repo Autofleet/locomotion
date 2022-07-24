@@ -1,7 +1,8 @@
 import styled from 'styled-components';
 import Button from '../Button';
-import ArrowIconSource from '../../assets/arrowright.png';
+import ArrowIconSource from '../../assets/chevron.svg';
 import { FONT_SIZES, FONT_WEIGHTS } from '../../context/theme';
+import SvgIcon from '../SvgIcon';
 
 export const ErrorText = styled.Text`
   color: #cc0d28;
@@ -63,12 +64,12 @@ export const ArrowContainer = styled.View`
   align-items: center;
 `;
 
-export const Arrow = styled.Image.attrs({ source: ArrowIconSource })`
-  opacity: 0.4;
-  width: 10px;
-  height: 10px;
-  padding: 5px 10px;
-`;
+export const Arrow = styled(SvgIcon).attrs({
+  Svg: ArrowIconSource,
+  stroke: '#d7d7d7',
+  width: 15,
+  height: 15,
+})``;
 
 
 export const CardsContainer = styled.View`
@@ -76,13 +77,13 @@ export const CardsContainer = styled.View`
   height: auto;
 `;
 
-export const CardContantContainer = styled.View`
+export const CardContentContainer = styled.View`
   width: 90%;
 `;
 
 export const CardsTitle = styled.Text`
   width: 100%;
-  ${FONT_SIZES.MEDIUM};
+  ${FONT_SIZES.H3};
   ${FONT_WEIGHTS.BOLD};
   color: #333333;
   padding: 30px 10px 15px;

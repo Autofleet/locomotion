@@ -1,16 +1,28 @@
 import React from 'react';
 import propsTypes from 'prop-types';
-import { View } from 'react-native';
+import { Platform, View } from 'react-native';
 import {
   Header, HeaderText, HeaderIconContainer, HeaderIcon, SkipButton, SkipButtonText,
 } from './styled';
 import i18n from '../../I18n';
 import backArrow from '../../assets/arrow-back.png';
 
+interface PageHeaderProps {
+  title: string,
+  icon?: any,
+  onIconPress?: () => void,
+  iconSide?: 'right' | 'left',
+  displayIcon?: boolean,
+  width?: number,
+  showSkipButton?: boolean,
+  onPressSkip?: () => void,
+  action?: any,
+}
+
 const PageHeader = ({
   title, icon, onIconPress, iconSide, displayIcon, width, showSkipButton, onPressSkip, action,
-}) => (
-  <Header>
+}: PageHeaderProps) => (
+  <Header style={Platform.OS === 'android' ? { shadowColor: '#000' } : {}}>
     {displayIcon !== false
       ? (
         <HeaderIconContainer side={iconSide} onPress={onIconPress} data-test-id="NavigationPanelButton">
@@ -38,19 +50,12 @@ const PageHeader = ({
 export default PageHeader;
 
 PageHeader.defaultProps = {
-  title: '',
   icon: backArrow,
   iconSide: 'left',
   onIconPress: () => null,
-  height: '25px',
   width: '25px',
-};
-
-PageHeader.propTypes = {
-  title: propsTypes.string,
-  icon: propsTypes.string,
-  iconSide: propsTypes.string,
-  onIconPress: propsTypes.func,
-  width: propsTypes.string,
-  height: propsTypes.string,
+  displayIcon: true,
+  showSkipButton: false,
+  onPressSkip: null,
+  action: null,
 };

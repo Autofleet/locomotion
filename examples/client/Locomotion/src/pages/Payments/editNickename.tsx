@@ -5,12 +5,13 @@ import { MAIN_ROUTES } from '../routes';
 import PaymentsContext from '../../context/payments';
 import TextInput from '../../Components/TextInput';
 import {
-  ErrorText, PageContainer, SafeView, InputContainer,
+  ErrorText, InputContainer,
 } from '../Profile/styles';
 import i18n from '../../I18n';
 import Header from '../Profile/Header';
 import ScreenText from '../Profile/ScreenText';
 import SaveButton from '../Profile/SaveButton';
+import { ContentContainer, PageContainer } from '../styles';
 
 type Params = {
   name: string,
@@ -35,10 +36,10 @@ const EditCardName = ({ navigation } : any) => {
   };
 
   return (
-    <SafeView>
-      <ScrollView keyboardShouldPersistTaps="handled">
+    <ScrollView keyboardShouldPersistTaps="handled">
+      <PageContainer>
         <Header title={i18n.t('onboarding.pages.name.title')} showSkipButton={false} />
-        <PageContainer>
+        <ContentContainer>
           <ScreenText
             text={i18n.t('payments.setCardName')}
             subText={undefined}
@@ -63,9 +64,9 @@ const EditCardName = ({ navigation } : any) => {
             buttonText="Save"
             isLoading={undefined}
           />
-        </PageContainer>
-      </ScrollView>
-    </SafeView>
+        </ContentContainer>
+      </PageContainer>
+    </ScrollView>
   );
 };
 

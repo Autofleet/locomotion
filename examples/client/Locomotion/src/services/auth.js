@@ -1,9 +1,8 @@
 /* eslint-disable class-methods-use-this */
 import jwtDecode from 'jwt-decode';
-import RNRestart from 'react-native-restart';
+import { DevSettings } from 'react-native';
 import StorageService from './storage';
 import AppSettings from './app-settings';
-import { MAIN_ROUTES } from '../pages/routes';
 
 class Auth {
   static jwtVerify(token) {
@@ -42,7 +41,7 @@ class Auth {
     return accessToken;
   };
 
-  logout = async (navigation) => {
+  logout = async () => {
     // TODO: call server on logout
     // try {
     //   await network.post('api/v1/me/logout')
@@ -50,9 +49,7 @@ class Auth {
     //   console.log('Bad logout request', e)
     // }
     await AppSettings.destroy();
-    navigation.popToTop();
-    navigation.replace(MAIN_ROUTES.START);
-    RNRestart.Restart();
+    DevSettings.reload();
   };
 
   onFaildAuth(cb) {

@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import { LogBox } from 'react-native';
 import Config from 'react-native-config';
+import { enableScreens } from 'react-native-screens';
 import { initStripe } from '@stripe/stripe-react-native';
 import 'react-native-gesture-handler';
 import crashlytics from '@react-native-firebase/crashlytics';
@@ -11,6 +12,7 @@ import RidePopups from './popups/RidePopups';
 import { setTopLevelNavigator } from './services/navigation';
 import NewRidePageContextProvider from './context/newRideContext';
 import BottomSheetContextProvider from './context/bottomSheetContext';
+import FutureRidesProvider from './context/futureRides';
 
 LogBox.ignoreAllLogs();
 const STRIPE_PUBLISHER_KEY = Config.STRIPE_PUBLISHER_KEY || '';
@@ -24,6 +26,7 @@ export default (props) => {
       publishableKey: STRIPE_PUBLISHER_KEY,
       merchantIdentifier: 'merchant.identifier',
     });
+    enableScreens(false);
   }, []);
 
   return (
@@ -38,11 +41,13 @@ export default (props) => {
       <MainProvider {...props}>
         <BottomSheetContextProvider {...props}>
           <RideStateContextContextProvider {...props}>
-            <NewRidePageContextProvider {...props}>
-              <MainRouter {...props} />
-              {props.children}
-              <RidePopups />
-            </NewRidePageContextProvider>
+            <FutureRidesProvider {...props}>
+              <NewRidePageContextProvider {...props}>
+                <MainRouter {...props} />
+                {props.children}
+                <RidePopups />
+              </NewRidePageContextProvider>
+            </FutureRidesProvider>
           </RideStateContextContextProvider>
         </BottomSheetContextProvider>
       </MainProvider>

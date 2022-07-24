@@ -6,3 +6,7 @@ export const PageContainer = styled(SafeView)`
   height: 100%;
   background-color: ${({ theme }) => theme.pageBackgroundColor};
 `;
+
+export const ContentContainer = styled.View`
+padding: 35px 30px;
+`;

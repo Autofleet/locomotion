@@ -1,4 +1,6 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
+import DatePicker from 'react-native-date-picker';
+import moment from 'moment';
 import FutureBookingButton from './FutureBookingButton';
 import {
   Container, RowContainer, ButtonContainer, ButtonText, StyledButton, HALF_WIDTH,
@@ -16,6 +18,7 @@ import { RideStateContextContext } from '../../../../../context/ridePageStateCon
 import { popupNames } from '../utils';
 import { BS_PAGES } from '../../../../../context/ridePageStateContext/utils';
 import cashPaymentMethod from '../../../../../pages/Payments/cashPaymentMethod';
+import { getFutureRideMaxDate, getFutureRideMinDate } from '../../../../../context/newRideContext/utils';
 
 
 interface RideButtonsProps {
@@ -30,23 +33,47 @@ const RideButtons = ({
   const {
     ride,
     chosenService,
+    updateRidePayload,
   } = useContext(RidePageContext);
-
   const {
     changeBsPage,
   } = useContext(RideStateContextContext);
 
   const {
     paymentMethods,
+    getClientOutstandingBalanceCard,
   }: {
         paymentMethods: PaymentMethodInterface[],
+        getClientOutstandingBalanceCard: () => PaymentMethodInterface | undefined,
     } = PaymentsContext.useContainer();
 
-  const renderFutureBooking = () => (
-    <ButtonContainer disabled>
-      <FutureBookingButton />
-    </ButtonContainer>
-  );
+  const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
+
+  const renderFutureBooking = () => {
+    const close = () => {
+      setIsDatePickerOpen(false);
+    };
+    return (
+      <ButtonContainer onPress={() => setIsDatePickerOpen(true)}>
+        <FutureBookingButton />
+        <DatePicker
+          open={isDatePickerOpen}
+          date={moment(ride?.scheduledTo).toDate()}
+          maximumDate={getFutureRideMaxDate()}
+          minimumDate={getFutureRideMinDate()}
+          mode="datetime"
+          title={i18n.t('bottomSheetContent.ride.chosePickupTime')}
+          onCancel={close}
+          onConfirm={(date) => {
+            updateRidePayload({ scheduledTo: date.getTime() });
+            changeBsPage(BS_PAGES.CONFIRM_PICKUP_TIME);
+            close();
+          }}
+          modal
+        />
+      </ButtonContainer>
+    );
+  };
 
   const renderRideNotes = () => {
     const rideHasNotes = ride?.notes;
@@ -105,7 +132,7 @@ const RideButtons = ({
       </RowContainer>
       <StyledButton
         data-test-id="selectService"
-        disabled={!chosenService}
+        disabled={!chosenService || !!getClientOutstandingBalanceCard()}
         onPress={() => {
           changeBsPage(BS_PAGES.CONFIRM_PICKUP);
         }}

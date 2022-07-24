@@ -14,7 +14,7 @@ import { SubmitButtonText } from '../../../Components/SelectableButton/styled';
 import BottomSheet from '../../../Components/BottomSheet';
 import BottomSheetContextProvider, { BottomSheetContext, SNAP_POINT_STATES } from '../../../context/bottomSheetContext';
 import CustomTip from './CustomTip';
-import { getFormattedPrice } from '../../../context/newRideContext/utils';
+import { getFormattedPrice, getCurrencySymbol } from '../../../context/newRideContext/utils';
 
 const TipSectionContainer = styled.View`
  width: 100%;
@@ -28,16 +28,15 @@ const TipSectionContainer = styled.View`
 
 const Container = styled.View`
   flex-direction: column;
-  padding: 30px 0px;
+  padding: 10px 0px 0px 10px;
   flex: 1;
 `;
 
 const Title = styled.Text`
-  font-size: 20px;
+  font-size: 18px;
   color: #333333;
   font-weight: 600;
   margin-bottom: 8px;
-
 `;
 
 const SubTitle = styled.Text`
@@ -97,22 +96,21 @@ const NoTipTextButton = ({ onPress, children }) => (
     </TouchableOpacity>
   </NoCustomTipContainer>
 );
-
 const Tips = ({
   driver,
   ridePrice,
   tipSettings,
   onSelectTip,
-  priceCurrency,
+  priceCurrency = null,
 }) => {
   const [selectedTip, setSelectedTip] = useState(null);
   const [customTip, setCustomTip] = useState(null);
 
   const isPercentage = ridePrice >= tipSettings.percentageThreshold;
   const buttons = isPercentage ? tipSettings.percentage : tipSettings.fixedPrice;
-
   const serviceDisplayPrice = getFormattedPrice(priceCurrency, ridePrice);
-  const tipSuffix = isPercentage ? '%' : serviceDisplayPrice;
+
+  const tipSuffix = isPercentage ? '%' : getCurrencySymbol(priceCurrency);
 
   const bottomSheetRef = useRef(null);
   const {
@@ -163,7 +161,7 @@ const Tips = ({
       return `${value}${tipSuffix}`;
     }
 
-    return `${tipSuffix}${value}`;
+    return getFormattedPrice(priceCurrency, value);
   };
   return (
     <>
@@ -195,7 +193,7 @@ const Tips = ({
             selected={!!customTip}
             onPress={() => bottomSheetRef.current.snapToIndex(0)}
             label={i18n.t('postRide.tip.customTip.title')}
-            value={`${customTip} ${tipSuffix}`}
+            value={customTip ? getFormattedPrice(priceCurrency, customTip) : null}
           >
             {!customTip ? i18n.t('postRide.tip.setCustomTip') : null}
           </SelectableButton>
@@ -216,6 +214,7 @@ const Tips = ({
           customAmount={customTip}
           onSubmit={value => onCustomTipSet(value)}
           tipSuffix={tipSuffix}
+          isExpanded={isExpanded}
         />
       </BottomSheet>
     </>

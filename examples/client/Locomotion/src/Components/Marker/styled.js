@@ -67,6 +67,7 @@ export const InfoBox = styled.View`
   shadow-offset: 0px 0px;
   shadow-color: #04214f;
   shadow-opacity: 0.4;
+  elevation: 4;
 `;
 
 export const Type = styled.View`
