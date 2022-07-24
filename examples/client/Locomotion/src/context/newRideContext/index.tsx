@@ -369,10 +369,15 @@ const RidePageContextProvider = ({ children }: {
   }, 4000);
 
   useEffect(() => {
-    if (!ride.id) {
+    validateRequestedStopPoints(requestStopPoints);
+  }, [requestStopPoints]);
+
+  useEffect(() => {
+    if (unconfirmedPickupTime) {
       validateRequestedStopPoints(requestStopPoints);
+      setUnconfirmedPickupTime(null);
     }
-  }, [requestStopPoints, ride.scheduledTo]);
+  }, [ride.scheduledTo]);
 
   const getRideFromApi = (rideId: string): Promise<RideInterface> => rideApi.getRide(rideId);
 
