@@ -1,6 +1,7 @@
 import React from 'react';
 import moment from 'moment';
 import { PaymentIcon } from 'react-native-payment-icons';
+import cashPaymentMethod from '../../pages/Payments/cashPaymentMethod';
 import { RideInterface } from '../../context/newRideContext';
 import i18n from '../../I18n';
 import RoundedButton from '../RoundedButton';
@@ -10,18 +11,28 @@ import {
 } from './styled';
 import StopPointsVerticalView from '../StopPointsVerticalView';
 import { getFormattedPrice } from '../../context/newRideContext/utils';
+import cashIcon from '../../assets/cash.svg';
 
 interface CardComponentProps {
+  paymentMethod: {
     name: string;
     brand: any;
+    id: string;
+  }
 }
-const CardComponent = ({ name, brand }: CardComponentProps) => (
-  <TextRowWithIcon
-    text={name}
-    Image={() => <PaymentIcon type={brand} />}
-    style={{ marginTop: 10, marginBottom: 10 }}
-  />
-);
+const CardComponent = ({ paymentMethod }: CardComponentProps) => {
+  const isCash = cashPaymentMethod.id === paymentMethod.id;
+  return (
+    <TextRowWithIcon
+      text={isCash ? cashPaymentMethod.id : paymentMethod.name}
+      Image={() => !isCash && <PaymentIcon type={paymentMethod.brand} />}
+      icon={isCash && cashIcon}
+      style={{ marginTop: 10, marginBottom: 10 }}
+      iconWidth={40}
+      iconHeight={20}
+    />
+  );
+};
 
 interface RideCardProps {
     ride: RideInterface;
@@ -47,7 +58,7 @@ const RideCard = ({
       {serviceName}
     </ServiceType>
     <StopPointsVerticalView ride={ride} />
-    {paymentMethod && <CardComponent name={paymentMethod.name} brand={paymentMethod.brand} />}
+    {paymentMethod && <CardComponent paymentMethod={paymentMethod} />}
     <RoundedButton onPress={onPress} hollow type="cancel">
       {i18n.t('home.cancelRideButton')}
     </RoundedButton>
