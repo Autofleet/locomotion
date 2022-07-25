@@ -28,7 +28,7 @@ import { RideStateContextContext, RideStateContextContextProvider } from '../../
 import NewRidePageContextProvider, { RidePageContext } from '../../context/newRideContext';
 import BottomSheetContextProvider, { BottomSheetContext, SNAP_POINT_STATES } from '../../context/bottomSheetContext';
 import {
-  PageContainer, MapOverlayButtons, BlackOverlay,
+  PageContainer, MapOverlayButtons,
 } from './styled';
 import Header from '../../Components/Header';
 import MainMap from './newMap';
@@ -51,6 +51,7 @@ import SETTINGS_KEYS from '../../context/settings/keys';
 import { checkVersionAndForceUpdateIfNeeded } from '../../services/VersionCheck';
 import TopMessage from './TopMessage';
 import i18n from '../../I18n';
+import BlackOverlay from '../../Components/BlackOverlay';
 
 
 const BLACK_OVERLAY_SCREENS = [BS_PAGES.CANCEL_RIDE];

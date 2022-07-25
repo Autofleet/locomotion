@@ -35,6 +35,7 @@ export const DriverRatingText = styled(Text)`
 export const DriverDetailText = styled<any>(Text)`
     ${({ activeRide }) => (activeRide ? FONT_SIZES.H2 : FONT_SIZES.LARGE)};
     ${FONT_WEIGHTS.MEDIUM}
+    width: 85%;
 `;
 
 export const DriverAvatar = styled(Image)`
