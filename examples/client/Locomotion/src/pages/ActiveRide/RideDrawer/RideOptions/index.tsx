@@ -74,8 +74,9 @@ const RideOptions = () => {
         setDefaultPaymentMethod(paymentMethod);
       }
     };
-
-    updateDefaultPaymentMethod();
+    if (!ride.paymentMethodId) {
+      updateDefaultPaymentMethod();
+    }
   }, [usePayments.paymentMethods]);
 
   useEffect(() => {
@@ -125,8 +126,8 @@ const RideOptions = () => {
         />
 
         <ChoosePaymentMethod
-          selected={ride?.paymentMethodId?.length
-          && usePayments.paymentMethods.includes(ride?.paymentMethodId as never)
+          selected={ride?.paymentMethodId
+            && usePayments.paymentMethods.find((pm: any) => ride.paymentMethodId === pm.id)
             ? ride.paymentMethodId : defaultPaymentMethod?.id}
           rideFlow
           isVisible={popupToShow === 'payment'}
