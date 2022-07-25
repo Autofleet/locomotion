@@ -79,7 +79,7 @@ export default React.forwardRef(({
     .includes(currentBsPage);
   const {
     requestStopPoints, saveSelectedLocation, reverseLocationGeocode, ride,
-    chosenService,
+    chosenService, lastSelectedLocation,
   } = useContext(RidePageContext);
   const {
     newFutureRide,
@@ -131,12 +131,10 @@ export default React.forwardRef(({
     if (currentBsPage === BS_PAGES.CONFIRM_PICKUP) {
       const [pickupStopPoint] = requestStopPoints;
       if (pickupStopPoint) {
-        ref.current.animateToRegion({
+        focusMapToCoordinates([{
           latitude: pickupStopPoint.lat,
           longitude: pickupStopPoint.lng,
-          latitudeDelta: 0.001,
-          longitudeDelta: 0.001,
-        }, 1000);
+        }], false, MAP_EDGE_PADDING);
       }
     }
     if (currentBsPage === BS_PAGES.CONFIRM_FUTURE_RIDE) {
