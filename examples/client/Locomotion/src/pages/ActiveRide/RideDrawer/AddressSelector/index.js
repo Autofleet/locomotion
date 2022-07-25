@@ -23,7 +23,7 @@ import { FONT_SIZES, FONT_WEIGHTS } from '../../../../context/theme';
 const NoHistoryTextContainer = styled.View`
   display: flex;
   align-items: center;
-  opacity: .6;
+  opacity: .5;
 `;
 const TakeRide = styled.Text`
   ${FONT_SIZES.H2}
@@ -113,7 +113,7 @@ const AddressSelectorBottomSheet = ({ addressSelectorFocus }) => {
   };
 
   const getHistoryRows = () => {
-    if (userContext.historyResults.length) {
+    if (!userContext.historyResults.length) {
       return userContext.historyResults.map((h, i) => (
         <AddressRow
           testID={`searchResults_${i}`}
