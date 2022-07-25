@@ -80,6 +80,7 @@ const Tips = ({
   useEffect(() => {
     if (isExpanded) {
       inputRef.current.focus();
+      setCustomTip(customAmount);
     } else {
       inputRef.current.blur();
     }
