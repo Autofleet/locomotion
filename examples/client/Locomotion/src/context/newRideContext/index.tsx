@@ -534,7 +534,6 @@ const RidePageContextProvider = ({ children }: {
       lng: enrichedPlace.lng,
     };
     resetSearchResults();
-    saveLastAddresses(selectedItem);
 
     if (loadRide) {
       validateRequestedStopPoints(reqSps);
@@ -658,6 +657,14 @@ const RidePageContextProvider = ({ children }: {
 
   const requestRide = async (pickupLocation?: any): Promise<void> => {
     let stopPoints = requestStopPoints;
+    const spsToUpdate = requestStopPoints.filter(p => p.placeId);
+    spsToUpdate.map((s) => {
+      saveLastAddresses({
+        text: s.streetAddress,
+        fullText: s.streetAddress,
+        placeId: s.placeId,
+      });
+    });
     if (pickupLocation) {
       if (!validateStopPointInTerritory([pickupLocation])) {
         return;
@@ -682,6 +689,7 @@ const RidePageContextProvider = ({ children }: {
         ...(i === 0 && { notes: ride.notes }),
       })),
     };
+
     try {
       const afRide = await rideApi.createRide(rideToCreate);
       if (afRide.state === RIDE_STATES.REJECTED) {
