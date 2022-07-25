@@ -327,10 +327,10 @@ export const CancelRide = (props: any) => {
       SubTitleText={i18n.t('bottomSheetContent.cancelRide.subTitleText')}
       SecondaryButtonText={i18n.t('bottomSheetContent.cancelRide.secondaryButtonText')}
       isLoading={isLoading}
-      onButtonPress={() => {
+      onButtonPress={async () => {
         try {
           setIsLoading(true);
-          cancelRide();
+          await cancelRide();
         } catch {
           setShowError(true);
           setIsLoading(false);
