@@ -79,7 +79,7 @@ export default React.forwardRef(({
     .includes(currentBsPage);
   const {
     requestStopPoints, saveSelectedLocation, reverseLocationGeocode, ride,
-    chosenService, lastSelectedLocation,
+    chosenService,
   } = useContext(RidePageContext);
   const {
     newFutureRide,
