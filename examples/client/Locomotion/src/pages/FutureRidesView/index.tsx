@@ -15,6 +15,8 @@ import { CancelRide } from '../../Components/BsPages';
 import { RideStateContextContext } from '../..';
 import { RideInterface, RidePageContext } from '../../context/newRideContext';
 import { BS_PAGES } from '../../context/ridePageStateContext/utils';
+import BlackOverlay from '../../Components/BlackOverlay';
+import { BottomSheetContext } from '../../context/bottomSheetContext';
 
 interface FutureRidesViewProps {
   menuSide: 'right' | 'left';
@@ -26,8 +28,9 @@ const FutureRidesView = ({ menuSide }: FutureRidesViewProps) => {
   const {
     futureRides, loadFutureRides,
   } = useContext(FutureRidesContext);
-  const { changeBsPage } = useContext(RideStateContextContext);
+  const { changeBsPage, currentBsPage } = useContext(RideStateContextContext);
   const { cancelRide, getServices } = useContext(RidePageContext);
+  const { snapPoints } = useContext(BottomSheetContext);
   const onPressCancel = (ride: RideInterface) => {
     setRideToCancel(ride);
     changeBsPage(BS_PAGES.CANCEL_RIDE);
@@ -77,6 +80,9 @@ const FutureRidesView = ({ menuSide }: FutureRidesViewProps) => {
         })}
       </ContentContainer>
       )}
+      {currentBsPage === BS_PAGES.CANCEL_RIDE
+        ? <BlackOverlay bottomSheetHeight={snapPoints[0]} />
+        : null}
       <BottomSheetComponent
         ref={bottomSheetRef}
         enablePanDownToClose
@@ -86,9 +92,9 @@ const FutureRidesView = ({ menuSide }: FutureRidesViewProps) => {
         <CancelRide
           secondaryButtonText={i18n.t('bottomSheetContent.cancelRide.secondaryButtonTextFuture')}
           onButtonPress={async () => {
-            closeBottomSheet();
             await cancelRide(rideToCancel?.id);
             await loadFutureRides();
+            closeBottomSheet();
             if (futureRides.length === 1) {
               changeBsPage(BS_PAGES.ADDRESS_SELECTOR);
               NavigationService.navigate(MAIN_ROUTES.HOME);
