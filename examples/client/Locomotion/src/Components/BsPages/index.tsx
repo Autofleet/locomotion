@@ -8,6 +8,7 @@ import { useBottomSheet } from '@gorhom/bottom-sheet';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import moment from 'moment';
 import DatePicker from 'react-native-date-picker';
+import GenericErrorPopup from '../../popups/GenericError';
 import TextRowWithIcon from '../../Components/TextRowWithIcon';
 import { FutureRidesContext } from '../../context/futureRides';
 import { STOP_POINT_TYPES } from '../../lib/commonTypes';
@@ -315,6 +316,7 @@ export const LocationRequest = (props: any) => (
 
 export const CancelRide = (props: any) => {
   const [isLoading, setIsLoading] = useState(false);
+  const [showError, setShowError] = useState(false);
   const { cancelRide } = useContext(RidePageContext);
   const { changeBsPage } = useContext(RideStateContextContext);
 
@@ -326,14 +328,24 @@ export const CancelRide = (props: any) => {
       SecondaryButtonText={i18n.t('bottomSheetContent.cancelRide.secondaryButtonText')}
       isLoading={isLoading}
       onButtonPress={() => {
-        setIsLoading(true);
-        cancelRide();
+        try {
+          setIsLoading(true);
+          cancelRide();
+        } catch {
+          setShowError(true);
+          setIsLoading(false);
+        }
       }}
       onSecondaryButtonPress={() => changeBsPage(BS_PAGES.ACTIVE_RIDE)}
       warning
       buttonDisabled={isLoading}
       {...props}
-    />
+    >
+      <GenericErrorPopup
+        isVisible={showError}
+        closePopup={() => setShowError(false)}
+      />
+    </BsPage>
   );
 };
 
