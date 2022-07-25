@@ -45,6 +45,7 @@ const FutureRidesView = ({ menuSide }: FutureRidesViewProps) => {
     if (bottomSheetRef?.current) {
       bottomSheetRef.current.forceClose();
     }
+    changeBsPage(BS_PAGES.ADDRESS_SELECTOR);
   };
 
   const loadServices = async () => {
@@ -99,7 +100,6 @@ const FutureRidesView = ({ menuSide }: FutureRidesViewProps) => {
               await loadFutureRides();
               closeBottomSheet();
               if (futureRides.length === 1) {
-                changeBsPage(BS_PAGES.ADDRESS_SELECTOR);
                 NavigationService.navigate(MAIN_ROUTES.HOME);
               }
             } catch {

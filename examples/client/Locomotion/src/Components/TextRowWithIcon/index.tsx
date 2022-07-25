@@ -25,10 +25,13 @@ interface TextRowWithIconProps {
     icon?: any;
     style?: Record<string, unknown>;
     Image?: any
+    iconWidth?: number;
+    iconHeight?: number;
+
 }
 
 const TextRowWithIcon = ({
-  text, icon, style, Image,
+  text, icon, style, Image, iconWidth, iconHeight,
 }: TextRowWithIconProps) => {
   const theme = useContext(ThemeContext);
   const getImage = () => {
@@ -36,8 +39,8 @@ const TextRowWithIcon = ({
       return (
         <SvgIcon
           Svg={icon}
-          width={15}
-          height={15}
+          width={iconWidth}
+          height={iconHeight}
           fill={theme.primaryColor}
         />
       );
@@ -63,6 +66,8 @@ TextRowWithIcon.defaultProps = {
   icon: null,
   style: {},
   Image: null,
+  iconWidth: 15,
+  iconHeight: 15,
 };
 
 export default TextRowWithIcon;

@@ -123,7 +123,7 @@ const RideButtons = ({
         <PaymentButton
           brand={selectedPaymentMethod?.brand}
           icon={creditCardIcon}
-          title={selectedPaymentMethod?.name === cashPaymentMethod.name ? 'Cash' : (selectedPaymentMethod?.name || i18n.t('bottomSheetContent.ride.addPayment'))}
+          title={selectedPaymentMethod?.name === cashPaymentMethod.name ? cashPaymentMethod.id : (selectedPaymentMethod?.name || i18n.t('bottomSheetContent.ride.addPayment'))}
           id={selectedPaymentMethod?.id}
         />
       </ButtonContainer>
