@@ -106,7 +106,7 @@ const SearchBar = ({
     }
 
     if (locationGranted) {
-      return 'addressView.currentLocation';
+      return 'addressView.enterAddress';
     }
 
     return '';

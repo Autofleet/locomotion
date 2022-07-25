@@ -195,7 +195,8 @@
         "dropoffTitle": "Exit",
         "addressPlaceholder": "Enter Address",
         "whereTo": "Enter your destination",
-        "currentLocation": "Enter address",
+        "currentLocation": "Current location",
+        "enterAddress": "Enter address",
         "setLocationOnMap": "Set location on map",
         "welcomeText": "Hey {{ name }}, where to?"
     },
