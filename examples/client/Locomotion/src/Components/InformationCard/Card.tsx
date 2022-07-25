@@ -3,7 +3,7 @@ import { TouchableOpacity, View } from 'react-native';
 import SvgIcon from '../SvgIcon';
 import i18n from '../../I18n';
 import {
-  Arrow, ArrowContainer, CardContainer, CardContantContainer, CardText, CardTitle, CardTitleContainer, VerifyContainer, VerifyText,
+  Arrow, ArrowContainer, CardContainer, CardContentContainer, CardText, CardTitle, CardTitleContainer, VerifyContainer, VerifyText,
 } from './styled';
 import { InformationCardProps } from '../InformationCard';
 
@@ -17,7 +17,7 @@ const Card = ({
   onIconPress,
 }: InformationCardProps) => (
   <CardContainer>
-    <CardContantContainer>
+    <CardContentContainer>
       <CardTitleContainer>
         <CardTitle>{title}</CardTitle>
         {verified ? (
@@ -39,7 +39,7 @@ const Card = ({
         )}
       </CardTitleContainer>
       {children ? <CardText>{children}</CardText> : undefined}
-    </CardContantContainer>
+    </CardContentContainer>
     {icon ? <TouchableOpacity onPress={onIconPress}><SvgIcon Svg={icon} fill="#333" /></TouchableOpacity>
       : <ArrowContainer>{onPress ? <Arrow /> : undefined}</ArrowContainer>}
   </CardContainer>

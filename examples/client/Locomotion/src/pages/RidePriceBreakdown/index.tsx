@@ -111,12 +111,20 @@ const RidePriceBreakDown = () => {
                 {priceCalculation?.discount && priceCalculation?.discount !== 0
                   ? <PriceCard name="Discount" text={`-${getPriceWithCurrency(Math.abs(priceCalculation?.discount) || 0)}`} />
                   : undefined}
-                {priceCalculation?.items?.map(item => (
+                {priceCalculation?.items?.filter(item => item.pricingRule).map(item => (
                   <PriceCard
-                    name={`${item.pricingRule.name} - ${getPriceWithCurrency(item.pricingRule.price)} per ${calculationTypeToUnit[item.pricingRule.calculationType]}`}
+                    name={`${item.pricingRule.name} - ${getPriceWithCurrency(item.pricingRule.price)} per ${calculationTypeToUnit[item.pricingRule.calculationType]} `}
                     text={getPriceWithCurrency(item.price)}
                   />
                 ))}
+                {
+                  // priceCalculation?.haveCancelationFee && ride.state === 'canceled' ? (
+                  <PriceCard
+                    name={`${i18n.t('Cancelation fee')}`}
+                    text={getPriceWithCurrency(priceCalculation?.totalPrice || 0)}
+                  />
+                  // ) : undefined
+                }
               </View>
             </InformationCard>
             {getTip() ? (

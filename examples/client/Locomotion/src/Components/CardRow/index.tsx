@@ -22,9 +22,8 @@ type ContainerProps = {
 const Container = styled(View) < ContainerProps >`
   flex-direction: row;
   justify-content: flex-start;
-  padding: 20px;
   background-color: ${(props: any) => (props.selected ? '#rgba(36, 170, 242, 0.2)' : '#fff')};
-  min-height: 70px;
+  min-height: 50px;
   width: 100%;
   align-items: center;
 `;

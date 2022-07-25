@@ -1,4 +1,5 @@
 import React, { useEffect, useRef } from 'react';
+import Config from 'react-native-config';
 import { MAIN_ROUTES } from '../routes';
 import Auth from '../../services/auth';
 import SubmitButton from '../../Components/RoundedButton';
@@ -53,7 +54,9 @@ export default ({ navigation }) => {
           {I18n.t('lock.text')}
         </Text>
         <SubText>
-          {I18n.t('lock.subText')}
+          {I18n.t('lock.subText', {
+            appName: Config.OPERATION_NAME,
+          })}
         </SubText>
 
       </LockTextContainer>

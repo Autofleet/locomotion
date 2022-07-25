@@ -32,24 +32,29 @@ interface RideCardProps {
     scheduledTo: string;
 }
 
+type Price = {
+  amount: number,
+  currency: string
+}
+
 const RideCard = ({
   ride, onPress, serviceName, paymentMethod, scheduledTo,
 }: RideCardProps) => {
-  const [totalPriceWithCurrency, seTotalPriceWithCurrency] = useState();
+  const [totalPriceWithCurrency, setTotalPriceWithCurrency] = useState<Price>();
   const {
     getRideTotalPriceWithCurrency,
   } = useContext(RidePageContext);
 
   const updateTotalPrice = async () => {
     const price = await getRideTotalPriceWithCurrency(ride.id);
-
-    seTotalPriceWithCurrency(price);
+    setTotalPriceWithCurrency(price);
   };
 
   useEffect(() => {
     updateTotalPrice();
   }, [ride]);
 
+  return (
     <CardContainer>
       <DateContainer>
         <RideDate>
@@ -69,7 +74,8 @@ const RideCard = ({
       <RoundedButton onPress={onPress} hollow type="cancel">
         {i18n.t('home.cancelRideButton')}
       </RoundedButton>
-    </CardContainer>;
+    </CardContainer>
+  );
 };
 
 export default RideCard;

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useRoute } from '@react-navigation/native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import moment from 'moment';
 import { getCurrencySymbol } from '../../context/newRideContext/utils';
 import ConfirmationPopup from '../../popups/ConfirmationPopup';
 import { getLastFourForamttedLong } from '../../pages/Payments/cardDetailUtils';
@@ -93,6 +94,12 @@ const CardDetails = ({
                 title={i18n.t('payments.cardDetails.number')}
               >
                 {getLastFourForamttedLong(paymentMethod?.lastFour)}
+
+              </Card>
+              <Card
+                title={i18n.t('payments.cardDetails.expiryDate')}
+              >
+                {moment(paymentMethod?.expiresAt).format('MM/YY')}
 
               </Card>
               {paymentMethod?.hasOutstandingBalance ? (

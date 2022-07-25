@@ -143,3 +143,7 @@ export const PaymentCardContainer = styled.View`
   border-bottom-color: #e2e2e2;
   background-color: ${({ theme }) => theme.pageBackgroundColor};
 `;
+
+export const BottomContainer = styled.View`
+padding: 20px;
+`;

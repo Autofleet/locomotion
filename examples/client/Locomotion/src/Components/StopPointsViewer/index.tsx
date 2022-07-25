@@ -18,38 +18,39 @@ const StopPointsViewer = ({ goBackToAddressSelector }: StopPointsViewerProps) =>
   const firstSp: any = requestStopPoints[0];
   const lastSp: any = requestStopPoints[requestStopPoints.length - 1];
   return (
-    <Container>
-      <StreetAddressContainer
-        onPress={() => goBackToAddressSelector(STOP_POINT_TYPES.STOP_POINT_PICKUP)}
-      >
-        <StreetAddress>
-          {firstSp?.streetAddress}
-        </StreetAddress>
-      </StreetAddressContainer>
-      <SvgIcon
-        Svg={backArrow}
-        width={ICON_SIZE}
-        height={ICON_SIZE}
-        style={{ transform: [{ rotate: '180deg' }] }}
-      />
-      <StreetAddressContainer
-        onPress={() => goBackToAddressSelector(STOP_POINT_TYPES.STOP_POINT_DROPOFF)}
-      >
-        <StreetAddress>
-          {lastSp?.streetAddress}
-        </StreetAddress>
-      </StreetAddressContainer>
-      <TouchableOpacity
-        onPress={() => goBackToAddressSelector(STOP_POINT_TYPES.STOP_POINT_DROPOFF)}
-      >
+    requestStopPoints.filter(sp => !!sp.lat).length > 1 ? (
+      <Container>
+        <StreetAddressContainer
+          onPress={() => goBackToAddressSelector(STOP_POINT_TYPES.STOP_POINT_PICKUP)}
+        >
+          <StreetAddress>
+            {firstSp?.streetAddress}
+          </StreetAddress>
+        </StreetAddressContainer>
         <SvgIcon
-          Svg={editIcon}
+          Svg={backArrow}
           width={ICON_SIZE}
           height={ICON_SIZE}
+          style={{ transform: [{ rotate: '180deg' }] }}
         />
-      </TouchableOpacity>
-    </Container>
-  );
+        <StreetAddressContainer
+          onPress={() => goBackToAddressSelector(STOP_POINT_TYPES.STOP_POINT_DROPOFF)}
+        >
+          <StreetAddress>
+            {lastSp?.streetAddress}
+          </StreetAddress>
+        </StreetAddressContainer>
+        <TouchableOpacity
+          onPress={() => goBackToAddressSelector(STOP_POINT_TYPES.STOP_POINT_DROPOFF)}
+        >
+          <SvgIcon
+            Svg={editIcon}
+            width={ICON_SIZE}
+            height={ICON_SIZE}
+          />
+        </TouchableOpacity>
+      </Container>
+    ) : null);
 };
 
 export default StopPointsViewer;

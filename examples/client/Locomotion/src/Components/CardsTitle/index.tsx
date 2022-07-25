@@ -5,10 +5,10 @@ import { FONT_SIZES, FONT_WEIGHTS } from '../../context/theme';
 
 const StyledCardsTitle = styled(Text)`
   width: 100%;
-  ${FONT_SIZES.MEDIUM};
+  ${FONT_SIZES.LARGE};
   ${FONT_WEIGHTS.BOLD};
   color: #333333;
-  padding: 30px 0px 15px;
+  padding: 30px 15px 5px;
 `;
 
 const CardsTitle = ({

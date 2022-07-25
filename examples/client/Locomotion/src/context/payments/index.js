@@ -46,6 +46,7 @@ const usePayments = () => {
 
   const clientHasValidPaymentMethods = () => paymentMethods.length > 0
   && paymentMethods.some(pm => !pm.isExpired);
+
   const isCashPaymentEnabled = async () => useSettings.getSettingByKey(SETTINGS_KEYS.CASH_ENABLED);
 
   const getClientDefaultMethod = async () => {
@@ -68,6 +69,8 @@ const usePayments = () => {
     return paymentMethod;
   };
 
+  const getClientOutstandingBalanceCard = () => paymentMethods.find(pm => pm.hasOutstandingBalance);
+
   return {
     getCustomer,
     customer,
@@ -81,6 +84,7 @@ const usePayments = () => {
     isCashPaymentEnabled,
     createPaymentMethod,
     updatePaymentMethod,
+    getClientOutstandingBalanceCard,
   };
 };
 

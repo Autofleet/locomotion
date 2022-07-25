@@ -73,13 +73,13 @@ const TitleContainer = styled(View)`
 
 const Title = styled(Text)`
   padding-bottom: 3px;
-  ${FONT_SIZES.H2}
+  ${FONT_SIZES.H1}
   ${FONT_WEIGHTS.MEDIUM}
   color: #333;
 `;
 
 const SubTitle = styled(Text)`
-  ${FONT_SIZES.LARGE}
+  ${FONT_SIZES.H3}
   color: ${({ theme }) => theme.disabledColor};
 `;
 
@@ -102,6 +102,7 @@ const SecondaryButtonTitle = styled(Text)<SecondaryButtonTitleInterface>`
 
 const AddressInput = styled(Text)`
   margin-left: 5;
+  ${FONT_SIZES.H3}
 `;
 
 const LoaderContainer = styled(View)`
@@ -126,7 +127,7 @@ const Footer = styled(View)<FooterInterface>`
   display: flex;
   flex-direction: ${({ fullWidthButtons }) => (fullWidthButtons ? 'column' : 'row')};
   margin-bottom: ${Platform.OS === 'android'
-    ? '10px' : '0px'};
+    ? '35px' : '10px'};
   justify-content: space-between;
   align-items: center;
 `;
@@ -232,18 +233,26 @@ export default BsPage;
 
 export const ConfirmPickupTime = (props: any) => {
   const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
-  const { ride, updateRidePayload } = useContext(MewRidePageContext);
+  const {
+    unconfirmedPickupTime,
+    updateRidePayload,
+    setUnconfirmedPickupTime,
+    tryServiceEstimations,
+    setServiceEstimations,
+  } = useContext(MewRidePageContext);
   const {
     changeBsPage,
   } = useContext(RideStateContextContext);
-  const date = moment(ride?.scheduledTo).format('ddd, MMM Do');
-  const time = moment(ride?.scheduledTo).format('HH:mm');
+  const date = moment(unconfirmedPickupTime).format('ddd, MMM Do');
+  const time = moment(unconfirmedPickupTime).format('HH:mm');
   return (
     <BsPage
       TitleText={i18n.t('bottomSheetContent.confirmPickupTime.titleText')}
       ButtonText={i18n.t('bottomSheetContent.confirmPickupTime.buttonText')}
       fullWidthButtons
       onButtonPress={() => {
+        updateRidePayload({ scheduledTo: unconfirmedPickupTime });
+        setServiceEstimations(null);
         changeBsPage(BS_PAGES.SERVICE_ESTIMATIONS);
       }}
       {...props}
@@ -260,14 +269,14 @@ export const ConfirmPickupTime = (props: any) => {
       </RoundedButton>
       <DatePicker
         open={isDatePickerOpen}
-        date={moment(ride?.scheduledTo).toDate()}
+        date={moment(unconfirmedPickupTime).add(unconfirmedPickupTime ? 0 : 1, 'hours').toDate()}
         maximumDate={getFutureRideMaxDate()}
         minimumDate={getFutureRideMinDate()}
         mode="datetime"
         title={i18n.t('bottomSheetContent.ride.chosePickupTime')}
         onCancel={() => setIsDatePickerOpen(false)}
         onConfirm={(newDate: Date) => {
-          updateRidePayload({ scheduledTo: newDate.getTime() });
+          setUnconfirmedPickupTime(newDate.getTime());
           setIsDatePickerOpen(false);
         }}
         modal
@@ -284,6 +293,8 @@ export const GenericError = (props: any) => {
       ButtonText={genericErrorDetails.buttonText}
       SubTitleText={genericErrorDetails.subTitleText}
       onButtonPress={genericErrorDetails.buttonPress}
+      SecondaryButtonText={genericErrorDetails.secondaryButtonText}
+      onSecondaryButtonPress={genericErrorDetails.secondaryButtonPress}
       fullWidthButtons
       {...props}
     />
@@ -362,17 +373,20 @@ export const ConfirmFutureRide = (props: any) => {
 };
 
 export const NotAvailableHere = (props: any) => {
-  const { setSnapPointsState } = useContext(BottomSheetContext);
+  const { setSnapPointsState, setIsExpanded } = useContext(BottomSheetContext);
   const { primaryColor } = useContext(ThemeContext);
   useEffect(() => {
     setSnapPointsState(SNAP_POINT_STATES.NOT_IN_TERRITORY);
+    setIsExpanded(false);
   }, []);
 
   return (
     <BsPage
       TitleText={i18n.t('bottomSheetContent.notAvailableHere.titleText')}
       ButtonText={i18n.t('bottomSheetContent.notAvailableHere.buttonText')}
-      SubTitleText={i18n.t('bottomSheetContent.notAvailableHere.subTitleText')}
+      SubTitleText={i18n.t('bottomSheetContent.notAvailableHere.subTitleText', {
+        appName: Config.OPERATION_NAME,
+      })}
       Image={<SvgIcon Svg={outOfTerritoryIcon} height={85} width={140} fill={primaryColor} />}
       fullWidthButtons
       {...props}
@@ -435,7 +449,6 @@ export const ConfirmPickup = (props: any) => {
 
 export const NoPayment = (props: any) => {
   const { setSnapPointsState } = useContext(BottomSheetContext);
-  const { changeBsPage } = useContext(RideStateContextContext);
   const { requestRide, ride } = useContext(RidePageContext);
 
   const {
@@ -463,10 +476,7 @@ export const NoPayment = (props: any) => {
       TitleText={i18n.t('bottomSheetContent.noPayment.titleText')}
       ButtonText={i18n.t('bottomSheetContent.noPayment.buttonText')}
       SubTitleText={i18n.t('bottomSheetContent.noPayment.subTitleText')}
-      SecondaryButtonText={i18n.t('bottomSheetContent.noPayment.secondaryButtonText')}
-      onSecondaryButtonPress={() => {
-        changeBsPage(BS_PAGES.ADDRESS_SELECTOR);
-      }}
+      fullWidthButtons
       onButtonPress={() => {
         navigationService.navigate(MAIN_ROUTES.PAYMENT, { rideFlow: true });
       }}

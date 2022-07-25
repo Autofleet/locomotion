@@ -55,6 +55,7 @@ export interface RideInterface {
   payment?: any;
   canceledBy?: string;
   cancelable?: boolean;
+  createdAt?: string;
   priceCalculationId?: string;
 }
 
@@ -75,7 +76,8 @@ export type PriceCalculation = {
      {calculationType: CalculationTypes, price: number, name: string},
      name: string,
      price: number}],
-  distanceUnit: string
+  distanceUnit: string,
+  haveCancelationFee: boolean
 };
 
 interface RidePageContextInterface {
@@ -88,7 +90,7 @@ interface RidePageContextInterface {
   setSelectedInputIndex: Dispatch<number | null>;
   selectedInputTarget: any;
   setSelectedInputTarget: Dispatch<any | null>;
-  onAddressSelected: (item: any, loadRide: boolean) => void;
+  onAddressSelected: (item: any, loadRide: boolean, index?: number) => void;
   requestStopPoints: any[];
   searchResults: any;
   searchAddress: (searchText: string) => void;
@@ -124,6 +126,9 @@ interface RidePageContextInterface {
   tryServiceEstimations: () => Promise<void>;
   getService: (serviceId: string) => Promise<any>;
   getServices: () => Promise<any[]>;
+  cleanRideState: () => void;
+  setUnconfirmedPickupTime: Dispatch<number | null>;
+  unconfirmedPickupTime: number | null;
   getRidePriceCalculation: (id: string | undefined) => Promise<PriceCalculation | undefined>;
   getRideTotalPriceWithCurrency: (rideId : string | undefined) => Promise<{ amount: number; currency: string; } | undefined>;
 }
@@ -138,7 +143,7 @@ export const RidePageContext = createContext<RidePageContextInterface>({
   setSelectedInputIndex: () => undefined,
   selectedInputTarget: null,
   setSelectedInputTarget: () => undefined,
-  onAddressSelected: (item: any, loadRide: boolean) => undefined,
+  onAddressSelected: (item: any, loadRide: boolean, index?: number) => undefined,
   requestStopPoints: [],
   searchResults: [],
   searchAddress: (searchText: string) => undefined,
@@ -176,6 +181,9 @@ export const RidePageContext = createContext<RidePageContextInterface>({
   getServices: async () => [],
   getRidePriceCalculation: async () => undefined,
   getRideTotalPriceWithCurrency: async () => undefined,
+  cleanRideState: () => undefined,
+  setUnconfirmedPickupTime: () => undefined,
+  unconfirmedPickupTime: null,
 });
 
 const HISTORY_RECORDS_NUM = 10;
@@ -201,6 +209,7 @@ const RidePageContextProvider = ({ children }: {
   const [lastSelectedLocation, saveSelectedLocation] = useState(false);
   const [rideRequestLoading, setRideRequestLoading] = useState(false);
   const [ridePopup, setRidePopup] = useState<RidePopupNames | null>(null);
+  const [unconfirmedPickupTime, setUnconfirmedPickupTime] = useState<number | null>(null);
   // const [priceCalculation, setPriceCalculation] = useState<PriceCalculation | null>(null);
   const intervalRef = useRef<any>();
 
@@ -237,8 +246,9 @@ const RidePageContextProvider = ({ children }: {
       setRide(newRide);
       changeBsPage(BS_PAGES.ACTIVE_RIDE);
     },
-    [RIDE_STATES.ACTIVE]: () => {
+    [RIDE_STATES.ACTIVE]: (activeRide: any) => {
       cleanRequestStopPoints();
+      setRide(activeRide);
       changeBsPage(BS_PAGES.ACTIVE_RIDE);
     },
     [RIDE_STATES.CANCELED]: (canceledRide: any) => {
@@ -296,7 +306,7 @@ const RidePageContextProvider = ({ children }: {
     changeBsPage(BS_PAGES.SERVICE_ESTIMATIONS);
     try {
       const formattedStopPoints = formatStopPointsForEstimations(requestStopPoints);
-      const { estimations, services } = await rideApi.createServiceEstimations(formattedStopPoints);
+      const { estimations, services } = await rideApi.createServiceEstimations(formattedStopPoints, ride.scheduledTo);
       const tags = getEstimationTags(estimations);
       const formattedEstimations = formatEstimations(services, estimations, tags);
       setChosenService(formattedEstimations.find((e: any) => e.eta));
@@ -389,8 +399,14 @@ const RidePageContextProvider = ({ children }: {
     validateRequestedStopPoints(requestStopPoints);
   }, [requestStopPoints]);
 
-  const getRideFromApi = (rideId: string): Promise<RideInterface> => rideApi.getRide(rideId);
+  const getRideFromApi = async (rideId: string): Promise<RideInterface> => formatRide(await rideApi.getRide(rideId));
 
+  useEffect(() => {
+    if (unconfirmedPickupTime) {
+      validateRequestedStopPoints(requestStopPoints);
+      setUnconfirmedPickupTime(null);
+    }
+  }, [ride.scheduledTo]);
   const reverseLocationGeocode = async (pinLat: number | null = null, pinLng: number | null = null)
     : Promise<any | undefined> => {
     try {
@@ -529,14 +545,14 @@ const RidePageContextProvider = ({ children }: {
     }
   };
 
-  const onAddressSelected = async (selectedItem: any, loadRide: boolean) => {
+  const onAddressSelected = async (selectedItem: any, loadRide: boolean, index?: number) => {
     if (selectedItem.isLoading) {
       return null;
     }
     const enrichedPlace = await enrichPlaceWithLocation(selectedItem.placeId);
     const reqSps = [...requestStopPoints];
-    reqSps[selectedInputIndex || 0] = {
-      ...reqSps[selectedInputIndex || 0],
+    reqSps[index || selectedInputIndex || 0] = {
+      ...reqSps[index || selectedInputIndex || 0],
       description: selectedItem.fullText,
       streetAddress: selectedItem.text,
       placeId: selectedItem.placeId,
@@ -544,7 +560,6 @@ const RidePageContextProvider = ({ children }: {
       lng: enrichedPlace.lng,
     };
     resetSearchResults();
-    saveLastAddresses(selectedItem);
 
     if (loadRide) {
       validateRequestedStopPoints(reqSps);
@@ -607,12 +622,58 @@ const RidePageContextProvider = ({ children }: {
   const FAILED_TO_CREATE_RIDE_ACTIONS = {
     [RIDE_FAILED_REASONS.BUSY]: () => { changeBsPage(BS_PAGES.NO_AVAILABLE_VEHICLES); },
     [RIDE_FAILED_REASONS.USER_FUTURE_RIDE_INTERVAL_LIMIT_REACHED]: () => {
+      const bsContent = ride.scheduledTo ? 'futureRideLimit' : 'futureRideLimitOnAsap';
       setGenericErrorDetails({
-        titleText: i18n.t('bottomSheetContent.futureRideLimit.titleText'),
-        buttonText: i18n.t('bottomSheetContent.futureRideLimit.buttonText'),
-        subTitleText: i18n.t('bottomSheetContent.futureRideLimit.subTitleText'),
+        titleText: i18n.t(`bottomSheetContent.${bsContent}.titleText`),
+        buttonText: i18n.t(`bottomSheetContent.${bsContent}.buttonText`),
+        subTitleText: i18n.t(`bottomSheetContent.${bsContent}.subTitleText`),
         buttonPress: () => {
           tryServiceEstimations();
+          changeBsPage(BS_PAGES.SERVICE_ESTIMATIONS);
+        },
+      });
+      changeBsPage(BS_PAGES.GENERIC_ERROR);
+    },
+    // mocks for now
+    [RIDE_FAILED_REASONS.USER_HAS_OUTSTANDING_BALANCE]: () => {
+      setGenericErrorDetails({
+        titleText: i18n.t('bottomSheetContent.outstandingBalance.titleText'),
+        buttonText: i18n.t('bottomSheetContent.outstandingBalance.buttonText'),
+        subTitleText: i18n.t('bottomSheetContent.outstandingBalance.subTitleText'),
+        buttonPress: () => {
+          changeBsPage(BS_PAGES.SERVICE_ESTIMATIONS);
+        },
+      });
+      changeBsPage(BS_PAGES.GENERIC_ERROR);
+    },
+    [RIDE_FAILED_REASONS.CASH_NOT_ALLOWED]: () => {
+      setGenericErrorDetails({
+        titleText: i18n.t('bottomSheetContent.outstandingBalance.titleText'),
+        buttonText: i18n.t('bottomSheetContent.outstandingBalance.buttonText'),
+        subTitleText: i18n.t('bottomSheetContent.outstandingBalance.subTitleText'),
+        buttonPress: () => {
+          changeBsPage(BS_PAGES.SERVICE_ESTIMATIONS);
+        },
+      });
+      changeBsPage(BS_PAGES.GENERIC_ERROR);
+    },
+    [RIDE_FAILED_REASONS.PAYMENT_METHOD_EXPIRED]: () => {
+      setGenericErrorDetails({
+        titleText: i18n.t('bottomSheetContent.outstandingBalance.titleText'),
+        buttonText: i18n.t('bottomSheetContent.outstandingBalance.buttonText'),
+        subTitleText: i18n.t('bottomSheetContent.outstandingBalance.subTitleText'),
+        buttonPress: () => {
+          changeBsPage(BS_PAGES.SERVICE_ESTIMATIONS);
+        },
+      });
+      changeBsPage(BS_PAGES.GENERIC_ERROR);
+    },
+    [RIDE_FAILED_REASONS.COULD_NOT_CREATE_PAYMENT_INTENT]: () => {
+      setGenericErrorDetails({
+        titleText: i18n.t('bottomSheetContent.outstandingBalance.titleText'),
+        buttonText: i18n.t('bottomSheetContent.outstandingBalance.buttonText'),
+        subTitleText: i18n.t('bottomSheetContent.outstandingBalance.subTitleText'),
+        buttonPress: () => {
           changeBsPage(BS_PAGES.SERVICE_ESTIMATIONS);
         },
       });
@@ -622,6 +683,14 @@ const RidePageContextProvider = ({ children }: {
 
   const requestRide = async (pickupLocation?: any): Promise<void> => {
     let stopPoints = requestStopPoints;
+    const spsToUpdate = requestStopPoints.filter(p => p.placeId);
+    spsToUpdate.map((s) => {
+      saveLastAddresses({
+        text: s.streetAddress,
+        fullText: s.streetAddress,
+        placeId: s.placeId,
+      });
+    });
     if (pickupLocation) {
       if (!validateStopPointInTerritory([pickupLocation])) {
         return;
@@ -646,6 +715,7 @@ const RidePageContextProvider = ({ children }: {
         ...(i === 0 && { notes: ride.notes }),
       })),
     };
+
     try {
       const afRide = await rideApi.createRide(rideToCreate);
       if (afRide.state === RIDE_STATES.REJECTED) {
@@ -655,13 +725,16 @@ const RidePageContextProvider = ({ children }: {
         loadFutureRides();
         setNewFutureRide(afRide);
         changeBsPage(BS_PAGES.CONFIRM_FUTURE_RIDE);
+      } else {
+        const formattedRide = await formatRide(afRide);
+        setRide(formattedRide);
       }
     } catch (e: any) {
-      const key = e.message || e.response?.data?.errors[0];
+      const key = e.response?.data?.errors[0] || e.message;
       if (FAILED_TO_CREATE_RIDE_ACTIONS[key]) {
         FAILED_TO_CREATE_RIDE_ACTIONS[key]();
       } else {
-        changeBsPage(BS_PAGES.NO_AVAILABLE_VEHICLES);
+        FAILED_TO_CREATE_RIDE_ACTIONS[RIDE_FAILED_REASONS.BUSY]();
       }
     } finally {
       setRideRequestLoading(false);
@@ -724,10 +797,6 @@ const RidePageContextProvider = ({ children }: {
       tip ? chargeTip(priceCalculationId, tip) : () => null,
       rating ? patchRideRating(rideId, rating) : () => null,
     ]);
-
-    cleanRideState();
-    navigationService.navigate(MAIN_ROUTES.HOME, {}, APP_ROUTES.MAIN_APP);
-    changeBsPage(BS_PAGES.ADDRESS_SELECTOR);
     return true;
   };
 
@@ -800,7 +869,7 @@ const RidePageContextProvider = ({ children }: {
     return calculation;
   };
 
-  const getRideTotalPriceWithCurrency = async (rideId: string) => {
+  const getRideTotalPriceWithCurrency = async (rideId: string | undefined) => {
     if (!rideId) {
       return { amount: 0, currency: '' };
     }
@@ -865,6 +934,9 @@ const RidePageContextProvider = ({ children }: {
         getService,
         getServices,
         getRidePriceCalculation,
+        cleanRideState,
+        setUnconfirmedPickupTime,
+        unconfirmedPickupTime,
       }}
     >
       {children}

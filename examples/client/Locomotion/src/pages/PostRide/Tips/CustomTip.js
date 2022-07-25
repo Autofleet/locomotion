@@ -80,6 +80,7 @@ const Tips = ({
   useEffect(() => {
     if (isExpanded) {
       inputRef.current.focus();
+      setCustomTip(customAmount);
     } else {
       inputRef.current.blur();
     }
@@ -182,7 +183,7 @@ const Tips = ({
           <RoundedButton
             type="confirm"
             hollow={false}
-            disabled={!isValid}
+            disabled={!isValid || !customTip}
             useCancelTextButton={false}
             setLoading={null}
             onPress={() => submitValue(customTip)}

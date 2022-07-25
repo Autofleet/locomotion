@@ -40,7 +40,7 @@ const Row = styled(Animated.View)`
 
 const BackButtonContainer = styled.TouchableOpacity`
     width: 40px;
-    height: 40px;
+    height: 50px;
     border-radius: 8px;
     background-color: #f1f2f6;
     margin-right: 8px;
@@ -80,7 +80,6 @@ const SearchBar = ({
   const {
     searchTerm,
     setSearchTerm,
-    selectedInputIndex,
     setSelectedInputIndex,
     selectedInputTarget,
     setSelectedInputTarget,
@@ -107,7 +106,7 @@ const SearchBar = ({
     }
 
     if (locationGranted) {
-      return 'addressView.currentLocation';
+      return 'addressView.enterAddress';
     }
 
     return '';
@@ -162,7 +161,7 @@ const SearchBar = ({
           }}
           fullBorder
           value={description || ''}
-          placeholderTextColor="#929395"
+          placeholderTextColor={isExpanded ? '#929395' : '#333333'}
           onFocus={(e) => {
             onInputFocus(e.target, i);
           }}

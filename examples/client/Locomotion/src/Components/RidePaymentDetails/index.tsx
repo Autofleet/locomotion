@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import propsTypes from 'prop-types';
 import { TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { RIDE_STATES } from '../../lib/commonTypes';
 import { MAIN_ROUTES } from '../../pages/routes';
 import { getFormattedPrice } from '../../context/newRideContext/utils';
 import CardRow from '../CardRow';
@@ -28,10 +29,13 @@ const RidePaymentDetails = ({
   rideId: string,
   paymentMethod: PaymentMethodInterface,
   rideHistory: boolean
+  currency: string,
+  state: string
 
 }) => {
   const navigation = useNavigation<Nav>();
   const [totalAmount, setTotalAmount] = useState(0);
+  const [haveCancelationFee, setHaveCancelationFee] = useState(false);
   const {
     getRidePriceCalculation,
   } = useContext(RidePageContext);
@@ -43,6 +47,7 @@ const RidePaymentDetails = ({
     setTotalAmount((calculation?.totalPrice || 0)
      + (calculation?.discount || 0)
      + (calculation?.additionalCharges.find(({ chargeFor }) => chargeFor === 'tip')?.amount || 0));
+    setHaveCancelationFee(calculation?.haveCancelationFee || false);
   };
 
   useEffect(() => {
@@ -61,11 +66,13 @@ const RidePaymentDetails = ({
           <TouchableOpacity onPress={() => navigation.navigate(MAIN_ROUTES.RIDE_PRICE_BREAKDOWN,
             { rideId, rideHistory })}
           >
-            {state !== 'canceled' ? (
-              <ViewDetails>
-                {i18n.t('ride.viewDetails').toString()}
-              </ViewDetails>
-            ) : undefined}
+            {/* {state !== RIDE_STATES.CANCELED
+            || (state === RIDE_STATES.CANCELED
+             && haveCancelationFee) ? ( */}
+            <ViewDetails>
+              {i18n.t('ride.viewDetails').toString()}
+            </ViewDetails>
+            {/* ) : undefined} */}
           </TouchableOpacity>
         </RidePriceDetails>
       </PaymentRow>

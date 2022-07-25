@@ -8,7 +8,7 @@
     "rideDetails": {
         "unavailable": "Not available",
         "timeUntilArrival": "In {{minutes}} min",
-        "toolTipEta": "Eta {{minutes}} min",
+        "toolTipEta": "ETA {{minutes}} min",
         "noCharge": "No charge",
         "type": {
             "pickup": "Pickup",
@@ -39,7 +39,6 @@
         "invalidPhoneNumberError": "Phone number is not valid.",
         "vertError": "Sorry, seems like the verification code is incorrect. Please make sure you've typed it correctly.",
         "resendButton": "Start over",
-        "introText": "Please enter your phone number to signup for Locomotion. You will receive an SMS with a verification code.",
         "termsWebViewTitle": "Terms and Conditions",
         "privacyWebViewTitle": "Data Protection Guidelines",
         "termsAgreement": "By proceeding you agree to the <0>Terms of use</0> and <1>Privacy Policy</1>"
@@ -186,7 +185,7 @@
     "lock": {
         "header": "Your signup has been recorded",
         "text": "We have received your registration and will review it as soon as possible",
-        "subText": "You will immediately receive a notification when your registration is completed and you are ready to use Locomotion",
+        "subText": "You will immediately receive a notification when your registration is completed and you are ready to use {{ appName }}",
         "submitText": " Login to different account"
     },
     "addressView": {
@@ -195,9 +194,11 @@
         "pickupTitle": "Boarding",
         "dropoffTitle": "Exit",
         "addressPlaceholder": "Enter Address",
-        "whereTo": "Where To?",
+        "whereTo": "Enter your destination",
         "currentLocation": "Current location",
-        "setLocationOnMap": "Set location on map"
+        "enterAddress": "Enter address",
+        "setLocationOnMap": "Set location on map",
+        "welcomeText": "Hey {{ name }}, where to?"
     },
     "popups": {
         "rideCanceled": {
@@ -308,7 +309,10 @@
       "noActivitySub": "Take your first ride and see it here!",
       "rideCard": {
         "rideJourney": "Ride journey",
-        "driverRating": "Driver rating"
+        "driverRating": "Driver rating",
+        "rateRide": "Tap to rate your ride",
+        "addTip": "Add a tip",
+        "tip": "Tip {{price}}"
       }
     },
     "futureRides": {
@@ -318,6 +322,8 @@
         "pageTitle": "Ride finished",
         "ratingHeadline": "How was your ride?",
         "submit": "Rate & Tip",
+        "submitForPast": "Done",
+        "notRated": "Ride not rated",
         "tip": {
             "title": "Add a tip for",
             "subTitle": "Your ride was",
@@ -338,19 +344,20 @@
         "defaultMethodTitle": "Default payment method",
         "otherMethodsTitle": "Other payment methods",
         "cardDetails": {
-            "cardsTitle": "Credit Card information",
+            "cardsTitle": "Credit card information",
             "title": "Payment method details",
-            "nickname": "Card Nickname",
-            "number": "Card Number",
+            "nickname": "Card nickname",
+            "number": "Card number",
             "balance": "Balance",
             "deleteText": "Delete payment method",
-            "outstandingBalanceText": "Outstanding balance of"
+            "outstandingBalanceText": "Outstanding balance of",
+            "expiryDate": "Expiry date"
         },
         "changeDefault": "Change",
         "select": "Select",
         "pageTitle": "Payments Method",
         "submitCard": "Add card",
-        "addNewCreditCard": "Add New Credit Card",
+        "addNewCreditCard": "Add new credit card",
         "expired": "expired",
         "hasOutstandingBalance": "Outstanding Balance",
         "skipForNow": "Skip for now",
@@ -377,6 +384,11 @@
     "subName": "Rider app"
   },
   "bottomSheetContent": {
+    "futureRideLimitOnAsap": {
+        "titleText": "Upcoming scheduled ride",
+        "buttonText": "Back to order",
+        "subTitleText": "Hey, you have an upcoming scheduled ride. To create a ride now, cancel your scheduled ride and try again."
+    },
     "futureRideLimit": {
         "titleText": "Scheduled ride limit reached",
         "buttonText": "Back to order",
@@ -412,7 +424,7 @@
         "titleText": "Are you sure you want to cancel?",
         "subTitleText": "You may be charged a fee for cancelling this ride",
         "buttonText": "Cancel Ride",
-        "secondaryButtonText": "Keep Riding",
+        "secondaryButtonText": "Keep Ride",
         "secondaryButtonTextFuture": "Keep Ride"
     },
     "confirmPickup": {
@@ -426,7 +438,7 @@
     "notAvailableHere": {
       "titleText": "We are Sorry!",
       "buttonText": "Choose another address",
-      "subTitleText": "Autofleet is not available in your area"
+      "subTitleText": "{{ appName }} is not available in your area"
     },
     "noPayment": {
         "titleText": "No payment set",
@@ -468,7 +480,8 @@
         "arrived": "Arrived",
         "completed": "Completed",
         "pending": "Pending",
-        "canceled": "Canceled"
+        "canceled": "Canceled",
+        "failed": "Canceled"
     }
   },
   "activeRide": {
@@ -479,6 +492,10 @@
     "dropoff": {
         "arrived": "Dropoff ETA",
         "pending": "Dropoff ETA"
+    },
+    "topMessage": {
+        "outstandBalanceCreditCard": "You can't order rides at the moment. There is an outstanding payment on {{ name }}. Please contact support to clear this balance.",
+        "precedingStops": "Your driver is completing a stop nearby"
     }
   },
   "min": "{{ min }} min",
