@@ -259,9 +259,7 @@ const RidePageContextProvider = ({ children }: {
     });
     const formattedServices = services.map((service) => {
       const estimationForService = estimationsMap[service.id];
-      const estimationResult = estimationForService?.results?.length
-        && estimationForService.results[0];
-      return formatEstimationsResult(service, estimationResult, tags);
+      return formatEstimationsResult(service, estimationForService, tags);
     });
 
     return formattedServices.sort((a, b) => {
@@ -299,6 +297,7 @@ const RidePageContextProvider = ({ children }: {
   const getServiceEstimationsFetchingInterval = () => getSettingByKey(
     SETTINGS_KEYS.SERVICE_ESTIMATIONS_INTERVAL_IN_SECONDS,
   );
+  const resetSearchResults = () => setSearchResults(null);
 
   const tryServiceEstimations = async () => {
     const serviceEstimationsInterval = await getServiceEstimationsFetchingInterval();
@@ -542,7 +541,6 @@ const RidePageContextProvider = ({ children }: {
     setRequestStopPoints(reqSps);
   };
 
-  const resetSearchResults = () => setSearchResults(null);
 
   const getCurrentLocation = async () => {
     const location = await getPosition();

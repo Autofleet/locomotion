@@ -71,7 +71,7 @@ export const getEstimationTags = (estimations: any[]) => {
     cheapest: {},
   };
   estimations.map((estimation) => {
-    const e = estimation.results[0];
+    const e = estimation[0];
     if (!e) {
       return;
     }
