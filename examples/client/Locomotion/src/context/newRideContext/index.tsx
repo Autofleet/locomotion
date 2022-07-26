@@ -342,7 +342,7 @@ const RidePageContextProvider = ({ children }: {
     if (user?.id) {
       loadActiveRide();
     }
-  }, []);
+  }, [user?.id]);
 
   useBackgroundInterval(async () => {
     if (user?.id && !rideRequestLoading) {
@@ -381,6 +381,7 @@ const RidePageContextProvider = ({ children }: {
       setUnconfirmedPickupTime(null);
     }
   }, [ride.scheduledTo]);
+
   const reverseLocationGeocode = async (pinLat: number | null = null, pinLng: number | null = null)
     : Promise<any | undefined> => {
     try {
