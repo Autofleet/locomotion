@@ -224,7 +224,9 @@ const RidePage = ({ mapSettings, navigation }) => {
       && currentBsPage === BS_PAGES.ADDRESS_SELECTOR) {
       changeBsPage(BS_PAGES.LOCATION_REQUEST);
     }
-    focusCurrentLocation();
+    if (!ride.id) {
+      focusCurrentLocation();
+    }
   }, [locationGranted]);
 
   useFocusEffect(
