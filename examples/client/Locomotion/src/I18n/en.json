@@ -10,6 +10,7 @@
         "timeUntilArrival": "In {{minutes}} min",
         "toolTipEta": "ETA {{minutes}} min",
         "noCharge": "No charge",
+        "estimatedFare": "Estimated fare",
         "type": {
             "pickup": "Pickup",
             "dropoff": "Drop off"

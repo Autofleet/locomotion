@@ -121,6 +121,7 @@ export const formatEstimationsResult = (service: any, estimationResult: any, tag
     eta: estimation.minPickupEta,
     price: estimation.priceAmount,
     currency: estimation.currency,
+    isPriceEstimated: true, // estimation.priceCalculationBasis === 'actual',
     availableSeats: service.maxPassengers || 4,
     tag: (Object.entries(tags).find(([, value]) => value === service.id) || [])[0],
     iconUrl: service.icon,
