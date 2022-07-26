@@ -1,11 +1,11 @@
 import React from 'react';
-import { View } from 'react-native';
 import PriceCard from '../PriceCard';
+import { NoTitlePriceCardContainer } from './styled';
 
 const NoTitlePriceCard = (props:any) => (
-  <View style={{ marginLeft: 15 }}>
+  <NoTitlePriceCardContainer>
     <PriceCard {...props} />
-  </View>
+  </NoTitlePriceCardContainer>
 );
 
 export default NoTitlePriceCard;

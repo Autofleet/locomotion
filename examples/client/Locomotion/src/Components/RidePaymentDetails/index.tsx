@@ -26,7 +26,7 @@ const RidePaymentDetails = ({
   state,
   currency,
 } :{
-  rideId: string,
+  rideId: string | undefined,
   paymentMethod: PaymentMethodInterface,
   rideHistory: boolean
   currency: string,

@@ -17,3 +17,7 @@ opacity: .8;
 export const PriceText = styled(PriceNameText)`
    text-align: right;
    `;
+
+export const NoTitlePriceCardContainer = styled.View`
+margin-left: 15px;
+`
