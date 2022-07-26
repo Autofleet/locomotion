@@ -17,12 +17,14 @@ import { RideInterface, RidePageContext } from '../../context/newRideContext';
 import { BS_PAGES } from '../../context/ridePageStateContext/utils';
 import BlackOverlay from '../../Components/BlackOverlay';
 import { BottomSheetContext } from '../../context/bottomSheetContext';
+import GenericErrorPopup from '../../popups/GenericError';
 
 interface FutureRidesViewProps {
   menuSide: 'right' | 'left';
 }
 const FutureRidesView = ({ menuSide }: FutureRidesViewProps) => {
   const [rideToCancel, setRideToCancel] = useState<RideInterface | null>(null);
+  const [showError, setShowError] = useState(false);
   const [services, setServices] = useState<any[]>([]);
   const bottomSheetRef = useRef<bottomSheet>(null);
   const {
@@ -93,11 +95,15 @@ const FutureRidesView = ({ menuSide }: FutureRidesViewProps) => {
         <CancelRide
           secondaryButtonText={i18n.t('bottomSheetContent.cancelRide.secondaryButtonTextFuture')}
           onButtonPress={async () => {
-            await cancelRide(rideToCancel?.id);
-            await loadFutureRides();
-            closeBottomSheet();
-            if (futureRides.length === 1) {
-              NavigationService.navigate(MAIN_ROUTES.HOME);
+            try {
+              await cancelRide(rideToCancel?.id);
+              await loadFutureRides();
+              closeBottomSheet();
+              if (futureRides.length === 1) {
+                NavigationService.navigate(MAIN_ROUTES.HOME);
+              }
+            } catch {
+              setShowError(true);
             }
           }}
           onSecondaryButtonPress={() => {
@@ -105,6 +111,10 @@ const FutureRidesView = ({ menuSide }: FutureRidesViewProps) => {
           }}
         />
       </BottomSheetComponent>
+      <GenericErrorPopup
+        isVisible={showError}
+        closePopup={() => setShowError(false)}
+      />
     </PageContainer>
   );
 };
