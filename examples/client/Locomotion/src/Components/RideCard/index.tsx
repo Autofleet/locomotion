@@ -75,8 +75,8 @@ const RideCard = ({
         <RideDate>
           {ride.state === RIDE_STATES.CANCELED && totalPriceWithCurrency?.amount === 0
             ? getFormattedPrice(totalPriceWithCurrency?.currency, 0)
-            : getFormattedPrice(totalPriceWithCurrency?.currency,
-              totalPriceWithCurrency?.amount)}
+            : getFormattedPrice(totalPriceWithCurrency?.currency || '',
+              totalPriceWithCurrency?.amount || 0)}
         </RideDate>
       </DateContainer>
       <ServiceType>
