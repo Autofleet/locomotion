@@ -71,7 +71,7 @@ export const getEstimationTags = (estimations: any[]) => {
     cheapest: {},
   };
   estimations.map((estimation) => {
-    const e = estimation.results[0];
+    const e = estimation[0];
     if (!e) {
       return;
     }
@@ -120,7 +120,7 @@ export const formatEstimationsResult = (service: any, estimationResult: any, tag
     name: service.displayName,
     eta: estimation.minPickupEta,
     price: estimation.priceAmount,
-    currency: estimation.priceCurrency,
+    currency: estimation.currency,
     availableSeats: service.maxPassengers || 4,
     tag: (Object.entries(tags).find(([, value]) => value === service.id) || [])[0],
     iconUrl: service.icon,

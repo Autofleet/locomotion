@@ -1,8 +1,9 @@
 import React, {
-  useEffect, useRef, useState,
+  useEffect, useRef, useState, useContext,
 } from 'react';
 import { KeyboardAvoidingView, SafeAreaView } from 'react-native';
 import Modal from 'react-native-modal';
+import { ThemeContext } from 'styled-components';
 import i18n from '../../I18n';
 import {
   SummaryContainer,
@@ -20,6 +21,7 @@ export default ({
 }) => {
   const [currentText, updateText] = useState('');
   const inputRef = useRef();
+  const theme = useContext(ThemeContext);
 
   useEffect(() => {
     updateText(notes || '');
@@ -49,6 +51,7 @@ export default ({
               placeholder={i18n.t('popups.rideNotes.placeholder')}
               maxLength={MAX_SIZE}
               onChangeText={updateText}
+              placeholderTextColor={theme.disabledColor}
             />
             <FlexCont>
               <RoundedButton

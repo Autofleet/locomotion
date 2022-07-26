@@ -48,7 +48,6 @@ const PAGES_TO_SHOW_MY_LOCATION = [
   BS_PAGES.ADDRESS_SELECTOR,
   BS_PAGES.SERVICE_ESTIMATIONS,
   BS_PAGES.NOT_IN_TERRITORY,
-  BS_PAGES.ACTIVE_RIDE,
   BS_PAGES.CANCEL_RIDE,
   BS_PAGES.CONFIRM_FUTURE_RIDE,
   BS_PAGES.SET_LOCATION_ON_MAP,
@@ -146,6 +145,19 @@ export default React.forwardRef(({
         latitude: sp.lat,
         longitude: sp.lng,
       })), false, MAP_EDGE_PADDING);
+    }
+    if (currentBsPage === BS_PAGES.SET_LOCATION_ON_MAP) {
+      const focusCurrentLocation = async () => {
+        const location = await getPosition();
+        const { coords } = (location || DEFAULT_COORDS);
+        ref.current.animateToRegion({
+          latitude: coords.latitude,
+          longitude: coords.longitude,
+          latitudeDelta: 0.015,
+          longitudeDelta: 0.015,
+        }, 0);
+      };
+      focusCurrentLocation();
     }
   }, [currentBsPage]);
 
