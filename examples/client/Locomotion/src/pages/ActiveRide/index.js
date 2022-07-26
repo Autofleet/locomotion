@@ -6,9 +6,10 @@ import { PortalProvider } from '@gorhom/portal';
 import {
   AppState, BackHandler, Platform, View,
 } from 'react-native';
+import { getPolylineList } from '../../lib/polyline/utils';
 import { FutureRidesContext } from '../../context/futureRides';
 import FutureRidesButton from '../../Components/FutureRidesButton';
-import { RIDE_STATES, STOP_POINT_TYPES } from '../../lib/commonTypes';
+import { RIDE_STATES, STOP_POINT_STATES, STOP_POINT_TYPES } from '../../lib/commonTypes';
 import { RIDE_POPUPS } from '../../context/newRideContext/utils';
 import { UserContext } from '../../context/user';
 import {
@@ -31,7 +32,7 @@ import {
   PageContainer, MapOverlayButtons,
 } from './styled';
 import Header from '../../Components/Header';
-import MainMap from './newMap';
+import MainMap, { MAP_EDGE_PADDING } from './newMap';
 import AvailabilityContextProvider from '../../context/availability';
 import BottomSheet from '../../Components/BottomSheet';
 import RideOptions from './RideDrawer/RideOptions';
@@ -199,15 +200,25 @@ const RidePage = ({ mapSettings, navigation }) => {
     [BS_PAGES.ACTIVE_RIDE]: () => <ActiveRide />,
   };
   const focusCurrentLocation = async () => {
-    const location = await getPosition();
-    const { coords } = (location || DEFAULT_COORDS);
-    mapRef.current.animateToRegion({
+    if (ride.state === RIDE_STATES.ACTIVE) {
+      const currentStopPoint = (ride.stopPoints || []).find(sp => sp.state === STOP_POINT_STATES.PENDING);
+      const coords = getPolylineList(currentStopPoint, ride);
+      console.log(coords);
+      mapRef.current.fitToCoordinates(coords, {
+        animated: true,
+        // edgePadding: MAP_EDGE_PADDING,
+      });
+    } else {
+      const location = await getPosition();
+      const { coords } = (location || DEFAULT_COORDS);
+      mapRef.current.animateToRegion({
       // I really don't know why this is needed, but it works
-      latitude: coords.latitude - parseFloat(50) / 10000,
-      longitude: coords.longitude,
-      latitudeDelta: 0.015,
-      longitudeDelta: 0.015,
-    }, 1000);
+        latitude: coords.latitude - parseFloat(50) / 10000,
+        longitude: coords.longitude,
+        latitudeDelta: 0.015,
+        longitudeDelta: 0.015,
+      }, 1000);
+    }
   };
 
   const checkLocationPermission = async () => {
@@ -224,7 +235,9 @@ const RidePage = ({ mapSettings, navigation }) => {
       && currentBsPage === BS_PAGES.ADDRESS_SELECTOR) {
       changeBsPage(BS_PAGES.LOCATION_REQUEST);
     }
-    focusCurrentLocation();
+    if (!ride.id) {
+      focusCurrentLocation();
+    }
   }, [locationGranted]);
 
   useFocusEffect(
