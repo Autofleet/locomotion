@@ -32,7 +32,7 @@ import {
   PageContainer, MapOverlayButtons,
 } from './styled';
 import Header from '../../Components/Header';
-import MainMap, { MAP_EDGE_PADDING } from './newMap';
+import MainMap, { ACTIVE_RIDE_MAP_PADDING } from './newMap';
 import AvailabilityContextProvider from '../../context/availability';
 import BottomSheet from '../../Components/BottomSheet';
 import RideOptions from './RideDrawer/RideOptions';
@@ -200,13 +200,12 @@ const RidePage = ({ mapSettings, navigation }) => {
     [BS_PAGES.ACTIVE_RIDE]: () => <ActiveRide />,
   };
   const focusCurrentLocation = async () => {
-    if (ride.state === RIDE_STATES.ACTIVE) {
+    if ([RIDE_STATES.ACTIVE, RIDE_STATES.DISPATCHED].includes(ride.state)) {
       const currentStopPoint = (ride.stopPoints || []).find(sp => sp.state === STOP_POINT_STATES.PENDING);
       const coords = getPolylineList(currentStopPoint, ride);
-      console.log(coords);
       mapRef.current.fitToCoordinates(coords, {
         animated: true,
-        // edgePadding: MAP_EDGE_PADDING,
+        edgePadding: ACTIVE_RIDE_MAP_PADDING,
       });
     } else {
       const location = await getPosition();

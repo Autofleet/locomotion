@@ -32,6 +32,13 @@ export const MAP_EDGE_PADDING = {
   left: 100,
 };
 
+export const ACTIVE_RIDE_MAP_PADDING = {
+  top: 50,
+  right: 70,
+  bottom: 300,
+  left: 40,
+};
+
 const PAGES_TO_SHOW_SP_MARKERS = [
   BS_PAGES.ADDRESS_SELECTOR,
   BS_PAGES.SERVICE_ESTIMATIONS,
@@ -167,13 +174,12 @@ export default React.forwardRef(({
       focusMapToCoordinates([pickupStopPoint, ride.vehicle.location].map(sp => ({
         latitude: sp.lat,
         longitude: sp.lng,
-      })), true, MAP_EDGE_PADDING);
+      })), true, ACTIVE_RIDE_MAP_PADDING);
     }
     if (ride.state === RIDE_STATES.ACTIVE) {
-      focusMapToCoordinates(ride.stopPoints.map(sp => ({
-        latitude: sp.lat,
-        longitude: sp.lng,
-      })), true, MAP_EDGE_PADDING);
+      const currentStopPoint = (ride.stopPoints || []).find(sp => sp.state === STOP_POINT_STATES.PENDING);
+      const coords = getPolylineList(currentStopPoint, ride);
+      focusMapToCoordinates(coords, true, ACTIVE_RIDE_MAP_PADDING);
     }
   }, [ride.state]);
 
