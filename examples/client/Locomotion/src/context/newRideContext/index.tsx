@@ -59,6 +59,28 @@ export interface RideInterface {
   priceCalculationId?: string;
 }
 
+type AdditionalCharge = {
+  amount: number,
+  chargeFor: string,
+}
+
+type CalculationTypes = 'fixed' |'distance' | 'duration';
+
+export type PriceCalculation = {
+  surgePrice: number,
+  discount: number,
+  totalPrice: number,
+  currency: string,
+  additionalCharges: AdditionalCharge[],
+  items: [{pricingRule:
+     {calculationType: CalculationTypes, price: number, name: string },
+     cancellationRule:
+     {calculationType: CalculationTypes, price: number, name: string },
+     name: string,
+     price: number}],
+  distanceUnit: string,
+};
+
 interface RidePageContextInterface {
   loadAddress: (input: any) => void;
   reverseLocationGeocode: (lat: number, lng: number) => Promise<any>;
@@ -107,6 +129,8 @@ interface RidePageContextInterface {
   setUnconfirmedPickupTime: Dispatch<number | null>;
   unconfirmedPickupTime: number | null;
   loadRide: (rideId: string) => Promise<void>;
+  getRidePriceCalculation: (id: string | undefined) => Promise<PriceCalculation | undefined>;
+  getRideTotalPriceWithCurrency: (rideId : string | undefined) => Promise<{ amount: number; currency: string; } | undefined>;
 }
 
 export const RidePageContext = createContext<RidePageContextInterface>({
@@ -153,6 +177,8 @@ export const RidePageContext = createContext<RidePageContextInterface>({
   tryServiceEstimations: async () => undefined,
   getService: async (serviceId: string) => ({}),
   getServices: async () => [],
+  getRidePriceCalculation: async () => undefined,
+  getRideTotalPriceWithCurrency: async () => undefined,
   cleanRideState: () => undefined,
   setUnconfirmedPickupTime: () => undefined,
   unconfirmedPickupTime: null,
@@ -182,6 +208,7 @@ const RidePageContextProvider = ({ children }: {
   const [rideRequestLoading, setRideRequestLoading] = useState(false);
   const [ridePopup, setRidePopup] = useState<RidePopupNames | null>(null);
   const [unconfirmedPickupTime, setUnconfirmedPickupTime] = useState<number | null>(null);
+  // const [priceCalculation, setPriceCalculation] = useState<PriceCalculation | null>(null);
   const intervalRef = useRef<any>();
 
   const stopRequestInterval = () => {
@@ -827,9 +854,31 @@ const RidePageContextProvider = ({ children }: {
     return null;
   };
 
+  const getRidePriceCalculation = async (id:string | undefined) => {
+    const apiRide = await getRideFromApi(id || ride.id || '');
+    const calculation = await rideApi.getPriceCalculation(apiRide?.priceCalculationId);
+    return calculation;
+  };
+
+  const getRideTotalPriceWithCurrency = async (rideId: string | undefined) => {
+    if (!rideId) {
+      return { amount: 0, currency: '' };
+    }
+    const apiRide = await getRideFromApi(rideId);
+    const calculation = (await rideApi.getPriceCalculation(apiRide?.priceCalculationId)) as PriceCalculation;
+    return {
+      amount:
+      (calculation?.totalPrice || 0)
+     + (calculation?.additionalCharges?.reduce((s, { amount }) => s + amount, 0) || 0)
+      + (calculation?.discount || 0),
+      currency: calculation.currency,
+    };
+  };
+
   return (
     <RidePageContext.Provider
       value={{
+        getRideTotalPriceWithCurrency,
         requestRide,
         loadAddress,
         reverseLocationGeocode,
@@ -873,6 +922,7 @@ const RidePageContextProvider = ({ children }: {
         tryServiceEstimations,
         getService,
         getServices,
+        getRidePriceCalculation,
         cleanRideState,
         setUnconfirmedPickupTime,
         unconfirmedPickupTime,

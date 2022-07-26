@@ -144,7 +144,7 @@ export const getFormattedPrice = (priceCurrency: string, priceAmount: number) =>
 };
 
 
-export const getCurrencySymbol = (priceCurrency: string) => {
+export const getCurrencySymbol = (priceCurrency?: string) => {
   if (!priceCurrency) {
     return '';
   }
