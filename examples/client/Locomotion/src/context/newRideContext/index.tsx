@@ -89,7 +89,7 @@ interface RidePageContextInterface {
   setSelectedInputIndex: Dispatch<number | null>;
   selectedInputTarget: any;
   setSelectedInputTarget: Dispatch<any | null>;
-  onAddressSelected: (item: any, loadRide: boolean, index?: number) => void;
+  onAddressSelected: (item: any, needToLoadRide: boolean, index?: number) => void;
   requestStopPoints: any[];
   searchResults: any;
   searchAddress: (searchText: string) => void;
@@ -141,7 +141,7 @@ export const RidePageContext = createContext<RidePageContextInterface>({
   setSelectedInputIndex: () => undefined,
   selectedInputTarget: null,
   setSelectedInputTarget: () => undefined,
-  onAddressSelected: (item: any, loadRide: boolean, index?: number) => undefined,
+  onAddressSelected: (item: any, needToLoadRide: boolean, index?: number) => undefined,
   requestStopPoints: [],
   searchResults: [],
   searchAddress: (searchText: string) => undefined,
@@ -547,7 +547,7 @@ const RidePageContextProvider = ({ children }: {
     }
   };
 
-  const onAddressSelected = async (selectedItem: any, loadRide: boolean, index?: number) => {
+  const onAddressSelected = async (selectedItem: any, needToLoadRide: boolean, index?: number) => {
     if (selectedItem.isLoading) {
       return null;
     }
@@ -563,7 +563,7 @@ const RidePageContextProvider = ({ children }: {
     };
     resetSearchResults();
 
-    if (loadRide) {
+    if (needToLoadRide) {
       validateRequestedStopPoints(reqSps);
     }
     setRequestStopPoints(reqSps);
