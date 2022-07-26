@@ -20,6 +20,33 @@ import { RideStateContextContext } from '../../../../context/ridePageStateContex
 import { UserContext } from '../../../../context/user';
 import { FONT_SIZES, FONT_WEIGHTS } from '../../../../context/theme';
 
+const NoHistoryTextContainer = styled.View`
+  display: flex;
+  align-items: center;
+  opacity: .5;
+`;
+const TakeRide = styled.Text`
+  ${FONT_SIZES.H2}
+  ${FONT_WEIGHTS.BOLD}
+  margin-top: 30px;
+  margin-bottom: 20px;
+`;
+const InfoText = styled.Text`
+  ${FONT_SIZES.H2}
+  ${FONT_WEIGHTS.REGULAR}
+  text-align: center;
+`;
+const NoHistoryText = () => (
+  <NoHistoryTextContainer>
+    <TakeRide>
+      {i18n.t('addressView.noHistoryHeader')}
+    </TakeRide>
+    <InfoText>
+      {i18n.t('addressView.noHistoryText')}
+    </InfoText>
+  </NoHistoryTextContainer>
+);
+
 const HistoryContainer = styled.View`
   margin-bottom: 10px;
   flex: 1;
@@ -84,6 +111,25 @@ const AddressSelectorBottomSheet = ({ addressSelectorFocus }) => {
     changeBsPage(BS_PAGES.SET_LOCATION_ON_MAP);
     collapse();
   };
+
+  const getHistoryRows = () => {
+    if (!userContext.historyResults.length) {
+      return userContext.historyResults.map((h, i) => (
+        <AddressRow
+          testID={`searchResults_${i}`}
+          {...h}
+          isHistory
+          key={h.placeId}
+          onPress={() => {
+            userContext.onAddressSelected(h, false, 1);
+          }}
+        />
+      ));
+    }
+    return (
+      <NoHistoryText />
+    );
+  };
   return (
     <ContentContainer>
       {!isExpanded ? (
@@ -130,17 +176,7 @@ const AddressSelectorBottomSheet = ({ addressSelectorFocus }) => {
               </BottomSheetScrollView>
             </>
           )
-          : (userContext.historyResults.map((h, i) => (
-            <AddressRow
-              testID={`searchResults_${i}`}
-              {...h}
-              isHistory
-              key={h.placeId}
-              onPress={() => {
-                userContext.onAddressSelected(h, false, 1);
-              }}
-            />
-          )))
+          : getHistoryRows()
           }
       </HistoryContainer>
       <GenericErrorPopup

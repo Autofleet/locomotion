@@ -1,4 +1,5 @@
 import React, {
+  useCallback,
   useContext, useEffect, useState,
 } from 'react';
 import polyline from '@mapbox/polyline';
@@ -6,6 +7,7 @@ import { StyleSheet } from 'react-native';
 import MapView, { Polygon, Polyline } from 'react-native-maps';
 import Config from 'react-native-config';
 import moment from 'moment';
+import { debounce } from 'lodash';
 import { FutureRidesContext } from '../../context/futureRides';
 import { RidePageContext } from '../../context/newRideContext';
 import { RideStateContextContext } from '../../context';
@@ -46,7 +48,6 @@ const PAGES_TO_SHOW_MY_LOCATION = [
   BS_PAGES.ADDRESS_SELECTOR,
   BS_PAGES.SERVICE_ESTIMATIONS,
   BS_PAGES.NOT_IN_TERRITORY,
-  BS_PAGES.ACTIVE_RIDE,
   BS_PAGES.CANCEL_RIDE,
   BS_PAGES.CONFIRM_FUTURE_RIDE,
   BS_PAGES.SET_LOCATION_ON_MAP,
@@ -209,6 +210,13 @@ export default React.forwardRef(({
     return stopPoint.streetAddress || stopPoint.description;
   };
 
+  const debouncedSaveLocation = debounce(async ({ latitude, longitude }) => {
+    const lat = latitude.toFixed(6);
+    const lng = longitude.toFixed(6);
+    const spData = await reverseLocationGeocode(lat, lng);
+    saveSelectedLocation(spData);
+  }, 300);
+
   return (
     <>
       <MapView
@@ -221,18 +229,11 @@ export default React.forwardRef(({
         key="map"
         followsUserLocation={isUserLocationFocused}
         moveOnMarkerPress={false}
-        onRegionChangeComplete={async (event) => {
+        onPanDrag={({ nativeEvent: { coordinate: { latitude, longitude } } }) => {
           if (isChooseLocationOnMap) {
-            const { latitude, longitude } = event;
-            const lat = latitude.toFixed(6);
-            const lng = longitude.toFixed(6);
-            const spData = await reverseLocationGeocode(lat, lng);
-            saveSelectedLocation(spData);
+            debouncedSaveLocation({ latitude, longitude });
           }
         }}
-        onPanDrag={() => (
-          !isUserLocationFocused === false ? setIsUserLocationFocused(false) : null
-        )}
         ref={ref}
         userInterfaceStyle={isDarkMode ? THEME_MOD.DARK : undefined}
         customMapStyle={isDarkMode ? mapDarkMode : undefined}

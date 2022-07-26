@@ -88,6 +88,7 @@ const AccountContent = ({ navigation }) => {
     : navigation.navigate(MAIN_ROUTES.EMAIL_CODE, {
       editAccount: true,
     }));
+
   return (
     <Container>
       <CardsContainer>

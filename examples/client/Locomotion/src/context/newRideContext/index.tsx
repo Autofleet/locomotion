@@ -73,7 +73,9 @@ export type PriceCalculation = {
   currency: string,
   additionalCharges: AdditionalCharge[],
   items: [{pricingRule:
-     {calculationType: CalculationTypes, price: number, name: string},
+     {calculationType: CalculationTypes, price: number, name: string },
+     cancellationRule:
+     {calculationType: CalculationTypes, price: number, name: string },
      name: string,
      price: number}],
   distanceUnit: string,
@@ -285,9 +287,7 @@ const RidePageContextProvider = ({ children }: {
     });
     const formattedServices = services.map((service) => {
       const estimationForService = estimationsMap[service.id];
-      const estimationResult = estimationForService?.results?.length
-        && estimationForService.results[0];
-      return formatEstimationsResult(service, estimationResult, tags);
+      return formatEstimationsResult(service, estimationForService, tags);
     });
 
     return formattedServices.sort((a, b) => {
@@ -325,6 +325,7 @@ const RidePageContextProvider = ({ children }: {
   const getServiceEstimationsFetchingInterval = () => getSettingByKey(
     SETTINGS_KEYS.SERVICE_ESTIMATIONS_INTERVAL_IN_SECONDS,
   );
+  const resetSearchResults = () => setSearchResults(null);
 
   const tryServiceEstimations = async () => {
     const serviceEstimationsInterval = await getServiceEstimationsFetchingInterval();
@@ -368,7 +369,7 @@ const RidePageContextProvider = ({ children }: {
     if (user?.id) {
       loadActiveRide();
     }
-  }, []);
+  }, [user?.id]);
 
   useBackgroundInterval(async () => {
     if (user?.id && !rideRequestLoading) {
@@ -407,6 +408,7 @@ const RidePageContextProvider = ({ children }: {
       setUnconfirmedPickupTime(null);
     }
   }, [ride.scheduledTo]);
+
   const reverseLocationGeocode = async (pinLat: number | null = null, pinLng: number | null = null)
     : Promise<any | undefined> => {
     try {
@@ -567,7 +569,6 @@ const RidePageContextProvider = ({ children }: {
     setRequestStopPoints(reqSps);
   };
 
-  const resetSearchResults = () => setSearchResults(null);
 
   const getCurrentLocation = async () => {
     const location = await getPosition();
@@ -866,6 +867,7 @@ const RidePageContextProvider = ({ children }: {
     // return calculation;
     const apiRide = await getRideFromApi(id || ride.id || '');
     const calculation = await rideApi.getPriceCalculation(apiRide?.priceCalculationId);
+    console.log('apiRide!', calculation);
     return calculation;
   };
 

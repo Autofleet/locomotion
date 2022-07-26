@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { View } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { useNavigation, useRoute } from '@react-navigation/native';
+import { RIDE_STATES } from '../../lib/commonTypes';
 import NoTitlePriceCard from '../../Components/PriceCard/NoTitlePriceCard';
 import { MAIN_ROUTES } from '../routes';
 import PriceCard from '../../Components/PriceCard';
@@ -52,6 +53,19 @@ const RidePriceBreakDown = () => {
     setPaymentMethod(result.payment?.paymentMethod);
     setLoading(false);
   };
+
+  useEffect(() => {
+    console.log('stateeee', ride.state);
+
+    if (!priceCalculation || !paymentMethod) {
+      setLoading(true);
+    }
+  }, [priceCalculation, paymentMethod]);
+
+  useEffect(() => {
+    console.log('stateeee', ride.state);
+    console.log('haveornot', priceCalculation?.haveCancelationFee);
+  });
 
   const getSymbol = () => getCurrencySymbol(priceCalculation?.currency);
   const getPriceWithCurrency = (amount:number) => `${getSymbol()}${amount.toFixed(2)}`;
@@ -118,12 +132,12 @@ const RidePriceBreakDown = () => {
                   />
                 ))}
                 {
-                  // priceCalculation?.haveCancelationFee && ride.state === 'canceled' ? (
-                  <PriceCard
-                    name={`${i18n.t('Cancelation fee')}`}
-                    text={getPriceWithCurrency(priceCalculation?.totalPrice || 0)}
-                  />
-                  // ) : undefined
+                 priceCalculation?.items.find(x => x.cancellationRule) ? (
+                   <PriceCard
+                     name={`${i18n.t('Cancelation fee')}`}
+                     text={getPriceWithCurrency(priceCalculation?.totalPrice || 0)}
+                   />
+                 ) : undefined
                 }
               </View>
             </InformationCard>

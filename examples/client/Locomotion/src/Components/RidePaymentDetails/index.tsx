@@ -8,7 +8,7 @@ import { getFormattedPrice } from '../../context/newRideContext/utils';
 import CardRow from '../CardRow';
 import CardsTitle from '../CardsTitle';
 import i18n from '../../I18n';
-import { RidePageContext } from '../../context/newRideContext';
+import { PriceCalculation, RidePageContext } from '../../context/newRideContext';
 import {
   PaymentRow, RidePriceDetails, PriceText, ViewDetails, CardRowContainer,
 } from './styled';
@@ -34,25 +34,26 @@ const RidePaymentDetails = ({
 
 }) => {
   const navigation = useNavigation<Nav>();
-  const [totalAmount, setTotalAmount] = useState(0);
-  const [haveCancelationFee, setHaveCancelationFee] = useState(false);
+  const [priceCalculation, setPriceCalculation] = useState<PriceCalculation>();
   const {
     getRidePriceCalculation,
   } = useContext(RidePageContext);
   const updatePriceCalculation = async () => {
-    if (state === 'canceled') {
-      return { amount: 0, currency };
-    }
     const calculation = await getRidePriceCalculation(rideId);
-    setTotalAmount((calculation?.totalPrice || 0)
-     + (calculation?.discount || 0)
-     + (calculation?.additionalCharges.find(({ chargeFor }) => chargeFor === 'tip')?.amount || 0));
-    setHaveCancelationFee(calculation?.haveCancelationFee || false);
+    setPriceCalculation(calculation);
   };
+
+  const getTotalAmount = () => (priceCalculation?.totalPrice || 0)
+  + (priceCalculation?.discount || 0)
+  + (priceCalculation?.additionalCharges.find(({ chargeFor }) => chargeFor === 'tip')?.amount || 0);
 
   useEffect(() => {
     updatePriceCalculation();
-  }, [rideId]);
+  }, []);
+
+  useEffect(() => {
+    console.log('itemss', priceCalculation);
+  }, [priceCalculation]);
 
   return (paymentMethod ? (
     <>
@@ -62,17 +63,17 @@ const RidePaymentDetails = ({
           <CardRow {...paymentMethod} />
         </CardRowContainer>
         <RidePriceDetails>
-          <PriceText>{getFormattedPrice(currency, totalAmount)}</PriceText>
+          <PriceText>{getFormattedPrice(currency, getTotalAmount())}</PriceText>
           <TouchableOpacity onPress={() => navigation.navigate(MAIN_ROUTES.RIDE_PRICE_BREAKDOWN,
             { rideId, rideHistory })}
           >
-            {/* {state !== RIDE_STATES.CANCELED
+            {state !== RIDE_STATES.CANCELED
             || (state === RIDE_STATES.CANCELED
-             && haveCancelationFee) ? ( */}
-            <ViewDetails>
-              {i18n.t('ride.viewDetails').toString()}
-            </ViewDetails>
-            {/* ) : undefined} */}
+             && priceCalculation?.items.find(x => x.cancellationRule)) ? (
+               <ViewDetails>
+                 {i18n.t('ride.viewDetails').toString()}
+               </ViewDetails>
+              ) : undefined}
           </TouchableOpacity>
         </RidePriceDetails>
       </PaymentRow>

@@ -198,7 +198,9 @@
         "currentLocation": "Current location",
         "enterAddress": "Enter address",
         "setLocationOnMap": "Set location on map",
-        "welcomeText": "Hey {{ name }}, where to?"
+        "welcomeText": "Hey {{ name }}, where to?",
+        "noHistoryHeader": "Take a ride!",
+        "noHistoryText": "You'll see your recent locations here"
     },
     "popups": {
         "rideCanceled": {
