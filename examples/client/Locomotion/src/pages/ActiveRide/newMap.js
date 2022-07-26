@@ -19,15 +19,22 @@ import StationsMap from '../../Components/Marker';
 import { BS_PAGES } from '../../context/ridePageStateContext/utils';
 import { RIDE_STATES, STOP_POINT_STATES } from '../../lib/commonTypes';
 import PrecedingStopPointMarker from '../../Components/PrecedingStopPointMarker';
-import { getSubLineStringAfterLocationFromDecodedPolyline } from '../../lib/polyline/utils';
+import { getPolylineList } from '../../lib/polyline/utils';
 import { BottomSheetContext } from '../../context/bottomSheetContext';
 import i18n from '../../I18n';
 
-const MAP_EDGE_PADDING = {
+export const MAP_EDGE_PADDING = {
   top: 140,
   right: 100,
   bottom: 400,
   left: 100,
+};
+
+export const ACTIVE_RIDE_MAP_PADDING = {
+  top: 50,
+  right: 70,
+  bottom: 300,
+  left: 40,
 };
 
 const PAGES_TO_SHOW_SP_MARKERS = [
@@ -165,13 +172,12 @@ export default React.forwardRef(({
       focusMapToCoordinates([pickupStopPoint, ride.vehicle.location].map(sp => ({
         latitude: sp.lat,
         longitude: sp.lng,
-      })), true, MAP_EDGE_PADDING);
+      })), true, ACTIVE_RIDE_MAP_PADDING);
     }
     if (ride.state === RIDE_STATES.ACTIVE) {
-      focusMapToCoordinates(ride.stopPoints.map(sp => ({
-        latitude: sp.lat,
-        longitude: sp.lng,
-      })), true, MAP_EDGE_PADDING);
+      const currentStopPoint = (ride.stopPoints || []).find(sp => sp.state === STOP_POINT_STATES.PENDING);
+      const coords = getPolylineList(currentStopPoint, ride);
+      focusMapToCoordinates(coords, true, ACTIVE_RIDE_MAP_PADDING);
     }
   }, [ride.state]);
 
@@ -201,10 +207,7 @@ export default React.forwardRef(({
   const precedingStopPoints = (currentStopPoint || {}).precedingStops || [];
 
   const polylineList = stopPoints && currentStopPoint
-     && currentStopPoint.polyline && getSubLineStringAfterLocationFromDecodedPolyline(
-    polyline.decode(currentStopPoint.polyline),
-    { latitude: ride.vehicle.location.lat, longitude: ride.vehicle.location.lng },
-  ).map(p => ({ latitude: p[0], longitude: p[1] }));
+     && currentStopPoint.polyline && getPolylineList(currentStopPoint, ride);
 
   const finalStopPoints = stopPoints || requestStopPoints;
   const firstSpNotCompleted = (stopPoints
