@@ -3,6 +3,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { View } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { useNavigation, useRoute } from '@react-navigation/native';
+import { CHARGE_FOR_TIP } from '../../lib/commonTypes';
 import NoTitlePriceCard from '../../Components/PriceCard/NoTitlePriceCard';
 import { MAIN_ROUTES } from '../routes';
 import PriceCard from '../../Components/PriceCard';
@@ -66,7 +67,7 @@ const RidePriceBreakDown = () => {
 
   const getSymbol = () => getCurrencySymbol(priceCalculation?.currency);
   const getPriceWithCurrency = (amount:number) => `${getSymbol()}${amount.toFixed(2)}`;
-  const getTip = () => priceCalculation?.additionalCharges?.find(({ chargeFor }) => chargeFor === 'tip');
+  const getTip = () => priceCalculation?.additionalCharges?.find(({ chargeFor }) => chargeFor === CHARGE_FOR_TIP);
   const getTotalPrice = () => getPriceWithCurrency(
     (priceCalculation?.totalPrice || 0)
    + (priceCalculation?.additionalCharges?.reduce((s, { amount }) => s + amount, 0) || 0)

@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import propsTypes from 'prop-types';
 import { TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { RIDE_STATES } from '../../lib/commonTypes';
+import { CHARGE_FOR_TIP, RIDE_STATES } from '../../lib/commonTypes';
 import { MAIN_ROUTES } from '../../pages/routes';
 import { getFormattedPrice } from '../../context/newRideContext/utils';
 import CardRow from '../CardRow';
@@ -26,7 +26,7 @@ const RidePaymentDetails = ({
   state,
   currency,
 } :{
-  rideId: string | undefined,
+  rideId: string,
   paymentMethod: PaymentMethodInterface,
   rideHistory: boolean
   currency: string,
@@ -45,7 +45,7 @@ const RidePaymentDetails = ({
 
   const getTotalAmount = () => (priceCalculation?.totalPrice || 0)
   + (priceCalculation?.discount || 0)
-  + (priceCalculation?.additionalCharges.find(({ chargeFor }) => chargeFor === 'tip')?.amount || 0);
+  + (priceCalculation?.additionalCharges.find(({ chargeFor }) => chargeFor === CHARGE_FOR_TIP)?.amount || 0);
 
   useEffect(() => {
     updatePriceCalculation();
