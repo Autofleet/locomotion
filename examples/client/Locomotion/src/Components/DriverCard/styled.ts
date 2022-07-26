@@ -16,7 +16,7 @@ export const RatingBarContainer = styled(View)`
 `;
 
 export const DriverDetailsContainer = styled(View)`
-flex-grow: 1;
+flex: 1;
 `;
 
 export const DriverAvatarContainer = styled(View)`

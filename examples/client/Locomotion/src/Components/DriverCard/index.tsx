@@ -24,6 +24,7 @@ import { MAIN_ROUTES } from '../../pages/routes';
 interface DriverCardProps {
     activeRide: boolean;
     ride: RideInterface;
+    noPaddingLeft: boolean;
 }
 
 const formatDriverRating = (rating: number): string | 0 => rating && rating.toFixed(1);
@@ -34,6 +35,7 @@ const formatDriverName = (name: string): string => name && name.substring(0, MAX
 const DriverCard = ({
   ride,
   activeRide,
+  noPaddingLeft,
 }: DriverCardProps) => {
   const getRatingSection = () => {
     if (ride.rating) {
@@ -59,7 +61,7 @@ const DriverCard = ({
   return (
     <DriverSectionContainer>
       {!activeRide && (
-      <CardsTitle title={i18n.t('rideHistory.rideCard.driverRating')} />
+      <CardsTitle noPaddingLeft={noPaddingLeft} title={i18n.t('rideHistory.rideCard.driverRating')} />
       )}
       <DriverRatingContainer>
         <DriverAvatarContainer>
