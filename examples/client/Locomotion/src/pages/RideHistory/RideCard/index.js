@@ -41,18 +41,13 @@ import * as NavigationService from '../../../services/navigation';
 import { MAIN_ROUTES } from '../../routes';
 import ServiceTypeDetails from '../../../Components/ServiceTypeDetails';
 
-type TotalPrice = {
-amount: number,
-currency: string
-};
-
 const RideTitleCard = ({
   ride, page, showTip, tip,
 }) => {
   const {
     getRideTotalPriceWithCurrency,
   } = useContext(RidePageContext);
-  const [totalPrice, setTotalPrice] = useState<TotalPrice>();
+  const [totalPrice, setTotalPrice] = useState();
 
   const updateTotalPrice = async () => {
     const price = await getRideTotalPriceWithCurrency(ride.id);
