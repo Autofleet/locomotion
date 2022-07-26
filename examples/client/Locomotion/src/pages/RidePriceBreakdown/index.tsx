@@ -73,12 +73,6 @@ const RidePriceBreakDown = () => {
     + (priceCalculation?.discount || 0),
   );
 
-  const calculationTypeToUnit = {
-    fixed: '',
-    duration: 'min',
-    distance: priceCalculation?.distanceUnit,
-  };
-
   useEffect(() => {
     updatePriceCalculation();
   }, []);
@@ -121,7 +115,7 @@ const RidePriceBreakDown = () => {
                     name={i18n.t('ridePriceBreakdown.priceItem', {
                       name: item.pricingRule.name,
                       price: getPriceWithCurrency(item.pricingRule.price),
-                      unit: calculationTypeToUnit[item.pricingRule.calculationType],
+                      unit: priceCalculation.distanceUnit,
                     })}
                     text={getPriceWithCurrency(item.price)}
                   />

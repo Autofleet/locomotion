@@ -79,7 +79,6 @@ export type PriceCalculation = {
      name: string,
      price: number}],
   distanceUnit: string,
-  haveCancelationFee: boolean
 };
 
 interface RidePageContextInterface {
