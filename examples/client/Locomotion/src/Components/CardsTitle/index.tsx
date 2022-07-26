@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { FONT_SIZES, FONT_WEIGHTS } from '../../context/theme';
 
 type StyledCardsTitleInterface = {
-  noPaddingLeft: boolean;
+  noPaddingLeft: boolean | undefined;
 }
 
 const StyledCardsTitle = styled(Text)<StyledCardsTitleInterface>`
