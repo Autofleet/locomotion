@@ -231,9 +231,6 @@ export default React.forwardRef(({
         followsUserLocation={isUserLocationFocused}
         moveOnMarkerPress={false}
         onPanDrag={({ nativeEvent: { coordinate: { latitude, longitude } } }) => {
-          if (!isUserLocationFocused === false) {
-            setIsUserLocationFocused(false);
-          }
           if (isChooseLocationOnMap) {
             debouncedSaveLocation({ latitude, longitude });
           }
