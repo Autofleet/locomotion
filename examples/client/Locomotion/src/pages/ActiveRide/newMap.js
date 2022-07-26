@@ -211,17 +211,12 @@ export default React.forwardRef(({
     return stopPoint.streetAddress || stopPoint.description;
   };
 
-  const debouncedSaveLocation = useCallback(
-    debounce(async ({ latitude, longitude }) => {
-      if (isChooseLocationOnMap) {
-        const lat = latitude.toFixed(6);
-        const lng = longitude.toFixed(6);
-        const spData = await reverseLocationGeocode(lat, lng);
-        saveSelectedLocation(spData);
-      }
-    }, 300),
-    [isChooseLocationOnMap],
-  );
+  const debouncedSaveLocation = debounce(async ({ latitude, longitude }) => {
+    const lat = latitude.toFixed(6);
+    const lng = longitude.toFixed(6);
+    const spData = await reverseLocationGeocode(lat, lng);
+    saveSelectedLocation(spData);
+  }, 300);
 
   return (
     <>
@@ -239,7 +234,9 @@ export default React.forwardRef(({
           if (!isUserLocationFocused === false) {
             setIsUserLocationFocused(false);
           }
-          debouncedSaveLocation({ latitude, longitude });
+          if (isChooseLocationOnMap) {
+            debouncedSaveLocation({ latitude, longitude });
+          }
         }}
         ref={ref}
         userInterfaceStyle={isDarkMode ? THEME_MOD.DARK : undefined}
