@@ -84,7 +84,6 @@ const RidesView = ({ rides }) => {
 
 const RidesList = React.memo(({
   rides,
-  activeFilter,
 }) => (
   <>
     {rides && rides.length ? (

@@ -85,8 +85,6 @@ interface RidePageContextInterface {
   loadAddress: (input: any) => void;
   reverseLocationGeocode: (lat: number, lng: number) => Promise<any>;
   enrichPlaceWithLocation: (placeId: string) => any;
-  searchTerm: string | null;
-  setSearchTerm: Dispatch<string | null>;
   selectedInputIndex: number | null;
   setSelectedInputIndex: Dispatch<number | null>;
   selectedInputTarget: any;
@@ -138,8 +136,6 @@ export const RidePageContext = createContext<RidePageContextInterface>({
   loadAddress: (input: any) => undefined,
   reverseLocationGeocode: async (lat: number, lng: number) => undefined,
   enrichPlaceWithLocation: (placeId: string) => undefined,
-  searchTerm: '',
-  setSearchTerm: () => undefined,
   selectedInputIndex: null,
   setSelectedInputIndex: () => undefined,
   selectedInputTarget: null,
@@ -199,7 +195,6 @@ const RidePageContextProvider = ({ children }: {
   const { setNewFutureRide, loadFutureRides } = useContext(FutureRidesContext);
   const [requestStopPoints, setRequestStopPoints] = useState(INITIAL_STOP_POINTS);
   const [currentGeocode, setCurrentGeocode] = useState<any | null>(null);
-  const [searchTerm, setSearchTerm] = useState<string | null>(null);
   const [selectedInputIndex, setSelectedInputIndex] = useState<number | null>(null);
   const [selectedInputTarget, setSelectedInputTarget] = useState<any | null>(null);
   const [searchResults, setSearchResults] = useState<any[] | null>(null);
@@ -684,13 +679,7 @@ const RidePageContextProvider = ({ children }: {
   const requestRide = async (pickupLocation?: any): Promise<void> => {
     let stopPoints = requestStopPoints;
     const spsToUpdate = requestStopPoints.filter(p => p.placeId);
-    spsToUpdate.map((s) => {
-      saveLastAddresses({
-        text: s.streetAddress,
-        fullText: s.streetAddress,
-        placeId: s.placeId,
-      });
-    });
+
     if (pickupLocation) {
       if (!validateStopPointInTerritory([pickupLocation])) {
         return;
@@ -702,6 +691,15 @@ const RidePageContextProvider = ({ children }: {
     stopRequestInterval();
     setServiceEstimations(null);
     changeBsPage(BS_PAGES.CONFIRMING_RIDE);
+    const lastSp = stopPoints[stopPoints.length - 1];
+    if (lastSp) {
+      saveLastAddresses({
+        text: lastSp.streetAddress || lastSp.description,
+        fullText: lastSp.streetAddress || lastSp.description,
+        placeId: lastSp.placeId,
+      });
+    }
+
     const rideToCreate = {
       serviceId: chosenService?.id,
       paymentMethodId: ride.paymentMethodId,
@@ -879,8 +877,6 @@ const RidePageContextProvider = ({ children }: {
         loadAddress,
         reverseLocationGeocode,
         enrichPlaceWithLocation,
-        searchTerm,
-        setSearchTerm,
         selectedInputIndex,
         setSelectedInputIndex,
         selectedInputTarget,

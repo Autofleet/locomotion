@@ -92,6 +92,7 @@
     "@types/bluebird": "^3.5.36",
     "@types/jest": "^27.5.1",
     "@types/lodash": "^4.14.182",
+    "@types/mapbox__polyline": "^1.0.2",
     "@types/react-native": "^0.67.7",
     "@types/react-native-version-check": "^3.4.4",
     "@types/react-test-renderer": "^18.0.0",

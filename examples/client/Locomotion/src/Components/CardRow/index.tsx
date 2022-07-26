@@ -19,13 +19,22 @@ type ContainerProps = {
   selected: boolean,
 };
 
-const Container = styled(View) < ContainerProps >`
+const InnerContainer = styled(View)<{chooseMethodPage: boolean}>`
   flex-direction: row;
   justify-content: flex-start;
-  background-color: ${(props: any) => (props.selected ? '#rgba(36, 170, 242, 0.2)' : '#fff')};
-  min-height: 50px;
   width: 100%;
   align-items: center;
+  padding: ${({ chooseMethodPage }) => (chooseMethodPage ? '0 15px' : '0px')};
+`;
+
+const Container = styled(View) < ContainerProps >`
+  background-color: ${(props: any) => (props.selected ? '#rgba(36, 170, 242, 0.2)' : '#fff')};
+  min-height: 50px;
+  flex-direction: row;
+  justify-content: flex-start;
+  width: 100%;
+  align-items: center;
+
 `;
 
 const ImageContainer = styled(View)`
@@ -92,62 +101,64 @@ const CardRow = (paymentMethod: any) => (
     }}
   >
     <Container selected={paymentMethod.selected}>
-      <ImageContainer>
-        {paymentMethod.addNew
-          ? (
-            <>
-              <PlusContainer><PlusText>+</PlusText></PlusContainer>
-            </>
-          )
-          : (
-            <>
-              {isCashPaymentMethod(paymentMethod)
-                ? <SvgIcon Svg={cashIcon} width={40} height={25} />
-                : <PaymentIcon type={paymentMethod.brand} />}
-              {paymentMethod.mark ? (
-                <SvgIcon
-                  style={{
-                    position: 'absolute',
-                    right: -7,
-                    bottom: -7,
-                  }}
-                  Svg={selected}
-                />
-              ) : null }
-            </>
-          )
+      <InnerContainer chooseMethodPage={paymentMethod.chooseMethodPage}>
+        <ImageContainer>
+          {paymentMethod.addNew
+            ? (
+              <>
+                <PlusContainer><PlusText>+</PlusText></PlusContainer>
+              </>
+            )
+            : (
+              <>
+                {isCashPaymentMethod(paymentMethod)
+                  ? <SvgIcon Svg={cashIcon} width={40} height={25} />
+                  : <PaymentIcon type={paymentMethod.brand} />}
+                {paymentMethod.mark ? (
+                  <SvgIcon
+                    style={{
+                      position: 'absolute',
+                      right: -7,
+                      bottom: -7,
+                    }}
+                    Svg={selected}
+                  />
+                ) : null }
+              </>
+            )
         }
 
-      </ImageContainer>
-      <TextContainer>
-        {paymentMethod.addNew
-          ? (
-            <>
-              <Type>{i18n.t('payments.addNewCreditCard').toString()}</Type>
-            </>
-          )
-          : (
-            <>
-              {isCashPaymentMethod(paymentMethod)
-                ? (
-                  <Type>
-                    {paymentMethod.name}
-                  </Type>
-                )
-                : (
-                  <Type>
-                    {capitalizeFirstLetter(paymentMethod.name)}
-                  </Type>
-                )}
-              {paymentMethod.lastFour
-                ? <Description>{getLastFourForamttedShort(paymentMethod.lastFour)}</Description>
-                : null}
-              {paymentMethod && !isCashPaymentMethod(paymentMethod) && moment(paymentMethod.expiresAt).isBefore(moment()) ? <Error>{i18n.t('payments.expired').toString()}</Error> : null}
-              {paymentMethod && !isCashPaymentMethod(paymentMethod) && paymentMethod.hasOutstandingBalance ? <Error>{i18n.t('payments.hasOutstandingBalance').toString()}</Error> : null}
-            </>
-          )}
-      </TextContainer>
-      {paymentMethod.showArrow && <SvgIcon Svg={chevronIcon} stroke="#d7d7d7" />}
+        </ImageContainer>
+        <TextContainer>
+          {paymentMethod.addNew
+            ? (
+              <>
+                <Type>{i18n.t('payments.addNewCreditCard').toString()}</Type>
+              </>
+            )
+            : (
+              <>
+                {isCashPaymentMethod(paymentMethod)
+                  ? (
+                    <Type>
+                      {paymentMethod.name}
+                    </Type>
+                  )
+                  : (
+                    <Type>
+                      {capitalizeFirstLetter(paymentMethod.name)}
+                    </Type>
+                  )}
+                {paymentMethod.lastFour
+                  ? <Description>{getLastFourForamttedShort(paymentMethod.lastFour)}</Description>
+                  : null}
+                {paymentMethod && !isCashPaymentMethod(paymentMethod) && moment(paymentMethod.expiresAt).isBefore(moment()) ? <Error>{i18n.t('payments.expired').toString()}</Error> : null}
+                {paymentMethod && !isCashPaymentMethod(paymentMethod) && paymentMethod.hasOutstandingBalance ? <Error>{i18n.t('payments.hasOutstandingBalance').toString()}</Error> : null}
+              </>
+            )}
+        </TextContainer>
+        {paymentMethod.showArrow && <SvgIcon Svg={chevronIcon} stroke="#d7d7d7" />}
+      </InnerContainer>
     </Container>
   </TouchableOpacity>
 );

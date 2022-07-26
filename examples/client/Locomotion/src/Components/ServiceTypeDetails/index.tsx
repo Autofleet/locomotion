@@ -16,7 +16,7 @@ const ServiceTypeDetails = ({
     serviceType: any,
 }) => (serviceType ? (
   <>
-    <CardsTitle title={i18n.t('ride.serviceType')} />
+    <CardsTitle noPaddingLeft title={i18n.t('ride.serviceType')} />
     <ServiceName>{serviceType.name}</ServiceName>
   </>
 ) : null
