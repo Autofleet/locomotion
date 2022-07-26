@@ -852,22 +852,8 @@ const RidePageContextProvider = ({ children }: {
   };
 
   const getRidePriceCalculation = async (id:string | undefined) => {
-    // if (id) {
-    //   const apiRide = await getRideFromApi(id);
-    //   const calculation = await rideApi.getPriceCalculation(apiRide?.priceCalculationId);
-    //   return calculation;
-    // } if (priceCalculation) {
-    //   return priceCalculation;
-    // }
-    // const apiRide = await getRideFromApi(ride.id || '');
-    // const calculation = await rideApi.getPriceCalculation(apiRide?.priceCalculationId);
-    // setPriceCalculation(calculation);
-
-
-    // return calculation;
     const apiRide = await getRideFromApi(id || ride.id || '');
     const calculation = await rideApi.getPriceCalculation(apiRide?.priceCalculationId);
-    console.log('apiRide!', calculation);
     return calculation;
   };
 
