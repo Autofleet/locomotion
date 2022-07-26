@@ -49,6 +49,8 @@ const RidePriceBreakDown = () => {
   const updateRideFromApi = async () => {
     setLoading(true);
     if (params.rideId || ride.id) {
+      // @ts-ignore
+      // ts does not recognize the null check
       const result = await getRideFromApi(params.rideId || ride.id);
       setPaymentMethod(result.payment?.paymentMethod);
       setLoading(false);
