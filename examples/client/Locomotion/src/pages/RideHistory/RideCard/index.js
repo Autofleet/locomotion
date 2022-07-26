@@ -144,7 +144,7 @@ const RideView = ({ ride }) => {
         <StopPointsVerticalViewContainer>
           <RidePaymentDetails
             rideId={ride.id}
-            paymentMethod={ride.payment.paymentMethod}
+            paymentMethod={ride.payment?.paymentMethod}
             state={ride.state}
             currency={ride.priceCurrency}
             rideHistory

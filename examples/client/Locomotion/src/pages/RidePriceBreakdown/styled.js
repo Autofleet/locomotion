@@ -9,3 +9,8 @@ padding: 10px;
                   border-style: solid;
                   border-width: 1px;
 `;
+
+export const PriceItemsContainer = styled.View`
+width: 90%;
+margin-left: 15px;
+`;

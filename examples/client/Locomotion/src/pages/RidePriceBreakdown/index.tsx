@@ -2,7 +2,6 @@ import React, { useContext, useEffect, useState } from 'react';
 import { View } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { useNavigation, useRoute } from '@react-navigation/native';
-import { RIDE_STATES } from '../../lib/commonTypes';
 import NoTitlePriceCard from '../../Components/PriceCard/NoTitlePriceCard';
 import { MAIN_ROUTES } from '../routes';
 import PriceCard from '../../Components/PriceCard';
@@ -15,7 +14,7 @@ import { PageContainer } from '../styles';
 import PageHeader from '../../Components/PageHeader';
 import { PriceCalculation, RidePageContext } from '../../context/newRideContext';
 import i18n from '../../I18n';
-import { CreditCardRowContainer } from './styled';
+import { CreditCardRowContainer, PriceItemsContainer } from './styled';
 import { PaymentMethodInterface } from '../../context/payments/interface';
 
 type RidePriceBreakdownParams = {
@@ -55,17 +54,10 @@ const RidePriceBreakDown = () => {
   };
 
   useEffect(() => {
-    console.log('stateeee', ride.state);
-
     if (!priceCalculation || !paymentMethod) {
       setLoading(true);
     }
   }, [priceCalculation, paymentMethod]);
-
-  useEffect(() => {
-    console.log('stateeee', ride.state);
-    console.log('haveornot', priceCalculation?.haveCancelationFee);
-  });
 
   const getSymbol = () => getCurrencySymbol(priceCalculation?.currency);
   const getPriceWithCurrency = (amount:number) => `${getSymbol()}${amount.toFixed(2)}`;
@@ -93,7 +85,7 @@ const RidePriceBreakDown = () => {
     <PageContainer>
 
       <PageHeader
-        title={i18n.t('Payment breakdown')}
+        title={i18n.t('ridePriceBreakdown.pageTitle')}
         onIconPress={
           () => navigation.navigate(params.rideHistory
             ? MAIN_ROUTES.COMPLETED_RIDE_OVERVIEW_PAGE
@@ -103,38 +95,36 @@ const RidePriceBreakDown = () => {
         {loading ? (
           <Loader lottieViewStyle={undefined} sourceProp={undefined} />
         ) : (
-          <View style={{ width: '90%', marginLeft: 15 }}>
-            <View>
-              <InformationCard title="Paymnet method">
-                <View>
-                  <CreditCardRowContainer>
-                    <CardRow {...paymentMethod} />
-                  </CreditCardRowContainer>
-                </View>
-              </InformationCard>
-            </View>
-
-            <InformationCard title="Payment Breakdown">
-              <View style={{
-                flexDirection: 'column',
-              }}
-              >
+          <PriceItemsContainer>
+            <InformationCard title={i18n.t('ridePriceBreakdown.paymentMethodTitle')}>
+              <View>
+                <CreditCardRowContainer>
+                  <CardRow {...paymentMethod} />
+                </CreditCardRowContainer>
+              </View>
+            </InformationCard>
+            <InformationCard title={i18n.t('ridePriceBreakdown.paymentBreakdownTitle')}>
+              <View>
                 {priceCalculation?.surgePrice && priceCalculation?.surgePrice !== 0
-                  ? <PriceCard name="Surge Price" text={getPriceWithCurrency(priceCalculation?.surgePrice || 0)} />
+                  ? <PriceCard name={i18n.t('ridePriceBreakdown.priceFieldNames.surgePrice')} text={getPriceWithCurrency(priceCalculation?.surgePrice || 0)} />
                   : undefined}
                 {priceCalculation?.discount && priceCalculation?.discount !== 0
-                  ? <PriceCard name="Discount" text={`-${getPriceWithCurrency(Math.abs(priceCalculation?.discount) || 0)}`} />
+                  ? <PriceCard name={i18n.t('ridePriceBreakdown.priceFieldNames.discount')} text={`-${getPriceWithCurrency(Math.abs(priceCalculation?.discount) || 0)}`} />
                   : undefined}
                 {priceCalculation?.items?.filter(item => item.pricingRule).map(item => (
                   <PriceCard
-                    name={`${item.pricingRule.name} - ${getPriceWithCurrency(item.pricingRule.price)} per ${calculationTypeToUnit[item.pricingRule.calculationType]} `}
+                    name={i18n.t('ridePriceBreakdown.priceItem', {
+                      name: item.pricingRule.name,
+                      price: getPriceWithCurrency(item.pricingRule.price),
+                      unit: calculationTypeToUnit[item.pricingRule.calculationType],
+                    })}
                     text={getPriceWithCurrency(item.price)}
                   />
                 ))}
                 {
                  priceCalculation?.items.find(x => x.cancellationRule) ? (
                    <PriceCard
-                     name={`${i18n.t('Cancelation fee')}`}
+                     name={i18n.t('ridePriceBreakdown.priceFieldNames.cancelationFee')}
                      text={getPriceWithCurrency(priceCalculation?.totalPrice || 0)}
                    />
                  ) : undefined
@@ -143,16 +133,16 @@ const RidePriceBreakDown = () => {
             </InformationCard>
             {getTip() ? (
               <NoTitleCard>
-                <NoTitlePriceCard name="Tip" text={getPriceWithCurrency((getTip()?.amount || 0))} />
+                <NoTitlePriceCard name={i18n.t('ridePriceBreakdown.priceFieldNames.tip')} text={getPriceWithCurrency((getTip()?.amount || 0))} />
               </NoTitleCard>
             ) : undefined}
             <NoTitleCard>
               <NoTitlePriceCard
-                name="Total"
+                name={i18n.t('ridePriceBreakdown.priceFieldNames.total')}
                 text={getTotalPrice()}
               />
             </NoTitleCard>
-          </View>
+          </PriceItemsContainer>
         )}
       </ScrollView>
     </PageContainer>
