@@ -111,16 +111,17 @@ const RidePriceBreakDown = () => {
                 {priceCalculation?.discount && priceCalculation?.discount !== 0
                   ? <PriceCard name={i18n.t('ridePriceBreakdown.priceFieldNames.discount')} text={`-${getPriceWithCurrency(Math.abs(priceCalculation?.discount) || 0)}`} />
                   : undefined}
-                {priceCalculation?.items?.filter(item => item.pricingRule).map(item => (
-                  <PriceCard
-                    name={i18n.t('ridePriceBreakdown.priceItem', {
-                      name: item.pricingRule.name,
-                      price: getPriceWithCurrency(item.pricingRule.price),
-                      unit: priceCalculation.distanceUnit,
-                    })}
-                    text={getPriceWithCurrency(item.price)}
-                  />
-                ))}
+                {priceCalculation?.items?.filter(item => item.pricingRule && item.price > 0)
+                  .map(item => (
+                    <PriceCard
+                      name={i18n.t('ridePriceBreakdown.priceItem', {
+                        name: item.pricingRule.name,
+                        price: getPriceWithCurrency(item.pricingRule.price),
+                        unit: priceCalculation.distanceUnit,
+                      })}
+                      text={getPriceWithCurrency(item.price)}
+                    />
+                  ))}
                 {
                  priceCalculation?.items.find(x => x.cancellationRule) ? (
                    <PriceCard
