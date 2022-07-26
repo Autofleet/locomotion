@@ -73,11 +73,11 @@ const RideCard = ({
           {moment(scheduledTo).format('MMMM DD, YYYY, h:mm A')}
         </RideDate>
         <RideDate>
-          {ride.state === RIDE_STATES.CANCELED
-            ? getFormattedPrice(totalPriceWithCurrency?.currency || 'USD', 0)
-            : getFormattedPrice(totalPriceWithCurrency?.currency || 'USD', totalPriceWithCurrency?.amount || 0)}
+          {ride.state === RIDE_STATES.CANCELED && totalPriceWithCurrency?.amount === 0
+            ? getFormattedPrice(totalPriceWithCurrency?.currency, 0)
+            : getFormattedPrice(totalPriceWithCurrency?.currency,
+              totalPriceWithCurrency?.amount)}
         </RideDate>
-
       </DateContainer>
       <ServiceType>
         {serviceName}

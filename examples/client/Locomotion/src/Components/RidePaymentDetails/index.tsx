@@ -59,7 +59,7 @@ const RidePaymentDetails = ({
           <CardRow {...paymentMethod} />
         </CardRowContainer>
         <RidePriceDetails>
-          <PriceText>{getFormattedPrice(currency, getTotalAmount())}</PriceText>
+          <PriceText>{getFormattedPrice(priceCalculation?.currency || '', getTotalAmount())}</PriceText>
           <TouchableOpacity onPress={() => navigation.navigate(MAIN_ROUTES.RIDE_PRICE_BREAKDOWN,
             { rideId, rideHistory })}
           >

@@ -97,9 +97,9 @@ const RideTitleCard = ({
         </RideViewTextContainer>
         <RideViewSecTextContainer>
           <DaySecTitleText>
-            {ride.state === RIDE_STATES.CANCELED
+            {ride.state === RIDE_STATES.CANCELED && totalPrice?.amount === 0
               ? getFormattedPrice('', 0)
-              : getFormattedPrice(totalPrice?.currency || 'USD', totalPrice?.amount || 0)}
+              : getFormattedPrice(totalPrice?.currency || 'USD', (tip > 0 ? totalPrice?.amount - tip : totalPrice?.amount) || 0)}
           </DaySecTitleText>
           {showTip
             ? getTipButton()
