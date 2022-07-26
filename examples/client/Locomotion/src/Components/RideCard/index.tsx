@@ -1,7 +1,8 @@
 import React, { useContext, useEffect, useState } from 'react';
 import moment from 'moment';
 import { PaymentIcon } from 'react-native-payment-icons';
-import { RideInterface, PriceCalculation, RidePageContext } from '../../context/newRideContext';
+import { RIDE_STATES } from '../../lib/commonTypes';
+import { RideInterface, RidePageContext } from '../../context/newRideContext';
 import cashPaymentMethod from '../../pages/Payments/cashPaymentMethod';
 import i18n from '../../I18n';
 import RoundedButton from '../RoundedButton';
@@ -72,7 +73,7 @@ const RideCard = ({
           {moment(scheduledTo).format('MMMM DD, YYYY, h:mm A')}
         </RideDate>
         <RideDate>
-          {ride.state === 'canceled'
+          {ride.state === RIDE_STATES.CANCELED
             ? getFormattedPrice(totalPriceWithCurrency?.currency || 'USD', 0)
             : getFormattedPrice(totalPriceWithCurrency?.currency || 'USD', totalPriceWithCurrency?.amount || 0)}
         </RideDate>
