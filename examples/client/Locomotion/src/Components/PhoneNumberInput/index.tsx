@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import PhoneInput from 'react-native-phone-number-input';
 import Config from 'react-native-config';
 import { AsYouType } from 'libphonenumber-js';
+import { ThemeContext } from 'styled-components';
 import { getInputIsoCode } from '../../services/MccMnc';
 import i18n from '../../I18n';
 import codes from './codes.json';
@@ -15,6 +16,7 @@ const PhoneNumberInput = ({
 }: any) => {
   const [isFocused, setIsFocused] = useState(false);
   const [defaultCode, setDefaultCode] = useState(null);
+  const theme = useContext(ThemeContext);
   const asYouTypePhoneNumber = new AsYouType();
 
   const onChangeText = (v: any) => {
@@ -55,6 +57,7 @@ const PhoneNumberInput = ({
       defaultCode={defaultCode}
       onChangeFormattedText={onChangeText}
       textInputProps={{
+        placeholderTextColor: theme.disabledColor,
         testID: 'phoneNumber',
         accessible: true,
         accessibilityLabel: 'phoneNumber',
