@@ -210,7 +210,7 @@
             "closeButtonText": "Go back to map"
         },
         "genericError": {
-            "title": "Error",
+            "title": "Something went wrong",
             "text": "Something went wrong. Please try again and contact support if the issue isn't solved",
             "buttonText": "OK"
         },
