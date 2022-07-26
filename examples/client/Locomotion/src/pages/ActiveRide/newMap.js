@@ -146,6 +146,19 @@ export default React.forwardRef(({
         longitude: sp.lng,
       })), false, MAP_EDGE_PADDING);
     }
+    if (currentBsPage === BS_PAGES.SET_LOCATION_ON_MAP) {
+      const focusCurrentLocation = async () => {
+        const location = await getPosition();
+        const { coords } = (location || DEFAULT_COORDS);
+        ref.current.animateToRegion({
+          latitude: coords.latitude,
+          longitude: coords.longitude,
+          latitudeDelta: 0.015,
+          longitudeDelta: 0.015,
+        }, 0);
+      };
+      focusCurrentLocation();
+    }
   }, [currentBsPage]);
 
   const showInputPointsOnMap = () => {
