@@ -122,6 +122,7 @@ const RideView = ({ ride }) => {
       getTip();
     }
   });
+
   return (
     <RideViewContainer>
       <MapRideViewContainer>
@@ -151,6 +152,7 @@ const RideView = ({ ride }) => {
         <DriverCardContainer>
           {ride.driver && ride.state === RIDE_STATES.COMPLETED && (
           <DriverCard
+            noPaddingLeft
             activeRide={false}
             ride={ride}
           />

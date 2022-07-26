@@ -19,12 +19,12 @@ type ContainerProps = {
   selected: boolean,
 };
 
-const InnerContainer = styled(View)`
+const InnerContainer = styled(View)<{chooseMethodPage: boolean}>`
   flex-direction: row;
   justify-content: flex-start;
   width: 100%;
   align-items: center;
-  padding: 0 15px;
+  padding: ${({ chooseMethodPage }) => (chooseMethodPage ? '0 15px' : '0px')};
 `;
 
 const Container = styled(View) < ContainerProps >`
@@ -101,7 +101,7 @@ const CardRow = (paymentMethod: any) => (
     }}
   >
     <Container selected={paymentMethod.selected}>
-      <InnerContainer>
+      <InnerContainer chooseMethodPage={paymentMethod.chooseMethodPage}>
         <ImageContainer>
           {paymentMethod.addNew
             ? (

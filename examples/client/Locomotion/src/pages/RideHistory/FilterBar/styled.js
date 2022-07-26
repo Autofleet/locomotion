@@ -36,7 +36,7 @@ export const FilterBarContainer = styled.ScrollView.attrs(props => ({
   contentContainerStyle: { paddingHorizontal: 20 },
 }))`
     width: 100%;
-    padding-bottom: 5px;
+    padding: 8px 0px;
     flex-direction: row;
     background-color: #ffffff00;
 `;

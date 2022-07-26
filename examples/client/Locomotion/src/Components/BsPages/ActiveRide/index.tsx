@@ -9,7 +9,7 @@ import {
   TopContainer, VehicleDetails, VehicleImage, VehiclePlateText, VehiclePlateContainer,
   DriverCardContainer, StopPointTextContainer, StopPointText, StopPointsTimeContainer,
   StopPointTimeText, PulseContainer, StopPointsVerticalViewContainer,
-  ButtonsContainer, RowContainer, ButtonContainer,
+  ButtonsContainer, RowContainer, ButtonContainer, Container,
 } from './styled';
 import { STOP_POINT_STATES } from '../../../lib/commonTypes';
 import i18n from '../../../I18n';
@@ -89,14 +89,6 @@ const ActiveRideContent = () => {
     </ButtonContainer>
   );
 
-  const onShare = async () => {
-    const trackerUrl = await trackRide();
-    await Share.share({
-      message: trackerUrl,
-      url: trackerUrl,
-    });
-  };
-
   const renderShareRide = () => (
     <ShareButton />
   );
@@ -109,10 +101,11 @@ const ActiveRideContent = () => {
     <>
       {ride
       && (
-        <>
+        <Container>
           <TopContainer>
             <DriverCardContainer>
               <DriverCard
+                noPaddingLeft={false}
                 activeRide
                 ride={ride}
               />
@@ -128,12 +121,16 @@ const ActiveRideContent = () => {
             <StopPointText>
               {getTextBasedOnStopPoints()}
             </StopPointText>
-            <StopPointsTimeContainer>
-              <PulseContainer>
-                <Loader dark={false} sourceProp={pulse} lottieViewStyle={{ width: 24, height: 24 }} />
-              </PulseContainer>
-              <StopPointTimeText>{getMinDifferent()}</StopPointTimeText>
-            </StopPointsTimeContainer>
+            {firstSpNotCompleted.state === STOP_POINT_STATES.PENDING
+              ? (
+                <StopPointsTimeContainer>
+                  <PulseContainer>
+                    <Loader dark={false} sourceProp={pulse} lottieViewStyle={{ width: 24, height: 24 }} />
+                  </PulseContainer>
+                  <StopPointTimeText>{getMinDifferent()}</StopPointTimeText>
+                </StopPointsTimeContainer>
+              )
+              : null}
           </StopPointTextContainer>
           <ButtonsContainer>
             <RowContainer>
@@ -176,7 +173,7 @@ const ActiveRideContent = () => {
               clearPopup();
             }}
           />
-        </>
+        </Container>
       )}
     </>
   );

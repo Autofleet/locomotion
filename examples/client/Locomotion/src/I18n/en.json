@@ -323,7 +323,7 @@
     "postRide": {
         "pageTitle": "Ride finished",
         "ratingHeadline": "How was your ride?",
-        "submit": "Rate & Tip",
+        "submit": "Done",
         "submitForPast": "Done",
         "notRated": "Ride not rated",
         "tip": {
@@ -492,7 +492,7 @@
         "pending": "Meeting at pickup point"
     },
     "dropoff": {
-        "arrived": "Dropoff ETA",
+        "arrived": "Arrived to dropoff",
         "pending": "Dropoff ETA"
     },
     "topMessage": {
