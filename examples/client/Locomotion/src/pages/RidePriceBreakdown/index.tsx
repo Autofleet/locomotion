@@ -48,9 +48,11 @@ const RidePriceBreakDown = () => {
 
   const updateRideFromApi = async () => {
     setLoading(true);
-    const result = await getRideFromApi(params.rideId || ride.id || '');
-    setPaymentMethod(result.payment?.paymentMethod);
-    setLoading(false);
+    if (params.rideId || ride.id) {
+      const result = await getRideFromApi(params.rideId || ride.id);
+      setPaymentMethod(result.payment?.paymentMethod);
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
