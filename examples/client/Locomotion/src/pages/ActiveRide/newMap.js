@@ -1,5 +1,4 @@
 import React, {
-  useCallback,
   useContext, useEffect, useState,
 } from 'react';
 import polyline from '@mapbox/polyline';
@@ -7,7 +6,6 @@ import { StyleSheet } from 'react-native';
 import MapView, { Polygon, Polyline } from 'react-native-maps';
 import Config from 'react-native-config';
 import moment from 'moment';
-import { debounce } from 'lodash';
 import { FutureRidesContext } from '../../context/futureRides';
 import { RidePageContext } from '../../context/newRideContext';
 import { RideStateContextContext } from '../../context';
@@ -239,13 +237,6 @@ export default React.forwardRef(({
     return stopPoint.streetAddress || stopPoint.description;
   };
 
-  const debouncedSaveLocation = debounce(async ({ latitude, longitude }) => {
-    const lat = latitude.toFixed(6);
-    const lng = longitude.toFixed(6);
-    const spData = await reverseLocationGeocode(lat, lng);
-    saveSelectedLocation(spData);
-  }, 300);
-
   return (
     <>
       <MapView
@@ -258,11 +249,18 @@ export default React.forwardRef(({
         key="map"
         followsUserLocation={isUserLocationFocused}
         moveOnMarkerPress={false}
-        onPanDrag={({ nativeEvent: { coordinate: { latitude, longitude } } }) => {
+        onRegionChangeComplete={async (event) => {
           if (isChooseLocationOnMap) {
-            debouncedSaveLocation({ latitude, longitude });
+            const { latitude, longitude } = event;
+            const lat = latitude.toFixed(6);
+            const lng = longitude.toFixed(6);
+            const spData = await reverseLocationGeocode(lat, lng);
+            saveSelectedLocation(spData);
           }
         }}
+        onPanDrag={() => (
+          !isUserLocationFocused === false ? setIsUserLocationFocused(false) : null
+        )}
         ref={ref}
         userInterfaceStyle={isDarkMode ? THEME_MOD.DARK : undefined}
         customMapStyle={isDarkMode ? mapDarkMode : undefined}
