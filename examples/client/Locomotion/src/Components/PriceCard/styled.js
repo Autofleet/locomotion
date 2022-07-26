@@ -20,4 +20,4 @@ export const PriceText = styled(PriceNameText)`
 
 export const NoTitlePriceCardContainer = styled.View`
 margin-left: 15px;
-`
+`;
