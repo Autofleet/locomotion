@@ -1,6 +1,5 @@
 import React from 'react';
-import { View } from 'react-native';
-import { SubText } from '../../pages/Profile/ScreenText/styles';
+import { PriceCardContainer, PriceNameText, PriceText } from './styled';
 
 type PriceCardProps = {
     name: string,
@@ -8,15 +7,12 @@ type PriceCardProps = {
 }
 
 const PriceCard = ({ name, text } : PriceCardProps) => (
-  <View style={{
-    flexDirection: 'row', marginVertical: 5, marginLeft: 15, width: 300, justifyContent: 'space-between',
-  }}
-  >
-    <SubText>{name}</SubText>
-    <SubText style={{ textAlign: 'right' }}>
+  <PriceCardContainer>
+    <PriceNameText>{name}</PriceNameText>
+    <PriceText>
       {text}
-    </SubText>
-  </View>
+    </PriceText>
+  </PriceCardContainer>
 );
 
 export default PriceCard;

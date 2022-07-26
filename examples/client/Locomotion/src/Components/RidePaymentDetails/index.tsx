@@ -51,10 +51,6 @@ const RidePaymentDetails = ({
     updatePriceCalculation();
   }, []);
 
-  useEffect(() => {
-    console.log('itemss', priceCalculation);
-  }, [priceCalculation]);
-
   return (paymentMethod ? (
     <>
       <CardsTitle title={i18n.t('ride.paymentMethod')} />
