@@ -113,8 +113,6 @@ const RideButtons = ({
        ? cashPaymentMethod
        : paymentMethods.find(pm => pm.id === ridePaymentMethod);
 
-    console.log('renderPaymentButton', { ridePaymentMethod, selectedPaymentMethod });
-
     return (
       <ButtonContainer
         onPress={() => {

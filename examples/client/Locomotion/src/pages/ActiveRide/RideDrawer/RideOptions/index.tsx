@@ -50,7 +50,6 @@ const RideOptions = () => {
     const updateDefaultPaymentMethod = async () => {
       const paymentMethod: PaymentMethodInterface |
        undefined = await usePayments.getClientDefaultMethod();
-      console.log('updateDefaultPaymentMethod', paymentMethod);
       if (paymentMethod) {
         updateRidePayload({
           paymentMethodId: paymentMethod.id,
