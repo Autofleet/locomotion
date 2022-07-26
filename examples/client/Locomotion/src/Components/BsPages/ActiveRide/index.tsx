@@ -30,7 +30,7 @@ import ShareButton from './share';
 const DEFAULT_VEHICLE_IMAGE = 'https://res.cloudinary.com/autofleet/image/upload/w_700,h_500,c_thumb,q_auto/vehicle-images/Minivan/minivan_blue.png';
 
 const ActiveRideContent = () => {
-  const { ride, trackRide, updateRide } = useContext(RidePageContext);
+  const { ride, loadRide, updateRide } = useContext(RidePageContext);
   const { changeBsPage, setGenericErrorPopup } = useContext(RideStateContextContext);
   const [popupToShow, setPopupToShow] = useState<string | null>(null);
 
@@ -73,20 +73,24 @@ const ActiveRideContent = () => {
   };
 
   const renderCancelRide = () => (
-    <ButtonContainer
-      disabled={!ride.cancelable}
-      testID="cancelRideButton"
-      onPress={() => {
-        if (ride.cancelable) {
-          changeBsPage(BS_PAGES.CANCEL_RIDE);
-        }
-      }}
-    >
-      <GenericRideButton
-        icon={cancel}
-        title={i18n.t('bottomSheetContent.ride.cancelRide')}
-      />
-    </ButtonContainer>
+    ride.cancelable
+      ? (
+        <ButtonContainer
+          testID="cancelRideButton"
+          onPress={() => {
+            if (ride.cancelable) {
+              changeBsPage(BS_PAGES.CANCEL_RIDE);
+            }
+          }}
+        >
+          <GenericRideButton
+            icon={cancel}
+            title={i18n.t('bottomSheetContent.ride.cancelRide')}
+          />
+        </ButtonContainer>
+      )
+      : null
+
   );
 
   const renderShareRide = () => (
@@ -160,13 +164,14 @@ const ActiveRideContent = () => {
           <RideNotes
             notes={firstSpNotCompleted?.notes}
             isVisible={popupToShow === 'notes'}
-            onSubmit={(text: string) => {
-              updateRide(ride.id, {
+            onSubmit={async (text: string) => {
+              await updateRide(ride.id, {
                 stopPoints: [{
                   id: firstSpNotCompleted.id,
                   notes: text,
                 }],
               });
+              await loadRide(ride.id || '');
               clearPopup();
             }}
             onCancel={() => {

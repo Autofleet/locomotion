@@ -91,6 +91,8 @@ export default React.forwardRef(({
     newFutureRide,
   } = useContext(FutureRidesContext);
   const [mapRegion, setMapRegion] = useState({
+    latitude: DEFAULT_COORDS.coords.latitude,
+    longitude: DEFAULT_COORDS.coords.longitude,
     latitudeDelta: 0.015,
     longitudeDelta: 0.015,
   });
@@ -142,7 +144,7 @@ export default React.forwardRef(({
           longitude: pickupStopPoint.lng,
           latitudeDelta: 0.001,
           longitudeDelta: 0.001,
-        }, 1000);
+        }, 1);
       }
     }
     if (currentBsPage === BS_PAGES.CONFIRM_FUTURE_RIDE) {
@@ -160,7 +162,7 @@ export default React.forwardRef(({
           longitude: coords.longitude,
           latitudeDelta: 0.015,
           longitudeDelta: 0.015,
-        }, 0);
+        }, 1);
       };
       focusCurrentLocation();
     }
@@ -267,6 +269,7 @@ export default React.forwardRef(({
         ref={ref}
         userInterfaceStyle={isDarkMode ? THEME_MOD.DARK : undefined}
         customMapStyle={isDarkMode ? mapDarkMode : undefined}
+        initialRegion={mapRegion}
         {...mapSettings}
       >
         {ride.vehicle && ride.vehicle.location && (

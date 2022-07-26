@@ -106,6 +106,7 @@ interface RidePageContextInterface {
   cleanRideState: () => void;
   setUnconfirmedPickupTime: Dispatch<number | null>;
   unconfirmedPickupTime: number | null;
+  loadRide: (rideId: string) => Promise<void>;
 }
 
 export const RidePageContext = createContext<RidePageContextInterface>({
@@ -155,6 +156,7 @@ export const RidePageContext = createContext<RidePageContextInterface>({
   cleanRideState: () => undefined,
   setUnconfirmedPickupTime: () => undefined,
   unconfirmedPickupTime: null,
+  loadRide: async (rideId: string) => undefined,
 });
 
 const HISTORY_RECORDS_NUM = 10;
@@ -338,21 +340,25 @@ const RidePageContextProvider = ({ children }: {
     }
   }, [user?.id]);
 
+  const loadRide = async (rideId: string) => {
+    const rideLoaded = await rideApi.getRide(rideId);
+    const formattedRide = await formatRide(rideLoaded);
+    if (ride.state !== rideLoaded.state) {
+      const screenFunction = RIDE_STATES_TO_SCREENS[rideLoaded.state];
+      if (screenFunction) {
+        screenFunction(rideLoaded);
+      }
+    }
+    if (!RIDE_FINAL_STATES.includes(rideLoaded?.state || '')) {
+      setRide(formattedRide);
+    }
+  };
+
   useBackgroundInterval(async () => {
     if (user?.id && !rideRequestLoading) {
       if (ride?.id) {
         try {
-          const rideLoaded = await rideApi.getRide(ride?.id);
-          const formattedRide = await formatRide(rideLoaded);
-          if (ride.state !== rideLoaded.state) {
-            const screenFunction = RIDE_STATES_TO_SCREENS[rideLoaded.state];
-            if (screenFunction) {
-              screenFunction(rideLoaded);
-            }
-          }
-          if (!RIDE_FINAL_STATES.includes(rideLoaded?.state || '')) {
-            setRide(formattedRide);
-          }
+          loadRide(ride.id);
         } catch (e) {
           cleanRideState();
           changeBsPage(BS_PAGES.ADDRESS_SELECTOR);
@@ -870,6 +876,7 @@ const RidePageContextProvider = ({ children }: {
         cleanRideState,
         setUnconfirmedPickupTime,
         unconfirmedPickupTime,
+        loadRide,
       }}
     >
       {children}
