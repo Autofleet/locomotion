@@ -1,4 +1,6 @@
-import React, { createRef, useEffect, useState } from 'react';
+import React, {
+  createRef, useEffect, useContext, useState,
+} from 'react';
 import moment from 'moment';
 import { useFocusEffect } from '@react-navigation/native';
 import FullPageLoader from '../../../Components/FullPageLoader';
@@ -32,6 +34,7 @@ import i18n from '../../../I18n';
 import { MMMM_DD_YYYY } from '../consts';
 import DriverCard from '../../../Components/DriverCard';
 import { getFormattedPrice } from '../../../context/newRideContext/utils';
+import { RidePageContext, PriceCalculation } from '../../../context/newRideContext';
 import { RIDE_STATES } from '../../../lib/commonTypes';
 import TextButton from '../../../Components/TextButton';
 import * as NavigationService from '../../../services/navigation';
@@ -41,6 +44,21 @@ import ServiceTypeDetails from '../../../Components/ServiceTypeDetails';
 const RideTitleCard = ({
   ride, page, showTip, tip,
 }) => {
+  const {
+    getRideTotalPriceWithCurrency,
+  } = useContext(RidePageContext);
+  const [totalPrice, setTotalPrice] = useState();
+
+  const updateTotalPrice = async () => {
+    const price = await getRideTotalPriceWithCurrency(ride.id);
+    setTotalPrice(price);
+  };
+
+
+  useEffect(() => {
+    updateTotalPrice();
+  }, [ride]);
+
   const getTipButton = () => {
     if (tip) {
       const price = getFormattedPrice(ride.priceCurrency, tip);
@@ -74,7 +92,9 @@ const RideTitleCard = ({
         </RideViewTextContainer>
         <RideViewSecTextContainer>
           <DaySecTitleText>
-            {getFormattedPrice(ride.priceCurrency, ride.priceAmount)}
+            {ride.state === RIDE_STATES.CANCELED && totalPrice?.amount === 0
+              ? getFormattedPrice('', 0)
+              : getFormattedPrice(totalPrice?.currency || 'USD', (tip > 0 ? totalPrice?.amount - tip : totalPrice?.amount) || 0)}
           </DaySecTitleText>
           {showTip
             ? getTipButton()
@@ -144,9 +164,11 @@ const RideView = ({ ride }) => {
         </StopPointsVerticalViewContainer>
         <StopPointsVerticalViewContainer>
           <RidePaymentDetails
-            payment={ride.payment}
-            priceAmount={ride.priceAmount}
-            priceCurrency={ride.priceCurrency}
+            rideId={ride.id}
+            paymentMethod={ride.payment?.paymentMethod}
+            state={ride.state}
+            currency={ride.priceCurrency}
+            rideHistory
           />
         </StopPointsVerticalViewContainer>
         <DriverCardContainer>

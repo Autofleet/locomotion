@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import moment from 'moment';
 import { Share } from 'react-native';
 import RidePaymentDetails from '../../RidePaymentDetails';
@@ -150,9 +150,10 @@ const ActiveRideContent = () => {
             ride={ride}
           />
           <RidePaymentDetails
-            payment={ride.payment}
-            priceAmount={ride.priceAmount}
-            priceCurrency={ride.priceCurrency}
+            rideId={ride.id || ''}
+            paymentMethod={ride.payment?.paymentMethod}
+            state={ride.state}
+            currency={ride.priceCurrency}
           />
           <ServiceTypeDetails
             serviceType={ride.serviceType}

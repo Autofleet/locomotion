@@ -278,6 +278,19 @@
         "termsOfUse": "Terms of use",
         "contactInformationTitle": "Contact information"
     },
+    "ridePriceBreakdown": {
+        "pageTitle": "Payment breakdown",
+        "priceItem": "{{ name }} - {{ price }} per {{ unit }} ",
+        "paymentBreakdownTitle": "Payment Breakdown",
+        "priceFieldNames": { 
+            "surgePrice": "Surge price",
+            "discount": "Discount",
+            "cancelationFee": "Cancelation fee",
+            "tip": "Tip",
+            "total": "Total"
+        },
+        "paymentMethodTitle": "Payment Method"
+    },
     "rideHistory": {
         "pageTitle": "Rides History",
         "tripPageTitle": "Trip details",
