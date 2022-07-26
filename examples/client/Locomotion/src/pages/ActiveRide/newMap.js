@@ -19,7 +19,7 @@ import { AvailabilityContext } from '../../context/availability';
 import AvailabilityVehicle from '../../Components/AvailabilityVehicle';
 import StationsMap from '../../Components/Marker';
 import { BS_PAGES } from '../../context/ridePageStateContext/utils';
-import { STOP_POINT_STATES } from '../../lib/commonTypes';
+import { RIDE_STATES, STOP_POINT_STATES } from '../../lib/commonTypes';
 import PrecedingStopPointMarker from '../../Components/PrecedingStopPointMarker';
 import { getSubLineStringAfterLocationFromDecodedPolyline } from '../../lib/polyline/utils';
 import { BottomSheetContext } from '../../context/bottomSheetContext';
@@ -160,6 +160,22 @@ export default React.forwardRef(({
       focusCurrentLocation();
     }
   }, [currentBsPage]);
+
+  useEffect(() => {
+    if (ride.state === RIDE_STATES.DISPATCHED) {
+      const [pickupStopPoint] = ride.stopPoints;
+      focusMapToCoordinates([pickupStopPoint, ride.vehicle.location].map(sp => ({
+        latitude: sp.lat,
+        longitude: sp.lng,
+      })), true, MAP_EDGE_PADDING);
+    }
+    if (ride.state === RIDE_STATES.ACTIVE) {
+      focusMapToCoordinates(ride.stopPoints.map(sp => ({
+        latitude: sp.lat,
+        longitude: sp.lng,
+      })), true, MAP_EDGE_PADDING);
+    }
+  }, [ride.state]);
 
   const showInputPointsOnMap = () => {
     const coordsToFit = requestStopPoints

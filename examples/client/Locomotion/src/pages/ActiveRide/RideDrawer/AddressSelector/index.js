@@ -113,7 +113,7 @@ const AddressSelectorBottomSheet = ({ addressSelectorFocus }) => {
   };
 
   const getHistoryRows = () => {
-    if (userContext.historyResults.length > 0) {
+    if (userContext.historyResults.length) {
       return userContext.historyResults.map((h, i) => (
         <AddressRow
           testID={`searchResults_${i}`}
