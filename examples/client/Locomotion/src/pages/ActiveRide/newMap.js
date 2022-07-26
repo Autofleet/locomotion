@@ -1,4 +1,5 @@
 import React, {
+  useCallback,
   useContext, useEffect, useState,
 } from 'react';
 import polyline from '@mapbox/polyline';
@@ -6,6 +7,7 @@ import { StyleSheet } from 'react-native';
 import MapView, { Polygon, Polyline } from 'react-native-maps';
 import Config from 'react-native-config';
 import moment from 'moment';
+import { debounce } from 'lodash';
 import { FutureRidesContext } from '../../context/futureRides';
 import { RidePageContext } from '../../context/newRideContext';
 import { RideStateContextContext } from '../../context';
@@ -131,10 +133,12 @@ export default React.forwardRef(({
     if (currentBsPage === BS_PAGES.CONFIRM_PICKUP) {
       const [pickupStopPoint] = requestStopPoints;
       if (pickupStopPoint) {
-        focusMapToCoordinates([{
+        ref.current.animateToRegion({
           latitude: pickupStopPoint.lat,
           longitude: pickupStopPoint.lng,
-        }], false, MAP_EDGE_PADDING);
+          latitudeDelta: 0.001,
+          longitudeDelta: 0.001,
+        }, 1000);
       }
     }
     if (currentBsPage === BS_PAGES.CONFIRM_FUTURE_RIDE) {
@@ -207,6 +211,18 @@ export default React.forwardRef(({
     return stopPoint.streetAddress || stopPoint.description;
   };
 
+  const debouncedSaveLocation = useCallback(
+    debounce(async ({ latitude, longitude }) => {
+      if (isChooseLocationOnMap) {
+        const lat = latitude.toFixed(6);
+        const lng = longitude.toFixed(6);
+        const spData = await reverseLocationGeocode(lat, lng);
+        saveSelectedLocation(spData);
+      }
+    }, 300),
+    [isChooseLocationOnMap],
+  );
+
   return (
     <>
       <MapView
@@ -219,18 +235,12 @@ export default React.forwardRef(({
         key="map"
         followsUserLocation={isUserLocationFocused}
         moveOnMarkerPress={false}
-        onRegionChangeComplete={async (event) => {
-          if (isChooseLocationOnMap) {
-            const { latitude, longitude } = event;
-            const lat = latitude.toFixed(6);
-            const lng = longitude.toFixed(6);
-            const spData = await reverseLocationGeocode(lat, lng);
-            saveSelectedLocation(spData);
+        onPanDrag={({ nativeEvent: { coordinate: { latitude, longitude } } }) => {
+          if (!isUserLocationFocused === false) {
+            setIsUserLocationFocused(false);
           }
+          debouncedSaveLocation({ latitude, longitude });
         }}
-        onPanDrag={() => (
-          !isUserLocationFocused === false ? setIsUserLocationFocused(false) : null
-        )}
         ref={ref}
         userInterfaceStyle={isDarkMode ? THEME_MOD.DARK : undefined}
         customMapStyle={isDarkMode ? mapDarkMode : undefined}
