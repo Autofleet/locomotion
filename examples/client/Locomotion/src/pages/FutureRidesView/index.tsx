@@ -16,7 +16,6 @@ import { RideStateContextContext } from '../..';
 import { RideInterface, RidePageContext } from '../../context/newRideContext';
 import { BS_PAGES } from '../../context/ridePageStateContext/utils';
 import BlackOverlay from '../../Components/BlackOverlay';
-import { BottomSheetContext } from '../../context/bottomSheetContext';
 import GenericErrorPopup from '../../popups/GenericError';
 
 interface FutureRidesViewProps {
@@ -32,21 +31,20 @@ const FutureRidesView = ({ menuSide }: FutureRidesViewProps) => {
   } = useContext(FutureRidesContext);
   const { changeBsPage, currentBsPage } = useContext(RideStateContextContext);
   const { cancelRide, getServices } = useContext(RidePageContext);
-  const { snapPoints } = useContext(BottomSheetContext);
   const onPressCancel = (ride: RideInterface) => {
     setRideToCancel(ride);
     changeBsPage(BS_PAGES.CANCEL_RIDE);
-    if (bottomSheetRef?.current) {
-      bottomSheetRef?.current.snapToIndex(0);
-    }
   };
 
-  const closeBottomSheet = () => {
-    if (bottomSheetRef?.current) {
-      bottomSheetRef.current.forceClose();
+  useEffect(() => {
+    if (currentBsPage === BS_PAGES.CANCEL_RIDE) {
+      if (bottomSheetRef?.current) {
+        bottomSheetRef?.current.snapToIndex(0);
+      }
+    } else if (bottomSheetRef?.current) {
+      bottomSheetRef?.current.close();
     }
-    changeBsPage(BS_PAGES.ADDRESS_SELECTOR);
-  };
+  }, [currentBsPage]);
 
   const loadServices = async () => {
     const res = await getServices();
@@ -84,7 +82,7 @@ const FutureRidesView = ({ menuSide }: FutureRidesViewProps) => {
       </ContentContainer>
       )}
       {currentBsPage === BS_PAGES.CANCEL_RIDE
-        ? <BlackOverlay bottomSheetHeight={snapPoints[0]} />
+        ? <BlackOverlay />
         : null}
       <BottomSheetComponent
         ref={bottomSheetRef}
@@ -98,7 +96,7 @@ const FutureRidesView = ({ menuSide }: FutureRidesViewProps) => {
             try {
               await cancelRide(rideToCancel?.id);
               await loadFutureRides();
-              closeBottomSheet();
+              changeBsPage(BS_PAGES.ADDRESS_SELECTOR);
               if (futureRides.length === 1) {
                 NavigationService.navigate(MAIN_ROUTES.HOME);
               }
@@ -107,7 +105,7 @@ const FutureRidesView = ({ menuSide }: FutureRidesViewProps) => {
             }
           }}
           onSecondaryButtonPress={() => {
-            closeBottomSheet();
+            changeBsPage(BS_PAGES.ADDRESS_SELECTOR);
           }}
         />
       </BottomSheetComponent>
