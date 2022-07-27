@@ -69,7 +69,8 @@ const Code = () => {
           </ResendText>
           <ResendButton
             onPress={() => navigation.navigate(MAIN_ROUTES.EMAIL, {
-              editAccount: true,
+              editAccount: route.params && route.params.editAccount,
+              email: user.email,
             })}
           >
             {i18n.t('onboarding.pages.emailCode.resendCodeButton')}
