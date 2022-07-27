@@ -193,7 +193,7 @@ const RidePageContextProvider = ({ children }: {
 }) => {
   const { locationGranted, user } = useContext(UserContext);
   const navigation = useNavigation<Nav>();
-  const { setGenericErrorDetails } = useContext(BottomSheetContext);
+  const { setGenericErrorDetails, setIsExpanded } = useContext(BottomSheetContext);
   const { checkStopPointsInTerritory, changeBsPage, currentBsPage } = useContext(RideStateContextContext);
   const { setNewFutureRide, loadFutureRides } = useContext(FutureRidesContext);
   const [requestStopPoints, setRequestStopPoints] = useState(INITIAL_STOP_POINTS);
@@ -209,7 +209,7 @@ const RidePageContextProvider = ({ children }: {
   const [rideRequestLoading, setRideRequestLoading] = useState(false);
   const [ridePopup, setRidePopup] = useState<RidePopupNames | null>(null);
   const [unconfirmedPickupTime, setUnconfirmedPickupTime] = useState<number | null>(null);
-  // const [priceCalculation, setPriceCalculation] = useState<PriceCalculation | null>(null);
+
   const intervalRef = useRef<any>();
 
   const stopRequestInterval = () => {
@@ -362,6 +362,14 @@ const RidePageContextProvider = ({ children }: {
       const areStopPointsInTerritory = validateStopPointInTerritory(stopPoints);
       if (areStopPointsInTerritory) {
         tryServiceEstimations();
+      }
+    } else if (currentBsPage !== BS_PAGES.ADDRESS_SELECTOR) {
+      // reset req stop point request
+      if (!ride.id) {
+        changeBsPage(BS_PAGES.ADDRESS_SELECTOR);
+        setTimeout(() => {
+          setIsExpanded(true);
+        }, 100);
       }
     }
   };
