@@ -28,11 +28,11 @@ const DrawerHeader = ({ navigateTo }) => {
     <Header>
       {user && (
         <Thumbnail
+          onPress={() => navigateTo(MAIN_ROUTES.ACCOUNT)}
           size={60}
           source={user.avatar}
         />
       )}
-
       <HeaderMainText>
         {user ? `${user.firstName} ${user.lastName}` : ''}
       </HeaderMainText>
