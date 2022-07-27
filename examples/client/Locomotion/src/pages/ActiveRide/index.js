@@ -398,14 +398,14 @@ BS_PAGE_TO_COMP[currentBsPage] ? BS_PAGE_TO_COMP[currentBsPage]() : null
           onCancel={() => {
             backToMap();
             setRidePopup(null);
-            // cleanRideState();
+            cleanRideState();
           }}
           onSubmit={() => {
             changeBsPage(BS_PAGES.SERVICE_ESTIMATIONS);
             setRidePopup(null);
             const sps = getRequestSpsFromRide();
             setRequestStopPoints(sps);
-            // cleanRideState(false);
+            cleanRideState(false);
           }
         }
         />
