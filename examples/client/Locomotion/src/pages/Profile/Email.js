@@ -26,7 +26,7 @@ const Email = ({ navigation }) => {
   const isFocused = useIsFocused();
 
   useEffect(() => {
-    setEmail(route.params && route.params.editAccount ? user.email : '');
+    setEmail(route.params && route.params.editAccount ? user.email : ((route.params && route.params.email) || ''));
   }, [isFocused]);
 
   const navigateToNextScreen = () => {
