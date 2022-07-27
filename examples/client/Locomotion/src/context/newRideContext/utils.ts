@@ -113,6 +113,8 @@ export const latLngToAddress = async (lat: string, lng: string) => {
   return data.results[0].formatted_address;
 };
 
+export const isPriceEstimated = (priceCalculationBasis: string) => priceCalculationBasis === 'actual';
+
 export const formatEstimationsResult = (service: any, estimationResult: any, tags: any) => {
   const estimation = estimationResult || {};
   return {
@@ -121,7 +123,7 @@ export const formatEstimationsResult = (service: any, estimationResult: any, tag
     eta: estimation.minPickupEta,
     price: estimation.priceAmount,
     currency: estimation.currency,
-    isPriceEstimated: true, // estimation.priceCalculationBasis === 'actual',
+    isPriceEstimated: isPriceEstimated(estimation.priceCalculationBasis),
     availableSeats: service.maxPassengers || 4,
     tag: (Object.entries(tags).find(([, value]) => value === service.id) || [])[0],
     iconUrl: service.icon,

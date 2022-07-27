@@ -55,7 +55,7 @@ const ServiceCard = ({ service }) => {
   };
 
   const getDescription = forFutureRidesView => (
-    <Description style={{ ...(forFutureRidesView && { width: '80%' }) }} numberOfLines={2}>
+    <Description style={{ ...(forFutureRidesView && { width: '60%' }) }} numberOfLines={2}>
       {service.description}
     </Description>
   );
