@@ -183,10 +183,6 @@ const RidePage = ({ mapSettings, navigation }) => {
     [BS_PAGES.SET_LOCATION_ON_MAP]: () => (
       <ConfirmPickup onButtonPress={(sp) => {
         updateRequestSp(sp);
-        changeBsPage(BS_PAGES.ADDRESS_SELECTOR);
-        setTimeout(() => {
-          setIsExpanded(true);
-        }, 100);
       }}
       />
     ),
