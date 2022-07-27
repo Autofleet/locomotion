@@ -112,6 +112,7 @@ const PaymentMethodPopup = ({
                 : usePayments.paymentMethods).map((paymentMethod: any, i) => (
                   <PaymentMethod
                     {...paymentMethod}
+                    chooseMethodPage
                     selected={selectedPaymentId === paymentMethod.id}
                     mark={selectedPaymentId === paymentMethod.id}
                     onPress={() => {
@@ -122,6 +123,7 @@ const PaymentMethodPopup = ({
               ))}
               <PaymentMethod
                 addNew
+                chooseMethodPage
                 onPress={() => {
                   onCancel();
                   navigation.navigate(MAIN_ROUTES.PAYMENT, { showAdd: true, rideFlow });

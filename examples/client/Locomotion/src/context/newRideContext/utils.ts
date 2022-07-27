@@ -71,7 +71,7 @@ export const getEstimationTags = (estimations: any[]) => {
     cheapest: {},
   };
   estimations.map((estimation) => {
-    const e = estimation.results[0];
+    const e = estimation[0];
     if (!e) {
       return;
     }
@@ -141,14 +141,14 @@ export const getFormattedPrice = (priceCurrency: string, priceAmount: number) =>
   if (!priceCurrency) {
     return i18n.t('rideDetails.noCharge');
   }
-  return new Intl.NumberFormat('en-IN', { style: 'currency', currency: priceCurrency }).format(priceAmount);
+  return new Intl.NumberFormat('en-US', { style: 'currency', currency: priceCurrency }).format(priceAmount);
 };
 
 
-export const getCurrencySymbol = (priceCurrency: string) => {
+export const getCurrencySymbol = (priceCurrency?: string) => {
   if (!priceCurrency) {
     return '';
   }
-  const currency = new Intl.NumberFormat('en-IN', { style: 'currency', currency: priceCurrency }).format(0);
+  const currency = new Intl.NumberFormat('en-US', { style: 'currency', currency: priceCurrency }).format(0);
   return currency[0];
 };

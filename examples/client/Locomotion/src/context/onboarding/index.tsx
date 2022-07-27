@@ -7,6 +7,7 @@ import SETTINGS_KEYS from '../settings/keys';
 import * as navigationService from '../../services/navigation';
 import { APP_ROUTES, MAIN_ROUTES } from '../../pages/routes';
 import { UserContext } from '../user';
+import payments from '../payments';
 
 interface OnboardingContextInterface {
   verifyCode: (code: string) => Promise<boolean | void>,
@@ -47,7 +48,9 @@ const OnboardingContextProvider = ({ children }: { children: any }) => {
   const { setUser, onVert } = useContext(UserContext);
   const navigation: any = useNavigation();
   const { getSettingByKey } = settings.useContainer();
-
+  const {
+    loadCustomer,
+  } = payments.useContainer();
   const [requiredOnboarding, setRequiredOnboarding] = useState({
     [MAIN_ROUTES.PHONE]: true,
     [MAIN_ROUTES.CODE]: true,
@@ -111,6 +114,7 @@ const OnboardingContextProvider = ({ children }: { children: any }) => {
       }
       return navigateToScreen(unfinishedScreen);
     }
+    await loadCustomer();
     return navigationService.navigate(MAIN_ROUTES.HOME, {}, APP_ROUTES.MAIN_APP);
   };
 

@@ -5,7 +5,6 @@ import { FONT_SIZES, FONT_WEIGHTS } from '../../context/theme';
 import Button from '../Button';
 
 export const Container = styled(Button)`
-
 `;
 
 export const ButtonText = styled(Text)`

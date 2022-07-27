@@ -35,6 +35,7 @@ const MainRouter = () => (
       <Stack.Screen name={APP_ROUTES.MAIN_APP} component={APP_ROUTES_COMPS[APP_ROUTES.MAIN_APP]} />
       <Stack.Screen name={MAIN_ROUTES.POST_RIDE} component={ROUTES_COMPS[MAIN_ROUTES.POST_RIDE]} />
       <Stack.Screen name={MAIN_ROUTES.FUTURE_RIDES} component={ROUTES_COMPS[MAIN_ROUTES.FUTURE_RIDES]} />
+      <Stack.Screen name={MAIN_ROUTES.RIDE_PRICE_BREAKDOWN} component={ROUTES_COMPS[MAIN_ROUTES.RIDE_PRICE_BREAKDOWN]} />
     </Stack.Navigator>
   </View>
 );

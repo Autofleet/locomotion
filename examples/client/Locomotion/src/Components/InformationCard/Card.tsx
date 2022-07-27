@@ -38,9 +38,9 @@ const Card = ({
           </>
         )}
       </CardTitleContainer>
-      <CardText>{children}</CardText>
+      {children ? <CardText>{children}</CardText> : undefined}
     </CardContentContainer>
-    {icon ? <TouchableOpacity onPress={onIconPress}><SvgIcon Svg={icon} fill="#333" /></TouchableOpacity>
+    {icon ? <TouchableOpacity style={{ zIndex: 999, width: 30, height: 30 }} onPress={onIconPress}><SvgIcon Svg={icon} fill="#333" /></TouchableOpacity>
       : <ArrowContainer>{onPress ? <Arrow /> : undefined}</ArrowContainer>}
   </CardContainer>
 );

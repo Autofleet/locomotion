@@ -46,23 +46,6 @@ const RideOptions = () => {
     setPopupToShow(null);
   };
 
-
-  useEffect(() => {
-    const updateClient = async () => {
-      await usePayments.loadCustomer();
-    };
-
-    updateClient();
-  }, []);
-
-  const loadCustomerData = async () => {
-    await usePayments.getOrFetchCustomer();
-  };
-
-  useEffect(() => {
-    loadCustomerData();
-  }, []);
-
   useEffect(() => {
     const updateDefaultPaymentMethod = async () => {
       const paymentMethod: PaymentMethodInterface |

@@ -211,7 +211,7 @@
             "closeButtonText": "Go back to map"
         },
         "genericError": {
-            "title": "Error",
+            "title": "Something went wrong",
             "text": "Something went wrong. Please try again and contact support if the issue isn't solved",
             "buttonText": "OK"
         },
@@ -279,6 +279,19 @@
         "termsOfUse": "Terms of use",
         "contactInformationTitle": "Contact information"
     },
+    "ridePriceBreakdown": {
+        "pageTitle": "Payment breakdown",
+        "priceItem": "{{ name }} - {{ price }} per {{ unit }} ",
+        "paymentBreakdownTitle": "Payment Breakdown",
+        "priceFieldNames": { 
+            "surgePrice": "Surge price",
+            "discount": "Discount",
+            "cancelationFee": "Cancelation fee",
+            "tip": "Tip",
+            "total": "Total"
+        },
+        "paymentMethodTitle": "Payment Method"
+    },
     "rideHistory": {
         "pageTitle": "Rides History",
         "tripPageTitle": "Trip details",
@@ -324,7 +337,7 @@
     "postRide": {
         "pageTitle": "Ride finished",
         "ratingHeadline": "How was your ride?",
-        "submit": "Rate & Tip",
+        "submit": "Done",
         "submitForPast": "Done",
         "notRated": "Ride not rated",
         "tip": {
@@ -493,7 +506,7 @@
         "pending": "Meeting at pickup point"
     },
     "dropoff": {
-        "arrived": "Dropoff ETA",
+        "arrived": "Arrived to dropoff",
         "pending": "Dropoff ETA"
     },
     "topMessage": {
