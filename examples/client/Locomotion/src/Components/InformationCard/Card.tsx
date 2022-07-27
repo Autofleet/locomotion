@@ -1,5 +1,6 @@
 import React from 'react';
-import { TouchableOpacity, View } from 'react-native';
+import { View } from 'react-native';
+import { TouchableIconContainer } from '../TextInput/styled';
 import SvgIcon from '../SvgIcon';
 import i18n from '../../I18n';
 import {
@@ -40,7 +41,7 @@ const Card = ({
       </CardTitleContainer>
       {children ? <CardText>{children}</CardText> : undefined}
     </CardContentContainer>
-    {icon ? <TouchableOpacity style={{ zIndex: 999, width: 30, height: 30 }} onPress={onIconPress}><SvgIcon Svg={icon} fill="#333" /></TouchableOpacity>
+    {icon ? <TouchableIconContainer onPress={onIconPress}><SvgIcon Svg={icon} fill="#333" /></TouchableIconContainer>
       : <ArrowContainer>{onPress ? <Arrow /> : undefined}</ArrowContainer>}
   </CardContainer>
 );

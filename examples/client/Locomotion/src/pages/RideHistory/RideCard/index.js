@@ -44,21 +44,6 @@ import ServiceTypeDetails from '../../../Components/ServiceTypeDetails';
 const RideTitleCard = ({
   ride, page, showTip, tip,
 }) => {
-  const {
-    getRideTotalPriceWithCurrency,
-  } = useContext(RidePageContext);
-  const [totalPrice, setTotalPrice] = useState();
-
-  const updateTotalPrice = async () => {
-    const price = await getRideTotalPriceWithCurrency(ride.id);
-    setTotalPrice(price);
-  };
-
-
-  useEffect(() => {
-    updateTotalPrice();
-  }, [ride]);
-
   const getTipButton = () => {
     if (tip) {
       const price = getFormattedPrice(ride.priceCurrency, tip);
@@ -92,9 +77,7 @@ const RideTitleCard = ({
         </RideViewTextContainer>
         <RideViewSecTextContainer>
           <DaySecTitleText>
-            {ride.state === RIDE_STATES.CANCELED && totalPrice?.amount === 0
-              ? getFormattedPrice('', 0)
-              : getFormattedPrice(totalPrice?.currency || 'USD', (tip > 0 ? totalPrice?.amount - tip : totalPrice?.amount) || 0)}
+            {getFormattedPrice(ride.priceCurrency, ride.priceAmount)}
           </DaySecTitleText>
           {showTip
             ? getTipButton()

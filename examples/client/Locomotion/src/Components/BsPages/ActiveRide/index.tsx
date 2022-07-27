@@ -125,7 +125,7 @@ const ActiveRideContent = () => {
             <StopPointText>
               {getTextBasedOnStopPoints()}
             </StopPointText>
-            {firstSpNotCompleted.state === STOP_POINT_STATES.PENDING
+            {firstSpNotCompleted?.state === STOP_POINT_STATES.PENDING
               ? (
                 <StopPointsTimeContainer>
                   <PulseContainer>

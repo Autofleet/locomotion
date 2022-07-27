@@ -9,14 +9,16 @@ import { MAIN_ROUTES } from '../routes';
 import PriceCard from '../../Components/PriceCard';
 import NoTitleCard from '../../Components/NoTitleCard';
 import Loader from '../../Components/Loader';
-import { getCurrencySymbol } from '../../context/newRideContext/utils';
+import { getCurrencySymbol, isPriceEstimated } from '../../context/newRideContext/utils';
 import InformationCard from '../../Components/InformationCard';
 import CardRow from '../../Components/CardRow';
 import { PageContainer } from '../styles';
 import PageHeader from '../../Components/PageHeader';
 import { PriceCalculation, RidePageContext } from '../../context/newRideContext';
 import i18n from '../../I18n';
-import { CreditCardRowContainer, PriceItemsContainer } from './styled';
+import {
+  CreditCardRowContainer, PriceItemsContainer, EstimationText, EstimationContainer,
+} from './styled';
 import { PaymentMethodInterface } from '../../context/payments/interface';
 
 type RidePriceBreakdownParams = {
@@ -81,9 +83,9 @@ const RidePriceBreakDown = () => {
   useEffect(() => {
     updateRideFromApi();
   }, []);
+
   return (
     <PageContainer>
-
       <PageHeader
         title={i18n.t('ridePriceBreakdown.pageTitle')}
         onIconPress={
@@ -101,8 +103,19 @@ const RidePriceBreakDown = () => {
                 <CreditCardRowContainer>
                   <CardRow {...paymentMethod} />
                 </CreditCardRowContainer>
+                {
+                (priceCalculation && isPriceEstimated(priceCalculation.calculationBasis))
+                  ? (
+                    <EstimationContainer>
+                      <EstimationText>{i18n.t('ridePriceBreakdown.estimatedText')}</EstimationText>
+
+                    </EstimationContainer>
+                  )
+                  : null
+              }
               </View>
             </InformationCard>
+
             <InformationCard title={i18n.t('ridePriceBreakdown.paymentBreakdownTitle')}>
               <View>
                 {priceCalculation?.surgePrice && priceCalculation?.surgePrice !== 0

@@ -1,17 +1,19 @@
 import React, { useContext, useEffect, useState } from 'react';
 import moment from 'moment';
 import { PaymentIcon } from 'react-native-payment-icons';
+import { View } from 'react-native';
 import { RIDE_STATES } from '../../lib/commonTypes';
-import { RideInterface, RidePageContext } from '../../context/newRideContext';
+import { PriceCalculation, RideInterface, RidePageContext } from '../../context/newRideContext';
 import cashPaymentMethod from '../../pages/Payments/cashPaymentMethod';
 import i18n from '../../I18n';
 import RoundedButton from '../RoundedButton';
 import TextRowWithIcon from '../TextRowWithIcon';
 import {
-  CardContainer, RideDate, ServiceType, DateContainer,
+  CardContainer, RideDate, ServiceType, DateContainer, EstimatedText,
+  TopTextsContainer,
 } from './styled';
 import StopPointsVerticalView from '../StopPointsVerticalView';
-import { getFormattedPrice } from '../../context/newRideContext/utils';
+import { getFormattedPrice, isPriceEstimated } from '../../context/newRideContext/utils';
 import cashIcon from '../../assets/cash.svg';
 
 
@@ -44,44 +46,50 @@ interface RideCardProps {
     scheduledTo: string;
 }
 
-type Price = {
-  amount: number,
-  currency: string
-}
-
 const RideCard = ({
   ride, onPress, serviceName, paymentMethod, scheduledTo,
 }: RideCardProps) => {
-  const [totalPriceWithCurrency, setTotalPriceWithCurrency] = useState<Price>();
+  const [ridePriceCalculation, setRidePriceCalculation] = useState<PriceCalculation>();
   const {
-    getRideTotalPriceWithCurrency,
+    getRidePriceCalculation,
   } = useContext(RidePageContext);
 
-  const updateTotalPrice = async () => {
-    const price = await getRideTotalPriceWithCurrency(ride.id);
-    setTotalPriceWithCurrency(price);
+  const addPriceCalculation = async () => {
+    const price = await getRidePriceCalculation(ride.id, ride.priceCalculationId);
+    setRidePriceCalculation(price);
   };
 
   useEffect(() => {
-    updateTotalPrice();
+    if (!ridePriceCalculation) {
+      addPriceCalculation();
+    }
   }, [ride]);
 
   return (
     <CardContainer>
       <DateContainer>
-        <RideDate>
-          {moment(scheduledTo).format('MMMM DD, YYYY, h:mm A')}
-        </RideDate>
-        <RideDate>
-          {ride.state === RIDE_STATES.CANCELED && totalPriceWithCurrency?.amount === 0
-            ? getFormattedPrice(totalPriceWithCurrency?.currency, 0)
-            : getFormattedPrice(totalPriceWithCurrency?.currency || '',
-              totalPriceWithCurrency?.amount || 0)}
-        </RideDate>
+        <TopTextsContainer>
+          <RideDate>
+            {moment(scheduledTo).format('MMMM DD, YYYY, h:mm A')}
+          </RideDate>
+          <ServiceType>
+            {serviceName}
+          </ServiceType>
+        </TopTextsContainer>
+        <TopTextsContainer>
+          <RideDate>
+            {getFormattedPrice(ride.priceCurrency, ride.priceAmount)}
+          </RideDate>
+          {ridePriceCalculation && isPriceEstimated(ridePriceCalculation.calculationBasis)
+            ? (
+              <EstimatedText>
+                {i18n.t('rideDetails.estimatedFare').toString()}
+              </EstimatedText>
+            )
+            : null}
+        </TopTextsContainer>
       </DateContainer>
-      <ServiceType>
-        {serviceName}
-      </ServiceType>
+
       <StopPointsVerticalView ride={ride} />
       {paymentMethod && <CardComponent paymentMethod={paymentMethod} />}
       <RoundedButton onPress={onPress} hollow type="cancel">

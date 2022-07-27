@@ -15,12 +15,13 @@ margin-bottom: 20px;
 export const RideDate = styled(Text)`
 ${FONT_SIZES.H3}
 ${FONT_WEIGHTS.MEDIUM}
+align-self: flex-end;
 `;
 
 export const ServiceType = styled(Text)`
 ${FONT_SIZES.MEDIUM}
 ${FONT_WEIGHTS.LIGHT}
-opacity: .7;
+color: #707070;
 margin-top: 5px;
 `;
 
@@ -29,4 +30,15 @@ display: flex;
 flex-direction: row;
 align-items: center;
 justify-content: space-between;
+`;
+
+export const EstimatedText = styled(Text)`
+margin-top: 5px;
+color: #707070;
+${FONT_SIZES.MEDIUM};
+${FONT_WEIGHTS.LIGHT}
+`;
+
+export const TopTextsContainer = styled(View)`
+flex-direction: column;
 `;

@@ -79,6 +79,7 @@ export type PriceCalculation = {
      name: string,
      price: number}],
   distanceUnit: string,
+  calculationBasis: string;
 };
 
 interface RidePageContextInterface {
@@ -129,7 +130,7 @@ interface RidePageContextInterface {
   setUnconfirmedPickupTime: Dispatch<number | null>;
   unconfirmedPickupTime: number | null;
   loadRide: (rideId: string) => Promise<void>;
-  getRidePriceCalculation: (id: string | undefined) => Promise<PriceCalculation | undefined>;
+  getRidePriceCalculation: (id: string | undefined, priceCalculationId?: string) => Promise<PriceCalculation | undefined>;
   getRideTotalPriceWithCurrency: (rideId : string | undefined) => Promise<{ amount: number; currency: string; } | undefined>;
 }
 
@@ -854,10 +855,18 @@ const RidePageContextProvider = ({ children }: {
     return null;
   };
 
-  const getRidePriceCalculation = async (id:string | undefined) => {
-    const apiRide = await getRideFromApi(id || ride.id || '');
-    const calculation = await rideApi.getPriceCalculation(apiRide?.priceCalculationId);
-    return calculation;
+  const getRidePriceCalculation = async (
+    id?: string | undefined,
+    priceCalculationId?: string,
+  ) => {
+    if (id || ride.id) {
+      if (!priceCalculationId) {
+        ({ priceCalculationId } = await getRideFromApi(id || ride.id || ''));
+      }
+      const calculation = await rideApi.getPriceCalculation(priceCalculationId);
+      return calculation;
+    }
+    return null;
   };
 
   const getRideTotalPriceWithCurrency = async (rideId: string | undefined) => {
