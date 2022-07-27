@@ -280,8 +280,8 @@
     },
     "ridePriceBreakdown": {
         "pageTitle": "Payment breakdown",
-        "priceItem": "{{ name }} - {{ price }} ",
-        "perUnit": "per {{ unit }} ",
+        "priceItem": "{{ name }} ",
+        "perUnit": " - {{ price }} per {{ unit }} ",
         "paymentBreakdownTitle": "Payment Breakdown",
         "priceFieldNames": { 
             "surgePrice": "Surge price",
