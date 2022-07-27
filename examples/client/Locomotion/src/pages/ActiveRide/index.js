@@ -81,6 +81,7 @@ const RidePage = ({ mapSettings, navigation }) => {
     setRequestStopPoints,
     tryServiceEstimations,
     selectedInputIndex,
+    cleanRideState,
   } = useContext(RidePageContext);
   const {
     setIsExpanded, snapPoints, isExpanded, topBarText,
@@ -397,14 +398,14 @@ BS_PAGE_TO_COMP[currentBsPage] ? BS_PAGE_TO_COMP[currentBsPage]() : null
           onCancel={() => {
             backToMap();
             setRidePopup(null);
-            setRide({});
+            // cleanRideState();
           }}
           onSubmit={() => {
             changeBsPage(BS_PAGES.SERVICE_ESTIMATIONS);
             setRidePopup(null);
             const sps = getRequestSpsFromRide();
             setRequestStopPoints(sps);
-            setRide({});
+            // cleanRideState(false);
           }
         }
         />
