@@ -28,5 +28,5 @@ export const MAIN_ROUTES = {
   CARD_DETAILS: 'CardDetails',
   EDIT_NICKNAME: 'EditNickname',
   FUTURE_RIDES: 'FutureRides',
-  RIDE_PRICE_BREAKDOWN: 'RidePriveBreakdown',
+  RIDE_PRICE_BREAKDOWN: 'RidePriceBreakdown',
 };

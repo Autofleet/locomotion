@@ -10,6 +10,7 @@
         "timeUntilArrival": "In {{minutes}} min",
         "toolTipEta": "ETA {{minutes}} min",
         "noCharge": "No charge",
+        "estimatedFare": "Estimated fare",
         "type": {
             "pickup": "Pickup",
             "dropoff": "Drop off"
@@ -279,6 +280,7 @@
         "contactInformationTitle": "Contact information"
     },
     "ridePriceBreakdown": {
+        "estimatedText": "The fares below are estimates and will be updated once the ride is completed based the actual ride conditions",
         "pageTitle": "Payment breakdown",
         "priceItem": "{{ name }} - {{ price }} per {{ unit }} ",
         "paymentBreakdownTitle": "Payment Breakdown",
