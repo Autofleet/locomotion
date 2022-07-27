@@ -114,6 +114,7 @@ const Name = ({ navigation }) => {
           </InputContainer>
           {showErrorText && <ErrorText>{i18n.t('onboarding.fullNameError')}</ErrorText>}
           <SaveButton
+            isInvalid={!firstName || !lastName}
             onFail={() => setShowErrorText(true)}
             onNext={onComplete}
           />
