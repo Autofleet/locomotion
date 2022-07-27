@@ -74,6 +74,12 @@ const RidePriceBreakDown = () => {
     + (priceCalculation?.discount || 0),
   );
 
+  const calculationTypeToUnit = {
+    fixed: '',
+    distance: i18n.t('ridePriceBreakdown.perUnit', { unit: priceCalculation?.distanceUnit }),
+    duration: i18n.t('ridePriceBreakdown.perUnit', { unit: 'minute' }),
+  };
+
   useEffect(() => {
     updatePriceCalculation();
   }, []);
@@ -81,6 +87,7 @@ const RidePriceBreakDown = () => {
   useEffect(() => {
     updateRideFromApi();
   }, []);
+
   return (
     <PageContainer>
 
@@ -117,7 +124,7 @@ const RidePriceBreakDown = () => {
                       name={i18n.t('ridePriceBreakdown.priceItem', {
                         name: item.pricingRule.name,
                         price: getPriceWithCurrency(item.pricingRule.price),
-                        unit: priceCalculation.distanceUnit,
+                        unit: calculationTypeToUnit[item.pricingRule.calculationType],
                       })}
                       text={getPriceWithCurrency(item.price)}
                     />
