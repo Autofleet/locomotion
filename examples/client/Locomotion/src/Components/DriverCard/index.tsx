@@ -75,7 +75,6 @@ const DriverCard = ({
           <DriverDetailContainer>
             <DriverDetailText numberOfLines={1} activeRide={activeRide}>
               {formatDriverName(ride.driver?.firstName || '')}
-              {formatDriverName(ride.driver?.lastName || '')}
             </DriverDetailText>
           </DriverDetailContainer>
           {activeRide && (
