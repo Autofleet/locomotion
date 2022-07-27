@@ -5,6 +5,7 @@ import SvgIcon from '../SvgIcon';
 import i18n from '../../I18n';
 import {
   Arrow, ArrowContainer, CardContainer, CardContentContainer, CardText, CardTitle, CardTitleContainer, VerifyContainer, VerifyText,
+  IconContainer,
 } from './styled';
 import { InformationCardProps } from '../InformationCard';
 
@@ -41,7 +42,13 @@ const Card = ({
       </CardTitleContainer>
       {children ? <CardText>{children}</CardText> : undefined}
     </CardContentContainer>
-    {icon ? <TouchableIconContainer onPress={onIconPress}><SvgIcon Svg={icon} fill="#333" /></TouchableIconContainer>
+    {icon ? (
+      <TouchableIconContainer onPress={onIconPress}>
+        <IconContainer>
+          <SvgIcon Svg={icon} fill="#333" />
+        </IconContainer>
+      </TouchableIconContainer>
+    )
       : <ArrowContainer>{onPress ? <Arrow /> : undefined}</ArrowContainer>}
   </CardContainer>
 );
