@@ -43,7 +43,7 @@ const RidePaymentDetails = ({
     setPriceCalculation(calculation);
   };
 
-  const getTotalAmount = () => (priceCalculation?.totalPrice || 0)
+  const totalAmount = (priceCalculation?.totalPrice || 0)
   + (priceCalculation?.discount || 0)
   + (priceCalculation?.additionalCharges.find(({ chargeFor }) => chargeFor === CHARGE_FOR_TIP)?.amount || 0);
 
@@ -60,12 +60,12 @@ const RidePaymentDetails = ({
         </CardRowContainer>
         <RidePriceDetails>
 
-          {getTotalAmount() === 0
+          {totalAmount === 0
             ? <PriceText>{`${i18n.t('rideDetails.noCharge')}`}</PriceText>
             : (
               <PriceText>
                 {getFormattedPrice(priceCalculation?.currency,
-                  getTotalAmount())}
+                  totalAmount)}
               </PriceText>
             )
             }
