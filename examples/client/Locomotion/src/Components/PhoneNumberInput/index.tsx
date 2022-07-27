@@ -15,7 +15,7 @@ const PhoneNumberInput = ({
   value,
 }: any) => {
   const [isFocused, setIsFocused] = useState(false);
-  const [defaultCode, setDefaultCode] = useState(null);
+  const [defaultCode, setDefaultCode] = useState<any>(Config.OVERWRITE_COUNTRY_CODE);
   const theme = useContext(ThemeContext);
   const asYouTypePhoneNumber = new AsYouType();
 
@@ -31,7 +31,7 @@ const PhoneNumberInput = ({
 
   const setIsoCode = async () => {
     const mobileIso = await getInputIsoCode();
-    setDefaultCode(Config.OVERWRITE_COUNTRY_CODE || mobileIso);
+    setDefaultCode(mobileIso);
   };
 
   const cleanNumber = (number: string) => {
@@ -46,7 +46,9 @@ const PhoneNumberInput = ({
   };
 
   useEffect(() => {
-    setIsoCode();
+    if (!Config.OVERWRITE_COUNTRY_CODE) {
+      setIsoCode();
+    }
   }, []);
 
   return defaultCode ? (
