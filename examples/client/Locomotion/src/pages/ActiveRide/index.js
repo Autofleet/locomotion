@@ -291,6 +291,7 @@ const RidePage = ({ mapSettings, navigation }) => {
   }, [isFocused]);
 
   const getRequestSpsFromRide = () => ride.stopPoints.map(sp => ({
+    id: sp.id,
     lat: sp.lat,
     lng: sp.lng,
     streetAddress: sp.description,

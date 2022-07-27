@@ -260,7 +260,6 @@ const RidePageContextProvider = ({ children }: {
     },
     [RIDE_STATES.FAILED]: () => {
       setRidePopup(RIDE_POPUPS.RIDE_CANCELED_BY_DISPATCHER);
-      cleanRideState();
     },
   };
 
