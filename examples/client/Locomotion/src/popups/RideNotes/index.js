@@ -14,7 +14,7 @@ import {
 import RoundedButton from '../../Components/RoundedButton';
 import { FlexCont } from '../../Components/Flex';
 
-const MAX_SIZE = 100;
+const MAX_SIZE = 150;
 
 export default ({
   isVisible, onSubmit, onCancel, notes,
