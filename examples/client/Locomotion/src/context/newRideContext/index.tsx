@@ -922,8 +922,7 @@ const RidePageContextProvider = ({ children }: {
     return {
       amount:
       (calculation?.totalPrice || 0)
-     + (calculation?.additionalCharges?.reduce((s, { amount }) => s + amount, 0) || 0)
-      + (calculation?.discount || 0),
+     + (calculation?.additionalCharges?.reduce((s, { amount }) => s + amount, 0) || 0),
       currency: calculation.currency,
     };
   };
