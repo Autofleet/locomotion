@@ -282,7 +282,8 @@
     "ridePriceBreakdown": {
         "estimatedText": "The fares below are estimates and will be updated once the ride is completed based the actual ride conditions",
         "pageTitle": "Payment breakdown",
-        "priceItem": "{{ name }} - {{ price }} per {{ unit }} ",
+        "priceItem": "{{ name }} ",
+        "perUnit": " - {{ price }} per {{ unit }} ",
         "paymentBreakdownTitle": "Payment Breakdown",
         "priceFieldNames": { 
             "surgePrice": "Surge price",

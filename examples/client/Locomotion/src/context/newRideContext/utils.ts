@@ -139,7 +139,7 @@ export const formatStopPointsForEstimations = (requestStopPoints: any[]) => requ
   lng: sp.lng,
 }));
 
-export const getFormattedPrice = (priceCurrency: string, priceAmount: number) => {
+export const getFormattedPrice = (priceCurrency: string | undefined, priceAmount: number) => {
   if (!priceCurrency) {
     return i18n.t('rideDetails.noCharge');
   }

@@ -76,6 +76,12 @@ const RidePriceBreakDown = () => {
     + (priceCalculation?.discount || 0),
   );
 
+  const calculationTypeToUnit = {
+    fixed: () => '',
+    distance: (price:string) => i18n.t('ridePriceBreakdown.perUnit', { unit: priceCalculation?.distanceUnit, price }),
+    duration: (price:string) => i18n.t('ridePriceBreakdown.perUnit', { unit: 'minute', price }),
+  };
+
   useEffect(() => {
     updatePriceCalculation();
   }, []);
@@ -127,11 +133,9 @@ const RidePriceBreakDown = () => {
                 {priceCalculation?.items?.filter(item => item.pricingRule && item.price > 0)
                   .map(item => (
                     <PriceCard
-                      name={i18n.t('ridePriceBreakdown.priceItem', {
+                      name={`${i18n.t('ridePriceBreakdown.priceItem', {
                         name: item.pricingRule.name,
-                        price: getPriceWithCurrency(item.pricingRule.price),
-                        unit: priceCalculation.distanceUnit,
-                      })}
+                      })}${calculationTypeToUnit[item.pricingRule.calculationType](getPriceWithCurrency(item.pricingRule.price))}`}
                       text={getPriceWithCurrency(item.price)}
                     />
                   ))}
