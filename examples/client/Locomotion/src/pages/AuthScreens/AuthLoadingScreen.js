@@ -71,7 +71,6 @@ const AuthLoadingScreen = ({ navigation }) => {
     }
 
     await getAppSettings();
-    // await versionCheck();
     if (!user) { // Load app state
       getFromStorage();
     }
