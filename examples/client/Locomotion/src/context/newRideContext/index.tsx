@@ -581,7 +581,13 @@ const RidePageContextProvider = ({ children }: {
     if (selectedItem.isLoading) {
       return null;
     }
-    const enrichedPlace = await enrichPlaceWithLocation(selectedItem.placeId);
+    let enrichedPlace = {
+      lat: selectedItem.lat,
+      lng: selectedItem.lng,
+    };
+    if (!selectedItem.lat || !selectedItem.lng) {
+      enrichedPlace = await enrichPlaceWithLocation(selectedItem.placeId);
+    }
     const reqSps = [...requestStopPoints];
     reqSps[index || selectedInputIndex || 0] = {
       ...reqSps[index || selectedInputIndex || 0],
@@ -714,7 +720,6 @@ const RidePageContextProvider = ({ children }: {
 
   const requestRide = async (pickupLocation?: any): Promise<void> => {
     let stopPoints = requestStopPoints;
-    const spsToUpdate = requestStopPoints.filter(p => p.placeId);
 
     if (pickupLocation) {
       if (!validateStopPointInTerritory([pickupLocation])) {
@@ -733,6 +738,8 @@ const RidePageContextProvider = ({ children }: {
         text: lastSp.streetAddress || lastSp.description,
         fullText: lastSp.streetAddress || lastSp.description,
         placeId: lastSp.placeId,
+        lat: lastSp.lat,
+        lng: lastSp.lng,
       });
     }
 
