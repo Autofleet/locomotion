@@ -59,7 +59,7 @@ export const InfoBox = styled.View`
   elevation: 4;
  shadow-offset: 0px 0px;
   shadow-opacity: 0.4;
-   ${Platform.OS === 'ios' && 'top: -35px'};
+   ${Platform.OS === 'ios' ? 'top: -35px;' : ''}
    height: 50px;
    display: flex;
    flex-direction: column;
@@ -67,8 +67,8 @@ export const InfoBox = styled.View`
    border-radius: 8px;
    padding: 3px;
    align-items: center;
-   ${Platform.OS === 'android' && 'border-color: #bcbcbc'};
-   ${Platform.OS === 'android' && 'border-width: 1px'};
+   ${Platform.OS === 'android' ? 'border-color: #bcbcbc;' : ''}
+   ${Platform.OS === 'android' ? 'border-width: 1px;' : ''}
   
 
 `;
