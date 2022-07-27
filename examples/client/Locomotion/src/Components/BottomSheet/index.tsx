@@ -96,6 +96,7 @@ const BottomSheetComponent = forwardRef(({
       enablePanDownToClose={enablePanDownToClose}
       index={index}
       handleComponent={getTopBar}
+      containerStyle={{ zIndex: 999 }}
       style={{
         backgroundColor: 'white',
         shadowColor: '#000',

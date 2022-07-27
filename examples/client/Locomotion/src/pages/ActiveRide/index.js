@@ -391,7 +391,7 @@ const RidePage = ({ mapSettings, navigation }) => {
 BS_PAGE_TO_COMP[currentBsPage] ? BS_PAGE_TO_COMP[currentBsPage]() : null
           }
         </BottomSheet>
-        {BLACK_OVERLAY_SCREENS.includes(currentBsPage) ? <BlackOverlay bottomSheetHeight={snapPoints[0]} /> : null}
+        {BLACK_OVERLAY_SCREENS.includes(currentBsPage) ? <BlackOverlay /> : null}
         <RideCanceledPopup
           isVisible={ridePopup === RIDE_POPUPS.RIDE_CANCELED_BY_DISPATCHER}
           onCancel={() => {

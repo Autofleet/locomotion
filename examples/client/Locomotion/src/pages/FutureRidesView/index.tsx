@@ -16,7 +16,6 @@ import { RideStateContextContext } from '../..';
 import { RideInterface, RidePageContext } from '../../context/newRideContext';
 import { BS_PAGES } from '../../context/ridePageStateContext/utils';
 import BlackOverlay from '../../Components/BlackOverlay';
-import { BottomSheetContext } from '../../context/bottomSheetContext';
 import GenericErrorPopup from '../../popups/GenericError';
 
 interface FutureRidesViewProps {
@@ -32,7 +31,6 @@ const FutureRidesView = ({ menuSide }: FutureRidesViewProps) => {
   } = useContext(FutureRidesContext);
   const { changeBsPage, currentBsPage } = useContext(RideStateContextContext);
   const { cancelRide, getServices } = useContext(RidePageContext);
-  const { snapPoints } = useContext(BottomSheetContext);
   const onPressCancel = (ride: RideInterface) => {
     setRideToCancel(ride);
     changeBsPage(BS_PAGES.CANCEL_RIDE);
@@ -84,7 +82,7 @@ const FutureRidesView = ({ menuSide }: FutureRidesViewProps) => {
       </ContentContainer>
       )}
       {currentBsPage === BS_PAGES.CANCEL_RIDE
-        ? <BlackOverlay bottomSheetHeight={snapPoints[0]} />
+        ? <BlackOverlay />
         : null}
       <BottomSheetComponent
         ref={bottomSheetRef}
