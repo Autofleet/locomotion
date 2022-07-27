@@ -44,7 +44,6 @@ const RidePaymentDetails = ({
   };
 
   const totalAmount = (priceCalculation?.totalPrice || 0)
-  + (priceCalculation?.discount || 0)
   + (priceCalculation?.additionalCharges.find(({ chargeFor }) => chargeFor === CHARGE_FOR_TIP)?.amount || 0);
 
   useEffect(() => {

@@ -67,8 +67,6 @@ type AdditionalCharge = {
 type CalculationTypes = 'fixed' |'distance' | 'duration';
 
 export type PriceCalculation = {
-  surgePrice: number,
-  discount: number,
   totalPrice: number,
   currency: string,
   additionalCharges: AdditionalCharge[],
@@ -922,8 +920,7 @@ const RidePageContextProvider = ({ children }: {
     return {
       amount:
       (calculation?.totalPrice || 0)
-     + (calculation?.additionalCharges?.reduce((s, { amount }) => s + amount, 0) || 0)
-      + (calculation?.discount || 0),
+     + (calculation?.additionalCharges?.reduce((s, { amount }) => s + amount, 0) || 0),
       currency: calculation.currency,
     };
   };

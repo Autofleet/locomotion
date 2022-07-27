@@ -72,8 +72,7 @@ const RidePriceBreakDown = () => {
   const getTip = () => priceCalculation?.additionalCharges?.find(({ chargeFor }) => chargeFor === CHARGE_FOR_TIP);
   const getTotalPrice = () => getPriceWithCurrency(
     (priceCalculation?.totalPrice || 0)
-   + (priceCalculation?.additionalCharges?.reduce((s, { amount }) => s + amount, 0) || 0)
-    + (priceCalculation?.discount || 0),
+   + (priceCalculation?.additionalCharges?.reduce((s, { amount }) => s + amount, 0) || 0),
   );
 
   const calculationTypeToUnit = {
@@ -124,12 +123,6 @@ const RidePriceBreakDown = () => {
 
             <InformationCard title={i18n.t('ridePriceBreakdown.paymentBreakdownTitle')}>
               <View>
-                {priceCalculation?.surgePrice && priceCalculation?.surgePrice !== 0
-                  ? <PriceCard name={i18n.t('ridePriceBreakdown.priceFieldNames.surgePrice')} text={getPriceWithCurrency(priceCalculation?.surgePrice || 0)} />
-                  : undefined}
-                {priceCalculation?.discount && priceCalculation?.discount !== 0
-                  ? <PriceCard name={i18n.t('ridePriceBreakdown.priceFieldNames.discount')} text={`-${getPriceWithCurrency(Math.abs(priceCalculation?.discount) || 0)}`} />
-                  : undefined}
                 {priceCalculation?.items?.filter(item => item.pricingRule && item.price > 0)
                   .map(item => (
                     <PriceCard
