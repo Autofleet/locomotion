@@ -17,6 +17,7 @@ import { RideInterface, RidePageContext } from '../../context/newRideContext';
 import { BS_PAGES } from '../../context/ridePageStateContext/utils';
 import BlackOverlay from '../../Components/BlackOverlay';
 import GenericErrorPopup from '../../popups/GenericError';
+import { NoRidesInList } from '../RideHistory/RidesList/styled';
 
 interface FutureRidesViewProps {
   menuSide: 'right' | 'left';
@@ -65,22 +66,29 @@ const FutureRidesView = ({ menuSide }: FutureRidesViewProps) => {
         }}
         iconSide={menuSide}
       />
-      {!!services.length && (
       <ContentContainer>
-        {(futureRides || []).map((ride) => {
-          const service = services.find(s => s.id === ride.serviceId);
-          return (
-            <RideCard
-              ride={ride}
-              onPress={() => onPressCancel(ride)}
-              serviceName={service.displayName}
-              paymentMethod={ride?.payment?.paymentMethod}
-              scheduledTo={ride.scheduledTo || ''}
-            />
-          );
-        })}
+        {futureRides.length ? (
+          <>
+            {(futureRides || []).map((ride) => {
+              const service = services.find(s => s.id === ride.serviceId);
+              return (
+                <RideCard
+                  ride={ride}
+                  onPress={() => onPressCancel(ride)}
+                  serviceName={service?.displayName}
+                  paymentMethod={ride?.payment?.paymentMethod}
+                  scheduledTo={ride.scheduledTo || ''}
+                />
+              );
+            })}
+          </>
+        ) : (
+          <NoRidesInList
+            title={i18n.t('futureRides.noRidesTitle')}
+            text={i18n.t('futureRides.noRidesText')}
+          />
+        )}
       </ContentContainer>
-      )}
       {currentBsPage === BS_PAGES.CANCEL_RIDE
         ? <BlackOverlay />
         : null}

@@ -269,7 +269,8 @@
         "paymentsSettings": "Payment",
         "account": "User Profile",
         "support": "Contact us",
-        "logout": "Logout"
+        "logout": "Logout",
+        "futureRides": "Upcoming Rides"
     },
     "contactUs": {
         "pageTitle": "Contact us",
@@ -334,7 +335,9 @@
       }
     },
     "futureRides": {
-        "pageTitle": "Upcoming rides"
+        "pageTitle": "Upcoming rides",
+        "noRidesTitle": "No upcoming rides",
+        "noRidesText": "Create a scheduled ride and see it here!"
     },
     "postRide": {
         "pageTitle": "Ride finished",
