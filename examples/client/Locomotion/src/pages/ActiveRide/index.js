@@ -184,7 +184,9 @@ const RidePage = ({ mapSettings, navigation }) => {
       <ConfirmPickup onButtonPress={(sp) => {
         updateRequestSp(sp);
         changeBsPage(BS_PAGES.ADDRESS_SELECTOR);
-        setIsExpanded(true);
+        setTimeout(() => {
+          setIsExpanded(true);
+        }, 100);
       }}
       />
     ),
