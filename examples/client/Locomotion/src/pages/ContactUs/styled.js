@@ -30,6 +30,7 @@ width: 100%;
 
 export const ContactUsPageLogoContainer = styled(LogoContainer)`
 max-height: 200px;
+max-width: 100%;
 padding: 20px;
 display: flex;
 justify-content: center;
