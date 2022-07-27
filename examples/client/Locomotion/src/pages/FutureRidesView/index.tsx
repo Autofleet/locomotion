@@ -34,17 +34,17 @@ const FutureRidesView = ({ menuSide }: FutureRidesViewProps) => {
   const onPressCancel = (ride: RideInterface) => {
     setRideToCancel(ride);
     changeBsPage(BS_PAGES.CANCEL_RIDE);
-    if (bottomSheetRef?.current) {
-      bottomSheetRef?.current.snapToIndex(0);
-    }
   };
 
-  const closeBottomSheet = () => {
-    if (bottomSheetRef?.current) {
-      bottomSheetRef.current.forceClose();
+  useEffect(() => {
+    if (currentBsPage === BS_PAGES.CANCEL_RIDE) {
+      if (bottomSheetRef?.current) {
+        bottomSheetRef?.current.snapToIndex(0);
+      }
+    } else if (bottomSheetRef?.current) {
+      bottomSheetRef?.current.close();
     }
-    changeBsPage(BS_PAGES.ADDRESS_SELECTOR);
-  };
+  }, [currentBsPage]);
 
   const loadServices = async () => {
     const res = await getServices();
@@ -96,7 +96,7 @@ const FutureRidesView = ({ menuSide }: FutureRidesViewProps) => {
             try {
               await cancelRide(rideToCancel?.id);
               await loadFutureRides();
-              closeBottomSheet();
+              changeBsPage(BS_PAGES.ADDRESS_SELECTOR);
               if (futureRides.length === 1) {
                 NavigationService.navigate(MAIN_ROUTES.HOME);
               }
@@ -105,7 +105,7 @@ const FutureRidesView = ({ menuSide }: FutureRidesViewProps) => {
             }
           }}
           onSecondaryButtonPress={() => {
-            closeBottomSheet();
+            changeBsPage(BS_PAGES.ADDRESS_SELECTOR);
           }}
         />
       </BottomSheetComponent>
