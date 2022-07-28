@@ -70,8 +70,8 @@ const Name = ({ navigation }) => {
   };
 
   return (
-    <ScrollView keyboardShouldPersistTaps="handled">
-      <PageContainer>
+    <PageContainer>
+      <ScrollView keyboardShouldPersistTaps="handled">
         <Header title={i18n.t('onboarding.pages.name.title')} page={MAIN_ROUTES.NAME} />
         <ContentContainer>
           <ScreenText
@@ -119,8 +119,8 @@ const Name = ({ navigation }) => {
             onNext={onComplete}
           />
         </ContentContainer>
-      </PageContainer>
-    </ScrollView>
+      </ScrollView>
+    </PageContainer>
   );
 };
 
