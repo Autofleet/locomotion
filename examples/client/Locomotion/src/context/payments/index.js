@@ -40,9 +40,9 @@ const usePayments = () => {
   };
 
   const getClientPaymentAccount = async () => {
-    const { data: data } = await network.get(`${BASE_PATH}/payment-account`);
+    const { data } = await network.get(`${BASE_PATH}/payment-account`);
     setPaymentAccount(data);
-  }
+  };
 
   const detachPaymentMethod = async (paymentMethodId) => {
     const { data: paymentMethodsData } = await network.post(`${BASE_PATH}/${paymentMethodId}/detach`);
