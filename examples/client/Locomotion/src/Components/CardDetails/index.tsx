@@ -2,7 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { useRoute } from '@react-navigation/native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import moment from 'moment';
-import { Modal, Text, View } from 'react-native';
+import {
+  Modal, Platform, Text, View,
+} from 'react-native';
 import GenericErrorPopup from '../../popups/GenericError';
 import { getCurrencySymbol } from '../../context/newRideContext/utils';
 import ConfirmationPopup from '../../popups/ConfirmationPopup';
@@ -33,7 +35,7 @@ const CardDetails = ({
   navigation = { navigate: (route: string, object?: any | undefined) => null },
 }) => {
   const [loading, setLoading] = useState(false);
-  const [showError, setShowError] = useState(true);
+  const [showError, setShowError] = useState(false);
   const [methodForDelete, setMethodForDelete] = useState(null);
   const [isCancelPopupVisible, setIsCancelPopupVisible] = useState(false);
   const usePayments = PaymentsContext.useContainer();
@@ -47,14 +49,14 @@ const CardDetails = ({
   const detachCard = async () => {
     setLoading(true);
     try {
-      await usePayments.detachPaymentMethod(null);
+      await usePayments.detachPaymentMethod(methodForDelete);
       await usePayments.loadCustomer();
       setLoading(false);
       setIsCancelPopupVisible(false);
       navigation.navigate(MAIN_ROUTES.PAYMENT);
     } catch (e) {
       setIsCancelPopupVisible(false);
-      setShowError(true);
+      setTimeout(() => setShowError(true), Platform.OS === 'ios' ? 500 : 0);
     }
   };
 
