@@ -80,7 +80,6 @@ const Tips = ({
   useEffect(() => {
     if (isExpanded) {
       inputRef.current.focus();
-      setCustomTip(customAmount);
     } else {
       inputRef.current.blur();
     }
@@ -94,6 +93,7 @@ const Tips = ({
     }
   };
   const onCancel = () => {
+    setCustomTip(customAmount);
     forceClose();
   };
 
@@ -119,11 +119,8 @@ const Tips = ({
   };
 
   useEffect(() => {
-    validateTip(customTip);
-  }, [customTip]);
-
-  useEffect(() => {
     inputRef.current.clear();
+    setCustomTip('');
   }, [customAmount]);
 
   return (
@@ -148,9 +145,10 @@ const Tips = ({
           placeholderTextColor="#929395"
           autoCorrect={false}
           keyboardType="decimal-pad"
-          placeholder={i18n.t('postRide.tip.customTip.inputPlaceholder')}
           value={customTip}
+          placeholder={i18n.t('postRide.tip.customTip.inputPlaceholder')}
           onChangeText={(text) => {
+            validateTip(text);
             setCustomTip(text);
           }}
           onFocus={(e) => {
@@ -183,7 +181,7 @@ const Tips = ({
           <RoundedButton
             type="confirm"
             hollow={false}
-            disabled={!isValid || !customTip}
+            disabled={!isValid || !customTip || customTip === ''}
             useCancelTextButton={false}
             setLoading={null}
             onPress={() => submitValue(customTip)}
