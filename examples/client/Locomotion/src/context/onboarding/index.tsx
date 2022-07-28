@@ -104,6 +104,9 @@ const OnboardingContextProvider = ({ children }: { children: any }) => {
   const navigateBasedOnUser = async (user: any) => {
     setUser(user);
     if (!user.didCompleteOnboarding) {
+      await getSettingByKey(
+        SETTINGS_KEYS.CARD_PAGE_SETTINGS,
+      );
       const screenKey: string | undefined = Object.keys(keyToScreen).find(key => !user[key]);
       let unfinishedScreen = screenKey ? keyToScreen[screenKey] : keyToScreen.welcome;
       if (unfinishedScreen === MAIN_ROUTES.CARD) {
