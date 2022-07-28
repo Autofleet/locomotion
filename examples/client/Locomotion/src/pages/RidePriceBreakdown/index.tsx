@@ -3,7 +3,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { View } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { useNavigation, useRoute } from '@react-navigation/native';
-import { CHARGE_FOR_TIP } from '../../lib/commonTypes';
+import { CHARGE_FOR_TIP, RIDE_FINAL_STATES } from '../../lib/commonTypes';
 import NoTitlePriceCard from '../../Components/PriceCard/NoTitlePriceCard';
 import { MAIN_ROUTES } from '../routes';
 import PriceCard from '../../Components/PriceCard';
@@ -14,7 +14,7 @@ import InformationCard from '../../Components/InformationCard';
 import CardRow from '../../Components/CardRow';
 import { PageContainer } from '../styles';
 import PageHeader from '../../Components/PageHeader';
-import { PriceCalculation, RidePageContext } from '../../context/newRideContext';
+import { PriceCalculation, RideInterface, RidePageContext } from '../../context/newRideContext';
 import i18n from '../../I18n';
 import {
   CreditCardRowContainer, PriceItemsContainer, EstimationText, EstimationContainer,
@@ -37,6 +37,7 @@ const RidePriceBreakDown = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [priceCalculation, setPriceCalculation] = useState<PriceCalculation>();
   const [paymentMethod, setPaymentMethod] = useState<PaymentMethodInterface>();
+  const [localRide, setLocalRide] = useState<RideInterface>();
   const {
     ride,
     getRidePriceCalculation,
@@ -56,6 +57,7 @@ const RidePriceBreakDown = () => {
       // ts does not recognize the null check
       // @ts-ignore
       const result = await getRideFromApi(params.rideId || ride.id);
+      setLocalRide(result);
       setPaymentMethod(result.payment?.paymentMethod);
       setLoading(false);
     }
@@ -109,7 +111,8 @@ const RidePriceBreakDown = () => {
                   <CardRow {...paymentMethod} />
                 </CreditCardRowContainer>
                 {
-                (priceCalculation && isPriceEstimated(priceCalculation.calculationBasis))
+                (priceCalculation && isPriceEstimated(priceCalculation.calculationBasis)
+                                  && !RIDE_FINAL_STATES.includes(localRide?.state || ''))
                   ? (
                     <EstimationContainer>
                       <EstimationText>{i18n.t('ridePriceBreakdown.estimatedText')}</EstimationText>
