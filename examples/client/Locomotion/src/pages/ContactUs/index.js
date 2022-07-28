@@ -14,7 +14,7 @@ import { Container, CardsContainer } from '../Account/styled';
 import Card from '../../Components/InformationCard';
 import CardsTitle from '../../Components/CardsTitle';
 import { Text } from '../Profile/ScreenText/styles';
-import logo from '../../assets/welcomeLogo.png';
+import logo from '../../assets/logo.png';
 import settingsContext from '../../context/settings';
 import arrowBack from '../../assets/arrow-back-learn-more.svg';
 import phoneIcon from '../../assets/phone.svg';
