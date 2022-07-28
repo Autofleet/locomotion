@@ -25,6 +25,7 @@ export const DriverAvatarContainer = styled(View)`
 export const DriverDetailContainer = styled(View)`
   padding-left: 10px;
   flex-direction: row;
+  align-items: center;
 `;
 
 export const DriverRatingText = styled(Text)`

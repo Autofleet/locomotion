@@ -69,7 +69,7 @@ const DriverCard = ({
         </DriverAvatarContainer>
         <DriverDetailsContainer>
           <DriverDetailContainer>
-            <StarIcon isOn height="8px" width="8px" />
+            <StarIcon isOn size={12} />
             <DriverRatingText>{formatDriverRating(ride?.driver?.rating)}</DriverRatingText>
           </DriverDetailContainer>
           <DriverDetailContainer>

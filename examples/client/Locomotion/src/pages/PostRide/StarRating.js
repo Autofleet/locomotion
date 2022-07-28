@@ -1,22 +1,9 @@
 
 import React, { useEffect, useState } from 'react';
-import { SummaryStars, StarIcon } from './styled';
-import Button from '../../Components/Button';
-
-import starIconSource from '../../assets/star.png';
-
-import lightStarIconSource from '../../assets/lightStar.png';
-
-
-const Star = (props) => {
-  const source = props.isOn ? lightStarIconSource : starIconSource;
-  return (
-    <Button noBackground {...props} data-test-id="RattingButton"><StarIcon source={source} isOn={props.isOn} /></Button>
-  );
-};
+import { SummaryStars } from './styled';
+import Stars from '../../Components/Stars';
 
 const StarRating = ({ onUpdate }) => {
-  const starsArray = [1, 2, 3, 4, 5];
   const [rating, setRating] = useState(null);
 
   const updateRating = async (rate) => {
@@ -29,7 +16,7 @@ const StarRating = ({ onUpdate }) => {
 
   return (
     <SummaryStars>
-      {starsArray.map(starValue => (<Star isOn={rating >= starValue} onPress={() => updateRating(starValue)} />))}
+      <Stars size={33} rating={rating} updateRating={updateRating} />
     </SummaryStars>
   );
 };
