@@ -59,7 +59,7 @@ const RidePaymentDetails = ({
         </CardRowContainer>
         <RidePriceDetails>
 
-          {totalAmount === 0
+          {!rideHistory ? (totalAmount === 0
             ? <PriceText>{`${i18n.t('rideDetails.noCharge')}`}</PriceText>
             : (
               <PriceText>
@@ -67,7 +67,7 @@ const RidePaymentDetails = ({
                   totalAmount)}
               </PriceText>
             )
-            }
+          ) : null}
 
           <TouchableOpacity onPress={() => navigation.navigate(MAIN_ROUTES.RIDE_PRICE_BREAKDOWN,
             { rideId, rideHistory })}
