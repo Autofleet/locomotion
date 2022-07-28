@@ -2,11 +2,14 @@ import { useNavigation } from '@react-navigation/native';
 import React, {
   createContext, useContext, useState,
 } from 'react';
+import { initStripe } from '@stripe/stripe-react-native';
+import Config from 'react-native-config';
 import settings from '../settings';
 import SETTINGS_KEYS from '../settings/keys';
 import * as navigationService from '../../services/navigation';
 import { APP_ROUTES, MAIN_ROUTES } from '../../pages/routes';
 import { UserContext } from '../user';
+import payments from '../payments';
 
 interface OnboardingContextInterface {
   verifyCode: (code: string) => Promise<boolean | void>,
@@ -47,6 +50,9 @@ const OnboardingContextProvider = ({ children }: { children: any }) => {
   const { setUser, onVert } = useContext(UserContext);
   const navigation: any = useNavigation();
   const { getSettingByKey } = settings.useContainer();
+  const {
+    getOrFetchClientPaymentAccount,
+  } = payments.useContainer();
 
   const [requiredOnboarding, setRequiredOnboarding] = useState({
     [MAIN_ROUTES.PHONE]: true,
@@ -99,6 +105,12 @@ const OnboardingContextProvider = ({ children }: { children: any }) => {
   };
 
   const navigateBasedOnUser = async (user: any) => {
+    const paymentAccount = await getOrFetchClientPaymentAccount();
+    initStripe({
+      publishableKey: Config.STRIPE_PUBLISHER_KEY,
+      merchantIdentifier: 'merchant.identifier',
+      stripeAccountId: paymentAccount.stripeId,
+    });
     setUser(user);
     if (!user.didCompleteOnboarding) {
       const screenKey: string | undefined = Object.keys(keyToScreen).find(key => !user[key]);
@@ -111,6 +123,7 @@ const OnboardingContextProvider = ({ children }: { children: any }) => {
       }
       return navigateToScreen(unfinishedScreen);
     }
+
     return navigationService.navigate(MAIN_ROUTES.HOME, {}, APP_ROUTES.MAIN_APP);
   };
 

@@ -42,6 +42,14 @@ const usePayments = () => {
   const getClientPaymentAccount = async () => {
     const { data } = await network.get(`${BASE_PATH}/payment-account`);
     setPaymentAccount(data);
+    return data;
+  };
+
+  const getOrFetchClientPaymentAccount = () => {
+    if (paymentAccount) {
+      return paymentAccount;
+    }
+    return getClientPaymentAccount();
   };
 
   const detachPaymentMethod = async (paymentMethodId) => {
@@ -92,6 +100,7 @@ const usePayments = () => {
     createPaymentMethod,
     updatePaymentMethod,
     getClientOutstandingBalanceCard,
+    getOrFetchClientPaymentAccount,
   };
 };
 
