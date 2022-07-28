@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import {
   CardForm as MainCardForm,
   useStripe,
@@ -11,6 +11,7 @@ import {
   CreditForm, ErrorMessage, SkipSubmitContainer, SubmitContainer, MainCardFormContainer,
 } from './styled';
 import { Context as ThemeContext } from '../../context/theme';
+import { getInputIsoCode } from '../../services/MccMnc';
 
 const NewCreditForm = ({ onDone, canSkip = false, PageText }) => {
   const theme = useContext(ThemeContext);
@@ -20,6 +21,7 @@ const NewCreditForm = ({ onDone, canSkip = false, PageText }) => {
   const [loading, setLoading] = useState(false);
   const [formReady, setFormReady] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
+  const [countryCode, setCountryCode] = useState();
 
   const handlePayPress = async () => {
     setLoading(true);
@@ -48,12 +50,21 @@ const NewCreditForm = ({ onDone, canSkip = false, PageText }) => {
     }
   };
 
+  const updateCountryCode = async () => {
+    setCountryCode(await getInputIsoCode());
+  };
+
+  useEffect(() => {
+    updateCountryCode();
+  }, []);
+
   return (
     <ScrollView keyboardShouldPersistTaps="handle">
       <CreditForm>
         <PageText />
         <MainCardForm
           autofocus
+          countryCode={countryCode}
           cardStyle={{
             backgroundColor: theme.pageBackgroundColor,
             textColor: theme.textColor,
