@@ -96,7 +96,7 @@ const CardRow = (paymentMethod: any) => {
     let isExpired = false;
     setTimeout(() => {
       isExpired = moment(paymentMethod.expiresAt).isBefore(moment());
-    }, 500);
+    }, 100);
     setIsCardExpired(isExpired);
   }, []);
   return (
