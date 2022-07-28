@@ -47,14 +47,15 @@ const Page = ({ menuSide }) => {
   const getRidesWithErrorHandler = async (rideLoaderFunction) => {
     try {
       await rideLoaderFunction();
-    } catch {
+    } catch (e) {
+      console.log(e);
       setShowErrorPopup(true);
     }
   };
 
   const onPageLoaded = async () => {
     const { today } = FILTERS;
-    await getRidesWithErrorHandler(initRides({
+    await getRidesWithErrorHandler(async () => initRides({
       initFilterId: today.id,
       ...(today.getParams()),
     }));
@@ -71,7 +72,7 @@ const Page = ({ menuSide }) => {
     setLoader(true);
     const filterClicked = FILTERS[filterId];
     setFilter(filterId);
-    await getRidesWithErrorHandler(loadRides({
+    await getRidesWithErrorHandler(async () => loadRides({
       filterId: filterClicked.id,
       ...(filterClicked.getParams()),
     }));
@@ -88,7 +89,7 @@ const Page = ({ menuSide }) => {
     const filterId = `${momentNewFromDate.format(DD_MMMM_YYYY)} to ${momentNewToDate.format(DD_MMMM_YYYY)}`;
     setFilter(filterId);
     setCustomFilter(getCustomFilter(filterId));
-    await getRidesWithErrorHandler(loadRides({
+    await getRidesWithErrorHandler(async () => loadRides({
       filterId,
       fromDate: `${momentNewFromDate.format(YYYY_MM_DD)} ${startOfDayTime}`,
       toDate: `${momentNewToDate.format(YYYY_MM_DD)} ${endOfDayTime}`,
