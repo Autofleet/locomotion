@@ -41,10 +41,10 @@ const NewCreditForm = ({ onDone, canSkip = false, PageText }) => {
       setErrorMessage(error.message);
       setLoading(false);
     } else {
-      await usePayments.createPaymentMethod(setupIntent.paymentMethodId);
+      const paymentMethod = await usePayments.createPaymentMethod(setupIntent.paymentMethodId);
       await usePayments.loadCustomer();
       setLoading(false);
-      await onDone();
+      await onDone(paymentMethod.id);
     }
   };
 
