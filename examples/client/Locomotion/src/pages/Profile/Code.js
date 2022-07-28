@@ -83,9 +83,7 @@ const Code = () => {
                 }
               }}
             >
-              {i18n.t('onboarding.pages.code.resendCodeButton', {
-                seconds: timer,
-              })}
+              {i18n.t('onboarding.pages.code.resendCodeButton')}
             </ResendButton>
             {timer > 0 ? (
               <ResendText>
