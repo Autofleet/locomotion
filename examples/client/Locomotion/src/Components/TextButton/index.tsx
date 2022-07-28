@@ -1,14 +1,14 @@
 import React from 'react';
 import { Text } from 'react-native';
 import styled from 'styled-components';
-import { FONT_SIZES, FONT_WEIGHTS } from '../../context/theme';
+import { FONT_SIZES, FONT_WEIGHTS, LINK_BLUE_COLOR } from '../../context/theme';
 import Button from '../Button';
 
 export const Container = styled(Button)`
 `;
 
 export const ButtonText = styled(Text)`
-color: ${({ theme }) => theme.primaryColor};
+color: ${LINK_BLUE_COLOR}
 ${FONT_SIZES.H3}
 ${FONT_WEIGHTS.REGULAR}
 `;

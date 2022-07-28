@@ -266,6 +266,7 @@ const RidePage = ({ mapSettings, navigation }) => {
     await checkLocationPermission();
   };
 
+
   useEffect(() => {
     initChecks();
     const subscription = AppState.addEventListener('change', (nextAppState) => {

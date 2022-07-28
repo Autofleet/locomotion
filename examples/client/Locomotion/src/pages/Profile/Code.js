@@ -16,7 +16,7 @@ import { PageContainer, ContentContainer } from '../styles';
 import useInterval from '../../lib/useInterval';
 
 const CODE_LENGTH = 4;
-const RESEND_SECONDS = 5;
+const RESEND_SECONDS = 60;
 
 const Code = () => {
   const { verifyCode } = useContext(OnboardingContext);
@@ -36,6 +36,7 @@ const Code = () => {
   };
 
   const verify = async (v) => {
+    setLoading(true);
     const input = v || code;
     setCode(input);
     const response = await verifyCode(input);
@@ -96,7 +97,7 @@ const Code = () => {
           </Line>
         </ResendContainer>
         <SaveButton
-          isLoading={!showErrorText && code.length === CODE_LENGTH && loading}
+          isLoading={loading}
           isInvalid={showErrorText || code.length < CODE_LENGTH || loading}
           onFail={() => setShowErrorText(true)}
         />
