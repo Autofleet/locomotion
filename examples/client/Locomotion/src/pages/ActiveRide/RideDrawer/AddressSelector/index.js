@@ -7,7 +7,7 @@ import {
   BottomSheetScrollView,
 } from '@gorhom/bottom-sheet';
 
-import styled from 'styled-components';
+import styled, { ThemeContext } from 'styled-components';
 import SvgIcon from '../../../../Components/SvgIcon';
 import { RIDE_POPUPS } from '../../../../context/newRideContext/utils';
 import GenericErrorPopup from '../../../../popups/GenericError';
@@ -37,14 +37,17 @@ const InfoText = styled.Text`
   text-align: center;
   width: 60%;
 `;
-const NoHistoryText = () => (
-  <NoHistoryTextContainer>
-    <SvgIcon Svg={noHistoryIcon} height={100} width={100} />
-    <InfoText>
-      {i18n.t('addressView.noHistoryText')}
-    </InfoText>
-  </NoHistoryTextContainer>
-);
+const NoHistoryText = () => {
+  const { primaryColor } = useContext(ThemeContext);
+  return (
+    <NoHistoryTextContainer>
+      <SvgIcon Svg={noHistoryIcon} height={100} width={100} fill={primaryColor} />
+      <InfoText>
+        {i18n.t('addressView.noHistoryText')}
+      </InfoText>
+    </NoHistoryTextContainer>
+  );
+};
 
 const HistoryContainer = styled.View`
   margin-bottom: 10px;
