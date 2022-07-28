@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { Text } from 'react-native';
 import PinCode from '../../Components/PinCode';
@@ -40,8 +40,8 @@ const Code = () => {
     const input = v || code;
     setCode(input);
     const response = await verifyCode(input);
+    setLoading(false);
     if (!response) {
-      setLoading(false);
       return setShowErrorText(true);
     }
   };
