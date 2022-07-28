@@ -48,7 +48,6 @@ const Page = ({ menuSide }) => {
     try {
       await rideLoaderFunction();
     } catch (e) {
-      console.log(e);
       setShowErrorPopup(true);
     }
   };
