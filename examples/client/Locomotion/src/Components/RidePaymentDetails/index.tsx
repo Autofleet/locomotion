@@ -52,7 +52,7 @@ const RidePaymentDetails = ({
 
   return (paymentMethod ? (
     <>
-      <CardsTitle title={i18n.t('ride.paymentMethod')} />
+      <CardsTitle noPaddingLeft title={i18n.t('ride.paymentMethod')} />
       <PaymentRow>
         <CardRowContainer>
           <CardRow {...paymentMethod} />
