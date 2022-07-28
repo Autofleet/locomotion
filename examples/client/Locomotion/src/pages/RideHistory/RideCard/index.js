@@ -3,6 +3,7 @@ import React, {
 } from 'react';
 import moment from 'moment';
 import { useFocusEffect } from '@react-navigation/native';
+import SkeletonContent from 'react-native-skeleton-content-nonexpo';
 import FullPageLoader from '../../../Components/FullPageLoader';
 import { getPriceCalculation } from '../../../context/futureRides/api';
 import RidePaymentDetails from '../../../Components/RidePaymentDetails';
@@ -44,8 +45,19 @@ import ServiceTypeDetails from '../../../Components/ServiceTypeDetails';
 const RideTitleCard = ({
   ride, page, showTip, tip,
 }) => {
+  const isDebuggingEnabled = (typeof atob !== 'undefined');
   const getTipButton = () => {
-    if (tip) {
+    if (!isDebuggingEnabled && tip === null) {
+      return (
+        <SkeletonContent
+          containerStyle={{}}
+          isLoading
+          layout={[
+            { width: 40, height: 10, marginTop: 10 },
+          ]}
+        />
+      );
+    } if (tip) {
       const price = getFormattedPrice(ride.priceCurrency, tip);
       const priceText = i18n.t('rideHistory.rideCard.tip', { price });
       return (
@@ -137,7 +149,7 @@ const RideView = ({ ride }) => {
       </MapRideViewContainer>
       <DetailsContainer>
         <MainRideViewSectionContainer>
-          {tip || tip === undefined ? (<RideTitleCard page ride={ride} showTip tip={tip} />) : null}
+          <RideTitleCard page ride={ride} showTip tip={tip} />
           <BlankContainer />
         </MainRideViewSectionContainer>
         <StopPointsVerticalViewContainer>
