@@ -233,7 +233,7 @@ const RidePage = ({ mapSettings, navigation }) => {
       && currentBsPage === BS_PAGES.ADDRESS_SELECTOR) {
       changeBsPage(BS_PAGES.LOCATION_REQUEST);
     }
-    if (!ride.id) {
+    if (locationGranted !== undefined && !ride.id) {
       focusCurrentLocation();
     }
   }, [locationGranted]);
