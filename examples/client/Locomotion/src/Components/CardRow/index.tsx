@@ -97,7 +97,7 @@ const CardRow = (paymentMethod: any) => {
     setTimeout(() => {
       isExpired = moment(paymentMethod.expiresAt).isBefore(moment());
     }, 500);
-    setIsCardExpired(isCardExpired);
+    setIsCardExpired(isExpired);
   }, []);
   return (
     <TouchableOpacity
@@ -160,7 +160,7 @@ const CardRow = (paymentMethod: any) => {
                   {paymentMethod.lastFour
                     ? <Description>{getLastFourForamttedShort(paymentMethod.lastFour)}</Description>
                     : null}
-                  {paymentMethod && !isCashPaymentMethod(paymentMethod) && moment(paymentMethod.expiresAt).isBefore(moment()) ? <Error>{i18n.t('payments.expired').toString()}</Error> : null}
+                  {paymentMethod && !isCashPaymentMethod(paymentMethod) && isCardExpired ? <Error>{i18n.t('payments.expired').toString()}</Error> : null}
                   {paymentMethod && !isCashPaymentMethod(paymentMethod) && paymentMethod.hasOutstandingBalance ? <Error>{i18n.t('payments.hasOutstandingBalance').toString()}</Error> : null}
                 </>
               )}
