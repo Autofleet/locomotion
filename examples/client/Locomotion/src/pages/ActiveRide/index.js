@@ -7,6 +7,7 @@ import { PortalProvider } from '@gorhom/portal';
 import {
   AppState, BackHandler, Platform, View,
 } from 'react-native';
+import Config from 'react-native-config';
 import { FutureRidesContext } from '../../context/futureRides';
 import FutureRidesButton from '../../Components/FutureRidesButton';
 import { RIDE_STATES, STOP_POINT_TYPES } from '../../lib/commonTypes';
