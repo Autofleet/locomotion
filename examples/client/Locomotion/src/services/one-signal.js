@@ -13,12 +13,13 @@ class NotificationsService {
     this.network = network;
   }
 
-  updateServer = async (pushToken, userId) => {
+  updateServer = async (pushTokenId, userId, isSubscribed) => {
     const clientProfile = await StorageService.get('clientProfile');
-    if (clientProfile.pushUserId !== userId || clientProfile.pushToken !== pushToken) {
+    if (clientProfile.pushUserId !== userId || clientProfile.pushTokenId !== pushTokenId) {
       this.registerOnServer({
-        pushToken,
+        pushTokenId,
         pushUserId: userId,
+        isSubscribed,
       });
     }
   };
@@ -27,9 +28,9 @@ class NotificationsService {
     const state = await OneSignal.getDeviceState();
     Mixpanel.setEvent('Notification Service: Check App State', state || undefined);
     if (state) {
-      const { pushToken, userId } = state;
-      if (pushToken && userId) {
-        await this.updateServer(pushToken, userId);
+      const { pushToken, userId, isSubscribed } = state;
+      if (pushToken && userId && isSubscribed) {
+        await this.updateServer(pushToken, userId, isSubscribed);
       }
     }
   };
@@ -63,9 +64,9 @@ class NotificationsService {
 
   subscriptionObserverHandler = async (data) => {
     const { to } = data;
-    const { pushToken, userId } = to;
+    const { pushToken, userId, isSubscribed } = to;
     if (pushToken && userId) {
-      await this.updateServer(pushToken, userId);
+      await this.updateServer(pushToken, userId, isSubscribed);
     }
   };
 
@@ -83,10 +84,11 @@ class NotificationsService {
     console.log('new notification', payload);
   };
 
-  registerOnServer = async ({ pushUserId, pushToken }) => {
+  registerOnServer = async ({ pushUserId, pushTokenId, isSubscribed }) => {
     const pushUserData = {
       pushUserId,
-      pushToken,
+      pushTokenId,
+      isPushEnabled: isSubscribed,
       deviceType: Platform.OS,
     };
 
