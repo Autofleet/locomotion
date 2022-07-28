@@ -46,7 +46,7 @@ export const THEME_MOD = {
 };
 
 export const ERROR_COLOR = '#f35657';
-
+export const LINK_BLUE_COLOR = '#38a7fc';
 export const FONT_SIZES = {
   H1: 'font-size: 22px',
   H2: 'font-size: 18px',
