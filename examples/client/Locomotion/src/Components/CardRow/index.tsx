@@ -98,7 +98,7 @@ const CardRow = (paymentMethod: any) => {
       isExpired = moment(paymentMethod.expiresAt).isBefore(moment());
     }, 100);
     setIsCardExpired(isExpired);
-  }, []);
+  }, [paymentMethod]);
   return (
     <TouchableOpacity
       activeOpacity={paymentMethod.onPress ? 0 : 1}
