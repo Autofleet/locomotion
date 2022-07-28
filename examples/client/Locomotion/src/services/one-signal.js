@@ -15,12 +15,14 @@ class NotificationsService {
 
   updateServer = async (pushTokenId, userId, isSubscribed) => {
     const clientProfile = await StorageService.get('clientProfile');
-    if (clientProfile.pushUserId !== userId || clientProfile.pushTokenId !== pushTokenId) {
-      this.registerOnServer({
-        pushTokenId,
-        pushUserId: userId,
-        isSubscribed,
-      });
+    if (clientProfile) {
+      if (clientProfile.pushUserId !== userId || clientProfile.pushTokenId !== pushTokenId) {
+        this.registerOnServer({
+          pushTokenId,
+          pushUserId: userId,
+          isSubscribed,
+        });
+      }
     }
   };
 
