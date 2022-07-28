@@ -94,6 +94,8 @@ export default ({
             }
 
             await usePayments.updatePaymentMethod(payment, { isDefault: true });
+            // without this line the chosen method in the popup will not be updated
+            setDefaultMethod(chosenDefault);
             await usePayments.loadCustomer();
           }}
         />
