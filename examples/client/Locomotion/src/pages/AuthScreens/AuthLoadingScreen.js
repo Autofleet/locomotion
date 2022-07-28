@@ -1,4 +1,6 @@
 import React, { useContext, useEffect } from 'react';
+import { initStripe } from '@stripe/stripe-react-native';
+import Config from 'react-native-config';
 import { APP_ROUTES, MAIN_ROUTES } from '../routes';
 import Auth from '../../services/auth';
 import { getUserDetails } from '../../context/user/api';
@@ -52,15 +54,17 @@ const AuthLoadingScreen = ({ navigation }) => {
         }
 
         const userData = response;
-        let cards = null;
-        try {
-          ({ paymentMethods: cards } = await usePayments.loadCustomer());
-        } catch (e) {
-          console.log(e);
-        }
+        const [paymentAccount] = await Promise.all([
+          usePayments.getOrFetchClientPaymentAccount(),
+          usePayments.loadCustomer(),
+        ]);
 
-        userData.cards = cards;
 
+        initStripe({
+          publishableKey: Config.STRIPE_PUBLISHER_KEY,
+          merchantIdentifier: 'merchant.identifier',
+          stripeAccountId: paymentAccount.stripeId,
+        });
         await saveUser(userData);
 
         if (!userData.active) {
@@ -78,7 +82,6 @@ const AuthLoadingScreen = ({ navigation }) => {
     }
 
     await getAppSettings();
-    // await versionCheck();
     if (!user) { // Load app state
       getFromStorage();
     }

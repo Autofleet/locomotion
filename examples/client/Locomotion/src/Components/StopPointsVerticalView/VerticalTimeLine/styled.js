@@ -27,7 +27,7 @@ export const Content = styled(FlexContainer)`
 `;
 
 export const EtaContent = styled(FlexContainer)`
-  flex: 1;
+  flex: 1.5;
   align-self: center;
   justify-content: flex-end;
 `;

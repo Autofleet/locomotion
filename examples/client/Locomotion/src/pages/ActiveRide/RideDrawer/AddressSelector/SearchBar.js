@@ -1,5 +1,5 @@
 import React, {
-  useCallback, useContext, useEffect, useRef,
+  useCallback, useContext, useEffect, useRef, useState,
 } from 'react';
 import { Animated, View } from 'react-native';
 import styled from 'styled-components';
@@ -78,8 +78,6 @@ const SearchBar = ({
   isSelected,
 }) => {
   const {
-    searchTerm,
-    setSearchTerm,
     setSelectedInputIndex,
     selectedInputTarget,
     setSelectedInputTarget,
@@ -92,6 +90,8 @@ const SearchBar = ({
   const {
     locationGranted,
   } = useContext(UserContext);
+
+  const [searchTerm, setSearchTerm] = useState('');
 
   const debouncedSearch = React.useRef(
     debounce(async (text, i) => {
@@ -106,7 +106,7 @@ const SearchBar = ({
     }
 
     if (locationGranted) {
-      return 'addressView.currentLocation';
+      return 'addressView.enterAddress';
     }
 
     return '';

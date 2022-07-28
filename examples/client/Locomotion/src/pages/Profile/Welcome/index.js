@@ -1,6 +1,5 @@
-import { useNavigation } from '@react-navigation/native';
 import React, { useContext } from 'react';
-import { APP_ROUTES } from '../../routes';
+import { APP_ROUTES, MAIN_ROUTES } from '../../routes';
 import i18n from '../../../I18n';
 import logo from '../../../assets/welcomeLogo.png';
 import SaveButton from '../SaveButton';
@@ -12,14 +11,14 @@ import {
   InfoContainer, LogoContainer, Logo,
 } from '../../AuthScreens/StartScreen/styles';
 import { UserContext } from '../../../context/user';
+import * as navigationService from '../../../services/navigation';
 
 const Welcome = () => {
   const { updateUserInfo, user } = useContext(UserContext);
-  const navigation = useNavigation();
 
   const onNext = async () => {
     await updateUserInfo({ didCompleteOnboarding: true });
-    navigation.navigate(APP_ROUTES.MAIN_APP);
+    navigationService.navigate(MAIN_ROUTES.HOME, {}, APP_ROUTES.MAIN_APP);
   };
   return (
     <SafeView>

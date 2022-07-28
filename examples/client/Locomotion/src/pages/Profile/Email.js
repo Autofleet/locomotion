@@ -21,12 +21,12 @@ const Email = ({ navigation }) => {
     updateState, updateUserInfo, user, verifyEmail, getUserFromServer,
   } = useContext(UserContext);
   const [errorText, setErrorText] = useState(false);
-  const [email, setEmail] = useState(user.email);
+  const [email, setEmail] = useState(route.params && route.params.editAccount ? user.email : '');
 
   const isFocused = useIsFocused();
 
   useEffect(() => {
-    setEmail(user.email);
+    setEmail(route.params && route.params.editAccount ? user.email : ((route.params && route.params.email) || ''));
   }, [isFocused]);
 
   const navigateToNextScreen = () => {

@@ -9,4 +9,5 @@ export default {
   PRIVACY_POLICY_URL: 'riderApp.privacyPolicyUrl',
   CONTACT_EMAIL: 'riderApp.contactEmail',
   CONTACT_PHONE: 'riderApp.contactPhone',
+  FUTURE_RIDES_ENABLED: 'riderApp.futureRidesEnabled',
 };

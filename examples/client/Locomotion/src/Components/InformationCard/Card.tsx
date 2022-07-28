@@ -1,12 +1,13 @@
 import React from 'react';
-import { TouchableOpacity, View } from 'react-native';
+import { View } from 'react-native';
+import { TouchableIconContainer } from '../TextInput/styled';
 import SvgIcon from '../SvgIcon';
 import i18n from '../../I18n';
 import {
   Arrow, ArrowContainer, CardContainer, CardContentContainer, CardText, CardTitle, CardTitleContainer, VerifyContainer, VerifyText,
+  IconContainer,
 } from './styled';
 import { InformationCardProps } from '../InformationCard';
-import { ButtonContainer } from '../../pages/Lock/styled';
 
 const Card = ({
   title,
@@ -39,9 +40,15 @@ const Card = ({
           </>
         )}
       </CardTitleContainer>
-      <CardText>{children}</CardText>
+      {children ? <CardText>{children}</CardText> : undefined}
     </CardContentContainer>
-    {icon ? <TouchableOpacity onPress={onIconPress}><SvgIcon Svg={icon} fill="#333" /></TouchableOpacity>
+    {icon ? (
+      <TouchableIconContainer onPress={onIconPress}>
+        <IconContainer>
+          <SvgIcon Svg={icon} fill="#333" />
+        </IconContainer>
+      </TouchableIconContainer>
+    )
       : <ArrowContainer>{onPress ? <Arrow /> : undefined}</ArrowContainer>}
   </CardContainer>
 );

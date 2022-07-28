@@ -15,32 +15,37 @@ import { CancelRide } from '../../Components/BsPages';
 import { RideStateContextContext } from '../..';
 import { RideInterface, RidePageContext } from '../../context/newRideContext';
 import { BS_PAGES } from '../../context/ridePageStateContext/utils';
+import BlackOverlay from '../../Components/BlackOverlay';
+import GenericErrorPopup from '../../popups/GenericError';
+import { NoRidesInList } from '../RideHistory/RidesList/styled';
 
 interface FutureRidesViewProps {
   menuSide: 'right' | 'left';
 }
 const FutureRidesView = ({ menuSide }: FutureRidesViewProps) => {
   const [rideToCancel, setRideToCancel] = useState<RideInterface | null>(null);
+  const [showError, setShowError] = useState(false);
   const [services, setServices] = useState<any[]>([]);
   const bottomSheetRef = useRef<bottomSheet>(null);
   const {
     futureRides, loadFutureRides,
   } = useContext(FutureRidesContext);
-  const { changeBsPage } = useContext(RideStateContextContext);
+  const { changeBsPage, currentBsPage } = useContext(RideStateContextContext);
   const { cancelRide, getServices } = useContext(RidePageContext);
   const onPressCancel = (ride: RideInterface) => {
     setRideToCancel(ride);
     changeBsPage(BS_PAGES.CANCEL_RIDE);
-    if (bottomSheetRef?.current) {
-      bottomSheetRef?.current.snapToIndex(0);
-    }
   };
 
-  const closeBottomSheet = () => {
-    if (bottomSheetRef?.current) {
-      bottomSheetRef.current.forceClose();
+  useEffect(() => {
+    if (currentBsPage === BS_PAGES.CANCEL_RIDE) {
+      if (bottomSheetRef?.current) {
+        bottomSheetRef?.current.snapToIndex(0);
+      }
+    } else if (bottomSheetRef?.current) {
+      bottomSheetRef?.current.close();
     }
-  };
+  }, [currentBsPage]);
 
   const loadServices = async () => {
     const res = await getServices();
@@ -61,22 +66,32 @@ const FutureRidesView = ({ menuSide }: FutureRidesViewProps) => {
         }}
         iconSide={menuSide}
       />
-      {!!services.length && (
       <ContentContainer>
-        {(futureRides || []).map((ride) => {
-          const service = services.find(s => s.id === ride.serviceId);
-          return (
-            <RideCard
-              ride={ride}
-              onPress={() => onPressCancel(ride)}
-              serviceName={service.displayName}
-              paymentMethod={ride.payment.paymentMethod}
-              scheduledTo={ride.scheduledTo || ''}
-            />
-          );
-        })}
+        {futureRides.length ? (
+          <>
+            {(futureRides || []).map((ride) => {
+              const service = services.find(s => s.id === ride.serviceId);
+              return (
+                <RideCard
+                  ride={ride}
+                  onPress={() => onPressCancel(ride)}
+                  serviceName={service?.displayName}
+                  paymentMethod={ride?.payment?.paymentMethod}
+                  scheduledTo={ride.scheduledTo || ''}
+                />
+              );
+            })}
+          </>
+        ) : (
+          <NoRidesInList
+            title={i18n.t('futureRides.noRidesTitle')}
+            text={i18n.t('futureRides.noRidesText')}
+          />
+        )}
       </ContentContainer>
-      )}
+      {currentBsPage === BS_PAGES.CANCEL_RIDE
+        ? <BlackOverlay />
+        : null}
       <BottomSheetComponent
         ref={bottomSheetRef}
         enablePanDownToClose
@@ -86,19 +101,26 @@ const FutureRidesView = ({ menuSide }: FutureRidesViewProps) => {
         <CancelRide
           secondaryButtonText={i18n.t('bottomSheetContent.cancelRide.secondaryButtonTextFuture')}
           onButtonPress={async () => {
-            closeBottomSheet();
-            await cancelRide(rideToCancel?.id);
-            await loadFutureRides();
-            if (futureRides.length === 1) {
+            try {
+              await cancelRide(rideToCancel?.id);
+              await loadFutureRides();
               changeBsPage(BS_PAGES.ADDRESS_SELECTOR);
-              NavigationService.navigate(MAIN_ROUTES.HOME);
+              if (futureRides.length === 1) {
+                NavigationService.navigate(MAIN_ROUTES.HOME);
+              }
+            } catch {
+              setShowError(true);
             }
           }}
           onSecondaryButtonPress={() => {
-            closeBottomSheet();
+            changeBsPage(BS_PAGES.ADDRESS_SELECTOR);
           }}
         />
       </BottomSheetComponent>
+      <GenericErrorPopup
+        isVisible={showError}
+        closePopup={() => setShowError(false)}
+      />
     </PageContainer>
   );
 };

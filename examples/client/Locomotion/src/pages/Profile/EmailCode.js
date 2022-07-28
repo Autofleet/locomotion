@@ -4,7 +4,7 @@ import PinCode from '../../Components/PinCode';
 import SaveButton from './SaveButton';
 import { OnboardingContext } from '../../context/onboarding';
 import {
-  ErrorText, ResendButton, ResendContainer, ResendText,
+  ErrorText, ResendButton, ResendContainer, ResendText, Line,
 } from './styles';
 import i18n from '../../I18n';
 import Header from './Header';
@@ -12,8 +12,10 @@ import ScreenText from './ScreenText';
 import { MAIN_ROUTES } from '../routes';
 import { UserContext } from '../../context/user';
 import { PageContainer, ContentContainer } from '../styles';
+import useInterval from '../../lib/useInterval';
 
 const CODE_LENGTH = 4;
+const RESEND_SECONDS = 60;
 
 const Code = () => {
   const route = useRoute();
@@ -23,6 +25,8 @@ const Code = () => {
   const [code, setCode] = useState('');
   const [showErrorText, setShowErrorText] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [timer, setTimer] = useState(RESEND_SECONDS);
+
   const onVertCodeChange = (value) => {
     setShowErrorText(false);
     if (value.length === CODE_LENGTH) {
@@ -49,6 +53,15 @@ const Code = () => {
     }
   };
 
+  useInterval(() => {
+    setTimer((currentTimer) => {
+      if (currentTimer > 0) {
+        return currentTimer - 1;
+      }
+      return currentTimer;
+    });
+  }, 1000);
+
   return (
     <PageContainer>
       <Header title={i18n.t('onboarding.pages.emailCode.title')} page={MAIN_ROUTES.EMAIL_CODE} showSkipButton={!(route.params && route.params.editAccount)} />
@@ -64,16 +77,34 @@ const Code = () => {
         />
         {showErrorText && <ErrorText>{i18n.t('login.vertError')}</ErrorText>}
         <ResendContainer>
-          <ResendText>
-            {i18n.t('onboarding.pages.emailCode.resendCodeText')}
-          </ResendText>
-          <ResendButton
-            onPress={() => navigation.navigate(MAIN_ROUTES.EMAIL, {
-              editAccount: true,
-            })}
-          >
-            {i18n.t('onboarding.pages.emailCode.resendCodeButton')}
-          </ResendButton>
+          <Line>
+            <ResendText>
+              {i18n.t('onboarding.pages.emailCode.resendCodeText')}
+            </ResendText>
+          </Line>
+          <Line>
+            <ResendButton
+              disabled={timer > 0}
+              onPress={() => {
+                if (timer === 0) {
+                  navigation.navigate(MAIN_ROUTES.EMAIL, {
+                    editAccount: route.params && route.params.editAccount,
+                    email: user.email,
+                  });
+                }
+              }}
+            >
+              {i18n.t('onboarding.pages.emailCode.resendCodeButton')}
+            </ResendButton>
+            {timer > 0 ? (
+              <ResendText>
+                {i18n.t('onboarding.pages.emailCode.resendCodeTextSeconds', {
+                  seconds: timer,
+                })}
+              </ResendText>
+            )
+              : null}
+          </Line>
         </ResendContainer>
         <SaveButton
           isLoading={!showErrorText && code.length === CODE_LENGTH && loading}

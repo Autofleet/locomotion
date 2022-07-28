@@ -52,8 +52,8 @@ const OnboardingContextProvider = ({ children }: { children: any }) => {
   const { getSettingByKey } = settings.useContainer();
   const {
     getOrFetchClientPaymentAccount,
+    loadCustomer,
   } = payments.useContainer();
-
   const [requiredOnboarding, setRequiredOnboarding] = useState({
     [MAIN_ROUTES.PHONE]: true,
     [MAIN_ROUTES.CODE]: true,
@@ -105,7 +105,11 @@ const OnboardingContextProvider = ({ children }: { children: any }) => {
   };
 
   const navigateBasedOnUser = async (user: any) => {
-    const paymentAccount = await getOrFetchClientPaymentAccount();
+    const [paymentAccount] = await Promise.all([
+      getOrFetchClientPaymentAccount(),
+      loadCustomer(),
+    ]);
+
     initStripe({
       publishableKey: Config.STRIPE_PUBLISHER_KEY,
       merchantIdentifier: 'merchant.identifier',
@@ -123,7 +127,6 @@ const OnboardingContextProvider = ({ children }: { children: any }) => {
       }
       return navigateToScreen(unfinishedScreen);
     }
-
     return navigationService.navigate(MAIN_ROUTES.HOME, {}, APP_ROUTES.MAIN_APP);
   };
 

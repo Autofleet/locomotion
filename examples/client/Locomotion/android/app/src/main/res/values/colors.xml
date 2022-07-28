@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="gray">#f6f6f8</color>
+    <color name="splash_screen_background_color">#f6f6f8</color>
     <color name="color_primary">#5c5c5c</color>
     <color name="dark_gary">#5c5c5c</color>
 </resources>

@@ -24,6 +24,7 @@ import { MAIN_ROUTES } from '../../pages/routes';
 interface DriverCardProps {
     activeRide: boolean;
     ride: RideInterface;
+    noPaddingLeft: boolean;
 }
 
 const formatDriverRating = (rating: number): string | 0 => rating && rating.toFixed(1);
@@ -34,6 +35,7 @@ const formatDriverName = (name: string): string => name && name.substring(0, MAX
 const DriverCard = ({
   ride,
   activeRide,
+  noPaddingLeft,
 }: DriverCardProps) => {
   const getRatingSection = () => {
     if (ride.rating) {
@@ -43,7 +45,8 @@ const DriverCard = ({
         </RatingBarContainer>
       );
     }
-    if (moment(moment()).diff(ride.scheduledTo || ride.createdAt, 'days') > 5) {
+    const isMoreThenFiveDaysSince = moment(moment()).diff(ride.scheduledTo || ride.createdAt, 'days') > 5;
+    if (isMoreThenFiveDaysSince) {
       const notRatedText = i18n.t('postRide.notRated');
       return (
         <NotRated>
@@ -58,7 +61,7 @@ const DriverCard = ({
   return (
     <DriverSectionContainer>
       {!activeRide && (
-      <CardsTitle title={i18n.t('rideHistory.rideCard.driverRating')} />
+      <CardsTitle noPaddingLeft={noPaddingLeft} title={i18n.t('rideHistory.rideCard.driverRating')} />
       )}
       <DriverRatingContainer>
         <DriverAvatarContainer>
@@ -72,7 +75,6 @@ const DriverCard = ({
           <DriverDetailContainer>
             <DriverDetailText numberOfLines={1} activeRide={activeRide}>
               {formatDriverName(ride.driver?.firstName || '')}
-              {formatDriverName(ride.driver?.lastName || '')}
             </DriverDetailText>
           </DriverDetailContainer>
           {activeRide && (
