@@ -127,5 +127,5 @@ export const CardContainer = styled.View`
 `;
 
 export const IconContainer = styled.View`
-  padding: 10px;
+  padding: 15px;
 `;
