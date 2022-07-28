@@ -21,11 +21,13 @@ flex: 1;
 background-color: white;
 `;
 
-export const ResendContainer = styled.Text`
+export const ResendContainer = styled.View`
 width: 100%;
 text-align: center;
+align-items: center;
 margin-top: 50px;
 opacity: .7;
+flex-direction: column;
 `;
 
 export const ResendText = styled(BaseText)`
@@ -38,9 +40,10 @@ export const ResendButton = styled(BaseText)`
   text-decoration: underline;
   ${FONT_SIZES.LARGE};
   ${FONT_WEIGHTS.REGULAR};
-  ${({ theme }) => `
+  ${({ theme, disabled }) => `
   text-decoration-color: ${theme.primaryColor};
   color: ${theme.primaryColor};
+  ${disabled ? 'opacity: 0.3;' : '1'}
   `}
 `;
 
@@ -60,4 +63,8 @@ max-width: 55%;
 export const InputContainer = styled.View`
   margin: 15px auto;
   width: 100%
+`;
+
+export const Line = styled.View`
+flex-direction: row;
 `;
