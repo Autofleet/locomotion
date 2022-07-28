@@ -2,6 +2,7 @@ import React, {
   useContext, useEffect, useRef, useState,
 } from 'react';
 import { useIsFocused, useFocusEffect } from '@react-navigation/native';
+import { initStripe } from '@stripe/stripe-react-native';
 import { PortalProvider } from '@gorhom/portal';
 import {
   AppState, BackHandler, Platform, View,
@@ -52,6 +53,7 @@ import { checkVersionAndForceUpdateIfNeeded } from '../../services/VersionCheck'
 import TopMessage from './TopMessage';
 import i18n from '../../I18n';
 
+const STRIPE_PUBLISHER_KEY = Config.STRIPE_PUBLISHER_KEY || '';
 
 const BLACK_OVERLAY_SCREENS = [BS_PAGES.CANCEL_RIDE];
 
@@ -86,6 +88,8 @@ const RidePage = ({ mapSettings, navigation }) => {
   const {
     clientHasValidPaymentMethods,
     getClientOutstandingBalanceCard,
+    getClientPaymentAccount,
+    paymentAccount,
   } = payments.useContainer();
   const {
     futureRides,
@@ -250,7 +254,18 @@ const RidePage = ({ mapSettings, navigation }) => {
   const initChecks = async () => {
     await versionCheck();
     await checkLocationPermission();
+    if (!paymentAccount) {
+      await getClientPaymentAccount();
+    }
   };
+
+  useEffect(() => {
+    initStripe({
+      publishableKey: STRIPE_PUBLISHER_KEY,
+      merchantIdentifier: 'merchant.identifier',
+      stripeAccountId: paymentAccount.stripeId,
+    });
+  }, [paymentAccount]);
 
   useEffect(() => {
     initChecks();

@@ -12,6 +12,7 @@ const usePayments = () => {
   const useSettings = SettingContext.useContainer();
   const [customer, setCustomer] = useState(null);
   const [paymentMethods, setPaymentMethods] = useState([]);
+  const [paymentAccount, setPaymentAccount] = useState(null);
 
   const getCustomer = async () => {
     const { data: clientData } = await network.get(BASE_PATH);
@@ -38,6 +39,10 @@ const usePayments = () => {
     return intent;
   };
 
+  const getClientPaymentAccount = async () => {
+    const { data: data } = await network.get(`${BASE_PATH}/payment-account`);
+    setPaymentAccount(data);
+  }
 
   const detachPaymentMethod = async (paymentMethodId) => {
     const { data: paymentMethodsData } = await network.post(`${BASE_PATH}/${paymentMethodId}/detach`);
@@ -72,6 +77,8 @@ const usePayments = () => {
   const getClientOutstandingBalanceCard = () => paymentMethods.find(pm => pm.hasOutstandingBalance);
 
   return {
+    paymentAccount,
+    getClientPaymentAccount,
     getCustomer,
     customer,
     loadCustomer,
