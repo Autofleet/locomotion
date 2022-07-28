@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { APP_ROUTES, MAIN_ROUTES } from '../../routes';
 import i18n from '../../../I18n';
-import logo from '../../../assets/logo.png';
+import logo from '../../../assets/welcomeLogo.png';
 import SaveButton from '../SaveButton';
 import {
   WelcomeSubText, WelcomeText, PageContainer, TextContainer,
