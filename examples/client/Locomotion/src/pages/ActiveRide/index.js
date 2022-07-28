@@ -371,7 +371,7 @@ const RidePage = ({ mapSettings, navigation }) => {
           }}
         >
           {currentBsPage === BS_PAGES.ADDRESS_SELECTOR
-        && !isExpanded && futureRides.length ? (
+        && !isExpanded && futureRides.length && !ride.id ? (
           <FutureRidesButton />
             ) : <View />}
           {!isExpanded && locationGranted && (

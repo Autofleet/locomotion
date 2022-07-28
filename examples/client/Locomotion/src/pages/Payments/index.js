@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useRoute } from '@react-navigation/native';
 import FullPageLoader from '../../Components/FullPageLoader';
 import i18n from '../../I18n';
@@ -7,6 +7,7 @@ import {
   PageContent, CreditFormText, CardContainer,
 } from './styled';
 import PaymentsContext from '../../context/payments';
+import { RidePageContext } from '../../context/newRideContext';
 import CreditCardsList from './credit-cards';
 import NewCreditForm from '../../Components/NewCreditForm';
 import { PageContainer } from '../styles';
@@ -19,6 +20,10 @@ export default ({ navigation, menuSide }) => {
   const {
     paymentMethods,
   } = usePayments;
+  const {
+    updateRidePayload,
+  } = useContext(RidePageContext);
+
   const [pageLoading, setPageLoading] = useState(true);
   const [loading, setLoading] = useState(false);
   const hasPaymentMethods = paymentMethods && paymentMethods.length > 0;
@@ -35,6 +40,9 @@ export default ({ navigation, menuSide }) => {
   }, []);
 
   const onPressBack = () => {
+    if (route.params?.rideFlow) {
+      return navigation.navigate(MAIN_ROUTES.HOME);
+    }
     if (!showList && hasPaymentMethods) {
       return setShowList(true);
     }
@@ -64,9 +72,12 @@ export default ({ navigation, menuSide }) => {
           <CardContainer>
             <NewCreditForm
               PageText={() => <CreditFormText>{i18n.t('payments.newCardDetails')}</CreditFormText>}
-              onDone={() => {
+              onDone={(paymentMethodId) => {
                 if (route.params && route.params.rideFlow) {
                   navigation.navigate(MAIN_ROUTES.HOME);
+                  updateRidePayload({
+                    paymentMethodId,
+                  });
                 } else {
                   setShowList(true);
                 }
