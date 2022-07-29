@@ -24,7 +24,6 @@ const Code = () => {
   const { verifyCode } = useContext(OnboardingContext);
   const { user } = useContext(UserContext);
   const navigation = useNavigation();
-  const [code, setCode] = useState('');
   const [showErrorText, setShowErrorText] = useState(false);
   const [loading, setLoading] = useState(false);
   const [timer, setTimer] = useState(RESEND_SECONDS);
@@ -34,13 +33,11 @@ const Code = () => {
     if (value.length === CODE_LENGTH) {
       setLoading(true);
     }
-    setCode(value);
   };
 
   const verify = async (v) => {
     setLoading(true);
-    const input = v || code;
-    setCode(input);
+    const input = v;
     const response = await verifyCode(input);
     if (!response) {
       return setShowErrorText(true);
@@ -59,7 +56,7 @@ const Code = () => {
   useFocusEffect(
     useCallback(() => {
       setLoading(false);
-    }, []),
+    }, [showErrorText]),
   );
   return (
     <PageContainer>
@@ -104,7 +101,7 @@ const Code = () => {
         </ResendContainer>
         <SaveButton
           isLoading={loading}
-          isInvalid={showErrorText || code.length < CODE_LENGTH || loading}
+          isInvalid
           onFail={() => setShowErrorText(true)}
         />
       </ContentContainer>
