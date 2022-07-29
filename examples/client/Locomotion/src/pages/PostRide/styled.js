@@ -24,7 +24,9 @@ export const StarIcon = styled.Image(({ isOn, theme }) => `
   width: 30px;
   ${isOn ? `
     tint-color: ${theme.primaryColor};
+    opacity: 0.7;
   ` : `
+    tint-color: transparent;
     opacity: 0.4;
   `}
 `);
