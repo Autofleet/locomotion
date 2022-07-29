@@ -1,5 +1,7 @@
-import React, { useContext, useState } from 'react';
-import { useNavigation } from '@react-navigation/native';
+import React, {
+  useCallback, useContext, useEffect, useState,
+} from 'react';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { Text } from 'react-native';
 import PinCode from '../../Components/PinCode';
 import SaveButton from './SaveButton';
@@ -40,7 +42,6 @@ const Code = () => {
     const input = v || code;
     setCode(input);
     const response = await verifyCode(input);
-    setLoading(false);
     if (!response) {
       return setShowErrorText(true);
     }
@@ -55,6 +56,11 @@ const Code = () => {
     });
   }, 1000);
 
+  useFocusEffect(
+    useCallback(() => {
+      setLoading(false);
+    }, []),
+  );
   return (
     <PageContainer>
       <Header title={i18n.t('onboarding.pages.code.title')} page={MAIN_ROUTES.CODE} />
