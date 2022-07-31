@@ -417,6 +417,26 @@
         "buttonText": "Back to order",
         "subTitleText": "Hey, looks like you're trying to schedule multiple rides that are too close together. Please select another time and try again."
     },
+    "outstandingBalance": {
+        "titleText": "Outstanding balance",
+        "buttonText": "Contact support",
+        "subTitleText": "The selected payment method has an outstanding balance. Please clear the balance so you can keep using {{operationName}}"
+    },
+    "cashNotAllowed": {
+        "titleText": "Choose another payment method",
+        "buttonText": "Back to order",
+        "subTitleText": "You’ve selected to pay with cash but this isn’t permitted. Please choose another payment method."
+    },
+    "paymentMethodExpired": {
+        "titleText": "Payment method expired",
+        "buttonText": "Back to order",
+        "subTitleText": "The selected payment method has expired. Please choose another payment method."
+    },
+    "paymentIntentError": {
+        "titleText": "There’s a payment issue",
+        "buttonText": "Back to order",
+        "subTitleText": "There’s an issue with this payment method. Please select another payment method to proceed."
+    },
     "confirmFutureRide": {
         "titleText": "Your upcoming ride has been scheduled",
         "buttonText": "Done",
