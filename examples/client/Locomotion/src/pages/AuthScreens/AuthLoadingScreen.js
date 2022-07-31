@@ -48,8 +48,10 @@ const AuthLoadingScreen = ({ navigation }) => {
     async function getFromStorage() {
       const clientProfile = await StorageService.get('clientProfile');
       if (clientProfile) {
-        const response = await getUserDetails();
-        if (!response) {
+        let response;
+        try {
+          response = await getUserDetails();
+        } catch (e) {
           Auth.logout(navigation);
         }
 

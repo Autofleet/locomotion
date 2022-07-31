@@ -14,6 +14,7 @@ import BottomSheetComponent from '../../Components/BottomSheet';
 import { CancelRide } from '../../Components/BsPages';
 import { RideStateContextContext } from '../..';
 import { RideInterface, RidePageContext } from '../../context/newRideContext';
+import { SNAP_POINT_STATES, BottomSheetContext } from '../../context/bottomSheetContext';
 import { BS_PAGES } from '../../context/ridePageStateContext/utils';
 import BlackOverlay from '../../Components/BlackOverlay';
 import GenericErrorPopup from '../../popups/GenericError';
@@ -30,22 +31,30 @@ const FutureRidesView = ({ menuSide }: FutureRidesViewProps) => {
   const {
     futureRides, loadFutureRides,
   } = useContext(FutureRidesContext);
-  const { changeBsPage, currentBsPage } = useContext(RideStateContextContext);
+  const {
+    setSnapPointsState,
+    setIsExpanded,
+  } = useContext(BottomSheetContext);
   const { cancelRide, getServices } = useContext(RidePageContext);
   const onPressCancel = (ride: RideInterface) => {
     setRideToCancel(ride);
-    changeBsPage(BS_PAGES.CANCEL_RIDE);
+    setSnapPointsState(SNAP_POINT_STATES.CANCEL_RIDE);
+    setIsExpanded(false);
+    if (bottomSheetRef?.current) {
+      bottomSheetRef?.current.snapToIndex(0);
+    }
   };
 
-  useEffect(() => {
-    if (currentBsPage === BS_PAGES.CANCEL_RIDE) {
-      if (bottomSheetRef?.current) {
-        bottomSheetRef?.current.snapToIndex(0);
-      }
-    } else if (bottomSheetRef?.current) {
-      bottomSheetRef?.current.close();
-    }
-  }, [currentBsPage]);
+  // useEffect(() => {
+  //   if (currentBsPage === BS_PAGES.CANCEL_RIDE) {
+  //     if (bottomSheetRef?.current) {
+  //       bottomSheetRef?.current.snapToIndex(0);
+  //     }
+  //   } else if (bottomSheetRef?.current) {
+  //     bottomSheetRef?.current.close();
+  //   }
+  // }, [currentBsPage]);
+
 
   const loadServices = async () => {
     const res = await getServices();
@@ -55,6 +64,13 @@ const FutureRidesView = ({ menuSide }: FutureRidesViewProps) => {
   useEffect(() => {
     loadServices();
   }, []);
+
+  const clearRideToCancel = () => {
+    setRideToCancel(null);
+    if (bottomSheetRef?.current) {
+      bottomSheetRef?.current.close();
+    }
+  };
 
   return (
     <PageContainer>
@@ -89,7 +105,7 @@ const FutureRidesView = ({ menuSide }: FutureRidesViewProps) => {
           />
         )}
       </ContentContainer>
-      {currentBsPage === BS_PAGES.CANCEL_RIDE
+      {rideToCancel
         ? <BlackOverlay />
         : null}
       <BottomSheetComponent
@@ -104,24 +120,27 @@ const FutureRidesView = ({ menuSide }: FutureRidesViewProps) => {
             try {
               await cancelRide(rideToCancel?.id);
               await loadFutureRides();
-              changeBsPage(BS_PAGES.ADDRESS_SELECTOR);
               if (futureRides.length === 1) {
                 NavigationService.navigate(MAIN_ROUTES.HOME);
               }
             } catch {
               setShowError(true);
+            } finally {
+              clearRideToCancel();
             }
           }}
           onSecondaryButtonPress={() => {
-            changeBsPage(BS_PAGES.ADDRESS_SELECTOR);
+            clearRideToCancel();
           }}
         />
       </BottomSheetComponent>
+
       <GenericErrorPopup
         isVisible={showError}
         closePopup={() => setShowError(false)}
       />
     </PageContainer>
+
   );
 };
 
