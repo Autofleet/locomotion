@@ -1,4 +1,5 @@
 /* eslint-disable class-methods-use-this */
+import Config from 'react-native-config';
 import Mixpanel from 'react-native-mixpanel';
 import { getDeviceId } from './device';
 
@@ -12,8 +13,7 @@ class MixpanelService {
 
   init = async () => {
     if (!this.isInit) {
-      /* if Config.OPERATION_ID is valid then mixpanelToken = Config.MIXPANEL_TOKEN */
-      await Mixpanel.sharedInstanceWithToken('token', true);
+      await Mixpanel.sharedInstanceWithToken(Config.MIXPANEL_TOKEN, true);
       this.isInit = true;
     }
   };
