@@ -70,6 +70,7 @@ const AvailabilityVehicle = ({
       key={id}
       ref={markerRef}
       coordinate={locationAnimated}
+      anchor={{ x: 0.5, y: 0.40 }}
     >
       <SvgIcon Svg={carIcon} height={48} width={48} fill={primaryColor} />
     </MarkerAnimated>

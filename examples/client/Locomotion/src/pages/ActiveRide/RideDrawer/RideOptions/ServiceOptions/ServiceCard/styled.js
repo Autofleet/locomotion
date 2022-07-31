@@ -40,7 +40,7 @@ export const Row = styled.View`
 display: flex;
 flex-direction: row;
 justify-content: space-between;
-align-items: center;
+align-items: flex-start;
 width: 100%;
 `;
 
@@ -89,6 +89,7 @@ export const Description = styled.Text`
 opacity: .5;
 ${FONT_SIZES.MEDIUM};
 ${FONT_WEIGHTS.REGULAR};
+width: 90%;
 `;
 
 export const EstimatedText = styled.Text`
