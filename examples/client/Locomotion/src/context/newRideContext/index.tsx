@@ -684,16 +684,17 @@ const RidePageContextProvider = ({ children }: {
         buttonText: i18n.t('bottomSheetContent.outstandingBalance.buttonText'),
         subTitleText: i18n.t('bottomSheetContent.outstandingBalance.subTitleText'),
         buttonPress: () => {
-          changeBsPage(BS_PAGES.SERVICE_ESTIMATIONS);
+          changeBsPage(BS_PAGES.ADDRESS_SELECTOR);
+          navigationService.navigate(MAIN_ROUTES.CONTACT_US);
         },
       });
       changeBsPage(BS_PAGES.GENERIC_ERROR);
     },
     [RIDE_FAILED_REASONS.CASH_NOT_ALLOWED]: () => {
       setGenericErrorDetails({
-        titleText: i18n.t('bottomSheetContent.outstandingBalance.titleText'),
-        buttonText: i18n.t('bottomSheetContent.outstandingBalance.buttonText'),
-        subTitleText: i18n.t('bottomSheetContent.outstandingBalance.subTitleText'),
+        titleText: i18n.t('bottomSheetContent.cashNotAllowed.titleText'),
+        buttonText: i18n.t('bottomSheetContent.cashNotAllowed.buttonText'),
+        subTitleText: i18n.t('bottomSheetContent.cashNotAllowed.subTitleText'),
         buttonPress: () => {
           changeBsPage(BS_PAGES.SERVICE_ESTIMATIONS);
         },
@@ -702,9 +703,9 @@ const RidePageContextProvider = ({ children }: {
     },
     [RIDE_FAILED_REASONS.PAYMENT_METHOD_EXPIRED]: () => {
       setGenericErrorDetails({
-        titleText: i18n.t('bottomSheetContent.outstandingBalance.titleText'),
-        buttonText: i18n.t('bottomSheetContent.outstandingBalance.buttonText'),
-        subTitleText: i18n.t('bottomSheetContent.outstandingBalance.subTitleText'),
+        titleText: i18n.t('bottomSheetContent.paymentMethodExpired.titleText'),
+        buttonText: i18n.t('bottomSheetContent.paymentMethodExpired.buttonText'),
+        subTitleText: i18n.t('bottomSheetContent.paymentMethodExpired.subTitleText'),
         buttonPress: () => {
           changeBsPage(BS_PAGES.SERVICE_ESTIMATIONS);
         },
@@ -713,9 +714,9 @@ const RidePageContextProvider = ({ children }: {
     },
     [RIDE_FAILED_REASONS.COULD_NOT_CREATE_PAYMENT_INTENT]: () => {
       setGenericErrorDetails({
-        titleText: i18n.t('bottomSheetContent.outstandingBalance.titleText'),
-        buttonText: i18n.t('bottomSheetContent.outstandingBalance.buttonText'),
-        subTitleText: i18n.t('bottomSheetContent.outstandingBalance.subTitleText'),
+        titleText: i18n.t('bottomSheetContent.paymentIntentError.titleText'),
+        buttonText: i18n.t('bottomSheetContent.paymentIntentError.buttonText'),
+        subTitleText: i18n.t('bottomSheetContent.paymentIntentError.subTitleText'),
         buttonPress: () => {
           changeBsPage(BS_PAGES.SERVICE_ESTIMATIONS);
         },

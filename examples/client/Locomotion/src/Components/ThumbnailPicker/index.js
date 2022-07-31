@@ -94,6 +94,8 @@ const ThumbnailPicker = (props) => {
       includeBase64: true,
       saveToPhotos: false,
       selectionLimit: 1,
+      maxHeight: 180,
+      maxWidth: 180,
     };
     const imageCallback = response => onSelectPicture(response);
 
