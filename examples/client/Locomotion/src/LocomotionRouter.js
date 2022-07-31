@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import { LogBox } from 'react-native';
 import { enableScreens } from 'react-native-screens';
+import { PortalProvider } from '@gorhom/portal';
 import 'react-native-gesture-handler';
 import crashlytics from '@react-native-firebase/crashlytics';
 import { NavigationContainer } from '@react-navigation/native';
@@ -36,9 +37,11 @@ export default (props) => {
           <RideStateContextContextProvider {...props}>
             <FutureRidesProvider {...props}>
               <NewRidePageContextProvider {...props}>
-                <MainRouter {...props} />
-                {props.children}
-                <RidePopups />
+                <PortalProvider>
+                  <MainRouter {...props} />
+                  {props.children}
+                  <RidePopups />
+                </PortalProvider>
               </NewRidePageContextProvider>
             </FutureRidesProvider>
           </RideStateContextContextProvider>
