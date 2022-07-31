@@ -59,7 +59,7 @@ const BLACK_OVERLAY_SCREENS = [BS_PAGES.CANCEL_RIDE];
 
 const RidePage = ({ mapSettings, navigation }) => {
   const { locationGranted, setLocationGranted, updatePushToken } = useContext(UserContext);
-  const [addressSelectorFocus, setAddressSelectorFocus] = useState(null);
+  const [addressSelectorFocus, setAddressSelectorFocus] = useState(STOP_POINT_TYPES.STOP_POINT_DROPOFF);
   const { getSettingByKey } = settings.useContainer();
   const mapRef = useRef();
   const bottomSheetRef = useRef(null);
