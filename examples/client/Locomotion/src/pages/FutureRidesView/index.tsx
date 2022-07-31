@@ -61,7 +61,7 @@ const FutureRidesView = ({ menuSide }: FutureRidesViewProps) => {
       <PageHeader
         title={i18n.t('futureRides.pageTitle')}
         onIconPress={() => {
-          changeBsPage(BS_PAGES.ADDRESS_SELECTOR);
+          // changeBsPage(BS_PAGES.ADDRESS_SELECTOR);
           NavigationService.navigate(MAIN_ROUTES.HOME);
         }}
         iconSide={menuSide}

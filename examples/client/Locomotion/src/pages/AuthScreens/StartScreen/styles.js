@@ -79,7 +79,7 @@ export const TermsLink = styled.Text`
   color: ${({ theme }) => theme.primaryColor};
   padding: 2px;
   text-decoration: underline;
-  text-decoration-color:  #8ab4f8;
+  text-decoration-color: ${({ theme }) => theme.primaryColor};
   &:active {
     color: red;
   }
