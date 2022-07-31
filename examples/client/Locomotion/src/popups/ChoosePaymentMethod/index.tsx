@@ -40,29 +40,31 @@ const PaymentMethodPopup = ({
   isVisible, onCancel, onSubmit, showCash, rideFlow, selected,
 }: PaymentMethodPopupProps) => {
   const usePayments = PaymentsContext.useContainer();
-  const [paymentId, setPaymentId] = useState<string | undefined>(undefined);
   const [selectedPaymentId, setSelectedPaymentId] = useState<string | undefined>(selected);
 
   useEffect(() => {
     usePayments.getOrFetchCustomer();
   }, []);
 
+
   useEffect(() => {
     const updateDefaultPaymentMethod = async () => {
-      const paymentMethod = await usePayments.getClientDefaultMethod();
-      setSelectedPaymentId(selected
-      || paymentMethod?.id);
-      setPaymentId(paymentMethod?.id);
+      if (selected) {
+        setSelectedPaymentId(selected);
+      } else {
+        const paymentMethod = await usePayments.getClientDefaultMethod();
+        setSelectedPaymentId(paymentMethod?.id);
+      }
     };
 
 
     updateDefaultPaymentMethod();
-  }, [usePayments.paymentMethods]);
+  }, [usePayments.paymentMethods, selected]);
 
   const navigation = useNavigation<Nav>();
 
   const onSave = () => {
-    onSubmit(paymentId);
+    onSubmit(selectedPaymentId);
     onCancel();
   };
 
@@ -112,16 +114,17 @@ const PaymentMethodPopup = ({
                 : usePayments.paymentMethods).map((paymentMethod: any, i) => (
                   <PaymentMethod
                     {...paymentMethod}
+                    chooseMethodPage
                     selected={selectedPaymentId === paymentMethod.id}
                     mark={selectedPaymentId === paymentMethod.id}
                     onPress={() => {
-                      setPaymentId(paymentMethod.id);
                       setSelectedPaymentId(paymentMethod.id);
                     }}
                   />
               ))}
               <PaymentMethod
                 addNew
+                chooseMethodPage
                 onPress={() => {
                   onCancel();
                   navigation.navigate(MAIN_ROUTES.PAYMENT, { showAdd: true, rideFlow });

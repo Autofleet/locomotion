@@ -26,31 +26,55 @@ const InformationCard = ({
 }: InformationCardProps) => (
   onPress
     ? (
-      <TouchableOpacity onPress={onPress} {...props}>
-        <Card
-          title={title}
-          onPress={onPress}
-          verified={verified}
-          showUnverified={showUnverified}
-          icon={icon}
-          onIconPress={onIconPress}
-        >
-          {children}
-        </Card>
+      <TouchableOpacity onPress={onPress} {...props} style={{ flex: 1 }}>
+        { children
+          ? (
+            <Card
+              title={title}
+              onPress={onPress}
+              verified={verified}
+              showUnverified={showUnverified}
+              icon={icon}
+              onIconPress={onIconPress}
+            >
+              {children}
+            </Card>
+          ) : (
+            <Card
+              title={title}
+              onPress={onPress}
+              verified={verified}
+              showUnverified={showUnverified}
+              icon={icon}
+              onIconPress={onIconPress}
+            />
+          )}
       </TouchableOpacity>
     )
     : (
       <View>
-        <Card
-          title={title}
-          onPress={onPress}
-          verified={verified}
-          showUnverified={showUnverified}
-          icon={icon}
-          onIconPress={onIconPress}
-        >
-          {children}
-        </Card>
+        { children
+          ? (
+            <Card
+              title={title}
+              onPress={onPress}
+              verified={verified}
+              showUnverified={showUnverified}
+              icon={icon}
+              onIconPress={onIconPress}
+            >
+              {children}
+            </Card>
+          ) : (
+            <Card
+              title={title}
+              onPress={onPress}
+              verified={verified}
+              showUnverified={showUnverified}
+              icon={icon}
+              onIconPress={onIconPress}
+            />
+          )}
       </View>
     )
 
@@ -69,7 +93,10 @@ InformationCard.defaultProps = {
 
 InformationCard.propTypes = {
   title: propsTypes.string,
-  children: propsTypes.string,
+  children: propsTypes.oneOfType([
+    propsTypes.arrayOf(propsTypes.node),
+    propsTypes.node, propsTypes.any,
+  ]),
   onPress: propsTypes.func,
   verified: propsTypes.bool,
   showUnverified: propsTypes.bool,

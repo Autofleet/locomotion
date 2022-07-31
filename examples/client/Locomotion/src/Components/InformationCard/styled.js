@@ -125,3 +125,7 @@ export const CardContainer = styled.View`
   border-bottom-color: #e2e2e2;
   background-color: ${({ theme }) => theme.pageBackgroundColor};
 `;
+
+export const IconContainer = styled.View`
+  padding: 15px;
+`;

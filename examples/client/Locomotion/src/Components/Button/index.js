@@ -31,7 +31,7 @@ const Button = (props) => {
         }
       }}
     >
-      {props.isLoading || isLoadingInternal ? (
+      {!props.noLoader && (props.isLoading || isLoadingInternal) ? (
         <LoaderContainer>
           <Loader
             lottieViewStyle={{

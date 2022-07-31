@@ -24,7 +24,9 @@ export const StarIcon = styled.Image(({ isOn, theme }) => `
   width: 30px;
   ${isOn ? `
     tint-color: ${theme.primaryColor};
+    opacity: 0.7;
   ` : `
+    tint-color: transparent;
     opacity: 0.4;
   `}
 `);
@@ -39,7 +41,7 @@ export const PageContent = styled(View)`
 
 
 export const RatingContainer = styled(View)`
-  padding: 10px 0px;
+  padding: 25px 0px;
   border-bottom-width: 1px ;
   border-bottom-color: #e2e2e2;
   justify-content: space-between;

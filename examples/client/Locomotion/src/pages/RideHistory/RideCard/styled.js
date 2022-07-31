@@ -101,6 +101,7 @@ export const RideViewTextContainer = styled.View`
 `;
 
 export const RideViewSecTextContainer = styled.View`
+align-items: flex-end;
 `;
 
 export const CenterContainer = styled.View`

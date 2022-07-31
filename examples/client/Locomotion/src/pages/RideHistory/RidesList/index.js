@@ -11,6 +11,7 @@ import {
 import Loader from '../../../Components/Loader';
 import Mixpanel from '../../../services/Mixpanel';
 import { RideListView } from '../RideCard';
+import i18n from '../../../I18n';
 
 const DISTANCE_FROM_END = 400;
 
@@ -84,13 +85,15 @@ const RidesView = ({ rides }) => {
 
 const RidesList = React.memo(({
   rides,
-  activeFilter,
 }) => (
   <>
     {rides && rides.length ? (
       <RidesView rides={rides} />
     ) : (
-      <NoRidesInList />
+      <NoRidesInList
+        title={i18n.t('rideHistory.noActivityYet')}
+        text={i18n.t('rideHistory.noActivitySub')}
+      />
     )}
   </>
 ));

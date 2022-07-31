@@ -41,7 +41,7 @@ export const SubNoRidesListContainer = styled(BaseText)`
   font-size: 16px;
 `;
 
-export const NoRidesInList = () => {
+export const NoRidesInList = ({ title, text }) => {
   const { primaryColor } = useContext(ThemeContext);
   return (
     <CenterContainer addTop>
@@ -49,10 +49,10 @@ export const NoRidesInList = () => {
         <SvgIcon Svg={noRides} width={157} height={171} fill={primaryColor} />
       </NoRidesImageContainer>
       <NoRidesListContainer>
-        {I18n.t('rideHistory.noActivityYet')}
+        {title}
       </NoRidesListContainer>
       <SubNoRidesListContainer>
-        {I18n.t('rideHistory.noActivitySub')}
+        {text}
       </SubNoRidesListContainer>
     </CenterContainer>
   );

@@ -1,6 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { useRoute } from '@react-navigation/native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import moment from 'moment';
+import {
+  Modal, Platform, Text, View,
+} from 'react-native';
+import GenericErrorPopup from '../../popups/GenericError';
 import { getCurrencySymbol } from '../../context/newRideContext/utils';
 import ConfirmationPopup from '../../popups/ConfirmationPopup';
 import { getLastFourForamttedLong } from '../../pages/Payments/cardDetailUtils';
@@ -30,6 +35,7 @@ const CardDetails = ({
   navigation = { navigate: (route: string, object?: any | undefined) => null },
 }) => {
   const [loading, setLoading] = useState(false);
+  const [showError, setShowError] = useState(false);
   const [methodForDelete, setMethodForDelete] = useState(null);
   const [isCancelPopupVisible, setIsCancelPopupVisible] = useState(false);
   const usePayments = PaymentsContext.useContainer();
@@ -42,11 +48,16 @@ const CardDetails = ({
 
   const detachCard = async () => {
     setLoading(true);
-    await usePayments.detachPaymentMethod(methodForDelete);
-    await usePayments.loadCustomer();
-    setLoading(false);
-    setIsCancelPopupVisible(false);
-    navigation.navigate(MAIN_ROUTES.PAYMENT);
+    try {
+      await usePayments.detachPaymentMethod(methodForDelete);
+      await usePayments.loadCustomer();
+      setLoading(false);
+      setIsCancelPopupVisible(false);
+      navigation.navigate(MAIN_ROUTES.PAYMENT);
+    } catch (e) {
+      setIsCancelPopupVisible(false);
+      setTimeout(() => setShowError(true), Platform.OS === 'ios' ? 500 : 0);
+    }
   };
 
   const loadCustomer = async () => {
@@ -95,6 +106,12 @@ const CardDetails = ({
                 {getLastFourForamttedLong(paymentMethod?.lastFour)}
 
               </Card>
+              <Card
+                title={i18n.t('payments.cardDetails.expiryDate')}
+              >
+                {moment(paymentMethod?.expiresAt).format('MM/YY')}
+
+              </Card>
               {paymentMethod?.hasOutstandingBalance ? (
                 <Card
                   title={i18n.t('payments.cardDetails.balance')}
@@ -129,8 +146,14 @@ const CardDetails = ({
             onSubmit={() => detachCard()}
             onClose={() => setIsCancelPopupVisible(false)}
           />
+
         </>
       </KeyboardAwareScrollView>
+      <GenericErrorPopup
+        isVisible={showError}
+        closePopup={() => setShowError(false)
+        }
+      />
     </PageContainer>
   );
 };

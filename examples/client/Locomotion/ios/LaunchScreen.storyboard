@@ -40,6 +40,6 @@
         </scene>
     </scenes>
     <resources>
-        <image name="SplashLogo" width="200" height="99.333335876464844"/>
+        <image name="SplashLogo" width="300" height="300"/>
     </resources>
 </document>

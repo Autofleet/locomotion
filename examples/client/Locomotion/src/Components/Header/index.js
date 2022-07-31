@@ -10,6 +10,7 @@ const Header = ({
   <SafeView>
     <Container>
       <SquareSvgButton
+        noLoader
         onPress={onPressIcon}
         icon={icon}
         style={Platform.OS === 'android' ? { shadowColor: '#000' } : {}}

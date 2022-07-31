@@ -1,7 +1,8 @@
-import React, { useContext, useState } from 'react';
+import React, { useCallback, useContext, useState } from 'react';
 import propsTypes from 'prop-types';
 import SmoothPinCodeInput from 'react-native-smooth-pincode-input';
 import styled from 'styled-components';
+import { useFocusEffect } from '@react-navigation/native';
 import { Context, ERROR_COLOR } from '../../context/theme';
 
 const MainView = styled.View`
@@ -18,6 +19,12 @@ const PinCode = ({
 }) => {
   const [digits, setDigits] = useState('');
   const theme = useContext(Context);
+
+  useFocusEffect(
+    useCallback(() => {
+      setDigits('');
+    }, []),
+  );
   return (
     <MainView>
       <SmoothPinCodeInput

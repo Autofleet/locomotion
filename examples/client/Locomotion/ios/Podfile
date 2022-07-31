@@ -26,6 +26,8 @@ target 'Locomotion' do
 
   pod 'react-native-background-timer', :path => '../node_modules/react-native-background-timer'
 
+  pod 'react-native-restart', :path => '../node_modules/react-native-restart'
+
   target 'LocomotionTests' do
     inherit! :complete
     # Pods for testing

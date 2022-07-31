@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import DatePicker from 'react-native-date-picker';
 import moment from 'moment';
 import FutureBookingButton from './FutureBookingButton';
@@ -19,7 +19,8 @@ import { popupNames } from '../utils';
 import { BS_PAGES } from '../../../../../context/ridePageStateContext/utils';
 import cashPaymentMethod from '../../../../../pages/Payments/cashPaymentMethod';
 import { getFutureRideMaxDate, getFutureRideMinDate } from '../../../../../context/newRideContext/utils';
-
+import settings from '../../../../../context/settings';
+import SETTINGS_KEYS from '../../../../../context/settings/keys';
 
 interface RideButtonsProps {
     displayPassenger: boolean;
@@ -33,12 +34,12 @@ const RideButtons = ({
   const {
     ride,
     chosenService,
-    updateRidePayload,
+    setUnconfirmedPickupTime,
   } = useContext(RidePageContext);
   const {
     changeBsPage,
   } = useContext(RideStateContextContext);
-
+  const { getSettingByKey } = settings.useContainer();
   const {
     paymentMethods,
     getClientOutstandingBalanceCard,
@@ -48,7 +49,18 @@ const RideButtons = ({
     } = PaymentsContext.useContainer();
 
   const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
+  const [isFutureRidesEnabled, setIsFutureRidesEnabled] = useState(true);
 
+  const checkFutureRidesSetting = async () => {
+    const futureRidesEnabled = await getSettingByKey(
+      SETTINGS_KEYS.FUTURE_RIDES_ENABLED,
+    );
+    setIsFutureRidesEnabled(futureRidesEnabled);
+  };
+
+  useEffect(() => {
+    checkFutureRidesSetting();
+  }, []);
   const renderFutureBooking = () => {
     const close = () => {
       setIsDatePickerOpen(false);
@@ -58,14 +70,14 @@ const RideButtons = ({
         <FutureBookingButton />
         <DatePicker
           open={isDatePickerOpen}
-          date={moment(ride?.scheduledTo).toDate()}
+          date={moment(ride?.scheduledTo).add(ride?.scheduledTo ? 0 : 1, 'hours').toDate()}
           maximumDate={getFutureRideMaxDate()}
           minimumDate={getFutureRideMinDate()}
           mode="datetime"
           title={i18n.t('bottomSheetContent.ride.chosePickupTime')}
           onCancel={close}
           onConfirm={(date) => {
-            updateRidePayload({ scheduledTo: date.getTime() });
+            setUnconfirmedPickupTime(date.getTime());
             changeBsPage(BS_PAGES.CONFIRM_PICKUP_TIME);
             close();
           }}
@@ -78,9 +90,11 @@ const RideButtons = ({
   const renderRideNotes = () => {
     const rideHasNotes = ride?.notes;
     return (
-      <ButtonContainer onPress={() => {
-        setPopupName('notes');
-      }}
+      <ButtonContainer
+        onPress={() => {
+          setPopupName('notes');
+        }}
+        style={{ width: isFutureRidesEnabled ? HALF_WIDTH : '100%' }}
       >
         <NoteButton
           icon={rideHasNotes ? editNote : plus}
@@ -109,7 +123,7 @@ const RideButtons = ({
         <PaymentButton
           brand={selectedPaymentMethod?.brand}
           icon={creditCardIcon}
-          title={selectedPaymentMethod?.name === cashPaymentMethod.name ? 'Cash' : (selectedPaymentMethod?.name || i18n.t('bottomSheetContent.ride.addPayment'))}
+          title={selectedPaymentMethod?.name === cashPaymentMethod.name ? cashPaymentMethod.id : (selectedPaymentMethod?.name || i18n.t('bottomSheetContent.ride.addPayment'))}
           id={selectedPaymentMethod?.id}
         />
       </ButtonContainer>
@@ -120,7 +134,7 @@ const RideButtons = ({
     <Container>
       <RowContainer>
         <>
-          {renderFutureBooking()}
+          {isFutureRidesEnabled && renderFutureBooking()}
           {displayPassenger ? <></> : renderRideNotes()}
         </>
       </RowContainer>

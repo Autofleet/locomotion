@@ -20,7 +20,7 @@ export const PriceText = styled(Text)`
 `;
 
 export const RidePriceDetails = styled(View)`
-    flex: 1;
+    flex: 1.5;
     justify-content: center;
     align-items: flex-end;
 `;
