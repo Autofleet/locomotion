@@ -30,6 +30,7 @@ interface PaymentMethodPopupProps {
   showCash: boolean;
   rideFlow: boolean;
   selected: any;
+  onAddNewMethod: () => void;
 }
 
 type Nav = {
@@ -37,7 +38,7 @@ type Nav = {
 }
 
 const PaymentMethodPopup = ({
-  isVisible, onCancel, onSubmit, showCash, rideFlow, selected,
+  isVisible, onCancel, onSubmit, showCash, rideFlow, selected, onAddNewMethod,
 }: PaymentMethodPopupProps) => {
   const usePayments = PaymentsContext.useContainer();
   const [selectedPaymentId, setSelectedPaymentId] = useState<string | undefined>(selected);
@@ -126,10 +127,7 @@ const PaymentMethodPopup = ({
                 addNew
                 chooseMethodPage
                 onPress={() => {
-                  onCancel();
-                  setTimeout(() => {
-                    navigation.navigate(MAIN_ROUTES.PAYMENT, { showAdd: true, rideFlow });
-                  }, 500);
+                  onAddNewMethod();
                 }}
               />
             </View>

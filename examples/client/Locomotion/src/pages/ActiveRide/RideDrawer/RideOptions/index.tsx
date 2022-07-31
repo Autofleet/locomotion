@@ -2,6 +2,7 @@ import React, {
   useContext, useEffect, useState,
 } from 'react';
 import { Portal } from '@gorhom/portal';
+import { MAIN_ROUTES } from '../../../routes';
 import i18n from '../../../../I18n';
 import { RIDE_POPUPS } from '../../../../context/newRideContext/utils';
 import RideButtons from './RideButtons';
@@ -15,7 +16,7 @@ import payments from '../../../../context/payments';
 import { PaymentMethodInterface } from '../../../../context/payments/interface';
 import { RideStateContextContext } from '../../../../context/ridePageStateContext';
 import { BS_PAGES } from '../../../../context/ridePageStateContext/utils';
-
+import * as navigationService from '../../../../services/navigation';
 
 const RideOptions = () => {
   const usePayments = payments.useContainer();
@@ -110,6 +111,12 @@ const RideOptions = () => {
         />
 
         <ChoosePaymentMethod
+          onAddNewMethod={() => {
+            clearPopup();
+            setTimeout(() => {
+              navigationService.navigate(MAIN_ROUTES.PAYMENT, { showAdd: true, rideFlow: true });
+            }, 500);
+          }}
           selected={ride?.paymentMethodId
             && usePayments.paymentMethods.find((pm: any) => ride.paymentMethodId === pm.id)
             ? ride.paymentMethodId : defaultPaymentMethod?.id}
