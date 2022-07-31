@@ -17,7 +17,7 @@ import Section from './paymentMethodSection';
 
 export default ({
   loadingState = false,
-  onAddClick = undefined,
+  onAddClick = () => undefined,
 }) => {
   const usePayments = PaymentsContext.useContainer();
   const [loading, setLoading] = useState(false);
@@ -82,6 +82,10 @@ export default ({
           </BottomContainer>
         ) : undefined}
         <ChoosePaymentMethod
+          onAddNewMethod={() => {
+            setShowChoosePayment(false);
+            onAddClick();
+          }}
           selected={defaultMethod?.id}
           isVisible={showChoosePayment}
           showCash={false}
