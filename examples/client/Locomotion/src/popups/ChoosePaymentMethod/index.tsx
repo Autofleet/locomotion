@@ -127,7 +127,9 @@ const PaymentMethodPopup = ({
                 chooseMethodPage
                 onPress={() => {
                   onCancel();
-                  navigation.navigate(MAIN_ROUTES.PAYMENT, { showAdd: true, rideFlow });
+                  setTimeout(() => {
+                    navigation.navigate(MAIN_ROUTES.PAYMENT, { showAdd: true, rideFlow });
+                  }, 500);
                 }}
               />
             </View>
