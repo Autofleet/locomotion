@@ -1,5 +1,7 @@
-import React, { useContext, useState } from 'react';
-import { useNavigation } from '@react-navigation/native';
+import React, {
+  useCallback, useContext, useEffect, useState,
+} from 'react';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { Text } from 'react-native';
 import PinCode from '../../Components/PinCode';
 import SaveButton from './SaveButton';
@@ -22,7 +24,6 @@ const Code = () => {
   const { verifyCode } = useContext(OnboardingContext);
   const { user } = useContext(UserContext);
   const navigation = useNavigation();
-  const [code, setCode] = useState('');
   const [showErrorText, setShowErrorText] = useState(false);
   const [loading, setLoading] = useState(false);
   const [timer, setTimer] = useState(RESEND_SECONDS);
@@ -32,15 +33,12 @@ const Code = () => {
     if (value.length === CODE_LENGTH) {
       setLoading(true);
     }
-    setCode(value);
   };
 
   const verify = async (v) => {
     setLoading(true);
-    const input = v || code;
-    setCode(input);
+    const input = v;
     const response = await verifyCode(input);
-    setLoading(false);
     if (!response) {
       return setShowErrorText(true);
     }
@@ -55,6 +53,11 @@ const Code = () => {
     });
   }, 1000);
 
+  useFocusEffect(
+    useCallback(() => {
+      setLoading(false);
+    }, [showErrorText]),
+  );
   return (
     <PageContainer>
       <Header title={i18n.t('onboarding.pages.code.title')} page={MAIN_ROUTES.CODE} />
@@ -98,7 +101,7 @@ const Code = () => {
         </ResendContainer>
         <SaveButton
           isLoading={loading}
-          isInvalid={showErrorText || code.length < CODE_LENGTH || loading}
+          isInvalid
           onFail={() => setShowErrorText(true)}
         />
       </ContentContainer>
