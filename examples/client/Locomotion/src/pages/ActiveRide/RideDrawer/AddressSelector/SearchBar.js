@@ -135,7 +135,7 @@ const SearchBar = ({
     } else {
       inputRef.current = null;
     }
-  }, [isSelected]);
+  }, [isSelected, isExpanded]);
 
   const buildSps = () => requestStopPoints.map((s, i) => {
     const { type, description } = requestStopPoints[i];
