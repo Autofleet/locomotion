@@ -96,13 +96,15 @@ export default ({ navigation, menuSide }) => {
                   >
                     <Text>{settings.contactEmail}</Text>
                   </Card>
-                  <Card
-                    icon={phoneIcon}
-                    onIconPress={() => (settings.contactPhone ? Linking.openURL(`tel:${settings.contactPhone}`) : undefined)}
-                    title={i18n.t('onboarding.phonePlaceholder')}
-                  >
-                    <Text>{settings.contactPhone}</Text>
-                  </Card>
+                  {settings.contactPhone ? (
+                    <Card
+                      icon={phoneIcon}
+                      onIconPress={() => (settings.contactPhone ? Linking.openURL(`tel:${settings.contactPhone}`) : undefined)}
+                      title={i18n.t('onboarding.phonePlaceholder')}
+                    >
+                      <Text>{settings.contactPhone}</Text>
+                    </Card>
+                  ) : null}
                   <NoTitleCard onPress={() => openContactUs()}>
                     <LearnMoreButton onPress={() => openContactUs()}>
                       <LearnMoreText>{i18n.t('contactUs.learnMore')}</LearnMoreText>
