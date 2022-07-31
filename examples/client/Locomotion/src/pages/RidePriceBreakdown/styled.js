@@ -1,9 +1,8 @@
 import styled from 'styled-components';
 import { FONT_SIZES, FONT_WEIGHTS } from '../../context/theme';
-import { CardRowContainer } from '../../Components/RidePaymentDetails/styled';
 
-export const CreditCardRowContainer = styled(CardRowContainer)`
-width: 330px;
+export const CreditCardRowContainer = styled.View`
+width: 300px;
                   margin-top: 20px;
                   margin-bottom: 10px;
                   padding: 10px;
@@ -13,14 +12,15 @@ width: 330px;
 `;
 
 export const PriceItemsContainer = styled.View`
-width: 350px;
+width: 90%;
 margin-left: 15px;
+margin-right: 5px;
 `;
 
 export const EstimationContainer = styled.View`
 padding: 10px;
 background-color: #f8f8f8;
-width: 330px;
+width: 300px;
 `;
 
 export const EstimationText = styled.Text`
