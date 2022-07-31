@@ -47,7 +47,7 @@ class NotificationsService {
     if (Platform.OS === 'ios') {
       OneSignal.promptForPushNotificationsWithUserResponse((response) => {
         if (response) {
-          Mixpanel.setEvent('iOS User approved push');
+          return Mixpanel.setEvent('iOS User approved push');
         }
         Mixpanel.setEvent('iOS User didn\'t approved push');
         return null;

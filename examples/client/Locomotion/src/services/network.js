@@ -36,7 +36,7 @@ class Network {
     this.axios = axios.create(settings);
     this.axios.interceptors.request.use((request) => {
       try {
-        Mixpanel.setEvent('Network request', { method: request.method, endpoint: request.url, params: request.params });
+        // Mixpanel.setEvent('Network request', { method: request.method, endpoint: request.url, params: request.params });
         console.debug(`Request [${request.method}] ${request.url}`);
       } catch (e) {
         console.error('Error in interceptors->request log', e);
@@ -46,7 +46,7 @@ class Network {
 
     this.axios.interceptors.response.use((response) => {
       try {
-        Mixpanel.setEvent('Network response', { method: response.config.method, endpoint: response.config.url, statusCode: response.status });
+        // Mixpanel.setEvent('Network response', { method: response.config.method, endpoint: response.config.url, statusCode: response.status });
         console.debug(`Response [${response.config.method}] ${response.config.url}:`, formatResponseLog(response));
       } catch (e) {
         console.error('Error in interceptors->response log', e);
