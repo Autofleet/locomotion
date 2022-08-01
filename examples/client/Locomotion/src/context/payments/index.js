@@ -60,7 +60,16 @@ const usePayments = () => {
   const clientHasValidPaymentMethods = () => paymentMethods.length > 0
   && paymentMethods.some(pm => !pm.isExpired);
 
-  const isCashPaymentEnabled = async () => useSettings.getSettingByKey(SETTINGS_KEYS.CASH_ENABLED);
+  const isCashPaymentEnabled = async () => {
+    const paymentSetting = await
+    useSettings.getMultipleSettingByKey([
+      SETTINGS_KEYS.CASH_ENABLED,
+      SETTINGS_KEYS.CASH_ENABLED_IN_APP,
+    ]);
+    const cashEnabled = paymentSetting[SETTINGS_KEYS.CASH_ENABLED];
+    const cashEnabledInApp = paymentSetting[SETTINGS_KEYS.CASH_ENABLED_IN_APP];
+    return cashEnabled && cashEnabledInApp;
+  };
 
   const getClientDefaultMethod = async () => {
     if (paymentMethods && paymentMethods.length) {
