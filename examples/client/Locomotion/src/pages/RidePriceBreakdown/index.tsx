@@ -15,7 +15,6 @@ import CardRow from '../../Components/CardRow';
 import { PageContainer } from '../styles';
 import PageHeader from '../../Components/PageHeader';
 import { PriceCalculation, RideInterface, RidePageContext } from '../../context/newRideContext';
-import PaymentContext from '../../context/payments';
 import i18n from '../../I18n';
 import {
   CreditCardRowContainer, PriceItemsContainer, EstimationText, EstimationContainer,
@@ -37,7 +36,7 @@ const RidePriceBreakDown = () => {
   const params : RidePriceBreakdownParams = route.params as RidePriceBreakdownParams;
   const [loading, setLoading] = useState<boolean>(true);
   const [priceCalculation, setPriceCalculation] = useState<PriceCalculation>();
-  const [paymentMethod, setPaymentMethod] = useState<PaymentMethodInterface>();
+  const [paymentMethod, setPaymentMethod] = useState();
   const [localRide, setLocalRide] = useState<RideInterface>();
   const {
     ride,

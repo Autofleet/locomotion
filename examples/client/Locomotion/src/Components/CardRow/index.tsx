@@ -89,9 +89,9 @@ const style = {
   [StartCapital()]: 28,
 };
 
-const isCashPaymentMethod = (paymentMethod: PaymentMethodInterface) => paymentMethod.id === cashPaymentMethod.id;
+const isCashPaymentMethod = (paymentMethod: any) => paymentMethod.id === cashPaymentMethod.id;
 
-const CardRow = (paymentMethod: PaymentMethodInterface) => {
+const CardRow = (paymentMethod: any) => {
   const [isCardExpired, setIsCardExpired] = useState(false);
   useEffect(() => {
     let isExpired = false;
