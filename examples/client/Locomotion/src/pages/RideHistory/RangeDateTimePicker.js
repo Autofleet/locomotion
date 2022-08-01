@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import DatePicker from 'react-native-date-picker';
+import { ThemeContext } from 'styled-components';
 import i18n from '../../I18n';
 
 export default ({
@@ -7,7 +8,7 @@ export default ({
 }) => {
   const [open, setOpen] = useState(true);
   const [fromDate, saveFromDate] = useState(false);
-
+  const theme = useContext(ThemeContext);
   const handleConfirm = async (date) => {
     await setOpen(false);
     if (fromDate) {
@@ -21,6 +22,7 @@ export default ({
   return (
     <>
       <DatePicker
+        textColor={theme.textColor}
         open={open}
         date={new Date()}
         maximumDate={new Date()}
