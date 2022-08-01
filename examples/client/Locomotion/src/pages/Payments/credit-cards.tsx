@@ -49,9 +49,9 @@ export default ({
 
   return (
     <CardsListContainer>
-      <View>
-        <PaymentMethodsContainer>
-          <ScrollView>
+      <ScrollView>
+        <View>
+          <PaymentMethodsContainer>
             { defaultMethod?.id && defaultMethod?.id !== cashPaymentMethod.id
               ? (
                 <Section
@@ -75,51 +75,52 @@ export default ({
                     .filter(({ id }) => id !== defaultMethod.id)}
                 />
               ) : undefined}
-          </ScrollView>
-        </PaymentMethodsContainer>
+          </PaymentMethodsContainer>
 
-        {onAddClick ? (
-          <BottomContainer>
-            <PaymentMethod
-              addNew
-              onPress={onAddClick}
-            />
-          </BottomContainer>
-        ) : undefined}
-        <TemporaryHoldView>
-          <TemporaryHoldText>{i18n.t('temporaryHoldText')}</TemporaryHoldText>
-          <TouchableOpacity onPress={() => setShowLearnMore(true)}>
-            <LearnMore>
-              {i18n.t('learnMore').toString()}
-            </LearnMore>
-          </TouchableOpacity>
-        </TemporaryHoldView>
-        <ChoosePaymentMethod
-          onAddNewMethod={() => {
-            setShowChoosePayment(false);
-            onAddClick();
-          }}
-          selected={defaultMethod?.id}
-          isVisible={showChoosePayment}
-          showCash={false}
-          onCancel={() => { setShowChoosePayment(false); }}
-          onSubmit={async (payment) => {
-            const chosenDefault = usePayments.paymentMethods.find(({ id }) => id === payment)
+          {onAddClick ? (
+            <BottomContainer>
+              <PaymentMethod
+                addNew
+                onPress={onAddClick}
+              />
+            </BottomContainer>
+          ) : undefined}
+          <TemporaryHoldView>
+            <TemporaryHoldText>{i18n.t('temporaryHoldText')}</TemporaryHoldText>
+            <TouchableOpacity onPress={() => setShowLearnMore(true)}>
+              <LearnMore>
+                {i18n.t('learnMore').toString()}
+              </LearnMore>
+            </TouchableOpacity>
+          </TemporaryHoldView>
+          <ChoosePaymentMethod
+            onAddNewMethod={() => {
+              setShowChoosePayment(false);
+              onAddClick();
+            }}
+            selected={defaultMethod?.id}
+            isVisible={showChoosePayment}
+            showCash={false}
+            onCancel={() => { setShowChoosePayment(false); }}
+            onSubmit={async (payment) => {
+              const chosenDefault = usePayments.paymentMethods.find(({ id }) => id === payment)
              || defaultMethod;
-            if (chosenDefault === defaultMethod) {
-              return;
-            }
+              if (chosenDefault === defaultMethod) {
+                return;
+              }
 
-            await usePayments.updatePaymentMethod(payment, { isDefault: true });
-            await usePayments.loadCustomer();
-          }}
-        />
-        <TempraryHoldLearnMorePopup
-          isVisible={showLearnMore}
-          closePopup={() => setShowLearnMore(false)}
-        />
+              await usePayments.updatePaymentMethod(payment, { isDefault: true });
+              await usePayments.loadCustomer();
+            }}
+          />
+          <TempraryHoldLearnMorePopup
+            isVisible={showLearnMore}
+            closePopup={() => setShowLearnMore(false)}
+          />
 
-      </View>
+        </View>
+      </ScrollView>
+
     </CardsListContainer>
   );
 };
