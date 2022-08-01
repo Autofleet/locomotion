@@ -247,7 +247,7 @@ export const ConfirmPickupTime = (props: any) => {
     changeBsPage,
   } = useContext(RideStateContextContext);
   const date = moment(unconfirmedPickupTime).format('ddd, MMM Do');
-  const time = moment(unconfirmedPickupTime).format('HH:mm');
+  const time = moment(unconfirmedPickupTime).format('h:mm A');
   return (
     <BsPage
       TitleText={i18n.t('bottomSheetContent.confirmPickupTime.titleText')}
@@ -357,7 +357,7 @@ export const ConfirmFutureRide = (props: any) => {
 
   const getDateDisplay = () => {
     const date = moment(newFutureRide?.scheduledTo).format('ddd, MMM Do');
-    const time = moment(newFutureRide?.scheduledTo).format('HH:mm');
+    const time = moment(newFutureRide?.scheduledTo).format('h:mm A');
     const dateText = i18n.t('bottomSheetContent.confirmPickupTime.pickupText', { date, time });
     return <TextRowWithIcon text={dateText} icon={timeIcon} />;
   };

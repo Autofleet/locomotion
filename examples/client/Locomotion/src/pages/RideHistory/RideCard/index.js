@@ -82,7 +82,7 @@ const RideTitleCard = ({
           </DayTitleText>
           {ride.state === RIDE_STATES.COMPLETED ? (
             <DayTitleSubText noCap>
-              {`${moment(ride.lastMatchAttempt).format('HH:mm')
+              {`${moment(ride.lastMatchAttempt).format('h:mm A')
               } · ${ride.appDuration}`}
             </DayTitleSubText>
           ) : <RideStateText>{i18n.t(`rideHistory.ride.states.${ride.state}`)}</RideStateText>}
