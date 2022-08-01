@@ -111,12 +111,12 @@ export default ({ menuSide }) => {
                 </CardsContainer>
                 <CardsContainer>
                   <CardsTitle title={i18n.t('contactUs.legalTitle')} />
-                  <NoTitleCard showArrow onPress={() => openPrivacy()}>
+                  <NoTitleCard testID="privacyPolicy" showArrow onPress={() => openPrivacy()}>
                     <Text>
                       {i18n.t('contactUs.privacyPolicy')}
                     </Text>
                   </NoTitleCard>
-                  <NoTitleCard showArrow onPress={() => openTerms()}>
+                  <NoTitleCard testID="termsOfUse" showArrow onPress={() => openTerms()}>
                     <Text>{i18n.t('contactUs.termsOfUse')}</Text>
                   </NoTitleCard>
                 </CardsContainer>

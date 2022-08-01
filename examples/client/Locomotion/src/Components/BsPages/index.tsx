@@ -194,7 +194,7 @@ const BsPage = ({
       <Footer fullWidthButtons={fullWidthButtons}>
         {ButtonText && (
         <OtherButton
-          testID="confirm"
+          testID="bottomSheetConfirm"
           style={{ width: buttonWidth }}
           disabled={buttonDisabled}
           onPress={onButtonPress}
@@ -206,6 +206,7 @@ const BsPage = ({
         )}
         {SecondaryButtonText && (
         <SecondaryButton
+          testID="bottomSheetSecondary"
           disabled={buttonDisabled}
           style={{ width: buttonWidth }}
           warning={warning}

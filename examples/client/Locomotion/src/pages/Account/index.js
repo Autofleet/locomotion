@@ -99,6 +99,7 @@ const AccountContent = () => {
       <CardsContainer>
         <CardsTitle title={i18n.t('onboarding.accountInformation')} />
         <Card
+          testID="goToName"
           title={i18n.t('onboarding.namePlaceholder')}
           onPress={() => navigationService.navigate(MAIN_ROUTES.NAME, {
             editAccount: true,
@@ -113,6 +114,7 @@ const AccountContent = () => {
           {user ? `${user.phoneNumber}` : ''}
         </Card>
         <Card
+          testID="goToEmail"
           verified={emailIsVerified}
           showUnverified
           title={i18n.t('onboarding.emailPlaceholder')}
@@ -124,6 +126,7 @@ const AccountContent = () => {
           <>
             <CardsTitle title={i18n.t('onboarding.paymentInformation')} />
             <Card
+              testID="goToPaymentMethod"
               title={i18n.t('onboarding.paymentMethodPlaceholder')}
               onPress={() => navigationService.navigate(MAIN_ROUTES.PAYMENT, {
                 back: true,

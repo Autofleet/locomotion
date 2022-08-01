@@ -37,7 +37,7 @@ const DrawerHeader = ({ navigateTo }) => {
       <HeaderMainText>
         {user ? `${user.firstName} ${user.lastName}` : ''}
       </HeaderMainText>
-      <HeaderLink onPress={() => navigateTo(MAIN_ROUTES.ACCOUNT)}>
+      <HeaderLink testID="userProfile" onPress={() => navigateTo(MAIN_ROUTES.ACCOUNT)}>
         <HeaderText>
           {i18n.t('menu.account')}
         </HeaderText>

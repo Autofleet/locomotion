@@ -13,6 +13,7 @@ interface ButtonProps {
   style?: any;
   icon?: any;
   children?: any;
+  testID?: string;
 }
 
 const RoundedButton = ({
@@ -86,6 +87,7 @@ RoundedButton.defaultProps = {
   style: {},
   children: null,
   icon: null,
+  testID: '',
 };
 
 export default RoundedButton;
