@@ -110,7 +110,7 @@ const FutureRidesView = ({ menuSide }: FutureRidesViewProps) => {
               if (futureRides.length === 1) {
                 NavigationService.navigate(MAIN_ROUTES.HOME);
               }
-            } catch (e) {
+            } catch (e: any) {
               setShowError(true);
               Mixpanel.setEvent('failed to cancel ride', { status: e?.response?.status });
             }

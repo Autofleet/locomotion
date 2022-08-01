@@ -336,7 +336,7 @@ export const CancelRide = (props: any) => {
           setIsLoading(true);
           Mixpanel.setEvent('Trying to cancel ride');
           await cancelRide();
-        } catch (e) {
+        } catch (e: any) {
           setShowError(true);
           setIsLoading(false);
           Mixpanel.setEvent('failed to cancel ride', { status: e?.response?.status });
