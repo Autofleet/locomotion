@@ -183,7 +183,7 @@ const UserContextProvider = ({ children }: { children: any }) => {
   };
 
   const deleteUser = async () => {
-    const result = await deleteUserApi(user?.id);
+    const result = await deleteUserApi();
     return result;
   };
 

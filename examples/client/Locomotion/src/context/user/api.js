@@ -46,7 +46,7 @@ export const sendEmailVerification = async () => {
   return data;
 };
 
-export const deleteUser = async (body) => {
-  const { data } = await network.delete('api/v1/me/user', body);
+export const deleteUser = async () => {
+  const { data } = await network.delete('api/v1/me/user');
   return data;
 };
