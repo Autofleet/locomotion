@@ -48,6 +48,13 @@ export const LogoutText = styled.Text`
   text-decoration-color: #24aaf2;
 `;
 
+export const DeleteText = styled.Text`
+  ${FONT_SIZES.LARGE}
+  color: red;
+  text-decoration: underline;
+  text-decoration-color: red;
+`;
+
 export const VerifyContainer = styled.View`
   border-radius: 24px;
   padding-top: 5px;

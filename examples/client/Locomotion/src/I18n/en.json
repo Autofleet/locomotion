@@ -274,6 +274,12 @@
         "logout": "Logout",
         "futureRides": "Upcoming Rides"
     },
+    "deleteUserPopup": {
+        "deleteUserTitle": "Delete Account",
+        "deleteAccountText": "Are you sure you want to delete your account?",
+        "confirmText": "Yes, delete account",
+        "cancelText": "Go back"
+    },
     "contactUs": {
         "pageTitle": "Contact us",
         "learnMore": "Learn more",
