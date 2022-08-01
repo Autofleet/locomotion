@@ -462,6 +462,7 @@ const RidePageContextProvider = ({ children }: {
 
       const { lat, lng } = data.results[0].geometry.location;
       const geoLocation = {
+        placeId: data.results[0].place_id,
         streetAddress: buildStreetAddress(data) || data.results[0].formatted_address,
         description: data.results[0].formatted_address,
         lat,
