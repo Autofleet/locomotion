@@ -3,7 +3,7 @@ import React, {
 } from 'react';
 import crashlytics from '@react-native-firebase/crashlytics';
 import Config from 'react-native-config';
-import { StorageService } from '../../services';
+import { authService, StorageService } from '../../services';
 import {
   getUserDetails, loginVert, sendEmailVerification, updateUser, emailVerify, deleteUser as deleteUserApi,
 } from './api';
@@ -72,7 +72,12 @@ const UserContextProvider = ({ children }: { children: any }) => {
   const getUserFromServer = () => getUserDetails();
 
   const updateUserFromServer = async () => {
-    setUser(await getUserDetails());
+    try {
+      const userFromServer = await getUserDetails();
+      setUser(userFromServer);
+    } catch (e) {
+      authService.logout();
+    }
   };
 
   const updateState = (values: any) => {

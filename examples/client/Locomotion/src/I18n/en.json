@@ -30,6 +30,7 @@
         "login": "Log In",
         "noAccountError": "No account exists with that number.",
         "accountAlreadyExistsError": "An account already exists with that number.",
+        "clientIsBanned": "There's an issue with your account. Please contact {{ appName }} for further assistance.",
         "onBoardingPageTitle": "Please add your name and upload a photo to continue.",
         "phoneNumberPlaceholder": "Phone number",
         "loginPageInstructions": "Enter your phone number.",
