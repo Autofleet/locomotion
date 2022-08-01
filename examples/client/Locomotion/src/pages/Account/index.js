@@ -140,6 +140,7 @@ const AccountContent = () => {
           </>
         ) : undefined}
         <LogoutContainer
+          testID="logout"
           onPress={() => {
             navigationService.navigate(MAIN_ROUTES.LOGOUT);
           }}
@@ -147,6 +148,7 @@ const AccountContent = () => {
           <LogoutText>{i18n.t('menu.logout')}</LogoutText>
         </LogoutContainer>
         <LogoutContainer
+          testID="deleteAccount"
           onPress={() => {
             setIsDeleteUserVisible(true);
           }}
