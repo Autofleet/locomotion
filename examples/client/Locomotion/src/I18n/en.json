@@ -276,6 +276,7 @@
         "futureRides": "Upcoming Rides"
     },
     "temporaryHoldText": "A small amount may be temporarily placed on hold when you start your ride ",
+    "learnMore": "Learn more",
     "temporaryHoldPopup":
     {
         "title": "Temporary hold",

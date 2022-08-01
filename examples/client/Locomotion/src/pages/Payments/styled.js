@@ -156,8 +156,8 @@ width: 90%;
 `;
 
 export const TemporaryHoldText = styled.Text`
-${FONT_SIZES.MEDIUM};
-${FONT_WEIGHTS.LIGHT}
+    ${FONT_SIZES.MEDIUM};
+    ${FONT_WEIGHTS.LIGHT};
 `;
 
 export const LearnMore = styled(Text)`

@@ -90,7 +90,7 @@ export default ({
           <TemporaryHoldText>{i18n.t('temporaryHoldText')}</TemporaryHoldText>
           <TouchableOpacity onPress={() => setShowLearnMore(true)}>
             <LearnMore>
-              {i18n.t('Learn more').toString()}
+              {i18n.t('learnMore').toString()}
             </LearnMore>
           </TouchableOpacity>
         </TemporaryHoldView>
