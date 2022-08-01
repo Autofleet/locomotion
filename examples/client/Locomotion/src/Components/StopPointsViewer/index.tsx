@@ -21,6 +21,7 @@ const StopPointsViewer = ({ goBackToAddressSelector }: StopPointsViewerProps) =>
     requestStopPoints.filter(sp => !!sp.lat).length > 1 ? (
       <Container>
         <StreetAddressContainer
+          testID="estimationsPickupEdit"
           onPress={() => goBackToAddressSelector(STOP_POINT_TYPES.STOP_POINT_PICKUP)}
         >
           <StreetAddress>
@@ -34,6 +35,7 @@ const StopPointsViewer = ({ goBackToAddressSelector }: StopPointsViewerProps) =>
           style={{ transform: [{ rotate: '180deg' }] }}
         />
         <StreetAddressContainer
+          testID="estimationsDropOffEdit"
           onPress={() => goBackToAddressSelector(STOP_POINT_TYPES.STOP_POINT_DROPOFF)}
         >
           <StreetAddress>
