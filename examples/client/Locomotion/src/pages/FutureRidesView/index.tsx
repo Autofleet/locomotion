@@ -18,6 +18,7 @@ import { BS_PAGES } from '../../context/ridePageStateContext/utils';
 import BlackOverlay from '../../Components/BlackOverlay';
 import GenericErrorPopup from '../../popups/GenericError';
 import { NoRidesInList } from '../RideHistory/RidesList/styled';
+import Mixpanel from '../../services/Mixpanel';
 
 interface FutureRidesViewProps {
   menuSide: 'right' | 'left';
@@ -102,14 +103,16 @@ const FutureRidesView = ({ menuSide }: FutureRidesViewProps) => {
           secondaryButtonText={i18n.t('bottomSheetContent.cancelRide.secondaryButtonTextFuture')}
           onButtonPress={async () => {
             try {
+              Mixpanel.setEvent('Trying to cancel ride');
               await cancelRide(rideToCancel);
               await loadFutureRides();
               changeBsPage(ride.id ? BS_PAGES.ACTIVE_RIDE : BS_PAGES.ADDRESS_SELECTOR);
               if (futureRides.length === 1) {
                 NavigationService.navigate(MAIN_ROUTES.HOME);
               }
-            } catch {
+            } catch (e: any) {
               setShowError(true);
+              Mixpanel.setEvent('failed to cancel ride', { status: e?.response?.status });
             }
           }}
           onSecondaryButtonPress={() => {

@@ -858,7 +858,12 @@ const RidePageContextProvider = ({ children }: {
   };
 
   const updateRide = async (rideId: string | undefined, newRide: RideInterface) => {
-    await rideApi.patchRide(rideId, newRide);
+    try {
+      Mixpanel.setEvent('Trying to update ride', newRide);
+      await rideApi.patchRide(rideId, newRide);
+    } catch (e) {
+      Mixpanel.setEvent('Failed to update ride');
+    }
   };
 
   const trackRide = async () => {

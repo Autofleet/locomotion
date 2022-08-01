@@ -1,5 +1,6 @@
 import React, { useState, useContext } from 'react';
 import { Share } from 'react-native';
+import Mixpanel from '../../../services/Mixpanel';
 import {
   ButtonContainer, HALF_WIDTH,
 } from './styled';
@@ -14,13 +15,18 @@ const ShareButton = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   const onShare = async () => {
-    setIsLoading(true);
-    const trackerUrl = await trackRide();
-    setIsLoading(false);
-    await Share.share({
-      message: trackerUrl,
-      url: trackerUrl,
-    });
+    try {
+      Mixpanel.setEvent('Sharing ride');
+      setIsLoading(true);
+      const trackerUrl = await trackRide();
+      setIsLoading(false);
+      await Share.share({
+        message: trackerUrl,
+        url: trackerUrl,
+      });
+    } catch (e) {
+      Mixpanel.setEvent('failed to share ride');
+    }
   };
 
   return (
