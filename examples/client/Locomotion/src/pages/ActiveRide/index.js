@@ -6,6 +6,7 @@ import {
   AppState, BackHandler, Platform, View,
 } from 'react-native';
 import { Portal } from '@gorhom/portal';
+import * as navigationService from '../../services/navigation';
 import { MAIN_ROUTES } from '../routes';
 import { getPolylineList } from '../../lib/polyline/utils';
 import { FutureRidesContext } from '../../context/futureRides';
@@ -397,13 +398,13 @@ BS_PAGE_TO_COMP[currentBsPage] ? BS_PAGE_TO_COMP[currentBsPage]() : null
         <RideCanceledPopup
           isVisible={ridePopup === RIDE_POPUPS.RIDE_CANCELED_BY_DISPATCHER}
           onCancel={() => {
-            navigation.navigate(MAIN_ROUTES.HOME);
+            navigationService.navigate(MAIN_ROUTES.HOME);
             backToMap();
             setRidePopup(null);
             cleanRideState();
           }}
           onSubmit={() => {
-            navigation.navigate(MAIN_ROUTES.HOME);
+            navigationService.navigate(MAIN_ROUTES.HOME);
             changeBsPage(BS_PAGES.SERVICE_ESTIMATIONS);
             setRidePopup(null);
             const sps = getRequestSpsFromRide();

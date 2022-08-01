@@ -14,11 +14,7 @@ import {
 } from './styled';
 import { PaymentMethodInterface } from '../../context/payments/interface';
 import PaymentContext from '../../context/payments';
-
-type Nav = {
-  navigate: (value: string, object?: any) => void;
-
-}
+import * as navigationService from '../../services/navigation';
 
 const RidePaymentDetails = ({
   rideId,
@@ -33,7 +29,6 @@ const RidePaymentDetails = ({
   state: string
 
 }) => {
-  const navigation = useNavigation<Nav>();
   const [priceCalculation, setPriceCalculation] = useState<PriceCalculation>();
   const [paymentMethod, setPaymentMethod] = useState<PaymentMethodInterface>();
   const {
@@ -81,7 +76,7 @@ const RidePaymentDetails = ({
             )
           ) : null}
 
-          <TouchableOpacity onPress={() => navigation.navigate(MAIN_ROUTES.RIDE_PRICE_BREAKDOWN,
+          <TouchableOpacity onPress={() => navigationService.navigate(MAIN_ROUTES.RIDE_PRICE_BREAKDOWN,
             { rideId, rideHistory })}
           >
             {state !== RIDE_STATES.CANCELED

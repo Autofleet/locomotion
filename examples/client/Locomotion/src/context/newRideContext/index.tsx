@@ -237,7 +237,7 @@ const RidePageContextProvider = ({ children }: {
   };
 
   const onRideCompleted = (rideId: string) => {
-    navigation.navigate(MAIN_ROUTES.POST_RIDE, { rideId });
+    navigationService.navigate(MAIN_ROUTES.POST_RIDE, { rideId });
     setTimeout(() => {
       changeBsPage(BS_PAGES.ADDRESS_SELECTOR);
       cleanRideState();

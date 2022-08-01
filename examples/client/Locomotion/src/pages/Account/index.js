@@ -6,7 +6,7 @@ import cashPaymentMethod from '../../pages/Payments/cashPaymentMethod';
 import Card from '../../Components/InformationCard';
 import PaymentsContext from '../../context/payments';
 import { MAIN_ROUTES } from '../routes';
-
+import * as navigationService from '../../services/navigation';
 import ThumbnailPicker from '../../Components/ThumbnailPicker';
 import {
   AccountHeaderContainer,
@@ -62,7 +62,7 @@ const AccountHeader = () => {
   );
 };
 
-const AccountContent = ({ navigation }) => {
+const AccountContent = () => {
   const [defaultPaymentMethod, setDefaultPaymentMethod] = useState(null);
 
   const { user } = useContext(UserContext);
@@ -82,10 +82,10 @@ const AccountContent = ({ navigation }) => {
 
   const emailIsVerified = user?.isEmailVerified;
   const onEmailPress = () => (emailIsVerified
-    ? navigation.navigate(MAIN_ROUTES.EMAIL, {
+    ? navigationService.navigate(MAIN_ROUTES.EMAIL, {
       editAccount: true,
     })
-    : navigation.navigate(MAIN_ROUTES.EMAIL_CODE, {
+    : navigationService.navigate(MAIN_ROUTES.EMAIL_CODE, {
       editAccount: true,
     }));
 
@@ -95,7 +95,7 @@ const AccountContent = ({ navigation }) => {
         <CardsTitle title={i18n.t('onboarding.accountInformation')} />
         <Card
           title={i18n.t('onboarding.namePlaceholder')}
-          onPress={() => navigation.navigate(MAIN_ROUTES.NAME, {
+          onPress={() => navigationService.navigate(MAIN_ROUTES.NAME, {
             editAccount: true,
           })
           }
@@ -120,7 +120,7 @@ const AccountContent = ({ navigation }) => {
             <CardsTitle title={i18n.t('onboarding.paymentInformation')} />
             <Card
               title={i18n.t('onboarding.paymentMethodPlaceholder')}
-              onPress={() => navigation.navigate(MAIN_ROUTES.PAYMENT, {
+              onPress={() => navigationService.navigate(MAIN_ROUTES.PAYMENT, {
                 back: true,
               })}
             >
@@ -133,7 +133,7 @@ const AccountContent = ({ navigation }) => {
         ) : undefined}
         <LogoutContainer
           onPress={() => {
-            navigation.navigate(MAIN_ROUTES.LOGOUT);
+            navigationService.navigate(MAIN_ROUTES.LOGOUT);
           }}
         >
           <LogoutText>{i18n.t('menu.logout')}</LogoutText>
@@ -156,7 +156,7 @@ export default ({ navigation, menuSide }) => {
     <PageContainer>
       <PageHeader
         title={i18n.t('onboarding.pageTitle')}
-        onIconPress={() => navigation.navigate(MAIN_ROUTES.HOME)}
+        onIconPress={() => navigationService.navigate(MAIN_ROUTES.HOME)}
         iconSide={menuSide}
       />
       <KeyboardAwareScrollView extraScrollHeight={20} enableOnAndroid>
