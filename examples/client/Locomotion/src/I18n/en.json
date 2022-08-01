@@ -11,6 +11,7 @@
         "toolTipEta": "ETA {{minutes}} min",
         "noCharge": "No charge",
         "estimatedFare": "Estimated fare",
+        "estimatedFareMessage": "Some of the fares are estimated and may vary based on ride and other conditions",
         "type": {
             "pickup": "Pickup",
             "dropoff": "Drop off"
