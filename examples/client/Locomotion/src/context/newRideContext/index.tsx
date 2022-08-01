@@ -5,7 +5,6 @@ import Config from 'react-native-config';
 import { useNavigation } from '@react-navigation/native';
 import _ from 'lodash';
 import moment from 'moment';
-import { useBottomSheet } from '@gorhom/bottom-sheet';
 import i18n from '../../I18n';
 import { FutureRidesContext } from '../futureRides';
 import { UserContext } from '../user';
