@@ -480,7 +480,7 @@ export const NoPayment = (props: any) => {
 
   useEffect(() => {
     proceedIfPaymentMethodsAreValid();
-  }, [paymentMethods]);
+  }, [ride.paymentMethodId]);
 
   return (
     <BsPage
