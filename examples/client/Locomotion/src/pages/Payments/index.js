@@ -74,10 +74,10 @@ export default ({ navigation, menuSide }) => {
               PageText={() => <CreditFormText>{i18n.t('payments.newCardDetails')}</CreditFormText>}
               onDone={(paymentMethodId) => {
                 if (route.params && route.params.rideFlow) {
-                  navigation.navigate(MAIN_ROUTES.HOME);
                   updateRidePayload({
                     paymentMethodId,
                   });
+                  navigation.navigate(MAIN_ROUTES.HOME);
                 } else {
                   setShowList(true);
                 }
