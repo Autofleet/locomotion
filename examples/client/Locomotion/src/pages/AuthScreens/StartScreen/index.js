@@ -1,6 +1,5 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { Trans } from 'react-i18next';
-import { useNavigation, useRoute } from '@react-navigation/native';
 import logo from '../../../assets/logo.png';
 import i18n from '../../../I18n';
 import {
@@ -16,27 +15,21 @@ import {
 } from './styles';
 import SafeView from '../../../Components/SafeView';
 import WebView from '../../WebView';
-import Mixpanel from '../../../services/Mixpanel';
 import { MAIN_ROUTES } from '../../routes';
 import { UserContext } from '../../../context/user';
 import { INITIAL_USER_STATE } from '../AuthLoadingScreen';
 import Settings from '../../../context/settings';
 import SETTING_KEYS from '../../../context/settings/keys';
+import * as navigationService from '../../../services/navigation';
 
 const StartScreen = () => {
   const { setUser } = useContext(UserContext);
   const { getSettingByKey } = Settings.useContainer();
-  const navigation = useNavigation();
   const [webViewWindow, setWebViewWindow] = useState(null);
-  const route = useRoute();
   const nextScreen = () => {
     setUser(INITIAL_USER_STATE);
-    navigation.navigate(MAIN_ROUTES.PHONE);
+    navigationService.navigate(MAIN_ROUTES.PHONE);
   };
-
-  useEffect(() => {
-    Mixpanel.pageView(route.name);
-  }, []);
 
   const openTerms = async () => {
     const termsOfUseUrl = await getSettingByKey(SETTING_KEYS.TERMS_OF_USE_URL);

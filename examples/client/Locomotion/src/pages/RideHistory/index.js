@@ -1,6 +1,5 @@
 import moment from 'moment';
 import React, { useContext, useEffect, useState } from 'react';
-import { useNavigation, useRoute } from '@react-navigation/native';
 import { View } from 'react-native';
 import GenericErrorPopup from '../../popups/GenericError';
 import { FILTERS } from './filters';
@@ -16,13 +15,13 @@ import {
   CalendarSvgIcon,
   PageContent,
 } from './styled';
-import Mixpanel from '../../services/Mixpanel';
 import { rideHistoryContext } from '../../context/rideHistory';
 import { PageContainer } from '../styles';
 import {
   DD_MMMM_YYYY, endOfDayTime, startOfDayTime, YYYY_MM_DD,
 } from './consts';
 import RangeDateTimePicker from './RangeDateTimePicker';
+import * as navigationService from '../../services/navigation';
 
 const getCustomFilter = filterId => ({
   [filterId]: {
@@ -33,8 +32,6 @@ const getCustomFilter = filterId => ({
 });
 
 const Page = ({ menuSide }) => {
-  const navigation = useNavigation();
-  const route = useRoute();
   const {
     rides, loadRides, initRides, savedParams,
   } = useContext(rideHistoryContext);
@@ -62,7 +59,6 @@ const Page = ({ menuSide }) => {
   };
 
   useEffect(() => {
-    Mixpanel.pageView(route.name);
     onPageLoaded();
   }, []);
 
@@ -107,7 +103,7 @@ const Page = ({ menuSide }) => {
         )}
         <PageHeader
           title={i18n.t('rideHistory.pageTitle')}
-          onIconPress={() => navigation.navigate(MAIN_ROUTES.HOME)}
+          onIconPress={() => navigationService.navigate(MAIN_ROUTES.HOME)}
           iconSide={menuSide}
           action={(
             <HeaderIconContainer
@@ -144,7 +140,7 @@ const Page = ({ menuSide }) => {
       <GenericErrorPopup
         isVisible={showErrorPopup}
         closePopup={() => {
-          navigation.navigate(MAIN_ROUTES.HOME);
+          navigationService.navigate(MAIN_ROUTES.HOME);
         }}
       />
     </PageContainer>

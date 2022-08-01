@@ -2,7 +2,6 @@ import React, {
   useEffect, useState, useRef, useContext,
 } from 'react';
 import { View } from 'react-native';
-import { useNavigation, useRoute } from '@react-navigation/native';
 import { formatRides, rideHistoryContext } from '../../context/rideHistory';
 import FullPageLoader from '../../Components/FullPageLoader';
 import { getPriceCalculation } from '../../context/futureRides/api';
@@ -16,7 +15,6 @@ import {
   TipsContainer,
   SubmitContainer,
 } from './styled';
-import Mixpanel from '../../services/Mixpanel';
 import { PageContainer } from '../styles';
 import StarRating from './StarRating';
 import Tips from './Tips';
@@ -32,8 +30,6 @@ import { BS_PAGES } from '../../context/ridePageStateContext/utils';
 import * as navigationService from '../../services/navigation';
 
 const PostRidePage = ({ menuSide, route }) => {
-  const navigation = useNavigation();
-  const router = useRoute();
   const { rideId, priceCalculationId } = route?.params;
   const [rating, setRating] = useState(null);
   const [ride, setRide] = useState(null);
@@ -54,10 +50,6 @@ const PostRidePage = ({ menuSide, route }) => {
     rides: pastRides, setRides: setPastRides,
   } = useContext(rideHistoryContext);
   const { getSettingByKey } = settings.useContainer();
-
-  useEffect(() => {
-    Mixpanel.pageView(router.name);
-  }, []);
 
   const onRatingUpdate = (selectedRating) => {
     setRating(selectedRating);
@@ -98,7 +90,7 @@ const PostRidePage = ({ menuSide, route }) => {
       const [formattedRide] = formatRides([ride]);
       const newRidesHistory = pastRides.map(pr => (pr.id === ride.id ? formattedRide : pr));
       setPastRides(newRidesHistory);
-      return navigation.goBack();
+      return navigationService.goBack();
     }
     cleanRideState();
     navigationService.navigate(MAIN_ROUTES.HOME, {}, APP_ROUTES.MAIN_APP);

@@ -1,5 +1,4 @@
 import React, { useEffect, useContext, useState } from 'react';
-import { useRoute } from '@react-navigation/native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { PaymentIcon } from 'react-native-payment-icons';
 import cashPaymentMethod from '../../pages/Payments/cashPaymentMethod';
@@ -143,26 +142,16 @@ const AccountContent = () => {
   );
 };
 
-export default ({ navigation, menuSide }) => {
-  const route = useRoute();
-
-  useEffect(() => {
-    if (route.params) {
-      Mixpanel.pageView(route.name);
-    }
-  }, []);
-
-  return (
-    <PageContainer>
-      <PageHeader
-        title={i18n.t('onboarding.pageTitle')}
-        onIconPress={() => navigationService.navigate(MAIN_ROUTES.HOME)}
-        iconSide={menuSide}
-      />
-      <KeyboardAwareScrollView extraScrollHeight={20} enableOnAndroid>
-        <AccountHeader />
-        <AccountContent navigation={navigation} />
-      </KeyboardAwareScrollView>
-    </PageContainer>
-  );
-};
+export default ({ navigation, menuSide }) => (
+  <PageContainer>
+    <PageHeader
+      title={i18n.t('onboarding.pageTitle')}
+      onIconPress={() => navigationService.navigate(MAIN_ROUTES.HOME)}
+      iconSide={menuSide}
+    />
+    <KeyboardAwareScrollView extraScrollHeight={20} enableOnAndroid>
+      <AccountHeader />
+      <AccountContent navigation={navigation} />
+    </KeyboardAwareScrollView>
+  </PageContainer>
+);
