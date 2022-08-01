@@ -1,11 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import { ScrollView, View } from 'react-native';
+import { ScrollView, TouchableOpacity, View } from 'react-native';
+import TempraryHoldLearnMorePopup from '../../popups/TempraryHoldLearnMore';
 import { MAIN_ROUTES } from '../routes';
 import i18n from '../../I18n';
 import {
   CardsListContainer,
   PaymentMethodsContainer,
   BottomContainer,
+  TemporaryHoldView,
+  TemporaryHoldText,
+  LearnMore,
 } from './styled';
 
 import PaymentMethod from '../../Components/CardRow';
@@ -23,6 +27,7 @@ export default ({
   const [loading, setLoading] = useState(false);
   const [defaultMethod, setDefaultMethod] = useState({ id: null });
   const [showChoosePayment, setShowChoosePayment] = useState(false);
+  const [showLearnMore, setShowLearnMore] = useState(false);
 
   const setDefaultPayment = async () => {
     setLoading(true);
@@ -81,6 +86,14 @@ export default ({
             />
           </BottomContainer>
         ) : undefined}
+        <TemporaryHoldView>
+          <TemporaryHoldText>{i18n.t('a small amount may be temporarily placed on hold when you start your ride ')}</TemporaryHoldText>
+          <TouchableOpacity onPress={() => setShowLearnMore(true)}>
+            <LearnMore>
+              {i18n.t('Learn more').toString()}
+            </LearnMore>
+          </TouchableOpacity>
+        </TemporaryHoldView>
         <ChoosePaymentMethod
           onAddNewMethod={() => {
             setShowChoosePayment(false);
@@ -100,6 +113,10 @@ export default ({
             await usePayments.updatePaymentMethod(payment, { isDefault: true });
             await usePayments.loadCustomer();
           }}
+        />
+        <TempraryHoldLearnMorePopup
+          isVisible={showLearnMore}
+          closePopup={() => setShowLearnMore(false)}
         />
 
       </View>

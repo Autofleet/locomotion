@@ -1,7 +1,7 @@
 import React from 'react';
 import { View } from 'react-native';
 import styled from 'styled-components';
-import { FONT_SIZES } from '../../context/theme';
+import { FONT_SIZES, FONT_WEIGHTS } from '../../context/theme';
 import { Text } from '../Profile/ScreenText/styles';
 import SvgIcon from '../../Components/SvgIcon';
 
@@ -146,4 +146,24 @@ export const PaymentCardContainer = styled.View`
 
 export const BottomContainer = styled.View`
 padding: 20px;
+`;
+
+export const TemporaryHoldView = styled.View`
+padding: 10px;
+background-color: #f8f8f8;
+margin-left: 15px;
+width: 90%;
+`;
+
+export const TemporaryHoldText = styled.Text`
+${FONT_SIZES.MEDIUM};
+${FONT_WEIGHTS.LIGHT}
+`;
+
+export const LearnMore = styled(Text)`
+    ${FONT_SIZES.LARGE};
+    ${FONT_WEIGHTS.BOLD}
+    color: #24aaf2;
+    text-decoration: underline;
+    text-decoration-color: #24aaf2;
 `;
