@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import Button from '../Button';
 
 
 const colors = theme => ({
@@ -18,7 +19,7 @@ export const SubmitButtonText = styled.Text`
   ${({ selected }) => selected && 'font-weight: 700'};
 `;
 
-export const StyledButton = styled.TouchableOpacity`
+export const StyledButton = styled(Button)`
   ${({
     theme,
   }) => `

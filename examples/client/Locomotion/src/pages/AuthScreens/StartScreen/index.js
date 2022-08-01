@@ -78,12 +78,12 @@ const StartScreen = () => {
                   <TermsLink
                     key="OpenTermsButton"
                     onPress={() => openTerms()}
-                    data-test-id="OpenTermsButton"
+                    testID="OpenTermsButton"
                   />,
                   <TermsLink
                     key="OpenPrivacyButton"
                     onPress={() => openPrivacy()}
-                    data-test-id="OpenPrivacyButton"
+                    testID="OpenPrivacyButton"
                   />,
                 ]}
               </Trans>

@@ -48,7 +48,6 @@ import geo, { DEFAULT_COORDS, getPosition } from '../../services/geo';
 import RideCanceledPopup from '../../popups/RideCanceledPopup';
 import SquareSvgButton from '../../Components/SquareSvgButton';
 import targetIcon from '../../assets/target.svg';
-import OneSignal from '../../services/one-signal';
 import settings from '../../context/settings';
 import SETTINGS_KEYS from '../../context/settings/keys';
 import { checkVersionAndForceUpdateIfNeeded } from '../../services/VersionCheck';
@@ -60,7 +59,9 @@ import BlackOverlay from '../../Components/BlackOverlay';
 const BLACK_OVERLAY_SCREENS = [BS_PAGES.CANCEL_RIDE];
 
 const RidePage = ({ mapSettings, navigation }) => {
-  const { locationGranted, setLocationGranted, updatePushToken } = useContext(UserContext);
+  const {
+    locationGranted, setLocationGranted,
+  } = useContext(UserContext);
   const [addressSelectorFocus, setAddressSelectorFocus] = useState(STOP_POINT_TYPES.STOP_POINT_DROPOFF);
   const { getSettingByKey } = settings.useContainer();
   const mapRef = useRef();
@@ -310,11 +311,6 @@ const RidePage = ({ mapSettings, navigation }) => {
       }
     }
   }, [isExpanded]);
-
-  useEffect(() => {
-    OneSignal.init();
-    updatePushToken();
-  }, []);
 
   const MESSAGE_MAP = {
     OUTSTANDING_BALANCE: {

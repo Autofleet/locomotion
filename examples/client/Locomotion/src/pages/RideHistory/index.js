@@ -108,7 +108,7 @@ const Page = ({ menuSide }) => {
           action={(
             <HeaderIconContainer
               onPress={() => setShowRangeDateTimePicker(true)}
-              data-test-id="calendarIcon"
+              testID="calendarIcon"
             >
               <CalendarSvgIcon />
             </HeaderIconContainer>

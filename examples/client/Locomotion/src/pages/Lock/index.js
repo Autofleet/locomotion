@@ -62,7 +62,7 @@ export default () => {
 
       </LockTextContainer>
       <ButtonContainer>
-        <SubmitButton onPress={submit} hollow data-test-id="LoginToDifferentAccountButton">
+        <SubmitButton onPress={submit} hollow testID="LoginToDifferentAccountButton">
           {I18n.t('lock.submitText')}
         </SubmitButton>
       </ButtonContainer>

@@ -94,7 +94,7 @@ const AddressTitle = styled.Text`
 export default ({
   pickup, description, eta, completedAt, openLocationSelect, useBorder, title, selected,
 }) => (
-  <RowContainer pickup={pickup} onPress={openLocationSelect} useBorder={useBorder} paddingStart data-test-id="OpenLocationSelectButton">
+  <RowContainer pickup={pickup} onPress={openLocationSelect} useBorder={useBorder} paddingStart testID="OpenLocationSelectButton">
     <StopPointDotContainer origin={pickup}>
       <StopPointDot origin={pickup} />
       <StopPointDotTimeLine />

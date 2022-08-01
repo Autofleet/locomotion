@@ -22,7 +22,7 @@ const SaveButton = ({
   }, [isLoading]);
 
   return (
-    <NavButton testID="continueButton" data-test-id="OnboardingNextButton" onPress={nextScreen} isLoading={loading} disabled={isInvalid || loading}>
+    <NavButton testID="continueButton" testID="OnboardingNextButton" onPress={nextScreen} isLoading={loading} disabled={isInvalid || loading}>
       <ButtonText>{buttonText || i18n.t('general.next')}</ButtonText>
     </NavButton>
   );

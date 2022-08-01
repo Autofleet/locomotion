@@ -237,10 +237,10 @@ const RidePageContextProvider = ({ children }: {
   };
 
   const onRideCompleted = (rideId: string) => {
+    cleanRideState();
     navigationService.navigate(MAIN_ROUTES.POST_RIDE, { rideId });
     setTimeout(() => {
       changeBsPage(BS_PAGES.ADDRESS_SELECTOR);
-      cleanRideState();
     }, 500);
   };
 
@@ -320,12 +320,14 @@ const RidePageContextProvider = ({ children }: {
     changeBsPage(BS_PAGES.SERVICE_ESTIMATIONS);
     try {
       const formattedStopPoints = formatStopPointsForEstimations(requestStopPoints);
+      Mixpanel.setEvent('Get service estimations');
       const { estimations, services } = await rideApi.createServiceEstimations(formattedStopPoints, ride.scheduledTo);
       const tags = getEstimationTags(estimations);
       const formattedEstimations = formatEstimations(services, estimations, tags);
       setChosenService(formattedEstimations.find((e: any) => e.eta));
       setServiceEstimations(formattedEstimations);
-    } catch (e) {
+    } catch (e: any) {
+      Mixpanel.setEvent('service estimations failed', { status: e?.response?.status });
       if (throwError) {
         setRidePopup(RIDE_POPUPS.FAILED_SERVICE_REQUEST);
       }
@@ -407,6 +409,7 @@ const RidePageContextProvider = ({ children }: {
     const rideLoaded = await rideApi.getRide(rideId);
     const formattedRide = await formatRide(rideLoaded);
     if (ride.state !== rideLoaded.state) {
+      Mixpanel.setEvent('New ride state', { oldState: ride.state, newState: rideLoaded.state });
       const screenFunction = RIDE_STATES_TO_SCREENS[rideLoaded.state];
       if (screenFunction) {
         screenFunction(rideLoaded);
@@ -423,6 +426,7 @@ const RidePageContextProvider = ({ children }: {
         try {
           loadRide(ride.id);
         } catch (e) {
+          console.log(e);
           cleanRideState();
           changeBsPage(BS_PAGES.ADDRESS_SELECTOR);
         }
@@ -727,6 +731,7 @@ const RidePageContextProvider = ({ children }: {
   };
 
   const requestRide = async (pickupLocation?: any): Promise<void> => {
+    Mixpanel.setEvent('Requesting ride');
     let stopPoints = requestStopPoints;
 
     if (pickupLocation) {
@@ -780,6 +785,7 @@ const RidePageContextProvider = ({ children }: {
       }
     } catch (e: any) {
       const key = e.response?.data?.errors[0] || e.message;
+      Mixpanel.setEvent('Ride failed', { status: e?.response?.status, reason: key });
       if (FAILED_TO_CREATE_RIDE_ACTIONS[key]) {
         FAILED_TO_CREATE_RIDE_ACTIONS[key]();
       } else {

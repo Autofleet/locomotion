@@ -25,7 +25,7 @@ const PageHeader = ({
   <Header style={Platform.OS === 'android' ? { shadowColor: '#000' } : {}}>
     {displayIcon !== false
       ? (
-        <HeaderIconContainer side={iconSide} onPress={onIconPress} data-test-id="NavigationPanelButton">
+        <HeaderIconContainer side={iconSide} onPress={onIconPress} testID="NavigationPanelButton">
           <HeaderIcon width={width} height={width} source={icon} side={iconSide} />
         </HeaderIconContainer>
       ) : <View />}

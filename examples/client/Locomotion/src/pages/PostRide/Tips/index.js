@@ -7,6 +7,7 @@ import {
 } from 'react-native';
 import styled from 'styled-components';
 import { useBottomSheet } from '@gorhom/bottom-sheet';
+import Button from '../../../Components/Button';
 import Thumbnail from '../../../Components/Thumbnail';
 import i18n from '../../../I18n';
 import SelectableButton from '../../../Components/SelectableButton';
@@ -91,9 +92,9 @@ export const DriverAvatar = styled(Image)`
 
 const NoTipTextButton = ({ onPress, children }) => (
   <NoCustomTipContainer>
-    <TouchableOpacity onPress={onPress}>
+    <Button testID="resetTip" noBackground onPress={onPress}>
       <NoCustomTipText>{children}</NoCustomTipText>
-    </TouchableOpacity>
+    </Button>
   </NoCustomTipContainer>
 );
 const Tips = ({
@@ -182,14 +183,15 @@ const Tips = ({
           </ThumbnailContainer>
         </DetailsContainer>
         <DetailsContainer style={{ marginTop: 30 }}>
-          {buttons.map(b => (
-            <SelectableButton selected={b === selectedTip} onPress={() => onTipPressed(b)}>
+          {buttons.map((b, i) => (
+            <SelectableButton testID={`tipButton${i}`} selected={b === selectedTip} onPress={() => onTipPressed(b)}>
               {formatCurrency(b)}
             </SelectableButton>
           ))}
         </DetailsContainer>
         <DetailsContainer style={{ marginTop: 5 }}>
           <SelectableButton
+            testID="customTipButton"
             selected={!!customTip}
             onPress={() => bottomSheetRef.current.snapToIndex(0)}
             label={i18n.t('postRide.tip.customTip.title')}

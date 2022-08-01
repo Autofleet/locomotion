@@ -32,7 +32,7 @@ export const FutureOrdersButton = ({
 
   return (
     futureRides && futureRides.length ? (
-      <FutureRidesButton onPress={onClosePress} data-test-id="FutureRidesButton">
+      <FutureRidesButton onPress={onClosePress} testID="FutureRidesButton">
         <FutureRideButtonText>
           {isOpen
             ? i18n.t('home.futureRides.closeButton')
@@ -73,7 +73,7 @@ export default ({
               </SpsContainer>
               <CancelContainer>
                 <RoundedButton
-                  data-test-id="CancelFutureRideButton"
+                  testID="CancelFutureRideButton"
                   hollow
                   height="30px"
                   width="70px"

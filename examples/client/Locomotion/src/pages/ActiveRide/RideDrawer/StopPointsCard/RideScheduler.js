@@ -65,7 +65,7 @@ const SelectionTitle = styled.Text`
 const OrderTimeSelector = ({
   selected, text, onPress, side, disabled,
 }) => (
-  <TimeItem selected={selected} onPress={onPress} side={side} disabled={disabled} data-test-id={`${text}OrderTimeButton`}>
+  <TimeItem selected={selected} onPress={onPress} side={side} disabled={disabled} testID={`${text}OrderTimeButton`}>
     <TextContainer selected={selected}>{text}</TextContainer>
   </TimeItem>
 

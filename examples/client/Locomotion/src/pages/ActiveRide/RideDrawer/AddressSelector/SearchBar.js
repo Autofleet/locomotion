@@ -4,6 +4,7 @@ import React, {
 import { Animated, View } from 'react-native';
 import styled from 'styled-components';
 import { debounce } from 'lodash';
+import Mixpanel from '../../../../services/Mixpanel';
 import BottomSheetInput from '../../../../Components/TextInput/BottomSheetInput';
 import i18n from '../../../../I18n';
 import { RidePageContext } from '../../../../context/newRideContext';
@@ -163,6 +164,7 @@ const SearchBar = ({
           value={description || ''}
           placeholderTextColor={isExpanded ? '#929395' : '#333333'}
           onFocus={(e) => {
+            Mixpanel.setEvent(`${type} address input focused`);
             onInputFocus(e.target, i);
           }}
           key={`input_${s.id}`}
