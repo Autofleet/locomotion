@@ -48,9 +48,14 @@ const AuthLoadingScreen = ({ navigation }) => {
     async function getFromStorage() {
       const clientProfile = await StorageService.get('clientProfile');
       if (clientProfile) {
-        const response = await getUserDetails();
-        if (!response) {
-          Auth.logout(navigation);
+        let response;
+        try {
+          response = await getUserDetails();
+          if (!response) {
+            Auth.logout();
+          }
+        } catch (e) {
+          Auth.logout();
         }
 
         const userData = response;
