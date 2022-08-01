@@ -19,6 +19,8 @@ const ServiceOptions = () => {
     if ((serviceEstimations || []).some(estimation => estimation.isPriceEstimated)) {
       setTopBarText(i18n.t('rideDetails.estimatedFareMessage'));
     }
+
+    return () => setTopBarText('');
   }, [serviceEstimations]);
 
 

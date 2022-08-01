@@ -8,6 +8,7 @@ import { useBottomSheet } from '@gorhom/bottom-sheet';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import moment from 'moment';
 import DatePicker from 'react-native-date-picker';
+import Mixpanel from '../../services/Mixpanel';
 import GenericErrorPopup from '../../popups/GenericError';
 import TextRowWithIcon from '../../Components/TextRowWithIcon';
 import { FutureRidesContext } from '../../context/futureRides';
@@ -333,10 +334,12 @@ export const CancelRide = (props: any) => {
       onButtonPress={async () => {
         try {
           setIsLoading(true);
+          Mixpanel.setEvent('Trying to cancel ride');
           await cancelRide();
-        } catch {
+        } catch (e) {
           setShowError(true);
           setIsLoading(false);
+          Mixpanel.setEvent('failed to cancel ride', { status: e?.response?.status });
         }
       }}
       onSecondaryButtonPress={() => changeBsPage(BS_PAGES.ACTIVE_RIDE)}
