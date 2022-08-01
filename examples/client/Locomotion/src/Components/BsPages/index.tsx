@@ -234,6 +234,7 @@ BsPage.defaultProps = {
 export default BsPage;
 
 export const ConfirmPickupTime = (props: any) => {
+  const theme = useContext(ThemeContext);
   const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
   const {
     unconfirmedPickupTime,
@@ -270,6 +271,7 @@ export const ConfirmPickupTime = (props: any) => {
         {i18n.t('bottomSheetContent.confirmPickupTime.pickupText', { date, time })}
       </RoundedButton>
       <DatePicker
+        textColor={theme.textColor}
         open={isDatePickerOpen}
         date={moment(unconfirmedPickupTime).add(unconfirmedPickupTime ? 0 : 1, 'hours').toDate()}
         maximumDate={getFutureRideMaxDate()}
