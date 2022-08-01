@@ -87,7 +87,7 @@ export default ({
           </BottomContainer>
         ) : undefined}
         <TemporaryHoldView>
-          <TemporaryHoldText>{i18n.t('a small amount may be temporarily placed on hold when you start your ride ')}</TemporaryHoldText>
+          <TemporaryHoldText>{i18n.t('temporaryHoldText')}</TemporaryHoldText>
           <TouchableOpacity onPress={() => setShowLearnMore(true)}>
             <LearnMore>
               {i18n.t('Learn more').toString()}

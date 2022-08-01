@@ -275,11 +275,12 @@
         "logout": "Logout",
         "futureRides": "Upcoming Rides"
     },
+    "temporaryHoldText": "A small amount may be temporarily placed on hold when you start your ride ",
     "temporaryHoldPopup":
     {
         "title": "Temporary hold",
         "buttonText": "Got it",
-        "text": "You may see a small amount on hold when you create a ride. This is to verify there are sufficient funds for your ride. {{appName}} will release the hold after your ride. It may take your bank several days to process."
+        "text": "You may see a  small amount on hold when you create a ride. This is to verify there are sufficient funds for your ride. {{appName}} will release the hold after your ride. It may take your bank several days to process."
     },
     "deleteUserPopup": {
         "deleteUserTitle": "Delete Account",
