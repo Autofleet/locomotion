@@ -65,7 +65,7 @@ const myThumbnail = (props) => {
         noBackground
         onPress={props.onPress}
         style={[styles.croper, borderRadius]}
-        data-test-id="ImagePickerButton"
+        testID="ImagePickerButton"
       >
         {props.showLoader ? (
           <Loader
@@ -85,7 +85,7 @@ const myThumbnail = (props) => {
           noBackground
           onPress={props.onPress}
           style={styles.iconContainer}
-          data-test-id={`${props.mode}ImageButton`}
+          testID={`${props.mode}ImageButton`}
         >
           <SvgIcon Svg={modes[props.mode]} height={48} width={48} fill={primaryColor} />
         </Button>

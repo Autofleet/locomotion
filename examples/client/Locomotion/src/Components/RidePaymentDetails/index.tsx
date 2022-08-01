@@ -1,7 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
 import propsTypes from 'prop-types';
-import { TouchableOpacity } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
 import { CHARGE_FOR_TIP, RIDE_STATES } from '../../lib/commonTypes';
 import { MAIN_ROUTES } from '../../pages/routes';
 import { getFormattedPrice } from '../../context/newRideContext/utils';
@@ -14,11 +12,8 @@ import {
 } from './styled';
 import { PaymentMethodInterface } from '../../context/payments/interface';
 import PaymentContext from '../../context/payments';
-
-type Nav = {
-  navigate: (value: string, object?: any) => void;
-
-}
+import * as navigationService from '../../services/navigation';
+import Button from '../Button';
 
 const RidePaymentDetails = ({
   rideId,
@@ -33,7 +28,6 @@ const RidePaymentDetails = ({
   state: string
 
 }) => {
-  const navigation = useNavigation<Nav>();
   const [priceCalculation, setPriceCalculation] = useState<PriceCalculation>();
   const {
     getRidePriceCalculation,
@@ -70,8 +64,11 @@ const RidePaymentDetails = ({
             )
           ) : null}
 
-          <TouchableOpacity onPress={() => navigation.navigate(MAIN_ROUTES.RIDE_PRICE_BREAKDOWN,
-            { rideId, rideHistory })}
+          <Button
+            testID="viewRidePaymentDetails"
+            noBackground
+            onPress={() => navigationService.navigate(MAIN_ROUTES.RIDE_PRICE_BREAKDOWN,
+              { rideId, rideHistory })}
           >
             {state !== RIDE_STATES.CANCELED
             || (state === RIDE_STATES.CANCELED
@@ -80,7 +77,7 @@ const RidePaymentDetails = ({
                  {i18n.t('ride.viewDetails').toString()}
                </ViewDetails>
               ) : undefined}
-          </TouchableOpacity>
+          </Button>
         </RidePriceDetails>
       </PaymentRow>
     </>

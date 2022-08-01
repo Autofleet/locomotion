@@ -57,14 +57,14 @@ export default ({
               <RoundedButton
                 width="48%"
                 hollow
-                data-test-id="SubmitRideSummaryPopupButton"
+                testID="SubmitRideNotes"
                 onPress={() => onCancel()}
               >
                 {i18n.t('popups.rideNotes.cancel')}
               </RoundedButton>
               <RoundedButton
                 width="48%"
-                data-test-id="SubmitRideSummaryPopupButton2"
+                testID="CancelRideNotes"
                 onPress={() => onSubmit(currentText)}
               >
                 {i18n.t('popups.rideNotes.save')}

@@ -22,6 +22,7 @@ import PaymentMethod from '../../Components/CardRow';
 import PaymentsContext from '../../context/payments';
 import cashPaymentMethod from '../../pages/Payments/cashPaymentMethod';
 import closeXIcon from '../../assets/close-x.svg';
+import * as navigationService from '../../services/navigation';
 
 interface PaymentMethodPopupProps {
   isVisible: boolean;
@@ -31,10 +32,6 @@ interface PaymentMethodPopupProps {
   rideFlow: boolean;
   selected: any;
   onAddNewMethod: () => void;
-}
-
-type Nav = {
-  navigate: (value: string, params?: any) => void;
 }
 
 const PaymentMethodPopup = ({
@@ -61,8 +58,6 @@ const PaymentMethodPopup = ({
 
     updateDefaultPaymentMethod();
   }, [usePayments.paymentMethods, selected]);
-
-  const navigation = useNavigation<Nav>();
 
   const onSave = () => {
     onSubmit(selectedPaymentId);
@@ -95,8 +90,8 @@ const PaymentMethodPopup = ({
               setSelectedPaymentId(selected
                 || (await usePayments.getClientDefaultMethod())?.id);
               rideFlow
-                ? navigation.navigate(MAIN_ROUTES.HOME)
-                : navigation.navigate(MAIN_ROUTES.PAYMENT);
+                ? navigationService.navigate(MAIN_ROUTES.HOME)
+                : navigationService.navigate(MAIN_ROUTES.PAYMENT);
             }}
           >
             <SvgIcon

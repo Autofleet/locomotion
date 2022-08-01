@@ -25,6 +25,7 @@ export interface User {
   pushUserId?: string | null;
   cards?: any;
   isPushEnabled: boolean;
+  didCompleteOnboarding?: boolean;
 }
 
 interface UserContextInterface {
@@ -180,6 +181,13 @@ const UserContextProvider = ({ children }: { children: any }) => {
       return false;
     }
   };
+
+  useEffect(() => {
+    if (user?.id && user?.didCompleteOnboarding) {
+      OneSignal.init();
+      updatePushToken();
+    }
+  }, [user?.id, user?.didCompleteOnboarding]);
 
   const deleteUser = async () => {
     const result = await deleteUserApi();

@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { useRoute } from '@react-navigation/native';
 import { Linking, Platform } from 'react-native';
 import Clipboard from '@react-native-community/clipboard';
 import { ScrollView } from 'react-native-gesture-handler';
@@ -8,7 +7,6 @@ import { MAIN_ROUTES } from '../routes';
 import i18n from '../../I18n';
 import WebView from '../WebView';
 import PageHeader from '../../Components/PageHeader';
-import Mixpanel from '../../services/Mixpanel';
 import { PageContainer } from '../styles';
 import { Container, CardsContainer } from '../Account/styled';
 import Card from '../../Components/InformationCard';
@@ -24,9 +22,9 @@ import {
   ContactUsPageLogoContainer,
   ContactUsPageView, LearnMoreButton, LearnMoreIcon, LearnMoreText,
 } from './styled';
+import * as navigationService from '../../services/navigation';
 
-export default ({ navigation, menuSide }) => {
-  const route = useRoute();
+export default ({ menuSide }) => {
   const useSettings = settingsContext.useContainer();
   const [webViewWindow, setWebViewWindow] = useState(null);
   const [settings, setSettings] = useState({
@@ -46,7 +44,6 @@ export default ({ navigation, menuSide }) => {
     loadSettings();
   }, []);
 
-  useEffect(() => { Mixpanel.pageView(route.name); });
   const openTerms = () => {
     setWebViewWindow({
       uri: settings.termsOfUseUrl,
@@ -77,7 +74,7 @@ export default ({ navigation, menuSide }) => {
             <PageHeader
               showShadow={false}
               title={i18n.t('contactUs.pageTitle')}
-              onIconPress={() => navigation.navigate(MAIN_ROUTES.HOME)}
+              onIconPress={() => navigationService.navigate(MAIN_ROUTES.HOME)}
               iconSide={menuSide}
             />
             <ScrollView>
@@ -114,12 +111,12 @@ export default ({ navigation, menuSide }) => {
                 </CardsContainer>
                 <CardsContainer>
                   <CardsTitle title={i18n.t('contactUs.legalTitle')} />
-                  <NoTitleCard showArrow onPress={() => openPrivacy()}>
+                  <NoTitleCard testID="privacyPolicy" showArrow onPress={() => openPrivacy()}>
                     <Text>
                       {i18n.t('contactUs.privacyPolicy')}
                     </Text>
                   </NoTitleCard>
-                  <NoTitleCard showArrow onPress={() => openTerms()}>
+                  <NoTitleCard testID="termsOfUse" showArrow onPress={() => openTerms()}>
                     <Text>{i18n.t('contactUs.termsOfUse')}</Text>
                   </NoTitleCard>
                 </CardsContainer>

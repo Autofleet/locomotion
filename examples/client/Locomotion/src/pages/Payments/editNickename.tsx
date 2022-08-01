@@ -12,6 +12,7 @@ import Header from '../Profile/Header';
 import ScreenText from '../Profile/ScreenText';
 import SaveButton from '../Profile/SaveButton';
 import { ContentContainer, PageContainer } from '../styles';
+import * as navigationService from '../../services/navigation';
 
 type Params = {
   name: string,
@@ -23,7 +24,7 @@ type Route = {
 }
 
 
-const EditCardName = ({ navigation } : any) => {
+const EditCardName = () => {
   const route : Route = useRoute();
   const usePayments = PaymentsContext.useContainer();
   const [nickname, setNickname] = useState((route.params as Params).name);
@@ -32,7 +33,7 @@ const EditCardName = ({ navigation } : any) => {
   const onComplete = async () => {
     await usePayments.updatePaymentMethod((route.params as Params).id, { name: nickname });
     await usePayments.loadCustomer();
-    navigation.navigate(MAIN_ROUTES.PAYMENT);
+    navigationService.navigate(MAIN_ROUTES.PAYMENT);
   };
 
   return (

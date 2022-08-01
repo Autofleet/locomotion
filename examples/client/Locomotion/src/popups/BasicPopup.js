@@ -31,7 +31,7 @@ export default ({
             <SubTitle>{subTitle}</SubTitle>
             {content || undefined}
           </Content>
-          <FooterButton onPress={closePopup} data-test-id="PopupFooterButton" />
+          <FooterButton onPress={closePopup} testID="PopupFooterButton" />
         </ModalContainer>
       </KeyboardAvoidingView>
     </Modal>

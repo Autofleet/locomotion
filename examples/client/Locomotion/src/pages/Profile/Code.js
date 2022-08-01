@@ -1,7 +1,7 @@
 import React, {
   useCallback, useContext, useEffect, useState,
 } from 'react';
-import { useFocusEffect, useNavigation } from '@react-navigation/native';
+import { useFocusEffect } from '@react-navigation/native';
 import { Text } from 'react-native';
 import PinCode from '../../Components/PinCode';
 import SaveButton from './SaveButton';
@@ -16,6 +16,7 @@ import { MAIN_ROUTES } from '../routes';
 import { UserContext } from '../../context/user';
 import { PageContainer, ContentContainer } from '../styles';
 import useInterval from '../../lib/useInterval';
+import * as navigationService from '../../services/navigation';
 
 const CODE_LENGTH = 4;
 const RESEND_SECONDS = 60;
@@ -23,7 +24,6 @@ const RESEND_SECONDS = 60;
 const Code = () => {
   const { verifyCode } = useContext(OnboardingContext);
   const { user } = useContext(UserContext);
-  const navigation = useNavigation();
   const [showErrorText, setShowErrorText] = useState(false);
   const [loading, setLoading] = useState(false);
   const [timer, setTimer] = useState(RESEND_SECONDS);
@@ -83,7 +83,7 @@ const Code = () => {
               disabled={timer > 0}
               onPress={() => {
                 if (timer === 0) {
-                  navigation.navigate('Phone');
+                  navigationService.navigate('Phone');
                 }
               }}
             >

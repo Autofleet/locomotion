@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react';
-import { useNavigation, useRoute } from '@react-navigation/native';
+import { useRoute } from '@react-navigation/native';
 import PinCode from '../../Components/PinCode';
 import SaveButton from './SaveButton';
 import { OnboardingContext } from '../../context/onboarding';
@@ -13,6 +13,7 @@ import { MAIN_ROUTES } from '../routes';
 import { UserContext } from '../../context/user';
 import { PageContainer, ContentContainer } from '../styles';
 import useInterval from '../../lib/useInterval';
+import * as navigationService from '../../services/navigation';
 
 const CODE_LENGTH = 4;
 const RESEND_SECONDS = 60;
@@ -21,7 +22,6 @@ const Code = () => {
   const route = useRoute();
   const { nextScreen } = useContext(OnboardingContext);
   const { user, onEmailVert, updateUserFromServer } = useContext(UserContext);
-  const navigation = useNavigation();
   const [code, setCode] = useState('');
   const [showErrorText, setShowErrorText] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -45,7 +45,7 @@ const Code = () => {
     }
     await updateUserFromServer();
     if (route.params && route.params.editAccount) {
-      navigation.navigate(MAIN_ROUTES.ACCOUNT, {
+      navigationService.navigate(MAIN_ROUTES.ACCOUNT, {
         editAccount: true,
       });
     } else {
@@ -87,7 +87,7 @@ const Code = () => {
               disabled={timer > 0}
               onPress={() => {
                 if (timer === 0) {
-                  navigation.navigate(MAIN_ROUTES.EMAIL, {
+                  navigationService.navigate(MAIN_ROUTES.EMAIL, {
                     editAccount: route.params && route.params.editAccount,
                     email: user.email,
                   });

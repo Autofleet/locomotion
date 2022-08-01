@@ -1,5 +1,4 @@
 import React, { useEffect, useContext, useState } from 'react';
-import { useRoute } from '@react-navigation/native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { PaymentIcon } from 'react-native-payment-icons';
 import { Platform } from 'react-native';
@@ -8,7 +7,7 @@ import cashPaymentMethod from '../../pages/Payments/cashPaymentMethod';
 import Card from '../../Components/InformationCard';
 import PaymentsContext from '../../context/payments';
 import { MAIN_ROUTES } from '../routes';
-
+import * as navigationService from '../../services/navigation';
 import ThumbnailPicker from '../../Components/ThumbnailPicker';
 import {
   AccountHeaderContainer,
@@ -66,7 +65,7 @@ const AccountHeader = () => {
   );
 };
 
-const AccountContent = ({ navigation }) => {
+const AccountContent = () => {
   const [showError, setShowError] = useState(false);
   const [isDeleteUserVisible, setIsDeleteUserVisible] = useState(false);
   const [defaultPaymentMethod, setDefaultPaymentMethod] = useState(null);
@@ -88,10 +87,10 @@ const AccountContent = ({ navigation }) => {
 
   const emailIsVerified = user?.isEmailVerified;
   const onEmailPress = () => (emailIsVerified
-    ? navigation.navigate(MAIN_ROUTES.EMAIL, {
+    ? navigationService.navigate(MAIN_ROUTES.EMAIL, {
       editAccount: true,
     })
-    : navigation.navigate(MAIN_ROUTES.EMAIL_CODE, {
+    : navigationService.navigate(MAIN_ROUTES.EMAIL_CODE, {
       editAccount: true,
     }));
 
@@ -100,8 +99,9 @@ const AccountContent = ({ navigation }) => {
       <CardsContainer>
         <CardsTitle title={i18n.t('onboarding.accountInformation')} />
         <Card
+          testID="goToName"
           title={i18n.t('onboarding.namePlaceholder')}
-          onPress={() => navigation.navigate(MAIN_ROUTES.NAME, {
+          onPress={() => navigationService.navigate(MAIN_ROUTES.NAME, {
             editAccount: true,
           })
           }
@@ -114,6 +114,7 @@ const AccountContent = ({ navigation }) => {
           {user ? `${user.phoneNumber}` : ''}
         </Card>
         <Card
+          testID="goToEmail"
           verified={emailIsVerified}
           showUnverified
           title={i18n.t('onboarding.emailPlaceholder')}
@@ -125,8 +126,9 @@ const AccountContent = ({ navigation }) => {
           <>
             <CardsTitle title={i18n.t('onboarding.paymentInformation')} />
             <Card
+              testID="goToPaymentMethod"
               title={i18n.t('onboarding.paymentMethodPlaceholder')}
-              onPress={() => navigation.navigate(MAIN_ROUTES.PAYMENT, {
+              onPress={() => navigationService.navigate(MAIN_ROUTES.PAYMENT, {
                 back: true,
               })}
             >
@@ -138,13 +140,15 @@ const AccountContent = ({ navigation }) => {
           </>
         ) : undefined}
         <LogoutContainer
+          testID="logout"
           onPress={() => {
-            navigation.navigate(MAIN_ROUTES.LOGOUT);
+            navigationService.navigate(MAIN_ROUTES.LOGOUT);
           }}
         >
           <LogoutText>{i18n.t('menu.logout')}</LogoutText>
         </LogoutContainer>
         <LogoutContainer
+          testID="deleteAccount"
           onPress={() => {
             setIsDeleteUserVisible(true);
           }}
@@ -162,7 +166,7 @@ const AccountContent = ({ navigation }) => {
           onSubmit={async () => {
             try {
               await deleteUser();
-              navigation.navigate(MAIN_ROUTES.LOGOUT);
+              navigationService.navigate(MAIN_ROUTES.LOGOUT);
             } catch (e) {
               console.log(e);
               setIsDeleteUserVisible(false);
@@ -182,26 +186,16 @@ const AccountContent = ({ navigation }) => {
   );
 };
 
-export default ({ navigation, menuSide }) => {
-  const route = useRoute();
-
-  useEffect(() => {
-    if (route.params) {
-      Mixpanel.pageView(route.name);
-    }
-  }, []);
-
-  return (
-    <PageContainer>
-      <PageHeader
-        title={i18n.t('onboarding.pageTitle')}
-        onIconPress={() => navigation.navigate(MAIN_ROUTES.HOME)}
-        iconSide={menuSide}
-      />
-      <KeyboardAwareScrollView extraScrollHeight={20} enableOnAndroid>
-        <AccountHeader />
-        <AccountContent navigation={navigation} />
-      </KeyboardAwareScrollView>
-    </PageContainer>
-  );
-};
+export default ({ navigation, menuSide }) => (
+  <PageContainer>
+    <PageHeader
+      title={i18n.t('onboarding.pageTitle')}
+      onIconPress={() => navigationService.navigate(MAIN_ROUTES.HOME)}
+      iconSide={menuSide}
+    />
+    <KeyboardAwareScrollView extraScrollHeight={20} enableOnAndroid>
+      <AccountHeader />
+      <AccountContent navigation={navigation} />
+    </KeyboardAwareScrollView>
+  </PageContainer>
+);

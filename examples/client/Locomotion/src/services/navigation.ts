@@ -8,6 +8,8 @@ export const setTopLevelNavigator = (navigatorRef: any) => {
   myNavigator = navigatorRef;
 };
 
+export const getNavigator = () => myNavigator;
+
 export const replace = (routeName: string) => {
   const activeRoute = myNavigator?.getCurrentRoute();
   if (activeRoute?.name === routeName) {
