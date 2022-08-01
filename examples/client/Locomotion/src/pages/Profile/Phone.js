@@ -26,6 +26,11 @@ const Phone = ({ navigation }) => {
     updateState({ phoneNumber });
   };
 
+  const ERROR_RESPONSES = {
+    429: () => setShowErrorText(i18n.t('login.tooManyRequestError')),
+    422: () => setShowErrorText(i18n.t('login.invalidPhoneNumberError')),
+  };
+
   const onSubmitPhoneNumber = async () => {
     try {
       await AppSettings.destroy();
@@ -36,6 +41,10 @@ const Phone = ({ navigation }) => {
       nextScreen(MAIN_ROUTES.PHONE);
     } catch (e) {
       console.log('Bad login with response', e);
+      const status = e && e.response && e.response.status;
+      if (ERROR_RESPONSES[status]) {
+        return ERROR_RESPONSES[status]();
+      }
       setShowErrorText(i18n.t('login.invalidPhoneNumberError'));
     }
   };
@@ -45,6 +54,7 @@ const Phone = ({ navigation }) => {
     const didBlurSubscription = navigation.addListener(
       'focus',
       () => {
+        setShowErrorText(null);
         setRenderId(Math.random());
       },
     );
