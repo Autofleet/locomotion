@@ -23,7 +23,7 @@ interface FutureRidesViewProps {
   menuSide: 'right' | 'left';
 }
 const FutureRidesView = ({ menuSide }: FutureRidesViewProps) => {
-  const [rideToCancel, setRideToCancel] = useState<string | null>(null);
+  const [rideToCancel, setRideToCancel] = useState<string | undefined>(undefined);
   const [showError, setShowError] = useState(false);
   const [services, setServices] = useState<any[]>([]);
   const bottomSheetRef = useRef<bottomSheet>(null);
@@ -33,7 +33,7 @@ const FutureRidesView = ({ menuSide }: FutureRidesViewProps) => {
   const { changeBsPage, currentBsPage } = useContext(RideStateContextContext);
   const { cancelRide, getServices, ride } = useContext(RidePageContext);
   const onPressCancel = (id?: string) => {
-    setRideToCancel(id || null);
+    setRideToCancel(id);
     changeBsPage(BS_PAGES.CANCEL_RIDE);
   };
 
