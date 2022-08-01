@@ -3,7 +3,6 @@ import React, {
 } from 'react';
 import crashlytics from '@react-native-firebase/crashlytics';
 import Config from 'react-native-config';
-import { BooleanLiteralTypeAnnotation } from '@babel/types';
 import { StorageService } from '../../services';
 import {
   getUserDetails, loginVert, sendEmailVerification, updateUser, emailVerify, deleteUser as deleteUserApi,
