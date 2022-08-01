@@ -38,6 +38,7 @@
         "submitVertButton": "Verify",
         "phoneNumberError": "Oops! Seems like something went wrong.",
         "invalidPhoneNumberError": "Phone number is not valid.",
+        "tooManyRequestError": "There have been too many recent attempts to contact this number. Please try again later.",
         "vertError": "Sorry, seems like the verification code is incorrect. Please make sure you've typed it correctly.",
         "resendButton": "Start over",
         "termsWebViewTitle": "Terms and Conditions",
@@ -273,6 +274,12 @@
         "support": "Contact us",
         "logout": "Logout",
         "futureRides": "Upcoming Rides"
+    },
+    "deleteUserPopup": {
+        "deleteUserTitle": "Delete Account",
+        "deleteAccountText": "Are you sure you want to delete your account?",
+        "confirmText": "Yes, delete account",
+        "cancelText": "Go back"
     },
     "contactUs": {
         "pageTitle": "Contact us",

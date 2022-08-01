@@ -109,8 +109,8 @@ const RidePage = ({ mapSettings, navigation }) => {
     resetStateToAddressSelector(selected);
     setTimeout(() => {
       setIsExpanded(true);
+      bottomSheetRef.current.expand();
     }, 100);
-    bottomSheetRef.current.expand();
   };
 
   const backToMap = () => {

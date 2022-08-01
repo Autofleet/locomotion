@@ -10,4 +10,5 @@ export default {
   CONTACT_EMAIL: 'riderApp.contactEmail',
   CONTACT_PHONE: 'riderApp.contactPhone',
   FUTURE_RIDES_ENABLED: 'riderApp.futureRidesEnabled',
+  CASH_ENABLED_IN_APP: 'payment.enableCashInApp',
 };

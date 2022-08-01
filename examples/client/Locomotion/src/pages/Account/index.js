@@ -1,6 +1,8 @@
 import React, { useEffect, useContext, useState } from 'react';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { PaymentIcon } from 'react-native-payment-icons';
+import { Platform } from 'react-native';
+import ConfirmationPopup from '../../popups/ConfirmationPopup';
 import cashPaymentMethod from '../../pages/Payments/cashPaymentMethod';
 import Card from '../../Components/InformationCard';
 import PaymentsContext from '../../context/payments';
@@ -20,6 +22,7 @@ import {
   LogoutText,
   Type,
   PaymentMethodContent,
+  DeleteText,
 } from './styled';
 import i18n from '../../I18n';
 import PageHeader from '../../Components/PageHeader';
@@ -27,6 +30,7 @@ import CardsTitle from '../../Components/CardsTitle';
 import Mixpanel from '../../services/Mixpanel';
 import { PageContainer } from '../styles';
 import { UserContext } from '../../context/user';
+import GenericErrorPopup from '../../popups/GenericError';
 
 const AccountHeader = () => {
   const { updateUserInfo, user } = useContext(UserContext);
@@ -62,9 +66,11 @@ const AccountHeader = () => {
 };
 
 const AccountContent = () => {
+  const [showError, setShowError] = useState(false);
+  const [isDeleteUserVisible, setIsDeleteUserVisible] = useState(false);
   const [defaultPaymentMethod, setDefaultPaymentMethod] = useState(null);
 
-  const { user } = useContext(UserContext);
+  const { user, deleteUser } = useContext(UserContext);
   const usePayments = PaymentsContext.useContainer();
 
 
@@ -137,6 +143,39 @@ const AccountContent = () => {
         >
           <LogoutText>{i18n.t('menu.logout')}</LogoutText>
         </LogoutContainer>
+        <LogoutContainer
+          onPress={() => {
+            setIsDeleteUserVisible(true);
+          }}
+        >
+          <DeleteText>{i18n.t('deleteUserPopup.deleteUserTitle')}</DeleteText>
+        </LogoutContainer>
+        <ConfirmationPopup
+          isVisible={isDeleteUserVisible}
+          title={i18n.t('deleteUserPopup.deleteUserTitle')}
+          text={i18n.t('deleteUserPopup.deleteAccountText')}
+          confirmText={i18n.t('deleteUserPopup.confirmText')}
+          cancelText={i18n.t('deleteUserPopup.cancelText')}
+          type="cancel"
+          useCancelTextButton
+          onSubmit={async () => {
+            try {
+              await deleteUser();
+              navigationService.navigate(MAIN_ROUTES.LOGOUT);
+            } catch (e) {
+              console.log(e);
+              setIsDeleteUserVisible(false);
+              setTimeout(() => setShowError(true), Platform.OS === 'ios' ? 500 : 0);
+            }
+          }}
+          onClose={() => setIsDeleteUserVisible(false)}
+        />
+
+        <GenericErrorPopup
+          isVisible={showError}
+          closePopup={() => setShowError(false)
+        }
+        />
       </CardsContainer>
     </Container>
   );

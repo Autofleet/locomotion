@@ -321,7 +321,8 @@ const RidePageContextProvider = ({ children }: {
     try {
       const formattedStopPoints = formatStopPointsForEstimations(requestStopPoints);
       Mixpanel.setEvent('Get service estimations');
-      const { estimations, services } = await rideApi.createServiceEstimations(formattedStopPoints, ride.scheduledTo);
+      const { estimations, services } = await rideApi
+        .createServiceEstimations(formattedStopPoints, ride.scheduledTo);
       const tags = getEstimationTags(estimations);
       const formattedEstimations = formatEstimations(services, estimations, tags);
       setChosenService(formattedEstimations.find((e: any) => e.eta));
@@ -330,6 +331,7 @@ const RidePageContextProvider = ({ children }: {
       Mixpanel.setEvent('service estimations failed', { status: e?.response?.status });
       if (throwError) {
         setRidePopup(RIDE_POPUPS.FAILED_SERVICE_REQUEST);
+        cleanRideState();
       }
     }
   };
