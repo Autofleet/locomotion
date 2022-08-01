@@ -40,6 +40,7 @@ export const FilterBarContainer = styled.ScrollView.attrs(props => ({
     padding: 8px 0px;
     flex-direction: row;
     background-color: #ffffff00;
+    z-index: 99;
 `;
 
 export const FilterTouchableOpacity = styled(Button)``;
