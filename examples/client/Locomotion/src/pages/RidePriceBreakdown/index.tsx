@@ -36,7 +36,7 @@ const RidePriceBreakDown = () => {
   const params : RidePriceBreakdownParams = route.params as RidePriceBreakdownParams;
   const [loading, setLoading] = useState<boolean>(true);
   const [priceCalculation, setPriceCalculation] = useState<PriceCalculation>();
-  const [paymentMethod, setPaymentMethod] = useState();
+  const [paymentMethod, setPaymentMethod] = useState<PaymentMethodInterface>();
   const [localRide, setLocalRide] = useState<RideInterface>();
   const {
     ride,
