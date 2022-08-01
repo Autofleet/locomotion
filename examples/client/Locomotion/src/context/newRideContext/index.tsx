@@ -725,9 +725,8 @@ const RidePageContextProvider = ({ children }: {
       changeBsPage(BS_PAGES.GENERIC_ERROR);
     },
   };
-  console.log(ride);
+
   const requestRide = async (pickupLocation?: any): Promise<void> => {
-    console.log(ride);
     let stopPoints = requestStopPoints;
 
     if (pickupLocation) {
