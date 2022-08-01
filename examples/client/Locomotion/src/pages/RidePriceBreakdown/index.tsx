@@ -15,7 +15,6 @@ import CardRow from '../../Components/CardRow';
 import { PageContainer } from '../styles';
 import PageHeader from '../../Components/PageHeader';
 import { PriceCalculation, RideInterface, RidePageContext } from '../../context/newRideContext';
-import PaymentContext from '../../context/payments';
 import i18n from '../../I18n';
 import {
   CreditCardRowContainer, PriceItemsContainer, EstimationText, EstimationContainer,
@@ -45,8 +44,6 @@ const RidePriceBreakDown = () => {
     getRideFromApi,
   } = useContext(RidePageContext);
 
-  const usePayments = PaymentContext.useContainer();
-
   const updatePriceCalculation = async () => {
     setLoading(true);
     const calculation = await getRidePriceCalculation(params.rideId);
@@ -61,8 +58,7 @@ const RidePriceBreakDown = () => {
       // @ts-ignore
       const result = await getRideFromApi(params.rideId || ride.id);
       setLocalRide(result);
-      setPaymentMethod(usePayments.paymentMethods
-        .find(({ id }) => id === result.payment.paymentMethod.id));
+      setPaymentMethod(result.payment.paymentMethod);
 
       setLoading(false);
     }

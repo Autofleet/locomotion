@@ -22,12 +22,12 @@ type Nav = {
 
 const RidePaymentDetails = ({
   rideId,
-  paymentMethodId,
+  paymentMethod,
   rideHistory = false,
   state,
 } :{
   rideId: string,
-  paymentMethodId: string,
+  paymentMethod: PaymentMethodInterface,
   rideHistory: boolean
   currency: string,
   state: string
@@ -35,20 +35,13 @@ const RidePaymentDetails = ({
 }) => {
   const navigation = useNavigation<Nav>();
   const [priceCalculation, setPriceCalculation] = useState<PriceCalculation>();
-  const [paymentMethod, setPaymentMethod] = useState<PaymentMethodInterface>();
   const {
     getRidePriceCalculation,
   } = useContext(RidePageContext);
 
-  const usePayments = PaymentContext.useContainer();
   const updatePriceCalculation = async () => {
     const calculation = await getRidePriceCalculation(rideId);
     setPriceCalculation(calculation);
-  };
-
-  const updatePaymentMethod = async () => {
-    const currentPaymentMethod = usePayments.paymentMethods.find(({ id }) => id === paymentMethodId);
-    setPaymentMethod(currentPaymentMethod);
   };
 
   const totalAmount = (priceCalculation?.totalPrice || 0)
@@ -56,10 +49,6 @@ const RidePaymentDetails = ({
 
   useEffect(() => {
     updatePriceCalculation();
-  }, []);
-
-  useEffect(() => {
-    updatePaymentMethod();
   }, []);
 
   return (paymentMethod ? (
