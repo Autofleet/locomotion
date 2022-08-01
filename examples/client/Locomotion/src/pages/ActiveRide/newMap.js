@@ -169,14 +169,7 @@ export default React.forwardRef(({
   }, [currentBsPage]);
 
   useEffect(() => {
-    if (ride.state === RIDE_STATES.DISPATCHED) {
-      const [pickupStopPoint] = ride.stopPoints;
-      focusMapToCoordinates([pickupStopPoint, ride.vehicle.location].map(sp => ({
-        latitude: sp.lat,
-        longitude: sp.lng,
-      })), true, ACTIVE_RIDE_MAP_PADDING);
-    }
-    if (ride.state === RIDE_STATES.ACTIVE) {
+    if ([RIDE_STATES.DISPATCHED, RIDE_STATES.ACTIVE].includes(ride.state)) {
       const currentStopPoint = (ride.stopPoints || []).find(sp => sp.state === STOP_POINT_STATES.PENDING);
       const coords = getPolylineList(currentStopPoint, ride);
       focusMapToCoordinates(coords, true, ACTIVE_RIDE_MAP_PADDING);
