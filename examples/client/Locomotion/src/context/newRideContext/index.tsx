@@ -5,6 +5,7 @@ import Config from 'react-native-config';
 import { useNavigation } from '@react-navigation/native';
 import _ from 'lodash';
 import moment from 'moment';
+import { useBottomSheet } from '@gorhom/bottom-sheet';
 import i18n from '../../I18n';
 import { FutureRidesContext } from '../futureRides';
 import { UserContext } from '../user';
@@ -320,7 +321,8 @@ const RidePageContextProvider = ({ children }: {
     changeBsPage(BS_PAGES.SERVICE_ESTIMATIONS);
     try {
       const formattedStopPoints = formatStopPointsForEstimations(requestStopPoints);
-      const { estimations, services } = await rideApi.createServiceEstimations(formattedStopPoints, ride.scheduledTo);
+      const { estimations, services } = await rideApi
+        .createServiceEstimations(formattedStopPoints, ride.scheduledTo);
       const tags = getEstimationTags(estimations);
       const formattedEstimations = formatEstimations(services, estimations, tags);
       setChosenService(formattedEstimations.find((e: any) => e.eta));
@@ -328,6 +330,7 @@ const RidePageContextProvider = ({ children }: {
     } catch (e) {
       if (throwError) {
         setRidePopup(RIDE_POPUPS.FAILED_SERVICE_REQUEST);
+        cleanRideState();
       }
     }
   };

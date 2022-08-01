@@ -185,8 +185,6 @@ const AddressSelectorBottomSheet = ({ addressSelectorFocus }) => {
         isVisible={userContext.ridePopup === RIDE_POPUPS.FAILED_SERVICE_REQUEST}
         closePopup={() => {
           userContext.setRidePopup(null);
-          setIsExpanded(true);
-          expand();
         }}
       />
     </ContentContainer>
