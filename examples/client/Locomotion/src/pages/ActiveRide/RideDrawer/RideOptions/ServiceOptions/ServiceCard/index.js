@@ -104,7 +104,7 @@ const ServiceCard = ({ service }) => {
             ? (
               <TimeDetails>
                 <Eta>
-                  {moment(service.eta).format('HH:mm')}
+                  {moment(service.eta).format('h:mm A')}
                 </Eta>
                 <Circle />
                 <Eta>
