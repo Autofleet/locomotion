@@ -3,7 +3,7 @@ import Config from 'react-native-config';
 import Mixpanel from 'react-native-mixpanel';
 import { getDeviceId } from './device';
 
-export const getElementName = props => props['data-test-id'] || props.id;
+export const getElementName = props => props.testID || props.id;
 
 class MixpanelService {
   constructor() {

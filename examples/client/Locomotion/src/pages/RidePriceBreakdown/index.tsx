@@ -15,24 +15,19 @@ import CardRow from '../../Components/CardRow';
 import { PageContainer } from '../styles';
 import PageHeader from '../../Components/PageHeader';
 import { PriceCalculation, RideInterface, RidePageContext } from '../../context/newRideContext';
-import PaymentContext from '../../context/payments';
 import i18n from '../../I18n';
 import {
   CreditCardRowContainer, PriceItemsContainer, EstimationText, EstimationContainer,
 } from './styled';
 import { PaymentMethodInterface } from '../../context/payments/interface';
+import * as navigationService from '../../services/navigation';
 
 type RidePriceBreakdownParams = {
   rideId: string,
   rideHistory: boolean
 }
 
-type Nav = {
-  navigate: (value: string, object?: any) => void;
-}
-
 const RidePriceBreakDown = () => {
-  const navigation = useNavigation<Nav>();
   const route = useRoute();
   const params : RidePriceBreakdownParams = route.params as RidePriceBreakdownParams;
   const [loading, setLoading] = useState<boolean>(true);
@@ -44,8 +39,6 @@ const RidePriceBreakDown = () => {
     getRidePriceCalculation,
     getRideFromApi,
   } = useContext(RidePageContext);
-
-  const usePayments = PaymentContext.useContainer();
 
   const updatePriceCalculation = async () => {
     setLoading(true);
@@ -61,8 +54,7 @@ const RidePriceBreakDown = () => {
       // @ts-ignore
       const result = await getRideFromApi(params.rideId || ride.id);
       setLocalRide(result);
-      setPaymentMethod(usePayments.paymentMethods
-        .find(({ id }) => id === result.payment.paymentMethod.id));
+      setPaymentMethod(result.payment.paymentMethod);
 
       setLoading(false);
     }
@@ -101,7 +93,7 @@ const RidePriceBreakDown = () => {
       <PageHeader
         title={i18n.t('ridePriceBreakdown.pageTitle')}
         onIconPress={
-          () => navigation.navigate(params.rideHistory
+          () => navigationService.navigate(params.rideHistory
             ? MAIN_ROUTES.COMPLETED_RIDE_OVERVIEW_PAGE
             : MAIN_ROUTES.HOME)}
       />

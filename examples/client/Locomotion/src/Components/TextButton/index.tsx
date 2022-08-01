@@ -8,18 +8,19 @@ export const Container = styled(Button)`
 `;
 
 export const ButtonText = styled(Text)`
-color: ${LINK_BLUE_COLOR}
-${FONT_SIZES.H3}
-${FONT_WEIGHTS.REGULAR}
+color: ${LINK_BLUE_COLOR};
+${FONT_SIZES.H3};
+${FONT_WEIGHTS.REGULAR};
 `;
 
 interface Props {
     onPress: () => void;
     text: string;
+    testID: string;
 }
 
-const TextButton = ({ onPress, text }: Props) => (
-  <Container noBackground onPress={onPress}>
+const TextButton = ({ onPress, text, testID }: Props) => (
+  <Container testID={testID} noBackground onPress={onPress}>
     <ButtonText>
       {text}
     </ButtonText>

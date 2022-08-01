@@ -21,7 +21,9 @@ margin-bottom: 2%;
 justify-content: space-between;
 `;
 
-export const ButtonContainer = styled(TouchableOpacity)`
+export const ButtonContainer = styled(Button).attrs({
+  noBackground: true,
+})`
     flex-direction: row;
     border: 1px solid #f1f2f6;
     border-radius: 8px;

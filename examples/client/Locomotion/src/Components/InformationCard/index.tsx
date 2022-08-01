@@ -1,7 +1,8 @@
 import React from 'react';
 import propsTypes from 'prop-types';
-import { TouchableOpacity, View } from 'react-native';
+import { View } from 'react-native';
 import Card from './Card';
+import Button from '../Button';
 
 
 export type InformationCardProps = {
@@ -11,7 +12,8 @@ export type InformationCardProps = {
   verified?: boolean,
   showUnverified?: boolean,
   icon?: any,
-  onIconPress?: () => void
+  onIconPress?: () => void,
+  testID?: string
 }
 
 const InformationCard = ({
@@ -26,7 +28,7 @@ const InformationCard = ({
 }: InformationCardProps) => (
   onPress
     ? (
-      <TouchableOpacity onPress={onPress} {...props} style={{ flex: 1 }}>
+      <Button onPress={onPress} {...props} style={{ flex: 1 }}>
         { children
           ? (
             <Card
@@ -49,7 +51,7 @@ const InformationCard = ({
               onIconPress={onIconPress}
             />
           )}
-      </TouchableOpacity>
+      </Button>
     )
     : (
       <View>
@@ -89,6 +91,7 @@ InformationCard.defaultProps = {
   showUnverified: false,
   icon: undefined,
   onIconPress: undefined,
+  testID: '',
 };
 
 InformationCard.propTypes = {

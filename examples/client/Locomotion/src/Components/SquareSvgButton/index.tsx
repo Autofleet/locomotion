@@ -14,7 +14,7 @@ const SquareSvgButton = ({
   <ButtonContainer
     noLoader={noLoader}
     onPress={onPress}
-    data-test-id="headerButton"
+    testID="headerButton"
     style={style}
   >
     <SvgIcon

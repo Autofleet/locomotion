@@ -24,6 +24,7 @@ import PaymentsContext from '../../context/payments';
 import deleteIcon from '../../assets/delete.svg';
 import { DeleteContainer, DeleteIcon, DeleteText } from './styled';
 import { PageContainer } from '../../pages/styles';
+import * as navigationService from '../../services/navigation';
 
 type CardDetailsRouteParams = {
   paymentMethod: PaymentMethodInterface
@@ -32,7 +33,6 @@ type CardDetailsRouteParams = {
 
 const CardDetails = ({
   loadingState = false,
-  navigation = { navigate: (route: string, object?: any | undefined) => null },
 }) => {
   const [loading, setLoading] = useState(false);
   const [showError, setShowError] = useState(false);
@@ -53,7 +53,7 @@ const CardDetails = ({
       await usePayments.loadCustomer();
       setLoading(false);
       setIsCancelPopupVisible(false);
-      navigation.navigate(MAIN_ROUTES.PAYMENT);
+      navigationService.navigate(MAIN_ROUTES.PAYMENT);
     } catch (e) {
       setIsCancelPopupVisible(false);
       setTimeout(() => setShowError(true), Platform.OS === 'ios' ? 500 : 0);
@@ -83,7 +83,7 @@ const CardDetails = ({
       <KeyboardAwareScrollView extraScrollHeight={20} enableOnAndroid>
         <PageHeader
           title={i18n.t('payments.cardDetails.title')}
-          onIconPress={() => navigation.navigate(MAIN_ROUTES.PAYMENT)}
+          onIconPress={() => navigationService.navigate(MAIN_ROUTES.PAYMENT)}
         />
         <>
           <Container>
@@ -121,6 +121,7 @@ const CardDetails = ({
               ) : undefined}
 
               <DeletePaymentContainer
+                testID="deletePaymentMethod"
                 disabled={paymentMethod?.hasOutstandingBalance}
                 onPress={async () => {
                   await onRemoveMethod(paymentMethod?.id);

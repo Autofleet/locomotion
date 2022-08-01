@@ -5,7 +5,7 @@ import crashlytics from '@react-native-firebase/crashlytics';
 import Config from 'react-native-config';
 import { authService, StorageService } from '../../services';
 import {
-  getUserDetails, loginVert, sendEmailVerification, updateUser, emailVerify,
+  getUserDetails, loginVert, sendEmailVerification, updateUser, emailVerify, deleteUser as deleteUserApi,
 } from './api';
 import auth from '../../services/auth';
 import Mixpanel from '../../services/Mixpanel';
@@ -25,6 +25,7 @@ export interface User {
   pushUserId?: string | null;
   cards?: any;
   isPushEnabled: boolean;
+  didCompleteOnboarding?: boolean;
 }
 
 interface UserContextInterface {
@@ -42,6 +43,7 @@ interface UserContextInterface {
   locationGranted: boolean | undefined,
   setLocationGranted: Dispatch<SetStateAction<any>>,
   updatePushToken: () => Promise<boolean | null>,
+  deleteUser: () => Promise<boolean>
 }
 
 export const UserContext = createContext<UserContextInterface>({
@@ -59,6 +61,7 @@ export const UserContext = createContext<UserContextInterface>({
   locationGranted: false,
   setLocationGranted: () => undefined,
   updatePushToken: async () => false,
+  deleteUser: async () => true,
 });
 
 const UserContextProvider = ({ children }: { children: any }) => {
@@ -184,6 +187,18 @@ const UserContextProvider = ({ children }: { children: any }) => {
     }
   };
 
+  useEffect(() => {
+    if (user?.id && user?.didCompleteOnboarding) {
+      OneSignal.init();
+      updatePushToken();
+    }
+  }, [user?.id, user?.didCompleteOnboarding]);
+
+  const deleteUser = async () => {
+    const result = await deleteUserApi();
+    return result;
+  };
+
   return (
     <UserContext.Provider
       value={{
@@ -201,6 +216,7 @@ const UserContextProvider = ({ children }: { children: any }) => {
         locationGranted,
         setLocationGranted,
         updatePushToken,
+        deleteUser,
       }}
     >
       {children}

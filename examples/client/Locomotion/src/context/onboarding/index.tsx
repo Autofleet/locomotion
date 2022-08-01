@@ -64,7 +64,7 @@ const OnboardingContextProvider = ({ children }: { children: any }) => {
     [MAIN_ROUTES.CARD]: false,
   });
 
-  const navigateToScreen = (screen: string) => navigation.navigate(screen);
+  const navigateToScreen = (screen: string) => navigationService.navigate(screen);
 
   const shouldShowCardPage = async () => {
     const cardPageSettings = await getSettingByKey(

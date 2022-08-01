@@ -18,7 +18,7 @@ const DisplayButton = styled(Button)`
 
 export default styled(({ displayButton, onPress }) => (
   displayButton ? (
-    <DisplayButton onPress={onPress} data-test-id="MyLocationButton">
+    <DisplayButton onPress={onPress} testID="MyLocationButton">
       <Sight source={icon} resizeMode="contain" />
     </DisplayButton>
   ) : null

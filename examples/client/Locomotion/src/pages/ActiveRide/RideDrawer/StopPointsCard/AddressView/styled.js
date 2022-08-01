@@ -128,7 +128,7 @@ export const AddressSearchItemTouchableOpacity = styled(Button)`
 `;
 
 export const AddressSearchItem = styled(({ onPress, ...props }) => (
-  <AddressSearchItemTouchableOpacity onPress={onPress} data-test-id="AddressSearchItemButton">
+  <AddressSearchItemTouchableOpacity onPress={onPress} testID="AddressSearchItemButton">
     <View {...props} />
   </AddressSearchItemTouchableOpacity>
 ))`

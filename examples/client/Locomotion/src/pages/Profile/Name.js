@@ -16,6 +16,7 @@ import ScreenText from './ScreenText';
 import { MAIN_ROUTES } from '../routes';
 import { UserContext } from '../../context/user';
 import { PageContainer, ContentContainer } from '../styles';
+import * as navigationService from '../../services/navigation';
 
 const MAX_LENGTH = 40;
 
@@ -32,7 +33,7 @@ const nameSchema = yup.object().shape({
     .required(),
 });
 
-const Name = ({ navigation }) => {
+const Name = () => {
   const route = useRoute();
   const { nextScreen } = useContext(OnboardingContext);
   const secondTextInput = useRef(null);
@@ -53,7 +54,7 @@ const Name = ({ navigation }) => {
       });
       await updateUserInfo(sanitizedNames);
       if (route.params && route.params.editAccount) {
-        navigation.navigate(MAIN_ROUTES.ACCOUNT);
+        navigationService.navigate(MAIN_ROUTES.ACCOUNT);
       } else {
         nextScreen(MAIN_ROUTES.NAME);
       }

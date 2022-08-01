@@ -4,6 +4,7 @@ import { TouchableOpacity } from 'react-native';
 import {
   ArrowContainer, CardContainer, CardText, Arrow,
 } from '../InformationCard/styled';
+import Button from '../Button';
 
 type NoTitleCardProps = {
     onPress: () => void | undefined,
@@ -14,12 +15,12 @@ type NoTitleCardProps = {
 const NoTitleCard = ({
   onPress, children, showArrow, ...props
 } : NoTitleCardProps) => (
-  <TouchableOpacity onPress={onPress} {...props}>
+  <Button noBackground onPress={onPress} {...props}>
     <CardContainer>
       <CardText style={{ marginVertical: 10 }}>{children}</CardText>
       <ArrowContainer>{showArrow ? <Arrow /> : undefined}</ArrowContainer>
     </CardContainer>
-  </TouchableOpacity>
+  </Button>
 );
 
 NoTitleCard.defaultProps = {

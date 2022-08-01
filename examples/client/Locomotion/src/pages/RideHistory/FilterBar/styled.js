@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import Button from '../../../Components/Button';
 import { isAndroid } from '../../../services/isAndroid';
 
 export const FilterView = styled.View`
@@ -41,4 +42,4 @@ export const FilterBarContainer = styled.ScrollView.attrs(props => ({
     background-color: #ffffff00;
 `;
 
-export const FilterTouchableOpacity = styled.TouchableOpacity``;
+export const FilterTouchableOpacity = styled(Button)``;

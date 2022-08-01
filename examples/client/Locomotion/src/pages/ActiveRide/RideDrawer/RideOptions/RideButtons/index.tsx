@@ -66,7 +66,7 @@ const RideButtons = ({
       setIsDatePickerOpen(false);
     };
     return (
-      <ButtonContainer onPress={() => setIsDatePickerOpen(true)}>
+      <ButtonContainer testID="RideTimeSelector" onPress={() => setIsDatePickerOpen(true)}>
         <FutureBookingButton />
         <DatePicker
           open={isDatePickerOpen}
@@ -91,6 +91,7 @@ const RideButtons = ({
     const rideHasNotes = ride?.notes;
     return (
       <ButtonContainer
+        testID="RideNotes"
         onPress={() => {
           setPopupName('notes');
         }}
@@ -115,6 +116,7 @@ const RideButtons = ({
 
     return (
       <ButtonContainer
+        testID="RidePayment"
         onPress={() => {
           setPopupName('payment');
         }}
@@ -145,7 +147,7 @@ const RideButtons = ({
         </>
       </RowContainer>
       <StyledButton
-        data-test-id="selectService"
+        testID="selectService"
         disabled={!chosenService || !!getClientOutstandingBalanceCard()}
         onPress={() => {
           changeBsPage(BS_PAGES.CONFIRM_PICKUP);

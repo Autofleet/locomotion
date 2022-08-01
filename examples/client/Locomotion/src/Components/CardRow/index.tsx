@@ -1,10 +1,12 @@
 /* eslint-disable no-nested-ternary */
 /* eslint-disable no-mixed-operators */
 import React, { useEffect, useState } from 'react';
-import { TouchableOpacity, View, Text } from 'react-native';
+import { View, Text } from 'react-native';
 import moment from 'moment';
 import styled from 'styled-components';
 import { PaymentIcon } from 'react-native-payment-icons';
+import { PaymentMethodInterface } from 'context/payments/interface';
+import Button from '../Button';
 import { capitalizeFirstLetter, getLastFourForamttedShort } from '../../pages/Payments/cardDetailUtils';
 import cashPaymentMethod from '../../pages/Payments/cashPaymentMethod';
 import i18n from '../../I18n';
@@ -100,7 +102,9 @@ const CardRow = (paymentMethod: any) => {
     }, 100);
   }, [paymentMethod]);
   return (
-    <TouchableOpacity
+    <Button
+      noBackground
+      testID={paymentMethod.addNew ? 'AddPaymentMethod' : 'ChoosePaymentMethod'}
       activeOpacity={paymentMethod.onPress ? 0 : 1}
       onPress={() => {
         if (paymentMethod.onPress) {
@@ -160,7 +164,7 @@ const CardRow = (paymentMethod: any) => {
                   {paymentMethod.lastFour
                     ? <Description>{getLastFourForamttedShort(paymentMethod.lastFour)}</Description>
                     : null}
-                  {paymentMethod && !isCashPaymentMethod(paymentMethod) && isCardExpired ? <Error>{i18n.t('payments.expired').toString()}</Error> : null}
+                  {paymentMethod && paymentMethod.expiresAt && !isCashPaymentMethod(paymentMethod) && isCardExpired ? <Error>{i18n.t('payments.expired').toString()}</Error> : null}
                   {paymentMethod && !isCashPaymentMethod(paymentMethod) && paymentMethod.hasOutstandingBalance ? <Error>{i18n.t('payments.hasOutstandingBalance').toString()}</Error> : null}
                 </>
               )}
@@ -168,7 +172,7 @@ const CardRow = (paymentMethod: any) => {
           {paymentMethod.showArrow && <SvgIcon Svg={chevronIcon} stroke="#d7d7d7" />}
         </InnerContainer>
       </Container>
-    </TouchableOpacity>
+    </Button>
   );
 };
 
