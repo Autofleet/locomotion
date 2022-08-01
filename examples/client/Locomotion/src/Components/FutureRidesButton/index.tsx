@@ -17,7 +17,7 @@ const FutureRidesButton = () => {
 
 
   return (
-    <Container onPress={() => NavigationService.navigate(MAIN_ROUTES.FUTURE_RIDES)}>
+    <Container noLoader onPress={() => NavigationService.navigate(MAIN_ROUTES.FUTURE_RIDES)}>
       <SvgIcon
         Svg={calendarIcon}
         height={12}

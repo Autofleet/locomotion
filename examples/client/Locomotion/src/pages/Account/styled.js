@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import Button from '../../Components/Button';
 import ArrowIconSource from '../../assets/arrowright.png';
-import { FONT_SIZES, FONT_WEIGHTS } from '../../context/theme';
+import { ERROR_COLOR, FONT_SIZES, FONT_WEIGHTS } from '../../context/theme';
 
 export const ErrorText = styled.Text`
   color: #cc0d28;
@@ -50,9 +50,9 @@ export const LogoutText = styled.Text`
 
 export const DeleteText = styled.Text`
   ${FONT_SIZES.LARGE}
-  color: red;
+  color: ${ERROR_COLOR};
   text-decoration: underline;
-  text-decoration-color: red;
+  text-decoration-color: ${ERROR_COLOR};
 `;
 
 export const VerifyContainer = styled.View`

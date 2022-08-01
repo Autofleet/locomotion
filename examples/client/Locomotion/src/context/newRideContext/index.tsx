@@ -320,7 +320,8 @@ const RidePageContextProvider = ({ children }: {
     changeBsPage(BS_PAGES.SERVICE_ESTIMATIONS);
     try {
       const formattedStopPoints = formatStopPointsForEstimations(requestStopPoints);
-      const { estimations, services } = await rideApi.createServiceEstimations(formattedStopPoints, ride.scheduledTo);
+      const { estimations, services } = await rideApi
+        .createServiceEstimations(formattedStopPoints, ride.scheduledTo);
       const tags = getEstimationTags(estimations);
       const formattedEstimations = formatEstimations(services, estimations, tags);
       setChosenService(formattedEstimations.find((e: any) => e.eta));
@@ -328,6 +329,7 @@ const RidePageContextProvider = ({ children }: {
     } catch (e) {
       if (throwError) {
         setRidePopup(RIDE_POPUPS.FAILED_SERVICE_REQUEST);
+        cleanRideState();
       }
     }
   };
