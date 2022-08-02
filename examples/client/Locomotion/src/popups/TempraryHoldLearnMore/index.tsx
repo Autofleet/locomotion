@@ -25,7 +25,6 @@ const TempraryHoldLearnMorePopup = ({
       <TextContainer>
         <SubTitle>
           {i18n.t('temporaryHoldPopup.text', { appName: Config.OPERATION_NAME })}
-
         </SubTitle>
       </TextContainer>
       <CloseButton onPress={closePopup}>
