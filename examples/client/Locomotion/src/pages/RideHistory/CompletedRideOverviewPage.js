@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react';
-import { useNavigation, useRoute, useFocusEffect } from '@react-navigation/native';
+import { useRoute, useFocusEffect } from '@react-navigation/native';
 import { MAIN_ROUTES } from '../routes';
 import i18n from '../../I18n';
 import PageHeader from '../../Components/PageHeader';
@@ -12,18 +12,17 @@ import { PageContainer } from '../styles';
 import RideView from './RideCard';
 import useBackHandler from '../../lib/useBackHandler';
 import { formatRides } from '../../context/rideHistory';
+import * as navigationService from '../../services/navigation';
 
 const Page = ({ menuSide }) => {
   const { getRideFromApi } = useContext(RidePageContext);
-
-  const navigation = useNavigation();
   const route = useRoute();
   const [ride, setRide] = useState();
 
   const { rideId } = (route.params || {});
 
   useBackHandler(() => {
-    navigation.navigate(MAIN_ROUTES.RIDE_HISTORY);
+    navigationService.navigate(MAIN_ROUTES.RIDE_HISTORY);
     return true;
   });
 
@@ -36,7 +35,6 @@ const Page = ({ menuSide }) => {
   useFocusEffect(
     React.useCallback(() => {
       getRideInfo();
-      Mixpanel.pageView(route.name);
     }, [rideId]),
   );
 
@@ -45,7 +43,7 @@ const Page = ({ menuSide }) => {
       <PageContent>
         <PageHeader
           title={i18n.t('rideHistory.tripPageTitle')}
-          onIconPress={() => navigation.navigate(MAIN_ROUTES.RIDE_HISTORY)}
+          onIconPress={() => navigationService.navigate(MAIN_ROUTES.RIDE_HISTORY)}
           iconSide={menuSide}
         />
         {ride ? (

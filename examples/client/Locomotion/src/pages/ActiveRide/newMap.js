@@ -1,11 +1,11 @@
 import React, {
   useContext, useEffect, useState,
 } from 'react';
-import polyline from '@mapbox/polyline';
 import { StyleSheet } from 'react-native';
 import MapView, { Polygon, Polyline } from 'react-native-maps';
 import Config from 'react-native-config';
 import moment from 'moment';
+import { lineString, nearestPointOnLine, point } from '@turf/turf';
 import { FutureRidesContext } from '../../context/futureRides';
 import { RidePageContext } from '../../context/newRideContext';
 import { RideStateContextContext } from '../../context';
@@ -17,17 +17,24 @@ import { AvailabilityContext } from '../../context/availability';
 import AvailabilityVehicle from '../../Components/AvailabilityVehicle';
 import StationsMap from '../../Components/Marker';
 import { BS_PAGES } from '../../context/ridePageStateContext/utils';
-import { STOP_POINT_STATES } from '../../lib/commonTypes';
+import { RIDE_STATES, STOP_POINT_STATES } from '../../lib/commonTypes';
 import PrecedingStopPointMarker from '../../Components/PrecedingStopPointMarker';
-import { getSubLineStringAfterLocationFromDecodedPolyline } from '../../lib/polyline/utils';
+import { getPolylineList } from '../../lib/polyline/utils';
 import { BottomSheetContext } from '../../context/bottomSheetContext';
 import i18n from '../../I18n';
 
-const MAP_EDGE_PADDING = {
+export const MAP_EDGE_PADDING = {
   top: 140,
   right: 100,
   bottom: 400,
   left: 100,
+};
+
+export const ACTIVE_RIDE_MAP_PADDING = {
+  top: 50,
+  right: 70,
+  bottom: 300,
+  left: 40,
 };
 
 const PAGES_TO_SHOW_SP_MARKERS = [
@@ -46,7 +53,6 @@ const PAGES_TO_SHOW_MY_LOCATION = [
   BS_PAGES.ADDRESS_SELECTOR,
   BS_PAGES.SERVICE_ESTIMATIONS,
   BS_PAGES.NOT_IN_TERRITORY,
-  BS_PAGES.ACTIVE_RIDE,
   BS_PAGES.CANCEL_RIDE,
   BS_PAGES.CONFIRM_FUTURE_RIDE,
   BS_PAGES.SET_LOCATION_ON_MAP,
@@ -85,6 +91,8 @@ export default React.forwardRef(({
     newFutureRide,
   } = useContext(FutureRidesContext);
   const [mapRegion, setMapRegion] = useState({
+    latitude: DEFAULT_COORDS.coords.latitude,
+    longitude: DEFAULT_COORDS.coords.longitude,
     latitudeDelta: 0.015,
     longitudeDelta: 0.015,
   });
@@ -136,7 +144,7 @@ export default React.forwardRef(({
           longitude: pickupStopPoint.lng,
           latitudeDelta: 0.001,
           longitudeDelta: 0.001,
-        }, 1000);
+        }, 1);
       }
     }
     if (currentBsPage === BS_PAGES.CONFIRM_FUTURE_RIDE) {
@@ -145,7 +153,28 @@ export default React.forwardRef(({
         longitude: sp.lng,
       })), false, MAP_EDGE_PADDING);
     }
+    if (currentBsPage === BS_PAGES.SET_LOCATION_ON_MAP) {
+      const focusCurrentLocation = async () => {
+        const location = await getPosition();
+        const { coords } = (location || DEFAULT_COORDS);
+        ref.current.animateToRegion({
+          latitude: coords.latitude,
+          longitude: coords.longitude,
+          latitudeDelta: 0.015,
+          longitudeDelta: 0.015,
+        }, 1);
+      };
+      focusCurrentLocation();
+    }
   }, [currentBsPage]);
+
+  useEffect(() => {
+    if ([RIDE_STATES.DISPATCHED, RIDE_STATES.ACTIVE].includes(ride.state)) {
+      const currentStopPoint = (ride.stopPoints || []).find(sp => sp.state === STOP_POINT_STATES.PENDING);
+      const coords = getPolylineList(currentStopPoint, ride);
+      focusMapToCoordinates(coords, true, ACTIVE_RIDE_MAP_PADDING);
+    }
+  }, [ride.state]);
 
   const showInputPointsOnMap = () => {
     const coordsToFit = requestStopPoints
@@ -173,10 +202,7 @@ export default React.forwardRef(({
   const precedingStopPoints = (currentStopPoint || {}).precedingStops || [];
 
   const polylineList = stopPoints && currentStopPoint
-     && currentStopPoint.polyline && getSubLineStringAfterLocationFromDecodedPolyline(
-    polyline.decode(currentStopPoint.polyline),
-    { latitude: ride.vehicle.location.lat, longitude: ride.vehicle.location.lng },
-  ).map(p => ({ latitude: p[0], longitude: p[1] }));
+     && currentStopPoint.polyline && getPolylineList(currentStopPoint, ride);
 
   const finalStopPoints = stopPoints || requestStopPoints;
   const firstSpNotCompleted = (stopPoints
@@ -209,6 +235,22 @@ export default React.forwardRef(({
     return stopPoint.streetAddress || stopPoint.description;
   };
 
+  const getVehicleLocation = (location, vehiclePolyline) => {
+    if (!vehiclePolyline) {
+      return location;
+    }
+
+    const formattedPolyline = lineString(vehiclePolyline.map(p => ([p.longitude, p.latitude])));
+    const vehiclePoint = point([location.lng, location.lat]);
+
+    const { geometry } = nearestPointOnLine(formattedPolyline, vehiclePoint);
+    return {
+      lat: geometry.coordinates[1],
+      lng: geometry.coordinates[0],
+      bearing: location.bearing,
+    };
+  };
+
   return (
     <>
       <MapView
@@ -236,11 +278,12 @@ export default React.forwardRef(({
         ref={ref}
         userInterfaceStyle={isDarkMode ? THEME_MOD.DARK : undefined}
         customMapStyle={isDarkMode ? mapDarkMode : undefined}
+        initialRegion={mapRegion}
         {...mapSettings}
       >
         {ride.vehicle && ride.vehicle.location && (
           <AvailabilityVehicle
-            location={ride.vehicle.location}
+            location={getVehicleLocation(ride.vehicle.location, finalStopPoints && polylineList)}
             id={ride.vehicle.id}
             key={ride.vehicle.id}
           />

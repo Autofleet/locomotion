@@ -2,6 +2,7 @@ import React, {
   useContext, useEffect, useState,
 } from 'react';
 import { Portal } from '@gorhom/portal';
+import { MAIN_ROUTES } from '../../../routes';
 import i18n from '../../../../I18n';
 import { RIDE_POPUPS } from '../../../../context/newRideContext/utils';
 import RideButtons from './RideButtons';
@@ -15,7 +16,7 @@ import payments from '../../../../context/payments';
 import { PaymentMethodInterface } from '../../../../context/payments/interface';
 import { RideStateContextContext } from '../../../../context/ridePageStateContext';
 import { BS_PAGES } from '../../../../context/ridePageStateContext/utils';
-
+import * as navigationService from '../../../../services/navigation';
 
 const RideOptions = () => {
   const usePayments = payments.useContainer();
@@ -46,23 +47,6 @@ const RideOptions = () => {
     setPopupToShow(null);
   };
 
-
-  useEffect(() => {
-    const updateClient = async () => {
-      await usePayments.loadCustomer();
-    };
-
-    updateClient();
-  }, []);
-
-  const loadCustomerData = async () => {
-    await usePayments.getOrFetchCustomer();
-  };
-
-  useEffect(() => {
-    loadCustomerData();
-  }, []);
-
   useEffect(() => {
     const updateDefaultPaymentMethod = async () => {
       const paymentMethod: PaymentMethodInterface |
@@ -74,9 +58,11 @@ const RideOptions = () => {
         setDefaultPaymentMethod(paymentMethod);
       }
     };
-
-    updateDefaultPaymentMethod();
+    if (!ride.paymentMethodId) {
+      updateDefaultPaymentMethod();
+    }
   }, [usePayments.paymentMethods]);
+
 
   useEffect(() => {
     setFooterComponent(() => (
@@ -98,14 +84,7 @@ const RideOptions = () => {
       stopRequestInterval();
     }
   }, [ridePopup]);
-  // logic for showing top banner for estimated fare
-  // useEffect(() => {
-  //   if (ride.scheduledTo) {
-  //     setTopBarText(i18n.t('home.futureRides.rideFareEstimationNotice'));
-  //   }
 
-  //   return () => setTopBarText('');
-  // }, [ride]);
   return (
     <>
       <ServiceOptions />
@@ -125,8 +104,14 @@ const RideOptions = () => {
         />
 
         <ChoosePaymentMethod
-          selected={ride?.paymentMethodId?.length
-          && usePayments.paymentMethods.includes(ride?.paymentMethodId as never)
+          onAddNewMethod={() => {
+            clearPopup();
+            setTimeout(() => {
+              navigationService.navigate(MAIN_ROUTES.PAYMENT, { showAdd: true, rideFlow: true });
+            }, 500);
+          }}
+          selected={ride?.paymentMethodId
+            && usePayments.paymentMethods.find((pm: any) => ride.paymentMethodId === pm.id)
             ? ride.paymentMethodId : defaultPaymentMethod?.id}
           rideFlow
           isVisible={popupToShow === 'payment'}

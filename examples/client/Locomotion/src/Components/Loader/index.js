@@ -12,7 +12,10 @@ const LoadingWrapper = styled.View`
 `;
 
 const Loader = ({
-  inSlider = false, dark, lottieViewStyle, sourceProp,
+  inSlider = false,
+  dark = false,
+  lottieViewStyle,
+  sourceProp,
 }) => {
   const Wrapper = inSlider ? View : LoadingWrapper;
   let source;
@@ -25,7 +28,7 @@ const Loader = ({
   return (
     <Wrapper>
       <LottieView
-        style={lottieViewStyle || undefined}
+        style={lottieViewStyle}
         ref={(animation) => {
           if (animation) {
             animation.play();

@@ -1,5 +1,5 @@
 import {
-  Image, Text, View, TouchableOpacity,
+  Image, Text, View, TouchableOpacity, Platform,
 } from 'react-native';
 import styled from 'styled-components';
 import { FONT_SIZES, FONT_WEIGHTS } from '../../../context/theme';
@@ -24,7 +24,12 @@ export const VehiclePlateContainer = styled(View)`
     position: absolute;
     background-color: white;
     top: 45px;
-    box-shadow: 0px 5px 5px rgba(0,0,0,0.05);
+    ${Platform.OS === 'android' ? `
+    elevation: 4;
+    shadow-color: rgba(0,0,0,0.5);`
+    : 'box-shadow: 0px 5px 5px rgba(0,0,0,0.05);'}
+    
+    
     border-radius: 4px;
     width: 100%;
     align-self: center;
@@ -98,4 +103,8 @@ export const ButtonContainer = styled(TouchableOpacity)`
     width: ${HALF_WIDTH};
     padding: 0 15px;
     opacity: ${props => (props.disabled ? 0.5 : 1)};
+`;
+
+export const Container = styled(View)`
+    padding: 0 10px;
 `;

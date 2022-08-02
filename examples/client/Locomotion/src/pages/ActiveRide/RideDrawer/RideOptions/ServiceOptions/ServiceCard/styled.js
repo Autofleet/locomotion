@@ -40,7 +40,7 @@ export const Row = styled.View`
 display: flex;
 flex-direction: row;
 justify-content: space-between;
-align-items: center;
+align-items: flex-start;
 width: 100%;
 `;
 
@@ -64,6 +64,7 @@ align-items: center;
 
 export const Eta = styled.Text`
 opacity: .5;
+${FONT_SIZES.LARGE}
 `;
 
 export const Capacity = styled.View`
@@ -88,4 +89,15 @@ export const Description = styled.Text`
 opacity: .5;
 ${FONT_SIZES.MEDIUM};
 ${FONT_WEIGHTS.REGULAR};
+width: 90%;
+`;
+
+export const EstimatedText = styled.Text`
+color: #707070;
+${FONT_SIZES.MEDIUM};
+${FONT_WEIGHTS.REGULAR};
+`;
+
+export const PriceContainer = styled.View`
+flex-direction: column;
 `;

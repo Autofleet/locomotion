@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import moment from 'moment';
 import { Share } from 'react-native';
 import RidePaymentDetails from '../../RidePaymentDetails';
@@ -9,7 +9,7 @@ import {
   TopContainer, VehicleDetails, VehicleImage, VehiclePlateText, VehiclePlateContainer,
   DriverCardContainer, StopPointTextContainer, StopPointText, StopPointsTimeContainer,
   StopPointTimeText, PulseContainer, StopPointsVerticalViewContainer,
-  ButtonsContainer, RowContainer, ButtonContainer,
+  ButtonsContainer, RowContainer, ButtonContainer, Container,
 } from './styled';
 import { STOP_POINT_STATES } from '../../../lib/commonTypes';
 import i18n from '../../../I18n';
@@ -30,7 +30,7 @@ import ShareButton from './share';
 const DEFAULT_VEHICLE_IMAGE = 'https://res.cloudinary.com/autofleet/image/upload/w_700,h_500,c_thumb,q_auto/vehicle-images/Minivan/minivan_blue.png';
 
 const ActiveRideContent = () => {
-  const { ride, trackRide, updateRide } = useContext(RidePageContext);
+  const { ride, loadRide, updateRide } = useContext(RidePageContext);
   const { changeBsPage, setGenericErrorPopup } = useContext(RideStateContextContext);
   const [popupToShow, setPopupToShow] = useState<string | null>(null);
 
@@ -73,29 +73,25 @@ const ActiveRideContent = () => {
   };
 
   const renderCancelRide = () => (
-    <ButtonContainer
-      disabled={!ride.cancelable}
-      testID="cancelRideButton"
-      onPress={() => {
-        if (ride.cancelable) {
-          changeBsPage(BS_PAGES.CANCEL_RIDE);
-        }
-      }}
-    >
-      <GenericRideButton
-        icon={cancel}
-        title={i18n.t('bottomSheetContent.ride.cancelRide')}
-      />
-    </ButtonContainer>
-  );
+    ride.cancelable
+      ? (
+        <ButtonContainer
+          testID="cancelRideButton"
+          onPress={() => {
+            if (ride.cancelable) {
+              changeBsPage(BS_PAGES.CANCEL_RIDE);
+            }
+          }}
+        >
+          <GenericRideButton
+            icon={cancel}
+            title={i18n.t('bottomSheetContent.ride.cancelRide')}
+          />
+        </ButtonContainer>
+      )
+      : null
 
-  const onShare = async () => {
-    const trackerUrl = await trackRide();
-    await Share.share({
-      message: trackerUrl,
-      url: trackerUrl,
-    });
-  };
+  );
 
   const renderShareRide = () => (
     <ShareButton />
@@ -109,10 +105,11 @@ const ActiveRideContent = () => {
     <>
       {ride
       && (
-        <>
+        <Container>
           <TopContainer>
             <DriverCardContainer>
               <DriverCard
+                noPaddingLeft={false}
                 activeRide
                 ride={ride}
               />
@@ -128,12 +125,16 @@ const ActiveRideContent = () => {
             <StopPointText>
               {getTextBasedOnStopPoints()}
             </StopPointText>
-            <StopPointsTimeContainer>
-              <PulseContainer>
-                <Loader dark={false} sourceProp={pulse} lottieViewStyle={{ width: 24, height: 24 }} />
-              </PulseContainer>
-              <StopPointTimeText>{getMinDifferent()}</StopPointTimeText>
-            </StopPointsTimeContainer>
+            {firstSpNotCompleted?.state === STOP_POINT_STATES.PENDING
+              ? (
+                <StopPointsTimeContainer>
+                  <PulseContainer>
+                    <Loader dark={false} sourceProp={pulse} lottieViewStyle={{ width: 24, height: 24 }} />
+                  </PulseContainer>
+                  <StopPointTimeText>{getMinDifferent()}</StopPointTimeText>
+                </StopPointsTimeContainer>
+              )
+              : null}
           </StopPointTextContainer>
           <ButtonsContainer>
             <RowContainer>
@@ -153,9 +154,10 @@ const ActiveRideContent = () => {
             ride={ride}
           />
           <RidePaymentDetails
-            payment={ride.payment}
-            priceAmount={ride.priceAmount}
-            priceCurrency={ride.priceCurrency}
+            rideId={ride.id || ''}
+            paymentMethod={ride.payment?.paymentMethod}
+            state={ride.state}
+            currency={ride.priceCurrency}
           />
           <ServiceTypeDetails
             serviceType={ride.serviceType}
@@ -163,20 +165,21 @@ const ActiveRideContent = () => {
           <RideNotes
             notes={firstSpNotCompleted?.notes}
             isVisible={popupToShow === 'notes'}
-            onSubmit={(text: string) => {
-              updateRide(ride.id, {
+            onSubmit={async (text: string) => {
+              await updateRide(ride.id, {
                 stopPoints: [{
                   id: firstSpNotCompleted.id,
                   notes: text,
                 }],
               });
+              await loadRide(ride.id || '');
               clearPopup();
             }}
             onCancel={() => {
               clearPopup();
             }}
           />
-        </>
+        </Container>
       )}
     </>
   );

@@ -10,6 +10,8 @@
         "timeUntilArrival": "In {{minutes}} min",
         "toolTipEta": "ETA {{minutes}} min",
         "noCharge": "No charge",
+        "estimatedFare": "Estimated fare",
+        "estimatedFareMessage": "Some of the fares are estimated and may vary based on ride and other conditions",
         "type": {
             "pickup": "Pickup",
             "dropoff": "Drop off"
@@ -29,6 +31,7 @@
         "login": "Log In",
         "noAccountError": "No account exists with that number.",
         "accountAlreadyExistsError": "An account already exists with that number.",
+        "clientIsBanned": "There's an issue with your account. Please contact {{ appName }} for further assistance.",
         "onBoardingPageTitle": "Please add your name and upload a photo to continue.",
         "phoneNumberPlaceholder": "Phone number",
         "loginPageInstructions": "Enter your phone number.",
@@ -37,9 +40,9 @@
         "submitVertButton": "Verify",
         "phoneNumberError": "Oops! Seems like something went wrong.",
         "invalidPhoneNumberError": "Phone number is not valid.",
+        "tooManyRequestError": "There have been too many recent attempts to contact this number. Please try again later.",
         "vertError": "Sorry, seems like the verification code is incorrect. Please make sure you've typed it correctly.",
         "resendButton": "Start over",
-        "introText": "Please enter your phone number to signup for Locomotion. You will receive an SMS with a verification code.",
         "termsWebViewTitle": "Terms and Conditions",
         "privacyWebViewTitle": "Data Protection Guidelines",
         "termsAgreement": "By proceeding you agree to the <0>Terms of use</0> and <1>Privacy Policy</1>"
@@ -57,14 +60,16 @@
                 "text": "Please enter code",
                 "subText": "A code has been sent to {{phoneNumber}}.",
                 "resendCodeText": "Didn't receive an SMS? ",
-                "resendCodeButton": "Resend"
+                "resendCodeButton": "Resend",
+                "resendCodeTextSeconds": " in {{seconds}} seconds"
             },
             "emailCode": {
                 "title": "Verification",
                 "text": "Please enter code",
                 "subText": "Please enter the 4-digit code below into the app to validate your email address.",
                 "resendCodeText": "Didn't receive an email? ",
-                "resendCodeButton": "Resend"
+                "resendCodeButton": "Resend",
+                "resendCodeTextSeconds": " in {{seconds}} seconds"
             },
             "name": {
                 "title": "Personal Details",
@@ -186,7 +191,7 @@
     "lock": {
         "header": "Your signup has been recorded",
         "text": "We have received your registration and will review it as soon as possible",
-        "subText": "You will immediately receive a notification when your registration is completed and you are ready to use Locomotion",
+        "subText": "You will immediately receive a notification when your registration is completed and you are ready to use {{ appName }}",
         "submitText": " Login to different account"
     },
     "addressView": {
@@ -196,9 +201,12 @@
         "dropoffTitle": "Exit",
         "addressPlaceholder": "Enter Address",
         "whereTo": "Enter your destination",
-        "currentLocation": "Enter address",
+        "currentLocation": "Current location",
+        "enterAddress": "Enter address",
         "setLocationOnMap": "Set location on map",
-        "welcomeText": "Hey {{ name }}, where to?"
+        "welcomeText": "Hey {{ name }}, where to?",
+        "noHistoryHeader": "Take a ride!",
+        "noHistoryText": "You'll see your recent locations here"
     },
     "popups": {
         "rideCanceled": {
@@ -208,7 +216,7 @@
             "closeButtonText": "Go back to map"
         },
         "genericError": {
-            "title": "Error",
+            "title": "Something went wrong",
             "text": "Something went wrong. Please try again and contact support if the issue isn't solved",
             "buttonText": "OK"
         },
@@ -266,7 +274,22 @@
         "paymentsSettings": "Payment",
         "account": "User Profile",
         "support": "Contact us",
-        "logout": "Logout"
+        "logout": "Logout",
+        "futureRides": "Upcoming Rides"
+    },
+    "temporaryHoldText": "A small amount may be temporarily placed on hold when you start your ride ",
+    "learnMore": "Learn more",
+    "temporaryHoldPopup":
+    {
+        "title": "Temporary hold",
+        "buttonText": "Got it",
+        "text": "You may see a  small amount on hold when you create a ride. This is to verify there are sufficient funds for your ride. {{appName}} will release the hold after your ride. It may take your bank several days to process."
+    },
+    "deleteUserPopup": {
+        "deleteUserTitle": "Delete Account",
+        "deleteAccountText": "Are you sure you want to delete your account?",
+        "confirmText": "Yes, delete account",
+        "cancelText": "Go back"
     },
     "contactUs": {
         "pageTitle": "Contact us",
@@ -275,6 +298,21 @@
         "privacyPolicy": "Privacy Policy",
         "termsOfUse": "Terms of use",
         "contactInformationTitle": "Contact information"
+    },
+    "ridePriceBreakdown": {
+        "estimatedText": "The fares below are estimates and will be updated once the ride is completed based on the actual ride conditions",
+        "pageTitle": "Payment breakdown",
+        "priceItem": "{{ name }} ",
+        "perUnit": " - {{ price }} per {{ unit }} ",
+        "paymentBreakdownTitle": "Payment Breakdown",
+        "priceFieldNames": { 
+            "surgePrice": "Surge price",
+            "discount": "Discount",
+            "cancelationFee": "Cancelation fee",
+            "tip": "Tip",
+            "total": "Total"
+        },
+        "paymentMethodTitle": "Payment Method"
     },
     "rideHistory": {
         "pageTitle": "Rides History",
@@ -316,12 +354,14 @@
       }
     },
     "futureRides": {
-        "pageTitle": "Upcoming rides"
+        "pageTitle": "Upcoming rides",
+        "noRidesTitle": "No upcoming rides",
+        "noRidesText": "Create a scheduled ride and see it here!"
     },
     "postRide": {
         "pageTitle": "Ride finished",
         "ratingHeadline": "How was your ride?",
-        "submit": "Rate & Tip",
+        "submit": "Done",
         "submitForPast": "Done",
         "notRated": "Ride not rated",
         "tip": {
@@ -344,19 +384,20 @@
         "defaultMethodTitle": "Default payment method",
         "otherMethodsTitle": "Other payment methods",
         "cardDetails": {
-            "cardsTitle": "Credit Card information",
+            "cardsTitle": "Credit card information",
             "title": "Payment method details",
-            "nickname": "Card Nickname",
-            "number": "Card Number",
+            "nickname": "Card nickname",
+            "number": "Card number",
             "balance": "Balance",
             "deleteText": "Delete payment method",
-            "outstandingBalanceText": "Outstanding balance of"
+            "outstandingBalanceText": "Outstanding balance of",
+            "expiryDate": "Expiry date"
         },
         "changeDefault": "Change",
         "select": "Select",
         "pageTitle": "Payments Method",
         "submitCard": "Add card",
-        "addNewCreditCard": "Add New Credit Card",
+        "addNewCreditCard": "Add new credit card",
         "expired": "expired",
         "hasOutstandingBalance": "Outstanding Balance",
         "skipForNow": "Skip for now",
@@ -383,10 +424,35 @@
     "subName": "Rider app"
   },
   "bottomSheetContent": {
+    "futureRideLimitOnAsap": {
+        "titleText": "Upcoming scheduled ride",
+        "buttonText": "Back to order",
+        "subTitleText": "Hey, you have an upcoming scheduled ride. To create a ride now, cancel your scheduled ride and try again."
+    },
     "futureRideLimit": {
         "titleText": "Scheduled ride limit reached",
         "buttonText": "Back to order",
         "subTitleText": "Hey, looks like you're trying to schedule multiple rides that are too close together. Please select another time and try again."
+    },
+    "outstandingBalance": {
+        "titleText": "Outstanding balance",
+        "buttonText": "Contact support",
+        "subTitleText": "The selected payment method has an outstanding balance. Please clear the balance so you can keep using {{operationName}}"
+    },
+    "cashNotAllowed": {
+        "titleText": "Choose another payment method",
+        "buttonText": "Back to order",
+        "subTitleText": "You’ve selected to pay with cash but this isn’t permitted. Please choose another payment method."
+    },
+    "paymentMethodExpired": {
+        "titleText": "Payment method expired",
+        "buttonText": "Back to order",
+        "subTitleText": "The selected payment method has expired. Please choose another payment method."
+    },
+    "paymentIntentError": {
+        "titleText": "There’s a payment issue",
+        "buttonText": "Back to order",
+        "subTitleText": "There’s an issue with this payment method. Please select another payment method to proceed."
     },
     "confirmFutureRide": {
         "titleText": "Your upcoming ride has been scheduled",
@@ -432,7 +498,7 @@
     "notAvailableHere": {
       "titleText": "We are Sorry!",
       "buttonText": "Choose another address",
-      "subTitleText": "Autofleet is not available in your area"
+      "subTitleText": "{{ appName }} is not available in your area"
     },
     "noPayment": {
         "titleText": "No payment set",
@@ -484,11 +550,12 @@
         "pending": "Meeting at pickup point"
     },
     "dropoff": {
-        "arrived": "Dropoff ETA",
+        "arrived": "Arrived to dropoff",
         "pending": "Dropoff ETA"
     },
     "topMessage": {
-        "outstandBalanceCreditCard": "You can't order rides at the moment. There is an outstanding payment on {{ name }}. Please contact support to clear this balance."
+        "outstandBalanceCreditCard": "You can't order rides at the moment. There is an outstanding payment on {{ name }}. Please contact support to clear this balance.",
+        "precedingStops": "Your driver is completing a stop nearby"
     }
   },
   "min": "{{ min }} min",

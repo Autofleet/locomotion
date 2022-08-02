@@ -13,6 +13,7 @@ import {
   ServiceDetails, TimeDetails,
   Title, Description,
   CarContainer, TitleContainer,
+  EstimatedText, PriceContainer,
 } from './styled';
 import Tag from '../../../../../../Components/Tag';
 import { RidePageContext } from '../../../../../../context/newRideContext';
@@ -54,7 +55,7 @@ const ServiceCard = ({ service }) => {
   };
 
   const getDescription = forFutureRidesView => (
-    <Description style={{ ...(forFutureRidesView && { width: '80%' }) }} numberOfLines={2}>
+    <Description style={{ ...(forFutureRidesView && { width: '60%' }) }} numberOfLines={2}>
       {service.description}
     </Description>
   );
@@ -95,6 +96,7 @@ const ServiceCard = ({ service }) => {
           <Price>
             {service.price !== undefined ? serviceDisplayPrice : unavailableText}
           </Price>
+
         </Row>
         {!unavailable && (
         <Row>
@@ -102,7 +104,7 @@ const ServiceCard = ({ service }) => {
             ? (
               <TimeDetails>
                 <Eta>
-                  {moment(service.eta).format('HH:mm')}
+                  {moment(service.eta).format('h:mm A')}
                 </Eta>
                 <Circle />
                 <Eta>
@@ -111,17 +113,33 @@ const ServiceCard = ({ service }) => {
               </TimeDetails>
             )
             : getDescription(isFutureRide)}
-          <Capacity>
-            <AvailableSeats>
-              {service.availableSeats}
-            </AvailableSeats>
-            <SvgIcon Svg={Seat} width={15} height={15} />
-          </Capacity>
+
+          {service.isPriceEstimated ? (
+            <EstimatedText>
+              {i18n.t('rideDetails.estimatedFare')}
+            </EstimatedText>
+          ) : (
+            <Capacity>
+              <AvailableSeats>
+                {service.availableSeats}
+              </AvailableSeats>
+              <SvgIcon Svg={Seat} width={15} height={15} />
+            </Capacity>
+          )}
+
         </Row>
         )}
         {service.description && !isFutureRide && (
         <Row>
           {getDescription()}
+          {service.isPriceEstimated ? (
+            <Capacity>
+              <AvailableSeats>
+                {service.availableSeats}
+              </AvailableSeats>
+              <SvgIcon Svg={Seat} width={15} height={15} />
+            </Capacity>
+          ) : null}
         </Row>
         )}
       </ServiceDetails>

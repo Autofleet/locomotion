@@ -7,7 +7,8 @@ import {
   BottomSheetScrollView,
 } from '@gorhom/bottom-sheet';
 
-import styled from 'styled-components';
+import styled, { ThemeContext } from 'styled-components';
+import SvgIcon from '../../../../Components/SvgIcon';
 import { RIDE_POPUPS } from '../../../../context/newRideContext/utils';
 import GenericErrorPopup from '../../../../popups/GenericError';
 import i18n from '../../../../I18n';
@@ -19,6 +20,34 @@ import { BS_PAGES } from '../../../../context/ridePageStateContext/utils';
 import { RideStateContextContext } from '../../../../context/ridePageStateContext';
 import { UserContext } from '../../../../context/user';
 import { FONT_SIZES, FONT_WEIGHTS } from '../../../../context/theme';
+import noHistoryIcon from '../../../../assets/bottomSheet/better_eta.svg';
+
+const NoHistoryTextContainer = styled.View`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  opacity: .5;
+  margin-top: 15px;
+  justify-content: space-around;
+`;
+
+const InfoText = styled.Text`
+  ${FONT_SIZES.H2}
+  ${FONT_WEIGHTS.REGULAR}
+  text-align: center;
+  width: 60%;
+`;
+const NoHistoryText = () => {
+  const { primaryColor } = useContext(ThemeContext);
+  return (
+    <NoHistoryTextContainer>
+      <SvgIcon Svg={noHistoryIcon} height={100} width={100} fill={primaryColor} />
+      <InfoText>
+        {i18n.t('addressView.noHistoryText')}
+      </InfoText>
+    </NoHistoryTextContainer>
+  );
+};
 
 const HistoryContainer = styled.View`
   margin-bottom: 10px;
@@ -84,6 +113,25 @@ const AddressSelectorBottomSheet = ({ addressSelectorFocus }) => {
     changeBsPage(BS_PAGES.SET_LOCATION_ON_MAP);
     collapse();
   };
+
+  const getHistoryRows = () => {
+    if (userContext.historyResults.length) {
+      return userContext.historyResults.map((h, i) => (
+        <AddressRow
+          testID={`searchResults_${i}`}
+          {...h}
+          isHistory
+          key={h.placeId}
+          onPress={() => {
+            userContext.onAddressSelected(h, false, 1);
+          }}
+        />
+      ));
+    }
+    return (
+      <NoHistoryText />
+    );
+  };
   return (
     <ContentContainer>
       {!isExpanded ? (
@@ -130,25 +178,13 @@ const AddressSelectorBottomSheet = ({ addressSelectorFocus }) => {
               </BottomSheetScrollView>
             </>
           )
-          : (userContext.historyResults.map((h, i) => (
-            <AddressRow
-              testID={`searchResults_${i}`}
-              {...h}
-              isHistory
-              key={h.placeId}
-              onPress={() => {
-                userContext.onAddressSelected(h, false, 1);
-              }}
-            />
-          )))
+          : getHistoryRows()
           }
       </HistoryContainer>
       <GenericErrorPopup
         isVisible={userContext.ridePopup === RIDE_POPUPS.FAILED_SERVICE_REQUEST}
         closePopup={() => {
           userContext.setRidePopup(null);
-          setIsExpanded(true);
-          expand();
         }}
       />
     </ContentContainer>

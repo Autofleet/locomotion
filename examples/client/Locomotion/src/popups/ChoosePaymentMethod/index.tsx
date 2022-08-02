@@ -22,6 +22,7 @@ import PaymentMethod from '../../Components/CardRow';
 import PaymentsContext from '../../context/payments';
 import cashPaymentMethod from '../../pages/Payments/cashPaymentMethod';
 import closeXIcon from '../../assets/close-x.svg';
+import * as navigationService from '../../services/navigation';
 
 interface PaymentMethodPopupProps {
   isVisible: boolean;
@@ -30,39 +31,36 @@ interface PaymentMethodPopupProps {
   showCash: boolean;
   rideFlow: boolean;
   selected: any;
-}
-
-type Nav = {
-  navigate: (value: string, params?: any) => void;
+  onAddNewMethod: () => void;
 }
 
 const PaymentMethodPopup = ({
-  isVisible, onCancel, onSubmit, showCash, rideFlow, selected,
+  isVisible, onCancel, onSubmit, showCash, rideFlow, selected, onAddNewMethod,
 }: PaymentMethodPopupProps) => {
   const usePayments = PaymentsContext.useContainer();
-  const [paymentId, setPaymentId] = useState<string | undefined>(undefined);
   const [selectedPaymentId, setSelectedPaymentId] = useState<string | undefined>(selected);
 
   useEffect(() => {
     usePayments.getOrFetchCustomer();
   }, []);
 
+
   useEffect(() => {
     const updateDefaultPaymentMethod = async () => {
-      const paymentMethod = await usePayments.getClientDefaultMethod();
-      setSelectedPaymentId(selected
-      || paymentMethod?.id);
-      setPaymentId(paymentMethod?.id);
+      if (selected) {
+        setSelectedPaymentId(selected);
+      } else {
+        const paymentMethod = await usePayments.getClientDefaultMethod();
+        setSelectedPaymentId(paymentMethod?.id);
+      }
     };
 
 
     updateDefaultPaymentMethod();
-  }, [usePayments.paymentMethods]);
-
-  const navigation = useNavigation<Nav>();
+  }, [usePayments.paymentMethods, selected]);
 
   const onSave = () => {
-    onSubmit(paymentId);
+    onSubmit(selectedPaymentId);
     onCancel();
   };
 
@@ -92,8 +90,8 @@ const PaymentMethodPopup = ({
               setSelectedPaymentId(selected
                 || (await usePayments.getClientDefaultMethod())?.id);
               rideFlow
-                ? navigation.navigate(MAIN_ROUTES.HOME)
-                : navigation.navigate(MAIN_ROUTES.PAYMENT);
+                ? navigationService.navigate(MAIN_ROUTES.HOME)
+                : navigationService.navigate(MAIN_ROUTES.PAYMENT);
             }}
           >
             <SvgIcon
@@ -112,19 +110,19 @@ const PaymentMethodPopup = ({
                 : usePayments.paymentMethods).map((paymentMethod: any, i) => (
                   <PaymentMethod
                     {...paymentMethod}
+                    chooseMethodPage
                     selected={selectedPaymentId === paymentMethod.id}
                     mark={selectedPaymentId === paymentMethod.id}
                     onPress={() => {
-                      setPaymentId(paymentMethod.id);
                       setSelectedPaymentId(paymentMethod.id);
                     }}
                   />
               ))}
               <PaymentMethod
                 addNew
+                chooseMethodPage
                 onPress={() => {
-                  onCancel();
-                  navigation.navigate(MAIN_ROUTES.PAYMENT, { showAdd: true, rideFlow });
+                  onAddNewMethod();
                 }}
               />
             </View>

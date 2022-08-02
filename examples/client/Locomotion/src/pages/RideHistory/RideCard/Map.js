@@ -97,7 +97,7 @@ const Map = forwardRef(({
           {...{
             lat, lng, type, ordinalDesc,
           }}
-          disableMarkers
+          disableMarkers={disableMarkers}
         />
       ) : (<></>)))}
     </MapView>

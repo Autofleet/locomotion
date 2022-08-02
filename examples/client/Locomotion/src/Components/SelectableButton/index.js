@@ -16,6 +16,7 @@ const SelectableButton = ({
 }) => (
   <StyledButton
     {...props}
+    noBackground
     onPress={onPress}
     selected={selected}
     style={style}

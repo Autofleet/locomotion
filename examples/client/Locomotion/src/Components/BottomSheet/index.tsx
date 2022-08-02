@@ -17,8 +17,8 @@ import { BottomSheetContext } from '../../context/bottomSheetContext';
 const BottomSheetTopInfo = styled(View)`
 background-color: #989898;
 position: absolute;
-height: 40px;
-top: -40px;
+height: 38px;
+top: -38px;
 width: 100%;
 align-items: center;
 border-top-left-radius: 8px;
@@ -29,7 +29,7 @@ justify-content: center;
 const InfoText = styled(Text)`
 color: #ffffff;
 text-align: center;
-max-width: 80%;
+max-width: 90%;
 `;
 
 interface BottomSheetProps {
@@ -96,6 +96,7 @@ const BottomSheetComponent = forwardRef(({
       enablePanDownToClose={enablePanDownToClose}
       index={index}
       handleComponent={getTopBar}
+      containerStyle={{ zIndex: 999 }}
       style={{
         backgroundColor: 'white',
         shadowColor: '#000',

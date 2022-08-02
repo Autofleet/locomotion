@@ -43,6 +43,8 @@ const FilterBar = React.memo(({
     >
       {Object.values(filters).map(filter => (
         <FilterTouchableOpacity
+          noLoader
+          noBackground
           onPress={() => !filter.isCustomFilter && onFilterClicked(filter.id)}
           key={`FilterTouchableOpacity#${filter.id}`}
           testID={`FilterTouchableOpacity-${filter.id}`}

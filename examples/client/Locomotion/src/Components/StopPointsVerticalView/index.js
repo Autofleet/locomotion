@@ -9,7 +9,7 @@ import {
   RIDE_ACTIVE_STATES, RIDE_STATES, STOP_POINT_STATES, STOP_POINT_TYPES,
 } from '../../lib/commonTypes';
 
-const getEtaText = eta => moment(eta).format('HH:mm');
+const getEtaText = eta => moment(eta).format('h:mm A');
 
 const stopPointText = (sp, isFutureRide) => {
   if (isFutureRide) {
@@ -30,12 +30,12 @@ const Index = ({ ride }) => {
     stopPoints,
   } = ride;
   const rideIsActive = [...RIDE_ACTIVE_STATES, RIDE_STATES.CANCELED, RIDE_STATES.FAILED].includes(state);
-  const isFutureRide = stopPoints[0].afterTime;
   if (stopPoints
     && stopPoints.length) {
+    const isFutureRide = stopPoints[0].afterTime;
     return (
       <>
-        <CardsTitle title={i18n.t('ride.journey')} />
+        <CardsTitle title={i18n.t('ride.journey')} noPaddingLeft />
         <PanelContentContainer>
           {stopPoints.map((sp, index) => (
             <VerticalTimeLineCard

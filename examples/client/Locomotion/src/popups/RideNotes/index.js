@@ -1,8 +1,9 @@
 import React, {
-  useEffect, useRef, useState,
+  useEffect, useRef, useState, useContext,
 } from 'react';
 import { KeyboardAvoidingView, SafeAreaView } from 'react-native';
 import Modal from 'react-native-modal';
+import { ThemeContext } from 'styled-components';
 import i18n from '../../I18n';
 import {
   SummaryContainer,
@@ -13,13 +14,14 @@ import {
 import RoundedButton from '../../Components/RoundedButton';
 import { FlexCont } from '../../Components/Flex';
 
-const MAX_SIZE = 100;
+const MAX_SIZE = 150;
 
 export default ({
   isVisible, onSubmit, onCancel, notes,
 }) => {
   const [currentText, updateText] = useState('');
   const inputRef = useRef();
+  const theme = useContext(ThemeContext);
 
   useEffect(() => {
     updateText(notes || '');
@@ -49,19 +51,20 @@ export default ({
               placeholder={i18n.t('popups.rideNotes.placeholder')}
               maxLength={MAX_SIZE}
               onChangeText={updateText}
+              placeholderTextColor={theme.disabledColor}
             />
             <FlexCont>
               <RoundedButton
                 width="48%"
                 hollow
-                data-test-id="SubmitRideSummaryPopupButton"
+                testID="SubmitRideNotes"
                 onPress={() => onCancel()}
               >
                 {i18n.t('popups.rideNotes.cancel')}
               </RoundedButton>
               <RoundedButton
                 width="48%"
-                data-test-id="SubmitRideSummaryPopupButton2"
+                testID="CancelRideNotes"
                 onPress={() => onSubmit(currentText)}
               >
                 {i18n.t('popups.rideNotes.save')}

@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { Dimensions } from 'react-native';
 import { LogoContainer } from '../AuthScreens/StartScreen/styles';
 import SafeView from '../../Components/SafeView';
 import Button from '../../Components/Button';
@@ -10,7 +11,7 @@ transform: rotate(135deg);
 `;
 
 export const LearnMoreButton = styled(Button)`
-  min-width: 100%;
+  width: ${Dimensions.get('window').width - 30};
   flex-direction: row;
   background-color: white;
   justify-content: center;
@@ -29,6 +30,7 @@ width: 100%;
 
 export const ContactUsPageLogoContainer = styled(LogoContainer)`
 max-height: 200px;
+max-width: 100%;
 padding: 20px;
 display: flex;
 justify-content: center;

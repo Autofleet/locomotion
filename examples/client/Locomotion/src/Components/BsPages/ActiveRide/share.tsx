@@ -1,7 +1,8 @@
 import React, { useState, useContext } from 'react';
 import { Share } from 'react-native';
+import Mixpanel from '../../../services/Mixpanel';
 import {
-  ButtonContainer,
+  ButtonContainer, HALF_WIDTH,
 } from './styled';
 import i18n from '../../../I18n';
 import Loader from '../../Loader';
@@ -10,23 +11,30 @@ import share from '../../../assets/bottomSheet/share.svg';
 import GenericRideButton from '../../GenericRideButton';
 
 const ShareButton = () => {
-  const { trackRide } = useContext(RidePageContext);
+  const { trackRide, ride } = useContext(RidePageContext);
   const [isLoading, setIsLoading] = useState(false);
 
   const onShare = async () => {
-    setIsLoading(true);
-    const trackerUrl = await trackRide();
-    setIsLoading(false);
-    await Share.share({
-      message: trackerUrl,
-      url: trackerUrl,
-    });
+    try {
+      Mixpanel.setEvent('Sharing ride');
+      setIsLoading(true);
+      const trackerUrl = await trackRide();
+      setIsLoading(false);
+      await Share.share({
+        message: trackerUrl,
+        url: trackerUrl,
+      });
+    } catch (e) {
+      Mixpanel.setEvent('failed to share ride');
+    }
   };
 
   return (
-    <ButtonContainer onPress={() => {
-      onShare();
-    }}
+    <ButtonContainer
+      onPress={() => {
+        onShare();
+      }}
+      style={{ width: ride.cancelable ? HALF_WIDTH : '100%' }}
     >
       {
             isLoading

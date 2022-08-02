@@ -44,7 +44,7 @@ const useSettings = () => {
           settingMap[key] = values[idx];
         }
       });
-      await StorageService.save(settingMap);
+      await StorageService.save(settingMap, FIVE_MINS_IN_SECONDS);
     }
 
     return {
@@ -68,12 +68,6 @@ const useSettings = () => {
     return formattedResult;
   };
 
-  const getSettings = async () => {
-    const settings = await settingsApi.getAppSettings();
-    setSettingsList(settings);
-    return settings;
-  };
-
   const getWorkingHours = async () => {
     const workingHoursData = await settingsApi.getWorkingHoursData();
     const prepWorkingHours = prepareWorkingHours(workingHoursData);
@@ -82,7 +76,7 @@ const useSettings = () => {
 
   const getAppSettings = async () => {
     const appSettings = await settingsApi.getAppSettings();
-    await StorageService.save(appSettings);
+    await StorageService.save(appSettings, FIVE_MINS_IN_SECONDS);
     return appSettings;
   };
 
@@ -100,7 +94,6 @@ const useSettings = () => {
 
   return {
     settingsList,
-    getSettings,
     getWorkingHours,
     workingHours,
     getSettingByKey,

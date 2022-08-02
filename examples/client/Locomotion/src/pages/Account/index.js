@@ -1,12 +1,13 @@
 import React, { useEffect, useContext, useState } from 'react';
-import { useRoute } from '@react-navigation/native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { PaymentIcon } from 'react-native-payment-icons';
+import { Platform } from 'react-native';
+import ConfirmationPopup from '../../popups/ConfirmationPopup';
 import cashPaymentMethod from '../../pages/Payments/cashPaymentMethod';
 import Card from '../../Components/InformationCard';
 import PaymentsContext from '../../context/payments';
 import { MAIN_ROUTES } from '../routes';
-
+import * as navigationService from '../../services/navigation';
 import ThumbnailPicker from '../../Components/ThumbnailPicker';
 import {
   AccountHeaderContainer,
@@ -21,6 +22,7 @@ import {
   LogoutText,
   Type,
   PaymentMethodContent,
+  DeleteText,
 } from './styled';
 import i18n from '../../I18n';
 import PageHeader from '../../Components/PageHeader';
@@ -28,6 +30,7 @@ import CardsTitle from '../../Components/CardsTitle';
 import Mixpanel from '../../services/Mixpanel';
 import { PageContainer } from '../styles';
 import { UserContext } from '../../context/user';
+import GenericErrorPopup from '../../popups/GenericError';
 
 const AccountHeader = () => {
   const { updateUserInfo, user } = useContext(UserContext);
@@ -62,10 +65,12 @@ const AccountHeader = () => {
   );
 };
 
-const AccountContent = ({ navigation }) => {
+const AccountContent = () => {
+  const [showError, setShowError] = useState(false);
+  const [isDeleteUserVisible, setIsDeleteUserVisible] = useState(false);
   const [defaultPaymentMethod, setDefaultPaymentMethod] = useState(null);
 
-  const { user } = useContext(UserContext);
+  const { user, deleteUser } = useContext(UserContext);
   const usePayments = PaymentsContext.useContainer();
 
 
@@ -82,19 +87,21 @@ const AccountContent = ({ navigation }) => {
 
   const emailIsVerified = user?.isEmailVerified;
   const onEmailPress = () => (emailIsVerified
-    ? navigation.navigate(MAIN_ROUTES.EMAIL, {
+    ? navigationService.navigate(MAIN_ROUTES.EMAIL, {
       editAccount: true,
     })
-    : navigation.navigate(MAIN_ROUTES.EMAIL_CODE, {
+    : navigationService.navigate(MAIN_ROUTES.EMAIL_CODE, {
       editAccount: true,
     }));
+
   return (
     <Container>
       <CardsContainer>
         <CardsTitle title={i18n.t('onboarding.accountInformation')} />
         <Card
+          testID="goToName"
           title={i18n.t('onboarding.namePlaceholder')}
-          onPress={() => navigation.navigate(MAIN_ROUTES.NAME, {
+          onPress={() => navigationService.navigate(MAIN_ROUTES.NAME, {
             editAccount: true,
           })
           }
@@ -107,6 +114,7 @@ const AccountContent = ({ navigation }) => {
           {user ? `${user.phoneNumber}` : ''}
         </Card>
         <Card
+          testID="goToEmail"
           verified={emailIsVerified}
           showUnverified
           title={i18n.t('onboarding.emailPlaceholder')}
@@ -118,8 +126,9 @@ const AccountContent = ({ navigation }) => {
           <>
             <CardsTitle title={i18n.t('onboarding.paymentInformation')} />
             <Card
+              testID="goToPaymentMethod"
               title={i18n.t('onboarding.paymentMethodPlaceholder')}
-              onPress={() => navigation.navigate(MAIN_ROUTES.PAYMENT, {
+              onPress={() => navigationService.navigate(MAIN_ROUTES.PAYMENT, {
                 back: true,
               })}
             >
@@ -131,37 +140,62 @@ const AccountContent = ({ navigation }) => {
           </>
         ) : undefined}
         <LogoutContainer
+          testID="logout"
           onPress={() => {
-            navigation.navigate(MAIN_ROUTES.LOGOUT);
+            navigationService.navigate(MAIN_ROUTES.LOGOUT);
           }}
         >
           <LogoutText>{i18n.t('menu.logout')}</LogoutText>
         </LogoutContainer>
+        <LogoutContainer
+          testID="deleteAccount"
+          onPress={() => {
+            setIsDeleteUserVisible(true);
+          }}
+        >
+          <DeleteText>{i18n.t('deleteUserPopup.deleteUserTitle')}</DeleteText>
+        </LogoutContainer>
+        <ConfirmationPopup
+          isVisible={isDeleteUserVisible}
+          title={i18n.t('deleteUserPopup.deleteUserTitle')}
+          text={i18n.t('deleteUserPopup.deleteAccountText')}
+          confirmText={i18n.t('deleteUserPopup.confirmText')}
+          cancelText={i18n.t('deleteUserPopup.cancelText')}
+          type="cancel"
+          useCancelTextButton
+          onSubmit={async () => {
+            try {
+              await deleteUser();
+              navigationService.navigate(MAIN_ROUTES.LOGOUT);
+            } catch (e) {
+              console.log(e);
+              setIsDeleteUserVisible(false);
+              setTimeout(() => setShowError(true), Platform.OS === 'ios' ? 500 : 0);
+            }
+          }}
+          onClose={() => setIsDeleteUserVisible(false)}
+        />
+
+        <GenericErrorPopup
+          isVisible={showError}
+          closePopup={() => setShowError(false)
+        }
+        />
       </CardsContainer>
     </Container>
   );
 };
 
-export default ({ navigation, menuSide }) => {
-  const route = useRoute();
-
-  useEffect(() => {
-    if (route.params) {
-      Mixpanel.pageView(route.name);
-    }
-  }, []);
-
-  return (
-    <PageContainer>
-      <PageHeader
-        title={i18n.t('onboarding.pageTitle')}
-        onIconPress={() => navigation.navigate(MAIN_ROUTES.HOME)}
-        iconSide={menuSide}
-      />
-      <KeyboardAwareScrollView extraScrollHeight={20} enableOnAndroid>
-        <AccountHeader />
-        <AccountContent navigation={navigation} />
-      </KeyboardAwareScrollView>
-    </PageContainer>
-  );
-};
+export default ({ navigation, menuSide }) => (
+  <PageContainer>
+    <PageHeader
+      title={i18n.t('onboarding.pageTitle')}
+      onIconPress={() => navigationService.navigate(MAIN_ROUTES.HOME)}
+      iconSide={menuSide}
+    />
+    <KeyboardAwareScrollView extraScrollHeight={20} enableOnAndroid>
+      <AccountHeader />
+      <AccountContent navigation={navigation} />
+    </KeyboardAwareScrollView>
+  </PageContainer>
+);

@@ -16,7 +16,7 @@ export const RatingBarContainer = styled(View)`
 `;
 
 export const DriverDetailsContainer = styled(View)`
-flex-grow: 1;
+flex: 1;
 `;
 
 export const DriverAvatarContainer = styled(View)`
@@ -25,6 +25,7 @@ export const DriverAvatarContainer = styled(View)`
 export const DriverDetailContainer = styled(View)`
   padding-left: 10px;
   flex-direction: row;
+  align-items: center;
 `;
 
 export const DriverRatingText = styled(Text)`
@@ -35,6 +36,7 @@ export const DriverRatingText = styled(Text)`
 export const DriverDetailText = styled<any>(Text)`
     ${({ activeRide }) => (activeRide ? FONT_SIZES.H2 : FONT_SIZES.LARGE)};
     ${FONT_WEIGHTS.MEDIUM}
+    width: 85%;
 `;
 
 export const DriverAvatar = styled(Image)`

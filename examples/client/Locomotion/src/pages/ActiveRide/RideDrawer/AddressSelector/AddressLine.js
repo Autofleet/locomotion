@@ -5,6 +5,7 @@ import SvgIcon from '../../../../Components/SvgIcon';
 import HistoryIcon from '../../../../assets/recent_search.svg';
 import GeoIcon from '../../../../assets/geo_location.svg';
 import LocationPinIcon from '../../../../assets/location_pin.svg';
+import Button from '../../../../Components/Button';
 
 
 const ICONS = {
@@ -13,7 +14,7 @@ const ICONS = {
   locationPin: LocationPinIcon,
 };
 
-const Row = styled.TouchableOpacity`
+const Row = styled(Button)`
     width: 100%;
     min-height: 50px;
     flex-direction: row;
@@ -72,13 +73,14 @@ const AddressRow = ({
       testID={testID}
       border
       onPress={onPress}
+      noBackground
     >
       <IconContainer>
         {finalIcon
           ? (
             <Icon
               Svg={finalIcon}
-              height={21}
+              height={20}
               width={20}
               actionButton={actionButton}
             />

@@ -1,9 +1,10 @@
 import React, {
-  useCallback, useContext, useEffect, useRef,
+  useCallback, useContext, useEffect, useRef, useState,
 } from 'react';
 import { Animated, View } from 'react-native';
 import styled from 'styled-components';
 import { debounce } from 'lodash';
+import Mixpanel from '../../../../services/Mixpanel';
 import BottomSheetInput from '../../../../Components/TextInput/BottomSheetInput';
 import i18n from '../../../../I18n';
 import { RidePageContext } from '../../../../context/newRideContext';
@@ -78,8 +79,6 @@ const SearchBar = ({
   isSelected,
 }) => {
   const {
-    searchTerm,
-    setSearchTerm,
     setSelectedInputIndex,
     selectedInputTarget,
     setSelectedInputTarget,
@@ -92,6 +91,8 @@ const SearchBar = ({
   const {
     locationGranted,
   } = useContext(UserContext);
+
+  const [searchTerm, setSearchTerm] = useState('');
 
   const debouncedSearch = React.useRef(
     debounce(async (text, i) => {
@@ -106,7 +107,7 @@ const SearchBar = ({
     }
 
     if (locationGranted) {
-      return 'addressView.currentLocation';
+      return 'addressView.enterAddress';
     }
 
     return '';
@@ -135,7 +136,7 @@ const SearchBar = ({
     } else {
       inputRef.current = null;
     }
-  }, [isSelected]);
+  }, [isSelected, isExpanded]);
 
   const buildSps = () => requestStopPoints.map((s, i) => {
     const { type, description } = requestStopPoints[i];
@@ -163,6 +164,7 @@ const SearchBar = ({
           value={description || ''}
           placeholderTextColor={isExpanded ? '#929395' : '#333333'}
           onFocus={(e) => {
+            Mixpanel.setEvent(`${type} address input focused`);
             onInputFocus(e.target, i);
           }}
           key={`input_${s.id}`}

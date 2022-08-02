@@ -1,4 +1,5 @@
 import React, { useEffect, useRef } from 'react';
+import Config from 'react-native-config';
 import { MAIN_ROUTES } from '../routes';
 import Auth from '../../services/auth';
 import SubmitButton from '../../Components/RoundedButton';
@@ -8,6 +9,7 @@ import {
 } from './styled';
 import I18n from '../../I18n';
 import UserService from '../../services/user';
+import * as navigationService from '../../services/navigation';
 
 const useInterval = (callback, delay) => {
   const savedCallback = useRef();
@@ -29,20 +31,20 @@ const useInterval = (callback, delay) => {
   }, [delay]);
 };
 
-export default ({ navigation }) => {
+export default () => {
   useInterval(async () => {
     const userData = await UserService.getUser();
     if (userData === null) {
-      Auth.logout(navigation);
+      Auth.logout();
     }
 
     if (userData.active === true) {
-      navigation.navigate(MAIN_ROUTES.START);
+      navigationService.navigate(MAIN_ROUTES.START);
     }
   }, 5000);
 
   const submit = async () => {
-    Auth.logout(navigation);
+    Auth.logout();
   };
 
   return (
@@ -53,12 +55,14 @@ export default ({ navigation }) => {
           {I18n.t('lock.text')}
         </Text>
         <SubText>
-          {I18n.t('lock.subText')}
+          {I18n.t('lock.subText', {
+            appName: Config.OPERATION_NAME,
+          })}
         </SubText>
 
       </LockTextContainer>
       <ButtonContainer>
-        <SubmitButton onPress={submit} hollow data-test-id="LoginToDifferentAccountButton">
+        <SubmitButton onPress={submit} hollow testID="LoginToDifferentAccountButton">
           {I18n.t('lock.submitText')}
         </SubmitButton>
       </ButtonContainer>

@@ -1,27 +1,42 @@
-import React from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import moment from 'moment';
 import { PaymentIcon } from 'react-native-payment-icons';
-import { RideInterface } from '../../context/newRideContext';
+import { View } from 'react-native';
+import { RIDE_STATES } from '../../lib/commonTypes';
+import { PriceCalculation, RideInterface, RidePageContext } from '../../context/newRideContext';
+import cashPaymentMethod from '../../pages/Payments/cashPaymentMethod';
 import i18n from '../../I18n';
 import RoundedButton from '../RoundedButton';
 import TextRowWithIcon from '../TextRowWithIcon';
 import {
-  CardContainer, RideDate, ServiceType, DateContainer,
+  CardContainer, RideDate, ServiceType, DateContainer, EstimatedText,
+  TopTextsContainer,
 } from './styled';
 import StopPointsVerticalView from '../StopPointsVerticalView';
-import { getFormattedPrice } from '../../context/newRideContext/utils';
+import { getFormattedPrice, isPriceEstimated } from '../../context/newRideContext/utils';
+import cashIcon from '../../assets/cash.svg';
+
 
 interface CardComponentProps {
+  paymentMethod: {
     name: string;
     brand: any;
+    id: string;
+  }
 }
-const CardComponent = ({ name, brand }: CardComponentProps) => (
-  <TextRowWithIcon
-    text={name}
-    Image={() => <PaymentIcon type={brand} />}
-    style={{ marginTop: 10, marginBottom: 10 }}
-  />
-);
+const CardComponent = ({ paymentMethod }: CardComponentProps) => {
+  const isCash = cashPaymentMethod.id === paymentMethod.id;
+  return (
+    <TextRowWithIcon
+      text={isCash ? cashPaymentMethod.id : paymentMethod.name}
+      Image={() => !isCash && <PaymentIcon type={paymentMethod.brand} />}
+      icon={isCash && cashIcon}
+      style={{ marginTop: 10, marginBottom: 10 }}
+      iconWidth={40}
+      iconHeight={20}
+    />
+  );
+};
 
 interface RideCardProps {
     ride: RideInterface;
@@ -33,25 +48,55 @@ interface RideCardProps {
 
 const RideCard = ({
   ride, onPress, serviceName, paymentMethod, scheduledTo,
-}: RideCardProps) => (
-  <CardContainer>
-    <DateContainer>
-      <RideDate>
-        {moment(scheduledTo).format('MMMM DD, YYYY, h:mm A')}
-      </RideDate>
-      <RideDate>
-        {getFormattedPrice(ride.priceCurrency, ride.priceAmount)}
-      </RideDate>
-    </DateContainer>
-    <ServiceType>
-      {serviceName}
-    </ServiceType>
-    <StopPointsVerticalView ride={ride} />
-    <CardComponent name={paymentMethod.name} brand={paymentMethod.brand} />
-    <RoundedButton onPress={onPress} hollow type="cancel">
-      {i18n.t('home.cancelRideButton')}
-    </RoundedButton>
-  </CardContainer>
-);
+}: RideCardProps) => {
+  const [ridePriceCalculation, setRidePriceCalculation] = useState<PriceCalculation>();
+  const {
+    getRidePriceCalculation,
+  } = useContext(RidePageContext);
+
+  const addPriceCalculation = async () => {
+    const price = await getRidePriceCalculation(ride.id, ride.priceCalculationId);
+    setRidePriceCalculation(price);
+  };
+
+  useEffect(() => {
+    if (!ridePriceCalculation) {
+      addPriceCalculation();
+    }
+  }, [ride]);
+
+  return (
+    <CardContainer>
+      <DateContainer>
+        <TopTextsContainer>
+          <RideDate>
+            {moment(scheduledTo).format('MMMM DD, YYYY, h:mm A')}
+          </RideDate>
+          <ServiceType>
+            {serviceName}
+          </ServiceType>
+        </TopTextsContainer>
+        <TopTextsContainer>
+          <RideDate>
+            {getFormattedPrice(ride.priceCurrency, ride.priceAmount)}
+          </RideDate>
+          {ridePriceCalculation && isPriceEstimated(ridePriceCalculation.calculationBasis)
+            ? (
+              <EstimatedText>
+                {i18n.t('rideDetails.estimatedFare').toString()}
+              </EstimatedText>
+            )
+            : null}
+        </TopTextsContainer>
+      </DateContainer>
+
+      <StopPointsVerticalView ride={ride} />
+      {paymentMethod && <CardComponent paymentMethod={paymentMethod} />}
+      <RoundedButton testID="cancelRide" onPress={onPress} hollow type="cancel">
+        {i18n.t('home.cancelRideButton')}
+      </RoundedButton>
+    </CardContainer>
+  );
+};
 
 export default RideCard;

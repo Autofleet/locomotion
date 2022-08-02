@@ -8,6 +8,8 @@ import { useBottomSheet } from '@gorhom/bottom-sheet';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import moment from 'moment';
 import DatePicker from 'react-native-date-picker';
+import Mixpanel from '../../services/Mixpanel';
+import GenericErrorPopup from '../../popups/GenericError';
 import TextRowWithIcon from '../../Components/TextRowWithIcon';
 import { FutureRidesContext } from '../../context/futureRides';
 import { STOP_POINT_TYPES } from '../../lib/commonTypes';
@@ -193,7 +195,7 @@ const BsPage = ({
       <Footer fullWidthButtons={fullWidthButtons}>
         {ButtonText && (
         <OtherButton
-          testID="confirm"
+          testID="bottomSheetConfirm"
           style={{ width: buttonWidth }}
           disabled={buttonDisabled}
           onPress={onButtonPress}
@@ -205,6 +207,7 @@ const BsPage = ({
         )}
         {SecondaryButtonText && (
         <SecondaryButton
+          testID="bottomSheetSecondary"
           disabled={buttonDisabled}
           style={{ width: buttonWidth }}
           warning={warning}
@@ -232,23 +235,28 @@ BsPage.defaultProps = {
 export default BsPage;
 
 export const ConfirmPickupTime = (props: any) => {
+  const theme = useContext(ThemeContext);
   const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
   const {
-    ride, updateRidePayload, tryServiceEstimations, setServiceEstimations,
+    unconfirmedPickupTime,
+    updateRidePayload,
+    setUnconfirmedPickupTime,
+    tryServiceEstimations,
+    setServiceEstimations,
   } = useContext(MewRidePageContext);
   const {
     changeBsPage,
   } = useContext(RideStateContextContext);
-  const date = moment(ride?.scheduledTo).format('ddd, MMM Do');
-  const time = moment(ride?.scheduledTo).format('HH:mm');
+  const date = moment(unconfirmedPickupTime).format('ddd, MMM Do');
+  const time = moment(unconfirmedPickupTime).format('h:mm A');
   return (
     <BsPage
       TitleText={i18n.t('bottomSheetContent.confirmPickupTime.titleText')}
       ButtonText={i18n.t('bottomSheetContent.confirmPickupTime.buttonText')}
       fullWidthButtons
       onButtonPress={() => {
+        updateRidePayload({ scheduledTo: unconfirmedPickupTime });
         setServiceEstimations(null);
-        tryServiceEstimations();
         changeBsPage(BS_PAGES.SERVICE_ESTIMATIONS);
       }}
       {...props}
@@ -264,15 +272,16 @@ export const ConfirmPickupTime = (props: any) => {
         {i18n.t('bottomSheetContent.confirmPickupTime.pickupText', { date, time })}
       </RoundedButton>
       <DatePicker
+        textColor={theme.textColor}
         open={isDatePickerOpen}
-        date={moment(ride?.scheduledTo).toDate()}
+        date={moment(unconfirmedPickupTime).add(unconfirmedPickupTime ? 0 : 1, 'hours').toDate()}
         maximumDate={getFutureRideMaxDate()}
         minimumDate={getFutureRideMinDate()}
         mode="datetime"
         title={i18n.t('bottomSheetContent.ride.chosePickupTime')}
         onCancel={() => setIsDatePickerOpen(false)}
         onConfirm={(newDate: Date) => {
-          updateRidePayload({ scheduledTo: newDate.getTime() });
+          setUnconfirmedPickupTime(newDate.getTime());
           setIsDatePickerOpen(false);
         }}
         modal
@@ -311,6 +320,7 @@ export const LocationRequest = (props: any) => (
 
 export const CancelRide = (props: any) => {
   const [isLoading, setIsLoading] = useState(false);
+  const [showError, setShowError] = useState(false);
   const { cancelRide } = useContext(RidePageContext);
   const { changeBsPage } = useContext(RideStateContextContext);
 
@@ -321,15 +331,27 @@ export const CancelRide = (props: any) => {
       SubTitleText={i18n.t('bottomSheetContent.cancelRide.subTitleText')}
       SecondaryButtonText={i18n.t('bottomSheetContent.cancelRide.secondaryButtonText')}
       isLoading={isLoading}
-      onButtonPress={() => {
-        setIsLoading(true);
-        cancelRide();
+      onButtonPress={async () => {
+        try {
+          setIsLoading(true);
+          Mixpanel.setEvent('Trying to cancel ride');
+          await cancelRide();
+        } catch (e: any) {
+          setShowError(true);
+          setIsLoading(false);
+          Mixpanel.setEvent('failed to cancel ride', { status: e?.response?.status });
+        }
       }}
       onSecondaryButtonPress={() => changeBsPage(BS_PAGES.ACTIVE_RIDE)}
       warning
       buttonDisabled={isLoading}
       {...props}
-    />
+    >
+      <GenericErrorPopup
+        isVisible={showError}
+        closePopup={() => setShowError(false)}
+      />
+    </BsPage>
   );
 };
 
@@ -338,7 +360,7 @@ export const ConfirmFutureRide = (props: any) => {
 
   const getDateDisplay = () => {
     const date = moment(newFutureRide?.scheduledTo).format('ddd, MMM Do');
-    const time = moment(newFutureRide?.scheduledTo).format('HH:mm');
+    const time = moment(newFutureRide?.scheduledTo).format('h:mm A');
     const dateText = i18n.t('bottomSheetContent.confirmPickupTime.pickupText', { date, time });
     return <TextRowWithIcon text={dateText} icon={timeIcon} />;
   };
@@ -369,17 +391,20 @@ export const ConfirmFutureRide = (props: any) => {
 };
 
 export const NotAvailableHere = (props: any) => {
-  const { setSnapPointsState } = useContext(BottomSheetContext);
+  const { setSnapPointsState, setIsExpanded } = useContext(BottomSheetContext);
   const { primaryColor } = useContext(ThemeContext);
   useEffect(() => {
     setSnapPointsState(SNAP_POINT_STATES.NOT_IN_TERRITORY);
+    setIsExpanded(false);
   }, []);
 
   return (
     <BsPage
       TitleText={i18n.t('bottomSheetContent.notAvailableHere.titleText')}
       ButtonText={i18n.t('bottomSheetContent.notAvailableHere.buttonText')}
-      SubTitleText={i18n.t('bottomSheetContent.notAvailableHere.subTitleText')}
+      SubTitleText={i18n.t('bottomSheetContent.notAvailableHere.subTitleText', {
+        appName: Config.OPERATION_NAME,
+      })}
       Image={<SvgIcon Svg={outOfTerritoryIcon} height={85} width={140} fill={primaryColor} />}
       fullWidthButtons
       {...props}
@@ -461,7 +486,7 @@ export const NoPayment = (props: any) => {
 
   useEffect(() => {
     proceedIfPaymentMethodsAreValid();
-  }, [paymentMethods]);
+  }, [ride.paymentMethodId]);
 
   return (
     <BsPage
@@ -510,7 +535,7 @@ export const ConfirmingRide = (props: any) => {
           lottieViewStyle={{
             height: '100%', width: '100%', alignItems: 'center', justifyContent: 'center',
           }}
-          sourceProp={null}
+          sourceProp={undefined}
         />
       </LoaderContainer>
     </BsPage>

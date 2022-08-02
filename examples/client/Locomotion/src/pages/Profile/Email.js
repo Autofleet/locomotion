@@ -13,25 +13,26 @@ import ScreenText from './ScreenText';
 import { MAIN_ROUTES } from '../routes';
 import { UserContext } from '../../context/user';
 import { PageContainer, ContentContainer } from '../styles';
+import * as navigationService from '../../services/navigation';
 
-const Email = ({ navigation }) => {
+const Email = () => {
   const route = useRoute();
   const { nextScreen } = useContext(OnboardingContext);
   const {
     updateState, updateUserInfo, user, verifyEmail, getUserFromServer,
   } = useContext(UserContext);
   const [errorText, setErrorText] = useState(false);
-  const [email, setEmail] = useState(user.email);
+  const [email, setEmail] = useState(route.params && route.params.editAccount ? user.email : '');
 
   const isFocused = useIsFocused();
 
   useEffect(() => {
-    setEmail(user.email);
+    setEmail(route.params && route.params.editAccount ? user.email : ((route.params && route.params.email) || ''));
   }, [isFocused]);
 
   const navigateToNextScreen = () => {
     if (route.params && route.params.editAccount) {
-      navigation.navigate(MAIN_ROUTES.EMAIL_CODE, {
+      navigationService.navigate(MAIN_ROUTES.EMAIL_CODE, {
         editAccount: route.params.editAccount,
       });
     } else {

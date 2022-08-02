@@ -17,6 +17,8 @@ const modes = {
   add: addIcon,
 };
 
+const BORDER_RADIUS = 1000;
+
 const Container = styled.View``;
 const myThumbnail = (props) => {
   const { primaryColor } = useContext(ThemeContext);
@@ -24,20 +26,20 @@ const myThumbnail = (props) => {
   const defaultStyles = {
     linearGradient: {
       padding: 3,
-      borderRadius: 100,
+      borderRadius: BORDER_RADIUS,
     },
     croper: {
       width: '100%',
       height: '100%',
       alignItems: 'center',
       justifyContent: 'center',
-      borderRadius: 100,
+      borderRadius: BORDER_RADIUS,
       backgroundColor: '#636363',
     },
     image: {
       width: '100%',
       height: '100%',
-      borderRadius: 100,
+      borderRadius: BORDER_RADIUS,
     },
     iconContainer: {
       position: 'absolute',
@@ -55,7 +57,7 @@ const myThumbnail = (props) => {
   defaultStyles.linearGradient = Object.assign(defaultStyles.linearGradient);
   const styles = StyleSheet.create(defaultStyles);
   const ImageComponent = props.source && props.source.substring(0, 4) === 'http' ? FastImage : Image;
-  const borderRadius = { borderRadius: props.size / 2 };
+  const borderRadius = { borderRadius: props.size };
   const borderRadiusSmall = { borderRadius: (props.size - 10) / 2 };
   return (
     <Container style={{ width: props.size, height: props.size }}>
@@ -63,7 +65,7 @@ const myThumbnail = (props) => {
         noBackground
         onPress={props.onPress}
         style={[styles.croper, borderRadius]}
-        data-test-id="ImagePickerButton"
+        testID="ImagePickerButton"
       >
         {props.showLoader ? (
           <Loader
@@ -83,7 +85,7 @@ const myThumbnail = (props) => {
           noBackground
           onPress={props.onPress}
           style={styles.iconContainer}
-          data-test-id={`${props.mode}ImageButton`}
+          testID={`${props.mode}ImageButton`}
         >
           <SvgIcon Svg={modes[props.mode]} height={48} width={48} fill={primaryColor} />
         </Button>

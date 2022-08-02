@@ -5,6 +5,7 @@ import Config from 'react-native-config';
 import network from './network';
 import { updateUser } from '../context/user/api';
 import { StorageService } from '.';
+import Mixpanel from './Mixpanel';
 
 
 class NotificationsService {
@@ -12,7 +13,31 @@ class NotificationsService {
     this.network = network;
   }
 
-  init = (notificationsHandlers) => {
+  updateServer = async (pushTokenId, userId, isSubscribed) => {
+    const clientProfile = await StorageService.get('clientProfile');
+    if (clientProfile) {
+      if (clientProfile.pushUserId !== userId || clientProfile.pushTokenId !== pushTokenId) {
+        this.registerOnServer({
+          pushTokenId,
+          pushUserId: userId,
+          isSubscribed,
+        });
+      }
+    }
+  };
+
+  checkLatestDeviceState = async () => {
+    const state = await OneSignal.getDeviceState();
+    Mixpanel.setEvent('Notification Service: Check App State', state || undefined);
+    if (state) {
+      const { pushToken, userId, isSubscribed } = state;
+      if (pushToken && userId && isSubscribed) {
+        await this.updateServer(pushToken, userId, isSubscribed);
+      }
+    }
+  };
+
+  init = async (notificationsHandlers) => {
     this.notificationsHandlers = notificationsHandlers;
 
     OneSignal.setAppId(Config.ONESIGNAL_APP_ID);
@@ -20,9 +45,18 @@ class NotificationsService {
     OneSignal.disablePush(false);
 
     if (Platform.OS === 'ios') {
-      OneSignal.promptForPushNotificationsWithUserResponse(() => null);
+      OneSignal.promptForPushNotificationsWithUserResponse((response) => {
+        if (response) {
+          return Mixpanel.setEvent('iOS User approved push');
+        }
+        Mixpanel.setEvent('iOS User didn\'t approved push');
+        return null;
+      });
     }
     OneSignal.addSubscriptionObserver(this.subscriptionObserverHandler);
+    OneSignal.addPermissionObserver(this.checkLatestDeviceState);
+
+    await this.checkLatestDeviceState();
   };
 
   getDeviceState = async () => {
@@ -32,15 +66,9 @@ class NotificationsService {
 
   subscriptionObserverHandler = async (data) => {
     const { to } = data;
-    const { pushToken, userId } = to;
+    const { pushToken, userId, isSubscribed } = to;
     if (pushToken && userId) {
-      const clientProfile = await StorageService.get('clientProfile');
-      if (clientProfile.pushUserId !== userId || clientProfile.pushToken !== pushToken) {
-        this.registerOnServer({
-          pushToken,
-          pushUserId: userId,
-        });
-      }
+      await this.updateServer(pushToken, userId, isSubscribed);
     }
   };
 
@@ -58,10 +86,11 @@ class NotificationsService {
     console.log('new notification', payload);
   };
 
-  registerOnServer = async ({ pushUserId, pushToken }) => {
+  registerOnServer = async ({ pushUserId, pushTokenId, isSubscribed }) => {
     const pushUserData = {
       pushUserId,
-      pushToken,
+      pushTokenId,
+      isPushEnabled: isSubscribed,
       deviceType: Platform.OS,
     };
 

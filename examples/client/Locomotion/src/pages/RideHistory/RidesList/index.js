@@ -11,6 +11,8 @@ import {
 import Loader from '../../../Components/Loader';
 import Mixpanel from '../../../services/Mixpanel';
 import { RideListView } from '../RideCard';
+import i18n from '../../../I18n';
+import * as navigationService from '../../../services/navigation';
 
 const DISTANCE_FROM_END = 400;
 
@@ -19,25 +21,22 @@ const RideCardInList = ({
   ride,
   lastItem,
   showSpacer,
-}) => {
-  const navigation = useNavigation();
-  return (
-    <>
-      <RideListView
-        ride={ride}
-        showSpacer={showSpacer}
-        onPress={() => navigation.navigate(MAIN_ROUTES.COMPLETED_RIDE_OVERVIEW_PAGE, {
-          rideId: ride.id,
-        })}
-      />
-      {lastItem && showBottomLoader ? (
-        <CenterContainer>
-          <Loader dark lottieViewStyle={{ width: 24, height: 24 }} />
-        </CenterContainer>
-      ) : null}
-    </>
-  );
-};
+}) => (
+  <>
+    <RideListView
+      ride={ride}
+      showSpacer={showSpacer}
+      onPress={() => navigationService.navigate(MAIN_ROUTES.COMPLETED_RIDE_OVERVIEW_PAGE, {
+        rideId: ride.id,
+      })}
+    />
+    {lastItem && showBottomLoader ? (
+      <CenterContainer>
+        <Loader dark lottieViewStyle={{ width: 24, height: 24 }} />
+      </CenterContainer>
+    ) : null}
+  </>
+);
 
 const RidesView = ({ rides }) => {
   const { loadMoreRides } = useContext(ridesContext);
@@ -84,13 +83,15 @@ const RidesView = ({ rides }) => {
 
 const RidesList = React.memo(({
   rides,
-  activeFilter,
 }) => (
   <>
     {rides && rides.length ? (
       <RidesView rides={rides} />
     ) : (
-      <NoRidesInList />
+      <NoRidesInList
+        title={i18n.t('rideHistory.noActivityYet')}
+        text={i18n.t('rideHistory.noActivitySub')}
+      />
     )}
   </>
 ));

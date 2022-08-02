@@ -1,7 +1,8 @@
 import React from 'react';
 import propsTypes from 'prop-types';
-import { TouchableOpacity, View } from 'react-native';
+import { View } from 'react-native';
 import Card from './Card';
+import Button from '../Button';
 
 
 export type InformationCardProps = {
@@ -11,7 +12,8 @@ export type InformationCardProps = {
   verified?: boolean,
   showUnverified?: boolean,
   icon?: any,
-  onIconPress?: () => void
+  onIconPress?: () => void,
+  testID?: string
 }
 
 const InformationCard = ({
@@ -26,31 +28,55 @@ const InformationCard = ({
 }: InformationCardProps) => (
   onPress
     ? (
-      <TouchableOpacity onPress={onPress} {...props}>
-        <Card
-          title={title}
-          onPress={onPress}
-          verified={verified}
-          showUnverified={showUnverified}
-          icon={icon}
-          onIconPress={onIconPress}
-        >
-          {children}
-        </Card>
-      </TouchableOpacity>
+      <Button onPress={onPress} {...props} style={{ flex: 1 }}>
+        { children
+          ? (
+            <Card
+              title={title}
+              onPress={onPress}
+              verified={verified}
+              showUnverified={showUnverified}
+              icon={icon}
+              onIconPress={onIconPress}
+            >
+              {children}
+            </Card>
+          ) : (
+            <Card
+              title={title}
+              onPress={onPress}
+              verified={verified}
+              showUnverified={showUnverified}
+              icon={icon}
+              onIconPress={onIconPress}
+            />
+          )}
+      </Button>
     )
     : (
       <View>
-        <Card
-          title={title}
-          onPress={onPress}
-          verified={verified}
-          showUnverified={showUnverified}
-          icon={icon}
-          onIconPress={onIconPress}
-        >
-          {children}
-        </Card>
+        { children
+          ? (
+            <Card
+              title={title}
+              onPress={onPress}
+              verified={verified}
+              showUnverified={showUnverified}
+              icon={icon}
+              onIconPress={onIconPress}
+            >
+              {children}
+            </Card>
+          ) : (
+            <Card
+              title={title}
+              onPress={onPress}
+              verified={verified}
+              showUnverified={showUnverified}
+              icon={icon}
+              onIconPress={onIconPress}
+            />
+          )}
       </View>
     )
 
@@ -65,11 +91,15 @@ InformationCard.defaultProps = {
   showUnverified: false,
   icon: undefined,
   onIconPress: undefined,
+  testID: '',
 };
 
 InformationCard.propTypes = {
   title: propsTypes.string,
-  children: propsTypes.string,
+  children: propsTypes.oneOfType([
+    propsTypes.arrayOf(propsTypes.node),
+    propsTypes.node, propsTypes.any,
+  ]),
   onPress: propsTypes.func,
   verified: propsTypes.bool,
   showUnverified: propsTypes.bool,

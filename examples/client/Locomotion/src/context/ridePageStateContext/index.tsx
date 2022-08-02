@@ -7,6 +7,7 @@ import { getUserTerritories } from '../user/api';
 import pointInPolygon from './pointInPolygon';
 import { BsPages, BS_PAGES } from './utils';
 import GenericErrorPopup from '../../popups/GenericError';
+import Mixpanel from '../../services/Mixpanel';
 
 interface RidePageStateContextProps {
   territory: any;
@@ -40,6 +41,7 @@ const RideStateContextContextProvider = ({ children }: { children: any }) => {
   const { setSnapPointsState, setIsExpanded } = useContext(BottomSheetContext);
 
   const changeBsPage = (pageName: BsPages) => {
+    Mixpanel.pageView(`Bottom sheet - ${pageName}`);
     setIsExpanded(false);
     setSnapPointsState(SNAP_POINT_STATES[pageName]);
     setCurrentBsPage(pageName);

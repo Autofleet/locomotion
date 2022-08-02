@@ -1,5 +1,6 @@
 import React, { useContext, useState } from 'react';
 import { useIsFocused } from '@react-navigation/native';
+import Config from 'react-native-config';
 import i18n from '../../I18n';
 import SaveButton from './SaveButton';
 import { OnboardingContext } from '../../context/onboarding';
@@ -26,6 +27,12 @@ const Phone = ({ navigation }) => {
     updateState({ phoneNumber });
   };
 
+  const ERROR_RESPONSES = {
+    429: () => setShowErrorText(i18n.t('login.tooManyRequestError')),
+    422: () => setShowErrorText(i18n.t('login.invalidPhoneNumberError')),
+    403: () => setShowErrorText(i18n.t('login.clientIsBanned', { appName: Config.OPERATION_NAME })),
+  };
+
   const onSubmitPhoneNumber = async () => {
     try {
       await AppSettings.destroy();
@@ -36,6 +43,10 @@ const Phone = ({ navigation }) => {
       nextScreen(MAIN_ROUTES.PHONE);
     } catch (e) {
       console.log('Bad login with response', e);
+      const status = e && e.response && e.response.status;
+      if (ERROR_RESPONSES[status]) {
+        return ERROR_RESPONSES[status]();
+      }
       setShowErrorText(i18n.t('login.invalidPhoneNumberError'));
     }
   };
@@ -45,6 +56,7 @@ const Phone = ({ navigation }) => {
     const didBlurSubscription = navigation.addListener(
       'focus',
       () => {
+        setShowErrorText(null);
         setRenderId(Math.random());
       },
     );
