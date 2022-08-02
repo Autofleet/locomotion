@@ -79,7 +79,7 @@ export default ({ menuSide }) => {
             />
             <ScrollView>
               <ContactUsPageLogoContainer style={Platform.OS === 'android' ? { shadowColor: '#000' } : {}}>
-                <ContactUsLogo resizeMode="center" source={logo} />
+                <ContactUsLogo resizeMode="contain" source={logo} />
               </ContactUsPageLogoContainer>
               <Container>
                 <CardsContainer>
