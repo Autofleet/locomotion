@@ -40,7 +40,7 @@ const Card = ({
           </>
         )}
       </CardTitleContainer>
-      {children ? <CardText>{children}</CardText> : undefined}
+      {children ? <CardText numberOfLines={1}>{children}</CardText> : undefined}
     </CardContentContainer>
     {icon ? (
       <TouchableIconContainer onPress={onIconPress}>
