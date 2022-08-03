@@ -26,13 +26,14 @@ class MixpanelService {
       await Mixpanel.identify(uniqueId);
       Mixpanel.set({
         id: user.id,
+        demandSourceId: Config.OPERATION_ID,
       });
     }
   };
 
   trackWithProperties = (event, props) => {
     if (this.isInit) {
-      Mixpanel.trackWithProperties(event, props);
+      Mixpanel.trackWithProperties(event, { ...props, demandSourceId: Config.OPERATION_ID });
     }
   };
 
