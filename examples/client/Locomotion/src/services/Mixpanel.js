@@ -25,15 +25,16 @@ class MixpanelService {
       await Mixpanel.optInTracking();
       await Mixpanel.identify(uniqueId);
       Mixpanel.set({
-        id: user.id,
+        AFId: user.id,
         demandSourceId: Config.OPERATION_ID,
+        appName: Config.OPERATION_NAME,
       });
     }
   };
 
   trackWithProperties = (event, props) => {
     if (this.isInit) {
-      Mixpanel.trackWithProperties(event, { ...props, demandSourceId: Config.OPERATION_ID });
+      Mixpanel.trackWithProperties(event, { ...props, demandSourceId: Config.OPERATION_ID, appName: Config.OPERATION_NAME });
     }
   };
 
