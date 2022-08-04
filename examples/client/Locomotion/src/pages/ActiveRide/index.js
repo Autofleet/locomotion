@@ -62,7 +62,7 @@ const RidePage = ({ mapSettings, navigation }) => {
   const {
     locationGranted, setLocationGranted,
   } = useContext(UserContext);
-  const [addressSelectorFocus, setAddressSelectorFocus] = useState(STOP_POINT_TYPES.STOP_POINT_DROPOFF);
+  const [addressSelectorFocusIndex, setAddressSelectorFocusIndex] = useState(1);
   const { getSettingByKey } = settings.useContainer();
   const mapRef = useRef();
   const bottomSheetRef = useRef(null);
@@ -97,16 +97,19 @@ const RidePage = ({ mapSettings, navigation }) => {
     futureRides,
   } = useContext(FutureRidesContext);
 
-  const resetStateToAddressSelector = (selected = null) => {
+  useEffect(() => {
+    setAddressSelectorFocusIndex(requestStopPoints.findIndex(sp => !sp.lat));
+  }, [requestStopPoints]);
+  const resetStateToAddressSelector = (selectedIndex = null) => {
     setServiceEstimations(null);
     setChosenService(null);
     setRide({});
     changeBsPage(BS_PAGES.ADDRESS_SELECTOR);
-    setAddressSelectorFocus(selected);
+    setAddressSelectorFocusIndex(selectedIndex);
   };
 
-  const goBackToAddress = (selected) => {
-    resetStateToAddressSelector(selected);
+  const goBackToAddress = (selectedIndex) => {
+    resetStateToAddressSelector(selectedIndex);
     setTimeout(() => {
       setIsExpanded(true);
       bottomSheetRef.current.expand();
@@ -125,9 +128,7 @@ const RidePage = ({ mapSettings, navigation }) => {
       changeBsPage(BS_PAGES.SERVICE_ESTIMATIONS);
     } else {
       // sorry
-      setAddressSelectorFocus(selectedInputIndex === 0
-        ? STOP_POINT_TYPES.STOP_POINT_PICKUP
-        : STOP_POINT_TYPES.STOP_POINT_DROPOFF);
+      setAddressSelectorFocusIndex(selectedInputIndex);
       setTimeout(() => {
         setIsExpanded(true);
       }, 100);
@@ -153,7 +154,7 @@ const RidePage = ({ mapSettings, navigation }) => {
     ),
     [BS_PAGES.LOCATION_REQUEST]: () => (
       <LocationRequest
-        onSecondaryButtonPress={() => goBackToAddress(STOP_POINT_TYPES.STOP_POINT_PICKUP)}
+        onSecondaryButtonPress={() => goBackToAddress(0)}
       />
     ),
     [BS_PAGES.GENERIC_ERROR]: () => (
@@ -168,7 +169,7 @@ const RidePage = ({ mapSettings, navigation }) => {
       />
     ),
     [BS_PAGES.ADDRESS_SELECTOR]: () => (
-      <AddressSelector addressSelectorFocus={addressSelectorFocus} />
+      <AddressSelector addressSelectorFocusIndex={addressSelectorFocusIndex} />
     ),
     [BS_PAGES.CONFIRM_PICKUP]: () => (
       <ConfirmPickup

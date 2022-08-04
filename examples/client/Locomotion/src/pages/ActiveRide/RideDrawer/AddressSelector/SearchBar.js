@@ -76,7 +76,7 @@ const SearchBar = ({
   onFocus = () => null,
   onBack,
   onSearch,
-  isSelected,
+  selectedIndex,
 }) => {
   const {
     setSelectedInputIndex,
@@ -127,22 +127,16 @@ const SearchBar = ({
   const inputRef = useRef();
 
   useEffect(() => {
-    if (isSelected) {
-      setTimeout(() => {
-        if (inputRef && inputRef.current) {
-          inputRef.current.focus();
-        }
-      }, 250);
-    } else {
-      inputRef.current = null;
+    if (inputRef && inputRef.current) {
+      inputRef.current.focus();
     }
-  }, [isSelected, isExpanded]);
+  }, [selectedIndex, isExpanded]);
 
   const buildSps = () => requestStopPoints.map((s, i) => {
     const { type, description } = requestStopPoints[i];
     const placeholder = getSpPlaceholder(s);
     const rowProps = i === 0 ? { isExpanded } : { setMargin: true };
-    const autoFocus = isExpanded && type === isSelected;
+    const autoFocus = isExpanded && i === selectedIndex;
     return (
       <Row
         {...rowProps}
@@ -182,7 +176,6 @@ const SearchBar = ({
               inputRef.current = ref;
             }
           }}
-          selectTextOnFocus
         />
       </Row>
     );
