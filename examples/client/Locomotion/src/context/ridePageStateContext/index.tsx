@@ -12,7 +12,7 @@ import Mixpanel from '../../services/Mixpanel';
 interface RidePageStateContextProps {
   territory: any;
   loadTerritory: () => void;
-  initGeoService: () => Promise<void>;
+  initGeoService: (skipTerritoryCheck?: boolean) => Promise<void>;
   isUserLocationFocused: boolean;
   setIsUserLocationFocused: (isLocationFocused: boolean) => void;
   currentBsPage: BsPages;
@@ -81,9 +81,9 @@ const RideStateContextContextProvider = ({ children }: { children: any }) => {
     return isInTerritory;
   };
 
-  const initGeoService = async () => {
+  const initGeoService = async (checkTerritory?: boolean) => {
     await geo.initAsync();
-    await loadTerritory(true);
+    await loadTerritory(checkTerritory);
   };
 
   return (
