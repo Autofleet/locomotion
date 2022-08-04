@@ -563,16 +563,17 @@ const RidePageContextProvider = ({ children }: {
       currentCoords = await getCurrentLocation();
     }
     try {
-      const location = currentCoords ? `${currentCoords.latitude},${currentCoords.longitude}` : null;
+      const location = currentCoords
+        ? `${currentCoords.latitude},${currentCoords.longitude}`
+        : `${DEFAULT_COORDS.coords.latitude},${DEFAULT_COORDS.coords.longitude}`;
       const data = await getPlaces({
         input,
-        region: 'il',
+        ...(Config.DEFAULT_COUNTRY_CODE && { region: Config.DEFAULT_COUNTRY_CODE.toLowerCase() }),
         origin: location,
         radius: 20000,
         location,
       });
-      // setSearchResults(data);
-      return data;
+      return data?.sort((a: any, b: any) => (a.distance_meters - b.distance_meters));
     } catch (error) {
       console.log('Got error while try to get places', error);
       return undefined;
