@@ -9,10 +9,9 @@ const pointInPolygon = (polys: any, position: any) => {
     try {
       const { coords: { latitude, longitude } } = position;
       if (latitude && longitude) {
-        const t = polys.map((p: { polygon: any; }) => p.polygon.coordinates);
+        const territoryPolygons = polys.map((p: { polygon: any; }) => polygon(p.polygon.coordinates));
         const pt = point([longitude, latitude]);
-        const poly = polygon(t.flat());
-        return booleanPointInPolygon(pt, poly);
+        return territoryPolygons.some((poly: any) => booleanPointInPolygon(pt, poly));
       }
     } catch (e) {
       console.error(ERROR_MSG, e);
