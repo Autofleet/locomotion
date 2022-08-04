@@ -10,7 +10,7 @@ import { Container, StreetAddress, StreetAddressContainer } from './styled';
 const ICON_SIZE = 15;
 
 interface StopPointsViewerProps {
-  goBackToAddressSelector: (selected: string | null) => void
+  goBackToAddressSelector: (selected: number | null) => void
 }
 
 const StopPointsViewer = ({ goBackToAddressSelector }: StopPointsViewerProps) => {
@@ -22,7 +22,7 @@ const StopPointsViewer = ({ goBackToAddressSelector }: StopPointsViewerProps) =>
       <Container>
         <StreetAddressContainer
           testID="estimationsPickupEdit"
-          onPress={() => goBackToAddressSelector(STOP_POINT_TYPES.STOP_POINT_PICKUP)}
+          onPress={() => goBackToAddressSelector(0)}
         >
           <StreetAddress>
             {firstSp?.streetAddress}
@@ -36,14 +36,14 @@ const StopPointsViewer = ({ goBackToAddressSelector }: StopPointsViewerProps) =>
         />
         <StreetAddressContainer
           testID="estimationsDropOffEdit"
-          onPress={() => goBackToAddressSelector(STOP_POINT_TYPES.STOP_POINT_DROPOFF)}
+          onPress={() => goBackToAddressSelector(1)}
         >
           <StreetAddress>
             {lastSp?.streetAddress}
           </StreetAddress>
         </StreetAddressContainer>
         <TouchableOpacity
-          onPress={() => goBackToAddressSelector(STOP_POINT_TYPES.STOP_POINT_DROPOFF)}
+          onPress={() => goBackToAddressSelector(1)}
         >
           <SvgIcon
             Svg={editIcon}
