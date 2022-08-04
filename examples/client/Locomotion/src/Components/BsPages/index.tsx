@@ -503,6 +503,22 @@ export const NoPayment = (props: any) => {
   );
 };
 
+export const Loading = (props: any) => (
+  <BsPage
+    {...props}
+  >
+    <LoaderContainer>
+      <Loader
+        dark
+        lottieViewStyle={{
+          height: '100%', width: '100%', alignItems: 'center', justifyContent: 'center',
+        }}
+        sourceProp={undefined}
+      />
+    </LoaderContainer>
+  </BsPage>
+);
+
 export const ConfirmingRide = (props: any) => {
   const { setSnapPointsState } = useContext(BottomSheetContext);
   const { changeBsPage } = useContext(RideStateContextContext);
