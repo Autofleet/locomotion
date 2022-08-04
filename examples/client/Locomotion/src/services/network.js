@@ -66,11 +66,9 @@ class Network {
       this[method] = async (...args) => {
         const baseURL = await AppSettings.getServerUrl();
         this.axios.defaults.baseURL = baseURL;
-        if (!this.axios.defaults.headers.common.Authorization) {
-          const accessToken = await Auth.getAT(this.axios);
-          if (accessToken) {
-            this.axios.defaults.headers.common.Authorization = `Bearer ${accessToken}`;
-          }
+        const accessToken = await Auth.getAT(this.axios);
+        if (accessToken) {
+          this.axios.defaults.headers.common.Authorization = `Bearer ${accessToken}`;
         }
 
         this.axios.defaults.headers.common['x-loco-ds-id'] = Config.OPERATION_ID;
