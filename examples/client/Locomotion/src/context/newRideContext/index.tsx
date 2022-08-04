@@ -561,6 +561,8 @@ const RidePageContextProvider = ({ children }: {
     let currentCoords;
     if (locationGranted) {
       currentCoords = await getCurrentLocation();
+    } else {
+      currentCoords = DEFAULT_COORDS.coords;
     }
     try {
       const location = currentCoords ? `${currentCoords.latitude},${currentCoords.longitude}` : null;
