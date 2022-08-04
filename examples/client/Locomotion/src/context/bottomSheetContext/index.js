@@ -23,11 +23,12 @@ export const SNAP_POINT_STATES = {
   [BS_PAGES.CANCEL_RIDE]: [STATIC_SNAP_POINTS],
   [BS_PAGES.CONFIRM_FUTURE_RIDE]: [400],
   [BS_PAGES.GENERIC_ERROR]: [STATIC_SNAP_POINTS],
+  [BS_PAGES.LOADING]: [STATIC_SNAP_POINTS],
 };
 const BottomSheetProvider = ({ children }) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const [genericErrorDetails, setGenericErrorDetails] = useState({});
-  const [snapPointsState, setSnapPointsState] = useState(SNAP_POINT_STATES[BS_PAGES.ADDRESS_SELECTOR]);
+  const [snapPointsState, setSnapPointsState] = useState(SNAP_POINT_STATES[BS_PAGES.LOADING]);
   const [footerComponent, setFooterComponent] = useState(null);
   const [topBarText, setTopBarText] = useState('');
   const snapPoints = useMemo(() => snapPointsState, [snapPointsState]);

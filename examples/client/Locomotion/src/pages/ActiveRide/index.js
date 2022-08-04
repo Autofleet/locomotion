@@ -26,6 +26,7 @@ import {
   ConfirmPickupTime,
   ConfirmFutureRide,
   GenericError,
+  Loading,
 } from '../../Components/BsPages';
 import { RideStateContextContext, RideStateContextContextProvider } from '../../context';
 import NewRidePageContextProvider, { RidePageContext } from '../../context/newRideContext';
@@ -137,6 +138,9 @@ const RidePage = ({ mapSettings, navigation }) => {
   };
 
   const BS_PAGE_TO_COMP = {
+    [BS_PAGES.LOADING]: () => (
+      <Loading />
+    ),
     [BS_PAGES.CONFIRM_FUTURE_RIDE]: () => (
       <ConfirmFutureRide
         onButtonPress={backToMap}

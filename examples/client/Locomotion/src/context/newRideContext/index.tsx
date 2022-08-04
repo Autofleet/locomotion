@@ -365,7 +365,7 @@ const RidePageContextProvider = ({ children }: {
       if (areStopPointsInTerritory) {
         tryServiceEstimations();
       }
-    } else if (currentBsPage !== BS_PAGES.ADDRESS_SELECTOR) {
+    } else if (![BS_PAGES.ADDRESS_SELECTOR, BS_PAGES.LOADING].includes(currentBsPage)) {
       // reset req stop point request
       if (!ride.id) {
         changeBsPage(BS_PAGES.ADDRESS_SELECTOR);
@@ -397,6 +397,9 @@ const RidePageContextProvider = ({ children }: {
             onRideCompleted(lastRideId);
           }, 1000);
         }
+      }
+      if (currentBsPage === BS_PAGES.LOADING) {
+        changeBsPage(BS_PAGES.ADDRESS_SELECTOR);
       }
     }
   };
