@@ -504,7 +504,9 @@ export const NoPayment = (props: any) => {
 };
 
 export const Loading = (props: any) => (
-  <BsPage>
+  <BsPage
+    {...props}
+  >
     <LoaderContainer>
       <Loader
         dark
