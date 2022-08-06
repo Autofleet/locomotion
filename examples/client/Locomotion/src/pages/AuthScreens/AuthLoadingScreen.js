@@ -12,6 +12,7 @@ import SETTINGS_KEYS from '../../context/settings/keys';
 import { StorageService } from '../../services';
 import FullPageLoader from '../../Components/FullPageLoader';
 import { checkVersionAndForceUpdateIfNeeded } from '../../services/VersionCheck';
+import * as navigationService from '../../services/navigation';
 
 export const INITIAL_USER_STATE = {
   phoneNumber: '',
@@ -24,7 +25,7 @@ export const INITIAL_USER_STATE = {
   pushUserId: '',
 };
 
-const AuthLoadingScreen = ({ navigation }) => {
+const AuthLoadingScreen = () => {
   const { setUser, user } = useContext(UserContext);
   const { navigateBasedOnUser } = useContext(OnboardingContext);
   const { getSettingByKey, getAppSettings } = settings.useContainer();
@@ -48,9 +49,14 @@ const AuthLoadingScreen = ({ navigation }) => {
     async function getFromStorage() {
       const clientProfile = await StorageService.get('clientProfile');
       if (clientProfile) {
-        const response = await getUserDetails();
-        if (!response) {
-          Auth.logout(navigation);
+        let response;
+        try {
+          response = await getUserDetails();
+          if (!response) {
+            Auth.logout();
+          }
+        } catch (e) {
+          Auth.logout();
         }
 
         const userData = response;
@@ -68,17 +74,17 @@ const AuthLoadingScreen = ({ navigation }) => {
         await saveUser(userData);
 
         if (!userData.active) {
-          return navigation.replace(MAIN_ROUTES.LOCK, { params: { showHeaderIcon: false } });
+          return navigationService.replace(MAIN_ROUTES.LOCK, { params: { showHeaderIcon: false } });
         }
 
         if (!userData.didCompleteOnboarding) {
           return navigateBasedOnUser(userData);
         }
 
-        return navigation.replace(APP_ROUTES.MAIN_APP);
+        return navigationService.replace(APP_ROUTES.MAIN_APP);
       }
       setUser(INITIAL_USER_STATE);
-      navigation.navigate(MAIN_ROUTES.START);
+      navigationService.replace(MAIN_ROUTES.START);
     }
 
     await getAppSettings();

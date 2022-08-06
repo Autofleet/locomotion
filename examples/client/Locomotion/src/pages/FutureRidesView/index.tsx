@@ -18,12 +18,13 @@ import { BS_PAGES } from '../../context/ridePageStateContext/utils';
 import BlackOverlay from '../../Components/BlackOverlay';
 import GenericErrorPopup from '../../popups/GenericError';
 import { NoRidesInList } from '../RideHistory/RidesList/styled';
+import Mixpanel from '../../services/Mixpanel';
 
 interface FutureRidesViewProps {
   menuSide: 'right' | 'left';
 }
 const FutureRidesView = ({ menuSide }: FutureRidesViewProps) => {
-  const [rideToCancel, setRideToCancel] = useState<RideInterface | null>(null);
+  const [rideToCancel, setRideToCancel] = useState<string | undefined>(undefined);
   const [showError, setShowError] = useState(false);
   const [services, setServices] = useState<any[]>([]);
   const bottomSheetRef = useRef<bottomSheet>(null);
@@ -31,9 +32,9 @@ const FutureRidesView = ({ menuSide }: FutureRidesViewProps) => {
     futureRides, loadFutureRides,
   } = useContext(FutureRidesContext);
   const { changeBsPage, currentBsPage } = useContext(RideStateContextContext);
-  const { cancelRide, getServices } = useContext(RidePageContext);
-  const onPressCancel = (ride: RideInterface) => {
-    setRideToCancel(ride);
+  const { cancelRide, getServices, ride } = useContext(RidePageContext);
+  const onPressCancel = (id?: string) => {
+    setRideToCancel(id);
     changeBsPage(BS_PAGES.CANCEL_RIDE);
   };
 
@@ -61,7 +62,7 @@ const FutureRidesView = ({ menuSide }: FutureRidesViewProps) => {
       <PageHeader
         title={i18n.t('futureRides.pageTitle')}
         onIconPress={() => {
-          changeBsPage(BS_PAGES.ADDRESS_SELECTOR);
+          changeBsPage(ride.id ? BS_PAGES.ACTIVE_RIDE : BS_PAGES.ADDRESS_SELECTOR);
           NavigationService.navigate(MAIN_ROUTES.HOME);
         }}
         iconSide={menuSide}
@@ -69,15 +70,15 @@ const FutureRidesView = ({ menuSide }: FutureRidesViewProps) => {
       <ContentContainer>
         {futureRides.length ? (
           <>
-            {(futureRides || []).map((ride) => {
-              const service = services.find(s => s.id === ride.serviceId);
+            {(futureRides || []).map((fRide) => {
+              const service = services.find(s => s.id === fRide.serviceId);
               return (
                 <RideCard
-                  ride={ride}
-                  onPress={() => onPressCancel(ride)}
+                  ride={fRide}
+                  onPress={() => onPressCancel(fRide?.id)}
                   serviceName={service?.displayName}
-                  paymentMethod={ride?.payment?.paymentMethod}
-                  scheduledTo={ride.scheduledTo || ''}
+                  paymentMethod={fRide?.payment?.paymentMethod}
+                  scheduledTo={fRide.scheduledTo || ''}
                 />
               );
             })}
@@ -102,18 +103,20 @@ const FutureRidesView = ({ menuSide }: FutureRidesViewProps) => {
           secondaryButtonText={i18n.t('bottomSheetContent.cancelRide.secondaryButtonTextFuture')}
           onButtonPress={async () => {
             try {
-              await cancelRide(rideToCancel?.id);
+              Mixpanel.setEvent('Trying to cancel ride');
+              await cancelRide(rideToCancel);
               await loadFutureRides();
-              changeBsPage(BS_PAGES.ADDRESS_SELECTOR);
+              changeBsPage(ride.id ? BS_PAGES.ACTIVE_RIDE : BS_PAGES.ADDRESS_SELECTOR);
               if (futureRides.length === 1) {
                 NavigationService.navigate(MAIN_ROUTES.HOME);
               }
-            } catch {
+            } catch (e: any) {
               setShowError(true);
+              Mixpanel.setEvent('failed to cancel ride', { status: e?.response?.status });
             }
           }}
           onSecondaryButtonPress={() => {
-            changeBsPage(BS_PAGES.ADDRESS_SELECTOR);
+            changeBsPage(ride.id ? BS_PAGES.ACTIVE_RIDE : BS_PAGES.ADDRESS_SELECTOR);
           }}
         />
       </BottomSheetComponent>

@@ -69,7 +69,7 @@ const RideTitleCard = ({
     const isLessThenFiveDaysSince = moment(moment()).diff(ride.scheduledTo || ride.createdAt, 'days') < 5;
     if (ride.state === RIDE_STATES.COMPLETED
       && isLessThenFiveDaysSince) {
-      return <TextButton onPress={() => { NavigationService.navigate(MAIN_ROUTES.POST_RIDE, { rideId: ride.id, priceCalculationId: ride.priceCalculationId }); }} text={i18n.t('rideHistory.rideCard.addTip')} />;
+      return <TextButton testID="AddATip" onPress={() => { NavigationService.navigate(MAIN_ROUTES.POST_RIDE, { rideId: ride.id, priceCalculationId: ride.priceCalculationId }); }} text={i18n.t('rideHistory.rideCard.addTip')} />;
     }
   };
 
@@ -82,7 +82,7 @@ const RideTitleCard = ({
           </DayTitleText>
           {ride.state === RIDE_STATES.COMPLETED ? (
             <DayTitleSubText noCap>
-              {`${moment(ride.lastMatchAttempt).format('HH:mm')
+              {`${moment(ride.lastMatchAttempt).format('h:mm A')
               } · ${ride.appDuration}`}
             </DayTitleSubText>
           ) : <RideStateText>{i18n.t(`rideHistory.ride.states.${ride.state}`)}</RideStateText>}
@@ -160,7 +160,7 @@ const RideView = ({ ride }) => {
         <StopPointsVerticalViewContainer>
           <RidePaymentDetails
             rideId={ride.id}
-            paymentMethod={ride.payment?.paymentMethod}
+            paymentMethod={ride?.payment?.paymentMethod}
             state={ride.state}
             currency={ride.priceCurrency}
             rideHistory

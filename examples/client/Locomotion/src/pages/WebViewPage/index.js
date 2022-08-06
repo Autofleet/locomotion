@@ -3,8 +3,9 @@ import { useRoute } from '@react-navigation/native';
 import { MAIN_ROUTES } from '../routes';
 import WebView from '../WebView';
 import SafeView from '../../Components/SafeView';
+import * as navigationService from '../../services/navigation';
 
-export default ({ navigation }) => {
+export default () => {
   const route = useRoute();
   const {
     url,
@@ -18,7 +19,7 @@ export default ({ navigation }) => {
       <WebView
         title={title}
         uri={url}
-        onIconPress={() => navigation.navigate(MAIN_ROUTES.HOME)}
+        onIconPress={() => navigationService.navigate(MAIN_ROUTES.HOME)}
       />
     </SafeView>
   );

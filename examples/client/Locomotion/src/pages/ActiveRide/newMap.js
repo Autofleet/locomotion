@@ -1,11 +1,11 @@
 import React, {
   useContext, useEffect, useState,
 } from 'react';
-import polyline from '@mapbox/polyline';
 import { StyleSheet } from 'react-native';
 import MapView, { Polygon, Polyline } from 'react-native-maps';
 import Config from 'react-native-config';
 import moment from 'moment';
+import { lineString, nearestPointOnLine, point } from '@turf/turf';
 import { FutureRidesContext } from '../../context/futureRides';
 import { RidePageContext } from '../../context/newRideContext';
 import { RideStateContextContext } from '../../context';
@@ -125,7 +125,7 @@ export default React.forwardRef(({
   };
 
   const initLocation = async () => {
-    await initGeoService();
+    await initGeoService(!ride.id);
     await initialLocation();
   };
 
@@ -169,14 +169,7 @@ export default React.forwardRef(({
   }, [currentBsPage]);
 
   useEffect(() => {
-    if (ride.state === RIDE_STATES.DISPATCHED) {
-      const [pickupStopPoint] = ride.stopPoints;
-      focusMapToCoordinates([pickupStopPoint, ride.vehicle.location].map(sp => ({
-        latitude: sp.lat,
-        longitude: sp.lng,
-      })), true, ACTIVE_RIDE_MAP_PADDING);
-    }
-    if (ride.state === RIDE_STATES.ACTIVE) {
+    if ([RIDE_STATES.DISPATCHED, RIDE_STATES.ACTIVE].includes(ride.state)) {
       const currentStopPoint = (ride.stopPoints || []).find(sp => sp.state === STOP_POINT_STATES.PENDING);
       const coords = getPolylineList(currentStopPoint, ride);
       focusMapToCoordinates(coords, true, ACTIVE_RIDE_MAP_PADDING);
@@ -242,6 +235,21 @@ export default React.forwardRef(({
     return stopPoint.streetAddress || stopPoint.description;
   };
 
+  const getVehicleLocation = (location, vehiclePolyline) => {
+    if (!vehiclePolyline) {
+      return location;
+    }
+
+    const formattedPolyline = lineString(vehiclePolyline.map(p => ([p.longitude, p.latitude])));
+    const vehiclePoint = point([location.lng, location.lat]);
+
+    const { geometry } = nearestPointOnLine(formattedPolyline, vehiclePoint);
+    return {
+      lat: geometry.coordinates[1],
+      lng: geometry.coordinates[0],
+    };
+  };
+
   return (
     <>
       <MapView
@@ -274,7 +282,7 @@ export default React.forwardRef(({
       >
         {ride.vehicle && ride.vehicle.location && (
           <AvailabilityVehicle
-            location={ride.vehicle.location}
+            location={getVehicleLocation(ride.vehicle.location, finalStopPoints && polylineList)}
             id={ride.vehicle.id}
             key={ride.vehicle.id}
           />

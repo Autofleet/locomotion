@@ -45,3 +45,8 @@ export const sendEmailVerification = async () => {
   const { data } = await network.post('/api/v1/invite/send-email-verification');
   return data;
 };
+
+export const deleteUser = async () => {
+  const { data } = await network.delete('api/v1/me/user');
+  return data;
+};

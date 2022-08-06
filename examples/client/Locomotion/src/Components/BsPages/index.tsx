@@ -8,6 +8,7 @@ import { useBottomSheet } from '@gorhom/bottom-sheet';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import moment from 'moment';
 import DatePicker from 'react-native-date-picker';
+import Mixpanel from '../../services/Mixpanel';
 import GenericErrorPopup from '../../popups/GenericError';
 import TextRowWithIcon from '../../Components/TextRowWithIcon';
 import { FutureRidesContext } from '../../context/futureRides';
@@ -194,7 +195,7 @@ const BsPage = ({
       <Footer fullWidthButtons={fullWidthButtons}>
         {ButtonText && (
         <OtherButton
-          testID="confirm"
+          testID="bottomSheetConfirm"
           style={{ width: buttonWidth }}
           disabled={buttonDisabled}
           onPress={onButtonPress}
@@ -206,6 +207,7 @@ const BsPage = ({
         )}
         {SecondaryButtonText && (
         <SecondaryButton
+          testID="bottomSheetSecondary"
           disabled={buttonDisabled}
           style={{ width: buttonWidth }}
           warning={warning}
@@ -233,6 +235,7 @@ BsPage.defaultProps = {
 export default BsPage;
 
 export const ConfirmPickupTime = (props: any) => {
+  const theme = useContext(ThemeContext);
   const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
   const {
     unconfirmedPickupTime,
@@ -245,7 +248,7 @@ export const ConfirmPickupTime = (props: any) => {
     changeBsPage,
   } = useContext(RideStateContextContext);
   const date = moment(unconfirmedPickupTime).format('ddd, MMM Do');
-  const time = moment(unconfirmedPickupTime).format('HH:mm');
+  const time = moment(unconfirmedPickupTime).format('h:mm A');
   return (
     <BsPage
       TitleText={i18n.t('bottomSheetContent.confirmPickupTime.titleText')}
@@ -269,6 +272,7 @@ export const ConfirmPickupTime = (props: any) => {
         {i18n.t('bottomSheetContent.confirmPickupTime.pickupText', { date, time })}
       </RoundedButton>
       <DatePicker
+        textColor={theme.textColor}
         open={isDatePickerOpen}
         date={moment(unconfirmedPickupTime).add(unconfirmedPickupTime ? 0 : 1, 'hours').toDate()}
         maximumDate={getFutureRideMaxDate()}
@@ -330,10 +334,12 @@ export const CancelRide = (props: any) => {
       onButtonPress={async () => {
         try {
           setIsLoading(true);
+          Mixpanel.setEvent('Trying to cancel ride');
           await cancelRide();
-        } catch {
+        } catch (e: any) {
           setShowError(true);
           setIsLoading(false);
+          Mixpanel.setEvent('failed to cancel ride', { status: e?.response?.status });
         }
       }}
       onSecondaryButtonPress={() => changeBsPage(BS_PAGES.ACTIVE_RIDE)}
@@ -354,7 +360,7 @@ export const ConfirmFutureRide = (props: any) => {
 
   const getDateDisplay = () => {
     const date = moment(newFutureRide?.scheduledTo).format('ddd, MMM Do');
-    const time = moment(newFutureRide?.scheduledTo).format('HH:mm');
+    const time = moment(newFutureRide?.scheduledTo).format('h:mm A');
     const dateText = i18n.t('bottomSheetContent.confirmPickupTime.pickupText', { date, time });
     return <TextRowWithIcon text={dateText} icon={timeIcon} />;
   };
@@ -480,7 +486,7 @@ export const NoPayment = (props: any) => {
 
   useEffect(() => {
     proceedIfPaymentMethodsAreValid();
-  }, [paymentMethods]);
+  }, [ride.paymentMethodId]);
 
   return (
     <BsPage
@@ -496,6 +502,22 @@ export const NoPayment = (props: any) => {
     />
   );
 };
+
+export const Loading = (props: any) => (
+  <BsPage
+    {...props}
+  >
+    <LoaderContainer>
+      <Loader
+        dark
+        lottieViewStyle={{
+          height: '100%', width: '100%', alignItems: 'center', justifyContent: 'center',
+        }}
+        sourceProp={undefined}
+      />
+    </LoaderContainer>
+  </BsPage>
+);
 
 export const ConfirmingRide = (props: any) => {
   const { setSnapPointsState } = useContext(BottomSheetContext);

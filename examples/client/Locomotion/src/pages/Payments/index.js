@@ -12,8 +12,9 @@ import CreditCardsList from './credit-cards';
 import NewCreditForm from '../../Components/NewCreditForm';
 import { PageContainer } from '../styles';
 import { MAIN_ROUTES } from '../routes';
+import * as navigationService from '../../services/navigation';
 
-export default ({ navigation, menuSide }) => {
+export default ({ menuSide }) => {
   const route = useRoute();
   const usePayments = PaymentsContext.useContainer();
 
@@ -41,15 +42,15 @@ export default ({ navigation, menuSide }) => {
 
   const onPressBack = () => {
     if (route.params?.rideFlow) {
-      return navigation.navigate(MAIN_ROUTES.HOME);
+      return navigationService.navigate(MAIN_ROUTES.HOME);
     }
     if (!showList && hasPaymentMethods) {
       return setShowList(true);
     }
     if (route.params && route.params.back) {
-      navigation.navigate(MAIN_ROUTES.ACCOUNT);
+      navigationService.navigate(MAIN_ROUTES.ACCOUNT);
     } else {
-      navigation.navigate(MAIN_ROUTES.HOME);
+      navigationService.navigate(MAIN_ROUTES.HOME);
     }
   };
   return (
@@ -74,10 +75,10 @@ export default ({ navigation, menuSide }) => {
               PageText={() => <CreditFormText>{i18n.t('payments.newCardDetails')}</CreditFormText>}
               onDone={(paymentMethodId) => {
                 if (route.params && route.params.rideFlow) {
-                  navigation.navigate(MAIN_ROUTES.HOME);
                   updateRidePayload({
                     paymentMethodId,
                   });
+                  navigationService.navigate(MAIN_ROUTES.HOME);
                 } else {
                   setShowList(true);
                 }

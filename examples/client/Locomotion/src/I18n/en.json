@@ -11,6 +11,7 @@
         "toolTipEta": "ETA {{minutes}} min",
         "noCharge": "No charge",
         "estimatedFare": "Estimated fare",
+        "estimatedFareMessage": "Some of the fares are estimated and may vary based on ride and other conditions",
         "type": {
             "pickup": "Pickup",
             "dropoff": "Drop off"
@@ -30,6 +31,7 @@
         "login": "Log In",
         "noAccountError": "No account exists with that number.",
         "accountAlreadyExistsError": "An account already exists with that number.",
+        "clientIsBanned": "There's an issue with your account. Please contact {{ appName }} for further assistance.",
         "onBoardingPageTitle": "Please add your name and upload a photo to continue.",
         "phoneNumberPlaceholder": "Phone number",
         "loginPageInstructions": "Enter your phone number.",
@@ -38,6 +40,7 @@
         "submitVertButton": "Verify",
         "phoneNumberError": "Oops! Seems like something went wrong.",
         "invalidPhoneNumberError": "Phone number is not valid.",
+        "tooManyRequestError": "There have been too many recent attempts to contact this number. Please try again later.",
         "vertError": "Sorry, seems like the verification code is incorrect. Please make sure you've typed it correctly.",
         "resendButton": "Start over",
         "termsWebViewTitle": "Terms and Conditions",
@@ -274,6 +277,20 @@
         "logout": "Logout",
         "futureRides": "Upcoming Rides"
     },
+    "temporaryHoldText": "A small amount may be temporarily placed on hold when you start your ride ",
+    "learnMore": "Learn more",
+    "temporaryHoldPopup":
+    {
+        "title": "Temporary hold",
+        "buttonText": "Got it",
+        "text": "You may see a small amount on hold when you create a ride. This is to verify there are sufficient funds for your ride. {{appName}} will release the hold after your ride. It may take your bank several days to process."
+    },
+    "deleteUserPopup": {
+        "deleteUserTitle": "Delete Account",
+        "deleteAccountText": "Are you sure you want to delete your account?",
+        "confirmText": "Yes, delete account",
+        "cancelText": "Go back"
+    },
     "contactUs": {
         "pageTitle": "Contact us",
         "learnMore": "Learn more",
@@ -416,6 +433,26 @@
         "titleText": "Scheduled ride limit reached",
         "buttonText": "Back to order",
         "subTitleText": "Hey, looks like you're trying to schedule multiple rides that are too close together. Please select another time and try again."
+    },
+    "outstandingBalance": {
+        "titleText": "Outstanding balance",
+        "buttonText": "Contact support",
+        "subTitleText": "The selected payment method has an outstanding balance. Please clear the balance so you can keep using {{operationName}}"
+    },
+    "cashNotAllowed": {
+        "titleText": "Choose another payment method",
+        "buttonText": "Back to order",
+        "subTitleText": "You’ve selected to pay with cash but this isn’t permitted. Please choose another payment method."
+    },
+    "paymentMethodExpired": {
+        "titleText": "Payment method expired",
+        "buttonText": "Back to order",
+        "subTitleText": "The selected payment method has expired. Please choose another payment method."
+    },
+    "paymentIntentError": {
+        "titleText": "There’s a payment issue",
+        "buttonText": "Back to order",
+        "subTitleText": "There’s an issue with this payment method. Please select another payment method to proceed."
     },
     "confirmFutureRide": {
         "titleText": "Your upcoming ride has been scheduled",

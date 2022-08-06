@@ -21,6 +21,7 @@ import CreditCardIconSource from '../../assets/credit-card.svg';
 import SvgIcon from '../SvgIcon';
 import settings from '../../context/settings';
 import SETTINGS_KEYS from '../../context/settings/keys';
+import * as navigationService from '../../services/navigation';
 
 const DrawerHeader = ({ navigateTo }) => {
   const { user } = useContext(UserContext);
@@ -36,7 +37,7 @@ const DrawerHeader = ({ navigateTo }) => {
       <HeaderMainText>
         {user ? `${user.firstName} ${user.lastName}` : ''}
       </HeaderMainText>
-      <HeaderLink onPress={() => navigateTo(MAIN_ROUTES.ACCOUNT)}>
+      <HeaderLink testID="userProfile" onPress={() => navigateTo(MAIN_ROUTES.ACCOUNT)}>
         <HeaderText>
           {i18n.t('menu.account')}
         </HeaderText>
@@ -61,7 +62,7 @@ export const DrawerContentComponent = ({ navigation, state }) => {
 
   const navigateTo = (page) => {
     navigation.closeDrawer();
-    navigation.navigate(page);
+    navigationService.navigate(page);
   };
 
   const checkFutureRidesSetting = async () => {

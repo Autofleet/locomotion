@@ -16,6 +16,8 @@ export default ({
     />
     { uri ? (
       <WebView
+        overScrollMode="never"
+        opacity={0.99}
         source={{ uri }}
         style={{ marginTop: 0 }}
         useWebKit

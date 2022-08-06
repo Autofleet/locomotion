@@ -9,7 +9,7 @@ import {
   RIDE_ACTIVE_STATES, RIDE_STATES, STOP_POINT_STATES, STOP_POINT_TYPES,
 } from '../../lib/commonTypes';
 
-const getEtaText = eta => moment(eta).format('HH:mm');
+const getEtaText = eta => moment(eta).format('h:mm A');
 
 const stopPointText = (sp, isFutureRide) => {
   if (isFutureRide) {

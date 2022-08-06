@@ -20,18 +20,14 @@ import {
   CreditCardRowContainer, PriceItemsContainer, EstimationText, EstimationContainer,
 } from './styled';
 import { PaymentMethodInterface } from '../../context/payments/interface';
+import * as navigationService from '../../services/navigation';
 
 type RidePriceBreakdownParams = {
   rideId: string,
   rideHistory: boolean
 }
 
-type Nav = {
-  navigate: (value: string, object?: any) => void;
-}
-
 const RidePriceBreakDown = () => {
-  const navigation = useNavigation<Nav>();
   const route = useRoute();
   const params : RidePriceBreakdownParams = route.params as RidePriceBreakdownParams;
   const [loading, setLoading] = useState<boolean>(true);
@@ -58,7 +54,8 @@ const RidePriceBreakDown = () => {
       // @ts-ignore
       const result = await getRideFromApi(params.rideId || ride.id);
       setLocalRide(result);
-      setPaymentMethod(result.payment?.paymentMethod);
+      setPaymentMethod(result.payment.paymentMethod);
+
       setLoading(false);
     }
   };
@@ -96,7 +93,7 @@ const RidePriceBreakDown = () => {
       <PageHeader
         title={i18n.t('ridePriceBreakdown.pageTitle')}
         onIconPress={
-          () => navigation.navigate(params.rideHistory
+          () => navigationService.navigate(params.rideHistory
             ? MAIN_ROUTES.COMPLETED_RIDE_OVERVIEW_PAGE
             : MAIN_ROUTES.HOME)}
       />

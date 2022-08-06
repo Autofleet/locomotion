@@ -1,8 +1,9 @@
 /* eslint-disable class-methods-use-this */
+import Config from 'react-native-config';
 import Mixpanel from 'react-native-mixpanel';
 import { getDeviceId } from './device';
 
-export const getElementName = props => props['data-test-id'] || props.id;
+export const getElementName = props => props.testID || props.id;
 
 class MixpanelService {
   constructor() {
@@ -12,8 +13,7 @@ class MixpanelService {
 
   init = async () => {
     if (!this.isInit) {
-      /* if Config.OPERATION_ID is valid then mixpanelToken = Config.MIXPANEL_TOKEN */
-      await Mixpanel.sharedInstanceWithToken('token', true);
+      await Mixpanel.sharedInstanceWithToken(Config.MIXPANEL_TOKEN, true);
       this.isInit = true;
     }
   };
@@ -25,14 +25,16 @@ class MixpanelService {
       await Mixpanel.optInTracking();
       await Mixpanel.identify(uniqueId);
       Mixpanel.set({
-        id: user.id,
+        AFId: user.id,
+        demandSourceId: Config.OPERATION_ID,
+        appName: Config.OPERATION_NAME,
       });
     }
   };
 
   trackWithProperties = (event, props) => {
     if (this.isInit) {
-      Mixpanel.trackWithProperties(event, props);
+      Mixpanel.trackWithProperties(event, { ...props, demandSourceId: Config.OPERATION_ID, appName: Config.OPERATION_NAME });
     }
   };
 

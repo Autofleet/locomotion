@@ -69,7 +69,7 @@ const WelcomeText = styled.Text`
   align-self: flex-start;
   margin-bottom: 5px;
 `;
-const AddressSelectorBottomSheet = ({ addressSelectorFocus }) => {
+const AddressSelectorBottomSheet = ({ addressSelectorFocusIndex }) => {
   const userContext = useContext(RidePageContext);
   const { locationGranted, user } = useContext(UserContext);
   const {
@@ -146,7 +146,7 @@ const AddressSelectorBottomSheet = ({ addressSelectorFocus }) => {
         isExpanded={isExpanded}
         onBack={onBack}
         onSearch={userContext.searchAddress}
-        isSelected={addressSelectorFocus}
+        selectedIndex={addressSelectorFocusIndex}
       />
       <HistoryContainer keyboardShouldPersistTaps="handled">
         {isExpanded
@@ -185,8 +185,6 @@ const AddressSelectorBottomSheet = ({ addressSelectorFocus }) => {
         isVisible={userContext.ridePopup === RIDE_POPUPS.FAILED_SERVICE_REQUEST}
         closePopup={() => {
           userContext.setRidePopup(null);
-          setIsExpanded(true);
-          expand();
         }}
       />
     </ContentContainer>

@@ -237,10 +237,10 @@ const RidePageContextProvider = ({ children }: {
   };
 
   const onRideCompleted = (rideId: string) => {
-    navigation.navigate(MAIN_ROUTES.POST_RIDE, { rideId });
+    cleanRideState();
+    navigationService.navigate(MAIN_ROUTES.POST_RIDE, { rideId });
     setTimeout(() => {
       changeBsPage(BS_PAGES.ADDRESS_SELECTOR);
-      cleanRideState();
     }, 500);
   };
 
@@ -320,14 +320,18 @@ const RidePageContextProvider = ({ children }: {
     changeBsPage(BS_PAGES.SERVICE_ESTIMATIONS);
     try {
       const formattedStopPoints = formatStopPointsForEstimations(requestStopPoints);
-      const { estimations, services } = await rideApi.createServiceEstimations(formattedStopPoints, ride.scheduledTo);
+      Mixpanel.setEvent('Get service estimations');
+      const { estimations, services } = await rideApi
+        .createServiceEstimations(formattedStopPoints, ride.scheduledTo);
       const tags = getEstimationTags(estimations);
       const formattedEstimations = formatEstimations(services, estimations, tags);
       setChosenService(formattedEstimations.find((e: any) => e.eta));
       setServiceEstimations(formattedEstimations);
-    } catch (e) {
+    } catch (e: any) {
+      Mixpanel.setEvent('service estimations failed', { status: e?.response?.status });
       if (throwError) {
         setRidePopup(RIDE_POPUPS.FAILED_SERVICE_REQUEST);
+        cleanRideState();
       }
     }
   };
@@ -361,7 +365,7 @@ const RidePageContextProvider = ({ children }: {
       if (areStopPointsInTerritory) {
         tryServiceEstimations();
       }
-    } else if (currentBsPage !== BS_PAGES.ADDRESS_SELECTOR) {
+    } else if (![BS_PAGES.ADDRESS_SELECTOR, BS_PAGES.LOADING].includes(currentBsPage)) {
       // reset req stop point request
       if (!ride.id) {
         changeBsPage(BS_PAGES.ADDRESS_SELECTOR);
@@ -394,6 +398,9 @@ const RidePageContextProvider = ({ children }: {
           }, 1000);
         }
       }
+      if (currentBsPage === BS_PAGES.LOADING) {
+        changeBsPage(BS_PAGES.ADDRESS_SELECTOR);
+      }
     }
   };
 
@@ -407,6 +414,7 @@ const RidePageContextProvider = ({ children }: {
     const rideLoaded = await rideApi.getRide(rideId);
     const formattedRide = await formatRide(rideLoaded);
     if (ride.state !== rideLoaded.state) {
+      Mixpanel.setEvent('New ride state', { oldState: ride.state, newState: rideLoaded.state });
       const screenFunction = RIDE_STATES_TO_SCREENS[rideLoaded.state];
       if (screenFunction) {
         screenFunction(rideLoaded);
@@ -423,6 +431,7 @@ const RidePageContextProvider = ({ children }: {
         try {
           loadRide(ride.id);
         } catch (e) {
+          console.log(e);
           cleanRideState();
           changeBsPage(BS_PAGES.ADDRESS_SELECTOR);
         }
@@ -462,6 +471,7 @@ const RidePageContextProvider = ({ children }: {
 
       const { lat, lng } = data.results[0].geometry.location;
       const geoLocation = {
+        placeId: data.results[0].place_id,
         streetAddress: buildStreetAddress(data) || data.results[0].formatted_address,
         description: data.results[0].formatted_address,
         lat,
@@ -556,16 +566,17 @@ const RidePageContextProvider = ({ children }: {
       currentCoords = await getCurrentLocation();
     }
     try {
-      const location = currentCoords ? `${currentCoords.latitude},${currentCoords.longitude}` : null;
+      const location = currentCoords
+        ? `${currentCoords.latitude},${currentCoords.longitude}`
+        : `${DEFAULT_COORDS.coords.latitude},${DEFAULT_COORDS.coords.longitude}`;
       const data = await getPlaces({
         input,
-        region: 'il',
+        ...(Config.DEFAULT_COUNTRY_CODE && { region: Config.DEFAULT_COUNTRY_CODE.toLowerCase() }),
         origin: location,
         radius: 20000,
         location,
       });
-      // setSearchResults(data);
-      return data;
+      return data?.sort((a: any, b: any) => (a.distance_meters - b.distance_meters));
     } catch (error) {
       console.log('Got error while try to get places', error);
       return undefined;
@@ -684,16 +695,17 @@ const RidePageContextProvider = ({ children }: {
         buttonText: i18n.t('bottomSheetContent.outstandingBalance.buttonText'),
         subTitleText: i18n.t('bottomSheetContent.outstandingBalance.subTitleText'),
         buttonPress: () => {
-          changeBsPage(BS_PAGES.SERVICE_ESTIMATIONS);
+          changeBsPage(BS_PAGES.ADDRESS_SELECTOR);
+          navigationService.navigate(MAIN_ROUTES.CONTACT_US);
         },
       });
       changeBsPage(BS_PAGES.GENERIC_ERROR);
     },
     [RIDE_FAILED_REASONS.CASH_NOT_ALLOWED]: () => {
       setGenericErrorDetails({
-        titleText: i18n.t('bottomSheetContent.outstandingBalance.titleText'),
-        buttonText: i18n.t('bottomSheetContent.outstandingBalance.buttonText'),
-        subTitleText: i18n.t('bottomSheetContent.outstandingBalance.subTitleText'),
+        titleText: i18n.t('bottomSheetContent.cashNotAllowed.titleText'),
+        buttonText: i18n.t('bottomSheetContent.cashNotAllowed.buttonText'),
+        subTitleText: i18n.t('bottomSheetContent.cashNotAllowed.subTitleText'),
         buttonPress: () => {
           changeBsPage(BS_PAGES.SERVICE_ESTIMATIONS);
         },
@@ -702,9 +714,9 @@ const RidePageContextProvider = ({ children }: {
     },
     [RIDE_FAILED_REASONS.PAYMENT_METHOD_EXPIRED]: () => {
       setGenericErrorDetails({
-        titleText: i18n.t('bottomSheetContent.outstandingBalance.titleText'),
-        buttonText: i18n.t('bottomSheetContent.outstandingBalance.buttonText'),
-        subTitleText: i18n.t('bottomSheetContent.outstandingBalance.subTitleText'),
+        titleText: i18n.t('bottomSheetContent.paymentMethodExpired.titleText'),
+        buttonText: i18n.t('bottomSheetContent.paymentMethodExpired.buttonText'),
+        subTitleText: i18n.t('bottomSheetContent.paymentMethodExpired.subTitleText'),
         buttonPress: () => {
           changeBsPage(BS_PAGES.SERVICE_ESTIMATIONS);
         },
@@ -713,9 +725,9 @@ const RidePageContextProvider = ({ children }: {
     },
     [RIDE_FAILED_REASONS.COULD_NOT_CREATE_PAYMENT_INTENT]: () => {
       setGenericErrorDetails({
-        titleText: i18n.t('bottomSheetContent.outstandingBalance.titleText'),
-        buttonText: i18n.t('bottomSheetContent.outstandingBalance.buttonText'),
-        subTitleText: i18n.t('bottomSheetContent.outstandingBalance.subTitleText'),
+        titleText: i18n.t('bottomSheetContent.paymentIntentError.titleText'),
+        buttonText: i18n.t('bottomSheetContent.paymentIntentError.buttonText'),
+        subTitleText: i18n.t('bottomSheetContent.paymentIntentError.subTitleText'),
         buttonPress: () => {
           changeBsPage(BS_PAGES.SERVICE_ESTIMATIONS);
         },
@@ -725,6 +737,7 @@ const RidePageContextProvider = ({ children }: {
   };
 
   const requestRide = async (pickupLocation?: any): Promise<void> => {
+    Mixpanel.setEvent('Requesting ride');
     let stopPoints = requestStopPoints;
 
     if (pickupLocation) {
@@ -778,6 +791,7 @@ const RidePageContextProvider = ({ children }: {
       }
     } catch (e: any) {
       const key = e.response?.data?.errors[0] || e.message;
+      Mixpanel.setEvent('Ride failed', { status: e?.response?.status, reason: key });
       if (FAILED_TO_CREATE_RIDE_ACTIONS[key]) {
         FAILED_TO_CREATE_RIDE_ACTIONS[key]();
       } else {
@@ -848,7 +862,12 @@ const RidePageContextProvider = ({ children }: {
   };
 
   const updateRide = async (rideId: string | undefined, newRide: RideInterface) => {
-    await rideApi.patchRide(rideId, newRide);
+    try {
+      Mixpanel.setEvent('Trying to update ride', newRide);
+      await rideApi.patchRide(rideId, newRide);
+    } catch (e) {
+      Mixpanel.setEvent('Failed to update ride');
+    }
   };
 
   const trackRide = async () => {

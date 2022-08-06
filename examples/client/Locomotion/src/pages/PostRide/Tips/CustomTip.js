@@ -166,6 +166,7 @@ const Tips = ({
       <DetailsContainer style={{ marginTop: 15 }}>
         <ButtonsContainer>
           <RoundedButton
+            testID="cancelCustomTip"
             type="confirm"
             hollow
             disabled={false}
@@ -179,6 +180,7 @@ const Tips = ({
         </ButtonsContainer>
         <ButtonsContainer>
           <RoundedButton
+            testID="confirmCustomTip"
             type="confirm"
             hollow={false}
             disabled={!isValid || !customTip || customTip === ''}

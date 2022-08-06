@@ -4,6 +4,7 @@ import React, {
 import { Animated, View } from 'react-native';
 import styled from 'styled-components';
 import { debounce } from 'lodash';
+import Mixpanel from '../../../../services/Mixpanel';
 import BottomSheetInput from '../../../../Components/TextInput/BottomSheetInput';
 import i18n from '../../../../I18n';
 import { RidePageContext } from '../../../../context/newRideContext';
@@ -75,7 +76,7 @@ const SearchBar = ({
   onFocus = () => null,
   onBack,
   onSearch,
-  isSelected,
+  selectedIndex,
 }) => {
   const {
     setSelectedInputIndex,
@@ -126,22 +127,16 @@ const SearchBar = ({
   const inputRef = useRef();
 
   useEffect(() => {
-    if (isSelected) {
-      setTimeout(() => {
-        if (inputRef && inputRef.current) {
-          inputRef.current.focus();
-        }
-      }, 250);
-    } else {
-      inputRef.current = null;
+    if (inputRef && inputRef.current) {
+      inputRef.current.focus();
     }
-  }, [isSelected]);
+  }, [selectedIndex, isExpanded]);
 
   const buildSps = () => requestStopPoints.map((s, i) => {
     const { type, description } = requestStopPoints[i];
     const placeholder = getSpPlaceholder(s);
     const rowProps = i === 0 ? { isExpanded } : { setMargin: true };
-    const autoFocus = isExpanded && type === isSelected;
+    const autoFocus = isExpanded && i === selectedIndex;
     return (
       <Row
         {...rowProps}
@@ -163,6 +158,7 @@ const SearchBar = ({
           value={description || ''}
           placeholderTextColor={isExpanded ? '#929395' : '#333333'}
           onFocus={(e) => {
+            Mixpanel.setEvent(`${type} address input focused`);
             onInputFocus(e.target, i);
           }}
           key={`input_${s.id}`}
@@ -180,7 +176,6 @@ const SearchBar = ({
               inputRef.current = ref;
             }
           }}
-          selectTextOnFocus
         />
       </Row>
     );

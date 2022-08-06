@@ -13,8 +13,9 @@ import ScreenText from './ScreenText';
 import { MAIN_ROUTES } from '../routes';
 import { UserContext } from '../../context/user';
 import { PageContainer, ContentContainer } from '../styles';
+import * as navigationService from '../../services/navigation';
 
-const Email = ({ navigation }) => {
+const Email = () => {
   const route = useRoute();
   const { nextScreen } = useContext(OnboardingContext);
   const {
@@ -31,7 +32,7 @@ const Email = ({ navigation }) => {
 
   const navigateToNextScreen = () => {
     if (route.params && route.params.editAccount) {
-      navigation.navigate(MAIN_ROUTES.EMAIL_CODE, {
+      navigationService.navigate(MAIN_ROUTES.EMAIL_CODE, {
         editAccount: route.params.editAccount,
       });
     } else {
@@ -70,6 +71,12 @@ const Email = ({ navigation }) => {
     }
     updateState({ email: value });
   };
+
+  useEffect(() => {
+    if (!(route.params && route.params.editAccount)) {
+      updateState({ email: '' });
+    }
+  }, []);
 
   return (
     <PageContainer>

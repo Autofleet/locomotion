@@ -29,8 +29,8 @@ width: 100%;
 `;
 
 export const ContactUsPageLogoContainer = styled(LogoContainer)`
-max-height: 200px;
-max-width: 100%;
+height: 200px;
+width: 100%;
 padding: 20px;
 display: flex;
 justify-content: center;
@@ -42,7 +42,5 @@ z-index: 1;
 `;
 
 export const ContactUsLogo = styled.Image`
-position: relative;
-display: flex;
-  
+flex: 1;
 `;

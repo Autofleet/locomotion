@@ -26,7 +26,9 @@ export const StyledDrawerLabel = styled.TouchableOpacity`
   align-items: center;
 `;
 
-export const HeaderLink = styled.TouchableOpacity`
+export const HeaderLink = styled(Button).attrs({
+  noBackground: true,
+})`
 `;
 
 export const HeaderIconContainer = styled(Button).attrs({ noBackground: true })`

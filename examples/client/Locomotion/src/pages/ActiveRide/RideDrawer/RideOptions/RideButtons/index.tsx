@@ -1,6 +1,7 @@
 import React, { useContext, useState, useEffect } from 'react';
 import DatePicker from 'react-native-date-picker';
 import moment from 'moment';
+import { ThemeContext } from 'styled-components';
 import FutureBookingButton from './FutureBookingButton';
 import {
   Container, RowContainer, ButtonContainer, ButtonText, StyledButton, HALF_WIDTH,
@@ -31,6 +32,7 @@ const RideButtons = ({
   displayPassenger,
   setPopupName,
 }: RideButtonsProps) => {
+  const theme = useContext(ThemeContext);
   const {
     ride,
     chosenService,
@@ -66,9 +68,10 @@ const RideButtons = ({
       setIsDatePickerOpen(false);
     };
     return (
-      <ButtonContainer onPress={() => setIsDatePickerOpen(true)}>
+      <ButtonContainer testID="RideTimeSelector" onPress={() => setIsDatePickerOpen(true)}>
         <FutureBookingButton />
         <DatePicker
+          textColor={theme.textColor}
           open={isDatePickerOpen}
           date={moment(ride?.scheduledTo).add(ride?.scheduledTo ? 0 : 1, 'hours').toDate()}
           maximumDate={getFutureRideMaxDate()}
@@ -91,6 +94,7 @@ const RideButtons = ({
     const rideHasNotes = ride?.notes;
     return (
       <ButtonContainer
+        testID="RideNotes"
         onPress={() => {
           setPopupName('notes');
         }}
@@ -115,6 +119,7 @@ const RideButtons = ({
 
     return (
       <ButtonContainer
+        testID="RidePayment"
         onPress={() => {
           setPopupName('payment');
         }}
@@ -145,7 +150,7 @@ const RideButtons = ({
         </>
       </RowContainer>
       <StyledButton
-        data-test-id="selectService"
+        testID="selectService"
         disabled={!chosenService || !!getClientOutstandingBalanceCard()}
         onPress={() => {
           changeBsPage(BS_PAGES.CONFIRM_PICKUP);

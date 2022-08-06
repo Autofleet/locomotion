@@ -36,7 +36,7 @@ class Network {
     this.axios = axios.create(settings);
     this.axios.interceptors.request.use((request) => {
       try {
-        Mixpanel.setEvent('Network request', { method: request.method, endpoint: request.url, params: request.params });
+        // Mixpanel.setEvent('Network request', { method: request.method, endpoint: request.url, params: request.params });
         console.debug(`Request [${request.method}] ${request.url}`);
       } catch (e) {
         console.error('Error in interceptors->request log', e);
@@ -46,7 +46,7 @@ class Network {
 
     this.axios.interceptors.response.use((response) => {
       try {
-        Mixpanel.setEvent('Network response', { method: response.config.method, endpoint: response.config.url, statusCode: response.status });
+        // Mixpanel.setEvent('Network response', { method: response.config.method, endpoint: response.config.url, statusCode: response.status });
         console.debug(`Response [${response.config.method}] ${response.config.url}:`, formatResponseLog(response));
       } catch (e) {
         console.error('Error in interceptors->response log', e);
@@ -70,11 +70,12 @@ class Network {
         if (accessToken) {
           this.axios.defaults.headers.common.Authorization = `Bearer ${accessToken}`;
         }
+
         this.axios.defaults.headers.common['x-loco-ds-id'] = Config.OPERATION_ID;
         this.axios.defaults.headers.common['x-loco-op-id'] = Config.OPERATION_ID;
         return this.axios[method](...args).catch((e) => {
           crashlytics().log(`HTTP Request Error ${e.message}`);
-          if ((e.response && e.response.status === 401) || (e.response && e.response.status === 403)) {
+          if ((e.response && e.response.status === 401)) {
             console.log('Got unauthorized response move to logout flow');
             Auth.logout();
             return null;

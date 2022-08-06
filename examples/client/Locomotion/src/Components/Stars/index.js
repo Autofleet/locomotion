@@ -27,10 +27,13 @@ export const StarIcon = styled(StarSvg).attrs((({
   opacity: .9;
 `;
 
-const Star = ({ onPress, isOn, size }) => (
+const NUM_OF_STARS = [1, 2, 3, 4, 5];
+const Star = ({
+  onPress, isOn, size, num = 1,
+}) => (
   <Button
     noBackground
-    data-test-id="RatingButton"
+    testID={`RatingButton${num}`}
     onPress={onPress}
   >
     <StarIcon isOn={isOn} size={size} />
@@ -39,11 +42,7 @@ const Star = ({ onPress, isOn, size }) => (
 
 const StarRating = ({ rating, updateRating = newRating => null, size = 16 }) => (
   <SummaryStars>
-    <Star size={size} isOn={rating >= 1} onPress={() => updateRating(1)} />
-    <Star size={size} isOn={rating >= 2} onPress={() => updateRating(2)} />
-    <Star size={size} isOn={rating >= 3} onPress={() => updateRating(3)} />
-    <Star size={size} isOn={rating >= 4} onPress={() => updateRating(4)} />
-    <Star size={size} isOn={rating >= 5} onPress={() => updateRating(5)} />
+    {NUM_OF_STARS.map(num => <Star num={num} size={size} isOn={rating >= num} onPress={() => updateRating(num)} />)}
   </SummaryStars>
 );
 
