@@ -1,6 +1,7 @@
 import React, {
   useState, useEffect, useRef, createContext, useContext,
 } from 'react';
+import { AppState } from 'react-native';
 import Config from 'react-native-config';
 import { useNavigation } from '@react-navigation/native';
 import _ from 'lodash';
@@ -426,7 +427,8 @@ const RidePageContextProvider = ({ children }: {
   };
 
   useBackgroundInterval(async () => {
-    if (user?.id && !rideRequestLoading) {
+    const isAppActive = AppState.currentState === 'active';
+    if (isAppActive && user?.id && !rideRequestLoading) {
       if (ride?.id) {
         try {
           loadRide(ride.id);
