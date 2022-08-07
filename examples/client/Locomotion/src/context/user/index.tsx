@@ -3,9 +3,16 @@ import React, {
 } from 'react';
 import crashlytics from '@react-native-firebase/crashlytics';
 import Config from 'react-native-config';
+import { getPosition } from 'services/geo';
 import { authService, StorageService } from '../../services';
 import {
-  getUserDetails, loginVert, sendEmailVerification, updateUser, emailVerify, deleteUser as deleteUserApi,
+  getUserDetails,
+  loginVert,
+  sendEmailVerification,
+  updateUser,
+  emailVerify,
+  deleteUser as deleteUserApi,
+  getBusinessModel,
 } from './api';
 import auth from '../../services/auth';
 import Mixpanel from '../../services/Mixpanel';
@@ -44,6 +51,7 @@ interface UserContextInterface {
   setLocationGranted: Dispatch<SetStateAction<any>>,
   updatePushToken: () => Promise<boolean | null>,
   deleteUser: () => Promise<boolean>
+  businessModelId: null | string;
 }
 
 export const UserContext = createContext<UserContextInterface>({
@@ -62,12 +70,29 @@ export const UserContext = createContext<UserContextInterface>({
   setLocationGranted: () => undefined,
   updatePushToken: async () => false,
   deleteUser: async () => true,
+  businessModelId: null,
 });
 
 const UserContextProvider = ({ children }: { children: any }) => {
   const usePayments = PaymentsContext.useContainer();
   const [locationGranted, setLocationGranted] = useState();
   const [user, setUser] = useState<User | null>(null);
+  const [businessModelId, setBusinessModelId] = useState(null);
+
+  const setBm = async () => {
+    const position = await getPosition();
+    if (position) {
+      const { latitude: lat, longitude: lng } = position?.coords;
+      const bm = await getBusinessModel({ lat, lng });
+      setBusinessModelId(bm);
+    }
+  };
+
+  useEffect(() => {
+    if (locationGranted !== undefined) {
+      setBm();
+    }
+  }, [locationGranted]);
 
   const getUserFromServer = () => getUserDetails();
 
@@ -217,6 +242,7 @@ const UserContextProvider = ({ children }: { children: any }) => {
         setLocationGranted,
         updatePushToken,
         deleteUser,
+        businessModelId,
       }}
     >
       {children}

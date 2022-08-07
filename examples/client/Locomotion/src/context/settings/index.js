@@ -20,10 +20,10 @@ const useSettings = () => {
   const [workingHours, setWorkingHours] = useState({});
 
 
-  const getSettingByKey = async (key) => {
+  const getSettingByKey = async (key, params) => {
     let value = await StorageService.get(key);
     if (value === undefined) {
-      ({ value } = await settingsApi.getByKey(key));
+      ({ value } = await settingsApi.getByKey(key, params));
       await StorageService.save({
         [key]: value,
       }, FIVE_MINS_IN_SECONDS);

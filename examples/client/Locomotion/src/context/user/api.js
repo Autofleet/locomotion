@@ -50,3 +50,10 @@ export const deleteUser = async () => {
   const { data } = await network.delete('api/v1/me/user');
   return data;
 };
+
+export const getBusinessModel = async (coords) => {
+  const { data } = await network.get('api/v1/business-model', {
+    params: coords,
+  });
+  return data;
+};

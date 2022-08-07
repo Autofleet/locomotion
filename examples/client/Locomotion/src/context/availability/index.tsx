@@ -2,10 +2,12 @@ import React, {
   createContext, useEffect, useState, useContext,
 } from 'react';
 import { useIsFocused } from '@react-navigation/native';
+import settings from '../settings';
 import { UserContext } from '../user';
 import useInterval from '../../lib/useInterval';
 import { getPosition } from '../../services/geo';
 import * as availabilityApi from './api';
+import SETTINGS_KEYS from '../settings/keys';
 
 
 interface AvailabilityLocation {
@@ -29,7 +31,9 @@ export const AvailabilityContext = createContext<AvailabilityContextInterface>({
 
 const AvailabilityContextProvider = ({ children }: { children: any }) => {
   const [availabilityVehicles, setAvailabilityVehicles] = useState<AvailabilityVehicles[]>([]);
-  const { locationGranted } = useContext(UserContext);
+  const { locationGranted, businessModelId } = useContext(UserContext);
+  const { getSettingByKey } = settings.useContainer();
+  const [showAvailableVehicles, setShowAvailableVehicles] = useState(false);
   const getVehicles = async () => {
     if (locationGranted) {
       try {
@@ -58,13 +62,27 @@ const AvailabilityContextProvider = ({ children }: { children: any }) => {
   const isFocused = useIsFocused();
 
   useInterval(() => {
-    if (isFocused) {
+    if (isFocused && showAvailableVehicles) {
       getVehicles();
     }
   }, 5000);
 
   useEffect(() => {
-    getVehicles();
+    if (showAvailableVehicles) {
+      getVehicles();
+    }
+  }, [isFocused, showAvailableVehicles]);
+
+  const checkSetting = async () => {
+    const value = await getSettingByKey(
+      SETTINGS_KEYS.SHOW_AVAILABLE_VEHICLES,
+      { businessModelId },
+    );
+    setShowAvailableVehicles(value);
+  };
+
+  useEffect(() => {
+    checkSetting();
   }, [isFocused]);
 
   return (
