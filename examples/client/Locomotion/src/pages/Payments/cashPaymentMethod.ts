@@ -1,13 +1,14 @@
 import i18n from '../../I18n';
 import { PaymentMethodInterface } from '../../context/payments/interface';
 
+export const CASH_KEY = i18n.t('payments.cash');
 const cashPaymentMethod : PaymentMethodInterface = {
   brand: 'generic',
   createdAt: new Date(),
   customerId: '',
   expiresAt: new Date(2100, 9, 9),
   hasOutstandingBalance: false,
-  id: i18n.t('payments.cash'),
+  id: CASH_KEY,
   isDefault: false,
   isExpired: false,
   lastFour: '',
