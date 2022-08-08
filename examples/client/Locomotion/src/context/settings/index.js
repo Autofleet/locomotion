@@ -21,7 +21,7 @@ const useSettings = () => {
 
 
   const getSettingByKey = async (key, params) => {
-    let value = await StorageService.get(key);
+    let value;
     if (value === undefined) {
       ({ value } = await settingsApi.getByKey(key, params));
       await StorageService.save({

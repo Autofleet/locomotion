@@ -82,8 +82,10 @@ const AvailabilityContextProvider = ({ children }: { children: any }) => {
   };
 
   useEffect(() => {
-    checkSetting();
-  }, [isFocused]);
+    if (businessModelId) {
+      checkSetting();
+    }
+  }, [isFocused, businessModelId]);
 
   return (
     <AvailabilityContext.Provider

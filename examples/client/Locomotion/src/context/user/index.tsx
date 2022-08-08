@@ -3,7 +3,7 @@ import React, {
 } from 'react';
 import crashlytics from '@react-native-firebase/crashlytics';
 import Config from 'react-native-config';
-import { getPosition } from 'services/geo';
+import { getPosition } from '../../services/geo';
 import { authService, StorageService } from '../../services';
 import {
   getUserDetails,
@@ -83,7 +83,7 @@ const UserContextProvider = ({ children }: { children: any }) => {
     const position = await getPosition();
     if (position) {
       const { latitude: lat, longitude: lng } = position?.coords;
-      const bm = await getBusinessModel({ lat, lng });
+      const { businessModelId: bm } = await getBusinessModel({ lat, lng });
       setBusinessModelId(bm);
     }
   };
