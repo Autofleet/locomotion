@@ -181,7 +181,6 @@ const RidePage = ({ mapSettings, navigation }) => {
         isConfirmPickup
         initialLocation={requestStopPoints[0]}
         onButtonPress={(pickupLocation) => {
-          console.log(ride);
           if (clientHasValidPaymentMethods() || ride.paymentMethodId === CASH_KEY) {
             requestRide(pickupLocation);
           } else {
