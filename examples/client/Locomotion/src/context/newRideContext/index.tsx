@@ -253,7 +253,10 @@ const RidePageContextProvider = ({ children }: {
       setRide(matchingRide);
       changeBsPage(BS_PAGES.CONFIRMING_RIDE);
     },
-    [RIDE_STATES.REJECTED]: () => { changeBsPage(BS_PAGES.NO_AVAILABLE_VEHICLES); },
+    [RIDE_STATES.REJECTED]: (rejectedRide: RideInterface) => {
+      setRide(rejectedRide);
+      changeBsPage(BS_PAGES.NO_AVAILABLE_VEHICLES);
+    },
     [RIDE_STATES.COMPLETED]: (completedRide: any) => {
       onRideCompleted(completedRide.id);
     },
