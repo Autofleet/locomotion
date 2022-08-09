@@ -64,7 +64,9 @@ const NewCreditForm = ({ onDone, canSkip = false, PageText }) => {
         <PageText />
         <MainCardForm
           autofocus
-          countryCode={countryCode}
+          defaultValues={{
+            countryCode,
+          }}
           cardStyle={{
             backgroundColor: theme.pageBackgroundColor,
             textColor: theme.textColor,
