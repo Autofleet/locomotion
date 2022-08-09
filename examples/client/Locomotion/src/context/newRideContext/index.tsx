@@ -888,7 +888,7 @@ const RidePageContextProvider = ({ children }: {
           number = maskSpRes.sp.maskedDriverPhoneNumber;
           Mixpanel.setEvent(`got masked-phones: ${number}`);
         } else {
-          number = stopPoint.metadata.contactPersonPhone;
+          number = ride?.driver?.phonenumber;
         }
       }
       Mixpanel.setEvent('tel', { number });
