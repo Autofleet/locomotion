@@ -1,5 +1,5 @@
 import { useRef, useEffect } from 'react';
-import { InteractionManager } from 'react-native';
+import { InteractionManager, AppState } from 'react-native';
 
 const useInterval = (callback, delay) => {
   const savedCallback = useRef();
@@ -10,10 +10,12 @@ const useInterval = (callback, delay) => {
 
   useEffect(() => {
     const tick = () => {
-      if (savedCallback && typeof savedCallback.current !== 'undefined') {
-        InteractionManager.runAfterInteractions(() => {
-          savedCallback.current();
-        });
+      if (AppState.currentState === 'active') {
+        if (savedCallback && typeof savedCallback.current !== 'undefined') {
+          InteractionManager.runAfterInteractions(() => {
+            savedCallback.current();
+          });
+        }
       }
     };
     if (delay !== null) {

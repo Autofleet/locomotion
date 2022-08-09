@@ -18,7 +18,7 @@ const currentLocationNative = async () => {
   return new Promise((resolve, reject) => {
     Geolocation.getCurrentPosition(
       resolve, reject,
-      { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 * 60 * 2 },
+      { enableHighAccuracy: false, timeout: 20000, maximumAge: 1000 * 60 * 2 },
     );
   });
 };
@@ -49,10 +49,10 @@ class Geo {
   };
 
   configure = () => RNLocation.configure({
-    distanceFilter: 1,
+    distanceFilter: 30,
     desiredAccuracy: {
-      ios: 'bestForNavigation',
-      android: 'highAccuracy',
+      ios: 'nearestTenMeters',
+      android: 'balancedPowerAccuracy',
     },
     // Android only
     androidProvider: 'playServices',
