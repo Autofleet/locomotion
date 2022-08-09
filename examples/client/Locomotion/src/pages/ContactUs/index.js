@@ -87,7 +87,9 @@ export default ({ menuSide }) => {
                   <Card
                     icon={copyIcon}
                     onIconPress={() => {
-                      if (settings.contactEmail) { Clipboard.setString(settings.contactEmail); }
+                      if (settings.contactEmail) {
+                        Linking.openURL(`mailto:${settings.contactEmail}`);
+                      }
                     }}
                     title={i18n.t('onboarding.emailPlaceholder')}
                   >

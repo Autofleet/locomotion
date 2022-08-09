@@ -2,6 +2,8 @@ import moment from 'moment';
 import i18n from '../../I18n';
 import { startOfDayTime, YYYY_MM_DD, toDate } from './consts';
 
+export const formatDateBeforeSend = date => moment(date).toDate();
+
 export const FILTERS = {
   // quarter: {
   //   id: 'quarter',
@@ -23,32 +25,32 @@ export const FILTERS = {
     id: 'today',
     title: i18n.t('rideHistory.filters.titles.today', 'Today'),
     getParams: () => ({
-      fromDate: `${moment().format(YYYY_MM_DD)} ${startOfDayTime}`,
-      toDate,
+      fromDate: formatDateBeforeSend(`${moment().format(YYYY_MM_DD)} ${startOfDayTime}`),
+      toDate: formatDateBeforeSend(toDate),
     }),
   },
   yesterday: {
     id: 'yesterday',
     title: i18n.t('rideHistory.filters.titles.yesterday', 'Yesterday'),
     getParams: () => ({
-      fromDate: `${moment().subtract(1, 'day').format(YYYY_MM_DD)} ${startOfDayTime}`,
-      toDate: `${moment().format(YYYY_MM_DD)} ${startOfDayTime}`,
+      fromDate: formatDateBeforeSend(`${moment().subtract(1, 'day').format(YYYY_MM_DD)} ${startOfDayTime}`),
+      toDate: formatDateBeforeSend(`${moment().format(YYYY_MM_DD)} ${startOfDayTime}`),
     }),
   },
   thisWeek: {
     id: 'thisWeek',
     title: i18n.t('rideHistory.filters.titles.thisWeek', 'This week'),
     getParams: () => ({
-      fromDate: `${moment().subtract(1, 'week').format(YYYY_MM_DD)} ${startOfDayTime}`,
-      toDate,
+      fromDate: formatDateBeforeSend(`${moment().subtract(1, 'week').format(YYYY_MM_DD)} ${startOfDayTime}`),
+      toDate: formatDateBeforeSend(toDate),
     }),
   },
   lastWeek: {
     id: 'lastWeek',
     title: i18n.t('rideHistory.filters.titles.lastWeek', 'Last week'),
     getParams: () => ({
-      fromDate: `${moment().subtract(2, 'week').format(YYYY_MM_DD)} ${startOfDayTime}`,
-      toDate: `${moment().subtract(1, 'week').format(YYYY_MM_DD)} ${startOfDayTime}`,
+      fromDate: formatDateBeforeSend(`${moment().subtract(2, 'week').format(YYYY_MM_DD)} ${startOfDayTime}`),
+      toDate: formatDateBeforeSend(`${moment().subtract(1, 'week').format(YYYY_MM_DD)} ${startOfDayTime}`),
     }),
   },
 };
