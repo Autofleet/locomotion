@@ -253,7 +253,10 @@ const RidePageContextProvider = ({ children }: {
       setRide(matchingRide);
       changeBsPage(BS_PAGES.CONFIRMING_RIDE);
     },
-    [RIDE_STATES.REJECTED]: () => { changeBsPage(BS_PAGES.NO_AVAILABLE_VEHICLES); },
+    [RIDE_STATES.REJECTED]: (rejectedRide: RideInterface) => {
+      setRide(rejectedRide);
+      changeBsPage(BS_PAGES.NO_AVAILABLE_VEHICLES);
+    },
     [RIDE_STATES.COMPLETED]: (completedRide: any) => {
       onRideCompleted(completedRide.id);
     },
@@ -793,6 +796,7 @@ const RidePageContextProvider = ({ children }: {
       }
     } catch (e: any) {
       const key = e.response?.data?.errors[0] || e.message;
+      console.log('here');
       Mixpanel.setEvent('Ride failed', { status: e?.response?.status, reason: key });
       if (FAILED_TO_CREATE_RIDE_ACTIONS[key]) {
         FAILED_TO_CREATE_RIDE_ACTIONS[key]();
