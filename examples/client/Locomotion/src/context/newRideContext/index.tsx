@@ -912,7 +912,7 @@ const RidePageContextProvider = ({ children }: {
           number = maskSpRes.sp.maskedDriverPhoneNumber;
           Mixpanel.setEvent(`got masked-phones: ${number}`);
         } else {
-          number = stopPoint.metadata.contactPersonPhone;
+          number = ride?.driver?.phoneNumber;
         }
       }
       Mixpanel.setEvent('tel', { number });
