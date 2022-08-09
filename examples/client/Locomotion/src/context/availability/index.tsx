@@ -47,6 +47,7 @@ const AvailabilityContextProvider = ({ children }: { children: any }) => {
         } = coords || {};
         if (lat && lng) {
           const { vehicles } = await availabilityApi.getVehicles(lat, lng);
+          console.log(vehicles);
           await setAvailabilityVehicles(vehicles);
         }
       } catch (e) {
