@@ -796,7 +796,6 @@ const RidePageContextProvider = ({ children }: {
       }
     } catch (e: any) {
       const key = e.response?.data?.errors[0] || e.message;
-      console.log('here');
       Mixpanel.setEvent('Ride failed', { status: e?.response?.status, reason: key });
       if (FAILED_TO_CREATE_RIDE_ACTIONS[key]) {
         FAILED_TO_CREATE_RIDE_ACTIONS[key]();
