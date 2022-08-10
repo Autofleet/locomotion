@@ -121,7 +121,7 @@ const PostRidePage = ({ menuSide, route }) => {
     }
     return i18n.t('postRide.submit');
   };
-  console.log(ride);
+
   return (
     <>
       {ride ? (

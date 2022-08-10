@@ -67,7 +67,6 @@ const RideButtons = ({
     const close = () => {
       setIsDatePickerOpen(false);
     };
-    console.log(theme.textColor);
 
     return (
       <ButtonContainer testID="RideTimeSelector" onPress={() => setIsDatePickerOpen(true)}>
