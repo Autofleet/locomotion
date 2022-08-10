@@ -509,7 +509,8 @@
     "noAvailableVehicles": {
         "titleText": "We are really busy",
         "buttonText": "Order again",
-        "subTitleText": "Please try again in a few minutes"
+        "subTitleText": "Please try again in a few minutes",
+        "buttonText2": "Take me back"
     },
     "ride": {
         "now": "Now",

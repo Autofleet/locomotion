@@ -123,6 +123,7 @@ const RidePage = ({ mapSettings, navigation }) => {
       BS_PAGES.SERVICE_ESTIMATIONS,
       BS_PAGES.CONFIRM_FUTURE_RIDE,
       BS_PAGES.ACTIVE_RIDE,
+      BS_PAGES.NO_AVAILABLE_SERVICES,
     ].includes(currentBsPage)) {
       resetStateToAddressSelector();
       initSps();
@@ -197,6 +198,14 @@ const RidePage = ({ mapSettings, navigation }) => {
     ),
     [BS_PAGES.NO_PAYMENT]: () => <NoPayment />,
     [BS_PAGES.CONFIRMING_RIDE]: () => <ConfirmingRide />,
+    [BS_PAGES.NO_AVAILABLE_SERVICES]: () => (
+      <NoAvailableVehicles
+        onButtonPress={() => {
+          backToMap();
+        }}
+        ButtonText={i18n.t('bottomSheetContent.noAvailableVehicles.buttonText2')}
+      />
+    ),
     [BS_PAGES.NO_AVAILABLE_VEHICLES]: () => (
       <NoAvailableVehicles
         onButtonPress={() => {

@@ -329,6 +329,9 @@ const RidePageContextProvider = ({ children }: {
         .createServiceEstimations(formattedStopPoints, ride.scheduledTo);
       const tags = getEstimationTags(estimations);
       const formattedEstimations = formatEstimations(services, estimations, tags);
+      if (formattedEstimations.every((e: any) => !e.eta)) {
+        return changeBsPage(BS_PAGES.NO_AVAILABLE_SERVICES);
+      }
       setChosenService(formattedEstimations.find((e: any) => e.eta));
       setServiceEstimations(formattedEstimations);
     } catch (e: any) {
