@@ -2,6 +2,7 @@ import React, { useEffect, useContext, useState } from 'react';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { PaymentIcon } from 'react-native-payment-icons';
 import { Platform } from 'react-native';
+import Button from '../../Components/Button';
 import ConfirmationPopup from '../../popups/ConfirmationPopup';
 import cashPaymentMethod from '../../pages/Payments/cashPaymentMethod';
 import Card from '../../Components/InformationCard';
@@ -139,21 +140,27 @@ const AccountContent = () => {
             </Card>
           </>
         ) : undefined}
-        <LogoutContainer
-          testID="logout"
-          onPress={() => {
-            navigationService.navigate(MAIN_ROUTES.LOGOUT);
-          }}
-        >
-          <LogoutText>{i18n.t('menu.logout')}</LogoutText>
+        <LogoutContainer>
+          <Button
+            noBackground
+            testID="logout"
+            onPress={() => {
+              navigationService.navigate(MAIN_ROUTES.LOGOUT);
+            }}
+          >
+            <LogoutText>{i18n.t('menu.logout')}</LogoutText>
+          </Button>
         </LogoutContainer>
-        <LogoutContainer
-          testID="deleteAccount"
-          onPress={() => {
-            setIsDeleteUserVisible(true);
-          }}
-        >
-          <DeleteText>{i18n.t('deleteUserPopup.deleteUserTitle')}</DeleteText>
+        <LogoutContainer>
+          <Button
+            noBackground
+            testID="deleteAccount"
+            onPress={() => {
+              setIsDeleteUserVisible(true);
+            }}
+          >
+            <DeleteText>{i18n.t('deleteUserPopup.deleteUserTitle')}</DeleteText>
+          </Button>
         </LogoutContainer>
         <ConfirmationPopup
           isVisible={isDeleteUserVisible}

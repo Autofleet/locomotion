@@ -34,11 +34,11 @@ export const Container = styled.View`
   padding-left: 5px;
 `;
 
-export const LogoutContainer = styled(Button)`
+export const LogoutContainer = styled.View`
   text-align: center;
   align-items: center;
   background-color: ${({ theme }) => theme.pageBackgroundColor};
-  padding: 20px;
+  padding-top: 40px;
 `;
 
 export const LogoutText = styled.Text`
