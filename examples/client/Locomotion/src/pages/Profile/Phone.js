@@ -38,6 +38,7 @@ const Phone = ({ navigation }) => {
       await AppSettings.destroy();
       await loginApi({
         phoneNumber: user.phoneNumber,
+        demandSourceId: Config.OPERATION_ID,
       });
       updateState({ phoneNumber: user.phoneNumber });
       nextScreen(MAIN_ROUTES.PHONE);
