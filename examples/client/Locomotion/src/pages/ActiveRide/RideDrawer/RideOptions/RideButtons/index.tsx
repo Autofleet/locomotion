@@ -68,6 +68,7 @@ const RideButtons = ({
     const close = () => {
       setIsDatePickerOpen(false);
     };
+
     return (
       <ButtonContainer testID="RideTimeSelector" onPress={() => setIsDatePickerOpen(true)}>
         <FutureBookingButton />
