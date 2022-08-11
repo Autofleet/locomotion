@@ -10,7 +10,7 @@ const {
   SECONDARY_COLOR = undefined,
 } = Config;
 
-export const getTextColorForDarkMode = () => {
+export const getTextColorForTheme = () => {
   const colorScheme = Appearance.getColorScheme();
   return colorScheme === 'dark' ? '#ffffff' : '#000000';
 };

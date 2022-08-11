@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import DatePicker from 'react-native-date-picker';
-import { getTextColorForDarkMode } from '../../context/theme';
+import { getTextColorForTheme } from '../../context/theme';
 import i18n from '../../I18n';
 
 export default ({
@@ -21,7 +21,7 @@ export default ({
   return (
     <>
       <DatePicker
-        textColor={getTextColorForDarkMode()}
+        textColor={getTextColorForTheme()}
         open={open}
         date={new Date()}
         maximumDate={new Date()}

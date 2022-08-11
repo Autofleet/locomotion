@@ -17,7 +17,7 @@ import SvgIcon from '../SvgIcon';
 import { RidePageContext } from '../../context/newRideContext';
 import i18n from '../../I18n';
 import {
-  ERROR_COLOR, FONT_SIZES, FONT_WEIGHTS, getTextColorForDarkMode,
+  ERROR_COLOR, FONT_SIZES, FONT_WEIGHTS, getTextColorForTheme,
 } from '../../context/theme';
 import Button from '../Button';
 import { BottomSheetContext, SNAP_POINT_STATES } from '../../context/bottomSheetContext';
@@ -274,7 +274,7 @@ export const ConfirmPickupTime = (props: any) => {
         {i18n.t('bottomSheetContent.confirmPickupTime.pickupText', { date, time })}
       </RoundedButton>
       <DatePicker
-        textColor={getTextColorForDarkMode()}
+        textColor={getTextColorForTheme()}
         open={isDatePickerOpen}
         date={moment(unconfirmedPickupTime).add(unconfirmedPickupTime ? 0 : 1, 'hours').toDate()}
         maximumDate={getFutureRideMaxDate()}
