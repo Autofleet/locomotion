@@ -22,6 +22,7 @@ import cashPaymentMethod from '../../../../../pages/Payments/cashPaymentMethod';
 import { getFutureRideMaxDate, getFutureRideMinDate } from '../../../../../context/newRideContext/utils';
 import settings from '../../../../../context/settings';
 import SETTINGS_KEYS from '../../../../../context/settings/keys';
+import { getTextColorForTheme } from '../../../../../context/theme';
 
 interface RideButtonsProps {
     displayPassenger: boolean;
@@ -71,7 +72,7 @@ const RideButtons = ({
       <ButtonContainer testID="RideTimeSelector" onPress={() => setIsDatePickerOpen(true)}>
         <FutureBookingButton />
         <DatePicker
-          textColor={theme.textColor}
+          textColor={getTextColorForTheme()}
           open={isDatePickerOpen}
           date={moment(ride?.scheduledTo || undefined).add(ride?.scheduledTo ? 0 : 1, 'hours').toDate()}
           maximumDate={getFutureRideMaxDate()}
