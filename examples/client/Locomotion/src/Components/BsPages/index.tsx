@@ -16,7 +16,9 @@ import { STOP_POINT_TYPES } from '../../lib/commonTypes';
 import SvgIcon from '../SvgIcon';
 import { RidePageContext } from '../../context/newRideContext';
 import i18n from '../../I18n';
-import { ERROR_COLOR, FONT_SIZES, FONT_WEIGHTS } from '../../context/theme';
+import {
+  ERROR_COLOR, FONT_SIZES, FONT_WEIGHTS, getTextColorForTheme,
+} from '../../context/theme';
 import Button from '../Button';
 import { BottomSheetContext, SNAP_POINT_STATES } from '../../context/bottomSheetContext';
 import { RideStateContextContext } from '../../context/ridePageStateContext';
@@ -34,6 +36,7 @@ import timeIcon from '../../assets/calendar.svg';
 import ActiveRideContent from './ActiveRide';
 import RoundedButton from '../RoundedButton';
 import { getFutureRideMaxDate, getFutureRideMinDate } from '../../context/newRideContext/utils';
+import { CASH_KEY } from '../../pages/Payments/cashPaymentMethod';
 
 const OtherButton = styled(Button)`
   background-color: ${({ warning, theme }) => (warning ? ERROR_COLOR : theme.primaryColor)};
@@ -235,7 +238,6 @@ BsPage.defaultProps = {
 export default BsPage;
 
 export const ConfirmPickupTime = (props: any) => {
-  const theme = useContext(ThemeContext);
   const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
   const {
     unconfirmedPickupTime,
@@ -272,7 +274,7 @@ export const ConfirmPickupTime = (props: any) => {
         {i18n.t('bottomSheetContent.confirmPickupTime.pickupText', { date, time })}
       </RoundedButton>
       <DatePicker
-        textColor={theme.textColor}
+        textColor={getTextColorForTheme()}
         open={isDatePickerOpen}
         date={moment(unconfirmedPickupTime).add(unconfirmedPickupTime ? 0 : 1, 'hours').toDate()}
         maximumDate={getFutureRideMaxDate()}
@@ -475,7 +477,7 @@ export const NoPayment = (props: any) => {
   } = payments.useContainer();
 
   const proceedIfPaymentMethodsAreValid = () => {
-    if (clientHasValidPaymentMethods() || ride.paymentMethodId === 'cash') {
+    if (clientHasValidPaymentMethods() || ride.paymentMethodId === CASH_KEY) {
       requestRide();
     }
   };

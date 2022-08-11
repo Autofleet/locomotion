@@ -1,6 +1,7 @@
 import React, {
   useState, useEffect, useRef, createContext, useContext,
 } from 'react';
+import { AppState } from 'react-native';
 import Config from 'react-native-config';
 import { useNavigation } from '@react-navigation/native';
 import _ from 'lodash';
@@ -252,7 +253,10 @@ const RidePageContextProvider = ({ children }: {
       setRide(matchingRide);
       changeBsPage(BS_PAGES.CONFIRMING_RIDE);
     },
-    [RIDE_STATES.REJECTED]: () => { changeBsPage(BS_PAGES.NO_AVAILABLE_VEHICLES); },
+    [RIDE_STATES.REJECTED]: (rejectedRide: RideInterface) => {
+      setRide(rejectedRide);
+      changeBsPage(BS_PAGES.NO_AVAILABLE_VEHICLES);
+    },
     [RIDE_STATES.COMPLETED]: (completedRide: any) => {
       onRideCompleted(completedRide.id);
     },
@@ -325,6 +329,9 @@ const RidePageContextProvider = ({ children }: {
         .createServiceEstimations(formattedStopPoints, ride.scheduledTo);
       const tags = getEstimationTags(estimations);
       const formattedEstimations = formatEstimations(services, estimations, tags);
+      if (formattedEstimations.every((e: any) => !e.eta)) {
+        return changeBsPage(BS_PAGES.NO_AVAILABLE_SERVICES);
+      }
       setChosenService(formattedEstimations.find((e: any) => e.eta));
       setServiceEstimations(formattedEstimations);
     } catch (e: any) {
@@ -426,7 +433,8 @@ const RidePageContextProvider = ({ children }: {
   };
 
   useBackgroundInterval(async () => {
-    if (user?.id && !rideRequestLoading) {
+    const isAppActive = AppState.currentState === 'active';
+    if (isAppActive && user?.id && !rideRequestLoading) {
       if (ride?.id) {
         try {
           loadRide(ride.id);
@@ -907,7 +915,7 @@ const RidePageContextProvider = ({ children }: {
           number = maskSpRes.sp.maskedDriverPhoneNumber;
           Mixpanel.setEvent(`got masked-phones: ${number}`);
         } else {
-          number = stopPoint.metadata.contactPersonPhone;
+          number = ride?.driver?.phoneNumber;
         }
       }
       Mixpanel.setEvent('tel', { number });

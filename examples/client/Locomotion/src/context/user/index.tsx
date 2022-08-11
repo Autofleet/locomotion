@@ -161,6 +161,7 @@ const UserContextProvider = ({ children }: { children: any }) => {
       const vertResponse = await loginVert({
         phoneNumber: user?.phoneNumber,
         code,
+        demandSourceId: Config.OPERATION_ID,
       });
 
       if (vertResponse.status !== 'OK' || !vertResponse.refreshToken || !vertResponse.accessToken) {

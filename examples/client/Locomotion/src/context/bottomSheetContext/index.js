@@ -24,6 +24,7 @@ export const SNAP_POINT_STATES = {
   [BS_PAGES.CONFIRM_FUTURE_RIDE]: [400],
   [BS_PAGES.GENERIC_ERROR]: [STATIC_SNAP_POINTS],
   [BS_PAGES.LOADING]: [STATIC_SNAP_POINTS],
+  [BS_PAGES.NO_AVAILABLE_SERVICES]: [STATIC_SNAP_POINTS],
 };
 const BottomSheetProvider = ({ children }) => {
   const [isExpanded, setIsExpanded] = useState(false);

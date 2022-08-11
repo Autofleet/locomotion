@@ -22,6 +22,7 @@ import cashPaymentMethod from '../../../../../pages/Payments/cashPaymentMethod';
 import { getFutureRideMaxDate, getFutureRideMinDate } from '../../../../../context/newRideContext/utils';
 import settings from '../../../../../context/settings';
 import SETTINGS_KEYS from '../../../../../context/settings/keys';
+import { getTextColorForTheme } from '../../../../../context/theme';
 
 interface RideButtonsProps {
     displayPassenger: boolean;
@@ -67,13 +68,14 @@ const RideButtons = ({
     const close = () => {
       setIsDatePickerOpen(false);
     };
+
     return (
       <ButtonContainer testID="RideTimeSelector" onPress={() => setIsDatePickerOpen(true)}>
         <FutureBookingButton />
         <DatePicker
-          textColor={theme.textColor}
+          textColor={getTextColorForTheme()}
           open={isDatePickerOpen}
-          date={moment(ride?.scheduledTo).add(ride?.scheduledTo ? 0 : 1, 'hours').toDate()}
+          date={moment(ride?.scheduledTo || undefined).add(ride?.scheduledTo ? 0 : 1, 'hours').toDate()}
           maximumDate={getFutureRideMaxDate()}
           minimumDate={getFutureRideMinDate()}
           mode="datetime"
@@ -128,7 +130,7 @@ const RideButtons = ({
         <PaymentButton
           brand={selectedPaymentMethod?.brand}
           icon={creditCardIcon}
-          title={selectedPaymentMethod?.name === cashPaymentMethod.name ? cashPaymentMethod.id : (selectedPaymentMethod?.name || i18n.t('bottomSheetContent.ride.addPayment'))}
+          title={selectedPaymentMethod?.name === cashPaymentMethod.name ? i18n.t('payments.cash') : (selectedPaymentMethod?.name || i18n.t('bottomSheetContent.ride.addPayment'))}
           id={selectedPaymentMethod?.id}
         />
       </ButtonContainer>
