@@ -10,6 +10,11 @@ const {
   SECONDARY_COLOR = undefined,
 } = Config;
 
+export const getTextColorForDarkMode = () => {
+  const colorScheme = Appearance.getColorScheme();
+  return colorScheme === 'dark' ? '#ffffff' : '#000000';
+};
+
 // interface LocomotionTheme {
 //   primaryColor: string;
 //   secondaryColor: string;

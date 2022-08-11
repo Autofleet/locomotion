@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import {
-  Linking, Platform, Text, View, Appearance,
+  Linking, Platform, Text, View,
 } from 'react-native';
 import Config from 'react-native-config';
 import styled, { ThemeContext } from 'styled-components';
@@ -16,7 +16,9 @@ import { STOP_POINT_TYPES } from '../../lib/commonTypes';
 import SvgIcon from '../SvgIcon';
 import { RidePageContext } from '../../context/newRideContext';
 import i18n from '../../I18n';
-import { ERROR_COLOR, FONT_SIZES, FONT_WEIGHTS } from '../../context/theme';
+import {
+  ERROR_COLOR, FONT_SIZES, FONT_WEIGHTS, getTextColorForDarkMode,
+} from '../../context/theme';
 import Button from '../Button';
 import { BottomSheetContext, SNAP_POINT_STATES } from '../../context/bottomSheetContext';
 import { RideStateContextContext } from '../../context/ridePageStateContext';
@@ -236,8 +238,6 @@ BsPage.defaultProps = {
 export default BsPage;
 
 export const ConfirmPickupTime = (props: any) => {
-  const theme = useContext(ThemeContext);
-  const colorScheme = Appearance.getColorScheme();
   const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
   const {
     unconfirmedPickupTime,
@@ -274,7 +274,7 @@ export const ConfirmPickupTime = (props: any) => {
         {i18n.t('bottomSheetContent.confirmPickupTime.pickupText', { date, time })}
       </RoundedButton>
       <DatePicker
-        textColor={colorScheme === 'dark' ? '#ffffff' : theme.textColor}
+        textColor={getTextColorForDarkMode()}
         open={isDatePickerOpen}
         date={moment(unconfirmedPickupTime).add(unconfirmedPickupTime ? 0 : 1, 'hours').toDate()}
         maximumDate={getFutureRideMaxDate()}

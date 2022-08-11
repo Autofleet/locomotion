@@ -1,6 +1,5 @@
 import React, { useContext, useState, useEffect } from 'react';
 import DatePicker from 'react-native-date-picker';
-import { Appearance } from 'react-native';
 import moment from 'moment';
 import { ThemeContext } from 'styled-components';
 import FutureBookingButton from './FutureBookingButton';
@@ -23,6 +22,7 @@ import cashPaymentMethod from '../../../../../pages/Payments/cashPaymentMethod';
 import { getFutureRideMaxDate, getFutureRideMinDate } from '../../../../../context/newRideContext/utils';
 import settings from '../../../../../context/settings';
 import SETTINGS_KEYS from '../../../../../context/settings/keys';
+import { getTextColorForDarkMode } from '../../../../../context/theme';
 
 interface RideButtonsProps {
     displayPassenger: boolean;
@@ -34,7 +34,6 @@ const RideButtons = ({
   setPopupName,
 }: RideButtonsProps) => {
   const theme = useContext(ThemeContext);
-  const colorScheme = Appearance.getColorScheme();
   const {
     ride,
     chosenService,
@@ -73,7 +72,7 @@ const RideButtons = ({
       <ButtonContainer testID="RideTimeSelector" onPress={() => setIsDatePickerOpen(true)}>
         <FutureBookingButton />
         <DatePicker
-          textColor={colorScheme === 'dark' ? '#ffffff' : theme.textColor}
+          textColor={getTextColorForDarkMode()}
           open={isDatePickerOpen}
           date={moment(ride?.scheduledTo || undefined).add(ride?.scheduledTo ? 0 : 1, 'hours').toDate()}
           maximumDate={getFutureRideMaxDate()}
