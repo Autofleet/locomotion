@@ -18,8 +18,8 @@ const Button = (props) => {
 
   return (
     <Container
-      {...props}
       activeOpacity={props.onPress ? 0.5 : 1}
+      {...props}
       onPress={async (e) => {
         if (!props.disabled) {
           if (props.onPress) {
