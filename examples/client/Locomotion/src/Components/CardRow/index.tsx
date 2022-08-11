@@ -153,7 +153,7 @@ const CardRow = (paymentMethod: any) => {
                   {isCashPaymentMethod(paymentMethod)
                     ? (
                       <Type>
-                        {paymentMethod.name}
+                        {i18n.t('payments.cash')}
                       </Type>
                     )
                     : (
