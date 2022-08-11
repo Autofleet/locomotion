@@ -1,5 +1,6 @@
 import React, { useContext, useState, useEffect } from 'react';
 import DatePicker from 'react-native-date-picker';
+import { Appearance } from 'react-native';
 import moment from 'moment';
 import { ThemeContext } from 'styled-components';
 import FutureBookingButton from './FutureBookingButton';
@@ -33,6 +34,7 @@ const RideButtons = ({
   setPopupName,
 }: RideButtonsProps) => {
   const theme = useContext(ThemeContext);
+  const colorScheme = Appearance.getColorScheme();
   const {
     ride,
     chosenService,
@@ -71,7 +73,7 @@ const RideButtons = ({
       <ButtonContainer testID="RideTimeSelector" onPress={() => setIsDatePickerOpen(true)}>
         <FutureBookingButton />
         <DatePicker
-          textColor={theme.textColor}
+          textColor={colorScheme === 'dark' ? '#ffffff' : theme.textColor}
           open={isDatePickerOpen}
           date={moment(ride?.scheduledTo || undefined).add(ride?.scheduledTo ? 0 : 1, 'hours').toDate()}
           maximumDate={getFutureRideMaxDate()}
