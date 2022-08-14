@@ -20,14 +20,14 @@ import Tag from '../../../../../../Components/Tag';
 import { RidePageContext } from '../../../../../../context/newRideContext';
 import FareBreakdownPopup from '../../../../../../popups/FareBreakdownPopup';
 
-const FARE_POPUP = 'fare popup';
+const FARE_POPUP = 'farePopup';
 
-const ServiceCard = ({ service, inPopup }) => {
+const ServiceCard = ({ service, withBorder }) => {
   const theme = useContext(ThemeContext);
   const {
     setChosenService, chosenService, serviceEstimations, ride,
   } = useContext(RidePageContext);
-  const [popup, setPopup] = useState('');
+  const [popup, setPopup] = useState(null);
   const isFutureRide = ride.scheduledTo;
   const unavailable = !service.eta;
   const unavailableText = i18n.t('rideDetails.unavailable');
@@ -70,13 +70,13 @@ const ServiceCard = ({ service, inPopup }) => {
     <>
       <CardContainer
         theme={theme}
-        inPopup={inPopup}
+        withBorder={withBorder}
         selected={isSelected}
-        activeOpacity={inPopup ? 1 : 0.5}
+        activeOpacity={!withBorder ? 1 : 0.5}
         noBackground
         disabled={unavailable}
         onPress={() => {
-          if (!inPopup) {
+          if (withBorder) {
             if (isSelected) {
               return setPopup(FARE_POPUP);
             }
@@ -173,12 +173,12 @@ const ServiceCard = ({ service, inPopup }) => {
 
 ServiceCard.defaultProps = {
   service: {},
-  inPopup: false,
+  withBorder: false,
 };
 
 ServiceCard.propTypes = {
   service: propsTypes.any,
-  inPopup: propsTypes.bool,
+  withBorder: propsTypes.bool,
 };
 
 export default ServiceCard;

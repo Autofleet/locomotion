@@ -26,7 +26,13 @@ const ServiceOptions = () => {
 
   return (
     <ServiceOptionsContainer alwaysBounceVertical={false}>
-      {(serviceEstimations || []).map(option => <ServiceCard service={option} key={option.name} />)}
+      {(serviceEstimations || []).map(option => (
+        <ServiceCard
+          withBorder
+          service={option}
+          key={option.name}
+        />
+      ))}
       {!isDebuggingEnabled
         ? (
           <SkeletonContent

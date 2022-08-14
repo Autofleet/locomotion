@@ -335,7 +335,6 @@ const RidePageContextProvider = ({ children }: {
       setChosenService(formattedEstimations.find((e: any) => e.eta));
       setServiceEstimations(formattedEstimations);
     } catch (e: any) {
-      console.log(e);
       Mixpanel.setEvent('service estimations failed', { status: e?.response?.status });
       if (throwError) {
         setRidePopup(RIDE_POPUPS.FAILED_SERVICE_REQUEST);

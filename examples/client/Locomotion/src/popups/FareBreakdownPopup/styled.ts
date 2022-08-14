@@ -1,7 +1,12 @@
 import { Text, View } from 'react-native';
 import styled from 'styled-components';
-import Button from '../../Components/Button';
+import CloseButton from '../../Components/CloseButton';
 import { FONT_SIZES, FONT_WEIGHTS } from '../../context/theme';
+
+export const StyledCloseButton = styled(CloseButton)`
+align-self: flex-end;
+margin-bottom: 5;
+`;
 
 export const OuterContainer = styled(View)`
 display: flex;
@@ -59,7 +64,7 @@ ${FONT_WEIGHTS.LIGHT}
 opacity: .7;
 `;
 
-export const CloseButton = styled(Button)`
-align-self: flex-end;
-margin-top: 5;
+export const CenteredItemText = styled(ItemText)`
+text-align: center;
+margin: 10px;
 `;

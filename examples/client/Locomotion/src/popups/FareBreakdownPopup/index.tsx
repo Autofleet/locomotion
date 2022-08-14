@@ -13,19 +13,20 @@ import {
   Title,
   Row,
   ItemText,
+  CenteredItemText,
 } from './styled';
 import i18n from '../../I18n';
 import { getPriceCalculation } from '../../context/newRideContext/api';
 import breakdownSkeleton from './breakdownSkeleton';
 import RoundedButton from '../../Components/RoundedButton';
 
-const NoBreakdownComponent = ({ failedRequest, isLoading, retryFunction }: any) => {
-  if (failedRequest) {
+const NoBreakdownComponent = ({ didRequestFail, isLoading, retryFunction }: any) => {
+  if (didRequestFail) {
     return (
       <>
-        <ItemText style={{ textAlign: 'center', margin: 10 }}>
+        <CenteredItemText>
           {`${i18n.t('ridePriceBreakdown.errorText')}`}
-        </ItemText>
+        </CenteredItemText>
         <RoundedButton hollow testID="priceBreakdownRetry" onPress={retryFunction}>
           {`${i18n.t('ridePriceBreakdown.errorButtonText')}`}
         </RoundedButton>
@@ -57,12 +58,12 @@ const FareBreakdownPopup = ({
   onClose,
 }: FareBreakdownPopupProps) => {
   const isDebuggingEnabled = (typeof atob !== 'undefined');
-  const [failedRequest, setFailedRequest] = useState(false);
+  const [didRequestFail, setDidRequestFail] = useState(false);
   const [priceCalculationItems, setPriceCalculationItems] = useState<any[]>();
-  const [total, setTotal] = useState('');
-  const getBreakdown = async () => {
+  const [total, setTotal] = useState<null | string>(null);
+  const loadPriceCalculationBreakdown = async () => {
+    setDidRequestFail(false);
     try {
-      setFailedRequest(false);
       const response = await getPriceCalculation(service.priceCalculationId);
       let totalPrice = 0;
       const items = response.items.map((item: any) => {
@@ -72,15 +73,16 @@ const FareBreakdownPopup = ({
           price: getFormattedPrice(response.currency, item.price),
         };
       });
+
       setTotal(getFormattedPrice(response.currency, totalPrice));
       setPriceCalculationItems(items);
     } catch (e) {
-      setFailedRequest(true);
+      setDidRequestFail(true);
     }
   };
   useEffect(() => {
     if (service.priceCalculationId) {
-      getBreakdown();
+      loadPriceCalculationBreakdown();
     }
   }, []);
 
@@ -90,7 +92,7 @@ const FareBreakdownPopup = ({
       <OuterContainer>
         <InnerContainer>
           <CloseButton onPress={onClose} containerStyles={{ alignSelf: 'flex-end', marginBottom: 5 }} />
-          <ServiceCard service={service} inPopup />
+          <ServiceCard service={service} />
           {service.isPriceEstimated && (
           <EstimatedTextContainer>
             <EstimatedText>
@@ -116,13 +118,13 @@ const FareBreakdownPopup = ({
           ))
             : (
               <NoBreakdownComponent
-                failedRequest={failedRequest}
+                didRequestFail={didRequestFail}
                 isLoading={!priceCalculationItems && !isDebuggingEnabled}
-                retryFunction={getBreakdown}
+                retryFunction={loadPriceCalculationBreakdown}
               />
             )}
         </InnerContainer>
-        {!failedRequest
+        {!didRequestFail
         && (
           <>
             <Line />
