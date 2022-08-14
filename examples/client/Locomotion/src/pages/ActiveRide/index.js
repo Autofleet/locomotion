@@ -217,6 +217,7 @@ const RidePage = ({ mapSettings, navigation }) => {
     [BS_PAGES.ACTIVE_RIDE]: () => <ActiveRide />,
   };
   const focusCurrentLocation = async () => {
+    console.log('focusing');
     if ([RIDE_STATES.ACTIVE, RIDE_STATES.DISPATCHED].includes(ride.state)) {
       const currentStopPoint = (ride.stopPoints || []).find(sp => sp.state === STOP_POINT_STATES.PENDING);
       const coords = getPolylineList(currentStopPoint, ride);
