@@ -1,6 +1,7 @@
 import moment from 'moment';
 import React, { useContext, useState } from 'react';
 import propsTypes from 'prop-types';
+import { View } from 'react-native';
 import SvgIcon from '../../../../../../Components/SvgIcon';
 import i18n from '../../../../../../I18n';
 import Seat from '../../../../../../assets/seat.svg';
@@ -99,16 +100,17 @@ const ServiceCard = ({ service, withBorder }) => {
             </Title>
             <TitleContainer>
               {serviceEstimations.filter(s => s.price).length > 1
-            // && service.tag
-            // && !(isFutureRide && service.tag === TAG_OPTIONS.FASTEST)
-            && (
-            <Tag
-              key={service.tag}
-              containerStyles={tagStyles[TAG_OPTIONS.FASTEST].container}
-              text="cheapest"
-              // textColor={tagStyles[service.tag].textColor}
-            />
-            )
+            && service.tag
+            && !(isFutureRide && service.tag === TAG_OPTIONS.FASTEST)
+                ? (
+                  <Tag
+                    key={service.tag}
+                    containerStyles={tagStyles[service.tag].container}
+                    text={service.tag}
+                    textColor={tagStyles[service.tag].textColor}
+                  />
+                )
+                : <View />
             }
               <Price>
                 {service.price !== undefined ? serviceDisplayPrice : unavailableText}

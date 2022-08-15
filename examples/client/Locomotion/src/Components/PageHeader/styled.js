@@ -7,6 +7,7 @@ export const HeaderText = styled.Text`
   color: ${({ theme }) => theme.textColor};
   text-align: center;
   position: absolute;
+  top: 0;
   left: 20%;  
   width: 60%;
   padding: ${HEADER_PADDING}px;

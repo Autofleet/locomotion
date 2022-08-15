@@ -6,7 +6,7 @@ import { FONT_SIZES, FONT_WEIGHTS } from '../../../../../../context/theme';
 export const TitleContainer = styled.View`
 display: flex;
 flex-direction: row;
-align-items: flex-start;
+align-items: center;
 justify-content: space-between;
 flex-grow: 1;
 `;

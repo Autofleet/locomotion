@@ -1,6 +1,6 @@
 import React from 'react';
 import propsTypes from 'prop-types';
-import { Platform, View } from 'react-native';
+import { Platform, Text, View } from 'react-native';
 import {
   Header, HeaderText, HeaderIconContainer, HeaderIcon, SkipButton, SkipButtonText,
 } from './styled';
@@ -29,6 +29,7 @@ const PageHeader = ({
           <HeaderIcon width={width} height={width} source={icon} side={iconSide} />
         </HeaderIconContainer>
       ) : <View />}
+    <HeaderText numberOfLines={2} style={{ color: 'transparent', position: 'relative' }}>{title}</HeaderText>
     <HeaderText numberOfLines={2}>{title}</HeaderText>
     {showSkipButton
       && (

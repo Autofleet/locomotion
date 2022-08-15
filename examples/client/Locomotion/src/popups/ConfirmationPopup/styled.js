@@ -14,14 +14,12 @@ export const PopupContainer = styled.View`
   align-items: center;
   border-radius: 2px;
   border-color: rgba(0, 0, 0, 0.1);
-  overflow: hidden;
 `;
 
 export const SummaryTitle = styled.Text`
   font-size: 20px;
   color: black;
   font-weight: 500;
-  margin-bottom: 15px;
   text-align: center;
 `;
 
@@ -46,7 +44,6 @@ export const SubmitContainer = styled.View`
 `;
 
 export const ContentContainer = styled.View`
-  flex: 1;
   max-width: 80%;
   flex-direction: column;
   justify-content: space-between;
@@ -54,5 +51,5 @@ export const ContentContainer = styled.View`
 
 export const Content = styled.Text`
   font-size: 16px;
-  flex: 1;
+  padding: 15px 0;
 `;
