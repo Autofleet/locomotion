@@ -14,7 +14,7 @@ import {
   ServiceDetails, TimeDetails,
   Title, Description,
   CarContainer, TitleContainer,
-  EstimatedText, PriceContainer,
+  EstimatedText, WrapRow,
 } from './styled';
 import Tag from '../../../../../../Components/Tag';
 import { RidePageContext } from '../../../../../../context/newRideContext';
@@ -33,21 +33,23 @@ const ServiceCard = ({ service, withBorder }) => {
   const unavailableText = i18n.t('rideDetails.unavailable');
   const serviceDisplayPrice = getFormattedPrice(service.currency, service.price);
   const isSelected = chosenService && chosenService.id === service.id;
+  const sharedTagContainerStyles = {
+    borderWidth: 1,
+    borderStyle: 'solid',
+    borderColor: theme.primaryColor,
+    marginRight: 5,
+  };
   const tagStyles = {
     [TAG_OPTIONS.FASTEST]: {
       container: {
-        borderWidth: 1,
-        borderStyle: 'solid',
-        borderColor: theme.primaryColor,
+        ...sharedTagContainerStyles,
         backgroundColor: theme.primaryColor,
       },
       textColor: theme.primaryButtonTextColor,
     },
     [TAG_OPTIONS.CHEAPEST]: {
       container: {
-        borderWidth: 1,
-        borderStyle: 'solid',
-        borderColor: theme.primaryColor,
+        ...sharedTagContainerStyles,
       },
       textColor: theme.primaryColor,
     },
@@ -91,31 +93,30 @@ const ServiceCard = ({ service, withBorder }) => {
           />
         </CarContainer>
         <ServiceDetails unavailable={unavailable}>
-          <Row>
+          <WrapRow>
+            <Title numberOfLines={2}>
+              {service.name}
+            </Title>
             <TitleContainer>
-              <Title>
-                {service.name}
-              </Title>
               {serviceEstimations.filter(s => s.price).length > 1
-            && service.tag
-            && !(isFutureRide && service.tag === TAG_OPTIONS.FASTEST)
+            // && service.tag
+            // && !(isFutureRide && service.tag === TAG_OPTIONS.FASTEST)
             && (
             <Tag
               key={service.tag}
-              containerStyles={tagStyles[service.tag].container}
-              text={service.tag}
-              textColor={tagStyles[service.tag].textColor}
+              containerStyles={tagStyles[TAG_OPTIONS.FASTEST].container}
+              text="cheapest"
+              // textColor={tagStyles[service.tag].textColor}
             />
             )
             }
+              <Price>
+                {service.price !== undefined ? serviceDisplayPrice : unavailableText}
+              </Price>
             </TitleContainer>
-            <Price>
-              {service.price !== undefined ? serviceDisplayPrice : unavailableText}
-            </Price>
-
-          </Row>
+          </WrapRow>
           {!unavailable && (
-          <Row>
+          <WrapRow>
             {!isFutureRide
               ? (
                 <TimeDetails>
@@ -143,7 +144,7 @@ const ServiceCard = ({ service, withBorder }) => {
               </Capacity>
             )}
 
-          </Row>
+          </WrapRow>
           )}
           {service.description && !isFutureRide && (
           <Row>

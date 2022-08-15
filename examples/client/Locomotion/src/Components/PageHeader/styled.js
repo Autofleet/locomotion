@@ -6,8 +6,9 @@ const HEADER_PADDING = 15;
 export const HeaderText = styled.Text`
   color: ${({ theme }) => theme.textColor};
   text-align: center;
-  position: absolute;  
-  width: 100%;
+  position: absolute;
+  left: 20%;  
+  width: 60%;
   padding: ${HEADER_PADDING}px;
   ${FONT_SIZES.H3}
   ${FONT_WEIGHTS.SEMI_BOLD}
@@ -34,6 +35,7 @@ export const Header = styled.View`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  align-items: center;
   position: relative;
   elevation: 10;
   box-shadow: 0px 5px 5px rgba(0,0,0,0.05);

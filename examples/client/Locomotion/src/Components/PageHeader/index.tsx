@@ -29,12 +29,13 @@ const PageHeader = ({
           <HeaderIcon width={width} height={width} source={icon} side={iconSide} />
         </HeaderIconContainer>
       ) : <View />}
-    <HeaderText>{title}</HeaderText>
+    <HeaderText numberOfLines={2}>{title}</HeaderText>
     {showSkipButton
       && (
       <SkipButton
         testID="skipButton"
         noBackground
+        noLoader
         onPress={onPressSkip}
       >
 

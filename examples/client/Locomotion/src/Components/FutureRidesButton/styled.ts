@@ -9,7 +9,7 @@ max-width: 45%;
 display: flex;
 flex-direction: row;
 justify-content: flex-start;
-height: 40px;
+min-height: 40px;
 padding: 10px;
 background-color: #ffffff;
 border-radius: 8px;

@@ -33,6 +33,7 @@ export const TouchableRideViewContainer = styled.TouchableOpacity`
   flex-direction: row;
   padding: 20px;
   justify-content: space-between;
+  flex-wrap: wrap;
 `;
 
 export const BaseRideViewContainer = styled.View`
@@ -98,10 +99,12 @@ export const BlankContainer = styled.View`
 `;
 
 export const RideViewTextContainer = styled.View`
+width: 65%;
 `;
 
 export const RideViewSecTextContainer = styled.View`
 align-items: flex-end;
+width: 35%;
 `;
 
 export const CenterContainer = styled.View`

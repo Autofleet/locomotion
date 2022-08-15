@@ -21,6 +21,7 @@ export const DrawerLabelsContainer = styled.View`
 
 export const StyledDrawerLabel = styled.TouchableOpacity`
   min-height: 50px;
+  width: 75%;
   margin-left: 30px;
   flex-direction: row;
   align-items: center;
