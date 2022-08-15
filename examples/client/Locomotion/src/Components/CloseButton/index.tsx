@@ -1,10 +1,18 @@
 import React from 'react';
+import styled from 'styled-components';
 import Button from '../Button';
 import SvgIcon from '../SvgIcon';
 import closeXIcon from '../../assets/close-x.svg';
 
+const StyledCloseButton = styled(Button)`
+height: 25;
+width: 25;
+align-items: center;
+justify-content: center;
+`;
+
 const CloseButton = ({ onPress, size, containerStyles }: { onPress: any, size?: number, containerStyles?: any }) => (
-  <Button
+  <StyledCloseButton
     style={containerStyles}
     noBackground
     onPress={onPress}
@@ -15,7 +23,7 @@ const CloseButton = ({ onPress, size, containerStyles }: { onPress: any, size?: 
       height={size}
       fill="#333"
     />
-  </Button>
+  </StyledCloseButton>
 );
 
 CloseButton.defaultProps = {

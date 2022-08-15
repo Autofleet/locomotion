@@ -37,34 +37,3 @@ ${FONT_SIZES.SMALL}
 ${FONT_WEIGHTS.LIGHT}
 opacity: .7;
 `;
-
-export const Line = styled(View)`
-border: .5px solid #e6e6e6;
-width: 100%;
-margin: 0 5px;
-`;
-
-export const Title = styled(Text)`
-${FONT_SIZES.MEDIUM}
-${FONT_WEIGHTS.SEMI_BOLD}
-padding: 8px 0;
-`;
-
-export const Row = styled(View)`
-display: flex;
-flex-direction: row;
-justify-content: space-between;
-align-items: center;
-padding: 8px 16px;
-`;
-
-export const ItemText = styled(Text)`
-${FONT_SIZES.MEDIUM}
-${FONT_WEIGHTS.LIGHT}
-opacity: .7;
-`;
-
-export const CenteredItemText = styled(ItemText)`
-text-align: center;
-margin: 10px;
-`;
