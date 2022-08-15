@@ -92,10 +92,10 @@ class Geo {
         return this.lastLocation;
       }
     }
-    const rnLastLocation = await RNLocation.getLatestLocation({ timeout: 10000 });
-    if (rnLastLocation) {
-      return prepareCoords([rnLastLocation]);
-    }
+    // const rnLastLocation = await RNLocation.getLatestLocation({ timeout: 10000 });
+    // if (rnLastLocation) {
+    //   return prepareCoords([rnLastLocation]);
+    // }
     const location = await currentLocationNative();
     return prepareCoords([location.coords || location]);
   };
