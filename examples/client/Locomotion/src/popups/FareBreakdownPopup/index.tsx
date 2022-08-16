@@ -41,14 +41,8 @@ const FareBreakdownPopup = ({
     loadPriceCalculation();
   }, []);
 
-  useEffect(() => {
-    BackHandler.addEventListener('hardwareBackPress', onClose);
-
-    return () => BackHandler.removeEventListener('hardwareBackPress', onClose);
-  }, []);
-
   return (
-    <Modal isVisible={isVisible}>
+    <Modal isVisible={isVisible} onBackButtonPress={onClose}>
       <OuterContainer>
         <InnerContainer>
           <CloseButton onPress={onClose} containerStyles={{ alignSelf: 'flex-end' }} />

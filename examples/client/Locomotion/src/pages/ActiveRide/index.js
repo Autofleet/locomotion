@@ -265,10 +265,10 @@ const RidePage = ({ mapSettings, navigation }) => {
         }
         return false;
       };
-      BackHandler.addEventListener('hardwareBackPress', onBackPress);
+      const backHandler = BackHandler.addEventListener('hardwareBackPress', onBackPress);
 
-      return () => BackHandler.removeEventListener('hardwareBackPress', onBackPress);
-    }, []),
+      return () => backHandler.remove();
+    }, [serviceEstimations]),
   );
 
   const versionCheck = async () => {
