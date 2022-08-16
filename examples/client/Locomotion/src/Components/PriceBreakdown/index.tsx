@@ -60,18 +60,15 @@ const PriceBreakdown = ({
   const isDebuggingEnabled = typeof atob !== 'undefined';
   const [priceCalculationItems, setPriceCalculationItems] = useState<any[]>();
   const [total, setTotal] = useState<null | string>(null);
-  const getPriceWithCurrency = (amount: number) =>
-    `${getCurrencySymbol(priceCalculation.currency)}${amount.toFixed(2)}`;
+  const getPriceWithCurrency = (amount: number) => `${getCurrencySymbol(priceCalculation.currency)}${amount.toFixed(2)}`;
 
   const calculationTypeToUnit: any = {
     fixed: () => '',
-    distance: (price: string) =>
-      i18n.t('ridePriceBreakdown.perUnit', {
-        unit: priceCalculation?.distanceUnit,
-        price,
-      }),
-    duration: (price: string) =>
-      i18n.t('ridePriceBreakdown.perUnit', { unit: 'minute', price }),
+    distance: (price: string) => i18n.t('ridePriceBreakdown.perUnit', {
+      unit: priceCalculation?.distanceUnit,
+      price,
+    }),
+    duration: (price: string) => i18n.t('ridePriceBreakdown.perUnit', { unit: 'minute', price }),
   };
 
   const loadPriceCalculationBreakdown = async () => {
