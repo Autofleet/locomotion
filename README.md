@@ -12,19 +12,21 @@ The app comes pre-integrated to autofleet's backend ride engine that matches rid
 
 ## Usage
 
-Locomotion is pre-integrated to the Autofleet platform, which offers the full dispatching and route optimization, driver management, and fleet maangement platform to power any ride-based service. To access set up your service with Autofleet and get API access please fill out this from and the partnership team will get in tocuh: [Autofleet API key form](https://forms.gle/fJKS7Hu29S9BXkdL8)
+Locomotion is pre-integrated to the Autofleet platform, which offers the full dispatching and route optimization, driver management, and fleet maangement platform to power any ride-based service. To access and set up your service with Autofleet and get API access please fill out this from and the partnership team will get in touch: [Autofleet API key form](https://forms.gle/fJKS7Hu29S9BXkdL8)
 
-![Book ride](https://res.cloudinary.com/dgotwqwlz/image/upload/h_460/v1618228158/WhatsApp_Image_2021-04-12_at_14.44.40_2_a3cgun.jpg) ![Confirm booking](https://res.cloudinary.com/dgotwqwlz/image/upload/h_460/v1618228158/WhatsApp_Image_2021-04-12_at_14.44.40_1_qsji9l.jpg) ![Ride booked](https://res.cloudinary.com/dgotwqwlz/image/upload/h_460/v1618228158/WhatsApp_Image_2021-04-12_at_14.44.40_kmyv6j.jpg)
+![Where to?](https://res.cloudinary.com/dgotwqwlz/image/upload/h_450/v1660651906/WhatsApp_Image_2022-08-16_at_12.28.27_PM_gsv42x.jpg) ![Get ride offers](https://res.cloudinary.com/dgotwqwlz/image/upload/h_450/v1660651906/WhatsApp_Image_2022-08-16_at_12.28.27_PM_1_cn8dqp.jpg) ![Ride booked](https://res.cloudinary.com/dgotwqwlz/image/upload/h_450/v1660651906/WhatsApp_Image_2022-08-16_at_12.28.28_PM_gnliqh.jpg)![Ride booked](https://res.cloudinary.com/dgotwqwlz/image/upload/h_450/v1660651906/WhatsApp_Image_2022-08-16_at_12.28.27_PM_2_rtdz1f.jpg)![Add payment method](https://res.cloudinary.com/dgotwqwlz/image/upload/h_450/v1660651906/WhatsApp_Image_2022-08-16_at_12.28.28_PM_1_rsgk3g.jpg)
 
 ## Roadmap
 
-* **In-Ride**: updates to ride (destination, new stop points, etc.)
+* Show nearby vehicles, pre-ETAs and prices - DONE
+* Add special requests/ notes to drivers - DONE
+* Customizable branding and color pallette - DONE
+* **In-Ride**: updates to ride (destination, new stop points, etc.) - DONE
+* Payments integration, including customer onboarding and processing - DONE
 * **Post-Ride**: allow comments on driver
-* Payments integration, including customer onboarding and processing
+* Multi-stop rides
 * Walking navigation for customer to pickup point
-* Show nearby vehicles and classes, and pre-ETAs and prices
-* Add special requests/ notes to drivers
-* Customizable branding and color pallette
+
 
 ## Authors & Acknowledgements
 
