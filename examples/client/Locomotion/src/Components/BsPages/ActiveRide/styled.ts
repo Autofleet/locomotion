@@ -1,5 +1,5 @@
 import {
-  Image, Text, View, TouchableOpacity, Platform,
+  Image, Text, View, TouchableOpacity, Platform, ScrollView,
 } from 'react-native';
 import styled from 'styled-components';
 import { FONT_SIZES, FONT_WEIGHTS } from '../../../context/theme';
@@ -9,7 +9,7 @@ export const HALF_WIDTH = '49%';
 export const TopContainer = styled(View)`
     flex-direction: row;
     width: 100%;
-    height: 70px;
+    align-items: center;
 `;
 
 export const VehicleDetails = styled(View)`
@@ -65,6 +65,7 @@ export const StopPointText = styled(Text)`
 
 export const StopPointsTimeContainer = styled(View)`
     flex-direction: row;
+    align-items: center;
 `;
 
 export const StopPointTimeText = styled(Text)`
@@ -89,7 +90,7 @@ export const RowContainer = styled(View)`
     flex-direction: row;
     width: 100%;
     margin-bottom: 2%;
-    height: 40px;
+    min-height: 40px;
     justify-content: space-between;
 `;
 
@@ -105,6 +106,6 @@ export const ButtonContainer = styled(TouchableOpacity)`
     opacity: ${props => (props.disabled ? 0.5 : 1)};
 `;
 
-export const Container = styled(View)`
+export const Container = styled(ScrollView)`
     padding: 0 10px;
 `;

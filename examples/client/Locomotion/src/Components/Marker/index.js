@@ -65,7 +65,7 @@ const StopPointMarker = ({
         <PulseContainer>
           <Loader
             sourceProp={pulse}
-            lottieViewStyle={{ width: 24, height: 24, marginRight: 5 }}
+            lottieViewStyle={{ width: 22, height: 22, marginRight: 5 }}
           />
         </PulseContainer>
       );

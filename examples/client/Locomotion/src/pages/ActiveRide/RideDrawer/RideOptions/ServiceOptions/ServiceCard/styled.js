@@ -6,6 +6,9 @@ import { FONT_SIZES, FONT_WEIGHTS } from '../../../../../../context/theme';
 export const TitleContainer = styled.View`
 display: flex;
 flex-direction: row;
+align-items: center;
+justify-content: space-between;
+flex-grow: 1;
 `;
 export const CardContainer = styled(Button)`
 width: 100%;
@@ -44,6 +47,11 @@ align-items: flex-start;
 width: 100%;
 `;
 
+export const WrapRow = styled(Row)`
+flex-wrap: wrap;
+align-items: center;
+`;
+
 export const Title = styled.Text`
 ${FONT_SIZES.H3};
 ${FONT_WEIGHTS.MEDIUM};
@@ -53,6 +61,7 @@ margin-right: 5px;
 export const Price = styled.Text`
 ${FONT_SIZES.LARGE};
 ${FONT_WEIGHTS.MEDIUM};
+text-align: right;
 `;
 
 export const TimeDetails = styled.View`
@@ -89,7 +98,7 @@ export const Description = styled.Text`
 opacity: .5;
 ${FONT_SIZES.MEDIUM};
 ${FONT_WEIGHTS.REGULAR};
-width: 90%;
+width: 85%;
 `;
 
 export const EstimatedText = styled.Text`
