@@ -320,6 +320,16 @@ const RidePageContextProvider = ({ children }: {
     });
   };
 
+  const ESTIMATION_ERRORS = {
+    'RIDE_VALIDATION:SOME_STOP_POINTS_ARE_OUT_OF_TERRITORY': 'RIDE_VALIDATION:SOME_STOP_POINTS_ARE_OUT_OF_TERRITORY',
+    FIRST_STOP_POINT_NOT_IN_TERRITORY: 'FIRST_STOP_POINT_NOT_IN_TERRITORY',
+  };
+
+  const FAILED_ESTIMATIONS_ACTIONS = {
+    [ESTIMATION_ERRORS['RIDE_VALIDATION:SOME_STOP_POINTS_ARE_OUT_OF_TERRITORY']]: () => changeBsPage(BS_PAGES.NOT_IN_TERRITORY),
+    [ESTIMATION_ERRORS.FIRST_STOP_POINT_NOT_IN_TERRITORY]: () => changeBsPage(BS_PAGES.PICKUP_NOT_IN_TERRITORY),
+  };
+
   const getServiceEstimations = async (throwError = true) => {
     changeBsPage(BS_PAGES.SERVICE_ESTIMATIONS);
     try {
@@ -327,6 +337,7 @@ const RidePageContextProvider = ({ children }: {
       Mixpanel.setEvent('Get service estimations');
       const { estimations, services } = await rideApi
         .createServiceEstimations(formattedStopPoints, ride.scheduledTo);
+      console.log('estimations', estimations);
       const tags = getEstimationTags(estimations);
       const formattedEstimations = formatEstimations(services, estimations, tags);
       if (formattedEstimations.every((e: any) => !e.eta)) {
@@ -337,8 +348,14 @@ const RidePageContextProvider = ({ children }: {
     } catch (e: any) {
       Mixpanel.setEvent('service estimations failed', { status: e?.response?.status });
       if (throwError) {
-        setRidePopup(RIDE_POPUPS.FAILED_SERVICE_REQUEST);
-        cleanRideState();
+        if (FAILED_ESTIMATIONS_ACTIONS[e?.response?.data?.errors[0]]) {
+          FAILED_ESTIMATIONS_ACTIONS[e?.response?.data?.errors[0]]();
+        } else {
+          cleanRideState();
+          setRidePopup(RIDE_POPUPS.FAILED_SERVICE_REQUEST);
+          changeBsPage(BS_PAGES.ADDRESS_SELECTOR);
+          setIsExpanded(true);
+        }
       }
     }
   };
@@ -368,10 +385,7 @@ const RidePageContextProvider = ({ children }: {
     const stopPoints = reqSps;
     const isSpsReady = stopPoints.every(r => r.lat && r.lng && r.description);
     if (stopPoints.length && isSpsReady) {
-      const areStopPointsInTerritory = validateStopPointInTerritory(stopPoints);
-      if (areStopPointsInTerritory) {
-        tryServiceEstimations();
-      }
+      tryServiceEstimations();
     } else if (![BS_PAGES.ADDRESS_SELECTOR, BS_PAGES.LOADING].includes(currentBsPage)) {
       // reset req stop point request
       if (!ride.id) {

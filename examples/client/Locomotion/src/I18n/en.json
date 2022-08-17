@@ -501,7 +501,8 @@
     "notAvailableHere": {
       "titleText": "We are Sorry!",
       "buttonText": "Choose another address",
-      "subTitleText": "{{ appName }} is not available in your area"
+      "subTitleText": "{{ appName }} is not available in your area",
+      "pickupSubTitleText": "Pickup location must be within the {{ appName }} area"
     },
     "noPayment": {
         "titleText": "No payment set",

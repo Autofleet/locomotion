@@ -42,6 +42,7 @@ const PAGES_TO_SHOW_SP_MARKERS = [
   BS_PAGES.SERVICE_ESTIMATIONS,
   BS_PAGES.NO_PAYMENT,
   BS_PAGES.NOT_IN_TERRITORY,
+  BS_PAGES.PICKUP_NOT_IN_TERRITORY,
   BS_PAGES.NO_AVAILABLE_VEHICLES,
   BS_PAGES.ACTIVE_RIDE,
   BS_PAGES.CANCEL_RIDE,
@@ -52,7 +53,7 @@ const PAGES_TO_SHOW_SP_MARKERS = [
 const PAGES_TO_SHOW_MY_LOCATION = [
   BS_PAGES.ADDRESS_SELECTOR,
   BS_PAGES.SERVICE_ESTIMATIONS,
-  BS_PAGES.NOT_IN_TERRITORY,
+  BS_PAGES.PICKUP_NOT_IN_TERRITORY,
   BS_PAGES.CANCEL_RIDE,
   BS_PAGES.CONFIRM_FUTURE_RIDE,
   BS_PAGES.SET_LOCATION_ON_MAP,
@@ -314,7 +315,7 @@ export default React.forwardRef(({
               );
             })
           : null}
-        {currentBsPage === BS_PAGES.NOT_IN_TERRITORY && territory && territory.length ? territory
+        {[BS_PAGES.NOT_IN_TERRITORY, BS_PAGES.PICKUP_NOT_IN_TERRITORY].includes(currentBsPage) && territory && territory.length ? territory
           .map(t => t.polygon.coordinates.map(poly => (
             <Polygon
               key={`Polygon#${t.id}#${poly[1]}#${poly[0]}`}

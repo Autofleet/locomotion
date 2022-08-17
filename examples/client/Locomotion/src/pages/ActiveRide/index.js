@@ -6,6 +6,7 @@ import {
   AppState, BackHandler, Platform, View,
 } from 'react-native';
 import { Portal } from '@gorhom/portal';
+import Config from 'react-native-config';
 import * as navigationService from '../../services/navigation';
 import { MAIN_ROUTES } from '../routes';
 import { getPolylineList } from '../../lib/polyline/utils';
@@ -171,6 +172,17 @@ const RidePage = ({ mapSettings, navigation }) => {
         fullWidthButtons
         onButtonPress={() => {
           goBackToAddress();
+        }}
+      />
+    ),
+    [BS_PAGES.PICKUP_NOT_IN_TERRITORY]: () => (
+      <NotAvailableHere
+        fullWidthButtons
+        SubTitleText={i18n.t('bottomSheetContent.notAvailableHere.pickupSubTitleText', {
+          appName: Config.OPERATION_NAME,
+        })}
+        onButtonPress={() => {
+          goBackToAddress(0);
         }}
       />
     ),
