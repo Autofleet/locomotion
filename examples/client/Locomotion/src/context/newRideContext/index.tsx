@@ -20,7 +20,7 @@ import {
   formatStopPointsForEstimations,
   getEstimationTags,
   INITIAL_STOP_POINTS,
-  RIDE_POPUPS, RidePopupNames, RIDE_FAILED_REASONS,
+  RIDE_POPUPS, RidePopupNames, RIDE_FAILED_REASONS, ESTIMATION_ERRORS,
 } from './utils';
 import settings from '../settings';
 import SETTINGS_KEYS from '../settings/keys';
@@ -320,11 +320,6 @@ const RidePageContextProvider = ({ children }: {
     });
   };
 
-  const ESTIMATION_ERRORS = {
-    'RIDE_VALIDATION:SOME_STOP_POINTS_ARE_OUT_OF_TERRITORY': 'RIDE_VALIDATION:SOME_STOP_POINTS_ARE_OUT_OF_TERRITORY',
-    FIRST_STOP_POINT_NOT_IN_TERRITORY: 'FIRST_STOP_POINT_NOT_IN_TERRITORY',
-  };
-
   const FAILED_ESTIMATIONS_ACTIONS = {
     [ESTIMATION_ERRORS['RIDE_VALIDATION:SOME_STOP_POINTS_ARE_OUT_OF_TERRITORY']]: () => changeBsPage(BS_PAGES.NOT_IN_TERRITORY),
     [ESTIMATION_ERRORS.FIRST_STOP_POINT_NOT_IN_TERRITORY]: () => changeBsPage(BS_PAGES.PICKUP_NOT_IN_TERRITORY),
@@ -337,7 +332,6 @@ const RidePageContextProvider = ({ children }: {
       Mixpanel.setEvent('Get service estimations');
       const { estimations, services } = await rideApi
         .createServiceEstimations(formattedStopPoints, ride.scheduledTo);
-      console.log('estimations', estimations);
       const tags = getEstimationTags(estimations);
       const formattedEstimations = formatEstimations(services, estimations, tags);
       if (formattedEstimations.every((e: any) => !e.eta)) {
