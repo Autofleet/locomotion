@@ -92,8 +92,10 @@ export const CardsTitle = styled.Text`
 export const CardTitleContainer = styled.View`
   flex-direction: row;
   justify-content: space-between;
+  flex-wrap: wrap;
   vertical-align: center;
   padding-right: 10px;
+  max-width: 100%;
 `;
 
 export const CardTitle = styled.Text`
