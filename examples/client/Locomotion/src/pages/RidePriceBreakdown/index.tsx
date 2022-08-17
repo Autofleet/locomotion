@@ -2,14 +2,11 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { View } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
-import { useNavigation, useRoute } from '@react-navigation/native';
-import { CHARGE_FOR_TIP, RIDE_FINAL_STATES } from '../../lib/commonTypes';
-import NoTitlePriceCard from '../../Components/PriceCard/NoTitlePriceCard';
+import { useRoute } from '@react-navigation/native';
+import { RIDE_FINAL_STATES } from '../../lib/commonTypes';
 import { MAIN_ROUTES } from '../routes';
-import PriceCard from '../../Components/PriceCard';
-import NoTitleCard from '../../Components/NoTitleCard';
 import Loader from '../../Components/Loader';
-import { getCurrencySymbol, isPriceEstimated } from '../../context/newRideContext/utils';
+import { isPriceEstimated } from '../../context/newRideContext/utils';
 import InformationCard from '../../Components/InformationCard';
 import CardRow from '../../Components/CardRow';
 import { PageContainer } from '../styles';
@@ -21,6 +18,7 @@ import {
 } from './styled';
 import { PaymentMethodInterface } from '../../context/payments/interface';
 import * as navigationService from '../../services/navigation';
+import PriceBreakdown from '../../Components/PriceBreakdown';
 
 type RidePriceBreakdownParams = {
   rideId: string,
@@ -31,6 +29,7 @@ const RidePriceBreakDown = () => {
   const route = useRoute();
   const params : RidePriceBreakdownParams = route.params as RidePriceBreakdownParams;
   const [loading, setLoading] = useState<boolean>(true);
+  const [didRequestFail, setDidRequestFail] = useState(false);
   const [priceCalculation, setPriceCalculation] = useState<PriceCalculation>();
   const [paymentMethod, setPaymentMethod] = useState<PaymentMethodInterface>();
   const [localRide, setLocalRide] = useState<RideInterface>();
@@ -41,10 +40,13 @@ const RidePriceBreakDown = () => {
   } = useContext(RidePageContext);
 
   const updatePriceCalculation = async () => {
-    setLoading(true);
-    const calculation = await getRidePriceCalculation(params.rideId);
-    setPriceCalculation(calculation);
-    setLoading(false);
+    try {
+      setDidRequestFail(false);
+      const calculation = await getRidePriceCalculation(params.rideId);
+      setPriceCalculation(calculation);
+    } catch {
+      setDidRequestFail(false);
+    }
   };
 
   const updateRideFromApi = async () => {
@@ -61,24 +63,10 @@ const RidePriceBreakDown = () => {
   };
 
   useEffect(() => {
-    if (!priceCalculation || !paymentMethod) {
+    if (!paymentMethod) {
       setLoading(true);
     }
-  }, [priceCalculation, paymentMethod]);
-
-  const getSymbol = () => getCurrencySymbol(priceCalculation?.currency);
-  const getPriceWithCurrency = (amount:number) => `${getSymbol()}${amount.toFixed(2)}`;
-  const getTip = () => priceCalculation?.additionalCharges?.find(({ chargeFor }) => chargeFor === CHARGE_FOR_TIP);
-  const getTotalPrice = () => getPriceWithCurrency(
-    (priceCalculation?.totalPrice || 0)
-   + (priceCalculation?.additionalCharges?.reduce((s, { amount }) => s + amount, 0) || 0),
-  );
-
-  const calculationTypeToUnit = {
-    fixed: () => '',
-    distance: (price:string) => i18n.t('ridePriceBreakdown.perUnit', { unit: priceCalculation?.distanceUnit, price }),
-    duration: (price:string) => i18n.t('ridePriceBreakdown.perUnit', { unit: 'minute', price }),
-  };
+  }, [paymentMethod]);
 
   useEffect(() => {
     updatePriceCalculation();
@@ -121,38 +109,11 @@ const RidePriceBreakDown = () => {
               </View>
             </InformationCard>
 
-            <InformationCard title={i18n.t('ridePriceBreakdown.paymentBreakdownTitle')}>
-              <View>
-                {priceCalculation?.items?.filter(item => item.pricingRule && item.price > 0)
-                  .map(item => (
-                    <PriceCard
-                      name={`${i18n.t('ridePriceBreakdown.priceItem', {
-                        name: item.pricingRule.name,
-                      })}${calculationTypeToUnit[item.pricingRule.calculationType](getPriceWithCurrency(item.pricingRule.price))}`}
-                      text={getPriceWithCurrency(item.price)}
-                    />
-                  ))}
-                {
-                 priceCalculation?.items.find(x => x.cancellationRule) ? (
-                   <PriceCard
-                     name={i18n.t('ridePriceBreakdown.priceFieldNames.cancelationFee')}
-                     text={getPriceWithCurrency(priceCalculation?.totalPrice || 0)}
-                   />
-                 ) : undefined
-                }
-              </View>
-            </InformationCard>
-            {getTip() ? (
-              <NoTitleCard>
-                <NoTitlePriceCard name={i18n.t('ridePriceBreakdown.priceFieldNames.tip')} text={getPriceWithCurrency((getTip()?.amount || 0))} />
-              </NoTitleCard>
-            ) : undefined}
-            <NoTitleCard>
-              <NoTitlePriceCard
-                name={i18n.t('ridePriceBreakdown.priceFieldNames.total')}
-                text={getTotalPrice()}
-              />
-            </NoTitleCard>
+            <PriceBreakdown
+              priceCalculation={priceCalculation}
+              didRequestFail={didRequestFail}
+              retryGetPriceBreakdown={updatePriceCalculation}
+            />
           </PriceItemsContainer>
         )}
       </ScrollView>
