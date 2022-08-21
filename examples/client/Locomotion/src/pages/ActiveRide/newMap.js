@@ -5,7 +5,7 @@ import { StyleSheet } from 'react-native';
 import MapView, { Polygon, Polyline } from 'react-native-maps';
 import Config from 'react-native-config';
 import moment from 'moment';
-import { lineString, nearestPointOnLine, point } from '@turf/turf';
+
 import { FutureRidesContext } from '../../context/futureRides';
 import { RidePageContext } from '../../context/newRideContext';
 import { RideStateContextContext } from '../../context';
@@ -19,7 +19,7 @@ import StationsMap from '../../Components/Marker';
 import { BS_PAGES } from '../../context/ridePageStateContext/utils';
 import { RIDE_STATES, STOP_POINT_STATES } from '../../lib/commonTypes';
 import PrecedingStopPointMarker from '../../Components/PrecedingStopPointMarker';
-import { getPolylineList } from '../../lib/polyline/utils';
+import { decodePolyline, getPolylineList, getVehicleLocation } from '../../lib/polyline/utils';
 import { BottomSheetContext } from '../../context/bottomSheetContext';
 import i18n from '../../I18n';
 
@@ -171,8 +171,10 @@ export default React.forwardRef(({
   useEffect(() => {
     if ([RIDE_STATES.DISPATCHED, RIDE_STATES.ACTIVE].includes(ride.state)) {
       const currentStopPoint = (ride.stopPoints || []).find(sp => sp.state === STOP_POINT_STATES.PENDING);
-      const coords = getPolylineList(currentStopPoint, ride);
-      focusMapToCoordinates(coords, true, ACTIVE_RIDE_MAP_PADDING);
+      if (currentStopPoint) {
+        const coords = getPolylineList(currentStopPoint, ride);
+        focusMapToCoordinates(coords, true, ACTIVE_RIDE_MAP_PADDING);
+      }
     }
   }, [ride.state]);
 
@@ -235,21 +237,6 @@ export default React.forwardRef(({
     return stopPoint.streetAddress || stopPoint.description;
   };
 
-  const getVehicleLocation = (location, vehiclePolyline) => {
-    if (!vehiclePolyline) {
-      return location;
-    }
-
-    const formattedPolyline = lineString(vehiclePolyline.map(p => ([p.longitude, p.latitude])));
-    const vehiclePoint = point([location.lng, location.lat]);
-
-    const { geometry } = nearestPointOnLine(formattedPolyline, vehiclePoint);
-    return {
-      lat: geometry.coordinates[1],
-      lng: geometry.coordinates[0],
-    };
-  };
-
   return (
     <>
       <MapView
@@ -280,9 +267,9 @@ export default React.forwardRef(({
         initialRegion={mapRegion}
         {...mapSettings}
       >
-        {ride.vehicle && ride.vehicle.location && (
+        {ride.vehicle && ride.vehicle.location && currentStopPoint && (
           <AvailabilityVehicle
-            location={getVehicleLocation(ride.vehicle.location, finalStopPoints && polylineList)}
+            location={getVehicleLocation(ride.vehicle.location, decodePolyline(currentStopPoint.polyline))}
             id={ride.vehicle.id}
             key={ride.vehicle.id}
           />
