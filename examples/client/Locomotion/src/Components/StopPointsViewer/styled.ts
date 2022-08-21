@@ -4,7 +4,7 @@ import { FONT_SIZES, FONT_WEIGHTS } from '../../context/theme';
 import Button from '../Button';
 
 export const Container = styled(View)`
-height: 40px;
+min-height: 40px;
 width: 85%;
 shadow-offset: 0px 0px;
 shadow-color: #04214f;

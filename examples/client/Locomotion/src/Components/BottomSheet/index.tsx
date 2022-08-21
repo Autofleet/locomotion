@@ -16,9 +16,9 @@ import { BottomSheetContext } from '../../context/bottomSheetContext';
 
 const BottomSheetTopInfo = styled(View)`
 background-color: #989898;
-position: absolute;
+/* position: absolute;
 height: 38px;
-top: -38px;
+top: -38px; */
 width: 100%;
 align-items: center;
 border-top-left-radius: 8px;
@@ -76,7 +76,7 @@ const BottomSheetComponent = forwardRef(({
   };
 
   const getTopBar = () => (
-    <BottomSheetHandle indicatorStyle={{ backgroundColor: '#989898', ...(snapPointsAreTheSame() && { display: 'none' }) }} style={{ paddingLeft: 0, paddingRight: 0 }}>
+    <>
       {!!topBarText && (
       <BottomSheetTopInfo>
         <InfoText>
@@ -84,7 +84,8 @@ const BottomSheetComponent = forwardRef(({
         </InfoText>
       </BottomSheetTopInfo>
       )}
-    </BottomSheetHandle>
+      <BottomSheetHandle indicatorStyle={{ backgroundColor: '#989898', ...(snapPointsAreTheSame() && { display: 'none' }) }} style={{ paddingLeft: 0, paddingRight: 0 }} />
+    </>
   );
   return (
     <BottomSheet
@@ -108,7 +109,7 @@ const BottomSheetComponent = forwardRef(({
         shadowRadius: 3.84,
         elevation: 10,
         zIndex: 999,
-        borderRadius: topBarText ? 0 : 8,
+        borderRadius: 8,
       }}
     >
       <SafeView

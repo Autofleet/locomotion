@@ -105,7 +105,7 @@ const ActiveRideContent = () => {
     <>
       {ride
       && (
-        <Container>
+        <Container alwaysBounceVertical={false}>
           <TopContainer>
             <DriverCardContainer>
               <DriverCard
@@ -122,7 +122,7 @@ const ActiveRideContent = () => {
             </VehicleDetails>
           </TopContainer>
           <StopPointTextContainer>
-            <StopPointText>
+            <StopPointText numberOfLines={1}>
               {getTextBasedOnStopPoints()}
             </StopPointText>
             {firstSpNotCompleted?.state === STOP_POINT_STATES.PENDING

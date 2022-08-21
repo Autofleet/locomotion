@@ -34,7 +34,7 @@ export const Container = styled.View`
   padding-left: 5px;
 `;
 
-export const LogoutContainer = styled.View`
+export const LogoutContainer = styled(Button)`
   text-align: center;
   align-items: center;
   background-color: ${({ theme }) => theme.pageBackgroundColor};
