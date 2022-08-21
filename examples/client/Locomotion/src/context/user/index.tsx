@@ -5,7 +5,8 @@ import crashlytics from '@react-native-firebase/crashlytics';
 import Config from 'react-native-config';
 import { authService, StorageService } from '../../services';
 import {
-  getUserDetails, loginVert, sendEmailVerification, updateUser, emailVerify, deleteUser as deleteUserApi,
+  getUserDetails, loginVert, sendEmailVerification,
+  updateUser as updateUserApi, emailVerify, deleteUser as deleteUserApi,
 } from './api';
 import auth from '../../services/auth';
 import Mixpanel from '../../services/Mixpanel';
@@ -43,7 +44,8 @@ interface UserContextInterface {
   locationGranted: boolean | undefined,
   setLocationGranted: Dispatch<SetStateAction<any>>,
   updatePushToken: () => Promise<boolean | null>,
-  deleteUser: () => Promise<boolean>
+  deleteUser: () => Promise<boolean>,
+  updateUser: (values: any) => Promise<any>,
 }
 
 export const UserContext = createContext<UserContextInterface>({
@@ -62,6 +64,7 @@ export const UserContext = createContext<UserContextInterface>({
   setLocationGranted: () => undefined,
   updatePushToken: async () => false,
   deleteUser: async () => true,
+  updateUser: async (values: any) => undefined,
 });
 
 const UserContextProvider = ({ children }: { children: any }) => {
@@ -130,11 +133,14 @@ const UserContextProvider = ({ children }: { children: any }) => {
 
   const updateUserInfo = async (values: any, { updateServer = true } = {}) => {
     updateState(values);
-    const newUser = updateServer ? await updateUser(values) : values;
+    const newUser = updateServer ? await updateUserApi(values) : values;
     if (newUser.didCompleteOnboarding) {
       StorageService.save({ [storageKey]: newUser });
     }
   };
+
+  const updateUser = async (values: any): Promise<any> => updateUserApi(values);
+
 
   const getCardInfo = () => {
     try {
@@ -218,6 +224,7 @@ const UserContextProvider = ({ children }: { children: any }) => {
         setLocationGranted,
         updatePushToken,
         deleteUser,
+        updateUser,
       }}
     >
       {children}
