@@ -3,7 +3,7 @@ import React, {
 } from 'react';
 import { BottomSheetContext, SNAP_POINT_STATES } from '../bottomSheetContext';
 import geo, { DEFAULT_COORDS, getPosition } from '../../services/geo';
-import { getUserTerritories } from '../user/api';
+import { getUserTerritories, getClosestTerritory } from '../user/api';
 import pointInPolygon from './pointInPolygon';
 import { BsPages, BS_PAGES } from './utils';
 import GenericErrorPopup from '../../popups/GenericError';
@@ -38,6 +38,7 @@ const RideStateContextContextProvider = ({ children }: { children: any }) => {
   const [territory, setTerritory] = useState<Array<any> | null>(null);
   const [isUserLocationFocused, setIsUserLocationFocused] = useState(false);
   const [currentBsPage, setCurrentBsPage] = useState<BsPages>(BS_PAGES.LOADING);
+  const [closestTerritory, setClosestTerritory] = useState<any | null>(null);
   const { setSnapPointsState, setIsExpanded } = useContext(BottomSheetContext);
 
   const changeBsPage = (pageName: BsPages) => {
@@ -51,13 +52,16 @@ const RideStateContextContextProvider = ({ children }: { children: any }) => {
   };
   const loadTerritory = async (checkTerritory = false) => {
     let t = territory;
+    const position = await getPosition();
     if (!t) {
-      t = await getUserTerritories();
-      t = t && t.flat();
+      const { territories, closest } = await getUserTerritories((position || DEFAULT_COORDS).coords);
+      t = territories && territories.flat();
       setTerritory(t);
+      if (closest) {
+        setClosestTerritory(closest);
+      }
     }
     if (t && checkTerritory) {
-      const position = await getPosition();
       const isInsidePoly = pointInPolygon(t, (position || DEFAULT_COORDS));
       if (!isInsidePoly) {
         setNotInTerritory();
@@ -98,6 +102,7 @@ const RideStateContextContextProvider = ({ children }: { children: any }) => {
         checkStopPointsInTerritory,
         changeBsPage,
         setGenericErrorPopup,
+        closestTerritory,
       }}
     >
       {children}

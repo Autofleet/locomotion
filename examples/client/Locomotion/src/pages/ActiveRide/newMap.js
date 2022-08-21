@@ -1,11 +1,13 @@
 import React, {
   useContext, useEffect, useState,
 } from 'react';
+import {
+  point, lineString, nearestPointOnLine,
+} from '@turf/turf';
 import { StyleSheet } from 'react-native';
 import MapView, { Polygon, Polyline } from 'react-native-maps';
 import Config from 'react-native-config';
 import moment from 'moment';
-import { lineString, nearestPointOnLine, point } from '@turf/turf';
 import { FutureRidesContext } from '../../context/futureRides';
 import { RidePageContext } from '../../context/newRideContext';
 import { RideStateContextContext } from '../../context';
@@ -76,6 +78,7 @@ export default React.forwardRef(({
     territory,
     currentBsPage,
     initGeoService,
+    closestTerritory,
   } = useContext(RideStateContextContext);
   const {
     snapPoints,
@@ -134,7 +137,12 @@ export default React.forwardRef(({
       initLocation();
     }
   }, [ref.current]);
-
+  const showClosestTerritory = async () => {
+    focusMapToCoordinates(closestTerritory.polygon.coordinates[0].map(([lng, lat]) => ({
+      latitude: lat,
+      longitude: lng,
+    })), false, MAP_EDGE_PADDING);
+  };
   useEffect(() => {
     if (currentBsPage === BS_PAGES.CONFIRM_PICKUP) {
       const [pickupStopPoint] = requestStopPoints;
@@ -166,7 +174,10 @@ export default React.forwardRef(({
       };
       focusCurrentLocation();
     }
-  }, [currentBsPage]);
+    if (currentBsPage === BS_PAGES.NOT_IN_TERRITORY && closestTerritory) {
+      showClosestTerritory();
+    }
+  }, [currentBsPage, closestTerritory]);
 
   useEffect(() => {
     if ([RIDE_STATES.DISPATCHED, RIDE_STATES.ACTIVE].includes(ride.state)) {

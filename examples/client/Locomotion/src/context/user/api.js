@@ -16,8 +16,13 @@ export const getUserDetails = async () => {
   return data;
 };
 
-export const getUserTerritories = async () => {
-  const { data } = await network.get('api/v1/me/territories');
+export const getUserTerritories = async (coords) => {
+  const { data } = await network.get('api/v1/me/territories', {
+    params: {
+      lat: coords.latitude,
+      lng: coords.longitude,
+    },
+  });
   return data;
 };
 
