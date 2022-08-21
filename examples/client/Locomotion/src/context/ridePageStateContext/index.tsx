@@ -3,7 +3,7 @@ import React, {
 } from 'react';
 import { BottomSheetContext, SNAP_POINT_STATES } from '../bottomSheetContext';
 import geo, { DEFAULT_COORDS, getPosition } from '../../services/geo';
-import { getUserTerritories, getClosestTerritory } from '../user/api';
+import { getUserTerritories } from '../user/api';
 import pointInPolygon from './pointInPolygon';
 import { BsPages, BS_PAGES } from './utils';
 import GenericErrorPopup from '../../popups/GenericError';
@@ -19,6 +19,7 @@ interface RidePageStateContextProps {
   checkStopPointsInTerritory: (sp: any) => boolean;
   changeBsPage: (pageName: BsPages) => void;
   setGenericErrorPopup: (error: any) => void;
+  closestTerritory: any | null;
 }
 
 export const RideStateContextContext = createContext<RidePageStateContextProps>({
@@ -31,6 +32,7 @@ export const RideStateContextContext = createContext<RidePageStateContextProps>(
   checkStopPointsInTerritory: () => false,
   changeBsPage: () => undefined,
   setGenericErrorPopup: () => undefined,
+  closestTerritory: null,
 });
 
 const RideStateContextContextProvider = ({ children }: { children: any }) => {
