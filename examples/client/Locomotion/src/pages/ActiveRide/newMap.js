@@ -31,10 +31,10 @@ export const MAP_EDGE_PADDING = {
 };
 
 export const ACTIVE_RIDE_MAP_PADDING = {
-  top: 50,
+  top: 100,
   right: 70,
   bottom: 300,
-  left: 40,
+  left: 70,
 };
 
 const PAGES_TO_SHOW_SP_MARKERS = [

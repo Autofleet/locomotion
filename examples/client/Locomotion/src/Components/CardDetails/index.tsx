@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useRoute } from '@react-navigation/native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import moment from 'moment';
 import {
   Modal, Platform, Text, View,
 } from 'react-native';
+import { RidePageContext } from '../../context/newRideContext';
 import GenericErrorPopup from '../../popups/GenericError';
 import { getCurrencySymbol } from '../../context/newRideContext/utils';
 import ConfirmationPopup from '../../popups/ConfirmationPopup';
@@ -40,6 +41,7 @@ const CardDetails = ({
   const [isCancelPopupVisible, setIsCancelPopupVisible] = useState(false);
   const usePayments = PaymentsContext.useContainer();
   const route = useRoute();
+  const { ride } = useContext(RidePageContext);
 
   const onRemoveMethod = async (methodId : any) => {
     setIsCancelPopupVisible(true);
@@ -122,7 +124,8 @@ const CardDetails = ({
 
               <DeletePaymentContainer
                 testID="deletePaymentMethod"
-                disabled={paymentMethod?.hasOutstandingBalance}
+                disabled={paymentMethod?.hasOutstandingBalance
+                  || ride.payment?.paymentMethod?.id === paymentMethod?.id}
                 onPress={async () => {
                   await onRemoveMethod(paymentMethod?.id);
                 }}
