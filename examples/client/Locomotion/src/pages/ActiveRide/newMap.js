@@ -5,7 +5,9 @@ import { StyleSheet } from 'react-native';
 import MapView, { Polygon, Polyline } from 'react-native-maps';
 import Config from 'react-native-config';
 import moment from 'moment';
-
+import {
+  point, featureCollection, nearestPoint, booleanPointInPolygon, polygon,
+} from '@turf/turf';
 import { FutureRidesContext } from '../../context/futureRides';
 import { RidePageContext } from '../../context/newRideContext';
 import { RideStateContextContext } from '../../context';
@@ -129,6 +131,36 @@ export default React.forwardRef(({
     await initialLocation();
   };
 
+  const showClosestTerritory = async () => {
+    const [pickup] = requestStopPoints;
+    const coordsToFindClosestTerritory = {
+      latitude: pickup.lat,
+      longitude: pickup.lng,
+    };
+
+    const allTerritoryPoints = territory.map(({ polygon: p }) => p.coordinates).flat().flat()
+      .map(coord => point([parseFloat(coord[1]), parseFloat(coord[0])]));
+    const targetPoint = point(
+      [
+        parseFloat(coordsToFindClosestTerritory.latitude),
+        parseFloat(coordsToFindClosestTerritory.longitude),
+      ],
+    );
+    const points = featureCollection(allTerritoryPoints);
+    const nearest = nearestPoint(targetPoint, points);
+
+    const closestTerritory = territory.find(bm => booleanPointInPolygon(nearest, polygon(bm.polygon.coordinates[0])));
+    const coordsToFocus = [...closestTerritory.polygon.coordinates[0]];
+
+    coordsToFocus.push(...requestStopPoints.map(sp => [parseFloat(sp.lng), parseFloat(sp.lat)]));
+
+
+    focusMapToCoordinates(coordsToFocus.map(([lng, lat]) => ({
+      latitude: lat,
+      longitude: lng,
+    })), false, MAP_EDGE_PADDING);
+  };
+
   useEffect(() => {
     if (ref.current) {
       initLocation();
@@ -165,6 +197,9 @@ export default React.forwardRef(({
         }, 1);
       };
       focusCurrentLocation();
+    }
+    if (currentBsPage === BS_PAGES.NOT_IN_TERRITORY && requestStopPoints.filter((sp => sp.lat)).length > 1) {
+      showClosestTerritory();
     }
   }, [currentBsPage]);
 
