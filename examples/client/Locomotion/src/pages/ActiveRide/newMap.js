@@ -127,7 +127,7 @@ export default React.forwardRef(({
   };
 
   const initLocation = async () => {
-    await initGeoService(!ride.id);
+    await initGeoService();
     await initialLocation();
   };
 
