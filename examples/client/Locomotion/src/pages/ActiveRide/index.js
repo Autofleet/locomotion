@@ -110,12 +110,14 @@ const RidePage = ({ mapSettings, navigation }) => {
     setAddressSelectorFocusIndex(selectedIndex);
   };
 
-  const goBackToAddress = (selectedIndex) => {
+  const goBackToAddress = (selectedIndex, expand = true) => {
     resetStateToAddressSelector(selectedIndex);
-    setTimeout(() => {
-      setIsExpanded(true);
-      bottomSheetRef.current.expand();
-    }, 100);
+    if (expand) {
+      setTimeout(() => {
+        setIsExpanded(true);
+        bottomSheetRef.current.expand();
+      }, 100);
+    }
   };
 
   const backToMap = () => {
