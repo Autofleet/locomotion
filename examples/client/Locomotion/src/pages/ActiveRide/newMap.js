@@ -5,7 +5,9 @@ import { StyleSheet } from 'react-native';
 import MapView, { Polygon, Polyline } from 'react-native-maps';
 import Config from 'react-native-config';
 import moment from 'moment';
-import { lineString, nearestPointOnLine, point } from '@turf/turf';
+import {
+  lineString, nearestPointOnLine, point, featureCollection, nearestPoint,
+} from '@turf/turf';
 import { FutureRidesContext } from '../../context/futureRides';
 import { RidePageContext } from '../../context/newRideContext';
 import { RideStateContextContext } from '../../context';
@@ -129,6 +131,56 @@ export default React.forwardRef(({
     await initialLocation();
   };
 
+  const showClosestTerritory = async () => {
+    let coordsToFindClosestTerritory;
+    const useStopPoints = requestStopPoints.filter((sp => sp.lat)).length > 1;
+    if (useStopPoints) {
+      const [pickup] = requestStopPoints;
+      coordsToFindClosestTerritory = {
+        latitude: pickup.lat,
+        longitude: pickup.lng,
+      };
+    } else {
+      let location = await getPosition();
+      if (!location) {
+        location = DEFAULT_COORDS;
+      }
+      // eslint-disable-next-line prefer-destructuring
+      coordsToFindClosestTerritory = location.coords;
+    }
+
+    const allTerritoryPoints = territory.map(({ polygon }) => polygon.coordinates).flat().flat()
+      .map(coord => point([parseFloat(coord[1]), parseFloat(coord[0])]));
+    const targetPoint = point(
+      [
+        parseFloat(coordsToFindClosestTerritory.latitude),
+        parseFloat(coordsToFindClosestTerritory.longitude),
+      ],
+    );
+    const points = featureCollection(allTerritoryPoints);
+    const nearest = nearestPoint(targetPoint, points);
+
+    const closestTerritory = territory.find(bm => bm.polygon.coordinates[0].find(coord => coord[0] === nearest.geometry.coordinates[1]
+          && coord[1] === nearest.geometry.coordinates[0]));
+    const coordsToFocus = [...closestTerritory.polygon.coordinates[0]];
+
+    if (useStopPoints) {
+      coordsToFocus.push(...requestStopPoints.map(sp => [parseFloat(sp.lng), parseFloat(sp.lat)]));
+    } else {
+      coordsToFocus.push(
+        [
+          parseFloat(coordsToFindClosestTerritory.longitude),
+          parseFloat(coordsToFindClosestTerritory.latitude),
+        ],
+      );
+    }
+
+    focusMapToCoordinates(coordsToFocus.map(([lng, lat]) => ({
+      latitude: lat,
+      longitude: lng,
+    })), false, MAP_EDGE_PADDING);
+  };
+
   useEffect(() => {
     if (ref.current) {
       initLocation();
@@ -165,6 +217,9 @@ export default React.forwardRef(({
         }, 1);
       };
       focusCurrentLocation();
+    }
+    if (currentBsPage === BS_PAGES.NOT_IN_TERRITORY) {
+      showClosestTerritory();
     }
   }, [currentBsPage]);
 
