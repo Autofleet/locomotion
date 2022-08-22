@@ -6,7 +6,7 @@ import MapView, { Polygon, Polyline } from 'react-native-maps';
 import Config from 'react-native-config';
 import moment from 'moment';
 import {
-  point, featureCollection, nearestPoint,
+  point, featureCollection, nearestPoint, booleanPointInPolygon, polygon,
 } from '@turf/turf';
 import { FutureRidesContext } from '../../context/futureRides';
 import { RidePageContext } from '../../context/newRideContext';
@@ -132,24 +132,13 @@ export default React.forwardRef(({
   };
 
   const showClosestTerritory = async () => {
-    let coordsToFindClosestTerritory;
-    const useStopPoints = requestStopPoints.filter((sp => sp.lat)).length > 1;
-    if (useStopPoints) {
-      const [pickup] = requestStopPoints;
-      coordsToFindClosestTerritory = {
-        latitude: pickup.lat,
-        longitude: pickup.lng,
-      };
-    } else {
-      let location = await getPosition();
-      if (!location) {
-        location = DEFAULT_COORDS;
-      }
-      // eslint-disable-next-line prefer-destructuring
-      coordsToFindClosestTerritory = location.coords;
-    }
+    const [pickup] = requestStopPoints;
+    const coordsToFindClosestTerritory = {
+      latitude: pickup.lat,
+      longitude: pickup.lng,
+    };
 
-    const allTerritoryPoints = territory.map(({ polygon }) => polygon.coordinates).flat().flat()
+    const allTerritoryPoints = territory.map(({ polygon: p }) => p.coordinates).flat().flat()
       .map(coord => point([parseFloat(coord[1]), parseFloat(coord[0])]));
     const targetPoint = point(
       [
@@ -160,20 +149,11 @@ export default React.forwardRef(({
     const points = featureCollection(allTerritoryPoints);
     const nearest = nearestPoint(targetPoint, points);
 
-    const closestTerritory = territory.find(bm => bm.polygon.coordinates[0].find(coord => coord[0] === nearest.geometry.coordinates[1]
-          && coord[1] === nearest.geometry.coordinates[0]));
+    const closestTerritory = territory.find(bm => booleanPointInPolygon(nearest, polygon(bm.polygon.coordinates[0])));
     const coordsToFocus = [...closestTerritory.polygon.coordinates[0]];
 
-    if (useStopPoints) {
-      coordsToFocus.push(...requestStopPoints.map(sp => [parseFloat(sp.lng), parseFloat(sp.lat)]));
-    } else {
-      coordsToFocus.push(
-        [
-          parseFloat(coordsToFindClosestTerritory.longitude),
-          parseFloat(coordsToFindClosestTerritory.latitude),
-        ],
-      );
-    }
+    coordsToFocus.push(...requestStopPoints.map(sp => [parseFloat(sp.lng), parseFloat(sp.lat)]));
+
 
     focusMapToCoordinates(coordsToFocus.map(([lng, lat]) => ({
       latitude: lat,
@@ -218,7 +198,7 @@ export default React.forwardRef(({
       };
       focusCurrentLocation();
     }
-    if (currentBsPage === BS_PAGES.NOT_IN_TERRITORY) {
+    if (currentBsPage === BS_PAGES.NOT_IN_TERRITORY && requestStopPoints.filter((sp => sp.lat)).length > 1) {
       showClosestTerritory();
     }
   }, [currentBsPage]);
