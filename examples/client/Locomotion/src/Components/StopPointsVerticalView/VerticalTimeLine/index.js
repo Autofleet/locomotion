@@ -1,14 +1,10 @@
 import React from 'react';
 import { STOP_POINT_TYPES } from '../../../lib/commonTypes';
 import {
-  BottomTimeLine,
   Content,
   EtaContent,
-  MarkerContiner,
-  TextFlexContainer,
-  TimeLineContainer,
-  TimeLineContent,
-  TopTimeLine,
+  IconContainer,
+  Line,
   MainContainer,
 } from './styled';
 import {
@@ -22,29 +18,17 @@ const VerticalTimeLineCard = ({
   content,
   underContent,
 }) => (
-  <>
-    <MainContainer>
-      <TimeLineContainer>
-        <TopTimeLine first={first} />
-        <BottomTimeLine last={last}>
-          <MarkerContiner first={first} last={last}>
-            {type === STOP_POINT_TYPES.STOP_POINT_PICKUP ? <PickupIconMarker /> : undefined}
-            {type === STOP_POINT_TYPES.STOP_POINT_DROPOFF ? <DropoffIconMarker /> : undefined}
-          </MarkerContiner>
-        </BottomTimeLine>
-      </TimeLineContainer>
-      <TextFlexContainer>
-        <TimeLineContent last={last}>
-          <Content>
-            {content}
-          </Content>
-          <EtaContent>
-            {underContent}
-          </EtaContent>
-        </TimeLineContent>
-      </TextFlexContainer>
-    </MainContainer>
-  </>
+  <MainContainer>
+    <IconContainer>
+      {type === STOP_POINT_TYPES.STOP_POINT_PICKUP ? <PickupIconMarker /> : <DropoffIconMarker />}
+    </IconContainer>
+    <Content>
+      {content}
+    </Content>
+    <EtaContent>
+      {underContent}
+    </EtaContent>
+  </MainContainer>
 );
 
 export default VerticalTimeLineCard;

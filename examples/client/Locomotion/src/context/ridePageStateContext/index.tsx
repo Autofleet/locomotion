@@ -12,7 +12,7 @@ import Mixpanel from '../../services/Mixpanel';
 interface RidePageStateContextProps {
   territory: any;
   loadTerritory: () => void;
-  initGeoService: (skipTerritoryCheck?: boolean) => Promise<void>;
+  initGeoService: () => Promise<void>;
   isUserLocationFocused: boolean;
   setIsUserLocationFocused: (isLocationFocused: boolean) => void;
   currentBsPage: BsPages;
@@ -26,7 +26,7 @@ export const RideStateContextContext = createContext<RidePageStateContextProps>(
   loadTerritory: () => undefined,
   initGeoService: async () => undefined,
   isUserLocationFocused: false,
-  setIsUserLocationFocused: (isLocationFocused: boolean) => undefined,
+  setIsUserLocationFocused: () => undefined,
   currentBsPage: BS_PAGES.ADDRESS_SELECTOR,
   checkStopPointsInTerritory: () => false,
   changeBsPage: () => undefined,
@@ -49,20 +49,14 @@ const RideStateContextContextProvider = ({ children }: { children: any }) => {
   const setNotInTerritory = () => {
     changeBsPage(BS_PAGES.NOT_IN_TERRITORY);
   };
-  const loadTerritory = async (checkTerritory = false) => {
+  const loadTerritory = async () => {
     let t = territory;
     if (!t) {
       t = await getUserTerritories();
       t = t && t.flat();
       setTerritory(t);
     }
-    if (t && checkTerritory) {
-      const position = await getPosition();
-      const isInsidePoly = pointInPolygon(t, (position || DEFAULT_COORDS));
-      if (!isInsidePoly) {
-        setNotInTerritory();
-      }
-    }
+
     return t;
   };
 
@@ -81,9 +75,9 @@ const RideStateContextContextProvider = ({ children }: { children: any }) => {
     return isInTerritory;
   };
 
-  const initGeoService = async (checkTerritory?: boolean) => {
+  const initGeoService = async () => {
     await geo.initAsync();
-    await loadTerritory(checkTerritory);
+    await loadTerritory();
   };
 
   return (

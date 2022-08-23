@@ -16,7 +16,7 @@ import logo from '../../assets/welcomeLogo.png';
 import settingsContext from '../../context/settings';
 import arrowBack from '../../assets/arrow-back-learn-more.svg';
 import phoneIcon from '../../assets/phone.svg';
-import copyIcon from '../../assets/copy.svg';
+import emailIcon from '../../assets/email.svg';
 import {
   ContactUsLogo,
   ContactUsPageLogoContainer,
@@ -85,7 +85,7 @@ export default ({ menuSide }) => {
                 <CardsContainer>
                   <CardsTitle title={i18n.t('contactUs.contactInformationTitle')} />
                   <Card
-                    icon={copyIcon}
+                    icon={emailIcon}
                     onIconPress={() => {
                       if (settings.contactEmail) {
                         Linking.openURL(`mailto:${settings.contactEmail}`);

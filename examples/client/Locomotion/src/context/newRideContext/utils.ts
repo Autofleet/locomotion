@@ -119,6 +119,7 @@ export const formatEstimationsResult = (service: any, estimationResult: any, tag
   const estimation = estimationResult || {};
   return {
     id: service.id,
+    priceCalculationId: estimation.priceCalculationId,
     name: service.displayName,
     eta: estimation.minPickupEta,
     price: estimation.priceAmount,

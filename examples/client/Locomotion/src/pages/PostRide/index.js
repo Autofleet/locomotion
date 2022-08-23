@@ -121,6 +121,7 @@ const PostRidePage = ({ menuSide, route }) => {
     }
     return i18n.t('postRide.submit');
   };
+
   return (
     <>
       {ride ? (
@@ -141,7 +142,7 @@ const PostRidePage = ({ menuSide, route }) => {
 
             {!(priceCalculationId && tipFromDb) && (
             <TipsContainer>
-              {ride?.priceCurrency && ride?.priceAmount
+              {ride?.priceCurrency && (ride?.priceAmount || ride?.priceAmount === 0)
                 ? (
                   <Tips
                     tipSettings={tipSettings}

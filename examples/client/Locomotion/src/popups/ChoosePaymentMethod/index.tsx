@@ -4,7 +4,7 @@ import { View } from 'react-native';
 import PropTypes from 'prop-types';
 import Modal from 'react-native-modal';
 import { useNavigation } from '@react-navigation/native';
-import SvgIcon from '../../Components/SvgIcon';
+import CloseButton from '../../Components/CloseButton';
 import i18n from '../../I18n';
 import { MAIN_ROUTES } from '../../pages/routes';
 import {
@@ -13,7 +13,6 @@ import {
   Container,
   Footer,
   TitleView,
-  CloseButton,
   CardsScrollView,
   SelectButton,
 } from './styled';
@@ -21,7 +20,6 @@ import { FlexCont } from '../../Components/Flex';
 import PaymentMethod from '../../Components/CardRow';
 import PaymentsContext from '../../context/payments';
 import cashPaymentMethod from '../../pages/Payments/cashPaymentMethod';
-import closeXIcon from '../../assets/close-x.svg';
 import * as navigationService from '../../services/navigation';
 
 interface PaymentMethodPopupProps {
@@ -83,24 +81,15 @@ const PaymentMethodPopup = ({
       <SummaryContainer>
         <TitleView>
           <Title>{i18n.t('popups.choosePaymentMethod.title')}</Title>
-          <CloseButton
-            noBackground
-            onPress={async () => {
-              onCancel();
-              setSelectedPaymentId(selected
+          <CloseButton onPress={async () => {
+            onCancel();
+            setSelectedPaymentId(selected
                 || (await usePayments.getClientDefaultMethod())?.id);
-              rideFlow
-                ? navigationService.navigate(MAIN_ROUTES.HOME)
-                : navigationService.navigate(MAIN_ROUTES.PAYMENT);
-            }}
-          >
-            <SvgIcon
-              Svg={closeXIcon}
-              width={11}
-              height={11}
-              fill="#333"
-            />
-          </CloseButton>
+            rideFlow
+              ? navigationService.navigate(MAIN_ROUTES.HOME)
+              : navigationService.navigate(MAIN_ROUTES.PAYMENT);
+          }}
+          />
         </TitleView>
         <CardsScrollView>
           <Container>
