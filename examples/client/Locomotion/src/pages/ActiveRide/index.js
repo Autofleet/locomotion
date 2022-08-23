@@ -111,12 +111,14 @@ const RidePage = ({ mapSettings, navigation }) => {
     setAddressSelectorFocusIndex(selectedIndex);
   };
 
-  const goBackToAddress = (selectedIndex) => {
+  const goBackToAddress = (selectedIndex, expand = true) => {
     resetStateToAddressSelector(selectedIndex);
-    setTimeout(() => {
-      setIsExpanded(true);
-      bottomSheetRef.current.expand();
-    }, 100);
+    if (expand) {
+      setTimeout(() => {
+        setIsExpanded(true);
+        bottomSheetRef.current.expand();
+      }, 100);
+    }
   };
 
   const backToMap = () => {
@@ -231,11 +233,13 @@ const RidePage = ({ mapSettings, navigation }) => {
   const focusCurrentLocation = async () => {
     if ([RIDE_STATES.ACTIVE, RIDE_STATES.DISPATCHED].includes(ride.state)) {
       const currentStopPoint = (ride.stopPoints || []).find(sp => sp.state === STOP_POINT_STATES.PENDING);
-      const coords = getPolylineList(currentStopPoint, ride);
-      mapRef.current.fitToCoordinates(coords, {
-        animated: true,
-        edgePadding: ACTIVE_RIDE_MAP_PADDING,
-      });
+      if (currentStopPoint) {
+        const coords = getPolylineList(currentStopPoint, ride);
+        mapRef.current.fitToCoordinates(coords, {
+          animated: true,
+          edgePadding: ACTIVE_RIDE_MAP_PADDING,
+        });
+      }
     } else {
       const location = await getPosition();
       const { coords } = (location || DEFAULT_COORDS);
@@ -277,10 +281,10 @@ const RidePage = ({ mapSettings, navigation }) => {
         }
         return false;
       };
-      BackHandler.addEventListener('hardwareBackPress', onBackPress);
+      const backHandler = BackHandler.addEventListener('hardwareBackPress', onBackPress);
 
-      return () => BackHandler.removeEventListener('hardwareBackPress', onBackPress);
-    }, []),
+      return () => backHandler.remove();
+    }, [serviceEstimations]),
   );
 
   const versionCheck = async () => {

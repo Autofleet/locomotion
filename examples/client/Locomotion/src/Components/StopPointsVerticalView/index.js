@@ -8,6 +8,7 @@ import { getOrdinal } from '../../lib/ride/utils';
 import {
   RIDE_ACTIVE_STATES, RIDE_STATES, STOP_POINT_STATES, STOP_POINT_TYPES,
 } from '../../lib/commonTypes';
+import { Line } from './VerticalTimeLine/styled';
 
 const getEtaText = eta => moment(eta).format('h:mm A');
 
@@ -37,6 +38,7 @@ const Index = ({ ride }) => {
       <>
         <CardsTitle title={i18n.t('ride.journey')} noPaddingLeft />
         <PanelContentContainer>
+          <Line />
           {stopPoints.map((sp, index) => (
             <VerticalTimeLineCard
               key={`VerticalTimeLineCard#${sp.id}`}

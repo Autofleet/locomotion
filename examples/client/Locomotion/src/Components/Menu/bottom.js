@@ -35,11 +35,9 @@ const appVersion = getVersion();
 export default () => (
   <BottomContainer>
     <BottomFlexContainer>
-      <BottomText>
+      <BottomText numberOfLines={1}>
         powered by
-        <BottomTextBold> Autofleet</BottomTextBold>
-      </BottomText>
-      <BottomText>
+        <BottomTextBold> Autofleet </BottomTextBold>
         {`v. ${appVersion}`}
       </BottomText>
     </BottomFlexContainer>

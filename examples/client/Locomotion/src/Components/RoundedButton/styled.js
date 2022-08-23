@@ -30,6 +30,7 @@ export const SubmitButtonText = styled.Text`
   font-size: 14px;
   text-align: center;
   width: 100%;
+  max-width: 100%;
   ${({
     useCancelTextButton, theme, hollow, type = 'confirm',
   }) => (useCancelTextButton ? `
@@ -51,7 +52,8 @@ export const StyledButton = styled(Button)`
       flex-direction: row;
       border-radius: 8px;
       width: ${width || '100%'};
-      height: ${height || '50px'};
+      height: ${height};
+      min-height: ${height || '50px'};
       ${withIcon
     ? `justify-content: flex-start;
       align-items: center`

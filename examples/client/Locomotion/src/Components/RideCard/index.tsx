@@ -10,7 +10,7 @@ import RoundedButton from '../RoundedButton';
 import TextRowWithIcon from '../TextRowWithIcon';
 import {
   CardContainer, RideDate, ServiceType, DateContainer, EstimatedText,
-  TopTextsContainer,
+  TopTextsContainer, TopPriceContainer,
 } from './styled';
 import StopPointsVerticalView from '../StopPointsVerticalView';
 import { getFormattedPrice, isPriceEstimated } from '../../context/newRideContext/utils';
@@ -76,7 +76,7 @@ const RideCard = ({
             {serviceName}
           </ServiceType>
         </TopTextsContainer>
-        <TopTextsContainer>
+        <TopPriceContainer>
           <RideDate>
             {getFormattedPrice(ride.priceCurrency, ride.priceAmount)}
           </RideDate>
@@ -87,7 +87,7 @@ const RideCard = ({
               </EstimatedText>
             )
             : null}
-        </TopTextsContainer>
+        </TopPriceContainer>
       </DateContainer>
 
       <StopPointsVerticalView ride={ride} />
