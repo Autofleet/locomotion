@@ -38,6 +38,7 @@ const RideButtons = ({
     ride,
     chosenService,
     setUnconfirmedPickupTime,
+    unconfirmedPickupTime,
   } = useContext(RidePageContext);
   const {
     changeBsPage,
@@ -82,9 +83,11 @@ const RideButtons = ({
           title={i18n.t('bottomSheetContent.ride.chosePickupTime')}
           onCancel={close}
           onConfirm={(date) => {
-            setUnconfirmedPickupTime(date.getTime());
-            changeBsPage(BS_PAGES.CONFIRM_PICKUP_TIME);
-            close();
+            if (unconfirmedPickupTime !== date.getTime()) {
+              setUnconfirmedPickupTime(date.getTime());
+              changeBsPage(BS_PAGES.CONFIRM_PICKUP_TIME);
+              close();
+            }
           }}
           modal
         />

@@ -45,7 +45,7 @@ export interface RideInterface {
   notes?: string;
   paymentMethodId?: string;
   serviceId?: string;
-  scheduledTo?: string;
+  scheduledTo?: string | number;
   driver?: any;
   stopPoints?: any[];
   vehicle?: any;
@@ -334,7 +334,8 @@ const RidePageContextProvider = ({ children }: {
         .createServiceEstimations(formattedStopPoints, ride.scheduledTo);
       const tags = getEstimationTags(estimations);
       const formattedEstimations = formatEstimations(services, estimations, tags);
-      setChosenService(formattedEstimations.find((e: any) => e.eta));
+      setChosenService(ride.scheduledTo ? formattedEstimations[0]
+        : formattedEstimations.find((e: any) => e.eta));
       setServiceEstimations(formattedEstimations);
     } catch (e: any) {
       Mixpanel.setEvent('service estimations failed', { status: e?.response?.status });
@@ -464,7 +465,6 @@ const RidePageContextProvider = ({ children }: {
   useEffect(() => {
     if (unconfirmedPickupTime) {
       validateRequestedStopPoints(requestStopPoints);
-      setUnconfirmedPickupTime(null);
     }
   }, [ride.scheduledTo]);
 
