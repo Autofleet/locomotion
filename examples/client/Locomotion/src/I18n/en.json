@@ -178,6 +178,13 @@
             "oneUpcomingRide": "Upcoming ride",
             "multipleUpcomingRides": "Upcoming rides"
         },
+        "promoCode": {
+            "placeholder": "PROMOCODE",
+            "buttonText": "Add code",
+            "pageHeader": "Add Promo Code",
+            "errorText": "Please enter a valid promo code",
+            "title": "Enter promo code"
+        },
         "RideScheduler": {
             "timeSelectionTitle": "I want to start",
             "now": "Now",
@@ -524,6 +531,7 @@
         },
         "rider": "Rider",
         "riders": "Riders",
+        "promoText": "Promo code",
         "addPayment": "Add Payment",
         "chosePickupTime": "Time of departure",
         "contactDriver": "Contact driver",

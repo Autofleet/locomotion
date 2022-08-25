@@ -50,3 +50,13 @@ export const deleteUser = async () => {
   const { data } = await network.delete('api/v1/me/user');
   return data;
 };
+
+export const getUserCoupon = async () => {
+  const { data } = await network.get('api/v1/me/customers/coupon');
+  return data;
+};
+
+export const createUserCoupon = async (code) => {
+  const { data } = await network.post('api/v1/me/customers/coupon', { code });
+  return data;
+};
