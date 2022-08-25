@@ -43,7 +43,7 @@ interface RideCardProps {
     onPress: (ride: RideInterface) => void;
     serviceName: string;
     paymentMethod: any;
-    scheduledTo: string;
+    scheduledTo: string | number;
 }
 
 const RideCard = ({

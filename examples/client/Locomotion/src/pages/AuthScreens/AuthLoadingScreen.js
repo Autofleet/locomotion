@@ -1,6 +1,8 @@
 import React, { useContext, useEffect } from 'react';
 import { initStripe } from '@stripe/stripe-react-native';
 import Config from 'react-native-config';
+import moment from 'moment';
+import { Platform } from 'react-native';
 import { APP_ROUTES, MAIN_ROUTES } from '../routes';
 import Auth from '../../services/auth';
 import { getUserDetails } from '../../context/user/api';
@@ -26,7 +28,7 @@ export const INITIAL_USER_STATE = {
 };
 
 const AuthLoadingScreen = () => {
-  const { setUser, user } = useContext(UserContext);
+  const { setUser, user, updateUser } = useContext(UserContext);
   const { navigateBasedOnUser } = useContext(OnboardingContext);
   const { getSettingByKey, getAppSettings } = settings.useContainer();
 
@@ -63,6 +65,10 @@ const AuthLoadingScreen = () => {
         const [paymentAccount] = await Promise.all([
           usePayments.getOrFetchClientPaymentAccount(),
           usePayments.loadCustomer(),
+          updateUser({
+            lastLogin: moment().toDate(),
+            deviceType: Platform.OS,
+          }),
         ]);
 
 

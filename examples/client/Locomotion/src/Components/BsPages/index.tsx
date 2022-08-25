@@ -245,6 +245,7 @@ export const ConfirmPickupTime = (props: any) => {
     setUnconfirmedPickupTime,
     tryServiceEstimations,
     setServiceEstimations,
+    ride,
   } = useContext(MewRidePageContext);
   const {
     changeBsPage,
@@ -257,8 +258,10 @@ export const ConfirmPickupTime = (props: any) => {
       ButtonText={i18n.t('bottomSheetContent.confirmPickupTime.buttonText')}
       fullWidthButtons
       onButtonPress={() => {
-        updateRidePayload({ scheduledTo: unconfirmedPickupTime });
-        setServiceEstimations(null);
+        if (ride?.scheduledTo !== unconfirmedPickupTime) {
+          updateRidePayload({ scheduledTo: unconfirmedPickupTime });
+          setServiceEstimations(null);
+        }
         changeBsPage(BS_PAGES.SERVICE_ESTIMATIONS);
       }}
       {...props}
