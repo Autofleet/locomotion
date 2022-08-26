@@ -179,6 +179,7 @@
             "multipleUpcomingRides": "Upcoming rides"
         },
         "promoCode": {
+            "amountOff": "{{amount}} off",
             "placeholder": "PROMOCODE",
             "buttonText": "Add code",
             "pageHeader": "Add Promo Code",

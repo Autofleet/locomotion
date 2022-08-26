@@ -2,6 +2,8 @@ import React, { useContext, useEffect, useState } from 'react';
 import { Text, View } from 'react-native';
 import { PaymentIcon } from 'react-native-payment-icons';
 import styled, { ThemeContext } from 'styled-components';
+import { useFocusEffect } from '@react-navigation/native';
+import { getFormattedPrice } from '../../../../../../context/newRideContext/utils';
 import { MAIN_ROUTES } from '../../../../../routes';
 import cashPaymentMethod from '../../../../../../pages/Payments/cashPaymentMethod';
 import SvgIcon from '../../../../../../Components/SvgIcon';
@@ -13,6 +15,7 @@ import i18n from '../../../../../../I18n';
 import Button from '../../../../../../Components/Button';
 import * as navigationService from '../../../../../../services/navigation';
 import { UserContext } from '../../../../../../context/user';
+import selected from '../../../../../../assets/selected-v.svg';
 
 const TimeText = styled(Text)`
     ${FONT_SIZES.LARGE}
@@ -63,22 +66,34 @@ const PaymentButton = ({
   id,
 }: PaymentButtonProps) => {
   const { primaryColor } = useContext(ThemeContext);
-  const [coupon, setCoupon] = useState(null);
+  const [coupon, setCoupon] = useState<any>(null);
   const { getCoupon } = useContext(UserContext);
 
   const checkCoupon = async () => {
     try {
       const res = await getCoupon();
-      console.log(res);
+      setCoupon(res);
     } catch (e) {
       console.log(e);
     }
   };
-  useEffect(() => {
+  useFocusEffect(() => {
     checkCoupon();
-  }, []);
+  });
 
-  const promoText = i18n.t('bottomSheetContent.ride.promoText');
+  const loadPromoText = () => {
+    if (coupon) {
+      let amount;
+      if (coupon.amount_off) {
+        amount = getFormattedPrice(coupon.currency, coupon.amount_off);
+      } else if (coupon.percent_off) {
+        amount = `${coupon.percent_off}%`;
+      }
+
+      return i18n.t('home.promoCode.amountOff', { amount });
+    }
+    return i18n.t('bottomSheetContent.ride.promoText');
+  };
   return (
     <Container>
       <CardNameContainer>
@@ -90,11 +105,18 @@ const PaymentButton = ({
       </CardNameContainer>
       <PromoButton
         noBackground
-        onPress={() => navigationService.navigate(MAIN_ROUTES.PROMO_CODE, { rideFlow: true })}
+        activeOpacity={coupon && 1}
+        onPress={() => !coupon && navigationService.navigate(MAIN_ROUTES.PROMO_CODE, { rideFlow: true })}
       >
-        <SvgIcon stroke={primaryColor} fill={primaryColor} Svg={plus} height={10} width={10} />
+        <SvgIcon
+          stroke={!coupon ? primaryColor : '#2cc36a'}
+          fill={!coupon ? primaryColor : '#2cc36a'}
+          Svg={!coupon ? plus : selected}
+          height={10}
+          width={10}
+        />
         <PromoText>
-          {promoText}
+          {loadPromoText()}
         </PromoText>
       </PromoButton>
     </Container>

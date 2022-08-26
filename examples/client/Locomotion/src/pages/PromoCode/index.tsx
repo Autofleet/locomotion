@@ -26,13 +26,11 @@ const PromoCode = () => {
 
   const onAddPromoCode = async () => {
     try {
-      const coupon = await createCoupon(code);
-      console.log(coupon);
+      await createCoupon(code);
       if (route.params && route.params.rideFlow) {
         navigationService.navigate(MAIN_ROUTES.HOME);
       }
     } catch (e) {
-      console.log(e);
       setError(true);
     }
   };
