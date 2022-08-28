@@ -4,7 +4,7 @@ import { FONT_SIZES, FONT_WEIGHTS } from '../../../context/theme';
 export const TextContainer = styled.View`
 display: flex;
 flex-direction: column;
-margin-bottom: 40px;
+margin-bottom: ${({ hasSubText }) => (hasSubText ? '40px' : '0px')};
 `;
 
 export const Text = styled.Text`
