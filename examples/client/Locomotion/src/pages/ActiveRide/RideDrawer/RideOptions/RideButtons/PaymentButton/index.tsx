@@ -7,7 +7,7 @@ import { getFormattedPrice } from '../../../../../../context/newRideContext/util
 import { MAIN_ROUTES } from '../../../../../routes';
 import cashPaymentMethod from '../../../../../../pages/Payments/cashPaymentMethod';
 import SvgIcon from '../../../../../../Components/SvgIcon';
-import { FONT_SIZES, FONT_WEIGHTS } from '../../../../../../context/theme';
+import { FONT_SIZES, FONT_WEIGHTS, GREEN_COLOR } from '../../../../../../context/theme';
 import { Brand } from '../../../../../../context/payments/interface';
 import cashIcon from '../../../../../../assets/cash.svg';
 import plus from '../../../../../../assets/bottomSheet/plus.svg';
@@ -109,8 +109,8 @@ const PaymentButton = ({
         onPress={() => !coupon && navigationService.navigate(MAIN_ROUTES.PROMO_CODE, { rideFlow: true })}
       >
         <SvgIcon
-          stroke={!coupon ? primaryColor : '#2cc36a'}
-          fill={!coupon ? primaryColor : '#2cc36a'}
+          stroke={!coupon ? primaryColor : GREEN_COLOR}
+          fill={!coupon ? primaryColor : GREEN_COLOR}
           Svg={!coupon ? plus : selected}
           height={10}
           width={10}
