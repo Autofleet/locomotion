@@ -39,14 +39,6 @@ const AuthLoadingScreen = () => {
     return StorageService.save({ clientProfile });
   };
 
-  const versionCheck = async () => {
-    const minAppVersion = await getSettingByKey(
-      SETTINGS_KEYS.MIN_APP_VERSION,
-    );
-
-    await checkVersionAndForceUpdateIfNeeded(minAppVersion);
-  };
-
   const init = async () => {
     async function getFromStorage() {
       const clientProfile = await StorageService.get('clientProfile');
