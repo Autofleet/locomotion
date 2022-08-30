@@ -1,4 +1,6 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, {
+  useCallback, useContext, useEffect, useState,
+} from 'react';
 import { Text, View } from 'react-native';
 import { PaymentIcon } from 'react-native-payment-icons';
 import styled, { ThemeContext } from 'styled-components';
@@ -77,9 +79,11 @@ const PaymentButton = ({
       console.log(e);
     }
   };
-  useFocusEffect(() => {
-    checkCoupon();
-  });
+  useFocusEffect(
+    useCallback(() => {
+      checkCoupon();
+    }, []),
+  );
 
   const loadPromoText = () => {
     if (coupon) {

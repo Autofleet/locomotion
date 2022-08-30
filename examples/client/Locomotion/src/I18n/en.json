@@ -311,6 +311,7 @@
         "errorText": "Oops, looks like something went wrong",
         "errorButtonText": "Get fare details",
         "total": "Total",
+        "couponName": "Discount",
         "estimatedText": "The fares below are estimates and will be updated once the ride is completed based on the actual ride conditions",
         "pageTitle": "Payment breakdown",
         "priceItem": "{{ name }}",

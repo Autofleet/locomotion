@@ -91,6 +91,7 @@ const usePayments = () => {
       SETTINGS_KEYS.CASH_ENABLED,
       SETTINGS_KEYS.CASH_ENABLED_IN_APP,
     ]);
+    console.log('paymentSetting', paymentSetting);
     const cashEnabled = paymentSetting[SETTINGS_KEYS.CASH_ENABLED];
     const cashEnabledInApp = paymentSetting[SETTINGS_KEYS.CASH_ENABLED_IN_APP];
     return cashEnabled && cashEnabledInApp;

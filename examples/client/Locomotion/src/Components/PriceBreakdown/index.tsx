@@ -86,6 +86,8 @@ const PriceBreakdown = ({
         })} ${calculationTypeToUnit[item.pricingRule.calculationType](
           getPriceWithCurrency(item.pricingRule.price),
         )}`;
+      } else if (item.type === 'coupon') {
+        name = item.couponDetails;
       }
       items.push({
         name:
