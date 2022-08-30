@@ -15,7 +15,7 @@ import ScreenText from '../Profile/ScreenText';
 import { UserContext } from '../../context/user';
 
 const StyledButton = styled(RoundedButton)`
-margin: 5px;
+margin: 5px 0;
 `;
 
 const PromoCode = () => {
@@ -36,7 +36,14 @@ const PromoCode = () => {
   };
   return (
     <PageContainer>
-      <PageHeader title={i18n.t('home.promoCode.pageHeader')} />
+      <PageHeader
+        onIconPress={() => {
+          if (route.params && route.params.rideFlow) {
+            navigationService.navigate(MAIN_ROUTES.HOME);
+          }
+        }}
+        title={i18n.t('home.promoCode.pageHeader')}
+      />
       <ContentContainer>
         <ScreenText
           text={i18n.t('home.promoCode.title')}
@@ -56,7 +63,7 @@ const PromoCode = () => {
             fullBorder
           />
         </InputContainer>
-        {error && <ErrorText>{i18n.t('home.promoCode.errorText')}</ErrorText>}
+        <ErrorText>{error && i18n.t('home.promoCode.errorText')}</ErrorText>
         <StyledButton
           testID="addPromoCode"
           disabled={!code || error}

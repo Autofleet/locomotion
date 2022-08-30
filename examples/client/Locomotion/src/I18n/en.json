@@ -180,7 +180,7 @@
         },
         "promoCode": {
             "amountOff": "{{amount}} off",
-            "placeholder": "PROMOCODE",
+            "placeholder": "please enter your coupon code here",
             "buttonText": "Add code",
             "pageHeader": "Add Promo Code",
             "errorText": "Please enter a valid promo code",
