@@ -75,7 +75,7 @@ const PaymentButton = ({
   const noCoupon = coupon && coupon.status === 'error';
 
   const loadPromoText = () => {
-    if (!noCoupon) {
+    if (coupon && !noCoupon) {
       let amount;
       if (coupon.amount_off) {
         amount = getFormattedPrice(coupon.currency, coupon.amount_off);
@@ -103,29 +103,32 @@ const PaymentButton = ({
         />
       );
     }
-    return (
-      <PromoButton
-        noBackground
-        activeOpacity={!noCoupon && 1}
-        onPress={() => noCoupon && navigationService.navigate(MAIN_ROUTES.PROMO_CODE, { rideFlow: true })}
-      >
-        <SvgIcon
-          stroke={noCoupon ? primaryColor : GREEN_COLOR}
-          fill={noCoupon ? primaryColor : GREEN_COLOR}
-          Svg={noCoupon ? plus : selected}
-          height={10}
-          width={10}
-        />
-        <PromoText>
-          {loadPromoText()}
-        </PromoText>
-      </PromoButton>
-    );
+    if (coupon !== null) {
+      return (
+        <PromoButton
+          noBackground
+          activeOpacity={!noCoupon && 1}
+          onPress={() => noCoupon && navigationService.navigate(MAIN_ROUTES.PROMO_CODE, { rideFlow: true })}
+        >
+          <SvgIcon
+            stroke={noCoupon ? primaryColor : GREEN_COLOR}
+            fill={noCoupon ? primaryColor : GREEN_COLOR}
+            Svg={noCoupon ? plus : selected}
+            height={10}
+            width={10}
+          />
+          <PromoText>
+            {loadPromoText()}
+          </PromoText>
+        </PromoButton>
+      );
+    }
   };
 
   const checkCoupon = async () => {
     try {
       const res = await getCoupon();
+      console.log('here');
       setCoupon(res);
     } catch (e) {
       setCoupon({ status: 'error' });
