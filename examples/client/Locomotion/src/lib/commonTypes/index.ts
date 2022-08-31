@@ -33,3 +33,5 @@ export const CHARGE_FOR_TIP = 'tip';
 
 export const RIDE_FINAL_STATES = Object.values(RIDE_STATES)
   .filter(state => !RIDE_ACTIVE_STATES.find(as => as === state));
+
+export const COUPON_TYPE = 'coupon';

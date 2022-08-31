@@ -1,4 +1,6 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, {
+  useCallback, useContext, useEffect, useState,
+} from 'react';
 import { Text, View } from 'react-native';
 import { PaymentIcon } from 'react-native-payment-icons';
 import styled, { ThemeContext } from 'styled-components';
@@ -77,9 +79,11 @@ const PaymentButton = ({
       console.log(e);
     }
   };
-  useFocusEffect(() => {
-    checkCoupon();
-  });
+  useFocusEffect(
+    useCallback(() => {
+      checkCoupon();
+    }, []),
+  );
 
   const loadPromoText = () => {
     if (coupon) {
@@ -103,22 +107,24 @@ const PaymentButton = ({
           : <SvgIcon fill={primaryColor} Svg={icon} height={15} width={15} />}
         <TimeText>{title}</TimeText>
       </CardNameContainer>
-      <PromoButton
-        noBackground
-        activeOpacity={coupon && 1}
-        onPress={() => !coupon && navigationService.navigate(MAIN_ROUTES.PROMO_CODE, { rideFlow: true })}
-      >
-        <SvgIcon
-          stroke={!coupon ? primaryColor : GREEN_COLOR}
-          fill={!coupon ? primaryColor : GREEN_COLOR}
-          Svg={!coupon ? plus : selected}
-          height={10}
-          width={10}
-        />
-        <PromoText>
-          {loadPromoText()}
-        </PromoText>
-      </PromoButton>
+      {id !== cashPaymentMethod.id && (
+        <PromoButton
+          noBackground
+          activeOpacity={coupon && 1}
+          onPress={() => !coupon && navigationService.navigate(MAIN_ROUTES.PROMO_CODE, { rideFlow: true })}
+        >
+          <SvgIcon
+            stroke={!coupon ? primaryColor : GREEN_COLOR}
+            fill={!coupon ? primaryColor : GREEN_COLOR}
+            Svg={!coupon ? plus : selected}
+            height={10}
+            width={10}
+          />
+          <PromoText>
+            {loadPromoText()}
+          </PromoText>
+        </PromoButton>
+      )}
     </Container>
   );
 };
