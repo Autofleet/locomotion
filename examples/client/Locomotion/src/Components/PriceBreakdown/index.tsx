@@ -15,6 +15,7 @@ import {
   Line,
   InnerContainer,
 } from './styled';
+import { COUPON_TYPE } from '../../lib/commonTypes';
 
 const NoBreakdownComponent = ({
   didRequestFail,
@@ -86,7 +87,7 @@ const PriceBreakdown = ({
         })} ${calculationTypeToUnit[item.pricingRule.calculationType](
           getPriceWithCurrency(item.pricingRule.price),
         )}`;
-      } else if (item.type === 'coupon') {
+      } else if (item.type === COUPON_TYPE) {
         name = item.couponDetails;
       }
       items.push({
