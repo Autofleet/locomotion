@@ -1,9 +1,9 @@
 /* eslint-disable no-nested-ternary */
 /* eslint-disable no-mixed-operators */
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { View, Text } from 'react-native';
 import moment from 'moment';
-import styled from 'styled-components';
+import styled, { ThemeContext } from 'styled-components';
 import { PaymentIcon } from 'react-native-payment-icons';
 import { PaymentMethodInterface } from 'context/payments/interface';
 import Button from '../Button';
@@ -93,6 +93,7 @@ const style = {
 const isCashPaymentMethod = (paymentMethod: any) => paymentMethod.id === cashPaymentMethod.id;
 
 const CardRow = (paymentMethod: any) => {
+  const { primaryColor } = useContext(ThemeContext);
   const [isCardExpired, setIsCardExpired] = useState(false);
   useEffect(() => {
     let isExpired = false;
@@ -134,6 +135,7 @@ const CardRow = (paymentMethod: any) => {
                         bottom: -7,
                       }}
                       Svg={selected}
+                      fill={primaryColor}
                     />
                   ) : null }
                 </>
