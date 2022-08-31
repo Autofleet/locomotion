@@ -88,7 +88,7 @@ const PaymentButton = ({
     return i18n.t('bottomSheetContent.ride.promoText');
   };
 
-  const getPromoButton = () => {
+  const loadPromoButton = () => {
     if (id === cashPaymentMethod.id) {
       return null;
     }
@@ -147,7 +147,7 @@ const PaymentButton = ({
           : <SvgIcon fill={primaryColor} Svg={icon} height={15} width={15} />}
         <TimeText>{title}</TimeText>
       </CardNameContainer>
-      {getPromoButton()}
+      {loadPromoButton()}
     </Container>
   );
 };
