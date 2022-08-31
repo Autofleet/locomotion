@@ -52,7 +52,6 @@ const PromoCode = () => {
           <TextInput
             testID="promoCode"
             autoFocus
-            placeholder={i18n.t('home.promoCode.placeholder')}
             onChangeText={(c: string) => {
               setError(false);
               setCode(c);
