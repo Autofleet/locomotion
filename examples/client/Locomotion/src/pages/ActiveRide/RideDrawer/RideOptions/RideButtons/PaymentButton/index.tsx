@@ -5,6 +5,7 @@ import { Text, View } from 'react-native';
 import { PaymentIcon } from 'react-native-payment-icons';
 import styled, { ThemeContext } from 'styled-components';
 import { useFocusEffect } from '@react-navigation/native';
+import SkeletonContent from 'react-native-skeleton-content-nonexpo';
 import { getFormattedPrice } from '../../../../../../context/newRideContext/utils';
 import { MAIN_ROUTES } from '../../../../../routes';
 import cashPaymentMethod from '../../../../../../pages/Payments/cashPaymentMethod';
@@ -70,23 +71,11 @@ const PaymentButton = ({
   const { primaryColor } = useContext(ThemeContext);
   const [coupon, setCoupon] = useState<any>(null);
   const { getCoupon } = useContext(UserContext);
-
-  const checkCoupon = async () => {
-    try {
-      const res = await getCoupon();
-      setCoupon(res);
-    } catch (e) {
-      console.log(e);
-    }
-  };
-  useFocusEffect(
-    useCallback(() => {
-      checkCoupon();
-    }, []),
-  );
+  const isDebuggingEnabled = (typeof atob !== 'undefined');
+  const noCoupon = coupon && coupon.status === 'error';
 
   const loadPromoText = () => {
-    if (coupon) {
+    if (!noCoupon) {
       let amount;
       if (coupon.amount_off) {
         amount = getFormattedPrice(coupon.currency, coupon.amount_off);
@@ -98,6 +87,57 @@ const PaymentButton = ({
     }
     return i18n.t('bottomSheetContent.ride.promoText');
   };
+
+  const getPromoButton = () => {
+    if (id === cashPaymentMethod.id) {
+      return null;
+    }
+    if (!isDebuggingEnabled && coupon === null) {
+      return (
+        <SkeletonContent
+          containerStyle={{}}
+          isLoading
+          layout={[
+            { width: 40, height: 10, marginTop: 10 },
+          ]}
+        />
+      );
+    }
+    return (
+      <PromoButton
+        noBackground
+        activeOpacity={!noCoupon && 1}
+        onPress={() => noCoupon && navigationService.navigate(MAIN_ROUTES.PROMO_CODE, { rideFlow: true })}
+      >
+        <SvgIcon
+          stroke={noCoupon ? primaryColor : GREEN_COLOR}
+          fill={noCoupon ? primaryColor : GREEN_COLOR}
+          Svg={noCoupon ? plus : selected}
+          height={10}
+          width={10}
+        />
+        <PromoText>
+          {loadPromoText()}
+        </PromoText>
+      </PromoButton>
+    );
+  };
+
+  const checkCoupon = async () => {
+    try {
+      const res = await getCoupon();
+      setCoupon(res);
+    } catch (e) {
+      setCoupon({ status: 'error' });
+    }
+  };
+
+  useFocusEffect(
+    useCallback(() => {
+      checkCoupon();
+    }, []),
+  );
+
   return (
     <Container>
       <CardNameContainer>
@@ -107,24 +147,7 @@ const PaymentButton = ({
           : <SvgIcon fill={primaryColor} Svg={icon} height={15} width={15} />}
         <TimeText>{title}</TimeText>
       </CardNameContainer>
-      {id !== cashPaymentMethod.id && (
-        <PromoButton
-          noBackground
-          activeOpacity={coupon && 1}
-          onPress={() => !coupon && navigationService.navigate(MAIN_ROUTES.PROMO_CODE, { rideFlow: true })}
-        >
-          <SvgIcon
-            stroke={!coupon ? primaryColor : GREEN_COLOR}
-            fill={!coupon ? primaryColor : GREEN_COLOR}
-            Svg={!coupon ? plus : selected}
-            height={10}
-            width={10}
-          />
-          <PromoText>
-            {loadPromoText()}
-          </PromoText>
-        </PromoButton>
-      )}
+      {getPromoButton()}
     </Container>
   );
 };
