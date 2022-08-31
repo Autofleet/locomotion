@@ -46,7 +46,7 @@ align-items: center;
 `;
 
 const PromoText = styled(Text)`
-    ${FONT_SIZES.SMALL}
+    ${FONT_SIZES.MEDIUM}
     ${FONT_WEIGHTS.MEDIUM}
     color: ${({ theme }) => theme.primaryColor};
     margin: 10px 5px;
