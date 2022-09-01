@@ -33,6 +33,13 @@ const ServiceOptions = () => {
           key={option.name}
         />
       ))}
+      {(serviceEstimations || []).map(option => (
+        <ServiceCard
+          withBorder
+          service={option}
+          key={option.name}
+        />
+      ))}
       {!isDebuggingEnabled
         ? (
           <SkeletonContent

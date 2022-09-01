@@ -25,6 +25,7 @@ const TimeText = styled(Text)`
     ${FONT_WEIGHTS.MEDIUM}
     color: #333;
     margin: 5px;
+    width: 60%;
 `;
 
 const Container = styled(View)`
@@ -49,7 +50,7 @@ align-items: center;
 `;
 
 const PromoText = styled(Text)`
-    ${FONT_SIZES.MEDIUM}
+    ${FONT_SIZES.LARGE}
     ${FONT_WEIGHTS.MEDIUM}
     color: ${({ theme }) => theme.primaryColor};
     margin: 10px 5px;
@@ -114,8 +115,8 @@ const PaymentButton = ({
             stroke={noCoupon ? primaryColor : GREEN_COLOR}
             fill={noCoupon ? primaryColor : GREEN_COLOR}
             Svg={noCoupon ? plus : selected}
-            height={10}
-            width={10}
+            height={15}
+            width={15}
           />
           <PromoText>
             {loadPromoText()}
