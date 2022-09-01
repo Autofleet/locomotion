@@ -52,7 +52,7 @@ align-items: center;
 const PromoText = styled(Text)`
     ${FONT_SIZES.LARGE}
     ${FONT_WEIGHTS.MEDIUM}
-    color: ${({ theme }) => theme.primaryColor};
+    color: #333;
     margin: 10px 5px;
 `;
 interface PaymentButtonProps {
