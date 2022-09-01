@@ -410,7 +410,7 @@ export const NotAvailableHere = (props: any) => {
       SubTitleText={i18n.t('bottomSheetContent.notAvailableHere.subTitleText', {
         appName: Config.OPERATION_NAME,
       })}
-      Image={<SvgIcon Svg={outOfTerritoryIcon} height={85} width={140} fill={primaryColor} />}
+      Image={<SvgIcon Svg={outOfTerritoryIcon} height={85} width={110} fill={primaryColor} />}
       fullWidthButtons
       {...props}
     />
