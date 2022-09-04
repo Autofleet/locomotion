@@ -51,6 +51,7 @@
     "react-native-config": "^1.4.5",
     "react-native-date-picker": "^4.2.2",
     "react-native-device-info": "^8.7.1",
+    "react-native-exit-app": "^1.1.0",
     "react-native-fast-image": "^8.5.11",
     "react-native-gesture-handler": "^2.4.2",
     "react-native-image-picker": "^4.8.2",

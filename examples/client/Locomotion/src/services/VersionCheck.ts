@@ -1,26 +1,31 @@
 import VersionCheck from 'react-native-version-check';
 import { Alert, BackHandler, Linking } from 'react-native';
 import Config from 'react-native-config';
+import { exitApp } from 'react-native-exit-app';
+import DeviceInfo from 'react-native-device-info';
 import i18n from '../I18n';
 
-const showUpdateVersionAlert = (updateData: {
-  isNeeded: boolean;
-  currentVersion: string;
-  latestVersion: string;
-  storeUrl: string;
-}) => {
+const showUpdateVersionAlert = () => {
   Alert.alert(
     i18n.t('updateVersion.title', {
       appName: Config.OPERATION_NAME,
-    }), i18n.t('updateVersion.body'),
+    }),
+    i18n.t('updateVersion.body'),
     [
       {
         text: i18n.t('updateVersion.buttonText'),
-        onPress: () => {
-          if (updateData?.storeUrl) {
-            BackHandler.exitApp();
-            Linking.openURL(updateData.storeUrl);
+        onPress: async () => {
+          const bundleId = await DeviceInfo.getBundleId();
+          const storeUrl = await VersionCheck.getStoreUrl({
+            appID: Config.APP_ID,
+            packageName: bundleId,
+          });
+
+          if (storeUrl) {
+            Linking.openURL(storeUrl);
           }
+
+          exitApp();
         },
       },
     ],
@@ -37,7 +42,7 @@ export const checkVersionAndForceUpdateIfNeeded = async (minAppVersion?: string)
     });
 
     if (updateData?.isNeeded) {
-      showUpdateVersionAlert(updateData);
+      showUpdateVersionAlert();
     }
   }
 };

@@ -50,6 +50,7 @@ export const THEME_MOD = {
   DARK: 'dark',
 };
 
+export const GREEN_COLOR = '#2cc36a';
 export const ERROR_COLOR = '#f35657';
 export const LINK_BLUE_COLOR = '#38a7fc';
 export const FONT_SIZES = {

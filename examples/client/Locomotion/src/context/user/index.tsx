@@ -6,7 +6,7 @@ import Config from 'react-native-config';
 import { authService, StorageService } from '../../services';
 import {
   getUserDetails, loginVert, sendEmailVerification,
-  updateUser as updateUserApi, emailVerify, deleteUser as deleteUserApi,
+  updateUser as updateUserApi, emailVerify, deleteUser as deleteUserApi, getUserCoupon, createUserCoupon,
 } from './api';
 import auth from '../../services/auth';
 import Mixpanel from '../../services/Mixpanel';
@@ -46,6 +46,8 @@ interface UserContextInterface {
   updatePushToken: () => Promise<boolean | null>,
   deleteUser: () => Promise<boolean>,
   updateUser: (values: any) => Promise<any>,
+  getCoupon: () => Promise<any>,
+  createCoupon: (values: any) => Promise<any>,
 }
 
 export const UserContext = createContext<UserContextInterface>({
@@ -65,6 +67,8 @@ export const UserContext = createContext<UserContextInterface>({
   updatePushToken: async () => false,
   deleteUser: async () => true,
   updateUser: async (values: any) => undefined,
+  getCoupon: async () => undefined,
+  createCoupon: async (values: any) => undefined,
 });
 
 const UserContextProvider = ({ children }: { children: any }) => {
@@ -206,6 +210,16 @@ const UserContextProvider = ({ children }: { children: any }) => {
     return result;
   };
 
+  const getCoupon = async () => {
+    const result = await getUserCoupon();
+    return result;
+  };
+
+  const createCoupon = async (code: string) => {
+    const result = await createUserCoupon(code);
+    return result;
+  };
+
   return (
     <UserContext.Provider
       value={{
@@ -225,6 +239,8 @@ const UserContextProvider = ({ children }: { children: any }) => {
         updatePushToken,
         deleteUser,
         updateUser,
+        getCoupon,
+        createCoupon,
       }}
     >
       {children}

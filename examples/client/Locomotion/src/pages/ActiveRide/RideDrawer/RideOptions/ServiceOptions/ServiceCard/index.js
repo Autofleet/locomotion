@@ -30,7 +30,7 @@ const ServiceCard = ({ service, withBorder }) => {
   } = useContext(RidePageContext);
   const [popup, setPopup] = useState(null);
   const isFutureRide = ride.scheduledTo;
-  const unavailable = !isFutureRide && !service.eta;
+  const unavailable = !service.price;
   const unavailableText = i18n.t('rideDetails.unavailable');
   const serviceDisplayPrice = getFormattedPrice(service.currency, service.price);
   const isSelected = chosenService && chosenService.id === service.id;
@@ -113,7 +113,7 @@ const ServiceCard = ({ service, withBorder }) => {
                 : <View />
             }
               <Price>
-                {service.price !== undefined ? serviceDisplayPrice : unavailableText}
+                {!unavailable ? serviceDisplayPrice : unavailableText}
               </Price>
             </TitleContainer>
           </WrapRow>

@@ -178,6 +178,14 @@
             "oneUpcomingRide": "Upcoming ride",
             "multipleUpcomingRides": "Upcoming rides"
         },
+        "promoCode": {
+            "amountOff": "{{amount}} off",
+            "placeholder": "please enter your coupon code here",
+            "buttonText": "Add code",
+            "pageHeader": "Add Promo Code",
+            "errorText": "Please enter a valid promo code",
+            "title": "Enter promo code"
+        },
         "RideScheduler": {
             "timeSelectionTitle": "I want to start",
             "now": "Now",
@@ -303,6 +311,7 @@
         "errorText": "Oops, looks like something went wrong",
         "errorButtonText": "Get fare details",
         "total": "Total",
+        "couponName": "Discount",
         "estimatedText": "The fares below are estimates and will be updated once the ride is completed based on the actual ride conditions",
         "pageTitle": "Payment breakdown",
         "priceItem": "{{ name }}",
@@ -524,6 +533,7 @@
         },
         "rider": "Rider",
         "riders": "Riders",
+        "promoText": "Promo code",
         "addPayment": "Add Payment",
         "chosePickupTime": "Time of departure",
         "contactDriver": "Contact driver",

@@ -425,6 +425,8 @@ PODS:
     - React-Core
   - RNDeviceInfo (8.7.1):
     - React-Core
+  - RNExitApp (1.1.0):
+    - React
   - RNFastImage (8.5.11):
     - React-Core
     - SDWebImage (~> 5.11.1)
@@ -555,6 +557,7 @@ DEPENDENCIES:
   - "RNCClipboard (from `../node_modules/@react-native-community/clipboard`)"
   - "RNCPicker (from `../node_modules/@react-native-picker/picker`)"
   - RNDeviceInfo (from `../node_modules/react-native-device-info`)
+  - RNExitApp (from `../node_modules/react-native-exit-app`)
   - RNFastImage (from `../node_modules/react-native-fast-image`)
   - "RNFBApp (from `../node_modules/@react-native-firebase/app`)"
   - "RNFBCrashlytics (from `../node_modules/@react-native-firebase/crashlytics`)"
@@ -697,6 +700,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@react-native-picker/picker"
   RNDeviceInfo:
     :path: "../node_modules/react-native-device-info"
+  RNExitApp:
+    :path: "../node_modules/react-native-exit-app"
   RNFastImage:
     :path: "../node_modules/react-native-fast-image"
   RNFBApp:
@@ -785,6 +790,7 @@ SPEC CHECKSUMS:
   RNCClipboard: 5e299c6df8e0c98f3d7416b86ae563d3a9f768a3
   RNCPicker: 0250e95ad170569a96f5b0555cdd5e65b9084dca
   RNDeviceInfo: af47a7d1a09d64c8cbb8b0c883db9bca422a9813
+  RNExitApp: 7d81855142a4d11eb75f4f06fdebf5a950d7aef2
   RNFastImage: 1f2cab428712a4baaf78d6169eaec7f622556dd7
   RNFBApp: 9646e09d041ea159b84584865212e4cf33acd179
   RNFBCrashlytics: f2b5e456c4969bdec60482e83d973d873ff17f1d
@@ -802,6 +808,6 @@ SPEC CHECKSUMS:
   StripeUICore: a8e24a6c91a5c99075c7a490d45695fb912876e8
   Yoga: 17cd9a50243093b547c1e539c749928dd68152da
 
-PODFILE CHECKSUM: 37f185e8ff6f88206ea39ba444579edc0c2a4c7b
+PODFILE CHECKSUM: 20746e5676acd267e1502c6978f80a405c23ff05
 
 COCOAPODS: 1.11.3

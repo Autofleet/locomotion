@@ -23,6 +23,7 @@ import CardDetails from '../Components/CardDetails';
 import EditCardName from './Payments/editNickename';
 import FutureRidesView from './FutureRidesView';
 import RidePriceBreakDown from './RidePriceBreakdown';
+import PromoCode from './PromoCode';
 
 export const ROUTES_COMPS = {
   [MAIN_ROUTES.HOME]: ActiveRide,
@@ -48,6 +49,7 @@ export const ROUTES_COMPS = {
   [MAIN_ROUTES.EDIT_NICKNAME]: EditCardName,
   [MAIN_ROUTES.FUTURE_RIDES]: FutureRidesView,
   [MAIN_ROUTES.RIDE_PRICE_BREAKDOWN]: RidePriceBreakDown,
+  [MAIN_ROUTES.PROMO_CODE]: PromoCode,
 };
 
 export const profileStack = ({ stack: Stack }) => (
