@@ -8,8 +8,7 @@ class Auth {
   static jwtVerify(token) {
     const decoded = jwtDecode(token);
     const now = (new Date().getTime()) / 1000;
-    // return decoded.exp && decoded.exp > now;
-    return false;
+    return decoded.exp && decoded.exp > now;
   }
 
   loginRefresh = async (network, body) => network.post('api/v1/login/refresh', body, {
@@ -43,6 +42,8 @@ class Auth {
         await this.updateTokens(response.data.refreshToken, response.data.accessToken);
         return response.data.accessToken;
       }
+      this.logout();
+      return false;
     }
     return accessToken;
   };
