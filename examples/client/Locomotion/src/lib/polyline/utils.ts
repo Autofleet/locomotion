@@ -22,11 +22,6 @@ export const decodePolyline = (stopPointPolyline: any) => polyline.decode(stopPo
 
 export const getPolylineList = (currentStopPoint: any, ride: RideInterface) => {
   const decodedPolyline: any[] = polyline.decode(currentStopPoint.polyline);
-  let vehicleLocation;
-  if (ride.vehicle?.location) {
-    vehicleLocation = getVehicleLocation(ride.vehicle?.location, decodedPolyline);
-  }
 
-  return (vehicleLocation ? [{ latitude: vehicleLocation.lat, longitude: vehicleLocation.lng }] : [])
-    .concat(decodedPolyline.map(p => ({ latitude: p[0], longitude: p[1] })));
+  return decodedPolyline.map(p => ({ latitude: p[0], longitude: p[1] }));
 };
