@@ -1,5 +1,6 @@
+import { BottomSheetScrollView } from '@gorhom/bottom-sheet';
 import {
-  Image, Text, View, TouchableOpacity, Platform, ScrollView,
+  Image, Text, View, TouchableOpacity, Platform,
 } from 'react-native';
 import styled from 'styled-components';
 import { FONT_SIZES, FONT_WEIGHTS } from '../../../context/theme';
@@ -106,6 +107,6 @@ export const ButtonContainer = styled(TouchableOpacity)`
     opacity: ${props => (props.disabled ? 0.5 : 1)};
 `;
 
-export const Container = styled(ScrollView)`
+export const Container = styled(BottomSheetScrollView)`
     padding: 0 10px;
 `;
