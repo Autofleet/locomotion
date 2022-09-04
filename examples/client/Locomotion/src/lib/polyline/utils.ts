@@ -28,7 +28,10 @@ export const getPolylineList = (currentStopPoint: any, ride: RideInterface) => {
 
   if (ride.vehicle?.location) {
     vehicleLocation = getVehicleLocation(ride.vehicle?.location, decodedPolyline);
-    const split = lineSplit(lineString(decodedPolyline), vehicleLocation);
+    const split = lineSplit(
+      lineString(decodedPolyline),
+      point([vehicleLocation.lng, vehicleLocation.lat]),
+    );
     decodedPolyline = split.features[1].geometry.coordinates.map(t => [t[1], t[0]]);
   }
 
