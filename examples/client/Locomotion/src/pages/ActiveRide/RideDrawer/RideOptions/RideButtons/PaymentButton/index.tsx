@@ -25,7 +25,8 @@ const TimeText = styled(Text)`
     ${FONT_WEIGHTS.MEDIUM}
     color: #333;
     margin: 5px;
-    width: 60%;
+
+    max-width: 80%;
 `;
 
 const Container = styled(View)`
@@ -41,6 +42,7 @@ const CardNameContainer = styled(View)`
     justify-content: flex-start;
     flex-direction: row;
     align-items: center;
+    max-width: 60%;
 `;
 
 const PromoButton = styled(Button)`
@@ -149,7 +151,7 @@ const PaymentButton = ({
           ? <PaymentIcon type={brand || 'generic'} />
           : <SvgIcon fill={primaryColor} Svg={cashIcon} height={25} width={40} />)
           : <SvgIcon fill={primaryColor} Svg={icon} height={15} width={15} />}
-        <TimeText>{title}</TimeText>
+        <TimeText numberOfLines={1}>{title}</TimeText>
       </CardNameContainer>
       {loadPromoButton()}
     </Container>
