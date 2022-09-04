@@ -145,6 +145,17 @@ const UserContextProvider = ({ children }: { children: any }) => {
 
   const updateUser = async (values: any): Promise<any> => updateUserApi(values);
 
+  const getCardInfo = () => {
+    try {
+      const methods = usePayments.paymentMethods;
+      if (methods.length) {
+        return methods;
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
   const onEmailVert = async (code: string) => {
     const vertResponse = await emailVerify({
       email: user?.email,
@@ -177,8 +188,9 @@ const UserContextProvider = ({ children }: { children: any }) => {
           demandSourceId: Config.OPERATION_ID,
         }),
       ]);
+      const cards = await getCardInfo();
       await updateUserInfo(userProfile, { updateServer: false });
-      return userProfile;
+      return { ...userProfile, cards };
     } catch (e) {
       console.log('Bad vert with request', e);
       return false;
