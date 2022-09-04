@@ -1,5 +1,7 @@
 import polyline from '@mapbox/polyline';
-import { lineString, nearestPointOnLine, point } from '@turf/turf';
+import {
+  lineString, nearestPointOnLine, point, lineSplit,
+} from '@turf/turf';
 import { RideInterface } from '../../context/newRideContext';
 
 export const getVehicleLocation = (location: any, vehiclePolyline: any[]) => {
@@ -21,7 +23,15 @@ export const getVehicleLocation = (location: any, vehiclePolyline: any[]) => {
 export const decodePolyline = (stopPointPolyline: any) => polyline.decode(stopPointPolyline);
 
 export const getPolylineList = (currentStopPoint: any, ride: RideInterface) => {
-  const decodedPolyline: any[] = polyline.decode(currentStopPoint.polyline);
+  let decodedPolyline: any[] = polyline.decode(currentStopPoint.polyline);
+  let vehicleLocation;
 
-  return decodedPolyline.map(p => ({ latitude: p[0], longitude: p[1] }));
+  if (ride.vehicle?.location) {
+    vehicleLocation = getVehicleLocation(ride.vehicle?.location, decodedPolyline);
+    const split = lineSplit(lineString(decodedPolyline), vehicleLocation);
+    decodedPolyline = split.features[1].geometry.coordinates.map(t => [t[1], t[0]]);
+  }
+
+  return (vehicleLocation ? [{ latitude: vehicleLocation.lat, longitude: vehicleLocation.lng }] : [])
+    .concat(decodedPolyline.map(p => ({ latitude: p[0], longitude: p[1] })));
 };
