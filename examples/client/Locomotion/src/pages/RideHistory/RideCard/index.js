@@ -41,6 +41,7 @@ import TextButton from '../../../Components/TextButton';
 import * as NavigationService from '../../../services/navigation';
 import { MAIN_ROUTES } from '../../routes';
 import ServiceTypeDetails from '../../../Components/ServiceTypeDetails';
+import { CASH_KEY } from '../../../pages/Payments/cashPaymentMethod';
 
 const RideTitleCard = ({
   ride, page, showTip, tip,
@@ -67,8 +68,10 @@ const RideTitleCard = ({
       );
     }
     const isLessThenFiveDaysSince = moment(moment()).diff(ride.scheduledTo || ride.createdAt, 'days') < 5;
+    const isCash = ride.payment && ride.payment.paymentMethod
+      && ride.payment.paymentMethod.id === CASH_KEY;
     if (ride.state === RIDE_STATES.COMPLETED
-      && isLessThenFiveDaysSince) {
+      && isLessThenFiveDaysSince && !isCash) {
       return <TextButton testID="AddATip" onPress={() => { NavigationService.navigate(MAIN_ROUTES.POST_RIDE, { rideId: ride.id, priceCalculationId: ride.priceCalculationId }); }} text={i18n.t('rideHistory.rideCard.addTip')} />;
     }
   };
