@@ -4,7 +4,6 @@ import { PaymentIcon } from 'react-native-payment-icons';
 import { Platform } from 'react-native';
 import Button from '../../Components/Button';
 import ConfirmationPopup from '../../popups/ConfirmationPopup';
-import cashPaymentMethod from '../../pages/Payments/cashPaymentMethod';
 import Card from '../../Components/InformationCard';
 import PaymentsContext from '../../context/payments';
 import { MAIN_ROUTES } from '../routes';
@@ -32,6 +31,7 @@ import Mixpanel from '../../services/Mixpanel';
 import { PageContainer } from '../styles';
 import { UserContext } from '../../context/user';
 import GenericErrorPopup from '../../popups/GenericError';
+import { PAYMENT_METHODS } from '../../pages/Payments/consts';
 
 const AccountHeader = () => {
   const { updateUserInfo, user } = useContext(UserContext);
@@ -123,7 +123,7 @@ const AccountContent = () => {
         >
           {user ? `${user.email}` : ''}
         </Card>
-        {defaultPaymentMethod && defaultPaymentMethod.id !== cashPaymentMethod.id ? (
+        {defaultPaymentMethod && defaultPaymentMethod.id !== PAYMENT_METHODS.CASH ? (
           <>
             <CardsTitle title={i18n.t('onboarding.paymentInformation')} />
             <Card

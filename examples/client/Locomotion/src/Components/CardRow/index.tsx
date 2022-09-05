@@ -8,13 +8,13 @@ import { PaymentIcon } from 'react-native-payment-icons';
 import { PaymentMethodInterface } from 'context/payments/interface';
 import Button from '../Button';
 import { capitalizeFirstLetter, getLastFourForamttedShort } from '../../pages/Payments/cardDetailUtils';
-import cashPaymentMethod from '../../pages/Payments/cashPaymentMethod';
 import i18n from '../../I18n';
 import SvgIcon from '../SvgIcon';
 import selected from '../../assets/selected-v.svg';
 import { Start, StartCapital } from '../../lib/text-direction';
 import cashIcon from '../../assets/cash.svg';
 import chevronIcon from '../../assets/chevron.svg';
+import { isCashPaymentMethod } from '../../lib/ride/utils';
 
 type ContainerProps = {
   children: React.ReactNode,
@@ -89,8 +89,6 @@ const style = {
   marginTop: -10,
   [StartCapital()]: 28,
 };
-
-const isCashPaymentMethod = (paymentMethod: any) => paymentMethod.id === cashPaymentMethod.id;
 
 const CardRow = (paymentMethod: any) => {
   const { primaryColor } = useContext(ThemeContext);

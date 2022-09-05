@@ -1,4 +1,4 @@
-import cashPaymentMethod from '../../pages/Payments/cashPaymentMethod';
+import { PAYMENT_METHODS } from '../../pages/Payments/consts';
 
 export const formatSps = function (stopPoints: any) {
   const orderDesc: any = {};
@@ -26,4 +26,4 @@ export const getOrdinal = (n: number) => {
 };
 
 
-export const isCashPaymentMethod = (paymentMethod: any) => paymentMethod.id === cashPaymentMethod.id;
+export const isCashPaymentMethod = (paymentMethod: any) => paymentMethod.id === PAYMENT_METHODS.CASH;

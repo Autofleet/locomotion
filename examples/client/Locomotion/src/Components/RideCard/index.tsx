@@ -4,7 +4,6 @@ import { PaymentIcon } from 'react-native-payment-icons';
 import { View } from 'react-native';
 import { RIDE_STATES } from '../../lib/commonTypes';
 import { PriceCalculation, RideInterface, RidePageContext } from '../../context/newRideContext';
-import cashPaymentMethod from '../../pages/Payments/cashPaymentMethod';
 import i18n from '../../I18n';
 import RoundedButton from '../RoundedButton';
 import TextRowWithIcon from '../TextRowWithIcon';
@@ -15,6 +14,7 @@ import {
 import StopPointsVerticalView from '../StopPointsVerticalView';
 import { getFormattedPrice, isPriceEstimated } from '../../context/newRideContext/utils';
 import cashIcon from '../../assets/cash.svg';
+import { PAYMENT_METHODS } from '../../pages/Payments/consts';
 
 
 interface CardComponentProps {
@@ -25,12 +25,31 @@ interface CardComponentProps {
   }
 }
 const CardComponent = ({ paymentMethod }: CardComponentProps) => {
-  const isCash = cashPaymentMethod.id === paymentMethod.id;
+  const isCash = PAYMENT_METHODS.CASH === paymentMethod.id;
+  const isOffline = PAYMENT_METHODS.OFFLINE === paymentMethod.id;
+
+  const getText = () => {
+    if (isCash) {
+      return PAYMENT_METHODS.CASH;
+    } if (isOffline) {
+      return PAYMENT_METHODS.OFFLINE;
+    }
+    return paymentMethod.name;
+  };
+
+  const getIcon = () => {
+    if (isCash) {
+      return cashIcon;
+    }
+    if (isOffline) {
+      return offlineIcon;
+    }
+  };
   return (
     <TextRowWithIcon
-      text={isCash ? cashPaymentMethod.id : paymentMethod.name}
-      Image={() => !isCash && <PaymentIcon type={paymentMethod.brand} />}
-      icon={isCash && cashIcon}
+      text={getText()}
+      Image={() => !getIcon() && <PaymentIcon type={paymentMethod.brand} />}
+      icon={getIcon()}
       style={{ marginTop: 10, marginBottom: 10 }}
       iconWidth={40}
       iconHeight={20}

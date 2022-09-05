@@ -56,7 +56,7 @@ import { checkVersionAndForceUpdateIfNeeded } from '../../services/VersionCheck'
 import TopMessage from './TopMessage';
 import i18n from '../../I18n';
 import BlackOverlay from '../../Components/BlackOverlay';
-import { CASH_KEY } from '../Payments/cashPaymentMethod';
+import { PAYMENT_METHODS } from '../Payments/consts';
 
 
 const BLACK_OVERLAY_SCREENS = [BS_PAGES.CANCEL_RIDE];
@@ -196,7 +196,7 @@ const RidePage = ({ mapSettings, navigation }) => {
         isConfirmPickup
         initialLocation={requestStopPoints[0]}
         onButtonPress={(pickupLocation) => {
-          if (clientHasValidPaymentMethods() || ride.paymentMethodId === CASH_KEY) {
+          if (clientHasValidPaymentMethods() || ride.paymentMethodId === PAYMENT_METHODS.CASH) {
             requestRide(pickupLocation);
           } else {
             changeBsPage(BS_PAGES.NO_PAYMENT);
