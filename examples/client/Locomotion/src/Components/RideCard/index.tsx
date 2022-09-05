@@ -42,13 +42,13 @@ const CardComponent = ({ paymentMethod }: CardComponentProps) => {
       return cashIcon;
     }
     if (isOffline) {
-      return offlineIcon;
+      return null;
     }
   };
   return (
     <TextRowWithIcon
       text={getText()}
-      Image={() => !getIcon() && <PaymentIcon type={paymentMethod.brand} />}
+      Image={() => !isCash && <PaymentIcon type={paymentMethod.brand} />}
       icon={getIcon()}
       style={{ marginTop: 10, marginBottom: 10 }}
       iconWidth={40}
