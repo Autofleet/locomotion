@@ -48,7 +48,7 @@ const CardComponent = ({ paymentMethod }: CardComponentProps) => {
   return (
     <TextRowWithIcon
       text={getText()}
-      Image={() => !isCash && <PaymentIcon type={paymentMethod.brand} />}
+      Image={() => !isCash && !isOffline && <PaymentIcon type={paymentMethod.brand} />}
       icon={getIcon()}
       style={{ marginTop: 10, marginBottom: 10 }}
       iconWidth={40}

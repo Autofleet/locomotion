@@ -420,6 +420,7 @@
         "setPaymentBanner": "Set payment method",
         "payWithCash": "Pay with Cash",
         "cash": "Cash",
+        "offline": "Offline",
         "popups": {
             "removeCard": {
                 "title": "Remove payment method",
