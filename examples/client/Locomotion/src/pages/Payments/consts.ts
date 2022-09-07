@@ -1,5 +1,5 @@
 export const PAYMENT_METHODS = {
   CASH: 'cash',
-  OFFLINE: 'offlinePayment',
+  OFFLINE: 'offline',
   CARD: 'card',
 };
