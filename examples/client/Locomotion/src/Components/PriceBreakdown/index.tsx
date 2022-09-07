@@ -82,13 +82,16 @@ const PriceBreakdown = ({
       totalPrice += item.price;
       let name;
       if (item.pricingRule) {
+        const calculationTypeToUnitInstance = calculationTypeToUnit[item.pricingRule.calculationType];
         name = `${i18n.t('ridePriceBreakdown.priceItem', {
           name: item.pricingRule.name,
-        })} ${calculationTypeToUnit[item.pricingRule.calculationType](
+        })} ${calculationTypeToUnitInstance ? calculationTypeToUnitInstance(
           getPriceWithCurrency(item.pricingRule.price),
-        )}`;
+        ) : ''}`;
       } else if (item.type === COUPON_TYPE) {
         name = item.couponDetails;
+      } else if (item.details) {
+        name = item.details;
       }
       items.push({
         name:
