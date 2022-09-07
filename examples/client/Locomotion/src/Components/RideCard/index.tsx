@@ -30,9 +30,9 @@ const CardComponent = ({ paymentMethod }: CardComponentProps) => {
 
   const getText = () => {
     if (isCash) {
-      return PAYMENT_METHODS.CASH;
+      return i18n.t('payments.cash');
     } if (isOffline) {
-      return PAYMENT_METHODS.OFFLINE;
+      return i18n.t('payments.offline');
     }
     return paymentMethod.name;
   };
