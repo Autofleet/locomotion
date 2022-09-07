@@ -263,7 +263,7 @@ export const ConfirmPickupTime = (props: any) => {
   };
   useEffect(() => {
     checkMinutesBeforeFutureRideSetting();
-  });
+  }, []);
   return (
     <BsPage
       TitleText={i18n.t('bottomSheetContent.confirmPickupTime.titleText')}
