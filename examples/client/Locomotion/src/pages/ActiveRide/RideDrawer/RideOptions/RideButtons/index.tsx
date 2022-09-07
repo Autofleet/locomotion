@@ -54,6 +54,7 @@ const RideButtons = ({
 
   const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
   const [isFutureRidesEnabled, setIsFutureRidesEnabled] = useState(true);
+  const [minMinutesBeforeFutureRide, setMinMinutesBeforeFutureRide] = useState(null);
 
   const checkFutureRidesSetting = async () => {
     const futureRidesEnabled = await getSettingByKey(
@@ -62,8 +63,14 @@ const RideButtons = ({
     setIsFutureRidesEnabled(futureRidesEnabled);
   };
 
+  const checkMinutesBeforeFutureRideSetting = async () => {
+    const minutes = await getSettingByKey(SETTINGS_KEYS.MIN_MINUTES_BEFORE_FUTURE_RIDE);
+    setMinMinutesBeforeFutureRide(minutes);
+  };
+
   useEffect(() => {
     checkFutureRidesSetting();
+    checkMinutesBeforeFutureRideSetting();
   }, []);
   const renderFutureBooking = () => {
     const close = () => {
@@ -71,12 +78,12 @@ const RideButtons = ({
     };
 
     return (
-      <ButtonContainer testID="RideTimeSelector" onPress={() => setIsDatePickerOpen(true)}>
+      <ButtonContainer testID="RideTimeSelector" onPress={() => minMinutesBeforeFutureRide && setIsDatePickerOpen(true)}>
         <FutureBookingButton />
         <DatePicker
           textColor={getTextColorForTheme()}
           open={isDatePickerOpen}
-          date={moment(ride?.scheduledTo || undefined).add(ride?.scheduledTo ? 0 : 1, 'hours').toDate()}
+          date={moment(ride?.scheduledTo || undefined).add(ride?.scheduledTo ? 0 : minMinutesBeforeFutureRide, 'minutes').toDate()}
           maximumDate={getFutureRideMaxDate()}
           minimumDate={getFutureRideMinDate()}
           mode="datetime"
