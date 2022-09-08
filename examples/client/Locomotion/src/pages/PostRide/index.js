@@ -23,7 +23,6 @@ import SETTINGS_KEYS from '../../context/settings/keys';
 import NewRidePageContextProvider, { RidePageContext } from '../../context/newRideContext';
 import closeIcon from '../../assets/x.png';
 import BottomSheetContextProvider, { BottomSheetContext } from '../../context/bottomSheetContext';
-import { isCashPaymentMethod } from '../../lib/ride/utils';
 import { RideStateContextContext } from '../..';
 import { BS_PAGES } from '../../context/ridePageStateContext/utils';
 import * as navigationService from '../../services/navigation';
