@@ -11,7 +11,11 @@ class Auth {
     return decoded.exp && decoded.exp > now;
   }
 
-  loginRefresh = async (network, body) => network.post('api/v1/login/refresh', body);
+  loginRefresh = async (network, body) => network.post('api/v1/login/refresh', body, {
+    headers: {
+      Authorization: '',
+    },
+  });
 
   getAT = async (network) => {
     const { accessToken, refreshToken } = await StorageService.get(['accessToken', 'refreshToken']);
@@ -27,6 +31,7 @@ class Auth {
       } catch (error) {
         console.log('error when try to refresh the login token', error);
         if (this.onFaildAuthCallback) { this.onFaildAuthCallback(); }
+        this.logout();
         return false;
       }
 
@@ -34,9 +39,11 @@ class Auth {
         if (this.onAuthRefreshCallback) {
           this.onAuthRefreshCallback();
         }
-        this.updateTokens(refreshToken, response.data.accessToken);
+        await this.updateTokens(response.data.refreshToken, response.data.accessToken);
         return response.data.accessToken;
       }
+      this.logout();
+      return false;
     }
     return accessToken;
   };

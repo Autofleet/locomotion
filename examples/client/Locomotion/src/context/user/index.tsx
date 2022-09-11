@@ -145,7 +145,6 @@ const UserContextProvider = ({ children }: { children: any }) => {
 
   const updateUser = async (values: any): Promise<any> => updateUserApi(values);
 
-
   const getCardInfo = () => {
     try {
       const methods = usePayments.paymentMethods;
@@ -179,7 +178,7 @@ const UserContextProvider = ({ children }: { children: any }) => {
         return false;
       }
 
-      auth.updateTokens(vertResponse.refreshToken, vertResponse.accessToken);
+      await auth.updateTokens(vertResponse.refreshToken, vertResponse.accessToken);
       const userProfile = vertResponse.clientProfile || {};
       Mixpanel.setUser(userProfile);
 
