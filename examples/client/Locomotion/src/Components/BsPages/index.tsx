@@ -293,7 +293,7 @@ export const ConfirmPickupTime = (props: any) => {
         open={isDatePickerOpen}
         date={moment(unconfirmedPickupTime).add(unconfirmedPickupTime ? 0 : minMinutesBeforeFutureRide, 'minutes').toDate()}
         maximumDate={getFutureRideMaxDate()}
-        minimumDate={getFutureRideMinDate(minMinutesBeforeFutureRide)}
+        minimumDate={getFutureRideMinDate((minMinutesBeforeFutureRide || 0))}
         mode="datetime"
         title={i18n.t('bottomSheetContent.ride.chosePickupTime')}
         onCancel={() => setIsDatePickerOpen(false)}
