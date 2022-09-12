@@ -242,7 +242,7 @@ export default BsPage;
 export const ConfirmPickupTime = (props: any) => {
   const { getSettingByKey } = SettingContext.useContainer();
   const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
-  const [minMinutesBeforeFutureRide, setMinMinutesBeforeFutureRide] = useState(null);
+  const [minMinutesBeforeFutureRide, setMinMinutesBeforeFutureRide] = useState<number | null>(null);
   const {
     unconfirmedPickupTime,
     updateRidePayload,
@@ -293,7 +293,7 @@ export const ConfirmPickupTime = (props: any) => {
         open={isDatePickerOpen}
         date={moment(unconfirmedPickupTime).add(unconfirmedPickupTime ? 0 : minMinutesBeforeFutureRide, 'minutes').toDate()}
         maximumDate={getFutureRideMaxDate()}
-        minimumDate={getFutureRideMinDate()}
+        minimumDate={getFutureRideMinDate(minMinutesBeforeFutureRide)}
         mode="datetime"
         title={i18n.t('bottomSheetContent.ride.chosePickupTime')}
         onCancel={() => setIsDatePickerOpen(false)}
