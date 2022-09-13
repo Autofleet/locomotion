@@ -332,7 +332,6 @@ const RidePageContextProvider = ({ children }: {
       Mixpanel.setEvent('Get service estimations');
       const { estimations, services } = await rideApi
         .createServiceEstimations(formattedStopPoints, ride.scheduledTo);
-      console.log(estimations);
       const tags = getEstimationTags(estimations);
       const formattedEstimations = formatEstimations(services, estimations, tags);
       setChosenService(ride.scheduledTo ? formattedEstimations[0]
