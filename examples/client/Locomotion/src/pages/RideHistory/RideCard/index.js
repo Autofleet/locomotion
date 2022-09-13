@@ -4,6 +4,8 @@ import React, {
 import moment from 'moment';
 import { useFocusEffect } from '@react-navigation/native';
 import SkeletonContent from 'react-native-skeleton-content-nonexpo';
+import { isCardPaymentMethod } from '../../../lib/ride/utils';
+import { PAYMENT_METHODS } from '../../../pages/Payments/consts';
 import FullPageLoader from '../../../Components/FullPageLoader';
 import { getPriceCalculation } from '../../../context/futureRides/api';
 import RidePaymentDetails from '../../../Components/RidePaymentDetails';
@@ -68,12 +70,13 @@ const RideTitleCard = ({
       );
     }
     const isLessThenFiveDaysSince = moment(moment()).diff(ride.scheduledTo || ride.createdAt, 'days') < 5;
-    const isCash = ride.payment && ride.payment.paymentMethod
-      && ride.payment.paymentMethod.id === CASH_KEY;
+    const isCard = ride.payment && ride.payment.paymentMethod && isCardPaymentMethod(ride.payment.paymentMethod);
+
     if (ride.state === RIDE_STATES.COMPLETED
-      && isLessThenFiveDaysSince && !isCash) {
+      && isLessThenFiveDaysSince && isCard) {
       return <TextButton testID="AddATip" onPress={() => { NavigationService.navigate(MAIN_ROUTES.POST_RIDE, { rideId: ride.id, priceCalculationId: ride.priceCalculationId }); }} text={i18n.t('rideHistory.rideCard.addTip')} />;
     }
+    return null;
   };
 
   return (
