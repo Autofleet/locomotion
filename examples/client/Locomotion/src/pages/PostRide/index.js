@@ -1,6 +1,7 @@
 import React, {
   useEffect, useState, useRef, useContext,
 } from 'react';
+import { isCardPaymentMethod } from '../../lib/ride/utils';
 import { PAYMENT_METHODS } from '../../pages/Payments/consts';
 import { formatRides, rideHistoryContext } from '../../context/rideHistory';
 import FullPageLoader from '../../Components/FullPageLoader';
@@ -121,8 +122,6 @@ const PostRidePage = ({ menuSide, route }) => {
     return i18n.t('postRide.submit');
   };
 
-  const isCard = ![PAYMENT_METHODS.CASH, PAYMENT_METHODS.OFFLINE].includes(ride?.payment?.paymentMethod?.id);
-
   return (
     <>
       {ride ? (
@@ -141,7 +140,7 @@ const PostRidePage = ({ menuSide, route }) => {
             </RatingContainer>
             )}
 
-            {isCard && !(priceCalculationId && tipFromDb) && (
+            {isCardPaymentMethod(ride?.payment?.paymentMethod) && !(priceCalculationId && tipFromDb) && (
             <TipsContainer>
               {ride?.priceCurrency && (ride?.priceAmount || ride?.priceAmount === 0)
                 ? (
