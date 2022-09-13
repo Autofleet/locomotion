@@ -15,6 +15,8 @@ import { FutureRidesContext } from '../../context/futureRides';
 import { STOP_POINT_TYPES } from '../../lib/commonTypes';
 import SvgIcon from '../SvgIcon';
 import { RidePageContext } from '../../context/newRideContext';
+import SettingContext from '../../context/settings';
+import SETTINGS_KEYS from '../../context/settings/keys';
 import i18n from '../../I18n';
 import {
   ERROR_COLOR, FONT_SIZES, FONT_WEIGHTS, getTextColorForTheme,
@@ -238,7 +240,9 @@ BsPage.defaultProps = {
 export default BsPage;
 
 export const ConfirmPickupTime = (props: any) => {
+  const { getSettingByKey } = SettingContext.useContainer();
   const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
+  const [minMinutesBeforeFutureRide, setMinMinutesBeforeFutureRide] = useState<number | null>(null);
   const {
     unconfirmedPickupTime,
     updateRidePayload,
@@ -252,6 +256,14 @@ export const ConfirmPickupTime = (props: any) => {
   } = useContext(RideStateContextContext);
   const date = moment(unconfirmedPickupTime).format('ddd, MMM Do');
   const time = moment(unconfirmedPickupTime).format('h:mm A');
+
+  const checkMinutesBeforeFutureRideSetting = async () => {
+    const minutes = await getSettingByKey(SETTINGS_KEYS.MIN_MINUTES_BEFORE_FUTURE_RIDE);
+    setMinMinutesBeforeFutureRide(minutes);
+  };
+  useEffect(() => {
+    checkMinutesBeforeFutureRideSetting();
+  }, []);
   return (
     <BsPage
       TitleText={i18n.t('bottomSheetContent.confirmPickupTime.titleText')}
@@ -267,7 +279,7 @@ export const ConfirmPickupTime = (props: any) => {
       {...props}
     >
       <RoundedButton
-        onPress={() => setIsDatePickerOpen(true)}
+        onPress={() => minMinutesBeforeFutureRide && setIsDatePickerOpen(true)}
         hollow
         icon={timeIcon}
         style={{
@@ -279,9 +291,9 @@ export const ConfirmPickupTime = (props: any) => {
       <DatePicker
         textColor={getTextColorForTheme()}
         open={isDatePickerOpen}
-        date={moment(unconfirmedPickupTime).add(unconfirmedPickupTime ? 0 : 1, 'hours').toDate()}
+        date={moment(unconfirmedPickupTime).add(unconfirmedPickupTime ? 0 : minMinutesBeforeFutureRide, 'minutes').toDate()}
         maximumDate={getFutureRideMaxDate()}
-        minimumDate={getFutureRideMinDate()}
+        minimumDate={getFutureRideMinDate((minMinutesBeforeFutureRide || 0))}
         mode="datetime"
         title={i18n.t('bottomSheetContent.ride.chosePickupTime')}
         onCancel={() => setIsDatePickerOpen(false)}
