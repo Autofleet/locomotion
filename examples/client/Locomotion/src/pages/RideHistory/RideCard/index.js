@@ -70,8 +70,7 @@ const RideTitleCard = ({
       );
     }
     const isLessThenFiveDaysSince = moment(moment()).diff(ride.scheduledTo || ride.createdAt, 'days') < 5;
-    const isCard = ride.payment && ride.payment.paymentMethod
-      && isCardPaymentMethod(ride.payment.paymentMethod.id);
+    const isCard = ride.payment && ride.payment.paymentMethod && isCardPaymentMethod(ride.payment.paymentMethod);
 
     if (ride.state === RIDE_STATES.COMPLETED
       && isLessThenFiveDaysSince && isCard) {
