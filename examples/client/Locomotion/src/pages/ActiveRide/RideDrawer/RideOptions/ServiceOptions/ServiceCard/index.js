@@ -65,7 +65,7 @@ const ServiceCard = ({ service, withBorder }) => {
 
   const getDescription = forFutureRidesView => (
     <Description style={{ ...(forFutureRidesView && { width: '60%' }) }} numberOfLines={2}>
-      {service.description}
+      {(service.description || '')}
     </Description>
   );
 
@@ -148,7 +148,7 @@ const ServiceCard = ({ service, withBorder }) => {
 
           </WrapRow>
           )}
-          {service.description && !isFutureRide && (
+          {!isFutureRide && (
           <Row>
             {getDescription()}
             {service.isPriceEstimated ? (

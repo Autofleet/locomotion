@@ -23,6 +23,7 @@ import { getFutureRideMaxDate, getFutureRideMinDate } from '../../../../../conte
 import settings from '../../../../../context/settings';
 import SETTINGS_KEYS from '../../../../../context/settings/keys';
 import { getTextColorForTheme } from '../../../../../context/theme';
+import { PAYMENT_METHODS } from '../../../../../pages/Payments/consts';
 
 interface RideButtonsProps {
     displayPassenger: boolean;
@@ -125,7 +126,7 @@ const RideButtons = ({
   const renderPaymentButton = () => {
     const ridePaymentMethod = ride?.paymentMethodId;
     const selectedPaymentMethod:
-     PaymentMethodInterface | undefined = ridePaymentMethod === cashPaymentMethod.id
+     PaymentMethodInterface | undefined = ridePaymentMethod === PAYMENT_METHODS.CASH
        ? cashPaymentMethod
        : paymentMethods.find(pm => pm.id === ridePaymentMethod);
 

@@ -8,7 +8,6 @@ import { useFocusEffect } from '@react-navigation/native';
 import SkeletonContent from 'react-native-skeleton-content-nonexpo';
 import { getFormattedPrice } from '../../../../../../context/newRideContext/utils';
 import { MAIN_ROUTES } from '../../../../../routes';
-import cashPaymentMethod from '../../../../../../pages/Payments/cashPaymentMethod';
 import SvgIcon from '../../../../../../Components/SvgIcon';
 import { FONT_SIZES, FONT_WEIGHTS, GREEN_COLOR } from '../../../../../../context/theme';
 import { Brand } from '../../../../../../context/payments/interface';
@@ -19,13 +18,15 @@ import Button from '../../../../../../Components/Button';
 import * as navigationService from '../../../../../../services/navigation';
 import { UserContext } from '../../../../../../context/user';
 import selected from '../../../../../../assets/selected-v.svg';
+import { PAYMENT_METHODS } from '../../../../../../pages/Payments/consts';
 
 const TimeText = styled(Text)`
     ${FONT_SIZES.LARGE}
     ${FONT_WEIGHTS.MEDIUM}
     color: #333;
     margin: 5px;
-    width: 60%;
+
+    max-width: 80%;
 `;
 
 const Container = styled(View)`
@@ -41,6 +42,7 @@ const CardNameContainer = styled(View)`
     justify-content: flex-start;
     flex-direction: row;
     align-items: center;
+    max-width: 60%;
 `;
 
 const PromoButton = styled(Button)`
@@ -90,7 +92,7 @@ const PaymentButton = ({
   };
 
   const loadPromoButton = () => {
-    if (id === cashPaymentMethod.id) {
+    if (id === PAYMENT_METHODS.CASH) {
       return null;
     }
     if (!isDebuggingEnabled && coupon === null) {
@@ -145,11 +147,11 @@ const PaymentButton = ({
   return (
     <Container>
       <CardNameContainer>
-        {id ? (id !== cashPaymentMethod.id
+        {id ? (id !== PAYMENT_METHODS.CASH
           ? <PaymentIcon type={brand || 'generic'} />
           : <SvgIcon fill={primaryColor} Svg={cashIcon} height={25} width={40} />)
           : <SvgIcon fill={primaryColor} Svg={icon} height={15} width={15} />}
-        <TimeText>{title}</TimeText>
+        <TimeText numberOfLines={1}>{title}</TimeText>
       </CardNameContainer>
       {loadPromoButton()}
     </Container>

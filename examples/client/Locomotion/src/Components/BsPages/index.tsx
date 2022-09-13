@@ -38,7 +38,7 @@ import timeIcon from '../../assets/calendar.svg';
 import ActiveRideContent from './ActiveRide';
 import RoundedButton from '../RoundedButton';
 import { getFutureRideMaxDate, getFutureRideMinDate } from '../../context/newRideContext/utils';
-import { CASH_KEY } from '../../pages/Payments/cashPaymentMethod';
+import { PAYMENT_METHODS } from '../../pages/Payments/consts';
 
 const OtherButton = styled(Button)`
   background-color: ${({ warning, theme }) => (warning ? ERROR_COLOR : theme.primaryColor)};
@@ -492,7 +492,7 @@ export const NoPayment = (props: any) => {
   } = payments.useContainer();
 
   const proceedIfPaymentMethodsAreValid = () => {
-    if (clientHasValidPaymentMethods() || ride.paymentMethodId === CASH_KEY) {
+    if (clientHasValidPaymentMethods() || ride.paymentMethodId === PAYMENT_METHODS.CASH) {
       requestRide();
     }
   };
