@@ -76,6 +76,7 @@ const RideTitleCard = ({
       && isLessThenFiveDaysSince && isCard) {
       return <TextButton testID="AddATip" onPress={() => { NavigationService.navigate(MAIN_ROUTES.POST_RIDE, { rideId: ride.id, priceCalculationId: ride.priceCalculationId }); }} text={i18n.t('rideHistory.rideCard.addTip')} />;
     }
+    return null;
   };
 
   return (
