@@ -17,7 +17,7 @@ export const RIDE_FAILED_REASONS = {
   COULD_NOT_CREATE_PAYMENT_INTENT: 'COULD_NOT_CREATE_PAYMENT_INTENT',
 };
 
-export const getFutureRideMinDate = () => moment().add(60, 'minutes').toDate();
+export const getFutureRideMinDate = (minutesBefore: number) => moment().add(minutesBefore, 'minutes').toDate();
 export const getFutureRideMaxDate = () => moment().add(7, 'days').toDate();
 
 export const TAG_OPTIONS = {

@@ -1,6 +1,8 @@
 import React, {
   useEffect, useState, useRef, useContext,
 } from 'react';
+import { isCardPaymentMethod } from '../../lib/ride/utils';
+import { PAYMENT_METHODS } from '../../pages/Payments/consts';
 import { formatRides, rideHistoryContext } from '../../context/rideHistory';
 import FullPageLoader from '../../Components/FullPageLoader';
 import { getPriceCalculation } from '../../context/futureRides/api';
@@ -26,7 +28,6 @@ import BottomSheetContextProvider, { BottomSheetContext } from '../../context/bo
 import { RideStateContextContext } from '../..';
 import { BS_PAGES } from '../../context/ridePageStateContext/utils';
 import * as navigationService from '../../services/navigation';
-import { CASH_KEY } from '../../pages/Payments/cashPaymentMethod';
 
 const PostRidePage = ({ menuSide, route }) => {
   const { rideId, priceCalculationId } = route?.params;
@@ -121,8 +122,6 @@ const PostRidePage = ({ menuSide, route }) => {
     return i18n.t('postRide.submit');
   };
 
-  const isCash = ride?.payment?.paymentMethod?.id === CASH_KEY;
-
   return (
     <>
       {ride ? (
@@ -141,7 +140,7 @@ const PostRidePage = ({ menuSide, route }) => {
             </RatingContainer>
             )}
 
-            {!isCash && !(priceCalculationId && tipFromDb) && (
+            {isCardPaymentMethod(ride?.payment?.paymentMethod) && !(priceCalculationId && tipFromDb) && (
             <TipsContainer>
               {ride?.priceCurrency && (ride?.priceAmount || ride?.priceAmount === 0)
                 ? (

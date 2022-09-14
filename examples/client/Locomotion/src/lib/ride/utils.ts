@@ -27,3 +27,5 @@ export const getOrdinal = (n: number) => {
 
 
 export const isCashPaymentMethod = (paymentMethod: any) => paymentMethod.id === PAYMENT_METHODS.CASH;
+
+export const isCardPaymentMethod = (paymentMethod: any) => ![PAYMENT_METHODS.CASH, PAYMENT_METHODS.OFFLINE].includes(paymentMethod?.id);
