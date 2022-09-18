@@ -80,6 +80,13 @@ export const DrawerContentComponent = ({ navigation, state }) => {
       <DrawerHeader navigateTo={p => navigateTo(p)} />
       <DrawerLabelsContainer>
         <DrawerLabel
+          title={i18n.t('menu.messages')}
+          icon={CalendarIcon}
+          onPress={() => navigateTo(MAIN_ROUTES.MESSAGES)}
+          iconFill="#333"
+          focused={route === MAIN_ROUTES.MESSAGES}
+        />
+        <DrawerLabel
           title={i18n.t('menu.trips')}
           icon={History}
           onPress={() => navigateTo(MAIN_ROUTES.RIDE_HISTORY)}

@@ -12,6 +12,7 @@ import { setTopLevelNavigator } from './services/navigation';
 import NewRidePageContextProvider from './context/newRideContext';
 import BottomSheetContextProvider from './context/bottomSheetContext';
 import FutureRidesProvider from './context/futureRides';
+import MessagesProvider from './context/messages';
 
 LogBox.ignoreAllLogs();
 
@@ -37,11 +38,13 @@ export default (props) => {
           <RideStateContextContextProvider {...props}>
             <FutureRidesProvider {...props}>
               <NewRidePageContextProvider {...props}>
-                <PortalProvider>
-                  <MainRouter {...props} />
-                  {props.children}
-                  <RidePopups />
-                </PortalProvider>
+                <MessagesProvider>
+                  <PortalProvider>
+                    <MainRouter {...props} />
+                    {props.children}
+                    <RidePopups />
+                  </PortalProvider>
+                </MessagesProvider>
               </NewRidePageContextProvider>
             </FutureRidesProvider>
           </RideStateContextContextProvider>

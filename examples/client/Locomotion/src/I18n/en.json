@@ -283,7 +283,8 @@
         "account": "User Profile",
         "support": "Contact us",
         "logout": "Logout",
-        "futureRides": "Upcoming Rides"
+        "futureRides": "Upcoming Rides",
+        "messages": "Messages"
     },
     "temporaryHoldText": "A small amount may be temporarily placed on hold when you start your ride ",
     "learnMore": "Learn more",
@@ -369,6 +370,10 @@
         "pageTitle": "Upcoming rides",
         "noRidesTitle": "No upcoming rides",
         "noRidesText": "Create a scheduled ride and see it here!"
+    },
+    "messages": {
+        "pageTitle": "Messages",
+        "readMore": "Read more"
     },
     "postRide": {
         "pageTitle": "Ride finished",
