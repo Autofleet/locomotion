@@ -47,9 +47,9 @@ const DrawerHeader = ({ navigateTo }) => {
 };
 
 const DrawerLabel = ({
-  onPress, focused, tintColor, title, icon, lastItem, iconFill,
+  onPress, focused, tintColor, title, icon, lastItem, iconFill, testID,
 }) => (
-  <StyledDrawerLabel focused={focused} onPress={onPress} lastItem={lastItem}>
+  <StyledDrawerLabel focused={focused} onPress={onPress} lastItem={lastItem} testID={testID}>
     <SvgIcon Svg={icon} width={23} height={23} style={{ marginRight: 15 }} fill={iconFill} />
     <LabelText color={tintColor} focused={focused}>{title}</LabelText>
   </StyledDrawerLabel>
@@ -87,6 +87,7 @@ export const DrawerContentComponent = ({ navigation, state }) => {
         />
         {futureRidesEnabled && (
         <DrawerLabel
+          testID="futureRidesDrawer"
           title={i18n.t('menu.futureRides')}
           icon={CalendarIcon}
           onPress={() => navigateTo(MAIN_ROUTES.FUTURE_RIDES)}
