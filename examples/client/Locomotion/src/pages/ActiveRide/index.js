@@ -388,6 +388,7 @@ const RidePage = ({ mapSettings, navigation }) => {
         : (
           <>
             <Header
+              testID="profileDataHamburger"
               icon={hamburgerIcon}
               onPressIcon={navigation.openDrawer}
             />
