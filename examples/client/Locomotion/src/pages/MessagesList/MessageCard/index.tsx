@@ -2,9 +2,8 @@ import React, { useContext } from 'react';
 import moment from 'moment';
 import { MAIN_ROUTES } from '../../routes';
 import i18n from '../../../I18n';
-import { BS_PAGES } from '../../../context/ridePageStateContext/utils';
 import * as NavigationService from '../../../services/navigation';
-import { messageProps } from '../../../context/messages';
+import { messageProps, MessagesContext } from '../../../context/messages';
 import {
   CardContainer, MessageDate, MessageFooter, MessageText, MessageTitle, ReadMore, ReadMoreText, ReadSymbol, ReadSymbolContainer, TextContainer,
 } from './styled';
@@ -14,9 +13,17 @@ interface MessageCardProps {
   }
 
 const MessageCard = ({ message }: MessageCardProps) => {
+  const { setViewingMessage } = useContext(MessagesContext);
   const { isRead } = message;
   return (
-    <CardContainer noBackground onPress={() => NavigationService.navigate()} isRead={isRead}>
+    <CardContainer
+      noBackground
+      onPress={() => {
+        setViewingMessage(message);
+        NavigationService.navigate(MAIN_ROUTES.MESSAGE_VIEW);
+      }}
+      isRead={isRead}
+    >
       <ReadSymbolContainer>
         {!isRead && <ReadSymbol />}
       </ReadSymbolContainer>

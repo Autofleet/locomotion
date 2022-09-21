@@ -24,7 +24,8 @@ import EditCardName from './Payments/editNickename';
 import FutureRidesView from './FutureRidesView';
 import RidePriceBreakDown from './RidePriceBreakdown';
 import PromoCode from './PromoCode';
-import Messages from './Messages';
+import Messages from './MessagesList';
+import MessageView from './MessageView';
 
 export const ROUTES_COMPS = {
   [MAIN_ROUTES.HOME]: ActiveRide,
@@ -52,6 +53,7 @@ export const ROUTES_COMPS = {
   [MAIN_ROUTES.RIDE_PRICE_BREAKDOWN]: RidePriceBreakDown,
   [MAIN_ROUTES.PROMO_CODE]: PromoCode,
   [MAIN_ROUTES.MESSAGES]: Messages,
+  [MAIN_ROUTES.MESSAGE_VIEW]: MessageView,
 };
 
 export const profileStack = ({ stack: Stack }) => (

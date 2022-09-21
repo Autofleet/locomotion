@@ -375,6 +375,9 @@
         "pageTitle": "Messages",
         "readMore": "Read more"
     },
+    "messageView": {
+        "pageTitle": "Messages"
+    },
     "postRide": {
         "pageTitle": "Ride finished",
         "ratingHeadline": "How was your ride?",

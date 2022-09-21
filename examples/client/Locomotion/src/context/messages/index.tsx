@@ -2,13 +2,9 @@ import React, {
   createContext,
   useState,
   useEffect,
-  Dispatch,
   useContext,
 } from 'react';
 import moment from 'moment';
-import useInterval from '../../lib/useInterval';
-import { RideInterface } from '../newRideContext';
-import * as futureRideApi from './api';
 import { UserContext } from '../user';
 
 export type messageProps = {
@@ -20,14 +16,19 @@ export type messageProps = {
 
 interface MessagesContextInterface {
     userMessages: messageProps[]
+    viewingMessage: messageProps | null,
+    setViewingMessage: React.Dispatch<React.SetStateAction<messageProps | null>>
 }
 
 export const MessagesContext = createContext<MessagesContextInterface>({
   userMessages: [],
+  viewingMessage: null,
+  setViewingMessage: () => undefined,
 });
 
 const MessagesProvider = ({ children }: { children: any }) => {
   const { user } = useContext(UserContext);
+  const [viewingMessage, setViewingMessage] = useState<messageProps | null>(null);
   const [userMessages, setUserMessages] = useState<messageProps[]>([]);
 
   const loadUserMessages = async () => {
@@ -85,6 +86,8 @@ const MessagesProvider = ({ children }: { children: any }) => {
     <MessagesContext.Provider
       value={{
         userMessages,
+        viewingMessage,
+        setViewingMessage,
       }}
     >
       {children}

@@ -31,4 +31,5 @@ export const MAIN_ROUTES = {
   RIDE_PRICE_BREAKDOWN: 'RidePriceBreakdown',
   PROMO_CODE: 'PromoCode',
   MESSAGES: 'messages',
+  MESSAGE_VIEW: 'message view',
 };

@@ -40,6 +40,7 @@ export const MessageDate = styled(Text)`
 ${FONT_SIZES.MEDIUM}
 ${FONT_WEIGHTS.REGULAR}
 opacity: .5;
+padding: 5px 0;
 `;
 
 export const ReadMore = styled(Button)`
