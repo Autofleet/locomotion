@@ -21,6 +21,7 @@ export default ({
   return (
     <>
       <DatePicker
+        testID="datePicker"
         textColor={getTextColorForTheme()}
         open={open}
         date={new Date()}
