@@ -7,14 +7,15 @@ interface ButtonProps {
     icon: any,
     style: Record<string, unknown>,
     noLoader: boolean,
+    testID: string;
 }
 const SquareSvgButton = ({
-  onPress, icon, style, noLoader,
+  onPress, icon, style, noLoader, testID = 'headerButton',
 }: ButtonProps) => (
   <ButtonContainer
     noLoader={noLoader}
     onPress={onPress}
-    testID="headerButton"
+    testID={testID}
     style={style}
   >
     <SvgIcon

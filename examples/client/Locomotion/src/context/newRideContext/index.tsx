@@ -390,6 +390,25 @@ const RidePageContextProvider = ({ children }: {
     }
   };
 
+  const getLastCompletedRide = async () => {
+    let lastTimestamp = await StorageService.get('lastCompletedRideTimestamp');
+    if (!lastTimestamp) {
+      lastTimestamp = moment().toDate();
+    }
+    const rides = await rideApi.fetchRides({
+      fromDate: lastTimestamp,
+      toDate: moment().toDate(),
+      pageNumber: 0,
+      pageSize: 1,
+      orderBy: 'updatedAt',
+      sort: 'DESC',
+      state: RIDE_STATES.COMPLETED,
+    });
+
+    // one week
+    await StorageService.save({ lastCompletedRideTimestamp: lastTimestamp }, 60 * 60 * 24 * 7);
+    return rides[0];
+  };
 
   const loadActiveRide = async () => {
     let activeRide;
@@ -418,9 +437,20 @@ const RidePageContextProvider = ({ children }: {
     }
   };
 
+
+  const loadLastCompletedRide = async () => {
+    const completedRide = await getLastCompletedRide();
+    if (completedRide?.id) {
+      setTimeout(() => {
+        onRideCompleted(completedRide?.id);
+      }, 1000);
+    }
+  };
+
   useEffect(() => {
     if (user?.id) {
       loadActiveRide();
+      loadLastCompletedRide();
     }
   }, [user?.id]);
 
@@ -855,7 +885,7 @@ const RidePageContextProvider = ({ children }: {
     }
 
     try {
-      const tipChargeResponse = await rideApi.additionalCharge(priceCalculationId, tip, 'tip');
+      await rideApi.additionalCharge(priceCalculationId, tip, 'tip');
       return true;
     } catch (e) {
       console.log(e);

@@ -84,3 +84,26 @@ export const maskStopPointPhones = async (rideId, stopPointId) => {
   const { data } = await network.get(`/api/v2/ride/${rideId}/stop-points/${stopPointId}/masked-phones`);
   return data;
 };
+
+export const fetchRides = async ({
+  fromDate,
+  toDate,
+  pageNumber,
+  pageSize,
+  orderBy,
+  sort,
+  ...params
+}) => {
+  const { data } = await network.get('/api/v1/me/rides', {
+    params: {
+      fromDate,
+      toDate,
+      pageNumber,
+      pageSize,
+      orderBy,
+      sort,
+      ...(params || {}),
+    },
+  });
+  return data;
+};
