@@ -206,6 +206,7 @@ const RidePageContextProvider = ({ children }: {
   const [chosenService, setChosenService] = useState<any | null>(null);
   const [lastSelectedLocation, saveSelectedLocation] = useState(false);
   const [rideRequestLoading, setRideRequestLoading] = useState(false);
+  const [isAppActive, setIsAppActive] = useState(false);
   const [ridePopup, setRidePopup] = useState<RidePopupNames | null>(null);
   const [unconfirmedPickupTime, setUnconfirmedPickupTime] = useState<number | null>(null);
 
@@ -454,6 +455,12 @@ const RidePageContextProvider = ({ children }: {
     }
   }, [user?.id]);
 
+  useEffect(() => {
+    if (user?.id && isAppActive) {
+      loadLastCompletedRide();
+    }
+  }, [isAppActive]);
+
   const loadRide = async (rideId: string) => {
     const rideLoaded = await rideApi.getRide(rideId);
     const formattedRide = await formatRide(rideLoaded);
@@ -470,8 +477,9 @@ const RidePageContextProvider = ({ children }: {
   };
 
   useBackgroundInterval(async () => {
-    const isAppActive = AppState.currentState === 'active';
-    if (isAppActive && user?.id && !rideRequestLoading) {
+    const appCurrentStateIsActive = AppState.currentState === 'active';
+    setIsAppActive(appCurrentStateIsActive);
+    if (appCurrentStateIsActive && user?.id && !rideRequestLoading) {
       if (ride?.id) {
         try {
           loadRide(ride.id);
