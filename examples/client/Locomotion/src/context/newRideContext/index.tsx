@@ -214,6 +214,16 @@ const RidePageContextProvider = ({ children }: {
   const stopRequestInterval = () => {
     clearInterval(intervalRef.current);
   };
+
+
+  const saveLastRide = async (rideId: string) => {
+    await StorageService.save({ lastRideId: rideId });
+  };
+
+  const clearLastRide = async () => {
+    await StorageService.delete('lastRideId');
+  };
+
   const cleanRequestStopPoints = () => {
     setRequestStopPoints([]);
     setChosenService(null);
@@ -224,6 +234,7 @@ const RidePageContextProvider = ({ children }: {
       initSps();
     }
     setRide({});
+    clearLastRide();
   };
 
   const onRideCompleted = (rideId: string) => {
@@ -253,11 +264,13 @@ const RidePageContextProvider = ({ children }: {
       cleanRequestStopPoints();
       setRide(newRide);
       changeBsPage(BS_PAGES.ACTIVE_RIDE);
+      saveLastRide(newRide.id);
     },
     [RIDE_STATES.ACTIVE]: (activeRide: any) => {
       cleanRequestStopPoints();
       setRide(activeRide);
       changeBsPage(BS_PAGES.ACTIVE_RIDE);
+      saveLastRide(activeRide.id);
     },
     [RIDE_STATES.CANCELED]: (canceledRide: any) => {
       if (canceledRide.canceledBy !== user?.id) {
@@ -408,8 +421,19 @@ const RidePageContextProvider = ({ children }: {
       if (screenFunction) {
         screenFunction(formattedRide);
       }
-    } else if (currentBsPage === BS_PAGES.LOADING) {
-      changeBsPage(BS_PAGES.ADDRESS_SELECTOR);
+    } else {
+      const lastRideId = await StorageService.get('lastRideId');
+      if (lastRideId) {
+        const lastRide = await rideApi.getRide(lastRideId);
+        if (lastRide.state === RIDE_STATES.COMPLETED) {
+          setTimeout(() => {
+            onRideCompleted(lastRideId);
+          }, 1000);
+        }
+      }
+      if (currentBsPage === BS_PAGES.LOADING) {
+        changeBsPage(BS_PAGES.ADDRESS_SELECTOR);
+      }
     }
   };
 
@@ -446,7 +470,8 @@ const RidePageContextProvider = ({ children }: {
   };
 
   useBackgroundInterval(async () => {
-    if (user?.id && !rideRequestLoading) {
+    const isAppActive = AppState.currentState === 'active';
+    if (isAppActive && user?.id && !rideRequestLoading) {
       if (ride?.id) {
         try {
           loadRide(ride.id);
