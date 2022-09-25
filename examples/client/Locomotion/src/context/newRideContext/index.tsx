@@ -446,8 +446,7 @@ const RidePageContextProvider = ({ children }: {
   };
 
   useBackgroundInterval(async () => {
-    const isAppActive = AppState.currentState === 'active';
-    if (isAppActive && user?.id && !rideRequestLoading) {
+    if (user?.id && !rideRequestLoading) {
       if (ride?.id) {
         try {
           loadRide(ride.id);
