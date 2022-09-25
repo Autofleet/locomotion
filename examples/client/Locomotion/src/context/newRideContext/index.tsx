@@ -214,16 +214,6 @@ const RidePageContextProvider = ({ children }: {
   const stopRequestInterval = () => {
     clearInterval(intervalRef.current);
   };
-
-
-  const saveLastRide = async (rideId: string) => {
-    await StorageService.save({ lastRideId: rideId });
-  };
-
-  const clearLastRide = async () => {
-    await StorageService.delete('lastRideId');
-  };
-
   const cleanRequestStopPoints = () => {
     setRequestStopPoints([]);
     setChosenService(null);
@@ -234,7 +224,6 @@ const RidePageContextProvider = ({ children }: {
       initSps();
     }
     setRide({});
-    clearLastRide();
   };
 
   const onRideCompleted = (rideId: string) => {
@@ -264,13 +253,11 @@ const RidePageContextProvider = ({ children }: {
       cleanRequestStopPoints();
       setRide(newRide);
       changeBsPage(BS_PAGES.ACTIVE_RIDE);
-      saveLastRide(newRide.id);
     },
     [RIDE_STATES.ACTIVE]: (activeRide: any) => {
       cleanRequestStopPoints();
       setRide(activeRide);
       changeBsPage(BS_PAGES.ACTIVE_RIDE);
-      saveLastRide(activeRide.id);
     },
     [RIDE_STATES.CANCELED]: (canceledRide: any) => {
       if (canceledRide.canceledBy !== user?.id) {
@@ -390,6 +377,25 @@ const RidePageContextProvider = ({ children }: {
     }
   };
 
+  const getLastCompletedRide = async () => {
+    let lastTimestamp = await StorageService.get('lastCompletedRideTimestamp');
+    if (!lastTimestamp) {
+      lastTimestamp = moment().toDate();
+    }
+    const rides = await rideApi.fetchRides({
+      fromDate: lastTimestamp,
+      toDate: moment().toDate(),
+      pageNumber: 0,
+      pageSize: 1,
+      orderBy: 'updatedAt',
+      sort: 'DESC',
+      state: RIDE_STATES.COMPLETED,
+    });
+
+    // one week
+    await StorageService.save({ lastCompletedRideTimestamp: lastTimestamp }, 60 * 60 * 24 * 7);
+    return rides[0];
+  };
 
   const loadActiveRide = async () => {
     let activeRide;
@@ -402,25 +408,25 @@ const RidePageContextProvider = ({ children }: {
       if (screenFunction) {
         screenFunction(formattedRide);
       }
-    } else {
-      const lastRideId = await StorageService.get('lastRideId');
-      if (lastRideId) {
-        const lastRide = await rideApi.getRide(lastRideId);
-        if (lastRide.state === RIDE_STATES.COMPLETED) {
-          setTimeout(() => {
-            onRideCompleted(lastRideId);
-          }, 1000);
-        }
-      }
-      if (currentBsPage === BS_PAGES.LOADING) {
-        changeBsPage(BS_PAGES.ADDRESS_SELECTOR);
-      }
+    } else if (currentBsPage === BS_PAGES.LOADING) {
+      changeBsPage(BS_PAGES.ADDRESS_SELECTOR);
+    }
+  };
+
+
+  const loadLastCompletedRide = async () => {
+    const completedRide = await getLastCompletedRide();
+    if (completedRide?.id) {
+      setTimeout(() => {
+        onRideCompleted(completedRide?.id);
+      }, 1000);
     }
   };
 
   useEffect(() => {
     if (user?.id) {
       loadActiveRide();
+      loadLastCompletedRide();
     }
   }, [user?.id]);
 
@@ -855,7 +861,7 @@ const RidePageContextProvider = ({ children }: {
     }
 
     try {
-      const tipChargeResponse = await rideApi.additionalCharge(priceCalculationId, tip, 'tip');
+      await rideApi.additionalCharge(priceCalculationId, tip, 'tip');
       return true;
     } catch (e) {
       console.log(e);
