@@ -5,6 +5,7 @@ import Mixpanel from '../../services/Mixpanel';
 import i18n from '../../I18n';
 import StorageService from '../../services/storage';
 import { formatSps } from '../../lib/ride/utils';
+import { fetchRides } from '../newRideContext/api';
 // import mock from './mock';
 
 export const PAGE_SIZE = 10;
@@ -15,26 +16,6 @@ const TTL_MILLI = 30000;
 
 export const rideHistoryContext = createContext({});
 
-const fetchRides = async ({
-  savedFromDate,
-  savedToDate,
-  pageNumber,
-  pageSize,
-  ...params
-}: any) => {
-  const { data } = await network.get('/api/v1/me/rides', {
-    params: {
-      fromDate: savedFromDate,
-      toDate: savedToDate,
-      pageNumber,
-      pageSize,
-      ...(params || {}),
-      orderBy: 'createdAt',
-      sort: 'DESC',
-    },
-  });
-  return data;
-};
 // }: any) => mock;
 const formatFloatTime = (num: number) => Math.round(num);
 
@@ -133,6 +114,8 @@ export const RideHistoryContextProvider = ({ children }: any) => {
         toDate,
         pageNumber,
         pageSize,
+        orderBy: 'createdAt',
+        sort: 'DESC',
       });
       data = formatRides(data);
     } catch (e) {

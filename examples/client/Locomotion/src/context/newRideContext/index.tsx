@@ -206,6 +206,7 @@ const RidePageContextProvider = ({ children }: {
   const [chosenService, setChosenService] = useState<any | null>(null);
   const [lastSelectedLocation, saveSelectedLocation] = useState(false);
   const [rideRequestLoading, setRideRequestLoading] = useState(false);
+  const [isAppActive, setIsAppActive] = useState(false);
   const [ridePopup, setRidePopup] = useState<RidePopupNames | null>(null);
   const [unconfirmedPickupTime, setUnconfirmedPickupTime] = useState<number | null>(null);
 
@@ -390,6 +391,25 @@ const RidePageContextProvider = ({ children }: {
     }
   };
 
+  const getLastCompletedRide = async () => {
+    let lastTimestamp = await StorageService.get('lastCompletedRideTimestamp');
+    if (!lastTimestamp) {
+      lastTimestamp = moment().toDate();
+    }
+    const rides = await rideApi.fetchRides({
+      fromDate: lastTimestamp,
+      toDate: moment().toDate(),
+      pageNumber: 0,
+      pageSize: 1,
+      orderBy: 'updatedAt',
+      sort: 'DESC',
+      state: RIDE_STATES.COMPLETED,
+    });
+
+    // one week
+    await StorageService.save({ lastCompletedRideTimestamp: lastTimestamp }, 60 * 60 * 24 * 7);
+    return rides[0];
+  };
 
   const loadActiveRide = async () => {
     let activeRide;
@@ -418,11 +438,28 @@ const RidePageContextProvider = ({ children }: {
     }
   };
 
+
+  const loadLastCompletedRide = async () => {
+    const completedRide = await getLastCompletedRide();
+    if (completedRide?.id) {
+      setTimeout(() => {
+        onRideCompleted(completedRide?.id);
+      }, 1000);
+    }
+  };
+
   useEffect(() => {
     if (user?.id) {
       loadActiveRide();
+      loadLastCompletedRide();
     }
   }, [user?.id]);
+
+  useEffect(() => {
+    if (user?.id && isAppActive) {
+      loadLastCompletedRide();
+    }
+  }, [isAppActive]);
 
   const loadRide = async (rideId: string) => {
     const rideLoaded = await rideApi.getRide(rideId);
@@ -440,8 +477,9 @@ const RidePageContextProvider = ({ children }: {
   };
 
   useBackgroundInterval(async () => {
-    const isAppActive = AppState.currentState === 'active';
-    if (isAppActive && user?.id && !rideRequestLoading) {
+    const appCurrentStateIsActive = AppState.currentState === 'active';
+    setIsAppActive(appCurrentStateIsActive);
+    if (appCurrentStateIsActive && user?.id && !rideRequestLoading) {
       if (ride?.id) {
         try {
           loadRide(ride.id);
@@ -855,7 +893,7 @@ const RidePageContextProvider = ({ children }: {
     }
 
     try {
-      const tipChargeResponse = await rideApi.additionalCharge(priceCalculationId, tip, 'tip');
+      await rideApi.additionalCharge(priceCalculationId, tip, 'tip');
       return true;
     } catch (e) {
       console.log(e);

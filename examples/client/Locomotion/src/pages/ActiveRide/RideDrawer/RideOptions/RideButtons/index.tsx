@@ -82,6 +82,7 @@ const RideButtons = ({
       <ButtonContainer testID="RideTimeSelector" onPress={() => minMinutesBeforeFutureRide && setIsDatePickerOpen(true)}>
         <FutureBookingButton />
         <DatePicker
+          testID="datePicker"
           textColor={getTextColorForTheme()}
           open={isDatePickerOpen}
           date={moment(ride?.scheduledTo || undefined).add(ride?.scheduledTo ? 0 : minMinutesBeforeFutureRide, 'minutes').toDate()}

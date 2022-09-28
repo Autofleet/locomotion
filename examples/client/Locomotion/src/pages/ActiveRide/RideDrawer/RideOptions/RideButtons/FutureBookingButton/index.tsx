@@ -25,7 +25,7 @@ const FutureBookingButton = () => {
   return (
     <>
       <SvgIcon fill={primaryColor} Svg={clock} height={15} width={15} />
-      <TimeText numberOfLines={1}>{isFutureRide ? chosenTime : nowText}</TimeText>
+      <TimeText testID="timePickerBottomSheet" numberOfLines={1}>{isFutureRide ? chosenTime : nowText}</TimeText>
       <SvgIcon stroke="#333333" Svg={chevron} height={10} width={10} style={{ transform: [{ rotate: '90deg' }] }} />
     </>
   );

@@ -5,11 +5,12 @@ import { Container } from './styled';
 import SafeView from '../SafeView';
 
 const Header = ({
-  children, onPressIcon, icon,
+  children, onPressIcon, icon, testID,
 }) => (
   <SafeView>
     <Container>
       <SquareSvgButton
+        testID={testID}
         noLoader
         onPress={onPressIcon}
         icon={icon}

@@ -289,6 +289,7 @@ export const ConfirmPickupTime = (props: any) => {
         {i18n.t('bottomSheetContent.confirmPickupTime.pickupText', { date, time })}
       </RoundedButton>
       <DatePicker
+        testID="datePicker"
         textColor={getTextColorForTheme()}
         open={isDatePickerOpen}
         date={moment(unconfirmedPickupTime).add(unconfirmedPickupTime ? 0 : minMinutesBeforeFutureRide, 'minutes').toDate()}
