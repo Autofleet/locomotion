@@ -13,13 +13,21 @@ interface MessageCardProps {
   }
 
 const MessageCard = ({ message }: MessageCardProps) => {
-  const { setViewingMessage } = useContext(MessagesContext);
+  const { setViewingMessage, userMessages, setUserMessages } = useContext(MessagesContext);
   const { isRead } = message;
   return (
     <CardContainer
       noBackground
       onPress={() => {
         setViewingMessage(message);
+        const messages = userMessages.map((m) => {
+          const tempMessage = { ...m };
+          if (tempMessage.id === message.id) {
+            tempMessage.isRead = true;
+          }
+          return tempMessage;
+        });
+        setUserMessages(messages);
         NavigationService.navigate(MAIN_ROUTES.MESSAGE_VIEW);
       }}
       isRead={isRead}
@@ -32,17 +40,15 @@ const MessageCard = ({ message }: MessageCardProps) => {
           {message.title}
         </MessageTitle>
         <MessageText numberOfLines={3}>
-          {message.text}
+          {message.subTitle}
         </MessageText>
         <MessageFooter>
           <MessageDate>
             {moment(message.sentAt).format('MMMM DD, YYYY, h:mm A')}
           </MessageDate>
-          <ReadMore noBackground>
-            <ReadMoreText>
-              {i18n.t('messages.readMore')}
-            </ReadMoreText>
-          </ReadMore>
+          <ReadMoreText>
+            {i18n.t('messages.readMore')}
+          </ReadMoreText>
         </MessageFooter>
       </TextContainer>
     </CardContainer>

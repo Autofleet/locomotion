@@ -3,8 +3,21 @@ import styled from 'styled-components';
 import Button from '../Button';
 import { FONT_SIZES, FONT_WEIGHTS } from '../../context/theme';
 
+export const Updates = styled.View`
+background-color: ${({ theme }) => theme.primaryColor};
+border-radius: 10px;
+width: 30px;
+align-items: center;
+`;
+
+export const UpdatesText = styled.Text`
+color: #ffffff;
+${FONT_SIZES.LARGE}
+`;
+
 export const LabelText = styled.Text`
   color: ${({ theme }) => theme.textColor};
+  flex-grow: 1;
   ${FONT_SIZES.H2}
   ${({ focused }) => (focused ? FONT_WEIGHTS.SEMI_BOLD : FONT_WEIGHTS.REGULAR)};
 `;

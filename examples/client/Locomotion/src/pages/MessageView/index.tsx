@@ -35,12 +35,12 @@ const MessageView = ({ menuSide }: FutureRidesViewProps) => {
           <MessageTitle>
             {message.title}
           </MessageTitle>
+          <MessageText>
+            {message.subTitle}
+          </MessageText>
           <MessageDate>
             {moment(message.sentAt).format('MMMM DD, YYYY, h:mm A')}
           </MessageDate>
-          <MessageText>
-            {message.text}
-          </MessageText>
         </ScrollContainer>
       </PageContainer>
     );

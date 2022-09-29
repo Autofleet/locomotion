@@ -1,4 +1,6 @@
+/* eslint-disable import/prefer-default-export */
 import React, { useContext, useEffect, useState } from 'react';
+import { MessagesContext } from '../../context/messages';
 import Bottom from './bottom';
 import { MAIN_ROUTES } from '../../pages/routes';
 import Thumbnail from '../Thumbnail';
@@ -12,6 +14,8 @@ import {
   Header,
   HeaderLink,
   DrawerLabelsContainer,
+  UpdatesText,
+  Updates,
 } from './styled';
 import { UserContext } from '../../context/user';
 import CalendarIcon from '../../assets/calendar.svg';
@@ -47,19 +51,28 @@ const DrawerHeader = ({ navigateTo }) => {
 };
 
 const DrawerLabel = ({
-  onPress, focused, tintColor, title, icon, lastItem, iconFill, testID,
+  onPress, focused, tintColor, title, icon, lastItem, iconFill, testID, numberOfUpdates,
 }) => (
   <StyledDrawerLabel focused={focused} onPress={onPress} lastItem={lastItem} testID={testID}>
     <SvgIcon Svg={icon} width={23} height={23} style={{ marginRight: 15 }} fill={iconFill} />
     <LabelText color={tintColor} focused={focused}>{title}</LabelText>
+    {!!numberOfUpdates
+    && (
+      <Updates>
+        <UpdatesText>
+          {numberOfUpdates}
+        </UpdatesText>
+      </Updates>
+    )}
   </StyledDrawerLabel>
 );
 
 export const DrawerContentComponent = ({ navigation, state }) => {
   const route = state.routes[state.index].name;
   const { getSettingByKey } = settings.useContainer();
+  const { userMessages } = useContext(MessagesContext);
   const [futureRidesEnabled, setFutureRidesEnabled] = useState(false);
-
+  console.log(userMessages);
   const navigateTo = (page) => {
     navigation.closeDrawer();
     navigationService.navigate(page);
@@ -85,6 +98,7 @@ export const DrawerContentComponent = ({ navigation, state }) => {
           onPress={() => navigateTo(MAIN_ROUTES.MESSAGES)}
           iconFill="#333"
           focused={route === MAIN_ROUTES.MESSAGES}
+          numberOfUpdates={(userMessages || []).filter(m => !m.isRead).length}
         />
         <DrawerLabel
           title={i18n.t('menu.trips')}

@@ -43,7 +43,7 @@ opacity: .5;
 padding: 5px 0;
 `;
 
-export const ReadMore = styled(Button)`
+export const ReadMore = styled(Text)`
 
 `;
 
