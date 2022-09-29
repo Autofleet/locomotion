@@ -461,7 +461,7 @@ const RidePageContextProvider = ({ children }: {
   }, [user?.id]);
 
   useEffect(() => {
-    if (user?.id && isAppActive) {
+    if (user?.id && isAppActive && !ride.id) {
       loadLastCompletedRide();
     }
   }, [isAppActive]);
