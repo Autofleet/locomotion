@@ -394,13 +394,13 @@ const RidePageContextProvider = ({ children }: {
 
   const setLastAcknowledgedRideCompletionTimestampToNow = () => {
     const now = moment().utc().toDate();
-    StorageService.save({ lastCompletedRideTimestamp: now }, 60 * 60 * 24 * 7);
+    return StorageService.save({ lastCompletedRideTimestamp: now }, 60 * 60 * 24 * 7);
   };
 
   const getLastCompletedRide = async () => {
     let lastTimestamp = await StorageService.get('lastCompletedRideTimestamp');
     if (!lastTimestamp) {
-      lastTimestamp = moment().toDate();
+      lastTimestamp = moment().subtract(24, 'hour').toDate();
     }
     const rides = await rideApi.fetchRides({
       fromDate: lastTimestamp,
@@ -413,7 +413,7 @@ const RidePageContextProvider = ({ children }: {
     });
 
     await setLastAcknowledgedRideCompletionTimestampToNow();
-    return rides.filter((r: any) => r.rating !== null)[0];
+    return rides.filter((r: any) => r.rating === null)[0];
   };
 
   const loadActiveRide = async () => {
