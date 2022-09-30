@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import React, {
   useState, useEffect, useRef, createContext, useContext,
 } from 'react';
@@ -391,10 +392,15 @@ const RidePageContextProvider = ({ children }: {
     }
   };
 
+  const setLastAcknowledgedRideCompletionTimestampToNow = () => {
+    const now = moment().utc().toDate();
+    return StorageService.save({ lastCompletedRideTimestamp: now }, 60 * 60 * 24 * 7);
+  };
+
   const getLastCompletedRide = async () => {
     let lastTimestamp = await StorageService.get('lastCompletedRideTimestamp');
     if (!lastTimestamp) {
-      lastTimestamp = moment().toDate();
+      lastTimestamp = moment().subtract(24, 'hour').toDate();
     }
     const rides = await rideApi.fetchRides({
       fromDate: lastTimestamp,
@@ -406,9 +412,8 @@ const RidePageContextProvider = ({ children }: {
       state: RIDE_STATES.COMPLETED,
     });
 
-    // one week
-    await StorageService.save({ lastCompletedRideTimestamp: lastTimestamp }, 60 * 60 * 24 * 7);
-    return rides[0];
+    await setLastAcknowledgedRideCompletionTimestampToNow();
+    return rides.filter((r: any) => r.rating === null)[0];
   };
 
   const loadActiveRide = async () => {
@@ -456,7 +461,7 @@ const RidePageContextProvider = ({ children }: {
   }, [user?.id]);
 
   useEffect(() => {
-    if (user?.id && isAppActive) {
+    if (user?.id && isAppActive && !ride.id) {
       loadLastCompletedRide();
     }
   }, [isAppActive]);
@@ -877,6 +882,7 @@ const RidePageContextProvider = ({ children }: {
     try {
       const updatedRide = await rideApi.patchRide(rideId, { rating });
       updateRidePayload(updatedRide);
+      setLastAcknowledgedRideCompletionTimestampToNow();
       if (updatedRide) {
         return true;
       }
