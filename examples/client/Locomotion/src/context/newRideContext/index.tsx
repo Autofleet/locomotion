@@ -882,7 +882,6 @@ const RidePageContextProvider = ({ children }: {
     try {
       const updatedRide = await rideApi.patchRide(rideId, { rating });
       updateRidePayload(updatedRide);
-      setLastAcknowledgedRideCompletionTimestampToNow();
       if (updatedRide) {
         return true;
       }
@@ -913,6 +912,7 @@ const RidePageContextProvider = ({ children }: {
       rideId, priceCalculationId, rating, tip,
     });
     await Promise.all([
+      setLastAcknowledgedRideCompletionTimestampToNow(),
       tip ? chargeTip(priceCalculationId, tip) : () => null,
       rating ? patchRideRating(rideId, rating) : () => null,
     ]);
