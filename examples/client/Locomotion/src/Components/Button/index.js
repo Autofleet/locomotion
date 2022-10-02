@@ -19,6 +19,7 @@ const Button = (props) => {
   return (
     <Container
       activeOpacity={props.onPress ? 0.5 : 1}
+      testID={props.testID}
       {...props}
       onPress={async (e) => {
         if (!props.disabled) {
