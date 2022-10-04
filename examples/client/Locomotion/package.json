@@ -76,6 +76,7 @@
     "react-native-svg": "^12.3.0",
     "react-native-svg-transformer": "^1.0.0",
     "react-native-table-component": "^1.2.2",
+    "react-native-toast-message": "^2.1.5",
     "react-native-version-check": "^3.4.3",
     "react-native-webview": "^11.18.2",
     "shortid": "^2.2.16",

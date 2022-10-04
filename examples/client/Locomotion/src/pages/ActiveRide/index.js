@@ -1,12 +1,14 @@
 import React, {
   useContext, useEffect, useRef, useState,
 } from 'react';
+import Toast from 'react-native-toast-message';
 import { useIsFocused, useFocusEffect } from '@react-navigation/native';
 import {
   AppState, BackHandler, Platform, View,
 } from 'react-native';
 import { Portal } from '@gorhom/portal';
 import Config from 'react-native-config';
+import AFToast from '../../Components/Toast';
 import * as navigationService from '../../services/navigation';
 import { MAIN_ROUTES } from '../routes';
 import { getPolylineList } from '../../lib/polyline/utils';
@@ -33,7 +35,7 @@ import { RideStateContextContext, RideStateContextContextProvider } from '../../
 import NewRidePageContextProvider, { RidePageContext } from '../../context/newRideContext';
 import BottomSheetContextProvider, { BottomSheetContext, SNAP_POINT_STATES } from '../../context/bottomSheetContext';
 import {
-  PageContainer, MapOverlayButtons,
+  PageContainer, MapOverlayButtons, ToastComp,
 } from './styled';
 import Header from '../../Components/Header';
 import MainMap, { ACTIVE_RIDE_MAP_PADDING } from './newMap';
@@ -366,6 +368,18 @@ const RidePage = ({ mapSettings, navigation }) => {
   const topMessageKey = Object.keys(MESSAGE_MAP).find(key => MESSAGE_MAP[key].condition());
   const topMessage = MESSAGE_MAP[topMessageKey];
 
+  useEffect(() => {
+    Toast.show({
+      type: 'tomatoToast',
+      text1: 'Attention! Changes in operational hours very soon',
+      text2: 'Due to maintenance somewhere we are obliged to change our operational hours from this and that into a mind blowing dramatic change. please pay attention. Changes will take place from 1st of May at 13:00 until 10th of May at 10:00.',
+      visibilityTime: 100000,
+      // props: {
+      //   image: 'https://res.cloudinary.com/autofleet/image/upload/v1535368744/Control-Center/green.png',
+      // },
+    });
+  }, []);
+
   return (
     <PageContainer>
       <MainMap
@@ -443,6 +457,19 @@ BS_PAGE_TO_COMP[currentBsPage] ? BS_PAGE_TO_COMP[currentBsPage]() : null
         }
         />
       </Portal>
+      <Toast
+        config={{
+          tomatoToast: props => (
+            <AFToast
+              {...props}
+              onPress={() => {
+                Toast.hide();
+                navigationService.navigate(MAIN_ROUTES.MESSAGES);
+              }}
+            />
+          ),
+        }}
+      />
     </PageContainer>
   );
 };
