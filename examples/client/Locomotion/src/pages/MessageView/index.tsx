@@ -1,7 +1,10 @@
-import React, { useContext } from 'react';
+import React, { useContext, useRef } from 'react';
 import styled from 'styled-components';
 import { ScrollView } from 'react-native-gesture-handler';
-import moment from 'moment';
+import { Linking, Text } from 'react-native';
+import RenderHTML from 'react-native-render-html';
+import SvgIcon from '../../Components/SvgIcon';
+import { getFormattedMessageDate } from '../../context/messages/utils';
 import { MessageDate, MessageText, MessageTitle } from '../MessagesList/MessageCard/styled';
 import { MAIN_ROUTES } from '../routes';
 import PageHeader from '../../Components/PageHeader';
@@ -9,10 +12,24 @@ import { PageContainer } from '../styles';
 import i18n from '../../I18n';
 import * as NavigationService from '../../services/navigation';
 import { MessagesContext } from '../../context/messages';
+import Button from '../../Components/Button';
+import { LINK_BLUE_COLOR, FONT_SIZES } from '../../context/theme';
+import arrow from '../../assets/chevron.svg';
 
 const ScrollContainer = styled(ScrollView)`
 padding: 20px;
 width: 90%;
+flex: 1;
+`;
+
+const MessageLink = styled(Button)`
+flex-direction: row;
+align-items: center;
+`;
+
+const LinkText = styled(Text)`
+${FONT_SIZES.H2};
+color: ${LINK_BLUE_COLOR};
 `;
 
 interface FutureRidesViewProps {
@@ -21,6 +38,7 @@ interface FutureRidesViewProps {
 
 const MessageView = ({ menuSide }: FutureRidesViewProps) => {
   const { viewingMessage: message } = useContext(MessagesContext);
+
   if (message) {
     return (
       <PageContainer>
@@ -39,8 +57,24 @@ const MessageView = ({ menuSide }: FutureRidesViewProps) => {
             {message.subTitle}
           </MessageText>
           <MessageDate>
-            {moment(message.sentAt).format('MMMM DD, YYYY, h:mm A')}
+            {getFormattedMessageDate(message)}
           </MessageDate>
+          {!!message.html
+          && (
+            <RenderHTML
+              source={{ html: message.html }}
+            />
+          )}
+          {!!message.link
+          && (
+          <MessageLink noBackground onPress={() => message.link && Linking.openURL(message.link)}>
+            <LinkText>
+              {message.linkDisplay || message.link}
+            </LinkText>
+            <SvgIcon Svg={arrow} stroke={LINK_BLUE_COLOR} height={15} />
+          </MessageLink>
+          )
+          }
         </ScrollContainer>
       </PageContainer>
     );

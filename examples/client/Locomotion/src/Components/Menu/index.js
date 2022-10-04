@@ -72,7 +72,7 @@ export const DrawerContentComponent = ({ navigation, state }) => {
   const { getSettingByKey } = settings.useContainer();
   const { userMessages } = useContext(MessagesContext);
   const [futureRidesEnabled, setFutureRidesEnabled] = useState(false);
-  console.log(userMessages);
+
   const navigateTo = (page) => {
     navigation.closeDrawer();
     navigationService.navigate(page);

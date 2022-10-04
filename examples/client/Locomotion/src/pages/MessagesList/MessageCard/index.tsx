@@ -5,29 +5,31 @@ import i18n from '../../../I18n';
 import * as NavigationService from '../../../services/navigation';
 import { messageProps, MessagesContext } from '../../../context/messages';
 import {
-  CardContainer, MessageDate, MessageFooter, MessageText, MessageTitle, ReadMore, ReadMoreText, ReadSymbol, ReadSymbolContainer, TextContainer,
+  CardContainer,
+  MessageDate,
+  MessageFooter,
+  MessageText,
+  MessageTitle,
+  ReadMoreText,
+  ReadSymbol,
+  ReadSymbolContainer,
+  TextContainer,
 } from './styled';
+import { getFormattedMessageDate } from '../../../context/messages/utils';
 
 interface MessageCardProps {
     message: messageProps;
   }
 
 const MessageCard = ({ message }: MessageCardProps) => {
-  const { setViewingMessage, userMessages, setUserMessages } = useContext(MessagesContext);
+  const { setViewingMessage } = useContext(MessagesContext);
   const { isRead } = message;
+  const readMoreText = i18n.t('messages.readMore');
   return (
     <CardContainer
       noBackground
       onPress={() => {
         setViewingMessage(message);
-        const messages = userMessages.map((m) => {
-          const tempMessage = { ...m };
-          if (tempMessage.id === message.id) {
-            tempMessage.isRead = true;
-          }
-          return tempMessage;
-        });
-        setUserMessages(messages);
         NavigationService.navigate(MAIN_ROUTES.MESSAGE_VIEW);
       }}
       isRead={isRead}
@@ -44,10 +46,10 @@ const MessageCard = ({ message }: MessageCardProps) => {
         </MessageText>
         <MessageFooter>
           <MessageDate>
-            {moment(message.sentAt).format('MMMM DD, YYYY, h:mm A')}
+            {getFormattedMessageDate(message)}
           </MessageDate>
           <ReadMoreText>
-            {i18n.t('messages.readMore')}
+            {readMoreText}
           </ReadMoreText>
         </MessageFooter>
       </TextContainer>

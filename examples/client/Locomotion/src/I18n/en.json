@@ -373,7 +373,8 @@
     },
     "messages": {
         "pageTitle": "Messages",
-        "readMore": "Read more"
+        "readMore": "Read more",
+        "now": "Now"
     },
     "messageView": {
         "pageTitle": "Messages"
