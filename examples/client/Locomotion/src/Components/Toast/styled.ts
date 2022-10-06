@@ -6,12 +6,23 @@ import Button from '../Button';
 export const ToastContainer = styled(Button)`
 width: 92%;
 margin: 0 4%;
-border-left-width: 0;
 min-height: 70px;
-flex-direction: row;
 background-color: #fff;
 border-radius: 8px;
-padding: 10px;
+padding: 14px;
+shadow-offset: 0px 0px;
+shadow-color: #000;
+shadow-opacity: 0.4;
+elevation: 6;
+
+`;
+
+export const IconContainer = styled(Button)`
+align-self: flex-end;
+`;
+
+export const ContentContainer = styled(View)`
+flex-direction: row;
 align-items: center;
 `;
 

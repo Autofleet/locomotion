@@ -374,9 +374,9 @@ const RidePage = ({ mapSettings, navigation }) => {
       text1: 'Attention! Changes in operational hours very soon',
       text2: 'Due to maintenance somewhere we are obliged to change our operational hours from this and that into a mind blowing dramatic change. please pay attention. Changes will take place from 1st of May at 13:00 until 10th of May at 10:00.',
       visibilityTime: 100000,
-      // props: {
-      //   image: 'https://res.cloudinary.com/autofleet/image/upload/v1535368744/Control-Center/green.png',
-      // },
+      props: {
+        image: 'https://res.cloudinary.com/autofleet/image/upload/v1535368744/Control-Center/green.png',
+      },
     });
   }, []);
 
@@ -462,6 +462,7 @@ BS_PAGE_TO_COMP[currentBsPage] ? BS_PAGE_TO_COMP[currentBsPage]() : null
           tomatoToast: props => (
             <AFToast
               {...props}
+              onHide={() => Toast.hide()}
               onPress={() => {
                 Toast.hide();
                 navigationService.navigate(MAIN_ROUTES.MESSAGES);
