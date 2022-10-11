@@ -118,7 +118,7 @@ const CardDetails = ({
                 <Card
                   title={i18n.t('payments.cardDetails.balance')}
                 >
-                  {`${i18n.t('payments.cardDetails.outstandingBalanceText')} ${paymentMethod.outstandingBalance.amount}${getCurrencySymbol(paymentMethod.outstandingBalance.currency)}`}
+                  {`${i18n.t('payments.cardDetails.outstandingBalanceText')} ${getCurrencySymbol(paymentMethod.outstandingBalance.currency)}${paymentMethod.outstandingBalance.amount.toFixed(2)}`}
                 </Card>
               ) : undefined}
 
