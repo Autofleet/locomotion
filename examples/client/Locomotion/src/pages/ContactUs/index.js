@@ -1,5 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import { Linking, Platform } from 'react-native';
+import React, { useState, useEffect, useRef } from 'react';
+import {
+  Linking, Platform, UIManager, findNodeHandle, ActionSheetIOS,
+} from 'react-native';
 import Clipboard from '@react-native-community/clipboard';
 import { ScrollView } from 'react-native-gesture-handler';
 import NoTitleCard from '../../Components/NoTitleCard';
@@ -23,6 +25,8 @@ import {
   ContactUsPageView, LearnMoreButton, LearnMoreIcon, LearnMoreText,
 } from './styled';
 import * as navigationService from '../../services/navigation';
+import Mixpanel from '../../services/Mixpanel';
+import DeviceService from '../../services/device';
 
 export default ({ menuSide }) => {
   const useSettings = settingsContext.useContainer();
@@ -34,6 +38,8 @@ export default ({ menuSide }) => {
     contactEmail: null,
     contactPhone: null,
   });
+
+  const buttonRef = useRef(null);
 
   useEffect(() => {
     const loadSettings = async () => {
@@ -63,6 +69,52 @@ export default ({ menuSide }) => {
       Linking.openURL(settings.contactUsUrl);
     } else {
       console.log('contact us link is not supported');
+    }
+  };
+
+  const ActionMenu = (number, elementRef) => {
+    const callPhone = (phoneNumber) => {
+      Mixpanel.clickEvent('Call support', { phoneNumber });
+      DeviceService.call(phoneNumber);
+    };
+
+    const smsPhone = (phoneNumber) => {
+      Mixpanel.clickEvent('SMS support', { phoneNumber });
+      DeviceService.sms(phoneNumber, '');
+    };
+
+    const options = [i18n.t('bottomSheetContent.ride.phoneCallOptions.call'), i18n.t('bottomSheetContent.ride.phoneCallOptions.sms')];
+    if (Platform.OS === 'android') {
+      UIManager.showPopupMenu(
+        findNodeHandle(elementRef.current),
+        options,
+        () => undefined,
+        (action, buttonIndex) => {
+          if (buttonIndex === 0) {
+            callPhone(number);
+          }
+
+          if (buttonIndex === 1) {
+            smsPhone(number);
+          }
+        },
+      );
+    } else {
+      ActionSheetIOS.showActionSheetWithOptions(
+        {
+          options: [i18n.t('bottomSheetContent.ride.phoneCallOptions.cancel'), ...options],
+          cancelButtonIndex: 0,
+        },
+        (buttonIndex) => {
+          if (buttonIndex === 1) {
+            callPhone(number);
+          }
+
+          if (buttonIndex === 2) {
+            smsPhone(number);
+          }
+        },
+      );
     }
   };
 
@@ -97,8 +149,9 @@ export default ({ menuSide }) => {
                   </Card>
                   {settings.contactPhone ? (
                     <Card
+                      ref={buttonRef}
                       icon={phoneIcon}
-                      onIconPress={() => (settings.contactPhone ? Linking.openURL(`tel:${settings.contactPhone}`) : undefined)}
+                      onIconPress={() => (settings.contactPhone ? ActionMenu(settings.contactPhone, buttonRef) : undefined)}
                       title={i18n.t('onboarding.phonePlaceholder')}
                     >
                       <Text>{settings.contactPhone}</Text>

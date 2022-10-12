@@ -12,7 +12,7 @@ class MixpanelService {
   }
 
   init = async () => {
-    if (!this.isInit) {
+    if (!this.isInit && Config.MIXPANEL_TOKEN) {
       await Mixpanel.sharedInstanceWithToken(Config.MIXPANEL_TOKEN, true);
       this.isInit = true;
     }
