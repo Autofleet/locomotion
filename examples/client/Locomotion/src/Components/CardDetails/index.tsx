@@ -80,6 +80,11 @@ const CardDetails = ({
   const params : CardDetailsRouteParams = route.params as CardDetailsRouteParams;
   const { paymentMethod } = params;
 
+  const round = (value: number, precision: number) => {
+    const multiplier = 10 ** (precision || 0);
+    return Math.round(value * multiplier) / multiplier;
+  };
+
   return (
     <PageContainer>
       <KeyboardAwareScrollView extraScrollHeight={20} enableOnAndroid>
@@ -118,7 +123,7 @@ const CardDetails = ({
                 <Card
                   title={i18n.t('payments.cardDetails.balance')}
                 >
-                  {`${i18n.t('payments.cardDetails.outstandingBalanceText')} ${getCurrencySymbol(paymentMethod.outstandingBalance.currency)}${paymentMethod.outstandingBalance.amount.toFixed(2)}`}
+                  {`${i18n.t('payments.cardDetails.outstandingBalanceText')} ${getCurrencySymbol(paymentMethod.outstandingBalance.currency)}${round(paymentMethod.outstandingBalance.amount, 1)}`}
                 </Card>
               ) : undefined}
 
