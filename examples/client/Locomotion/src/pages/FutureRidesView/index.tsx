@@ -61,12 +61,12 @@ const FutureRidesView = ({ menuSide }: FutureRidesViewProps) => {
     loadServices();
   }, []);
 
-  const convertRideScheduledTo = async (ride) => {
-    const { stopPoints, scheduledTo } = ride;
+  const convertRideScheduledTo = async (cRide) => {
+    const { stopPoints, scheduledTo } = cRide;
     const unixScheduledTo = moment.utc(scheduledTo);
     const convertedTime = await convertTimezoneByLocation(stopPoints[0].lat, stopPoints[0].lng, unixScheduledTo, false);
-    ride.scheduledTo = convertedTime;
-    return ride;
+    cRide.scheduledTo = convertedTime;
+    return cRide;
   };
 
   const formatRides = async (rides = []) => {
