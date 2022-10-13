@@ -377,8 +377,8 @@ export const ConfirmFutureRide = (props: any) => {
   const { newFutureRide } = useContext(FutureRidesContext);
 
   const getDateDisplay = () => {
-    const date = moment(newFutureRide?.scheduledTo).format('ddd, MMM Do');
-    const time = moment(newFutureRide?.scheduledTo).format('h:mm A');
+    const date = moment.parseZone(newFutureRide?.scheduledTo).format('ddd, MMM Do');
+    const time = moment.parseZone(newFutureRide?.scheduledTo).format('h:mm A');
     const dateText = i18n.t('bottomSheetContent.confirmPickupTime.pickupText', { date, time });
     return <TextRowWithIcon text={dateText} icon={timeIcon} />;
   };

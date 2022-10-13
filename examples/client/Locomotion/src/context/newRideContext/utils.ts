@@ -1,7 +1,7 @@
 import moment from 'moment';
 import shortid from 'shortid';
 import i18n from '../../I18n';
-import { getGeocode } from './google-api';
+import { getGeocode, getLocationTimezone } from './google-api';
 
 export const ESTIMATION_ERRORS = {
   'RIDE_VALIDATION:SOME_STOP_POINTS_ARE_OUT_OF_TERRITORY': 'RIDE_VALIDATION:SOME_STOP_POINTS_ARE_OUT_OF_TERRITORY',
@@ -159,4 +159,17 @@ export const getCurrencySymbol = (priceCurrency?: string) => {
   }
   const currency = new Intl.NumberFormat('en-US', { style: 'currency', currency: priceCurrency }).format(0);
   return currency[0];
+};
+
+export const convertTimezoneByLocation = async (
+  lat: number,
+  lng: number,
+  momentDate: any,
+  keepTime = true,
+) => {
+  const convertedZone = momentDate.clone();
+  const timezoneResponse = await getLocationTimezone(lat, lng, momentDate);
+  const { timeZoneId } = timezoneResponse;
+
+  return convertedZone.tz(timeZoneId, keepTime).format();
 };

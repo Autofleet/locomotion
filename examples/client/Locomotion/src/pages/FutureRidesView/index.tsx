@@ -2,6 +2,7 @@ import React, {
   useContext, useRef, useState, useEffect,
 } from 'react';
 import bottomSheet from '@gorhom/bottom-sheet/lib/typescript/components/bottomSheet';
+import moment from 'moment';
 import { FutureRidesContext } from '../../context/futureRides';
 import { PageContainer } from '../styles';
 import { ContentContainer } from './styled';
@@ -14,6 +15,8 @@ import BottomSheetComponent from '../../Components/BottomSheet';
 import { CancelRide } from '../../Components/BsPages';
 import { RideStateContextContext } from '../..';
 import { RideInterface, RidePageContext } from '../../context/newRideContext';
+import { convertTimezoneByLocation } from '../../context/newRideContext/utils';
+
 import { BS_PAGES } from '../../context/ridePageStateContext/utils';
 import BlackOverlay from '../../Components/BlackOverlay';
 import GenericErrorPopup from '../../popups/GenericError';
@@ -27,6 +30,7 @@ const FutureRidesView = ({ menuSide }: FutureRidesViewProps) => {
   const [rideToCancel, setRideToCancel] = useState<string | undefined>(undefined);
   const [showError, setShowError] = useState(false);
   const [services, setServices] = useState<any[]>([]);
+  const [localFutureRides, setLocalFutureRides] = useState<any[]>([]);
   const bottomSheetRef = useRef<bottomSheet>(null);
   const {
     futureRides, loadFutureRides,
@@ -57,6 +61,26 @@ const FutureRidesView = ({ menuSide }: FutureRidesViewProps) => {
     loadServices();
   }, []);
 
+  const convertRideScheduledTo = async (ride) => {
+    const { stopPoints, scheduledTo } = ride;
+    const unixScheduledTo = moment.utc(scheduledTo);
+    const convertedTime = await convertTimezoneByLocation(stopPoints[0].lat, stopPoints[0].lng, unixScheduledTo, false);
+    ride.scheduledTo = convertedTime;
+    return ride;
+  };
+
+  const formatRides = async (rides = []) => {
+    const formattedRides = await Promise.all(rides.map(async (fride) => {
+      const formattedTime = await convertRideScheduledTo(fride);
+      return formattedTime;
+    }));
+    setLocalFutureRides(formattedRides);
+  };
+
+  useEffect(() => {
+    formatRides(futureRides);
+  }, [futureRides]);
+
   return (
     <PageContainer>
       <PageHeader
@@ -68,9 +92,9 @@ const FutureRidesView = ({ menuSide }: FutureRidesViewProps) => {
         iconSide={menuSide}
       />
       <ContentContainer>
-        {futureRides.length ? (
+        {localFutureRides.length ? (
           <>
-            {(futureRides || []).map((fRide) => {
+            {(localFutureRides || []).map((fRide) => {
               const service = services.find(s => s.id === fRide.serviceId);
               return (
                 <RideCard
@@ -78,7 +102,7 @@ const FutureRidesView = ({ menuSide }: FutureRidesViewProps) => {
                   onPress={() => onPressCancel(fRide?.id)}
                   serviceName={service?.displayName}
                   paymentMethod={fRide?.payment?.paymentMethod}
-                  scheduledTo={fRide.scheduledTo || ''}
+                  scheduledTo={fRide?.scheduledTo || ''}
                 />
               );
             })}

@@ -89,7 +89,7 @@ const RideCard = ({
       <DateContainer>
         <TopTextsContainer>
           <RideDate>
-            {moment(scheduledTo).format('MMMM DD, YYYY, h:mm A')}
+            {moment.parseZone(scheduledTo).format('MMMM DD, YYYY, h:mm A')}
           </RideDate>
           <ServiceType>
             {serviceName}
