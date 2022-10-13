@@ -162,8 +162,8 @@ export const getCurrencySymbol = (priceCurrency?: string) => {
 };
 
 export const convertTimezoneByLocation = async (
-  lat: number,
-  lng: number,
+  lat: any,
+  lng: any,
   momentDate: any,
   keepTime = true,
 ) => {

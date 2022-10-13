@@ -61,16 +61,21 @@ const FutureRidesView = ({ menuSide }: FutureRidesViewProps) => {
     loadServices();
   }, []);
 
-  const convertRideScheduledTo = async (cRide) => {
-    const { stopPoints, scheduledTo } = cRide;
+  const convertRideScheduledTo = async (cRide: RideInterface) => {
+    const { stopPoints = [], scheduledTo } = cRide;
     const unixScheduledTo = moment.utc(scheduledTo);
-    const convertedTime = await convertTimezoneByLocation(stopPoints[0].lat, stopPoints[0].lng, unixScheduledTo, false);
+    const convertedTime = await convertTimezoneByLocation(
+      stopPoints[0]?.lat,
+      stopPoints[0]?.lng,
+      unixScheduledTo,
+      false,
+    );
     cRide.scheduledTo = convertedTime;
     return cRide;
   };
 
-  const formatRides = async (rides = []) => {
-    const formattedRides = await Promise.all(rides.map(async (fride) => {
+  const formatRides = async (rides: RideInterface[]) => {
+    const formattedRides = await Promise.all(rides.map(async (fride: any) => {
       const formattedTime = await convertRideScheduledTo(fride);
       return formattedTime;
     }));

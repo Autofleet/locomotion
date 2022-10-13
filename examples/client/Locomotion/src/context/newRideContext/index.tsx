@@ -823,7 +823,7 @@ const RidePageContextProvider = ({ children }: {
 
     let scheduledToMoment = ride.scheduledTo;
     if (ride.scheduledTo) {
-      const unixScheduledTo = moment.unix(ride.scheduledTo / 1000);
+      const unixScheduledTo = moment.unix(Number(ride.scheduledTo) / 1000);
       scheduledToMoment = await convertTimezoneByLocation(stopPoints[0].lat, stopPoints[0].lng, unixScheduledTo);
     }
 
