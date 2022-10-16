@@ -110,7 +110,7 @@ export const fetchRides = async ({
 
 
 export const getLocationTimezone = async (lat, lng) => {
-  const { data } = await network.get('/api/v1/timezone/xx', {
+  const { data } = await network.get('/api/v1/timezone', {
     params: {
       lat,
       lng,
