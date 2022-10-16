@@ -34,8 +34,8 @@ const ConfirmationPopup = ({
             {text}
           </Content>
           <SubmitContainer>
-            <RoundedButton onPress={() => onSubmit()} type={type}>{confirmText}</RoundedButton>
-            <RoundedButton onPress={() => closePopup()} hollow type={type} useCancelTextButton={useCancelTextButton}>{cancelText}</RoundedButton>
+            <RoundedButton testID="confirm" onPress={() => onSubmit()} type={type}>{confirmText}</RoundedButton>
+            <RoundedButton testID="cancel" onPress={() => closePopup()} hollow type={type} useCancelTextButton={useCancelTextButton}>{cancelText}</RoundedButton>
           </SubmitContainer>
         </ContentContainer>
       </PopupContainer>

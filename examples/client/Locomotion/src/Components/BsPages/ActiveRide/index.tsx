@@ -58,9 +58,11 @@ const ActiveRideContent = () => {
   const renderRideNotes = () => {
     const rideHasNotes = firstSpNotCompleted?.notes;
     return (
-      <ButtonContainer onPress={() => {
-        setPopupToShow('notes');
-      }}
+      <ButtonContainer
+        testID="RideNotes"
+        onPress={() => {
+          setPopupToShow('notes');
+        }}
       >
         <GenericRideButton
           icon={rideHasNotes ? editNote : plus}
