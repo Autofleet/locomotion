@@ -1,7 +1,8 @@
 import moment from 'moment';
 import shortid from 'shortid';
 import i18n from '../../I18n';
-import { getGeocode, getLocationTimezone } from './google-api';
+import { getGeocode } from './google-api';
+import { getLocationTimezone } from './api';
 
 export const ESTIMATION_ERRORS = {
   'RIDE_VALIDATION:SOME_STOP_POINTS_ARE_OUT_OF_TERRITORY': 'RIDE_VALIDATION:SOME_STOP_POINTS_ARE_OUT_OF_TERRITORY',
@@ -167,9 +168,15 @@ export const convertTimezoneByLocation = async (
   momentDate: any,
   keepTime = true,
 ) => {
-  const convertedZone = momentDate.clone();
-  const timezoneResponse = await getLocationTimezone(lat, lng, momentDate);
-  const { timeZoneId } = timezoneResponse;
-
-  return convertedZone.tz(timeZoneId, keepTime).format();
+  try {
+    const convertedZone = momentDate.clone();
+    const timezoneResponse: any = await getLocationTimezone(lat, lng);
+    const { timezone } = timezoneResponse;
+    return {
+      time: convertedZone.tz(timezone, keepTime).format(),
+      timezone,
+    };
+  } catch (e) {
+    throw new Error('Could not fetch timezone from server');
+  }
 };

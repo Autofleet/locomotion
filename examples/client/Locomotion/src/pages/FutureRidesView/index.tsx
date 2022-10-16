@@ -15,7 +15,6 @@ import BottomSheetComponent from '../../Components/BottomSheet';
 import { CancelRide } from '../../Components/BsPages';
 import { RideStateContextContext } from '../..';
 import { RideInterface, RidePageContext } from '../../context/newRideContext';
-import { convertTimezoneByLocation } from '../../context/newRideContext/utils';
 
 import { BS_PAGES } from '../../context/ridePageStateContext/utils';
 import BlackOverlay from '../../Components/BlackOverlay';
@@ -30,7 +29,7 @@ const FutureRidesView = ({ menuSide }: FutureRidesViewProps) => {
   const [rideToCancel, setRideToCancel] = useState<string | undefined>(undefined);
   const [showError, setShowError] = useState(false);
   const [services, setServices] = useState<any[]>([]);
-  const [localFutureRides, setLocalFutureRides] = useState<any[]>([]);
+
   const bottomSheetRef = useRef<bottomSheet>(null);
   const {
     futureRides, loadFutureRides,
@@ -61,31 +60,6 @@ const FutureRidesView = ({ menuSide }: FutureRidesViewProps) => {
     loadServices();
   }, []);
 
-  const convertRideScheduledTo = async (cRide: RideInterface) => {
-    const { stopPoints = [], scheduledTo } = cRide;
-    const unixScheduledTo = moment.utc(scheduledTo);
-    const convertedTime = await convertTimezoneByLocation(
-      stopPoints[0]?.lat,
-      stopPoints[0]?.lng,
-      unixScheduledTo,
-      false,
-    );
-    cRide.scheduledTo = convertedTime;
-    return cRide;
-  };
-
-  const formatRides = async (rides: RideInterface[]) => {
-    const formattedRides = await Promise.all(rides.map(async (fride: any) => {
-      const formattedTime = await convertRideScheduledTo(fride);
-      return formattedTime;
-    }));
-    setLocalFutureRides(formattedRides);
-  };
-
-  useEffect(() => {
-    formatRides(futureRides);
-  }, [futureRides]);
-
   return (
     <PageContainer>
       <PageHeader
@@ -97,9 +71,9 @@ const FutureRidesView = ({ menuSide }: FutureRidesViewProps) => {
         iconSide={menuSide}
       />
       <ContentContainer>
-        {localFutureRides.length ? (
+        {futureRides.length ? (
           <>
-            {(localFutureRides || []).map((fRide) => {
+            {(futureRides || []).map((fRide) => {
               const service = services.find(s => s.id === fRide.serviceId);
               return (
                 <RideCard

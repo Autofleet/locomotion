@@ -821,27 +821,30 @@ const RidePageContextProvider = ({ children }: {
       });
     }
 
-    let scheduledToMoment = ride.scheduledTo;
-    if (ride.scheduledTo) {
-      const unixScheduledTo = moment.unix(Number(ride.scheduledTo) / 1000);
-      scheduledToMoment = await convertTimezoneByLocation(stopPoints[0].lat, stopPoints[0].lng, unixScheduledTo);
-    }
-
-    const rideToCreate = {
-      serviceId: chosenService?.id,
-      paymentMethodId: ride.paymentMethodId,
-      rideType: 'passenger',
-      ...(ride.scheduledTo && { scheduledTo: scheduledToMoment }),
-      stopPoints: stopPoints.map((sp, i) => ({
-        lat: Number(sp.lat),
-        lng: Number(sp.lng),
-        description: sp.streetAddress || sp.description,
-        type: sp.type,
-        ...(i === 0 && { notes: ride.notes }),
-      })),
-    };
-
     try {
+      let scheduledToMoment = ride.scheduledTo;
+      if (ride.scheduledTo) {
+        const unixScheduledTo = moment.unix(Number(ride.scheduledTo) / 1000);
+        const timezoneResponse = await convertTimezoneByLocation(stopPoints[0].lat, stopPoints[0].lng, unixScheduledTo);
+        console.log('timezoneResponse', timezoneResponse);
+        scheduledToMoment = timezoneResponse.time;
+      }
+
+      const rideToCreate = {
+        serviceId: chosenService?.id,
+        paymentMethodId: ride.paymentMethodId,
+        rideType: 'passenger',
+        ...(ride.scheduledTo && { scheduledTo: scheduledToMoment }),
+        stopPoints: stopPoints.map((sp, i) => ({
+          lat: Number(sp.lat),
+          lng: Number(sp.lng),
+          description: sp.streetAddress || sp.description,
+          type: sp.type,
+          ...(i === 0 && { notes: ride.notes }),
+        })),
+      };
+
+
       const afRide = await rideApi.createRide(rideToCreate);
       if (afRide.state === RIDE_STATES.REJECTED) {
         throw new Error(RIDE_FAILED_REASONS.BUSY);
@@ -855,6 +858,8 @@ const RidePageContextProvider = ({ children }: {
         setRide(formattedRide);
       }
     } catch (e: any) {
+      console.log(e);
+      console.log(e.message);
       const key = e.response?.data?.errors[0] || e.message;
       Mixpanel.setEvent('Ride failed', { status: e?.response?.status, reason: key });
       if (FAILED_TO_CREATE_RIDE_ACTIONS[key]) {
