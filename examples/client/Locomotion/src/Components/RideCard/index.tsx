@@ -1,7 +1,9 @@
 import React, { useContext, useEffect, useState } from 'react';
-import moment from 'moment';
+import moment from 'moment-timezone';
 import { PaymentIcon } from 'react-native-payment-icons';
 import { View } from 'react-native';
+import SkeletonContent from 'react-native-skeleton-content-nonexpo';
+
 import { RIDE_STATES } from '../../lib/commonTypes';
 import { PriceCalculation, RideInterface, RidePageContext } from '../../context/newRideContext';
 import i18n from '../../I18n';
@@ -12,10 +14,9 @@ import {
   TopTextsContainer, TopPriceContainer,
 } from './styled';
 import StopPointsVerticalView from '../StopPointsVerticalView';
-import { getFormattedPrice, isPriceEstimated } from '../../context/newRideContext/utils';
+import { getFormattedPrice, isPriceEstimated, convertTimezoneByLocation } from '../../context/newRideContext/utils';
 import cashIcon from '../../assets/cash.svg';
 import { PAYMENT_METHODS } from '../../pages/Payments/consts';
-
 
 interface CardComponentProps {
   paymentMethod: {
@@ -69,6 +70,8 @@ const RideCard = ({
   ride, onPress, serviceName, paymentMethod, scheduledTo,
 }: RideCardProps) => {
   const [ridePriceCalculation, setRidePriceCalculation] = useState<PriceCalculation>();
+  const [timezonedScheduledTo, setTimezonedScheduledTo] = useState<string | null>(null);
+  const [displayTimezone, setDisplayTimezone] = useState<string | null>(null);
   const {
     getRidePriceCalculation,
   } = useContext(RidePageContext);
@@ -84,13 +87,52 @@ const RideCard = ({
     }
   }, [ride]);
 
+  const formatScheludedTo = async (time: any) => {
+    try {
+      const { stopPoints = [] } = ride;
+      const unixScheduledTo = moment.utc(time);
+      const convertedTime = await convertTimezoneByLocation(
+        stopPoints[0]?.lat,
+        stopPoints[0]?.lng,
+        unixScheduledTo,
+        false,
+      );
+
+      const newScheduledTo = moment.parseZone(convertedTime.time).format('MMMM DD, YYYY, h:mm A');
+      setTimezonedScheduledTo(newScheduledTo);
+      setDisplayTimezone(null);
+    } catch (e) {
+      const newScheduledTo = moment(time).format('MMMM DD, YYYY, h:mm A');
+      setTimezonedScheduledTo(newScheduledTo);
+      setDisplayTimezone(moment.tz.guess());
+    }
+  };
+  useEffect(() => {
+    formatScheludedTo(scheduledTo);
+  }, [scheduledTo]);
   return (
     <CardContainer>
       <DateContainer>
         <TopTextsContainer>
           <RideDate>
-            {moment(scheduledTo).format('MMMM DD, YYYY, h:mm A')}
+            {!timezonedScheduledTo
+              ? (
+                <SkeletonContent
+                  containerStyle={{}}
+                  isLoading
+                  layout={[
+                    { width: 150, height: 17 },
+                  ]}
+                />
+              ) : timezonedScheduledTo}
           </RideDate>
+          {displayTimezone ? (
+            <ServiceType>
+              (
+              {displayTimezone}
+              )
+            </ServiceType>
+          ) : null}
           <ServiceType>
             {serviceName}
           </ServiceType>
@@ -106,6 +148,7 @@ const RideCard = ({
               </EstimatedText>
             )
             : null}
+          {displayTimezone ? <ServiceType /> : null}
         </TopPriceContainer>
       </DateContainer>
 

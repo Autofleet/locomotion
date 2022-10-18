@@ -13,7 +13,7 @@ margin-bottom: 20px;
 `;
 
 export const RideDate = styled(Text)`
-${FONT_SIZES.H3}
+${FONT_SIZES.LARGE}
 ${FONT_WEIGHTS.MEDIUM}
 align-self: flex-end;
 `;
