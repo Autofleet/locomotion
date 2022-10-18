@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Linking, Platform, UIManager, findNodeHandle, ActionSheetIOS,
 } from 'react-native';
@@ -39,8 +39,6 @@ export default ({ menuSide }) => {
     contactPhone: null,
   });
 
-  const buttonRef = useRef(null);
-
   useEffect(() => {
     const loadSettings = async () => {
       const settingsData = await useSettings.getLoginSettings();
@@ -72,7 +70,7 @@ export default ({ menuSide }) => {
     }
   };
 
-  const ActionMenu = (number, elementRef) => {
+  const ActionMenu = (event, number) => {
     const callPhone = (phoneNumber) => {
       Mixpanel.clickEvent('Call support', { phoneNumber });
       DeviceService.call(phoneNumber);
@@ -86,7 +84,7 @@ export default ({ menuSide }) => {
     const options = [i18n.t('bottomSheetContent.ride.phoneCallOptions.call'), i18n.t('bottomSheetContent.ride.phoneCallOptions.sms')];
     if (Platform.OS === 'android') {
       UIManager.showPopupMenu(
-        findNodeHandle(elementRef.current),
+        findNodeHandle(event.target),
         options,
         () => undefined,
         (action, buttonIndex) => {
@@ -149,9 +147,8 @@ export default ({ menuSide }) => {
                   </Card>
                   {settings.contactPhone ? (
                     <Card
-                      ref={buttonRef}
                       icon={phoneIcon}
-                      onIconPress={() => (settings.contactPhone ? ActionMenu(settings.contactPhone, buttonRef) : undefined)}
+                      onIconPress={e => (settings.contactPhone ? ActionMenu(e, settings.contactPhone) : undefined)}
                       title={i18n.t('onboarding.phonePlaceholder')}
                     >
                       <Text>{settings.contactPhone}</Text>
