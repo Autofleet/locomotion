@@ -88,7 +88,6 @@ const RideCard = ({
   }, [ride]);
 
   const formatScheludedTo = async (time: any) => {
-    // setTimeout(async () => {
     try {
       const { stopPoints = [] } = ride;
       const unixScheduledTo = moment.utc(time);
@@ -107,7 +106,6 @@ const RideCard = ({
       setTimezonedScheduledTo(newScheduledTo);
       setDisplayTimezone(moment.tz.guess());
     }
-    // }, 5000);
   };
   useEffect(() => {
     formatScheludedTo(scheduledTo);
