@@ -2,6 +2,7 @@ import moment from 'moment';
 import shortid from 'shortid';
 import i18n from '../../I18n';
 import { getGeocode } from './google-api';
+import { getLocationTimezone } from './api';
 
 export const ESTIMATION_ERRORS = {
   'RIDE_VALIDATION:SOME_STOP_POINTS_ARE_OUT_OF_TERRITORY': 'RIDE_VALIDATION:SOME_STOP_POINTS_ARE_OUT_OF_TERRITORY',
@@ -159,4 +160,23 @@ export const getCurrencySymbol = (priceCurrency?: string) => {
   }
   const currency = new Intl.NumberFormat('en-US', { style: 'currency', currency: priceCurrency }).format(0);
   return currency[0];
+};
+
+export const convertTimezoneByLocation = async (
+  lat: any,
+  lng: any,
+  momentDate: any,
+  keepTime = true,
+) => {
+  try {
+    const convertedZone = momentDate.clone();
+    const timezoneResponse: any = await getLocationTimezone(lat, lng);
+    const { timezone } = timezoneResponse;
+    return {
+      time: convertedZone.tz(timezone, keepTime).format(),
+      timezone,
+    };
+  } catch (e) {
+    throw new Error('Could not fetch timezone from server');
+  }
 };
