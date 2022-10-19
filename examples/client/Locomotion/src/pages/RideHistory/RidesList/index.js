@@ -26,6 +26,7 @@ const RideCardInList = ({
     <RideListView
       ride={ride}
       showSpacer={showSpacer}
+      testID={`rideHistoryCard-${ride.id}`}
       onPress={() => navigationService.navigate(MAIN_ROUTES.COMPLETED_RIDE_OVERVIEW_PAGE, {
         rideId: ride.id,
       })}
