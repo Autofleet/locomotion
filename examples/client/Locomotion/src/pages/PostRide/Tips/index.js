@@ -111,7 +111,7 @@ const Tips = ({
   const buttons = isPercentage ? tipSettings.percentage : tipSettings.fixedPrice;
   const serviceDisplayPrice = getFormattedPrice(priceCurrency, ridePrice);
 
-  const tipSuffix = getCurrencySymbol(priceCurrency);
+  const tipSuffix = isPercentage ? '%' : getCurrencySymbol(priceCurrency);
 
   const bottomSheetRef = useRef(null);
   const {
