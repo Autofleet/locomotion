@@ -97,6 +97,7 @@ export const DrawerContentComponent = ({ navigation, state }) => {
         />
         )}
         <DrawerLabel
+          testID="payment"
           title={i18n.t('menu.paymentsSettings')}
           icon={CreditCardIconSource}
           onPress={() => navigateTo(MAIN_ROUTES.PAYMENT)}
