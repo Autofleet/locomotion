@@ -114,10 +114,10 @@ const RideTitleCard = ({
 };
 
 export const RideListView = ({
-  ride, showSpacer, onPress,
+  ride, showSpacer, onPress, testID,
 }) => (
   <>
-    <TouchableRideViewContainer onPress={onPress}>
+    <TouchableRideViewContainer testID={testID} onPress={onPress}>
       <RideTitleCard
         ride={ride}
       />
