@@ -27,7 +27,7 @@
     "@react-navigation/drawer": "^6.4.1",
     "@react-navigation/native": "^6.0.10",
     "@react-navigation/native-stack": "^6.6.2",
-    "@stripe/stripe-react-native": "^0.19.0",
+    "@stripe/stripe-react-native": "^0.13.0",
     "@turf/boolean-point-in-polygon": "^6.5.0",
     "@turf/turf": "^6.5.0",
     "@types/googlemaps": "^3.43.3",
