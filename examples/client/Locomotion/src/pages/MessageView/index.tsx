@@ -44,14 +44,36 @@ interface FutureRidesViewProps {
   }
 
 const MessageView = ({ menuSide, route }: FutureRidesViewProps) => {
-  const { viewingMessage: message, setViewingMessage } = useContext(MessagesContext);
+  const {
+    viewingMessage: message,
+    setViewingMessage,
+    userMessages,
+    getUserMessages,
+  } = useContext(MessagesContext);
+
+  const loadMessage = async (messageId) => {
+    const messages = await getUserMessages();
+    const foundMessage = messages.find(({ message: m }) => m.id === messageId);
+    if (foundMessage.message) {
+      setViewingMessage(foundMessage.message);
+    } else {
+      NavigationService.navigate(MAIN_ROUTES.MESSAGES);
+    }
+  };
 
   useEffect(() => {
-    const { userMessageId, userMessage } = route.params;
+    const { userMessageId, userMessage, messageId } = route.params;
     if (userMessageId) {
       setViewingMessage(userMessage);
     }
-  }, [route]);
+
+    if (messageId) {
+      loadMessage(messageId);
+    }
+
+
+    return () => setViewingMessage(null);
+  }, [route, userMessages]);
 
   if (message) {
     return (
@@ -72,6 +94,9 @@ const MessageView = ({ menuSide, route }: FutureRidesViewProps) => {
           </MessageDate>
           <MessageText>
             {message.subTitle}
+          </MessageText>
+          <MessageText>
+            {message.content}
           </MessageText>
           {!!message.html
           && (

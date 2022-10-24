@@ -11,11 +11,7 @@ import { MAIN_ROUTES } from '../pages/routes';
 
 const openNotificationsHandlers = {
   message: ({ messageId }) => {
-    console.log('messageIdmessageId', messageId);
-
-    setTimeout(() => {
-      NavigationService.navigate(MAIN_ROUTES.MESSAGE_VIEW, { messageId });
-    }, 3000);
+    NavigationService.navigate(MAIN_ROUTES.MESSAGE_VIEW, { messageId });
   },
 };
 
@@ -86,17 +82,13 @@ class NotificationsService {
   };
 
   onOpened = (openResult) => {
-    console.log(openResult);
     const { additionalData } = openResult.notification;
-    console.log(additionalData);
-    /* if (additionalData && additionalData.type) {
-      console.log('sdfsdfsdf');
-      console.log(openNotificationsHandlers);
+    if (additionalData && additionalData.type) {
       const method = openNotificationsHandlers[additionalData.type];
       if (method) {
         method(additionalData);
       }
-    } */
+    }
   };
 
   triggerOnNotification = (payload) => {

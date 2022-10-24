@@ -14,7 +14,8 @@ display: flex;
 flex-direction: row;
 align-items: flex-start;
 background-color: ${({ isRead }) => (isRead ? '#f9f9f9' : '#ffffff')};
-border-bottom: 1px solid #e2e2e2;
+border-width: 1px;
+border-color: #e2e2e2;
 `;
 
 export const MessageTitle = styled(Text)`
@@ -23,7 +24,7 @@ ${FONT_WEIGHTS.SEMI_BOLD}
 `;
 
 export const MessageText = styled(Text)`
-${FONT_SIZES.LARGE}
+${FONT_SIZES.H3}
 ${FONT_WEIGHTS.REGULAR}
 opacity: .8;
 margin: 10px 0;

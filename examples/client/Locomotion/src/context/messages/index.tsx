@@ -9,7 +9,7 @@ import Toast from 'react-native-toast-message';
 import { UserContext } from '../user';
 import OneSignal from '../../services/one-signal';
 import {
-  getUserMessages, getMessage, markReadMessage as markReadMessageCall, dismissMessage as dismissMessageCall,
+  getUserMessages as getUserMessagesCall, getMessage, markReadMessage as markReadMessageCall, dismissMessage as dismissMessageCall,
 } from './api';
 import * as navigationService from '../../services/navigation';
 import { MAIN_ROUTES } from '../../pages/routes';
@@ -17,12 +17,14 @@ import { MAIN_ROUTES } from '../../pages/routes';
 export type messageProps = {
     id: string;
     title: string;
-    isRead: boolean;
+    readAt: Date | null;
     subTitle: string;
     html?: string;
     sentAt: Date;
     link?: string;
     linkText?: string;
+    content?: string;
+    dismissedAt: Date | null;
 }
 
 interface MessagesContextInterface {
@@ -32,8 +34,9 @@ interface MessagesContextInterface {
     setUserMessages: React.Dispatch<React.SetStateAction<messageProps[]>>;
     loadUserMessages: () => Promise<void>;
     isLoading: boolean;
-    markReadMessages: () => Promise<any>
+    markReadMessages: (param) => Promise<any>
     dismissMessages: () => Promise<any>
+    getUserMessages: () => Promise<any>
 
 }
 
@@ -47,7 +50,7 @@ export const MessagesContext = createContext<MessagesContextInterface>({
   isLoading: false,
   markReadMessages: async () => undefined,
   dismissMessages: async () => undefined,
-
+  getUserMessages: async () => undefined,
 });
 
 const MessagesProvider = ({ children }: { children: any }) => {
@@ -56,27 +59,7 @@ const MessagesProvider = ({ children }: { children: any }) => {
   const [userMessages, setUserMessages] = useState<messageProps[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
-  const notificationHandler = {
-    message: async (data: any) => {
-      console.log('innnnn');
-      console.log(data);
-    },
-  };
-
-  useEffect(() => {
-    OneSignal.setNotificationsHandlers(notificationHandler);
-  }, []);
-
-
-  const checkUnreadMessages = (messages: any) => {
-    const unreadMessage = messages.find(message => !message.readAt);
-    if (unreadMessage) {
-      displayMessage(unreadMessage.id);
-    }
-  };
-
   const showToast = (userMessage) => {
-    console.log('called');
     const { id: userMessageId, message } = userMessage;
     Toast.show({
       type: 'tomatoToast',
@@ -107,9 +90,8 @@ const MessagesProvider = ({ children }: { children: any }) => {
   const loadUserMessages = async () => {
     try {
       setIsLoading(true);
-      const messages = await getUserMessages(user.id);
-      console.log('loadUserMessages messages', messages);
-      setUserMessages(messages);
+      const messages = await getUserMessagesCall(user.id);
+      setUserMessages(messages.sort(sortBySentAt));
       setIsLoading(false);
       return messages;
     } catch (e) {
@@ -119,12 +101,10 @@ const MessagesProvider = ({ children }: { children: any }) => {
 
   const markReadMessages = async (userMessageIds: string[] = []) => {
     const response = await markReadMessageCall(userMessageIds);
-    loadUserMessages();
     return response;
   };
 
   const dismissMessages = async (userMessageIds:string[] = []) => {
-    console.log('DISSSMS');
     const response = await dismissMessageCall(userMessageIds);
     loadUserMessages();
     return response;
@@ -132,7 +112,6 @@ const MessagesProvider = ({ children }: { children: any }) => {
 
   const checkMessagesForToast = async () => {
     const unreadMessage = userMessages.find(message => !message.readAt && !message.dismissedAt);
-    console.log('checkMessagesForToast unreadMessage', unreadMessage);
     if (unreadMessage) {
       showToast(unreadMessage);
     }
@@ -142,11 +121,34 @@ const MessagesProvider = ({ children }: { children: any }) => {
     await loadUserMessages();
   };
 
+  const loadMessageForView = async (messageId: string) => {
+    const message = await getMessage(messageId);
+    setViewingMessage(message);
+  };
+
+  const getUserMessages = async () => {
+    const messages = await getUserMessagesCall(user.id);
+    return messages;
+  };
+
+  const sortBySentAt = (a, b) => {
+    const sentAtA = moment(a.message.sentAt);
+    const sentAtB = moment(b.message.sentAt);
+    if (sentAtA.isBefore(sentAtB)) {
+      return 1;
+    }
+    if (sentAtA.isAfter(sentAtB)) {
+      return -1;
+    }
+    return 0;
+  };
+
   useEffect(() => {
     if (user && user.id) {
       init();
     }
   }, [user?.id]);
+
   return (
     <MessagesContext.Provider
       value={{
@@ -159,6 +161,7 @@ const MessagesProvider = ({ children }: { children: any }) => {
         markReadMessages,
         dismissMessages,
         checkMessagesForToast,
+        getUserMessages,
       }}
     >
       {children}
