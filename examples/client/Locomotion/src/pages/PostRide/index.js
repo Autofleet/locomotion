@@ -155,7 +155,7 @@ const PostRidePage = ({ menuSide, route }) => {
             </TipsContainer>
             )}
             <SubmitContainer>
-              <Button onPress={onSubmit} disabled={isExpanded}>{getButtonText()}</Button>
+              <Button testID="submitPostRide" onPress={onSubmit} disabled={isExpanded}>{getButtonText()}</Button>
             </SubmitContainer>
           </PageContent>
         </PageContainer>

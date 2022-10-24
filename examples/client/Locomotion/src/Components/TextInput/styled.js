@@ -34,7 +34,7 @@ export const Input = styled.TextInput.attrs(props => ({
 
 export const BottomSheetInput = styled(BottomSheetTextInput)`
   padding: 0px 8px;
-  padding-right: 30;
+  padding-right: 30px;
   height: 50px;
   ${FONT_SIZES.H3}
   ${({ fullBorder, isFocused }) => (fullBorder ? fullBorderStyles(isFocused) : bottomBorderStyles)}

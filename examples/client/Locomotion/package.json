@@ -42,6 +42,7 @@
     "lottie-react-native": "^5.0.1",
     "mcc-mnc-list": "^1.1.8",
     "moment": "^2.29.3",
+    "moment-timezone": "^0.5.37",
     "prop-types": "^15.8.1",
     "react": "17.0.2",
     "react-i18next": "^11.7.2",

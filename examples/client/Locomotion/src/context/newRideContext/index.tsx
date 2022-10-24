@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import React, {
   useState, useEffect, useRef, createContext, useContext,
 } from 'react';
@@ -5,12 +6,14 @@ import { AppState } from 'react-native';
 import Config from 'react-native-config';
 import { useNavigation } from '@react-navigation/native';
 import _ from 'lodash';
-import moment from 'moment';
+import moment from 'moment-timezone';
 import i18n from '../../I18n';
 import { FutureRidesContext } from '../futureRides';
 import { UserContext } from '../user';
 import { getPosition, DEFAULT_COORDS } from '../../services/geo';
-import { getPlaces, getGeocode, getPlaceDetails } from './google-api';
+import {
+  getPlaces, getGeocode, getPlaceDetails, getLocationTimezone,
+} from './google-api';
 import StorageService from '../../services/storage';
 import Mixpanel from '../../services/Mixpanel';
 import * as rideApi from './api';
@@ -21,6 +24,7 @@ import {
   getEstimationTags,
   INITIAL_STOP_POINTS,
   RIDE_POPUPS, RidePopupNames, RIDE_FAILED_REASONS, ESTIMATION_ERRORS,
+  convertTimezoneByLocation,
 } from './utils';
 import settings from '../settings';
 import SETTINGS_KEYS from '../settings/keys';
@@ -335,7 +339,7 @@ const RidePageContextProvider = ({ children }: {
         .createServiceEstimations(formattedStopPoints, ride.scheduledTo);
       const tags = getEstimationTags(estimations);
       const formattedEstimations = formatEstimations(services, estimations, tags);
-      setChosenService(ride.scheduledTo ? formattedEstimations[0]
+      setChosenService(ride.scheduledTo ? formattedEstimations.find((e: any) => e.currency)
         : formattedEstimations.find((e: any) => e.eta));
       setServiceEstimations(formattedEstimations);
     } catch (e: any) {
@@ -391,10 +395,15 @@ const RidePageContextProvider = ({ children }: {
     }
   };
 
+  const setLastAcknowledgedRideCompletionTimestampToNow = () => {
+    const now = moment().utc().toDate();
+    return StorageService.save({ lastCompletedRideTimestamp: now }, 60 * 60 * 24 * 7);
+  };
+
   const getLastCompletedRide = async () => {
     let lastTimestamp = await StorageService.get('lastCompletedRideTimestamp');
     if (!lastTimestamp) {
-      lastTimestamp = moment().toDate();
+      lastTimestamp = moment().subtract(24, 'hour').toDate();
     }
     const rides = await rideApi.fetchRides({
       fromDate: lastTimestamp,
@@ -406,9 +415,8 @@ const RidePageContextProvider = ({ children }: {
       state: RIDE_STATES.COMPLETED,
     });
 
-    // one week
-    await StorageService.save({ lastCompletedRideTimestamp: lastTimestamp }, 60 * 60 * 24 * 7);
-    return rides[0];
+    await setLastAcknowledgedRideCompletionTimestampToNow();
+    return rides.filter((r: any) => r.rating === null)[0];
   };
 
   const loadActiveRide = async () => {
@@ -456,7 +464,7 @@ const RidePageContextProvider = ({ children }: {
   }, [user?.id]);
 
   useEffect(() => {
-    if (user?.id && isAppActive) {
+    if (user?.id && isAppActive && !ride.id) {
       loadLastCompletedRide();
     }
   }, [isAppActive]);
@@ -636,7 +644,6 @@ const RidePageContextProvider = ({ children }: {
   };
 
   const enrichPlaceWithLocation = async (placeId: string) => {
-    console.log({ placeId });
     try {
       const data = await getPlaceDetails(placeId);
       return data;
@@ -814,34 +821,45 @@ const RidePageContextProvider = ({ children }: {
       });
     }
 
-    const rideToCreate = {
-      serviceId: chosenService?.id,
-      paymentMethodId: ride.paymentMethodId,
-      rideType: 'passenger',
-      ...(ride.scheduledTo && { scheduledTo: ride.scheduledTo }),
-      stopPoints: stopPoints.map((sp, i) => ({
-        lat: Number(sp.lat),
-        lng: Number(sp.lng),
-        description: sp.streetAddress || sp.description,
-        type: sp.type,
-        ...(i === 0 && { notes: ride.notes }),
-      })),
-    };
-
     try {
+      let scheduledToMoment = ride.scheduledTo;
+      if (ride.scheduledTo) {
+        const unixScheduledTo = moment.unix(Number(ride.scheduledTo) / 1000);
+        const timezoneResponse = await convertTimezoneByLocation(stopPoints[0].lat, stopPoints[0].lng, unixScheduledTo);
+        console.log('timezoneResponse', timezoneResponse);
+        scheduledToMoment = timezoneResponse.time;
+      }
+
+      const rideToCreate = {
+        serviceId: chosenService?.id,
+        paymentMethodId: ride.paymentMethodId,
+        rideType: 'passenger',
+        ...(ride.scheduledTo && { scheduledTo: scheduledToMoment }),
+        stopPoints: stopPoints.map((sp, i) => ({
+          lat: Number(sp.lat),
+          lng: Number(sp.lng),
+          description: sp.streetAddress || sp.description,
+          type: sp.type,
+          ...(i === 0 && { notes: ride.notes }),
+        })),
+      };
+
+
       const afRide = await rideApi.createRide(rideToCreate);
       if (afRide.state === RIDE_STATES.REJECTED) {
         throw new Error(RIDE_FAILED_REASONS.BUSY);
       }
       if (afRide.scheduledTo) {
         loadFutureRides();
-        setNewFutureRide(afRide);
+        setNewFutureRide({ ...afRide, scheduledTo: scheduledToMoment });
         changeBsPage(BS_PAGES.CONFIRM_FUTURE_RIDE);
       } else {
         const formattedRide = await formatRide(afRide);
         setRide(formattedRide);
       }
     } catch (e: any) {
+      console.log(e);
+      console.log(e.message);
       const key = e.response?.data?.errors[0] || e.message;
       Mixpanel.setEvent('Ride failed', { status: e?.response?.status, reason: key });
       if (FAILED_TO_CREATE_RIDE_ACTIONS[key]) {
@@ -907,6 +925,7 @@ const RidePageContextProvider = ({ children }: {
       rideId, priceCalculationId, rating, tip,
     });
     await Promise.all([
+      setLastAcknowledgedRideCompletionTimestampToNow(),
       tip ? chargeTip(priceCalculationId, tip) : () => null,
       rating ? patchRideRating(rideId, rating) : () => null,
     ]);
