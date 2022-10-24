@@ -21,9 +21,9 @@ interface MessageCardProps {
     message: messageProps;
   }
 
-const MessageCard = ({ message }: MessageCardProps) => {
+const MessageCard = ({ message, readAt }: MessageCardProps) => {
   const { setViewingMessage } = useContext(MessagesContext);
-  const { isRead } = message;
+  // const { isRead } = message;
   const readMoreText = i18n.t('messages.readMore');
   return (
     <CardContainer
@@ -32,10 +32,10 @@ const MessageCard = ({ message }: MessageCardProps) => {
         setViewingMessage(message);
         NavigationService.navigate(MAIN_ROUTES.MESSAGE_VIEW);
       }}
-      isRead={isRead}
+      isRead={readAt}
     >
       <ReadSymbolContainer>
-        {!isRead && <ReadSymbol />}
+        {!readAt && <ReadSymbol />}
       </ReadSymbolContainer>
       <TextContainer>
         <MessageTitle numberOfLines={2}>

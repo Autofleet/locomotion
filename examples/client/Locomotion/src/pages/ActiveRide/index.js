@@ -59,7 +59,7 @@ import TopMessage from './TopMessage';
 import i18n from '../../I18n';
 import BlackOverlay from '../../Components/BlackOverlay';
 import { PAYMENT_METHODS } from '../Payments/consts';
-
+import { MessagesContext } from '../../context/messages';
 
 const BLACK_OVERLAY_SCREENS = [BS_PAGES.CANCEL_RIDE];
 
@@ -74,6 +74,7 @@ const RidePage = ({ mapSettings, navigation }) => {
   const {
     currentBsPage, changeBsPage,
   } = useContext(RideStateContextContext);
+  const { checkMessagesForToast } = useContext(MessagesContext);
   const {
     serviceEstimations,
     setServiceEstimations,
@@ -301,6 +302,7 @@ const RidePage = ({ mapSettings, navigation }) => {
   const initChecks = async () => {
     await versionCheck();
     await checkLocationPermission();
+    await checkMessagesForToast();
   };
 
 
@@ -368,17 +370,6 @@ const RidePage = ({ mapSettings, navigation }) => {
   const topMessageKey = Object.keys(MESSAGE_MAP).find(key => MESSAGE_MAP[key].condition());
   const topMessage = MESSAGE_MAP[topMessageKey];
 
-  useEffect(() => {
-    Toast.show({
-      type: 'tomatoToast',
-      text1: 'Attention! Changes in operational hours very soon',
-      text2: 'Due to maintenance somewhere we are obliged to change our operational hours from this and that into a mind blowing dramatic change. please pay attention. Changes will take place from 1st of May at 13:00 until 10th of May at 10:00.',
-      visibilityTime: 100000,
-      props: {
-        image: 'https://res.cloudinary.com/autofleet/image/upload/v1535368744/Control-Center/green.png',
-      },
-    });
-  }, []);
 
   return (
     <PageContainer>
@@ -462,10 +453,10 @@ BS_PAGE_TO_COMP[currentBsPage] ? BS_PAGE_TO_COMP[currentBsPage]() : null
           tomatoToast: props => (
             <AFToast
               {...props}
-              onHide={() => Toast.hide()}
               onPress={() => {
                 Toast.hide();
-                navigationService.navigate(MAIN_ROUTES.MESSAGES);
+                navigationService.push(MAIN_ROUTES.MESSAGE_VIEW);
+                navigationService.navigate(MAIN_ROUTES.MESSAGE_VIEW, { userMessageId: props.props.userMessageId, userMessage: props.props.message });
               }}
             />
           ),

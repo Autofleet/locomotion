@@ -5,7 +5,12 @@ import React, {
   useContext,
 } from 'react';
 import moment from 'moment';
+import Toast from 'react-native-toast-message';
 import { UserContext } from '../user';
+import { setNotificationsHandlers } from '../../services/one-signal';
+import {
+  getUserMessages, getMessage, markReadMessage as markReadMessageCall, dismissMessage as dismissMessageCall,
+} from './api';
 
 export type messageProps = {
     id: string;
@@ -25,7 +30,10 @@ interface MessagesContextInterface {
     setUserMessages: React.Dispatch<React.SetStateAction<messageProps[]>>;
     loadUserMessages: () => Promise<void>;
     isLoading: boolean;
+    markReadMessages: () => Promise<any>
+    dismissMessages: () => Promise<any>
 }
+
 
 export const MessagesContext = createContext<MessagesContextInterface>({
   userMessages: [],
@@ -34,6 +42,8 @@ export const MessagesContext = createContext<MessagesContextInterface>({
   setUserMessages: () => undefined,
   loadUserMessages: async () => undefined,
   isLoading: false,
+  markReadMessages: async () => undefined,
+  dismissMessages: async () => undefined,
 });
 
 const MessagesProvider = ({ children }: { children: any }) => {
@@ -42,70 +52,87 @@ const MessagesProvider = ({ children }: { children: any }) => {
   const [userMessages, setUserMessages] = useState<messageProps[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
+  const notificationHandler = {
+    message: async (notification: any) => {
+
+    },
+  };
+
+  /*   useEffect(() => {
+    setNotificationsHandlers(notificationHandler);
+  }, []); */
+
+
+  const checkUnreadMessages = (messages: any) => {
+    const unreadMessage = messages.find(message => !message.readAt);
+    if (unreadMessage) {
+      displayMessage(unreadMessage.id);
+    }
+  };
+
+  const showToast = (userMessage) => {
+    const { id: userMessageId, message } = userMessage;
+    Toast.show({
+      type: 'tomatoToast',
+      text1: message.title,
+      text2: message.subTitle,
+      visibilityTime: 10000,
+      props: {
+        // image: 'https://res.cloudinary.com/autofleet/image/upload/v1535368744/Control-Center/green.png',
+        userMessageId,
+        message,
+        /*         onHide: () => {
+          dismissMessages([userMessageId]);
+        }, */
+      },
+      onHide: () => {
+        dismissMessages([userMessageId]);
+      },
+    });
+  };
+
   const loadUserMessages = async () => {
-    setIsLoading(true);
-    // const messages = await getUserMessages(user.id)
-    const messages = [
-      {
-        id: 'a',
-        title: 'Attention! Changes in operational hours very soon',
-        isRead: false,
-        subTitle: 'Due to maintenance somewhere we are obliged to change our operational hours from this and that into a mind blowing dramatic change. please pay attention. Changes will take place from 1st of May at 13:00 until 10th of May at 10:00.',
-        sentAt: moment().subtract(3, 'minutes').toDate(),
-        html: '<h1>Hello world</h1>',
-        link: 'https://autofleet.io/',
-        linkDisplay: 'Autofleet',
-      },
-      {
-        id: 'b',
-        title: 'Attention! Changes in operational hours very soon',
-        isRead: true,
-        subTitle: 'Due to maintenance somewhere we are ',
-        sentAt: moment().subtract(5, 'hours').toDate(),
-        html: '<h1>Hello world</h1>',
-      },
-      {
-        id: 'c',
-        title: 'Attention! Changes in operational hours very soon',
-        isRead: true,
-        subTitle: 'Due to maintenance somewhere we are ',
-        sentAt: moment().subtract(5, 'hours').toDate(),
-      },
-      {
-        id: 'd',
-        title: 'Attention! Changes in operational hours very soon',
-        isRead: true,
-        subTitle: 'Due to maintenance somewhere we are ',
-        sentAt: moment().subtract(5, 'hours').toDate(),
-      },
-      {
-        id: 'e',
-        title: 'Attention! Changes in operational hours very soon',
-        isRead: true,
-        subTitle: 'Due to maintenance somewhere we are ',
-        sentAt: moment().subtract(5, 'days').toDate(),
-      },
-      {
-        id: 'f',
-        title: 'Attention! Changes in operational hours very soon',
-        isRead: true,
-        subTitle: 'Due to maintenance somewhere we are ',
-        sentAt: moment().subtract(7, 'days').toDate(),
-      },
-      {
-        id: 'g',
-        title: 'Attention! Changes in operational hours very soon',
-        isRead: true,
-        subTitle: 'Due to maintenance somewhere we are ',
-        sentAt: moment().subtract(15, 'days').toDate(),
-      }];
-    setUserMessages(messages);
-    setIsLoading(false);
+    try {
+      setIsLoading(true);
+      const messages = await getUserMessages(user.id);
+      console.log('loadUserMessages messages', messages);
+      setUserMessages(messages);
+      setIsLoading(false);
+      return messages;
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  const markReadMessages = async (userMessageIds: string[] = []) => {
+    const response = await markReadMessageCall(userMessageIds);
+    loadUserMessages();
+    return response;
+  };
+
+  const dismissMessages = async (userMessageIds:string[] = []) => {
+    const response = await dismissMessageCall(userMessageIds);
+    loadUserMessages();
+    return response;
+  };
+
+  const checkMessagesForToast = async () => {
+    const unreadMessage = userMessages.find(message => !message.readAt && !message.dismissedAt);
+    console.log('checkMessagesForToast unreadMessage', unreadMessage);
+    if (unreadMessage) {
+      showToast(unreadMessage);
+    }
+  };
+
+  const init = async () => {
+    await loadUserMessages();
   };
 
   useEffect(() => {
-    loadUserMessages();
-  }, []);
+    if (user && user.id) {
+      init();
+    }
+  }, [user?.id]);
   return (
     <MessagesContext.Provider
       value={{
@@ -115,6 +142,9 @@ const MessagesProvider = ({ children }: { children: any }) => {
         setUserMessages,
         loadUserMessages,
         isLoading,
+        markReadMessages,
+        dismissMessages,
+        checkMessagesForToast,
       }}
     >
       {children}

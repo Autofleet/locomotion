@@ -1,5 +1,5 @@
 import React, {
-  useContext, useState,
+  useContext, useEffect, useState,
 } from 'react';
 import styled from 'styled-components';
 import { ScrollView } from 'react-native-gesture-handler';
@@ -16,6 +16,8 @@ import * as NavigationService from '../../services/navigation';
 import { MessagesContext } from '../../context/messages';
 import MessageCard from './MessageCard';
 import Loader from '../../Components/Loader';
+import { NoRidesInList } from './styled';
+import PageGenericMessage from '../../Components/PageGenericMessage';
 
 const ScrollContainer = styled(ScrollView)`
 `;
@@ -25,11 +27,14 @@ justify-content: center;
 `;
 interface FutureRidesViewProps {
     menuSide: 'right' | 'left';
+    route: any;
   }
 
-const Messages = ({ menuSide }: FutureRidesViewProps) => {
+const Messages = ({ menuSide, route }: FutureRidesViewProps) => {
   const { changeBsPage } = useContext(RideStateContextContext);
-  const { userMessages, loadUserMessages, isLoading } = useContext(MessagesContext);
+  const {
+    userMessages, loadUserMessages, isLoading, markReadMessages,
+  } = useContext(MessagesContext);
   const { ride } = useContext(RidePageContext);
 
   const markMessagesAsRead = async () => {
@@ -41,6 +46,15 @@ const Messages = ({ menuSide }: FutureRidesViewProps) => {
       markMessagesAsRead();
     }, []),
   );
+  useEffect(() => {
+    if (userMessages && userMessages.length) {
+      const unreadMessages = userMessages.filter(message => !message.readAt).map(message => message.id);
+      if (unreadMessages.length) {
+        markReadMessages(unreadMessages);
+      }
+    }
+  }, []);
+
 
   return (
     <PageContainer>
@@ -66,14 +80,23 @@ const Messages = ({ menuSide }: FutureRidesViewProps) => {
         )
         : (
           <ScrollContainer>
-            {(userMessages || []).map(message => (
-              <MessageCard
-                message={message}
-              />
-            ))}
+            {userMessages && userMessages.length
+              ? (userMessages || []).map(m => (
+                <MessageCard
+                  {...m}
+                />
+              ))
+              : (
+                <PageGenericMessage
+                  title={i18n.t('messages.noMessagesTitle')}
+                  text={i18n.t('messages.noMessagesText')}
+                />
+              )
+          }
           </ScrollContainer>
         )
           }
+
 
     </PageContainer>
   );

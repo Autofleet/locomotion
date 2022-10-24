@@ -1,4 +1,4 @@
-import React, { useContext, useRef } from 'react';
+import React, { useContext, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import { ScrollView } from 'react-native-gesture-handler';
 import { Linking, Text } from 'react-native';
@@ -34,10 +34,18 @@ color: ${LINK_BLUE_COLOR};
 
 interface FutureRidesViewProps {
     menuSide: 'right' | 'left';
+    route: any;
   }
 
-const MessageView = ({ menuSide }: FutureRidesViewProps) => {
-  const { viewingMessage: message } = useContext(MessagesContext);
+const MessageView = ({ menuSide, route }: FutureRidesViewProps) => {
+  const { viewingMessage: message, setViewingMessage } = useContext(MessagesContext);
+
+  useEffect(() => {
+    const { userMessageId, userMessage } = route.params;
+    if (userMessageId) {
+      setViewingMessage(userMessage);
+    }
+  }, [route]);
 
   if (message) {
     return (

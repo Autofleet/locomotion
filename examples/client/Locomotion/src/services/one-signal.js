@@ -11,6 +11,7 @@ import Mixpanel from './Mixpanel';
 class NotificationsService {
   constructor() {
     this.network = network;
+    this.notificationsHandlers = {};
   }
 
   updateServer = async (pushTokenId, userId, isSubscribed) => {
@@ -73,13 +74,13 @@ class NotificationsService {
   };
 
   onOpened = (openResult) => {
-    /* const { additionalData } = openResult.notification.payload;
+    const { additionalData } = openResult.notification.payload;
     if (additionalData && additionalData.type) {
       const method = this.notificationsHandlers[additionalData.type];
       if (method) {
         method();
       }
-    } */
+    }
   };
 
   triggerOnNotification = (payload) => {
@@ -99,6 +100,13 @@ class NotificationsService {
   };
 
   getOneSignalId = () => new Promise(resolve => OneSignal.getPermissionSubscriptionState(({ userId }) => resolve(userId)));
+
+  setNotificationsHandlers = (notificationsHandlers) => {
+    this.notificationsHandlers = {
+      ...this.notificationsHandlers,
+      ...notificationsHandlers,
+    };
+  };
 }
 
 export default new NotificationsService();

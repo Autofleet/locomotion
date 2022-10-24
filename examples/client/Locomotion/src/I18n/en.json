@@ -318,7 +318,7 @@
         "priceItem": "{{ name }}",
         "perUnit": "- {{ price }} per {{ unit }} ",
         "paymentBreakdownTitle": "Payment Breakdown",
-        "priceFieldNames": { 
+        "priceFieldNames": {
             "surgePrice": "Surge price",
             "discount": "Discount",
             "cancelationFee": "Cancelation fee",
@@ -374,7 +374,9 @@
     "messages": {
         "pageTitle": "Messages",
         "readMore": "Read more",
-        "now": "Now"
+        "now": "Now",
+        "noMessagesTitle": "No Messages",
+        "noMessagesText": ""
     },
     "messageView": {
         "pageTitle": "Messages"
