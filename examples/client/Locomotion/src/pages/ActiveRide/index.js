@@ -74,7 +74,7 @@ const RidePage = ({ mapSettings, navigation }) => {
   const {
     currentBsPage, changeBsPage,
   } = useContext(RideStateContextContext);
-  const { checkMessagesForToast } = useContext(MessagesContext);
+  const { checkMessagesForToast, dismissMessages } = useContext(MessagesContext);
   const {
     serviceEstimations,
     setServiceEstimations,
@@ -454,9 +454,13 @@ BS_PAGE_TO_COMP[currentBsPage] ? BS_PAGE_TO_COMP[currentBsPage]() : null
             <AFToast
               {...props}
               onPress={() => {
+                dismissMessages([props.props.userMessageId]);
                 Toast.hide();
-                navigationService.push(MAIN_ROUTES.MESSAGE_VIEW);
                 navigationService.navigate(MAIN_ROUTES.MESSAGE_VIEW, { userMessageId: props.props.userMessageId, userMessage: props.props.message });
+              }}
+              onHide={() => {
+                dismissMessages([props.props.userMessageId]);
+                Toast.hide();
               }}
             />
           ),

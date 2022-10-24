@@ -7,10 +7,12 @@ import React, {
 import moment from 'moment';
 import Toast from 'react-native-toast-message';
 import { UserContext } from '../user';
-import { setNotificationsHandlers } from '../../services/one-signal';
+import OneSignal from '../../services/one-signal';
 import {
   getUserMessages, getMessage, markReadMessage as markReadMessageCall, dismissMessage as dismissMessageCall,
 } from './api';
+import * as navigationService from '../../services/navigation';
+import { MAIN_ROUTES } from '../../pages/routes';
 
 export type messageProps = {
     id: string;
@@ -20,7 +22,7 @@ export type messageProps = {
     html?: string;
     sentAt: Date;
     link?: string;
-    linkDisplay?: string;
+    linkText?: string;
 }
 
 interface MessagesContextInterface {
@@ -32,6 +34,7 @@ interface MessagesContextInterface {
     isLoading: boolean;
     markReadMessages: () => Promise<any>
     dismissMessages: () => Promise<any>
+
 }
 
 
@@ -44,6 +47,7 @@ export const MessagesContext = createContext<MessagesContextInterface>({
   isLoading: false,
   markReadMessages: async () => undefined,
   dismissMessages: async () => undefined,
+
 });
 
 const MessagesProvider = ({ children }: { children: any }) => {
@@ -53,14 +57,15 @@ const MessagesProvider = ({ children }: { children: any }) => {
   const [isLoading, setIsLoading] = useState(false);
 
   const notificationHandler = {
-    message: async (notification: any) => {
-
+    message: async (data: any) => {
+      console.log('innnnn');
+      console.log(data);
     },
   };
 
-  /*   useEffect(() => {
-    setNotificationsHandlers(notificationHandler);
-  }, []); */
+  useEffect(() => {
+    OneSignal.setNotificationsHandlers(notificationHandler);
+  }, []);
 
 
   const checkUnreadMessages = (messages: any) => {
@@ -71,23 +76,31 @@ const MessagesProvider = ({ children }: { children: any }) => {
   };
 
   const showToast = (userMessage) => {
+    console.log('called');
     const { id: userMessageId, message } = userMessage;
     Toast.show({
       type: 'tomatoToast',
       text1: message.title,
       text2: message.subTitle,
-      visibilityTime: 10000,
+      visibilityTime: 5000,
+      autoHide: true,
       props: {
         // image: 'https://res.cloudinary.com/autofleet/image/upload/v1535368744/Control-Center/green.png',
         userMessageId,
         message,
-        /*         onHide: () => {
-          dismissMessages([userMessageId]);
-        }, */
       },
-      onHide: () => {
+      /*  onHide: () => {
+        console.log('onHide');
+        Toast.hide();
         dismissMessages([userMessageId]);
-      },
+      }, */
+      /*       onPress: () => {
+        console.log('pressed');
+        Toast.hide();
+        dismissMessages([userMessageId]);
+        navigationService.navigate(MAIN_ROUTES.MESSAGE_VIEW, { userMessageId, userMessage: message });
+      }, */
+
     });
   };
 
@@ -111,6 +124,7 @@ const MessagesProvider = ({ children }: { children: any }) => {
   };
 
   const dismissMessages = async (userMessageIds:string[] = []) => {
+    console.log('DISSSMS');
     const response = await dismissMessageCall(userMessageIds);
     loadUserMessages();
     return response;

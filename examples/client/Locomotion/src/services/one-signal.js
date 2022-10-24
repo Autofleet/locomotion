@@ -6,6 +6,18 @@ import network from './network';
 import { updateUser } from '../context/user/api';
 import { StorageService } from '.';
 import Mixpanel from './Mixpanel';
+import * as NavigationService from './navigation';
+import { MAIN_ROUTES } from '../pages/routes';
+
+const openNotificationsHandlers = {
+  message: ({ messageId }) => {
+    console.log('messageIdmessageId', messageId);
+
+    setTimeout(() => {
+      NavigationService.navigate(MAIN_ROUTES.MESSAGE_VIEW, { messageId });
+    }, 3000);
+  },
+};
 
 
 class NotificationsService {
@@ -74,13 +86,17 @@ class NotificationsService {
   };
 
   onOpened = (openResult) => {
-    const { additionalData } = openResult.notification.payload;
-    if (additionalData && additionalData.type) {
-      const method = this.notificationsHandlers[additionalData.type];
+    console.log(openResult);
+    const { additionalData } = openResult.notification;
+    console.log(additionalData);
+    /* if (additionalData && additionalData.type) {
+      console.log('sdfsdfsdf');
+      console.log(openNotificationsHandlers);
+      const method = openNotificationsHandlers[additionalData.type];
       if (method) {
-        method();
+        method(additionalData);
       }
-    }
+    } */
   };
 
   triggerOnNotification = (payload) => {

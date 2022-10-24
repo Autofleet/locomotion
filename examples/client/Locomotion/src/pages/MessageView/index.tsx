@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import { ScrollView } from 'react-native-gesture-handler';
-import { Linking, Text } from 'react-native';
+import { Linking, Text, View } from 'react-native';
 import RenderHTML from 'react-native-render-html';
 import SvgIcon from '../../Components/SvgIcon';
 import { getFormattedMessageDate } from '../../context/messages/utils';
@@ -17,8 +17,8 @@ import { LINK_BLUE_COLOR, FONT_SIZES } from '../../context/theme';
 import arrow from '../../assets/chevron.svg';
 
 const ScrollContainer = styled(ScrollView)`
-padding: 20px;
-width: 90%;
+padding: 25px;
+width: 100%;
 flex: 1;
 `;
 
@@ -28,8 +28,14 @@ align-items: center;
 `;
 
 const LinkText = styled(Text)`
-${FONT_SIZES.H2};
+${FONT_SIZES.H3};
 color: ${LINK_BLUE_COLOR};
+`;
+
+const Footer = styled(View)`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
 `;
 
 interface FutureRidesViewProps {
@@ -61,12 +67,12 @@ const MessageView = ({ menuSide, route }: FutureRidesViewProps) => {
           <MessageTitle>
             {message.title}
           </MessageTitle>
-          <MessageText>
-            {message.subTitle}
-          </MessageText>
           <MessageDate>
             {getFormattedMessageDate(message)}
           </MessageDate>
+          <MessageText>
+            {message.subTitle}
+          </MessageText>
           {!!message.html
           && (
             <RenderHTML
@@ -75,14 +81,15 @@ const MessageView = ({ menuSide, route }: FutureRidesViewProps) => {
           )}
           {!!message.link
           && (
-          <MessageLink noBackground onPress={() => message.link && Linking.openURL(message.link)}>
-            <LinkText>
-              {message.linkDisplay || message.link}
-            </LinkText>
-            <SvgIcon Svg={arrow} stroke={LINK_BLUE_COLOR} height={15} />
-          </MessageLink>
+            <MessageLink noBackground onPress={() => message.link && Linking.openURL(message.link)}>
+              <LinkText>
+                {message.linkText || message.link}
+              </LinkText>
+              <SvgIcon Svg={arrow} stroke={LINK_BLUE_COLOR} height={15} />
+            </MessageLink>
           )
-          }
+        }
+
         </ScrollContainer>
       </PageContainer>
     );

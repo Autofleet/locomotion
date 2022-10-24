@@ -1,6 +1,7 @@
 // import { NavigationActions, StackActions } from 'react-navigation';
 import { CommonActions, NavigationContainerRef, StackActions } from '@react-navigation/native';
 import Mixpanel from './Mixpanel';
+import { MAIN_ROUTES } from '../pages/routes';
 
 let myNavigator: any;
 
@@ -63,8 +64,4 @@ export const goBack = () => {
   myNavigator.dispatch(CommonActions.goBack());
 
   return true;
-};
-
-export const push = (name: string, params: any = {}) => {
-  myNavigator.push(name, params);
 };
