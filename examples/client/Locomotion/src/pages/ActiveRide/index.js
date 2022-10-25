@@ -453,15 +453,6 @@ BS_PAGE_TO_COMP[currentBsPage] ? BS_PAGE_TO_COMP[currentBsPage]() : null
           tomatoToast: props => (
             <AFToast
               {...props}
-              onPress={() => {
-                dismissMessages([props.props.userMessageId]);
-                Toast.hide();
-                navigationService.navigate(MAIN_ROUTES.MESSAGE_VIEW, { userMessageId: props.props.userMessageId, userMessage: props.props.message });
-              }}
-              onHide={() => {
-                dismissMessages([props.props.userMessageId]);
-                Toast.hide();
-              }}
             />
           ),
         }}

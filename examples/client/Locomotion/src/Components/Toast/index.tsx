@@ -1,10 +1,10 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useContext } from 'react';
 import SvgIcon from '../SvgIcon';
 import {
   ContentContainer,
-  Header, SubText, TextContainer, ToastContainer, ToastImage, IconContainer,
+  Header, SubText, TextContainer, ToastContainer, ToastImage, IconContainer, Footer, FooterButton, FooterButtonText,
 } from './styled';
-import closeIcon from '../../assets/close-x.svg';
+import i18n from '../../I18n';
 
 interface AFToastProps {
     text1: string;
@@ -19,11 +19,9 @@ const AFToast = ({
   useEffect(() => () => {
     onHide();
   }, []);
+
   return (
-    <ToastContainer noBackground onPress={onPress}>
-      <IconContainer onPress={onHide} noBackground>
-        <SvgIcon Svg={closeIcon} height={10} width={10} />
-      </IconContainer>
+    <ToastContainer noBackground activeOpacity={1} onPress={onPress}>
       <ContentContainer>
         {props.image && <ToastImage resizeMode="contain" source={{ uri: props.image }} />}
         <TextContainer>
@@ -35,6 +33,13 @@ const AFToast = ({
           </SubText>
         </TextContainer>
       </ContentContainer>
+      <Footer>
+        <FooterButton>
+          <FooterButtonText onPress={props.onButtonClick}>
+            {props.buttonText}
+          </FooterButtonText>
+        </FooterButton>
+      </Footer>
     </ToastContainer>
   );
 };

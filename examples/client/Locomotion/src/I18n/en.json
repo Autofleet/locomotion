@@ -376,7 +376,10 @@
         "readMore": "Read more",
         "now": "Now",
         "noMessagesTitle": "No Messages",
-        "noMessagesText": ""
+        "noMessagesText": "",
+        "toast":{
+            "dismiss": "Dismiss"
+        }
     },
     "messageView": {
         "pageTitle": "Messages"

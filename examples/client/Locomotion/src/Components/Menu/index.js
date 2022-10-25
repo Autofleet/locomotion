@@ -22,6 +22,7 @@ import CalendarIcon from '../../assets/calendar.svg';
 import History from '../../assets/history.svg';
 import HelpIconSource from '../../assets/help.svg';
 import CreditCardIconSource from '../../assets/credit-card.svg';
+import MessagesIcon from '../../assets/email.svg';
 import SvgIcon from '../SvgIcon';
 import settings from '../../context/settings';
 import SETTINGS_KEYS from '../../context/settings/keys';
@@ -94,11 +95,11 @@ export const DrawerContentComponent = ({ navigation, state }) => {
       <DrawerLabelsContainer>
         <DrawerLabel
           title={i18n.t('menu.messages')}
-          icon={CalendarIcon}
+          icon={MessagesIcon}
           onPress={() => navigateTo(MAIN_ROUTES.MESSAGES)}
           iconFill="#333"
           focused={route === MAIN_ROUTES.MESSAGES}
-          numberOfUpdates={(userMessages || []).filter(m => !m.readAt).length}
+          numberOfUpdates={(userMessages || []).filter(m => !m.readAt && !m.dismissedAt).length}
         />
         <DrawerLabel
           testID="rideHistory"

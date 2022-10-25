@@ -9,10 +9,14 @@ import Toast from 'react-native-toast-message';
 import { UserContext } from '../user';
 import OneSignal from '../../services/one-signal';
 import {
-  getUserMessages as getUserMessagesCall, getMessage, markReadMessage as markReadMessageCall, dismissMessage as dismissMessageCall,
+  getUserMessages as getUserMessagesCall,
+  getMessage,
+  markReadMessage as markReadMessageCall,
+  dismissMessage as dismissMessageCall,
 } from './api';
 import * as navigationService from '../../services/navigation';
 import { MAIN_ROUTES } from '../../pages/routes';
+import i18n from '../../I18n';
 
 export type messageProps = {
     id: string;
@@ -34,7 +38,7 @@ interface MessagesContextInterface {
     setUserMessages: React.Dispatch<React.SetStateAction<messageProps[]>>;
     loadUserMessages: () => Promise<void>;
     isLoading: boolean;
-    markReadMessages: (param) => Promise<any>
+    markReadMessages: (param: any) => Promise<any>
     dismissMessages: () => Promise<any>
     getUserMessages: () => Promise<any>
 
@@ -65,25 +69,22 @@ const MessagesProvider = ({ children }: { children: any }) => {
       type: 'tomatoToast',
       text1: message.title,
       text2: message.subTitle,
-      visibilityTime: 5000,
-      autoHide: true,
+      autoHide: false,
+      topOffset: 60,
       props: {
         // image: 'https://res.cloudinary.com/autofleet/image/upload/v1535368744/Control-Center/green.png',
         userMessageId,
-        message,
+        messageId: message.id,
+        onButtonClick: () => Toast.hide(),
+        buttonText: i18n.t('messages.toast.dismiss'),
       },
-      /*  onHide: () => {
-        console.log('onHide');
-        Toast.hide();
+      onPress: () => {
         dismissMessages([userMessageId]);
-      }, */
-      /*       onPress: () => {
-        console.log('pressed');
-        Toast.hide();
+        navigationService.navigate(MAIN_ROUTES.MESSAGE_VIEW, { messageId: message.id });
+      },
+      onHide: () => {
         dismissMessages([userMessageId]);
-        navigationService.navigate(MAIN_ROUTES.MESSAGE_VIEW, { userMessageId, userMessage: message });
-      }, */
-
+      },
     });
   };
 
@@ -119,11 +120,6 @@ const MessagesProvider = ({ children }: { children: any }) => {
 
   const init = async () => {
     await loadUserMessages();
-  };
-
-  const loadMessageForView = async (messageId: string) => {
-    const message = await getMessage(messageId);
-    setViewingMessage(message);
   };
 
   const getUserMessages = async () => {

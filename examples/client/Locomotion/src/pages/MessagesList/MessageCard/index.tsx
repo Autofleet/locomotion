@@ -23,14 +23,12 @@ interface MessageCardProps {
 
 const MessageCard = ({ message, readAt }: MessageCardProps) => {
   const { setViewingMessage } = useContext(MessagesContext);
-  // const { isRead } = message;
   const readMoreText = i18n.t('messages.readMore');
   return (
     <CardContainer
       noBackground
       onPress={() => {
-        setViewingMessage(message);
-        NavigationService.navigate(MAIN_ROUTES.MESSAGE_VIEW);
+        NavigationService.navigate(MAIN_ROUTES.MESSAGE_VIEW, { messageId: message.id });
       }}
       isRead={readAt}
     >

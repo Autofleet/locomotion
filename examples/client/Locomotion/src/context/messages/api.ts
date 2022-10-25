@@ -1,29 +1,21 @@
 import networkService from '../../services/network';
 
 export const getUserMessages = async (userId: string) => {
-  const { data } = await networkService.get('api/v2/user-messages', { params: { userId } });
+  const { data } = await networkService.get('api/v1/me/user-messages', { params: { userId } });
   return data;
 };
 
 export const getMessage = async (messageId: string) => {
-  const { data } = await networkService.get(`api/v2/messages/${messageId}`);
+  const { data } = await networkService.get(`api/v1/me/messages/${messageId}`);
   return data;
 };
 
 export const markReadMessage = async (userMessageIds = []) => {
-  console.log('userMessageIds', userMessageIds);
-
-  try {
-    const { data } = await networkService.post('api/v2/user-messages/read', { ids: userMessageIds });
-    console.log(data);
-    return data;
-  } catch (error) {
-    console.log('error', error);
-    return false;
-  }
+  const { data } = await networkService.post('api/v1/me/user-messages/read', { ids: userMessageIds });
+  return data;
 };
 
 export const dismissMessage = async (userMessageIds = []) => {
-  const { data } = await networkService.post('api/v2/user-messages/dismiss', { ids: userMessageIds });
+  const { data } = await networkService.post('api/v1/me/user-messages/dismiss', { ids: userMessageIds });
   return data;
 };

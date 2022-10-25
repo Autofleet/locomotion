@@ -1,5 +1,5 @@
 import React, {
-  useContext, useEffect, useState,
+  useContext, useEffect, useState, useCallback,
 } from 'react';
 import styled from 'styled-components';
 import { ScrollView } from 'react-native-gesture-handler';
@@ -38,23 +38,24 @@ const Messages = ({ menuSide, route }: FutureRidesViewProps) => {
   const { ride } = useContext(RidePageContext);
 
   const markMessagesAsRead = async () => {
-    // TODO request to backend to mark all as read
-  };
-  useFocusEffect(
-    React.useCallback(() => {
-      loadUserMessages();
-      markMessagesAsRead();
-    }, []),
-  );
-  useEffect(() => {
     if (userMessages && userMessages.length) {
       const unreadMessages = userMessages.filter(message => !message.readAt).map(message => message.id);
       if (unreadMessages.length) {
         markReadMessages(unreadMessages);
       }
     }
-  }, []);
+  };
 
+  const initPage = async () => {
+    await loadUserMessages();
+    markMessagesAsRead();
+  };
+
+  useFocusEffect(
+    useCallback(() => {
+      initPage();
+    }, []),
+  );
 
   return (
     <PageContainer>

@@ -1,4 +1,7 @@
-import React, { useContext, useEffect, useRef } from 'react';
+import React, {
+  Fragment,
+  useContext, useEffect, useRef, useState,
+} from 'react';
 import styled from 'styled-components';
 import { ScrollView } from 'react-native-gesture-handler';
 import { Linking, Text, View } from 'react-native';
@@ -11,10 +14,11 @@ import PageHeader from '../../Components/PageHeader';
 import { PageContainer } from '../styles';
 import i18n from '../../I18n';
 import * as NavigationService from '../../services/navigation';
-import { MessagesContext } from '../../context/messages';
+import { getMessage } from '../../context/messages/api';
 import Button from '../../Components/Button';
 import { LINK_BLUE_COLOR, FONT_SIZES } from '../../context/theme';
 import arrow from '../../assets/chevron.svg';
+import Loader from '../../Components/Loader';
 
 const ScrollContainer = styled(ScrollView)`
 padding: 25px;
@@ -38,53 +42,46 @@ const Footer = styled(View)`
   justify-content: space-between;
 `;
 
+const LoaderContainer = styled(View)`
+  justify-content: center;
+  flex: 1;
+`;
+
 interface FutureRidesViewProps {
     menuSide: 'right' | 'left';
     route: any;
   }
 
 const MessageView = ({ menuSide, route }: FutureRidesViewProps) => {
-  const {
-    viewingMessage: message,
-    setViewingMessage,
-    userMessages,
-    getUserMessages,
-  } = useContext(MessagesContext);
+  const [message, setMessage] = useState(null);
 
   const loadMessage = async (messageId) => {
-    const messages = await getUserMessages();
-    const foundMessage = messages.find(({ message: m }) => m.id === messageId);
-    if (foundMessage.message) {
-      setViewingMessage(foundMessage.message);
+    const fetchedMessage = await getMessage(messageId);
+    if (fetchedMessage) {
+      setMessage(fetchedMessage);
     } else {
       NavigationService.navigate(MAIN_ROUTES.MESSAGES);
     }
   };
 
   useEffect(() => {
-    const { userMessageId, userMessage, messageId } = route.params;
-    if (userMessageId) {
-      setViewingMessage(userMessage);
-    }
+    const { messageId } = route.params;
 
     if (messageId) {
       loadMessage(messageId);
     }
+  }, [route]);
 
-
-    return () => setViewingMessage(null);
-  }, [route, userMessages]);
-
-  if (message) {
-    return (
-      <PageContainer>
-        <PageHeader
-          title={i18n.t('messageView.pageTitle')}
-          onIconPress={() => {
-            NavigationService.navigate(MAIN_ROUTES.MESSAGES);
-          }}
-          iconSide={menuSide}
-        />
+  return (
+    <PageContainer>
+      <PageHeader
+        title={i18n.t('messageView.pageTitle')}
+        onIconPress={() => {
+          NavigationService.navigate(MAIN_ROUTES.MESSAGES);
+        }}
+        iconSide={menuSide}
+      />
+      {message ? (
         <ScrollContainer alwaysBounceVertical={false}>
           <MessageTitle>
             {message.title}
@@ -113,13 +110,22 @@ const MessageView = ({ menuSide, route }: FutureRidesViewProps) => {
               <SvgIcon Svg={arrow} stroke={LINK_BLUE_COLOR} height={15} />
             </MessageLink>
           )
-        }
 
+        }
         </ScrollContainer>
-      </PageContainer>
-    );
-  }
-  return null;
+      ) : (
+        <LoaderContainer>
+          <Loader
+            sourceProp={null}
+            dark
+            lottieViewStyle={{
+              height: 15, width: 15,
+            }}
+          />
+        </LoaderContainer>
+      )}
+    </PageContainer>
+  );
 };
 
 
