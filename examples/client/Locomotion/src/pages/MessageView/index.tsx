@@ -95,7 +95,13 @@ const MessageView = ({ menuSide, route }: FutureRidesViewProps) => {
           {message.content
           && (
           <View style={{ marginTop: 20 }}>
-            <Markdown>
+            <Markdown style={{
+              link: {
+                textDecorationLine: 'underline',
+                color: LINK_BLUE_COLOR,
+              },
+            }}
+            >
               {message.content}
             </Markdown>
           </View>
