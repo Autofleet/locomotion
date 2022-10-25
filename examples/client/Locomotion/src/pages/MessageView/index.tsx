@@ -5,7 +5,7 @@ import React, {
 import styled from 'styled-components';
 import { ScrollView } from 'react-native-gesture-handler';
 import { Linking, Text, View } from 'react-native';
-import RenderHTML from 'react-native-render-html';
+import Markdown from 'react-native-markdown-display';
 import SvgIcon from '../../Components/SvgIcon';
 import { getFormattedMessageDate } from '../../context/messages/utils';
 import { MessageDate, MessageText, MessageTitle } from '../MessagesList/MessageCard/styled';
@@ -86,20 +86,19 @@ const MessageView = ({ menuSide, route }: FutureRidesViewProps) => {
           <MessageTitle>
             {message.title}
           </MessageTitle>
-          <MessageDate>
-            {getFormattedMessageDate(message)}
-          </MessageDate>
           <MessageText>
             {message.subTitle}
           </MessageText>
-          <MessageText>
-            {message.content}
-          </MessageText>
-          {!!message.html
+          <MessageDate>
+            {getFormattedMessageDate(message)}
+          </MessageDate>
+          {message.content
           && (
-            <RenderHTML
-              source={{ html: message.html }}
-            />
+          <View style={{ marginTop: 20 }}>
+            <Markdown>
+              {message.content}
+            </Markdown>
+          </View>
           )}
           {!!message.link
           && (

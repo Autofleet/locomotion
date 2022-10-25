@@ -27,7 +27,7 @@ export const MessageText = styled(Text)`
 ${FONT_SIZES.H3}
 ${FONT_WEIGHTS.REGULAR}
 opacity: .8;
-margin: 10px 0;
+margin: 4px 0;
 `;
 
 export const MessageFooter = styled(View)`
@@ -41,7 +41,7 @@ export const MessageDate = styled(Text)`
 ${FONT_SIZES.MEDIUM}
 ${FONT_WEIGHTS.REGULAR}
 opacity: .5;
-padding: 5px 0;
+
 `;
 
 export const ReadMore = styled(Text)`
