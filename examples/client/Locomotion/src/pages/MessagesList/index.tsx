@@ -54,6 +54,8 @@ const Messages = ({ menuSide, route }: FutureRidesViewProps) => {
   useFocusEffect(
     useCallback(() => {
       initPage();
+
+      return () => loadUserMessages();
     }, []),
   );
 

@@ -79,7 +79,7 @@ const MessagesProvider = ({ children }: { children: any }) => {
         buttonText: i18n.t('messages.toast.dismiss'),
       },
       onPress: () => {
-        dismissMessages([userMessageId]);
+        Toast.hide();
         navigationService.navigate(MAIN_ROUTES.MESSAGE_VIEW, { messageId: message.id });
       },
       onHide: () => {
