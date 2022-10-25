@@ -21,7 +21,7 @@ interface MessageCardProps {
     message: messageProps;
   }
 
-const MessageCard = ({ message, readAt }: MessageCardProps) => {
+const MessageCard = ({ message, readAt, dismissedAt }: MessageCardProps) => {
   const { setViewingMessage } = useContext(MessagesContext);
   const readMoreText = i18n.t('messages.readMore');
   return (
@@ -33,7 +33,7 @@ const MessageCard = ({ message, readAt }: MessageCardProps) => {
       isRead={readAt}
     >
       <ReadSymbolContainer>
-        {!readAt && <ReadSymbol />}
+        {!readAt && !dismissedAt && <ReadSymbol />}
       </ReadSymbolContainer>
       <TextContainer>
         <MessageTitle numberOfLines={2}>
