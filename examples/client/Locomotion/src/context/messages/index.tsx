@@ -41,9 +41,9 @@ interface MessagesContextInterface {
     markReadMessages: (param: any) => Promise<any>
     dismissMessages: () => Promise<any>
     getUserMessages: () => Promise<any>
+    checkMessagesForToast: () => any
 
 }
-
 
 export const MessagesContext = createContext<MessagesContextInterface>({
   userMessages: [],
@@ -55,6 +55,7 @@ export const MessagesContext = createContext<MessagesContextInterface>({
   markReadMessages: async () => undefined,
   dismissMessages: async () => undefined,
   getUserMessages: async () => undefined,
+  checkMessagesForToast: () => undefined,
 });
 
 const MessagesProvider = ({ children }: { children: any }) => {
@@ -63,7 +64,7 @@ const MessagesProvider = ({ children }: { children: any }) => {
   const [userMessages, setUserMessages] = useState<messageProps[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
-  const showToast = (userMessage) => {
+  const showToast = (userMessage: any) => {
     const { id: userMessageId, message } = userMessage;
     Toast.show({
       type: 'tomatoToast',
@@ -91,7 +92,7 @@ const MessagesProvider = ({ children }: { children: any }) => {
   const loadUserMessages = async () => {
     try {
       setIsLoading(true);
-      const messages = await getUserMessagesCall(user.id);
+      const messages = await getUserMessagesCall(user?.id);
       setUserMessages(messages.sort(sortBySentAt));
       setIsLoading(false);
       return messages;
@@ -100,7 +101,7 @@ const MessagesProvider = ({ children }: { children: any }) => {
     }
   };
 
-  const markReadMessages = async (userMessageIds: string[] = []) => {
+  const markReadMessages = async (userMessageIds: string[]): Promise<void> => {
     const response = await markReadMessageCall(userMessageIds);
     return response;
   };
@@ -111,7 +112,7 @@ const MessagesProvider = ({ children }: { children: any }) => {
     return response;
   };
 
-  const checkMessagesForToast = async () => {
+  const checkMessagesForToast = () => {
     const unreadMessage = userMessages.find(message => !message.readAt && !message.dismissedAt);
     if (unreadMessage) {
       showToast(unreadMessage);
@@ -123,11 +124,11 @@ const MessagesProvider = ({ children }: { children: any }) => {
   };
 
   const getUserMessages = async () => {
-    const messages = await getUserMessagesCall(user.id);
+    const messages = await getUserMessagesCall(user?.id);
     return messages;
   };
 
-  const sortBySentAt = (a, b) => {
+  const sortBySentAt = (a: any, b:any) => {
     const sentAtA = moment(a.message.sentAt);
     const sentAtB = moment(b.message.sentAt);
     if (sentAtA.isBefore(sentAtB)) {
