@@ -1,7 +1,9 @@
 import { Text, View } from 'react-native';
 import styled from 'styled-components';
 import Button from '../../../Components/Button';
-import { FONT_SIZES, FONT_WEIGHTS, LINK_BLUE_COLOR } from '../../../context/theme';
+import {
+  FONT_SIZES, FONT_WEIGHTS, LINK_BLUE_COLOR, FONT_SIZES_VALUES,
+} from '../../../context/theme';
 
 type CardContainerProps = {
     isRead: boolean
@@ -71,3 +73,9 @@ width: 10px;
 background-color: ${LINK_BLUE_COLOR};
 border-radius: 100px;
 `;
+
+
+export const MARKDOWN_TEXT_STYLE = {
+  fontSize: FONT_SIZES_VALUES.H3,
+  opacity: 0.8,
+};

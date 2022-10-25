@@ -8,7 +8,9 @@ import { Linking, Text, View } from 'react-native';
 import Markdown from 'react-native-markdown-display';
 import SvgIcon from '../../Components/SvgIcon';
 import { getFormattedMessageDate } from '../../context/messages/utils';
-import { MessageDate, MessageText, MessageTitle } from '../MessagesList/MessageCard/styled';
+import {
+  MessageDate, MessageText, MessageTitle, MARKDOWN_TEXT_STYLE,
+} from '../MessagesList/MessageCard/styled';
 import { MAIN_ROUTES } from '../routes';
 import PageHeader from '../../Components/PageHeader';
 import { PageContainer } from '../styles';
@@ -99,6 +101,9 @@ const MessageView = ({ menuSide, route }: FutureRidesViewProps) => {
               link: {
                 textDecorationLine: 'underline',
                 color: LINK_BLUE_COLOR,
+              },
+              text: {
+                ...MARKDOWN_TEXT_STYLE,
               },
             }}
             >
