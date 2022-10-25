@@ -19,7 +19,6 @@ const openNotificationsHandlers = {
 class NotificationsService {
   constructor() {
     this.network = network;
-    this.notificationsHandlers = {};
   }
 
   updateServer = async (pushTokenId, userId, isSubscribed) => {
@@ -47,8 +46,6 @@ class NotificationsService {
   };
 
   init = async (notificationsHandlers) => {
-    this.notificationsHandlers = notificationsHandlers;
-
     OneSignal.setAppId(Config.ONESIGNAL_APP_ID);
     OneSignal.setNotificationOpenedHandler(this.onOpened);
     OneSignal.disablePush(false);
@@ -108,13 +105,6 @@ class NotificationsService {
   };
 
   getOneSignalId = () => new Promise(resolve => OneSignal.getPermissionSubscriptionState(({ userId }) => resolve(userId)));
-
-  setNotificationsHandlers = (notificationsHandlers) => {
-    this.notificationsHandlers = {
-      ...this.notificationsHandlers,
-      ...notificationsHandlers,
-    };
-  };
 }
 
 export default new NotificationsService();

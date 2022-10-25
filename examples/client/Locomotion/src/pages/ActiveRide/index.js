@@ -35,7 +35,7 @@ import { RideStateContextContext, RideStateContextContextProvider } from '../../
 import NewRidePageContextProvider, { RidePageContext } from '../../context/newRideContext';
 import BottomSheetContextProvider, { BottomSheetContext, SNAP_POINT_STATES } from '../../context/bottomSheetContext';
 import {
-  PageContainer, MapOverlayButtons, ToastComp,
+  PageContainer, MapOverlayButtons,
 } from './styled';
 import Header from '../../Components/Header';
 import MainMap, { ACTIVE_RIDE_MAP_PADDING } from './newMap';
