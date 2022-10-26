@@ -64,6 +64,7 @@ const MessagesProvider = ({ children }: { children: any }) => {
   const [viewingMessage, setViewingMessage] = useState<messageProps | null>(null);
   const [userMessages, setUserMessages] = useState<messageProps[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [toastMessageId, setToastMessageId] = useState<string | null>(null);
 
   const showToast = (userMessage: any) => {
     const { id: userMessageId, message } = userMessage;
@@ -87,14 +88,17 @@ const MessagesProvider = ({ children }: { children: any }) => {
       onHide: async () => {
         await dismissMessages([userMessageId]);
       },
+      onShow: () => {
+        setToastMessageId(message.id);
+      },
     });
   };
 
   const loadUserMessages = async () => {
     try {
       setIsLoading(true);
-      const messages = await getUserMessagesCall(user?.id);
-      setUserMessages(messages.sort(sortBySentAt));
+      const messages = await getUserMessages();
+      setUserMessages(messages);
       setIsLoading(false);
       return messages;
     } catch (e) {
@@ -114,11 +118,17 @@ const MessagesProvider = ({ children }: { children: any }) => {
 
   const checkMessagesForToast = async () => {
     const messages = await getUserMessages();
+    setUserMessages(messages);
     const unreadMessage = messages.find(message => !message.readAt && !message.dismissedAt);
     if (unreadMessage) {
       showToast(unreadMessage);
     }
   };
+
+  useEffect(() => {
+    OneSignal.addForegroundNotificationHandler('message', checkMessagesForToast);
+    OneSignal.addNotificationHandler('message', ({ messageId }) => navigationService.navigate(MAIN_ROUTES.MESSAGE_VIEW, { messageId }));
+  }, []);
 
   const init = async () => {
     await loadUserMessages();
@@ -126,7 +136,7 @@ const MessagesProvider = ({ children }: { children: any }) => {
 
   const getUserMessages = async () => {
     const messages = await getUserMessagesCall(user?.id);
-    return messages;
+    return messages.sort(sortBySentAt);
   };
 
   const sortBySentAt = (a: any, b:any) => {
@@ -145,6 +155,12 @@ const MessagesProvider = ({ children }: { children: any }) => {
     const fetchedMessage = await getMessageCall(messageId, user.id);
     return fetchedMessage;
   };
+
+  const closeToast = () => {
+    Toast.hide();
+    setToastMessageId(null);
+  };
+
   useEffect(() => {
     if (user && user.id) {
       init();
@@ -165,6 +181,8 @@ const MessagesProvider = ({ children }: { children: any }) => {
         checkMessagesForToast,
         getUserMessages,
         getMessage,
+        toastMessageId,
+        closeToast,
       }}
     >
       {children}

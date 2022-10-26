@@ -6,19 +6,12 @@ import network from './network';
 import { updateUser } from '../context/user/api';
 import { StorageService } from '.';
 import Mixpanel from './Mixpanel';
-import * as NavigationService from './navigation';
-import { MAIN_ROUTES } from '../pages/routes';
-
-const openNotificationsHandlers = {
-  message: ({ messageId }) => {
-    NavigationService.navigate(MAIN_ROUTES.MESSAGE_VIEW, { messageId });
-  },
-};
-
 
 class NotificationsService {
   constructor() {
     this.network = network;
+    this.notificationsHandlers = {};
+    this.foregroundNotificationsHandlers = {};
   }
 
   updateServer = async (pushTokenId, userId, isSubscribed) => {
@@ -61,7 +54,14 @@ class NotificationsService {
     }
     OneSignal.addSubscriptionObserver(this.subscriptionObserverHandler);
     OneSignal.addPermissionObserver(this.checkLatestDeviceState);
-
+    OneSignal.setNotificationWillShowInForegroundHandler((notificationReceivedEvent) => {
+      const notification = notificationReceivedEvent.getNotification();
+      const { additionalData } = notification;
+      if (this.foregroundNotificationsHandlers[additionalData.type]) {
+        this.foregroundNotificationsHandlers[additionalData.type](additionalData);
+      }
+      notificationReceivedEvent.complete(notification);
+    });
     await this.checkLatestDeviceState();
   };
 
@@ -81,7 +81,7 @@ class NotificationsService {
   onOpened = (openResult) => {
     const { additionalData } = openResult.notification;
     if (additionalData && additionalData.type) {
-      const method = openNotificationsHandlers[additionalData.type];
+      const method = this.notificationsHandlers[additionalData.type];
       if (method) {
         method(additionalData);
       }
@@ -105,6 +105,15 @@ class NotificationsService {
   };
 
   getOneSignalId = () => new Promise(resolve => OneSignal.getPermissionSubscriptionState(({ userId }) => resolve(userId)));
+
+  addNotificationHandler(type, handler) {
+    this.notificationsHandlers[type] = handler;
+  }
+
+  addForegroundNotificationHandler(type, handler) {
+    console.log('in add forground');
+    this.foregroundNotificationsHandlers[type] = handler;
+  }
 }
 
 export default new NotificationsService();

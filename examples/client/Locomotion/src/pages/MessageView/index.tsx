@@ -55,7 +55,9 @@ interface FutureRidesViewProps {
   }
 
 const MessageView = ({ menuSide, route }: FutureRidesViewProps) => {
-  const { getMessage, markReadMessages } = useContext(MessagesContext);
+  const {
+    getMessage, markReadMessages, toastMessageId, closeToast,
+  } = useContext(MessagesContext);
   const [message, setMessage] = useState(null);
 
   const loadMessage = async (messageId: string) => {
@@ -75,6 +77,10 @@ const MessageView = ({ menuSide, route }: FutureRidesViewProps) => {
   }, [route]);
 
   useEffect(() => {
+    if (message?.id === toastMessageId) {
+      closeToast();
+    }
+
     if (
       message
       && message.userMessages
