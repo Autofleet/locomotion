@@ -84,9 +84,8 @@ const MessagesProvider = ({ children }: { children: any }) => {
         Toast.hide();
         navigationService.navigate(MAIN_ROUTES.MESSAGE_VIEW, { messageId: message.id });
       },
-      onHide: () => {
-        console.log('dissmisss callleeeddd');
-        dismissMessages([userMessageId]);
+      onHide: async () => {
+        await dismissMessages([userMessageId]);
       },
     });
   };
