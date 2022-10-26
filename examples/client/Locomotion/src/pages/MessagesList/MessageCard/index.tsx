@@ -30,7 +30,7 @@ const MessageCard = ({ message, readAt, dismissedAt }: MessageCardProps) => (
     onPress={() => {
       NavigationService.navigate(MAIN_ROUTES.MESSAGE_VIEW, { messageId: message.id });
     }}
-    isRead={readAt || dismissedAt}
+    isRead={readAt}
   >
     <ReadSymbolContainer>
       {!readAt && !dismissedAt && <ReadSymbol />}
