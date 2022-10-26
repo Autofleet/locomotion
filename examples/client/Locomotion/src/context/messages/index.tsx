@@ -112,10 +112,11 @@ const MessagesProvider = ({ children }: { children: any }) => {
     return response;
   };
 
-  const checkMessagesForToast = () => {
+  const checkMessagesForToast = async () => {
     const unreadMessage = userMessages.find(message => !message.readAt && !message.dismissedAt);
     if (unreadMessage) {
       showToast(unreadMessage);
+      await loadUserMessages();
     }
   };
 
