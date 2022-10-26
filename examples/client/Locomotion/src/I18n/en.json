@@ -375,8 +375,8 @@
         "pageTitle": "Messages",
         "readMore": "Read more",
         "now": "Now",
-        "noMessagesTitle": "No Messages",
-        "noMessagesText": "",
+        "noMessagesTitle": "No new messages",
+        "noMessagesText": "We'll let you know when you have one!",
         "toast":{
             "dismiss": "Dismiss"
         }

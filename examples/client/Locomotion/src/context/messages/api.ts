@@ -5,8 +5,8 @@ export const getUserMessages = async (userId: string) => {
   return data;
 };
 
-export const getMessage = async (messageId: string) => {
-  const { data } = await networkService.get(`api/v1/me/messages/${messageId}`);
+export const getMessage = async (messageId: string, userId: string | null) => {
+  const { data } = await networkService.get(`api/v1/me/messages/${messageId}`, { params: { userId } });
   return data;
 };
 

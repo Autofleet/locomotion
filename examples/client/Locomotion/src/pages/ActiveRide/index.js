@@ -74,7 +74,7 @@ const RidePage = ({ mapSettings, navigation }) => {
   const {
     currentBsPage, changeBsPage,
   } = useContext(RideStateContextContext);
-  const { checkMessagesForToast, dismissMessages } = useContext(MessagesContext);
+  const { checkMessagesForToast } = useContext(MessagesContext);
   const {
     serviceEstimations,
     setServiceEstimations,

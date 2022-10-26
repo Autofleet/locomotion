@@ -87,6 +87,10 @@ const Main = () => (
       component={ROUTES_COMPS[MAIN_ROUTES.MESSAGES]}
     />
     <Drawer.Screen
+      name={MAIN_ROUTES.MESSAGE_VIEW}
+      component={ROUTES_COMPS[MAIN_ROUTES.MESSAGE_VIEW]}
+    />
+    <Drawer.Screen
       name={MAIN_ROUTES.FUTURE_RIDES}
       component={ROUTES_COMPS[MAIN_ROUTES.FUTURE_RIDES]}
     />

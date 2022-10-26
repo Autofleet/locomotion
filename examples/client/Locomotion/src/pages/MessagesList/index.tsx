@@ -41,21 +41,23 @@ const Messages = ({ menuSide, route }: FutureRidesViewProps) => {
     if (userMessages && userMessages.length) {
       const unreadMessages = userMessages.filter(message => !message.readAt).map(message => message.id);
       if (unreadMessages.length) {
-        markReadMessages(unreadMessages);
+        await markReadMessages(unreadMessages);
       }
     }
   };
 
   const initPage = async () => {
     await loadUserMessages();
-    markMessagesAsRead();
+  };
+
+  const exitPageActions = async () => {
+    await markMessagesAsRead();
+    await loadUserMessages();
   };
 
   useFocusEffect(
     useCallback(() => {
       initPage();
-
-      return () => loadUserMessages();
     }, []),
   );
 
@@ -64,6 +66,7 @@ const Messages = ({ menuSide, route }: FutureRidesViewProps) => {
       <PageHeader
         title={i18n.t('messages.pageTitle')}
         onIconPress={() => {
+          exitPageActions();
           changeBsPage(ride.id ? BS_PAGES.ACTIVE_RIDE : BS_PAGES.ADDRESS_SELECTOR);
           NavigationService.navigate(MAIN_ROUTES.HOME);
         }}

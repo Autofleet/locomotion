@@ -8,7 +8,6 @@ import Button from '../Button';
 
 export const ToastContainer = styled(Button)`
   width: 92%;
-  margin: 0 4%;
   min-height: 70px;
   background-color: #fff;
   border-radius: 8px;
@@ -55,7 +54,7 @@ export const Footer = styled(View)`
 `;
 
 export const FooterButton = styled(TouchableOpacity)`
-
+  padding: 10px 0px 10px 15px;
 `;
 
 

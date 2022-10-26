@@ -10,7 +10,7 @@ import { UserContext } from '../user';
 import OneSignal from '../../services/one-signal';
 import {
   getUserMessages as getUserMessagesCall,
-  getMessage,
+  getMessage as getMessageCall,
   markReadMessage as markReadMessageCall,
   dismissMessage as dismissMessageCall,
 } from './api';
@@ -23,7 +23,6 @@ export type messageProps = {
     title: string;
     readAt: Date | null;
     subTitle: string;
-    html?: string;
     sentAt: Date;
     link?: string;
     linkText?: string;
@@ -36,12 +35,13 @@ interface MessagesContextInterface {
     viewingMessage: messageProps | null;
     setViewingMessage: React.Dispatch<React.SetStateAction<messageProps | null>>;
     setUserMessages: React.Dispatch<React.SetStateAction<messageProps[]>>;
-    loadUserMessages: () => Promise<void>;
+    loadUserMessages: () => Promise<messageProps[]>;
     isLoading: boolean;
     markReadMessages: (param: any) => Promise<any>
     dismissMessages: () => Promise<any>
     getUserMessages: () => Promise<any>
     checkMessagesForToast: () => any
+    getMessage: (messageId: string) => Promise<any>
 
 }
 
@@ -50,12 +50,13 @@ export const MessagesContext = createContext<MessagesContextInterface>({
   viewingMessage: null,
   setViewingMessage: () => undefined,
   setUserMessages: () => undefined,
-  loadUserMessages: async () => undefined,
+  loadUserMessages: async () => [],
   isLoading: false,
   markReadMessages: async () => undefined,
   dismissMessages: async () => undefined,
   getUserMessages: async () => undefined,
   checkMessagesForToast: () => undefined,
+  getMessage: async () => undefined,
 });
 
 const MessagesProvider = ({ children }: { children: any }) => {
@@ -71,7 +72,7 @@ const MessagesProvider = ({ children }: { children: any }) => {
       text1: message.title,
       text2: message.subTitle,
       autoHide: false,
-      topOffset: 60,
+      topOffset: 120,
       props: {
         // image: 'https://res.cloudinary.com/autofleet/image/upload/v1535368744/Control-Center/green.png',
         userMessageId,
@@ -84,6 +85,7 @@ const MessagesProvider = ({ children }: { children: any }) => {
         navigationService.navigate(MAIN_ROUTES.MESSAGE_VIEW, { messageId: message.id });
       },
       onHide: () => {
+        console.log('dissmisss callleeeddd');
         dismissMessages([userMessageId]);
       },
     });
@@ -102,13 +104,12 @@ const MessagesProvider = ({ children }: { children: any }) => {
   };
 
   const markReadMessages = async (userMessageIds: string[]): Promise<void> => {
-    const response = await markReadMessageCall(userMessageIds);
-    return response;
+    await markReadMessageCall(userMessageIds, user?.id);
   };
 
   const dismissMessages = async (userMessageIds:string[] = []) => {
     const response = await dismissMessageCall(userMessageIds);
-    loadUserMessages();
+    await loadUserMessages();
     return response;
   };
 
@@ -140,6 +141,10 @@ const MessagesProvider = ({ children }: { children: any }) => {
     return 0;
   };
 
+  const getMessage = async (messageId: string) => {
+    const fetchedMessage = await getMessageCall(messageId, user.id);
+    return fetchedMessage;
+  };
   useEffect(() => {
     if (user && user.id) {
       init();
@@ -159,6 +164,7 @@ const MessagesProvider = ({ children }: { children: any }) => {
         dismissMessages,
         checkMessagesForToast,
         getUserMessages,
+        getMessage,
       }}
     >
       {children}

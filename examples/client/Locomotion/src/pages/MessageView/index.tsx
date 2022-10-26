@@ -16,11 +16,11 @@ import PageHeader from '../../Components/PageHeader';
 import { PageContainer } from '../styles';
 import i18n from '../../I18n';
 import * as NavigationService from '../../services/navigation';
-import { getMessage } from '../../context/messages/api';
 import Button from '../../Components/Button';
 import { LINK_BLUE_COLOR, FONT_SIZES } from '../../context/theme';
 import arrow from '../../assets/chevron.svg';
 import Loader from '../../Components/Loader';
+import { MessagesContext } from '../../context/messages';
 
 const ScrollContainer = styled(ScrollView)`
 padding: 25px;
@@ -55,9 +55,10 @@ interface FutureRidesViewProps {
   }
 
 const MessageView = ({ menuSide, route }: FutureRidesViewProps) => {
+  const { getMessage, markReadMessages } = useContext(MessagesContext);
   const [message, setMessage] = useState(null);
 
-  const loadMessage = async (messageId) => {
+  const loadMessage = async (messageId: string) => {
     const fetchedMessage = await getMessage(messageId);
     if (fetchedMessage) {
       setMessage(fetchedMessage);
@@ -68,11 +69,21 @@ const MessageView = ({ menuSide, route }: FutureRidesViewProps) => {
 
   useEffect(() => {
     const { messageId } = route.params;
-
     if (messageId) {
       loadMessage(messageId);
     }
   }, [route]);
+
+  useEffect(() => {
+    if (
+      message
+      && message.userMessages
+      && message.userMessages.length
+      && !message.userMessages[0].readAt
+    ) {
+      markReadMessages([message.userMessages[0].id]);
+    }
+  }, [message]);
 
   return (
     <PageContainer>
