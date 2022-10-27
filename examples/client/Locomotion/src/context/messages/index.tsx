@@ -15,7 +15,7 @@ import {
   dismissMessage as dismissMessageCall,
 } from './api';
 import * as navigationService from '../../services/navigation';
-import { MAIN_ROUTES } from '../../pages/routes';
+import { MAIN_ROUTES, APP_ROUTES } from '../../pages/routes';
 import i18n from '../../I18n';
 
 export type messageProps = {
@@ -126,7 +126,7 @@ const MessagesProvider = ({ children }: { children: any }) => {
 
   useEffect(() => {
     OneSignal.addForegroundNotificationHandler('message', checkMessagesForToast);
-    OneSignal.addNotificationHandler('message', ({ messageId }) => navigationService.navigate(MAIN_ROUTES.MESSAGE_VIEW, { messageId }));
+    OneSignal.addNotificationHandler('message', ({ messageId }) => navigationService.navigate(MAIN_ROUTES.MESSAGE_VIEW, { messageId }, APP_ROUTES.MAIN_APP));
   }, []);
 
   const init = async () => {

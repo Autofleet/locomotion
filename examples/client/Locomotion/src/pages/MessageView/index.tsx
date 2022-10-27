@@ -11,7 +11,7 @@ import { getFormattedMessageDate } from '../../context/messages/utils';
 import {
   MessageDate, MessageText, MessageTitle, MARKDOWN_TEXT_STYLE,
 } from '../MessagesList/MessageCard/styled';
-import { MAIN_ROUTES } from '../routes';
+import { MAIN_ROUTES, APP_ROUTES } from '../routes';
 import PageHeader from '../../Components/PageHeader';
 import { PageContainer } from '../styles';
 import i18n from '../../I18n';
@@ -66,7 +66,7 @@ const MessageView = ({ menuSide, route }: FutureRidesViewProps) => {
     if (fetchedMessage) {
       setMessage(fetchedMessage);
     } else {
-      NavigationService.navigate(MAIN_ROUTES.MESSAGES);
+      NavigationService.navigate(MAIN_ROUTES.MESSAGES, {}, APP_ROUTES.MAIN_APP);
     }
   };
 
@@ -97,7 +97,7 @@ const MessageView = ({ menuSide, route }: FutureRidesViewProps) => {
       <PageHeader
         title={i18n.t('messageView.pageTitle')}
         onIconPress={() => {
-          NavigationService.navigate(MAIN_ROUTES.MESSAGES);
+          NavigationService.navigate(MAIN_ROUTES.MESSAGES, {}, APP_ROUTES.MAIN_APP);
         }}
         iconSide={menuSide}
       />

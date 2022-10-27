@@ -79,7 +79,14 @@ const AuthLoadingScreen = () => {
           return navigateBasedOnUser(userData);
         }
 
-        return navigationService.replace(APP_ROUTES.MAIN_APP);
+        const nav = navigationService.getNavigator();
+        const currentRoute = nav.getCurrentRoute();
+
+        if (currentRoute.name === APP_ROUTES.AUTH_LOADING) {
+          return navigationService.replace(APP_ROUTES.MAIN_APP);
+        }
+
+        return true;
       }
       setUser(INITIAL_USER_STATE);
       navigationService.replace(MAIN_ROUTES.START);
