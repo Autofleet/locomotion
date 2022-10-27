@@ -113,6 +113,7 @@ export const CenterContainer = styled.View`
 `;
 
 export const BaseText = styled.Text`
+  color: ${({ markError }) => (markError ? 'red' : '')};
   padding-top: 5px;
 `;
 
@@ -201,4 +202,8 @@ ${FONT_WEIGHTS.REGULAR};
 
 export const DetailsContainer = styled.View`
 padding: 20px;
+`;
+
+export const RetryPaymentButtonContainer = styled.View`
+  padding-top: 20px;
 `;

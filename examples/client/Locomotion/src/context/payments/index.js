@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { createContainer } from 'unstated-next';
+import { PAYMENT_STATES } from '../../lib/commonTypes';
 import Mixpanel from '../../services/Mixpanel';
 import cashPaymentMethod from '../../pages/Payments/cashPaymentMethod';
 import { getByKey } from '../../context/settings/api';
@@ -128,6 +129,18 @@ const usePayments = () => {
     }
   };
 
+  const retryPayment = async (paymentId) => {
+    try {
+      Mixpanel.setEvent('retry payment', { paymentId });
+      const { data } = await network.post(`${BASE_PATH}/${paymentId}/retry`);
+      return data.status === PAYMENT_STATES.PAID;
+    } catch (e) {
+      const status = e && e.response && e.response.status;
+      Mixpanel.setEvent('Retry payment failed', { status });
+      return false;
+    }
+  };
+
   const getClientOutstandingBalanceCard = () => paymentMethods.find(pm => pm.hasOutstandingBalance);
 
   return {
@@ -147,6 +160,7 @@ const usePayments = () => {
     updatePaymentMethod,
     getClientOutstandingBalanceCard,
     getOrFetchClientPaymentAccount,
+    retryPayment,
   };
 };
 

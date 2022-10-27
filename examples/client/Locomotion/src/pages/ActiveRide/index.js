@@ -14,7 +14,9 @@ import { MAIN_ROUTES } from '../routes';
 import { getPolylineList } from '../../lib/polyline/utils';
 import { FutureRidesContext } from '../../context/futureRides';
 import FutureRidesButton from '../../Components/FutureRidesButton';
-import { RIDE_STATES, STOP_POINT_STATES, STOP_POINT_TYPES } from '../../lib/commonTypes';
+import {
+  PAYMENT_STATES, RIDE_STATES, STOP_POINT_STATES, STOP_POINT_TYPES,
+} from '../../lib/commonTypes';
 import { RIDE_POPUPS } from '../../context/newRideContext/utils';
 import { UserContext } from '../../context/user';
 import {
@@ -32,7 +34,8 @@ import {
   Loading,
 } from '../../Components/BsPages';
 import { RideStateContextContext, RideStateContextContextProvider } from '../../context';
-import NewRidePageContextProvider, { RidePageContext } from '../../context/newRideContext';
+import { RidePageContext } from '../../context/newRideContext';
+import { fetchRides } from '../../context/newRideContext/api';
 import BottomSheetContextProvider, { BottomSheetContext, SNAP_POINT_STATES } from '../../context/bottomSheetContext';
 import {
   PageContainer, MapOverlayButtons,
@@ -60,6 +63,8 @@ import i18n from '../../I18n';
 import BlackOverlay from '../../Components/BlackOverlay';
 import { PAYMENT_METHODS } from '../Payments/consts';
 import { MessagesContext } from '../../context/messages';
+import alertIcon from '../../assets/warning.svg';
+import { rideHistoryContext } from '../../context/rideHistory';
 
 const BLACK_OVERLAY_SCREENS = [BS_PAGES.CANCEL_RIDE];
 
@@ -68,13 +73,18 @@ const RidePage = ({ mapSettings, navigation }) => {
     locationGranted, setLocationGranted,
   } = useContext(UserContext);
   const [addressSelectorFocusIndex, setAddressSelectorFocusIndex] = useState(1);
+  const [rejectedPaymentRideId, setRejectedPaymentRideId] = useState(null);
   const { getSettingByKey } = settings.useContainer();
   const mapRef = useRef();
   const bottomSheetRef = useRef(null);
+
   const {
     currentBsPage, changeBsPage,
   } = useContext(RideStateContextContext);
   const { checkMessagesForToast } = useContext(MessagesContext);
+  const {
+    rides: historyRides, loadRides: loadHistoryRides,
+  } = useContext(rideHistoryContext);
   const {
     serviceEstimations,
     setServiceEstimations,
@@ -321,12 +331,22 @@ const RidePage = ({ mapSettings, navigation }) => {
     };
   }, []);
 
+  const loadRides = async () => {
+    const d = new Date();
+    d.setMonth(d.getMonth() - 1);
+    const rides = await fetchRides({ fromDate: d });
+    const rejectedRide = rides.find(r => (
+      r.payment.state === PAYMENT_STATES.REJECTED));
+    setRejectedPaymentRideId(rejectedRide.id);
+  };
+
   const isFocused = useIsFocused();
 
   useEffect(() => {
     if (isFocused) {
       navigation.closeDrawer();
     }
+    loadRides();
   }, [isFocused]);
 
   const getRequestSpsFromRide = () => ride.stopPoints.map(sp => ({
@@ -360,6 +380,14 @@ const RidePage = ({ mapSettings, navigation }) => {
         const creditCard = getClientOutstandingBalanceCard();
         return creditCard && currentBsPage === BS_PAGES.SERVICE_ESTIMATIONS;
       },
+      title: 'Outstanding Balance',
+      titleIcon: alertIcon,
+      buttonText: 'Settle payments',
+      onClick: () => {
+        navigationService.navigate(MAIN_ROUTES.COMPLETED_RIDE_OVERVIEW_PAGE, {
+          rideId: rejectedPaymentRideId,
+        });
+      },
     },
     PRECEDING_STOPS: {
       condition: () => ride?.stopPoints && ride?.stopPoints[0]?.precedingStops?.length,
@@ -387,7 +415,15 @@ const RidePage = ({ mapSettings, navigation }) => {
 
               <StopPointsViewer goBackToAddressSelector={goBackToAddress} />
             </Header>
-            {topMessage ? <TopMessage text={topMessage.text()} /> : null}
+            {topMessage ? (
+              <TopMessage
+                text={topMessage.text()}
+                title={topMessage.title}
+                button={topMessage.buttonText}
+                onPress={topMessage.onClick}
+                icon={topMessage.titleIcon}
+              />
+            ) : null}
           </>
         )
         : (
@@ -397,7 +433,15 @@ const RidePage = ({ mapSettings, navigation }) => {
               icon={hamburgerIcon}
               onPressIcon={navigation.openDrawer}
             />
-            {topMessage ? <TopMessage text={topMessage.text()} /> : null}
+            {topMessage ? (
+              <TopMessage
+                text={topMessage.text()}
+                title={topMessage.title}
+                button={topMessage.buttonText}
+                onPress={topMessage.onClick}
+                icon={topMessage.titleIcon}
+              />
+            ) : null}
           </>
         )}
       <MapOverlayButtons
