@@ -73,7 +73,6 @@ const MessagesProvider = ({ children }: { children: any }) => {
       text1: message.title,
       text2: message.subTitle,
       autoHide: false,
-      topOffset: 120,
       props: {
         // image: 'https://res.cloudinary.com/autofleet/image/upload/v1535368744/Control-Center/green.png',
         userMessageId,

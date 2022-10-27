@@ -33,7 +33,7 @@ const MessageCard = ({ message, readAt, dismissedAt }: MessageCardProps) => (
     isRead={readAt}
   >
     <ReadSymbolContainer>
-      {!readAt && !dismissedAt && <ReadSymbol />}
+      {!readAt && <ReadSymbol />}
     </ReadSymbolContainer>
     <TextContainer>
       <MessageTitle numberOfLines={2}>
