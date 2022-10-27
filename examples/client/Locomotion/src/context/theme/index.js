@@ -62,6 +62,15 @@ export const FONT_SIZES = {
   SMALL: 'font-size: 10px',
 };
 
+export const FONT_SIZES_VALUES = {
+  H1: 22,
+  H2: 18,
+  H3: 16,
+  LARGE: 14,
+  MEDIUM: 12,
+  SMALL: 10,
+};
+
 export const FONT_WEIGHTS = {
   BOLD: `
     font-weight: bold;

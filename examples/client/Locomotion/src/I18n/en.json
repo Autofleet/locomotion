@@ -283,7 +283,8 @@
         "account": "User Profile",
         "support": "Contact us",
         "logout": "Logout",
-        "futureRides": "Upcoming Rides"
+        "futureRides": "Upcoming Rides",
+        "messages": "Messages"
     },
     "temporaryHoldText": "A small amount may be temporarily placed on hold when you start your ride ",
     "learnMore": "Learn more",
@@ -317,7 +318,7 @@
         "priceItem": "{{ name }}",
         "perUnit": "- {{ price }} per {{ unit }} ",
         "paymentBreakdownTitle": "Payment Breakdown",
-        "priceFieldNames": { 
+        "priceFieldNames": {
             "surgePrice": "Surge price",
             "discount": "Discount",
             "cancelationFee": "Cancelation fee",
@@ -369,6 +370,19 @@
         "pageTitle": "Upcoming rides",
         "noRidesTitle": "No upcoming rides",
         "noRidesText": "Create a scheduled ride and see it here!"
+    },
+    "messages": {
+        "pageTitle": "Messages",
+        "readMore": "Read more",
+        "now": "Now",
+        "noMessagesTitle": "No new messages",
+        "noMessagesText": "We'll let you know when you have one!",
+        "toast":{
+            "dismiss": "Dismiss"
+        }
+    },
+    "messageView": {
+        "pageTitle": "Messages"
     },
     "postRide": {
         "pageTitle": "Ride finished",

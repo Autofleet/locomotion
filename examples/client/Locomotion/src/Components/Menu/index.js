@@ -1,4 +1,6 @@
+/* eslint-disable import/prefer-default-export */
 import React, { useContext, useEffect, useState } from 'react';
+import { MessagesContext } from '../../context/messages';
 import Bottom from './bottom';
 import { MAIN_ROUTES } from '../../pages/routes';
 import Thumbnail from '../Thumbnail';
@@ -12,12 +14,15 @@ import {
   Header,
   HeaderLink,
   DrawerLabelsContainer,
+  UpdatesText,
+  Updates,
 } from './styled';
 import { UserContext } from '../../context/user';
 import CalendarIcon from '../../assets/calendar.svg';
 import History from '../../assets/history.svg';
 import HelpIconSource from '../../assets/help.svg';
 import CreditCardIconSource from '../../assets/credit-card.svg';
+import MessagesIcon from '../../assets/email.svg';
 import SvgIcon from '../SvgIcon';
 import settings from '../../context/settings';
 import SETTINGS_KEYS from '../../context/settings/keys';
@@ -47,17 +52,26 @@ const DrawerHeader = ({ navigateTo }) => {
 };
 
 const DrawerLabel = ({
-  onPress, focused, tintColor, title, icon, lastItem, iconFill, testID,
+  onPress, focused, tintColor, title, icon, lastItem, iconFill, testID, numberOfUpdates,
 }) => (
   <StyledDrawerLabel focused={focused} onPress={onPress} lastItem={lastItem} testID={testID}>
     <SvgIcon Svg={icon} width={23} height={23} style={{ marginRight: 15 }} fill={iconFill} />
     <LabelText color={tintColor} focused={focused}>{title}</LabelText>
+    {!!numberOfUpdates
+    && (
+      <Updates>
+        <UpdatesText>
+          {numberOfUpdates}
+        </UpdatesText>
+      </Updates>
+    )}
   </StyledDrawerLabel>
 );
 
 export const DrawerContentComponent = ({ navigation, state }) => {
   const route = state.routes[state.index].name;
   const { getSettingByKey } = settings.useContainer();
+  const { userMessages } = useContext(MessagesContext);
   const [futureRidesEnabled, setFutureRidesEnabled] = useState(false);
 
   const navigateTo = (page) => {
@@ -79,6 +93,14 @@ export const DrawerContentComponent = ({ navigation, state }) => {
     <StyledSafeAreaView>
       <DrawerHeader navigateTo={p => navigateTo(p)} />
       <DrawerLabelsContainer>
+        <DrawerLabel
+          title={i18n.t('menu.messages')}
+          icon={MessagesIcon}
+          onPress={() => navigateTo(MAIN_ROUTES.MESSAGES)}
+          iconFill="#333"
+          focused={route === MAIN_ROUTES.MESSAGES}
+          numberOfUpdates={(userMessages || []).filter(m => !m.readAt && !m.dismissedAt).length}
+        />
         <DrawerLabel
           testID="rideHistory"
           title={i18n.t('menu.trips')}

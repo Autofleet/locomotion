@@ -1,12 +1,14 @@
 import React, {
   useContext, useEffect, useRef, useState,
 } from 'react';
+import Toast from 'react-native-toast-message';
 import { useIsFocused, useFocusEffect } from '@react-navigation/native';
 import {
   AppState, BackHandler, Platform, View,
 } from 'react-native';
 import { Portal } from '@gorhom/portal';
 import Config from 'react-native-config';
+import AFToast from '../../Components/Toast';
 import * as navigationService from '../../services/navigation';
 import { MAIN_ROUTES } from '../routes';
 import { getPolylineList } from '../../lib/polyline/utils';
@@ -57,7 +59,7 @@ import TopMessage from './TopMessage';
 import i18n from '../../I18n';
 import BlackOverlay from '../../Components/BlackOverlay';
 import { PAYMENT_METHODS } from '../Payments/consts';
-
+import { MessagesContext } from '../../context/messages';
 
 const BLACK_OVERLAY_SCREENS = [BS_PAGES.CANCEL_RIDE];
 
@@ -72,6 +74,7 @@ const RidePage = ({ mapSettings, navigation }) => {
   const {
     currentBsPage, changeBsPage,
   } = useContext(RideStateContextContext);
+  const { checkMessagesForToast } = useContext(MessagesContext);
   const {
     serviceEstimations,
     setServiceEstimations,
@@ -299,6 +302,7 @@ const RidePage = ({ mapSettings, navigation }) => {
   const initChecks = async () => {
     await versionCheck();
     await checkLocationPermission();
+    await checkMessagesForToast();
   };
 
 
@@ -365,6 +369,7 @@ const RidePage = ({ mapSettings, navigation }) => {
 
   const topMessageKey = Object.keys(MESSAGE_MAP).find(key => MESSAGE_MAP[key].condition());
   const topMessage = MESSAGE_MAP[topMessageKey];
+
 
   return (
     <PageContainer>
@@ -443,6 +448,15 @@ BS_PAGE_TO_COMP[currentBsPage] ? BS_PAGE_TO_COMP[currentBsPage]() : null
         }
         />
       </Portal>
+      <Toast
+        config={{
+          tomatoToast: props => (
+            <AFToast
+              {...props}
+            />
+          ),
+        }}
+      />
     </PageContainer>
   );
 };

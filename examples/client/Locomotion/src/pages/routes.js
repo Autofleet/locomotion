@@ -30,4 +30,6 @@ export const MAIN_ROUTES = {
   FUTURE_RIDES: 'FutureRides',
   RIDE_PRICE_BREAKDOWN: 'RidePriceBreakdown',
   PROMO_CODE: 'PromoCode',
+  MESSAGES: 'messages',
+  MESSAGE_VIEW: 'messageView',
 };
