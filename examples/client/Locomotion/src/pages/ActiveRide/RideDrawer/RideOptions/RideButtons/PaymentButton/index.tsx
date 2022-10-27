@@ -131,7 +131,6 @@ const PaymentButton = ({
   const checkCoupon = async () => {
     try {
       const res = await getCoupon();
-      console.log('here');
       setCoupon(res);
     } catch (e) {
       setCoupon({ status: 'error' });

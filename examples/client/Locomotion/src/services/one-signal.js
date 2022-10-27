@@ -111,7 +111,6 @@ class NotificationsService {
   }
 
   addForegroundNotificationHandler(type, handler) {
-    console.log('in add forground');
     this.foregroundNotificationsHandlers[type] = handler;
   }
 }
