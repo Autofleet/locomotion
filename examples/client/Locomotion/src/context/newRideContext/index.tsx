@@ -426,7 +426,6 @@ const RidePageContextProvider = ({ children }: {
       activeRide = await rideApi.getActiveRide();
     } catch (e) {}
     if (activeRide) {
-      console.log('activeRide', activeRide);
       const formattedRide = await formatRide(activeRide);
       const screenFunction = RIDE_STATES_TO_SCREENS[formattedRide?.state || ''];
       if (screenFunction) {
@@ -474,7 +473,6 @@ const RidePageContextProvider = ({ children }: {
   const loadRide = async (rideId: string) => {
     const rideLoaded = await rideApi.getRide(rideId);
     const formattedRide = await formatRide(rideLoaded);
-    console.log('asdfasdf', rideLoaded);
     if (ride.state !== rideLoaded.state) {
       Mixpanel.setEvent('New ride state', { oldState: ride.state, newState: rideLoaded.state });
       const screenFunction = RIDE_STATES_TO_SCREENS[rideLoaded.state];
