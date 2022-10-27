@@ -40,7 +40,7 @@ export const SubNoRidesListContainer = styled(BaseText)`
   font-size: 16px;
 `;
 
-export const NoRidesInList = ({
+export const PageGenericMessage = ({
   title, text, svg = null, addTop = true,
 }) => {
   const { primaryColor } = useContext(ThemeContext);
@@ -68,4 +68,4 @@ export const RidesViewContainer = styled.View`
 `;
 
 
-export default NoRidesInList;
+export default PageGenericMessage;
