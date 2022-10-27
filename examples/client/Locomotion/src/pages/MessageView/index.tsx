@@ -31,6 +31,7 @@ flex: 1;
 const MessageLink = styled(Button)`
 flex-direction: row;
 align-items: center;
+padding-bottom: 60px;
 `;
 
 const LinkText = styled(Text)`
@@ -137,7 +138,6 @@ const MessageView = ({ menuSide, route }: FutureRidesViewProps) => {
               <SvgIcon Svg={arrow} stroke={LINK_BLUE_COLOR} height={15} />
             </MessageLink>
           )
-
         }
         </ScrollContainer>
       ) : (
