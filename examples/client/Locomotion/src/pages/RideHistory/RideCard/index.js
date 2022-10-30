@@ -86,7 +86,7 @@ const RideTitleCard = ({
     if (isPaymentRejected) {
       return (
         <DaySecTitleSubText markError>
-          Unpaid ride
+          {i18n.t('rideHistory.unpaidRide')}
         </DaySecTitleSubText>
       );
     } if (showTip) {
@@ -184,7 +184,7 @@ const RideView = ({ ride }) => {
         NavigationService.navigate(MAIN_ROUTES.CONTACT_US);
       }}
     >
-      Contact our support
+      {i18n.t('rideHistory.rideCard.paymentRetry.retryFailedBody')}
     </RoundedButton>
   );
 
@@ -207,7 +207,7 @@ const RideView = ({ ride }) => {
             ? (
               <RetryPaymentButtonContainer>
                 <RoundedButton style={{ backgroundColor: '#24aaf2' }} onPress={retryPayment}>
-                  Pay balance now
+                  {i18n.t('rideHistory.rideCard.paymentRetry.retryPaymentButton')}
                 </RoundedButton>
               </RetryPaymentButtonContainer>
             ) : null
@@ -241,19 +241,19 @@ const RideView = ({ ride }) => {
         </DetailsContainer>
       </RideViewContainer>
       <GenericErrorPopup
-        title="Unable to processs"
-        text={'Seems like there was an issue trying to process your request.\n\nWe recommend trying again later or contacting our support team'}
+        title={i18n.t('rideHistory.rideCard.paymentRetry.retryFailedTitle')}
+        text={i18n.t('rideHistory.rideCard.paymentRetry.retryFailedBody')}
         isVisible={isUnableToProcessPopupVisible}
         customButton={contactUsButton}
         cancelPopup={() => setIsUnablToProcessPopupVisible(false)}
       />
       <GenericPopup
-        title="You are all set!"
-        text="Thank you for your payment - you can nou resume your rides!"
+        title={i18n.t('rideHistory.rideCard.paymentRetry.retrySuccessTitle')}
+        text={i18n.t('rideHistory.rideCard.paymentRetry.retrySuccessBody')}
         isVisible={isPaymentSuccessPopupVisible}
         closePopup={() => { setIsPaymentSuccessPopupVisible(false); }}
         icon={sucessIcon}
-        buttonText="Done"
+        buttonText={i18n.t('rideHistory.rideCard.paymentRetry.retrySuccessButton')}
       />
     </>
   );

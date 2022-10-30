@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import i18n from '../../../I18n';
 import blackRightArrow from '../../../assets/arrowright.png';
 import noRides from '../../../assets/no_rides.svg';
-import { FONT_SIZES, FONT_WEIGHTS } from '../../../context/theme';
+import { ERROR_COLOR, FONT_SIZES, FONT_WEIGHTS } from '../../../context/theme';
 
 export const RideDrillDownIcon = styled.Image.attrs({
   source: blackRightArrow,
@@ -113,7 +113,7 @@ export const CenterContainer = styled.View`
 `;
 
 export const BaseText = styled.Text`
-  color: ${({ markError }) => (markError ? 'red' : '')};
+  color: ${({ markError }) => (markError ? ERROR_COLOR : '')};
   padding-top: 5px;
 `;
 
