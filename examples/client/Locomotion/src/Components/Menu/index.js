@@ -99,7 +99,7 @@ export const DrawerContentComponent = ({ navigation, state }) => {
           onPress={() => navigateTo(MAIN_ROUTES.MESSAGES)}
           iconFill="#333"
           focused={route === MAIN_ROUTES.MESSAGES}
-          numberOfUpdates={(userMessages || []).filter(m => !m.readAt && !m.dismissedAt).length}
+          numberOfUpdates={(userMessages || []).filter(m => !m.readAt).length}
         />
         <DrawerLabel
           testID="rideHistory"
