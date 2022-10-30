@@ -184,7 +184,7 @@ const RideView = ({ ride }) => {
         NavigationService.navigate(MAIN_ROUTES.CONTACT_US);
       }}
     >
-      {i18n.t('rideHistory.rideCard.paymentRetry.retryFailedBody')}
+      {i18n.t('rideHistory.rideCard.paymentRetry.retryFailedButton')}
     </RoundedButton>
   );
 
