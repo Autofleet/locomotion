@@ -251,7 +251,8 @@ const RidePageContextProvider = ({ children }: {
   };
 
   const RIDE_STATES_TO_SCREENS = {
-    [RIDE_STATES.PENDING]: () => {
+    [RIDE_STATES.PENDING]: (pendingRide: RideInterface) => {
+      setRide(pendingRide);
       changeBsPage(BS_PAGES.CONFIRMING_RIDE);
     },
     [RIDE_STATES.MATCHING]: (matchingRide: RideInterface) => {
