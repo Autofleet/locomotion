@@ -156,7 +156,6 @@ const usePayments = () => {
         },
       });
       if (details && details.payments.length) {
-        console.log('details', details);
         const { data: ride } = await network.get('/api/v1/me/rides', {
           params: {
             paymentId: details.payments[0].id,

@@ -375,7 +375,6 @@ const RidePage = ({ mapSettings, navigation }) => {
       buttonText: 'Settle payments',
       onClick: async () => {
         const rejectedRide = await loadOutstandingBalanceRide();
-        console.log('rejectedRide', rejectedRide);
         navigationService.navigate(MAIN_ROUTES.COMPLETED_RIDE_OVERVIEW_PAGE, {
           rideId: rejectedRide.rideId,
         });
