@@ -841,7 +841,7 @@ const RidePageContextProvider = ({ children }: {
       let scheduledToMoment = ride.scheduledTo;
       if (ride.scheduledTo) {
         const unixScheduledTo = moment.unix(Number(ride.scheduledTo) / 1000);
-        const timezoneResponse = await getLocationTimezoneTime(formattedStopPoints[0].lat, formattedStopPoints[0].lng, unixScheduledTo);
+        const timezoneResponse = await getLocationTimezoneTime(pickupLocation.lat, pickupLocation.lng, unixScheduledTo);
         scheduledToMoment = timezoneResponse.time;
       }
 
