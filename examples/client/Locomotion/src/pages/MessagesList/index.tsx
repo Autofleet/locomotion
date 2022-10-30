@@ -17,7 +17,7 @@ import { MessagesContext } from '../../context/messages';
 import MessageCard from './MessageCard';
 import Loader from '../../Components/Loader';
 import { NoRidesInList } from './styled';
-import PageGenericMessage from '../../Components/PageGenericMessage';
+import { PageGenericMessage } from '../../Components/PageGenericMessage';
 
 const ScrollContainer = styled(ScrollView)`
 `;
