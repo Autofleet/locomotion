@@ -343,11 +343,9 @@ const RidePageContextProvider = ({ children }: {
       Mixpanel.setEvent('Get service estimations');
 
       let scheduledTime: any = ride.scheduledTo;
-
       if (ride.scheduledTo) {
         const unixScheduledTo = moment.unix(Number(ride.scheduledTo) / 1000);
-        const timezoneResponse = await getLocationTimezoneTime(formattedStopPoints[0].lat, formattedStopPoints[0].lng, unixScheduledTo);
-        scheduledTime = timezoneResponse.time;
+        scheduledTime = await getLocationTimezoneTime(formattedStopPoints[0].lat, formattedStopPoints[0].lng, unixScheduledTo);
       }
 
       const { estimations, services } = await rideApi
@@ -841,8 +839,7 @@ const RidePageContextProvider = ({ children }: {
       let scheduledToMoment = ride.scheduledTo;
       if (ride.scheduledTo) {
         const unixScheduledTo = moment.unix(Number(ride.scheduledTo) / 1000);
-        const timezoneResponse = await getLocationTimezoneTime(pickupLocation.lat, pickupLocation.lng, unixScheduledTo);
-        scheduledToMoment = timezoneResponse.time;
+        scheduledToMoment = await getLocationTimezoneTime(pickupLocation.lat, pickupLocation.lng, unixScheduledTo);
       }
 
       const rideToCreate = {
