@@ -73,7 +73,6 @@ const RidePage = ({ mapSettings, navigation }) => {
     locationGranted, setLocationGranted,
   } = useContext(UserContext);
   const [addressSelectorFocusIndex, setAddressSelectorFocusIndex] = useState(1);
-  const [rejectedPaymentRideId, setRejectedPaymentRideId] = useState(null);
   const { getSettingByKey } = settings.useContainer();
   const mapRef = useRef();
   const bottomSheetRef = useRef(null);
@@ -108,6 +107,7 @@ const RidePage = ({ mapSettings, navigation }) => {
   const {
     clientHasValidPaymentMethods,
     getClientOutstandingBalanceCard,
+    loadOutstandingBalanceRide,
   } = payments.useContainer();
   const {
     futureRides,
@@ -331,22 +331,12 @@ const RidePage = ({ mapSettings, navigation }) => {
     };
   }, []);
 
-  const loadRides = async () => {
-    const d = new Date();
-    d.setMonth(d.getMonth() - 1);
-    const rides = await fetchRides({ fromDate: d });
-    const rejectedRide = rides.find(r => (
-      r.payment.state === PAYMENT_STATES.REJECTED));
-    setRejectedPaymentRideId(rejectedRide.id);
-  };
-
   const isFocused = useIsFocused();
 
   useEffect(() => {
     if (isFocused) {
       navigation.closeDrawer();
     }
-    loadRides();
   }, [isFocused]);
 
   const getRequestSpsFromRide = () => ride.stopPoints.map(sp => ({
@@ -383,9 +373,11 @@ const RidePage = ({ mapSettings, navigation }) => {
       title: 'Outstanding Balance',
       titleIcon: alertIcon,
       buttonText: 'Settle payments',
-      onClick: () => {
+      onClick: async () => {
+        const rejectedRide = await loadOutstandingBalanceRide();
+        console.log('rejectedRide', rejectedRide);
         navigationService.navigate(MAIN_ROUTES.COMPLETED_RIDE_OVERVIEW_PAGE, {
-          rideId: rejectedPaymentRideId,
+          rideId: rejectedRide.rideId,
         });
       },
     },

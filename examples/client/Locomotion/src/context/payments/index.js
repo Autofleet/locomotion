@@ -3,7 +3,7 @@ import { createContainer } from 'unstated-next';
 import { PAYMENT_STATES } from '../../lib/commonTypes';
 import Mixpanel from '../../services/Mixpanel';
 import cashPaymentMethod from '../../pages/Payments/cashPaymentMethod';
-import { getByKey } from '../../context/settings/api';
+import { fetchRides } from '../newRideContext/api';
 import network from '../../services/network';
 import SETTINGS_KEYS from '../settings/keys';
 import SettingContext from '../settings';
@@ -144,6 +144,30 @@ const usePayments = () => {
 
   const getClientOutstandingBalanceCard = () => paymentMethods.find(pm => pm.hasOutstandingBalance);
 
+  const loadOutstandingBalanceRide = async () => {
+    const returnObject = {
+      rideId: null,
+    };
+    const paymentMethod = getClientOutstandingBalanceCard();
+    if (paymentMethod) {
+      const { data: details } = await network.get(`${BASE_PATH}/${paymentMethod.id}/outstanding-balance`, {
+        params: {
+          includePayments: true,
+        },
+      });
+      if (details && details.payments.length) {
+        console.log('details', details);
+        const { data: ride } = await network.get('/api/v1/me/rides', {
+          params: {
+            paymentId: details.payments[0].id,
+          },
+        });
+        returnObject.rideId = ride[0].id;
+      }
+    }
+    return returnObject;
+  };
+
   return {
     paymentAccount,
     getClientPaymentAccount,
@@ -161,6 +185,7 @@ const usePayments = () => {
     updatePaymentMethod,
     getClientOutstandingBalanceCard,
     getOrFetchClientPaymentAccount,
+    loadOutstandingBalanceRide,
     retryPayment,
   };
 };
