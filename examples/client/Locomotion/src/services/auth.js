@@ -50,12 +50,6 @@ class Auth {
   };
 
   logout = async () => {
-    // TODO: call server on logout
-    // try {
-    //   await network.post('api/v1/me/logout')
-    // } catch (e) {
-    //   console.log('Bad logout request', e)
-    // }
     await logoutUser();
     await AppSettings.destroy();
     RNRestart.Restart();
