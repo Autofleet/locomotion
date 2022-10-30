@@ -39,4 +39,5 @@ export const ButtonText = styled(Text)`
    color: #24aaf2
    ${FONT_SIZES.LARGE};
    ${FONT_WEIGHTS.SEMI_BOLD};
+   margin-bottom: -10px;
 `;

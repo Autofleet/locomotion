@@ -35,7 +35,7 @@ const GenericPopup = ({
     <Container>
       <TitleContainer>
         {icon ? (
-          <SvgIcon Svg={icon} fill="black" height={20} width={20} style={{ marginRight: 5 }} />
+          <SvgIcon Svg={icon} height={20} width={20} style={{ marginRight: 5 }} />
         ) : null}
         <Title>{title}</Title>
       </TitleContainer>

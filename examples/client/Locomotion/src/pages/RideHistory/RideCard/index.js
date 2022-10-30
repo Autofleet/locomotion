@@ -253,7 +253,6 @@ const RideView = ({ ride }) => {
         isVisible={isPaymentSuccessPopupVisible}
         closePopup={() => { setIsPaymentSuccessPopupVisible(false); }}
         icon={sucessIcon}
-        iconFill="#2dc36a"
         buttonText="Done"
       />
     </>

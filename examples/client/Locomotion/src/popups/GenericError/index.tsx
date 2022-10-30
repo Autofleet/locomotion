@@ -7,7 +7,7 @@ import errorIcon from '../../assets/error-icon.svg';
 import XButton from '../../Components/CloseButton';
 
 import {
-  ButtonText, CloseButton, Container, TextContainer, TitleContainer,
+  ButtonText, CloseButton, Container, TextContainer, TitleContainer, LeftSideTitle, RightSideTitle,
 } from './styles';
 
 interface GenericErrorProps {
@@ -32,13 +32,16 @@ const GenericErrorPopup = ({
   <Modal isVisible={isVisible}>
     <Container>
       <TitleContainer>
-        <SvgIcon Svg={errorIcon} height={20} width={20} style={{ marginRight: 5 }} />
-        <Title>{title}</Title>
-        {cancelPopup ? (
-          <XButton onPress={cancelPopup} containerStyles={{ alignSelf: 'flex-end' }} />
-        ) : (null)
+        <LeftSideTitle>
+          <SvgIcon Svg={errorIcon} height={20} width={20} style={{ marginRight: 5 }} />
+          <Title>{title}</Title>
+        </LeftSideTitle>
+        <RightSideTitle>
+          {cancelPopup ? (
+            <XButton onPress={cancelPopup} containerStyles={{ alignSelf: 'flex-end' }} />
+          ) : (null)
         }
-
+        </RightSideTitle>
       </TitleContainer>
       <TextContainer>
         <SubTitle>{text}</SubTitle>
