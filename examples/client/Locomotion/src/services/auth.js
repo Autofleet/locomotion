@@ -3,6 +3,7 @@ import jwtDecode from 'jwt-decode';
 import RNRestart from 'react-native-restart';
 import StorageService from './storage';
 import AppSettings from './app-settings';
+import { logoutUser } from '../context/user/api';
 
 class Auth {
   static jwtVerify(token) {
@@ -49,12 +50,7 @@ class Auth {
   };
 
   logout = async () => {
-    // TODO: call server on logout
-    // try {
-    //   await network.post('api/v1/me/logout')
-    // } catch (e) {
-    //   console.log('Bad logout request', e)
-    // }
+    await logoutUser();
     await AppSettings.destroy();
     RNRestart.Restart();
   };
