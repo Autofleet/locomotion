@@ -595,6 +595,8 @@
     },
     "topMessage": {
         "outstandBalanceCreditCard": "Your last ride's payment failed. Ordering rides is disabled until the outstanding payment is settled.",
+        "outstandBalanceTitle": "Outstanding Balance",
+        "outstandBalanceButton": "Settle payment",
         "precedingStops": "Your driver is completing a stop nearby"
     }
   },

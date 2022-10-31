@@ -73,6 +73,7 @@ const RidePage = ({ mapSettings, navigation }) => {
     locationGranted, setLocationGranted,
   } = useContext(UserContext);
   const [addressSelectorFocusIndex, setAddressSelectorFocusIndex] = useState(1);
+  const [topMessage, setTopMessage] = useState(null);
   const { getSettingByKey } = settings.useContainer();
   const mapRef = useRef();
   const bottomSheetRef = useRef(null);
@@ -108,6 +109,8 @@ const RidePage = ({ mapSettings, navigation }) => {
     clientHasValidPaymentMethods,
     getClientOutstandingBalanceCard,
     loadOutstandingBalanceRide,
+    loadCustomer,
+    hasOutstandingPayment,
   } = payments.useContainer();
   const {
     futureRides,
@@ -287,6 +290,12 @@ const RidePage = ({ mapSettings, navigation }) => {
 
   useFocusEffect(
     React.useCallback(() => {
+      console.log('****** using focus');
+      const interval = setInterval(() => {
+        console.log('* * * * Logs every second');
+        loadCustomer();
+      }, 1000);
+      prepareTopMessage();
       const onBackPress = () => {
         if (serviceEstimations) {
           resetStateToAddressSelector();
@@ -297,7 +306,10 @@ const RidePage = ({ mapSettings, navigation }) => {
       const backHandler = BackHandler.addEventListener('hardwareBackPress', onBackPress);
       focusCurrentLocation();
 
-      return () => backHandler.remove();
+      return () => {
+        backHandler.remove();
+        clearInterval(interval);
+      };
     }, [serviceEstimations]),
   );
 
@@ -358,37 +370,35 @@ const RidePage = ({ mapSettings, navigation }) => {
     }
   }, [isExpanded]);
 
-  const MESSAGE_MAP = {
-    OUTSTANDING_BALANCE: {
-      text: () => {
-        const creditCard = getClientOutstandingBalanceCard();
-        return i18n.t('activeRide.topMessage.outstandBalanceCreditCard', {
-          name: creditCard.name,
-        });
+  const prepareTopMessage = async () => {
+    const MESSAGE_MAP = {
+      OUTSTANDING_BALANCE: {
+        text: () => i18n.t('activeRide.topMessage.outstandBalanceCreditCard'),
+        condition: () => hasOutstandingPayment,
+        title: i18n.t('activeRide.topMessage.outstandBalanceTitle'),
+        titleIcon: alertIcon,
+        buttonText: i18n.t('activeRide.topMessage.outstandBalanceButton'),
+        onClick: async () => {
+          const rejectedRide = await loadOutstandingBalanceRide();
+          navigationService.navigate(MAIN_ROUTES.COMPLETED_RIDE_OVERVIEW_PAGE, {
+            rideId: rejectedRide.rideId,
+          });
+        },
       },
-      condition: () => {
-        const creditCard = getClientOutstandingBalanceCard();
-        return creditCard && currentBsPage === BS_PAGES.SERVICE_ESTIMATIONS;
+      PRECEDING_STOPS: {
+        condition: () => ride?.stopPoints && ride?.stopPoints[0]?.precedingStops?.length,
+        text: () => i18n.t('activeRide.topMessage.precedingStops'),
       },
-      title: 'Outstanding Balance',
-      titleIcon: alertIcon,
-      buttonText: 'Settle payments',
-      onClick: async () => {
-        const rejectedRide = await loadOutstandingBalanceRide();
-        navigationService.navigate(MAIN_ROUTES.COMPLETED_RIDE_OVERVIEW_PAGE, {
-          rideId: rejectedRide.rideId,
-        });
-      },
-    },
-    PRECEDING_STOPS: {
-      condition: () => ride?.stopPoints && ride?.stopPoints[0]?.precedingStops?.length,
-      text: () => i18n.t('activeRide.topMessage.precedingStops'),
-    },
+    };
+
+    await loadCustomer();
+    const topMessageKey = Object.keys(MESSAGE_MAP).find(key => MESSAGE_MAP[key].condition());
+    setTopMessage(MESSAGE_MAP[topMessageKey]);
   };
 
-  const topMessageKey = Object.keys(MESSAGE_MAP).find(key => MESSAGE_MAP[key].condition());
-  const topMessage = MESSAGE_MAP[topMessageKey];
-
+  useEffect(() => {
+    console.log('* * * top message use effect', topMessage);
+  }, [topMessage]);
 
   return (
     <PageContainer>
@@ -406,6 +416,7 @@ const RidePage = ({ mapSettings, navigation }) => {
 
               <StopPointsViewer goBackToAddressSelector={goBackToAddress} />
             </Header>
+            {console.log('*1*1*1*', topMessage)}
             {topMessage ? (
               <TopMessage
                 text={topMessage.text()}
@@ -424,6 +435,7 @@ const RidePage = ({ mapSettings, navigation }) => {
               icon={hamburgerIcon}
               onPressIcon={navigation.openDrawer}
             />
+            {console.log('*2*2*2*', topMessage)}
             {topMessage ? (
               <TopMessage
                 text={topMessage.text()}

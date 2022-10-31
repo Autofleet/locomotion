@@ -1,5 +1,6 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { createContainer } from 'unstated-next';
+import { PaymentIntent } from '@stripe/stripe-react-native';
 import { PAYMENT_STATES } from '../../lib/commonTypes';
 import Mixpanel from '../../services/Mixpanel';
 import cashPaymentMethod from '../../pages/Payments/cashPaymentMethod';
@@ -15,6 +16,7 @@ const usePayments = () => {
   const [customer, setCustomer] = useState(null);
   const [paymentMethods, setPaymentMethods] = useState([]);
   const [paymentAccount, setPaymentAccount] = useState(null);
+  const [hasOutstandingPayment, setHasOutstandingPayment] = useState(false);
 
   const getCustomer = async () => {
     try {
@@ -31,6 +33,7 @@ const usePayments = () => {
     const customerData = await getCustomer();
     setCustomer(customerData);
     setPaymentMethods(customerData.paymentMethods);
+    console.log('***** load customer ******', paymentMethods);
     return customerData;
   };
 
@@ -142,7 +145,22 @@ const usePayments = () => {
     }
   };
 
-  const getClientOutstandingBalanceCard = () => paymentMethods.find(pm => pm.hasOutstandingBalance);
+  const getClientOutstandingBalanceCard = () => {
+    console.log('**** payment method in getClientOutstandingBalanceCard ****', paymentMethods);
+    const has = paymentMethods.find(pm => pm.hasOutstandingBalance);
+    console.log('***** has ******', has);
+    return has;
+  };
+
+  useEffect(() => {
+    if (paymentMethods && paymentMethods.length) {
+      if (paymentMethods.find(pm => pm.hasOutstandingBalance)) {
+        setHasOutstandingPayment(true);
+      } else {
+        setHasOutstandingPayment(false);
+      }
+    }
+  }, [paymentMethods]);
 
   const loadOutstandingBalanceRide = async () => {
     const returnObject = {
@@ -186,6 +204,7 @@ const usePayments = () => {
     getOrFetchClientPaymentAccount,
     loadOutstandingBalanceRide,
     retryPayment,
+    hasOutstandingPayment,
   };
 };
 

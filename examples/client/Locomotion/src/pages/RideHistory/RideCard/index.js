@@ -99,7 +99,7 @@ const RideTitleCard = ({
       </DaySecTitleSubText>
     );
   };
-
+  console.log('****** is payment rejected', isPaymentRejected);
   return (
     <>
       <TitleContainer>
@@ -132,6 +132,7 @@ export const RideListView = ({
     <TouchableRideViewContainer testID={testID} onPress={onPress}>
       <RideTitleCard
         ride={ride}
+        isPaymentRejected={ride.payment?.state === PAYMENT_STATES.REJECTED}
       />
       <RideDrillDownContainer>
         <RideDrillDownIcon />
@@ -172,6 +173,7 @@ const RideView = ({ ride }) => {
     if (success) {
       setIsPaymentSuccessPopupVisible(true);
       setPaymentSettled(true);
+      await usePayments.loadCustomer();
     } else {
       setIsUnablToProcessPopupVisible(true);
     }

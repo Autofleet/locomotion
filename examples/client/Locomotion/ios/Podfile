@@ -30,6 +30,8 @@ target 'Locomotion' do
 
   pod 'RNExitApp', :path => '../node_modules/react-native-exit-app'
 
+  pod 'RNGestureHandler', :path => '../node_modules/react-native-gesture-handler'
+
   target 'LocomotionTests' do
     inherit! :complete
     # Pods for testing
