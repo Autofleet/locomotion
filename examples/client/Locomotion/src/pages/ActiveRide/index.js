@@ -304,9 +304,7 @@ const RidePage = ({ mapSettings, navigation }) => {
       const backHandler = BackHandler.addEventListener('hardwareBackPress', onBackPress);
       focusCurrentLocation();
 
-      return () => {
-        backHandler.remove();
-      };
+      return () => backHandler.remove();
     }, [serviceEstimations]),
   );
 
