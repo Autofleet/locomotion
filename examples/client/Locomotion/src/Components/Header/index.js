@@ -7,18 +7,16 @@ import SafeView from '../SafeView';
 const Header = ({
   children, onPressIcon, icon, testID,
 }) => (
-  <SafeView>
-    <Container>
-      <SquareSvgButton
-        testID={testID}
-        noLoader
-        onPress={onPressIcon}
-        icon={icon}
-        style={Platform.OS === 'android' ? { shadowColor: '#000' } : {}}
-      />
-      {children}
-    </Container>
-  </SafeView>
+  <Container>
+    <SquareSvgButton
+      testID={testID}
+      noLoader
+      onPress={onPressIcon}
+      icon={icon}
+      style={Platform.OS === 'android' ? { shadowColor: '#000' } : {}}
+    />
+    {children}
+  </Container>
 );
 
 export default Header;

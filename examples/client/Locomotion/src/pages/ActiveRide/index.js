@@ -65,6 +65,7 @@ import { PAYMENT_METHODS } from '../Payments/consts';
 import { MessagesContext } from '../../context/messages';
 import alertIcon from '../../assets/warning.svg';
 import { rideHistoryContext } from '../../context/rideHistory';
+import SafeView from '../../Components/SafeView';
 
 const BLACK_OVERLAY_SCREENS = [BS_PAGES.CANCEL_RIDE];
 
@@ -422,7 +423,7 @@ const RidePage = ({ mapSettings, navigation }) => {
           </>
         )
         : (
-          <>
+          <SafeView>
             <Header
               testID="profileDataHamburger"
               icon={hamburgerIcon}
@@ -437,7 +438,7 @@ const RidePage = ({ mapSettings, navigation }) => {
                 icon={topMessage.titleIcon}
               />
             ) : null}
-          </>
+          </SafeView>
         )}
       <MapOverlayButtons
         style={{
