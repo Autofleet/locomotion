@@ -6,7 +6,7 @@ import { AppState } from 'react-native';
 import Config from 'react-native-config';
 import { useNavigation } from '@react-navigation/native';
 import _ from 'lodash';
-import moment from 'moment-timezone';
+import moment, { Moment } from 'moment-timezone';
 import i18n from '../../I18n';
 import { FutureRidesContext } from '../futureRides';
 import { UserContext } from '../user';
@@ -251,7 +251,8 @@ const RidePageContextProvider = ({ children }: {
   };
 
   const RIDE_STATES_TO_SCREENS = {
-    [RIDE_STATES.PENDING]: () => {
+    [RIDE_STATES.PENDING]: (pendingRide: RideInterface) => {
+      setRide(pendingRide);
       changeBsPage(BS_PAGES.CONFIRMING_RIDE);
     },
     [RIDE_STATES.MATCHING]: (matchingRide: RideInterface) => {
@@ -330,13 +331,27 @@ const RidePageContextProvider = ({ children }: {
     [ESTIMATION_ERRORS.FIRST_STOP_POINT_NOT_IN_TERRITORY]: () => changeBsPage(BS_PAGES.PICKUP_NOT_IN_TERRITORY),
   };
 
+
+  const getLocationTimezoneTime = async (lat: number, lng:number, scheduledTime: Moment) => {
+    const timezoneResponse = await convertTimezoneByLocation(lat, lng, scheduledTime);
+    return timezoneResponse.time;
+  };
+
   const getServiceEstimations = async (throwError = true) => {
     changeBsPage(BS_PAGES.SERVICE_ESTIMATIONS);
     try {
       const formattedStopPoints = formatStopPointsForEstimations(requestStopPoints);
       Mixpanel.setEvent('Get service estimations');
+
+      let scheduledTime: any = ride.scheduledTo;
+      if (ride.scheduledTo) {
+        const unixScheduledTo = moment.unix(Number(ride.scheduledTo) / 1000);
+        scheduledTime = await getLocationTimezoneTime(formattedStopPoints[0].lat, formattedStopPoints[0].lng, unixScheduledTo);
+      }
+
       const { estimations, services } = await rideApi
-        .createServiceEstimations(formattedStopPoints, ride.scheduledTo);
+        .createServiceEstimations(formattedStopPoints, scheduledTime);
+
       const tags = getEstimationTags(estimations);
       const formattedEstimations = formatEstimations(services, estimations, tags);
       setChosenService(ride.scheduledTo ? formattedEstimations.find((e: any) => e.currency)
@@ -825,9 +840,7 @@ const RidePageContextProvider = ({ children }: {
       let scheduledToMoment = ride.scheduledTo;
       if (ride.scheduledTo) {
         const unixScheduledTo = moment.unix(Number(ride.scheduledTo) / 1000);
-        const timezoneResponse = await convertTimezoneByLocation(stopPoints[0].lat, stopPoints[0].lng, unixScheduledTo);
-        console.log('timezoneResponse', timezoneResponse);
-        scheduledToMoment = timezoneResponse.time;
+        scheduledToMoment = await getLocationTimezoneTime(pickupLocation.lat, pickupLocation.lng, unixScheduledTo);
       }
 
       const rideToCreate = {

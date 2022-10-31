@@ -114,7 +114,7 @@ const AddressInput = styled(Text)`
 `;
 
 const LoaderContainer = styled(View)`
-  height: 25px;
+  height: 20px;
   width: 100%;
   margin: auto 0;
   margin-top: 25px;
