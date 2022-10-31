@@ -1,8 +1,10 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { createContainer } from 'unstated-next';
+import { PaymentIntent } from '@stripe/stripe-react-native';
+import { PAYMENT_STATES } from '../../lib/commonTypes';
 import Mixpanel from '../../services/Mixpanel';
 import cashPaymentMethod from '../../pages/Payments/cashPaymentMethod';
-import { getByKey } from '../../context/settings/api';
+import { fetchRides } from '../newRideContext/api';
 import network from '../../services/network';
 import SETTINGS_KEYS from '../settings/keys';
 import SettingContext from '../settings';
@@ -14,6 +16,7 @@ const usePayments = () => {
   const [customer, setCustomer] = useState(null);
   const [paymentMethods, setPaymentMethods] = useState([]);
   const [paymentAccount, setPaymentAccount] = useState(null);
+  const [hasOutstandingPayment, setHasOutstandingPayment] = useState(false);
 
   const getCustomer = async () => {
     try {
@@ -128,7 +131,58 @@ const usePayments = () => {
     }
   };
 
-  const getClientOutstandingBalanceCard = () => paymentMethods.find(pm => pm.hasOutstandingBalance);
+  const retryPayment = async (paymentId) => {
+    try {
+      Mixpanel.setEvent('retry payment', { paymentId });
+      const { data } = await network.post(`${BASE_PATH}/${paymentId}/retry`);
+      Mixpanel.setEvent('retry payment response', { paymentId, data });
+      await loadCustomer();
+      return data.state === PAYMENT_STATES.PAID;
+    } catch (e) {
+      const status = e && e.response && e.response.status;
+      Mixpanel.setEvent('Retry payment failed', { status });
+      await loadCustomer();
+      return false;
+    }
+  };
+
+  const getClientOutstandingBalanceCard = () => {
+    const has = paymentMethods.find(pm => pm.hasOutstandingBalance);
+    return has;
+  };
+
+  useEffect(() => {
+    if (paymentMethods && paymentMethods.length) {
+      if (paymentMethods.find(pm => pm.hasOutstandingBalance)) {
+        setHasOutstandingPayment(true);
+      } else {
+        setHasOutstandingPayment(false);
+      }
+    }
+  }, [paymentMethods]);
+
+  const loadOutstandingBalanceRide = async () => {
+    const returnObject = {
+      rideId: null,
+    };
+    const paymentMethod = getClientOutstandingBalanceCard();
+    if (paymentMethod) {
+      const { data: details } = await network.get(`${BASE_PATH}/${paymentMethod.id}/outstanding-balance`, {
+        params: {
+          includePayments: true,
+        },
+      });
+      if (details && details.payments.length) {
+        const { data: ride } = await network.get('/api/v1/me/rides', {
+          params: {
+            paymentId: details.payments[0].id,
+          },
+        });
+        returnObject.rideId = ride[0].id;
+      }
+    }
+    return returnObject;
+  };
 
   return {
     paymentAccount,
@@ -147,6 +201,9 @@ const usePayments = () => {
     updatePaymentMethod,
     getClientOutstandingBalanceCard,
     getOrFetchClientPaymentAccount,
+    loadOutstandingBalanceRide,
+    retryPayment,
+    hasOutstandingPayment,
   };
 };
 

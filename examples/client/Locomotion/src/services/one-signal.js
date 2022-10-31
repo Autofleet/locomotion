@@ -57,7 +57,7 @@ class NotificationsService {
     OneSignal.setNotificationWillShowInForegroundHandler((notificationReceivedEvent) => {
       const notification = notificationReceivedEvent.getNotification();
       const { additionalData } = notification;
-      if (this.foregroundNotificationsHandlers[additionalData.type]) {
+      if (additionalData && additionalData.type && this.foregroundNotificationsHandlers[additionalData.type]) {
         this.foregroundNotificationsHandlers[additionalData.type](additionalData);
       }
       notificationReceivedEvent.complete(notification);
