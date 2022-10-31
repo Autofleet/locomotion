@@ -368,7 +368,7 @@ const RidePage = ({ mapSettings, navigation }) => {
 
   useEffect(() => {
     prepareTopMessage();
-  }, [hasOutstandingPayment]);
+  }, [hasOutstandingPayment, ride?.stopPoints && ride?.stopPoints[0]?.precedingStops?.length]);
 
   const prepareTopMessage = async () => {
     const MESSAGE_MAP = {
@@ -403,7 +403,7 @@ const RidePage = ({ mapSettings, navigation }) => {
       />
       {serviceEstimations || currentBsPage === BS_PAGES.SET_LOCATION_ON_MAP
         ? (
-          <>
+          <SafeView>
             <Header
               icon={backArrow}
               onPressIcon={backToMap}
@@ -420,7 +420,7 @@ const RidePage = ({ mapSettings, navigation }) => {
                 icon={topMessage.titleIcon}
               />
             ) : null}
-          </>
+          </SafeView>
         )
         : (
           <SafeView>
