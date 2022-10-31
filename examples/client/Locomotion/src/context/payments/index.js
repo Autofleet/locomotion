@@ -134,7 +134,7 @@ const usePayments = () => {
       Mixpanel.setEvent('retry payment', { paymentId });
       const { data } = await network.post(`${BASE_PATH}/${paymentId}/retry`);
       Mixpanel.setEvent('retry payment response', { paymentId, data });
-      return data.status === PAYMENT_STATES.PAID;
+      return data.state === PAYMENT_STATES.PAID;
     } catch (e) {
       const status = e && e.response && e.response.status;
       Mixpanel.setEvent('Retry payment failed', { status });

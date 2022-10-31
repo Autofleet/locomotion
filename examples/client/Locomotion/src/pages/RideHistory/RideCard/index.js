@@ -48,10 +48,9 @@ import contactUsIcon from '../../../assets/headset.svg';
 import sucessIcon from '../../../assets/checkmark.svg';
 
 const RideTitleCard = ({
-  ride, page, showTip, tip,
+  ride, page, showTip, tip, isPaymentRejected,
 }) => {
   const isDebuggingEnabled = (typeof atob !== 'undefined');
-  const isPaymentRejected = ride.payment?.state === PAYMENT_STATES.REJECTED;
   const getTipButton = () => {
     if (!isDebuggingEnabled && tip === null) {
       return (
@@ -143,9 +142,12 @@ export const RideListView = ({
 );
 
 const RideView = ({ ride }) => {
+  const isRidePaymentRejected = ride.payment?.state === PAYMENT_STATES.REJECTED;
   const [tip, setTip] = useState(null);
+  const [isPaymentSettled, setPaymentSettled] = useState(false);
   const [isUnableToProcessPopupVisible, setIsUnablToProcessPopupVisible] = useState(false);
   const [isPaymentSuccessPopupVisible, setIsPaymentSuccessPopupVisible] = useState(false);
+  const isPaymentRejected = !isPaymentSettled && isRidePaymentRejected;
 
   const usePayments = PaymentContext.useContainer();
 
@@ -169,6 +171,7 @@ const RideView = ({ ride }) => {
     });
     if (success) {
       setIsPaymentSuccessPopupVisible(true);
+      setPaymentSettled(true);
     } else {
       setIsUnablToProcessPopupVisible(true);
     }
@@ -200,10 +203,10 @@ const RideView = ({ ride }) => {
         </MapRideViewContainer>
         <DetailsContainer>
           <MainRideViewSectionContainer>
-            <RideTitleCard page ride={ride} showTip tip={tip} />
+            <RideTitleCard page ride={ride} showTip tip={tip} isPaymentRejected={isPaymentRejected} />
             <BlankContainer />
           </MainRideViewSectionContainer>
-          {ride.payment?.state === PAYMENT_STATES.REJECTED
+          {isPaymentRejected
             ? (
               <RetryPaymentButtonContainer>
                 <RoundedButton style={{ backgroundColor: '#24aaf2' }} onPress={retryPayment}>
