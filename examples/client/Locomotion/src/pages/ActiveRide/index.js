@@ -367,7 +367,7 @@ const RidePage = ({ mapSettings, navigation }) => {
 
   useEffect(() => {
     prepareTopMessage();
-  }, [hasOutstandingPayment]);
+  }, [hasOutstandingPayment, ride?.stopPoints && ride?.stopPoints[0]?.precedingStops?.length]);
 
   const prepareTopMessage = async () => {
     const MESSAGE_MAP = {

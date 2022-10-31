@@ -2,6 +2,7 @@ import React from 'react';
 import { Text } from 'react-native';
 import Button from '../../../Components/Button';
 import SvgIcon from '../../../Components/SvgIcon';
+import SafeView from '../../../Components/SafeView';
 import {
   BodyText, Container, Title, TitleText, ButtonContainer, ButtonText,
 } from './styled';
@@ -17,17 +18,18 @@ const TopMessage = ({
 }) => (
   text
     ? (
-      <Container>
-        {title && (
-        <Title>
-          {icon && <SvgIcon Svg={icon} height={20} width={20} style={{ marginRight: 10 }} />}
-          <TitleText>{title}</TitleText>
-        </Title>
-        )}
-        <BodyText>
-          {text}
-        </BodyText>
-        {button && onPress && (
+      <SafeView>
+        <Container>
+          {title && (
+          <Title>
+            {icon && <SvgIcon Svg={icon} height={20} width={20} style={{ marginRight: 10 }} />}
+            <TitleText>{title}</TitleText>
+          </Title>
+          )}
+          <BodyText>
+            {text}
+          </BodyText>
+          {button && onPress && (
           <ButtonContainer>
             <Button
               noBackground
@@ -38,8 +40,9 @@ const TopMessage = ({
               </ButtonText>
             </Button>
           </ButtonContainer>
-        )}
-      </Container>
+          )}
+        </Container>
+      </SafeView>
     )
     : null
 );
