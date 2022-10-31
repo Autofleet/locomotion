@@ -370,7 +370,7 @@
             "retryFailedBody": "Seems like there was an issue trying to process your request.\n\nWe recommend trying again later or contacting our support team",
             "retryFailedButton": "Contact our support",
             "retrySuccessTitle": "You are all set!",
-            "retrySuccessBody": "Thank you for your payment - you can nou resume your rides!",
+            "retrySuccessBody": "Thank you for your payment - you can now resume your rides!",
             "retrySuccessButton": "Done",
             "retryPaymentButton": "Pay balance now"
         }
