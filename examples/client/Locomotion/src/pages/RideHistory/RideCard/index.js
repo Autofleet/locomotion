@@ -99,7 +99,6 @@ const RideTitleCard = ({
       </DaySecTitleSubText>
     );
   };
-  console.log('****** is payment rejected', isPaymentRejected);
   return (
     <>
       <TitleContainer>

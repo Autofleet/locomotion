@@ -288,14 +288,12 @@ const RidePage = ({ mapSettings, navigation }) => {
     }
   }, [locationGranted]);
 
+  useEffect(() => {
+    loadCustomer();
+  }, []);
+
   useFocusEffect(
     React.useCallback(() => {
-      console.log('****** using focus');
-      const interval = setInterval(() => {
-        console.log('* * * * Logs every second');
-        loadCustomer();
-      }, 1000);
-      prepareTopMessage();
       const onBackPress = () => {
         if (serviceEstimations) {
           resetStateToAddressSelector();
@@ -308,7 +306,6 @@ const RidePage = ({ mapSettings, navigation }) => {
 
       return () => {
         backHandler.remove();
-        clearInterval(interval);
       };
     }, [serviceEstimations]),
   );
@@ -370,6 +367,10 @@ const RidePage = ({ mapSettings, navigation }) => {
     }
   }, [isExpanded]);
 
+  useEffect(() => {
+    prepareTopMessage();
+  }, [hasOutstandingPayment]);
+
   const prepareTopMessage = async () => {
     const MESSAGE_MAP = {
       OUTSTANDING_BALANCE: {
@@ -391,14 +392,9 @@ const RidePage = ({ mapSettings, navigation }) => {
       },
     };
 
-    await loadCustomer();
     const topMessageKey = Object.keys(MESSAGE_MAP).find(key => MESSAGE_MAP[key].condition());
     setTopMessage(MESSAGE_MAP[topMessageKey]);
   };
-
-  useEffect(() => {
-    console.log('* * * top message use effect', topMessage);
-  }, [topMessage]);
 
   return (
     <PageContainer>
@@ -416,7 +412,6 @@ const RidePage = ({ mapSettings, navigation }) => {
 
               <StopPointsViewer goBackToAddressSelector={goBackToAddress} />
             </Header>
-            {console.log('*1*1*1*', topMessage)}
             {topMessage ? (
               <TopMessage
                 text={topMessage.text()}
@@ -435,7 +430,6 @@ const RidePage = ({ mapSettings, navigation }) => {
               icon={hamburgerIcon}
               onPressIcon={navigation.openDrawer}
             />
-            {console.log('*2*2*2*', topMessage)}
             {topMessage ? (
               <TopMessage
                 text={topMessage.text()}

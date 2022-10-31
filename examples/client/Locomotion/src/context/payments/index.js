@@ -33,7 +33,6 @@ const usePayments = () => {
     const customerData = await getCustomer();
     setCustomer(customerData);
     setPaymentMethods(customerData.paymentMethods);
-    console.log('***** load customer ******', paymentMethods);
     return customerData;
   };
 
@@ -137,18 +136,18 @@ const usePayments = () => {
       Mixpanel.setEvent('retry payment', { paymentId });
       const { data } = await network.post(`${BASE_PATH}/${paymentId}/retry`);
       Mixpanel.setEvent('retry payment response', { paymentId, data });
+      await loadCustomer();
       return data.state === PAYMENT_STATES.PAID;
     } catch (e) {
       const status = e && e.response && e.response.status;
       Mixpanel.setEvent('Retry payment failed', { status });
+      await loadCustomer();
       return false;
     }
   };
 
   const getClientOutstandingBalanceCard = () => {
-    console.log('**** payment method in getClientOutstandingBalanceCard ****', paymentMethods);
     const has = paymentMethods.find(pm => pm.hasOutstandingBalance);
-    console.log('***** has ******', has);
     return has;
   };
 
