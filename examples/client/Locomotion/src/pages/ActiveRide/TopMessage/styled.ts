@@ -4,7 +4,6 @@ import { FONT_SIZES, FONT_WEIGHTS } from '../../../context/theme';
 
 export const Container = styled(View)`
     margin: 0 20px;
-    top: -40px;
     padding: 10px;
     shadow-offset: 0px 0px;
     shadow-color: #04214f;
