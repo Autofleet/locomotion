@@ -4,7 +4,6 @@ import android.app.Application;
 import android.content.Context;
 import com.facebook.react.PackageList;
 import com.facebook.react.ReactApplication;
-import com.swmansion.gesturehandler.RNGestureHandlerPackage;
 import com.github.wumke.RNExitApp.RNExitAppPackage;
 import com.reactnativerestart.RestartPackage;
 import com.ocetnik.timer.BackgroundTimerPackage;
