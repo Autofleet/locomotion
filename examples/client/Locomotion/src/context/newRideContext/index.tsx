@@ -584,7 +584,11 @@ const RidePageContextProvider = ({ children }: {
   };
 
   useEffect(() => {
-    initCurrentLocation();
+    if (!locationGranted) {
+      getCurrentLocation();
+    } else {
+      initCurrentLocation();
+    }
   }, [locationGranted]);
 
   const initSps = async () => {
