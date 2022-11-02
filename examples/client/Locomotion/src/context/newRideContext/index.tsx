@@ -12,7 +12,7 @@ import { FutureRidesContext } from '../futureRides';
 import { UserContext } from '../user';
 import { getPosition, DEFAULT_COORDS } from '../../services/geo';
 import {
-  getPlaces, getGeocode, getPlaceDetails, getLocationTimezone,
+  getPlaces, getGeocode, getPlaceDetails,
 } from './google-api';
 import StorageService from '../../services/storage';
 import Mixpanel from '../../services/Mixpanel';
@@ -579,6 +579,7 @@ const RidePageContextProvider = ({ children }: {
     if (locationGranted) {
       const locationData = await getCurrentLocationAddress();
       setCurrentGeocode(locationData);
+      return locationData;
     }
   };
 
@@ -627,12 +628,9 @@ const RidePageContextProvider = ({ children }: {
   };
 
   const setSpCurrentLocation = async () => {
-    if (!currentGeocode) {
-      await getCurrentLocationAddress();
-      updateRequestSp(currentGeocode);
-      return true;
-    }
-    updateRequestSp(currentGeocode);
+    const newGeoLocation = await reverseLocationGeocode();
+    updateRequestSp(newGeoLocation);
+    return true;
   };
 
   const loadAddress = async (input: any) => {
