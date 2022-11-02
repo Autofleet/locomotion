@@ -579,11 +579,16 @@ const RidePageContextProvider = ({ children }: {
     if (locationGranted) {
       const locationData = await getCurrentLocationAddress();
       setCurrentGeocode(locationData);
+      return locationData;
     }
   };
 
   useEffect(() => {
-    initCurrentLocation();
+    if (!locationGranted) {
+      getCurrentLocation();
+    } else {
+      initCurrentLocation();
+    }
   }, [locationGranted]);
 
   const initSps = async () => {
@@ -627,12 +632,9 @@ const RidePageContextProvider = ({ children }: {
   };
 
   const setSpCurrentLocation = async () => {
-    if (!currentGeocode) {
-      await getCurrentLocationAddress();
-      updateRequestSp(currentGeocode);
-      return true;
-    }
-    updateRequestSp(currentGeocode);
+    const newGeoLocation = await reverseLocationGeocode();
+    updateRequestSp(newGeoLocation);
+    return true;
   };
 
   const loadAddress = async (input: any) => {
