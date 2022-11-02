@@ -65,7 +65,7 @@ import { PAYMENT_METHODS } from '../Payments/consts';
 import { MessagesContext } from '../../context/messages';
 import alertIcon from '../../assets/warning.svg';
 import { rideHistoryContext } from '../../context/rideHistory';
-import SafeView from '../../Components/SafeView'
+import SafeView from '../../Components/SafeView';
 
 const BLACK_OVERLAY_SCREENS = [BS_PAGES.CANCEL_RIDE];
 
@@ -327,9 +327,7 @@ const RidePage = ({ mapSettings, navigation }) => {
   useEffect(() => {
     initChecks();
     const subscription = AppState.addEventListener('change', (nextAppState) => {
-      if (
-        nextAppState === 'active'
-      ) {
+      if (nextAppState === 'active') {
         initChecks();
       }
     });
