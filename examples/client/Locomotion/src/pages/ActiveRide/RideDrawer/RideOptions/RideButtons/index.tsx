@@ -25,6 +25,7 @@ import SETTINGS_KEYS from '../../../../../context/settings/keys';
 import { getTextColorForTheme } from '../../../../../context/theme';
 import { PAYMENT_METHODS } from '../../../../../pages/Payments/consts';
 
+const TIME_WINDOW_CHANGE_HIGHLIGHT_TIME_MS = 3000;
 interface RideButtonsProps {
     displayPassenger: boolean;
     setPopupName: (popupName: popupNames) => void;
@@ -44,6 +45,8 @@ const RideButtons = ({
   const {
     changeBsPage,
   } = useContext(RideStateContextContext);
+  const [pickupTimeWindow, setPickupTimeWindow] = useState(0);
+  const [pickupTimeWindowChangedHighlight, setPickupTimeWindowChangedHighlight] = useState(false);
   const { getSettingByKey } = settings.useContainer();
   const {
     paymentMethods,
@@ -73,13 +76,27 @@ const RideButtons = ({
     checkFutureRidesSetting();
     checkMinutesBeforeFutureRideSetting();
   }, []);
+
+  useEffect(() => {
+    if (chosenService && pickupTimeWindow !== chosenService.pickupWindowSizeInMinutes) {
+      setPickupTimeWindow(chosenService.pickupWindowSizeInMinutes);
+      setPickupTimeWindowChangedHighlight(true);
+      setTimeout(() => {
+        setPickupTimeWindowChangedHighlight(false);
+      }, TIME_WINDOW_CHANGE_HIGHLIGHT_TIME_MS);
+    }
+  }, [chosenService]);
+
   const renderFutureBooking = () => {
     const close = () => {
       setIsDatePickerOpen(false);
     };
-
     return (
-      <ButtonContainer testID="RideTimeSelector" onPress={() => minMinutesBeforeFutureRide && setIsDatePickerOpen(true)}>
+      <ButtonContainer
+        testID="RideTimeSelector"
+        onPress={() => minMinutesBeforeFutureRide && setIsDatePickerOpen(true)}
+        highlight={ride?.scheduledTo && pickupTimeWindowChangedHighlight}
+      >
         <FutureBookingButton />
         <DatePicker
           testID="datePicker"

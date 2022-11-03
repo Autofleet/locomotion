@@ -257,12 +257,16 @@ export const ConfirmPickupTime = (props: any) => {
     tryServiceEstimations,
     setServiceEstimations,
     ride,
+    chosenService,
   } = useContext(MewRidePageContext);
   const {
     changeBsPage,
   } = useContext(RideStateContextContext);
   const date = moment(unconfirmedPickupTime).format('ddd, MMM Do');
-  const time = moment(unconfirmedPickupTime).format('h:mm A');
+  const isDateToday = moment(unconfirmedPickupTime).isSame(moment(), 'day');
+  const afterTime = moment(unconfirmedPickupTime).format('h:mm A');
+  const window = chosenService && chosenService.pickupWindowSizeInMinutes;
+  const beforeTime = (window && moment(unconfirmedPickupTime).add(window, 'minutes').format('h:mm A')) || 'optimized';
 
   const checkMinutesBeforeFutureRideSetting = async () => {
     const minutes = await getSettingByKey(SETTINGS_KEYS.MIN_MINUTES_BEFORE_FUTURE_RIDE);
@@ -293,7 +297,17 @@ export const ConfirmPickupTime = (props: any) => {
           borderColor: '#f1f2f6',
         }}
       >
-        {i18n.t('bottomSheetContent.confirmPickupTime.pickupText', { date, time })}
+        {i18n.t('bottomSheetContent.confirmPickupTime.pickupTextTime', { afterTime, beforeTime })}
+      </RoundedButton>
+      <RoundedButton
+        onPress={() => minMinutesBeforeFutureRide && setIsDatePickerOpen(true)}
+        hollow
+        icon={timeIcon}
+        style={{
+          borderColor: '#f1f2f6',
+        }}
+      >
+        {i18n.t(`bottomSheetContent.confirmPickupTime.${isDateToday ? 'pickupTextToday' : 'pickupTextDay'}`, { date })}
       </RoundedButton>
       <DatePicker
         testID="datePicker"
@@ -384,13 +398,25 @@ export const CancelRide = (props: any) => {
 
 export const ConfirmFutureRide = (props: any) => {
   const { newFutureRide } = useContext(FutureRidesContext);
+  const { chosenService } = useContext(MewRidePageContext);
+
+  const getTimeDisplay = () => {
+    const afterTime = moment.parseZone(newFutureRide?.scheduledTo).format('h:mm A');
+    const window = chosenService && chosenService.pickupWindowSizeInMinutes;
+    const beforeTime = (window && moment.parseZone(newFutureRide?.scheduledTo).add(window, 'minutes').format('h:mm A')) || 'optimized';
+
+    const timeText = i18n.t('bottomSheetContent.confirmPickupTime.pickupTextTime', { afterTime, beforeTime });
+    return <TextRowWithIcon text={timeText} icon={timeIcon} />;
+  };
 
   const getDateDisplay = () => {
     const date = moment.parseZone(newFutureRide?.scheduledTo).format('ddd, MMM Do');
-    const time = moment.parseZone(newFutureRide?.scheduledTo).format('h:mm A');
-    const dateText = i18n.t('bottomSheetContent.confirmPickupTime.pickupText', { date, time });
+    const isDateToday = moment.parseZone(newFutureRide?.scheduledTo).isSame(moment(), 'day');
+
+    const dateText = i18n.t(`bottomSheetContent.confirmPickupTime.${isDateToday ? 'pickupTextToday' : 'pickupTextDay'}`, { date });
     return <TextRowWithIcon text={dateText} icon={timeIcon} />;
   };
+
   const getPickupDisplay = () => {
     const pickup = (newFutureRide?.stopPoints || [])
       .find(sp => sp.type === STOP_POINT_TYPES.STOP_POINT_PICKUP);
@@ -410,6 +436,7 @@ export const ConfirmFutureRide = (props: any) => {
       fullWidthButtons
       {...props}
     >
+      {getTimeDisplay()}
       {getDateDisplay()}
       {getPickupDisplay()}
       {getDropOffDisplay()}

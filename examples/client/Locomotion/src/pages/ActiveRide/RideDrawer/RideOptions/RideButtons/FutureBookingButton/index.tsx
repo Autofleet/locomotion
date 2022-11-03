@@ -17,15 +17,17 @@ const TimeText = styled(Text)`
 `;
 
 const FutureBookingButton = () => {
-  const { ride } = useContext(RidePageContext);
+  const { chosenService, ride } = useContext(RidePageContext);
   const nowText = i18n.t('bottomSheetContent.ride.now');
   const { primaryColor } = useContext(ThemeContext);
   const isFutureRide = ride?.scheduledTo;
   const chosenTime = isFutureRide && moment(ride.scheduledTo).format('MMM D, h:mm A');
+  const window = chosenService && chosenService.pickupWindowSizeInMinutes;
+  const chosenBeforeTime = window ? moment(ride.scheduledTo).add(window, 'minutes').format('MMM D, h:mm A') : 'optimized';
   return (
     <>
       <SvgIcon fill={primaryColor} Svg={clock} height={15} width={15} />
-      <TimeText testID="timePickerBottomSheet" numberOfLines={1}>{isFutureRide ? chosenTime : nowText}</TimeText>
+      <TimeText testID="timePickerBottomSheet" numberOfLines={1}>{isFutureRide ? `${chosenTime} - ${chosenBeforeTime}` : nowText}</TimeText>
       <SvgIcon stroke="#333333" Svg={chevron} height={10} width={10} style={{ transform: [{ rotate: '90deg' }] }} />
     </>
   );

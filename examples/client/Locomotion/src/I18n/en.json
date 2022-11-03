@@ -500,7 +500,9 @@
     "confirmPickupTime": {
         "titleText": "Scheduled ride",
         "buttonText": "Set pick up time",
-        "pickupText": "Pick up on {{date}}, at {{time}}"
+        "pickupTextTime": "Pickup at {{afterTime}} - {{beforeTime}}",
+        "pickupTextDay": "On {{date}}",
+        "pickupTextToday": "Today, {{date}}"
     },
     "locationRequest": {
         "titleText": "Update location services",
