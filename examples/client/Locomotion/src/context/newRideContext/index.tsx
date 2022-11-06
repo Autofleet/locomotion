@@ -30,7 +30,9 @@ import settings from '../settings';
 import SETTINGS_KEYS from '../settings/keys';
 import { RideStateContextContext } from '../ridePageStateContext';
 import { BS_PAGES } from '../ridePageStateContext/utils';
-import { RIDE_STATES, RIDE_FINAL_STATES, STOP_POINT_TYPES } from '../../lib/commonTypes';
+import {
+  RIDE_STATES, RIDE_FINAL_STATES, STOP_POINT_TYPES, PAYMENT_STATES,
+} from '../../lib/commonTypes';
 import useBackgroundInterval from '../../lib/useBackgroundInterval';
 import { formatSps } from '../../lib/ride/utils';
 import { APP_ROUTES, MAIN_ROUTES } from '../../pages/routes';
@@ -135,6 +137,7 @@ interface RidePageContextInterface {
   loadRide: (rideId: string) => Promise<void>;
   getRidePriceCalculation: (id: string | undefined, priceCalculationId?: string) => Promise<PriceCalculation | undefined>;
   getRideTotalPriceWithCurrency: (rideId : string | undefined) => Promise<{ amount: number; currency: string; } | undefined>;
+  getRidesByParams: (params: any) => Promise<RideInterface[]>;
 }
 
 export const RidePageContext = createContext<RidePageContextInterface>({
@@ -187,6 +190,7 @@ export const RidePageContext = createContext<RidePageContextInterface>({
   setUnconfirmedPickupTime: () => undefined,
   unconfirmedPickupTime: null,
   loadRide: async (rideId: string) => undefined,
+  getRidesByParams: async (params: any) => [],
 });
 
 const HISTORY_RECORDS_NUM = 10;
@@ -213,7 +217,7 @@ const RidePageContextProvider = ({ children }: {
   const [isAppActive, setIsAppActive] = useState(false);
   const [ridePopup, setRidePopup] = useState<RidePopupNames | null>(null);
   const [unconfirmedPickupTime, setUnconfirmedPickupTime] = useState<number | null>(null);
-
+  const getRouteName = () => navigationService?.getNavigator()?.getCurrentRoute().name;
   const intervalRef = useRef<any>();
 
   const stopRequestInterval = () => {
@@ -244,7 +248,9 @@ const RidePageContextProvider = ({ children }: {
 
   const onRideCompleted = (rideId: string) => {
     cleanRideState();
-    navigationService.navigate(MAIN_ROUTES.POST_RIDE, { rideId });
+    if (getRouteName() !== 'CompletedRideOverviewPage') {
+      navigationService.navigate(MAIN_ROUTES.POST_RIDE, { rideId });
+    }
     setTimeout(() => {
       changeBsPage(BS_PAGES.ADDRESS_SELECTOR);
     }, 500);
@@ -414,6 +420,8 @@ const RidePageContextProvider = ({ children }: {
     const now = moment().utc().toDate();
     return StorageService.save({ lastCompletedRideTimestamp: now }, 60 * 60 * 24 * 7);
   };
+
+  const getRidesByParams = async (params: any) => rideApi.fetchRides(params);
 
   const getLastCompletedRide = async () => {
     let lastTimestamp = await StorageService.get('lastCompletedRideTimestamp');
@@ -1082,6 +1090,7 @@ const RidePageContextProvider = ({ children }: {
         setUnconfirmedPickupTime,
         unconfirmedPickupTime,
         loadRide,
+        getRidesByParams,
       }}
     >
       {children}
