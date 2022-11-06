@@ -99,7 +99,7 @@ const RideCard = ({
         false,
       );
 
-      const newScheduledTo = moment.parseZone(convertedTime.time).format('MMMM DD, YYYY, h:mm A');
+      const newScheduledTo = moment.parseZone(convertedTime.time).format('MMM DD, YYYY [at] h:mm A');
       const scheduledBeforeTime = pickupWindowTime ? moment.parseZone(convertedTime.time).add(pickupWindowTime, 'minutes').format('h:mm A') : 'optimized';
       setTimezonedScheduledTo(`${newScheduledTo} - ${scheduledBeforeTime}`);
       setDisplayTimezone(null);

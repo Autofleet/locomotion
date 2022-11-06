@@ -516,7 +516,7 @@
     },
     "confirmingFutureRide": {
         "titleText": "Confirming your scheduled ride",
-        "subTitleText": "For {{date}}",
+        "subTitleText": "For {{date}} - {{beforeTime}}",
         "secondaryButtonText": "Cancel ride"
     },
     "cancelRide": {

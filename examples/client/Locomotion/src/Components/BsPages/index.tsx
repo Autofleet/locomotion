@@ -36,6 +36,7 @@ import locationIcon from '../../assets/location_pin.svg';
 import Loader from '../Loader';
 import { MewRidePageContext } from '../..';
 import timeIcon from '../../assets/calendar.svg';
+import clockIcon from '../../assets/bottomSheet/clock.svg';
 import ActiveRideContent from './ActiveRide';
 import RoundedButton from '../RoundedButton';
 import { getFutureRideMaxDate, getFutureRideMinDate } from '../../context/newRideContext/utils';
@@ -292,9 +293,10 @@ export const ConfirmPickupTime = (props: any) => {
       <RoundedButton
         onPress={() => minMinutesBeforeFutureRide && setIsDatePickerOpen(true)}
         hollow
-        icon={timeIcon}
+        icon={clockIcon}
         style={{
           borderColor: '#f1f2f6',
+          marginBottom: 20,
         }}
       >
         {i18n.t('bottomSheetContent.confirmPickupTime.pickupTextTime', { afterTime, beforeTime })}
@@ -406,7 +408,7 @@ export const ConfirmFutureRide = (props: any) => {
     const beforeTime = (window && moment.parseZone(newFutureRide?.scheduledTo).add(window, 'minutes').format('h:mm A')) || 'optimized';
 
     const timeText = i18n.t('bottomSheetContent.confirmPickupTime.pickupTextTime', { afterTime, beforeTime });
-    return <TextRowWithIcon text={timeText} icon={timeIcon} />;
+    return <TextRowWithIcon text={timeText} icon={clockIcon} />;
   };
 
   const getDateDisplay = () => {
@@ -576,7 +578,7 @@ export const Loading = (props: any) => (
 export const ConfirmingRide = (props: any) => {
   const { setSnapPointsState } = useContext(BottomSheetContext);
   const { changeBsPage } = useContext(RideStateContextContext);
-  const { ride } = useContext(RidePageContext);
+  const { ride, chosenService } = useContext(RidePageContext);
   useEffect(() => {
     setSnapPointsState(SNAP_POINT_STATES.CONFIRMING_RIDE);
   }, []);
@@ -585,10 +587,12 @@ export const ConfirmingRide = (props: any) => {
     ? i18n.t('bottomSheetContent.confirmingFutureRide.titleText')
     : i18n.t('bottomSheetContent.confirmingRide.titleText');
 
+  const window = chosenService.pickupWindowSizeInMinutes;
+  const beforeTime = window ? moment(ride.scheduledTo).add(window, 'minutes').format('h:mm A') : 'optimized';
 
   const SubTitleText = ride?.scheduledTo
     ? i18n.t('bottomSheetContent.confirmingFutureRide.subTitleText',
-      { date: moment(ride.scheduledTo).format('MMM D, h:mm A') })
+      { date: moment(ride.scheduledTo).format('MMM D, h:mm A'), beforeTime })
     : null;
   return (
     <BsPage
