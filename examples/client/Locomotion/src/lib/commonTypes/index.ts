@@ -30,6 +30,14 @@ export const RIDE_STATES = {
   FAILED: 'failed',
 };
 
+export const PAYMENT_STATES = {
+  PENDING: 'pending',
+  PAID: 'paid',
+  REJECTED: 'rejected',
+  SETTLED: 'settled',
+  CANCELED: 'canceled',
+};
+
 export const RIDE_ACTIVE_STATES = [
   RIDE_STATES.PENDING,
   RIDE_STATES.MATCHING,

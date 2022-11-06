@@ -8,11 +8,12 @@ import { useBottomSheet } from '@gorhom/bottom-sheet';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import moment from 'moment';
 import DatePicker from 'react-native-date-picker';
+import objDefault from '../../lib/objDefault';
 import Mixpanel from '../../services/Mixpanel';
 import GenericErrorPopup from '../../popups/GenericError';
 import TextRowWithIcon from '../../Components/TextRowWithIcon';
 import { FutureRidesContext } from '../../context/futureRides';
-import { STOP_POINT_TYPES } from '../../lib/commonTypes';
+import { RIDE_STATES, STOP_POINT_TYPES } from '../../lib/commonTypes';
 import SvgIcon from '../SvgIcon';
 import { RidePageContext } from '../../context/newRideContext';
 import SettingContext from '../../context/settings';
@@ -113,7 +114,7 @@ const AddressInput = styled(Text)`
 `;
 
 const LoaderContainer = styled(View)`
-  height: 25px;
+  height: 20px;
   width: 100%;
   margin: auto 0;
   margin-top: 25px;
@@ -143,6 +144,12 @@ const AddressContainer = styled(View)`
   flex-direction: row;
   align-items: center;
 `;
+
+const RIDE_STATES_TO_BS_PAGES = objDefault({
+  [RIDE_STATES.PENDING]: BS_PAGES.CONFIRMING_RIDE,
+  [RIDE_STATES.MATCHING]: BS_PAGES.CONFIRMING_RIDE,
+  defaultValue: BS_PAGES.ACTIVE_RIDE,
+});
 
 const BsPage = ({
   onSecondaryButtonPress,
@@ -339,7 +346,7 @@ export const LocationRequest = (props: any) => (
 export const CancelRide = (props: any) => {
   const [isLoading, setIsLoading] = useState(false);
   const [showError, setShowError] = useState(false);
-  const { cancelRide } = useContext(RidePageContext);
+  const { cancelRide, ride } = useContext(RidePageContext);
   const { changeBsPage } = useContext(RideStateContextContext);
 
   return (
@@ -360,7 +367,9 @@ export const CancelRide = (props: any) => {
           Mixpanel.setEvent('failed to cancel ride', { status: e?.response?.status });
         }
       }}
-      onSecondaryButtonPress={() => changeBsPage(BS_PAGES.ACTIVE_RIDE)}
+      onSecondaryButtonPress={() => changeBsPage(
+        RIDE_STATES_TO_BS_PAGES[ride.state || RIDE_STATES.ACTIVE],
+      )}
       warning
       buttonDisabled={isLoading}
       {...props}

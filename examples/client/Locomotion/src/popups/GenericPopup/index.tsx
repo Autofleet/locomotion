@@ -3,51 +3,47 @@ import Modal from 'react-native-modal';
 import SvgIcon from '../../Components/SvgIcon';
 import { SubTitle, Title } from '../styled';
 import i18n from '../../I18n';
-import errorIcon from '../../assets/error-icon.svg';
-import XButton from '../../Components/CloseButton';
 
 import {
-  ButtonText, CloseButton, Container, TextContainer, TitleContainer, LeftSideTitle, RightSideTitle,
+  ButtonText, CloseButton, Container, TextContainer, TitleContainer,
 } from './styles';
 
-interface GenericErrorProps {
+interface GenericProps {
   isVisible: boolean;
   closePopup: any | SetStateAction<boolean>;
   title?: string;
   text?: string;
   buttonText?: string;
+  buttonColor?: string;
   customButton?: any;
-  cancelPopup?: any;
+  icon?: any;
+  iconFill?: string
 }
 
-const GenericErrorPopup = ({
+const GenericPopup = ({
   isVisible,
   closePopup,
   title,
   text,
   buttonText,
+  buttonColor,
   customButton,
-  cancelPopup,
-}: GenericErrorProps) => (
+  icon,
+  iconFill,
+}: GenericProps) => (
   <Modal isVisible={isVisible}>
     <Container>
       <TitleContainer>
-        <LeftSideTitle>
-          <SvgIcon Svg={errorIcon} height={20} width={20} style={{ marginRight: 5 }} />
-          <Title>{title}</Title>
-        </LeftSideTitle>
-        <RightSideTitle>
-          {cancelPopup ? (
-            <XButton onPress={cancelPopup} containerStyles={{ alignSelf: 'flex-end' }} />
-          ) : (null)
-        }
-        </RightSideTitle>
+        {icon ? (
+          <SvgIcon Svg={icon} height={20} width={20} style={{ marginRight: 5 }} />
+        ) : null}
+        <Title>{title}</Title>
       </TitleContainer>
       <TextContainer>
         <SubTitle>{text}</SubTitle>
       </TextContainer>
       {customButton || (
-      <CloseButton onPress={closePopup}>
+      <CloseButton onPress={closePopup} style={{ backgroundColor: buttonColor || '#24aaf2' }}>
         <ButtonText>
           {buttonText}
         </ButtonText>
@@ -57,11 +53,13 @@ const GenericErrorPopup = ({
   </Modal>
 );
 
-GenericErrorPopup.defaultProps = {
+GenericPopup.defaultProps = {
   title: i18n.t('popups.genericError.title'),
   text: i18n.t('popups.genericError.text'),
   buttonText: i18n.t('popups.genericError.buttonText'),
+  buttonColor: null,
   customButton: null,
-  cancelPopup: null,
+  icon: null,
+  iconFill: null,
 };
-export default GenericErrorPopup;
+export default GenericPopup;
