@@ -12,4 +12,5 @@ export default {
   FUTURE_RIDES_ENABLED: 'riderApp.futureRidesEnabled',
   CASH_ENABLED_IN_APP: 'payment.enableCashInApp',
   MIN_MINUTES_BEFORE_FUTURE_RIDE: 'riderApp.minMinutesBeforeFutureRide',
+  SHOW_POST_RIDE_FEEDBACK: 'riderApp.showPostRideFeedback',
 };

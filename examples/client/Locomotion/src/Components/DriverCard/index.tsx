@@ -38,7 +38,7 @@ const DriverCard = ({
   noPaddingLeft,
 }: DriverCardProps) => {
   const getRatingSection = () => {
-    if (ride.rating) {
+    if (ride.rating || ride.rideFeedbacks.length) {
       return (
         <RatingBarContainer>
           <Stars rating={ride.rating || 0} />
