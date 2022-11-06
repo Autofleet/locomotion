@@ -25,6 +25,8 @@ import {
   INITIAL_STOP_POINTS,
   RIDE_POPUPS, RidePopupNames, RIDE_FAILED_REASONS, ESTIMATION_ERRORS,
   convertTimezoneByLocation,
+  RIDER_APP_SOURCE,
+  FEEDBACK_TYPES,
 } from './utils';
 import settings from '../settings';
 import SETTINGS_KEYS from '../settings/keys';
@@ -42,6 +44,11 @@ type Nav = {
   navigate: (value: string, object?: any) => void;
 }
 
+interface RideFeedback {
+  value: string;
+  type: string;
+  source: string;
+}
 export interface RideInterface {
   priceCurrency?: any;
   priceAmount?: any;
@@ -62,6 +69,7 @@ export interface RideInterface {
   cancelable?: boolean;
   createdAt?: string;
   priceCalculationId?: string;
+  rideFeedbacks?: RideFeedback[];
 }
 
 type AdditionalCharge = {
@@ -902,13 +910,16 @@ const RidePageContextProvider = ({ children }: {
     });
   };
 
-  const patchRideRating = async (rideId: string, rating: number|null): Promise<any> => {
-    if (!rating) {
+  const patchRideRating = async (rideId: string, rating: number | null, feedback: RideFeedback | null): Promise<any> => {
+    if (!rating && !feedback) {
       return null;
     }
 
     try {
-      const updatedRide = await rideApi.patchRide(rideId, { rating });
+      const updatedRide = await rideApi.patchRide(rideId, {
+        rating,
+        feedback,
+      });
       updateRidePayload(updatedRide);
       if (updatedRide) {
         return true;
@@ -920,7 +931,6 @@ const RidePageContextProvider = ({ children }: {
   };
 
   const chargeTip = async (priceCalculationId: string, tip:number|null): Promise<any> => {
-    // TODO: implement
     if (!tip) {
       return null;
     }
@@ -934,15 +944,24 @@ const RidePageContextProvider = ({ children }: {
     }
   };
 
+  const buildRideFeedbackObject = (rideFeedbackText: string) => ({
+    source: RIDER_APP_SOURCE,
+    type: FEEDBACK_TYPES.FREE_TEXT,
+    value: rideFeedbackText,
+  });
+
   const postRideSubmit = async (rideId: string, ridePayload: any): Promise<boolean> => {
-    const { priceCalculationId, rating, tip } = ridePayload;
+    const {
+      priceCalculationId, rating, tip, rideFeedbackText,
+    } = ridePayload;
     console.log('Post Ride Data', {
-      rideId, priceCalculationId, rating, tip,
+      rideId, priceCalculationId, rating, tip, rideFeedbackText,
     });
+    const rideFeedbackObject: RideFeedback | null = rideFeedbackText ? buildRideFeedbackObject(rideFeedbackText) : null;
     await Promise.all([
       setLastAcknowledgedRideCompletionTimestampToNow(),
-      tip ? chargeTip(priceCalculationId, tip) : () => null,
-      rating ? patchRideRating(rideId, rating) : () => null,
+      chargeTip(priceCalculationId, tip),
+      patchRideRating(rideId, rating, rideFeedbackObject),
     ]);
     return true;
   };

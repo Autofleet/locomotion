@@ -28,6 +28,7 @@ import BottomSheetContextProvider, { BottomSheetContext } from '../../context/bo
 import { RideStateContextContext } from '../..';
 import { BS_PAGES } from '../../context/ridePageStateContext/utils';
 import * as navigationService from '../../services/navigation';
+import RideFeedback from './Feedback';
 
 const PostRidePage = ({ menuSide, route }) => {
   const { rideId, priceCalculationId } = route?.params;
@@ -35,6 +36,7 @@ const PostRidePage = ({ menuSide, route }) => {
   const [ride, setRide] = useState(null);
   const [tipFromDb, setTipFromDb] = useState();
   const [rideTip, setRideTip] = useState(null);
+  const [rideFeedbackText, setRideFeedbackText] = useState(null);
   const [tipSettings, setTipSettings] = useState({
     percentageThreshold: 30,
     percentage: [10, 15, 20],
@@ -102,6 +104,7 @@ const PostRidePage = ({ menuSide, route }) => {
         rating,
         tip: rideTip,
         priceCalculationId: ride.priceCalculationId,
+        rideFeedbackText,
       });
       nextPage();
       return true;
@@ -133,10 +136,13 @@ const PostRidePage = ({ menuSide, route }) => {
             icon={closeIcon}
           />
           <PageContent>
-            {!ride.rating && (
+            {!ride.rating && !ride.rideFeedbacks.length && (
             <RatingContainer>
               <SummaryStarsTitle>{i18n.t('postRide.ratingHeadline')}</SummaryStarsTitle>
               <StarRating onUpdate={onRatingUpdate} />
+              <>
+                <RideFeedback onTextChange={text => setRideFeedbackText(text)} />
+              </>
             </RatingContainer>
             )}
 
