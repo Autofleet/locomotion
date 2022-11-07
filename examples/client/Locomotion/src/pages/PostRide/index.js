@@ -136,7 +136,7 @@ const PostRidePage = ({ menuSide, route }) => {
             iconSide={menuSide}
             icon={closeIcon}
           />
-          <PageContent>
+          <PageContent alwaysBounceVertical={false} keyboardShouldPersistTaps={false}>
             {!didUserRate(ride.rating, ride.rideFeedbacks) && (
               <RatingContainer>
                 <SummaryStarsTitle>{i18n.t('postRide.ratingHeadline')}</SummaryStarsTitle>
