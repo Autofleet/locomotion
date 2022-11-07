@@ -3,6 +3,7 @@ import moment from 'moment';
 import TextButton from '../TextButton';
 import CardsTitle from '../CardsTitle';
 import { RideInterface } from '../../context/newRideContext';
+import { didUserRate } from '../../context/newRideContext/utils';
 import i18n from '../../I18n';
 import Stars, { StarIcon } from '../Stars';
 import {
@@ -38,7 +39,7 @@ const DriverCard = ({
   noPaddingLeft,
 }: DriverCardProps) => {
   const getRatingSection = () => {
-    if (ride.rating || ride.rideFeedbacks.length) {
+    if (didUserRate(ride.rating, ride.rideFeedbacks)) {
       return (
         <RatingBarContainer>
           <Stars rating={ride.rating || 0} />

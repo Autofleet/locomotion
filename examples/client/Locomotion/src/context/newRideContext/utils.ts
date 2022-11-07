@@ -186,3 +186,5 @@ export const convertTimezoneByLocation = async (
     throw new Error('Could not fetch timezone from server');
   }
 };
+
+export const didUserRate = (rating: string | null, rideFeedback: any[] | null) => rating || rideFeedback?.length;
