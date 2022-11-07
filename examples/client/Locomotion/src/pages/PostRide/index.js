@@ -23,6 +23,7 @@ import Button from '../../Components/RoundedButton';
 import settings from '../../context/settings';
 import SETTINGS_KEYS from '../../context/settings/keys';
 import NewRidePageContextProvider, { RidePageContext } from '../../context/newRideContext';
+import { didUserRate } from '../../context/newRideContext/utils';
 import closeIcon from '../../assets/x.png';
 import BottomSheetContextProvider, { BottomSheetContext } from '../../context/bottomSheetContext';
 import { RideStateContextContext } from '../..';
@@ -136,14 +137,14 @@ const PostRidePage = ({ menuSide, route }) => {
             icon={closeIcon}
           />
           <PageContent>
-            {!ride.rating && !ride.rideFeedbacks.length && (
-            <RatingContainer>
-              <SummaryStarsTitle>{i18n.t('postRide.ratingHeadline')}</SummaryStarsTitle>
-              <StarRating onUpdate={onRatingUpdate} />
-              <>
-                <RideFeedback onTextChange={text => setRideFeedbackText(text)} />
-              </>
-            </RatingContainer>
+            {!didUserRate(ride.rating, ride.rideFeedbacks) && (
+              <RatingContainer>
+                <SummaryStarsTitle>{i18n.t('postRide.ratingHeadline')}</SummaryStarsTitle>
+                <StarRating onUpdate={onRatingUpdate} />
+                <>
+                  <RideFeedback onTextChange={text => setRideFeedbackText(text)} />
+                </>
+              </RatingContainer>
             )}
 
             {isCardPaymentMethod(ride?.payment?.paymentMethod) && !(priceCalculationId && tipFromDb) && (
