@@ -25,12 +25,16 @@ import {
   INITIAL_STOP_POINTS,
   RIDE_POPUPS, RidePopupNames, RIDE_FAILED_REASONS, ESTIMATION_ERRORS,
   convertTimezoneByLocation,
+  RIDER_APP_SOURCE,
+  FEEDBACK_TYPES,
 } from './utils';
 import settings from '../settings';
 import SETTINGS_KEYS from '../settings/keys';
 import { RideStateContextContext } from '../ridePageStateContext';
 import { BS_PAGES } from '../ridePageStateContext/utils';
-import { RIDE_STATES, RIDE_FINAL_STATES, STOP_POINT_TYPES } from '../../lib/commonTypes';
+import {
+  RIDE_STATES, RIDE_FINAL_STATES, STOP_POINT_TYPES, PAYMENT_STATES,
+} from '../../lib/commonTypes';
 import useBackgroundInterval from '../../lib/useBackgroundInterval';
 import { formatSps } from '../../lib/ride/utils';
 import { APP_ROUTES, MAIN_ROUTES } from '../../pages/routes';
@@ -42,6 +46,11 @@ type Nav = {
   navigate: (value: string, object?: any) => void;
 }
 
+interface RideFeedback {
+  value: string;
+  type: string;
+  source: string;
+}
 export interface RideInterface {
   priceCurrency?: any;
   priceAmount?: any;
@@ -62,6 +71,7 @@ export interface RideInterface {
   cancelable?: boolean;
   createdAt?: string;
   priceCalculationId?: string;
+  rideFeedbacks?: RideFeedback[];
 }
 
 type AdditionalCharge = {
@@ -135,6 +145,7 @@ interface RidePageContextInterface {
   loadRide: (rideId: string) => Promise<void>;
   getRidePriceCalculation: (id: string | undefined, priceCalculationId?: string) => Promise<PriceCalculation | undefined>;
   getRideTotalPriceWithCurrency: (rideId : string | undefined) => Promise<{ amount: number; currency: string; } | undefined>;
+  getRidesByParams: (params: any) => Promise<RideInterface[]>;
 }
 
 export const RidePageContext = createContext<RidePageContextInterface>({
@@ -187,6 +198,7 @@ export const RidePageContext = createContext<RidePageContextInterface>({
   setUnconfirmedPickupTime: () => undefined,
   unconfirmedPickupTime: null,
   loadRide: async (rideId: string) => undefined,
+  getRidesByParams: async (params: any) => [],
 });
 
 const HISTORY_RECORDS_NUM = 10;
@@ -213,7 +225,7 @@ const RidePageContextProvider = ({ children }: {
   const [isAppActive, setIsAppActive] = useState(false);
   const [ridePopup, setRidePopup] = useState<RidePopupNames | null>(null);
   const [unconfirmedPickupTime, setUnconfirmedPickupTime] = useState<number | null>(null);
-
+  const getRouteName = () => navigationService?.getNavigator()?.getCurrentRoute().name;
   const intervalRef = useRef<any>();
 
   const stopRequestInterval = () => {
@@ -244,7 +256,9 @@ const RidePageContextProvider = ({ children }: {
 
   const onRideCompleted = (rideId: string) => {
     cleanRideState();
-    navigationService.navigate(MAIN_ROUTES.POST_RIDE, { rideId });
+    if (getRouteName() !== 'CompletedRideOverviewPage') {
+      navigationService.navigate(MAIN_ROUTES.POST_RIDE, { rideId });
+    }
     setTimeout(() => {
       changeBsPage(BS_PAGES.ADDRESS_SELECTOR);
     }, 500);
@@ -415,6 +429,8 @@ const RidePageContextProvider = ({ children }: {
     return StorageService.save({ lastCompletedRideTimestamp: now }, 60 * 60 * 24 * 7);
   };
 
+  const getRidesByParams = async (params: any) => rideApi.fetchRides(params);
+
   const getLastCompletedRide = async () => {
     let lastTimestamp = await StorageService.get('lastCompletedRideTimestamp');
     if (!lastTimestamp) {
@@ -579,11 +595,16 @@ const RidePageContextProvider = ({ children }: {
     if (locationGranted) {
       const locationData = await getCurrentLocationAddress();
       setCurrentGeocode(locationData);
+      return locationData;
     }
   };
 
   useEffect(() => {
-    initCurrentLocation();
+    if (!locationGranted) {
+      getCurrentLocation();
+    } else {
+      initCurrentLocation();
+    }
   }, [locationGranted]);
 
   const initSps = async () => {
@@ -627,12 +648,9 @@ const RidePageContextProvider = ({ children }: {
   };
 
   const setSpCurrentLocation = async () => {
-    if (!currentGeocode) {
-      await getCurrentLocationAddress();
-      updateRequestSp(currentGeocode);
-      return true;
-    }
-    updateRequestSp(currentGeocode);
+    const newGeoLocation = await reverseLocationGeocode();
+    updateRequestSp(newGeoLocation);
+    return true;
   };
 
   const loadAddress = async (input: any) => {
@@ -900,13 +918,16 @@ const RidePageContextProvider = ({ children }: {
     });
   };
 
-  const patchRideRating = async (rideId: string, rating: number|null): Promise<any> => {
-    if (!rating) {
+  const patchRideRating = async (rideId: string, rating: number | null, feedback: RideFeedback | null): Promise<any> => {
+    if (!rating && !feedback) {
       return null;
     }
 
     try {
-      const updatedRide = await rideApi.patchRide(rideId, { rating });
+      const updatedRide = await rideApi.patchRide(rideId, {
+        rating,
+        feedback,
+      });
       updateRidePayload(updatedRide);
       if (updatedRide) {
         return true;
@@ -918,7 +939,6 @@ const RidePageContextProvider = ({ children }: {
   };
 
   const chargeTip = async (priceCalculationId: string, tip:number|null): Promise<any> => {
-    // TODO: implement
     if (!tip) {
       return null;
     }
@@ -932,15 +952,24 @@ const RidePageContextProvider = ({ children }: {
     }
   };
 
+  const buildRideFeedbackObject = (rideFeedbackText: string) => ({
+    source: RIDER_APP_SOURCE,
+    type: FEEDBACK_TYPES.FREE_TEXT,
+    value: rideFeedbackText,
+  });
+
   const postRideSubmit = async (rideId: string, ridePayload: any): Promise<boolean> => {
-    const { priceCalculationId, rating, tip } = ridePayload;
+    const {
+      priceCalculationId, rating, tip, rideFeedbackText,
+    } = ridePayload;
     console.log('Post Ride Data', {
-      rideId, priceCalculationId, rating, tip,
+      rideId, priceCalculationId, rating, tip, rideFeedbackText,
     });
+    const rideFeedbackObject: RideFeedback | null = rideFeedbackText ? buildRideFeedbackObject(rideFeedbackText) : null;
     await Promise.all([
       setLastAcknowledgedRideCompletionTimestampToNow(),
-      tip ? chargeTip(priceCalculationId, tip) : () => null,
-      rating ? patchRideRating(rideId, rating) : () => null,
+      chargeTip(priceCalculationId, tip),
+      patchRideRating(rideId, rating, rideFeedbackObject),
     ]);
     return true;
   };
@@ -1080,6 +1109,7 @@ const RidePageContextProvider = ({ children }: {
         setUnconfirmedPickupTime,
         unconfirmedPickupTime,
         loadRide,
+        getRidesByParams,
       }}
     >
       {children}

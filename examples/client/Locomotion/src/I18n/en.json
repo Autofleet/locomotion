@@ -413,6 +413,10 @@
                 "inputPlaceholder":"amount...",
                 "invalidAmountError": "Please enter a valid amount"
             }
+        },
+        "writeComment": {
+            "title": "Write a comment",
+            "placeholder": "Comments may be shared anonymously with drivers"
         }
     },
     "payments": {
