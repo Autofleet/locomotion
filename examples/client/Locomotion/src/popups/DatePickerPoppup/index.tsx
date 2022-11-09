@@ -24,9 +24,9 @@ export default ({
           {...props}
           date={date}
           modal={false}
-          onDateChange={(date) => {
-            setCurrentDate(date);
-            onChange(date);
+          onDateChange={(newDate) => {
+            setCurrentDate(newDate);
+            onChange(newDate);
           }}
           style={{ marginTop: isAndroid ? 10 : 0, marginBottom: isAndroid ? 10 : 0 }}
         />
