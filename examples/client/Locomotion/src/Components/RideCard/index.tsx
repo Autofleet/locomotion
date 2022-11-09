@@ -64,10 +64,11 @@ interface RideCardProps {
     serviceName: string;
     paymentMethod: any;
     scheduledTo: string | number;
+    pickupWindowTime: number;
 }
 
 const RideCard = ({
-  ride, onPress, serviceName, paymentMethod, scheduledTo,
+  ride, onPress, serviceName, paymentMethod, scheduledTo, pickupWindowTime,
 }: RideCardProps) => {
   const [ridePriceCalculation, setRidePriceCalculation] = useState<PriceCalculation>();
   const [timezonedScheduledTo, setTimezonedScheduledTo] = useState<string | null>(null);
@@ -98,8 +99,11 @@ const RideCard = ({
         false,
       );
 
-      const newScheduledTo = moment.parseZone(convertedTime.time).format('MMMM DD, YYYY, h:mm A');
-      setTimezonedScheduledTo(newScheduledTo);
+      const newScheduledTo = moment.parseZone(convertedTime.time).format('MMM DD, YYYY [at] h:mm A');
+      const scheduledBeforeTime = pickupWindowTime
+        ? moment.parseZone(convertedTime.time).add(pickupWindowTime, 'minutes').format('h:mm A')
+        : i18n.t('general.noTimeWindow');
+      setTimezonedScheduledTo(`${newScheduledTo} - ${scheduledBeforeTime}`);
       setDisplayTimezone(null);
     } catch (e) {
       const newScheduledTo = moment(time).format('MMMM DD, YYYY, h:mm A');
@@ -109,7 +113,7 @@ const RideCard = ({
   };
   useEffect(() => {
     formatScheludedTo(scheduledTo);
-  }, [scheduledTo]);
+  }, [scheduledTo, pickupWindowTime]);
   return (
     <CardContainer>
       <DateContainer>

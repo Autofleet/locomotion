@@ -24,6 +24,7 @@ justify-content: space-between;
 export const ButtonContainer = styled(Button).attrs({
   noBackground: true,
 })`
+    background-color: ${({ highlight }) => (highlight ? '#d3eefc' : 'transparent')};
     flex-direction: row;
     border: 1px solid #f1f2f6;
     border-radius: 8px;
@@ -46,4 +47,20 @@ width: 100%;
 height: 50px;
 background-color: ${({ disabled, theme }) => (disabled ? '#bcbcbc' : theme.primaryColor)};
 border-radius: 8px;
+`;
+
+export const PickerTitle = styled(Text)`
+  ${FONT_SIZES.H1};
+  ${FONT_WEIGHTS.SEMI_BOLD};
+  margin-bottom: 25px;
+`;
+
+export const PickerDate = styled(Text)`
+  ${FONT_SIZES.H3};
+  ${FONT_WEIGHTS.LIGHT};
+  margin-bottom: 7px;
+`;
+
+export const PickerTimeRange = styled(Text)`
+  ${FONT_SIZES.H1};
 `;

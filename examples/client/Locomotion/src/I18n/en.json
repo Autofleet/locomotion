@@ -23,7 +23,8 @@
         "cancel": "Cancel",
         "skip": "Skip",
         "select": "Select",
-        "now": "Now"
+        "now": "Now",
+        "noTimeWindow": "ASAP"
     },
     "login": {
         "getStarted": "Get started!",
@@ -504,7 +505,9 @@
     "confirmPickupTime": {
         "titleText": "Scheduled ride",
         "buttonText": "Set pick up time",
-        "pickupText": "Pick up on {{date}}, at {{time}}"
+        "pickupTextTime": "Pickup at {{afterTime}} - {{beforeTime}}",
+        "pickupTextDay": "On {{date}}",
+        "pickupTextToday": "Today, {{date}}"
     },
     "locationRequest": {
         "titleText": "Update location services",
@@ -518,7 +521,7 @@
     },
     "confirmingFutureRide": {
         "titleText": "Confirming your scheduled ride",
-        "subTitleText": "For {{date}}",
+        "subTitleText": "For {{date}} - {{beforeTime}}",
         "secondaryButtonText": "Cancel ride"
     },
     "cancelRide": {
