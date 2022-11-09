@@ -9,6 +9,14 @@ export const STOP_POINT_STATES = {
   PENDING: 'pending',
 };
 
+export const PAYMENT_STATES = {
+  PENDING: 'pending',
+  PAID: 'paid',
+  REJECTED: 'rejected',
+  SETTLED: 'settled',
+  CANCELED: 'canceled',
+};
+
 export const RIDE_STATES = {
   OFFER: 'offer',
   OFFER_REJECTED: 'offer-rejected',
@@ -20,14 +28,6 @@ export const RIDE_STATES = {
   PENDING: 'pending',
   ACTIVE: 'active',
   FAILED: 'failed',
-};
-
-export const PAYMENT_STATES = {
-  PENDING: 'pending',
-  PAID: 'paid',
-  REJECTED: 'rejected',
-  SETTLED: 'settled',
-  CANCELED: 'canceled',
 };
 
 export const RIDE_ACTIVE_STATES = [

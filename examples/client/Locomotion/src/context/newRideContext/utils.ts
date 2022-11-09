@@ -18,6 +18,12 @@ export const RIDE_FAILED_REASONS = {
   COULD_NOT_CREATE_PAYMENT_INTENT: 'COULD_NOT_CREATE_PAYMENT_INTENT',
 };
 
+export const FEEDBACK_TYPES = {
+  FREE_TEXT: 'FREE_TEXT',
+};
+
+export const RIDER_APP_SOURCE = 'RIDER_APP';
+
 export const getFutureRideMinDate = (minutesBefore: number) => moment().add(minutesBefore, 'minutes').toDate();
 export const getFutureRideMaxDate = () => moment().add(7, 'days').toDate();
 
@@ -181,3 +187,5 @@ export const convertTimezoneByLocation = async (
     throw new Error('Could not fetch timezone from server');
   }
 };
+
+export const didUserRate = (rating: string | null, rideFeedback: any[] | null) => rating || rideFeedback?.length;

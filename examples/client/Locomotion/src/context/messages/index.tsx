@@ -17,6 +17,7 @@ import {
 import * as navigationService from '../../services/navigation';
 import { MAIN_ROUTES, APP_ROUTES } from '../../pages/routes';
 import i18n from '../../I18n';
+import { RidePageContext } from '../newRideContext';
 
 export type messageProps = {
     id: string;
@@ -61,6 +62,7 @@ export const MessagesContext = createContext<MessagesContextInterface>({
 
 const MessagesProvider = ({ children }: { children: any }) => {
   const { user } = useContext(UserContext);
+  const { getRidesByParams } = useContext(RidePageContext);
   const [viewingMessage, setViewingMessage] = useState<messageProps | null>(null);
   const [userMessages, setUserMessages] = useState<messageProps[]>([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -124,9 +126,17 @@ const MessagesProvider = ({ children }: { children: any }) => {
     }
   };
 
+  const failedPaymentHandler = async (paymentId: string) => {
+    const [ride] = await getRidesByParams({ paymentId });
+    navigationService.navigate(MAIN_ROUTES.COMPLETED_RIDE_OVERVIEW_PAGE, {
+      rideId: ride.id,
+    }, APP_ROUTES.MAIN_APP);
+  };
+
   useEffect(() => {
     OneSignal.addForegroundNotificationHandler('message', checkMessagesForToast);
     OneSignal.addNotificationHandler('message', ({ messageId }) => navigationService.navigate(MAIN_ROUTES.MESSAGE_VIEW, { messageId }, APP_ROUTES.MAIN_APP));
+    OneSignal.addNotificationHandler('failedPayment', ({ paymentId }) => failedPaymentHandler(paymentId));
   }, []);
 
   const init = async () => {
