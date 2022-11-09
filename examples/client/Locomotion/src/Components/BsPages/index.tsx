@@ -282,8 +282,8 @@ export const ConfirmPickupTime = (props: any) => {
   const date = moment(unconfirmedPickupTime).format('ddd, MMM Do');
   const isDateToday = moment(unconfirmedPickupTime).isSame(moment(), 'day');
   const afterTime = moment(unconfirmedPickupTime).format('h:mm A');
-  const window = chosenService && chosenService.pickupWindowSizeInMinutes;
-  const beforeTime = (window && moment(unconfirmedPickupTime).add(window, 'minutes').format('h:mm A')) || i18n.t('general.noTimeWindow');
+  const windowSize = chosenService && chosenService.pickupWindowSizeInMinutes;
+  const beforeTime = (windowSize && moment(unconfirmedPickupTime).add(windowSize, 'minutes').format('h:mm A')) || i18n.t('general.noTimeWindow');
   const startDate = moment(unconfirmedPickupTime).add(unconfirmedPickupTime ? 0 : minMinutesBeforeFutureRide, 'minutes').toDate();
   const [tempSelectedDate, setTempSelectedDate] = useState(startDate);
 
@@ -295,11 +295,15 @@ export const ConfirmPickupTime = (props: any) => {
     checkMinutesBeforeFutureRideSetting();
   }, []);
 
+  const afterTimeTitle = moment(tempSelectedDate).format('h:mm A');
+  const beforeTimeTitle = (chosenService?.pickupWindowSizeInMinutes
+    && moment(tempSelectedDate).add(chosenService?.pickupWindowSizeInMinutes, 'minutes').format('h:mm A'))
+    || i18n.t('general.noTimeWindow');
   const renderDatePickerTitle = () => (
     <>
       <PickerTitle>{i18n.t('bottomSheetContent.ride.chosePickupTime')}</PickerTitle>
       <PickerDate>{moment(tempSelectedDate).format('dddd, MMM Do')}</PickerDate>
-      <PickerTimeRange>{`${moment(tempSelectedDate).format('h:mm A')} - ${moment(tempSelectedDate).add(chosenService?.pickupWindowSizeInMinutes, 'minutes').format('h:mm A')}`}</PickerTimeRange>
+      <PickerTimeRange>{`${afterTimeTitle} - ${beforeTimeTitle}`}</PickerTimeRange>
 
     </>
   );
@@ -431,8 +435,8 @@ export const ConfirmFutureRide = (props: any) => {
 
   const getTimeDisplay = () => {
     const afterTime = moment.parseZone(newFutureRide?.scheduledTo).format('h:mm A');
-    const window = chosenService && chosenService.pickupWindowSizeInMinutes;
-    const beforeTime = (window && moment.parseZone(newFutureRide?.scheduledTo).add(window, 'minutes').format('h:mm A')) || i18n.t('general.noTimeWindow');
+    const windowSize = chosenService && chosenService.pickupWindowSizeInMinutes;
+    const beforeTime = (windowSize && moment.parseZone(newFutureRide?.scheduledTo).add(windowSize, 'minutes').format('h:mm A')) || i18n.t('general.noTimeWindow');
 
     const timeText = i18n.t('bottomSheetContent.confirmPickupTime.pickupTextTime', { afterTime, beforeTime });
     return <TextRowWithIcon text={timeText} icon={clockIcon} />;
@@ -614,8 +618,8 @@ export const ConfirmingRide = (props: any) => {
     ? i18n.t('bottomSheetContent.confirmingFutureRide.titleText')
     : i18n.t('bottomSheetContent.confirmingRide.titleText');
 
-  const window = chosenService.pickupWindowSizeInMinutes;
-  const beforeTime = window ? moment(ride.scheduledTo).add(window, 'minutes').format('h:mm A') : i18n.t('general.noTimeWindow');
+  const windowSize = chosenService.pickupWindowSizeInMinutes;
+  const beforeTime = windowSize ? moment(ride.scheduledTo).add(windowSize, 'minutes').format('h:mm A') : i18n.t('general.noTimeWindow');
 
   const SubTitleText = ride?.scheduledTo
     ? i18n.t('bottomSheetContent.confirmingFutureRide.subTitleText',

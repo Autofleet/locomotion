@@ -24,7 +24,7 @@
         "skip": "Skip",
         "select": "Select",
         "now": "Now",
-        "noTimeWindow": "optimized"
+        "noTimeWindow": "ASAP"
     },
     "login": {
         "getStarted": "Get started!",

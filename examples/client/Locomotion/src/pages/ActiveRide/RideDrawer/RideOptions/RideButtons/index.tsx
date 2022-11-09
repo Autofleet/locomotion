@@ -97,16 +97,16 @@ const RideButtons = ({
       setIsDatePickerOpen(false);
       setTempSelectedDate(firstDate);
     };
+    const afterTimeTitle = moment(tempSelectedDate).format('h:mm A');
+    const beforeTimeTitle = (chosenService?.pickupWindowSizeInMinutes
+      && moment(tempSelectedDate).add(chosenService?.pickupWindowSizeInMinutes, 'minutes').format('h:mm A'))
+      || i18n.t('general.noTimeWindow');
 
     const renderDatePickerTitle = () => (
       <>
         <PickerTitle>{i18n.t('bottomSheetContent.ride.chosePickupTime')}</PickerTitle>
         <PickerDate>{moment(tempSelectedDate).format('dddd, MMM Do')}</PickerDate>
-        <PickerTimeRange>
-          {`${moment(tempSelectedDate).format('h:mm A')} - ${(chosenService?.pickupWindowSizeInMinutes
-          && moment(tempSelectedDate).add(chosenService?.pickupWindowSizeInMinutes, 'minutes').format('h:mm A'))
-          || i18n.t('general.noTimeWindow')}`}
-        </PickerTimeRange>
+        <PickerTimeRange>{`${afterTimeTitle} - ${beforeTimeTitle}`}</PickerTimeRange>
 
       </>
     );

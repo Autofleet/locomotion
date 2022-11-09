@@ -22,8 +22,8 @@ const FutureBookingButton = () => {
   const { primaryColor } = useContext(ThemeContext);
   const isFutureRide = ride?.scheduledTo;
   const chosenTime = isFutureRide && moment(ride.scheduledTo).format('MMM D, h:mm A');
-  const window = chosenService && chosenService.pickupWindowSizeInMinutes;
-  const chosenBeforeTime = window ? moment(ride.scheduledTo).add(window, 'minutes').format('MMM D, h:mm A') : i18n.t('general.noTimeWindow');
+  const windowSize = chosenService && chosenService.pickupWindowSizeInMinutes;
+  const chosenBeforeTime = windowSize ? moment(ride.scheduledTo).add(windowSize, 'minutes').format('MMM D, h:mm A') : i18n.t('general.noTimeWindow');
   return (
     <>
       <SvgIcon fill={primaryColor} Svg={clock} height={15} width={15} />
