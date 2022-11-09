@@ -128,11 +128,9 @@ const RideButtons = ({
           title={renderDatePickerTitle()}
           onCancel={close}
           onConfirm={(date) => {
-            if (unconfirmedPickupTime !== date.getTime()) {
-              setUnconfirmedPickupTime(date.getTime());
-              changeBsPage(BS_PAGES.CONFIRM_PICKUP_TIME);
-              close();
-            }
+            setUnconfirmedPickupTime(date.getTime());
+            changeBsPage(BS_PAGES.CONFIRM_PICKUP_TIME);
+            close();
           }}
           onChange={date => setTempSelectedDate(date)}
         />
