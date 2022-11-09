@@ -7,7 +7,6 @@ import styled, { ThemeContext } from 'styled-components';
 import { useBottomSheet } from '@gorhom/bottom-sheet';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import moment from 'moment';
-import DatePicker from 'react-native-date-picker';
 import objDefault from '../../lib/objDefault';
 import Mixpanel from '../../services/Mixpanel';
 import GenericErrorPopup from '../../popups/GenericError';
@@ -41,6 +40,7 @@ import ActiveRideContent from './ActiveRide';
 import RoundedButton from '../RoundedButton';
 import { getFutureRideMaxDate, getFutureRideMinDate } from '../../context/newRideContext/utils';
 import { PAYMENT_METHODS } from '../../pages/Payments/consts';
+import DatePickerPoppup from '../../popups/DatePickerPoppup';
 
 const OtherButton = styled(Button)`
   background-color: ${({ warning, theme }) => (warning ? ERROR_COLOR : theme.primaryColor)};
@@ -144,6 +144,22 @@ const Footer = styled(View)<FooterInterface>`
 const AddressContainer = styled(View)`
   flex-direction: row;
   align-items: center;
+`;
+
+const PickerTitle = styled(Text)`
+  ${FONT_SIZES.H1};
+  ${FONT_WEIGHTS.SEMI_BOLD};
+  margin-bottom: 25px;
+`;
+
+const PickerDate = styled(Text)`
+  ${FONT_SIZES.H3};
+  ${FONT_WEIGHTS.LIGHT};
+  margin-bottom: 7px;
+`;
+
+const PickerTimeRange = styled(Text)`
+  ${FONT_SIZES.H1};
 `;
 
 const RIDE_STATES_TO_BS_PAGES = objDefault({
@@ -267,7 +283,9 @@ export const ConfirmPickupTime = (props: any) => {
   const isDateToday = moment(unconfirmedPickupTime).isSame(moment(), 'day');
   const afterTime = moment(unconfirmedPickupTime).format('h:mm A');
   const window = chosenService && chosenService.pickupWindowSizeInMinutes;
-  const beforeTime = (window && moment(unconfirmedPickupTime).add(window, 'minutes').format('h:mm A')) || 'optimized';
+  const beforeTime = (window && moment(unconfirmedPickupTime).add(window, 'minutes').format('h:mm A')) || i18n.t('general.noTimeWindow');
+  const startDate = moment(unconfirmedPickupTime).add(unconfirmedPickupTime ? 0 : minMinutesBeforeFutureRide, 'minutes').toDate();
+  const [tempSelectedDate, setTempSelectedDate] = useState(startDate);
 
   const checkMinutesBeforeFutureRideSetting = async () => {
     const minutes = await getSettingByKey(SETTINGS_KEYS.MIN_MINUTES_BEFORE_FUTURE_RIDE);
@@ -276,6 +294,15 @@ export const ConfirmPickupTime = (props: any) => {
   useEffect(() => {
     checkMinutesBeforeFutureRideSetting();
   }, []);
+
+  const renderDatePickerTitle = () => (
+    <>
+      <PickerTitle>{i18n.t('bottomSheetContent.ride.chosePickupTime')}</PickerTitle>
+      <PickerDate>{moment(tempSelectedDate).format('dddd, MMM Do')}</PickerDate>
+      <PickerTimeRange>{`${moment(tempSelectedDate).format('h:mm A')} - ${moment(tempSelectedDate).add(chosenService?.pickupWindowSizeInMinutes, 'minutes').format('h:mm A')}`}</PickerTimeRange>
+
+    </>
+  );
   return (
     <BsPage
       TitleText={i18n.t('bottomSheetContent.confirmPickupTime.titleText')}
@@ -311,21 +338,21 @@ export const ConfirmPickupTime = (props: any) => {
       >
         {i18n.t(`bottomSheetContent.confirmPickupTime.${isDateToday ? 'pickupTextToday' : 'pickupTextDay'}`, { date })}
       </RoundedButton>
-      <DatePicker
+      <DatePickerPoppup
         testID="datePicker"
         textColor={getTextColorForTheme()}
-        open={isDatePickerOpen}
-        date={moment(unconfirmedPickupTime).add(unconfirmedPickupTime ? 0 : minMinutesBeforeFutureRide, 'minutes').toDate()}
+        isVisible={isDatePickerOpen}
+        date={tempSelectedDate}
         maximumDate={getFutureRideMaxDate()}
         minimumDate={getFutureRideMinDate((minMinutesBeforeFutureRide || 0))}
         mode="datetime"
-        title={i18n.t('bottomSheetContent.ride.chosePickupTime')}
+        title={renderDatePickerTitle()}
         onCancel={() => setIsDatePickerOpen(false)}
         onConfirm={(newDate: Date) => {
           setUnconfirmedPickupTime(newDate.getTime());
           setIsDatePickerOpen(false);
         }}
-        modal
+        onChange={date => setTempSelectedDate(date)}
       />
     </BsPage>
   );
@@ -641,5 +668,13 @@ export const ActiveRide = (props: any) => (
     {...props}
   >
     <ActiveRideContent />
+  </BsPage>
+);
+
+export const FutureRideTimePicker = (props: any) => (
+  <BsPage
+    {...props}
+  >
+    <CustomTimePicker title={() => <Title>Hello</Title>} />
   </BsPage>
 );

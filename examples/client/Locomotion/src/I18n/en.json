@@ -23,7 +23,8 @@
         "cancel": "Cancel",
         "skip": "Skip",
         "select": "Select",
-        "now": "Now"
+        "now": "Now",
+        "noTimeWindow": "optimized"
     },
     "login": {
         "getStarted": "Get started!",

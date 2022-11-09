@@ -23,7 +23,7 @@ const FutureBookingButton = () => {
   const isFutureRide = ride?.scheduledTo;
   const chosenTime = isFutureRide && moment(ride.scheduledTo).format('MMM D, h:mm A');
   const window = chosenService && chosenService.pickupWindowSizeInMinutes;
-  const chosenBeforeTime = window ? moment(ride.scheduledTo).add(window, 'minutes').format('MMM D, h:mm A') : 'optimized';
+  const chosenBeforeTime = window ? moment(ride.scheduledTo).add(window, 'minutes').format('MMM D, h:mm A') : i18n.t('general.noTimeWindow');
   return (
     <>
       <SvgIcon fill={primaryColor} Svg={clock} height={15} width={15} />

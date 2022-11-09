@@ -2,9 +2,11 @@ import React, { useContext, useState, useEffect } from 'react';
 import DatePicker from 'react-native-date-picker';
 import moment from 'moment';
 import { ThemeContext } from 'styled-components';
+import DatePickerPoppup from '../../../../../popups/DatePickerPoppup';
 import FutureBookingButton from './FutureBookingButton';
 import {
   Container, RowContainer, ButtonContainer, ButtonText, StyledButton, HALF_WIDTH,
+  PickerDate, PickerTimeRange, PickerTitle,
 } from './styled';
 import { RidePageContext } from '../../../../../context/newRideContext';
 import NoteButton from '../../../../../Components/GenericRideButton';
@@ -59,6 +61,9 @@ const RideButtons = ({
   const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
   const [isFutureRidesEnabled, setIsFutureRidesEnabled] = useState(true);
   const [minMinutesBeforeFutureRide, setMinMinutesBeforeFutureRide] = useState(null);
+  const firstDate = moment(ride?.scheduledTo || undefined).add(ride?.scheduledTo ? 0 : minMinutesBeforeFutureRide, 'minutes').toDate();
+  const [tempSelectedDate, setTempSelectedDate] = useState(firstDate);
+
 
   const checkFutureRidesSetting = async () => {
     const futureRidesEnabled = await getSettingByKey(
@@ -90,7 +95,21 @@ const RideButtons = ({
   const renderFutureBooking = () => {
     const close = () => {
       setIsDatePickerOpen(false);
+      setTempSelectedDate(firstDate);
     };
+
+    const renderDatePickerTitle = () => (
+      <>
+        <PickerTitle>{i18n.t('bottomSheetContent.ride.chosePickupTime')}</PickerTitle>
+        <PickerDate>{moment(tempSelectedDate).format('dddd, MMM Do')}</PickerDate>
+        <PickerTimeRange>
+          {`${moment(tempSelectedDate).format('h:mm A')} - ${(chosenService?.pickupWindowSizeInMinutes
+          && moment(tempSelectedDate).add(chosenService?.pickupWindowSizeInMinutes, 'minutes').format('h:mm A'))
+          || i18n.t('general.noTimeWindow')}`}
+        </PickerTimeRange>
+
+      </>
+    );
     return (
       <ButtonContainer
         testID="RideTimeSelector"
@@ -98,15 +117,15 @@ const RideButtons = ({
         highlight={ride?.scheduledTo && pickupTimeWindowChangedHighlight}
       >
         <FutureBookingButton />
-        <DatePicker
+        <DatePickerPoppup
           testID="datePicker"
           textColor={getTextColorForTheme()}
-          open={isDatePickerOpen}
-          date={moment(ride?.scheduledTo || undefined).add(ride?.scheduledTo ? 0 : minMinutesBeforeFutureRide, 'minutes').toDate()}
+          isVisible={isDatePickerOpen}
+          date={tempSelectedDate}
           maximumDate={getFutureRideMaxDate()}
           minimumDate={getFutureRideMinDate((minMinutesBeforeFutureRide || 0))}
           mode="datetime"
-          title={i18n.t('bottomSheetContent.ride.chosePickupTime')}
+          title={renderDatePickerTitle()}
           onCancel={close}
           onConfirm={(date) => {
             if (unconfirmedPickupTime !== date.getTime()) {
@@ -115,7 +134,7 @@ const RideButtons = ({
               close();
             }
           }}
-          modal
+          onChange={date => setTempSelectedDate(date)}
         />
       </ButtonContainer>
     );
