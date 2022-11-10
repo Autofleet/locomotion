@@ -294,6 +294,9 @@ export const ConfirmPickupTime = (props: any) => {
   useEffect(() => {
     checkMinutesBeforeFutureRideSetting();
   }, []);
+  useEffect(() => {
+    setTempSelectedDate(startDate);
+  }, [minMinutesBeforeFutureRide]);
 
   const afterTimeTitle = moment(tempSelectedDate).format('h:mm A');
   const beforeTimeTitle = (chosenService?.pickupWindowSizeInMinutes
@@ -344,7 +347,7 @@ export const ConfirmPickupTime = (props: any) => {
       </RoundedButton>
       <DatePickerPoppup
         testID="datePicker"
-        textColor={getTextColorForTheme()}
+        textColor="black"
         isVisible={isDatePickerOpen}
         date={tempSelectedDate}
         maximumDate={getFutureRideMaxDate()}

@@ -64,7 +64,6 @@ const RideButtons = ({
   const firstDate = moment(ride?.scheduledTo || undefined).add(ride?.scheduledTo ? 0 : minMinutesBeforeFutureRide, 'minutes').toDate();
   const [tempSelectedDate, setTempSelectedDate] = useState(firstDate);
 
-
   const checkFutureRidesSetting = async () => {
     const futureRidesEnabled = await getSettingByKey(
       SETTINGS_KEYS.FUTURE_RIDES_ENABLED,
@@ -76,6 +75,10 @@ const RideButtons = ({
     const minutes = await getSettingByKey(SETTINGS_KEYS.MIN_MINUTES_BEFORE_FUTURE_RIDE);
     setMinMinutesBeforeFutureRide(minutes);
   };
+
+  useEffect(() => {
+    setTempSelectedDate(firstDate);
+  }, [minMinutesBeforeFutureRide]);
 
   useEffect(() => {
     checkFutureRidesSetting();
@@ -119,7 +122,7 @@ const RideButtons = ({
         <FutureBookingButton />
         <DatePickerPoppup
           testID="datePicker"
-          textColor={getTextColorForTheme()}
+          textColor="black"
           isVisible={isDatePickerOpen}
           date={tempSelectedDate}
           maximumDate={getFutureRideMaxDate()}
@@ -199,12 +202,15 @@ const RideButtons = ({
       </RowContainer>
       <StyledButton
         testID="selectService"
-        disabled={!chosenService || !!getClientOutstandingBalanceCard()}
+        disabled={(!chosenService || !!getClientOutstandingBalanceCard())
+          || (ride?.scheduledTo && pickupTimeWindowChangedHighlight)}
         onPress={() => {
           changeBsPage(BS_PAGES.CONFIRM_PICKUP);
         }}
       >
-        <ButtonText testID="select">{i18n.t('general.select').toString()}</ButtonText>
+        <ButtonText testID="select">
+          {i18n.t('general.select').toString()}
+        </ButtonText>
       </StyledButton>
     </Container>
   );
