@@ -43,6 +43,7 @@ const RideButtons = ({
     chosenService,
     setUnconfirmedPickupTime,
     unconfirmedPickupTime,
+    defaultService,
   } = useContext(RidePageContext);
   const {
     changeBsPage,
@@ -101,8 +102,9 @@ const RideButtons = ({
       setTempSelectedDate(firstDate);
     };
     const afterTimeTitle = moment(tempSelectedDate).format('h:mm A');
-    const beforeTimeTitle = (chosenService?.pickupWindowSizeInMinutes
-      && moment(tempSelectedDate).add(chosenService?.pickupWindowSizeInMinutes, 'minutes').format('h:mm A'))
+    const pickupTimeWindow = (chosenService || defaultService)?.pickupWindowSizeInMinutes;
+    const beforeTimeTitle = (pickupTimeWindow
+      && moment(tempSelectedDate).add(pickupTimeWindow, 'minutes').format('h:mm A'))
       || i18n.t('general.noTimeWindow');
 
     const renderDatePickerTitle = () => (

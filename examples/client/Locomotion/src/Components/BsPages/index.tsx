@@ -275,6 +275,7 @@ export const ConfirmPickupTime = (props: any) => {
     setServiceEstimations,
     ride,
     chosenService,
+    defaultService,
   } = useContext(MewRidePageContext);
   const {
     changeBsPage,
@@ -299,8 +300,9 @@ export const ConfirmPickupTime = (props: any) => {
   }, [minMinutesBeforeFutureRide]);
 
   const afterTimeTitle = moment(tempSelectedDate).format('h:mm A');
-  const beforeTimeTitle = (chosenService?.pickupWindowSizeInMinutes
-    && moment(tempSelectedDate).add(chosenService?.pickupWindowSizeInMinutes, 'minutes').format('h:mm A'))
+  const pickupWindowTime = (chosenService || defaultService)?.pickupWindowSizeInMinutes;
+  const beforeTimeTitle = (pickupWindowTime
+    && moment(tempSelectedDate).add(pickupWindowTime, 'minutes').format('h:mm A'))
     || i18n.t('general.noTimeWindow');
   const renderDatePickerTitle = () => (
     <>
