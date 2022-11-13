@@ -102,9 +102,9 @@ const RideButtons = ({
       setTempSelectedDate(firstDate);
     };
     const afterTimeTitle = moment(tempSelectedDate).format('h:mm A');
-    const pickupTimeWindow = (chosenService || defaultService)?.pickupWindowSizeInMinutes;
-    const beforeTimeTitle = (pickupTimeWindow
-      && moment(tempSelectedDate).add(pickupTimeWindow, 'minutes').format('h:mm A'))
+    const pickupWindow = (chosenService || defaultService)?.pickupWindowSizeInMinutes;
+    const beforeTimeTitle = (pickupWindow
+      && moment(tempSelectedDate).add(pickupWindow, 'minutes').format('h:mm A'))
       || i18n.t('general.noTimeWindow');
 
     const renderDatePickerTitle = () => (
@@ -131,10 +131,14 @@ const RideButtons = ({
           minimumDate={getFutureRideMinDate((minMinutesBeforeFutureRide || 0))}
           mode="datetime"
           title={renderDatePickerTitle()}
+          confirmText={i18n.t('general.select')}
+          cancelText={i18n.t('general.cancel')}
           onCancel={close}
           onConfirm={(date) => {
-            setUnconfirmedPickupTime(date.getTime());
-            changeBsPage(BS_PAGES.CONFIRM_PICKUP_TIME);
+            if (unconfirmedPickupTime !== date.getTime()) {
+              setUnconfirmedPickupTime(date.getTime());
+              changeBsPage(BS_PAGES.CONFIRM_PICKUP_TIME);
+            }
             close();
           }}
           onChange={date => setTempSelectedDate(date)}

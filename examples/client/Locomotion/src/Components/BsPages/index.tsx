@@ -356,6 +356,8 @@ export const ConfirmPickupTime = (props: any) => {
         minimumDate={getFutureRideMinDate((minMinutesBeforeFutureRide || 0))}
         mode="datetime"
         title={renderDatePickerTitle()}
+        confirmText={i18n.t('general.select')}
+        cancelText={i18n.t('general.cancel')}
         onCancel={() => setIsDatePickerOpen(false)}
         onConfirm={(newDate: Date) => {
           setUnconfirmedPickupTime(newDate.getTime());
