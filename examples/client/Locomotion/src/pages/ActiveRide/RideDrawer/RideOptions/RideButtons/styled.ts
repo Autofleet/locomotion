@@ -24,7 +24,6 @@ justify-content: space-between;
 export const ButtonContainer = styled(Button).attrs({
   noBackground: true,
 })`
-    background-color: ${({ highlight }) => (highlight ? '#d3eefc' : 'transparent')};
     flex-direction: row;
     border: 1px solid #f1f2f6;
     border-radius: 8px;

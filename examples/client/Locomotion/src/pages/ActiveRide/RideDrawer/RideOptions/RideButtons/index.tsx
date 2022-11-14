@@ -2,6 +2,7 @@ import React, { useContext, useState, useEffect } from 'react';
 import DatePicker from 'react-native-date-picker';
 import moment from 'moment';
 import { ThemeContext } from 'styled-components';
+import { Animated } from 'react-native';
 import DatePickerPoppup from '../../../../../popups/DatePickerPoppup';
 import FutureBookingButton from './FutureBookingButton';
 import {
@@ -24,7 +25,6 @@ import cashPaymentMethod from '../../../../../pages/Payments/cashPaymentMethod';
 import { getFutureRideMaxDate, getFutureRideMinDate } from '../../../../../context/newRideContext/utils';
 import settings from '../../../../../context/settings';
 import SETTINGS_KEYS from '../../../../../context/settings/keys';
-import { getTextColorForTheme } from '../../../../../context/theme';
 import { PAYMENT_METHODS } from '../../../../../pages/Payments/consts';
 
 const TIME_WINDOW_CHANGE_HIGHLIGHT_TIME_MS = 3000;
@@ -86,12 +86,32 @@ const RideButtons = ({
     checkMinutesBeforeFutureRideSetting();
   }, []);
 
+  const [animatedOpacity] = useState(new Animated.Value(0));
+
+  const animatedStyle = {
+    height: '100%',
+    width: HALF_WIDTH,
+    backgroundColor: '#d3eefc',
+    borderRadius: 8,
+    opacity: animatedOpacity,
+  };
+
+  const animateShowBg = (toValue: number) => {
+    Animated.timing(animatedOpacity, {
+      toValue: ride?.scheduledTo ? toValue : 0,
+      duration: 500,
+      useNativeDriver: false,
+    }).start();
+  };
+
   useEffect(() => {
     if (chosenService && pickupTimeWindow !== chosenService.pickupWindowSizeInMinutes) {
       setPickupTimeWindow(chosenService.pickupWindowSizeInMinutes);
       setPickupTimeWindowChangedHighlight(true);
+      animateShowBg(1);
       setTimeout(() => {
         setPickupTimeWindowChangedHighlight(false);
+        animateShowBg(0);
       }, TIME_WINDOW_CHANGE_HIGHLIGHT_TIME_MS);
     }
   }, [chosenService]);
@@ -115,13 +135,19 @@ const RideButtons = ({
 
       </>
     );
+
+
     return (
-      <ButtonContainer
-        testID="RideTimeSelector"
-        onPress={() => minMinutesBeforeFutureRide && setIsDatePickerOpen(true)}
-        highlight={ride?.scheduledTo && pickupTimeWindowChangedHighlight}
-      >
-        <FutureBookingButton />
+      <>
+        <Animated.View style={animatedStyle} />
+        <ButtonContainer
+          testID="RideTimeSelector"
+          onPress={() => minMinutesBeforeFutureRide && setIsDatePickerOpen(true)}
+          style={{ position: 'absolute' }}
+        >
+
+          <FutureBookingButton />
+        </ButtonContainer>
         <DatePickerPoppup
           testID="datePicker"
           textColor="black"
@@ -143,7 +169,8 @@ const RideButtons = ({
           }}
           onChange={date => setTempSelectedDate(date)}
         />
-      </ButtonContainer>
+      </>
+
     );
   };
 
