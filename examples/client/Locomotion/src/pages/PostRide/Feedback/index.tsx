@@ -61,7 +61,7 @@ const RideFeedback = ({
     && (
       <Container>
         {!isActive ? (
-          <TouchableOpacity activeOpacity={1} onPress={onLabelClick}>
+          <TouchableOpacity testID="addFeedback" activeOpacity={1} onPress={onLabelClick}>
             <ActiveLabelContainer>
               <SvgIcon
                 width={20}
