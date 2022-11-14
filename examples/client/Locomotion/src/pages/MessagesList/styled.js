@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import styled, { ThemeContext } from 'styled-components';
 import { FONT_SIZES, FONT_WEIGHTS } from '../../context/theme';
-import noRides from '../../assets/no_rides.svg';
+import noRides from '../../assets/no_messages.svg';
 import SvgIcon from '../../Components/SvgIcon';
 
 export const NoRidesImageContainer = styled.View`
