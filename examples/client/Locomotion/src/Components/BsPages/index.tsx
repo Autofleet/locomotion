@@ -275,6 +275,7 @@ export const ConfirmPickupTime = (props: any) => {
     setServiceEstimations,
     ride,
     chosenService,
+    defaultService,
   } = useContext(MewRidePageContext);
   const {
     changeBsPage,
@@ -282,9 +283,9 @@ export const ConfirmPickupTime = (props: any) => {
   const date = moment(unconfirmedPickupTime).format('ddd, MMM Do');
   const isDateToday = moment(unconfirmedPickupTime).isSame(moment(), 'day');
   const afterTime = moment(unconfirmedPickupTime).format('h:mm A');
-  const windowSize = chosenService && chosenService.pickupWindowSizeInMinutes;
+  const windowSize = chosenService?.pickupWindowSizeInMinutes;
   const beforeTime = (windowSize && moment(unconfirmedPickupTime).add(windowSize, 'minutes').format('h:mm A')) || i18n.t('general.noTimeWindow');
-  const startDate = moment(unconfirmedPickupTime).add(unconfirmedPickupTime ? 0 : minMinutesBeforeFutureRide, 'minutes').toDate();
+  const startDate = moment(unconfirmedPickupTime).add(unconfirmedPickupTime ? 0 : (minMinutesBeforeFutureRide || 0) + 1, 'minutes').toDate();
   const [tempSelectedDate, setTempSelectedDate] = useState(startDate);
 
   const checkMinutesBeforeFutureRideSetting = async () => {
@@ -294,10 +295,14 @@ export const ConfirmPickupTime = (props: any) => {
   useEffect(() => {
     checkMinutesBeforeFutureRideSetting();
   }, []);
+  useEffect(() => {
+    setTempSelectedDate(startDate);
+  }, [minMinutesBeforeFutureRide]);
 
   const afterTimeTitle = moment(tempSelectedDate).format('h:mm A');
-  const beforeTimeTitle = (chosenService?.pickupWindowSizeInMinutes
-    && moment(tempSelectedDate).add(chosenService?.pickupWindowSizeInMinutes, 'minutes').format('h:mm A'))
+  const pickupWindowTime = (chosenService || defaultService)?.pickupWindowSizeInMinutes;
+  const beforeTimeTitle = (pickupWindowTime
+    && moment(tempSelectedDate).add(pickupWindowTime, 'minutes').format('h:mm A'))
     || i18n.t('general.noTimeWindow');
   const renderDatePickerTitle = () => (
     <>
@@ -344,13 +349,15 @@ export const ConfirmPickupTime = (props: any) => {
       </RoundedButton>
       <DatePickerPoppup
         testID="datePicker"
-        textColor={getTextColorForTheme()}
+        textColor="black"
         isVisible={isDatePickerOpen}
         date={tempSelectedDate}
         maximumDate={getFutureRideMaxDate()}
         minimumDate={getFutureRideMinDate((minMinutesBeforeFutureRide || 0))}
         mode="datetime"
         title={renderDatePickerTitle()}
+        confirmText={i18n.t('general.select')}
+        cancelText={i18n.t('general.cancel')}
         onCancel={() => setIsDatePickerOpen(false)}
         onConfirm={(newDate: Date) => {
           setUnconfirmedPickupTime(newDate.getTime());
@@ -435,7 +442,7 @@ export const ConfirmFutureRide = (props: any) => {
 
   const getTimeDisplay = () => {
     const afterTime = moment.parseZone(newFutureRide?.scheduledTo).format('h:mm A');
-    const windowSize = chosenService && chosenService.pickupWindowSizeInMinutes;
+    const windowSize = chosenService?.pickupWindowSizeInMinutes;
     const beforeTime = (windowSize && moment.parseZone(newFutureRide?.scheduledTo).add(windowSize, 'minutes').format('h:mm A')) || i18n.t('general.noTimeWindow');
 
     const timeText = i18n.t('bottomSheetContent.confirmPickupTime.pickupTextTime', { afterTime, beforeTime });
@@ -618,7 +625,7 @@ export const ConfirmingRide = (props: any) => {
     ? i18n.t('bottomSheetContent.confirmingFutureRide.titleText')
     : i18n.t('bottomSheetContent.confirmingRide.titleText');
 
-  const windowSize = chosenService.pickupWindowSizeInMinutes;
+  const windowSize = chosenService?.pickupWindowSizeInMinutes;
   const beforeTime = windowSize ? moment(ride.scheduledTo).add(windowSize, 'minutes').format('h:mm A') : i18n.t('general.noTimeWindow');
 
   const SubTitleText = ride?.scheduledTo

@@ -8,7 +8,7 @@ import {
 import { isAndroid } from '../../services/isAndroid';
 
 export default ({
-  title, date, onChange, isVisible, onConfirm, onCancel, ...props
+  title, date, onChange, isVisible, onConfirm, onCancel, confirmText, cancelText, ...props
 }) => {
   const [currentDate, setCurrentDate] = useState(date);
   return (
@@ -30,8 +30,8 @@ export default ({
           }}
           style={{ marginTop: isAndroid ? 10 : 0, marginBottom: isAndroid ? 10 : 0 }}
         />
-        <ConfirmButton onPress={() => onConfirm(currentDate)}>Confirm</ConfirmButton>
-        <CancelButton onPress={onCancel} hollow>Cancel</CancelButton>
+        <ConfirmButton onPress={() => onConfirm(currentDate)} testID="datePickerConfirm">{confirmText}</ConfirmButton>
+        <CancelButton onPress={onCancel} hollow testID="datePickerCancel">{cancelText}</CancelButton>
 
       </ModalContainer>
     </Modal>
