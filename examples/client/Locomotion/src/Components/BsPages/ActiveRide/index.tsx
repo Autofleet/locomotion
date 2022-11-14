@@ -140,22 +140,23 @@ const ActiveRideContent = () => {
               : null}
           </StopPointTextContainer>
           <ButtonsContainer>
-          {firstSpNotCompleted?.type == "pickup" ? (
-            <>
-            <RowContainer>
-                <Call onError={() => {setGenericErrorPopup({});}}/>
-                {renderRideNotes()}
+            {firstSpNotCompleted?.type === 'pickup' ? (
+              <>
+                <RowContainer>
+                  <Call onError={() => { setGenericErrorPopup({}); }} />
+                  {renderRideNotes()}
                 </RowContainer>
+                <RowContainer>
+                  {renderCancelRide()}
+                  {renderShareRide()}
+                </RowContainer>
+              </>
+            ) : (
               <RowContainer>
-                {renderCancelRide()}
+                <Call onError={() => { setGenericErrorPopup({}); }} />
                 {renderShareRide()}
               </RowContainer>
-            </>
-              ) : (
-              <RowContainer>
-                <Call onError={() => {setGenericErrorPopup({});}}/>
-                {renderShareRide()}
-              </RowContainer>)}
+            )}
           </ButtonsContainer>
           <StopPointsVerticalView
             ride={ride}
