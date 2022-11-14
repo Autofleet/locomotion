@@ -96,6 +96,7 @@ export const DrawerContentComponent = ({ navigation, state }) => {
         <DrawerLabel
           title={i18n.t('menu.messages')}
           icon={MessagesIcon}
+          testID="messages"
           onPress={() => navigateTo(MAIN_ROUTES.MESSAGES)}
           iconFill="#333"
           focused={route === MAIN_ROUTES.MESSAGES}
