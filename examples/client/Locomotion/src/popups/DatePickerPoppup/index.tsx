@@ -30,8 +30,8 @@ export default ({
           }}
           style={{ marginTop: isAndroid ? 10 : 0, marginBottom: isAndroid ? 10 : 0 }}
         />
-        <ConfirmButton onPress={() => onConfirm(currentDate)}>{confirmText}</ConfirmButton>
-        <CancelButton onPress={onCancel} hollow>{cancelText}</CancelButton>
+        <ConfirmButton onPress={() => onConfirm(currentDate)} testID="datePickerConfirm">{confirmText}</ConfirmButton>
+        <CancelButton onPress={onCancel} hollow testID="datePickerCancel">{cancelText}</CancelButton>
 
       </ModalContainer>
     </Modal>

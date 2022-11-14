@@ -27,7 +27,7 @@ import settings from '../../../../../context/settings';
 import SETTINGS_KEYS from '../../../../../context/settings/keys';
 import { PAYMENT_METHODS } from '../../../../../pages/Payments/consts';
 
-const TIME_WINDOW_CHANGE_HIGHLIGHT_TIME_MS = 3000;
+const TIME_WINDOW_CHANGE_HIGHLIGHT_TIME_MS = 500;
 interface RideButtonsProps {
     displayPassenger: boolean;
     setPopupName: (popupName: popupNames) => void;
@@ -96,10 +96,10 @@ const RideButtons = ({
     opacity: animatedOpacity,
   };
 
-  const animateShowBg = (toValue: number) => {
+  const animateShowBg = (toValue: number, duration: number) => {
     Animated.timing(animatedOpacity, {
       toValue: ride?.scheduledTo ? toValue : 0,
-      duration: 500,
+      duration,
       useNativeDriver: false,
     }).start();
   };
@@ -108,10 +108,10 @@ const RideButtons = ({
     if (chosenService && pickupTimeWindow !== chosenService.pickupWindowSizeInMinutes) {
       setPickupTimeWindow(chosenService.pickupWindowSizeInMinutes);
       setPickupTimeWindowChangedHighlight(true);
-      animateShowBg(1);
+      animateShowBg(1, 0);
       setTimeout(() => {
         setPickupTimeWindowChangedHighlight(false);
-        animateShowBg(0);
+        animateShowBg(0, 250);
       }, TIME_WINDOW_CHANGE_HIGHLIGHT_TIME_MS);
     }
   }, [chosenService]);
@@ -235,8 +235,7 @@ const RideButtons = ({
       </RowContainer>
       <StyledButton
         testID="selectService"
-        disabled={(!chosenService || !!getClientOutstandingBalanceCard())
-          || (ride?.scheduledTo && pickupTimeWindowChangedHighlight)}
+        disabled={(!chosenService || !!getClientOutstandingBalanceCard())}
         onPress={() => {
           changeBsPage(BS_PAGES.CONFIRM_PICKUP);
         }}
