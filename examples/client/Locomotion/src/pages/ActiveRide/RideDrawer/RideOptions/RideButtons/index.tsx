@@ -2,6 +2,7 @@ import React, { useContext, useState, useEffect } from 'react';
 import DatePicker from 'react-native-date-picker';
 import moment from 'moment';
 import { ThemeContext } from 'styled-components';
+import { Animated } from 'react-native';
 import DatePickerPoppup from '../../../../../popups/DatePickerPoppup';
 import FutureBookingButton from './FutureBookingButton';
 import {
@@ -24,10 +25,9 @@ import cashPaymentMethod from '../../../../../pages/Payments/cashPaymentMethod';
 import { getFutureRideMaxDate, getFutureRideMinDate } from '../../../../../context/newRideContext/utils';
 import settings from '../../../../../context/settings';
 import SETTINGS_KEYS from '../../../../../context/settings/keys';
-import { getTextColorForTheme } from '../../../../../context/theme';
 import { PAYMENT_METHODS } from '../../../../../pages/Payments/consts';
 
-const TIME_WINDOW_CHANGE_HIGHLIGHT_TIME_MS = 3000;
+const TIME_WINDOW_CHANGE_HIGHLIGHT_TIME_MS = 500;
 interface RideButtonsProps {
     displayPassenger: boolean;
     setPopupName: (popupName: popupNames) => void;
@@ -43,6 +43,7 @@ const RideButtons = ({
     chosenService,
     setUnconfirmedPickupTime,
     unconfirmedPickupTime,
+    defaultService,
   } = useContext(RidePageContext);
   const {
     changeBsPage,
@@ -61,9 +62,8 @@ const RideButtons = ({
   const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
   const [isFutureRidesEnabled, setIsFutureRidesEnabled] = useState(true);
   const [minMinutesBeforeFutureRide, setMinMinutesBeforeFutureRide] = useState(null);
-  const firstDate = moment(ride?.scheduledTo || undefined).add(ride?.scheduledTo ? 0 : minMinutesBeforeFutureRide, 'minutes').toDate();
+  const firstDate = moment(ride?.scheduledTo || undefined).add(ride?.scheduledTo ? 0 : (minMinutesBeforeFutureRide || 0) + 1, 'minutes').toDate();
   const [tempSelectedDate, setTempSelectedDate] = useState(firstDate);
-
 
   const checkFutureRidesSetting = async () => {
     const futureRidesEnabled = await getSettingByKey(
@@ -78,16 +78,40 @@ const RideButtons = ({
   };
 
   useEffect(() => {
+    setTempSelectedDate(firstDate);
+  }, [minMinutesBeforeFutureRide]);
+
+  useEffect(() => {
     checkFutureRidesSetting();
     checkMinutesBeforeFutureRideSetting();
   }, []);
+
+  const [animatedOpacity] = useState(new Animated.Value(0));
+
+  const animatedStyle = {
+    height: '100%',
+    width: HALF_WIDTH,
+    backgroundColor: '#d3eefc',
+    borderRadius: 8,
+    opacity: animatedOpacity,
+  };
+
+  const animateShowBg = (toValue: number, duration: number) => {
+    Animated.timing(animatedOpacity, {
+      toValue: ride?.scheduledTo ? toValue : 0,
+      duration,
+      useNativeDriver: false,
+    }).start();
+  };
 
   useEffect(() => {
     if (chosenService && pickupTimeWindow !== chosenService.pickupWindowSizeInMinutes) {
       setPickupTimeWindow(chosenService.pickupWindowSizeInMinutes);
       setPickupTimeWindowChangedHighlight(true);
+      animateShowBg(1, 0);
       setTimeout(() => {
         setPickupTimeWindowChangedHighlight(false);
+        animateShowBg(0, 250);
       }, TIME_WINDOW_CHANGE_HIGHLIGHT_TIME_MS);
     }
   }, [chosenService]);
@@ -98,8 +122,9 @@ const RideButtons = ({
       setTempSelectedDate(firstDate);
     };
     const afterTimeTitle = moment(tempSelectedDate).format('h:mm A');
-    const beforeTimeTitle = (chosenService?.pickupWindowSizeInMinutes
-      && moment(tempSelectedDate).add(chosenService?.pickupWindowSizeInMinutes, 'minutes').format('h:mm A'))
+    const pickupWindow = (chosenService || defaultService)?.pickupWindowSizeInMinutes;
+    const beforeTimeTitle = (pickupWindow
+      && moment(tempSelectedDate).add(pickupWindow, 'minutes').format('h:mm A'))
       || i18n.t('general.noTimeWindow');
 
     const renderDatePickerTitle = () => (
@@ -110,31 +135,42 @@ const RideButtons = ({
 
       </>
     );
+
+
     return (
-      <ButtonContainer
-        testID="RideTimeSelector"
-        onPress={() => minMinutesBeforeFutureRide && setIsDatePickerOpen(true)}
-        highlight={ride?.scheduledTo && pickupTimeWindowChangedHighlight}
-      >
-        <FutureBookingButton />
+      <>
+        <Animated.View style={animatedStyle} />
+        <ButtonContainer
+          testID="RideTimeSelector"
+          onPress={() => minMinutesBeforeFutureRide && setIsDatePickerOpen(true)}
+          style={{ position: 'absolute' }}
+        >
+
+          <FutureBookingButton />
+        </ButtonContainer>
         <DatePickerPoppup
           testID="datePicker"
-          textColor={getTextColorForTheme()}
+          textColor="black"
           isVisible={isDatePickerOpen}
           date={tempSelectedDate}
           maximumDate={getFutureRideMaxDate()}
           minimumDate={getFutureRideMinDate((minMinutesBeforeFutureRide || 0))}
           mode="datetime"
           title={renderDatePickerTitle()}
+          confirmText={i18n.t('general.select')}
+          cancelText={i18n.t('general.cancel')}
           onCancel={close}
           onConfirm={(date) => {
-            setUnconfirmedPickupTime(date.getTime());
-            changeBsPage(BS_PAGES.CONFIRM_PICKUP_TIME);
+            if (unconfirmedPickupTime !== date.getTime()) {
+              setUnconfirmedPickupTime(date.getTime());
+              changeBsPage(BS_PAGES.CONFIRM_PICKUP_TIME);
+            }
             close();
           }}
           onChange={date => setTempSelectedDate(date)}
         />
-      </ButtonContainer>
+      </>
+
     );
   };
 
@@ -199,12 +235,14 @@ const RideButtons = ({
       </RowContainer>
       <StyledButton
         testID="selectService"
-        disabled={!chosenService || !!getClientOutstandingBalanceCard()}
+        disabled={(!chosenService || !!getClientOutstandingBalanceCard())}
         onPress={() => {
           changeBsPage(BS_PAGES.CONFIRM_PICKUP);
         }}
       >
-        <ButtonText testID="select">{i18n.t('general.select').toString()}</ButtonText>
+        <ButtonText testID="select">
+          {i18n.t('general.select').toString()}
+        </ButtonText>
       </StyledButton>
     </Container>
   );
