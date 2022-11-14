@@ -80,6 +80,7 @@ const RideFeedback = ({
                 <Counter>{`${currentText.length}/${MAX_LENGTH}`}</Counter>
               </TextAreaTopBar>
               <StyledTextArea
+                testID="feedbackInput"
                 autoFocus={false}
                 ref={inputRef}
                 value={currentText}
