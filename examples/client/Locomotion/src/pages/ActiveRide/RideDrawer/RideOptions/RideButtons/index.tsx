@@ -62,8 +62,8 @@ const RideButtons = ({
   const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
   const [isFutureRidesEnabled, setIsFutureRidesEnabled] = useState(true);
   const [minMinutesBeforeFutureRide, setMinMinutesBeforeFutureRide] = useState(null);
-  const firstDate = moment(ride?.scheduledTo || undefined).add(ride?.scheduledTo ? 0 : (minMinutesBeforeFutureRide || 0) + 1, 'minutes').toDate();
-  const [tempSelectedDate, setTempSelectedDate] = useState(firstDate);
+  const firstDate = () => moment(ride?.scheduledTo || undefined).add(ride?.scheduledTo ? 0 : (minMinutesBeforeFutureRide || 0) + 1, 'minutes').toDate();
+  const [tempSelectedDate, setTempSelectedDate] = useState(firstDate());
 
   const checkFutureRidesSetting = async () => {
     const futureRidesEnabled = await getSettingByKey(
@@ -78,7 +78,7 @@ const RideButtons = ({
   };
 
   useEffect(() => {
-    setTempSelectedDate(firstDate);
+    setTempSelectedDate(firstDate());
   }, [minMinutesBeforeFutureRide]);
 
   useEffect(() => {

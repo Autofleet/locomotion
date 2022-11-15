@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Modal from 'react-native-modal';
 import DatePicker from 'react-native-date-picker';
 
@@ -11,6 +11,9 @@ export default ({
   title, date, onChange, isVisible, onConfirm, onCancel, confirmText, cancelText, ...props
 }) => {
   const [currentDate, setCurrentDate] = useState(date);
+  useEffect(() => {
+    setCurrentDate(date);
+  }, [date]);
   return (
     <Modal
       isVisible={isVisible}
