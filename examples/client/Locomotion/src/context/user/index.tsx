@@ -3,6 +3,7 @@ import React, {
 } from 'react';
 import crashlytics from '@react-native-firebase/crashlytics';
 import Config from 'react-native-config';
+import network from 'services/network';
 import { authService, StorageService } from '../../services';
 import {
   getUserDetails, loginVert, sendEmailVerification,
@@ -83,7 +84,7 @@ const UserContextProvider = ({ children }: { children: any }) => {
       const userFromServer = await getUserDetails();
       setUser(userFromServer);
     } catch (e) {
-      authService.logout();
+      authService.logout(network);
     }
   };
 

@@ -3,6 +3,7 @@ import { initStripe } from '@stripe/stripe-react-native';
 import Config from 'react-native-config';
 import moment from 'moment';
 import { Platform } from 'react-native';
+import network from 'services/network';
 import { APP_ROUTES, MAIN_ROUTES } from '../routes';
 import Auth from '../../services/auth';
 import { getUserDetails } from '../../context/user/api';
@@ -47,10 +48,10 @@ const AuthLoadingScreen = () => {
         try {
           response = await getUserDetails();
           if (!response) {
-            Auth.logout();
+            Auth.logout(network);
           }
         } catch (e) {
-          Auth.logout();
+          Auth.logout(network);
         }
 
         const userData = response;
