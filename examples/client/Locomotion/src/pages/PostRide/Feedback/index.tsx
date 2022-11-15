@@ -61,7 +61,7 @@ const RideFeedback = ({
     && (
       <Container>
         {!isActive ? (
-          <TouchableOpacity activeOpacity={1} onPress={onLabelClick}>
+          <TouchableOpacity testID="addFeedback" activeOpacity={1} onPress={onLabelClick}>
             <ActiveLabelContainer>
               <SvgIcon
                 width={20}
@@ -80,6 +80,7 @@ const RideFeedback = ({
                 <Counter>{`${currentText.length}/${MAX_LENGTH}`}</Counter>
               </TextAreaTopBar>
               <StyledTextArea
+                testID="feedbackInput"
                 autoFocus={false}
                 ref={inputRef}
                 value={currentText}
