@@ -3,6 +3,7 @@ import jwtDecode from 'jwt-decode';
 import RNRestart from 'react-native-restart';
 import StorageService from './storage';
 import AppSettings from './app-settings';
+import { logoutUser } from '../context/user/api';
 
 class Auth {
   static jwtVerify(token) {
@@ -31,7 +32,7 @@ class Auth {
       } catch (error) {
         console.log('error when try to refresh the login token', error);
         if (this.onFaildAuthCallback) { this.onFaildAuthCallback(); }
-        this.logout(network);
+        this.logout();
         return false;
       }
 
@@ -42,14 +43,14 @@ class Auth {
         await this.updateTokens(response.data.refreshToken, response.data.accessToken);
         return response.data.accessToken;
       }
-      this.logout(network);
+      this.logout();
       return false;
     }
     return accessToken;
   };
 
-  logout = async (networkInstance) => {
-    await networkInstance.post('api/v1/me/logout');
+  logout = async () => {
+    await logoutUser();
     await AppSettings.destroy();
     RNRestart.Restart();
   };

@@ -61,7 +61,7 @@ export const createUserCoupon = async (code) => {
   return data;
 };
 
-export const logoutUser = async () => {
+export const logoutUser = async (code) => {
   const { data } = await network.post('api/v1/me/logout');
   return data;
 };
