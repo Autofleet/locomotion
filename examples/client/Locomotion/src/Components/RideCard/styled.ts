@@ -41,10 +41,10 @@ ${FONT_WEIGHTS.LIGHT}
 
 export const TopTextsContainer = styled(View)`
 flex-direction: column;
-max-width: 70%;
+max-width: 75%;
 `;
 
 export const TopPriceContainer = styled(View)`
 flex-direction: column;
-max-width: 30%;
+max-width: 25%;
 `;
