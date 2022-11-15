@@ -283,7 +283,7 @@ export const ConfirmPickupTime = (props: any) => {
   const date = moment(unconfirmedPickupTime).format('ddd, MMM Do');
   const isDateToday = moment(unconfirmedPickupTime).isSame(moment(), 'day');
   const afterTime = moment(unconfirmedPickupTime).format('h:mm A');
-  const windowSize = chosenService?.pickupWindowSizeInMinutes;
+  const windowSize = (chosenService || defaultService)?.pickupWindowSizeInMinutes;
   const beforeTime = (windowSize && moment(unconfirmedPickupTime).add(windowSize, 'minutes').format('h:mm A')) || i18n.t('general.noTimeWindow');
   const startDate = moment(unconfirmedPickupTime).add(unconfirmedPickupTime ? 0 : (minMinutesBeforeFutureRide || 0) + 1, 'minutes').toDate();
   const [tempSelectedDate, setTempSelectedDate] = useState(startDate);
