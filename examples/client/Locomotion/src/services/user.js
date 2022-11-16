@@ -1,6 +1,6 @@
 import { MAIN_ROUTES } from '../pages/routes';
 import { getUserDetails } from '../context/user/api';
-import Auth from './auth';
+import logout from './logout';
 
 const UserService = {
   getUser: async (navigation) => {
@@ -11,7 +11,7 @@ const UserService = {
     }
 
     if (userData === null) {
-      Auth.logout(navigation);
+      logout(navigation);
     }
 
     if (userData.active === false) {

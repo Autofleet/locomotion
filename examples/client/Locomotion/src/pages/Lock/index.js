@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import Config from 'react-native-config';
 import { MAIN_ROUTES } from '../routes';
-import Auth from '../../services/auth';
+import logout from '../../services/logout';
 import SubmitButton from '../../Components/RoundedButton';
 
 import {
@@ -35,7 +35,7 @@ export default () => {
   useInterval(async () => {
     const userData = await UserService.getUser();
     if (userData === null) {
-      Auth.logout();
+      logout();
     }
 
     if (userData.active === true) {
@@ -44,7 +44,7 @@ export default () => {
   }, 5000);
 
   const submit = async () => {
-    Auth.logout();
+    logout();
   };
 
   return (
