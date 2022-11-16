@@ -13,6 +13,8 @@ import { MAIN_ROUTES } from '../routes';
 import { UserContext } from '../../context/user';
 import AppSettings from '../../services/app-settings';
 import { PageContainer, ContentContainer } from '../styles';
+import { ScrollView } from 'react-native';
+
 
 const Phone = ({ navigation }) => {
   const { nextScreen } = useContext(OnboardingContext);
@@ -68,32 +70,34 @@ const Phone = ({ navigation }) => {
   }, []);
 
   return (
-    <PageContainer>
-      <Header
-        title={i18n.t('onboarding.pages.phone.title')}
-        page={MAIN_ROUTES.PHONE}
-      />
-      <ContentContainer>
-        <ScreenText
-          text={i18n.t('onboarding.pages.phone.text')}
-          subText={i18n.t('onboarding.pages.phone.subText')}
-        />
-        <PhoneNumberInput
-          key={renderId}
-          value={user.phoneNumber}
-          onPhoneNumberChange={onPhoneNumberChange}
-          autoFocus
-          error={showErrorText}
-        />
-        {showErrorText && <ErrorText>{showErrorText}</ErrorText>}
-        <SaveButton
-          isInvalid={isInvalid}
-          onNext={onSubmitPhoneNumber}
-          onFail={() => setShowErrorText(i18n.t('login.invalidPhoneNumberError'))
-          }
-        />
-      </ContentContainer>
-    </PageContainer>
+      <PageContainer>
+        <ScrollView keyboardShouldPersistTaps="handled">
+          <Header
+            title={i18n.t('onboarding.pages.phone.title')}
+            page={MAIN_ROUTES.PHONE}
+          />
+          <ContentContainer>
+            <ScreenText
+              text={i18n.t('onboarding.pages.phone.text')}
+              subText={i18n.t('onboarding.pages.phone.subText')}
+            />
+            <PhoneNumberInput
+              key={renderId}
+              value={user.phoneNumber}
+              onPhoneNumberChange={onPhoneNumberChange}
+              autoFocus
+              error={showErrorText}
+            />
+            {showErrorText && <ErrorText>{showErrorText}</ErrorText>}
+            <SaveButton
+              isInvalid={isInvalid}
+              onNext={onSubmitPhoneNumber}
+              onFail={() => setShowErrorText(i18n.t('login.invalidPhoneNumberError'))
+              }
+            />
+          </ContentContainer>
+        </ScrollView>
+      </PageContainer>
   );
 };
 
