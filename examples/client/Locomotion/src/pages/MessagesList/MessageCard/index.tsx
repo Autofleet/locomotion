@@ -27,6 +27,7 @@ const readMoreText = i18n.t('messages.readMore');
 const MessageCard = ({ message, readAt, dismissedAt }: MessageCardProps) => (
   <CardContainer
     noBackground
+    testID={`messageCard_${message.id}`}
     onPress={() => {
       NavigationService.navigate(MAIN_ROUTES.MESSAGE_VIEW, { messageId: message.id });
     }}
