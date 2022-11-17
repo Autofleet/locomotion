@@ -25,6 +25,7 @@ export default ({
         {title}
         <DatePicker
           {...props}
+          locale="en-US"
           is24hourSource="locale"
           date={date}
           modal={false}
