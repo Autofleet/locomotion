@@ -25,6 +25,7 @@ export default ({
         {title}
         <DatePicker
           {...props}
+          is24hourSource="locale"
           date={date}
           modal={false}
           onDateChange={(newDate) => {
