@@ -226,6 +226,8 @@ const RidePageContextProvider = ({ children }: {
   const [ridePopup, setRidePopup] = useState<RidePopupNames | null>(null);
   const [unconfirmedPickupTime, setUnconfirmedPickupTime] = useState<number | null>(null);
   const getRouteName = () => navigationService?.getNavigator()?.getCurrentRoute().name;
+  const [passengersNumber, setPassengersNumber] = useState<number>(1);
+
   const intervalRef = useRef<any>();
 
   const stopRequestInterval = () => {
@@ -1110,6 +1112,8 @@ const RidePageContextProvider = ({ children }: {
         unconfirmedPickupTime,
         loadRide,
         getRidesByParams,
+        passengersNumber,
+        setPassengersNumber,
       }}
     >
       {children}

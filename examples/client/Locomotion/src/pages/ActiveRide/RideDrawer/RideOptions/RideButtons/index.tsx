@@ -22,8 +22,12 @@ import cashPaymentMethod from '../../../../../pages/Payments/cashPaymentMethod';
 import { getFutureRideMaxDate, getFutureRideMinDate } from '../../../../../context/newRideContext/utils';
 import settings from '../../../../../context/settings';
 import SETTINGS_KEYS from '../../../../../context/settings/keys';
-import { getTextColorForTheme } from '../../../../../context/theme';
+import {
+  getTextColorForTheme,
+} from '../../../../../context/theme';
 import { PAYMENT_METHODS } from '../../../../../pages/Payments/consts';
+import PassengersCounter from './PassengersCounter';
+
 
 interface RideButtonsProps {
     displayPassenger: boolean;
@@ -40,7 +44,10 @@ const RideButtons = ({
     chosenService,
     setUnconfirmedPickupTime,
     unconfirmedPickupTime,
+    setPassengersNumber,
   } = useContext(RidePageContext);
+
+
   const {
     changeBsPage,
   } = useContext(RideStateContextContext);
@@ -56,6 +63,7 @@ const RideButtons = ({
   const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
   const [isFutureRidesEnabled, setIsFutureRidesEnabled] = useState(true);
   const [minMinutesBeforeFutureRide, setMinMinutesBeforeFutureRide] = useState(null);
+  const [passengersCounterError, setPassengersCounterError] = useState(false);
 
   const checkFutureRidesSetting = async () => {
     const futureRidesEnabled = await getSettingByKey(
@@ -73,6 +81,7 @@ const RideButtons = ({
     checkFutureRidesSetting();
     checkMinutesBeforeFutureRideSetting();
   }, []);
+
   const renderFutureBooking = () => {
     const close = () => {
       setIsDatePickerOpen(false);
@@ -149,6 +158,7 @@ const RideButtons = ({
     );
   };
 
+
   return (
     <Container>
       <RowContainer>
@@ -163,15 +173,26 @@ const RideButtons = ({
           {renderPaymentButton()}
         </>
       </RowContainer>
-      <StyledButton
-        testID="selectService"
-        disabled={!chosenService || !!getClientOutstandingBalanceCard()}
-        onPress={() => {
-          changeBsPage(BS_PAGES.CONFIRM_PICKUP);
-        }}
-      >
-        <ButtonText testID="select">{i18n.t('general.select').toString()}</ButtonText>
-      </StyledButton>
+      <RowContainer>
+
+        {chosenService ? (
+          <PassengersCounter
+            service={chosenService}
+            onSelect={setPassengersNumber}
+            onError={setPassengersCounterError}
+          />
+        ) : null}
+
+        <StyledButton
+          testID="selectService"
+          disabled={!chosenService || !!getClientOutstandingBalanceCard() || passengersCounterError}
+          onPress={() => {
+            changeBsPage(BS_PAGES.CONFIRM_PICKUP);
+          }}
+        >
+          <ButtonText testID="select">{i18n.t('general.select').toString()}</ButtonText>
+        </StyledButton>
+      </RowContainer>
     </Container>
   );
 };

@@ -14,11 +14,13 @@ export const Container = styled(View)`
 `;
 
 export const RowContainer = styled(View)`
-    flex-direction: row;
-width: 100%;
-height: 30%;
-margin-bottom: 2%;
-justify-content: space-between;
+  flex-direction: row;
+  width: 100%;
+  height: 30%;
+  margin-bottom: 2%;
+  justify-content: space-between;
+  display: flex;
+  row-gap: 10;
 `;
 
 export const ButtonContainer = styled(Button).attrs({
@@ -42,7 +44,7 @@ export const ButtonText = styled(Text)`
 `;
 
 export const StyledButton = styled(Button)`
-width: 100%;
+flex: 5;
 height: 50px;
 background-color: ${({ disabled, theme }) => (disabled ? '#bcbcbc' : theme.primaryColor)};
 border-radius: 8px;
