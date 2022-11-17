@@ -57,6 +57,7 @@ const PhoneNumberInput = ({
       defaultCode={defaultCode}
       onChangeFormattedText={onChangeText}
       textInputProps={{
+        returnKeyType: 'done',
         placeholderTextColor: theme.disabledColor,
         testID: 'phoneNumber',
         accessible: true,
