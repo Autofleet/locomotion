@@ -4,7 +4,7 @@ import Config from 'react-native-config';
 import moment from 'moment';
 import { Platform } from 'react-native';
 import { APP_ROUTES, MAIN_ROUTES } from '../routes';
-import logout from '../../services/logout';
+import { logout } from '../../services/logout';
 import { getUserDetails } from '../../context/user/api';
 import { OnboardingContext } from '../../context/onboarding';
 import PaymentsContext from '../../context/payments';

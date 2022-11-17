@@ -6,7 +6,7 @@ export const logoutUser = async () => {
   return data;
 };
 
-const logout = async (navigation = null) => {
+export const logout = async (navigation = null) => {
   try {
     await logoutUser();
     await Auth.logout();
@@ -14,5 +14,3 @@ const logout = async (navigation = null) => {
     console.error('error when try to logout', e);
   }
 };
-
-export default logout;

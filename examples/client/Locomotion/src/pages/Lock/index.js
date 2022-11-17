@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import Config from 'react-native-config';
 import { MAIN_ROUTES } from '../routes';
-import logout from '../../services/logout';
+import { logout } from '../../services/logout';
 import SubmitButton from '../../Components/RoundedButton';
 
 import {

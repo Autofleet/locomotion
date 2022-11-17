@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import propTypes from 'prop-types';
-import logout from '../../services/logout';
+import { logout } from '../../services/logout';
 import FullPageLoader from '../../Components/FullPageLoader';
 
 const Logout = ({ navigation }) => {
