@@ -2,7 +2,7 @@ import React, { useEffect, useContext, useState } from 'react';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { PaymentIcon } from 'react-native-payment-icons';
 import { Platform } from 'react-native';
-import Auth from 'services/auth';
+import Auth from '../../services/auth';
 import Button from '../../Components/Button';
 import ConfirmationPopup from '../../popups/ConfirmationPopup';
 import Card from '../../Components/InformationCard';
