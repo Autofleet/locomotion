@@ -11,6 +11,7 @@ const logout = async (navigation = null) => {
     await logoutUser();
     await Auth.logout();
   } catch (e) {
+    console.error('error when try to logout', e);
   }
 };
 

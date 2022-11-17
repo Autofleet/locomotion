@@ -2,6 +2,7 @@ import React, { useEffect, useContext, useState } from 'react';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { PaymentIcon } from 'react-native-payment-icons';
 import { Platform } from 'react-native';
+import Auth from 'services/auth';
 import Button from '../../Components/Button';
 import ConfirmationPopup from '../../popups/ConfirmationPopup';
 import Card from '../../Components/InformationCard';
@@ -173,7 +174,7 @@ const AccountContent = () => {
           onSubmit={async () => {
             try {
               await deleteUser();
-              navigationService.navigate(MAIN_ROUTES.LOGOUT);
+              await Auth.logout();
             } catch (e) {
               console.log(e);
               setIsDeleteUserVisible(false);
