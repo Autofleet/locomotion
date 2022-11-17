@@ -3,7 +3,6 @@ import Config from 'react-native-config';
 import crashlytics from '@react-native-firebase/crashlytics';
 import Auth from './auth';
 import AppSettings from './app-settings';
-import Mixpanel from './Mixpanel';
 
 const HTTPMethods = [
   'get',
