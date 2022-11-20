@@ -146,6 +146,8 @@ interface RidePageContextInterface {
   getRidePriceCalculation: (id: string | undefined, priceCalculationId?: string) => Promise<PriceCalculation | undefined>;
   getRideTotalPriceWithCurrency: (rideId : string | undefined) => Promise<{ amount: number; currency: string; } | undefined>;
   getRidesByParams: (params: any) => Promise<RideInterface[]>;
+  numberOfPassengers: number,
+  setNumberOfPassengers: (num: number) => void,
 }
 
 export const RidePageContext = createContext<RidePageContextInterface>({
@@ -199,6 +201,8 @@ export const RidePageContext = createContext<RidePageContextInterface>({
   unconfirmedPickupTime: null,
   loadRide: async (rideId: string) => undefined,
   getRidesByParams: async (params: any) => [],
+  numberOfPassengers: 1,
+  setNumberOfPassengers: () => undefined,
 });
 
 const HISTORY_RECORDS_NUM = 10;
@@ -226,7 +230,7 @@ const RidePageContextProvider = ({ children }: {
   const [ridePopup, setRidePopup] = useState<RidePopupNames | null>(null);
   const [unconfirmedPickupTime, setUnconfirmedPickupTime] = useState<number | null>(null);
   const getRouteName = () => navigationService?.getNavigator()?.getCurrentRoute().name;
-  const [passengersNumber, setPassengersNumber] = useState<number>(1);
+  const [numberOfPassengers, setNumberOfPassengers] = useState<number>(1);
 
   const intervalRef = useRef<any>();
 
@@ -867,6 +871,7 @@ const RidePageContextProvider = ({ children }: {
         serviceId: chosenService?.id,
         paymentMethodId: ride.paymentMethodId,
         rideType: 'passenger',
+        numberOfPassengers,
         ...(ride.scheduledTo && { scheduledTo: scheduledToMoment }),
         stopPoints: stopPoints.map((sp, i) => ({
           lat: Number(sp.lat),
@@ -1112,8 +1117,8 @@ const RidePageContextProvider = ({ children }: {
         unconfirmedPickupTime,
         loadRide,
         getRidesByParams,
-        passengersNumber,
-        setPassengersNumber,
+        numberOfPassengers,
+        setNumberOfPassengers,
       }}
     >
       {children}

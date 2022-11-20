@@ -4,7 +4,6 @@ import styled from 'styled-components';
 import SelectDropdown from 'react-native-select-dropdown';
 import SvgIcon from '../SvgIcon';
 import person from '../../assets/person.svg';
-import close from '../../assets/close-x.svg';
 import {
   FONT_SIZES, FONT_SIZES_VALUES, FONT_WEIGHTS,
 } from '../../context/theme';
@@ -41,7 +40,6 @@ const StyledPop = styled(SelectDropdown).attrs(({ theme, icon = person, error })
   rowStyle: {
     height: 40,
   },
-
 }))``;
 
 
@@ -53,6 +51,8 @@ const StyledRow = styled(View)`
   align-items: center;
   padding-horizontal: 8;
   background-color: ${({ theme, selected }) => (selected ? `rgba(${hextToRgba(theme.primaryColor, 0.1)})` : '#ffffff')};
+  border-width: 1;
+  border-color: #f1f2f6;
 `;
 
 const StyledText = styled(Text)`
@@ -82,9 +82,8 @@ const StyledSelectRow = ({ item, theme, selected }) => (
     <StyledText selected={selected}>{item.label}</StyledText>
 
   </StyledRow>
-
 );
-const SelectPop = ({ data, onSelect, onError }) => {
+const SelectModal = ({ data, onSelect, onError }) => {
   const [selectedItem, setSelectedItem] = useState(null);
   const [error, setError] = useState(false);
 
@@ -108,7 +107,6 @@ const SelectPop = ({ data, onSelect, onError }) => {
       data={data}
       defaultButtonText={selectedItem?.label || '1'}
       onSelect={(item, index) => {
-        console.log(item);
         setSelectedItem(item);
       }}
       dropdownIconPosition="left"
@@ -125,4 +123,4 @@ const SelectPop = ({ data, onSelect, onError }) => {
   );
 };
 
-export default SelectPop;
+export default SelectModal;

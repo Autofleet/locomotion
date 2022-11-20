@@ -1,4 +1,6 @@
-import React, { useContext, useState, useEffect } from 'react';
+import React, {
+  useContext, useState, useEffect, useCallback,
+} from 'react';
 import DatePicker from 'react-native-date-picker';
 import moment from 'moment';
 import { ThemeContext } from 'styled-components';
@@ -44,7 +46,7 @@ const RideButtons = ({
     chosenService,
     setUnconfirmedPickupTime,
     unconfirmedPickupTime,
-    setPassengersNumber,
+    setNumberOfPassengers,
   } = useContext(RidePageContext);
 
 
@@ -159,6 +161,19 @@ const RideButtons = ({
   };
 
 
+  const renderPassengersCounter = useCallback(() => {
+    if (chosenService && chosenService.pooling && chosenService.pooling !== 'no') {
+      return (
+        <PassengersCounter
+          service={chosenService}
+          onSelect={setNumberOfPassengers}
+          onError={setPassengersCounterError}
+        />
+      );
+    }
+    setNumberOfPassengers(1);
+    return null;
+  }, [chosenService]);
   return (
     <Container>
       <RowContainer>
@@ -175,13 +190,7 @@ const RideButtons = ({
       </RowContainer>
       <RowContainer>
 
-        {chosenService ? (
-          <PassengersCounter
-            service={chosenService}
-            onSelect={setPassengersNumber}
-            onError={setPassengersCounterError}
-          />
-        ) : null}
+        {renderPassengersCounter()}
 
         <StyledButton
           testID="selectService"

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 
 
-import SelectPop from '../../../../../../Components/SelectPop';
+import SelectPop from '../../../../../../Components/SelectModal';
 
 
 const PassengersCounter = ({ service, onSelect, onError = () => null }) => {
