@@ -4,16 +4,14 @@ import Config from 'react-native-config';
 import moment from 'moment';
 import { Platform } from 'react-native';
 import { APP_ROUTES, MAIN_ROUTES } from '../routes';
-import Auth from '../../services/auth';
+import { logout } from '../../services/logout';
 import { getUserDetails } from '../../context/user/api';
 import { OnboardingContext } from '../../context/onboarding';
 import PaymentsContext from '../../context/payments';
 import { UserContext } from '../../context/user';
 import settings from '../../context/settings';
-import SETTINGS_KEYS from '../../context/settings/keys';
 import { StorageService } from '../../services';
 import FullPageLoader from '../../Components/FullPageLoader';
-import { checkVersionAndForceUpdateIfNeeded } from '../../services/VersionCheck';
 import * as navigationService from '../../services/navigation';
 
 export const INITIAL_USER_STATE = {
@@ -47,10 +45,10 @@ const AuthLoadingScreen = () => {
         try {
           response = await getUserDetails();
           if (!response) {
-            Auth.logout();
+            logout();
           }
         } catch (e) {
-          Auth.logout();
+          logout();
         }
 
         const userData = response;

@@ -34,7 +34,6 @@ const ShareButton = () => {
       onPress={() => {
         onShare();
       }}
-      style={{ width: ride.cancelable ? HALF_WIDTH : '100%' }}
     >
       {
             isLoading

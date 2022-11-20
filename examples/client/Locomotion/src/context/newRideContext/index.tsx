@@ -114,6 +114,7 @@ interface RidePageContextInterface {
   ride: RideInterface;
   updateRidePayload: (ride: any) => void;
   chosenService: any;
+  defaultService: any;
   lastSelectedLocation: any;
   getCurrentLocationAddress: () => any;
   saveSelectedLocation: (sp: any) => void;
@@ -168,6 +169,7 @@ export const RidePageContext = createContext<RidePageContextInterface>({
   serviceEstimations: [],
   updateRidePayload: (ride: any) => undefined,
   chosenService: null,
+  defaultService: null,
   lastSelectedLocation: null,
   getCurrentLocationAddress: () => undefined,
   saveSelectedLocation: (sp: any) => undefined,
@@ -224,6 +226,7 @@ const RidePageContextProvider = ({ children }: {
   const [serviceEstimations, setServiceEstimations] = useState<any | null>(null);
   const [ride, setRide] = useState<RideInterface>({});
   const [chosenService, setChosenService] = useState<any | null>(null);
+  const [defaultService, setDefaultService] = useState<any | null>(null);
   const [lastSelectedLocation, saveSelectedLocation] = useState(false);
   const [rideRequestLoading, setRideRequestLoading] = useState(false);
   const [isAppActive, setIsAppActive] = useState(false);
@@ -250,6 +253,7 @@ const RidePageContextProvider = ({ children }: {
   const cleanRequestStopPoints = () => {
     setRequestStopPoints([]);
     setChosenService(null);
+    setDefaultService(null);
   };
 
   const cleanRideState = (initSpsBool = true) => {
@@ -376,6 +380,7 @@ const RidePageContextProvider = ({ children }: {
       const formattedEstimations = formatEstimations(services, estimations, tags);
       setChosenService(ride.scheduledTo ? formattedEstimations.find((e: any) => e.currency)
         : formattedEstimations.find((e: any) => e.eta));
+      setDefaultService(formattedEstimations?.[0]);
       setServiceEstimations(formattedEstimations);
     } catch (e: any) {
       Mixpanel.setEvent('service estimations failed', { status: e?.response?.status });
@@ -1091,6 +1096,7 @@ const RidePageContextProvider = ({ children }: {
         updateRidePayload,
         chosenService,
         setChosenService,
+        defaultService,
         setServiceEstimations,
         initSps,
         lastSelectedLocation,

@@ -49,3 +49,19 @@ height: 50px;
 background-color: ${({ disabled, theme }) => (disabled ? '#bcbcbc' : theme.primaryColor)};
 border-radius: 8px;
 `;
+
+export const PickerTitle = styled(Text)`
+  ${FONT_SIZES.H1};
+  ${FONT_WEIGHTS.SEMI_BOLD};
+  margin-bottom: 25px;
+`;
+
+export const PickerDate = styled(Text)`
+  ${FONT_SIZES.H3};
+  ${FONT_WEIGHTS.LIGHT};
+  margin-bottom: 7px;
+`;
+
+export const PickerTimeRange = styled(Text)`
+  ${FONT_SIZES.H1};
+`;

@@ -144,6 +144,7 @@ export const formatEstimationsResult = (service: any, estimationResult: any, tag
     priority: service.priority,
     serviceAvailabilitiesNumber: service.serviceAvailabilities.length,
     pooling: service.pooling,
+    pickupWindowSizeInMinutes: service.pickupWindowSizeInMinutes,
   };
 };
 
