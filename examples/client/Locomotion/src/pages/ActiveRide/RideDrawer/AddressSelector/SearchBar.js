@@ -94,11 +94,7 @@ const SearchBar = ({
 
   const [searchTerm, setSearchTerm] = useState('');
 
-  const debouncedSearch = React.useRef(
-    debounce(async (text, i) => {
-      onSearch(text);
-    }, 300),
-  ).current;
+  const debouncedSearch = useCallback(debounce(async text => onSearch(text), 300), [locationGranted]);
 
 
   const getSpPlaceholder = (sp) => {
