@@ -372,7 +372,6 @@ const RidePageContextProvider = ({ children }: {
 
       const tags = getEstimationTags(estimations);
       const formattedEstimations = formatEstimations(services, estimations, tags);
-      console.log('ANKRI', formattedEstimations);
       setChosenService(ride.scheduledTo ? formattedEstimations.find((e: any) => e.currency)
         : formattedEstimations.find((e: any) => e.eta));
       setDefaultService(formattedEstimations?.[0]);
