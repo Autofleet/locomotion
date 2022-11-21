@@ -242,6 +242,7 @@ const RideButtons = ({
       );
     }
     setNumberOfPassengers(1);
+    setPassengersCounterError(false);
     return null;
   }, [chosenService]);
   return (
