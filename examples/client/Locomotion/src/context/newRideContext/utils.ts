@@ -133,6 +133,7 @@ export const formatEstimationsResult = (service: any, estimationResult: any, tag
     id: service.id,
     priceCalculationId:
       estimation.priceCalculationId || estimation.highEtaAsapRide?.priceCalculationId,
+    estimationId: estimation.id,
     name: service.displayName,
     eta: estimation.minPickupEta,
     price: estimation.priceAmount || estimation.highEtaAsapRide?.priceAmount,

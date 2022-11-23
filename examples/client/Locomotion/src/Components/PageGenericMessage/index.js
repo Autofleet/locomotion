@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import styled, { ThemeContext } from 'styled-components';
 import { FONT_SIZES, FONT_WEIGHTS } from '../../context/theme';
-import noRides from '../../assets/no_rides.svg';
+import noMessages from '../../assets/no_messages.svg';
 import SvgIcon from '../SvgIcon';
 
 export const NoRidesImageContainer = styled.View`
@@ -47,7 +47,7 @@ export const PageGenericMessage = ({
   return (
     <CenterContainer addTop={addTop}>
       <NoRidesImageContainer>
-        <SvgIcon Svg={svg || noRides} width={157} height={171} fill={primaryColor} />
+        <SvgIcon Svg={svg || noMessages} width={157} height={171} fill={primaryColor} />
       </NoRidesImageContainer>
       <NoRidesListContainer>
         {title}
