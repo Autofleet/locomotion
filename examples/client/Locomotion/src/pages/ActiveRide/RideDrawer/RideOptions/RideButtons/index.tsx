@@ -26,6 +26,7 @@ import { getFutureRideMaxDate, getFutureRideMinDate } from '../../../../../conte
 import settings from '../../../../../context/settings';
 import SETTINGS_KEYS from '../../../../../context/settings/keys';
 import { PAYMENT_METHODS } from '../../../../../pages/Payments/consts';
+import ErrorPopup from '../../../../../popups/TwoButtonPopup';
 
 const TIME_WINDOW_CHANGE_HIGHLIGHT_TIME_MS = 500;
 interface RideButtonsProps {
@@ -50,6 +51,7 @@ const RideButtons = ({
   } = useContext(RideStateContextContext);
   const [pickupTimeWindow, setPickupTimeWindow] = useState(0);
   const [pickupTimeWindowChangedHighlight, setPickupTimeWindowChangedHighlight] = useState(false);
+  const [highEtaPopupVisible, setHighEtaPopupVisible] = useState(false);
   const { getSettingByKey } = settings.useContainer();
   const {
     paymentMethods,
@@ -219,32 +221,64 @@ const RideButtons = ({
     );
   };
 
+  const allowRideOrderIfNoMatchedVehicles = chosenService?.allowRideOrderIfNoVehiclesMatched;
+
+  const isSelectButtonDisabled = () => (
+    (chosenService?.isHighEtaAsapRide ? !allowRideOrderIfNoMatchedVehicles : !chosenService)
+    || !!getClientOutstandingBalanceCard()
+  );
+
+  const selectButtonText = () => {
+    if (chosenService?.isHighEtaAsapRide) {
+      return i18n.t(allowRideOrderIfNoMatchedVehicles ? 'bottomSheetContent.ride.highEtaButton.enabled' : 'bottomSheetContent.ride.highEtaButton.disabled');
+    }
+    return i18n.t('general.select');
+  };
+
   return (
-    <Container>
-      <RowContainer>
-        <>
-          {isFutureRidesEnabled && renderFutureBooking()}
-          {displayPassenger ? <></> : renderRideNotes()}
-        </>
-      </RowContainer>
-      <RowContainer>
-        <>
-          {displayPassenger && renderRideNotes()}
-          {renderPaymentButton()}
-        </>
-      </RowContainer>
-      <StyledButton
-        testID="selectService"
-        disabled={(!chosenService || !!getClientOutstandingBalanceCard())}
-        onPress={() => {
+    <>
+      <Container>
+        <RowContainer>
+          <>
+            {isFutureRidesEnabled && renderFutureBooking()}
+            {displayPassenger ? <></> : renderRideNotes()}
+          </>
+        </RowContainer>
+        <RowContainer>
+          <>
+            {displayPassenger && renderRideNotes()}
+            {renderPaymentButton()}
+          </>
+        </RowContainer>
+        <StyledButton
+          testID="selectService"
+          disabled={isSelectButtonDisabled()}
+          onPress={() => {
+            if (chosenService?.isHighEtaAsapRide) {
+              setHighEtaPopupVisible(true);
+            } else {
+              changeBsPage(BS_PAGES.CONFIRM_PICKUP);
+            }
+          }}
+        >
+          <ButtonText testID="select">
+            {selectButtonText().toString()}
+          </ButtonText>
+        </StyledButton>
+      </Container>
+      <ErrorPopup
+        title={i18n.t('popups.highEtaConfirm.title')}
+        isVisible={highEtaPopupVisible}
+        text={i18n.t('popups.highEtaConfirm.text')}
+        cancelText={i18n.t('popups.highEtaConfirm.cancel')}
+        submitText={i18n.t('popups.highEtaConfirm.submit')}
+        onCancel={() => setHighEtaPopupVisible(false)}
+        onSubmit={() => {
+          setHighEtaPopupVisible(false);
           changeBsPage(BS_PAGES.CONFIRM_PICKUP);
         }}
-      >
-        <ButtonText testID="select">
-          {i18n.t('general.select').toString()}
-        </ButtonText>
-      </StyledButton>
-    </Container>
+      />
+    </>
   );
 };
 

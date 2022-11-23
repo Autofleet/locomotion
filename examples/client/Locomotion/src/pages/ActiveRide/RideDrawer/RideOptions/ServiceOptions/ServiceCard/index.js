@@ -15,7 +15,7 @@ import {
   ServiceDetails, TimeDetails,
   Title, Description,
   CarContainer, TitleContainer,
-  EstimatedText, WrapRow,
+  EstimatedText, WrapRow, HighEta,
 } from './styled';
 import Tag from '../../../../../../Components/Tag';
 import { RidePageContext } from '../../../../../../context/newRideContext';
@@ -30,7 +30,7 @@ const ServiceCard = ({ service, withBorder }) => {
   } = useContext(RidePageContext);
   const [popup, setPopup] = useState(null);
   const isFutureRide = ride.scheduledTo;
-  const unavailable = !service.currency;
+  const unavailable = !(service.eta || service.isHighEtaAsapRide);
   const unavailableText = i18n.t('rideDetails.unavailable');
   const serviceDisplayPrice = getFormattedPrice(service.currency, service.price);
   const isSelected = chosenService && chosenService.id === service.id;
@@ -61,6 +61,27 @@ const ServiceCard = ({ service, withBorder }) => {
     return minutesUntilPickup < 1
       ? i18n.t('general.now')
       : i18n.t('rideDetails.toolTipEta', { minutes: minutesUntilPickup });
+  };
+
+  const etaTimeDetails = () => {
+    if (service.isHighEtaAsapRide) {
+      return (
+        <HighEta theme={theme}>
+          {i18n.t('rideDetails.highEta')}
+        </HighEta>
+      );
+    }
+    return (
+      <TimeDetails>
+        <Eta>
+          {moment(service.eta).format('h:mm A')}
+        </Eta>
+        <Circle />
+        <Eta>
+          {getEta()}
+        </Eta>
+      </TimeDetails>
+    );
   };
 
   const getDescription = forFutureRidesView => (
@@ -121,15 +142,7 @@ const ServiceCard = ({ service, withBorder }) => {
           <WrapRow>
             {!isFutureRide
               ? (
-                <TimeDetails>
-                  <Eta>
-                    {moment(service.eta).format('h:mm A')}
-                  </Eta>
-                  <Circle />
-                  <Eta>
-                    {getEta()}
-                  </Eta>
-                </TimeDetails>
+                etaTimeDetails()
               )
               : getDescription(isFutureRide)}
 

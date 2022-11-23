@@ -15,7 +15,8 @@
         "type": {
             "pickup": "Pickup",
             "dropoff": "Drop off"
-        }
+        },
+        "highEta": "ETA is higher than usual" 
     },
     "general": {
         "back": "Back",
@@ -273,6 +274,12 @@
         "futureRideCanceled": {
             "title": "Your ride has been canceled",
             "subTitle": "Sorry it didn't work out this time, please create an order to try again"
+        },
+        "highEtaConfirm": {
+            "title": "Important!",
+            "text": "Please note that this service is currently experiencing high ETAs. Finding a driver might take longer than usual.\n\nTo proceed with ordering a ride hit 'Continue'.",
+            "submit": "Continue",
+            "cancel": "Back"
         },
         "defaultFooterButton": "OK"
     },
@@ -575,6 +582,10 @@
           "call": "Call",
           "sms": "SMS",
           "cancel": "Cancel"
+        },
+        "highEtaButton": {
+            "enabled": "Select",
+            "disabled": "Temporarily unavailable, try again soon."
         }
     }
   },
