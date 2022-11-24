@@ -277,9 +277,9 @@
         },
         "highEtaConfirm": {
             "title": "Important!",
-            "text": "Please note that this service is currently experiencing high ETAs. Finding a driver might take longer than usual.\n\nTo proceed with ordering a ride hit 'Continue'.",
+            "text": "Please note that this service is currently experiencing high ETAs.\n\nFinding a driver might take longer than usual." ,
             "submit": "Continue",
-            "cancel": "Back"
+            "back": "Back"
         },
         "defaultFooterButton": "OK"
     },

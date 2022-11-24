@@ -10,20 +10,20 @@ interface TwoButtonPopupProps {
   title: string;
   text: string;
   isVisible: boolean;
-  cancelText: string;
-  submitText: string;
-  onCancel: any;
-  onSubmit: any;
+  defualtText: string;
+  secondText: string;
+  onDefaultPress: any;
+  onSecondPress: any;
 }
 
 const TwoButtonPopup = ({
   title,
   text,
   isVisible,
-  cancelText,
-  onCancel,
-  submitText,
-  onSubmit,
+  secondText,
+  onSecondPress,
+  defualtText,
+  onDefaultPress,
 }: TwoButtonPopupProps) => (
   <Modal isVisible={isVisible}>
     <Container>
@@ -32,11 +32,11 @@ const TwoButtonPopup = ({
         <SubTitle>{text}</SubTitle>
       </TextContainer>
       <ButtonContainer>
-        <RoundedButton onPress={onSubmit} style={{ marginBottom: 10 }}>
-          {submitText}
+        <RoundedButton onPress={onDefaultPress} style={{ marginBottom: 10 }}>
+          {defualtText}
         </RoundedButton>
-        <RoundedButton onPress={onCancel} hollow>
-          {cancelText}
+        <RoundedButton onPress={onSecondPress} hollow>
+          {secondText}
         </RoundedButton>
       </ButtonContainer>
     </Container>
