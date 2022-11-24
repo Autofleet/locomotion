@@ -5,15 +5,8 @@ import SelectDropdown from 'react-native-select-dropdown';
 import SvgIcon from '../SvgIcon';
 import person from '../../assets/person.svg';
 import {
-  FONT_SIZES, FONT_SIZES_VALUES, FONT_WEIGHTS,
+  FONT_SIZES, FONT_SIZES_VALUES, FONT_WEIGHTS, convertHextToRgba,
 } from '../../context/theme';
-
-const hextToRgba = (hex: string, alpha: number) => {
-  const r = parseInt(hex.slice(1, 3), 16);
-  const g = parseInt(hex.slice(3, 5), 16);
-  const b = parseInt(hex.slice(5, 7), 16);
-  return `${r},${g},${b},${alpha}`;
-};
 
 const ERROR_COLOR = '#f35657';
 const StyledPop = styled(SelectDropdown).attrs(({ theme, icon = person, error }) => ({
@@ -50,7 +43,7 @@ const StyledRow = styled(View)`
   flex-direction: row;
   align-items: center;
   padding-horizontal: 8;
-  background-color: ${({ theme, selected }) => (selected ? `rgba(${hextToRgba(theme.primaryColor, 0.1)})` : '#ffffff')};
+  background-color: ${({ theme, selected }) => (selected ? `rgba(${convertHextToRgba(theme.primaryColor, 0.1)})` : '#ffffff')};
   border-width: 1;
   border-color: #f1f2f6;
 `;
@@ -83,12 +76,24 @@ const StyledSelectRow = ({ item, theme, selected }) => (
 
   </StyledRow>
 );
-const SelectModal = ({ data, onSelect, onError }) => {
+
+interface Item {
+  value: any;
+  label: string;
+}
+
+interface SelectModalProps {
+  data: Item[];
+  onSelect: (item: Item) => void;
+  onError: (error: boolean) => void;
+}
+
+const SelectModal = ({ data, onSelect, onError }: SelectModalProps) => {
   const [selectedItem, setSelectedItem] = useState(null);
   const [error, setError] = useState(false);
 
   useEffect(() => {
-    if (data && data.length) {
+    if (data?.length) {
       if (!selectedItem) {
         setSelectedItem(data[0]);
       } else {

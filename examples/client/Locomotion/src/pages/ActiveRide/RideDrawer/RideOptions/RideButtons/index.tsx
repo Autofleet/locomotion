@@ -33,6 +33,11 @@ import {
 import { PAYMENT_METHODS } from '../../../../../pages/Payments/consts';
 import PassengersCounter from './PassengersCounter';
 
+const POOLING_TYPES = {
+  NO: 'no',
+  ACTIVE: 'active',
+  PASSIVE: 'passive',
+};
 
 const TIME_WINDOW_CHANGE_HIGHLIGHT_TIME_MS = 500;
 interface RideButtonsProps {
@@ -231,7 +236,7 @@ const RideButtons = ({
   };
 
   useEffect(() => {
-    if (!chosenService || (chosenService.pooling && chosenService.pooling === 'no')) {
+    if (!chosenService || chosenService?.pooling === POOLING_TYPES.NO) {
       setNumberOfPassengers(null);
       setPassengersCounterError(false);
     }

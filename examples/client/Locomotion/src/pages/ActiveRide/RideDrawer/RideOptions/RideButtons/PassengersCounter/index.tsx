@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 
 
-import SelectPop from '../../../../../../Components/SelectModal';
+import SelectModal from '../../../../../../Components/SelectModal';
 
 
 const PassengersCounter = ({ service, onSelect, onError = () => null }) => {
@@ -21,7 +21,7 @@ const PassengersCounter = ({ service, onSelect, onError = () => null }) => {
     onSelect(item.value);
   };
   return (
-    <SelectPop
+    <SelectModal
       data={passengersOptions}
       onSelect={onItemSelect}
       onError={onError}
