@@ -258,7 +258,7 @@ const RideButtons = ({
       </RowContainer>
       <RowContainer>
 
-        {chosenService && chosenService.pooling && chosenService.pooling !== 'no'
+        {chosenService?.pooling !== POOLING_TYPES.NO
           ? (
             <PassengersCounter
               service={chosenService}
