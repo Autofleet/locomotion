@@ -868,7 +868,6 @@ const RidePageContextProvider = ({ children }: {
 
       const rideToCreate = {
         serviceId: chosenService?.id,
-        estimationId: chosenService?.estimationId,
         paymentMethodId: ride.paymentMethodId,
         rideType: 'passenger',
         ...(ride.scheduledTo && { scheduledTo: scheduledToMoment }),
