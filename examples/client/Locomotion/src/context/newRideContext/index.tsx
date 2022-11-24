@@ -203,7 +203,7 @@ export const RidePageContext = createContext<RidePageContextInterface>({
   unconfirmedPickupTime: null,
   loadRide: async (rideId: string) => undefined,
   getRidesByParams: async (params: any) => [],
-  numberOfPassengers: 1,
+  numberOfPassengers: null,
   setNumberOfPassengers: () => undefined,
 });
 
@@ -233,7 +233,7 @@ const RidePageContextProvider = ({ children }: {
   const [ridePopup, setRidePopup] = useState<RidePopupNames | null>(null);
   const [unconfirmedPickupTime, setUnconfirmedPickupTime] = useState<number | null>(null);
   const getRouteName = () => navigationService?.getNavigator()?.getCurrentRoute().name;
-  const [numberOfPassengers, setNumberOfPassengers] = useState<number>(1);
+  const [numberOfPassengers, setNumberOfPassengers] = useState<number | null>(null);
 
   const intervalRef = useRef<any>();
 

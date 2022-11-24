@@ -230,21 +230,13 @@ const RideButtons = ({
     );
   };
 
-
-  const renderPassengersCounter = useCallback(() => {
-    if (chosenService && chosenService.pooling && chosenService.pooling !== 'no') {
-      return (
-        <PassengersCounter
-          service={chosenService}
-          onSelect={setNumberOfPassengers}
-          onError={setPassengersCounterError}
-        />
-      );
+  useEffect(() => {
+    if (!chosenService || (chosenService.pooling && chosenService.pooling === 'no')) {
+      setNumberOfPassengers(null);
+      setPassengersCounterError(false);
     }
-    setNumberOfPassengers(1);
-    setPassengersCounterError(false);
-    return null;
   }, [chosenService]);
+
   return (
     <Container>
       <RowContainer>
@@ -261,7 +253,14 @@ const RideButtons = ({
       </RowContainer>
       <RowContainer>
 
-        {renderPassengersCounter()}
+        {chosenService && chosenService.pooling && chosenService.pooling !== 'no'
+          ? (
+            <PassengersCounter
+              service={chosenService}
+              onSelect={setNumberOfPassengers}
+              onError={setPassengersCounterError}
+            />
+          ) : null}
 
         <StyledButton
           testID="selectService"
