@@ -32,6 +32,7 @@ import {
 } from '../../../../../context/theme';
 import { PAYMENT_METHODS } from '../../../../../pages/Payments/consts';
 import PassengersCounter from './PassengersCounter';
+import ErrorPopup from '../../../../../popups/TwoButtonPopup';
 
 const POOLING_TYPES = {
   NO: 'no',
@@ -65,6 +66,7 @@ const RideButtons = ({
   } = useContext(RideStateContextContext);
   const [pickupTimeWindow, setPickupTimeWindow] = useState(0);
   const [pickupTimeWindowChangedHighlight, setPickupTimeWindowChangedHighlight] = useState(false);
+  const [highEtaPopupVisible, setHighEtaPopupVisible] = useState(false);
   const { getSettingByKey } = settings.useContainer();
   const {
     paymentMethods,
@@ -235,6 +237,7 @@ const RideButtons = ({
     );
   };
 
+
   useEffect(() => {
     if (!chosenService || chosenService?.pooling === POOLING_TYPES.NO) {
       setNumberOfPassengers(null);
@@ -242,42 +245,75 @@ const RideButtons = ({
     }
   }, [chosenService]);
 
+  const allowRideOrderIfNoMatchedVehicles = chosenService?.allowRideOrderIfNoVehiclesMatched;
+
+  const isSelectButtonDisabled = () => (
+    !(chosenService?.isHighEtaAsapRide ? allowRideOrderIfNoMatchedVehicles : chosenService)
+    || !!getClientOutstandingBalanceCard()
+  );
+
+  const selectButtonText = () => {
+    if (chosenService?.isHighEtaAsapRide) {
+      return i18n.t(allowRideOrderIfNoMatchedVehicles ? 'bottomSheetContent.ride.highEtaButton.enabled' : 'bottomSheetContent.ride.highEtaButton.disabled');
+    }
+    return i18n.t('general.select');
+  };
+
   return (
-    <Container>
-      <RowContainer>
-        <>
+    <>
+      <Container>
+        <RowContainer>
           {isFutureRidesEnabled && renderFutureBooking()}
           {displayPassenger ? <></> : renderRideNotes()}
-        </>
-      </RowContainer>
-      <RowContainer>
-        <>
+
+        </RowContainer>
+        <RowContainer>
+
           {displayPassenger && renderRideNotes()}
           {renderPaymentButton()}
-        </>
-      </RowContainer>
-      <RowContainer>
 
-        {chosenService && chosenService?.pooling !== POOLING_TYPES.NO
-          ? (
-            <PassengersCounter
-              service={chosenService}
-              onSelect={setNumberOfPassengers}
-              onError={setPassengersCounterError}
-            />
-          ) : null}
+        </RowContainer>
+        <RowContainer>
 
-        <StyledButton
-          testID="selectService"
-          disabled={!chosenService || !!getClientOutstandingBalanceCard() || passengersCounterError}
-          onPress={() => {
-            changeBsPage(BS_PAGES.CONFIRM_PICKUP);
-          }}
-        >
-          <ButtonText testID="select">{i18n.t('general.select').toString()}</ButtonText>
-        </StyledButton>
-      </RowContainer>
-    </Container>
+          {chosenService && chosenService?.pooling !== POOLING_TYPES.NO
+            ? (
+              <PassengersCounter
+                service={chosenService}
+                onSelect={setNumberOfPassengers}
+                onError={setPassengersCounterError}
+              />
+            ) : null}
+
+          <StyledButton
+            testID="selectService"
+            disabled={isSelectButtonDisabled()}
+            onPress={() => {
+              if (chosenService?.isHighEtaAsapRide) {
+                setHighEtaPopupVisible(true);
+              } else {
+                changeBsPage(BS_PAGES.CONFIRM_PICKUP);
+              }
+            }}
+          >
+            <ButtonText testID="select">
+              {selectButtonText().toString()}
+            </ButtonText>
+          </StyledButton>
+        </RowContainer>
+      </Container>
+      <ErrorPopup
+        title={i18n.t('popups.highEtaConfirm.title')}
+        isVisible={highEtaPopupVisible}
+        text={i18n.t('popups.highEtaConfirm.text')}
+        defualtText={i18n.t('popups.highEtaConfirm.back')}
+        secondText={i18n.t('popups.highEtaConfirm.submit')}
+        onDefaultPress={() => setHighEtaPopupVisible(false)}
+        onSecondPress={() => {
+          setHighEtaPopupVisible(false);
+          changeBsPage(BS_PAGES.CONFIRM_PICKUP);
+        }}
+      />
+    </>
   );
 };
 
