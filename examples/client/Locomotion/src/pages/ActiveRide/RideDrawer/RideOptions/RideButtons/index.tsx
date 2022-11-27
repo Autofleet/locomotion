@@ -1,4 +1,6 @@
-import React, { useContext, useState, useEffect } from 'react';
+import React, {
+  useContext, useState, useEffect, useCallback,
+} from 'react';
 import DatePicker from 'react-native-date-picker';
 import moment from 'moment';
 import { ThemeContext } from 'styled-components';
@@ -25,8 +27,18 @@ import cashPaymentMethod from '../../../../../pages/Payments/cashPaymentMethod';
 import { getFutureRideMaxDate, getFutureRideMinDate } from '../../../../../context/newRideContext/utils';
 import settings from '../../../../../context/settings';
 import SETTINGS_KEYS from '../../../../../context/settings/keys';
+import {
+  getTextColorForTheme,
+} from '../../../../../context/theme';
 import { PAYMENT_METHODS } from '../../../../../pages/Payments/consts';
+import PassengersCounter from './PassengersCounter';
 import ErrorPopup from '../../../../../popups/TwoButtonPopup';
+
+const POOLING_TYPES = {
+  NO: 'no',
+  ACTIVE: 'active',
+  PASSIVE: 'passive',
+};
 
 const TIME_WINDOW_CHANGE_HIGHLIGHT_TIME_MS = 500;
 interface RideButtonsProps {
@@ -44,8 +56,11 @@ const RideButtons = ({
     chosenService,
     setUnconfirmedPickupTime,
     unconfirmedPickupTime,
+    setNumberOfPassengers,
     defaultService,
   } = useContext(RidePageContext);
+
+
   const {
     changeBsPage,
   } = useContext(RideStateContextContext);
@@ -64,6 +79,7 @@ const RideButtons = ({
   const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
   const [isFutureRidesEnabled, setIsFutureRidesEnabled] = useState(true);
   const [minMinutesBeforeFutureRide, setMinMinutesBeforeFutureRide] = useState(null);
+  const [passengersCounterError, setPassengersCounterError] = useState(false);
   const firstDate = () => moment(ride?.scheduledTo || undefined).add(ride?.scheduledTo ? 0 : (minMinutesBeforeFutureRide || 0) + 1, 'minutes').toDate();
   const [tempSelectedDate, setTempSelectedDate] = useState(firstDate());
 
@@ -221,6 +237,14 @@ const RideButtons = ({
     );
   };
 
+
+  useEffect(() => {
+    if (!chosenService || chosenService?.pooling === POOLING_TYPES.NO) {
+      setNumberOfPassengers(null);
+      setPassengersCounterError(false);
+    }
+  }, [chosenService]);
+
   const allowRideOrderIfNoMatchedVehicles = chosenService?.allowRideOrderIfNoVehiclesMatched;
 
   const isSelectButtonDisabled = () => (
@@ -239,32 +263,43 @@ const RideButtons = ({
     <>
       <Container>
         <RowContainer>
-          <>
-            {isFutureRidesEnabled && renderFutureBooking()}
-            {displayPassenger ? <></> : renderRideNotes()}
-          </>
+          {isFutureRidesEnabled && renderFutureBooking()}
+          {displayPassenger ? <></> : renderRideNotes()}
+
         </RowContainer>
         <RowContainer>
-          <>
-            {displayPassenger && renderRideNotes()}
-            {renderPaymentButton()}
-          </>
+
+          {displayPassenger && renderRideNotes()}
+          {renderPaymentButton()}
+
         </RowContainer>
-        <StyledButton
-          testID="selectService"
-          disabled={isSelectButtonDisabled()}
-          onPress={() => {
-            if (chosenService?.isHighEtaAsapRide) {
-              setHighEtaPopupVisible(true);
-            } else {
-              changeBsPage(BS_PAGES.CONFIRM_PICKUP);
-            }
-          }}
-        >
-          <ButtonText testID="select">
-            {selectButtonText().toString()}
-          </ButtonText>
-        </StyledButton>
+        <RowContainer>
+
+          {chosenService && chosenService?.pooling !== POOLING_TYPES.NO
+            ? (
+              <PassengersCounter
+                service={chosenService}
+                onSelect={setNumberOfPassengers}
+                onError={setPassengersCounterError}
+              />
+            ) : null}
+
+          <StyledButton
+            testID="selectService"
+            disabled={isSelectButtonDisabled()}
+            onPress={() => {
+              if (chosenService?.isHighEtaAsapRide) {
+                setHighEtaPopupVisible(true);
+              } else {
+                changeBsPage(BS_PAGES.CONFIRM_PICKUP);
+              }
+            }}
+          >
+            <ButtonText testID="select">
+              {selectButtonText().toString()}
+            </ButtonText>
+          </StyledButton>
+        </RowContainer>
       </Container>
       <ErrorPopup
         title={i18n.t('popups.highEtaConfirm.title')}

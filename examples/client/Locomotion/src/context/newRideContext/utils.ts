@@ -147,6 +147,7 @@ export const formatEstimationsResult = (service: any, estimationResult: any, tag
     description: service.displayDescription,
     priority: service.priority,
     serviceAvailabilitiesNumber: service.serviceAvailabilities.length,
+    pooling: service.pooling,
     pickupWindowSizeInMinutes: service.pickupWindowSizeInMinutes,
     isHighEtaAsapRide: !!estimation.highEtaAsapRide,
     allowRideOrderIfNoVehiclesMatched: service.allowRideOrderIfNoVehiclesMatched,
