@@ -18,7 +18,7 @@ const PassengersCounter = ({ service, onSelect, onError = () => null }) => {
   const [passengersOptions, setPassengersOptions] = useState([]);
 
   const onItemSelect = (item) => {
-    onSelect(item.value);
+    onSelect(item?.value);
   };
   return (
     <SelectModal

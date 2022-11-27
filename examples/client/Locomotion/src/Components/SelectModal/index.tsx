@@ -106,6 +106,10 @@ const SelectModal = ({ data, onSelect, onError }: SelectModalProps) => {
     onError(error);
   }, [error]);
 
+  useEffect(() => {
+    onSelect(selectedItem);
+  }, [selectedItem]);
+
   return (
     <StyledPop
       error={error}
