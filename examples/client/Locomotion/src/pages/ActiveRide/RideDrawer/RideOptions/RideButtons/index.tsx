@@ -248,8 +248,8 @@ const RideButtons = ({
   const allowRideOrderIfNoMatchedVehicles = chosenService?.allowRideOrderIfNoVehiclesMatched;
 
   const isSelectButtonDisabled = () => (
-    !(chosenService?.isHighEtaAsapRide ? allowRideOrderIfNoMatchedVehicles : chosenService)
-    || !!getClientOutstandingBalanceCard()
+    !chosenService || !(chosenService?.isHighEtaAsapRide ? allowRideOrderIfNoMatchedVehicles : chosenService)
+    || !!getClientOutstandingBalanceCard() || passengersCounterError
   );
 
   const selectButtonText = () => {
