@@ -1,6 +1,4 @@
 import network from '../../services/network';
-import * as settingsApi from '../settings/api';
-
 
 export const ImageUpload = async (formData) => {
   const { data } = await network.post('api/v1/me/image-upload', formData, {
@@ -58,10 +56,5 @@ export const getUserCoupon = async () => {
 
 export const createUserCoupon = async (code) => {
   const { data } = await network.post('api/v1/me/customers/coupon', { code });
-  return data;
-};
-
-export const logoutUser = async (code) => {
-  const { data } = await network.post('api/v1/me/logout');
   return data;
 };

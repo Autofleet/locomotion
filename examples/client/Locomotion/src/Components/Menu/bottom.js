@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { Fragment } from 'react';
+import Config from 'react-native-config';
 import styled from 'styled-components';
 import { FONT_SIZES, FONT_WEIGHTS } from '../../context/theme';
 import { getVersion } from '../../services/device';
@@ -32,12 +33,20 @@ export const BottomTextBold = styled.Text`
 
 const appVersion = getVersion();
 
+const shouldHideAutofleet = Config.HIDE_AUTOFLEET && Config.HIDE_AUTOFLEET === 'true';
+
 export default () => (
+
   <BottomContainer>
     <BottomFlexContainer>
       <BottomText numberOfLines={1}>
-        powered by
-        <BottomTextBold> Autofleet </BottomTextBold>
+        {!shouldHideAutofleet
+  && (
+    <Fragment>
+      powered by
+      <BottomTextBold> Autofleet </BottomTextBold>
+    </Fragment>
+  )}
         {`v. ${appVersion}`}
       </BottomText>
     </BottomFlexContainer>

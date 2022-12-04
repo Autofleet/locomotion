@@ -23,7 +23,8 @@
         "cancel": "Cancel",
         "skip": "Skip",
         "select": "Select",
-        "now": "Now"
+        "now": "Now",
+        "noTimeWindow": "ASAP"
     },
     "login": {
         "getStarted": "Get started!",
@@ -413,6 +414,10 @@
                 "inputPlaceholder":"amount...",
                 "invalidAmountError": "Please enter a valid amount"
             }
+        },
+        "writeComment": {
+            "title": "Write a comment",
+            "placeholder": "Comments may be shared anonymously with drivers"
         }
     },
     "payments": {
@@ -500,7 +505,9 @@
     "confirmPickupTime": {
         "titleText": "Scheduled ride",
         "buttonText": "Set pick up time",
-        "pickupText": "Pick up on {{date}}, at {{time}}"
+        "pickupTextTime": "Pickup at {{afterTime}} - {{beforeTime}}",
+        "pickupTextDay": "On {{date}}",
+        "pickupTextToday": "Today, {{date}}"
     },
     "locationRequest": {
         "titleText": "Update location services",
@@ -514,7 +521,7 @@
     },
     "confirmingFutureRide": {
         "titleText": "Confirming your scheduled ride",
-        "subTitleText": "For {{date}}",
+        "subTitleText": "For {{date}} - {{beforeTime}}",
         "secondaryButtonText": "Cancel ride"
     },
     "cancelRide": {
@@ -560,7 +567,7 @@
         "riders": "Riders",
         "promoText": "Promo code",
         "addPayment": "Add Payment",
-        "chosePickupTime": "Time of departure",
+        "chosePickupTime": "Set your pickup window",
         "contactDriver": "Contact driver",
         "shareRide": "Share ride",
         "cancelRide": "Cancel ride",
