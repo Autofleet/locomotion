@@ -149,6 +149,7 @@ export const formatEstimationsResult = (service: any, estimationResult: any, tag
     serviceAvailabilitiesNumber: service.serviceAvailabilities.length,
     pooling: service.pooling,
     pickupWindowSizeInMinutes: service.pickupWindowSizeInMinutes,
+    futurePickupWindowSizeInMinutes: service.futurePickupWindowSizeInMinutes,
     isHighEtaAsapRide: !!estimation.highEtaAsapRide,
     allowRideOrderIfNoVehiclesMatched: service.allowRideOrderIfNoVehiclesMatched,
   };
