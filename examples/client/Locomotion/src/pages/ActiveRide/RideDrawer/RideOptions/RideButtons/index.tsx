@@ -140,7 +140,7 @@ const RideButtons = ({
       setTempSelectedDate(firstDate);
     };
     const afterTimeTitle = moment(tempSelectedDate).format('h:mm A');
-    const pickupWindow = (chosenService || defaultService)?.pickupWindowSizeInMinutes;
+    const pickupWindow = (chosenService || defaultService)?.futurePickupWindowSizeInMinutes;
     const beforeTimeTitle = (pickupWindow
       && moment(tempSelectedDate).add(pickupWindow, 'minutes').format('h:mm A'))
       || i18n.t('general.noTimeWindow');

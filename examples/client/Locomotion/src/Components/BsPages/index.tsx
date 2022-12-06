@@ -300,7 +300,7 @@ export const ConfirmPickupTime = (props: any) => {
   }, [minMinutesBeforeFutureRide]);
 
   const afterTimeTitle = moment(tempSelectedDate).format('h:mm A');
-  const pickupWindowTime = (chosenService || defaultService)?.pickupWindowSizeInMinutes;
+  const pickupWindowTime = (chosenService || defaultService)?.futurePickupWindowSizeInMinutes;
   const beforeTimeTitle = (pickupWindowTime
     && moment(tempSelectedDate).add(pickupWindowTime, 'minutes').format('h:mm A'))
     || i18n.t('general.noTimeWindow');
