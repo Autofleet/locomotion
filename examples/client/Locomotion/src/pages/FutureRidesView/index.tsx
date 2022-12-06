@@ -82,7 +82,7 @@ const FutureRidesView = ({ menuSide }: FutureRidesViewProps) => {
                   serviceName={service?.displayName}
                   paymentMethod={fRide?.payment?.paymentMethod}
                   scheduledTo={fRide?.scheduledTo || ''}
-                  pickupWindowTime={service?.pickupWindowSizeInMinutes}
+                  pickupWindowTime={service?.futurePickupWindowSizeInMinutes}
                 />
               );
             })}

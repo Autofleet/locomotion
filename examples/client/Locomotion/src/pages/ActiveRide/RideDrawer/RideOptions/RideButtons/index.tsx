@@ -123,8 +123,8 @@ const RideButtons = ({
   };
 
   useEffect(() => {
-    if (chosenService && pickupTimeWindow !== chosenService.pickupWindowSizeInMinutes) {
-      setPickupTimeWindow(chosenService.pickupWindowSizeInMinutes);
+    if (chosenService && pickupTimeWindow !== chosenService.futurePickupWindowSizeInMinutes) {
+      setPickupTimeWindow(chosenService.futurePickupWindowSizeInMinutes);
       setPickupTimeWindowChangedHighlight(true);
       animateShowBg(1, 0);
       setTimeout(() => {
