@@ -123,8 +123,8 @@ const RideButtons = ({
   };
 
   useEffect(() => {
-    if (chosenService && pickupTimeWindow !== chosenService.pickupWindowSizeInMinutes) {
-      setPickupTimeWindow(chosenService.pickupWindowSizeInMinutes);
+    if (chosenService && pickupTimeWindow !== chosenService.futurePickupWindowSizeInMinutes) {
+      setPickupTimeWindow(chosenService.futurePickupWindowSizeInMinutes);
       setPickupTimeWindowChangedHighlight(true);
       animateShowBg(1, 0);
       setTimeout(() => {
@@ -140,7 +140,7 @@ const RideButtons = ({
       setTempSelectedDate(firstDate);
     };
     const afterTimeTitle = moment(tempSelectedDate).format('h:mm A');
-    const pickupWindow = (chosenService || defaultService)?.pickupWindowSizeInMinutes;
+    const pickupWindow = (chosenService || defaultService)?.futurePickupWindowSizeInMinutes;
     const beforeTimeTitle = (pickupWindow
       && moment(tempSelectedDate).add(pickupWindow, 'minutes').format('h:mm A'))
       || i18n.t('general.noTimeWindow');
