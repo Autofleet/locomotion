@@ -378,7 +378,12 @@ const RidePageContextProvider = ({ children }: {
 
       const tags = getEstimationTags(estimations);
       const formattedEstimations = formatEstimations(services, estimations, tags);
-      setChosenService(formattedEstimations.find((e: any) => e.currency));
+      setChosenService((prevService) => {
+        if (prevService) {
+          return prevService;
+        }
+        return formattedEstimations.find((e: any) => e.currency);
+      });
       setDefaultService(formattedEstimations?.[0]);
       setServiceEstimations(formattedEstimations);
     } catch (e: any) {
