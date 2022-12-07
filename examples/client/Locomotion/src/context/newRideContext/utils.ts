@@ -131,19 +131,27 @@ export const formatEstimationsResult = (service: any, estimationResult: any, tag
   const estimation = estimationResult || {};
   return {
     id: service.id,
-    priceCalculationId: estimation.priceCalculationId,
+    priceCalculationId:
+      estimation.priceCalculationId || estimation.highEtaAsapRide?.priceCalculationId,
+    estimationId: estimation.id,
     name: service.displayName,
     eta: estimation.minPickupEta,
-    price: estimation.priceAmount,
-    currency: estimation.currency,
-    isPriceEstimated: isPriceEstimated(estimation.priceCalculationBasis),
+    price: estimation.priceAmount || estimation.highEtaAsapRide?.priceAmount,
+    currency: estimation.currency || estimation.highEtaAsapRide?.currency,
+    isPriceEstimated: isPriceEstimated(
+      estimation.priceCalculationBasis || estimation.highEtaAsapRide?.priceCalculationBasis,
+    ),
     availableSeats: service.maxPassengers || 4,
     tag: (Object.entries(tags).find(([, value]) => value === service.id) || [])[0],
     iconUrl: service.icon,
     description: service.displayDescription,
     priority: service.priority,
     serviceAvailabilitiesNumber: service.serviceAvailabilities.length,
+    pooling: service.pooling,
     pickupWindowSizeInMinutes: service.pickupWindowSizeInMinutes,
+    futurePickupWindowSizeInMinutes: service.futurePickupWindowSizeInMinutesWithFallback,
+    isHighEtaAsapRide: !!estimation.highEtaAsapRide,
+    allowRideOrderIfNoVehiclesMatched: service.allowRideOrderIfNoVehiclesMatched,
   };
 };
 

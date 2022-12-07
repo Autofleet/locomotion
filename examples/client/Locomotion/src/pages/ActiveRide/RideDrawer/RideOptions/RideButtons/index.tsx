@@ -1,4 +1,6 @@
-import React, { useContext, useState, useEffect } from 'react';
+import React, {
+  useContext, useState, useEffect, useCallback,
+} from 'react';
 import DatePicker from 'react-native-date-picker';
 import moment from 'moment';
 import { ThemeContext } from 'styled-components';
@@ -25,7 +27,18 @@ import cashPaymentMethod from '../../../../../pages/Payments/cashPaymentMethod';
 import { getFutureRideMaxDate, getFutureRideMinDate } from '../../../../../context/newRideContext/utils';
 import settings from '../../../../../context/settings';
 import SETTINGS_KEYS from '../../../../../context/settings/keys';
+import {
+  getTextColorForTheme,
+} from '../../../../../context/theme';
 import { PAYMENT_METHODS } from '../../../../../pages/Payments/consts';
+import PassengersCounter from './PassengersCounter';
+import ErrorPopup from '../../../../../popups/TwoButtonPopup';
+
+const POOLING_TYPES = {
+  NO: 'no',
+  ACTIVE: 'active',
+  PASSIVE: 'passive',
+};
 
 const TIME_WINDOW_CHANGE_HIGHLIGHT_TIME_MS = 500;
 interface RideButtonsProps {
@@ -43,13 +56,17 @@ const RideButtons = ({
     chosenService,
     setUnconfirmedPickupTime,
     unconfirmedPickupTime,
+    setNumberOfPassengers,
     defaultService,
   } = useContext(RidePageContext);
+
+
   const {
     changeBsPage,
   } = useContext(RideStateContextContext);
   const [pickupTimeWindow, setPickupTimeWindow] = useState(0);
   const [pickupTimeWindowChangedHighlight, setPickupTimeWindowChangedHighlight] = useState(false);
+  const [highEtaPopupVisible, setHighEtaPopupVisible] = useState(false);
   const { getSettingByKey } = settings.useContainer();
   const {
     paymentMethods,
@@ -62,6 +79,7 @@ const RideButtons = ({
   const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
   const [isFutureRidesEnabled, setIsFutureRidesEnabled] = useState(true);
   const [minMinutesBeforeFutureRide, setMinMinutesBeforeFutureRide] = useState(null);
+  const [passengersCounterError, setPassengersCounterError] = useState(false);
   const firstDate = () => moment(ride?.scheduledTo || undefined).add(ride?.scheduledTo ? 0 : (minMinutesBeforeFutureRide || 0) + 1, 'minutes').toDate();
   const [tempSelectedDate, setTempSelectedDate] = useState(firstDate());
 
@@ -105,8 +123,8 @@ const RideButtons = ({
   };
 
   useEffect(() => {
-    if (chosenService && pickupTimeWindow !== chosenService.pickupWindowSizeInMinutes) {
-      setPickupTimeWindow(chosenService.pickupWindowSizeInMinutes);
+    if (chosenService && pickupTimeWindow !== chosenService.futurePickupWindowSizeInMinutes) {
+      setPickupTimeWindow(chosenService.futurePickupWindowSizeInMinutes);
       setPickupTimeWindowChangedHighlight(true);
       animateShowBg(1, 0);
       setTimeout(() => {
@@ -122,7 +140,7 @@ const RideButtons = ({
       setTempSelectedDate(firstDate);
     };
     const afterTimeTitle = moment(tempSelectedDate).format('h:mm A');
-    const pickupWindow = (chosenService || defaultService)?.pickupWindowSizeInMinutes;
+    const pickupWindow = (chosenService || defaultService)?.futurePickupWindowSizeInMinutes;
     const beforeTimeTitle = (pickupWindow
       && moment(tempSelectedDate).add(pickupWindow, 'minutes').format('h:mm A'))
       || i18n.t('general.noTimeWindow');
@@ -219,32 +237,83 @@ const RideButtons = ({
     );
   };
 
+
+  useEffect(() => {
+    if (!chosenService || chosenService?.pooling === POOLING_TYPES.NO) {
+      setNumberOfPassengers(null);
+      setPassengersCounterError(false);
+    }
+  }, [chosenService]);
+
+  const allowRideOrderIfNoMatchedVehicles = chosenService?.allowRideOrderIfNoVehiclesMatched;
+
+  const isSelectButtonDisabled = () => (
+    !chosenService || !(chosenService?.isHighEtaAsapRide ? allowRideOrderIfNoMatchedVehicles : chosenService)
+    || !!getClientOutstandingBalanceCard() || passengersCounterError
+  );
+
+  const selectButtonText = () => {
+    if (chosenService?.isHighEtaAsapRide) {
+      return i18n.t(allowRideOrderIfNoMatchedVehicles ? 'bottomSheetContent.ride.highEtaButton.enabled' : 'bottomSheetContent.ride.highEtaButton.disabled');
+    }
+    return i18n.t('general.select');
+  };
+
   return (
-    <Container>
-      <RowContainer>
-        <>
+    <>
+      <Container>
+        <RowContainer>
           {isFutureRidesEnabled && renderFutureBooking()}
           {displayPassenger ? <></> : renderRideNotes()}
-        </>
-      </RowContainer>
-      <RowContainer>
-        <>
+
+        </RowContainer>
+        <RowContainer>
+
           {displayPassenger && renderRideNotes()}
           {renderPaymentButton()}
-        </>
-      </RowContainer>
-      <StyledButton
-        testID="selectService"
-        disabled={(!chosenService || !!getClientOutstandingBalanceCard())}
-        onPress={() => {
+
+        </RowContainer>
+        <RowContainer>
+
+          {chosenService && chosenService?.pooling !== POOLING_TYPES.NO
+            ? (
+              <PassengersCounter
+                service={chosenService}
+                onSelect={setNumberOfPassengers}
+                onError={setPassengersCounterError}
+              />
+            ) : null}
+
+          <StyledButton
+            testID="selectService"
+            disabled={isSelectButtonDisabled()}
+            onPress={() => {
+              if (chosenService?.isHighEtaAsapRide) {
+                setHighEtaPopupVisible(true);
+              } else {
+                changeBsPage(BS_PAGES.CONFIRM_PICKUP);
+              }
+            }}
+          >
+            <ButtonText testID="select">
+              {selectButtonText().toString()}
+            </ButtonText>
+          </StyledButton>
+        </RowContainer>
+      </Container>
+      <ErrorPopup
+        title={i18n.t('popups.highEtaConfirm.title')}
+        isVisible={highEtaPopupVisible}
+        text={i18n.t('popups.highEtaConfirm.text')}
+        defualtText={i18n.t('popups.highEtaConfirm.back')}
+        secondText={i18n.t('popups.highEtaConfirm.submit')}
+        onDefaultPress={() => setHighEtaPopupVisible(false)}
+        onSecondPress={() => {
+          setHighEtaPopupVisible(false);
           changeBsPage(BS_PAGES.CONFIRM_PICKUP);
         }}
-      >
-        <ButtonText testID="select">
-          {i18n.t('general.select').toString()}
-        </ButtonText>
-      </StyledButton>
-    </Container>
+      />
+    </>
   );
 };
 
