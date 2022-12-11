@@ -23,6 +23,8 @@ import { RIDE_STATES, STOP_POINT_STATES } from '../../lib/commonTypes';
 import PrecedingStopPointMarker from '../../Components/PrecedingStopPointMarker';
 import { decodePolyline, getPolylineList, getVehicleLocation } from '../../lib/polyline/utils';
 import { BottomSheetContext } from '../../context/bottomSheetContext';
+import { VirtualStationsContext } from '../../context/virtualStationsContext';
+
 import i18n from '../../I18n';
 
 export const MAP_EDGE_PADDING = {
@@ -83,6 +85,9 @@ export default React.forwardRef(({
   const {
     snapPoints,
   } = useContext(BottomSheetContext);
+
+  const { getMapMarkers } = useContext(VirtualStationsContext);
+
   const isMainPage = currentBsPage === BS_PAGES.ADDRESS_SELECTOR;
   const isChooseLocationOnMap = [BS_PAGES.CONFIRM_PICKUP, BS_PAGES.SET_LOCATION_ON_MAP]
     .includes(currentBsPage);
@@ -310,6 +315,7 @@ export default React.forwardRef(({
             key={ride.vehicle.id}
           />
         )}
+
         {finalStopPoints && !!precedingStopPoints.length
           && precedingStopPoints.map(sp => <PrecedingStopPointMarker key={sp.id} stopPoint={sp} />)
         }
@@ -349,6 +355,7 @@ export default React.forwardRef(({
             />
           ))) : null}
         {buildAvailabilityVehicles()}
+        {getMapMarkers()}
       </MapView>
       {isChooseLocationOnMap && (
         <LocationMarkerContainer pointerEvents="none">

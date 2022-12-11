@@ -66,6 +66,7 @@ import { MessagesContext } from '../../context/messages';
 import alertIcon from '../../assets/warning.svg';
 import { rideHistoryContext } from '../../context/rideHistory';
 import SafeView from '../../Components/SafeView';
+import VirtualStationsProvider, { VirtualStationsContext } from '../../context/virtualStationsContext';
 
 const BLACK_OVERLAY_SCREENS = [BS_PAGES.CANCEL_RIDE];
 
@@ -76,6 +77,7 @@ const RidePage = ({ mapSettings, navigation }) => {
   const [addressSelectorFocusIndex, setAddressSelectorFocusIndex] = useState(1);
   const [topMessage, setTopMessage] = useState(null);
   const { getSettingByKey } = settings.useContainer();
+
   const mapRef = useRef();
   const bottomSheetRef = useRef(null);
 
@@ -503,8 +505,10 @@ BS_PAGE_TO_COMP[currentBsPage] ? BS_PAGE_TO_COMP[currentBsPage]() : null
 
 export default props => (
   <AvailabilityContextProvider>
-    <RidePage
-      {...props}
-    />
+    <VirtualStationsProvider>
+      <RidePage
+        {...props}
+      />
+    </VirtualStationsProvider>
   </AvailabilityContextProvider>
 );
