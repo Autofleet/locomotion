@@ -85,6 +85,8 @@ const RidePage = ({ mapSettings, navigation }) => {
     currentBsPage, changeBsPage,
   } = useContext(RideStateContextContext);
   const { checkMessagesForToast } = useContext(MessagesContext);
+  const { isStationsEnabled } = useContext(VirtualStationsContext);
+
   const {
     rides: historyRides, loadRides: loadHistoryRides,
   } = useContext(rideHistoryContext);
@@ -505,10 +507,8 @@ BS_PAGE_TO_COMP[currentBsPage] ? BS_PAGE_TO_COMP[currentBsPage]() : null
 
 export default props => (
   <AvailabilityContextProvider>
-    <VirtualStationsProvider>
-      <RidePage
-        {...props}
-      />
-    </VirtualStationsProvider>
+    <RidePage
+      {...props}
+    />
   </AvailabilityContextProvider>
 );

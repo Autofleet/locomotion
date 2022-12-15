@@ -24,7 +24,7 @@ export const getPlaceDetails = async (placeId) => {
     },
   });
 
-  return data.result.geometry.location;
+  return data?.result?.geometry?.location;
 };
 
 export const getLocationTimezone = async (lat, lng, momentTimestamp) => {

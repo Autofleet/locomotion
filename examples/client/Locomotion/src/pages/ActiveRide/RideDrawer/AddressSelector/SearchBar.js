@@ -4,6 +4,7 @@ import React, {
 import { Animated, View } from 'react-native';
 import styled from 'styled-components';
 import { debounce } from 'lodash';
+import shortid from 'shortid';
 import Mixpanel from '../../../../services/Mixpanel';
 import BottomSheetInput from '../../../../Components/TextInput/BottomSheetInput';
 import i18n from '../../../../I18n';
@@ -93,9 +94,7 @@ const SearchBar = ({
   } = useContext(UserContext);
 
   const [searchTerm, setSearchTerm] = useState('');
-
-  const debouncedSearch = useCallback(debounce(async text => onSearch(text), 300), [locationGranted]);
-
+  const debouncedSearch = useCallback(debounce(async text => onSearch(text), 3000), [locationGranted]);
 
   const getSpPlaceholder = (sp) => {
     if (!isExpanded || !sp.useDefaultLocation) {
@@ -164,6 +163,7 @@ const SearchBar = ({
               description: null,
               lat: null,
               lng: null,
+              id: shortid.generate(),
             }, i);
             setSearchTerm(null);
           }}

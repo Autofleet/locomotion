@@ -8,10 +8,8 @@ import React, {
 import { Platform, Text, View } from 'react-native';
 import moment from 'moment';
 import Toast from 'react-native-toast-message';
-import {
-  Marker, MarkerAnimated, AnimatedRegion, Callout,
-} from 'react-native-maps';
 import Config from 'react-native-config';
+import { point, distance } from '@turf/turf';
 import { UserContext } from '../user';
 import OneSignal from '../../services/one-signal';
 import {
@@ -20,13 +18,18 @@ import {
 import * as navigationService from '../../services/navigation';
 import { MAIN_ROUTES, APP_ROUTES } from '../../pages/routes';
 import i18n from '../../I18n';
-import { RidePageContext } from '../newRideContext';
 import SettingContext from '../settings';
+import { getPosition, DEFAULT_COORDS } from '../../services/geo';
 import VirtualStationMarker from '../../Components/VirtualStationMarker';
 
 type Location = {
   lat: number;
   lng: number;
+}
+
+type Coords = {
+  latitude: number;
+  longitude: number;
 }
 
 export type Station = {
@@ -41,40 +44,120 @@ export type Station = {
 interface VirtualStationsContextInterface {
   loadVirtualStations: () => Promise<void>;
   getMapMarkers: () => any;
-
+  isStationsEnabled: boolean;
+  rawStations: Station[];
+  stationsList: Station[];
 }
 
 export const VirtualStationsContext = createContext<VirtualStationsContextInterface>({
   loadVirtualStations: async () => undefined,
   getMapMarkers: () => undefined,
+  isStationsEnabled: false,
+  rawStations: [],
+  stationsList: [],
 });
+/* {
 
+}; */
 const StationsProvider = ({ children }: { children: any }) => {
   const { user } = useContext(UserContext);
-  const { getSettingByKey } = SettingContext.useContainer();
-  const { getRidesByParams } = useContext(RidePageContext);
   const [isStationsEnabled, setIsStationsEnabled] = useState(false);
-  const [stationsUrl, setStationsUrl] = useState<string | null>(null);
-
   const [rawStations, setRawStations] = useState<Station[]>([]);
-
+  const [stationsList, setStationsList] = useState<Station[]>([]);
+  const [currentLocation, setCurrentLocation] = useState<Location>({
+    lat: DEFAULT_COORDS.coords.latitude,
+    lng: DEFAULT_COORDS.coords.longitude,
+  });
   const [isLoading, setIsLoading] = useState(false);
 
   const init = async () => {
-    const stations = await getStationsCall();
-    setRawStations(stations);
+    getCurrentLocation();
+    loadVirtualStations();
   };
 
   const loadVirtualStations = async () => {
-    // setRawStations(stationsUrl);
+    try {
+      const stations = await getStationsCall();
+      setRawStations(stations);
+    } catch (e) {
+      console.log(e);
+    }
   };
 
-  useEffect(() => {
-    if (stationsUrl) {
-      setIsStationsEnabled(true);
-      loadVirtualStations();
+  const getCurrentLocation = async () => {
+    const location = await getPosition();
+    if (!location) {
+      setCurrentLocation(formatCoords(DEFAULT_COORDS.coords));
+      return DEFAULT_COORDS.coords;
     }
-  }, [stationsUrl]);
+    setCurrentLocation(formatCoords(location.coords));
+    return location.coords;
+  };
+
+  const formatCoords = (coords:Coords) => ({ lat: coords.latitude, lng: coords.longitude });
+
+  const sortAndUpdateStations = useCallback((location = null) => {
+    const sortedStations = sortStationsByDistanceUsingTurf(location || currentLocation);
+    setStationsList(sortedStations);
+  }, [rawStations, currentLocation]);
+
+  const calculateDistance = (sourceLocation: Location, destinationLocation:Location) => {
+    const sourcePoint = point([sourceLocation.lng, sourceLocation.lat]);
+    const destinationPoint = point([destinationLocation.lng, destinationLocation.lat]);
+    const pointsDistance = distance(sourcePoint, destinationPoint, { units: 'meters' });
+    return pointsDistance;
+  };
+
+  const sortStationsByDistanceUsingTurf = (
+    sourceLocation: Location,
+  ) => {
+    const sortedStations = rawStations.sort((a, b) => {
+      const aDistance = calculateDistance({ lng: a.coordinates.lng, lat: a.coordinates.lat }, sourceLocation);
+      const bDistance = calculateDistance({ lng: b.coordinates.lng, lat: b.coordinates.lat }, sourceLocation);
+      return aDistance - bDistance;
+    });
+
+    return sortedStations;
+  };
+
+  const sortStationsByDistance = (stations) => {
+    const sortedStations = stations.sort((a, b) => a.distance - b.distance);
+    return sortedStations;
+  };
+
+  const addDistanceToStations = (stations:Station[], location:Location) => {
+    const stationsWithDistance = stations.map((station) => {
+      const stationDistance = calculateDistance({ lng: station.coordinates.lng, lat: station.coordinates.lat }, location);
+      return { ...station, distance: stationDistance };
+    });
+    return stationsWithDistance;
+  };
+
+  const getStationList = (sourceLocation: Location | null = null, filterId = null) => {
+    const location = sourceLocation || currentLocation;
+    const stationsWithDistance = addDistanceToStations(rawStations, location);
+    const sortedStations = sortStationsByDistance(stationsWithDistance);
+    let filteredStations = sortedStations;
+    if (filterId) {
+      filteredStations = sortedStations.filter(station => station.id === filterId);
+    }
+    setStationsList(filteredStations);
+    return filteredStations;
+  };
+
+
+  useEffect(() => {
+    if (rawStations?.length) {
+      sortAndUpdateStations();
+      setIsStationsEnabled(true);
+    }
+  }, [rawStations]);
+  /*
+  useEffect(() => {
+    if (rawStations) {
+      getStationsList(currentLocation);
+    }
+  }, [rawStations]); */
 
   useEffect(() => {
     if (user && user.id) {
@@ -87,26 +170,22 @@ const StationsProvider = ({ children }: { children: any }) => {
     <VirtualStationMarker station={station} onCalloutPress={(selectedStation:Station) => console.log('selectedStation', selectedStation)} />
   );
 
-  const getMapMarkers = () => useCallback([{
-    id: '4',
-    label: 'Station name',
-    address: '136 Madison Avenue, NY',
-    distance: 500,
-    coordinates: {
-      lat: 32.06837319164164,
-      lng: 34.789900166993874,
-    },
 
-  }].map((s) => {
-    console.log(s);
-    return createMapMarker(s);
-  }), [rawStations]);
+  const getMapMarkers = () => useCallback(rawStations.map(s =>
+  // console.log(s);
+    createMapMarker(s)), [rawStations]);
 
   return (
     <VirtualStationsContext.Provider
       value={{
         loadVirtualStations,
         getMapMarkers,
+        isStationsEnabled,
+        rawStations,
+        stationsList,
+        sortAndUpdateStations,
+        sortStationsByDistanceUsingTurf,
+        getStationList,
       }}
     >
       {children}

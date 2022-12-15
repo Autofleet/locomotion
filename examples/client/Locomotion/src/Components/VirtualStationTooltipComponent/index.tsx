@@ -18,13 +18,13 @@ const VirtualStationTooltip = ({ station, onPress }) => (
     <StationDetails>
       <Row>
         <StationName>{station.label}</StationName>
-        <DistanceText>{`${station.distance}m`}</DistanceText>
+        {station.distance ? <DistanceText>{`${station.distance}m`}</DistanceText> : null}
       </Row>
       <Row>
         <AddressText>{station.address}</AddressText>
       </Row>
     </StationDetails>
-    <BottomActions>
+    {/*     <BottomActions>
       <LinkText
         iconSide="right"
         icon={stationIcon}
@@ -33,7 +33,7 @@ const VirtualStationTooltip = ({ station, onPress }) => (
         {i18n.t('virtualStations.tooltip.setDropoff')}
 
       </LinkText>
-    </BottomActions>
+    </BottomActions> */}
   </Tooltip>
 );
 

@@ -86,11 +86,11 @@ export default React.forwardRef(({
     snapPoints,
   } = useContext(BottomSheetContext);
 
-  const { getMapMarkers } = useContext(VirtualStationsContext);
+  const { getMapMarkers, isStationsEnabled } = useContext(VirtualStationsContext);
 
   const isMainPage = currentBsPage === BS_PAGES.ADDRESS_SELECTOR;
   const isChooseLocationOnMap = [BS_PAGES.CONFIRM_PICKUP, BS_PAGES.SET_LOCATION_ON_MAP]
-    .includes(currentBsPage);
+    .includes(currentBsPage) && !isStationsEnabled;
   const {
     requestStopPoints, saveSelectedLocation, reverseLocationGeocode, ride,
     chosenService,

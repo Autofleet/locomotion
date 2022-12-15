@@ -19,6 +19,7 @@ import { BottomSheetContext, SNAP_POINT_STATES } from '../../../../context/botto
 import { BS_PAGES } from '../../../../context/ridePageStateContext/utils';
 import { RideStateContextContext } from '../../../../context/ridePageStateContext';
 import { UserContext } from '../../../../context/user';
+import { VirtualStationsContext } from '../../../../context/virtualStationsContext';
 import { FONT_SIZES, FONT_WEIGHTS } from '../../../../context/theme';
 import noHistoryIcon from '../../../../assets/bottomSheet/better_eta.svg';
 
@@ -72,6 +73,7 @@ const WelcomeText = styled.Text`
 const AddressSelectorBottomSheet = ({ addressSelectorFocusIndex }) => {
   const userContext = useContext(RidePageContext);
   const { locationGranted, user } = useContext(UserContext);
+  const { stationsList, isStationsEnabled } = useContext(VirtualStationsContext);
   const {
     changeBsPage,
   } = useContext(RideStateContextContext);
@@ -132,6 +134,7 @@ const AddressSelectorBottomSheet = ({ addressSelectorFocusIndex }) => {
       <NoHistoryText />
     );
   };
+
   return (
     <ContentContainer>
       {!isExpanded ? (
@@ -152,6 +155,14 @@ const AddressSelectorBottomSheet = ({ addressSelectorFocusIndex }) => {
         {isExpanded
           ? (
             <>
+              {userContext.addressSearchLabel && userContext.addressSearchLabel !== '' ? (
+                <AddressRow
+                  border={false}
+                  text={userContext.addressSearchLabel}
+                  onPress={() => null}
+                  label="Searching stations near:"
+                />
+              ) : null}
               {locationGranted ? (
                 <AddressRow
                   border={false}
@@ -161,7 +172,7 @@ const AddressSelectorBottomSheet = ({ addressSelectorFocusIndex }) => {
                   onPress={onCurrentLocation}
                 />
               ) : null}
-              {locationGranted ? (
+              {locationGranted && !isStationsEnabled ? (
                 <AddressRow
                   border={false}
                   text={i18n.t('addressView.setLocationOnMap')}
