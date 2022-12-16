@@ -133,16 +133,12 @@ const StationsProvider = ({ children }: { children: any }) => {
     return stationsWithDistance;
   };
 
-  const getStationList = (sourceLocation: Location | null = null, filterId = null) => {
+  const getStationList = (sourceLocation: Location | null = null) => {
     const location = sourceLocation || currentLocation;
     const stationsWithDistance = addDistanceToStations(rawStations, location);
     const sortedStations = sortStationsByDistance(stationsWithDistance);
-    let filteredStations = sortedStations;
-    if (filterId) {
-      filteredStations = sortedStations.filter(station => station.id === filterId);
-    }
-    setStationsList(filteredStations);
-    return filteredStations;
+    setStationsList(sortedStations);
+    return sortedStations;
   };
 
 
@@ -152,12 +148,6 @@ const StationsProvider = ({ children }: { children: any }) => {
       setIsStationsEnabled(true);
     }
   }, [rawStations]);
-  /*
-  useEffect(() => {
-    if (rawStations) {
-      getStationsList(currentLocation);
-    }
-  }, [rawStations]); */
 
   useEffect(() => {
     if (user && user.id) {

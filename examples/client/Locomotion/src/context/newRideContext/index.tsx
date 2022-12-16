@@ -5,8 +5,9 @@ import React, {
 import { AppState } from 'react-native';
 import Config from 'react-native-config';
 import { useNavigation } from '@react-navigation/native';
-import _ from 'lodash';
+import _, { pick } from 'lodash';
 import moment, { Moment } from 'moment-timezone';
+import debounce from 'lodash/debounce';
 import i18n from '../../I18n';
 import { FutureRidesContext } from '../futureRides';
 import { UserContext } from '../user';
@@ -417,10 +418,7 @@ const RidePageContextProvider = ({ children }: {
   );
   const resetSearchResults = () => {
     if (isStationsEnabled) {
-      setAddressLabelAndResults(
-        (getStationList()).map(formatStationToSearchResult),
-        null,
-      );
+      setAddressLabelAndResults(null);
     } else {
       setSearchResults(null);
     }
@@ -648,8 +646,7 @@ const RidePageContextProvider = ({ children }: {
     const [closesStation] = getStationList();
     if (isStationsEnabled) {
       currentAddress = {
-        id: closesStation.id,
-        externalId: closesStation.externalId,
+        externalId: closesStation.id,
         streetAddress: closesStation.label,
         description: closesStation.label,
         lat: closesStation.coordinates.lat,
@@ -663,7 +660,6 @@ const RidePageContextProvider = ({ children }: {
         if (s.useDefaultLocation) {
           return {
             ...s,
-            id: currentAddress.id,
             externalId: currentAddress.externalId,
             streetAddress: currentAddress.streetAddress,
             description: currentAddress.description,
@@ -705,8 +701,8 @@ const RidePageContextProvider = ({ children }: {
       updateRequestSp({
         description: newGeoLocation?.description,
         streetAddress: newGeoLocation?.streetAddress,
+        externalId: null,
       });
-      useStationSearch(newGeoLocation?.description);
       return true;
     }
     updateRequestSp(newGeoLocation);
@@ -760,7 +756,6 @@ const RidePageContextProvider = ({ children }: {
     const reqSps = [...requestStopPoints];
     reqSps[index || selectedInputIndex || 0] = {
       ...reqSps[index || selectedInputIndex || 0],
-      id: selectedItem.id || getRandomId(),
       externalId: selectedItem.externalId,
       description: selectedItem.fullText,
       streetAddress: selectedItem.text,
@@ -797,14 +792,14 @@ const RidePageContextProvider = ({ children }: {
   };
 
 
-  const setAddressLabelAndResults = (results: any[], label: string | null) => {
+  const setAddressLabelAndResults = (label: string | null) => {
     setAddressSearchLabel(label);
   };
 
 
   const getStationListAndFormat = useCallback((stations) => {
-    const stopPointsIds = requestStopPoints.map(sp => sp.id);
-    const filteredStations = stations.filter(sp => !stopPointsIds.includes(sp.id));
+    const stopPointsIds = requestStopPoints.map(sp => sp.externalId);
+    const filteredStations = stations.filter(sp => !stopPointsIds.includes(sp.externalId));
     return filteredStations.map(formatStationToSearchResult);
   }, [requestStopPoints]);
 
@@ -813,53 +808,65 @@ const RidePageContextProvider = ({ children }: {
   }, [stationsList]);
 
 
-  /*   useEffect(() => {
-    if (requestStopPoints.length) {
-      console.log('useEffect requestStopPoints');
-      getStationList(getSeachCords(requestStopPoints));
-    }
-  }, [requestStopPoints]); */
+  const useStationSearch = async (stopPoints, index) => {
+    if (index !== null && stopPoints?.length) {
+      const selected = stopPoints[index];
 
-  const getSeachCords = (stopPoints = null) => {
-    const sp = stopPoints.find(s => s.lat && s.lng);
-    if (!sp) {
-      return null;
-    }
+      if ((!selected.lat || !selected.lng) && selected?.description?.length) {
+        await debouncedSearch(selected.description);
+        return null;
+      }
 
-    return {
-      lat: sp.lat,
-      lng: sp.lng,
-    };
+      const [pickup] = stopPoints;
+      let result = {
+        type: 'currentLocation',
+        coords: null,
+      };
+
+      if (stopPoints[index].type === 'dropoff') {
+        if (pickup.lat && pickup.lng) {
+          result = {
+            type: 'pickup',
+            coords: {
+              lat: pickup.lat,
+              lng: pickup.lng,
+            },
+          };
+        }
+      }
+
+      const { type, coords } = result;
+      setAddressLabelAndResults(i18n.t(`virtualStations.search.${type}`));
+      await getStationList(coords);
+      return true;
+    }
+    resetSearchResults();
   };
 
-  const useStationSearch = async (searchText: string) => {
-    if (searchText === null || searchText === '') {
-      setAddressLabelAndResults(
-        (getStationList()).map(formatStationToSearchResult),
-        null,
-      );
+  useEffect(() => {
+    if (isStationsEnabled) {
+      useStationSearch(requestStopPoints, selectedInputIndex);
+    }
+  }, [requestStopPoints, isStationsEnabled, selectedInputIndex]);
+
+  const debouncedSearch = useCallback(debounce(async text => searchStation(text), 300), [isStationsEnabled]);
+  const searchStation = async (searchTerm: string) => {
+    const results = await loadAddress(searchTerm);
+    if (results?.length) {
+      const enrichedPlace = await enrichPlaceWithLocation(results[0].place_id);
+      const [parsedResult] = parseSearchResults([results[0]]);
+      getStationList(enrichedPlace);
+      setAddressLabelAndResults(parsedResult.fullText);
     } else {
-      const results = await loadAddress(searchText);
-      if (results?.length) {
-        const enrichedPlace = await enrichPlaceWithLocation(results[0].place_id);
-        const [parsedResult] = parseSearchResults([results[0]]);
-        setAddressLabelAndResults(
-          getStationList(enrichedPlace).map(formatStationToSearchResult),
-          parsedResult.fullText,
-        );
-      } else {
-        // sp / current location
-        setAddressLabelAndResults(
-          (getStationList()).map(formatStationToSearchResult),
-          i18n.t('virtualStations.search.addressNotFound'),
-        );
-      }
+      setAddressLabelAndResults(
+        i18n.t('virtualStations.search.addressNotFound'),
+      );
     }
   };
 
   const formatStationToSearchResult = (station: any) => ({
-    id: station.id,
-    externalId: station.id,
+    //    id: station.id,
+    externalId: station.externalId,
     text: station.label,
     subText: station.address,
     fullText: station.label,
@@ -868,13 +875,12 @@ const RidePageContextProvider = ({ children }: {
     distance: formatDistanceByMeasurement(station.distance, measureSystem),
   });
 
-  const searchAddress = async (searchText: string) => {
+
+  const searchAddress = useCallback(async (searchText: string) => {
     if (!isStationsEnabled) {
       useGoogleSearch(searchText);
-    } else {
-      useStationSearch(searchText);
     }
-  };
+  }, [isStationsEnabled]);
 
   const parseSearchResults = (results: any[]) => results.map((r) => {
     let formatedAddress = r.structured_formatting.main_text;
@@ -1200,6 +1206,7 @@ const RidePageContextProvider = ({ children }: {
       currency: calculation.currency,
     };
   };
+
 
   return (
     <RidePageContext.Provider

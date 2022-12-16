@@ -640,7 +640,9 @@
         "defaultStation": "This station was set to pickup by default"
     },
     "search": {
-        "addressNotFound": "No address found. Please try another search."
+        "addressNotFound": "No address found. Please try another search.",
+        "currentLocation": "Current location",
+        "pickup": "Pickup location"
     }
   }
 }

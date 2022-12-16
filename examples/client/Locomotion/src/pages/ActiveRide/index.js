@@ -130,6 +130,15 @@ const RidePage = ({ mapSettings, navigation }) => {
     setRide({});
     changeBsPage(BS_PAGES.ADDRESS_SELECTOR);
     setAddressSelectorFocusIndex(selectedIndex);
+    if (isStationsEnabled) {
+      updateRequestSp({
+        lat: null,
+        lng: null,
+        externalId: null,
+        description: null,
+        streetAddress: null,
+      }, selectedIndex);
+    }
   };
 
   const goBackToAddress = (selectedIndex, expand = true) => {

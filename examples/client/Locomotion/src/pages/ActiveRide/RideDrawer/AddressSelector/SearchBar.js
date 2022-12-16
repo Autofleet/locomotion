@@ -94,7 +94,7 @@ const SearchBar = ({
   } = useContext(UserContext);
 
   const [searchTerm, setSearchTerm] = useState('');
-  const debouncedSearch = useCallback(debounce(async text => onSearch(text), 3000), [locationGranted]);
+  const debouncedSearch = useCallback(debounce(async text => onSearch(text), 300), [locationGranted]);
 
   const getSpPlaceholder = (sp) => {
     if (!isExpanded || !sp.useDefaultLocation) {
@@ -146,6 +146,7 @@ const SearchBar = ({
               description: text,
               lat: null,
               lng: null,
+              externalId: null,
             }, i);
             setSearchTerm(text);
           }}
@@ -163,6 +164,7 @@ const SearchBar = ({
               description: null,
               lat: null,
               lng: null,
+              externalId: null,
               id: shortid.generate(),
             }, i);
             setSearchTerm(null);
