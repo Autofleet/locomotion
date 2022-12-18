@@ -702,6 +702,8 @@ const RidePageContextProvider = ({ children }: {
         description: newGeoLocation?.description,
         streetAddress: newGeoLocation?.streetAddress,
         externalId: null,
+        lat: null,
+        lng: null,
       });
       return true;
     }
@@ -996,6 +998,7 @@ const RidePageContextProvider = ({ children }: {
         text: lastSp.streetAddress || lastSp.description,
         fullText: lastSp.streetAddress || lastSp.description,
         placeId: lastSp.placeId,
+        externalId: lastSp.externalId,
         lat: lastSp.lat,
         lng: lastSp.lng,
       });
@@ -1264,6 +1267,7 @@ const RidePageContextProvider = ({ children }: {
         numberOfPassengers,
         setNumberOfPassengers,
         addressSearchLabel,
+        formatStationToSearchResult,
       }}
     >
       {children}
