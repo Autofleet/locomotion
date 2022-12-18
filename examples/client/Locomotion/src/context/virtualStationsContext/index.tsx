@@ -4,6 +4,8 @@ import React, {
   useEffect,
   useContext,
   useCallback,
+  forwardRef,
+  useRef,
 } from 'react';
 import { Platform, Text, View } from 'react-native';
 import moment from 'moment';
@@ -69,6 +71,7 @@ const StationsProvider = ({ children }: { children: any }) => {
     lng: DEFAULT_COORDS.coords.longitude,
   });
   const [isLoading, setIsLoading] = useState(false);
+  const stationCalloutsRef = useRef([]);
 
   const init = async () => {
     getCurrentLocation();
@@ -156,14 +159,32 @@ const StationsProvider = ({ children }: { children: any }) => {
   }, [user?.id]);
 
 
-  const createMapMarker = (station:Station) => (
-    <VirtualStationMarker station={station} onCalloutPress={(selectedStation:Station) => console.log('selectedStation', selectedStation)} />
-  );
+  const createMapMarker = (station:Station, stopPoints) => {
+    let type = 'default';
+
+    if (station.externalId === stopPoints[0].externalId) {
+      type = 'pickup';
+    }
+
+    if (station.externalId === stopPoints[1].externalId) {
+      type = 'dropoff';
+    }
 
 
-  const getMapMarkers = () => useCallback(rawStations.map(s =>
-  // console.log(s);
-    createMapMarker(s)), [rawStations]);
+    return (
+      <VirtualStationMarker
+        station={station}
+        type={type}
+        stopPointsonCalloutPress={(selectedStation:Station) => console.log('selectedStation', selectedStation)}
+        forwardedRef={stationCalloutsRef.current[station.externalId]}
+        ref={(r) => {
+          stationCalloutsRef.current[station.externalId] = r;
+        }}
+      />
+    );
+  };
+
+  const getMapMarkers = requestedStopPoints => useCallback(rawStations.map(s => createMapMarker(s, requestedStopPoints)), [requestedStopPoints]);
 
   return (
     <VirtualStationsContext.Provider
@@ -176,6 +197,7 @@ const StationsProvider = ({ children }: { children: any }) => {
         sortAndUpdateStations,
         sortStationsByDistanceUsingTurf,
         getStationList,
+        stationCalloutsRef,
       }}
     >
       {children}

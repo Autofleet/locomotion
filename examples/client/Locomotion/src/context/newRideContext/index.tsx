@@ -646,7 +646,7 @@ const RidePageContextProvider = ({ children }: {
     const [closesStation] = getStationList();
     if (isStationsEnabled) {
       currentAddress = {
-        externalId: closesStation.id,
+        externalId: closesStation.externalId,
         streetAddress: closesStation.label,
         description: closesStation.label,
         lat: closesStation.coordinates.lat,
@@ -796,15 +796,14 @@ const RidePageContextProvider = ({ children }: {
     setAddressSearchLabel(label);
   };
 
-
-  const getStationListAndFormat = useCallback((stations) => {
+  const formatStationsList = useCallback((stations) => {
     const stopPointsIds = requestStopPoints.map(sp => sp.externalId);
     const filteredStations = stations.filter(sp => !stopPointsIds.includes(sp.externalId));
     return filteredStations.map(formatStationToSearchResult);
   }, [requestStopPoints]);
 
   useEffect(() => {
-    setSearchResults(getStationListAndFormat(stationsList));
+    setSearchResults(formatStationsList(stationsList));
   }, [stationsList]);
 
 

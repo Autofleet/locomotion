@@ -339,6 +339,7 @@ export default React.forwardRef(({
                   isNext={isNext}
                   etaText={getStopPointEtaText(sp, isNext)}
                   isFutureRide={ride.scheduledTo}
+                  isStationsEnabled={isStationsEnabled}
                 />
               );
             })
@@ -355,7 +356,7 @@ export default React.forwardRef(({
             />
           ))) : null}
         {buildAvailabilityVehicles()}
-        {getMapMarkers()}
+        {getMapMarkers(requestStopPoints)}
       </MapView>
       {isChooseLocationOnMap && (
         <LocationMarkerContainer pointerEvents="none">
