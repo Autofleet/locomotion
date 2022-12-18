@@ -9,12 +9,13 @@ import {
 
 import styled, { ThemeContext } from 'styled-components';
 import SvgIcon from '../../../../Components/SvgIcon';
-import { RIDE_POPUPS } from '../../../../context/newRideContext/utils';
+import { RIDE_POPUPS, formatDistanceByMeasurement } from '../../../../context/newRideContext/utils';
 import GenericErrorPopup from '../../../../popups/GenericError';
 import i18n from '../../../../I18n';
 import AddressRow from './AddressLine';
 import SearchBar from './SearchBar';
 import { RidePageContext } from '../../../../context/newRideContext';
+
 import { BottomSheetContext, SNAP_POINT_STATES } from '../../../../context/bottomSheetContext';
 import { BS_PAGES } from '../../../../context/ridePageStateContext/utils';
 import { RideStateContextContext } from '../../../../context/ridePageStateContext';
@@ -117,6 +118,20 @@ const AddressSelectorBottomSheet = ({ addressSelectorFocusIndex }) => {
   };
 
   const getHistoryRows = () => {
+    if (isStationsEnabled && stationsList.length) {
+      return stationsList.map((h, i) => (
+        <AddressRow
+          testID={`searchResults_${i}`}
+          text={h.label}
+          subText={h.address}
+          key={h.externalId}
+          onPress={() => {
+            userContext.onAddressSelected(userContext.formatStationToSearchResult(h), false, 1);
+          }}
+        />
+      ));
+    }
+
     if (userContext.historyResults.length) {
       return userContext.historyResults.map((h, i) => (
         <AddressRow
