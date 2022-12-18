@@ -1,4 +1,3 @@
-import { Platform } from 'react-native';
 import styled from 'styled-components';
 import Button from '../../../../../../Components/Button';
 import { FONT_SIZES, FONT_WEIGHTS } from '../../../../../../context/theme';
@@ -69,6 +68,12 @@ display: flex;
 flex-direction: row;
 justify-content: space-between;
 align-items: center;
+`;
+
+export const HighEta = styled.Text`
+color: ${({ theme }) => theme.primaryColor};
+font-weight: bold;
+${FONT_SIZES.LARGE}
 `;
 
 export const Eta = styled.Text`
