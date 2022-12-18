@@ -38,7 +38,7 @@ export type Station = {
     id: string;
     label: string;
     address?: string;
-    externalId?: string;
+    externalId: string;
     coordinates: Location;
     distance?: number,
 }
@@ -49,6 +49,10 @@ interface VirtualStationsContextInterface {
   isStationsEnabled: boolean;
   rawStations: Station[];
   stationsList: Station[];
+  StationMarkers: any;
+  sortAndUpdateStations: () => void
+  getStationList: () => Station[]
+  stationCalloutsRef: any[];
 }
 
 export const VirtualStationsContext = createContext<VirtualStationsContextInterface>({
@@ -57,6 +61,10 @@ export const VirtualStationsContext = createContext<VirtualStationsContextInterf
   isStationsEnabled: false,
   rawStations: [],
   stationsList: [],
+  StationMarkers: [],
+  sortAndUpdateStations: () => undefined,
+  getStationList: () => [],
+  stationCalloutsRef: [],
 });
 
 const StationsProvider = ({ children }: { children: any }) => {
@@ -193,7 +201,6 @@ const StationsProvider = ({ children }: { children: any }) => {
         rawStations,
         stationsList,
         sortAndUpdateStations,
-        sortStationsByDistanceUsingTurf,
         getStationList,
         stationCalloutsRef,
       }}
