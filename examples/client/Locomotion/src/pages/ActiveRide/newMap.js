@@ -52,6 +52,7 @@ const PAGES_TO_SHOW_SP_MARKERS = [
   BS_PAGES.CANCEL_RIDE,
   BS_PAGES.CONFIRMING_RIDE,
   BS_PAGES.CONFIRM_FUTURE_RIDE,
+  BS_PAGES.CONFIRM_PICKUP,
 ];
 
 const PAGES_TO_SHOW_MY_LOCATION = [
@@ -62,6 +63,14 @@ const PAGES_TO_SHOW_MY_LOCATION = [
   BS_PAGES.CONFIRM_FUTURE_RIDE,
   BS_PAGES.SET_LOCATION_ON_MAP,
   BS_PAGES.CONFIRM_PICKUP,
+];
+
+const PAGES_TO_SHOW_STATIONS_MARKERS = [
+  BS_PAGES.ADDRESS_SELECTOR,
+  BS_PAGES.NO_PAYMENT,
+  BS_PAGES.NOT_IN_TERRITORY,
+  BS_PAGES.PICKUP_NOT_IN_TERRITORY,
+  BS_PAGES.NO_AVAILABLE_VEHICLES,
 ];
 
 const getFirstPendingStopPoint = sps => (sps || []).find(sp => sp.state
@@ -86,7 +95,7 @@ export default React.forwardRef(({
     snapPoints,
   } = useContext(BottomSheetContext);
 
-  const { getMapMarkers, isStationsEnabled } = useContext(VirtualStationsContext);
+  const { StationMarkers, isStationsEnabled } = useContext(VirtualStationsContext);
 
   const isMainPage = currentBsPage === BS_PAGES.ADDRESS_SELECTOR;
   const isChooseLocationOnMap = [BS_PAGES.CONFIRM_PICKUP, BS_PAGES.SET_LOCATION_ON_MAP]
@@ -356,7 +365,7 @@ export default React.forwardRef(({
             />
           ))) : null}
         {buildAvailabilityVehicles()}
-        {getMapMarkers(requestStopPoints)}
+        {isStationsEnabled && PAGES_TO_SHOW_STATIONS_MARKERS.includes(currentBsPage) ? <StationMarkers requestedStopPoints={requestStopPoints} /> : null}
       </MapView>
       {isChooseLocationOnMap && (
         <LocationMarkerContainer pointerEvents="none">

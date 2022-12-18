@@ -58,9 +58,7 @@ export const VirtualStationsContext = createContext<VirtualStationsContextInterf
   rawStations: [],
   stationsList: [],
 });
-/* {
 
-}; */
 const StationsProvider = ({ children }: { children: any }) => {
   const { user } = useContext(UserContext);
   const [isStationsEnabled, setIsStationsEnabled] = useState(false);
@@ -150,7 +148,7 @@ const StationsProvider = ({ children }: { children: any }) => {
       sortAndUpdateStations();
       setIsStationsEnabled(true);
     }
-  }, [rawStations]);
+  }, [rawStations?.length]);
 
   useEffect(() => {
     if (user && user.id) {
@@ -162,11 +160,11 @@ const StationsProvider = ({ children }: { children: any }) => {
   const createMapMarker = (station:Station, stopPoints) => {
     let type = 'default';
 
-    if (station.externalId === stopPoints[0].externalId) {
+    if (station?.externalId === stopPoints[0]?.externalId) {
       type = 'pickup';
     }
 
-    if (station.externalId === stopPoints[1].externalId) {
+    if (station?.externalId === stopPoints[1]?.externalId) {
       type = 'dropoff';
     }
 
@@ -184,13 +182,13 @@ const StationsProvider = ({ children }: { children: any }) => {
     );
   };
 
-  const getMapMarkers = requestedStopPoints => useCallback(rawStations.map(s => createMapMarker(s, requestedStopPoints)), [requestedStopPoints]);
+  const StationMarkers = ({ requestedStopPoints }) => useCallback(rawStations.map(s => createMapMarker(s, requestedStopPoints)), [requestedStopPoints]);
 
   return (
     <VirtualStationsContext.Provider
       value={{
         loadVirtualStations,
-        getMapMarkers,
+        StationMarkers,
         isStationsEnabled,
         rawStations,
         stationsList,

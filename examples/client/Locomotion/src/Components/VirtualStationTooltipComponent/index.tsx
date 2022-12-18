@@ -18,7 +18,7 @@ const VirtualStationTooltip = ({ station, onPress }) => (
     <StationDetails>
       <Row>
         <StationName>{station.label}</StationName>
-        {station.distance ? <DistanceText>{`${station.distance}m`}</DistanceText> : null}
+        {/* {station.distance ? <DistanceText>{`${station.distance}m`}</DistanceText> : null} */}
       </Row>
       <Row>
         <AddressText>{station.address}</AddressText>

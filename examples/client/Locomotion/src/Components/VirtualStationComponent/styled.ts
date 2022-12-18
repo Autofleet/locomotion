@@ -20,15 +20,15 @@ const ICONS:IconsMap = {
 export const Contrainer = styled.View`
     align-items: center;
     display: flex;
+    width: 25px;
 `;
 export const MarkerContainer = styled.TouchableOpacity`
-    width: 30px;
-    height: 30px;
+    width: 25px;
+    height: 25px;
     border-radius: 4px;
     border-color: ${({ isActive = false, theme }) => (!isActive ? theme.primaryColor : theme.primaryButtonTextColor)};
     background-color: ${({ isActive = false, theme }) => (isActive ? theme.primaryColor : theme.primaryButtonTextColor)};
     border-width: 2px;
-    padding: 2px;
 `;
 
 interface MarkerProps {
@@ -38,6 +38,12 @@ interface MarkerProps {
   isActive?: boolean;
   type?: string;
 }
+
+export const IconContainer = styled(View)`
+    display: flex;
+    align-items: center;
+    justify-content: center;
+`;
 
 export const StyledIcon = styled(SvgIcon).attrs(({
   theme,
@@ -51,9 +57,3 @@ export const StyledIcon = styled(SvgIcon).attrs(({
   height,
   fill: !isActive ? theme.primaryColor : theme.primaryButtonTextColor,
 }))``;
-
-export const IconContainer = styled(View)`
-    display: flex;
-    align-items: center;
-    justify-content: center;
-`;
