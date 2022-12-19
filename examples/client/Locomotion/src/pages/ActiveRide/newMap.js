@@ -71,6 +71,7 @@ const PAGES_TO_SHOW_STATIONS_MARKERS = [
   BS_PAGES.PICKUP_NOT_IN_TERRITORY,
   BS_PAGES.NO_AVAILABLE_VEHICLES,
   BS_PAGES.CONFIRM_PICKUP,
+  BS_PAGES.LOCATION_REQUEST,
 ];
 
 const getFirstPendingStopPoint = sps => (sps || []).find(sp => sp.state
