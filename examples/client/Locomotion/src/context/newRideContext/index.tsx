@@ -874,7 +874,7 @@ const RidePageContextProvider = ({ children }: {
     fullText: station.label,
     lat: station.coordinates.lat,
     lng: station.coordinates.lng,
-    distance: formatDistanceByMeasurement(station.distance, measureSystem),
+    // distance: formatDistanceByMeasurement(station.distance, measureSystem),
   });
 
 
