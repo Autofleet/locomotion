@@ -642,7 +642,8 @@
     "search": {
         "addressNotFound": "No address found. Please try another search.",
         "currentLocation": "Current location",
-        "pickup": "Pickup location"
+        "pickup": "Pickup location",
+        "title": "Searching stations near:"
     }
   }
 }

@@ -106,6 +106,7 @@ const RidePage = ({ mapSettings, navigation }) => {
     tryServiceEstimations,
     selectedInputIndex,
     cleanRideState,
+    clearRequestSp,
   } = useContext(RidePageContext);
   const {
     setIsExpanded, snapPoints, isExpanded, topBarText,
@@ -131,13 +132,7 @@ const RidePage = ({ mapSettings, navigation }) => {
     changeBsPage(BS_PAGES.ADDRESS_SELECTOR);
     setAddressSelectorFocusIndex(selectedIndex);
     if (isStationsEnabled) {
-      updateRequestSp({
-        lat: null,
-        lng: null,
-        externalId: null,
-        description: null,
-        streetAddress: null,
-      }, selectedIndex);
+      clearRequestSp(selectedIndex);
     }
   };
 

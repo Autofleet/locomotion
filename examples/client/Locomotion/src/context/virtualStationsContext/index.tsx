@@ -23,6 +23,9 @@ import i18n from '../../I18n';
 import SettingContext from '../settings';
 import { getPosition, DEFAULT_COORDS } from '../../services/geo';
 import VirtualStationMarker from '../../Components/VirtualStationMarker';
+import {
+  STOP_POINT_TYPES,
+} from '../../lib/commonTypes';
 
 type Location = {
   lat: number;
@@ -169,11 +172,11 @@ const StationsProvider = ({ children }: { children: any }) => {
     let type = 'default';
 
     if (station?.externalId === stopPoints[0]?.externalId) {
-      type = 'pickup';
+      type = STOP_POINT_TYPES.STOP_POINT_PICKUP;
     }
 
     if (station?.externalId === stopPoints[1]?.externalId) {
-      type = 'dropoff';
+      type = STOP_POINT_TYPES.STOP_POINT_DROPOFF;
     }
 
 

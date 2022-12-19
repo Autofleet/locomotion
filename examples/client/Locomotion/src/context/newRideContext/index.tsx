@@ -45,10 +45,7 @@ import * as navigationService from '../../services/navigation';
 import { BottomSheetContext } from '../bottomSheetContext';
 import { VirtualStationsContext } from '../virtualStationsContext';
 
-const STOP_POINTS_TYPES = {
-  PICKUP: 'pickup',
-  DROPOFF: 'dropoff',
-};
+
 type Dispatch<A> = (value: A) => void;
 type Nav = {
   navigate: (value: string, object?: any) => void;
@@ -802,9 +799,14 @@ const RidePageContextProvider = ({ children }: {
     setAddressSearchLabel(label);
   };
 
-  const formatStationsList = useCallback((stations) => {
+  const filterSelectedStations = (stations) => {
     const stopPointsExternalIds = requestStopPoints.map(sp => sp.externalId);
     const filteredStations = stations.filter(sp => !stopPointsExternalIds.includes(sp.externalId));
+    return filteredStations;
+  };
+
+  const formatStationsList = useCallback((stations) => {
+    const filteredStations = filterSelectedStations(stations);
     return filteredStations.map(formatStationToSearchResult);
   }, [requestStopPoints]);
 
@@ -828,10 +830,10 @@ const RidePageContextProvider = ({ children }: {
         coords: null,
       };
 
-      if (stopPoints[index].type === STOP_POINTS_TYPES.DROPOFF) {
+      if (stopPoints[index].type === STOP_POINT_TYPES.STOP_POINT_DROPOFF) {
         if (pickup.lat && pickup.lng) {
           result = {
-            type: STOP_POINTS_TYPES.PICKUP,
+            type: STOP_POINT_TYPES.STOP_POINT_PICKUP,
             coords: {
               lat: pickup.lat,
               lng: pickup.lng,
@@ -1214,6 +1216,15 @@ const RidePageContextProvider = ({ children }: {
     };
   };
 
+  const clearRequestSp = (index: number) => {
+    updateRequestSp({
+      lat: null,
+      lng: null,
+      externalId: null,
+      description: null,
+      streetAddress: null,
+    }, index);
+  };
 
   return (
     <RidePageContext.Provider

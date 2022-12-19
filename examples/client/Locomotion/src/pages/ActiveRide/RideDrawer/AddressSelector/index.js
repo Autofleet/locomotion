@@ -176,7 +176,7 @@ const AddressSelectorBottomSheet = ({ addressSelectorFocusIndex }) => {
                   border={false}
                   text={userContext.addressSearchLabel}
                   onPress={() => null}
-                  label="Searching stations near:"
+                  label={i18n.t('virtualStations.search.title')}
                 />
               ) : null}
               {locationGranted && !isStationsEnabled ? (
