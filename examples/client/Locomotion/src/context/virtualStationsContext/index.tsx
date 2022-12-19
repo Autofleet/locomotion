@@ -4,28 +4,18 @@ import React, {
   useEffect,
   useContext,
   useCallback,
-  forwardRef,
   useRef,
 } from 'react';
-import { Platform, Text, View } from 'react-native';
-import moment from 'moment';
-import Toast from 'react-native-toast-message';
-import Config from 'react-native-config';
 import { point, distance } from '@turf/turf';
 import { UserContext } from '../user';
-import OneSignal from '../../services/one-signal';
 import {
   getStations as getStationsCall,
 } from './api';
-import * as navigationService from '../../services/navigation';
-import { MAIN_ROUTES, APP_ROUTES } from '../../pages/routes';
-import i18n from '../../I18n';
-import SettingContext from '../settings';
 import { getPosition, DEFAULT_COORDS } from '../../services/geo';
-import VirtualStationMarker from '../../Components/VirtualStationMarker';
 import {
   STOP_POINT_TYPES,
 } from '../../lib/commonTypes';
+import VirtualStationMarker from '../../Components/VirtualStationMarker';
 
 type Location = {
   lat: number;
@@ -55,7 +45,7 @@ interface VirtualStationsContextInterface {
   StationMarkers: any;
   sortAndUpdateStations: () => void
   getStationList: () => Station[]
-  stationCalloutsRef: any[];
+  stationCalloutsRef: any;
 }
 
 export const VirtualStationsContext = createContext<VirtualStationsContextInterface>({
@@ -132,7 +122,7 @@ const StationsProvider = ({ children }: { children: any }) => {
     return sortedStations;
   };
 
-  const sortStationsByDistance = (stations) => {
+  const sortStationsByDistance = (stations:Station[]) => {
     const sortedStations = stations.sort((a, b) => a.distance - b.distance);
     return sortedStations;
   };

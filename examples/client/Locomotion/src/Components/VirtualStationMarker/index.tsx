@@ -10,7 +10,7 @@ import VirtualStationTooltip from '../VirtualStationTooltipComponent';
 
 const trackViewChanges = Platform.OS === 'ios' && Config.MAP_PROVIDER === 'google';
 const VirtualStationMarker = forwardRef(({
-  station, onCalloutPress, type, forwardedRef,
+  station, onCalloutPress, type,
 }, ref) => {
   const isActive = useCallback(() => type !== 'default', [type]);
   return (
@@ -31,3 +31,9 @@ const VirtualStationMarker = forwardRef(({
   );
 });
 export default VirtualStationMarker;
+
+VirtualStationMarker.defaultProps = {
+  station: {},
+  onCalloutPress: () => {},
+  type: 'default',
+};

@@ -27,7 +27,7 @@ const StopPointMarker = ({
   isFutureRide,
   isStationsEnabled = false,
 }) => {
-  const { lat, lng, type } = stopPoint;
+  const { lat, lng } = stopPoint;
   const theme = useContext(ThemeContext);
   const stationIcon = (type: string) => <VirtualStationComponent type={type} isActive style={{ top: Platform.OS === 'ios' ? -35 : 0 }} />;
 

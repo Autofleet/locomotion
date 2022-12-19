@@ -1,7 +1,8 @@
 import React from 'react';
-import  from 'react-native';
 import propsTypes from 'prop-types';
-import { LinkText, Container, StyledIcon,TouchableContainer } from './styled';
+import {
+  LinkText, Container, StyledIcon, TouchableContainer,
+} from './styled';
 
 interface LinkTextProps {
     children: React.ReactNode;
