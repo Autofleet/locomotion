@@ -77,6 +77,7 @@ const AddressSelectorBottomSheet = ({ addressSelectorFocusIndex }) => {
   const { stationsList, isStationsEnabled } = useContext(VirtualStationsContext);
   const {
     changeBsPage,
+    searchResults,
   } = useContext(RideStateContextContext);
 
   const {
@@ -119,20 +120,20 @@ const AddressSelectorBottomSheet = ({ addressSelectorFocusIndex }) => {
 
   const getHistoryRows = () => {
     if (isStationsEnabled && stationsList.length) {
-      return stationsList.map((h, i) => (
+      return userContext.formatStationsList(stationsList).map((h, i) => (
         <AddressRow
           testID={`searchResults_${i}`}
-          text={h.label}
-          subText={h.address}
+          text={h.text}
+          subText={h.subText}
           key={h.externalId}
           onPress={() => {
-            userContext.onAddressSelected(userContext.formatStationToSearchResult(h), false, 1);
+            userContext.onAddressSelected(h, false, 1);
           }}
         />
       ));
     }
 
-    if (userContext.historyResults.length) {
+    if (userContext.historyResults.length && !isStationsEnabled) {
       return userContext.historyResults.map((h, i) => (
         <AddressRow
           testID={`searchResults_${i}`}

@@ -1269,6 +1269,7 @@ const RidePageContextProvider = ({ children }: {
         setNumberOfPassengers,
         addressSearchLabel,
         formatStationToSearchResult,
+        formatStationsList,
       }}
     >
       {children}
