@@ -223,7 +223,7 @@ const AccountContent = ({ setHeaderTitle }) => {
             });
           }}
           selected={chosenLanguageIndex}
-          title={i18n.t('chooseLanguagePopup.title')}
+          title={i18n.t('popups.chooseLanguage.title')}
         />
 
         <GenericErrorPopup

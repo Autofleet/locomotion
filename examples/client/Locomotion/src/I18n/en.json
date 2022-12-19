@@ -99,10 +99,6 @@
                 "text": "Welcome aboard, {{firstName}}!",
                 "subText": "We are glad to have you riding with us.",
                 "buttonText": "Let's go!"
-            },
-            "card": {
-                "title": "Payment Method",
-                "text": "Credit card information"
             }
         },
         "pageTitle": "Your profile",
@@ -128,7 +124,8 @@
                 "email": "Email must be valid."
             }
 
-        }
+        },
+        "chooseLanguage": "App language"
     },
     "home": {
         "map": {
@@ -280,6 +277,9 @@
             "text": "Please note that this service is currently experiencing high ETAs.\n\nFinding a driver might take longer than usual." ,
             "submit": "Continue",
             "back": "Back"
+        },
+        "chooseLanguage": {
+            "title": "Choose your language"
         },
         "defaultFooterButton": "OK"
     },

@@ -92,7 +92,7 @@ const ItemSelector = ({
                 onSave();
               }}
             >
-              {i18n.t('payments.select')}
+              {i18n.t('general.select')}
             </SelectButton>
           </FlexCont>
         </Footer>
