@@ -34,6 +34,6 @@ export default VirtualStationMarker;
 
 VirtualStationMarker.defaultProps = {
   station: {},
-  onCalloutPress: () => {},
+  onCalloutPress: () => null,
   type: 'default',
 };
