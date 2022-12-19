@@ -178,7 +178,7 @@ const AddressSelectorBottomSheet = ({ addressSelectorFocusIndex }) => {
                   label="Searching stations near:"
                 />
               ) : null}
-              {locationGranted ? (
+              {locationGranted && !isStationsEnabled ? (
                 <AddressRow
                   border={false}
                   text={i18n.t('addressView.currentLocation')}
