@@ -862,6 +862,7 @@ const RidePageContextProvider = ({ children }: {
       setAddressLabelAndResults(
         i18n.t('virtualStations.search.addressNotFound'),
       );
+      await getStationList();
     }
   };
 
