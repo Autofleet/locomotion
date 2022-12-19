@@ -23,13 +23,15 @@ export const Container = styled.View`
 
 `;
 
-
 export const LinkText = styled(Text)`
     ${FONT_SIZES.LARGE};
     ${FONT_WEIGHTS.SEMI_REGULAR};
     color: ${LINK_BLUE_COLOR};
 `;
 
+export const TouchableContainer = styled.TouchableOpacity`
+  flex: 1;
+`;
 
 export const StyledIcon = styled(SvgIcon).attrs(({
   theme,

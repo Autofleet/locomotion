@@ -45,6 +45,10 @@ import * as navigationService from '../../services/navigation';
 import { BottomSheetContext } from '../bottomSheetContext';
 import { VirtualStationsContext } from '../virtualStationsContext';
 
+const STOP_POINTS_TYPES = {
+  PICKUP: 'pickup',
+  DROPOFF: 'dropoff',
+};
 type Dispatch<A> = (value: A) => void;
 type Nav = {
   navigate: (value: string, object?: any) => void;
@@ -799,8 +803,8 @@ const RidePageContextProvider = ({ children }: {
   };
 
   const formatStationsList = useCallback((stations) => {
-    const stopPointsIds = requestStopPoints.map(sp => sp.externalId);
-    const filteredStations = stations.filter(sp => !stopPointsIds.includes(sp.externalId));
+    const stopPointsExternalIds = requestStopPoints.map(sp => sp.externalId);
+    const filteredStations = stations.filter(sp => !stopPointsExternalIds.includes(sp.externalId));
     return filteredStations.map(formatStationToSearchResult);
   }, [requestStopPoints]);
 
@@ -824,10 +828,10 @@ const RidePageContextProvider = ({ children }: {
         coords: null,
       };
 
-      if (stopPoints[index].type === 'dropoff') {
+      if (stopPoints[index].type === STOP_POINTS_TYPES.DROPOFF) {
         if (pickup.lat && pickup.lng) {
           result = {
-            type: 'pickup',
+            type: STOP_POINTS_TYPES.PICKUP,
             coords: {
               lat: pickup.lat,
               lng: pickup.lng,

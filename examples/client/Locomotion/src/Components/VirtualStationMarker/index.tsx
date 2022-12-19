@@ -1,4 +1,4 @@
-import React, { forwardRef, useEffect, useRef } from 'react';
+import React, { forwardRef, useCallback } from 'react';
 import {
   Marker, Callout,
 } from 'react-native-maps';
@@ -8,19 +8,20 @@ import Config from 'react-native-config';
 import VirtualStationComponent from '../VirtualStationComponent';
 import VirtualStationTooltip from '../VirtualStationTooltipComponent';
 
+const trackViewChanges = Platform.OS === 'ios' && Config.MAP_PROVIDER === 'google';
 const VirtualStationMarker = forwardRef(({
   station, onCalloutPress, type, forwardedRef,
 }, ref) => {
-  console.log();
+  const isActive = useCallback(() => type !== 'default', [type]);
   return (
     <Marker
       coordinate={{ latitude: parseFloat(station.coordinates.lat), longitude: parseFloat(station.coordinates.lng) }}
       zIndex={10}
-      tracksViewChanges={Platform.OS === 'ios' && Config.MAP_PROVIDER === 'google'}
+      tracksViewChanges={trackViewChanges}
       key={station.externalId}
       ref={ref}
     >
-      <VirtualStationComponent type={type} isActive={type !== 'default'} />
+      <VirtualStationComponent type={type} isActive={isActive()} />
 
       <Callout tooltip>
         <VirtualStationTooltip station={station} onPress={onCalloutPress} />

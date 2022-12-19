@@ -1,7 +1,7 @@
 import React from 'react';
-import { TextInput, Text, TouchableOpacity } from 'react-native';
+import  from 'react-native';
 import propsTypes from 'prop-types';
-import { LinkText, Container, StyledIcon } from './styled';
+import { LinkText, Container, StyledIcon,TouchableContainer } from './styled';
 
 interface LinkTextProps {
     children: React.ReactNode;
@@ -10,17 +10,18 @@ interface LinkTextProps {
     onPress: () => void;
 }
 
+
 const LinkTextComponent = ({
   children, icon, iconSide = 'left', onPress = () => null,
 }: LinkTextProps) => (
-  <TouchableOpacity onPress={onPress} style={{ flex: 1 }}>
+  <TouchableContainer onPress={onPress}>
     <Container iconSide={iconSide}>
       {icon ? <StyledIcon icon={icon} iconSide={iconSide} width={18} height={18} /> : null}
       <LinkText>
         {children}
       </LinkText>
     </Container>
-  </TouchableOpacity>
+  </TouchableContainer>
 );
 
 LinkTextComponent.defaultProps = {

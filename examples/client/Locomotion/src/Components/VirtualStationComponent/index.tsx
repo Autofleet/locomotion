@@ -3,7 +3,7 @@ import {
   MarkerContainer, StyledIcon, IconContainer, Contrainer,
 } from './styled';
 
-const VirtualStationComponent = ({ type = 'default', isActive = false, style }) => (
+const VirtualStationComponent = ({ type = 'default', isActive = false, style = {} }) => (
   <Contrainer style={style}>
     <MarkerContainer isActive={isActive}>
       <IconContainer>
