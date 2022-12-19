@@ -76,6 +76,10 @@ const AvailabilityVehicle = ({
       ref={markerRef}
       coordinate={locationAnimated}
       anchor={{ x: 0.5, y: 0.40 }}
+      tappable={false}
+      // tooltip workaround, need to upgrade library
+      onPress={() => { markerRef?.current?.redraw(); }}
+
     >
       <SvgIcon Svg={carIcon} height={48} width={48} fill={primaryColor} />
     </MarkerAnimated>

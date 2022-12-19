@@ -1285,6 +1285,7 @@ const RidePageContextProvider = ({ children }: {
         addressSearchLabel,
         formatStationToSearchResult,
         formatStationsList,
+        clearRequestSp,
       }}
     >
       {children}
