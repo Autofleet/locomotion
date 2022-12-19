@@ -32,7 +32,9 @@ const languageDetector = {
   async: true, // async detection
   // eslint-disable-next-line no-return-await
   detect: async cb => cb(await getPreferredLanguageCode()),
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
   init: () => {},
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
   cacheUserLanguage: () => {},
 };
 
