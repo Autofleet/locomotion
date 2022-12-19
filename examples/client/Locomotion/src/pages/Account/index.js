@@ -106,7 +106,6 @@ const AccountContent = ({ setHeaderTitle }) => {
 
   const fetchLanguageCode = async () => {
     const preferred = await getPreferredLanguageCode();
-    console.log('~~~~ preffered', { preferred, idx: languageItems.findIndex(l => l.value === preferred) });
     setChosenLanguageIndex(languageItems.findIndex(l => l.value === preferred));
   };
 

@@ -69,9 +69,7 @@ i18n
 export const updateLanguage = (lng, onDone) => {
   const updatedLng = lng || RNLocalize.getLocales()[0].languageCode;
   i18n.changeLanguage(updatedLng, async (err, lang) => {
-    console.log('~~~ changeLanguage', { updatedLng, err, lang });
     await updateUserLanguage(updatedLng);
-    console.log('~~~ get from storage ', await getUserLanguage());
     Mixpanel.setEvent('languageChanged', { language: (lng || 'phone default') });
     if (onDone) {
       onDone();
