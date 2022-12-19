@@ -196,7 +196,7 @@ const Tips = ({
             selected={!!customTip}
             onPress={() => bottomSheetRef.current.snapToIndex(0)}
             label={i18n.t('postRide.tip.customTip.title')}
-            value={customTip ? getFormattedPrice(priceCurrency, customTip) : null}
+            value={customTip ? formatCurrency(customTip) : null}
           >
             {!customTip ? i18n.t('postRide.tip.setCustomTip') : null}
           </SelectableButton>
