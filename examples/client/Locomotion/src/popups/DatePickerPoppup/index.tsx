@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Modal from 'react-native-modal';
 import DatePicker from 'react-native-date-picker';
+import { userLanguage } from '../../I18n';
 
 import {
   ModalContainer, ConfirmButton, CancelButton,
@@ -25,7 +26,7 @@ export default ({
         {title}
         <DatePicker
           {...props}
-          locale="en-US"
+          locale={userLanguage}
           is24hourSource="locale"
           date={date}
           modal={false}
