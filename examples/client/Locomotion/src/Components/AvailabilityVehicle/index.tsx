@@ -32,7 +32,12 @@ const areEqual = (prev: AvailabilityVehicleProps, next: AvailabilityVehicleProps
   && prev.location.lng === next.location.lng
   && prev.location.bearing === next.location.bearing;
 
-
+const insureNumberType = (v: string | number) => {
+  if (typeof v === 'string') {
+    return parseFloat(v);
+  }
+  return v;
+};
 const AvailabilityVehicle = ({
   location,
   id,
@@ -41,9 +46,9 @@ const AvailabilityVehicle = ({
 
   const markerRef = useRef<MarkerAnimated>(null);
   const [locationAnimated] = useState(new AnimatedRegion({
-    latitude: location.lat,
+    latitude: insureNumberType(location.lat),
     latitudeDelta: 0.1,
-    longitude: location.lng,
+    longitude: insureNumberType(location.lng),
     longitudeDelta: 0.1,
   }));
 
@@ -52,8 +57,8 @@ const AvailabilityVehicle = ({
       if (Platform.OS === 'android') {
         setTimeout(() => {
           markerRef?.current?.animateMarkerToCoordinate({
-            latitude: location.lat,
-            longitude: location.lng,
+            latitude: insureNumberType(location.lat),
+            longitude: insureNumberType(location.lng),
           }, DURATION);
         }, 0);
       } else {

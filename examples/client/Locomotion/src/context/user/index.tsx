@@ -5,7 +5,8 @@ import crashlytics from '@react-native-firebase/crashlytics';
 import Config from 'react-native-config';
 import { authService, StorageService } from '../../services';
 import {
-  getUserDetails, loginVert, sendEmailVerification, updateUser, emailVerify, deleteUser as deleteUserApi,
+  getUserDetails, loginVert, sendEmailVerification,
+  updateUser as updateUserApi, emailVerify, deleteUser as deleteUserApi, getUserCoupon, createUserCoupon,
 } from './api';
 import auth from '../../services/auth';
 import Mixpanel from '../../services/Mixpanel';
@@ -43,7 +44,10 @@ interface UserContextInterface {
   locationGranted: boolean | undefined,
   setLocationGranted: Dispatch<SetStateAction<any>>,
   updatePushToken: () => Promise<boolean | null>,
-  deleteUser: () => Promise<boolean>
+  deleteUser: () => Promise<boolean>,
+  updateUser: (values: any) => Promise<any>,
+  getCoupon: () => Promise<any>,
+  createCoupon: (values: any) => Promise<any>,
 }
 
 export const UserContext = createContext<UserContextInterface>({
@@ -62,6 +66,9 @@ export const UserContext = createContext<UserContextInterface>({
   setLocationGranted: () => undefined,
   updatePushToken: async () => false,
   deleteUser: async () => true,
+  updateUser: async (values: any) => undefined,
+  getCoupon: async () => undefined,
+  createCoupon: async (values: any) => undefined,
 });
 
 const UserContextProvider = ({ children }: { children: any }) => {
@@ -130,11 +137,13 @@ const UserContextProvider = ({ children }: { children: any }) => {
 
   const updateUserInfo = async (values: any, { updateServer = true } = {}) => {
     updateState(values);
-    const newUser = updateServer ? await updateUser(values) : values;
+    const newUser = updateServer ? await updateUserApi(values) : values;
     if (newUser.didCompleteOnboarding) {
       StorageService.save({ [storageKey]: newUser });
     }
   };
+
+  const updateUser = async (values: any): Promise<any> => updateUserApi(values);
 
   const getCardInfo = () => {
     try {
@@ -161,6 +170,7 @@ const UserContextProvider = ({ children }: { children: any }) => {
       const vertResponse = await loginVert({
         phoneNumber: user?.phoneNumber,
         code,
+        demandSourceId: Config.OPERATION_ID,
       });
 
       if (vertResponse.status !== 'OK' || !vertResponse.refreshToken || !vertResponse.accessToken) {
@@ -168,7 +178,7 @@ const UserContextProvider = ({ children }: { children: any }) => {
         return false;
       }
 
-      auth.updateTokens(vertResponse.refreshToken, vertResponse.accessToken);
+      await auth.updateTokens(vertResponse.refreshToken, vertResponse.accessToken);
       const userProfile = vertResponse.clientProfile || {};
       Mixpanel.setUser(userProfile);
 
@@ -199,6 +209,16 @@ const UserContextProvider = ({ children }: { children: any }) => {
     return result;
   };
 
+  const getCoupon = async () => {
+    const result = await getUserCoupon();
+    return result;
+  };
+
+  const createCoupon = async (code: string) => {
+    const result = await createUserCoupon(code);
+    return result;
+  };
+
   return (
     <UserContext.Provider
       value={{
@@ -217,6 +237,9 @@ const UserContextProvider = ({ children }: { children: any }) => {
         setLocationGranted,
         updatePushToken,
         deleteUser,
+        updateUser,
+        getCoupon,
+        createCoupon,
       }}
     >
       {children}

@@ -13,7 +13,21 @@ export const TitleContainer = styled(View)`
 display: flex;
 flex-direction: row;
 align-items: center;
+justify-content: space-between;
+`;
+
+export const LeftSideTitle = styled(View)`
+display: flex;
+flex-direction: row;
+align-items: center;
 justify-content: flex-start;
+`;
+
+export const RightSideTitle = styled(View)`
+display: flex;
+flex-direction: row;
+align-items: center;
+justify-content: flex-end;
 `;
 
 export const ButtonText = styled(Text)`

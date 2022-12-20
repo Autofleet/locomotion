@@ -16,8 +16,8 @@ import PaymentMethod from '../../Components/CardRow';
 import PaymentsContext from '../../context/payments';
 import { navigate } from '../../services/navigation';
 import ChoosePaymentMethod from '../../popups/ChoosePaymentMethod';
-import cashPaymentMethod from './cashPaymentMethod';
 import Section from './paymentMethodSection';
+import { PAYMENT_METHODS } from './consts';
 
 export default ({
   loadingState = false,
@@ -52,7 +52,7 @@ export default ({
       <ScrollView>
         <View>
           <PaymentMethodsContainer>
-            { defaultMethod?.id && defaultMethod?.id !== cashPaymentMethod.id
+            { defaultMethod?.id && defaultMethod?.id !== PAYMENT_METHODS.CASH
               ? (
                 <Section
                   title={i18n.t('payments.defaultMethodTitle')}

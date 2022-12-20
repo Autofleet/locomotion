@@ -1,7 +1,8 @@
 import React, {
   useEffect, useState, useRef, useContext,
 } from 'react';
-import { View } from 'react-native';
+import { isCardPaymentMethod } from '../../lib/ride/utils';
+import { PAYMENT_METHODS } from '../../pages/Payments/consts';
 import { formatRides, rideHistoryContext } from '../../context/rideHistory';
 import FullPageLoader from '../../Components/FullPageLoader';
 import { getPriceCalculation } from '../../context/futureRides/api';
@@ -22,12 +23,13 @@ import Button from '../../Components/RoundedButton';
 import settings from '../../context/settings';
 import SETTINGS_KEYS from '../../context/settings/keys';
 import NewRidePageContextProvider, { RidePageContext } from '../../context/newRideContext';
+import { didUserRate } from '../../context/newRideContext/utils';
 import closeIcon from '../../assets/x.png';
 import BottomSheetContextProvider, { BottomSheetContext } from '../../context/bottomSheetContext';
-import { isCashPaymentMethod } from '../../lib/ride/utils';
 import { RideStateContextContext } from '../..';
 import { BS_PAGES } from '../../context/ridePageStateContext/utils';
 import * as navigationService from '../../services/navigation';
+import RideFeedback from './Feedback';
 
 const PostRidePage = ({ menuSide, route }) => {
   const { rideId, priceCalculationId } = route?.params;
@@ -35,6 +37,7 @@ const PostRidePage = ({ menuSide, route }) => {
   const [ride, setRide] = useState(null);
   const [tipFromDb, setTipFromDb] = useState();
   const [rideTip, setRideTip] = useState(null);
+  const [rideFeedbackText, setRideFeedbackText] = useState(null);
   const [tipSettings, setTipSettings] = useState({
     percentageThreshold: 30,
     percentage: [10, 15, 20],
@@ -102,6 +105,7 @@ const PostRidePage = ({ menuSide, route }) => {
         rating,
         tip: rideTip,
         priceCalculationId: ride.priceCalculationId,
+        rideFeedbackText,
       });
       nextPage();
       return true;
@@ -121,6 +125,7 @@ const PostRidePage = ({ menuSide, route }) => {
     }
     return i18n.t('postRide.submit');
   };
+
   return (
     <>
       {ride ? (
@@ -131,17 +136,20 @@ const PostRidePage = ({ menuSide, route }) => {
             iconSide={menuSide}
             icon={closeIcon}
           />
-          <PageContent>
-            {!ride.rating && (
-            <RatingContainer>
-              <SummaryStarsTitle>{i18n.t('postRide.ratingHeadline')}</SummaryStarsTitle>
-              <StarRating onUpdate={onRatingUpdate} />
-            </RatingContainer>
+          <PageContent alwaysBounceVertical={false} keyboardShouldPersistTaps={false}>
+            {!didUserRate(ride.rating, ride.rideFeedbacks) && (
+              <RatingContainer>
+                <SummaryStarsTitle>{i18n.t('postRide.ratingHeadline')}</SummaryStarsTitle>
+                <StarRating onUpdate={onRatingUpdate} />
+                <>
+                  <RideFeedback onTextChange={text => setRideFeedbackText(text)} />
+                </>
+              </RatingContainer>
             )}
 
-            {!(priceCalculationId && tipFromDb) && (
+            {isCardPaymentMethod(ride?.payment?.paymentMethod) && !(priceCalculationId && tipFromDb) && (
             <TipsContainer>
-              {ride?.priceCurrency && ride?.priceAmount
+              {ride?.priceCurrency && (ride?.priceAmount || ride?.priceAmount === 0)
                 ? (
                   <Tips
                     tipSettings={tipSettings}
@@ -154,7 +162,7 @@ const PostRidePage = ({ menuSide, route }) => {
             </TipsContainer>
             )}
             <SubmitContainer>
-              <Button onPress={onSubmit} disabled={isExpanded}>{getButtonText()}</Button>
+              <Button testID="submitPostRide" onPress={onSubmit} disabled={isExpanded}>{getButtonText()}</Button>
             </SubmitContainer>
           </PageContent>
         </PageContainer>

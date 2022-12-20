@@ -1,6 +1,4 @@
 import network from '../../services/network';
-import * as settingsApi from '../settings/api';
-
 
 export const ImageUpload = async (formData) => {
   const { data } = await network.post('api/v1/me/image-upload', formData, {
@@ -48,5 +46,15 @@ export const sendEmailVerification = async () => {
 
 export const deleteUser = async () => {
   const { data } = await network.delete('api/v1/me/user');
+  return data;
+};
+
+export const getUserCoupon = async () => {
+  const { data } = await network.get('api/v1/me/customers/coupon');
+  return data;
+};
+
+export const createUserCoupon = async (code) => {
+  const { data } = await network.post('api/v1/me/customers/coupon', { code });
   return data;
 };

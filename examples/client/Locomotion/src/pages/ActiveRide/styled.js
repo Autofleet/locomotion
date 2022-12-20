@@ -1,5 +1,6 @@
 import React from 'react';
 import { StyleSheet, Dimensions } from 'react-native';
+import { BaseToast } from 'react-native-toast-message';
 import styled from 'styled-components';
 import vehicleIcon from '../../assets/car-icon.png';
 import Icon from '../../assets/location_pin.svg';

@@ -2,6 +2,12 @@ import moment from 'moment';
 import shortid from 'shortid';
 import i18n from '../../I18n';
 import { getGeocode } from './google-api';
+import { getLocationTimezone } from './api';
+
+export const ESTIMATION_ERRORS = {
+  'RIDE_VALIDATION:SOME_STOP_POINTS_ARE_OUT_OF_TERRITORY': 'RIDE_VALIDATION:SOME_STOP_POINTS_ARE_OUT_OF_TERRITORY',
+  FIRST_STOP_POINT_NOT_IN_TERRITORY: 'FIRST_STOP_POINT_NOT_IN_TERRITORY',
+};
 
 export const RIDE_FAILED_REASONS = {
   BUSY: 'BUSY',
@@ -12,7 +18,13 @@ export const RIDE_FAILED_REASONS = {
   COULD_NOT_CREATE_PAYMENT_INTENT: 'COULD_NOT_CREATE_PAYMENT_INTENT',
 };
 
-export const getFutureRideMinDate = () => moment().add(60, 'minutes').toDate();
+export const FEEDBACK_TYPES = {
+  FREE_TEXT: 'FREE_TEXT',
+};
+
+export const RIDER_APP_SOURCE = 'RIDER_APP';
+
+export const getFutureRideMinDate = (minutesBefore: number) => moment().add(minutesBefore, 'minutes').toDate();
 export const getFutureRideMaxDate = () => moment().add(7, 'days').toDate();
 
 export const TAG_OPTIONS = {
@@ -119,17 +131,27 @@ export const formatEstimationsResult = (service: any, estimationResult: any, tag
   const estimation = estimationResult || {};
   return {
     id: service.id,
+    priceCalculationId:
+      estimation.priceCalculationId || estimation.highEtaAsapRide?.priceCalculationId,
+    estimationId: estimation.id,
     name: service.displayName,
     eta: estimation.minPickupEta,
-    price: estimation.priceAmount,
-    currency: estimation.currency,
-    isPriceEstimated: isPriceEstimated(estimation.priceCalculationBasis),
+    price: estimation.priceAmount || estimation.highEtaAsapRide?.priceAmount,
+    currency: estimation.currency || estimation.highEtaAsapRide?.currency,
+    isPriceEstimated: isPriceEstimated(
+      estimation.priceCalculationBasis || estimation.highEtaAsapRide?.priceCalculationBasis,
+    ),
     availableSeats: service.maxPassengers || 4,
     tag: (Object.entries(tags).find(([, value]) => value === service.id) || [])[0],
     iconUrl: service.icon,
     description: service.displayDescription,
     priority: service.priority,
     serviceAvailabilitiesNumber: service.serviceAvailabilities.length,
+    pooling: service.pooling,
+    pickupWindowSizeInMinutes: service.pickupWindowSizeInMinutes,
+    futurePickupWindowSizeInMinutes: service.futurePickupWindowSizeInMinutesWithFallback,
+    isHighEtaAsapRide: !!estimation.highEtaAsapRide,
+    allowRideOrderIfNoVehiclesMatched: service.allowRideOrderIfNoVehiclesMatched,
   };
 };
 
@@ -154,3 +176,24 @@ export const getCurrencySymbol = (priceCurrency?: string) => {
   const currency = new Intl.NumberFormat('en-US', { style: 'currency', currency: priceCurrency }).format(0);
   return currency[0];
 };
+
+export const convertTimezoneByLocation = async (
+  lat: any,
+  lng: any,
+  momentDate: any,
+  keepTime = true,
+) => {
+  try {
+    const convertedZone = momentDate.clone();
+    const timezoneResponse: any = await getLocationTimezone(lat, lng);
+    const { timezone } = timezoneResponse;
+    return {
+      time: convertedZone.tz(timezone, keepTime).format(),
+      timezone,
+    };
+  } catch (e) {
+    throw new Error('Could not fetch timezone from server');
+  }
+};
+
+export const didUserRate = (rating: string | null, rideFeedback: any[] | null) => rating || rideFeedback?.length;

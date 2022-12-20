@@ -2,6 +2,7 @@ import React, {
   useContext, useRef, useState, useEffect,
 } from 'react';
 import bottomSheet from '@gorhom/bottom-sheet/lib/typescript/components/bottomSheet';
+import moment from 'moment';
 import { FutureRidesContext } from '../../context/futureRides';
 import { PageContainer } from '../styles';
 import { ContentContainer } from './styled';
@@ -14,6 +15,7 @@ import BottomSheetComponent from '../../Components/BottomSheet';
 import { CancelRide } from '../../Components/BsPages';
 import { RideStateContextContext } from '../..';
 import { RideInterface, RidePageContext } from '../../context/newRideContext';
+
 import { BS_PAGES } from '../../context/ridePageStateContext/utils';
 import BlackOverlay from '../../Components/BlackOverlay';
 import GenericErrorPopup from '../../popups/GenericError';
@@ -27,6 +29,7 @@ const FutureRidesView = ({ menuSide }: FutureRidesViewProps) => {
   const [rideToCancel, setRideToCancel] = useState<string | undefined>(undefined);
   const [showError, setShowError] = useState(false);
   const [services, setServices] = useState<any[]>([]);
+
   const bottomSheetRef = useRef<bottomSheet>(null);
   const {
     futureRides, loadFutureRides,
@@ -78,7 +81,8 @@ const FutureRidesView = ({ menuSide }: FutureRidesViewProps) => {
                   onPress={() => onPressCancel(fRide?.id)}
                   serviceName={service?.displayName}
                   paymentMethod={fRide?.payment?.paymentMethod}
-                  scheduledTo={fRide.scheduledTo || ''}
+                  scheduledTo={fRide?.scheduledTo || ''}
+                  pickupWindowTime={service?.futurePickupWindowSizeInMinutesWithFallback}
                 />
               );
             })}

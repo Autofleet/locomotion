@@ -1,6 +1,7 @@
 // import { NavigationActions, StackActions } from 'react-navigation';
 import { CommonActions, NavigationContainerRef, StackActions } from '@react-navigation/native';
 import Mixpanel from './Mixpanel';
+import { MAIN_ROUTES } from '../pages/routes';
 
 let myNavigator: any;
 
@@ -10,7 +11,7 @@ export const setTopLevelNavigator = (navigatorRef: any) => {
 
 export const getNavigator = () => myNavigator;
 
-export const replace = (routeName: string) => {
+export const replace = (routeName: string, params = {}) => {
   const activeRoute = myNavigator?.getCurrentRoute();
   if (activeRoute?.name === routeName) {
     return false;
@@ -21,7 +22,7 @@ export const replace = (routeName: string) => {
     index: 0,
     routeNames: [routeName],
     routes: [
-      { name: routeName },
+      { name: routeName, params },
     ],
   });
   return myNavigator.dispatch(resetAction);

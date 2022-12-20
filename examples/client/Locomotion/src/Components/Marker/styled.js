@@ -60,7 +60,7 @@ export const InfoBox = styled.View`
  shadow-offset: 0px 0px;
   shadow-opacity: 0.4;
    ${Platform.OS === 'ios' ? 'top: -35px;' : ''}
-   height: 50px;
+   min-height: 50px;
    display: flex;
    flex-direction: column;
    background-color: #f0f0f0;
@@ -74,13 +74,13 @@ export const InfoBox = styled.View`
 `;
 
 export const Type = styled.View`
-  height: 50%;
   width: 100%;
   display: flex;
   justify-content: center;
   background-color: #ffffff;
   border-radius: 4px;
   align-items: center;
+  flex: 1;
 `;
 
 export const SubText = styled.Text`
@@ -97,15 +97,14 @@ margin-top: 5px;
 export const TypeText = styled.Text`
 ${FONT_SIZES.LARGE}
 ${FONT_WEIGHTS.SEMI_BOLD}
-margin: 0 auto;
 `;
 
 export const SubContainer = styled.View`
 display: flex;
 flex-direction: row;
 align-items: center;
-height: 50%;
 padding: 0 5px;
+flex: 1;
 `;
 
 export const PulseContainer = styled.View`

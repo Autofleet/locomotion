@@ -11,7 +11,7 @@ import {
   StopPointTimeText, PulseContainer, StopPointsVerticalViewContainer,
   ButtonsContainer, RowContainer, ButtonContainer, Container,
 } from './styled';
-import { STOP_POINT_STATES } from '../../../lib/commonTypes';
+import { STOP_POINT_STATES, STOP_POINT_TYPES } from '../../../lib/commonTypes';
 import i18n from '../../../I18n';
 import pulse from '../../../assets/marker-pulse.json';
 import Loader from '../../Loader';
@@ -41,6 +41,7 @@ const ActiveRideContent = () => {
   const { stopPoints } = ride;
 
   const firstSpNotCompleted = stopPoints?.find(p => p.state !== STOP_POINT_STATES.COMPLETED);
+  const pickupSp = stopPoints?.find(p => p.type === STOP_POINT_TYPES.STOP_POINT_PICKUP);
 
   const getTextBasedOnStopPoints = () => {
     if (firstSpNotCompleted) {
@@ -56,11 +57,13 @@ const ActiveRideContent = () => {
   };
 
   const renderRideNotes = () => {
-    const rideHasNotes = firstSpNotCompleted?.notes;
+    const rideHasNotes = pickupSp?.notes;
     return (
-      <ButtonContainer onPress={() => {
-        setPopupToShow('notes');
-      }}
+      <ButtonContainer
+        testID="RideNotes"
+        onPress={() => {
+          setPopupToShow('notes');
+        }}
       >
         <GenericRideButton
           icon={rideHasNotes ? editNote : plus}
@@ -105,7 +108,7 @@ const ActiveRideContent = () => {
     <>
       {ride
       && (
-        <Container>
+        <Container alwaysBounceVertical={false}>
           <TopContainer>
             <DriverCardContainer>
               <DriverCard
@@ -122,7 +125,7 @@ const ActiveRideContent = () => {
             </VehicleDetails>
           </TopContainer>
           <StopPointTextContainer>
-            <StopPointText>
+            <StopPointText numberOfLines={1}>
               {getTextBasedOnStopPoints()}
             </StopPointText>
             {firstSpNotCompleted?.state === STOP_POINT_STATES.PENDING
@@ -137,18 +140,23 @@ const ActiveRideContent = () => {
               : null}
           </StopPointTextContainer>
           <ButtonsContainer>
-            <RowContainer>
-              <Call
-                onError={() => {
-                  setGenericErrorPopup({});
-                }}
-              />
-              {renderRideNotes()}
-            </RowContainer>
-            <RowContainer>
-              {renderCancelRide()}
-              {renderShareRide()}
-            </RowContainer>
+            {firstSpNotCompleted?.type === 'pickup' ? (
+              <>
+                <RowContainer>
+                  <Call onError={() => { setGenericErrorPopup({}); }} />
+                  {renderRideNotes()}
+                </RowContainer>
+                <RowContainer>
+                  {renderCancelRide()}
+                  {renderShareRide()}
+                </RowContainer>
+              </>
+            ) : (
+              <RowContainer>
+                <Call onError={() => { setGenericErrorPopup({}); }} />
+                {renderShareRide()}
+              </RowContainer>
+            )}
           </ButtonsContainer>
           <StopPointsVerticalView
             ride={ride}
@@ -163,12 +171,12 @@ const ActiveRideContent = () => {
             serviceType={ride.serviceType}
           />
           <RideNotes
-            notes={firstSpNotCompleted?.notes}
+            notes={pickupSp?.notes}
             isVisible={popupToShow === 'notes'}
             onSubmit={async (text: string) => {
               await updateRide(ride.id, {
                 stopPoints: [{
-                  id: firstSpNotCompleted.id,
+                  id: pickupSp.id,
                   notes: text,
                 }],
               });

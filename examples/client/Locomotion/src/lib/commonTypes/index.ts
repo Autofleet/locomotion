@@ -9,6 +9,14 @@ export const STOP_POINT_STATES = {
   PENDING: 'pending',
 };
 
+export const PAYMENT_STATES = {
+  PENDING: 'pending',
+  PAID: 'paid',
+  REJECTED: 'rejected',
+  SETTLED: 'settled',
+  CANCELED: 'canceled',
+};
+
 export const RIDE_STATES = {
   OFFER: 'offer',
   OFFER_REJECTED: 'offer-rejected',
@@ -33,3 +41,5 @@ export const CHARGE_FOR_TIP = 'tip';
 
 export const RIDE_FINAL_STATES = Object.values(RIDE_STATES)
   .filter(state => !RIDE_ACTIVE_STATES.find(as => as === state));
+
+export const COUPON_TYPE = 'coupon';

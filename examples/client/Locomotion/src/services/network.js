@@ -3,7 +3,6 @@ import Config from 'react-native-config';
 import crashlytics from '@react-native-firebase/crashlytics';
 import Auth from './auth';
 import AppSettings from './app-settings';
-import Mixpanel from './Mixpanel';
 
 const HTTPMethods = [
   'get',
@@ -66,18 +65,15 @@ class Network {
       this[method] = async (...args) => {
         const baseURL = await AppSettings.getServerUrl();
         this.axios.defaults.baseURL = baseURL;
-        if (!this.axios.defaults.headers.common.Authorization) {
-          const accessToken = await Auth.getAT(this.axios);
-          if (accessToken) {
-            this.axios.defaults.headers.common.Authorization = `Bearer ${accessToken}`;
-          }
-        }
+        const accessToken = await Auth.getAT(this.axios);
+        this.axios.defaults.headers.common.Authorization = accessToken ? `Bearer ${accessToken}` : accessToken;
 
         this.axios.defaults.headers.common['x-loco-ds-id'] = Config.OPERATION_ID;
         this.axios.defaults.headers.common['x-loco-op-id'] = Config.OPERATION_ID;
         return this.axios[method](...args).catch((e) => {
           crashlytics().log(`HTTP Request Error ${e.message}`);
-          if ((e.response && e.response.status === 401)) {
+          if ((e.response && e.response.status === 401)
+          || (e.response && e.response.status === 403)) {
             console.log('Got unauthorized response move to logout flow');
             Auth.logout();
             return null;

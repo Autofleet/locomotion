@@ -2,7 +2,7 @@ import moment from 'moment';
 import React, { useContext, useEffect, useState } from 'react';
 import { View } from 'react-native';
 import GenericErrorPopup from '../../popups/GenericError';
-import { FILTERS } from './filters';
+import { FILTERS, formatDateBeforeSend } from './filters';
 import { HeaderIconContainer } from '../../Components/PageHeader/styled';
 import { CenterContainer } from './RideCard/styled';
 import RidesList from './RidesList';
@@ -86,8 +86,8 @@ const Page = ({ menuSide }) => {
     setCustomFilter(getCustomFilter(filterId));
     await getRidesWithErrorHandler(async () => loadRides({
       filterId,
-      fromDate: `${momentNewFromDate.format(YYYY_MM_DD)} ${startOfDayTime}`,
-      toDate: `${momentNewToDate.format(YYYY_MM_DD)} ${endOfDayTime}`,
+      fromDate: formatDateBeforeSend(`${momentNewFromDate.format(YYYY_MM_DD)} ${startOfDayTime}`),
+      toDate: formatDateBeforeSend(`${momentNewToDate.format(YYYY_MM_DD)} ${endOfDayTime}`),
     }));
     setLoader(false);
   };

@@ -1,5 +1,6 @@
 import axios from 'axios';
 import Config from 'react-native-config';
+import moment from 'moment';
 
 const instance = axios.create({
   baseURL: 'https://maps.googleapis.com',
@@ -24,4 +25,17 @@ export const getPlaceDetails = async (placeId) => {
   });
 
   return data.result.geometry.location;
+};
+
+export const getLocationTimezone = async (lat, lng, momentTimestamp) => {
+  const timestamp = momentTimestamp.unix();
+  const { data } = await instance.get('/maps/api/timezone/json', {
+    params: {
+      key: Config.GOOGLE_MAPS_KEY,
+      location: `${lat},${lng}`,
+      timestamp,
+    },
+  });
+
+  return data;
 };

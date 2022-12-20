@@ -10,6 +10,11 @@ const {
   SECONDARY_COLOR = undefined,
 } = Config;
 
+export const getTextColorForTheme = () => {
+  const colorScheme = Appearance.getColorScheme();
+  return colorScheme === 'dark' ? '#ffffff' : '#000000';
+};
+
 // interface LocomotionTheme {
 //   primaryColor: string;
 //   secondaryColor: string;
@@ -17,6 +22,13 @@ const {
 //   dividerColor: string;
 //   backgroundColor: string;
 // }
+
+export const convertHextToRgba = (hex, alpha) => {
+  const r = parseInt(hex.slice(1, 3), 16);
+  const g = parseInt(hex.slice(3, 5), 16);
+  const b = parseInt(hex.slice(5, 7), 16);
+  return `${r},${g},${b},${alpha}`;
+};
 
 export const darkTheme = {
   primaryColor: '#38a7fc',
@@ -45,6 +57,7 @@ export const THEME_MOD = {
   DARK: 'dark',
 };
 
+export const GREEN_COLOR = '#2cc36a';
 export const ERROR_COLOR = '#f35657';
 export const LINK_BLUE_COLOR = '#38a7fc';
 export const FONT_SIZES = {
@@ -54,6 +67,15 @@ export const FONT_SIZES = {
   LARGE: 'font-size: 14px',
   MEDIUM: 'font-size: 12px',
   SMALL: 'font-size: 10px',
+};
+
+export const FONT_SIZES_VALUES = {
+  H1: 22,
+  H2: 18,
+  H3: 16,
+  LARGE: 14,
+  MEDIUM: 12,
+  SMALL: 10,
 };
 
 export const FONT_WEIGHTS = {

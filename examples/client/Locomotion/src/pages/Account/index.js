@@ -2,8 +2,9 @@ import React, { useEffect, useContext, useState } from 'react';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { PaymentIcon } from 'react-native-payment-icons';
 import { Platform } from 'react-native';
+import Auth from '../../services/auth';
+import Button from '../../Components/Button';
 import ConfirmationPopup from '../../popups/ConfirmationPopup';
-import cashPaymentMethod from '../../pages/Payments/cashPaymentMethod';
 import Card from '../../Components/InformationCard';
 import PaymentsContext from '../../context/payments';
 import { MAIN_ROUTES } from '../routes';
@@ -31,6 +32,7 @@ import Mixpanel from '../../services/Mixpanel';
 import { PageContainer } from '../styles';
 import { UserContext } from '../../context/user';
 import GenericErrorPopup from '../../popups/GenericError';
+import { PAYMENT_METHODS } from '../../pages/Payments/consts';
 
 const AccountHeader = () => {
   const { updateUserInfo, user } = useContext(UserContext);
@@ -122,7 +124,7 @@ const AccountContent = () => {
         >
           {user ? `${user.email}` : ''}
         </Card>
-        {defaultPaymentMethod && defaultPaymentMethod.id !== cashPaymentMethod.id ? (
+        {defaultPaymentMethod && defaultPaymentMethod.id !== PAYMENT_METHODS.CASH ? (
           <>
             <CardsTitle title={i18n.t('onboarding.paymentInformation')} />
             <Card
@@ -139,21 +141,27 @@ const AccountContent = () => {
             </Card>
           </>
         ) : undefined}
-        <LogoutContainer
-          testID="logout"
-          onPress={() => {
-            navigationService.navigate(MAIN_ROUTES.LOGOUT);
-          }}
-        >
-          <LogoutText>{i18n.t('menu.logout')}</LogoutText>
+        <LogoutContainer>
+          <Button
+            noBackground
+            testID="logout"
+            onPress={() => {
+              navigationService.navigate(MAIN_ROUTES.LOGOUT);
+            }}
+          >
+            <LogoutText>{i18n.t('menu.logout')}</LogoutText>
+          </Button>
         </LogoutContainer>
-        <LogoutContainer
-          testID="deleteAccount"
-          onPress={() => {
-            setIsDeleteUserVisible(true);
-          }}
-        >
-          <DeleteText>{i18n.t('deleteUserPopup.deleteUserTitle')}</DeleteText>
+        <LogoutContainer>
+          <Button
+            noBackground
+            testID="deleteAccount"
+            onPress={() => {
+              setIsDeleteUserVisible(true);
+            }}
+          >
+            <DeleteText>{i18n.t('deleteUserPopup.deleteUserTitle')}</DeleteText>
+          </Button>
         </LogoutContainer>
         <ConfirmationPopup
           isVisible={isDeleteUserVisible}
@@ -166,7 +174,7 @@ const AccountContent = () => {
           onSubmit={async () => {
             try {
               await deleteUser();
-              navigationService.navigate(MAIN_ROUTES.LOGOUT);
+              await Auth.logout();
             } catch (e) {
               console.log(e);
               setIsDeleteUserVisible(false);

@@ -4,8 +4,10 @@ import SvgIcon from '../../Components/SvgIcon';
 import { SubTitle, Title } from '../styled';
 import i18n from '../../I18n';
 import errorIcon from '../../assets/error-icon.svg';
+import XButton from '../../Components/CloseButton';
+
 import {
-  ButtonText, CloseButton, Container, TextContainer, TitleContainer,
+  ButtonText, CloseButton, Container, TextContainer, TitleContainer, LeftSideTitle, RightSideTitle,
 } from './styles';
 
 interface GenericErrorProps {
@@ -13,7 +15,9 @@ interface GenericErrorProps {
   closePopup: any | SetStateAction<boolean>;
   title?: string;
   text?: string;
-  buttonText?: string
+  buttonText?: string;
+  customButton?: any;
+  cancelPopup?: any;
 }
 
 const GenericErrorPopup = ({
@@ -22,21 +26,33 @@ const GenericErrorPopup = ({
   title,
   text,
   buttonText,
+  customButton,
+  cancelPopup,
 }: GenericErrorProps) => (
   <Modal isVisible={isVisible}>
     <Container>
       <TitleContainer>
-        <SvgIcon Svg={errorIcon} height={20} width={20} style={{ marginRight: 5 }} />
-        <Title>{title}</Title>
+        <LeftSideTitle>
+          <SvgIcon Svg={errorIcon} height={20} width={20} style={{ marginRight: 5 }} />
+          <Title>{title}</Title>
+        </LeftSideTitle>
+        <RightSideTitle>
+          {cancelPopup ? (
+            <XButton onPress={cancelPopup} containerStyles={{ alignSelf: 'flex-end' }} />
+          ) : (null)
+        }
+        </RightSideTitle>
       </TitleContainer>
       <TextContainer>
         <SubTitle>{text}</SubTitle>
       </TextContainer>
+      {customButton || (
       <CloseButton onPress={closePopup}>
         <ButtonText>
           {buttonText}
         </ButtonText>
       </CloseButton>
+      )}
     </Container>
   </Modal>
 );
@@ -45,5 +61,7 @@ GenericErrorPopup.defaultProps = {
   title: i18n.t('popups.genericError.title'),
   text: i18n.t('popups.genericError.text'),
   buttonText: i18n.t('popups.genericError.buttonText'),
+  customButton: null,
+  cancelPopup: null,
 };
 export default GenericErrorPopup;

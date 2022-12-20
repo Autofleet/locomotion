@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Linking, Platform } from 'react-native';
+import {
+  Linking, Platform, UIManager, findNodeHandle, ActionSheetIOS,
+} from 'react-native';
 import Clipboard from '@react-native-community/clipboard';
 import { ScrollView } from 'react-native-gesture-handler';
 import NoTitleCard from '../../Components/NoTitleCard';
@@ -16,13 +18,15 @@ import logo from '../../assets/welcomeLogo.png';
 import settingsContext from '../../context/settings';
 import arrowBack from '../../assets/arrow-back-learn-more.svg';
 import phoneIcon from '../../assets/phone.svg';
-import copyIcon from '../../assets/copy.svg';
+import emailIcon from '../../assets/email.svg';
 import {
   ContactUsLogo,
   ContactUsPageLogoContainer,
   ContactUsPageView, LearnMoreButton, LearnMoreIcon, LearnMoreText,
 } from './styled';
 import * as navigationService from '../../services/navigation';
+import Mixpanel from '../../services/Mixpanel';
+import DeviceService from '../../services/device';
 
 export default ({ menuSide }) => {
   const useSettings = settingsContext.useContainer();
@@ -66,6 +70,52 @@ export default ({ menuSide }) => {
     }
   };
 
+  const ActionMenu = (event, number) => {
+    const callPhone = (phoneNumber) => {
+      Mixpanel.clickEvent('Call support', { phoneNumber });
+      DeviceService.call(phoneNumber);
+    };
+
+    const smsPhone = (phoneNumber) => {
+      Mixpanel.clickEvent('SMS support', { phoneNumber });
+      DeviceService.sms(phoneNumber, '');
+    };
+
+    const options = [i18n.t('bottomSheetContent.ride.phoneCallOptions.call'), i18n.t('bottomSheetContent.ride.phoneCallOptions.sms')];
+    if (Platform.OS === 'android') {
+      UIManager.showPopupMenu(
+        findNodeHandle(event.target),
+        options,
+        () => undefined,
+        (action, buttonIndex) => {
+          if (buttonIndex === 0) {
+            callPhone(number);
+          }
+
+          if (buttonIndex === 1) {
+            smsPhone(number);
+          }
+        },
+      );
+    } else {
+      ActionSheetIOS.showActionSheetWithOptions(
+        {
+          options: [i18n.t('bottomSheetContent.ride.phoneCallOptions.cancel'), ...options],
+          cancelButtonIndex: 0,
+        },
+        (buttonIndex) => {
+          if (buttonIndex === 1) {
+            callPhone(number);
+          }
+
+          if (buttonIndex === 2) {
+            smsPhone(number);
+          }
+        },
+      );
+    }
+  };
+
   return (
     <PageContainer>
       {!webViewWindow ? (
@@ -79,15 +129,17 @@ export default ({ menuSide }) => {
             />
             <ScrollView>
               <ContactUsPageLogoContainer style={Platform.OS === 'android' ? { shadowColor: '#000' } : {}}>
-                <ContactUsLogo resizeMode="center" source={logo} />
+                <ContactUsLogo resizeMode="contain" source={logo} />
               </ContactUsPageLogoContainer>
               <Container>
                 <CardsContainer>
                   <CardsTitle title={i18n.t('contactUs.contactInformationTitle')} />
                   <Card
-                    icon={copyIcon}
+                    icon={emailIcon}
                     onIconPress={() => {
-                      if (settings.contactEmail) { Clipboard.setString(settings.contactEmail); }
+                      if (settings.contactEmail) {
+                        Linking.openURL(`mailto:${settings.contactEmail}`);
+                      }
                     }}
                     title={i18n.t('onboarding.emailPlaceholder')}
                   >
@@ -96,7 +148,7 @@ export default ({ menuSide }) => {
                   {settings.contactPhone ? (
                     <Card
                       icon={phoneIcon}
-                      onIconPress={() => (settings.contactPhone ? Linking.openURL(`tel:${settings.contactPhone}`) : undefined)}
+                      onIconPress={e => (settings.contactPhone ? ActionMenu(e, settings.contactPhone) : undefined)}
                       title={i18n.t('onboarding.phonePlaceholder')}
                     >
                       <Text>{settings.contactPhone}</Text>

@@ -15,7 +15,8 @@
         "type": {
             "pickup": "Pickup",
             "dropoff": "Drop off"
-        }
+        },
+        "highEta": "ETA is higher than usual" 
     },
     "general": {
         "back": "Back",
@@ -23,7 +24,8 @@
         "cancel": "Cancel",
         "skip": "Skip",
         "select": "Select",
-        "now": "Now"
+        "now": "Now",
+        "noTimeWindow": "ASAP"
     },
     "login": {
         "getStarted": "Get started!",
@@ -178,6 +180,14 @@
             "oneUpcomingRide": "Upcoming ride",
             "multipleUpcomingRides": "Upcoming rides"
         },
+        "promoCode": {
+            "amountOff": "{{amount}} off",
+            "placeholder": "please enter your coupon code here",
+            "buttonText": "Add code",
+            "pageHeader": "Add Promo Code",
+            "errorText": "Please enter a valid promo code",
+            "title": "Enter promo code"
+        },
         "RideScheduler": {
             "timeSelectionTitle": "I want to start",
             "now": "Now",
@@ -265,6 +275,12 @@
             "title": "Your ride has been canceled",
             "subTitle": "Sorry it didn't work out this time, please create an order to try again"
         },
+        "highEtaConfirm": {
+            "title": "Important!",
+            "text": "Please note that this service is currently experiencing high ETAs.\n\nFinding a driver might take longer than usual." ,
+            "submit": "Continue",
+            "back": "Back"
+        },
         "defaultFooterButton": "OK"
     },
     "menu": {
@@ -275,7 +291,8 @@
         "account": "User Profile",
         "support": "Contact us",
         "logout": "Logout",
-        "futureRides": "Upcoming Rides"
+        "futureRides": "Upcoming Rides",
+        "messages": "Messages"
     },
     "temporaryHoldText": "A small amount may be temporarily placed on hold when you start your ride ",
     "learnMore": "Learn more",
@@ -283,7 +300,7 @@
     {
         "title": "Temporary hold",
         "buttonText": "Got it",
-        "text": "You may see a  small amount on hold when you create a ride. This is to verify there are sufficient funds for your ride. {{appName}} will release the hold after your ride. It may take your bank several days to process."
+        "text": "You may see a small amount on hold when you create a ride. This is to verify there are sufficient funds for your ride. {{appName}} will release the hold after your ride. It may take your bank several days to process."
     },
     "deleteUserPopup": {
         "deleteUserTitle": "Delete Account",
@@ -300,12 +317,16 @@
         "contactInformationTitle": "Contact information"
     },
     "ridePriceBreakdown": {
+        "errorText": "Oops, looks like something went wrong",
+        "errorButtonText": "Get fare details",
+        "total": "Total",
+        "couponName": "Discount",
         "estimatedText": "The fares below are estimates and will be updated once the ride is completed based on the actual ride conditions",
         "pageTitle": "Payment breakdown",
-        "priceItem": "{{ name }} ",
-        "perUnit": " - {{ price }} per {{ unit }} ",
+        "priceItem": "{{ name }}",
+        "perUnit": "- {{ price }} per {{ unit }} ",
         "paymentBreakdownTitle": "Payment Breakdown",
-        "priceFieldNames": { 
+        "priceFieldNames": {
             "surgePrice": "Surge price",
             "discount": "Discount",
             "cancelationFee": "Cancelation fee",
@@ -345,18 +366,41 @@
       "noActivity": "No rides",
       "noActivityYet": "No rides yet",
       "noActivitySub": "Take your first ride and see it here!",
+      "unpaidRide": "Unpaid ride",
       "rideCard": {
         "rideJourney": "Ride journey",
         "driverRating": "Driver rating",
         "rateRide": "Tap to rate your ride",
         "addTip": "Add a tip",
-        "tip": "Tip {{price}}"
+        "tip": "Tip {{price}}",
+        "paymentRetry": {
+            "retryFailedTitle": "Unable to processs",
+            "retryFailedBody": "Seems like there was an issue trying to process your request.\n\nWe recommend trying again later or contacting our support team",
+            "retryFailedButton": "Contact our support",
+            "retrySuccessTitle": "You are all set!",
+            "retrySuccessBody": "Thank you for your payment - you can now resume your rides!",
+            "retrySuccessButton": "Done",
+            "retryPaymentButton": "Pay balance now"
+        }
       }
     },
     "futureRides": {
         "pageTitle": "Upcoming rides",
         "noRidesTitle": "No upcoming rides",
         "noRidesText": "Create a scheduled ride and see it here!"
+    },
+    "messages": {
+        "pageTitle": "Messages",
+        "readMore": "Read more",
+        "now": "Now",
+        "noMessagesTitle": "No new messages",
+        "noMessagesText": "We'll let you know when you have one!",
+        "toast":{
+            "dismiss": "Dismiss"
+        }
+    },
+    "messageView": {
+        "pageTitle": "Messages"
     },
     "postRide": {
         "pageTitle": "Ride finished",
@@ -377,6 +421,10 @@
                 "inputPlaceholder":"amount...",
                 "invalidAmountError": "Please enter a valid amount"
             }
+        },
+        "writeComment": {
+            "title": "Write a comment",
+            "placeholder": "Comments may be shared anonymously with drivers"
         }
     },
     "payments": {
@@ -407,7 +455,8 @@
         "newCardDetails": "Please add your payment details",
         "setPaymentBanner": "Set payment method",
         "payWithCash": "Pay with Cash",
-        "cash": "cash",
+        "cash": "Cash",
+        "offline": "Offline payment",
         "popups": {
             "removeCard": {
                 "title": "Remove payment method",
@@ -463,7 +512,9 @@
     "confirmPickupTime": {
         "titleText": "Scheduled ride",
         "buttonText": "Set pick up time",
-        "pickupText": "Pick up on {{date}}, at {{time}}"
+        "pickupTextTime": "Pickup at {{afterTime}} - {{beforeTime}}",
+        "pickupTextDay": "On {{date}}",
+        "pickupTextToday": "Today, {{date}}"
     },
     "locationRequest": {
         "titleText": "Update location services",
@@ -477,7 +528,7 @@
     },
     "confirmingFutureRide": {
         "titleText": "Confirming your scheduled ride",
-        "subTitleText": "For {{date}}",
+        "subTitleText": "For {{date}} - {{beforeTime}}",
         "secondaryButtonText": "Cancel ride"
     },
     "cancelRide": {
@@ -498,7 +549,8 @@
     "notAvailableHere": {
       "titleText": "We are Sorry!",
       "buttonText": "Choose another address",
-      "subTitleText": "{{ appName }} is not available in your area"
+      "subTitleText": "{{ appName }} is not available in your area",
+      "pickupSubTitleText": "Pickup location must be within the {{ appName }} area"
     },
     "noPayment": {
         "titleText": "No payment set",
@@ -509,7 +561,8 @@
     "noAvailableVehicles": {
         "titleText": "We are really busy",
         "buttonText": "Order again",
-        "subTitleText": "Please try again in a few minutes"
+        "subTitleText": "Please try again in a few minutes",
+        "buttonText2": "Take me back"
     },
     "ride": {
         "now": "Now",
@@ -519,8 +572,9 @@
         },
         "rider": "Rider",
         "riders": "Riders",
+        "promoText": "Promo code",
         "addPayment": "Add Payment",
-        "chosePickupTime": "Time of departure",
+        "chosePickupTime": "Set your pickup window",
         "contactDriver": "Contact driver",
         "shareRide": "Share ride",
         "cancelRide": "Cancel ride",
@@ -528,6 +582,10 @@
           "call": "Call",
           "sms": "SMS",
           "cancel": "Cancel"
+        },
+        "highEtaButton": {
+            "enabled": "Select",
+            "disabled": "Temporarily unavailable, try again soon."
         }
     }
   },
@@ -554,7 +612,9 @@
         "pending": "Dropoff ETA"
     },
     "topMessage": {
-        "outstandBalanceCreditCard": "You can't order rides at the moment. There is an outstanding payment on {{ name }}. Please contact support to clear this balance.",
+        "outstandBalanceCreditCard": "Your last ride's payment failed. Ordering rides is disabled until the outstanding payment is settled.",
+        "outstandBalanceTitle": "Outstanding Balance",
+        "outstandBalanceButton": "Settle payment",
         "precedingStops": "Your driver is completing a stop nearby"
     }
   },

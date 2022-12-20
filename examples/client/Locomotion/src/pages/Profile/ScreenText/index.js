@@ -1,8 +1,9 @@
 import React from 'react';
+import propsTypes from 'prop-types';
 import { SubText, Text, TextContainer } from './styles';
 
 const ScreenText = ({ text, subText }) => (
-  <TextContainer>
+  <TextContainer hasSubText={!!subText}>
     <Text>
       {text}
     </Text>
@@ -13,5 +14,14 @@ const ScreenText = ({ text, subText }) => (
     )}
   </TextContainer>
 );
+
+ScreenText.propTypes = {
+  text: propsTypes.string.isRequired,
+  subText: propsTypes.string,
+};
+
+ScreenText.defaultProps = {
+  subText: null,
+};
 
 export default ScreenText;

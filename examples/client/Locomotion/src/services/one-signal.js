@@ -7,10 +7,11 @@ import { updateUser } from '../context/user/api';
 import { StorageService } from '.';
 import Mixpanel from './Mixpanel';
 
-
 class NotificationsService {
   constructor() {
     this.network = network;
+    this.notificationsHandlers = {};
+    this.foregroundNotificationsHandlers = {};
   }
 
   updateServer = async (pushTokenId, userId, isSubscribed) => {
@@ -38,8 +39,6 @@ class NotificationsService {
   };
 
   init = async (notificationsHandlers) => {
-    this.notificationsHandlers = notificationsHandlers;
-
     OneSignal.setAppId(Config.ONESIGNAL_APP_ID);
     OneSignal.setNotificationOpenedHandler(this.onOpened);
     OneSignal.disablePush(false);
@@ -55,7 +54,14 @@ class NotificationsService {
     }
     OneSignal.addSubscriptionObserver(this.subscriptionObserverHandler);
     OneSignal.addPermissionObserver(this.checkLatestDeviceState);
-
+    OneSignal.setNotificationWillShowInForegroundHandler((notificationReceivedEvent) => {
+      const notification = notificationReceivedEvent.getNotification();
+      const { additionalData } = notification;
+      if (additionalData && additionalData.type && this.foregroundNotificationsHandlers[additionalData.type]) {
+        this.foregroundNotificationsHandlers[additionalData.type](additionalData);
+      }
+      notificationReceivedEvent.complete(notification);
+    });
     await this.checkLatestDeviceState();
   };
 
@@ -73,13 +79,13 @@ class NotificationsService {
   };
 
   onOpened = (openResult) => {
-    /* const { additionalData } = openResult.notification.payload;
+    const { additionalData } = openResult.notification;
     if (additionalData && additionalData.type) {
       const method = this.notificationsHandlers[additionalData.type];
       if (method) {
-        method();
+        method(additionalData);
       }
-    } */
+    }
   };
 
   triggerOnNotification = (payload) => {
@@ -99,6 +105,14 @@ class NotificationsService {
   };
 
   getOneSignalId = () => new Promise(resolve => OneSignal.getPermissionSubscriptionState(({ userId }) => resolve(userId)));
+
+  addNotificationHandler(type, handler) {
+    this.notificationsHandlers[type] = handler;
+  }
+
+  addForegroundNotificationHandler(type, handler) {
+    this.foregroundNotificationsHandlers[type] = handler;
+  }
 }
 
 export default new NotificationsService();

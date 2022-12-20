@@ -7,16 +7,20 @@ import styled, { ThemeContext } from 'styled-components';
 import { useBottomSheet } from '@gorhom/bottom-sheet';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import moment from 'moment';
-import DatePicker from 'react-native-date-picker';
+import objDefault from '../../lib/objDefault';
 import Mixpanel from '../../services/Mixpanel';
 import GenericErrorPopup from '../../popups/GenericError';
 import TextRowWithIcon from '../../Components/TextRowWithIcon';
 import { FutureRidesContext } from '../../context/futureRides';
-import { STOP_POINT_TYPES } from '../../lib/commonTypes';
+import { RIDE_STATES, STOP_POINT_TYPES } from '../../lib/commonTypes';
 import SvgIcon from '../SvgIcon';
 import { RidePageContext } from '../../context/newRideContext';
+import SettingContext from '../../context/settings';
+import SETTINGS_KEYS from '../../context/settings/keys';
 import i18n from '../../I18n';
-import { ERROR_COLOR, FONT_SIZES, FONT_WEIGHTS } from '../../context/theme';
+import {
+  ERROR_COLOR, FONT_SIZES, FONT_WEIGHTS, getTextColorForTheme,
+} from '../../context/theme';
 import Button from '../Button';
 import { BottomSheetContext, SNAP_POINT_STATES } from '../../context/bottomSheetContext';
 import { RideStateContextContext } from '../../context/ridePageStateContext';
@@ -31,9 +35,12 @@ import locationIcon from '../../assets/location_pin.svg';
 import Loader from '../Loader';
 import { MewRidePageContext } from '../..';
 import timeIcon from '../../assets/calendar.svg';
+import clockIcon from '../../assets/bottomSheet/clock.svg';
 import ActiveRideContent from './ActiveRide';
 import RoundedButton from '../RoundedButton';
 import { getFutureRideMaxDate, getFutureRideMinDate } from '../../context/newRideContext/utils';
+import { PAYMENT_METHODS } from '../../pages/Payments/consts';
+import DatePickerPoppup from '../../popups/DatePickerPoppup';
 
 const OtherButton = styled(Button)`
   background-color: ${({ warning, theme }) => (warning ? ERROR_COLOR : theme.primaryColor)};
@@ -108,7 +115,7 @@ const AddressInput = styled(Text)`
 `;
 
 const LoaderContainer = styled(View)`
-  height: 25px;
+  height: 20px;
   width: 100%;
   margin: auto 0;
   margin-top: 25px;
@@ -138,6 +145,28 @@ const AddressContainer = styled(View)`
   flex-direction: row;
   align-items: center;
 `;
+
+const PickerTitle = styled(Text)`
+  ${FONT_SIZES.H1};
+  ${FONT_WEIGHTS.SEMI_BOLD};
+  margin-bottom: 25px;
+`;
+
+const PickerDate = styled(Text)`
+  ${FONT_SIZES.H3};
+  ${FONT_WEIGHTS.LIGHT};
+  margin-bottom: 7px;
+`;
+
+const PickerTimeRange = styled(Text)`
+  ${FONT_SIZES.H1};
+`;
+
+const RIDE_STATES_TO_BS_PAGES = objDefault({
+  [RIDE_STATES.PENDING]: BS_PAGES.CONFIRMING_RIDE,
+  [RIDE_STATES.MATCHING]: BS_PAGES.CONFIRMING_RIDE,
+  defaultValue: BS_PAGES.ACTIVE_RIDE,
+});
 
 const BsPage = ({
   onSecondaryButtonPress,
@@ -235,56 +264,106 @@ BsPage.defaultProps = {
 export default BsPage;
 
 export const ConfirmPickupTime = (props: any) => {
-  const theme = useContext(ThemeContext);
+  const { getSettingByKey } = SettingContext.useContainer();
   const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
+  const [minMinutesBeforeFutureRide, setMinMinutesBeforeFutureRide] = useState<number | null>(null);
   const {
     unconfirmedPickupTime,
     updateRidePayload,
     setUnconfirmedPickupTime,
     tryServiceEstimations,
     setServiceEstimations,
+    ride,
+    chosenService,
+    defaultService,
   } = useContext(MewRidePageContext);
   const {
     changeBsPage,
   } = useContext(RideStateContextContext);
   const date = moment(unconfirmedPickupTime).format('ddd, MMM Do');
-  const time = moment(unconfirmedPickupTime).format('h:mm A');
+  const isDateToday = moment(unconfirmedPickupTime).isSame(moment(), 'day');
+  const afterTime = moment(unconfirmedPickupTime).format('h:mm A');
+  const windowSize = (chosenService || defaultService)?.futurePickupWindowSizeInMinutes;
+  const beforeTime = (windowSize && moment(unconfirmedPickupTime).add(windowSize, 'minutes').format('h:mm A')) || i18n.t('general.noTimeWindow');
+  const startDate = moment(unconfirmedPickupTime).add(unconfirmedPickupTime ? 0 : (minMinutesBeforeFutureRide || 0) + 1, 'minutes').toDate();
+  const [tempSelectedDate, setTempSelectedDate] = useState(startDate);
+
+  const checkMinutesBeforeFutureRideSetting = async () => {
+    const minutes = await getSettingByKey(SETTINGS_KEYS.MIN_MINUTES_BEFORE_FUTURE_RIDE);
+    setMinMinutesBeforeFutureRide(minutes);
+  };
+  useEffect(() => {
+    checkMinutesBeforeFutureRideSetting();
+  }, []);
+  useEffect(() => {
+    setTempSelectedDate(startDate);
+  }, [minMinutesBeforeFutureRide]);
+
+  const afterTimeTitle = moment(tempSelectedDate).format('h:mm A');
+  const pickupWindowTime = (chosenService || defaultService)?.futurePickupWindowSizeInMinutes;
+  const beforeTimeTitle = (pickupWindowTime
+    && moment(tempSelectedDate).add(pickupWindowTime, 'minutes').format('h:mm A'))
+    || i18n.t('general.noTimeWindow');
+  const renderDatePickerTitle = () => (
+    <>
+      <PickerTitle>{i18n.t('bottomSheetContent.ride.chosePickupTime')}</PickerTitle>
+      <PickerDate>{moment(tempSelectedDate).format('dddd, MMM Do')}</PickerDate>
+      <PickerTimeRange>{`${afterTimeTitle} - ${beforeTimeTitle}`}</PickerTimeRange>
+
+    </>
+  );
   return (
     <BsPage
       TitleText={i18n.t('bottomSheetContent.confirmPickupTime.titleText')}
       ButtonText={i18n.t('bottomSheetContent.confirmPickupTime.buttonText')}
       fullWidthButtons
       onButtonPress={() => {
-        updateRidePayload({ scheduledTo: unconfirmedPickupTime });
-        setServiceEstimations(null);
+        if (ride?.scheduledTo !== unconfirmedPickupTime) {
+          updateRidePayload({ scheduledTo: unconfirmedPickupTime });
+          setServiceEstimations(null);
+        }
         changeBsPage(BS_PAGES.SERVICE_ESTIMATIONS);
       }}
       {...props}
     >
       <RoundedButton
-        onPress={() => setIsDatePickerOpen(true)}
+        onPress={() => minMinutesBeforeFutureRide && setIsDatePickerOpen(true)}
+        hollow
+        icon={clockIcon}
+        style={{
+          borderColor: '#f1f2f6',
+          marginBottom: 20,
+        }}
+      >
+        {i18n.t('bottomSheetContent.confirmPickupTime.pickupTextTime', { afterTime, beforeTime })}
+      </RoundedButton>
+      <RoundedButton
+        onPress={() => minMinutesBeforeFutureRide && setIsDatePickerOpen(true)}
         hollow
         icon={timeIcon}
         style={{
           borderColor: '#f1f2f6',
         }}
       >
-        {i18n.t('bottomSheetContent.confirmPickupTime.pickupText', { date, time })}
+        {i18n.t(`bottomSheetContent.confirmPickupTime.${isDateToday ? 'pickupTextToday' : 'pickupTextDay'}`, { date })}
       </RoundedButton>
-      <DatePicker
-        textColor={theme.textColor}
-        open={isDatePickerOpen}
-        date={moment(unconfirmedPickupTime).add(unconfirmedPickupTime ? 0 : 1, 'hours').toDate()}
+      <DatePickerPoppup
+        testID="datePicker"
+        textColor="black"
+        isVisible={isDatePickerOpen}
+        date={tempSelectedDate}
         maximumDate={getFutureRideMaxDate()}
-        minimumDate={getFutureRideMinDate()}
+        minimumDate={getFutureRideMinDate((minMinutesBeforeFutureRide || 0))}
         mode="datetime"
-        title={i18n.t('bottomSheetContent.ride.chosePickupTime')}
+        title={renderDatePickerTitle()}
+        confirmText={i18n.t('general.select')}
+        cancelText={i18n.t('general.cancel')}
         onCancel={() => setIsDatePickerOpen(false)}
         onConfirm={(newDate: Date) => {
           setUnconfirmedPickupTime(newDate.getTime());
           setIsDatePickerOpen(false);
         }}
-        modal
+        onChange={(newDate: Date) => setTempSelectedDate(newDate)}
       />
     </BsPage>
   );
@@ -321,7 +400,7 @@ export const LocationRequest = (props: any) => (
 export const CancelRide = (props: any) => {
   const [isLoading, setIsLoading] = useState(false);
   const [showError, setShowError] = useState(false);
-  const { cancelRide } = useContext(RidePageContext);
+  const { cancelRide, ride } = useContext(RidePageContext);
   const { changeBsPage } = useContext(RideStateContextContext);
 
   return (
@@ -342,7 +421,9 @@ export const CancelRide = (props: any) => {
           Mixpanel.setEvent('failed to cancel ride', { status: e?.response?.status });
         }
       }}
-      onSecondaryButtonPress={() => changeBsPage(BS_PAGES.ACTIVE_RIDE)}
+      onSecondaryButtonPress={() => changeBsPage(
+        RIDE_STATES_TO_BS_PAGES[ride.state || RIDE_STATES.ACTIVE],
+      )}
       warning
       buttonDisabled={isLoading}
       {...props}
@@ -357,13 +438,25 @@ export const CancelRide = (props: any) => {
 
 export const ConfirmFutureRide = (props: any) => {
   const { newFutureRide } = useContext(FutureRidesContext);
+  const { chosenService } = useContext(MewRidePageContext);
+
+  const getTimeDisplay = () => {
+    const afterTime = moment.parseZone(newFutureRide?.scheduledTo).format('h:mm A');
+    const windowSize = chosenService?.futurePickupWindowSizeInMinutes;
+    const beforeTime = (windowSize && moment.parseZone(newFutureRide?.scheduledTo).add(windowSize, 'minutes').format('h:mm A')) || i18n.t('general.noTimeWindow');
+
+    const timeText = i18n.t('bottomSheetContent.confirmPickupTime.pickupTextTime', { afterTime, beforeTime });
+    return <TextRowWithIcon text={timeText} icon={clockIcon} />;
+  };
 
   const getDateDisplay = () => {
-    const date = moment(newFutureRide?.scheduledTo).format('ddd, MMM Do');
-    const time = moment(newFutureRide?.scheduledTo).format('h:mm A');
-    const dateText = i18n.t('bottomSheetContent.confirmPickupTime.pickupText', { date, time });
+    const date = moment.parseZone(newFutureRide?.scheduledTo).format('ddd, MMM Do');
+    const isDateToday = moment.parseZone(newFutureRide?.scheduledTo).isSame(moment(), 'day');
+
+    const dateText = i18n.t(`bottomSheetContent.confirmPickupTime.${isDateToday ? 'pickupTextToday' : 'pickupTextDay'}`, { date });
     return <TextRowWithIcon text={dateText} icon={timeIcon} />;
   };
+
   const getPickupDisplay = () => {
     const pickup = (newFutureRide?.stopPoints || [])
       .find(sp => sp.type === STOP_POINT_TYPES.STOP_POINT_PICKUP);
@@ -383,6 +476,7 @@ export const ConfirmFutureRide = (props: any) => {
       fullWidthButtons
       {...props}
     >
+      {getTimeDisplay()}
       {getDateDisplay()}
       {getPickupDisplay()}
       {getDropOffDisplay()}
@@ -405,7 +499,7 @@ export const NotAvailableHere = (props: any) => {
       SubTitleText={i18n.t('bottomSheetContent.notAvailableHere.subTitleText', {
         appName: Config.OPERATION_NAME,
       })}
-      Image={<SvgIcon Svg={outOfTerritoryIcon} height={85} width={140} fill={primaryColor} />}
+      Image={<SvgIcon Svg={outOfTerritoryIcon} height={85} width={110} fill={primaryColor} />}
       fullWidthButtons
       {...props}
     />
@@ -475,7 +569,7 @@ export const NoPayment = (props: any) => {
   } = payments.useContainer();
 
   const proceedIfPaymentMethodsAreValid = () => {
-    if (clientHasValidPaymentMethods() || ride.paymentMethodId === 'cash') {
+    if (clientHasValidPaymentMethods() || ride.paymentMethodId === PAYMENT_METHODS.CASH) {
       requestRide();
     }
   };
@@ -503,10 +597,26 @@ export const NoPayment = (props: any) => {
   );
 };
 
+export const Loading = (props: any) => (
+  <BsPage
+    {...props}
+  >
+    <LoaderContainer>
+      <Loader
+        dark
+        lottieViewStyle={{
+          height: '100%', width: '100%', alignItems: 'center', justifyContent: 'center',
+        }}
+        sourceProp={undefined}
+      />
+    </LoaderContainer>
+  </BsPage>
+);
+
 export const ConfirmingRide = (props: any) => {
   const { setSnapPointsState } = useContext(BottomSheetContext);
   const { changeBsPage } = useContext(RideStateContextContext);
-  const { ride } = useContext(RidePageContext);
+  const { ride, chosenService } = useContext(RidePageContext);
   useEffect(() => {
     setSnapPointsState(SNAP_POINT_STATES.CONFIRMING_RIDE);
   }, []);
@@ -515,10 +625,12 @@ export const ConfirmingRide = (props: any) => {
     ? i18n.t('bottomSheetContent.confirmingFutureRide.titleText')
     : i18n.t('bottomSheetContent.confirmingRide.titleText');
 
+  const windowSize = chosenService?.futurePickupWindowSizeInMinutes;
+  const beforeTime = windowSize ? moment(ride.scheduledTo).add(windowSize, 'minutes').format('h:mm A') : i18n.t('general.noTimeWindow');
 
   const SubTitleText = ride?.scheduledTo
     ? i18n.t('bottomSheetContent.confirmingFutureRide.subTitleText',
-      { date: moment(ride.scheduledTo).format('MMM D, h:mm A') })
+      { date: moment(ride.scheduledTo).format('MMM D, h:mm A'), beforeTime })
     : null;
   return (
     <BsPage

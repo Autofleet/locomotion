@@ -84,3 +84,38 @@ export const maskStopPointPhones = async (rideId, stopPointId) => {
   const { data } = await network.get(`/api/v2/ride/${rideId}/stop-points/${stopPointId}/masked-phones`);
   return data;
 };
+
+export const fetchRides = async ({
+  fromDate,
+  toDate,
+  pageNumber,
+  pageSize,
+  orderBy,
+  sort,
+  ...params
+}) => {
+  const { data } = await network.get('/api/v1/me/rides', {
+    params: {
+      fromDate,
+      toDate,
+      pageNumber,
+      pageSize,
+      orderBy,
+      sort,
+      ...(params || {}),
+    },
+  });
+  return data;
+};
+
+
+export const getLocationTimezone = async (lat, lng) => {
+  const { data } = await network.get('/api/v1/timezone', {
+    params: {
+      lat,
+      lng,
+    },
+  });
+
+  return data;
+};

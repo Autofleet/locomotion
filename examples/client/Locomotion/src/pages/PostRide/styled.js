@@ -1,4 +1,4 @@
-import { View } from 'react-native';
+import { ScrollView, View } from 'react-native';
 import styled from 'styled-components';
 
 
@@ -31,7 +31,7 @@ export const StarIcon = styled.Image(({ isOn, theme }) => `
   `}
 `);
 
-export const PageContent = styled(View)`
+export const PageContent = styled(ScrollView)`
     width: 100%;
     height: 100%;
     padding: 0px;

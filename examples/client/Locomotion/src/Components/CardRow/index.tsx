@@ -1,20 +1,21 @@
 /* eslint-disable no-nested-ternary */
 /* eslint-disable no-mixed-operators */
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { View, Text } from 'react-native';
 import moment from 'moment';
-import styled from 'styled-components';
+import styled, { ThemeContext } from 'styled-components';
 import { PaymentIcon } from 'react-native-payment-icons';
 import { PaymentMethodInterface } from 'context/payments/interface';
 import Button from '../Button';
 import { capitalizeFirstLetter, getLastFourForamttedShort } from '../../pages/Payments/cardDetailUtils';
-import cashPaymentMethod from '../../pages/Payments/cashPaymentMethod';
 import i18n from '../../I18n';
 import SvgIcon from '../SvgIcon';
 import selected from '../../assets/selected-v.svg';
 import { Start, StartCapital } from '../../lib/text-direction';
 import cashIcon from '../../assets/cash.svg';
 import chevronIcon from '../../assets/chevron.svg';
+import { isCashPaymentMethod } from '../../lib/ride/utils';
+
 
 type ContainerProps = {
   children: React.ReactNode,
@@ -90,9 +91,8 @@ const style = {
   [StartCapital()]: 28,
 };
 
-const isCashPaymentMethod = (paymentMethod: any) => paymentMethod.id === cashPaymentMethod.id;
-
 const CardRow = (paymentMethod: any) => {
+  const { primaryColor } = useContext(ThemeContext);
   const [isCardExpired, setIsCardExpired] = useState(false);
   useEffect(() => {
     let isExpired = false;
@@ -123,8 +123,8 @@ const CardRow = (paymentMethod: any) => {
               )
               : (
                 <>
-                  {isCashPaymentMethod(paymentMethod)
-                    ? <SvgIcon Svg={cashIcon} width={40} height={25} />
+                  {!paymentMethod.lastFour
+                    ? isCashPaymentMethod(paymentMethod) ? <SvgIcon Svg={cashIcon} width={40} height={25} /> : null
                     : <PaymentIcon type={paymentMethod.brand} />}
                   {paymentMethod.mark ? (
                     <SvgIcon
@@ -134,6 +134,7 @@ const CardRow = (paymentMethod: any) => {
                         bottom: -7,
                       }}
                       Svg={selected}
+                      fill={primaryColor}
                     />
                   ) : null }
                 </>
@@ -150,10 +151,10 @@ const CardRow = (paymentMethod: any) => {
               )
               : (
                 <>
-                  {isCashPaymentMethod(paymentMethod)
+                  {!paymentMethod.lastFour
                     ? (
                       <Type>
-                        {paymentMethod.name}
+                        {`${i18n.t(`payments.${isCashPaymentMethod(paymentMethod) ? 'cash' : 'offline'}`)}`}
                       </Type>
                     )
                     : (
@@ -164,8 +165,8 @@ const CardRow = (paymentMethod: any) => {
                   {paymentMethod.lastFour
                     ? <Description>{getLastFourForamttedShort(paymentMethod.lastFour)}</Description>
                     : null}
-                  {paymentMethod && paymentMethod.expiresAt && !isCashPaymentMethod(paymentMethod) && isCardExpired ? <Error>{i18n.t('payments.expired').toString()}</Error> : null}
-                  {paymentMethod && !isCashPaymentMethod(paymentMethod) && paymentMethod.hasOutstandingBalance ? <Error>{i18n.t('payments.hasOutstandingBalance').toString()}</Error> : null}
+                  {paymentMethod && paymentMethod.expiresAt && !!paymentMethod.lastFour && isCardExpired ? <Error>{i18n.t('payments.expired').toString()}</Error> : null}
+                  {paymentMethod && !!paymentMethod.lastFour && paymentMethod.hasOutstandingBalance ? <Error>{i18n.t('payments.hasOutstandingBalance').toString()}</Error> : null}
                 </>
               )}
           </TextContainer>

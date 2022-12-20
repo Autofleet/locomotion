@@ -1,5 +1,6 @@
 import i18n from '../../I18n';
 import { PaymentMethodInterface } from '../../context/payments/interface';
+import { PAYMENT_METHODS } from './consts';
 
 const cashPaymentMethod : PaymentMethodInterface = {
   brand: 'generic',
@@ -7,7 +8,7 @@ const cashPaymentMethod : PaymentMethodInterface = {
   customerId: '',
   expiresAt: new Date(2100, 9, 9),
   hasOutstandingBalance: false,
-  id: i18n.t('payments.cash'),
+  id: PAYMENT_METHODS.CASH,
   isDefault: false,
   isExpired: false,
   lastFour: '',

@@ -1,17 +1,17 @@
 import React, { useContext, useEffect } from 'react';
 import { initStripe } from '@stripe/stripe-react-native';
 import Config from 'react-native-config';
+import moment from 'moment';
+import { Platform } from 'react-native';
 import { APP_ROUTES, MAIN_ROUTES } from '../routes';
-import Auth from '../../services/auth';
+import { logout } from '../../services/logout';
 import { getUserDetails } from '../../context/user/api';
 import { OnboardingContext } from '../../context/onboarding';
 import PaymentsContext from '../../context/payments';
 import { UserContext } from '../../context/user';
 import settings from '../../context/settings';
-import SETTINGS_KEYS from '../../context/settings/keys';
 import { StorageService } from '../../services';
 import FullPageLoader from '../../Components/FullPageLoader';
-import { checkVersionAndForceUpdateIfNeeded } from '../../services/VersionCheck';
 import * as navigationService from '../../services/navigation';
 
 export const INITIAL_USER_STATE = {
@@ -26,7 +26,7 @@ export const INITIAL_USER_STATE = {
 };
 
 const AuthLoadingScreen = () => {
-  const { setUser, user } = useContext(UserContext);
+  const { setUser, user, updateUser } = useContext(UserContext);
   const { navigateBasedOnUser } = useContext(OnboardingContext);
   const { getSettingByKey, getAppSettings } = settings.useContainer();
 
@@ -37,14 +37,6 @@ const AuthLoadingScreen = () => {
     return StorageService.save({ clientProfile });
   };
 
-  const versionCheck = async () => {
-    const minAppVersion = await getSettingByKey(
-      SETTINGS_KEYS.MIN_APP_VERSION,
-    );
-
-    await checkVersionAndForceUpdateIfNeeded(minAppVersion);
-  };
-
   const init = async () => {
     async function getFromStorage() {
       const clientProfile = await StorageService.get('clientProfile');
@@ -53,16 +45,20 @@ const AuthLoadingScreen = () => {
         try {
           response = await getUserDetails();
           if (!response) {
-            Auth.logout();
+            logout();
           }
         } catch (e) {
-          Auth.logout();
+          logout();
         }
 
         const userData = response;
         const [paymentAccount] = await Promise.all([
           usePayments.getOrFetchClientPaymentAccount(),
           usePayments.loadCustomer(),
+          updateUser({
+            lastLogin: moment().toDate(),
+            deviceType: Platform.OS,
+          }),
         ]);
 
 
@@ -81,7 +77,14 @@ const AuthLoadingScreen = () => {
           return navigateBasedOnUser(userData);
         }
 
-        return navigationService.replace(APP_ROUTES.MAIN_APP);
+        const nav = navigationService.getNavigator();
+        const currentRoute = nav.getCurrentRoute();
+
+        if (currentRoute.name === APP_ROUTES.AUTH_LOADING) {
+          return navigationService.replace(APP_ROUTES.MAIN_APP);
+        }
+
+        return true;
       }
       setUser(INITIAL_USER_STATE);
       navigationService.replace(MAIN_ROUTES.START);

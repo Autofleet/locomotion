@@ -1,17 +1,22 @@
 import React, {
   useContext, useEffect, useRef, useState,
 } from 'react';
+import Toast from 'react-native-toast-message';
 import { useIsFocused, useFocusEffect } from '@react-navigation/native';
 import {
   AppState, BackHandler, Platform, View,
 } from 'react-native';
 import { Portal } from '@gorhom/portal';
+import Config from 'react-native-config';
+import AFToast from '../../Components/Toast';
 import * as navigationService from '../../services/navigation';
 import { MAIN_ROUTES } from '../routes';
 import { getPolylineList } from '../../lib/polyline/utils';
 import { FutureRidesContext } from '../../context/futureRides';
 import FutureRidesButton from '../../Components/FutureRidesButton';
-import { RIDE_STATES, STOP_POINT_STATES, STOP_POINT_TYPES } from '../../lib/commonTypes';
+import {
+  PAYMENT_STATES, RIDE_STATES, STOP_POINT_STATES, STOP_POINT_TYPES,
+} from '../../lib/commonTypes';
 import { RIDE_POPUPS } from '../../context/newRideContext/utils';
 import { UserContext } from '../../context/user';
 import {
@@ -26,9 +31,11 @@ import {
   ConfirmPickupTime,
   ConfirmFutureRide,
   GenericError,
+  Loading,
 } from '../../Components/BsPages';
 import { RideStateContextContext, RideStateContextContextProvider } from '../../context';
-import NewRidePageContextProvider, { RidePageContext } from '../../context/newRideContext';
+import { RidePageContext } from '../../context/newRideContext';
+import { fetchRides } from '../../context/newRideContext/api';
 import BottomSheetContextProvider, { BottomSheetContext, SNAP_POINT_STATES } from '../../context/bottomSheetContext';
 import {
   PageContainer, MapOverlayButtons,
@@ -54,7 +61,11 @@ import { checkVersionAndForceUpdateIfNeeded } from '../../services/VersionCheck'
 import TopMessage from './TopMessage';
 import i18n from '../../I18n';
 import BlackOverlay from '../../Components/BlackOverlay';
-
+import { PAYMENT_METHODS } from '../Payments/consts';
+import { MessagesContext } from '../../context/messages';
+import alertIcon from '../../assets/warning.svg';
+import { rideHistoryContext } from '../../context/rideHistory';
+import SafeView from '../../Components/SafeView';
 
 const BLACK_OVERLAY_SCREENS = [BS_PAGES.CANCEL_RIDE];
 
@@ -62,13 +73,19 @@ const RidePage = ({ mapSettings, navigation }) => {
   const {
     locationGranted, setLocationGranted,
   } = useContext(UserContext);
-  const [addressSelectorFocus, setAddressSelectorFocus] = useState(STOP_POINT_TYPES.STOP_POINT_DROPOFF);
+  const [addressSelectorFocusIndex, setAddressSelectorFocusIndex] = useState(1);
+  const [topMessage, setTopMessage] = useState(null);
   const { getSettingByKey } = settings.useContainer();
   const mapRef = useRef();
   const bottomSheetRef = useRef(null);
+
   const {
     currentBsPage, changeBsPage,
   } = useContext(RideStateContextContext);
+  const { checkMessagesForToast } = useContext(MessagesContext);
+  const {
+    rides: historyRides, loadRides: loadHistoryRides,
+  } = useContext(rideHistoryContext);
   const {
     serviceEstimations,
     setServiceEstimations,
@@ -92,25 +109,33 @@ const RidePage = ({ mapSettings, navigation }) => {
   const {
     clientHasValidPaymentMethods,
     getClientOutstandingBalanceCard,
+    loadOutstandingBalanceRide,
+    loadCustomer,
+    hasOutstandingPayment,
   } = payments.useContainer();
   const {
     futureRides,
   } = useContext(FutureRidesContext);
 
-  const resetStateToAddressSelector = (selected = null) => {
+  useEffect(() => {
+    setAddressSelectorFocusIndex(requestStopPoints.findIndex(sp => !sp.lat));
+  }, [requestStopPoints]);
+  const resetStateToAddressSelector = (selectedIndex = null) => {
     setServiceEstimations(null);
     setChosenService(null);
     setRide({});
     changeBsPage(BS_PAGES.ADDRESS_SELECTOR);
-    setAddressSelectorFocus(selected);
+    setAddressSelectorFocusIndex(selectedIndex);
   };
 
-  const goBackToAddress = (selected) => {
-    resetStateToAddressSelector(selected);
-    setTimeout(() => {
-      setIsExpanded(true);
-      bottomSheetRef.current.expand();
-    }, 100);
+  const goBackToAddress = (selectedIndex, expand = true) => {
+    resetStateToAddressSelector(selectedIndex);
+    if (expand) {
+      setTimeout(() => {
+        setIsExpanded(true);
+        bottomSheetRef.current.expand();
+      }, 100);
+    }
   };
 
   const backToMap = () => {
@@ -118,6 +143,7 @@ const RidePage = ({ mapSettings, navigation }) => {
       BS_PAGES.SERVICE_ESTIMATIONS,
       BS_PAGES.CONFIRM_FUTURE_RIDE,
       BS_PAGES.ACTIVE_RIDE,
+      BS_PAGES.NO_AVAILABLE_SERVICES,
     ].includes(currentBsPage)) {
       resetStateToAddressSelector();
       initSps();
@@ -125,9 +151,7 @@ const RidePage = ({ mapSettings, navigation }) => {
       changeBsPage(BS_PAGES.SERVICE_ESTIMATIONS);
     } else {
       // sorry
-      setAddressSelectorFocus(selectedInputIndex === 0
-        ? STOP_POINT_TYPES.STOP_POINT_PICKUP
-        : STOP_POINT_TYPES.STOP_POINT_DROPOFF);
+      setAddressSelectorFocusIndex(selectedInputIndex);
       setTimeout(() => {
         setIsExpanded(true);
       }, 100);
@@ -137,6 +161,9 @@ const RidePage = ({ mapSettings, navigation }) => {
   };
 
   const BS_PAGE_TO_COMP = {
+    [BS_PAGES.LOADING]: () => (
+      <Loading />
+    ),
     [BS_PAGES.CONFIRM_FUTURE_RIDE]: () => (
       <ConfirmFutureRide
         onButtonPress={backToMap}
@@ -153,7 +180,7 @@ const RidePage = ({ mapSettings, navigation }) => {
     ),
     [BS_PAGES.LOCATION_REQUEST]: () => (
       <LocationRequest
-        onSecondaryButtonPress={() => goBackToAddress(STOP_POINT_TYPES.STOP_POINT_PICKUP)}
+        onSecondaryButtonPress={() => goBackToAddress(0)}
       />
     ),
     [BS_PAGES.GENERIC_ERROR]: () => (
@@ -167,15 +194,26 @@ const RidePage = ({ mapSettings, navigation }) => {
         }}
       />
     ),
+    [BS_PAGES.PICKUP_NOT_IN_TERRITORY]: () => (
+      <NotAvailableHere
+        fullWidthButtons
+        SubTitleText={i18n.t('bottomSheetContent.notAvailableHere.pickupSubTitleText', {
+          appName: Config.OPERATION_NAME,
+        })}
+        onButtonPress={() => {
+          goBackToAddress(0);
+        }}
+      />
+    ),
     [BS_PAGES.ADDRESS_SELECTOR]: () => (
-      <AddressSelector addressSelectorFocus={addressSelectorFocus} />
+      <AddressSelector addressSelectorFocusIndex={addressSelectorFocusIndex} />
     ),
     [BS_PAGES.CONFIRM_PICKUP]: () => (
       <ConfirmPickup
         isConfirmPickup
         initialLocation={requestStopPoints[0]}
         onButtonPress={(pickupLocation) => {
-          if (clientHasValidPaymentMethods() || ride.paymentMethodId === 'cash') {
+          if (clientHasValidPaymentMethods() || ride.paymentMethodId === PAYMENT_METHODS.CASH) {
             requestRide(pickupLocation);
           } else {
             changeBsPage(BS_PAGES.NO_PAYMENT);
@@ -191,6 +229,14 @@ const RidePage = ({ mapSettings, navigation }) => {
     ),
     [BS_PAGES.NO_PAYMENT]: () => <NoPayment />,
     [BS_PAGES.CONFIRMING_RIDE]: () => <ConfirmingRide />,
+    [BS_PAGES.NO_AVAILABLE_SERVICES]: () => (
+      <NoAvailableVehicles
+        onButtonPress={() => {
+          backToMap();
+        }}
+        ButtonText={i18n.t('bottomSheetContent.noAvailableVehicles.buttonText2')}
+      />
+    ),
     [BS_PAGES.NO_AVAILABLE_VEHICLES]: () => (
       <NoAvailableVehicles
         onButtonPress={() => {
@@ -204,11 +250,13 @@ const RidePage = ({ mapSettings, navigation }) => {
   const focusCurrentLocation = async () => {
     if ([RIDE_STATES.ACTIVE, RIDE_STATES.DISPATCHED].includes(ride.state)) {
       const currentStopPoint = (ride.stopPoints || []).find(sp => sp.state === STOP_POINT_STATES.PENDING);
-      const coords = getPolylineList(currentStopPoint, ride);
-      mapRef.current.fitToCoordinates(coords, {
-        animated: true,
-        edgePadding: ACTIVE_RIDE_MAP_PADDING,
-      });
+      if (currentStopPoint) {
+        const coords = getPolylineList(currentStopPoint, ride);
+        mapRef.current.fitToCoordinates(coords, {
+          animated: true,
+          edgePadding: ACTIVE_RIDE_MAP_PADDING,
+        });
+      }
     } else {
       const location = await getPosition();
       const { coords } = (location || DEFAULT_COORDS);
@@ -241,6 +289,10 @@ const RidePage = ({ mapSettings, navigation }) => {
     }
   }, [locationGranted]);
 
+  useEffect(() => {
+    loadCustomer();
+  }, []);
+
   useFocusEffect(
     React.useCallback(() => {
       const onBackPress = () => {
@@ -250,10 +302,11 @@ const RidePage = ({ mapSettings, navigation }) => {
         }
         return false;
       };
-      BackHandler.addEventListener('hardwareBackPress', onBackPress);
+      const backHandler = BackHandler.addEventListener('hardwareBackPress', onBackPress);
+      focusCurrentLocation();
 
-      return () => BackHandler.removeEventListener('hardwareBackPress', onBackPress);
-    }, []),
+      return () => backHandler.remove();
+    }, [serviceEstimations]),
   );
 
   const versionCheck = async () => {
@@ -267,6 +320,7 @@ const RidePage = ({ mapSettings, navigation }) => {
   const initChecks = async () => {
     await versionCheck();
     await checkLocationPermission();
+    await checkMessagesForToast();
   };
 
 
@@ -312,27 +366,34 @@ const RidePage = ({ mapSettings, navigation }) => {
     }
   }, [isExpanded]);
 
-  const MESSAGE_MAP = {
-    OUTSTANDING_BALANCE: {
-      text: () => {
-        const creditCard = getClientOutstandingBalanceCard();
-        return i18n.t('activeRide.topMessage.outstandBalanceCreditCard', {
-          name: creditCard.name,
-        });
-      },
-      condition: () => {
-        const creditCard = getClientOutstandingBalanceCard();
-        return creditCard && currentBsPage === BS_PAGES.SERVICE_ESTIMATIONS;
-      },
-    },
-    PRECEDING_STOPS: {
-      condition: () => ride?.stopPoints && ride?.stopPoints[0]?.precedingStops?.length,
-      text: () => i18n.t('activeRide.topMessage.precedingStops'),
-    },
-  };
+  useEffect(() => {
+    prepareTopMessage();
+  }, [hasOutstandingPayment, ride?.stopPoints && ride?.stopPoints[0]?.precedingStops?.length]);
 
-  const topMessageKey = Object.keys(MESSAGE_MAP).find(key => MESSAGE_MAP[key].condition());
-  const topMessage = MESSAGE_MAP[topMessageKey];
+  const prepareTopMessage = async () => {
+    const MESSAGE_MAP = {
+      OUTSTANDING_BALANCE: {
+        text: () => i18n.t('activeRide.topMessage.outstandBalanceCreditCard'),
+        condition: () => hasOutstandingPayment,
+        title: i18n.t('activeRide.topMessage.outstandBalanceTitle'),
+        titleIcon: alertIcon,
+        buttonText: i18n.t('activeRide.topMessage.outstandBalanceButton'),
+        onClick: async () => {
+          const rejectedRide = await loadOutstandingBalanceRide();
+          navigationService.navigate(MAIN_ROUTES.COMPLETED_RIDE_OVERVIEW_PAGE, {
+            rideId: rejectedRide.rideId,
+          });
+        },
+      },
+      PRECEDING_STOPS: {
+        condition: () => ride?.stopPoints && ride?.stopPoints[0]?.precedingStops?.length,
+        text: () => i18n.t('activeRide.topMessage.precedingStops'),
+      },
+    };
+
+    const topMessageKey = Object.keys(MESSAGE_MAP).find(key => MESSAGE_MAP[key].condition());
+    setTopMessage(MESSAGE_MAP[topMessageKey]);
+  };
 
   return (
     <PageContainer>
@@ -342,7 +403,7 @@ const RidePage = ({ mapSettings, navigation }) => {
       />
       {serviceEstimations || currentBsPage === BS_PAGES.SET_LOCATION_ON_MAP
         ? (
-          <>
+          <SafeView>
             <Header
               icon={backArrow}
               onPressIcon={backToMap}
@@ -350,17 +411,34 @@ const RidePage = ({ mapSettings, navigation }) => {
 
               <StopPointsViewer goBackToAddressSelector={goBackToAddress} />
             </Header>
-            {topMessage ? <TopMessage text={topMessage.text()} /> : null}
-          </>
+            {topMessage ? (
+              <TopMessage
+                text={topMessage.text()}
+                title={topMessage.title}
+                button={topMessage.buttonText}
+                onPress={topMessage.onClick}
+                icon={topMessage.titleIcon}
+              />
+            ) : null}
+          </SafeView>
         )
         : (
-          <>
+          <SafeView>
             <Header
+              testID="profileDataHamburger"
               icon={hamburgerIcon}
               onPressIcon={navigation.openDrawer}
             />
-            {topMessage ? <TopMessage text={topMessage.text()} /> : null}
-          </>
+            {topMessage ? (
+              <TopMessage
+                text={topMessage.text()}
+                title={topMessage.title}
+                button={topMessage.buttonText}
+                onPress={topMessage.onClick}
+                icon={topMessage.titleIcon}
+              />
+            ) : null}
+          </SafeView>
         )}
       <MapOverlayButtons
         style={{
@@ -410,6 +488,15 @@ BS_PAGE_TO_COMP[currentBsPage] ? BS_PAGE_TO_COMP[currentBsPage]() : null
         }
         />
       </Portal>
+      <Toast
+        config={{
+          tomatoToast: props => (
+            <AFToast
+              {...props}
+            />
+          ),
+        }}
+      />
     </PageContainer>
   );
 };

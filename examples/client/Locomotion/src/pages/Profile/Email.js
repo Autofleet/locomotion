@@ -72,6 +72,12 @@ const Email = () => {
     updateState({ email: value });
   };
 
+  useEffect(() => {
+    if (!(route.params && route.params.editAccount)) {
+      updateState({ email: '' });
+    }
+  }, []);
+
   return (
     <PageContainer>
       <Header title={i18n.t('onboarding.pages.email.title')} page={MAIN_ROUTES.EMAIL} />
