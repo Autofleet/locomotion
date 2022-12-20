@@ -657,9 +657,9 @@ const RidePageContextProvider = ({ children }: {
     setRequestStopPoints(reqSps);
   };
 
-  const setSpCurrentLocation = async () => {
+  const setSpCurrentLocation = async (index?: number) => {
     const newGeoLocation = await reverseLocationGeocode();
-    updateRequestSp(newGeoLocation);
+    updateRequestSp(newGeoLocation, index);
     return true;
   };
 
