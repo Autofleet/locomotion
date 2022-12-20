@@ -22,7 +22,9 @@ const updateUserLanguage = chosenLanguageCode => StorageService.save(
   { [USER_LANGUAGE_STORAGE_KEY]: chosenLanguageCode },
 );
 
-export let userLanguage: string;
+let userLanguage;
+
+export const getUserLanguageCode = () => userLanguage;
 
 export const getPreferredLanguageCode = async () => (
   (await getUserLanguage())
