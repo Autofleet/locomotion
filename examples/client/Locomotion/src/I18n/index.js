@@ -1,5 +1,9 @@
 import i18n from 'i18next';
+import _ from 'lodash';
+import * as axios from 'axios';
 import { initReactI18next } from 'react-i18next';
+import i18nHttpLoader from 'i18next-http-backend';
+import Backend from '@autofleet/i18next-remote-backend-with-locals';
 import * as RNLocalize from 'react-native-localize';
 import moment from 'moment';
 import 'moment/locale/fr';
@@ -16,6 +20,15 @@ const USER_LANGUAGE_STORAGE_KEY = 'userLanguage';
 const getUserLanguage = async () => {
   const languageCode = await StorageService.get(USER_LANGUAGE_STORAGE_KEY);
   return languageCode;
+};
+
+const extractLanguageFromUrl = (url) => {
+  if (!url) {
+    return 'en';
+  }
+  const endpoints = url.split('/');
+  const lastEndpoint = endpoints[endpoints.length - 1];
+  return lastEndpoint.split('.')[0];
 };
 
 const updateUserLanguage = chosenLanguageCode => StorageService.save(
@@ -62,17 +75,43 @@ export const supportedLanguages = {
   },
 };
 
+const localResources = {
+  en,
+  fr,
+  el_GR: elGR,
+};
+
 i18n
   .use(languageDetector)
+  .use(Backend)
   .use(initReactI18next)
   .init({
+    react: {
+      useSuspense: false,
+      bindI18n: 'languageChanged loaded added',
+    },
     fallbackLng: 'en',
-    resources: {
-      ...supportedLanguages,
-      ns: ['translation'],
-      defaultNS: 'translation',
-      interpolation: {
-        escapeValue: false, // not needed for react
+    backend: {
+      localResources,
+      remoteBackend: {
+        type: i18nHttpLoader,
+        options: {
+          loadPath: `https://storage.googleapis.com/language-files/locomotion/{{lng}}.json?timestamp=${moment().format('HH:mm')}`,
+          parse: data => data,
+          request: async (options, url, payload, callback) => {
+            try {
+              const { data, status } = await axios.get(url);
+              const lng = extractLanguageFromUrl(url);
+              callback(null, {
+                status,
+                data: _.merge(localResources[lng], data),
+              });
+              i18n.emit('loaded');
+            } catch (err) {
+              callback(err, null);
+            }
+          },
+        },
       },
     },
   });
@@ -89,7 +128,10 @@ export const updateLanguage = (lng, onDone) => {
       userLanguage = updatedLng;
       await updateUserLanguage(updatedLng);
       moment.locale(updatedLng);
-      Mixpanel.setEvent('languageChanged', { language: (lng || 'phone default') });
+      Mixpanel.setEvent('language selected', {
+        selectedLanguage: updatedLng,
+        deviceLanguage: RNLocalize.getLocales()[0].languageCode,
+      });
       if (onDone) {
         onDone();
       }

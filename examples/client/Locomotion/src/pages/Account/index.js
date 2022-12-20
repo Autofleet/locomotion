@@ -110,6 +110,7 @@ const AccountContent = ({ setHeaderTitle }) => {
   };
 
   const openLanguageSelector = () => {
+    Mixpanel.clickEvent('language selector');
     setLanguagePickerVisible(true);
   };
 

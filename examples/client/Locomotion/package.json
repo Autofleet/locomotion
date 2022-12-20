@@ -15,6 +15,7 @@
     "dev": "npx nodemon --exec 'npm run symlink' --watch ../../../locomotion-sdk/src -e js,ts,tsx,jsx --delay 2.5"
   },
   "dependencies": {
+    "@autofleet/i18next-remote-backend-with-locals": "^1.0.0",
     "@gorhom/bottom-sheet": "^4.3.1",
     "@gorhom/portal": "^1.0.14",
     "@mapbox/polyline": "^1.1.0",
@@ -35,6 +36,7 @@
     "bluebird": "^3.7.2",
     "cheap-ruler": "^3.0.2",
     "i18next": "^19.7.0",
+    "i18next-http-backend": "^2.1.1",
     "jwt-decode": "^3.1.2",
     "libphonenumber-js": "^1.10.6",
     "lodash": "^4.17.21",
