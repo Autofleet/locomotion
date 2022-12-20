@@ -123,7 +123,7 @@ const RidePage = ({ mapSettings, navigation }) => {
   } = useContext(FutureRidesContext);
 
   useEffect(() => {
-    setAddressSelectorFocusIndex(requestStopPoints.findIndex(sp => !sp.lat));
+    setAddressSelectorFocusIndex(requestStopPoints.findIndex(sp => !sp?.lat));
   }, [requestStopPoints]);
   const resetStateToAddressSelector = (selectedIndex = null) => {
     setServiceEstimations(null);

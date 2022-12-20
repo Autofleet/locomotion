@@ -264,7 +264,7 @@ const RidePageContextProvider = ({ children }: {
   };
 
   const cleanRequestStopPoints = () => {
-    setRequestStopPoints([]);
+    setRequestStopPoints(INITIAL_STOP_POINTS);
     setChosenService(null);
     setDefaultService(null);
   };
