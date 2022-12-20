@@ -15,15 +15,15 @@ const ICONS = {
 };
 
 const Row = styled(Button)`
-    width: 100%;
     min-height: 50px;
     flex-direction: column;
+    flex-grow: 1;
+    max-height: 70px;
     padding: 10px 0px;
     ${({ border }) => border && `
       border-bottom-color: #f1f2f6;
       border-bottom-width: 2px;
     `}
-
   `;
 
 const SubRow = styled.View`

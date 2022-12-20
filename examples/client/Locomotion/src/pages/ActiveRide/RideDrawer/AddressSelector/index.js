@@ -1,7 +1,6 @@
 import React, {
   useEffect, useContext,
 } from 'react';
-
 import {
   useBottomSheet,
   BottomSheetScrollView,
@@ -61,7 +60,7 @@ const ContentContainer = styled.View`
   align-items: center;
   flex-direction: column;
   padding: 0px 30px 40px 30px;
-  width: 100%;
+
   flex: 1;
 `;
 
@@ -171,7 +170,7 @@ const AddressSelectorBottomSheet = ({ addressSelectorFocusIndex }) => {
         {isExpanded
           ? (
             <>
-              {userContext.addressSearchLabel && userContext.addressSearchLabel !== '' ? (
+              {locationGranted && userContext.addressSearchLabel && userContext.addressSearchLabel !== '' ? (
                 <AddressRow
                   border={false}
                   text={userContext.addressSearchLabel}
