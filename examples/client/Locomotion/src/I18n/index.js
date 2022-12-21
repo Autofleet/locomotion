@@ -100,14 +100,20 @@ i18n
           parse: data => data,
           request: async (options, url, payload, callback) => {
             try {
+              console.log('#### trying request', {
+                options, url, payload, callback,
+              });
               const { data, status } = await axios.get(url);
+              console.log('#### data status', { data, status });
               const lng = extractLanguageFromUrl(url);
+              console.log('#### extracted lng', { lng });
               callback(null, {
                 status,
                 data: _.merge(localResources[lng], data),
               });
               i18n.emit('loaded');
             } catch (err) {
+              console.error('#### request error', err);
               callback(err, null);
             }
           },
@@ -124,6 +130,7 @@ i18n
 export const updateLanguage = (lng, onDone) => {
   const updatedLng = lng || RNLocalize.getLocales()[0].languageCode;
   i18n.changeLanguage(updatedLng, async (err) => {
+    console.log('updated language', { err, updatedLng });
     if (!err) {
       userLanguage = updatedLng;
       await updateUserLanguage(updatedLng);
