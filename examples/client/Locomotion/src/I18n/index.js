@@ -13,7 +13,7 @@ import { StorageService } from '../services';
 
 import en from './en.json';
 import fr from './fr.json';
-import elGR from './el_GR.json';
+import el from './el.json';
 
 const USER_LANGUAGE_STORAGE_KEY = 'userLanguage';
 
@@ -69,16 +69,16 @@ export const supportedLanguages = {
     label: 'Français',
     translation: fr,
   },
-  el_GR: {
+  el: {
     label: 'Ελληνικά',
-    translation: elGR,
+    translation: el,
   },
 };
 
 const localResources = {
   en,
   fr,
-  el_GR: elGR,
+  el,
 };
 
 i18n
