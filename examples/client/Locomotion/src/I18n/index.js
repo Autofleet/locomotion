@@ -23,6 +23,7 @@ const getUserLanguage = async () => {
 };
 
 const extractLanguageFromUrl = (url) => {
+  console.log(`##### url: ${url}`);
   if (!url) {
     return 'en';
   }
@@ -86,10 +87,6 @@ i18n
   .use(Backend)
   .use(initReactI18next)
   .init({
-    react: {
-      useSuspense: false,
-      bindI18n: 'languageChanged loaded added',
-    },
     fallbackLng: 'en',
     backend: {
       localResources,
@@ -104,9 +101,9 @@ i18n
                 options, url, payload, callback,
               });
               const { data, status } = await axios.get(url);
-              console.log('#### data status', { data, status });
+              console.log(`#### data status: ${status}`);
               const lng = extractLanguageFromUrl(url);
-              console.log('#### extracted lng', { lng });
+              console.log(`#### extracted lng: ${lng}`);
               callback(null, {
                 status,
                 data: _.merge(localResources[lng], data),
@@ -128,9 +125,10 @@ i18n
 
 
 export const updateLanguage = (lng, onDone) => {
-  const updatedLng = lng || RNLocalize.getLocales()[0].languageCode;
+  console.log(`#### updated language 1 ${lng}`);
+  const updatedLng = lng || userLanguage;
   i18n.changeLanguage(updatedLng, async (err) => {
-    console.log('updated language', { err, updatedLng });
+    console.log('#### updated language 2', { err, updatedLng });
     if (!err) {
       userLanguage = updatedLng;
       await updateUserLanguage(updatedLng);
