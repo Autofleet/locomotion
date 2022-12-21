@@ -91,7 +91,7 @@ const AddressSelectorBottomSheet = ({ addressSelectorFocusIndex }) => {
 
   const onSearchFocus = () => {
     if (!isExpanded) {
-      userContext.setSpCurrentLocation(0);
+      userContext.initSps();
       setSnapPointsState(SNAP_POINT_STATES.ADDRESS_SELECTOR);
       setIsExpanded(true);
       expand();
