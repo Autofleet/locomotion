@@ -11,7 +11,7 @@ import 'moment/locale/el';
 import Mixpanel from '../services/Mixpanel';
 import { StorageService } from '../services';
 
-import en from './en.json';
+// import en from './en.json';
 import fr from './fr.json';
 import el from './el.json';
 
@@ -25,7 +25,7 @@ const getUserLanguage = async () => {
 const extractLanguageFromUrl = (url) => {
   console.log(`##### url: ${url}`);
   if (!url) {
-    return 'en';
+    return 'fr';
   }
   const endpoints = url.split('/');
   const lastEndpoint = endpoints[endpoints.length - 1];
@@ -62,10 +62,10 @@ const languageDetector = {
 };
 
 export const supportedLanguages = {
-  en: {
-    label: 'English',
-    translation: en,
-  },
+  // en: {
+  //   label: 'English',
+  //   translation: en,
+  // },
   fr: {
     label: 'Français',
     translation: fr,
@@ -77,10 +77,12 @@ export const supportedLanguages = {
 };
 
 const localResources = {
-  en,
+  // en,
   fr,
   el,
 };
+
+console.log(`%%% i18 language 0 ${i18n.language}`);
 
 i18n
   .use(languageDetector)
@@ -108,6 +110,7 @@ i18n
                 status,
                 data: _.merge(localResources[lng], data),
               });
+              console.log(`%%% i18 language 2 ${i18n.language}`);
               i18n.emit('loaded');
             } catch (err) {
               console.error('#### request error', err);
@@ -118,6 +121,8 @@ i18n
       },
     },
   });
+
+console.log(`%%% i18 language 1 ${i18n.language}`);
 
 (async () => {
   moment.locale(userLanguage);
@@ -130,6 +135,7 @@ export const updateLanguage = (lng, onDone) => {
   i18n.changeLanguage(updatedLng, async (err) => {
     console.log('#### updated language 2', { err, updatedLng });
     if (!err) {
+      console.log(`%%% i18 language 3 ${i18n.language}`);
       userLanguage = updatedLng;
       await updateUserLanguage(updatedLng);
       moment.locale(updatedLng);
