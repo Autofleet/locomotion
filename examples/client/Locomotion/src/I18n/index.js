@@ -11,7 +11,7 @@ import 'moment/locale/el';
 import Mixpanel from '../services/Mixpanel';
 import { StorageService } from '../services';
 
-// import en from './en.json';
+import en from './en.json';
 import fr from './fr.json';
 import el from './el.json';
 
@@ -23,9 +23,8 @@ const getUserLanguage = async () => {
 };
 
 const extractLanguageFromUrl = (url) => {
-  console.log(`##### url: ${url}`);
   if (!url) {
-    return 'fr';
+    return 'en';
   }
   const endpoints = url.split('/');
   const lastEndpoint = endpoints[endpoints.length - 1];
@@ -62,10 +61,10 @@ const languageDetector = {
 };
 
 export const supportedLanguages = {
-  // en: {
-  //   label: 'English',
-  //   translation: en,
-  // },
+  en: {
+    label: 'English',
+    translation: en,
+  },
   fr: {
     label: 'Français',
     translation: fr,
@@ -77,7 +76,7 @@ export const supportedLanguages = {
 };
 
 const localResources = {
-  // en,
+  en,
   fr,
   el,
 };
@@ -89,7 +88,7 @@ i18n
   .use(Backend)
   .use(initReactI18next)
   .init({
-    fallbackLng: 'fr',
+    fallbackLng: 'en',
     backend: {
       localResources,
       remoteBackend: {
@@ -99,21 +98,14 @@ i18n
           parse: data => data,
           request: async (options, url, payload, callback) => {
             try {
-              console.log('#### trying request', {
-                options, url, payload, callback,
-              });
               const { data, status } = await axios.get(url);
-              console.log(`#### data status: ${status}`);
               const lng = extractLanguageFromUrl(url);
-              console.log(`#### extracted lng: ${lng}`);
               callback(null, {
                 status,
                 data: _.merge(localResources[lng], data),
               });
-              console.log(`%%% i18 language 2 ${i18n.language}`);
               i18n.emit('loaded');
             } catch (err) {
-              console.error('#### request error', err);
               callback(err, null);
             }
           },
@@ -122,7 +114,6 @@ i18n
     },
   });
 
-console.log(`%%% i18 language 1 ${i18n.language}`);
 
 (async () => {
   moment.locale(userLanguage);
@@ -130,12 +121,9 @@ console.log(`%%% i18 language 1 ${i18n.language}`);
 
 
 export const updateLanguage = (lng, onDone) => {
-  console.log(`#### updated language 1 ${lng}`);
   const updatedLng = lng || userLanguage;
   i18n.changeLanguage(updatedLng, async (err) => {
-    console.log('#### updated language 2', { err, updatedLng });
     if (!err) {
-      console.log(`%%% i18 language 3 ${i18n.language}`);
       userLanguage = updatedLng;
       await updateUserLanguage(updatedLng);
       moment.locale(updatedLng);
