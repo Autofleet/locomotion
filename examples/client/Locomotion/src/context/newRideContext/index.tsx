@@ -618,7 +618,7 @@ const RidePageContextProvider = ({ children }: {
   }, [locationGranted]);
 
   const initSps = async () => {
-    const currentAddress = currentGeocode || await getCurrentLocationAddress();
+    const currentAddress = await getCurrentLocationAddress();
     if (currentGeocode) {
       const sps = [...INITIAL_STOP_POINTS].map((s) => {
         if (s.useDefaultLocation) {
