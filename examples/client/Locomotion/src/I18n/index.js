@@ -8,6 +8,7 @@ import * as RNLocalize from 'react-native-localize';
 import moment from 'moment';
 import 'moment/locale/fr';
 import 'moment/locale/el';
+import Config from 'react-native-config';
 import Mixpanel from '../services/Mixpanel';
 import { StorageService } from '../services';
 
@@ -94,7 +95,7 @@ i18n
       remoteBackend: {
         type: i18nHttpLoader,
         options: {
-          loadPath: `https://storage.googleapis.com/language-files/locomotion/{{lng}}.json?timestamp=${moment().format('HH:mm')}`,
+          loadPath: `${Config.LANGUAGE_FILES_STORAGE}/{{lng}}.json?timestamp=${moment().format('HH:mm')}`,
           parse: data => data,
           request: async (options, url, payload, callback) => {
             try {
