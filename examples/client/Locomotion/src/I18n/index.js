@@ -18,6 +18,8 @@ import el from './el.json';
 
 const USER_LANGUAGE_STORAGE_KEY = 'userLanguage';
 
+const DEFAULT_LANGUAGE_CODE = 'en';
+
 const getUserLanguage = async () => {
   const languageCode = await StorageService.get(USER_LANGUAGE_STORAGE_KEY);
   return languageCode;
@@ -40,9 +42,26 @@ let userLanguage;
 
 export const getUserLanguageCode = () => userLanguage;
 
+export const supportedLanguages = {
+  en: {
+    label: 'English',
+    translation: en,
+  },
+  fr: {
+    label: 'Français',
+    translation: fr,
+  },
+  el: {
+    label: 'Ελληνικά',
+    translation: el,
+  },
+};
+
 export const getPreferredLanguageCode = async () => (
   (await getUserLanguage())
-  || RNLocalize.getLocales()[0].languageCode
+  || (Object.keys(supportedLanguages).includes(RNLocalize.getLocales()[0].languageCode)
+    ? RNLocalize.getLocales()[0].languageCode
+    : DEFAULT_LANGUAGE_CODE)
 );
 
 (async () => {
@@ -61,21 +80,6 @@ const languageDetector = {
   cacheUserLanguage: () => {},
 };
 
-export const supportedLanguages = {
-  en: {
-    label: 'English',
-    translation: en,
-  },
-  fr: {
-    label: 'Français',
-    translation: fr,
-  },
-  el: {
-    label: 'Ελληνικά',
-    translation: el,
-  },
-};
-
 const localResources = {
   en,
   fr,
@@ -89,7 +93,7 @@ i18n
   .use(Backend)
   .use(initReactI18next)
   .init({
-    fallbackLng: 'en',
+    fallbackLng: DEFAULT_LANGUAGE_CODE,
     backend: {
       localResources,
       remoteBackend: {
