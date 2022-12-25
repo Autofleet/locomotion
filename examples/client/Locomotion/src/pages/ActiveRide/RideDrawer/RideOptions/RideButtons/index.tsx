@@ -305,10 +305,10 @@ const RideButtons = ({
         title={i18n.t('popups.highEtaConfirm.title')}
         isVisible={highEtaPopupVisible}
         text={i18n.t('popups.highEtaConfirm.text')}
-        defualtText={i18n.t('popups.highEtaConfirm.back')}
-        secondText={i18n.t('popups.highEtaConfirm.submit')}
-        onDefaultPress={() => setHighEtaPopupVisible(false)}
-        onSecondPress={() => {
+        secondText={i18n.t('popups.highEtaConfirm.back')}
+        defualtText={i18n.t('popups.highEtaConfirm.submit')}
+        onSecondPress={() => setHighEtaPopupVisible(false)}
+        onDefaultPress={() => {
           setHighEtaPopupVisible(false);
           changeBsPage(BS_PAGES.CONFIRM_PICKUP);
         }}
