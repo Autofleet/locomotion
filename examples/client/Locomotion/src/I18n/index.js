@@ -6,15 +6,15 @@ import i18nHttpLoader from 'i18next-http-backend';
 import Backend from '@autofleet/i18next-remote-backend-with-locals';
 import * as RNLocalize from 'react-native-localize';
 import moment from 'moment';
-import 'moment/locale/fr';
+import 'moment/locale/es';
 import 'moment/locale/el';
 import Config from 'react-native-config';
 import Mixpanel from '../services/Mixpanel';
 import { StorageService } from '../services';
 
 import en from './en.json';
-import fr from './fr.json';
 import el from './el.json';
+import es from './es.json';
 
 const USER_LANGUAGE_STORAGE_KEY = 'userLanguage';
 
@@ -27,7 +27,7 @@ const getUserLanguage = async () => {
 
 const extractLanguageFromUrl = (url) => {
   if (!url) {
-    return 'en';
+    return DEFAULT_LANGUAGE_CODE;
   }
   const endpoints = url.split('/');
   const lastEndpoint = endpoints[endpoints.length - 1];
@@ -47,13 +47,13 @@ export const supportedLanguages = {
     label: 'English',
     translation: en,
   },
-  fr: {
-    label: 'Français',
-    translation: fr,
-  },
   el: {
     label: 'Ελληνικά',
     translation: el,
+  },
+  es: {
+    label: 'Español',
+    translation: es,
   },
 };
 
@@ -82,8 +82,8 @@ const languageDetector = {
 
 const localResources = {
   en,
-  fr,
   el,
+  es,
 };
 
 console.log(`%%% i18 language 0 ${i18n.language}`);

@@ -1,0 +1,670 @@
+{
+    "pushNotifications": {
+        "driverArriving": "Su automóvil llega a su punto de recogida \" {{stopPoint}} \" en {{etaMinutes}} minutos",
+        "driverArrivingHeading": "Tu coche llega pronto",
+        "futureRideCanceled": {
+            "heading": "Lo sentimos, no podemos reparar su viaje.",
+            "text": "Actualmente no podemos encontrar un conductor para su viaje. Vuelva a intentarlo."
+        },
+        "futureRideFleetCancel": {
+            "heading": "Lo sentimos, no podemos reparar su viaje.",
+            "text": "Lo sentimos, la futura reserva que realizó no puede ser atendida. Por favor, haga otra reserva para un horario disponible diferente."
+        },
+        "failureRide": {
+            "heading": "Lo sentimos, no podemos reparar su viaje.",
+            "text": "Lo sentimos, su pedido no se pudo servir en este momento. Vuelva a intentarlo pronto."
+        },
+        "rideReject": {
+            "heading": "Lo sentimos, no podemos reparar su viaje.",
+            "text": "Lo sentimos, no pudimos encontrar un controlador disponible en este momento. Vuelva a intentarlo pronto."
+        },
+        "findingNewDriver": {
+            "heading": "Lo sentimos, no podemos reparar su viaje.",
+            "text": "Ahora estamos buscando un controlador diferente para usted; lo actualizaremos en un momento."
+        },
+        "activatingFutureRide": {
+            "heading": "Su viaje ha sido activado",
+            "text": "Prepárate para encontrarte con tu conductor en \" {{stopPoint}} \""
+        }
+    },
+    "emailTemplate": {
+        "hi": "Oye",
+        "p1": "Por favor confirme su correo electrónico presionando el siguiente enlace",
+        "buttonText": "Confirmar",
+        "expiryDateText": "Este correo electrónico es válido hasta",
+        "helpCenter": "Centro de ayuda",
+        "terms": "Términos",
+        "privacy": "Privacidad",
+        "emailPreferences": "Preferencias de correo electrónico",
+        "poweredBy": "Energizado por",
+        "issues": "Si encuentra algún problema, póngase en contacto con",
+        "ignore": "Si cree que este correo electrónico no estaba destinado a usted, ignórelo.",
+        "privacyPolicy": "Política de privacidad"
+    },
+    "services": {
+        "tags": {
+            "fastest": "Lo más rápido",
+            "cheapest": "Lo mas barato"
+        }
+    },
+    "rideDetails": {
+        "unavailable": "No disponible",
+        "timeUntilArrival": "En {{minutes}} min",
+        "toolTipEta": "ETA {{minutes}} min",
+        "noCharge": "Sin cargo",
+        "estimatedFare": "Tarifa estimada",
+        "estimatedFareMessage": "Algunas de las tarifas son estimadas y pueden variar según el viaje y otras condiciones",
+        "type": {
+            "pickup": "Levantar",
+            "dropoff": "Dejar"
+        },
+        "highEta": "ETA es más alta de lo habitual"
+    },
+    "general": {
+        "back": "atrás",
+        "next": "Continuar",
+        "cancel": "Cancelar",
+        "skip": "Saltar",
+        "select": "Seleccione",
+        "now": "Ahora",
+        "noTimeWindow": "lo antes posible"
+    },
+    "login": {
+        "getStarted": "¡Empezar!",
+        "signUp": "Inscribirse",
+        "login": "Iniciar sesión",
+        "noAccountError": "No existe ninguna cuenta con ese número.",
+        "accountAlreadyExistsError": "Ya existe una cuenta con ese número.",
+        "clientIsBanned": "Hay un problema con tu cuenta. Ponte en contacto con {{ appName }} para obtener más ayuda.",
+        "onBoardingPageTitle": "Agrega tu nombre y sube una foto para continuar.",
+        "phoneNumberPlaceholder": "Número de teléfono",
+        "loginPageInstructions": "Ingrese su número telefónico.",
+        "verificationCodeInstructions": "Ingresa el código que recibiste.",
+        "submitPhoneNumberButton": "Acceso",
+        "submitVertButton": "Verificar",
+        "phoneNumberError": "¡Ups! Parece que algo salió mal.",
+        "invalidPhoneNumberError": "El número de teléfono no es válido.",
+        "tooManyRequestError": "Ha habido demasiados intentos recientes de contactar a este número. Por favor, inténtelo de nuevo más tarde.",
+        "vertError": "Lo sentimos, parece que el código de verificación es incorrecto. Por favor, asegúrese de haberlo escrito correctamente.",
+        "resendButton": "Comenzar de nuevo",
+        "termsWebViewTitle": "Términos y condiciones",
+        "privacyWebViewTitle": "Directrices de protección de datos",
+        "termsAgreement": "Al continuar, acepta las < 0 > Condiciones de uso < \/0 > y la < 1 > Política de privacidad < \/1 >"
+    },
+    "onboarding": {
+        "pages": {
+            "phone": {
+                "title": "Número de teléfono",
+                "text": "Ingrese el número de teléfono móvil",
+                "subText": "Enviaremos un código de verificación a este número.",
+                "placeholder": "(000) 123 - 4567"
+            },
+            "code": {
+                "title": "Verificación",
+                "text": "Por favor ingrese el código",
+                "subText": "Se ha enviado un código a {{phoneNumber}} .",
+                "resendCodeText": "¿No recibiste un SMS?",
+                "resendCodeButton": "reenviar",
+                "resendCodeTextSeconds": "en {{seconds}} segundos"
+            },
+            "emailCode": {
+                "title": "Verificación",
+                "text": "Por favor ingrese el código",
+                "subText": "Ingrese el código de 4 dígitos a continuación en la aplicación para validar su dirección de correo electrónico.",
+                "resendCodeText": "¿No recibiste un correo electrónico?",
+                "resendCodeButton": "reenviar",
+                "resendCodeTextSeconds": "en {{seconds}} segundos"
+            },
+            "name": {
+                "title": "Detalles personales",
+                "text": "¿Cuál es tu nombre?",
+                "subText": "Háganos saber la mejor manera de dirigirnos a usted."
+            },
+            "card": {
+                "title": "Método de pago",
+                "text": "Información de tarjeta de crédito"
+            },
+            "avatar": {
+                "title": "Detalles personales",
+                "text": "Agregar una foto",
+                "subText": "Ayúdenos a identificarlo durante las recolecciones."
+            },
+            "email": {
+                "title": "Detalles personales",
+                "text": "Ingrese su dirección de correo electrónico",
+                "subText": "Aquí es donde le enviaremos los recibos.",
+                "placeholder": "ex. Juan@email.com",
+                "error": "Por favor, introduce una dirección de correo electrónico válida.",
+                "inUseError": "Correo electrónico ya está en uso"
+            },
+            "welcome": {
+                "text": "¡Bienvenido a bordo, {{firstName}} !",
+                "subText": "Estamos contentos de tenerte cabalgando con nosotros.",
+                "buttonText": "¡Vamos!"
+            }
+        },
+        "pageTitle": "Tu perfil",
+        "submit": "Ahorrar",
+        "paymentMethodPlaceholder": "Método de pago",
+        "firstNamePlaceholder": "Nombre de pila",
+        "lastNamePlaceholder": "Apellido",
+        "fullNameError": "Por favor llena todos los espacios",
+        "emailPlaceholder": "Correo electrónico",
+        "phonePlaceholder": "Número de teléfono",
+        "namePlaceholder": "Nombre",
+        "accountInformation": "Información de la cuenta",
+        "paymentInformation": "Información del pago",
+        "verified": "Verificado",
+        "unverified": "Inconfirmado",
+        "validations": {
+            "required": {
+                "firstName": "Se requiere el primer nombre.",
+                "lastName": "El apellido es obligatorio.",
+                "email": "Correo electronico es requerido."
+            },
+            "email": {
+                "email": "El email debe ser válido."
+            }
+        }
+    },
+    "home": {
+        "map": {
+            "markers": {
+                "pickup": "Embarque",
+                "dropoff": "Salida"
+            }
+        },
+        "letsRideButton": "Montemos",
+        "cancelRideButton": "Cancelar viaje",
+        "cancelRidePriceButton": "Cancelar viaje",
+        "choosePickup": "Elija Recoger",
+        "chooseDropoff": "Elija Entrega",
+        "passengersNumber": "Pasajeros",
+        "rideStates": {
+            "driverOnTheWay": "Su viaje ha sido reservado.",
+            "driverOnTheWayEta": "Tiempo hasta el embarque: {{pickupEta}} Minutos",
+            "driverOnTheWaySoon": "Tiempo hasta el embarque: Menos de 1 minuto",
+            "onBoard": "Tiempo de viaje restante: app. {{dropoffEta}} Minutos",
+            "onBoardSoon": "Llegando pronto",
+            "driverArrived": "Su conductor ha llegado"
+        },
+        "bookingCard": {
+            "pickupEtaTitle": "Embarque estimado",
+            "dropoffEtaTitle": "Salida estimada"
+        },
+        "rideCard": {
+            "carTitle": "Tu carro:",
+            "driverTitle": "Conductor:"
+        },
+        "offerCard": {
+            "pickup": "Embarque",
+            "dropoff": "Salida",
+            "etaNotice": {
+                "medium": "¡Alta demanda! Tiempo de espera > {{etaThreshold}} min",
+                "high": "¡Muy alta demanda! Tiempo de espera > {{etaThreshold}} min"
+            },
+            "passengersNumber": "Pasajeros",
+            "confirmOffer": "Reservar ahora",
+            "expiredOffer": "Renovar",
+            "expiredOfferText": "Su solicitud caducó",
+            "offerBooked": "El viaje ha sido reservado"
+        },
+        "futureRides": {
+            "openBookingsButton": "{{openBookings}} reservas abiertas",
+            "closeButton": "Cerca",
+            "cancelButton": "Cancelar",
+            "rideFareEstimationNotice": "Las ferias que se muestran son estimadas y pueden cambiar según las condiciones durante el viaje.",
+            "oneUpcomingRide": "Próximo paseo",
+            "multipleUpcomingRides": "Próximos viajes"
+        },
+        "promoCode": {
+            "amountOff": "{{amount}} de descuento",
+            "placeholder": "por favor ingrese su código de cupón aquí",
+            "buttonText": "Agregar código",
+            "pageHeader": "Agregar código de promoción",
+            "errorText": "Por favor, introduzca un código de promoción válido",
+            "title": "Introduce el código de promoción"
+        },
+        "RideScheduler": {
+            "timeSelectionTitle": "Quiero empezar",
+            "now": "Ahora",
+            "future": "Luego",
+            "timePicker": {
+                "date": "Fecha",
+                "hour": "Hora"
+            }
+        }
+    },
+    "lock": {
+        "header": "Su registro ha sido registrado",
+        "text": "Hemos recibido tu registro y lo revisaremos lo antes posible",
+        "subText": "Inmediatamente recibirá una notificación cuando se complete su registro y esté listo para usar {{ appName }}",
+        "submitText": "Iniciar sesión en una cuenta diferente"
+    },
+    "addressView": {
+        "pickupPlaceholder": "Haga clic en las estaciones o ingrese la dirección",
+        "dropoffPlaceholder": "Haga clic en las estaciones o ingrese la dirección",
+        "pickupTitle": "Embarque",
+        "dropoffTitle": "Salida",
+        "addressPlaceholder": "Ingresa la direccion",
+        "whereTo": "Introduce tu destino",
+        "currentLocation": "Ubicación actual",
+        "enterAddress": "Ingresa la direccion",
+        "setLocationOnMap": "Establecer ubicación en el mapa",
+        "welcomeText": "Oye, {{ nombre }}, ¿adónde?",
+        "noHistoryHeader": "¡Dar un paseo!",
+        "noHistoryText": "Verás tus ubicaciones recientes aquí"
+    },
+    "popups": {
+        "rideCanceled": {
+            "title": "Viaje cancelado",
+            "text": "Su viaje ha sido cancelado",
+            "buttonText": "Pide el mismo viaje",
+            "closeButtonText": "volver al mapa"
+        },
+        "genericError": {
+            "title": "Algo salió mal",
+            "text": "Algo salió mal. Vuelva a intentarlo y póngase en contacto con el soporte si el problema no se resuelve.",
+            "buttonText": "OK"
+        },
+        "photoUpload": {
+            "takePhoto": "Tomar foto...",
+            "choosePhoto": "Elige de la biblioteca..."
+        },
+        "rideNotes": {
+            "title": "Agregar una nota al conductor",
+            "placeholder": "Como encontrarme, vuelos, info, etc.",
+            "save": "Ahorrar",
+            "cancel": "Cancelar"
+        },
+        "choosePaymentMethod": {
+            "title": "elige el método de pago",
+            "placeholder": "Como encontrarme, vuelos, info, etc.",
+            "save": "Ahorrar",
+            "cancel": "Cancelar"
+        },
+        "rideSummary": {
+            "thanksForRideHeadline": "¡Gracias por tu paseo!",
+            "rideDataHeadline": "",
+            "durationLabel": "Duración",
+            "distanceLabel": "Distancia",
+            "priceLabel": "Precio",
+            "ratingPre": "¿Qué tan satisfecho estás?",
+            "ratingHeadline": "Califica tu viaje",
+            "ratingPost": "Damos la bienvenida a sus comentarios",
+            "durationValue": "{{duration}} Minutos",
+            "distanceValue": "{{distance}} km",
+            "priceValue": "{{price}} €",
+            "submit": "Enviar"
+        },
+        "rideOver": {
+            "main": "¡Has llegado!",
+            "sub": "Gracias por viajar con nosotros, ¡hasta pronto!"
+        },
+        "rideRejected": {
+            "main": "Lo sentimos, no pudimos encontrar un controlador para usted",
+            "sub": "Todos nuestros conductores están ocupados en este momento. Vuelva a intentarlo en unos minutos."
+        },
+        "selectNumberOfPassenger": {
+            "main": "Seleccione el número de pasajeros"
+        },
+        "futureRideCanceled": {
+            "title": "Su viaje ha sido cancelado",
+            "subTitle": "Lo sentimos, no funcionó esta vez, crea un pedido para volver a intentarlo"
+        },
+        "highEtaConfirm": {
+            "title": "¡Importante!",
+            "text": "Tenga en cuenta que este servicio actualmente está experimentando altas ETA. \n\n Encontrar un conductor puede llevar más tiempo de lo habitual.",
+            "submit": "Continuar",
+            "back": "atrás"
+        },
+        "defaultFooterButton": "OK"
+    },
+    "menu": {
+        "title": "Menú",
+        "home": "Hogar",
+        "trips": "Historial de viajes",
+        "paymentsSettings": "Pago",
+        "account": "Perfil del usuario",
+        "support": "Contáctenos",
+        "logout": "Cerrar sesión",
+        "futureRides": "Próximos viajes",
+        "messages": "Mensajes"
+    },
+    "temporaryHoldText": "Es posible que se retenga temporalmente una pequeña cantidad cuando comience su viaje",
+    "learnMore": "Aprende más",
+    "temporaryHoldPopup": {
+        "title": "retención temporal",
+        "buttonText": "Entiendo",
+        "text": "Es posible que veas una pequeña cantidad en espera cuando creas un viaje. Esto es para verificar que haya fondos suficientes para su viaje. {{appName}} liberará la retención después de tu viaje. Su banco puede tardar varios días en procesarlo."
+    },
+    "deleteUserPopup": {
+        "deleteUserTitle": "Borrar cuenta",
+        "deleteAccountText": "¿Está seguro de que desea eliminar su cuenta?",
+        "confirmText": "Sí, eliminar cuenta",
+        "cancelText": "Regresa"
+    },
+    "contactUs": {
+        "pageTitle": "Contáctenos",
+        "learnMore": "Aprende más",
+        "legalTitle": "Legal",
+        "privacyPolicy": "Política de privacidad",
+        "termsOfUse": "Términos de Uso",
+        "contactInformationTitle": "Información del contacto"
+    },
+    "ridePriceBreakdown": {
+        "errorText": "Ups, parece que algo salió mal",
+        "errorButtonText": "Obtener detalles de la tarifa",
+        "total": "Total",
+        "couponName": "Descuento",
+        "estimatedText": "Las tarifas a continuación son estimaciones y se actualizarán una vez que se complete el viaje en función de las condiciones reales del viaje.",
+        "pageTitle": "desglose de pagos",
+        "priceItem": "{{ nombre }}",
+        "perUnit": "- {{ precio por unidad }}",
+        "paymentBreakdownTitle": "Desglose de pagos",
+        "priceFieldNames": {
+            "surgePrice": "precio de aumento",
+            "discount": "Descuento",
+            "cancelationFee": "Tarifa de cancelación",
+            "tip": "Consejo",
+            "total": "Total"
+        },
+        "paymentMethodTitle": "Método de pago"
+    },
+    "rideHistory": {
+        "pageTitle": "Historial de viajes",
+        "tripPageTitle": "Detalles del viaje",
+        "noRides": "No se han encontrado resultados",
+        "noRidesSubText": "",
+        "ride": {
+            "states": {
+                "canceled": "Cancelado",
+                "failed": "Cancelado"
+            }
+        },
+        "ridesTable": {
+            "timeTitle": "Tiempo",
+            "startTitle": "comienzo",
+            "stopTitle": "Deténgase",
+            "price": "Precio"
+        },
+        "ridesDurationHours": "{{ridesDurationHours}} horas",
+        "ridesDurationMinutes": "{{ridesDurationMinutes}} Min",
+        "todayTitle": "Este Dia",
+        "actualDistance": "{{actualDistance}} KM",
+        "rangeDateTimePicker": {
+            "selectEndDate": "Seleccionar fecha de finalización",
+            "selectStartDate": "Seleccionar fecha de inicio",
+            "cancelText": "Cancelar",
+            "confirmText": "Seleccione"
+        },
+        "fewSeconds": "Pocos segundos",
+        "noActivity": "sin paseos",
+        "noActivityYet": "Aún no hay viajes",
+        "noActivitySub": "¡Haz tu primer viaje y míralo aquí!",
+        "unpaidRide": "viaje no pagado",
+        "rideCard": {
+            "rideJourney": "viaje de viaje",
+            "driverRating": "Calificación del conductor",
+            "rateRide": "Toca para calificar tu viaje",
+            "addTip": "Añadir un consejo",
+            "tip": "Consejo {{price}}",
+            "paymentRetry": {
+                "retryFailedTitle": "Incapaz de procesar",
+                "retryFailedBody": "Parece que hubo un problema al tratar de procesar su solicitud. \n\n Recomendamos volver a intentarlo más tarde o ponerse en contacto con nuestro equipo de soporte.",
+                "retryFailedButton": "Póngase en contacto con nuestro soporte",
+                "retrySuccessTitle": "¡Estas listo!",
+                "retrySuccessBody": "Gracias por su pago. ¡Ahora puede reanudar sus viajes!",
+                "retrySuccessButton": "Hecho",
+                "retryPaymentButton": "Pagar saldo ahora"
+            }
+        }
+    },
+    "futureRides": {
+        "pageTitle": "Próximos viajes",
+        "noRidesTitle": "No hay viajes próximos",
+        "noRidesText": "¡Crea un viaje programado y míralo aquí!"
+    },
+    "messages": {
+        "pageTitle": "Mensajes",
+        "readMore": "Lee mas",
+        "now": "Ahora",
+        "noMessagesTitle": "no hay mensajes nuevos",
+        "noMessagesText": "¡Te avisaremos cuando tengas uno!",
+        "toast": {
+            "dismiss": "Despedir"
+        }
+    },
+    "messageView": {
+        "pageTitle": "Mensajes"
+    },
+    "postRide": {
+        "pageTitle": "Paseo terminado",
+        "ratingHeadline": "¿Cómo estuvo tu viaje?",
+        "submit": "Hecho",
+        "submitForPast": "Hecho",
+        "notRated": "Paseo no calificado",
+        "tip": {
+            "title": "Añade un consejo para",
+            "subTitle": "tu viaje fue",
+            "noTip": "Sin propina",
+            "setCustomTip": "Establecer cantidad personalizada",
+            "customTip": {
+                "title": "Cantidad personalizada",
+                "subTitle": "Ingrese otra cantidad",
+                "submit": "Establecer",
+                "cancel": "Cancelar",
+                "inputPlaceholder": "Monto...",
+                "invalidAmountError": "Por favor ingrese una cantidad válida"
+            }
+        },
+        "writeComment": {
+            "title": "Escribir un comentario",
+            "placeholder": "Los comentarios se pueden compartir de forma anónima con los conductores."
+        }
+    },
+    "payments": {
+        "setCardName": "Establecer el nombre de la tarjeta",
+        "defaultMethodTitle": "Método de pago por defecto",
+        "otherMethodsTitle": "otros métodos de pago",
+        "cardDetails": {
+            "cardsTitle": "Información de tarjeta de crédito",
+            "title": "Detalles del método de pago",
+            "nickname": "Apodo de tarjeta",
+            "number": "Número de tarjeta",
+            "balance": "Balance",
+            "deleteText": "Eliminar método de pago",
+            "outstandingBalanceText": "Saldo pendiente de",
+            "expiryDate": "Fecha de caducidad"
+        },
+        "changeDefault": "Cambio",
+        "select": "Seleccione",
+        "pageTitle": "Método de pago",
+        "submitCard": "Agregar tarjeta",
+        "addNewCreditCard": "Añadir nueva tarjeta de crédito",
+        "expired": "Caducado",
+        "hasOutstandingBalance": "Saldo pendiente",
+        "skipForNow": "Saltar por ahora",
+        "balance": "Balance",
+        "deleteCard": "Remover",
+        "addPaymentMethod": "Agregar nuevo",
+        "newCardDetails": "Por favor agregue sus detalles de pago",
+        "setPaymentBanner": "Establecer método de pago",
+        "payWithCash": "Pagar en efectivo",
+        "cash": "Dinero",
+        "offline": "Pago fuera de línea",
+        "popups": {
+            "removeCard": {
+                "title": "Eliminar método de pago",
+                "text": "¿Está seguro de que desea eliminar este método de pago?",
+                "confirmText": "Remover",
+                "cancelText": "atrás"
+            }
+        },
+        "cashMethodBrand": "Dinero"
+    },
+    "currency": "€",
+    "operation": {
+        "name": "Locomoción",
+        "subName": "Aplicación para ciclistas"
+    },
+    "bottomSheetContent": {
+        "futureRideLimitOnAsap": {
+            "titleText": "Próximo viaje programado",
+            "buttonText": "volver al pedido",
+            "subTitleText": "Oye, tienes un próximo viaje programado. Para crear un viaje ahora, cancele su viaje programado y vuelva a intentarlo."
+        },
+        "futureRideLimit": {
+            "titleText": "Límite de viaje programado alcanzado",
+            "buttonText": "volver al pedido",
+            "subTitleText": "Oye, parece que estás intentando programar varios viajes demasiado juntos. Seleccione otra hora y vuelva a intentarlo."
+        },
+        "outstandingBalance": {
+            "titleText": "Saldo pendiente",
+            "buttonText": "Soporte de contacto",
+            "subTitleText": "El método de pago seleccionado tiene un saldo pendiente. Borre el saldo para poder seguir usando {{operationName}}"
+        },
+        "cashNotAllowed": {
+            "titleText": "Elige otro método de pago",
+            "buttonText": "volver al pedido",
+            "subTitleText": "Ha seleccionado pagar en efectivo, pero esto no está permitido. Elija otro método de pago."
+        },
+        "paymentMethodExpired": {
+            "titleText": "Método de pago caducado",
+            "buttonText": "volver al pedido",
+            "subTitleText": "El método de pago seleccionado ha caducado. Elija otro método de pago."
+        },
+        "paymentIntentError": {
+            "titleText": "Hay un problema de pago",
+            "buttonText": "volver al pedido",
+            "subTitleText": "Hay un problema con este método de pago. Seleccione otro método de pago para continuar."
+        },
+        "confirmFutureRide": {
+            "titleText": "Su próximo viaje ha sido programado",
+            "buttonText": "Hecho",
+            "pickupText": "De {{address}}",
+            "dropOffText": "A {{address}}"
+        },
+        "confirmPickupTime": {
+            "titleText": "viaje programado",
+            "buttonText": "Establecer hora de recogida",
+            "pickupTextTime": "Recogida a {{afterTime}} - {{beforeTime}}",
+            "pickupTextDay": "El {{date}}",
+            "pickupTextToday": "Hoy, {{date}}"
+        },
+        "locationRequest": {
+            "titleText": "Actualizar servicios de ubicación",
+            "buttonText": "Activar permisos de ubicación",
+            "secondaryButtonText": "Introduce el lugar de recogida",
+            "subTitleText": "{{operation}} necesita tu ubicación para encontrar viajes cercanos"
+        },
+        "confirmingRide": {
+            "titleText": "Confirmando tu viaje",
+            "secondaryButtonText": "Cancelar viaje"
+        },
+        "confirmingFutureRide": {
+            "titleText": "Confirmación de su viaje programado",
+            "subTitleText": "Para {{date}} - {{beforeTime}}",
+            "secondaryButtonText": "Cancelar viaje"
+        },
+        "cancelRide": {
+            "titleText": "¿Estas seguro que quieres cancelar?",
+            "subTitleText": "Es posible que se le cobre una tarifa por cancelar este viaje",
+            "buttonText": "Cancelar viaje",
+            "secondaryButtonText": "mantener paseo",
+            "secondaryButtonTextFuture": "mantener paseo"
+        },
+        "confirmPickup": {
+            "confirmPickupTitle": "Confirmar recogida",
+            "confirmLocationTitle": "Confirmar ubicación",
+            "buttonText": "Confirmar",
+            "buttonTextWithRequest": "Confirmar y solicitar",
+            "subTitleText": "Arrastra el mapa para establecer la ubicación",
+            "noAddress": "Dirección no encontrada. Elija otra ubicación."
+        },
+        "notAvailableHere": {
+            "titleText": "¡Lo sentimos!",
+            "buttonText": "Elige otra dirección",
+            "subTitleText": "{{ appName }} no está disponible en tu área",
+            "pickupSubTitleText": "La ubicación de recogida debe estar dentro del área de {{ appName }}"
+        },
+        "noPayment": {
+            "titleText": "Sin pago establecido",
+            "buttonText": "Añadir método de pago",
+            "secondaryButtonText": "Cancelar",
+            "subTitleText": "Sin configurar un método de pago, no podrá realizar una solicitud de viaje"
+        },
+        "noAvailableVehicles": {
+            "titleText": "estamos muy ocupados",
+            "buttonText": "ordenar de nuevo",
+            "subTitleText": "Vuelve a intentarlo en unos minutos.",
+            "buttonText2": "Llévame de vuelta"
+        },
+        "ride": {
+            "now": "Ahora",
+            "notes": {
+                "edit": "Editar nota",
+                "add": "Nota para el conductor"
+            },
+            "rider": "Jinete",
+            "riders": "Jinetes",
+            "promoText": "Código promocional",
+            "addPayment": "Agregar pago",
+            "chosePickupTime": "Establezca su ventana de recogida",
+            "contactDriver": "Conductor de contacto",
+            "shareRide": "Compartir viaje",
+            "cancelRide": "Cancelar viaje",
+            "phoneCallOptions": {
+                "call": "Llamar",
+                "sms": "SMS",
+                "cancel": "Cancelar"
+            },
+            "highEtaButton": {
+                "enabled": "Seleccione",
+                "disabled": "Temporalmente no disponible, inténtalo de nuevo pronto."
+            }
+        }
+    },
+    "stopPointsTypes": {
+        "dropoff": "Dejar",
+        "pickup": "Levantar"
+    },
+    "stopPoints": {
+        "states": {
+            "arrived": "Llegado",
+            "completed": "Terminado",
+            "pending": "Pendiente",
+            "canceled": "Cancelado",
+            "failed": "Cancelado"
+        }
+    },
+    "activeRide": {
+        "pickup": {
+            "arrived": "Su conductor ha llegado",
+            "pending": "Reunión en el punto de recogida."
+        },
+        "dropoff": {
+            "arrived": "Llegué a dejar",
+            "pending": "Hora estimada de llegada"
+        },
+        "topMessage": {
+            "outstandBalanceCreditCard": "El pago de tu último viaje falló. El pedido de viajes está deshabilitado hasta que se liquide el pago pendiente.",
+            "outstandBalanceTitle": "Saldo pendiente",
+            "outstandBalanceButton": "Arreglo de pago",
+            "precedingStops": "Tu conductor está completando una parada cerca"
+        }
+    },
+    "min": "{{ min }} min",
+    "now": "Ahora",
+    "ride": {
+        "journey": "viaje de viaje",
+        "paymentMethod": "Método de pago",
+        "viewDetails": "Ver detalles",
+        "serviceType": "Tipo de servicio"
+    },
+    "updateVersion": {
+        "title": "¡{{ appName }} necesita una actualización!",
+        "body": "Oye, parece que tienes una versión anterior de la aplicación.\n Actualice para obtener las funciones más recientes y la mejor experiencia.",
+        "buttonText": "Actualizar ahora"
+    }
+}
