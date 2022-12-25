@@ -318,7 +318,7 @@ PODS:
     - react-native-config/App (= 1.4.11)
   - react-native-config/App (1.4.11):
     - React-Core
-  - react-native-date-picker (4.2.5):
+  - react-native-date-picker (4.2.6):
     - React-Core
   - react-native-geolocation (2.1.0):
     - React-Core
@@ -766,7 +766,7 @@ SPEC CHECKSUMS:
   react-native-background-timer: 117fffdc9b0d6f144444bb49029f94275a45fdb5
   react-native-carrier-info: 1e6299256bd7ceaa36f851b30e071b2b4fc406ad
   react-native-config: bcafda5b4c51491ee1b0e1d0c4e3905bc7b56c1b
-  react-native-date-picker: 55193347d8d0f40948f441ffd4e5db6f0a8fbe13
+  react-native-date-picker: 93e43b3084cea595b4d68b1405d6d99849663bd6
   react-native-geolocation: 205c5f619aea7bd54067b7b51e0781cae2f37151
   react-native-google-maps: 8231ffa015bf8b222c2e2661fa9163cdb609a224
   react-native-image-picker: 35834940bc572ba914707c39b60e043a06f88178
