@@ -292,7 +292,8 @@
         "support": "fr-Contact us",
         "logout": "fr-Logout",
         "futureRides": "fr-Upcoming Rides",
-        "messages": "fr-Messages"
+        "messages": "fr-Messages",
+        "poweredBy": "fr-powered by"
     },
     "temporaryHoldText": "fr-A small amount may be temporarily placed on hold when you start your ride ",
     "learnMore": "fr-Learn more",

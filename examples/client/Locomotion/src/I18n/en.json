@@ -292,7 +292,8 @@
         "support": "Contact us",
         "logout": "Logout",
         "futureRides": "Upcoming Rides",
-        "messages": "Messages"
+        "messages": "Messages",
+        "poweredBy":  "powered by"
     },
     "temporaryHoldText": "A small amount may be temporarily placed on hold when you start your ride ",
     "learnMore": "Learn more",
@@ -351,6 +352,14 @@
             "startTitle": "Start",
             "stopTitle": "Stop",
             "price": "Price"
+        },
+        "filters": {
+            "titles": {
+                "today": "Today",
+                "yesterday": "Yesterday",
+                "thisWeek": "This Week",
+                "lastWeek": "Last Week"
+            }
         },
       "ridesDurationHours": "{{ridesDurationHours}} Hours",
       "ridesDurationMinutes": "{{ridesDurationMinutes}} Min",
