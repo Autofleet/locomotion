@@ -20,6 +20,7 @@ export const Title = styled.Text`
   color: black;
   font-weight: 500;
   margin-bottom: 15px;
+  flex: 1;
 `;
 
 export const Counter = styled.Text`
@@ -29,6 +30,7 @@ export const Counter = styled.Text`
   color: #1a303b56;
   margin-bottom: 15px;
   text-align: ${End};
+  width: 55;
 `;
 
 export const StyledTextArea = styled(TextArea)`

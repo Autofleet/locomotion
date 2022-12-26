@@ -99,10 +99,6 @@
                 "text": "Welcome aboard, {{firstName}}!",
                 "subText": "We are glad to have you riding with us.",
                 "buttonText": "Let's go!"
-            },
-            "card": {
-                "title": "Payment Method",
-                "text": "Credit card information"
             }
         },
         "pageTitle": "Your profile",
@@ -128,7 +124,8 @@
                 "email": "Email must be valid."
             }
 
-        }
+        },
+        "chooseLanguage": "App language"
     },
     "home": {
         "map": {
@@ -281,6 +278,9 @@
             "submit": "Continue",
             "back": "Back"
         },
+        "chooseLanguage": {
+            "title": "Choose your language"
+        },
         "defaultFooterButton": "OK"
     },
     "menu": {
@@ -292,7 +292,8 @@
         "support": "Contact us",
         "logout": "Logout",
         "futureRides": "Upcoming Rides",
-        "messages": "Messages"
+        "messages": "Messages",
+        "poweredBy":  "powered by"
     },
     "temporaryHoldText": "A small amount may be temporarily placed on hold when you start your ride ",
     "learnMore": "Learn more",
@@ -351,6 +352,14 @@
             "startTitle": "Start",
             "stopTitle": "Stop",
             "price": "Price"
+        },
+        "filters": {
+            "titles": {
+                "today": "Today",
+                "yesterday": "Yesterday",
+                "thisWeek": "This Week",
+                "lastWeek": "Last Week"
+            }
         },
       "ridesDurationHours": "{{ridesDurationHours}} Hours",
       "ridesDurationMinutes": "{{ridesDurationMinutes}} Min",
