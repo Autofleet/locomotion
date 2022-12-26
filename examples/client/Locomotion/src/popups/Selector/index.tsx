@@ -61,6 +61,7 @@ const ItemSelector = ({
   return (
     <Modal
       isVisible={isVisible}
+      onBackButtonPress={onCancel}
     >
       <SummaryContainer>
         <TitleView>
