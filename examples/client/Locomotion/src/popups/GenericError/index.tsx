@@ -34,7 +34,7 @@ const GenericErrorPopup = ({
       <TitleContainer>
         <LeftSideTitle>
           <SvgIcon Svg={errorIcon} height={20} width={20} style={{ marginRight: 5 }} />
-          <Title>{title}</Title>
+          <Title>{title || i18n.t('popups.genericError.title')}</Title>
         </LeftSideTitle>
         <RightSideTitle>
           {cancelPopup ? (
@@ -44,12 +44,12 @@ const GenericErrorPopup = ({
         </RightSideTitle>
       </TitleContainer>
       <TextContainer>
-        <SubTitle>{text}</SubTitle>
+        <SubTitle>{text || i18n.t('popups.genericError.text')}</SubTitle>
       </TextContainer>
       {customButton || (
       <CloseButton onPress={closePopup}>
         <ButtonText>
-          {buttonText}
+          {buttonText || i18n.t('popups.genericError.buttonText')}
         </ButtonText>
       </CloseButton>
       )}
@@ -58,9 +58,9 @@ const GenericErrorPopup = ({
 );
 
 GenericErrorPopup.defaultProps = {
-  title: i18n.t('popups.genericError.title'),
-  text: i18n.t('popups.genericError.text'),
-  buttonText: i18n.t('popups.genericError.buttonText'),
+  title: '',
+  text: '',
+  buttonText: '',
   customButton: null,
   cancelPopup: null,
 };
