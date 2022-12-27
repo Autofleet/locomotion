@@ -23,7 +23,7 @@ export const FILTERS = {
   // },
   today: {
     id: 'today',
-    title: i18n.t('rideHistory.filters.titles.today', 'Today'),
+    title: i18n.t('rideHistory.filters.titles.today'),
     getParams: () => ({
       fromDate: formatDateBeforeSend(`${moment().format(YYYY_MM_DD)} ${startOfDayTime}`),
       toDate: formatDateBeforeSend(toDate),
@@ -31,7 +31,7 @@ export const FILTERS = {
   },
   yesterday: {
     id: 'yesterday',
-    title: i18n.t('rideHistory.filters.titles.yesterday', 'Yesterday'),
+    title: i18n.t('rideHistory.filters.titles.yesterday'),
     getParams: () => ({
       fromDate: formatDateBeforeSend(`${moment().subtract(1, 'day').format(YYYY_MM_DD)} ${startOfDayTime}`),
       toDate: formatDateBeforeSend(`${moment().format(YYYY_MM_DD)} ${startOfDayTime}`),
@@ -39,7 +39,7 @@ export const FILTERS = {
   },
   thisWeek: {
     id: 'thisWeek',
-    title: i18n.t('rideHistory.filters.titles.thisWeek', 'This week'),
+    title: i18n.t('rideHistory.filters.titles.thisWeek'),
     getParams: () => ({
       fromDate: formatDateBeforeSend(`${moment().subtract(1, 'week').format(YYYY_MM_DD)} ${startOfDayTime}`),
       toDate: formatDateBeforeSend(toDate),
@@ -47,7 +47,7 @@ export const FILTERS = {
   },
   lastWeek: {
     id: 'lastWeek',
-    title: i18n.t('rideHistory.filters.titles.lastWeek', 'Last week'),
+    title: i18n.t('rideHistory.filters.titles.lastWeek'),
     getParams: () => ({
       fromDate: formatDateBeforeSend(`${moment().subtract(2, 'week').format(YYYY_MM_DD)} ${startOfDayTime}`),
       toDate: formatDateBeforeSend(`${moment().subtract(1, 'week').format(YYYY_MM_DD)} ${startOfDayTime}`),
