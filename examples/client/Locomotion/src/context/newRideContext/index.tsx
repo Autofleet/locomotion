@@ -654,7 +654,7 @@ const RidePageContextProvider = ({ children }: {
         lng: closesStation.coordinates.lng,
       };
     } else {
-      currentAddress = currentGeocode || await getCurrentLocationAddress();
+      currentAddress = await getCurrentLocationAddress();
     }
     if (currentGeocode) {
       const sps = [...INITIAL_STOP_POINTS].map((s) => {
