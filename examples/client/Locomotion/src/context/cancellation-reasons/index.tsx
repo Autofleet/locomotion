@@ -16,7 +16,6 @@ const CancellationReasonsProvider = ({ children }: { children: any }) => {
   const [cancellationReasons, setCancellationReasons] = useState<CancellationReason[]>([]);
 
   const getCancellationReasons = async (rideId?: string) => {
-    console.log('getCancellationReasons', rideId);
     if (rideId) {
       const cancellationReasonFromApi = await cancellationReasonsApi.getCancellationReasons(rideId);
       setCancellationReasons(cancellationReasonFromApi);
