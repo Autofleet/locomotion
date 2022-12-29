@@ -2,7 +2,7 @@ import network from '../../services/network';
 
 export const createServiceEstimations = async (stopPoints, scheduledTo) => {
   try {
-    const { data } = await network.post('api/v1/services/service-estimations', { stopPoints, scheduledTo });
+    const { data } = await network.post('api/v1/services/service-estimations', { businessModelId: '21612f92-e8d5-4b46-9db6-b41d2e0252fc', stopPoints, scheduledTo });
     return data;
   } catch (e) {
     console.error(e);

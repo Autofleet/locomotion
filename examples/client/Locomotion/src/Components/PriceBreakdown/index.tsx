@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import SkeletonContent from 'react-native-skeleton-content-nonexpo';
+import { Alert } from 'react-native';
 import i18n from '../../I18n';
 import {
   getCurrencySymbol,
@@ -108,6 +109,7 @@ const PriceBreakdown = ({
     });
 
     setTotal(getFormattedPrice(priceCalculation.currency, totalPrice));
+    console.log('items_gery', JSON.stringify(items, null, 2));
     setPriceCalculationItems(items);
   };
   useEffect(() => {
