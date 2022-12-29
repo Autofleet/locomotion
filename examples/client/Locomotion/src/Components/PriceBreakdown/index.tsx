@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import SkeletonContent from 'react-native-skeleton-content-nonexpo';
-import { Alert } from 'react-native';
 import i18n from '../../I18n';
 import {
   getCurrencySymbol,
@@ -63,7 +62,17 @@ const PriceBreakdown = ({
   const [priceCalculationItems, setPriceCalculationItems] = useState<any[]>();
   const [total, setTotal] = useState<null | string>(null);
   const getPriceWithCurrency = (amount: number) => `${getCurrencySymbol(priceCalculation.currency)}${amount.toFixed(2)}`;
-
+  const formatCouponName = (couponName: string) => {
+    const couponNameParts = couponName.split(' ');
+    const partWithPrecentage = couponNameParts.find((part: string) => part.includes('%'));
+    if (!partWithPrecentage) {
+      return couponName;
+    }
+    const percentageIndex = couponNameParts.indexOf(partWithPrecentage);
+    couponNameParts[percentageIndex] = partWithPrecentage.replace('%', '');
+    couponNameParts[percentageIndex] = `${couponNameParts[percentageIndex]}%`;
+    return couponNameParts.join(' ');
+  };
   const calculationTypeToUnit: any = {
     fixed: () => '',
     distance: (price: string) => i18n.t('ridePriceBreakdown.perUnit', {
@@ -90,13 +99,12 @@ const PriceBreakdown = ({
           getPriceWithCurrency(item.pricingRule.price),
         ) : ''}`;
       } else if (item.type === COUPON_TYPE) {
-        name = item.couponDetails;
+        name = formatCouponName(item.couponDetails);
       } else if (item.details) {
         name = item.details;
       }
       items.push({
-        name:
-          name || i18n.t('ridePriceBreakdown.priceFieldNames.cancelationFee'),
+        name: name || i18n.t('ridePriceBreakdown.priceFieldNames.cancelationFee'),
         price: getFormattedPrice(priceCalculation.currency, item.price),
       });
     });
@@ -109,7 +117,6 @@ const PriceBreakdown = ({
     });
 
     setTotal(getFormattedPrice(priceCalculation.currency, totalPrice));
-    console.log('items_gery', JSON.stringify(items, null, 2));
     setPriceCalculationItems(items);
   };
   useEffect(() => {
