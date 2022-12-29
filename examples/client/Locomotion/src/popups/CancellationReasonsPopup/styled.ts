@@ -3,9 +3,6 @@ import styled from 'styled-components';
 import { FONT_SIZES, FONT_WEIGHTS } from '../../context/theme';
 
 export const Container = styled(View)`
-display: flex;
-flex-direction: column;
-justify-content: space-evenly;
 background-color: #ffffff;
 border-radius: 8px;
 padding: 25px;
@@ -40,4 +37,11 @@ export const LoaderContainer = styled(View)`
   width: 100%;
   margin: auto 0;
   margin-top: 25px;
+`;
+
+export const CloseButtonContainer = styled(View)`
+  flex-direction: row;
+  position: absolute;
+  right: 10;
+  top: 10;
 `;

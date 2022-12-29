@@ -395,13 +395,7 @@ const RidePage = ({ mapSettings, navigation }) => {
     setTopMessage(MESSAGE_MAP[topMessageKey]);
   };
 
-  const onCancellationReasonsCancel = () => {
-    changeBsPage(BS_PAGES.SERVICE_ESTIMATIONS);
-    setRidePopup(null);
-    cleanRideState();
-  };
-
-  const onCancellationReasonsSubmit = () => {
+  const onCancellationReasonsAction = () => {
     setRidePopup(null);
     cleanRideState();
   };
@@ -500,8 +494,8 @@ BS_PAGE_TO_COMP[currentBsPage] ? BS_PAGE_TO_COMP[currentBsPage]() : null
         />
         <CancellationReasonsPopup
           isVisible={ridePopup === RIDE_POPUPS.CANCELLATION_REASON}
-          onCancel={onCancellationReasonsCancel}
-          onSubmit={onCancellationReasonsSubmit}
+          onCancel={onCancellationReasonsAction}
+          onSubmit={onCancellationReasonsAction}
         />
       </Portal>
       <Toast

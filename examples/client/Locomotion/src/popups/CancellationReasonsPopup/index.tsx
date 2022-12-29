@@ -1,6 +1,8 @@
 import React, { useContext, useEffect, useState } from 'react';
 import Modal from 'react-native-modal';
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import { View } from 'react-native';
+import CloseButton from '../../Components/CloseButton';
 import CancellationReasonsProvider, { CancellationReasonsContext } from '../../context/cancellation-reasons';
 import RoundedButton from '../../Components/RoundedButton';
 import { SubTitle, Title } from '../styled';
@@ -11,7 +13,7 @@ import {
   BodyContainer,
   CancellationReasonCard,
   CancellationReasonText,
-
+  CloseButtonContainer,
 } from './styled';
 import { RidePageContext } from '../../context/newRideContext';
 import Loader from '../../Components/Loader';
@@ -53,7 +55,11 @@ const CancellationReasonsPopup = ({
 
   return (
     <Modal isVisible={isVisible}>
+
       <Container>
+        <CloseButtonContainer>
+          <CloseButton onPress={onCancel} />
+        </CloseButtonContainer>
         <Title>{i18n.t('popups.cancellationReasons.title')}</Title>
         <SubTitle>{i18n.t('popups.cancellationReasons.subTitle')}</SubTitle>
         <BodyContainer>
