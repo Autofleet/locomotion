@@ -104,7 +104,8 @@ const PriceBreakdown = ({
         name = item.details;
       }
       items.push({
-        name: name || i18n.t('ridePriceBreakdown.priceFieldNames.cancelationFee'),
+        name:
+          name || i18n.t('ridePriceBreakdown.priceFieldNames.cancelationFee'),
         price: getFormattedPrice(priceCalculation.currency, item.price),
       });
     });
