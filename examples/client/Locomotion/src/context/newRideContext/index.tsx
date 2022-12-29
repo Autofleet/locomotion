@@ -72,6 +72,7 @@ export interface RideInterface {
   createdAt?: string;
   priceCalculationId?: string;
   rideFeedbacks?: RideFeedback[];
+  cancellationReasonId?: string;
 }
 
 type AdditionalCharge = {
@@ -305,9 +306,6 @@ const RidePageContextProvider = ({ children }: {
     [RIDE_STATES.CANCELED]: (canceledRide: any) => {
       if (canceledRide.canceledBy !== user?.id) {
         setRidePopup(RIDE_POPUPS.RIDE_CANCELED_BY_DISPATCHER);
-      } else {
-        cleanRideState();
-        changeBsPage(BS_PAGES.ADDRESS_SELECTOR);
       }
     },
     [RIDE_STATES.FAILED]: () => {

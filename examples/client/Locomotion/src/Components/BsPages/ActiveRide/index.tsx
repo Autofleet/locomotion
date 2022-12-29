@@ -1,6 +1,6 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useState } from 'react';
 import moment from 'moment';
-import { Share } from 'react-native';
+import { CancellationReasonsContext } from '../../../context/cancellation-reasons';
 import RidePaymentDetails from '../../RidePaymentDetails';
 import { BS_PAGES } from '../../../context/ridePageStateContext/utils';
 import { RidePageContext } from '../../../context/newRideContext';
@@ -19,7 +19,6 @@ import StopPointsVerticalView from '../../StopPointsVerticalView';
 import GenericRideButton from '../../GenericRideButton';
 import plus from '../../../assets/bottomSheet/plus.svg';
 import editNote from '../../../assets/bottomSheet/edit_note.svg';
-import share from '../../../assets/bottomSheet/share.svg';
 import cancel from '../../../assets/bottomSheet/cancel.svg';
 import RideNotes from '../../../popups/RideNotes';
 import ServiceTypeDetails from '../../ServiceTypeDetails';
@@ -32,6 +31,9 @@ const DEFAULT_VEHICLE_IMAGE = 'https://res.cloudinary.com/autofleet/image/upload
 const ActiveRideContent = () => {
   const { ride, loadRide, updateRide } = useContext(RidePageContext);
   const { changeBsPage, setGenericErrorPopup } = useContext(RideStateContextContext);
+  const {
+    getCancellationReasons,
+  } = useContext(CancellationReasonsContext);
   const [popupToShow, setPopupToShow] = useState<string | null>(null);
 
   const {
@@ -80,8 +82,9 @@ const ActiveRideContent = () => {
       ? (
         <ButtonContainer
           testID="cancelRideButton"
-          onPress={() => {
+          onPress={async () => {
             if (ride.cancelable) {
+              await getCancellationReasons(ride?.id);
               changeBsPage(BS_PAGES.CANCEL_RIDE);
             }
           }}

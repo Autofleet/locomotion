@@ -281,6 +281,15 @@
             "submit": "Continue",
             "back": "Back"
         },
+        "cancellationReasons": {
+            "title": "Your ride has been canceled",
+            "subTitle": "Hope to see you back soon! Could you please tell us why you canceled?",
+            "confirmation": {
+                "title": "Thank you for your feedback!",
+                "text": "We will use this information to continue creating better experiences for our riders.",
+                "button": "Done"
+            }
+        },
         "defaultFooterButton": "OK"
     },
     "menu": {

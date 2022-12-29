@@ -13,6 +13,7 @@ import NewRidePageContextProvider from './context/newRideContext';
 import BottomSheetContextProvider from './context/bottomSheetContext';
 import FutureRidesProvider from './context/futureRides';
 import MessagesProvider from './context/messages';
+import CancellationReasonsProvider from './context/cancellation-reasons';
 
 LogBox.ignoreAllLogs();
 
@@ -39,11 +40,13 @@ export default (props) => {
             <FutureRidesProvider {...props}>
               <NewRidePageContextProvider {...props}>
                 <MessagesProvider>
-                  <PortalProvider>
-                    <MainRouter {...props} />
-                    {props.children}
-                    <RidePopups />
-                  </PortalProvider>
+                  <CancellationReasonsProvider>
+                    <PortalProvider>
+                      <MainRouter {...props} />
+                      {props.children}
+                      <RidePopups />
+                    </PortalProvider>
+                  </CancellationReasonsProvider>
                 </MessagesProvider>
               </NewRidePageContextProvider>
             </FutureRidesProvider>
