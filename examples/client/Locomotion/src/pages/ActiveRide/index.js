@@ -303,7 +303,10 @@ const RidePage = ({ mapSettings, navigation }) => {
         return false;
       };
       const backHandler = BackHandler.addEventListener('hardwareBackPress', onBackPress);
-      focusCurrentLocation();
+
+      if (!currentBsPage === BS_PAGES.SERVICE_ESTIMATIONS) {
+        focusCurrentLocation();
+      }
 
       return () => backHandler.remove();
     }, [serviceEstimations]),
