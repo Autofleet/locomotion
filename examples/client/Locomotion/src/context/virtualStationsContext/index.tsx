@@ -61,7 +61,7 @@ export const VirtualStationsContext = createContext<VirtualStationsContextInterf
 });
 
 const StationsProvider = ({ children }: { children: any }) => {
-  const { user } = useContext(UserContext);
+  const { user, locationGranted } = useContext(UserContext);
   const [isStationsEnabled, setIsStationsEnabled] = useState(false);
   const [rawStations, setRawStations] = useState<Station[]>([]);
   const [stationsList, setStationsList] = useState<Station[]>([]);
@@ -95,6 +95,11 @@ const StationsProvider = ({ children }: { children: any }) => {
     setCurrentLocation(formatCoords(location.coords));
     return location.coords;
   };
+
+
+  useEffect(() => {
+    getCurrentLocation();
+  }, [locationGranted]);
 
   const formatCoords = (coords:Coords) => ({ lat: coords.latitude, lng: coords.longitude });
 
