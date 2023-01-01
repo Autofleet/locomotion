@@ -520,7 +520,7 @@ const RidePageContextProvider = ({ children }: {
     if (isStationsEnabled) {
       initSps();
     }
-  }, [isStationsEnabled]);
+  }, [isStationsEnabled, locationGranted]);
 
   useEffect(() => {
     if (user?.id) {
