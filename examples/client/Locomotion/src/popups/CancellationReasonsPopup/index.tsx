@@ -17,6 +17,7 @@ import {
 } from './styled';
 import { RidePageContext } from '../../context/newRideContext';
 import Loader from '../../Components/Loader';
+import Mixpanel from '../../services/Mixpanel';
 
 interface CancellationReasonsProps {
   isVisible: boolean;
@@ -38,6 +39,16 @@ const CancellationReasonsPopup = ({
       if (!cancellationReasons
       || cancellationReasons.length === 0) {
         onCancel();
+        Mixpanel.setEvent('No cancellation reasons in the popup', {
+          state: ride.state,
+          rideId: ride.id,
+        });
+      } else {
+        Mixpanel.setEvent('Cancellation reasons popup showed', {
+          state: ride.state,
+          rideId: ride.id,
+          cancellationReasonIds: cancellationReasons.map(cr => cr.id),
+        });
       }
     } else {
       setIsLoading(false);
@@ -47,6 +58,11 @@ const CancellationReasonsPopup = ({
 
   const onCancellationReasonClick = async (id: string) => {
     setIsLoading(true);
+    Mixpanel.clickEvent('Cancellation reasons clicked', {
+      cancellationReasonId: id,
+      state: ride.state,
+      rideId: ride.id,
+    });
     await updateRide(ride?.id, {
       cancellationReasonId: id,
     });
