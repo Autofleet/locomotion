@@ -1,4 +1,46 @@
 {
+    "pushNotifications": {
+        "driverArriving": "Your car reaches your pickup \"{{stopPoint}}\" in {{etaMinutes}} minutes",
+        "driverArrivingHeading": "Your car arrives soon",
+        "futureRideCanceled": {
+            "heading": "Sorry, we cannot service your ride",
+            "text": "We are currently unable to find a driver for your ride - please try again"
+        },
+        "futureRideFleetCancel": {
+            "heading": "Sorry, we cannot service your ride",
+            "text": " We're sorry, the future booking you made cannot be served. Please make another booking for a different available time."
+        },
+        "failureRide": {
+            "heading": "Sorry, we cannot service your ride",
+            "text": "We're sorry, your order could not be served right now. Please try again soon."
+        },
+        "rideReject": {
+            "heading": "Sorry, we cannot service your ride",
+            "text": "Sorry, we couldn't find an available driver right now. Please try again soon."
+        },
+        "findingNewDriver": {
+            "heading": "Sorry, we cannot service your ride",
+            "text": "We're finding a different driver for you now - we'll update momentarily."
+        },
+        "activatingFutureRide": {
+            "heading": "Your Ride Has Been Activated",
+            "text": "Get ready to meet your driver at \"{{stopPoint}}\""
+        }
+    },
+    "emailTemplate": {
+        "hi": "Hey",
+        "p1": "Please confirm your email by pressing the link bellow",
+        "buttonText": "Confirm",
+        "expiryDateText": "This email is valid until",
+        "helpCenter": "Help Center",
+        "terms": "Terms",
+        "privacy": "Privacy",
+        "emailPreferences": "Email preferences",
+        "poweredBy": "Powered by",
+        "issues": "If you encounter any issues please contact",
+        "ignore": "If you think this email wasn't meant for you, please ignore it.",
+        "privacyPolicy": "Privacy policy"
+    },
     "services": {
         "tags": {
             "fastest": "Fastest",
@@ -47,7 +89,7 @@
         "resendButton": "Start over",
         "termsWebViewTitle": "Terms and Conditions",
         "privacyWebViewTitle": "Data Protection Guidelines",
-        "termsAgreement": "By proceeding you agree to the <0>Terms of use</0> and <1>Privacy Policy</1>"
+        "termsAgreement": "By proceeding you agree to the <0>Terms of use<\/0> and <1>Privacy Policy<\/1>"
     },
     "onboarding": {
         "pages": {
@@ -80,7 +122,7 @@
             },
             "card": {
                 "title": "Payment Method",
-                "text": "Credit Card Information"
+                "text": "Credit card information"
             },
             "avatar": {
                 "title": "Personal Details",
@@ -123,7 +165,6 @@
             "email": {
                 "email": "Email must be valid."
             }
-
         },
         "chooseLanguage": "App language"
     },
@@ -228,7 +269,7 @@
             "buttonText": "OK"
         },
         "photoUpload": {
-            "takePhoto":  "Take Photo...",
+            "takePhoto": "Take Photo...",
             "choosePhoto": "Choose from Library..."
         },
         "rideNotes": {
@@ -274,14 +315,14 @@
         },
         "highEtaConfirm": {
             "title": "Important!",
-            "text": "Please note that this service is currently experiencing high ETAs.\n\nFinding a driver might take longer than usual." ,
+            "text": "Please note that this service is currently experiencing high ETAs.\n\nFinding a driver might take longer than usual.",
             "submit": "Continue",
             "back": "Back"
         },
+        "defaultFooterButton": "OK",
         "chooseLanguage": {
             "title": "Choose your language"
-        },
-        "defaultFooterButton": "OK"
+        }
     },
     "menu": {
         "title": "Menu",
@@ -293,12 +334,11 @@
         "logout": "Logout",
         "futureRides": "Upcoming Rides",
         "messages": "Messages",
-        "poweredBy":  "powered by"
+        "poweredBy": "powered by"
     },
     "temporaryHoldText": "A small amount may be temporarily placed on hold when you start your ride ",
     "learnMore": "Learn more",
-    "temporaryHoldPopup":
-    {
+    "temporaryHoldPopup": {
         "title": "Temporary hold",
         "buttonText": "Got it",
         "text": "You may see a small amount on hold when you create a ride. This is to verify there are sufficient funds for your ride. {{appName}} will release the hold after your ride. It may take your bank several days to process."
@@ -353,6 +393,37 @@
             "stopTitle": "Stop",
             "price": "Price"
         },
+        "ridesDurationHours": "{{ridesDurationHours}} Hours",
+        "ridesDurationMinutes": "{{ridesDurationMinutes}} Min",
+        "todayTitle": "Today",
+        "actualDistance": "{{actualDistance}} KM",
+        "rangeDateTimePicker": {
+            "selectEndDate": "Select end date",
+            "selectStartDate": "Select start date",
+            "cancelText": "Cancel",
+            "confirmText": "Select"
+        },
+        "fewSeconds": "Few seconds",
+        "noActivity": "No rides",
+        "noActivityYet": "No rides yet",
+        "noActivitySub": "Take your first ride and see it here!",
+        "unpaidRide": "Unpaid ride",
+        "rideCard": {
+            "rideJourney": "Ride journey",
+            "driverRating": "Driver rating",
+            "rateRide": "Tap to rate your ride",
+            "addTip": "Add a tip",
+            "tip": "Tip {{price}}",
+            "paymentRetry": {
+                "retryFailedTitle": "Unable to processs",
+                "retryFailedBody": "Seems like there was an issue trying to process your request.\n\nWe recommend trying again later or contacting our support team",
+                "retryFailedButton": "Contact our support",
+                "retrySuccessTitle": "You are all set!",
+                "retrySuccessBody": "Thank you for your payment - you can now resume your rides!",
+                "retrySuccessButton": "Done",
+                "retryPaymentButton": "Pay balance now"
+            }
+        },
         "filters": {
             "titles": {
                 "today": "Today",
@@ -360,38 +431,7 @@
                 "thisWeek": "This Week",
                 "lastWeek": "Last Week"
             }
-        },
-      "ridesDurationHours": "{{ridesDurationHours}} Hours",
-      "ridesDurationMinutes": "{{ridesDurationMinutes}} Min",
-      "todayTitle": "Today",
-      "actualDistance": "{{actualDistance}} KM",
-      "rangeDateTimePicker": {
-        "selectEndDate": "Select end date",
-        "selectStartDate": "Select start date",
-        "cancelText": "Cancel",
-        "confirmText": "Select"
-      },
-      "fewSeconds": "Few seconds",
-      "noActivity": "No rides",
-      "noActivityYet": "No rides yet",
-      "noActivitySub": "Take your first ride and see it here!",
-      "unpaidRide": "Unpaid ride",
-      "rideCard": {
-        "rideJourney": "Ride journey",
-        "driverRating": "Driver rating",
-        "rateRide": "Tap to rate your ride",
-        "addTip": "Add a tip",
-        "tip": "Tip {{price}}",
-        "paymentRetry": {
-            "retryFailedTitle": "Unable to processs",
-            "retryFailedBody": "Seems like there was an issue trying to process your request.\n\nWe recommend trying again later or contacting our support team",
-            "retryFailedButton": "Contact our support",
-            "retrySuccessTitle": "You are all set!",
-            "retrySuccessBody": "Thank you for your payment - you can now resume your rides!",
-            "retrySuccessButton": "Done",
-            "retryPaymentButton": "Pay balance now"
         }
-      }
     },
     "futureRides": {
         "pageTitle": "Upcoming rides",
@@ -404,7 +444,7 @@
         "now": "Now",
         "noMessagesTitle": "No new messages",
         "noMessagesText": "We'll let you know when you have one!",
-        "toast":{
+        "toast": {
             "dismiss": "Dismiss"
         }
     },
@@ -427,7 +467,7 @@
                 "subTitle": "Enter other amount",
                 "submit": "Set",
                 "cancel": "Cancel",
-                "inputPlaceholder":"amount...",
+                "inputPlaceholder": "amount...",
                 "invalidAmountError": "Please enter a valid amount"
             }
         },
@@ -476,183 +516,183 @@
         },
         "cashMethodBrand": "Cash"
     },
-  "currency": "€",
-  "operation": {
-    "name": "Locomotion",
-    "subName": "Rider app"
-  },
-  "bottomSheetContent": {
-    "futureRideLimitOnAsap": {
-        "titleText": "Upcoming scheduled ride",
-        "buttonText": "Back to order",
-        "subTitleText": "Hey, you have an upcoming scheduled ride. To create a ride now, cancel your scheduled ride and try again."
+    "currency": "€",
+    "operation": {
+        "name": "Locomotion",
+        "subName": "Rider app"
     },
-    "futureRideLimit": {
-        "titleText": "Scheduled ride limit reached",
-        "buttonText": "Back to order",
-        "subTitleText": "Hey, looks like you're trying to schedule multiple rides that are too close together. Please select another time and try again."
+    "bottomSheetContent": {
+        "futureRideLimitOnAsap": {
+            "titleText": "Upcoming scheduled ride",
+            "buttonText": "Back to order",
+            "subTitleText": "Hey, you have an upcoming scheduled ride. To create a ride now, cancel your scheduled ride and try again."
+        },
+        "futureRideLimit": {
+            "titleText": "Scheduled ride limit reached",
+            "buttonText": "Back to order",
+            "subTitleText": "Hey, looks like you're trying to schedule multiple rides that are too close together. Please select another time and try again."
+        },
+        "outstandingBalance": {
+            "titleText": "Outstanding balance",
+            "buttonText": "Contact support",
+            "subTitleText": "The selected payment method has an outstanding balance. Please clear the balance so you can keep using {{operationName}}"
+        },
+        "cashNotAllowed": {
+            "titleText": "Choose another payment method",
+            "buttonText": "Back to order",
+            "subTitleText": "You’ve selected to pay with cash but this isn’t permitted. Please choose another payment method."
+        },
+        "paymentMethodExpired": {
+            "titleText": "Payment method expired",
+            "buttonText": "Back to order",
+            "subTitleText": "The selected payment method has expired. Please choose another payment method."
+        },
+        "paymentIntentError": {
+            "titleText": "There’s a payment issue",
+            "buttonText": "Back to order",
+            "subTitleText": "There’s an issue with this payment method. Please select another payment method to proceed."
+        },
+        "confirmFutureRide": {
+            "titleText": "Your upcoming ride has been scheduled",
+            "buttonText": "Done",
+            "pickupText": "From {{address}}",
+            "dropOffText": "To {{address}}"
+        },
+        "confirmPickupTime": {
+            "titleText": "Scheduled ride",
+            "buttonText": "Set pick up time",
+            "pickupTextTime": "Pickup at {{afterTime}} - {{beforeTime}}",
+            "pickupTextDay": "On {{date}}",
+            "pickupTextToday": "Today, {{date}}"
+        },
+        "locationRequest": {
+            "titleText": "Update location services",
+            "buttonText": "Turn on location permissions",
+            "secondaryButtonText": "Enter pickup location",
+            "subTitleText": "{{operation}} needs your location to find nearby rides"
+        },
+        "confirmingRide": {
+            "titleText": "Confirming your ride",
+            "secondaryButtonText": "Cancel ride"
+        },
+        "confirmingFutureRide": {
+            "titleText": "Confirming your scheduled ride",
+            "subTitleText": "For {{date}} - {{beforeTime}}",
+            "secondaryButtonText": "Cancel ride"
+        },
+        "cancelRide": {
+            "titleText": "Are you sure you want to cancel?",
+            "subTitleText": "You may be charged a fee for cancelling this ride",
+            "buttonText": "Cancel Ride",
+            "secondaryButtonText": "Keep Ride",
+            "secondaryButtonTextFuture": "Keep Ride"
+        },
+        "confirmPickup": {
+            "confirmPickupTitle": "Confirm pickup",
+            "confirmLocationTitle": "Confirm location",
+            "buttonText": "Confirm",
+            "buttonTextWithRequest": "Confirm and request",
+            "subTitleText": "Drag the map to set the location",
+            "noAddress": "Address not found. Please choose another location."
+        },
+        "notAvailableHere": {
+            "titleText": "We are Sorry!",
+            "buttonText": "Choose another address",
+            "subTitleText": "{{ appName }} is not available in your area",
+            "pickupSubTitleText": "Pickup location must be within the {{ appName }} area"
+        },
+        "noPayment": {
+            "titleText": "No payment set",
+            "buttonText": "Add payment method",
+            "secondaryButtonText": "Cancel",
+            "subTitleText": "Without setting a payment method, you won't be able to make a ride request"
+        },
+        "noAvailableVehicles": {
+            "titleText": "We are really busy",
+            "buttonText": "Order again",
+            "subTitleText": "Please try again in a few minutes",
+            "buttonText2": "Take me back"
+        },
+        "ride": {
+            "now": "Now",
+            "notes": {
+                "edit": "Edit note",
+                "add": "Note to driver"
+            },
+            "rider": "Rider",
+            "riders": "Riders",
+            "promoText": "Promo code",
+            "addPayment": "Add Payment",
+            "chosePickupTime": "Set your pickup window",
+            "contactDriver": "Contact driver",
+            "shareRide": "Share ride",
+            "cancelRide": "Cancel ride",
+            "phoneCallOptions": {
+                "call": "Call",
+                "sms": "SMS",
+                "cancel": "Cancel"
+            },
+            "highEtaButton": {
+                "enabled": "Select",
+                "disabled": "Temporarily unavailable, try again soon."
+            }
+        }
     },
-    "outstandingBalance": {
-        "titleText": "Outstanding balance",
-        "buttonText": "Contact support",
-        "subTitleText": "The selected payment method has an outstanding balance. Please clear the balance so you can keep using {{operationName}}"
+    "stopPointsTypes": {
+        "dropoff": "Dropoff",
+        "pickup": "Pickup"
     },
-    "cashNotAllowed": {
-        "titleText": "Choose another payment method",
-        "buttonText": "Back to order",
-        "subTitleText": "You’ve selected to pay with cash but this isn’t permitted. Please choose another payment method."
+    "stopPoints": {
+        "states": {
+            "arrived": "Arrived",
+            "completed": "Completed",
+            "pending": "Pending",
+            "canceled": "Canceled",
+            "failed": "Canceled"
+        }
     },
-    "paymentMethodExpired": {
-        "titleText": "Payment method expired",
-        "buttonText": "Back to order",
-        "subTitleText": "The selected payment method has expired. Please choose another payment method."
+    "activeRide": {
+        "pickup": {
+            "arrived": "Your driver has arrived",
+            "pending": "Meeting at pickup point"
+        },
+        "dropoff": {
+            "arrived": "Arrived to dropoff",
+            "pending": "Dropoff ETA"
+        },
+        "topMessage": {
+            "outstandBalanceCreditCard": "Your last ride's payment failed. Ordering rides is disabled until the outstanding payment is settled.",
+            "outstandBalanceTitle": "Outstanding Balance",
+            "outstandBalanceButton": "Settle payment",
+            "precedingStops": "Your driver is completing a stop nearby"
+        }
     },
-    "paymentIntentError": {
-        "titleText": "There’s a payment issue",
-        "buttonText": "Back to order",
-        "subTitleText": "There’s an issue with this payment method. Please select another payment method to proceed."
-    },
-    "confirmFutureRide": {
-        "titleText": "Your upcoming ride has been scheduled",
-        "buttonText": "Done",
-        "pickupText": "From {{address}}",
-        "dropOffText": "To {{address}}"
-    },
-    "confirmPickupTime": {
-        "titleText": "Scheduled ride",
-        "buttonText": "Set pick up time",
-        "pickupTextTime": "Pickup at {{afterTime}} - {{beforeTime}}",
-        "pickupTextDay": "On {{date}}",
-        "pickupTextToday": "Today, {{date}}"
-    },
-    "locationRequest": {
-        "titleText": "Update location services",
-        "buttonText": "Turn on location permissions",
-        "secondaryButtonText": "Enter pickup location",
-        "subTitleText": "{{operation}} needs your location to find nearby rides"
-    },
-    "confirmingRide": {
-        "titleText": "Confirming your ride",
-        "secondaryButtonText": "Cancel ride"
-    },
-    "confirmingFutureRide": {
-        "titleText": "Confirming your scheduled ride",
-        "subTitleText": "For {{date}} - {{beforeTime}}",
-        "secondaryButtonText": "Cancel ride"
-    },
-    "cancelRide": {
-        "titleText": "Are you sure you want to cancel?",
-        "subTitleText": "You may be charged a fee for cancelling this ride",
-        "buttonText": "Cancel Ride",
-        "secondaryButtonText": "Keep Ride",
-        "secondaryButtonTextFuture": "Keep Ride"
-    },
-    "confirmPickup": {
-      "confirmPickupTitle": "Confirm pickup",
-      "confirmLocationTitle": "Confirm location",
-      "buttonText": "Confirm",
-      "buttonTextWithRequest": "Confirm and request",
-      "subTitleText": "Drag the map to set the location",
-      "noAddress": "Address not found. Please choose another location."
-    },
-    "notAvailableHere": {
-      "titleText": "We are Sorry!",
-      "buttonText": "Choose another address",
-      "subTitleText": "{{ appName }} is not available in your area",
-      "pickupSubTitleText": "Pickup location must be within the {{ appName }} area"
-    },
-    "noPayment": {
-        "titleText": "No payment set",
-        "buttonText": "Add payment method",
-        "secondaryButtonText": "Cancel",
-        "subTitleText": "Without setting a payment method, you won't be able to make a ride request"
-    },
-    "noAvailableVehicles": {
-        "titleText": "We are really busy",
-        "buttonText": "Order again",
-        "subTitleText": "Please try again in a few minutes",
-        "buttonText2": "Take me back"
-    },
+    "min": "{{ min }} min",
+    "now": "Now",
     "ride": {
-        "now": "Now",
-        "notes": {
-            "edit": "Edit note",
-            "add": "Note to driver"
+        "journey": "Ride journey",
+        "paymentMethod": "Payment method",
+        "viewDetails": "View details",
+        "serviceType": "Service Type"
+    },
+    "updateVersion": {
+        "title": "{{ appName }} needs an update!",
+        "body": "Hey, looks like you have an older version of the app.\nPlease update to get the latest features and best experience.",
+        "buttonText": "Update now"
+    },
+    "virtualStations": {
+        "tooltip": {
+            "setDropoff": "Set Dropoff",
+            "setPickup": "Set Pickup",
+            "changeDropoff": "Change Dropoff",
+            "changePickup": "Change Pickup",
+            "defaultStation": "This station was set to pickup by default"
         },
-        "rider": "Rider",
-        "riders": "Riders",
-        "promoText": "Promo code",
-        "addPayment": "Add Payment",
-        "chosePickupTime": "Set your pickup window",
-        "contactDriver": "Contact driver",
-        "shareRide": "Share ride",
-        "cancelRide": "Cancel ride",
-        "phoneCallOptions": {
-          "call": "Call",
-          "sms": "SMS",
-          "cancel": "Cancel"
-        },
-        "highEtaButton": {
-            "enabled": "Select",
-            "disabled": "Temporarily unavailable, try again soon."
+        "search": {
+            "addressNotFound": "No address found. Please try another search.",
+            "currentLocation": "Current location",
+            "pickup": "Pickup location",
+            "title": "Searching stations near:"
         }
     }
-  },
-  "stopPointsTypes": {
-    "dropoff": "Dropoff",
-    "pickup": "Pickup"
-  },
-  "stopPoints": {
-    "states": {
-        "arrived": "Arrived",
-        "completed": "Completed",
-        "pending": "Pending",
-        "canceled": "Canceled",
-        "failed": "Canceled"
-    }
-  },
-  "activeRide": {
-    "pickup": {
-        "arrived": "Your driver has arrived",
-        "pending": "Meeting at pickup point"
-    },
-    "dropoff": {
-        "arrived": "Arrived to dropoff",
-        "pending": "Dropoff ETA"
-    },
-    "topMessage": {
-        "outstandBalanceCreditCard": "Your last ride's payment failed. Ordering rides is disabled until the outstanding payment is settled.",
-        "outstandBalanceTitle": "Outstanding Balance",
-        "outstandBalanceButton": "Settle payment",
-        "precedingStops": "Your driver is completing a stop nearby"
-    }
-  },
-  "min": "{{ min }} min",
-  "now": "Now",
-  "ride": {
-    "journey": "Ride journey",
-    "paymentMethod": "Payment method",
-    "viewDetails": "View details",
-    "serviceType": "Service Type"
-  },
-  "updateVersion": {
-    "title": "{{ appName }} needs an update!",
-    "body": "Hey, looks like you have an older version of the app.\nPlease update to get the latest features and best experience.",
-    "buttonText": "Update now"
-  },
-  "virtualStations": {
-    "tooltip": {
-        "setDropoff": "Set Dropoff",
-        "setPickup": "Set Pickup",
-        "changeDropoff": "Change Dropoff",
-        "changePickup": "Change Pickup",
-        "defaultStation": "This station was set to pickup by default"
-    },
-    "search": {
-        "addressNotFound": "No address found. Please try another search.",
-        "currentLocation": "Current location",
-        "pickup": "Pickup location",
-        "title": "Searching stations near:"
-    }
-  }
 }

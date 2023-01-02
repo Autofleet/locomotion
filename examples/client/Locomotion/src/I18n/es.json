@@ -165,7 +165,8 @@
             "email": {
                 "email": "El correo electrónico debe ser válido."
             }
-        }
+        },
+        "chooseLanguage": ""
     },
     "home": {
         "map": {
@@ -318,7 +319,10 @@
             "submit": "Continuar",
             "back": "Atrás"
         },
-        "defaultFooterButton": "OK"
+        "defaultFooterButton": "OK",
+        "chooseLanguage": {
+            "title": ""
+        }
     },
     "menu": {
         "title": "Menú",
@@ -329,7 +333,8 @@
         "support": "Contáctenos",
         "logout": "Cerrar sesión",
         "futureRides": "Próximos viajes",
-        "messages": "Mensajes"
+        "messages": "Mensajes",
+        "poweredBy": ""
     },
     "temporaryHoldText": "Es posible que se retenga temporalmente una pequeña cantidad cuando comience su viaje",
     "learnMore": "Conoce más",
@@ -417,6 +422,14 @@
                 "retrySuccessBody": "Gracias por su pago. ¡Ahora puede reanudar sus viajes!",
                 "retrySuccessButton": "Hecho",
                 "retryPaymentButton": "Pagar saldo ahora"
+            }
+        },
+        "filters": {
+            "titles": {
+                "today": "",
+                "yesterday": "",
+                "thisWeek": "",
+                "lastWeek": ""
             }
         }
     },
@@ -666,5 +679,20 @@
         "title": "¡{{ appName }} necesita una actualización!",
         "body": "Oye, parece que tienes una versión anterior de la aplicación.\n Actualice para obtener las funciones más recientes y la mejor experiencia.",
         "buttonText": "Actualizar ahora"
+    },
+    "virtualStations": {
+        "tooltip": {
+            "setDropoff": "",
+            "setPickup": "",
+            "changeDropoff": "",
+            "changePickup": "",
+            "defaultStation": ""
+        },
+        "search": {
+            "addressNotFound": "",
+            "currentLocation": "",
+            "pickup": "",
+            "title": ""
+        }
     }
 }
