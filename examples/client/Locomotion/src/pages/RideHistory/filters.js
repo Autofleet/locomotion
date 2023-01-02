@@ -4,7 +4,7 @@ import { startOfDayTime, YYYY_MM_DD, toDate } from './consts';
 
 export const formatDateBeforeSend = date => moment(date).toDate();
 
-export const FILTERS = {
+export const FILTERS = () => ({
   // quarter: {
   //   id: 'quarter',
   //   title: i18n.t('activityPage.filters.titles.quarter', 'Quarter'),
@@ -53,4 +53,4 @@ export const FILTERS = {
       toDate: formatDateBeforeSend(`${moment().subtract(1, 'week').format(YYYY_MM_DD)} ${startOfDayTime}`),
     }),
   },
-};
+});
