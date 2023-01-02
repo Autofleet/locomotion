@@ -251,7 +251,7 @@
         "currentLocation": "Ubicación actual",
         "enterAddress": "Ingresa la dirección",
         "setLocationOnMap": "Indicar ubicación en el mapa",
-        "welcomeText": "Oye, {{ nombre }}, ¿adónde amos?",
+        "welcomeText": "Oye, {{ name }}, ¿adónde amos?",
         "noHistoryHeader": "¡Tomar un viaje!",
         "noHistoryText": "Verás tus ubicaciones recientes aquí"
     },
