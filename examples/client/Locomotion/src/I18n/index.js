@@ -14,7 +14,7 @@ import { StorageService } from '../services';
 
 import en from './en.json';
 import el from './el.json';
-// import es from './es.json';
+import es from './es.json';
 
 const USER_LANGUAGE_STORAGE_KEY = 'userLanguage';
 
@@ -51,10 +51,10 @@ export const supportedLanguages = {
     label: 'Ελληνικά',
     translation: el,
   },
-  // es: {
-  //   label: 'Español',
-  //   translation: es,
-  // },
+  es: {
+    label: 'Español',
+    translation: es,
+  },
 };
 
 export const getPreferredLanguageCode = async () => (
@@ -83,7 +83,7 @@ const languageDetector = {
 const localResources = {
   en,
   el,
-  // es,
+  es,
 };
 
 console.log(`%%% i18 language 0 ${i18n.language}`);
@@ -119,11 +119,7 @@ i18n
     },
   });
 
-
-(async () => {
-  moment.locale(userLanguage);
-})();
-
+moment.locale(userLanguage);
 
 export const updateLanguage = (lng, onDone) => {
   const updatedLng = lng || userLanguage;
