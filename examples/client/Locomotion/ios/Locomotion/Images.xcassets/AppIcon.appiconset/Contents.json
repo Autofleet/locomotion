@@ -49,6 +49,19 @@
       "scale" : "3x"
     },
     {
+      "size" : "152x152",
+      "idiom" : "ios-marketing",
+      "filename" : "152.png",
+      "scale" : "1x"
+    },
+    
+    {
+      "size" : "167x167",
+      "idiom" : "ios-marketing",
+      "filename" : "167.png",
+      "scale" : "1x"
+    },
+    {
       "size" : "1024x1024",
       "idiom" : "ios-marketing",
       "filename" : "1024.png",
