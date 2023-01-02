@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import DatePicker from 'react-native-date-picker';
 import { getTextColorForTheme } from '../../context/theme';
-import i18n from '../../I18n';
+import i18n, { getUserLanguageCode } from '../../I18n';
 
 export default ({
   onCancel, onConfirm,
@@ -23,6 +23,7 @@ export default ({
       <DatePicker
         testID="datePicker"
         textColor={getTextColorForTheme()}
+        locale={getUserLanguageCode()}
         open={open}
         date={new Date()}
         maximumDate={new Date()}

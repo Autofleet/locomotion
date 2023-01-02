@@ -1,7 +1,6 @@
 import React, {
   useEffect, useContext,
 } from 'react';
-
 import {
   useBottomSheet,
   BottomSheetScrollView,
@@ -9,16 +8,18 @@ import {
 
 import styled, { ThemeContext } from 'styled-components';
 import SvgIcon from '../../../../Components/SvgIcon';
-import { RIDE_POPUPS } from '../../../../context/newRideContext/utils';
+import { RIDE_POPUPS, formatDistanceByMeasurement } from '../../../../context/newRideContext/utils';
 import GenericErrorPopup from '../../../../popups/GenericError';
 import i18n from '../../../../I18n';
 import AddressRow from './AddressLine';
 import SearchBar from './SearchBar';
 import { RidePageContext } from '../../../../context/newRideContext';
+
 import { BottomSheetContext, SNAP_POINT_STATES } from '../../../../context/bottomSheetContext';
 import { BS_PAGES } from '../../../../context/ridePageStateContext/utils';
 import { RideStateContextContext } from '../../../../context/ridePageStateContext';
 import { UserContext } from '../../../../context/user';
+import { VirtualStationsContext } from '../../../../context/virtualStationsContext';
 import { FONT_SIZES, FONT_WEIGHTS } from '../../../../context/theme';
 import noHistoryIcon from '../../../../assets/bottomSheet/better_eta.svg';
 
@@ -59,7 +60,7 @@ const ContentContainer = styled.View`
   align-items: center;
   flex-direction: column;
   padding: 0px 30px 40px 30px;
-  width: 100%;
+
   flex: 1;
 `;
 
@@ -72,8 +73,10 @@ const WelcomeText = styled.Text`
 const AddressSelectorBottomSheet = ({ addressSelectorFocusIndex }) => {
   const userContext = useContext(RidePageContext);
   const { locationGranted, user } = useContext(UserContext);
+  const { stationsList, isStationsEnabled } = useContext(VirtualStationsContext);
   const {
     changeBsPage,
+    searchResults,
   } = useContext(RideStateContextContext);
 
   const {
@@ -91,6 +94,7 @@ const AddressSelectorBottomSheet = ({ addressSelectorFocusIndex }) => {
 
   const onSearchFocus = () => {
     if (!isExpanded) {
+      userContext.initSps();
       setSnapPointsState(SNAP_POINT_STATES.ADDRESS_SELECTOR);
       setIsExpanded(true);
       expand();
@@ -115,7 +119,21 @@ const AddressSelectorBottomSheet = ({ addressSelectorFocusIndex }) => {
   };
 
   const getHistoryRows = () => {
-    if (userContext.historyResults.length) {
+    if (isStationsEnabled && stationsList.length) {
+      return userContext.formatStationsList(stationsList).map((h, i) => (
+        <AddressRow
+          testID={`searchResults_${i}`}
+          text={h.text}
+          subText={h.subText}
+          key={h.externalId}
+          onPress={() => {
+            userContext.onAddressSelected(h, false, 1);
+          }}
+        />
+      ));
+    }
+
+    if (userContext.historyResults.length && !isStationsEnabled) {
       return userContext.historyResults.map((h, i) => (
         <AddressRow
           testID={`searchResults_${i}`}
@@ -132,6 +150,7 @@ const AddressSelectorBottomSheet = ({ addressSelectorFocusIndex }) => {
       <NoHistoryText />
     );
   };
+
   return (
     <ContentContainer>
       {!isExpanded ? (
@@ -152,7 +171,15 @@ const AddressSelectorBottomSheet = ({ addressSelectorFocusIndex }) => {
         {isExpanded
           ? (
             <>
-              {locationGranted ? (
+              {locationGranted && userContext.addressSearchLabel && userContext.addressSearchLabel !== '' ? (
+                <AddressRow
+                  border={false}
+                  text={userContext.addressSearchLabel}
+                  onPress={() => null}
+                  label={i18n.t('virtualStations.search.title')}
+                />
+              ) : null}
+              {locationGranted && !isStationsEnabled ? (
                 <AddressRow
                   border={false}
                   text={i18n.t('addressView.currentLocation')}
@@ -161,7 +188,7 @@ const AddressSelectorBottomSheet = ({ addressSelectorFocusIndex }) => {
                   onPress={onCurrentLocation}
                 />
               ) : null}
-              {locationGranted ? (
+              {locationGranted && !isStationsEnabled ? (
                 <AddressRow
                   border={false}
                   text={i18n.t('addressView.setLocationOnMap')}

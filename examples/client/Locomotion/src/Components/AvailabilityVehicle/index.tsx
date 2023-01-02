@@ -1,5 +1,5 @@
 import React, {
-  useContext, useEffect, useState, useRef,
+  useContext, useEffect, useState, useRef, useCallback,
 } from 'react';
 import { Platform, View } from 'react-native';
 import styled from 'styled-components';
@@ -70,12 +70,24 @@ const AvailabilityVehicle = ({
     }
   }, [location]);
 
+  const onPressWorkaround = useCallback(() => {
+    try {
+      markerRef?.current?.hideCallout();
+    } catch (e) {
+      console.log('error', e);
+    }
+  }, [markerRef]);
+
   return (
     <MarkerAnimated
       key={id}
       ref={markerRef}
       coordinate={locationAnimated}
       anchor={{ x: 0.5, y: 0.40 }}
+      tappable={false}
+      // tooltip workaround, need to upgrade library
+      onPress={onPressWorkaround}
+
     >
       <SvgIcon Svg={carIcon} height={48} width={48} fill={primaryColor} />
     </MarkerAnimated>
