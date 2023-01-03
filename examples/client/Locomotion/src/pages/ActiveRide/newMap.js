@@ -88,6 +88,7 @@ export default React.forwardRef(({
   const {
     isUserLocationFocused,
     setIsUserLocationFocused,
+    setIsDraggingLocationPin,
     territory,
     currentBsPage,
     initGeoService,
@@ -307,11 +308,15 @@ export default React.forwardRef(({
             const lng = longitude.toFixed(6);
             const spData = await reverseLocationGeocode(lat, lng);
             saveSelectedLocation(spData);
+            setIsDraggingLocationPin(false);
           }
         }}
-        onPanDrag={() => (
-          !isUserLocationFocused === false ? setIsUserLocationFocused(false) : null
-        )}
+        onPanDrag={() => {
+          setIsDraggingLocationPin(true);
+          if (!isUserLocationFocused === false) {
+            setIsUserLocationFocused(false);
+          }
+        }}
         ref={ref}
         userInterfaceStyle={isDarkMode ? THEME_MOD.DARK : undefined}
         customMapStyle={isDarkMode ? mapDarkMode : undefined}
