@@ -66,6 +66,7 @@ import { MessagesContext } from '../../context/messages';
 import alertIcon from '../../assets/warning.svg';
 import { rideHistoryContext } from '../../context/rideHistory';
 import SafeView from '../../Components/SafeView';
+import VirtualStationsProvider, { VirtualStationsContext } from '../../context/virtualStationsContext';
 
 const BLACK_OVERLAY_SCREENS = [BS_PAGES.CANCEL_RIDE];
 
@@ -76,6 +77,7 @@ const RidePage = ({ mapSettings, navigation }) => {
   const [addressSelectorFocusIndex, setAddressSelectorFocusIndex] = useState(1);
   const [topMessage, setTopMessage] = useState(null);
   const { getSettingByKey } = settings.useContainer();
+
   const mapRef = useRef();
   const bottomSheetRef = useRef(null);
 
@@ -83,6 +85,8 @@ const RidePage = ({ mapSettings, navigation }) => {
     currentBsPage, changeBsPage,
   } = useContext(RideStateContextContext);
   const { checkMessagesForToast } = useContext(MessagesContext);
+  const { isStationsEnabled } = useContext(VirtualStationsContext);
+
   const {
     rides: historyRides, loadRides: loadHistoryRides,
   } = useContext(rideHistoryContext);
@@ -102,6 +106,7 @@ const RidePage = ({ mapSettings, navigation }) => {
     tryServiceEstimations,
     selectedInputIndex,
     cleanRideState,
+    clearRequestSp,
   } = useContext(RidePageContext);
   const {
     setIsExpanded, snapPoints, isExpanded, topBarText,
@@ -118,7 +123,7 @@ const RidePage = ({ mapSettings, navigation }) => {
   } = useContext(FutureRidesContext);
 
   useEffect(() => {
-    setAddressSelectorFocusIndex(requestStopPoints.findIndex(sp => !sp.lat));
+    setAddressSelectorFocusIndex(requestStopPoints.findIndex(sp => !sp?.lat));
   }, [requestStopPoints]);
   const resetStateToAddressSelector = (selectedIndex = null) => {
     setServiceEstimations(null);
@@ -126,6 +131,9 @@ const RidePage = ({ mapSettings, navigation }) => {
     setRide({});
     changeBsPage(BS_PAGES.ADDRESS_SELECTOR);
     setAddressSelectorFocusIndex(selectedIndex);
+    if (isStationsEnabled) {
+      clearRequestSp(selectedIndex);
+    }
   };
 
   const goBackToAddress = (selectedIndex, expand = true) => {

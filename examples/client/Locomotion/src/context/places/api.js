@@ -11,8 +11,6 @@ export const getLocation = async (params) => {
 };
 
 export const getPlacesByLocation = async (params) => {
-  console.log(params);
-
   const { data } = await network.get('api/v1/me/places', { params });
   return data;
 };

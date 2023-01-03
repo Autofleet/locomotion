@@ -1,12 +1,13 @@
 /* eslint-disable max-len */
 import React, {
-  useState, useEffect, useRef, createContext, useContext,
+  useState, useEffect, useRef, createContext, useContext, useCallback,
 } from 'react';
 import { AppState } from 'react-native';
 import Config from 'react-native-config';
 import { useNavigation } from '@react-navigation/native';
-import _ from 'lodash';
+import _, { pick } from 'lodash';
 import moment, { Moment } from 'moment-timezone';
+import debounce from 'lodash/debounce';
 import i18n from '../../I18n';
 import { FutureRidesContext } from '../futureRides';
 import { UserContext } from '../user';
@@ -27,6 +28,8 @@ import {
   convertTimezoneByLocation,
   RIDER_APP_SOURCE,
   FEEDBACK_TYPES,
+  formatDistanceByMeasurement,
+  getRandomId,
 } from './utils';
 import settings from '../settings';
 import SETTINGS_KEYS from '../settings/keys';
@@ -40,6 +43,8 @@ import { formatSps } from '../../lib/ride/utils';
 import { APP_ROUTES, MAIN_ROUTES } from '../../pages/routes';
 import * as navigationService from '../../services/navigation';
 import { BottomSheetContext } from '../bottomSheetContext';
+import { VirtualStationsContext } from '../virtualStationsContext';
+
 
 type Dispatch<A> = (value: A) => void;
 type Nav = {
@@ -213,6 +218,14 @@ const RidePageContextProvider = ({ children }: {
   children: any
 }) => {
   const { locationGranted, user } = useContext(UserContext);
+  const {
+    isStationsEnabled,
+    sortAndUpdateStations,
+    sortStationsByDistanceUsingTurf,
+    getStationList,
+    stationsList,
+  } = useContext(VirtualStationsContext);
+
   const navigation = useNavigation<Nav>();
   const { setGenericErrorDetails, setIsExpanded } = useContext(BottomSheetContext);
   const { checkStopPointsInTerritory, changeBsPage, currentBsPage } = useContext(RideStateContextContext);
@@ -234,13 +247,13 @@ const RidePageContextProvider = ({ children }: {
   const [unconfirmedPickupTime, setUnconfirmedPickupTime] = useState<number | null>(null);
   const getRouteName = () => navigationService?.getNavigator()?.getCurrentRoute().name;
   const [numberOfPassengers, setNumberOfPassengers] = useState<number | null>(null);
+  const [addressSearchLabel, setAddressSearchLabel] = useState<string | null>(null);
 
   const intervalRef = useRef<any>();
 
   const stopRequestInterval = () => {
     clearInterval(intervalRef.current);
   };
-
 
   const saveLastRide = async (rideId: string) => {
     await StorageService.save({ lastRideId: rideId });
@@ -251,7 +264,7 @@ const RidePageContextProvider = ({ children }: {
   };
 
   const cleanRequestStopPoints = () => {
-    setRequestStopPoints([]);
+    setRequestStopPoints(INITIAL_STOP_POINTS);
     setChosenService(null);
     setDefaultService(null);
   };
@@ -325,7 +338,7 @@ const RidePageContextProvider = ({ children }: {
     };
   };
 
-  const { getSettingByKey } = settings.useContainer();
+  const { getSettingByKey, measureSystem } = settings.useContainer();
 
 
   const formatEstimations = (services: any[], estimations: any, tags: any): any => {
@@ -405,7 +418,13 @@ const RidePageContextProvider = ({ children }: {
   const getServiceEstimationsFetchingInterval = () => getSettingByKey(
     SETTINGS_KEYS.SERVICE_ESTIMATIONS_INTERVAL_IN_SECONDS,
   );
-  const resetSearchResults = () => setSearchResults(null);
+  const resetSearchResults = () => {
+    if (isStationsEnabled) {
+      setAddressLabelAndResults(null);
+    } else {
+      setSearchResults(null);
+    }
+  };
 
   const tryServiceEstimations = async () => {
     const serviceEstimationsInterval = await getServiceEstimationsFetchingInterval();
@@ -497,6 +516,12 @@ const RidePageContextProvider = ({ children }: {
       }, 1000);
     }
   };
+
+  useEffect(() => {
+    if (isStationsEnabled) {
+      initSps();
+    }
+  }, [isStationsEnabled, locationGranted]);
 
   useEffect(() => {
     if (user?.id) {
@@ -619,12 +644,25 @@ const RidePageContextProvider = ({ children }: {
   }, [locationGranted]);
 
   const initSps = async () => {
-    const currentAddress = currentGeocode || await getCurrentLocationAddress();
+    let currentAddress = null;
+    const [closesStation] = getStationList();
+    if (isStationsEnabled) {
+      currentAddress = {
+        externalId: closesStation.externalId,
+        streetAddress: closesStation.label,
+        description: closesStation.label,
+        lat: closesStation.coordinates.lat,
+        lng: closesStation.coordinates.lng,
+      };
+    } else {
+      currentAddress = await getCurrentLocationAddress();
+    }
     if (currentGeocode) {
       const sps = [...INITIAL_STOP_POINTS].map((s) => {
         if (s.useDefaultLocation) {
           return {
             ...s,
+            externalId: currentAddress.externalId,
             streetAddress: currentAddress.streetAddress,
             description: currentAddress.description,
             lat: currentAddress.lat,
@@ -645,6 +683,7 @@ const RidePageContextProvider = ({ children }: {
     }
   }, [currentGeocode]);
 
+
   const updateRequestSp = (data: any[], index?: number) => {
     const reqSps = [...requestStopPoints];
     if (_.isNil(index)) {
@@ -660,6 +699,16 @@ const RidePageContextProvider = ({ children }: {
 
   const setSpCurrentLocation = async () => {
     const newGeoLocation = await reverseLocationGeocode();
+    if (isStationsEnabled) {
+      updateRequestSp({
+        description: newGeoLocation?.description,
+        streetAddress: newGeoLocation?.streetAddress,
+        externalId: null,
+        lat: null,
+        lng: null,
+      });
+      return true;
+    }
     updateRequestSp(newGeoLocation);
     return true;
   };
@@ -711,12 +760,14 @@ const RidePageContextProvider = ({ children }: {
     const reqSps = [...requestStopPoints];
     reqSps[index || selectedInputIndex || 0] = {
       ...reqSps[index || selectedInputIndex || 0],
+      externalId: selectedItem.externalId,
       description: selectedItem.fullText,
       streetAddress: selectedItem.text,
       placeId: selectedItem.placeId,
       lat: enrichedPlace.lat,
       lng: enrichedPlace.lng,
     };
+
     resetSearchResults();
 
     if (needToLoadRide) {
@@ -724,7 +775,6 @@ const RidePageContextProvider = ({ children }: {
     }
     setRequestStopPoints(reqSps);
   };
-
 
   const getCurrentLocation = async () => {
     const location = await getPosition();
@@ -735,7 +785,7 @@ const RidePageContextProvider = ({ children }: {
     return location.coords;
   };
 
-  const searchAddress = async (searchText: string) => {
+  const useGoogleSearch = async (searchText: string) => {
     if (searchText === null || searchText === '') {
       resetSearchResults();
     } else {
@@ -744,6 +794,102 @@ const RidePageContextProvider = ({ children }: {
       setSearchResults(parsed);
     }
   };
+
+
+  const setAddressLabelAndResults = (label: string | null) => {
+    setAddressSearchLabel(label);
+  };
+
+  const filterSelectedStations = (stations) => {
+    const stopPointsExternalIds = requestStopPoints.map(sp => sp.externalId);
+    const filteredStations = stations.filter(sp => !stopPointsExternalIds.includes(sp.externalId));
+    return filteredStations;
+  };
+
+  const formatStationsList = useCallback((stations) => {
+    const filteredStations = filterSelectedStations(stations);
+    return filteredStations.map(formatStationToSearchResult);
+  }, [requestStopPoints]);
+
+  useEffect(() => {
+    setSearchResults(formatStationsList(stationsList));
+  }, [stationsList]);
+
+
+  const useStationSearch = async (stopPoints, index) => {
+    if (index !== null && stopPoints?.length) {
+      const selected = stopPoints[index];
+
+      if ((!selected.lat || !selected.lng) && selected?.description?.length) {
+        await debouncedSearch(selected.description);
+        return null;
+      }
+
+      const [pickup] = stopPoints;
+      let result = {
+        type: 'currentLocation',
+        coords: null,
+      };
+
+      if (stopPoints[index].type === STOP_POINT_TYPES.STOP_POINT_DROPOFF) {
+        if (pickup.lat && pickup.lng) {
+          result = {
+            type: STOP_POINT_TYPES.STOP_POINT_PICKUP,
+            coords: {
+              lat: pickup.lat,
+              lng: pickup.lng,
+            },
+          };
+        }
+      }
+
+      const { type, coords } = result;
+      setAddressLabelAndResults(i18n.t(`virtualStations.search.${type}`));
+      await getStationList(coords);
+      return true;
+    }
+    resetSearchResults();
+  };
+
+  useEffect(() => {
+    if (isStationsEnabled) {
+      useStationSearch(requestStopPoints, selectedInputIndex);
+    }
+  }, [requestStopPoints, isStationsEnabled, selectedInputIndex]);
+
+  const debouncedSearch = useCallback(debounce(async text => searchStation(text), 300), [isStationsEnabled]);
+  const searchStation = async (searchTerm: string) => {
+    const results = await loadAddress(searchTerm);
+    if (results?.length) {
+      const enrichedPlace = await enrichPlaceWithLocation(results[0].place_id);
+      const [parsedResult] = parseSearchResults([results[0]]);
+      getStationList(enrichedPlace);
+      setAddressLabelAndResults(parsedResult.fullText);
+    } else {
+      setAddressLabelAndResults(
+        i18n.t('virtualStations.search.addressNotFound'),
+      );
+      await getStationList();
+    }
+  };
+
+  const formatStationToSearchResult = (station: any) => ({
+    //    id: station.id,
+    externalId: station.externalId,
+    text: station.label,
+    subText: station.address,
+    fullText: station.label,
+    lat: station.coordinates.lat,
+    lng: station.coordinates.lng,
+    // distance: formatDistanceByMeasurement(station.distance, measureSystem),
+  });
+
+
+  const searchAddress = useCallback(async (searchText: string) => {
+    if (!isStationsEnabled) {
+      useGoogleSearch(searchText);
+    }
+  }, [isStationsEnabled]);
 
   const parseSearchResults = (results: any[]) => results.map((r) => {
     let formatedAddress = r.structured_formatting.main_text;
@@ -860,6 +1006,7 @@ const RidePageContextProvider = ({ children }: {
         text: lastSp.streetAddress || lastSp.description,
         fullText: lastSp.streetAddress || lastSp.description,
         placeId: lastSp.placeId,
+        externalId: lastSp.externalId,
         lat: lastSp.lat,
         lng: lastSp.lng,
       });
@@ -1070,6 +1217,16 @@ const RidePageContextProvider = ({ children }: {
     };
   };
 
+  const clearRequestSp = (index: number) => {
+    updateRequestSp({
+      lat: null,
+      lng: null,
+      externalId: null,
+      description: null,
+      streetAddress: null,
+    }, index);
+  };
+
   return (
     <RidePageContext.Provider
       value={{
@@ -1126,6 +1283,10 @@ const RidePageContextProvider = ({ children }: {
         getRidesByParams,
         numberOfPassengers,
         setNumberOfPassengers,
+        addressSearchLabel,
+        formatStationToSearchResult,
+        formatStationsList,
+        clearRequestSp,
       }}
     >
       {children}
