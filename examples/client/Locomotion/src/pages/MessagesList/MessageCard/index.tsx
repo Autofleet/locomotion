@@ -23,7 +23,6 @@ interface MessageCardProps {
   dismissedAt: Date | null;
 }
 
-const readMoreText = i18n.t('messages.readMore');
 const MessageCard = ({ message, readAt, dismissedAt }: MessageCardProps) => (
   <CardContainer
     noBackground
@@ -48,7 +47,7 @@ const MessageCard = ({ message, readAt, dismissedAt }: MessageCardProps) => (
           {getFormattedMessageDate(message)}
         </MessageDate>
         <ReadMoreText>
-          {readMoreText}
+          {i18n.t('messages.readMore')}
         </ReadMoreText>
       </MessageFooter>
     </TextContainer>

@@ -41,6 +41,7 @@ import RoundedButton from '../RoundedButton';
 import { getFutureRideMaxDate, getFutureRideMinDate } from '../../context/newRideContext/utils';
 import { PAYMENT_METHODS } from '../../pages/Payments/consts';
 import DatePickerPoppup from '../../popups/DatePickerPoppup';
+import { VirtualStationsContext } from '../../context/virtualStationsContext';
 
 const OtherButton = styled(Button)`
   background-color: ${({ warning, theme }) => (warning ? ERROR_COLOR : theme.primaryColor)};
@@ -283,7 +284,7 @@ export const ConfirmPickupTime = (props: any) => {
   const date = moment(unconfirmedPickupTime).format('ddd, MMM Do');
   const isDateToday = moment(unconfirmedPickupTime).isSame(moment(), 'day');
   const afterTime = moment(unconfirmedPickupTime).format('h:mm A');
-  const windowSize = (chosenService || defaultService)?.pickupWindowSizeInMinutes;
+  const windowSize = (chosenService || defaultService)?.futurePickupWindowSizeInMinutes;
   const beforeTime = (windowSize && moment(unconfirmedPickupTime).add(windowSize, 'minutes').format('h:mm A')) || i18n.t('general.noTimeWindow');
   const startDate = moment(unconfirmedPickupTime).add(unconfirmedPickupTime ? 0 : (minMinutesBeforeFutureRide || 0) + 1, 'minutes').toDate();
   const [tempSelectedDate, setTempSelectedDate] = useState(startDate);
@@ -300,7 +301,7 @@ export const ConfirmPickupTime = (props: any) => {
   }, [minMinutesBeforeFutureRide]);
 
   const afterTimeTitle = moment(tempSelectedDate).format('h:mm A');
-  const pickupWindowTime = (chosenService || defaultService)?.pickupWindowSizeInMinutes;
+  const pickupWindowTime = (chosenService || defaultService)?.futurePickupWindowSizeInMinutes;
   const beforeTimeTitle = (pickupWindowTime
     && moment(tempSelectedDate).add(pickupWindowTime, 'minutes').format('h:mm A'))
     || i18n.t('general.noTimeWindow');
@@ -442,7 +443,7 @@ export const ConfirmFutureRide = (props: any) => {
 
   const getTimeDisplay = () => {
     const afterTime = moment.parseZone(newFutureRide?.scheduledTo).format('h:mm A');
-    const windowSize = chosenService?.pickupWindowSizeInMinutes;
+    const windowSize = chosenService?.futurePickupWindowSizeInMinutes;
     const beforeTime = (windowSize && moment.parseZone(newFutureRide?.scheduledTo).add(windowSize, 'minutes').format('h:mm A')) || i18n.t('general.noTimeWindow');
 
     const timeText = i18n.t('bottomSheetContent.confirmPickupTime.pickupTextTime', { afterTime, beforeTime });
@@ -516,8 +517,9 @@ export const ConfirmPickup = (props: any) => {
   } = useContext(RidePageContext);
 
   const { setSnapPointsState } = useContext(BottomSheetContext);
-  const { collapse } = useBottomSheet();
+  const { isStationsEnabled } = useContext(VirtualStationsContext);
 
+  const { collapse } = useBottomSheet();
   const setInitialLocation = async () => {
     if (props.initialLocation) {
       saveSelectedLocation(props.initialLocation);
@@ -540,7 +542,7 @@ export const ConfirmPickup = (props: any) => {
     <BsPage
       TitleText={i18n.t(`bottomSheetContent.confirmPickup.${titleText}`)}
       ButtonText={i18n.t(`bottomSheetContent.confirmPickup.${props.isConfirmPickup ? 'buttonTextWithRequest' : 'buttonText'}`)}
-      SubTitleText={i18n.t('bottomSheetContent.confirmPickup.subTitleText')}
+      SubTitleText={!isStationsEnabled ? i18n.t('bottomSheetContent.confirmPickup.subTitleText') : ''}
       isLoading={rideRequestLoading}
       fullWidthButtons
       {...props}
@@ -625,7 +627,7 @@ export const ConfirmingRide = (props: any) => {
     ? i18n.t('bottomSheetContent.confirmingFutureRide.titleText')
     : i18n.t('bottomSheetContent.confirmingRide.titleText');
 
-  const windowSize = chosenService?.pickupWindowSizeInMinutes;
+  const windowSize = chosenService?.futurePickupWindowSizeInMinutes;
   const beforeTime = windowSize ? moment(ride.scheduledTo).add(windowSize, 'minutes').format('h:mm A') : i18n.t('general.noTimeWindow');
 
   const SubTitleText = ride?.scheduledTo

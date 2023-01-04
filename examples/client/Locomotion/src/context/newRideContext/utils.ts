@@ -149,6 +149,7 @@ export const formatEstimationsResult = (service: any, estimationResult: any, tag
     serviceAvailabilitiesNumber: service.serviceAvailabilities.length,
     pooling: service.pooling,
     pickupWindowSizeInMinutes: service.pickupWindowSizeInMinutes,
+    futurePickupWindowSizeInMinutes: service.futurePickupWindowSizeInMinutesWithFallback,
     isHighEtaAsapRide: !!estimation.highEtaAsapRide,
     allowRideOrderIfNoVehiclesMatched: service.allowRideOrderIfNoVehiclesMatched,
   };
@@ -196,3 +197,23 @@ export const convertTimezoneByLocation = async (
 };
 
 export const didUserRate = (rating: string | null, rideFeedback: any[] | null) => rating || rideFeedback?.length;
+
+const convertKmToMiles = (km: number) => km * 0.621371;
+
+export const formatDistanceByMeasurement = (distanceInMeters: number, measurement = 'metric') => {
+  const suffix = measurement === 'imperial' ? 'mi' : 'km';
+
+  let distance = (distanceInMeters / 1000);
+
+  if (!distance) {
+    return null;
+  }
+
+  if (measurement === 'imperial') {
+    distance *= 0.621371;
+  }
+
+  return `${distance.toFixed(2)} ${suffix}`;
+};
+
+export const getRandomId = () => shortid.generate();
