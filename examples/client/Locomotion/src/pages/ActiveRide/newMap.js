@@ -103,6 +103,7 @@ export default React.forwardRef(({
   const isChooseLocationOnMap = [BS_PAGES.CONFIRM_PICKUP, BS_PAGES.SET_LOCATION_ON_MAP]
     .includes(currentBsPage) && !isStationsEnabled;
   const {
+    lastSelectedLocation,
     requestStopPoints, saveSelectedLocation, reverseLocationGeocode, ride,
     chosenService,
   } = useContext(RidePageContext);
@@ -288,6 +289,9 @@ export default React.forwardRef(({
 
     return stopPoint.streetAddress || stopPoint.description;
   };
+  useEffect(() => {
+    setIsDraggingLocationPin(false);
+  }, [lastSelectedLocation]);
 
   return (
     <>
@@ -308,7 +312,6 @@ export default React.forwardRef(({
             const lng = longitude.toFixed(6);
             const spData = await reverseLocationGeocode(lat, lng);
             saveSelectedLocation(spData);
-            setIsDraggingLocationPin(false);
           }
         }}
         onPanDrag={() => {
