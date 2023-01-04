@@ -290,7 +290,7 @@ export default React.forwardRef(({
     return stopPoint.streetAddress || stopPoint.description;
   };
   useEffect(() => {
-    setTimeout(() => setIsDraggingLocationPin(false), 150);
+    setIsDraggingLocationPin(false);
   }, [lastSelectedLocation]);
 
   return (
