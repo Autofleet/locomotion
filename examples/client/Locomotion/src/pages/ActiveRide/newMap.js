@@ -88,6 +88,7 @@ export default React.forwardRef(({
   const {
     isUserLocationFocused,
     setIsUserLocationFocused,
+    setIsDraggingLocationPin,
     territory,
     currentBsPage,
     initGeoService,
@@ -102,6 +103,7 @@ export default React.forwardRef(({
   const isChooseLocationOnMap = [BS_PAGES.CONFIRM_PICKUP, BS_PAGES.SET_LOCATION_ON_MAP]
     .includes(currentBsPage) && !isStationsEnabled;
   const {
+    lastSelectedLocation,
     requestStopPoints, saveSelectedLocation, reverseLocationGeocode, ride,
     chosenService,
   } = useContext(RidePageContext);
@@ -287,6 +289,9 @@ export default React.forwardRef(({
 
     return stopPoint.streetAddress || stopPoint.description;
   };
+  useEffect(() => {
+    setIsDraggingLocationPin(false);
+  }, [lastSelectedLocation]);
 
   return (
     <>
@@ -309,9 +314,12 @@ export default React.forwardRef(({
             saveSelectedLocation(spData);
           }
         }}
-        onPanDrag={() => (
-          !isUserLocationFocused === false ? setIsUserLocationFocused(false) : null
-        )}
+        onPanDrag={() => {
+          setIsDraggingLocationPin(true);
+          if (!isUserLocationFocused === false) {
+            setIsUserLocationFocused(false);
+          }
+        }}
         ref={ref}
         userInterfaceStyle={isDarkMode ? THEME_MOD.DARK : undefined}
         customMapStyle={isDarkMode ? mapDarkMode : undefined}

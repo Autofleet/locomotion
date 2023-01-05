@@ -15,6 +15,8 @@ interface RidePageStateContextProps {
   initGeoService: () => Promise<void>;
   isUserLocationFocused: boolean;
   setIsUserLocationFocused: (isLocationFocused: boolean) => void;
+  isDraggingLocationPin: boolean;
+  setIsDraggingLocationPin: (isDragging: boolean) => void;
   currentBsPage: BsPages;
   checkStopPointsInTerritory: (sp: any) => boolean;
   changeBsPage: (pageName: BsPages) => void;
@@ -27,6 +29,8 @@ export const RideStateContextContext = createContext<RidePageStateContextProps>(
   initGeoService: async () => undefined,
   isUserLocationFocused: false,
   setIsUserLocationFocused: () => undefined,
+  isDraggingLocationPin: false,
+  setIsDraggingLocationPin: () => undefined,
   currentBsPage: BS_PAGES.ADDRESS_SELECTOR,
   checkStopPointsInTerritory: () => false,
   changeBsPage: () => undefined,
@@ -37,6 +41,7 @@ const RideStateContextContextProvider = ({ children }: { children: any }) => {
   const [genericErrorPopup, setGenericErrorPopup] = useState<any | null>(null);
   const [territory, setTerritory] = useState<Array<any> | null>(null);
   const [isUserLocationFocused, setIsUserLocationFocused] = useState(false);
+  const [isDraggingLocationPin, setIsDraggingLocationPin] = useState(false);
   const [currentBsPage, setCurrentBsPage] = useState<BsPages>(BS_PAGES.LOADING);
   const { setSnapPointsState, setIsExpanded } = useContext(BottomSheetContext);
 
@@ -88,6 +93,8 @@ const RideStateContextContextProvider = ({ children }: { children: any }) => {
         initGeoService,
         isUserLocationFocused,
         setIsUserLocationFocused,
+        isDraggingLocationPin,
+        setIsDraggingLocationPin,
         currentBsPage,
         checkStopPointsInTerritory,
         changeBsPage,
