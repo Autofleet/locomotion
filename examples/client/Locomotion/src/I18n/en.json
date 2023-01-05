@@ -458,6 +458,9 @@
         "cash": "Cash",
         "offline": "Offline payment",
         "popups": {
+            "errors": {
+                "invalidCard": "Could not validate card, Please try another card."
+            },
             "removeCard": {
                 "title": "Remove payment method",
                 "text": "Are you sure you want to remove this payment method?",

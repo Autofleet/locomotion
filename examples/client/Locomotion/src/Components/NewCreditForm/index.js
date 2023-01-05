@@ -3,7 +3,10 @@ import {
   CardForm as MainCardForm,
   useStripe,
 } from '@stripe/stripe-react-native';
-import { KeyboardAvoidingView, Platform, ScrollView } from 'react-native';
+import {
+  KeyboardAvoidingView, Platform, ScrollView,
+} from 'react-native';
+import GenericErrorPopup from '../../popups/GenericError';
 import i18n from '../../I18n';
 import PaymentsContext from '../../context/payments';
 import SubmitButton from '../RoundedButton';
@@ -21,6 +24,7 @@ const NewCreditForm = ({ onDone, canSkip = false, PageText }) => {
   const [loading, setLoading] = useState(false);
   const [formReady, setFormReady] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
+  const [showErrorPopup, setShowErrorPopup] = useState(false);
   const [countryCode, setCountryCode] = useState();
 
   const handlePayPress = async () => {
@@ -39,8 +43,9 @@ const NewCreditForm = ({ onDone, canSkip = false, PageText }) => {
 
 
     if (error) {
-      console.error(error);
+      setShowErrorPopup(true);
       setErrorMessage(error.message);
+      console.error(error);
       setLoading(false);
     } else {
       const paymentMethod = await usePayments.createPaymentMethod(setupIntent.paymentMethodId);
@@ -89,6 +94,13 @@ const NewCreditForm = ({ onDone, canSkip = false, PageText }) => {
           }}
         />
         <ErrorMessage>{errorMessage}</ErrorMessage>
+        <GenericErrorPopup
+          text={i18n.t('payments.popups.errors.invalidCard')}
+          isVisible={showErrorPopup}
+          closePopup={() => {
+            setShowErrorPopup(false);
+          }}
+        />
       </CreditForm>
       <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
