@@ -1,7 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
 import Modal from 'react-native-modal';
-import { TouchableOpacity } from 'react-native-gesture-handler';
-import { View } from 'react-native';
 import CloseButton from '../../Components/CloseButton';
 import CancellationReasonsProvider, { CancellationReasonsContext } from '../../context/cancellation-reasons';
 import RoundedButton from '../../Components/RoundedButton';
@@ -14,6 +12,7 @@ import {
   CancellationReasonCard,
   CancellationReasonText,
   CloseButtonContainer,
+  ClickableContainer,
 } from './styled';
 import { RidePageContext } from '../../context/newRideContext';
 import Loader from '../../Components/Loader';
@@ -92,13 +91,16 @@ const CancellationReasonsPopup = ({
               </LoaderContainer>
             )
             : cancellationReasons.map(cr => (
-              <TouchableOpacity activeOpacity={1} onPress={() => onCancellationReasonClick(cr.id)}>
+              <ClickableContainer
+                activeOpacity={1}
+                onPress={() => onCancellationReasonClick(cr.id)}
+              >
                 <CancellationReasonCard key={cr.id}>
                   <CancellationReasonText>
                     {cr.value}
                   </CancellationReasonText>
                 </CancellationReasonCard>
-              </TouchableOpacity>
+              </ClickableContainer>
             ))}
         </BodyContainer>
       </Container>

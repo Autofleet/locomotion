@@ -1,4 +1,4 @@
-import { Text, View } from 'react-native';
+import { Text, View, TouchableOpacity } from 'react-native';
 import styled from 'styled-components';
 import { FONT_SIZES, FONT_WEIGHTS } from '../../context/theme';
 
@@ -45,3 +45,5 @@ export const CloseButtonContainer = styled(View)`
   right: 10;
   top: 10;
 `;
+
+export const ClickableContainer = styled(TouchableOpacity)``;
