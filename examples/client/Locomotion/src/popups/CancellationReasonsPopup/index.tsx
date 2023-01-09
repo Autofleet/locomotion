@@ -22,30 +22,33 @@ interface CancellationReasonsProps {
   isVisible: boolean;
   onCancel: any;
   onSubmit: any;
+  rideId: string;
 }
 
 const CancellationReasonsPopup = ({
   isVisible,
   onCancel,
   onSubmit,
+  rideId,
 }: CancellationReasonsProps) => {
   const { cancellationReasons, clearCancellationReasons } = useContext(CancellationReasonsContext);
   const { updateRide, ride } = useContext(RidePageContext);
   const [isLoading, setIsLoading] = useState(false);
 
+  const rideIdToUse = rideId || ride?.id;
   useEffect(() => {
     if (isVisible) {
       if (!cancellationReasons
       || cancellationReasons.length === 0) {
         onCancel();
         Mixpanel.setEvent('No cancellation reasons in the popup', {
-          state: ride.state,
-          rideId: ride.id,
+          state: ride?.state,
+          rideId: rideIdToUse,
         });
       } else {
         Mixpanel.setEvent('Cancellation reasons popup showed', {
-          state: ride.state,
-          rideId: ride.id,
+          state: ride?.state,
+          rideId: rideIdToUse,
           cancellationReasonIds: cancellationReasons.map(cr => cr.id),
         });
       }
@@ -59,10 +62,10 @@ const CancellationReasonsPopup = ({
     setIsLoading(true);
     Mixpanel.clickEvent('Cancellation reasons clicked', {
       cancellationReasonId: id,
-      state: ride.state,
-      rideId: ride.id,
+      state: ride?.state,
+      rideId: rideIdToUse,
     });
-    await updateRide(ride?.id, {
+    await updateRide(rideIdToUse, {
       cancellationReasonId: id,
     });
     onSubmit();

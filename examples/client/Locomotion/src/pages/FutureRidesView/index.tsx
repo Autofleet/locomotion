@@ -136,6 +136,7 @@ const FutureRidesView = ({ menuSide }: FutureRidesViewProps) => {
         isVisible={showCancellationReasonPopup}
         onCancel={onCancellationReasonSubmit}
         onSubmit={onCancellationReasonSubmit}
+        rideId={rideToCancel}
       />
       <GenericErrorPopup
         isVisible={showError}
