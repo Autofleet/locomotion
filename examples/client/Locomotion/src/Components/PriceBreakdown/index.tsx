@@ -14,6 +14,7 @@ import {
   CenteredItemText,
   Line,
   InnerContainer,
+  PriceText,
 } from './styled';
 import { COUPON_TYPE } from '../../lib/commonTypes';
 
@@ -124,7 +125,7 @@ const PriceBreakdown = ({
           priceCalculationItems.map(item => (
             <Row>
               <ItemText>{item.name}</ItemText>
-              <ItemText>{item.price}</ItemText>
+              <PriceText>{item.price}</PriceText>
             </Row>
           ))
         ) : (
@@ -142,7 +143,7 @@ const PriceBreakdown = ({
             <Row>
               <ItemText>{`${i18n.t('ridePriceBreakdown.total')}`}</ItemText>
               {priceCalculationItems ? (
-                <ItemText>{total}</ItemText>
+                <PriceText>{total}</PriceText>
               ) : (
                 <SkeletonContent
                   containerStyle={{}}
