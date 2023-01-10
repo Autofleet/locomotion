@@ -13,7 +13,7 @@ export const BodyContainer = styled(View)`
 display: flex;
 flex-direction: column;
 width: 100%;
-margin-top: 10px;
+margin-top: 15px;
 `;
 
 export const CancellationReasonCard = styled(View)`
@@ -47,3 +47,7 @@ export const CloseButtonContainer = styled(View)`
 `;
 
 export const ClickableContainer = styled(TouchableOpacity)``;
+
+export const SubTitleContainer = styled(View)`
+margin-top: 15px;
+`;

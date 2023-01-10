@@ -13,6 +13,7 @@ import {
   CancellationReasonText,
   CloseButtonContainer,
   ClickableContainer,
+  SubTitleContainer,
 } from './styled';
 import { RidePageContext } from '../../context/newRideContext';
 import Loader from '../../Components/Loader';
@@ -79,7 +80,9 @@ const CancellationReasonsPopup = ({
           <CloseButton onPress={onCancel} />
         </CloseButtonContainer>
         <Title>{i18n.t('popups.cancellationReasons.title')}</Title>
-        <SubTitle>{i18n.t('popups.cancellationReasons.subTitle')}</SubTitle>
+        <SubTitleContainer>
+          <SubTitle>{i18n.t('popups.cancellationReasons.subTitle')}</SubTitle>
+        </SubTitleContainer>
         <BodyContainer>
           {isLoading
             ? (
