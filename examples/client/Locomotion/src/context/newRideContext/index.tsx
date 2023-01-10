@@ -885,11 +885,11 @@ const RidePageContextProvider = ({ children }: {
   });
 
 
-  const searchAddress = useCallback(async (searchText: string) => {
+  const searchAddress = async (searchText: string) => {
     if (!isStationsEnabled) {
       useGoogleSearch(searchText);
     }
-  }, [isStationsEnabled]);
+  };
 
   const parseSearchResults = (results: any[]) => results.map((r) => {
     let formatedAddress = r.structured_formatting.main_text;
