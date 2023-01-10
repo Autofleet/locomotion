@@ -282,7 +282,7 @@
             "back": "Back"
         },
         "cancellationReasons": {
-            "title": "Ride cancelled",
+            "title": "Ride canceled",
             "subTitle": "Hope to see you back soon. Why did you cancel the ride?",
             "confirmation": {
                 "title": "Thank you for your feedback!",
