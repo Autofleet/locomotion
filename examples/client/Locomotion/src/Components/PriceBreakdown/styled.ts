@@ -23,6 +23,12 @@ export const ItemText = styled(Text)`
   text-transform: capitalize;
 `;
 
+export const PriceText = styled(Text)`
+  ${FONT_SIZES.MEDIUM};
+  ${FONT_WEIGHTS.LIGHT};
+  opacity: 0.7;
+`;
+
 export const CenteredItemText = styled(ItemText)`
   text-align: center;
   margin: 10px;
