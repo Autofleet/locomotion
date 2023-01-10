@@ -19,7 +19,7 @@ margin-top: 10px;
 export const CancellationReasonCard = styled(View)`
 border-bottom-width: 1px;
 border-color: #f1f2f6;
-padding: 8px 3px;
+padding: 16px 3px;
 
 &:last-child {
     border-bottom-width: 0px;
@@ -28,7 +28,7 @@ padding: 8px 3px;
 
 export const CancellationReasonText = styled(Text)`
     color: #333333;
-    ${FONT_SIZES.LARGE};
+    ${FONT_SIZES.H3};
     ${FONT_WEIGHTS.REGULAR};
 `;
 
