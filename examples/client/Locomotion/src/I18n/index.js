@@ -8,6 +8,7 @@ import * as RNLocalize from 'react-native-localize';
 import moment from 'moment';
 import 'moment/locale/es';
 import 'moment/locale/el';
+import 'moment/locale/fr';
 import Config from 'react-native-config';
 import Mixpanel from '../services/Mixpanel';
 import { StorageService } from '../services';
