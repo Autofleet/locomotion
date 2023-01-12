@@ -280,6 +280,7 @@ export const ConfirmPickupTime = (props: any) => {
   } = useContext(MewRidePageContext);
   const {
     changeBsPage,
+    isDraggingLocationPin,
   } = useContext(RideStateContextContext);
   const date = moment(unconfirmedPickupTime).format('ddd, MMM Do');
   const isDateToday = moment(unconfirmedPickupTime).isSame(moment(), 'day');
@@ -515,7 +516,7 @@ export const ConfirmPickup = (props: any) => {
     setSelectedInputIndex,
     rideRequestLoading,
   } = useContext(RidePageContext);
-
+  const { isDraggingLocationPin } = useContext(RideStateContextContext);
   const { setSnapPointsState } = useContext(BottomSheetContext);
   const { isStationsEnabled } = useContext(VirtualStationsContext);
 
@@ -551,7 +552,7 @@ export const ConfirmPickup = (props: any) => {
           props.onButtonPress(lastSelectedLocation);
         }
       }}
-      buttonDisabled={!lastSelectedLocation?.streetAddress}
+      buttonDisabled={isDraggingLocationPin || !lastSelectedLocation?.streetAddress}
     >
       <AddressContainer>
         <SvgIcon Svg={locationIcon} height={20} width={10} fill="#333" />

@@ -8,6 +8,7 @@ import * as RNLocalize from 'react-native-localize';
 import moment from 'moment';
 import 'moment/locale/es';
 import 'moment/locale/el';
+import 'moment/locale/fr';
 import Config from 'react-native-config';
 import Mixpanel from '../services/Mixpanel';
 import { StorageService } from '../services';
@@ -15,6 +16,7 @@ import { StorageService } from '../services';
 import en from './en.json';
 import el from './el.json';
 import es from './es.json';
+import fr from './fr.json';
 
 const USER_LANGUAGE_STORAGE_KEY = 'userLanguage';
 
@@ -55,6 +57,10 @@ export const supportedLanguages = {
     label: 'Español',
     translation: es,
   },
+  fr: {
+    label: 'Français',
+    translation: fr,
+  },
 };
 
 export const getPreferredLanguageCode = async () => (
@@ -85,6 +91,7 @@ const localResources = {
   en,
   el,
   es,
+  fr,
 };
 
 i18n

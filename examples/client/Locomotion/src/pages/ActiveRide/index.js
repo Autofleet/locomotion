@@ -82,7 +82,7 @@ const RidePage = ({ mapSettings, navigation }) => {
   const bottomSheetRef = useRef(null);
 
   const {
-    currentBsPage, changeBsPage,
+    currentBsPage, changeBsPage, setIsDraggingLocationPin,
   } = useContext(RideStateContextContext);
   const { checkMessagesForToast } = useContext(MessagesContext);
   const { isStationsEnabled } = useContext(VirtualStationsContext);
@@ -266,6 +266,7 @@ const RidePage = ({ mapSettings, navigation }) => {
         });
       }
     } else {
+      setIsDraggingLocationPin(true);
       const location = await getPosition();
       const { coords } = (location || DEFAULT_COORDS);
       mapRef.current.animateToRegion({
@@ -311,7 +312,10 @@ const RidePage = ({ mapSettings, navigation }) => {
         return false;
       };
       const backHandler = BackHandler.addEventListener('hardwareBackPress', onBackPress);
-      focusCurrentLocation();
+
+      if (!currentBsPage === BS_PAGES.SERVICE_ESTIMATIONS) {
+        focusCurrentLocation();
+      }
 
       return () => backHandler.remove();
     }, [serviceEstimations]),
