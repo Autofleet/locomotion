@@ -42,6 +42,7 @@ import RoundedButton from '../RoundedButton';
 import { getFutureRideMaxDate, getFutureRideMinDate, RIDE_POPUPS } from '../../context/newRideContext/utils';
 import { PAYMENT_METHODS } from '../../pages/Payments/consts';
 import DatePickerPoppup from '../../popups/DatePickerPoppup';
+import { VirtualStationsContext } from '../../context/virtualStationsContext';
 
 const OtherButton = styled(Button)`
   background-color: ${({ warning, theme }) => (warning ? ERROR_COLOR : theme.primaryColor)};
@@ -280,6 +281,7 @@ export const ConfirmPickupTime = (props: any) => {
   } = useContext(MewRidePageContext);
   const {
     changeBsPage,
+    isDraggingLocationPin,
   } = useContext(RideStateContextContext);
   const date = moment(unconfirmedPickupTime).format('ddd, MMM Do');
   const isDateToday = moment(unconfirmedPickupTime).isSame(moment(), 'day');
@@ -517,10 +519,11 @@ export const ConfirmPickup = (props: any) => {
     setSelectedInputIndex,
     rideRequestLoading,
   } = useContext(RidePageContext);
-
+  const { isDraggingLocationPin } = useContext(RideStateContextContext);
   const { setSnapPointsState } = useContext(BottomSheetContext);
-  const { collapse } = useBottomSheet();
+  const { isStationsEnabled } = useContext(VirtualStationsContext);
 
+  const { collapse } = useBottomSheet();
   const setInitialLocation = async () => {
     if (props.initialLocation) {
       saveSelectedLocation(props.initialLocation);
@@ -543,7 +546,7 @@ export const ConfirmPickup = (props: any) => {
     <BsPage
       TitleText={i18n.t(`bottomSheetContent.confirmPickup.${titleText}`)}
       ButtonText={i18n.t(`bottomSheetContent.confirmPickup.${props.isConfirmPickup ? 'buttonTextWithRequest' : 'buttonText'}`)}
-      SubTitleText={i18n.t('bottomSheetContent.confirmPickup.subTitleText')}
+      SubTitleText={!isStationsEnabled ? i18n.t('bottomSheetContent.confirmPickup.subTitleText') : ''}
       isLoading={rideRequestLoading}
       fullWidthButtons
       {...props}
@@ -552,7 +555,7 @@ export const ConfirmPickup = (props: any) => {
           props.onButtonPress(lastSelectedLocation);
         }
       }}
-      buttonDisabled={!lastSelectedLocation?.streetAddress}
+      buttonDisabled={isDraggingLocationPin || !lastSelectedLocation?.streetAddress}
     >
       <AddressContainer>
         <SvgIcon Svg={locationIcon} height={20} width={10} fill="#333" />

@@ -123,7 +123,7 @@ const ActiveRideContent = () => {
             <VehicleDetails>
               <VehicleImage resizeMode="contain" source={{ uri: (vehicle?.image) || DEFAULT_VEHICLE_IMAGE }} />
               <VehiclePlateContainer>
-                <VehiclePlateText>{(vehicle?.licensePlate) || ''}</VehiclePlateText>
+                <VehiclePlateText numberOfLines={1}>{(vehicle?.licensePlate) || ''}</VehiclePlateText>
               </VehiclePlateContainer>
             </VehicleDetails>
           </TopContainer>

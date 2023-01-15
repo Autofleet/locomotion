@@ -23,7 +23,6 @@ export const getPlaceDetails = async (placeId) => {
       placeid: placeId,
     },
   });
-
   return data.result.geometry.location;
 };
 

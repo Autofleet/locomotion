@@ -16,7 +16,7 @@
             "pickup": "Pickup",
             "dropoff": "Drop off"
         },
-        "highEta": "ETA is higher than usual" 
+        "highEta": "ETA is higher than usual"
     },
     "general": {
         "back": "Back",
@@ -99,10 +99,6 @@
                 "text": "Welcome aboard, {{firstName}}!",
                 "subText": "We are glad to have you riding with us.",
                 "buttonText": "Let's go!"
-            },
-            "card": {
-                "title": "Payment Method",
-                "text": "Credit card information"
             }
         },
         "pageTitle": "Your profile",
@@ -128,7 +124,8 @@
                 "email": "Email must be valid."
             }
 
-        }
+        },
+        "chooseLanguage": "App language"
     },
     "home": {
         "map": {
@@ -290,6 +287,9 @@
                 "button": "Done"
             }
         },
+        "chooseLanguage": {
+            "title": "Choose your language"
+        },
         "defaultFooterButton": "OK"
     },
     "menu": {
@@ -301,7 +301,8 @@
         "support": "Contact us",
         "logout": "Logout",
         "futureRides": "Upcoming Rides",
-        "messages": "Messages"
+        "messages": "Messages",
+        "poweredBy":  "powered by"
     },
     "temporaryHoldText": "A small amount may be temporarily placed on hold when you start your ride ",
     "learnMore": "Learn more",
@@ -360,6 +361,14 @@
             "startTitle": "Start",
             "stopTitle": "Stop",
             "price": "Price"
+        },
+        "filters": {
+            "titles": {
+                "today": "Today",
+                "yesterday": "Yesterday",
+                "thisWeek": "This Week",
+                "lastWeek": "Last Week"
+            }
         },
       "ridesDurationHours": "{{ridesDurationHours}} Hours",
       "ridesDurationMinutes": "{{ridesDurationMinutes}} Min",
@@ -639,5 +648,20 @@
     "title": "{{ appName }} needs an update!",
     "body": "Hey, looks like you have an older version of the app.\nPlease update to get the latest features and best experience.",
     "buttonText": "Update now"
+  },
+  "virtualStations": {
+    "tooltip": {
+        "setDropoff": "Set Dropoff",
+        "setPickup": "Set Pickup",
+        "changeDropoff": "Change Dropoff",
+        "changePickup": "Change Pickup",
+        "defaultStation": "This station was set to pickup by default"
+    },
+    "search": {
+        "addressNotFound": "No address found. Please try another search.",
+        "currentLocation": "Current location",
+        "pickup": "Pickup location",
+        "title": "Searching stations near:"
+    }
   }
 }

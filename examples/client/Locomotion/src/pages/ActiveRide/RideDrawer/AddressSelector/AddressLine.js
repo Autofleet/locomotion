@@ -15,11 +15,10 @@ const ICONS = {
 };
 
 const Row = styled(Button)`
-    width: 100%;
     min-height: 50px;
-    flex-direction: row;
-    justify-content: flex-start;
-    align-items: center;
+    flex-direction: column;
+    flex-grow: 1;
+    max-height: 70px;
     padding: 10px 0px;
     ${({ border }) => border && `
       border-bottom-color: #f1f2f6;
@@ -27,20 +26,25 @@ const Row = styled(Button)`
     `}
   `;
 
+const SubRow = styled.View`
+    flex-direction: row;
+    justify-content: flex-start;
+    align-self: center;
+    flex: 1;
+
+`;
 const IconContainer = styled.View`
     margin-right: 15px;
+    align-self: center;
 `;
-
-const Icon = styled(SvgIcon).attrs(({ actionButton, theme }) => ({
-  stroke: actionButton ? theme.primaryColor : theme.textColor,
-  fill: actionButton ? theme.primaryColor : theme.textColor,
-}))``;
 
 const AddressContainer = styled.View`
     flex-direction: column;
     justify-content: space-between;
     flex: 1;
+    align-self: center;
 `;
+
 
 const AddressText = styled.Text`
     color: ${({ subtext, actionButton, theme }) => (!subtext ? (actionButton ? theme.primaryColor : theme.textColor) : '#666666')};
@@ -56,6 +60,19 @@ const ActionText = styled.Text`
     line-height: 20px;
 `;
 
+const Label = styled.Text`
+    color:  #666666;
+    font-weight: 500;
+    font-size: 12px;
+    line-height: 20px;
+`;
+
+const Icon = styled(SvgIcon).attrs(({ actionButton, theme }) => ({
+  stroke: actionButton ? theme.primaryColor : theme.textColor,
+  fill: actionButton ? theme.primaryColor : theme.textColor,
+}))``;
+
+
 const AddressRow = ({
   text,
   subText,
@@ -65,6 +82,8 @@ const AddressRow = ({
   isLoading = false,
   isHistory,
   testID,
+  label,
+  distance,
 }) => {
   const finalIcon = ICONS[icon] || (isHistory && HistoryIcon);
   const isDebuggingEnabled = (typeof atob !== 'undefined');
@@ -75,35 +94,41 @@ const AddressRow = ({
       onPress={onPress}
       noBackground
     >
-      <IconContainer>
-        {finalIcon
-          ? (
-            <Icon
-              Svg={finalIcon}
-              height={20}
-              width={20}
-              actionButton={actionButton}
+      <SubRow>
+        <IconContainer>
+          {finalIcon
+            ? (
+              <Icon
+                Svg={finalIcon}
+                height={20}
+                width={20}
+                actionButton={actionButton}
+              />
+            )
+            : null}
+        </IconContainer>
+        <AddressContainer>
+          {isLoading && !isDebuggingEnabled ? (
+            <SkeletonContent
+              containerStyle={{}}
+              isLoading
+              layout={[
+                { width: 180, height: 20, marginBottom: 6 },
+                { width: 220, height: 20 },
+              ]}
             />
-          )
-          : null}
-      </IconContainer>
-      <AddressContainer>
-        {isLoading && !isDebuggingEnabled ? (
-          <SkeletonContent
-            containerStyle={{}}
-            isLoading
-            layout={[
-              { width: 180, height: 20, marginBottom: 6 },
-              { width: 220, height: 20 },
-            ]}
-          />
-        ) : (
-          <>
-            {actionButton ? <ActionText>{text}</ActionText> : <AddressText>{text}</AddressText>}
-            {subText ? <AddressText subtext>{subText}</AddressText> : null}
-          </>
-        )}
-      </AddressContainer>
+          ) : (
+            <>
+              {label ? <Label>{label}</Label> : null}
+              {actionButton ? <ActionText>{text}</ActionText> : <AddressText>{text}</AddressText>}
+              {subText ? <AddressText subtext>{subText}</AddressText> : null}
+            </>
+          )}
+        </AddressContainer>
+        <IconContainer>
+          <AddressText subtext>{distance}</AddressText>
+        </IconContainer>
+      </SubRow>
     </Row>
   );
 };

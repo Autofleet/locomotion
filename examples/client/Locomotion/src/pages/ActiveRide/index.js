@@ -67,7 +67,7 @@ import alertIcon from '../../assets/warning.svg';
 import { rideHistoryContext } from '../../context/rideHistory';
 import SafeView from '../../Components/SafeView';
 import CancellationReasonsPopup from '../../popups/CancellationReasonsPopup';
-import GenericPopup from '../../popups/GenericPopup';
+import VirtualStationsProvider, { VirtualStationsContext } from '../../context/virtualStationsContext';
 
 const BLACK_OVERLAY_SCREENS = [BS_PAGES.CANCEL_RIDE];
 
@@ -78,13 +78,16 @@ const RidePage = ({ mapSettings, navigation }) => {
   const [addressSelectorFocusIndex, setAddressSelectorFocusIndex] = useState(1);
   const [topMessage, setTopMessage] = useState(null);
   const { getSettingByKey } = settings.useContainer();
+
   const mapRef = useRef();
   const bottomSheetRef = useRef(null);
 
   const {
-    currentBsPage, changeBsPage,
+    currentBsPage, changeBsPage, setIsDraggingLocationPin,
   } = useContext(RideStateContextContext);
   const { checkMessagesForToast } = useContext(MessagesContext);
+  const { isStationsEnabled } = useContext(VirtualStationsContext);
+
   const {
     serviceEstimations,
     setServiceEstimations,
@@ -102,6 +105,7 @@ const RidePage = ({ mapSettings, navigation }) => {
     selectedInputIndex,
     cleanRideState,
     updateRide,
+    clearRequestSp,
   } = useContext(RidePageContext);
   const {
     setIsExpanded, snapPoints, isExpanded, topBarText,
@@ -118,7 +122,7 @@ const RidePage = ({ mapSettings, navigation }) => {
   } = useContext(FutureRidesContext);
 
   useEffect(() => {
-    setAddressSelectorFocusIndex(requestStopPoints.findIndex(sp => !sp.lat));
+    setAddressSelectorFocusIndex(requestStopPoints.findIndex(sp => !sp?.lat));
   }, [requestStopPoints]);
   const resetStateToAddressSelector = (selectedIndex = null) => {
     setServiceEstimations(null);
@@ -126,6 +130,9 @@ const RidePage = ({ mapSettings, navigation }) => {
     setRide({});
     changeBsPage(BS_PAGES.ADDRESS_SELECTOR);
     setAddressSelectorFocusIndex(selectedIndex);
+    if (isStationsEnabled) {
+      clearRequestSp(selectedIndex);
+    }
   };
 
   const goBackToAddress = (selectedIndex, expand = true) => {
@@ -258,6 +265,7 @@ const RidePage = ({ mapSettings, navigation }) => {
         });
       }
     } else {
+      setIsDraggingLocationPin(true);
       const location = await getPosition();
       const { coords } = (location || DEFAULT_COORDS);
       mapRef.current.animateToRegion({
@@ -303,7 +311,10 @@ const RidePage = ({ mapSettings, navigation }) => {
         return false;
       };
       const backHandler = BackHandler.addEventListener('hardwareBackPress', onBackPress);
-      focusCurrentLocation();
+
+      if (!currentBsPage === BS_PAGES.SERVICE_ESTIMATIONS) {
+        focusCurrentLocation();
+      }
 
       return () => backHandler.remove();
     }, [serviceEstimations]),
