@@ -1,20 +1,28 @@
 import Config from 'react-native-config';
 import Storage from './storage';
 
-const keyName = 'settings';
+const keyName = 'devSettings';
 
 const { SERVER_HOST } = Config;
 
 const AppSettings = {
   getSettings: async () => {
-    if (AppSettings.settings) {
-      console.log('Return from cache delete me');
-      return AppSettings.settings;
-    }
     const res = await Storage.get(keyName);
     return res || {};
   },
-  getServerUrl: async () => SERVER_HOST,
+  getServerUrl: async () => {
+    const { serverHost } = await AppSettings.getSettings();
+    return serverHost && serverHost.length > 0 ? serverHost : SERVER_HOST;
+  },
+  setSettings: async (newSettingKeyObject) => {
+    const currentSettings = await AppSettings.getSettings();
+    await Storage.save({
+      [keyName]: {
+        ...currentSettings,
+        newSettingKeyObject,
+      },
+    });
+  },
   destroy: async () => Storage.clear(),
 };
 

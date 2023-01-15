@@ -13,6 +13,7 @@ import PhoneNumberInput from '../../Components/PhoneNumberInput';
 import { MAIN_ROUTES } from '../routes';
 import { UserContext } from '../../context/user';
 import AppSettings from '../../services/app-settings';
+import * as NavigationService from '../../services/navigation';
 import { PageContainer, ContentContainer } from '../styles';
 
 
@@ -29,6 +30,11 @@ const Phone = ({ navigation }) => {
     updateState({ phoneNumber });
   };
 
+  const checkDevSettingsPage = () => {
+    const devSettingsIsValid = Config.DEV_SETTINGS && Config.DEV_SETTINGS === 'true';
+    return user.phoneNumber === Config.DEV_PAGE_PHONE_NUMBER && devSettingsIsValid;
+  };
+
   const ERROR_RESPONSES = {
     429: () => setShowErrorText(i18n.t('login.tooManyRequestError')),
     422: () => setShowErrorText(i18n.t('login.invalidPhoneNumberError')),
@@ -38,6 +44,10 @@ const Phone = ({ navigation }) => {
   const onSubmitPhoneNumber = async () => {
     try {
       await AppSettings.destroy();
+      if (checkDevSettingsPage()) {
+        NavigationService.navigate(MAIN_ROUTES.DEV_SETTINGS_PAGE);
+        return;
+      }
       await loginApi({
         phoneNumber: user.phoneNumber,
         demandSourceId: Config.OPERATION_ID,

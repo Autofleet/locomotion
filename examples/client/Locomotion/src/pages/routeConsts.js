@@ -54,6 +54,7 @@ export const ROUTES_COMPS = {
   [MAIN_ROUTES.PROMO_CODE]: PromoCode,
   [MAIN_ROUTES.MESSAGES]: Messages,
   [MAIN_ROUTES.MESSAGE_VIEW]: MessageView,
+  [MAIN_ROUTES.DEV_SETTINGS_PAGE]: MessageView,
 };
 
 export const profileStack = ({ stack: Stack }) => (
