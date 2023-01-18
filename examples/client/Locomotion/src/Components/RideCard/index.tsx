@@ -61,7 +61,7 @@ const CardComponent = ({ paymentMethod }: CardComponentProps) => {
 interface RideCardProps {
     ride: RideInterface;
     onPress: (ride: RideInterface) => void;
-    serviceName: string;
+    serviceName: string | undefined;
     paymentMethod: any;
     scheduledTo: string | number;
     pickupWindowTime: number;
