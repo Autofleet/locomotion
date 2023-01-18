@@ -98,7 +98,6 @@ const CancellationReasonsPopup = ({
             )
             : cancellationReasons.map(cr => (
               <ClickableContainer
-                activeOpacity={1}
                 onPress={() => onCancellationReasonClick(cr.id)}
               >
                 <CancellationReasonCard key={cr.id}>
