@@ -33,7 +33,6 @@ const Index = ({ ride }) => {
     state,
     stopPoints,
   } = ride;
-  console.log();
   const rideIsActive = [...RIDE_ACTIVE_STATES, RIDE_STATES.CANCELED, RIDE_STATES.FAILED].includes(state);
   if (stopPoints
     && stopPoints.length) {
