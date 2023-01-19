@@ -759,8 +759,8 @@ const RidePageContextProvider = ({ children }: {
     reqSps[index || selectedInputIndex || 0] = {
       ...reqSps[index || selectedInputIndex || 0],
       externalId: selectedItem.externalId,
-      description: selectedItem.fullText,
-      streetAddress: selectedItem.text,
+      description: selectedItem.description || selectedItem.fullText,
+      streetAddress: selectedItem.description || selectedItem.text,
       placeId: selectedItem.placeId,
       lat: enrichedPlace.lat,
       lng: enrichedPlace.lng,
@@ -890,16 +890,17 @@ const RidePageContextProvider = ({ children }: {
   };
 
   const parseSearchResults = (results: any[]) => results.map((r) => {
-    let formatedAddress = r.structured_formatting.main_text;
+    let formattedAddress = r.structured_formatting.main_text;
     if (r.structured_formatting.secondary_text) {
-      formatedAddress = `${formatedAddress}, ${r.structured_formatting.secondary_text}`;
+      formattedAddress = `${formattedAddress}, ${r.structured_formatting.secondary_text}`;
     }
 
     return {
       text: r.structured_formatting.main_text,
       subText: r.structured_formatting.secondary_text,
-      fullText: formatedAddress,
+      fullText: formattedAddress,
       placeId: r.place_id,
+      description: r.description,
     };
   });
 
