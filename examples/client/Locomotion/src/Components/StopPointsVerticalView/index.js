@@ -16,10 +16,10 @@ const stopPointText = (sp, isFutureRide, rideState) => {
   if (isFutureRide) {
     return '';
   }
-  if (sp.state === STOP_POINT_STATES.PENDING && !RIDE_ACTIVE_STATES.includes(rideState)) {
-    return i18n.t(`stopPoints.states.${RIDE_STATES.CANCELED}`);
-  }
   if (sp.state === STOP_POINT_STATES.PENDING) {
+    if (!RIDE_ACTIVE_STATES.includes(rideState)) {
+      return i18n.t(`stopPoints.states.${RIDE_STATES.CANCELED}`);
+    }
     return getEtaText((sp.plannedArrivalTime || sp.afterTime));
   }
 
