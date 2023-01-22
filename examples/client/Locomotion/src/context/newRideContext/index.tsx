@@ -922,6 +922,11 @@ const RidePageContextProvider = ({ children }: {
     setHistoryResults(history);
   };
 
+  const backToServiceEstimations = () => {
+    tryServiceEstimations();
+    changeBsPage(BS_PAGES.SERVICE_ESTIMATIONS);
+  };
+
   const FAILED_TO_CREATE_RIDE_ACTIONS = {
     [RIDE_FAILED_REASONS.BUSY]: () => { changeBsPage(BS_PAGES.NO_AVAILABLE_VEHICLES); },
     [RIDE_FAILED_REASONS.USER_FUTURE_RIDE_INTERVAL_LIMIT_REACHED]: () => {
@@ -931,8 +936,7 @@ const RidePageContextProvider = ({ children }: {
         buttonText: i18n.t(`bottomSheetContent.${bsContent}.buttonText`),
         subTitleText: i18n.t(`bottomSheetContent.${bsContent}.subTitleText`),
         buttonPress: () => {
-          tryServiceEstimations();
-          changeBsPage(BS_PAGES.SERVICE_ESTIMATIONS);
+          backToServiceEstimations();
         },
       });
       changeBsPage(BS_PAGES.GENERIC_ERROR);
@@ -956,7 +960,7 @@ const RidePageContextProvider = ({ children }: {
         buttonText: i18n.t('bottomSheetContent.cashNotAllowed.buttonText'),
         subTitleText: i18n.t('bottomSheetContent.cashNotAllowed.subTitleText'),
         buttonPress: () => {
-          changeBsPage(BS_PAGES.SERVICE_ESTIMATIONS);
+          backToServiceEstimations();
         },
       });
       changeBsPage(BS_PAGES.GENERIC_ERROR);
@@ -967,7 +971,7 @@ const RidePageContextProvider = ({ children }: {
         buttonText: i18n.t('bottomSheetContent.paymentMethodExpired.buttonText'),
         subTitleText: i18n.t('bottomSheetContent.paymentMethodExpired.subTitleText'),
         buttonPress: () => {
-          changeBsPage(BS_PAGES.SERVICE_ESTIMATIONS);
+          backToServiceEstimations();
         },
       });
       changeBsPage(BS_PAGES.GENERIC_ERROR);
@@ -978,7 +982,7 @@ const RidePageContextProvider = ({ children }: {
         buttonText: i18n.t('bottomSheetContent.paymentIntentError.buttonText'),
         subTitleText: i18n.t('bottomSheetContent.paymentIntentError.subTitleText'),
         buttonPress: () => {
-          changeBsPage(BS_PAGES.SERVICE_ESTIMATIONS);
+          backToServiceEstimations();
         },
       });
       changeBsPage(BS_PAGES.GENERIC_ERROR);
