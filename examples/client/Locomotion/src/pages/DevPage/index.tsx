@@ -2,6 +2,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { ScrollView } from 'react-native-gesture-handler';
 import Config from 'react-native-config';
+import AppSettings from '../../services/app-settings';
 import Button from '../../Components/Button';
 import { ButtonText } from '../../Components/TextButton';
 import { BaseText } from '../../Components/BaseText';
@@ -45,6 +46,7 @@ const DevSettingPage = () => {
         testID="saveButton"
         onPress={() => {
           navigationService.goBack();
+          AppSettings.setSettings({ serverHost, operationId });
         }}
       >
         <ButtonText>Save</ButtonText>
