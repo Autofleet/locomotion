@@ -26,6 +26,7 @@ import RidePriceBreakDown from './RidePriceBreakdown';
 import PromoCode from './PromoCode';
 import Messages from './MessagesList';
 import MessageView from './MessageView';
+import DevSettingPage from './DevPage';
 
 export const ROUTES_COMPS = {
   [MAIN_ROUTES.HOME]: ActiveRide,
@@ -54,7 +55,7 @@ export const ROUTES_COMPS = {
   [MAIN_ROUTES.PROMO_CODE]: PromoCode,
   [MAIN_ROUTES.MESSAGES]: Messages,
   [MAIN_ROUTES.MESSAGE_VIEW]: MessageView,
-  [MAIN_ROUTES.DEV_SETTINGS_PAGE]: MessageView,
+  [MAIN_ROUTES.DEV_SETTINGS_PAGE]: DevSettingPage,
 };
 
 export const profileStack = ({ stack: Stack }) => (

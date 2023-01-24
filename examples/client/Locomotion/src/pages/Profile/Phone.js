@@ -31,6 +31,7 @@ const Phone = ({ navigation }) => {
   };
 
   const checkDevSettingsPage = () => {
+    console.log('checkDevSettingsPage', { setting: Config.DEV_SETTINGS, phone: Config.DEV_PAGE_PHONE_NUMBER, userPhone: user.phoneNumber });
     const devSettingsIsValid = Config.DEV_SETTINGS && Config.DEV_SETTINGS === 'true';
     return user.phoneNumber === Config.DEV_PAGE_PHONE_NUMBER && devSettingsIsValid;
   };
