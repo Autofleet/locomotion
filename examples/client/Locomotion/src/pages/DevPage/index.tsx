@@ -1,8 +1,9 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import React, { useContext, useEffect, useState } from 'react';
-import { View } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import Config from 'react-native-config';
+import Button from '../../Components/Button';
+import { ButtonText } from '../../Components/TextButton';
 import { BaseText } from '../../Components/BaseText';
 import TextInput from '../../Components/TextInput';
 import { PageContainer } from '../styles';
@@ -14,7 +15,7 @@ import * as navigationService from '../../services/navigation';
 
 const DevSettingPage = () => {
   const [operationId, setOperationId] = useState(Config.OPERATION_ID);
-  const [clientGatewayIp, setClientGatewayIp] = useState(Config.SERVER_HOST);
+  const [serverHost, setServerHost] = useState(Config.SERVER_HOST);
   return (
     <PageContainer>
       <PageHeader
@@ -26,15 +27,32 @@ const DevSettingPage = () => {
       <TextInput
         testID="operationId"
         autoFocus
-        onChangeText={(c: string) => {
-          setOperationId(c);
+        onChangeText={(newOperationId : string) => {
+          setOperationId(newOperationId);
         }}
         value={operationId}
-        autoCapitalize="none"
       />
+      <BaseText>Server Host</BaseText>
+      <TextInput
+        testID="serverHost"
+        autoFocus
+        onChangeText={(newServerHost: string) => {
+          setServerHost(newServerHost);
+        }}
+        value={serverHost}
+      />
+      <Button
+        testID="saveButton"
+        onPress={() => {
+          navigationService.goBack();
+        }}
+      >
+        <ButtonText>Save</ButtonText>
+      </Button>
 
       <ScrollView />
     </PageContainer>
+
   );
 };
 
