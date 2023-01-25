@@ -156,8 +156,8 @@ const SearchBar = ({
           onFocus={(e) => {
             Mixpanel.setEvent(`${type} address input focused`);
             onInputFocus(e.target, i);
-            e.currentTarget?.setSelection(description?.length, description?.length);
           }}
+          onPressIn={e => e.currentTarget?.setSelection(description?.length, description?.length)}
           key={`input_${s.id}`}
           autoCorrect={false}
           clear={() => {
