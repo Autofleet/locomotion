@@ -156,6 +156,7 @@ const SearchBar = ({
           onFocus={(e) => {
             Mixpanel.setEvent(`${type} address input focused`);
             onInputFocus(e.target, i);
+            e.currentTarget?.setSelection(description?.length, description?.length);
           }}
           key={`input_${s.id}`}
           autoCorrect={false}
@@ -173,6 +174,10 @@ const SearchBar = ({
             if (autoFocus) {
               inputRef.current = ref;
             }
+          }}
+          onLayout={e => e.currentTarget?.setSelection(1, 1)}
+          onBlur={(e) => {
+            e.currentTarget?.setSelection(1, 1);
           }}
         />
       </Row>
