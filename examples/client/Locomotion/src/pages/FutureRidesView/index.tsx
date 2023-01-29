@@ -65,6 +65,7 @@ const FutureRidesView = ({ menuSide }: FutureRidesViewProps) => {
   }, []);
 
   const onCancellationReasonSubmit = () => {
+    setShowCancellationReasonPopup(false);
     if (futureRides.length === 0) {
       NavigationService.navigate(MAIN_ROUTES.HOME);
     }
