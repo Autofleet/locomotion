@@ -73,43 +73,44 @@ const CancellationReasonsPopup = ({
   };
 
   return (
-    <Modal isVisible={isVisible}>
-
-      <Container>
-        <CloseButtonContainer>
-          <CloseButton onPress={onCancel} />
-        </CloseButtonContainer>
-        <Title>{i18n.t('popups.cancellationReasons.title')}</Title>
-        <SubTitleContainer>
-          <SubTitle>{i18n.t('popups.cancellationReasons.subTitle')}</SubTitle>
-        </SubTitleContainer>
-        <BodyContainer>
-          {isLoading
-            ? (
-              <LoaderContainer>
-                <Loader
-                  dark
-                  lottieViewStyle={{
-                    height: '100%', width: '100%', alignItems: 'center', justifyContent: 'center',
-                  }}
-                  sourceProp={undefined}
-                />
-              </LoaderContainer>
-            )
-            : cancellationReasons.map(cr => (
-              <ClickableContainer
-                onPress={() => onCancellationReasonClick(cr.id)}
-              >
-                <CancellationReasonCard key={cr.id}>
-                  <CancellationReasonText>
-                    {i18n.t(`cancellationReasons.${cr.value}`, cr.value)}
-                  </CancellationReasonText>
-                </CancellationReasonCard>
-              </ClickableContainer>
-            ))}
-        </BodyContainer>
-      </Container>
-    </Modal>
+    cancellationReasons?.length > 0 ? (
+      <Modal isVisible={isVisible}>
+        <Container>
+          <CloseButtonContainer>
+            <CloseButton onPress={onCancel} />
+          </CloseButtonContainer>
+          <Title>{i18n.t('popups.cancellationReasons.title')}</Title>
+          <SubTitleContainer>
+            <SubTitle>{i18n.t('popups.cancellationReasons.subTitle')}</SubTitle>
+          </SubTitleContainer>
+          <BodyContainer>
+            {isLoading
+              ? (
+                <LoaderContainer>
+                  <Loader
+                    dark
+                    lottieViewStyle={{
+                      height: '100%', width: '100%', alignItems: 'center', justifyContent: 'center',
+                    }}
+                    sourceProp={undefined}
+                  />
+                </LoaderContainer>
+              )
+              : cancellationReasons.map(cr => (
+                <ClickableContainer
+                  onPress={() => onCancellationReasonClick(cr.id)}
+                >
+                  <CancellationReasonCard key={cr.id}>
+                    <CancellationReasonText>
+                      {i18n.t(`cancellationReasons.${cr.value}`, cr.value)}
+                    </CancellationReasonText>
+                  </CancellationReasonCard>
+                </ClickableContainer>
+              ))}
+          </BodyContainer>
+        </Container>
+      </Modal>
+    ) : null
   );
 };
 

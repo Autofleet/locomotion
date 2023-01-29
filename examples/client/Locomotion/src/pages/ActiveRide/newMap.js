@@ -8,6 +8,7 @@ import moment from 'moment';
 import {
   point, featureCollection, nearestPoint, booleanPointInPolygon, polygon,
 } from '@turf/turf';
+import Mixpanel from '../../services/Mixpanel';
 import { FutureRidesContext } from '../../context/futureRides';
 import { RidePageContext } from '../../context/newRideContext';
 import { RideStateContextContext } from '../../context';
@@ -312,6 +313,13 @@ export default React.forwardRef(({
             const lng = longitude.toFixed(6);
             const spData = await reverseLocationGeocode(lat, lng);
             saveSelectedLocation(spData);
+            Mixpanel.setEvent('Change stop point location', {
+              gesture_type: 'drag_map',
+              screen: currentBsPage,
+              ...spData,
+              lat,
+              lng,
+            });
           }
         }}
         onPanDrag={() => {
