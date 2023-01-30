@@ -12,11 +12,14 @@ import { Line } from './VerticalTimeLine/styled';
 
 const getEtaText = eta => moment(eta).format('h:mm A');
 
-const stopPointText = (sp, isFutureRide) => {
+const stopPointText = (sp, isFutureRide, rideState) => {
   if (isFutureRide) {
     return '';
   }
   if (sp.state === STOP_POINT_STATES.PENDING) {
+    if (!RIDE_ACTIVE_STATES.includes(rideState)) {
+      return i18n.t(`stopPoints.states.${RIDE_STATES.CANCELED}`);
+    }
     return getEtaText((sp.plannedArrivalTime || sp.afterTime));
   }
 
@@ -58,7 +61,7 @@ const Index = ({ ride }) => {
               underContent={(
                 <ContentTitle>
                   {rideIsActive
-                    ? stopPointText(sp, isFutureRide)
+                    ? stopPointText(sp, isFutureRide, ride.state)
                     : getEtaText(sp.completedAt || sp.arrivedAt)
                 }
                 </ContentTitle>

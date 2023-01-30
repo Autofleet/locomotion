@@ -2,7 +2,7 @@ import React, {
   useContext, useRef, useState, useEffect,
 } from 'react';
 import bottomSheet from '@gorhom/bottom-sheet/lib/typescript/components/bottomSheet';
-import moment from 'moment';
+import CancellationReasonsPopup from '../../popups/CancellationReasonsPopup';
 import { FutureRidesContext } from '../../context/futureRides';
 import { PageContainer } from '../styles';
 import { ContentContainer } from './styled';
@@ -14,13 +14,14 @@ import RideCard from '../../Components/RideCard';
 import BottomSheetComponent from '../../Components/BottomSheet';
 import { CancelRide } from '../../Components/BsPages';
 import { RideStateContextContext } from '../..';
-import { RideInterface, RidePageContext } from '../../context/newRideContext';
+import { RidePageContext } from '../../context/newRideContext';
 
 import { BS_PAGES } from '../../context/ridePageStateContext/utils';
 import BlackOverlay from '../../Components/BlackOverlay';
 import GenericErrorPopup from '../../popups/GenericError';
 import { NoRidesInList } from '../RideHistory/RidesList/styled';
 import Mixpanel from '../../services/Mixpanel';
+import CancellationReasonsProvider, { CancellationReasonsContext } from '../../context/cancellation-reasons';
 
 interface FutureRidesViewProps {
   menuSide: 'right' | 'left';
@@ -29,6 +30,7 @@ const FutureRidesView = ({ menuSide }: FutureRidesViewProps) => {
   const [rideToCancel, setRideToCancel] = useState<string | undefined>(undefined);
   const [showError, setShowError] = useState(false);
   const [services, setServices] = useState<any[]>([]);
+  const [showCancellationReasonPopup, setShowCancellationReasonPopup] = useState(false);
 
   const bottomSheetRef = useRef<bottomSheet>(null);
   const {
@@ -36,7 +38,9 @@ const FutureRidesView = ({ menuSide }: FutureRidesViewProps) => {
   } = useContext(FutureRidesContext);
   const { changeBsPage, currentBsPage } = useContext(RideStateContextContext);
   const { cancelRide, getServices, ride } = useContext(RidePageContext);
+  const { getCancellationReasons } = useContext(CancellationReasonsContext);
   const onPressCancel = (id?: string) => {
+    getCancellationReasons(id);
     setRideToCancel(id);
     changeBsPage(BS_PAGES.CANCEL_RIDE);
   };
@@ -59,6 +63,13 @@ const FutureRidesView = ({ menuSide }: FutureRidesViewProps) => {
   useEffect(() => {
     loadServices();
   }, []);
+
+  const onCancellationReasonSubmit = () => {
+    setShowCancellationReasonPopup(false);
+    if (futureRides.length === 0) {
+      NavigationService.navigate(MAIN_ROUTES.HOME);
+    }
+  };
 
   return (
     <PageContainer>
@@ -111,9 +122,7 @@ const FutureRidesView = ({ menuSide }: FutureRidesViewProps) => {
               await cancelRide(rideToCancel);
               await loadFutureRides();
               changeBsPage(ride.id ? BS_PAGES.ACTIVE_RIDE : BS_PAGES.ADDRESS_SELECTOR);
-              if (futureRides.length === 1) {
-                NavigationService.navigate(MAIN_ROUTES.HOME);
-              }
+              setShowCancellationReasonPopup(true);
             } catch (e: any) {
               setShowError(true);
               Mixpanel.setEvent('failed to cancel ride', { status: e?.response?.status });
@@ -124,6 +133,12 @@ const FutureRidesView = ({ menuSide }: FutureRidesViewProps) => {
           }}
         />
       </BottomSheetComponent>
+      <CancellationReasonsPopup
+        isVisible={showCancellationReasonPopup}
+        onCancel={onCancellationReasonSubmit}
+        onSubmit={onCancellationReasonSubmit}
+        rideId={rideToCancel}
+      />
       <GenericErrorPopup
         isVisible={showError}
         closePopup={() => setShowError(false)}

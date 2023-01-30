@@ -7,6 +7,7 @@
     },
     "rideDetails": {
         "unavailable": "Not available",
+        "outOfTerritory": "Not in territory",
         "timeUntilArrival": "In {{minutes}} min",
         "toolTipEta": "ETA {{minutes}} min",
         "noCharge": "No charge",
@@ -277,6 +278,15 @@
             "text": "Please note that this service is currently experiencing high ETAs.\n\nFinding a driver might take longer than usual." ,
             "submit": "Continue",
             "back": "Back"
+        },
+        "cancellationReasons": {
+            "title": "Ride canceled",
+            "subTitle": "Hope to see you back soon. Why did you cancel the ride?",
+            "confirmation": {
+                "title": "Thank you for your feedback!",
+                "text": "We will use this information to continue creating better experiences for our riders.",
+                "button": "Done"
+            }
         },
         "chooseLanguage": {
             "title": "Choose your language"
@@ -654,5 +664,16 @@
         "pickup": "Pickup location",
         "title": "Searching stations near:"
     }
-  }
+  },
+    "cancellationReasons": {
+        "Ordered by mistake": "Ordered by mistake",
+        "Booking a different time": "Booking a different time",
+        "Other reason": "Other reason",
+        "It's taking too long": "It's taking too long",
+        "ETA was too long": "ETA was too long",
+        "Found another courier": "Found another courier",
+        "Don't need a courier anymore": "Don't need a courier anymore",
+        "Found another ride": "Found another ride",
+        "Don't need a ride anymore": "Don't need a ride anymore"
+    }
 }

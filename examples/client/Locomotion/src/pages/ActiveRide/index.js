@@ -66,6 +66,7 @@ import { MessagesContext } from '../../context/messages';
 import alertIcon from '../../assets/warning.svg';
 import { rideHistoryContext } from '../../context/rideHistory';
 import SafeView from '../../Components/SafeView';
+import CancellationReasonsPopup from '../../popups/CancellationReasonsPopup';
 import VirtualStationsProvider, { VirtualStationsContext } from '../../context/virtualStationsContext';
 
 const BLACK_OVERLAY_SCREENS = [BS_PAGES.CANCEL_RIDE];
@@ -88,9 +89,6 @@ const RidePage = ({ mapSettings, navigation }) => {
   const { isStationsEnabled } = useContext(VirtualStationsContext);
 
   const {
-    rides: historyRides, loadRides: loadHistoryRides,
-  } = useContext(rideHistoryContext);
-  const {
     serviceEstimations,
     setServiceEstimations,
     initSps,
@@ -106,6 +104,7 @@ const RidePage = ({ mapSettings, navigation }) => {
     tryServiceEstimations,
     selectedInputIndex,
     cleanRideState,
+    updateRide,
     clearRequestSp,
   } = useContext(RidePageContext);
   const {
@@ -407,6 +406,11 @@ const RidePage = ({ mapSettings, navigation }) => {
     setTopMessage(MESSAGE_MAP[topMessageKey]);
   };
 
+  const onCancellationReasonsAction = () => {
+    setRidePopup(null);
+    cleanRideState();
+  };
+
   return (
     <PageContainer>
       <MainMap
@@ -498,6 +502,11 @@ BS_PAGE_TO_COMP[currentBsPage] ? BS_PAGE_TO_COMP[currentBsPage]() : null
             cleanRideState(false);
           }
         }
+        />
+        <CancellationReasonsPopup
+          isVisible={ridePopup === RIDE_POPUPS.CANCELLATION_REASON}
+          onCancel={onCancellationReasonsAction}
+          onSubmit={onCancellationReasonsAction}
         />
       </Portal>
       <Toast

@@ -32,8 +32,6 @@ const ServiceCard = ({ service, withBorder }) => {
   const isFutureRide = ride.scheduledTo;
   const unavailable = !((ride.scheduledTo && service.priceCalculationId)
    || (service.eta || service.isHighEtaAsapRide));
-  const unavailableText = i18n.t('rideDetails.unavailable');
-  const serviceDisplayPrice = getFormattedPrice(service.currency, service.price);
   const isSelected = chosenService && chosenService.id === service.id;
   const sharedTagContainerStyles = {
     borderWidth: 1,
@@ -91,6 +89,18 @@ const ServiceCard = ({ service, withBorder }) => {
     </Description>
   );
 
+  const getUnavailableText = () => {
+    if (unavailable) {
+      if (service.outOfTerritory) {
+        return i18n.t('rideDetails.outOfTerritory');
+      }
+
+      return i18n.t('rideDetails.unavailable');
+    }
+
+    return getFormattedPrice(service.currency, service.price);
+  };
+
   return (
     <>
       <CardContainer
@@ -135,7 +145,7 @@ const ServiceCard = ({ service, withBorder }) => {
                 : <View />
             }
               <Price>
-                {!unavailable ? serviceDisplayPrice : unavailableText}
+                {getUnavailableText()}
               </Price>
             </TitleContainer>
           </WrapRow>
