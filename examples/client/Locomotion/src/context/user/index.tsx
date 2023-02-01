@@ -6,7 +6,7 @@ import Config from 'react-native-config';
 import { authService, StorageService } from '../../services';
 import {
   getUserDetails, loginVert, sendEmailVerification,
-  updateUser as updateUserApi, emailVerify, deleteUser as deleteUserApi, getUserCoupon, createUserCoupon,
+  updateUser as updateUserApi, emailVerify, deleteUser as deleteUserApi, getUserCoupon, createUserCoupon, loginApi,
 } from './api';
 import auth from '../../services/auth';
 import Mixpanel from '../../services/Mixpanel';
@@ -48,6 +48,7 @@ interface UserContextInterface {
   updateUser: (values: any) => Promise<any>,
   getCoupon: () => Promise<any>,
   createCoupon: (values: any) => Promise<any>,
+  onLogin: (phoneNumber: string, channel: string) => Promise<void>
 }
 
 export const UserContext = createContext<UserContextInterface>({
@@ -69,6 +70,7 @@ export const UserContext = createContext<UserContextInterface>({
   updateUser: async (values: any) => undefined,
   getCoupon: async () => undefined,
   createCoupon: async (values: any) => undefined,
+  onLogin: async (phoneNumber: string, channel: string) => undefined,
 });
 
 const UserContextProvider = ({ children }: { children: any }) => {
@@ -165,6 +167,14 @@ const UserContextProvider = ({ children }: { children: any }) => {
     return vertResponse.status === 'OK';
   };
 
+  const onLogin = async (phoneNumber: string, channel = 'sms') => {
+    await loginApi({
+      phoneNumber,
+      channel,
+      demandSourceId: Config.OPERATION_ID,
+    });
+  };
+
   const onVert = async (code: string) => {
     try {
       const vertResponse = await loginVert({
@@ -240,6 +250,7 @@ const UserContextProvider = ({ children }: { children: any }) => {
         updateUser,
         getCoupon,
         createCoupon,
+        onLogin,
       }}
     >
       {children}
