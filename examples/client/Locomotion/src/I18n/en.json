@@ -62,9 +62,11 @@
                 "title": "Verification",
                 "text": "Please enter code",
                 "subText": "A code has been sent to {{phoneNumber}}.",
-                "resendCodeText": "Didn't receive an SMS? ",
-                "resendCodeButton": "Resend",
-                "resendCodeTextSeconds": " in {{seconds}} seconds"
+                "resendCodeText": "Not receiving an SMS? ",
+                "resendCodeButton": "Resend SMS",
+                "resendCodeTextSeconds": " in {{seconds}} seconds",
+                "call": "Call me",
+                "calling": "Calling you now!"
             },
             "emailCode": {
                 "title": "Verification",
