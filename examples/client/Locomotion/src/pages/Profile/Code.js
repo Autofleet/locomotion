@@ -95,15 +95,17 @@ const Code = () => {
   };
 
   useEffect(() => {
-    const callingTimeout = setTimeout(() => {
-      setIsCalling(false);
-    }, 10 * 1000);
+    if (isCalling) {
+      const callingTimeout = setTimeout(() => {
+        setIsCalling(false);
+      }, 10 * 1000);
 
-    return () => {
-      if (callingTimeout) {
-        clearTimeout(callingTimeout);
-      }
-    };
+      return () => {
+        if (callingTimeout) {
+          clearTimeout(callingTimeout);
+        }
+      };
+    }
   }, [isCalling]);
 
   return (
