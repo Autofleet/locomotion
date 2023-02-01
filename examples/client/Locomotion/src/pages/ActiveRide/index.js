@@ -269,8 +269,7 @@ const RidePage = ({ mapSettings, navigation }) => {
       const location = await getPosition();
       const { coords } = (location || DEFAULT_COORDS);
       mapRef.current.animateToRegion({
-      // I really don't know why this is needed, but it works
-        latitude: coords.latitude - parseFloat(50) / 10000,
+        latitude: coords.latitude,
         longitude: coords.longitude,
         latitudeDelta: 0.015,
         longitudeDelta: 0.015,
