@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import { createContainer } from 'unstated-next';
-import { PaymentIntent } from '@stripe/stripe-react-native';
 import { PAYMENT_STATES } from '../../lib/commonTypes';
 import Mixpanel from '../../services/Mixpanel';
 import cashPaymentMethod from '../../pages/Payments/cashPaymentMethod';
@@ -8,6 +7,7 @@ import { fetchRides } from '../newRideContext/api';
 import network from '../../services/network';
 import SETTINGS_KEYS from '../settings/keys';
 import SettingContext from '../settings';
+import { PAYMENT_METHODS } from '../../pages/Payments/consts';
 
 const BASE_PATH = '/api/v1/me/customers';
 
@@ -184,6 +184,12 @@ const usePayments = () => {
     return returnObject;
   };
 
+  const userHasTypePaymentMethod = type => (paymentMethods || []).some(pm => pm.type === type);
+
+  const userHasGooglePayPaymentMethod = () => userHasTypePaymentMethod(PAYMENT_METHODS.GOOGLE_PAY);
+
+  const clientHasApplePayPaymentMethod = () => userHasTypePaymentMethod(PAYMENT_METHODS.APPLE_PAY);
+
   return {
     paymentAccount,
     getClientPaymentAccount,
@@ -204,6 +210,8 @@ const usePayments = () => {
     loadOutstandingBalanceRide,
     retryPayment,
     hasOutstandingPayment,
+    userHasGooglePayPaymentMethod,
+    clientHasApplePayPaymentMethod,
   };
 };
 

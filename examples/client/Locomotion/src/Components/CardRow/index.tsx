@@ -1,13 +1,15 @@
 /* eslint-disable no-nested-ternary */
 /* eslint-disable no-mixed-operators */
-import React, { useContext, useEffect, useState } from 'react';
+import React, {
+  useContext, useEffect, useMemo, useState,
+} from 'react';
 import { View, Text } from 'react-native';
 import moment from 'moment';
 import styled, { ThemeContext } from 'styled-components';
 import { PaymentIcon } from 'react-native-payment-icons';
 import { PaymentMethodInterface } from 'context/payments/interface';
 import Button from '../Button';
-import { capitalizeFirstLetter, getLastFourForamttedShort } from '../../pages/Payments/cardDetailUtils';
+import { capitalizeFirstLetter, getLastFourFormattedShort } from '../../pages/Payments/cardDetailUtils';
 import i18n from '../../I18n';
 import SvgIcon from '../SvgIcon';
 import selected from '../../assets/selected-v.svg';
@@ -15,6 +17,7 @@ import { Start, StartCapital } from '../../lib/text-direction';
 import cashIcon from '../../assets/cash.svg';
 import chevronIcon from '../../assets/chevron.svg';
 import { isCashPaymentMethod } from '../../lib/ride/utils';
+import { PAYMENT_METHODS } from '../../pages/Payments/consts';
 
 
 type ContainerProps = {
@@ -101,6 +104,82 @@ const CardRow = (paymentMethod: any) => {
       setIsCardExpired(isExpired);
     }, 100);
   }, [paymentMethod]);
+
+  const renderCreditCard = () => (
+    <>
+      <ImageContainer>
+        {paymentMethod.addNew
+          ? (
+            <>
+              <PlusContainer><PlusText>+</PlusText></PlusContainer>
+            </>
+          )
+          : (
+            <>
+              {!paymentMethod.lastFour
+                ? isCashPaymentMethod(paymentMethod) ? <SvgIcon Svg={cashIcon} width={40} height={25} /> : null
+                : <PaymentIcon type={paymentMethod.brand} />}
+              {paymentMethod.mark ? (
+                <SvgIcon
+                  style={{
+                    position: 'absolute',
+                    right: -7,
+                    bottom: -7,
+                  }}
+                  Svg={selected}
+                  fill={primaryColor}
+                />
+              ) : null }
+            </>
+          )
+        }
+
+      </ImageContainer>
+      <TextContainer>
+        {paymentMethod.addNew
+          ? (
+            <>
+              <Type>{i18n.t('payments.addNewCreditCard').toString()}</Type>
+            </>
+          )
+          : (
+            <>
+              {!paymentMethod.lastFour
+                ? (
+                  <Type>
+                    {`${i18n.t(`payments.${isCashPaymentMethod(paymentMethod) ? 'cash' : 'offline'}`)}`}
+                  </Type>
+                )
+                : (
+                  <Type>
+                    {capitalizeFirstLetter(paymentMethod.name)}
+                  </Type>
+                )}
+              {paymentMethod.lastFour
+                ? <Description>{getLastFourFormattedShort(paymentMethod.lastFour)}</Description>
+                : null}
+              {paymentMethod && paymentMethod.expiresAt && !!paymentMethod.lastFour && isCardExpired ? <Error>{i18n.t('payments.expired').toString()}</Error> : null}
+              {paymentMethod && !!paymentMethod.lastFour && paymentMethod.hasOutstandingBalance ? <Error>{i18n.t('payments.hasOutstandingBalance').toString()}</Error> : null}
+            </>
+          )}
+      </TextContainer>
+      {paymentMethod.showArrow && <SvgIcon Svg={chevronIcon} stroke="#d7d7d7" />}
+    </>
+  );
+
+  const renderApplePay = () => {};
+
+  const renderGooglePay = () => {};
+
+  const RENDER_TO_ACTION = useMemo(() => ({
+    [PAYMENT_METHODS.APPLE_PAY]: renderApplePay,
+    [PAYMENT_METHODS.CARD]: renderCreditCard,
+    [PAYMENT_METHODS.GOOGLE_PAY]: renderGooglePay,
+  }), []);
+
+  const creditCardComponent = RENDER_TO_ACTION[paymentMethod.type]
+   || RENDER_TO_ACTION[PAYMENT_METHODS.CARD];
+
   return (
     <Button
       noBackground
@@ -114,63 +193,7 @@ const CardRow = (paymentMethod: any) => {
     >
       <Container selected={paymentMethod.selected}>
         <InnerContainer chooseMethodPage={paymentMethod.chooseMethodPage}>
-          <ImageContainer>
-            {paymentMethod.addNew
-              ? (
-                <>
-                  <PlusContainer><PlusText>+</PlusText></PlusContainer>
-                </>
-              )
-              : (
-                <>
-                  {!paymentMethod.lastFour
-                    ? isCashPaymentMethod(paymentMethod) ? <SvgIcon Svg={cashIcon} width={40} height={25} /> : null
-                    : <PaymentIcon type={paymentMethod.brand} />}
-                  {paymentMethod.mark ? (
-                    <SvgIcon
-                      style={{
-                        position: 'absolute',
-                        right: -7,
-                        bottom: -7,
-                      }}
-                      Svg={selected}
-                      fill={primaryColor}
-                    />
-                  ) : null }
-                </>
-              )
-        }
-
-          </ImageContainer>
-          <TextContainer>
-            {paymentMethod.addNew
-              ? (
-                <>
-                  <Type>{i18n.t('payments.addNewCreditCard').toString()}</Type>
-                </>
-              )
-              : (
-                <>
-                  {!paymentMethod.lastFour
-                    ? (
-                      <Type>
-                        {`${i18n.t(`payments.${isCashPaymentMethod(paymentMethod) ? 'cash' : 'offline'}`)}`}
-                      </Type>
-                    )
-                    : (
-                      <Type>
-                        {capitalizeFirstLetter(paymentMethod.name)}
-                      </Type>
-                    )}
-                  {paymentMethod.lastFour
-                    ? <Description>{getLastFourForamttedShort(paymentMethod.lastFour)}</Description>
-                    : null}
-                  {paymentMethod && paymentMethod.expiresAt && !!paymentMethod.lastFour && isCardExpired ? <Error>{i18n.t('payments.expired').toString()}</Error> : null}
-                  {paymentMethod && !!paymentMethod.lastFour && paymentMethod.hasOutstandingBalance ? <Error>{i18n.t('payments.hasOutstandingBalance').toString()}</Error> : null}
-                </>
-              )}
-          </TextContainer>
-          {paymentMethod.showArrow && <SvgIcon Svg={chevronIcon} stroke="#d7d7d7" />}
+          {creditCardComponent()}
         </InnerContainer>
       </Container>
     </Button>

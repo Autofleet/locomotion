@@ -9,7 +9,7 @@ import { RidePageContext } from '../../context/newRideContext';
 import GenericErrorPopup from '../../popups/GenericError';
 import { getCurrencySymbol } from '../../context/newRideContext/utils';
 import ConfirmationPopup from '../../popups/ConfirmationPopup';
-import { getLastFourForamttedLong } from '../../pages/Payments/cardDetailUtils';
+import { getLastFourFormattedLong } from '../../pages/Payments/cardDetailUtils';
 import { MAIN_ROUTES } from '../../pages/routes';
 import Card from '../InformationCard';
 import {
@@ -110,7 +110,7 @@ const CardDetails = ({
               <Card
                 title={i18n.t('payments.cardDetails.number')}
               >
-                {getLastFourForamttedLong(paymentMethod?.lastFour)}
+                {getLastFourFormattedLong(paymentMethod?.lastFour)}
 
               </Card>
               <Card

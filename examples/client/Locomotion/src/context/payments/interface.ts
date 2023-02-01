@@ -17,5 +17,6 @@ export interface PaymentMethodInterface {
     name: string;
     stripeId: string;
     updatedAt: Date;
-    outstandingBalance: Balance
+    outstandingBalance: Balance;
+    type: string;
 }

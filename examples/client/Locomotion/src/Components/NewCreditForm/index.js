@@ -30,13 +30,13 @@ const NewCreditForm = ({ onDone, canSkip = false, PageText }) => {
     const billingDetails = {
       email: customerData.email,
     };
+
     const { setupIntent, error } = await confirmSetupIntent(clientSecret, {
       paymentMethodType: 'Card',
       paymentMethod: {
         billingDetails,
       },
     });
-
 
     if (error) {
       console.error(error);

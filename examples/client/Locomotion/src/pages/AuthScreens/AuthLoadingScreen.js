@@ -64,7 +64,7 @@ const AuthLoadingScreen = () => {
 
         initStripe({
           publishableKey: Config.STRIPE_PUBLISHER_KEY,
-          merchantIdentifier: 'merchant.identifier',
+          merchantIdentifier: Config.APPLE_PAY_MERCHANT_ID,
           stripeAccountId: paymentAccount.stripeId,
         });
         await saveUser(userData);

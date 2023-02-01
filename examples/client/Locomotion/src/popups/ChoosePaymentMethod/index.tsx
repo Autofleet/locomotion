@@ -3,7 +3,6 @@ import React, { useEffect, useState } from 'react';
 import { View } from 'react-native';
 import PropTypes from 'prop-types';
 import Modal from 'react-native-modal';
-import { useNavigation } from '@react-navigation/native';
 import CloseButton from '../../Components/CloseButton';
 import i18n from '../../I18n';
 import { MAIN_ROUTES } from '../../pages/routes';
@@ -21,6 +20,7 @@ import PaymentMethod from '../../Components/CardRow';
 import PaymentsContext from '../../context/payments';
 import cashPaymentMethod from '../../pages/Payments/cashPaymentMethod';
 import * as navigationService from '../../services/navigation';
+import ApplePay from '../../Components/ApplePay';
 
 interface PaymentMethodPopupProps {
   isVisible: boolean;
@@ -74,6 +74,11 @@ const PaymentMethodPopup = ({
     getIsCashEnabled();
   }, [usePayments.paymentMethods]);
 
+
+  const finalPaymentMethods = (isCashEnabled && showCash
+    ? [...usePayments.paymentMethods, cashPaymentMethod]
+    : usePayments.paymentMethods);
+
   return (
     <Modal
       isVisible={isVisible}
@@ -94,19 +99,21 @@ const PaymentMethodPopup = ({
         <CardsScrollView>
           <Container>
             <View>
-              {(isCashEnabled && showCash
-                ? [...usePayments.paymentMethods, cashPaymentMethod]
-                : usePayments.paymentMethods).map((paymentMethod: any, i) => (
-                  <PaymentMethod
-                    {...paymentMethod}
-                    chooseMethodPage
-                    selected={selectedPaymentId === paymentMethod.id}
-                    mark={selectedPaymentId === paymentMethod.id}
-                    onPress={() => {
-                      setSelectedPaymentId(paymentMethod.id);
-                    }}
-                  />
+              {finalPaymentMethods.map((paymentMethod: any, i) => (
+                <PaymentMethod
+                  {...paymentMethod}
+                  chooseMethodPage
+                  selected={selectedPaymentId === paymentMethod.id}
+                  mark={selectedPaymentId === paymentMethod.id}
+                  onPress={() => {
+                    setSelectedPaymentId(paymentMethod.id);
+                  }}
+                />
               ))}
+              {!usePayments.clientHasApplePayPaymentMethod()
+                ? <ApplePay />
+                : null
+              }
               <PaymentMethod
                 addNew
                 chooseMethodPage
