@@ -1,7 +1,7 @@
 import React, {
   useContext, useEffect, useState,
 } from 'react';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Dimensions } from 'react-native';
 import MapView, { Polygon, Polyline } from 'react-native-maps';
 import Config from 'react-native-config';
 import moment from 'moment';
@@ -74,6 +74,11 @@ const PAGES_TO_SHOW_STATIONS_MARKERS = [
   BS_PAGES.CONFIRM_PICKUP,
   BS_PAGES.LOCATION_REQUEST,
 ];
+
+const MAP_STYLE = {
+  ...StyleSheet.absoluteFillObject,
+  height: Dimensions.get('window').height - 250,
+};
 
 const getFirstPendingStopPoint = sps => (sps || []).find(sp => sp.state
   === STOP_POINT_STATES.PENDING);
@@ -299,7 +304,7 @@ export default React.forwardRef(({
       <MapView
         provider={Config.MAP_PROVIDER}
         showsUserLocation={PAGES_TO_SHOW_MY_LOCATION.includes(currentBsPage)}
-        style={StyleSheet.absoluteFillObject}
+        style={MAP_STYLE}
         showsMyLocationButton={false}
         loadingEnabled
         showsCompass={false}
