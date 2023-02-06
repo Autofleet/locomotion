@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Dimensions } from 'react-native';
+import { StyleSheet, Dimensions, Platform } from 'react-native';
 import { BaseToast } from 'react-native-toast-message';
 import styled from 'styled-components';
 import vehicleIcon from '../../assets/car-icon.png';
@@ -45,21 +45,17 @@ export const MapButtonsContainer = styled.View`
   `;
 
 export const LocationMarkerContainer = styled.View`
-  position: absolute;
-  align-items: center;
-  justify-content: center;
   background-color: transparent;
-  top: 0;
-  bottom: ${({ bottomHeight }) => bottomHeight + 15 || 0};
-  left: 0;
-  right: 0;
 `;
 
 export const LocationMarker = styled(Icon).attrs(({ theme }) => ({
-  height: '80px',
+  height: '20%',
+  position: 'absolute',
+  bottom: Platform.OS === 'android' ? '45%' : '41%',
+  left: '45%',
   fill: theme.primaryColor,
   stroke: theme.pageBackgroundColor,
-  width: '40px',
+  width: '10%',
   viewBox: '-1 0 13 10',
 }))``;
 

@@ -297,16 +297,18 @@ export default React.forwardRef(({
   const hightRatioOfBottomSheet = typeof snapPoints[0] === 'number'
     ? `${snapPoints[0] / Dimensions.get('window').height}%`
     : snapPoints[0];
+
+  const mapPositionStyles = {
+    width: '100%',
+    height: `${100 - (hightRatioOfBottomSheet.split('%')[0] * 100)}%`,
+    position: 'absolute',
+  };
   return (
     <>
       <MapView
         provider={Config.MAP_PROVIDER}
         showsUserLocation={PAGES_TO_SHOW_MY_LOCATION.includes(currentBsPage)}
-        style={{
-          width: '100%',
-          height: `${100 - (hightRatioOfBottomSheet.split('%')[0] * 100)}%`,
-          position: 'absolute',
-        }}
+        style={mapPositionStyles}
         showsMyLocationButton={false}
         loadingEnabled
         showsCompass={false}
@@ -392,7 +394,11 @@ export default React.forwardRef(({
         {isStationsEnabled && PAGES_TO_SHOW_STATIONS_MARKERS.includes(currentBsPage) ? <StationMarkers requestedStopPoints={requestStopPoints} /> : null}
       </MapView>
       {isChooseLocationOnMap && (
-        <LocationMarkerContainer pointerEvents="none" bottomHeight={snapPoints[0]}>
+        <LocationMarkerContainer
+          pointerEvents="none"
+          bottomHeight={snapPoints[0]}
+          style={mapPositionStyles}
+        >
           <LocationMarker />
         </LocationMarkerContainer>
       )}
