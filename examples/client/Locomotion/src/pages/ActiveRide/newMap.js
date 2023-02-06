@@ -297,7 +297,6 @@ export default React.forwardRef(({
   const hightRatioOfBottomSheet = typeof snapPoints[0] === 'number'
     ? `${snapPoints[0] / Dimensions.get('window').height}%`
     : snapPoints[0];
-  console.log(hightRatioOfBottomSheet, `${100 - (hightRatioOfBottomSheet.split('%')[0] * 100)}%`);
   return (
     <>
       <MapView
