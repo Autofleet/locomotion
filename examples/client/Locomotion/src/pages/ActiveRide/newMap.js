@@ -396,7 +396,6 @@ export default React.forwardRef(({
       {isChooseLocationOnMap && (
         <LocationMarkerContainer
           pointerEvents="none"
-          bottomHeight={snapPoints[0]}
           style={mapPositionStyles}
         >
           <LocationMarker />
