@@ -12,6 +12,8 @@ import cashIcon from '../../../../../../assets/cash.svg';
 import { UserContext } from '../../../../../../context/user';
 import { PAYMENT_METHODS } from '../../../../../../pages/Payments/consts';
 import PromoButtonComponent from '../PromoButton';
+import { RideStateContextContext } from '../../../../../../context';
+import { BS_PAGES } from '../../../../../../context/ridePageStateContext/utils';
 
 const TimeText = styled(Text)`
     ${FONT_SIZES.LARGE}
@@ -63,12 +65,9 @@ const PaymentButton = ({
   const { primaryColor } = useContext(ThemeContext);
   const [coupon, setCoupon] = useState<any>(null);
   const { getCoupon } = useContext(UserContext);
-
-  useEffect(() => {
-    if (coupon) {
-      setCoupon(null);
-    }
-  }, []);
+  const {
+    currentBsPage,
+  } = useContext(RideStateContextContext);
 
   const checkCoupon = async () => {
     try {
@@ -81,8 +80,10 @@ const PaymentButton = ({
 
   useFocusEffect(
     useCallback(() => {
-      checkCoupon();
-    }, []),
+      if (currentBsPage === BS_PAGES.SERVICE_ESTIMATIONS) {
+        checkCoupon();
+      }
+    }, [currentBsPage]),
   );
 
   return (
