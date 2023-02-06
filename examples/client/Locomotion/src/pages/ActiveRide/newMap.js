@@ -1,7 +1,7 @@
 import React, {
   useContext, useEffect, useState,
 } from 'react';
-import { StyleSheet } from 'react-native';
+import { Dimensions, StyleSheet } from 'react-native';
 import MapView, { Polygon, Polyline } from 'react-native-maps';
 import Config from 'react-native-config';
 import moment from 'moment';
@@ -29,16 +29,16 @@ import { VirtualStationsContext } from '../../context/virtualStationsContext';
 import i18n from '../../I18n';
 
 export const MAP_EDGE_PADDING = {
-  top: 140,
+  top: 180,
   right: 100,
-  bottom: 400,
+  bottom: 50,
   left: 100,
 };
 
 export const ACTIVE_RIDE_MAP_PADDING = {
   top: 100,
   right: 70,
-  bottom: 300,
+  bottom: 50,
   left: 70,
 };
 
@@ -294,12 +294,21 @@ export default React.forwardRef(({
     setIsDraggingLocationPin(false);
   }, [lastSelectedLocation]);
 
+  const hightRatioOfBottomSheet = typeof snapPoints[0] === 'number'
+    ? `${snapPoints[0] / Dimensions.get('window').height}%`
+    : snapPoints[0];
+
+  const mapPositionStyles = {
+    width: '100%',
+    height: `${100 - (hightRatioOfBottomSheet.split('%')[0] * 100)}%`,
+    position: 'absolute',
+  };
   return (
     <>
       <MapView
         provider={Config.MAP_PROVIDER}
         showsUserLocation={PAGES_TO_SHOW_MY_LOCATION.includes(currentBsPage)}
-        style={StyleSheet.absoluteFillObject}
+        style={mapPositionStyles}
         showsMyLocationButton={false}
         loadingEnabled
         showsCompass={false}
@@ -385,7 +394,10 @@ export default React.forwardRef(({
         {isStationsEnabled && PAGES_TO_SHOW_STATIONS_MARKERS.includes(currentBsPage) ? <StationMarkers requestedStopPoints={requestStopPoints} /> : null}
       </MapView>
       {isChooseLocationOnMap && (
-        <LocationMarkerContainer pointerEvents="none">
+        <LocationMarkerContainer
+          pointerEvents="none"
+          style={mapPositionStyles}
+        >
           <LocationMarker />
         </LocationMarkerContainer>
       )}

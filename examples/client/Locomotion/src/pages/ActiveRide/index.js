@@ -4,7 +4,7 @@ import React, {
 import Toast from 'react-native-toast-message';
 import { useIsFocused, useFocusEffect } from '@react-navigation/native';
 import {
-  AppState, BackHandler, Platform, View,
+  AppState, BackHandler, Platform, View, Dimensions,
 } from 'react-native';
 import { Portal } from '@gorhom/portal';
 import Config from 'react-native-config';
@@ -265,16 +265,28 @@ const RidePage = ({ mapSettings, navigation }) => {
         });
       }
     } else {
+      let deltas = {
+        latitudeDelta: 0.015,
+        longitudeDelta: 0.015,
+      };
+      if (currentBsPage === BS_PAGES.CONFIRM_PICKUP) {
+        deltas = {
+          latitudeDelta: 0.001,
+          longitudeDelta: 0.001,
+        };
+      }
       setIsDraggingLocationPin(true);
       const location = await getPosition();
       const { coords } = (location || DEFAULT_COORDS);
+      const animateTime = 1000;
       mapRef.current.animateToRegion({
-      // I really don't know why this is needed, but it works
-        latitude: coords.latitude - parseFloat(50) / 10000,
+        latitude: coords.latitude,
         longitude: coords.longitude,
-        latitudeDelta: 0.015,
-        longitudeDelta: 0.015,
-      }, 1000);
+        ...deltas,
+      }, animateTime);
+      setTimeout(() => {
+        setIsDraggingLocationPin(false);
+      }, animateTime + 500);
     }
   };
 
