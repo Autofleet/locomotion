@@ -1,5 +1,5 @@
-import React, { useContext, useState } from 'react';
-import { useRoute } from '@react-navigation/native';
+import React, { useCallback, useContext, useState } from 'react';
+import { useFocusEffect, useRoute } from '@react-navigation/native';
 import PinCode from '../../Components/PinCode';
 import SaveButton from './SaveButton';
 import { OnboardingContext } from '../../context/onboarding';
@@ -26,6 +26,12 @@ const Code = () => {
   const [showErrorText, setShowErrorText] = useState(false);
   const [loading, setLoading] = useState(false);
   const [timer, setTimer] = useState(RESEND_SECONDS);
+
+  useFocusEffect(
+    useCallback(() => {
+      setTimer(RESEND_SECONDS);
+    }, []),
+  );
 
   const onVertCodeChange = (value) => {
     setShowErrorText(false);
