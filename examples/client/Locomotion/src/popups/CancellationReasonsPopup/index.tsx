@@ -101,7 +101,7 @@ const CancellationReasonsPopup = ({
                   onPress={() => onCancellationReasonClick(cr.id)}
                 >
                   <CancellationReasonCard key={cr.id}>
-                    <CancellationReasonText>
+                    <CancellationReasonText testID={cr.category}>
                       {i18n.t(`cancellationReasons.${cr.value}`, cr.value)}
                     </CancellationReasonText>
                   </CancellationReasonCard>
