@@ -21,9 +21,7 @@ const RESEND_SECONDS = 60;
 const Code = () => {
   const route = useRoute();
   const { nextScreen } = useContext(OnboardingContext);
-  const {
-    user, onEmailVert, updateUserFromServer, verifyEmail,
-  } = useContext(UserContext);
+  const { user, onEmailVert, updateUserFromServer } = useContext(UserContext);
   const [code, setCode] = useState('');
   const [showErrorText, setShowErrorText] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -95,8 +93,10 @@ const Code = () => {
               disabled={timer > 0}
               onPress={() => {
                 if (timer === 0) {
-                  verifyEmail();
-                  setTimer(RESEND_SECONDS);
+                  navigationService.navigate(MAIN_ROUTES.EMAIL, {
+                    editAccount: route.params && route.params.editAccount,
+                    email: user.email,
+                  });
                 }
               }}
             >
