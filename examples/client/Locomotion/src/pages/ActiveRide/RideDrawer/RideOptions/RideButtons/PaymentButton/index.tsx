@@ -135,7 +135,10 @@ const PaymentButton = ({
             width={15}
           />
           <PromoCodeTextContainer>
-            <PromoText numberOfLines={1}>
+            <PromoText
+              numberOfLines={1}
+              testID="usePromoCode"
+            >
               {loadPromoText()}
             </PromoText>
           </PromoCodeTextContainer>
