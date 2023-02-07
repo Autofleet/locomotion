@@ -16,11 +16,10 @@ import PaymentMethod from '../../Components/CardRow';
 
 
 const Section = ({
-  onPress,
-  paymentMethods,
   showChangeButton = false,
   title,
   onPressChange = () => { console.log('no onPressChange'); },
+  children,
 }) => (
   <PaymentCardContainer>
     <View>
@@ -40,16 +39,7 @@ const Section = ({
         </HeaderLink>
       </CardTitleContainer>
       <CardContentContainer>
-        {paymentMethods.map(paymentMethod => (
-          <MethodCard>
-            <PaymentMethod
-              {...paymentMethod}
-              onPress={() => onPress(paymentMethod)}
-              showArrow
-            />
-          </MethodCard>
-        ))
-      }
+        {children}
       </CardContentContainer>
     </View>
   </PaymentCardContainer>

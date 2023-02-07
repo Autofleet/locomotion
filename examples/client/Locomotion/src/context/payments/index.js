@@ -184,12 +184,6 @@ const usePayments = () => {
     return returnObject;
   };
 
-  const userHasTypePaymentMethod = type => (paymentMethods || []).some(pm => pm.type === type);
-
-  const userHasGooglePayPaymentMethod = () => userHasTypePaymentMethod(PAYMENT_METHODS.GOOGLE_PAY);
-
-  const clientHasApplePayPaymentMethod = () => userHasTypePaymentMethod(PAYMENT_METHODS.APPLE_PAY);
-
   return {
     paymentAccount,
     getClientPaymentAccount,
@@ -210,8 +204,6 @@ const usePayments = () => {
     loadOutstandingBalanceRide,
     retryPayment,
     hasOutstandingPayment,
-    userHasGooglePayPaymentMethod,
-    clientHasApplePayPaymentMethod,
   };
 };
 

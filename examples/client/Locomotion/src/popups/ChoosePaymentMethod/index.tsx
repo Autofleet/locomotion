@@ -20,7 +20,7 @@ import PaymentMethod from '../../Components/CardRow';
 import PaymentsContext from '../../context/payments';
 import cashPaymentMethod from '../../pages/Payments/cashPaymentMethod';
 import * as navigationService from '../../services/navigation';
-import ApplePay from '../../Components/ApplePay';
+import NativePay from '../../Components/NativePay';
 
 interface PaymentMethodPopupProps {
   isVisible: boolean;
@@ -30,6 +30,7 @@ interface PaymentMethodPopupProps {
   rideFlow: boolean;
   selected: any;
   onAddNewMethod: () => void;
+  showNativePay?: boolean;
 }
 
 const PaymentMethodPopup = ({
@@ -99,7 +100,7 @@ const PaymentMethodPopup = ({
         <CardsScrollView>
           <Container>
             <View>
-              {finalPaymentMethods.map((paymentMethod: any, i) => (
+              {finalPaymentMethods.map((paymentMethod: any) => (
                 <PaymentMethod
                   {...paymentMethod}
                   chooseMethodPage
@@ -110,10 +111,7 @@ const PaymentMethodPopup = ({
                   }}
                 />
               ))}
-              {!usePayments.clientHasApplePayPaymentMethod()
-                ? <ApplePay />
-                : null
-              }
+              <NativePay />
               <PaymentMethod
                 addNew
                 chooseMethodPage

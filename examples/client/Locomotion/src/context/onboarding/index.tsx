@@ -112,7 +112,8 @@ const OnboardingContextProvider = ({ children }: { children: any }) => {
 
     initStripe({
       publishableKey: Config.STRIPE_PUBLISHER_KEY,
-      merchantIdentifier: 'merchant.identifier',
+      merchantIdentifier: Config.APPLE_PAY_MERCHANT_ID,
+      urlScheme: Config.URL_SCHEME,
       stripeAccountId: paymentAccount.stripeId,
     });
     setUser(user);

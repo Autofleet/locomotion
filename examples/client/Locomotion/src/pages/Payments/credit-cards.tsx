@@ -10,6 +10,7 @@ import {
   TemporaryHoldView,
   TemporaryHoldText,
   LearnMore,
+  MethodCard,
 } from './styled';
 
 import PaymentMethod from '../../Components/CardRow';
@@ -18,6 +19,7 @@ import { navigate } from '../../services/navigation';
 import ChoosePaymentMethod from '../../popups/ChoosePaymentMethod';
 import Section from './paymentMethodSection';
 import { PAYMENT_METHODS } from './consts';
+import NativePay from '../../Components/NativePay';
 
 export default ({
   loadingState = false,
@@ -46,6 +48,8 @@ export default ({
     setLoading(loadingState);
   }, [loading]);
 
+  const onCardPress = (selectedPaymentMethod: any) => navigate(MAIN_ROUTES.CARD_DETAILS,
+    { paymentMethod: selectedPaymentMethod });
 
   return (
     <CardsListContainer>
@@ -56,12 +60,17 @@ export default ({
               ? (
                 <Section
                   title={i18n.t('payments.defaultMethodTitle')}
-                  onPress={() => navigate(MAIN_ROUTES.CARD_DETAILS,
-                    { paymentMethod: defaultMethod })}
-                  paymentMethods={[defaultMethod]}
                   showChangeButton
                   onPressChange={() => setShowChoosePayment(true)}
-                />
+                >
+                  <MethodCard>
+                    <PaymentMethod
+                      {...defaultMethod}
+                      onPress={() => onCardPress(defaultMethod)}
+                      showArrow
+                    />
+                  </MethodCard>
+                </Section>
               ) : undefined}
 
             {usePayments.paymentMethods.length > 1
@@ -69,11 +78,18 @@ export default ({
                 <Section
                   title={i18n.t('payments.otherMethodsTitle')}
                   showChangeButton={false}
-                  onPress={(paymentMethod: any) => navigate(MAIN_ROUTES.CARD_DETAILS,
-                    { paymentMethod })}
-                  paymentMethods={usePayments.paymentMethods
-                    .filter(({ id }) => id !== defaultMethod.id)}
-                />
+                >
+                  {usePayments.paymentMethods
+                    .filter(({ id }) => id !== defaultMethod.id).map((paymentMethod: any) => (
+                      <MethodCard>
+                        <PaymentMethod
+                          {...paymentMethod}
+                          onPress={() => onCardPress(paymentMethod)}
+                          showArrow
+                        />
+                      </MethodCard>
+                    ))}
+                </Section>
               ) : undefined}
           </PaymentMethodsContainer>
 
