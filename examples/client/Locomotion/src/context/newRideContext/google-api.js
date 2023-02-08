@@ -1,40 +1,17 @@
-import axios from 'axios';
-import Config from 'react-native-config';
-import moment from 'moment';
-
-const instance = axios.create({
-  baseURL: 'https://maps.googleapis.com',
-});
+import network from '../../services/network';
 
 export const getPlaces = async (params) => {
-  const { data } = await instance.get('/maps/api/place/autocomplete/json', { params: { ...params, key: Config.GOOGLE_MAPS_KEY } });
-  return data.predictions;
+  const { data } = await network.get('/api/v1/maps/place/autocomplete', { params });
+  return data.result;
 };
 
 export const getGeocode = async (params) => {
-  const { data } = await instance.get('/maps/api/geocode/json', { params: { ...params, key: Config.GOOGLE_MAPS_KEY } });
-  return data;
+  const { data } = await network.post('/api/v1/maps/reverse-geocode',
+    { params: { ...params, includePlaceId: true } });
+  return data.result;
 };
 
 export const getPlaceDetails = async (placeId) => {
-  const { data } = await instance.get('/maps/api/place/details/json', {
-    params: {
-      key: Config.GOOGLE_MAPS_KEY,
-      placeid: placeId,
-    },
-  });
-  return data.result.geometry.location;
-};
-
-export const getLocationTimezone = async (lat, lng, momentTimestamp) => {
-  const timestamp = momentTimestamp.unix();
-  const { data } = await instance.get('/maps/api/timezone/json', {
-    params: {
-      key: Config.GOOGLE_MAPS_KEY,
-      location: `${lat},${lng}`,
-      timestamp,
-    },
-  });
-
-  return data;
+  const { data } = await network.get(`/api/v1/maps/place/${placeId}`);
+  return data.result;
 };
