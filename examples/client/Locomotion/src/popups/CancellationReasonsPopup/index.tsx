@@ -83,7 +83,7 @@ const CancellationReasonsPopup = ({
           <SubTitleContainer>
             <SubTitle>{i18n.t('popups.cancellationReasons.subTitle')}</SubTitle>
           </SubTitleContainer>
-          <BodyContainer>
+          <BodyContainer testID="cancellationReasons">
             {isLoading
               ? (
                 <LoaderContainer>
@@ -99,9 +99,10 @@ const CancellationReasonsPopup = ({
               : cancellationReasons.map(cr => (
                 <ClickableContainer
                   onPress={() => onCancellationReasonClick(cr.id)}
+                  testID="cancellationReason-"
                 >
                   <CancellationReasonCard key={cr.id}>
-                    <CancellationReasonText>
+                    <CancellationReasonText testID={`cancellationReason-${cr.category}`}>
                       {i18n.t(`cancellationReasons.${cr.value}`, cr.value)}
                     </CancellationReasonText>
                   </CancellationReasonCard>
