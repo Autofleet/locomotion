@@ -170,7 +170,7 @@ const Tips = ({
       <Container>
         <DetailsContainer>
           <Column>
-            <Title>
+            <Title testID="tipPageTitle">
               {`${i18n.t('postRide.tip.title')} ${driver.firstName}`}
             </Title>
             <SubTitle>
