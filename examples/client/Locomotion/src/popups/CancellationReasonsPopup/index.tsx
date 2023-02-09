@@ -99,6 +99,7 @@ const CancellationReasonsPopup = ({
               : cancellationReasons.map(cr => (
                 <ClickableContainer
                   onPress={() => onCancellationReasonClick(cr.id)}
+                  testID="cancellationReason-"
                 >
                   <CancellationReasonCard key={cr.id}>
                     <CancellationReasonText testID={`cancellationReason-${cr.category}`}>
