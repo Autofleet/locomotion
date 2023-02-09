@@ -15,6 +15,7 @@
     "dev": "npx nodemon --exec 'npm run symlink' --watch ../../../locomotion-sdk/src -e js,ts,tsx,jsx --delay 2.5"
   },
 
+
   
   "dependencies": {
     "@autofleet/i18next-remote-backend-with-locals": "^1.0.0",
