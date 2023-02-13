@@ -148,8 +148,10 @@ const usePayments = () => {
 
   const getClientOutstandingBalanceCard = () => {
     const has = paymentMethods.find(pm => pm.hasOutstandingBalance);
+
     return has;
   };
+
 
   useEffect(() => {
     if (paymentMethods && paymentMethods.length) {
