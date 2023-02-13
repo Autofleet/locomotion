@@ -58,7 +58,8 @@
             "pickup": "Μαζεύω",
             "dropoff": "Αποκοιμιέμαι"
         },
-        "highEta": "Το ETA είναι υψηλότερο από το συνηθισμένο"
+        "highEta": "Το ETA είναι υψηλότερο από το συνηθισμένο",
+        "outOfTerritory": ""
     },
     "general": {
         "back": "Πίσω",
@@ -105,7 +106,9 @@
                 "subText": "Ένας κωδικός έχει σταλεί στο {{phoneNumber}} .",
                 "resendCodeText": "Δεν λάβατε SMS;",
                 "resendCodeButton": "Εκ νέου αποστολή",
-                "resendCodeTextSeconds": "σε {{seconds}} δευτερόλεπτα"
+                "resendCodeTextSeconds": "σε {{seconds}} δευτερόλεπτα",
+                "call": "",
+                "calling": ""
             },
             "emailCode": {
                 "title": "Επαλήθευση",
@@ -165,7 +168,8 @@
             "email": {
                 "email": "Το email πρέπει να είναι έγκυρο."
             }
-        }
+        },
+        "chooseLanguage": ""
     },
     "home": {
         "map": {
@@ -318,7 +322,19 @@
             "submit": "Να συνεχίσει",
             "back": "Πίσω"
         },
-        "defaultFooterButton": "Εντάξει"
+        "defaultFooterButton": "Εντάξει",
+        "chooseLanguage": {
+            "title": ""
+        },
+        "cancellationReasons": {
+            "title": "",
+            "subTitle": "",
+            "confirmation": {
+                "title": "",
+                "text": "",
+                "button": ""
+            }
+        }
     },
     "menu": {
         "title": "Μενού",
@@ -330,7 +346,7 @@
         "logout": "Αποσύνδεση",
         "futureRides": "Προσεχείς Βόλτες",
         "messages": "Μηνύματα",
-        "poweredBy": "Τροφοδοτείται από"
+        "poweredBy": ""
     },
     "temporaryHoldText": "Μια μικρή ποσότητα μπορεί να τεθεί προσωρινά σε αναμονή όταν ξεκινάτε τη βόλτα σας",
     "learnMore": "Μάθε περισσότερα",
@@ -360,8 +376,8 @@
         "couponName": "Εκπτωση",
         "estimatedText": "Οι παρακάτω ναύλοι είναι εκτιμήσεις και θα ενημερωθούν μόλις ολοκληρωθεί η διαδρομή με βάση τις πραγματικές συνθήκες διαδρομής",
         "pageTitle": "Ανάλυση πληρωμών",
-        "priceItem": "{{ όνομα }}",
-        "perUnit": "- {{ τιμή }} ανά {{ μονάδα }}",
+        "priceItem": "{{ name }}",
+        "perUnit": "- {{ price }} ανά {{ unit }}",
         "paymentBreakdownTitle": "Ανάλυση πληρωμών",
         "priceFieldNames": {
             "surgePrice": "Αύξηση τιμής",
@@ -418,6 +434,14 @@
                 "retrySuccessBody": "Σας ευχαριστούμε για την πληρωμή σας - μπορείτε τώρα να συνεχίσετε τις βόλτες σας!",
                 "retrySuccessButton": "Ολοκληρώθηκε",
                 "retryPaymentButton": "Πληρώστε το υπόλοιπο τώρα"
+            }
+        },
+        "filters": {
+            "titles": {
+                "today": "",
+                "yesterday": "",
+                "thisWeek": "",
+                "lastWeek": ""
             }
         }
     },
@@ -655,7 +679,7 @@
             "precedingStops": "Ο οδηγός σας ολοκληρώνει μια στάση κοντά"
         }
     },
-    "min": "{{ λεπτά }} λεπτά",
+    "min": "{{ min }} λεπτά",
     "now": "Τώρα",
     "ride": {
         "journey": "Ταξίδι με βόλτα",
@@ -667,5 +691,31 @@
         "title": "Το {{ appName }} χρειάζεται ενημέρωση!",
         "body": "Γεια, φαίνεται ότι έχετε μια παλαιότερη έκδοση της εφαρμογής.\n Ενημερώστε για να λάβετε τις πιο πρόσφατες δυνατότητες και την καλύτερη εμπειρία.",
         "buttonText": "Ενημέρωση τώρα"
+    },
+    "virtualStations": {
+        "tooltip": {
+            "setDropoff": "",
+            "setPickup": "",
+            "changeDropoff": "",
+            "changePickup": "",
+            "defaultStation": ""
+        },
+        "search": {
+            "addressNotFound": "",
+            "currentLocation": "",
+            "pickup": "",
+            "title": ""
+        }
+    },
+    "cancellationReasons": {
+        "Ordered by mistake": "",
+        "Booking a different time": "",
+        "Other reason": "",
+        "It's taking too long": "",
+        "ETA was too long": "",
+        "Found another courier": "",
+        "Don't need a courier anymore": "",
+        "Found another ride": "",
+        "Don't need a ride anymore": ""
     }
 }
