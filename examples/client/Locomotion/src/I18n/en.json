@@ -5,6 +5,7 @@
             "cheapest": "Cheapest"
         }
     },
+    
     "rideDetails": {
         "unavailable": "Not available",
         "outOfTerritory": "Not in territory",
