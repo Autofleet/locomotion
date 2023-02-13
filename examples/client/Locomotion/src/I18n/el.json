@@ -285,7 +285,6 @@
         },
         "rideSummary": {
             "thanksForRideHeadline": "Ευχαριστώ για τη βόλτα σας!",
-            "rideDataHeadline": "",
             "durationLabel": "Διάρκεια",
             "distanceLabel": "Απόσταση",
             "priceLabel": "Τιμή",
@@ -329,8 +328,7 @@
         "support": "Επικοινωνήστε μαζί μας",
         "logout": "Αποσύνδεση",
         "futureRides": "Προσεχείς Βόλτες",
-        "messages": "Μηνύματα",
-        "poweredBy": "Τροφοδοτείται από"
+        "messages": "Μηνύματα"
     },
     "temporaryHoldText": "Μια μικρή ποσότητα μπορεί να τεθεί προσωρινά σε αναμονή όταν ξεκινάτε τη βόλτα σας",
     "learnMore": "Μάθε περισσότερα",
@@ -360,8 +358,8 @@
         "couponName": "Εκπτωση",
         "estimatedText": "Οι παρακάτω ναύλοι είναι εκτιμήσεις και θα ενημερωθούν μόλις ολοκληρωθεί η διαδρομή με βάση τις πραγματικές συνθήκες διαδρομής",
         "pageTitle": "Ανάλυση πληρωμών",
-        "priceItem": "{{ όνομα }}",
-        "perUnit": "- {{ τιμή }} ανά {{ μονάδα }}",
+        "priceItem": "{{ name }}",
+        "perUnit": "- {{ price }} ανά {{ unit }}",
         "paymentBreakdownTitle": "Ανάλυση πληρωμών",
         "priceFieldNames": {
             "surgePrice": "Αύξηση τιμής",
@@ -376,7 +374,6 @@
         "pageTitle": "Ιστορία ιπποδρομιών",
         "tripPageTitle": "Λεπτομέρειες ταξιδιού",
         "noRides": "Δεν βρέθηκαν αποτελέσματα",
-        "noRidesSubText": "",
         "ride": {
             "states": {
                 "canceled": "Ακυρώθηκε",
@@ -655,7 +652,7 @@
             "precedingStops": "Ο οδηγός σας ολοκληρώνει μια στάση κοντά"
         }
     },
-    "min": "{{ λεπτά }} λεπτά",
+    "min": "{{ min }} λεπτά",
     "now": "Τώρα",
     "ride": {
         "journey": "Ταξίδι με βόλτα",
