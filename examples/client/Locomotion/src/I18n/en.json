@@ -289,7 +289,6 @@
         },
         "rideSummary": {
             "thanksForRideHeadline": "Thanks for your ride!",
-            "rideDataHeadline": "",
             "durationLabel": "Duration",
             "distanceLabel": "Distance",
             "priceLabel": "Price",
@@ -392,7 +391,6 @@
         "pageTitle": "Rides History",
         "tripPageTitle": "Trip details",
         "noRides": "No results found",
-        "noRidesSubText": "",
         "ride": {
             "states": {
                 "canceled": "Canceled",

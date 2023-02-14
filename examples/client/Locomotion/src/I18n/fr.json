@@ -59,7 +59,7 @@
             "dropoff": "Dépose"
         },
         "highEta": "L'estimation d'heure d'arrivée est plus élevée que d'habitude",
-        "outOfTerritory": ""
+        "outOfTerritory": "Indisponible sur le territoire"
     },
     "general": {
         "back": "Retour",
@@ -107,8 +107,8 @@
                 "resendCodeText": "Vous n'avez pas reçu de SMS ?",
                 "resendCodeButton": "Renvoyer",
                 "resendCodeTextSeconds": "dans {{seconds}} secondes",
-                "call": "",
-                "calling": ""
+                "call": "Appelez moi",
+                "calling": "Appel en cours"
             },
             "emailCode": {
                 "title": "Vérification",
@@ -327,12 +327,12 @@
             "title": "Choisissez votre langue"
         },
         "cancellationReasons": {
-            "title": "",
-            "subTitle": "",
+            "title": "Trajet annulé",
+            "subTitle": "Nous espérons vous revoir bientôt. Pour quelle raison avez-vous annulé le trajet ?",
             "confirmation": {
-                "title": "",
-                "text": "",
-                "button": ""
+                "title": "Merci pour votre retour",
+                "text": "Nous utiliserons cette information pour continuer à améliorer l'expérience de nos passagers",
+                "button": "Terminé"
             }
         }
     },
@@ -708,14 +708,14 @@
         }
     },
     "cancellationReasons": {
-        "Ordered by mistake": "",
-        "Booking a different time": "",
-        "Other reason": "",
-        "It's taking too long": "",
-        "ETA was too long": "",
-        "Found another courier": "",
-        "Don't need a courier anymore": "",
-        "Found another ride": "",
-        "Don't need a ride anymore": ""
+        "Ordered by mistake": "Réservé par erreur",
+        "Booking a different time": "Réserver à une autre heure",
+        "Other reason": "Autre raison",
+        "It's taking too long": "C'est trop long",
+        "ETA was too long": "L'heure d'arrivée était trop tardive",
+        "Found another courier": "J'ai trouvé une autre course",
+        "Don't need a courier anymore": "Je n'ai plus besoin de course",
+        "Found another ride": "J'ai trouvé une autre course",
+        "Don't need a ride anymore": "Je n'ai plus besoin d'une course"
     }
 }

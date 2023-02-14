@@ -701,7 +701,7 @@
             "defaultStation": "Esta estación fue seleccionada por omisión"
         },
         "search": {
-            "addressNotFound": "Dirección no encontrada. Por favor intente otra busqueda.",
+            "addressNotFound": "Dirección no encontrada. Por favor intente otra búsqueda.",
             "currentLocation": "Ubicación actual",
             "pickup": "Punto de recogida",
             "title": "Buscando estaciones cerca:"
