@@ -47,9 +47,6 @@
             "cheapest": "Cheapest"
         }
     },
-    "devSettingsPage": {
-        "pageTitle": "Debug"
-    },
     "rideDetails": {
         "unavailable": "Not available",
         "timeUntilArrival": "In {{minutes}} min",

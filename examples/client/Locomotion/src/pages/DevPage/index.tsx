@@ -19,7 +19,7 @@ const DevSettingPage = () => {
   return (
     <PageContainer>
       <PageHeader
-        title={i18n.t('devSettingsPage.pageTitle')}
+        title="Debug"
         onIconPress={
           () => navigationService.goBack()}
       />
