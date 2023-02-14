@@ -29,12 +29,8 @@ const Phone = ({ navigation }) => {
     setIsInvalid(!isValid);
     updateState({ phoneNumber });
   };
-
-  const checkDevSettingsPage = () => {
-    console.log('checkDevSettingsPage', { setting: Config.DEV_SETTINGS, phone: Config.DEV_PAGE_PHONE_NUMBER, userPhone: user.phoneNumber });
-    const devSettingsIsValid = Config.DEV_SETTINGS && Config.DEV_SETTINGS === 'true';
-    return user.phoneNumber === Config.DEV_PAGE_PHONE_NUMBER && devSettingsIsValid;
-  };
+  const isDevSettingOn = () => Config.DEV_SETTINGS && Config.DEV_SETTINGS === 'true';
+  const isDebugPhoneNumber = () => user.phoneNumber === Config.DEV_PAGE_PHONE_NUMBER && isDevSettingOn();
 
   const ERROR_RESPONSES = {
     429: () => setShowErrorText(i18n.t('login.tooManyRequestError')),
@@ -44,11 +40,14 @@ const Phone = ({ navigation }) => {
 
   const onSubmitPhoneNumber = async () => {
     try {
-      await AppSettings.destroy();
-      if (checkDevSettingsPage()) {
+      if (isDebugPhoneNumber()) {
         NavigationService.navigate(MAIN_ROUTES.DEV_SETTINGS_PAGE);
         return;
       }
+      if (!isDevSettingOn()) {
+        await AppSettings.destroy();
+      }
+
       await onLogin(user.phoneNumber);
       updateState({ phoneNumber: user.phoneNumber });
       nextScreen(MAIN_ROUTES.PHONE);

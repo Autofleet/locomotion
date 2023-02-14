@@ -3,23 +3,29 @@ import Storage from './storage';
 
 const keyName = 'devSettings';
 
-const { SERVER_HOST } = Config;
+const { SERVER_HOST, OPERATION_ID } = Config;
 
+const keyFallbackMap = {
+  serverUrl: SERVER_HOST,
+  operationId: OPERATION_ID,
+};
 const AppSettings = {
   getSettings: async () => {
     const res = await Storage.get(keyName);
     return res || {};
   },
-  getServerUrl: async () => {
-    const { serverHost } = await AppSettings.getSettings();
-    return serverHost && serverHost.length > 0 ? serverHost : SERVER_HOST;
+  getKeyWithFallback: async (key) => {
+    const { [key]: value } = await AppSettings.getSettings();
+    return value && value.length > 0 ? value : keyFallbackMap(key);
   },
+  getServerUrl: async () => AppSettings.getSafeKey('serverUrl'),
+  getOperationId: async () => AppSettings.getSafeKey('operationId'),
   setSettings: async (newSettingKeyObject) => {
     const currentSettings = await AppSettings.getSettings();
     await Storage.save({
       [keyName]: {
         ...currentSettings,
-        newSettingKeyObject,
+        ...newSettingKeyObject,
       },
     });
   },
