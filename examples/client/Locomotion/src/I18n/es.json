@@ -55,10 +55,11 @@
         "estimatedFare": "Tarifa estimada",
         "estimatedFareMessage": "Algunas de las tarifas son estimadas y pueden variar según el viaje y otras condiciones",
         "type": {
-            "pickup": "Levantar",
-            "dropoff": "Dejar"
+            "pickup": "Recogida",
+            "dropoff": "Destino"
         },
-        "highEta": "Tiempo estimado de llegada es más alto de lo habitual"
+        "highEta": "Tiempo estimado de llegada es más alto de lo habitual",
+        "outOfTerritory": "Fuera de territorio"
     },
     "general": {
         "back": "Atrás",
@@ -105,7 +106,9 @@
                 "subText": "Se ha enviado un código a {{phoneNumber}} .",
                 "resendCodeText": "¿No recibiste un SMS?",
                 "resendCodeButton": "Reenviar",
-                "resendCodeTextSeconds": "en {{seconds}} segundos"
+                "resendCodeTextSeconds": "en {{seconds}} segundos",
+                "call": "Llámenme",
+                "calling": "¡Te estamos llamando!"
             },
             "emailCode": {
                 "title": "Verificación",
@@ -165,7 +168,8 @@
             "email": {
                 "email": "El correo electrónico debe ser válido."
             }
-        }
+        },
+        "chooseLanguage": "Lenguaje de la app"
     },
     "home": {
         "map": {
@@ -251,7 +255,7 @@
         "currentLocation": "Ubicación actual",
         "enterAddress": "Ingresa la dirección",
         "setLocationOnMap": "Indicar ubicación en el mapa",
-        "welcomeText": "Oye, {{ name }}, ¿adónde amos?",
+        "welcomeText": "Oye, {{ name }}, ¿A dónde vamos?",
         "noHistoryHeader": "¡Tomar un viaje!",
         "noHistoryText": "Verás tus ubicaciones recientes aquí"
     },
@@ -285,7 +289,7 @@
         },
         "rideSummary": {
             "thanksForRideHeadline": "¡Gracias por tu viaje!",
-            "rideDataHeadline": "",
+            "rideDataHeadline": "Vacío",
             "durationLabel": "Duración",
             "distanceLabel": "Distancia",
             "priceLabel": "Precio",
@@ -318,18 +322,31 @@
             "submit": "Continuar",
             "back": "Atrás"
         },
-        "defaultFooterButton": "OK"
+        "defaultFooterButton": "OK",
+        "chooseLanguage": {
+            "title": "Seleccione tu lenguaje"
+        },
+        "cancellationReasons": {
+            "title": "Viaje cancelado",
+            "subTitle": "Esperamos verlo\/a de vuelta pronto. ¿Por qué canceló el viaje?",
+            "confirmation": {
+                "title": "¡Gracias por su respuesta!",
+                "text": "Usaremos esta información para mejorar la experiencia de nuestros usuarios.",
+                "button": "Listo"
+            }
+        }
     },
     "menu": {
         "title": "Menú",
         "home": "Inicio",
-        "trips": "Historial de viaje",
+        "trips": "Historial de viajes",
         "paymentsSettings": "Pago",
         "account": "Perfil del usuario",
         "support": "Contáctenos",
         "logout": "Cerrar sesión",
         "futureRides": "Próximos viajes",
-        "messages": "Mensajes"
+        "messages": "Mensajes",
+        "poweredBy": "Desarrollado por"
     },
     "temporaryHoldText": "Es posible que se retenga temporalmente una pequeña cantidad cuando comience su viaje",
     "learnMore": "Conoce más",
@@ -375,7 +392,7 @@
         "pageTitle": "Historial de viajes",
         "tripPageTitle": "Detalles del viaje",
         "noRides": "No se han encontrado resultados",
-        "noRidesSubText": "",
+        "noRidesSubText": "Vacío",
         "ride": {
             "states": {
                 "canceled": "Cancelado",
@@ -417,6 +434,14 @@
                 "retrySuccessBody": "Gracias por su pago. ¡Ahora puede reanudar sus viajes!",
                 "retrySuccessButton": "Hecho",
                 "retryPaymentButton": "Pagar saldo ahora"
+            }
+        },
+        "filters": {
+            "titles": {
+                "today": "Hoy",
+                "yesterday": "Ayer",
+                "thisWeek": "Esta semana",
+                "lastWeek": "Semana pasada"
             }
         }
     },
@@ -626,7 +651,7 @@
         }
     },
     "stopPointsTypes": {
-        "dropoff": "Dejar",
+        "dropoff": "Destino",
         "pickup": "Recoger"
     },
     "stopPoints": {
@@ -666,5 +691,31 @@
         "title": "¡{{ appName }} necesita una actualización!",
         "body": "Oye, parece que tienes una versión anterior de la aplicación.\n Actualice para obtener las funciones más recientes y la mejor experiencia.",
         "buttonText": "Actualizar ahora"
+    },
+    "virtualStations": {
+        "tooltip": {
+            "setDropoff": "establecer descenso",
+            "setPickup": "establecer recogida",
+            "changeDropoff": "Cambiar descenso",
+            "changePickup": "Cambiar ascenso",
+            "defaultStation": "Esta estación fue seleccionada por omisión"
+        },
+        "search": {
+            "addressNotFound": "Dirección no encontrada. Por favor intente otra busqueda.",
+            "currentLocation": "Ubicación actual",
+            "pickup": "Punto de recogida",
+            "title": "Buscando estaciones cerca:"
+        }
+    },
+    "cancellationReasons": {
+        "Ordered by mistake": "Viaje pedido por error",
+        "Booking a different time": "Reservaré para otra hora",
+        "Other reason": "Otra razón",
+        "It's taking too long": "Está tardando mucho",
+        "ETA was too long": "Llegada estimada muy tarde",
+        "Found another courier": "Encontré otro mensajero",
+        "Don't need a courier anymore": "Ya no necesito un mensajero",
+        "Found another ride": "Encontré otro viaje",
+        "Don't need a ride anymore": "Ya no necesito este viaje"
     }
 }

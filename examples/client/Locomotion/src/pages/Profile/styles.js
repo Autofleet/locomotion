@@ -67,4 +67,5 @@ export const InputContainer = styled.View`
 
 export const Line = styled.View`
 flex-direction: row;
+margin-bottom: 10px;
 `;

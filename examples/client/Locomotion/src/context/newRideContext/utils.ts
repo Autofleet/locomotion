@@ -32,11 +32,12 @@ export const TAG_OPTIONS = {
   CHEAPEST: i18n.t('services.tags.cheapest'),
 };
 
-export type RidePopupNames = 'FAILED_SERVICE_REQUEST' | 'RIDE_CANCELED_BY_DISPATCHER';
+export type RidePopupNames = 'FAILED_SERVICE_REQUEST' | 'RIDE_CANCELED_BY_DISPATCHER' | 'CANCELLATION_REASON';
 
 export const RIDE_POPUPS: {[key: string]: RidePopupNames} = {
   FAILED_SERVICE_REQUEST: 'FAILED_SERVICE_REQUEST',
   RIDE_CANCELED_BY_DISPATCHER: 'RIDE_CANCELED_BY_DISPATCHER',
+  CANCELLATION_REASON: 'CANCELLATION_REASON',
 };
 
 export const INITIAL_STOP_POINTS = [{
@@ -147,6 +148,7 @@ export const formatEstimationsResult = (service: any, estimationResult: any, tag
     description: service.displayDescription,
     priority: service.priority,
     serviceAvailabilitiesNumber: service.serviceAvailabilities.length,
+    outOfTerritory: service.serviceTerritories?.some((st: any) => st.alwaysShow),
     pooling: service.pooling,
     pickupWindowSizeInMinutes: service.pickupWindowSizeInMinutes,
     futurePickupWindowSizeInMinutes: service.futurePickupWindowSizeInMinutesWithFallback,

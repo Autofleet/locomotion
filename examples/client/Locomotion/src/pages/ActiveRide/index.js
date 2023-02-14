@@ -4,7 +4,7 @@ import React, {
 import Toast from 'react-native-toast-message';
 import { useIsFocused, useFocusEffect } from '@react-navigation/native';
 import {
-  AppState, BackHandler, Platform, View,
+  AppState, BackHandler, Platform, View, Dimensions,
 } from 'react-native';
 import { Portal } from '@gorhom/portal';
 import Config from 'react-native-config';
@@ -66,6 +66,7 @@ import { MessagesContext } from '../../context/messages';
 import alertIcon from '../../assets/warning.svg';
 import { rideHistoryContext } from '../../context/rideHistory';
 import SafeView from '../../Components/SafeView';
+import CancellationReasonsPopup from '../../popups/CancellationReasonsPopup';
 import VirtualStationsProvider, { VirtualStationsContext } from '../../context/virtualStationsContext';
 
 const BLACK_OVERLAY_SCREENS = [BS_PAGES.CANCEL_RIDE];
@@ -82,14 +83,11 @@ const RidePage = ({ mapSettings, navigation }) => {
   const bottomSheetRef = useRef(null);
 
   const {
-    currentBsPage, changeBsPage,
+    currentBsPage, changeBsPage, setIsDraggingLocationPin,
   } = useContext(RideStateContextContext);
   const { checkMessagesForToast } = useContext(MessagesContext);
   const { isStationsEnabled } = useContext(VirtualStationsContext);
 
-  const {
-    rides: historyRides, loadRides: loadHistoryRides,
-  } = useContext(rideHistoryContext);
   const {
     serviceEstimations,
     setServiceEstimations,
@@ -106,6 +104,7 @@ const RidePage = ({ mapSettings, navigation }) => {
     tryServiceEstimations,
     selectedInputIndex,
     cleanRideState,
+    updateRide,
     clearRequestSp,
   } = useContext(RidePageContext);
   const {
@@ -266,15 +265,28 @@ const RidePage = ({ mapSettings, navigation }) => {
         });
       }
     } else {
-      const location = await getPosition();
-      const { coords } = (location || DEFAULT_COORDS);
-      mapRef.current.animateToRegion({
-      // I really don't know why this is needed, but it works
-        latitude: coords.latitude - parseFloat(50) / 10000,
-        longitude: coords.longitude,
+      let deltas = {
         latitudeDelta: 0.015,
         longitudeDelta: 0.015,
-      }, 1000);
+      };
+      if (currentBsPage === BS_PAGES.CONFIRM_PICKUP) {
+        deltas = {
+          latitudeDelta: 0.001,
+          longitudeDelta: 0.001,
+        };
+      }
+      setIsDraggingLocationPin(true);
+      const location = await getPosition();
+      const { coords } = (location || DEFAULT_COORDS);
+      const animateTime = 1000;
+      mapRef.current.animateToRegion({
+        latitude: coords.latitude,
+        longitude: coords.longitude,
+        ...deltas,
+      }, animateTime);
+      setTimeout(() => {
+        setIsDraggingLocationPin(false);
+      }, animateTime + 500);
     }
   };
 
@@ -311,7 +323,10 @@ const RidePage = ({ mapSettings, navigation }) => {
         return false;
       };
       const backHandler = BackHandler.addEventListener('hardwareBackPress', onBackPress);
-      focusCurrentLocation();
+
+      if (!currentBsPage === BS_PAGES.SERVICE_ESTIMATIONS) {
+        focusCurrentLocation();
+      }
 
       return () => backHandler.remove();
     }, [serviceEstimations]),
@@ -401,6 +416,11 @@ const RidePage = ({ mapSettings, navigation }) => {
 
     const topMessageKey = Object.keys(MESSAGE_MAP).find(key => MESSAGE_MAP[key].condition());
     setTopMessage(MESSAGE_MAP[topMessageKey]);
+  };
+
+  const onCancellationReasonsAction = () => {
+    setRidePopup(null);
+    cleanRideState();
   };
 
   return (
@@ -494,6 +514,11 @@ BS_PAGE_TO_COMP[currentBsPage] ? BS_PAGE_TO_COMP[currentBsPage]() : null
             cleanRideState(false);
           }
         }
+        />
+        <CancellationReasonsPopup
+          isVisible={ridePopup === RIDE_POPUPS.CANCELLATION_REASON}
+          onCancel={onCancellationReasonsAction}
+          onSubmit={onCancellationReasonsAction}
         />
       </Portal>
       <Toast

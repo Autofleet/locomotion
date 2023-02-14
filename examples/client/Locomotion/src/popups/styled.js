@@ -29,6 +29,7 @@ export const Title = styled.Text`
 export const SubTitle = styled.Text`
   ${FONT_SIZES.LARGE}
   ${FONT_WEIGHTS.LIGHT}
+  color: #707070;
 `;
 
 const FooterButtonText = styled.Text`

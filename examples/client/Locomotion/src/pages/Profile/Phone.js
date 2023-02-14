@@ -19,7 +19,7 @@ import { PageContainer, ContentContainer } from '../styles';
 
 const Phone = ({ navigation }) => {
   const { nextScreen } = useContext(OnboardingContext);
-  const { updateState, user } = useContext(UserContext);
+  const { updateState, user, onLogin } = useContext(UserContext);
   const [showErrorText, setShowErrorText] = useState(false);
   const [renderId, setRenderId] = useState(0);
   const [isInvalid, setIsInvalid] = useState(true);
@@ -49,10 +49,7 @@ const Phone = ({ navigation }) => {
         NavigationService.navigate(MAIN_ROUTES.DEV_SETTINGS_PAGE);
         return;
       }
-      await loginApi({
-        phoneNumber: user.phoneNumber,
-        demandSourceId: Config.OPERATION_ID,
-      });
+      await onLogin(user.phoneNumber);
       updateState({ phoneNumber: user.phoneNumber });
       nextScreen(MAIN_ROUTES.PHONE);
     } catch (e) {

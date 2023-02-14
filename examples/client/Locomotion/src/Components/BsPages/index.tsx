@@ -7,6 +7,7 @@ import styled, { ThemeContext } from 'styled-components';
 import { useBottomSheet } from '@gorhom/bottom-sheet';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import moment from 'moment';
+import CancellationReasonsProvider, { CancellationReasonsContext } from '../../context/cancellation-reasons';
 import objDefault from '../../lib/objDefault';
 import Mixpanel from '../../services/Mixpanel';
 import GenericErrorPopup from '../../popups/GenericError';
@@ -38,7 +39,7 @@ import timeIcon from '../../assets/calendar.svg';
 import clockIcon from '../../assets/bottomSheet/clock.svg';
 import ActiveRideContent from './ActiveRide';
 import RoundedButton from '../RoundedButton';
-import { getFutureRideMaxDate, getFutureRideMinDate } from '../../context/newRideContext/utils';
+import { getFutureRideMaxDate, getFutureRideMinDate, RIDE_POPUPS } from '../../context/newRideContext/utils';
 import { PAYMENT_METHODS } from '../../pages/Payments/consts';
 import DatePickerPoppup from '../../popups/DatePickerPoppup';
 import { VirtualStationsContext } from '../../context/virtualStationsContext';
@@ -280,6 +281,7 @@ export const ConfirmPickupTime = (props: any) => {
   } = useContext(MewRidePageContext);
   const {
     changeBsPage,
+    isDraggingLocationPin,
   } = useContext(RideStateContextContext);
   const date = moment(unconfirmedPickupTime).format('ddd, MMM Do');
   const isDateToday = moment(unconfirmedPickupTime).isSame(moment(), 'day');
@@ -401,7 +403,7 @@ export const LocationRequest = (props: any) => (
 export const CancelRide = (props: any) => {
   const [isLoading, setIsLoading] = useState(false);
   const [showError, setShowError] = useState(false);
-  const { cancelRide, ride } = useContext(RidePageContext);
+  const { cancelRide, ride, setRidePopup } = useContext(RidePageContext);
   const { changeBsPage } = useContext(RideStateContextContext);
 
   return (
@@ -416,6 +418,8 @@ export const CancelRide = (props: any) => {
           setIsLoading(true);
           Mixpanel.setEvent('Trying to cancel ride');
           await cancelRide();
+          setRidePopup(RIDE_POPUPS.CANCELLATION_REASON);
+          changeBsPage(BS_PAGES.ADDRESS_SELECTOR);
         } catch (e: any) {
           setShowError(true);
           setIsLoading(false);
@@ -515,7 +519,7 @@ export const ConfirmPickup = (props: any) => {
     setSelectedInputIndex,
     rideRequestLoading,
   } = useContext(RidePageContext);
-
+  const { isDraggingLocationPin } = useContext(RideStateContextContext);
   const { setSnapPointsState } = useContext(BottomSheetContext);
   const { isStationsEnabled } = useContext(VirtualStationsContext);
 
@@ -551,7 +555,7 @@ export const ConfirmPickup = (props: any) => {
           props.onButtonPress(lastSelectedLocation);
         }
       }}
-      buttonDisabled={!lastSelectedLocation?.streetAddress}
+      buttonDisabled={isDraggingLocationPin || !lastSelectedLocation?.streetAddress}
     >
       <AddressContainer>
         <SvgIcon Svg={locationIcon} height={20} width={10} fill="#333" />
@@ -619,6 +623,9 @@ export const ConfirmingRide = (props: any) => {
   const { setSnapPointsState } = useContext(BottomSheetContext);
   const { changeBsPage } = useContext(RideStateContextContext);
   const { ride, chosenService } = useContext(RidePageContext);
+  const {
+    getCancellationReasons,
+  } = useContext(CancellationReasonsContext);
   useEffect(() => {
     setSnapPointsState(SNAP_POINT_STATES.CONFIRMING_RIDE);
   }, []);
@@ -638,7 +645,10 @@ export const ConfirmingRide = (props: any) => {
     <BsPage
       TitleText={TitleText}
       SecondaryButtonText={ride?.id ? i18n.t('bottomSheetContent.confirmingRide.secondaryButtonText') : null}
-      onSecondaryButtonPress={() => changeBsPage(BS_PAGES.CANCEL_RIDE)}
+      onSecondaryButtonPress={() => {
+        getCancellationReasons(ride?.id);
+        changeBsPage(BS_PAGES.CANCEL_RIDE);
+      }}
       SubTitleText={SubTitleText}
       fullWidthButtons
       {...props}

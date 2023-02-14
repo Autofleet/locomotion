@@ -77,6 +77,7 @@ export interface RideInterface {
   createdAt?: string;
   priceCalculationId?: string;
   rideFeedbacks?: RideFeedback[];
+  cancellationReasonId?: string;
 }
 
 type AdditionalCharge = {
@@ -318,9 +319,6 @@ const RidePageContextProvider = ({ children }: {
     [RIDE_STATES.CANCELED]: (canceledRide: any) => {
       if (canceledRide.canceledBy !== user?.id) {
         setRidePopup(RIDE_POPUPS.RIDE_CANCELED_BY_DISPATCHER);
-      } else {
-        cleanRideState();
-        changeBsPage(BS_PAGES.ADDRESS_SELECTOR);
       }
     },
     [RIDE_STATES.FAILED]: () => {
@@ -391,7 +389,8 @@ const RidePageContextProvider = ({ children }: {
 
       const tags = getEstimationTags(estimations);
       const formattedEstimations = formatEstimations(services, estimations, tags);
-      setChosenService(formattedEstimations.find((e: any) => e.currency));
+      const isCurrentChosenServiceAvailable = chosenService && formattedEstimations.some((e: any) => e.id === chosenService.id);
+      setChosenService(isCurrentChosenServiceAvailable ? chosenService : formattedEstimations.find((e: any) => e.currency));
       setDefaultService(formattedEstimations?.[0]);
       setServiceEstimations(formattedEstimations);
     } catch (e: any) {
@@ -760,8 +759,8 @@ const RidePageContextProvider = ({ children }: {
     reqSps[index || selectedInputIndex || 0] = {
       ...reqSps[index || selectedInputIndex || 0],
       externalId: selectedItem.externalId,
-      description: selectedItem.fullText,
-      streetAddress: selectedItem.text,
+      description: selectedItem.description || selectedItem.fullText,
+      streetAddress: selectedItem.description || selectedItem.text,
       placeId: selectedItem.placeId,
       lat: enrichedPlace.lat,
       lng: enrichedPlace.lng,
@@ -891,16 +890,17 @@ const RidePageContextProvider = ({ children }: {
   };
 
   const parseSearchResults = (results: any[]) => results.map((r) => {
-    let formatedAddress = r.structured_formatting.main_text;
+    let formattedAddress = r.structured_formatting.main_text;
     if (r.structured_formatting.secondary_text) {
-      formatedAddress = `${formatedAddress}, ${r.structured_formatting.secondary_text}`;
+      formattedAddress = `${formattedAddress}, ${r.structured_formatting.secondary_text}`;
     }
 
     return {
       text: r.structured_formatting.main_text,
       subText: r.structured_formatting.secondary_text,
-      fullText: formatedAddress,
+      fullText: formattedAddress,
       placeId: r.place_id,
+      description: r.description,
     };
   });
 
@@ -921,6 +921,11 @@ const RidePageContextProvider = ({ children }: {
     setHistoryResults(history);
   };
 
+  const backToServiceEstimations = () => {
+    tryServiceEstimations();
+    changeBsPage(BS_PAGES.SERVICE_ESTIMATIONS);
+  };
+
   const FAILED_TO_CREATE_RIDE_ACTIONS = {
     [RIDE_FAILED_REASONS.BUSY]: () => { changeBsPage(BS_PAGES.NO_AVAILABLE_VEHICLES); },
     [RIDE_FAILED_REASONS.USER_FUTURE_RIDE_INTERVAL_LIMIT_REACHED]: () => {
@@ -930,8 +935,7 @@ const RidePageContextProvider = ({ children }: {
         buttonText: i18n.t(`bottomSheetContent.${bsContent}.buttonText`),
         subTitleText: i18n.t(`bottomSheetContent.${bsContent}.subTitleText`),
         buttonPress: () => {
-          tryServiceEstimations();
-          changeBsPage(BS_PAGES.SERVICE_ESTIMATIONS);
+          backToServiceEstimations();
         },
       });
       changeBsPage(BS_PAGES.GENERIC_ERROR);
@@ -955,7 +959,7 @@ const RidePageContextProvider = ({ children }: {
         buttonText: i18n.t('bottomSheetContent.cashNotAllowed.buttonText'),
         subTitleText: i18n.t('bottomSheetContent.cashNotAllowed.subTitleText'),
         buttonPress: () => {
-          changeBsPage(BS_PAGES.SERVICE_ESTIMATIONS);
+          backToServiceEstimations();
         },
       });
       changeBsPage(BS_PAGES.GENERIC_ERROR);
@@ -966,7 +970,7 @@ const RidePageContextProvider = ({ children }: {
         buttonText: i18n.t('bottomSheetContent.paymentMethodExpired.buttonText'),
         subTitleText: i18n.t('bottomSheetContent.paymentMethodExpired.subTitleText'),
         buttonPress: () => {
-          changeBsPage(BS_PAGES.SERVICE_ESTIMATIONS);
+          backToServiceEstimations();
         },
       });
       changeBsPage(BS_PAGES.GENERIC_ERROR);
@@ -977,7 +981,7 @@ const RidePageContextProvider = ({ children }: {
         buttonText: i18n.t('bottomSheetContent.paymentIntentError.buttonText'),
         subTitleText: i18n.t('bottomSheetContent.paymentIntentError.subTitleText'),
         buttonPress: () => {
-          changeBsPage(BS_PAGES.SERVICE_ESTIMATIONS);
+          backToServiceEstimations();
         },
       });
       changeBsPage(BS_PAGES.GENERIC_ERROR);

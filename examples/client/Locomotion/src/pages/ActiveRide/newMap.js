@@ -1,13 +1,14 @@
 import React, {
   useContext, useEffect, useState,
 } from 'react';
-import { StyleSheet } from 'react-native';
+import { Dimensions, StyleSheet } from 'react-native';
 import MapView, { Polygon, Polyline } from 'react-native-maps';
 import Config from 'react-native-config';
 import moment from 'moment';
 import {
   point, featureCollection, nearestPoint, booleanPointInPolygon, polygon,
 } from '@turf/turf';
+import Mixpanel from '../../services/Mixpanel';
 import { FutureRidesContext } from '../../context/futureRides';
 import { RidePageContext } from '../../context/newRideContext';
 import { RideStateContextContext } from '../../context';
@@ -28,16 +29,16 @@ import { VirtualStationsContext } from '../../context/virtualStationsContext';
 import i18n from '../../I18n';
 
 export const MAP_EDGE_PADDING = {
-  top: 140,
+  top: 180,
   right: 100,
-  bottom: 400,
+  bottom: 50,
   left: 100,
 };
 
 export const ACTIVE_RIDE_MAP_PADDING = {
   top: 100,
   right: 70,
-  bottom: 300,
+  bottom: 50,
   left: 70,
 };
 
@@ -88,6 +89,7 @@ export default React.forwardRef(({
   const {
     isUserLocationFocused,
     setIsUserLocationFocused,
+    setIsDraggingLocationPin,
     territory,
     currentBsPage,
     initGeoService,
@@ -102,6 +104,7 @@ export default React.forwardRef(({
   const isChooseLocationOnMap = [BS_PAGES.CONFIRM_PICKUP, BS_PAGES.SET_LOCATION_ON_MAP]
     .includes(currentBsPage) && !isStationsEnabled;
   const {
+    lastSelectedLocation,
     requestStopPoints, saveSelectedLocation, reverseLocationGeocode, ride,
     chosenService,
   } = useContext(RidePageContext);
@@ -287,13 +290,25 @@ export default React.forwardRef(({
 
     return stopPoint.streetAddress || stopPoint.description;
   };
+  useEffect(() => {
+    setIsDraggingLocationPin(false);
+  }, [lastSelectedLocation]);
 
+  const hightRatioOfBottomSheet = typeof snapPoints[0] === 'number'
+    ? `${snapPoints[0] / Dimensions.get('window').height}%`
+    : snapPoints[0];
+
+  const mapPositionStyles = {
+    width: '100%',
+    height: `${100 - (hightRatioOfBottomSheet.split('%')[0] * 100)}%`,
+    position: 'absolute',
+  };
   return (
     <>
       <MapView
         provider={Config.MAP_PROVIDER}
         showsUserLocation={PAGES_TO_SHOW_MY_LOCATION.includes(currentBsPage)}
-        style={StyleSheet.absoluteFillObject}
+        style={mapPositionStyles}
         showsMyLocationButton={false}
         loadingEnabled
         showsCompass={false}
@@ -307,11 +322,21 @@ export default React.forwardRef(({
             const lng = longitude.toFixed(6);
             const spData = await reverseLocationGeocode(lat, lng);
             saveSelectedLocation(spData);
+            Mixpanel.setEvent('Change stop point location', {
+              gesture_type: 'drag_map',
+              screen: currentBsPage,
+              ...spData,
+              lat,
+              lng,
+            });
           }
         }}
-        onPanDrag={() => (
-          !isUserLocationFocused === false ? setIsUserLocationFocused(false) : null
-        )}
+        onPanDrag={() => {
+          setIsDraggingLocationPin(true);
+          if (!isUserLocationFocused === false) {
+            setIsUserLocationFocused(false);
+          }
+        }}
         ref={ref}
         userInterfaceStyle={isDarkMode ? THEME_MOD.DARK : undefined}
         customMapStyle={isDarkMode ? mapDarkMode : undefined}
@@ -369,7 +394,10 @@ export default React.forwardRef(({
         {isStationsEnabled && PAGES_TO_SHOW_STATIONS_MARKERS.includes(currentBsPage) ? <StationMarkers requestedStopPoints={requestStopPoints} /> : null}
       </MapView>
       {isChooseLocationOnMap && (
-        <LocationMarkerContainer pointerEvents="none">
+        <LocationMarkerContainer
+          pointerEvents="none"
+          style={mapPositionStyles}
+        >
           <LocationMarker />
         </LocationMarkerContainer>
       )}
