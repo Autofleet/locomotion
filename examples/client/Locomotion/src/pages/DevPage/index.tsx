@@ -1,16 +1,16 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { ScrollView } from 'react-native-gesture-handler';
 import Config from 'react-native-config';
+import TextInput from '../../Components/TextInput';
 import { NavButton, ButtonText } from '../Profile/SaveButton/styles';
 import AppSettings from '../../services/app-settings';
-import { BaseText } from '../../Components/BaseText';
-import TextInput from '../../Components/TextInput';
 import { PageContainer } from '../styles';
 import PageHeader from '../../Components/PageHeader';
 import i18n from '../../I18n';
 
 import * as navigationService from '../../services/navigation';
+import { InputContainer, Label } from './styles';
 
 
 const DevSettingPage = () => {
@@ -23,16 +23,18 @@ const DevSettingPage = () => {
         onIconPress={
           () => navigationService.goBack()}
       />
-      <BaseText>Operation Id</BaseText>
-      <TextInput
-        testID="operationId"
-        autoFocus
-        onChangeText={(newOperationId : string) => {
-          setOperationId(newOperationId);
-        }}
-        value={operationId}
-      />
-      <BaseText>Server Host</BaseText>
+      <Label>Operation Id</Label>
+      <InputContainer>
+        <TextInput
+          testID="operationId"
+          autoFocus
+          onChangeText={(newOperationId : string) => {
+            setOperationId(newOperationId);
+          }}
+          value={operationId}
+        />
+      </InputContainer>
+      <Label>Server Host</Label>
       <TextInput
         testID="serverHost"
         autoFocus
