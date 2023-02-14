@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/ban-ts-comment */
 import React, { useState } from 'react';
 import { ScrollView } from 'react-native-gesture-handler';
 import Config from 'react-native-config';
@@ -7,7 +6,6 @@ import { NavButton, ButtonText } from '../Profile/SaveButton/styles';
 import AppSettings from '../../services/app-settings';
 import { PageContainer } from '../styles';
 import PageHeader from '../../Components/PageHeader';
-import i18n from '../../I18n';
 
 import * as navigationService from '../../services/navigation';
 import { InputContainer, Label } from './styles';
