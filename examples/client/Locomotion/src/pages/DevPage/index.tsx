@@ -2,9 +2,8 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { ScrollView } from 'react-native-gesture-handler';
 import Config from 'react-native-config';
+import { NavButton, ButtonText } from '../Profile/SaveButton/styles';
 import AppSettings from '../../services/app-settings';
-import Button from '../../Components/Button';
-import { ButtonText } from '../../Components/TextButton';
 import { BaseText } from '../../Components/BaseText';
 import TextInput from '../../Components/TextInput';
 import { PageContainer } from '../styles';
@@ -42,7 +41,7 @@ const DevSettingPage = () => {
         }}
         value={serverHost}
       />
-      <Button
+      <NavButton
         testID="saveButton"
         onPress={() => {
           navigationService.goBack();
@@ -50,7 +49,7 @@ const DevSettingPage = () => {
         }}
       >
         <ButtonText>Save</ButtonText>
-      </Button>
+      </NavButton>
 
       <ScrollView />
     </PageContainer>
