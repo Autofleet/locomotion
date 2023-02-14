@@ -16,10 +16,10 @@ const AppSettings = {
   },
   getKeyWithFallback: async (key) => {
     const { [key]: value } = await AppSettings.getSettings();
-    return value && value.length > 0 ? value : keyFallbackMap(key);
+    return value && value.length > 0 ? value : keyFallbackMap[key];
   },
-  getServerUrl: async () => AppSettings.getSafeKey('serverUrl'),
-  getOperationId: async () => AppSettings.getSafeKey('operationId'),
+  getServerUrl: async () => AppSettings.getKeyWithFallback('serverUrl'),
+  getOperationId: async () => AppSettings.getKeyWithFallback('operationId'),
   setSettings: async (newSettingKeyObject) => {
     const currentSettings = await AppSettings.getSettings();
     await Storage.save({
