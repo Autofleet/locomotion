@@ -63,13 +63,16 @@ class Network {
     // Temp
     HTTPMethods.map((method) => {
       this[method] = async (...args) => {
-        const baseURL = await AppSettings.getServerUrl();
+        const [baseURL, operationId] = await Promise.all([
+          AppSettings.getServerUrl(),
+          AppSettings.getOperationId(),
+        ]);
         this.axios.defaults.baseURL = baseURL;
         const accessToken = await Auth.getAT(this.axios);
         this.axios.defaults.headers.common.Authorization = accessToken ? `Bearer ${accessToken}` : accessToken;
 
-        this.axios.defaults.headers.common['x-loco-ds-id'] = Config.OPERATION_ID;
-        this.axios.defaults.headers.common['x-loco-op-id'] = Config.OPERATION_ID;
+        this.axios.defaults.headers.common['x-loco-ds-id'] = operationId;
+        this.axios.defaults.headers.common['x-loco-op-id'] = operationId;
         return this.axios[method](...args).catch((e) => {
           crashlytics().log(`HTTP Request Error ${e.message}`);
           if ((e.response && e.response.status === 401)
