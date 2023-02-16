@@ -30,6 +30,7 @@ const Code = () => {
   const [loading, setLoading] = useState(false);
   const [timer, setTimer] = useState(RESEND_SECONDS);
   const [resendCounter, setResendCounter] = useState(0);
+  const [callCounter, setCallCounter] = useState(0);
   const [isCalling, setIsCalling] = useState(false);
 
   const onVertCodeChange = (value) => {
@@ -66,6 +67,7 @@ const Code = () => {
   useFocusEffect(
     useCallback(() => {
       setResendCounter(0);
+      setCallCounter(0);
       setTimer(RESEND_SECONDS);
       setIsCalling(false);
     }, []),
@@ -91,7 +93,7 @@ const Code = () => {
 
   const onCallPress = async () => {
     await onLoginInternal('call');
-
+    setCallCounter(currentValue => currentValue + 1);
     setIsCalling(true);
   };
 
@@ -139,6 +141,7 @@ const Code = () => {
                 </ResendText>
                 <ResendButton
                   testID="callForCode"
+                  pressCount={callCounter + 1}
                   onPress={() => {
                     onCallPress();
                   }}
@@ -152,6 +155,7 @@ const Code = () => {
           <Line>
             <ResendButton
               testID="resendPhoneNumberCode"
+              pressCount={resendCounter + 1}
               disabled={timer > 0}
               onPress={() => {
                 if (timer === 0) {

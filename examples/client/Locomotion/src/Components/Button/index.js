@@ -24,7 +24,7 @@ const Button = (props) => {
         if (!props.disabled) {
           if (props.onPress) {
             setIsLoadingInternal(true);
-            Mixpanel.trackElementClick(props);
+            Mixpanel.trackElementClick(props, props.pressCounter ? { count: props.pressCounter } : {});
             await props.onPress(e);
             setIsLoadingInternal(false);
           }
