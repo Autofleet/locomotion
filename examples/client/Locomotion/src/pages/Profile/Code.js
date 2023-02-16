@@ -8,7 +8,8 @@ import PinCode from '../../Components/PinCode';
 import SaveButton from './SaveButton';
 import { OnboardingContext } from '../../context/onboarding';
 import {
-  ErrorText, ResendButton, ResendContainer, ResendText, SafeView, Line,
+  ErrorText, ResendButton, ResendContainer, ResendText, SafeView,
+  Line, ResendButtonText,
 } from './styles';
 import i18n from '../../I18n';
 import Header from './Header';
@@ -137,16 +138,20 @@ const Code = () => {
                   {i18n.t('onboarding.pages.code.resendCodeText')}
                 </ResendText>
                 <ResendButton
+                  testID="callForCode"
                   onPress={() => {
                     onCallPress();
                   }}
                 >
-                  {i18n.t('onboarding.pages.code.call')}
+                  <ResendButtonText>
+                    {i18n.t('onboarding.pages.code.call')}
+                  </ResendButtonText>
                 </ResendButton>
               </Line>
             ) : null)}
           <Line>
             <ResendButton
+              testID="resendPhoneNumberCode"
               disabled={timer > 0}
               onPress={() => {
                 if (timer === 0) {
@@ -154,7 +159,9 @@ const Code = () => {
                 }
               }}
             >
-              {i18n.t('onboarding.pages.code.resendCodeButton')}
+              <ResendButtonText>
+                {i18n.t('onboarding.pages.code.resendCodeButton')}
+              </ResendButtonText>
             </ResendButton>
             {timer > 0 ? (
               <ResendText>
