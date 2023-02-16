@@ -7,6 +7,7 @@ export const Container = styled.View`
   width: 100%;
   max-width: 300px;
 
+  
   margin: 0 auto 50px auto;
 `;
 
