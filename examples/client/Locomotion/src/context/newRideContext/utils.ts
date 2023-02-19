@@ -119,11 +119,11 @@ export const getEstimationTags = (estimations: any[]) => {
 };
 
 export const latLngToAddress = async (lat: string, lng: string) => {
-  const location = `${lat},${lng}`;
   const data = await getGeocode({
-    latlng: location,
+    lat,
+    lng,
   });
-  return data.results[0].formatted_address;
+  return data.formattedAddress;
 };
 
 export const isPriceEstimated = (priceCalculationBasis: string) => priceCalculationBasis === 'actual';

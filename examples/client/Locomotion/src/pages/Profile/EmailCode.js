@@ -4,7 +4,7 @@ import PinCode from '../../Components/PinCode';
 import SaveButton from './SaveButton';
 import { OnboardingContext } from '../../context/onboarding';
 import {
-  ErrorText, ResendButton, ResendContainer, ResendText, Line,
+  ErrorText, ResendButton, ResendContainer, ResendText, Line, ResendButtonText,
 } from './styles';
 import i18n from '../../I18n';
 import Header from './Header';
@@ -90,6 +90,7 @@ const Code = () => {
           </Line>
           <Line>
             <ResendButton
+              testID="resendEmailCode"
               disabled={timer > 0}
               onPress={() => {
                 if (timer === 0) {
@@ -100,7 +101,9 @@ const Code = () => {
                 }
               }}
             >
-              {i18n.t('onboarding.pages.emailCode.resendCodeButton')}
+              <ResendButtonText>
+                {i18n.t('onboarding.pages.emailCode.resendCodeButton')}
+              </ResendButtonText>
             </ResendButton>
             {timer > 0 ? (
               <ResendText>
