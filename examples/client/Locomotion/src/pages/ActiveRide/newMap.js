@@ -321,7 +321,8 @@ export default React.forwardRef(({
             const lat = latitude.toFixed(6);
             const lng = longitude.toFixed(6);
             const [pickup] = requestStopPoints;
-            const sourcePoint = point([pickup.lng, pickup.lat]);
+            const finalStopPoint = lastSelectedLocation || pickup;
+            const sourcePoint = point([finalStopPoint.lng, finalStopPoint.lat]);
             const destinationPoint = point([lng, lat]);
             const changeDistance = distance(sourcePoint, destinationPoint, { units: 'meters' });
             if (changeDistance < 5) {
@@ -329,15 +330,17 @@ export default React.forwardRef(({
               return;
             }
             const spData = await reverseLocationGeocode(lat, lng);
-            saveSelectedLocation(spData);
-            setIsDraggingLocationPin(false);
-            Mixpanel.setEvent('Change stop point location', {
-              gesture_type: 'drag_map',
-              screen: currentBsPage,
-              ...spData,
-              lat,
-              lng,
-            });
+            if (spData) {
+              saveSelectedLocation(spData);
+              setIsDraggingLocationPin(false);
+              Mixpanel.setEvent('Change stop point location', {
+                gesture_type: 'drag_map',
+                screen: currentBsPage,
+                ...spData,
+                lat,
+                lng,
+              });
+            }
           }
         }}
         onPanDrag={() => {
