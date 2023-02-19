@@ -3,6 +3,7 @@ import React, {
 } from 'react';
 import crashlytics from '@react-native-firebase/crashlytics';
 import Config from 'react-native-config';
+import AppSettings from '../../services/app-settings';
 import { authService, StorageService } from '../../services';
 import {
   getUserDetails, loginVert, sendEmailVerification,
@@ -168,19 +169,21 @@ const UserContextProvider = ({ children }: { children: any }) => {
   };
 
   const onLogin = async (phoneNumber: string, channel = 'sms') => {
+    const demandSourceId = await AppSettings.getOperationId();
     await loginApi({
       phoneNumber,
       channel,
-      demandSourceId: Config.OPERATION_ID,
+      demandSourceId,
     });
   };
 
   const onVert = async (code: string) => {
+    const demandSourceId = await AppSettings.getOperationId();
     try {
       const vertResponse = await loginVert({
         phoneNumber: user?.phoneNumber,
         code,
-        demandSourceId: Config.OPERATION_ID,
+        demandSourceId,
       });
 
       if (vertResponse.status !== 'OK' || !vertResponse.refreshToken || !vertResponse.accessToken) {
@@ -191,11 +194,10 @@ const UserContextProvider = ({ children }: { children: any }) => {
       await auth.updateTokens(vertResponse.refreshToken, vertResponse.accessToken);
       const userProfile = vertResponse.clientProfile || {};
       Mixpanel.setUser(userProfile);
-
       await Promise.all([
         crashlytics().setUserId(userProfile.id),
         crashlytics().setAttributes({
-          demandSourceId: Config.OPERATION_ID,
+          demandSourceId,
         }),
       ]);
       const cards = await getCardInfo();

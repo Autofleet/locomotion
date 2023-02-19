@@ -32,10 +32,10 @@ const TwoButtonPopup = ({
         <SubTitle>{text}</SubTitle>
       </TextContainer>
       <ButtonContainer>
-        <RoundedButton onPress={onDefaultPress} style={{ marginBottom: 10 }}>
+        <RoundedButton onPress={onDefaultPress} style={{ marginBottom: 10 }} testID="twoButtonPopupDefaultText">
           {defualtText}
         </RoundedButton>
-        <RoundedButton onPress={onSecondPress} hollow>
+        <RoundedButton onPress={onSecondPress} hollow testID="twoButtonPopupSecondText">
           {secondText}
         </RoundedButton>
       </ButtonContainer>

@@ -61,7 +61,7 @@ const BackButton = ({ isExpanded, onBack }) => {
     return null;
   }
   return (
-    <BackButtonContainer onPress={onBack}>
+    <BackButtonContainer onPress={onBack} testID="backButton">
       <ArrowImage />
     </BackButtonContainer>
   );
