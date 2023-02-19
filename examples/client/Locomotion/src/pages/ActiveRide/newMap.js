@@ -325,6 +325,7 @@ export default React.forwardRef(({
             const destinationPoint = point([lng, lat]);
             const changeDistance = distance(sourcePoint, destinationPoint, { units: 'meters' });
             if (changeDistance < 5) {
+              setIsDraggingLocationPin(false);
               return;
             }
             const spData = await reverseLocationGeocode(lat, lng);
