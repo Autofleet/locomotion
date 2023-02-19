@@ -320,6 +320,13 @@ export default React.forwardRef(({
             const { latitude, longitude } = event;
             const lat = latitude.toFixed(6);
             const lng = longitude.toFixed(6);
+            const [pickup] = requestStopPoints;
+            const sourcePoint = point([pickup.lng, pickup.lat]);
+            const destinationPoint = point([lng, lat]);
+            const changeDistance = distance(sourcePoint, destinationPoint, { units: 'meters' });
+            if (changeDistance < 5) {
+              return;
+            }
             const spData = await reverseLocationGeocode(lat, lng);
             saveSelectedLocation(spData);
             setIsDraggingLocationPin(false);
