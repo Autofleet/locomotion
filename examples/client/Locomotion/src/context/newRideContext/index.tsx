@@ -726,7 +726,6 @@ const RidePageContextProvider = ({ children }: {
     try {
       const data = await getPlaces({
         input,
-        ...(Config.DEFAULT_COUNTRY_CODE && { region: Config.DEFAULT_COUNTRY_CODE.toLowerCase() }),
         radius: 20000,
         lat: currentCoords?.latitude || DEFAULT_COORDS.coords.latitude,
         lng: currentCoords?.longitude || DEFAULT_COORDS.coords.longitude,
