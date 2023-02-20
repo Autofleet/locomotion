@@ -1,12 +1,12 @@
 import React, {
   useContext, useEffect, useState,
 } from 'react';
-import { Dimensions, StyleSheet } from 'react-native';
+import { Dimensions } from 'react-native';
 import MapView, { Polygon, Polyline } from 'react-native-maps';
 import Config from 'react-native-config';
 import moment from 'moment';
 import {
-  point, featureCollection, nearestPoint, booleanPointInPolygon, polygon,
+  point, featureCollection, nearestPoint, booleanPointInPolygon, polygon, distance,
 } from '@turf/turf';
 import Mixpanel from '../../services/Mixpanel';
 import { FutureRidesContext } from '../../context/futureRides';
@@ -320,15 +320,27 @@ export default React.forwardRef(({
             const { latitude, longitude } = event;
             const lat = latitude.toFixed(6);
             const lng = longitude.toFixed(6);
+            const [pickup] = requestStopPoints;
+            const finalStopPoint = lastSelectedLocation || pickup;
+            const sourcePoint = point([finalStopPoint.lng, finalStopPoint.lat]);
+            const destinationPoint = point([lng, lat]);
+            const changeDistance = distance(sourcePoint, destinationPoint, { units: 'meters' });
+            if (changeDistance < 5) {
+              setIsDraggingLocationPin(false);
+              return;
+            }
             const spData = await reverseLocationGeocode(lat, lng);
-            saveSelectedLocation(spData);
-            Mixpanel.setEvent('Change stop point location', {
-              gesture_type: 'drag_map',
-              screen: currentBsPage,
-              ...spData,
-              lat,
-              lng,
-            });
+            if (spData) {
+              saveSelectedLocation(spData);
+              setIsDraggingLocationPin(false);
+              Mixpanel.setEvent('Change stop point location', {
+                gesture_type: 'drag_map',
+                screen: currentBsPage,
+                ...spData,
+                lat,
+                lng,
+              });
+            }
           }
         }}
         onPanDrag={() => {

@@ -36,13 +36,19 @@ ${FONT_SIZES.LARGE};
 ${FONT_WEIGHTS.REGULAR}
 `;
 
-export const ResendButton = styled(BaseText)`
-  text-decoration: underline;
+export const ResendButtonText = styled(ResendText)`
+text-decoration: underline;
+${({ theme }) => `
+  text-decoration-color: ${theme.primaryColor};
+  `}
+`;
+
+export const ResendButton = styled(Button).attrs({
+  noBackground: true,
+})`
   ${FONT_SIZES.LARGE};
   ${FONT_WEIGHTS.REGULAR};
-  ${({ theme, disabled }) => `
-  text-decoration-color: ${theme.primaryColor};
-  color: ${theme.primaryColor};
+  ${({ disabled }) => `
   ${disabled ? 'opacity: 0.3;' : '1'}
   `}
 `;

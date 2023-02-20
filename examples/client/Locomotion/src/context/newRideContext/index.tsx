@@ -584,23 +584,26 @@ const RidePageContextProvider = ({ children }: {
     try {
       let location;
       if (pinLat && pinLng) {
-        location = `${pinLat},${pinLng}`;
+        location = {
+          lat: pinLat,
+          lng: pinLng,
+        };
       } else {
         const currentCoords = await getCurrentLocation();
-        location = `${currentCoords.latitude},${currentCoords.longitude}`;
+        location = {
+          lat: currentCoords.latitude,
+          lng: currentCoords.longitude,
+        };
       }
+      const data = await getGeocode(location);
 
-      const data = await getGeocode({
-        latlng: location,
-      });
-
-      const { lat, lng } = data.results[0].geometry.location;
+      const { placeId, formattedAddress } = data;
       const geoLocation = {
-        placeId: data.results[0].place_id,
-        streetAddress: data.results[0].formatted_address,
-        description: data.results[0].formatted_address,
-        lat,
-        lng,
+        placeId,
+        streetAddress: formattedAddress,
+        description: formattedAddress,
+        lat: location.lat,
+        lng: location.lng,
       };
 
       return geoLocation;
@@ -634,10 +637,12 @@ const RidePageContextProvider = ({ children }: {
   };
 
   useEffect(() => {
-    if (!locationGranted) {
-      getCurrentLocation();
-    } else {
-      initCurrentLocation();
+    if (user?.id) {
+      if (!locationGranted) {
+        getCurrentLocation();
+      } else {
+        initCurrentLocation();
+      }
     }
   }, [locationGranted]);
 
@@ -676,8 +681,10 @@ const RidePageContextProvider = ({ children }: {
   };
 
   useEffect(() => {
-    if (requestStopPoints.filter((sp => sp.lat)).length <= 1) {
-      initSps();
+    if (user?.id) {
+      if (requestStopPoints.filter((sp => sp.lat)).length <= 1) {
+        initSps();
+      }
     }
   }, [currentGeocode]);
 
@@ -717,15 +724,11 @@ const RidePageContextProvider = ({ children }: {
       currentCoords = await getCurrentLocation();
     }
     try {
-      const location = currentCoords
-        ? `${currentCoords.latitude},${currentCoords.longitude}`
-        : `${DEFAULT_COORDS.coords.latitude},${DEFAULT_COORDS.coords.longitude}`;
       const data = await getPlaces({
         input,
-        ...(Config.DEFAULT_COUNTRY_CODE && { region: Config.DEFAULT_COUNTRY_CODE.toLowerCase() }),
-        origin: location,
         radius: 20000,
-        location,
+        lat: currentCoords?.latitude || DEFAULT_COORDS.coords.latitude,
+        lng: currentCoords?.longitude || DEFAULT_COORDS.coords.longitude,
       });
       return data?.sort((a: any, b: any) => (a.distance_meters - b.distance_meters));
     } catch (error) {

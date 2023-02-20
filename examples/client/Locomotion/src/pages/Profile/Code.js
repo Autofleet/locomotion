@@ -8,7 +8,8 @@ import PinCode from '../../Components/PinCode';
 import SaveButton from './SaveButton';
 import { OnboardingContext } from '../../context/onboarding';
 import {
-  ErrorText, ResendButton, ResendContainer, ResendText, SafeView, Line,
+  ErrorText, ResendButton, ResendContainer, ResendText, SafeView,
+  Line, ResendButtonText,
 } from './styles';
 import i18n from '../../I18n';
 import Header from './Header';
@@ -29,6 +30,7 @@ const Code = () => {
   const [loading, setLoading] = useState(false);
   const [timer, setTimer] = useState(RESEND_SECONDS);
   const [resendCounter, setResendCounter] = useState(0);
+  const [callCounter, setCallCounter] = useState(0);
   const [isCalling, setIsCalling] = useState(false);
 
   const onVertCodeChange = (value) => {
@@ -65,6 +67,7 @@ const Code = () => {
   useFocusEffect(
     useCallback(() => {
       setResendCounter(0);
+      setCallCounter(0);
       setTimer(RESEND_SECONDS);
       setIsCalling(false);
     }, []),
@@ -90,7 +93,7 @@ const Code = () => {
 
   const onCallPress = async () => {
     await onLoginInternal('call');
-
+    setCallCounter(currentValue => currentValue + 1);
     setIsCalling(true);
   };
 
@@ -137,16 +140,22 @@ const Code = () => {
                   {i18n.t('onboarding.pages.code.resendCodeText')}
                 </ResendText>
                 <ResendButton
+                  testID="callForCode"
+                  pressCount={callCounter + 1}
                   onPress={() => {
                     onCallPress();
                   }}
                 >
-                  {i18n.t('onboarding.pages.code.call')}
+                  <ResendButtonText>
+                    {i18n.t('onboarding.pages.code.call')}
+                  </ResendButtonText>
                 </ResendButton>
               </Line>
             ) : null)}
           <Line>
             <ResendButton
+              testID="resendPhoneNumberCode"
+              pressCount={resendCounter + 1}
               disabled={timer > 0}
               onPress={() => {
                 if (timer === 0) {
@@ -154,7 +163,9 @@ const Code = () => {
                 }
               }}
             >
-              {i18n.t('onboarding.pages.code.resendCodeButton')}
+              <ResendButtonText>
+                {i18n.t('onboarding.pages.code.resendCodeButton')}
+              </ResendButtonText>
             </ResendButton>
             {timer > 0 ? (
               <ResendText>
