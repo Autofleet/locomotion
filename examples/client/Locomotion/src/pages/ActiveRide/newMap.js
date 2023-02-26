@@ -8,6 +8,7 @@ import moment from 'moment';
 import {
   point, featureCollection, nearestPoint, booleanPointInPolygon, polygon, distance,
 } from '@turf/turf';
+import { debounce } from 'lodash';
 import Mixpanel from '../../services/Mixpanel';
 import { FutureRidesContext } from '../../context/futureRides';
 import { RidePageContext } from '../../context/newRideContext';
@@ -191,11 +192,11 @@ export default React.forwardRef(({
       const [pickupStopPoint] = requestStopPoints;
       if (pickupStopPoint) {
         ref.current.animateToRegion({
-          latitude: pickupStopPoint.lat,
-          longitude: pickupStopPoint.lng,
+          latitude: parseFloat(pickupStopPoint.lat),
+          longitude: parseFloat(pickupStopPoint.lng),
           latitudeDelta: 0.001,
           longitudeDelta: 0.001,
-        }, 1);
+        }, 200);
       }
     }
     if (currentBsPage === BS_PAGES.CONFIRM_FUTURE_RIDE) {
@@ -209,11 +210,11 @@ export default React.forwardRef(({
         const location = await getPosition();
         const { coords } = (location || DEFAULT_COORDS);
         ref.current.animateToRegion({
-          latitude: coords.latitude,
-          longitude: coords.longitude,
+          latitude: parseFloat(coords.latitude),
+          longitude: parseFloat(coords.longitude),
           latitudeDelta: 0.015,
           longitudeDelta: 0.015,
-        }, 1);
+        }, 200);
       };
       focusCurrentLocation();
     }
@@ -303,6 +304,36 @@ export default React.forwardRef(({
     height: `${100 - (hightRatioOfBottomSheet.split('%')[0] * 100)}%`,
     position: 'absolute',
   };
+
+  const onRegionChangeComplete = debounce(async (event) => {
+    if (isChooseLocationOnMap) {
+      const { latitude, longitude } = event;
+      const lat = latitude.toFixed(6);
+      const lng = longitude.toFixed(6);
+      const [pickup] = requestStopPoints;
+      const finalStopPoint = lastSelectedLocation || pickup;
+      const sourcePoint = point([finalStopPoint.lng, finalStopPoint.lat]);
+      const destinationPoint = point([lng, lat]);
+      const changeDistance = distance(sourcePoint, destinationPoint, { units: 'meters' });
+      if (changeDistance < 5) {
+        setIsDraggingLocationPin(false);
+        return;
+      }
+      const spData = await reverseLocationGeocode(lat, lng);
+      if (spData) {
+        saveSelectedLocation(spData);
+        setIsDraggingLocationPin(false);
+        Mixpanel.setEvent('Change stop point location', {
+          gesture_type: 'drag_map',
+          screen: currentBsPage,
+          ...spData,
+          lat,
+          lng,
+        });
+      }
+    }
+  }, 300);
+
   return (
     <>
       <MapView
@@ -315,34 +346,7 @@ export default React.forwardRef(({
         key="map"
         followsUserLocation={isUserLocationFocused}
         moveOnMarkerPress={false}
-        onRegionChangeComplete={async (event) => {
-          if (isChooseLocationOnMap) {
-            const { latitude, longitude } = event;
-            const lat = latitude.toFixed(6);
-            const lng = longitude.toFixed(6);
-            const [pickup] = requestStopPoints;
-            const finalStopPoint = lastSelectedLocation || pickup;
-            const sourcePoint = point([finalStopPoint.lng, finalStopPoint.lat]);
-            const destinationPoint = point([lng, lat]);
-            const changeDistance = distance(sourcePoint, destinationPoint, { units: 'meters' });
-            if (changeDistance < 5) {
-              setIsDraggingLocationPin(false);
-              return;
-            }
-            const spData = await reverseLocationGeocode(lat, lng);
-            if (spData) {
-              saveSelectedLocation(spData);
-              setIsDraggingLocationPin(false);
-              Mixpanel.setEvent('Change stop point location', {
-                gesture_type: 'drag_map',
-                screen: currentBsPage,
-                ...spData,
-                lat,
-                lng,
-              });
-            }
-          }
-        }}
+        onRegionChangeComplete={onRegionChangeComplete}
         onPanDrag={() => {
           setIsDraggingLocationPin(true);
           if (!isUserLocationFocused === false) {
