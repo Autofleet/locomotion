@@ -193,8 +193,6 @@ export default React.forwardRef(({
         ref.current.animateToRegion({
           latitude: pickupStopPoint.lat,
           longitude: pickupStopPoint.lng,
-          latitudeDelta: 0.001,
-          longitudeDelta: 0.001,
         }, 1);
       }
     }
@@ -211,8 +209,6 @@ export default React.forwardRef(({
         ref.current.animateToRegion({
           latitude: coords.latitude,
           longitude: coords.longitude,
-          latitudeDelta: 0.015,
-          longitudeDelta: 0.015,
         }, 1);
       };
       focusCurrentLocation();
