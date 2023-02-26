@@ -28,7 +28,6 @@ import { BottomSheetContext } from '../../context/bottomSheetContext';
 import { VirtualStationsContext } from '../../context/virtualStationsContext';
 
 import i18n from '../../I18n';
-import { getDeltasForRegion } from './utils';
 
 export const MAP_EDGE_PADDING = {
   top: 180,
@@ -188,34 +187,17 @@ export default React.forwardRef(({
     }
   }, [ref.current]);
 
-  const animateToRegion = async (lat, lng, timing) => {
-    const {
-      latDelta,
-      lngDelta,
-    } = await getDeltasForRegion({
-      lat,
-      lng,
-      boundingBox: await ref.current.getMapBoundaries(),
-      snapPoint: snapPoints[0],
-    });
-    ref.current.animateToRegion({
-      latitude: lat,
-      longitude: lng,
-      latitudeDelta: latDelta,
-      longitudeDelta: lngDelta,
-    }, timing);
-  };
-
-  const changeMapFocusOnConfirmPickup = async () => {
-    const [pickupStopPoint] = requestStopPoints;
-    if (pickupStopPoint) {
-      await animateToRegion(pickupStopPoint.lat, pickupStopPoint.lng, 1);
-    }
-  };
-
   useEffect(() => {
     if (currentBsPage === BS_PAGES.CONFIRM_PICKUP) {
-      changeMapFocusOnConfirmPickup();
+      const [pickupStopPoint] = requestStopPoints;
+      if (pickupStopPoint) {
+        ref.current.animateToRegion({
+          latitude: pickupStopPoint.lat,
+          longitude: pickupStopPoint.lng,
+          latitudeDelta: 0.001,
+          longitudeDelta: 0.001,
+        }, 1);
+      }
     }
     if (currentBsPage === BS_PAGES.CONFIRM_FUTURE_RIDE) {
       focusMapToCoordinates(newFutureRide.stopPoints.map(sp => ({
@@ -227,7 +209,12 @@ export default React.forwardRef(({
       const focusCurrentLocation = async () => {
         const location = await getPosition();
         const { coords } = (location || DEFAULT_COORDS);
-        await animateToRegion(coords.latitude, coords.longitude, 1000);
+        ref.current.animateToRegion({
+          latitude: coords.latitude,
+          longitude: coords.longitude,
+          latitudeDelta: 0.015,
+          longitudeDelta: 0.015,
+        }, 1);
       };
       focusCurrentLocation();
     }
