@@ -192,11 +192,11 @@ export default React.forwardRef(({
       const [pickupStopPoint] = requestStopPoints;
       if (pickupStopPoint) {
         ref.current.animateToRegion({
-          latitude: pickupStopPoint.lat,
-          longitude: pickupStopPoint.lng,
+          latitude: parseFloat(pickupStopPoint.lat),
+          longitude: parseFloat(pickupStopPoint.lng),
           latitudeDelta: 0.001,
           longitudeDelta: 0.001,
-        }, 1);
+        }, 200);
       }
     }
     if (currentBsPage === BS_PAGES.CONFIRM_FUTURE_RIDE) {
@@ -210,11 +210,11 @@ export default React.forwardRef(({
         const location = await getPosition();
         const { coords } = (location || DEFAULT_COORDS);
         ref.current.animateToRegion({
-          latitude: coords.latitude,
-          longitude: coords.longitude,
+          latitude: parseFloat(coords.latitude),
+          longitude: parseFloat(coords.longitude),
           latitudeDelta: 0.015,
           longitudeDelta: 0.015,
-        }, 1);
+        }, 200);
       };
       focusCurrentLocation();
     }
