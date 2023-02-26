@@ -280,8 +280,8 @@ const RidePage = ({ mapSettings, navigation }) => {
       const { coords } = (location || DEFAULT_COORDS);
       const animateTime = 1000;
       mapRef.current.animateToRegion({
-        latitude: coords.latitude,
-        longitude: coords.longitude,
+        latitude: parseFloat(coords.latitude),
+        longitude: parseFloat(coords.longitude),
         ...deltas,
       }, animateTime);
       setTimeout(() => {
@@ -436,8 +436,9 @@ const RidePage = ({ mapSettings, navigation }) => {
               icon={backArrow}
               onPressIcon={backToMap}
             >
-
-              <StopPointsViewer goBackToAddressSelector={goBackToAddress} />
+              {currentBsPage !== BS_PAGES.CONFIRM_PICKUP
+                ? <StopPointsViewer goBackToAddressSelector={goBackToAddress} />
+                : <></>}
             </Header>
             {topMessage ? (
               <TopMessage
