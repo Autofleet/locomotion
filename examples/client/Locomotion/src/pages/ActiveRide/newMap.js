@@ -8,6 +8,7 @@ import moment from 'moment';
 import {
   point, featureCollection, nearestPoint, booleanPointInPolygon, polygon, distance,
 } from '@turf/turf';
+import { debounce } from 'lodash';
 import Mixpanel from '../../services/Mixpanel';
 import { FutureRidesContext } from '../../context/futureRides';
 import { RidePageContext } from '../../context/newRideContext';
@@ -316,6 +317,36 @@ export default React.forwardRef(({
     height: `${100 - (hightRatioOfBottomSheet.split('%')[0] * 100)}%`,
     position: 'absolute',
   };
+
+  const onRegionChangeComplete = debounce(async (event) => {
+    if (isChooseLocationOnMap) {
+      const { latitude, longitude } = event;
+      const lat = latitude.toFixed(6);
+      const lng = longitude.toFixed(6);
+      const [pickup] = requestStopPoints;
+      const finalStopPoint = lastSelectedLocation || pickup;
+      const sourcePoint = point([finalStopPoint.lng, finalStopPoint.lat]);
+      const destinationPoint = point([lng, lat]);
+      const changeDistance = distance(sourcePoint, destinationPoint, { units: 'meters' });
+      if (changeDistance < 5) {
+        setIsDraggingLocationPin(false);
+        return;
+      }
+      const spData = await reverseLocationGeocode(lat, lng);
+      if (spData) {
+        saveSelectedLocation(spData);
+        setIsDraggingLocationPin(false);
+        Mixpanel.setEvent('Change stop point location', {
+          gesture_type: 'drag_map',
+          screen: currentBsPage,
+          ...spData,
+          lat,
+          lng,
+        });
+      }
+    }
+  }, 300);
+
   return (
     <>
       <MapView
@@ -328,34 +359,7 @@ export default React.forwardRef(({
         key="map"
         followsUserLocation={isUserLocationFocused}
         moveOnMarkerPress={false}
-        onRegionChangeComplete={async (event, details) => {
-          if (isChooseLocationOnMap) {
-            const { latitude, longitude } = event;
-            const lat = latitude.toFixed(6);
-            const lng = longitude.toFixed(6);
-            const [pickup] = requestStopPoints;
-            const finalStopPoint = lastSelectedLocation || pickup;
-            const sourcePoint = point([finalStopPoint.lng, finalStopPoint.lat]);
-            const destinationPoint = point([lng, lat]);
-            const changeDistance = distance(sourcePoint, destinationPoint, { units: 'meters' });
-            if (changeDistance < 5) {
-              setIsDraggingLocationPin(false);
-              return;
-            }
-            const spData = await reverseLocationGeocode(lat, lng);
-            if (spData) {
-              saveSelectedLocation(spData);
-              setIsDraggingLocationPin(false);
-              Mixpanel.setEvent('Change stop point location', {
-                gesture_type: 'drag_map',
-                screen: currentBsPage,
-                ...spData,
-                lat,
-                lng,
-              });
-            }
-          }
-        }}
+        onRegionChangeComplete={onRegionChangeComplete}
         onPanDrag={() => {
           setIsDraggingLocationPin(true);
           if (!isUserLocationFocused === false) {
