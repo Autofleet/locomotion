@@ -68,6 +68,7 @@ import { rideHistoryContext } from '../../context/rideHistory';
 import SafeView from '../../Components/SafeView';
 import CancellationReasonsPopup from '../../popups/CancellationReasonsPopup';
 import VirtualStationsProvider, { VirtualStationsContext } from '../../context/virtualStationsContext';
+import { getDeltasForRegion } from './utils';
 
 const BLACK_OVERLAY_SCREENS = [BS_PAGES.CANCEL_RIDE];
 
@@ -265,24 +266,24 @@ const RidePage = ({ mapSettings, navigation }) => {
         });
       }
     } else {
-      let deltas = {
-        latitudeDelta: 0.015,
-        longitudeDelta: 0.015,
-      };
-      if (currentBsPage === BS_PAGES.CONFIRM_PICKUP) {
-        deltas = {
-          latitudeDelta: 0.001,
-          longitudeDelta: 0.001,
-        };
-      }
       setIsDraggingLocationPin(true);
       const location = await getPosition();
       const { coords } = (location || DEFAULT_COORDS);
       const animateTime = 1000;
+      const {
+        latDelta,
+        lngDelta,
+      } = await getDeltasForRegion({
+        lat: coords.latitude,
+        lng: coords.longitude,
+        snapPoint: snapPoints[0],
+        boundingBox: await mapRef.current.getMapBoundaries(),
+      });
       mapRef.current.animateToRegion({
         latitude: coords.latitude,
         longitude: coords.longitude,
-        ...deltas,
+        latitudeDelta: latDelta,
+        longitudeDelta: lngDelta,
       }, animateTime);
       setTimeout(() => {
         setIsDraggingLocationPin(false);

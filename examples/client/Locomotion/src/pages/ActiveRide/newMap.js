@@ -27,6 +27,7 @@ import { BottomSheetContext } from '../../context/bottomSheetContext';
 import { VirtualStationsContext } from '../../context/virtualStationsContext';
 
 import i18n from '../../I18n';
+import { getDeltasForRegion } from './utils';
 
 export const MAP_EDGE_PADDING = {
   top: 180,
@@ -186,15 +187,34 @@ export default React.forwardRef(({
     }
   }, [ref.current]);
 
+  const animateToRegion = async (lat, lng, timing) => {
+    const {
+      latDelta,
+      lngDelta,
+    } = await getDeltasForRegion({
+      lat,
+      lng,
+      boundingBox: await ref.current.getMapBoundaries(),
+      snapPoint: snapPoints[0],
+    });
+    ref.current.animateToRegion({
+      latitude: lat,
+      longitude: lng,
+      latitudeDelta: latDelta,
+      longitudeDelta: lngDelta,
+    }, timing);
+  };
+
+  const changeMapFocusOnConfirmPickup = async () => {
+    const [pickupStopPoint] = requestStopPoints;
+    if (pickupStopPoint) {
+      await animateToRegion(pickupStopPoint.lat, pickupStopPoint.lng, 1);
+    }
+  };
+
   useEffect(() => {
     if (currentBsPage === BS_PAGES.CONFIRM_PICKUP) {
-      const [pickupStopPoint] = requestStopPoints;
-      if (pickupStopPoint) {
-        ref.current.animateToRegion({
-          latitude: pickupStopPoint.lat,
-          longitude: pickupStopPoint.lng,
-        }, 1);
-      }
+      changeMapFocusOnConfirmPickup();
     }
     if (currentBsPage === BS_PAGES.CONFIRM_FUTURE_RIDE) {
       focusMapToCoordinates(newFutureRide.stopPoints.map(sp => ({
@@ -206,10 +226,7 @@ export default React.forwardRef(({
       const focusCurrentLocation = async () => {
         const location = await getPosition();
         const { coords } = (location || DEFAULT_COORDS);
-        ref.current.animateToRegion({
-          latitude: coords.latitude,
-          longitude: coords.longitude,
-        }, 1);
+        await animateToRegion(coords.latitude, coords.longitude, 1000);
       };
       focusCurrentLocation();
     }
@@ -311,7 +328,7 @@ export default React.forwardRef(({
         key="map"
         followsUserLocation={isUserLocationFocused}
         moveOnMarkerPress={false}
-        onRegionChangeComplete={async (event) => {
+        onRegionChangeComplete={async (event, details) => {
           if (isChooseLocationOnMap) {
             const { latitude, longitude } = event;
             const lat = latitude.toFixed(6);
