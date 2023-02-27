@@ -8,7 +8,7 @@ import styled from 'styled-components';
 import { MarkerAnimated, AnimatedRegion } from 'react-native-maps';
 import { Context as ThemeContext } from '../../context/theme';
 import SvgIcon from '../SvgIcon';
-import carIcon from '../../assets/map/Autofleet_Car_Icon.svg';
+import carIcon from '../../assets/map/autofleet_car_icon.svg';
 
 interface Location {
   lat: number;
@@ -42,8 +42,7 @@ const AvailabilityVehicle = ({
   location,
   id,
 }: AvailabilityVehicleProps) => {
-  const { primaryColor } = useContext(ThemeContext);
-
+  const { vehicleColor } = useContext(ThemeContext);
   const markerRef = useRef<MarkerAnimated>(null);
   const [locationAnimated] = useState(new AnimatedRegion({
     latitude: insureNumberType(location.lat),
@@ -71,7 +70,7 @@ const AvailabilityVehicle = ({
       }
     }
   }, [location]);
-  console.log(location);
+
   return (
     <MarkerAnimated
       key={id}
@@ -79,16 +78,12 @@ const AvailabilityVehicle = ({
       coordinate={locationAnimated}
       anchor={{ x: 0.5, y: 0.40 }}
     >
-
-      <View>
-        <SvgIcon
-          Svg={carIcon}
-          height={48}
-          width={48}
-          fill={primaryColor}
-          style={{ transform: [{ rotate: `${location.bearing}deg` }] }}
-        />
-      </View>
+      <SvgIcon
+        Svg={carIcon}
+        height={48}
+        width={48}
+        style={{ transform: [{ rotate: `${location.bearing}deg` }], color: vehicleColor }}
+      />
     </MarkerAnimated>
 
   );
