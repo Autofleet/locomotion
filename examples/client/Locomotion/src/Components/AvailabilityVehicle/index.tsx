@@ -2,7 +2,7 @@ import React, {
   useContext, useEffect, useState, useRef,
 } from 'react';
 import {
-  Animated, Easing, Platform, Text, View,
+  Platform, View,
 } from 'react-native';
 import styled from 'styled-components';
 import { MarkerAnimated, AnimatedRegion } from 'react-native-maps';
@@ -20,10 +20,6 @@ interface AvailabilityVehicleProps {
   location: Location;
   id: string;
 }
-
-const AvailabilityVehicleContainer = styled(View)`
-z-index: 100;
-`;
 
 const DURATION = 5000;
 
