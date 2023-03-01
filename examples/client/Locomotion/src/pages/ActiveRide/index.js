@@ -4,7 +4,7 @@ import React, {
 import Toast from 'react-native-toast-message';
 import { useIsFocused, useFocusEffect } from '@react-navigation/native';
 import {
-  AppState, BackHandler, Platform, View,
+  AppState, BackHandler, Platform, View, Dimensions,
 } from 'react-native';
 import { Portal } from '@gorhom/portal';
 import Config from 'react-native-config';
@@ -66,6 +66,8 @@ import { MessagesContext } from '../../context/messages';
 import alertIcon from '../../assets/warning.svg';
 import { rideHistoryContext } from '../../context/rideHistory';
 import SafeView from '../../Components/SafeView';
+import CancellationReasonsPopup from '../../popups/CancellationReasonsPopup';
+import VirtualStationsProvider, { VirtualStationsContext } from '../../context/virtualStationsContext';
 
 const BLACK_OVERLAY_SCREENS = [BS_PAGES.CANCEL_RIDE];
 
@@ -76,16 +78,16 @@ const RidePage = ({ mapSettings, navigation }) => {
   const [addressSelectorFocusIndex, setAddressSelectorFocusIndex] = useState(1);
   const [topMessage, setTopMessage] = useState(null);
   const { getSettingByKey } = settings.useContainer();
+
   const mapRef = useRef();
   const bottomSheetRef = useRef(null);
 
   const {
-    currentBsPage, changeBsPage,
+    currentBsPage, changeBsPage, setIsDraggingLocationPin,
   } = useContext(RideStateContextContext);
   const { checkMessagesForToast } = useContext(MessagesContext);
-  const {
-    rides: historyRides, loadRides: loadHistoryRides,
-  } = useContext(rideHistoryContext);
+  const { isStationsEnabled } = useContext(VirtualStationsContext);
+
   const {
     serviceEstimations,
     setServiceEstimations,
@@ -102,6 +104,8 @@ const RidePage = ({ mapSettings, navigation }) => {
     tryServiceEstimations,
     selectedInputIndex,
     cleanRideState,
+    updateRide,
+    clearRequestSp,
   } = useContext(RidePageContext);
   const {
     setIsExpanded, snapPoints, isExpanded, topBarText,
@@ -118,7 +122,7 @@ const RidePage = ({ mapSettings, navigation }) => {
   } = useContext(FutureRidesContext);
 
   useEffect(() => {
-    setAddressSelectorFocusIndex(requestStopPoints.findIndex(sp => !sp.lat));
+    setAddressSelectorFocusIndex(requestStopPoints.findIndex(sp => !sp?.lat));
   }, [requestStopPoints]);
   const resetStateToAddressSelector = (selectedIndex = null) => {
     setServiceEstimations(null);
@@ -126,6 +130,9 @@ const RidePage = ({ mapSettings, navigation }) => {
     setRide({});
     changeBsPage(BS_PAGES.ADDRESS_SELECTOR);
     setAddressSelectorFocusIndex(selectedIndex);
+    if (isStationsEnabled) {
+      clearRequestSp(selectedIndex);
+    }
   };
 
   const goBackToAddress = (selectedIndex, expand = true) => {
@@ -258,15 +265,28 @@ const RidePage = ({ mapSettings, navigation }) => {
         });
       }
     } else {
-      const location = await getPosition();
-      const { coords } = (location || DEFAULT_COORDS);
-      mapRef.current.animateToRegion({
-      // I really don't know why this is needed, but it works
-        latitude: coords.latitude - parseFloat(50) / 10000,
-        longitude: coords.longitude,
+      let deltas = {
         latitudeDelta: 0.015,
         longitudeDelta: 0.015,
-      }, 1000);
+      };
+      if (currentBsPage === BS_PAGES.CONFIRM_PICKUP) {
+        deltas = {
+          latitudeDelta: 0.001,
+          longitudeDelta: 0.001,
+        };
+      }
+      setIsDraggingLocationPin(true);
+      const location = await getPosition();
+      const { coords } = (location || DEFAULT_COORDS);
+      const animateTime = 1000;
+      mapRef.current.animateToRegion({
+        latitude: parseFloat(coords.latitude),
+        longitude: parseFloat(coords.longitude),
+        ...deltas,
+      }, animateTime);
+      setTimeout(() => {
+        setIsDraggingLocationPin(false);
+      }, animateTime + 500);
     }
   };
 
@@ -303,7 +323,10 @@ const RidePage = ({ mapSettings, navigation }) => {
         return false;
       };
       const backHandler = BackHandler.addEventListener('hardwareBackPress', onBackPress);
-      focusCurrentLocation();
+
+      if (!currentBsPage === BS_PAGES.SERVICE_ESTIMATIONS) {
+        focusCurrentLocation();
+      }
 
       return () => backHandler.remove();
     }, [serviceEstimations]),
@@ -395,6 +418,11 @@ const RidePage = ({ mapSettings, navigation }) => {
     setTopMessage(MESSAGE_MAP[topMessageKey]);
   };
 
+  const onCancellationReasonsAction = () => {
+    setRidePopup(null);
+    cleanRideState();
+  };
+
   return (
     <PageContainer>
       <MainMap
@@ -408,8 +436,9 @@ const RidePage = ({ mapSettings, navigation }) => {
               icon={backArrow}
               onPressIcon={backToMap}
             >
-
-              <StopPointsViewer goBackToAddressSelector={goBackToAddress} />
+              {currentBsPage !== BS_PAGES.CONFIRM_PICKUP
+                ? <StopPointsViewer goBackToAddressSelector={goBackToAddress} />
+                : <></>}
             </Header>
             {topMessage ? (
               <TopMessage
@@ -486,6 +515,11 @@ BS_PAGE_TO_COMP[currentBsPage] ? BS_PAGE_TO_COMP[currentBsPage]() : null
             cleanRideState(false);
           }
         }
+        />
+        <CancellationReasonsPopup
+          isVisible={ridePopup === RIDE_POPUPS.CANCELLATION_REASON}
+          onCancel={onCancellationReasonsAction}
+          onSubmit={onCancellationReasonsAction}
         />
       </Portal>
       <Toast

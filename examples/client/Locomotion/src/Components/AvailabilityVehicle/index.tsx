@@ -1,10 +1,9 @@
 import React, {
-  useContext, useEffect, useState, useRef,
+  useContext, useEffect, useState, useRef, useCallback,
 } from 'react';
 import {
-  Platform, View,
+  Platform,
 } from 'react-native';
-import styled from 'styled-components';
 import { MarkerAnimated, AnimatedRegion } from 'react-native-maps';
 import { Context as ThemeContext } from '../../context/theme';
 import SvgIcon from '../SvgIcon';
@@ -23,7 +22,10 @@ interface AvailabilityVehicleProps {
 
 const DURATION = 5000;
 
-const areEqual = (prev: AvailabilityVehicleProps, next: AvailabilityVehicleProps) => prev.id === next.id
+const areEqual = (
+  prev: AvailabilityVehicleProps,
+  next: AvailabilityVehicleProps,
+) => prev.id === next.id
   && prev.location.lat === next.location.lat
   && prev.location.lng === next.location.lng
   && prev.location.bearing === next.location.bearing;
@@ -67,12 +69,24 @@ const AvailabilityVehicle = ({
     }
   }, [location]);
 
+  const onPressWorkaround = useCallback(() => {
+    try {
+      markerRef?.current?.hideCallout();
+    } catch (e) {
+      console.log('error', e);
+    }
+  }, [markerRef]);
+
   return (
     <MarkerAnimated
       key={id}
       ref={markerRef}
       coordinate={locationAnimated}
       anchor={{ x: 0.5, y: 0.40 }}
+      tappable={false}
+      // tooltip workaround, need to upgrade library
+      onPress={onPressWorkaround}
+
     >
       <SvgIcon
         Svg={carIcon}

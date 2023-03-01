@@ -3,10 +3,11 @@ import React, {
 } from 'react';
 import crashlytics from '@react-native-firebase/crashlytics';
 import Config from 'react-native-config';
+import AppSettings from '../../services/app-settings';
 import { authService, StorageService } from '../../services';
 import {
   getUserDetails, loginVert, sendEmailVerification,
-  updateUser as updateUserApi, emailVerify, deleteUser as deleteUserApi, getUserCoupon, createUserCoupon,
+  updateUser as updateUserApi, emailVerify, deleteUser as deleteUserApi, getUserCoupon, createUserCoupon, loginApi,
 } from './api';
 import auth from '../../services/auth';
 import Mixpanel from '../../services/Mixpanel';
@@ -48,6 +49,7 @@ interface UserContextInterface {
   updateUser: (values: any) => Promise<any>,
   getCoupon: () => Promise<any>,
   createCoupon: (values: any) => Promise<any>,
+  onLogin: (phoneNumber: string, channel: string) => Promise<void>
 }
 
 export const UserContext = createContext<UserContextInterface>({
@@ -69,6 +71,7 @@ export const UserContext = createContext<UserContextInterface>({
   updateUser: async (values: any) => undefined,
   getCoupon: async () => undefined,
   createCoupon: async (values: any) => undefined,
+  onLogin: async (phoneNumber: string, channel: string) => undefined,
 });
 
 const UserContextProvider = ({ children }: { children: any }) => {
@@ -165,12 +168,22 @@ const UserContextProvider = ({ children }: { children: any }) => {
     return vertResponse.status === 'OK';
   };
 
+  const onLogin = async (phoneNumber: string, channel = 'sms') => {
+    const demandSourceId = await AppSettings.getOperationId();
+    await loginApi({
+      phoneNumber,
+      channel,
+      demandSourceId,
+    });
+  };
+
   const onVert = async (code: string) => {
+    const demandSourceId = await AppSettings.getOperationId();
     try {
       const vertResponse = await loginVert({
         phoneNumber: user?.phoneNumber,
         code,
-        demandSourceId: Config.OPERATION_ID,
+        demandSourceId,
       });
 
       if (vertResponse.status !== 'OK' || !vertResponse.refreshToken || !vertResponse.accessToken) {
@@ -181,11 +194,10 @@ const UserContextProvider = ({ children }: { children: any }) => {
       await auth.updateTokens(vertResponse.refreshToken, vertResponse.accessToken);
       const userProfile = vertResponse.clientProfile || {};
       Mixpanel.setUser(userProfile);
-
       await Promise.all([
         crashlytics().setUserId(userProfile.id),
         crashlytics().setAttributes({
-          demandSourceId: Config.OPERATION_ID,
+          demandSourceId,
         }),
       ]);
       const cards = await getCardInfo();
@@ -240,6 +252,7 @@ const UserContextProvider = ({ children }: { children: any }) => {
         updateUser,
         getCoupon,
         createCoupon,
+        onLogin,
       }}
     >
       {children}

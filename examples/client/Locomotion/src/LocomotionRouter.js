@@ -13,6 +13,8 @@ import NewRidePageContextProvider from './context/newRideContext';
 import BottomSheetContextProvider from './context/bottomSheetContext';
 import FutureRidesProvider from './context/futureRides';
 import MessagesProvider from './context/messages';
+import CancellationReasonsProvider from './context/cancellation-reasons';
+import VirtualStationsProvider from './context/virtualStationsContext';
 
 LogBox.ignoreAllLogs();
 
@@ -36,17 +38,21 @@ export default (props) => {
       <MainProvider {...props}>
         <BottomSheetContextProvider {...props}>
           <RideStateContextContextProvider {...props}>
-            <FutureRidesProvider {...props}>
-              <NewRidePageContextProvider {...props}>
-                <MessagesProvider>
-                  <PortalProvider>
-                    <MainRouter {...props} />
-                    {props.children}
-                    <RidePopups />
-                  </PortalProvider>
-                </MessagesProvider>
-              </NewRidePageContextProvider>
-            </FutureRidesProvider>
+            <CancellationReasonsProvider>
+              <VirtualStationsProvider>
+                <FutureRidesProvider {...props}>
+                  <NewRidePageContextProvider {...props}>
+                    <MessagesProvider>
+                      <PortalProvider>
+                        <MainRouter {...props} />
+                        {props.children}
+                        <RidePopups />
+                      </PortalProvider>
+                    </MessagesProvider>
+                  </NewRidePageContextProvider>
+                </FutureRidesProvider>
+              </VirtualStationsProvider>
+            </CancellationReasonsProvider>
           </RideStateContextContextProvider>
         </BottomSheetContextProvider>
       </MainProvider>

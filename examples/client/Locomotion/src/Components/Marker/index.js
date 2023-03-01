@@ -17,6 +17,7 @@ import SvgIcon from '../SvgIcon';
 import { STOP_POINT_TYPES, STOP_POINT_STATES } from '../../lib/commonTypes';
 import Loader from '../Loader';
 import pulse from '../../assets/marker-pulse.json';
+import VirtualStationComponent from '../VirtualStationComponent';
 
 const StopPointMarker = ({
   stopPoint,
@@ -24,9 +25,12 @@ const StopPointMarker = ({
   isNext,
   etaText,
   isFutureRide,
+  isStationsEnabled = false,
 }) => {
   const { lat, lng } = stopPoint;
   const theme = useContext(ThemeContext);
+  const stationIcon = (type: string) => <VirtualStationComponent type={type} isActive style={{ top: Platform.OS === 'ios' ? -35 : 0 }} />;
+
   const typeDetails = {
     [STOP_POINT_TYPES.STOP_POINT_PICKUP]: {
       Icon: <SvgIcon
@@ -35,6 +39,7 @@ const StopPointMarker = ({
         height={20}
         style={{ top: Platform.OS === 'ios' ? -35 : 0 }}
       />,
+      stationIcon: stationIcon(STOP_POINT_TYPES.STOP_POINT_PICKUP),
       displayName: i18n.t('rideDetails.type.pickup'),
     },
     [STOP_POINT_TYPES.STOP_POINT_DROPOFF]: {
@@ -44,6 +49,7 @@ const StopPointMarker = ({
         height={50}
         style={{ top: Platform.OS === 'ios' ? -45 : 0 }}
       />,
+      stationIcon: stationIcon(STOP_POINT_TYPES.STOP_POINT_DROPOFF),
       displayName: i18n.t('rideDetails.type.dropoff'),
     },
   };
@@ -93,7 +99,7 @@ const StopPointMarker = ({
         </SubContainer>
       </InfoBox>
       <IconContainer>
-        {typeDetails[stopPoint.type].Icon}
+        {typeDetails[stopPoint.type][isStationsEnabled ? 'stationIcon' : 'Icon']}
       </IconContainer>
     </Marker>
   );

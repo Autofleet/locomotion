@@ -1,5 +1,5 @@
 import { unitsFactors } from '@turf/turf';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { createContainer } from 'unstated-next';
 import { StorageService } from '../../services';
 import * as settingsApi from './api';
@@ -12,12 +12,15 @@ const fieldNameToSettingKeyMap = {
   privacyPolicyUrl: settingsKeys.PRIVACY_POLICY_URL,
   contactEmail: settingsKeys.CONTACT_EMAIL,
   contactPhone: settingsKeys.CONTACT_PHONE,
+  measureSystem: settingsKeys.MEASURE_SYSTEM,
 };
 
 
 const useSettings = () => {
   const [settingsList, setSettingsList] = useState({});
   const [workingHours, setWorkingHours] = useState({});
+  const [measureSystem, setMeasureSystem] = useState('metric');
+  const [appSettingsState, setAppSettingsState] = useState({});
 
 
   const getSettingByKey = async (key) => {
@@ -77,6 +80,7 @@ const useSettings = () => {
   const getAppSettings = async () => {
     const appSettings = await settingsApi.getAppSettings();
     await StorageService.save(appSettings, FIVE_MINS_IN_SECONDS);
+    setAppSettingsState(appSettingsState);
     return appSettings;
   };
 
@@ -92,6 +96,30 @@ const useSettings = () => {
     return preparedworkingHours;
   };
 
+  const getMeasureSystem = async () => {
+    if (measureSystem) {
+      return measureSystem;
+    }
+
+    const measureSystemValue = await getSettingByKey('riderApp.measureSystem');
+    if (measureSystemValue) {
+      setMeasureSystem(measureSystemValue);
+      return measureSystemValue;
+    }
+
+    return null;
+  };
+
+  const setAppSettingsStates = async (settings) => {
+    if (!settings.measureSystem) {
+      setMeasureSystem(settings.measureSystem);
+    }
+  };
+
+  useEffect(() => {
+    setAppSettingsStates(appSettingsState);
+  }, [appSettingsState]);
+
   return {
     settingsList,
     getWorkingHours,
@@ -100,6 +128,8 @@ const useSettings = () => {
     getMultipleSettingByKey,
     getLoginSettings,
     getAppSettings,
+    getMeasureSystem,
+    measureSystem,
   };
 };
 export default createContainer(useSettings);

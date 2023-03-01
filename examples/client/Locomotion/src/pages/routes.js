@@ -32,4 +32,5 @@ export const MAIN_ROUTES = {
   PROMO_CODE: 'PromoCode',
   MESSAGES: 'messages',
   MESSAGE_VIEW: 'messageView',
+  DEV_SETTINGS_PAGE: 'DevSettingPage',
 };

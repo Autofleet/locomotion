@@ -101,6 +101,10 @@ export const FONT_WEIGHTS = {
     font-family: 'Inter-Light';
     font-weight: normal;
   `,
+  SEMI_REGULAR: `
+    font-family: 'Inter-Regular';
+    font-weight: 500;
+  `,
 };
 
 // export const TEXT_STYLE_OBJECT = {

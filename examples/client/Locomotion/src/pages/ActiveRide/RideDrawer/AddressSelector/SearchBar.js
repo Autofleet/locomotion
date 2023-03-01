@@ -4,6 +4,7 @@ import React, {
 import { Animated, View } from 'react-native';
 import styled from 'styled-components';
 import { debounce } from 'lodash';
+import shortid from 'shortid';
 import Mixpanel from '../../../../services/Mixpanel';
 import BottomSheetInput from '../../../../Components/TextInput/BottomSheetInput';
 import i18n from '../../../../I18n';
@@ -60,7 +61,7 @@ const BackButton = ({ isExpanded, onBack }) => {
     return null;
   }
   return (
-    <BackButtonContainer onPress={onBack}>
+    <BackButtonContainer onPress={onBack} testID="backButton">
       <ArrowImage />
     </BackButtonContainer>
   );
@@ -93,9 +94,7 @@ const SearchBar = ({
   } = useContext(UserContext);
 
   const [searchTerm, setSearchTerm] = useState('');
-
   const debouncedSearch = useCallback(debounce(async text => onSearch(text), 300), [locationGranted]);
-
 
   const getSpPlaceholder = (sp) => {
     if (!isExpanded || !sp.useDefaultLocation) {
@@ -147,6 +146,7 @@ const SearchBar = ({
               description: text,
               lat: null,
               lng: null,
+              externalId: null,
             }, i);
             setSearchTerm(text);
           }}
@@ -157,6 +157,7 @@ const SearchBar = ({
             Mixpanel.setEvent(`${type} address input focused`);
             onInputFocus(e.target, i);
           }}
+          onPressIn={e => e.currentTarget?.setSelection((description?.length || 0), (description?.length || 0))}
           key={`input_${s.id}`}
           autoCorrect={false}
           clear={() => {
@@ -164,6 +165,8 @@ const SearchBar = ({
               description: null,
               lat: null,
               lng: null,
+              externalId: null,
+              id: shortid.generate(),
             }, i);
             setSearchTerm(null);
           }}
@@ -171,6 +174,10 @@ const SearchBar = ({
             if (autoFocus) {
               inputRef.current = ref;
             }
+          }}
+          onLayout={e => e.currentTarget?.setSelection(1, 1)}
+          onBlur={(e) => {
+            e.currentTarget?.setSelection(1, 1);
           }}
         />
       </Row>

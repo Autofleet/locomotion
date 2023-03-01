@@ -3,6 +3,8 @@ import Config from 'react-native-config';
 import styled from 'styled-components';
 import { FONT_SIZES, FONT_WEIGHTS } from '../../context/theme';
 import { getVersion } from '../../services/device';
+import i18n from '../../I18n';
+
 
 export const BottomContainer = styled.View`
   position: absolute;
@@ -43,7 +45,7 @@ export default () => (
         {!shouldHideAutofleet
   && (
     <Fragment>
-      powered by
+      {i18n.t('menu.poweredBy')}
       <BottomTextBold> Autofleet </BottomTextBold>
     </Fragment>
   )}

@@ -32,11 +32,12 @@ export const TAG_OPTIONS = {
   CHEAPEST: i18n.t('services.tags.cheapest'),
 };
 
-export type RidePopupNames = 'FAILED_SERVICE_REQUEST' | 'RIDE_CANCELED_BY_DISPATCHER';
+export type RidePopupNames = 'FAILED_SERVICE_REQUEST' | 'RIDE_CANCELED_BY_DISPATCHER' | 'CANCELLATION_REASON';
 
 export const RIDE_POPUPS: {[key: string]: RidePopupNames} = {
   FAILED_SERVICE_REQUEST: 'FAILED_SERVICE_REQUEST',
   RIDE_CANCELED_BY_DISPATCHER: 'RIDE_CANCELED_BY_DISPATCHER',
+  CANCELLATION_REASON: 'CANCELLATION_REASON',
 };
 
 export const INITIAL_STOP_POINTS = [{
@@ -118,11 +119,11 @@ export const getEstimationTags = (estimations: any[]) => {
 };
 
 export const latLngToAddress = async (lat: string, lng: string) => {
-  const location = `${lat},${lng}`;
   const data = await getGeocode({
-    latlng: location,
+    lat,
+    lng,
   });
-  return data.results[0].formatted_address;
+  return data.formattedAddress;
 };
 
 export const isPriceEstimated = (priceCalculationBasis: string) => priceCalculationBasis === 'actual';
@@ -147,6 +148,7 @@ export const formatEstimationsResult = (service: any, estimationResult: any, tag
     description: service.displayDescription,
     priority: service.priority,
     serviceAvailabilitiesNumber: service.serviceAvailabilities.length,
+    outOfTerritory: service.serviceTerritories?.some((st: any) => st.alwaysShow),
     pooling: service.pooling,
     pickupWindowSizeInMinutes: service.pickupWindowSizeInMinutes,
     futurePickupWindowSizeInMinutes: service.futurePickupWindowSizeInMinutesWithFallback,
@@ -197,3 +199,23 @@ export const convertTimezoneByLocation = async (
 };
 
 export const didUserRate = (rating: string | null, rideFeedback: any[] | null) => rating || rideFeedback?.length;
+
+const convertKmToMiles = (km: number) => km * 0.621371;
+
+export const formatDistanceByMeasurement = (distanceInMeters: number, measurement = 'metric') => {
+  const suffix = measurement === 'imperial' ? 'mi' : 'km';
+
+  let distance = (distanceInMeters / 1000);
+
+  if (!distance) {
+    return null;
+  }
+
+  if (measurement === 'imperial') {
+    distance *= 0.621371;
+  }
+
+  return `${distance.toFixed(2)} ${suffix}`;
+};
+
+export const getRandomId = () => shortid.generate();

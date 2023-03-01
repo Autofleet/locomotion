@@ -10,6 +10,8 @@ import PaymentsContext from '../../context/payments';
 import { MAIN_ROUTES } from '../routes';
 import * as navigationService from '../../services/navigation';
 import ThumbnailPicker from '../../Components/ThumbnailPicker';
+import LanguageSelectorPopup from '../../popups/Selector';
+
 import {
   AccountHeaderContainer,
   AccountHeaderIndicatorContainer,
@@ -25,7 +27,7 @@ import {
   PaymentMethodContent,
   DeleteText,
 } from './styled';
-import i18n from '../../I18n';
+import i18n, { supportedLanguages, getPreferredLanguageCode, updateLanguage } from '../../I18n';
 import PageHeader from '../../Components/PageHeader';
 import CardsTitle from '../../Components/CardsTitle';
 import Mixpanel from '../../services/Mixpanel';
@@ -67,14 +69,15 @@ const AccountHeader = () => {
   );
 };
 
-const AccountContent = () => {
+const AccountContent = ({ setHeaderTitle }) => {
   const [showError, setShowError] = useState(false);
   const [isDeleteUserVisible, setIsDeleteUserVisible] = useState(false);
   const [defaultPaymentMethod, setDefaultPaymentMethod] = useState(null);
+  const [chosenLanguageIndex, setChosenLanguageIndex] = useState(0);
+  const [isLanguagePickerVisible, setLanguagePickerVisible] = useState(false);
 
-  const { user, deleteUser } = useContext(UserContext);
+  const { user, deleteUser, verifyEmail } = useContext(UserContext);
   const usePayments = PaymentsContext.useContainer();
-
 
   const updateDefault = async () => {
     const { paymentMethods } = await usePayments.getOrFetchCustomer();
@@ -88,13 +91,37 @@ const AccountContent = () => {
   }, [usePayments.paymentMethods]);
 
   const emailIsVerified = user?.isEmailVerified;
-  const onEmailPress = () => (emailIsVerified
-    ? navigationService.navigate(MAIN_ROUTES.EMAIL, {
-      editAccount: true,
-    })
-    : navigationService.navigate(MAIN_ROUTES.EMAIL_CODE, {
-      editAccount: true,
-    }));
+  const onEmailPress = () => {
+    if (emailIsVerified) {
+      navigationService.navigate(MAIN_ROUTES.EMAIL, {
+        editAccount: true,
+      });
+    } else {
+      verifyEmail();
+      navigationService.navigate(MAIN_ROUTES.EMAIL_CODE, {
+        editAccount: true,
+      });
+    }
+  };
+
+  const languageItems = Object.entries(supportedLanguages).map(([key, val]) => ({
+    label: val.label,
+    value: key,
+  }));
+
+  const fetchLanguageCode = async () => {
+    const preferred = await getPreferredLanguageCode();
+    setChosenLanguageIndex(languageItems.findIndex(l => l.value === preferred));
+  };
+
+  const openLanguageSelector = () => {
+    Mixpanel.clickEvent('language selector');
+    setLanguagePickerVisible(true);
+  };
+
+  useEffect(() => {
+    fetchLanguageCode();
+  }, []);
 
   return (
     <Container>
@@ -123,6 +150,14 @@ const AccountContent = () => {
           onPress={onEmailPress}
         >
           {user ? `${user.email}` : ''}
+        </Card>
+        <Card
+          testID="chooseLanguage"
+          title={i18n.t('onboarding.chooseLanguage')}
+          onPress={openLanguageSelector}
+        >
+
+          {languageItems[chosenLanguageIndex].label}
         </Card>
         {defaultPaymentMethod && defaultPaymentMethod.id !== PAYMENT_METHODS.CASH ? (
           <>
@@ -183,6 +218,19 @@ const AccountContent = () => {
           }}
           onClose={() => setIsDeleteUserVisible(false)}
         />
+        <LanguageSelectorPopup
+          isVisible={isLanguagePickerVisible}
+          items={languageItems}
+          onCancel={() => setLanguagePickerVisible(false)}
+          onSubmit={(id) => {
+            setChosenLanguageIndex(id);
+            updateLanguage(languageItems[id].value, () => {
+              setHeaderTitle(i18n.t('onboarding.pageTitle'));
+            });
+          }}
+          selected={chosenLanguageIndex}
+          title={i18n.t('popups.chooseLanguage.title')}
+        />
 
         <GenericErrorPopup
           isVisible={showError}
@@ -194,16 +242,19 @@ const AccountContent = () => {
   );
 };
 
-export default ({ navigation, menuSide }) => (
-  <PageContainer>
-    <PageHeader
-      title={i18n.t('onboarding.pageTitle')}
-      onIconPress={() => navigationService.navigate(MAIN_ROUTES.HOME)}
-      iconSide={menuSide}
-    />
-    <KeyboardAwareScrollView extraScrollHeight={20} enableOnAndroid>
-      <AccountHeader />
-      <AccountContent navigation={navigation} />
-    </KeyboardAwareScrollView>
-  </PageContainer>
-);
+export default ({ navigation, menuSide }) => {
+  const [headerTitle, setHeaderTitle] = useState(i18n.t('onboarding.pageTitle'));
+  return (
+    <PageContainer>
+      <PageHeader
+        title={headerTitle}
+        onIconPress={() => navigationService.navigate(MAIN_ROUTES.HOME)}
+        iconSide={menuSide}
+      />
+      <KeyboardAwareScrollView extraScrollHeight={20} enableOnAndroid>
+        <AccountHeader />
+        <AccountContent navigation={navigation} setHeaderTitle={setHeaderTitle} />
+      </KeyboardAwareScrollView>
+    </PageContainer>
+  );
+};

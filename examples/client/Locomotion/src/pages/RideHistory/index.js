@@ -2,7 +2,6 @@ import moment from 'moment';
 import React, { useContext, useEffect, useState } from 'react';
 import { View } from 'react-native';
 import GenericErrorPopup from '../../popups/GenericError';
-import { FILTERS, formatDateBeforeSend } from './filters';
 import { HeaderIconContainer } from '../../Components/PageHeader/styled';
 import { CenterContainer } from './RideCard/styled';
 import RidesList from './RidesList';
@@ -10,6 +9,7 @@ import Loader from '../../Components/Loader';
 import FilterBar from './FilterBar';
 import { MAIN_ROUTES } from '../routes';
 import i18n from '../../I18n';
+import { FILTERS, formatDateBeforeSend } from './filters';
 import PageHeader from '../../Components/PageHeader';
 import {
   CalendarSvgIcon,
@@ -35,8 +35,8 @@ const Page = ({ menuSide }) => {
   const {
     rides, loadRides, initRides, savedParams,
   } = useContext(rideHistoryContext);
-  const [filter, setFilter] = useState(savedParams ? savedParams.filterId : FILTERS.today.id);
-  const [customFilter, setCustomFilter] = useState(savedParams && !FILTERS[savedParams.filterId]
+  const [filter, setFilter] = useState(savedParams ? savedParams.filterId : FILTERS().today.id);
+  const [customFilter, setCustomFilter] = useState(savedParams && !FILTERS()[savedParams.filterId]
     ? getCustomFilter(savedParams.filterId) : {});
   const [showLoader, setLoader] = useState(!rides);
   const [showRangeDateTimePicker, setShowRangeDateTimePicker] = useState(false);
@@ -50,7 +50,7 @@ const Page = ({ menuSide }) => {
   };
 
   const onPageLoaded = async () => {
-    const { today } = FILTERS;
+    const { today } = FILTERS();
     await getRidesWithErrorHandler(async () => initRides({
       initFilterId: today.id,
       ...(today.getParams()),
@@ -65,7 +65,7 @@ const Page = ({ menuSide }) => {
   const onFilterClicked = async (filterId) => {
     setCustomFilter({});
     setLoader(true);
-    const filterClicked = FILTERS[filterId];
+    const filterClicked = FILTERS()[filterId];
     setFilter(filterId);
     await getRidesWithErrorHandler(async () => loadRides({
       filterId: filterClicked.id,
@@ -120,7 +120,7 @@ const Page = ({ menuSide }) => {
             activeFilter={filter}
             filters={{
               ...customFilter,
-              ...FILTERS,
+              ...FILTERS(),
             }}
           />
         </View>

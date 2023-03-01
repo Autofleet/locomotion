@@ -1,13 +1,15 @@
 import React, {
   useContext, useEffect, useState,
 } from 'react';
-import { StyleSheet } from 'react-native';
+import { Dimensions } from 'react-native';
 import MapView, { Polygon, Polyline } from 'react-native-maps';
 import Config from 'react-native-config';
 import moment from 'moment';
 import {
-  point, featureCollection, nearestPoint, booleanPointInPolygon, polygon,
+  point, featureCollection, nearestPoint, booleanPointInPolygon, polygon, distance,
 } from '@turf/turf';
+import { debounce } from 'lodash';
+import Mixpanel from '../../services/Mixpanel';
 import { FutureRidesContext } from '../../context/futureRides';
 import { RidePageContext } from '../../context/newRideContext';
 import { RideStateContextContext } from '../../context';
@@ -23,19 +25,21 @@ import { RIDE_STATES, STOP_POINT_STATES } from '../../lib/commonTypes';
 import PrecedingStopPointMarker from '../../Components/PrecedingStopPointMarker';
 import { decodePolyline, getPolylineList, getVehicleLocation } from '../../lib/polyline/utils';
 import { BottomSheetContext } from '../../context/bottomSheetContext';
+import { VirtualStationsContext } from '../../context/virtualStationsContext';
+
 import i18n from '../../I18n';
 
 export const MAP_EDGE_PADDING = {
-  top: 140,
+  top: 180,
   right: 100,
-  bottom: 400,
+  bottom: 50,
   left: 100,
 };
 
 export const ACTIVE_RIDE_MAP_PADDING = {
   top: 100,
   right: 70,
-  bottom: 300,
+  bottom: 50,
   left: 70,
 };
 
@@ -62,6 +66,16 @@ const PAGES_TO_SHOW_MY_LOCATION = [
   BS_PAGES.CONFIRM_PICKUP,
 ];
 
+const PAGES_TO_SHOW_STATIONS_MARKERS = [
+  BS_PAGES.ADDRESS_SELECTOR,
+  BS_PAGES.NO_PAYMENT,
+  BS_PAGES.NOT_IN_TERRITORY,
+  BS_PAGES.PICKUP_NOT_IN_TERRITORY,
+  BS_PAGES.NO_AVAILABLE_VEHICLES,
+  BS_PAGES.CONFIRM_PICKUP,
+  BS_PAGES.LOCATION_REQUEST,
+];
+
 const getFirstPendingStopPoint = sps => (sps || []).find(sp => sp.state
   === STOP_POINT_STATES.PENDING);
 
@@ -76,6 +90,7 @@ export default React.forwardRef(({
   const {
     isUserLocationFocused,
     setIsUserLocationFocused,
+    setIsDraggingLocationPin,
     territory,
     currentBsPage,
     initGeoService,
@@ -83,10 +98,14 @@ export default React.forwardRef(({
   const {
     snapPoints,
   } = useContext(BottomSheetContext);
+
+  const { StationMarkers, isStationsEnabled } = useContext(VirtualStationsContext);
+
   const isMainPage = currentBsPage === BS_PAGES.ADDRESS_SELECTOR;
   const isChooseLocationOnMap = [BS_PAGES.CONFIRM_PICKUP, BS_PAGES.SET_LOCATION_ON_MAP]
-    .includes(currentBsPage);
+    .includes(currentBsPage) && !isStationsEnabled;
   const {
+    lastSelectedLocation,
     requestStopPoints, saveSelectedLocation, reverseLocationGeocode, ride,
     chosenService,
   } = useContext(RidePageContext);
@@ -173,11 +192,11 @@ export default React.forwardRef(({
       const [pickupStopPoint] = requestStopPoints;
       if (pickupStopPoint) {
         ref.current.animateToRegion({
-          latitude: pickupStopPoint.lat,
-          longitude: pickupStopPoint.lng,
+          latitude: parseFloat(pickupStopPoint.lat),
+          longitude: parseFloat(pickupStopPoint.lng),
           latitudeDelta: 0.001,
           longitudeDelta: 0.001,
-        }, 1);
+        }, 200);
       }
     }
     if (currentBsPage === BS_PAGES.CONFIRM_FUTURE_RIDE) {
@@ -191,11 +210,11 @@ export default React.forwardRef(({
         const location = await getPosition();
         const { coords } = (location || DEFAULT_COORDS);
         ref.current.animateToRegion({
-          latitude: coords.latitude,
-          longitude: coords.longitude,
+          latitude: parseFloat(coords.latitude),
+          longitude: parseFloat(coords.longitude),
           latitudeDelta: 0.015,
           longitudeDelta: 0.015,
-        }, 1);
+        }, 200);
       };
       focusCurrentLocation();
     }
@@ -272,31 +291,68 @@ export default React.forwardRef(({
 
     return stopPoint.streetAddress || stopPoint.description;
   };
+  useEffect(() => {
+    setIsDraggingLocationPin(false);
+  }, [lastSelectedLocation]);
+
+  const hightRatioOfBottomSheet = typeof snapPoints[0] === 'number'
+    ? `${snapPoints[0] / Dimensions.get('window').height}%`
+    : snapPoints[0];
+
+  const mapPositionStyles = {
+    width: '100%',
+    height: `${100 - (hightRatioOfBottomSheet.split('%')[0] * 100)}%`,
+    position: 'absolute',
+  };
+
+  const onRegionChangeComplete = debounce(async (event) => {
+    if (isChooseLocationOnMap) {
+      const { latitude, longitude } = event;
+      const lat = latitude.toFixed(6);
+      const lng = longitude.toFixed(6);
+      const [pickup] = requestStopPoints;
+      const finalStopPoint = lastSelectedLocation || pickup;
+      const sourcePoint = point([finalStopPoint.lng, finalStopPoint.lat]);
+      const destinationPoint = point([lng, lat]);
+      const changeDistance = distance(sourcePoint, destinationPoint, { units: 'meters' });
+      if (changeDistance < 5) {
+        setIsDraggingLocationPin(false);
+        return;
+      }
+      const spData = await reverseLocationGeocode(lat, lng);
+      if (spData) {
+        saveSelectedLocation(spData);
+        setIsDraggingLocationPin(false);
+        Mixpanel.setEvent('Change stop point location', {
+          gesture_type: 'drag_map',
+          screen: currentBsPage,
+          ...spData,
+          lat,
+          lng,
+        });
+      }
+    }
+  }, 300);
 
   return (
     <>
       <MapView
         provider={Config.MAP_PROVIDER}
         showsUserLocation={PAGES_TO_SHOW_MY_LOCATION.includes(currentBsPage)}
-        style={StyleSheet.absoluteFillObject}
+        style={mapPositionStyles}
         showsMyLocationButton={false}
         loadingEnabled
         showsCompass={false}
         key="map"
         followsUserLocation={isUserLocationFocused}
         moveOnMarkerPress={false}
-        onRegionChangeComplete={async (event) => {
-          if (isChooseLocationOnMap) {
-            const { latitude, longitude } = event;
-            const lat = latitude.toFixed(6);
-            const lng = longitude.toFixed(6);
-            const spData = await reverseLocationGeocode(lat, lng);
-            saveSelectedLocation(spData);
+        onRegionChangeComplete={onRegionChangeComplete}
+        onPanDrag={() => {
+          setIsDraggingLocationPin(true);
+          if (!isUserLocationFocused === false) {
+            setIsUserLocationFocused(false);
           }
         }}
-        onPanDrag={() => (
-          !isUserLocationFocused === false ? setIsUserLocationFocused(false) : null
-        )}
         ref={ref}
         userInterfaceStyle={isDarkMode ? THEME_MOD.DARK : undefined}
         customMapStyle={isDarkMode ? mapDarkMode : undefined}
@@ -310,6 +366,7 @@ export default React.forwardRef(({
             key={ride.vehicle.id}
           />
         )}
+
         {finalStopPoints && !!precedingStopPoints.length
           && precedingStopPoints.map(sp => <PrecedingStopPointMarker key={sp.id} stopPoint={sp} />)
         }
@@ -333,6 +390,7 @@ export default React.forwardRef(({
                   isNext={isNext}
                   etaText={getStopPointEtaText(sp, isNext)}
                   isFutureRide={ride.scheduledTo}
+                  isStationsEnabled={isStationsEnabled}
                 />
               );
             })
@@ -349,9 +407,13 @@ export default React.forwardRef(({
             />
           ))) : null}
         {buildAvailabilityVehicles()}
+        {isStationsEnabled && PAGES_TO_SHOW_STATIONS_MARKERS.includes(currentBsPage) ? <StationMarkers requestedStopPoints={requestStopPoints} /> : null}
       </MapView>
       {isChooseLocationOnMap && (
-        <LocationMarkerContainer pointerEvents="none">
+        <LocationMarkerContainer
+          pointerEvents="none"
+          style={mapPositionStyles}
+        >
           <LocationMarker />
         </LocationMarkerContainer>
       )}

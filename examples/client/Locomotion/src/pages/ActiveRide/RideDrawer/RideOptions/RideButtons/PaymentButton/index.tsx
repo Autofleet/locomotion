@@ -42,7 +42,21 @@ const CardNameContainer = styled(View)`
     justify-content: flex-start;
     flex-direction: row;
     align-items: center;
-    max-width: 60%;
+    width: 55%;
+`;
+
+const PromoButtonContainer = styled(View)`
+    display: flex;
+    justify-content: flex-end;
+    flex-direction: row;
+    align-items: center;
+    flex: 1;
+`;
+
+const PromoCodeTextContainer = styled(View)`
+    display: flex;
+    flex-direction: row;
+    align-items: center;
 `;
 
 const PromoButton = styled(Button)`
@@ -120,9 +134,14 @@ const PaymentButton = ({
             height={15}
             width={15}
           />
-          <PromoText>
-            {loadPromoText()}
-          </PromoText>
+          <PromoCodeTextContainer>
+            <PromoText
+              numberOfLines={1}
+              testID="usePromoCode"
+            >
+              {loadPromoText()}
+            </PromoText>
+          </PromoCodeTextContainer>
         </PromoButton>
       );
     }
@@ -152,7 +171,9 @@ const PaymentButton = ({
           : <SvgIcon fill={primaryColor} Svg={icon} height={15} width={15} />}
         <TimeText numberOfLines={1}>{title}</TimeText>
       </CardNameContainer>
-      {loadPromoButton()}
+      <PromoButtonContainer>
+        {loadPromoButton()}
+      </PromoButtonContainer>
     </Container>
   );
 };
