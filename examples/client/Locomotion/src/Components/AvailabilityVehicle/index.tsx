@@ -7,7 +7,7 @@ import {
 import { MarkerAnimated, AnimatedRegion } from 'react-native-maps';
 import { Context as ThemeContext } from '../../context/theme';
 import SvgIcon from '../SvgIcon';
-import carIcon from '../../assets/map/autofleet_car_icon.svg';
+import carIcon from '../../assets/map/Autofleet_Car_Icon.svg';
 
 interface Location {
   lat: number;
