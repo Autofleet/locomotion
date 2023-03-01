@@ -1,4 +1,6 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, {
+  useCallback, useContext, useEffect, useMemo, useState,
+} from 'react';
 import {
   Linking, Platform, Text, View,
 } from 'react-native';
@@ -7,6 +9,7 @@ import styled, { ThemeContext } from 'styled-components';
 import { useBottomSheet } from '@gorhom/bottom-sheet';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import moment from 'moment';
+import SkeletonContent from 'react-native-skeleton-content-nonexpo';
 import CancellationReasonsProvider, { CancellationReasonsContext } from '../../context/cancellation-reasons';
 import objDefault from '../../lib/objDefault';
 import Mixpanel from '../../services/Mixpanel';
@@ -146,6 +149,7 @@ const Footer = styled(View)<FooterInterface>`
 const AddressContainer = styled(View)`
   flex-direction: row;
   align-items: center;
+  display: flex;
 `;
 
 const PickerTitle = styled(Text)`
@@ -542,6 +546,34 @@ export const ConfirmPickup = (props: any) => {
 
   const titleText = props.isConfirmPickup ? 'confirmPickupTitle' : 'confirmLocationTitle';
 
+  const renderSkeleton = useCallback(() => (
+    <SkeletonContent
+      containerStyle={{}}
+      isLoading
+      layout={[{
+        flexDirection: 'row',
+        width: '100%',
+        paddingLeft: 5,
+        paddingRight: 10,
+        alignItems: 'center',
+        children: [
+          {
+            width: '100%',
+            height: 13,
+          },
+        ],
+      }]}
+    />
+  ), []);
+
+  const renderAddressContainer = useCallback(() => (
+    <AddressContainer>
+      <SvgIcon Svg={locationIcon} height={20} width={10} fill={isDraggingLocationPin ? '#ADAEBA' : '#333'} />
+      {isDraggingLocationPin ? renderSkeleton()
+        : <AddressInput>{lastSelectedLocation?.streetAddress || i18n.t('bottomSheetContent.confirmPickup.noAddress')}</AddressInput>}
+    </AddressContainer>
+  ), [isDraggingLocationPin, lastSelectedLocation?.streetAddress]);
+
   return (
     <BsPage
       TitleText={i18n.t(`bottomSheetContent.confirmPickup.${titleText}`)}
@@ -557,10 +589,7 @@ export const ConfirmPickup = (props: any) => {
       }}
       buttonDisabled={isDraggingLocationPin || !lastSelectedLocation?.streetAddress}
     >
-      <AddressContainer>
-        <SvgIcon Svg={locationIcon} height={20} width={10} fill="#333" />
-        <AddressInput>{lastSelectedLocation?.streetAddress || i18n.t('bottomSheetContent.confirmPickup.noAddress')}</AddressInput>
-      </AddressContainer>
+      {renderAddressContainer()}
     </BsPage>
   );
 };
