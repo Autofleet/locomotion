@@ -13,6 +13,7 @@ import settings from '../../context/settings';
 import { StorageService } from '../../services';
 import FullPageLoader from '../../Components/FullPageLoader';
 import * as navigationService from '../../services/navigation';
+import networkInfo from '../../services/networkInfo';
 
 export const INITIAL_USER_STATE = {
   phoneNumber: '',
@@ -90,6 +91,7 @@ const AuthLoadingScreen = () => {
       navigationService.replace(MAIN_ROUTES.START);
     }
 
+    await networkInfo.fetchData();
     await getAppSettings();
     if (!user) { // Load app state
       getFromStorage();
