@@ -62,7 +62,6 @@ padding: 6px 8px;
 border-radius: 6px;
 justify-content: center;
 flex-direction: row;
-height: 30;
 width: 140;
 right: ${(140 - MARKER_SIZE.width) * 0.5};
 top: -2;
