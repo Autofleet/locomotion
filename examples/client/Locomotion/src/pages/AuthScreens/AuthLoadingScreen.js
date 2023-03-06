@@ -16,6 +16,7 @@ import * as navigationService from '../../services/navigation';
 import networkInfo from '../../services/networkInfo';
 import GenericErrorPopup from '../../popups/GenericError';
 import i18n from '../../I18n';
+import Mixpanel from '../../services/Mixpanel';
 
 export const INITIAL_USER_STATE = {
   phoneNumber: '',
@@ -106,7 +107,10 @@ const AuthLoadingScreen = () => {
     let unsubscribeFunction;
     setTimeout(() => {
       unsubscribeFunction = networkInfo.addEventListener((listener) => {
-        setIsConnected(listener.isConnected && listener.isInternetReachable);
+        setIsConnected(listener.isConnected);
+        if (!(listener.isConnected)) {
+          Mixpanel.setEvent('No connection popup showed');
+        }
       });
     }, 3000);
 
@@ -125,6 +129,7 @@ const AuthLoadingScreen = () => {
         text={i18n.t('popups.noConnection.text')}
         buttonText={i18n.t('popups.noConnection.buttonText')}
         closePopup={() => {
+          Mixpanel.clickEvent('No connection popup clicked');
           setIsConnected(true);
         }}
       />

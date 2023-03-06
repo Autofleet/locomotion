@@ -1,4 +1,5 @@
 import NetInfo, { NetInfoState } from '@react-native-community/netinfo';
+import Mixpanel from '../Mixpanel';
 
 class NetworkInfo {
   private isConnected: boolean;
@@ -33,7 +34,7 @@ class NetworkInfo {
     (listener) => {
       this.isConnected = !!listener.isConnected;
       this.isInternetReachable = !!listener.isInternetReachable;
-
+      Mixpanel.setEvent(`Internet connection changed - is Connected: ${this.isConnected}`);
       if (cb) {
         cb(listener);
       }
