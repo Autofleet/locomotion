@@ -28,9 +28,12 @@ export default (props) => {
   useEffect(() => {
     crashlytics().log('App mounted.');
     enableScreens(false);
-    const unsubscribeFunction = networkInfo.addEventListener((listener) => {
-      setIsConnected(listener.isConnected && listener.isInternetReachable);
-    });
+    let unsubscribeFunction;
+    setTimeout(() => {
+      unsubscribeFunction = networkInfo.addEventListener((listener) => {
+        setIsConnected(listener.isConnected && listener.isInternetReachable);
+      });
+    }, 3000);
 
     return () => {
       if (unsubscribeFunction) {
