@@ -722,5 +722,9 @@
         "Don't need a courier anymore": "Don't need a courier anymore",
         "Found another ride": "Found another ride",
         "Don't need a ride anymore": "Don't need a ride anymore"
+    },
+    "map": {
+        "pickupHere": "Pickup here",
+        "pickupChanged": "Pickup changed"
     }
 }

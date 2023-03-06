@@ -589,6 +589,7 @@
 				DEVELOPMENT_TEAM = 7K92DGCAEB;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Locomotion/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -618,6 +619,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 7K92DGCAEB;
 				INFOPLIST_FILE = Locomotion/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
