@@ -63,8 +63,8 @@ border-radius: 6px;
 justify-content: center;
 flex-direction: row;
 height: 30;
-width: 120;
-right: ${(120 - MARKER_SIZE.width) * 0.5};
+width: 140;
+right: ${(140 - MARKER_SIZE.width) * 0.5};
 top: -2;
 
 ${({ hide }) => hide && `
