@@ -65,6 +65,9 @@ export default (props) => {
                           title={i18n.t('popups.noConnection.title')}
                           text={i18n.t('popups.noConnection.text')}
                           buttonText={i18n.t('popups.noConnection.buttonText')}
+                          closePopup={() => {
+                            setIsConnected(true);
+                          }}
                         />
                       </PortalProvider>
                     </MessagesProvider>
