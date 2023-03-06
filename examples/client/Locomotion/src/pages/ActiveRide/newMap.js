@@ -193,6 +193,7 @@ export default React.forwardRef(({
 
   useEffect(() => {
     if (currentBsPage === BS_PAGES.CONFIRM_PICKUP) {
+      setPickupChanged(false);
       const [pickupStopPoint] = requestStopPoints;
       if (pickupStopPoint) {
         ref.current.animateToRegion({
@@ -327,7 +328,7 @@ export default React.forwardRef(({
       if (spData) {
         saveSelectedLocation(spData);
         setIsDraggingLocationPin(false);
-        setPickupChanged(currentBsPage === BS_PAGES.CONFIRM_PICKUP);
+        setPickupChanged(true);
         Mixpanel.setEvent('Change stop point location', {
           gesture_type: 'drag_map',
           screen: currentBsPage,
