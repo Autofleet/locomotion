@@ -40,7 +40,7 @@ class NetworkInfo {
     },
   );
 
-  isConnectionAvailable = (): boolean => this.isConnected && this.isInternetReachable;
+  isConnectionAvailable = (): boolean => this.isConnected;
 }
 
 export default NetworkInfo.getInstance();

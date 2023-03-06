@@ -52,7 +52,7 @@ export const MapButtonsContainer = styled.View``;
 export const LocationMarkerContainer = styled.View`
   background-color: transparent;
   position: absolute;
-  top: ${(((Dimensions.get('window').height - STATIC_SNAP_POINTS) * 0.5) - MARKER_SIZE.height) - Platform.OS === 'android' ? 35 : 0};
+  top: ${(((Dimensions.get('window').height - STATIC_SNAP_POINTS) * 0.5) - MARKER_SIZE.height) - (Platform.OS === 'android' ? 35 : 0)};
   left: ${(Dimensions.get('window').width - MARKER_SIZE.width) * 0.5};
 `;
 
