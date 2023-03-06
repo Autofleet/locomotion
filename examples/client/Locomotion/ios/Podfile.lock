@@ -58,7 +58,7 @@ PODS:
     - GoogleMaps
   - Google-Maps-iOS-Utils/QuadTree (4.1.0):
     - GoogleMaps
-  - GoogleDataTransport (9.1.4):
+  - GoogleDataTransport (9.2.1):
     - GoogleUtilities/Environment (~> 7.7)
     - nanopb (< 2.30910.0, >= 2.30908.0)
     - PromisesObjC (< 3.0, >= 1.2)
@@ -67,21 +67,21 @@ PODS:
   - GoogleMaps/Base (7.3.0)
   - GoogleMaps/Maps (7.3.0):
     - GoogleMaps/Base
-  - GoogleUtilities/Environment (7.7.0):
+  - GoogleUtilities/Environment (7.11.0):
     - PromisesObjC (< 3.0, >= 1.2)
-  - GoogleUtilities/Logger (7.7.0):
+  - GoogleUtilities/Logger (7.11.0):
     - GoogleUtilities/Environment
-  - GoogleUtilities/UserDefaults (7.7.0):
+  - GoogleUtilities/UserDefaults (7.11.0):
     - GoogleUtilities/Logger
-  - libwebp (1.2.1):
-    - libwebp/demux (= 1.2.1)
-    - libwebp/mux (= 1.2.1)
-    - libwebp/webp (= 1.2.1)
-  - libwebp/demux (1.2.1):
+  - libwebp (1.2.4):
+    - libwebp/demux (= 1.2.4)
+    - libwebp/mux (= 1.2.4)
+    - libwebp/webp (= 1.2.4)
+  - libwebp/demux (1.2.4):
     - libwebp/webp
-  - libwebp/mux (1.2.1):
+  - libwebp/mux (1.2.4):
     - libwebp/demux
-  - libwebp/webp (1.2.1)
+  - libwebp/webp (1.2.4)
   - lottie-ios (3.4.0)
   - lottie-react-native (5.1.4):
     - lottie-ios (~> 3.4.0)
@@ -102,7 +102,7 @@ PODS:
     - OneSignalXCFramework/OneSignalOutcomes
   - OneSignalXCFramework/OneSignalOutcomes (3.11.2):
     - OneSignalXCFramework/OneSignalCore
-  - PromisesObjC (2.1.1)
+  - PromisesObjC (2.2.0)
   - RCT-Folly (2021.06.28.00-v2):
     - boost
     - DoubleConversion
@@ -749,7 +749,7 @@ SPEC CHECKSUMS:
   Mixpanel: de8296d8568806ab17bfced0f823c908b808e1e0
   nanopb: a0ba3315591a9ae0a16a309ee504766e90db0c96
   OneSignalXCFramework: 81ceac017a290f23793443323090cfbe888f74ea
-  PromisesObjC: ab77feca74fa2823e7af4249b8326368e61014cb
+  PromisesObjC: 09985d6d70fbe7878040aa746d78236e6946d2ef
   RCT-Folly: 4d8508a426467c48885f1151029bc15fa5d7b3b8
   RCTRequired: 0f06b6068f530932d10e1a01a5352fad4eaacb74
   RCTTypeSafety: b0ee81f10ef1b7d977605a2b266823dabd565e65
