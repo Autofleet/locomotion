@@ -23,6 +23,7 @@
     "@react-native-community/cli": "^7.0.4",
     "@react-native-community/clipboard": "^1.5.1",
     "@react-native-community/geolocation": "^2.0.2",
+    "@react-native-community/netinfo": "^9.3.7",
     "@react-native-firebase/app": "^14.11.1",
     "@react-native-firebase/crashlytics": "^14.11.1",
     "@react-native-picker/picker": "^2.4.1",

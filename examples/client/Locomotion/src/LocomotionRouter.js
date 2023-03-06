@@ -1,10 +1,11 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { LogBox } from 'react-native';
 import { enableScreens } from 'react-native-screens';
 import { PortalProvider } from '@gorhom/portal';
 import 'react-native-gesture-handler';
 import crashlytics from '@react-native-firebase/crashlytics';
 import { NavigationContainer } from '@react-navigation/native';
+import i18n from './I18n';
 import { MainProvider, RideStateContextContextProvider } from './context';
 import MainRouter from './pages';
 import RidePopups from './popups/RidePopups';
@@ -15,15 +16,27 @@ import FutureRidesProvider from './context/futureRides';
 import MessagesProvider from './context/messages';
 import CancellationReasonsProvider from './context/cancellation-reasons';
 import VirtualStationsProvider from './context/virtualStationsContext';
+import GenericErrorPopup from './popups/GenericError';
+import networkInfo from './services/networkInfo';
 
 LogBox.ignoreAllLogs();
 
 export default (props) => {
   const navigatorRef = useRef(null);
+  const [isConnected, setIsConnected] = useState(true);
 
   useEffect(() => {
     crashlytics().log('App mounted.');
     enableScreens(false);
+    const unsubscribeFunction = networkInfo.addEventListener((listener) => {
+      setIsConnected(listener.isConnected && listener.isInternetReachable);
+    });
+
+    return () => {
+      if (unsubscribeFunction) {
+        unsubscribeFunction();
+      }
+    };
   }, []);
 
   return (
@@ -47,6 +60,12 @@ export default (props) => {
                         <MainRouter {...props} />
                         {props.children}
                         <RidePopups />
+                        <GenericErrorPopup
+                          isVisible={!isConnected}
+                          title={i18n.t('popups.noConnection.title')}
+                          text={i18n.t('popups.noConnection.text')}
+                          buttonText={i18n.t('popups.noConnection.buttonText')}
+                        />
                       </PortalProvider>
                     </MessagesProvider>
                   </NewRidePageContextProvider>
