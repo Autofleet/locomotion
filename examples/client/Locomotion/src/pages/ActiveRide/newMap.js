@@ -14,7 +14,9 @@ import { FutureRidesContext } from '../../context/futureRides';
 import { RidePageContext } from '../../context/newRideContext';
 import { RideStateContextContext } from '../../context';
 import { DEFAULT_COORDS, getPosition } from '../../services/geo';
-import { LocationMarker, LocationMarkerContainer } from './styled';
+import {
+  LocationMarker, LocationMarkerContainer, PickupTextContainer, PickupText,
+} from './styled';
 import mapDarkMode from '../../assets/mapDarkMode.json';
 import { Context as ThemeContext, THEME_MOD } from '../../context/theme';
 import { AvailabilityContext } from '../../context/availability';
@@ -82,6 +84,7 @@ const getFirstPendingStopPoint = sps => (sps || []).find(sp => sp.state
 export default React.forwardRef(({
   mapSettings,
 }, ref) => {
+  const [pickupChanged, setPickupChanged] = useState(false);
   const { isDarkMode, primaryColor } = useContext(ThemeContext);
   const {
     availabilityVehicles,
@@ -91,6 +94,7 @@ export default React.forwardRef(({
     isUserLocationFocused,
     setIsUserLocationFocused,
     setIsDraggingLocationPin,
+    isDraggingLocationPin,
     territory,
     currentBsPage,
     initGeoService,
@@ -196,7 +200,7 @@ export default React.forwardRef(({
           longitude: parseFloat(pickupStopPoint.lng),
           latitudeDelta: 0.001,
           longitudeDelta: 0.001,
-        }, 200);
+        }, 0);
       }
     }
     if (currentBsPage === BS_PAGES.CONFIRM_FUTURE_RIDE) {
@@ -214,7 +218,7 @@ export default React.forwardRef(({
           longitude: parseFloat(coords.longitude),
           latitudeDelta: 0.015,
           longitudeDelta: 0.015,
-        }, 200);
+        }, 0);
       };
       focusCurrentLocation();
     }
@@ -305,7 +309,7 @@ export default React.forwardRef(({
     position: 'absolute',
   };
 
-  const onRegionChangeComplete = debounce(async (event) => {
+  const onRegionChangeComplete = async (event) => {
     if (isChooseLocationOnMap) {
       const { latitude, longitude } = event;
       const lat = latitude.toFixed(6);
@@ -323,6 +327,7 @@ export default React.forwardRef(({
       if (spData) {
         saveSelectedLocation(spData);
         setIsDraggingLocationPin(false);
+        setPickupChanged(true);
         Mixpanel.setEvent('Change stop point location', {
           gesture_type: 'drag_map',
           screen: currentBsPage,
@@ -332,7 +337,7 @@ export default React.forwardRef(({
         });
       }
     }
-  }, 300);
+  };
 
   return (
     <>
@@ -361,7 +366,10 @@ export default React.forwardRef(({
       >
         {ride.vehicle && ride.vehicle.location && currentStopPoint && (
           <AvailabilityVehicle
-            location={getVehicleLocation(ride.vehicle.location, decodePolyline(currentStopPoint.polyline))}
+            location={
+                getVehicleLocation(ride.vehicle.location,
+                  decodePolyline(currentStopPoint.polyline))
+              }
             id={ride.vehicle.id}
             key={ride.vehicle.id}
           />
@@ -395,25 +403,34 @@ export default React.forwardRef(({
               );
             })
           : null}
-        {[BS_PAGES.NOT_IN_TERRITORY, BS_PAGES.PICKUP_NOT_IN_TERRITORY].includes(currentBsPage) && territory && territory.length ? territory
-          .map(t => t.polygon.coordinates.map(poly => (
-            <Polygon
-              key={`Polygon#${t.id}#${poly[1]}#${poly[0]}`}
-              strokeColor="transparent"
-              fillColor="#26333333"
-              coordinates={poly.map(p => (
-                { latitude: parseFloat(p[1]), longitude: parseFloat(p[0]) }
-              ))}
-            />
-          ))) : null}
+        {[BS_PAGES.NOT_IN_TERRITORY, BS_PAGES.PICKUP_NOT_IN_TERRITORY].includes(currentBsPage)
+        && territory && territory.length ? territory
+            .map(t => t.polygon.coordinates.map(poly => (
+              <Polygon
+                key={`Polygon#${t.id}#${poly[1]}#${poly[0]}`}
+                strokeColor="transparent"
+                fillColor="#26333333"
+                coordinates={poly.map(p => (
+                  { latitude: parseFloat(p[1]), longitude: parseFloat(p[0]) }
+                ))}
+              />
+            ))) : null}
         {buildAvailabilityVehicles()}
-        {isStationsEnabled && PAGES_TO_SHOW_STATIONS_MARKERS.includes(currentBsPage) ? <StationMarkers requestedStopPoints={requestStopPoints} /> : null}
+        {isStationsEnabled && PAGES_TO_SHOW_STATIONS_MARKERS.includes(currentBsPage)
+          ? <StationMarkers requestedStopPoints={requestStopPoints} /> : null}
       </MapView>
       {isChooseLocationOnMap && (
         <LocationMarkerContainer
           pointerEvents="none"
           style={mapPositionStyles}
         >
+
+          <PickupTextContainer
+            hide={currentBsPage !== BS_PAGES.CONFIRM_PICKUP
+          || isDraggingLocationPin}
+          >
+            <PickupText>{pickupChanged ? i18n.t('map.pickupChanged') : i18n.t('map.pickupHere')}</PickupText>
+          </PickupTextContainer>
           <LocationMarker />
         </LocationMarkerContainer>
       )}

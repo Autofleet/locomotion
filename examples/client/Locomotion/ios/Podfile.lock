@@ -62,10 +62,10 @@ PODS:
     - GoogleUtilities/Environment (~> 7.7)
     - nanopb (< 2.30910.0, >= 2.30908.0)
     - PromisesObjC (< 3.0, >= 1.2)
-  - GoogleMaps (6.1.1):
-    - GoogleMaps/Maps (= 6.1.1)
-  - GoogleMaps/Base (6.1.1)
-  - GoogleMaps/Maps (6.1.1):
+  - GoogleMaps (7.3.0):
+    - GoogleMaps/Maps (= 7.3.0)
+  - GoogleMaps/Base (7.3.0)
+  - GoogleMaps/Maps (7.3.0):
     - GoogleMaps/Base
   - GoogleUtilities/Environment (7.11.0):
     - PromisesObjC (< 3.0, >= 1.2)
@@ -322,9 +322,9 @@ PODS:
     - React-Core
   - react-native-geolocation (2.1.0):
     - React-Core
-  - react-native-google-maps (0.31.1):
+  - react-native-google-maps (1.4.0):
     - Google-Maps-iOS-Utils (= 4.1.0)
-    - GoogleMaps (= 6.1.1)
+    - GoogleMaps (= 7.3.0)
     - React-Core
   - react-native-image-picker (4.10.0):
     - React-Core
@@ -332,7 +332,7 @@ PODS:
     - React-Core
   - react-native-location (2.5.0):
     - React
-  - react-native-maps (0.31.1):
+  - react-native-maps (1.4.0):
     - React-Core
   - react-native-mixpanel (1.2.5):
     - Mixpanel (~> 3.6.0)
@@ -740,10 +740,10 @@ SPEC CHECKSUMS:
   fmt: ff9d55029c625d3757ed641535fd4a75fedc7ce9
   glog: 476ee3e89abb49e07f822b48323c51c57124b572
   Google-Maps-iOS-Utils: 3343332b18dfd5be8f1f44edd7d481ace3da4d9a
-  GoogleDataTransport: ea169759df570f4e37bdee1623ec32a7e64e67c4
-  GoogleMaps: 94e6e0851beece6678af9f508f4918b7a7c61722
-  GoogleUtilities: c2bdc4cf2ce786c4d2e6b3bcfd599a25ca78f06f
-  libwebp: f62cb61d0a484ba548448a4bd52aabf150ff6eef
+  GoogleDataTransport: 5fffe35792f8b96ec8d6775f5eccd83c998d5a3b
+  GoogleMaps: a146f275ee429d14822178c7a841c03366ec92a1
+  GoogleUtilities: e0913149f6b0625b553d70dae12b49fc62914fd1
+  libwebp: 98a37e597e40bfdb4c911fc98f2c53d0b12d05fc
   lottie-ios: 69495122151a378fdc7d1bb4c5930347e37baf1f
   lottie-react-native: b702fab740cdb952a8e2354713d3beda63ff97b0
   Mixpanel: de8296d8568806ab17bfced0f823c908b808e1e0
@@ -768,11 +768,11 @@ SPEC CHECKSUMS:
   react-native-config: bcafda5b4c51491ee1b0e1d0c4e3905bc7b56c1b
   react-native-date-picker: 93e43b3084cea595b4d68b1405d6d99849663bd6
   react-native-geolocation: 205c5f619aea7bd54067b7b51e0781cae2f37151
-  react-native-google-maps: 8231ffa015bf8b222c2e2661fa9163cdb609a224
+  react-native-google-maps: 247de10063a5b102523d3b883ea2f5bd1830f0ff
   react-native-image-picker: 35834940bc572ba914707c39b60e043a06f88178
   react-native-image-resizer: 506412a2bdd70dde64a61e13505ce10f61a04369
   react-native-location: 9c53c0957756f7d70e8fdc76b1c7ed85867c8d0b
-  react-native-maps: 8b8bfada2c86205a7f5a07dd1f92f29b33ea83aa
+  react-native-maps: 3556d0fd5f559805f11777c1f59fc01eeb9f6405
   react-native-mixpanel: 3e21f895f4e439f680cee7e236711db273cb273d
   react-native-onesignal: a4a08bf22290f739df33acf1f45f7a7f9850273b
   react-native-restart: 8af4579c94638f38bd9074ec477ebf087de87dc5
@@ -814,6 +814,6 @@ SPEC CHECKSUMS:
   StripeUICore: 08c1efbd7e3c54ee7fa74334a37a1d4c08ba944d
   Yoga: c4d61225a466f250c35c1ee78d2d0b3d41fe661c
 
-PODFILE CHECKSUM: 20746e5676acd267e1502c6978f80a405c23ff05
+PODFILE CHECKSUM: 3ecd351b8acc4adce2eff1bac4abd16ab1cea147
 
 COCOAPODS: 1.11.3

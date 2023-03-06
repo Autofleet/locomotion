@@ -64,7 +64,7 @@
     "react-native-linear-gradient": "^2.5.6",
     "react-native-localize": "^2.2.4",
     "react-native-location": "^2.5.0",
-    "react-native-maps": "^0.31.1",
+    "react-native-maps": "^1.4.0",
     "react-native-markdown-display": "^7.0.0-alpha.2",
     "react-native-mixpanel": "^1.2.5",
     "react-native-modal": "^13.0.1",

@@ -1,9 +1,15 @@
 import React from 'react';
 import { StyleSheet, Dimensions, Platform } from 'react-native';
-import { BaseToast } from 'react-native-toast-message';
 import styled from 'styled-components';
+import { STATIC_SNAP_POINTS } from '../../context/bottomSheetContext';
 import vehicleIcon from '../../assets/car-icon.png';
 import Icon from '../../assets/location_pin.svg';
+import { FONT_SIZES, FONT_WEIGHTS } from '../../context/theme';
+
+const MARKER_SIZE = {
+  height: 39,
+  width: 30,
+};
 
 export const PageContainer = styled.View({
   ...StyleSheet.absoluteFillObject,
@@ -41,23 +47,44 @@ export const VehicleDot = ({ source }) => (
   </VehicleDotContainer>
 );
 
-export const MapButtonsContainer = styled.View`
-  `;
+export const MapButtonsContainer = styled.View``;
 
 export const LocationMarkerContainer = styled.View`
   background-color: transparent;
+  position: absolute;
+  top: ${(((Dimensions.get('window').height - STATIC_SNAP_POINTS) * 0.5) - MARKER_SIZE.height) - Platform.OS === 'android' ? 35 : 0};
+  left: ${(Dimensions.get('window').width - MARKER_SIZE.width) * 0.5};
+`;
+
+export const PickupTextContainer = styled.View`
+background-color: #212229;
+padding: 6px 8px;
+border-radius: 6px;
+justify-content: center;
+flex-direction: row;
+height: 30;
+width: 120;
+right: ${(120 - MARKER_SIZE.width) * 0.5};
+top: -2;
+
+${({ hide }) => hide && `
+    opacity: 0;
+  `}
+`;
+
+export const PickupText = styled.Text`
+color: white;
+${FONT_SIZES.LARGE}
+${FONT_WEIGHTS.REGULAR}
 `;
 
 export const LocationMarker = styled(Icon).attrs(({ theme }) => ({
-  height: '20%',
-  position: 'absolute',
-  bottom: Platform.OS === 'android' ? '45%' : '41%',
-  left: '45%',
+  height: MARKER_SIZE.height,
   fill: theme.primaryColor,
   stroke: theme.pageBackgroundColor,
-  width: '10%',
-  viewBox: '-1 0 13 10',
+  width: MARKER_SIZE.width,
 }))``;
+
 
 export const MapOverlayButtons = styled.View`
 position: absolute;
