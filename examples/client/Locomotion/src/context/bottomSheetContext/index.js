@@ -5,7 +5,7 @@ import { BS_PAGES } from '../ridePageStateContext/utils';
 
 export const BottomSheetContext = createContext();
 
-const STATIC_SNAP_POINTS = 235;
+export const STATIC_SNAP_POINTS = 235;
 
 export const SNAP_POINT_STATES = {
   [BS_PAGES.ADDRESS_SELECTOR]: [290, '100%'],

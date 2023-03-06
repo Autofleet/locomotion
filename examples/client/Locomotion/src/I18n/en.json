@@ -334,6 +334,11 @@
                 "text": "We will use this information to continue creating better experiences for our riders.",
                 "button": "Done"
             }
+        },
+        "noConnection": {
+            "title": "Something went wrong",
+            "text": "It seems like there is a network issue. Please check your connection and try again.",
+            "buttonText": "Got it"
         }
     },
     "menu": {
@@ -717,5 +722,9 @@
         "Don't need a courier anymore": "Don't need a courier anymore",
         "Found another ride": "Found another ride",
         "Don't need a ride anymore": "Don't need a ride anymore"
+    },
+    "map": {
+        "pickupHere": "Pickup here",
+        "pickupChanged": "Pickup changed"
     }
 }
