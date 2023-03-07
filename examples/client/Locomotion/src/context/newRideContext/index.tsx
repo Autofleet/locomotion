@@ -780,7 +780,9 @@ const RidePageContextProvider = ({ children }: {
   const getCurrentLocation = async () => {
     const location = await getPosition();
     if (!location) {
-      changeBsPage(BS_PAGES.LOCATION_REQUEST);
+      if (!ride?.id) {
+        changeBsPage(BS_PAGES.LOCATION_REQUEST);
+      }
       return DEFAULT_COORDS.coords;
     }
     return location.coords;
@@ -988,6 +990,9 @@ const RidePageContextProvider = ({ children }: {
         },
       });
       changeBsPage(BS_PAGES.GENERIC_ERROR);
+    },
+    [RIDE_FAILED_REASONS.USER_ACTIVE_RIDE_LIMIT_REACHED]: () => {
+      loadActiveRide();
     },
   };
 
