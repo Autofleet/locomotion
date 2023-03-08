@@ -562,7 +562,7 @@ const RidePageContextProvider = ({ children }: {
           changeBsPage(BS_PAGES.ADDRESS_SELECTOR);
         }
       } else {
-        // loadActiveRide();
+        loadActiveRide();
       }
     }
   }, 4000);
@@ -780,9 +780,9 @@ const RidePageContextProvider = ({ children }: {
   const getCurrentLocation = async () => {
     const location = await getPosition();
     if (!location) {
-      // if (!ride?.id) {
-      changeBsPage(BS_PAGES.LOCATION_REQUEST);
-      // }
+      if (!ride?.id) {
+        changeBsPage(BS_PAGES.LOCATION_REQUEST);
+      }
       return DEFAULT_COORDS.coords;
     }
     return location.coords;
