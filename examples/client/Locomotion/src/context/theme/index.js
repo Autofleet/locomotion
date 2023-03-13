@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { useColorScheme, Appearance } from 'react-native';
 import { ThemeProvider, ThemeContext } from 'styled-components';
 import Config from 'react-native-config';
+import settings from '../settings';
+import SETTINGS_KEYS from '../settings/keys';
 
 const {
   FORCE_DARK_MODE = false,
@@ -126,8 +128,10 @@ export const FONT_WEIGHTS = {
 
 const Provider = ({ children }) => {
   const colorScheme = useColorScheme();
+  const { getSettingByKey } = settings.useContainer();
   const isInitDarkMode = FORCE_DARK_MODE || (Appearance.getColorScheme() === THEME_MOD.DARK && DARK_MODE_ENABLED);
   const [isDarkMode, setDarkMode] = useState(isInitDarkMode);
+  const [vehicleColor, setVehicleColor] = useState(null);
   // Appearance.addChangeListener()
   useEffect(() => {
     if (!FORCE_DARK_MODE && DARK_MODE_ENABLED) {
@@ -135,11 +139,22 @@ const Provider = ({ children }) => {
     }
   }, [colorScheme]);
 
+  const checkVehicleColor = async () => {
+    const color = await getSettingByKey(
+      SETTINGS_KEYS.VEHICLE_COLOR,
+    );
+    setVehicleColor(color);
+  };
+  useEffect(() => {
+    checkVehicleColor();
+  }, []);
+
   return (
     <ThemeProvider
       theme={{
         isDarkMode,
         ...(isDarkMode ? darkTheme : lightTheme),
+        vehicleColor,
       }}
     >
       {children}
