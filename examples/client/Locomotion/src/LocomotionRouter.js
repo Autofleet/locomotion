@@ -1,10 +1,11 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { LogBox } from 'react-native';
 import { enableScreens } from 'react-native-screens';
 import { PortalProvider } from '@gorhom/portal';
 import 'react-native-gesture-handler';
 import crashlytics from '@react-native-firebase/crashlytics';
 import { NavigationContainer } from '@react-navigation/native';
+import i18n from './I18n';
 import { MainProvider, RideStateContextContextProvider } from './context';
 import MainRouter from './pages';
 import RidePopups from './popups/RidePopups';

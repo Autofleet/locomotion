@@ -136,7 +136,7 @@ const AddressSelectorBottomSheet = ({ addressSelectorFocusIndex }) => {
     if (userContext.historyResults.length && !isStationsEnabled) {
       return userContext.historyResults.map((h, i) => (
         <AddressRow
-          testID={`searchResults_${i}`}
+          testID={`historyResults_${i}`}
           {...h}
           isHistory
           key={h.placeId}
@@ -199,8 +199,9 @@ const AddressSelectorBottomSheet = ({ addressSelectorFocusIndex }) => {
               ) : null}
               <BottomSheetScrollView keyboardShouldPersistTaps="handled" contentContainerStyle={{ overflow: 'visible' }}>
                 {
-                  userContext.searchResults ? userContext.searchResults.map((h, i) => <AddressRow testID={`searchResults_${i}`} {...h} key={h.placeId} onPress={() => userContext.onAddressSelected(h)} />)
-                    : userContext.historyResults.map((h, i) => <AddressRow testID={`searchResults_${i}`} {...h} isHistory key={h.placeId} onPress={() => userContext.onAddressSelected(h)} />)
+                  userContext.searchResults && userContext.searchResults.length > 0
+                    ? userContext.searchResults.map((h, i) => <AddressRow testID={`searchResults_${i}`} {...h} key={h.placeId} onPress={() => userContext.onAddressSelected(h)} />)
+                    : getHistoryRows()
                 }
               </BottomSheetScrollView>
             </>

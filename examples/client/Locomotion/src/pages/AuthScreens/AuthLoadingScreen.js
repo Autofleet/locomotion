@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { initStripe } from '@stripe/stripe-react-native';
 import Config from 'react-native-config';
 import moment from 'moment';
@@ -13,6 +13,10 @@ import settings from '../../context/settings';
 import { StorageService } from '../../services';
 import FullPageLoader from '../../Components/FullPageLoader';
 import * as navigationService from '../../services/navigation';
+import networkInfo from '../../services/networkInfo';
+import GenericErrorPopup from '../../popups/GenericError';
+import i18n from '../../I18n';
+import Mixpanel from '../../services/Mixpanel';
 
 export const INITIAL_USER_STATE = {
   phoneNumber: '',
@@ -26,6 +30,7 @@ export const INITIAL_USER_STATE = {
 };
 
 const AuthLoadingScreen = () => {
+  const [isConnected, setIsConnected] = useState(true);
   const { setUser, user, updateUser } = useContext(UserContext);
   const { navigateBasedOnUser } = useContext(OnboardingContext);
   const { getSettingByKey, getAppSettings } = settings.useContainer();
@@ -36,6 +41,7 @@ const AuthLoadingScreen = () => {
     setUser(clientProfile);
     return StorageService.save({ clientProfile });
   };
+
 
   const init = async () => {
     async function getFromStorage() {
@@ -90,6 +96,7 @@ const AuthLoadingScreen = () => {
       navigationService.replace(MAIN_ROUTES.START);
     }
 
+    await networkInfo.fetchData();
     await getAppSettings();
     if (!user) { // Load app state
       getFromStorage();
@@ -97,10 +104,35 @@ const AuthLoadingScreen = () => {
   };
   useEffect(() => {
     init();
+    let unsubscribeFunction;
+    setTimeout(() => {
+      unsubscribeFunction = networkInfo.addEventListener((listener) => {
+        setIsConnected(listener.isConnected);
+        if (!(listener.isConnected)) {
+          Mixpanel.setEvent('No connection popup showed');
+        }
+      });
+    }, 3000);
+
+    return () => {
+      if (unsubscribeFunction) {
+        unsubscribeFunction();
+      }
+    };
   }, []);
   return (
     <>
       <FullPageLoader />
+      <GenericErrorPopup
+        isVisible={!isConnected}
+        title={i18n.t('popups.noConnection.title')}
+        text={i18n.t('popups.noConnection.text')}
+        buttonText={i18n.t('popups.noConnection.buttonText')}
+        closePopup={() => {
+          Mixpanel.clickEvent('No connection popup clicked');
+          setIsConnected(true);
+        }}
+      />
     </>
   );
 };
