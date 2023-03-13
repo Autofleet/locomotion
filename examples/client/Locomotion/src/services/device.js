@@ -48,6 +48,6 @@ export default class DeviceService {
   static isTablet = () => DeviceInfo.isTablet();
 
   static getVersion() {
-    return DeviceInfo.getVersion();
+    return `${DeviceInfo.getVersion()}.${DeviceInfo.getBuildNumber()}`;
   }
 }
