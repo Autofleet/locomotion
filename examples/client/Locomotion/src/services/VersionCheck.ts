@@ -47,4 +47,7 @@ export const checkVersionAndForceUpdateIfNeeded = async (minAppVersion?: string)
   }
 };
 
-export const { getCurrentVersion } = VersionCheck;
+/**
+ * Return a string of [current version].[current build] e.g. 1.0.1 for version 1.0 build 1
+ */
+export const getReadableCurrentVersion = () => `${VersionCheck.getCurrentVersion()}.${VersionCheck.getCurrentBuildNumber()}`;
