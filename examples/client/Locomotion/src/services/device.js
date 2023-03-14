@@ -1,5 +1,6 @@
 import { Linking, Dimensions, PixelRatio } from 'react-native';
 import DeviceInfo from 'react-native-device-info';
+import { getCurrentVersion } from './VersionCheck.ts';
 
 export { getDeviceId, getVersion } from 'react-native-device-info';
 
@@ -48,6 +49,6 @@ export default class DeviceService {
   static isTablet = () => DeviceInfo.isTablet();
 
   static getVersion() {
-    return `${DeviceInfo.getVersion()}.${DeviceInfo.getBuildNumber()}`;
+    return getCurrentVersion();
   }
 }

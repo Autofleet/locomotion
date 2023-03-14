@@ -46,3 +46,5 @@ export const checkVersionAndForceUpdateIfNeeded = async (minAppVersion?: string)
     }
   }
 };
+
+export const { getCurrentVersion } = VersionCheck;
