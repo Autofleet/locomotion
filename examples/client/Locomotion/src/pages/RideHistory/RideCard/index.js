@@ -76,7 +76,7 @@ const RideTitleCard = ({
 
     if (ride.state === RIDE_STATES.COMPLETED
       && isLessThenFiveDaysSince && isCard) {
-      return <TextButton testID="AddATip" onPress={() => { NavigationService.navigate(MAIN_ROUTES.POST_RIDE, { rideId: ride.id, priceCalculationId: ride.priceCalculationId, fromHistory: true }); }} text={i18n.t('rideHistory.rideCard.addTip')} />;
+      return <TextButton testID="AddATip" onPress={() => { NavigationService.navigate(MAIN_ROUTES.POST_RIDE, { rideId: ride.id, priceCalculationId: ride.priceCalculationId }); }} text={i18n.t('rideHistory.rideCard.addTip')} />;
     }
     return null;
   };
