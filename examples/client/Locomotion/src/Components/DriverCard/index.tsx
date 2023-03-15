@@ -56,7 +56,7 @@ const DriverCard = ({
       );
     }
     return (
-      <TextButton testID="RatePastRide" onPress={() => { NavigationService.navigate(MAIN_ROUTES.POST_RIDE, { rideId: ride.id, priceCalculationId: ride.priceCalculationId, fromHistory: true }); }} text={i18n.t('rideHistory.rideCard.rateRide')} />
+      <TextButton testID="RatePastRide" onPress={() => { NavigationService.navigate(MAIN_ROUTES.POST_RIDE, { rideId: ride.id, priceCalculationId: ride.priceCalculationId }); }} text={i18n.t('rideHistory.rideCard.rateRide')} />
     );
   };
   return (

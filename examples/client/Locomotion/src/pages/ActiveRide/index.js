@@ -68,7 +68,6 @@ import { rideHistoryContext } from '../../context/rideHistory';
 import SafeView from '../../Components/SafeView';
 import CancellationReasonsPopup from '../../popups/CancellationReasonsPopup';
 import VirtualStationsProvider, { VirtualStationsContext } from '../../context/virtualStationsContext';
-import Mixpanel from '../../services/Mixpanel';
 
 const BLACK_OVERLAY_SCREENS = [BS_PAGES.CANCEL_RIDE];
 
@@ -256,12 +255,10 @@ const RidePage = ({ mapSettings, navigation }) => {
     [BS_PAGES.ACTIVE_RIDE]: () => <ActiveRide />,
   };
   const focusCurrentLocation = async () => {
-    let coords;
     if ([RIDE_STATES.ACTIVE, RIDE_STATES.DISPATCHED].includes(ride.state)) {
-      const currentStopPoint = (ride.stopPoints || [])
-        .find(sp => sp.state === STOP_POINT_STATES.PENDING);
+      const currentStopPoint = (ride.stopPoints || []).find(sp => sp.state === STOP_POINT_STATES.PENDING);
       if (currentStopPoint) {
-        coords = getPolylineList(currentStopPoint, ride);
+        const coords = getPolylineList(currentStopPoint, ride);
         mapRef.current.fitToCoordinates(coords, {
           animated: true,
           edgePadding: ACTIVE_RIDE_MAP_PADDING,
@@ -280,7 +277,7 @@ const RidePage = ({ mapSettings, navigation }) => {
       }
       setIsDraggingLocationPin(true);
       const location = await getPosition();
-      ({ coords } = (location || DEFAULT_COORDS));
+      const { coords } = (location || DEFAULT_COORDS);
       const animateTime = 1000;
       mapRef.current.animateToRegion({
         latitude: parseFloat(coords.latitude),
@@ -291,7 +288,6 @@ const RidePage = ({ mapSettings, navigation }) => {
         setIsDraggingLocationPin(false);
       }, animateTime + 500);
     }
-    return coords;
   };
 
   const checkLocationPermission = async () => {
@@ -427,14 +423,6 @@ const RidePage = ({ mapSettings, navigation }) => {
     cleanRideState();
   };
 
-  const onPressTargetIcon = async () => {
-    const coords = await focusCurrentLocation();
-    const lat = coords?.latitude;
-    const lng = coords?.longitude;
-    Mixpanel.clickEvent('Target Icon',
-      { currentPage: currentBsPage, lat, lng });
-  };
-
   return (
     <PageContainer>
       <MainMap
@@ -494,7 +482,7 @@ const RidePage = ({ mapSettings, navigation }) => {
         {!isExpanded && locationGranted && (
         <SquareSvgButton
           noLoader
-          onPress={onPressTargetIcon}
+          onPress={focusCurrentLocation}
           icon={targetIcon}
           style={Platform.OS === 'android' ? { shadowColor: '#000' } : {}}
         />
