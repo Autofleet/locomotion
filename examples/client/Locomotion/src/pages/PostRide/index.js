@@ -32,7 +32,7 @@ import * as navigationService from '../../services/navigation';
 import RideFeedback from './Feedback';
 
 const PostRidePage = ({ menuSide, route }) => {
-  const { rideId, priceCalculationId } = route?.params;
+  const { rideId, priceCalculationId, fromHistory } = route?.params;
   const [rating, setRating] = useState(null);
   const [ride, setRide] = useState(null);
   const [tipFromDb, setTipFromDb] = useState();
@@ -47,6 +47,7 @@ const PostRidePage = ({ menuSide, route }) => {
     postRideSubmit,
     getRideFromApi,
     cleanRideState,
+    setLastAcknowledgedRideCompletionTimestampToNow,
   } = useContext(RidePageContext);
   const { changeBsPage } = useContext(RideStateContextContext);
   const {
@@ -86,10 +87,11 @@ const PostRidePage = ({ menuSide, route }) => {
   useEffect(() => {
     initSettings();
     loadRide();
+    setLastAcknowledgedRideCompletionTimestampToNow();
   }, []);
 
   const nextPage = () => {
-    if (priceCalculationId) {
+    if (fromHistory) {
       const [formattedRide] = formatRides([ride]);
       const newRidesHistory = pastRides.map(pr => (pr.id === ride.id ? formattedRide : pr));
       setPastRides(newRidesHistory);
@@ -104,7 +106,7 @@ const PostRidePage = ({ menuSide, route }) => {
       await postRideSubmit(ride.id, {
         rating,
         tip: rideTip,
-        priceCalculationId: ride.priceCalculationId,
+        priceCalculationId,
         rideFeedbackText,
       });
       nextPage();
@@ -119,12 +121,7 @@ const PostRidePage = ({ menuSide, route }) => {
     isExpanded,
   } = useContext(BottomSheetContext);
 
-  const getButtonText = () => {
-    if (priceCalculationId) {
-      return i18n.t('postRide.submitForPast');
-    }
-    return i18n.t('postRide.submit');
-  };
+  const getButtonText = () => i18n.t('postRide.submit');
 
   return (
     <>
@@ -147,7 +144,7 @@ const PostRidePage = ({ menuSide, route }) => {
               </RatingContainer>
             )}
 
-            {isCardPaymentMethod(ride?.payment?.paymentMethod) && !(priceCalculationId && tipFromDb) && (
+            {isCardPaymentMethod(ride?.payment?.paymentMethod) && !tipFromDb && (
             <TipsContainer>
               {ride?.priceCurrency && (ride?.priceAmount || ride?.priceAmount === 0)
                 ? (

@@ -30,12 +30,6 @@ const prepareCoords = locations => ({
 });
 
 class Geo {
-  constructor() {
-    this.watchCbs = {};
-    this.locationWatcher = false;
-    this.lastLocation = null;
-  }
-
   init() {
     this.configure();
     this.requestPermission();
@@ -49,7 +43,7 @@ class Geo {
   };
 
   configure = () => RNLocation.configure({
-    distanceFilter: 30,
+    distanceFilter: 0,
     desiredAccuracy: {
       ios: 'nearestTenMeters',
       android: 'balancedPowerAccuracy',
@@ -70,32 +64,15 @@ class Geo {
   });
 
   requestPermission = async () => {
-    const granted = await RNLocation.requestPermission({
+    await RNLocation.requestPermission({
       ios: 'whenInUse',
       android: {
         detail: 'fine',
       },
     });
-    if (granted) {
-      this.locationSubscription = RNLocation.subscribeToLocationUpdates(this.handleLocation);
-    }
-  };
-
-  handleLocation = (locations) => {
-    const location = prepareCoords(locations);
-    this.lastLocation = Object.assign({}, location);
   };
 
   currentLocation = async () => {
-    if (this.lastLocation) {
-      if (moment(this.lastLocation.timestamp).isAfter(moment().subtract(1, 'minute'))) {
-        return this.lastLocation;
-      }
-    }
-    // const rnLastLocation = await RNLocation.getLatestLocation({ timeout: 10000 });
-    // if (rnLastLocation) {
-    //   return prepareCoords([rnLastLocation]);
-    // }
     const location = await currentLocationNative();
     return prepareCoords([location.coords || location]);
   };
