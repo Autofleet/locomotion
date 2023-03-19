@@ -3,10 +3,14 @@ import { Alert, PermissionsAndroid, Platform } from 'react-native';
 import Config from 'react-native-config';
 import RNLocation from 'react-native-location';
 import Geolocation from '@react-native-community/geolocation';
-import moment from 'moment';
-import { BS_PAGES } from '../context/ridePageStateContext/utils';
 
-const currentLocationNative = async () => {
+const DEFAULT_OPTIONS = {
+  enableHighAccuracy: true,
+  timeout: 20000,
+  maximumAge: 0,
+};
+
+const currentLocationNative = async (options) => {
   if (Platform.OS === 'android') {
     const granted = await
     PermissionsAndroid.check(PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION);
@@ -15,10 +19,15 @@ const currentLocationNative = async () => {
       return null;
     }
   }
+
+  const mergedOptions = {
+    ...DEFAULT_OPTIONS,
+    ...(options || {}),
+  };
   return new Promise((resolve, reject) => {
     Geolocation.getCurrentPosition(
       resolve, reject,
-      { enableHighAccuracy: false, timeout: 20000, maximumAge: 1000 * 60 * 2 },
+      mergedOptions,
     );
   });
 };
@@ -72,8 +81,8 @@ class Geo {
     });
   };
 
-  currentLocation = async () => {
-    const location = await currentLocationNative();
+  currentLocation = async (options) => {
+    const location = await currentLocationNative(options);
     return prepareCoords([location.coords || location]);
   };
 }
@@ -90,13 +99,13 @@ export const DEFAULT_COORDS = {
     longitude: parseFloat(Config.DEFAULT_LONGITUDE),
   },
 };
-export const getPosition = async () => {
+export const getPosition = async (options) => {
   try {
     const granted = await GeoService.checkPermission();
     if (!granted) {
       return false;
     }
-    return GeoService.currentLocation();
+    return GeoService.currentLocation(options);
   } catch (e) {
     console.error('Error getting location', e);
     return false;
