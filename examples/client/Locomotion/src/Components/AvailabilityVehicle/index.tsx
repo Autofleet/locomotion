@@ -1,12 +1,13 @@
 import React, {
   useContext, useEffect, useState, useRef, useCallback,
 } from 'react';
-import { Platform, View } from 'react-native';
-import styled from 'styled-components';
+import {
+  Platform,
+} from 'react-native';
 import { MarkerAnimated, AnimatedRegion } from 'react-native-maps';
 import { Context as ThemeContext } from '../../context/theme';
 import SvgIcon from '../SvgIcon';
-import carIcon from '../../assets/map/car.svg';
+import carIcon from '../../assets/map/Autofleet_Car_Icon.svg';
 
 interface Location {
   lat: number;
@@ -19,13 +20,12 @@ interface AvailabilityVehicleProps {
   id: string;
 }
 
-const AvailabilityVehicleContainer = styled(View)`
-z-index: 100;
-`;
-
 const DURATION = 5000;
 
-const areEqual = (prev: AvailabilityVehicleProps, next: AvailabilityVehicleProps) => prev.id === next.id
+const areEqual = (
+  prev: AvailabilityVehicleProps,
+  next: AvailabilityVehicleProps,
+) => prev.id === next.id
   && prev.location.lat === next.location.lat
   && prev.location.lng === next.location.lng
   && prev.location.bearing === next.location.bearing;
@@ -40,8 +40,7 @@ const AvailabilityVehicle = ({
   location,
   id,
 }: AvailabilityVehicleProps) => {
-  const { primaryColor } = useContext(ThemeContext);
-
+  const { vehicleColor } = useContext(ThemeContext);
   const markerRef = useRef<MarkerAnimated>(null);
   const [locationAnimated] = useState(new AnimatedRegion({
     latitude: insureNumberType(location.lat),
@@ -89,8 +88,14 @@ const AvailabilityVehicle = ({
       onPress={onPressWorkaround}
 
     >
-      <SvgIcon Svg={carIcon} height={48} width={48} fill={primaryColor} />
+      <SvgIcon
+        Svg={carIcon}
+        height={48}
+        width={48}
+        style={{ transform: [{ rotate: `${location.bearing}deg` }], color: vehicleColor }}
+      />
     </MarkerAnimated>
+
   );
 };
 
