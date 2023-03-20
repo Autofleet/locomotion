@@ -48,10 +48,7 @@ export default class DeviceService {
 
   static isTablet = () => DeviceInfo.isTablet();
 
-  /**
- * Return a string of [current version].[current build] e.g. 1.0.1.650 for version 1.0.1 build 650
- */
   static getVersion() {
-    return `${VersionCheck.getCurrentVersion()}.${VersionCheck.getCurrentBuildNumber()}`;
+    return VersionCheck.getCurrentVersion();
   }
 }
