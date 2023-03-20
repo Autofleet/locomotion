@@ -13,7 +13,7 @@ import { InputContainer, Label } from './styles';
 
 const DevSettingPage = () => {
   const [operationId, setOperationId] = useState(Config.OPERATION_ID);
-  const [serverHost, setServerHost] = useState(Config.SERVER_HOST);
+  const [serverUrl, setServerUrl] = useState(Config.SERVER_HOST);
   return (
     <PageContainer>
       <PageHeader
@@ -34,18 +34,18 @@ const DevSettingPage = () => {
       </InputContainer>
       <Label>Server Host</Label>
       <TextInput
-        testID="serverHost"
+        testID="serverUrl"
         autoFocus
-        onChangeText={(newServerHost: string) => {
-          setServerHost(newServerHost);
+        onChangeText={(newServerUrl: string) => {
+          setServerUrl(newServerUrl);
         }}
-        value={serverHost}
+        value={serverUrl}
       />
       <NavButton
         testID="saveButton"
         onPress={() => {
+          AppSettings.setSettings({ serverUrl, operationId });
           navigationService.goBack();
-          AppSettings.setSettings({ serverHost, operationId });
         }}
       >
         <ButtonText>Save</ButtonText>
