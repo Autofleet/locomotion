@@ -127,8 +127,8 @@ export const FONT_WEIGHTS = {
 
 /**
  * useVehicleColor hook
- * once called, get the vehicle color setting and update its vehicleColor, asyncly
- * return the vehicleColor
+ * Once called, it'll get the vehicle color setting and update vehicleColor, asynchronously
+ * @return vehicleColor
  */
 const useVehicleColor = () => {
   const { getSettingByKey } = settings.useContainer();
