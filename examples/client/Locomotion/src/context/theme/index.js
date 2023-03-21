@@ -125,13 +125,34 @@ export const FONT_WEIGHTS = {
 //   SMALL_LIGHT: FONT_WEIGHT.LIGHT.concat(FONT_SIZES.SMALL),
 // }
 
+/**
+ * useVehicleColor hook
+ * once called, get the vehicle color setting and update its vehicleColor, asyncly
+ * return the vehicleColor
+ */
+const useVehicleColor = () => {
+  const { getSettingByKey } = settings.useContainer();
+  const [vehicleColor, setVehicleColor] = useState(null);
+
+  const getVehicleColor = async () => {
+    const color = await getSettingByKey(
+      SETTINGS_KEYS.VEHICLE_COLOR,
+    );
+    setVehicleColor(color);
+  };
+
+  useEffect(() => {
+    getVehicleColor();
+  }, []);
+
+  return { vehicleColor };
+};
+
 
 const Provider = ({ children }) => {
   const colorScheme = useColorScheme();
-  const { getSettingByKey } = settings.useContainer();
   const isInitDarkMode = FORCE_DARK_MODE || (Appearance.getColorScheme() === THEME_MOD.DARK && DARK_MODE_ENABLED);
   const [isDarkMode, setDarkMode] = useState(isInitDarkMode);
-  const [vehicleColor, setVehicleColor] = useState(null);
   // Appearance.addChangeListener()
   useEffect(() => {
     if (!FORCE_DARK_MODE && DARK_MODE_ENABLED) {
@@ -139,22 +160,12 @@ const Provider = ({ children }) => {
     }
   }, [colorScheme]);
 
-  const checkVehicleColor = async () => {
-    const color = await getSettingByKey(
-      SETTINGS_KEYS.VEHICLE_COLOR,
-    );
-    setVehicleColor(color);
-  };
-  useEffect(() => {
-    checkVehicleColor();
-  }, []);
-
   return (
     <ThemeProvider
       theme={{
         isDarkMode,
         ...(isDarkMode ? darkTheme : lightTheme),
-        vehicleColor,
+        useVehicleColor,
       }}
     >
       {children}

@@ -40,7 +40,8 @@ const AvailabilityVehicle = ({
   location,
   id,
 }: AvailabilityVehicleProps) => {
-  const { vehicleColor } = useContext(ThemeContext);
+  const { useVehicleColor } = useContext(ThemeContext);
+  const { vehicleColor } = useVehicleColor();
   const markerRef = useRef<MarkerAnimated>(null);
   const [locationAnimated] = useState(new AnimatedRegion({
     latitude: insureNumberType(location.lat),
