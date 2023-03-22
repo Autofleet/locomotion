@@ -287,9 +287,6 @@ const RidePage = ({ mapSettings, navigation }) => {
         longitude: parseFloat(coords.longitude),
         ...deltas,
       }, animateTime);
-      setTimeout(() => {
-        setIsDraggingLocationPin(false);
-      }, animateTime + 500);
     }
     return coords;
   };
