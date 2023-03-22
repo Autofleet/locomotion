@@ -67,7 +67,6 @@ const Messages = ({ menuSide, route }: FutureRidesViewProps) => {
         title={i18n.t('messages.pageTitle')}
         onIconPress={() => {
           exitPageActions();
-          changeBsPage(ride.id ? BS_PAGES.ACTIVE_RIDE : BS_PAGES.ADDRESS_SELECTOR);
           NavigationService.navigate(MAIN_ROUTES.HOME);
         }}
         iconSide={menuSide}
