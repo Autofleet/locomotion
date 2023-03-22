@@ -128,3 +128,6 @@ typings/
 watchmanScript.sh
 
 *.tsbuildinfo
+
+# vscode
+**/.vscode
