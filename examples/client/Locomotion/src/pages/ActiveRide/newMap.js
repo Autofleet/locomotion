@@ -1,7 +1,7 @@
 import React, {
   useContext, useEffect, useState,
 } from 'react';
-import { Dimensions } from 'react-native';
+import { Alert, Dimensions } from 'react-native';
 import MapView, { Polygon, Polyline } from 'react-native-maps';
 import Config from 'react-native-config';
 import moment from 'moment';
@@ -98,6 +98,10 @@ export default React.forwardRef(({
     territory,
     currentBsPage,
     initGeoService,
+    setPanLat,
+    setPanLng,
+    panLat,
+    panLng,
   } = useContext(RideStateContextContext);
   const {
     snapPoints,
@@ -310,11 +314,10 @@ export default React.forwardRef(({
     position: 'absolute',
   };
 
-  const onRegionChangeComplete = async (event) => {
-    if (isChooseLocationOnMap) {
-      const { latitude, longitude } = event;
-      const lat = latitude.toFixed(6);
-      const lng = longitude.toFixed(6);
+  const handleNewLocation = async (location) => {
+    if (isChooseLocationOnMap && panLat && panLng) {
+      const lat = panLat.toFixed(6);
+      const lng = panLng.toFixed(6);
       const [pickup] = requestStopPoints;
       const finalStopPoint = lastSelectedLocation || pickup;
       const sourcePoint = point([finalStopPoint.lng, finalStopPoint.lat]);
@@ -339,6 +342,15 @@ export default React.forwardRef(({
       }
     }
   };
+  useEffect(() => {
+    handleNewLocation(lastSelectedLocation);
+  }, [panLat, panLng]);
+
+  const onRegionChangeComplete = (event) => {
+    Alert.alert('onRegionChangeComplete');
+    setPanLat(event.latitude);
+    setPanLng(event.longitude);
+  };
 
   return (
     <>
@@ -354,6 +366,7 @@ export default React.forwardRef(({
         moveOnMarkerPress={false}
         onRegionChangeComplete={onRegionChangeComplete}
         onPanDrag={() => {
+          Alert.alert('onPanDrag');
           setIsDraggingLocationPin(true);
           if (!isUserLocationFocused === false) {
             setIsUserLocationFocused(false);

@@ -8,6 +8,7 @@ import {
 } from 'react-native';
 import { Portal } from '@gorhom/portal';
 import Config from 'react-native-config';
+import networkInfo from '../../services/networkInfo';
 import AFToast from '../../Components/Toast';
 import * as navigationService from '../../services/navigation';
 import { MAIN_ROUTES } from '../routes';
@@ -85,6 +86,7 @@ const RidePage = ({ mapSettings, navigation }) => {
 
   const {
     currentBsPage, changeBsPage, setIsDraggingLocationPin,
+    setPanLat, setPanLng,
   } = useContext(RideStateContextContext);
   const { checkMessagesForToast } = useContext(MessagesContext);
   const { isStationsEnabled } = useContext(VirtualStationsContext);
@@ -107,6 +109,7 @@ const RidePage = ({ mapSettings, navigation }) => {
     cleanRideState,
     updateRide,
     clearRequestSp,
+    saveSelectedLocation,
   } = useContext(RidePageContext);
   const {
     setIsExpanded, snapPoints, isExpanded, topBarText,
@@ -287,6 +290,10 @@ const RidePage = ({ mapSettings, navigation }) => {
         longitude: parseFloat(coords.longitude),
         ...deltas,
       }, animateTime);
+      if (networkInfo.isConnectionAvailable()) {
+        setPanLat(coords.latitude);
+        setPanLng(coords.longitude);
+      }
     }
     return coords;
   };
