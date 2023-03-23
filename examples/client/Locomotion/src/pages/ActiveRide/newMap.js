@@ -9,6 +9,7 @@ import {
   point, featureCollection, nearestPoint, booleanPointInPolygon, polygon, distance,
 } from '@turf/turf';
 import { debounce } from 'lodash';
+import networkInfo from '../../services/networkInfo';
 import Mixpanel from '../../services/Mixpanel';
 import { FutureRidesContext } from '../../context/futureRides';
 import { RidePageContext } from '../../context/newRideContext';
@@ -313,7 +314,7 @@ export default React.forwardRef(({
     height: `${100 - (hightRatioOfBottomSheet.split('%')[0] * 100)}%`,
     position: 'absolute',
   };
-
+  const safeReleasePin = () => networkInfo.isConnectionAvailable() && setIsDraggingLocationPin(false);
   const handleNewLocation = async (location) => {
     if (isChooseLocationOnMap && panLat && panLng) {
       const lat = panLat.toFixed(6);
@@ -324,13 +325,13 @@ export default React.forwardRef(({
       const destinationPoint = point([lng, lat]);
       const changeDistance = distance(sourcePoint, destinationPoint, { units: 'meters' });
       if (changeDistance < 5) {
-        setIsDraggingLocationPin(false);
+        safeReleasePin();
         return;
       }
       const spData = await reverseLocationGeocode(lat, lng);
       if (spData) {
         saveSelectedLocation(spData);
-        setIsDraggingLocationPin(false);
+        safeReleasePin();
         setPickupChanged(true);
         Mixpanel.setEvent('Change stop point location', {
           gesture_type: 'drag_map',
@@ -347,7 +348,6 @@ export default React.forwardRef(({
   }, [panLat, panLng]);
 
   const onRegionChangeComplete = (event) => {
-    Alert.alert('onRegionChangeComplete');
     setPanLat(event.latitude);
     setPanLng(event.longitude);
   };
@@ -366,7 +366,6 @@ export default React.forwardRef(({
         moveOnMarkerPress={false}
         onRegionChangeComplete={onRegionChangeComplete}
         onPanDrag={() => {
-          Alert.alert('onPanDrag');
           setIsDraggingLocationPin(true);
           if (!isUserLocationFocused === false) {
             setIsUserLocationFocused(false);
