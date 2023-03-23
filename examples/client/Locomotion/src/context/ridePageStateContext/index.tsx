@@ -16,7 +16,9 @@ interface RidePageStateContextProps {
   isUserLocationFocused: boolean;
   setIsUserLocationFocused: (isLocationFocused: boolean) => void;
   isDraggingLocationPin: boolean;
+  isConfirmingFutureRide: boolean;
   setIsDraggingLocationPin: (isDragging: boolean) => void;
+  setIsConfirmingFutureRide: (isDragging: boolean) => void;
   currentBsPage: BsPages;
   checkStopPointsInTerritory: (sp: any) => boolean;
   changeBsPage: (pageName: BsPages) => void;
@@ -30,6 +32,8 @@ export const RideStateContextContext = createContext<RidePageStateContextProps>(
   isUserLocationFocused: false,
   setIsUserLocationFocused: () => undefined,
   isDraggingLocationPin: false,
+  isConfirmingFutureRide: false,
+  setIsConfirmingFutureRide: () => undefined,
   setIsDraggingLocationPin: () => undefined,
   currentBsPage: BS_PAGES.ADDRESS_SELECTOR,
   checkStopPointsInTerritory: () => false,
@@ -38,6 +42,7 @@ export const RideStateContextContext = createContext<RidePageStateContextProps>(
 });
 
 const RideStateContextContextProvider = ({ children }: { children: any }) => {
+  const [isConfirmingFutureRide, setIsConfirmingFutureRide] = useState(false);
   const [genericErrorPopup, setGenericErrorPopup] = useState<any | null>(null);
   const [territory, setTerritory] = useState<Array<any> | null>(null);
   const [isUserLocationFocused, setIsUserLocationFocused] = useState(false);
@@ -95,6 +100,8 @@ const RideStateContextContextProvider = ({ children }: { children: any }) => {
         setIsUserLocationFocused,
         isDraggingLocationPin,
         setIsDraggingLocationPin,
+        isConfirmingFutureRide,
+        setIsConfirmingFutureRide,
         currentBsPage,
         checkStopPointsInTerritory,
         changeBsPage,
