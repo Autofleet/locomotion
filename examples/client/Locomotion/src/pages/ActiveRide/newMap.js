@@ -84,7 +84,6 @@ const getFirstPendingStopPoint = sps => (sps || []).find(sp => sp.state
 export default React.forwardRef(({
   mapSettings,
 }, ref) => {
-  const [pickupChanged, setPickupChanged] = useState(false);
   const { isDarkMode, primaryColor } = useContext(ThemeContext);
   const {
     availabilityVehicles,
@@ -112,6 +111,9 @@ export default React.forwardRef(({
     lastSelectedLocation,
     requestStopPoints, saveSelectedLocation, reverseLocationGeocode, ride,
     chosenService,
+    updateLocationOnMapData,
+    pickupChanged,
+    setPickupChanged,
   } = useContext(RidePageContext);
   const {
     newFutureRide,
@@ -324,19 +326,7 @@ export default React.forwardRef(({
         setIsDraggingLocationPin(false);
         return;
       }
-      const spData = await reverseLocationGeocode(lat, lng);
-      if (spData) {
-        saveSelectedLocation(spData);
-        setIsDraggingLocationPin(false);
-        setPickupChanged(true);
-        Mixpanel.setEvent('Change stop point location', {
-          gesture_type: 'drag_map',
-          screen: currentBsPage,
-          ...spData,
-          lat,
-          lng,
-        });
-      }
+      await updateLocationOnMapData(lat, lng);
     }
   };
 

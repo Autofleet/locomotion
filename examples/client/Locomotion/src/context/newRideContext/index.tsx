@@ -156,6 +156,9 @@ interface RidePageContextInterface {
   numberOfPassengers: number,
   setNumberOfPassengers: (num: number) => void,
   setLastAcknowledgedRideCompletionTimestampToNow: () => void
+  pickupChanged: boolean;
+  setPickupChanged: (value: boolean) => void;
+  updateLocationOnMapData: (lat: number, lng: number) => Promise<void>;
 }
 
 export const RidePageContext = createContext<RidePageContextInterface>({
@@ -213,6 +216,9 @@ export const RidePageContext = createContext<RidePageContextInterface>({
   numberOfPassengers: null,
   setNumberOfPassengers: () => undefined,
   setLastAcknowledgedRideCompletionTimestampToNow: () => undefined,
+  updateLocationOnMapData: async (lat: number, lng: number) => undefined,
+  pickupChanged: false,
+  setPickupChanged: (value: boolean) => undefined,
 });
 
 const HISTORY_RECORDS_NUM = 10;
@@ -251,6 +257,7 @@ const RidePageContextProvider = ({ children }: {
   const getRouteName = () => navigationService?.getNavigator()?.getCurrentRoute().name;
   const [numberOfPassengers, setNumberOfPassengers] = useState<number | null>(null);
   const [addressSearchLabel, setAddressSearchLabel] = useState<string | null>(null);
+  const [pickupChanged, setPickupChanged] = useState(false);
 
   const intervalRef = useRef<any>();
 
@@ -700,6 +707,21 @@ const RidePageContextProvider = ({ children }: {
       }
     }
   }, [currentGeocode]);
+
+  const updateLocationOnMapData = async (lat: number, lng: number) => {
+    const spData = await reverseLocationGeocode(lat, lng);
+    if (spData) {
+      saveSelectedLocation(spData);
+      setPickupChanged(true);
+      Mixpanel.setEvent('Change stop point location', {
+        gesture_type: 'drag_map',
+        screen: currentBsPage,
+        ...spData,
+        lat,
+        lng,
+      });
+    }
+  };
 
 
   const updateRequestSp = (data: any[], index?: number) => {
@@ -1313,6 +1335,9 @@ const RidePageContextProvider = ({ children }: {
         formatStationsList,
         clearRequestSp,
         setLastAcknowledgedRideCompletionTimestampToNow,
+        updateLocationOnMapData,
+        setPickupChanged,
+        pickupChanged,
       }}
     >
       {children}
