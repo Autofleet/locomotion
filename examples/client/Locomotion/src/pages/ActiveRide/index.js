@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 import { Portal } from '@gorhom/portal';
 import Config from 'react-native-config';
-import networkInfo from 'services/networkInfo';
+import networkInfo from '../../services/networkInfo';
 import AFToast from '../../Components/Toast';
 import * as navigationService from '../../services/navigation';
 import { MAIN_ROUTES } from '../routes';
