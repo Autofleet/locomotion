@@ -16,10 +16,8 @@ interface RidePageStateContextProps {
   isUserLocationFocused: boolean;
   setIsUserLocationFocused: (isLocationFocused: boolean) => void;
   isDraggingLocationPin: boolean;
-  panLat: number | null;
-  panLng: number | null;
-  setPanLat: (lat: number) => void;
-  setPanLng: (lng: number) => void;
+  panLocation: any;
+  setPanLocation: (newLocation: any) => void;
   setIsDraggingLocationPin: (isDragging: boolean) => void;
   currentBsPage: BsPages;
   checkStopPointsInTerritory: (sp: any) => boolean;
@@ -35,10 +33,8 @@ export const RideStateContextContext = createContext<RidePageStateContextProps>(
   setIsUserLocationFocused: () => undefined,
   isDraggingLocationPin: false,
   setIsDraggingLocationPin: () => undefined,
-  panLat: null,
-  panLng: null,
-  setPanLat: () => undefined,
-  setPanLng: () => undefined,
+  panLocation: null,
+  setPanLocation: () => undefined,
   currentBsPage: BS_PAGES.ADDRESS_SELECTOR,
   checkStopPointsInTerritory: () => false,
   changeBsPage: () => undefined,
@@ -46,8 +42,7 @@ export const RideStateContextContext = createContext<RidePageStateContextProps>(
 });
 
 const RideStateContextContextProvider = ({ children }: { children: any }) => {
-  const [panLat, setPanLat] = useState<number | null>(null);
-  const [panLng, setPanLng] = useState<number | null>(null);
+  const [panLocation, setPanLocation] = useState<any | null>(null);
   const [genericErrorPopup, setGenericErrorPopup] = useState<any | null>(null);
   const [territory, setTerritory] = useState<Array<any> | null>(null);
   const [isUserLocationFocused, setIsUserLocationFocused] = useState(false);
@@ -105,10 +100,8 @@ const RideStateContextContextProvider = ({ children }: { children: any }) => {
         setIsUserLocationFocused,
         isDraggingLocationPin,
         setIsDraggingLocationPin,
-        panLat,
-        panLng,
-        setPanLat,
-        setPanLng,
+        panLocation,
+        setPanLocation,
         currentBsPage,
         checkStopPointsInTerritory,
         changeBsPage,

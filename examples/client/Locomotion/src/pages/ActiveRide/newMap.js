@@ -99,10 +99,8 @@ export default React.forwardRef(({
     territory,
     currentBsPage,
     initGeoService,
-    setPanLat,
-    setPanLng,
-    panLat,
-    panLng,
+    setPanLocation,
+    panLocation,
   } = useContext(RideStateContextContext);
   const {
     snapPoints,
@@ -314,9 +312,10 @@ export default React.forwardRef(({
     height: `${100 - (hightRatioOfBottomSheet.split('%')[0] * 100)}%`,
     position: 'absolute',
   };
-  const safeReleasePin = () => networkInfo.isConnectionAvailable() && setIsDraggingLocationPin(false);
-  const handleNewLocation = async (location) => {
-    if (isChooseLocationOnMap && panLat && panLng) {
+
+  const handleNewLocation = async () => {
+    if (isChooseLocationOnMap && panLocation) {
+      const { lat: panLat, lng: panLng } = panLocation;
       const lat = panLat.toFixed(6);
       const lng = panLng.toFixed(6);
       const [pickup] = requestStopPoints;
@@ -324,14 +323,13 @@ export default React.forwardRef(({
       const sourcePoint = point([finalStopPoint.lng, finalStopPoint.lat]);
       const destinationPoint = point([lng, lat]);
       const changeDistance = distance(sourcePoint, destinationPoint, { units: 'meters' });
-      if (changeDistance < 5) {
-        safeReleasePin();
+      if (changeDistance < 5 && networkInfo.isConnectionAvailable()) {
+        setIsDraggingLocationPin(false);
         return;
       }
       const spData = await reverseLocationGeocode(lat, lng);
       if (spData) {
         saveSelectedLocation(spData);
-        safeReleasePin();
         setPickupChanged(true);
         Mixpanel.setEvent('Change stop point location', {
           gesture_type: 'drag_map',
@@ -344,12 +342,11 @@ export default React.forwardRef(({
     }
   };
   useEffect(() => {
-    handleNewLocation(lastSelectedLocation);
-  }, [panLat, panLng]);
+    handleNewLocation(panLocation);
+  }, [panLocation]);
 
   const onRegionChangeComplete = (event) => {
-    setPanLat(event.latitude);
-    setPanLng(event.longitude);
+    setPanLocation({ lat: event.latitude, lng: event.longitude });
   };
 
   return (
