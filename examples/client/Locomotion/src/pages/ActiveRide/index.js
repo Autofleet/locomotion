@@ -267,7 +267,7 @@ const RidePage = ({ mapSettings, navigation }) => {
     const spData = await reverseLocationGeocode(lat, lng);
     if (spData) {
       saveSelectedLocation(spData);
-      setPickupChanged(currentBsPage === BS_PAGES.CONFIRM_PICKUP);
+      setPickupChanged(currentBsPage !== BS_PAGES.CONFIRM_PICKUP);
       Mixpanel.setEvent('Change stop point location', {
         gesture_type: 'drag_map',
         screen: currentBsPage,
