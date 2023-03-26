@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { useColorScheme, Appearance } from 'react-native';
 import { ThemeProvider, ThemeContext } from 'styled-components';
 import Config from 'react-native-config';
+import settings from '../settings';
+import SETTINGS_KEYS from '../settings/keys';
 
 const {
   FORCE_DARK_MODE = false,
@@ -123,6 +125,29 @@ export const FONT_WEIGHTS = {
 //   SMALL_LIGHT: FONT_WEIGHT.LIGHT.concat(FONT_SIZES.SMALL),
 // }
 
+/**
+ * useVehicleColor hook
+ * Once called, it'll get the vehicle color setting and update vehicleColor, asynchronously
+ * @return vehicleColor
+ */
+const useVehicleColor = () => {
+  const { getSettingByKey } = settings.useContainer();
+  const [vehicleColor, setVehicleColor] = useState(null);
+
+  const getVehicleColor = async () => {
+    const color = await getSettingByKey(
+      SETTINGS_KEYS.VEHICLE_COLOR,
+    );
+    setVehicleColor(color);
+  };
+
+  useEffect(() => {
+    getVehicleColor();
+  }, []);
+
+  return { vehicleColor };
+};
+
 
 const Provider = ({ children }) => {
   const colorScheme = useColorScheme();
@@ -140,6 +165,7 @@ const Provider = ({ children }) => {
       theme={{
         isDarkMode,
         ...(isDarkMode ? darkTheme : lightTheme),
+        useVehicleColor,
       }}
     >
       {children}

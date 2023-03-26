@@ -16,6 +16,7 @@ export const getVehicleLocation = (location: any, vehiclePolyline: any[]) => {
   return {
     lat: geometry.coordinates[1],
     lng: geometry.coordinates[0],
+    bearing: location.bearing,
   };
 };
 
