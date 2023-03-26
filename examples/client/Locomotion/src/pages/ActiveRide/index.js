@@ -9,6 +9,7 @@ import {
 import { Portal } from '@gorhom/portal';
 import Config from 'react-native-config';
 import { distance, point } from '@turf/turf';
+import networkInfo from '../../services/networkInfo';
 import AFToast from '../../Components/Toast';
 import * as navigationService from '../../services/navigation';
 import { MAIN_ROUTES } from '../routes';
@@ -472,7 +473,7 @@ const RidePage = ({ mapSettings, navigation }) => {
       const sourcePoint = point([finalStopPoint.lng, finalStopPoint.lat]);
       const destinationPoint = point([lng, lat]);
       const changeDistance = distance(sourcePoint, destinationPoint, { units: 'meters' });
-      if (changeDistance < 5) {
+      if (changeDistance < 5 && networkInfo.isConnectionAvailable()) {
         setIsDraggingLocationPin(false);
         return;
       }
