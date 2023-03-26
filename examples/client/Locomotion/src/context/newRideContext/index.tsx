@@ -156,8 +156,6 @@ interface RidePageContextInterface {
   numberOfPassengers: number,
   setNumberOfPassengers: (num: number) => void,
   setLastAcknowledgedRideCompletionTimestampToNow: () => void
-  pickupChanged: boolean;
-  setPickupChanged: (value: boolean) => void;
 }
 
 export const RidePageContext = createContext<RidePageContextInterface>({
@@ -253,7 +251,6 @@ const RidePageContextProvider = ({ children }: {
   const getRouteName = () => navigationService?.getNavigator()?.getCurrentRoute().name;
   const [numberOfPassengers, setNumberOfPassengers] = useState<number | null>(null);
   const [addressSearchLabel, setAddressSearchLabel] = useState<string | null>(null);
-  const [pickupChanged, setPickupChanged] = useState(false);
 
   const intervalRef = useRef<any>();
 
@@ -1316,8 +1313,6 @@ const RidePageContextProvider = ({ children }: {
         formatStationsList,
         clearRequestSp,
         setLastAcknowledgedRideCompletionTimestampToNow,
-        setPickupChanged,
-        pickupChanged,
       }}
     >
       {children}
