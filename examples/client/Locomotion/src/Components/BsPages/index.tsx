@@ -2,7 +2,7 @@ import React, {
   useCallback, useContext, useEffect, useMemo, useState,
 } from 'react';
 import {
-  Linking, Platform, Text, View, Alert,
+  Linking, Platform, Text, View,
 } from 'react-native';
 import Config from 'react-native-config';
 import styled, { ThemeContext } from 'styled-components';
@@ -285,7 +285,6 @@ export const ConfirmPickupTime = (props: any) => {
   } = useContext(MewRidePageContext);
   const {
     changeBsPage,
-    currentBsPage,
     isDraggingLocationPin,
   } = useContext(RideStateContextContext);
   const date = moment(unconfirmedPickupTime).format('ddd, MMM Do');
@@ -330,8 +329,6 @@ export const ConfirmPickupTime = (props: any) => {
           updateRidePayload({ scheduledTo: unconfirmedPickupTime });
           setServiceEstimations(null);
         }
-        Alert.alert('GOING_TO_SERVICE_ESTIMATIONS 2', currentBsPage);
-        console.log('GOING_TO_SERVICE_ESTIMATIONS 2', currentBsPage);
         changeBsPage(BS_PAGES.SERVICE_ESTIMATIONS);
       }}
       {...props}

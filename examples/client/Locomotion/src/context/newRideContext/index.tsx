@@ -2,7 +2,7 @@
 import React, {
   useState, useEffect, useRef, createContext, useContext, useCallback,
 } from 'react';
-import { Alert, AppState } from 'react-native';
+import { AppState } from 'react-native';
 import Config from 'react-native-config';
 import { useNavigation } from '@react-navigation/native';
 import _, { pick } from 'lodash';
@@ -231,10 +231,7 @@ const RidePageContextProvider = ({ children }: {
 
   const navigation = useNavigation<Nav>();
   const { setGenericErrorDetails, setIsExpanded } = useContext(BottomSheetContext);
-  const {
-    checkStopPointsInTerritory, changeBsPage, currentBsPage, isConfirmingFutureRide,
-    setIsConfirmingFutureRide,
-  } = useContext(RideStateContextContext);
+  const { checkStopPointsInTerritory, changeBsPage, currentBsPage } = useContext(RideStateContextContext);
   const { setNewFutureRide, loadFutureRides } = useContext(FutureRidesContext);
   const [requestStopPoints, setRequestStopPoints] = useState(INITIAL_STOP_POINTS);
   const [currentGeocode, setCurrentGeocode] = useState<any | null>(null);
@@ -378,7 +375,6 @@ const RidePageContextProvider = ({ children }: {
   };
 
   const getServiceEstimations = async (throwError = true) => {
-    Alert.alert('Going to service estimations 15', currentBsPage);
     changeBsPage(BS_PAGES.SERVICE_ESTIMATIONS);
     try {
       const formattedStopPoints = formatStopPointsForEstimations(requestStopPoints);
@@ -446,20 +442,14 @@ const RidePageContextProvider = ({ children }: {
     const stopPoints = reqSps;
     const isSpsReady = stopPoints.every(r => r.lat && r.lng && r.description);
     if (stopPoints.length && isSpsReady) {
-      if (!isConfirmingFutureRide) {
-        tryServiceEstimations();
-      }
+      tryServiceEstimations();
     } else if (![BS_PAGES.ADDRESS_SELECTOR, BS_PAGES.LOADING].includes(currentBsPage)) {
       // reset req stop point request
       if (!ride.id) {
         changeBsPage(BS_PAGES.ADDRESS_SELECTOR);
-        if (!isConfirmingFutureRide) {
-          setTimeout(() => {
-            setIsExpanded(true);
-          }, 100);
-        } else {
-          setIsConfirmingFutureRide(false);
-        }
+        setTimeout(() => {
+          setIsExpanded(true);
+        }, 100);
       }
     }
   };
@@ -951,10 +941,7 @@ const RidePageContextProvider = ({ children }: {
 
   const backToServiceEstimations = () => {
     tryServiceEstimations();
-    Alert.alert('Going to service estimations 11', currentBsPage);
-    setTimeout(() => {
-      changeBsPage(BS_PAGES.SERVICE_ESTIMATIONS);
-    }, 1000);
+    changeBsPage(BS_PAGES.SERVICE_ESTIMATIONS);
   };
 
   const FAILED_TO_CREATE_RIDE_ACTIONS = {

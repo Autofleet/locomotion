@@ -4,7 +4,7 @@ import React, {
 import Toast from 'react-native-toast-message';
 import { useIsFocused, useFocusEffect } from '@react-navigation/native';
 import {
-  AppState, BackHandler, Platform, View, Dimensions, Alert,
+  AppState, BackHandler, Platform, View, Dimensions,
 } from 'react-native';
 import { Portal } from '@gorhom/portal';
 import Config from 'react-native-config';
@@ -84,7 +84,6 @@ const RidePage = ({ mapSettings, navigation }) => {
   const bottomSheetRef = useRef(null);
 
   const {
-    setIsConfirmingFutureRide,
     currentBsPage, changeBsPage, setIsDraggingLocationPin,
   } = useContext(RideStateContextContext);
   const { checkMessagesForToast } = useContext(MessagesContext);
@@ -158,9 +157,7 @@ const RidePage = ({ mapSettings, navigation }) => {
       resetStateToAddressSelector();
       initSps();
     } else if (serviceEstimations || currentBsPage === BS_PAGES.CONFIRM_PICKUP_TIME) {
-      setTimeout(() => {
-        changeBsPage(BS_PAGES.SERVICE_ESTIMATIONS);
-      }, 1000);
+      changeBsPage(BS_PAGES.SERVICE_ESTIMATIONS);
     } else {
       // sorry
       setAddressSelectorFocusIndex(selectedInputIndex);
@@ -178,10 +175,7 @@ const RidePage = ({ mapSettings, navigation }) => {
     ),
     [BS_PAGES.CONFIRM_FUTURE_RIDE]: () => (
       <ConfirmFutureRide
-        onButtonPress={() => {
-          setIsConfirmingFutureRide(true);
-          backToMap();
-        }}
+        onButtonPress={backToMap}
       />
     ),
     [BS_PAGES.CANCEL_RIDE]: () => (
@@ -256,9 +250,7 @@ const RidePage = ({ mapSettings, navigation }) => {
       <NoAvailableVehicles
         onButtonPress={() => {
           tryServiceEstimations();
-          setTimeout(() => {
-            changeBsPage(BS_PAGES.SERVICE_ESTIMATIONS);
-          }, 1000);
+          changeBsPage(BS_PAGES.SERVICE_ESTIMATIONS);
         }}
       />
     ),
@@ -529,9 +521,7 @@ BS_PAGE_TO_COMP[currentBsPage] ? BS_PAGE_TO_COMP[currentBsPage]() : null
           }}
           onSubmit={() => {
             navigationService.navigate(MAIN_ROUTES.HOME);
-            setTimeout(() => {
-              changeBsPage(BS_PAGES.SERVICE_ESTIMATIONS);
-            }, 1000);
+            changeBsPage(BS_PAGES.SERVICE_ESTIMATIONS);
             setRidePopup(null);
             const sps = getRequestSpsFromRide();
             setRequestStopPoints(sps);

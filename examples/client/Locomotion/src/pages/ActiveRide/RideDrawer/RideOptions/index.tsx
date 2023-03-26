@@ -2,7 +2,6 @@ import React, {
   useContext, useEffect, useState,
 } from 'react';
 import { Portal } from '@gorhom/portal';
-import { Alert } from 'react-native';
 import { MAIN_ROUTES } from '../../../routes';
 import i18n from '../../../../I18n';
 import { RIDE_POPUPS } from '../../../../context/newRideContext/utils';
@@ -38,7 +37,6 @@ const RideOptions = () => {
 
   const {
     changeBsPage,
-    currentBsPage,
   } = useContext(RideStateContextContext);
 
   const setPopupName = (popupName: popupNames) => {
@@ -74,7 +72,6 @@ const RideOptions = () => {
       />
     ));
 
-    Alert.alert('GOING_TO_SERVICE_ESTIMATIONS 1', currentBsPage);
     changeBsPage(BS_PAGES.SERVICE_ESTIMATIONS);
     return () => {
       setFooterComponent(null);
