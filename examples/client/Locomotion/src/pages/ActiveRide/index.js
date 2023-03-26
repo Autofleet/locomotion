@@ -108,6 +108,7 @@ const RidePage = ({ mapSettings, navigation }) => {
     cleanRideState,
     updateRide,
     clearRequestSp,
+    setUnconfirmedPickupTime,
   } = useContext(RidePageContext);
   const {
     setIsExpanded, snapPoints, isExpanded, topBarText,
