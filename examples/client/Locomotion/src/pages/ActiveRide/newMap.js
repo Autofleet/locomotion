@@ -99,8 +99,10 @@ export default React.forwardRef(({
     territory,
     currentBsPage,
     initGeoService,
-    setPanLocation,
-    panLocation,
+    setPanLat,
+    setPanLng,
+    panLat,
+    panLng,
   } = useContext(RideStateContextContext);
   const {
     snapPoints,
@@ -312,10 +314,9 @@ export default React.forwardRef(({
     height: `${100 - (hightRatioOfBottomSheet.split('%')[0] * 100)}%`,
     position: 'absolute',
   };
-
-  const handleNewLocation = async () => {
-    if (isChooseLocationOnMap && panLocation) {
-      const { lat: panLat, lng: panLng } = panLocation;
+  const safeReleasePin = () => networkInfo.isConnectionAvailable() && setIsDraggingLocationPin(false);
+  const handleNewLocation = async (location) => {
+    if (isChooseLocationOnMap && panLat && panLng) {
       const lat = panLat.toFixed(6);
       const lng = panLng.toFixed(6);
       const [pickup] = requestStopPoints;
@@ -323,13 +324,14 @@ export default React.forwardRef(({
       const sourcePoint = point([finalStopPoint.lng, finalStopPoint.lat]);
       const destinationPoint = point([lng, lat]);
       const changeDistance = distance(sourcePoint, destinationPoint, { units: 'meters' });
-      if (changeDistance < 5 && networkInfo.isConnectionAvailable()) {
-        setIsDraggingLocationPin(false);
+      if (changeDistance < 5) {
+        safeReleasePin();
         return;
       }
       const spData = await reverseLocationGeocode(lat, lng);
       if (spData) {
         saveSelectedLocation(spData);
+        safeReleasePin();
         setPickupChanged(true);
         Mixpanel.setEvent('Change stop point location', {
           gesture_type: 'drag_map',
@@ -342,11 +344,12 @@ export default React.forwardRef(({
     }
   };
   useEffect(() => {
-    handleNewLocation(panLocation);
-  }, [panLocation]);
+    handleNewLocation(lastSelectedLocation);
+  }, [panLat, panLng]);
 
   const onRegionChangeComplete = (event) => {
-    setPanLocation({ lat: event.latitude, lng: event.longitude });
+    setPanLat(event.latitude);
+    setPanLng(event.longitude);
   };
 
   return (

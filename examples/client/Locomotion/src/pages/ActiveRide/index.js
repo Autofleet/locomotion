@@ -86,7 +86,7 @@ const RidePage = ({ mapSettings, navigation }) => {
 
   const {
     currentBsPage, changeBsPage, setIsDraggingLocationPin,
-    setPanLocation, panLocation,
+    setPanLat, setPanLng, panLat, panLng,
   } = useContext(RideStateContextContext);
   const { checkMessagesForToast } = useContext(MessagesContext);
   const { isStationsEnabled } = useContext(VirtualStationsContext);
@@ -284,16 +284,17 @@ const RidePage = ({ mapSettings, navigation }) => {
       const location = await getPosition();
       ({ coords } = (location || DEFAULT_COORDS));
       const { latitude, longitude } = coords;
-      if (latitude !== panLocation.lat || longitude !== panLocation.lng) {
+      if (latitude !== panLat || longitude !== panLng) {
         setIsDraggingLocationPin(true);
         const animateTime = 1000;
         mapRef.current.animateToRegion({
-          latitude: parseFloat(latitude),
-          longitude: parseFloat(longitude),
+          latitude: parseFloat(coords.latitude),
+          longitude: parseFloat(coords.longitude),
           ...deltas,
         }, animateTime);
         if (networkInfo.isConnectionAvailable()) {
-          setPanLocation({ lat: latitude, lng: longitude });
+          setPanLat(coords.latitude);
+          setPanLng(coords.longitude);
         }
       }
     }
