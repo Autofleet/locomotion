@@ -83,6 +83,7 @@ const getFirstPendingStopPoint = sps => (sps || []).find(sp => sp.state
 
 export default React.forwardRef(({
   mapSettings,
+  onRegionChangeComplete,
 }, ref) => {
   const { isDarkMode, primaryColor } = useContext(ThemeContext);
   const {
@@ -105,15 +106,11 @@ export default React.forwardRef(({
   const { StationMarkers, isStationsEnabled } = useContext(VirtualStationsContext);
 
   const isMainPage = currentBsPage === BS_PAGES.ADDRESS_SELECTOR;
-  const isChooseLocationOnMap = [BS_PAGES.CONFIRM_PICKUP, BS_PAGES.SET_LOCATION_ON_MAP]
-    .includes(currentBsPage) && !isStationsEnabled;
+
   const {
     lastSelectedLocation,
-    requestStopPoints, saveSelectedLocation, reverseLocationGeocode, ride,
+    requestStopPoints, ride,
     chosenService,
-    updateLocationOnMapData,
-    pickupChanged,
-    setPickupChanged,
   } = useContext(RidePageContext);
   const {
     newFutureRide,
@@ -195,7 +192,6 @@ export default React.forwardRef(({
 
   useEffect(() => {
     if (currentBsPage === BS_PAGES.CONFIRM_PICKUP) {
-      setPickupChanged(false);
       const [pickupStopPoint] = requestStopPoints;
       if (pickupStopPoint) {
         ref.current.animateToRegion({
@@ -312,23 +308,6 @@ export default React.forwardRef(({
     position: 'absolute',
   };
 
-  const onRegionChangeComplete = async (event) => {
-    if (isChooseLocationOnMap) {
-      const { latitude, longitude } = event;
-      const lat = latitude.toFixed(6);
-      const lng = longitude.toFixed(6);
-      const [pickup] = requestStopPoints;
-      const finalStopPoint = lastSelectedLocation || pickup;
-      const sourcePoint = point([finalStopPoint.lng, finalStopPoint.lat]);
-      const destinationPoint = point([lng, lat]);
-      const changeDistance = distance(sourcePoint, destinationPoint, { units: 'meters' });
-      if (changeDistance < 5) {
-        setIsDraggingLocationPin(false);
-        return;
-      }
-      await updateLocationOnMapData(lat, lng);
-    }
-  };
 
   return (
     <>
@@ -336,13 +315,13 @@ export default React.forwardRef(({
         provider={Config.MAP_PROVIDER}
         showsUserLocation={PAGES_TO_SHOW_MY_LOCATION.includes(currentBsPage)}
         style={mapPositionStyles}
+        onRegionChangeComplete={onRegionChangeComplete}
         showsMyLocationButton={false}
         loadingEnabled
         showsCompass={false}
         key="map"
         followsUserLocation={isUserLocationFocused}
         moveOnMarkerPress={false}
-        onRegionChangeComplete={onRegionChangeComplete}
         onPanDrag={() => {
           setIsDraggingLocationPin(true);
           if (!isUserLocationFocused === false) {
@@ -410,21 +389,7 @@ export default React.forwardRef(({
         {isStationsEnabled && PAGES_TO_SHOW_STATIONS_MARKERS.includes(currentBsPage)
           ? <StationMarkers requestedStopPoints={requestStopPoints} /> : null}
       </MapView>
-      {isChooseLocationOnMap && (
-        <LocationMarkerContainer
-          pointerEvents="none"
-          style={mapPositionStyles}
-        >
 
-          <PickupTextContainer
-            hide={currentBsPage !== BS_PAGES.CONFIRM_PICKUP
-          || isDraggingLocationPin}
-          >
-            <PickupText>{pickupChanged ? i18n.t('map.pickupChanged') : i18n.t('map.pickupHere')}</PickupText>
-          </PickupTextContainer>
-          <LocationMarker />
-        </LocationMarkerContainer>
-      )}
     </>
   );
 });
