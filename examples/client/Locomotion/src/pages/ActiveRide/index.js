@@ -8,7 +8,6 @@ import {
 } from 'react-native';
 import { Portal } from '@gorhom/portal';
 import Config from 'react-native-config';
-import networkInfo from '../../services/networkInfo';
 import AFToast from '../../Components/Toast';
 import * as navigationService from '../../services/navigation';
 import { MAIN_ROUTES } from '../routes';
@@ -289,9 +288,7 @@ const RidePage = ({ mapSettings, navigation }) => {
         longitude: parseFloat(coords.longitude),
         ...deltas,
       }, animateTime);
-      if (networkInfo.isConnectionAvailable()) {
-        await updateLocationOnMapData(coords.latitude, coords.longitude);
-      }
+      await updateLocationOnMapData(coords.latitude, coords.longitude);
     }
     return coords;
   };
