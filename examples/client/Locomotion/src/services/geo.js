@@ -2,15 +2,20 @@
 import { Alert, PermissionsAndroid, Platform } from 'react-native';
 import Config from 'react-native-config';
 import RNLocation from 'react-native-location';
-import Geolocation from '@react-native-community/geolocation';
+import Geolocation from 'react-native-geolocation-service';
 
 const ONE_MINUTE = 60 * 1000;
-const FIVE_SECONDS = 5 * 1000;
+const ONE_SECOND = 1000;
 
 const DEFAULT_OPTIONS = {
-  enableHighAccuracy: true,
-  timeout: FIVE_SECONDS,
+  enableHighAccuracy: false,
+  timeout: 2 * ONE_SECOND,
   maximumAge: ONE_MINUTE,
+  accuracy: {
+    ios: 'best',
+    android: 'high',
+  },
+  distanceFilter: 5,
 };
 
 const currentLocationNative = async (options) => {
@@ -76,11 +81,16 @@ class Geo {
       },
     });
     if (result) {
-      // If permission is granted, we will warmup the location manager
-      // to get a faster response when requesting location updates
-      currentLocationNative({
-        maximumAge: 0,
-      });
+      try {
+        // If permission is granted, we will warmup the location manager
+        // to get a faster response when requesting location updates
+        currentLocationNative({
+          maximumAge: 0,
+          timeout: 10 * ONE_SECOND,
+        });
+      } catch (e) {
+        console.error('Error warming up location manager', e);
+      }
     }
     return result;
   };
