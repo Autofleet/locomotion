@@ -50,6 +50,7 @@ class Geo {
 
   initAsync = async () => {
     await this.configure();
+    await this.requestPermission();
     await this.checkPermission();
   };
 
@@ -68,7 +69,6 @@ class Geo {
   });
 
   checkPermission = async () => {
-    await this.requestPermission();
     const result = await RNLocation.checkPermission({
       ios: 'whenInUse',
       android: {
