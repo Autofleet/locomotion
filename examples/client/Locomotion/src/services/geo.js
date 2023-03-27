@@ -5,11 +5,11 @@ import RNLocation from 'react-native-location';
 import Geolocation from '@react-native-community/geolocation';
 
 const ONE_MINUTE = 60 * 1000;
-const THREE_SECONDS = 3 * 1000;
+const TWO_SECONDS = 2 * 1000;
 
 const DEFAULT_OPTIONS = {
   enableHighAccuracy: false,
-  timeout: THREE_SECONDS,
+  timeout: TWO_SECONDS,
   maximumAge: ONE_MINUTE,
 };
 
