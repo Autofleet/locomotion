@@ -18,7 +18,7 @@ const currentLocationNative = async (options) => {
     const granted = await
     PermissionsAndroid.check(PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION);
     if (!granted) {
-      Alert('Location error');
+      Alert.alert('Location error');
       return null;
     }
   }
@@ -85,6 +85,7 @@ class Geo {
   };
 
   currentLocation = async (options) => {
+    this.requestPermission();
     const location = await currentLocationNative(options);
     return prepareCoords([location.coords || location]);
   };
