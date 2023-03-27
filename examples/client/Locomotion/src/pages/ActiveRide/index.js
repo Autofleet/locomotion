@@ -196,6 +196,7 @@ const RidePage = ({ mapSettings, navigation }) => {
     [BS_PAGES.SERVICE_ESTIMATIONS]: () => (
       <RideOptions />
     ),
+
     [BS_PAGES.CONFIRM_PICKUP_TIME]: () => (
       <ConfirmPickupTime />
     ),
