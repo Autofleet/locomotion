@@ -5,11 +5,11 @@ import RNLocation from 'react-native-location';
 import Geolocation from '@react-native-community/geolocation';
 
 const ONE_MINUTE = 60 * 1000;
-const TWO_SECONDS = 2 * 1000;
+const FIVE_SECONDS = 5 * 1000;
 
 const DEFAULT_OPTIONS = {
-  enableHighAccuracy: false,
-  timeout: TWO_SECONDS,
+  enableHighAccuracy: true,
+  timeout: FIVE_SECONDS,
   maximumAge: ONE_MINUTE,
 };
 
@@ -68,12 +68,22 @@ class Geo {
     activityType: 'other',
   });
 
-  checkPermission = () => RNLocation.checkPermission({
-    ios: 'whenInUse',
-    android: {
-      detail: 'fine',
-    },
-  });
+  checkPermission = async () => {
+    const result = await RNLocation.checkPermission({
+      ios: 'whenInUse',
+      android: {
+        detail: 'fine',
+      },
+    });
+    if (result) {
+      // If permission is granted, we will warmup the location manager
+      // to get a faster response when requesting location updates
+      currentLocationNative({
+        maximumAge: 0,
+      });
+    }
+    return result;
+  };
 
   requestPermission = async () => {
     await RNLocation.requestPermission({
@@ -85,7 +95,7 @@ class Geo {
   };
 
   currentLocation = async (options) => {
-    this.requestPermission();
+    await this.requestPermission();
     const location = await currentLocationNative(options);
     return prepareCoords([location.coords || location]);
   };
@@ -106,10 +116,12 @@ export const DEFAULT_COORDS = {
 export const getPosition = async (options) => {
   try {
     const granted = await GeoService.checkPermission();
+    console.log('granted', granted);
     if (!granted) {
       return false;
     }
-    return GeoService.currentLocation(options);
+    const location = await GeoService.currentLocation(options);
+    return location;
   } catch (e) {
     console.error('Error getting location', e);
     return false;
