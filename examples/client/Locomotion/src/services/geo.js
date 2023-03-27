@@ -114,7 +114,6 @@ export const DEFAULT_COORDS = {
 };
 export const getPosition = async (options) => {
   try {
-    await this.requestPermission();
     const granted = await GeoService.checkPermission();
     if (!granted) {
       return false;
