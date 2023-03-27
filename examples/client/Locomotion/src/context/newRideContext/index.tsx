@@ -109,7 +109,7 @@ interface RidePageContextInterface {
   setSelectedInputIndex: Dispatch<number | null>;
   selectedInputTarget: any;
   setSelectedInputTarget: Dispatch<any | null>;
-  onAddressSelected: (item: any, needToLoadRide: boolean, index?: number) => void;
+  onAddressSelected: (item: any, needToLoadRide: boolean, index?: number, refreshCurrentLocation?: boolean) => void;
   requestStopPoints: any[];
   searchResults: any;
   searchAddress: (searchText: string) => void;
@@ -166,7 +166,7 @@ export const RidePageContext = createContext<RidePageContextInterface>({
   setSelectedInputIndex: () => undefined,
   selectedInputTarget: null,
   setSelectedInputTarget: () => undefined,
-  onAddressSelected: (item: any, needToLoadRide: boolean, index?: number) => undefined,
+  onAddressSelected: (item: any, needToLoadRide: boolean, index?: number, refreshCurrentLocation?: boolean) => undefined,
   requestStopPoints: [],
   searchResults: [],
   searchAddress: (searchText: string) => undefined,
@@ -760,7 +760,7 @@ const RidePageContextProvider = ({ children }: {
     }
   };
 
-  const onAddressSelected = async (selectedItem: any, needToLoadRide: boolean, index?: number) => {
+  const onAddressSelected = async (selectedItem: any, needToLoadRide: boolean, index?: number, refreshCurrentLocation?: boolean) => {
     if (selectedItem.isLoading) {
       return null;
     }
@@ -772,6 +772,10 @@ const RidePageContextProvider = ({ children }: {
       enrichedPlace = await enrichPlaceWithLocation(selectedItem.placeId);
     }
     const reqSps = [...requestStopPoints];
+    if (refreshCurrentLocation) {
+      const newCurrentLocation = await getCurrentLocationAddress();
+      reqSps[0] = { ...reqSps[0], ...newCurrentLocation };
+    }
     reqSps[index || selectedInputIndex || 0] = {
       ...reqSps[index || selectedInputIndex || 0],
       externalId: selectedItem.externalId,

@@ -76,6 +76,7 @@ const AddressSelectorBottomSheet = ({ addressSelectorFocusIndex }) => {
   const { stationsList, isStationsEnabled } = useContext(VirtualStationsContext);
   const {
     changeBsPage,
+    currentBsPage,
     searchResults,
   } = useContext(RideStateContextContext);
 
@@ -141,7 +142,7 @@ const AddressSelectorBottomSheet = ({ addressSelectorFocusIndex }) => {
           isHistory
           key={h.placeId}
           onPress={() => {
-            userContext.onAddressSelected(h, false, 1);
+            userContext.onAddressSelected(h, false, 1, !isExpanded);
           }}
         />
       ));
