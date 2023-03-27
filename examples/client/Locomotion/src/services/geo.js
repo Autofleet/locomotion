@@ -69,6 +69,7 @@ class Geo {
   });
 
   checkPermission = async () => {
+    await this.requestPermission();
     const result = await RNLocation.checkPermission({
       ios: 'whenInUse',
       android: {
@@ -95,7 +96,6 @@ class Geo {
   };
 
   currentLocation = async (options) => {
-    await this.requestPermission();
     const location = await currentLocationNative(options);
     return prepareCoords([location.coords || location]);
   };
@@ -116,7 +116,6 @@ export const DEFAULT_COORDS = {
 export const getPosition = async (options) => {
   try {
     const granted = await GeoService.checkPermission();
-    console.log('granted', granted);
     if (!granted) {
       return false;
     }
