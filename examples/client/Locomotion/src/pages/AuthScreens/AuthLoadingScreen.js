@@ -17,6 +17,7 @@ import networkInfo from '../../services/networkInfo';
 import GenericErrorPopup from '../../popups/GenericError';
 import i18n from '../../I18n';
 import Mixpanel from '../../services/Mixpanel';
+import DeviceService from '../../services/device';
 
 export const INITIAL_USER_STATE = {
   phoneNumber: '',
@@ -64,6 +65,7 @@ const AuthLoadingScreen = () => {
           updateUser({
             lastLogin: moment().toDate(),
             deviceType: Platform.OS,
+            appVersion: DeviceService.getVersion(),
           }),
         ]);
 
