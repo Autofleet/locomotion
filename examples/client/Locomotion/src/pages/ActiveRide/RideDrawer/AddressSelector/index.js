@@ -76,7 +76,6 @@ const AddressSelectorBottomSheet = ({ addressSelectorFocusIndex }) => {
   const { stationsList, isStationsEnabled } = useContext(VirtualStationsContext);
   const {
     changeBsPage,
-    currentBsPage,
     searchResults,
   } = useContext(RideStateContextContext);
 
