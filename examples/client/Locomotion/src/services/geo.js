@@ -4,10 +4,12 @@ import Config from 'react-native-config';
 import RNLocation from 'react-native-location';
 import Geolocation from '@react-native-community/geolocation';
 
+const FIFTEEN_SECONDS_IN_MILLISECONDS = 15 * 1000;
+
 const DEFAULT_OPTIONS = {
-  enableHighAccuracy: true,
+  enableHighAccuracy: false,
   timeout: 20000,
-  maximumAge: 0,
+  maximumAge: FIFTEEN_SECONDS_IN_MILLISECONDS,
 };
 
 const currentLocationNative = async (options) => {
