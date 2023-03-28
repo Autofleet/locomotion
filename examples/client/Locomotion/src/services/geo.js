@@ -84,10 +84,10 @@ class Geo {
       try {
         // If permission is granted, we will warmup the location manager
         // to get a faster response when requesting location updates
-        currentLocationNative({
-          maximumAge: 0,
-          timeout: 10 * ONE_SECOND,
-        });
+        // currentLocationNative({
+        //   maximumAge: 0,
+        //   timeout: 10 * ONE_SECOND,
+        // });
       } catch (e) {
         console.error('Error warming up location manager', e);
       }
