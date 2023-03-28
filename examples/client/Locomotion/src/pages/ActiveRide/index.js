@@ -5,6 +5,7 @@ import Toast from 'react-native-toast-message';
 import { useIsFocused, useFocusEffect } from '@react-navigation/native';
 import {
   AppState, BackHandler, Platform, View, Dimensions,
+  Alert,
 } from 'react-native';
 import { Portal } from '@gorhom/portal';
 import Config from 'react-native-config';
@@ -280,6 +281,7 @@ const RidePage = ({ mapSettings, navigation }) => {
   };
   const focusCurrentLocation = async () => {
     let coords;
+    changeBsPage(BS_PAGES.ADDRESS_SELECTOR);
     if ([RIDE_STATES.ACTIVE, RIDE_STATES.DISPATCHED].includes(ride.state)) {
       const currentStopPoint = (ride.stopPoints || [])
         .find(sp => sp.state === STOP_POINT_STATES.PENDING);
@@ -316,8 +318,12 @@ const RidePage = ({ mapSettings, navigation }) => {
   };
 
   const checkLocationPermission = async () => {
-    const granted = await geo.checkPermission();
-    setLocationGranted(granted);
+    try {
+      const granted = await geo.checkPermission();
+      setLocationGranted(granted);
+    } catch (error) {
+      Alert.alert('Error', error.message);
+    }
   };
 
   useEffect(() => {

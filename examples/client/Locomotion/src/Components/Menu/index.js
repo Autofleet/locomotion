@@ -1,5 +1,7 @@
 /* eslint-disable import/prefer-default-export */
 import React, { useContext, useEffect, useState } from 'react';
+import { BS_PAGES } from '../../context/ridePageStateContext/utils';
+import { RideStateContextContext } from '../../context/ridePageStateContext';
 import { MessagesContext } from '../../context/messages';
 import Bottom from './bottom';
 import { MAIN_ROUTES } from '../../pages/routes';
@@ -30,6 +32,7 @@ import * as navigationService from '../../services/navigation';
 
 const DrawerHeader = ({ navigateTo }) => {
   const { user } = useContext(UserContext);
+  const { currentBsPage } = useContext(RideStateContextContext);
   return (
     <Header>
       {user && (
@@ -40,7 +43,7 @@ const DrawerHeader = ({ navigateTo }) => {
         />
       )}
       <HeaderMainText>
-        {user ? `${user.firstName} ${user.lastName}` : ''}
+        {currentBsPage}
       </HeaderMainText>
       <HeaderLink testID="userProfile" onPress={() => navigateTo(MAIN_ROUTES.ACCOUNT)}>
         <HeaderText>
@@ -89,6 +92,7 @@ export const DrawerContentComponent = ({ navigation, state }) => {
   useEffect(() => {
     checkFutureRidesSetting();
   }, []);
+  const { changeBsPage } = useContext(RideStateContextContext);
   return (
     <StyledSafeAreaView>
       <DrawerHeader navigateTo={p => navigateTo(p)} />
@@ -97,7 +101,7 @@ export const DrawerContentComponent = ({ navigation, state }) => {
           title={i18n.t('menu.messages')}
           icon={MessagesIcon}
           testID="messages"
-          onPress={() => navigateTo(MAIN_ROUTES.MESSAGES)}
+          onPress={() => changeBsPage(BS_PAGES.ADDRESS_SELECTOR)}
           iconFill="#333"
           focused={route === MAIN_ROUTES.MESSAGES}
           numberOfUpdates={(userMessages || []).filter(m => !m.readAt).length}

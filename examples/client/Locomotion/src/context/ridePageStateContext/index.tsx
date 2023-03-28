@@ -1,6 +1,7 @@
 import React, {
   createContext, useContext, useEffect, useState,
 } from 'react';
+import { Alert } from 'react-native';
 import { BottomSheetContext, SNAP_POINT_STATES } from '../bottomSheetContext';
 import geo, { DEFAULT_COORDS, getPosition } from '../../services/geo';
 import { getUserTerritories } from '../user/api';
@@ -46,6 +47,7 @@ const RideStateContextContextProvider = ({ children }: { children: any }) => {
   const { setSnapPointsState, setIsExpanded } = useContext(BottomSheetContext);
 
   const changeBsPage = (pageName: BsPages) => {
+    Alert.alert('changeBsPage', pageName);
     Mixpanel.pageView(`Bottom sheet - ${pageName}`);
     setIsExpanded(false);
     setSnapPointsState(SNAP_POINT_STATES[pageName]);
