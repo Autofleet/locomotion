@@ -392,17 +392,24 @@ export const GenericError = (props: any) => {
   );
 };
 
-export const LocationRequest = (props: any) => (
-  <BsPage
-    TitleText={i18n.t('bottomSheetContent.locationRequest.titleText')}
-    ButtonText={i18n.t('bottomSheetContent.locationRequest.buttonText')}
-    SecondaryButtonText={i18n.t('bottomSheetContent.locationRequest.secondaryButtonText')}
-    SubTitleText={i18n.t('bottomSheetContent.locationRequest.subTitleText', { operation: Config.OPERATION_NAME })}
-    onButtonPress={Linking.openSettings}
-    fullWidthButtons
-    {...props}
-  />
-);
+export const LocationRequest = (props: any) => {
+  const { setSnapPointsState } = useContext(BottomSheetContext);
+
+  useEffect(() => {
+    setSnapPointsState(SNAP_POINT_STATES.LOCATION_REQUEST);
+  }, []);
+  return (
+    <BsPage
+      TitleText={i18n.t('bottomSheetContent.locationRequest.titleText')}
+      ButtonText={i18n.t('bottomSheetContent.locationRequest.buttonText')}
+      SecondaryButtonText={i18n.t('bottomSheetContent.locationRequest.secondaryButtonText')}
+      SubTitleText={i18n.t('bottomSheetContent.locationRequest.subTitleText', { operation: Config.OPERATION_NAME })}
+      onButtonPress={Linking.openSettings}
+      fullWidthButtons
+      {...props}
+    />
+  );
+};
 
 export const CancelRide = (props: any) => {
   const [isLoading, setIsLoading] = useState(false);
