@@ -2,12 +2,20 @@
 import { Alert, PermissionsAndroid, Platform } from 'react-native';
 import Config from 'react-native-config';
 import RNLocation from 'react-native-location';
-import Geolocation from '@react-native-community/geolocation';
+import Geolocation from 'react-native-geolocation-service';
+
+const ONE_MINUTE = 60 * 1000;
+const ONE_SECOND = 1000;
 
 const DEFAULT_OPTIONS = {
-  enableHighAccuracy: true,
-  timeout: 20000,
-  maximumAge: 0,
+  enableHighAccuracy: false,
+  timeout: 2 * ONE_SECOND,
+  maximumAge: ONE_MINUTE,
+  accuracy: {
+    ios: 'best',
+    android: 'high',
+  },
+  distanceFilter: 5,
 };
 
 const currentLocationNative = async (options) => {
@@ -15,7 +23,7 @@ const currentLocationNative = async (options) => {
     const granted = await
     PermissionsAndroid.check(PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION);
     if (!granted) {
-      Alert('Location error');
+      Alert.alert('Location error');
       return null;
     }
   }
@@ -65,12 +73,27 @@ class Geo {
     activityType: 'other',
   });
 
-  checkPermission = () => RNLocation.checkPermission({
-    ios: 'whenInUse',
-    android: {
-      detail: 'fine',
-    },
-  });
+  checkPermission = async () => {
+    const result = await RNLocation.checkPermission({
+      ios: 'whenInUse',
+      android: {
+        detail: 'fine',
+      },
+    });
+    if (result) {
+      try {
+        // If permission is granted, we will warmup the location manager
+        // to get a faster response when requesting location updates
+        currentLocationNative({
+          maximumAge: 0,
+          timeout: 10 * ONE_SECOND,
+        });
+      } catch (e) {
+        console.error('Error warming up location manager', e);
+      }
+    }
+    return result;
+  };
 
   requestPermission = async () => {
     await RNLocation.requestPermission({
@@ -105,7 +128,8 @@ export const getPosition = async (options) => {
     if (!granted) {
       return false;
     }
-    return GeoService.currentLocation(options);
+    const location = await GeoService.currentLocation(options);
+    return location;
   } catch (e) {
     console.error('Error getting location', e);
     return false;
