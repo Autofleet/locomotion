@@ -8,6 +8,8 @@ import {
 } from 'react-native';
 import { Portal } from '@gorhom/portal';
 import Config from 'react-native-config';
+import { distance, point } from '@turf/turf';
+import networkInfo from '../../services/networkInfo';
 import AFToast from '../../Components/Toast';
 import * as navigationService from '../../services/navigation';
 import { MAIN_ROUTES } from '../routes';
@@ -38,7 +40,7 @@ import { RidePageContext } from '../../context/newRideContext';
 import { fetchRides } from '../../context/newRideContext/api';
 import BottomSheetContextProvider, { BottomSheetContext, SNAP_POINT_STATES } from '../../context/bottomSheetContext';
 import {
-  PageContainer, MapOverlayButtons,
+  PageContainer, MapOverlayButtons, LocationMarkerContainer, PickupTextContainer, PickupText, LocationMarker,
 } from './styled';
 import Header from '../../Components/Header';
 import MainMap, { ACTIVE_RIDE_MAP_PADDING } from './newMap';
@@ -68,6 +70,7 @@ import { rideHistoryContext } from '../../context/rideHistory';
 import SafeView from '../../Components/SafeView';
 import CancellationReasonsPopup from '../../popups/CancellationReasonsPopup';
 import VirtualStationsProvider, { VirtualStationsContext } from '../../context/virtualStationsContext';
+import Mixpanel from '../../services/Mixpanel';
 
 const BLACK_OVERLAY_SCREENS = [BS_PAGES.CANCEL_RIDE];
 
@@ -75,7 +78,9 @@ const RidePage = ({ mapSettings, navigation }) => {
   const {
     locationGranted, setLocationGranted,
   } = useContext(UserContext);
+
   const [addressSelectorFocusIndex, setAddressSelectorFocusIndex] = useState(1);
+  const [pickupChanged, setPickupChanged] = useState(false);
   const [topMessage, setTopMessage] = useState(null);
   const { getSettingByKey } = settings.useContainer();
 
@@ -83,8 +88,10 @@ const RidePage = ({ mapSettings, navigation }) => {
   const bottomSheetRef = useRef(null);
 
   const {
-    currentBsPage, changeBsPage, setIsDraggingLocationPin,
+    currentBsPage, changeBsPage, setIsDraggingLocationPin, isDraggingLocationPin,
   } = useContext(RideStateContextContext);
+  const isChooseLocationOnMap = [BS_PAGES.CONFIRM_PICKUP, BS_PAGES.SET_LOCATION_ON_MAP]
+    .includes(currentBsPage) && !isStationsEnabled;
   const { checkMessagesForToast } = useContext(MessagesContext);
   const { isStationsEnabled } = useContext(VirtualStationsContext);
 
@@ -106,6 +113,9 @@ const RidePage = ({ mapSettings, navigation }) => {
     cleanRideState,
     updateRide,
     clearRequestSp,
+    lastSelectedLocation,
+    saveSelectedLocation,
+    reverseLocationGeocode,
   } = useContext(RidePageContext);
   const {
     setIsExpanded, snapPoints, isExpanded, topBarText,
@@ -254,11 +264,27 @@ const RidePage = ({ mapSettings, navigation }) => {
     ),
     [BS_PAGES.ACTIVE_RIDE]: () => <ActiveRide />,
   };
+  const updateLocationOnMapData = async (lat, lng) => {
+    const spData = await reverseLocationGeocode(lat, lng);
+    if (spData) {
+      saveSelectedLocation(spData);
+      setPickupChanged(true);
+      Mixpanel.setEvent('Change stop point location', {
+        gesture_type: 'drag_map',
+        screen: currentBsPage,
+        ...spData,
+        lat,
+        lng,
+      });
+    }
+  };
   const focusCurrentLocation = async () => {
+    let coords;
     if ([RIDE_STATES.ACTIVE, RIDE_STATES.DISPATCHED].includes(ride.state)) {
-      const currentStopPoint = (ride.stopPoints || []).find(sp => sp.state === STOP_POINT_STATES.PENDING);
+      const currentStopPoint = (ride.stopPoints || [])
+        .find(sp => sp.state === STOP_POINT_STATES.PENDING);
       if (currentStopPoint) {
-        const coords = getPolylineList(currentStopPoint, ride);
+        coords = getPolylineList(currentStopPoint, ride);
         mapRef.current.fitToCoordinates(coords, {
           animated: true,
           edgePadding: ACTIVE_RIDE_MAP_PADDING,
@@ -277,17 +303,16 @@ const RidePage = ({ mapSettings, navigation }) => {
       }
       setIsDraggingLocationPin(true);
       const location = await getPosition();
-      const { coords } = (location || DEFAULT_COORDS);
+      ({ coords } = (location || DEFAULT_COORDS));
       const animateTime = 1000;
       mapRef.current.animateToRegion({
         latitude: parseFloat(coords.latitude),
         longitude: parseFloat(coords.longitude),
         ...deltas,
       }, animateTime);
-      setTimeout(() => {
-        setIsDraggingLocationPin(false);
-      }, animateTime + 500);
+      await updateLocationOnMapData(coords.latitude, coords.longitude);
     }
+    return coords;
   };
 
   const checkLocationPermission = async () => {
@@ -340,6 +365,7 @@ const RidePage = ({ mapSettings, navigation }) => {
     await checkVersionAndForceUpdateIfNeeded(minAppVersion);
   };
 
+
   const initChecks = async () => {
     await versionCheck();
     await checkLocationPermission();
@@ -388,6 +414,11 @@ const RidePage = ({ mapSettings, navigation }) => {
       }
     }
   }, [isExpanded]);
+  useEffect(() => {
+    if (currentBsPage === BS_PAGES.CONFIRM_PICKUP) {
+      setPickupChanged(false);
+    }
+  }, [currentBsPage]);
 
   useEffect(() => {
     prepareTopMessage();
@@ -423,12 +454,53 @@ const RidePage = ({ mapSettings, navigation }) => {
     cleanRideState();
   };
 
+  const onPressTargetIcon = async () => {
+    const coords = await focusCurrentLocation();
+    const lat = coords?.latitude;
+    const lng = coords?.longitude;
+    Mixpanel.clickEvent('Target Icon',
+      { currentPage: currentBsPage, lat, lng });
+  };
+
+
+  const onRegionChangeComplete = async (event) => {
+    if (isChooseLocationOnMap) {
+      const { latitude, longitude } = event;
+      const lat = latitude.toFixed(6);
+      const lng = longitude.toFixed(6);
+      const [pickup] = requestStopPoints;
+      const finalStopPoint = lastSelectedLocation || pickup;
+      const sourcePoint = point([finalStopPoint.lng, finalStopPoint.lat]);
+      const destinationPoint = point([lng, lat]);
+      const changeDistance = distance(sourcePoint, destinationPoint, { units: 'meters' });
+      if (changeDistance < 5 && networkInfo.isConnectionAvailable()) {
+        setIsDraggingLocationPin(false);
+        return;
+      }
+      await updateLocationOnMapData(lat, lng);
+    }
+  };
   return (
     <PageContainer>
       <MainMap
+        onRegionChangeComplete={onRegionChangeComplete}
         ref={mapRef}
         mapSettings={mapSettings}
       />
+      {isChooseLocationOnMap && (
+      <LocationMarkerContainer
+        pointerEvents="none"
+      >
+
+        <PickupTextContainer
+          hide={currentBsPage !== BS_PAGES.CONFIRM_PICKUP
+          || isDraggingLocationPin}
+        >
+          <PickupText>{pickupChanged ? i18n.t('map.pickupChanged') : i18n.t('map.pickupHere')}</PickupText>
+        </PickupTextContainer>
+        <LocationMarker />
+      </LocationMarkerContainer>
+      )}
       {serviceEstimations || currentBsPage === BS_PAGES.SET_LOCATION_ON_MAP
         ? (
           <SafeView>
@@ -482,7 +554,7 @@ const RidePage = ({ mapSettings, navigation }) => {
         {!isExpanded && locationGranted && (
         <SquareSvgButton
           noLoader
-          onPress={focusCurrentLocation}
+          onPress={onPressTargetIcon}
           icon={targetIcon}
           style={Platform.OS === 'android' ? { shadowColor: '#000' } : {}}
         />
