@@ -1,6 +1,6 @@
 /* eslint-disable class-methods-use-this */
 import Config from 'react-native-config';
-import { } from 'mixpanel-react-native';
+import { Mixpanel } from 'mixpanel-react-native';
 import { getDeviceId } from './device';
 
 export const getElementName = props => props.testID || props.id;
@@ -8,15 +8,16 @@ export const getElementName = props => props.testID || props.id;
 class MixpanelService {
   constructor() {
     this.isInit = false;
-    this.init();
     this.mixpanel = {};
+    this.init();
   }
 
   init = async () => {
     if (!this.isInit && Config.MIXPANEL_TOKEN) {
       const trackAutomaticEvents = true;
-      this.mixpanel = new (Config.MIXPANEL_TOKEN, trackAutomaticEvents)();
+      this.mixpanel = new Mixpanel(Config.MIXPANEL_TOKEN, trackAutomaticEvents);
       this.mixpanel.init();
+      this.mixpanel.setLoggingEnabled(true);
       this.isInit = true;
     }
   };
@@ -37,7 +38,6 @@ class MixpanelService {
 
   trackWithProperties = (event, props) => {
     if (this.isInit && this.mixpanel) {
-      console.log({ mixpanel: this.mixpanel });
       this.mixpanel.track(event,
         {
           ...props,
