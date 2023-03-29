@@ -35,7 +35,9 @@ const AvailabilityContextProvider = ({ children }: { children: any }) => {
       try {
         let coords;
         try {
-          const location = await getPosition();
+          const location = await getPosition({
+            maximumAge: 1000 * 60 * 2,
+          });
           if (location) {
             ({ coords } = location);
           }

@@ -36,7 +36,7 @@ import SETTINGS_KEYS from '../settings/keys';
 import { RideStateContextContext } from '../ridePageStateContext';
 import { BS_PAGES } from '../ridePageStateContext/utils';
 import {
-  RIDE_STATES, RIDE_FINAL_STATES, STOP_POINT_TYPES, PAYMENT_STATES,
+  RIDE_STATES, RIDE_FINAL_STATES, STOP_POINT_TYPES, PAYMENT_STATES, CHARGE_FOR_TIP,
 } from '../../lib/commonTypes';
 import useBackgroundInterval from '../../lib/useBackgroundInterval';
 import { formatSps } from '../../lib/ride/utils';
@@ -155,6 +155,7 @@ interface RidePageContextInterface {
   getRidesByParams: (params: any) => Promise<RideInterface[]>;
   numberOfPassengers: number,
   setNumberOfPassengers: (num: number) => void,
+  setLastAcknowledgedRideCompletionTimestampToNow: () => void
 }
 
 export const RidePageContext = createContext<RidePageContextInterface>({
@@ -211,6 +212,7 @@ export const RidePageContext = createContext<RidePageContextInterface>({
   getRidesByParams: async (params: any) => [],
   numberOfPassengers: null,
   setNumberOfPassengers: () => undefined,
+  setLastAcknowledgedRideCompletionTimestampToNow: () => undefined,
 });
 
 const HISTORY_RECORDS_NUM = 10;
@@ -278,10 +280,10 @@ const RidePageContextProvider = ({ children }: {
     clearLastRide();
   };
 
-  const onRideCompleted = (rideId: string) => {
+  const onRideCompleted = (rideId: string, priceCalculationId: string) => {
     cleanRideState();
     if (getRouteName() !== 'CompletedRideOverviewPage') {
-      navigationService.navigate(MAIN_ROUTES.POST_RIDE, { rideId });
+      navigationService.navigate(MAIN_ROUTES.POST_RIDE, { rideId, priceCalculationId });
     }
     setTimeout(() => {
       changeBsPage(BS_PAGES.ADDRESS_SELECTOR);
@@ -302,7 +304,7 @@ const RidePageContextProvider = ({ children }: {
       changeBsPage(BS_PAGES.NO_AVAILABLE_VEHICLES);
     },
     [RIDE_STATES.COMPLETED]: (completedRide: any) => {
-      onRideCompleted(completedRide.id);
+      onRideCompleted(completedRide.id, completedRide.priceCalculationId);
     },
     [RIDE_STATES.DISPATCHED]: (newRide: any) => {
       cleanRequestStopPoints();
@@ -389,8 +391,8 @@ const RidePageContextProvider = ({ children }: {
 
       const tags = getEstimationTags(estimations);
       const formattedEstimations = formatEstimations(services, estimations, tags);
-      const isCurrentChosenServiceAvailable = chosenService && formattedEstimations.some((e: any) => e.id === chosenService.id);
-      setChosenService(isCurrentChosenServiceAvailable ? chosenService : formattedEstimations.find((e: any) => e.currency));
+      const newChosenService = chosenService && formattedEstimations.find((e: any) => e.id === chosenService.id);
+      setChosenService(newChosenService || formattedEstimations.find((e: any) => e.currency));
       setDefaultService(formattedEstimations?.[0]);
       setServiceEstimations(formattedEstimations);
     } catch (e: any) {
@@ -475,7 +477,18 @@ const RidePageContextProvider = ({ children }: {
     });
 
     await setLastAcknowledgedRideCompletionTimestampToNow();
-    return rides.filter((r: any) => r.rating === null)[0];
+
+    const [currentRide] = rides;
+    if (currentRide) {
+      const priceCalculation: any = await getRidePriceCalculation(currentRide.id, currentRide.priceCalculationId);
+      const tip = priceCalculation?.additionalCharges.find(({ chargeFor }: any) => chargeFor === CHARGE_FOR_TIP);
+      // check null because of zero
+      if (currentRide.rating === null && !tip) {
+        return currentRide;
+      }
+      return null;
+    }
+    return null;
   };
 
   const loadActiveRide = async () => {
@@ -495,7 +508,7 @@ const RidePageContextProvider = ({ children }: {
         const lastRide = await rideApi.getRide(lastRideId);
         if (lastRide.state === RIDE_STATES.COMPLETED) {
           setTimeout(() => {
-            onRideCompleted(lastRideId);
+            onRideCompleted(lastRideId, lastRide.priceCalculationId);
           }, 1000);
         }
       }
@@ -510,7 +523,7 @@ const RidePageContextProvider = ({ children }: {
     const completedRide = await getLastCompletedRide();
     if (completedRide?.id) {
       setTimeout(() => {
-        onRideCompleted(completedRide?.id);
+        onRideCompleted(completedRide?.id, completedRide?.priceCalculationId);
       }, 1000);
     }
   };
@@ -780,7 +793,9 @@ const RidePageContextProvider = ({ children }: {
   const getCurrentLocation = async () => {
     const location = await getPosition();
     if (!location) {
-      changeBsPage(BS_PAGES.LOCATION_REQUEST);
+      if (!ride?.id) {
+        changeBsPage(BS_PAGES.LOCATION_REQUEST);
+      }
       return DEFAULT_COORDS.coords;
     }
     return location.coords;
@@ -988,6 +1003,9 @@ const RidePageContextProvider = ({ children }: {
         },
       });
       changeBsPage(BS_PAGES.GENERIC_ERROR);
+    },
+    [RIDE_FAILED_REASONS.USER_ACTIVE_RIDE_LIMIT_REACHED]: () => {
+      loadActiveRide();
     },
   };
 
@@ -1199,11 +1217,12 @@ const RidePageContextProvider = ({ children }: {
     id?: string | undefined,
     priceCalculationId?: string,
   ) => {
-    if (id || ride.id) {
-      if (!priceCalculationId) {
-        ({ priceCalculationId } = await getRideFromApi(id || ride.id || ''));
+    if (id || ride?.id) {
+      let finalPriceCalculation = priceCalculationId || ride?.priceCalculationId;
+      if (!finalPriceCalculation) {
+        ({ priceCalculationId: finalPriceCalculation } = await getRideFromApi(id || ride.id || ''));
       }
-      const calculation = await rideApi.getPriceCalculation(priceCalculationId);
+      const calculation = await rideApi.getPriceCalculation(finalPriceCalculation);
       return calculation;
     }
     return null;
@@ -1293,6 +1312,7 @@ const RidePageContextProvider = ({ children }: {
         formatStationToSearchResult,
         formatStationsList,
         clearRequestSp,
+        setLastAcknowledgedRideCompletionTimestampToNow,
       }}
     >
       {children}
