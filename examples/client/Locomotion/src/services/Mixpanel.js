@@ -1,6 +1,6 @@
 /* eslint-disable class-methods-use-this */
 import Config from 'react-native-config';
-import Mixpanel from 'react-native-mixpanel';
+import { } from 'mixpanel-react-native';
 import { getDeviceId } from './device';
 
 export const getElementName = props => props.testID || props.id;
@@ -9,11 +9,14 @@ class MixpanelService {
   constructor() {
     this.isInit = false;
     this.init();
+    this.mixpanel = {};
   }
 
   init = async () => {
     if (!this.isInit && Config.MIXPANEL_TOKEN) {
-      await Mixpanel.sharedInstanceWithToken(Config.MIXPANEL_TOKEN, true);
+      const trackAutomaticEvents = true;
+      this.mixpanel = new (Config.MIXPANEL_TOKEN, trackAutomaticEvents)();
+      this.mixpanel.init();
       this.isInit = true;
     }
   };
@@ -22,9 +25,9 @@ class MixpanelService {
     const uniqueId = (user && user.id) || getDeviceId();
     this.user = user;
     if (user && user.id) {
-      await Mixpanel.optInTracking();
-      await Mixpanel.identify(uniqueId);
-      Mixpanel.set({
+      this.mixpanel.optInTracking();
+      this.mixpanel.identify(uniqueId);
+      this.mixpanel.getPeople().set({
         AFId: user.id,
         demandSourceId: Config.OPERATION_ID,
         appName: Config.OPERATION_NAME,
@@ -33,8 +36,14 @@ class MixpanelService {
   };
 
   trackWithProperties = (event, props) => {
-    if (this.isInit) {
-      Mixpanel.trackWithProperties(event, { ...props, demandSourceId: Config.OPERATION_ID, appName: Config.OPERATION_NAME });
+    if (this.isInit && this.mixpanel) {
+      console.log({ mixpanel: this.mixpanel });
+      this.mixpanel.track(event,
+        {
+          ...props,
+          demandSourceId: Config.OPERATION_ID,
+          appName: Config.OPERATION_NAME,
+        });
     }
   };
 
@@ -59,20 +68,20 @@ class MixpanelService {
   };
 
   resetIdentifier = async () => {
-    await Mixpanel.clearSuperProperties();
-    await Mixpanel.reset();
+    await this.mixpanel.clearSuperProperties();
+    await this.mixpanel.reset();
   };
 
   registerSuperProperties = (properties) => {
-    Mixpanel.registerSuperProperties(properties);
+    this.mixpanel.registerSuperProperties(properties);
   };
 
   demoMode = (isDemoUser) => {
     if (isDemoUser) {
-      Mixpanel.optOutTracking();
+      this.mixpanel.optOutTracking();
     } else {
-      Mixpanel.setOnce({ demo_user: isDemoUser });
-      Mixpanel.registerSuperProperties({ demo_user: isDemoUser });
+      this.mixpanel.registerSuperPropertiesOnce({ demo_user: isDemoUser });
+      this.mixpanel.registerSuperProperties({ demo_user: isDemoUser });
     }
   };
 }
