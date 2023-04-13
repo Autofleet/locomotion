@@ -113,6 +113,7 @@ const RidePage = ({ mapSettings, navigation }) => {
     cleanRideState,
     updateRide,
     clearRequestSp,
+    setUnconfirmedPickupTime,
     lastSelectedLocation,
     saveSelectedLocation,
     reverseLocationGeocode,
@@ -183,7 +184,10 @@ const RidePage = ({ mapSettings, navigation }) => {
     ),
     [BS_PAGES.CONFIRM_FUTURE_RIDE]: () => (
       <ConfirmFutureRide
-        onButtonPress={backToMap}
+        onButtonPress={() => {
+          setUnconfirmedPickupTime(null);
+          backToMap();
+        }}
       />
     ),
     [BS_PAGES.CANCEL_RIDE]: () => (
@@ -192,6 +196,7 @@ const RidePage = ({ mapSettings, navigation }) => {
     [BS_PAGES.SERVICE_ESTIMATIONS]: () => (
       <RideOptions />
     ),
+
     [BS_PAGES.CONFIRM_PICKUP_TIME]: () => (
       <ConfirmPickupTime />
     ),
