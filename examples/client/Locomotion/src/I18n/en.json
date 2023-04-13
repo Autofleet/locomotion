@@ -121,7 +121,7 @@
             "name": {
                 "title": "Personal Details",
                 "text": "What's your name?",
-                "subText": "Let us know the best way to address you."
+                "subText": "Let us know your first and last name"
             },
             "card": {
                 "title": "Payment Method",
@@ -289,7 +289,6 @@
         },
         "rideSummary": {
             "thanksForRideHeadline": "Thanks for your ride!",
-            "rideDataHeadline": "",
             "durationLabel": "Duration",
             "distanceLabel": "Distance",
             "priceLabel": "Price",
@@ -397,7 +396,6 @@
         "pageTitle": "Rides History",
         "tripPageTitle": "Trip details",
         "noRides": "No results found",
-        "noRidesSubText": "",
         "ride": {
             "states": {
                 "canceled": "Canceled",
