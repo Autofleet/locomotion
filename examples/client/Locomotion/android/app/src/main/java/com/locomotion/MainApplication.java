@@ -18,6 +18,7 @@ import com.locomotion.newarchitecture.MainApplicationReactNativeHost;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import com.BV.LinearGradient.LinearGradientPackage;
+import com.kevinejohn.RNMixpanel.*;
 import com.facebook.react.bridge.JSIModulePackage;
 import com.swmansion.reanimated.ReanimatedJSIModulePackage;
 import com.facebook.react.modules.i18nmanager.I18nUtil;
