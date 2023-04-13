@@ -334,6 +334,11 @@
                 "text": "Usaremos esta información para mejorar la experiencia de nuestros usuarios.",
                 "button": "Listo"
             }
+        },
+        "noConnection": {
+            "title": "Algo no está funcionando",
+            "text": "Parece que hay un error de conexión. Porfavor chequee su señal e intente de nuevo",
+            "buttonText": "Entendido"
         }
     },
     "menu": {
@@ -701,7 +706,7 @@
             "defaultStation": "Esta estación fue seleccionada por omisión"
         },
         "search": {
-            "addressNotFound": "Dirección no encontrada. Por favor intente otra busqueda.",
+            "addressNotFound": "Dirección no encontrada. Por favor intente otra búsqueda.",
             "currentLocation": "Ubicación actual",
             "pickup": "Punto de recogida",
             "title": "Buscando estaciones cerca:"
@@ -717,5 +722,9 @@
         "Don't need a courier anymore": "Ya no necesito un mensajero",
         "Found another ride": "Encontré otro viaje",
         "Don't need a ride anymore": "Ya no necesito este viaje"
+    },
+    "map": {
+        "pickupHere": "Recogida aquí",
+        "pickupChanged": "Recogida cambiada"
     }
 }
