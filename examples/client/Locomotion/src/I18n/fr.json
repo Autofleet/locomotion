@@ -58,7 +58,7 @@
             "pickup": "Départ",
             "dropoff": "Arrivé"
         },
-        "highEta": "L'estimation d'heure d'arrivée est plus élevée que d'habitude",
+        "highEta": "Le trajet est plus long que d’habitude",
         "outOfTerritory": "Indisponible sur le territoire"
     },
     "general": {
