@@ -76,7 +76,7 @@ const AccountContent = ({ setHeaderTitle }) => {
   const [chosenLanguageIndex, setChosenLanguageIndex] = useState(0);
   const [isLanguagePickerVisible, setLanguagePickerVisible] = useState(false);
 
-  const { user, deleteUser, verifyEmail } = useContext(UserContext);
+  const { user, deleteUser } = useContext(UserContext);
   const usePayments = PaymentsContext.useContainer();
 
   const updateDefault = async () => {
@@ -92,16 +92,9 @@ const AccountContent = ({ setHeaderTitle }) => {
 
   const emailIsVerified = user?.isEmailVerified;
   const onEmailPress = () => {
-    if (emailIsVerified) {
-      navigationService.navigate(MAIN_ROUTES.EMAIL, {
-        editAccount: true,
-      });
-    } else {
-      verifyEmail();
-      navigationService.navigate(MAIN_ROUTES.EMAIL_CODE, {
-        editAccount: true,
-      });
-    }
+    navigationService.navigate(MAIN_ROUTES.EMAIL, {
+      editAccount: true,
+    });
   };
 
   const languageItems = Object.entries(supportedLanguages).map(([key, val]) => ({
