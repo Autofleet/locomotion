@@ -56,7 +56,7 @@
         "estimatedFareMessage": "Certains tarifs sont estimés et peuvent varier en fonction du trajet et d'autres conditions",
         "type": {
             "pickup": "Départ",
-            "dropoff": "Arrivé"
+            "dropoff": "Arrivée"
         },
         "highEta": "L'estimation du trajet est plus longue que d’habitude",
         "outOfTerritory": "Indisponible sur le territoire"
@@ -674,7 +674,7 @@
             "pending": "Rendez-vous au point de prise en charge"
         },
         "dropoff": {
-            "arrived": "Arrivé à l'arrêt",
+            "arrived": "Arrivé au premier l'arrêt",
             "pending": "Heure d'arrivée estimée à l'arrêt"
         },
         "topMessage": {
