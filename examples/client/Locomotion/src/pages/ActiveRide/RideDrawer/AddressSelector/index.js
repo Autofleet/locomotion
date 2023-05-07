@@ -141,7 +141,7 @@ const AddressSelectorBottomSheet = ({ addressSelectorFocusIndex }) => {
           isHistory
           key={h.placeId}
           onPress={() => {
-            userContext.onAddressSelected(h, false, 1);
+            userContext.onAddressSelected(h, false, 1, !isExpanded);
           }}
         />
       ));
