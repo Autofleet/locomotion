@@ -78,6 +78,10 @@ const AvailabilityVehicle = ({
     }
   }, [markerRef]);
 
+  const svgStyle : any = { color: vehicleColor };
+  if (location && location.bearing) {
+    svgStyle.transform = [{ rotate: `${location.bearing}deg` }];
+  }
   return (
     <MarkerAnimated
       key={id}
@@ -93,7 +97,7 @@ const AvailabilityVehicle = ({
         Svg={carIcon}
         height={48}
         width={48}
-        style={{ transform: [{ rotate: `${location.bearing}deg` }], color: vehicleColor }}
+        style={svgStyle}
       />
     </MarkerAnimated>
 
