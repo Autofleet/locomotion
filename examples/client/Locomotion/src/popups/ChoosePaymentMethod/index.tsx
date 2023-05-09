@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-expressions */
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { View } from 'react-native';
 import PropTypes from 'prop-types';
 import Modal from 'react-native-modal';
@@ -21,6 +21,7 @@ import PaymentMethod from '../../Components/CardRow';
 import PaymentsContext from '../../context/payments';
 import cashPaymentMethod from '../../pages/Payments/cashPaymentMethod';
 import * as navigationService from '../../services/navigation';
+import { MewRidePageContext } from '../../context';
 
 interface PaymentMethodPopupProps {
   isVisible: boolean;
@@ -35,13 +36,14 @@ interface PaymentMethodPopupProps {
 const PaymentMethodPopup = ({
   isVisible, onCancel, onSubmit, showCash, rideFlow, selected, onAddNewMethod,
 }: PaymentMethodPopupProps) => {
-  const usePayments = PaymentsContext.useContainer();
+  const usePayments: any = PaymentsContext.useContainer();
+  const { chosenService } = useContext(MewRidePageContext);
   const [selectedPaymentId, setSelectedPaymentId] = useState<string | undefined>(selected);
+  const isChosenServiceCash = !chosenService || chosenService.allowCash;
 
   useEffect(() => {
     usePayments.getOrFetchCustomer();
   }, []);
-
 
   useEffect(() => {
     const updateDefaultPaymentMethod = async () => {
@@ -57,8 +59,8 @@ const PaymentMethodPopup = ({
     updateDefaultPaymentMethod();
   }, [usePayments.paymentMethods, selected]);
 
-  const onSave = () => {
-    onSubmit(selectedPaymentId);
+  const onSave = (id?: string) => {
+    onSubmit(id || selectedPaymentId);
     onCancel();
   };
 
@@ -73,6 +75,12 @@ const PaymentMethodPopup = ({
 
     getIsCashEnabled();
   }, [usePayments.paymentMethods]);
+
+  useEffect(() => {
+    if (selectedPaymentId === 'cash' && !chosenService?.allowCash) {
+      onSave((usePayments?.paymentMethods || [])[0]?.id);
+    }
+  }, [chosenService]);
 
   return (
     <Modal
@@ -94,7 +102,7 @@ const PaymentMethodPopup = ({
         <CardsScrollView>
           <Container>
             <View>
-              {(isCashEnabled && showCash
+              {(isCashEnabled && showCash && isChosenServiceCash
                 ? [...usePayments.paymentMethods, cashPaymentMethod]
                 : usePayments.paymentMethods).map((paymentMethod: any, i) => (
                   <PaymentMethod

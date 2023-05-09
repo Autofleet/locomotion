@@ -350,7 +350,7 @@ const RidePageContextProvider = ({ children }: {
       const estimationForService = estimationsMap[service.id];
       return formatEstimationsResult(service, estimationForService, tags);
     });
-
+    formattedServices[0].allowCash = true;
     return formattedServices.sort((a, b) => {
       if (
         (a.serviceAvailabilitiesNumber !== 0 && b.serviceAvailabilitiesNumber !== 0)
