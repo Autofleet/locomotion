@@ -1,6 +1,7 @@
 import axios from 'axios';
-import Config from 'react-native-config';
 import crashlytics from '@react-native-firebase/crashlytics';
+import moment from 'moment';
+import { getDeviceId } from './device';
 import Auth from './auth';
 import AppSettings from './app-settings';
 
@@ -22,6 +23,16 @@ const formatResponseLog = function ({ data = '' }) {
     str = `${str}...(cut)`;
   }
   return str;
+};
+const getJwtPayload = () => {
+  const data = {
+    requestId: `${getDeviceId()}`,
+  };
+  const expiry = moment().fromNow().add(5, 'minutes').unix();
+  return {
+    data,
+    expiry,
+  };
 };
 
 class Network {
@@ -70,7 +81,7 @@ class Network {
         this.axios.defaults.baseURL = baseURL;
         const accessToken = await Auth.getAT(this.axios);
         this.axios.defaults.headers.common.Authorization = accessToken ? `Bearer ${accessToken}` : accessToken;
-
+        this.axios.defaults.headers.common['app-integrity-token'] = await Auth.jwtSign(getJwtPayload());
         this.axios.defaults.headers.common['x-loco-ds-id'] = operationId;
         this.axios.defaults.headers.common['x-loco-op-id'] = operationId;
         return this.axios[method](...args).catch((e) => {

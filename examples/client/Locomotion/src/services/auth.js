@@ -1,6 +1,7 @@
 /* eslint-disable class-methods-use-this */
 import jwtDecode from 'jwt-decode';
 import RNRestart from 'react-native-restart';
+import { sign } from 'react-native-pure-jwt';
 import StorageService from './storage';
 import AppSettings from './app-settings';
 
@@ -65,6 +66,18 @@ class Auth {
     accessToken: at,
     refreshToken: rt,
   });
+
+  jwtSign = async ({ data, expiry }) => {
+    const signedJwt = await sign({
+      ...data,
+      exp: expiry,
+    }, 'my-secret',
+    {
+      alg: 'HS256',
+    });
+    console.log('signedJwt_debug', signedJwt);
+    return signedJwt;
+  };
 }
 
 export default new Auth();
