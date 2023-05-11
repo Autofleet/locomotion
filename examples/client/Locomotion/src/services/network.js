@@ -1,6 +1,7 @@
 import axios from 'axios';
 import crashlytics from '@react-native-firebase/crashlytics';
 import moment from 'moment';
+import uuid from 'react-native-uuid';
 import { getDeviceId } from './device';
 import Auth from './auth';
 import AppSettings from './app-settings';
@@ -26,9 +27,9 @@ const formatResponseLog = function ({ data = '' }) {
 };
 const getJwtPayload = () => {
   const data = {
-    requestId: `${getDeviceId()}`,
+    requestId: `${getDeviceId()}:${uuid.v4()}}`,
   };
-  const expiry = moment().fromNow().add(5, 'minutes').unix();
+  const expiry = moment().add(5, 'minutes').unix();
   return {
     data,
     expiry,

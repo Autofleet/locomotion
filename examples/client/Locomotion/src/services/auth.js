@@ -2,6 +2,7 @@
 import jwtDecode from 'jwt-decode';
 import RNRestart from 'react-native-restart';
 import { sign } from 'react-native-pure-jwt';
+import Config from 'react-native-config';
 import StorageService from './storage';
 import AppSettings from './app-settings';
 
@@ -68,14 +69,18 @@ class Auth {
   });
 
   jwtSign = async ({ data, expiry }) => {
+    console.log('newJwt_debug1', {
+      ...data,
+      exp: expiry,
+    });
     const signedJwt = await sign({
       ...data,
       exp: expiry,
-    }, 'my-secret',
+    }, Config.APP_INTEGRITY_SIGN_KEY,
     {
       alg: 'HS256',
     });
-    console.log('signedJwt_debug', signedJwt);
+    console.log('newJwt_debug2', signedJwt);
     return signedJwt;
   };
 }
