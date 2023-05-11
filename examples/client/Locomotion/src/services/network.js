@@ -1,8 +1,8 @@
 import axios from 'axios';
+import Config from 'react-native-config';
 import crashlytics from '@react-native-firebase/crashlytics';
 import moment from 'moment';
 import uuid from 'react-native-uuid';
-import Config from 'react-native-config';
 import { getDeviceId } from './device';
 import Auth from './auth';
 import AppSettings from './app-settings';

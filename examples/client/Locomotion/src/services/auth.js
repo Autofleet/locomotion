@@ -69,10 +69,6 @@ class Auth {
   });
 
   jwtSign = async ({ data, expiry }) => {
-    console.log('newJwt_debug1', {
-      ...data,
-      exp: expiry,
-    });
     const signedJwt = await sign({
       ...data,
       exp: expiry * 1000,
@@ -80,7 +76,6 @@ class Auth {
     {
       alg: 'HS256',
     });
-    console.log('newJwt_debug4', signedJwt);
     return signedJwt;
   };
 }
