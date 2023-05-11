@@ -17,6 +17,7 @@ class Auth {
     },
   });
 
+
   getAT = async (network) => {
     const { accessToken, refreshToken } = await StorageService.get(['accessToken', 'refreshToken']);
     if (!refreshToken) {
@@ -65,6 +66,12 @@ class Auth {
     accessToken: at,
     refreshToken: rt,
   });
+
+  updateCaptchaToken = captchaToken => StorageService.save({
+    captchaToken,
+  });
+
+  getCaptchaToken = () => StorageService.get('captchaToken');
 }
 
 export default new Auth();

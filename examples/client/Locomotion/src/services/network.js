@@ -68,11 +68,15 @@ class Network {
           AppSettings.getOperationId(),
         ]);
         this.axios.defaults.baseURL = baseURL;
-        const accessToken = await Auth.getAT(this.axios);
+        const [accessToken, captchaToken] = await Promise.all([
+          Auth.getAT(this.axios),
+          Config.CAPTCHA_KEY && Auth.getCaptchaToken(),
+        ]);
+        console.log('debug_captchaToken', captchaToken);
         this.axios.defaults.headers.common.Authorization = accessToken ? `Bearer ${accessToken}` : accessToken;
-
         this.axios.defaults.headers.common['x-loco-ds-id'] = operationId;
         this.axios.defaults.headers.common['x-loco-op-id'] = operationId;
+        this.axios.defaults.headers.common['captcha-token'] = captchaToken;
         return this.axios[method](...args).catch((e) => {
           crashlytics().log(`HTTP Request Error ${e.message}`);
           if ((e.response && e.response.status === 401)

@@ -1,5 +1,10 @@
-import React, { useContext, useState } from 'react';
+import React, {
+  useContext, useEffect, useRef, useState,
+} from 'react';
 import { Trans } from 'react-i18next';
+import Recaptcha from 'react-native-recaptcha-that-works';
+import { Alert } from 'react-native';
+import Config from 'react-native-config';
 import logo from '../../../assets/logo.png';
 import i18n from '../../../I18n';
 import {
@@ -21,14 +26,33 @@ import { INITIAL_USER_STATE } from '../AuthLoadingScreen';
 import Settings from '../../../context/settings';
 import SETTING_KEYS from '../../../context/settings/keys';
 import * as navigationService from '../../../services/navigation';
+import Auth from '../../../services/auth';
 
 const StartScreen = () => {
   const { setUser } = useContext(UserContext);
   const { getSettingByKey } = Settings.useContainer();
   const [webViewWindow, setWebViewWindow] = useState(null);
-  const nextScreen = () => {
+  const recaptchaRef = useRef(null);
+  const [captchaToken, setCaptchaToken] = useState('');
+
+  const onVerify = async (token) => {
+    setCaptchaToken(token);
+    await Auth.updateCaptchaToken(token);
+    Alert.alert('success!', token);
+  };
+
+  useEffect(() => {
+    if (captchaToken) {
+      recaptchaRef.current.close();
+      navigationService.navigate(MAIN_ROUTES.PHONE);
+    }
+  }, [captchaToken]);
+
+  const handleGetStartedClick = async () => {
     setUser(INITIAL_USER_STATE);
-    navigationService.navigate(MAIN_ROUTES.PHONE);
+    if (recaptchaRef.current) {
+      recaptchaRef.current.open();
+    }
   };
 
   const openTerms = async () => {
@@ -56,6 +80,7 @@ const StartScreen = () => {
       {!webViewWindow ? (
         <PageContainer>
           <>
+
             <InfoContainer>
               <LogoContainer>
                 <Logo resizeMode="contain" source={logo} />
@@ -65,11 +90,19 @@ const StartScreen = () => {
               <StartButton
                 testID="loginButton"
                 dark
-                onPress={() => nextScreen()}
+                onPress={async () => handleGetStartedClick()}
               >
                 <ButtonText dark>{i18n.t('login.getStarted')}</ButtonText>
               </StartButton>
             </ButtonsContainer>
+            <Recaptcha
+              ref={recaptchaRef}
+              siteKey={Config.CAPTCHA_KEY}
+              baseUrl="https://www.google.com/recaptcha/api/siteverify"
+              onVerify={onVerify}
+              size="invisible"
+              hideBadge={false}
+            />
             <TermsText>
               <Trans
                 i18nKey="login.termsAgreement"
