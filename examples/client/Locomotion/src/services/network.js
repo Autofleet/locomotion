@@ -2,6 +2,7 @@ import axios from 'axios';
 import crashlytics from '@react-native-firebase/crashlytics';
 import moment from 'moment';
 import uuid from 'react-native-uuid';
+import Config from 'react-native-config';
 import { getDeviceId } from './device';
 import Auth from './auth';
 import AppSettings from './app-settings';
@@ -26,10 +27,11 @@ const formatResponseLog = function ({ data = '' }) {
   return str;
 };
 const getJwtPayload = () => {
+  const BYPASS_CAPTCHA_EXPIRY_MINUTES = 60;
   const data = {
     requestId: `${getDeviceId()}:${uuid.v4()}}`,
   };
-  const expiry = moment().add(5, 'minutes').unix();
+  const expiry = moment().utc().add(BYPASS_CAPTCHA_EXPIRY_MINUTES, 'minutes').unix();
   return {
     data,
     expiry,
@@ -82,7 +84,9 @@ class Network {
         this.axios.defaults.baseURL = baseURL;
         const accessToken = await Auth.getAT(this.axios);
         this.axios.defaults.headers.common.Authorization = accessToken ? `Bearer ${accessToken}` : accessToken;
-        this.axios.defaults.headers.common['app-integrity-token'] = await Auth.jwtSign(getJwtPayload());
+        if (Config.APP_INTEGRITY_SIGN_KEY) {
+          this.axios.defaults.headers.common['app-integrity-token'] = await Auth.jwtSign(getJwtPayload());
+        }
         this.axios.defaults.headers.common['x-loco-ds-id'] = operationId;
         this.axios.defaults.headers.common['x-loco-op-id'] = operationId;
         return this.axios[method](...args).catch((e) => {

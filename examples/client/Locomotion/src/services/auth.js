@@ -75,12 +75,12 @@ class Auth {
     });
     const signedJwt = await sign({
       ...data,
-      exp: expiry,
+      exp: expiry * 1000,
     }, Config.APP_INTEGRITY_SIGN_KEY,
     {
       alg: 'HS256',
     });
-    console.log('newJwt_debug2', signedJwt);
+    console.log('newJwt_debug4', signedJwt);
     return signedJwt;
   };
 }
