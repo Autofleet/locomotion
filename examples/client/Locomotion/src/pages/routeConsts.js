@@ -27,6 +27,7 @@ import PromoCode from './PromoCode';
 import Messages from './MessagesList';
 import MessageView from './MessageView';
 import DevSettingPage from './DevPage';
+import Captcha from './Captcha';
 
 export const ROUTES_COMPS = {
   [MAIN_ROUTES.HOME]: ActiveRide,
@@ -36,7 +37,7 @@ export const ROUTES_COMPS = {
   [MAIN_ROUTES.ACCOUNT]: Account,
   [MAIN_ROUTES.CONTACT_US]: ContactUs,
   [MAIN_ROUTES.WEBVIEW]: WebViewPage,
-  [MAIN_ROUTES.START]: StartScreen,
+  [MAIN_ROUTES.START]: Captcha,
   [MAIN_ROUTES.PHONE]: Phone,
   [MAIN_ROUTES.CODE]: Code,
   [MAIN_ROUTES.EMAIL_CODE]: EmailCode,
