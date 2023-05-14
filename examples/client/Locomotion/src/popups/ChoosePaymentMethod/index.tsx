@@ -95,7 +95,6 @@ const PaymentMethodPopup = ({
                 ? [...usePayments.paymentMethods, cashPaymentMethod]
                 : usePayments.paymentMethods).map((paymentMethod: any) => {
                 const reason = getDisabledReason(paymentMethod);
-                console.log(reason);
                 return (
                   <PaymentMethod
                     {...paymentMethod}
