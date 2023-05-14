@@ -75,7 +75,7 @@ class Network {
         this.axios.defaults.headers.common.Authorization = accessToken ? `Bearer ${accessToken}` : accessToken;
         this.axios.defaults.headers.common['x-loco-ds-id'] = operationId;
         this.axios.defaults.headers.common['x-loco-op-id'] = operationId;
-        this.axios.defaults.headers.common['captcha-token'] = captchaToken;
+        this.axios.defaults.headers.common['x-captcha-token'] = captchaToken;
         return this.axios[method](...args).catch((e) => {
           crashlytics().log(`HTTP Request Error ${e.message}`);
           if ((e.response && e.response.status === 401)

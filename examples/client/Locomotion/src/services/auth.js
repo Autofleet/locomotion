@@ -17,7 +17,6 @@ class Auth {
     },
   });
 
-
   getAT = async (network) => {
     const { accessToken, refreshToken } = await StorageService.get(['accessToken', 'refreshToken']);
     if (!refreshToken) {

@@ -3,7 +3,6 @@ import React, {
 } from 'react';
 import { Trans } from 'react-i18next';
 import Recaptcha from 'react-native-recaptcha-that-works';
-import { Alert } from 'react-native';
 import Config from 'react-native-config';
 import logo from '../../../assets/logo.png';
 import i18n from '../../../I18n';
@@ -47,7 +46,7 @@ const StartScreen = () => {
     }
   }, [captchaToken]);
 
-  const handleGetStartedClick = async () => {
+  const handleGetStartedClick = () => {
     setUser(INITIAL_USER_STATE);
     if (Config.CAPTCHA_KEY) {
       if (recaptchaRef.current) {
@@ -93,7 +92,7 @@ const StartScreen = () => {
               <StartButton
                 testID="loginButton"
                 dark
-                onPress={async () => handleGetStartedClick()}
+                onPress={() => handleGetStartedClick()}
               >
                 <ButtonText dark>{i18n.t('login.getStarted')}</ButtonText>
               </StartButton>
