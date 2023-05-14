@@ -83,7 +83,9 @@ const Phone = ({ navigation }) => {
     }
   };
   useEffect(() => {
-    submitPhoneNumber();
+    if (captchaToken) {
+      submitPhoneNumber();
+    }
   }, [captchaToken]);
 
 
