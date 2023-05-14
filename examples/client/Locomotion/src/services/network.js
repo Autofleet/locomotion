@@ -72,7 +72,6 @@ class Network {
           Auth.getAT(this.axios),
           Config.CAPTCHA_KEY && Auth.getCaptchaToken(),
         ]);
-        console.log('debug_captchaToken', captchaToken);
         this.axios.defaults.headers.common.Authorization = accessToken ? `Bearer ${accessToken}` : accessToken;
         this.axios.defaults.headers.common['x-loco-ds-id'] = operationId;
         this.axios.defaults.headers.common['x-loco-op-id'] = operationId;

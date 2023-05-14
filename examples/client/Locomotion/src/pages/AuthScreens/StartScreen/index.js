@@ -38,7 +38,6 @@ const StartScreen = () => {
   const onVerify = async (token) => {
     setCaptchaToken(token);
     await Auth.updateCaptchaToken(token);
-    Alert.alert('success!', token);
   };
 
   useEffect(() => {
@@ -50,8 +49,12 @@ const StartScreen = () => {
 
   const handleGetStartedClick = async () => {
     setUser(INITIAL_USER_STATE);
-    if (recaptchaRef.current) {
-      recaptchaRef.current.open();
+    if (Config.CAPTCHA_KEY) {
+      if (recaptchaRef.current) {
+        recaptchaRef.current.open();
+      }
+    } else {
+      navigationService.navigate(MAIN_ROUTES.PHONE);
     }
   };
 
@@ -95,14 +98,18 @@ const StartScreen = () => {
                 <ButtonText dark>{i18n.t('login.getStarted')}</ButtonText>
               </StartButton>
             </ButtonsContainer>
-            <Recaptcha
-              ref={recaptchaRef}
-              siteKey={Config.CAPTCHA_KEY}
-              baseUrl="https://www.google.com/recaptcha/api/siteverify"
-              onVerify={onVerify}
-              size="invisible"
-              hideBadge={false}
-            />
+            { Config.CAPTCHA_KEY
+              && (
+              <Recaptcha
+                ref={recaptchaRef}
+                siteKey={Config.CAPTCHA_KEY}
+                baseUrl="https://www.google.com/recaptcha/api/siteverify"
+                onVerify={onVerify}
+                size="invisible"
+                hideBadge={!Config.SHOW_CAPTCHA_ICON}
+              />
+              )
+            }
             <TermsText>
               <Trans
                 i18nKey="login.termsAgreement"
