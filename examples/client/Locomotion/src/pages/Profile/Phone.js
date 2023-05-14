@@ -1,7 +1,11 @@
-import React, { useContext, useState } from 'react';
+import React, {
+  useCallback,
+  useContext, useEffect, useRef, useState,
+} from 'react';
 import { useIsFocused } from '@react-navigation/native';
 import Config from 'react-native-config';
 import { ScrollView } from 'react-native';
+import Recaptcha from 'react-native-recaptcha-that-works';
 import i18n from '../../I18n';
 import SaveButton from './SaveButton';
 import { OnboardingContext } from '../../context/onboarding';
@@ -15,6 +19,7 @@ import { UserContext } from '../../context/user';
 import AppSettings from '../../services/app-settings';
 import * as NavigationService from '../../services/navigation';
 import { PageContainer, ContentContainer } from '../styles';
+import Auth from '../../services/auth';
 
 
 const Phone = ({ navigation }) => {
@@ -23,6 +28,24 @@ const Phone = ({ navigation }) => {
   const [showErrorText, setShowErrorText] = useState(false);
   const [renderId, setRenderId] = useState(0);
   const [isInvalid, setIsInvalid] = useState(true);
+  const recaptchaRef = useRef(null);
+  const [captchaToken, setCaptchaToken] = useState(null);
+
+  const onVerifyCaptcha = async (token) => {
+    setCaptchaToken(token);
+    await Auth.updateCaptchaToken(token);
+  };
+
+
+  const handleCaptcha = useCallback(() => {
+    if (Config.CAPTCHA_KEY) {
+      if (recaptchaRef.current) {
+        recaptchaRef.current.open();
+      }
+    } else {
+      NavigationService.navigate(MAIN_ROUTES.PHONE);
+    }
+  }, [Config.CAPTCHA_KEY]);
 
   const onPhoneNumberChange = (phoneNumber, isValid) => {
     setShowErrorText(false);
@@ -38,7 +61,7 @@ const Phone = ({ navigation }) => {
     403: () => setShowErrorText(i18n.t('login.clientIsBanned', { appName: Config.OPERATION_NAME })),
   };
 
-  const onSubmitPhoneNumber = async () => {
+  const submitPhoneNumber = async () => {
     try {
       if (isDebugPhoneNumber()) {
         NavigationService.navigate(MAIN_ROUTES.DEV_SETTINGS_PAGE);
@@ -47,7 +70,6 @@ const Phone = ({ navigation }) => {
       if (!isDevSettingOn()) {
         await AppSettings.destroy();
       }
-
       await onLogin(user.phoneNumber);
       updateState({ phoneNumber: user.phoneNumber });
       nextScreen(MAIN_ROUTES.PHONE);
@@ -60,6 +82,10 @@ const Phone = ({ navigation }) => {
       setShowErrorText(i18n.t('login.invalidPhoneNumberError'));
     }
   };
+  useEffect(() => {
+    submitPhoneNumber();
+  }, [captchaToken]);
+
 
   // Force render the component when the focus changes
   useState(() => {
@@ -98,10 +124,22 @@ const Phone = ({ navigation }) => {
           {showErrorText && <ErrorText>{showErrorText}</ErrorText>}
           <SaveButton
             isInvalid={isInvalid}
-            onNext={onSubmitPhoneNumber}
+            onNext={handleCaptcha}
             onFail={() => setShowErrorText(i18n.t('login.invalidPhoneNumberError'))
               }
           />
+          { Config.CAPTCHA_KEY
+              && (
+              <Recaptcha
+                ref={recaptchaRef}
+                siteKey={Config.CAPTCHA_KEY}
+                baseUrl="https://www.google.com/recaptcha/api/siteverify"
+                onVerify={onVerifyCaptcha}
+                size="invisible"
+                hideBadge={!Config.SHOW_CAPTCHA_ICON}
+              />
+              )
+            }
         </ContentContainer>
       </ScrollView>
     </PageContainer>

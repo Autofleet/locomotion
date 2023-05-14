@@ -32,31 +32,7 @@ const StartScreen = () => {
   const { setUser } = useContext(UserContext);
   const { getSettingByKey } = Settings.useContainer();
   const [webViewWindow, setWebViewWindow] = useState(null);
-  const recaptchaRef = useRef(null);
-  const [captchaToken, setCaptchaToken] = useState(null);
 
-  const onVerify = async (token) => {
-    setCaptchaToken(token);
-    await Auth.updateCaptchaToken(token);
-  };
-
-  useEffect(() => {
-    if (captchaToken) {
-      recaptchaRef.current.close();
-      navigationService.navigate(MAIN_ROUTES.PHONE);
-    }
-  }, [captchaToken]);
-
-  const handleGetStartedClick = useCallback(() => {
-    setUser(INITIAL_USER_STATE);
-    if (Config.CAPTCHA_KEY) {
-      if (recaptchaRef.current) {
-        recaptchaRef.current.open();
-      }
-    } else {
-      navigationService.navigate(MAIN_ROUTES.PHONE);
-    }
-  }, [Config.CAPTCHA_KEY]);
 
   const openTerms = async () => {
     const termsOfUseUrl = await getSettingByKey(SETTING_KEYS.TERMS_OF_USE_URL);
@@ -98,18 +74,7 @@ const StartScreen = () => {
                 <ButtonText dark>{i18n.t('login.getStarted')}</ButtonText>
               </StartButton>
             </ButtonsContainer>
-            { Config.CAPTCHA_KEY
-              && (
-              <Recaptcha
-                ref={recaptchaRef}
-                siteKey={Config.CAPTCHA_KEY}
-                baseUrl="https://www.google.com/recaptcha/api/siteverify"
-                onVerify={onVerify}
-                size="invisible"
-                hideBadge={!Config.SHOW_CAPTCHA_ICON}
-              />
-              )
-            }
+
             <TermsText>
               <Trans
                 i18nKey="login.termsAgreement"
