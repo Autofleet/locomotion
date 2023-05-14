@@ -33,7 +33,7 @@ const StartScreen = () => {
   const { getSettingByKey } = Settings.useContainer();
   const [webViewWindow, setWebViewWindow] = useState(null);
   const recaptchaRef = useRef(null);
-  const [captchaToken, setCaptchaToken] = useState('');
+  const [captchaToken, setCaptchaToken] = useState(null);
 
   const onVerify = async (token) => {
     setCaptchaToken(token);
