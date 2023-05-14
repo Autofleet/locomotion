@@ -1,4 +1,5 @@
 import React, {
+  useCallback,
   useContext, useEffect, useRef, useState,
 } from 'react';
 import { Trans } from 'react-i18next';
@@ -46,7 +47,7 @@ const StartScreen = () => {
     }
   }, [captchaToken]);
 
-  const handleGetStartedClick = () => {
+  const handleGetStartedClick = useCallback(() => {
     setUser(INITIAL_USER_STATE);
     if (Config.CAPTCHA_KEY) {
       if (recaptchaRef.current) {
@@ -55,7 +56,7 @@ const StartScreen = () => {
     } else {
       navigationService.navigate(MAIN_ROUTES.PHONE);
     }
-  };
+  }, [Config.CAPTCHA_KEY]);
 
   const openTerms = async () => {
     const termsOfUseUrl = await getSettingByKey(SETTING_KEYS.TERMS_OF_USE_URL);
