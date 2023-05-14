@@ -192,9 +192,8 @@ const UserContextProvider = ({ children }: { children: any }) => {
         console.log('Bad vert with response', vertResponse);
         return false;
       }
-      await Promise.all([
-        auth.updateTokens(vertResponse.refreshToken, vertResponse.accessToken),
-      ]);
+      await auth.updateTokens(vertResponse.refreshToken, vertResponse.accessToken);
+
       const userProfile = vertResponse.clientProfile || {};
       Mixpanel.setUser(userProfile);
       await Promise.all([

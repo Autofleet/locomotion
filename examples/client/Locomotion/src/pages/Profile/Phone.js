@@ -37,16 +37,6 @@ const Phone = ({ navigation }) => {
   };
 
 
-  const handleCaptcha = useCallback(() => {
-    if (Config.CAPTCHA_KEY) {
-      if (recaptchaRef.current) {
-        recaptchaRef.current.open();
-      }
-    } else {
-      NavigationService.navigate(MAIN_ROUTES.PHONE);
-    }
-  }, [Config.CAPTCHA_KEY]);
-
   const onPhoneNumberChange = (phoneNumber, isValid) => {
     setShowErrorText(false);
     setIsInvalid(!isValid);
@@ -82,6 +72,17 @@ const Phone = ({ navigation }) => {
       setShowErrorText(i18n.t('login.invalidPhoneNumberError'));
     }
   };
+
+  const onClickContinue = () => {
+    if (Config.CAPTCHA_KEY) {
+      if (recaptchaRef.current) {
+        recaptchaRef.current.open();
+      }
+    } else {
+      submitPhoneNumber();
+    }
+  };
+
   useEffect(() => {
     if (captchaToken) {
       submitPhoneNumber();
@@ -126,7 +127,7 @@ const Phone = ({ navigation }) => {
           {showErrorText && <ErrorText>{showErrorText}</ErrorText>}
           <SaveButton
             isInvalid={isInvalid}
-            onNext={handleCaptcha}
+            onNext={onClickContinue}
             onFail={() => setShowErrorText(i18n.t('login.invalidPhoneNumberError'))
               }
           />
