@@ -72,7 +72,7 @@ class Network {
           Auth.getAT(this.axios),
           Config.CAPTCHA_KEY && Auth.getCaptchaToken(),
         ]);
-        if (!accessToken && captchaToken) {
+        if (captchaToken) {
           this.axios.defaults.headers.common['x-captcha-token'] = captchaToken;
         }
         this.axios.defaults.headers.common.Authorization = accessToken ? `Bearer ${accessToken}` : accessToken;
