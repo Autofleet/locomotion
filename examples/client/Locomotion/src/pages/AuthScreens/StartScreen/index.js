@@ -1,10 +1,5 @@
-import React, {
-  useCallback,
-  useContext, useEffect, useRef, useState,
-} from 'react';
+import React, { useContext, useState } from 'react';
 import { Trans } from 'react-i18next';
-import Recaptcha from 'react-native-recaptcha-that-works';
-import Config from 'react-native-config';
 import logo from '../../../assets/logo.png';
 import i18n from '../../../I18n';
 import {
@@ -26,13 +21,15 @@ import { INITIAL_USER_STATE } from '../AuthLoadingScreen';
 import Settings from '../../../context/settings';
 import SETTING_KEYS from '../../../context/settings/keys';
 import * as navigationService from '../../../services/navigation';
-import Auth from '../../../services/auth';
 
 const StartScreen = () => {
   const { setUser } = useContext(UserContext);
   const { getSettingByKey } = Settings.useContainer();
   const [webViewWindow, setWebViewWindow] = useState(null);
-
+  const nextScreen = () => {
+    setUser(INITIAL_USER_STATE);
+    navigationService.navigate(MAIN_ROUTES.PHONE);
+  };
 
   const openTerms = async () => {
     const termsOfUseUrl = await getSettingByKey(SETTING_KEYS.TERMS_OF_USE_URL);
@@ -59,7 +56,6 @@ const StartScreen = () => {
       {!webViewWindow ? (
         <PageContainer>
           <>
-
             <InfoContainer>
               <LogoContainer>
                 <Logo resizeMode="contain" source={logo} />
@@ -69,12 +65,11 @@ const StartScreen = () => {
               <StartButton
                 testID="loginButton"
                 dark
-                onPress={() => handleGetStartedClick()}
+                onPress={() => nextScreen()}
               >
                 <ButtonText dark>{i18n.t('login.getStarted')}</ButtonText>
               </StartButton>
             </ButtonsContainer>
-
             <TermsText>
               <Trans
                 i18nKey="login.termsAgreement"
