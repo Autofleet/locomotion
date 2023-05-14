@@ -9,7 +9,7 @@ import DatePickerPoppup from '../../../../../popups/DatePickerPoppup';
 import FutureBookingButton from './FutureBookingButton';
 import {
   Container, RowContainer, ButtonContainer, ButtonText, StyledButton, HALF_WIDTH,
-  PickerDate, PickerTimeRange, PickerTitle,
+  PickerDate, PickerTimeRange, PickerTitle, ErrorText, ButtonContainerWithError, ButtonWithError,
 } from './styled';
 import { RidePageContext } from '../../../../../context/newRideContext';
 import NoteButton from '../../../../../Components/GenericRideButton';
@@ -82,6 +82,7 @@ const RideButtons = ({
   const [passengersCounterError, setPassengersCounterError] = useState(false);
   const firstDate = () => moment(ride?.scheduledTo || undefined).add(ride?.scheduledTo ? 0 : (minMinutesBeforeFutureRide || 0) + 1, 'minutes').toDate();
   const [tempSelectedDate, setTempSelectedDate] = useState(firstDate());
+  const paymentMethodNotAllowedOnService = chosenService && chosenService.blockedPaymentMethods.includes(ride.paymentMethodId);
 
   const checkFutureRidesSetting = async () => {
     const futureRidesEnabled = await getSettingByKey(
@@ -219,8 +220,9 @@ const RideButtons = ({
        ? cashPaymentMethod
        : paymentMethods.find(pm => pm.id === ridePaymentMethod);
 
-    return (
+    const pureButton = () => (
       <ButtonContainer
+        error={paymentMethodNotAllowedOnService}
         testID="RidePayment"
         onPress={() => {
           setPopupName('payment');
@@ -232,8 +234,22 @@ const RideButtons = ({
           icon={creditCardIcon}
           title={selectedPaymentMethod?.name === cashPaymentMethod.name ? i18n.t('payments.cash') : (selectedPaymentMethod?.name || i18n.t('bottomSheetContent.ride.addPayment'))}
           id={selectedPaymentMethod?.id}
+          invalid={paymentMethodNotAllowedOnService}
         />
       </ButtonContainer>
+    );
+    return (
+      <>
+        {paymentMethodNotAllowedOnService
+          ? (
+            <ButtonWithError
+              errorText={paymentMethodNotAllowedOnService && i18n.t('bottomSheetContent.ride.paymentMethodNotAllowedOnService', { type: ride.paymentMethodId })}
+            >
+              {pureButton()}
+            </ButtonWithError>
+          )
+          : pureButton() }
+      </>
     );
   };
 

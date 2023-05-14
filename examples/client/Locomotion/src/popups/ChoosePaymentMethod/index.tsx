@@ -39,7 +39,14 @@ const PaymentMethodPopup = ({
   const usePayments: any = PaymentsContext.useContainer();
   const { chosenService } = useContext(MewRidePageContext);
   const [selectedPaymentId, setSelectedPaymentId] = useState<string | undefined>(selected);
-  const isChosenServiceCash = !chosenService || chosenService.allowCash;
+  const chosenServiceAllowsCash = !chosenService || !chosenService.blockedPaymentMethods.includes('cash');
+
+  const getDisabledReason = (paymentMethod: any) => {
+    if (paymentMethod.id === 'cash' && !chosenServiceAllowsCash) {
+      return i18n.t('popups.choosePaymentMethod.unavailable');
+    }
+    return null;
+  };
 
   useEffect(() => {
     usePayments.getOrFetchCustomer();
@@ -57,30 +64,12 @@ const PaymentMethodPopup = ({
 
 
     updateDefaultPaymentMethod();
-  }, [usePayments.paymentMethods, selected]);
+  }, [usePayments.paymentMethods, selected, chosenService]);
 
   const onSave = (id?: string) => {
     onSubmit(id || selectedPaymentId);
     onCancel();
   };
-
-  const [isCashEnabled, setIsCashEnabled] = useState(false);
-
-  useEffect(() => {
-    const getIsCashEnabled = async () => {
-      const result = await usePayments.isCashPaymentEnabled();
-
-      setIsCashEnabled(result);
-    };
-
-    getIsCashEnabled();
-  }, [usePayments.paymentMethods]);
-
-  useEffect(() => {
-    if (selectedPaymentId === 'cash' && !chosenService?.allowCash) {
-      onSave((usePayments?.paymentMethods || [])[0]?.id);
-    }
-  }, [chosenService]);
 
   return (
     <Modal
@@ -102,19 +91,24 @@ const PaymentMethodPopup = ({
         <CardsScrollView>
           <Container>
             <View>
-              {(isCashEnabled && showCash && isChosenServiceCash
+              {(showCash
                 ? [...usePayments.paymentMethods, cashPaymentMethod]
-                : usePayments.paymentMethods).map((paymentMethod: any, i) => (
+                : usePayments.paymentMethods).map((paymentMethod: any) => {
+                const reason = getDisabledReason(paymentMethod);
+                console.log(reason);
+                return (
                   <PaymentMethod
                     {...paymentMethod}
                     chooseMethodPage
+                    disabledReason={reason}
                     selected={selectedPaymentId === paymentMethod.id}
                     mark={selectedPaymentId === paymentMethod.id}
                     onPress={() => {
                       setSelectedPaymentId(paymentMethod.id);
                     }}
                   />
-              ))}
+                );
+              })}
               <PaymentMethod
                 addNew
                 chooseMethodPage
