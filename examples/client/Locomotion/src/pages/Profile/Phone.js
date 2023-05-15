@@ -6,6 +6,7 @@ import { useIsFocused } from '@react-navigation/native';
 import Config from 'react-native-config';
 import { ScrollView } from 'react-native';
 import Recaptcha from 'react-native-recaptcha-that-works';
+import Mixpanel from '../../services/Mixpanel';
 import i18n from '../../I18n';
 import SaveButton from './SaveButton';
 import { OnboardingContext } from '../../context/onboarding';
@@ -32,6 +33,7 @@ const Phone = ({ navigation }) => {
   const [captchaToken, setCaptchaToken] = useState(null);
 
   const onVerifyCaptcha = async (token) => {
+    Mixpanel.setEvent('Captcha Verified successfully');
     setCaptchaToken(token);
     await Auth.updateCaptchaToken(token);
   };
@@ -76,15 +78,18 @@ const Phone = ({ navigation }) => {
   const onClickContinue = () => {
     if (Config.CAPTCHA_KEY) {
       if (recaptchaRef.current) {
+        Mixpanel.setEvent('Opening captcha, after click continue in phone number page');
         recaptchaRef.current.open();
       }
     } else {
+      Mixpanel.setEvent('Submit phone number, without captcha , (Config.CAPTCHA_KEY is not defined)');
       submitPhoneNumber();
     }
   };
 
   useEffect(() => {
     if (captchaToken) {
+      Mixpanel.setEvent('Submit phone number, after captcha');
       submitPhoneNumber();
     }
   }, [captchaToken]);
@@ -140,6 +145,8 @@ const Phone = ({ navigation }) => {
                 onVerify={onVerifyCaptcha}
                 size="invisible"
                 hideBadge={!Config.SHOW_CAPTCHA_ICON}
+                onClose={() => Mixpanel.setEvent('Captcha closed')}
+                onError={e => Mixpanel.setEvent('Captcha error', e)}
               />
               )
             }
