@@ -155,10 +155,7 @@ export const formatEstimationsResult = (service: any, estimationResult: any, tag
     futurePickupWindowSizeInMinutes: service.futurePickupWindowSizeInMinutesWithFallback,
     isHighEtaAsapRide: !!estimation.highEtaAsapRide,
     allowRideOrderIfNoVehiclesMatched: service.allowRideOrderIfNoVehiclesMatched,
-    blockedPaymentMethods: [
-      ...(service.clientBlockedPaymentMethods || []),
-      ...(service.blockedPaymentMethods || []),
-    ],
+    blockedPaymentMethods: service.clientBlockedPaymentMethods || [],
   };
 };
 
