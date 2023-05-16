@@ -4,6 +4,7 @@ import { View } from 'react-native';
 import PropTypes from 'prop-types';
 import Modal from 'react-native-modal';
 import { useNavigation } from '@react-navigation/native';
+import { getPaymentMethod } from '../../pages/Payments/cardDetailUtils';
 import CloseButton from '../../Components/CloseButton';
 import i18n from '../../I18n';
 import { MAIN_ROUTES } from '../../pages/routes';
@@ -39,10 +40,9 @@ const PaymentMethodPopup = ({
   const usePayments: any = PaymentsContext.useContainer();
   const { chosenService } = useContext(MewRidePageContext);
   const [selectedPaymentId, setSelectedPaymentId] = useState<string | undefined>(selected);
-  const chosenServiceAllowsCash = !chosenService || !chosenService.blockedPaymentMethods.includes('cash');
 
   const getDisabledReason = (paymentMethod: any) => {
-    if (paymentMethod.id === 'cash' && !chosenServiceAllowsCash) {
+    if (chosenService?.blockedPaymentMethods.includes(getPaymentMethod(paymentMethod.id))) {
       return i18n.t('popups.choosePaymentMethod.unavailable');
     }
     return null;

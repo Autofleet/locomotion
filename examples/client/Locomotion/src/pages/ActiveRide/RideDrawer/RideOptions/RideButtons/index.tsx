@@ -265,7 +265,7 @@ const RideButtons = ({
 
   const isSelectButtonDisabled = () => (
     !chosenService || !(chosenService?.isHighEtaAsapRide ? allowRideOrderIfNoMatchedVehicles : chosenService)
-    || !!getClientOutstandingBalanceCard() || passengersCounterError
+    || !!getClientOutstandingBalanceCard() || passengersCounterError || paymentMethodNotAllowedOnService
   );
 
   const selectButtonText = () => {
