@@ -5,7 +5,6 @@ import { Animated, View } from 'react-native';
 import styled from 'styled-components';
 import { debounce } from 'lodash';
 import shortid from 'shortid';
-import { Text } from 'react-native-svg';
 import Mixpanel from '../../../../services/Mixpanel';
 import BottomSheetInput from '../../../../Components/TextInput/BottomSheetInput';
 import i18n from '../../../../I18n';
@@ -60,7 +59,7 @@ const AddSpContainer = styled.TouchableOpacity`
     margin-top: 32px;
     justify-content: center;
     align-items: center;
-
+    margin-left: 8px;
 `;
 
 const ArrowImage = styled.Image.attrs({ source: backImage })`
@@ -84,16 +83,12 @@ const BackButton = ({ isExpanded, onBack }) => {
   );
 };
 
-const AddSpButton = ({ isExpanded, onBack }) => {
-  if (!isExpanded) {
-    return null;
-  }
-  return (
-    <AddSpContainer onPress={onBack} testID="addSpButton">
-      <PlusIcon />
-    </AddSpContainer>
-  );
-};
+const AddSpButton = ({ onPress }) => (
+  <AddSpContainer onPress={onPress} testID="addSpButton">
+    <PlusIcon />
+  </AddSpContainer>
+
+);
 
 /* if (Platform.OS === 'android' && UIManager.setLayoutAnimationEnabledExperimental
 ) {
@@ -258,8 +253,7 @@ const SearchBar = ({
       {isExpanded
         ? (
           <AddSpButton
-            isExpanded
-            onBack={onBackPress}
+            onPress={() => { console.log('hellowe'); }}
           />
         ) : null}
     </View>
