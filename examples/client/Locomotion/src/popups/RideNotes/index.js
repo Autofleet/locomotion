@@ -47,6 +47,7 @@ export default ({
               value={currentText}
               multiline
               numberOfLines={7}
+              testID="notesInput"
               textAlignVertical="top"
               placeholder={i18n.t('popups.rideNotes.placeholder')}
               maxLength={MAX_SIZE}
