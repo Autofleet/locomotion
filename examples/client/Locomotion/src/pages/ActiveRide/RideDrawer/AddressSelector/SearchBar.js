@@ -5,11 +5,12 @@ import { Animated, View } from 'react-native';
 import styled from 'styled-components';
 import { debounce } from 'lodash';
 import shortid from 'shortid';
+import { Text } from 'react-native-svg';
 import Mixpanel from '../../../../services/Mixpanel';
 import BottomSheetInput from '../../../../Components/TextInput/BottomSheetInput';
 import i18n from '../../../../I18n';
 import { RidePageContext } from '../../../../context/newRideContext';
-
+import plusImage from '../../../../assets/plus.png';
 import backImage from '../../../../assets/arrow-back.png';
 import { UserContext } from '../../../../context/user';
 
@@ -51,9 +52,25 @@ const BackButtonContainer = styled.TouchableOpacity`
 
 `;
 
+const AddSpContainer = styled.TouchableOpacity`
+    width: 40px;
+    height: 50px;
+    border-radius: 8px;
+    background-color: #f1f2f6;
+    margin-top: 32px;
+    justify-content: center;
+    align-items: center;
+
+`;
+
 const ArrowImage = styled.Image.attrs({ source: backImage })`
     width: 25px;
     height: 25px;
+`;
+
+const PlusIcon = styled.Image.attrs({ source: plusImage })`
+    width: 15px;
+    height: 15px;
 `;
 
 const BackButton = ({ isExpanded, onBack }) => {
@@ -64,6 +81,17 @@ const BackButton = ({ isExpanded, onBack }) => {
     <BackButtonContainer onPress={onBack} testID="backButton">
       <ArrowImage />
     </BackButtonContainer>
+  );
+};
+
+const AddSpButton = ({ isExpanded, onBack }) => {
+  if (!isExpanded) {
+    return null;
+  }
+  return (
+    <AddSpContainer onPress={onBack} testID="addSpButton">
+      <PlusIcon />
+    </AddSpContainer>
   );
 };
 
@@ -227,6 +255,13 @@ const SearchBar = ({
         {buildSps()}
 
       </View>
+      {isExpanded
+        ? (
+          <AddSpButton
+            isExpanded
+            onBack={onBackPress}
+          />
+        ) : null}
     </View>
   );
 };
