@@ -44,7 +44,7 @@ const CardNameContainer = styled(View)`
     align-items: center;
     width: 55%;
 `;
-
+//
 const PromoButtonContainer = styled(View)`
     display: flex;
     justify-content: flex-end;
