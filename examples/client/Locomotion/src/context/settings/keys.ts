@@ -15,4 +15,5 @@ export default {
   SHOW_POST_RIDE_FEEDBACK: 'riderApp.showPostRideFeedback',
   VEHICLE_COLOR: 'riderApp.vehicleIconColor',
   MEASURE_SYSTEM: 'riderApp.measureSystem',
+  MULTI_SP: 'riderApp.showMultiStopPoint',
 };

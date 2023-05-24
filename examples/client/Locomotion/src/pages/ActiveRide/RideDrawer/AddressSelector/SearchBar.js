@@ -5,13 +5,15 @@ import { Animated, View } from 'react-native';
 import styled from 'styled-components';
 import { debounce } from 'lodash';
 import shortid from 'shortid';
+import { UserContext } from '../../../../context/user';
+import settings from '../../../../context/settings';
 import Mixpanel from '../../../../services/Mixpanel';
 import BottomSheetInput from '../../../../Components/TextInput/BottomSheetInput';
 import i18n from '../../../../I18n';
 import { RidePageContext } from '../../../../context/newRideContext';
 import plusImage from '../../../../assets/plus.png';
 import backImage from '../../../../assets/arrow-back.png';
-import { UserContext } from '../../../../context/user';
+import SETTINGS_KEYS from '../../../../context/settings/keys';
 
 
 const SearchContainer = styled.View`
@@ -111,12 +113,14 @@ const SearchBar = ({
     initSps,
     fillLoadSkeleton,
   } = useContext(RidePageContext);
+  const { getSettingByKey } = settings.useContainer();
 
   const {
     locationGranted,
   } = useContext(UserContext);
 
   const [searchTerm, setSearchTerm] = useState('');
+  const [multiSpAmount, setMultiSpAmount] = useState(0);
   const debouncedSearch = useCallback(debounce(async text => onSearch(text), 300), [locationGranted]);
 
   const getSpPlaceholder = (sp) => {
@@ -136,7 +140,16 @@ const SearchBar = ({
     setSelectedInputIndex(index);
     onFocus();
   };
-
+  const loadMultiSpSetting = async () => {
+    console.log('laoding multi sp setting');
+    const multiSpSetting = await getSettingByKey(SETTINGS_KEYS.MULTI_SP);
+    if (multiSpSetting && multiSpSetting.enabled) {
+      setMultiSpAmount(multiSpAmount.amount);
+    }
+  };
+  useEffect(() => {
+    loadMultiSpSetting();
+  }, []);
   useEffect(() => {
     fillLoadSkeleton();
     debouncedSearch(searchTerm);
@@ -253,7 +266,15 @@ const SearchBar = ({
       {isExpanded
         ? (
           <AddSpButton
-            onPress={() => { console.log('hellowe'); }}
+            onPress={() => {
+              updateRequestSp({
+                description: '123',
+                lat: null,
+                lng: null,
+                externalId: null,
+                type: 'pickup',
+              }, 2);
+            }}
           />
         ) : null}
     </View>
