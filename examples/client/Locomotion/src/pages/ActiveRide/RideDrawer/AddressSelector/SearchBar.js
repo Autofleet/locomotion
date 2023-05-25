@@ -38,7 +38,7 @@ const Row = styled(Animated.View)`
     ${({ isExpanded }) => isExpanded === false && `
         display: none;
     `}
-
+    
 `;
 
 
@@ -89,7 +89,12 @@ const AddSpButton = ({ onPress }) => (
   <AddSpContainer onPress={onPress} testID="addSpButton">
     <PlusIcon />
   </AddSpContainer>
+);
 
+const RemoveSpButton = ({ onPress }) => (
+  <AddSpContainer onPress={onPress} testID="addSpButton">
+    <PlusIcon />
+  </AddSpContainer>
 );
 
 /* if (Platform.OS === 'android' && UIManager.setLayoutAnimationEnabledExperimental
@@ -124,7 +129,7 @@ const SearchBar = ({
   const [searchTerm, setSearchTerm] = useState('');
   const [multiSpAmount, setMultiSpAmount] = useState(0);
   const debouncedSearch = useCallback(debounce(async text => onSearch(text), 300), [locationGranted]);
-
+  const isMultiSpEnabled = multiSpAmount > 0 && isExpanded;
   const getSpPlaceholder = (sp) => {
     if (!isExpanded || !sp.useDefaultLocation) {
       return 'addressView.whereTo';
@@ -143,10 +148,11 @@ const SearchBar = ({
     onFocus();
   };
   const loadMultiSpSetting = async () => {
-    console.log('laoding multi sp setting');
     const multiSpSetting = await getSettingByKey(SETTINGS_KEYS.MULTI_SP);
+    console.log('multi sp setting', multiSpSetting);
     if (multiSpSetting && multiSpSetting.enabled) {
-      setMultiSpAmount(multiSpAmount.amount);
+      console.log('multi sp setting', multiSpSetting.amount);
+      setMultiSpAmount(multiSpSetting.amount);
     }
   };
   useEffect(() => {
@@ -218,6 +224,16 @@ const SearchBar = ({
             e.currentTarget?.setSelection(1, 1);
           }}
         />
+        { isMultiSpEnabled && requestStopPoints.length > 2
+         && i === requestStopPoints.length - 1
+        && (
+        <RemoveSpButton
+          onPress={() => {
+            console.log('pressed remove for index', i);
+            removeRequestSp(i);
+          }}
+        />
+        )}
       </Row>
     );
   });
@@ -265,11 +281,11 @@ const SearchBar = ({
         {buildSps()}
 
       </View>
-      {isExpanded
+      {isMultiSpEnabled && requestStopPoints.length < 3
         ? (
           <AddSpButton
             onPress={() => {
-              requestStopPoints.length > 4 ? removeRequestSp(2) : addNewEmptyRequestSp(1);
+              addNewEmptyRequestSp(1);
             }}
           />
         ) : null}
