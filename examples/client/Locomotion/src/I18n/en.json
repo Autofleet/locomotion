@@ -632,7 +632,7 @@
             "buttonText2": "Take me back"
         },
         "ride": {
-            "paymentMethodNotAllowedOnService": "{{type}} is unavailable for the selected service",
+            "paymentMethodNotAllowedOnService": "{{type}} not allowed for this service",
             "now": "Now",
             "notes": {
                 "edit": "Edit note",

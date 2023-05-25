@@ -214,7 +214,7 @@ const RideButtons = ({
   };
 
   const renderPaymentButton = () => {
-    const ridePaymentMethod = ride?.paymentMethodId;
+    const ridePaymentMethod = ride?.paymentMethodId || '';
     const selectedPaymentMethod:
      PaymentMethodInterface | undefined = ridePaymentMethod === PAYMENT_METHODS.CASH
        ? cashPaymentMethod
@@ -243,7 +243,7 @@ const RideButtons = ({
         {paymentMethodNotAllowedOnService
           ? (
             <ButtonWithError
-              errorText={paymentMethodNotAllowedOnService && i18n.t('bottomSheetContent.ride.paymentMethodNotAllowedOnService', { type: ride.paymentMethodId })}
+              errorText={i18n.t('bottomSheetContent.ride.paymentMethodNotAllowedOnService', { type: ridePaymentMethod.charAt(0).toUpperCase() + ridePaymentMethod.slice(1) })}
             >
               {pureButton()}
             </ButtonWithError>
