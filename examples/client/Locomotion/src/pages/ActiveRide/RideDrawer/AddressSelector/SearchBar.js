@@ -112,6 +112,8 @@ const SearchBar = ({
     updateRequestSp,
     initSps,
     fillLoadSkeleton,
+    addNewEmptyRequestSp,
+    removeRequestSp,
   } = useContext(RidePageContext);
   const { getSettingByKey } = settings.useContainer();
 
@@ -267,13 +269,7 @@ const SearchBar = ({
         ? (
           <AddSpButton
             onPress={() => {
-              updateRequestSp({
-                description: '123',
-                lat: null,
-                lng: null,
-                externalId: null,
-                type: 'pickup',
-              }, 2);
+              requestStopPoints.length > 4 ? removeRequestSp(2) : addNewEmptyRequestSp(1);
             }}
           />
         ) : null}

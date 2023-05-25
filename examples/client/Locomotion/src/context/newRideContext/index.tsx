@@ -113,7 +113,9 @@ interface RidePageContextInterface {
   requestStopPoints: any[];
   searchResults: any;
   searchAddress: (searchText: string) => void;
+  removeRequestSp: (index: number) => void;
   updateRequestSp: (sp: any) => void;
+  addNewEmptyRequestSp: (index: number) => void;
   setSpCurrentLocation: () => void;
   historyResults: any[];
   serviceEstimations: any[];
@@ -714,6 +716,27 @@ const RidePageContextProvider = ({ children }: {
 
     setRequestStopPoints(reqSps);
   };
+  const addNewEmptyRequestSp = (index : number) => {
+    setRequestStopPoints((oldRequestSps) => {
+      const newRequestsSps = [...oldRequestSps];
+      console.log('add New', index);
+      newRequestsSps.splice(index, 0, {
+        lat: null,
+        lng: null,
+        externalId: null,
+        type: 'pickup',
+        text: '123',
+      });
+      return newRequestsSps;
+    });
+  };
+  const removeRequestSp = (index : number) => {
+    setRequestStopPoints((oldRequestSps) => {
+      const newRequestsSps = [...oldRequestSps];
+      newRequestsSps.splice(index, 1);
+      return newRequestsSps;
+    });
+  };
 
   const setSpCurrentLocation = async () => {
     const newGeoLocation = await reverseLocationGeocode();
@@ -1273,6 +1296,8 @@ const RidePageContextProvider = ({ children }: {
         searchResults,
         searchAddress,
         updateRequestSp,
+        addNewEmptyRequestSp,
+        removeRequestSp,
         setSpCurrentLocation,
         historyResults,
         loadHistory,
