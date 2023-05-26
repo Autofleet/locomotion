@@ -3,7 +3,7 @@ import React, {
 } from 'react';
 import { Animated, View } from 'react-native';
 import styled from 'styled-components';
-import { debounce } from 'lodash';
+import { debounce, remove } from 'lodash';
 import shortid from 'shortid';
 import { UserContext } from '../../../../context/user';
 import settings from '../../../../context/settings';
@@ -130,6 +130,8 @@ const SearchBar = ({
   const [multiSpAmount, setMultiSpAmount] = useState(0);
   const debouncedSearch = useCallback(debounce(async text => onSearch(text), 300), [locationGranted]);
   const isMultiSpEnabled = multiSpAmount > 0 && isExpanded;
+  const hasEnteredMultiSp = requestStopPoints.length > 2;
+  const isSpIndexMulti = i => hasEnteredMultiSp && i > 0 && i < requestStopPoints.length - 1;
   const getSpPlaceholder = (sp) => {
     if (!isExpanded || !sp.useDefaultLocation) {
       return 'addressView.whereTo';
@@ -219,21 +221,14 @@ const SearchBar = ({
               inputRef.current = ref;
             }
           }}
+          hasMultiSp={hasEnteredMultiSp}
+          remove={isSpIndexMulti(i) ? () => removeRequestSp(i) : null}
           onLayout={e => e.currentTarget?.setSelection(1, 1)}
           onBlur={(e) => {
             e.currentTarget?.setSelection(1, 1);
           }}
         />
-        { isMultiSpEnabled && requestStopPoints.length > 2
-         && i === requestStopPoints.length - 1
-        && (
-        <RemoveSpButton
-          onPress={() => {
-            console.log('pressed remove for index', i);
-            removeRequestSp(i);
-          }}
-        />
-        )}
+
       </Row>
     );
   });
@@ -281,7 +276,7 @@ const SearchBar = ({
         {buildSps()}
 
       </View>
-      {isMultiSpEnabled && requestStopPoints.length < 3
+      {isMultiSpEnabled && requestStopPoints.length < 4
         ? (
           <AddSpButton
             onPress={() => {

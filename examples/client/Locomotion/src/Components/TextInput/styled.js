@@ -55,5 +55,19 @@ export const IconContainer = styled(View)`
   z-index: 1;
 `;
 
+export const RemoveIconContainer = styled(View)`
+  //centered
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  margin-left: 10px;
+  margin-top: 16px;
+  justify-content: center;
+  z-index: 1;
+  
+
+`;
+
 export const TouchableIconContainer = styled.TouchableOpacity`
 `;
