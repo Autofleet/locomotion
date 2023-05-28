@@ -31,6 +31,7 @@ const Phone = ({ navigation }) => {
   const [isInvalid, setIsInvalid] = useState(true);
   const recaptchaRef = useRef(null);
   const [captchaToken, setCaptchaToken] = useState(null);
+  const [isLoadingSaveButton, setIsLoadingSaveButton] = useState(false);
 
   const onVerifyCaptcha = async (token) => {
     Mixpanel.setEvent('Captcha Verified successfully');
@@ -65,7 +66,9 @@ const Phone = ({ navigation }) => {
       await onLogin(user.phoneNumber);
       updateState({ phoneNumber: user.phoneNumber });
       nextScreen(MAIN_ROUTES.PHONE);
+      setIsLoadingSaveButton(false);
     } catch (e) {
+      setIsLoadingSaveButton(false);
       console.log('Bad login with response', e);
       const status = e && e.response && e.response.status;
       if (ERROR_RESPONSES[status]) {
@@ -74,12 +77,15 @@ const Phone = ({ navigation }) => {
       setShowErrorText(i18n.t('login.invalidPhoneNumberError'));
     }
   };
-
+  useEffect(() => {
+    if (isLoadingSaveButton) {
+      recaptchaRef.current.open();
+    }
+  }, [isLoadingSaveButton]);
   const onClickContinue = () => {
     if (Config.CAPTCHA_KEY) {
       if (recaptchaRef.current) {
-        Mixpanel.setEvent('Opening captcha, after click continue in phone number page');
-        recaptchaRef.current.open();
+        setIsLoadingSaveButton(true);
       }
     } else {
       Mixpanel.setEvent('Submit phone number, without captcha , (Config.CAPTCHA_KEY is not defined)');
@@ -131,6 +137,7 @@ const Phone = ({ navigation }) => {
           />
           {showErrorText && <ErrorText>{showErrorText}</ErrorText>}
           <SaveButton
+            isLoading={isLoadingSaveButton}
             isInvalid={isInvalid}
             onNext={onClickContinue}
             onFail={() => setShowErrorText(i18n.t('login.invalidPhoneNumberError'))
