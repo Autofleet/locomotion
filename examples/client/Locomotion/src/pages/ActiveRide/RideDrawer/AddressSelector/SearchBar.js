@@ -105,10 +105,11 @@ const SearchBar = ({
   const [multiSpAmount, setMultiSpAmount] = useState(0);
   const debouncedSearch = useCallback(debounce(async text => onSearch(text), 300), [locationGranted]);
   const isMultiSpEnabled = multiSpAmount > 0 && isExpanded;
+  const amountOfEnteredSp = requestStopPoints.length;
   const canAddMoreMultiSp = isMultiSpEnabled
-  && requestStopPoints.length < multiSpAmount + SP_AMOUNT_WITHOUT_MULTI;
-  const hasEnteredMultiSp = requestStopPoints.length > SP_AMOUNT_WITHOUT_MULTI;
-  const isSpIndexMulti = i => hasEnteredMultiSp && i > 0 && i < requestStopPoints.length - 1;
+  && amountOfEnteredSp < multiSpAmount + SP_AMOUNT_WITHOUT_MULTI;
+  const hasEnteredMultiSp = amountOfEnteredSp > SP_AMOUNT_WITHOUT_MULTI;
+  const isSpIndexMulti = i => hasEnteredMultiSp && i > 0 && i < amountOfEnteredSp - 1;
   const getSpPlaceholder = (sp, index) => {
     if (isSpIndexMulti(index)) {
       return 'addressView.multiStopPlaceholder';
@@ -205,7 +206,8 @@ const SearchBar = ({
           }}
           remove={isSpIndexMulti(i) ? () => removeRequestSp(i) : null}
           add={canAddMoreMultiSp
-            && i === requestStopPoints.length - 1 ? () => addNewEmptyRequestSp() : null}
+            && i === amountOfEnteredSp - 1 ? () => addNewEmptyRequestSp()
+            : null}
           onLayout={e => e.currentTarget?.setSelection(1, 1)}
           onBlur={(e) => {
             e.currentTarget?.setSelection(1, 1);

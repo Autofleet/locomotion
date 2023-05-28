@@ -115,7 +115,7 @@ interface RidePageContextInterface {
   searchAddress: (searchText: string) => void;
   removeRequestSp: (index: number) => void;
   updateRequestSp: (sp: any) => void;
-  addNewEmptyRequestSp: (index: number) => void;
+  addNewEmptyRequestSp: () => void;
   setSpCurrentLocation: () => void;
   historyResults: any[];
   serviceEstimations: any[];
@@ -716,14 +716,14 @@ const RidePageContextProvider = ({ children }: {
 
     setRequestStopPoints(reqSps);
   };
-  const addNewEmptyRequestSp = (index : number) => {
+  const addNewEmptyRequestSp = () => {
     setRequestStopPoints((oldRequestSps) => {
       const newRequestsSps = [...oldRequestSps];
-      console.log('add New', index);
-      newRequestsSps.splice(index, 0, {
+      newRequestsSps.splice(requestStopPoints.length - 1, 0, {
         lat: null,
         lng: null,
         externalId: null,
+        text: '',
         type: 'pickup',
       });
       return newRequestsSps;
