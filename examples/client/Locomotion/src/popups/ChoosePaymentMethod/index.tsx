@@ -42,7 +42,10 @@ const PaymentMethodPopup = ({
   const [selectedPaymentId, setSelectedPaymentId] = useState<string | undefined>(selected);
 
   const getDisabledReason = (paymentMethod: any) => {
-    if (chosenService?.blockedPaymentMethods.includes(getPaymentMethod(paymentMethod.id))) {
+    if (
+      chosenService
+      && !chosenService.allowedPaymentMethods.includes(getPaymentMethod(paymentMethod.id))
+    ) {
       return i18n.t('popups.choosePaymentMethod.unavailable');
     }
     return null;
