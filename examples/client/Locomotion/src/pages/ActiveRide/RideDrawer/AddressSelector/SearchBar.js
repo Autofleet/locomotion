@@ -107,7 +107,10 @@ const SearchBar = ({
   const isMultiSpEnabled = multiSpAmount > 0 && isExpanded;
   const hasEnteredMultiSp = requestStopPoints.length > 2;
   const isSpIndexMulti = i => hasEnteredMultiSp && i > 0 && i < requestStopPoints.length - 1;
-  const getSpPlaceholder = (sp) => {
+  const getSpPlaceholder = (sp, index) => {
+    if (isSpIndexMulti(index)) {
+      return 'addressView.multiStopPlaceholder';
+    }
     if (!isExpanded || !sp.useDefaultLocation) {
       return 'addressView.whereTo';
     }
@@ -150,7 +153,7 @@ const SearchBar = ({
 
   const buildSps = () => requestStopPoints.map((s, i) => {
     const { type, description } = requestStopPoints[i];
-    const placeholder = getSpPlaceholder(s);
+    const placeholder = getSpPlaceholder(s, i);
     const rowProps = i === 0 ? { isExpanded } : { setMargin: true };
     const autoFocus = isExpanded && i === selectedIndex;
     return (
@@ -179,6 +182,7 @@ const SearchBar = ({
             onInputFocus(e.target, i);
           }}
           isMultiSpEnabled={isMultiSpEnabled}
+          hasEnteredMultiSp={hasEnteredMultiSp}
           onPressIn={e => e.currentTarget?.setSelection((description?.length || 0), (description?.length || 0))}
           key={`input_${s.id}`}
           autoCorrect={false}
@@ -198,7 +202,8 @@ const SearchBar = ({
             }
           }}
           remove={isSpIndexMulti(i) ? () => removeRequestSp(i) : null}
-          add={isMultiSpEnabled && i === requestStopPoints.length - 1 ? () => addNewEmptyRequestSp() : null}
+          add={isMultiSpEnabled
+            && i === requestStopPoints.length - 1 ? () => addNewEmptyRequestSp() : null}
           onLayout={e => e.currentTarget?.setSelection(1, 1)}
           onBlur={(e) => {
             e.currentTarget?.setSelection(1, 1);

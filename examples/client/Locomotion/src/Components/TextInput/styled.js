@@ -82,7 +82,7 @@ export const AddSpContainer = styled.TouchableOpacity`
     height: 40px;
     border-radius: 8px;
     background-color: #f1f2f6;
-    margin-top: 6px;
+    margin-top: ${({ hasEnteredMultiSp }) => (!hasEnteredMultiSp ? '-24px' : '6px')};
     justify-content: center;
     align-items: center;
     margin-left: 10px;
