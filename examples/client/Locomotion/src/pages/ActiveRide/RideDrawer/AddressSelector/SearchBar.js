@@ -100,12 +100,13 @@ const SearchBar = ({
   const {
     locationGranted,
   } = useContext(UserContext);
-
+  const SP_AMOUNT_WITHOUT_MULTI = 2; // pickup+dropoff
   const [searchTerm, setSearchTerm] = useState('');
   const [multiSpAmount, setMultiSpAmount] = useState(0);
   const debouncedSearch = useCallback(debounce(async text => onSearch(text), 300), [locationGranted]);
   const isMultiSpEnabled = multiSpAmount > 0 && isExpanded;
-  const hasEnteredMultiSp = requestStopPoints.length > 2;
+  const canAddMoreMultiSp = requestStopPoints.length < multiSpAmount + SP_AMOUNT_WITHOUT_MULTI;
+  const hasEnteredMultiSp = requestStopPoints.length > SP_AMOUNT_WITHOUT_MULTI;
   const isSpIndexMulti = i => hasEnteredMultiSp && i > 0 && i < requestStopPoints.length - 1;
   const getSpPlaceholder = (sp, index) => {
     if (isSpIndexMulti(index)) {
@@ -202,7 +203,7 @@ const SearchBar = ({
             }
           }}
           remove={isSpIndexMulti(i) ? () => removeRequestSp(i) : null}
-          add={isMultiSpEnabled
+          add={canAddMoreMultiSp
             && i === requestStopPoints.length - 1 ? () => addNewEmptyRequestSp() : null}
           onLayout={e => e.currentTarget?.setSelection(1, 1)}
           onBlur={(e) => {
