@@ -105,7 +105,8 @@ const SearchBar = ({
   const [multiSpAmount, setMultiSpAmount] = useState(0);
   const debouncedSearch = useCallback(debounce(async text => onSearch(text), 300), [locationGranted]);
   const isMultiSpEnabled = multiSpAmount > 0 && isExpanded;
-  const canAddMoreMultiSp = requestStopPoints.length < multiSpAmount + SP_AMOUNT_WITHOUT_MULTI;
+  const canAddMoreMultiSp = isMultiSpEnabled
+  && requestStopPoints.length < multiSpAmount + SP_AMOUNT_WITHOUT_MULTI;
   const hasEnteredMultiSp = requestStopPoints.length > SP_AMOUNT_WITHOUT_MULTI;
   const isSpIndexMulti = i => hasEnteredMultiSp && i > 0 && i < requestStopPoints.length - 1;
   const getSpPlaceholder = (sp, index) => {
