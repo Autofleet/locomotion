@@ -117,7 +117,7 @@ const AddressSelectorBottomSheet = ({ addressSelectorFocusIndex }) => {
     changeBsPage(BS_PAGES.SET_LOCATION_ON_MAP);
     collapse();
   };
-
+  const getRecentLocationInputIndex = () => (isExpanded ? addressSelectorFocusIndex : 1);
   const getHistoryRows = () => {
     if (isStationsEnabled && stationsList.length) {
       return userContext.formatStationsList(stationsList).map((h, i) => (
@@ -127,7 +127,7 @@ const AddressSelectorBottomSheet = ({ addressSelectorFocusIndex }) => {
           subText={h.subText}
           key={h.externalId}
           onPress={() => {
-            userContext.onAddressSelected(h, false, 1);
+            userContext.onAddressSelected(h, false, getRecentLocationInputIndex());
           }}
         />
       ));
@@ -141,7 +141,7 @@ const AddressSelectorBottomSheet = ({ addressSelectorFocusIndex }) => {
           isHistory
           key={h.placeId}
           onPress={() => {
-            userContext.onAddressSelected(h, false, 1, !isExpanded);
+            userContext.onAddressSelected(h, false, getRecentLocationInputIndex(), !isExpanded);
           }}
         />
       ));
