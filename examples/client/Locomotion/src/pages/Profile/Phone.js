@@ -58,6 +58,7 @@ const Phone = ({ navigation }) => {
     try {
       if (isDebugPhoneNumber()) {
         NavigationService.navigate(MAIN_ROUTES.DEV_SETTINGS_PAGE);
+        setIsLoadingSaveButton(false);
         return;
       }
       if (!isDevSettingOn()) {
