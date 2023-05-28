@@ -12,6 +12,7 @@ const TextInput = (props) => {
       isFocused={isFocused}
       ref={props.inputRef}
       {...props}
+      testID={props.testID || null}
     />
   );
 };
