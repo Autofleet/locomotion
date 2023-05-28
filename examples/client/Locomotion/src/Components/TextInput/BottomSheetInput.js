@@ -1,15 +1,27 @@
 import React, { forwardRef } from 'react';
 import SvgIcon from '../SvgIcon';
 import {
-  BottomSheetInput, IconContainer, BottomSheetInputContainer, TouchableIconContainer, RemoveIconContainer,
+  BottomSheetInput,
+  IconContainer,
+  BottomSheetInputContainer,
+  TouchableIconContainer,
+  RemoveIconContainer,
+  AddSpContainer,
+  PlusIcon,
 } from './styled';
 import cancel from '../../assets/bottomSheet/cancel.svg';
 import deleteIcon from '../../assets/bottomSheet/trash.svg';
 
+const AddSpButton = ({ onPress }) => (
+  <AddSpContainer isFirstSp onPress={onPress} testID="addSpButton">
+    <PlusIcon />
+  </AddSpContainer>
+);
 const BottomSheetInputField = forwardRef((props, ref) => (
   <BottomSheetInputContainer>
 
     <BottomSheetInput
+      hasMultiSp={props.hasMultiSp}
       {...props}
       ref={ref}
     />
@@ -33,16 +45,19 @@ const BottomSheetInputField = forwardRef((props, ref) => (
       </IconContainer>
     </TouchableIconContainer>
     )}
-    { props.hasMultiSp && (
-    <TouchableIconContainer onPress={() => props.remove && props.remove()}>
+    { props.add && (
+      <AddSpButton onPress={() => props.add()} />
+    )}
+    { props.remove && (
+    <TouchableIconContainer onPress={() => props.remove()}>
       <RemoveIconContainer>
         <SvgIcon
           Svg={deleteIcon}
           stroke="#333"
           fill="#333"
           style={{ opacity: props.remove ? 1 : 0 }}
-          height={18}
-          width={16}
+          height={19}
+          width={19}
         />
       </RemoveIconContainer>
     </TouchableIconContainer>

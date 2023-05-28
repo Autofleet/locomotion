@@ -2,7 +2,7 @@ import React from 'react';
 import { Text, View } from 'react-native';
 import styled from 'styled-components';
 import { BottomSheetTextInput } from '@gorhom/bottom-sheet';
-
+import plusImage from '../../assets/plus.png';
 import { ERROR_COLOR, FONT_SIZES } from '../../context/theme';
 
 const bottomBorderStyles = `
@@ -36,6 +36,7 @@ export const BottomSheetInput = styled(BottomSheetTextInput)`
   padding: 0px 8px;
   padding-right: 30px;
   height: 50px;
+  max-width: ${({ isMultiSpEnabled }) => (isMultiSpEnabled ? '80%' : '100%')};
   ${FONT_SIZES.H3}
   ${({ fullBorder, isFocused }) => (fullBorder ? fullBorderStyles(isFocused) : bottomBorderStyles)}
   border-color: ${({ error }) => (error ? ERROR_COLOR : '#333333')};
@@ -61,7 +62,7 @@ export const RemoveIconContainer = styled(View)`
   right: 0;
   top: 0;
   bottom: 0;
-  margin-left: 10px;
+  margin-left: 16px;
   margin-top: 16px;
   justify-content: center;
   z-index: 1;
@@ -70,4 +71,19 @@ export const RemoveIconContainer = styled(View)`
 `;
 
 export const TouchableIconContainer = styled.TouchableOpacity`
+`;
+
+export const PlusIcon = styled.Image.attrs({ source: plusImage })`
+    width: 15px;
+    height: 15px;
+`;
+export const AddSpContainer = styled.TouchableOpacity`
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    background-color: #f1f2f6;
+    margin-top: 6px;
+    justify-content: center;
+    align-items: center;
+    margin-left: 10px;
 `;

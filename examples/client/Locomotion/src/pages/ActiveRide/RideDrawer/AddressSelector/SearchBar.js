@@ -53,26 +53,12 @@ const BackButtonContainer = styled.TouchableOpacity`
 
 `;
 
-const AddSpContainer = styled.TouchableOpacity`
-    width: 40px;
-    height: 50px;
-    border-radius: 8px;
-    background-color: #f1f2f6;
-    margin-top: 32px;
-    justify-content: center;
-    align-items: center;
-    margin-left: 8px;
-`;
 
 const ArrowImage = styled.Image.attrs({ source: backImage })`
     width: 25px;
     height: 25px;
 `;
 
-const PlusIcon = styled.Image.attrs({ source: plusImage })`
-    width: 15px;
-    height: 15px;
-`;
 
 const BackButton = ({ isExpanded, onBack }) => {
   if (!isExpanded) {
@@ -85,17 +71,6 @@ const BackButton = ({ isExpanded, onBack }) => {
   );
 };
 
-const AddSpButton = ({ onPress }) => (
-  <AddSpContainer onPress={onPress} testID="addSpButton">
-    <PlusIcon />
-  </AddSpContainer>
-);
-
-const RemoveSpButton = ({ onPress }) => (
-  <AddSpContainer onPress={onPress} testID="addSpButton">
-    <PlusIcon />
-  </AddSpContainer>
-);
 
 /* if (Platform.OS === 'android' && UIManager.setLayoutAnimationEnabledExperimental
 ) {
@@ -203,6 +178,7 @@ const SearchBar = ({
             Mixpanel.setEvent(`${type} address input focused`);
             onInputFocus(e.target, i);
           }}
+          isMultiSpEnabled={isMultiSpEnabled}
           onPressIn={e => e.currentTarget?.setSelection((description?.length || 0), (description?.length || 0))}
           key={`input_${s.id}`}
           autoCorrect={false}
@@ -221,8 +197,8 @@ const SearchBar = ({
               inputRef.current = ref;
             }
           }}
-          hasMultiSp={hasEnteredMultiSp}
           remove={isSpIndexMulti(i) ? () => removeRequestSp(i) : null}
+          add={isMultiSpEnabled && i === requestStopPoints.length - 1 ? () => addNewEmptyRequestSp() : null}
           onLayout={e => e.currentTarget?.setSelection(1, 1)}
           onBlur={(e) => {
             e.currentTarget?.setSelection(1, 1);
@@ -276,14 +252,6 @@ const SearchBar = ({
         {buildSps()}
 
       </View>
-      {isMultiSpEnabled && requestStopPoints.length < 4
-        ? (
-          <AddSpButton
-            onPress={() => {
-              addNewEmptyRequestSp(1);
-            }}
-          />
-        ) : null}
     </View>
   );
 };
