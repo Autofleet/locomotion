@@ -33,6 +33,7 @@ import {
 import { PAYMENT_METHODS } from '../../../../../pages/Payments/consts';
 import PassengersCounter from './PassengersCounter';
 import ErrorPopup from '../../../../../popups/TwoButtonPopup';
+import { getPaymentMethod } from '../../../../../pages/Payments/cardDetailUtils';
 
 const POOLING_TYPES = {
   NO: 'no',
@@ -82,7 +83,8 @@ const RideButtons = ({
   const [passengersCounterError, setPassengersCounterError] = useState(false);
   const firstDate = () => moment(ride?.scheduledTo || undefined).add(ride?.scheduledTo ? 0 : (minMinutesBeforeFutureRide || 0) + 1, 'minutes').toDate();
   const [tempSelectedDate, setTempSelectedDate] = useState(firstDate());
-  const paymentMethodNotAllowedOnService = chosenService && !chosenService.allowedPaymentMethods.includes(ride.paymentMethodId);
+  const paymentMethodNotAllowedOnService = chosenService && ride?.paymentMethodId
+    && !chosenService.allowedPaymentMethods.includes(getPaymentMethod(ride.paymentMethodId));
 
   const checkFutureRidesSetting = async () => {
     const futureRidesEnabled = await getSettingByKey(
@@ -214,7 +216,7 @@ const RideButtons = ({
   };
 
   const renderPaymentButton = () => {
-    const ridePaymentMethod = ride?.paymentMethodId || '';
+    const ridePaymentMethod = ride?.paymentMethodId ? getPaymentMethod(ride.paymentMethodId) : '';
     const selectedPaymentMethod:
      PaymentMethodInterface | undefined = ridePaymentMethod === PAYMENT_METHODS.CASH
        ? cashPaymentMethod
