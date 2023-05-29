@@ -250,7 +250,7 @@
         "dropoffPlaceholder": "Click on stations or enter address",
         "pickupTitle": "Boarding",
         "dropoffTitle": "Exit",
-        "multiStopPlaceholder": "Add stop",
+        "multiStopPlaceholder": "Add stop address",
         "addressPlaceholder": "Enter Address",
         "whereTo": "Enter your destination",
         "currentLocation": "Current location",
