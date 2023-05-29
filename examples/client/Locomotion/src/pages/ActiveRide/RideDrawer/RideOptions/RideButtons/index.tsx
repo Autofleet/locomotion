@@ -216,7 +216,7 @@ const RideButtons = ({
   };
 
   const renderPaymentButton = () => {
-    const ridePaymentMethod = ride?.paymentMethodId ? getPaymentMethod(ride.paymentMethodId) : '';
+    const ridePaymentMethod = ride?.paymentMethodId || '';
     const selectedPaymentMethod:
      PaymentMethodInterface | undefined = ridePaymentMethod === PAYMENT_METHODS.CASH
        ? cashPaymentMethod
