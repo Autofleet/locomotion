@@ -54,7 +54,7 @@ const RideOptions = () => {
   useEffect(() => {
     const updateDefaultPaymentMethod = async () => {
       const paymentMethod: any = usePayments.getClientDefaultMethod(
-        showCash && chosenService?.allowedPaymentMethods.includes(PAYMENT_METHODS.CASH),
+        chosenService?.allowedPaymentMethods.includes(PAYMENT_METHODS.CASH),
       );
       if (paymentMethod && paymentMethod?.id) {
         updateRidePayload({
