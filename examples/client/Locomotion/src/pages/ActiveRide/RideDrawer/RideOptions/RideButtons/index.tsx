@@ -216,11 +216,11 @@ const RideButtons = ({
   };
 
   const renderPaymentButton = () => {
-    const ridePaymentMethod = ride?.paymentMethodId || '';
+    const ridePaymentMethodId = ride?.paymentMethodId || '';
     const selectedPaymentMethod:
-     PaymentMethodInterface | undefined = ridePaymentMethod === PAYMENT_METHODS.CASH
+     PaymentMethodInterface | undefined = ridePaymentMethodId === PAYMENT_METHODS.CASH
        ? cashPaymentMethod
-       : paymentMethods.find(pm => pm.id === ridePaymentMethod);
+       : paymentMethods.find(pm => pm.id === ridePaymentMethodId);
 
     const pureButton = () => (
       <ButtonContainer
@@ -240,6 +240,8 @@ const RideButtons = ({
         />
       </ButtonContainer>
     );
+
+    const ridePaymentMethod = ride?.paymentMethodId ? getPaymentMethod(ride.paymentMethodId) : '';
     return (
       <>
         {paymentMethodNotAllowedOnService
