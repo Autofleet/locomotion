@@ -60,7 +60,7 @@ const PaymentMethodPopup = ({
       if (selected) {
         setSelectedPaymentId(selected);
       } else {
-        const paymentMethod = await usePayments.getClientDefaultMethod();
+        const paymentMethod = await usePayments.getClientDefaultMethod(showCash);
         setSelectedPaymentId(paymentMethod?.id);
       }
     };
@@ -84,7 +84,7 @@ const PaymentMethodPopup = ({
           <CloseButton onPress={async () => {
             onCancel();
             setSelectedPaymentId(selected
-                || (await usePayments.getClientDefaultMethod())?.id);
+                || (await usePayments.getClientDefaultMethod(showCash))?.id);
             rideFlow
               ? navigationService.navigate(MAIN_ROUTES.HOME)
               : navigationService.navigate(MAIN_ROUTES.PAYMENT);
