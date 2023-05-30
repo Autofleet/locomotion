@@ -71,12 +71,6 @@ export const RemoveIconContainer = styled(View)`
 `;
 
 export const TouchableIconContainer = styled.TouchableOpacity`
-
-`;
-
-export const TouchableDragContainer = styled.TouchableOpacity`
-  width: 50px;
-  background-color: #f1f2f6;
 `;
 export const PlusIcon = styled.Image.attrs({ source: plusImage })`
     width: 15px;
