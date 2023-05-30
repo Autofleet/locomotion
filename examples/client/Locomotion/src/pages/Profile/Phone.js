@@ -34,7 +34,8 @@ const Phone = ({ navigation }) => {
   const [isLoadingSaveButton, setIsLoadingSaveButton] = useState(false);
 
   const onVerifyCaptcha = async (token) => {
-    Mixpanel.setEvent('Captcha Verified successfully');
+    setIsLoadingSaveButton(true);
+    Mixpanel.setEvent('Captcha Verified successfully', { token });
     setCaptchaToken(token);
     await Auth.updateCaptchaToken(token);
   };
@@ -78,16 +79,9 @@ const Phone = ({ navigation }) => {
       setShowErrorText(i18n.t('login.invalidPhoneNumberError'));
     }
   };
-  useEffect(() => {
-    if (isLoadingSaveButton) {
-      recaptchaRef.current.open();
-    }
-  }, [isLoadingSaveButton]);
   const onClickContinue = () => {
-    if (Config.CAPTCHA_KEY) {
-      if (recaptchaRef.current) {
-        setIsLoadingSaveButton(true);
-      }
+    if (Config.CAPTCHA_KEY && recaptchaRef.current) {
+      recaptchaRef.current.open();
     } else {
       Mixpanel.setEvent('Submit phone number, without captcha , (Config.CAPTCHA_KEY is not defined)');
       submitPhoneNumber();
@@ -153,7 +147,7 @@ const Phone = ({ navigation }) => {
                 onVerify={onVerifyCaptcha}
                 size="invisible"
                 hideBadge={!Config.SHOW_CAPTCHA_ICON}
-                onClose={() => Mixpanel.setEvent('Captcha closed')}
+                onClose={() => Mixpanel.setEvent('Captcha closed', { captchaToken })}
                 onError={(e) => {
                   Mixpanel.setEvent('Captcha error', e);
                   // try without captcha on api key issues
