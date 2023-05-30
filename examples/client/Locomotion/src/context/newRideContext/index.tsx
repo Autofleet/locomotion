@@ -1295,6 +1295,7 @@ const RidePageContextProvider = ({ children }: {
         searchResults,
         searchAddress,
         updateRequestSp,
+        setRequestStopPoints,
         addNewEmptyRequestSp,
         removeRequestSp,
         setSpCurrentLocation,

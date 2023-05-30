@@ -8,6 +8,7 @@ import {
   RemoveIconContainer,
   AddSpContainer,
   PlusIcon,
+  TouchableDragContainer,
 } from './styled';
 import cancel from '../../assets/bottomSheet/cancel.svg';
 import deleteIcon from '../../assets/bottomSheet/trash.svg';
@@ -18,7 +19,27 @@ const AddSpButton = ({ onPress, hasEnteredMultiSp }) => (
   </AddSpContainer>
 );
 const BottomSheetInputField = forwardRef((props, ref) => (
+
   <BottomSheetInputContainer>
+    { props.onDrag && (
+    <TouchableDragContainer onLongPress={() => {
+      if (props.onDrag) {
+        props.onDrag();
+      }
+    }}
+    >
+
+      <IconContainer>
+        <SvgIcon
+          Svg={cancel}
+          fill="pink"
+          stroke="pink"
+          height={20}
+          width={20}
+        />
+      </IconContainer>
+    </TouchableDragContainer>
+    )}
 
     <BottomSheetInput
       hasMultiSp={props.hasMultiSp}
@@ -33,18 +54,21 @@ const BottomSheetInputField = forwardRef((props, ref) => (
         props.clear();
       }
     }}
+
     >
+
       <IconContainer>
         <SvgIcon
           Svg={cancel}
           fill="#333"
           stroke="#333"
-          height={12}
-          width={12}
+          height={1}
+          width={1}
         />
       </IconContainer>
     </TouchableIconContainer>
     )}
+
     { props.add && (
       <AddSpButton hasEnteredMultiSp={props.hasEnteredMultiSp} onPress={() => props.add()} />
     )}

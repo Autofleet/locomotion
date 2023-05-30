@@ -1,10 +1,13 @@
 import React, {
   useCallback, useContext, useEffect, useRef, useState,
 } from 'react';
-import { Animated, View } from 'react-native';
+import {
+  Animated, View, Text, TouchableOpacity,
+} from 'react-native';
 import styled from 'styled-components';
 import { debounce, remove } from 'lodash';
 import shortid from 'shortid';
+import DraggableFlatList from 'react-native-draggable-flatlist';
 import { UserContext } from '../../../../context/user';
 import settings from '../../../../context/settings';
 import Mixpanel from '../../../../services/Mixpanel';
@@ -14,7 +17,6 @@ import { RidePageContext } from '../../../../context/newRideContext';
 import plusImage from '../../../../assets/plus.png';
 import backImage from '../../../../assets/arrow-back.png';
 import SETTINGS_KEYS from '../../../../context/settings/keys';
-
 
 const SearchContainer = styled.View`
     flex: 1;
@@ -90,6 +92,7 @@ const SearchBar = ({
     setSelectedInputTarget,
     requestStopPoints,
     updateRequestSp,
+    setRequestStopPoints,
     initSps,
     fillLoadSkeleton,
     addNewEmptyRequestSp,
@@ -153,70 +156,97 @@ const SearchBar = ({
       inputRef.current.focus();
     }
   }, [selectedIndex, isExpanded]);
-
-  const buildSps = () => requestStopPoints.map((s, i) => {
-    const { type, description } = requestStopPoints[i];
-    const placeholder = getSpPlaceholder(s, i);
-    const rowProps = i === 0 ? { isExpanded } : { setMargin: true };
-    const autoFocus = isExpanded && i === selectedIndex;
+  const renderDraggableItem = ({
+    getIndex, item, drag,
+  }) => {
+    const index = getIndex();
+    console.log('render draggable', index, item, requestStopPoints[index]);
+    console.log('drag is', drag);
+    const sp = requestStopPoints[index];
+    const { type, description } = sp;
+    const placeholder = getSpPlaceholder(sp, index);
+    const rowProps = index === 0 ? { isExpanded } : { setMargin: true };
+    const autoFocus = isExpanded && index === selectedIndex;
     return (
-      <Row
-        {...rowProps}
-        key={s.id}
-      >
-        <BottomSheetInput
-          accessible
-          accessibilityLabel={`address_input_${i}`}
-          placeholder={i18n.t(placeholder)}
-          onChangeText={(text) => {
-            updateRequestSp({
-              description: text,
-              lat: null,
-              lng: null,
-              externalId: null,
-            }, i);
-            setSearchTerm(text);
-          }}
-          fullBorder
-          value={description || ''}
-          placeholderTextColor={isExpanded ? '#929395' : '#333333'}
-          onFocus={(e) => {
-            Mixpanel.setEvent(`${type} address input focused`);
-            onInputFocus(e.target, i);
-          }}
-          isMultiSpEnabled={isMultiSpEnabled}
-          hasEnteredMultiSp={hasEnteredMultiSp}
-          onPressIn={e => e.currentTarget?.setSelection((description?.length || 0), (description?.length || 0))}
-          key={`input_${s.id}`}
-          autoCorrect={false}
-          clear={() => {
-            updateRequestSp({
-              description: null,
-              lat: null,
-              lng: null,
-              externalId: null,
-              id: shortid.generate(),
-            }, i);
-            setSearchTerm(null);
-          }}
-          ref={(ref) => {
-            if (autoFocus) {
-              inputRef.current = ref;
-            }
-          }}
-          remove={isSpIndexMulti(i) ? () => removeRequestSp(i) : null}
-          add={canAddMoreMultiSp
-            && i === amountOfEnteredSp - 1 ? () => addNewEmptyRequestSp()
-            : null}
-          onLayout={e => e.currentTarget?.setSelection(1, 1)}
-          onBlur={(e) => {
-            e.currentTarget?.setSelection(1, 1);
-          }}
-        />
 
-      </Row>
+      <TouchableOpacity>
+        <Row
+          {...rowProps}
+          key={sp.id}
+        >
+
+          <BottomSheetInput
+            accessible
+            accessibilityLabel={`address_input_${index}`}
+            placeholder={i18n.t(placeholder)}
+            onDrag={drag}
+            onChangeText={(text) => {
+              updateRequestSp({
+                description: text,
+                lat: null,
+                lng: null,
+                externalId: null,
+              }, index);
+              setSearchTerm(text);
+            }}
+            fullBorder
+            value={description || ''}
+            placeholderTextColor={isExpanded ? '#929395' : '#333333'}
+            onFocus={(e) => {
+              Mixpanel.setEvent(`${type} address input focused`);
+              onInputFocus(e.target, index);
+            }}
+            isMultiSpEnabled={isMultiSpEnabled}
+            hasEnteredMultiSp={hasEnteredMultiSp}
+            onPressIn={e => e.currentTarget?.setSelection((description?.length || 0), (description?.length || 0))}
+            key={`input_${sp.id}`}
+            autoCorrect={false}
+            clear={() => {
+              updateRequestSp({
+                description: null,
+                lat: null,
+                lng: null,
+                externalId: null,
+                id: shortid.generate(),
+              }, index);
+              setSearchTerm(null);
+            }}
+            ref={(ref) => {
+              if (autoFocus) {
+                inputRef.current = ref;
+              }
+            }}
+            remove={isSpIndexMulti(index) ? () => removeRequestSp(index) : null}
+            add={canAddMoreMultiSp
+      && index === amountOfEnteredSp - 1 ? () => addNewEmptyRequestSp()
+              : null}
+            onLayout={e => e.currentTarget?.setSelection(1, 1)}
+            onBlur={(e) => {
+              e.currentTarget?.setSelection(1, 1);
+            }}
+          />
+        </Row>
+      </TouchableOpacity>
+
+
     );
-  });
+  };
+  const buildSps = () => (
+    <DraggableFlatList
+      data={requestStopPoints}
+      renderItem={renderDraggableItem}
+      keyExtractor={item => item.id}
+      onTouchStart={event => console.log('spsss are isss', requestStopPoints)}
+      onDragBegin={() => console.log('drag begin!!')}
+      onScrollBeginDrag={() => console.log('scroll begin drag')}
+      onDragEnd={({ data }) => {
+        console.log('drag enddd!!!', data);
+        setRequestStopPoints(data);
+      }
+          }
+    />
+  );
+
 
   const onBackPress = useCallback(() => {
     initSps();
