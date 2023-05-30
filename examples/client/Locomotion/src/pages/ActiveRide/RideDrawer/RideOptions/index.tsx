@@ -29,6 +29,7 @@ const RideOptions = () => {
     ridePopup,
     stopRequestInterval,
     serviceEstimations,
+    chosenService,
   } = useContext(RidePageContext);
 
   const {
@@ -52,7 +53,9 @@ const RideOptions = () => {
 
   useEffect(() => {
     const updateDefaultPaymentMethod = async () => {
-      const paymentMethod: any = usePayments.getClientDefaultMethod(showCash);
+      const paymentMethod: any = usePayments.getClientDefaultMethod(
+        showCash && chosenService?.allowedPaymentMethods.includes(PAYMENT_METHODS.CASH),
+      );
       if (paymentMethod && paymentMethod?.id) {
         updateRidePayload({
           paymentMethodId: paymentMethod.id,
