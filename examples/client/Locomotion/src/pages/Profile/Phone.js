@@ -154,7 +154,13 @@ const Phone = ({ navigation }) => {
                 size="invisible"
                 hideBadge={!Config.SHOW_CAPTCHA_ICON}
                 onClose={() => Mixpanel.setEvent('Captcha closed')}
-                onError={e => Mixpanel.setEvent('Captcha error', e)}
+                onError={(e) => {
+                  Mixpanel.setEvent('Captcha error', e);
+                  // try without captcha on api key issues
+                  submitPhoneNumber();
+                }}
+                style={{ backgroundColor: 'transparent' }}
+
               />
               )
             }
