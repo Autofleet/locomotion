@@ -99,6 +99,9 @@ const SearchBar = ({
     removeRequestSp,
   } = useContext(RidePageContext);
   const { getSettingByKey } = settings.useContainer();
+  const firstPickup = requestStopPoints[0];
+  const draggableSps = requestStopPoints.slice(1);
+  console.log('draggableSps', draggableSps);
   const {
     locationGranted,
   } = useContext(UserContext);
@@ -155,11 +158,14 @@ const SearchBar = ({
       inputRef.current.focus();
     }
   }, [selectedIndex, isExpanded]);
-  const renderDraggableItem = ({
-    getIndex, drag,
+  const renderSp = ({
+    getIndex, drag, stopPoint,
   }) => {
-    const index = getIndex();
-    const sp = requestStopPoints[index];
+    console.log('render sp', {
+      getIndex: getIndex ? getIndex() : 0, drag, stopPoint,
+    });
+    const index = getIndex ? getIndex() + 1 : 0;
+    const sp = stopPoint || draggableSps[index - 1];
     const { type, description } = sp;
     const placeholder = getSpPlaceholder(sp, index);
     const rowProps = index === 0 ? { isExpanded } : { setMargin: true };
@@ -176,7 +182,7 @@ const SearchBar = ({
           accessible
           accessibilityLabel={`address_input_${index}`}
           placeholder={i18n.t(placeholder)}
-          onDrag={drag}
+          onDrag={hasEnteredMultiSp ? drag : null}
           onChangeText={(text) => {
             updateRequestSp({
               description: text,
@@ -227,16 +233,20 @@ const SearchBar = ({
 
     );
   };
-  const buildSps = () => (
+  const renderFirstPickup = () => renderSp({
+    stopPoint: firstPickup,
+  });
+
+  const buildDraggableSps = () => (
     <DraggableFlatList
-      data={requestStopPoints}
-      renderItem={renderDraggableItem}
+      data={draggableSps}
+      renderItem={renderSp}
       keyExtractor={item => item.id}
       onDragBegin={() => console.log('drag begin!!')}
       onScrollBeginDrag={() => console.log('scroll begin drag')}
       onDragEnd={({ data }) => {
         console.log('drag enddd!!!', data);
-        setRequestStopPoints(data);
+        setRequestStopPoints([firstPickup, ...data]);
       }
           }
     />
@@ -282,8 +292,8 @@ const SearchBar = ({
           flex: 1,
         }}
       >
-
-        {buildSps()}
+        {renderFirstPickup()}
+        {buildDraggableSps()}
 
       </View>
     </View>
