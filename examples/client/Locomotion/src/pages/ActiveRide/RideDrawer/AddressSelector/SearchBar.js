@@ -176,7 +176,7 @@ const SearchBar = ({
           accessible
           accessibilityLabel={`address_input_${index}`}
           placeholder={i18n.t(placeholder)}
-          onDrag={drag}
+          onDrag={hasEnteredMultiSp ? drag : null}
           onChangeText={(text) => {
             updateRequestSp({
               description: text,
