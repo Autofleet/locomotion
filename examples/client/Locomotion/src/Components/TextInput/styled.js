@@ -92,7 +92,10 @@ export const DragIconContainer = styled(View)`
   
   justify-content: center;
   z-index: 1;
-  background-color: #f1f2f6;
   width: 20px;
-  height: 60px;
+  height: 50px;
+  background-color: #f1f2f6;
+  flex: 1;
+  ${bottomBorderStyles}
+  border-color: '#333333';
 `;
