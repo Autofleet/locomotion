@@ -1,4 +1,5 @@
 import React, { forwardRef } from 'react';
+import { View } from 'react-native';
 import SvgIcon from '../SvgIcon';
 import {
   BottomSheetInput,
@@ -10,6 +11,7 @@ import {
   PlusIcon,
   DragContainer,
   DragIconContainer,
+  TextDragCloseContainer,
 } from './styled';
 import cancel from '../../assets/bottomSheet/cancel.svg';
 import dragIcon from '../../assets/bottomSheet/drag-icon.svg';
@@ -25,37 +27,36 @@ const BottomSheetInputField = forwardRef((props, ref) => (
 
   <BottomSheetInputContainer>
 
-
-    <BottomSheetInput
-      hasMultiSp={props.hasMultiSp}
-      {...props}
-      ref={ref}
-    />
-
-
-    {!!props.value && props.value.length > 0 && (
-    <TouchableIconContainer onPress={() => {
-      if (props.clear) {
-        props.clear();
-      }
-    }}
-
-    >
-
-      <IconContainer>
-        <SvgIcon
-          Svg={cancel}
-          fill="#333"
-          stroke="#333"
-          height={12}
-          width={12}
-        />
-      </IconContainer>
-    </TouchableIconContainer>
-    )}
+    <TextDragCloseContainer>
+      <BottomSheetInput
+        hasMultiSp={props.hasMultiSp}
+        {...props}
+        ref={ref}
+      />
 
 
-    { props.onDrag && (
+      {!!props.value && props.value.length > 0 && (
+      <TouchableIconContainer onPress={() => {
+        if (props.clear) {
+          props.clear();
+        }
+      }}
+      >
+
+        <IconContainer>
+          <SvgIcon
+            Svg={cancel}
+            fill="#333"
+            stroke="#333"
+            height={12}
+            width={12}
+          />
+        </IconContainer>
+      </TouchableIconContainer>
+      )}
+
+
+      { props.onDrag && (
       <TouchableIconContainer onLongPress={() => props.onDrag()}>
         <DragIconContainer>
           <SvgIcon
@@ -63,13 +64,13 @@ const BottomSheetInputField = forwardRef((props, ref) => (
             stroke="#333"
             fill="#333"
             style={{ opacity: props.onDrag ? 1 : 0 }}
-            height={17}
-            width={17}
+            height={15}
+            width={15}
           />
         </DragIconContainer>
       </TouchableIconContainer>
-    )}
-
+      )}
+    </TextDragCloseContainer>
     { props.add && (
     <AddSpButton hasEnteredMultiSp onPress={() => props.add()} />
     )}

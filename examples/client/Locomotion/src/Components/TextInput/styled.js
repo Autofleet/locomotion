@@ -58,8 +58,6 @@ export const IconContainer = styled(View)`
 `;
 
 export const RemoveIconContainer = styled(View)`
-  //centered
-  position: absolute;
   right: 0;
   top: 0;
   bottom: 0;
@@ -70,6 +68,7 @@ export const RemoveIconContainer = styled(View)`
 `;
 
 export const TouchableIconContainer = styled.TouchableOpacity`
+
 `;
 export const PlusIcon = styled.Image.attrs({ source: plusImage })`
     width: 15px;
@@ -87,15 +86,12 @@ export const AddSpContainer = styled.TouchableOpacity`
 `;
 
 export const DragIconContainer = styled(View)`
-    //centered
-  position: absolute;
-  
-  justify-content: center;
-  z-index: 1;
-  width: 20px;
-  height: 50px;
-  background-color: #f1f2f6;
-  flex: 1;
-  ${bottomBorderStyles}
-  border-color: '#333333';
+
+`;
+export const TextDragCloseContainer = styled(View)`
+width: 90%;
+flex: 1;
+flex-direction: row;
+align-items: center;
+background-color: #f1f2f6;
 `;
