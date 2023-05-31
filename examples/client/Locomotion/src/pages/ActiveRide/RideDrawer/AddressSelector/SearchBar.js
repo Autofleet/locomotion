@@ -7,7 +7,7 @@ import {
 import styled from 'styled-components';
 import { debounce, remove } from 'lodash';
 import shortid from 'shortid';
-import DraggableFlatList from 'react-native-draggable-flatlist';
+import DraggableFlatList, { ScaleDecorator } from 'react-native-draggable-flatlist';
 import { UserContext } from '../../../../context/user';
 import settings from '../../../../context/settings';
 import Mixpanel from '../../../../services/Mixpanel';
@@ -169,64 +169,63 @@ const SearchBar = ({
     const autoFocus = isExpanded && index === selectedIndex;
     return (
 
-      <TouchableOpacity>
-        <Row
-          {...rowProps}
-          key={sp.id}
-        >
 
-          <BottomSheetInput
-            accessible
-            accessibilityLabel={`address_input_${index}`}
-            placeholder={i18n.t(placeholder)}
-            onDrag={drag}
-            onChangeText={(text) => {
-              updateRequestSp({
-                description: text,
-                lat: null,
-                lng: null,
-                externalId: null,
-              }, index);
-              setSearchTerm(text);
-            }}
-            fullBorder
-            value={description || ''}
-            placeholderTextColor={isExpanded ? '#929395' : '#333333'}
-            onFocus={(e) => {
-              Mixpanel.setEvent(`${type} address input focused`);
-              onInputFocus(e.target, index);
-            }}
-            isMultiSpEnabled={isMultiSpEnabled}
-            hasEnteredMultiSp={hasEnteredMultiSp}
-            onPressIn={e => e.currentTarget?.setSelection((description?.length || 0), (description?.length || 0))}
-            key={`input_${sp.id}`}
-            autoCorrect={false}
-            clear={() => {
-              updateRequestSp({
-                description: null,
-                lat: null,
-                lng: null,
-                externalId: null,
-                id: shortid.generate(),
-              }, index);
-              setSearchTerm(null);
-            }}
-            ref={(ref) => {
-              if (autoFocus) {
-                inputRef.current = ref;
-              }
-            }}
-            remove={isSpIndexMulti(index) ? () => removeRequestSp(index) : null}
-            add={canAddMoreMultiSp
+      <Row
+        {...rowProps}
+        key={sp.id}
+      >
+
+        <BottomSheetInput
+          accessible
+          accessibilityLabel={`address_input_${index}`}
+          placeholder={i18n.t(placeholder)}
+          onDrag={drag}
+          onChangeText={(text) => {
+            updateRequestSp({
+              description: text,
+              lat: null,
+              lng: null,
+              externalId: null,
+            }, index);
+            setSearchTerm(text);
+          }}
+          fullBorder
+          value={description || ''}
+          placeholderTextColor={isExpanded ? '#929395' : '#333333'}
+          onFocus={(e) => {
+            Mixpanel.setEvent(`${type} address input focused`);
+            onInputFocus(e.target, index);
+          }}
+          isMultiSpEnabled={isMultiSpEnabled}
+          hasEnteredMultiSp={hasEnteredMultiSp}
+          onPressIn={e => e.currentTarget?.setSelection((description?.length || 0), (description?.length || 0))}
+          key={`input_${sp.id}`}
+          autoCorrect={false}
+          clear={() => {
+            updateRequestSp({
+              description: null,
+              lat: null,
+              lng: null,
+              externalId: null,
+              id: shortid.generate(),
+            }, index);
+            setSearchTerm(null);
+          }}
+          ref={(ref) => {
+            if (autoFocus) {
+              inputRef.current = ref;
+            }
+          }}
+          remove={isSpIndexMulti(index) ? () => removeRequestSp(index) : null}
+          add={canAddMoreMultiSp
       && index === amountOfEnteredSp - 1 ? () => addNewEmptyRequestSp()
-              : null}
-            onLayout={e => e.currentTarget?.setSelection(1, 1)}
-            onBlur={(e) => {
-              e.currentTarget?.setSelection(1, 1);
-            }}
-          />
-        </Row>
-      </TouchableOpacity>
+            : null}
+          onLayout={e => e.currentTarget?.setSelection(1, 1)}
+          onBlur={(e) => {
+            e.currentTarget?.setSelection(1, 1);
+          }}
+        />
+      </Row>
 
 
     );
@@ -236,7 +235,6 @@ const SearchBar = ({
       data={requestStopPoints}
       renderItem={renderDraggableItem}
       keyExtractor={item => item.id}
-      onTouchStart={event => console.log('spsss are isss', requestStopPoints)}
       onDragBegin={() => console.log('drag begin!!')}
       onScrollBeginDrag={() => console.log('scroll begin drag')}
       onDragEnd={({ data }) => {

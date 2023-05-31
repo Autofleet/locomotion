@@ -725,6 +725,7 @@ const RidePageContextProvider = ({ children }: {
         externalId: null,
         text: '',
         type: 'pickup',
+        id: getRandomId(),
       });
       return newRequestsSps;
     });
