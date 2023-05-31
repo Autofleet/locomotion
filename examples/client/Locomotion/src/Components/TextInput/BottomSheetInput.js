@@ -38,7 +38,22 @@ const BottomSheetInputField = forwardRef((props, ref) => (
       />
 
 
-      {!!props.value && props.value.length > 0 && (
+      { props.onDrag && (
+      <TouchableIconContainer onLongPress={() => props.onDrag()}>
+        <DragIconContainer>
+          <SvgIcon
+            Svg={dragIcon}
+            stroke="#333"
+            fill="#333"
+            style={{ opacity: props.onDrag ? 1 : 0 }}
+            height={15}
+            width={15}
+          />
+        </DragIconContainer>
+      </TouchableIconContainer>
+      )}
+    </TextDragCloseContainer>
+    {!!props.value && props.value.length > 0 && (
       <TouchableIconContainer onPress={() => {
         if (props.clear) {
           props.clear();
@@ -56,24 +71,7 @@ const BottomSheetInputField = forwardRef((props, ref) => (
           />
         </IconContainer>
       </TouchableIconContainer>
-      )}
-
-
-      { props.onDrag && (
-      <TouchableIconContainer onLongPress={() => props.onDrag()}>
-        <DragIconContainer>
-          <SvgIcon
-            Svg={dragIcon}
-            stroke="#333"
-            fill="#333"
-            style={{ opacity: props.onDrag ? 1 : 0 }}
-            height={15}
-            width={15}
-          />
-        </DragIconContainer>
-      </TouchableIconContainer>
-      )}
-    </TextDragCloseContainer>
+    )}
     { props.add && (
     <AddSpButton hasEnteredMultiSp onPress={() => props.add()} />
     )}

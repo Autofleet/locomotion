@@ -89,7 +89,6 @@ export const DragIconContainer = styled(View)`
 
 `;
 export const TextDragCloseContainer = styled(View)`
-  width: 90%;
   flex: 1;
   flex-direction: row;
   align-items: center;
