@@ -89,9 +89,14 @@ export const DragIconContainer = styled(View)`
 
 `;
 export const TextDragCloseContainer = styled(View)`
-width: 90%;
-flex: 1;
-flex-direction: row;
-align-items: center;
-background-color: #f1f2f6;
+  width: 90%;
+  flex: 1;
+  flex-direction: row;
+  align-items: center;
+  background-color: #f1f2f6;
+  max-width: ${({ isMultiSpEnabled }) => (isMultiSpEnabled ? '80%' : '100%')};
+  ${FONT_SIZES.H3}
+  ${({ fullBorder, isFocused }) => (fullBorder ? fullBorderStyles(isFocused) : bottomBorderStyles)}
+  border-color: ${({ error }) => (error ? ERROR_COLOR : '#333333')};
+  color: ${({ error }) => (error ? ERROR_COLOR : '#333333')};
 `;

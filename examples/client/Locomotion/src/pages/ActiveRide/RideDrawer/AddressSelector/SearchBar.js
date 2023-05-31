@@ -217,9 +217,16 @@ const SearchBar = ({
           add={canAddMoreMultiSp
       && index === amountOfEnteredSp - 1 ? () => addNewEmptyRequestSp()
             : null}
-          onLayout={e => e.currentTarget?.setSelection(1, 1)}
+          onLayout={(e) => {
+            if (e.currentTarget?.setSelection) {
+              e.currentTarget?.setSelection(1, 1);
+            }
+          }
+          }
           onBlur={(e) => {
-            e.currentTarget?.setSelection(1, 1);
+            if (e.currentTarget?.setSelection) {
+              e.currentTarget?.setSelection(1, 1);
+            }
           }}
         />
       </Row>

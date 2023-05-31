@@ -27,7 +27,10 @@ const BottomSheetInputField = forwardRef((props, ref) => (
 
   <BottomSheetInputContainer>
 
-    <TextDragCloseContainer>
+    <TextDragCloseContainer
+      {...props}
+      ref={ref}
+    >
       <BottomSheetInput
         hasMultiSp={props.hasMultiSp}
         {...props}
