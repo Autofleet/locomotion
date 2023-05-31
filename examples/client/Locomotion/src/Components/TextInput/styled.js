@@ -3,6 +3,7 @@ import { Text, View } from 'react-native';
 import styled from 'styled-components';
 import { BottomSheetTextInput } from '@gorhom/bottom-sheet';
 import plusImage from '../../assets/plus.png';
+
 import { ERROR_COLOR, FONT_SIZES } from '../../context/theme';
 
 const bottomBorderStyles = `
@@ -66,8 +67,6 @@ export const RemoveIconContainer = styled(View)`
   margin-top: 16px;
   justify-content: center;
   z-index: 1;
-  
-
 `;
 
 export const TouchableIconContainer = styled.TouchableOpacity`
@@ -85,4 +84,15 @@ export const AddSpContainer = styled.TouchableOpacity`
     justify-content: center;
     align-items: center;
     margin-left: 10px;
+`;
+
+export const DragIconContainer = styled(View)`
+    //centered
+  position: absolute;
+  
+  justify-content: center;
+  z-index: 1;
+  background-color: #f1f2f6;
+  width: 20px;
+  height: 60px;
 `;

@@ -8,17 +8,19 @@ import {
   RemoveIconContainer,
   AddSpContainer,
   PlusIcon,
-  TouchableDragContainer,
+  DragContainer,
+  DragIconContainer,
 } from './styled';
 import cancel from '../../assets/bottomSheet/cancel.svg';
-import deleteIcon from '../../assets/bottomSheet/trash.svg';
 import dragIcon from '../../assets/bottomSheet/drag-icon.svg';
+import deleteIcon from '../../assets/bottomSheet/trash.svg';
 
 const AddSpButton = ({ onLongPress, hasEnteredMultiSp, onPress }) => (
   <AddSpContainer hasEnteredMultiSp={hasEnteredMultiSp} onPress={onPress} onLongPress={onLongPress} testID="addSpButton">
     <PlusIcon />
   </AddSpContainer>
 );
+
 const BottomSheetInputField = forwardRef((props, ref) => (
 
   <BottomSheetInputContainer>
@@ -54,27 +56,37 @@ const BottomSheetInputField = forwardRef((props, ref) => (
 
 
     { props.onDrag && (
-      <AddSpButton hasEnteredMultiSp onLongPress={() => props.onDrag()} />
+      <TouchableIconContainer onLongPress={() => props.onDrag()}>
+        <DragIconContainer>
+          <SvgIcon
+            Svg={dragIcon}
+            stroke="#333"
+            fill="#333"
+            style={{ opacity: props.onDrag ? 1 : 0 }}
+            height={17}
+            width={17}
+          />
+        </DragIconContainer>
+      </TouchableIconContainer>
     )}
 
     { props.add && (
     <AddSpButton hasEnteredMultiSp onPress={() => props.add()} />
     )}
 
-    {/* { props.remove && (
+    { props.remove && (
     <TouchableIconContainer onPress={() => props.remove()}>
       <RemoveIconContainer>
         <SvgIcon
           Svg={deleteIcon}
           stroke="#333"
           fill="#333"
-          style={{ opacity: props.remove ? 1 : 0 }}
           height={19}
           width={19}
         />
       </RemoveIconContainer>
     </TouchableIconContainer>
-    )} */}
+    )}
 
 
   </BottomSheetInputContainer>

@@ -99,11 +99,10 @@ const SearchBar = ({
     removeRequestSp,
   } = useContext(RidePageContext);
   const { getSettingByKey } = settings.useContainer();
-
   const {
     locationGranted,
   } = useContext(UserContext);
-  const SP_AMOUNT_WITHOUT_MULTI = 2; // pickup+dropoff
+  const SP_AMOUNT_WITHOUT_MULTI = 2;
   const [searchTerm, setSearchTerm] = useState('');
   const [multiSpAmount, setMultiSpAmount] = useState(0);
   const debouncedSearch = useCallback(debounce(async text => onSearch(text), 300), [locationGranted]);
@@ -157,11 +156,9 @@ const SearchBar = ({
     }
   }, [selectedIndex, isExpanded]);
   const renderDraggableItem = ({
-    getIndex, item, drag,
+    getIndex, drag,
   }) => {
     const index = getIndex();
-    console.log('render draggable', index, item, requestStopPoints[index]);
-    console.log('drag is', drag);
     const sp = requestStopPoints[index];
     const { type, description } = sp;
     const placeholder = getSpPlaceholder(sp, index);
