@@ -68,7 +68,7 @@ export const RemoveIconContainer = styled(View)`
 `;
 
 export const TouchableIconContainer = styled.TouchableOpacity`
-
+  width: 12px;
 `;
 export const PlusIcon = styled.Image.attrs({ source: plusImage })`
     width: 15px;
