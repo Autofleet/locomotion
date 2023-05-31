@@ -86,7 +86,6 @@ export const AddSpContainer = styled.TouchableOpacity`
 `;
 
 export const DragIconContainer = styled(View)`
-
 `;
 export const TextDragCloseContainer = styled(View)`
   flex: 1;
