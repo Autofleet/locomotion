@@ -69,7 +69,6 @@ const BottomSheetInputField = forwardRef((props, ref) => (
             Svg={dragIcon}
             stroke="#333"
             fill="#333"
-            style={{ opacity: props.onDrag ? 1 : 0 }}
             height={15}
             width={15}
           />
