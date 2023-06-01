@@ -12,6 +12,7 @@ import {
   DragContainer,
   DragIconContainer,
   TextDragCloseContainer,
+  DragTouchableIconContainer,
 } from './styled';
 import cancel from '../../assets/bottomSheet/cancel.svg';
 import dragIcon from '../../assets/bottomSheet/drag-icon.svg';
@@ -22,7 +23,6 @@ const AddSpButton = ({ onLongPress, hasEnteredMultiSp, onPress }) => (
     <PlusIcon />
   </AddSpContainer>
 );
-
 const BottomSheetInputField = forwardRef((props, ref) => (
 
   <BottomSheetInputContainer>
@@ -32,14 +32,13 @@ const BottomSheetInputField = forwardRef((props, ref) => (
       ref={ref}
     >
       <BottomSheetInput
-        hasMultiSp={props.hasMultiSp}
         {...props}
         ref={ref}
       />
 
 
       <TouchableIconContainer
-
+        isMultiSpEnabled={props.isMultiSpEnabled}
         onPress={() => {
           if (props.clear) {
             props.clear();
@@ -63,17 +62,17 @@ const BottomSheetInputField = forwardRef((props, ref) => (
 
 
       { props.onDrag && (
-      <TouchableIconContainer onLongPress={() => props.onDrag()}>
+      <DragTouchableIconContainer onLongPress={() => props.onDrag()}>
         <DragIconContainer>
           <SvgIcon
             Svg={dragIcon}
             stroke="#333"
             fill="#333"
-            height={15}
+            height={25}
             width={15}
           />
         </DragIconContainer>
-      </TouchableIconContainer>
+      </DragTouchableIconContainer>
       )}
     </TextDragCloseContainer>
     { props.add && (

@@ -38,7 +38,7 @@ export const BottomSheetInput = styled(BottomSheetTextInput)`
   padding-right: 30px;
   height: 50px;
   max-width: ${({ isMultiSpEnabled }) => (isMultiSpEnabled ? '80%' : '100%')};
-  ${FONT_SIZES.H3}
+  ${({ isMultiSpEnabled }) => (isMultiSpEnabled ? FONT_SIZES.H4 : FONT_SIZES.H3)}
   ${({ fullBorder, isFocused }) => (fullBorder ? fullBorderStyles(isFocused) : bottomBorderStyles)}
   border-color: ${({ error }) => (error ? ERROR_COLOR : '#333333')};
   color: ${({ error }) => (error ? ERROR_COLOR : '#333333')};
@@ -69,6 +69,17 @@ export const RemoveIconContainer = styled(View)`
 
 export const TouchableIconContainer = styled.TouchableOpacity`
   width: 12px;
+  ${({ isMultiSpEnabled }) => (!isMultiSpEnabled && 'margin-right: 10px;')}
+`;
+
+export const DragTouchableIconContainer = styled.TouchableOpacity`
+  width: 12px;
+  padding-right: 20px;
+  padding-left: 5px;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  margin-left: 4px;
+  
 `;
 export const PlusIcon = styled.Image.attrs({ source: plusImage })`
     width: 15px;
@@ -86,14 +97,14 @@ export const AddSpContainer = styled.TouchableOpacity`
 `;
 
 export const DragIconContainer = styled(View)`
-margin-left: 8px;
+  
 `;
 export const TextDragCloseContainer = styled(View)`
   flex: 1;
   flex-direction: row;
   align-items: center;
   background-color: #f1f2f6;
-  max-width: ${({ isMultiSpEnabled }) => (isMultiSpEnabled ? '80%' : '100%')};
+  max-width: ${({ isMultiSpEnabled }) => (isMultiSpEnabled ? '80%' : '90%')};
   ${FONT_SIZES.H3}
   ${({ fullBorder, isFocused }) => (fullBorder ? fullBorderStyles(isFocused) : bottomBorderStyles)}
   border-color: ${({ error }) => (error ? ERROR_COLOR : '#333333')};

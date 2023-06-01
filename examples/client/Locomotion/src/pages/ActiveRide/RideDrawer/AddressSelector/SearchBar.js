@@ -239,10 +239,9 @@ const SearchBar = ({
       data={requestStopPoints}
       renderItem={renderDraggableItem}
       keyExtractor={item => item.id}
-      onDragBegin={() => console.log('drag begin!!')}
-      onScrollBeginDrag={() => console.log('scroll begin drag')}
+      onDragBegin={() => Mixpanel.setEvent('started drag multi sps')}
       onDragEnd={({ data }) => {
-        console.log('drag enddd!!!', data);
+        Mixpanel.setEvent('finished drag multi sps', { data });
         setRequestStopPoints(data);
       }
           }
