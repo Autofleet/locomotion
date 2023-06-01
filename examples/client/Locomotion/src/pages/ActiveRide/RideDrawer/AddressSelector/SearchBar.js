@@ -2,12 +2,13 @@ import React, {
   useCallback, useContext, useEffect, useRef, useState,
 } from 'react';
 import {
-  Animated, View, Text, TouchableOpacity,
+  Animated, View,
 } from 'react-native';
 import styled from 'styled-components';
-import { debounce, remove } from 'lodash';
+import { debounce } from 'lodash';
 import shortid from 'shortid';
-import DraggableFlatList, { ScaleDecorator } from 'react-native-draggable-flatlist';
+import DraggableFlatList from 'react-native-draggable-flatlist';
+import { STOP_POINT_TYPES } from '../../../../lib/commonTypes';
 import { UserContext } from '../../../../context/user';
 import settings from '../../../../context/settings';
 import Mixpanel from '../../../../services/Mixpanel';
@@ -18,6 +19,7 @@ import plusImage from '../../../../assets/plus.png';
 import backImage from '../../../../assets/arrow-back.png';
 import SETTINGS_KEYS from '../../../../context/settings/keys';
 
+const { STOP_POINT_DROPOFF, STOP_POINT_PICKUP } = STOP_POINT_TYPES;
 const SearchContainer = styled.View`
     flex: 1;
     padding-bottom: 12px;
@@ -155,6 +157,16 @@ const SearchBar = ({
       inputRef.current.focus();
     }
   }, [selectedIndex, isExpanded]);
+  const formatMovedMultiSps = (sps) => {
+    const newSps = [...sps];
+    return newSps.map((sp, index) => {
+      const type = index === newSps.length - 1 ? STOP_POINT_DROPOFF : STOP_POINT_PICKUP;
+      return {
+        ...sp,
+        type,
+      };
+    });
+  };
   const renderDraggableItem = ({
     getIndex, drag,
   }) => {
@@ -241,8 +253,9 @@ const SearchBar = ({
       keyExtractor={item => item.id}
       onDragBegin={() => Mixpanel.setEvent('started drag multi sps')}
       onDragEnd={({ data }) => {
-        Mixpanel.setEvent('finished drag multi sps', { data });
-        setRequestStopPoints(data);
+        const formattedMovedStopPoints = formatMovedMultiSps(data);
+        Mixpanel.setEvent('finished drag multi sps', { formattedMovedStopPoints });
+        setRequestStopPoints(formattedMovedStopPoints);
       }
           }
     />
