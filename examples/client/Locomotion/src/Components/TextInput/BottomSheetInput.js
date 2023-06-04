@@ -29,7 +29,6 @@ const BottomSheetInputField = forwardRef((props, ref) => (
 
     <TextDragCloseContainer
       {...props}
-      ref={ref}
     >
       <BottomSheetInput
         {...props}
