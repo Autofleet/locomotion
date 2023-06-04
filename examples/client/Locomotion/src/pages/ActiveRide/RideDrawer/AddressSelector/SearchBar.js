@@ -221,7 +221,7 @@ const SearchBar = ({
             setSearchTerm(null);
           }}
           ref={(ref) => {
-            if (autoFocus && inputRef?.current) {
+            if (autoFocus) {
               inputRef.current = ref;
             }
           }}
