@@ -88,23 +88,11 @@ const usePayments = () => {
   const clientHasValidPaymentMethods = () => paymentMethods.length > 0
   && paymentMethods.some(pm => !pm.isExpired);
 
-  const isCashPaymentEnabled = async () => {
-    const paymentSetting = await
-    useSettings.getMultipleSettingByKey([
-      SETTINGS_KEYS.CASH_ENABLED,
-      SETTINGS_KEYS.CASH_ENABLED_IN_APP,
-    ]);
-    const cashEnabled = paymentSetting[SETTINGS_KEYS.CASH_ENABLED];
-    const cashEnabledInApp = paymentSetting[SETTINGS_KEYS.CASH_ENABLED_IN_APP];
-    return cashEnabled && cashEnabledInApp;
-  };
-
-  const getClientDefaultMethod = async () => {
+  const getClientDefaultMethod = (enableCash) => {
     if (paymentMethods && paymentMethods.length) {
       return (paymentMethods || []).find(pm => pm.isDefault) || paymentMethods[0];
     }
-    const cashEnabled = await isCashPaymentEnabled();
-    if (cashEnabled) {
+    if (enableCash) {
       return cashPaymentMethod;
     }
   };
@@ -196,7 +184,6 @@ const usePayments = () => {
     getOrFetchCustomer,
     clientHasValidPaymentMethods,
     getClientDefaultMethod,
-    isCashPaymentEnabled,
     createPaymentMethod,
     updatePaymentMethod,
     getClientOutstandingBalanceCard,

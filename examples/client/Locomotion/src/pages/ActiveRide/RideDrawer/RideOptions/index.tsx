@@ -17,17 +17,19 @@ import { PaymentMethodInterface } from '../../../../context/payments/interface';
 import { RideStateContextContext } from '../../../../context/ridePageStateContext';
 import { BS_PAGES } from '../../../../context/ridePageStateContext/utils';
 import * as navigationService from '../../../../services/navigation';
+import { PAYMENT_METHODS } from '../../../../lib/commonTypes';
 
 const RideOptions = () => {
   const usePayments = payments.useContainer();
   const [defaultPaymentMethod, setDefaultPaymentMethod] = useState<PaymentMethodInterface | undefined>(undefined);
   const [popupToShow, setPopupToShow] = useState<popupNames | null>(null);
-
   const {
     updateRidePayload,
     ride,
     ridePopup,
     stopRequestInterval,
+    serviceEstimations,
+    chosenService,
   } = useContext(RidePageContext);
 
   const {
@@ -47,11 +49,14 @@ const RideOptions = () => {
     setPopupToShow(null);
   };
 
+  const showCash = !!serviceEstimations?.filter((se: any) => se.allowedPaymentMethods.includes(PAYMENT_METHODS.CASH)).length;
+
   useEffect(() => {
     const updateDefaultPaymentMethod = async () => {
-      const paymentMethod: PaymentMethodInterface |
-       undefined = await usePayments.getClientDefaultMethod();
-      if (paymentMethod) {
+      const paymentMethod: any = usePayments.getClientDefaultMethod(
+        chosenService?.allowedPaymentMethods.includes(PAYMENT_METHODS.CASH),
+      );
+      if (paymentMethod && paymentMethod?.id) {
         updateRidePayload({
           paymentMethodId: paymentMethod.id,
         });
@@ -61,7 +66,7 @@ const RideOptions = () => {
     if (!ride.paymentMethodId) {
       updateDefaultPaymentMethod();
     }
-  }, [usePayments.paymentMethods]);
+  }, [usePayments.paymentMethods, showCash]);
 
 
   useEffect(() => {
@@ -110,6 +115,7 @@ const RideOptions = () => {
               navigationService.navigate(MAIN_ROUTES.PAYMENT, { showAdd: true, rideFlow: true });
             }, 500);
           }}
+          showCash={showCash}
           selected={ride?.paymentMethodId
             && usePayments.paymentMethods.find((pm: any) => ride.paymentMethodId === pm.id)
             ? ride.paymentMethodId : defaultPaymentMethod?.id}
