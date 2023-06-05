@@ -4,36 +4,32 @@ import React, {
 import { StyleSheet } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
 import { useIsFocused } from '@react-navigation/native';
-import { STOP_POINT_TYPES } from '../../../lib/commonTypes';
+import { STOP_POINT_TYPES, formatUiDisplaySpType } from '../../../lib/commonTypes';
 import { DropoffIconMarker, PickupIconMarker } from '../marker';
 import { MarkerTitle } from './styled';
 import i18n from '../../../I18n';
-import { getOrdinal } from '../../../lib/ride/utils';
+import { formatSpText, getOrdinal } from '../../../lib/ride/utils';
 
 const mapStyle = {
   ...StyleSheet.absoluteFillObject,
 };
 
-const SpMarker = ({
-  lat, lng, type, ordinalDesc, disableMarkers,
-}) => (
+const SpMarker = ({ sp, disableMarkers }) => (
   <Marker
-    key={`Marker#${lat}#${lng}#${type}`}
+    key={`Marker#${sp.lat}#${sp.lng}#${sp.type}`}
     coordinate={{
-      latitude: parseFloat(lat),
-      longitude: parseFloat(lng),
+      latitude: parseFloat(sp.lat),
+      longitude: parseFloat(sp.lng),
     }}
     style={{
       alignItems: 'center',
     }}
   >
-    <MarkerTitle type={type}>
-      {`${ordinalDesc !== 0 ? getOrdinal(ordinalDesc + 1) : ''} ${
-        i18n.t(`stopPointsTypes.${type}`)
-      }`}
+    <MarkerTitle type={sp.type}>
+      {formatSpText(sp)}
     </MarkerTitle>
-    {type === STOP_POINT_TYPES.STOP_POINT_PICKUP ? <PickupIconMarker disableMarkers={disableMarkers} onMap /> : undefined}
-    {type === STOP_POINT_TYPES.STOP_POINT_DROPOFF ? <DropoffIconMarker disableMarkers={disableMarkers} onMap /> : undefined}
+    {sp.type === STOP_POINT_TYPES.STOP_POINT_PICKUP ? <PickupIconMarker disableMarkers={disableMarkers} onMap /> : undefined}
+    {sp.type === STOP_POINT_TYPES.STOP_POINT_DROPOFF ? <DropoffIconMarker disableMarkers={disableMarkers} onMap /> : undefined}
   </Marker>
 );
 
@@ -89,14 +85,10 @@ const Map = forwardRef(({
       showMyLocation={false}
       followMyLocation={false}
     >
-      {stopPoints && stopPoints.map(({
-        lat, lng, type, ordinalDesc,
-      }) => (lat && lng ? (
+      {stopPoints && stopPoints.map(sp => (sp.lat && sp.lng ? (
         <SpMarker
-          key={`Marker#${lat}#${lng}#${type}`}
-          {...{
-            lat, lng, type, ordinalDesc,
-          }}
+          key={`Marker#${sp.lat}#${sp.lng}#${sp.type}`}
+          sp={sp}
           disableMarkers={disableMarkers}
         />
       ) : (<></>)))}

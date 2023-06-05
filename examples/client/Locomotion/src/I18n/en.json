@@ -661,7 +661,8 @@
     },
     "stopPointsTypes": {
         "dropoff": "Dropoff",
-        "pickup": "Pickup"
+        "pickup": "Pickup",
+        "multi": "Stop"
     },
     "stopPoints": {
         "states": {

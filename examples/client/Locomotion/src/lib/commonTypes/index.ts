@@ -51,11 +51,14 @@ export const CHARGE_FOR_TIP = 'tip';
 export const RIDE_FINAL_STATES = Object.values(RIDE_STATES)
   .filter(state => !RIDE_ACTIVE_STATES.find(as => as === state));
 export const isPickup = (sp: any) => sp.type === STOP_POINT_TYPES.STOP_POINT_PICKUP;
-export const formatUiDisplaySpType = (sp: any, index: number) => {
-  if (isPickup(sp) && (sp.orderInParent > 0 || index > 0)) {
+
+export const formatUiDisplaySpType = (sp: any, index: number | null) => {
+  if (isPickup(sp) && (sp.orderInParent > 0 || (index && index > 0))) {
     return STOP_POINT_TYPES.STOP_POINT_MULTI;
   }
   return sp.type;
 };
+export const isMulti = (sp: any) => formatUiDisplaySpType(sp, null)
+=== STOP_POINT_TYPES.STOP_POINT_MULTI;
 
 export const COUPON_TYPE = 'coupon';
