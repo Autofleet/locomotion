@@ -258,6 +258,7 @@ export default React.forwardRef(({
 
   const { stopPoints } = ride;
 
+
   const currentStopPoint = getFirstPendingStopPoint(stopPoints);
   const precedingStopPoints = (currentStopPoint || {}).precedingStops || [];
 
@@ -359,10 +360,11 @@ export default React.forwardRef(({
           && finalStopPoints.filter(sp => !!sp.lat).length > 1
           ? finalStopPoints
             .filter(sp => !!sp.lat)
-            .map((sp) => {
+            .map((sp, index) => {
               const isNext = firstSpNotCompleted.id === sp.id;
               return (
                 <StationsMap
+                  index={index}
                   stopPoint={sp}
                   key={sp.id}
                   isNext={isNext}
