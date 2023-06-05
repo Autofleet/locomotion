@@ -723,7 +723,7 @@ const RidePageContextProvider = ({ children }: {
         lng: null,
         externalId: null,
         text: '',
-        type: 'pickup',
+        type: STOP_POINT_TYPES.STOP_POINT_PICKUP,
         id: getRandomId(),
       });
       return newRequestsSps;
