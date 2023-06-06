@@ -7,7 +7,7 @@ import {
 import styled from 'styled-components';
 import { debounce } from 'lodash';
 import shortid from 'shortid';
-import DraggableFlatList from 'react-native-draggable-flatlist';
+import DraggableFlatList from 'react-native-draglist';
 import { STOP_POINT_TYPES } from '../../../../lib/commonTypes';
 import { UserContext } from '../../../../context/user';
 import settings from '../../../../context/settings';
@@ -168,9 +168,9 @@ const SearchBar = ({
     });
   };
   const renderDraggableItem = ({
-    getIndex, drag,
+    onStartDrag, item, onEndDrag,
   }) => {
-    const index = getIndex();
+    const index = requestStopPoints.indexOf(item);
     const sp = requestStopPoints[index];
     const { type, description } = sp;
     const placeholder = getSpPlaceholder(sp, index);
@@ -188,7 +188,8 @@ const SearchBar = ({
           accessible
           accessibilityLabel={`address_input_${index}`}
           placeholder={i18n.t(placeholder)}
-          onDrag={hasEnteredMultiSp ? drag : null}
+          onDrag={hasEnteredMultiSp ? onStartDrag : null}
+          onEndDrag={hasEnteredMultiSp ? onEndDrag : null}
           onChangeText={(text) => {
             updateRequestSp({
               description: text,
@@ -251,9 +252,12 @@ const SearchBar = ({
       data={requestStopPoints}
       renderItem={renderDraggableItem}
       keyExtractor={item => item.id}
-      onDragBegin={() => Mixpanel.setEvent('started drag multi sps')}
-      onDragEnd={({ data }) => {
-        const formattedMovedStopPoints = formatMovedMultiSps(data);
+      keyboardShouldPersistTaps="always"
+      onReordered={(fromIndex, toIndex) => {
+        const newSps = [...requestStopPoints]; // Don't modify react data in-place
+        const removed = newSps.splice(fromIndex, 1);
+        newSps.splice(toIndex, 0, removed[0]);
+        const formattedMovedStopPoints = formatMovedMultiSps(newSps);
         Mixpanel.setEvent('finished drag multi sps', { formattedMovedStopPoints });
         setRequestStopPoints(formattedMovedStopPoints);
       }

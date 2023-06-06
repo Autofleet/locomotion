@@ -61,7 +61,10 @@ const BottomSheetInputField = forwardRef((props, ref) => (
 
 
       { props.onDrag && (
-      <DragTouchableIconContainer onLongPress={() => props.onDrag()}>
+      <DragTouchableIconContainer
+        onPressIn={() => props.onDrag()}
+        onPressOut={() => props.onEndDrag()}
+      >
         <DragIconContainer>
           <SvgIcon
             Svg={dragIcon}
