@@ -118,15 +118,10 @@ const SearchBar = ({
     if (isSpIndexMulti(index)) {
       return 'addressView.multiStopPlaceholder';
     }
-    if (!isExpanded || !sp.useDefaultLocation) {
-      return 'addressView.whereTo';
-    }
-
-    if (locationGranted) {
+    if (index === 0) {
       return 'addressView.enterAddress';
     }
-
-    return '';
+    return 'addressView.whereTo';
   };
 
   const onInputFocus = (target, index) => {
