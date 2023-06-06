@@ -254,14 +254,14 @@ const SearchBar = ({
       keyExtractor={item => item.id}
       keyboardShouldPersistTaps="always"
       onReordered={(fromIndex, toIndex) => {
-        const newSps = [...requestStopPoints]; // Don't modify react data in-place
+        const newSps = [...requestStopPoints];
         const removed = newSps.splice(fromIndex, 1);
         newSps.splice(toIndex, 0, removed[0]);
         const formattedMovedStopPoints = formatMovedMultiSps(newSps);
         Mixpanel.setEvent('finished drag multi sps', { formattedMovedStopPoints });
         setRequestStopPoints(formattedMovedStopPoints);
       }
-          }
+      }
     />
   );
 

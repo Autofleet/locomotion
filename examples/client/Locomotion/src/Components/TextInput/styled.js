@@ -61,7 +61,6 @@ export const RemoveIconContainer = styled(View)`
   right: 0;
   top: 0;
   bottom: 0;
-  margin-left: 16px;
   margin-top: 16px;
   justify-content: center;
   z-index: 1;
@@ -69,7 +68,7 @@ export const RemoveIconContainer = styled(View)`
 
 export const TouchableIconContainer = styled.TouchableOpacity`
   width: 12px;
-  ${({ isMultiSpEnabled }) => (!isMultiSpEnabled && 'margin-right: 10px;')}
+  margin-left: 20px;
 `;
 
 export const DragTouchableIconContainer = styled.TouchableOpacity`
