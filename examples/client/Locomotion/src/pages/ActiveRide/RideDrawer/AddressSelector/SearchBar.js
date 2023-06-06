@@ -136,9 +136,7 @@ const SearchBar = ({
   };
   const loadMultiSpSetting = async () => {
     const multiSpSetting = await getSettingByKey(SETTINGS_KEYS.MULTI_SP);
-    console.log('multi sp setting', multiSpSetting);
     if (multiSpSetting && multiSpSetting.enabled) {
-      console.log('multi sp setting', multiSpSetting.amount);
       setMultiSpAmount(multiSpSetting.amount);
     }
   };

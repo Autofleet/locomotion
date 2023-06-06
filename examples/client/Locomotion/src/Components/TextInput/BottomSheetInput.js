@@ -9,7 +9,6 @@ import {
   RemoveIconContainer,
   AddSpContainer,
   PlusIcon,
-  DragContainer,
   DragIconContainer,
   TextDragCloseContainer,
   DragTouchableIconContainer,
@@ -37,7 +36,7 @@ const BottomSheetInputField = forwardRef((props, ref) => (
 
 
       <TouchableIconContainer
-        isMultiSpEnabled={props.isMultiSpEnabled}
+        marginLeft={props.isMultiSpEnabled && 20}
         onPress={() => {
           if (props.clear) {
             props.clear();
@@ -82,7 +81,7 @@ const BottomSheetInputField = forwardRef((props, ref) => (
     )}
 
     { props.remove && (
-    <TouchableIconContainer onPress={() => props.remove()}>
+    <TouchableIconContainer marginLeft={15} onPress={() => props.remove()}>
       <RemoveIconContainer>
         <SvgIcon
           Svg={deleteIcon}
