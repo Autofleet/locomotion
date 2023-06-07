@@ -245,7 +245,7 @@ const RidePage = ({ mapSettings, navigation }) => {
     ),
     [BS_PAGES.SET_LOCATION_ON_MAP]: () => (
       <ConfirmPickup onButtonPress={(sp) => {
-        updateRequestSp(sp);
+        updateRequestSp(sp, selectedInputIndex);
       }}
       />
     ),

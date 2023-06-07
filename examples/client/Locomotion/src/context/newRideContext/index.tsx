@@ -703,7 +703,7 @@ const RidePageContextProvider = ({ children }: {
   }, [currentGeocode]);
 
 
-  const updateRequestSp = (data: any[], index?: number) => {
+  const updateRequestSp = (data: any[], index?: number | null) => {
     const reqSps = [...requestStopPoints];
     if (_.isNil(index)) {
       index = (_.isNil(selectedInputIndex) ? requestStopPoints.length - 1 : selectedInputIndex);
@@ -749,7 +749,7 @@ const RidePageContextProvider = ({ children }: {
       });
       return true;
     }
-    updateRequestSp(newGeoLocation);
+    updateRequestSp(newGeoLocation, selectedInputIndex);
     return true;
   };
 
