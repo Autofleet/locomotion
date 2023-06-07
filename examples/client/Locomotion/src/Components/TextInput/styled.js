@@ -35,7 +35,7 @@ export const Input = styled.TextInput.attrs(props => ({
 
 export const BottomSheetInput = styled(BottomSheetTextInput)`
   padding: 0px 8px;
-  padding-right: 30px;
+  
   height: 50px;
   max-width: ${({ isMultiSpEnabled }) => (isMultiSpEnabled ? '80%' : '100%')};
   ${({ isMultiSpEnabled }) => (isMultiSpEnabled ? FONT_SIZES.H4 : FONT_SIZES.H3)}

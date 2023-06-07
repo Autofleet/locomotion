@@ -35,28 +35,26 @@ const BottomSheetInputField = forwardRef((props, ref) => (
       />
 
 
-      <TouchableIconContainer
-        marginLeft={props.isMultiSpEnabled && 20}
-        onPress={() => {
-          if (props.clear) {
+      { !!props.value && props.value.length > 0 && props.clear && (
+        <TouchableIconContainer
+          marginLeft={props.isMultiSpEnabled && 20}
+          onPress={() => {
             props.clear();
-          }
-        }}
-      >
+          }}
+        >
 
 
-        { !!props.value && props.value.length > 0 && (
-        <SvgIcon
-          Svg={cancel}
-          fill="#333"
-          stroke="#333"
-          height={12}
-          width={12}
-        />
-        )}
+          <SvgIcon
+            Svg={cancel}
+            fill="#333"
+            stroke="#333"
+            height={12}
+            width={12}
+          />
 
 
-      </TouchableIconContainer>
+        </TouchableIconContainer>
+      )}
 
 
       { props.onDrag && (
