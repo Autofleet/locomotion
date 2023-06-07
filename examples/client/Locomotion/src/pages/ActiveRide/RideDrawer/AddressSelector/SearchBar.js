@@ -243,6 +243,7 @@ const SearchBar = ({
   const buildSps = () => (
     <DraggableFlatList
       data={requestStopPoints}
+      scrollEnabled={false}
       renderItem={renderDraggableItem}
       keyExtractor={item => item.id}
       keyboardShouldPersistTaps="always"
