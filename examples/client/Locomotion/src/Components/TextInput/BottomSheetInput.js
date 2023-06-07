@@ -30,6 +30,8 @@ const BottomSheetInputField = forwardRef((props, ref) => (
       {...props}
     >
       <BottomSheetInput
+        dragIsRendered={!!props.onDrag}
+        clearIsRendered={!!props.value && props.value.length > 0 && props.clear}
         {...props}
         ref={ref}
       />

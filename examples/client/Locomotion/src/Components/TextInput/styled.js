@@ -38,11 +38,12 @@ export const BottomSheetInput = styled(BottomSheetTextInput)`
   
   height: 50px;
   max-width: ${({ isMultiSpEnabled }) => (isMultiSpEnabled ? '80%' : '100%')};
-  ${({ isMultiSpEnabled }) => (isMultiSpEnabled ? FONT_SIZES.H4 : FONT_SIZES.H3)}
+  ${({ isMultiSpEnabled }) => (isMultiSpEnabled ? FONT_SIZES.LARGE : FONT_SIZES.H3)}
   ${({ fullBorder, isFocused }) => (fullBorder ? fullBorderStyles(isFocused) : bottomBorderStyles)}
   border-color: ${({ error }) => (error ? ERROR_COLOR : '#333333')};
   color: ${({ error }) => (error ? ERROR_COLOR : '#333333')};
   flex: 1;
+  margin-right: ${({ dragIsRendered, clearIsRendered }) => ((dragIsRendered && !clearIsRendered) ? '12px' : '0px')};
 `;
 
 export const BottomSheetInputContainer = styled(View)`
