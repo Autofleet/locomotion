@@ -948,10 +948,10 @@ const RidePageContextProvider = ({ children }: {
     };
   });
 
-  const saveLastAddresses = async (item: any) => {
+  const saveLastAddresses = async (items: any[]) => {
     const history: any[] = await getLastAddresses();
-    const filteredHistory = (history || []).filter(h => h.placeId !== item.placeId);
-    filteredHistory.unshift(item);
+    const filteredHistory = (history || []).filter(h => items.every(item => h.placeId !== item.placeId));
+    filteredHistory.unshift(...items);
     await StorageService.save({ lastAddresses: filteredHistory.slice(0, HISTORY_RECORDS_NUM) });
   };
 
@@ -1050,17 +1050,16 @@ const RidePageContextProvider = ({ children }: {
     stopRequestInterval();
     setServiceEstimations(null);
     changeBsPage(BS_PAGES.CONFIRMING_RIDE);
-    const lastSp = stopPoints[stopPoints.length - 1];
-    if (lastSp) {
-      saveLastAddresses({
-        text: lastSp.streetAddress || lastSp.description,
-        fullText: lastSp.streetAddress || lastSp.description,
-        placeId: lastSp.placeId,
-        externalId: lastSp.externalId,
-        lat: lastSp.lat,
-        lng: lastSp.lng,
-      });
-    }
+    const allSpsExceptFirstPickup = stopPoints.slice(1);
+    const allSpsExceptFirstPickupDefined = allSpsExceptFirstPickup.filter(sp => sp && sp.lat);
+    saveLastAddresses(allSpsExceptFirstPickupDefined.map(sp => ({
+      text: sp.streetAddress || sp.description,
+      fullText: sp.streetAddress || sp.description,
+      placeId: sp.placeId,
+      externalId: sp.externalId,
+      lat: sp.lat,
+      lng: sp.lng,
+    })));
 
     try {
       let scheduledToMoment = ride.scheduledTo;

@@ -56,7 +56,7 @@ export const formatUiDisplaySpType = (sp: any, index: number | null) => {
   if (isPickup(sp) && (sp.orderInParent > 0 || (index && index > 0))) {
     return STOP_POINT_TYPES.STOP_POINT_MULTI;
   }
-  return sp.type;
+  return sp.type || STOP_POINT_TYPES.STOP_POINT_PICKUP;
 };
 export const isMulti = (sp: any) => formatUiDisplaySpType(sp, null)
 === STOP_POINT_TYPES.STOP_POINT_MULTI;
