@@ -72,6 +72,7 @@ const WelcomeText = styled.Text`
 `;
 const AddressSelectorBottomSheet = ({ addressSelectorFocusIndex }) => {
   const userContext = useContext(RidePageContext);
+  const { selectedInputIndex } = userContext;
   const { locationGranted, user } = useContext(UserContext);
   const { stationsList, isStationsEnabled } = useContext(VirtualStationsContext);
   const {
@@ -117,7 +118,7 @@ const AddressSelectorBottomSheet = ({ addressSelectorFocusIndex }) => {
     changeBsPage(BS_PAGES.SET_LOCATION_ON_MAP);
     collapse();
   };
-  const getRecentLocationInputIndex = () => (isExpanded ? addressSelectorFocusIndex : 1);
+  const getRecentLocationInputIndex = () => (isExpanded ? selectedInputIndex : 1);
   const getHistoryRows = () => {
     if (isStationsEnabled && stationsList.length) {
       return userContext.formatStationsList(stationsList).map((h, i) => (
