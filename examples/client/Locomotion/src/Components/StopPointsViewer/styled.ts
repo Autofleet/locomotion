@@ -13,6 +13,7 @@ elevation: 3;
 background-color: ${({ theme }) => theme.pageBackgroundColor};
 border-radius: 8px;
 padding: 10px;
+padding-right: 16px;
 display: flex;
 flex-direction: row;
 align-items: center;
