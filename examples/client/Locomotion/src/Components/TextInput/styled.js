@@ -46,6 +46,7 @@ export const BottomSheetInput = styled(BottomSheetTextInput)`
   margin-right: ${({ dragIsRendered, clearIsRendered }) => ((dragIsRendered && !clearIsRendered) ? '12px' : '0px')};
 `;
 
+
 export const BottomSheetInputContainer = styled(View)`
   flex-direction: row;
 `;
