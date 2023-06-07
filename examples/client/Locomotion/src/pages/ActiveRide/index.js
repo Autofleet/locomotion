@@ -132,8 +132,14 @@ const RidePage = ({ mapSettings, navigation }) => {
     futureRides,
   } = useContext(FutureRidesContext);
   const isSpInputEmpty = sp => !sp?.lat || !sp?.lng;
+  const prevRequestStopPointsLength = useRef(requestStopPoints.length);
   useEffect(() => {
-    setAddressSelectorFocusIndex(requestStopPoints.findIndex(sp => isSpInputEmpty(sp)));
+    if (requestStopPoints.length > prevRequestStopPointsLength.current) {
+      setAddressSelectorFocusIndex(requestStopPoints.length - 1);
+    } else {
+      setAddressSelectorFocusIndex(requestStopPoints.findIndex(sp => isSpInputEmpty(sp)));
+    }
+    prevRequestStopPointsLength.current = requestStopPoints.length;
   }, [requestStopPoints]);
   const resetStateToAddressSelector = (selectedIndex = null) => {
     setServiceEstimations(null);
