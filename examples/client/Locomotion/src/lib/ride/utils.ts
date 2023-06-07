@@ -34,13 +34,13 @@ export const getOrdinal = (n: number) => {
   return n + (s[(v - 20) % 10] || s[v] || s[0]);
 };
 
-export const formatSpText = (sp: any) => {
+export const getSpTextWithNumberPrefix = (sp: any) => {
   const uiSpType = formatUiDisplaySpType(sp, null);
   const { ordinalDesc } = sp;
   const isMultiSp = isMulti(sp);
   const isOnlyMultiSp = isMultiSp && sp.amountOfSpsFromType === 2;
-  const numberPart = `${sp.ordinalDesc && !isOnlyMultiSp ? `${getOrdinal(isMultiSp ? ordinalDesc : ordinalDesc + 1)} ` : ''}`;
-  return `${numberPart}${i18n.t(`stopPointsTypes.${uiSpType}`)}`;
+  const ordinalNumberPrefixText = `${sp.ordinalDesc && !isOnlyMultiSp ? `${getOrdinal(isMultiSp ? ordinalDesc : ordinalDesc + 1)} ` : ''}`;
+  return `${ordinalNumberPrefixText}${i18n.t(`stopPointsTypes.${uiSpType}`)}`;
 };
 
 export const isCashPaymentMethod = (paymentMethod: any) => paymentMethod.id === PAYMENT_METHODS.CASH;

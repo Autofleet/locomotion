@@ -8,7 +8,7 @@ import { STOP_POINT_TYPES, formatUiDisplaySpType } from '../../../lib/commonType
 import { DropoffIconMarker, PickupIconMarker } from '../marker';
 import { MarkerTitle } from './styled';
 import i18n from '../../../I18n';
-import { formatSpText, getOrdinal } from '../../../lib/ride/utils';
+import { getSpTextWithNumberPrefix, getOrdinal } from '../../../lib/ride/utils';
 
 const mapStyle = {
   ...StyleSheet.absoluteFillObject,
@@ -26,7 +26,7 @@ const SpMarker = ({ sp, disableMarkers }) => (
     }}
   >
     <MarkerTitle type={sp.type}>
-      {formatSpText(sp)}
+      {getSpTextWithNumberPrefix(sp)}
     </MarkerTitle>
     {sp.type === STOP_POINT_TYPES.STOP_POINT_PICKUP ? <PickupIconMarker disableMarkers={disableMarkers} onMap /> : undefined}
     {sp.type === STOP_POINT_TYPES.STOP_POINT_DROPOFF ? <DropoffIconMarker disableMarkers={disableMarkers} onMap /> : undefined}
