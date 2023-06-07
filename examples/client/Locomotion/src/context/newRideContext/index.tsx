@@ -950,8 +950,9 @@ const RidePageContextProvider = ({ children }: {
 
   const saveLastAddresses = async (items: any[]) => {
     const history: any[] = await getLastAddresses();
+    const uniqueItems = items.filter((item, index) => items.findIndex(i => i.placeId === item.placeId) === index);
     const filteredHistory = (history || []).filter(h => items.every(item => h.placeId !== item.placeId));
-    filteredHistory.unshift(...items);
+    filteredHistory.unshift(...uniqueItems);
     await StorageService.save({ lastAddresses: filteredHistory.slice(0, HISTORY_RECORDS_NUM) });
   };
 
