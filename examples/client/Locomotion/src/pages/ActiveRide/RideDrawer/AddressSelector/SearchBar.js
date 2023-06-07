@@ -196,7 +196,7 @@ const SearchBar = ({
           value={description || ''}
           placeholderTextColor={isExpanded ? '#929395' : '#333333'}
           onFocus={(e) => {
-            Mixpanel.setEvent(`${type} address input focused`);
+            Mixpanel.setEvent('address input focused', { index, type });
             onInputFocus(e.target, index);
           }}
           isMultiSpEnabled={isMultiSpEnabled}
@@ -205,6 +205,7 @@ const SearchBar = ({
           key={`input_${sp.id}`}
           autoCorrect={false}
           clear={() => {
+            Mixpanel.setEvent('address input cleared', { index, type });
             updateRequestSp({
               description: null,
               lat: null,
@@ -219,9 +220,15 @@ const SearchBar = ({
               inputRef.current = ref;
             }
           }}
-          remove={isSpIndexMulti(index) ? () => removeRequestSp(index) : null}
+          remove={isSpIndexMulti(index) ? () => {
+            removeRequestSp(index);
+            Mixpanel.setEvent('sp removed by trash can click', { index, type });
+          } : null}
           add={canAddMoreMultiSp
-      && index === amountOfEnteredSp - 1 ? () => addNewEmptyRequestSp()
+      && index === amountOfEnteredSp - 1 ? () => {
+              addNewEmptyRequestSp();
+              Mixpanel.setEvent('sp added by plus click', { index, type });
+            }
             : null}
           onLayout={(e) => {
             if (e.currentTarget?.setSelection) {
@@ -252,8 +259,8 @@ const SearchBar = ({
         const removed = newSps.splice(fromIndex, 1);
         newSps.splice(toIndex, 0, removed[0]);
         const formattedMovedStopPoints = formatMovedMultiSps(newSps);
-        Mixpanel.setEvent('finished drag multi sps', { formattedMovedStopPoints });
         setRequestStopPoints(formattedMovedStopPoints);
+        Mixpanel.setEvent('finished drag multi sps', { formattedMovedStopPoints });
       }
       }
     />
