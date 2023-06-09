@@ -113,6 +113,7 @@ const SearchBar = ({
   const canAddMoreMultiSp = isMultiSpEnabled
   && amountOfEnteredSp < multiSpAmount + SP_AMOUNT_WITHOUT_MULTI;
   const hasEnteredMultiSp = amountOfEnteredSp > SP_AMOUNT_WITHOUT_MULTI;
+  const [hideMultiSps, setHideMultiSps] = useState(false);
   const isSpIndexMulti = i => hasEnteredMultiSp && i > 0 && i < amountOfEnteredSp - 1;
   const getSpPlaceholder = (sp, index) => {
     if (isSpIndexMulti(index)) {
@@ -123,12 +124,22 @@ const SearchBar = ({
     }
     return 'addressView.whereTo';
   };
+  useEffect(() => {
+    if (hasEnteredMultiSp && !isExpanded) {
+      setHideMultiSps(true);
+    } else if (hideMultiSps) {
+      setTimeout(() => {
+        setHideMultiSps(false);
+      }, 150);
+    }
+  }, [hasEnteredMultiSp, isExpanded]);
 
   const onInputFocus = (target, index) => {
     setSelectedInputTarget(target);
     setSelectedInputIndex(index);
     onFocus();
   };
+
   const loadMultiSpSetting = async () => {
     const multiSpSetting = await getSettingByKey(SETTINGS_KEYS.MULTI_SP);
     if (multiSpSetting && multiSpSetting.enabled) {
@@ -249,7 +260,7 @@ const SearchBar = ({
   };
   const buildSps = () => (
     <DraggableFlatList
-      data={requestStopPoints}
+      data={hideMultiSps ? requestStopPoints.slice(0, 2) : requestStopPoints}
       scrollEnabled={false}
       renderItem={renderDraggableItem}
       keyExtractor={item => item.id}
