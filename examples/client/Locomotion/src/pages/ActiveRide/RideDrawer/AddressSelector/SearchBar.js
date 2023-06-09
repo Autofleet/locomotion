@@ -8,6 +8,7 @@ import styled from 'styled-components';
 import { debounce } from 'lodash';
 import shortid from 'shortid';
 import DraggableFlatList from 'react-native-draglist';
+import { isAndroid } from '../../../../services/isAndroid';
 import { STOP_POINT_TYPES } from '../../../../lib/commonTypes';
 import { UserContext } from '../../../../context/user';
 import settings from '../../../../context/settings';
@@ -128,9 +129,15 @@ const SearchBar = ({
     if (hasEnteredMultiSp && !isExpanded) {
       setHideMultiSps(true);
     } else if (hideMultiSps) {
-      setTimeout(() => {
+      if (isAndroid) {
         setHideMultiSps(false);
-      }, 120);
+      } else {
+        // when moving from collapsed bottom sheet to expanded bottom sheet in ios
+        // the full list must be rendered only after the bottom sheet is expanded
+        setTimeout(() => {
+          setHideMultiSps(false);
+        }, 120);
+      }
     }
   }, [hasEnteredMultiSp, isExpanded]);
 
