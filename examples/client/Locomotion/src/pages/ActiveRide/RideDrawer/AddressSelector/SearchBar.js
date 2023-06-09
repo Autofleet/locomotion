@@ -130,7 +130,7 @@ const SearchBar = ({
     } else if (hideMultiSps) {
       setTimeout(() => {
         setHideMultiSps(false);
-      }, 150);
+      }, 120);
     }
   }, [hasEnteredMultiSp, isExpanded]);
 
