@@ -9,7 +9,7 @@ import DatePickerPoppup from '../../../../../popups/DatePickerPoppup';
 import FutureBookingButton from './FutureBookingButton';
 import {
   Container, RowContainer, ButtonContainer, ButtonText, StyledButton, HALF_WIDTH,
-  PickerDate, PickerTimeRange, PickerTitle,
+  PickerDate, PickerTimeRange, PickerTitle, ErrorText, ButtonContainerWithError, ButtonWithError,
 } from './styled';
 import { RidePageContext } from '../../../../../context/newRideContext';
 import NoteButton from '../../../../../Components/GenericRideButton';
@@ -33,6 +33,7 @@ import {
 import { PAYMENT_METHODS } from '../../../../../pages/Payments/consts';
 import PassengersCounter from './PassengersCounter';
 import ErrorPopup from '../../../../../popups/TwoButtonPopup';
+import { getPaymentMethod } from '../../../../../pages/Payments/cardDetailUtils';
 
 const POOLING_TYPES = {
   NO: 'no',
@@ -82,6 +83,8 @@ const RideButtons = ({
   const [passengersCounterError, setPassengersCounterError] = useState(false);
   const firstDate = () => moment(ride?.scheduledTo || undefined).add(ride?.scheduledTo ? 0 : (minMinutesBeforeFutureRide || 0) + 1, 'minutes').toDate();
   const [tempSelectedDate, setTempSelectedDate] = useState(firstDate());
+  const paymentMethodNotAllowedOnService = chosenService && ride?.paymentMethodId
+    && !chosenService.allowedPaymentMethods.includes(getPaymentMethod(ride.paymentMethodId));
 
   const checkFutureRidesSetting = async () => {
     const futureRidesEnabled = await getSettingByKey(
@@ -213,14 +216,15 @@ const RideButtons = ({
   };
 
   const renderPaymentButton = () => {
-    const ridePaymentMethod = ride?.paymentMethodId;
+    const ridePaymentMethodId = ride?.paymentMethodId || '';
     const selectedPaymentMethod:
-     PaymentMethodInterface | undefined = ridePaymentMethod === PAYMENT_METHODS.CASH
+     PaymentMethodInterface | undefined = ridePaymentMethodId === PAYMENT_METHODS.CASH
        ? cashPaymentMethod
-       : paymentMethods.find(pm => pm.id === ridePaymentMethod);
+       : paymentMethods.find(pm => pm.id === ridePaymentMethodId);
 
-    return (
+    const pureButton = () => (
       <ButtonContainer
+        error={paymentMethodNotAllowedOnService}
         testID="RidePayment"
         onPress={() => {
           setPopupName('payment');
@@ -232,8 +236,24 @@ const RideButtons = ({
           icon={creditCardIcon}
           title={selectedPaymentMethod?.name === cashPaymentMethod.name ? i18n.t('payments.cash') : (selectedPaymentMethod?.name || i18n.t('bottomSheetContent.ride.addPayment'))}
           id={selectedPaymentMethod?.id}
+          invalid={paymentMethodNotAllowedOnService}
         />
       </ButtonContainer>
+    );
+
+    const ridePaymentMethod = ride?.paymentMethodId ? getPaymentMethod(ride.paymentMethodId) : '';
+    return (
+      <>
+        {paymentMethodNotAllowedOnService
+          ? (
+            <ButtonWithError
+              errorText={i18n.t('bottomSheetContent.ride.paymentMethodNotAllowedOnService', { type: ridePaymentMethod.charAt(0).toUpperCase() + ridePaymentMethod.slice(1) })}
+            >
+              {pureButton()}
+            </ButtonWithError>
+          )
+          : pureButton() }
+      </>
     );
   };
 
@@ -249,7 +269,7 @@ const RideButtons = ({
 
   const isSelectButtonDisabled = () => (
     !chosenService || !(chosenService?.isHighEtaAsapRide ? allowRideOrderIfNoMatchedVehicles : chosenService)
-    || !!getClientOutstandingBalanceCard() || passengersCounterError
+    || !!getClientOutstandingBalanceCard() || passengersCounterError || paymentMethodNotAllowedOnService
   );
 
   const selectButtonText = () => {

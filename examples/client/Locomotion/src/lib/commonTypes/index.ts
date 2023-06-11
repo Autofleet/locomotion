@@ -17,6 +17,14 @@ export const PAYMENT_STATES = {
   CANCELED: 'canceled',
 };
 
+export const PAYMENT_METHODS = {
+  CASH: 'cash',
+  CARD: 'card',
+  OFFLINE: 'offline',
+  APPLE_PAY: 'apple-pay',
+  GOOGLE_PAY: 'google-pay',
+};
+
 export const RIDE_STATES = {
   OFFER: 'offer',
   OFFER_REJECTED: 'offer-rejected',

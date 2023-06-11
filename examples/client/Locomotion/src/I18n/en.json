@@ -285,7 +285,8 @@
             "title": "Choose payment method",
             "placeholder": "How to find me, flights, info, etc.",
             "save": "Save",
-            "cancel": "Cancel"
+            "cancel": "Cancel",
+            "unavailable": "Unavailable for the selected service"
         },
         "rideSummary": {
             "thanksForRideHeadline": "Thanks for your ride!",
@@ -631,6 +632,7 @@
             "buttonText2": "Take me back"
         },
         "ride": {
+            "paymentMethodNotAllowedOnService": "{{type}} not allowed for this service",
             "now": "Now",
             "notes": {
                 "edit": "Edit note",
