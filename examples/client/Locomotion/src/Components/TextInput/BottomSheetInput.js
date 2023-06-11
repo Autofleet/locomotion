@@ -18,7 +18,7 @@ import dragIcon from '../../assets/bottomSheet/drag-icon.svg';
 import deleteIcon from '../../assets/bottomSheet/trash.svg';
 
 const AddSpButton = ({ onLongPress, hasEnteredMultiSp, onPress }) => (
-  <AddSpContainer hasEnteredMultiSp={hasEnteredMultiSp} onPress={onPress} onLongPress={onLongPress} testID="addSpButton">
+  <AddSpContainer hasEnteredMultiSp={hasEnteredMultiSp} onPress={onPress} testID="addSpButton">
     <PlusIcon />
   </AddSpContainer>
 );
