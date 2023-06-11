@@ -4,8 +4,11 @@ import { STOP_POINT_TYPES } from '../../lib/commonTypes';
 import { RidePageContext } from '../../context/newRideContext';
 import SvgIcon from '../SvgIcon';
 import backArrow from '../../assets/arrow-back.svg';
+import MultiSpConnector from './MultiSpConnector';
 import editIcon from '../../assets/edit-icon.svg';
-import { Container, StreetAddress, StreetAddressContainer } from './styled';
+import {
+  Container, StreetAddress, StreetAddressContainer,
+} from './styled';
 
 const ICON_SIZE = 15;
 
@@ -17,6 +20,25 @@ const StopPointsViewer = ({ goBackToAddressSelector }: StopPointsViewerProps) =>
   const { requestStopPoints } = useContext(RidePageContext);
   const firstSp: any = requestStopPoints[0];
   const lastSp: any = requestStopPoints[requestStopPoints.length - 1];
+  const renderSpConnector = () => {
+    const amountOfStops = requestStopPoints.length - 2;
+    const isMultiSpMode = amountOfStops > 0;
+    if (isMultiSpMode) {
+      return (
+        <MultiSpConnector
+          amountOfStops={amountOfStops}
+        />
+      );
+    }
+    return (
+      <SvgIcon
+        Svg={backArrow}
+        width={ICON_SIZE}
+        height={ICON_SIZE}
+        style={{ transform: [{ rotate: '180deg' }] }}
+      />
+    );
+  };
   return (
     requestStopPoints.filter(sp => !!sp.lat).length > 1 ? (
       <Container>
@@ -28,22 +50,17 @@ const StopPointsViewer = ({ goBackToAddressSelector }: StopPointsViewerProps) =>
             {firstSp?.streetAddress}
           </StreetAddress>
         </StreetAddressContainer>
-        <SvgIcon
-          Svg={backArrow}
-          width={ICON_SIZE}
-          height={ICON_SIZE}
-          style={{ transform: [{ rotate: '180deg' }] }}
-        />
+        {renderSpConnector()}
         <StreetAddressContainer
           testID="estimationsDropOffEdit"
-          onPress={() => goBackToAddressSelector(1)}
+          onPress={() => goBackToAddressSelector(requestStopPoints.length - 1)}
         >
           <StreetAddress>
             {lastSp?.streetAddress}
           </StreetAddress>
         </StreetAddressContainer>
         <TouchableOpacity
-          onPress={() => goBackToAddressSelector(1)}
+          onPress={() => goBackToAddressSelector(requestStopPoints.length - 1)}
         >
           <SvgIcon
             Svg={editIcon}

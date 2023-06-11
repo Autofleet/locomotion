@@ -56,7 +56,8 @@
         "estimatedFareMessage": "Some of the fares are estimated and may vary based on ride and other conditions",
         "type": {
             "pickup": "Pickup",
-            "dropoff": "Drop off"
+            "dropoff": "Drop off",
+            "multi": "Stop"
         },
         "highEta": "ETA is higher than usual",
         "outOfTerritory": "Not in territory"
@@ -250,6 +251,7 @@
         "dropoffPlaceholder": "Click on stations or enter address",
         "pickupTitle": "Boarding",
         "dropoffTitle": "Exit",
+        "multiStopPlaceholder": "Add stop address",
         "addressPlaceholder": "Enter Address",
         "whereTo": "Enter your destination",
         "currentLocation": "Current location",
@@ -659,7 +661,8 @@
     },
     "stopPointsTypes": {
         "dropoff": "Dropoff",
-        "pickup": "Pickup"
+        "pickup": "Pickup",
+        "multi": "Stop"
     },
     "stopPoints": {
         "states": {
