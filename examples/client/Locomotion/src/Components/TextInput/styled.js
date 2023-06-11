@@ -69,7 +69,7 @@ export const RemoveIconContainer = styled(View)`
 `;
 
 export const TouchableIconContainer = styled.TouchableOpacity`
-  width: 12px;
+  width: ${({ width }) => (width || '12px')};
   margin-left: ${({ marginLeft }) => (marginLeft || '-20px')};
 `;
 

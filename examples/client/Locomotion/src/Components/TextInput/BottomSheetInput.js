@@ -81,7 +81,7 @@ const BottomSheetInputField = forwardRef((props, ref) => (
     )}
 
     { props.remove && (
-    <TouchableIconContainer marginLeft={15} onPress={() => props.remove()}>
+    <TouchableIconContainer width={30} marginLeft={15} onPress={() => props.remove()}>
       <RemoveIconContainer>
         <SvgIcon
           Svg={deleteIcon}
