@@ -34,7 +34,6 @@ const Phone = ({ navigation }) => {
   const [isLoadingSaveButton, setIsLoadingSaveButton] = useState(false);
 
   const onVerifyCaptcha = async (token) => {
-    setIsLoadingSaveButton(true);
     Mixpanel.setEvent('Captcha Verified successfully', { token });
     setCaptchaToken(token);
     await Auth.updateCaptchaToken(token);
@@ -79,14 +78,17 @@ const Phone = ({ navigation }) => {
       setShowErrorText(i18n.t('login.invalidPhoneNumberError'));
     }
   };
-  const onClickContinue = () => {
-    if (Config.CAPTCHA_KEY && recaptchaRef.current) {
-      recaptchaRef.current.open();
-    } else {
-      Mixpanel.setEvent('Submit phone number, without captcha , (Config.CAPTCHA_KEY is not defined)');
-      submitPhoneNumber();
+  useEffect(() => {
+    if (isLoadingSaveButton) {
+      if (Config.CAPTCHA_KEY && recaptchaRef.current) {
+        recaptchaRef.current.open();
+      } else {
+        Mixpanel.setEvent('Submit phone number, without captcha , (Config.CAPTCHA_KEY is not defined)');
+        submitPhoneNumber();
+      }
     }
-  };
+  }, [isLoadingSaveButton]);
+
 
   useEffect(() => {
     if (captchaToken) {
@@ -134,7 +136,7 @@ const Phone = ({ navigation }) => {
           <SaveButton
             isLoading={isLoadingSaveButton}
             isInvalid={isInvalid}
-            onNext={onClickContinue}
+            onNext={() => setIsLoadingSaveButton(true)}
             onFail={() => setShowErrorText(i18n.t('login.invalidPhoneNumberError'))
               }
           />
@@ -147,9 +149,14 @@ const Phone = ({ navigation }) => {
                 onVerify={onVerifyCaptcha}
                 size="invisible"
                 hideBadge={!Config.SHOW_CAPTCHA_ICON}
-                onClose={() => Mixpanel.setEvent('Captcha closed', { captchaToken })}
+                onClose={() => {
+                  setIsLoadingSaveButton(false);
+                  Mixpanel.setEvent('Captcha closed', { captchaToken });
+                }
+                }
                 onError={(e) => {
                   Mixpanel.setEvent('Captcha error', e);
+                  setIsLoadingSaveButton(false);
                   // try without captcha on api key issues
                   submitPhoneNumber();
                 }}
