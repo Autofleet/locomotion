@@ -180,25 +180,30 @@ const AddressSelectorBottomSheet = ({ addressSelectorFocusIndex }) => {
                   label={i18n.t('virtualStations.search.title')}
                 />
               ) : null}
-              {locationGranted && !isStationsEnabled ? (
-                <AddressRow
-                  border={false}
-                  text={i18n.t('addressView.currentLocation')}
-                  icon="location"
-                  actionButton
-                  onPress={onCurrentLocation}
-                />
-              ) : null}
-              {locationGranted && !isStationsEnabled ? (
-                <AddressRow
-                  border={false}
-                  text={i18n.t('addressView.setLocationOnMap')}
-                  icon="locationPin"
-                  actionButton
-                  onPress={onSetLocationOnMap}
-                />
-              ) : null}
               <BottomSheetScrollView keyboardShouldPersistTaps="handled" contentContainerStyle={{ overflow: 'visible' }}>
+                {locationGranted && !isStationsEnabled ? (
+                  <AddressRow
+                    border={false}
+                    text={i18n.t('addressView.currentLocation')}
+                    icon="location"
+                    actionButton
+                    onPress={onCurrentLocation}
+                    key="currentLocation"
+                    testID="currentLocationButton"
+                  />
+                ) : null}
+                {locationGranted && !isStationsEnabled ? (
+                  <AddressRow
+                    border={false}
+                    text={i18n.t('addressView.setLocationOnMap')}
+                    icon="locationPin"
+                    actionButton
+                    onPress={onSetLocationOnMap}
+                    key="setLocationOnMap"
+                    testID="setLocationOnMapButton"
+                  />
+                ) : null}
+
                 {
                   userContext.searchResults && userContext.searchResults.length > 0
                     ? userContext.searchResults.map((h, i) => <AddressRow testID={`searchResults_${i}`} {...h} key={h.placeId} onPress={() => userContext.onAddressSelected(h)} />)
