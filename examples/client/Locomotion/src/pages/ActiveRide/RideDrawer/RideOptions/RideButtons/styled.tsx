@@ -1,3 +1,4 @@
+import React from 'react';
 import { Text, View, TouchableOpacity } from 'react-native';
 import styled from 'styled-components';
 import { FONT_SIZES, FONT_WEIGHTS } from '../../../../../context/theme';
@@ -27,7 +28,7 @@ export const ButtonContainer = styled(Button).attrs({
   noBackground: true,
 })`
     flex-direction: row;
-    border: 1px solid #f1f2f6;
+    border: ${({ error }) => (error ? '1px solid #F83743' : '1px solid #f1f2f6')};
     border-radius: 8px;
     align-items: center;
     height: 100%;
@@ -65,3 +66,34 @@ export const PickerDate = styled(Text)`
 export const PickerTimeRange = styled(Text)`
   ${FONT_SIZES.H1};
 `;
+
+export const ButtonContainerWithError = styled(View)`
+display: flex;
+flex-direction: column;
+height: 100%;
+`;
+
+export const ButtonContainerInError = styled(View)`
+display: flex;
+flex-direction: column;
+height: 80%;
+`;
+
+export const ErrorText = styled(Text)`
+  ${FONT_SIZES.MEDIUM};
+  color: #F83743;
+`;
+
+export const ButtonWithError = ({ children, errorText }) => (
+  <ButtonContainerWithError>
+    <ButtonContainerInError>
+      {children}
+    </ButtonContainerInError>
+    {errorText
+    && (
+    <ErrorText>
+      {errorText}
+    </ErrorText>
+    )}
+  </ButtonContainerWithError>
+);
