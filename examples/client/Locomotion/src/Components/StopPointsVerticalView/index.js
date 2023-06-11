@@ -4,7 +4,7 @@ import CardsTitle from '../CardsTitle';
 import i18n from '../../I18n';
 import VerticalTimeLineCard from './VerticalTimeLine';
 import { ContentSubTitle, ContentTitle, PanelContentContainer } from './styled';
-import { getOrdinal } from '../../lib/ride/utils';
+import { getSpTextWithNumberPrefix, getOrdinal } from '../../lib/ride/utils';
 import {
   RIDE_ACTIVE_STATES, RIDE_STATES, STOP_POINT_STATES, STOP_POINT_TYPES,
 } from '../../lib/commonTypes';
@@ -51,7 +51,7 @@ const Index = ({ ride }) => {
               content={(
                 <>
                   <ContentTitle>
-                    {`${sp.ordinalDesc ? `${getOrdinal(sp.ordinalDesc + 1)} ` : ''}${i18n.t(`stopPointsTypes.${sp.type}`)}`}
+                    {getSpTextWithNumberPrefix(sp)}
                   </ContentTitle>
                   <ContentSubTitle>
                     {(sp.description || '').slice(0, MAX_DESC_LIMIT)}
