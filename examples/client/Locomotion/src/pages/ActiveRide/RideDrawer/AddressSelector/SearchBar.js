@@ -7,8 +7,7 @@ import {
 import styled from 'styled-components';
 import { debounce } from 'lodash';
 import shortid from 'shortid';
-import DraggableFlatList from 'react-native-draglist';
-import { isAndroid } from '../../../../services/isAndroid';
+import DraggableFlatList from 'gery-react-native-draglist';
 import { STOP_POINT_TYPES } from '../../../../lib/commonTypes';
 import { UserContext } from '../../../../context/user';
 import settings from '../../../../context/settings';
@@ -16,7 +15,6 @@ import Mixpanel from '../../../../services/Mixpanel';
 import BottomSheetInput from '../../../../Components/TextInput/BottomSheetInput';
 import i18n from '../../../../I18n';
 import { RidePageContext } from '../../../../context/newRideContext';
-import plusImage from '../../../../assets/plus.png';
 import backImage from '../../../../assets/arrow-back.png';
 import SETTINGS_KEYS from '../../../../context/settings/keys';
 
@@ -101,6 +99,7 @@ const SearchBar = ({
     addNewEmptyRequestSp,
     removeRequestSp,
   } = useContext(RidePageContext);
+  const dragListRef = useRef();
   const { getSettingByKey } = settings.useContainer();
   const {
     locationGranted,
@@ -114,7 +113,6 @@ const SearchBar = ({
   const canAddMoreMultiSp = isMultiSpEnabled
   && amountOfEnteredSp < multiSpAmount + SP_AMOUNT_WITHOUT_MULTI;
   const hasEnteredMultiSp = amountOfEnteredSp > SP_AMOUNT_WITHOUT_MULTI;
-  const [hideMultiSps, setHideMultiSps] = useState(false);
   const isSpIndexMulti = i => hasEnteredMultiSp && i > 0 && i < amountOfEnteredSp - 1;
   const getSpPlaceholder = (sp, index) => {
     if (isSpIndexMulti(index)) {
@@ -125,19 +123,14 @@ const SearchBar = ({
     }
     return 'addressView.whereTo';
   };
+
   useEffect(() => {
-    if (hasEnteredMultiSp && !isExpanded) {
-      setHideMultiSps(true);
-    } else if (hideMultiSps) {
-      if (isAndroid) {
-        setHideMultiSps(false);
-      } else {
-        // when moving from collapsed bottom sheet to expanded bottom sheet in ios
-        // the full list must be rendered only after the bottom sheet is expanded
-        setTimeout(() => {
-          setHideMultiSps(false);
-        }, 120);
-      }
+    if (hasEnteredMultiSp) {
+      // when moving from collapsed bottom sheet to expanded bottom sheet
+      // the full list must be rendered only after the bottom sheet is fully expanded
+      setTimeout(() => {
+        dragListRef.current?.reMeasure();
+      }, 250);
     }
   }, [hasEnteredMultiSp, isExpanded]);
 
@@ -267,8 +260,9 @@ const SearchBar = ({
   };
   const buildSps = () => (
     <DraggableFlatList
-      data={hideMultiSps ? requestStopPoints.slice(0, 2) : requestStopPoints}
+      data={requestStopPoints}
       scrollEnabled={false}
+      ref={dragListRef}
       renderItem={renderDraggableItem}
       keyExtractor={item => item.id}
       keyboardShouldPersistTaps="always"

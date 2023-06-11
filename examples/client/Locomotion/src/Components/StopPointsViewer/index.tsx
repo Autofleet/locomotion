@@ -53,14 +53,14 @@ const StopPointsViewer = ({ goBackToAddressSelector }: StopPointsViewerProps) =>
         {renderSpConnector()}
         <StreetAddressContainer
           testID="estimationsDropOffEdit"
-          onPress={() => goBackToAddressSelector(1)}
+          onPress={() => goBackToAddressSelector(requestStopPoints.length - 1)}
         >
           <StreetAddress>
             {lastSp?.streetAddress}
           </StreetAddress>
         </StreetAddressContainer>
         <TouchableOpacity
-          onPress={() => goBackToAddressSelector(1)}
+          onPress={() => goBackToAddressSelector(requestStopPoints.length - 1)}
         >
           <SvgIcon
             Svg={editIcon}

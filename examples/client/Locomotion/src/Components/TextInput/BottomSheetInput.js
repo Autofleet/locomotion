@@ -17,7 +17,7 @@ import cancel from '../../assets/bottomSheet/cancel.svg';
 import dragIcon from '../../assets/bottomSheet/drag-icon.svg';
 import deleteIcon from '../../assets/bottomSheet/trash.svg';
 
-const AddSpButton = ({ onLongPress, hasEnteredMultiSp, onPress }) => (
+const AddSpButton = ({ hasEnteredMultiSp, onPress }) => (
   <AddSpContainer hasEnteredMultiSp={hasEnteredMultiSp} onPress={onPress} testID="addSpButton">
     <PlusIcon />
   </AddSpContainer>
