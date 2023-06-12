@@ -190,7 +190,7 @@ const SearchBar = ({
 
         <BottomSheetInput
           accessible
-          accessibilityLabel={`address_input_${index}`}
+          index={index}
           placeholder={i18n.t(placeholder)}
           onDrag={hasEnteredMultiSp ? onStartDrag : null}
           onEndDrag={hasEnteredMultiSp ? onEndDrag : null}

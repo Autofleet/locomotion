@@ -33,6 +33,7 @@ const BottomSheetInputField = forwardRef((props, ref) => (
         dragIsRendered={!!props.onDrag}
         clearIsRendered={!!props.value && props.value.length > 0 && props.clear}
         {...props}
+        testID={`address_input_${props.index}`}
         ref={ref}
       />
 
