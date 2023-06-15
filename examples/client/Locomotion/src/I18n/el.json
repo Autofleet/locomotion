@@ -29,9 +29,9 @@
     },
     "emailTemplate": {
         "hi": "Γεια",
-        "p1": "Επιβεβαιώστε το ηλεκτρονικό ταχυδρομείο σας πατώντας τον παρακάτω σύνδεσμο",
+        "p1": "Επιβεβαιώστε το email σας πατώντας τον παρακάτω σύνδεσμο",
         "buttonText": "Επιβεβαίωση",
-        "expiryDateText": "Αυτό το ηλεκτρονικό ταχυδρομείο ισχύει μέχρι",
+        "expiryDateText": "Αυτό το email ισχύει μέχρι",
         "helpCenter": "Κέντρο Βοήθειας",
         "terms": "Όροι",
         "privacy": "Απόρρητο",
@@ -50,7 +50,7 @@
     "rideDetails": {
         "unavailable": "Μη διαθέσιμος",
         "timeUntilArrival": "Σε {{minutes}} λεπτά",
-        "toolTipEta": "ΕΧΑ {{minutes}} λεπτά",
+        "toolTipEta": "ETA {{minutes}} λεπτά",
         "noCharge": "Χωρίς χρέωση",
         "estimatedFare": "Εκτιμώμενος ναύλος",
         "estimatedFareMessage": "Ορισμένοι από τους ναύλους εκτιμώνται και ενδέχεται να διαφέρουν ανάλογα με τη διαδρομή και άλλες συνθήκες",
@@ -58,7 +58,7 @@
             "pickup": "Μαζεύω",
             "dropoff": "Αποκοιμιέμαι"
         },
-        "highEta": "Το ΕΧΑ είναι υψηλότερο από το συνηθισμένο"
+        "highEta": "Το ETA είναι υψηλότερο από το συνηθισμένο"
     },
     "general": {
         "back": "Πίσω",
@@ -110,8 +110,8 @@
             "emailCode": {
                 "title": "Επαλήθευση",
                 "text": "Εισαγάγετε κωδικό",
-                "subText": "Εισαγάγετε τον παρακάτω τετραψήφιο κωδικό στην εφαρμογή για να επικυρώσετε τη διεύθυνση ηλεκτρονικό ταχυδρομείο σας.",
-                "resendCodeText": "Δεν λάβατε ηλεκτρονικό ταχυδρομείο;",
+                "subText": "Εισαγάγετε τον παρακάτω τετραψήφιο κωδικό στην εφαρμογή για να επικυρώσετε τη διεύθυνση email σας.",
+                "resendCodeText": "Δεν λάβατε email;",
                 "resendCodeButton": "Εκ νέου αποστολή",
                 "resendCodeTextSeconds": "σε {{seconds}} δευτερόλεπτα"
             },
@@ -135,7 +135,7 @@
                 "subText": "Εδώ θα σας στείλουμε αποδείξεις.",
                 "placeholder": "πρώην. John@email.com",
                 "error": "Παρακαλώ εισάγετε μια έγκυρη διεύθυνση ηλεκτρονικού ταχυδρομείου.",
-                "inUseError": "Το ηλεκτρονικό ταχυδρομείο χρησιμοποιείται ήδη"
+                "inUseError": "Το email χρησιμοποιείται ήδη"
             },
             "welcome": {
                 "text": "Καλώς ορίσατε, {{firstName}} !",
@@ -160,12 +160,11 @@
             "required": {
                 "firstName": "Το όνομα είναι υποχρεωτικό.",
                 "lastName": "Το επώνυμο είναι υποχρεωτικό.",
-                "email": "Απαιτείται ηλεκτρονικό ταχυδρομείο."
+                "email": "Απαιτείται email."
             },
             "email": {
-                "email": "Το ηλεκτρονικό ταχυδρομείο πρέπει να είναι έγκυρο."
+                "email": "Το email πρέπει να είναι έγκυρο."
             }
-
         },
         "chooseLanguage": "Γλώσσα Εφαρμογής"
     },
@@ -173,14 +172,14 @@
         "map": {
             "markers": {
                 "pickup": "Επιβίβαση",
-                "dropoff": "Αποβίβαση"
+                "dropoff": "Εξοδος"
             }
         },
         "letsRideButton": "Ας καβαλήσουμε",
         "cancelRideButton": "Ακύρωση διαδρομής",
         "cancelRidePriceButton": "Ακύρωση διαδρομής",
         "choosePickup": "Επιλέξτε Παραλαβή",
-        "chooseDropoff": "Επιλέξτε Αποβίβαση",
+        "chooseDropoff": "Επιλέξτε Dropoff",
         "passengersNumber": "Επιβάτες",
         "rideStates": {
             "driverOnTheWay": "Η διαδρομή σας έχει κλείσει.",
@@ -287,7 +286,6 @@
         },
         "rideSummary": {
             "thanksForRideHeadline": "Ευχαριστώ για τη βόλτα σας!",
-            "rideDataHeadline": "",
             "durationLabel": "Διάρκεια",
             "distanceLabel": "Απόσταση",
             "priceLabel": "Τιμή",
@@ -316,14 +314,14 @@
         },
         "highEtaConfirm": {
             "title": "Σπουδαίος!",
-            "text": "Λάβετε υπόψη ότι αυτή η υπηρεσία αντιμετωπίζει αυτήν τη στιγμή υψηλές τιμές ΕΧΑ. \n\n Η εύρεση ενός οδηγού μπορεί να διαρκέσει περισσότερο από το συνηθισμένο.",
+            "text": "Λάβετε υπόψη ότι αυτή η υπηρεσία αντιμετωπίζει αυτήν τη στιγμή υψηλές τιμές ETA. \n\n Η εύρεση ενός οδηγού μπορεί να διαρκέσει περισσότερο από το συνηθισμένο.",
             "submit": "Να συνεχίσει",
             "back": "Πίσω"
         },
+        "defaultFooterButton": "Εντάξει",
         "chooseLanguage": {
             "title": "Επιλογή Γλώσσας"
-        },
-        "defaultFooterButton": "Εντάξει"
+        }
     },
     "menu": {
         "title": "Μενού",
@@ -381,7 +379,6 @@
         "pageTitle": "Ιστορία ιπποδρομιών",
         "tripPageTitle": "Λεπτομέρειες ταξιδιού",
         "noRides": "Δεν βρέθηκαν αποτελέσματα",
-        "noRidesSubText": "",
         "ride": {
             "states": {
                 "canceled": "Ακυρώθηκε",
@@ -393,14 +390,6 @@
             "startTitle": "Αρχή",
             "stopTitle": "Να σταματήσει",
             "price": "Τιμή"
-        },
-        "filters": {
-            "titles": {
-                "today": "Σήμερα",
-                "yesterday": "Χθες",
-                "thisWeek": "Αυτή την Εβδομάδα",
-                "lastWeek": "Προηγούμενη Εβδομάδα"
-            }
         },
         "ridesDurationHours": "{{ridesDurationHours}} Ώρες",
         "ridesDurationMinutes": "{{ridesDurationMinutes}} Ελάχ",
@@ -431,6 +420,14 @@
                 "retrySuccessBody": "Σας ευχαριστούμε για την πληρωμή σας - μπορείτε τώρα να συνεχίσετε τις βόλτες σας!",
                 "retrySuccessButton": "Ολοκληρώθηκε",
                 "retryPaymentButton": "Πληρώστε το υπόλοιπο τώρα"
+            }
+        },
+        "filters": {
+            "titles": {
+                "today": "Σήμερα",
+                "yesterday": "Χθες",
+                "thisWeek": "Αυτή την Εβδομάδα",
+                "lastWeek": "Προηγούμενη Εβδομάδα"
             }
         }
     },
@@ -640,7 +637,7 @@
         }
     },
     "stopPointsTypes": {
-        "dropoff": "Αποβίβαση",
+        "dropoff": "Dropoff",
         "pickup": "Μαζεύω"
     },
     "stopPoints": {
@@ -659,7 +656,7 @@
         },
         "dropoff": {
             "arrived": "Έφτασε στην αποβίβαση",
-            "pending": "Αποβίβαση ΕΧΑ"
+            "pending": "Dropoff ETA"
         },
         "topMessage": {
             "outstandBalanceCreditCard": "Η πληρωμή της τελευταίας σας διαδρομής απέτυχε. Η παραγγελία δρομολογίων είναι απενεργοποιημένη μέχρι να διευθετηθεί η εκκρεμή πληρωμή.",
