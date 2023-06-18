@@ -1,19 +1,24 @@
 import React, {
   useCallback, useContext, useEffect, useRef, useState,
 } from 'react';
-import { Animated, View } from 'react-native';
+import {
+  Animated, View,
+} from 'react-native';
 import styled from 'styled-components';
 import { debounce } from 'lodash';
 import shortid from 'shortid';
+import DraggableFlatList from 'gery-react-native-draglist';
+import { STOP_POINT_TYPES } from '../../../../lib/commonTypes';
+import { UserContext } from '../../../../context/user';
+import settings from '../../../../context/settings';
 import Mixpanel from '../../../../services/Mixpanel';
 import BottomSheetInput from '../../../../Components/TextInput/BottomSheetInput';
 import i18n from '../../../../I18n';
 import { RidePageContext } from '../../../../context/newRideContext';
-
 import backImage from '../../../../assets/arrow-back.png';
-import { UserContext } from '../../../../context/user';
+import SETTINGS_KEYS from '../../../../context/settings/keys';
 
-
+const { STOP_POINT_DROPOFF, STOP_POINT_PICKUP } = STOP_POINT_TYPES;
 const SearchContainer = styled.View`
     flex: 1;
     padding-bottom: 12px;
@@ -36,7 +41,7 @@ const Row = styled(Animated.View)`
     ${({ isExpanded }) => isExpanded === false && `
         display: none;
     `}
-
+    
 `;
 
 
@@ -51,10 +56,12 @@ const BackButtonContainer = styled.TouchableOpacity`
 
 `;
 
+
 const ArrowImage = styled.Image.attrs({ source: backImage })`
     width: 25px;
     height: 25px;
 `;
+
 
 const BackButton = ({ isExpanded, onBack }) => {
   if (!isExpanded) {
@@ -66,6 +73,7 @@ const BackButton = ({ isExpanded, onBack }) => {
     </BackButtonContainer>
   );
 };
+
 
 /* if (Platform.OS === 'android' && UIManager.setLayoutAnimationEnabledExperimental
 ) {
@@ -85,28 +93,46 @@ const SearchBar = ({
     setSelectedInputTarget,
     requestStopPoints,
     updateRequestSp,
+    setRequestStopPoints,
     initSps,
     fillLoadSkeleton,
+    addNewEmptyRequestSp,
+    removeRequestSp,
   } = useContext(RidePageContext);
-
+  const dragListRef = useRef();
+  const { getSettingByKey } = settings.useContainer();
   const {
     locationGranted,
   } = useContext(UserContext);
-
+  const SP_AMOUNT_WITHOUT_MULTI = 2;
   const [searchTerm, setSearchTerm] = useState('');
+  const [multiSpAmount, setMultiSpAmount] = useState(0);
   const debouncedSearch = useCallback(debounce(async text => onSearch(text), 300), [locationGranted]);
-
-  const getSpPlaceholder = (sp) => {
-    if (!isExpanded || !sp.useDefaultLocation) {
-      return 'addressView.whereTo';
+  const isMultiSpEnabled = multiSpAmount > 0 && isExpanded;
+  const amountOfEnteredSp = requestStopPoints.length;
+  const canAddMoreMultiSp = isMultiSpEnabled
+  && amountOfEnteredSp < multiSpAmount + SP_AMOUNT_WITHOUT_MULTI;
+  const hasEnteredMultiSp = amountOfEnteredSp > SP_AMOUNT_WITHOUT_MULTI;
+  const isSpIndexMulti = i => hasEnteredMultiSp && i > 0 && i < amountOfEnteredSp - 1;
+  const getSpPlaceholder = (sp, index) => {
+    if (isSpIndexMulti(index)) {
+      return 'addressView.multiStopPlaceholder';
     }
-
-    if (locationGranted) {
+    if (index === 0) {
       return 'addressView.enterAddress';
     }
-
-    return '';
+    return 'addressView.whereTo';
   };
+
+  useEffect(() => {
+    if (hasEnteredMultiSp) {
+      // when moving from collapsed bottom sheet to expanded bottom sheet
+      // the full list must be rendered only after the bottom sheet is fully expanded
+      setTimeout(() => {
+        dragListRef.current?.reMeasure();
+      }, 250);
+    }
+  }, [hasEnteredMultiSp, isExpanded]);
 
   const onInputFocus = (target, index) => {
     setSelectedInputTarget(target);
@@ -114,6 +140,15 @@ const SearchBar = ({
     onFocus();
   };
 
+  const loadMultiSpSetting = async () => {
+    const multiSpSetting = await getSettingByKey(SETTINGS_KEYS.MULTI_SP);
+    if (multiSpSetting && multiSpSetting.enabled) {
+      setMultiSpAmount(multiSpSetting.amount);
+    }
+  };
+  useEffect(() => {
+    loadMultiSpSetting();
+  }, []);
   useEffect(() => {
     fillLoadSkeleton();
     debouncedSearch(searchTerm);
@@ -126,48 +161,69 @@ const SearchBar = ({
       inputRef.current.focus();
     }
   }, [selectedIndex, isExpanded]);
-
-  const buildSps = () => requestStopPoints.map((s, i) => {
-    const { type, description } = requestStopPoints[i];
-    const placeholder = getSpPlaceholder(s);
-    const rowProps = i === 0 ? { isExpanded } : { setMargin: true };
-    const autoFocus = isExpanded && i === selectedIndex;
+  const formatMovedMultiSps = (sps) => {
+    const newSps = [...sps];
+    return newSps.map((sp, index) => {
+      const type = index === newSps.length - 1 ? STOP_POINT_DROPOFF : STOP_POINT_PICKUP;
+      return {
+        ...sp,
+        type,
+      };
+    });
+  };
+  const renderDraggableItem = ({
+    onStartDrag, item, onEndDrag,
+  }) => {
+    const index = requestStopPoints.indexOf(item);
+    const sp = requestStopPoints[index];
+    const { type, description } = sp;
+    const placeholder = getSpPlaceholder(sp, index);
+    const rowProps = index === 0 ? { isExpanded } : { setMargin: true };
+    const autoFocus = isExpanded && index === selectedIndex;
     return (
+
+
       <Row
         {...rowProps}
-        key={s.id}
+        key={sp.id}
       >
+
         <BottomSheetInput
           accessible
-          accessibilityLabel={`address_input_${i}`}
+          index={index}
           placeholder={i18n.t(placeholder)}
+          onDrag={hasEnteredMultiSp ? onStartDrag : null}
+          onEndDrag={hasEnteredMultiSp ? onEndDrag : null}
           onChangeText={(text) => {
             updateRequestSp({
               description: text,
               lat: null,
               lng: null,
               externalId: null,
-            }, i);
+            }, index);
             setSearchTerm(text);
           }}
           fullBorder
           value={description || ''}
           placeholderTextColor={isExpanded ? '#929395' : '#333333'}
           onFocus={(e) => {
-            Mixpanel.setEvent(`${type} address input focused`);
-            onInputFocus(e.target, i);
+            Mixpanel.setEvent('address input focused', { index, type });
+            onInputFocus(e.target, index);
           }}
+          isMultiSpEnabled={isMultiSpEnabled}
+          hasEnteredMultiSp={hasEnteredMultiSp}
           onPressIn={e => e.currentTarget?.setSelection((description?.length || 0), (description?.length || 0))}
-          key={`input_${s.id}`}
+          key={`input_${sp.id}`}
           autoCorrect={false}
           clear={() => {
+            Mixpanel.setEvent('address input cleared', { index, type });
             updateRequestSp({
               description: null,
               lat: null,
               lng: null,
               externalId: null,
               id: shortid.generate(),
-            }, i);
+            }, index);
             setSearchTerm(null);
           }}
           ref={(ref) => {
@@ -175,14 +231,53 @@ const SearchBar = ({
               inputRef.current = ref;
             }
           }}
-          onLayout={e => e.currentTarget?.setSelection(1, 1)}
+          remove={isSpIndexMulti(index) ? () => {
+            removeRequestSp(index);
+            Mixpanel.setEvent('sp removed by trash can click', { index, type });
+          } : null}
+          add={canAddMoreMultiSp
+      && index === amountOfEnteredSp - 1 ? () => {
+              addNewEmptyRequestSp();
+              Mixpanel.setEvent('sp added by plus click', { index, type });
+            }
+            : null}
+          onLayout={(e) => {
+            if (e.currentTarget?.setSelection) {
+              e.currentTarget?.setSelection(1, 1);
+            }
+          }
+          }
           onBlur={(e) => {
-            e.currentTarget?.setSelection(1, 1);
+            if (e.currentTarget?.setSelection) {
+              e.currentTarget?.setSelection(1, 1);
+            }
           }}
         />
       </Row>
+
+
     );
-  });
+  };
+  const buildSps = () => (
+    <DraggableFlatList
+      data={requestStopPoints}
+      scrollEnabled={false}
+      ref={dragListRef}
+      renderItem={renderDraggableItem}
+      keyExtractor={item => item.id}
+      keyboardShouldPersistTaps="always"
+      onReordered={(fromIndex, toIndex) => {
+        const newSps = [...requestStopPoints];
+        const removed = newSps.splice(fromIndex, 1);
+        newSps.splice(toIndex, 0, removed[0]);
+        const formattedMovedStopPoints = formatMovedMultiSps(newSps);
+        setRequestStopPoints(formattedMovedStopPoints);
+        Mixpanel.setEvent('finished drag multi sps', { formattedMovedStopPoints });
+      }
+      }
+    />
+  );
+
 
   const onBackPress = useCallback(() => {
     initSps();

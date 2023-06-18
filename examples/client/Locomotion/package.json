@@ -37,6 +37,7 @@
     "axios": "^0.27.2",
     "bluebird": "^3.7.2",
     "cheap-ruler": "^3.0.2",
+    "gery-react-native-draglist": "^3.4.1-beta",
     "i18next": "^19.7.0",
     "i18next-http-backend": "^2.1.1",
     "jwt-decode": "^3.1.2",
