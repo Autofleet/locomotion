@@ -175,6 +175,8 @@ const UserContextProvider = ({ children }: { children: any }) => {
       channel,
       demandSourceId,
     });
+    // successful login - delete captcha token
+    await StorageService.delete('captchaToken');
   };
 
   const onVert = async (code: string) => {
@@ -190,8 +192,8 @@ const UserContextProvider = ({ children }: { children: any }) => {
         console.log('Bad vert with response', vertResponse);
         return false;
       }
-
       await auth.updateTokens(vertResponse.refreshToken, vertResponse.accessToken);
+
       const userProfile = vertResponse.clientProfile || {};
       Mixpanel.setUser(userProfile);
       await Promise.all([
