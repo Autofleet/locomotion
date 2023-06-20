@@ -126,6 +126,7 @@ const PaymentMethodPopup = ({
         <Footer>
           <FlexCont style={{ justifyContent: 'center' }}>
             <SelectButton
+              testID="selectCard"
               type="confirm"
               onPress={() => {
                 onSave();
