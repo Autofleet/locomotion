@@ -101,7 +101,7 @@ const CardRow = (paymentMethod: any) => {
       setIsCardExpired(isExpired);
     }, 100);
   }, [paymentMethod]);
-  const testID = paymentMethod.addNew ? `${paymentMethod.testId || ''}AddPaymentMethod` : (`${paymentMethod.testId || ''}ChoosePaymentMethod`);
+  const testID = paymentMethod.addNew ? `${paymentMethod.testIdPrefix || ''}AddPaymentMethod` : (`${paymentMethod.testIdPrefix || ''}ChoosePaymentMethod`);
   return (
     <>
       <Button

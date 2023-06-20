@@ -100,7 +100,7 @@ const PaymentMethodPopup = ({
                 const reason = getDisabledReason(paymentMethod);
                 return (
                   <PaymentMethod
-                    testId="Dialog"
+                    testIdPrefix="Dialog"
                     {...paymentMethod}
                     chooseMethodPage
                     disabledReason={reason}
@@ -113,7 +113,7 @@ const PaymentMethodPopup = ({
                 );
               })}
               <PaymentMethod
-                testId="Dialog"
+                testIdPrefix="Dialog"
                 addNew
                 chooseMethodPage
                 onPress={() => {
