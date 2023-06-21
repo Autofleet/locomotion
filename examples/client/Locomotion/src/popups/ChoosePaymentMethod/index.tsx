@@ -100,6 +100,7 @@ const PaymentMethodPopup = ({
                 const reason = getDisabledReason(paymentMethod);
                 return (
                   <PaymentMethod
+                    testIdPrefix="Dialog"
                     {...paymentMethod}
                     chooseMethodPage
                     disabledReason={reason}
@@ -112,6 +113,7 @@ const PaymentMethodPopup = ({
                 );
               })}
               <PaymentMethod
+                testIdPrefix="Dialog"
                 addNew
                 chooseMethodPage
                 onPress={() => {
@@ -124,6 +126,7 @@ const PaymentMethodPopup = ({
         <Footer>
           <FlexCont style={{ justifyContent: 'center' }}>
             <SelectButton
+              testID="selectCard"
               type="confirm"
               onPress={() => {
                 onSave();
