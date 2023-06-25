@@ -582,6 +582,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 696204FB26E0B163288A662A /* Pods-Locomotion.debug.xcconfig */;
 			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Locomotion/Locomotion.entitlements;
@@ -613,6 +614,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 55610BD25FC1E81B65311466 /* Pods-Locomotion.release.xcconfig */;
 			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Locomotion/Locomotion.entitlements;
@@ -625,6 +627,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 3.0.32;
+				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
