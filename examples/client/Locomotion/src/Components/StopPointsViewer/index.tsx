@@ -46,7 +46,9 @@ const StopPointsViewer = ({ goBackToAddressSelector }: StopPointsViewerProps) =>
           testID="estimationsPickupEdit"
           onPress={() => goBackToAddressSelector(0)}
         >
-          <StreetAddress>
+          <StreetAddress
+          testID={firstSp?.streetAddress}
+          >
             {firstSp?.streetAddress}
           </StreetAddress>
         </StreetAddressContainer>
@@ -55,7 +57,9 @@ const StopPointsViewer = ({ goBackToAddressSelector }: StopPointsViewerProps) =>
           testID="estimationsDropOffEdit"
           onPress={() => goBackToAddressSelector(requestStopPoints.length - 1)}
         >
-          <StreetAddress>
+          <StreetAddress
+          testID={lastSp?.streetAddress}
+          >
             {lastSp?.streetAddress}
           </StreetAddress>
         </StreetAddressContainer>
