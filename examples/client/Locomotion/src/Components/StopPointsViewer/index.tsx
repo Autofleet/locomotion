@@ -47,7 +47,7 @@ const StopPointsViewer = ({ goBackToAddressSelector }: StopPointsViewerProps) =>
           onPress={() => goBackToAddressSelector(0)}
         >
           <StreetAddress
-          testID={firstSp?.streetAddress}
+            testID={firstSp?.streetAddress}
           >
             {firstSp?.streetAddress}
           </StreetAddress>
@@ -58,7 +58,7 @@ const StopPointsViewer = ({ goBackToAddressSelector }: StopPointsViewerProps) =>
           onPress={() => goBackToAddressSelector(requestStopPoints.length - 1)}
         >
           <StreetAddress
-          testID={lastSp?.streetAddress}
+            testID={lastSp?.streetAddress}
           >
             {lastSp?.streetAddress}
           </StreetAddress>
