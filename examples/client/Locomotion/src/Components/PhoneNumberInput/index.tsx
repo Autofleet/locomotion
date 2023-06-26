@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import PhoneInput from 'react-native-phone-number-input';
 import Config from 'react-native-config';
-import { AsYouType } from 'libphonenumber-js';
+// import { AsYouType } from 'libphonenumber-js';
 import { ThemeContext } from 'styled-components';
 import { getInputIsoCode } from '../../services/MccMnc';
 import i18n from '../../I18n';
@@ -15,24 +15,24 @@ const PhoneNumberInput = ({
   value,
 }: any) => {
   const [isFocused, setIsFocused] = useState(false);
-  const [defaultCode, setDefaultCode] = useState(null);
+  const [defaultCode, setDefaultCode] = 'IL';
   const theme = useContext(ThemeContext);
-  const asYouTypePhoneNumber = new AsYouType();
+  // const asYouTypePhoneNumber = new AsYouType();
 
-  const onChangeText = (v: any) => {
-    const numberValue = `${v}`;
-    asYouTypePhoneNumber.input(numberValue);
-    const number = asYouTypePhoneNumber.getNumberValue();
-    return onPhoneNumberChange(
-      number && number.replace('+', ''),
-      asYouTypePhoneNumber.isValid(),
-    );
-  };
+  // const onChangeText = (v: any) => {
+  //   const numberValue = `${v}`;
+  //   asYouTypePhoneNumber.input(numberValue);
+  //   const number = asYouTypePhoneNumber.getNumberValue();
+  //   return onPhoneNumberChange(
+  //     number && number.replace('+', ''),
+  //     asYouTypePhoneNumber.isValid(),
+  //   );
+  // };
 
-  const setIsoCode = async () => {
-    const mobileIso = await getInputIsoCode();
-    setDefaultCode(Config.OVERWRITE_COUNTRY_CODE || mobileIso);
-  };
+  // const setIsoCode = async () => {
+  //   const mobileIso = await getInputIsoCode();
+  //   setDefaultCode(Config.OVERWRITE_COUNTRY_CODE || mobileIso);
+  // };
 
   const cleanNumber = (number: string) => {
     if (!number) {
@@ -45,25 +45,25 @@ const PhoneNumberInput = ({
     return number;
   };
 
-  useEffect(() => {
-    setIsoCode();
-  }, []);
+  // useEffect(() => {
+  //   setIsoCode();
+  // }, []);
 
   return defaultCode ? (
     <PhoneInput
-      key={defaultCode}
-      value={cleanNumber(value)}
-      autoFocus={autoFocus}
-      defaultCode={defaultCode}
-      onChangeFormattedText={onChangeText}
+      key="IL"
+      value="542053522"
+      autoFocus={false}
+      defaultCode="IL"
+      onChangeFormattedText={() => { console.log('test'); }}
       textInputProps={{
         returnKeyType: 'done',
-        placeholderTextColor: theme.disabledColor,
+        placeholderTextColor: '#333333',
         testID: 'phoneNumber',
         accessible: true,
         accessibilityLabel: 'phoneNumber',
-        onFocus: () => setIsFocused(true),
-        onBlur: () => setIsFocused(false),
+        onFocus: () => () => console.log('test'),
+        onBlur: () => console.log('testblur'),
       }}
       containerStyle={{
         width: '100%',
@@ -72,11 +72,11 @@ const PhoneNumberInput = ({
       textContainerStyle={{
         borderRadius: 8,
         backgroundColor: '#f1f2f6',
-        borderWidth: isFocused ? 0.5 : 0,
-        borderColor: error ? ERROR_COLOR : '#333333',
+        borderWidth: 0,
+        borderColor: '#333333',
       }}
       textInputStyle={{
-        color: error ? ERROR_COLOR : '#333333',
+        color: '#333333',
       }}
       flagButtonStyle={{
         backgroundColor: '#f1f2f6',
