@@ -348,7 +348,7 @@ PODS:
     - React (< 1.0.0, >= 0.13.0)
   - react-native-restart (0.0.24):
     - React-Core
-  - react-native-safe-area-context (4.4.1):
+  - react-native-safe-area-context (4.6.3):
     - RCT-Folly
     - RCTRequired
     - RCTTypeSafety
@@ -790,7 +790,7 @@ SPEC CHECKSUMS:
   react-native-netinfo: 85f4311a8272324a2bf56583248f0a0bba5315a8
   react-native-onesignal: a4a08bf22290f739df33acf1f45f7a7f9850273b
   react-native-restart: 8af4579c94638f38bd9074ec477ebf087de87dc5
-  react-native-safe-area-context: ec0d85aca8110dae9327430a9541fec165352dab
+  react-native-safe-area-context: 5496bfc1fb0f0e096eeb740377d6a3d62597abe2
   react-native-version-check: ecc2bfeb57459db83351020610af16cd1d3abcbd
   react-native-webview: a192040320142d8f10d652a745c46e4f43e37f8c
   React-perflogger: 0458a87ea9a7342079e7a31b0d32b3734fb8415f
