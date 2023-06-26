@@ -7,7 +7,7 @@ import {
 import styled from 'styled-components';
 import { debounce } from 'lodash';
 import shortid from 'shortid';
-import DraggableFlatList from 'gery-react-native-draglist';
+import DraggableFlatList from 'react-native-draglist';
 import { STOP_POINT_TYPES } from '../../../../lib/commonTypes';
 import { UserContext } from '../../../../context/user';
 import settings from '../../../../context/settings';
