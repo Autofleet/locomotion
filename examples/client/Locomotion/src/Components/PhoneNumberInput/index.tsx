@@ -30,7 +30,7 @@ const PhoneNumberInput = ({
   };
 
   const setIsoCode = async () => {
-    // const mobileIso = await getInputIsoCode();
+    const mobileIso = await getInputIsoCode();
     // setDefaultCode(Config.OVERWRITE_COUNTRY_CODE || mobileIso);
     setDefaultCode('IL');
   };
