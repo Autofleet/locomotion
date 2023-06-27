@@ -32,8 +32,10 @@ const PhoneNumberInput = ({
 
   const setIsoCode = async () => {
     const mobileIso = await getInputIsoCode();
-    Alert.alert('mobileIso', mobileIso);
-    setDefaultCode(Config.DEFAULT_COUNTRY_CODE);
+    setTimeout(() => {
+      Alert.alert('mobileIso', mobileIso);
+    }, 1000);
+    // setDefaultCode(Config.DEFAULT_COUNTRY_CODE);
   };
 
   const cleanNumber = (number: string) => {
