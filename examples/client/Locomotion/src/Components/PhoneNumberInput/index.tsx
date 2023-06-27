@@ -30,8 +30,9 @@ const PhoneNumberInput = ({
   };
 
   const setIsoCode = async () => {
-    const mobileIso = await getInputIsoCode();
-    setDefaultCode(Config.OVERWRITE_COUNTRY_CODE || mobileIso);
+    // const mobileIso = await getInputIsoCode();
+    // setDefaultCode(Config.OVERWRITE_COUNTRY_CODE || mobileIso);
+    setDefaultCode('IL');
   };
 
   const cleanNumber = (number: string) => {
@@ -54,7 +55,7 @@ const PhoneNumberInput = ({
       key={defaultCode}
       value={cleanNumber(value)}
       autoFocus={autoFocus}
-      defaultCode="IL"
+      defaultCode={defaultCode}
       onChangeFormattedText={onChangeText}
       textInputProps={{
         returnKeyType: 'done',
