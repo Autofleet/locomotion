@@ -34,7 +34,7 @@ const PhoneNumberInput = ({
     const mobileIso = await getInputIsoCode();
     setTimeout(() => {
       setDefaultCode(mobileIso);
-    }, 0);
+    }, 50);
   };
 
   const cleanNumber = (number: string) => {
