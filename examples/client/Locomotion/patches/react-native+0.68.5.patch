@@ -11,6 +11,7 @@ index 9986279..20389d4 100644
          currentRelativeChild->getLayout().hadOverflow());
    }
    return deltaFreeSpace;
+
 diff --git a/node_modules/react-native/scripts/react-native-xcode.sh b/node_modules/react-native/scripts/react-native-xcode.sh
 index ad31b9c..4521b7f 100755
 --- a/node_modules/react-native/scripts/react-native-xcode.sh
