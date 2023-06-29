@@ -1,5 +1,4 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { Alert } from 'react-native';
 import PhoneInput from 'react-native-phone-number-input';
 import Config from 'react-native-config';
 import { AsYouType } from 'libphonenumber-js';
@@ -33,7 +32,7 @@ const PhoneNumberInput = ({
   const setIsoCode = async () => {
     const mobileIso = await getInputIsoCode();
     setTimeout(() => {
-      setDefaultCode(mobileIso);
+      setDefaultCode(Config.OVERWRITE_COUNTRY_CODE || mobileIso);
     }, 50);
   };
 
