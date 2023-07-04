@@ -55,8 +55,8 @@ const PhoneNumberInput = ({
     <PhoneInput
       key={defaultCode}
       value={cleanNumber(value)}
-      autoFocus={false}
-      defaultCode="IL"
+      autoFocus={autoFocus}
+      defaultCode={defaultCode}
       onChangeFormattedText={onChangeText}
       textInputProps={{
         returnKeyType: 'done',
