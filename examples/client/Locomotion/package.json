@@ -11,8 +11,9 @@
     "linter": "eslint 'src/**/*.{js,jsx,ts,tsx}'",
     "build-android": "cd android && ./gradlew app:assembleRelease && cd .. && today=`date '+%Y_%m_%d(%H_%M_%S)'`; mv ./android/app/build/outputs/apk/release/app-release.apk ./locomotion-release-RN-$today.apk",
     "clean-android": "cd android  && ./gradlew clean",
-    "postinstall": "patch-package && npx jetify && echo I POST INSTALLED",
-    "dev": "npx nodemon --exec 'npm run symlink' --watch ../../../locomotion-sdk/src -e js,ts,tsx,jsx --delay 2.5"
+    "postinstall": "patch-package && npx jetify",
+    "dev": "npx nodemon --exec 'npm run symlink' --watch ../../../locomotion-sdk/src -e js,ts,tsx,jsx --delay 2.5",
+    "patch-package": "patch-package"
   },
   "dependencies": {
     "@autofleet/i18next-remote-backend-with-locals": "^1.0.0",
