@@ -141,7 +141,6 @@ const Phone = ({ navigation }) => {
             text={i18n.t('onboarding.pages.phone.text')}
             subText={i18n.t('onboarding.pages.phone.subText')}
           />
-
           <PhoneNumberInput
             key={renderId}
             value={user.phoneNumber}
@@ -149,7 +148,6 @@ const Phone = ({ navigation }) => {
             autoFocus
             error={showErrorText}
           />
-
           {showErrorText && <ErrorText>{showErrorText}</ErrorText>}
           <SaveButton
             isLoading={isLoadingSaveButton}
