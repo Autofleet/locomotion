@@ -109,11 +109,13 @@ interface RidePageContextInterface {
   setSelectedInputIndex: Dispatch<number | null>;
   selectedInputTarget: any;
   setSelectedInputTarget: Dispatch<any | null>;
-  onAddressSelected: (item: any, needToLoadRide: boolean, index?: number) => void;
+  onAddressSelected: (item: any, needToLoadRide: boolean, index?: number, refreshCurrentLocation?: boolean) => void;
   requestStopPoints: any[];
   searchResults: any;
   searchAddress: (searchText: string) => void;
+  removeRequestSp: (index: number) => void;
   updateRequestSp: (sp: any) => void;
+  addNewEmptyRequestSp: () => void;
   setSpCurrentLocation: () => void;
   historyResults: any[];
   serviceEstimations: any[];
@@ -166,7 +168,7 @@ export const RidePageContext = createContext<RidePageContextInterface>({
   setSelectedInputIndex: () => undefined,
   selectedInputTarget: null,
   setSelectedInputTarget: () => undefined,
-  onAddressSelected: (item: any, needToLoadRide: boolean, index?: number) => undefined,
+  onAddressSelected: (item: any, needToLoadRide: boolean, index?: number, refreshCurrentLocation?: boolean) => undefined,
   requestStopPoints: [],
   searchResults: [],
   searchAddress: (searchText: string) => undefined,
@@ -350,7 +352,6 @@ const RidePageContextProvider = ({ children }: {
       const estimationForService = estimationsMap[service.id];
       return formatEstimationsResult(service, estimationForService, tags);
     });
-
     return formattedServices.sort((a, b) => {
       if (
         (a.serviceAvailabilitiesNumber !== 0 && b.serviceAvailabilitiesNumber !== 0)
@@ -702,7 +703,7 @@ const RidePageContextProvider = ({ children }: {
   }, [currentGeocode]);
 
 
-  const updateRequestSp = (data: any[], index?: number) => {
+  const updateRequestSp = (data: any[], index?: number | null) => {
     const reqSps = [...requestStopPoints];
     if (_.isNil(index)) {
       index = (_.isNil(selectedInputIndex) ? requestStopPoints.length - 1 : selectedInputIndex);
@@ -713,6 +714,27 @@ const RidePageContextProvider = ({ children }: {
     };
 
     setRequestStopPoints(reqSps);
+  };
+  const addNewEmptyRequestSp = () => {
+    setRequestStopPoints((oldRequestSps) => {
+      const newRequestsSps = [...oldRequestSps];
+      newRequestsSps.splice(requestStopPoints.length - 1, 0, {
+        lat: null,
+        lng: null,
+        externalId: null,
+        text: '',
+        type: STOP_POINT_TYPES.STOP_POINT_PICKUP,
+        id: getRandomId(),
+      });
+      return newRequestsSps;
+    });
+  };
+  const removeRequestSp = (index : number) => {
+    setRequestStopPoints((oldRequestSps) => {
+      const newRequestsSps = [...oldRequestSps];
+      newRequestsSps.splice(index, 1);
+      return newRequestsSps;
+    });
   };
 
   const setSpCurrentLocation = async () => {
@@ -727,7 +749,7 @@ const RidePageContextProvider = ({ children }: {
       });
       return true;
     }
-    updateRequestSp(newGeoLocation);
+    updateRequestSp(newGeoLocation, selectedInputIndex);
     return true;
   };
 
@@ -760,7 +782,7 @@ const RidePageContextProvider = ({ children }: {
     }
   };
 
-  const onAddressSelected = async (selectedItem: any, needToLoadRide: boolean, index?: number) => {
+  const onAddressSelected = async (selectedItem: any, needToLoadRide: boolean, index?: number, refreshCurrentLocation?: boolean) => {
     if (selectedItem.isLoading) {
       return null;
     }
@@ -772,6 +794,10 @@ const RidePageContextProvider = ({ children }: {
       enrichedPlace = await enrichPlaceWithLocation(selectedItem.placeId);
     }
     const reqSps = [...requestStopPoints];
+    if (refreshCurrentLocation) {
+      const newCurrentLocation = await getCurrentLocationAddress();
+      reqSps[0] = { ...reqSps[0], ...newCurrentLocation };
+    }
     reqSps[index || selectedInputIndex || 0] = {
       ...reqSps[index || selectedInputIndex || 0],
       externalId: selectedItem.externalId,
@@ -922,10 +948,11 @@ const RidePageContextProvider = ({ children }: {
     };
   });
 
-  const saveLastAddresses = async (item: any) => {
+  const saveLastAddresses = async (items: any[]) => {
     const history: any[] = await getLastAddresses();
-    const filteredHistory = (history || []).filter(h => h.placeId !== item.placeId);
-    filteredHistory.unshift(item);
+    const uniqueItems = items.filter((item, index) => items.findIndex(i => i.placeId === item.placeId) === index);
+    const filteredHistory = (history || []).filter(h => items.every(item => h.placeId !== item.placeId));
+    filteredHistory.unshift(...uniqueItems);
     await StorageService.save({ lastAddresses: filteredHistory.slice(0, HISTORY_RECORDS_NUM) });
   };
 
@@ -1024,17 +1051,16 @@ const RidePageContextProvider = ({ children }: {
     stopRequestInterval();
     setServiceEstimations(null);
     changeBsPage(BS_PAGES.CONFIRMING_RIDE);
-    const lastSp = stopPoints[stopPoints.length - 1];
-    if (lastSp) {
-      saveLastAddresses({
-        text: lastSp.streetAddress || lastSp.description,
-        fullText: lastSp.streetAddress || lastSp.description,
-        placeId: lastSp.placeId,
-        externalId: lastSp.externalId,
-        lat: lastSp.lat,
-        lng: lastSp.lng,
-      });
-    }
+    const allSpsExceptFirstPickup = stopPoints.slice(1);
+    const allSpsExceptFirstPickupDefined = allSpsExceptFirstPickup.filter(sp => sp && sp.lat);
+    saveLastAddresses(allSpsExceptFirstPickupDefined.map(sp => ({
+      text: sp.streetAddress || sp.description,
+      fullText: sp.streetAddress || sp.description,
+      placeId: sp.placeId,
+      externalId: sp.externalId,
+      lat: sp.lat,
+      lng: sp.lng,
+    })));
 
     try {
       let scheduledToMoment = ride.scheduledTo;
@@ -1269,6 +1295,9 @@ const RidePageContextProvider = ({ children }: {
         searchResults,
         searchAddress,
         updateRequestSp,
+        setRequestStopPoints,
+        addNewEmptyRequestSp,
+        removeRequestSp,
         setSpCurrentLocation,
         historyResults,
         loadHistory,

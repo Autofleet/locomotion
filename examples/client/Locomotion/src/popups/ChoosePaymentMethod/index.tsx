@@ -1,9 +1,10 @@
 /* eslint-disable no-unused-expressions */
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { View } from 'react-native';
 import PropTypes from 'prop-types';
 import Modal from 'react-native-modal';
 import { useNavigation } from '@react-navigation/native';
+import { getPaymentMethod } from '../../pages/Payments/cardDetailUtils';
 import CloseButton from '../../Components/CloseButton';
 import i18n from '../../I18n';
 import { MAIN_ROUTES } from '../../pages/routes';
@@ -21,6 +22,7 @@ import PaymentMethod from '../../Components/CardRow';
 import PaymentsContext from '../../context/payments';
 import cashPaymentMethod from '../../pages/Payments/cashPaymentMethod';
 import * as navigationService from '../../services/navigation';
+import { MewRidePageContext } from '../../context';
 
 interface PaymentMethodPopupProps {
   isVisible: boolean;
@@ -35,13 +37,23 @@ interface PaymentMethodPopupProps {
 const PaymentMethodPopup = ({
   isVisible, onCancel, onSubmit, showCash, rideFlow, selected, onAddNewMethod,
 }: PaymentMethodPopupProps) => {
-  const usePayments = PaymentsContext.useContainer();
+  const usePayments: any = PaymentsContext.useContainer();
+  const { chosenService } = useContext(MewRidePageContext);
   const [selectedPaymentId, setSelectedPaymentId] = useState<string | undefined>(selected);
+
+  const getDisabledReason = (paymentMethod: any) => {
+    if (
+      chosenService
+      && !chosenService.allowedPaymentMethods.includes(getPaymentMethod(paymentMethod.id))
+    ) {
+      return i18n.t('popups.choosePaymentMethod.unavailable');
+    }
+    return null;
+  };
 
   useEffect(() => {
     usePayments.getOrFetchCustomer();
   }, []);
-
 
   useEffect(() => {
     const updateDefaultPaymentMethod = async () => {
@@ -55,24 +67,12 @@ const PaymentMethodPopup = ({
 
 
     updateDefaultPaymentMethod();
-  }, [usePayments.paymentMethods, selected]);
+  }, [usePayments.paymentMethods, selected, chosenService]);
 
-  const onSave = () => {
-    onSubmit(selectedPaymentId);
+  const onSave = (id?: string) => {
+    onSubmit(id || selectedPaymentId);
     onCancel();
   };
-
-  const [isCashEnabled, setIsCashEnabled] = useState(false);
-
-  useEffect(() => {
-    const getIsCashEnabled = async () => {
-      const result = await usePayments.isCashPaymentEnabled();
-
-      setIsCashEnabled(result);
-    };
-
-    getIsCashEnabled();
-  }, [usePayments.paymentMethods]);
 
   return (
     <Modal
@@ -94,20 +94,26 @@ const PaymentMethodPopup = ({
         <CardsScrollView>
           <Container>
             <View>
-              {(isCashEnabled && showCash
+              {(showCash
                 ? [...usePayments.paymentMethods, cashPaymentMethod]
-                : usePayments.paymentMethods).map((paymentMethod: any, i) => (
+                : usePayments.paymentMethods).map((paymentMethod: any) => {
+                const reason = getDisabledReason(paymentMethod);
+                return (
                   <PaymentMethod
+                    testIdPrefix="Dialog"
                     {...paymentMethod}
                     chooseMethodPage
+                    disabledReason={reason}
                     selected={selectedPaymentId === paymentMethod.id}
                     mark={selectedPaymentId === paymentMethod.id}
                     onPress={() => {
                       setSelectedPaymentId(paymentMethod.id);
                     }}
                   />
-              ))}
+                );
+              })}
               <PaymentMethod
+                testIdPrefix="Dialog"
                 addNew
                 chooseMethodPage
                 onPress={() => {
@@ -120,6 +126,7 @@ const PaymentMethodPopup = ({
         <Footer>
           <FlexCont style={{ justifyContent: 'center' }}>
             <SelectButton
+              testID="selectCard"
               type="confirm"
               onPress={() => {
                 onSave();

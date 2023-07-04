@@ -28,7 +28,7 @@
         }
     },
     "emailTemplate": {
-        "hi": "Hey",
+        "hi": "Bonjour",
         "p1": "Veuillez confirmer votre email en cliquant sur le lien ci-dessous",
         "buttonText": "Confirmer",
         "expiryDateText": "Cet e-mail est valable jusqu'au",
@@ -55,18 +55,18 @@
         "estimatedFare": "Tarif estimé",
         "estimatedFareMessage": "Certains tarifs sont estimés et peuvent varier en fonction du trajet et d'autres conditions",
         "type": {
-            "pickup": "Prise en charge",
-            "dropoff": "Dépose"
+            "pickup": "Départ",
+            "dropoff": "Arrivée"
         },
-        "highEta": "L'estimation d'heure d'arrivée est plus élevée que d'habitude",
-        "outOfTerritory": ""
+        "highEta": "L'estimation du trajet est plus longue que d’habitude",
+        "outOfTerritory": "Indisponible sur le territoire"
     },
     "general": {
         "back": "Retour",
         "next": "Continuer",
         "cancel": "Annuler",
         "skip": "Ignorer",
-        "select": "Sélectionner",
+        "select": "Valider",
         "now": "Maintenant",
         "noTimeWindow": "Le plus rapidement possible"
     },
@@ -77,7 +77,7 @@
         "noAccountError": "Aucun compte n'existe avec ce numéro.",
         "accountAlreadyExistsError": "Un compte existe déjà avec ce numéro.",
         "clientIsBanned": "Il y a un problème avec votre compte. Veuillez contacter {{ appName }} pour obtenir de l'aide.",
-        "onBoardingPageTitle": "Veuillez ajouter votre nom et téléchargez une photo pour continuer.",
+        "onBoardingPageTitle": "Veuillez ajouter votre nom et télécharger une photo pour continuer.",
         "phoneNumberPlaceholder": "Numéro de téléphone",
         "loginPageInstructions": "Entrez votre numéro de téléphone.",
         "verificationCodeInstructions": "Entrez le code que vous avez reçu.",
@@ -107,14 +107,14 @@
                 "resendCodeText": "Vous n'avez pas reçu de SMS ?",
                 "resendCodeButton": "Renvoyer",
                 "resendCodeTextSeconds": "dans {{seconds}} secondes",
-                "call": "",
-                "calling": ""
+                "call": "Appelez-moi",
+                "calling": "Appel en cours"
             },
             "emailCode": {
                 "title": "Vérification",
                 "text": "Veuillez entrer le code",
                 "subText": "Veuillez saisir le code à 4 chiffres ci-dessous dans l'application pour confirmer votre adresse e-mail.",
-                "resendCodeText": "Vous n'avez pas reçu d'e-mail ?",
+                "resendCodeText": "Vous n'avez pas reçu d'e-mail?",
                 "resendCodeButton": "Renvoyer",
                 "resendCodeTextSeconds": "en {{seconds}} secondes"
             },
@@ -166,7 +166,7 @@
                 "email": "Un e-mail est requis."
             },
             "email": {
-                "email": "L'email doit être valide."
+                "email": "L'e-mail doit être valide."
             }
         },
         "chooseLanguage": "Langue de l'application"
@@ -174,7 +174,7 @@
     "home": {
         "map": {
             "markers": {
-                "pickup": "Embarquement",
+                "pickup": "Prise en charge",
                 "dropoff": "Sortir"
             }
         },
@@ -186,9 +186,9 @@
         "passengersNumber": "Passagers",
         "rideStates": {
             "driverOnTheWay": "Votre trajet a été réservé.",
-            "driverOnTheWayEta": "Temps jusqu'à l'embarquement : {{pickupEta}} minutes",
+            "driverOnTheWayEta": "Temps jusqu'à la prise en charge: {{pickupEta}} minutes",
             "driverOnTheWaySoon": "Temps jusqu'à l'embarquement : Moins d'1 minute",
-            "onBoard": "Temps de trajet restant : env. {{dropoffEta}} minutes",
+            "onBoard": "Temps de trajet restant: env. {{dropoffEta}} minutes",
             "onBoardSoon": "Arrivée imminente",
             "driverArrived": "Votre chauffeur est arrivé"
         },
@@ -219,7 +219,7 @@
             "cancelButton": "Annuler",
             "rideFareEstimationNotice": "Les tarifs indiqués sont estimés et peuvent changer en fonction des conditions pendant le trajet",
             "oneUpcomingRide": "Trajet à venir",
-            "multipleUpcomingRides": "Trajet à venir"
+            "multipleUpcomingRides": "Trajets planifiés"
         },
         "promoCode": {
             "amountOff": "{{amount}} désactivé",
@@ -261,8 +261,8 @@
     },
     "popups": {
         "rideCanceled": {
-            "title": "Trajet annulée",
-            "text": "Votre trajet a été annulée",
+            "title": "Trajet annulé",
+            "text": "Votre trajet a été annulé",
             "buttonText": "Commander le même trajet",
             "closeButtonText": "Retour à la carte"
         },
@@ -327,13 +327,18 @@
             "title": "Choisissez votre langue"
         },
         "cancellationReasons": {
-            "title": "",
-            "subTitle": "",
+            "title": "Trajet annulé",
+            "subTitle": "Nous espérons vous revoir bientôt. Pour quelle raison avez-vous annulé le trajet ?",
             "confirmation": {
-                "title": "",
-                "text": "",
-                "button": ""
+                "title": "Merci pour votre retour !",
+                "text": "Nous utiliserons cette information pour continuer à améliorer l'expérience de nos passagers",
+                "button": "Terminé"
             }
+        },
+        "noConnection": {
+            "title": "Quelque chose s'est mal passé",
+            "text": "On dirait qu'il y a un problème de réseau. Vérifiez votre connexion et essayez de nouveau",
+            "buttonText": "Compris"
         }
     },
     "menu": {
@@ -344,9 +349,9 @@
         "account": "Profil Utilisateur",
         "support": "Contactez-nous",
         "logout": "Se déconnecter",
-        "futureRides": "Trajets à venir",
+        "futureRides": "Trajets planifiés",
         "messages": "Messages",
-        "poweredBy": "Propulsé par"
+        "poweredBy": "powered by"
     },
     "temporaryHoldText": "Une petite somme peut être temporairement mise en attente lorsque vous démarrez votre trajet",
     "learnMore": "En savoir plus",
@@ -413,13 +418,13 @@
             "selectEndDate": "Sélectionnez la date de fin",
             "selectStartDate": "Sélectionnez la date de début",
             "cancelText": "Annuler",
-            "confirmText": "Sélectionner"
+            "confirmText": "Valider"
         },
         "fewSeconds": "Quelques secondes",
-        "noActivity": "Aucune trajet",
+        "noActivity": "Aucun trajet",
         "noActivityYet": "Pas encore de trajets",
-        "noActivitySub": "Réalisez votre première trajet et visualisez-la ici!",
-        "unpaidRide": "Trajet non payée",
+        "noActivitySub": "Réalisez votre premier trajet et visualisez-le ici!",
+        "unpaidRide": "Trajet non payé",
         "rideCard": {
             "rideJourney": "Trajet",
             "driverRating": "Évaluation du conducteur",
@@ -441,12 +446,12 @@
                 "today": "Aujourd'hui",
                 "yesterday": "Hier",
                 "thisWeek": "Cette semaine",
-                "lastWeek": "Dernière semaine"
+                "lastWeek": "La semaine dernière"
             }
         }
     },
     "futureRides": {
-        "pageTitle": "Trajets à venir",
+        "pageTitle": "Trajets planifiés",
         "noRidesTitle": "Aucun trajet à venir",
         "noRidesText": "Créez un trajet programmé et visualisez-le ici !"
     },
@@ -464,7 +469,7 @@
         "pageTitle": "messages"
     },
     "postRide": {
-        "pageTitle": "Trajet terminée",
+        "pageTitle": "Trajet terminé",
         "ratingHeadline": "Comment s'est passé votre trajet ?",
         "submit": "Fait",
         "submitForPast": "Fait",
@@ -503,7 +508,7 @@
             "expiryDate": "Date d'expiration"
         },
         "changeDefault": "Changer",
-        "select": "Sélectionner",
+        "select": "Valider",
         "pageTitle": "Mode de paiement",
         "submitCard": "Ajouter une carte",
         "addNewCreditCard": "Ajouter une nouvelle carte de crédit",
@@ -531,23 +536,23 @@
     "currency": "€",
     "operation": {
         "name": "Locomotion",
-        "subName": "Application des passagers"
+        "subName": "Application passagers"
     },
     "bottomSheetContent": {
         "futureRideLimitOnAsap": {
-            "titleText": "Trajet programmée à venir",
+            "titleText": "Trajet programmé à venir",
             "buttonText": "Retour à la commande",
-            "subTitleText": "Hey, vous avez déjà un prochain trajet prévu. Pour créer un trajet maintenant, annulez votre trajet programmé et réessayez."
+            "subTitleText": "Vous avez déjà un prochain trajet prévu. Pour créer un trajet maintenant, annulez votre trajet programmé et réessayez."
         },
         "futureRideLimit": {
             "titleText": "Limite de trajets programmées atteinte",
             "buttonText": "Retour à la commande",
-            "subTitleText": "Hey, on dirait que vous essayez de programmer plusieurs trajets trop rapprochés. Veuillez sélectionner une autre heure et réessayez."
+            "subTitleText": "On dirait que vous essayez de programmer plusieurs trajets trop rapprochés. Veuillez sélectionner une autre heure et réessayez."
         },
         "outstandingBalance": {
             "titleText": "Solde en attente",
             "buttonText": "Contactez le support",
-            "subTitleText": "Le mode de paiement sélectionné a un solde de attente. Veuillez régler le solde afin de pouvoir continuer à utiliser {{operationName}}"
+            "subTitleText": "Le mode de paiement sélectionné a un solde en attente. Veuillez régler le solde afin de pouvoir continuer à utiliser {{operationName}}"
         },
         "cashNotAllowed": {
             "titleText": "Choisissez un autre mode de paiement",
@@ -597,7 +602,7 @@
             "subTitleText": "Des frais peuvent vous être facturés pour l'annulation de ce trajet",
             "buttonText": "Annuler le trajet",
             "secondaryButtonText": "Continuer le trajet",
-            "secondaryButtonTextFuture": "Continuer la trajet"
+            "secondaryButtonTextFuture": "Continuer le trajet"
         },
         "confirmPickup": {
             "confirmPickupTitle": "Confirmer la prise en charge",
@@ -635,7 +640,7 @@
             "riders": "Passagers",
             "promoText": "Code promo",
             "addPayment": "Ajouter un paiement",
-            "chosePickupTime": "Définissez votre créneau de prise en charge",
+            "chosePickupTime": "Réservez votre trajet pour plus tard",
             "contactDriver": "Contacter le chauffeur",
             "shareRide": "Partager le trajet",
             "cancelRide": "Annuler le trajet",
@@ -645,7 +650,7 @@
                 "cancel": "Annuler"
             },
             "highEtaButton": {
-                "enabled": "Sélectionner",
+                "enabled": "Valider",
                 "disabled": "Temporairement indisponible, réessayez ultérieurement"
             }
         }
@@ -669,7 +674,7 @@
             "pending": "Rendez-vous au point de prise en charge"
         },
         "dropoff": {
-            "arrived": "Arrivé à l'arrêt",
+            "arrived": "Arrivé au premier l'arrêt",
             "pending": "Heure d'arrivée estimée à l'arrêt"
         },
         "topMessage": {
@@ -697,25 +702,29 @@
             "setDropoff": "Paramétrer la dépose",
             "setPickup": "Paramétrer la prise en charge",
             "changeDropoff": "Changer le point de dépose",
-            "changePickup": "Changer la prise en charge",
+            "changePickup": "Changer le lieu de prise en charge",
             "defaultStation": "Cet arrêt a été configuré par défaut pour la prise en charge."
         },
         "search": {
             "addressNotFound": "Pas d'adresse trouvée. Veuillez ressayer.",
             "currentLocation": "Position actuelle",
-            "pickup": "Prise en charge",
+            "pickup": "Départ",
             "title": "Recherche des arrêts à proximité"
         }
     },
     "cancellationReasons": {
-        "Ordered by mistake": "",
-        "Booking a different time": "",
-        "Other reason": "",
-        "It's taking too long": "",
-        "ETA was too long": "",
-        "Found another courier": "",
-        "Don't need a courier anymore": "",
-        "Found another ride": "",
-        "Don't need a ride anymore": ""
+        "Ordered by mistake": "Réservé par erreur",
+        "Booking a different time": "Réserver à une autre heure",
+        "Other reason": "Autre raison",
+        "It's taking too long": "C'est trop long",
+        "ETA was too long": "L'heure d'arrivée était trop tardive",
+        "Found another courier": "J'ai trouvé une autre course",
+        "Don't need a courier anymore": "Je n'ai plus besoin de course",
+        "Found another ride": "J'ai trouvé une autre course",
+        "Don't need a ride anymore": "Je n'ai plus besoin d'une course"
+    },
+    "map": {
+        "pickupHere": "Prise en charge ici",
+        "pickupChanged": "Lieu de prise en charge modifié"
     }
 }

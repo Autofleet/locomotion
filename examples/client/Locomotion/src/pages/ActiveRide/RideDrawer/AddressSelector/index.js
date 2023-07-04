@@ -72,6 +72,7 @@ const WelcomeText = styled.Text`
 `;
 const AddressSelectorBottomSheet = ({ addressSelectorFocusIndex }) => {
   const userContext = useContext(RidePageContext);
+  const { selectedInputIndex } = userContext;
   const { locationGranted, user } = useContext(UserContext);
   const { stationsList, isStationsEnabled } = useContext(VirtualStationsContext);
   const {
@@ -117,7 +118,7 @@ const AddressSelectorBottomSheet = ({ addressSelectorFocusIndex }) => {
     changeBsPage(BS_PAGES.SET_LOCATION_ON_MAP);
     collapse();
   };
-
+  const getRecentLocationInputIndex = () => (isExpanded ? selectedInputIndex : 1);
   const getHistoryRows = () => {
     if (isStationsEnabled && stationsList.length) {
       return userContext.formatStationsList(stationsList).map((h, i) => (
@@ -127,7 +128,7 @@ const AddressSelectorBottomSheet = ({ addressSelectorFocusIndex }) => {
           subText={h.subText}
           key={h.externalId}
           onPress={() => {
-            userContext.onAddressSelected(h, false, 1);
+            userContext.onAddressSelected(h, false, getRecentLocationInputIndex());
           }}
         />
       ));
@@ -141,7 +142,7 @@ const AddressSelectorBottomSheet = ({ addressSelectorFocusIndex }) => {
           isHistory
           key={h.placeId}
           onPress={() => {
-            userContext.onAddressSelected(h, false, 1);
+            userContext.onAddressSelected(h, false, getRecentLocationInputIndex(), !isExpanded);
           }}
         />
       ));
@@ -179,25 +180,30 @@ const AddressSelectorBottomSheet = ({ addressSelectorFocusIndex }) => {
                   label={i18n.t('virtualStations.search.title')}
                 />
               ) : null}
-              {locationGranted && !isStationsEnabled ? (
-                <AddressRow
-                  border={false}
-                  text={i18n.t('addressView.currentLocation')}
-                  icon="location"
-                  actionButton
-                  onPress={onCurrentLocation}
-                />
-              ) : null}
-              {locationGranted && !isStationsEnabled ? (
-                <AddressRow
-                  border={false}
-                  text={i18n.t('addressView.setLocationOnMap')}
-                  icon="locationPin"
-                  actionButton
-                  onPress={onSetLocationOnMap}
-                />
-              ) : null}
               <BottomSheetScrollView keyboardShouldPersistTaps="handled" contentContainerStyle={{ overflow: 'visible' }}>
+                {locationGranted && !isStationsEnabled ? (
+                  <AddressRow
+                    border={false}
+                    text={i18n.t('addressView.currentLocation')}
+                    icon="location"
+                    actionButton
+                    onPress={onCurrentLocation}
+                    key="currentLocation"
+                    testID="currentLocationButton"
+                  />
+                ) : null}
+                {locationGranted && !isStationsEnabled ? (
+                  <AddressRow
+                    border={false}
+                    text={i18n.t('addressView.setLocationOnMap')}
+                    icon="locationPin"
+                    actionButton
+                    onPress={onSetLocationOnMap}
+                    key="setLocationOnMap"
+                    testID="setLocationOnMapButton"
+                  />
+                ) : null}
+
                 {
                   userContext.searchResults && userContext.searchResults.length > 0
                     ? userContext.searchResults.map((h, i) => <AddressRow testID={`searchResults_${i}`} {...h} key={h.placeId} onPress={() => userContext.onAddressSelected(h)} />)

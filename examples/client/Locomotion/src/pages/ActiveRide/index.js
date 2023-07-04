@@ -79,7 +79,6 @@ const RidePage = ({ mapSettings, navigation }) => {
     locationGranted, setLocationGranted,
   } = useContext(UserContext);
 
-  const [addressSelectorFocusIndex, setAddressSelectorFocusIndex] = useState(1);
   const [pickupChanged, setPickupChanged] = useState(false);
   const [topMessage, setTopMessage] = useState(null);
   const { getSettingByKey } = settings.useContainer();
@@ -110,9 +109,11 @@ const RidePage = ({ mapSettings, navigation }) => {
     setRequestStopPoints,
     tryServiceEstimations,
     selectedInputIndex,
+    setSelectedInputIndex,
     cleanRideState,
     updateRide,
     clearRequestSp,
+    setUnconfirmedPickupTime,
     lastSelectedLocation,
     saveSelectedLocation,
     reverseLocationGeocode,
@@ -130,16 +131,25 @@ const RidePage = ({ mapSettings, navigation }) => {
   const {
     futureRides,
   } = useContext(FutureRidesContext);
-
+  const isSpInputEmpty = sp => !sp?.lat || !sp?.lng;
+  const prevRequestStopPoints = useRef(requestStopPoints.length);
   useEffect(() => {
-    setAddressSelectorFocusIndex(requestStopPoints.findIndex(sp => !sp?.lat));
+    if (requestStopPoints.length > prevRequestStopPoints.current.length) {
+      setSelectedInputIndex(requestStopPoints.length - 1);
+    } else {
+      const newFocusedSp = requestStopPoints[selectedInputIndex];
+      if (!isSpInputEmpty(newFocusedSp)) {
+        setSelectedInputIndex(requestStopPoints.findIndex(sp => isSpInputEmpty(sp)));
+      }
+    }
+    prevRequestStopPoints.current = requestStopPoints;
   }, [requestStopPoints]);
   const resetStateToAddressSelector = (selectedIndex = null) => {
     setServiceEstimations(null);
     setChosenService(null);
     setRide({});
     changeBsPage(BS_PAGES.ADDRESS_SELECTOR);
-    setAddressSelectorFocusIndex(selectedIndex);
+    setSelectedInputIndex(selectedIndex);
     if (isStationsEnabled) {
       clearRequestSp(selectedIndex);
     }
@@ -167,8 +177,6 @@ const RidePage = ({ mapSettings, navigation }) => {
     } else if (serviceEstimations || currentBsPage === BS_PAGES.CONFIRM_PICKUP_TIME) {
       changeBsPage(BS_PAGES.SERVICE_ESTIMATIONS);
     } else {
-      // sorry
-      setAddressSelectorFocusIndex(selectedInputIndex);
       setTimeout(() => {
         setIsExpanded(true);
       }, 100);
@@ -183,7 +191,10 @@ const RidePage = ({ mapSettings, navigation }) => {
     ),
     [BS_PAGES.CONFIRM_FUTURE_RIDE]: () => (
       <ConfirmFutureRide
-        onButtonPress={backToMap}
+        onButtonPress={() => {
+          setUnconfirmedPickupTime(null);
+          backToMap();
+        }}
       />
     ),
     [BS_PAGES.CANCEL_RIDE]: () => (
@@ -192,6 +203,7 @@ const RidePage = ({ mapSettings, navigation }) => {
     [BS_PAGES.SERVICE_ESTIMATIONS]: () => (
       <RideOptions />
     ),
+
     [BS_PAGES.CONFIRM_PICKUP_TIME]: () => (
       <ConfirmPickupTime />
     ),
@@ -223,7 +235,7 @@ const RidePage = ({ mapSettings, navigation }) => {
       />
     ),
     [BS_PAGES.ADDRESS_SELECTOR]: () => (
-      <AddressSelector addressSelectorFocusIndex={addressSelectorFocusIndex} />
+      <AddressSelector addressSelectorFocusIndex={selectedInputIndex} />
     ),
     [BS_PAGES.CONFIRM_PICKUP]: () => (
       <ConfirmPickup
@@ -240,7 +252,7 @@ const RidePage = ({ mapSettings, navigation }) => {
     ),
     [BS_PAGES.SET_LOCATION_ON_MAP]: () => (
       <ConfirmPickup onButtonPress={(sp) => {
-        updateRequestSp(sp);
+        updateRequestSp(sp, selectedInputIndex);
       }}
       />
     ),

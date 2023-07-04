@@ -31,7 +31,9 @@ const Section = ({
         <HeaderLink onPress={onPressChange}>
           {showChangeButton
             ? (
-              <ChangeButton>
+              <ChangeButton
+                testID="Change"
+              >
                 {i18n.t('payments.changeDefault')}
               </ChangeButton>
             )

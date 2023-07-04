@@ -56,7 +56,8 @@
         "estimatedFareMessage": "Some of the fares are estimated and may vary based on ride and other conditions",
         "type": {
             "pickup": "Pickup",
-            "dropoff": "Drop off"
+            "dropoff": "Drop off",
+            "multi": "Stop"
         },
         "highEta": "ETA is higher than usual",
         "outOfTerritory": "Not in territory"
@@ -121,7 +122,7 @@
             "name": {
                 "title": "Personal Details",
                 "text": "What's your name?",
-                "subText": "Let us know the best way to address you."
+                "subText": "Let us know your first and last name"
             },
             "card": {
                 "title": "Payment Method",
@@ -250,6 +251,7 @@
         "dropoffPlaceholder": "Click on stations or enter address",
         "pickupTitle": "Boarding",
         "dropoffTitle": "Exit",
+        "multiStopPlaceholder": "Add stop address",
         "addressPlaceholder": "Enter Address",
         "whereTo": "Enter your destination",
         "currentLocation": "Current location",
@@ -285,7 +287,8 @@
             "title": "Choose payment method",
             "placeholder": "How to find me, flights, info, etc.",
             "save": "Save",
-            "cancel": "Cancel"
+            "cancel": "Cancel",
+            "unavailable": "Unavailable for the selected service"
         },
         "rideSummary": {
             "thanksForRideHeadline": "Thanks for your ride!",
@@ -631,6 +634,7 @@
             "buttonText2": "Take me back"
         },
         "ride": {
+            "paymentMethodNotAllowedOnService": "{{type}} not allowed for this service",
             "now": "Now",
             "notes": {
                 "edit": "Edit note",
@@ -657,7 +661,8 @@
     },
     "stopPointsTypes": {
         "dropoff": "Dropoff",
-        "pickup": "Pickup"
+        "pickup": "Pickup",
+        "multi": "Stop"
     },
     "stopPoints": {
         "states": {

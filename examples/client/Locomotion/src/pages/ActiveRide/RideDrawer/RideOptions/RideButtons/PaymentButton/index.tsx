@@ -76,6 +76,7 @@ interface PaymentButtonProps {
     title: string;
     brand?: Brand;
     id?: string;
+    invalid?: boolean;
 }
 
 
@@ -84,6 +85,7 @@ const PaymentButton = ({
   title,
   brand,
   id,
+  invalid,
 }: PaymentButtonProps) => {
   const { primaryColor } = useContext(ThemeContext);
   const [coupon, setCoupon] = useState<any>(null);
@@ -161,14 +163,21 @@ const PaymentButton = ({
       checkCoupon();
     }, []),
   );
-
+  const IconColor = invalid ? '#F83743' : primaryColor;
   return (
     <Container>
       <CardNameContainer>
         {id ? (id !== PAYMENT_METHODS.CASH
           ? <PaymentIcon type={brand || 'generic'} />
-          : <SvgIcon fill={primaryColor} Svg={cashIcon} height={25} width={40} />)
-          : <SvgIcon fill={primaryColor} Svg={icon} height={15} width={15} />}
+          : (
+            <SvgIcon
+              fill={IconColor}
+              Svg={cashIcon}
+              height={25}
+              width={40}
+            />
+          ))
+          : <SvgIcon fill={IconColor} Svg={icon} height={15} width={15} />}
         <TimeText numberOfLines={1}>{title}</TimeText>
       </CardNameContainer>
       <PromoButtonContainer>
@@ -183,4 +192,5 @@ export default PaymentButton;
 PaymentButton.defaultProps = {
   brand: null,
   id: null,
+  invalid: false,
 };

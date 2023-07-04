@@ -65,6 +65,12 @@ class Auth {
     accessToken: at,
     refreshToken: rt,
   });
+
+  updateCaptchaToken = captchaToken => StorageService.save({
+    captchaToken,
+  });
+
+  getCaptchaToken = () => StorageService.get('captchaToken');
 }
 
 export default new Auth();

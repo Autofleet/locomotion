@@ -1,3 +1,7 @@
+import i18n from '../../I18n';
+import {
+  formatUiDisplaySpType, isMulti,
+} from '../commonTypes';
 import { PAYMENT_METHODS } from '../../pages/Payments/consts';
 
 export const formatSps = function (stopPoints: any) {
@@ -16,8 +20,13 @@ export const formatSps = function (stopPoints: any) {
     .map((sp: any) => ({
       ...sp,
       ordinalDesc: getOrdinalDescForSp(sp),
+    }))
+    .map((sp: any) => ({
+      ...sp,
+      amountOfSpsFromType: orderDesc[sp.type],
     }));
 };
+
 
 export const getOrdinal = (n: number) => {
   const s = ['th', 'st', 'nd', 'rd'];
@@ -25,6 +34,14 @@ export const getOrdinal = (n: number) => {
   return n + (s[(v - 20) % 10] || s[v] || s[0]);
 };
 
+export const getSpTextWithNumberPrefix = (sp: any) => {
+  const uiSpType = formatUiDisplaySpType(sp, null);
+  const { ordinalDesc } = sp;
+  const isMultiSp = isMulti(sp);
+  const isOnlyMultiSp = isMultiSp && sp.amountOfSpsFromType === 2;
+  const ordinalNumberPrefixText = `${sp.ordinalDesc && !isOnlyMultiSp ? `${getOrdinal(isMultiSp ? ordinalDesc : ordinalDesc + 1)} ` : ''}`;
+  return `${ordinalNumberPrefixText}${i18n.t(`stopPointsTypes.${uiSpType}`)}`;
+};
 
 export const isCashPaymentMethod = (paymentMethod: any) => paymentMethod.id === PAYMENT_METHODS.CASH;
 
