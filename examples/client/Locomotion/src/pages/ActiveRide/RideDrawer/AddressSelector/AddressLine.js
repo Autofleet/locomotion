@@ -46,7 +46,9 @@ const AddressContainer = styled.View`
 `;
 
 
-const AddressText = styled.Text`
+const AddressText = styled.Text.attrs({
+  numberOfLines: 1,
+})`
     color: ${({ subtext, actionButton, theme }) => (!subtext ? (actionButton ? theme.primaryColor : theme.textColor) : '#666666')};
     font-weight: 500;
     font-size: 14px;
