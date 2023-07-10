@@ -18,7 +18,7 @@ export const getCountryCodeByIP = async () => {
     const data = await response.json();
     return data?.country;
   } catch (error) {
-    console.log('Unable to get country code by IP', error);
+    console.error('Unable to get country code by IP', error);
     return null;
   }
 };
