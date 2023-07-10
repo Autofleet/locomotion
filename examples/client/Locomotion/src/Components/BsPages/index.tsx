@@ -567,7 +567,7 @@ export const ConfirmPickup = (props: any) => {
   ), []);
 
   const renderAddressContainer = useCallback(() => (
-    <AddressContainer>
+    <AddressContainer testID="pickupAddress">
       <SvgIcon Svg={locationIcon} height={20} width={10} fill={isDraggingLocationPin ? '#ADAEBA' : '#333'} />
       {isDraggingLocationPin ? renderSkeleton()
         : <AddressInput>{lastSelectedLocation?.streetAddress || i18n.t('bottomSheetContent.confirmPickup.noAddress')}</AddressInput>}
