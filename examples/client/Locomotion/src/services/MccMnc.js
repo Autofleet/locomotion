@@ -2,7 +2,7 @@ import MccMncList from 'mcc-mnc-list';
 import CarrierInfo from 'react-native-carrier-info';
 import Config from 'react-native-config';
 
-export const defaultCountryCode = Config.DEFAULT_COUNTRY_CODE;
+const defaultCountryCode = Config.DEFAULT_COUNTRY_CODE;
 const getMccMnc = async () => {
   const mccMnc = await CarrierInfo.mobileNetworkOperator();
   return mccMnc;
