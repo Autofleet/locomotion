@@ -1,6 +1,9 @@
 import MccMncList from 'mcc-mnc-list';
 import CarrierInfo from 'react-native-carrier-info';
 import Config from 'react-native-config';
+import mixpanel from "services/Mixpanel";
+
+const IP_LOCATION_API = Config.IP_LOCATION_API || 'https://ipapi.co/json/';
 
 const defaultCountryCode = Config.DEFAULT_COUNTRY_CODE;
 const getMccMnc = async () => {
@@ -14,11 +17,11 @@ const getMobileIsoCode = async () => {
 };
 export const getCountryCodeByIP = async () => {
   try {
-    const response = await fetch('https://ipapi.co/json/');
+    const response = await fetch(IP_LOCATION_API);
     const data = await response.json();
     return data?.country;
   } catch (error) {
-    console.error('Unable to get country code by IP', error);
+    mixpanel.trackWithProperties("Unable to get country code by IP", { error })
     return null;
   }
 };
@@ -42,7 +45,7 @@ export const getInputIsoCode = async () => {
     const IsoByMncMcc = mmcMnc ? getIsoCodeByList(mmcMnc, mobileIso) : null;
     return IsoByMncMcc || mobileIso || await getCountryCodeByIP() || defaultCountryCode;
   } catch (error) {
-    console.error('cannot get iso code', error);
+    mixpanel.trackWithProperties("Unable to get input iso code from sim", { error })
     return await getCountryCodeByIP() || defaultCountryCode;
   }
 };
