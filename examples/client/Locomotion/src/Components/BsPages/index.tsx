@@ -277,15 +277,14 @@ export const ConfirmPickupTime = (props: any) => {
     unconfirmedPickupTime,
     updateRidePayload,
     setUnconfirmedPickupTime,
-    tryServiceEstimations,
     setServiceEstimations,
     ride,
     chosenService,
     defaultService,
+    setChosenService,
   } = useContext(MewRidePageContext);
   const {
     changeBsPage,
-    isDraggingLocationPin,
   } = useContext(RideStateContextContext);
   const date = moment(unconfirmedPickupTime).format('ddd, MMM Do');
   const isDateToday = moment(unconfirmedPickupTime).isSame(moment(), 'day');
@@ -328,6 +327,7 @@ export const ConfirmPickupTime = (props: any) => {
         if (ride?.scheduledTo !== unconfirmedPickupTime) {
           updateRidePayload({ scheduledTo: unconfirmedPickupTime });
           setServiceEstimations(null);
+          setChosenService(null);
         }
         changeBsPage(BS_PAGES.SERVICE_ESTIMATIONS);
       }}
