@@ -7,7 +7,7 @@ import {
 import styled from 'styled-components';
 import { debounce } from 'lodash';
 import shortid from 'shortid';
-import DraggableFlatList from 'gery-react-native-draglist';
+import DraggableFlatList from 'react-native-draglist';
 import { STOP_POINT_TYPES } from '../../../../lib/commonTypes';
 import { UserContext } from '../../../../context/user';
 import settings from '../../../../context/settings';
@@ -74,12 +74,6 @@ const BackButton = ({ isExpanded, onBack }) => {
   );
 };
 
-
-/* if (Platform.OS === 'android' && UIManager.setLayoutAnimationEnabledExperimental
-) {
-  UIManager.setLayoutAnimationEnabledExperimental(true);
-} */
-
 const SearchBar = ({
   isExpanded,
   onFocus = () => null,
@@ -99,7 +93,6 @@ const SearchBar = ({
     addNewEmptyRequestSp,
     removeRequestSp,
   } = useContext(RidePageContext);
-  const dragListRef = useRef();
   const { getSettingByKey } = settings.useContainer();
   const {
     locationGranted,
@@ -124,15 +117,6 @@ const SearchBar = ({
     return 'addressView.whereTo';
   };
 
-  useEffect(() => {
-    if (hasEnteredMultiSp) {
-      // when moving from collapsed bottom sheet to expanded bottom sheet
-      // the full list must be rendered only after the bottom sheet is fully expanded
-      setTimeout(() => {
-        dragListRef.current?.reMeasure();
-      }, 250);
-    }
-  }, [hasEnteredMultiSp, isExpanded]);
 
   const onInputFocus = (target, index) => {
     setSelectedInputTarget(target);
@@ -262,7 +246,6 @@ const SearchBar = ({
     <DraggableFlatList
       data={requestStopPoints}
       scrollEnabled={false}
-      ref={dragListRef}
       renderItem={renderDraggableItem}
       keyExtractor={item => item.id}
       keyboardShouldPersistTaps="always"
