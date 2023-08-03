@@ -64,10 +64,13 @@ const Phone = ({ navigation }) => {
   const isDevSettingOn = () => Config.DEV_SETTINGS && Config.DEV_SETTINGS === 'true';
   const isDebugPhoneNumber = () => user.phoneNumber === Config.DEV_PAGE_PHONE_NUMBER && isDevSettingOn();
 
+  const CLIENT_CREATION_BLOCKED_ERROR = 'CLIENT_CREATION_BLOCKED';
   const ERROR_RESPONSES = {
     429: () => setShowErrorText(i18n.t('login.tooManyRequestError')),
     422: () => setShowErrorText(i18n.t('login.invalidPhoneNumberError')),
-    403: () => setShowErrorText(i18n.t('login.clientIsBanned', { appName: Config.OPERATION_NAME })),
+    403: error => setShowErrorText(error === CLIENT_CREATION_BLOCKED_ERROR
+      ? i18n.t('login.clientCreationBlocked')
+      : i18n.t('login.clientIsBanned', { appName: Config.OPERATION_NAME })),
   };
 
   const submitPhoneNumber = async () => {
@@ -89,7 +92,7 @@ const Phone = ({ navigation }) => {
       console.log('Bad login with response', e);
       const status = e && e.response && e.response.status;
       if (ERROR_RESPONSES[status]) {
-        return ERROR_RESPONSES[status]();
+        return ERROR_RESPONSES[status](e.response.errors[0]);
       }
       setShowErrorText(i18n.t('login.invalidPhoneNumberError'));
     }
