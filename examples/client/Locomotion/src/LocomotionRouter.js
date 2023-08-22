@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { LogBox } from 'react-native';
 import { enableScreens } from 'react-native-screens';
 import { PortalProvider } from '@gorhom/portal';
-import 'react-native-gesture-handler';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import crashlytics from '@react-native-firebase/crashlytics';
 import { NavigationContainer } from '@react-navigation/native';
 import i18n from './I18n';
@@ -44,11 +44,13 @@ export default (props) => {
                 <FutureRidesProvider {...props}>
                   <NewRidePageContextProvider {...props}>
                     <MessagesProvider>
-                      <PortalProvider>
-                        <MainRouter {...props} />
-                        {props.children}
-                        <RidePopups />
-                      </PortalProvider>
+                      <GestureHandlerRootView style={{ flex: 1 }}>
+                        <PortalProvider>
+                          <MainRouter {...props} />
+                          {props.children}
+                          <RidePopups />
+                        </PortalProvider>
+                      </GestureHandlerRootView>
                     </MessagesProvider>
                   </NewRidePageContextProvider>
                 </FutureRidesProvider>
