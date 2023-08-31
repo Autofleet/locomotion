@@ -49,7 +49,7 @@ const StartScreen = () => {
   };
 
   return (
-    <GestureHandlerRootView>
+    <GestureHandlerRootView style={{ flex: 1 }}>
       <SafeView style={{
         flex: 1,
         backgroundColor: 'white',

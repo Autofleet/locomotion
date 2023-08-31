@@ -89,6 +89,11 @@ const BottomSheetComponent = forwardRef(({
     </>
   );
   return (
+  // <GestureHandlerRootView style={{
+  //   zIndex: 999,
+  //   borderRadius: 8,
+  // }}
+  // >
     <BottomSheet
       android_keyboardInputMode="adjustResize"
       ref={ref}
@@ -113,16 +118,18 @@ const BottomSheetComponent = forwardRef(({
         borderRadius: 8,
       }}
     >
-      <SafeView
-        style={{
-          flex: 1,
-          flexDirection: 'column',
-        }}
-      >
-        {children}
-      </SafeView>
-
+      <GestureHandlerRootView style={{ flex: 1 }}>
+        <SafeView
+          style={{
+            flex: 1,
+            flexDirection: 'column',
+          }}
+        >
+          {children}
+        </SafeView>
+      </GestureHandlerRootView>
     </BottomSheet>
+  // </GestureHandlerRootView>
   );
 });
 BottomSheetComponent.defaultProps = {

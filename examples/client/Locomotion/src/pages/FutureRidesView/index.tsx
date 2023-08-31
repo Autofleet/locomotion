@@ -2,6 +2,7 @@ import React, {
   useContext, useRef, useState, useEffect,
 } from 'react';
 import bottomSheet from '@gorhom/bottom-sheet/lib/typescript/components/bottomSheet';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import CancellationReasonsPopup from '../../popups/CancellationReasonsPopup';
 import { FutureRidesContext } from '../../context/futureRides';
 import { PageContainer } from '../styles';
@@ -108,31 +109,33 @@ const FutureRidesView = ({ menuSide }: FutureRidesViewProps) => {
       {currentBsPage === BS_PAGES.CANCEL_RIDE
         ? <BlackOverlay />
         : null}
-      <BottomSheetComponent
-        ref={bottomSheetRef}
-        enablePanDownToClose
-        index={-1}
-        closeable
-      >
-        <CancelRide
-          secondaryButtonText={i18n.t('bottomSheetContent.cancelRide.secondaryButtonTextFuture')}
-          onButtonPress={async () => {
-            try {
-              Mixpanel.setEvent('Trying to cancel ride');
-              await cancelRide(rideToCancel);
-              await loadFutureRides();
+      <GestureHandlerRootView>
+        <BottomSheetComponent
+          ref={bottomSheetRef}
+          enablePanDownToClose
+          index={-1}
+          closeable
+        >
+          <CancelRide
+            secondaryButtonText={i18n.t('bottomSheetContent.cancelRide.secondaryButtonTextFuture')}
+            onButtonPress={async () => {
+              try {
+                Mixpanel.setEvent('Trying to cancel ride');
+                await cancelRide(rideToCancel);
+                await loadFutureRides();
+                changeBsPage(ride.id ? BS_PAGES.ACTIVE_RIDE : BS_PAGES.ADDRESS_SELECTOR);
+                setShowCancellationReasonPopup(true);
+              } catch (e: any) {
+                setShowError(true);
+                Mixpanel.setEvent('failed to cancel ride', { status: e?.response?.status });
+              }
+            }}
+            onSecondaryButtonPress={() => {
               changeBsPage(ride.id ? BS_PAGES.ACTIVE_RIDE : BS_PAGES.ADDRESS_SELECTOR);
-              setShowCancellationReasonPopup(true);
-            } catch (e: any) {
-              setShowError(true);
-              Mixpanel.setEvent('failed to cancel ride', { status: e?.response?.status });
-            }
-          }}
-          onSecondaryButtonPress={() => {
-            changeBsPage(ride.id ? BS_PAGES.ACTIVE_RIDE : BS_PAGES.ADDRESS_SELECTOR);
-          }}
-        />
-      </BottomSheetComponent>
+            }}
+          />
+        </BottomSheetComponent>
+      </GestureHandlerRootView>
       <CancellationReasonsPopup
         isVisible={showCancellationReasonPopup}
         onCancel={onCancellationReasonSubmit}
