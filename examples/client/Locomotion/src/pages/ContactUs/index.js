@@ -132,35 +132,41 @@ export default ({ menuSide }) => {
                 <ContactUsLogo resizeMode="contain" source={logo} />
               </ContactUsPageLogoContainer>
               <Container>
-                <CardsContainer>
-                  <CardsTitle title={i18n.t('contactUs.contactInformationTitle')} />
-                  <Card
-                    icon={emailIcon}
-                    onIconPress={() => {
-                      if (settings.contactEmail) {
-                        Linking.openURL(`mailto:${settings.contactEmail}`);
-                      }
-                    }}
-                    title={i18n.t('onboarding.emailPlaceholder')}
-                  >
-                    <Text>{settings.contactEmail}</Text>
-                  </Card>
-                  {settings.contactPhone ? (
-                    <Card
-                      icon={phoneIcon}
-                      onIconPress={e => (settings.contactPhone ? ActionMenu(e, settings.contactPhone) : undefined)}
-                      title={i18n.t('onboarding.phonePlaceholder')}
-                    >
-                      <Text>{settings.contactPhone}</Text>
-                    </Card>
-                  ) : null}
-                  <NoTitleCard onPress={() => openContactUs()}>
-                    <LearnMoreButton onPress={() => openContactUs()}>
-                      <LearnMoreText>{i18n.t('contactUs.learnMore')}</LearnMoreText>
-                      <LearnMoreIcon Svg={arrowBack} fill="#24aaf2" />
-                    </LearnMoreButton>
-                  </NoTitleCard>
-                </CardsContainer>
+                {settings.contactEmail || settings.contactPhone || settings.contactUsUrl ? (
+                  <CardsContainer>
+                    <CardsTitle title={i18n.t('contactUs.contactInformationTitle')} />
+                    {settings.contactEmail ? (
+                      <Card
+                        icon={emailIcon}
+                        onIconPress={() => {
+                          if (settings.contactEmail) {
+                            Linking.openURL(`mailto:${settings.contactEmail}`);
+                          }
+                        }}
+                        title={i18n.t('onboarding.emailPlaceholder')}
+                      >
+                        <Text>{settings.contactEmail}</Text>
+                      </Card>
+                    ) : null}
+                    {settings.contactPhone ? (
+                      <Card
+                        icon={phoneIcon}
+                        onIconPress={e => (settings.contactPhone ? ActionMenu(e, settings.contactPhone) : undefined)}
+                        title={i18n.t('onboarding.phonePlaceholder')}
+                      >
+                        <Text>{settings.contactPhone}</Text>
+                      </Card>
+                    ) : null}
+                    {settings.contactUsUrl ? (
+                      <NoTitleCard onPress={() => openContactUs()}>
+                        <LearnMoreButton onPress={() => openContactUs()}>
+                          <LearnMoreText>{i18n.t('contactUs.learnMore')}</LearnMoreText>
+                          <LearnMoreIcon Svg={arrowBack} fill="#24aaf2" />
+                        </LearnMoreButton>
+                      </NoTitleCard>
+                    ) : null}
+                  </CardsContainer>
+                ) : null}
                 <CardsContainer>
                   <CardsTitle title={i18n.t('contactUs.legalTitle')} />
                   <NoTitleCard testID="privacyPolicy" showArrow onPress={() => openPrivacy()}>
