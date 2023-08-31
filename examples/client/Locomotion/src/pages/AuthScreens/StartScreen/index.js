@@ -1,5 +1,6 @@
 import React, { useContext, useState } from 'react';
 import { Trans } from 'react-i18next';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import logo from '../../../assets/logo.png';
 import i18n from '../../../I18n';
 import {
@@ -48,56 +49,57 @@ const StartScreen = () => {
   };
 
   return (
-    <SafeView style={{
-      flex: 1,
-      backgroundColor: 'white',
-    }}
-    >
-      {!webViewWindow ? (
-        <PageContainer>
-          <>
-            <InfoContainer>
-              <LogoContainer>
-                <Logo resizeMode="contain" source={logo} />
-              </LogoContainer>
-            </InfoContainer>
-            <ButtonsContainer>
-              <StartButton
-                testID="loginButton"
-                dark
-                onPress={() => nextScreen()}
-              >
-                <ButtonText dark>{i18n.t('login.getStarted')}</ButtonText>
-              </StartButton>
-            </ButtonsContainer>
-            <TermsText>
-              <Trans
-                i18nKey="login.termsAgreement"
-              >
-                {[
-                  <TermsLink
-                    key="OpenTermsButton"
-                    onPress={() => openTerms()}
-                    testID="OpenTermsButton"
-                  />,
-                  <TermsLink
-                    key="OpenPrivacyButton"
-                    onPress={() => openPrivacy()}
-                    testID="OpenPrivacyButton"
-                  />,
-                ]}
-              </Trans>
-            </TermsText>
-          </>
-        </PageContainer>
-      ) : (
-        <WebView
-          {...webViewWindow}
-          onIconPress={() => setWebViewWindow(null)}
-        />
-      )}
-    </SafeView>
-
+    <GestureHandlerRootView>
+      <SafeView style={{
+        flex: 1,
+        backgroundColor: 'white',
+      }}
+      >
+        {!webViewWindow ? (
+          <PageContainer>
+            <>
+              <InfoContainer>
+                <LogoContainer>
+                  <Logo resizeMode="contain" source={logo} />
+                </LogoContainer>
+              </InfoContainer>
+              <ButtonsContainer>
+                <StartButton
+                  testID="loginButton"
+                  dark
+                  onPress={() => nextScreen()}
+                >
+                  <ButtonText dark>{i18n.t('login.getStarted')}</ButtonText>
+                </StartButton>
+              </ButtonsContainer>
+              <TermsText>
+                <Trans
+                  i18nKey="login.termsAgreement"
+                >
+                  {[
+                    <TermsLink
+                      key="OpenTermsButton"
+                      onPress={() => openTerms()}
+                      testID="OpenTermsButton"
+                    />,
+                    <TermsLink
+                      key="OpenPrivacyButton"
+                      onPress={() => openPrivacy()}
+                      testID="OpenPrivacyButton"
+                    />,
+                  ]}
+                </Trans>
+              </TermsText>
+            </>
+          </PageContainer>
+        ) : (
+          <WebView
+            {...webViewWindow}
+            onIconPress={() => setWebViewWindow(null)}
+          />
+        )}
+      </SafeView>
+    </GestureHandlerRootView>
   );
 };
 

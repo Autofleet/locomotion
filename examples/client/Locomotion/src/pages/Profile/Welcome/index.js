@@ -1,4 +1,5 @@
 import React, { useContext } from 'react';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { APP_ROUTES, MAIN_ROUTES } from '../../routes';
 import i18n from '../../../I18n';
 import logo from '../../../assets/welcomeLogo.png';
@@ -21,24 +22,26 @@ const Welcome = () => {
     navigationService.navigate(MAIN_ROUTES.HOME, {}, APP_ROUTES.MAIN_APP);
   };
   return (
-    <SafeView>
-      <PageContainer>
-        <InfoContainer>
-          <LogoContainer>
-            <Logo resizeMode="contain" source={logo} />
-          </LogoContainer>
-        </InfoContainer>
-        <TextContainer>
-          <WelcomeText>
-            {i18n.t('onboarding.pages.welcome.text', { firstName: user.firstName })}
-          </WelcomeText>
-          <WelcomeSubText>
-            {i18n.t('onboarding.pages.welcome.subText')}
-          </WelcomeSubText>
-        </TextContainer>
-        <SaveButton buttonText={i18n.t('onboarding.pages.welcome.buttonText')} onNext={onNext} />
-      </PageContainer>
-    </SafeView>
+    <GestureHandlerRootView>
+      <SafeView>
+        <PageContainer>
+          <InfoContainer>
+            <LogoContainer>
+              <Logo resizeMode="contain" source={logo} />
+            </LogoContainer>
+          </InfoContainer>
+          <TextContainer>
+            <WelcomeText>
+              {i18n.t('onboarding.pages.welcome.text', { firstName: user.firstName })}
+            </WelcomeText>
+            <WelcomeSubText>
+              {i18n.t('onboarding.pages.welcome.subText')}
+            </WelcomeSubText>
+          </TextContainer>
+          <SaveButton buttonText={i18n.t('onboarding.pages.welcome.buttonText')} onNext={onNext} />
+        </PageContainer>
+      </SafeView>
+    </GestureHandlerRootView>
   );
 };
 

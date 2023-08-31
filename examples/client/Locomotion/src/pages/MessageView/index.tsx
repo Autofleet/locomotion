@@ -3,7 +3,7 @@ import React, {
   useContext, useEffect, useRef, useState,
 } from 'react';
 import styled from 'styled-components';
-import { ScrollView } from 'react-native-gesture-handler';
+import { GestureHandlerRootView, ScrollView } from 'react-native-gesture-handler';
 import { Linking, Text, View } from 'react-native';
 import Markdown from 'react-native-markdown-display';
 import SvgIcon from '../../Components/SvgIcon';
@@ -93,26 +93,27 @@ const MessageView = ({ menuSide, route }: FutureRidesViewProps) => {
   }, [message]);
 
   return (
-    <PageContainer>
-      <PageHeader
-        title={i18n.t('messageView.pageTitle')}
-        onIconPress={() => {
-          NavigationService.navigate(MAIN_ROUTES.MESSAGES, {}, APP_ROUTES.MAIN_APP);
-        }}
-        iconSide={menuSide}
-      />
-      {message ? (
-        <ScrollContainer alwaysBounceVertical={false}>
-          <MessageTitle>
-            {message.title}
-          </MessageTitle>
-          <MessageText>
-            {message.subTitle}
-          </MessageText>
-          <MessageDate>
-            {getFormattedMessageDate(message)}
-          </MessageDate>
-          {message.content
+    <GestureHandlerRootView>
+      <PageContainer>
+        <PageHeader
+          title={i18n.t('messageView.pageTitle')}
+          onIconPress={() => {
+            NavigationService.navigate(MAIN_ROUTES.MESSAGES, {}, APP_ROUTES.MAIN_APP);
+          }}
+          iconSide={menuSide}
+        />
+        {message ? (
+          <ScrollContainer alwaysBounceVertical={false}>
+            <MessageTitle>
+              {message.title}
+            </MessageTitle>
+            <MessageText>
+              {message.subTitle}
+            </MessageText>
+            <MessageDate>
+              {getFormattedMessageDate(message)}
+            </MessageDate>
+            {message.content
           && (
           <View style={{ marginTop: 20 }}>
             <Markdown style={{
@@ -129,7 +130,7 @@ const MessageView = ({ menuSide, route }: FutureRidesViewProps) => {
             </Markdown>
           </View>
           )}
-          {!!message.link
+            {!!message.link
           && (
             <MessageLink noBackground onPress={() => message.link && Linking.openURL(message.link)}>
               <LinkText>
@@ -139,19 +140,20 @@ const MessageView = ({ menuSide, route }: FutureRidesViewProps) => {
             </MessageLink>
           )
         }
-        </ScrollContainer>
-      ) : (
-        <LoaderContainer>
-          <Loader
-            sourceProp={null}
-            dark
-            lottieViewStyle={{
-              height: 15, width: 15,
-            }}
-          />
-        </LoaderContainer>
-      )}
-    </PageContainer>
+          </ScrollContainer>
+        ) : (
+          <LoaderContainer>
+            <Loader
+              sourceProp={null}
+              dark
+              lottieViewStyle={{
+                height: 15, width: 15,
+              }}
+            />
+          </LoaderContainer>
+        )}
+      </PageContainer>
+    </GestureHandlerRootView>
   );
 };
 

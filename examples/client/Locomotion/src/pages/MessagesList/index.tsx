@@ -2,7 +2,7 @@ import React, {
   useContext, useEffect, useState, useCallback,
 } from 'react';
 import styled from 'styled-components';
-import { ScrollView } from 'react-native-gesture-handler';
+import { GestureHandlerRootView, ScrollView } from 'react-native-gesture-handler';
 import { useFocusEffect } from '@react-navigation/native';
 import { View } from 'react-native';
 import { MAIN_ROUTES } from '../routes';
@@ -62,48 +62,50 @@ const Messages = ({ menuSide, route }: FutureRidesViewProps) => {
   );
 
   return (
-    <PageContainer>
-      <PageHeader
-        title={i18n.t('messages.pageTitle')}
-        onIconPress={() => {
-          exitPageActions();
-          NavigationService.navigate(MAIN_ROUTES.HOME);
-        }}
-        iconSide={menuSide}
-      />
-      {isLoading
-        ? (
-          <LoaderContainer>
-            <Loader
-              sourceProp={null}
-              dark
-              lottieViewStyle={{
-                height: 15, width: 15,
-              }}
-            />
-          </LoaderContainer>
-        )
-        : (
-          <ScrollContainer>
-            {userMessages && userMessages.length
-              ? (userMessages || []).map(m => (
-                <MessageCard
-                  {...m}
-                />
-              ))
-              : (
-                <PageGenericMessage
-                  title={i18n.t('messages.noMessagesTitle')}
-                  text={i18n.t('messages.noMessagesText')}
-                />
-              )
+    <GestureHandlerRootView>
+      <PageContainer>
+        <PageHeader
+          title={i18n.t('messages.pageTitle')}
+          onIconPress={() => {
+            exitPageActions();
+            NavigationService.navigate(MAIN_ROUTES.HOME);
+          }}
+          iconSide={menuSide}
+        />
+        {isLoading
+          ? (
+            <LoaderContainer>
+              <Loader
+                sourceProp={null}
+                dark
+                lottieViewStyle={{
+                  height: 15, width: 15,
+                }}
+              />
+            </LoaderContainer>
+          )
+          : (
+            <ScrollContainer>
+              {userMessages && userMessages.length
+                ? (userMessages || []).map(m => (
+                  <MessageCard
+                    {...m}
+                  />
+                ))
+                : (
+                  <PageGenericMessage
+                    title={i18n.t('messages.noMessagesTitle')}
+                    text={i18n.t('messages.noMessagesText')}
+                  />
+                )
           }
-          </ScrollContainer>
-        )
+            </ScrollContainer>
+          )
           }
 
 
-    </PageContainer>
+      </PageContainer>
+    </GestureHandlerRootView>
   );
 };
 

@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import React, { useContext, useEffect, useState } from 'react';
 import { View } from 'react-native';
-import { ScrollView } from 'react-native-gesture-handler';
+import { GestureHandlerRootView, ScrollView } from 'react-native-gesture-handler';
 import { useRoute } from '@react-navigation/native';
 import { RIDE_FINAL_STATES } from '../../lib/commonTypes';
 import { MAIN_ROUTES } from '../routes';
@@ -77,25 +77,26 @@ const RidePriceBreakDown = () => {
   }, []);
 
   return (
-    <PageContainer>
-      <PageHeader
-        title={i18n.t('ridePriceBreakdown.pageTitle')}
-        onIconPress={
+    <GestureHandlerRootView>
+      <PageContainer>
+        <PageHeader
+          title={i18n.t('ridePriceBreakdown.pageTitle')}
+          onIconPress={
           () => navigationService.navigate(params.rideHistory
             ? MAIN_ROUTES.COMPLETED_RIDE_OVERVIEW_PAGE
             : MAIN_ROUTES.HOME)}
-      />
-      <ScrollView>
-        {loading ? (
-          <Loader lottieViewStyle={undefined} sourceProp={undefined} />
-        ) : (
-          <PriceItemsContainer>
-            <InformationCard title={i18n.t('ridePriceBreakdown.paymentMethodTitle')}>
-              <View>
-                <CreditCardRowContainer>
-                  <CardRow {...paymentMethod} />
-                </CreditCardRowContainer>
-                {
+        />
+        <ScrollView>
+          {loading ? (
+            <Loader lottieViewStyle={undefined} sourceProp={undefined} />
+          ) : (
+            <PriceItemsContainer>
+              <InformationCard title={i18n.t('ridePriceBreakdown.paymentMethodTitle')}>
+                <View>
+                  <CreditCardRowContainer>
+                    <CardRow {...paymentMethod} />
+                  </CreditCardRowContainer>
+                  {
                 (priceCalculation && isPriceEstimated(priceCalculation.calculationBasis)
                                   && !RIDE_FINAL_STATES.includes(localRide?.state || ''))
                   ? (
@@ -106,18 +107,19 @@ const RidePriceBreakDown = () => {
                   )
                   : null
               }
-              </View>
-            </InformationCard>
+                </View>
+              </InformationCard>
 
-            <PriceBreakdown
-              priceCalculation={priceCalculation}
-              didRequestFail={didRequestFail}
-              retryGetPriceBreakdown={updatePriceCalculation}
-            />
-          </PriceItemsContainer>
-        )}
-      </ScrollView>
-    </PageContainer>
+              <PriceBreakdown
+                priceCalculation={priceCalculation}
+                didRequestFail={didRequestFail}
+                retryGetPriceBreakdown={updatePriceCalculation}
+              />
+            </PriceItemsContainer>
+          )}
+        </ScrollView>
+      </PageContainer>
+    </GestureHandlerRootView>
   );
 };
 

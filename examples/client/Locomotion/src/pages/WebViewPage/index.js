@@ -1,5 +1,6 @@
 import React from 'react';
 import { useRoute } from '@react-navigation/native';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { MAIN_ROUTES } from '../routes';
 import WebView from '../WebView';
 import SafeView from '../../Components/SafeView';
@@ -15,12 +16,14 @@ export default () => {
     title: '',
   });
   return (
-    <SafeView style={{ height: '100%', width: '100%' }}>
-      <WebView
-        title={title}
-        uri={url}
-        onIconPress={() => navigationService.navigate(MAIN_ROUTES.HOME)}
-      />
-    </SafeView>
+    <GestureHandlerRootView>
+      <SafeView style={{ height: '100%', width: '100%' }}>
+        <WebView
+          title={title}
+          uri={url}
+          onIconPress={() => navigationService.navigate(MAIN_ROUTES.HOME)}
+        />
+      </SafeView>
+    </GestureHandlerRootView>
   );
 };

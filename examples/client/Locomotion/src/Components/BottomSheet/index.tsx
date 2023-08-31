@@ -9,6 +9,7 @@ import BottomSheet, {
 } from '@gorhom/bottom-sheet';
 import styled from 'styled-components';
 import { Text, View } from 'react-native';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { UserContext } from '../../context/user';
 // eslint-disable-next-line import/no-unresolved
 import SafeView from '../SafeView';
