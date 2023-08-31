@@ -2,6 +2,7 @@ import React, {
   useContext, useEffect, useRef, useState,
 } from 'react';
 import Toast from 'react-native-toast-message';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { useIsFocused, useFocusEffect } from '@react-navigation/native';
 import {
   AppState, BackHandler, Platform, View, Dimensions,
@@ -515,43 +516,48 @@ const RidePage = ({ mapSettings, navigation }) => {
       )}
       {serviceEstimations || currentBsPage === BS_PAGES.SET_LOCATION_ON_MAP
         ? (
-          <SafeView>
-            <Header
-              icon={backArrow}
-              onPressIcon={backToMap}
-            >
-              {currentBsPage !== BS_PAGES.CONFIRM_PICKUP
-                ? <StopPointsViewer goBackToAddressSelector={goBackToAddress} />
-                : <></>}
-            </Header>
-            {topMessage ? (
-              <TopMessage
-                text={topMessage.text()}
-                title={topMessage.title}
-                button={topMessage.buttonText}
-                onPress={topMessage.onClick}
-                icon={topMessage.titleIcon}
-              />
-            ) : null}
-          </SafeView>
+          <GestureHandlerRootView>
+            <SafeView>
+              <Header
+                icon={backArrow}
+                onPressIcon={backToMap}
+              >
+                {currentBsPage !== BS_PAGES.CONFIRM_PICKUP
+                  ? <StopPointsViewer goBackToAddressSelector={goBackToAddress} />
+                  : <></>}
+              </Header>
+              {topMessage ? (
+                <TopMessage
+                  text={topMessage.text()}
+                  title={topMessage.title}
+                  button={topMessage.buttonText}
+                  onPress={topMessage.onClick}
+                  icon={topMessage.titleIcon}
+                />
+              ) : null}
+            </SafeView>
+          </GestureHandlerRootView>
         )
         : (
-          <SafeView>
-            <Header
-              testID="profileDataHamburger"
-              icon={hamburgerIcon}
-              onPressIcon={navigation.openDrawer}
-            />
-            {topMessage ? (
-              <TopMessage
-                text={topMessage.text()}
-                title={topMessage.title}
-                button={topMessage.buttonText}
-                onPress={topMessage.onClick}
-                icon={topMessage.titleIcon}
+
+          <GestureHandlerRootView>
+            <SafeView>
+              <Header
+                testID="profileDataHamburger"
+                icon={hamburgerIcon}
+                onPressIcon={navigation.openDrawer}
               />
-            ) : null}
-          </SafeView>
+              {topMessage ? (
+                <TopMessage
+                  text={topMessage.text()}
+                  title={topMessage.title}
+                  button={topMessage.buttonText}
+                  onPress={topMessage.onClick}
+                  icon={topMessage.titleIcon}
+                />
+              ) : null}
+            </SafeView>
+          </GestureHandlerRootView>
         )}
       <MapOverlayButtons
         style={{
