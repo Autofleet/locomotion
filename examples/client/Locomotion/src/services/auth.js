@@ -3,6 +3,7 @@ import jwtDecode from 'jwt-decode';
 import RNRestart from 'react-native-restart';
 import StorageService from './storage';
 import AppSettings from './app-settings';
+import Mixpanel from './Mixpanel';
 
 class Auth {
   static jwtVerify(token) {
@@ -49,6 +50,7 @@ class Auth {
   };
 
   logout = async () => {
+    Mixpanel.appStateEvent('Logout');
     await AppSettings.destroy();
     RNRestart.Restart();
   };
