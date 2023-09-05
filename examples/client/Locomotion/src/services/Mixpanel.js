@@ -59,6 +59,10 @@ class MixpanelService {
     this.trackWithProperties(`Click - ${eventName}`, { event_name: eventName, event_type: 'click', ...properties });
   };
 
+  appStateEvent = (eventName, properties = {}) => {
+    this.trackWithProperties(`AppState - ${eventName}`, { event_name: eventName, event_type: 'event', ...properties });
+  };
+
   trackElementClick = (props, properties = {}) => {
     const elmName = getElementName(props);
     const eventName = `${elmName}`;
