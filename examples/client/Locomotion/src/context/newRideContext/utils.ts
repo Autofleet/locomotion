@@ -165,11 +165,12 @@ export const formatStopPointsForEstimations = (requestStopPoints: any[]) => requ
   lng: sp.lng,
 }));
 
-export const getFormattedPrice = (priceCurrency: string | undefined, priceAmount: number) => {
+export const getFormattedPrice = (priceCurrency: string | undefined,
+  priceAmount: number | undefined) => {
   if (!priceCurrency) {
     return i18n.t('rideDetails.noCharge');
   }
-  return new Intl.NumberFormat('en-US', { style: 'currency', currency: priceCurrency }).format(priceAmount);
+  return new Intl.NumberFormat('en-US', { style: 'currency', currency: priceCurrency }).format(priceAmount || 0);
 };
 
 
