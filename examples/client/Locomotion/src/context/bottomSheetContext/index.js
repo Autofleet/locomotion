@@ -33,6 +33,8 @@ const BottomSheetProvider = ({ children }) => {
   const [snapPointsState, setSnapPointsState] = useState(SNAP_POINT_STATES[BS_PAGES.LOADING]);
   const [footerComponent, setFooterComponent] = useState(null);
   const [topBarText, setTopBarText] = useState('');
+  const [backgroundColor, setBackgroundColor] = useState(null);
+  const [topBarTextTags, setTopBarTextTags] = useState([]);
   const snapPoints = useMemo(() => snapPointsState, [snapPointsState]);
 
   return (
@@ -48,6 +50,10 @@ const BottomSheetProvider = ({ children }) => {
         setTopBarText,
         genericErrorDetails,
         setGenericErrorDetails,
+        backgroundColor,
+        setBackgroundColor,
+        topBarTextTags,
+        setTopBarTextTags,
       }}
     >
       {children}

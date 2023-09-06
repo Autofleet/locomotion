@@ -1,6 +1,9 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import SkeletonContent from 'react-native-skeleton-content-nonexpo';
+import { Text } from 'react-native';
+import { getFormattedPrice } from '../../../../../context/newRideContext/utils';
 import { RidePageContext } from '../../../../../context/newRideContext';
+import { UserContext } from '../../../../../context/user';
 import ServiceCard from './ServiceCard';
 import { ServiceOptionsContainer } from './styles';
 import { serviceCardSkeleton } from './ServiceCard/skeleton';
@@ -9,19 +12,38 @@ import i18n from '../../../../../I18n';
 
 const ServiceOptions = () => {
   const { serviceEstimations, stopRequestInterval } = useContext(RidePageContext);
+  const { getCoupon } = useContext(UserContext);
   const isDebuggingEnabled = (typeof atob !== 'undefined');
-  const {
-    setTopBarText,
-  } = useContext(BottomSheetContext);
-  useEffect(() => () => stopRequestInterval(), []);
+  const { setTopBarText, setBackgroundColor, setTopBarTextTags } = useContext(BottomSheetContext);
+  const [coupon, setCoupon] = useState(null);
+
+  const fetchCoupon = async () => {
+    const result = await getCoupon();
+    setCoupon(result);
+  };
 
   useEffect(() => {
-    if ((serviceEstimations || []).some(estimation => estimation.isPriceEstimated)) {
+    fetchCoupon();
+    return () => stopRequestInterval();
+  }, []);
+
+  useEffect(() => {
+    if (coupon) {
+      const couponDiscount = coupon.percent_off ? `${coupon.percent_off}%`
+        : getFormattedPrice(coupon.currency, coupon.amount_off);
+      setTopBarText(i18n.t('rideDetails.couponDiscountMessage', { couponDiscount }));
+      setBackgroundColor('#25B861');
+      setTopBarTextTags([<Text style={{ fontWeight: 'bold' }} />]);
+    } else if ((serviceEstimations || []).some(estimation => estimation.isPriceEstimated)) {
       setTopBarText(i18n.t('rideDetails.estimatedFareMessage'));
     }
 
-    return () => setTopBarText('');
-  }, [serviceEstimations]);
+    return () => {
+      setTopBarText('');
+      setBackgroundColor(null);
+      setTopBarTextTags([]);
+    };
+  }, [serviceEstimations, coupon]);
 
 
   return (
