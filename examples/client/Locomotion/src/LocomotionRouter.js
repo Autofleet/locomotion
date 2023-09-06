@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { LogBox } from 'react-native';
+import { LogBox, AppState } from 'react-native';
 import { enableScreens } from 'react-native-screens';
 import { PortalProvider } from '@gorhom/portal';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
@@ -16,15 +16,46 @@ import FutureRidesProvider from './context/futureRides';
 import MessagesProvider from './context/messages';
 import CancellationReasonsProvider from './context/cancellation-reasons';
 import VirtualStationsProvider from './context/virtualStationsContext';
+import Mixpanel from './services/Mixpanel';
 
 LogBox.ignoreAllLogs();
 
 export default (props) => {
   const navigatorRef = useRef(null);
+  const appStateRef = useRef(AppState.currentState);
+
+  const registerAppStateListener = () => AppState.addEventListener('change', (appState) => {
+    const properties = { newAppState: appState, currentAppState: appStateRef.current };
+    if (appState === 'active' && appState !== appStateRef.current) {
+      // first time app is opened
+    }
+    if (![appState, 'unknown'].includes(appStateRef.current)) {
+      if (appState === 'background') {
+        Mixpanel.appStateEvent('Moved to background / killed', properties);
+      } else if (appState === 'active') {
+        Mixpanel.appStateEvent('Moved to front', properties);
+      }
+    }
+    appStateRef.current = appState;
+  });
+
+  const sendAppLaunchEvent = async () => {
+    if (!Mixpanel.isInit) {
+      await Mixpanel.init();
+    }
+    Mixpanel.appStateEvent('Launch', { appState: appStateRef.current });
+  };
 
   useEffect(() => {
+    sendAppLaunchEvent();
     crashlytics().log('App mounted.');
     enableScreens(false);
+    const listener = registerAppStateListener();
+    return () => {
+      if (listener) {
+        listener.remove();
+      }
+    };
   }, []);
 
   return (
