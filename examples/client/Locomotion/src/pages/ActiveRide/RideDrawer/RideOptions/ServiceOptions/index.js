@@ -1,7 +1,7 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect } from 'react';
 import SkeletonContent from 'react-native-skeleton-content-nonexpo';
 import { Text } from 'react-native';
-import { getCouponText, getFormattedPrice } from '../../../../../context/newRideContext/utils';
+import { getCouponText } from '../../../../../context/newRideContext/utils';
 import { RidePageContext } from '../../../../../context/newRideContext';
 import { UserContext } from '../../../../../context/user';
 import ServiceCard from './ServiceCard';
@@ -9,6 +9,8 @@ import { ServiceOptionsContainer } from './styles';
 import { serviceCardSkeleton } from './ServiceCard/skeleton';
 import { BottomSheetContext } from '../../../../../context/bottomSheetContext';
 import i18n from '../../../../../I18n';
+
+const SUCCESS_COLOR = '#25B861';
 
 const ServiceOptions = () => {
   const { serviceEstimations, stopRequestInterval } = useContext(RidePageContext);
@@ -21,7 +23,7 @@ const ServiceOptions = () => {
   useEffect(() => {
     if (coupon && coupon.status !== 'error') {
       setTopBarText(i18n.t('rideDetails.couponDiscountMessage', { couponDiscount: getCouponText(coupon) }));
-      setBackgroundColor('#25B861');
+      setBackgroundColor(SUCCESS_COLOR);
       setTopBarTextTags([<Text style={{ fontWeight: 'bold' }} />]);
     } else if ((serviceEstimations || []).some(estimation => estimation.isPriceEstimated)) {
       setTopBarText(i18n.t('rideDetails.estimatedFareMessage'));
