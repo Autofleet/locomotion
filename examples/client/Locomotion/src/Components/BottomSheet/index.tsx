@@ -15,7 +15,7 @@ import SafeView from '../SafeView';
 import { BottomSheetContext } from '../../context/bottomSheetContext';
 
 const BottomSheetTopInfo = styled(View)<{backgroundColor: string}>`
-background-color: ${props => (props.backgroundColor ? props.backgroundColor : '#989898')};
+background-color: ${props => props.backgroundColor || '#989898'};
 /* position: absolute;
 height: 38px;
 top: -38px; */
