@@ -20,19 +20,33 @@ const ServiceOptions = () => {
 
   useEffect(() => () => stopRequestInterval(), []);
 
+  const clearTopBar = () => {
+    setTopBarText('');
+    setBackgroundColor(null);
+    setTopBarTextTags([]);
+  };
+
+  const setCouponTopBar = () => {
+    setTopBarText(i18n.t('rideDetails.couponDiscountMessage', { couponDiscount: getCouponText(coupon) }));
+    setBackgroundColor(SUCCESS_COLOR);
+    setTopBarTextTags([<Text style={{ fontWeight: 'bold' }} />]);
+  };
+
+  const setEstimateFareTopBar = () => {
+    setTopBarText(i18n.t('rideDetails.estimatedFareMessage'));
+    setBackgroundColor(null);
+    setTopBarTextTags([]);
+  };
+
   useEffect(() => {
     if (coupon && coupon.status !== 'error') {
-      setTopBarText(i18n.t('rideDetails.couponDiscountMessage', { couponDiscount: getCouponText(coupon) }));
-      setBackgroundColor(SUCCESS_COLOR);
-      setTopBarTextTags([<Text style={{ fontWeight: 'bold' }} />]);
+      setCouponTopBar();
     } else if ((serviceEstimations || []).some(estimation => estimation.isPriceEstimated)) {
-      setTopBarText(i18n.t('rideDetails.estimatedFareMessage'));
+      setEstimateFareTopBar();
     }
 
     return () => {
-      setTopBarText('');
-      setBackgroundColor(null);
-      setTopBarTextTags([]);
+      clearTopBar();
     };
   }, [serviceEstimations, coupon]);
 
