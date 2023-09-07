@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import SkeletonContent from 'react-native-skeleton-content-nonexpo';
 import { Text } from 'react-native';
-import { getFormattedPrice } from '../../../../../context/newRideContext/utils';
+import { getCouponText, getFormattedPrice } from '../../../../../context/newRideContext/utils';
 import { RidePageContext } from '../../../../../context/newRideContext';
 import { UserContext } from '../../../../../context/user';
 import ServiceCard from './ServiceCard';
@@ -12,26 +12,15 @@ import i18n from '../../../../../I18n';
 
 const ServiceOptions = () => {
   const { serviceEstimations, stopRequestInterval } = useContext(RidePageContext);
-  const { getCoupon } = useContext(UserContext);
+  const { coupon } = useContext(UserContext);
   const isDebuggingEnabled = (typeof atob !== 'undefined');
   const { setTopBarText, setBackgroundColor, setTopBarTextTags } = useContext(BottomSheetContext);
-  const [coupon, setCoupon] = useState(null);
 
-  const fetchCoupon = async () => {
-    const result = await getCoupon();
-    setCoupon(result);
-  };
+  useEffect(() => () => stopRequestInterval(), []);
 
   useEffect(() => {
-    fetchCoupon();
-    return () => stopRequestInterval();
-  }, []);
-
-  useEffect(() => {
-    if (coupon) {
-      const couponDiscount = coupon.percent_off ? `${coupon.percent_off}%`
-        : getFormattedPrice(coupon.currency, coupon.amount_off);
-      setTopBarText(i18n.t('rideDetails.couponDiscountMessage', { couponDiscount }));
+    if (coupon && coupon.status !== 'error') {
+      setTopBarText(i18n.t('rideDetails.couponDiscountMessage', { couponDiscount: getCouponText(coupon) }));
       setBackgroundColor('#25B861');
       setTopBarTextTags([<Text style={{ fontWeight: 'bold' }} />]);
     } else if ((serviceEstimations || []).some(estimation => estimation.isPriceEstimated)) {
