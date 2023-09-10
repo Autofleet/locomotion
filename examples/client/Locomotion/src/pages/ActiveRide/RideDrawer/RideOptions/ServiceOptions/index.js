@@ -7,7 +7,7 @@ import { UserContext } from '../../../../../context/user';
 import ServiceCard from './ServiceCard';
 import { ServiceOptionsContainer } from './styles';
 import { serviceCardSkeleton } from './ServiceCard/skeleton';
-import { BottomSheetContext } from '../../../../../context/bottomSheetContext';
+import { BottomSheetContext, INITIAL_TOP_BAR_PROPS } from '../../../../../context/bottomSheetContext';
 import i18n from '../../../../../I18n';
 
 const SUCCESS_COLOR = '#25B861';
@@ -16,26 +16,28 @@ const ServiceOptions = () => {
   const { serviceEstimations, stopRequestInterval } = useContext(RidePageContext);
   const { coupon } = useContext(UserContext);
   const isDebuggingEnabled = (typeof atob !== 'undefined');
-  const { setTopBarText, setBackgroundColor, setTopBarTextTags } = useContext(BottomSheetContext);
+  const { setTopBarProps } = useContext(BottomSheetContext);
 
   useEffect(() => () => stopRequestInterval(), []);
 
   const clearTopBar = () => {
-    setTopBarText('');
-    setBackgroundColor(null);
-    setTopBarTextTags([]);
+    setTopBarProps(INITIAL_TOP_BAR_PROPS);
   };
 
   const setCouponTopBar = () => {
-    setTopBarText(i18n.t('rideDetails.couponDiscountMessage', { couponDiscount: getCouponText(coupon) }));
-    setBackgroundColor(SUCCESS_COLOR);
-    setTopBarTextTags([<Text style={{ fontWeight: 'bold' }} />]);
+    setTopBarProps({
+      text: i18n.t('rideDetails.couponDiscountMessage', { couponDiscount: getCouponText(coupon) }),
+      backgroundColor: SUCCESS_COLOR,
+      htmlTags: [<Text style={{ fontWeight: 'bold' }} />],
+    });
   };
 
   const setEstimateFareTopBar = () => {
-    setTopBarText(i18n.t('rideDetails.estimatedFareMessage'));
-    setBackgroundColor(null);
-    setTopBarTextTags([]);
+    setTopBarProps({
+      text: i18n.t('rideDetails.estimatedFareMessage'),
+      backgroundColor: null,
+      htmlTags: [],
+    });
   };
 
   useEffect(() => {

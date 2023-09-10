@@ -49,9 +49,7 @@ const BottomSheetComponent = forwardRef(({
     setIsExpanded,
     snapPoints,
     footerComponent,
-    topBarText,
-    backgroundColor,
-    topBarTextTags,
+    topBarProps,
   } = useContext(BottomSheetContext);
   const onAnimate = useCallback((from: any, to: any) => {
     if (!closeable && from !== -1) {
@@ -79,10 +77,10 @@ const BottomSheetComponent = forwardRef(({
 
   const getTopBar = () => (
     <>
-      {!!topBarText && (
-      <BottomSheetTopInfo backgroundColor={backgroundColor}>
+      {!!topBarProps.text && (
+      <BottomSheetTopInfo backgroundColor={topBarProps.backgroundColor}>
         <InfoText>
-          <Trans defaults={topBarText} components={topBarTextTags} />
+          <Trans defaults={topBarProps.text} components={topBarProps.htmlTags} />
         </InfoText>
       </BottomSheetTopInfo>
       )}
