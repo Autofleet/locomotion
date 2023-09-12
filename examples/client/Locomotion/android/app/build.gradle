@@ -281,7 +281,9 @@ dependencies {
     implementation 'com.google.firebase:firebase-crashlytics'
     // implementation 'com.google.firebase:firebase-analytics'
     implementation ("com.google.firebase:firebase-analytics") {
-        exclude module: "play-services-ads-identifier"   
+        exclude module: "play-services-ads-identifier"
+        exclude module: "play-services-measurement"
+        exclude module: "play-services-measurement-sdk"
     }
 
     //noinspection GradleDynamicVersion
