@@ -82,6 +82,8 @@ class Network {
           crashlytics().log(`HTTP Request Error ${e.message}`);
           const errorCode = e.response && e.response.status;
           const isBadAuth = errorCode === 401 || errorCode === 403;
+
+          // the purpose is to logout the user only if he is logged in, but has a bad token
           if (isBadAuth && accessToken) {
             console.log('Got unauthorized response move to logout flow');
             Auth.logout();
