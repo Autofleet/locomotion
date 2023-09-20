@@ -80,8 +80,9 @@ class Network {
         this.axios.defaults.headers.common['x-loco-op-id'] = operationId;
         return this.axios[method](...args).catch((e) => {
           crashlytics().log(`HTTP Request Error ${e.message}`);
-          if ((e.response && e.response.status === 401)
-          || (e.response && e.response.status === 403)) {
+          const errorCode = e.response && e.response.status;
+          const isBadAuth = errorCode === 401 || errorCode === 403;
+          if (isBadAuth && accessToken) {
             console.log('Got unauthorized response move to logout flow');
             Auth.logout();
             return null;
