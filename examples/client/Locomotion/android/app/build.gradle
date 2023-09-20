@@ -274,12 +274,19 @@ android {
 
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
-    
+
     implementation platform('com.google.firebase:firebase-bom:30.2.0')
 
     // When using the BoM, you don't specify versions in Firebase library dependencies
     implementation 'com.google.firebase:firebase-crashlytics'
-    implementation 'com.google.firebase:firebase-analytics'
+    // implementation 'com.google.firebase:firebase-analytics'
+    implementation ("com.google.firebase:firebase-analytics") {
+        exclude module: "play-services-ads-identifier"
+        exclude module: "play-services-ads"
+        exclude module: "play-services-ads-lite"
+        exclude module: "play-services-measurement"
+        exclude module: "play-services-measurement-sdk"
+    }
 
     //noinspection GradleDynamicVersion
     implementation "com.facebook.react:react-native:+"  // From node_modules
