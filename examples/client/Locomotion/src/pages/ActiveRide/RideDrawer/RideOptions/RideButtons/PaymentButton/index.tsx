@@ -150,6 +150,7 @@ const PaymentButton = ({
   useFocusEffect(
     useCallback(() => {
       checkCoupon();
+      return () => setCoupon(null);
     }, []),
   );
   const IconColor = invalid ? '#F83743' : primaryColor;
