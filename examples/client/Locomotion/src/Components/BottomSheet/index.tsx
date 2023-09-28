@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 // @ts-nocheck
 import React, {
-  useCallback, useContext, forwardRef, useEffect,
+  useCallback, useContext, forwardRef,
 } from 'react';
 import BottomSheet, {
   BottomSheetFooter,
@@ -9,13 +9,13 @@ import BottomSheet, {
 } from '@gorhom/bottom-sheet';
 import styled from 'styled-components';
 import { Text, View } from 'react-native';
-import { UserContext } from '../../context/user';
+import { Trans } from 'react-i18next';
 // eslint-disable-next-line import/no-unresolved
 import SafeView from '../SafeView';
 import { BottomSheetContext } from '../../context/bottomSheetContext';
 
-const BottomSheetTopInfo = styled(View)`
-background-color: #989898;
+const BottomSheetTopInfo = styled(View)<{backgroundColor: string}>`
+background-color: ${props => props.backgroundColor || '#989898'};
 /* position: absolute;
 height: 38px;
 top: -38px; */
@@ -49,7 +49,7 @@ const BottomSheetComponent = forwardRef(({
     setIsExpanded,
     snapPoints,
     footerComponent,
-    topBarText,
+    topBarProps,
   } = useContext(BottomSheetContext);
   const onAnimate = useCallback((from: any, to: any) => {
     if (!closeable && from !== -1) {
@@ -77,10 +77,10 @@ const BottomSheetComponent = forwardRef(({
 
   const getTopBar = () => (
     <>
-      {!!topBarText && (
-      <BottomSheetTopInfo>
+      {!!topBarProps.text && (
+      <BottomSheetTopInfo backgroundColor={topBarProps.backgroundColor}>
         <InfoText>
-          {topBarText}
+          <Trans defaults={topBarProps.text} components={topBarProps.htmlTags} />
         </InfoText>
       </BottomSheetTopInfo>
       )}

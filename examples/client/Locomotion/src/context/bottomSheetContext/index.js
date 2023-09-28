@@ -27,12 +27,19 @@ export const SNAP_POINT_STATES = {
   [BS_PAGES.NO_AVAILABLE_SERVICES]: [STATIC_SNAP_POINTS],
   [BS_PAGES.PICKUP_NOT_IN_TERRITORY]: [STATIC_SNAP_POINTS],
 };
+
+export const INITIAL_TOP_BAR_PROPS = {
+  text: '',
+  backgroundColor: null,
+  htmlTags: [],
+};
+
 const BottomSheetProvider = ({ children }) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const [genericErrorDetails, setGenericErrorDetails] = useState({});
   const [snapPointsState, setSnapPointsState] = useState(SNAP_POINT_STATES[BS_PAGES.LOADING]);
   const [footerComponent, setFooterComponent] = useState(null);
-  const [topBarText, setTopBarText] = useState('');
+  const [topBarProps, setTopBarProps] = useState(INITIAL_TOP_BAR_PROPS);
   const snapPoints = useMemo(() => snapPointsState, [snapPointsState]);
 
   return (
@@ -44,10 +51,10 @@ const BottomSheetProvider = ({ children }) => {
         setSnapPointsState,
         setFooterComponent,
         footerComponent,
-        topBarText,
-        setTopBarText,
         genericErrorDetails,
         setGenericErrorDetails,
+        topBarProps,
+        setTopBarProps,
       }}
     >
       {children}

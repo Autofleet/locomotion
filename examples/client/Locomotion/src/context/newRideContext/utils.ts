@@ -173,6 +173,13 @@ export const getFormattedPrice = (priceCurrency: string | undefined,
   return new Intl.NumberFormat('en-US', { style: 'currency', currency: priceCurrency }).format(priceAmount || 0);
 };
 
+export const getCouponText = (coupon: any) => {
+  if (!coupon || coupon.status === 'error') {
+    return '';
+  }
+  return coupon.percent_off ? `${coupon.percent_off}%` : getFormattedPrice(coupon.currency, coupon.amount_off);
+};
+
 
 export const getCurrencySymbol = (priceCurrency?: string) => {
   if (!priceCurrency) {
