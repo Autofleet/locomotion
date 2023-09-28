@@ -34,7 +34,6 @@ const RideOptions = () => {
 
   const {
     setFooterComponent,
-    setTopBarText,
   } = useContext(BottomSheetContext);
 
   const {
