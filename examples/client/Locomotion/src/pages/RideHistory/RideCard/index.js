@@ -66,7 +66,7 @@ const RideTitleCard = ({
       const price = getFormattedPrice(ride.priceCurrency, tip);
       const priceText = i18n.t('rideHistory.rideCard.tip', { price });
       return (
-        <DayTitleSubText>
+        <DayTitleSubText testID="rideTip">
           {priceText}
         </DayTitleSubText>
       );
@@ -114,7 +114,7 @@ const RideTitleCard = ({
           ) : <RideStateText>{i18n.t(`rideHistory.ride.states.${ride.state}`)}</RideStateText>}
         </RideViewTextContainer>
         <RideViewSecTextContainer>
-          <DaySecTitleText markError={isPaymentRejected}>
+          <DaySecTitleText markError={isPaymentRejected} testID="ridePrice">
             {getFormattedPrice(ride.priceCurrency, ride.priceAmount)}
           </DaySecTitleText>
           {getPriceSubtitle()}
