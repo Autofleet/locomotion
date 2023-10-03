@@ -29,11 +29,11 @@ export const StarIcon = styled(StarSvg).attrs((({
 
 const NUM_OF_STARS = [1, 2, 3, 4, 5];
 const Star = ({
-  onPress, isOn, size, num = 1,
+  onPress, isOn, size,
 }) => (
   <Button
     noBackground
-    testID={`RatingButton${num}`}
+    testID={`RatingButton${isOn ? '_on' : '_off'}`}
     onPress={onPress}
   >
     <StarIcon isOn={isOn} size={size} />
