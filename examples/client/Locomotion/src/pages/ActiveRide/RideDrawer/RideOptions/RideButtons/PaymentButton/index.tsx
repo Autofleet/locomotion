@@ -6,6 +6,7 @@ import { PaymentIcon } from 'react-native-payment-icons';
 import styled, { ThemeContext } from 'styled-components';
 import { useFocusEffect } from '@react-navigation/native';
 import SkeletonContent from 'react-native-skeleton-content-nonexpo';
+import { isCardPaymentMethod } from '../../../../../../lib/ride/utils';
 import { getFormattedPrice } from '../../../../../../context/newRideContext/utils';
 import { MAIN_ROUTES } from '../../../../../routes';
 import SvgIcon from '../../../../../../Components/SvgIcon';
@@ -167,17 +168,15 @@ const PaymentButton = ({
   return (
     <Container>
       <CardNameContainer>
-        {id ? (id !== PAYMENT_METHODS.CASH
-          ? <PaymentIcon type={brand || 'generic'} />
+        {isCardPaymentMethod({ id }) ? <PaymentIcon type={brand || 'generic'} />
           : (
             <SvgIcon
               fill={IconColor}
-              Svg={cashIcon}
+              Svg={icon}
               height={25}
               width={40}
             />
-          ))
-          : <SvgIcon fill={IconColor} Svg={icon} height={15} width={15} />}
+          )}
         <TimeText numberOfLines={1}>{title}</TimeText>
       </CardNameContainer>
       <PromoButtonContainer>

@@ -16,7 +16,6 @@ import NoteButton from '../../../../../Components/GenericRideButton';
 import i18n from '../../../../../I18n';
 import plus from '../../../../../assets/bottomSheet/plus.svg';
 import editNote from '../../../../../assets/bottomSheet/edit_note.svg';
-import creditCardIcon from '../../../../../assets/bottomSheet/credit_card_icon.svg';
 import PaymentButton from './PaymentButton';
 import PaymentsContext from '../../../../../context/payments';
 import { PaymentMethodInterface } from '../../../../../context/payments/interface';
@@ -31,7 +30,7 @@ import SETTINGS_KEYS from '../../../../../context/settings/keys';
 import {
   getTextColorForTheme,
 } from '../../../../../context/theme';
-import { PAYMENT_METHODS } from '../../../../../pages/Payments/consts';
+import { PAYMENT_METHODS, nonCardPaymentMethodToIconMap } from '../../../../../pages/Payments/consts';
 import PassengersCounter from './PassengersCounter';
 import ErrorPopup from '../../../../../popups/TwoButtonPopup';
 import { getPaymentMethod } from '../../../../../pages/Payments/cardDetailUtils';
@@ -227,7 +226,7 @@ const RideButtons = ({
       || paymentMethods.find(pm => pm.id === ridePaymentMethodId);
 
     const getSelectedPaymentMethodTitle = () : string => {
-      console.log('selectedPaymentMethodData', selectedPaymentMethod);
+      console.log('selectedPaymentMethodDataID', selectedPaymentMethod.id);
       return selectedPaymentMethod?.name === cashPaymentMethod.name ? i18n.t('payments.cash') : (selectedPaymentMethod?.name || i18n.t('bottomSheetContent.ride.addPayment'));
     };
     const pureButton = () => (
@@ -241,7 +240,7 @@ const RideButtons = ({
       >
         <PaymentButton
           brand={selectedPaymentMethod?.brand}
-          icon={creditCardIcon}
+          icon={nonCardPaymentMethodToIconMap[selectedPaymentMethod?.id]}
           title={getSelectedPaymentMethodTitle()}
           id={selectedPaymentMethod?.id}
           invalid={paymentMethodNotAllowedOnService}
@@ -265,9 +264,6 @@ const RideButtons = ({
     );
   };
 
-
-  useEffect(() => {
-  }, [chosenService]);
 
   const allowRideOrderIfNoMatchedVehicles = chosenService?.allowRideOrderIfNoVehiclesMatched;
 

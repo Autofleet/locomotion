@@ -5,16 +5,13 @@ import { View, Text } from 'react-native';
 import moment from 'moment';
 import styled, { ThemeContext } from 'styled-components';
 import { PaymentIcon } from 'react-native-payment-icons';
-import { PaymentMethodInterface } from 'context/payments/interface';
-import { PAYMENT_METHODS } from '../../lib/commonTypes';
+import { nonCardPaymentMethodToIconMap } from '../../pages/Payments/consts';
 import Button from '../Button';
 import { capitalizeFirstLetter, getLastFourForamttedShort } from '../../pages/Payments/cardDetailUtils';
 import i18n from '../../I18n';
 import SvgIcon from '../SvgIcon';
 import selected from '../../assets/selected-v.svg';
 import { Start, StartCapital } from '../../lib/text-direction';
-import cashIcon from '../../assets/cash.svg';
-import offlineIcon from '../../assets/offline.svg';
 import chevronIcon from '../../assets/chevron.svg';
 import { isCashPaymentMethod } from '../../lib/ride/utils';
 
@@ -93,11 +90,6 @@ const style = {
   [StartCapital()]: 28,
 };
 
-const paymentMethodToIconMap = {
-  [PAYMENT_METHODS.CASH]: cashIcon,
-  [PAYMENT_METHODS.OFFLINE]: offlineIcon,
-};
-
 
 const CardRow = (paymentMethod: any) => {
   const { primaryColor } = useContext(ThemeContext);
@@ -120,7 +112,7 @@ const CardRow = (paymentMethod: any) => {
     return (
       <SvgIcon
         fill={primaryColor}
-        Svg={paymentMethodToIconMap[id]}
+        Svg={nonCardPaymentMethodToIconMap[id]}
         width={40}
         height={25}
       />
