@@ -50,6 +50,7 @@ const RideOptions = () => {
   };
 
   const showCash = !!serviceEstimations?.filter((se: any) => se.allowedPaymentMethods.includes(PAYMENT_METHODS.CASH)).length;
+  const showOffline = chosenService?.allowedPaymentMethods.includes(PAYMENT_METHODS.OFFLINE);
 
   useEffect(() => {
     const updateDefaultPaymentMethod = async () => {
@@ -116,6 +117,7 @@ const RideOptions = () => {
             }, 500);
           }}
           showCash={showCash}
+          showOffline={showOffline}
           selected={ride?.paymentMethodId
             && usePayments.paymentMethods.find((pm: any) => ride.paymentMethodId === pm.id)
             ? ride.paymentMethodId : defaultPaymentMethod?.id}

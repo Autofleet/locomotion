@@ -24,6 +24,7 @@ import { RideStateContextContext } from '../../../../../context/ridePageStateCon
 import { popupNames } from '../utils';
 import { BS_PAGES } from '../../../../../context/ridePageStateContext/utils';
 import cashPaymentMethod from '../../../../../pages/Payments/cashPaymentMethod';
+import offlinePaymentMethod from '../../../../../pages/Payments/offlinePaymentMethod';
 import { getFutureRideMaxDate, getFutureRideMinDate } from '../../../../../context/newRideContext/utils';
 import settings from '../../../../../context/settings';
 import SETTINGS_KEYS from '../../../../../context/settings/keys';
@@ -215,13 +216,20 @@ const RideButtons = ({
     );
   };
 
+  const paymentMethodIdToDataMap = {
+    [PAYMENT_METHODS.CASH]: cashPaymentMethod,
+    [PAYMENT_METHODS.OFFLINE]: offlinePaymentMethod,
+  };
   const renderPaymentButton = () => {
     const ridePaymentMethodId = ride?.paymentMethodId || '';
     const selectedPaymentMethod:
-     PaymentMethodInterface | undefined = ridePaymentMethodId === PAYMENT_METHODS.CASH
-       ? cashPaymentMethod
-       : paymentMethods.find(pm => pm.id === ridePaymentMethodId);
+     PaymentMethodInterface | undefined = paymentMethodIdToDataMap[ridePaymentMethodId]
+      || paymentMethods.find(pm => pm.id === ridePaymentMethodId);
 
+    const getSelectedPaymentMethodTitle = () : string => {
+      console.log('selectedPaymentMethodData', selectedPaymentMethod);
+      return selectedPaymentMethod?.name === cashPaymentMethod.name ? i18n.t('payments.cash') : (selectedPaymentMethod?.name || i18n.t('bottomSheetContent.ride.addPayment'));
+    };
     const pureButton = () => (
       <ButtonContainer
         error={paymentMethodNotAllowedOnService}
@@ -234,7 +242,7 @@ const RideButtons = ({
         <PaymentButton
           brand={selectedPaymentMethod?.brand}
           icon={creditCardIcon}
-          title={selectedPaymentMethod?.name === cashPaymentMethod.name ? i18n.t('payments.cash') : (selectedPaymentMethod?.name || i18n.t('bottomSheetContent.ride.addPayment'))}
+          title={getSelectedPaymentMethodTitle()}
           id={selectedPaymentMethod?.id}
           invalid={paymentMethodNotAllowedOnService}
         />
@@ -259,10 +267,6 @@ const RideButtons = ({
 
 
   useEffect(() => {
-    if (!chosenService || chosenService?.pooling === POOLING_TYPES.NO) {
-      setNumberOfPassengers(null);
-      setPassengersCounterError(false);
-    }
   }, [chosenService]);
 
   const allowRideOrderIfNoMatchedVehicles = chosenService?.allowRideOrderIfNoVehiclesMatched;

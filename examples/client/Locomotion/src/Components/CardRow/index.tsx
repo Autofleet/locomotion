@@ -6,6 +6,7 @@ import moment from 'moment';
 import styled, { ThemeContext } from 'styled-components';
 import { PaymentIcon } from 'react-native-payment-icons';
 import { PaymentMethodInterface } from 'context/payments/interface';
+import { PAYMENT_METHODS } from '../../lib/commonTypes';
 import Button from '../Button';
 import { capitalizeFirstLetter, getLastFourForamttedShort } from '../../pages/Payments/cardDetailUtils';
 import i18n from '../../I18n';
@@ -13,6 +14,7 @@ import SvgIcon from '../SvgIcon';
 import selected from '../../assets/selected-v.svg';
 import { Start, StartCapital } from '../../lib/text-direction';
 import cashIcon from '../../assets/cash.svg';
+import offlineIcon from '../../assets/offline.svg';
 import chevronIcon from '../../assets/chevron.svg';
 import { isCashPaymentMethod } from '../../lib/ride/utils';
 
@@ -91,6 +93,12 @@ const style = {
   [StartCapital()]: 28,
 };
 
+const paymentMethodToIconMap = {
+  [PAYMENT_METHODS.CASH]: cashIcon,
+  [PAYMENT_METHODS.OFFLINE]: offlineIcon,
+};
+
+
 const CardRow = (paymentMethod: any) => {
   const { primaryColor } = useContext(ThemeContext);
   const [isCardExpired, setIsCardExpired] = useState(false);
@@ -102,6 +110,22 @@ const CardRow = (paymentMethod: any) => {
     }, 100);
   }, [paymentMethod]);
   const testID = paymentMethod.addNew ? `${paymentMethod.testIdPrefix || ''}AddPaymentMethod` : (`${paymentMethod.testIdPrefix || ''}ChoosePaymentMethod`);
+
+  const getPaymentMethodIcon = () => {
+    const { brand, id, lastFour } = paymentMethod;
+    const isCard = lastFour;
+    if (isCard) {
+      return <PaymentIcon type={brand} />;
+    }
+    return (
+      <SvgIcon
+        fill={primaryColor}
+        Svg={paymentMethodToIconMap[id]}
+        width={40}
+        height={25}
+      />
+    );
+  };
   return (
     <>
       <Button
@@ -129,9 +153,7 @@ const CardRow = (paymentMethod: any) => {
                 )
                 : (
                   <>
-                    {!paymentMethod.lastFour
-                      ? isCashPaymentMethod(paymentMethod) ? <SvgIcon fill={primaryColor} Svg={cashIcon} width={40} height={25} /> : null
-                      : <PaymentIcon type={paymentMethod.brand} />}
+                    {getPaymentMethodIcon()}
                     {paymentMethod.mark ? (
                       <SvgIcon
                         style={{

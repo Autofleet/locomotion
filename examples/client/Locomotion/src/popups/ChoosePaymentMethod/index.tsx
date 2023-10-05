@@ -21,6 +21,7 @@ import { FlexCont } from '../../Components/Flex';
 import PaymentMethod from '../../Components/CardRow';
 import PaymentsContext from '../../context/payments';
 import cashPaymentMethod from '../../pages/Payments/cashPaymentMethod';
+import offlinePaymentMethod from '../../pages/Payments/offlinePaymentMethod';
 import * as navigationService from '../../services/navigation';
 import { MewRidePageContext } from '../../context';
 
@@ -35,7 +36,7 @@ interface PaymentMethodPopupProps {
 }
 
 const PaymentMethodPopup = ({
-  isVisible, onCancel, onSubmit, showCash, rideFlow, selected, onAddNewMethod,
+  isVisible, onCancel, onSubmit, showCash, rideFlow, selected, onAddNewMethod, showOffline,
 }: PaymentMethodPopupProps) => {
   const usePayments: any = PaymentsContext.useContainer();
   const { chosenService } = useContext(MewRidePageContext);
@@ -94,24 +95,27 @@ const PaymentMethodPopup = ({
         <CardsScrollView>
           <Container>
             <View>
-              {(showCash
-                ? [...usePayments.paymentMethods, cashPaymentMethod]
-                : usePayments.paymentMethods).map((paymentMethod: any) => {
-                const reason = getDisabledReason(paymentMethod);
-                return (
-                  <PaymentMethod
-                    testIdPrefix="Dialog"
-                    {...paymentMethod}
-                    chooseMethodPage
-                    disabledReason={reason}
-                    selected={selectedPaymentId === paymentMethod.id}
-                    mark={selectedPaymentId === paymentMethod.id}
-                    onPress={() => {
-                      setSelectedPaymentId(paymentMethod.id);
-                    }}
-                  />
-                );
-              })}
+              {
+                [
+                  ...usePayments.paymentMethods,
+                  ...(showCash ? [cashPaymentMethod] : []),
+                  ...(showOffline ? [offlinePaymentMethod] : []),
+                ].map((paymentMethod: any) => {
+                  const reason = getDisabledReason(paymentMethod);
+                  return (
+                    <PaymentMethod
+                      testIdPrefix="Dialog"
+                      {...paymentMethod}
+                      chooseMethodPage
+                      disabledReason={reason}
+                      selected={selectedPaymentId === paymentMethod.id}
+                      mark={selectedPaymentId === paymentMethod.id}
+                      onPress={() => {
+                        setSelectedPaymentId(paymentMethod.id);
+                      }}
+                    />
+                  );
+                })}
               <PaymentMethod
                 testIdPrefix="Dialog"
                 addNew
