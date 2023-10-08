@@ -525,7 +525,7 @@
         "setPaymentBanner": "Set payment method",
         "payWithCash": "Pay with Cash",
         "cash": "Cash",
-        "offline": "Offline payment",
+        "offline": "Billed to company",
         "popups": {
             "removeCard": {
                 "title": "Remove payment method",

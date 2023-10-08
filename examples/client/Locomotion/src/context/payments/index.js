@@ -1,10 +1,9 @@
 import { useState, useEffect } from 'react';
 import { createContainer } from 'unstated-next';
-import { PaymentIntent } from '@stripe/stripe-react-native';
+import i18n from '../../I18n';
 import { PAYMENT_STATES } from '../../lib/commonTypes';
 import Mixpanel from '../../services/Mixpanel';
 import cashPaymentMethod from '../../pages/Payments/cashPaymentMethod';
-import { fetchRides } from '../newRideContext/api';
 import network from '../../services/network';
 import SETTINGS_KEYS from '../settings/keys';
 import SettingContext from '../settings';
@@ -17,6 +16,13 @@ const usePayments = () => {
   const [paymentMethods, setPaymentMethods] = useState([]);
   const [paymentAccount, setPaymentAccount] = useState(null);
   const [hasOutstandingPayment, setHasOutstandingPayment] = useState(false);
+  const [offlinePaymentText, setOfflinePaymentText] = useState(i18n.t('payments.offline'));
+
+  const loadPaymentText = async () => {
+    const companyName = await useSettings.getSettingByKey(SETTINGS_KEYS.COMPANY_NAME);
+    setOfflinePaymentText(companyName);
+    return companyName;
+  };
 
   const getCustomer = async () => {
     try {
@@ -191,6 +197,8 @@ const usePayments = () => {
     loadOutstandingBalanceRide,
     retryPayment,
     hasOutstandingPayment,
+    offlinePaymentText,
+    loadPaymentText,
   };
 };
 

@@ -14,7 +14,7 @@ import selected from '../../assets/selected-v.svg';
 import { Start, StartCapital } from '../../lib/text-direction';
 import chevronIcon from '../../assets/chevron.svg';
 import { isCashPaymentMethod } from '../../lib/ride/utils';
-
+import settingsContext from '../../context/settings';
 
 type ContainerProps = {
   children: React.ReactNode,
@@ -91,8 +91,9 @@ const style = {
 };
 
 
-const CardRow = (paymentMethod: any) => {
+const CardRow = async (paymentMethod: any) => {
   const { primaryColor } = useContext(ThemeContext);
+  const { getSettingByKey } = settingsContext.useContainer();
   const [isCardExpired, setIsCardExpired] = useState(false);
   useEffect(() => {
     let isExpired = false;
@@ -103,6 +104,14 @@ const CardRow = (paymentMethod: any) => {
   }, [paymentMethod]);
   const testID = paymentMethod.addNew ? `${paymentMethod.testIdPrefix || ''}AddPaymentMethod` : (`${paymentMethod.testIdPrefix || ''}ChoosePaymentMethod`);
 
+  const getNonCardPaymentMethodText = async () => {
+    if (isCashPaymentMethod(paymentMethod)) { return i18n.t('payments.cash'); }
+
+    // offline payment method
+    const { name: fallbackName } = paymentMethod;
+    const nameFromSetting = await getSettingByKey('offlinePaymentMethodDisplayName');
+    return nameFromSetting || fallbackName;
+  };
   const getPaymentMethodIcon = () => {
     const { brand, id, lastFour } = paymentMethod;
     const isCard = lastFour;
@@ -174,7 +183,7 @@ const CardRow = (paymentMethod: any) => {
                     {!paymentMethod.lastFour
                       ? (
                         <Type>
-                          {`${i18n.t(`payments.${isCashPaymentMethod(paymentMethod) ? 'cash' : 'offline'}`)}`}
+                          {getNonCardPaymentMethodText()}
                         </Type>
                       )
                       : (
