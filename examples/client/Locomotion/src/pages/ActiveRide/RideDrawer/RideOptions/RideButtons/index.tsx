@@ -5,6 +5,7 @@ import DatePicker from 'react-native-date-picker';
 import moment from 'moment';
 import { ThemeContext } from 'styled-components';
 import { Animated } from 'react-native';
+import { isCashPaymentMethod } from '../../../../../lib/ride/utils';
 import DatePickerPoppup from '../../../../../popups/DatePickerPoppup';
 import FutureBookingButton from './FutureBookingButton';
 import {
@@ -220,15 +221,17 @@ const RideButtons = ({
     [PAYMENT_METHODS.OFFLINE]: offlinePaymentMethod,
   };
   const renderPaymentButton = () => {
+    const { offlinePaymentText, loadOfflinePaymentText } = PaymentsContext.useContainer();
+    useEffect(() => {
+      loadOfflinePaymentText();
+    }, []);
     const ridePaymentMethodId = ride?.paymentMethodId || '';
     const selectedPaymentMethod:
      PaymentMethodInterface | undefined = paymentMethodIdToDataMap[ridePaymentMethodId]
       || paymentMethods.find(pm => pm.id === ridePaymentMethodId);
 
-    const getSelectedPaymentMethodTitle = () : string => {
-      console.log('selectedPaymentMethodDataID', selectedPaymentMethod.id);
-      return selectedPaymentMethod?.name === cashPaymentMethod.name ? i18n.t('payments.cash') : (selectedPaymentMethod?.name || i18n.t('bottomSheetContent.ride.addPayment'));
-    };
+    const getSelectedPaymentMethodTitle = () : string => (isCashPaymentMethod(selectedPaymentMethod)
+      ? i18n.t('payments.cash') : (selectedPaymentMethod?.name || i18n.t('bottomSheetContent.ride.addPayment')));
     const pureButton = () => (
       <ButtonContainer
         error={paymentMethodNotAllowedOnService}

@@ -16,11 +16,12 @@ const usePayments = () => {
   const [paymentMethods, setPaymentMethods] = useState([]);
   const [paymentAccount, setPaymentAccount] = useState(null);
   const [hasOutstandingPayment, setHasOutstandingPayment] = useState(false);
-  const [offlinePaymentText, setOfflinePaymentText] = useState(i18n.t('payments.offline'));
+  const [offlinePaymentText, setOfflinePaymentText] = useState(() => i18n.t('payments.offline'));
 
-  const loadPaymentText = async () => {
+  const loadOfflinePaymentText = async () => {
     const companyName = await useSettings.getSettingByKey(SETTINGS_KEYS.COMPANY_NAME);
     setOfflinePaymentText(companyName);
+    console.log('companyName', companyName);
     return companyName;
   };
 
@@ -198,7 +199,7 @@ const usePayments = () => {
     retryPayment,
     hasOutstandingPayment,
     offlinePaymentText,
-    loadPaymentText,
+    loadOfflinePaymentText,
   };
 };
 

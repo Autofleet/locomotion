@@ -14,7 +14,7 @@ import selected from '../../assets/selected-v.svg';
 import { Start, StartCapital } from '../../lib/text-direction';
 import chevronIcon from '../../assets/chevron.svg';
 import { isCashPaymentMethod } from '../../lib/ride/utils';
-import settingsContext from '../../context/settings';
+import paymentContext from '../../context/payments';
 
 type ContainerProps = {
   children: React.ReactNode,
@@ -91,10 +91,14 @@ const style = {
 };
 
 
-const CardRow = async (paymentMethod: any) => {
+const CardRow = (paymentMethod: any) => {
   const { primaryColor } = useContext(ThemeContext);
-  const { getSettingByKey } = settingsContext.useContainer();
+  const { offlinePaymentText, loadOfflinePaymentText } = paymentContext.useContainer();
   const [isCardExpired, setIsCardExpired] = useState(false);
+
+  useEffect(() => {
+    loadOfflinePaymentText();
+  }, []);
   useEffect(() => {
     let isExpired = false;
     setTimeout(() => {
@@ -104,14 +108,7 @@ const CardRow = async (paymentMethod: any) => {
   }, [paymentMethod]);
   const testID = paymentMethod.addNew ? `${paymentMethod.testIdPrefix || ''}AddPaymentMethod` : (`${paymentMethod.testIdPrefix || ''}ChoosePaymentMethod`);
 
-  const getNonCardPaymentMethodText = async () => {
-    if (isCashPaymentMethod(paymentMethod)) { return i18n.t('payments.cash'); }
 
-    // offline payment method
-    const { name: fallbackName } = paymentMethod;
-    const nameFromSetting = await getSettingByKey('offlinePaymentMethodDisplayName');
-    return nameFromSetting || fallbackName;
-  };
   const getPaymentMethodIcon = () => {
     const { brand, id, lastFour } = paymentMethod;
     const isCard = lastFour;
@@ -183,7 +180,7 @@ const CardRow = async (paymentMethod: any) => {
                     {!paymentMethod.lastFour
                       ? (
                         <Type>
-                          {getNonCardPaymentMethodText()}
+                          {isCashPaymentMethod(paymentMethod) ? i18n.t('payments.cash') : offlinePaymentText }
                         </Type>
                       )
                       : (

@@ -33,6 +33,7 @@ interface PaymentMethodPopupProps {
   rideFlow: boolean;
   selected: any;
   onAddNewMethod: () => void;
+  showOffline: boolean;
 }
 
 const PaymentMethodPopup = ({
@@ -150,6 +151,7 @@ PaymentMethodPopup.propTypes = {
   showCash: PropTypes.bool,
   rideFlow: PropTypes.bool,
   selected: PropTypes.string,
+  showOffline: PropTypes.bool,
 };
 
 PaymentMethodPopup.defaultProps = {
@@ -157,6 +159,7 @@ PaymentMethodPopup.defaultProps = {
   showCash: true,
   rideFlow: false,
   selected: null,
+  showOffline: false,
 };
 
 export default PaymentMethodPopup;
