@@ -20,8 +20,9 @@ const usePayments = () => {
 
   const loadOfflinePaymentText = async () => {
     const companyName = await useSettings.getSettingByKey(SETTINGS_KEYS.COMPANY_NAME);
-    setOfflinePaymentText(companyName);
-    console.log('companyName', companyName);
+    if (companyName) {
+      setOfflinePaymentText(companyName);
+    }
     return companyName;
   };
 
