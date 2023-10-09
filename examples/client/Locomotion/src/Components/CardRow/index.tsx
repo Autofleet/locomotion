@@ -108,7 +108,6 @@ const CardRow = (paymentMethod: any) => {
   }, [paymentMethod]);
   const testID = paymentMethod.addNew ? `${paymentMethod.testIdPrefix || ''}AddPaymentMethod` : (`${paymentMethod.testIdPrefix || ''}ChoosePaymentMethod`);
 
-
   const getPaymentMethodIcon = () => {
     const { brand, id, lastFour } = paymentMethod;
     const isCard = lastFour;
@@ -124,6 +123,7 @@ const CardRow = (paymentMethod: any) => {
       />
     );
   };
+
   return (
     <>
       <Button
