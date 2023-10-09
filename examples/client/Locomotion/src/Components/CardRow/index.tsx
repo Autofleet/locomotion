@@ -5,7 +5,7 @@ import { View, Text } from 'react-native';
 import moment from 'moment';
 import styled, { ThemeContext } from 'styled-components';
 import { PaymentIcon } from 'react-native-payment-icons';
-import { nonCardPaymentMethodToIconMap } from '../../pages/Payments/consts';
+import { paymentMethodToIconMap } from '../../pages/Payments/consts';
 import Button from '../Button';
 import { capitalizeFirstLetter, getLastFourForamttedShort } from '../../pages/Payments/cardDetailUtils';
 import i18n from '../../I18n';
@@ -118,7 +118,7 @@ const CardRow = (paymentMethod: any) => {
     return (
       <SvgIcon
         fill={primaryColor}
-        Svg={nonCardPaymentMethodToIconMap[id]}
+        Svg={paymentMethodToIconMap[id]}
         width={40}
         height={25}
       />

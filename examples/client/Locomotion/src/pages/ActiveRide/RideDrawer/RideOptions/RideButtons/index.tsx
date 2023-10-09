@@ -31,7 +31,7 @@ import SETTINGS_KEYS from '../../../../../context/settings/keys';
 import {
   getTextColorForTheme,
 } from '../../../../../context/theme';
-import { PAYMENT_METHODS, nonCardPaymentMethodToIconMap } from '../../../../../pages/Payments/consts';
+import { PAYMENT_METHODS, paymentMethodToIconMap } from '../../../../../pages/Payments/consts';
 import PassengersCounter from './PassengersCounter';
 import ErrorPopup from '../../../../../popups/TwoButtonPopup';
 import { getPaymentMethod } from '../../../../../pages/Payments/cardDetailUtils';
@@ -243,7 +243,7 @@ const RideButtons = ({
       >
         <PaymentButton
           brand={selectedPaymentMethod?.brand}
-          icon={nonCardPaymentMethodToIconMap[selectedPaymentMethod?.id]}
+          icon={paymentMethodToIconMap[selectedPaymentMethod?.id]}
           title={getSelectedPaymentMethodTitle()}
           id={selectedPaymentMethod?.id}
           invalid={paymentMethodNotAllowedOnService}
@@ -266,7 +266,12 @@ const RideButtons = ({
       </>
     );
   };
-
+  useEffect(() => {
+    if (!chosenService || chosenService?.pooling === POOLING_TYPES.NO) {
+      setNumberOfPassengers(null);
+      setPassengersCounterError(false);
+    }
+  }, [chosenService]);
 
   const allowRideOrderIfNoMatchedVehicles = chosenService?.allowRideOrderIfNoVehiclesMatched;
 

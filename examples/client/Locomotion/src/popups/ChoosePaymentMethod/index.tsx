@@ -37,7 +37,14 @@ interface PaymentMethodPopupProps {
 }
 
 const PaymentMethodPopup = ({
-  isVisible, onCancel, onSubmit, showCash, rideFlow, selected, onAddNewMethod, showOffline,
+  isVisible,
+  onCancel,
+  onSubmit,
+  showCash,
+  rideFlow,
+  selected,
+  onAddNewMethod,
+  showOffline,
 }: PaymentMethodPopupProps) => {
   const usePayments: any = PaymentsContext.useContainer();
   const { chosenService } = useContext(MewRidePageContext);

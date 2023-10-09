@@ -7,7 +7,7 @@ export const PAYMENT_METHODS = {
   CARD: 'card',
 };
 
-export const nonCardPaymentMethodToIconMap = {
+export const paymentMethodToIconMap = {
   [PAYMENT_METHODS.CASH]: cashIcon,
   [PAYMENT_METHODS.OFFLINE]: offlineIcon,
 };
