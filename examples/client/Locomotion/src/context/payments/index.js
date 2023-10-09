@@ -19,7 +19,7 @@ const usePayments = () => {
   const [offlinePaymentText, setOfflinePaymentText] = useState(i18n.t('payments.offline').toString());
 
   const loadOfflinePaymentText = async () => {
-    const companyName = await useSettings.getSettingByKey(SETTINGS_KEYS.COMPANY_NAME);
+    const companyName = await useSettings.getSettingByKey(SETTINGS_KEYS.OFFLINE_PAYMENT_TEXT);
     if (companyName) {
       setOfflinePaymentText(companyName);
     }

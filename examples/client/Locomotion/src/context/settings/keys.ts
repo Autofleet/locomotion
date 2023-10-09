@@ -15,5 +15,5 @@ export default {
   MEASURE_SYSTEM: 'riderApp.measureSystem',
   MULTI_SP: 'riderApp.showMultiStopPoint',
   DISABLE_CAPTCHA_UI: 'riderApp.disableCaptchaUi',
-  COMPANY_NAME: 'riderApp.companyName',
+  OFFLINE_PAYMENT_TEXT: 'riderApp.offlinePaymentText',
 };
