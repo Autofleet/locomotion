@@ -1,10 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import moment from 'moment-timezone';
 import { PaymentIcon } from 'react-native-payment-icons';
-import { View } from 'react-native';
 import SkeletonContent from 'react-native-skeleton-content-nonexpo';
-
-import { RIDE_STATES } from '../../lib/commonTypes';
 import { PriceCalculation, RideInterface, RidePageContext } from '../../context/newRideContext';
 import i18n from '../../I18n';
 import RoundedButton from '../RoundedButton';
@@ -17,6 +14,7 @@ import StopPointsVerticalView from '../StopPointsVerticalView';
 import { getFormattedPrice, isPriceEstimated, convertTimezoneByLocation } from '../../context/newRideContext/utils';
 import cashIcon from '../../assets/cash.svg';
 import { PAYMENT_METHODS } from '../../pages/Payments/consts';
+import paymentContext from '../../context/payments';
 
 interface CardComponentProps {
   paymentMethod: {
@@ -28,12 +26,17 @@ interface CardComponentProps {
 const CardComponent = ({ paymentMethod }: CardComponentProps) => {
   const isCash = PAYMENT_METHODS.CASH === paymentMethod.id;
   const isOffline = PAYMENT_METHODS.OFFLINE === paymentMethod.id;
+  const { offlinePaymentText, loadOfflinePaymentText } = paymentContext.useContainer();
+
+  useEffect(() => {
+    loadOfflinePaymentText();
+  }, []);
 
   const getText = () => {
     if (isCash) {
       return i18n.t('payments.cash');
     } if (isOffline) {
-      return i18n.t('payments.offline');
+      return offlinePaymentText;
     }
     return paymentMethod.name;
   };
