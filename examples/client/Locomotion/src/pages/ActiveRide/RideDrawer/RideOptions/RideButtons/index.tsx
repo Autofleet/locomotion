@@ -266,6 +266,8 @@ const RideButtons = ({
       </>
     );
   };
+
+
   useEffect(() => {
     if (!chosenService || chosenService?.pooling === POOLING_TYPES.NO) {
       setNumberOfPassengers(null);
