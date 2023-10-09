@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { createContainer } from 'unstated-next';
-import i18n from '../../I18n';
+import offlinePaymentMethod from '../../pages/Payments/offlinePaymentMethod';
 import { PAYMENT_STATES } from '../../lib/commonTypes';
 import Mixpanel from '../../services/Mixpanel';
 import cashPaymentMethod from '../../pages/Payments/cashPaymentMethod';
@@ -16,7 +16,7 @@ const usePayments = () => {
   const [paymentMethods, setPaymentMethods] = useState([]);
   const [paymentAccount, setPaymentAccount] = useState(null);
   const [hasOutstandingPayment, setHasOutstandingPayment] = useState(false);
-  const [offlinePaymentText, setOfflinePaymentText] = useState(i18n.t('payments.offline').toString());
+  const [offlinePaymentText, setOfflinePaymentText] = useState(offlinePaymentMethod.name);
 
   const loadOfflinePaymentText = async () => {
     const companyName = await useSettings.getSettingByKey(SETTINGS_KEYS.OFFLINE_PAYMENT_TEXT);
