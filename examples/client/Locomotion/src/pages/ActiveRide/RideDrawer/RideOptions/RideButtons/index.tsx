@@ -5,7 +5,7 @@ import DatePicker from 'react-native-date-picker';
 import moment from 'moment';
 import { ThemeContext } from 'styled-components';
 import { Animated } from 'react-native';
-import { isCashPaymentMethod, isOfflineMethod, isOfflinePaymentMethod } from '../../../../../lib/ride/utils';
+import { isCashPaymentMethod, isOfflinePaymentMethod } from '../../../../../lib/ride/utils';
 import DatePickerPoppup from '../../../../../popups/DatePickerPoppup';
 import FutureBookingButton from './FutureBookingButton';
 import {
@@ -262,7 +262,10 @@ const RideButtons = ({
         {paymentMethodNotAllowedOnService
           ? (
             <ButtonWithError
-              errorText={i18n.t('bottomSheetContent.ride.paymentMethodNotAllowedOnService', { type: ridePaymentMethod.charAt(0).toUpperCase() + ridePaymentMethod.slice(1) })}
+              errorText={i18n.t('bottomSheetContent.ride.paymentMethodNotAllowedOnService', {
+                type: isOfflinePaymentMethod(selectedPaymentMethod) ? offlinePaymentText
+                  : ridePaymentMethod.charAt(0).toUpperCase() + ridePaymentMethod.slice(1),
+              })}
             >
               {pureButton()}
             </ButtonWithError>
