@@ -31,7 +31,7 @@ import SETTINGS_KEYS from '../../../../../context/settings/keys';
 import { PAYMENT_METHODS, paymentMethodToIconMap } from '../../../../../pages/Payments/consts';
 import PassengersCounter from './PassengersCounter';
 import ErrorPopup from '../../../../../popups/TwoButtonPopup';
-import { getPaymentMethod } from '../../../../../pages/Payments/cardDetailUtils';
+import { capitalizeFirstLetter, getPaymentMethod } from '../../../../../pages/Payments/cardDetailUtils';
 
 const POOLING_TYPES = {
   NO: 'no',
@@ -257,14 +257,19 @@ const RideButtons = ({
     );
 
     const ridePaymentMethod = ride?.paymentMethodId ? getPaymentMethod(ride.paymentMethodId) : '';
+    const getTypeText = () => {
+      if (isOfflinePaymentMethod(selectedPaymentMethod)) {
+        return offlinePaymentText;
+      }
+      return capitalizeFirstLetter(ridePaymentMethod);
+    };
     return (
       <>
         {paymentMethodNotAllowedOnService
           ? (
             <ButtonWithError
               errorText={i18n.t('bottomSheetContent.ride.paymentMethodNotAllowedOnService', {
-                type: isOfflinePaymentMethod(selectedPaymentMethod) ? offlinePaymentText
-                  : ridePaymentMethod.charAt(0).toUpperCase() + ridePaymentMethod.slice(1),
+                type: getTypeText(),
               })}
             >
               {pureButton()}
