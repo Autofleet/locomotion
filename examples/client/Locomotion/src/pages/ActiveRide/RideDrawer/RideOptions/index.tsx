@@ -48,9 +48,10 @@ const RideOptions = () => {
   const clearPopup = () => {
     setPopupToShow(null);
   };
-
-  const showCash = !!serviceEstimations?.filter((se: any) => se.allowedPaymentMethods.includes(PAYMENT_METHODS.CASH)).length;
-  const showOffline = chosenService?.allowedPaymentMethods.includes(PAYMENT_METHODS.OFFLINE);
+  const allServicesPaymentMethods = new Set(serviceEstimations
+    ?.map((se: any) => se.allowedPaymentMethods).flat());
+  const showCash = allServicesPaymentMethods.has(PAYMENT_METHODS.CASH);
+  const showOffline = allServicesPaymentMethods.has(PAYMENT_METHODS.OFFLINE);
 
   useEffect(() => {
     const updateDefaultPaymentMethod = async () => {
