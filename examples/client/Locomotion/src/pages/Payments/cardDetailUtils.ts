@@ -10,4 +10,3 @@ export const getPaymentMethod = (paymentMethodId: string) => {
   }
   return PAYMENT_METHODS.CARD;
 };
-//
