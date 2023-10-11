@@ -988,6 +988,7 @@ const RidePageContextProvider = ({ children }: {
     // mocks for now
     [RIDE_FAILED_REASONS.USER_HAS_OUTSTANDING_BALANCE]: () => {
       setGenericErrorDetails({
+        subtitleTestId: 'outstandingBalanceError',
         titleText: i18n.t('bottomSheetContent.outstandingBalance.titleText'),
         buttonText: i18n.t('bottomSheetContent.outstandingBalance.buttonText'),
         subTitleText: i18n.t('bottomSheetContent.outstandingBalance.subTitleText'),
