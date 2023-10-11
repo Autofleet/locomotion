@@ -279,15 +279,14 @@ export const ConfirmPickupTime = (props: any) => {
     unconfirmedPickupTime,
     updateRidePayload,
     setUnconfirmedPickupTime,
-    tryServiceEstimations,
     setServiceEstimations,
     ride,
     chosenService,
     defaultService,
+    setChosenService,
   } = useContext(MewRidePageContext);
   const {
     changeBsPage,
-    isDraggingLocationPin,
   } = useContext(RideStateContextContext);
   const date = moment(unconfirmedPickupTime).format('ddd, MMM Do');
   const isDateToday = moment(unconfirmedPickupTime).isSame(moment(), 'day');
@@ -330,6 +329,7 @@ export const ConfirmPickupTime = (props: any) => {
         if (ride?.scheduledTo !== unconfirmedPickupTime) {
           updateRidePayload({ scheduledTo: unconfirmedPickupTime });
           setServiceEstimations(null);
+          setChosenService(null);
         }
         changeBsPage(BS_PAGES.SERVICE_ESTIMATIONS);
       }}
@@ -570,7 +570,7 @@ export const ConfirmPickup = (props: any) => {
   ), []);
 
   const renderAddressContainer = useCallback(() => (
-    <AddressContainer>
+    <AddressContainer testID="pickupAddress">
       <SvgIcon Svg={locationIcon} height={20} width={10} fill={isDraggingLocationPin ? '#ADAEBA' : '#333'} />
       {isDraggingLocationPin ? renderSkeleton()
         : <AddressInput>{lastSelectedLocation?.streetAddress || i18n.t('bottomSheetContent.confirmPickup.noAddress')}</AddressInput>}

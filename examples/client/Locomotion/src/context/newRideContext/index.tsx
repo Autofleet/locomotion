@@ -430,6 +430,7 @@ const RidePageContextProvider = ({ children }: {
   const tryServiceEstimations = async () => {
     const serviceEstimationsInterval = await getServiceEstimationsFetchingInterval();
     await getServiceEstimations();
+    clearInterval(intervalRef.current);
     intervalRef.current = setInterval(async () => {
       if (intervalRef.current) {
         await getServiceEstimations(false);
