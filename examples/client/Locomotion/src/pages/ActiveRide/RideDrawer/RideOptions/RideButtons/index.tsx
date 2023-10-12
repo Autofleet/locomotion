@@ -239,6 +239,7 @@ const RideButtons = ({
     };
     const pureButton = () => (
       <ButtonContainer
+        padding="0 10px"
         error={paymentMethodNotAllowedOnService}
         testID="RidePayment"
         onPress={() => {
