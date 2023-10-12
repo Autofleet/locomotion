@@ -6,7 +6,7 @@ import { PaymentIcon } from 'react-native-payment-icons';
 import styled, { ThemeContext } from 'styled-components';
 import { useFocusEffect } from '@react-navigation/native';
 import SkeletonContent from 'react-native-skeleton-content-nonexpo';
-import { isCardPaymentMethod } from '../../../../../../lib/ride/utils';
+import { isCardPaymentMethod, isCashPaymentMethod, isOfflinePaymentMethod } from '../../../../../../lib/ride/utils';
 import { getFormattedPrice } from '../../../../../../context/newRideContext/utils';
 import { MAIN_ROUTES } from '../../../../../routes';
 import SvgIcon from '../../../../../../Components/SvgIcon';
@@ -109,7 +109,7 @@ const PaymentButton = ({
   };
 
   const loadPromoButton = () => {
-    if (id === PAYMENT_METHODS.CASH) {
+    if (isCashPaymentMethod({ id }) || isOfflinePaymentMethod({ id })) {
       return null;
     }
     if (!isDebuggingEnabled && coupon === null) {
