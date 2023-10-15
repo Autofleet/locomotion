@@ -7,7 +7,7 @@ import styled, { ThemeContext } from 'styled-components';
 import { useFocusEffect } from '@react-navigation/native';
 import SkeletonContent from 'react-native-skeleton-content-nonexpo';
 import { isCardPaymentMethod, isCashPaymentMethod, isOfflinePaymentMethod } from '../../../../../../lib/ride/utils';
-import { getFormattedPrice } from '../../../../../../context/newRideContext/utils';
+import { getFormattedPrice, getCouponText } from '../../../../../../context/newRideContext/utils';
 import { MAIN_ROUTES } from '../../../../../routes';
 import SvgIcon from '../../../../../../Components/SvgIcon';
 import { FONT_SIZES, FONT_WEIGHTS, GREEN_COLOR } from '../../../../../../context/theme';
@@ -89,24 +89,12 @@ const PaymentButton = ({
   invalid,
 }: PaymentButtonProps) => {
   const { primaryColor } = useContext(ThemeContext);
-  const [coupon, setCoupon] = useState<any>(null);
-  const { getCoupon } = useContext(UserContext);
+  const { getCoupon, coupon, setCoupon } = useContext(UserContext);
   const isDebuggingEnabled = (typeof atob !== 'undefined');
   const noCoupon = coupon && coupon.status === 'error';
 
-  const loadPromoText = () => {
-    if (coupon && !noCoupon) {
-      let amount;
-      if (coupon.amount_off) {
-        amount = getFormattedPrice(coupon.currency, coupon.amount_off);
-      } else if (coupon.percent_off) {
-        amount = `${coupon.percent_off}%`;
-      }
-
-      return i18n.t('home.promoCode.amountOff', { amount });
-    }
-    return i18n.t('bottomSheetContent.ride.promoText');
-  };
+  const loadPromoText = () => (coupon && !noCoupon ? i18n.t('home.promoCode.amountOff', { amount: getCouponText(coupon) })
+    : i18n.t('bottomSheetContent.ride.promoText'));
 
   const loadPromoButton = () => {
     if (isCashPaymentMethod({ id }) || isOfflinePaymentMethod({ id })) {
@@ -148,6 +136,7 @@ const PaymentButton = ({
         </PromoButton>
       );
     }
+    return (null);
   };
 
   const checkCoupon = async () => {
@@ -162,6 +151,7 @@ const PaymentButton = ({
   useFocusEffect(
     useCallback(() => {
       checkCoupon();
+      return () => setCoupon(null);
     }, []),
   );
   const IconColor = invalid ? '#F83743' : primaryColor;
