@@ -260,7 +260,7 @@ const RideButtons = ({
     const ridePaymentMethod = ride?.paymentMethodId ? getPaymentMethod(ride.paymentMethodId) : '';
     const getTypeText = () => {
       if (isOfflinePaymentMethod(selectedPaymentMethod)) {
-        return offlinePaymentText;
+        return i18n.t('bottomSheetContent.ride.defaultPaymentMethodNotAllowedText');
       }
       return capitalizeFirstLetter(ridePaymentMethod);
     };
