@@ -526,7 +526,7 @@
         "setPaymentBanner": "Set payment method",
         "payWithCash": "Pay with Cash",
         "cash": "Cash",
-        "offline": "Offline payment",
+        "offline": "Billed to company",
         "popups": {
             "removeCard": {
                 "title": "Remove payment method",
@@ -636,6 +636,7 @@
         },
         "ride": {
             "paymentMethodNotAllowedOnService": "{{type}} not allowed for this service",
+            "defaultPaymentMethodNotAllowedText": "This payment method is",
             "now": "Now",
             "notes": {
                 "edit": "Edit note",

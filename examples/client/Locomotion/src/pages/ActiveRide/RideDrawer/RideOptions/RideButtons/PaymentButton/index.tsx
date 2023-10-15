@@ -1,24 +1,23 @@
 import React, {
-  useCallback, useContext, useEffect, useState,
+  useCallback, useContext,
 } from 'react';
 import { Text, View } from 'react-native';
 import { PaymentIcon } from 'react-native-payment-icons';
 import styled, { ThemeContext } from 'styled-components';
 import { useFocusEffect } from '@react-navigation/native';
 import SkeletonContent from 'react-native-skeleton-content-nonexpo';
+import { isCardPaymentMethod, isCashPaymentMethod, isOfflinePaymentMethod } from '../../../../../../lib/ride/utils';
 import { getCouponText } from '../../../../../../context/newRideContext/utils';
 import { MAIN_ROUTES } from '../../../../../routes';
 import SvgIcon from '../../../../../../Components/SvgIcon';
 import { FONT_SIZES, FONT_WEIGHTS, GREEN_COLOR } from '../../../../../../context/theme';
 import { Brand } from '../../../../../../context/payments/interface';
-import cashIcon from '../../../../../../assets/cash.svg';
 import plus from '../../../../../../assets/bottomSheet/plus.svg';
 import i18n from '../../../../../../I18n';
 import Button from '../../../../../../Components/Button';
 import * as navigationService from '../../../../../../services/navigation';
 import { UserContext } from '../../../../../../context/user';
 import selected from '../../../../../../assets/selected-v.svg';
-import { PAYMENT_METHODS } from '../../../../../../pages/Payments/consts';
 
 const TimeText = styled(Text)`
     ${FONT_SIZES.LARGE}
@@ -96,7 +95,7 @@ const PaymentButton = ({
     : i18n.t('bottomSheetContent.ride.promoText'));
 
   const loadPromoButton = () => {
-    if (id === PAYMENT_METHODS.CASH) {
+    if (isCashPaymentMethod({ id }) || isOfflinePaymentMethod({ id })) {
       return null;
     }
     if (!isDebuggingEnabled && coupon === null) {
@@ -157,17 +156,15 @@ const PaymentButton = ({
   return (
     <Container>
       <CardNameContainer>
-        {id ? (id !== PAYMENT_METHODS.CASH
-          ? <PaymentIcon type={brand || 'generic'} />
+        {isCardPaymentMethod({ id }) ? <PaymentIcon type={brand || 'generic'} />
           : (
             <SvgIcon
               fill={IconColor}
-              Svg={cashIcon}
+              Svg={icon}
               height={25}
               width={40}
             />
-          ))
-          : <SvgIcon fill={IconColor} Svg={icon} height={15} width={15} />}
+          )}
         <TimeText numberOfLines={1}>{title}</TimeText>
       </CardNameContainer>
       <PromoButtonContainer>
