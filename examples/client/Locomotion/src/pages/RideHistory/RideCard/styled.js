@@ -54,7 +54,6 @@ export const RideViewContainer = styled.ScrollView.attrs(({
     paddingBottom: 60,
   },
 }))`
-
 `;
 
 export const MapRideViewContainer = styled(BaseRideViewContainer)`
@@ -140,8 +139,8 @@ export const MarkerTitleContainer = styled.View`
 `;
 
 export const MarkerTitleText = styled.Text`
-  ${FONT_SIZES.MEDIUM}
-  ${FONT_WEIGHTS.LIGHT}
+  ${FONT_SIZES.MEDIUM};
+  ${FONT_WEIGHTS.LIGHT};
 `;
 
 export const MarkerTitle = React.memo(({ children }) => (
@@ -156,24 +155,24 @@ export const MarkerTitle = React.memo(({ children }) => (
 
 export const DayTitleText = styled(BaseText)`
   text-transform: capitalize;
-  ${FONT_SIZES.H3}
-  ${FONT_WEIGHTS.SEMI_BOLD}
+  ${FONT_SIZES.H3};
+  ${FONT_WEIGHTS.SEMI_BOLD};
 `;
 
 export const RideViewSectionTitleText = styled(BaseText)`
   text-transform: capitalize;
-  ${FONT_SIZES.LARGE}
-  ${FONT_WEIGHTS.MEDIUM}
+  ${FONT_SIZES.LARGE};
+  ${FONT_WEIGHTS.MEDIUM};
 `;
 
 export const DayTitleSubText = styled(BaseText)`
-  ${({ noCap }) => (noCap ? '' : 'text-transform: capitalize;')}
+  ${({ noCap }) => (noCap ? '' : 'text-transform: capitalize;')};
 `;
 
 export const DaySecTitleText = styled(BaseText)`
   text-align: right;
-  ${FONT_SIZES.H3}
-  ${FONT_WEIGHTS.MEDIUM}
+  ${FONT_SIZES.H3};
+  ${FONT_WEIGHTS.MEDIUM};
 `;
 
 export const DaySecTitleSubText = styled(BaseText)`
@@ -205,5 +204,13 @@ padding: 20px;
 `;
 
 export const RetryPaymentButtonContainer = styled.View`
-  padding-top: 20px;
+padding-top: 20px;
+`;
+
+export const OutstandBalanceText = styled.Text`
+  color: ${ERROR_COLOR};
+  ${FONT_SIZES.LARGE};
+  ${FONT_WEIGHTS.LIGHT};
+  text-align: center;
+  margin-bottom: 10px;
 `;

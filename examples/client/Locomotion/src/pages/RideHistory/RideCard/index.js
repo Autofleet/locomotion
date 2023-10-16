@@ -31,6 +31,7 @@ import {
   StopPointsVerticalViewContainer,
   RideStateText,
   RetryPaymentButtonContainer,
+  OutstandBalanceText,
 } from './styled';
 import StopPointsVerticalView from '../../../Components/StopPointsVerticalView';
 import Map from './Map';
@@ -147,6 +148,7 @@ const RideView = ({ ride }) => {
   const [isPaymentSettled, setPaymentSettled] = useState(false);
   const [isUnableToProcessPopupVisible, setIsUnablToProcessPopupVisible] = useState(false);
   const [isPaymentSuccessPopupVisible, setIsPaymentSuccessPopupVisible] = useState(false);
+  const [outstandingBalance, setOutstandingBalance] = useState(null);
   const isPaymentRejected = !isPaymentSettled && isRidePaymentRejected;
 
   const usePayments = PaymentContext.useContainer();
@@ -158,11 +160,27 @@ const RideView = ({ ride }) => {
     setTip((tipObj || {}).amount);
   };
 
+  const getOutstandingBalance = async () => {
+    const {
+      amount,
+      currency,
+    } = await
+    usePayments.loadOutstandingBalance(ride.payment?.paymentMethod?.id);
+    setOutstandingBalance({
+      amount,
+      currency,
+    });
+  };
+
   useFocusEffect(() => {
     if (ride.priceCalculationId) {
       getTip();
     }
-  });
+
+    if (isRidePaymentRejected) {
+      getOutstandingBalance();
+    }
+  }, []);
 
   const retryPayment = async () => {
     const paymentId = ride.payment?.id;
@@ -204,12 +222,19 @@ const RideView = ({ ride }) => {
         </MapRideViewContainer>
         <DetailsContainer>
           <MainRideViewSectionContainer>
-            <RideTitleCard page ride={ride} showTip tip={tip} isPaymentRejected={isPaymentRejected} />
+            <RideTitleCard page ride={ride} showTip tip={tip} />
             <BlankContainer />
           </MainRideViewSectionContainer>
           {isPaymentRejected
             ? (
               <RetryPaymentButtonContainer>
+                {outstandingBalance
+                  ? (
+                    <OutstandBalanceText>
+                      {i18n.t('rideHistory.rideCard.paymentRetry.text',
+                        { price: getFormattedPrice(outstandingBalance.currency, outstandingBalance.amount) })}
+                    </OutstandBalanceText>
+                  ) : null}
                 <RoundedButton style={{ backgroundColor: '#24aaf2' }} onPress={retryPayment}>
                   {i18n.t('rideHistory.rideCard.paymentRetry.retryPaymentButton')}
                 </RoundedButton>

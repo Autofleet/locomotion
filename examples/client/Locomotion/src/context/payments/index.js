@@ -149,17 +149,22 @@ const usePayments = () => {
     }
   }, [paymentMethods]);
 
+  const loadOutstandingBalance = async (paymentMethodId) => {
+    const { data } = await network.get(`${BASE_PATH}/${paymentMethodId}/outstanding-balance`, {
+      params: {
+        includePayments: true,
+      },
+    });
+    return data;
+  };
+
   const loadOutstandingBalanceRide = async () => {
     const returnObject = {
       rideId: null,
     };
     const paymentMethod = getClientOutstandingBalanceCard();
     if (paymentMethod) {
-      const { data: details } = await network.get(`${BASE_PATH}/${paymentMethod.id}/outstanding-balance`, {
-        params: {
-          includePayments: true,
-        },
-      });
+      const details = await loadOutstandingBalance(paymentMethod.id);
       if (details && details.payments.length) {
         const { data: ride } = await network.get('/api/v1/me/rides', {
           params: {
@@ -191,6 +196,7 @@ const usePayments = () => {
     loadOutstandingBalanceRide,
     retryPayment,
     hasOutstandingPayment,
+    loadOutstandingBalance,
   };
 };
 
