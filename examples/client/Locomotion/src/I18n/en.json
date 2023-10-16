@@ -443,7 +443,7 @@
                 "retrySuccessBody": "Thank you for your payment - you can now resume your rides!",
                 "retrySuccessButton": "Done",
                 "retryPaymentButton": "Pay balance now",
-                "text": "You have an outstanding balance of {{ price }} for this ride"
+                "text": "You have an outstanding balance of \n {{ price }} for this ride"
             }
         },
         "filters": {

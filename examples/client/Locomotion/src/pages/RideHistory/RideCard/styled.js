@@ -98,12 +98,10 @@ export const BlankContainer = styled.View`
 `;
 
 export const RideViewTextContainer = styled.View`
-width: 65%;
 `;
 
 export const RideViewSecTextContainer = styled.View`
 align-items: flex-end;
-width: 35%;
 `;
 
 export const CenterContainer = styled.View`
