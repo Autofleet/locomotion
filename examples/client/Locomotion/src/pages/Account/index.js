@@ -177,7 +177,7 @@ const AccountContent = ({ setHeaderTitle }) => {
               navigationService.navigate(MAIN_ROUTES.LOGOUT);
             }}
           >
-            <LogoutText>{i18n.t('menu.logout')}</LogoutText>
+            <LogoutText testID="logoutButton">{i18n.t('menu.logout')}</LogoutText>
           </Button>
         </LogoutContainer>
         <LogoutContainer>

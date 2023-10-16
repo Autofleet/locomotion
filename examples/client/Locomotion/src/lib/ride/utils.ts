@@ -43,6 +43,8 @@ export const getSpTextWithNumberPrefix = (sp: any) => {
   return `${ordinalNumberPrefixText}${i18n.t(`stopPointsTypes.${uiSpType}`)}`;
 };
 
-export const isCashPaymentMethod = (paymentMethod: any) => paymentMethod.id === PAYMENT_METHODS.CASH;
+export const isCashPaymentMethod = (paymentMethod: any) => paymentMethod?.id === PAYMENT_METHODS.CASH;
+
+export const isOfflinePaymentMethod = (paymentMethod: any) => paymentMethod?.id === PAYMENT_METHODS.OFFLINE;
 
 export const isCardPaymentMethod = (paymentMethod: any) => ![PAYMENT_METHODS.CASH, PAYMENT_METHODS.OFFLINE].includes(paymentMethod?.id);

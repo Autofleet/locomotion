@@ -54,6 +54,7 @@
         "noCharge": "No charge",
         "estimatedFare": "Estimated fare",
         "estimatedFareMessage": "Some of the fares are estimated and may vary based on ride and other conditions",
+        "couponDiscountMessage": "<0>Promo code applied!<\/0> {{couponDiscount}} will be discounted at the end of the ride",
         "type": {
             "pickup": "Pickup",
             "dropoff": "Drop off",
@@ -526,7 +527,7 @@
         "setPaymentBanner": "Set payment method",
         "payWithCash": "Pay with Cash",
         "cash": "Cash",
-        "offline": "Offline payment",
+        "offline": "Billed to company",
         "popups": {
             "removeCard": {
                 "title": "Remove payment method",
@@ -636,6 +637,7 @@
         },
         "ride": {
             "paymentMethodNotAllowedOnService": "{{type}} not allowed for this service",
+            "defaultPaymentMethodNotAllowedText": "This payment method is",
             "now": "Now",
             "notes": {
                 "edit": "Edit note",
