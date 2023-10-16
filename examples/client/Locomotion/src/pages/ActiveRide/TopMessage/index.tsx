@@ -19,7 +19,7 @@ const TopMessage = ({
   text
     ? (
       <SafeView>
-        <Container>
+        <Container testID={title}>
           {title && (
           <Title>
             {icon && <SvgIcon Svg={icon} height={20} width={20} style={{ marginRight: 10 }} />}
