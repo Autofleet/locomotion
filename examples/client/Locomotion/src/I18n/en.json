@@ -428,7 +428,7 @@
         "noActivity": "No rides",
         "noActivityYet": "No rides yet",
         "noActivitySub": "Take your first ride and see it here!",
-        "unpaidRide": "Unpaid ride",
+        "unpaidRide": "Payment was rejected",
         "rideCard": {
             "rideJourney": "Ride journey",
             "driverRating": "Driver rating",
@@ -442,7 +442,8 @@
                 "retrySuccessTitle": "You are all set!",
                 "retrySuccessBody": "Thank you for your payment - you can now resume your rides!",
                 "retrySuccessButton": "Done",
-                "retryPaymentButton": "Pay balance now"
+                "retryPaymentButton": "Pay balance now",
+                "text": "You have an outstanding balance of \n {{ price }} for this ride"
             }
         },
         "filters": {
