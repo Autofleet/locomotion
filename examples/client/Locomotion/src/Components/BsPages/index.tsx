@@ -188,6 +188,7 @@ const BsPage = ({
   buttonDisabled,
   warning,
   fullWidthButtons,
+  subtitleTestId,
 }: {
   onSecondaryButtonPress?: any,
   onButtonPress: any,
@@ -202,6 +203,7 @@ const BsPage = ({
   buttonDisabled?: boolean;
   warning?: boolean
   fullWidthButtons?: boolean;
+  subtitleTestId: string
 }) => {
   const buttonWidth = fullWidthButtons ? '100%' : '48%';
   return (
@@ -215,7 +217,7 @@ const BsPage = ({
                 {titleIcon && <SvgIcon Svg={titleIcon} style={{ marginRight: 5 }} />}
                 <Title>{TitleText}</Title>
               </TitleContainer>
-              <SubTitle>{SubTitleText}</SubTitle>
+              <SubTitle testID={subtitleTestId}>{SubTitleText}</SubTitle>
             </CardText>
             {Image ? (
               <ImageContainer>
@@ -389,6 +391,7 @@ export const GenericError = (props: any) => {
   const { genericErrorDetails } = useContext(BottomSheetContext);
   return (
     <BsPage
+      subtitleTestId={genericErrorDetails.subtitleTestId}
       TitleText={genericErrorDetails.titleText}
       ButtonText={genericErrorDetails.buttonText}
       SubTitleText={genericErrorDetails.subTitleText}
