@@ -251,7 +251,6 @@
         "dropoffPlaceholder": "Click on stations or enter address",
         "pickupTitle": "Boarding",
         "dropoffTitle": "Exit",
-        "multiStopPlaceholder": "Add stop address",
         "addressPlaceholder": "Enter Address",
         "whereTo": "Enter your destination",
         "currentLocation": "Current location",
@@ -259,7 +258,8 @@
         "setLocationOnMap": "Set location on map",
         "welcomeText": "Hey {{ name }}, where to?",
         "noHistoryHeader": "Take a ride!",
-        "noHistoryText": "You'll see your recent locations here"
+        "noHistoryText": "You'll see your recent locations here",
+        "multiStopPlaceholder": "Add stop address"
     },
     "popups": {
         "rideCanceled": {
@@ -292,7 +292,6 @@
         },
         "rideSummary": {
             "thanksForRideHeadline": "Thanks for your ride!",
-            "rideDataHeadline": "",
             "durationLabel": "Duration",
             "distanceLabel": "Distance",
             "priceLabel": "Price",
@@ -400,7 +399,6 @@
         "pageTitle": "Rides History",
         "tripPageTitle": "Trip details",
         "noRides": "No results found",
-        "noRidesSubText": "",
         "ride": {
             "states": {
                 "canceled": "Canceled",
@@ -427,7 +425,7 @@
         "noActivity": "No rides",
         "noActivityYet": "No rides yet",
         "noActivitySub": "Take your first ride and see it here!",
-        "unpaidRide": "Unpaid ride",
+        "unpaidRide": "Payment was rejected",
         "rideCard": {
             "rideJourney": "Ride journey",
             "driverRating": "Driver rating",
@@ -616,7 +614,7 @@
             "noAddress": "Address not found. Please choose another location."
         },
         "notAvailableHere": {
-            "titleText": "We are Sorry!",
+            "titleText": "We are sorry!",
             "buttonText": "Choose another address",
             "subTitleText": "{{ appName }} is not available in your area",
             "pickupSubTitleText": "Pickup location must be within the {{ appName }} area"
@@ -634,7 +632,6 @@
             "buttonText2": "Take me back"
         },
         "ride": {
-            "paymentMethodNotAllowedOnService": "{{type}} not allowed for this service",
             "now": "Now",
             "notes": {
                 "edit": "Edit note",
@@ -656,7 +653,8 @@
             "highEtaButton": {
                 "enabled": "Select",
                 "disabled": "Temporarily unavailable, try again soon."
-            }
+            },
+            "paymentMethodNotAllowedOnService": "{{type}} not allowed for this service"
         }
     },
     "stopPointsTypes": {
