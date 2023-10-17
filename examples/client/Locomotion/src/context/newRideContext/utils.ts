@@ -24,10 +24,9 @@ export const FEEDBACK_TYPES = {
 };
 
 export const RIDER_APP_SOURCE = 'RIDER_APP';
-export const DEFAULT_FUTURE_MAX_RIDE_DAYS = 7;
 
 export const getFutureRideMinDate = (minutesBefore: number) => moment().add(minutesBefore, 'minutes').toDate();
-export const getFutureRideMaxDate = (daysAfter: number|undefined) => moment().add(daysAfter || DEFAULT_FUTURE_MAX_RIDE_DAYS, 'days').toDate();
+export const getFutureRideMaxDate = (daysAfter: number) => moment().add(daysAfter, 'days').toDate();
 
 export const TAG_OPTIONS = {
   FASTEST: i18n.t('services.tags.fastest'),

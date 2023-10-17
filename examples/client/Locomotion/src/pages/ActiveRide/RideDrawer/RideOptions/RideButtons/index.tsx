@@ -83,7 +83,7 @@ const RideButtons = ({
   const [passengersCounterError, setPassengersCounterError] = useState(false);
   const firstDate = () => moment(ride?.scheduledTo || undefined).add(ride?.scheduledTo ? 0 : (minMinutesBeforeFutureRide || 0) + 1, 'minutes').toDate();
   const [tempSelectedDate, setTempSelectedDate] = useState(firstDate());
-  const [maxDaysFutureRide, setMaxDaysFutureRide] = useState();
+  const [maxDaysFutureRide, setMaxDaysFutureRide] = useState(0);
   const paymentMethodNotAllowedOnService = chosenService && ride?.paymentMethodId
     && !chosenService.allowedPaymentMethods.includes(getPaymentMethod(ride.paymentMethodId));
 
