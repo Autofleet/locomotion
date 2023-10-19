@@ -284,6 +284,8 @@ export const ConfirmPickupTime = (props: any) => {
     chosenService,
     defaultService,
     setChosenService,
+    loadFutureBookingDays,
+    futureBookingDays,
   } = useContext(MewRidePageContext);
   const {
     changeBsPage,
@@ -300,9 +302,12 @@ export const ConfirmPickupTime = (props: any) => {
     const minutes = await getSettingByKey(SETTINGS_KEYS.MIN_MINUTES_BEFORE_FUTURE_RIDE);
     setMinMinutesBeforeFutureRide(minutes);
   };
+
   useEffect(() => {
     checkMinutesBeforeFutureRideSetting();
+    loadFutureBookingDays();
   }, []);
+
   useEffect(() => {
     setTempSelectedDate(startDate);
   }, [minMinutesBeforeFutureRide]);
@@ -361,7 +366,7 @@ export const ConfirmPickupTime = (props: any) => {
         textColor="black"
         isVisible={isDatePickerOpen}
         date={tempSelectedDate}
-        maximumDate={getFutureRideMaxDate()}
+        maximumDate={getFutureRideMaxDate(futureBookingDays)}
         minimumDate={getFutureRideMinDate((minMinutesBeforeFutureRide || 0))}
         mode="datetime"
         title={renderDatePickerTitle()}
