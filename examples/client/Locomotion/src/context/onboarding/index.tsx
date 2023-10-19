@@ -120,6 +120,13 @@ const OnboardingContextProvider = ({ children }: { children: any }) => {
       await getSettingByKey(
         SETTINGS_KEYS.CARD_PAGE_SETTINGS,
       );
+      const enforceProfilePicture = await getSettingByKey(
+        SETTINGS_KEYS.ENFORCE_PROFILE_PICTURE,
+      );
+      setRequiredOnboarding({
+        ...requiredOnboarding,
+        [MAIN_ROUTES.AVATAR]: enforceProfilePicture,
+      });
       const screenKey: string | undefined = Object.keys(keyToScreen).find(key => !user[key]);
       let unfinishedScreen = screenKey ? keyToScreen[screenKey] : keyToScreen.welcome;
       if (unfinishedScreen === MAIN_ROUTES.CARD) {

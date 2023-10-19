@@ -2,6 +2,7 @@ export default {
   SERVICE_ESTIMATIONS_INTERVAL_IN_SECONDS: 'riderApp.preRide.estimationsInterval',
   POST_RIDE_TIP_SETTINGS: 'riderApp.postRide.showTipPresetsAsPercentageThreshold',
   CARD_PAGE_SETTINGS: 'riderApp.onboarding.cardPageSettings',
+  ENFORCE_PROFILE_PICTURE: 'riderApp.enforceProfilePicture',
   MIN_APP_VERSION: 'riderApp.minAppVersion',
   CONTACT_US_URL: 'riderApp.contactUsUrl',
   TERMS_OF_USE_URL: 'riderApp.termsOfUseUrl',
@@ -16,4 +17,5 @@ export default {
   MULTI_SP: 'riderApp.showMultiStopPoint',
   DISABLE_CAPTCHA_UI: 'riderApp.disableCaptchaUi',
   MAX_DAYS_FOR_FUTURE_RIDE: 'riderApp.daysForFutureRideBooking',
+  OFFLINE_PAYMENT_TEXT: 'riderApp.offlinePaymentText',
 };

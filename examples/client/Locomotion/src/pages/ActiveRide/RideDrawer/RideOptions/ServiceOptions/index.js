@@ -1,27 +1,56 @@
 import React, { useContext, useEffect } from 'react';
 import SkeletonContent from 'react-native-skeleton-content-nonexpo';
+import { Text } from 'react-native';
+import { getCouponText } from '../../../../../context/newRideContext/utils';
 import { RidePageContext } from '../../../../../context/newRideContext';
+import { UserContext } from '../../../../../context/user';
 import ServiceCard from './ServiceCard';
 import { ServiceOptionsContainer } from './styles';
 import { serviceCardSkeleton } from './ServiceCard/skeleton';
-import { BottomSheetContext } from '../../../../../context/bottomSheetContext';
+import { BottomSheetContext, INITIAL_TOP_BAR_PROPS } from '../../../../../context/bottomSheetContext';
 import i18n from '../../../../../I18n';
+
+const SUCCESS_COLOR = '#25B861';
 
 const ServiceOptions = () => {
   const { serviceEstimations, stopRequestInterval } = useContext(RidePageContext);
+  const { coupon } = useContext(UserContext);
   const isDebuggingEnabled = (typeof atob !== 'undefined');
-  const {
-    setTopBarText,
-  } = useContext(BottomSheetContext);
+  const { setTopBarProps } = useContext(BottomSheetContext);
+
   useEffect(() => () => stopRequestInterval(), []);
 
+  const clearTopBar = () => {
+    setTopBarProps(INITIAL_TOP_BAR_PROPS);
+  };
+
+  const setCouponTopBar = () => {
+    setTopBarProps({
+      text: i18n.t('rideDetails.couponDiscountMessage', { couponDiscount: getCouponText(coupon) }),
+      backgroundColor: SUCCESS_COLOR,
+      htmlTags: [<Text style={{ fontWeight: 'bold' }} />],
+    });
+  };
+
+  const setEstimateFareTopBar = () => {
+    setTopBarProps({
+      text: i18n.t('rideDetails.estimatedFareMessage'),
+      backgroundColor: null,
+      htmlTags: [],
+    });
+  };
+
   useEffect(() => {
-    if ((serviceEstimations || []).some(estimation => estimation.isPriceEstimated)) {
-      setTopBarText(i18n.t('rideDetails.estimatedFareMessage'));
+    if (coupon && coupon.status !== 'error') {
+      setCouponTopBar();
+    } else if ((serviceEstimations || []).some(estimation => estimation.isPriceEstimated)) {
+      setEstimateFareTopBar();
     }
 
-    return () => setTopBarText('');
-  }, [serviceEstimations]);
+    return () => {
+      clearTopBar();
+    };
+  }, [serviceEstimations, coupon]);
 
 
   return (

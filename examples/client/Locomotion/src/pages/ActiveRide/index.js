@@ -119,7 +119,7 @@ const RidePage = ({ mapSettings, navigation }) => {
     reverseLocationGeocode,
   } = useContext(RidePageContext);
   const {
-    setIsExpanded, snapPoints, isExpanded, topBarText,
+    setIsExpanded, snapPoints, isExpanded, topBarProps,
   } = useContext(BottomSheetContext);
   const {
     clientHasValidPaymentMethods,
@@ -555,7 +555,7 @@ const RidePage = ({ mapSettings, navigation }) => {
         )}
       <MapOverlayButtons
         style={{
-          marginBottom: topBarText ? 40 : 0,
+          marginBottom: topBarProps.text ? 40 : 0,
           bottom: parseFloat(snapPoints[0]) + 25,
         }}
       >
