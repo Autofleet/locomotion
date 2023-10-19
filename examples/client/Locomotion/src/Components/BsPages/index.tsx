@@ -284,6 +284,8 @@ export const ConfirmPickupTime = (props: any) => {
     chosenService,
     defaultService,
     setChosenService,
+    loadFutureBookingDays,
+    futureBookingDays,
   } = useContext(MewRidePageContext);
   const {
     changeBsPage,
@@ -295,21 +297,15 @@ export const ConfirmPickupTime = (props: any) => {
   const beforeTime = (windowSize && moment(unconfirmedPickupTime).add(windowSize, 'minutes').format('h:mm A')) || i18n.t('general.noTimeWindow');
   const startDate = moment(unconfirmedPickupTime).add(unconfirmedPickupTime ? 0 : (minMinutesBeforeFutureRide || 0) + 1, 'minutes').toDate();
   const [tempSelectedDate, setTempSelectedDate] = useState(startDate);
-  const [maxDaysFutureRide, setMaxDaysFutureRide] = useState(0);
 
   const checkMinutesBeforeFutureRideSetting = async () => {
     const minutes = await getSettingByKey(SETTINGS_KEYS.MIN_MINUTES_BEFORE_FUTURE_RIDE);
     setMinMinutesBeforeFutureRide(minutes);
   };
 
-  const checkFutureBookingDays = async () => {
-    const maxDaysFromSettings = await getSettingByKey(SETTINGS_KEYS.MAX_DAYS_FOR_FUTURE_RIDE);
-    setMaxDaysFutureRide(maxDaysFromSettings);
-  };
-
   useEffect(() => {
     checkMinutesBeforeFutureRideSetting();
-    checkFutureBookingDays();
+    loadFutureBookingDays();
   }, []);
 
   useEffect(() => {
@@ -370,7 +366,7 @@ export const ConfirmPickupTime = (props: any) => {
         textColor="black"
         isVisible={isDatePickerOpen}
         date={tempSelectedDate}
-        maximumDate={getFutureRideMaxDate(maxDaysFutureRide)}
+        maximumDate={getFutureRideMaxDate(futureBookingDays)}
         minimumDate={getFutureRideMinDate((minMinutesBeforeFutureRide || 0))}
         mode="datetime"
         title={renderDatePickerTitle()}

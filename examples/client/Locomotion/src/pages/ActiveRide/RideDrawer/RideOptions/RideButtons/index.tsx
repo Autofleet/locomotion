@@ -59,6 +59,8 @@ const RideButtons = ({
     unconfirmedPickupTime,
     setNumberOfPassengers,
     defaultService,
+    loadFutureBookingDays,
+    futureBookingDays,
   } = useContext(RidePageContext);
 
 
@@ -83,7 +85,7 @@ const RideButtons = ({
   const [passengersCounterError, setPassengersCounterError] = useState(false);
   const firstDate = () => moment(ride?.scheduledTo || undefined).add(ride?.scheduledTo ? 0 : (minMinutesBeforeFutureRide || 0) + 1, 'minutes').toDate();
   const [tempSelectedDate, setTempSelectedDate] = useState(firstDate());
-  const [maxDaysFutureRide, setMaxDaysFutureRide] = useState(0);
+
   const paymentMethodNotAllowedOnService = chosenService && ride?.paymentMethodId
     && !chosenService.allowedPaymentMethods.includes(getPaymentMethod(ride.paymentMethodId));
 
@@ -103,15 +105,10 @@ const RideButtons = ({
     setTempSelectedDate(firstDate());
   }, [minMinutesBeforeFutureRide]);
 
-  const checkFutureBookingDays = async () => {
-    const maxDaysFromSettings = await getSettingByKey(SETTINGS_KEYS.MAX_DAYS_FOR_FUTURE_RIDE);
-    setMaxDaysFutureRide(maxDaysFromSettings);
-  };
-
   useEffect(() => {
     checkFutureRidesSetting();
     checkMinutesBeforeFutureRideSetting();
-    checkFutureBookingDays();
+    loadFutureBookingDays();
   }, []);
 
   const [animatedOpacity] = useState(new Animated.Value(0));
@@ -181,7 +178,7 @@ const RideButtons = ({
           textColor="black"
           isVisible={isDatePickerOpen}
           date={tempSelectedDate}
-          maximumDate={getFutureRideMaxDate(maxDaysFutureRide)}
+          maximumDate={getFutureRideMaxDate(futureBookingDays)}
           minimumDate={getFutureRideMinDate((minMinutesBeforeFutureRide || 0))}
           mode="datetime"
           title={renderDatePickerTitle()}
