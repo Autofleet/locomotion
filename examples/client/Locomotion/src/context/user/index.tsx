@@ -47,8 +47,10 @@ interface UserContextInterface {
   updatePushToken: () => Promise<boolean | null>,
   deleteUser: () => Promise<boolean>,
   updateUser: (values: any) => Promise<any>,
+  coupon: any | null,
   getCoupon: () => Promise<any>,
   createCoupon: (values: any) => Promise<any>,
+  setCoupon: (coupon: any | null) => void,
   onLogin: (phoneNumber: string, channel: string) => Promise<void>
 }
 
@@ -69,7 +71,9 @@ export const UserContext = createContext<UserContextInterface>({
   updatePushToken: async () => false,
   deleteUser: async () => true,
   updateUser: async (values: any) => undefined,
+  coupon: null,
   getCoupon: async () => undefined,
+  setCoupon: (coupon: any | null) => null,
   createCoupon: async (values: any) => undefined,
   onLogin: async (phoneNumber: string, channel: string) => undefined,
 });
@@ -78,6 +82,7 @@ const UserContextProvider = ({ children }: { children: any }) => {
   const usePayments = PaymentsContext.useContainer();
   const [locationGranted, setLocationGranted] = useState();
   const [user, setUser] = useState<User | null>(null);
+  const [coupon, setCoupon] = useState<any | null>(null);
 
   const getUserFromServer = () => getUserDetails();
 
@@ -252,7 +257,9 @@ const UserContextProvider = ({ children }: { children: any }) => {
         updatePushToken,
         deleteUser,
         updateUser,
+        coupon,
         getCoupon,
+        setCoupon: c => setCoupon(c),
         createCoupon,
         onLogin,
       }}

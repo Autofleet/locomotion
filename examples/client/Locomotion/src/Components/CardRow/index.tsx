@@ -5,17 +5,16 @@ import { View, Text } from 'react-native';
 import moment from 'moment';
 import styled, { ThemeContext } from 'styled-components';
 import { PaymentIcon } from 'react-native-payment-icons';
-import { PaymentMethodInterface } from 'context/payments/interface';
+import { paymentMethodToIconMap } from '../../pages/Payments/consts';
 import Button from '../Button';
 import { capitalizeFirstLetter, getLastFourForamttedShort } from '../../pages/Payments/cardDetailUtils';
 import i18n from '../../I18n';
 import SvgIcon from '../SvgIcon';
 import selected from '../../assets/selected-v.svg';
 import { Start, StartCapital } from '../../lib/text-direction';
-import cashIcon from '../../assets/cash.svg';
 import chevronIcon from '../../assets/chevron.svg';
 import { isCashPaymentMethod } from '../../lib/ride/utils';
-
+import paymentContext from '../../context/payments';
 
 type ContainerProps = {
   children: React.ReactNode,
@@ -91,9 +90,15 @@ const style = {
   [StartCapital()]: 28,
 };
 
+
 const CardRow = (paymentMethod: any) => {
   const { primaryColor } = useContext(ThemeContext);
+  const { offlinePaymentText, loadOfflinePaymentText } = paymentContext.useContainer();
   const [isCardExpired, setIsCardExpired] = useState(false);
+
+  useEffect(() => {
+    loadOfflinePaymentText();
+  }, []);
   useEffect(() => {
     let isExpired = false;
     setTimeout(() => {
@@ -102,6 +107,23 @@ const CardRow = (paymentMethod: any) => {
     }, 100);
   }, [paymentMethod]);
   const testID = paymentMethod.addNew ? `${paymentMethod.testIdPrefix || ''}AddPaymentMethod` : (`${paymentMethod.testIdPrefix || ''}ChoosePaymentMethod`);
+
+  const getPaymentMethodIcon = () => {
+    const { brand, id, lastFour } = paymentMethod;
+    const isCard = lastFour;
+    if (isCard) {
+      return <PaymentIcon type={brand} />;
+    }
+    return (
+      <SvgIcon
+        fill={primaryColor}
+        Svg={paymentMethodToIconMap[id]}
+        width={40}
+        height={25}
+      />
+    );
+  };
+
   return (
     <>
       <Button
@@ -129,9 +151,7 @@ const CardRow = (paymentMethod: any) => {
                 )
                 : (
                   <>
-                    {!paymentMethod.lastFour
-                      ? isCashPaymentMethod(paymentMethod) ? <SvgIcon fill={primaryColor} Svg={cashIcon} width={40} height={25} /> : null
-                      : <PaymentIcon type={paymentMethod.brand} />}
+                    {getPaymentMethodIcon()}
                     {paymentMethod.mark ? (
                       <SvgIcon
                         style={{
@@ -160,7 +180,7 @@ const CardRow = (paymentMethod: any) => {
                     {!paymentMethod.lastFour
                       ? (
                         <Type>
-                          {`${i18n.t(`payments.${isCashPaymentMethod(paymentMethod) ? 'cash' : 'offline'}`)}`}
+                          {isCashPaymentMethod(paymentMethod) ? i18n.t('payments.cash') : offlinePaymentText }
                         </Type>
                       )
                       : (
