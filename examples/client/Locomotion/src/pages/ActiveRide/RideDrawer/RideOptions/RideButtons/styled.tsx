@@ -34,7 +34,7 @@ export const ButtonContainer = styled(Button).attrs({
     height: 100%;
     display: flex;
     width: ${HALF_WIDTH};
-    padding: 0 15px;
+    padding: ${(({ padding }) => (padding || '0 15px'))};
 `;
 
 export const ButtonText = styled(Text)`
