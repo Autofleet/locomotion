@@ -33,6 +33,8 @@ const RidePaymentDetails = ({
     getRidePriceCalculation,
   } = useContext(RidePageContext);
 
+  const { showPrice, loadShowPrice } = PaymentContext.useContainer();
+
   const updatePriceCalculation = async () => {
     const calculation = await getRidePriceCalculation(rideId);
     setPriceCalculation(calculation);
@@ -43,6 +45,7 @@ const RidePaymentDetails = ({
 
   useEffect(() => {
     updatePriceCalculation();
+    loadShowPrice();
   }, []);
 
   return (paymentMethod ? (
@@ -54,16 +57,19 @@ const RidePaymentDetails = ({
         </CardRowContainer>
         <RidePriceDetails>
 
-          {!rideHistory ? (totalAmount === 0
+          {!rideHistory && (totalAmount === 0
             ? <PriceText>{`${i18n.t('rideDetails.noCharge')}`}</PriceText>
-            : (
+            : (showPrice
+              && (
               <PriceText>
                 {getFormattedPrice(priceCalculation?.currency,
                   totalAmount)}
               </PriceText>
+              )
             )
-          ) : null}
+          )}
 
+          {showPrice && (
           <Button
             testID="viewRidePaymentDetails"
             noBackground
@@ -78,6 +84,7 @@ const RidePaymentDetails = ({
                </ViewDetails>
               ) : undefined}
           </Button>
+          )}
         </RidePriceDetails>
       </PaymentRow>
     </>

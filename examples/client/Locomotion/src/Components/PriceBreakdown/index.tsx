@@ -17,6 +17,7 @@ import {
   PriceText,
 } from './styled';
 import { COUPON_TYPE } from '../../lib/commonTypes';
+import PaymentContext from '../../context/payments';
 
 const NoBreakdownComponent = ({
   didRequestFail,
@@ -62,6 +63,8 @@ const PriceBreakdown = ({
   const isDebuggingEnabled = typeof atob !== 'undefined';
   const [priceCalculationItems, setPriceCalculationItems] = useState<any[]>();
   const [total, setTotal] = useState<null | string>(null);
+
+  const { showPrice, loadShowPrice } = PaymentContext.useContainer();
   const getPriceWithCurrency = (amount: number) => `${getCurrencySymbol(priceCalculation.currency)}${amount.toFixed(2)}`;
 
   const calculationTypeToUnit: any = {
@@ -83,7 +86,8 @@ const PriceBreakdown = ({
       totalPrice += item.price;
       let name;
       if (item.pricingRule) {
-        const calculationTypeToUnitInstance = calculationTypeToUnit[item.pricingRule.calculationType];
+        const calculationTypeToUnitInstance = calculationTypeToUnit[
+          item.pricingRule.calculationType];
         name = `${i18n.t('ridePriceBreakdown.priceItem', {
           name: item.pricingRule.name,
         })} ${calculationTypeToUnitInstance ? calculationTypeToUnitInstance(
@@ -117,6 +121,10 @@ const PriceBreakdown = ({
     }
   }, [priceCalculation]);
 
+  useEffect(() => {
+    loadShowPrice();
+  }, []);
+
   return (
     <>
       <InnerContainer>
@@ -142,7 +150,7 @@ const PriceBreakdown = ({
           <InnerContainer>
             <Row>
               <ItemText>{`${i18n.t('ridePriceBreakdown.total')}`}</ItemText>
-              {priceCalculationItems ? (
+              {priceCalculationItems && showPrice ? (
                 <PriceText>{total}</PriceText>
               ) : (
                 <SkeletonContent

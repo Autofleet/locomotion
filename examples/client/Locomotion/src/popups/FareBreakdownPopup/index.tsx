@@ -13,6 +13,7 @@ import {
 import i18n from '../../I18n';
 import { Line } from '../../Components/PriceBreakdown/styled';
 import { getPriceCalculation } from '../../context/newRideContext/api';
+import PaymentContext from '../../context/payments';
 
 
 interface FareBreakdownPopupProps {
@@ -28,6 +29,8 @@ const FareBreakdownPopup = ({
 }: FareBreakdownPopupProps) => {
   const [priceCalculation, setPriceCalculation] = useState(null);
   const [didRequestFail, setDidRequestFail] = useState(false);
+  const { showPrice, loadShowPrice } = PaymentContext.useContainer();
+
   const loadPriceCalculation = async () => {
     try {
       setDidRequestFail(false);
@@ -39,6 +42,7 @@ const FareBreakdownPopup = ({
   };
   useEffect(() => {
     loadPriceCalculation();
+    loadShowPrice();
   }, []);
 
   return (
@@ -56,11 +60,14 @@ const FareBreakdownPopup = ({
           )}
         </InnerContainer>
         {service.isPriceEstimated && <Line />}
-        <PriceBreakdown
-          priceCalculation={priceCalculation}
-          didRequestFail={didRequestFail}
-          retryGetPriceBreakdown={loadPriceCalculation}
-        />
+        {showPrice
+          && (
+          <PriceBreakdown
+            priceCalculation={priceCalculation}
+            didRequestFail={didRequestFail}
+            retryGetPriceBreakdown={loadPriceCalculation}
+          />
+          )}
       </OuterContainer>
     </Modal>
   );

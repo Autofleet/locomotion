@@ -16,6 +16,7 @@ import BottomSheet from '../../../Components/BottomSheet';
 import BottomSheetContextProvider, { BottomSheetContext, SNAP_POINT_STATES } from '../../../context/bottomSheetContext';
 import CustomTip from './CustomTip';
 import { getFormattedPrice, getCurrencySymbol } from '../../../context/newRideContext/utils';
+import PaymentContext from '../../../context/payments';
 
 const TipSectionContainer = styled.View`
  width: 100%;
@@ -106,6 +107,7 @@ const Tips = ({
 }) => {
   const [selectedTip, setSelectedTip] = useState(null);
   const [customTip, setCustomTip] = useState(null);
+  const { showPrice, loadShowPrice } = PaymentContext.useContainer();
 
   const isPercentage = ridePrice >= tipSettings.percentageThreshold;
   const buttons = isPercentage ? tipSettings.percentage : tipSettings.fixedPrice;
@@ -121,6 +123,7 @@ const Tips = ({
 
   useEffect(() => {
     setSnapPointsState(SNAP_POINT_STATES.CUSTOM_TIP);
+    loadShowPrice();
   }, []);
 
 
@@ -173,9 +176,11 @@ const Tips = ({
             <Title testID="tipPageTitle">
               {`${i18n.t('postRide.tip.title')} ${driver.firstName}`}
             </Title>
+            {showPrice && (
             <SubTitle>
               {`${i18n.t('postRide.tip.subTitle')} ${serviceDisplayPrice}`}
             </SubTitle>
+            )}
           </Column>
           <ThumbnailContainer>
             <StyledThumbnail>
