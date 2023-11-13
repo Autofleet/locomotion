@@ -17,7 +17,7 @@ import {
   PriceText,
 } from './styled';
 import { COUPON_TYPE } from '../../lib/commonTypes';
-import PaymentContext from '../../context/payments';
+import settingsContext from '../../context/settings';
 
 const NoBreakdownComponent = ({
   didRequestFail,
@@ -60,11 +60,11 @@ const PriceBreakdown = ({
   didRequestFail,
   retryGetPriceBreakdown,
 }: PriceBreakdownProps) => {
+  const { showPrice, loadShowPrice } = settingsContext.useContainer();
   const isDebuggingEnabled = typeof atob !== 'undefined';
   const [priceCalculationItems, setPriceCalculationItems] = useState<any[]>();
   const [total, setTotal] = useState<null | string>(null);
 
-  const { showPrice, loadShowPrice } = PaymentContext.useContainer();
   const getPriceWithCurrency = (amount: number) => `${getCurrencySymbol(priceCalculation.currency)}${amount.toFixed(2)}`;
 
   const calculationTypeToUnit: any = {

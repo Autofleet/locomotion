@@ -17,7 +17,6 @@ const usePayments = () => {
   const [paymentAccount, setPaymentAccount] = useState(null);
   const [hasOutstandingPayment, setHasOutstandingPayment] = useState(false);
   const [offlinePaymentText, setOfflinePaymentText] = useState(null);
-  const [showPrice, setShowPrice] = useState(true);
 
   const loadOfflinePaymentText = async () => {
     const companyName = await useSettings.getSettingByKey(SETTINGS_KEYS.OFFLINE_PAYMENT_TEXT);
@@ -185,10 +184,6 @@ const usePayments = () => {
     }
     return returnObject;
   };
-  const loadShowPrice = async () => {
-    const hidePrice = await useSettings.getSettingByKey(SETTINGS_KEYS.HIDE_PRICE);
-    setShowPrice(!hidePrice);
-  };
 
   return {
     paymentAccount,
@@ -212,8 +207,6 @@ const usePayments = () => {
     loadOutstandingBalance,
     offlinePaymentText: offlinePaymentText || i18n.t('payments.offline'),
     loadOfflinePaymentText,
-    loadShowPrice,
-    showPrice,
   };
 };
 

@@ -10,6 +10,7 @@ import { isCardPaymentMethod } from '../../../lib/ride/utils';
 import { getPriceCalculation } from '../../../context/futureRides/api';
 import RidePaymentDetails from '../../../Components/RidePaymentDetails';
 import PaymentContext from '../../../context/payments';
+import SettingsContext from '../../../context/settings';
 import {
   DaySecTitleSubText,
   DaySecTitleText,
@@ -52,7 +53,7 @@ const RideTitleCard = ({
   ride, page, showTip, tip, isPaymentRejected,
 }) => {
   const isDebuggingEnabled = (typeof atob !== 'undefined');
-  const { showPrice, loadShowPrice } = PaymentContext.useContainer();
+  const { showPrice, loadShowPrice } = SettingsContext.useContainer();
 
   useEffect(() => {
     loadShowPrice();

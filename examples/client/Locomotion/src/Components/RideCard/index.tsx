@@ -15,6 +15,7 @@ import { getFormattedPrice, isPriceEstimated, convertTimezoneByLocation } from '
 import cashIcon from '../../assets/cash.svg';
 import { PAYMENT_METHODS } from '../../pages/Payments/consts';
 import PaymentContext from '../../context/payments';
+import SettingsContext from '../../context/settings';
 
 interface CardComponentProps {
   paymentMethod: {
@@ -51,7 +52,7 @@ const CardComponent = ({ paymentMethod }: CardComponentProps) => {
   };
   return (
     <TextRowWithIcon
-      text={getText()}
+      text={getText() || ''}
       Image={() => !isCash && !isOffline && <PaymentIcon type={paymentMethod.brand} />}
       icon={getIcon()}
       style={{ marginTop: 10, marginBottom: 10 }}
@@ -79,7 +80,7 @@ const RideCard = ({
   const {
     getRidePriceCalculation,
   } = useContext(RidePageContext);
-  const { showPrice, loadShowPrice } = PaymentContext.useContainer();
+  const { showPrice, loadShowPrice } = SettingsContext.useContainer();
 
   const addPriceCalculation = async () => {
     const price = await getRidePriceCalculation(ride.id, ride.priceCalculationId);
