@@ -21,18 +21,15 @@ import Tag from '../../../../../../Components/Tag';
 import { RidePageContext } from '../../../../../../context/newRideContext';
 import FareBreakdownPopup from '../../../../../../popups/FareBreakdownPopup';
 import SettingsContext from '../../../../../../context/settings';
-import SETTINGS_KEYS from '../../../../../../context/settings/keys';
 
 const FARE_POPUP = 'farePopup';
 
 const ServiceCard = ({ service, withBorder }) => {
-  const [showPrice, setShowPrice] = useState(true);
-
   const theme = useContext(ThemeContext);
   const {
     setChosenService, chosenService, serviceEstimations, ride,
   } = useContext(RidePageContext);
-  const { getSettingByKey } = SettingsContext.useContainer();
+  const { showPrice, loadShowPrice } = SettingsContext.useContainer();
   const [popup, setPopup] = useState(null);
   const isFutureRide = ride.scheduledTo;
   const unavailable = !((ride.scheduledTo && service.priceCalculationId)
@@ -104,13 +101,6 @@ const ServiceCard = ({ service, withBorder }) => {
     }
 
     return showPrice ? getFormattedPrice(service.currency, service.price) : null;
-  };
-
-  const loadShowPrice = async () => {
-    const hidePrice = await getSettingByKey(
-      SETTINGS_KEYS.HIDE_PRICE,
-    );
-    setShowPrice(!hidePrice);
   };
 
   useEffect(() => {

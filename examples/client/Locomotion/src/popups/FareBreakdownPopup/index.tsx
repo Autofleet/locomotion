@@ -14,7 +14,6 @@ import i18n from '../../I18n';
 import { Line } from '../../Components/PriceBreakdown/styled';
 import { getPriceCalculation } from '../../context/newRideContext/api';
 import SettingsContext from '../../context/settings';
-import SETTINGS_KEYS from '../../context/settings/keys';
 
 
 interface FareBreakdownPopupProps {
@@ -30,9 +29,7 @@ const FareBreakdownPopup = ({
 }: FareBreakdownPopupProps) => {
   const [priceCalculation, setPriceCalculation] = useState(null);
   const [didRequestFail, setDidRequestFail] = useState(false);
-  const [showPrice, setShowPrice] = useState<boolean>(true);
-
-  const { getSettingByKey } = SettingsContext.useContainer();
+  const { showPrice, loadShowPrice } = SettingsContext.useContainer();
 
   const loadPriceCalculation = async () => {
     try {
@@ -43,14 +40,6 @@ const FareBreakdownPopup = ({
       setDidRequestFail(true);
     }
   };
-
-  const loadShowPrice = async () => {
-    const hidePrice = await getSettingByKey(
-      SETTINGS_KEYS.HIDE_PRICE,
-    );
-    setShowPrice(!hidePrice);
-  };
-
   useEffect(() => {
     loadPriceCalculation();
     loadShowPrice();

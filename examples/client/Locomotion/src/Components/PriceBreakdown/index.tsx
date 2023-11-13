@@ -17,8 +17,7 @@ import {
   PriceText,
 } from './styled';
 import { COUPON_TYPE } from '../../lib/commonTypes';
-import SettingsContext from '../../context/settings';
-import SETTINGS_KEYS from '../../context/settings/keys';
+import settingsContext from '../../context/settings';
 
 const NoBreakdownComponent = ({
   didRequestFail,
@@ -61,11 +60,10 @@ const PriceBreakdown = ({
   didRequestFail,
   retryGetPriceBreakdown,
 }: PriceBreakdownProps) => {
-  const { getSettingByKey } = SettingsContext.useContainer();
+  const { showPrice, loadShowPrice } = settingsContext.useContainer();
   const isDebuggingEnabled = typeof atob !== 'undefined';
   const [priceCalculationItems, setPriceCalculationItems] = useState<any[]>();
   const [total, setTotal] = useState<null | string>(null);
-  const [showPrice, setShowPrice] = useState<boolean>(true);
 
   const getPriceWithCurrency = (amount: number) => `${getCurrencySymbol(priceCalculation.currency)}${amount.toFixed(2)}`;
 
@@ -122,13 +120,6 @@ const PriceBreakdown = ({
       loadPriceCalculationBreakdown();
     }
   }, [priceCalculation]);
-
-  const loadShowPrice = async () => {
-    const hidePrice = await getSettingByKey(
-      SETTINGS_KEYS.HIDE_PRICE,
-    );
-    setShowPrice(!hidePrice);
-  };
 
   useEffect(() => {
     loadShowPrice();

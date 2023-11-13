@@ -12,7 +12,6 @@ import {
 } from './styled';
 import { PaymentMethodInterface } from '../../context/payments/interface';
 import SettingsContext from '../../context/settings';
-import SETTINGS_KEYS from '../../context/settings/keys';
 import * as navigationService from '../../services/navigation';
 import Button from '../Button';
 
@@ -30,13 +29,11 @@ const RidePaymentDetails = ({
 
 }) => {
   const [priceCalculation, setPriceCalculation] = useState<PriceCalculation>();
-  const [showPrice, setShowPrice] = useState<boolean>(true);
-
   const {
     getRidePriceCalculation,
   } = useContext(RidePageContext);
-  const { getSettingByKey } = SettingsContext.useContainer();
 
+  const { showPrice, loadShowPrice } = SettingsContext.useContainer();
 
   const updatePriceCalculation = async () => {
     const calculation = await getRidePriceCalculation(rideId);
@@ -45,13 +42,6 @@ const RidePaymentDetails = ({
 
   const totalAmount = (priceCalculation?.totalPrice || 0)
   + (priceCalculation?.additionalCharges.find(({ chargeFor }) => chargeFor === CHARGE_FOR_TIP)?.amount || 0);
-
-  const loadShowPrice = async () => {
-    const hidePrice = await getSettingByKey(
-      SETTINGS_KEYS.HIDE_PRICE,
-    );
-    setShowPrice(!hidePrice);
-  };
 
   useEffect(() => {
     updatePriceCalculation();
