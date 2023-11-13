@@ -17,6 +17,7 @@ import BottomSheetContextProvider, { BottomSheetContext, SNAP_POINT_STATES } fro
 import CustomTip from './CustomTip';
 import { getFormattedPrice, getCurrencySymbol } from '../../../context/newRideContext/utils';
 import SettingsContext from '../../../context/settings';
+import SETTINGS_KEYS from '../../../context/settings/keys';
 
 const TipSectionContainer = styled.View`
  width: 100%;
@@ -107,7 +108,9 @@ const Tips = ({
 }) => {
   const [selectedTip, setSelectedTip] = useState(null);
   const [customTip, setCustomTip] = useState(null);
-  const { showPrice, loadShowPrice } = SettingsContext.useContainer();
+  const [showPrice, setShowPrice] = useState(true);
+
+  const { getSettingByKey } = SettingsContext.useContainer();
 
   const isPercentage = ridePrice >= tipSettings.percentageThreshold;
   const buttons = isPercentage ? tipSettings.percentage : tipSettings.fixedPrice;
@@ -120,6 +123,13 @@ const Tips = ({
     setSnapPointsState,
     isExpanded,
   } = useContext(BottomSheetContext);
+
+  const loadShowPrice = async () => {
+    const hidePrice = await getSettingByKey(
+      SETTINGS_KEYS.HIDE_PRICE,
+    );
+    setShowPrice(!hidePrice);
+  };
 
   useEffect(() => {
     setSnapPointsState(SNAP_POINT_STATES.CUSTOM_TIP);

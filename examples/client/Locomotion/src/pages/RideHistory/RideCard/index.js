@@ -11,6 +11,7 @@ import { getPriceCalculation } from '../../../context/futureRides/api';
 import RidePaymentDetails from '../../../Components/RidePaymentDetails';
 import PaymentContext from '../../../context/payments';
 import SettingsContext from '../../../context/settings';
+import SETTINGS_KEYS from '../../../context/settings/keys';
 import {
   DaySecTitleSubText,
   DaySecTitleText,
@@ -52,8 +53,16 @@ import sucessIcon from '../../../assets/checkmark.svg';
 const RideTitleCard = ({
   ride, page, showTip, tip, isPaymentRejected,
 }) => {
+  const [showPrice, setShowPrice] = useState(true);
+
   const isDebuggingEnabled = (typeof atob !== 'undefined');
-  const { showPrice, loadShowPrice } = SettingsContext.useContainer();
+  const { getSettingByKey } = SettingsContext.useContainer();
+  const loadShowPrice = async () => {
+    const hidePrice = await getSettingByKey(
+      SETTINGS_KEYS.HIDE_PRICE,
+    );
+    setShowPrice(!hidePrice);
+  };
 
   useEffect(() => {
     loadShowPrice();

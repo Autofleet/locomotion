@@ -16,6 +16,7 @@ import cashIcon from '../../assets/cash.svg';
 import { PAYMENT_METHODS } from '../../pages/Payments/consts';
 import PaymentContext from '../../context/payments';
 import SettingsContext from '../../context/settings';
+import SETTINGS_KEYS from '../../context/settings/keys';
 
 interface CardComponentProps {
   paymentMethod: {
@@ -77,10 +78,12 @@ const RideCard = ({
   const [ridePriceCalculation, setRidePriceCalculation] = useState<PriceCalculation>();
   const [timezonedScheduledTo, setTimezonedScheduledTo] = useState<string | null>(null);
   const [displayTimezone, setDisplayTimezone] = useState<string | null>(null);
+  const [showPrice, setShowPrice] = useState<boolean>(true);
+
   const {
     getRidePriceCalculation,
   } = useContext(RidePageContext);
-  const { showPrice, loadShowPrice } = SettingsContext.useContainer();
+  const { getSettingByKey } = SettingsContext.useContainer();
 
   const addPriceCalculation = async () => {
     const price = await getRidePriceCalculation(ride.id, ride.priceCalculationId);
@@ -92,6 +95,12 @@ const RideCard = ({
       addPriceCalculation();
     }
   }, [ride]);
+  const loadShowPrice = async () => {
+    const hidePrice = await getSettingByKey(
+      SETTINGS_KEYS.HIDE_PRICE,
+    );
+    setShowPrice(!hidePrice);
+  };
 
   useEffect(() => {
     loadShowPrice();
