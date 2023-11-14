@@ -244,7 +244,7 @@ const RidePage = ({ mapSettings, navigation }) => {
         onButtonPress={(pickupLocation) => {
           const { paymentMethodId } = ride;
           if (clientHasValidPaymentMethods()
-                || paymentMethodId.includes([PAYMENT_METHODS.CASH, PAYMENT_METHODS.OFFLINE])) {
+                || [PAYMENT_METHODS.CASH, PAYMENT_METHODS.OFFLINE].includes(paymentMethodId)) {
             requestRide(pickupLocation);
           } else {
             changeBsPage(BS_PAGES.NO_PAYMENT);
