@@ -242,7 +242,9 @@ const RidePage = ({ mapSettings, navigation }) => {
         isConfirmPickup
         initialLocation={requestStopPoints[0]}
         onButtonPress={(pickupLocation) => {
-          if (clientHasValidPaymentMethods() || ride.paymentMethodId === PAYMENT_METHODS.CASH) {
+          const { paymentMethodId } = ride;
+          if (clientHasValidPaymentMethods()
+                || paymentMethodId.includes([PAYMENT_METHODS.CASH, PAYMENT_METHODS.OFFLINE])) {
             requestRide(pickupLocation);
           } else {
             changeBsPage(BS_PAGES.NO_PAYMENT);
