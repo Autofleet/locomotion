@@ -5,7 +5,7 @@ import { View, Text } from 'react-native';
 import moment from 'moment';
 import styled, { ThemeContext } from 'styled-components';
 import { PaymentIcon } from 'react-native-payment-icons';
-import { paymentMethodToIconMap } from '../../pages/Payments/consts';
+import { PAYMENT_METHODS, paymentMethodToIconMap } from '../../pages/Payments/consts';
 import Button from '../Button';
 import { capitalizeFirstLetter, getLastFourForamttedShort } from '../../pages/Payments/cardDetailUtils';
 import i18n from '../../I18n';
@@ -106,7 +106,9 @@ const CardRow = (paymentMethod: any) => {
       setIsCardExpired(isExpired);
     }, 100);
   }, [paymentMethod]);
-  const testID = paymentMethod.addNew ? `${paymentMethod.testIdPrefix || ''}AddPaymentMethod` : (`${paymentMethod.testIdPrefix || ''}ChoosePaymentMethod`);
+  const testID = paymentMethod.addNew
+    ? `${paymentMethod.testIdPrefix || ''}AddPaymentMethod`
+    : (`${paymentMethod.testIdPrefix || ''}ChoosePaymentMethod${paymentMethod.id === PAYMENT_METHODS.OFFLINE || paymentMethod.id === PAYMENT_METHODS.CASH ? `_${paymentMethod.id}` : ''}`);
 
   const getPaymentMethodIcon = () => {
     const { brand, id, lastFour } = paymentMethod;
