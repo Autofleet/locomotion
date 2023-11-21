@@ -9,6 +9,7 @@ import {
 import { Portal } from '@gorhom/portal';
 import Config from 'react-native-config';
 import { distance, point } from '@turf/turf';
+import { isCardPaymentMethod } from '../../lib/ride/utils';
 import networkInfo from '../../services/networkInfo';
 import AFToast from '../../Components/Toast';
 import * as navigationService from '../../services/navigation';
@@ -242,7 +243,8 @@ const RidePage = ({ mapSettings, navigation }) => {
         isConfirmPickup
         initialLocation={requestStopPoints[0]}
         onButtonPress={(pickupLocation) => {
-          if (clientHasValidPaymentMethods() || ride.paymentMethodId === PAYMENT_METHODS.CASH) {
+          const { paymentMethodId } = ride;
+          if (clientHasValidPaymentMethods() || !isCardPaymentMethod({ id: paymentMethodId })) {
             requestRide(pickupLocation);
           } else {
             changeBsPage(BS_PAGES.NO_PAYMENT);
