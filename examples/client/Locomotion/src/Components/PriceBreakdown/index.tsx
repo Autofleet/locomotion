@@ -151,7 +151,7 @@ const PriceBreakdown = ({
             <Row>
               <ItemText>{`${i18n.t('ridePriceBreakdown.total')}`}</ItemText>
               {priceCalculationItems && showPrice ? (
-                <PriceText>{total}</PriceText>
+                <PriceText testID="priceCalculation">{total}</PriceText>
               ) : (
                 <SkeletonContent
                   containerStyle={{}}
