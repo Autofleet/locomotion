@@ -177,7 +177,7 @@ const Tips = ({
               {`${i18n.t('postRide.tip.title')} ${driver.firstName}`}
             </Title>
             {showPrice && (
-            <SubTitle>
+            <SubTitle testID="postRideTip">
               {`${i18n.t('postRide.tip.subTitle')} ${serviceDisplayPrice}`}
             </SubTitle>
             )}

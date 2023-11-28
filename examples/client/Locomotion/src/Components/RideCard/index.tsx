@@ -151,7 +151,7 @@ const RideCard = ({
           </ServiceType>
         </TopTextsContainer>
         { showPrice && (
-        <TopPriceContainer>
+        <TopPriceContainer testID="priceContainer">
           <RideDate>
             {getFormattedPrice(ride.priceCurrency, ride.priceAmount)}
           </RideDate>

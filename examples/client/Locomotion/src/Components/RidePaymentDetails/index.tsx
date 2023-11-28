@@ -61,7 +61,7 @@ const RidePaymentDetails = ({
             ? <PriceText>{`${i18n.t('rideDetails.noCharge')}`}</PriceText>
             : (showPrice
               && (
-              <PriceText>
+              <PriceText testID="priceText">
                 {getFormattedPrice(priceCalculation?.currency,
                   totalAmount)}
               </PriceText>
