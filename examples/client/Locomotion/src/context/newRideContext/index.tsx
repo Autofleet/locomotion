@@ -257,7 +257,7 @@ const RidePageContextProvider = ({ children }: {
   const getRouteName = () => navigationService?.getNavigator()?.getCurrentRoute().name;
   const [numberOfPassengers, setNumberOfPassengers] = useState<number | null>(null);
   const [addressSearchLabel, setAddressSearchLabel] = useState<string | null>(null);
-  const [futureBookingDays, setfutureBookingDays] = useState(0);
+  const [futureBookingDays, setFutureBookingDays] = useState(0);
 
 
   const intervalRef = useRef<any>();
@@ -471,7 +471,7 @@ const RidePageContextProvider = ({ children }: {
 
   const loadFutureBookingDays = async () => {
     const maxDaysFromSettings = await getSettingByKey(SETTINGS_KEYS.MAX_DAYS_FOR_FUTURE_RIDE);
-    setfutureBookingDays(maxDaysFromSettings);
+    setFutureBookingDays(maxDaysFromSettings);
   };
 
   const getLastCompletedRide = async () => {
