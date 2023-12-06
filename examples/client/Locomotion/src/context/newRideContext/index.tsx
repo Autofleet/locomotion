@@ -158,6 +158,8 @@ interface RidePageContextInterface {
   numberOfPassengers: number,
   setNumberOfPassengers: (num: number) => void,
   setLastAcknowledgedRideCompletionTimestampToNow: () => void
+  loadFutureBookingDays: () => void;
+  futureBookingDays: number;
 }
 
 export const RidePageContext = createContext<RidePageContextInterface>({
@@ -215,6 +217,8 @@ export const RidePageContext = createContext<RidePageContextInterface>({
   numberOfPassengers: null,
   setNumberOfPassengers: () => undefined,
   setLastAcknowledgedRideCompletionTimestampToNow: () => undefined,
+  loadFutureBookingDays: () => undefined,
+  futureBookingDays: 0,
 });
 
 const HISTORY_RECORDS_NUM = 10;
@@ -253,6 +257,8 @@ const RidePageContextProvider = ({ children }: {
   const getRouteName = () => navigationService?.getNavigator()?.getCurrentRoute().name;
   const [numberOfPassengers, setNumberOfPassengers] = useState<number | null>(null);
   const [addressSearchLabel, setAddressSearchLabel] = useState<string | null>(null);
+  const [futureBookingDays, setfutureBookingDays] = useState(0);
+
 
   const intervalRef = useRef<any>();
 
@@ -462,6 +468,11 @@ const RidePageContextProvider = ({ children }: {
   };
 
   const getRidesByParams = async (params: any) => rideApi.fetchRides(params);
+
+  const loadFutureBookingDays = async () => {
+    const maxDaysFromSettings = await getSettingByKey(SETTINGS_KEYS.MAX_DAYS_FOR_FUTURE_RIDE);
+    setfutureBookingDays(maxDaysFromSettings);
+  };
 
   const getLastCompletedRide = async () => {
     let lastTimestamp = await StorageService.get('lastCompletedRideTimestamp');
@@ -1344,6 +1355,8 @@ const RidePageContextProvider = ({ children }: {
         formatStationsList,
         clearRequestSp,
         setLastAcknowledgedRideCompletionTimestampToNow,
+        loadFutureBookingDays,
+        futureBookingDays,
       }}
     >
       {children}

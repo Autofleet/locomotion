@@ -54,6 +54,7 @@
         "noCharge": "No charge",
         "estimatedFare": "Estimated fare",
         "estimatedFareMessage": "Some of the fares are estimated and may vary based on ride and other conditions",
+        "couponDiscountMessage": "<0>Promo code applied!<\/0> {{couponDiscount}} will be discounted at the end of the ride",
         "type": {
             "pickup": "Pickup",
             "dropoff": "Drop off",
@@ -427,7 +428,7 @@
         "noActivity": "No rides",
         "noActivityYet": "No rides yet",
         "noActivitySub": "Take your first ride and see it here!",
-        "unpaidRide": "Unpaid ride",
+        "unpaidRide": "Payment was rejected",
         "rideCard": {
             "rideJourney": "Ride journey",
             "driverRating": "Driver rating",
@@ -441,7 +442,8 @@
                 "retrySuccessTitle": "You are all set!",
                 "retrySuccessBody": "Thank you for your payment - you can now resume your rides!",
                 "retrySuccessButton": "Done",
-                "retryPaymentButton": "Pay balance now"
+                "retryPaymentButton": "Pay balance now",
+                "text": "You have an outstanding balance of \n {{ price }} for this ride"
             }
         },
         "filters": {
@@ -525,7 +527,7 @@
         "setPaymentBanner": "Set payment method",
         "payWithCash": "Pay with Cash",
         "cash": "Cash",
-        "offline": "Offline payment",
+        "offline": "Billed to company",
         "popups": {
             "removeCard": {
                 "title": "Remove payment method",
@@ -635,6 +637,7 @@
         },
         "ride": {
             "paymentMethodNotAllowedOnService": "{{type}} not allowed for this service",
+            "defaultPaymentMethodNotAllowedText": "This payment method is",
             "now": "Now",
             "notes": {
                 "edit": "Edit note",

@@ -1,10 +1,9 @@
 import { useState, useEffect } from 'react';
 import { createContainer } from 'unstated-next';
-import { PaymentIntent } from '@stripe/stripe-react-native';
+import i18n from '../../I18n';
 import { PAYMENT_STATES } from '../../lib/commonTypes';
 import Mixpanel from '../../services/Mixpanel';
 import cashPaymentMethod from '../../pages/Payments/cashPaymentMethod';
-import { fetchRides } from '../newRideContext/api';
 import network from '../../services/network';
 import SETTINGS_KEYS from '../settings/keys';
 import SettingContext from '../settings';
@@ -17,6 +16,15 @@ const usePayments = () => {
   const [paymentMethods, setPaymentMethods] = useState([]);
   const [paymentAccount, setPaymentAccount] = useState(null);
   const [hasOutstandingPayment, setHasOutstandingPayment] = useState(false);
+  const [offlinePaymentText, setOfflinePaymentText] = useState(null);
+
+  const loadOfflinePaymentText = async () => {
+    const companyName = await useSettings.getSettingByKey(SETTINGS_KEYS.OFFLINE_PAYMENT_TEXT);
+    if (companyName) {
+      setOfflinePaymentText(companyName);
+    }
+    return companyName;
+  };
 
   const getCustomer = async () => {
     try {
@@ -149,17 +157,22 @@ const usePayments = () => {
     }
   }, [paymentMethods]);
 
+  const loadOutstandingBalance = async (paymentMethodId) => {
+    const { data } = await network.get(`${BASE_PATH}/${paymentMethodId}/outstanding-balance`, {
+      params: {
+        includePayments: true,
+      },
+    });
+    return data;
+  };
+
   const loadOutstandingBalanceRide = async () => {
     const returnObject = {
       rideId: null,
     };
     const paymentMethod = getClientOutstandingBalanceCard();
     if (paymentMethod) {
-      const { data: details } = await network.get(`${BASE_PATH}/${paymentMethod.id}/outstanding-balance`, {
-        params: {
-          includePayments: true,
-        },
-      });
+      const details = await loadOutstandingBalance(paymentMethod.id);
       if (details && details.payments.length) {
         const { data: ride } = await network.get('/api/v1/me/rides', {
           params: {
@@ -191,6 +204,9 @@ const usePayments = () => {
     loadOutstandingBalanceRide,
     retryPayment,
     hasOutstandingPayment,
+    loadOutstandingBalance,
+    offlinePaymentText: offlinePaymentText || i18n.t('payments.offline'),
+    loadOfflinePaymentText,
   };
 };
 

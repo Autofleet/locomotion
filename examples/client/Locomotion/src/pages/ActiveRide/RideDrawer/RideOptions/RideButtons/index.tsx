@@ -5,6 +5,7 @@ import DatePicker from 'react-native-date-picker';
 import moment from 'moment';
 import { ThemeContext } from 'styled-components';
 import { Animated } from 'react-native';
+import { isCashPaymentMethod, isOfflinePaymentMethod } from '../../../../../lib/ride/utils';
 import DatePickerPoppup from '../../../../../popups/DatePickerPoppup';
 import FutureBookingButton from './FutureBookingButton';
 import {
@@ -16,7 +17,6 @@ import NoteButton from '../../../../../Components/GenericRideButton';
 import i18n from '../../../../../I18n';
 import plus from '../../../../../assets/bottomSheet/plus.svg';
 import editNote from '../../../../../assets/bottomSheet/edit_note.svg';
-import creditCardIcon from '../../../../../assets/bottomSheet/credit_card_icon.svg';
 import PaymentButton from './PaymentButton';
 import PaymentsContext from '../../../../../context/payments';
 import { PaymentMethodInterface } from '../../../../../context/payments/interface';
@@ -24,16 +24,14 @@ import { RideStateContextContext } from '../../../../../context/ridePageStateCon
 import { popupNames } from '../utils';
 import { BS_PAGES } from '../../../../../context/ridePageStateContext/utils';
 import cashPaymentMethod from '../../../../../pages/Payments/cashPaymentMethod';
+import offlinePaymentMethod from '../../../../../pages/Payments/offlinePaymentMethod';
 import { getFutureRideMaxDate, getFutureRideMinDate } from '../../../../../context/newRideContext/utils';
 import settings from '../../../../../context/settings';
 import SETTINGS_KEYS from '../../../../../context/settings/keys';
-import {
-  getTextColorForTheme,
-} from '../../../../../context/theme';
-import { PAYMENT_METHODS } from '../../../../../pages/Payments/consts';
+import { PAYMENT_METHODS, paymentMethodToIconMap } from '../../../../../pages/Payments/consts';
 import PassengersCounter from './PassengersCounter';
 import ErrorPopup from '../../../../../popups/TwoButtonPopup';
-import { getPaymentMethod } from '../../../../../pages/Payments/cardDetailUtils';
+import { capitalizeFirstLetter, getPaymentMethod } from '../../../../../pages/Payments/cardDetailUtils';
 
 const POOLING_TYPES = {
   NO: 'no',
@@ -59,6 +57,8 @@ const RideButtons = ({
     unconfirmedPickupTime,
     setNumberOfPassengers,
     defaultService,
+    loadFutureBookingDays,
+    futureBookingDays,
   } = useContext(RidePageContext);
 
 
@@ -83,6 +83,7 @@ const RideButtons = ({
   const [passengersCounterError, setPassengersCounterError] = useState(false);
   const firstDate = () => moment(ride?.scheduledTo || undefined).add(ride?.scheduledTo ? 0 : (minMinutesBeforeFutureRide || 0) + 1, 'minutes').toDate();
   const [tempSelectedDate, setTempSelectedDate] = useState(firstDate());
+
   const paymentMethodNotAllowedOnService = chosenService && ride?.paymentMethodId
     && !chosenService.allowedPaymentMethods.includes(getPaymentMethod(ride.paymentMethodId));
 
@@ -105,6 +106,7 @@ const RideButtons = ({
   useEffect(() => {
     checkFutureRidesSetting();
     checkMinutesBeforeFutureRideSetting();
+    loadFutureBookingDays();
   }, []);
 
   const [animatedOpacity] = useState(new Animated.Value(0));
@@ -174,7 +176,7 @@ const RideButtons = ({
           textColor="black"
           isVisible={isDatePickerOpen}
           date={tempSelectedDate}
-          maximumDate={getFutureRideMaxDate()}
+          maximumDate={getFutureRideMaxDate(futureBookingDays)}
           minimumDate={getFutureRideMinDate((minMinutesBeforeFutureRide || 0))}
           mode="datetime"
           title={renderDatePickerTitle()}
@@ -215,15 +217,33 @@ const RideButtons = ({
     );
   };
 
+  const paymentMethodIdToDataMap = {
+    [PAYMENT_METHODS.CASH]: cashPaymentMethod,
+    [PAYMENT_METHODS.OFFLINE]: offlinePaymentMethod,
+  };
   const renderPaymentButton = () => {
+    const { offlinePaymentText, loadOfflinePaymentText } = PaymentsContext.useContainer();
+    useEffect(() => {
+      loadOfflinePaymentText();
+    }, []);
     const ridePaymentMethodId = ride?.paymentMethodId || '';
     const selectedPaymentMethod:
-     PaymentMethodInterface | undefined = ridePaymentMethodId === PAYMENT_METHODS.CASH
-       ? cashPaymentMethod
-       : paymentMethods.find(pm => pm.id === ridePaymentMethodId);
+     PaymentMethodInterface | undefined = paymentMethodIdToDataMap[ridePaymentMethodId]
+      || paymentMethods.find(pm => pm.id === ridePaymentMethodId);
 
+    const getSelectedPaymentMethodTitle = () : string => {
+      if (isCashPaymentMethod(selectedPaymentMethod)) {
+        return i18n.t('payments.cash');
+      }
+      if (isOfflinePaymentMethod(selectedPaymentMethod)) {
+        return offlinePaymentText;
+      }
+
+      return selectedPaymentMethod?.name || i18n.t('bottomSheetContent.ride.addPayment');
+    };
     const pureButton = () => (
       <ButtonContainer
+        padding="0 10px"
         error={paymentMethodNotAllowedOnService}
         testID="RidePayment"
         onPress={() => {
@@ -233,8 +253,8 @@ const RideButtons = ({
       >
         <PaymentButton
           brand={selectedPaymentMethod?.brand}
-          icon={creditCardIcon}
-          title={selectedPaymentMethod?.name === cashPaymentMethod.name ? i18n.t('payments.cash') : (selectedPaymentMethod?.name || i18n.t('bottomSheetContent.ride.addPayment'))}
+          icon={paymentMethodToIconMap[selectedPaymentMethod?.id]}
+          title={getSelectedPaymentMethodTitle()}
           id={selectedPaymentMethod?.id}
           invalid={paymentMethodNotAllowedOnService}
         />
@@ -242,12 +262,20 @@ const RideButtons = ({
     );
 
     const ridePaymentMethod = ride?.paymentMethodId ? getPaymentMethod(ride.paymentMethodId) : '';
+    const getTypeText = () => {
+      if (isOfflinePaymentMethod(selectedPaymentMethod)) {
+        return i18n.t('bottomSheetContent.ride.defaultPaymentMethodNotAllowedText');
+      }
+      return capitalizeFirstLetter(ridePaymentMethod);
+    };
     return (
       <>
         {paymentMethodNotAllowedOnService
           ? (
             <ButtonWithError
-              errorText={i18n.t('bottomSheetContent.ride.paymentMethodNotAllowedOnService', { type: ridePaymentMethod.charAt(0).toUpperCase() + ridePaymentMethod.slice(1) })}
+              errorText={i18n.t('bottomSheetContent.ride.paymentMethodNotAllowedOnService', {
+                type: getTypeText(),
+              })}
             >
               {pureButton()}
             </ButtonWithError>

@@ -26,7 +26,7 @@ export const FEEDBACK_TYPES = {
 export const RIDER_APP_SOURCE = 'RIDER_APP';
 
 export const getFutureRideMinDate = (minutesBefore: number) => moment().add(minutesBefore, 'minutes').toDate();
-export const getFutureRideMaxDate = () => moment().add(7, 'days').toDate();
+export const getFutureRideMaxDate = (daysAfter: number) => moment().add(daysAfter, 'days').toDate();
 
 export const TAG_OPTIONS = {
   FASTEST: i18n.t('services.tags.fastest'),
@@ -165,11 +165,19 @@ export const formatStopPointsForEstimations = (requestStopPoints: any[]) => requ
   lng: sp.lng,
 }));
 
-export const getFormattedPrice = (priceCurrency: string | undefined, priceAmount: number) => {
+export const getFormattedPrice = (priceCurrency: string | undefined,
+  priceAmount: number | undefined) => {
   if (!priceCurrency) {
     return i18n.t('rideDetails.noCharge');
   }
-  return new Intl.NumberFormat('en-US', { style: 'currency', currency: priceCurrency }).format(priceAmount);
+  return new Intl.NumberFormat('en-US', { style: 'currency', currency: priceCurrency }).format(priceAmount || 0);
+};
+
+export const getCouponText = (coupon: any) => {
+  if (!coupon || coupon.status === 'error') {
+    return '';
+  }
+  return coupon.percent_off ? `${coupon.percent_off}%` : getFormattedPrice(coupon.currency, coupon.amount_off);
 };
 
 

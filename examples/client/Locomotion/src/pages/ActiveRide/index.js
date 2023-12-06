@@ -9,6 +9,7 @@ import {
 import { Portal } from '@gorhom/portal';
 import Config from 'react-native-config';
 import { distance, point } from '@turf/turf';
+import { isCardPaymentMethod } from '../../lib/ride/utils';
 import networkInfo from '../../services/networkInfo';
 import AFToast from '../../Components/Toast';
 import * as navigationService from '../../services/navigation';
@@ -119,7 +120,7 @@ const RidePage = ({ mapSettings, navigation }) => {
     reverseLocationGeocode,
   } = useContext(RidePageContext);
   const {
-    setIsExpanded, snapPoints, isExpanded, topBarText,
+    setIsExpanded, snapPoints, isExpanded, topBarProps,
   } = useContext(BottomSheetContext);
   const {
     clientHasValidPaymentMethods,
@@ -242,7 +243,8 @@ const RidePage = ({ mapSettings, navigation }) => {
         isConfirmPickup
         initialLocation={requestStopPoints[0]}
         onButtonPress={(pickupLocation) => {
-          if (clientHasValidPaymentMethods() || ride.paymentMethodId === PAYMENT_METHODS.CASH) {
+          const { paymentMethodId } = ride;
+          if (clientHasValidPaymentMethods() || !isCardPaymentMethod({ id: paymentMethodId })) {
             requestRide(pickupLocation);
           } else {
             changeBsPage(BS_PAGES.NO_PAYMENT);
@@ -555,7 +557,7 @@ const RidePage = ({ mapSettings, navigation }) => {
         )}
       <MapOverlayButtons
         style={{
-          marginBottom: topBarText ? 40 : 0,
+          marginBottom: topBarProps.text ? 40 : 0,
           bottom: parseFloat(snapPoints[0]) + 25,
         }}
       >

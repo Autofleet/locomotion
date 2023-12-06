@@ -447,7 +447,7 @@ PODS:
     - Firebase/Crashlytics (= 8.15.0)
     - React-Core
     - RNFBApp
-  - RNGestureHandler (2.4.2):
+  - RNGestureHandler (2.12.1):
     - React-Core
   - RNLocalize (2.2.4):
     - React-Core
@@ -816,9 +816,9 @@ SPEC CHECKSUMS:
   RNFastImage: 3207b9eb17c2425d574ca40db35185db6e324f4e
   RNFBApp: e4439717c23252458da2b41b81b4b475c86f90c4
   RNFBCrashlytics: 94e1f78e2a9aa9e02edbfb0d3f1f0921ce00094b
-  RNGestureHandler: 61628a2c859172551aa2100d3e73d1e57878392f
+  RNGestureHandler: c0d04458598fcb26052494ae23dda8f8f5162b13
   RNLocalize: ea02d6ee626a9239c9efe0b2b3f8a4660dff6df6
-  RNReanimated: 51bba3f4b6dc13fbfe83d620fe20e82fcf6e9697
+  RNReanimated: 1f117be601c59177816351a965bc57320b766c15
   RNScreens: 34cc502acf1b916c582c60003dc3089fa01dc66d
   RNSVG: ecd661f380a07ba690c9c5929c475a44f432d674
   SDWebImage: a7f831e1a65eb5e285e3fb046a23fcfbf08e696d
@@ -831,6 +831,6 @@ SPEC CHECKSUMS:
   StripeUICore: 08c1efbd7e3c54ee7fa74334a37a1d4c08ba944d
   Yoga: c4d61225a466f250c35c1ee78d2d0b3d41fe661c
 
-PODFILE CHECKSUM: 702820324fe56b3916c3fc841fd20ce5daddfaf7
+PODFILE CHECKSUM: 42909390370d7a65830c84fab99e66e070f1b4f9
 
 COCOAPODS: 1.12.1
