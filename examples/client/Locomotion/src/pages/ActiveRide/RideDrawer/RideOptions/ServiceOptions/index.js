@@ -28,6 +28,7 @@ const ServiceOptions = () => {
     <ServiceOptionsContainer alwaysBounceVertical={false}>
       {(serviceEstimations || []).map(option => (
         <ServiceCard
+          testID={`Service_${option.id}`}
           withBorder
           service={option}
           key={option.name}
