@@ -14,6 +14,7 @@ import { InputContainer, Label } from './styles';
 const DevSettingPage = () => {
   const [operationId, setOperationId] = useState(Config.OPERATION_ID);
   const [serverUrl, setServerUrl] = useState(Config.SERVER_HOST);
+  const [stripeKey, setStripeKey] = useState(Config.STRIPE_PUBLISHER_KEY);
   return (
     <PageContainer>
       <PageHeader
@@ -41,10 +42,19 @@ const DevSettingPage = () => {
         }}
         value={serverUrl}
       />
+      <Label>Stripe Key</Label>
+      <TextInput
+        testID="stripeKey"
+        autoFocus
+        onChangeText={(newStripeKey: string) => {
+          setStripeKey(newStripeKey);
+        }}
+        value={stripeKey}
+      />
       <NavButton
         testID="saveButton"
         onPress={() => {
-          AppSettings.setSettings({ serverUrl, operationId });
+          AppSettings.setSettings({ serverUrl, operationId, stripeKey });
           navigationService.goBack();
         }}
       >
