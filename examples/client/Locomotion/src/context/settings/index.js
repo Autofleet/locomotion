@@ -21,7 +21,7 @@ const useSettings = () => {
   const [workingHours, setWorkingHours] = useState({});
   const [measureSystem, setMeasureSystem] = useState('metric');
   const [appSettingsState, setAppSettingsState] = useState({});
-  const [showPrice, setShowPrice] = useState(true);
+  const [showPrice, setShowPrice] = useState(false);
 
 
   const getSettingByKey = async (key) => {
