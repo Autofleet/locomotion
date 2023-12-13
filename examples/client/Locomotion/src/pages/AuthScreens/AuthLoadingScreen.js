@@ -1,8 +1,8 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { initStripe } from '@stripe/stripe-react-native';
-import Config from 'react-native-config';
 import moment from 'moment';
 import { Platform } from 'react-native';
+import AppSettings from '../../services/app-settings';
 import { APP_ROUTES, MAIN_ROUTES } from '../routes';
 import { logout } from '../../services/logout';
 import { getUserDetails } from '../../context/user/api';
@@ -69,9 +69,9 @@ const AuthLoadingScreen = () => {
           }),
         ]);
 
-
+        const publishableKey = await AppSettings.getStripeKey();
         initStripe({
-          publishableKey: Config.STRIPE_PUBLISHER_KEY,
+          publishableKey,
           merchantIdentifier: 'merchant.identifier',
           stripeAccountId: paymentAccount.stripeId,
         });
