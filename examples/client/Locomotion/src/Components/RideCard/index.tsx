@@ -14,7 +14,8 @@ import StopPointsVerticalView from '../StopPointsVerticalView';
 import { getFormattedPrice, isPriceEstimated, convertTimezoneByLocation } from '../../context/newRideContext/utils';
 import cashIcon from '../../assets/cash.svg';
 import { PAYMENT_METHODS } from '../../pages/Payments/consts';
-import paymentContext from '../../context/payments';
+import PaymentContext from '../../context/payments';
+import SettingsContext from '../../context/settings';
 
 interface CardComponentProps {
   paymentMethod: {
@@ -26,7 +27,7 @@ interface CardComponentProps {
 const CardComponent = ({ paymentMethod }: CardComponentProps) => {
   const isCash = PAYMENT_METHODS.CASH === paymentMethod.id;
   const isOffline = PAYMENT_METHODS.OFFLINE === paymentMethod.id;
-  const { offlinePaymentText, loadOfflinePaymentText } = paymentContext.useContainer();
+  const { offlinePaymentText, loadOfflinePaymentText } = PaymentContext.useContainer();
 
   useEffect(() => {
     loadOfflinePaymentText();
@@ -51,7 +52,7 @@ const CardComponent = ({ paymentMethod }: CardComponentProps) => {
   };
   return (
     <TextRowWithIcon
-      text={getText()}
+      text={getText() || ''}
       Image={() => !isCash && !isOffline && <PaymentIcon type={paymentMethod.brand} />}
       icon={getIcon()}
       style={{ marginTop: 10, marginBottom: 10 }}
@@ -79,6 +80,7 @@ const RideCard = ({
   const {
     getRidePriceCalculation,
   } = useContext(RidePageContext);
+  const { showPrice, loadShowPrice } = SettingsContext.useContainer();
 
   const addPriceCalculation = async () => {
     const price = await getRidePriceCalculation(ride.id, ride.priceCalculationId);
@@ -90,6 +92,10 @@ const RideCard = ({
       addPriceCalculation();
     }
   }, [ride]);
+
+  useEffect(() => {
+    loadShowPrice();
+  }, []);
 
   const formatScheludedTo = async (time: any) => {
     try {
@@ -144,7 +150,8 @@ const RideCard = ({
             {serviceName}
           </ServiceType>
         </TopTextsContainer>
-        <TopPriceContainer>
+        { showPrice && (
+        <TopPriceContainer testID="priceContainer">
           <RideDate>
             {getFormattedPrice(ride.priceCurrency, ride.priceAmount)}
           </RideDate>
@@ -157,6 +164,7 @@ const RideCard = ({
             : null}
           {displayTimezone ? <ServiceType /> : null}
         </TopPriceContainer>
+        )}
       </DateContainer>
 
       <StopPointsVerticalView ride={ride} />

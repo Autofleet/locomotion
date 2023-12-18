@@ -1,5 +1,5 @@
 import moment from 'moment';
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import propsTypes from 'prop-types';
 import { View } from 'react-native';
 import SvgIcon from '../../../../../../Components/SvgIcon';
@@ -20,6 +20,7 @@ import {
 import Tag from '../../../../../../Components/Tag';
 import { RidePageContext } from '../../../../../../context/newRideContext';
 import FareBreakdownPopup from '../../../../../../popups/FareBreakdownPopup';
+import SettingsContext from '../../../../../../context/settings';
 
 const FARE_POPUP = 'farePopup';
 
@@ -28,6 +29,7 @@ const ServiceCard = ({ service, withBorder }) => {
   const {
     setChosenService, chosenService, serviceEstimations, ride,
   } = useContext(RidePageContext);
+  const { showPrice, loadShowPrice } = SettingsContext.useContainer();
   const [popup, setPopup] = useState(null);
   const isFutureRide = ride.scheduledTo;
   const unavailable = !((ride.scheduledTo && service.priceCalculationId)
@@ -98,8 +100,12 @@ const ServiceCard = ({ service, withBorder }) => {
       return i18n.t('rideDetails.unavailable');
     }
 
-    return getFormattedPrice(service.currency, service.price);
+    return showPrice ? getFormattedPrice(service.currency, service.price) : null;
   };
+
+  useEffect(() => {
+    loadShowPrice();
+  }, []);
 
   return (
     <>

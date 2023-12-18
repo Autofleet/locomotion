@@ -10,6 +10,7 @@ import { isCardPaymentMethod } from '../../../lib/ride/utils';
 import { getPriceCalculation } from '../../../context/futureRides/api';
 import RidePaymentDetails from '../../../Components/RidePaymentDetails';
 import PaymentContext from '../../../context/payments';
+import SettingsContext from '../../../context/settings';
 import {
   DaySecTitleSubText,
   DaySecTitleText,
@@ -52,6 +53,12 @@ const RideTitleCard = ({
   ride, page, showTip, tip, isPaymentRejected,
 }) => {
   const isDebuggingEnabled = (typeof atob !== 'undefined');
+  const { showPrice, loadShowPrice } = SettingsContext.useContainer();
+
+  useEffect(() => {
+    loadShowPrice();
+  }, []);
+
   const getTipButton = () => {
     if (!isDebuggingEnabled && tip === null) {
       return (
@@ -115,9 +122,11 @@ const RideTitleCard = ({
           ) : <RideStateText>{i18n.t(`rideHistory.ride.states.${ride.state}`)}</RideStateText>}
         </RideViewTextContainer>
         <RideViewSecTextContainer>
+          {showPrice && (
           <DaySecTitleText markError={isPaymentRejected} testID="ridePrice">
             {getFormattedPrice(ride.priceCurrency, ride.priceAmount)}
           </DaySecTitleText>
+          )}
           {getPriceSubtitle()}
         </RideViewSecTextContainer>
       </TitleContainer>
@@ -232,7 +241,10 @@ const RideView = ({ ride }) => {
                   ? (
                     <OutstandBalanceText>
                       {i18n.t('rideHistory.rideCard.paymentRetry.text',
-                        { price: getFormattedPrice(outstandingBalance.currency, outstandingBalance.amount) })}
+                        {
+                          price:
+                          getFormattedPrice(outstandingBalance.currency, outstandingBalance.amount),
+                        })}
                     </OutstandBalanceText>
                   ) : null}
                 <RoundedButton style={{ backgroundColor: '#24aaf2' }} onPress={retryPayment}>

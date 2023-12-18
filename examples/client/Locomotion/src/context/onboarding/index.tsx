@@ -3,7 +3,7 @@ import React, {
   createContext, useContext, useState,
 } from 'react';
 import { initStripe } from '@stripe/stripe-react-native';
-import Config from 'react-native-config';
+import AppSettings from '../../services/app-settings';
 import settings from '../settings';
 import SETTINGS_KEYS from '../settings/keys';
 import * as navigationService from '../../services/navigation';
@@ -109,9 +109,9 @@ const OnboardingContextProvider = ({ children }: { children: any }) => {
       getOrFetchClientPaymentAccount(),
       loadCustomer(),
     ]);
-
+    const publishableKey = await AppSettings.getStripeKey();
     initStripe({
-      publishableKey: Config.STRIPE_PUBLISHER_KEY,
+      publishableKey,
       merchantIdentifier: 'merchant.identifier',
       stripeAccountId: paymentAccount.stripeId,
     });
