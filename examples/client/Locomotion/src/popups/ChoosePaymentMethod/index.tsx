@@ -4,6 +4,8 @@ import { View } from 'react-native';
 import PropTypes from 'prop-types';
 import Modal from 'react-native-modal';
 import { useNavigation } from '@react-navigation/native';
+import { INITIAL_ACTIVE_PAYMENT_TAB, PAYMENT_TABS } from '../../pages/Payments/consts';
+import TabSwitch from '../../Components/TabSwitch';
 import { getPaymentMethod } from '../../pages/Payments/cardDetailUtils';
 import CloseButton from '../../Components/CloseButton';
 import i18n from '../../I18n';
@@ -49,7 +51,7 @@ const PaymentMethodPopup = ({
   const usePayments: any = PaymentsContext.useContainer();
   const { chosenService } = useContext(MewRidePageContext);
   const [selectedPaymentId, setSelectedPaymentId] = useState<string | undefined>(selected);
-
+  const [activePaymentTab, setActivePaymentTab] = useState(INITIAL_ACTIVE_PAYMENT_TAB);
   const getDisabledReason = (paymentMethod: any) => {
     if (
       chosenService
@@ -102,6 +104,13 @@ const PaymentMethodPopup = ({
         </TitleView>
         <CardsScrollView>
           <Container>
+            <TabSwitch
+              activeTabId={activePaymentTab}
+              tabs={PAYMENT_TABS}
+              onUnselectedClick={(tab) => {
+                setActivePaymentTab(tab.id);
+              }}
+            />
             <View>
               {
                 [

@@ -289,7 +289,11 @@
             "placeholder": "How to find me, flights, info, etc.",
             "save": "Save",
             "cancel": "Cancel",
-            "unavailable": "Unavailable for the selected service"
+            "unavailable": "Unavailable for the selected service",
+            "tabs": {
+                "personal": "Personal",
+                "business": "Business"
+            }
         },
         "rideSummary": {
             "thanksForRideHeadline": "Thanks for your ride!",
