@@ -8,16 +8,19 @@ export const PAYMENT_METHODS = {
   OFFLINE: 'offline',
   CARD: 'card',
 };
-
+export const PAYMENT_MODES = {
+  PERSONAL: 'personal',
+  BUSINESS: 'business',
+};
 export const PAYMENT_TABS = [
   {
     textKey: 'popups.choosePaymentMethod.tabs.personal',
-    id: 'personal',
+    id: PAYMENT_MODES.PERSONAL,
     Svg: personalPaymentIcon,
   },
   {
     textKey: 'popups.choosePaymentMethod.tabs.business',
-    id: 'business',
+    id: PAYMENT_MODES.BUSINESS,
     Svg: businessPaymentIcon,
   },
 ];

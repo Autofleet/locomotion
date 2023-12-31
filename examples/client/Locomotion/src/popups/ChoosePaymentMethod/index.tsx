@@ -4,7 +4,7 @@ import { View } from 'react-native';
 import PropTypes from 'prop-types';
 import Modal from 'react-native-modal';
 import { useNavigation } from '@react-navigation/native';
-import { INITIAL_ACTIVE_PAYMENT_TAB, PAYMENT_TABS } from '../../pages/Payments/consts';
+import { INITIAL_ACTIVE_PAYMENT_TAB, PAYMENT_MODES, PAYMENT_TABS } from '../../pages/Payments/consts';
 import TabSwitch from '../../Components/TabSwitch';
 import { getPaymentMethod } from '../../pages/Payments/cardDetailUtils';
 import CloseButton from '../../Components/CloseButton';
@@ -52,6 +52,7 @@ const PaymentMethodPopup = ({
   const { chosenService } = useContext(MewRidePageContext);
   const [selectedPaymentId, setSelectedPaymentId] = useState<string | undefined>(selected);
   const [activePaymentTab, setActivePaymentTab] = useState(INITIAL_ACTIVE_PAYMENT_TAB);
+  const isBusinessMode = activePaymentTab === PAYMENT_MODES.BUSINESS;
   const getDisabledReason = (paymentMethod: any) => {
     if (
       chosenService
@@ -113,26 +114,30 @@ const PaymentMethodPopup = ({
             />
             <View>
               {
-                [
-                  ...usePayments.paymentMethods,
-                  ...(showCash ? [cashPaymentMethod] : []),
-                  ...(showOffline ? [offlinePaymentMethod] : []),
-                ].map((paymentMethod: any) => {
-                  const reason = getDisabledReason(paymentMethod);
-                  return (
-                    <PaymentMethod
-                      testIdPrefix="Dialog"
-                      {...paymentMethod}
-                      chooseMethodPage
-                      disabledReason={reason}
-                      selected={selectedPaymentId === paymentMethod.id}
-                      mark={selectedPaymentId === paymentMethod.id}
-                      onPress={() => {
-                        setSelectedPaymentId(paymentMethod.id);
-                      }}
-                    />
-                  );
-                })}
+                (
+                  [
+                    ...usePayments.paymentMethods,
+                    ...(showCash ? [cashPaymentMethod] : []),
+                    ...(showOffline ? [offlinePaymentMethod] : []),
+                  ].map((paymentMethod: any) => {
+                    const reason = getDisabledReason(paymentMethod);
+                    return (
+                      <PaymentMethod
+                        testIdPrefix="Dialog"
+                        {...paymentMethod}
+                        chooseMethodPage
+                        disabledReason={reason}
+                        selected={selectedPaymentId === paymentMethod.id}
+                        mark={selectedPaymentId === paymentMethod.id}
+                        onPress={() => {
+                          setSelectedPaymentId(paymentMethod.id);
+                        }}
+                      />
+                    );
+                  })
+                  )
+              }
+              { !isBusinessMode && (
               <PaymentMethod
                 testIdPrefix="Dialog"
                 addNew
@@ -141,6 +146,7 @@ const PaymentMethodPopup = ({
                   onAddNewMethod();
                 }}
               />
+              ) }
             </View>
           </Container>
         </CardsScrollView>
