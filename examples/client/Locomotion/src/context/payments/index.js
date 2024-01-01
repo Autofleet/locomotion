@@ -46,7 +46,12 @@ const usePayments = () => {
     return customerData;
   };
 
-  const getOrFetchCustomer = async () => loadCustomer();
+  const getOrFetchCustomer = async () => {
+    if (customer) {
+      return customer;
+    }
+    return loadCustomer();
+  };
 
   const setup = async () => {
     try {

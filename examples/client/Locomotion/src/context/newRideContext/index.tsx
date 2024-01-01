@@ -291,6 +291,7 @@ const RidePageContextProvider = ({ children }: {
     }
     setRide({});
     clearLastRide();
+    setBusinessAccountId(null);
   };
 
   const onRideCompleted = (rideId: string, priceCalculationId: string) => {
@@ -1302,7 +1303,6 @@ const RidePageContextProvider = ({ children }: {
   };
   const updateBusinessAccountId = (newBusinessAccountId: string | null) => {
     if (newBusinessAccountId !== businessAccountId) {
-      console.log('UPDATING...BS!', newBusinessAccountId);
       setBusinessAccountId(newBusinessAccountId);
     }
   };
