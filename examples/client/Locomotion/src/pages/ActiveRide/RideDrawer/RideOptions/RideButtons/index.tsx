@@ -59,6 +59,7 @@ const RideButtons = ({
     defaultService,
     loadFutureBookingDays,
     futureBookingDays,
+    businessAccountId,
   } = useContext(RidePageContext);
 
 
@@ -222,7 +223,11 @@ const RideButtons = ({
     [PAYMENT_METHODS.OFFLINE]: offlinePaymentMethod,
   };
   const renderPaymentButton = () => {
-    const { offlinePaymentText, loadOfflinePaymentText } = PaymentsContext.useContainer();
+    const {
+      offlinePaymentText,
+      businessPaymentMethods,
+      loadOfflinePaymentText,
+    } = PaymentsContext.useContainer();
     useEffect(() => {
       loadOfflinePaymentText();
     }, []);
@@ -232,6 +237,11 @@ const RideButtons = ({
       || paymentMethods.find(pm => pm.id === ridePaymentMethodId);
 
     const getSelectedPaymentMethodTitle = () : string => {
+      if (businessAccountId) {
+        const businessAccount : any = businessPaymentMethods
+          .find((ba :any) => ba.id === businessAccountId);
+        return businessAccount?.name;
+      }
       if (isCashPaymentMethod(selectedPaymentMethod)) {
         return i18n.t('payments.cash');
       }

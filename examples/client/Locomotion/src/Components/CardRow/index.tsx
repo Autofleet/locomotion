@@ -13,7 +13,7 @@ import SvgIcon from '../SvgIcon';
 import selected from '../../assets/selected-v.svg';
 import { Start, StartCapital } from '../../lib/text-direction';
 import chevronIcon from '../../assets/chevron.svg';
-import { isCashPaymentMethod } from '../../lib/ride/utils';
+import { isCashPaymentMethod, isOfflinePaymentMethod } from '../../lib/ride/utils';
 import paymentContext from '../../context/payments';
 
 type ContainerProps = {
@@ -96,6 +96,17 @@ const CardRow = (paymentMethod: any) => {
   const { offlinePaymentText, loadOfflinePaymentText } = paymentContext.useContainer();
   const [isCardExpired, setIsCardExpired] = useState(false);
 
+  const getPaymentMethodTitle = () => {
+    if (isCashPaymentMethod(paymentMethod)) {
+      return i18n.t('payments.cash');
+    }
+    if (isOfflinePaymentMethod(paymentMethod)) {
+      return offlinePaymentText;
+    }
+    return paymentMethod.doNotCapitalizeName ? paymentMethod.name
+      : capitalizeFirstLetter(paymentMethod.name);
+  };
+
   useEffect(() => {
     loadOfflinePaymentText();
   }, []);
@@ -153,7 +164,7 @@ const CardRow = (paymentMethod: any) => {
                 )
                 : (
                   <>
-                    {getPaymentMethodIcon()}
+                    {!paymentMethod.noSvg && getPaymentMethodIcon()}
                     {paymentMethod.mark ? (
                       <SvgIcon
                         style={{
@@ -179,17 +190,9 @@ const CardRow = (paymentMethod: any) => {
                 )
                 : (
                   <>
-                    {!paymentMethod.lastFour
-                      ? (
-                        <Type>
-                          {isCashPaymentMethod(paymentMethod) ? i18n.t('payments.cash') : offlinePaymentText }
-                        </Type>
-                      )
-                      : (
-                        <Type>
-                          {capitalizeFirstLetter(paymentMethod.name)}
-                        </Type>
-                      )}
+                    <Type>
+                      {getPaymentMethodTitle()}
+                    </Type>
                     {paymentMethod.lastFour
                       ? <Description>{getLastFourForamttedShort(paymentMethod.lastFour)}</Description>
                       : null}

@@ -78,6 +78,7 @@ export interface RideInterface {
   priceCalculationId?: string;
   rideFeedbacks?: RideFeedback[];
   cancellationReasonId?: string;
+  businessAccountId?: string;
 }
 
 type AdditionalCharge = {
@@ -160,6 +161,8 @@ interface RidePageContextInterface {
   setLastAcknowledgedRideCompletionTimestampToNow: () => void
   loadFutureBookingDays: () => void;
   futureBookingDays: number;
+  businessAccountId: string | null,
+  updateBusinessAccountId: (newBusinessAccountId: string | null) => void;
 }
 
 export const RidePageContext = createContext<RidePageContextInterface>({
@@ -219,6 +222,8 @@ export const RidePageContext = createContext<RidePageContextInterface>({
   setLastAcknowledgedRideCompletionTimestampToNow: () => undefined,
   loadFutureBookingDays: () => undefined,
   futureBookingDays: 0,
+  businessAccountId: null,
+  updateBusinessAccountId: (newBusinessAccountId: string | null) => undefined,
 });
 
 const HISTORY_RECORDS_NUM = 10;
@@ -258,7 +263,7 @@ const RidePageContextProvider = ({ children }: {
   const [numberOfPassengers, setNumberOfPassengers] = useState<number | null>(null);
   const [addressSearchLabel, setAddressSearchLabel] = useState<string | null>(null);
   const [futureBookingDays, setFutureBookingDays] = useState(0);
-
+  const [businessAccountId, setBusinessAccountId] = useState<string | null>(null);
 
   const intervalRef = useRef<any>();
 
@@ -392,9 +397,8 @@ const RidePageContextProvider = ({ children }: {
         const unixScheduledTo = moment.unix(Number(ride.scheduledTo) / 1000);
         scheduledTime = await getLocationTimezoneTime(formattedStopPoints[0].lat, formattedStopPoints[0].lng, unixScheduledTo);
       }
-
       const { estimations, services } = await rideApi
-        .createServiceEstimations(formattedStopPoints, scheduledTime);
+        .createServiceEstimations(formattedStopPoints, scheduledTime, businessAccountId);
 
       const tags = getEstimationTags(estimations);
       const formattedEstimations = formatEstimations(services, estimations, tags);
@@ -553,6 +557,12 @@ const RidePageContextProvider = ({ children }: {
       loadLastCompletedRide();
     }
   }, [user?.id]);
+
+  useEffect(() => {
+    if (currentBsPage === BS_PAGES.SERVICE_ESTIMATIONS) {
+      getServiceEstimations();
+    }
+  }, [businessAccountId]);
 
   useEffect(() => {
     if (user?.id && isAppActive && !ride.id) {
@@ -1081,7 +1091,6 @@ const RidePageContextProvider = ({ children }: {
         const unixScheduledTo = moment.unix(Number(ride.scheduledTo) / 1000);
         scheduledToMoment = await getLocationTimezoneTime(pickupLocation.lat, pickupLocation.lng, unixScheduledTo);
       }
-
       const rideToCreate = {
         serviceId: chosenService?.id,
         estimationId: chosenService?.estimationId,
@@ -1096,6 +1105,7 @@ const RidePageContextProvider = ({ children }: {
           type: sp.type,
           ...(i === 0 && { notes: ride.notes }),
         })),
+        businessAccountId,
       };
 
 
@@ -1290,6 +1300,12 @@ const RidePageContextProvider = ({ children }: {
       streetAddress: null,
     }, index);
   };
+  const updateBusinessAccountId = (newBusinessAccountId: string | null) => {
+    if (newBusinessAccountId !== businessAccountId) {
+      console.log('UPDATING...BS!', newBusinessAccountId);
+      setBusinessAccountId(newBusinessAccountId);
+    }
+  };
 
   return (
     <RidePageContext.Provider
@@ -1357,6 +1373,8 @@ const RidePageContextProvider = ({ children }: {
         setLastAcknowledgedRideCompletionTimestampToNow,
         loadFutureBookingDays,
         futureBookingDays,
+        businessAccountId,
+        updateBusinessAccountId,
       }}
     >
       {children}

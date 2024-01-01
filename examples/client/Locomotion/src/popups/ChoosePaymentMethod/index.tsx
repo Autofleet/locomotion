@@ -30,7 +30,7 @@ import { MewRidePageContext } from '../../context';
 interface PaymentMethodPopupProps {
   isVisible: boolean;
   onCancel: () => void;
-  onSubmit: (payment: string | undefined) => void;
+  onSubmit: (payment: any) => void;
   showCash: boolean;
   rideFlow: boolean;
   selected: any;
@@ -48,11 +48,17 @@ const PaymentMethodPopup = ({
   onAddNewMethod,
   showOffline,
 }: PaymentMethodPopupProps) => {
-  const usePayments: any = PaymentsContext.useContainer();
+  const usePayments = PaymentsContext.useContainer();
   const { chosenService } = useContext(MewRidePageContext);
   const [selectedPaymentId, setSelectedPaymentId] = useState<string | undefined>(selected);
   const [activePaymentTab, setActivePaymentTab] = useState(INITIAL_ACTIVE_PAYMENT_TAB);
   const isBusinessMode = activePaymentTab === PAYMENT_MODES.BUSINESS;
+  const personalPaymentMethods = [
+    ...usePayments.paymentMethods,
+    ...(showCash ? [cashPaymentMethod] : []),
+    ...(showOffline ? [offlinePaymentMethod] : []),
+  ];
+
   const getDisabledReason = (paymentMethod: any) => {
     if (
       chosenService
@@ -82,7 +88,14 @@ const PaymentMethodPopup = ({
   }, [usePayments.paymentMethods, selected, chosenService]);
 
   const onSave = (id?: string) => {
-    onSubmit(id || selectedPaymentId);
+    if (isBusinessMode) {
+      onSubmit({
+        id: selectedPaymentId,
+        isBusiness: true,
+      });
+    } else {
+      onSubmit(id || selectedPaymentId);
+    }
     onCancel();
   };
 
@@ -113,30 +126,43 @@ const PaymentMethodPopup = ({
               }}
             />
             <View>
-              {
-                (
-                  [
-                    ...usePayments.paymentMethods,
-                    ...(showCash ? [cashPaymentMethod] : []),
-                    ...(showOffline ? [offlinePaymentMethod] : []),
-                  ].map((paymentMethod: any) => {
-                    const reason = getDisabledReason(paymentMethod);
-                    return (
-                      <PaymentMethod
-                        testIdPrefix="Dialog"
-                        {...paymentMethod}
-                        chooseMethodPage
-                        disabledReason={reason}
-                        selected={selectedPaymentId === paymentMethod.id}
-                        mark={selectedPaymentId === paymentMethod.id}
-                        onPress={() => {
-                          setSelectedPaymentId(paymentMethod.id);
-                        }}
-                      />
-                    );
-                  })
-                  )
-              }
+              {isBusinessMode ? (
+                usePayments.businessPaymentMethods.map((paymentMethod: any) => {
+                  const reason = getDisabledReason(paymentMethod);
+                  return (
+                    <PaymentMethod
+                      testIdPrefix="Dialog"
+                      noSvg
+                      noNotCapitalizeName
+                      {...paymentMethod}
+                      chooseMethodPage
+                      disabledReason={reason}
+                      selected={selectedPaymentId === paymentMethod.id}
+                      mark={selectedPaymentId === paymentMethod.id}
+                      onPress={() => {
+                        setSelectedPaymentId(paymentMethod.id);
+                      }}
+                    />
+                  );
+                })
+              ) : (
+                personalPaymentMethods.map((paymentMethod: any) => {
+                  const reason = getDisabledReason(paymentMethod);
+                  return (
+                    <PaymentMethod
+                      testIdPrefix="Dialog"
+                      {...paymentMethod}
+                      chooseMethodPage
+                      disabledReason={reason}
+                      selected={selectedPaymentId === paymentMethod.id}
+                      mark={selectedPaymentId === paymentMethod.id}
+                      onPress={() => {
+                        setSelectedPaymentId(paymentMethod.id);
+                      }}
+                    />
+                  );
+                })
+              )}
               { !isBusinessMode && (
               <PaymentMethod
                 testIdPrefix="Dialog"

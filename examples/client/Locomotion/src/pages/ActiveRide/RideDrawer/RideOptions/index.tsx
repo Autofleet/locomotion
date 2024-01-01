@@ -2,6 +2,7 @@ import React, {
   useContext, useEffect, useState,
 } from 'react';
 import { Portal } from '@gorhom/portal';
+import offlinePaymentMethod from '../../../Payments/offlinePaymentMethod';
 import { MAIN_ROUTES } from '../../../routes';
 import i18n from '../../../../I18n';
 import { RIDE_POPUPS } from '../../../../context/newRideContext/utils';
@@ -30,6 +31,7 @@ const RideOptions = () => {
     stopRequestInterval,
     serviceEstimations,
     chosenService,
+    updateBusinessAccountId,
   } = useContext(RidePageContext);
 
   const {
@@ -125,9 +127,18 @@ const RideOptions = () => {
           isVisible={popupToShow === 'payment'}
           onCancel={() => clearPopup()}
           onSubmit={(payment: any) => {
-            updateRidePayload({
-              paymentMethodId: payment,
-            });
+            if (payment.isBusiness) {
+              updateRidePayload({
+                paymentMethodId: offlinePaymentMethod.id,
+              });
+              console.log('IDD', payment.id);
+              updateBusinessAccountId(payment.id);
+            } else {
+              updateBusinessAccountId(null);
+              updateRidePayload({
+                paymentMethodId: payment,
+              });
+            }
           }}
         />
       </Portal>

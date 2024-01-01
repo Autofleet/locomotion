@@ -17,6 +17,7 @@ const usePayments = () => {
   const [paymentAccount, setPaymentAccount] = useState(null);
   const [hasOutstandingPayment, setHasOutstandingPayment] = useState(false);
   const [offlinePaymentText, setOfflinePaymentText] = useState(null);
+  const [businessPaymentMethods, setBusinessPaymentMethods] = useState([]);
 
   const loadOfflinePaymentText = async () => {
     const companyName = await useSettings.getSettingByKey(SETTINGS_KEYS.OFFLINE_PAYMENT_TEXT);
@@ -41,16 +42,11 @@ const usePayments = () => {
     const customerData = await getCustomer();
     setCustomer(customerData);
     setPaymentMethods(customerData.paymentMethods);
+    setBusinessPaymentMethods(customerData.businessAccounts);
     return customerData;
   };
 
-  const getOrFetchCustomer = async () => {
-    if (customer) {
-      return customer;
-    }
-
-    return loadCustomer();
-  };
+  const getOrFetchCustomer = async () => loadCustomer();
 
   const setup = async () => {
     try {
@@ -193,6 +189,7 @@ const usePayments = () => {
     loadCustomer,
     setup,
     paymentMethods,
+    businessPaymentMethods,
     detachPaymentMethod,
     getOrFetchCustomer,
     clientHasValidPaymentMethods,

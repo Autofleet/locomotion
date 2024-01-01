@@ -81,7 +81,7 @@ const TabSwitch = ({ onUnselectedClick, tabs, activeTabId }: ITabSwitchProps) =>
               onUnselectedClick(tab);
             }
           }}
-          isSelected={tab.id === activeTabId}
+          isSelected={isSelected}
         >
           <TabInner isSelected={isSelected}>
 
@@ -95,7 +95,7 @@ const TabSwitch = ({ onUnselectedClick, tabs, activeTabId }: ITabSwitchProps) =>
                   />
                   )
             }
-            <TextContainer>
+            <TextContainer isSelected={isSelected}>
               {i18n.t(tab.textKey)}
             </TextContainer>
 
