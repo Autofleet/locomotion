@@ -36,6 +36,7 @@ interface PaymentMethodPopupProps {
   selected: any;
   onAddNewMethod: () => void;
   showOffline: boolean;
+  showBusinessPaymentMethods: boolean;
 }
 
 const PaymentMethodPopup = ({
@@ -47,6 +48,7 @@ const PaymentMethodPopup = ({
   selected,
   onAddNewMethod,
   showOffline,
+  showBusinessPaymentMethods,
 }: PaymentMethodPopupProps) => {
   const usePayments = PaymentsContext.useContainer();
   const { chosenService } = useContext(MewRidePageContext);
@@ -118,6 +120,7 @@ const PaymentMethodPopup = ({
         </TitleView>
         <CardsScrollView>
           <Container>
+            { showBusinessPaymentMethods && (
             <TabSwitch
               activeTabId={activePaymentTab}
               tabs={PAYMENT_TABS}
@@ -125,6 +128,7 @@ const PaymentMethodPopup = ({
                 setActivePaymentTab(tab.id);
               }}
             />
+            ) }
             <View>
               {isBusinessMode ? (
                 usePayments.businessPaymentMethods.map((paymentMethod: any) => {

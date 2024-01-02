@@ -561,7 +561,8 @@ const RidePageContextProvider = ({ children }: {
 
   useEffect(() => {
     if (currentBsPage === BS_PAGES.SERVICE_ESTIMATIONS) {
-      getServiceEstimations();
+      setServiceEstimations(null);
+      tryServiceEstimations();
     }
   }, [businessAccountId]);
 
