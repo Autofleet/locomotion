@@ -5,6 +5,7 @@ import { View, Text } from 'react-native';
 import moment from 'moment';
 import styled, { ThemeContext } from 'styled-components';
 import { PaymentIcon } from 'react-native-payment-icons';
+import { RideInterface, RidePageContext } from '../../context/newRideContext';
 import { PAYMENT_METHODS, paymentMethodToIconMap } from '../../pages/Payments/consts';
 import Button from '../Button';
 import { capitalizeFirstLetter, getLastFourForamttedShort } from '../../pages/Payments/cardDetailUtils';
@@ -93,10 +94,22 @@ const style = {
 
 const CardRow = (paymentMethod: any) => {
   const { primaryColor } = useContext(ThemeContext);
-  const { offlinePaymentText, loadOfflinePaymentText } = paymentContext.useContainer();
+  const {
+    offlinePaymentText,
+    businessPaymentMethods,
+    loadOfflinePaymentText,
+  } = paymentContext.useContainer();
+  const { businessAccountId } = paymentMethod;
   const [isCardExpired, setIsCardExpired] = useState(false);
 
   const getPaymentMethodTitle = () => {
+    if (businessAccountId) {
+      const relevantBusinessAccount : any = businessPaymentMethods
+        .find((ba: any) => ba.id === businessAccountId);
+      if (relevantBusinessAccount) {
+        return relevantBusinessAccount.name;
+      }
+    }
     if (isCashPaymentMethod(paymentMethod)) {
       return i18n.t('payments.cash');
     }
@@ -127,6 +140,7 @@ const CardRow = (paymentMethod: any) => {
     if (isCard) {
       return <PaymentIcon type={brand} />;
     }
+    if (!paymentMethodToIconMap[id]) { return null; }
     return (
       <SvgIcon
         fill={primaryColor}

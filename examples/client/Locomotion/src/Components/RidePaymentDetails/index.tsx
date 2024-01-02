@@ -6,7 +6,7 @@ import { getFormattedPrice } from '../../context/newRideContext/utils';
 import CardRow from '../CardRow';
 import CardsTitle from '../CardsTitle';
 import i18n from '../../I18n';
-import { PriceCalculation, RidePageContext } from '../../context/newRideContext';
+import { PriceCalculation, RideInterface, RidePageContext } from '../../context/newRideContext';
 import {
   PaymentRow, RidePriceDetails, PriceText, ViewDetails, CardRowContainer,
 } from './styled';
@@ -16,12 +16,12 @@ import * as navigationService from '../../services/navigation';
 import Button from '../Button';
 
 const RidePaymentDetails = ({
-  rideId,
+  ride,
   paymentMethod,
   rideHistory = false,
   state,
 } :{
-  rideId: string,
+  ride: RideInterface,
   paymentMethod: PaymentMethodInterface,
   rideHistory: boolean
   currency: string,
@@ -36,7 +36,7 @@ const RidePaymentDetails = ({
   const { showPrice, loadShowPrice } = SettingsContext.useContainer();
 
   const updatePriceCalculation = async () => {
-    const calculation = await getRidePriceCalculation(rideId);
+    const calculation = await getRidePriceCalculation(ride?.id);
     setPriceCalculation(calculation);
   };
 
@@ -53,7 +53,7 @@ const RidePaymentDetails = ({
       <CardsTitle noPaddingLeft title={i18n.t('ride.paymentMethod')} />
       <PaymentRow>
         <CardRowContainer>
-          <CardRow {...paymentMethod} />
+          <CardRow {...{ ...paymentMethod, businessAccountId: ride.businessAccountId }} />
         </CardRowContainer>
         <RidePriceDetails>
 
@@ -74,7 +74,7 @@ const RidePaymentDetails = ({
             testID="viewRidePaymentDetails"
             noBackground
             onPress={() => navigationService.navigate(MAIN_ROUTES.RIDE_PRICE_BREAKDOWN,
-              { rideId, rideHistory })}
+              { rideId: ride.id, rideHistory })}
           >
             {state !== RIDE_STATES.CANCELED
             || (state === RIDE_STATES.CANCELED

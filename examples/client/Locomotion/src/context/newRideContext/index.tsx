@@ -1107,7 +1107,7 @@ const RidePageContextProvider = ({ children }: {
           type: sp.type,
           ...(i === 0 && { notes: ride.notes }),
         })),
-        businessAccountId,
+        ...(businessAccountId ? { businessAccountId } : {}),
       };
 
 
