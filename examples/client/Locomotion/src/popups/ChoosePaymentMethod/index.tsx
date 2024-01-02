@@ -72,7 +72,7 @@ const PaymentMethodPopup = ({
   };
 
   useEffect(() => {
-    usePayments.getOrFetchCustomer();
+    usePayments.loadCustomer();
   }, []);
 
   useEffect(() => {

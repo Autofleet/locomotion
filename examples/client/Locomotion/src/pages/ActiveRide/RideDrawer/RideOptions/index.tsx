@@ -112,7 +112,7 @@ const RideOptions = () => {
         />
 
         <ChoosePaymentMethod
-          showBusinessPaymentMethods
+          showBusinessPaymentMethods={usePayments.businessPaymentMethods?.length > 0}
           onAddNewMethod={() => {
             clearPopup();
             setTimeout(() => {
