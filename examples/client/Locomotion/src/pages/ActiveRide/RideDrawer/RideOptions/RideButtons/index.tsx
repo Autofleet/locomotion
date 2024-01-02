@@ -225,7 +225,7 @@ const RideButtons = ({
   const renderPaymentButton = () => {
     const {
       offlinePaymentText,
-      businessPaymentMethods,
+      getBusinessAccountNameById,
       loadOfflinePaymentText,
     } = PaymentsContext.useContainer();
     useEffect(() => {
@@ -236,11 +236,10 @@ const RideButtons = ({
      PaymentMethodInterface | undefined = paymentMethodIdToDataMap[ridePaymentMethodId]
       || paymentMethods.find(pm => pm.id === ridePaymentMethodId);
 
-    const getSelectedPaymentMethodTitle = () : string => {
-      if (businessAccountId) {
-        const businessAccount : any = businessPaymentMethods
-          .find((ba :any) => ba.id === businessAccountId);
-        return businessAccount?.name;
+    const getSelectedPaymentMethodTitle = () : string | null => {
+      const businessAccountName = getBusinessAccountNameById(businessAccountId);
+      if (businessAccountName) {
+        return businessAccountName;
       }
       if (isCashPaymentMethod(selectedPaymentMethod)) {
         return i18n.t('payments.cash');

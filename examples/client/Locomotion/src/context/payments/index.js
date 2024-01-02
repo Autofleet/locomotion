@@ -185,6 +185,14 @@ const usePayments = () => {
     }
     return returnObject;
   };
+  const getBusinessAccountNameById = (id) => {
+    if (!id) { return null; }
+    const relevantBusinessAccount = businessPaymentMethods.find(ba => ba.id === id);
+    if (relevantBusinessAccount) {
+      return relevantBusinessAccount.name;
+    }
+    return null;
+  };
 
   return {
     paymentAccount,
@@ -209,6 +217,7 @@ const usePayments = () => {
     loadOutstandingBalance,
     offlinePaymentText: offlinePaymentText || i18n.t('payments.offline'),
     loadOfflinePaymentText,
+    getBusinessAccountNameById,
   };
 };
 

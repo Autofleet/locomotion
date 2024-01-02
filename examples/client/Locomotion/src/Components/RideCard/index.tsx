@@ -23,17 +23,26 @@ interface CardComponentProps {
     brand: any;
     id: string;
   }
+  businessAccountId: string | undefined;
 }
-const CardComponent = ({ paymentMethod }: CardComponentProps) => {
+const CardComponent = ({ paymentMethod, businessAccountId }: CardComponentProps) => {
   const isCash = PAYMENT_METHODS.CASH === paymentMethod.id;
   const isOffline = PAYMENT_METHODS.OFFLINE === paymentMethod.id;
-  const { offlinePaymentText, loadOfflinePaymentText } = PaymentContext.useContainer();
+  const {
+    offlinePaymentText,
+    loadOfflinePaymentText,
+    getBusinessAccountNameById,
+  } = PaymentContext.useContainer();
 
   useEffect(() => {
     loadOfflinePaymentText();
   }, []);
 
   const getText = () => {
+    const businessAccountName = getBusinessAccountNameById(businessAccountId);
+    if (businessAccountName) {
+      return businessAccountName;
+    }
     if (isCash) {
       return i18n.t('payments.cash');
     } if (isOffline) {
@@ -168,7 +177,12 @@ const RideCard = ({
       </DateContainer>
 
       <StopPointsVerticalView ride={ride} />
-      {paymentMethod && <CardComponent paymentMethod={paymentMethod} />}
+      {paymentMethod && (
+      <CardComponent
+        paymentMethod={paymentMethod}
+        businessAccountId={ride.businessAccountId}
+      />
+      )}
       <RoundedButton testID="cancelRide" onPress={onPress} hollow type="cancel">
         {i18n.t('home.cancelRideButton')}
       </RoundedButton>

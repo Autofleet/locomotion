@@ -96,19 +96,16 @@ const CardRow = (paymentMethod: any) => {
   const { primaryColor } = useContext(ThemeContext);
   const {
     offlinePaymentText,
-    businessPaymentMethods,
     loadOfflinePaymentText,
+    getBusinessAccountNameById,
   } = paymentContext.useContainer();
   const { businessAccountId } = paymentMethod;
   const [isCardExpired, setIsCardExpired] = useState(false);
 
   const getPaymentMethodTitle = () => {
-    if (businessAccountId) {
-      const relevantBusinessAccount : any = businessPaymentMethods
-        .find((ba: any) => ba.id === businessAccountId);
-      if (relevantBusinessAccount) {
-        return relevantBusinessAccount.name;
-      }
+    const businessAccountName = getBusinessAccountNameById(businessAccountId);
+    if (businessAccountName) {
+      return businessAccountName;
     }
     if (isCashPaymentMethod(paymentMethod)) {
       return i18n.t('payments.cash');
