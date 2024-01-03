@@ -176,7 +176,7 @@ const CardRow = (paymentMethod: any) => {
                 : (
                   <>
                     {!paymentMethod.noSvg && getPaymentMethodIcon()}
-                    {paymentMethod.mark ? (
+                    {(paymentMethod.mark && !paymentMethod.alignMarkToRight) ? (
                       <SvgIcon
                         style={{
                           position: 'absolute',
@@ -219,6 +219,17 @@ const CardRow = (paymentMethod: any) => {
             {paymentMethod.disabledReason}
           </Description>
           )}
+          {(paymentMethod.mark && paymentMethod.alignMarkToRight) ? (
+            <SvgIcon
+              style={{
+                position: 'absolute',
+                right: 10,
+                bottom: 15,
+              }}
+              Svg={selected}
+              fill={primaryColor}
+            />
+          ) : null }
         </Container>
       </Button>
     </>

@@ -137,6 +137,7 @@ const PaymentMethodPopup = ({
                     <PaymentMethod
                       testIdPrefix="Dialog"
                       noSvg
+                      alignMarkToRight
                       noNotCapitalizeName
                       {...paymentMethod}
                       chooseMethodPage
