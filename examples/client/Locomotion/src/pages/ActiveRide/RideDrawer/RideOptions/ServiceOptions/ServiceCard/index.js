@@ -163,7 +163,7 @@ const ServiceCard = ({ service, withBorder }) => {
               )
               : getDescription(isFutureRide)}
 
-            {service.isPriceEstimated ? (
+            {service.isPriceEstimated && showPrice ? (
               <EstimatedText>
                 {i18n.t('rideDetails.estimatedFare')}
               </EstimatedText>
@@ -181,7 +181,7 @@ const ServiceCard = ({ service, withBorder }) => {
           {!isFutureRide && (
           <Row>
             {getDescription()}
-            {service.isPriceEstimated ? (
+            {service.isPriceEstimated && showPrice ? (
               <Capacity>
                 <AvailableSeats>
                   {service.availableSeats}
