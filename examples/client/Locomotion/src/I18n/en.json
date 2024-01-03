@@ -61,7 +61,7 @@
             "multi": "Stop"
         },
         "highEta": "ETA is higher than usual",
-        "outOfTerritory": "Not in territory"
+        "outOfTerritory": "Service is \n unavailable"
     },
     "general": {
         "back": "Back",

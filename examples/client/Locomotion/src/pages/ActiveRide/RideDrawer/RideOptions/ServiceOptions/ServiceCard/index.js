@@ -115,7 +115,6 @@ const ServiceCard = ({ service, withBorder }) => {
         selected={isSelected}
         activeOpacity={!withBorder ? 1 : 0.5}
         noBackground
-        disabled={unavailable}
         onPress={() => {
           if (withBorder) {
             if (isSelected) {
@@ -131,9 +130,9 @@ const ServiceCard = ({ service, withBorder }) => {
             source={{ uri: service.iconUrl }}
           />
         </CarContainer>
-        <ServiceDetails unavailable={unavailable}>
+        <ServiceDetails>
           <WrapRow>
-            <Title numberOfLines={2}>
+            <Title numberOfLines={2} unavailable={unavailable} primaryColor={theme.primaryColor}>
               {service.name}
             </Title>
             <TitleContainer>
@@ -150,7 +149,7 @@ const ServiceCard = ({ service, withBorder }) => {
                 )
                 : <View />
             }
-              <Price>
+              <Price unavailable={unavailable} primaryColor={theme.primaryColor}>
                 {getUnavailableText()}
               </Price>
             </TitleContainer>

@@ -23,7 +23,7 @@ ${({ selected, withBorder }) => (withBorder && selected && 'box-shadow: 0 0 4px 
 
 export const CarContainer = styled.View`
 width: 20%;
-opacity: ${({ unavailable }) => (unavailable ? 0.4 : 1)};
+opacity: ${({ unavailable }) => (unavailable ? 0.56 : 1)};
 `;
 
 export const CarIcon = styled.Image`
@@ -35,7 +35,7 @@ width: 80%;
 display: flex;
 flex-direction: column;
 justify-content: center;
-opacity: ${({ unavailable }) => (unavailable ? 0.4 : 1)};
+opacity: ${({ unavailable }) => (unavailable ? 0.56 : 1)};
 `;
 
 export const Row = styled.View`
@@ -54,12 +54,15 @@ align-items: center;
 export const Title = styled.Text`
 ${FONT_SIZES.H3};
 ${FONT_WEIGHTS.MEDIUM};
+opacity: ${({ unavailable }) => (unavailable ? 0.56 : 1)};
+color: ${({ unavailable, primaryColor }) => (unavailable ? '#7F7F7F' : primaryColor)};
 margin-right: 5px;
 `;
 
 export const Price = styled.Text`
 ${FONT_SIZES.LARGE};
 ${FONT_WEIGHTS.MEDIUM};
+color: ${({ unavailable, primaryColor }) => (unavailable ? '#212229' : primaryColor)};
 text-align: right;
 `;
 
