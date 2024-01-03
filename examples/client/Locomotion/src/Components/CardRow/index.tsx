@@ -50,7 +50,7 @@ const margin = `margin-${Start()}`;
 const TextContainer = styled(View)`
   justify-content: center;
   ${margin}: 16px;
-  width: 80%;
+  width: ${({ noSvg } : { noSvg: boolean}) => (noSvg ? '95%' : '80%')};
 `;
 
 const Type = styled(Text)`
@@ -132,6 +132,9 @@ const CardRow = (paymentMethod: any) => {
     : (`${paymentMethod.testIdPrefix || ''}ChoosePaymentMethod${paymentMethod.id === PAYMENT_METHODS.OFFLINE || paymentMethod.id === PAYMENT_METHODS.CASH ? `_${paymentMethod.id}` : ''}`);
 
   const getPaymentMethodIcon = () => {
+    if (paymentMethod.noSvg) {
+      return null;
+    }
     const { brand, id, lastFour } = paymentMethod;
     const isCard = lastFour;
     if (isCard) {
@@ -175,7 +178,7 @@ const CardRow = (paymentMethod: any) => {
                 )
                 : (
                   <>
-                    {!paymentMethod.noSvg && getPaymentMethodIcon()}
+                    {getPaymentMethodIcon()}
                     {(paymentMethod.mark && !paymentMethod.alignMarkToRight) ? (
                       <SvgIcon
                         style={{
@@ -192,7 +195,7 @@ const CardRow = (paymentMethod: any) => {
         }
 
             </ImageContainer>
-            <TextContainer>
+            <TextContainer noSvg={paymentMethod.noSvg}>
               {paymentMethod.addNew
                 ? (
                   <>
