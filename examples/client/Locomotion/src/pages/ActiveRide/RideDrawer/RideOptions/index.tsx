@@ -132,7 +132,6 @@ const RideOptions = () => {
               updateRidePayload({
                 paymentMethodId: offlinePaymentMethod.id,
               });
-              console.log('IDD', payment.id);
               updateBusinessAccountId(payment.id);
             } else {
               updateBusinessAccountId(null);
