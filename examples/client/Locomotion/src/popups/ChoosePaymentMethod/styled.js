@@ -44,13 +44,12 @@ export const SummaryContainer = styled.View`
 
 export const Title = styled.Text`
   flex: 10;
-  color: var(--gray-05, #212229);
-  /* Body strong - Mobile */
+  color: #212229;
   font-family: Montserrat;
   font-size: 16px;
   font-style: normal;
   font-weight: 700;
-  line-height: 24px; /* 150% */
+  line-height: 24px;
 `;
 
 export const StyledTextArea = styled(TextArea)`
