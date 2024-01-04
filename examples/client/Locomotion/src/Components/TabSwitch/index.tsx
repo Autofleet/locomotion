@@ -57,12 +57,11 @@ line-height: 24px;
 const TextContainer = styled.Text`
 color: #666975;
 color: ${({ isSelected }: TabStyled) => (isSelected ? SELECTED_COLOR : UNSELECTED_COLOR)};
-/* Body - Mobile */
 font-family: Montserrat;
 font-size: 16px;
 font-style: normal;
 font-weight: 500;
-line-height: 24px; /* 150% */
+line-height: 24px;
 padding-left: 4px;
 `;
 
