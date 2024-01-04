@@ -114,8 +114,7 @@ const CardRow = (paymentMethod: any) => {
     if (isOfflinePaymentMethod(paymentMethod)) {
       return offlinePaymentText;
     }
-    return paymentMethod.doNotCapitalizeName ? paymentMethod.name
-      : capitalizeFirstLetter(paymentMethod.name);
+    return paymentMethod.name;
   };
 
   useEffect(() => {

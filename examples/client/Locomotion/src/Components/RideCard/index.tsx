@@ -13,6 +13,7 @@ import {
 import StopPointsVerticalView from '../StopPointsVerticalView';
 import { getFormattedPrice, isPriceEstimated, convertTimezoneByLocation } from '../../context/newRideContext/utils';
 import cashIcon from '../../assets/cash.svg';
+import offlineIcon from '../../assets/offline.svg';
 import { PAYMENT_METHODS } from '../../pages/Payments/consts';
 import PaymentContext from '../../context/payments';
 import SettingsContext from '../../context/settings';
@@ -56,12 +57,13 @@ const CardComponent = ({ paymentMethod, businessAccountId }: CardComponentProps)
       return cashIcon;
     }
     if (isOffline) {
-      return null;
+      return offlineIcon;
     }
   };
   return (
     <TextRowWithIcon
       text={getText() || ''}
+      subTitle={businessAccountId ? offlinePaymentText : ''}
       Image={() => !isCash && !isOffline && <PaymentIcon type={paymentMethod.brand} />}
       icon={getIcon()}
       style={{ marginTop: 10, marginBottom: 10 }}
