@@ -4,6 +4,7 @@ import { View } from 'react-native';
 import PropTypes from 'prop-types';
 import Modal from 'react-native-modal';
 import { useNavigation } from '@react-navigation/native';
+import Mixpanel from '../../services/Mixpanel';
 import { INITIAL_ACTIVE_PAYMENT_TAB, PAYMENT_MODES, PAYMENT_TABS } from '../../pages/Payments/consts';
 import TabSwitch from '../../Components/TabSwitch';
 import { getPaymentMethod } from '../../pages/Payments/cardDetailUtils';
@@ -126,6 +127,7 @@ const PaymentMethodPopup = ({
               tabs={PAYMENT_TABS}
               onUnselectedClick={(tab) => {
                 setActivePaymentTab(tab.id);
+                Mixpanel.setEvent('change payment mode personal / business', { mode: tab.id });
               }}
             />
             ) }
@@ -145,6 +147,7 @@ const PaymentMethodPopup = ({
                       selected={selectedPaymentId === paymentMethod.id}
                       mark={selectedPaymentId === paymentMethod.id}
                       onPress={() => {
+                        Mixpanel.setEvent('select payment method', { method: paymentMethod.id });
                         setSelectedPaymentId(paymentMethod.id);
                       }}
                     />
