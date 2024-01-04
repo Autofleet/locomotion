@@ -264,6 +264,7 @@ const RideButtons = ({
           brand={selectedPaymentMethod?.brand}
           icon={paymentMethodToIconMap[selectedPaymentMethod?.id]}
           title={getSelectedPaymentMethodTitle()}
+          subTitle={businessAccountId && offlinePaymentText}
           id={selectedPaymentMethod?.id}
           invalid={paymentMethodNotAllowedOnService}
         />
