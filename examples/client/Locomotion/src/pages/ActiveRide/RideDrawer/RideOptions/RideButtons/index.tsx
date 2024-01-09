@@ -60,6 +60,7 @@ const RideButtons = ({
     loadFutureBookingDays,
     futureBookingDays,
     businessAccountId,
+    serviceEstimations,
   } = useContext(RidePageContext);
 
 
@@ -86,7 +87,8 @@ const RideButtons = ({
   const [tempSelectedDate, setTempSelectedDate] = useState(firstDate());
 
   const paymentMethodNotAllowedOnService = chosenService && ride?.paymentMethodId
-    && !chosenService.allowedPaymentMethods.includes(getPaymentMethod(ride.paymentMethodId));
+    && !chosenService.allowedPaymentMethods.includes(getPaymentMethod(ride.paymentMethodId))
+    && serviceEstimations;
 
   const checkFutureRidesSetting = async () => {
     const futureRidesEnabled = await getSettingByKey(
