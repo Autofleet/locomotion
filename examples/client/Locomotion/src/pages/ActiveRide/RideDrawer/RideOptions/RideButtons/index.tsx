@@ -88,7 +88,7 @@ const RideButtons = ({
 
   const paymentMethodNotAllowedOnService = chosenService && ride?.paymentMethodId
     && !chosenService.allowedPaymentMethods.includes(getPaymentMethod(ride.paymentMethodId))
-    && serviceEstimations;
+    && serviceEstimations?.length > 0;
 
   const checkFutureRidesSetting = async () => {
     const futureRidesEnabled = await getSettingByKey(
