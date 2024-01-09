@@ -90,14 +90,18 @@ const PaymentMethodPopup = ({
     updateDefaultPaymentMethod();
   }, [usePayments.paymentMethods, selected, chosenService]);
 
-  const onSave = (id?: string) => {
-    if (isBusinessMode) {
+  const onSave = () => {
+    const businessPaymentSelected = showBusinessPaymentMethods
+      && usePayments.businessPaymentMethods.some(
+        (paymentMethod: any) => paymentMethod.id === selectedPaymentId,
+      );
+    if (businessPaymentSelected) {
       onSubmit({
         id: selectedPaymentId,
         isBusiness: true,
       });
     } else {
-      onSubmit(id || selectedPaymentId);
+      onSubmit(selectedPaymentId);
     }
     onCancel();
   };
@@ -187,6 +191,7 @@ const PaymentMethodPopup = ({
         <Footer>
           <FlexCont style={{ justifyContent: 'center' }}>
             <SelectButton
+              disabled={!selectedPaymentId}
               testID="selectCard"
               type="confirm"
               onPress={() => {
