@@ -116,11 +116,13 @@ const ServiceCard = ({ service, withBorder }) => {
         activeOpacity={!withBorder ? 1 : 0.5}
         noBackground
         onPress={() => {
-          if (withBorder) {
-            if (isSelected) {
-              return setPopup(FARE_POPUP);
+          if (!unavailable) {
+            if (withBorder) {
+              if (isSelected) {
+                return setPopup(FARE_POPUP);
+              }
+              setChosenService(service);
             }
-            setChosenService(service);
           }
         }}
       >
