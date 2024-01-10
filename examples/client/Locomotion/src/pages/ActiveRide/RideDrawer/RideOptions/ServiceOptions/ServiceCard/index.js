@@ -132,9 +132,9 @@ const ServiceCard = ({ service, withBorder }) => {
             source={{ uri: service.iconUrl }}
           />
         </CarContainer>
-        <ServiceDetails>
+        <ServiceDetails unavailable={unavailable}>
           <WrapRow>
-            <Title numberOfLines={2} unavailable={unavailable} primaryColor={theme.primaryColor}>
+            <Title numberOfLines={2}>
               {service.name}
             </Title>
             <TitleContainer>
@@ -151,7 +151,7 @@ const ServiceCard = ({ service, withBorder }) => {
                 )
                 : <View />
             }
-              <Price unavailable={unavailable} primaryColor={theme.primaryColor}>
+              <Price unavailable={unavailable}>
                 {getUnavailableText()}
               </Price>
             </TitleContainer>

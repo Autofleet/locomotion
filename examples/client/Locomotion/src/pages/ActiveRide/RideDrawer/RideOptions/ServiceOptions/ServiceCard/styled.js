@@ -57,15 +57,15 @@ export const Title = styled.Text`
 ${FONT_SIZES.H3};
 ${FONT_WEIGHTS.MEDIUM};
 opacity: ${({ unavailable }) => (unavailable ? UNAVAILABLE_OPACITY : 1)};
-color: ${({ unavailable, primaryColor }) => (unavailable ? '#7F7F7F' : primaryColor)};
+color: #101010;
 margin-right: 5px;
 `;
 
 export const Price = styled.Text`
-${FONT_SIZES.LARGE};
-${FONT_WEIGHTS.MEDIUM};
-color: ${({ unavailable, primaryColor }) => (unavailable ? '#212229' : primaryColor)};
-text-align: right;
+    ${FONT_SIZES.LARGE};
+    ${FONT_WEIGHTS.MEDIUM};
+    color: ${({ unavailable }) => (unavailable ? '#7F7F7F' : '#101010')};
+    text-align: right;
 `;
 
 export const TimeDetails = styled.View`
@@ -82,8 +82,8 @@ ${FONT_SIZES.LARGE}
 `;
 
 export const Eta = styled.Text`
-opacity: .5;
 ${FONT_SIZES.LARGE}
+color: #101010;
 `;
 
 export const Capacity = styled.View`
@@ -93,8 +93,7 @@ align-items: center;
 `;
 
 export const Circle = styled.View`
-background-color: #333333;
-opacity: .5;
+background-color: #101010;
 border-radius: 2px;
 width: 2px;
 height: 2px;
@@ -102,17 +101,18 @@ margin: 5px;
 `;
 
 export const AvailableSeats = styled.Text`
+color: #101010;
 
 `;
 export const Description = styled.Text`
-opacity: .5;
 ${FONT_SIZES.MEDIUM};
 ${FONT_WEIGHTS.REGULAR};
 width: 85%;
+color: #101010;
 `;
 
 export const EstimatedText = styled.Text`
-color: #707070;
+color: #101010;
 ${FONT_SIZES.MEDIUM};
 ${FONT_WEIGHTS.REGULAR};
 `;
