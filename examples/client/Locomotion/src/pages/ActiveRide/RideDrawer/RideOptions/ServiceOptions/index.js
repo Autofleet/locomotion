@@ -1,6 +1,7 @@
 import React, { useContext, useEffect } from 'react';
 import SkeletonContent from 'react-native-skeleton-content-nonexpo';
 import { Text } from 'react-native';
+import EmptyState from '../../../../../Components/EmptyState';
 import { getCouponText } from '../../../../../context/newRideContext/utils';
 import { RidePageContext } from '../../../../../context/newRideContext';
 import { UserContext } from '../../../../../context/user';
@@ -55,13 +56,22 @@ const ServiceOptions = () => {
 
   return (
     <ServiceOptionsContainer alwaysBounceVertical={false}>
-      {(serviceEstimations || []).map(option => (
-        <ServiceCard
-          withBorder
-          service={option}
-          key={option.name}
-        />
-      ))}
+
+      { serviceEstimations?.length === 0
+        ? (
+          <EmptyState
+            title={i18n.t('services.emptyState.title')}
+            description={i18n.t('services.emptyState.description')}
+          />
+        )
+        : (serviceEstimations || []).map(option => (
+          <ServiceCard
+            withBorder
+            service={option}
+            key={option.name}
+          />
+        ))
+      }
       {!isDebuggingEnabled
         ? (
           <SkeletonContent

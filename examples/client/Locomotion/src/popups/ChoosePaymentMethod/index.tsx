@@ -4,6 +4,7 @@ import { View } from 'react-native';
 import PropTypes from 'prop-types';
 import Modal from 'react-native-modal';
 import { useNavigation } from '@react-navigation/native';
+import EmptyState from '../../Components/EmptyState';
 import Mixpanel from '../../services/Mixpanel';
 import { INITIAL_ACTIVE_PAYMENT_TAB, PAYMENT_MODES, PAYMENT_TABS } from '../../pages/Payments/consts';
 import TabSwitch from '../../Components/TabSwitch';
@@ -105,6 +106,31 @@ const PaymentMethodPopup = ({
     }
     onCancel();
   };
+  const renderPersonalPaymentMethods = () => (
+    personalPaymentMethods.length > 0
+      ? (personalPaymentMethods.map((paymentMethod: any) => {
+        const reason = getDisabledReason(paymentMethod);
+        return (
+          <PaymentMethod
+            testIdPrefix="Dialog"
+            {...paymentMethod}
+            chooseMethodPage
+            disabledReason={reason}
+            selected={selectedPaymentId === paymentMethod.id}
+            mark={selectedPaymentId === paymentMethod.id}
+            onPress={() => {
+              setSelectedPaymentId(paymentMethod.id);
+            }}
+          />
+        );
+      })
+      ) : (
+        <EmptyState
+          title={i18n.t('popups.choosePaymentMethod.emptyStateText')}
+        />
+      )
+  );
+
 
   return (
     <Modal
@@ -157,24 +183,7 @@ const PaymentMethodPopup = ({
                     />
                   );
                 })
-              ) : (
-                personalPaymentMethods.map((paymentMethod: any) => {
-                  const reason = getDisabledReason(paymentMethod);
-                  return (
-                    <PaymentMethod
-                      testIdPrefix="Dialog"
-                      {...paymentMethod}
-                      chooseMethodPage
-                      disabledReason={reason}
-                      selected={selectedPaymentId === paymentMethod.id}
-                      mark={selectedPaymentId === paymentMethod.id}
-                      onPress={() => {
-                        setSelectedPaymentId(paymentMethod.id);
-                      }}
-                    />
-                  );
-                })
-              )}
+              ) : renderPersonalPaymentMethods()}
               { !isBusinessMode && (
               <PaymentMethod
                 testIdPrefix="Dialog"
