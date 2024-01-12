@@ -35,12 +35,14 @@ class MixpanelService {
     this.isInit = false;
     this.mixpanel = {};
     this.shouldTrackEvents = shouldTrackEvents();
-    if (this.shouldTrackEvents) {
-      this.init();
-    }
+    this.init();
   }
 
   init = async () => {
+    if (!this.shouldTrackEvents) {
+      return;
+    }
+
     if (!this.isInit && Config.MIXPANEL_TOKEN) {
       const trackAutomaticEvents = true;
       this.mixpanel = new Mixpanel(Config.MIXPANEL_TOKEN, trackAutomaticEvents);
@@ -105,6 +107,7 @@ class MixpanelService {
   };
 
   resetIdentifier = async () => {
+    if (!this.isInit) return;
     await this.mixpanel.clearSuperProperties();
     await this.mixpanel.reset();
   };
@@ -115,6 +118,7 @@ class MixpanelService {
   };
 
   demoMode = (isDemoUser) => {
+    if (!this.isInit) return;
     if (isDemoUser) {
       this.mixpanel.optOutTracking();
     } else {
