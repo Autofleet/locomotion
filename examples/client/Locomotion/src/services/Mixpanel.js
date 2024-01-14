@@ -2,8 +2,9 @@
 import Config from 'react-native-config';
 import { Mixpanel } from 'mixpanel-react-native';
 import { getUniqueId } from 'react-native-device-info';
-import { Alert } from 'react-native';
 import { getDeviceId } from './device';
+
+const { MIXPANEL_EVENTS_NUMBER } = Config;
 
 export const getElementName = props => props.testID || props.id;
 
@@ -18,15 +19,12 @@ const getRandomNumberByUuid = (uuid) => {
   }
 };
 
-const { MIXPANEL_EVENTS_NUMBER } = Config;
-
 const shouldTrackEvents = () => {
   if (!MIXPANEL_EVENTS_NUMBER) {
     return true;
   }
   const deviceUuid = getUniqueId();
   const number = getRandomNumberByUuid(deviceUuid);
-  Alert.alert(deviceUuid, number.toString());
   return number <= parseInt(MIXPANEL_EVENTS_NUMBER, 10);
 };
 
