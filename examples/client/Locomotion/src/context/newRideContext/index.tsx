@@ -274,9 +274,10 @@ const RidePageContextProvider = ({ children }: {
   const stopRequestInterval = () => {
     clearInterval(intervalRef.current);
   };
-
-  const saveLastRide = async (rideId: string, rideBusinessAccountId: string) => Promise.all([
-    StorageService.save({ lastRideId: rideId }),
+  const saveLastRide = async (rideId: string) => {
+    await StorageService.save({ lastRideId: rideId });
+  };
+  const saveOrderedRidePaymentMethod = async (rideBusinessAccountId: string | null) => Promise.all([
     StorageService.save({ lastBusinessAccountId: rideBusinessAccountId || PAYMENT_MODES.PERSONAL }),
     StorageService.save({ orderedRide: true }),
   ]);
@@ -332,13 +333,13 @@ const RidePageContextProvider = ({ children }: {
       cleanRequestStopPoints();
       setRide(newRide);
       changeBsPage(BS_PAGES.ACTIVE_RIDE);
-      saveLastRide(newRide.id, newRide.businessAccountId);
+      saveLastRide(newRide.id);
     },
     [RIDE_STATES.ACTIVE]: (activeRide: any) => {
       cleanRequestStopPoints();
       setRide(activeRide);
       changeBsPage(BS_PAGES.ACTIVE_RIDE);
-      saveLastRide(activeRide.id, activeRide.businessAccountId);
+      saveLastRide(activeRide.id);
     },
     [RIDE_STATES.CANCELED]: (canceledRide: any) => {
       if (canceledRide.canceledBy !== user?.id) {
@@ -1144,7 +1145,10 @@ const RidePageContextProvider = ({ children }: {
       };
 
 
-      const afRide = await rideApi.createRide(rideToCreate);
+      const [afRide] = await Promise.all([
+        rideApi.createRide(rideToCreate),
+        saveOrderedRidePaymentMethod(businessAccountId),
+      ]);
       if (afRide.state === RIDE_STATES.REJECTED) {
         throw new Error(RIDE_FAILED_REASONS.BUSY);
       }
@@ -1157,8 +1161,6 @@ const RidePageContextProvider = ({ children }: {
         setRide(formattedRide);
       }
     } catch (e: any) {
-      console.log(e);
-      console.log(e.message);
       const key = e.response?.data?.errors[0] || e.message;
       Mixpanel.setEvent('Ride failed', { status: e?.response?.status, reason: key });
       if (FAILED_TO_CREATE_RIDE_ACTIONS[key]) {
