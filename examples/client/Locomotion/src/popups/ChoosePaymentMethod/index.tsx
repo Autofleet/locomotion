@@ -6,7 +6,7 @@ import Modal from 'react-native-modal';
 import { useNavigation } from '@react-navigation/native';
 import EmptyState from '../../Components/EmptyState';
 import Mixpanel from '../../services/Mixpanel';
-import { INITIAL_ACTIVE_PAYMENT_TAB, PAYMENT_MODES, PAYMENT_TABS } from '../../pages/Payments/consts';
+import { PAYMENT_MODES, PAYMENT_TABS } from '../../pages/Payments/consts';
 import TabSwitch from '../../Components/TabSwitch';
 import { getPaymentMethod } from '../../pages/Payments/cardDetailUtils';
 import CloseButton from '../../Components/CloseButton';
@@ -39,6 +39,7 @@ interface PaymentMethodPopupProps {
   onAddNewMethod: () => void;
   showOffline: boolean;
   showBusinessPaymentMethods: boolean;
+  selectedBusinessAccountId: string | null;
 }
 
 const PaymentMethodPopup = ({
@@ -51,11 +52,14 @@ const PaymentMethodPopup = ({
   onAddNewMethod,
   showOffline,
   showBusinessPaymentMethods,
+  selectedBusinessAccountId,
 }: PaymentMethodPopupProps) => {
   const usePayments = PaymentsContext.useContainer();
   const { chosenService } = useContext(MewRidePageContext);
   const [selectedPaymentId, setSelectedPaymentId] = useState<string | undefined>(selected);
-  const [activePaymentTab, setActivePaymentTab] = useState(INITIAL_ACTIVE_PAYMENT_TAB);
+  const [activePaymentTab, setActivePaymentTab] = useState(
+    selectedBusinessAccountId ? PAYMENT_MODES.BUSINESS : PAYMENT_MODES.PERSONAL,
+  );
   const isBusinessMode = activePaymentTab === PAYMENT_MODES.BUSINESS;
   const personalPaymentMethods = [
     ...usePayments.paymentMethods,
@@ -83,7 +87,11 @@ const PaymentMethodPopup = ({
         setSelectedPaymentId(selected);
       } else {
         const paymentMethod = await usePayments.getClientDefaultMethod();
-        setSelectedPaymentId(paymentMethod?.id);
+        if (paymentMethod?.id) {
+          setSelectedPaymentId(paymentMethod?.id);
+        } else if (selectedBusinessAccountId) {
+          setSelectedPaymentId(selectedBusinessAccountId);
+        }
       }
     };
 

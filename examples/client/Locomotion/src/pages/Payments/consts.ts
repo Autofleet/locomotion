@@ -24,7 +24,6 @@ export const PAYMENT_TABS = [
     Svg: businessPaymentIcon,
   },
 ];
-export const INITIAL_ACTIVE_PAYMENT_TAB = PAYMENT_TABS[0].id;
 export const paymentMethodToIconMap = {
   [PAYMENT_METHODS.CASH]: cashIcon,
   [PAYMENT_METHODS.OFFLINE]: offlineIcon,

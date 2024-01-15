@@ -8,12 +8,15 @@ import { useNavigation } from '@react-navigation/native';
 import _, { pick } from 'lodash';
 import moment, { Moment } from 'moment-timezone';
 import debounce from 'lodash/debounce';
+import { PAYMENT_MODES } from '../../pages/Payments/consts';
+import offlinePaymentMethod from '../../pages/Payments/offlinePaymentMethod';
 import i18n from '../../I18n';
 import { FutureRidesContext } from '../futureRides';
 import { UserContext } from '../user';
+import PaymentContext from '../payments';
 import { getPosition, DEFAULT_COORDS } from '../../services/geo';
 import {
-  getPlaces, getGeocode, getPlaceDetails, getLocationTimezone,
+  getPlaces, getGeocode, getPlaceDetails,
 } from './google-api';
 import StorageService from '../../services/storage';
 import Mixpanel from '../../services/Mixpanel';
@@ -231,6 +234,7 @@ const HISTORY_RECORDS_NUM = 10;
 const RidePageContextProvider = ({ children }: {
   children: any
 }) => {
+  const { getClientDefaultMethod } = PaymentContext.useContainer();
   const { locationGranted, user } = useContext(UserContext);
   const {
     isStationsEnabled,
@@ -271,8 +275,11 @@ const RidePageContextProvider = ({ children }: {
     clearInterval(intervalRef.current);
   };
 
-  const saveLastRide = async (rideId: string) => {
-    await StorageService.save({ lastRideId: rideId });
+  const saveLastRide = async (rideId: string, rideBusinessAccountId: string) => {
+    await Promise.all([
+      StorageService.save({ lastRideId: rideId }),
+      StorageService.save({ lastBusinessAccountId: rideBusinessAccountId || PAYMENT_MODES.PERSONAL }),
+    ]);
   };
 
   const clearLastRide = async () => {
@@ -325,13 +332,13 @@ const RidePageContextProvider = ({ children }: {
       cleanRequestStopPoints();
       setRide(newRide);
       changeBsPage(BS_PAGES.ACTIVE_RIDE);
-      saveLastRide(newRide.id);
+      saveLastRide(newRide.id, newRide.businessAccountId);
     },
     [RIDE_STATES.ACTIVE]: (activeRide: any) => {
       cleanRequestStopPoints();
       setRide(activeRide);
       changeBsPage(BS_PAGES.ACTIVE_RIDE);
-      saveLastRide(activeRide.id);
+      saveLastRide(activeRide.id, activeRide.businessAccountId);
     },
     [RIDE_STATES.CANCELED]: (canceledRide: any) => {
       if (canceledRide.canceledBy !== user?.id) {
@@ -388,7 +395,32 @@ const RidePageContextProvider = ({ children }: {
     return timezoneResponse.time;
   };
 
-  const getServiceEstimations = async (throwError = true) => {
+  const updateRidePayload = (newRide: RideInterface) => {
+    setRide({
+      ...ride,
+      ...newRide,
+    });
+  };
+
+  const getBusinessAccountIdWithFallback = async (paymentChosen: boolean) => {
+    const doNotUseFallback = paymentChosen || businessAccountId;
+    if (doNotUseFallback) {
+      return businessAccountId;
+    }
+    const [notFirstRide, fallbackId] = await Promise.all([
+      StorageService.get('lastRideId'),
+      StorageService.get('lastBusinessAccountId'),
+    ]);
+    const defaultPaymentMethod = notFirstRide ? getClientDefaultMethod() : null;
+    const usePersonalPayment = !fallbackId || fallbackId === PAYMENT_MODES.PERSONAL || defaultPaymentMethod;
+    if (usePersonalPayment) { return null; }
+    updateRidePayload({ paymentMethodId: offlinePaymentMethod.id });
+    setBusinessAccountId(fallbackId);
+    return fallbackId;
+  };
+
+  const getServiceEstimations = async (throwError = true, paymentChosen = true) => {
+    const relevantBusinessAccountId = await getBusinessAccountIdWithFallback(paymentChosen);
     changeBsPage(BS_PAGES.SERVICE_ESTIMATIONS);
     try {
       const formattedStopPoints = formatStopPointsForEstimations(requestStopPoints);
@@ -400,7 +432,7 @@ const RidePageContextProvider = ({ children }: {
         scheduledTime = await getLocationTimezoneTime(formattedStopPoints[0].lat, formattedStopPoints[0].lng, unixScheduledTo);
       }
       const { estimations, services } = await rideApi
-        .createServiceEstimations(formattedStopPoints, scheduledTime, businessAccountId);
+        .createServiceEstimations(formattedStopPoints, scheduledTime, relevantBusinessAccountId);
 
       const tags = getEstimationTags(estimations);
       const formattedEstimations = formatEstimations(services, estimations, tags);
@@ -439,24 +471,24 @@ const RidePageContextProvider = ({ children }: {
     }
   };
 
-  const tryServiceEstimations = async () => {
+  const tryServiceEstimations = async (paymentChosen = true) => {
     const serviceEstimationsInterval = await getServiceEstimationsFetchingInterval();
-    await getServiceEstimations();
+    await getServiceEstimations(true, paymentChosen);
     clearInterval(intervalRef.current);
     intervalRef.current = setInterval(async () => {
       if (intervalRef.current) {
-        await getServiceEstimations(false);
+        await getServiceEstimations(false, true);
       }
     }, ((serviceEstimationsInterval || 60) * 1000));
   };
 
   const validateStopPointInTerritory = (stopPoints: any[]) => checkStopPointsInTerritory(stopPoints);
 
-  const validateRequestedStopPoints = (reqSps: any[]) => {
+  const validateRequestedStopPoints = (reqSps: any[], paymentChosen = true) => {
     const stopPoints = reqSps;
     const isSpsReady = stopPoints.every(r => r.lat && r.lng && r.description);
     if (stopPoints.length && isSpsReady) {
-      tryServiceEstimations();
+      tryServiceEstimations(paymentChosen);
     } else if (![BS_PAGES.ADDRESS_SELECTOR, BS_PAGES.LOADING].includes(currentBsPage)) {
       // reset req stop point request
       if (!ride.id) {
@@ -607,7 +639,7 @@ const RidePageContextProvider = ({ children }: {
   }, 4000);
 
   useEffect(() => {
-    validateRequestedStopPoints(requestStopPoints);
+    validateRequestedStopPoints(requestStopPoints, false);
   }, [requestStopPoints]);
 
   const getRideFromApi = async (rideId: string): Promise<RideInterface> => formatRide(await rideApi.getRide(rideId));
@@ -1147,12 +1179,6 @@ const RidePageContextProvider = ({ children }: {
     }
   };
 
-  const updateRidePayload = (newRide: RideInterface) => {
-    setRide({
-      ...ride,
-      ...newRide,
-    });
-  };
 
   const patchRideRating = async (rideId: string, rating: number | null, feedback: RideFeedback | null): Promise<any> => {
     if (!rating && !feedback) {

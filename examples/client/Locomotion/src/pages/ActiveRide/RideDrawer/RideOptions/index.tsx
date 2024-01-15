@@ -32,6 +32,7 @@ const RideOptions = () => {
     serviceEstimations,
     chosenService,
     updateBusinessAccountId,
+    businessAccountId,
   } = useContext(RidePageContext);
 
   const {
@@ -112,6 +113,7 @@ const RideOptions = () => {
         />
 
         <ChoosePaymentMethod
+          selectedBusinessAccountId={businessAccountId}
           showBusinessPaymentMethods={usePayments.businessPaymentMethods?.length > 0}
           onAddNewMethod={() => {
             clearPopup();

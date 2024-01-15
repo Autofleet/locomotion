@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { createContainer } from 'unstated-next';
+import { StorageService } from '../../services';
 import i18n from '../../I18n';
 import { PAYMENT_STATES } from '../../lib/commonTypes';
 import Mixpanel from '../../services/Mixpanel';
@@ -38,11 +39,20 @@ const usePayments = () => {
     }
   };
 
+  const handleBusinessAccountStorage = async (businessAccounts) => {
+    const lastBusinessAccountId = await StorageService.get('lastBusinessAccountId');
+    if (businessAccounts?.length > 0 && !lastBusinessAccountId) {
+      await StorageService.save({ lastBusinessAccountId: businessAccounts[0].id });
+    }
+  };
+
   const loadCustomer = async () => {
     const customerData = await getCustomer();
     setCustomer(customerData);
     setPaymentMethods(customerData.paymentMethods);
-    setBusinessPaymentMethods(customerData.businessAccounts);
+    const { businessAccounts } = customerData;
+    setBusinessPaymentMethods(businessAccounts);
+    await handleBusinessAccountStorage(businessAccounts);
     return customerData;
   };
 
