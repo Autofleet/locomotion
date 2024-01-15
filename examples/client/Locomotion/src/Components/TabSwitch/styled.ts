@@ -18,6 +18,7 @@ export const Container = styled.View`
   margin-bottom: 16px;
   padding-left: 8px;
   padding-right: 8px;
+  overflow: hidden;
 `;
 
 export const Tab = styled.TouchableOpacity`
@@ -29,6 +30,7 @@ export const Tab = styled.TouchableOpacity`
   ${({ isSelected }: TabStyled) => isSelected && `border-bottom-width: 2px; border-bottom-color: ${SELECTED_COLOR};`}
   margin-left: 8px;
   margin-right: 8px;
+  overflow: hidden;
 `;
 export const TabInner = styled.View`
 display: flex;
