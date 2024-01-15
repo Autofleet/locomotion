@@ -51,7 +51,7 @@ const FareBreakdownPopup = ({
         <InnerContainer>
           <CloseButton onPress={onClose} containerStyles={{ alignSelf: 'flex-end' }} />
           <ServiceCard service={service} />
-          {service.isPriceEstimated && (
+          {service.isPriceEstimated && showPrice && (
           <EstimatedTextContainer>
             <EstimatedText>
               {`${i18n.t('ridePriceBreakdown.estimatedText')}`}
@@ -59,7 +59,7 @@ const FareBreakdownPopup = ({
           </EstimatedTextContainer>
           )}
         </InnerContainer>
-        {service.isPriceEstimated && <Line />}
+        {service.isPriceEstimated && showPrice && <Line />}
         {showPrice
           && (
           <PriceBreakdown

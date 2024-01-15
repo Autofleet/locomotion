@@ -19,6 +19,7 @@ import {
 import { PaymentMethodInterface } from '../../context/payments/interface';
 import * as navigationService from '../../services/navigation';
 import PriceBreakdown from '../../Components/PriceBreakdown';
+import SettingsContext from '../../context/settings';
 
 type RidePriceBreakdownParams = {
   rideId: string,
@@ -38,6 +39,8 @@ const RidePriceBreakDown = () => {
     getRidePriceCalculation,
     getRideFromApi,
   } = useContext(RidePageContext);
+  const { showPrice, loadShowPrice } = SettingsContext.useContainer();
+
 
   const updatePriceCalculation = async () => {
     try {
@@ -74,6 +77,9 @@ const RidePriceBreakDown = () => {
   useEffect(() => {
     updateRideFromApi();
   }, []);
+  useEffect(() => {
+    loadShowPrice();
+  }, []);
 
   return (
     <PageContainer>
@@ -100,7 +106,8 @@ const RidePriceBreakDown = () => {
                 </CreditCardRowContainer>
                 {
                 (priceCalculation && isPriceEstimated(priceCalculation.calculationBasis)
-                                  && !RIDE_FINAL_STATES.includes(localRide?.state || ''))
+                                  && !RIDE_FINAL_STATES.includes(localRide?.state || '')
+                                  && showPrice)
                   ? (
                     <EstimationContainer>
                       <EstimationText>{i18n.t('ridePriceBreakdown.estimatedText')}</EstimationText>
