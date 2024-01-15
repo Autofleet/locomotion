@@ -275,12 +275,12 @@ const RidePageContextProvider = ({ children }: {
     clearInterval(intervalRef.current);
   };
 
-  const saveLastRide = async (rideId: string, rideBusinessAccountId: string) => {
-    await Promise.all([
-      StorageService.save({ lastRideId: rideId }),
-      StorageService.save({ lastBusinessAccountId: rideBusinessAccountId || PAYMENT_MODES.PERSONAL }),
-    ]);
-  };
+  const saveLastRide = async (rideId: string, rideBusinessAccountId: string) => Promise.all([
+    StorageService.save({ lastRideId: rideId }),
+    StorageService.save({ lastBusinessAccountId: rideBusinessAccountId || PAYMENT_MODES.PERSONAL }),
+    StorageService.save({ orderedRide: true }),
+  ]);
+
 
   const clearLastRide = async () => {
     await StorageService.delete('lastRideId');
@@ -408,7 +408,7 @@ const RidePageContextProvider = ({ children }: {
       return businessAccountId;
     }
     const [notFirstRide, fallbackId] = await Promise.all([
-      StorageService.get('lastRideId'),
+      StorageService.get('orderedRide'),
       StorageService.get('lastBusinessAccountId'),
     ]);
     const defaultPaymentMethod = notFirstRide ? getClientDefaultMethod() : null;
