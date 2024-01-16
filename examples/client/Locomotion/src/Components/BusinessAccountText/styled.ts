@@ -8,7 +8,6 @@ export const TitleWithSubTitle = styled(View)`
 `;
 export const BaseText = styled(Text)`
 color: #212229;
-font-family: Montserrat;
 font-size: 14px;
 font-style: normal;
 line-height: 20px;
