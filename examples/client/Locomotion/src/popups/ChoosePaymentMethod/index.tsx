@@ -171,26 +171,22 @@ const PaymentMethodPopup = ({
           ) }
           <CardsScrollView>
             {isBusinessMode ? (
-              usePayments.businessPaymentMethods.map((paymentMethod: any) => {
-                const reason = getDisabledReason(paymentMethod);
-                return (
-                  <PaymentMethod
-                    testIdPrefix="Dialog"
-                    noSvg
-                    alignMarkToRight
-                    noNotCapitalizeName
-                    {...paymentMethod}
-                    chooseMethodPage
-                    disabledReason={reason}
-                    selected={selectedPaymentId === paymentMethod.id}
-                    mark={selectedPaymentId === paymentMethod.id}
-                    onPress={() => {
-                      Mixpanel.setEvent('select payment method', { method: paymentMethod.id });
-                      setSelectedPaymentId(paymentMethod.id);
-                    }}
-                  />
-                );
-              })
+              usePayments.businessPaymentMethods.map((paymentMethod: any) => (
+                <PaymentMethod
+                  testIdPrefix="Dialog"
+                  noSvg
+                  alignMarkToRight
+                  noNotCapitalizeName
+                  {...paymentMethod}
+                  chooseMethodPage
+                  selected={selectedPaymentId === paymentMethod.id}
+                  mark={selectedPaymentId === paymentMethod.id}
+                  onPress={() => {
+                    Mixpanel.setEvent('select business payment method', { method: paymentMethod.id });
+                    setSelectedPaymentId(paymentMethod.id);
+                  }}
+                />
+              ))
             ) : renderPersonalPaymentMethods()}
             { !isBusinessMode && (
               <PaymentMethod
