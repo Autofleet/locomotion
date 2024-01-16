@@ -45,7 +45,7 @@ export const SummaryContainer = styled.View`
 export const Title = styled.Text`
   flex: 10;
   color: #212229;
-  font-family: Montserrat;
+  font-family: Inter;
   font-size: 16px;
   font-style: normal;
   font-weight: 700;
