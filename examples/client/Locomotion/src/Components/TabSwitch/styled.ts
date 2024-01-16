@@ -40,6 +40,7 @@ padding: 4px;
 justify-content: center;
 align-items: center;
 color: ${({ isSelected }: TabStyled) => (isSelected ? SELECTED_COLOR : UNSELECTED_COLOR)};
+font-family: Montserrat;
 font-size: 16px;
 font-style: normal;
 font-weight: 500;
@@ -48,6 +49,7 @@ line-height: 24px;
 export const TextContainer = styled.Text`
 color: #666975;
 color: ${({ isSelected }: TabStyled) => (isSelected ? SELECTED_COLOR : UNSELECTED_COLOR)};
+font-family: Montserrat;
 font-size: 16px;
 font-style: normal;
 font-weight: 500;
