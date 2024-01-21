@@ -23,6 +23,7 @@ export default ({ menuSide }) => {
   } = usePayments;
   const {
     updateRidePayload,
+    updateBusinessAccountId,
   } = useContext(RidePageContext);
 
   const [pageLoading, setPageLoading] = useState(true);
@@ -78,6 +79,7 @@ export default ({ menuSide }) => {
                   updateRidePayload({
                     paymentMethodId,
                   });
+                  updateBusinessAccountId(null);
                   navigationService.navigate(MAIN_ROUTES.HOME);
                 } else {
                   setShowList(true);
