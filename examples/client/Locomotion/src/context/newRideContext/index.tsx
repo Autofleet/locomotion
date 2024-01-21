@@ -385,12 +385,20 @@ const RidePageContextProvider = ({ children }: {
     });
   };
 
+  const updateRidePayload = (newRide: RideInterface) => {
+    setRide({
+      ...ride,
+      ...newRide,
+    });
+  };
+
   const FAILED_ESTIMATIONS_ACTIONS = {
     [ESTIMATION_ERRORS['RIDE_VALIDATION:SOME_STOP_POINTS_ARE_OUT_OF_TERRITORY']]: () => changeBsPage(BS_PAGES.NOT_IN_TERRITORY),
     [ESTIMATION_ERRORS.FIRST_STOP_POINT_NOT_IN_TERRITORY]: () => changeBsPage(BS_PAGES.PICKUP_NOT_IN_TERRITORY),
     [ESTIMATION_ERRORS.CLIENT_NOT_IN_BUSINESS_ACCOUNT]: async () => {
       await StorageService.delete('lastBusinessAccountId');
       setBusinessAccountId(null);
+      updateRidePayload({ paymentMethodId: undefined });
     },
   };
 
@@ -400,12 +408,6 @@ const RidePageContextProvider = ({ children }: {
     return timezoneResponse.time;
   };
 
-  const updateRidePayload = (newRide: RideInterface) => {
-    setRide({
-      ...ride,
-      ...newRide,
-    });
-  };
 
   const getBusinessAccountIdWithFallback = async (paymentChosen: boolean) => {
     const doNotUseFallback = paymentChosen || businessAccountId;
