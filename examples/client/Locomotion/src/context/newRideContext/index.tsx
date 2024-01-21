@@ -388,6 +388,10 @@ const RidePageContextProvider = ({ children }: {
   const FAILED_ESTIMATIONS_ACTIONS = {
     [ESTIMATION_ERRORS['RIDE_VALIDATION:SOME_STOP_POINTS_ARE_OUT_OF_TERRITORY']]: () => changeBsPage(BS_PAGES.NOT_IN_TERRITORY),
     [ESTIMATION_ERRORS.FIRST_STOP_POINT_NOT_IN_TERRITORY]: () => changeBsPage(BS_PAGES.PICKUP_NOT_IN_TERRITORY),
+    [ESTIMATION_ERRORS.CLIENT_NOT_IN_BUSINESS_ACCOUNT]: async () => {
+      await StorageService.delete('lastBusinessAccountId');
+      setBusinessAccountId(null);
+    },
   };
 
 
@@ -444,8 +448,11 @@ const RidePageContextProvider = ({ children }: {
     } catch (e: any) {
       Mixpanel.setEvent('service estimations failed', { status: e?.response?.status });
       if (throwError) {
-        if (FAILED_ESTIMATIONS_ACTIONS[e?.response?.data?.errors[0]]) {
-          FAILED_ESTIMATIONS_ACTIONS[e?.response?.data?.errors[0]]();
+        const error = e?.response?.data?.errors[0];
+        const errorHandleFunction = FAILED_ESTIMATIONS_ACTIONS[error];
+        if (errorHandleFunction) {
+          Mixpanel.setEvent('service estimations failed with error reason', { error });
+          await errorHandleFunction();
         } else {
           cleanRideState();
           setRidePopup(RIDE_POPUPS.FAILED_SERVICE_REQUEST);

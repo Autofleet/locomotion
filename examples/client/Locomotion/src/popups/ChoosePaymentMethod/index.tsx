@@ -60,6 +60,7 @@ const PaymentMethodPopup = ({
     selectedBusinessAccountId ? PAYMENT_MODES.BUSINESS : PAYMENT_MODES.PERSONAL,
   );
   const isBusinessMode = activePaymentTab === PAYMENT_MODES.BUSINESS;
+
   const personalPaymentMethods = [
     ...usePayments.paymentMethods,
     ...(showCash ? [cashPaymentMethod] : []),
@@ -79,6 +80,13 @@ const PaymentMethodPopup = ({
   useEffect(() => {
     usePayments.loadCustomer();
   }, []);
+
+  useEffect(() => {
+    if (!usePayments.businessPaymentMethods?.length
+      && activePaymentTab === PAYMENT_MODES.BUSINESS) {
+      setActivePaymentTab(PAYMENT_MODES.PERSONAL);
+    }
+  }, [usePayments.businessPaymentMethods]);
 
   useEffect(() => {
     const updateDefaultPaymentMethod = async () => {
