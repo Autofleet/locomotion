@@ -1,6 +1,5 @@
 /* eslint-disable no-unused-expressions */
 import React, { useContext, useEffect, useState } from 'react';
-import { View } from 'react-native';
 import PropTypes from 'prop-types';
 import Modal from 'react-native-modal';
 import { useNavigation } from '@react-navigation/native';
@@ -84,7 +83,11 @@ const PaymentMethodPopup = ({
   useEffect(() => {
     const updateDefaultPaymentMethod = async () => {
       if (selected) {
-        setSelectedPaymentId(selected);
+        if (selected === offlinePaymentMethod.id && selectedBusinessAccountId) {
+          setSelectedPaymentId(selectedBusinessAccountId);
+        } else {
+          setSelectedPaymentId(selected);
+        }
       } else {
         const paymentMethod = await usePayments.getClientDefaultMethod();
         if (paymentMethod?.id) {
@@ -149,8 +152,6 @@ const PaymentMethodPopup = ({
           <Title>{i18n.t('popups.choosePaymentMethod.title')}</Title>
           <CloseButton onPress={async () => {
             onCancel();
-            setSelectedPaymentId(selected
-                || (await usePayments.getClientDefaultMethod())?.id);
             rideFlow
               ? navigationService.navigate(MAIN_ROUTES.HOME)
               : navigationService.navigate(MAIN_ROUTES.PAYMENT);

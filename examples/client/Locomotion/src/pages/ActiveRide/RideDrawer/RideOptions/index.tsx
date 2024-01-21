@@ -123,9 +123,7 @@ const RideOptions = () => {
           }}
           showCash={showCash}
           showOffline={showOffline}
-          selected={ride?.paymentMethodId
-            && usePayments.paymentMethods.find((pm: any) => ride.paymentMethodId === pm.id)
-            ? ride.paymentMethodId : defaultPaymentMethod?.id}
+          selected={ride?.paymentMethodId || defaultPaymentMethod?.id}
           rideFlow
           isVisible={popupToShow === 'payment'}
           onCancel={() => clearPopup()}
