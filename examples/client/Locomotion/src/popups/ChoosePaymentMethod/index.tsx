@@ -89,6 +89,14 @@ const PaymentMethodPopup = ({
   }, [usePayments.businessPaymentMethods]);
 
   useEffect(() => {
+    if (!isVisible) {
+      setActivePaymentTab(
+        selectedBusinessAccountId ? PAYMENT_MODES.BUSINESS : PAYMENT_MODES.PERSONAL,
+      );
+    }
+  }, [isVisible]);
+
+  useEffect(() => {
     const updateDefaultPaymentMethod = async () => {
       if (selected) {
         if (selected === offlinePaymentMethod.id && selectedBusinessAccountId) {
