@@ -1,5 +1,6 @@
 import { Text, View } from 'react-native';
 import styled from 'styled-components';
+import { FONT_SIZES, FONT_WEIGHTS } from '../../context/theme';
 
 export const TitleWithSubTitle = styled(View)`
   display: flex;
@@ -8,8 +9,8 @@ export const TitleWithSubTitle = styled(View)`
 `;
 export const BaseText = styled(Text)`
 color: #212229;
+${FONT_SIZES.LARGE};
 font-family: Inter;
-font-size: 14px;
 font-style: normal;
 line-height: 20px;
 `;
