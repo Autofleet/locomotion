@@ -51,7 +51,7 @@ const margin = `margin-${Start()}`;
 const TextContainer = styled(View)`
   justify-content: center;
   ${margin}: 16px;
-  width: ${({ noSvg } : { noSvg: boolean}) => (noSvg ? '95%' : '80%')};
+  width: 80%;
 `;
 
 const Type = styled(Text)`
@@ -195,7 +195,7 @@ const CardRow = (paymentMethod: any) => {
         }
 
             </ImageContainer>
-            <TextContainer noSvg={paymentMethod.noSvg}>
+            <TextContainer>
               {paymentMethod.addNew
                 ? (
                   <>
