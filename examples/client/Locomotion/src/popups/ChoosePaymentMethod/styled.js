@@ -43,13 +43,10 @@ export const SummaryContainer = styled.View`
 `;
 
 export const Title = styled.Text`
+  ${FONT_SIZES.H2}
+  color: black;
+  ${FONT_WEIGHTS.SEMI_BOLD};
   flex: 10;
-  color: #212229;
-  font-family: Inter;
-  font-size: 16px;
-  font-style: normal;
-  font-weight: 700;
-  line-height: 24px;
 `;
 
 export const StyledTextArea = styled(TextArea)`
