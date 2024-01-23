@@ -1,5 +1,6 @@
 import { Text, View } from 'react-native';
 import styled from 'styled-components';
+import { FONT_SIZES, FONT_WEIGHTS } from '../../context/theme';
 
 export const Container = styled(View)`
 border-radius: 8px;
@@ -17,26 +18,23 @@ export const Title = styled(Text)`
 align-self: stretch;
 color: #212229;
 text-align: center;
-font-family: Inter;
-font-size: 14px;
-font-style: normal;
+${FONT_WEIGHTS.REGULAR};
+${FONT_SIZES.LARGE};
 font-weight: 600;
 `;
 export const Description = styled(Text)`
 align-self: stretch;
 color: #666975;
 text-align: center;
-font-family: Inter;
-font-size: 14px;
-font-style: normal;
+${FONT_WEIGHTS.REGULAR};
+${FONT_SIZES.LARGE};
 font-weight: 400;
 `;
 export const TitleWithoutDescription = styled(Text)`
 align-self: stretch;
 color: #666975;
 text-align: center;
-font-family: Inter;
-font-size: 14px;
-font-style: normal;
+${FONT_WEIGHTS.REGULAR};
+${FONT_SIZES.LARGE};
 font-weight: 500;
 `;
