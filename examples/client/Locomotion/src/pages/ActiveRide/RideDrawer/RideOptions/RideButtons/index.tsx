@@ -85,10 +85,11 @@ const RideButtons = ({
   const [passengersCounterError, setPassengersCounterError] = useState(false);
   const firstDate = () => moment(ride?.scheduledTo || undefined).add(ride?.scheduledTo ? 0 : (minMinutesBeforeFutureRide || 0) + 1, 'minutes').toDate();
   const [tempSelectedDate, setTempSelectedDate] = useState(firstDate());
-  const paymentMethodNotAllowedOnService = !businessAccountId
-  && chosenService && ride?.paymentMethodId
-    && !chosenService.allowedPaymentMethods.includes(getPaymentMethod(ride.paymentMethodId))
-    && serviceEstimations?.length > 0;
+  const ridePaymentId = ride?.paymentMethodId;
+  const selectedRequiredFields = chosenService && ridePaymentId && serviceEstimations?.length > 0;
+  const paymentMethodNotAllowedOnService = !businessAccountId && selectedRequiredFields
+  && !chosenService.allowedPaymentMethods.includes(getPaymentMethod(ridePaymentId));
+
 
   const checkFutureRidesSetting = async () => {
     const futureRidesEnabled = await getSettingByKey(
