@@ -42,7 +42,7 @@ const CardNameContainer = styled(View)`
     justify-content: flex-start;
     flex-direction: row;
     align-items: center;
-    width: 55%;
+    width: ${({ fullWidth }) => (fullWidth ? '100%' : '55%')};
 `;
 
 const PromoButtonContainer = styled(View)`
@@ -158,7 +158,7 @@ const PaymentButton = ({
   const IconColor = invalid ? '#F83743' : primaryColor;
   return (
     <Container>
-      <CardNameContainer>
+      <CardNameContainer fullWidth={!isCardPaymentMethod({ id })}>
         {isCardPaymentMethod({ id }) ? <PaymentIcon type={brand || 'generic'} />
           : (
             <SvgIcon
