@@ -38,7 +38,7 @@
     "@turf/boolean-point-in-polygon": "^6.5.0",
     "@turf/turf": "^6.5.0",
     "@types/googlemaps": "^3.43.3",
-    "axios": "^0.27.2",
+    "axios": "^1.6.0",
     "bluebird": "^3.7.2",
     "cheap-ruler": "^3.0.2",
     "i18next": "^19.7.0",
