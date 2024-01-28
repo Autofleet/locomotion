@@ -13,6 +13,7 @@ import {
 import StopPointsVerticalView from '../StopPointsVerticalView';
 import { getFormattedPrice, isPriceEstimated, convertTimezoneByLocation } from '../../context/newRideContext/utils';
 import cashIcon from '../../assets/cash.svg';
+import offlineIcon from '../../assets/offline.svg';
 import { PAYMENT_METHODS } from '../../pages/Payments/consts';
 import PaymentContext from '../../context/payments';
 import SettingsContext from '../../context/settings';
@@ -23,17 +24,26 @@ interface CardComponentProps {
     brand: any;
     id: string;
   }
+  businessAccountId: string | undefined;
 }
-const CardComponent = ({ paymentMethod }: CardComponentProps) => {
+const CardComponent = ({ paymentMethod, businessAccountId }: CardComponentProps) => {
   const isCash = PAYMENT_METHODS.CASH === paymentMethod.id;
   const isOffline = PAYMENT_METHODS.OFFLINE === paymentMethod.id;
-  const { offlinePaymentText, loadOfflinePaymentText } = PaymentContext.useContainer();
+  const {
+    offlinePaymentText,
+    loadOfflinePaymentText,
+    getBusinessAccountNameById,
+  } = PaymentContext.useContainer();
 
   useEffect(() => {
     loadOfflinePaymentText();
   }, []);
 
   const getText = () => {
+    const businessAccountName = getBusinessAccountNameById(businessAccountId);
+    if (businessAccountName) {
+      return businessAccountName;
+    }
     if (isCash) {
       return i18n.t('payments.cash');
     } if (isOffline) {
@@ -47,12 +57,13 @@ const CardComponent = ({ paymentMethod }: CardComponentProps) => {
       return cashIcon;
     }
     if (isOffline) {
-      return null;
+      return offlineIcon;
     }
   };
   return (
     <TextRowWithIcon
       text={getText() || ''}
+      subTitle={businessAccountId ? offlinePaymentText : ''}
       Image={() => !isCash && !isOffline && <PaymentIcon type={paymentMethod.brand} />}
       icon={getIcon()}
       style={{ marginTop: 10, marginBottom: 10 }}
@@ -168,7 +179,12 @@ const RideCard = ({
       </DateContainer>
 
       <StopPointsVerticalView ride={ride} />
-      {paymentMethod && <CardComponent paymentMethod={paymentMethod} />}
+      {paymentMethod && (
+      <CardComponent
+        paymentMethod={paymentMethod}
+        businessAccountId={ride.businessAccountId}
+      />
+      )}
       <RoundedButton testID="cancelRide" onPress={onPress} hollow type="cancel">
         {i18n.t('home.cancelRideButton')}
       </RoundedButton>

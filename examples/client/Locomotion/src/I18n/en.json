@@ -45,6 +45,10 @@
         "tags": {
             "fastest": "Fastest",
             "cheapest": "Cheapest"
+        },
+        "emptyState": {
+            "title": "There are no available services",
+            "description": "Try changing the ride schedule or select a different payment method"
         }
     },
     "rideDetails": {
@@ -289,7 +293,12 @@
             "placeholder": "How to find me, flights, info, etc.",
             "save": "Save",
             "cancel": "Cancel",
-            "unavailable": "Unavailable for the selected service"
+            "unavailable": "Unavailable for the selected service",
+            "emptyStateText": "No credit cards were added",
+            "tabs": {
+                "personal": "Personal",
+                "business": "Business"
+            }
         },
         "rideSummary": {
             "thanksForRideHeadline": "Thanks for your ride!",

@@ -54,10 +54,9 @@ const RidePriceBreakDown = () => {
 
   const updateRideFromApi = async () => {
     setLoading(true);
-    if (params.rideId || ride.id) {
-      // ts does not recognize the null check
-      // @ts-ignore
-      const result = await getRideFromApi(params.rideId || ride.id);
+    const rideId = params.rideId || ride.id;
+    if (rideId) {
+      const result = await getRideFromApi(rideId);
       setLocalRide(result);
       setPaymentMethod(result.payment.paymentMethod);
 
@@ -99,7 +98,11 @@ const RidePriceBreakDown = () => {
             <InformationCard title={i18n.t('ridePriceBreakdown.paymentMethodTitle')}>
               <View>
                 <CreditCardRowContainer>
-                  <CardRow {...paymentMethod} />
+                  <CardRow {...{
+                    ...paymentMethod,
+                    businessAccountId: localRide?.businessAccountId,
+                  }}
+                  />
                 </CreditCardRowContainer>
                 {
                 (priceCalculation && isPriceEstimated(priceCalculation.calculationBasis)

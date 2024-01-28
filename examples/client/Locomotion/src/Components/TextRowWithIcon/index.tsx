@@ -1,6 +1,7 @@
 import React, { useContext } from 'react';
 import { Text, View } from 'react-native';
 import styled, { ThemeContext } from 'styled-components';
+import BusinessAccountText from '../BusinessAccountText';
 import { FONT_SIZES } from '../../context/theme';
 import SvgIcon from '../SvgIcon';
 
@@ -31,7 +32,7 @@ interface TextRowWithIconProps {
 }
 
 const TextRowWithIcon = ({
-  text, icon, style, Image, iconWidth, iconHeight,
+  subTitle, text, icon, style, Image, iconWidth, iconHeight,
 }: TextRowWithIconProps) => {
   const theme = useContext(ThemeContext);
   const getImage = () => {
@@ -56,7 +57,13 @@ const TextRowWithIcon = ({
         ...((Image || icon) && { marginLeft: 10 }),
       }}
       >
-        {text}
+        {subTitle ? (
+          <BusinessAccountText
+            title={text}
+            subTitle={subTitle}
+          />
+        )
+          : text}
       </BasicText>
     </Container>
   );

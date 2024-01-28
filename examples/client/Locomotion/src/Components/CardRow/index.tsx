@@ -5,6 +5,8 @@ import { View, Text } from 'react-native';
 import moment from 'moment';
 import styled, { ThemeContext } from 'styled-components';
 import { PaymentIcon } from 'react-native-payment-icons';
+import BusinessAccountText from '../BusinessAccountText';
+import { RideInterface, RidePageContext } from '../../context/newRideContext';
 import { PAYMENT_METHODS, paymentMethodToIconMap } from '../../pages/Payments/consts';
 import Button from '../Button';
 import { capitalizeFirstLetter, getLastFourForamttedShort } from '../../pages/Payments/cardDetailUtils';
@@ -13,7 +15,7 @@ import SvgIcon from '../SvgIcon';
 import selected from '../../assets/selected-v.svg';
 import { Start, StartCapital } from '../../lib/text-direction';
 import chevronIcon from '../../assets/chevron.svg';
-import { isCashPaymentMethod } from '../../lib/ride/utils';
+import { isCashPaymentMethod, isOfflinePaymentMethod } from '../../lib/ride/utils';
 import paymentContext from '../../context/payments';
 
 type ContainerProps = {
@@ -93,8 +95,27 @@ const style = {
 
 const CardRow = (paymentMethod: any) => {
   const { primaryColor } = useContext(ThemeContext);
-  const { offlinePaymentText, loadOfflinePaymentText } = paymentContext.useContainer();
+  const {
+    offlinePaymentText,
+    loadOfflinePaymentText,
+    getBusinessAccountNameById,
+  } = paymentContext.useContainer();
+  const { businessAccountId } = paymentMethod;
   const [isCardExpired, setIsCardExpired] = useState(false);
+
+  const getPaymentMethodTitle = () => {
+    const businessAccountName = getBusinessAccountNameById(businessAccountId);
+    if (businessAccountName) {
+      return businessAccountName;
+    }
+    if (isCashPaymentMethod(paymentMethod)) {
+      return i18n.t('payments.cash');
+    }
+    if (isOfflinePaymentMethod(paymentMethod)) {
+      return offlinePaymentText;
+    }
+    return capitalizeFirstLetter(paymentMethod.name);
+  };
 
   useEffect(() => {
     loadOfflinePaymentText();
@@ -111,11 +132,15 @@ const CardRow = (paymentMethod: any) => {
     : (`${paymentMethod.testIdPrefix || ''}ChoosePaymentMethod${paymentMethod.id === PAYMENT_METHODS.OFFLINE || paymentMethod.id === PAYMENT_METHODS.CASH ? `_${paymentMethod.id}` : ''}`);
 
   const getPaymentMethodIcon = () => {
+    if (paymentMethod.noSvg) {
+      return null;
+    }
     const { brand, id, lastFour } = paymentMethod;
     const isCard = lastFour;
     if (isCard) {
       return <PaymentIcon type={brand} />;
     }
+    if (!paymentMethodToIconMap[id]) { return null; }
     return (
       <SvgIcon
         fill={primaryColor}
@@ -154,7 +179,7 @@ const CardRow = (paymentMethod: any) => {
                 : (
                   <>
                     {getPaymentMethodIcon()}
-                    {paymentMethod.mark ? (
+                    {(paymentMethod.mark && !paymentMethod.alignMarkToRight) ? (
                       <SvgIcon
                         style={{
                           position: 'absolute',
@@ -179,17 +204,19 @@ const CardRow = (paymentMethod: any) => {
                 )
                 : (
                   <>
-                    {!paymentMethod.lastFour
-                      ? (
-                        <Type>
-                          {isCashPaymentMethod(paymentMethod) ? i18n.t('payments.cash') : offlinePaymentText }
-                        </Type>
-                      )
-                      : (
-                        <Type>
-                          {capitalizeFirstLetter(paymentMethod.name)}
-                        </Type>
-                      )}
+                    {
+                      (businessAccountId && offlinePaymentText)
+                        ? (
+                          <BusinessAccountText
+                            title={getPaymentMethodTitle()}
+                            subTitle={offlinePaymentText}
+                          />
+                        )
+                        : (
+                          <Type>
+                            {getPaymentMethodTitle()}
+                          </Type>
+                        )}
                     {paymentMethod.lastFour
                       ? <Description>{getLastFourForamttedShort(paymentMethod.lastFour)}</Description>
                       : null}
@@ -205,6 +232,17 @@ const CardRow = (paymentMethod: any) => {
             {paymentMethod.disabledReason}
           </Description>
           )}
+          {(paymentMethod.mark && paymentMethod.alignMarkToRight) ? (
+            <SvgIcon
+              style={{
+                position: 'absolute',
+                right: 10,
+                bottom: 15,
+              }}
+              Svg={selected}
+              fill={primaryColor}
+            />
+          ) : null }
         </Container>
       </Button>
     </>

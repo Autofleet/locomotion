@@ -159,7 +159,6 @@ const RideView = ({ ride }) => {
   const [isPaymentSuccessPopupVisible, setIsPaymentSuccessPopupVisible] = useState(false);
   const [outstandingBalance, setOutstandingBalance] = useState(null);
   const isPaymentRejected = !isPaymentSettled && isRidePaymentRejected;
-
   const usePayments = PaymentContext.useContainer();
 
   const map = createRef();
@@ -260,7 +259,7 @@ const RideView = ({ ride }) => {
           </StopPointsVerticalViewContainer>
           <StopPointsVerticalViewContainer>
             <RidePaymentDetails
-              rideId={ride.id}
+              ride={ride}
               paymentMethod={ride?.payment?.paymentMethod}
               state={ride.state}
               currency={ride.priceCurrency}

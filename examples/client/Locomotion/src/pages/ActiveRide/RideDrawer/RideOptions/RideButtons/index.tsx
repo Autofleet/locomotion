@@ -59,6 +59,8 @@ const RideButtons = ({
     defaultService,
     loadFutureBookingDays,
     futureBookingDays,
+    businessAccountId,
+    serviceEstimations,
   } = useContext(RidePageContext);
 
 
@@ -83,9 +85,11 @@ const RideButtons = ({
   const [passengersCounterError, setPassengersCounterError] = useState(false);
   const firstDate = () => moment(ride?.scheduledTo || undefined).add(ride?.scheduledTo ? 0 : (minMinutesBeforeFutureRide || 0) + 1, 'minutes').toDate();
   const [tempSelectedDate, setTempSelectedDate] = useState(firstDate());
+  const ridePaymentId = ride?.paymentMethodId;
+  const selectedRequiredFields = chosenService && ridePaymentId && serviceEstimations?.length > 0;
+  const paymentMethodNotAllowedOnService = !businessAccountId && selectedRequiredFields
+  && !chosenService.allowedPaymentMethods.includes(getPaymentMethod(ridePaymentId));
 
-  const paymentMethodNotAllowedOnService = chosenService && ride?.paymentMethodId
-    && !chosenService.allowedPaymentMethods.includes(getPaymentMethod(ride.paymentMethodId));
 
   const checkFutureRidesSetting = async () => {
     const futureRidesEnabled = await getSettingByKey(
@@ -222,7 +226,11 @@ const RideButtons = ({
     [PAYMENT_METHODS.OFFLINE]: offlinePaymentMethod,
   };
   const renderPaymentButton = () => {
-    const { offlinePaymentText, loadOfflinePaymentText } = PaymentsContext.useContainer();
+    const {
+      offlinePaymentText,
+      getBusinessAccountNameById,
+      loadOfflinePaymentText,
+    } = PaymentsContext.useContainer();
     useEffect(() => {
       loadOfflinePaymentText();
     }, []);
@@ -231,7 +239,11 @@ const RideButtons = ({
      PaymentMethodInterface | undefined = paymentMethodIdToDataMap[ridePaymentMethodId]
       || paymentMethods.find(pm => pm.id === ridePaymentMethodId);
 
-    const getSelectedPaymentMethodTitle = () : string => {
+    const getSelectedPaymentMethodTitle = () : string | null => {
+      const businessAccountName = getBusinessAccountNameById(businessAccountId);
+      if (businessAccountName) {
+        return businessAccountName;
+      }
       if (isCashPaymentMethod(selectedPaymentMethod)) {
         return i18n.t('payments.cash');
       }
@@ -255,6 +267,7 @@ const RideButtons = ({
           brand={selectedPaymentMethod?.brand}
           icon={paymentMethodToIconMap[selectedPaymentMethod?.id]}
           title={getSelectedPaymentMethodTitle()}
+          subTitle={businessAccountId && offlinePaymentText}
           id={selectedPaymentMethod?.id}
           invalid={paymentMethodNotAllowedOnService}
         />

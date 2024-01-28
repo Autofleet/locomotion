@@ -8,12 +8,15 @@ import { useNavigation } from '@react-navigation/native';
 import _, { pick } from 'lodash';
 import moment, { Moment } from 'moment-timezone';
 import debounce from 'lodash/debounce';
+import { PAYMENT_MODES } from '../../pages/Payments/consts';
+import offlinePaymentMethod from '../../pages/Payments/offlinePaymentMethod';
 import i18n from '../../I18n';
 import { FutureRidesContext } from '../futureRides';
 import { UserContext } from '../user';
+import PaymentContext from '../payments';
 import { getPosition, DEFAULT_COORDS } from '../../services/geo';
 import {
-  getPlaces, getGeocode, getPlaceDetails, getLocationTimezone,
+  getPlaces, getGeocode, getPlaceDetails,
 } from './google-api';
 import StorageService from '../../services/storage';
 import Mixpanel from '../../services/Mixpanel';
@@ -78,6 +81,7 @@ export interface RideInterface {
   priceCalculationId?: string;
   rideFeedbacks?: RideFeedback[];
   cancellationReasonId?: string;
+  businessAccountId?: string;
 }
 
 type AdditionalCharge = {
@@ -160,6 +164,8 @@ interface RidePageContextInterface {
   setLastAcknowledgedRideCompletionTimestampToNow: () => void
   loadFutureBookingDays: () => void;
   futureBookingDays: number;
+  businessAccountId: string | null,
+  updateBusinessAccountId: (newBusinessAccountId: string | null) => void;
 }
 
 export const RidePageContext = createContext<RidePageContextInterface>({
@@ -219,6 +225,8 @@ export const RidePageContext = createContext<RidePageContextInterface>({
   setLastAcknowledgedRideCompletionTimestampToNow: () => undefined,
   loadFutureBookingDays: () => undefined,
   futureBookingDays: 0,
+  businessAccountId: null,
+  updateBusinessAccountId: (newBusinessAccountId: string | null) => undefined,
 });
 
 const HISTORY_RECORDS_NUM = 10;
@@ -226,6 +234,7 @@ const HISTORY_RECORDS_NUM = 10;
 const RidePageContextProvider = ({ children }: {
   children: any
 }) => {
+  const { getClientDefaultMethod } = PaymentContext.useContainer();
   const { locationGranted, user } = useContext(UserContext);
   const {
     isStationsEnabled,
@@ -258,17 +267,21 @@ const RidePageContextProvider = ({ children }: {
   const [numberOfPassengers, setNumberOfPassengers] = useState<number | null>(null);
   const [addressSearchLabel, setAddressSearchLabel] = useState<string | null>(null);
   const [futureBookingDays, setFutureBookingDays] = useState(0);
-
+  const [businessAccountId, setBusinessAccountId] = useState<string | null>(null);
 
   const intervalRef = useRef<any>();
 
   const stopRequestInterval = () => {
     clearInterval(intervalRef.current);
   };
-
   const saveLastRide = async (rideId: string) => {
     await StorageService.save({ lastRideId: rideId });
   };
+  const saveOrderedRidePaymentMethod = async (rideBusinessAccountId: string | null) => Promise.all([
+    StorageService.save({ lastBusinessAccountId: rideBusinessAccountId || PAYMENT_MODES.PERSONAL }),
+    StorageService.save({ orderedRide: true }),
+  ]);
+
 
   const clearLastRide = async () => {
     await StorageService.delete('lastRideId');
@@ -278,6 +291,7 @@ const RidePageContextProvider = ({ children }: {
     setRequestStopPoints(INITIAL_STOP_POINTS);
     setChosenService(null);
     setDefaultService(null);
+    setBusinessAccountId(null);
   };
 
   const cleanRideState = (initSpsBool = true) => {
@@ -286,6 +300,7 @@ const RidePageContextProvider = ({ children }: {
     }
     setRide({});
     clearLastRide();
+    setBusinessAccountId(null);
   };
 
   const onRideCompleted = (rideId: string, priceCalculationId: string) => {
@@ -370,9 +385,21 @@ const RidePageContextProvider = ({ children }: {
     });
   };
 
+  const updateRidePayload = (newRide: RideInterface) => {
+    setRide({
+      ...ride,
+      ...newRide,
+    });
+  };
+
   const FAILED_ESTIMATIONS_ACTIONS = {
     [ESTIMATION_ERRORS['RIDE_VALIDATION:SOME_STOP_POINTS_ARE_OUT_OF_TERRITORY']]: () => changeBsPage(BS_PAGES.NOT_IN_TERRITORY),
     [ESTIMATION_ERRORS.FIRST_STOP_POINT_NOT_IN_TERRITORY]: () => changeBsPage(BS_PAGES.PICKUP_NOT_IN_TERRITORY),
+    [ESTIMATION_ERRORS.CLIENT_NOT_IN_BUSINESS_ACCOUNT]: async () => {
+      await StorageService.delete('lastBusinessAccountId');
+      setBusinessAccountId(null);
+      updateRidePayload({ paymentMethodId: undefined });
+    },
   };
 
 
@@ -381,7 +408,26 @@ const RidePageContextProvider = ({ children }: {
     return timezoneResponse.time;
   };
 
-  const getServiceEstimations = async (throwError = true) => {
+
+  const getBusinessAccountIdWithFallback = async (paymentChosen: boolean) => {
+    const doNotUseFallback = paymentChosen || businessAccountId;
+    if (doNotUseFallback) {
+      return businessAccountId;
+    }
+    const [notFirstRide, fallbackId] = await Promise.all([
+      StorageService.get('orderedRide'),
+      StorageService.get('lastBusinessAccountId'),
+    ]);
+    const defaultPaymentMethod = notFirstRide ? getClientDefaultMethod() : null;
+    const usePersonalPayment = !fallbackId || fallbackId === PAYMENT_MODES.PERSONAL || defaultPaymentMethod;
+    if (usePersonalPayment) { return null; }
+    updateRidePayload({ paymentMethodId: offlinePaymentMethod.id });
+    setBusinessAccountId(fallbackId);
+    return fallbackId;
+  };
+
+  const getServiceEstimations = async (throwError = true, paymentChosen = true) => {
+    const relevantBusinessAccountId = await getBusinessAccountIdWithFallback(paymentChosen);
     changeBsPage(BS_PAGES.SERVICE_ESTIMATIONS);
     try {
       const formattedStopPoints = formatStopPointsForEstimations(requestStopPoints);
@@ -392,9 +438,8 @@ const RidePageContextProvider = ({ children }: {
         const unixScheduledTo = moment.unix(Number(ride.scheduledTo) / 1000);
         scheduledTime = await getLocationTimezoneTime(formattedStopPoints[0].lat, formattedStopPoints[0].lng, unixScheduledTo);
       }
-
       const { estimations, services } = await rideApi
-        .createServiceEstimations(formattedStopPoints, scheduledTime);
+        .createServiceEstimations(formattedStopPoints, scheduledTime, relevantBusinessAccountId);
 
       const tags = getEstimationTags(estimations);
       const formattedEstimations = formatEstimations(services, estimations, tags);
@@ -405,8 +450,11 @@ const RidePageContextProvider = ({ children }: {
     } catch (e: any) {
       Mixpanel.setEvent('service estimations failed', { status: e?.response?.status });
       if (throwError) {
-        if (FAILED_ESTIMATIONS_ACTIONS[e?.response?.data?.errors[0]]) {
-          FAILED_ESTIMATIONS_ACTIONS[e?.response?.data?.errors[0]]();
+        const error = e?.response?.data?.errors[0];
+        const errorHandleFunction = FAILED_ESTIMATIONS_ACTIONS[error];
+        if (errorHandleFunction) {
+          Mixpanel.setEvent('service estimations failed with error reason', { error });
+          await errorHandleFunction();
         } else {
           cleanRideState();
           setRidePopup(RIDE_POPUPS.FAILED_SERVICE_REQUEST);
@@ -433,24 +481,24 @@ const RidePageContextProvider = ({ children }: {
     }
   };
 
-  const tryServiceEstimations = async () => {
+  const tryServiceEstimations = async (paymentChosen = true) => {
     const serviceEstimationsInterval = await getServiceEstimationsFetchingInterval();
-    await getServiceEstimations();
+    await getServiceEstimations(true, paymentChosen);
     clearInterval(intervalRef.current);
     intervalRef.current = setInterval(async () => {
       if (intervalRef.current) {
-        await getServiceEstimations(false);
+        await getServiceEstimations(false, true);
       }
     }, ((serviceEstimationsInterval || 60) * 1000));
   };
 
   const validateStopPointInTerritory = (stopPoints: any[]) => checkStopPointsInTerritory(stopPoints);
 
-  const validateRequestedStopPoints = (reqSps: any[]) => {
+  const validateRequestedStopPoints = (reqSps: any[], paymentChosen = true) => {
     const stopPoints = reqSps;
     const isSpsReady = stopPoints.every(r => r.lat && r.lng && r.description);
     if (stopPoints.length && isSpsReady) {
-      tryServiceEstimations();
+      tryServiceEstimations(paymentChosen);
     } else if (![BS_PAGES.ADDRESS_SELECTOR, BS_PAGES.LOADING].includes(currentBsPage)) {
       // reset req stop point request
       if (!ride.id) {
@@ -555,6 +603,13 @@ const RidePageContextProvider = ({ children }: {
   }, [user?.id]);
 
   useEffect(() => {
+    if (currentBsPage === BS_PAGES.SERVICE_ESTIMATIONS) {
+      setServiceEstimations(null);
+      tryServiceEstimations();
+    }
+  }, [businessAccountId]);
+
+  useEffect(() => {
     if (user?.id && isAppActive && !ride.id) {
       loadLastCompletedRide();
     }
@@ -594,7 +649,7 @@ const RidePageContextProvider = ({ children }: {
   }, 4000);
 
   useEffect(() => {
-    validateRequestedStopPoints(requestStopPoints);
+    validateRequestedStopPoints(requestStopPoints, false);
   }, [requestStopPoints]);
 
   const getRideFromApi = async (rideId: string): Promise<RideInterface> => formatRide(await rideApi.getRide(rideId));
@@ -1081,7 +1136,6 @@ const RidePageContextProvider = ({ children }: {
         const unixScheduledTo = moment.unix(Number(ride.scheduledTo) / 1000);
         scheduledToMoment = await getLocationTimezoneTime(pickupLocation.lat, pickupLocation.lng, unixScheduledTo);
       }
-
       const rideToCreate = {
         serviceId: chosenService?.id,
         estimationId: chosenService?.estimationId,
@@ -1096,10 +1150,14 @@ const RidePageContextProvider = ({ children }: {
           type: sp.type,
           ...(i === 0 && { notes: ride.notes }),
         })),
+        ...(businessAccountId ? { businessAccountId } : {}),
       };
 
 
-      const afRide = await rideApi.createRide(rideToCreate);
+      const [afRide] = await Promise.all([
+        rideApi.createRide(rideToCreate),
+        saveOrderedRidePaymentMethod(businessAccountId),
+      ]);
       if (afRide.state === RIDE_STATES.REJECTED) {
         throw new Error(RIDE_FAILED_REASONS.BUSY);
       }
@@ -1112,8 +1170,6 @@ const RidePageContextProvider = ({ children }: {
         setRide(formattedRide);
       }
     } catch (e: any) {
-      console.log(e);
-      console.log(e.message);
       const key = e.response?.data?.errors[0] || e.message;
       Mixpanel.setEvent('Ride failed', { status: e?.response?.status, reason: key });
       if (FAILED_TO_CREATE_RIDE_ACTIONS[key]) {
@@ -1134,12 +1190,6 @@ const RidePageContextProvider = ({ children }: {
     }
   };
 
-  const updateRidePayload = (newRide: RideInterface) => {
-    setRide({
-      ...ride,
-      ...newRide,
-    });
-  };
 
   const patchRideRating = async (rideId: string, rating: number | null, feedback: RideFeedback | null): Promise<any> => {
     if (!rating && !feedback) {
@@ -1290,6 +1340,11 @@ const RidePageContextProvider = ({ children }: {
       streetAddress: null,
     }, index);
   };
+  const updateBusinessAccountId = (newBusinessAccountId: string | null) => {
+    if (newBusinessAccountId !== businessAccountId) {
+      setBusinessAccountId(newBusinessAccountId);
+    }
+  };
 
   return (
     <RidePageContext.Provider
@@ -1357,6 +1412,8 @@ const RidePageContextProvider = ({ children }: {
         setLastAcknowledgedRideCompletionTimestampToNow,
         loadFutureBookingDays,
         futureBookingDays,
+        businessAccountId,
+        updateBusinessAccountId,
       }}
     >
       {children}

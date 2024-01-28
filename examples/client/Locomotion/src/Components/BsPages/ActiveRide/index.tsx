@@ -165,7 +165,7 @@ const ActiveRideContent = () => {
             ride={ride}
           />
           <RidePaymentDetails
-            rideId={ride.id || ''}
+            ride={ride}
             paymentMethod={ride.payment?.paymentMethod}
             state={ride.state}
             currency={ride.priceCurrency}
