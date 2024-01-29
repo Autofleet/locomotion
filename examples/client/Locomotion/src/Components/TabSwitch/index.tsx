@@ -22,6 +22,7 @@ const TabSwitch = ({ onUnselectedClick, tabs, activeTabId }: ITabSwitchProps) =>
       const isSelected = tab.id === activeTabId;
       return (
         <Tab
+          testID={tab.id}
           key={tab.id}
           id={tab.id}
           onPress={() => {
