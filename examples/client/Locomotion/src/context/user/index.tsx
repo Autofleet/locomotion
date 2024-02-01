@@ -175,24 +175,40 @@ const UserContextProvider = ({ children }: { children: any }) => {
 
   const onLogin = async (phoneNumber: string, channel = 'sms') => {
     const demandSourceId = await AppSettings.getOperationId();
-    await loginApi({
+    const switchDemandSource = Config.SWITCH_DEMAND_SOURCE === 'true';
+    const response = await loginApi({
       phoneNumber,
       channel,
       demandSourceId,
+      switchDemandSource
     });
+    console.log('onLogin', response, switchDemandSource);
+    if (switchDemandSource && response.demandSourceId &&
+        response.demandSourceId !== demandSourceId) {
+      await AppSettings.setSettings({
+        OPERATION_ID: response.demandSourceId
+      });
+    }
     // successful login - delete captcha token
     await StorageService.delete('captchaToken');
   };
 
   const onVert = async (code: string) => {
     const demandSourceId = await AppSettings.getOperationId();
+    const switchDemandSource = Config.SWITCH_DEMAND_SOURCE === 'true';
     try {
       const vertResponse = await loginVert({
         phoneNumber: user?.phoneNumber,
         code,
         demandSourceId,
+        switchDemandSource
       });
-
+      console.log('onVert', vertResponse, switchDemandSource);
+      if (switchDemandSource && vertResponse.demandSourceId !== demandSourceId) {
+        await AppSettings.setSettings({
+          OPERATION_ID: vertResponse.demandSourceId
+        });
+      }
       if (vertResponse.status !== 'OK' || !vertResponse.refreshToken || !vertResponse.accessToken) {
         console.log('Bad vert with response', vertResponse);
         return false;
