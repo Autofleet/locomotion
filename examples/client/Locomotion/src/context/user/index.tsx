@@ -182,12 +182,9 @@ const UserContextProvider = ({ children }: { children: any }) => {
       demandSourceId,
       switchDemandSource
     });
-    console.log('onLogin', response, switchDemandSource);
     if (switchDemandSource && response.demandSourceId &&
         response.demandSourceId !== demandSourceId) {
-      await AppSettings.setSettings({
-        OPERATION_ID: response.demandSourceId
-      });
+      await AppSettings.setOperationId(response.demandSourceId);
     }
     // successful login - delete captcha token
     await StorageService.delete('captchaToken');
@@ -195,20 +192,13 @@ const UserContextProvider = ({ children }: { children: any }) => {
 
   const onVert = async (code: string) => {
     const demandSourceId = await AppSettings.getOperationId();
-    const switchDemandSource = Config.SWITCH_DEMAND_SOURCE === 'true';
     try {
       const vertResponse = await loginVert({
         phoneNumber: user?.phoneNumber,
         code,
         demandSourceId,
-        switchDemandSource
       });
-      console.log('onVert', vertResponse, switchDemandSource);
-      if (switchDemandSource && vertResponse.demandSourceId !== demandSourceId) {
-        await AppSettings.setSettings({
-          OPERATION_ID: vertResponse.demandSourceId
-        });
-      }
+
       if (vertResponse.status !== 'OK' || !vertResponse.refreshToken || !vertResponse.accessToken) {
         console.log('Bad vert with response', vertResponse);
         return false;
