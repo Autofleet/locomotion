@@ -179,7 +179,7 @@ const UserContextProvider = ({ children }: { children: any }) => {
     }
     const allowedDemandSourceIds = JSON.parse(Config.ALLOWED_DEMAND_SOURCE_IDS);
     return Array.isArray(allowedDemandSourceIds) ? allowedDemandSourceIds : [];
-  }
+  };
 
   const onLogin = async (phoneNumber: string, channel = 'sms') => {
     const demandSourceId = await AppSettings.getOperationId();
