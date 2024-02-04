@@ -173,18 +173,26 @@ const UserContextProvider = ({ children }: { children: any }) => {
     return vertResponse.status === 'OK';
   };
 
+  const getAllowedDemandSourceIds = () => {
+    if (!Config.ALLOWED_DEMAND_SOURCE_IDS) {
+      return [];
+    }
+    const allowedDemandSourceIds = JSON.parse(Config.ALLOWED_DEMAND_SOURCE_IDS);
+    return Array.isArray(allowedDemandSourceIds) ? allowedDemandSourceIds : [];
+  }
+
   const onLogin = async (phoneNumber: string, channel = 'sms') => {
     const demandSourceId = await AppSettings.getOperationId();
-    const switchDemandSource = Config.SWITCH_DEMAND_SOURCE === 'true';
+    const allowedDemandSourceIds = getAllowedDemandSourceIds();
     const response = await loginApi({
       phoneNumber,
       channel,
       demandSourceId,
-      switchDemandSource,
+      allowedDemandSourceIds,
     });
-    if (switchDemandSource && response.demandSourceId
-        && response.demandSourceId !== demandSourceId) {
-      await AppSettings.setOperationId(response.demandSourceId);
+    const { selectedDemandSourceId } = response;
+    if (allowedDemandSourceIds.length > 0 && selectedDemandSourceId && selectedDemandSourceId !== demandSourceId) {
+      await AppSettings.setOperationId(selectedDemandSourceId);
     }
     // successful login - delete captcha token
     await StorageService.delete('captchaToken');
