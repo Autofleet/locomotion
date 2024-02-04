@@ -180,7 +180,7 @@ const UserContextProvider = ({ children }: { children: any }) => {
       phoneNumber,
       channel,
       demandSourceId,
-      switchDemandSource
+      switchDemandSource,
     });
     if (switchDemandSource && response.demandSourceId &&
         response.demandSourceId !== demandSourceId) {
