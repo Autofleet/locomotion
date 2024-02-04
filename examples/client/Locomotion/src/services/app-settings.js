@@ -31,7 +31,7 @@ const AppSettings = {
       },
     });
   },
-  setOperationId: async (newOperationId) => AppSettings.setSettings({ operationId: newOperationId }),
+  setOperationId: async newOperationId => AppSettings.setSettings({ operationId: newOperationId }),
   destroy: async () => Storage.clear(),
 };
 
