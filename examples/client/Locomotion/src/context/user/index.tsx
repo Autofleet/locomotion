@@ -182,8 +182,8 @@ const UserContextProvider = ({ children }: { children: any }) => {
       demandSourceId,
       switchDemandSource,
     });
-    if (switchDemandSource && response.demandSourceId &&
-        response.demandSourceId !== demandSourceId) {
+    if (switchDemandSource && response.demandSourceId
+        && response.demandSourceId !== demandSourceId) {
       await AppSettings.setOperationId(response.demandSourceId);
     }
     // successful login - delete captcha token
