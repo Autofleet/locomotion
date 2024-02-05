@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import SkeletonContent from 'react-native-skeleton-content-nonexpo';
 import i18n from '../../I18n';
 import {
@@ -17,7 +17,7 @@ import {
   PriceText,
 } from './styled';
 import { COUPON_TYPE } from '../../lib/commonTypes';
-import settingsContext from '../../context/settings';
+import { UserContext } from '../../context/user';
 
 const NoBreakdownComponent = ({
   didRequestFail,
@@ -60,7 +60,7 @@ const PriceBreakdown = ({
   didRequestFail,
   retryGetPriceBreakdown,
 }: PriceBreakdownProps) => {
-  const { showPrice, loadShowPrice } = settingsContext.useContainer();
+  const { showPrice, loadShowPrice } = useContext(UserContext);
   const isDebuggingEnabled = typeof atob !== 'undefined';
   const [priceCalculationItems, setPriceCalculationItems] = useState<any[]>();
   const [total, setTotal] = useState<null | string>(null);

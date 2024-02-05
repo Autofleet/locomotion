@@ -20,7 +20,7 @@ import {
 import Tag from '../../../../../../Components/Tag';
 import { RidePageContext } from '../../../../../../context/newRideContext';
 import FareBreakdownPopup from '../../../../../../popups/FareBreakdownPopup';
-import SettingsContext from '../../../../../../context/settings';
+import { UserContext } from '../../../../../../context/user';
 
 const FARE_POPUP = 'farePopup';
 
@@ -29,7 +29,7 @@ const ServiceCard = ({ service, withBorder }) => {
   const {
     setChosenService, chosenService, serviceEstimations, ride,
   } = useContext(RidePageContext);
-  const { showPrice, loadShowPrice } = SettingsContext.useContainer();
+  const { showPrice, loadShowPrice } = useContext(UserContext);
   const [popup, setPopup] = useState(null);
   const isFutureRide = ride.scheduledTo;
   const unavailable = !((ride.scheduledTo && service.priceCalculationId)
@@ -100,6 +100,7 @@ const ServiceCard = ({ service, withBorder }) => {
       return i18n.t('rideDetails.unavailable');
     }
 
+    // console.log(" Service: " , service); // checkBA? Selected Account? If I have businessAcountId its bussine from newRIde?
     return showPrice ? getFormattedPrice(service.currency, service.price) : null;
   };
 

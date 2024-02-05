@@ -11,7 +11,7 @@ import {
   PaymentRow, RidePriceDetails, PriceText, ViewDetails, CardRowContainer,
 } from './styled';
 import { PaymentMethodInterface } from '../../context/payments/interface';
-import SettingsContext from '../../context/settings';
+import { UserContext } from '../../context/user';
 import * as navigationService from '../../services/navigation';
 import Button from '../Button';
 
@@ -33,7 +33,7 @@ const RidePaymentDetails = ({
     getRidePriceCalculation,
   } = useContext(RidePageContext);
 
-  const { showPrice, loadShowPrice } = SettingsContext.useContainer();
+  const { showPrice, loadShowPrice } = useContext(UserContext);
 
   const updatePriceCalculation = async () => {
     const calculation = await getRidePriceCalculation(ride?.id);

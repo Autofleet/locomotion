@@ -16,7 +16,7 @@ import BottomSheet from '../../../Components/BottomSheet';
 import BottomSheetContextProvider, { BottomSheetContext, SNAP_POINT_STATES } from '../../../context/bottomSheetContext';
 import CustomTip from './CustomTip';
 import { getFormattedPrice, getCurrencySymbol } from '../../../context/newRideContext/utils';
-import SettingsContext from '../../../context/settings';
+import { UserContext } from '../../../context/user';
 
 const TipSectionContainer = styled.View`
  width: 100%;
@@ -107,7 +107,7 @@ const Tips = ({
 }) => {
   const [selectedTip, setSelectedTip] = useState(null);
   const [customTip, setCustomTip] = useState(null);
-  const { showPrice, loadShowPrice } = SettingsContext.useContainer();
+  const { showPrice, loadShowPrice } = useContext(UserContext);
 
   const isPercentage = ridePrice >= tipSettings.percentageThreshold;
   const buttons = isPercentage ? tipSettings.percentage : tipSettings.fixedPrice;

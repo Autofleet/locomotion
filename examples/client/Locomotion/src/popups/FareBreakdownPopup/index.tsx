@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import Modal from 'react-native-modal';
 import { BackHandler } from 'react-native';
 import PriceBreakdown from '../../Components/PriceBreakdown';
@@ -13,7 +13,7 @@ import {
 import i18n from '../../I18n';
 import { Line } from '../../Components/PriceBreakdown/styled';
 import { getPriceCalculation } from '../../context/newRideContext/api';
-import SettingsContext from '../../context/settings';
+import { UserContext } from '../../context/user';
 
 
 interface FareBreakdownPopupProps {
@@ -29,7 +29,7 @@ const FareBreakdownPopup = ({
 }: FareBreakdownPopupProps) => {
   const [priceCalculation, setPriceCalculation] = useState(null);
   const [didRequestFail, setDidRequestFail] = useState(false);
-  const { showPrice, loadShowPrice } = SettingsContext.useContainer();
+  const { showPrice, loadShowPrice } = useContext(UserContext);
 
   const loadPriceCalculation = async () => {
     try {

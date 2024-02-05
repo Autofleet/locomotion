@@ -19,7 +19,7 @@ import {
 import { PaymentMethodInterface } from '../../context/payments/interface';
 import * as navigationService from '../../services/navigation';
 import PriceBreakdown from '../../Components/PriceBreakdown';
-import SettingsContext from '../../context/settings';
+import { UserContext } from '../../context/user';
 
 type RidePriceBreakdownParams = {
   rideId: string,
@@ -39,7 +39,7 @@ const RidePriceBreakDown = () => {
     getRidePriceCalculation,
     getRideFromApi,
   } = useContext(RidePageContext);
-  const { showPrice, loadShowPrice } = SettingsContext.useContainer();
+  const { showPrice, loadShowPrice } = useContext(UserContext);
 
 
   const updatePriceCalculation = async () => {

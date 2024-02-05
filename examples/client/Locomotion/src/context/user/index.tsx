@@ -1,5 +1,5 @@
 import React, {
-  createContext, Dispatch, SetStateAction, useEffect, useState,
+  createContext, Dispatch, SetStateAction, useContext, useEffect, useState,
 } from 'react';
 import crashlytics from '@react-native-firebase/crashlytics';
 import Config from 'react-native-config';
@@ -12,6 +12,8 @@ import {
 import auth from '../../services/auth';
 import Mixpanel from '../../services/Mixpanel';
 import PaymentsContext from '../payments';
+import SettingsContext from '../settings';
+import { RidePageContext } from '../newRideContext';
 import OneSignal from '../../services/one-signal';
 
 const storageKey = 'clientProfile';
@@ -52,6 +54,8 @@ interface UserContextInterface {
   createCoupon: (values: any) => Promise<any>,
   setCoupon: (coupon: any | null) => void,
   onLogin: (phoneNumber: string, channel: string) => Promise<void>
+  loadShowPrice: () => Promise<any>
+  showPrice: boolean
 }
 
 export const UserContext = createContext<UserContextInterface>({
@@ -76,6 +80,8 @@ export const UserContext = createContext<UserContextInterface>({
   setCoupon: (coupon: any | null) => null,
   createCoupon: async (values: any) => undefined,
   onLogin: async (phoneNumber: string, channel: string) => undefined,
+  loadShowPrice: async () => undefined,
+  showPrice: false,
 });
 
 const UserContextProvider = ({ children }: { children: any }) => {
@@ -83,6 +89,9 @@ const UserContextProvider = ({ children }: { children: any }) => {
   const [locationGranted, setLocationGranted] = useState();
   const [user, setUser] = useState<User | null>(null);
   const [coupon, setCoupon] = useState<any | null>(null);
+  const [showPrice, setShowPrice] = useState(false);
+  const { showSettingsPrice, loadSettingsShowPrice } = SettingsContext.useContainer();
+  const { businessAccountId } = useContext(RidePageContext);
 
   const getUserFromServer = () => getUserDetails();
 
@@ -116,6 +125,7 @@ const UserContextProvider = ({ children }: { children: any }) => {
 
   useEffect(() => {
     getUserFromStorage();
+    loadSettingsShowPrice();
   }, []);
 
   const updatePushToken = async () => {
@@ -238,6 +248,19 @@ const UserContextProvider = ({ children }: { children: any }) => {
     return result;
   };
 
+  const loadShowPrice = async () => {
+    let hidePrice = false;
+    console.log("businessAccountId: " , businessAccountId);
+    if (businessAccountId) {
+      console.log("Loading BA prefs");
+      hidePrice = true; // TODO change this to await get prop from BA in DB
+    } else {
+      console.log("showSettingsPrice:  laoded from other settings context: " , showSettingsPrice);
+      hidePrice = !showSettingsPrice;
+    }
+    setShowPrice(!hidePrice);
+  };
+
   return (
     <UserContext.Provider
       value={{
@@ -262,6 +285,8 @@ const UserContextProvider = ({ children }: { children: any }) => {
         setCoupon: c => setCoupon(c),
         createCoupon,
         onLogin,
+        loadShowPrice,
+        showPrice,
       }}
     >
       {children}

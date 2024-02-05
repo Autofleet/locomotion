@@ -1341,6 +1341,7 @@ const RidePageContextProvider = ({ children }: {
     }, index);
   };
   const updateBusinessAccountId = (newBusinessAccountId: string | null) => {
+    console.log("Update BA id in ride new context: " , newBusinessAccountId);
     if (newBusinessAccountId !== businessAccountId) {
       setBusinessAccountId(newBusinessAccountId);
     }
@@ -1412,7 +1413,7 @@ const RidePageContextProvider = ({ children }: {
         setLastAcknowledgedRideCompletionTimestampToNow,
         loadFutureBookingDays,
         futureBookingDays,
-        businessAccountId,
+        businessAccountId, //
         updateBusinessAccountId,
       }}
     >
