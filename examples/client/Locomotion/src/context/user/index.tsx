@@ -173,12 +173,17 @@ const UserContextProvider = ({ children }: { children: any }) => {
     return vertResponse.status === 'OK';
   };
 
-  const getAllowedDemandSourceIds = () => {
-    if (!Config.ALLOWED_DEMAND_SOURCE_IDS) {
+  const getAllowedDemandSourceIds = (): string[] => {
+    try {
+      if (!Config.ALLOWED_DEMAND_SOURCE_IDS) {
+        return [];
+      }
+      const allowedDemandSourceIds = JSON.parse(Config.ALLOWED_DEMAND_SOURCE_IDS);
+      return Array.isArray(allowedDemandSourceIds) ? allowedDemandSourceIds : [];
+    } catch (error) {
+      Mixpanel.setEvent('Invalid ALLOWED_DEMAND_SOURCE_IDS', { allowedDemandSourceIds: Config.ALLOWED_DEMAND_SOURCE_IDS });
       return [];
     }
-    const allowedDemandSourceIds = JSON.parse(Config.ALLOWED_DEMAND_SOURCE_IDS);
-    return Array.isArray(allowedDemandSourceIds) ? allowedDemandSourceIds : [];
   };
 
   const onLogin = async (phoneNumber: string, channel = 'sms') => {
