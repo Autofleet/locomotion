@@ -5,7 +5,7 @@ import EmptyState from '../../../../../Components/EmptyState';
 import { getCouponText } from '../../../../../context/newRideContext/utils';
 import { RidePageContext } from '../../../../../context/newRideContext';
 import { UserContext } from '../../../../../context/user';
-import PaymentContext from '../../../../../context/payments';
+import PriceContext from '../../../../../context/price';
 import ServiceCard from './ServiceCard';
 import { ServiceOptionsContainer } from './styles';
 import { serviceCardSkeleton } from './ServiceCard/skeleton';
@@ -18,7 +18,7 @@ const ServiceOptions = () => {
   const { serviceEstimations, stopRequestInterval } = useContext(RidePageContext);
 
   const { coupon } = useContext(UserContext);
-  const { showPrice, loadShowPrice } = PaymentContext.useContainer();
+  const { showPrice, loadShowPrice } = PriceContext.useContainer();
   const isDebuggingEnabled = (typeof atob !== 'undefined');
   const { setTopBarProps } = useContext(BottomSheetContext);
 

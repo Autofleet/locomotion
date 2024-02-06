@@ -20,7 +20,7 @@ import {
 import Tag from '../../../../../../Components/Tag';
 import { RidePageContext } from '../../../../../../context/newRideContext';
 import FareBreakdownPopup from '../../../../../../popups/FareBreakdownPopup';
-import PaymentContext from '../../../../../../context/payments';
+import PriceContext from '../../../../../../context/price';
 
 const FARE_POPUP = 'farePopup';
 
@@ -30,7 +30,7 @@ const ServiceCard = ({ service, withBorder }) => {
   const {
     setChosenService, chosenService, serviceEstimations, ride,
   } = useContext(RidePageContext);
-  const { showPrice, loadShowPrice } = PaymentContext.useContainer();
+  const { showPrice, loadShowPrice } = PriceContext.useContainer();
   const [popup, setPopup] = useState(null);
   const isFutureRide = ride.scheduledTo;
   const unavailable = !((ride.scheduledTo && service.priceCalculationId)

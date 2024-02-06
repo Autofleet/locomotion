@@ -16,6 +16,7 @@ import cashIcon from '../../assets/cash.svg';
 import offlineIcon from '../../assets/offline.svg';
 import { PAYMENT_METHODS } from '../../pages/Payments/consts';
 import PaymentContext from '../../context/payments';
+import PriceContext from '../../context/price';
 
 interface CardComponentProps {
   paymentMethod: {
@@ -90,7 +91,7 @@ const RideCard = ({
   const {
     getRidePriceCalculation,
   } = useContext(RidePageContext);
-  const { showPrice, loadShowPrice } = PaymentContext.useContainer();
+  const { showPrice, loadShowPrice } = PriceContext.useContainer();
 
   const addPriceCalculation = async () => {
     const price = await getRidePriceCalculation(ride.id, ride.priceCalculationId);

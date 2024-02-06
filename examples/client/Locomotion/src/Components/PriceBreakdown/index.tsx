@@ -17,7 +17,7 @@ import {
   PriceText,
 } from './styled';
 import { COUPON_TYPE } from '../../lib/commonTypes';
-import PaymentContext from '../../context/payments';
+import PriceContext from '../../context/price';
 
 const NoBreakdownComponent = ({
   didRequestFail,
@@ -60,7 +60,7 @@ const PriceBreakdown = ({
   didRequestFail,
   retryGetPriceBreakdown,
 }: PriceBreakdownProps) => {
-  const { showPrice, loadShowPrice } = PaymentContext.useContainer();
+  const { showPrice, loadShowPrice } = PriceContext.useContainer();
   const isDebuggingEnabled = typeof atob !== 'undefined';
   const [priceCalculationItems, setPriceCalculationItems] = useState<any[]>();
   const [total, setTotal] = useState<null | string>(null);
