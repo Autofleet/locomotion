@@ -122,12 +122,9 @@ const useSettings = () => {
   }, [appSettingsState]);
 
   const loadShowPrice = async (showPriceToMembersOfBA) => {
-    console.log("SettingsContext::businessAccountId: ARRIVED " , showPriceToMembersOfBA);
     if (showPriceToMembersOfBA !== undefined) {
-      console.log("SettingsContext::Loading !!!!!!BA prefs");
       setShowPrice(showPriceToMembersOfBA);
     } else {
-      console.log("SettingsContext:: ??????showSettingsPrice:  laoded from other settings context: ");
       const hidePrice = await getSettingByKey(settingsKeys.HIDE_PRICE);
       setShowPrice(!hidePrice);
     }

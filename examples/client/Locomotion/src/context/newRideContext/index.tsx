@@ -603,7 +603,6 @@ const RidePageContextProvider = ({ children }: {
   }, [user?.id]);
 
   useEffect(() => {
-    console.log("RIdeContext::businessAccountId updated:", businessAccountId);
     if (currentBsPage === BS_PAGES.SERVICE_ESTIMATIONS) {
       setServiceEstimations(null);
       tryServiceEstimations();
@@ -1342,7 +1341,6 @@ const RidePageContextProvider = ({ children }: {
     }, index);
   };
   const updateBusinessAccountId = (newBusinessAccountId: string | null) => {
-    console.log("Update BA id in ride new context: " , newBusinessAccountId);
     if (newBusinessAccountId !== businessAccountId) {
       setBusinessAccountId(newBusinessAccountId);
     }
