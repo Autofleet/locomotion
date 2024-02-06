@@ -3,7 +3,6 @@ import { RideHistoryContextProvider } from './rideHistory';
 import I18n from '../I18n';
 import SettingsContext from './settings';
 import PaymentsContext from './payments';
-import PriceContext from './price';
 import ThemeProvider from './theme';
 import UserContextProvider from './user';
 import OnboardingContextProvider from './onboarding';
@@ -44,9 +43,7 @@ export const MainProvider = ({ children, LoginPage, i18n }) => {
             <UserContextProvider>
               <OnboardingContextProvider>
                 <RideHistoryContextProvider>
-                  <PriceContext.Provider>
-                    {children}
-                  </PriceContext.Provider>
+                  {children}
                 </RideHistoryContextProvider>
               </OnboardingContextProvider>
             </UserContextProvider>

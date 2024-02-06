@@ -21,7 +21,7 @@ const useSettings = () => {
   const [workingHours, setWorkingHours] = useState({});
   const [measureSystem, setMeasureSystem] = useState('metric');
   const [appSettingsState, setAppSettingsState] = useState({});
-  const [showSettingsPrice, setSettingsShowPrice] = useState(false);
+  const [showPrice, setShowPrice] = useState(false);
 
 
   const getSettingByKey = async (key) => {
@@ -121,9 +121,16 @@ const useSettings = () => {
     setAppSettingsStates(appSettingsState);
   }, [appSettingsState]);
 
-  const loadSettingsShowPrice = async () => {
-    const hidePrice = await getSettingByKey(settingsKeys.HIDE_PRICE);
-    setSettingsShowPrice(!hidePrice);
+  const loadShowPrice = async (showPriceToMembersOfBA) => {
+    console.log("SettingsContext::businessAccountId: ARRIVED " , showPriceToMembersOfBA);
+    if (showPriceToMembersOfBA !== undefined) {
+      console.log("SettingsContext::Loading !!!!!!BA prefs");
+      setShowPrice(showPriceToMembersOfBA);
+    } else {
+      console.log("SettingsContext:: ??????showSettingsPrice:  laoded from other settings context: ");
+      const hidePrice = await getSettingByKey(settingsKeys.HIDE_PRICE);
+      setShowPrice(!hidePrice);
+    }
   };
 
   return {
@@ -136,8 +143,8 @@ const useSettings = () => {
     getAppSettings,
     getMeasureSystem,
     measureSystem,
-    loadSettingsShowPrice,
-    showSettingsPrice,
+    loadShowPrice,
+    showPrice,
   };
 };
 export default createContainer(useSettings);

@@ -603,6 +603,7 @@ const RidePageContextProvider = ({ children }: {
   }, [user?.id]);
 
   useEffect(() => {
+    console.log("RIdeContext::businessAccountId updated:", businessAccountId);
     if (currentBsPage === BS_PAGES.SERVICE_ESTIMATIONS) {
       setServiceEstimations(null);
       tryServiceEstimations();

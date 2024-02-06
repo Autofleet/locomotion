@@ -13,7 +13,9 @@ import {
 import i18n from '../../I18n';
 import { Line } from '../../Components/PriceBreakdown/styled';
 import { getPriceCalculation } from '../../context/newRideContext/api';
-import PriceContext from '../../context/price';
+import SettingContext from '../../context/settings';
+import PaymentContext from '../../context/payments';
+import { RidePageContext } from '../../context/newRideContext';
 
 
 interface FareBreakdownPopupProps {
@@ -29,7 +31,9 @@ const FareBreakdownPopup = ({
 }: FareBreakdownPopupProps) => {
   const [priceCalculation, setPriceCalculation] = useState(null);
   const [didRequestFail, setDidRequestFail] = useState(false);
-  const { showPrice, loadShowPrice } = PriceContext.useContainer();
+  const { businessAccountId } = useContext(RidePageContext);
+  const { getBusinessAccountById } = PaymentContext.useContainer();
+  const { showPrice, loadShowPrice } = SettingContext.useContainer();
 
   const loadPriceCalculation = async () => {
     try {
@@ -42,8 +46,15 @@ const FareBreakdownPopup = ({
   };
   useEffect(() => {
     loadPriceCalculation();
-    loadShowPrice();
   }, []);
+  useEffect(() => {
+    if (businessAccountId) {
+      const { showPriceToMembers } = getBusinessAccountById(businessAccountId);
+      loadShowPrice(showPriceToMembers ?? false);
+    } else {
+      loadShowPrice();
+    }
+  }, [businessAccountId]);
 
   return (
     <Modal isVisible={isVisible} onBackButtonPress={onClose}>

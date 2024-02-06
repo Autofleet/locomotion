@@ -5,7 +5,9 @@ import EmptyState from '../../../../../Components/EmptyState';
 import { getCouponText } from '../../../../../context/newRideContext/utils';
 import { RidePageContext } from '../../../../../context/newRideContext';
 import { UserContext } from '../../../../../context/user';
-import PriceContext from '../../../../../context/price';
+import SettingContext from '../../../../../context/settings';
+import PaymentContext from '../../../../../context/payments';
+
 import ServiceCard from './ServiceCard';
 import { ServiceOptionsContainer } from './styles';
 import { serviceCardSkeleton } from './ServiceCard/skeleton';
@@ -18,14 +20,21 @@ const ServiceOptions = () => {
   const { serviceEstimations, stopRequestInterval } = useContext(RidePageContext);
 
   const { coupon } = useContext(UserContext);
-  const { showPrice, loadShowPrice } = PriceContext.useContainer();
+  const { businessAccountId } = useContext(RidePageContext);
+  const { getBusinessAccountById } = PaymentContext.useContainer();
+  const { showPrice, loadShowPrice } = SettingContext.useContainer();
   const isDebuggingEnabled = (typeof atob !== 'undefined');
   const { setTopBarProps } = useContext(BottomSheetContext);
 
   useEffect(() => () => stopRequestInterval(), []);
   useEffect(() => {
-    loadShowPrice();
-  }, []);
+    if (businessAccountId) {
+      const { showPriceToMembers } = getBusinessAccountById(businessAccountId);
+      loadShowPrice(showPriceToMembers ?? false);
+    } else {
+      loadShowPrice();
+    }
+  }, [businessAccountId]);
 
   const clearTopBar = () => {
     setTopBarProps(INITIAL_TOP_BAR_PROPS);

@@ -195,11 +195,11 @@ const usePayments = () => {
     }
     return returnObject;
   };
-  const getBusinessAccountNameById = (id) => {
+  const getBusinessAccountById = (id) => {
     if (!id) { return null; }
     const relevantBusinessAccount = businessPaymentMethods.find(ba => ba.id === id);
     if (relevantBusinessAccount) {
-      return relevantBusinessAccount.name;
+      return relevantBusinessAccount;
     }
     return null;
   };
@@ -227,7 +227,7 @@ const usePayments = () => {
     loadOutstandingBalance,
     offlinePaymentText: offlinePaymentText || i18n.t('payments.offline'),
     loadOfflinePaymentText,
-    getBusinessAccountNameById,
+    getBusinessAccountById,
   };
 };
 

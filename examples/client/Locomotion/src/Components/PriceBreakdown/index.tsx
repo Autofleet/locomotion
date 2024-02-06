@@ -17,7 +17,9 @@ import {
   PriceText,
 } from './styled';
 import { COUPON_TYPE } from '../../lib/commonTypes';
-import PriceContext from '../../context/price';
+import SettingContext from '../../context/settings';
+import PaymentContext from '../../context/payments';
+import { RidePageContext } from '../../context/newRideContext';
 
 const NoBreakdownComponent = ({
   didRequestFail,
@@ -60,7 +62,9 @@ const PriceBreakdown = ({
   didRequestFail,
   retryGetPriceBreakdown,
 }: PriceBreakdownProps) => {
-  const { showPrice, loadShowPrice } = PriceContext.useContainer();
+  const { businessAccountId } = useContext(RidePageContext);
+  const { getBusinessAccountById } = PaymentContext.useContainer();
+  const { showPrice, loadShowPrice } = SettingContext.useContainer();
   const isDebuggingEnabled = typeof atob !== 'undefined';
   const [priceCalculationItems, setPriceCalculationItems] = useState<any[]>();
   const [total, setTotal] = useState<null | string>(null);
@@ -122,8 +126,13 @@ const PriceBreakdown = ({
   }, [priceCalculation]);
 
   useEffect(() => {
-    loadShowPrice();
-  }, []);
+    if (businessAccountId) {
+      const { showPriceToMembers } = getBusinessAccountById(businessAccountId);
+      loadShowPrice(showPriceToMembers ?? false);
+    } else {
+      loadShowPrice();
+    }
+  }, [businessAccountId]);
 
   return (
     <>

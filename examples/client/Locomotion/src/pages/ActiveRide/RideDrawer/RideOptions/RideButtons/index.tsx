@@ -228,7 +228,7 @@ const RideButtons = ({
   const renderPaymentButton = () => {
     const {
       offlinePaymentText,
-      getBusinessAccountNameById,
+      getBusinessAccountById,
       loadOfflinePaymentText,
     } = PaymentsContext.useContainer();
     useEffect(() => {
@@ -240,9 +240,9 @@ const RideButtons = ({
       || paymentMethods.find(pm => pm.id === ridePaymentMethodId);
 
     const getSelectedPaymentMethodTitle = () : string | null => {
-      const businessAccountName = getBusinessAccountNameById(businessAccountId);
-      if (businessAccountName) {
-        return businessAccountName;
+      if (businessAccountId) {
+        const { name } = getBusinessAccountById(businessAccountId);
+        return name;
       }
       if (isCashPaymentMethod(selectedPaymentMethod)) {
         return i18n.t('payments.cash');

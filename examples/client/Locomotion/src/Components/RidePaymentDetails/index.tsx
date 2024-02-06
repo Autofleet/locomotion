@@ -11,7 +11,8 @@ import {
   PaymentRow, RidePriceDetails, PriceText, ViewDetails, CardRowContainer,
 } from './styled';
 import { PaymentMethodInterface } from '../../context/payments/interface';
-import PriceContext from '../../context/price';
+import PaymentContext from '../../context/payments';
+import SettingContext from '../../context/settings';
 import * as navigationService from '../../services/navigation';
 import Button from '../Button';
 
@@ -33,7 +34,9 @@ const RidePaymentDetails = ({
     getRidePriceCalculation,
   } = useContext(RidePageContext);
 
-  const { showPrice, loadShowPrice } = PriceContext.useContainer();
+  const { businessAccountId } = useContext(RidePageContext);
+  const { getBusinessAccountById } = PaymentContext.useContainer();
+  const { showPrice, loadShowPrice } = SettingContext.useContainer();
 
   const updatePriceCalculation = async () => {
     const calculation = await getRidePriceCalculation(ride?.id);
@@ -45,8 +48,16 @@ const RidePaymentDetails = ({
 
   useEffect(() => {
     updatePriceCalculation();
-    loadShowPrice();
   }, []);
+
+  useEffect(() => {
+    if (businessAccountId) {
+      const { showPriceToMembers } = getBusinessAccountById(businessAccountId);
+      loadShowPrice(showPriceToMembers ?? false);
+    } else {
+      loadShowPrice();
+    }
+  }, [businessAccountId]);
 
   return (paymentMethod ? (
     <>

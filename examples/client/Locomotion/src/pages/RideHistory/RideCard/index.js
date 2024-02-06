@@ -10,7 +10,8 @@ import { isCardPaymentMethod } from '../../../lib/ride/utils';
 import { getPriceCalculation } from '../../../context/futureRides/api';
 import RidePaymentDetails from '../../../Components/RidePaymentDetails';
 import PaymentContext from '../../../context/payments';
-import PriceContext from '../../../context/price';
+import SettingContext from '../../../context/settings';
+import { RidePageContext } from '../../../context/newRideContext';
 import {
   DaySecTitleSubText,
   DaySecTitleText,
@@ -53,11 +54,18 @@ const RideTitleCard = ({
   ride, page, showTip, tip, isPaymentRejected,
 }) => {
   const isDebuggingEnabled = (typeof atob !== 'undefined');
-  const { showPrice, loadShowPrice } = PriceContext.useContainer();
+  const { businessAccountId } = useContext(RidePageContext);
+  const { getBusinessAccountById } = PaymentContext.useContainer();
+  const { showPrice, loadShowPrice } = SettingContext.useContainer();
 
   useEffect(() => {
-    loadShowPrice();
-  }, []);
+    if (businessAccountId) {
+      const { showPriceToMembers } = getBusinessAccountById(businessAccountId);
+      loadShowPrice(showPriceToMembers ?? false);
+    } else {
+      loadShowPrice();
+    }
+  }, [businessAccountId]);
 
   const getTipButton = () => {
     if (!isDebuggingEnabled && tip === null) {
