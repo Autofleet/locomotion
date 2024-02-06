@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { createContainer } from 'unstated-next';
 import { StorageService } from '../../services';
 import i18n from '../../I18n';
@@ -8,6 +8,7 @@ import cashPaymentMethod from '../../pages/Payments/cashPaymentMethod';
 import network from '../../services/network';
 import SETTINGS_KEYS from '../settings/keys';
 import SettingContext from '../settings';
+import { RidePageContext } from '../newRideContext';
 
 const BASE_PATH = '/api/v1/me/customers';
 
@@ -19,6 +20,10 @@ const usePayments = () => {
   const [hasOutstandingPayment, setHasOutstandingPayment] = useState(false);
   const [offlinePaymentText, setOfflinePaymentText] = useState(null);
   const [businessPaymentMethods, setBusinessPaymentMethods] = useState([]);
+  const [showPrice, setShowPrice] = useState(false);
+
+  const { showSettingsPrice, loadSettingsShowPrice } = SettingContext.useContainer();
+  const { businessAccountId } = useContext(RidePageContext);
 
   const loadOfflinePaymentText = async () => {
     const companyName = await useSettings.getSettingByKey(SETTINGS_KEYS.OFFLINE_PAYMENT_TEXT);
@@ -168,6 +173,10 @@ const usePayments = () => {
     }
   }, [paymentMethods]);
 
+  useEffect(() => {
+    loadSettingsShowPrice();
+  }, [businessAccountId]);
+
   const loadOutstandingBalance = async (paymentMethodId) => {
     const { data } = await network.get(`${BASE_PATH}/${paymentMethodId}/outstanding-balance`, {
       params: {
@@ -204,6 +213,19 @@ const usePayments = () => {
     return null;
   };
 
+  const loadShowPrice = async () => {
+    let hidePrice = false;
+    console.log("businessAccountId: " , businessAccountId);
+    if (businessAccountId) {
+      console.log("Loading BA prefs");
+      hidePrice = true; // TODO change this to await get prop from BA in DB
+    } else {
+      console.log("From Payments console showSettingsPrice:  laoded from other settings context: " , showSettingsPrice);
+      hidePrice = !showSettingsPrice;
+    }
+    setShowPrice(!hidePrice);
+  };
+
   return {
     paymentAccount,
     getClientPaymentAccount,
@@ -228,6 +250,8 @@ const usePayments = () => {
     offlinePaymentText: offlinePaymentText || i18n.t('payments.offline'),
     loadOfflinePaymentText,
     getBusinessAccountNameById,
+    loadShowPrice,
+    showPrice,
   };
 };
 

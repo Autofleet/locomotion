@@ -5,6 +5,7 @@ import EmptyState from '../../../../../Components/EmptyState';
 import { getCouponText } from '../../../../../context/newRideContext/utils';
 import { RidePageContext } from '../../../../../context/newRideContext';
 import { UserContext } from '../../../../../context/user';
+import PaymentContext from '../../../../../context/payments';
 import ServiceCard from './ServiceCard';
 import { ServiceOptionsContainer } from './styles';
 import { serviceCardSkeleton } from './ServiceCard/skeleton';
@@ -16,7 +17,8 @@ const SUCCESS_COLOR = '#25B861';
 const ServiceOptions = () => {
   const { serviceEstimations, stopRequestInterval } = useContext(RidePageContext);
 
-  const { coupon, showPrice, loadShowPrice } = useContext(UserContext);
+  const { coupon } = useContext(UserContext);
+  const { showPrice, loadShowPrice } = PaymentContext.useContainer();
   const isDebuggingEnabled = (typeof atob !== 'undefined');
   const { setTopBarProps } = useContext(BottomSheetContext);
 

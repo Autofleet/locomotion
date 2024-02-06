@@ -13,7 +13,7 @@ import {
 import i18n from '../../I18n';
 import { Line } from '../../Components/PriceBreakdown/styled';
 import { getPriceCalculation } from '../../context/newRideContext/api';
-import { UserContext } from '../../context/user';
+import PaymentContext from '../../context/payments';
 
 
 interface FareBreakdownPopupProps {
@@ -29,7 +29,7 @@ const FareBreakdownPopup = ({
 }: FareBreakdownPopupProps) => {
   const [priceCalculation, setPriceCalculation] = useState(null);
   const [didRequestFail, setDidRequestFail] = useState(false);
-  const { showPrice, loadShowPrice } = useContext(UserContext);
+  const { showPrice, loadShowPrice } = PaymentContext.useContainer();
 
   const loadPriceCalculation = async () => {
     try {

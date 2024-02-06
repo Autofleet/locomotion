@@ -20,16 +20,17 @@ import {
 import Tag from '../../../../../../Components/Tag';
 import { RidePageContext } from '../../../../../../context/newRideContext';
 import FareBreakdownPopup from '../../../../../../popups/FareBreakdownPopup';
-import { UserContext } from '../../../../../../context/user';
+import PaymentContext from '../../../../../../context/payments';
 
 const FARE_POPUP = 'farePopup';
 
 const ServiceCard = ({ service, withBorder }) => {
+  const { businessAccountId } = useContext(RidePageContext);
   const theme = useContext(ThemeContext);
   const {
     setChosenService, chosenService, serviceEstimations, ride,
   } = useContext(RidePageContext);
-  const { showPrice, loadShowPrice } = useContext(UserContext);
+  const { showPrice, loadShowPrice } = PaymentContext.useContainer();
   const [popup, setPopup] = useState(null);
   const isFutureRide = ride.scheduledTo;
   const unavailable = !((ride.scheduledTo && service.priceCalculationId)
@@ -106,7 +107,7 @@ const ServiceCard = ({ service, withBorder }) => {
 
   useEffect(() => {
     loadShowPrice();
-  }, []);
+  }, [businessAccountId]);
 
   return (
     <>
