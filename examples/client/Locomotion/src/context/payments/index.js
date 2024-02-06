@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext } from 'react';
+import { useState, useEffect } from 'react';
 import { createContainer } from 'unstated-next';
 import { StorageService } from '../../services';
 import i18n from '../../I18n';

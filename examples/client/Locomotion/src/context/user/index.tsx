@@ -1,5 +1,5 @@
 import React, {
-  createContext, Dispatch, SetStateAction, useContext, useEffect, useState,
+  createContext, Dispatch, SetStateAction, useEffect, useState,
 } from 'react';
 import crashlytics from '@react-native-firebase/crashlytics';
 import Config from 'react-native-config';
@@ -12,8 +12,6 @@ import {
 import auth from '../../services/auth';
 import Mixpanel from '../../services/Mixpanel';
 import PaymentsContext from '../payments';
-import SettingsContext from '../settings';
-import { RidePageContext } from '../newRideContext';
 import OneSignal from '../../services/one-signal';
 
 const storageKey = 'clientProfile';
@@ -239,7 +237,6 @@ const UserContextProvider = ({ children }: { children: any }) => {
     const result = await createUserCoupon(code);
     return result;
   };
-
 
   return (
     <UserContext.Provider
