@@ -19,6 +19,7 @@ import { getFormattedPrice, getCurrencySymbol } from '../../../context/newRideCo
 import SettingContext from '../../../context/settings';
 import PaymentContext from '../../../context/payments';
 import { RidePageContext } from '../../../context/newRideContext';
+import showPriceBasedOnAccount from '../../../services/showPriceBasedOnAccount';
 
 const TipSectionContainer = styled.View`
  width: 100%;
@@ -129,12 +130,7 @@ const Tips = ({
     setSnapPointsState(SNAP_POINT_STATES.CUSTOM_TIP);
   }, []);
   useEffect(() => {
-    if (businessAccountId) {
-      const { showPriceToMembers } = getBusinessAccountById(businessAccountId);
-      loadShowPrice(showPriceToMembers ?? false);
-    } else {
-      loadShowPrice();
-    }
+    showPriceBasedOnAccount(loadShowPrice, getBusinessAccountById, businessAccountId);
   }, [businessAccountId]);
 
 

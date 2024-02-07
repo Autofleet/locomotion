@@ -17,6 +17,7 @@ import offlineIcon from '../../assets/offline.svg';
 import { PAYMENT_METHODS } from '../../pages/Payments/consts';
 import PaymentContext from '../../context/payments';
 import SettingContext from '../../context/settings';
+import showPriceBasedOnAccount from '../../services/showPriceBasedOnAccount';
 
 
 interface CardComponentProps {
@@ -108,12 +109,7 @@ const RideCard = ({
   }, [ride]);
 
   useEffect(() => {
-    if (businessAccountId) {
-      const { showPriceToMembers } = getBusinessAccountById(businessAccountId);
-      loadShowPrice(showPriceToMembers ?? false);
-    } else {
-      loadShowPrice();
-    }
+    showPriceBasedOnAccount(loadShowPrice, getBusinessAccountById, businessAccountId);
   }, [businessAccountId]);
 
   const formatScheludedTo = async (time: any) => {

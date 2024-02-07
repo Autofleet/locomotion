@@ -7,6 +7,7 @@ import { RidePageContext } from '../../../../../context/newRideContext';
 import { UserContext } from '../../../../../context/user';
 import SettingContext from '../../../../../context/settings';
 import PaymentContext from '../../../../../context/payments';
+import showPriceBasedOnAccount from '../../../../../services/showPriceBasedOnAccount';
 
 import ServiceCard from './ServiceCard';
 import { ServiceOptionsContainer } from './styles';
@@ -28,12 +29,7 @@ const ServiceOptions = () => {
 
   useEffect(() => () => stopRequestInterval(), []);
   useEffect(() => {
-    if (businessAccountId) {
-      const { showPriceToMembers } = getBusinessAccountById(businessAccountId);
-      loadShowPrice(showPriceToMembers ?? false);
-    } else {
-      loadShowPrice();
-    }
+    showPriceBasedOnAccount(loadShowPrice, getBusinessAccountById, businessAccountId);
   }, [businessAccountId]);
 
   const clearTopBar = () => {

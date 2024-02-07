@@ -20,6 +20,7 @@ import { COUPON_TYPE } from '../../lib/commonTypes';
 import SettingContext from '../../context/settings';
 import PaymentContext from '../../context/payments';
 import { RidePageContext } from '../../context/newRideContext';
+import showPriceBasedOnAccount from '../../services/showPriceBasedOnAccount';
 
 const NoBreakdownComponent = ({
   didRequestFail,
@@ -126,12 +127,7 @@ const PriceBreakdown = ({
   }, [priceCalculation]);
 
   useEffect(() => {
-    if (businessAccountId) {
-      const { showPriceToMembers } = getBusinessAccountById(businessAccountId);
-      loadShowPrice(showPriceToMembers ?? false);
-    } else {
-      loadShowPrice();
-    }
+    showPriceBasedOnAccount(loadShowPrice, getBusinessAccountById, businessAccountId);
   }, [businessAccountId]);
 
   return (

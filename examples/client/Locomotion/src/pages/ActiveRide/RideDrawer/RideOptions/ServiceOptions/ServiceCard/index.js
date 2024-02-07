@@ -22,6 +22,7 @@ import { RidePageContext } from '../../../../../../context/newRideContext';
 import FareBreakdownPopup from '../../../../../../popups/FareBreakdownPopup';
 import SettingContext from '../../../../../../context/settings';
 import PaymentContext from '../../../../../../context/payments';
+import showPriceBasedOnAccount from '../../../../../../services/showPriceBasedOnAccount';
 
 const FARE_POPUP = 'farePopup';
 
@@ -107,12 +108,7 @@ const ServiceCard = ({ service, withBorder }) => {
   };
 
   useEffect(() => {
-    if (businessAccountId) {
-      const { showPriceToMembers } = getBusinessAccountById(businessAccountId);
-      loadShowPrice(showPriceToMembers ?? false);
-    } else {
-      loadShowPrice();
-    }
+    showPriceBasedOnAccount(loadShowPrice, getBusinessAccountById, businessAccountId);
   }, [businessAccountId]);
 
   return (

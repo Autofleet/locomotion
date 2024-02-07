@@ -15,6 +15,7 @@ import PaymentContext from '../../context/payments';
 import SettingContext from '../../context/settings';
 import * as navigationService from '../../services/navigation';
 import Button from '../Button';
+import showPriceBasedOnAccount from '../../services/showPriceBasedOnAccount';
 
 const RidePaymentDetails = ({
   ride,
@@ -51,12 +52,7 @@ const RidePaymentDetails = ({
   }, []);
 
   useEffect(() => {
-    if (businessAccountId) {
-      const { showPriceToMembers } = getBusinessAccountById(businessAccountId);
-      loadShowPrice(showPriceToMembers ?? false);
-    } else {
-      loadShowPrice();
-    }
+    showPriceBasedOnAccount(loadShowPrice, getBusinessAccountById, businessAccountId);
   }, [businessAccountId]);
 
   return (paymentMethod ? (

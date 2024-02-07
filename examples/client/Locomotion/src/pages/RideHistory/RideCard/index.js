@@ -12,6 +12,7 @@ import RidePaymentDetails from '../../../Components/RidePaymentDetails';
 import PaymentContext from '../../../context/payments';
 import SettingContext from '../../../context/settings';
 import { RidePageContext } from '../../../context/newRideContext';
+import showPriceBasedOnAccount from '../../../services/showPriceBasedOnAccount';
 import {
   DaySecTitleSubText,
   DaySecTitleText,
@@ -59,12 +60,7 @@ const RideTitleCard = ({
   const { showPrice, loadShowPrice } = SettingContext.useContainer();
 
   useEffect(() => {
-    if (businessAccountId) {
-      const { showPriceToMembers } = getBusinessAccountById(businessAccountId);
-      loadShowPrice(showPriceToMembers ?? false);
-    } else {
-      loadShowPrice();
-    }
+    showPriceBasedOnAccount(loadShowPrice, getBusinessAccountById, businessAccountId);
   }, [businessAccountId]);
 
   const getTipButton = () => {

@@ -21,6 +21,7 @@ import * as navigationService from '../../services/navigation';
 import PriceBreakdown from '../../Components/PriceBreakdown';
 import SettingContext from '../../context/settings';
 import PaymentContext from '../../context/payments';
+import showPriceBasedOnAccount from '../../services/showPriceBasedOnAccount';
 
 type RidePriceBreakdownParams = {
   rideId: string,
@@ -81,12 +82,7 @@ const RidePriceBreakDown = () => {
     updateRideFromApi();
   }, []);
   useEffect(() => {
-    if (businessAccountId) {
-      const { showPriceToMembers } = getBusinessAccountById(businessAccountId);
-      loadShowPrice(showPriceToMembers ?? false);
-    } else {
-      loadShowPrice();
-    }
+    showPriceBasedOnAccount(loadShowPrice, getBusinessAccountById, businessAccountId);
   }, [businessAccountId]);
 
   return (
