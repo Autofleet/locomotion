@@ -1412,7 +1412,7 @@ const RidePageContextProvider = ({ children }: {
         setLastAcknowledgedRideCompletionTimestampToNow,
         loadFutureBookingDays,
         futureBookingDays,
-        businessAccountId, //
+        businessAccountId,
         updateBusinessAccountId,
       }}
     >

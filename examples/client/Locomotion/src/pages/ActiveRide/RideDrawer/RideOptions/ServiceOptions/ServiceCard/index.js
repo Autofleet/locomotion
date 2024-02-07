@@ -103,7 +103,6 @@ const ServiceCard = ({ service, withBorder }) => {
       return i18n.t('rideDetails.unavailable');
     }
 
-    // console.log(" Service: " , service); // checkBA? Selected Account? If I have businessAcountId its bussine from newRIde?
     return showPrice ? getFormattedPrice(service.currency, service.price) : null;
   };
 
