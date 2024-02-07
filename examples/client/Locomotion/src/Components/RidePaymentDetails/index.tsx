@@ -35,7 +35,6 @@ const RidePaymentDetails = ({
     getRidePriceCalculation,
   } = useContext(RidePageContext);
 
-  const { businessAccountId } = useContext(RidePageContext);
   const { getBusinessAccountById } = PaymentContext.useContainer();
   const { showPrice, loadShowPrice } = SettingContext.useContainer();
 
@@ -49,11 +48,9 @@ const RidePaymentDetails = ({
 
   useEffect(() => {
     updatePriceCalculation();
+    showPriceBasedOnAccount(loadShowPrice, getBusinessAccountById, ride.businessAccountId);
   }, []);
 
-  useEffect(() => {
-    showPriceBasedOnAccount(loadShowPrice, getBusinessAccountById, businessAccountId);
-  }, [businessAccountId]);
 
   return (paymentMethod ? (
     <>
