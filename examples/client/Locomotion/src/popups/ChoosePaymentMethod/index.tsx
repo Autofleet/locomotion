@@ -1,9 +1,12 @@
 /* eslint-disable no-unused-expressions */
 import React, { useContext, useEffect, useState } from 'react';
-import { View } from 'react-native';
 import PropTypes from 'prop-types';
 import Modal from 'react-native-modal';
 import { useNavigation } from '@react-navigation/native';
+import EmptyState from '../../Components/EmptyState';
+import Mixpanel from '../../services/Mixpanel';
+import { PAYMENT_MODES, PAYMENT_TABS } from '../../pages/Payments/consts';
+import TabSwitch from '../../Components/TabSwitch';
 import { getPaymentMethod } from '../../pages/Payments/cardDetailUtils';
 import CloseButton from '../../Components/CloseButton';
 import i18n from '../../I18n';
@@ -28,12 +31,14 @@ import { MewRidePageContext } from '../../context';
 interface PaymentMethodPopupProps {
   isVisible: boolean;
   onCancel: () => void;
-  onSubmit: (payment: string | undefined) => void;
+  onSubmit: (payment: any) => void;
   showCash: boolean;
   rideFlow: boolean;
   selected: any;
   onAddNewMethod: () => void;
   showOffline: boolean;
+  showBusinessPaymentMethods: boolean;
+  selectedBusinessAccountId: string | null;
 }
 
 const PaymentMethodPopup = ({
@@ -45,10 +50,22 @@ const PaymentMethodPopup = ({
   selected,
   onAddNewMethod,
   showOffline,
+  showBusinessPaymentMethods,
+  selectedBusinessAccountId,
 }: PaymentMethodPopupProps) => {
-  const usePayments: any = PaymentsContext.useContainer();
+  const usePayments = PaymentsContext.useContainer();
   const { chosenService } = useContext(MewRidePageContext);
   const [selectedPaymentId, setSelectedPaymentId] = useState<string | undefined>(selected);
+  const [activePaymentTab, setActivePaymentTab] = useState(
+    selectedBusinessAccountId ? PAYMENT_MODES.BUSINESS : PAYMENT_MODES.PERSONAL,
+  );
+  const isBusinessMode = activePaymentTab === PAYMENT_MODES.BUSINESS;
+
+  const personalPaymentMethods = [
+    ...usePayments.paymentMethods,
+    ...(showCash ? [cashPaymentMethod] : []),
+    ...(showOffline ? [offlinePaymentMethod] : []),
+  ];
 
   const getDisabledReason = (paymentMethod: any) => {
     if (
@@ -61,16 +78,39 @@ const PaymentMethodPopup = ({
   };
 
   useEffect(() => {
-    usePayments.getOrFetchCustomer();
+    usePayments.loadCustomer();
   }, []);
+
+  useEffect(() => {
+    if (!usePayments.businessPaymentMethods?.length
+      && activePaymentTab === PAYMENT_MODES.BUSINESS) {
+      setActivePaymentTab(PAYMENT_MODES.PERSONAL);
+    }
+  }, [usePayments.businessPaymentMethods]);
+
+  useEffect(() => {
+    if (!isVisible) {
+      setActivePaymentTab(
+        selectedBusinessAccountId ? PAYMENT_MODES.BUSINESS : PAYMENT_MODES.PERSONAL,
+      );
+    }
+  }, [isVisible]);
 
   useEffect(() => {
     const updateDefaultPaymentMethod = async () => {
       if (selected) {
-        setSelectedPaymentId(selected);
+        if (selected === offlinePaymentMethod.id && selectedBusinessAccountId) {
+          setSelectedPaymentId(selectedBusinessAccountId);
+        } else {
+          setSelectedPaymentId(selected);
+        }
       } else {
         const paymentMethod = await usePayments.getClientDefaultMethod();
-        setSelectedPaymentId(paymentMethod?.id);
+        if (paymentMethod?.id) {
+          setSelectedPaymentId(paymentMethod?.id);
+        } else if (selectedBusinessAccountId) {
+          setSelectedPaymentId(selectedBusinessAccountId);
+        }
       }
     };
 
@@ -78,10 +118,46 @@ const PaymentMethodPopup = ({
     updateDefaultPaymentMethod();
   }, [usePayments.paymentMethods, selected, chosenService]);
 
-  const onSave = (id?: string) => {
-    onSubmit(id || selectedPaymentId);
+  const onSave = () => {
+    const businessPaymentSelected = showBusinessPaymentMethods
+      && usePayments.businessPaymentMethods.some(
+        (paymentMethod: any) => paymentMethod.id === selectedPaymentId,
+      );
+    if (businessPaymentSelected) {
+      onSubmit({
+        id: selectedPaymentId,
+        isBusiness: true,
+      });
+    } else {
+      onSubmit(selectedPaymentId);
+    }
     onCancel();
   };
+  const renderPersonalPaymentMethods = () => (
+    personalPaymentMethods.length > 0
+      ? (personalPaymentMethods.map((paymentMethod: any) => {
+        const reason = getDisabledReason(paymentMethod);
+        return (
+          <PaymentMethod
+            testIdPrefix="Dialog"
+            {...paymentMethod}
+            chooseMethodPage
+            disabledReason={reason}
+            selected={selectedPaymentId === paymentMethod.id}
+            mark={selectedPaymentId === paymentMethod.id}
+            onPress={() => {
+              setSelectedPaymentId(paymentMethod.id);
+            }}
+          />
+        );
+      })
+      ) : (
+        <EmptyState
+          title={i18n.t('popups.choosePaymentMethod.emptyStateText')}
+        />
+      )
+  );
+
 
   return (
     <Modal
@@ -92,38 +168,44 @@ const PaymentMethodPopup = ({
           <Title>{i18n.t('popups.choosePaymentMethod.title')}</Title>
           <CloseButton onPress={async () => {
             onCancel();
-            setSelectedPaymentId(selected
-                || (await usePayments.getClientDefaultMethod())?.id);
             rideFlow
               ? navigationService.navigate(MAIN_ROUTES.HOME)
               : navigationService.navigate(MAIN_ROUTES.PAYMENT);
           }}
           />
         </TitleView>
-        <CardsScrollView>
-          <Container>
-            <View>
-              {
-                [
-                  ...usePayments.paymentMethods,
-                  ...(showCash ? [cashPaymentMethod] : []),
-                  ...(showOffline ? [offlinePaymentMethod] : []),
-                ].map((paymentMethod: any) => {
-                  const reason = getDisabledReason(paymentMethod);
-                  return (
-                    <PaymentMethod
-                      testIdPrefix="Dialog"
-                      {...paymentMethod}
-                      chooseMethodPage
-                      disabledReason={reason}
-                      selected={selectedPaymentId === paymentMethod.id}
-                      mark={selectedPaymentId === paymentMethod.id}
-                      onPress={() => {
-                        setSelectedPaymentId(paymentMethod.id);
-                      }}
-                    />
-                  );
-                })}
+
+        <Container>
+          { showBusinessPaymentMethods && (
+            <TabSwitch
+              activeTabId={activePaymentTab}
+              tabs={PAYMENT_TABS}
+              onUnselectedClick={(tab) => {
+                setActivePaymentTab(tab.id);
+                Mixpanel.setEvent('change payment mode personal / business', { mode: tab.id });
+              }}
+            />
+          ) }
+          <CardsScrollView>
+            {isBusinessMode ? (
+              usePayments.businessPaymentMethods.map((paymentMethod: any) => (
+                <PaymentMethod
+                  testIdPrefix="Dialog"
+                  noSvg
+                  alignMarkToRight
+                  noNotCapitalizeName
+                  {...paymentMethod}
+                  chooseMethodPage
+                  selected={selectedPaymentId === paymentMethod.id}
+                  mark={selectedPaymentId === paymentMethod.id}
+                  onPress={() => {
+                    Mixpanel.setEvent('select business payment method', { method: paymentMethod.id });
+                    setSelectedPaymentId(paymentMethod.id);
+                  }}
+                />
+              ))
+            ) : renderPersonalPaymentMethods()}
+            { !isBusinessMode && (
               <PaymentMethod
                 testIdPrefix="Dialog"
                 addNew
@@ -132,12 +214,13 @@ const PaymentMethodPopup = ({
                   onAddNewMethod();
                 }}
               />
-            </View>
-          </Container>
-        </CardsScrollView>
+            ) }
+          </CardsScrollView>
+        </Container>
         <Footer>
           <FlexCont style={{ justifyContent: 'center' }}>
             <SelectButton
+              disabled={!selectedPaymentId}
               testID="selectCard"
               type="confirm"
               onPress={() => {

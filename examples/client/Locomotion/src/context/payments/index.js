@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { createContainer } from 'unstated-next';
+import { StorageService } from '../../services';
 import i18n from '../../I18n';
 import { PAYMENT_STATES } from '../../lib/commonTypes';
 import Mixpanel from '../../services/Mixpanel';
@@ -17,6 +18,7 @@ const usePayments = () => {
   const [paymentAccount, setPaymentAccount] = useState(null);
   const [hasOutstandingPayment, setHasOutstandingPayment] = useState(false);
   const [offlinePaymentText, setOfflinePaymentText] = useState(null);
+  const [businessPaymentMethods, setBusinessPaymentMethods] = useState([]);
 
   const loadOfflinePaymentText = async () => {
     const companyName = await useSettings.getSettingByKey(SETTINGS_KEYS.OFFLINE_PAYMENT_TEXT);
@@ -37,10 +39,20 @@ const usePayments = () => {
     }
   };
 
+  const handleBusinessAccountStorage = async (businessAccounts) => {
+    const lastBusinessAccountId = await StorageService.get('lastBusinessAccountId');
+    if (businessAccounts?.length > 0 && !lastBusinessAccountId) {
+      await StorageService.save({ lastBusinessAccountId: businessAccounts[0].id });
+    }
+  };
+
   const loadCustomer = async () => {
     const customerData = await getCustomer();
     setCustomer(customerData);
     setPaymentMethods(customerData.paymentMethods);
+    const { businessAccounts } = customerData;
+    setBusinessPaymentMethods(businessAccounts);
+    await handleBusinessAccountStorage(businessAccounts);
     return customerData;
   };
 
@@ -48,7 +60,6 @@ const usePayments = () => {
     if (customer) {
       return customer;
     }
-
     return loadCustomer();
   };
 
@@ -184,6 +195,14 @@ const usePayments = () => {
     }
     return returnObject;
   };
+  const getBusinessAccountNameById = (id) => {
+    if (!id) { return null; }
+    const relevantBusinessAccount = businessPaymentMethods.find(ba => ba.id === id);
+    if (relevantBusinessAccount) {
+      return relevantBusinessAccount.name;
+    }
+    return null;
+  };
 
   return {
     paymentAccount,
@@ -193,6 +212,7 @@ const usePayments = () => {
     loadCustomer,
     setup,
     paymentMethods,
+    businessPaymentMethods,
     detachPaymentMethod,
     getOrFetchCustomer,
     clientHasValidPaymentMethods,
@@ -207,6 +227,7 @@ const usePayments = () => {
     loadOutstandingBalance,
     offlinePaymentText: offlinePaymentText || i18n.t('payments.offline'),
     loadOfflinePaymentText,
+    getBusinessAccountNameById,
   };
 };
 

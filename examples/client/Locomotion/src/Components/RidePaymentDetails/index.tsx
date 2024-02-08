@@ -6,22 +6,22 @@ import { getFormattedPrice } from '../../context/newRideContext/utils';
 import CardRow from '../CardRow';
 import CardsTitle from '../CardsTitle';
 import i18n from '../../I18n';
-import { PriceCalculation, RidePageContext } from '../../context/newRideContext';
+import { PriceCalculation, RideInterface, RidePageContext } from '../../context/newRideContext';
 import {
   PaymentRow, RidePriceDetails, PriceText, ViewDetails, CardRowContainer,
 } from './styled';
 import { PaymentMethodInterface } from '../../context/payments/interface';
-import PaymentContext from '../../context/payments';
+import SettingsContext from '../../context/settings';
 import * as navigationService from '../../services/navigation';
 import Button from '../Button';
 
 const RidePaymentDetails = ({
-  rideId,
+  ride,
   paymentMethod,
   rideHistory = false,
   state,
 } :{
-  rideId: string,
+  ride: RideInterface,
   paymentMethod: PaymentMethodInterface,
   rideHistory: boolean
   currency: string,
@@ -33,8 +33,10 @@ const RidePaymentDetails = ({
     getRidePriceCalculation,
   } = useContext(RidePageContext);
 
+  const { showPrice, loadShowPrice } = SettingsContext.useContainer();
+
   const updatePriceCalculation = async () => {
-    const calculation = await getRidePriceCalculation(rideId);
+    const calculation = await getRidePriceCalculation(ride?.id);
     setPriceCalculation(calculation);
   };
 
@@ -43,6 +45,7 @@ const RidePaymentDetails = ({
 
   useEffect(() => {
     updatePriceCalculation();
+    loadShowPrice();
   }, []);
 
   return (paymentMethod ? (
@@ -50,25 +53,28 @@ const RidePaymentDetails = ({
       <CardsTitle noPaddingLeft title={i18n.t('ride.paymentMethod')} />
       <PaymentRow>
         <CardRowContainer>
-          <CardRow {...paymentMethod} />
+          <CardRow {...{ ...paymentMethod, businessAccountId: ride.businessAccountId }} />
         </CardRowContainer>
         <RidePriceDetails>
 
-          {!rideHistory ? (totalAmount === 0
+          {!rideHistory && (totalAmount === 0
             ? <PriceText>{`${i18n.t('rideDetails.noCharge')}`}</PriceText>
-            : (
-              <PriceText>
+            : (showPrice
+              && (
+              <PriceText testID="priceText">
                 {getFormattedPrice(priceCalculation?.currency,
                   totalAmount)}
               </PriceText>
+              )
             )
-          ) : null}
+          )}
 
+          {showPrice && (
           <Button
             testID="viewRidePaymentDetails"
             noBackground
             onPress={() => navigationService.navigate(MAIN_ROUTES.RIDE_PRICE_BREAKDOWN,
-              { rideId, rideHistory })}
+              { rideId: ride.id, rideHistory })}
           >
             {state !== RIDE_STATES.CANCELED
             || (state === RIDE_STATES.CANCELED
@@ -78,6 +84,7 @@ const RidePaymentDetails = ({
                </ViewDetails>
               ) : undefined}
           </Button>
+          )}
         </RidePriceDetails>
       </PaymentRow>
     </>

@@ -19,6 +19,7 @@ import {
 import { PaymentMethodInterface } from '../../context/payments/interface';
 import * as navigationService from '../../services/navigation';
 import PriceBreakdown from '../../Components/PriceBreakdown';
+import SettingsContext from '../../context/settings';
 
 type RidePriceBreakdownParams = {
   rideId: string,
@@ -38,6 +39,8 @@ const RidePriceBreakDown = () => {
     getRidePriceCalculation,
     getRideFromApi,
   } = useContext(RidePageContext);
+  const { showPrice, loadShowPrice } = SettingsContext.useContainer();
+
 
   const updatePriceCalculation = async () => {
     try {
@@ -51,10 +54,9 @@ const RidePriceBreakDown = () => {
 
   const updateRideFromApi = async () => {
     setLoading(true);
-    if (params.rideId || ride.id) {
-      // ts does not recognize the null check
-      // @ts-ignore
-      const result = await getRideFromApi(params.rideId || ride.id);
+    const rideId = params.rideId || ride.id;
+    if (rideId) {
+      const result = await getRideFromApi(rideId);
       setLocalRide(result);
       setPaymentMethod(result.payment.paymentMethod);
 
@@ -75,6 +77,9 @@ const RidePriceBreakDown = () => {
   useEffect(() => {
     updateRideFromApi();
   }, []);
+  useEffect(() => {
+    loadShowPrice();
+  }, []);
 
   return (
     <PageContainer>
@@ -93,11 +98,16 @@ const RidePriceBreakDown = () => {
             <InformationCard title={i18n.t('ridePriceBreakdown.paymentMethodTitle')}>
               <View>
                 <CreditCardRowContainer>
-                  <CardRow {...paymentMethod} />
+                  <CardRow {...{
+                    ...paymentMethod,
+                    businessAccountId: localRide?.businessAccountId,
+                  }}
+                  />
                 </CreditCardRowContainer>
                 {
                 (priceCalculation && isPriceEstimated(priceCalculation.calculationBasis)
-                                  && !RIDE_FINAL_STATES.includes(localRide?.state || ''))
+                                  && !RIDE_FINAL_STATES.includes(localRide?.state || '')
+                                  && showPrice)
                   ? (
                     <EstimationContainer>
                       <EstimationText>{i18n.t('ridePriceBreakdown.estimatedText')}</EstimationText>

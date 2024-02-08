@@ -6,6 +6,7 @@ import { PaymentIcon } from 'react-native-payment-icons';
 import styled, { ThemeContext } from 'styled-components';
 import { useFocusEffect } from '@react-navigation/native';
 import SkeletonContent from 'react-native-skeleton-content-nonexpo';
+import BusinessAccountText from '../../../../../../Components/BusinessAccountText';
 import { isCardPaymentMethod, isCashPaymentMethod, isOfflinePaymentMethod } from '../../../../../../lib/ride/utils';
 import { getCouponText } from '../../../../../../context/newRideContext/utils';
 import { MAIN_ROUTES } from '../../../../../routes';
@@ -41,7 +42,7 @@ const CardNameContainer = styled(View)`
     justify-content: flex-start;
     flex-direction: row;
     align-items: center;
-    width: 55%;
+    width: ${({ fullWidth }) => (fullWidth ? '100%' : '55%')};
 `;
 
 const PromoButtonContainer = styled(View)`
@@ -76,6 +77,7 @@ interface PaymentButtonProps {
     brand?: Brand;
     id?: string;
     invalid?: boolean;
+    subTitle?: string;
 }
 
 
@@ -85,6 +87,7 @@ const PaymentButton = ({
   brand,
   id,
   invalid,
+  subTitle,
 }: PaymentButtonProps) => {
   const { primaryColor } = useContext(ThemeContext);
   const { getCoupon, coupon, setCoupon } = useContext(UserContext);
@@ -155,7 +158,7 @@ const PaymentButton = ({
   const IconColor = invalid ? '#F83743' : primaryColor;
   return (
     <Container>
-      <CardNameContainer>
+      <CardNameContainer fullWidth={!isCardPaymentMethod({ id })}>
         {isCardPaymentMethod({ id }) ? <PaymentIcon type={brand || 'generic'} />
           : (
             <SvgIcon
@@ -165,7 +168,9 @@ const PaymentButton = ({
               width={40}
             />
           )}
-        <TimeText numberOfLines={1}>{title}</TimeText>
+        { subTitle
+          ? <BusinessAccountText title={title} subTitle={subTitle} />
+          : <TimeText numberOfLines={1}>{title}</TimeText> }
       </CardNameContainer>
       <PromoButtonContainer>
         {loadPromoButton()}
@@ -180,4 +185,5 @@ PaymentButton.defaultProps = {
   brand: null,
   id: null,
   invalid: false,
+  subTitle: null,
 };

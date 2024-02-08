@@ -1,9 +1,11 @@
 import React, { useContext, useEffect } from 'react';
 import SkeletonContent from 'react-native-skeleton-content-nonexpo';
 import { Text } from 'react-native';
+import EmptyState from '../../../../../Components/EmptyState';
 import { getCouponText } from '../../../../../context/newRideContext/utils';
 import { RidePageContext } from '../../../../../context/newRideContext';
 import { UserContext } from '../../../../../context/user';
+import SettingsContext from '../../../../../context/settings';
 import ServiceCard from './ServiceCard';
 import { ServiceOptionsContainer } from './styles';
 import { serviceCardSkeleton } from './ServiceCard/skeleton';
@@ -14,11 +16,16 @@ const SUCCESS_COLOR = '#25B861';
 
 const ServiceOptions = () => {
   const { serviceEstimations, stopRequestInterval } = useContext(RidePageContext);
+  const { showPrice, loadShowPrice } = SettingsContext.useContainer();
+
   const { coupon } = useContext(UserContext);
   const isDebuggingEnabled = (typeof atob !== 'undefined');
   const { setTopBarProps } = useContext(BottomSheetContext);
 
   useEffect(() => () => stopRequestInterval(), []);
+  useEffect(() => {
+    loadShowPrice();
+  }, []);
 
   const clearTopBar = () => {
     setTopBarProps(INITIAL_TOP_BAR_PROPS);
@@ -43,7 +50,8 @@ const ServiceOptions = () => {
   useEffect(() => {
     if (coupon && coupon.status !== 'error') {
       setCouponTopBar();
-    } else if ((serviceEstimations || []).some(estimation => estimation.isPriceEstimated)) {
+    } else if (showPrice
+      && (serviceEstimations || []).some(estimation => estimation.isPriceEstimated)) {
       setEstimateFareTopBar();
     }
 
@@ -55,14 +63,21 @@ const ServiceOptions = () => {
 
   return (
     <ServiceOptionsContainer alwaysBounceVertical={false}>
-      {(serviceEstimations || []).map(option => (
-        <ServiceCard
-          testID={`Service_${option.id}`}
-          withBorder
-          service={option}
-          key={option.name}
-        />
-      ))}
+      { serviceEstimations?.length === 0
+        ? (
+          <EmptyState
+            title={i18n.t('services.emptyState.title')}
+            description={i18n.t('services.emptyState.description')}
+          />
+        )
+        : (serviceEstimations || []).map(option => (
+          <ServiceCard
+            withBorder
+            service={option}
+            key={option.name}
+          />
+        ))
+      }
       {!isDebuggingEnabled
         ? (
           <SkeletonContent

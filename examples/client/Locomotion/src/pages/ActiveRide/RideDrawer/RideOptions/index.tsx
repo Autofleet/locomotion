@@ -2,6 +2,7 @@ import React, {
   useContext, useEffect, useState,
 } from 'react';
 import { Portal } from '@gorhom/portal';
+import offlinePaymentMethod from '../../../Payments/offlinePaymentMethod';
 import { MAIN_ROUTES } from '../../../routes';
 import i18n from '../../../../I18n';
 import { RIDE_POPUPS } from '../../../../context/newRideContext/utils';
@@ -30,6 +31,8 @@ const RideOptions = () => {
     stopRequestInterval,
     serviceEstimations,
     chosenService,
+    updateBusinessAccountId,
+    businessAccountId,
   } = useContext(RidePageContext);
 
   const {
@@ -110,6 +113,8 @@ const RideOptions = () => {
         />
 
         <ChoosePaymentMethod
+          selectedBusinessAccountId={businessAccountId}
+          showBusinessPaymentMethods={usePayments.businessPaymentMethods?.length > 0}
           onAddNewMethod={() => {
             clearPopup();
             setTimeout(() => {
@@ -118,16 +123,22 @@ const RideOptions = () => {
           }}
           showCash={showCash}
           showOffline={showOffline}
-          selected={ride?.paymentMethodId
-            && usePayments.paymentMethods.find((pm: any) => ride.paymentMethodId === pm.id)
-            ? ride.paymentMethodId : defaultPaymentMethod?.id}
+          selected={ride?.paymentMethodId || defaultPaymentMethod?.id}
           rideFlow
           isVisible={popupToShow === 'payment'}
           onCancel={() => clearPopup()}
           onSubmit={(payment: any) => {
-            updateRidePayload({
-              paymentMethodId: payment,
-            });
+            if (payment.isBusiness) {
+              updateRidePayload({
+                paymentMethodId: offlinePaymentMethod.id,
+              });
+              updateBusinessAccountId(payment.id);
+            } else {
+              updateBusinessAccountId(null);
+              updateRidePayload({
+                paymentMethodId: payment,
+              });
+            }
           }}
         />
       </Portal>

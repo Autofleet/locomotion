@@ -118,6 +118,7 @@ const RidePage = ({ mapSettings, navigation }) => {
     lastSelectedLocation,
     saveSelectedLocation,
     reverseLocationGeocode,
+    updateBusinessAccountId,
   } = useContext(RidePageContext);
   const {
     setIsExpanded, snapPoints, isExpanded, topBarProps,
@@ -149,6 +150,7 @@ const RidePage = ({ mapSettings, navigation }) => {
     setServiceEstimations(null);
     setChosenService(null);
     setRide({});
+    updateBusinessAccountId(null);
     changeBsPage(BS_PAGES.ADDRESS_SELECTOR);
     setSelectedInputIndex(selectedIndex);
     if (isStationsEnabled) {

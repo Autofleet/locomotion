@@ -21,6 +21,7 @@ const useSettings = () => {
   const [workingHours, setWorkingHours] = useState({});
   const [measureSystem, setMeasureSystem] = useState('metric');
   const [appSettingsState, setAppSettingsState] = useState({});
+  const [showPrice, setShowPrice] = useState(false);
 
 
   const getSettingByKey = async (key) => {
@@ -120,6 +121,11 @@ const useSettings = () => {
     setAppSettingsStates(appSettingsState);
   }, [appSettingsState]);
 
+  const loadShowPrice = async () => {
+    const hidePrice = await getSettingByKey(settingsKeys.HIDE_PRICE);
+    setShowPrice(!hidePrice);
+  };
+
   return {
     settingsList,
     getWorkingHours,
@@ -130,6 +136,8 @@ const useSettings = () => {
     getAppSettings,
     getMeasureSystem,
     measureSystem,
+    loadShowPrice,
+    showPrice,
   };
 };
 export default createContainer(useSettings);

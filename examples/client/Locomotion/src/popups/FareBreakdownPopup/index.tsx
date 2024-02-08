@@ -13,6 +13,7 @@ import {
 import i18n from '../../I18n';
 import { Line } from '../../Components/PriceBreakdown/styled';
 import { getPriceCalculation } from '../../context/newRideContext/api';
+import SettingsContext from '../../context/settings';
 
 
 interface FareBreakdownPopupProps {
@@ -28,6 +29,8 @@ const FareBreakdownPopup = ({
 }: FareBreakdownPopupProps) => {
   const [priceCalculation, setPriceCalculation] = useState(null);
   const [didRequestFail, setDidRequestFail] = useState(false);
+  const { showPrice, loadShowPrice } = SettingsContext.useContainer();
+
   const loadPriceCalculation = async () => {
     try {
       setDidRequestFail(false);
@@ -39,6 +42,7 @@ const FareBreakdownPopup = ({
   };
   useEffect(() => {
     loadPriceCalculation();
+    loadShowPrice();
   }, []);
 
   return (
@@ -47,7 +51,7 @@ const FareBreakdownPopup = ({
         <InnerContainer>
           <CloseButton onPress={onClose} containerStyles={{ alignSelf: 'flex-end' }} />
           <ServiceCard service={service} />
-          {service.isPriceEstimated && (
+          {service.isPriceEstimated && showPrice && (
           <EstimatedTextContainer>
             <EstimatedText>
               {`${i18n.t('ridePriceBreakdown.estimatedText')}`}
@@ -55,12 +59,15 @@ const FareBreakdownPopup = ({
           </EstimatedTextContainer>
           )}
         </InnerContainer>
-        {service.isPriceEstimated && <Line />}
-        <PriceBreakdown
-          priceCalculation={priceCalculation}
-          didRequestFail={didRequestFail}
-          retryGetPriceBreakdown={loadPriceCalculation}
-        />
+        {service.isPriceEstimated && showPrice && <Line />}
+        {showPrice
+          && (
+          <PriceBreakdown
+            priceCalculation={priceCalculation}
+            didRequestFail={didRequestFail}
+            retryGetPriceBreakdown={loadPriceCalculation}
+          />
+          )}
       </OuterContainer>
     </Modal>
   );
