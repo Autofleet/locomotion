@@ -62,6 +62,7 @@ const BottomSheetInputField = forwardRef((props, ref) => (
 
       { props.onDrag && (
       <DragTouchableIconContainer
+        testID={`DragIconContainer_${props.index}`}
         onPressIn={() => props.onDrag()}
         onPressOut={() => props.onEndDrag()}
       >
@@ -83,7 +84,7 @@ const BottomSheetInputField = forwardRef((props, ref) => (
 
     { props.remove && (
     <TouchableIconContainer width={30} marginLeft={15} onPress={() => props.remove()}>
-      <RemoveIconContainer>
+      <RemoveIconContainer testID={`removeIcon_${props.index}`}>
         <SvgIcon
           Svg={deleteIcon}
           stroke="#333"

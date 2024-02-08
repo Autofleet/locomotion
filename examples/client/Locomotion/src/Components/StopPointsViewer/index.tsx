@@ -64,6 +64,7 @@ const StopPointsViewer = ({ goBackToAddressSelector }: StopPointsViewerProps) =>
           </StreetAddress>
         </StreetAddressContainer>
         <TouchableOpacity
+          testID="editIcon"
           onPress={() => goBackToAddressSelector(requestStopPoints.length - 1)}
         >
           <SvgIcon
