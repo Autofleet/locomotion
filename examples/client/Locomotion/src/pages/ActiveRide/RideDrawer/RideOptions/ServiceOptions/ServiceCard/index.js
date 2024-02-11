@@ -24,7 +24,7 @@ import SettingsContext from '../../../../../../context/settings';
 
 const FARE_POPUP = 'farePopup';
 
-const ServiceCard = ({ service, withBorder }) => {
+const ServiceCard = ({ service, withBorder, testID }) => {
   const theme = useContext(ThemeContext);
   const {
     setChosenService, chosenService, serviceEstimations, ride,
@@ -110,6 +110,7 @@ const ServiceCard = ({ service, withBorder }) => {
   return (
     <>
       <CardContainer
+        testID={testID}
         theme={theme}
         withBorder={withBorder}
         selected={isSelected}
