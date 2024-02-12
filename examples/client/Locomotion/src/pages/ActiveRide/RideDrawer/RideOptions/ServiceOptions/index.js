@@ -68,7 +68,6 @@ const ServiceOptions = () => {
 
   return (
     <ServiceOptionsContainer alwaysBounceVertical={false}>
-
       { serviceEstimations?.length === 0
         ? (
           <EmptyState
