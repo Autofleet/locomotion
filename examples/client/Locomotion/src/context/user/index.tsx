@@ -173,13 +173,32 @@ const UserContextProvider = ({ children }: { children: any }) => {
     return vertResponse.status === 'OK';
   };
 
+  const getAllowedDemandSourceIds = (): string[] => {
+    try {
+      if (!Config.ALLOWED_DEMAND_SOURCE_IDS) {
+        return [];
+      }
+      const allowedDemandSourceIds = JSON.parse(Config.ALLOWED_DEMAND_SOURCE_IDS);
+      return Array.isArray(allowedDemandSourceIds) ? allowedDemandSourceIds : [];
+    } catch (error) {
+      Mixpanel.setEvent('Invalid ALLOWED_DEMAND_SOURCE_IDS', { allowedDemandSourceIds: Config.ALLOWED_DEMAND_SOURCE_IDS });
+      return [];
+    }
+  };
+
   const onLogin = async (phoneNumber: string, channel = 'sms') => {
     const demandSourceId = await AppSettings.getOperationId();
-    await loginApi({
+    const allowedDemandSourceIds = getAllowedDemandSourceIds();
+    const response = await loginApi({
       phoneNumber,
       channel,
       demandSourceId,
+      allowedDemandSourceIds,
     });
+    const { selectedDemandSourceId } = response;
+    if (allowedDemandSourceIds.length > 0 && selectedDemandSourceId && selectedDemandSourceId !== demandSourceId) {
+      await AppSettings.setOperationId(selectedDemandSourceId);
+    }
     // successful login - delete captcha token
     await StorageService.delete('captchaToken');
   };
