@@ -5,29 +5,17 @@ import { View } from 'react-native';
 import SvgIcon from '../../../../../../Components/SvgIcon';
 import i18n from '../../../../../../I18n';
 import Seat from '../../../../../../assets/seat.svg';
-import {
-  getFormattedPrice,
-  TAG_OPTIONS,
-} from '../../../../../../context/newRideContext/utils';
+import { getFormattedPrice, TAG_OPTIONS } from '../../../../../../context/newRideContext/utils';
 import { Context as ThemeContext } from '../../../../../../context/theme';
 import {
-  Circle,
-  AvailableSeats,
-  Capacity,
-  CardContainer,
-  CarIcon,
-  Eta,
-  Row,
-  Price,
-  ServiceDetails,
-  TimeDetails,
-  Title,
-  Description,
-  CarContainer,
-  TitleContainer,
-  EstimatedText,
-  WrapRow,
-  HighEta,
+  Circle, AvailableSeats,
+  Capacity, CardContainer,
+  CarIcon, Eta,
+  Row, Price,
+  ServiceDetails, TimeDetails,
+  Title, Description,
+  CarContainer, TitleContainer,
+  EstimatedText, WrapRow, HighEta,
 } from './styled';
 import Tag from '../../../../../../Components/Tag';
 import { RidePageContext } from '../../../../../../context/newRideContext';
@@ -41,17 +29,15 @@ const FARE_POPUP = 'farePopup';
 const ServiceCard = ({ service, withBorder, testID }) => {
   const { businessAccountId } = useContext(RidePageContext);
   const theme = useContext(ThemeContext);
-  const { setChosenService, chosenService, serviceEstimations, ride } =
-    useContext(RidePageContext);
+  const {
+    setChosenService, chosenService, serviceEstimations, ride,
+  } = useContext(RidePageContext);
   const { showPrice, loadShowPrice } = SettingContext.useContainer();
   const { getBusinessAccountById } = PaymentContext.useContainer();
   const [popup, setPopup] = useState(null);
   const isFutureRide = ride.scheduledTo;
-  const unavailable = !(
-    (ride.scheduledTo && service.priceCalculationId) ||
-    service.eta ||
-    service.isHighEtaAsapRide
-  );
+  const unavailable = !((ride.scheduledTo && service.priceCalculationId)
+   || (service.eta || service.isHighEtaAsapRide));
   const isSelected = chosenService && chosenService.id === service.id;
   const sharedTagContainerStyles = {
     borderWidth: 1,
@@ -84,23 +70,28 @@ const ServiceCard = ({ service, withBorder, testID }) => {
 
   const etaTimeDetails = () => {
     if (service.isHighEtaAsapRide) {
-      return <HighEta theme={theme}>{i18n.t('rideDetails.highEta')}</HighEta>;
+      return (
+        <HighEta theme={theme}>
+          {i18n.t('rideDetails.highEta')}
+        </HighEta>
+      );
     }
     return (
       <TimeDetails>
-        <Eta>{moment(service.eta).format('h:mm A')}</Eta>
+        <Eta>
+          {moment(service.eta).format('h:mm A')}
+        </Eta>
         <Circle />
-        <Eta>{getEta()}</Eta>
+        <Eta>
+          {getEta()}
+        </Eta>
       </TimeDetails>
     );
   };
 
-  const getDescription = (forFutureRidesView) => (
-    <Description
-      style={{ ...(forFutureRidesView && { width: '60%' }) }}
-      numberOfLines={2}
-    >
-      {service.description || ''}
+  const getDescription = forFutureRidesView => (
+    <Description style={{ ...(forFutureRidesView && { width: '60%' }) }} numberOfLines={2}>
+      {(service.description || '')}
     </Description>
   );
 
@@ -113,17 +104,11 @@ const ServiceCard = ({ service, withBorder, testID }) => {
       return i18n.t('rideDetails.unavailable');
     }
 
-    return showPrice
-      ? getFormattedPrice(service.currency, service.price)
-      : null;
+    return showPrice ? getFormattedPrice(service.currency, service.price) : null;
   };
 
   useEffect(() => {
-    showPriceBasedOnAccount(
-      loadShowPrice,
-      getBusinessAccountById,
-      businessAccountId
-    );
+    showPriceBasedOnAccount(loadShowPrice, getBusinessAccountById, businessAccountId);
   }, [businessAccountId]);
 
   return (
@@ -146,62 +131,79 @@ const ServiceCard = ({ service, withBorder, testID }) => {
         }}
       >
         <CarContainer unavailable={unavailable}>
-          <CarIcon resizeMode='contain' source={{ uri: service.iconUrl }} />
+          <CarIcon
+            resizeMode="contain"
+            source={{ uri: service.iconUrl }}
+          />
         </CarContainer>
         <ServiceDetails unavailable={unavailable}>
           <WrapRow>
-            <Title numberOfLines={2}>{service.name}</Title>
+            <Title numberOfLines={2}>
+              {service.name}
+            </Title>
             <TitleContainer>
-              {serviceEstimations.filter((s) => s.price).length > 1 &&
-              service.tag &&
-              !(isFutureRide && service.tag === TAG_OPTIONS.FASTEST) ? (
-                <Tag
-                  key={service.tag}
-                  containerStyles={tagStyles[service.tag].container}
-                  text={service.tag}
-                  textColor={tagStyles[service.tag].textColor}
-                />
-              ) : (
-                <View />
-              )}
-              <Price>{getUnavailableText()}</Price>
+              {serviceEstimations.filter(s => s.price).length > 1
+            && service.tag
+            && !(isFutureRide && service.tag === TAG_OPTIONS.FASTEST)
+                ? (
+                  <Tag
+                    key={service.tag}
+                    containerStyles={tagStyles[service.tag].container}
+                    text={service.tag}
+                    textColor={tagStyles[service.tag].textColor}
+                  />
+                )
+                : <View />
+            }
+              <Price>
+                {getUnavailableText()}
+              </Price>
             </TitleContainer>
           </WrapRow>
           {!unavailable && (
-            <WrapRow>
-              {!isFutureRide ? etaTimeDetails() : getDescription(isFutureRide)}
+          <WrapRow>
+            {!isFutureRide
+              ? (
+                etaTimeDetails()
+              )
+              : getDescription(isFutureRide)}
 
-              {service.isPriceEstimated && showPrice ? (
-                <EstimatedText>
-                  {i18n.t('rideDetails.estimatedFare')}
-                </EstimatedText>
-              ) : (
-                <Capacity>
-                  <AvailableSeats>{service.availableSeats}</AvailableSeats>
-                  <SvgIcon Svg={Seat} width={15} height={15} />
-                </Capacity>
-              )}
-            </WrapRow>
+            {service.isPriceEstimated && showPrice ? (
+              <EstimatedText>
+                {i18n.t('rideDetails.estimatedFare')}
+              </EstimatedText>
+            ) : (
+              <Capacity>
+                <AvailableSeats>
+                  {service.availableSeats}
+                </AvailableSeats>
+                <SvgIcon Svg={Seat} width={15} height={15} />
+              </Capacity>
+            )}
+
+          </WrapRow>
           )}
           {!isFutureRide && (
-            <Row>
-              {getDescription()}
-              {service.isPriceEstimated && showPrice ? (
-                <Capacity>
-                  <AvailableSeats>{service.availableSeats}</AvailableSeats>
-                  <SvgIcon Svg={Seat} width={15} height={15} />
-                </Capacity>
-              ) : null}
-            </Row>
+          <Row>
+            {getDescription()}
+            {service.isPriceEstimated && showPrice ? (
+              <Capacity>
+                <AvailableSeats>
+                  {service.availableSeats}
+                </AvailableSeats>
+                <SvgIcon Svg={Seat} width={15} height={15} />
+              </Capacity>
+            ) : null}
+          </Row>
           )}
         </ServiceDetails>
       </CardContainer>
       {popup === FARE_POPUP && (
-        <FareBreakdownPopup
-          isVisible={popup === FARE_POPUP}
-          service={service}
-          onClose={() => setPopup('')}
-        />
+      <FareBreakdownPopup
+        isVisible={popup === FARE_POPUP}
+        service={service}
+        onClose={() => setPopup('')}
+      />
       )}
     </>
   );
