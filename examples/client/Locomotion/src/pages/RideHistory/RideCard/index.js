@@ -10,7 +10,7 @@ import { isCardPaymentMethod } from '../../../lib/ride/utils';
 import { getPriceCalculation } from '../../../context/futureRides/api';
 import RidePaymentDetails from '../../../Components/RidePaymentDetails';
 import PaymentContext from '../../../context/payments';
-import SettingsContext from '../../../context/settings';
+import SettingContext from '../../../context/settings';
 import {
   DaySecTitleSubText,
   DaySecTitleText,
@@ -53,11 +53,19 @@ const RideTitleCard = ({
   ride, page, showTip, tip, isPaymentRejected,
 }) => {
   const isDebuggingEnabled = (typeof atob !== 'undefined');
-  const { showPrice, loadShowPrice } = SettingsContext.useContainer();
+  const { getBusinessAccountById } = PaymentContext.useContainer();
+  const { showPrice, loadShowPrice } = SettingContext.useContainer();
 
   useEffect(() => {
     loadShowPrice();
   }, []);
+
+  if (ride.businessAccountId) {
+    const { showPriceToMembers } = getBusinessAccountById(ride.businessAccountId);
+    ride.showPrice = showPriceToMembers;
+  } else {
+    ride.showPrice = showPrice;
+  }
 
   const getTipButton = () => {
     if (!isDebuggingEnabled && tip === null) {
@@ -122,7 +130,7 @@ const RideTitleCard = ({
           ) : <RideStateText>{i18n.t(`rideHistory.ride.states.${ride.state}`)}</RideStateText>}
         </RideViewTextContainer>
         <RideViewSecTextContainer>
-          {showPrice && (
+          {ride.showPrice && (
           <DaySecTitleText markError={isPaymentRejected} testID="ridePrice">
             {getFormattedPrice(ride.priceCurrency, ride.priceAmount)}
           </DaySecTitleText>

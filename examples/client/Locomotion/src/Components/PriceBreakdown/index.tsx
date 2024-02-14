@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import SkeletonContent from 'react-native-skeleton-content-nonexpo';
 import i18n from '../../I18n';
 import {
@@ -17,7 +17,10 @@ import {
   PriceText,
 } from './styled';
 import { COUPON_TYPE } from '../../lib/commonTypes';
-import settingsContext from '../../context/settings';
+import SettingContext from '../../context/settings';
+import PaymentContext from '../../context/payments';
+import { RidePageContext } from '../../context/newRideContext';
+import showPriceBasedOnAccount from '../../services/showPriceBasedOnAccount';
 
 const NoBreakdownComponent = ({
   didRequestFail,
@@ -60,7 +63,9 @@ const PriceBreakdown = ({
   didRequestFail,
   retryGetPriceBreakdown,
 }: PriceBreakdownProps) => {
-  const { showPrice, loadShowPrice } = settingsContext.useContainer();
+  const { businessAccountId } = useContext(RidePageContext);
+  const { getBusinessAccountById } = PaymentContext.useContainer();
+  const { showPrice, loadShowPrice } = SettingContext.useContainer();
   const isDebuggingEnabled = typeof atob !== 'undefined';
   const [priceCalculationItems, setPriceCalculationItems] = useState<any[]>();
   const [total, setTotal] = useState<null | string>(null);
@@ -122,8 +127,8 @@ const PriceBreakdown = ({
   }, [priceCalculation]);
 
   useEffect(() => {
-    loadShowPrice();
-  }, []);
+    showPriceBasedOnAccount(loadShowPrice, getBusinessAccountById, businessAccountId);
+  }, [businessAccountId]);
 
   return (
     <>

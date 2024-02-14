@@ -20,16 +20,20 @@ import {
 import Tag from '../../../../../../Components/Tag';
 import { RidePageContext } from '../../../../../../context/newRideContext';
 import FareBreakdownPopup from '../../../../../../popups/FareBreakdownPopup';
-import SettingsContext from '../../../../../../context/settings';
+import SettingContext from '../../../../../../context/settings';
+import PaymentContext from '../../../../../../context/payments';
+import showPriceBasedOnAccount from '../../../../../../services/showPriceBasedOnAccount';
 
 const FARE_POPUP = 'farePopup';
 
 const ServiceCard = ({ service, withBorder, testID }) => {
+  const { businessAccountId } = useContext(RidePageContext);
   const theme = useContext(ThemeContext);
   const {
     setChosenService, chosenService, serviceEstimations, ride,
   } = useContext(RidePageContext);
-  const { showPrice, loadShowPrice } = SettingsContext.useContainer();
+  const { showPrice, loadShowPrice } = SettingContext.useContainer();
+  const { getBusinessAccountById } = PaymentContext.useContainer();
   const [popup, setPopup] = useState(null);
   const isFutureRide = ride.scheduledTo;
   const unavailable = !((ride.scheduledTo && service.priceCalculationId)
@@ -104,8 +108,8 @@ const ServiceCard = ({ service, withBorder, testID }) => {
   };
 
   useEffect(() => {
-    loadShowPrice();
-  }, []);
+    showPriceBasedOnAccount(loadShowPrice, getBusinessAccountById, businessAccountId);
+  }, [businessAccountId]);
 
   return (
     <>

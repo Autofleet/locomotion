@@ -16,7 +16,10 @@ import BottomSheet from '../../../Components/BottomSheet';
 import BottomSheetContextProvider, { BottomSheetContext, SNAP_POINT_STATES } from '../../../context/bottomSheetContext';
 import CustomTip from './CustomTip';
 import { getFormattedPrice, getCurrencySymbol } from '../../../context/newRideContext/utils';
-import SettingsContext from '../../../context/settings';
+import SettingContext from '../../../context/settings';
+import PaymentContext from '../../../context/payments';
+import { RidePageContext } from '../../../context/newRideContext';
+import showPriceBasedOnAccount from '../../../services/showPriceBasedOnAccount';
 
 const TipSectionContainer = styled.View`
  width: 100%;
@@ -107,7 +110,9 @@ const Tips = ({
 }) => {
   const [selectedTip, setSelectedTip] = useState(null);
   const [customTip, setCustomTip] = useState(null);
-  const { showPrice, loadShowPrice } = SettingsContext.useContainer();
+  const { businessAccountId } = useContext(RidePageContext);
+  const { getBusinessAccountById } = PaymentContext.useContainer();
+  const { showPrice, loadShowPrice } = SettingContext.useContainer();
 
   const isPercentage = ridePrice >= tipSettings.percentageThreshold;
   const buttons = isPercentage ? tipSettings.percentage : tipSettings.fixedPrice;
@@ -123,8 +128,10 @@ const Tips = ({
 
   useEffect(() => {
     setSnapPointsState(SNAP_POINT_STATES.CUSTOM_TIP);
-    loadShowPrice();
   }, []);
+  useEffect(() => {
+    showPriceBasedOnAccount(loadShowPrice, getBusinessAccountById, businessAccountId);
+  }, [businessAccountId]);
 
 
   const resetTip = () => {

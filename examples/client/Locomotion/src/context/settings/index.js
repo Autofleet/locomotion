@@ -121,9 +121,13 @@ const useSettings = () => {
     setAppSettingsStates(appSettingsState);
   }, [appSettingsState]);
 
-  const loadShowPrice = async () => {
-    const hidePrice = await getSettingByKey(settingsKeys.HIDE_PRICE);
-    setShowPrice(!hidePrice);
+  const loadShowPrice = async (showPriceToMembersOfBA) => {
+    if (showPriceToMembersOfBA !== undefined) {
+      setShowPrice(showPriceToMembersOfBA);
+    } else {
+      const hidePrice = await getSettingByKey(settingsKeys.HIDE_PRICE);
+      setShowPrice(!hidePrice);
+    }
   };
 
   return {

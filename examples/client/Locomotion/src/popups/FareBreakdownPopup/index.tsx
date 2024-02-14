@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import Modal from 'react-native-modal';
 import { BackHandler } from 'react-native';
 import PriceBreakdown from '../../Components/PriceBreakdown';
@@ -13,7 +13,10 @@ import {
 import i18n from '../../I18n';
 import { Line } from '../../Components/PriceBreakdown/styled';
 import { getPriceCalculation } from '../../context/newRideContext/api';
-import SettingsContext from '../../context/settings';
+import SettingContext from '../../context/settings';
+import PaymentContext from '../../context/payments';
+import { RidePageContext } from '../../context/newRideContext';
+import showPriceBasedOnAccount from '../../services/showPriceBasedOnAccount';
 
 
 interface FareBreakdownPopupProps {
@@ -29,7 +32,9 @@ const FareBreakdownPopup = ({
 }: FareBreakdownPopupProps) => {
   const [priceCalculation, setPriceCalculation] = useState(null);
   const [didRequestFail, setDidRequestFail] = useState(false);
-  const { showPrice, loadShowPrice } = SettingsContext.useContainer();
+  const { businessAccountId } = useContext(RidePageContext);
+  const { getBusinessAccountById } = PaymentContext.useContainer();
+  const { showPrice, loadShowPrice } = SettingContext.useContainer();
 
   const loadPriceCalculation = async () => {
     try {
@@ -42,8 +47,10 @@ const FareBreakdownPopup = ({
   };
   useEffect(() => {
     loadPriceCalculation();
-    loadShowPrice();
   }, []);
+  useEffect(() => {
+    showPriceBasedOnAccount(loadShowPrice, getBusinessAccountById, businessAccountId);
+  }, [businessAccountId]);
 
   return (
     <Modal isVisible={isVisible} onBackButtonPress={onClose}>

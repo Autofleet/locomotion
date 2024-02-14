@@ -16,7 +16,9 @@ import cashIcon from '../../assets/cash.svg';
 import offlineIcon from '../../assets/offline.svg';
 import { PAYMENT_METHODS } from '../../pages/Payments/consts';
 import PaymentContext from '../../context/payments';
-import SettingsContext from '../../context/settings';
+import SettingContext from '../../context/settings';
+import showPriceBasedOnAccount from '../../services/showPriceBasedOnAccount';
+
 
 interface CardComponentProps {
   paymentMethod: {
@@ -32,7 +34,7 @@ const CardComponent = ({ paymentMethod, businessAccountId }: CardComponentProps)
   const {
     offlinePaymentText,
     loadOfflinePaymentText,
-    getBusinessAccountNameById,
+    getBusinessAccountById,
   } = PaymentContext.useContainer();
 
   useEffect(() => {
@@ -40,9 +42,9 @@ const CardComponent = ({ paymentMethod, businessAccountId }: CardComponentProps)
   }, []);
 
   const getText = () => {
-    const businessAccountName = getBusinessAccountNameById(businessAccountId);
-    if (businessAccountName) {
-      return businessAccountName;
+    if (businessAccountId) {
+      const { name } = getBusinessAccountById(businessAccountId);
+      return name;
     }
     if (isCash) {
       return i18n.t('payments.cash');
@@ -91,7 +93,9 @@ const RideCard = ({
   const {
     getRidePriceCalculation,
   } = useContext(RidePageContext);
-  const { showPrice, loadShowPrice } = SettingsContext.useContainer();
+  const { businessAccountId } = useContext(RidePageContext);
+  const { getBusinessAccountById } = PaymentContext.useContainer();
+  const { showPrice, loadShowPrice } = SettingContext.useContainer();
 
   const addPriceCalculation = async () => {
     const price = await getRidePriceCalculation(ride.id, ride.priceCalculationId);
@@ -105,8 +109,8 @@ const RideCard = ({
   }, [ride]);
 
   useEffect(() => {
-    loadShowPrice();
-  }, []);
+    showPriceBasedOnAccount(loadShowPrice, getBusinessAccountById, businessAccountId);
+  }, [businessAccountId]);
 
   const formatScheludedTo = async (time: any) => {
     try {
