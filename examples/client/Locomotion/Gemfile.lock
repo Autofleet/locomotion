@@ -34,7 +34,7 @@ GEM
       ruby-macho (>= 2.3.0, < 3.0)
       xcodeproj (>= 1.21.0, < 2.0)
     cocoapods-core (1.12.1)
-      activesupport (>= 5.0, < 8)
+      activesupport (>= 5.0, < 7.0.8)
       addressable (~> 2.8)
       algoliasearch (~> 1.0)
       concurrent-ruby (~> 1.1)
