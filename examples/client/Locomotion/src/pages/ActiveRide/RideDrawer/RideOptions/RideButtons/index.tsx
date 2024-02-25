@@ -1,5 +1,5 @@
 import React, {
-  useContext, useState, useEffect, useCallback,
+  useContext, useState, useEffect,
 } from 'react';
 import DatePicker from 'react-native-date-picker';
 import moment from 'moment';
@@ -71,6 +71,7 @@ const RideButtons = ({
   const [pickupTimeWindow, setPickupTimeWindow] = useState(0);
   const [pickupTimeWindowChangedHighlight, setPickupTimeWindowChangedHighlight] = useState(false);
   const [highEtaPopupVisible, setHighEtaPopupVisible] = useState(false);
+  const [tempPassengersNumber, setTempPassengersNumber] = useState<number>(0);
   const { getSettingByKey } = settings.useContainer();
   const {
     paymentMethods,
@@ -341,9 +342,9 @@ const RideButtons = ({
             ? (
               <PassengersCounter
                 service={chosenService}
-                onSelect={setNumberOfPassengers}
+                onSelect={setTempPassengersNumber}
                 onError={setPassengersCounterError}
-                value={numberOfPassengers}
+                selectedValue={numberOfPassengers}
               />
             ) : null}
 
@@ -351,6 +352,7 @@ const RideButtons = ({
             testID="selectService"
             disabled={isSelectButtonDisabled()}
             onPress={() => {
+              setNumberOfPassengers(tempPassengersNumber);
               if (chosenService?.isHighEtaAsapRide) {
                 setHighEtaPopupVisible(true);
               } else {

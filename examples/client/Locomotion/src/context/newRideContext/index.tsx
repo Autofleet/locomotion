@@ -612,6 +612,10 @@ const RidePageContextProvider = ({ children }: {
   }, [businessAccountId]);
 
   useEffect(() => {
+    setNumberOfPassengers(-1);
+  }, [chosenService]);
+
+  useEffect(() => {
     if (user?.id && isAppActive && !ride.id) {
       loadLastCompletedRide();
     }
