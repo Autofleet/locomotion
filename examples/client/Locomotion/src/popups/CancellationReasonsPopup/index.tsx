@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import Modal from 'react-native-modal';
+import { ScrollView } from 'react-native-gesture-handler';
 import CloseButton from '../../Components/CloseButton';
 import CancellationReasonsProvider, { CancellationReasonsContext } from '../../context/cancellation-reasons';
 import RoundedButton from '../../Components/RoundedButton';
@@ -76,39 +77,45 @@ const CancellationReasonsPopup = ({
     cancellationReasons?.length > 0 ? (
       <Modal isVisible={isVisible}>
         <Container>
-          <CloseButtonContainer>
-            <CloseButton onPress={onCancel} />
-          </CloseButtonContainer>
-          <Title>{i18n.t('popups.cancellationReasons.title')}</Title>
-          <SubTitleContainer>
-            <SubTitle>{i18n.t('popups.cancellationReasons.subTitle')}</SubTitle>
-          </SubTitleContainer>
-          <BodyContainer testID="cancellationReasons">
-            {isLoading
-              ? (
-                <LoaderContainer>
-                  <Loader
-                    dark
-                    lottieViewStyle={{
-                      height: '100%', width: '100%', alignItems: 'center', justifyContent: 'center',
-                    }}
-                    sourceProp={undefined}
-                  />
-                </LoaderContainer>
-              )
-              : cancellationReasons.map(cr => (
-                <ClickableContainer
-                  onPress={() => onCancellationReasonClick(cr.id)}
-                  testID={`cancellationReason-${cr.category}`}
-                >
-                  <CancellationReasonCard key={cr.id}>
-                    <CancellationReasonText>
-                      {i18n.t(`cancellationReasons.${cr.value}`, cr.value)}
-                    </CancellationReasonText>
-                  </CancellationReasonCard>
-                </ClickableContainer>
-              ))}
-          </BodyContainer>
+          <ScrollView>
+            <CloseButtonContainer>
+              <CloseButton onPress={onCancel} />
+            </CloseButtonContainer>
+            <Title>{i18n.t('popups.cancellationReasons.title')}</Title>
+            <SubTitleContainer>
+              <SubTitle>{i18n.t('popups.cancellationReasons.subTitle')}</SubTitle>
+            </SubTitleContainer>
+            <BodyContainer testID="cancellationReasons">
+              {isLoading
+                ? (
+                  <LoaderContainer>
+                    <Loader
+                      dark
+                      lottieViewStyle={{
+                        height: '100%', width: '100%', alignItems: 'center', justifyContent: 'center',
+                      }}
+                      sourceProp={undefined}
+                    />
+                  </LoaderContainer>
+                )
+                : (
+                  cancellationReasons.map(cr => (
+                    <ClickableContainer
+                      onPress={() => onCancellationReasonClick(cr.id)}
+                      testID={`cancellationReason-${cr.category}`}
+                    >
+
+                      <CancellationReasonCard key={cr.id}>
+                        <CancellationReasonText>
+                          {i18n.t(`cancellationReasons.${cr.value}`, cr.value)}
+                        </CancellationReasonText>
+                      </CancellationReasonCard>
+                    </ClickableContainer>
+                  ))
+                )
+            }
+            </BodyContainer>
+          </ScrollView>
         </Container>
       </Modal>
     ) : null
