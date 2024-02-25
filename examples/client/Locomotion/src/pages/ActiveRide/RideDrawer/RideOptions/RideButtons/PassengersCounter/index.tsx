@@ -4,7 +4,9 @@ import React, { useState, useEffect } from 'react';
 import SelectModal from '../../../../../../Components/SelectModal';
 
 
-const PassengersCounter = ({ service, onSelect, onError = () => null }) => {
+const PassengersCounter = ({
+  service, onSelect, onError = () => null, value,
+}) => {
   useEffect(() => {
     if (service?.availableSeats) {
       const array = [];
@@ -25,6 +27,7 @@ const PassengersCounter = ({ service, onSelect, onError = () => null }) => {
       data={passengersOptions}
       onSelect={onItemSelect}
       onError={onError}
+      defaultValue={value}
     />
   );
 };

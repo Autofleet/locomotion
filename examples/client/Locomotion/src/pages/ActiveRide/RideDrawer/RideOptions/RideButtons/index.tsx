@@ -61,6 +61,7 @@ const RideButtons = ({
     futureBookingDays,
     businessAccountId,
     serviceEstimations,
+    numberOfPassengers,
   } = useContext(RidePageContext);
 
 
@@ -342,6 +343,7 @@ const RideButtons = ({
                 service={chosenService}
                 onSelect={setNumberOfPassengers}
                 onError={setPassengersCounterError}
+                value={numberOfPassengers}
               />
             ) : null}
 

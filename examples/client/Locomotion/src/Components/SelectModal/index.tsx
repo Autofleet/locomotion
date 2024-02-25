@@ -84,12 +84,15 @@ interface Item {
 
 interface SelectModalProps {
   data: Item[];
+  defaultValue?: any;
   onSelect: (item: Item) => void;
   onError: (error: boolean) => void;
 }
 
-const SelectModal = ({ data, onSelect, onError }: SelectModalProps) => {
-  const [selectedItem, setSelectedItem] = useState(null);
+const SelectModal = ({
+  data, onSelect, onError, defaultValue,
+}: SelectModalProps) => {
+  const [selectedItem, setSelectedItem] = useState<Item| null>(null);
   const [error, setError] = useState(false);
 
   useEffect(() => {
@@ -118,6 +121,7 @@ const SelectModal = ({ data, onSelect, onError }: SelectModalProps) => {
       onSelect={(item, index) => {
         setSelectedItem(item);
       }}
+      defaultValue={defaultValue}
       dropdownIconPosition="left"
       dropdownOverlayColor="transparent"
       buttonTextAfterSelection={(item, index) => item.value}
@@ -130,6 +134,9 @@ const SelectModal = ({ data, onSelect, onError }: SelectModalProps) => {
       )}
     />
   );
+};
+SelectModal.defaultProps = {
+  defaultValue: null,
 };
 
 export default SelectModal;
