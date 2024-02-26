@@ -236,7 +236,7 @@ const RideButtons = ({
     useEffect(() => {
       loadOfflinePaymentText();
     }, []);
-    const ridePaymentMethodId = ride?.paymentMethodId || '';
+    const ridePaymentMethodId = ride?.paymentMethodId || chosenService?.allowedPaymentMethods?.[0] || '';
     const selectedPaymentMethod:
      PaymentMethodInterface | undefined = paymentMethodIdToDataMap[ridePaymentMethodId]
       || paymentMethods.find(pm => pm.id === ridePaymentMethodId);
