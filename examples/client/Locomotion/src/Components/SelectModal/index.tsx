@@ -84,43 +84,51 @@ interface Item {
 
 interface SelectModalProps {
   data: Item[];
+  selectedValue?: any;
   onSelect: (item: Item) => void;
   onError: (error: boolean) => void;
 }
 
-const SelectModal = ({ data, onSelect, onError }: SelectModalProps) => {
-  const [selectedItem, setSelectedItem] = useState(null);
+const SelectModal = ({
+  data, onSelect, onError, selectedValue,
+}: SelectModalProps) => {
+  const [selectedItem, setSelectedItem] = useState<Item| null>(null);
   const [error, setError] = useState(false);
 
   useEffect(() => {
     if (data?.length) {
-      if (!selectedItem) {
-        setSelectedItem(data[0]);
+      const defaultItem = data.find(i => i.value === selectedValue);
+      if (defaultItem) {
+        setSelectedItem(defaultItem);
       } else {
-        setError(!(data.find(item => item.value === selectedItem.value)));
+        setSelectedItem(data[0]);
       }
     }
-  }, [data, selectedItem]);
+  }, [data.length, selectedValue]);
 
   useEffect(() => {
     onError(error);
   }, [error]);
 
   useEffect(() => {
-    onSelect(selectedItem);
+    if (selectedItem) {
+      onSelect(selectedItem);
+      setError(!(data.find(item => item.value === selectedItem.value)));
+    }
   }, [selectedItem]);
 
   return (
     <StyledPop
       error={error}
       data={data}
+      defaultValue={selectedItem}
       defaultButtonText={selectedItem?.label || '1'}
       onSelect={(item, index) => {
         setSelectedItem(item);
       }}
       dropdownIconPosition="left"
       dropdownOverlayColor="transparent"
-      buttonTextAfterSelection={(item, index) => item.value}
+      buttonTextAfterSelection={(item, index) => item.label}
       renderCustomizedRowChild={(item, index) => (
         <StyledSelectRow
           item={item}
@@ -130,6 +138,9 @@ const SelectModal = ({ data, onSelect, onError }: SelectModalProps) => {
       )}
     />
   );
+};
+SelectModal.defaultProps = {
+  selectedValue: null,
 };
 
 export default SelectModal;

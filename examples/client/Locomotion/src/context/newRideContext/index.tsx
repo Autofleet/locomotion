@@ -123,7 +123,7 @@ interface RidePageContextInterface {
   setSpCurrentLocation: () => void;
   historyResults: any[];
   serviceEstimations: any[];
-  ride: RideInterface;
+  ride: RideInterface | null;
   updateRidePayload: (ride: any) => void;
   chosenService: any;
   defaultService: any;
@@ -159,7 +159,7 @@ interface RidePageContextInterface {
   getRidePriceCalculation: (id: string | undefined, priceCalculationId?: string) => Promise<PriceCalculation | undefined>;
   getRideTotalPriceWithCurrency: (rideId : string | undefined) => Promise<{ amount: number; currency: string; } | undefined>;
   getRidesByParams: (params: any) => Promise<RideInterface[]>;
-  numberOfPassengers: number,
+  numberOfPassengers: number | null,
   setNumberOfPassengers: (num: number) => void,
   setLastAcknowledgedRideCompletionTimestampToNow: () => void
   loadFutureBookingDays: () => void;
@@ -227,6 +227,8 @@ export const RidePageContext = createContext<RidePageContextInterface>({
   futureBookingDays: 0,
   businessAccountId: null,
   updateBusinessAccountId: (newBusinessAccountId: string | null) => undefined,
+  addNewEmptyRequestSp: () => undefined,
+  removeRequestSp: (index: number) => undefined,
 });
 
 const HISTORY_RECORDS_NUM = 10;
@@ -608,6 +610,10 @@ const RidePageContextProvider = ({ children }: {
       tryServiceEstimations();
     }
   }, [businessAccountId]);
+
+  useEffect(() => {
+    setNumberOfPassengers(-1);
+  }, [chosenService]);
 
   useEffect(() => {
     if (user?.id && isAppActive && !ride.id) {
