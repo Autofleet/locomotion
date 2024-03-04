@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import PhoneInput from 'react-native-phone-number-input';
+import PhoneInput, { PhoneInputProps } from 'react-native-phone-number-input';
 import Config from 'react-native-config';
 import { AsYouType } from 'libphonenumber-js';
 import { ThemeContext } from 'styled-components';
@@ -8,6 +8,9 @@ import i18n from '../../I18n';
 import codes from './codes.json';
 import { ERROR_COLOR } from '../../context/theme';
 
+type SupportIsoCode = PhoneInputProps['defaultCode'];
+const ALL_SUPPORTED_ISO_CODES_FROM_LIB: SupportIsoCode[] = [];
+
 const PhoneNumberInput = ({
   onPhoneNumberChange,
   autoFocus,
@@ -15,7 +18,7 @@ const PhoneNumberInput = ({
   value,
 }: any) => {
   const [isFocused, setIsFocused] = useState(false);
-  const [defaultCode, setDefaultCode] = useState(null);
+  const [defaultCode, setDefaultCode] = useState<SupportIsoCode | null>(null);
   const theme = useContext(ThemeContext);
   const asYouTypePhoneNumber = new AsYouType();
 
@@ -28,11 +31,19 @@ const PhoneNumberInput = ({
       asYouTypePhoneNumber.isValid(),
     );
   };
+  const getSafeIsoCode = (rawCode: string) : SupportIsoCode => {
+    const code = Config.OVERWRITE_COUNTRY_CODE || rawCode;
+    if (ALL_SUPPORTED_ISO_CODES_FROM_LIB.includes(code as SupportIsoCode)) {
+      return (code as SupportIsoCode);
+    }
+    return (Config.DEFAULT_COUNTRY_CODE as SupportIsoCode);
+  };
 
   const setIsoCode = async () => {
-    const mobileIso = await getInputIsoCode();
+    const rawMobileIso = await getInputIsoCode();
+    const safeCode = getSafeIsoCode(rawMobileIso);
     setTimeout(() => {
-      setDefaultCode(Config.OVERWRITE_COUNTRY_CODE || mobileIso);
+      setDefaultCode(safeCode);
     }, 50);
   };
 
