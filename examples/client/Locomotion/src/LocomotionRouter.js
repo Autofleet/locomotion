@@ -5,6 +5,7 @@ import { PortalProvider } from '@gorhom/portal';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import crashlytics from '@react-native-firebase/crashlytics';
 import { NavigationContainer } from '@react-navigation/native';
+import analytics from '@react-native-firebase/analytics';
 import i18n from './I18n';
 import { MainProvider, RideStateContextContextProvider } from './context';
 import MainRouter from './pages';
@@ -23,7 +24,14 @@ LogBox.ignoreAllLogs();
 export default (props) => {
   const navigatorRef = useRef(null);
   const appStateRef = useRef(AppState.currentState);
-
+  (async () => {
+    const appInstanceId = await analytics().getAppInstanceId();
+    console.log('appInstanceId', appInstanceId);
+    const ana = await analytics().logEvent('loadPage', {
+      id: 3745092,
+    });
+    console.log('analytics', ana);
+  })();
   const registerAppStateListener = () => AppState.addEventListener('change', (appState) => {
     const properties = { newAppState: appState, currentAppState: appStateRef.current };
     if (appState === 'active' && appState !== appStateRef.current) {
