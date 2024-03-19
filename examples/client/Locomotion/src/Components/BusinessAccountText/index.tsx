@@ -9,7 +9,7 @@ const BusinessAccountText = ({
   title, subTitle,
 } : BusinessAccountTextProps) => (
   <TitleWithSubTitle>
-    <BoldTitle numberOfLines={1}>{title}</BoldTitle>
+    {title && <BoldTitle numberOfLines={1}>{title}</BoldTitle>}
     <SubTitle numberOfLines={1}>{subTitle}</SubTitle>
   </TitleWithSubTitle>
 );
