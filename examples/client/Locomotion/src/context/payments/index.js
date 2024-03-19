@@ -201,7 +201,9 @@ const usePayments = () => {
     if (relevantBusinessAccount) {
       return relevantBusinessAccount;
     }
-    return null;
+    // this means the client no longer have access to the business account, or BA was deleted
+    // requires a fallback object to avoid breaking the app
+    return {};
   };
 
   return {
