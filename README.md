@@ -2,7 +2,6 @@
 description: Democratizing mobility.
 ---
 
-
 # Locomotion
 
 ## What is Locomotion?
