@@ -1147,6 +1147,7 @@ const RidePageContextProvider = ({ children }: {
         estimationId: chosenService?.estimationId,
         paymentMethodId: ride.paymentMethodId,
         rideType: 'passenger',
+        origin: 'Mobile rider app',
         numberOfPassengers,
         ...(ride.scheduledTo && { scheduledTo: scheduledToMoment }),
         stopPoints: stopPoints.map((sp, i) => ({
