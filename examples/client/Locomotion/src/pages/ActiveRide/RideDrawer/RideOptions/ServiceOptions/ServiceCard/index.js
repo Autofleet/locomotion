@@ -120,13 +120,14 @@ const ServiceCard = ({ service, withBorder, testID }) => {
         selected={isSelected}
         activeOpacity={!withBorder ? 1 : 0.5}
         noBackground
-        disabled={unavailable}
         onPress={() => {
-          if (withBorder) {
-            if (isSelected) {
-              return setPopup(FARE_POPUP);
+          if (!unavailable) {
+            if (withBorder) {
+              if (isSelected) {
+                return setPopup(FARE_POPUP);
+              }
+              setChosenService(service);
             }
-            setChosenService(service);
           }
         }}
       >
@@ -155,7 +156,7 @@ const ServiceCard = ({ service, withBorder, testID }) => {
                 )
                 : <View />
             }
-              <Price>
+              <Price unavailable={unavailable}>
                 {getUnavailableText()}
               </Price>
             </TitleContainer>
