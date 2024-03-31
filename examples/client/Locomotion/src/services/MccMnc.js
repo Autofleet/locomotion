@@ -8,6 +8,7 @@ const getMccMnc = async () => {
   return mccMnc;
 };
 
+
 const getMobileIsoCode = async () => {
   const isoCode = await CarrierInfo.isoCountryCode();
   return isoCode.toUpperCase();
