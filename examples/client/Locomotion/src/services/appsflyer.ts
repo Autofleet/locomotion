@@ -3,14 +3,14 @@ import appsFlyer from 'react-native-appsflyer';
 import Config from 'react-native-config';
 
 const LOG_PREFIX = 'APPSFLYER INTEG';
-const { ANDROID_APPSFLYER_DEV_KEY, IOS_APPSFLYER_DEV_KEY, IOS_APPSFLYER_APP_ID } = Config;
+const { ANDROID_APPSFLYER_DEV_KEY, IOS_APPSFLYER_DEV_KEY, IOS_APP_ID } = Config;
 const PLATFORM_CONFIG: any = {
   android: {
     devKey: ANDROID_APPSFLYER_DEV_KEY,
   },
   ios: {
     devKey: IOS_APPSFLYER_DEV_KEY,
-    appId: IOS_APPSFLYER_APP_ID,
+    appId: IOS_APP_ID,
     timeToWaitForATTUserAuthorization: 10, // for iOS 14.5
   },
 };
