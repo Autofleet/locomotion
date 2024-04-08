@@ -17,6 +17,7 @@ import MessagesProvider from './context/messages';
 import CancellationReasonsProvider from './context/cancellation-reasons';
 import VirtualStationsProvider from './context/virtualStationsContext';
 import Mixpanel from './services/Mixpanel';
+import initAppsFlyer from './services/appsflyer';
 
 LogBox.ignoreAllLogs();
 
@@ -49,6 +50,7 @@ export default (props) => {
   useEffect(() => {
     sendAppLaunchEvent();
     crashlytics().log('App mounted.');
+    initAppsFlyer();
     enableScreens(false);
     const listener = registerAppStateListener();
     return () => {
