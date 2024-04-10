@@ -94,7 +94,6 @@ const RideCard = ({
     getRidePriceCalculation,
   } = useContext(RidePageContext);
 
-
   const { getBusinessAccountById } = PaymentContext.useContainer();
   const { showPrice, loadShowPrice } = SettingContext.useContainer();
 
