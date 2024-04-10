@@ -6,7 +6,6 @@ import { PaymentIcon } from 'react-native-payment-icons';
 import styled, { ThemeContext } from 'styled-components';
 import { useFocusEffect } from '@react-navigation/native';
 import SkeletonContent from 'react-native-skeleton-content-nonexpo';
-import BusinessAccountText from '../../../../../../Components/BusinessAccountText';
 import { isCardPaymentMethod, isCashPaymentMethod, isOfflinePaymentMethod } from '../../../../../../lib/ride/utils';
 import { getCouponText } from '../../../../../../context/newRideContext/utils';
 import { MAIN_ROUTES } from '../../../../../routes';
@@ -77,7 +76,6 @@ interface PaymentButtonProps {
     brand?: Brand;
     id?: string;
     invalid?: boolean;
-    subTitle?: string;
 }
 
 
@@ -87,7 +85,6 @@ const PaymentButton = ({
   brand,
   id,
   invalid,
-  subTitle,
 }: PaymentButtonProps) => {
   const { primaryColor } = useContext(ThemeContext);
   const { getCoupon, coupon, setCoupon } = useContext(UserContext);
@@ -168,9 +165,7 @@ const PaymentButton = ({
               width={40}
             />
           )}
-        { subTitle
-          ? <BusinessAccountText title={title} subTitle={subTitle} />
-          : <TimeText numberOfLines={1}>{title}</TimeText> }
+        <TimeText numberOfLines={1}>{title}</TimeText>
       </CardNameContainer>
       <PromoButtonContainer>
         {loadPromoButton()}
@@ -185,5 +180,4 @@ PaymentButton.defaultProps = {
   brand: null,
   id: null,
   invalid: false,
-  subTitle: null,
 };
