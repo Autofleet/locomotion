@@ -93,7 +93,7 @@ const RideCard = ({
   const {
     getRidePriceCalculation,
   } = useContext(RidePageContext);
-  const { businessAccountId } = useContext(RidePageContext);
+
   const { getBusinessAccountById } = PaymentContext.useContainer();
   const { showPrice, loadShowPrice } = SettingContext.useContainer();
 
@@ -109,8 +109,8 @@ const RideCard = ({
   }, [ride]);
 
   useEffect(() => {
-    showPriceBasedOnAccount(loadShowPrice, getBusinessAccountById, businessAccountId);
-  }, [businessAccountId]);
+    showPriceBasedOnAccount(loadShowPrice, getBusinessAccountById, ride.businessAccountId);
+  }, [ride.businessAccountId]);
 
   const formatScheludedTo = async (time: any) => {
     try {

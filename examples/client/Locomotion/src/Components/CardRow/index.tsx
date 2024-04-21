@@ -5,7 +5,6 @@ import { View, Text } from 'react-native';
 import moment from 'moment';
 import styled, { ThemeContext } from 'styled-components';
 import { PaymentIcon } from 'react-native-payment-icons';
-import BusinessAccountText from '../BusinessAccountText';
 import { RideInterface, RidePageContext } from '../../context/newRideContext';
 import { PAYMENT_METHODS, paymentMethodToIconMap } from '../../pages/Payments/consts';
 import Button from '../Button';
@@ -204,19 +203,11 @@ const CardRow = (paymentMethod: any) => {
                 )
                 : (
                   <>
-                    {
-                      (businessAccountId && offlinePaymentText)
-                        ? (
-                          <BusinessAccountText
-                            title={getPaymentMethodTitle()}
-                            subTitle={offlinePaymentText}
-                          />
-                        )
-                        : (
-                          <Type>
-                            {getPaymentMethodTitle()}
-                          </Type>
-                        )}
+
+                    <Type>
+                      {getPaymentMethodTitle()}
+                    </Type>
+
                     {paymentMethod.lastFour
                       ? <Description>{getLastFourForamttedShort(paymentMethod.lastFour)}</Description>
                       : null}

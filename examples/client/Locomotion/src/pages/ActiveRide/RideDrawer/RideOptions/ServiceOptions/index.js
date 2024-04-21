@@ -79,7 +79,8 @@ const ServiceOptions = () => {
           <ServiceCard
             withBorder
             service={option}
-            key={option.name}
+            key={option.id}
+            descriptionNumberOfLines={2}
           />
         ))
       }
