@@ -612,7 +612,7 @@ const RidePageContextProvider = ({ children }: {
   }, [businessAccountId]);
 
   useEffect(() => {
-    setNumberOfPassengers(-1);
+    setNumberOfPassengers(1);
   }, [chosenService]);
 
   useEffect(() => {
