@@ -16,17 +16,22 @@ Locomotion is pre-integrated to the Autofleet platform, which offers the full di
 
 ![Where to?](https://res.cloudinary.com/dgotwqwlz/image/upload/h_450/v1660651906/WhatsApp_Image_2022-08-16_at_12.28.27_PM_gsv42x.jpg) ![Get ride offers](https://res.cloudinary.com/dgotwqwlz/image/upload/h_450/v1660651906/WhatsApp_Image_2022-08-16_at_12.28.27_PM_1_cn8dqp.jpg) ![Ride booked](https://res.cloudinary.com/dgotwqwlz/image/upload/h_450/v1660651906/WhatsApp_Image_2022-08-16_at_12.28.28_PM_gnliqh.jpg)![Ride booked](https://res.cloudinary.com/dgotwqwlz/image/upload/h_450/v1660651906/WhatsApp_Image_2022-08-16_at_12.28.27_PM_2_rtdz1f.jpg)![Add payment method](https://res.cloudinary.com/dgotwqwlz/image/upload/h_450/v1660651906/WhatsApp_Image_2022-08-16_at_12.28.28_PM_1_rsgk3g.jpg)
 
-## Roadmap
+## Support and Contributions
 
-* Show nearby vehicles, pre-ETAs and prices - DONE
-* Add special requests/ notes to drivers - DONE
-* Customizable branding and color pallette - DONE
-* **In-Ride**: updates to ride (destination, new stop points, etc.) - DONE
-* Payments integration, including customer onboarding and processing - DONE
-* **Post-Ride**: allow comments on driver
-* Multi-stop rides
-* Walking navigation for customer to pickup point
+We welcome contributions and bug reports from our community! If you encounter any issues with the code, please feel free to open an issue. Our master branch is continuously tested and should be safe to run, with each build derived from this branch.
 
+### Environment Setup
+
+While we are happy to assist with general questions and support, we kindly ask that you utilize community resources for environment setup issues. To ensure a smooth experience, we recommend following the setup instructions provided in this repository. If you encounter any problems during the setup process, the community is a great resource for troubleshooting and finding solutions.
+
+### Reporting Bugs
+
+If you identify a bug within the code:
+
+	1.	Ensure you are using the master branch, as it contains the latest stable changes.
+	2.	Open a detailed issue in the Issues section, providing as much information as possible to help us understand and reproduce the problem.
+
+Thank you for your understanding and for contributing to the improvement of our product!
 
 ## Authors & Acknowledgements
 
@@ -39,4 +44,3 @@ Check us out on twitter [@autofleet\_io](https://twitter.com/autofleet_io) and o
 ## License
 
 [MIT](https://choosealicense.com/licenses/mit/)
-
