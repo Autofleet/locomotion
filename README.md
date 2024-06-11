@@ -28,8 +28,8 @@ While we are happy to assist with general questions and support, we kindly ask t
 
 If you identify a bug within the code:
 
-	1.	Ensure you are using the master branch, as it contains the latest stable changes.
-	2.	Open a detailed issue in the Issues section, providing as much information as possible to help us understand and reproduce the problem.
+1.	Ensure you are using the master branch, as it contains the latest stable changes.
+2.	Open a detailed issue in the Issues section, providing as much information as possible to help us understand and reproduce the problem.
 
 Thank you for your understanding and for contributing to the improvement of our product!
 
