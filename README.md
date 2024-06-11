@@ -22,7 +22,7 @@ We welcome contributions and bug reports from our community! If you encounter an
 
 ### Environment Setup
 
-While we are happy to assist with general questions and support, we kindly ask that you utilize community resources for environment setup issues. To ensure a smooth experience, we recommend following the setup instructions provided in this repository. If you encounter any problems during the setup process, the community is a great resource for troubleshooting and finding solutions.
+While we are happy to assist with general questions and support, we kindly ask that you utilize community resources for environment setup issues. To ensure a smooth experience, we recommend you follow the setup instructions of the frameworks and open-source components used in the repo. If you encounter any problems during the setup process, the community is a great resource for troubleshooting and finding solutions.
 
 ### Reporting Bugs
 
