@@ -2,6 +2,7 @@ import React, {
   useCallback, useContext, useEffect, useRef, useState,
 } from 'react';
 import {
+  Alert,
   Animated, View,
 } from 'react-native';
 import styled from 'styled-components';
@@ -126,6 +127,7 @@ const SearchBar = ({
 
   const loadMultiSpSetting = async () => {
     const multiSpSetting = await getSettingByKey(SETTINGS_KEYS.MULTI_SP);
+    Alert.alert('MULTI_SP', JSON.stringify(multiSpSetting,null,2));
     if (multiSpSetting && multiSpSetting.enabled) {
       setMultiSpAmount(multiSpSetting.amount);
     }
