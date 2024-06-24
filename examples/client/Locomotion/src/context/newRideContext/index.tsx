@@ -39,7 +39,7 @@ import SETTINGS_KEYS from '../settings/keys';
 import { RideStateContextContext } from '../ridePageStateContext';
 import { BS_PAGES } from '../ridePageStateContext/utils';
 import {
-  RIDE_STATES, RIDE_FINAL_STATES, STOP_POINT_TYPES, PAYMENT_STATES, CHARGE_FOR_TIP,
+  RIDE_STATES, RIDE_FINAL_STATES, STOP_POINT_TYPES, PAYMENT_STATES, CHARGE_FOR_TIP, PAYMENT_METHODS,
 } from '../../lib/commonTypes';
 import useBackgroundInterval from '../../lib/useBackgroundInterval';
 import { formatSps } from '../../lib/ride/utils';
@@ -440,7 +440,7 @@ const RidePageContextProvider = ({ children }: {
         const unixScheduledTo = moment.unix(Number(ride.scheduledTo) / 1000);
         scheduledTime = await getLocationTimezoneTime(formattedStopPoints[0].lat, formattedStopPoints[0].lng, unixScheduledTo);
       }
-      const defaultPaymentMethodId = getClientDefaultMethod()?.id;
+      const defaultPaymentMethodId = relevantBusinessAccountId ? PAYMENT_METHODS.OFFLINE : getClientDefaultMethod()?.id;
       const { estimations, services } = await rideApi
         .createServiceEstimations(formattedStopPoints, scheduledTime, relevantBusinessAccountId, defaultPaymentMethodId);
 
