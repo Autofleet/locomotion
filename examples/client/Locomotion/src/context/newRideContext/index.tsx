@@ -440,8 +440,9 @@ const RidePageContextProvider = ({ children }: {
         const unixScheduledTo = moment.unix(Number(ride.scheduledTo) / 1000);
         scheduledTime = await getLocationTimezoneTime(formattedStopPoints[0].lat, formattedStopPoints[0].lng, unixScheduledTo);
       }
+      const defaultPaymentMethodId = getClientDefaultMethod()?.id;
       const { estimations, services } = await rideApi
-        .createServiceEstimations(formattedStopPoints, scheduledTime, relevantBusinessAccountId);
+        .createServiceEstimations(formattedStopPoints, scheduledTime, relevantBusinessAccountId, defaultPaymentMethodId);
 
       const tags = getEstimationTags(estimations);
       const formattedEstimations = formatEstimations(services, estimations, tags);

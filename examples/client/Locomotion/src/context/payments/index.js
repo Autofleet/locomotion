@@ -108,12 +108,16 @@ const usePayments = () => {
   && paymentMethods.some(pm => !pm.isExpired);
 
   const getClientDefaultMethod = (enableCash) => {
+    if (customer.defaultPaymentMethodId) {
+      return customer.defaultPaymentMethodId;
+    }
     if (paymentMethods && paymentMethods.length) {
-      return (paymentMethods || []).find(pm => pm.isDefault) || paymentMethods[0];
+      return paymentMethods.find(pm => pm.isDefault) || paymentMethods[0];
     }
     if (enableCash) {
       return cashPaymentMethod;
     }
+    return null;
   };
 
   const createPaymentMethod = async (paymentMethodId) => {
