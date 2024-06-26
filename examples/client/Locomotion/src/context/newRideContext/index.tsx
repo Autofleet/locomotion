@@ -22,7 +22,6 @@ import StorageService from '../../services/storage';
 import Mixpanel from '../../services/Mixpanel';
 import * as rideApi from './api';
 import {
-  buildStreetAddress,
   formatEstimationsResult,
   formatStopPointsForEstimations,
   getEstimationTags,
@@ -31,7 +30,6 @@ import {
   convertTimezoneByLocation,
   RIDER_APP_SOURCE,
   FEEDBACK_TYPES,
-  formatDistanceByMeasurement,
   getRandomId,
 } from './utils';
 import settings from '../settings';
@@ -39,11 +37,11 @@ import SETTINGS_KEYS from '../settings/keys';
 import { RideStateContextContext } from '../ridePageStateContext';
 import { BS_PAGES } from '../ridePageStateContext/utils';
 import {
-  RIDE_STATES, RIDE_FINAL_STATES, STOP_POINT_TYPES, PAYMENT_STATES, CHARGE_FOR_TIP, PAYMENT_METHODS,
+  RIDE_STATES, RIDE_FINAL_STATES, STOP_POINT_TYPES, CHARGE_FOR_TIP,
 } from '../../lib/commonTypes';
 import useBackgroundInterval from '../../lib/useBackgroundInterval';
 import { formatSps } from '../../lib/ride/utils';
-import { APP_ROUTES, MAIN_ROUTES } from '../../pages/routes';
+import { MAIN_ROUTES } from '../../pages/routes';
 import * as navigationService from '../../services/navigation';
 import { BottomSheetContext } from '../bottomSheetContext';
 import { VirtualStationsContext } from '../virtualStationsContext';
@@ -440,7 +438,7 @@ const RidePageContextProvider = ({ children }: {
         const unixScheduledTo = moment.unix(Number(ride.scheduledTo) / 1000);
         scheduledTime = await getLocationTimezoneTime(formattedStopPoints[0].lat, formattedStopPoints[0].lng, unixScheduledTo);
       }
-      const defaultPaymentMethodId = relevantBusinessAccountId ? PAYMENT_METHODS.OFFLINE : getClientDefaultMethod()?.id;
+      const defaultPaymentMethodId = getClientDefaultMethod(true, relevantBusinessAccountId)?.id;
       const { estimations, services } = await rideApi
         .createServiceEstimations(formattedStopPoints, scheduledTime, relevantBusinessAccountId, defaultPaymentMethodId);
 
