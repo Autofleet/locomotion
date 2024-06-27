@@ -112,8 +112,8 @@ const usePayments = () => {
     if (businessAccountId) {
       return offlinePaymentMethod;
     }
-    if (customer.defaultPaymentMethodId) {
-      return customer.defaultPaymentMethodId;
+    if (customer.defaultPaymentMethodId && paymentMethods?.find(p => p.id === customer.defaultPaymentMethodId)) {
+      return { id: customer.defaultPaymentMethodId };
     }
     if (paymentMethods && paymentMethods.length) {
       return paymentMethods.find(pm => pm.isDefault) || paymentMethods[0];
