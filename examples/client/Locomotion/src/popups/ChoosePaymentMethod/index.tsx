@@ -107,7 +107,8 @@ const PaymentMethodPopup = ({
         }
       } else {
         const paymentMethod = usePayments.getClientDefaultMethod(
-          chosenService?.allowedPaymentMethods.includes(PAYMENT_METHODS.CASH));
+          chosenService?.allowedPaymentMethods.includes(PAYMENT_METHODS.CASH),
+        );
         if (paymentMethod?.id) {
           setSelectedPaymentId(paymentMethod?.id);
         } else if (selectedBusinessAccountId) {
