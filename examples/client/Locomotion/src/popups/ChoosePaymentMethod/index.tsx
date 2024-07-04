@@ -27,6 +27,7 @@ import cashPaymentMethod from '../../pages/Payments/cashPaymentMethod';
 import offlinePaymentMethod from '../../pages/Payments/offlinePaymentMethod';
 import * as navigationService from '../../services/navigation';
 import { MewRidePageContext } from '../../context';
+import { PAYMENT_METHODS } from '../../lib/commonTypes';
 
 interface PaymentMethodPopupProps {
   isVisible: boolean;
@@ -105,7 +106,9 @@ const PaymentMethodPopup = ({
           setSelectedPaymentId(selected);
         }
       } else {
-        const paymentMethod = await usePayments.getClientDefaultMethod();
+        const paymentMethod = usePayments.getClientDefaultMethod(
+          chosenService?.allowedPaymentMethods.includes(PAYMENT_METHODS.CASH),
+        );
         if (paymentMethod?.id) {
           setSelectedPaymentId(paymentMethod?.id);
         } else if (selectedBusinessAccountId) {

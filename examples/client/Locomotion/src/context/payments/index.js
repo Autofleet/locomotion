@@ -5,6 +5,7 @@ import i18n from '../../I18n';
 import { PAYMENT_STATES } from '../../lib/commonTypes';
 import Mixpanel from '../../services/Mixpanel';
 import cashPaymentMethod from '../../pages/Payments/cashPaymentMethod';
+import offlinePaymentMethod from '../../pages/Payments/offlinePaymentMethod';
 import network from '../../services/network';
 import SETTINGS_KEYS from '../settings/keys';
 import SettingContext from '../settings';
@@ -107,13 +108,20 @@ const usePayments = () => {
   const clientHasValidPaymentMethods = () => paymentMethods.length > 0
   && paymentMethods.some(pm => !pm.isExpired);
 
-  const getClientDefaultMethod = (enableCash) => {
+  const getClientDefaultMethod = (enableCash, businessAccountId) => {
+    if (businessAccountId) {
+      return offlinePaymentMethod;
+    }
+    if (customer.defaultPaymentMethodId && paymentMethods?.find(p => p.id === customer.defaultPaymentMethodId)) {
+      return { id: customer.defaultPaymentMethodId };
+    }
     if (paymentMethods && paymentMethods.length) {
-      return (paymentMethods || []).find(pm => pm.isDefault) || paymentMethods[0];
+      return paymentMethods.find(pm => pm.isDefault) || paymentMethods[0];
     }
     if (enableCash) {
       return cashPaymentMethod;
     }
+    return null;
   };
 
   const createPaymentMethod = async (paymentMethodId) => {
