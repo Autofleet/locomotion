@@ -48,7 +48,6 @@ const Phone = ({ navigation }) => {
 
 
   const onVerifyCaptcha = async (verifiedCaptchaToken) => {
-    await Auth.updateCaptchaToken(verifiedCaptchaToken);
     Mixpanel.setEvent('Captcha Verified successfully', { verifiedCaptchaToken });
     setCaptchaToken(verifiedCaptchaToken);
   };
@@ -78,6 +77,7 @@ const Phone = ({ navigation }) => {
       if (!isDevSettingOn()) {
         await AppSettings.destroy();
       }
+      await Auth.updateCaptchaToken(captchaToken);
       await onLogin(user.phoneNumber);
       updateState({ phoneNumber: user.phoneNumber });
       nextScreen(MAIN_ROUTES.PHONE);
