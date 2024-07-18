@@ -14,7 +14,6 @@ import { OnboardingContext } from '../../context/onboarding';
 import { ErrorText } from './styles';
 import Header from './Header';
 import ScreenText from './ScreenText/index';
-import { loginApi } from '../../context/user/api';
 import PhoneNumberInput from '../../Components/PhoneNumberInput';
 import { MAIN_ROUTES } from '../routes';
 import { UserContext } from '../../context/user';
@@ -22,7 +21,6 @@ import AppSettings from '../../services/app-settings';
 import * as NavigationService from '../../services/navigation';
 import { PageContainer, ContentContainer } from '../styles';
 import Auth from '../../services/auth';
-import { getAppSettings } from '../../context/settings/api';
 import SETTINGS_KEYS from '../../context/settings/keys';
 
 
@@ -49,10 +47,9 @@ const Phone = ({ navigation }) => {
   }, []);
 
 
-  const onVerifyCaptcha = async (token) => {
-    Mixpanel.setEvent('Captcha Verified successfully', { token });
-    setCaptchaToken(token);
-    await Auth.updateCaptchaToken(token);
+  const onVerifyCaptcha = async (verifiedCaptchaToken) => {
+    Mixpanel.setEvent('Captcha Verified successfully', { verifiedCaptchaToken });
+    setCaptchaToken(verifiedCaptchaToken);
   };
 
 
@@ -80,6 +77,7 @@ const Phone = ({ navigation }) => {
       if (!isDevSettingOn()) {
         await AppSettings.destroy();
       }
+      await Auth.updateCaptchaToken(captchaToken);
       await onLogin(user.phoneNumber);
       updateState({ phoneNumber: user.phoneNumber });
       nextScreen(MAIN_ROUTES.PHONE);
