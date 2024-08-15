@@ -313,7 +313,6 @@ export default React.forwardRef(({
   return (
     <>
       <MapView
-        provider={Config.MAP_PROVIDER}
         showsUserLocation={PAGES_TO_SHOW_MY_LOCATION.includes(currentBsPage)}
         style={mapPositionStyles}
         onRegionChangeComplete={onRegionChangeComplete}

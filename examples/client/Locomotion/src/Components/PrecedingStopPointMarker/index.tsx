@@ -13,7 +13,7 @@ const PrecedingStopPointMarker = ({ stopPoint }: PrecedingStopPointMarkerProps) 
   <Marker
     coordinate={{ latitude: parseFloat(stopPoint.lat), longitude: parseFloat(stopPoint.lng) }}
     zIndex={10}
-    tracksViewChanges={Platform.OS === 'ios' && Config.MAP_PROVIDER === 'google'}
+    tracksViewChanges={false}
   >
     <SvgIcon Svg={pickupIcon} width={10} height={10} />
   </Marker>

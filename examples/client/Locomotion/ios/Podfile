@@ -7,11 +7,6 @@ install! 'cocoapods', :deterministic_uuids => false
 
 target 'Locomotion' do
   config = use_native_modules!
-  rn_maps_path = '../node_modules/react-native-maps'
-  pod 'react-native-google-maps', :path => rn_maps_path
-
-  pod 'GoogleMaps', '7.3.0'
-  pod 'Google-Maps-iOS-Utils', '4.1.0'
 
   # Flags change depending on the env values.
   flags = get_default_flags()

@@ -8,7 +8,6 @@ import Config from 'react-native-config';
 import VirtualStationComponent from '../VirtualStationComponent';
 import VirtualStationTooltip from '../VirtualStationTooltipComponent';
 
-const trackViewChanges = Platform.OS === 'ios' && Config.MAP_PROVIDER === 'google';
 const VirtualStationMarker = forwardRef(({
   station, onCalloutPress, type,
 }, ref) => {
@@ -17,7 +16,7 @@ const VirtualStationMarker = forwardRef(({
     <Marker
       coordinate={{ latitude: parseFloat(station.coordinates.lat), longitude: parseFloat(station.coordinates.lng) }}
       zIndex={10}
-      tracksViewChanges={trackViewChanges}
+      tracksViewChanges={false}
       key={station.externalId}
       ref={ref}
     >

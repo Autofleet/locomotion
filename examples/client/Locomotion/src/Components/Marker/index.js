@@ -94,7 +94,7 @@ const StopPointMarker = ({
       key={key}
       coordinate={{ latitude: parseFloat(lat), longitude: parseFloat(lng) }}
       zIndex={999}
-      tracksViewChanges={Platform.OS === 'ios' && Config.MAP_PROVIDER === 'google'}
+      tracksViewChanges={false}
     >
       <InfoBox>
         <Type>
