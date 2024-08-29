@@ -26,8 +26,8 @@ export const HeaderIconContainer = styled(Button)(({ side, theme }) => `
 `);
 
 export const HeaderIcon = styled.Image`
-  width: ${({ width }) => (width || '18px')};
-  height: ${({ height }) => (height || '18px')};
+  width: ${({ width }) => (width || 18)};
+  height: ${({ height }) => (height || 18)};
 `;
 
 export const Header = styled.View`

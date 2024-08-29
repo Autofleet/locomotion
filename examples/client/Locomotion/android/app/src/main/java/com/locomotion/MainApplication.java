@@ -4,11 +4,6 @@ import android.app.Application;
 import com.facebook.react.PackageList;
 import com.facebook.react.ReactApplication;
 import com.facebook.react.config.ReactFeatureFlags;
-/* import com.reactnativecommunity.netinfo.NetInfoPackage;
-import com.github.wumke.RNExitApp.RNExitAppPackage;
-import com.reactnativerestart.RestartPackage;
-import com.ocetnik.timer.BackgroundTimerPackage;
-import io.xogus.reactnative.versioncheck.RNVersionCheckPackage; */
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.defaults.DefaultNewArchitectureEntryPoint;
@@ -18,6 +13,12 @@ import java.util.List;
 import com.BV.LinearGradient.LinearGradientPackage;
 import com.facebook.react.bridge.JSIModulePackage;
 import com.facebook.react.modules.i18nmanager.I18nUtil;
+import android.content.Context;
+import android.content.BroadcastReceiver;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.os.Build;
+import org.jetbrains.annotations.Nullable;
 
 public class MainApplication extends Application implements ReactApplication {
 
@@ -42,11 +43,6 @@ public class MainApplication extends Application implements ReactApplication {
         protected String getJSMainModuleName() {
           return "index";
         }
-        //
-        /* @Override
-        protected JSIModulePackage getJSIModulePackage() {
-          return new ReanimatedJSIModulePackage(); // <- add
-        } */
         @Override
         protected boolean isNewArchEnabled() {
           return BuildConfig.IS_NEW_ARCHITECTURE_ENABLED;
@@ -62,7 +58,14 @@ public class MainApplication extends Application implements ReactApplication {
   public ReactNativeHost getReactNativeHost() {
     return mReactNativeHost;
   }
-
+ @Override
+    public Intent registerReceiver(@Nullable BroadcastReceiver receiver, IntentFilter filter) {
+        if (Build.VERSION.SDK_INT >= 34 && getApplicationInfo().targetSdkVersion >= 34) {
+            return super.registerReceiver(receiver, filter, Context.RECEIVER_EXPORTED);
+        } else {
+            return super.registerReceiver(receiver, filter);
+        }
+    }
   @Override
   public void onCreate() {
     super.onCreate();
