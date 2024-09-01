@@ -60,7 +60,7 @@
     "react-native-appsflyer": "^6.13.1",
     "react-native-background-timer": "^2.4.1",
     "react-native-carrier-info": "^1.1.2",
-    "react-native-config": "^1.5.1",
+    "react-native-config": "^1.5.3",
     "react-native-date-picker": "^4.2.6",
     "react-native-device-info": "^11.1.0",
     "react-native-draglist": "^3.5.1",
