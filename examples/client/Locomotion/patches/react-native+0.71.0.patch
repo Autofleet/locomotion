@@ -1,9 +1,1 @@
-diff --git a/node_modules/react-native/scripts/.packager.env b/node_modules/react-native/scripts/.packager.env
-new file mode 100644
-index 0000000..21a13cf
---- /dev/null
-+++ b/node_modules/react-native/scripts/.packager.env
-@@ -0,0 +1 @@
-+export RCT_METRO_PORT=8081
-\ No newline at end of file
-
+   
