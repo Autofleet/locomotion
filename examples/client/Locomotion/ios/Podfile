@@ -49,6 +49,7 @@ target 'Locomotion' do
   end
   
   # use_frameworks!
+  use_modular_headers!
 
   post_install do |installer|
     react_native_post_install(
