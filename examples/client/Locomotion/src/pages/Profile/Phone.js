@@ -95,7 +95,7 @@ const Phone = ({ navigation }) => {
   useEffect(() => {
     if (isLoadingSaveButton) {
       if (
-        !shouldHideCaptcha && Config.CAPTCHA_KEY && recaptchaRef.curren && !isDebugPhoneNumber()
+        !shouldHideCaptcha && Config.CAPTCHA_KEY && recaptchaRef.current && !isDebugPhoneNumber()
       ) {
         recaptchaRef.current.open();
       } else {
