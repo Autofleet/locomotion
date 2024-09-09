@@ -44,7 +44,7 @@ const Phone = ({ navigation }) => {
   };
   useEffect(() => {
     fetchHideCaptchaSetting();
-  }, []);
+  }, [user?.phoneNumber]);
 
 
   const onVerifyCaptcha = async (verifiedCaptchaToken) => {
@@ -94,7 +94,9 @@ const Phone = ({ navigation }) => {
   };
   useEffect(() => {
     if (isLoadingSaveButton) {
-      if (!shouldHideCaptcha && Config.CAPTCHA_KEY && recaptchaRef.current) {
+      if (
+        !shouldHideCaptcha && Config.CAPTCHA_KEY && recaptchaRef.curren && !isDebugPhoneNumber()
+      ) {
         recaptchaRef.current.open();
       } else {
         Mixpanel.setEvent('Submit phone number, without captcha , (Config.CAPTCHA_KEY is not defined)');
