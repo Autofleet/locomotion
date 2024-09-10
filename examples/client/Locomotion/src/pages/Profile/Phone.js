@@ -1,6 +1,6 @@
 import React, {
   useCallback,
-  useContext, useEffect, useMemo, useRef, useState,
+  useContext, useEffect, useRef, useState,
 } from 'react';
 import { useIsFocused } from '@react-navigation/native';
 import Config from 'react-native-config';
