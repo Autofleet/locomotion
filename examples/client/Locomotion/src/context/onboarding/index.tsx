@@ -25,7 +25,7 @@ export const OnboardingContext = createContext<OnboardingContextInterface>({
   navigateBasedOnUser: user => undefined,
   requiredOnboarding: {},
   nextScreen: (currentScreen: string) => undefined,
-  fetchHideCaptchaSetting: () => undefined,
+  fetchHideCaptchaSetting: async () => undefined,
   shouldHideCaptcha: false,
 });
 
@@ -73,7 +73,6 @@ const OnboardingContextProvider = ({ children }: { children: any }) => {
       SETTINGS_KEYS.DISABLE_CAPTCHA_UI,
       true,
     );
-    console.log('hideCaptchaSetting', hideCaptchaSetting);
 
     setShouldHideCaptcha(hideCaptchaSetting);
   };

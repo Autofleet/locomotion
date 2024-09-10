@@ -24,9 +24,9 @@ const useSettings = () => {
   const [showPrice, setShowPrice] = useState(false);
 
 
-  const getSettingByKey = async (key, fetchSettingAgain = false) => {
+  const getSettingByKey = async (key, invalidateCache = false) => {
     let value = await StorageService.get(key);
-    if (value === undefined || fetchSettingAgain) {
+    if (value === undefined || invalidateCache) {
       ({ value } = await settingsApi.getByKey(key));
       await StorageService.save({
         [key]: value,

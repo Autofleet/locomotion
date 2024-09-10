@@ -55,9 +55,9 @@ const DevSettingPage = () => {
       />
       <NavButton
         testID="saveButton"
-        onPress={() => {
-          AppSettings.setSettings({ serverUrl, operationId, stripeKey });
-          fetchHideCaptchaSetting();
+        onPress={async () => {
+          await AppSettings.setSettings({ serverUrl, operationId, stripeKey });
+          await fetchHideCaptchaSetting();
           navigationService.goBack();
         }}
       >
