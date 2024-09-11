@@ -62,6 +62,8 @@ target 'Locomotion' do
   pod 'nanopb', :modular_headers => true
 
   post_install do |installer|
+    puts 'Patching `Flipper` to compile with rn71'
+    %x(patch Pods/Flipper/xplat/Flipper/FlipperTransportTypes.h -N < patches/Flipper.patch)
     react_native_post_install(
       installer,
       # Set `mac_catalyst_enabled` to `true` in order to apply patches
