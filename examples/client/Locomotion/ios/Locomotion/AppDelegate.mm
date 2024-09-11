@@ -2,7 +2,6 @@
 
 #import <React/RCTBundleURLProvider.h>
 #import <Firebase.h>
-#import <GoogleMaps/GoogleMaps.h>
 
 @implementation AppDelegate
 
