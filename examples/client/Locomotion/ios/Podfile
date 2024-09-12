@@ -80,8 +80,8 @@ target 'Locomotion' do
             config.build_settings['CODE_SIGNING_ALLOWED'] = 'NO'
         end
       end
-      puts 'Updating React-Codegen to have the min SWIFT_VERSION & ios deployment target'
       if target.to_s === 'React-Codegen'
+        puts 'Updating React-Codegen to have the min SWIFT_VERSION & ios deployment target'
         target.build_configurations.each do |config|
           config.build_settings['SWIFT_VERSION'] = '5.0'
           config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '12.4'

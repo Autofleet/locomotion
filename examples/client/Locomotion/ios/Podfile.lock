@@ -508,8 +508,8 @@ PODS:
     - RCTTypeSafety
     - React-Core
     - ReactCommon/turbomodule/core
-  - react-native-version-check (3.4.3):
-    - React
+  - react-native-version-check (3.4.7):
+    - React-Core
   - react-native-webview (13.12.0):
     - RCT-Folly (= 2021.07.22.00)
     - React-Core
@@ -1065,7 +1065,7 @@ SPEC CHECKSUMS:
   react-native-onesignal: e1f82b98767a9014d2c46f395b083330cfa29cea
   react-native-restart: 45c8dca02491980f2958595333cbccd6877cb57e
   react-native-safe-area-context: 36cc67648134e89465663b8172336a19eeda493d
-  react-native-version-check: e85c2e21d0955b7cdfd91c0ddacc3edf14b7abd7
+  react-native-version-check: 6cd36aad4e30b8e3216747e3b4ddeb09e0647af8
   react-native-webview: 4c1cf84395dda69560049d7f00bf06d28262fc36
   React-perflogger: e5fc4149e9bbb972b8520277f3b23141faa47a36
   React-RCTActionSheet: 991de88216bf03ab9bb1d213d73c62ecbe64ade7
