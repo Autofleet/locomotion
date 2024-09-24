@@ -1,0 +1,11 @@
+diff --git a/node_modules/react-native-geolocation-service/android/build.gradle b/node_modules/react-native-geolocation-service/android/build.gradle
+index cf167cf..6b359d5 100644
+--- a/node_modules/react-native-geolocation-service/android/build.gradle
++++ b/node_modules/react-native-geolocation-service/android/build.gradle
+@@ -31,5 +31,5 @@ dependencies {
+ 
+   implementation "com.facebook.react:react-native:+"
+   implementation 'androidx.appcompat:appcompat:1.0.2'
+-  implementation "com.google.android.gms:play-services-location:$googlePlayServicesVersion"
++  implementation "com.google.android.gms:play-services-location:21.3.0"
+ }

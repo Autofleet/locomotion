@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import {
   Linking, Platform, UIManager, findNodeHandle, ActionSheetIOS,
 } from 'react-native';
-import Clipboard from '@react-native-community/clipboard';
 import { ScrollView } from 'react-native-gesture-handler';
 import NoTitleCard from '../../Components/NoTitleCard';
 import { MAIN_ROUTES } from '../routes';
