@@ -3,6 +3,8 @@
 .DS_Store
 
 # Xcode
+/ios/Locomotion.xcodeproj/project.xcworkspace/contents.xcworkspacedata
+
 #
 build/
 *.pbxuser
@@ -125,7 +127,9 @@ typings/
 # next.js build output
 .next
 
+# watchman
 watchmanScript.sh
+.watchman-cookie-*
 
 *.tsbuildinfo
 

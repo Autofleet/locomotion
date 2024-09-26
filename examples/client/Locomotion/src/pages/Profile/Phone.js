@@ -21,11 +21,10 @@ import AppSettings from '../../services/app-settings';
 import * as NavigationService from '../../services/navigation';
 import { PageContainer, ContentContainer } from '../styles';
 import Auth from '../../services/auth';
-import SETTINGS_KEYS from '../../context/settings/keys';
 
 
 const Phone = ({ navigation }) => {
-  const { nextScreen } = useContext(OnboardingContext);
+  const { nextScreen, shouldHideCaptcha, fetchHideCaptchaSetting } = useContext(OnboardingContext);
   const { updateState, user, onLogin } = useContext(UserContext);
   const [showErrorText, setShowErrorText] = useState(false);
   const [renderId, setRenderId] = useState(0);
@@ -33,19 +32,10 @@ const Phone = ({ navigation }) => {
   const recaptchaRef = useRef(null);
   const [captchaToken, setCaptchaToken] = useState(null);
   const [isLoadingSaveButton, setIsLoadingSaveButton] = useState(false);
-  const [shouldHideCaptcha, setShouldHideCaptcha] = useState(false);
-  const { getSettingByKey } = settings.useContainer();
-  const fetchHideCaptchaSetting = async () => {
-    const hideCaptchaSetting = await getSettingByKey(
-      SETTINGS_KEYS.DISABLE_CAPTCHA_UI,
-    );
-    Mixpanel.setEvent('Fetched hide captcha setting', { hideCaptchaSetting });
-    setShouldHideCaptcha(hideCaptchaSetting);
-  };
+
   useEffect(() => {
     fetchHideCaptchaSetting();
   }, []);
-
 
   const onVerifyCaptcha = async (verifiedCaptchaToken) => {
     Mixpanel.setEvent('Captcha Verified successfully', { verifiedCaptchaToken });
@@ -94,7 +84,9 @@ const Phone = ({ navigation }) => {
   };
   useEffect(() => {
     if (isLoadingSaveButton) {
-      if (!shouldHideCaptcha && Config.CAPTCHA_KEY && recaptchaRef.current) {
+      if (
+        !shouldHideCaptcha && Config.CAPTCHA_KEY && recaptchaRef.current && !isDebugPhoneNumber()
+      ) {
         recaptchaRef.current.open();
       } else {
         Mixpanel.setEvent('Submit phone number, without captcha , (Config.CAPTCHA_KEY is not defined)');

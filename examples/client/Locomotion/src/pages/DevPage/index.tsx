@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { ScrollView } from 'react-native-gesture-handler';
 import Config from 'react-native-config';
+import { OnboardingContext } from '../../context/onboarding';
 import TextInput from '../../Components/TextInput';
 import { NavButton, ButtonText } from '../Profile/SaveButton/styles';
 import AppSettings from '../../services/app-settings';
@@ -15,6 +16,7 @@ const DevSettingPage = () => {
   const [operationId, setOperationId] = useState(Config.OPERATION_ID);
   const [serverUrl, setServerUrl] = useState(Config.SERVER_HOST);
   const [stripeKey, setStripeKey] = useState(Config.STRIPE_PUBLISHER_KEY);
+  const { fetchHideCaptchaSetting } = useContext(OnboardingContext);
   return (
     <PageContainer>
       <PageHeader
@@ -53,8 +55,9 @@ const DevSettingPage = () => {
       />
       <NavButton
         testID="saveButton"
-        onPress={() => {
-          AppSettings.setSettings({ serverUrl, operationId, stripeKey });
+        onPress={async () => {
+          await AppSettings.setSettings({ serverUrl, operationId, stripeKey });
+          await fetchHideCaptchaSetting();
           navigationService.goBack();
         }}
       >

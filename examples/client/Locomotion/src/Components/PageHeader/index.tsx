@@ -55,7 +55,7 @@ PageHeader.defaultProps = {
   icon: backArrow,
   iconSide: 'left',
   onIconPress: () => null,
-  width: '25px',
+  width: 25,
   displayIcon: true,
   showSkipButton: false,
   onPressSkip: null,

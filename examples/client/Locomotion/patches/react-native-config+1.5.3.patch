@@ -1,0 +1,12 @@
+--- a/node_modules/react-native-config/react-native-config.podspec
++++ b/node_modules/react-native-config/react-native-config.podspec
+@@ -16,7 +16,8 @@ Pod::Spec.new do |s|
+   s.ios.deployment_target = '9.0'
+   s.tvos.deployment_target = '9.0'
+   s.macos.deployment_target = '10.15'
+-  s.visionos.deployment_target = '1.0'
++  # can delete
++  #s.visionos.deployment_target = '1.0'
+ 
+   s.source       = { git: 'https://github.com/luggit/react-native-config.git', tag: "v#{s.version.to_s}" }
+   s.script_phase = {
