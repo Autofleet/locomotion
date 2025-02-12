@@ -21,6 +21,9 @@ export const LearnMoreButton = styled(Button)`
 
 export const LearnMoreText = styled(Text)`
 margin-right: 10px;
+max-width: 80%;
+flex-shrink: 1;
+flex-wrap: wrap;
 `;
 
 export const ContactUsPageView = styled(SafeView)`
