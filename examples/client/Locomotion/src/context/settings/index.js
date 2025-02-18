@@ -8,6 +8,7 @@ import settingsKeys from './keys';
 const FIVE_MINS_IN_SECONDS = 5 * 60;
 const fieldNameToSettingKeyMap = {
   contactUsUrl: settingsKeys.CONTACT_US_URL,
+  contactUsText: settingsKeys.CONTACT_US_TEXT,
   termsOfUseUrl: settingsKeys.TERMS_OF_USE_URL,
   privacyPolicyUrl: settingsKeys.PRIVACY_POLICY_URL,
   contactEmail: settingsKeys.CONTACT_EMAIL,
