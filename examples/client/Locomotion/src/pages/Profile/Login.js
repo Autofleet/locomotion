@@ -21,6 +21,7 @@ import AppSettings from '../../services/app-settings';
 import * as NavigationService from '../../services/navigation';
 import { PageContainer, ContentContainer } from '../styles';
 import Auth from '../../services/auth';
+import { EmailInput, emailSchema } from '../../Components/EmailInput';
 
 
 const Phone = ({ navigation }) => {
@@ -48,40 +49,67 @@ const Phone = ({ navigation }) => {
     setIsInvalid(!isValid);
     updateState({ phoneNumber });
   };
+
+  const onEmailChange = async (email) => {
+    setShowErrorText(false);
+    try {
+      await emailSchema.validate({ email });
+      setIsInvalid(false);
+    } catch (e) {
+      setIsInvalid(true);
+    }
+    updateState({ email });
+  };
   const isDevSettingOn = () => Config.DEV_SETTINGS && Config.DEV_SETTINGS === 'true';
   const isDebugPhoneNumber = () => user.phoneNumber === Config.DEV_PAGE_PHONE_NUMBER && isDevSettingOn();
 
   const ERROR_RESPONSES = {
     429: () => setShowErrorText(i18n.t('login.tooManyRequestError')),
-    422: () => setShowErrorText(i18n.t('login.invalidPhoneNumberError')),
+    422: inputType => setShowErrorText(inputType === 'phone' ? i18n.t('login.invalidPhoneNumberError') : i18n.t('login.invalidEmailError')),
     403: () => setShowErrorText(i18n.t('login.clientIsBanned', { appName: Config.OPERATION_NAME })),
   };
 
-  const submitPhoneNumber = async () => {
+  const commonLoginFlow = async (inputType) => {
     try {
-      if (isDebugPhoneNumber()) {
-        NavigationService.navigate(MAIN_ROUTES.DEV_SETTINGS_PAGE);
-        setIsLoadingSaveButton(false);
-        return;
-      }
-      if (!isDevSettingOn()) {
-        await AppSettings.destroy();
-      }
       await Auth.updateCaptchaToken(captchaToken);
-      await onLogin(user.phoneNumber);
-      updateState({ phoneNumber: user.phoneNumber });
-      nextScreen(MAIN_ROUTES.PHONE);
+      await onLogin(inputType === 'phone' ? 'sms' : 'email');
+      updateState({ phoneNumber: user.phoneNumber, email: user.email });
+      nextScreen(MAIN_ROUTES.LOGIN);
       setIsLoadingSaveButton(false);
     } catch (e) {
       setIsLoadingSaveButton(false);
       console.log('Bad login with response', e);
       const status = e && e.response && e.response.status;
       if (ERROR_RESPONSES[status]) {
-        return ERROR_RESPONSES[status]();
+        return ERROR_RESPONSES[status](inputType);
       }
-      setShowErrorText(i18n.t('login.invalidPhoneNumberError'));
+      setShowErrorText(i18n.t(`login.${inputType === 'phone' ? 'invalidPhoneNumberError' : 'invalidEmailError'}`));
     }
   };
+  const submitPhoneNumber = async () => {
+    if (isDebugPhoneNumber()) {
+      NavigationService.navigate(MAIN_ROUTES.DEV_SETTINGS_PAGE);
+      setIsLoadingSaveButton(false);
+      return;
+    }
+    await commonLoginFlow('phone');
+  };
+
+  const submitEmail = async () => {
+    await commonLoginFlow('email');
+  };
+
+  const submit = async () => {
+    if (!isDevSettingOn()) {
+      await AppSettings.destroy();
+    }
+    if (user.phoneNumber && user.phoneNumber.length > 0) {
+      await submitPhoneNumber();
+    } else if (user.email && user.email.length > 0) {
+      await submitEmail();
+    }
+  };
+
   useEffect(() => {
     if (isLoadingSaveButton) {
       if (
@@ -90,7 +118,7 @@ const Phone = ({ navigation }) => {
         recaptchaRef.current.open();
       } else {
         Mixpanel.setEvent('Submit phone number, without captcha , (Config.CAPTCHA_KEY is not defined)');
-        submitPhoneNumber();
+        submit();
       }
     }
   }, [isLoadingSaveButton]);
@@ -99,7 +127,7 @@ const Phone = ({ navigation }) => {
   useEffect(() => {
     if (captchaToken) {
       Mixpanel.setEvent('Submit phone number, after captcha');
-      submitPhoneNumber();
+      submit();
     }
   }, [captchaToken]);
 
@@ -123,19 +151,25 @@ const Phone = ({ navigation }) => {
     <PageContainer>
       <ScrollView keyboardShouldPersistTaps="handled">
         <Header
-          title={i18n.t('onboarding.pages.phone.title')}
-          page={MAIN_ROUTES.PHONE}
+          // title={i18n.t('onboarding.pages.phone.title')}
+          page={MAIN_ROUTES.LOGIN}
         />
         <ContentContainer>
           <ScreenText
-            text={i18n.t('onboarding.pages.phone.text')}
-            subText={i18n.t('onboarding.pages.phone.subText')}
+            text={i18n.t('onboarding.pages.login.text')}
+            subText={i18n.t('onboarding.pages.login.subText')}
+          />
+          <EmailInput
+            disabled={user.phoneNumber && user.phoneNumber.length > 0}
+            onChange={onEmailChange}
+            email={user.email}
+            error={showErrorText}
           />
           <PhoneNumberInput
+            disabled={user.email && user.email.length > 0}
             key={renderId}
             value={user.phoneNumber}
             onPhoneNumberChange={onPhoneNumberChange}
-            autoFocus
             error={showErrorText}
           />
           {showErrorText && <ErrorText>{showErrorText}</ErrorText>}
@@ -164,7 +198,7 @@ const Phone = ({ navigation }) => {
                   Mixpanel.setEvent('Captcha error', e);
                   setIsLoadingSaveButton(false);
                   // try without captcha on api key issues
-                  submitPhoneNumber();
+                  submit();
                 }}
                 style={{ backgroundColor: 'transparent' }}
 

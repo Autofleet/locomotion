@@ -1,6 +1,6 @@
 import React from 'react';
 import StartScreen from './AuthScreens/StartScreen';
-import Phone from './Profile/Phone';
+import Login from './Profile/Login';
 import Code from './Profile/Code';
 import EmailCode from './Profile/EmailCode';
 import Name from './Profile/Name';
@@ -37,7 +37,7 @@ export const ROUTES_COMPS = {
   [MAIN_ROUTES.CONTACT_US]: ContactUs,
   [MAIN_ROUTES.WEBVIEW]: WebViewPage,
   [MAIN_ROUTES.START]: StartScreen,
-  [MAIN_ROUTES.PHONE]: Phone,
+  [MAIN_ROUTES.LOGIN]: Login,
   [MAIN_ROUTES.CODE]: Code,
   [MAIN_ROUTES.EMAIL_CODE]: EmailCode,
   [MAIN_ROUTES.NAME]: Name,
@@ -62,7 +62,7 @@ export const profileStack = ({ stack: Stack }) => (
   <>
     <Stack.Screen name={MAIN_ROUTES.WELCOME} component={ROUTES_COMPS[MAIN_ROUTES.WELCOME]} />
     <Stack.Screen name={MAIN_ROUTES.LOCK} component={ROUTES_COMPS[MAIN_ROUTES.LOCK]} />
-    <Stack.Screen name={MAIN_ROUTES.PHONE} component={ROUTES_COMPS[MAIN_ROUTES.PHONE]} />
+    <Stack.Screen name={MAIN_ROUTES.LOGIN} component={ROUTES_COMPS[MAIN_ROUTES.LOGIN]} />
     <Stack.Screen name={MAIN_ROUTES.CODE} component={ROUTES_COMPS[MAIN_ROUTES.CODE]} />
     <Stack.Screen name={MAIN_ROUTES.EMAIL_CODE} component={ROUTES_COMPS[MAIN_ROUTES.EMAIL_CODE]} />
     <Stack.Screen name={MAIN_ROUTES.NAME} component={ROUTES_COMPS[MAIN_ROUTES.NAME]} />

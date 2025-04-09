@@ -31,7 +31,7 @@ export const OnboardingContext = createContext<OnboardingContextInterface>({
 
 const SCREEN_ORDER = [
   MAIN_ROUTES.START,
-  MAIN_ROUTES.PHONE,
+  MAIN_ROUTES.LOGIN,
   MAIN_ROUTES.CODE,
   MAIN_ROUTES.NAME,
   MAIN_ROUTES.EMAIL,
@@ -59,7 +59,7 @@ const OnboardingContextProvider = ({ children }: { children: any }) => {
     loadCustomer,
   } = payments.useContainer();
   const [requiredOnboarding, setRequiredOnboarding] = useState({
-    [MAIN_ROUTES.PHONE]: true,
+    [MAIN_ROUTES.LOGIN]: true,
     [MAIN_ROUTES.CODE]: true,
     [MAIN_ROUTES.NAME]: true,
     [MAIN_ROUTES.EMAIL]: true,

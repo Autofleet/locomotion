@@ -1,11 +1,9 @@
 import React, { useContext, useEffect, useState } from 'react';
-import * as yup from 'yup';
 import { useIsFocused, useRoute } from '@react-navigation/native';
-import TextInput from '../../Components/TextInput';
 import SaveButton from './SaveButton';
 import { OnboardingContext } from '../../context/onboarding';
 import {
-  ErrorText, SafeView, InputContainer,
+  ErrorText,
 } from './styles';
 import i18n from '../../I18n';
 import Header from './Header';
@@ -14,6 +12,7 @@ import { MAIN_ROUTES } from '../routes';
 import { UserContext } from '../../context/user';
 import { PageContainer, ContentContainer } from '../styles';
 import * as navigationService from '../../services/navigation';
+import { EmailInput, emailSchema } from '../../Components/EmailInput';
 
 const Email = () => {
   const route = useRoute();
@@ -54,11 +53,6 @@ const Email = () => {
     }
   };
 
-  const emailSchema = yup.object().shape({
-    // eslint-disable-next-line no-useless-escape
-    email: yup.string().required().email().matches(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/),
-  });
-
   const onChange = async (value) => {
     setErrorText(false);
     setEmail(value);
@@ -86,18 +80,11 @@ const Email = () => {
           text={i18n.t('onboarding.pages.email.text')}
           subText={i18n.t('onboarding.pages.email.subText')}
         />
-        <InputContainer>
-          <TextInput
-            testID="email"
-            autoFocus
-            placeholder={i18n.t('onboarding.pages.email.placeholder')}
-            onChangeText={onChange}
-            value={email}
-            autoCapitalize="none"
-            autoCorrect={false}
-            fullBorder
-          />
-        </InputContainer>
+        <EmailInput
+          onChange={onChange}
+          email={email}
+          autoFocus
+        />
         {errorText && <ErrorText>{errorText}</ErrorText>}
         <SaveButton
           isInvalid={!user.email}

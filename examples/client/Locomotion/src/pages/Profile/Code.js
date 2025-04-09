@@ -75,7 +75,7 @@ const Code = () => {
 
   const onLoginInternal = async (channel) => {
     try {
-      await onLogin(user.phoneNumber, channel);
+      await onLogin(channel);
     } catch (e) {
       console.log('Bad login with response', e);
       const status = e && e.response && e.response.status;
@@ -86,7 +86,7 @@ const Code = () => {
   };
 
   const onResendPress = async () => {
-    await onLoginInternal();
+    await onLoginInternal('call');
     setResendCounter(currentValue => currentValue + 1);
     setTimer(RESEND_SECONDS);
   };

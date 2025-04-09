@@ -91,6 +91,7 @@
         "submitVertButton": "Verify",
         "phoneNumberError": "Oops! Seems like something went wrong.",
         "invalidPhoneNumberError": "Phone number is not valid.",
+        "invalidEmailError": "Email address is not valid.",
         "tooManyRequestError": "There have been too many recent attempts to contact this number. Please try again later.",
         "vertError": "Sorry, seems like the verification code is incorrect. Please make sure you've typed it correctly.",
         "resendButton": "Start over",
@@ -100,11 +101,12 @@
     },
     "onboarding": {
         "pages": {
-            "phone": {
-                "title": "Phone Number",
-                "text": "Enter mobile phone number",
-                "subText": "We'll send a verification code to this number.",
-                "placeholder": "(000) 123 - 4567"
+            "login": {
+                "title": "Login",
+                "text": "Welcome",
+                "subText": "Please log in",
+                "phonePlaceholder": "(000) 123 - 4567",
+                "emailPlaceholder": "Enter email"
             },
             "code": {
                 "title": "Verification",

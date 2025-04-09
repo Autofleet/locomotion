@@ -16,6 +16,7 @@ const PhoneNumberInput = ({
   autoFocus,
   error,
   value,
+  disabled,
 }: any) => {
   const [isFocused, setIsFocused] = useState(false);
   const [defaultCode, setDefaultCode] = useState<SupportIsoCode | null>(null);
@@ -64,7 +65,7 @@ const PhoneNumberInput = ({
 
   return defaultCode ? (
     <PhoneInput
-      key={defaultCode}
+      key={`${defaultCode}-${disabled}`}
       value={cleanNumber(value)}
       autoFocus={autoFocus}
       defaultCode={defaultCode}
@@ -81,12 +82,13 @@ const PhoneNumberInput = ({
       containerStyle={{
         width: '100%',
       }}
-      placeholder={i18n.t('onboarding.pages.phone.placeholder')}
+      placeholder={i18n.t('onboarding.pages.login.phonePlaceholder')}
       textContainerStyle={{
         borderRadius: 8,
         backgroundColor: '#f1f2f6',
         borderWidth: isFocused ? 0.5 : 0,
         borderColor: error ? ERROR_COLOR : '#333333',
+        opacity: disabled ? 0.5 : 1,
       }}
       textInputStyle={{
         color: error ? ERROR_COLOR : '#333333',
@@ -95,7 +97,9 @@ const PhoneNumberInput = ({
         backgroundColor: '#f1f2f6',
         borderRadius: 8,
         marginRight: 4,
+        opacity: disabled ? 0.5 : 1,
       }}
+      disabled={disabled}
     />
   ) : null;
 };

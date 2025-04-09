@@ -28,7 +28,7 @@ const StartScreen = () => {
   const [webViewWindow, setWebViewWindow] = useState(null);
   const nextScreen = () => {
     setUser(INITIAL_USER_STATE);
-    navigationService.navigate(MAIN_ROUTES.PHONE);
+    navigationService.navigate(MAIN_ROUTES.LOGIN);
   };
 
   const openTerms = async () => {

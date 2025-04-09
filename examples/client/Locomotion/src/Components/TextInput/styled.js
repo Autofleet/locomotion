@@ -23,6 +23,7 @@ ${isFocused && `
 
 export const Input = styled.TextInput.attrs(props => ({
   placeholderTextColor: props.theme.disabledColor,
+  editable: !props.disabled,
 }))`
     width: 100%;
     padding: 0px 8px;
@@ -31,6 +32,7 @@ export const Input = styled.TextInput.attrs(props => ({
     ${({ fullBorder, isFocused }) => (fullBorder ? fullBorderStyles(isFocused) : bottomBorderStyles)}
     border-color: ${({ error }) => (error ? ERROR_COLOR : '#333333')};
     color: ${({ error }) => (error ? ERROR_COLOR : '#333333')};
+    opacity: ${({ disabled }) => (disabled ? 0.5 : 1)};
 `;
 
 export const BottomSheetInput = styled(BottomSheetTextInput)`

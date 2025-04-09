@@ -30,6 +30,7 @@ export interface User {
   didCompleteOnboarding?: boolean;
 }
 
+type Channel = 'email' | 'sms' | 'call'
 interface UserContextInterface {
   setUser: (user: User | null) => void,
   user: User | null,
@@ -51,7 +52,7 @@ interface UserContextInterface {
   getCoupon: () => Promise<any>,
   createCoupon: (values: any) => Promise<any>,
   setCoupon: (coupon: any | null) => void,
-  onLogin: (phoneNumber: string, channel: string) => Promise<void>
+  onLogin: (channel: Channel) => Promise<void>
 }
 
 export const UserContext = createContext<UserContextInterface>({
@@ -75,7 +76,7 @@ export const UserContext = createContext<UserContextInterface>({
   getCoupon: async () => undefined,
   setCoupon: (coupon: any | null) => null,
   createCoupon: async (values: any) => undefined,
-  onLogin: async (phoneNumber: string, channel: string) => undefined,
+  onLogin: async (channel: string) => undefined,
 });
 
 const UserContextProvider = ({ children }: { children: any }) => {
@@ -186,12 +187,12 @@ const UserContextProvider = ({ children }: { children: any }) => {
     }
   };
 
-  const onLogin = async (phoneNumber: string, channel = 'sms') => {
+  const onLogin = async (channel: Channel) => {
     const demandSourceId = await AppSettings.getOperationId();
     const allowedDemandSourceIds = getAllowedDemandSourceIds();
+    const input = user?.phoneNumber ? { phoneNumber: user.phoneNumber, channel } : { email: user?.email };
     const response = await loginApi({
-      phoneNumber,
-      channel,
+      ...input,
       demandSourceId,
       allowedDemandSourceIds,
     });
@@ -206,8 +207,9 @@ const UserContextProvider = ({ children }: { children: any }) => {
   const onVert = async (code: string) => {
     const demandSourceId = await AppSettings.getOperationId();
     try {
+      const input = user?.phoneNumber ? { phoneNumber: user?.phoneNumber } : { email: user?.email };
       const vertResponse = await loginVert({
-        phoneNumber: user?.phoneNumber,
+        ...input,
         code,
         demandSourceId,
       });

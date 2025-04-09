@@ -15,6 +15,7 @@ export const MAIN_ROUTES = {
   WEBVIEW: 'webview',
   START: 'Start',
   PHONE: 'Phone',
+  LOGIN: 'login',
   CODE: 'Code',
   EMAIL_CODE: 'EmailCode',
   NAME: 'Name',
