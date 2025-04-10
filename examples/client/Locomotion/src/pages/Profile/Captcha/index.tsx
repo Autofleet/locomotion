@@ -34,9 +34,8 @@ const Captcha: React.FC<CaptchaProps> = ({
       onVerified();
     } catch (error) {
       console.error('Captcha verification failed:', error);
-      if (onError) {
-        onError();
-      }
+      onError?.();
+      Mixpanel.setEvent('Captcha verification error');
     }
   }, [onVerified, onError]);
 
