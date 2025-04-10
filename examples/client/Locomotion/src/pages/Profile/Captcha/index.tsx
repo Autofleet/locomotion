@@ -3,10 +3,10 @@ import React, {
 } from 'react';
 import Config from 'react-native-config';
 import Recaptcha, { RecaptchaHandles } from 'react-native-recaptcha-that-works';
-import { UserContext } from '../../context/user';
-import Mixpanel from '../../services/Mixpanel';
-import Auth from '../../services/auth';
-import { OnboardingContext } from '../../context/onboarding';
+import { UserContext } from '../../../context/user';
+import Mixpanel from '../../../services/Mixpanel';
+import Auth from '../../../services/auth';
+import { OnboardingContext } from '../../../context/onboarding';
 
 interface CaptchaProps {
   onVerified: () => void;
