@@ -15,12 +15,14 @@ interface CaptchaProps {
   isOpen: boolean;
 }
 
-const Captcha: React.FC<CaptchaProps> = ({
+const GOOGLE_RECAPTCHA_URL = 'https://www.google.com/recaptcha/api/siteverify';
+
+const Captcha = ({
   onVerified,
   onClose,
   onError,
   isOpen,
-}) => {
+}: CaptchaProps) => {
   const { shouldHideCaptcha, fetchHideCaptchaSetting } = useContext(OnboardingContext);
   const { user } = useContext(UserContext);
   const recaptchaRef = useRef<RecaptchaHandles | null>(null);
@@ -72,7 +74,7 @@ const Captcha: React.FC<CaptchaProps> = ({
     <Recaptcha
       ref={recaptchaRef}
       siteKey={Config.CAPTCHA_KEY}
-      baseUrl="https://www.google.com/recaptcha/api/siteverify"
+      baseUrl={GOOGLE_RECAPTCHA_URL}
       onVerify={onVerifyCaptcha}
       size="invisible"
       hideBadge={!Config.SHOW_CAPTCHA_ICON}
