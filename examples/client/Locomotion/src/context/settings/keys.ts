@@ -5,6 +5,7 @@ export default {
   ENFORCE_PROFILE_PICTURE: 'riderApp.enforceProfilePicture',
   MIN_APP_VERSION: 'riderApp.minAppVersion',
   CONTACT_US_URL: 'riderApp.contactUsUrl',
+  CONTACT_US_TEXT: 'riderApp.contactUsText',
   TERMS_OF_USE_URL: 'riderApp.termsOfUseUrl',
   PRIVACY_POLICY_URL: 'riderApp.privacyPolicyUrl',
   CONTACT_EMAIL: 'riderApp.contactEmail',

@@ -34,6 +34,7 @@ export default ({ menuSide }) => {
     termsUrl: null,
     privacyUrl: null,
     contactUsUrl: null,
+    contactUsText: null,
     contactEmail: null,
     contactPhone: null,
   });
@@ -159,7 +160,7 @@ export default ({ menuSide }) => {
                     {settings.contactUsUrl ? (
                       <NoTitleCard onPress={() => openContactUs()}>
                         <LearnMoreButton onPress={() => openContactUs()}>
-                          <LearnMoreText>{i18n.t('contactUs.learnMore')}</LearnMoreText>
+                          <LearnMoreText>{settings.contactUsText || i18n.t('contactUs.learnMore')}</LearnMoreText>
                           <LearnMoreIcon Svg={arrowBack} fill="#24aaf2" />
                         </LearnMoreButton>
                       </NoTitleCard>
