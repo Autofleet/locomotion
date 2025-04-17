@@ -130,15 +130,25 @@ export const latLngToAddress = async (lat: string, lng: string) => {
 
 export const isPriceEstimated = (priceCalculationBasis: string) => priceCalculationBasis === 'actual';
 
-export const formatEstimationsResult = (service: any, estimationResult: any, tags: any) => {
+export const formatEstimationsResult = (
+  service: any,
+  estimationResult: any,
+  tags: any,
+  isFutureRide: boolean,
+) => {
   const estimation = estimationResult || {};
+
+  const eta = estimation.minPickupEta;
+  const isHighEtaAsapRide = !!estimation.highEtaAsapRide;
+  const priceCalculationId = estimation.priceCalculationId
+    || estimation.highEtaAsapRide?.priceCalculationId;
+
   return {
     id: service.id,
-    priceCalculationId:
-      estimation.priceCalculationId || estimation.highEtaAsapRide?.priceCalculationId,
+    priceCalculationId,
     estimationId: estimation.id,
     name: service.displayName,
-    eta: estimation.minPickupEta,
+    eta,
     price: estimation.priceAmount || estimation.highEtaAsapRide?.priceAmount,
     currency: estimation.currency || estimation.highEtaAsapRide?.currency,
     isPriceEstimated: isPriceEstimated(
@@ -149,14 +159,14 @@ export const formatEstimationsResult = (service: any, estimationResult: any, tag
     iconUrl: service.icon,
     description: service.displayDescription,
     priority: service.priority,
-    serviceAvailabilitiesNumber: service.serviceAvailabilities.length,
     outOfTerritory: service.serviceTerritories?.some((st: any) => st.alwaysShow),
     pooling: service.pooling,
     pickupWindowSizeInMinutes: service.pickupWindowSizeInMinutes,
     futurePickupWindowSizeInMinutes: service.futurePickupWindowSizeInMinutesWithFallback,
-    isHighEtaAsapRide: !!estimation.highEtaAsapRide,
+    isHighEtaAsapRide,
     allowRideOrderIfNoVehiclesMatched: service.allowRideOrderIfNoVehiclesMatched,
     allowedPaymentMethods: service.clientAllowedPaymentMethods || [],
+    unavailable: !((isFutureRide && priceCalculationId) || eta || isHighEtaAsapRide),
   };
 };
 
