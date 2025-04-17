@@ -38,8 +38,7 @@ const ServiceCard = ({
   const { getBusinessAccountById } = PaymentContext.useContainer();
   const [popup, setPopup] = useState(null);
   const isFutureRide = ride.scheduledTo;
-  const unavailable = !((ride.scheduledTo && service.priceCalculationId)
-   || (service.eta || service.isHighEtaAsapRide));
+  const { unavailable } = service;
   const isSelected = chosenService && chosenService.id === service.id;
   const sharedTagContainerStyles = {
     borderWidth: 1,
