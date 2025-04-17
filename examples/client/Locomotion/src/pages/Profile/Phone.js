@@ -1,12 +1,6 @@
-import React, {
-  useCallback,
-  useContext, useEffect, useRef, useState,
-} from 'react';
-import { useIsFocused } from '@react-navigation/native';
+import React, { useContext, useState } from 'react';
 import Config from 'react-native-config';
 import { ScrollView } from 'react-native';
-import Recaptcha from 'react-native-recaptcha-that-works';
-import settings from '../../context/settings';
 import Mixpanel from '../../services/Mixpanel';
 import i18n from '../../I18n';
 import SaveButton from './SaveButton';
@@ -20,28 +14,16 @@ import { UserContext } from '../../context/user';
 import AppSettings from '../../services/app-settings';
 import * as NavigationService from '../../services/navigation';
 import { PageContainer, ContentContainer } from '../styles';
-import Auth from '../../services/auth';
+import Captcha from './Captcha';
 
 
 const Phone = ({ navigation }) => {
-  const { nextScreen, shouldHideCaptcha, fetchHideCaptchaSetting } = useContext(OnboardingContext);
+  const { nextScreen } = useContext(OnboardingContext);
   const { updateState, user, onLogin } = useContext(UserContext);
   const [showErrorText, setShowErrorText] = useState(false);
   const [renderId, setRenderId] = useState(0);
   const [isInvalid, setIsInvalid] = useState(true);
-  const recaptchaRef = useRef(null);
-  const [captchaToken, setCaptchaToken] = useState(null);
   const [isLoadingSaveButton, setIsLoadingSaveButton] = useState(false);
-
-  useEffect(() => {
-    fetchHideCaptchaSetting();
-  }, []);
-
-  const onVerifyCaptcha = async (verifiedCaptchaToken) => {
-    Mixpanel.setEvent('Captcha Verified successfully', { verifiedCaptchaToken });
-    setCaptchaToken(verifiedCaptchaToken);
-  };
-
 
   const onPhoneNumberChange = (phoneNumber, isValid) => {
     setShowErrorText(false);
@@ -67,7 +49,6 @@ const Phone = ({ navigation }) => {
       if (!isDevSettingOn()) {
         await AppSettings.destroy();
       }
-      await Auth.updateCaptchaToken(captchaToken);
       await onLogin(user.phoneNumber);
       updateState({ phoneNumber: user.phoneNumber });
       nextScreen(MAIN_ROUTES.PHONE);
@@ -82,27 +63,20 @@ const Phone = ({ navigation }) => {
       setShowErrorText(i18n.t('login.invalidPhoneNumberError'));
     }
   };
-  useEffect(() => {
-    if (isLoadingSaveButton) {
-      if (
-        !shouldHideCaptcha && Config.CAPTCHA_KEY && recaptchaRef.current && !isDebugPhoneNumber()
-      ) {
-        recaptchaRef.current.open();
-      } else {
-        Mixpanel.setEvent('Submit phone number, without captcha , (Config.CAPTCHA_KEY is not defined)');
-        submitPhoneNumber();
-      }
-    }
-  }, [isLoadingSaveButton]);
 
+  const handleCaptchaVerified = () => {
+    Mixpanel.setEvent('Submit phone number, after captcha');
+    submitPhoneNumber();
+  };
 
-  useEffect(() => {
-    if (captchaToken) {
-      Mixpanel.setEvent('Submit phone number, after captcha');
-      submitPhoneNumber();
-    }
-  }, [captchaToken]);
+  const handleCaptchaError = () => {
+    setIsLoadingSaveButton(false);
+    submitPhoneNumber();
+  };
 
+  const handleCaptchaClosed = () => {
+    setIsLoadingSaveButton(false);
+  };
 
   // Force render the component when the focus changes
   useState(() => {
@@ -146,31 +120,12 @@ const Phone = ({ navigation }) => {
             onFail={() => setShowErrorText(i18n.t('login.invalidPhoneNumberError'))
               }
           />
-          { Config.CAPTCHA_KEY
-              && (
-              <Recaptcha
-                ref={recaptchaRef}
-                siteKey={Config.CAPTCHA_KEY}
-                baseUrl="https://www.google.com/recaptcha/api/siteverify"
-                onVerify={onVerifyCaptcha}
-                size="invisible"
-                hideBadge={!Config.SHOW_CAPTCHA_ICON}
-                onClose={() => {
-                  setIsLoadingSaveButton(false);
-                  Mixpanel.setEvent('Captcha closed', { captchaToken });
-                }
-                }
-                onError={(e) => {
-                  Mixpanel.setEvent('Captcha error', e);
-                  setIsLoadingSaveButton(false);
-                  // try without captcha on api key issues
-                  submitPhoneNumber();
-                }}
-                style={{ backgroundColor: 'transparent' }}
-
-              />
-              )
-            }
+          <Captcha
+            isOpen={isLoadingSaveButton}
+            onVerified={handleCaptchaVerified}
+            onError={handleCaptchaError}
+            onClose={handleCaptchaClosed}
+          />
         </ContentContainer>
       </ScrollView>
     </PageContainer>
