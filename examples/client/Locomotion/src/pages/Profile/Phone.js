@@ -151,7 +151,7 @@ const Phone = ({ navigation }) => {
               && (
               <Recaptcha
                 ref={recaptchaRef}
-                siteKey={ SETTINGS_KEYS.DISABLE_CAPTCHA || Config.CAPTCHA_KEY}
+                siteKey={SETTINGS_KEYS.DISABLE_CAPTCHA || Config.CAPTCHA_KEY}
                 baseUrl="https://www.google.com/recaptcha/api/siteverify"
                 onVerify={onVerifyCaptcha}
                 size="invisible"
