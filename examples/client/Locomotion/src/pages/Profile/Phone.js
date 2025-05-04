@@ -21,6 +21,7 @@ import AppSettings from '../../services/app-settings';
 import * as NavigationService from '../../services/navigation';
 import { PageContainer, ContentContainer } from '../styles';
 import Auth from '../../services/auth';
+import SETTINGS_KEYS from '../settings/keys';
 
 
 const Phone = ({ navigation }) => {
@@ -85,7 +86,7 @@ const Phone = ({ navigation }) => {
   useEffect(() => {
     if (isLoadingSaveButton) {
       if (
-        !shouldHideCaptcha && Config.CAPTCHA_KEY && recaptchaRef.current && !isDebugPhoneNumber()
+        !shouldHideCaptcha && !SETTINGS_KEYS.DISABLE_CAPTCHA && Config.CAPTCHA_KEY && recaptchaRef.current && !isDebugPhoneNumber()
       ) {
         recaptchaRef.current.open();
       } else {
@@ -150,7 +151,7 @@ const Phone = ({ navigation }) => {
               && (
               <Recaptcha
                 ref={recaptchaRef}
-                siteKey={Config.CAPTCHA_KEY}
+                siteKey={ SETTINGS_KEYS.DISABLE_CAPTCHA || Config.CAPTCHA_KEY}
                 baseUrl="https://www.google.com/recaptcha/api/siteverify"
                 onVerify={onVerifyCaptcha}
                 size="invisible"
