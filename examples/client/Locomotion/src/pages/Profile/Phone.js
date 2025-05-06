@@ -120,6 +120,7 @@ const Phone = ({ navigation }) => {
     };
   }, []);
 
+  const captchaSiteKey = SETTINGS_KEYS.DISABLE_CAPTCHA || Config.CAPTCHA_KEY;
   return (
     <PageContainer>
       <ScrollView keyboardShouldPersistTaps="handled">
@@ -147,11 +148,11 @@ const Phone = ({ navigation }) => {
             onFail={() => setShowErrorText(i18n.t('login.invalidPhoneNumberError'))
               }
           />
-          { Config.CAPTCHA_KEY
+          { !SETTINGS_KEYS.DISABLE_CAPTCHA && Config.CAPTCHA_KEY
               && (
               <Recaptcha
                 ref={recaptchaRef}
-                siteKey={SETTINGS_KEYS.DISABLE_CAPTCHA || Config.CAPTCHA_KEY}
+                siteKey={siteKey}
                 baseUrl="https://www.google.com/recaptcha/api/siteverify"
                 onVerify={onVerifyCaptcha}
                 size="invisible"
