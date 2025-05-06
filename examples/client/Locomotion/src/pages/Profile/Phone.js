@@ -152,7 +152,7 @@ const Phone = ({ navigation }) => {
               && (
               <Recaptcha
                 ref={recaptchaRef}
-                siteKey={siteKey}
+                siteKey={captchaSiteKey}
                 baseUrl="https://www.google.com/recaptcha/api/siteverify"
                 onVerify={onVerifyCaptcha}
                 size="invisible"
