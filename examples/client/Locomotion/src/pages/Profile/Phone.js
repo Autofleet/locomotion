@@ -30,6 +30,7 @@ const Phone = ({ navigation }) => {
     shouldHideCaptcha,
     shouldDisableCaptcha,
     fetchHideCaptchaSetting,
+    fetchDisableCaptchaSetting,
   } = useContext(OnboardingContext);
   const { updateState, user, onLogin } = useContext(UserContext);
   const [showErrorText, setShowErrorText] = useState(false);
@@ -41,6 +42,7 @@ const Phone = ({ navigation }) => {
 
   useEffect(() => {
     fetchHideCaptchaSetting();
+    fetchDisableCaptchaSetting();
   }, []);
 
   const onVerifyCaptcha = async (verifiedCaptchaToken) => {
