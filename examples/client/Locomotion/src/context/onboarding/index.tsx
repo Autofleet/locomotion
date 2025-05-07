@@ -18,6 +18,7 @@ interface OnboardingContextInterface {
   nextScreen: (currentScreen: string) => void,
   fetchHideCaptchaSetting: () => void,
   shouldHideCaptcha?: boolean,
+  shouldDisableCaptcha?: boolean,
 }
 
 export const OnboardingContext = createContext<OnboardingContextInterface>({
@@ -27,6 +28,7 @@ export const OnboardingContext = createContext<OnboardingContextInterface>({
   nextScreen: (currentScreen: string) => undefined,
   fetchHideCaptchaSetting: async () => undefined,
   shouldHideCaptcha: false,
+  shouldDisableCaptcha: false,
 });
 
 const SCREEN_ORDER = [
@@ -68,6 +70,7 @@ const OnboardingContextProvider = ({ children }: { children: any }) => {
     [MAIN_ROUTES.CARD]: false,
   });
   const [shouldHideCaptcha, setShouldHideCaptcha] = useState(false);
+  const [shouldDisableCaptcha, setShouldDisableCaptcha] = useState(false);
   const fetchHideCaptchaSetting = async () => {
     const hideCaptchaSetting = await getSettingByKey(
       SETTINGS_KEYS.DISABLE_CAPTCHA_UI,
@@ -75,6 +78,14 @@ const OnboardingContextProvider = ({ children }: { children: any }) => {
     );
 
     setShouldHideCaptcha(hideCaptchaSetting);
+  };
+  const fetchDisableCaptchaSetting = async () => {
+    const disableCaptchaSetting = await getSettingByKey(
+      SETTINGS_KEYS.DISABLE_CAPTCHA,
+      true,
+    );
+
+    setShouldDisableCaptcha(disableCaptchaSetting);
   };
   const navigateToScreen = (screen: string) => navigationService.navigate(screen);
 
@@ -169,6 +180,7 @@ const OnboardingContextProvider = ({ children }: { children: any }) => {
         nextScreen,
         fetchHideCaptchaSetting,
         shouldHideCaptcha,
+        shouldDisableCaptcha,
       }}
     >
       {children}

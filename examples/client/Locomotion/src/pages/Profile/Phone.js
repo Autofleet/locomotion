@@ -25,7 +25,7 @@ import SETTINGS_KEYS from '../../context/settings/keys';
 
 
 const Phone = ({ navigation }) => {
-  const { nextScreen, shouldHideCaptcha, fetchHideCaptchaSetting } = useContext(OnboardingContext);
+  const { nextScreen, shouldHideCaptcha, shouldDisableCaptcha, fetchHideCaptchaSetting } = useContext(OnboardingContext);
   const { updateState, user, onLogin } = useContext(UserContext);
   const [showErrorText, setShowErrorText] = useState(false);
   const [renderId, setRenderId] = useState(0);
@@ -83,10 +83,11 @@ const Phone = ({ navigation }) => {
       setShowErrorText(i18n.t('login.invalidPhoneNumberError'));
     }
   };
+
   useEffect(() => {
     if (isLoadingSaveButton) {
       if (
-        !shouldHideCaptcha && !SETTINGS_KEYS.DISABLE_CAPTCHA && Config.CAPTCHA_KEY && recaptchaRef.current && !isDebugPhoneNumber()
+        !shouldHideCaptcha && !shouldDisableCaptcha && Config.CAPTCHA_KEY && recaptchaRef.current && !isDebugPhoneNumber()
       ) {
         recaptchaRef.current.open();
       } else {
@@ -120,7 +121,7 @@ const Phone = ({ navigation }) => {
     };
   }, []);
 
-  const captchaSiteKey = SETTINGS_KEYS.DISABLE_CAPTCHA || Config.CAPTCHA_KEY;
+  const captchaSiteKey = shouldDisableCaptcha || Config.CAPTCHA_KEY;
   return (
     <PageContainer>
       <ScrollView keyboardShouldPersistTaps="handled">
@@ -148,7 +149,7 @@ const Phone = ({ navigation }) => {
             onFail={() => setShowErrorText(i18n.t('login.invalidPhoneNumberError'))
               }
           />
-          { !SETTINGS_KEYS.DISABLE_CAPTCHA && Config.CAPTCHA_KEY
+          { !shouldDisableCaptcha && Config.CAPTCHA_KEY
               && (
               <Recaptcha
                 ref={recaptchaRef}
