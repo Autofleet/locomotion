@@ -25,7 +25,12 @@ import SETTINGS_KEYS from '../../context/settings/keys';
 
 
 const Phone = ({ navigation }) => {
-  const { nextScreen, shouldHideCaptcha, shouldDisableCaptcha, fetchHideCaptchaSetting } = useContext(OnboardingContext);
+  const {
+    nextScreen,
+    shouldHideCaptcha,
+    shouldDisableCaptcha,
+    fetchHideCaptchaSetting,
+  } = useContext(OnboardingContext);
   const { updateState, user, onLogin } = useContext(UserContext);
   const [showErrorText, setShowErrorText] = useState(false);
   const [renderId, setRenderId] = useState(0);
