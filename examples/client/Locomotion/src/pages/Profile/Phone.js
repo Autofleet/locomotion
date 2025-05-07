@@ -128,7 +128,35 @@ const Phone = ({ navigation }) => {
     };
   }, []);
 
-  const captchaSiteKey = shouldDisableCaptcha || Config.CAPTCHA_KEY;
+  function renderRecaptcha(...props) {
+    console.log('shouldDisableCaptcha', shouldDisableCaptcha);
+    return (
+      (!shouldDisableCaptcha && Config.CAPTCHA_KEY)
+      && (
+        <Recaptcha
+          ref={recaptchaRef}
+          siteKey={Config.CAPTCHA_KEY}
+          baseUrl="https://www.google.com/recaptcha/api/siteverify"
+          onVerify={onVerifyCaptcha}
+          size="invisible"
+          hideBadge={!Config.SHOW_CAPTCHA_ICON}
+          onClose={() => {
+            setIsLoadingSaveButton(false);
+            Mixpanel.setEvent('Captcha closed', { captchaToken });
+          }
+          }
+          onError={(e) => {
+            Mixpanel.setEvent('Captcha error', e);
+            setIsLoadingSaveButton(false);
+            // try without captcha on api key issues
+            submitPhoneNumber();
+          }}
+          style={{ backgroundColor: 'transparent' }}
+
+        />
+      )
+    );
+  }
   return (
     <PageContainer>
       <ScrollView keyboardShouldPersistTaps="handled">
@@ -154,33 +182,11 @@ const Phone = ({ navigation }) => {
             isInvalid={isInvalid}
             onNext={() => setIsLoadingSaveButton(true)}
             onFail={() => setShowErrorText(i18n.t('login.invalidPhoneNumberError'))
-              }
-          />
-          { !shouldDisableCaptcha && Config.CAPTCHA_KEY
-              && (
-              <Recaptcha
-                ref={recaptchaRef}
-                siteKey={captchaSiteKey}
-                baseUrl="https://www.google.com/recaptcha/api/siteverify"
-                onVerify={onVerifyCaptcha}
-                size="invisible"
-                hideBadge={!Config.SHOW_CAPTCHA_ICON}
-                onClose={() => {
-                  setIsLoadingSaveButton(false);
-                  Mixpanel.setEvent('Captcha closed', { captchaToken });
-                }
-                }
-                onError={(e) => {
-                  Mixpanel.setEvent('Captcha error', e);
-                  setIsLoadingSaveButton(false);
-                  // try without captcha on api key issues
-                  submitPhoneNumber();
-                }}
-                style={{ backgroundColor: 'transparent' }}
-
-              />
-              )
             }
+          />
+          {
+            renderRecaptcha()
+          }
         </ContentContainer>
       </ScrollView>
     </PageContainer>
