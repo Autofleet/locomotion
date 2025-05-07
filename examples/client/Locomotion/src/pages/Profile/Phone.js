@@ -39,12 +39,15 @@ const Phone = ({ navigation }) => {
   const recaptchaRef = useRef(null);
   const [captchaToken, setCaptchaToken] = useState(null);
   const [isLoadingSaveButton, setIsLoadingSaveButton] = useState(false);
+  const [isCaptchaDisable, setIsCaptchaDisable] = useState(shouldDisableCaptcha);
 
   useEffect(() => {
     fetchHideCaptchaSetting();
     fetchDisableCaptchaSetting();
   }, []);
-
+  useEffect(() => {
+    setIsCaptchaDisable(shouldDisableCaptcha);
+  }, [shouldDisableCaptcha]);
   const onVerifyCaptcha = async (verifiedCaptchaToken) => {
     Mixpanel.setEvent('Captcha Verified successfully', { verifiedCaptchaToken });
     setCaptchaToken(verifiedCaptchaToken);
@@ -94,7 +97,7 @@ const Phone = ({ navigation }) => {
   useEffect(() => {
     if (isLoadingSaveButton) {
       if (
-        !shouldHideCaptcha && !shouldDisableCaptcha && Config.CAPTCHA_KEY && recaptchaRef.current && !isDebugPhoneNumber()
+        !shouldHideCaptcha && !isCaptchaDisable && Config.CAPTCHA_KEY && recaptchaRef.current && !isDebugPhoneNumber()
       ) {
         recaptchaRef.current.open();
       } else {
@@ -130,8 +133,11 @@ const Phone = ({ navigation }) => {
 
   function renderRecaptcha(...props) {
     console.log('shouldDisableCaptcha', shouldDisableCaptcha);
+    if (isCaptchaDisable) {
+      return null;
+    }
     return (
-      (!shouldDisableCaptcha && Config.CAPTCHA_KEY)
+      Config.CAPTCHA_KEY
       && (
         <Recaptcha
           ref={recaptchaRef}
