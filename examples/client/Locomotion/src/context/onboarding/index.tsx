@@ -17,6 +17,7 @@ interface OnboardingContextInterface {
   requiredOnboarding: any,
   nextScreen: (currentScreen: string) => void,
   fetchHideCaptchaSetting: () => void,
+  fetchDisableCaptchaSetting: () => void,
   shouldHideCaptcha?: boolean,
   shouldDisableCaptcha?: boolean,
 }
@@ -27,6 +28,7 @@ export const OnboardingContext = createContext<OnboardingContextInterface>({
   requiredOnboarding: {},
   nextScreen: (currentScreen: string) => undefined,
   fetchHideCaptchaSetting: async () => undefined,
+  fetchDisableCaptchaSetting: async () => undefined,
   shouldHideCaptcha: false,
   shouldDisableCaptcha: false,
 });
@@ -179,6 +181,7 @@ const OnboardingContextProvider = ({ children }: { children: any }) => {
         requiredOnboarding,
         nextScreen,
         fetchHideCaptchaSetting,
+        fetchDisableCaptchaSetting,
         shouldHideCaptcha,
         shouldDisableCaptcha,
       }}
