@@ -21,10 +21,17 @@ import AppSettings from '../../services/app-settings';
 import * as NavigationService from '../../services/navigation';
 import { PageContainer, ContentContainer } from '../styles';
 import Auth from '../../services/auth';
+import SETTINGS_KEYS from '../../context/settings/keys';
 
 
 const Phone = ({ navigation }) => {
-  const { nextScreen, shouldHideCaptcha, fetchHideCaptchaSetting } = useContext(OnboardingContext);
+  const {
+    nextScreen,
+    shouldHideCaptcha,
+    shouldDisableCaptcha,
+    fetchHideCaptchaSetting,
+    fetchDisableCaptchaSetting,
+  } = useContext(OnboardingContext);
   const { updateState, user, onLogin } = useContext(UserContext);
   const [showErrorText, setShowErrorText] = useState(false);
   const [renderId, setRenderId] = useState(0);
@@ -32,11 +39,15 @@ const Phone = ({ navigation }) => {
   const recaptchaRef = useRef(null);
   const [captchaToken, setCaptchaToken] = useState(null);
   const [isLoadingSaveButton, setIsLoadingSaveButton] = useState(false);
+  const [isCaptchaDisable, setIsCaptchaDisable] = useState(shouldDisableCaptcha);
 
   useEffect(() => {
     fetchHideCaptchaSetting();
+    fetchDisableCaptchaSetting();
   }, []);
-
+  useEffect(() => {
+    setIsCaptchaDisable(shouldDisableCaptcha);
+  }, [shouldDisableCaptcha]);
   const onVerifyCaptcha = async (verifiedCaptchaToken) => {
     Mixpanel.setEvent('Captcha Verified successfully', { verifiedCaptchaToken });
     setCaptchaToken(verifiedCaptchaToken);
@@ -82,10 +93,11 @@ const Phone = ({ navigation }) => {
       setShowErrorText(i18n.t('login.invalidPhoneNumberError'));
     }
   };
+
   useEffect(() => {
     if (isLoadingSaveButton) {
       if (
-        !shouldHideCaptcha && Config.CAPTCHA_KEY && recaptchaRef.current && !isDebugPhoneNumber()
+        !shouldHideCaptcha && !isCaptchaDisable && Config.CAPTCHA_KEY && recaptchaRef.current && !isDebugPhoneNumber()
       ) {
         recaptchaRef.current.open();
       } else {
@@ -119,6 +131,38 @@ const Phone = ({ navigation }) => {
     };
   }, []);
 
+  function renderRecaptcha(...props) {
+    console.log('shouldDisableCaptcha', shouldDisableCaptcha);
+    if (isCaptchaDisable) {
+      return <div />;
+    }
+    return (
+      Config.CAPTCHA_KEY
+      && (
+        <Recaptcha
+          ref={recaptchaRef}
+          siteKey={Config.CAPTCHA_KEY}
+          baseUrl="https://www.google.com/recaptcha/api/siteverify"
+          onVerify={onVerifyCaptcha}
+          size="invisible"
+          hideBadge={!Config.SHOW_CAPTCHA_ICON}
+          onClose={() => {
+            setIsLoadingSaveButton(false);
+            Mixpanel.setEvent('Captcha closed', { captchaToken });
+          }
+          }
+          onError={(e) => {
+            Mixpanel.setEvent('Captcha error', e);
+            setIsLoadingSaveButton(false);
+            // try without captcha on api key issues
+            submitPhoneNumber();
+          }}
+          style={{ backgroundColor: 'transparent' }}
+
+        />
+      )
+    );
+  }
   return (
     <PageContainer>
       <ScrollView keyboardShouldPersistTaps="handled">
@@ -144,33 +188,11 @@ const Phone = ({ navigation }) => {
             isInvalid={isInvalid}
             onNext={() => setIsLoadingSaveButton(true)}
             onFail={() => setShowErrorText(i18n.t('login.invalidPhoneNumberError'))
-              }
-          />
-          { Config.CAPTCHA_KEY
-              && (
-              <Recaptcha
-                ref={recaptchaRef}
-                siteKey={Config.CAPTCHA_KEY}
-                baseUrl="https://www.google.com/recaptcha/api/siteverify"
-                onVerify={onVerifyCaptcha}
-                size="invisible"
-                hideBadge={!Config.SHOW_CAPTCHA_ICON}
-                onClose={() => {
-                  setIsLoadingSaveButton(false);
-                  Mixpanel.setEvent('Captcha closed', { captchaToken });
-                }
-                }
-                onError={(e) => {
-                  Mixpanel.setEvent('Captcha error', e);
-                  setIsLoadingSaveButton(false);
-                  // try without captcha on api key issues
-                  submitPhoneNumber();
-                }}
-                style={{ backgroundColor: 'transparent' }}
-
-              />
-              )
             }
+          />
+          {
+            renderRecaptcha()
+          }
         </ContentContainer>
       </ScrollView>
     </PageContainer>

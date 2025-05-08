@@ -17,6 +17,7 @@ export default {
   MEASURE_SYSTEM: 'riderApp.measureSystem',
   MULTI_SP: 'riderApp.showMultiStopPoint',
   DISABLE_CAPTCHA_UI: 'riderApp.disableCaptchaUi',
+  DISABLE_CAPTCHA: 'riderApp.disableCaptcha',
   MAX_DAYS_FOR_FUTURE_RIDE: 'riderApp.daysForFutureRideBooking',
   OFFLINE_PAYMENT_TEXT: 'riderApp.offlinePaymentText',
   HIDE_PRICE: 'riderApp.hidePrice',
