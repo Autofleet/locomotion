@@ -134,7 +134,7 @@ const Phone = ({ navigation }) => {
   function renderRecaptcha(...props) {
     console.log('shouldDisableCaptcha', shouldDisableCaptcha);
     if (isCaptchaDisable) {
-      return null;
+      return <div />;
     }
     return (
       Config.CAPTCHA_KEY
