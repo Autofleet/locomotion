@@ -1,6 +1,6 @@
 /* eslint-disable class-methods-use-this */
 import { Platform } from 'react-native';
-import OneSignal from 'react-native-onesignal';
+import { OneSignal } from 'react-native-onesignal';
 import Config from 'react-native-config';
 import network from './network';
 import { updateUser } from '../context/user/api';
