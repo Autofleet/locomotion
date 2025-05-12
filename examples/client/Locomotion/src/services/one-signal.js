@@ -39,7 +39,7 @@ class NotificationsService {
     }
   };
 
-  init = async (notificationsHandlers) => {
+  init = async () => {
     // Initialize OneSignal
     OneSignal.initialize(Config.ONESIGNAL_APP_ID);
 
