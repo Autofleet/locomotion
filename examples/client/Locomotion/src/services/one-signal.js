@@ -1,6 +1,6 @@
 /* eslint-disable class-methods-use-this */
 import { Platform } from 'react-native';
-import OneSignal from 'react-native-onesignal'; // Import package from node modules
+import OneSignal from 'react-native-onesignal';
 import Config from 'react-native-config';
 import network from './network';
 import { updateUser } from '../context/user/api';
@@ -28,58 +28,85 @@ class NotificationsService {
   };
 
   checkLatestDeviceState = async () => {
-    const state = await OneSignal.getDeviceState();
-    Mixpanel.setEvent('Notification Service: Check App State', state || undefined);
-    if (state) {
-      const { pushToken, userId, isSubscribed } = state;
-      if (pushToken && userId && isSubscribed) {
-        await this.updateServer(pushToken, userId, isSubscribed);
-      }
+    const isSubscribed = await OneSignal.User.pushSubscription.getIsSubscribed();
+    const pushToken = await OneSignal.User.pushSubscription.getPushSubscriptionId();
+    const userId = await OneSignal.User.getExternalId();
+
+    Mixpanel.setEvent('Notification Service: Check App State', { isSubscribed, pushToken, userId });
+
+    if (pushToken && userId && isSubscribed) {
+      await this.updateServer(pushToken, userId, isSubscribed);
     }
   };
 
   init = async (notificationsHandlers) => {
-    OneSignal.setAppId(Config.ONESIGNAL_APP_ID);
-    OneSignal.setNotificationOpenedHandler(this.onOpened);
-    OneSignal.disablePush(false);
+    // Initialize OneSignal
+    OneSignal.initialize(Config.ONESIGNAL_APP_ID);
 
-    if (Platform.OS === 'ios') {
-      OneSignal.promptForPushNotificationsWithUserResponse((response) => {
-        if (response) {
-          return Mixpanel.setEvent('iOS User approved push');
-        }
-        Mixpanel.setEvent('iOS User didn\'t approved push');
-        return null;
-      });
-    }
-    OneSignal.addSubscriptionObserver(this.subscriptionObserverHandler);
-    OneSignal.addPermissionObserver(this.checkLatestDeviceState);
-    OneSignal.setNotificationWillShowInForegroundHandler((notificationReceivedEvent) => {
-      const notification = notificationReceivedEvent.getNotification();
+    // Enable push notifications
+    OneSignal.User.pushSubscription.optIn();
+
+    // Set notification opened handler
+    OneSignal.Notifications.addEventListener('click', this.onOpened);
+
+    // Set foreground notification handler
+    OneSignal.Notifications.addEventListener('foregroundWillDisplay', (notificationReceivedEvent) => {
+      const { notification } = notificationReceivedEvent;
       const { additionalData } = notification;
-      if (additionalData && additionalData.type && this.foregroundNotificationsHandlers[additionalData.type]) {
+
+      if (additionalData
+        && additionalData.type && this.foregroundNotificationsHandlers[additionalData.type]) {
         this.foregroundNotificationsHandlers[additionalData.type](additionalData);
       }
-      notificationReceivedEvent.complete(notification);
+
+      // Display the notification
+      notificationReceivedEvent.preventDefault();
+      notificationReceivedEvent.display();
     });
+
+    // Handle push subscription changes
+    OneSignal.User.pushSubscription.addEventListener('change', this.subscriptionObserverHandler);
+
+    // iOS-specific prompt for permissions
+    if (Platform.OS === 'ios') {
+      const permission = await OneSignal.Notifications.requestPermission(true);
+      if (permission) {
+        Mixpanel.setEvent('iOS User approved push');
+      } else {
+        Mixpanel.setEvent('iOS User didn\'t approved push');
+      }
+    }
+
     await this.checkLatestDeviceState();
   };
 
   getDeviceState = async () => {
-    const deviceState = await OneSignal.getDeviceState();
-    return deviceState;
+    const isSubscribed = await OneSignal.User.pushSubscription.getIsSubscribed();
+    const pushToken = await OneSignal.User.pushSubscription.getPushSubscriptionId();
+    const userId = await OneSignal.User.getExternalId();
+
+    return {
+      isSubscribed,
+      pushToken,
+      userId,
+    };
   };
 
-  subscriptionObserverHandler = async (data) => {
-    const { to } = data;
-    const { pushToken, userId, isSubscribed } = to;
+  subscriptionObserverHandler = async (event) => {
+    const { current } = event;
+    const { isSubscribed } = current;
+    const pushToken = current.id; // This is the push token/subscription ID
+    const userId = await OneSignal.User.getExternalId();
+
     if (pushToken && userId) {
       await this.updateServer(pushToken, userId, isSubscribed);
     }
   };
 
   onOpened = (openResult) => {
-    const { additionalData } = openResult.notification;
+    const { notification } = openResult;
+    const { additionalData } = notification;
+
     if (additionalData && additionalData.type) {
       const method = this.notificationsHandlers[additionalData.type];
       if (method) {
@@ -104,7 +131,10 @@ class NotificationsService {
     console.log(response.data);
   };
 
-  getOneSignalId = () => new Promise(resolve => OneSignal.getPermissionSubscriptionState(({ userId }) => resolve(userId)));
+  getOneSignalId = async () => {
+    const userId = await OneSignal.User.getExternalId();
+    return userId;
+  };
 
   addNotificationHandler(type, handler) {
     this.notificationsHandlers[type] = handler;
@@ -112,6 +142,14 @@ class NotificationsService {
 
   addForegroundNotificationHandler(type, handler) {
     this.foregroundNotificationsHandlers[type] = handler;
+  }
+
+  setExternalUserId(userId) {
+    if (userId) {
+      OneSignal.login(userId);
+    } else {
+      OneSignal.logout();
+    }
   }
 }
 

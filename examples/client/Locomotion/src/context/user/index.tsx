@@ -125,15 +125,17 @@ const UserContextProvider = ({ children }: { children: any }) => {
       return null;
     }
 
+    const { isSubscribed, pushToken, userId } = deviceState;
+
     if (
-      user?.pushTokenId !== deviceState.pushToken
-      || user?.pushUserId !== deviceState.userId
-      || user?.isPushEnabled !== deviceState.isSubscribed
+      user?.pushTokenId !== pushToken
+      || user?.pushUserId !== userId
+      || user?.isPushEnabled !== isSubscribed
     ) {
       await updateUserInfo({
-        pushTokenId: deviceState.pushToken,
-        isPushEnabled: deviceState.isSubscribed,
-        pushUserId: deviceState.userId,
+        pushTokenId: pushToken,
+        isPushEnabled: isSubscribed,
+        pushUserId: userId,
       });
     }
     return true;

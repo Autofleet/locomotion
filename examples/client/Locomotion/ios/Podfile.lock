@@ -237,16 +237,52 @@ PODS:
     - nanopb/encode (= 2.30910.0)
   - nanopb/decode (2.30910.0)
   - nanopb/encode (2.30910.0)
-  - OneSignalXCFramework (3.11.2):
-    - OneSignalXCFramework/OneSignalCore (= 3.11.2)
-    - OneSignalXCFramework/OneSignalExtension (= 3.11.2)
-    - OneSignalXCFramework/OneSignalOutcomes (= 3.11.2)
-  - OneSignalXCFramework/OneSignalCore (3.11.2)
-  - OneSignalXCFramework/OneSignalExtension (3.11.2):
+  - OneSignalXCFramework (5.2.10):
+    - OneSignalXCFramework/OneSignalComplete (= 5.2.10)
+  - OneSignalXCFramework/OneSignal (5.2.10):
+    - OneSignalXCFramework/OneSignalCore
+    - OneSignalXCFramework/OneSignalExtension
+    - OneSignalXCFramework/OneSignalLiveActivities
+    - OneSignalXCFramework/OneSignalNotifications
+    - OneSignalXCFramework/OneSignalOSCore
+    - OneSignalXCFramework/OneSignalOutcomes
+    - OneSignalXCFramework/OneSignalUser
+  - OneSignalXCFramework/OneSignalComplete (5.2.10):
+    - OneSignalXCFramework/OneSignal
+    - OneSignalXCFramework/OneSignalInAppMessages
+    - OneSignalXCFramework/OneSignalLocation
+  - OneSignalXCFramework/OneSignalCore (5.2.10)
+  - OneSignalXCFramework/OneSignalExtension (5.2.10):
     - OneSignalXCFramework/OneSignalCore
     - OneSignalXCFramework/OneSignalOutcomes
-  - OneSignalXCFramework/OneSignalOutcomes (3.11.2):
+  - OneSignalXCFramework/OneSignalInAppMessages (5.2.10):
     - OneSignalXCFramework/OneSignalCore
+    - OneSignalXCFramework/OneSignalNotifications
+    - OneSignalXCFramework/OneSignalOSCore
+    - OneSignalXCFramework/OneSignalOutcomes
+    - OneSignalXCFramework/OneSignalUser
+  - OneSignalXCFramework/OneSignalLiveActivities (5.2.10):
+    - OneSignalXCFramework/OneSignalCore
+    - OneSignalXCFramework/OneSignalOSCore
+    - OneSignalXCFramework/OneSignalUser
+  - OneSignalXCFramework/OneSignalLocation (5.2.10):
+    - OneSignalXCFramework/OneSignalCore
+    - OneSignalXCFramework/OneSignalNotifications
+    - OneSignalXCFramework/OneSignalOSCore
+    - OneSignalXCFramework/OneSignalUser
+  - OneSignalXCFramework/OneSignalNotifications (5.2.10):
+    - OneSignalXCFramework/OneSignalCore
+    - OneSignalXCFramework/OneSignalExtension
+    - OneSignalXCFramework/OneSignalOutcomes
+  - OneSignalXCFramework/OneSignalOSCore (5.2.10):
+    - OneSignalXCFramework/OneSignalCore
+  - OneSignalXCFramework/OneSignalOutcomes (5.2.10):
+    - OneSignalXCFramework/OneSignalCore
+  - OneSignalXCFramework/OneSignalUser (5.2.10):
+    - OneSignalXCFramework/OneSignalCore
+    - OneSignalXCFramework/OneSignalNotifications
+    - OneSignalXCFramework/OneSignalOSCore
+    - OneSignalXCFramework/OneSignalOutcomes
   - OpenSSL-Universal (1.1.1100)
   - PromisesObjC (2.4.0)
   - PromisesSwift (2.4.0):
@@ -497,8 +533,8 @@ PODS:
     - React-Core
   - react-native-netinfo (11.3.2):
     - React-Core
-  - react-native-onesignal (4.4.1):
-    - OneSignalXCFramework (= 3.11.2)
+  - react-native-onesignal (5.2.11):
+    - OneSignalXCFramework (= 5.2.10)
     - React (< 1.0.0, >= 0.13.0)
   - react-native-restart (0.0.24):
     - React-Core
@@ -996,7 +1032,7 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   AppsFlyerFramework: 971521cf5b890c2afeab2f2c91734547b8b169ca
   boost: 7dcd2de282d72e344012f7d6564d024930a6a440
-  BVLinearGradient: 34a999fda29036898a09c6a6b728b0b4189e1a44
+  BVLinearGradient: 7815a70ab485b7b155186dd0cc836363e0288cad
   CocoaAsyncSocket: 065fd1e645c7abab64f7a6a2007a48038fdc6a99
   DoubleConversion: 5189b271737e1565bdce30deb4a08d647e3f5f54
   FBLazyVector: 61839cba7a48c570b7ac3e1cd8a4d0948382202f
@@ -1028,49 +1064,49 @@ SPEC CHECKSUMS:
   libevent: 4049cae6c81cdb3654a443be001fb9bdceff7913
   libwebp: 1786c9f4ff8a279e4dac1e8f385004d5fc253009
   lottie-ios: 69495122151a378fdc7d1bb4c5930347e37baf1f
-  lottie-react-native: b702fab740cdb952a8e2354713d3beda63ff97b0
+  lottie-react-native: 61e02fe80b8873ae42c45df06b5941d158b46776
   Mixpanel-swift: 7b46c63259dec8398a7df9f8a1298fd00b6b3cb3
-  MixpanelReactNative: 52edfa25071042f12fca18c9854e01b2c917396a
+  MixpanelReactNative: 582ad8a433b8a207fd86bc60be9ff2f0cdf81eef
   nanopb: 438bc412db1928dac798aa6fd75726007be04262
-  OneSignalXCFramework: 81ceac017a290f23793443323090cfbe888f74ea
+  OneSignalXCFramework: 1a3b28dfbff23aabce585796d23c1bef37772774
   OpenSSL-Universal: ebc357f1e6bc71fa463ccb2fe676756aff50e88c
   PromisesObjC: f5707f49cb48b9636751c5b2e7d227e43fba9f47
   PromisesSwift: 9d77319bbe72ebf6d872900551f7eeba9bce2851
-  RCT-Folly: 424b8c9a7a0b9ab2886ffe9c3b041ef628fd4fb1
+  RCT-Folly: 8dc08ca5a393b48b1c523ab6220dfdcc0fe000ad
   RCTRequired: dea3e4163184ea57c50288c15c32c1529265c58f
   RCTTypeSafety: a0834ab89159a346731e8aae55ad6e2cce61c327
   React: d877d055ff2137ca0325a4babdef3411e11f3cb7
   React-callinvoker: 77bd2701eee3acac154b11ec219e68d5a1f780ad
-  React-Codegen: bccc516adc1551ccfe04b0de27e345d38829b204
-  React-Core: 4035f59e5bec8f3053583c6108d99c7516deb760
+  React-Codegen: 95d90763dacc199ae1a47d65821a164362334d29
+  React-Core: 420a8c9008f84ade12fa56ce06fcdbb5db258b35
   React-CoreModules: b6a1f76423fea57a03e0d7a2f79d3b55cf193f2c
-  React-cxxreact: fe5f6ec8ae875bebc71309d1e8ef89bb966d61a6
-  React-hermes: 3c8ea5e8f402db2a08b57051206d7f2ba9c75565
-  React-jsi: dbf0f82c93bfd828fa05c50f2ee74dc81f711050
-  React-jsiexecutor: 060dd495f1e2af3d87216f7ca8a94c55ec885b4f
+  React-cxxreact: 7271d0109cd73d9c1d33c7ad8bfead743047ebd2
+  React-hermes: d5739a8c6b54733e34d07f438d6b0395f0a8af1a
+  React-jsi: 1ac1f03405d0a21126561398770a1d47aaa2dfa8
+  React-jsiexecutor: d888f8ebd07a6fab4ef56941c137809c965e35fe
   React-jsinspector: 5061fcbec93fd672183dfb39cc2f65e55a0835db
-  React-logger: a6c0b3a807a8e81f6d7fea2e72660766f55daa50
-  react-native-appsflyer: 2cc1f96348065fc23e976fc7a27e371789fb349e
-  react-native-background-timer: 17ea5e06803401a379ebf1f20505b793ac44d0fe
-  react-native-carrier-info: f94c990c4e27017648738430afc01acf367e102f
-  react-native-config: aa47e487f8850a747bf849bb6a398a0bba93fbbd
-  react-native-date-picker: 93e43b3084cea595b4d68b1405d6d99849663bd6
-  react-native-geolocation: ef66fb798d96284c6043f0b16c15d9d1d4955db4
-  react-native-geolocation-service: 608e1da71a1ac31b4de64d9ef2815f697978c55b
-  react-native-image-picker: 4bc9ed38c8be255b515d8c88babbaf74973f91a8
-  react-native-image-resizer: d9fb629a867335bdc13230ac2a58702bb8c8828f
-  react-native-location: 5a40ec1cc6abf2f6d94df979f98ec76c3a415681
-  react-native-maps: 75681193c8beca45e117bbddd7a10d9625348921
-  react-native-netinfo: 076df4f9b07f6670acf4ce9a75aac8d34c2e2ccc
-  react-native-onesignal: e1f82b98767a9014d2c46f395b083330cfa29cea
-  react-native-restart: 45c8dca02491980f2958595333cbccd6877cb57e
-  react-native-safe-area-context: 36cc67648134e89465663b8172336a19eeda493d
-  react-native-version-check: 6cd36aad4e30b8e3216747e3b4ddeb09e0647af8
-  react-native-webview: 4c1cf84395dda69560049d7f00bf06d28262fc36
+  React-logger: 0fe5ee7372759f919d01cfe69714bba3f086b441
+  react-native-appsflyer: 7f5e98f1ffd5c16a961b5300ac7a4d24d23676da
+  react-native-background-timer: 4638ae3bee00320753647900b21260b10587b6f7
+  react-native-carrier-info: 779179d074310054d1063ac58ae444ce772b21be
+  react-native-config: 53a5e0a87973fb344c02914563a8b6090a986617
+  react-native-date-picker: bbf77c50dce9da2beb11e2f67f3300195ba27d81
+  react-native-geolocation: f0fa51740690633a1adb6222539166b484facefb
+  react-native-geolocation-service: 32b2c2a3b91e70ce2a8d0c684801aaeb0a07e0ec
+  react-native-image-picker: 9d387cdb47196817252ded9d0d7216bbaaa33e3d
+  react-native-image-resizer: 17b2d73c030975b6543395c7e7368bc8774c5efa
+  react-native-location: 70e6bdfe4a98a80ebda57fd5b30994e48d082e99
+  react-native-maps: d67cea75a33320c6ada8031c810306f66d766a62
+  react-native-netinfo: ce102083db558237dac20cf64172ef569ebe2dd9
+  react-native-onesignal: 62ad0dfd1dabd68cc1dcc64746cb89e2ccd2ea70
+  react-native-restart: df7caae89026a8ab2ecdd82839978f657701f51d
+  react-native-safe-area-context: f998d7c030d9c89b0a745f8466f1f988478d822e
+  react-native-version-check: c7b4269cd18781b51009fa4b5a8ad9ab5131ce6f
+  react-native-webview: cb255355decd1e0e4051585ef451079d77aeda06
   React-perflogger: e5fc4149e9bbb972b8520277f3b23141faa47a36
   React-RCTActionSheet: 991de88216bf03ab9bb1d213d73c62ecbe64ade7
   React-RCTAnimation: b74e3d1bf5280891a573e447b487fa1db0713b5b
-  React-RCTAppDelegate: f52667f2dbc510f87b7988c5204e8764d50bf0c1
+  React-RCTAppDelegate: 2530ab5eb8d364f44a0d4b16bf08816a2604e388
   React-RCTBlob: 6762787c01d5d8d18efed03764b0d58d3b79595a
   React-RCTImage: 9ed7eba8dd192a49def2cad2ecaedee7e7e315b4
   React-RCTLinking: 0b58eed9af0645a161b80bf412b6b721e4585c66
@@ -1079,25 +1115,25 @@ SPEC CHECKSUMS:
   React-RCTText: a631564e84a227fe24bae7c04446f36faea7fcf5
   React-RCTVibration: 55c91eccdbd435d7634efbe847086944389475b0
   React-runtimeexecutor: ac80782d9d76ba2b0f709f4de0c427fe33c352dc
-  ReactCommon: 20e38a9be5fe1341b5e422220877cc94034776ba
-  RNCAsyncStorage: 0c357f3156fcb16c8589ede67cc036330b6698ca
-  RNCClipboard: 41d8d918092ae8e676f18adada19104fa3e68495
-  RNCPicker: 0bf8ef8f7800524f32d2bb2a8bcadd53eda0ecd1
-  RNDeviceInfo: b899ce37a403a4dea52b7cb85e16e49c04a5b88e
-  RNExitApp: 00036cabe7bacbb413d276d5520bf74ba39afa6a
-  RNFastImage: 3207b9eb17c2425d574ca40db35185db6e324f4e
-  RNFBApp: 2f83756f4d8be2859af5e2cf54130c20e380119d
-  RNFBCrashlytics: a845824a269968ebb7a4a6cf4772c4977125b5f6
-  RNGestureHandler: d678f94a8f74de70ce3d9f5d23eb0f97b686e943
-  RNLocalize: dbea38dcb344bf80ff18a1757b1becf11f70cae4
-  RNReanimated: f186e85d9f28c9383d05ca39e11dd194f59093ec
-  RNScreens: 50ffe2fa2342eabb2d0afbe19f7c1af286bc7fb3
-  RNSVG: ecd661f380a07ba690c9c5929c475a44f432d674
+  ReactCommon: fec49851b6e2a8ebbe0752cc56224efb87ebbe17
+  RNCAsyncStorage: fdb01edd825ea18d63e6faf50b8989cea24f2dd3
+  RNCClipboard: b0541df1bb88935d40bdc93b41b7d8e3334c998a
+  RNCPicker: a04f825ecc28764441425987e78946032850102d
+  RNDeviceInfo: 900bd20e1fd3bfd894e7384cc4a83880c0341bd3
+  RNExitApp: 4432b9b7cc5ccec9f91c94e507849891282befd4
+  RNFastImage: e300c8ee2f6b5f0ca1c4e82a9b8ddb9e2f6c72bc
+  RNFBApp: cf60163ac94264d7014fbe117e03668f9485524b
+  RNFBCrashlytics: 49e753bd242f4780505832f58a3cb1f8c279d430
+  RNGestureHandler: 5ae428abcc1bf7d89b42ee17a1d5a53e38de7acd
+  RNLocalize: 01b15a24a8f1856eeaeeb77f4179ccd88c117a73
+  RNReanimated: f9f8945aad05d259324869fb79ce30b75c6062da
+  RNScreens: 39db1910d2ea9ae885dcda43086818e9f8b714d0
+  RNSVG: e8aaa6223a056a2f21fa9c1b171eaa10cd7f9556
   SDWebImage: a7f831e1a65eb5e285e3fb046a23fcfbf08e696d
   SDWebImageWebPCoder: 908b83b6adda48effe7667cd2b7f78c897e5111d
   SocketRocket: f32cd54efbe0f095c4d7594881e52619cfe80b17
   Stripe: ff389e265eeffb891b871b62b2fa644e30e69338
-  stripe-react-native: 3a3707beddd814f2ff87823a2fd444a5717eac0e
+  stripe-react-native: f18c30984d5d6f0d87c1e35416c10920e164d1ae
   StripeApplePay: 4413b4f21c0206094df20775aa5e8e063b9c8b5d
   StripeCore: 6318dff8f7e42125c6e8b671ac54a6e82804705a
   StripeFinancialConnections: 3586b42043921d46eadf59bb0dcd2ac17ff109f2
@@ -1110,4 +1146,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: 60efc9f5f49fb780edb55aa41fe1652f3e0a6ef3
 
-COCOAPODS: 1.15.2
+COCOAPODS: 1.16.2
