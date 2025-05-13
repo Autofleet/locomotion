@@ -44,7 +44,6 @@ interface UserContextInterface {
   getUserFromServer: () => Promise<void>,
   locationGranted: boolean | undefined,
   setLocationGranted: Dispatch<SetStateAction<any>>,
-  updatePushToken: () => Promise<boolean | null>,
   deleteUser: () => Promise<boolean>,
   updateUser: (values: any) => Promise<any>,
   coupon: any | null,
@@ -68,7 +67,6 @@ export const UserContext = createContext<UserContextInterface>({
   getUserFromServer: async () => undefined,
   locationGranted: false,
   setLocationGranted: () => undefined,
-  updatePushToken: async () => false,
   deleteUser: async () => true,
   updateUser: async (values: any) => undefined,
   coupon: null,
@@ -118,33 +116,6 @@ const UserContextProvider = ({ children }: { children: any }) => {
     getUserFromStorage();
   }, []);
 
-  const updatePushToken = async () => {
-    const deviceState = await OneSignal.getDeviceState();
-    if (!deviceState) {
-      await updateUserInfo({ pushTokenId: null });
-      return null;
-    }
-
-    const { isSubscribed, pushToken, userId } = deviceState;
-
-    if (
-      user?.pushTokenId !== pushToken
-      || user?.pushUserId !== userId
-      || user?.isPushEnabled !== isSubscribed
-    ) {
-      await updateUserInfo({
-        pushTokenId: pushToken,
-        isPushEnabled: isSubscribed,
-        pushUserId: userId,
-      });
-    }
-    return true;
-  };
-
-  const verifyEmail = async () => {
-    await sendEmailVerification();
-  };
-
   const updateUserInfo = async (values: any, { updateServer = true } = {}) => {
     updateState(values);
     const newUser = updateServer ? await updateUserApi(values) : values;
@@ -152,6 +123,33 @@ const UserContextProvider = ({ children }: { children: any }) => {
       StorageService.save({ [storageKey]: newUser });
     }
   };
+
+  const updatePushToken = async (): Promise<void> => {
+    const pushSettings = await OneSignal.getPushSettings();
+    if (!pushSettings) {
+      await updateUserInfo({ pushTokenId: null });
+      return;
+    }
+
+    const { isPushEnabled, pushTokenId, userId } = pushSettings;
+
+    if (
+      user?.pushTokenId !== pushTokenId
+      || user?.pushUserId !== userId
+      || user?.isPushEnabled !== isPushEnabled
+    ) {
+      await updateUserInfo({
+        pushTokenId,
+        isPushEnabled,
+        pushUserId: userId,
+      });
+    }
+  };
+
+  const verifyEmail = async () => {
+    await sendEmailVerification();
+  };
+
 
   const updateUser = async (values: any): Promise<any> => updateUserApi(values);
 
@@ -240,6 +238,7 @@ const UserContextProvider = ({ children }: { children: any }) => {
   useEffect(() => {
     if (user?.id && user?.didCompleteOnboarding) {
       OneSignal.init();
+      OneSignal.loginUser(user.id);
       updatePushToken();
     }
   }, [user?.id, user?.didCompleteOnboarding]);
@@ -275,7 +274,6 @@ const UserContextProvider = ({ children }: { children: any }) => {
         getUserFromServer,
         locationGranted,
         setLocationGranted,
-        updatePushToken,
         deleteUser,
         updateUser,
         coupon,
