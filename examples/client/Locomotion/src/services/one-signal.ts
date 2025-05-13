@@ -96,12 +96,6 @@ class NotificationsService {
         userId,
       } = pushSettings;
 
-      console.log('#### refreshPushSettings', {
-        isPushEnabled,
-        pushTokenId,
-        userId,
-      });
-
       Mixpanel.setEvent('Notification Service: Check App State', { isSubscribed: isPushEnabled, pushToken: pushTokenId, userId });
 
       if (pushTokenId && userId && isPushEnabled) {
@@ -112,29 +106,40 @@ class NotificationsService {
     }
   };
 
+  handleNotificationClick = (openResult: NotificationClickEvent): void => {
+    const { notification } = openResult;
+    const additionalData = notification.additionalData as NotificationAdditionalData;
+
+    if (additionalData && additionalData.type) {
+      const method = this.notificationsHandlers[additionalData.type];
+      if (method) {
+        method(additionalData);
+      }
+    }
+  };
+
+  handleForegroundNotificationClick = (notificationReceivedEvent: NotificationWillDisplayEvent): void => {
+    const { notification } = notificationReceivedEvent;
+    const additionalData = notification.additionalData as NotificationAdditionalData;
+
+    if (additionalData
+      && additionalData.type && this.foregroundNotificationsHandlers[additionalData.type]) {
+      this.foregroundNotificationsHandlers[additionalData.type](additionalData);
+    }
+
+    notificationReceivedEvent.preventDefault();
+    notificationReceivedEvent.getNotification().display();
+  };
+
   init = async (): Promise<void> => {
     if (!Config.ONESIGNAL_APP_ID) return;
 
-    console.log('#### init OneSignal');
     OneSignal.initialize(Config.ONESIGNAL_APP_ID);
 
     OneSignal.User.pushSubscription.optIn();
 
-    OneSignal.Notifications.addEventListener('click', this.onOpened);
-
-    OneSignal.Notifications.addEventListener('foregroundWillDisplay', (notificationReceivedEvent: NotificationWillDisplayEvent) => {
-      const { notification } = notificationReceivedEvent;
-      const additionalData = notification.additionalData as NotificationAdditionalData;
-
-      if (additionalData
-        && additionalData.type && this.foregroundNotificationsHandlers[additionalData.type]) {
-        this.foregroundNotificationsHandlers[additionalData.type](additionalData);
-      }
-
-      notificationReceivedEvent.preventDefault();
-      notificationReceivedEvent.getNotification().display();
-    });
-
+    OneSignal.Notifications.addEventListener('click', this.handleNotificationClick);
+    OneSignal.Notifications.addEventListener('foregroundWillDisplay', this.handleForegroundNotificationClick);
     OneSignal.User.pushSubscription.addEventListener('change', this.subscriptionObserverHandler);
 
     if (Platform.OS === 'ios') {
@@ -146,7 +151,6 @@ class NotificationsService {
       }
     }
 
-    console.log('#### OneSignal initialized');
     await this.refreshPushSettings();
   };
 
@@ -157,18 +161,6 @@ class NotificationsService {
     const userId = await this.getOneSignalUserId();
     if (userId && pushTokenId) {
       await this.updateServer(pushTokenId, userId, isPushEnabled);
-    }
-  };
-
-  onOpened = (openResult: NotificationClickEvent): void => {
-    const { notification } = openResult;
-    const additionalData = notification.additionalData as NotificationAdditionalData;
-
-    if (additionalData && additionalData.type) {
-      const method = this.notificationsHandlers[additionalData.type];
-      if (method) {
-        method(additionalData);
-      }
     }
   };
 
