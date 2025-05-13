@@ -1,20 +1,52 @@
 /* eslint-disable class-methods-use-this */
 import { Platform } from 'react-native';
-import { OneSignal } from 'react-native-onesignal';
+import {
+  OneSignal,
+  NotificationClickEvent,
+  NotificationWillDisplayEvent,
+  PushSubscriptionChangedState,
+} from 'react-native-onesignal';
 import Config from 'react-native-config';
-import network from './network';
 import { updateUser } from '../context/user/api';
 import { StorageService } from '.';
 import Mixpanel from './Mixpanel';
 
+interface NotificationAdditionalData {
+  type?: string;
+  [key: string]: any;
+}
+
+type NotificationHandler = (data: NotificationAdditionalData) => void;
+type NotificationHandlers = Record<string, NotificationHandler>;
+
+interface PushUserData {
+  pushUserId: string | null;
+  pushTokenId: string | null;
+  isPushEnabled: boolean;
+  deviceType: string;
+}
+
+interface PushSettings {
+  isPushEnabled: boolean;
+  pushTokenId: string | null;
+  userId: string | null;
+}
+
 class NotificationsService {
+  private notificationsHandlers: NotificationHandlers;
+
+  private foregroundNotificationsHandlers: NotificationHandlers;
+
   constructor() {
-    this.network = network;
     this.notificationsHandlers = {};
     this.foregroundNotificationsHandlers = {};
   }
 
-  updateServer = async (pushTokenId, userId, isPushEnabled) => {
+  updateServer = async (
+    pushTokenId: string | null,
+    userId: string | null,
+    isPushEnabled: boolean,
+  ): Promise<void> => {
     const clientProfile = await StorageService.get('clientProfile');
     if (!clientProfile) return;
 
@@ -23,13 +55,14 @@ class NotificationsService {
         pushTokenId,
         pushUserId: userId,
         isPushEnabled,
+        deviceType: Platform.OS,
       });
     }
   };
 
-  getOneSignalUserId = async () => OneSignal.User.getExternalId();
+  getOneSignalUserId = async (): Promise<string | null> => OneSignal.User.getExternalId();
 
-  getPushSettings = async () => {
+  getPushSettings = async (): Promise<PushSettings | null> => {
     try {
       const [
         isPushEnabled,
@@ -52,7 +85,7 @@ class NotificationsService {
     }
   };
 
-  refreshPushSettings = async () => {
+  refreshPushSettings = async (): Promise<void> => {
     try {
       const pushSettings = await this.getPushSettings();
       if (!pushSettings) return;
@@ -79,7 +112,9 @@ class NotificationsService {
     }
   };
 
-  init = async () => {
+  init = async (): Promise<void> => {
+    if (!Config.ONESIGNAL_APP_ID) return;
+
     console.log('#### init OneSignal');
     OneSignal.initialize(Config.ONESIGNAL_APP_ID);
 
@@ -87,9 +122,9 @@ class NotificationsService {
 
     OneSignal.Notifications.addEventListener('click', this.onOpened);
 
-    OneSignal.Notifications.addEventListener('foregroundWillDisplay', (notificationReceivedEvent) => {
+    OneSignal.Notifications.addEventListener('foregroundWillDisplay', (notificationReceivedEvent: NotificationWillDisplayEvent) => {
       const { notification } = notificationReceivedEvent;
-      const { additionalData } = notification;
+      const additionalData = notification.additionalData as NotificationAdditionalData;
 
       if (additionalData
         && additionalData.type && this.foregroundNotificationsHandlers[additionalData.type]) {
@@ -97,7 +132,7 @@ class NotificationsService {
       }
 
       notificationReceivedEvent.preventDefault();
-      notificationReceivedEvent.display();
+      notificationReceivedEvent.getNotification().display();
     });
 
     OneSignal.User.pushSubscription.addEventListener('change', this.subscriptionObserverHandler);
@@ -115,19 +150,19 @@ class NotificationsService {
     await this.refreshPushSettings();
   };
 
-  subscriptionObserverHandler = async (event) => {
+  subscriptionObserverHandler = async (event: PushSubscriptionChangedState): Promise<void> => {
     const { current } = event;
     const { optedIn: isPushEnabled, id: pushTokenId } = current;
 
     const userId = await this.getOneSignalUserId();
-    if (userId) {
+    if (userId && pushTokenId) {
       await this.updateServer(pushTokenId, userId, isPushEnabled);
     }
   };
 
-  onOpened = (openResult) => {
+  onOpened = (openResult: NotificationClickEvent): void => {
     const { notification } = openResult;
-    const { additionalData } = notification;
+    const additionalData = notification.additionalData as NotificationAdditionalData;
 
     if (additionalData && additionalData.type) {
       const method = this.notificationsHandlers[additionalData.type];
@@ -137,31 +172,24 @@ class NotificationsService {
     }
   };
 
-  registerOnServer = async ({ pushUserId, pushTokenId, isPushEnabled }) => {
-    const pushUserData = {
-      pushUserId,
-      pushTokenId,
-      isPushEnabled,
-      deviceType: Platform.OS,
-    };
-
+  registerOnServer = async (pushUserData: PushUserData): Promise<void> => {
     const response = await updateUser(pushUserData);
     console.log(response.data);
   };
 
-  addNotificationHandler(type, handler) {
+  addNotificationHandler(type: string, handler: NotificationHandler): void {
     this.notificationsHandlers[type] = handler;
   }
 
-  addForegroundNotificationHandler(type, handler) {
+  addForegroundNotificationHandler(type: string, handler: NotificationHandler): void {
     this.foregroundNotificationsHandlers[type] = handler;
   }
 
-  loginUser(userId) {
+  loginUser(userId: string): void {
     OneSignal.login(userId);
   }
 
-  logoutUser() {
+  logoutUser(): void {
     OneSignal.logout();
   }
 }
