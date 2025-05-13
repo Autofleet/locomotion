@@ -110,20 +110,18 @@ class NotificationsService {
     const { notification } = openResult;
     const additionalData = notification.additionalData as NotificationAdditionalData;
 
-    if (additionalData && additionalData.type) {
-      const method = this.notificationsHandlers[additionalData.type];
-      if (method) {
-        method(additionalData);
-      }
+    if (additionalData.type && this.notificationsHandlers[additionalData.type]) {
+      this.notificationsHandlers[additionalData.type](additionalData);
     }
   };
 
-  handleForegroundNotificationClick = (notificationReceivedEvent: NotificationWillDisplayEvent): void => {
+  handleForegroundNotificationClick = (
+    notificationReceivedEvent: NotificationWillDisplayEvent,
+  ): void => {
     const { notification } = notificationReceivedEvent;
     const additionalData = notification.additionalData as NotificationAdditionalData;
 
-    if (additionalData
-      && additionalData.type && this.foregroundNotificationsHandlers[additionalData.type]) {
+    if (additionalData.type && this.foregroundNotificationsHandlers[additionalData.type]) {
       this.foregroundNotificationsHandlers[additionalData.type](additionalData);
     }
 
