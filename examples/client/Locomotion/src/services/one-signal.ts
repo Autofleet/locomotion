@@ -28,8 +28,8 @@ interface PushUserData {
 
 interface PushSettings {
   isPushEnabled: boolean;
-  pushTokenId: string | null;
-  userId: string | null;
+  pushToken: string | null;
+  pushSubscriptionId: string | null;
 }
 
 class NotificationsService {
@@ -43,41 +43,42 @@ class NotificationsService {
   }
 
   updateServer = async (
-    pushTokenId: string | null,
-    userId: string | null,
+    pushToken: string | null,
+    pushSubscriptionId: string | null,
     isPushEnabled: boolean,
   ): Promise<void> => {
     const clientProfile = await StorageService.get('clientProfile');
     if (!clientProfile) return;
 
-    if (clientProfile.pushUserId !== userId || clientProfile.pushTokenId !== pushTokenId) {
+    if (
+      clientProfile.pushUserId !== pushSubscriptionId
+       || clientProfile.pushTokenId !== pushToken
+    ) {
       this.registerOnServer({
-        pushTokenId,
-        pushUserId: userId,
+        pushTokenId: pushToken,
+        pushUserId: pushSubscriptionId,
         isPushEnabled,
         deviceType: Platform.OS,
       });
     }
   };
 
-  getOneSignalUserId = async (): Promise<string | null> => OneSignal.User.getExternalId();
-
   getPushSettings = async (): Promise<PushSettings | null> => {
     try {
       const [
         isPushEnabled,
-        pushTokenId,
-        userId,
+        pushToken,
+        pushSubscriptionId,
       ] = await Promise.all([
         OneSignal.User.pushSubscription.getOptedInAsync(),
+        OneSignal.User.pushSubscription.getTokenAsync(),
         OneSignal.User.pushSubscription.getIdAsync(),
-        this.getOneSignalUserId(),
       ]);
 
       return {
         isPushEnabled,
-        pushTokenId,
-        userId,
+        pushToken,
+        pushSubscriptionId,
       };
     } catch (error) {
       console.error('Error getting device state', error);
@@ -92,14 +93,14 @@ class NotificationsService {
 
       const {
         isPushEnabled,
-        pushTokenId,
-        userId,
+        pushToken,
+        pushSubscriptionId,
       } = pushSettings;
 
-      Mixpanel.setEvent('Notification Service: Check App State', { isSubscribed: isPushEnabled, pushToken: pushTokenId, userId });
+      Mixpanel.setEvent('Notification Service: Check App State', { isSubscribed: isPushEnabled, pushToken, userId: pushSubscriptionId });
 
-      if (pushTokenId && userId && isPushEnabled) {
-        await this.updateServer(pushTokenId, userId, isPushEnabled);
+      if (pushToken && pushSubscriptionId && isPushEnabled) {
+        await this.updateServer(pushToken, pushSubscriptionId, isPushEnabled);
       }
     } catch (error) {
       console.error('Error checking latest device state', error);
@@ -148,19 +149,19 @@ class NotificationsService {
         Mixpanel.setEvent('iOS User didn\'t approved push');
       }
     }
-
     await this.refreshPushSettings();
   };
 
+
   subscriptionObserverHandler = async (event: PushSubscriptionChangedState): Promise<void> => {
     const { current } = event;
-    const { optedIn: isPushEnabled, id: pushTokenId } = current;
+    const { optedIn: isPushEnabled, id: pushSubscriptionId, token: pushToken } = current;
 
-    const userId = await this.getOneSignalUserId();
-    if (userId && pushTokenId) {
-      await this.updateServer(pushTokenId, userId, isPushEnabled);
+    if (pushSubscriptionId && pushToken) {
+      await this.updateServer(pushToken, pushSubscriptionId, isPushEnabled);
     }
   };
+
 
   registerOnServer = async (pushUserData: PushUserData): Promise<void> => {
     const response = await updateUser(pushUserData);
