@@ -13,7 +13,7 @@ import {
 import auth from '../../services/auth';
 import Mixpanel from '../../services/Mixpanel';
 import PaymentsContext from '../payments';
-import { PushSettings } from '../../services/one-signal/types';
+import type { PushSettings } from '../../services/one-signal/types';
 
 const storageKey = 'clientProfile';
 

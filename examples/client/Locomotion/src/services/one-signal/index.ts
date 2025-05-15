@@ -18,6 +18,7 @@ import {
   NotificationAdditionalData,
 } from './types';
 
+const IOS = 'ios';
 
 class NotificationsService {
   private notificationsHandlers: NotificationHandlers;
@@ -41,12 +42,12 @@ class NotificationsService {
       clientProfile.pushUserId !== pushSubscriptionId
        || clientProfile.pushTokenId !== pushToken
     ) {
-      this.registerOnServer({
+      await updateUser({
         pushTokenId: pushToken,
         pushUserId: pushSubscriptionId,
         isPushEnabled,
         deviceType: Platform.OS,
-      });
+      } as PushUserData);
     }
   };
 
@@ -132,7 +133,7 @@ class NotificationsService {
     OneSignal.Notifications.addEventListener('foregroundWillDisplay', this.handleForegroundNotificationClick);
     OneSignal.User.pushSubscription.addEventListener('change', this.subscriptionObserverHandler);
 
-    if (Platform.OS === 'ios') {
+    if (Platform.OS === IOS) {
       const permission = await OneSignal.Notifications.requestPermission(true);
       if (permission) {
         Mixpanel.setEvent('iOS User approved push');
@@ -152,12 +153,6 @@ class NotificationsService {
     if (pushSubscriptionId && pushToken) {
       await this.updateServer(pushToken, pushSubscriptionId, isPushEnabled);
     }
-  };
-
-
-  registerOnServer = async (pushUserData: PushUserData): Promise<void> => {
-    const response = await updateUser(pushUserData);
-    console.log(response.data);
   };
 
   addNotificationHandler(type: string, handler: NotificationHandler): void {
