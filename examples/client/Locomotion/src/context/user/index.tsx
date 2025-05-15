@@ -3,6 +3,7 @@ import React, {
 } from 'react';
 import crashlytics from '@react-native-firebase/crashlytics';
 import Config from 'react-native-config';
+import OneSignal from '../../services/one-signal';
 import AppSettings from '../../services/app-settings';
 import { authService, StorageService } from '../../services';
 import {
@@ -12,7 +13,6 @@ import {
 import auth from '../../services/auth';
 import Mixpanel from '../../services/Mixpanel';
 import PaymentsContext from '../payments';
-import OneSignal from '../../services/one-signal';
 
 const storageKey = 'clientProfile';
 
@@ -131,17 +131,17 @@ const UserContextProvider = ({ children }: { children: any }) => {
       return;
     }
 
-    const { isPushEnabled, pushTokenId, userId } = pushSettings;
+    const { isPushEnabled, pushToken, pushSubscriptionId } = pushSettings;
 
     if (
-      user?.pushTokenId !== pushTokenId
-      || user?.pushUserId !== userId
+      user?.pushTokenId !== pushToken
+      || user?.pushUserId !== pushSubscriptionId
       || user?.isPushEnabled !== isPushEnabled
     ) {
       await updateUserInfo({
-        pushTokenId,
+        pushTokenId: pushToken,
         isPushEnabled,
-        pushUserId: userId,
+        pushUserId: pushSubscriptionId,
       });
     }
   };

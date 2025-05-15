@@ -7,9 +7,9 @@ import {
   PushSubscriptionChangedState,
 } from 'react-native-onesignal';
 import Config from 'react-native-config';
-import { updateUser } from '../context/user/api';
-import { StorageService } from '.';
-import Mixpanel from './Mixpanel';
+import { updateUser } from '../../context/user/api';
+import { StorageService } from '..';
+import Mixpanel from '../Mixpanel';
 
 interface NotificationAdditionalData {
   type?: string;
@@ -149,6 +149,7 @@ class NotificationsService {
         Mixpanel.setEvent('iOS User didn\'t approved push');
       }
     }
+
     await this.refreshPushSettings();
   };
 
