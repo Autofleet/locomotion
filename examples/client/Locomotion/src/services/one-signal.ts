@@ -111,7 +111,7 @@ class NotificationsService {
     const { notification } = openResult;
     const additionalData = notification.additionalData as NotificationAdditionalData;
 
-    if (additionalData.type && this.notificationsHandlers[additionalData.type]) {
+    if (additionalData?.type && this.notificationsHandlers[additionalData.type]) {
       this.notificationsHandlers[additionalData.type](additionalData);
     }
   };
@@ -122,7 +122,7 @@ class NotificationsService {
     const { notification } = notificationReceivedEvent;
     const additionalData = notification.additionalData as NotificationAdditionalData;
 
-    if (additionalData.type && this.foregroundNotificationsHandlers[additionalData.type]) {
+    if (additionalData?.type && this.foregroundNotificationsHandlers[additionalData.type]) {
       this.foregroundNotificationsHandlers[additionalData.type](additionalData);
     }
 
