@@ -237,8 +237,7 @@ const UserContextProvider = ({ children }: { children: any }) => {
 
   useEffect(() => {
     if (user?.id && user?.didCompleteOnboarding) {
-      OneSignal.init();
-      OneSignal.loginUser(user.id);
+      OneSignal.init(user.id);
       updatePushToken();
     }
   }, [user?.id, user?.didCompleteOnboarding]);

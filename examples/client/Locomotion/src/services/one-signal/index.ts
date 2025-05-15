@@ -130,10 +130,11 @@ class NotificationsService {
     notificationReceivedEvent.getNotification().display();
   };
 
-  init = async (): Promise<void> => {
+  init = async (userId: string): Promise<void> => {
     if (!Config.ONESIGNAL_APP_ID) return;
 
     OneSignal.initialize(Config.ONESIGNAL_APP_ID);
+    OneSignal.login(userId);
 
     OneSignal.User.pushSubscription.optIn();
 
@@ -175,10 +176,6 @@ class NotificationsService {
 
   addForegroundNotificationHandler(type: string, handler: NotificationHandler): void {
     this.foregroundNotificationsHandlers[type] = handler;
-  }
-
-  loginUser(userId: string): void {
-    OneSignal.login(userId);
   }
 
   logoutUser(): void {
