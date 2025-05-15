@@ -10,27 +10,14 @@ import Config from 'react-native-config';
 import { updateUser } from '../../context/user/api';
 import { StorageService } from '..';
 import Mixpanel from '../Mixpanel';
+import {
+  NotificationHandler,
+  NotificationHandlers,
+  PushSettings,
+  PushUserData,
+  NotificationAdditionalData,
+} from './types';
 
-interface NotificationAdditionalData {
-  type?: string;
-  [key: string]: any;
-}
-
-type NotificationHandler = (data: NotificationAdditionalData) => void;
-type NotificationHandlers = Record<string, NotificationHandler>;
-
-interface PushUserData {
-  pushUserId: string | null;
-  pushTokenId: string | null;
-  isPushEnabled: boolean;
-  deviceType: string;
-}
-
-interface PushSettings {
-  isPushEnabled: boolean;
-  pushToken: string | null;
-  pushSubscriptionId: string | null;
-}
 
 class NotificationsService {
   private notificationsHandlers: NotificationHandlers;
@@ -86,10 +73,10 @@ class NotificationsService {
     }
   };
 
-  refreshPushSettings = async (): Promise<void> => {
+  refreshPushSettings = async (): Promise<PushSettings | null> => {
     try {
       const pushSettings = await this.getPushSettings();
-      if (!pushSettings) return;
+      if (!pushSettings) return null;
 
       const {
         isPushEnabled,
@@ -102,8 +89,11 @@ class NotificationsService {
       if (pushToken && pushSubscriptionId && isPushEnabled) {
         await this.updateServer(pushToken, pushSubscriptionId, isPushEnabled);
       }
+
+      return pushSettings;
     } catch (error) {
       console.error('Error checking latest device state', error);
+      return null;
     }
   };
 
@@ -130,8 +120,8 @@ class NotificationsService {
     notificationReceivedEvent.getNotification().display();
   };
 
-  init = async (userId: string): Promise<void> => {
-    if (!Config.ONESIGNAL_APP_ID) return;
+  init = async (userId: string): Promise<PushSettings | null> => {
+    if (!Config.ONESIGNAL_APP_ID) return null;
 
     OneSignal.initialize(Config.ONESIGNAL_APP_ID);
     OneSignal.login(userId);
@@ -151,7 +141,7 @@ class NotificationsService {
       }
     }
 
-    await this.refreshPushSettings();
+    return this.refreshPushSettings();
   };
 
 

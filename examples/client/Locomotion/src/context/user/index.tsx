@@ -13,6 +13,7 @@ import {
 import auth from '../../services/auth';
 import Mixpanel from '../../services/Mixpanel';
 import PaymentsContext from '../payments';
+import { PushSettings } from '../../services/one-signal/types';
 
 const storageKey = 'clientProfile';
 
@@ -124,8 +125,7 @@ const UserContextProvider = ({ children }: { children: any }) => {
     }
   };
 
-  const updatePushToken = async (): Promise<void> => {
-    const pushSettings = await OneSignal.getPushSettings();
+  const updatePushSettings = async (pushSettings: PushSettings | null): Promise<void> => {
     if (!pushSettings) {
       await updateUserInfo({ pushTokenId: null });
       return;
@@ -235,10 +235,14 @@ const UserContextProvider = ({ children }: { children: any }) => {
     }
   };
 
+  const initializeOneSignal = async (userId: string) => {
+    const pushSettings = await OneSignal.init(userId);
+    updatePushSettings(pushSettings);
+  };
+
   useEffect(() => {
     if (user?.id && user?.didCompleteOnboarding) {
-      OneSignal.init(user.id);
-      updatePushToken();
+      initializeOneSignal(user.id);
     }
   }, [user?.id, user?.didCompleteOnboarding]);
 
