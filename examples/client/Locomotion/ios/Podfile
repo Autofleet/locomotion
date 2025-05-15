@@ -65,7 +65,7 @@ target 'Locomotion' do
     puts 'Patching `Flipper` to compile with rn71'
     %x(patch Pods/Flipper/xplat/Flipper/FlipperTransportTypes.h -N < patches/Flipper.patch)
     
-    # Add Bitcode stripping for Hermes
+    # Bitcode stripping for Hermes
     bitcode_strip_path = `xcrun --find bitcode_strip`.chop!
     hermes_framework_paths = [
       "Pods/hermes-engine/destroot/Library/Frameworks/universal/hermes.xcframework/ios-arm64/hermes.framework/hermes",
