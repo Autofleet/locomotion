@@ -9536,10 +9536,10 @@ react-native-modal@^13.0.1:
     prop-types "^15.6.2"
     react-native-animatable "1.3.3"
 
-react-native-onesignal@^4.3.9:
-  version "4.4.1"
-  resolved "https://registry.npmjs.org/react-native-onesignal/-/react-native-onesignal-4.4.1.tgz"
-  integrity sha512-vbS0E2TO5KljT0l1nAce04aOZF6FLv9oUaliffhFQR92oTHAbwNmwwMpxZF6CIcNANDDKkYtKPw5h7baUxmQdw==
+react-native-onesignal@^5.2.4:
+  version "5.2.11"
+  resolved "https://registry.npmjs.org/react-native-onesignal/-/react-native-onesignal-5.2.11.tgz"
+  integrity sha512-Xf/5tUGwt0MtjKawtKC+BIftihXPHFqiu0SnhsC+qjlawdHCUPo9fzKKyDYv5Hshgw6L3ZrbCyC24VPd+j22oA==
   dependencies:
     invariant "^2.2.2"
 
