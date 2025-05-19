@@ -133,13 +133,24 @@ class NotificationsService {
     OneSignal.Notifications.addEventListener('foregroundWillDisplay', this.handleForegroundNotificationClick);
     OneSignal.User.pushSubscription.addEventListener('change', this.subscriptionObserverHandler);
 
-    if (Platform.OS === IOS) {
-      const permission = await OneSignal.Notifications.requestPermission(true);
-      if (permission) {
-        Mixpanel.setEvent('iOS User approved push');
-      } else {
-        Mixpanel.setEvent('iOS User didn\'t approved push');
+    if (Platform.OS === 'ios') {
+      // true  → granted, false → denied, undefined → never asked
+      const permissionStatus = await OneSignal.Notifications.getPermissionAsync();
+      if (permissionStatus === undefined) { // first launch
+        const accepted = await OneSignal.Notifications.requestPermission(false);
+        if (accepted) { // user tapped “Allow”
+          Mixpanel.setEvent('iOS User approved push');
+          OneSignal.User.pushSubscription.optIn(); // register with APNs
+        } else {
+          Mixpanel.setEvent('iOS User didn\'t approve push');
+        }
+      } else if (permissionStatus === true) { // already granted
+        OneSignal.User.pushSubscription.optIn();
       }
+      // permissionStatus === false → user denied → leave silent
+    } else {
+      // Android: optIn() will prompt if the OS needs it
+      OneSignal.User.pushSubscription.optIn();
     }
 
     return this.refreshPushSettings();
