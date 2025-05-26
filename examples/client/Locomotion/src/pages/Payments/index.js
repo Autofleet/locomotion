@@ -74,12 +74,12 @@ export default ({ menuSide }) => {
           <CardContainer>
             <NewCreditForm
               PageText={() => <CreditFormText>{i18n.t('payments.newCardDetails')}</CreditFormText>}
-              onDone={(paymentMethodId) => {
+              onDone={async (paymentMethodId) => {
                 if (route.params && route.params.rideFlow) {
                   updateRidePayload({
                     paymentMethodId,
                   });
-                  updateBusinessAccountId(null);
+                  await updateBusinessAccountId(null);
                   navigationService.navigate(MAIN_ROUTES.HOME);
                 } else {
                   setShowList(true);

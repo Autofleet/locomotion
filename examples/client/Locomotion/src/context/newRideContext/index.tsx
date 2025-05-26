@@ -165,7 +165,7 @@ interface RidePageContextInterface {
   loadFutureBookingDays: () => void;
   futureBookingDays: number;
   businessAccountId: string | null,
-  updateBusinessAccountId: (newBusinessAccountId: string | null) => void;
+  updateBusinessAccountId: (newBusinessAccountId: string | null) => Promise<void>;
 }
 
 export const RidePageContext = createContext<RidePageContextInterface>({
@@ -226,7 +226,7 @@ export const RidePageContext = createContext<RidePageContextInterface>({
   loadFutureBookingDays: () => undefined,
   futureBookingDays: 0,
   businessAccountId: null,
-  updateBusinessAccountId: (newBusinessAccountId: string | null) => undefined,
+  updateBusinessAccountId: async (newBusinessAccountId: string | null) => undefined,
   addNewEmptyRequestSp: () => undefined,
   removeRequestSp: (index: number) => undefined,
 });
@@ -280,7 +280,7 @@ const RidePageContextProvider = ({ children }: {
     await StorageService.save({ lastRideId: rideId });
   };
   const saveOrderedRidePaymentMethod = async (rideBusinessAccountId: string | null) => Promise.all([
-    StorageService.save({ lastBusinessAccountId: rideBusinessAccountId || PAYMENT_MODES.PERSONAL }),
+    StorageService.save({ lastBusinessAccountId: rideBusinessAccountId }),
     StorageService.save({ orderedRide: true }),
   ]);
 
@@ -289,7 +289,7 @@ const RidePageContextProvider = ({ children }: {
     await StorageService.delete('lastRideId');
   };
 
-  const refreshBusinessAccountIdFromStorage = async () => {
+  const initializeBusinessAccountIdFromStorage = async () => {
     const storedId = await StorageService.get('lastBusinessAccountId');
     if (storedId && storedId !== PAYMENT_MODES.PERSONAL) {
       setBusinessAccountId(storedId);
@@ -298,12 +298,11 @@ const RidePageContextProvider = ({ children }: {
     }
   };
 
-  const cleanRequestStopPoints = async () => {
+  const cleanRequestStopPoints = () => {
     setRequestStopPoints(INITIAL_STOP_POINTS);
     setChosenService(null);
     setDefaultService(null);
-    // Refresh businessAccountId from storage instead of nulling it
-    await refreshBusinessAccountIdFromStorage();
+    // Don't reset businessAccountId - it should persist across ride states
   };
 
 
@@ -612,6 +611,7 @@ const RidePageContextProvider = ({ children }: {
     if (user?.id) {
       loadActiveRide();
       loadLastCompletedRide();
+      initializeBusinessAccountIdFromStorage();
     }
   }, [user?.id]);
 
@@ -1357,9 +1357,11 @@ const RidePageContextProvider = ({ children }: {
       streetAddress: null,
     }, index);
   };
-  const updateBusinessAccountId = (newBusinessAccountId: string | null) => {
+  const updateBusinessAccountId = async (newBusinessAccountId: string | null) => {
     if (newBusinessAccountId !== businessAccountId) {
       setBusinessAccountId(newBusinessAccountId);
+      // Save to storage immediately when businessAccountId changes
+      await StorageService.save({ lastBusinessAccountId: newBusinessAccountId });
     }
   };
 

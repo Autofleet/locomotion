@@ -146,11 +146,11 @@ const RidePage = ({ mapSettings, navigation }) => {
     }
     prevRequestStopPoints.current = requestStopPoints;
   }, [requestStopPoints]);
-  const resetStateToAddressSelector = (selectedIndex = null) => {
+  const resetStateToAddressSelector = async (selectedIndex = null) => {
     setServiceEstimations(null);
     setChosenService(null);
     setRide({});
-    updateBusinessAccountId(null);
+    await updateBusinessAccountId(null);
     changeBsPage(BS_PAGES.ADDRESS_SELECTOR);
     setSelectedInputIndex(selectedIndex);
     if (isStationsEnabled) {
@@ -158,8 +158,8 @@ const RidePage = ({ mapSettings, navigation }) => {
     }
   };
 
-  const goBackToAddress = (selectedIndex, expand = true) => {
-    resetStateToAddressSelector(selectedIndex);
+  const goBackToAddress = async (selectedIndex, expand = true) => {
+    await resetStateToAddressSelector(selectedIndex);
     if (expand) {
       setTimeout(() => {
         setIsExpanded(true);
@@ -168,14 +168,14 @@ const RidePage = ({ mapSettings, navigation }) => {
     }
   };
 
-  const backToMap = () => {
+  const backToMap = async () => {
     if ([
       BS_PAGES.SERVICE_ESTIMATIONS,
       BS_PAGES.CONFIRM_FUTURE_RIDE,
       BS_PAGES.ACTIVE_RIDE,
       BS_PAGES.NO_AVAILABLE_SERVICES,
     ].includes(currentBsPage)) {
-      resetStateToAddressSelector();
+      await resetStateToAddressSelector();
       initSps();
     } else if (serviceEstimations || currentBsPage === BS_PAGES.CONFIRM_PICKUP_TIME) {
       changeBsPage(BS_PAGES.SERVICE_ESTIMATIONS);
@@ -356,9 +356,9 @@ const RidePage = ({ mapSettings, navigation }) => {
 
   useFocusEffect(
     React.useCallback(() => {
-      const onBackPress = () => {
+      const onBackPress = async () => {
         if (serviceEstimations) {
-          resetStateToAddressSelector();
+          await resetStateToAddressSelector();
           return true;
         }
         return false;
