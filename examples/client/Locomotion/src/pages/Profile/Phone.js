@@ -24,6 +24,7 @@ import Auth from '../../services/auth';
 
 
 const Phone = ({ navigation }) => {
+  const { nextScreen, shouldHideCaptcha, fetchHideCaptchaSetting } = useContext(OnboardingContext);
   const { updateState, user, onLogin } = useContext(UserContext);
   const [showErrorText, setShowErrorText] = useState(false);
   const [renderId, setRenderId] = useState(0);
@@ -35,6 +36,7 @@ const Phone = ({ navigation }) => {
   useEffect(() => {
     fetchHideCaptchaSetting();
   }, []);
+
   const onVerifyCaptcha = async (verifiedCaptchaToken) => {
     Mixpanel.setEvent('Captcha Verified successfully', { verifiedCaptchaToken });
     setCaptchaToken(verifiedCaptchaToken);
@@ -143,7 +145,7 @@ const Phone = ({ navigation }) => {
             isInvalid={isInvalid}
             onNext={() => setIsLoadingSaveButton(true)}
             onFail={() => setShowErrorText(i18n.t('login.invalidPhoneNumberError'))
-            }
+              }
           />
           { Config.CAPTCHA_KEY
               && (

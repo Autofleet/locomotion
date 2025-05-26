@@ -68,7 +68,6 @@ const OnboardingContextProvider = ({ children }: { children: any }) => {
     [MAIN_ROUTES.CARD]: false,
   });
   const [shouldHideCaptcha, setShouldHideCaptcha] = useState(false);
-  const [shouldDisableCaptcha, setShouldDisableCaptcha] = useState(true);
   const fetchHideCaptchaSetting = async () => {
     const hideCaptchaSetting = await getSettingByKey(
       SETTINGS_KEYS.DISABLE_CAPTCHA_UI,
