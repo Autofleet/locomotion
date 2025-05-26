@@ -293,7 +293,7 @@ const RidePageContextProvider = ({ children }: {
     setRequestStopPoints(INITIAL_STOP_POINTS);
     setChosenService(null);
     setDefaultService(null);
-    setBusinessAccountId(null);
+    // setBusinessAccountId(null);
   };
 
   const cleanRideState = (initSpsBool = true) => {
