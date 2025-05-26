@@ -293,7 +293,17 @@ const RidePageContextProvider = ({ children }: {
     setRequestStopPoints(INITIAL_STOP_POINTS);
     setChosenService(null);
     setDefaultService(null);
-    // setBusinessAccountId(null);
+    // Refresh businessAccountId from storage instead of nulling it
+    refreshBusinessAccountIdFromStorage();
+  };
+
+  const refreshBusinessAccountIdFromStorage = async () => {
+    const storedId = await StorageService.get('lastBusinessAccountId');
+    if (storedId && storedId !== PAYMENT_MODES.PERSONAL) {
+      setBusinessAccountId(storedId);
+    } else {
+      setBusinessAccountId(null);
+    }
   };
 
   const cleanRideState = (initSpsBool = true) => {
