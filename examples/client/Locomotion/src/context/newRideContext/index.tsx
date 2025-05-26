@@ -289,14 +289,6 @@ const RidePageContextProvider = ({ children }: {
     await StorageService.delete('lastRideId');
   };
 
-  const cleanRequestStopPoints = () => {
-    setRequestStopPoints(INITIAL_STOP_POINTS);
-    setChosenService(null);
-    setDefaultService(null);
-    // Refresh businessAccountId from storage instead of nulling it
-    refreshBusinessAccountIdFromStorage();
-  };
-
   const refreshBusinessAccountIdFromStorage = async () => {
     const storedId = await StorageService.get('lastBusinessAccountId');
     if (storedId && storedId !== PAYMENT_MODES.PERSONAL) {
@@ -305,6 +297,15 @@ const RidePageContextProvider = ({ children }: {
       setBusinessAccountId(null);
     }
   };
+
+  const cleanRequestStopPoints = async () => {
+    setRequestStopPoints(INITIAL_STOP_POINTS);
+    setChosenService(null);
+    setDefaultService(null);
+    // Refresh businessAccountId from storage instead of nulling it
+    await refreshBusinessAccountIdFromStorage();
+  };
+
 
   const cleanRideState = (initSpsBool = true) => {
     if (initSpsBool) {
