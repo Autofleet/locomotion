@@ -82,7 +82,6 @@ const Phone = ({ navigation }) => {
       setShowErrorText(i18n.t('login.invalidPhoneNumberError'));
     }
   };
-
   useEffect(() => {
     if (isLoadingSaveButton) {
       if (
