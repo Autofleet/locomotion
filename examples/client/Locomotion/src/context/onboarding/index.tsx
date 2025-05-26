@@ -17,9 +17,7 @@ interface OnboardingContextInterface {
   requiredOnboarding: any,
   nextScreen: (currentScreen: string) => void,
   fetchHideCaptchaSetting: () => void,
-  fetchDisableCaptchaSetting: () => void,
   shouldHideCaptcha?: boolean,
-  shouldDisableCaptcha?: boolean,
 }
 
 export const OnboardingContext = createContext<OnboardingContextInterface>({
@@ -28,9 +26,7 @@ export const OnboardingContext = createContext<OnboardingContextInterface>({
   requiredOnboarding: {},
   nextScreen: (currentScreen: string) => undefined,
   fetchHideCaptchaSetting: async () => undefined,
-  fetchDisableCaptchaSetting: async () => undefined,
   shouldHideCaptcha: false,
-  shouldDisableCaptcha: false,
 });
 
 const SCREEN_ORDER = [
@@ -80,14 +76,6 @@ const OnboardingContextProvider = ({ children }: { children: any }) => {
     );
 
     setShouldHideCaptcha(hideCaptchaSetting);
-  };
-  const fetchDisableCaptchaSetting = async () => {
-    const disableCaptchaSetting = await getSettingByKey(
-      SETTINGS_KEYS.DISABLE_CAPTCHA,
-      true,
-    );
-
-    setShouldDisableCaptcha(disableCaptchaSetting);
   };
   const navigateToScreen = (screen: string) => navigationService.navigate(screen);
 
@@ -181,9 +169,7 @@ const OnboardingContextProvider = ({ children }: { children: any }) => {
         requiredOnboarding,
         nextScreen,
         fetchHideCaptchaSetting,
-        fetchDisableCaptchaSetting,
         shouldHideCaptcha,
-        shouldDisableCaptcha,
       }}
     >
       {children}
