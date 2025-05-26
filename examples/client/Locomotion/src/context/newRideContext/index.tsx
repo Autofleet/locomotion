@@ -289,7 +289,7 @@ const RidePageContextProvider = ({ children }: {
     await StorageService.delete('lastRideId');
   };
 
-  const initializeBusinessAccountIdFromStorage = async () => {
+  const refreshBusinessAccountIdFromStorage = async () => {
     const storedId = await StorageService.get('lastBusinessAccountId');
     if (storedId && storedId !== PAYMENT_MODES.PERSONAL) {
       setBusinessAccountId(storedId);
@@ -298,11 +298,16 @@ const RidePageContextProvider = ({ children }: {
     }
   };
 
-  const cleanRequestStopPoints = () => {
+  const initializeBusinessAccountIdFromStorage = async () => {
+    await refreshBusinessAccountIdFromStorage();
+  };
+
+  const cleanRequestStopPoints = async () => {
     setRequestStopPoints(INITIAL_STOP_POINTS);
     setChosenService(null);
     setDefaultService(null);
-    // Don't reset businessAccountId - it should persist across ride states
+    // Refresh businessAccountId from storage to ensure it's current
+    await refreshBusinessAccountIdFromStorage();
   };
 
 
@@ -341,14 +346,14 @@ const RidePageContextProvider = ({ children }: {
     [RIDE_STATES.COMPLETED]: (completedRide: any) => {
       onRideCompleted(completedRide.id, completedRide.priceCalculationId);
     },
-    [RIDE_STATES.DISPATCHED]: (newRide: any) => {
-      cleanRequestStopPoints();
+    [RIDE_STATES.DISPATCHED]: async (newRide: any) => {
+      await cleanRequestStopPoints();
       setRide(newRide);
       changeBsPage(BS_PAGES.ACTIVE_RIDE);
       saveLastRide(newRide.id);
     },
-    [RIDE_STATES.ACTIVE]: (activeRide: any) => {
-      cleanRequestStopPoints();
+    [RIDE_STATES.ACTIVE]: async (activeRide: any) => {
+      await cleanRequestStopPoints();
       setRide(activeRide);
       changeBsPage(BS_PAGES.ACTIVE_RIDE);
       saveLastRide(activeRide.id);
@@ -573,7 +578,7 @@ const RidePageContextProvider = ({ children }: {
       const formattedRide = await formatRide(activeRide);
       const screenFunction = RIDE_STATES_TO_SCREENS[formattedRide?.state || ''];
       if (screenFunction) {
-        screenFunction(formattedRide);
+        await screenFunction(formattedRide);
       }
     } else {
       const lastRideId = await StorageService.get('lastRideId');
@@ -639,7 +644,7 @@ const RidePageContextProvider = ({ children }: {
       Mixpanel.setEvent('New ride state', { oldState: ride.state, newState: rideLoaded.state });
       const screenFunction = RIDE_STATES_TO_SCREENS[rideLoaded.state];
       if (screenFunction) {
-        screenFunction(rideLoaded);
+        await screenFunction(rideLoaded);
       }
     }
     if (!RIDE_FINAL_STATES.includes(rideLoaded?.state || '')) {
@@ -653,14 +658,14 @@ const RidePageContextProvider = ({ children }: {
     if (appCurrentStateIsActive && user?.id && !rideRequestLoading) {
       if (ride?.id) {
         try {
-          loadRide(ride.id);
+          await loadRide(ride.id);
         } catch (e) {
           console.log(e);
           cleanRideState();
           changeBsPage(BS_PAGES.ADDRESS_SELECTOR);
         }
       } else {
-        loadActiveRide();
+        await loadActiveRide();
       }
     }
   }, 4000);
