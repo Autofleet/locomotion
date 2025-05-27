@@ -142,8 +142,6 @@ class NotificationsService {
     OneSignal.initialize(Config.ONESIGNAL_APP_ID);
     OneSignal.login(userId);
 
-    OneSignal.User.pushSubscription.optIn();
-
     OneSignal.Notifications.addEventListener('click', this.handleNotificationClick);
     OneSignal.Notifications.addEventListener('foregroundWillDisplay', this.handleForegroundNotificationClick);
     OneSignal.User.pushSubscription.addEventListener('change', this.subscriptionObserverHandler);
