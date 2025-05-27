@@ -120,6 +120,12 @@ class NotificationsService {
   };
 
   requestNotificationPermissions = async (): Promise<void> => {
+    // Check if the user has already denied permissions in the past
+    const shouldRequestPermissions = await OneSignal.Notifications.canRequestPermission();
+    if (!shouldRequestPermissions) {
+      return;
+    }
+
     const hasAccepted = await OneSignal.Notifications.requestPermission(false);
     if (!hasAccepted) {
       Mixpanel.setEvent('Notification Service: User didn\'t approved push');
@@ -142,13 +148,12 @@ class NotificationsService {
     OneSignal.Notifications.addEventListener('foregroundWillDisplay', this.handleForegroundNotificationClick);
     OneSignal.User.pushSubscription.addEventListener('change', this.subscriptionObserverHandler);
 
-    // true  → granted, false → denied, undefined → never asked
     const hasNotificationPermissions = await OneSignal.Notifications.getPermissionAsync();
     if (hasNotificationPermissions) {
       OneSignal.User.pushSubscription.optIn();
-    } else if (hasNotificationPermissions === undefined) {
+    } else {
       await this.requestNotificationPermissions();
-    } // hasNotificationPermissions === false → user denied push notifications → do nothing
+    }
 
     return this.refreshPushSettings();
   };
