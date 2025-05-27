@@ -18,8 +18,6 @@ import {
   NotificationAdditionalData,
 } from './types';
 
-const IOS = 'ios';
-
 class NotificationsService {
   private notificationsHandlers: NotificationHandlers;
 
@@ -121,6 +119,17 @@ class NotificationsService {
     notificationReceivedEvent.getNotification().display();
   };
 
+  requestNotificationPermissions = async (): Promise<void> => {
+    const hasAccepted = await OneSignal.Notifications.requestPermission(false);
+    if (!hasAccepted) {
+      Mixpanel.setEvent('Notification Service: User didn\'t approved push');
+      return;
+    }
+
+    Mixpanel.setEvent('Notification Service: User approved push');
+    OneSignal.User.pushSubscription.optIn();
+  };
+
   init = async (userId: string): Promise<PushSettings | null> => {
     if (!Config.ONESIGNAL_APP_ID) return null;
 
@@ -133,25 +142,13 @@ class NotificationsService {
     OneSignal.Notifications.addEventListener('foregroundWillDisplay', this.handleForegroundNotificationClick);
     OneSignal.User.pushSubscription.addEventListener('change', this.subscriptionObserverHandler);
 
-    if (Platform.OS === 'ios') {
-      // true  → granted, false → denied, undefined → never asked
-      const permissionStatus = await OneSignal.Notifications.getPermissionAsync();
-      if (permissionStatus === undefined) { // first launch
-        const accepted = await OneSignal.Notifications.requestPermission(false);
-        if (accepted) { // user tapped “Allow”
-          Mixpanel.setEvent('iOS User approved push');
-          OneSignal.User.pushSubscription.optIn(); // register with APNs
-        } else {
-          Mixpanel.setEvent('iOS User didn\'t approve push');
-        }
-      } else if (permissionStatus === true) { // already granted
-        OneSignal.User.pushSubscription.optIn();
-      }
-      // permissionStatus === false → user denied → leave silent
-    } else {
-      // Android: optIn() will prompt if the OS needs it
+    // true  → granted, false → denied, undefined → never asked
+    const hasNotificationPermissions = await OneSignal.Notifications.getPermissionAsync();
+    if (hasNotificationPermissions) {
       OneSignal.User.pushSubscription.optIn();
-    }
+    } else if (hasNotificationPermissions === undefined) {
+      await this.requestNotificationPermissions();
+    } // hasNotificationPermissions === false → user denied push notifications → do nothing
 
     return this.refreshPushSettings();
   };
