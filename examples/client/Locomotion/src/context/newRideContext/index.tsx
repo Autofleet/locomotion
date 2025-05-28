@@ -280,7 +280,7 @@ const RidePageContextProvider = ({ children }: {
     await StorageService.save({ lastRideId: rideId });
   };
   const saveOrderedRidePaymentMethod = async (rideBusinessAccountId: string | null) => Promise.all([
-    StorageService.save({ lastBusinessAccountId: rideBusinessAccountId }),
+    StorageService.save({ lastBusinessAccountId: rideBusinessAccountId || PAYMENT_MODES.PERSONAL }),
     StorageService.save({ orderedRide: true }),
   ]);
 
@@ -306,8 +306,6 @@ const RidePageContextProvider = ({ children }: {
     setRequestStopPoints(INITIAL_STOP_POINTS);
     setChosenService(null);
     setDefaultService(null);
-    // Don't refresh businessAccountId here - preserve user's current selection
-    // Only refresh on app startup, not during active ride flows
   };
 
 
@@ -1365,7 +1363,6 @@ const RidePageContextProvider = ({ children }: {
   const updateBusinessAccountId = (newBusinessAccountId: string | null) => {
     if (newBusinessAccountId !== businessAccountId) {
       setBusinessAccountId(newBusinessAccountId);
-      // Save to storage asynchronously (fire and forget)
       StorageService.save({ lastBusinessAccountId: newBusinessAccountId });
     }
   };
