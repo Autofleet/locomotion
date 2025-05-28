@@ -302,12 +302,12 @@ const RidePageContextProvider = ({ children }: {
     await refreshBusinessAccountIdFromStorage();
   };
 
-  const cleanRequestStopPoints = async () => {
+  const cleanRequestStopPoints = () => {
     setRequestStopPoints(INITIAL_STOP_POINTS);
     setChosenService(null);
     setDefaultService(null);
-    // Refresh businessAccountId from storage to ensure it's current
-    await refreshBusinessAccountIdFromStorage();
+    // Don't refresh businessAccountId here - preserve user's current selection
+    // Only refresh on app startup, not during active ride flows
   };
 
 
@@ -346,14 +346,14 @@ const RidePageContextProvider = ({ children }: {
     [RIDE_STATES.COMPLETED]: (completedRide: any) => {
       onRideCompleted(completedRide.id, completedRide.priceCalculationId);
     },
-    [RIDE_STATES.DISPATCHED]: async (newRide: any) => {
-      await cleanRequestStopPoints();
+    [RIDE_STATES.DISPATCHED]: (newRide: any) => {
+      cleanRequestStopPoints();
       setRide(newRide);
       changeBsPage(BS_PAGES.ACTIVE_RIDE);
       saveLastRide(newRide.id);
     },
-    [RIDE_STATES.ACTIVE]: async (activeRide: any) => {
-      await cleanRequestStopPoints();
+    [RIDE_STATES.ACTIVE]: (activeRide: any) => {
+      cleanRequestStopPoints();
       setRide(activeRide);
       changeBsPage(BS_PAGES.ACTIVE_RIDE);
       saveLastRide(activeRide.id);
@@ -578,7 +578,7 @@ const RidePageContextProvider = ({ children }: {
       const formattedRide = await formatRide(activeRide);
       const screenFunction = RIDE_STATES_TO_SCREENS[formattedRide?.state || ''];
       if (screenFunction) {
-        await screenFunction(formattedRide);
+        screenFunction(formattedRide);
       }
     } else {
       const lastRideId = await StorageService.get('lastRideId');
@@ -644,7 +644,7 @@ const RidePageContextProvider = ({ children }: {
       Mixpanel.setEvent('New ride state', { oldState: ride.state, newState: rideLoaded.state });
       const screenFunction = RIDE_STATES_TO_SCREENS[rideLoaded.state];
       if (screenFunction) {
-        await screenFunction(rideLoaded);
+        screenFunction(rideLoaded);
       }
     }
     if (!RIDE_FINAL_STATES.includes(rideLoaded?.state || '')) {
@@ -1172,7 +1172,7 @@ const RidePageContextProvider = ({ children }: {
           type: sp.type,
           ...(i === 0 && { notes: ride.notes }),
         })),
-        ...(businessAccountId ? { businessAccountId } : {}),
+        { businessAccountId },
       };
 
 
