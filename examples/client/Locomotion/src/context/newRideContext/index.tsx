@@ -165,7 +165,7 @@ interface RidePageContextInterface {
   loadFutureBookingDays: () => void;
   futureBookingDays: number;
   businessAccountId: string | null,
-  updateBusinessAccountId: (newBusinessAccountId: string | null) => Promise<void>;
+  updateBusinessAccountId: (newBusinessAccountId: string | null) => void;
 }
 
 export const RidePageContext = createContext<RidePageContextInterface>({
@@ -226,7 +226,7 @@ export const RidePageContext = createContext<RidePageContextInterface>({
   loadFutureBookingDays: () => undefined,
   futureBookingDays: 0,
   businessAccountId: null,
-  updateBusinessAccountId: async (newBusinessAccountId: string | null) => undefined,
+  updateBusinessAccountId: (newBusinessAccountId: string | null) => undefined,
   addNewEmptyRequestSp: () => undefined,
   removeRequestSp: (index: number) => undefined,
 });
@@ -1362,11 +1362,11 @@ const RidePageContextProvider = ({ children }: {
       streetAddress: null,
     }, index);
   };
-  const updateBusinessAccountId = async (newBusinessAccountId: string | null) => {
+  const updateBusinessAccountId = (newBusinessAccountId: string | null) => {
     if (newBusinessAccountId !== businessAccountId) {
       setBusinessAccountId(newBusinessAccountId);
-      // Save to storage immediately when businessAccountId changes
-      await StorageService.save({ lastBusinessAccountId: newBusinessAccountId });
+      // Save to storage asynchronously (fire and forget)
+      StorageService.save({ lastBusinessAccountId: newBusinessAccountId });
     }
   };
 

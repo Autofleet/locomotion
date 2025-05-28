@@ -127,14 +127,14 @@ const RideOptions = () => {
           rideFlow
           isVisible={popupToShow === 'payment'}
           onCancel={() => clearPopup()}
-          onSubmit={async (payment: any) => {
+          onSubmit={(payment: any) => {
             if (payment.isBusiness) {
               updateRidePayload({
                 paymentMethodId: offlinePaymentMethod.id,
               });
-              await updateBusinessAccountId(payment.id);
+              updateBusinessAccountId(payment.id);
             } else {
-              await updateBusinessAccountId(null);
+              updateBusinessAccountId(null);
               updateRidePayload({
                 paymentMethodId: payment,
               });
