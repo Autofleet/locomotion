@@ -236,7 +236,7 @@ const HISTORY_RECORDS_NUM = 10;
 const RidePageContextProvider = ({ children }: {
   children: any
 }) => {
-  const { getClientDefaultMethod } = PaymentContext.useContainer();
+  const { getClientDefaultMethod, businessPaymentMethods, getOrFetchCustomer } = PaymentContext.useContainer();
   const { locationGranted, user } = useContext(UserContext);
   const {
     isStationsEnabled,
@@ -280,7 +280,7 @@ const RidePageContextProvider = ({ children }: {
     await StorageService.save({ lastRideId: rideId });
   };
   const saveOrderedRidePaymentMethod = async (rideBusinessAccountId: string | null) => Promise.all([
-    StorageService.save({ lastBusinessAccountId: rideBusinessAccountId || PAYMENT_MODES.PERSONAL }),
+    StorageService.save({ lastBusinessAccountId: rideBusinessAccountId }),
     StorageService.save({ orderedRide: true }),
   ]);
 
@@ -315,7 +315,7 @@ const RidePageContextProvider = ({ children }: {
     }
     setRide({});
     clearLastRide();
-    setBusinessAccountId(null);
+    // Don't reset businessAccountId - preserve user's selection
   };
 
   const onRideCompleted = (rideId: string, priceCalculationId: string) => {
@@ -434,8 +434,10 @@ const RidePageContextProvider = ({ children }: {
       StorageService.get('lastBusinessAccountId'),
     ]);
     const defaultPaymentMethod = notFirstRide ? getClientDefaultMethod() : null;
-    const usePersonalPayment = !fallbackId || fallbackId === PAYMENT_MODES.PERSONAL || defaultPaymentMethod;
-    if (usePersonalPayment) { return null; }
+    const usePersonalPayment = !fallbackId || fallbackId === PAYMENT_MODES.PERSONAL;
+    if (usePersonalPayment) { 
+      return null; 
+    }
     updateRidePayload({ paymentMethodId: offlinePaymentMethod.id });
     setBusinessAccountId(fallbackId);
     return fallbackId;
@@ -660,10 +662,10 @@ const RidePageContextProvider = ({ children }: {
         } catch (e) {
           console.log(e);
           cleanRideState();
-          changeBsPage(BS_PAGES.ADDRESS_SELECTOR);
+          await changeBsPage(BS_PAGES.ADDRESS_SELECTOR);
         }
       } else {
-        await loadActiveRide();
+        loadActiveRide();
       }
     }
   }, 4000);
@@ -1151,6 +1153,18 @@ const RidePageContextProvider = ({ children }: {
     })));
 
     try {
+      // Ensure we have a business account ID if one should be used
+      let finalBusinessAccountId = businessAccountId;
+      if (!finalBusinessAccountId) {
+        const customerData = await getOrFetchCustomer();
+        const availableBusinessAccounts = businessPaymentMethods || customerData?.businessAccounts || [];
+        if (availableBusinessAccounts?.length > 0) {
+          finalBusinessAccountId = availableBusinessAccounts[0].id;
+          setBusinessAccountId(finalBusinessAccountId);
+          updateRidePayload({ paymentMethodId: offlinePaymentMethod.id });
+        }
+      }
+
       let scheduledToMoment = ride.scheduledTo;
       if (ride.scheduledTo) {
         const unixScheduledTo = moment.unix(Number(ride.scheduledTo) / 1000);
@@ -1170,13 +1184,13 @@ const RidePageContextProvider = ({ children }: {
           type: sp.type,
           ...(i === 0 && { notes: ride.notes }),
         })),
-        businessAccountId,
+        ...(finalBusinessAccountId && finalBusinessAccountId !== PAYMENT_MODES.PERSONAL ? { businessAccountId: finalBusinessAccountId } : {}),
       };
 
 
       const [afRide] = await Promise.all([
         rideApi.createRide(rideToCreate),
-        saveOrderedRidePaymentMethod(businessAccountId),
+        saveOrderedRidePaymentMethod(finalBusinessAccountId),
       ]);
       if (afRide.state === RIDE_STATES.REJECTED) {
         throw new Error(RIDE_FAILED_REASONS.BUSY);
