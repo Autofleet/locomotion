@@ -435,8 +435,8 @@ const RidePageContextProvider = ({ children }: {
     ]);
     const defaultPaymentMethod = notFirstRide ? getClientDefaultMethod() : null;
     const usePersonalPayment = !fallbackId || fallbackId === PAYMENT_MODES.PERSONAL;
-    if (usePersonalPayment) { 
-      return null; 
+    if (usePersonalPayment) {
+      return null;
     }
     updateRidePayload({ paymentMethodId: offlinePaymentMethod.id });
     setBusinessAccountId(fallbackId);
