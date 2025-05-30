@@ -37,7 +37,7 @@ import outOfTerritoryIcon from '../../assets/bottomSheet/out_of_territory.svg';
 import busyImage from '../../assets/bottomSheet/busy.svg';
 import locationIcon from '../../assets/location_pin.svg';
 import Loader from '../Loader';
-import { MewRidePageContext } from '../..';
+import { NewRidePageContext } from '../..';
 import timeIcon from '../../assets/calendar.svg';
 import clockIcon from '../../assets/bottomSheet/clock.svg';
 import ActiveRideContent from './ActiveRide';
@@ -286,7 +286,7 @@ export const ConfirmPickupTime = (props: any) => {
     setChosenService,
     loadFutureBookingDays,
     futureBookingDays,
-  } = useContext(MewRidePageContext);
+  } = useContext(NewRidePageContext);
   const {
     changeBsPage,
   } = useContext(RideStateContextContext);
@@ -455,7 +455,7 @@ export const CancelRide = (props: any) => {
 
 export const ConfirmFutureRide = (props: any) => {
   const { newFutureRide } = useContext(FutureRidesContext);
-  const { chosenService } = useContext(MewRidePageContext);
+  const { chosenService } = useContext(NewRidePageContext);
 
   const getTimeDisplay = () => {
     const afterTime = moment.parseZone(newFutureRide?.scheduledTo).format('h:mm A');
