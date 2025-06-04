@@ -386,17 +386,13 @@ const RidePageContextProvider = ({ children }: {
     });
     const formattedServices = services.map((service) => {
       const estimationForService = estimationsMap[service.id];
-      return formatEstimationsResult(service, estimationForService, tags);
+      return formatEstimationsResult(service, estimationForService, tags, !!ride.scheduledTo);
     });
-    return formattedServices.sort((a, b) => {
-      if (
-        (a.serviceAvailabilitiesNumber !== 0 && b.serviceAvailabilitiesNumber !== 0)
-        || (a.serviceAvailabilitiesNumber === 0 && b.serviceAvailabilitiesNumber === 0)
-      ) {
-        return a.priority - b.priority;
-      }
 
-      return a.serviceAvailabilitiesNumber === 0 ? -1 : 1;
+    return formattedServices.sort((a, b) => {
+      if (b.unavailable) return -1;
+
+      return a.priority - b.priority;
     });
   };
 

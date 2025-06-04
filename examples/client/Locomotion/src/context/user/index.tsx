@@ -3,6 +3,7 @@ import React, {
 } from 'react';
 import crashlytics from '@react-native-firebase/crashlytics';
 import Config from 'react-native-config';
+import OneSignal from '../../services/one-signal';
 import AppSettings from '../../services/app-settings';
 import { authService, StorageService } from '../../services';
 import {
@@ -12,7 +13,7 @@ import {
 import auth from '../../services/auth';
 import Mixpanel from '../../services/Mixpanel';
 import PaymentsContext from '../payments';
-import OneSignal from '../../services/one-signal';
+import type { PushSettings } from '../../services/one-signal/types';
 
 const storageKey = 'clientProfile';
 
@@ -44,7 +45,6 @@ interface UserContextInterface {
   getUserFromServer: () => Promise<void>,
   locationGranted: boolean | undefined,
   setLocationGranted: Dispatch<SetStateAction<any>>,
-  updatePushToken: () => Promise<boolean | null>,
   deleteUser: () => Promise<boolean>,
   updateUser: (values: any) => Promise<any>,
   coupon: any | null,
@@ -68,7 +68,6 @@ export const UserContext = createContext<UserContextInterface>({
   getUserFromServer: async () => undefined,
   locationGranted: false,
   setLocationGranted: () => undefined,
-  updatePushToken: async () => false,
   deleteUser: async () => true,
   updateUser: async (values: any) => undefined,
   coupon: null,
@@ -118,31 +117,6 @@ const UserContextProvider = ({ children }: { children: any }) => {
     getUserFromStorage();
   }, []);
 
-  const updatePushToken = async () => {
-    const deviceState = await OneSignal.getDeviceState();
-    if (!deviceState) {
-      await updateUserInfo({ pushTokenId: null });
-      return null;
-    }
-
-    if (
-      user?.pushTokenId !== deviceState.pushToken
-      || user?.pushUserId !== deviceState.userId
-      || user?.isPushEnabled !== deviceState.isSubscribed
-    ) {
-      await updateUserInfo({
-        pushTokenId: deviceState.pushToken,
-        isPushEnabled: deviceState.isSubscribed,
-        pushUserId: deviceState.userId,
-      });
-    }
-    return true;
-  };
-
-  const verifyEmail = async () => {
-    await sendEmailVerification();
-  };
-
   const updateUserInfo = async (values: any, { updateServer = true } = {}) => {
     updateState(values);
     const newUser = updateServer ? await updateUserApi(values) : values;
@@ -150,6 +124,32 @@ const UserContextProvider = ({ children }: { children: any }) => {
       StorageService.save({ [storageKey]: newUser });
     }
   };
+
+  const updatePushSettings = async (pushSettings: PushSettings | null): Promise<void> => {
+    if (!pushSettings) {
+      await updateUserInfo({ pushTokenId: null });
+      return;
+    }
+
+    const { isPushEnabled, pushToken, pushSubscriptionId } = pushSettings;
+
+    if (
+      user?.pushTokenId !== pushToken
+      || user?.pushUserId !== pushSubscriptionId
+      || user?.isPushEnabled !== isPushEnabled
+    ) {
+      await updateUserInfo({
+        pushTokenId: pushToken,
+        isPushEnabled,
+        pushUserId: pushSubscriptionId,
+      });
+    }
+  };
+
+  const verifyEmail = async () => {
+    await sendEmailVerification();
+  };
+
 
   const updateUser = async (values: any): Promise<any> => updateUserApi(values);
 
@@ -235,10 +235,14 @@ const UserContextProvider = ({ children }: { children: any }) => {
     }
   };
 
+  const initializeOneSignal = async (userId: string) => {
+    const pushSettings = await OneSignal.init(userId);
+    updatePushSettings(pushSettings);
+  };
+
   useEffect(() => {
     if (user?.id && user?.didCompleteOnboarding) {
-      OneSignal.init();
-      updatePushToken();
+      initializeOneSignal(user.id);
     }
   }, [user?.id, user?.didCompleteOnboarding]);
 
@@ -273,7 +277,6 @@ const UserContextProvider = ({ children }: { children: any }) => {
         getUserFromServer,
         locationGranted,
         setLocationGranted,
-        updatePushToken,
         deleteUser,
         updateUser,
         coupon,
