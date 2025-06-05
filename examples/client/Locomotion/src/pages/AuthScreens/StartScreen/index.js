@@ -21,12 +21,15 @@ import { INITIAL_USER_STATE } from '../AuthLoadingScreen';
 import Settings from '../../../context/settings';
 import SETTING_KEYS from '../../../context/settings/keys';
 import * as navigationService from '../../../services/navigation';
+import AppSettings from '../../../services/app-settings';
 
 const StartScreen = () => {
   const { setUser } = useContext(UserContext);
   const { getSettingByKey } = Settings.useContainer();
   const [webViewWindow, setWebViewWindow] = useState(null);
+
   const nextScreen = () => {
+    AppSettings.destroy();
     setUser(INITIAL_USER_STATE);
     navigationService.navigate(MAIN_ROUTES.PHONE);
   };
