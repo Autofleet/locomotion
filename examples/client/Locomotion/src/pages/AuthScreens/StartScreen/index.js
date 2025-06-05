@@ -1,5 +1,6 @@
 import React, { useContext, useState } from 'react';
 import { Trans } from 'react-i18next';
+import Config from 'react-native-config';
 import logo from '../../../assets/logo.png';
 import i18n from '../../../I18n';
 import {
@@ -28,8 +29,13 @@ const StartScreen = () => {
   const { getSettingByKey } = Settings.useContainer();
   const [webViewWindow, setWebViewWindow] = useState(null);
 
-  const nextScreen = () => {
-    AppSettings.destroy();
+  const isDevSettingOn = () => Config.DEV_SETTINGS && Config.DEV_SETTINGS === 'true';
+
+  const nextScreen = async () => {
+    if (!isDevSettingOn()) {
+      await AppSettings.destroy();
+    }
+
     setUser(INITIAL_USER_STATE);
     navigationService.navigate(MAIN_ROUTES.PHONE);
   };
