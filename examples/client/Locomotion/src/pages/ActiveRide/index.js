@@ -150,7 +150,6 @@ const RidePage = ({ mapSettings, navigation }) => {
     setServiceEstimations(null);
     setChosenService(null);
     setRide({});
-    // Don't reset businessAccountId - preserve user's selection
     changeBsPage(BS_PAGES.ADDRESS_SELECTOR);
     setSelectedInputIndex(selectedIndex);
     if (isStationsEnabled) {

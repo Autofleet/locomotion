@@ -315,7 +315,6 @@ const RidePageContextProvider = ({ children }: {
     }
     setRide({});
     clearLastRide();
-    // Don't reset businessAccountId - preserve user's selection
   };
 
   const onRideCompleted = (rideId: string, priceCalculationId: string) => {
@@ -1149,7 +1148,6 @@ const RidePageContextProvider = ({ children }: {
     })));
 
     try {
-      // Ensure we have a business account ID if one should be used
       let finalBusinessAccountId = businessAccountId;
       if (!finalBusinessAccountId) {
         const customerData = await getOrFetchCustomer();
