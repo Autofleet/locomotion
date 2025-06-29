@@ -11,7 +11,6 @@ import ScreenText from './ScreenText/index';
 import PhoneNumberInput from '../../Components/PhoneNumberInput';
 import { MAIN_ROUTES } from '../routes';
 import { UserContext } from '../../context/user';
-import AppSettings from '../../services/app-settings';
 import * as NavigationService from '../../services/navigation';
 import { PageContainer, ContentContainer } from '../styles';
 import Captcha from './Captcha';
@@ -46,9 +45,7 @@ const Phone = ({ navigation }) => {
         setIsLoadingSaveButton(false);
         return;
       }
-      if (!isDevSettingOn()) {
-        await AppSettings.destroy();
-      }
+
       await onLogin(user.phoneNumber);
       updateState({ phoneNumber: user.phoneNumber });
       nextScreen(MAIN_ROUTES.PHONE);
