@@ -291,11 +291,8 @@ const RidePageContextProvider = ({ children }: {
 
   const refreshBusinessAccountIdFromStorage = async () => {
     const storedId = await StorageService.get('lastBusinessAccountId');
-    if (storedId && storedId !== PAYMENT_MODES.PERSONAL) {
-      setBusinessAccountId(storedId);
-    } else {
-      setBusinessAccountId(null);
-    }
+    const notPersonalPaymentMode = !storedId || storedId !== PAYMENT_MODES.PERSONAL;
+    setBusinessAccountId(notPersonalPaymentMode ? null : storedId);
   };
 
   const initializeBusinessAccountIdFromStorage = async () => {
