@@ -4,6 +4,7 @@
 
 # Xcode
 /ios/Locomotion.xcodeproj/project.xcworkspace/contents.xcworkspacedata
+ios/.xcode.env.local
 
 #
 build/

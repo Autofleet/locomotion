@@ -57,5 +57,5 @@
       "WebSocket": true,
       "it": true
   },
-  "ignorePatterns": ["dist/*", "node_modules/", "jest.config.js", "**/*.d.*", "**/*.test.*", "src/test/", "src/storybook"]
+  "ignorePatterns": ["dist/*", "node_modules/", "jest.config.js", "metro.config.js", "**/*.d.*", "**/*.test.*", "src/test/", "src/storybook"]
 }
