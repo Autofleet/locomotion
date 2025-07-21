@@ -5,7 +5,6 @@ import { Text, View } from 'react-native';
 import { PaymentIcon } from 'react-native-payment-icons';
 import styled, { ThemeContext } from 'styled-components';
 import { useFocusEffect } from '@react-navigation/native';
-import SkeletonContent from 'react-native-skeleton-content-nonexpo';
 import { isCardPaymentMethod, isCashPaymentMethod, isOfflinePaymentMethod } from '../../../../../../lib/ride/utils';
 import { getCouponText } from '../../../../../../context/newRideContext/utils';
 import { MAIN_ROUTES } from '../../../../../routes';
@@ -18,6 +17,7 @@ import Button from '../../../../../../Components/Button';
 import * as navigationService from '../../../../../../services/navigation';
 import { UserContext } from '../../../../../../context/user';
 import selected from '../../../../../../assets/selected-v.svg';
+import { PromoButtonSkeleton } from './Skeleton';
 
 const TimeText = styled(Text)`
     ${FONT_SIZES.LARGE}
@@ -71,11 +71,11 @@ const PromoText = styled(Text)`
     margin: 10px 5px;
 `;
 interface PaymentButtonProps {
-    icon: string;
-    title: string;
-    brand?: Brand;
-    id?: string;
-    invalid?: boolean;
+  icon: string;
+  title: string;
+  brand?: Brand;
+  id?: string;
+  invalid?: boolean;
 }
 
 
@@ -98,17 +98,11 @@ const PaymentButton = ({
     if (isCashPaymentMethod({ id }) || isOfflinePaymentMethod({ id })) {
       return null;
     }
+
     if (!isDebuggingEnabled && coupon === null) {
-      return (
-        <SkeletonContent
-          containerStyle={{}}
-          isLoading
-          layout={[
-            { width: 40, height: 10, marginTop: 10 },
-          ]}
-        />
-      );
+      return <PromoButtonSkeleton />;
     }
+
     if (coupon !== null) {
       return (
         <PromoButton

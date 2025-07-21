@@ -1,11 +1,11 @@
 import React from 'react';
 import styled from 'styled-components';
-import SkeletonContent from 'react-native-skeleton-content-nonexpo';
 import SvgIcon from '../../../../Components/SvgIcon';
 import HistoryIcon from '../../../../assets/recent_search.svg';
 import GeoIcon from '../../../../assets/geo_location.svg';
 import LocationPinIcon from '../../../../assets/location_pin.svg';
 import Button from '../../../../Components/Button';
+import { AddressLineSkeleton } from './Skeleton';
 
 
 const ICONS = {
@@ -111,14 +111,7 @@ const AddressRow = ({
         </IconContainer>
         <AddressContainer>
           {isLoading && !isDebuggingEnabled ? (
-            <SkeletonContent
-              containerStyle={{}}
-              isLoading
-              layout={[
-                { width: 180, height: 20, marginBottom: 6 },
-                { width: 220, height: 20 },
-              ]}
-            />
+            <AddressLineSkeleton />
           ) : (
             <>
               {label ? <Label>{label}</Label> : null}

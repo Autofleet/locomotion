@@ -1,11 +1,9 @@
 import React, { useContext, useEffect, useState } from 'react';
-import SkeletonContent from 'react-native-skeleton-content-nonexpo';
 import i18n from '../../I18n';
 import {
   getCurrencySymbol,
   getFormattedPrice,
 } from '../../context/newRideContext/utils';
-import breakdownSkeleton from './breakdownSkeleton';
 import RoundedButton from '../RoundedButton';
 import {
   Title,
@@ -21,12 +19,14 @@ import SettingContext from '../../context/settings';
 import PaymentContext from '../../context/payments';
 import { RidePageContext } from '../../context/newRideContext';
 import showPriceBasedOnAccount from '../../services/showPriceBasedOnAccount';
+import { NoBreakdownSkeleton, PriceBreakdownSkeleton } from './Skeleton';
 
-const NoBreakdownComponent = ({
-  didRequestFail,
-  isLoading,
-  retryFunction,
-}: any) => {
+interface NoBreakdownComponentProps {
+  didRequestFail: boolean;
+  retryFunction: () => Promise<void>;
+}
+
+const NoBreakdownComponent = ({ didRequestFail, retryFunction }: NoBreakdownComponentProps) => {
   if (didRequestFail) {
     return (
       <>
@@ -43,19 +43,14 @@ const NoBreakdownComponent = ({
       </>
     );
   }
-  return (
-    <SkeletonContent
-      containerStyle={{}}
-      isLoading={isLoading}
-      layout={[breakdownSkeleton, breakdownSkeleton, breakdownSkeleton]}
-    />
-  );
+
+  return <NoBreakdownSkeleton />;
 };
 
 interface PriceBreakdownProps {
   priceCalculation: any;
   didRequestFail: boolean;
-  retryGetPriceBreakdown: any;
+  retryGetPriceBreakdown: () => Promise<void>;
 }
 
 const PriceBreakdown = ({
@@ -66,7 +61,6 @@ const PriceBreakdown = ({
   const { businessAccountId } = useContext(RidePageContext);
   const { getBusinessAccountById } = PaymentContext.useContainer();
   const { showPrice, loadShowPrice } = SettingContext.useContainer();
-  const isDebuggingEnabled = typeof atob !== 'undefined';
   const [priceCalculationItems, setPriceCalculationItems] = useState<any[]>();
   const [total, setTotal] = useState<null | string>(null);
 
@@ -144,7 +138,6 @@ const PriceBreakdown = ({
         ) : (
           <NoBreakdownComponent
             didRequestFail={didRequestFail}
-            isLoading={!priceCalculationItems && !isDebuggingEnabled}
             retryFunction={retryGetPriceBreakdown}
           />
         )}
@@ -158,16 +151,7 @@ const PriceBreakdown = ({
               {priceCalculationItems && showPrice ? (
                 <PriceText testID="priceCalculation">{total}</PriceText>
               ) : (
-                <SkeletonContent
-                  containerStyle={{}}
-                  isLoading={!priceCalculationItems && !isDebuggingEnabled}
-                  layout={[
-                    {
-                      width: 50,
-                      height: 10,
-                    },
-                  ]}
-                />
+                <PriceBreakdownSkeleton />
               )}
             </Row>
           </InnerContainer>

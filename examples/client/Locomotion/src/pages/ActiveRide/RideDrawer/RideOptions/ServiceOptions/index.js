@@ -1,5 +1,4 @@
 import React, { useContext, useEffect } from 'react';
-import SkeletonContent from 'react-native-skeleton-content-nonexpo';
 import { Text } from 'react-native';
 import EmptyState from '../../../../../Components/EmptyState';
 import { getCouponText } from '../../../../../context/newRideContext/utils';
@@ -8,12 +7,11 @@ import { UserContext } from '../../../../../context/user';
 import SettingContext from '../../../../../context/settings';
 import PaymentContext from '../../../../../context/payments';
 import showPriceBasedOnAccount from '../../../../../services/showPriceBasedOnAccount';
-
 import ServiceCard from './ServiceCard';
 import { ServiceOptionsContainer } from './styles';
-import { serviceCardSkeleton } from './ServiceCard/skeleton';
 import { BottomSheetContext, INITIAL_TOP_BAR_PROPS } from '../../../../../context/bottomSheetContext';
 import i18n from '../../../../../I18n';
+import { ServiceOptionsSkeleton } from './Skeleton';
 
 const SUCCESS_COLOR = '#25B861';
 
@@ -84,18 +82,9 @@ const ServiceOptions = () => {
           />
         ))
       }
-      {!isDebuggingEnabled
-        ? (
-          <SkeletonContent
-            containerStyle={{}}
-            isLoading={!serviceEstimations}
-            layout={[
-              serviceCardSkeleton,
-              serviceCardSkeleton,
-              serviceCardSkeleton,
-            ]}
-          />
-        ) : null}
+      {!isDebuggingEnabled && !serviceEstimations && (
+        <ServiceOptionsSkeleton />
+      )}
     </ServiceOptionsContainer>
   );
 };
