@@ -1368,8 +1368,6 @@ PODS:
     - React-perflogger (= 0.73.11)
   - RNCAsyncStorage (1.17.10):
     - React-Core
-  - RNCClipboard (1.5.1):
-    - React-Core
   - RNCMaskedView (0.2.9):
     - React-Core
   - RNCPicker (2.4.8):
@@ -1413,7 +1411,7 @@ PODS:
     - RCT-Folly (= 2022.05.16.00)
     - React-Core
     - ReactCommon/turbomodule/core
-  - RNScreens (3.37.0):
+  - RNScreens (3.32.0):
     - glog
     - RCT-Folly (= 2022.05.16.00)
     - React-Core
@@ -1427,42 +1425,42 @@ PODS:
     - libwebp (~> 1.0)
     - SDWebImage/Core (~> 5.10)
   - SocketRocket (0.6.1)
-  - Stripe (23.1.1):
-    - StripeApplePay (= 23.1.1)
-    - StripeCore (= 23.1.1)
-    - StripePayments (= 23.1.1)
-    - StripePaymentsUI (= 23.1.1)
-    - StripeUICore (= 23.1.1)
-  - stripe-react-native (0.20.0):
+  - Stripe (23.18.3):
+    - StripeApplePay (= 23.18.3)
+    - StripeCore (= 23.18.3)
+    - StripePayments (= 23.18.3)
+    - StripePaymentsUI (= 23.18.3)
+    - StripeUICore (= 23.18.3)
+  - stripe-react-native (0.35.1):
     - React-Core
-    - Stripe (~> 23.1.0)
-    - StripeApplePay (~> 23.1.0)
-    - StripeFinancialConnections (~> 23.1.0)
-    - StripePayments (~> 23.1.0)
-    - StripePaymentSheet (~> 23.1.0)
-    - StripePaymentsUI (~> 23.1.0)
-  - StripeApplePay (23.1.1):
-    - StripeCore (= 23.1.1)
-  - StripeCore (23.1.1)
-  - StripeFinancialConnections (23.1.1):
-    - StripeCore (= 23.1.1)
-    - StripeUICore (= 23.1.1)
-  - StripePayments (23.1.1):
-    - StripeCore (= 23.1.1)
-    - StripePayments/Stripe3DS2 (= 23.1.1)
-  - StripePayments/Stripe3DS2 (23.1.1):
-    - StripeCore (= 23.1.1)
-  - StripePaymentSheet (23.1.1):
-    - StripeApplePay (= 23.1.1)
-    - StripeCore (= 23.1.1)
-    - StripePayments (= 23.1.1)
-    - StripePaymentsUI (= 23.1.1)
-  - StripePaymentsUI (23.1.1):
-    - StripeCore (= 23.1.1)
-    - StripePayments (= 23.1.1)
-    - StripeUICore (= 23.1.1)
-  - StripeUICore (23.1.1):
-    - StripeCore (= 23.1.1)
+    - Stripe (~> 23.18.0)
+    - StripeApplePay (~> 23.18.0)
+    - StripeFinancialConnections (~> 23.18.0)
+    - StripePayments (~> 23.18.0)
+    - StripePaymentSheet (~> 23.18.0)
+    - StripePaymentsUI (~> 23.18.0)
+  - StripeApplePay (23.18.3):
+    - StripeCore (= 23.18.3)
+  - StripeCore (23.18.3)
+  - StripeFinancialConnections (23.18.3):
+    - StripeCore (= 23.18.3)
+    - StripeUICore (= 23.18.3)
+  - StripePayments (23.18.3):
+    - StripeCore (= 23.18.3)
+    - StripePayments/Stripe3DS2 (= 23.18.3)
+  - StripePayments/Stripe3DS2 (23.18.3):
+    - StripeCore (= 23.18.3)
+  - StripePaymentSheet (23.18.3):
+    - StripeApplePay (= 23.18.3)
+    - StripeCore (= 23.18.3)
+    - StripePayments (= 23.18.3)
+    - StripePaymentsUI (= 23.18.3)
+  - StripePaymentsUI (23.18.3):
+    - StripeCore (= 23.18.3)
+    - StripePayments (= 23.18.3)
+    - StripeUICore (= 23.18.3)
+  - StripeUICore (23.18.3):
+    - StripeCore (= 23.18.3)
   - Yoga (1.14.0)
 
 DEPENDENCIES:
@@ -1569,7 +1567,6 @@ DEPENDENCIES:
   - React-utils (from `../node_modules/react-native/ReactCommon/react/utils`)
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
   - "RNCAsyncStorage (from `../node_modules/@react-native-async-storage/async-storage`)"
-  - "RNCClipboard (from `../node_modules/@react-native-community/clipboard`)"
   - "RNCMaskedView (from `../node_modules/@react-native-masked-view/masked-view`)"
   - "RNCPicker (from `../node_modules/@react-native-picker/picker`)"
   - RNDeviceInfo (from `../node_modules/react-native-device-info`)
@@ -1769,8 +1766,6 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon"
   RNCAsyncStorage:
     :path: "../node_modules/@react-native-async-storage/async-storage"
-  RNCClipboard:
-    :path: "../node_modules/@react-native-community/clipboard"
   RNCMaskedView:
     :path: "../node_modules/@react-native-masked-view/masked-view"
   RNCPicker:
@@ -1866,7 +1861,7 @@ SPEC CHECKSUMS:
   react-native-appsflyer: 7f5e98f1ffd5c16a961b5300ac7a4d24d23676da
   react-native-background-timer: 4638ae3bee00320753647900b21260b10587b6f7
   react-native-carrier-info: 779179d074310054d1063ac58ae444ce772b21be
-  react-native-config: ea75335a7cca1d3326de1da384227e580a7c082e
+  react-native-config: 53a5e0a87973fb344c02914563a8b6090a986617
   react-native-date-picker: bbf77c50dce9da2beb11e2f67f3300195ba27d81
   react-native-geolocation: f0fa51740690633a1adb6222539166b484facefb
   react-native-geolocation-service: 32b2c2a3b91e70ce2a8d0c684801aaeb0a07e0ec
@@ -1901,7 +1896,6 @@ SPEC CHECKSUMS:
   React-utils: e8549669b504c18929b2e9aa4d87657e530a91a4
   ReactCommon: 9c38e8797dc2ac72edf63cd18cf450d918575666
   RNCAsyncStorage: fdb01edd825ea18d63e6faf50b8989cea24f2dd3
-  RNCClipboard: b0541df1bb88935d40bdc93b41b7d8e3334c998a
   RNCMaskedView: 4b5b12efdee55966f1d68f32d4b3401c2acf05c2
   RNCPicker: a04f825ecc28764441425987e78946032850102d
   RNDeviceInfo: 900bd20e1fd3bfd894e7384cc4a83880c0341bd3
@@ -1912,20 +1906,20 @@ SPEC CHECKSUMS:
   RNGestureHandler: 1bee78004d2a26b1a3a9d2543ddd130525e9736b
   RNLocalize: 01b15a24a8f1856eeaeeb77f4179ccd88c117a73
   RNReanimated: 973a8eefcd968f461ff6415d5ff3900a8f8c6564
-  RNScreens: 3ce54903891fd6281865ad3e7cfe4c2bb438c70c
+  RNScreens: 6cf8de97c0a9436c3d74e89d62dfc6b102db59cc
   RNSVG: e8aaa6223a056a2f21fa9c1b171eaa10cd7f9556
   SDWebImage: a7f831e1a65eb5e285e3fb046a23fcfbf08e696d
   SDWebImageWebPCoder: 908b83b6adda48effe7667cd2b7f78c897e5111d
   SocketRocket: f32cd54efbe0f095c4d7594881e52619cfe80b17
-  Stripe: ff389e265eeffb891b871b62b2fa644e30e69338
-  stripe-react-native: f18c30984d5d6f0d87c1e35416c10920e164d1ae
-  StripeApplePay: 4413b4f21c0206094df20775aa5e8e063b9c8b5d
-  StripeCore: 6318dff8f7e42125c6e8b671ac54a6e82804705a
-  StripeFinancialConnections: 3586b42043921d46eadf59bb0dcd2ac17ff109f2
-  StripePayments: 7e903765860f1cc914041069edc9cf5e202f5ef7
-  StripePaymentSheet: 49602fb474a86e7624a082f256fd786b2eac80cb
-  StripePaymentsUI: e4b2be5b5b5edb774fc8667a71429194c39ce2a4
-  StripeUICore: 149ba9dda3f48dff829d2ebb2e3d455bc59dc0ed
+  Stripe: e046335ab6e3f25d39f1a55bd98620a85269cffa
+  stripe-react-native: b826a7a621596be9a3971d66ad63a24c48b391f0
+  StripeApplePay: 1aa77f8ec7a6d9463fa8f49ae0672fe59dbf4c73
+  StripeCore: fe10c34fb3c9ae18b986913f7e4460e7c653ce93
+  StripeFinancialConnections: 6022426894046f26fe21d348da02d83d8a637fb0
+  StripePayments: 7084fed30c5f03f15ae23c5dce63715ba0b53e15
+  StripePaymentSheet: c8d25d4133476c6238d3cc932fb8219bb5ea49c0
+  StripePaymentsUI: c12de264eda974d91e43a769f53a6c6afc9a1715
+  StripeUICore: 090c4fe916d039616ce8f8de30392f4aeb33dd16
   Yoga: a813a6d82538ccba91c54406404e3ed80b48a692
 
 PODFILE CHECKSUM: 77be61d8fa335d48f68a12ea2d32c430cdd2005d

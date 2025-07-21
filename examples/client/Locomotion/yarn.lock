@@ -2323,11 +2323,6 @@
     prompts "^2.4.2"
     semver "^7.5.2"
 
-"@react-native-community/clipboard@^1.5.1":
-  version "1.5.1"
-  resolved "https://registry.npmjs.org/@react-native-community/clipboard/-/clipboard-1.5.1.tgz"
-  integrity sha512-AHAmrkLEH5UtPaDiRqoULERHh3oNv7Dgs0bTC0hO5Z2GdNokAMPT5w8ci8aMcRemcwbtdHjxChgtjbeA38GBdA==
-
 "@react-native-community/geolocation@^3.1.0":
   version "3.1.0"
   resolved "https://registry.npmjs.org/@react-native-community/geolocation/-/geolocation-3.1.0.tgz"
@@ -2639,10 +2634,10 @@
   dependencies:
     "@sinonjs/commons" "^3.0.0"
 
-"@stripe/stripe-react-native@^0.20.0":
-  version "0.20.0"
-  resolved "https://registry.npmjs.org/@stripe/stripe-react-native/-/stripe-react-native-0.20.0.tgz"
-  integrity sha512-KDUebiphZZd5KYCKiYAGWPkN7yU9hmhIfRJn7uVlhdPP2TbR2xDcjcqVchAGIasUZTbI1K2SgeJG5hgBJgG4qQ==
+"@stripe/stripe-react-native@^0.35.1":
+  version "0.35.1"
+  resolved "https://registry.npmjs.org/@stripe/stripe-react-native/-/stripe-react-native-0.35.1.tgz"
+  integrity sha512-F6sewQYO0/wS1LDsjH9mE6qvyhfU3BAfz81oBSzntH8HdGon/TablGYsGTXrpmok+c4qzbXCQcPmVOdisZMQ0A==
 
 "@svgr/babel-plugin-add-jsx-attribute@8.0.0":
   version "8.0.0"
@@ -9997,10 +9992,10 @@ react-native-safe-area-context@^4.6.3:
   resolved "https://registry.npmjs.org/react-native-safe-area-context/-/react-native-safe-area-context-4.6.3.tgz"
   integrity sha512-3CeZM9HFXkuqiU9HqhOQp1yxhXw6q99axPWrT+VJkITd67gnPSU03+U27Xk2/cr9XrLUnakM07kj7H0hdPnFiQ==
 
-react-native-screens@^3.25.0:
-  version "3.37.0"
-  resolved "https://registry.npmjs.org/react-native-screens/-/react-native-screens-3.37.0.tgz"
-  integrity sha512-vEi4qZqWYoGuVGuHTv1K2XA90rgSydksmR5+tb5uhL93whl6Bch6EEXzC+8eEfj4SimiCgXBPY7r/xTXJxvnUg==
+react-native-screens@~3.32.0:
+  version "3.32.0"
+  resolved "https://registry.npmjs.org/react-native-screens/-/react-native-screens-3.32.0.tgz"
+  integrity sha512-wybqZAHX7v8ipOXhh90CqGLkBHw5JYqKNRBX7R/b0c2WQisTOgu0M0yGwBMM6LyXRBT+4k3NTGHdDbpJVpq0yQ==
   dependencies:
     react-freeze "^1.0.0"
     warn-once "^0.1.0"
