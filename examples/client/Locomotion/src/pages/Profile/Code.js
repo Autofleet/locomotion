@@ -18,6 +18,7 @@ import { MAIN_ROUTES } from '../routes';
 import { UserContext } from '../../context/user';
 import { PageContainer, ContentContainer } from '../styles';
 import useInterval from '../../lib/useInterval';
+import Captcha from './Captcha';
 
 const CODE_LENGTH = 4;
 const RESEND_SECONDS = 60;
@@ -32,6 +33,8 @@ const Code = () => {
   const [resendCounter, setResendCounter] = useState(0);
   const [callCounter, setCallCounter] = useState(0);
   const [isCalling, setIsCalling] = useState(false);
+  const [isRetryingLogin, setIsRetryingLogin] = useState(false);
+  const [retryChannel, setRetryChannel] = useState(null);
 
   const onVertCodeChange = (value) => {
     setShowErrorText(false);
@@ -76,25 +79,36 @@ const Code = () => {
   const onLoginInternal = async (channel) => {
     try {
       await onLogin(user.phoneNumber, channel);
+      setIsRetryingLogin(false);
+      setRetryChannel(null);
     } catch (e) {
       console.log('Bad login with response', e);
       const status = e && e.response && e.response.status;
       if (status === 429) {
         setShowErrorText(i18n.t('login.tooManyRequestError'));
       }
+      setIsRetryingLogin(false);
+      setRetryChannel(null);
     }
   };
 
   const onResendPress = async () => {
-    await onLoginInternal();
+    setIsRetryingLogin(true);
+    setRetryChannel('sms');
     setResendCounter(currentValue => currentValue + 1);
     setTimer(RESEND_SECONDS);
   };
 
   const onCallPress = async () => {
-    await onLoginInternal('call');
+    setIsRetryingLogin(true);
+    setRetryChannel('call');
     setCallCounter(currentValue => currentValue + 1);
     setIsCalling(true);
+  };
+
+  const handleCaptchaClosed = () => {
+    setIsRetryingLogin(false);
+    setRetryChannel(null);
   };
 
   useEffect(() => {
@@ -181,6 +195,12 @@ const Code = () => {
           isLoading={loading}
           isInvalid
           onFail={() => setShowErrorText(true)}
+        />
+        <Captcha
+          isOpen={isRetryingLogin}
+          onVerified={() => onLoginInternal(retryChannel)}
+          onError={handleCaptchaClosed}
+          onClose={handleCaptchaClosed}
         />
       </ContentContainer>
     </PageContainer>
