@@ -12,7 +12,6 @@ import com.facebook.flipper.android.utils.FlipperUtils;
 import com.facebook.flipper.core.FlipperClient;
 import com.facebook.flipper.plugins.crashreporter.CrashReporterPlugin;
 import com.facebook.flipper.plugins.databases.DatabasesFlipperPlugin;
-// import com.facebook.flipper.plugins.fresco.FrescoFlipperPlugin; // Disabled for RN 0.73
 import com.facebook.flipper.plugins.inspector.DescriptorMapping;
 import com.facebook.flipper.plugins.inspector.InspectorFlipperPlugin;
 import com.facebook.flipper.plugins.network.FlipperOkhttpInterceptor;
@@ -48,9 +47,6 @@ public class ReactNativeFlipper {
           });
       client.addPlugin(networkFlipperPlugin);
       client.start();
-
-      // Fresco Plugin disabled for RN 0.73 compatibility
-      // The ImagePerfDataListener class is not available in this version
     }
   }
 }
