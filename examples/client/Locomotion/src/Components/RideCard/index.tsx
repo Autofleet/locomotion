@@ -17,7 +17,7 @@ import { PAYMENT_METHODS } from '../../pages/Payments/consts';
 import PaymentContext from '../../context/payments';
 import SettingContext from '../../context/settings';
 import showPriceBasedOnAccount from '../../services/showPriceBasedOnAccount';
-import { RideDateSkeleton } from './Skeleton';
+import { RideDateSkeleton } from './Skeleton/RideDateSkeleton';
 
 
 interface CardComponentProps {

@@ -5,7 +5,7 @@ import HistoryIcon from '../../../../assets/recent_search.svg';
 import GeoIcon from '../../../../assets/geo_location.svg';
 import LocationPinIcon from '../../../../assets/location_pin.svg';
 import Button from '../../../../Components/Button';
-import { AddressLineSkeleton } from './Skeleton';
+import { AddressLineSkeleton } from './Skeleton/AddressLineSkeleton';
 
 
 const ICONS = {

@@ -1,4 +1,4 @@
-import { ServiceCardSkeleton } from "../ServiceCard/Skeleton"
+import { ServiceCardSkeleton } from "../ServiceCard/Skeleton/ServiceCardSkeleton"
 
 export const ServiceOptionsSkeleton = () => {
     return (

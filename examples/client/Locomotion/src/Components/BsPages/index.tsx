@@ -45,7 +45,7 @@ import { getFutureRideMaxDate, getFutureRideMinDate, RIDE_POPUPS } from '../../c
 import { PAYMENT_METHODS } from '../../pages/Payments/consts';
 import DatePickerPoppup from '../../popups/DatePickerPoppup';
 import { VirtualStationsContext } from '../../context/virtualStationsContext';
-import { ConfirmPickupSkeleton } from './Skeleton';
+import { ConfirmPickupSkeleton } from './Skeleton/ConfirmPickupSkeleton';
 
 const OtherButton = styled(Button)`
   background-color: ${({ warning, theme }) => (warning ? ERROR_COLOR : theme.primaryColor)};

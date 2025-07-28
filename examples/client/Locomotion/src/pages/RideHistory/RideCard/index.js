@@ -47,7 +47,7 @@ import ServiceTypeDetails from '../../../Components/ServiceTypeDetails';
 import RoundedButton from '../../../Components/RoundedButton';
 import contactUsIcon from '../../../assets/headset.svg';
 import sucessIcon from '../../../assets/checkmark.svg';
-import { TipButtonSkeleton } from './Skeleton';
+import { TipButtonSkeleton } from './Skeleton/TipButtonSkeleton';
 
 const RideTitleCard = ({
   ride, page, showTip, tip, isPaymentRejected,

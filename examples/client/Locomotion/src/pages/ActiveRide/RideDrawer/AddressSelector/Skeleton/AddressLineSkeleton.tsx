@@ -1,4 +1,4 @@
-import { Skeleton } from "../../../../../Components/Skeleton";
+import { Skeleton } from "../../../../../Components/Skeleton/Skeleton";
 import { StyleSheet, View } from "react-native"
 
 export const AddressLineSkeleton = () => (

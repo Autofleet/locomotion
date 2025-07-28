@@ -17,7 +17,7 @@ import Button from '../../../../../../Components/Button';
 import * as navigationService from '../../../../../../services/navigation';
 import { UserContext } from '../../../../../../context/user';
 import selected from '../../../../../../assets/selected-v.svg';
-import { PromoButtonSkeleton } from './Skeleton';
+import { PromoButtonSkeleton } from './Skeleton/PromoButtonSkeleton';
 
 const TimeText = styled(Text)`
     ${FONT_SIZES.LARGE}

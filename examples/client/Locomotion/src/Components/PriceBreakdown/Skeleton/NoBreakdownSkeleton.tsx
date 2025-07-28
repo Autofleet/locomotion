@@ -1,4 +1,4 @@
-import { Skeleton } from "../../Skeleton";
+import { Skeleton } from "../../Skeleton/Skeleton";
 import { StyleSheet, View } from "react-native";
 
 const SkeletonItem = () => (

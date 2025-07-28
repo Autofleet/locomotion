@@ -11,7 +11,7 @@ import ServiceCard from './ServiceCard';
 import { ServiceOptionsContainer } from './styles';
 import { BottomSheetContext, INITIAL_TOP_BAR_PROPS } from '../../../../../context/bottomSheetContext';
 import i18n from '../../../../../I18n';
-import { ServiceOptionsSkeleton } from './Skeleton';
+import { ServiceOptionsSkeleton } from './Skeleton/ServiceOptionsSkeleton';
 
 const SUCCESS_COLOR = '#25B861';
 
