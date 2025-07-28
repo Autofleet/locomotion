@@ -1,5 +1,4 @@
 {
-  "extends": "@react-native/typescript-config/tsconfig.json",
   "compilerOptions": {
     "allowJs": true,
     "allowSyntheticDefaultImports": true,
@@ -7,7 +6,7 @@
     "isolatedModules": true,
     "jsx": "react-native",
     "lib": ["es2017"],
-    "moduleResolution": "bundler",
+    "moduleResolution": "node",
     "noEmit": true,
     "strict": true,
     "target": "esnext",
@@ -18,12 +17,12 @@
     },
     "skipLibCheck": true,
     "incremental": true,
-    "module": "esnext",
+    "module": "commonjs",
     "sourceMap": false,
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "resolveJsonModule": true,
-  },
+},
   "exclude": [
     "node_modules",
     "babel.config.js",
