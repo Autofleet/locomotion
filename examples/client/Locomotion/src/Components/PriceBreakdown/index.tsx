@@ -50,13 +50,13 @@ const NoBreakdownComponent = ({ didRequestFail, retryFunction }: NoBreakdownComp
 interface PriceBreakdownProps {
   priceCalculation: any;
   didRequestFail: boolean;
-  retryGetPriceBreakdown: () => Promise<void>;
+  reloadPriceBreakdown: () => Promise<void>;
 }
 
 const PriceBreakdown = ({
   priceCalculation,
   didRequestFail,
-  retryGetPriceBreakdown,
+  reloadPriceBreakdown,
 }: PriceBreakdownProps) => {
   const { businessAccountId } = useContext(RidePageContext);
   const { getBusinessAccountById } = PaymentContext.useContainer();
@@ -138,7 +138,7 @@ const PriceBreakdown = ({
         ) : (
           <NoBreakdownComponent
             didRequestFail={didRequestFail}
-            retryFunction={retryGetPriceBreakdown}
+            retryFunction={reloadPriceBreakdown}
           />
         )}
       </InnerContainer>
