@@ -6,7 +6,9 @@ import {
   useClearByFocusCell,
 } from 'react-native-confirmation-code-field';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Platform, Text, TextInput, TextInputProps, View } from 'react-native';
+import {
+  Platform, Text, TextInput, TextInputProps, View,
+} from 'react-native';
 import { Context } from '../../context/theme';
 import { styling } from './style';
 
@@ -22,7 +24,7 @@ const AUTO_COMPLETE = Platform.select<TextInputProps['autoComplete']>({
   default: 'one-time-code',
 });
 
-const PinCode = ({
+export const PinCode = ({
   onLastDigit,
   onChange,
   error,
@@ -76,5 +78,3 @@ const PinCode = ({
     </SafeAreaView>
   );
 };
-
-export default PinCode;

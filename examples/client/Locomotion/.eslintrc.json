@@ -47,7 +47,8 @@
       "jsx-a11y/anchor-is-valid": ["off"],
       "react/jsx-no-bind": ["off"],
       "no-restricted-syntax": "warn",
-      "react/require-default-props": "off"
+      "react/require-default-props": "off",
+      "import/prefer-default-export": "off"
   },
   "globals": {
       "navigator": true,
