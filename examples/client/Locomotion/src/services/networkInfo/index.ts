@@ -6,6 +6,7 @@ class NetworkInfo {
 
   private isInternetReachable: boolean;
 
+  // eslint-disable-next-line no-use-before-define
   private static instance: NetworkInfo;
 
   private constructor() {

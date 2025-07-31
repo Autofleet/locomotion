@@ -90,10 +90,10 @@ const RidePage = ({ mapSettings, navigation }) => {
   const {
     currentBsPage, changeBsPage, setIsDraggingLocationPin, isDraggingLocationPin,
   } = useContext(RideStateContextContext);
-  const isChooseLocationOnMap = [BS_PAGES.CONFIRM_PICKUP, BS_PAGES.SET_LOCATION_ON_MAP]
-    .includes(currentBsPage) && !isStationsEnabled;
   const { checkMessagesForToast } = useContext(MessagesContext);
   const { isStationsEnabled } = useContext(VirtualStationsContext);
+  const isChooseLocationOnMap = [BS_PAGES.CONFIRM_PICKUP, BS_PAGES.SET_LOCATION_ON_MAP]
+    .includes(currentBsPage) && !isStationsEnabled;
 
   const {
     serviceEstimations,
