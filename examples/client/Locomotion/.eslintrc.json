@@ -35,7 +35,6 @@
       "array-callback-return": 1,
       "react/forbid-prop-types": 1,
       "no-use-before-define": 1,
-      "import/prefer-default-export": 1,
       "import/extensions": 1,
       "import/named": 1,
       "no-unused-vars": 1,
@@ -48,7 +47,7 @@
       "jsx-a11y/anchor-is-valid": ["off"],
       "react/jsx-no-bind": ["off"],
       "no-restricted-syntax": "warn",
-      "react/require-default-props": "off"
+      "react/require-default-props": "off",
   },
   "globals": {
       "navigator": true,
