@@ -140,7 +140,7 @@
     "jetifier": "^2.0.0",
     "patch-package": "^7.0.0",
     "react-test-renderer": "^18.2.0",
-    "typescript": "^5.0.4"
+    "typescript": "~5.0.4"
   },
   "jest": {
     "preset": "react-native"
