@@ -1368,6 +1368,8 @@ PODS:
     - React-perflogger (= 0.73.11)
   - RNCAsyncStorage (1.17.10):
     - React-Core
+  - RNCMaskedView (0.2.9):
+    - React-Core
   - RNCPicker (2.4.8):
     - React-Core
   - RNDeviceInfo (11.1.0):
@@ -1565,6 +1567,7 @@ DEPENDENCIES:
   - React-utils (from `../node_modules/react-native/ReactCommon/react/utils`)
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
   - "RNCAsyncStorage (from `../node_modules/@react-native-async-storage/async-storage`)"
+  - "RNCMaskedView (from `../node_modules/@react-native-masked-view/masked-view`)"
   - "RNCPicker (from `../node_modules/@react-native-picker/picker`)"
   - RNDeviceInfo (from `../node_modules/react-native-device-info`)
   - RNExitApp (from `../node_modules/react-native-exit-app`)
@@ -1763,6 +1766,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon"
   RNCAsyncStorage:
     :path: "../node_modules/@react-native-async-storage/async-storage"
+  RNCMaskedView:
+    :path: "../node_modules/@react-native-masked-view/masked-view"
   RNCPicker:
     :path: "../node_modules/@react-native-picker/picker"
   RNDeviceInfo:
@@ -1891,6 +1896,7 @@ SPEC CHECKSUMS:
   React-utils: e8549669b504c18929b2e9aa4d87657e530a91a4
   ReactCommon: 9c38e8797dc2ac72edf63cd18cf450d918575666
   RNCAsyncStorage: fdb01edd825ea18d63e6faf50b8989cea24f2dd3
+  RNCMaskedView: 4b5b12efdee55966f1d68f32d4b3401c2acf05c2
   RNCPicker: a04f825ecc28764441425987e78946032850102d
   RNDeviceInfo: 900bd20e1fd3bfd894e7384cc4a83880c0341bd3
   RNExitApp: 4432b9b7cc5ccec9f91c94e507849891282befd4
