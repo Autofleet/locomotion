@@ -1,5 +1,5 @@
 import React, {
-  useContext, useEffect, useState, useRef, useCallback,
+  useContext, useEffect, useRef, useCallback,
 } from 'react';
 import {
   MarkerAnimated, AnimatedRegion, MapMarker, LatLng,
@@ -53,16 +53,18 @@ const AvailabilityVehicle = ({
   const { useVehicleColor } = useContext(ThemeContext);
   const { vehicleColor } = useVehicleColor();
   const markerRef = useRef<MapMarker>(null);
-  const [locationAnimated] = useState(new AnimatedRegion({
-    latitude: ensureNumberType(location.lat),
-    latitudeDelta: 0.1,
-    longitude: ensureNumberType(location.lng),
-    longitudeDelta: 0.1,
-  }));
+  const locationAnimationRef = useRef<AnimatedRegion>(
+    new AnimatedRegion({
+      latitude: ensureNumberType(location.lat),
+      longitude: ensureNumberType(location.lng),
+      latitudeDelta: MAINTAIN_CURRENT_ZOOM,
+      longitudeDelta: MAINTAIN_CURRENT_ZOOM,
+    }),
+  );
 
   useEffect(() => {
     if (location.lat && location.lng) {
-      locationAnimated.timing({
+      locationAnimationRef.current.timing({
         toValue: ANIMATED_VALUE_PLACEHOLDER,
         duration: DURATION,
         longitudeDelta: MAINTAIN_CURRENT_ZOOM,
@@ -91,7 +93,7 @@ const AvailabilityVehicle = ({
     <MarkerAnimated
       key={id}
       ref={markerRef}
-      coordinate={locationAnimated as unknown as LatLng}
+      coordinate={locationAnimationRef.current as unknown as LatLng}
       anchor={{ x: 0.5, y: 0.40 }}
       tappable={false}
       // tooltip workaround, need to upgrade library
@@ -105,7 +107,6 @@ const AvailabilityVehicle = ({
         style={svgStyle}
       />
     </MarkerAnimated>
-
   );
 };
 
