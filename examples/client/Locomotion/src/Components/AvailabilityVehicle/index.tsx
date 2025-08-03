@@ -4,7 +4,6 @@ import React, {
 import {
   MarkerAnimated, AnimatedRegion, MapMarker, LatLng,
 } from 'react-native-maps';
-import { StyleProp } from 'react-native';
 import { Context as ThemeContext } from '../../context/theme';
 import SvgIcon from '../SvgIcon';
 import carIcon from '../../assets/map/Autofleet_Car_Icon.svg';
@@ -83,7 +82,7 @@ const AvailabilityVehicle = ({
     }
   }, [markerRef]);
 
-  const svgStyle: StyleProp<SvgStyle> = { color: vehicleColor };
+  const svgStyle: SvgStyle = { color: vehicleColor };
   if (location?.bearing) {
     svgStyle.transform = [{ rotate: `${location.bearing}deg` }];
   }
