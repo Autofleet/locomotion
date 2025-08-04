@@ -76,6 +76,10 @@ const AvailabilityVehicle = ({
     }
   }, [location]);
 
+  useEffect(() => {
+    markerRef.current?.redraw();
+  }, [vehicleColor, markerRef.current, location?.bearing]);
+
   const onPressWorkaround = useCallback(() => {
     try {
       markerRef?.current?.hideCallout();
