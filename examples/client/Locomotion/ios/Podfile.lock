@@ -175,11 +175,11 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - Mixpanel-swift (4.1.0):
-    - Mixpanel-swift/Complete (= 4.1.0)
-  - Mixpanel-swift/Complete (4.1.0)
-  - MixpanelReactNative (2.2.1):
-    - Mixpanel-swift (= 4.1.0)
+  - Mixpanel-swift (4.2.0):
+    - Mixpanel-swift/Complete (= 4.2.0)
+  - Mixpanel-swift/Complete (4.2.0)
+  - MixpanelReactNative (2.4.1):
+    - Mixpanel-swift (= 4.2.0)
     - React-Core
   - nanopb (2.30910.0):
     - nanopb/decode (= 2.30910.0)
@@ -1967,8 +1967,8 @@ SPEC CHECKSUMS:
   libwebp: 02b23773aedb6ff1fd38cec7a77b81414c6842a8
   lottie-ios: e047b1d2e6239b787cc5e9755b988869cf190494
   lottie-react-native: 45707364bd70cffa7602fa1a1abb40dee5f3c0e0
-  Mixpanel-swift: 7b46c63259dec8398a7df9f8a1298fd00b6b3cb3
-  MixpanelReactNative: 582ad8a433b8a207fd86bc60be9ff2f0cdf81eef
+  Mixpanel-swift: e5dd85295923e6a875acf17ccbab8d2ecb10ea65
+  MixpanelReactNative: 37259ace491ca9d927c0f81498e6577a32a69f43
   nanopb: 438bc412db1928dac798aa6fd75726007be04262
   OneSignalXCFramework: 1a3b28dfbff23aabce585796d23c1bef37772774
   PromisesObjC: f5707f49cb48b9636751c5b2e7d227e43fba9f47
