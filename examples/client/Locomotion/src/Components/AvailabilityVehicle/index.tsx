@@ -4,6 +4,7 @@ import React, {
 import {
   MarkerAnimated, AnimatedRegion, MapMarker, LatLng,
 } from 'react-native-maps';
+import { Platform } from 'react-native';
 import { Context as ThemeContext } from '../../context/theme';
 import SvgIcon from '../SvgIcon';
 import carIcon from '../../assets/map/Autofleet_Car_Icon.svg';
@@ -25,7 +26,7 @@ interface SvgStyle {
 }
 
 /** toValue is ignored in favor of lat/lng, but required by TimingAnimationConfig interface */
-const ANIMATED_VALUE_PLACEHOLDER = 1;
+const TO_VALUE_PLACEHOLDER = 1;
 
 /** Zero delta maintains current map zoom level during marker animation */
 const MAINTAIN_CURRENT_ZOOM = 0;
@@ -57,27 +58,29 @@ const AvailabilityVehicle = ({
     new AnimatedRegion({
       latitude: ensureNumberType(location.lat),
       longitude: ensureNumberType(location.lng),
-      latitudeDelta: MAINTAIN_CURRENT_ZOOM,
-      longitudeDelta: MAINTAIN_CURRENT_ZOOM,
+      latitudeDelta: 0.1,
+      longitudeDelta: 0.1,
     }),
   );
 
   useEffect(() => {
     if (location.lat && location.lng) {
       locationAnimationRef.current.timing({
-        toValue: ANIMATED_VALUE_PLACEHOLDER,
+        toValue: TO_VALUE_PLACEHOLDER,
         duration: DURATION,
         longitudeDelta: MAINTAIN_CURRENT_ZOOM,
         latitudeDelta: MAINTAIN_CURRENT_ZOOM,
         useNativeDriver: false,
-        latitude: location.lat,
-        longitude: location.lng,
+        latitude: ensureNumberType(location.lat),
+        longitude: ensureNumberType(location.lng),
       }).start();
     }
-  }, [location]);
+  }, [location?.lat, location?.lng]);
 
   useEffect(() => {
-    markerRef.current?.redraw();
+    if (Platform.OS === 'android') {
+      markerRef.current?.redraw();
+    }
   }, [vehicleColor, markerRef.current, location?.bearing]);
 
   const onPressWorkaround = useCallback(() => {
