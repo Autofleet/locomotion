@@ -1,10 +1,10 @@
 import React, {
-  useContext, useEffect, useState, useRef, useCallback,
+  useContext, useEffect, useRef, useCallback,
 } from 'react';
 import {
-  Platform,
-} from 'react-native';
-import { MarkerAnimated, AnimatedRegion } from 'react-native-maps';
+  MarkerAnimated, AnimatedRegion, MapMarker, LatLng,
+} from 'react-native-maps';
+import { Platform } from 'react-native';
 import { Context as ThemeContext } from '../../context/theme';
 import SvgIcon from '../SvgIcon';
 import carIcon from '../../assets/map/Autofleet_Car_Icon.svg';
@@ -20,17 +20,28 @@ interface AvailabilityVehicleProps {
   id: string;
 }
 
+interface SvgStyle {
+  color: string,
+  transform?: { rotate: string }[]
+}
+
+/** toValue is ignored in favor of lat/lng, but required by TimingAnimationConfig interface */
+const TO_VALUE_PLACEHOLDER = 1;
+
+/** Zero delta maintains current map zoom level during marker animation */
+const MAINTAIN_CURRENT_ZOOM = 0;
+
 const DURATION = 5000;
 
 const areEqual = (
   prev: AvailabilityVehicleProps,
   next: AvailabilityVehicleProps,
 ) => prev.id === next.id
-  && prev.location.lat === next.location.lat
-  && prev.location.lng === next.location.lng
+&& prev.location.lat === next.location.lat
+&& prev.location.lng === next.location.lng
   && prev.location.bearing === next.location.bearing;
 
-const insureNumberType = (v: string | number) => {
+const ensureNumberType = (v: string | number) => {
   if (typeof v === 'string') {
     return parseFloat(v);
   }
@@ -42,33 +53,35 @@ const AvailabilityVehicle = ({
 }: AvailabilityVehicleProps) => {
   const { useVehicleColor } = useContext(ThemeContext);
   const { vehicleColor } = useVehicleColor();
-  const markerRef = useRef<MarkerAnimated>(null);
-  const [locationAnimated] = useState(new AnimatedRegion({
-    latitude: insureNumberType(location.lat),
-    latitudeDelta: 0.1,
-    longitude: insureNumberType(location.lng),
-    longitudeDelta: 0.1,
-  }));
+  const markerRef = useRef<MapMarker>(null);
+  const locationAnimationRef = useRef<AnimatedRegion>(
+    new AnimatedRegion({
+      latitude: ensureNumberType(location.lat),
+      longitude: ensureNumberType(location.lng),
+      latitudeDelta: 0.1,
+      longitudeDelta: 0.1,
+    }),
+  );
 
   useEffect(() => {
     if (location.lat && location.lng) {
-      if (Platform.OS === 'android') {
-        setTimeout(() => {
-          markerRef?.current?.animateMarkerToCoordinate({
-            latitude: insureNumberType(location.lat),
-            longitude: insureNumberType(location.lng),
-          }, DURATION);
-        }, 0);
-      } else {
-        locationAnimated.timing({
-          latitude: location.lat,
-          longitude: location.lng,
-          useNativeDriver: false,
-          duration: DURATION,
-        }).start();
-      }
+      locationAnimationRef.current.timing({
+        toValue: TO_VALUE_PLACEHOLDER,
+        duration: DURATION,
+        longitudeDelta: MAINTAIN_CURRENT_ZOOM,
+        latitudeDelta: MAINTAIN_CURRENT_ZOOM,
+        useNativeDriver: false,
+        latitude: ensureNumberType(location.lat),
+        longitude: ensureNumberType(location.lng),
+      }).start();
     }
-  }, [location]);
+  }, [location?.lat, location?.lng]);
+
+  useEffect(() => {
+    if (Platform.OS === 'android') {
+      markerRef.current?.redraw();
+    }
+  }, [vehicleColor, markerRef.current, location?.bearing]);
 
   const onPressWorkaround = useCallback(() => {
     try {
@@ -78,20 +91,21 @@ const AvailabilityVehicle = ({
     }
   }, [markerRef]);
 
-  const svgStyle : any = { color: vehicleColor };
+  const svgStyle: SvgStyle = { color: vehicleColor };
   if (location?.bearing) {
     svgStyle.transform = [{ rotate: `${location.bearing}deg` }];
   }
+
   return (
     <MarkerAnimated
       key={id}
       ref={markerRef}
-      coordinate={locationAnimated}
+      coordinate={locationAnimationRef.current as unknown as LatLng}
       anchor={{ x: 0.5, y: 0.40 }}
       tappable={false}
       // tooltip workaround, need to upgrade library
       onPress={onPressWorkaround}
-
+      tracksViewChanges={false}
     >
       <SvgIcon
         Svg={carIcon}
@@ -100,7 +114,6 @@ const AvailabilityVehicle = ({
         style={svgStyle}
       />
     </MarkerAnimated>
-
   );
 };
 
