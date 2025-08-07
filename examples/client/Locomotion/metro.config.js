@@ -5,25 +5,22 @@
  * @format
  */
 
-const {getDefaultConfig} = require('metro-config');
+const { getDefaultConfig, mergeConfig } = require('@react-native/metro-config');
 
-module.exports = (async () => {
-  const {
-    resolver: {sourceExts, assetExts},
-  } = await getDefaultConfig();
-  return {
-    transformer: {
-      getTransformOptions: async () => ({
-        transform: {
-          experimentalImportSupport: false,
-          inlineRequires: false,
-        },
-      }),
-      babelTransformerPath: require.resolve('react-native-svg-transformer'),
-    },
-    resolver: {
-      assetExts: assetExts.filter(ext => ext !== 'svg'),
-      sourceExts: [...sourceExts, 'svg'],
-    },
-  };
-})();
+const config = {
+  transformer: {
+    getTransformOptions: async () => ({
+      transform: {
+        experimentalImportSupport: false,
+        inlineRequires: false,
+      },
+    }),
+    babelTransformerPath: require.resolve('react-native-svg-transformer'),
+  },
+  resolver: {
+    assetExts: ['bin', 'txt', 'jpg', 'png', 'json', 'gif', 'webp', 'ttf', 'woff', 'woff2', 'otf'],
+    sourceExts: ['js', 'jsx', 'ts', 'tsx', 'json', 'svg'],
+  },
+};
+
+module.exports = mergeConfig(getDefaultConfig(__dirname), config);
