@@ -9,8 +9,7 @@ import styled, { ThemeContext } from 'styled-components';
 import { useBottomSheet } from '@gorhom/bottom-sheet';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import moment from 'moment';
-import SkeletonContent from 'react-native-skeleton-content-nonexpo';
-import CancellationReasonsProvider, { CancellationReasonsContext } from '../../context/cancellation-reasons';
+import { CancellationReasonsContext } from '../../context/cancellation-reasons';
 import objDefault from '../../lib/objDefault';
 import Mixpanel from '../../services/Mixpanel';
 import GenericErrorPopup from '../../popups/GenericError';
@@ -46,6 +45,7 @@ import { getFutureRideMaxDate, getFutureRideMinDate, RIDE_POPUPS } from '../../c
 import { PAYMENT_METHODS } from '../../pages/Payments/consts';
 import DatePickerPoppup from '../../popups/DatePickerPoppup';
 import { VirtualStationsContext } from '../../context/virtualStationsContext';
+import { ConfirmPickupSkeleton } from './Skeleton/ConfirmPickupSkeleton';
 
 const OtherButton = styled(Button)`
   background-color: ${({ warning, theme }) => (warning ? ERROR_COLOR : theme.primaryColor)};
@@ -100,7 +100,7 @@ const SubTitle = styled(Text)`
 const ButtonTitle = styled(Text)`
   margin: auto;
   ${FONT_SIZES.H2}
-  ${({ theme }:{ theme: any }) => `
+  ${({ theme }: { theme: any }) => `
     color: ${theme.primaryButtonTextColor}
   `};
 `;
@@ -108,7 +108,7 @@ const ButtonTitle = styled(Text)`
 type SecondaryButtonTitleInterface = {
   warning: boolean | undefined;
 }
-const SecondaryButtonTitle = styled(Text)<SecondaryButtonTitleInterface>`
+const SecondaryButtonTitle = styled(Text) <SecondaryButtonTitleInterface>`
   margin: auto;
   ${FONT_SIZES.H2}
   color: ${({ warning, theme }) => (warning ? '#333333' : theme.primaryColor)};
@@ -136,7 +136,7 @@ const Header = styled(View)`
 type FooterInterface = {
   fullWidthButtons: boolean | undefined;
 }
-const Footer = styled(View)<FooterInterface>`
+const Footer = styled(View) <FooterInterface>`
   width: 100%;
   display: flex;
   flex-direction: ${({ fullWidthButtons }) => (fullWidthButtons ? 'column' : 'row')};
@@ -211,47 +211,47 @@ const BsPage = ({
       <MainContent>
         <>
           {TitleText && (
-          <Header>
-            <CardText style={{ width: Image ? '50%' : '100%' }}>
-              <TitleContainer>
-                {titleIcon && <SvgIcon Svg={titleIcon} style={{ marginRight: 5 }} />}
-                <Title>{TitleText}</Title>
-              </TitleContainer>
-              <SubTitle testID={subtitleTestId}>{SubTitleText}</SubTitle>
-            </CardText>
-            {Image ? (
-              <ImageContainer>
-                {Image}
-              </ImageContainer>
-            ) : undefined}
-          </Header>
+            <Header>
+              <CardText style={{ width: Image ? '50%' : '100%' }}>
+                <TitleContainer>
+                  {titleIcon && <SvgIcon Svg={titleIcon} style={{ marginRight: 5 }} />}
+                  <Title>{TitleText}</Title>
+                </TitleContainer>
+                <SubTitle testID={subtitleTestId}>{SubTitleText}</SubTitle>
+              </CardText>
+              {Image ? (
+                <ImageContainer>
+                  {Image}
+                </ImageContainer>
+              ) : undefined}
+            </Header>
           )}
           {children}
         </>
       </MainContent>
       <Footer fullWidthButtons={fullWidthButtons}>
         {ButtonText && (
-        <OtherButton
-          testID="bottomSheetConfirm"
-          style={{ width: buttonWidth }}
-          disabled={buttonDisabled}
-          onPress={onButtonPress}
-          isLoading={isLoading}
-          warning={warning}
-        >
-          <ButtonTitle>{ButtonText}</ButtonTitle>
-        </OtherButton>
+          <OtherButton
+            testID="bottomSheetConfirm"
+            style={{ width: buttonWidth }}
+            disabled={buttonDisabled}
+            onPress={onButtonPress}
+            isLoading={isLoading}
+            warning={warning}
+          >
+            <ButtonTitle>{ButtonText}</ButtonTitle>
+          </OtherButton>
         )}
         {SecondaryButtonText && (
-        <SecondaryButton
-          testID="bottomSheetSecondary"
-          disabled={buttonDisabled}
-          style={{ width: buttonWidth }}
-          warning={warning}
-          onPress={onSecondaryButtonPress}
-        >
-          <SecondaryButtonTitle warning={warning}>{SecondaryButtonText}</SecondaryButtonTitle>
-        </SecondaryButton>
+          <SecondaryButton
+            testID="bottomSheetSecondary"
+            disabled={buttonDisabled}
+            style={{ width: buttonWidth }}
+            warning={warning}
+            onPress={onSecondaryButtonPress}
+          >
+            <SecondaryButtonTitle warning={warning}>{SecondaryButtonText}</SecondaryButtonTitle>
+          </SecondaryButton>
         )}
       </Footer>
     </Container>
@@ -554,30 +554,10 @@ export const ConfirmPickup = (props: any) => {
 
   const titleText = props.isConfirmPickup ? 'confirmPickupTitle' : 'confirmLocationTitle';
 
-  const renderSkeleton = useCallback(() => (
-    <SkeletonContent
-      containerStyle={{}}
-      isLoading
-      layout={[{
-        flexDirection: 'row',
-        width: '100%',
-        paddingLeft: 5,
-        paddingRight: 10,
-        alignItems: 'center',
-        children: [
-          {
-            width: '100%',
-            height: 13,
-          },
-        ],
-      }]}
-    />
-  ), []);
-
   const renderAddressContainer = useCallback(() => (
     <AddressContainer testID="pickupAddress">
       <SvgIcon Svg={locationIcon} height={20} width={10} fill={isDraggingLocationPin ? '#ADAEBA' : '#333'} />
-      {isDraggingLocationPin ? renderSkeleton()
+      {isDraggingLocationPin ? <ConfirmPickupSkeleton />
         : <AddressInput>{lastSelectedLocation?.streetAddress || i18n.t('bottomSheetContent.confirmPickup.noAddress')}</AddressInput>}
     </AddressContainer>
   ), [isDraggingLocationPin, lastSelectedLocation?.streetAddress]);

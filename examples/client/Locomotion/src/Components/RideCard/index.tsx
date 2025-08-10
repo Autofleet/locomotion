@@ -1,7 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import moment from 'moment-timezone';
 import { PaymentIcon } from 'react-native-payment-icons';
-import SkeletonContent from 'react-native-skeleton-content-nonexpo';
 import { PriceCalculation, RideInterface, RidePageContext } from '../../context/newRideContext';
 import i18n from '../../I18n';
 import RoundedButton from '../RoundedButton';
@@ -18,6 +17,7 @@ import { PAYMENT_METHODS } from '../../pages/Payments/consts';
 import PaymentContext from '../../context/payments';
 import SettingContext from '../../context/settings';
 import showPriceBasedOnAccount from '../../services/showPriceBasedOnAccount';
+import { RideDateSkeleton } from './Skeleton/RideDateSkeleton';
 
 
 interface CardComponentProps {
@@ -76,12 +76,12 @@ const CardComponent = ({ paymentMethod, businessAccountId }: CardComponentProps)
 };
 
 interface RideCardProps {
-    ride: RideInterface;
-    onPress: (ride: RideInterface) => void;
-    serviceName: string | undefined;
-    paymentMethod: any;
-    scheduledTo: string | number;
-    pickupWindowTime: number;
+  ride: RideInterface;
+  onPress: (ride: RideInterface) => void;
+  serviceName: string | undefined;
+  paymentMethod: any;
+  scheduledTo: string | number;
+  pickupWindowTime: number;
 }
 
 const RideCard = ({
@@ -145,13 +145,7 @@ const RideCard = ({
           <RideDate>
             {!timezonedScheduledTo
               ? (
-                <SkeletonContent
-                  containerStyle={{}}
-                  isLoading
-                  layout={[
-                    { width: 150, height: 17 },
-                  ]}
-                />
+                <RideDateSkeleton />
               ) : timezonedScheduledTo}
           </RideDate>
           {displayTimezone ? (
@@ -165,29 +159,29 @@ const RideCard = ({
             {serviceName}
           </ServiceType>
         </TopTextsContainer>
-        { showPrice && (
-        <TopPriceContainer testID="priceContainer">
-          <RideDate>
-            {getFormattedPrice(ride.priceCurrency, ride.priceAmount)}
-          </RideDate>
-          {ridePriceCalculation && isPriceEstimated(ridePriceCalculation.calculationBasis)
-            ? (
-              <EstimatedText>
-                {i18n.t('rideDetails.estimatedFare').toString()}
-              </EstimatedText>
-            )
-            : null}
-          {displayTimezone ? <ServiceType /> : null}
-        </TopPriceContainer>
+        {showPrice && (
+          <TopPriceContainer testID="priceContainer">
+            <RideDate>
+              {getFormattedPrice(ride.priceCurrency, ride.priceAmount)}
+            </RideDate>
+            {ridePriceCalculation && isPriceEstimated(ridePriceCalculation.calculationBasis)
+              ? (
+                <EstimatedText>
+                  {i18n.t('rideDetails.estimatedFare').toString()}
+                </EstimatedText>
+              )
+              : null}
+            {displayTimezone ? <ServiceType /> : null}
+          </TopPriceContainer>
         )}
       </DateContainer>
 
       <StopPointsVerticalView ride={ride} />
       {paymentMethod && (
-      <CardComponent
-        paymentMethod={paymentMethod}
-        businessAccountId={ride.businessAccountId}
-      />
+        <CardComponent
+          paymentMethod={paymentMethod}
+          businessAccountId={ride.businessAccountId}
+        />
       )}
       <RoundedButton testID="cancelRide" onPress={onPress} hollow type="cancel">
         {i18n.t('home.cancelRideButton')}

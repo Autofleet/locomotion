@@ -3,7 +3,6 @@ import React, {
 } from 'react';
 import moment from 'moment';
 import { useFocusEffect } from '@react-navigation/native';
-import SkeletonContent from 'react-native-skeleton-content-nonexpo';
 import GenericPopup from '../../../popups/GenericPopup';
 import GenericErrorPopup from '../../../popups/GenericError';
 import { isCardPaymentMethod } from '../../../lib/ride/utils';
@@ -48,6 +47,7 @@ import ServiceTypeDetails from '../../../Components/ServiceTypeDetails';
 import RoundedButton from '../../../Components/RoundedButton';
 import contactUsIcon from '../../../assets/headset.svg';
 import sucessIcon from '../../../assets/checkmark.svg';
+import { TipButtonSkeleton } from './Skeleton/TipButtonSkeleton';
 
 const RideTitleCard = ({
   ride, page, showTip, tip, isPaymentRejected,
@@ -69,15 +69,7 @@ const RideTitleCard = ({
 
   const getTipButton = () => {
     if (!isDebuggingEnabled && tip === null) {
-      return (
-        <SkeletonContent
-          containerStyle={{}}
-          isLoading
-          layout={[
-            { width: 40, height: 10, marginTop: 10 },
-          ]}
-        />
-      );
+      return <TipButtonSkeleton />;
     } if (tip) {
       const price = getFormattedPrice(ride.priceCurrency, tip);
       const priceText = i18n.t('rideHistory.rideCard.tip', { price });
