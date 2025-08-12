@@ -126,7 +126,7 @@ const RidePriceBreakDown = () => {
             <PriceBreakdown
               priceCalculation={priceCalculation}
               didRequestFail={didRequestFail}
-              retryGetPriceBreakdown={updatePriceCalculation}
+              reloadPriceBreakdown={updatePriceCalculation}
             />
           </PriceItemsContainer>
         )}

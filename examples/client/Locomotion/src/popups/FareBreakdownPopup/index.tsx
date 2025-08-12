@@ -72,7 +72,7 @@ const FareBreakdownPopup = ({
           <PriceBreakdown
             priceCalculation={priceCalculation}
             didRequestFail={didRequestFail}
-            retryGetPriceBreakdown={loadPriceCalculation}
+            reloadPriceBreakdown={loadPriceCalculation}
           />
           )}
       </OuterContainer>
