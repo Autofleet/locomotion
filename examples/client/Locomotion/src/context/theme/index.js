@@ -17,14 +17,6 @@ export const getTextColorForTheme = () => {
   return colorScheme === 'dark' ? '#ffffff' : '#000000';
 };
 
-// interface LocomotionTheme {
-//   primaryColor: string;
-//   secondaryColor: string;
-//   textColor: string;
-//   dividerColor: string;
-//   backgroundColor: string;
-// }
-
 export const convertHextToRgba = (hex, alpha) => {
   const r = parseInt(hex.slice(1, 3), 16);
   const g = parseInt(hex.slice(3, 5), 16);
@@ -107,23 +99,15 @@ export const FONT_WEIGHTS = {
   `,
 };
 
-// export const TEXT_STYLE_OBJECT = {
-//   H1_BOLD: FONT_WEIGHT.BOLD.concat(FONT_SIZES.H1),
-//   H1_SEMI_BOLD: FONT_WEIGHT.SEMI_BOLD.concat(FONT_SIZES.H1),
-//   H2_SEMI_BOLD: FONT_WEIGHT.SEMI_BOLD.concat(FONT_SIZES.H2),
-//   H2_REGULAR: FONT_WEIGHT.REGULAR.concat(FONT_SIZES.H2),
-//   H3_SEMI_BOLD: FONT_WEIGHT.SEMI_BOLD.concat(FONT_SIZES.H3),
-//   H3_REGULAR: FONT_WEIGHT.REGULAR.concat(FONT_SIZES.H3),
-//   LARGE_REGULAR: FONT_WEIGHT.REGULAR.concat(FONT_SIZES.LARGE),
-//   LARGE_SEMI_BOLD: FONT_WEIGHT.SEMI_BOLD.concat(FONT_SIZES.LARGE),
-//   LARGE_MEDIUM: FONT_WEIGHT.MEDIUM.concat(FONT_SIZES.LARGE),
-//   MEDIUM_REGULAR: FONT_WEIGHT.REGULAR.concat(FONT_SIZES.MEDIUM),
-//   MEDIUM_MEDIUM: FONT_WEIGHT.MEDIUM.concat(FONT_SIZES.MEDIUM),
-//   MEDIUM_LIGHT: FONT_WEIGHT.LIGHT.concat(FONT_SIZES.MEDIUM),
-//   MEDIUM_BOLD: FONT_WEIGHT.BOLD.concat(FONT_SIZES.MEDIUM),
-//   SMALL_REGULAR: FONT_WEIGHT.SEMI_BOLD.concat(FONT_SIZES.SMALL),
-//   SMALL_LIGHT: FONT_WEIGHT.LIGHT.concat(FONT_SIZES.SMALL),
-// }
+const BORDER_RADIUS_VALUES = {
+  NONE: 0,
+  XS: 2,
+  SM: 4,
+  MD: 6,
+  LG: 8,
+  XL: 16,
+  '2XL': 24,
+};
 
 /**
  * useVehicleColor hook
@@ -164,6 +148,7 @@ const Provider = ({ children }) => {
     <ThemeProvider
       theme={{
         isDarkMode,
+        borderRadiusValues: BORDER_RADIUS_VALUES,
         ...(isDarkMode ? darkTheme : lightTheme),
         useVehicleColor,
       }}

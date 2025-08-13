@@ -26,7 +26,7 @@ import PaymentsContext from '../../context/payments';
 import cashPaymentMethod from '../../pages/Payments/cashPaymentMethod';
 import offlinePaymentMethod from '../../pages/Payments/offlinePaymentMethod';
 import * as navigationService from '../../services/navigation';
-import { MewRidePageContext } from '../../context';
+import { NewRidePageContext } from '../../context';
 
 interface PaymentMethodPopupProps {
   isVisible: boolean;
@@ -54,7 +54,7 @@ const PaymentMethodPopup = ({
   selectedBusinessAccountId,
 }: PaymentMethodPopupProps) => {
   const usePayments = PaymentsContext.useContainer();
-  const { chosenService } = useContext(MewRidePageContext);
+  const { chosenService } = useContext(NewRidePageContext);
   const [selectedPaymentId, setSelectedPaymentId] = useState<string | undefined>(selected);
   const [activePaymentTab, setActivePaymentTab] = useState(
     selectedBusinessAccountId ? PAYMENT_MODES.BUSINESS : PAYMENT_MODES.PERSONAL,
