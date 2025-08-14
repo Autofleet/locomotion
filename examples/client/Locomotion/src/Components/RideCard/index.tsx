@@ -13,6 +13,7 @@ import StopPointsVerticalView from '../StopPointsVerticalView';
 import { getFormattedPrice, isPriceEstimated, convertTimezoneByLocation } from '../../context/newRideContext/utils';
 import cashIcon from '../../assets/cash.svg';
 import offlineIcon from '../../assets/offline.svg';
+import placeholderIcon from '../../assets/placeholder-payment.svg';
 import { PAYMENT_METHODS } from '../../pages/Payments/consts';
 import PaymentContext from '../../context/payments';
 import SettingContext from '../../context/settings';
@@ -31,6 +32,7 @@ interface CardComponentProps {
 const CardComponent = ({ paymentMethod, businessAccountId }: CardComponentProps) => {
   const isCash = PAYMENT_METHODS.CASH === paymentMethod.id;
   const isOffline = PAYMENT_METHODS.OFFLINE === paymentMethod.id;
+  const isExternal = PAYMENT_METHODS.EXTERNAL === paymentMethod.id;
   const {
     offlinePaymentText,
     loadOfflinePaymentText,
@@ -51,6 +53,10 @@ const CardComponent = ({ paymentMethod, businessAccountId }: CardComponentProps)
     } if (isOffline) {
       return offlinePaymentText;
     }
+    if (isExternal) {
+      return i18n.t('payments.external');
+    }
+
     return paymentMethod.name;
   };
 
@@ -61,7 +67,11 @@ const CardComponent = ({ paymentMethod, businessAccountId }: CardComponentProps)
     if (isOffline) {
       return offlineIcon;
     }
+    if (isExternal) {
+      return placeholderIcon;
+    }
   };
+
   return (
     <TextRowWithIcon
       text={getText() || ''}

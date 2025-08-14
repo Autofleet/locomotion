@@ -1,5 +1,6 @@
 import cashIcon from '../../assets/cash.svg';
 import offlineIcon from '../../assets/offline.svg';
+import placeholderIcon from '../../assets/placeholder-payment.svg';
 import personalPaymentIcon from '../../assets/personal-payment.svg';
 import businessPaymentIcon from '../../assets/business-payment.svg';
 
@@ -7,6 +8,7 @@ export const PAYMENT_METHODS = {
   CASH: 'cash',
   OFFLINE: 'offline',
   CARD: 'card',
+  EXTERNAL: 'external',
 };
 export const PAYMENT_MODES = {
   PERSONAL: 'personal',
@@ -27,4 +29,5 @@ export const PAYMENT_TABS = [
 export const paymentMethodToIconMap = {
   [PAYMENT_METHODS.CASH]: cashIcon,
   [PAYMENT_METHODS.OFFLINE]: offlineIcon,
+  [PAYMENT_METHODS.EXTERNAL]: placeholderIcon,
 };

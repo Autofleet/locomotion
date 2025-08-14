@@ -5,7 +5,12 @@ import { Text, View } from 'react-native';
 import { PaymentIcon } from 'react-native-payment-icons';
 import styled, { ThemeContext } from 'styled-components';
 import { useFocusEffect } from '@react-navigation/native';
-import { isCardPaymentMethod, isCashPaymentMethod, isOfflinePaymentMethod } from '../../../../../../lib/ride/utils';
+import {
+  isCardPaymentMethod,
+  isCashPaymentMethod,
+  isExternalPaymentMethod,
+  isOfflinePaymentMethod
+} from '../../../../../../lib/ride/utils';
 import { getCouponText } from '../../../../../../context/newRideContext/utils';
 import { MAIN_ROUTES } from '../../../../../routes';
 import SvgIcon from '../../../../../../Components/SvgIcon';
@@ -95,7 +100,7 @@ const PaymentButton = ({
     : i18n.t('bottomSheetContent.ride.promoText'));
 
   const loadPromoButton = () => {
-    if (isCashPaymentMethod({ id }) || isOfflinePaymentMethod({ id })) {
+    if (isCashPaymentMethod({ id }) || isOfflinePaymentMethod({ id }) || isExternalPaymentMethod({ id })) {
       return null;
     }
 
