@@ -134,16 +134,16 @@ const CardRow = (paymentMethod: any) => {
     }, 100);
   }, [paymentMethod]);
   const testID = paymentMethod.addNew
-      ? `${paymentMethod.testIdPrefix || ''}AddPaymentMethod`
-      : (
-          `${paymentMethod.testIdPrefix || ''}ChoosePaymentMethod${
-              paymentMethod.id === PAYMENT_METHODS.OFFLINE
+    ? `${paymentMethod.testIdPrefix || ''}AddPaymentMethod`
+    : (
+      `${paymentMethod.testIdPrefix || ''}ChoosePaymentMethod${
+        paymentMethod.id === PAYMENT_METHODS.OFFLINE
               || paymentMethod.id === PAYMENT_METHODS.CASH
               || paymentMethod.id === PAYMENT_METHODS.EXTERNAL
-                  ? `_${paymentMethod.id}`
-                  : ''
-          }`
-      );
+          ? `_${paymentMethod.id}`
+          : ''
+      }`
+    );
 
   const getPaymentMethodIcon = () => {
     if (paymentMethod.noSvg) {

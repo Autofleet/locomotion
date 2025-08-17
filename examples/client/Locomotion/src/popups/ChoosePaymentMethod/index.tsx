@@ -68,7 +68,7 @@ const PaymentMethodPopup = ({
   const personalPaymentMethods = [
     ...usePayments.paymentMethods,
     ...(showCash ? [cashPaymentMethod] : []),
-    ...(showOffline? [offlinePaymentMethod]: []),
+    ...(showOffline ? [offlinePaymentMethod] : []),
     ...(showExternal ? [externalPaymentMethod] : []),
   ];
 

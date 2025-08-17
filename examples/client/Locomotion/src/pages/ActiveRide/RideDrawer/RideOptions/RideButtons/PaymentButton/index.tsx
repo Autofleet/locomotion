@@ -9,7 +9,7 @@ import {
   isCardPaymentMethod,
   isCashPaymentMethod,
   isExternalPaymentMethod,
-  isOfflinePaymentMethod
+  isOfflinePaymentMethod,
 } from '../../../../../../lib/ride/utils';
 import { getCouponText } from '../../../../../../context/newRideContext/utils';
 import { MAIN_ROUTES } from '../../../../../routes';
