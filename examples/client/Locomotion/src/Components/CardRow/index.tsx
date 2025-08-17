@@ -133,17 +133,18 @@ const CardRow = (paymentMethod: any) => {
       setIsCardExpired(isExpired);
     }, 100);
   }, [paymentMethod]);
-  const testID = paymentMethod.addNew
-    ? `${paymentMethod.testIdPrefix || ''}AddPaymentMethod`
-    : (
-      `${paymentMethod.testIdPrefix || ''}ChoosePaymentMethod${
-        paymentMethod.id === PAYMENT_METHODS.OFFLINE
-              || paymentMethod.id === PAYMENT_METHODS.CASH
-              || paymentMethod.id === PAYMENT_METHODS.EXTERNAL
-          ? `_${paymentMethod.id}`
-          : ''
-      }`
-    );
+
+  const prefix = paymentMethod.testIdPrefix || '';
+  const { id, addNew } = paymentMethod;
+  const isSpecialMethod = [
+    PAYMENT_METHODS.OFFLINE,
+    PAYMENT_METHODS.CASH,
+    PAYMENT_METHODS.EXTERNAL,
+  ].includes(id);
+
+  const testID = addNew
+      ? `${prefix}AddPaymentMethod`
+      : `${prefix}ChoosePaymentMethod${isSpecialMethod ? `_${id}` : ''}`;
 
   const getPaymentMethodIcon = () => {
     if (paymentMethod.noSvg) {
