@@ -2,7 +2,7 @@ import { PaymentMethodInterface } from 'context/payments/interface';
 import i18n from 'i18next';
 import { PAYMENT_METHODS } from './consts';
 
-const externalPaymentMethod : PaymentMethodInterface = {
+export const externalPaymentMethod : PaymentMethodInterface = {
   brand: 'generic',
   createdAt: new Date(),
   customerId: '',
@@ -18,5 +18,3 @@ const externalPaymentMethod : PaymentMethodInterface = {
   deletedAt: null,
   outstandingBalance: { amount: 0, currency: 'USD' },
 };
-
-export default externalPaymentMethod;

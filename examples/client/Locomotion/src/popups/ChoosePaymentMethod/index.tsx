@@ -25,7 +25,7 @@ import PaymentMethod from '../../Components/CardRow';
 import PaymentsContext from '../../context/payments';
 import cashPaymentMethod from '../../pages/Payments/cashPaymentMethod';
 import offlinePaymentMethod from '../../pages/Payments/offlinePaymentMethod';
-import externalPaymentMethod from '../../pages/Payments/externalPaymentMethod';
+import { externalPaymentMethod } from '../../pages/Payments/externalPaymentMethod';
 
 import * as navigationService from '../../services/navigation';
 import { NewRidePageContext } from '../../context';

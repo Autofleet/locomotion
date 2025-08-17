@@ -32,7 +32,7 @@ import { PAYMENT_METHODS, paymentMethodToIconMap } from '../../../../../pages/Pa
 import PassengersCounter from './PassengersCounter';
 import ErrorPopup from '../../../../../popups/TwoButtonPopup';
 import { capitalizeFirstLetter, getPaymentMethod } from '../../../../../pages/Payments/cardDetailUtils';
-import externalPaymentMethod from '../../../../../pages/Payments/externalPaymentMethod';
+import { externalPaymentMethod } from '../../../../../pages/Payments/externalPaymentMethod';
 
 const POOLING_TYPES = {
   NO: 'no',

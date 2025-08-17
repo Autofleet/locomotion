@@ -13,7 +13,6 @@ import StopPointsVerticalView from '../StopPointsVerticalView';
 import { getFormattedPrice, isPriceEstimated, convertTimezoneByLocation } from '../../context/newRideContext/utils';
 import cashIcon from '../../assets/cash.svg';
 import offlineIcon from '../../assets/offline.svg';
-import placeholderIcon from '../../assets/placeholder-payment.svg';
 import { PAYMENT_METHODS } from '../../pages/Payments/consts';
 import PaymentContext from '../../context/payments';
 import SettingContext from '../../context/settings';
@@ -68,7 +67,7 @@ const CardComponent = ({ paymentMethod, businessAccountId }: CardComponentProps)
       return offlineIcon;
     }
     if (isExternal) {
-      return placeholderIcon;
+      return PaymentIcon;
     }
   };
 
