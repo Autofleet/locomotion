@@ -1,6 +1,6 @@
 import cashIcon from '../../assets/cash.svg';
 import offlineIcon from '../../assets/offline.svg';
-import { PaymentIcon } from 'react-native-payment-icons';
+import  defaultPaymentIcon from '../../assets/default-payment.svg';
 import personalPaymentIcon from '../../assets/personal-payment.svg';
 import businessPaymentIcon from '../../assets/business-payment.svg';
 
@@ -29,5 +29,5 @@ export const PAYMENT_TABS = [
 export const paymentMethodToIconMap = {
   [PAYMENT_METHODS.CASH]: cashIcon,
   [PAYMENT_METHODS.OFFLINE]: offlineIcon,
-  [PAYMENT_METHODS.EXTERNAL]: PaymentIcon,
+  [PAYMENT_METHODS.EXTERNAL]: defaultPaymentIcon,
 };

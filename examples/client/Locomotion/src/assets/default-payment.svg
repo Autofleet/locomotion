@@ -1,0 +1,14 @@
+<svg
+        data-autofleet-icon="true"
+        role="img"
+        aria-hidden="true"
+        focusable="false"
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 24 24"
+        class="SvgContainer-NcZRl bLZmUO"
+>
+    <path
+            fill-rule="evenodd"
+            d="M3 18c0 .5523.4477 1 1 1H20c.5523 0 1-.4477 1-1V10H3v8ZM21 8V9H3V8H21ZM20 5c.5523 0 1 .4477 1 1V7H3V6c0-.5523.4477-1 1-1H20ZM4 4H20c1.1046 0 2 .8954 2 2V18c0 1.1046-.8954 2-2 2H4c-1.1046 0-2-.8954-2-2V6c0-1.1046.8954-2 2-2ZM7 16H6V13H7v3Zm2-3H8v3H9V13Zm2 3H10V13h1v3Zm2-3H12v3h1V13Z"
+    />
+</svg>
