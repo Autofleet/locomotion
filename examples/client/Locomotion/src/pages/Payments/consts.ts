@@ -1,6 +1,6 @@
 import cashIcon from '../../assets/cash.svg';
 import offlineIcon from '../../assets/offline.svg';
-import  defaultPaymentIcon from '../../assets/default-payment.svg';
+import defaultPaymentIcon from '../../assets/default-payment.svg';
 import personalPaymentIcon from '../../assets/personal-payment.svg';
 import businessPaymentIcon from '../../assets/business-payment.svg';
 

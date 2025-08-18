@@ -143,8 +143,8 @@ const CardRow = (paymentMethod: any) => {
   ].includes(id);
 
   const testID = addNew
-      ? `${prefix}AddPaymentMethod`
-      : `${prefix}ChoosePaymentMethod${isSpecialMethod ? `_${id}` : ''}`;
+    ? `${prefix}AddPaymentMethod`
+    : `${prefix}ChoosePaymentMethod${isSpecialMethod ? `_${id}` : ''}`;
 
   const getPaymentMethodIcon = () => {
     if (paymentMethod.noSvg) {

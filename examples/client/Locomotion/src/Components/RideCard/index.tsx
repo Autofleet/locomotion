@@ -18,7 +18,7 @@ import PaymentContext from '../../context/payments';
 import SettingContext from '../../context/settings';
 import showPriceBasedOnAccount from '../../services/showPriceBasedOnAccount';
 import { RideDateSkeleton } from './Skeleton/RideDateSkeleton';
-import  defaultPaymentIcon from '../../assets/default-payment.svg';
+import defaultPaymentIcon from '../../assets/default-payment.svg';
 
 interface CardComponentProps {
   paymentMethod: {
