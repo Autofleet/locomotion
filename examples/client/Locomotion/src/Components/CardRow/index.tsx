@@ -14,7 +14,7 @@ import SvgIcon from '../SvgIcon';
 import selected from '../../assets/selected-v.svg';
 import { Start, StartCapital } from '../../lib/text-direction';
 import chevronIcon from '../../assets/chevron.svg';
-import { isCashPaymentMethod, isOfflinePaymentMethod } from '../../lib/ride/utils';
+import { isCashPaymentMethod, isExternalPaymentMethod, isOfflinePaymentMethod } from '../../lib/ride/utils';
 import paymentContext from '../../context/payments';
 
 type ContainerProps = {
@@ -107,12 +107,19 @@ const CardRow = (paymentMethod: any) => {
       const { name } = getBusinessAccountById(businessAccountId);
       return name;
     }
+
     if (isCashPaymentMethod(paymentMethod)) {
       return i18n.t('payments.cash');
     }
+
     if (isOfflinePaymentMethod(paymentMethod)) {
       return offlinePaymentText;
     }
+
+    if (isExternalPaymentMethod(paymentMethod)) {
+      return i18n.t('payments.external');
+    }
+
     return capitalizeFirstLetter(paymentMethod.name);
   };
 
@@ -126,9 +133,18 @@ const CardRow = (paymentMethod: any) => {
       setIsCardExpired(isExpired);
     }, 100);
   }, [paymentMethod]);
-  const testID = paymentMethod.addNew
-    ? `${paymentMethod.testIdPrefix || ''}AddPaymentMethod`
-    : (`${paymentMethod.testIdPrefix || ''}ChoosePaymentMethod${paymentMethod.id === PAYMENT_METHODS.OFFLINE || paymentMethod.id === PAYMENT_METHODS.CASH ? `_${paymentMethod.id}` : ''}`);
+
+  const prefix = paymentMethod.testIdPrefix || '';
+  const { paymentMethodId, addNew } = paymentMethod;
+  const isSpecialMethod = [
+    PAYMENT_METHODS.OFFLINE,
+    PAYMENT_METHODS.CASH,
+    PAYMENT_METHODS.EXTERNAL,
+  ].includes(paymentMethodId);
+
+  const testID = addNew
+    ? `${prefix}AddPaymentMethod`
+    : `${prefix}ChoosePaymentMethod${isSpecialMethod ? `_${paymentMethodId}` : ''}`;
 
   const getPaymentMethodIcon = () => {
     if (paymentMethod.noSvg) {

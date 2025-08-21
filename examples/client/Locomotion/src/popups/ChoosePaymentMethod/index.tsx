@@ -25,6 +25,8 @@ import PaymentMethod from '../../Components/CardRow';
 import PaymentsContext from '../../context/payments';
 import cashPaymentMethod from '../../pages/Payments/cashPaymentMethod';
 import offlinePaymentMethod from '../../pages/Payments/offlinePaymentMethod';
+import { externalPaymentMethod } from '../../pages/Payments/externalPaymentMethod';
+
 import * as navigationService from '../../services/navigation';
 import { NewRidePageContext } from '../../context';
 
@@ -37,6 +39,7 @@ interface PaymentMethodPopupProps {
   selected: any;
   onAddNewMethod: () => void;
   showOffline: boolean;
+  showExternal: boolean;
   showBusinessPaymentMethods: boolean;
   selectedBusinessAccountId: string | null;
 }
@@ -50,6 +53,7 @@ const PaymentMethodPopup = ({
   selected,
   onAddNewMethod,
   showOffline,
+  showExternal,
   showBusinessPaymentMethods,
   selectedBusinessAccountId,
 }: PaymentMethodPopupProps) => {
@@ -65,6 +69,7 @@ const PaymentMethodPopup = ({
     ...usePayments.paymentMethods,
     ...(showCash ? [cashPaymentMethod] : []),
     ...(showOffline ? [offlinePaymentMethod] : []),
+    ...(showExternal ? [externalPaymentMethod] : []),
   ];
 
   const getDisabledReason = (paymentMethod: any) => {
@@ -242,6 +247,7 @@ PaymentMethodPopup.propTypes = {
   rideFlow: PropTypes.bool,
   selected: PropTypes.string,
   showOffline: PropTypes.bool,
+  showExternal: PropTypes.bool,
 };
 
 PaymentMethodPopup.defaultProps = {
@@ -250,6 +256,7 @@ PaymentMethodPopup.defaultProps = {
   rideFlow: false,
   selected: null,
   showOffline: false,
+  showExternal: false,
 };
 
 export default PaymentMethodPopup;

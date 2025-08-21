@@ -5,7 +5,7 @@ import DatePicker from 'react-native-date-picker';
 import moment from 'moment';
 import { ThemeContext } from 'styled-components';
 import { Animated } from 'react-native';
-import { isCashPaymentMethod, isOfflinePaymentMethod } from '../../../../../lib/ride/utils';
+import { isCashPaymentMethod, isExternalPaymentMethod, isOfflinePaymentMethod } from '../../../../../lib/ride/utils';
 import DatePickerPoppup from '../../../../../popups/DatePickerPoppup';
 import FutureBookingButton from './FutureBookingButton';
 import {
@@ -32,6 +32,7 @@ import { PAYMENT_METHODS, paymentMethodToIconMap } from '../../../../../pages/Pa
 import PassengersCounter from './PassengersCounter';
 import ErrorPopup from '../../../../../popups/TwoButtonPopup';
 import { capitalizeFirstLetter, getPaymentMethod } from '../../../../../pages/Payments/cardDetailUtils';
+import { externalPaymentMethod } from '../../../../../pages/Payments/externalPaymentMethod';
 
 const POOLING_TYPES = {
   NO: 'no',
@@ -226,6 +227,7 @@ const RideButtons = ({
   const paymentMethodIdToDataMap = {
     [PAYMENT_METHODS.CASH]: cashPaymentMethod,
     [PAYMENT_METHODS.OFFLINE]: offlinePaymentMethod,
+    [PAYMENT_METHODS.EXTERNAL]: externalPaymentMethod,
   };
   const renderPaymentButton = () => {
     const {
@@ -251,6 +253,9 @@ const RideButtons = ({
       }
       if (isOfflinePaymentMethod(selectedPaymentMethod)) {
         return offlinePaymentText;
+      }
+      if (isExternalPaymentMethod(selectedPaymentMethod)) {
+        return i18n.t('payments.external');
       }
 
       return selectedPaymentMethod?.name || i18n.t('bottomSheetContent.ride.addPayment');

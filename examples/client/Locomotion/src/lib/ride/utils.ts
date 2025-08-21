@@ -47,4 +47,6 @@ export const isCashPaymentMethod = (paymentMethod: any) => paymentMethod?.id ===
 
 export const isOfflinePaymentMethod = (paymentMethod: any) => paymentMethod?.id === PAYMENT_METHODS.OFFLINE;
 
-export const isCardPaymentMethod = (paymentMethod: any) => ![PAYMENT_METHODS.CASH, PAYMENT_METHODS.OFFLINE].includes(paymentMethod?.id);
+export const isCardPaymentMethod = (paymentMethod: any) => ![PAYMENT_METHODS.CASH, PAYMENT_METHODS.OFFLINE, PAYMENT_METHODS.EXTERNAL].includes(paymentMethod?.id);
+
+export const isExternalPaymentMethod = (paymentMethod: any) => paymentMethod?.id === PAYMENT_METHODS.EXTERNAL;

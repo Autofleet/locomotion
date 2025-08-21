@@ -18,7 +18,7 @@ import PaymentContext from '../../context/payments';
 import SettingContext from '../../context/settings';
 import showPriceBasedOnAccount from '../../services/showPriceBasedOnAccount';
 import { RideDateSkeleton } from './Skeleton/RideDateSkeleton';
-
+import defaultPaymentIcon from '../../assets/default-payment.svg';
 
 interface CardComponentProps {
   paymentMethod: {
@@ -31,6 +31,7 @@ interface CardComponentProps {
 const CardComponent = ({ paymentMethod, businessAccountId }: CardComponentProps) => {
   const isCash = PAYMENT_METHODS.CASH === paymentMethod.id;
   const isOffline = PAYMENT_METHODS.OFFLINE === paymentMethod.id;
+  const isExternal = PAYMENT_METHODS.EXTERNAL === paymentMethod.id;
   const {
     offlinePaymentText,
     loadOfflinePaymentText,
@@ -51,6 +52,10 @@ const CardComponent = ({ paymentMethod, businessAccountId }: CardComponentProps)
     } if (isOffline) {
       return offlinePaymentText;
     }
+    if (isExternal) {
+      return i18n.t('payments.external');
+    }
+
     return paymentMethod.name;
   };
 
@@ -61,7 +66,11 @@ const CardComponent = ({ paymentMethod, businessAccountId }: CardComponentProps)
     if (isOffline) {
       return offlineIcon;
     }
+    if (isExternal) {
+      return defaultPaymentIcon;
+    }
   };
+
   return (
     <TextRowWithIcon
       text={getText() || ''}

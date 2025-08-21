@@ -22,6 +22,7 @@ export const PAYMENT_METHODS = {
   CASH: 'cash',
   CARD: 'card',
   OFFLINE: 'offline',
+  EXTERNAL: 'external',
   APPLE_PAY: 'apple-pay',
   GOOGLE_PAY: 'google-pay',
 };
