@@ -150,6 +150,7 @@ const RidePage = ({ mapSettings, navigation }) => {
     setServiceEstimations(null);
     setChosenService(null);
     setRide({});
+    updateBusinessAccountId(null);
     changeBsPage(BS_PAGES.ADDRESS_SELECTOR);
     setSelectedInputIndex(selectedIndex);
     if (isStationsEnabled) {
