@@ -54,6 +54,7 @@ const RideOptions = () => {
     ?.map((se: any) => se.allowedPaymentMethods).flat());
   const showCash = allServicesPaymentMethods.has(PAYMENT_METHODS.CASH);
   const showOffline = allServicesPaymentMethods.has(PAYMENT_METHODS.OFFLINE);
+  const showExternal = allServicesPaymentMethods.has(PAYMENT_METHODS.EXTERNAL);
 
   useEffect(() => {
     const updateDefaultPaymentMethod = async () => {
@@ -123,6 +124,7 @@ const RideOptions = () => {
           }}
           showCash={showCash}
           showOffline={showOffline}
+          showExternal={showExternal}
           selected={ride?.paymentMethodId || defaultPaymentMethod?.id}
           rideFlow
           isVisible={popupToShow === 'payment'}

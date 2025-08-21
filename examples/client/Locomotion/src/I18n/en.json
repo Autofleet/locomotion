@@ -536,6 +536,7 @@
         "setPaymentBanner": "Set payment method",
         "payWithCash": "Pay with Cash",
         "cash": "Cash",
+        "external": "External",
         "offline": "Billed to company",
         "popups": {
             "removeCard": {
