@@ -28,9 +28,6 @@
             <category android:name="android.intent.category.LAUNCHER" />
         </intent-filter>
       </activity>
-      <meta-data
-        android:name="com.google.android.geo.API_KEY"
-        android:value="AIzaSyB-c9iBOz8CmNyynP74oH5RIFtdClfFlXw"/>
       <meta-data android:name="google_analytics_adid_collection_enabled" android:value="false" />
       <meta-data android:name="google_analytics_default_allow_ad_personalization_signals" android:value="false" />
       <uses-library android:name="org.apache.http.legacy" android:required="false"/>
