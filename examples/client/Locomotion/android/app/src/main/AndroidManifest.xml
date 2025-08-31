@@ -30,7 +30,7 @@
       </activity>
       <meta-data
         android:name="com.google.android.geo.API_KEY"
-        android:value="${GOOGLE_MAPS_API_KEY}"/>
+        android:value="@string/GOOGLE_MAPS_API_KEY"/>
       <meta-data android:name="google_analytics_adid_collection_enabled" android:value="false" />
       <meta-data android:name="google_analytics_default_allow_ad_personalization_signals" android:value="false" />
       <uses-library android:name="org.apache.http.legacy" android:required="false"/>
