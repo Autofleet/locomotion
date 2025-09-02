@@ -1,7 +1,6 @@
 import React, { useContext } from 'react';
 import { Image, StyleSheet } from 'react-native';
 import FastImage from 'react-native-fast-image';
-import LottieView from 'lottie-react-native';
 import propsTypes from 'prop-types';
 import styled from 'styled-components';
 import Button from '../Button';
@@ -108,6 +107,6 @@ myThumbnail.propTypes = {
   size: propsTypes.oneOfType([propsTypes.number, propsTypes.string]),
   onPress: propsTypes.func,
   mode: propsTypes.string,
-  source: Image.propTypes.source,
+  source: propsTypes.string,
   showLoader: propsTypes.bool,
 };

@@ -4,7 +4,8 @@
 
 # Xcode
 /ios/Locomotion.xcodeproj/project.xcworkspace/contents.xcworkspacedata
-ios/.xcode.env.local
+**/.xcode.env.local
+**/.xcode.env
 
 #
 build/
@@ -61,7 +62,7 @@ buck-out/
 *.jsbundle
 
 # Ruby / CocoaPods
-/ios/Pods/
+**/Pods/
 /vendor/bundle/
 
 .env
@@ -136,3 +137,11 @@ watchmanScript.sh
 
 # vscode
 **/.vscode
+
+# Yarn
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
