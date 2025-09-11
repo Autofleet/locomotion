@@ -72,7 +72,7 @@ const NewCreditForm = ({ onDone, canSkip = false, PageText }) => {
           }}
           style={{
             width: '100%',
-            height: 170,
+            height: 300,
             border: 0,
           }}
           onFormComplete={(cardDetails) => {
