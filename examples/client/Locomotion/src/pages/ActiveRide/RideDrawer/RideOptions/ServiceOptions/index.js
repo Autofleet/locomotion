@@ -17,12 +17,10 @@ const SUCCESS_COLOR = '#25B861';
 
 const ServiceOptions = () => {
   const { serviceEstimations, stopRequestInterval } = useContext(RidePageContext);
-
   const { coupon } = useContext(UserContext);
   const { businessAccountId } = useContext(RidePageContext);
   const { getBusinessAccountById } = PaymentContext.useContainer();
   const { showPrice, loadShowPrice } = SettingContext.useContainer();
-  const isDebuggingEnabled = (typeof atob !== 'undefined');
   const { setTopBarProps } = useContext(BottomSheetContext);
 
   useEffect(() => () => stopRequestInterval(), []);
@@ -66,7 +64,7 @@ const ServiceOptions = () => {
 
   return (
     <ServiceOptionsContainer alwaysBounceVertical={false}>
-      { serviceEstimations?.length === 0
+      {serviceEstimations?.length === 0
         ? (
           <EmptyState
             title={i18n.t('services.emptyState.title')}
@@ -82,7 +80,7 @@ const ServiceOptions = () => {
           />
         ))
       }
-      {!isDebuggingEnabled && !serviceEstimations && (
+      {!serviceEstimations && (
         <ServiceOptionsSkeleton />
       )}
     </ServiceOptionsContainer>
