@@ -3,13 +3,11 @@ import {
   CardForm as MainCardForm,
   useStripe,
 } from '@stripe/stripe-react-native';
-import { KeyboardAvoidingView, Platform, ScrollView } from 'react-native';
+import { ScrollView, View } from 'react-native';
 import i18n from '../../I18n';
 import PaymentsContext from '../../context/payments';
 import SubmitButton from '../RoundedButton';
-import {
-  CreditForm, ErrorMessage, SkipSubmitContainer, SubmitContainer, MainCardFormContainer,
-} from './styled';
+import { ErrorMessage, SkipSubmitContainer, SubmitContainer } from './styled';
 import { Context as ThemeContext } from '../../context/theme';
 import { getInputIsoCode } from '../../services/MccMnc';
 
@@ -60,7 +58,7 @@ const NewCreditForm = ({ onDone, canSkip = false, PageText }) => {
 
   return (
     <ScrollView keyboardShouldPersistTaps="handle">
-      <CreditForm>
+      <View>
         <PageText />
         <MainCardForm
           autofocus
@@ -89,30 +87,23 @@ const NewCreditForm = ({ onDone, canSkip = false, PageText }) => {
           }}
         />
         <ErrorMessage>{errorMessage}</ErrorMessage>
-      </CreditForm>
-      <KeyboardAvoidingView
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-        keyboardVerticalOffset={100}
-      >
-        <SubmitContainer>
-          {canSkip && (
-            <SkipSubmitContainer>
-              <SubmitButton onPress={() => onDone()} disabled={loading}>
-                {i18n.t('payments.skipForNow')}
-              </SubmitButton>
-            </SkipSubmitContainer>
-          )}
-          <SubmitButton
-            testID="submitCardButton"
-            onPress={() => handlePayPress()}
-            disabled={!formReady || loading}
-          >
-            {i18n.t('payments.submitCard')}
-          </SubmitButton>
-        </SubmitContainer>
-
-      </KeyboardAvoidingView>
-
+      </View>
+      <SubmitContainer>
+        {canSkip && (
+          <SkipSubmitContainer>
+            <SubmitButton onPress={() => onDone()} disabled={loading}>
+              {i18n.t('payments.skipForNow')}
+            </SubmitButton>
+          </SkipSubmitContainer>
+        )}
+        <SubmitButton
+          testID="submitCardButton"
+          onPress={() => handlePayPress()}
+          disabled={!formReady || loading}
+        >
+          {i18n.t('payments.submitCard')}
+        </SubmitButton>
+      </SubmitContainer>
     </ScrollView>
   );
 };
