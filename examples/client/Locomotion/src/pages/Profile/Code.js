@@ -4,7 +4,7 @@ import React, {
 } from 'react';
 import { useFocusEffect } from '@react-navigation/native';
 import { Text } from 'react-native';
-import { PinCode } from '../../Components/PinCode/PinCode';
+import PinCode from '../../Components/PinCode';
 import SaveButton from './SaveButton';
 import { OnboardingContext } from '../../context/onboarding';
 import {

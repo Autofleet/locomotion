@@ -24,14 +24,11 @@ export const convertHextToRgba = (hex, alpha) => {
   return `${r},${g},${b},${alpha}`;
 };
 
-export const ERROR_COLOR = '#f35657';
-
 export const darkTheme = {
   primaryColor: '#38a7fc',
   secondaryColor: '#08902d',
   primaryButtonTextColor: '#ffffff',
   disabledColor: '#bcbcbc',
-  errorColor: ERROR_COLOR,
 
   textColor: '#ffffff',
   pageBackgroundColor: '#24292E',
@@ -43,7 +40,6 @@ export const lightTheme = {
   secondaryColor: SECONDARY_COLOR || '#08902d',
   primaryButtonTextColor: '#ffffff',
   disabledColor: '#bcbcbc',
-  errorColor: ERROR_COLOR,
 
   /** for dark mode: */
   textColor: '#000000',
@@ -56,6 +52,7 @@ export const THEME_MOD = {
 };
 
 export const GREEN_COLOR = '#2cc36a';
+export const ERROR_COLOR = '#f35657';
 export const LINK_BLUE_COLOR = '#38a7fc';
 export const FONT_SIZES = {
   H1: 'font-size: 22px',

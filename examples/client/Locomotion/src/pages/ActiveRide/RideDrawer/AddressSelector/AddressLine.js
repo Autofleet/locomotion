@@ -88,6 +88,7 @@ const AddressRow = ({
   distance,
 }) => {
   const finalIcon = ICONS[icon] || (isHistory && HistoryIcon);
+  const isDebuggingEnabled = (typeof atob !== 'undefined');
   return (
     <Row
       testID={testID}
@@ -109,7 +110,7 @@ const AddressRow = ({
             : null}
         </IconContainer>
         <AddressContainer>
-          {isLoading ? (
+          {isLoading && !isDebuggingEnabled ? (
             <AddressLineSkeleton />
           ) : (
             <>

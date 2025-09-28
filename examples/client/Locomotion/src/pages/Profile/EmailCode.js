@@ -1,6 +1,6 @@
 import React, { useCallback, useContext, useState } from 'react';
 import { useFocusEffect, useRoute } from '@react-navigation/native';
-import { PinCode } from '../../Components/PinCode/PinCode';
+import PinCode from '../../Components/PinCode';
 import SaveButton from './SaveButton';
 import { OnboardingContext } from '../../context/onboarding';
 import {
