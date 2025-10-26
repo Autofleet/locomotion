@@ -8,6 +8,7 @@ import { useNavigation } from '@react-navigation/native';
 import _, { pick } from 'lodash';
 import moment, { Moment } from 'moment-timezone';
 import debounce from 'lodash/debounce';
+import { POOLING_TYPES } from 'pages/ActiveRide/RideDrawer/RideOptions/RideButtons';
 import { PAYMENT_MODES } from '../../pages/Payments/consts';
 import offlinePaymentMethod from '../../pages/Payments/offlinePaymentMethod';
 import i18n from '../../I18n';
@@ -47,7 +48,6 @@ import { APP_ROUTES, MAIN_ROUTES } from '../../pages/routes';
 import * as navigationService from '../../services/navigation';
 import { BottomSheetContext } from '../bottomSheetContext';
 import { VirtualStationsContext } from '../virtualStationsContext';
-import { POOLING_TYPES } from 'pages/ActiveRide/RideDrawer/RideOptions/RideButtons';
 
 
 type Dispatch<A> = (value: A) => void;
