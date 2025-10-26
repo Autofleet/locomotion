@@ -1138,12 +1138,16 @@ const RidePageContextProvider = ({ children }: {
         const unixScheduledTo = moment.unix(Number(ride.scheduledTo) / 1000);
         scheduledToMoment = await getLocationTimezoneTime(pickupLocation.lat, pickupLocation.lng, unixScheduledTo);
       }
+
+      // Workaround to fix the issue with the passengers state
+      const isNonPooling = chosenService.pooling === 'no' || chosenService.pooling === 'passive';
+
       const rideToCreate = {
         serviceId: chosenService?.id,
         estimationId: chosenService?.estimationId,
         paymentMethodId: ride.paymentMethodId,
         rideType: 'passenger',
-        numberOfPassengers,
+        numberOfPassengers: isNonPooling ? 1 : numberOfPassengers,
         ...(ride.scheduledTo && { scheduledTo: scheduledToMoment }),
         stopPoints: stopPoints.map((sp, i) => ({
           lat: Number(sp.lat),
