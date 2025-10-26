@@ -34,7 +34,7 @@ import ErrorPopup from '../../../../../popups/TwoButtonPopup';
 import { capitalizeFirstLetter, getPaymentMethod } from '../../../../../pages/Payments/cardDetailUtils';
 import { externalPaymentMethod } from '../../../../../pages/Payments/externalPaymentMethod';
 
-const POOLING_TYPES = {
+export const POOLING_TYPES = {
   NO: 'no',
   ACTIVE: 'active',
   PASSIVE: 'passive',

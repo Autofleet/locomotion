@@ -47,6 +47,7 @@ import { APP_ROUTES, MAIN_ROUTES } from '../../pages/routes';
 import * as navigationService from '../../services/navigation';
 import { BottomSheetContext } from '../bottomSheetContext';
 import { VirtualStationsContext } from '../virtualStationsContext';
+import { POOLING_TYPES } from 'pages/ActiveRide/RideDrawer/RideOptions/RideButtons';
 
 
 type Dispatch<A> = (value: A) => void;
@@ -1140,7 +1141,7 @@ const RidePageContextProvider = ({ children }: {
       }
 
       // Workaround to fix the issue with the passengers state
-      const isNonPooling = chosenService.pooling === 'no' || chosenService.pooling === 'passive';
+      const isNonPooling = chosenService.pooling === POOLING_TYPES.NO || chosenService.pooling === POOLING_TYPES.PASSIVE;
 
       const rideToCreate = {
         serviceId: chosenService?.id,
