@@ -8,7 +8,6 @@ import { useNavigation } from '@react-navigation/native';
 import _, { pick } from 'lodash';
 import moment, { Moment } from 'moment-timezone';
 import debounce from 'lodash/debounce';
-import { POOLING_TYPES } from 'pages/ActiveRide/RideDrawer/RideOptions/RideButtons';
 import { PAYMENT_MODES } from '../../pages/Payments/consts';
 import offlinePaymentMethod from '../../pages/Payments/offlinePaymentMethod';
 import i18n from '../../I18n';
@@ -60,6 +59,7 @@ interface RideFeedback {
   type: string;
   source: string;
 }
+
 export interface RideInterface {
   priceCurrency?: any;
   priceAmount?: any;
@@ -84,6 +84,12 @@ export interface RideInterface {
   cancellationReasonId?: string;
   businessAccountId?: string;
 }
+
+export const POOLING_TYPES = {
+  NO: 'no',
+  ACTIVE: 'active',
+  PASSIVE: 'passive',
+};
 
 type AdditionalCharge = {
   amount: number,

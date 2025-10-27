@@ -12,7 +12,7 @@ import {
   Container, RowContainer, ButtonContainer, ButtonText, StyledButton, HALF_WIDTH,
   PickerDate, PickerTimeRange, PickerTitle, ErrorText, ButtonContainerWithError, ButtonWithError,
 } from './styled';
-import { RidePageContext } from '../../../../../context/newRideContext';
+import {POOLING_TYPES, RidePageContext} from '../../../../../context/newRideContext';
 import NoteButton from '../../../../../Components/GenericRideButton';
 import i18n from '../../../../../I18n';
 import plus from '../../../../../assets/bottomSheet/plus.svg';
@@ -33,12 +33,6 @@ import PassengersCounter from './PassengersCounter';
 import ErrorPopup from '../../../../../popups/TwoButtonPopup';
 import { capitalizeFirstLetter, getPaymentMethod } from '../../../../../pages/Payments/cardDetailUtils';
 import { externalPaymentMethod } from '../../../../../pages/Payments/externalPaymentMethod';
-
-export const POOLING_TYPES = {
-  NO: 'no',
-  ACTIVE: 'active',
-  PASSIVE: 'passive',
-};
 
 const TIME_WINDOW_CHANGE_HIGHLIGHT_TIME_MS = 500;
 interface RideButtonsProps {
