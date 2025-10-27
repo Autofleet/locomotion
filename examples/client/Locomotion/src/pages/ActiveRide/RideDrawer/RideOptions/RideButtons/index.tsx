@@ -12,7 +12,7 @@ import {
   Container, RowContainer, ButtonContainer, ButtonText, StyledButton, HALF_WIDTH,
   PickerDate, PickerTimeRange, PickerTitle, ErrorText, ButtonContainerWithError, ButtonWithError,
 } from './styled';
-import {POOLING_TYPES, RidePageContext} from '../../../../../context/newRideContext';
+import { POOLING_TYPES, RidePageContext } from '../../../../../context/newRideContext';
 import NoteButton from '../../../../../Components/GenericRideButton';
 import i18n from '../../../../../I18n';
 import plus from '../../../../../assets/bottomSheet/plus.svg';
