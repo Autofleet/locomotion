@@ -1147,14 +1147,15 @@ const RidePageContextProvider = ({ children }: {
       }
 
       // Workaround to fix the issue with the passengers state
-      const isNonPooling = chosenService.pooling === POOLING_TYPES.NO || chosenService.pooling === POOLING_TYPES.PASSIVE;
+      const validPassengers = Math.max(Number(numberOfPassengers) || 0, 1);
+      const isNonPooling = chosenService?.pooling === POOLING_TYPES.NO;
 
       const rideToCreate = {
         serviceId: chosenService?.id,
         estimationId: chosenService?.estimationId,
         paymentMethodId: ride.paymentMethodId,
         rideType: 'passenger',
-        numberOfPassengers: isNonPooling ? 1 : numberOfPassengers,
+        numberOfPassengers: isNonPooling ? 1 : validPassengers,
         ...(ride.scheduledTo && { scheduledTo: scheduledToMoment }),
         stopPoints: stopPoints.map((sp, i) => ({
           lat: Number(sp.lat),
