@@ -59,6 +59,7 @@ interface RideFeedback {
   type: string;
   source: string;
 }
+
 export interface RideInterface {
   priceCurrency?: any;
   priceAmount?: any;
@@ -83,6 +84,12 @@ export interface RideInterface {
   cancellationReasonId?: string;
   businessAccountId?: string;
 }
+
+export const POOLING_TYPES = {
+  NO: 'no',
+  ACTIVE: 'active',
+  PASSIVE: 'passive',
+};
 
 type AdditionalCharge = {
   amount: number,
@@ -1138,12 +1145,17 @@ const RidePageContextProvider = ({ children }: {
         const unixScheduledTo = moment.unix(Number(ride.scheduledTo) / 1000);
         scheduledToMoment = await getLocationTimezoneTime(pickupLocation.lat, pickupLocation.lng, unixScheduledTo);
       }
+
+      // Workaround to fix the issue with the passengers state
+      const validPassengers = Math.max(Number(numberOfPassengers) || 0, 1);
+      const isNonPooling = chosenService?.pooling === POOLING_TYPES.NO;
+
       const rideToCreate = {
         serviceId: chosenService?.id,
         estimationId: chosenService?.estimationId,
         paymentMethodId: ride.paymentMethodId,
         rideType: 'passenger',
-        numberOfPassengers,
+        numberOfPassengers: isNonPooling ? 1 : validPassengers,
         ...(ride.scheduledTo && { scheduledTo: scheduledToMoment }),
         stopPoints: stopPoints.map((sp, i) => ({
           lat: Number(sp.lat),
