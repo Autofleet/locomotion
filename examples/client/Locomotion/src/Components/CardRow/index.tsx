@@ -150,7 +150,7 @@ const CardRow = (paymentMethod: any) => {
     if (paymentMethod.noSvg) {
       return null;
     }
-    const { brand, id, lastFour } = paymentMethod;
+    const { brand, lastFour } = paymentMethod;
     const isCard = lastFour;
     if (isCard) {
       return <PaymentIcon type={brand} />;
