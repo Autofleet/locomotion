@@ -1,7 +1,9 @@
 module.exports = {
   project: {
     ios: {},
-    android: {}, // grouped into "project"
+    android: {
+      packageName: 'com.locomotion',
+    },
   },
   assets: ['./src/assets/fonts'], // stays the same
 };

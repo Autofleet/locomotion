@@ -1,17 +1,24 @@
-pluginManagement { includeBuild("../node_modules/@react-native/gradle-plugin") }
-plugins { id("com.facebook.react.settings") }
-extensions.configure(com.facebook.react.ReactSettingsExtension){ ex -> ex.autolinkLibrariesFromCommand() }
-rootProject.name = 'Locomotion'
-include ':react-native-exit-app'
-project(':react-native-exit-app').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-exit-app/android')
-include ':react-native-restart'
-project(':react-native-restart').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-restart/android')
-include ':react-native-background-timer'
-project(':react-native-background-timer').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-background-timer/android')
-include ':react-native-version-check'
-project(':react-native-version-check').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-version-check/android')
-include ':app'
+pluginManagement {
+    repositories {
+        google()
+        mavenCentral()
+        gradlePluginPortal()
+    }
+    includeBuild("../node_modules/@react-native/gradle-plugin")
+}
+plugins {
+    id 'com.facebook.react.settings'
+}
+
+// Keep this for compatibility with current root build.gradle plugin resolution
 includeBuild('../node_modules/@react-native/gradle-plugin')
 
-include ':react-native-linear-gradient'
-project(':react-native-linear-gradient').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-linear-gradient/android')
+rootProject.name = 'Locomotion'
+
+include ':app'
+include ':react-native-config'
+project(':react-native-config').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-config/android')
+reactSettings {
+    // Generate build/generated/autolinking/autolinking.json via RN CLI
+    autolinkLibrariesFromCommand()
+}

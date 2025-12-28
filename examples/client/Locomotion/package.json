@@ -32,7 +32,7 @@
     "@react-native-firebase/crashlytics": "^20.4.0",
     "@react-native-masked-view/masked-view": "^0.3.0",
     "@react-native-picker/picker": "^2.4.1",
-    "@react-native/gradle-plugin": "^0.74.0",
+    "@react-native/gradle-plugin": "0.75.5",
     "@react-navigation/drawer": "^6.4.1",
     "@react-navigation/native": "^6.0.8",
     "@react-navigation/native-stack": "^6.6.2",
