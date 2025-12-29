@@ -1472,9 +1472,9 @@ PODS:
     - React-Core
   - react-native-carrier-info (1.1.3):
     - React
-  - react-native-config (1.6.1):
-    - react-native-config/App (= 1.6.1)
-  - react-native-config/App (1.6.1):
+  - react-native-config (1.5.3):
+    - react-native-config/App (= 1.5.3)
+  - react-native-config/App (1.5.3):
     - React-Core
   - react-native-date-picker (4.4.2):
     - React-Core
@@ -2424,7 +2424,7 @@ SPEC CHECKSUMS:
   react-native-appsflyer: f228f08c1e6611209a4869ccae7e3b91dc716f3f
   react-native-background-timer: 17ea5e06803401a379ebf1f20505b793ac44d0fe
   react-native-carrier-info: 920b17042a1e8df5a63abe3ef87e878a1d7e6b10
-  react-native-config: 97ffff0aec29e12269f4dd2d41c6669c0056c7aa
+  react-native-config: 8f7283449bbb048902f4e764affbbf24504454af
   react-native-date-picker: 312c387d2ff873c66c5e4cf78ff6827fa91644e2
   react-native-geolocation: 0c7a8496962d3268ac5b28f22a8e5d7a04c43f1a
   react-native-geolocation-service: 608e1da71a1ac31b4de64d9ef2815f697978c55b
