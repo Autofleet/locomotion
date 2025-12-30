@@ -135,22 +135,22 @@ const CardRow = (paymentMethod: any) => {
   }, [paymentMethod]);
 
   const prefix = paymentMethod.testIdPrefix || '';
-  const { paymentMethodId, addNew } = paymentMethod;
+  const { id, addNew } = paymentMethod;
   const isSpecialMethod = [
     PAYMENT_METHODS.OFFLINE,
     PAYMENT_METHODS.CASH,
     PAYMENT_METHODS.EXTERNAL,
-  ].includes(paymentMethodId);
+  ].includes(id);
 
   const testID = addNew
     ? `${prefix}AddPaymentMethod`
-    : `${prefix}ChoosePaymentMethod${isSpecialMethod ? `_${paymentMethodId}` : ''}`;
+    : `${prefix}ChoosePaymentMethod${isSpecialMethod ? `_${id}` : ''}`;
 
   const getPaymentMethodIcon = () => {
     if (paymentMethod.noSvg) {
       return null;
     }
-    const { brand, id, lastFour } = paymentMethod;
+    const { brand, lastFour } = paymentMethod;
     const isCard = lastFour;
     if (isCard) {
       return <PaymentIcon type={brand} />;
