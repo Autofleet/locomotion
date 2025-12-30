@@ -13,7 +13,9 @@
       android:roundIcon="@mipmap/ic_launcher_round"
       android:allowBackup="false"
       android:theme="@style/SplashTheme"
+      android:supportsRtl="true"
       android:usesCleartextTraffic="true"
+      tools:replace="android:allowBackup"
       >
       <activity
         android:name=".MainActivity"

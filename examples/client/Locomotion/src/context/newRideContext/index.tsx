@@ -83,6 +83,7 @@ export interface RideInterface {
   rideFeedbacks?: RideFeedback[];
   cancellationReasonId?: string;
   businessAccountId?: string;
+  lastMatchAttempt?: string;
 }
 
 export const POOLING_TYPES = {
@@ -256,7 +257,7 @@ const RidePageContextProvider = ({ children }: {
   const navigation = useNavigation<Nav>();
   const { setGenericErrorDetails, setIsExpanded } = useContext(BottomSheetContext);
   const { checkStopPointsInTerritory, changeBsPage, currentBsPage } = useContext(RideStateContextContext);
-  const { setNewFutureRide, loadFutureRides } = useContext(FutureRidesContext);
+  const { setNewFutureRide, loadFutureRides, onFutureRideTransition } = useContext(FutureRidesContext);
   const [requestStopPoints, setRequestStopPoints] = useState(INITIAL_STOP_POINTS);
   const [currentGeocode, setCurrentGeocode] = useState<any | null>(null);
   const [selectedInputIndex, setSelectedInputIndex] = useState<number | null>(null);
@@ -623,6 +624,20 @@ const RidePageContextProvider = ({ children }: {
       loadLastCompletedRide();
     }
   }, [isAppActive]);
+
+  useEffect(() => {
+    if (onFutureRideTransition) {
+      onFutureRideTransition(async (transitionedRide) => {
+        const formattedRide = await formatRide(transitionedRide);
+        setRide(formattedRide);
+
+        const screenFunction = RIDE_STATES_TO_SCREENS[formattedRide.state || ''];
+        if (screenFunction) {
+          screenFunction(formattedRide);
+        }
+      });
+    }
+  }, [onFutureRideTransition]);
 
   const loadRide = async (rideId: string) => {
     const rideLoaded = await rideApi.getRide(rideId);
@@ -1175,7 +1190,7 @@ const RidePageContextProvider = ({ children }: {
       if (afRide.state === RIDE_STATES.REJECTED) {
         throw new Error(RIDE_FAILED_REASONS.BUSY);
       }
-      if (afRide.scheduledTo) {
+      if (afRide.scheduledTo && afRide.state === RIDE_STATES.PENDING) {
         loadFutureRides();
         setNewFutureRide({ ...afRide, scheduledTo: scheduledToMoment });
         changeBsPage(BS_PAGES.CONFIRM_FUTURE_RIDE);
