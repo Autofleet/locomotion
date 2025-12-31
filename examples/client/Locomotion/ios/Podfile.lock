@@ -1520,7 +1520,7 @@ PODS:
     - React-Core
   - react-native-version-check (3.5.0):
     - React-Core
-  - react-native-webview (13.16.0):
+  - react-native-webview (13.12.5):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1952,7 +1952,7 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - RNScreens (3.37.0):
+  - RNScreens (3.35.0):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -2437,7 +2437,7 @@ SPEC CHECKSUMS:
   react-native-restart: 45c8dca02491980f2958595333cbccd6877cb57e
   react-native-safe-area-context: 141eca0fd4e4191288dfc8b96a7c7e1c2983447a
   react-native-version-check: 54a471d70dadf0f72fc142e70f16e4bf473a91a5
-  react-native-webview: 310cd22df1a808e10b5721803b0d1b4aa8052762
+  react-native-webview: b034adbe6dc6cc783c3270b6e47298bc1dfdb632
   React-nativeconfig: 237c862aab56a7426301fcbbb8dd6988745231e0
   React-NativeModulesApple: 205d3251b2e7fc625b7e6232153d4393bc2d30fe
   React-perflogger: 46ce3b295add69087b7c5ff325b55a6c7af204fc
@@ -2475,7 +2475,7 @@ SPEC CHECKSUMS:
   RNGestureHandler: 2e4971181218718ab9c5871ea5ef855ec5c389fe
   RNLocalize: c7344c139695a6587b3a250609bf8deff1482cf6
   RNReanimated: d1e1069c64b84cc1dc91c73d59a2106c139ed7a1
-  RNScreens: 6649de620b77a84d4bf7c7c8ff8830cc96f11cac
+  RNScreens: c7ceced6a8384cb9be5e7a5e88e9e714401fd958
   RNSVG: 04b49c16a517396385fef05091fe0713cf890dc7
   SDWebImage: a7f831e1a65eb5e285e3fb046a23fcfbf08e696d
   SDWebImageWebPCoder: 908b83b6adda48effe7667cd2b7f78c897e5111d
