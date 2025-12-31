@@ -10,8 +10,6 @@ import com.facebook.react.defaults.DefaultNewArchitectureEntryPoint;
 import com.facebook.react.defaults.DefaultReactNativeHost;
 import com.facebook.soloader.SoLoader;
 import java.util.List;
-import com.BV.LinearGradient.LinearGradientPackage;
-import com.facebook.react.bridge.JSIModulePackage;
 import com.facebook.react.modules.i18nmanager.I18nUtil;
 import android.content.Context;
 import android.content.BroadcastReceiver;
@@ -35,7 +33,6 @@ public class MainApplication extends Application implements ReactApplication {
           List<ReactPackage> packages = new PackageList(this).getPackages();
           // Packages that cannot be autolinked yet can be added manually here, for example:
           // packages.add(new MyReactNativePackage());
-          packages.add(new LinearGradientPackage());
           return packages;
         }
 
