@@ -2,12 +2,12 @@ import React, {
   useCallback, useContext, useEffect, useMemo, useState,
 } from 'react';
 import {
-  Linking, Platform, Text, View,
+  Linking, Text, View,
 } from 'react-native';
 import Config from 'react-native-config';
 import styled, { ThemeContext } from 'styled-components';
 import { useBottomSheet } from '@gorhom/bottom-sheet';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import moment from 'moment';
 import { CancellationReasonsContext } from '../../context/cancellation-reasons';
 import objDefault from '../../lib/objDefault';
@@ -135,13 +135,13 @@ const Header = styled(View)`
 
 type FooterInterface = {
   fullWidthButtons: boolean | undefined;
+  bottomInset: number;
 }
 const Footer = styled(View) <FooterInterface>`
   width: 100%;
   display: flex;
   flex-direction: ${({ fullWidthButtons }) => (fullWidthButtons ? 'column' : 'row')};
-  margin-bottom: ${Platform.OS === 'android'
-    ? '35px' : '10px'};
+  margin-bottom: ${({ bottomInset }) => bottomInset}px;
   justify-content: space-between;
   align-items: center;
 `;
@@ -173,6 +173,8 @@ const RIDE_STATES_TO_BS_PAGES = objDefault({
   [RIDE_STATES.MATCHING]: BS_PAGES.CONFIRMING_RIDE,
   defaultValue: BS_PAGES.ACTIVE_RIDE,
 });
+
+const MIN_FOOTER_BOTTOM_MARGIN = 10;
 
 const BsPage = ({
   onSecondaryButtonPress,
@@ -206,8 +208,10 @@ const BsPage = ({
   subtitleTestId: string
 }) => {
   const buttonWidth = fullWidthButtons ? '100%' : '48%';
+  const insets = useSafeAreaInsets();
+  const bottomInset = Math.max(insets.bottom, MIN_FOOTER_BOTTOM_MARGIN);
   return (
-    <Container edges={['bottom']}>
+    <Container>
       <MainContent>
         <>
           {TitleText && (
@@ -229,7 +233,7 @@ const BsPage = ({
           {children}
         </>
       </MainContent>
-      <Footer fullWidthButtons={fullWidthButtons}>
+      <Footer fullWidthButtons={fullWidthButtons} bottomInset={bottomInset}>
         {ButtonText && (
           <OtherButton
             testID="bottomSheetConfirm"
