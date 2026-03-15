@@ -21,7 +21,6 @@ import VirtualStationComponent from '../VirtualStationComponent';
 
 const StopPointMarker = ({
   stopPoint,
-  key,
   isNext,
   etaText,
   isFutureRide,
@@ -91,7 +90,6 @@ const StopPointMarker = ({
 
   return (
     <Marker
-      key={key}
       coordinate={{ latitude: parseFloat(lat), longitude: parseFloat(lng) }}
       zIndex={999}
       tracksViewChanges={false}

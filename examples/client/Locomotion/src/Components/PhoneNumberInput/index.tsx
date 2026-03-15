@@ -31,7 +31,7 @@ const PhoneNumberInput = ({
       asYouTypePhoneNumber.isValid(),
     );
   };
-  const getSafeIsoCode = (rawCode: string) : SupportIsoCode => {
+  const getSafeIsoCode = (rawCode: string): SupportIsoCode => {
     const code = Config.OVERWRITE_COUNTRY_CODE || rawCode;
     if (ALL_SUPPORTED_ISO_CODES_FROM_LIB.includes(code as SupportIsoCode)) {
       return (code as SupportIsoCode);
@@ -94,7 +94,7 @@ const PhoneNumberInput = ({
       flagButtonStyle={{
         backgroundColor: '#f1f2f6',
         borderRadius: 8,
-        marginRight: 4,
+        marginRight: 8,
       }}
     />
   ) : null;

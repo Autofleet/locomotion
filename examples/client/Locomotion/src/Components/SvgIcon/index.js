@@ -36,5 +36,5 @@ SvgIcon.propTypes = {
   fill: propTypes.string,
   width: propTypes.number,
   height: propTypes.number,
-  style: propTypes.object,
+  style: propTypes.oneOfType([propTypes.object, propTypes.array]),
 };

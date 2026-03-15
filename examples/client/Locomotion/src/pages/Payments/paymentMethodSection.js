@@ -43,7 +43,7 @@ const Section = ({
       </CardTitleContainer>
       <CardContentContainer>
         {paymentMethods.map(paymentMethod => (
-          <MethodCard>
+          <MethodCard key={paymentMethod.id}>
             <PaymentMethod
               {...paymentMethod}
               onPress={() => onPress(paymentMethod)}
@@ -51,7 +51,7 @@ const Section = ({
             />
           </MethodCard>
         ))
-      }
+        }
       </CardContentContainer>
     </View>
   </PaymentCardContainer>

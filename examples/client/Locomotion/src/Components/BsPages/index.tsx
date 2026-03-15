@@ -69,6 +69,7 @@ const MainContent = styled(View)`
   flex: 1;
   width: 100%;
   margin-bottom: 5px;
+  min-height: 150px;
 `;
 
 const CardText = styled(View)`
@@ -209,25 +210,23 @@ const BsPage = ({
   return (
     <Container edges={['bottom']}>
       <MainContent>
-        <>
-          {TitleText && (
-            <Header>
-              <CardText style={{ width: Image ? '50%' : '100%' }}>
-                <TitleContainer>
-                  {titleIcon && <SvgIcon Svg={titleIcon} style={{ marginRight: 5 }} />}
-                  <Title>{TitleText}</Title>
-                </TitleContainer>
-                <SubTitle testID={subtitleTestId}>{SubTitleText}</SubTitle>
-              </CardText>
-              {Image ? (
-                <ImageContainer>
-                  {Image}
-                </ImageContainer>
-              ) : undefined}
-            </Header>
-          )}
-          {children}
-        </>
+        {TitleText && (
+          <Header>
+            <CardText style={{ width: Image ? '50%' : '100%' }}>
+              <TitleContainer>
+                {titleIcon && <SvgIcon Svg={titleIcon} style={{ marginRight: 5 }} />}
+                <Title>{TitleText}</Title>
+              </TitleContainer>
+              <SubTitle testID={subtitleTestId}>{SubTitleText}</SubTitle>
+            </CardText>
+            {Image ? (
+              <ImageContainer>
+                {Image}
+              </ImageContainer>
+            ) : undefined}
+          </Header>
+        )}
+        {children}
       </MainContent>
       <Footer fullWidthButtons={fullWidthButtons}>
         {ButtonText && (
@@ -319,7 +318,7 @@ export const ConfirmPickupTime = (props: any) => {
     || i18n.t('general.noTimeWindow');
   const renderDatePickerTitle = () => (
     <>
-      <PickerTitle>{i18n.t('bottomSheetContent.ride.chosePickupTime')}</PickerTitle>
+      <PickerTitle>{String(i18n.t('bottomSheetContent.ride.chosePickupTime'))}</PickerTitle>
       <PickerDate>{moment(tempSelectedDate).format('dddd, MMM Do')}</PickerDate>
       <PickerTimeRange>{`${afterTimeTitle} - ${beforeTimeTitle}`}</PickerTimeRange>
 
@@ -439,7 +438,7 @@ export const CancelRide = (props: any) => {
         }
       }}
       onSecondaryButtonPress={() => changeBsPage(
-        RIDE_STATES_TO_BS_PAGES[ride.state || RIDE_STATES.ACTIVE],
+        RIDE_STATES_TO_BS_PAGES[ride?.state || RIDE_STATES.ACTIVE],
       )}
       warning
       buttonDisabled={isLoading}
@@ -592,7 +591,7 @@ export const NoPayment = (props: any) => {
   } = payments.useContainer();
 
   const proceedIfPaymentMethodsAreValid = () => {
-    if (clientHasValidPaymentMethods() || ride.paymentMethodId === PAYMENT_METHODS.CASH) {
+    if (clientHasValidPaymentMethods() || ride?.paymentMethodId === PAYMENT_METHODS.CASH) {
       requestRide();
     }
   };
@@ -603,7 +602,7 @@ export const NoPayment = (props: any) => {
 
   useEffect(() => {
     proceedIfPaymentMethodsAreValid();
-  }, [ride.paymentMethodId]);
+  }, [ride?.paymentMethodId]);
 
   return (
     <BsPage
@@ -652,7 +651,7 @@ export const ConfirmingRide = (props: any) => {
     : i18n.t('bottomSheetContent.confirmingRide.titleText');
 
   const windowSize = chosenService?.futurePickupWindowSizeInMinutes;
-  const beforeTime = windowSize ? moment(ride.scheduledTo).add(windowSize, 'minutes').format('h:mm A') : i18n.t('general.noTimeWindow');
+  const beforeTime = windowSize ? moment(ride?.scheduledTo).add(windowSize, 'minutes').format('h:mm A') : i18n.t('general.noTimeWindow');
 
   const SubTitleText = ride?.scheduledTo
     ? i18n.t('bottomSheetContent.confirmingFutureRide.subTitleText',

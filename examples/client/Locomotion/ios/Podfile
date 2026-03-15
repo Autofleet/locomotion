@@ -5,10 +5,9 @@ require Pod::Executable.execute_command('node', ['-p',
     {paths: [process.argv[1]]},
   )', __dir__]).strip
 
-require_relative '../node_modules/@react-native-community/cli-platform-ios/native_modules'
 # $RNFirebaseAsStaticFramework = true
 
-platform :ios, '13.4'
+platform :ios, min_ios_version_supported
 prepare_react_native_project!
 
 linkage = ENV['USE_FRAMEWORKS']
@@ -32,7 +31,6 @@ target 'Locomotion' do
 
   pod 'react-native-restart', :path => '../node_modules/react-native-restart'
 
-  pod 'RNExitApp', :path => '../node_modules/react-native-exit-app'
 
   target 'LocomotionTests' do
     inherit! :complete
@@ -53,22 +51,6 @@ target 'Locomotion' do
   pod 'nanopb', :modular_headers => true
 
   post_install do |installer|
-    # Bitcode stripping for Hermes
-    bitcode_strip_path = `xcrun --find bitcode_strip`.chop!
-    hermes_framework_paths = [
-      "Pods/hermes-engine/destroot/Library/Frameworks/universal/hermes.xcframework/ios-arm64/hermes.framework/hermes",
-      "Pods/hermes-engine/destroot/Library/Frameworks/universal/hermes.xcframework/ios-arm64_x86_64-simulator/hermes.framework/hermes"
-    ]
-    
-    hermes_framework_paths.each do |framework_path|
-      full_path = File.join(Dir.pwd, framework_path)
-      if File.exist?(full_path)
-        strip_command = "#{bitcode_strip_path} #{full_path} -r -o #{full_path}"
-        puts "Stripping bitcode: #{strip_command}"
-        system(strip_command)
-      end
-    end
-    
     # https://github.com/facebook/react-native/blob/main/packages/react-native/scripts/react_native_pods.rb#L197-L202
     react_native_post_install(
       installer,
@@ -77,21 +59,9 @@ target 'Locomotion' do
       # :ccache_enabled => true
     )
     installer.pods_project.targets.each do |target|
-      target.build_configurations.each do |config|
-        # Explicitly disable Bitcode for all targets
-        config.build_settings['ENABLE_BITCODE'] = 'NO'
-        config.build_settings['GCC_PREPROCESSOR_DEFINITIONS'] ||= ['$(inherited)', '_LIBCPP_ENABLE_CXX17_REMOVED_UNARY_BINARY_FUNCTION']
-      end
       if target.respond_to?(:product_type) and target.product_type == "com.apple.product-type.bundle"
         target.build_configurations.each do |config|
             config.build_settings['CODE_SIGNING_ALLOWED'] = 'NO'
-        end
-      end
-      if target.to_s === 'React-Codegen'
-        puts 'Updating React-Codegen to have the min SWIFT_VERSION & ios deployment target'
-        target.build_configurations.each do |config|
-          config.build_settings['SWIFT_VERSION'] = '5.0'
-          config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '12.4'
         end
       end
     end

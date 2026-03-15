@@ -82,5 +82,7 @@
 	<string>Light</string>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+	<key>RCTTextKit2Disabled</key>
+	<true/>
 </dict>
 </plist>

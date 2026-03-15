@@ -23,11 +23,11 @@ interface GenericErrorProps {
 const GenericErrorPopup = ({
   isVisible,
   closePopup,
-  title,
-  text,
-  buttonText,
-  customButton,
-  cancelPopup,
+  title = '',
+  text = '',
+  buttonText = '',
+  customButton = null,
+  cancelPopup = null,
 }: GenericErrorProps) => (
   <Modal isVisible={isVisible}>
     <Container>
@@ -57,11 +57,5 @@ const GenericErrorPopup = ({
   </Modal>
 );
 
-GenericErrorPopup.defaultProps = {
-  title: '',
-  text: '',
-  buttonText: '',
-  customButton: null,
-  cancelPopup: null,
-};
+
 export default GenericErrorPopup;

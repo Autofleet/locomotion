@@ -1,16 +1,24 @@
-import { ReactElement, useContext } from 'react';
-import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
+import React, { ReactElement, useContext } from 'react';
+import SkeletonPlaceholder from 'react-native-reanimated-skeleton';
 import { ThemeContext } from 'styled-components';
 
 interface SkeletonProps {
   children: ReactElement;
+  layout?: object[];
 }
 
-export const Skeleton = ({ children }: SkeletonProps) => {
+export const Skeleton = ({ children, layout }: SkeletonProps) => {
   const theme = useContext(ThemeContext);
 
   return (
-    <SkeletonPlaceholder borderRadius={theme.borderRadiusValues.SM}>
+    <SkeletonPlaceholder
+      isLoading={true}
+      animationType="pulse"
+      layout={layout}
+      containerStyle={{ borderRadius: theme.borderRadiusValues.SM }}
+      boneColor={theme.isDarkMode ? '#3a3a3a' : '#d0d0d0'}
+      highlightColor={theme.isDarkMode ? '#505050' : '#e8e8e8'}
+    >
       {children}
     </SkeletonPlaceholder>
   );
