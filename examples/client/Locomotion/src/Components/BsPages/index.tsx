@@ -655,7 +655,7 @@ export const ConfirmingRide = (props: any) => {
 
   const SubTitleText = ride?.scheduledTo
     ? i18n.t('bottomSheetContent.confirmingFutureRide.subTitleText',
-      { date: moment(ride.scheduledTo).format('MMM D, h:mm A'), beforeTime })
+      { date: moment(ride?.scheduledTo).format('MMM D, h:mm A'), beforeTime })
     : null;
   return (
     <BsPage

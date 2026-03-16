@@ -1,7 +1,10 @@
-apply plugin: "com.android.application"
-apply plugin: "com.facebook.react"
-apply plugin: 'com.google.gms.google-services'
-apply plugin: 'com.google.firebase.crashlytics'
+plugins {
+    id("com.android.application")
+    id("com.facebook.react")
+}
+
+apply plugin: "com.google.gms.google-services"
+apply plugin: "com.google.firebase.crashlytics"
 
 apply from: project(':react-native-config').projectDir.getPath() + "/dotenv.gradle"
 /*
