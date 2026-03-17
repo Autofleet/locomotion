@@ -220,7 +220,6 @@ const RidePage = ({ mapSettings, navigation }) => {
     ),
     [BS_PAGES.NOT_IN_TERRITORY]: () => (
       <NotAvailableHere
-        fullWidthButtons
         onButtonPress={() => {
           goBackToAddress();
         }}
@@ -228,7 +227,6 @@ const RidePage = ({ mapSettings, navigation }) => {
     ),
     [BS_PAGES.PICKUP_NOT_IN_TERRITORY]: () => (
       <NotAvailableHere
-        fullWidthButtons
         SubTitleText={i18n.t('bottomSheetContent.notAvailableHere.pickupSubTitleText', {
           appName: Config.OPERATION_NAME,
         })}

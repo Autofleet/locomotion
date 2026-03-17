@@ -469,7 +469,7 @@ export function CancelRide({
   );
 }
 
-export const ConfirmFutureRide = (props: any) => {
+export function ConfirmFutureRide({ onButtonPress }: { onButtonPress?: () => void }) {
   const { newFutureRide } = useContext(FutureRidesContext);
   const { chosenService } = useContext(NewRidePageContext);
 
@@ -492,13 +492,13 @@ export const ConfirmFutureRide = (props: any) => {
 
   const getPickupDisplay = () => {
     const pickup = (newFutureRide?.stopPoints || [])
-      .find(sp => sp.type === STOP_POINT_TYPES.STOP_POINT_PICKUP);
+      .find((sp) => sp.type === STOP_POINT_TYPES.STOP_POINT_PICKUP);
     const pickupText = i18n.t('bottomSheetContent.confirmFutureRide.pickupText', { address: pickup?.description });
     return <TextRowWithIcon text={pickupText} />;
   };
   const getDropOffDisplay = () => {
     const dropOff = (newFutureRide?.stopPoints || [])
-      .find(sp => sp.type === STOP_POINT_TYPES.STOP_POINT_DROPOFF);
+      .find((sp) => sp.type === STOP_POINT_TYPES.STOP_POINT_DROPOFF);
     const dropOffText = i18n.t('bottomSheetContent.confirmFutureRide.dropOffText', { address: dropOff?.description });
     return <TextRowWithIcon text={dropOffText} />;
   };
@@ -507,7 +507,7 @@ export const ConfirmFutureRide = (props: any) => {
       TitleText={i18n.t('bottomSheetContent.confirmFutureRide.titleText')}
       ButtonText={i18n.t('bottomSheetContent.confirmFutureRide.buttonText')}
       fullWidthButtons
-      {...props}
+      onButtonPress={onButtonPress}
     >
       {getTimeDisplay()}
       {getDateDisplay()}
@@ -515,9 +515,9 @@ export const ConfirmFutureRide = (props: any) => {
       {getDropOffDisplay()}
     </BsPage>
   );
-};
+}
 
-export const NotAvailableHere = (props: any) => {
+export function NotAvailableHere({ onButtonPress, SubTitleText }: { onButtonPress?: () => void, SubTitleText?: string }) {
   const { setSnapPointsState, setIsExpanded } = useContext(BottomSheetContext);
   const { primaryColor } = useContext(ThemeContext);
   useEffect(() => {
@@ -529,17 +529,17 @@ export const NotAvailableHere = (props: any) => {
     <BsPage
       TitleText={i18n.t('bottomSheetContent.notAvailableHere.titleText')}
       ButtonText={i18n.t('bottomSheetContent.notAvailableHere.buttonText')}
-      SubTitleText={i18n.t('bottomSheetContent.notAvailableHere.subTitleText', {
+      SubTitleText={SubTitleText || i18n.t('bottomSheetContent.notAvailableHere.subTitleText', {
         appName: Config.OPERATION_NAME,
       })}
       Image={<SvgIcon Svg={outOfTerritoryIcon} height={85} width={110} fill={primaryColor} />}
       fullWidthButtons
-      {...props}
+      onButtonPress={onButtonPress}
     />
   );
-};
+}
 
-export const ConfirmPickup = (props: any) => {
+export function ConfirmPickup({ onButtonPress, isConfirmPickup, initialLocation }: { onButtonPress?: (location: any) => void, isConfirmPickup?: boolean, initialLocation?: any }) {
   const {
     lastSelectedLocation,
     getCurrentLocationAddress,
@@ -553,8 +553,8 @@ export const ConfirmPickup = (props: any) => {
 
   const { collapse } = useBottomSheet();
   const setInitialLocation = async () => {
-    if (props.initialLocation) {
-      saveSelectedLocation(props.initialLocation);
+    if (initialLocation) {
+      saveSelectedLocation(initialLocation);
       setSelectedInputIndex(0);
     } else {
       const sp = await getCurrentLocationAddress();
@@ -568,7 +568,7 @@ export const ConfirmPickup = (props: any) => {
     setInitialLocation();
   }, []);
 
-  const titleText = props.isConfirmPickup ? 'confirmPickupTitle' : 'confirmLocationTitle';
+  const titleText = isConfirmPickup ? 'confirmPickupTitle' : 'confirmLocationTitle';
 
   const renderAddressContainer = useCallback(() => (
     <AddressContainer testID="pickupAddress">
@@ -581,14 +581,13 @@ export const ConfirmPickup = (props: any) => {
   return (
     <BsPage
       TitleText={i18n.t(`bottomSheetContent.confirmPickup.${titleText}`)}
-      ButtonText={i18n.t(`bottomSheetContent.confirmPickup.${props.isConfirmPickup ? 'buttonTextWithRequest' : 'buttonText'}`)}
+      ButtonText={i18n.t(`bottomSheetContent.confirmPickup.${isConfirmPickup ? 'buttonTextWithRequest' : 'buttonText'}`)}
       SubTitleText={!isStationsEnabled ? i18n.t('bottomSheetContent.confirmPickup.subTitleText') : ''}
       isLoading={rideRequestLoading}
       fullWidthButtons
-      {...props}
       onButtonPress={() => {
-        if (props.onButtonPress) {
-          props.onButtonPress(lastSelectedLocation);
+        if (onButtonPress) {
+          onButtonPress(lastSelectedLocation);
         }
       }}
       buttonDisabled={isDraggingLocationPin || !lastSelectedLocation?.streetAddress}
@@ -596,9 +595,9 @@ export const ConfirmPickup = (props: any) => {
       {renderAddressContainer()}
     </BsPage>
   );
-};
+}
 
-export const NoPayment = (props: any) => {
+export function NoPayment() {
   const { setSnapPointsState } = useContext(BottomSheetContext);
   const { requestRide, ride } = useContext(RidePageContext);
 
@@ -631,28 +630,30 @@ export const NoPayment = (props: any) => {
       onButtonPress={() => {
         navigationService.navigate(MAIN_ROUTES.PAYMENT, { rideFlow: true });
       }}
-      {...props}
     />
   );
-};
+}
 
-export const Loading = (props: any) => (
-  <BsPage
-    {...props}
-  >
-    <LoaderContainer>
-      <Loader
-        dark
-        lottieViewStyle={{
-          height: '100%', width: '100%', alignItems: 'center', justifyContent: 'center',
-        }}
-        sourceProp={undefined}
-      />
-    </LoaderContainer>
-  </BsPage>
-);
+export function Loading() {
+  return (
+    <BsPage
+      TitleText=""
+      ButtonText=""
+    >
+      <LoaderContainer>
+        <Loader
+          dark
+          lottieViewStyle={{
+            height: '100%', width: '100%', alignItems: 'center', justifyContent: 'center',
+          }}
+          sourceProp={undefined}
+        />
+      </LoaderContainer>
+    </BsPage>
+  );
+}
 
-export const ConfirmingRide = (props: any) => {
+export function ConfirmingRide() {
   const { setSnapPointsState } = useContext(BottomSheetContext);
   const { changeBsPage } = useContext(RideStateContextContext);
   const { ride, chosenService } = useContext(RidePageContext);
@@ -671,12 +672,15 @@ export const ConfirmingRide = (props: any) => {
   const beforeTime = windowSize ? moment(ride?.scheduledTo).add(windowSize, 'minutes').format('h:mm A') : i18n.t('general.noTimeWindow');
 
   const SubTitleText = ride?.scheduledTo
-    ? i18n.t('bottomSheetContent.confirmingFutureRide.subTitleText',
-      { date: moment(ride?.scheduledTo).format('MMM D, h:mm A'), beforeTime })
+    ? i18n.t(
+      'bottomSheetContent.confirmingFutureRide.subTitleText',
+      { date: moment(ride?.scheduledTo).format('MMM D, h:mm A'), beforeTime },
+    )
     : null;
   return (
     <BsPage
       TitleText={TitleText}
+      ButtonText=""
       SecondaryButtonText={ride?.id ? i18n.t('bottomSheetContent.confirmingRide.secondaryButtonText') : null}
       onSecondaryButtonPress={() => {
         getCancellationReasons(ride?.id);
@@ -684,7 +688,6 @@ export const ConfirmingRide = (props: any) => {
       }}
       SubTitleText={SubTitleText}
       fullWidthButtons
-      {...props}
     >
       <LoaderContainer>
         <Loader
@@ -697,9 +700,9 @@ export const ConfirmingRide = (props: any) => {
       </LoaderContainer>
     </BsPage>
   );
-};
+}
 
-export const NoAvailableVehicles = (props: any) => {
+export function NoAvailableVehicles({ onButtonPress, ButtonText }: { onButtonPress?: () => void, ButtonText?: string }) {
   const { setSnapPointsState } = useContext(BottomSheetContext);
   const { primaryColor } = useContext(ThemeContext);
 
@@ -710,19 +713,22 @@ export const NoAvailableVehicles = (props: any) => {
   return (
     <BsPage
       TitleText={i18n.t('bottomSheetContent.noAvailableVehicles.titleText')}
-      ButtonText={i18n.t('bottomSheetContent.noAvailableVehicles.buttonText')}
+      ButtonText={ButtonText || i18n.t('bottomSheetContent.noAvailableVehicles.buttonText')}
       SubTitleText={i18n.t('bottomSheetContent.noAvailableVehicles.subTitleText')}
       fullWidthButtons
       Image={<SvgIcon Svg={busyImage} height={85} width={140} fill={primaryColor} />}
-      {...props}
+      onButtonPress={onButtonPress}
     />
   );
-};
+}
 
-export const ActiveRide = (props: any) => (
-  <BsPage
-    {...props}
-  >
-    <ActiveRideContent />
-  </BsPage>
-);
+export function ActiveRide() {
+  return (
+    <BsPage
+      TitleText=""
+      ButtonText=""
+    >
+      <ActiveRideContent />
+    </BsPage>
+  );
+}
