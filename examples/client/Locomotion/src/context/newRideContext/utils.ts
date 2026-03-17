@@ -36,13 +36,30 @@ export const TAG_OPTIONS = {
 
 export type RidePopupNames = 'FAILED_SERVICE_REQUEST' | 'RIDE_CANCELED_BY_DISPATCHER' | 'CANCELLATION_REASON';
 
-export const RIDE_POPUPS: {[key: string]: RidePopupNames} = {
+export const RIDE_POPUPS: { [key: string]: RidePopupNames } = {
   FAILED_SERVICE_REQUEST: 'FAILED_SERVICE_REQUEST',
   RIDE_CANCELED_BY_DISPATCHER: 'RIDE_CANCELED_BY_DISPATCHER',
   CANCELLATION_REASON: 'CANCELLATION_REASON',
 };
 
-export const INITIAL_STOP_POINTS = [{
+export interface StopPoint {
+  type: string;
+  lat: number | null;
+  lng: number | null;
+  useDefaultLocation?: boolean;
+  id: string;
+  description: string | null;
+  streetAddress: string | null;
+  placeId: string | null;
+  externalId?: string | null;
+  text?: string;
+  orderInParent?: number;
+  state?: string;
+  notes?: string;
+  plannedArrivalTime?: string;
+}
+
+export const INITIAL_STOP_POINTS: StopPoint[] = [{
   type: 'pickup',
   lat: null,
   lng: null,
@@ -219,9 +236,7 @@ export const convertTimezoneByLocation = async (
   }
 };
 
-export const didUserRate = (rating: string | null, rideFeedback: any[] | null) => rating || rideFeedback?.length;
-
-const convertKmToMiles = (km: number) => km * 0.621371;
+export const didUserRate = (rating: string | number | null | undefined, rideFeedback: any[] | null | undefined) => rating || rideFeedback?.length;
 
 export const formatDistanceByMeasurement = (distanceInMeters: number, measurement = 'metric') => {
   const suffix = measurement === 'imperial' ? 'mi' : 'km';

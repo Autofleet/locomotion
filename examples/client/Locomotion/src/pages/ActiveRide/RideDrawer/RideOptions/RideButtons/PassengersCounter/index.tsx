@@ -8,9 +8,21 @@ interface Item {
   label: string;
 }
 
+interface SelectModalItem {
+  value: string | number;
+  label: string;
+}
+
+interface PassengersCounterProps {
+  service: { availableSeats?: number } | null;
+  onSelect: (value: number) => void;
+  onError?: (error: boolean) => void;
+  selectedValue?: number | null;
+}
+
 const PassengersCounter = ({
-  service, onSelect, onError = () => null, selectedValue,
-}) => {
+  service, onSelect, onError = () => undefined, selectedValue,
+}: PassengersCounterProps) => {
   const [passengersOptions, setPassengersOptions] = useState<Item[]>([]);
 
   useEffect(() => {
@@ -24,8 +36,10 @@ const PassengersCounter = ({
   }, [service]);
 
 
-  const onItemSelect = (item: Item) => {
-    onSelect(item?.value);
+  const onItemSelect = (item: SelectModalItem) => {
+    if (typeof item?.value === 'number') {
+      onSelect(item.value);
+    }
   };
   return (
     <SelectModal

@@ -26,7 +26,7 @@ import {
   formatEstimationsResult,
   formatStopPointsForEstimations,
   getEstimationTags,
-  INITIAL_STOP_POINTS,
+  INITIAL_STOP_POINTS, StopPoint,
   RIDE_POPUPS, RidePopupNames, RIDE_FAILED_REASONS, ESTIMATION_ERRORS,
   convertTimezoneByLocation,
   RIDER_APP_SOURCE,
@@ -46,7 +46,7 @@ import { formatSps } from '../../lib/ride/utils';
 import { APP_ROUTES, MAIN_ROUTES } from '../../pages/routes';
 import * as navigationService from '../../services/navigation';
 import { BottomSheetContext } from '../bottomSheetContext';
-import { VirtualStationsContext } from '../virtualStationsContext';
+import { VirtualStationsContext, Station } from '../virtualStationsContext';
 
 
 type Dispatch<A> = (value: A) => void;
@@ -69,7 +69,7 @@ export interface RideInterface {
   serviceId?: string;
   scheduledTo?: string | number;
   driver?: any;
-  stopPoints?: any[];
+  stopPoints?: StopPoint[];
   vehicle?: any;
   rating?: number;
   state?: string;
@@ -85,6 +85,10 @@ export interface RideInterface {
   businessAccountId?: string;
   lastMatchAttempt?: string;
 }
+
+export type RideUpdatePayload = Partial<Omit<RideInterface, 'stopPoints'>> & {
+  stopPoints?: Partial<StopPoint>[];
+};
 
 export const POOLING_TYPES = {
   NO: 'no',
@@ -154,7 +158,7 @@ interface RidePageContextInterface {
   getCallNumbers: () => Promise<void>;
   getRideFromApi: (rideId: string) => Promise<RideInterface>;
   setRide: Dispatch<RideInterface>;
-  updateRide: (rideId: string | undefined, ride: RideInterface) => Promise<void>;
+  updateRide: (rideId: string | undefined, ride: RideUpdatePayload) => Promise<void>;
   validateRequestedStopPoints: (reqSps: any[]) => void;
   setRequestStopPoints: (sps: any) => void;
   tryServiceEstimations: () => Promise<void>;
@@ -168,12 +172,16 @@ interface RidePageContextInterface {
   getRideTotalPriceWithCurrency: (rideId : string | undefined) => Promise<{ amount: number; currency: string; } | undefined>;
   getRidesByParams: (params: any) => Promise<RideInterface[]>;
   numberOfPassengers: number | null,
-  setNumberOfPassengers: (num: number) => void,
+  setNumberOfPassengers: (num: number | null) => void,
   setLastAcknowledgedRideCompletionTimestampToNow: () => void
   loadFutureBookingDays: () => void;
   futureBookingDays: number;
   businessAccountId: string | null,
   updateBusinessAccountId: (newBusinessAccountId: string | null) => void;
+  addressSearchLabel: string | null;
+  formatStationToSearchResult: (station: Station) => { externalId: string; text: string; subText?: string; fullText: string; lat: number; lng: number };
+  formatStationsList: (stations: Station[]) => { externalId: string; text: string; subText?: string; fullText: string; lat: number; lng: number }[];
+  clearRequestSp: (index: number) => void;
 }
 
 export const RidePageContext = createContext<RidePageContextInterface>({
@@ -215,7 +223,7 @@ export const RidePageContext = createContext<RidePageContextInterface>({
   getCallNumbers: async () => undefined,
   getRideFromApi: async () => ({}),
   setRide: () => undefined,
-  updateRide: async (rideId: string | undefined, ride: RideInterface) => undefined,
+  updateRide: async (rideId: string | undefined, ride: RideUpdatePayload) => undefined,
   validateRequestedStopPoints: (reqSps: any[]) => undefined,
   setRequestStopPoints: (sps: any) => undefined,
   tryServiceEstimations: async () => undefined,
@@ -237,6 +245,10 @@ export const RidePageContext = createContext<RidePageContextInterface>({
   updateBusinessAccountId: (newBusinessAccountId: string | null) => undefined,
   addNewEmptyRequestSp: () => undefined,
   removeRequestSp: (index: number) => undefined,
+  addressSearchLabel: null,
+  formatStationToSearchResult: () => ({ externalId: '', text: '', fullText: '', lat: 0, lng: 0 }),
+  formatStationsList: () => [],
+  clearRequestSp: () => undefined,
 });
 
 const HISTORY_RECORDS_NUM = 10;
@@ -249,7 +261,6 @@ const RidePageContextProvider = ({ children }: {
   const {
     isStationsEnabled,
     sortAndUpdateStations,
-    sortStationsByDistanceUsingTurf,
     getStationList,
     stationsList,
   } = useContext(VirtualStationsContext);
@@ -752,7 +763,7 @@ const RidePageContextProvider = ({ children }: {
   }, [locationGranted]);
 
   const initSps = async () => {
-    let currentAddress = null;
+    let currentAddress: Pick<StopPoint, 'externalId' | 'streetAddress' | 'description' | 'lat' | 'lng'> | null = null;
     const [closesStation] = getStationList();
     if (isStationsEnabled) {
       currentAddress = {
@@ -765,16 +776,17 @@ const RidePageContextProvider = ({ children }: {
     } else {
       currentAddress = await getCurrentLocationAddress();
     }
-    if (currentGeocode) {
+    if (currentGeocode && currentAddress) {
+      const addr = currentAddress;
       const sps = [...INITIAL_STOP_POINTS].map((s) => {
         if (s.useDefaultLocation) {
           return {
             ...s,
-            externalId: currentAddress.externalId,
-            streetAddress: currentAddress.streetAddress,
-            description: currentAddress.description,
-            lat: currentAddress.lat,
-            lng: currentAddress.lng,
+            externalId: addr.externalId,
+            streetAddress: addr.streetAddress,
+            description: addr.description,
+            lat: addr.lat,
+            lng: addr.lng,
           };
         }
 
@@ -794,7 +806,7 @@ const RidePageContextProvider = ({ children }: {
   }, [currentGeocode]);
 
 
-  const updateRequestSp = (data: any[], index?: number | null) => {
+  const updateRequestSp = (data: Partial<StopPoint>, index?: number | null) => {
     const reqSps = [...requestStopPoints];
     if (_.isNil(index)) {
       index = (_.isNil(selectedInputIndex) ? requestStopPoints.length - 1 : selectedInputIndex);
@@ -816,6 +828,9 @@ const RidePageContextProvider = ({ children }: {
         text: '',
         type: STOP_POINT_TYPES.STOP_POINT_PICKUP,
         id: getRandomId(),
+        description: null,
+        streetAddress: null,
+        placeId: null,
       });
       return newRequestsSps;
     });
@@ -933,13 +948,13 @@ const RidePageContextProvider = ({ children }: {
     setAddressSearchLabel(label);
   };
 
-  const filterSelectedStations = (stations) => {
-    const stopPointsExternalIds = requestStopPoints.map(sp => sp.externalId);
-    const filteredStations = stations.filter(sp => !stopPointsExternalIds.includes(sp.externalId));
+  const filterSelectedStations = (stations: Station[]) => {
+    const stopPointsExternalIds = requestStopPoints.map((sp: StopPoint) => sp.externalId);
+    const filteredStations = stations.filter((sp: Station) => !stopPointsExternalIds.includes(sp.externalId));
     return filteredStations;
   };
 
-  const formatStationsList = useCallback((stations) => {
+  const formatStationsList = useCallback((stations: Station[]) => {
     const filteredStations = filterSelectedStations(stations);
     return filteredStations.map(formatStationToSearchResult);
   }, [requestStopPoints]);
@@ -949,7 +964,7 @@ const RidePageContextProvider = ({ children }: {
   }, [stationsList]);
 
 
-  const useStationSearch = async (stopPoints, index) => {
+  const useStationSearch = async (stopPoints: StopPoint[], index: number | null) => {
     if (index !== null && stopPoints?.length) {
       const selected = stopPoints[index];
 
@@ -959,7 +974,7 @@ const RidePageContextProvider = ({ children }: {
       }
 
       const [pickup] = stopPoints;
-      let result = {
+      let result: { type: string; coords: { lat: number; lng: number } | null } = {
         type: 'currentLocation',
         coords: null,
       };
@@ -1006,7 +1021,7 @@ const RidePageContextProvider = ({ children }: {
     }
   };
 
-  const formatStationToSearchResult = (station: any) => ({
+  const formatStationToSearchResult = (station: Station) => ({
     //    id: station.id,
     externalId: station.externalId,
     text: station.label,
@@ -1276,7 +1291,7 @@ const RidePageContextProvider = ({ children }: {
     return true;
   };
 
-  const updateRide = async (rideId: string | undefined, newRide: RideInterface) => {
+  const updateRide = async (rideId: string | undefined, newRide: RideUpdatePayload) => {
     try {
       Mixpanel.setEvent('Trying to update ride', newRide);
       await rideApi.patchRide(rideId, newRide);
@@ -1422,7 +1437,6 @@ const RidePageContextProvider = ({ children }: {
         cancelRide,
         getCallNumbers,
         validateRequestedStopPoints,
-        setRequestStopPoints,
         tryServiceEstimations,
         getService,
         getServices,

@@ -5,14 +5,16 @@ import {
   Container, SELECTED_COLOR, Tab, TabInner, TextContainer, UNSELECTED_COLOR,
 } from './styled';
 
+interface TabItem {
+    textKey: string;
+    id: string;
+    Svg: React.FC;
+}
+
 interface ITabSwitchProps {
-    onUnselectedClick: (tab) => void
+    onUnselectedClick: (tab: TabItem) => void
     activeTabId: string;
-    tabs: {
-        textKey: string;
-        id: string;
-        Svg: any;
-    }[];
+    tabs: TabItem[];
 }
 
 const TabSwitch = ({ onUnselectedClick, tabs, activeTabId }: ITabSwitchProps) => (

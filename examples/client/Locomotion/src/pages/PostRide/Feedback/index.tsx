@@ -2,7 +2,7 @@ import React, {
   useContext, useEffect, useRef, useState,
 } from 'react';
 import { ThemeContext } from 'styled-components';
-import { TouchableOpacity } from 'react-native';
+import { TextInput, TouchableOpacity } from 'react-native';
 import i18n from '../../../I18n';
 import {
   ActiveLabelContainer,
@@ -31,7 +31,7 @@ const RideFeedback = ({
   const [isActive, setIsActive] = useState(false);
   const [shouldShowPage, setShouldShowPage] = useState(false);
   const [currentText, updateText] = useState('');
-  const inputRef = useRef();
+  const inputRef = useRef<TextInput>(null);
   const theme = useContext(ThemeContext);
 
   const onChange = (text: string) => {

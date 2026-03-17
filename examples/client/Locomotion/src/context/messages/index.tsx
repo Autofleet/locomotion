@@ -19,6 +19,11 @@ import { MAIN_ROUTES, APP_ROUTES } from '../../pages/routes';
 import i18n from '../../I18n';
 import { RidePageContext } from '../newRideContext';
 
+export type UserMessageProps = {
+    id: string;
+    readAt: Date | null;
+}
+
 export type messageProps = {
     id: string;
     title: string;
@@ -29,6 +34,7 @@ export type messageProps = {
     linkText?: string;
     content?: string;
     dismissedAt: Date | null;
+    userMessages?: UserMessageProps[];
 }
 
 interface MessagesContextInterface {
@@ -43,6 +49,8 @@ interface MessagesContextInterface {
     getUserMessages: () => Promise<any>
     checkMessagesForToast: () => any
     getMessage: (messageId: string) => Promise<any>
+    toastMessageId: string | null
+    closeToast: () => void
 
 }
 
@@ -58,6 +66,8 @@ export const MessagesContext = createContext<MessagesContextInterface>({
   getUserMessages: async () => undefined,
   checkMessagesForToast: () => undefined,
   getMessage: async () => undefined,
+  toastMessageId: null,
+  closeToast: () => undefined,
 });
 
 const MessagesProvider = ({ children }: { children: any }) => {
@@ -108,7 +118,7 @@ const MessagesProvider = ({ children }: { children: any }) => {
   };
 
   const markReadMessages = async (userMessageIds: string[]): Promise<void> => {
-    await markReadMessageCall(userMessageIds, user?.id);
+    await markReadMessageCall(userMessageIds);
   };
 
   const dismissMessages = async (userMessageIds:string[] = []) => {
@@ -120,7 +130,7 @@ const MessagesProvider = ({ children }: { children: any }) => {
   const checkMessagesForToast = async () => {
     const messages = await getUserMessages();
     setUserMessages(messages);
-    const unreadMessage = messages.find(message => !message.readAt && !message.dismissedAt);
+    const unreadMessage = messages.find((message: messageProps) => !message.readAt && !message.dismissedAt);
     if (unreadMessage) {
       showToast(unreadMessage);
     }
@@ -144,7 +154,7 @@ const MessagesProvider = ({ children }: { children: any }) => {
   };
 
   const getUserMessages = async () => {
-    const messages = await getUserMessagesCall(user?.id);
+    const messages = await getUserMessagesCall(user?.id ?? '');
     return messages.sort(sortBySentAt);
   };
 
@@ -161,7 +171,7 @@ const MessagesProvider = ({ children }: { children: any }) => {
   };
 
   const getMessage = async (messageId: string) => {
-    const fetchedMessage = await getMessageCall(messageId, user.id);
+    const fetchedMessage = await getMessageCall(messageId, user?.id ?? null);
     return fetchedMessage;
   };
 

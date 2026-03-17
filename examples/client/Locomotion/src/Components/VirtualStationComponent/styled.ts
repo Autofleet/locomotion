@@ -11,7 +11,7 @@ interface IconsMap {
   [key: string]: React.FC;
 }
 
-const ICONS:IconsMap = {
+const ICONS: IconsMap = {
   pickup: pickupIcon,
   dropoff: dropoffIcon,
   default: station,
@@ -22,17 +22,29 @@ export const Contrainer = styled.View`
     display: flex;
     width: 25px;
 `;
-export const MarkerContainer = styled.TouchableOpacity`
+
+interface Theme {
+  primaryColor: string;
+  primaryButtonTextColor: string;
+}
+
+interface MarkerContainerProps {
+  isActive?: boolean;
+  theme: Theme;
+  primaryButtonTextColor: string;
+};
+
+export const MarkerContainer = styled.TouchableOpacity<MarkerContainerProps>`
     width: 25px;
     height: 25px;
     border-radius: 4px;
-    border-color: ${({ isActive = false, theme }) => (!isActive ? theme.primaryColor : theme.primaryButtonTextColor)};
-    background-color: ${({ isActive = false, theme }) => (isActive ? theme.primaryColor : theme.primaryButtonTextColor)};
+    border-color: ${({ isActive = false, theme }: MarkerContainerProps) => (!isActive ? theme.primaryColor : theme.primaryButtonTextColor)};
+    background-color: ${({ isActive = false, theme }: MarkerContainerProps) => (isActive ? theme.primaryColor : theme.primaryButtonTextColor)};
     border-width: 2px;
 `;
 
 interface MarkerProps {
-  theme?: any;
+  theme: Theme;
   width?: number;
   height?: number;
   isActive?: boolean;
@@ -51,7 +63,7 @@ export const StyledIcon = styled(SvgIcon).attrs(({
   height = 24,
   isActive = false,
   type = 'default',
-}:MarkerProps) => ({
+}: MarkerProps) => ({
   Svg: ICONS[type] || ICONS.default,
   width,
   height,

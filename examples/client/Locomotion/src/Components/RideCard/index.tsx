@@ -42,10 +42,13 @@ const CardComponent = ({ paymentMethod, businessAccountId }: CardComponentProps)
     loadOfflinePaymentText();
   }, []);
 
-  const getText = () => {
+  const getText = (): string | null | undefined => {
     if (businessAccountId) {
-      const { name } = getBusinessAccountById(businessAccountId);
-      return name;
+      const businessAccount = getBusinessAccountById(businessAccountId);
+      if (businessAccount && 'name' in businessAccount) {
+        return String(businessAccount.name);
+      }
+      return undefined;
     }
     if (isCash) {
       return i18n.t('payments.cash');

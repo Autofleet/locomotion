@@ -22,7 +22,7 @@ export const ItemsScrollView = styled(ScrollView)`
   margin-bottom: 50px;
 `;
 
-export const TitleView = styled.View`
+export const TitleView = styled(View)`
   display: flex;
   padding: 0px 20px;
   flex-direction: row;
@@ -31,7 +31,7 @@ export const TitleView = styled.View`
   margin: 20px 0px;
 `;
 
-export const SummaryContainer = styled.View`
+export const SummaryContainer = styled(View)`
   flex: 1;
   flex-shrink: 1;
   max-height: 450px;
@@ -43,7 +43,7 @@ export const SummaryContainer = styled.View`
   max-height: 450px;
 `;
 
-export const Title = styled.Text`
+export const Title = styled(Text)`
   ${FONT_SIZES.H2}
   color: black;
   ${FONT_WEIGHTS.SEMI_BOLD};
@@ -75,8 +75,8 @@ export const ItemInnerContainer = styled(View)`
   padding: 0 15px;
 `;
 
-export const ItemContainer = styled(View)`
-  background-color: ${({ selected }) => (selected ? '#rgba(36, 170, 242, 0.2)' : '#fff')};
+export const ItemContainer = styled(View)<{ selected: boolean }>`
+  background-color: ${({ selected }: { selected: boolean }) => (selected ? 'rgba(36, 170, 242, 0.2)' : '#fff')};
   min-height: 50px;
   flex-direction: row;
   justify-content: flex-start;

@@ -6,7 +6,7 @@ import { APP_ROUTES, MAIN_ROUTES } from './routes';
 import Main from './Main';
 import AuthLoadingScreen from './AuthScreens/AuthLoadingScreen';
 
-const APP_ROUTES_COMPS = {
+const APP_ROUTES_COMPS: Record<string, React.ComponentType<Record<string, unknown>>> = {
   [APP_ROUTES.MAIN_APP]: Main,
   [APP_ROUTES.AUTH_LOADING]: AuthLoadingScreen,
 };

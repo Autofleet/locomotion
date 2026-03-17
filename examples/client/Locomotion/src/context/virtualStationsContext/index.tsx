@@ -15,6 +15,7 @@ import { getPosition, DEFAULT_COORDS } from '../../services/geo';
 import {
   STOP_POINT_TYPES,
 } from '../../lib/commonTypes';
+import { StopPoint } from '../newRideContext/utils';
 import VirtualStationMarker from '../../Components/VirtualStationMarker';
 
 type Location = {
@@ -38,29 +39,29 @@ export type Station = {
 
 interface VirtualStationsContextInterface {
   loadVirtualStations: () => Promise<void>;
-  getMapMarkers: () => any;
+  getMapMarkers: (stopPoints: StopPoint[]) => React.ReactNode[];
   isStationsEnabled: boolean;
   rawStations: Station[];
   stationsList: Station[];
-  StationMarkers: any;
+  StationMarkers: React.FC<{ requestedStopPoints: StopPoint[] }>;
   sortAndUpdateStations: () => void
-  getStationList: () => Station[]
-  stationCalloutsRef: any;
+  getStationList: (sourceLocation?: { lat: number; lng: number } | null) => Station[]
+  stationCalloutsRef: React.MutableRefObject<Record<string, unknown>>;
 }
 
 export const VirtualStationsContext = createContext<VirtualStationsContextInterface>({
   loadVirtualStations: async () => undefined,
-  getMapMarkers: () => undefined,
+  getMapMarkers: () => [],
   isStationsEnabled: false,
   rawStations: [],
   stationsList: [],
-  StationMarkers: [],
+  StationMarkers: () => null,
   sortAndUpdateStations: () => undefined,
   getStationList: () => [],
-  stationCalloutsRef: [],
+  stationCalloutsRef: { current: {} },
 });
 
-const StationsProvider = ({ children }: { children: any }) => {
+const StationsProvider = ({ children }: { children: React.ReactNode }) => {
   const { user, locationGranted } = useContext(UserContext);
   const [isStationsEnabled, setIsStationsEnabled] = useState(false);
   const [rawStations, setRawStations] = useState<Station[]>([]);
@@ -70,7 +71,7 @@ const StationsProvider = ({ children }: { children: any }) => {
     lng: DEFAULT_COORDS.coords.longitude,
   });
   const [isLoading, setIsLoading] = useState(false);
-  const stationCalloutsRef = useRef([]);
+  const stationCalloutsRef = useRef<Record<string, unknown>>({});
 
   const init = async () => {
     getCurrentLocation();
@@ -128,7 +129,7 @@ const StationsProvider = ({ children }: { children: any }) => {
   };
 
   const sortStationsByDistance = (stations:Station[]) => {
-    const sortedStations = stations.sort((a, b) => a.distance - b.distance);
+    const sortedStations = stations.sort((a, b) => (a.distance ?? 0) - (b.distance ?? 0));
     return sortedStations;
   };
 
@@ -163,7 +164,7 @@ const StationsProvider = ({ children }: { children: any }) => {
   }, [user?.id]);
 
 
-  const createMapMarker = (station:Station, stopPoints) => {
+  const createMapMarker = (station: Station, stopPoints: StopPoint[]) => {
     let type = 'default';
 
     if (station?.externalId === stopPoints[0]?.externalId) {
@@ -179,21 +180,26 @@ const StationsProvider = ({ children }: { children: any }) => {
       <VirtualStationMarker
         station={station}
         type={type}
-        stopPointsonCalloutPress={(selectedStation:Station) => console.log('selectedStation', selectedStation)}
-        forwardedRef={stationCalloutsRef.current[station.externalId]}
-        ref={(r) => {
+        onCalloutPress={(selectedStation: Station) => console.log('selectedStation', selectedStation)}
+        ref={(r: unknown) => {
           stationCalloutsRef.current[station.externalId] = r;
         }}
       />
     );
   };
 
-  const StationMarkers = ({ requestedStopPoints }) => useCallback(rawStations.map(s => createMapMarker(s, requestedStopPoints)), [requestedStopPoints]);
+  const getMapMarkers = (stopPoints: StopPoint[]): React.ReactNode[] => rawStations.map(s => createMapMarker(s, stopPoints));
+
+  const StationMarkers = ({ requestedStopPoints }: { requestedStopPoints: StopPoint[] }) => {
+    const markers = useCallback(() => rawStations.map(s => createMapMarker(s, requestedStopPoints)), [requestedStopPoints]);
+    return <>{markers()}</>;
+  };
 
   return (
     <VirtualStationsContext.Provider
       value={{
         loadVirtualStations,
+        getMapMarkers,
         StationMarkers,
         isStationsEnabled,
         rawStations,

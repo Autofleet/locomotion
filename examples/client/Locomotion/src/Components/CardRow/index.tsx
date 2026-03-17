@@ -20,7 +20,8 @@ import paymentContext from '../../context/payments';
 type ContainerProps = {
   children: React.ReactNode,
   selected: boolean,
-  chooseMethodPage: boolean
+  chooseMethodPage: boolean,
+  disabled?: boolean
 };
 
 const InnerContainer = styled(View)`
@@ -102,10 +103,13 @@ const CardRow = (paymentMethod: any) => {
   const { businessAccountId } = paymentMethod;
   const [isCardExpired, setIsCardExpired] = useState(false);
 
-  const getPaymentMethodTitle = () => {
+  const getPaymentMethodTitle = (): string | null | undefined => {
     if (businessAccountId) {
-      const { name } = getBusinessAccountById(businessAccountId);
-      return name;
+      const businessAccount = getBusinessAccountById(businessAccountId);
+      if (businessAccount && 'name' in businessAccount) {
+        return String(businessAccount.name);
+      }
+      return undefined;
     }
 
     if (isCashPaymentMethod(paymentMethod)) {

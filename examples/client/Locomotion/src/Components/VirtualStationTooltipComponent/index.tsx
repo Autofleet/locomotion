@@ -9,31 +9,22 @@ import {
   AddressText,
   BottomActions,
 } from './styled';
-import LinkText from '../../Components/LinkText';
-import stationIcon from '../../assets/map/markers/stations/arrow.svg';
+import { Station } from '../../context/virtualStationsContext';
 
+interface VirtualStationTooltipProps {
+  station: Station;
+}
 
-const VirtualStationTooltip = ({ station, onPress }) => (
+const VirtualStationTooltip = ({ station }: VirtualStationTooltipProps) => (
   <Tooltip>
     <StationDetails>
       <Row>
         <StationName>{station.label}</StationName>
-        {/* {station.distance ? <DistanceText>{`${station.distance}m`}</DistanceText> : null} */}
       </Row>
       <Row>
         <AddressText>{station.address}</AddressText>
       </Row>
     </StationDetails>
-    {/*     <BottomActions>
-      <LinkText
-        iconSide="right"
-        icon={stationIcon}
-        onPress={() => onPress(station)}
-      >
-        {i18n.t('virtualStations.tooltip.setDropoff')}
-
-      </LinkText>
-    </BottomActions> */}
   </Tooltip>
 );
 

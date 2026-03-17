@@ -107,7 +107,7 @@ const CancellationReasonsPopup = ({
 
                       <CancellationReasonCard key={cr.id}>
                         <CancellationReasonText>
-                          {i18n.t(`cancellationReasons.${cr.value}`, cr.value)}
+                          {String(i18n.t(`cancellationReasons.${cr.value}`, cr.value))}
                         </CancellationReasonText>
                       </CancellationReasonCard>
                     </ClickableContainer>

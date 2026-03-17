@@ -76,7 +76,7 @@ const FutureRidesView = ({ menuSide }: FutureRidesViewProps) => {
       <PageHeader
         title={i18n.t('futureRides.pageTitle')}
         onIconPress={() => {
-          changeBsPage(ride.id ? BS_PAGES.ACTIVE_RIDE : BS_PAGES.ADDRESS_SELECTOR);
+          changeBsPage(ride?.id ? BS_PAGES.ACTIVE_RIDE : BS_PAGES.ADDRESS_SELECTOR);
           NavigationService.navigate(MAIN_ROUTES.HOME);
         }}
         iconSide={menuSide}
@@ -121,7 +121,7 @@ const FutureRidesView = ({ menuSide }: FutureRidesViewProps) => {
               Mixpanel.setEvent('Trying to cancel ride');
               await cancelRide(rideToCancel);
               await loadFutureRides();
-              changeBsPage(ride.id ? BS_PAGES.ACTIVE_RIDE : BS_PAGES.ADDRESS_SELECTOR);
+              changeBsPage(ride?.id ? BS_PAGES.ACTIVE_RIDE : BS_PAGES.ADDRESS_SELECTOR);
               setShowCancellationReasonPopup(true);
             } catch (e: any) {
               setShowError(true);
@@ -129,7 +129,7 @@ const FutureRidesView = ({ menuSide }: FutureRidesViewProps) => {
             }
           }}
           onSecondaryButtonPress={() => {
-            changeBsPage(ride.id ? BS_PAGES.ACTIVE_RIDE : BS_PAGES.ADDRESS_SELECTOR);
+            changeBsPage(ride?.id ? BS_PAGES.ACTIVE_RIDE : BS_PAGES.ADDRESS_SELECTOR);
           }}
         />
       </BottomSheetComponent>
@@ -137,7 +137,7 @@ const FutureRidesView = ({ menuSide }: FutureRidesViewProps) => {
         isVisible={showCancellationReasonPopup}
         onCancel={onCancellationReasonSubmit}
         onSubmit={onCancellationReasonSubmit}
-        rideId={rideToCancel}
+        rideId={rideToCancel ?? ''}
       />
       <GenericErrorPopup
         isVisible={showError}

@@ -4,7 +4,7 @@ import React, {
 import DatePicker from 'react-native-date-picker';
 import moment from 'moment';
 import { ThemeContext } from 'styled-components';
-import { Animated } from 'react-native';
+import { Animated, ViewStyle } from 'react-native';
 import { isCashPaymentMethod, isExternalPaymentMethod, isOfflinePaymentMethod } from '../../../../../lib/ride/utils';
 import DatePickerPoppup from '../../../../../popups/DatePickerPoppup';
 import FutureBookingButton from './FutureBookingButton';
@@ -78,7 +78,7 @@ const RideButtons = ({
 
   const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
   const [isFutureRidesEnabled, setIsFutureRidesEnabled] = useState(true);
-  const [minMinutesBeforeFutureRide, setMinMinutesBeforeFutureRide] = useState(null);
+  const [minMinutesBeforeFutureRide, setMinMinutesBeforeFutureRide] = useState<number | null>(null);
   const [passengersCounterError, setPassengersCounterError] = useState(false);
   const firstDate = () => moment(ride?.scheduledTo || undefined).add(ride?.scheduledTo ? 0 : (minMinutesBeforeFutureRide || 0) + 1, 'minutes').toDate();
   const [tempSelectedDate, setTempSelectedDate] = useState(firstDate());
@@ -112,7 +112,7 @@ const RideButtons = ({
 
   const [animatedOpacity] = useState(new Animated.Value(0));
 
-  const animatedStyle = {
+  const animatedStyle: Animated.WithAnimatedValue<ViewStyle> = {
     height: '100%',
     width: HALF_WIDTH,
     backgroundColor: '#d3eefc',
@@ -153,7 +153,7 @@ const RideButtons = ({
 
     const renderDatePickerTitle = () => (
       <>
-        <PickerTitle>{i18n.t('bottomSheetContent.ride.chosePickupTime')}</PickerTitle>
+        <PickerTitle>{String(i18n.t('bottomSheetContent.ride.chosePickupTime'))}</PickerTitle>
         <PickerDate>{moment(tempSelectedDate).format('dddd, MMM Do')}</PickerDate>
         <PickerTimeRange>{`${afterTimeTitle} - ${beforeTimeTitle}`}</PickerTimeRange>
 
@@ -239,8 +239,12 @@ const RideButtons = ({
 
     const getSelectedPaymentMethodTitle = () : string | null => {
       if (businessAccountId) {
-        const { name } = getBusinessAccountById(businessAccountId);
-        return name;
+        const businessAccount = getBusinessAccountById(businessAccountId);
+        if (businessAccount && typeof businessAccount === 'object' && 'name' in businessAccount) {
+          const { name } = businessAccount;
+          return typeof name === 'string' ? name : null;
+        }
+        return null;
       }
       if (isCashPaymentMethod(selectedPaymentMethod)) {
         return i18n.t('payments.cash');
@@ -267,7 +271,7 @@ const RideButtons = ({
         <PaymentButton
           brand={selectedPaymentMethod?.brand}
           icon={paymentMethodToIconMap[selectedPaymentMethod?.id]}
-          title={getSelectedPaymentMethodTitle()}
+          title={getSelectedPaymentMethodTitle() ?? ''}
           id={selectedPaymentMethod?.id}
           invalid={paymentMethodNotAllowedOnService}
         />

@@ -175,7 +175,7 @@ const RIDE_STATES_TO_BS_PAGES = objDefault({
   defaultValue: BS_PAGES.ACTIVE_RIDE,
 });
 
-const BsPage = ({
+function BsPage({
   onSecondaryButtonPress,
   onButtonPress,
   Image,
@@ -191,21 +191,21 @@ const BsPage = ({
   fullWidthButtons,
   subtitleTestId,
 }: {
-  onSecondaryButtonPress?: any,
-  onButtonPress: any,
-  Image: any,
-  children?: any,
-  titleIcon?: any,
+  onSecondaryButtonPress?: () => void,
+  onButtonPress?: () => void,
+  Image?: React.ReactNode,
+  children?: React.ReactNode,
+  titleIcon?: string,
   TitleText: string,
-  SubTitleText: string,
+  SubTitleText?: string,
   ButtonText: string,
   SecondaryButtonText?: string,
   isLoading?: boolean;
   buttonDisabled?: boolean;
   warning?: boolean
   fullWidthButtons?: boolean;
-  subtitleTestId: string
-}) => {
+  subtitleTestId?: string
+}) {
   const buttonWidth = fullWidthButtons ? '100%' : '48%';
   return (
     <Container edges={['bottom']}>
@@ -255,7 +255,7 @@ const BsPage = ({
       </Footer>
     </Container>
   );
-};
+}
 
 BsPage.defaultProps = {
   children: undefined,
@@ -270,7 +270,7 @@ BsPage.defaultProps = {
 
 export default BsPage;
 
-export const ConfirmPickupTime = (props: any) => {
+export function ConfirmPickupTime() {
   const { getSettingByKey } = SettingContext.useContainer();
   const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
   const [minMinutesBeforeFutureRide, setMinMinutesBeforeFutureRide] = useState<number | null>(null);
@@ -337,7 +337,7 @@ export const ConfirmPickupTime = (props: any) => {
         }
         changeBsPage(BS_PAGES.SERVICE_ESTIMATIONS);
       }}
-      {...props}
+      subtitleTestId=""
     >
       <RoundedButton
         onPress={() => minMinutesBeforeFutureRide && setIsDatePickerOpen(true)}
@@ -380,9 +380,9 @@ export const ConfirmPickupTime = (props: any) => {
       />
     </BsPage>
   );
-};
+}
 
-export const GenericError = (props: any) => {
+export function GenericError() {
   const { genericErrorDetails } = useContext(BottomSheetContext);
   return (
     <BsPage
@@ -394,55 +394,72 @@ export const GenericError = (props: any) => {
       SecondaryButtonText={genericErrorDetails.secondaryButtonText}
       onSecondaryButtonPress={genericErrorDetails.secondaryButtonPress}
       fullWidthButtons
-      {...props}
     />
   );
-};
+}
 
-export const LocationRequest = (props: any) => (
-  <BsPage
-    TitleText={i18n.t('bottomSheetContent.locationRequest.titleText')}
-    ButtonText={i18n.t('bottomSheetContent.locationRequest.buttonText')}
-    SecondaryButtonText={i18n.t('bottomSheetContent.locationRequest.secondaryButtonText')}
-    SubTitleText={i18n.t('bottomSheetContent.locationRequest.subTitleText', { operation: Config.OPERATION_NAME })}
-    onButtonPress={Linking.openSettings}
-    fullWidthButtons
-    {...props}
-  />
-);
+export function LocationRequest({ onSecondaryButtonPress }: { onSecondaryButtonPress?: any }) {
+  return (
+    <BsPage
+      TitleText={i18n.t('bottomSheetContent.locationRequest.titleText')}
+      ButtonText={i18n.t('bottomSheetContent.locationRequest.buttonText')}
+      SecondaryButtonText={i18n.t('bottomSheetContent.locationRequest.secondaryButtonText')}
+      SubTitleText={i18n.t('bottomSheetContent.locationRequest.subTitleText', { operation: Config.OPERATION_NAME })}
+      onButtonPress={Linking.openSettings}
+      onSecondaryButtonPress={onSecondaryButtonPress}
+      fullWidthButtons
+      subtitleTestId=""
+    />
+  );
+}
 
-export const CancelRide = (props: any) => {
+interface CancelRideProps {
+  secondaryButtonText?: string;
+  onButtonPress?: () => void | Promise<void>;
+  onSecondaryButtonPress?: () => void;
+}
+
+export function CancelRide({
+  secondaryButtonText,
+  onButtonPress: onButtonPressProp,
+  onSecondaryButtonPress: onSecondaryButtonPressProp,
+}: CancelRideProps = {}) {
   const [isLoading, setIsLoading] = useState(false);
   const [showError, setShowError] = useState(false);
   const { cancelRide, ride, setRidePopup } = useContext(RidePageContext);
   const { changeBsPage } = useContext(RideStateContextContext);
+
+  const defaultOnButtonPress = async () => {
+    try {
+      setIsLoading(true);
+      Mixpanel.setEvent('Trying to cancel ride');
+      await cancelRide();
+      setRidePopup(RIDE_POPUPS.CANCELLATION_REASON);
+      changeBsPage(BS_PAGES.ADDRESS_SELECTOR);
+    } catch (e: unknown) {
+      setShowError(true);
+      setIsLoading(false);
+      const status = e !== null && typeof e === 'object' && 'response' in e
+        ? (e.response !== null && typeof e.response === 'object' && 'status' in e.response ? e.response.status : undefined)
+        : undefined;
+      Mixpanel.setEvent('failed to cancel ride', { status });
+    }
+  };
 
   return (
     <BsPage
       TitleText={i18n.t('bottomSheetContent.cancelRide.titleText')}
       ButtonText={i18n.t('bottomSheetContent.cancelRide.buttonText')}
       SubTitleText={i18n.t('bottomSheetContent.cancelRide.subTitleText')}
-      SecondaryButtonText={i18n.t('bottomSheetContent.cancelRide.secondaryButtonText')}
+      SecondaryButtonText={secondaryButtonText || i18n.t('bottomSheetContent.cancelRide.secondaryButtonText')}
       isLoading={isLoading}
-      onButtonPress={async () => {
-        try {
-          setIsLoading(true);
-          Mixpanel.setEvent('Trying to cancel ride');
-          await cancelRide();
-          setRidePopup(RIDE_POPUPS.CANCELLATION_REASON);
-          changeBsPage(BS_PAGES.ADDRESS_SELECTOR);
-        } catch (e: any) {
-          setShowError(true);
-          setIsLoading(false);
-          Mixpanel.setEvent('failed to cancel ride', { status: e?.response?.status });
-        }
-      }}
-      onSecondaryButtonPress={() => changeBsPage(
+      onButtonPress={onButtonPressProp || defaultOnButtonPress}
+      onSecondaryButtonPress={onSecondaryButtonPressProp || (() => changeBsPage(
         RIDE_STATES_TO_BS_PAGES[ride?.state || RIDE_STATES.ACTIVE],
-      )}
+      ))}
       warning
       buttonDisabled={isLoading}
-      {...props}
+      subtitleTestId=""
     >
       <GenericErrorPopup
         isVisible={showError}
@@ -450,7 +467,7 @@ export const CancelRide = (props: any) => {
       />
     </BsPage>
   );
-};
+}
 
 export const ConfirmFutureRide = (props: any) => {
   const { newFutureRide } = useContext(FutureRidesContext);

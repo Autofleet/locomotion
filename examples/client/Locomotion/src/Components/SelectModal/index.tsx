@@ -9,7 +9,13 @@ import {
 } from '../../context/theme';
 
 const ERROR_COLOR = '#f35657';
-const StyledPop = styled(SelectDropdown).attrs(({ theme, icon = person, error }) => ({
+
+interface StyledPopProps {
+  icon?: React.FC;
+  error?: boolean;
+}
+
+const StyledPop = styled(SelectDropdown).attrs<StyledPopProps>(({ theme, icon = person, error }: StyledPopProps & { theme: { textColor: string } }) => ({
   buttonStyle: {
     borderRadius: 8,
     flex: 1,
@@ -33,40 +39,49 @@ const StyledPop = styled(SelectDropdown).attrs(({ theme, icon = person, error })
   rowStyle: {
     height: 40,
   },
-}))``;
+}))<StyledPopProps>``;
 
 
-const StyledRow = styled(View)`
+const StyledRow = styled(View)<{ selected: boolean }>`
   height: 40;
   display: flex;
   justify-content: space-between;
   flex-direction: row;
   align-items: center;
   padding-horizontal: 8;
-  background-color: ${({ theme, selected }) => (selected ? `rgba(${convertHextToRgba(theme.primaryColor, 0.1)})` : '#ffffff')};
+  background-color: ${({ theme, selected }: { theme: { primaryColor: string }; selected: boolean }) => (selected ? `rgba(${convertHextToRgba(theme.primaryColor, 0.1)})` : '#ffffff')};
   border-width: 1;
   border-color: #f1f2f6;
 `;
 
-const StyledText = styled(Text)`
+const StyledText = styled(Text)<{ selected: boolean }>`
   ${FONT_SIZES.H3};
   text-align: center;
   flex: 1;
   margin-horizontal: 8;
-  color: ${({ theme }) => theme.textColor};
-  ${({ selected }) => selected && `${FONT_WEIGHTS.BOLD}`}
+  color: ${({ theme }: { theme: { textColor: string } }) => theme.textColor};
+  ${({ selected }: { selected: boolean }) => selected && `${FONT_WEIGHTS.BOLD}`}
 `;
 
-const StyledIcon = styled(SvgIcon).attrs(({
+interface StyledIconProps {
+  fillColor?: string;
+  selected?: boolean;
+}
+
+const StyledIcon = styled(SvgIcon).attrs<StyledIconProps>(({
   theme, fillColor, width, height, selected,
-}) => ({
+}: StyledIconProps & { theme: { primaryColor: string; textColor: string }; width?: number; height?: number }) => ({
   fill: fillColor || (selected ? theme.primaryColor : theme.textColor),
   width: width || 16,
   height: height || 16,
-}))``;
+}))<StyledIconProps>``;
 
+interface StyledSelectRowProps {
+  item: { label: string; icon?: React.FC };
+  selected: boolean;
+}
 
-const StyledSelectRow = ({ item, theme, selected }) => (
+const StyledSelectRow = ({ item, selected }: StyledSelectRowProps) => (
   <StyledRow selected={selected}>
     <StyledIcon
       Svg={person}
@@ -78,13 +93,13 @@ const StyledSelectRow = ({ item, theme, selected }) => (
 );
 
 interface Item {
-  value: any;
+  value: string | number;
   label: string;
 }
 
 interface SelectModalProps {
   data: Item[];
-  selectedValue?: any;
+  selectedValue?: string | number | null;
   onSelect: (item: Item) => void;
   onError: (error: boolean) => void;
 }
@@ -123,17 +138,17 @@ const SelectModal = ({
       data={data}
       defaultValue={selectedItem}
       defaultButtonText={selectedItem?.label || '1'}
-      onSelect={(item, index) => {
+      onSelect={(item: Item) => {
         setSelectedItem(item);
       }}
       dropdownIconPosition="left"
       dropdownOverlayColor="transparent"
-      buttonTextAfterSelection={(item, index) => item.label}
-      renderCustomizedRowChild={(item, index) => (
+      rowTextForSelection={(item: Item) => item.label}
+      buttonTextAfterSelection={(item: Item) => item.label}
+      renderCustomizedRowChild={(item: Item) => (
         <StyledSelectRow
           item={item}
-          index={index}
-          selected={selectedItem && item.value === selectedItem.value}
+          selected={selectedItem !== null && item.value === selectedItem.value}
         />
       )}
     />

@@ -101,6 +101,8 @@ export default ({
             selected={defaultMethod?.id}
             isVisible={showChoosePayment}
             showCash={false}
+            showBusinessPaymentMethods={false}
+            selectedBusinessAccountId={null}
             onCancel={() => { setShowChoosePayment(false); }}
             onSubmit={async (payment) => {
               const chosenDefault = usePayments.paymentMethods.find(({ id }) => id === payment)

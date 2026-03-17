@@ -1,3 +1,4 @@
+import React from 'react';
 import { TextInput, Text } from 'react-native';
 import styled from 'styled-components/native';
 import {
@@ -7,18 +8,25 @@ import {
 import SvgIcon from '../SvgIcon';
 
 interface MarkerProps {
-    theme?: any;
+    theme?: Record<string, unknown>;
     width?: number;
     height?: number;
-    icon: any;
-    iconSide: 'left' | 'right';
+    icon: React.FC;
+    iconSide: IconSide;
 }
 
-const isLeft = side => side === 'left';
-export const Container = styled.View`
+type IconSide = 'left' | 'right';
+
+const isLeft = (side: IconSide) => side === 'left';
+
+interface ContainerProps {
+    iconSide: IconSide;
+}
+
+export const Container = styled.View<ContainerProps>`
     display: flex;
-    flex-direction: ${({ iconSide }) => (isLeft(iconSide) ? 'row' : 'row-reverse')};
-    justify-content: ${({ iconSide }) => (isLeft(iconSide) ? 'flex-start' : 'flex-end')};
+    flex-direction: ${({ iconSide }: ContainerProps) => (isLeft(iconSide) ? 'row' : 'row-reverse')};
+    justify-content: ${({ iconSide }: ContainerProps) => (isLeft(iconSide) ? 'flex-start' : 'flex-end')};
     align-items: center;
 
 `;
@@ -45,7 +53,7 @@ export const StyledIcon = styled(SvgIcon).attrs(({
   height,
   fill: LINK_BLUE_COLOR,
 }))`
-    ${({ iconSide }) => (isLeft(iconSide) ? 'margin-right: 5px' : 'margin-left: 5px')};
-    width: ${({ width }) => width}px;
-    height: ${({ height }) => height}px;
+    ${({ iconSide }: MarkerProps) => (isLeft(iconSide) ? 'margin-right: 5px' : 'margin-left: 5px')};
+    width: ${({ width }: MarkerProps) => width}px;
+    height: ${({ height }: MarkerProps) => height}px;
 `;

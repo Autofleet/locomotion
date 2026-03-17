@@ -36,6 +36,8 @@ function ActiveRideContent() {
   } = useContext(CancellationReasonsContext);
   const [popupToShow, setPopupToShow] = useState<string | null>(null);
 
+  if (!ride) return null;
+
   const {
     vehicle,
   } = ride;
@@ -175,6 +177,7 @@ function ActiveRideContent() {
             notes={pickupSp?.notes}
             isVisible={popupToShow === 'notes'}
             onSubmit={async (text: string) => {
+              if (!pickupSp) return;
               await updateRide(ride.id, {
                 stopPoints: [{
                   id: pickupSp.id,

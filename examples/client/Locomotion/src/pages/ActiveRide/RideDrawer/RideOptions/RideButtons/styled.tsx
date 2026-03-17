@@ -24,17 +24,22 @@ export const RowContainer = styled(View)`
   row-gap: 10;
 `;
 
+interface ButtonContainerProps {
+  error?: boolean;
+  padding?: string;
+}
+
 export const ButtonContainer = styled(Button).attrs({
   noBackground: true,
-})`
+})<ButtonContainerProps>`
     flex-direction: row;
-    border: ${({ error }) => (error ? '1px solid #F83743' : '1px solid #f1f2f6')};
+    border: ${({ error }: ButtonContainerProps) => (error ? '1px solid #F83743' : '1px solid #f1f2f6')};
     border-radius: 8px;
     align-items: center;
     height: 100%;
     display: flex;
     width: ${HALF_WIDTH};
-    padding: ${(({ padding }) => (padding || '0 15px'))};
+    padding: ${(({ padding }: ButtonContainerProps) => (padding || '0 15px'))};
 `;
 
 export const ButtonText = styled(Text)`
@@ -84,7 +89,12 @@ export const ErrorText = styled(Text)`
   color: #F83743;
 `;
 
-export const ButtonWithError = ({ children, errorText }) => (
+interface ButtonWithErrorProps {
+  children: React.ReactNode;
+  errorText: string;
+}
+
+export const ButtonWithError = ({ children, errorText }: ButtonWithErrorProps) => (
   <ButtonContainerWithError>
     <ButtonContainerInError>
       {children}

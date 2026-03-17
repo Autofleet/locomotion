@@ -1,14 +1,17 @@
-import React from 'react';
-import { View } from 'react-native';
 import styled from 'styled-components/native';
 
-import SvgIcon from '../SvgIcon';
 import {
-  FONT_SIZES, FONT_SIZES_VALUES, FONT_WEIGHTS, convertHextToRgba, LINK_BLUE_COLOR,
+  FONT_SIZES, FONT_WEIGHTS,
 } from '../../context/theme';
 
 
-export const Tooltip = styled.View`
+interface TooltipProps {
+  theme: {
+    primaryColor: string;
+  };
+}
+
+export const Tooltip = styled.View<TooltipProps>`
   background-color: #f0f0f0;
   display: flex;
   justify-content: center;
@@ -16,7 +19,7 @@ export const Tooltip = styled.View`
   width: 200px;
   padding: 3px;
   border-radius: 8px;
-  border-color: ${({ theme }) => theme.primaryColor};
+  border-color: ${({ theme }: TooltipProps) => theme.primaryColor};
   border-width: 2px;
 `;
 

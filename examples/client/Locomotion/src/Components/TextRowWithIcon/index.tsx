@@ -22,6 +22,7 @@ color: #333333;
 
 interface TextRowWithIconProps {
     text: string;
+    subTitle?: string | null;
     icon?: any;
     style?: Record<string, unknown>;
     Image?: any
