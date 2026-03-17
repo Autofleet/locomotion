@@ -11,6 +11,6 @@ z-index: 10;
 position: absolute;
 `;
 
-const BlackOverlay = () => <Overlay />;
+function BlackOverlay() { return <Overlay />; }
 
 export default BlackOverlay;

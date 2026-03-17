@@ -28,7 +28,7 @@ import ShareButton from './share';
 
 const DEFAULT_VEHICLE_IMAGE = 'https://res.cloudinary.com/autofleet/image/upload/w_700,h_500,c_thumb,q_auto/vehicle-images/Minivan/minivan_blue.png';
 
-const ActiveRideContent = () => {
+function ActiveRideContent() {
   const { ride, loadRide, updateRide } = useContext(RidePageContext);
   const { changeBsPage, setGenericErrorPopup } = useContext(RideStateContextContext);
   const {
@@ -42,8 +42,8 @@ const ActiveRideContent = () => {
 
   const { stopPoints } = ride;
 
-  const firstSpNotCompleted = stopPoints?.find(p => p.state !== STOP_POINT_STATES.COMPLETED);
-  const pickupSp = stopPoints?.find(p => p.type === STOP_POINT_TYPES.STOP_POINT_PICKUP);
+  const firstSpNotCompleted = stopPoints?.find((p) => p.state !== STOP_POINT_STATES.COMPLETED);
+  const pickupSp = stopPoints?.find((p) => p.type === STOP_POINT_TYPES.STOP_POINT_PICKUP);
 
   const getTextBasedOnStopPoints = () => {
     if (firstSpNotCompleted) {
@@ -108,9 +108,8 @@ const ActiveRideContent = () => {
   };
 
   return (
-    <>
-      {ride
-      && (
+    ride
+      ? (
         <Container alwaysBounceVertical={false}>
           <TopContainer>
             <DriverCardContainer>
@@ -190,9 +189,9 @@ const ActiveRideContent = () => {
             }}
           />
         </Container>
-      )}
-    </>
+      )
+      : null
   );
-};
+}
 
 export default ActiveRideContent;

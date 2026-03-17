@@ -10,7 +10,7 @@ import { RidePageContext } from '../../../context/newRideContext';
 import share from '../../../assets/bottomSheet/share.svg';
 import GenericRideButton from '../../GenericRideButton';
 
-const ShareButton = () => {
+function ShareButton() {
   const { trackRide, ride } = useContext(RidePageContext);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -55,6 +55,6 @@ const ShareButton = () => {
         }
     </ButtonContainer>
   );
-};
+}
 
 export default ShareButton;
