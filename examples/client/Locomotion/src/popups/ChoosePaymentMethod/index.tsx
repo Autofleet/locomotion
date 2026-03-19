@@ -1,8 +1,6 @@
 /* eslint-disable no-unused-expressions */
 import React, { useContext, useEffect, useState } from 'react';
-import PropTypes from 'prop-types';
 import Modal from '../../Components/CompatModal';
-import { useNavigation } from '@react-navigation/native';
 import EmptyState from '../../Components/EmptyState';
 import Mixpanel from '../../services/Mixpanel';
 import { PAYMENT_MODES, PAYMENT_TABS } from '../../pages/Payments/consts';
@@ -34,17 +32,17 @@ interface PaymentMethodPopupProps {
   isVisible: boolean;
   onCancel: () => void;
   onSubmit: (payment: any) => void;
-  showCash: boolean;
-  rideFlow: boolean;
-  selected: any;
+  showCash?: boolean;
+  rideFlow?: boolean;
+  selected?: any;
   onAddNewMethod: () => void;
-  showOffline: boolean;
-  showExternal: boolean;
+  showOffline?: boolean;
+  showExternal?: boolean;
   showBusinessPaymentMethods: boolean;
   selectedBusinessAccountId: string | null;
 }
 
-function PaymentMethodPopup({
+const PaymentMethodPopup = ({
   isVisible,
   onCancel,
   onSubmit,
@@ -56,7 +54,7 @@ function PaymentMethodPopup({
   showExternal = false,
   showBusinessPaymentMethods,
   selectedBusinessAccountId,
-}: PaymentMethodPopupProps) {
+}: PaymentMethodPopupProps) => {
   const usePayments = PaymentsContext.useContainer();
   const { chosenService } = useContext(NewRidePageContext);
   const [selectedPaymentId, setSelectedPaymentId] = useState<string | undefined>(selected);
@@ -237,24 +235,6 @@ function PaymentMethodPopup({
       </SummaryContainer>
     </Modal>
   );
-}
-
-PaymentMethodPopup.propTypes = {
-  onSave: PropTypes.func,
-  showCash: PropTypes.bool,
-  rideFlow: PropTypes.bool,
-  selected: PropTypes.string,
-  showOffline: PropTypes.bool,
-  showExternal: PropTypes.bool,
-};
-
-PaymentMethodPopup.defaultProps = {
-  onSave: null,
-  showCash: true,
-  rideFlow: false,
-  selected: null,
-  showOffline: false,
-  showExternal: false,
 };
 
 export default PaymentMethodPopup;

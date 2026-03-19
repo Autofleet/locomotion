@@ -1,5 +1,4 @@
 import React from 'react';
-import propsTypes from 'prop-types';
 import {
   LinkText, Container, StyledIcon, TouchableContainer,
 } from './styled';

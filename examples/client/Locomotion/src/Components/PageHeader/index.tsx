@@ -1,6 +1,5 @@
 import React from 'react';
-import propsTypes from 'prop-types';
-import { Platform, Text, View } from 'react-native';
+import { Platform, View } from 'react-native';
 import {
   Header, HeaderText, HeaderIconContainer, HeaderIcon, SkipButton, SkipButtonText,
 } from './styled';
@@ -33,19 +32,19 @@ function PageHeader({
       <HeaderText numberOfLines={2} style={{ color: 'transparent', position: 'relative' }}>{title}</HeaderText>
       <HeaderText numberOfLines={2}>{title}</HeaderText>
       {showSkipButton
-      && (
-      <SkipButton
-        testID="skipButton"
-        noBackground
-        noLoader
-        onPress={onPressSkip}
-      >
+        && (
+          <SkipButton
+            testID="skipButton"
+            noBackground
+            noLoader
+            onPress={onPressSkip}
+          >
 
-        <SkipButtonText>
-          {i18n.t('general.skip')}
-        </SkipButtonText>
-      </SkipButton>
-      )}
+            <SkipButtonText>
+              {i18n.t('general.skip')}
+            </SkipButtonText>
+          </SkipButton>
+        )}
       {action}
     </Header>
   );

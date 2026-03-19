@@ -1,5 +1,4 @@
 import React from 'react';
-import propsTypes from 'prop-types';
 import { View } from 'react-native';
 import Card from './Card';
 import Button from '../Button';
@@ -79,17 +78,5 @@ function InformationCard({
       </View>
     );
 }
-
-InformationCard.propTypes = {
-  title: propsTypes.string,
-  children: propsTypes.oneOfType([
-    propsTypes.arrayOf(propsTypes.node),
-    propsTypes.node, propsTypes.any,
-  ]),
-  onPress: propsTypes.func,
-  verified: propsTypes.bool,
-  showUnverified: propsTypes.bool,
-  onIconPress: propsTypes.func,
-};
 
 export default InformationCard;

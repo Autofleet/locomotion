@@ -1,5 +1,4 @@
 import React from 'react';
-import propsTypes from 'prop-types';
 import {
   ArrowContainer, CardContainer, CardText, Arrow,
 } from '../InformationCard/styled';
@@ -23,10 +22,5 @@ function NoTitleCard({
     </Button>
   );
 }
-
-NoTitleCard.propTypes = {
-  onPress: propsTypes.func,
-  showArrow: propsTypes.bool,
-};
 
 export default NoTitleCard;

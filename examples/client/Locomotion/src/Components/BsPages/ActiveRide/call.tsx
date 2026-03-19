@@ -2,7 +2,6 @@ import React, { useState, useContext } from 'react';
 import {
   Alert, Platform, ActionSheetIOS,
 } from 'react-native';
-import propsTypes from 'prop-types';
 import Mixpanel from '../../../services/Mixpanel';
 import Loader from '../../Loader';
 import DeviceService from '../../../services/device';
@@ -13,7 +12,11 @@ import GenericRideButton from '../../GenericRideButton';
 import phone from '../../../assets/bottomSheet/phone.svg';
 import { RidePageContext } from '../../../context/newRideContext';
 
-function CallContactPersonMasked({ onError = () => null }: { onError?: any}) {
+interface CallContactPersonMaskedProps {
+  onError?: () => void;
+}
+
+function CallContactPersonMasked({ onError = () => null }: CallContactPersonMaskedProps) {
   const { getCallNumbers } = useContext(RidePageContext);
   const [disabledPhoneButton, setDisabledPhoneButton] = useState(false);
 
@@ -93,9 +96,5 @@ function CallContactPersonMasked({ onError = () => null }: { onError?: any}) {
     </ButtonContainer>
   );
 }
-
-CallContactPersonMasked.propTypes = {
-  onError: propsTypes.func,
-};
 
 export default CallContactPersonMasked;
