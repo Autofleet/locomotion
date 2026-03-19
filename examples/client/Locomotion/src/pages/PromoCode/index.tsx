@@ -18,7 +18,7 @@ const StyledButton = styled(RoundedButton)`
 margin: 5px 0;
 `;
 
-const PromoCode = () => {
+function PromoCode() {
   const [code, setCode] = useState<string | null>(null);
   const [error, setError] = useState(false);
   const { createCoupon } = useContext(UserContext);
@@ -73,6 +73,6 @@ const PromoCode = () => {
       </ContentContainer>
     </PageContainer>
   );
-};
+}
 
 export default PromoCode;

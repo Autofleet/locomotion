@@ -44,7 +44,7 @@ interface PaymentMethodPopupProps {
   selectedBusinessAccountId: string | null;
 }
 
-const PaymentMethodPopup = ({
+function PaymentMethodPopup({
   isVisible,
   onCancel,
   onSubmit,
@@ -56,7 +56,7 @@ const PaymentMethodPopup = ({
   showExternal,
   showBusinessPaymentMethods,
   selectedBusinessAccountId,
-}: PaymentMethodPopupProps) => {
+}: PaymentMethodPopupProps) {
   const usePayments = PaymentsContext.useContainer();
   const { chosenService } = useContext(NewRidePageContext);
   const [selectedPaymentId, setSelectedPaymentId] = useState<string | undefined>(selected);
@@ -119,7 +119,6 @@ const PaymentMethodPopup = ({
       }
     };
 
-
     updateDefaultPaymentMethod();
   }, [usePayments.paymentMethods, selected, chosenService]);
 
@@ -162,7 +161,6 @@ const PaymentMethodPopup = ({
         />
       )
   );
-
 
   return (
     <Modal
@@ -239,7 +237,7 @@ const PaymentMethodPopup = ({
       </SummaryContainer>
     </Modal>
   );
-};
+}
 
 PaymentMethodPopup.propTypes = {
   onSave: PropTypes.func,

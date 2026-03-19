@@ -3,7 +3,6 @@ import styled from 'styled-components';
 import Button from '../Button';
 import { FONT_SIZES } from '../../context/theme';
 
-
 export const Container = styled(Button)`
 max-width: 45%;
 display: flex;

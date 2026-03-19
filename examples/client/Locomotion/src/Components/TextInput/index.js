@@ -3,7 +3,7 @@ import {
   Input,
 } from './styled';
 
-const TextInput = (props) => {
+function TextInput(props) {
   const [isFocused, setIsFocused] = useState(false);
   return (
     <Input
@@ -15,6 +15,6 @@ const TextInput = (props) => {
       testID={props.testID || null}
     />
   );
-};
+}
 
 export default TextInput;

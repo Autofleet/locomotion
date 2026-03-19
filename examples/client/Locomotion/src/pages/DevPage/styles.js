@@ -1,6 +1,5 @@
 import styled from 'styled-components';
 
-
 export const Label = styled.Text`
     color:  #666666;
     font-weight: 500;

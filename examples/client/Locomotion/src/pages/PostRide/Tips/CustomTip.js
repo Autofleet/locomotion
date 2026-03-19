@@ -1,6 +1,4 @@
-
 import React, { useEffect, useRef, useState } from 'react';
-import { View, Text, TouchableOpacity } from 'react-native';
 import styled from 'styled-components';
 import { useBottomSheet } from '@gorhom/bottom-sheet';
 import * as yup from 'yup';
@@ -56,7 +54,7 @@ const ButtonsContainer = styled.View`
   padding-right: 10px;
 `;
 
-const numberSchema = yup.number().required().positive().transform(value => value);
+const numberSchema = yup.number().required().positive().transform((value) => value);
 const isValidNumber = async (number) => {
   try {
     const newNumber = await numberSchema.validate(number);
@@ -66,12 +64,12 @@ const isValidNumber = async (number) => {
   }
 };
 
-const Tips = ({
+function Tips({
   customAmount,
   onSubmit,
   tipSuffix,
   isExpanded,
-}) => {
+}) {
   const [customTip, setCustomTip] = useState(customAmount);
   const [isValid, setIsValid] = useState(null);
   const { expand, forceClose } = useBottomSheet();
@@ -194,10 +192,8 @@ const Tips = ({
 
       </DetailsContainer>
 
-
     </Container>
   );
-};
-
+}
 
 export default Tips;

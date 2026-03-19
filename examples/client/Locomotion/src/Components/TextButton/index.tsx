@@ -19,12 +19,14 @@ interface Props {
     testID: string;
 }
 
-const TextButton = ({ onPress, text, testID }: Props) => (
-  <Container testID={testID} noBackground onPress={onPress}>
-    <ButtonText>
-      {text}
-    </ButtonText>
-  </Container>
-);
+function TextButton({ onPress, text, testID }: Props) {
+  return (
+    <Container testID={testID} noBackground onPress={onPress}>
+      <ButtonText>
+        {text}
+      </ButtonText>
+    </Container>
+  );
+}
 
 export default TextButton;

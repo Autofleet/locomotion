@@ -20,7 +20,7 @@ interface GenericProps {
   iconFill?: string
 }
 
-const GenericPopup = ({
+function GenericPopup({
   isVisible,
   closePopup,
   title,
@@ -30,28 +30,30 @@ const GenericPopup = ({
   customButton,
   icon,
   iconFill,
-}: GenericProps) => (
-  <Modal isVisible={isVisible}>
-    <Container>
-      <TitleContainer>
-        {icon ? (
-          <SvgIcon Svg={icon} height={20} width={20} style={{ marginRight: 5 }} />
-        ) : null}
-        <Title>{title}</Title>
-      </TitleContainer>
-      <TextContainer>
-        <SubTitle>{text}</SubTitle>
-      </TextContainer>
-      {customButton || (
-      <CloseButton onPress={closePopup} style={{ backgroundColor: buttonColor || '#24aaf2' }}>
-        <ButtonText>
-          {buttonText}
-        </ButtonText>
-      </CloseButton>
-      )}
-    </Container>
-  </Modal>
-);
+}: GenericProps) {
+  return (
+    <Modal isVisible={isVisible}>
+      <Container>
+        <TitleContainer>
+          {icon ? (
+            <SvgIcon Svg={icon} height={20} width={20} style={{ marginRight: 5 }} />
+          ) : null}
+          <Title>{title}</Title>
+        </TitleContainer>
+        <TextContainer>
+          <SubTitle>{text}</SubTitle>
+        </TextContainer>
+        {customButton || (
+        <CloseButton onPress={closePopup} style={{ backgroundColor: buttonColor || '#24aaf2' }}>
+          <ButtonText>
+            {buttonText}
+          </ButtonText>
+        </CloseButton>
+        )}
+      </Container>
+    </Modal>
+  );
+}
 
 GenericPopup.defaultProps = {
   title: i18n.t('popups.genericError.title'),

@@ -20,7 +20,6 @@ export const StopPointDot = styled.View`
   border-radius: 10px;
 `;
 
-
 export const PickupRow = styled.View`
   border-bottom-color: #f2f2f2;
   border-bottom-width: 1px;
@@ -44,7 +43,6 @@ const StopPointDotTimeLine = styled.View`
   background-color: ${({ origin, theme }) => (origin ? theme.primaryColor : theme.secondaryColor)};
 `;
 
-
 const AddressTextCont = styled.View`
   flex: 1;
 `;
@@ -55,7 +53,6 @@ const AddressText = styled.Text`
   margin-start: 22;
   margin-end: 16;
 `;
-
 
 const RowContainer = styled.View`
   min-height: 20px;
@@ -85,9 +82,9 @@ const OfferRideEtaText = styled.Text`
   margin-bottom: 5px;
 `;
 
-export default ({
+export default function ({
   pickup, description, eta, useBorder, rideOffer, etaDrift, etaMediumThreshold, etaHighThreshold,
-}) => {
+}) {
   const rideEta = moment(rideOffer.dropoffTime).diff(moment(rideOffer.pickupTime), 'minutes');
 
   return (
@@ -116,4 +113,4 @@ export default ({
       </AddressTextCont>
     </RowContainer>
   );
-};
+}

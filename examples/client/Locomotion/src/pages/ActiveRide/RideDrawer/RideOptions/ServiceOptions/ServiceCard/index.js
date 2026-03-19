@@ -26,9 +26,9 @@ import showPriceBasedOnAccount from '../../../../../../services/showPriceBasedOn
 
 const FARE_POPUP = 'farePopup';
 
-const ServiceCard = ({
+function ServiceCard({
   service, withBorder, testID, descriptionNumberOfLines,
-}) => {
+}) {
   const { businessAccountId } = useContext(RidePageContext);
   const theme = useContext(ThemeContext);
   const {
@@ -90,7 +90,7 @@ const ServiceCard = ({
     );
   };
 
-  const getDescription = forFutureRidesView => (
+  const getDescription = (forFutureRidesView) => (
     <Description style={{ ...(forFutureRidesView && { width: '60%' }) }} numberOfLines={descriptionNumberOfLines || null}>
       {(service.description || '')}
     </Description>
@@ -143,7 +143,7 @@ const ServiceCard = ({
               {service.name}
             </Title>
             <TitleContainer>
-              {serviceEstimations.filter(s => s.price).length > 1
+              {serviceEstimations.filter((s) => s.price).length > 1
             && service.tag
             && !(isFutureRide && service.tag === TAG_OPTIONS.FASTEST)
                 ? (
@@ -154,8 +154,7 @@ const ServiceCard = ({
                     textColor={tagStyles[service.tag].textColor}
                   />
                 )
-                : <View />
-            }
+                : <View />}
               <Price>
                 {getUnavailableText()}
               </Price>
@@ -208,7 +207,7 @@ const ServiceCard = ({
       )}
     </>
   );
-};
+}
 
 ServiceCard.defaultProps = {
   service: {},

@@ -1,5 +1,5 @@
 import React, {
-  createContext, useContext, useEffect, useState,
+  createContext, useContext, useState, useMemo,
 } from 'react';
 import { BottomSheetContext, SNAP_POINT_STATES } from '../bottomSheetContext';
 import geo, { DEFAULT_COORDS, getPosition } from '../../services/geo';
@@ -37,7 +37,7 @@ export const RideStateContextContext = createContext<RidePageStateContextProps>(
   setGenericErrorPopup: () => undefined,
 });
 
-const RideStateContextContextProvider = ({ children }: { children: any }) => {
+function RideStateContextContextProvider({ children }: { children: any }) {
   const [genericErrorPopup, setGenericErrorPopup] = useState<any | null>(null);
   const [territory, setTerritory] = useState<Array<any> | null>(null);
   const [isUserLocationFocused, setIsUserLocationFocused] = useState(false);
@@ -66,7 +66,7 @@ const RideStateContextContextProvider = ({ children }: { children: any }) => {
   };
 
   const checkStopPointsInTerritory = (stopPoints: any[]) => {
-    const isInTerritory = stopPoints.every(sp => pointInPolygon(territory, {
+    const isInTerritory = stopPoints.every((sp) => pointInPolygon(territory, {
       coords: {
         latitude: sp.lat,
         longitude: sp.lng,
@@ -85,21 +85,23 @@ const RideStateContextContextProvider = ({ children }: { children: any }) => {
     await loadTerritory();
   };
 
+  const contextValue = useMemo(() => ({
+    territory,
+    loadTerritory,
+    initGeoService,
+    isUserLocationFocused,
+    setIsUserLocationFocused,
+    isDraggingLocationPin,
+    setIsDraggingLocationPin,
+    currentBsPage,
+    checkStopPointsInTerritory,
+    changeBsPage,
+    setGenericErrorPopup,
+  }), [territory, isUserLocationFocused, isDraggingLocationPin, currentBsPage]);
+
   return (
     <RideStateContextContext.Provider
-      value={{
-        territory,
-        loadTerritory,
-        initGeoService,
-        isUserLocationFocused,
-        setIsUserLocationFocused,
-        isDraggingLocationPin,
-        setIsDraggingLocationPin,
-        currentBsPage,
-        checkStopPointsInTerritory,
-        changeBsPage,
-        setGenericErrorPopup,
-      }}
+      value={contextValue}
     >
       {children}
       <GenericErrorPopup
@@ -110,7 +112,6 @@ const RideStateContextContextProvider = ({ children }: { children: any }) => {
       />
     </RideStateContextContext.Provider>
   );
-};
-
+}
 
 export default RideStateContextContextProvider;

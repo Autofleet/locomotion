@@ -16,7 +16,7 @@ interface TwoButtonPopupProps {
   onSecondPress: any;
 }
 
-const TwoButtonPopup = ({
+function TwoButtonPopup({
   title,
   text,
   isVisible,
@@ -24,23 +24,25 @@ const TwoButtonPopup = ({
   onSecondPress,
   defualtText,
   onDefaultPress,
-}: TwoButtonPopupProps) => (
-  <Modal isVisible={isVisible}>
-    <Container>
-      <TextContainer>
-        <Title style={{ textAlign: 'center', paddingBottom: 15 }}>{title}</Title>
-        <SubTitle>{text}</SubTitle>
-      </TextContainer>
-      <ButtonContainer>
-        <RoundedButton onPress={onDefaultPress} style={{ marginBottom: 10 }} testID="twoButtonPopupDefaultText">
-          {defualtText}
-        </RoundedButton>
-        <RoundedButton onPress={onSecondPress} hollow testID="twoButtonPopupSecondText">
-          {secondText}
-        </RoundedButton>
-      </ButtonContainer>
-    </Container>
-  </Modal>
-);
+}: TwoButtonPopupProps) {
+  return (
+    <Modal isVisible={isVisible}>
+      <Container>
+        <TextContainer>
+          <Title style={{ textAlign: 'center', paddingBottom: 15 }}>{title}</Title>
+          <SubTitle>{text}</SubTitle>
+        </TextContainer>
+        <ButtonContainer>
+          <RoundedButton onPress={onDefaultPress} style={{ marginBottom: 10 }} testID="twoButtonPopupDefaultText">
+            {defualtText}
+          </RoundedButton>
+          <RoundedButton onPress={onSecondPress} hollow testID="twoButtonPopupSecondText">
+            {secondText}
+          </RoundedButton>
+        </ButtonContainer>
+      </Container>
+    </Modal>
+  );
+}
 
 export default TwoButtonPopup;

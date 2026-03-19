@@ -1,5 +1,4 @@
-
-import { View, Text, Dimensions } from 'react-native';
+import { View, Text } from 'react-native';
 import styled from 'styled-components';
 
 export const PageContent = styled(View)`

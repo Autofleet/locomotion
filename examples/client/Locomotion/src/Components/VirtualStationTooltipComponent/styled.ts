@@ -4,7 +4,6 @@ import {
   FONT_SIZES, FONT_WEIGHTS,
 } from '../../context/theme';
 
-
 interface TooltipProps {
   theme: {
     primaryColor: string;
@@ -33,14 +32,12 @@ export const StationDetails = styled.View`
   padding-bottom: 0;
 `;
 
-
 export const BottomActions = styled.View`
   flex: 1;
   display: flex;
   background-color: #f0f0f0;
   padding: 6px;
 `;
-
 
 export const StationName = styled.Text`
   ${FONT_SIZES.H2}

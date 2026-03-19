@@ -5,7 +5,6 @@ import { FONT_SIZES, FONT_WEIGHTS } from '../../context/theme';
 import { getVersion } from '../../services/device';
 import i18n from '../../I18n';
 
-
 export const BottomContainer = styled.View`
   position: absolute;
   bottom: 0;
@@ -37,20 +36,21 @@ const appVersion = getVersion();
 
 const shouldHideAutofleet = Config.HIDE_AUTOFLEET && Config.HIDE_AUTOFLEET === 'true';
 
-export default () => (
-
-  <BottomContainer>
-    <BottomFlexContainer>
-      <BottomText numberOfLines={1}>
-        {!shouldHideAutofleet
+export default function () {
+  return (
+    <BottomContainer>
+      <BottomFlexContainer>
+        <BottomText numberOfLines={1}>
+          {!shouldHideAutofleet
   && (
-    <Fragment>
+    <>
       {i18n.t('menu.poweredBy')}
       <BottomTextBold> Autofleet </BottomTextBold>
-    </Fragment>
+    </>
   )}
-        {`v. ${appVersion}`}
-      </BottomText>
-    </BottomFlexContainer>
-  </BottomContainer>
-);
+          {`v. ${appVersion}`}
+        </BottomText>
+      </BottomFlexContainer>
+    </BottomContainer>
+  );
+}

@@ -23,21 +23,23 @@ interface SelectorItem {
   label: string;
 }
 
-const Item = ({ item, onPress, selected }: { item: SelectorItem; onPress: () => void; selected: boolean }) => (
-  <Button
-    noBackground
-    testID={`languageItem-${item.value}`}
-    onPress={onPress}
-  >
-    <ItemContainer selected={selected}>
-      <ItemInnerContainer>
-        <ItemTextContainer>
-          {item.label}
-        </ItemTextContainer>
-      </ItemInnerContainer>
-    </ItemContainer>
-  </Button>
-);
+function Item({ item, onPress, selected }: { item: SelectorItem; onPress: () => void; selected: boolean }) {
+  return (
+    <Button
+      noBackground
+      testID={`languageItem-${item.value}`}
+      onPress={onPress}
+    >
+      <ItemContainer selected={selected}>
+        <ItemInnerContainer>
+          <ItemTextContainer>
+            {item.label}
+          </ItemTextContainer>
+        </ItemInnerContainer>
+      </ItemContainer>
+    </Button>
+  );
+}
 
 interface ItemSelectorProps {
   isVisible: boolean;
@@ -48,9 +50,9 @@ interface ItemSelectorProps {
   title: string;
 }
 
-const ItemSelector = ({
+function ItemSelector({
   isVisible, onCancel, onSubmit, items, selected, title,
-}: ItemSelectorProps) => {
+}: ItemSelectorProps) {
   const [selectedItem, setSelectedItem] = useState<number>(selected);
 
   useEffect(() => {
@@ -105,6 +107,6 @@ const ItemSelector = ({
       </SummaryContainer>
     </Modal>
   );
-};
+}
 
 export default ItemSelector;

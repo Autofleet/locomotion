@@ -1,10 +1,10 @@
 import React, {
   createContext,
   useState,
+  useMemo,
 } from 'react';
 import * as cancellationReasonsApi from './api';
 import { CancellationReason, CancellationReasonsContextInterface } from './interface';
-
 
 export const CancellationReasonsContext = createContext<CancellationReasonsContextInterface>({
   cancellationReasons: [],
@@ -12,7 +12,7 @@ export const CancellationReasonsContext = createContext<CancellationReasonsConte
   clearCancellationReasons: () => undefined,
 });
 
-const CancellationReasonsProvider = ({ children }: { children: any }) => {
+function CancellationReasonsProvider({ children }: { children: any }) {
   const [cancellationReasons, setCancellationReasons] = useState<CancellationReason[]>([]);
 
   const getCancellationReasons = async (rideId?: string) => {
@@ -26,17 +26,19 @@ const CancellationReasonsProvider = ({ children }: { children: any }) => {
     setCancellationReasons([]);
   };
 
+  const contextValue = useMemo(() => ({
+    getCancellationReasons,
+    cancellationReasons,
+    clearCancellationReasons,
+  }), [cancellationReasons]);
+
   return (
     <CancellationReasonsContext.Provider
-      value={{
-        getCancellationReasons,
-        cancellationReasons,
-        clearCancellationReasons,
-      }}
+      value={contextValue}
     >
       {children}
     </CancellationReasonsContext.Provider>
   );
-};
+}
 
 export default CancellationReasonsProvider;

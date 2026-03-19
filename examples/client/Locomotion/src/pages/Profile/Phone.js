@@ -15,8 +15,7 @@ import * as NavigationService from '../../services/navigation';
 import { PageContainer, ContentContainer } from '../styles';
 import Captcha from './Captcha';
 
-
-const Phone = ({ navigation }) => {
+function Phone({ navigation }) {
   const { nextScreen } = useContext(OnboardingContext);
   const { updateState, user, onLogin } = useContext(UserContext);
   const [showErrorText, setShowErrorText] = useState(false);
@@ -114,8 +113,7 @@ const Phone = ({ navigation }) => {
             isLoading={isLoadingSaveButton}
             isInvalid={isInvalid}
             onNext={() => setIsLoadingSaveButton(true)}
-            onFail={() => setShowErrorText(i18n.t('login.invalidPhoneNumberError'))
-              }
+            onFail={() => setShowErrorText(i18n.t('login.invalidPhoneNumberError'))}
           />
           <Captcha
             isOpen={isLoadingSaveButton}
@@ -127,6 +125,6 @@ const Phone = ({ navigation }) => {
       </ScrollView>
     </PageContainer>
   );
-};
+}
 
 export default Phone;

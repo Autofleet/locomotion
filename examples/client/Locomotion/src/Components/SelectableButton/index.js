@@ -4,7 +4,7 @@ import propsTypes from 'prop-types';
 import Loader from '../Loader';
 import { ButtonTextContainer, StyledButton, SubmitButtonText } from './styled';
 
-const SelectableButton = ({
+function SelectableButton({
   onPress,
   style,
   selected,
@@ -13,16 +13,17 @@ const SelectableButton = ({
   label,
   value,
   ...props
-}) => (
-  <StyledButton
-    {...props}
-    noBackground
-    onPress={onPress}
-    selected={selected}
-    style={style}
-  >
-    <ButtonTextContainer selected={selected}>
-      {
+}) {
+  return (
+    <StyledButton
+      {...props}
+      noBackground
+      onPress={onPress}
+      selected={selected}
+      style={style}
+    >
+      <ButtonTextContainer selected={selected}>
+        {
         children
           ? (
             <SubmitButtonText selected={selected}>
@@ -43,9 +44,10 @@ const SelectableButton = ({
             </>
           )
     }
-    </ButtonTextContainer>
-  </StyledButton>
-);
+      </ButtonTextContainer>
+    </StyledButton>
+  );
+}
 
 SelectableButton.defaultProps = {
   selected: false,

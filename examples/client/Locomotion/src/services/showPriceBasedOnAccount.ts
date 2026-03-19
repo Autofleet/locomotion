@@ -1,5 +1,3 @@
-
-
 type GetBusinessAccountByIdFunction = (id: string) => any | null;
 
 type LoadShowPriceFunction = (showPriceToMembers?: boolean) => void;

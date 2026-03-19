@@ -40,10 +40,10 @@ interface RideButtonsProps {
     setPopupName: (popupName: popupNames) => void;
 }
 
-const RideButtons = ({
+function RideButtons({
   displayPassenger,
   setPopupName,
-}: RideButtonsProps) => {
+}: RideButtonsProps) {
   const theme = useContext(ThemeContext);
   const {
     ride,
@@ -58,7 +58,6 @@ const RideButtons = ({
     serviceEstimations,
     numberOfPassengers,
   } = useContext(RidePageContext);
-
 
   const {
     changeBsPage,
@@ -86,7 +85,6 @@ const RideButtons = ({
   const selectedRequiredFields = chosenService && ridePaymentId && serviceEstimations?.length > 0;
   const paymentMethodNotAllowedOnService = !businessAccountId && selectedRequiredFields
   && !chosenService.allowedPaymentMethods.includes(getPaymentMethod(ridePaymentId));
-
 
   const checkFutureRidesSetting = async () => {
     const futureRidesEnabled = await getSettingByKey(
@@ -160,7 +158,6 @@ const RideButtons = ({
       </>
     );
 
-
     return (
       <>
         <Animated.View style={animatedStyle} />
@@ -191,7 +188,7 @@ const RideButtons = ({
             }
             close();
           }}
-          onChange={date => setTempSelectedDate(date)}
+          onChange={(date) => setTempSelectedDate(date)}
         />
       </>
 
@@ -235,7 +232,7 @@ const RideButtons = ({
     const ridePaymentMethodId = ride?.paymentMethodId || chosenService?.allowedPaymentMethods?.[0] || '';
     const selectedPaymentMethod:
      PaymentMethodInterface | undefined = paymentMethodIdToDataMap[ridePaymentMethodId]
-      || paymentMethods.find(pm => pm.id === ridePaymentMethodId);
+      || paymentMethods.find((pm) => pm.id === ridePaymentMethodId);
 
     const getSelectedPaymentMethodTitle = () : string | null => {
       if (businessAccountId) {
@@ -286,22 +283,19 @@ const RideButtons = ({
       return capitalizeFirstLetter(ridePaymentMethod);
     };
     return (
-      <>
-        {paymentMethodNotAllowedOnService
-          ? (
-            <ButtonWithError
-              errorText={i18n.t('bottomSheetContent.ride.paymentMethodNotAllowedOnService', {
-                type: getTypeText(),
-              })}
-            >
-              {pureButton()}
-            </ButtonWithError>
-          )
-          : pureButton() }
-      </>
+      paymentMethodNotAllowedOnService
+        ? (
+          <ButtonWithError
+            errorText={i18n.t('bottomSheetContent.ride.paymentMethodNotAllowedOnService', {
+              type: getTypeText(),
+            })}
+          >
+            {pureButton()}
+          </ButtonWithError>
+        )
+        : pureButton()
     );
   };
-
 
   useEffect(() => {
     if (!chosenService || chosenService?.pooling === POOLING_TYPES.NO) {
@@ -329,7 +323,7 @@ const RideButtons = ({
       <Container>
         <RowContainer>
           {isFutureRidesEnabled && renderFutureBooking()}
-          {displayPassenger ? <></> : renderRideNotes()}
+          {displayPassenger ? null : renderRideNotes()}
 
         </RowContainer>
         <RowContainer>
@@ -382,6 +376,6 @@ const RideButtons = ({
       />
     </>
   );
-};
+}
 
 export default RideButtons;

@@ -1,6 +1,6 @@
 /* eslint-disable max-len */
 import React, {
-  useState, useEffect, useRef, createContext, useContext, useCallback,
+  useState, useEffect, useRef, createContext, useContext, useCallback, useMemo,
 } from 'react';
 import { AppState } from 'react-native';
 import Config from 'react-native-config';
@@ -47,7 +47,6 @@ import { APP_ROUTES, MAIN_ROUTES } from '../../pages/routes';
 import * as navigationService from '../../services/navigation';
 import { BottomSheetContext } from '../bottomSheetContext';
 import { VirtualStationsContext, Station } from '../virtualStationsContext';
-
 
 type Dispatch<A> = (value: A) => void;
 type Nav = {
@@ -246,16 +245,18 @@ export const RidePageContext = createContext<RidePageContextInterface>({
   addNewEmptyRequestSp: () => undefined,
   removeRequestSp: (index: number) => undefined,
   addressSearchLabel: null,
-  formatStationToSearchResult: () => ({ externalId: '', text: '', fullText: '', lat: 0, lng: 0 }),
+  formatStationToSearchResult: () => ({
+    externalId: '', text: '', fullText: '', lat: 0, lng: 0,
+  }),
   formatStationsList: () => [],
   clearRequestSp: () => undefined,
 });
 
 const HISTORY_RECORDS_NUM = 10;
 
-const RidePageContextProvider = ({ children }: {
+function RidePageContextProvider({ children }: {
   children: any
-}) => {
+}) {
   const { getClientDefaultMethod } = PaymentContext.useContainer();
   const { locationGranted, user } = useContext(UserContext);
   const {
@@ -302,7 +303,6 @@ const RidePageContextProvider = ({ children }: {
     StorageService.save({ lastBusinessAccountId: rideBusinessAccountId || PAYMENT_MODES.PERSONAL }),
     StorageService.save({ orderedRide: true }),
   ]);
-
 
   const clearLastRide = async () => {
     await StorageService.delete('lastRideId');
@@ -384,7 +384,6 @@ const RidePageContextProvider = ({ children }: {
 
   const { getSettingByKey, measureSystem } = settings.useContainer();
 
-
   const formatEstimations = (services: any[], estimations: any, tags: any): any => {
     const estimationsMap: any = {};
     estimations.map((e: any) => {
@@ -419,12 +418,10 @@ const RidePageContextProvider = ({ children }: {
     },
   };
 
-
   const getLocationTimezoneTime = async (lat: number, lng:number, scheduledTime: Moment) => {
     const timezoneResponse = await convertTimezoneByLocation(lat, lng, scheduledTime);
     return timezoneResponse.time;
   };
-
 
   const getBusinessAccountIdWithFallback = async (paymentChosen: boolean) => {
     const doNotUseFallback = paymentChosen || businessAccountId;
@@ -513,7 +510,7 @@ const RidePageContextProvider = ({ children }: {
 
   const validateRequestedStopPoints = (reqSps: any[], paymentChosen = true) => {
     const stopPoints = reqSps;
-    const isSpsReady = stopPoints.every(r => r.lat && r.lng && r.description);
+    const isSpsReady = stopPoints.every((r) => r.lat && r.lng && r.description);
     if (stopPoints.length && isSpsReady) {
       tryServiceEstimations(paymentChosen);
     } else if (![BS_PAGES.ADDRESS_SELECTOR, BS_PAGES.LOADING].includes(currentBsPage)) {
@@ -595,7 +592,6 @@ const RidePageContextProvider = ({ children }: {
       }
     }
   };
-
 
   const loadLastCompletedRide = async () => {
     const completedRide = await getLastCompletedRide();
@@ -799,12 +795,11 @@ const RidePageContextProvider = ({ children }: {
 
   useEffect(() => {
     if (user?.id) {
-      if (requestStopPoints.filter((sp => sp.lat)).length <= 1) {
+      if (requestStopPoints.filter(((sp) => sp.lat)).length <= 1) {
         initSps();
       }
     }
   }, [currentGeocode]);
-
 
   const updateRequestSp = (data: Partial<StopPoint>, index?: number | null) => {
     const reqSps = [...requestStopPoints];
@@ -943,7 +938,6 @@ const RidePageContextProvider = ({ children }: {
     }
   };
 
-
   const setAddressLabelAndResults = (label: string | null) => {
     setAddressSearchLabel(label);
   };
@@ -962,7 +956,6 @@ const RidePageContextProvider = ({ children }: {
   useEffect(() => {
     setSearchResults(formatStationsList(stationsList));
   }, [stationsList]);
-
 
   const useStationSearch = async (stopPoints: StopPoint[], index: number | null) => {
     if (index !== null && stopPoints?.length) {
@@ -1005,7 +998,7 @@ const RidePageContextProvider = ({ children }: {
     }
   }, [requestStopPoints, isStationsEnabled, selectedInputIndex]);
 
-  const debouncedSearch = useCallback(debounce(async text => searchStation(text), 300), [isStationsEnabled]);
+  const debouncedSearch = useCallback(debounce(async (text) => searchStation(text), 300), [isStationsEnabled]);
   const searchStation = async (searchTerm: string) => {
     const results = await loadAddress(searchTerm);
     if (results?.length) {
@@ -1032,7 +1025,6 @@ const RidePageContextProvider = ({ children }: {
     // distance: formatDistanceByMeasurement(station.distance, measureSystem),
   });
 
-
   const searchAddress = async (searchText: string) => {
     if (!isStationsEnabled) {
       useGoogleSearch(searchText);
@@ -1056,8 +1048,8 @@ const RidePageContextProvider = ({ children }: {
 
   const saveLastAddresses = async (items: any[]) => {
     const history: any[] = await getLastAddresses();
-    const uniqueItems = items.filter((item, index) => items.findIndex(i => i.placeId === item.placeId) === index);
-    const filteredHistory = (history || []).filter(h => items.every(item => h.placeId !== item.placeId));
+    const uniqueItems = items.filter((item, index) => items.findIndex((i) => i.placeId === item.placeId) === index);
+    const filteredHistory = (history || []).filter((h) => items.every((item) => h.placeId !== item.placeId));
     filteredHistory.unshift(...uniqueItems);
     await StorageService.save({ lastAddresses: filteredHistory.slice(0, HISTORY_RECORDS_NUM) });
   };
@@ -1159,8 +1151,8 @@ const RidePageContextProvider = ({ children }: {
     setServiceEstimations(null);
     changeBsPage(BS_PAGES.CONFIRMING_RIDE);
     const allSpsExceptFirstPickup = stopPoints.slice(1);
-    const allSpsExceptFirstPickupDefined = allSpsExceptFirstPickup.filter(sp => sp && sp.lat);
-    saveLastAddresses(allSpsExceptFirstPickupDefined.map(sp => ({
+    const allSpsExceptFirstPickupDefined = allSpsExceptFirstPickup.filter((sp) => sp && sp.lat);
+    saveLastAddresses(allSpsExceptFirstPickupDefined.map((sp) => ({
       text: sp.streetAddress || sp.description,
       fullText: sp.streetAddress || sp.description,
       placeId: sp.placeId,
@@ -1197,7 +1189,6 @@ const RidePageContextProvider = ({ children }: {
         ...(businessAccountId ? { businessAccountId } : {}),
       };
 
-
       const [afRide] = await Promise.all([
         rideApi.createRide(rideToCreate),
         saveOrderedRidePaymentMethod(businessAccountId),
@@ -1226,14 +1217,12 @@ const RidePageContextProvider = ({ children }: {
     }
   };
 
-
   const fillLoadSkeleton = () => {
     const filledArray = new Array(4).fill({ isLoading: true });
     if (!searchResults || !searchResults.length || (searchResults.length && !searchResults[0].isLoading)) {
       setSearchResults(filledArray);
     }
   };
-
 
   const patchRideRating = async (rideId: string, rating: number | null, feedback: RideFeedback | null): Promise<any> => {
     if (!rating && !feedback) {
@@ -1314,7 +1303,6 @@ const RidePageContextProvider = ({ children }: {
     return ride.trackerUrl;
   };
 
-
   const cancelRide = async (rideId?: string) => {
     await rideApi.cancelRide(rideId || ride?.id);
   };
@@ -1390,78 +1378,85 @@ const RidePageContextProvider = ({ children }: {
     }
   };
 
+  const contextValue = useMemo(() => ({
+    getRideTotalPriceWithCurrency,
+    requestRide,
+    loadAddress,
+    reverseLocationGeocode,
+    enrichPlaceWithLocation,
+    selectedInputIndex,
+    setSelectedInputIndex,
+    selectedInputTarget,
+    setSelectedInputTarget,
+    onAddressSelected,
+    requestStopPoints,
+    searchResults,
+    searchAddress,
+    updateRequestSp,
+    setRequestStopPoints,
+    addNewEmptyRequestSp,
+    removeRequestSp,
+    setSpCurrentLocation,
+    historyResults,
+    loadHistory,
+    serviceEstimations,
+    ride,
+    setRide,
+    updateRide,
+    updateRidePayload,
+    chosenService,
+    setChosenService,
+    defaultService,
+    setServiceEstimations,
+    initSps,
+    lastSelectedLocation,
+    saveSelectedLocation,
+    getCurrentLocationAddress,
+    fillLoadSkeleton,
+    rideRequestLoading,
+    stopRequestInterval,
+    ridePopup,
+    setRidePopup,
+    trackRide,
+    postRideSubmit,
+    getRideFromApi,
+    cancelRide,
+    getCallNumbers,
+    validateRequestedStopPoints,
+    tryServiceEstimations,
+    getService,
+    getServices,
+    getRidePriceCalculation,
+    cleanRideState,
+    setUnconfirmedPickupTime,
+    unconfirmedPickupTime,
+    loadRide,
+    getRidesByParams,
+    numberOfPassengers,
+    setNumberOfPassengers,
+    addressSearchLabel,
+    formatStationToSearchResult,
+    formatStationsList,
+    clearRequestSp,
+    setLastAcknowledgedRideCompletionTimestampToNow,
+    loadFutureBookingDays,
+    futureBookingDays,
+    businessAccountId,
+    updateBusinessAccountId,
+  }), [
+    selectedInputIndex, selectedInputTarget, requestStopPoints, searchResults,
+    historyResults, serviceEstimations, ride, chosenService, defaultService,
+    lastSelectedLocation, rideRequestLoading, ridePopup, unconfirmedPickupTime,
+    numberOfPassengers, addressSearchLabel, futureBookingDays, businessAccountId,
+  ]);
+
   return (
     <RidePageContext.Provider
-      value={{
-        getRideTotalPriceWithCurrency,
-        requestRide,
-        loadAddress,
-        reverseLocationGeocode,
-        enrichPlaceWithLocation,
-        selectedInputIndex,
-        setSelectedInputIndex,
-        selectedInputTarget,
-        setSelectedInputTarget,
-        onAddressSelected,
-        requestStopPoints,
-        searchResults,
-        searchAddress,
-        updateRequestSp,
-        setRequestStopPoints,
-        addNewEmptyRequestSp,
-        removeRequestSp,
-        setSpCurrentLocation,
-        historyResults,
-        loadHistory,
-        serviceEstimations,
-        ride,
-        setRide,
-        updateRide,
-        updateRidePayload,
-        chosenService,
-        setChosenService,
-        defaultService,
-        setServiceEstimations,
-        initSps,
-        lastSelectedLocation,
-        saveSelectedLocation,
-        getCurrentLocationAddress,
-        fillLoadSkeleton,
-        rideRequestLoading,
-        stopRequestInterval,
-        ridePopup,
-        setRidePopup,
-        trackRide,
-        postRideSubmit,
-        getRideFromApi,
-        cancelRide,
-        getCallNumbers,
-        validateRequestedStopPoints,
-        tryServiceEstimations,
-        getService,
-        getServices,
-        getRidePriceCalculation,
-        cleanRideState,
-        setUnconfirmedPickupTime,
-        unconfirmedPickupTime,
-        loadRide,
-        getRidesByParams,
-        numberOfPassengers,
-        setNumberOfPassengers,
-        addressSearchLabel,
-        formatStationToSearchResult,
-        formatStationsList,
-        clearRequestSp,
-        setLastAcknowledgedRideCompletionTimestampToNow,
-        loadFutureBookingDays,
-        futureBookingDays,
-        businessAccountId,
-        updateBusinessAccountId,
-      }}
+      value={contextValue}
     >
       {children}
     </RidePageContext.Provider>
   );
-};
+}
 
 export default RidePageContextProvider;

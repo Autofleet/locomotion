@@ -39,9 +39,9 @@ const StopPointTitle = styled.Text`
   line-height: 16px;
 `;
 
-export default ({
+export default function ({
   pickup, description, eta, firstEta, completedAt, etaDrift, paddingStart, showEta,
-}) => {
+}) {
   const etaToDisplay = () => {
     if (!firstEta) {
       return '';
@@ -75,4 +75,4 @@ export default ({
       </AddressTextCont>
     </RowContainer>
   );
-};
+}

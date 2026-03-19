@@ -156,7 +156,6 @@ class NotificationsService {
     return this.refreshPushSettings();
   };
 
-
   subscriptionObserverHandler = async (event: PushSubscriptionChangedState): Promise<void> => {
     const { current } = event;
     const { optedIn: isPushEnabled, id: pushSubscriptionId, token: pushToken } = current;

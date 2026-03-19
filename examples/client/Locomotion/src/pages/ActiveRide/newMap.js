@@ -78,7 +78,7 @@ const PAGES_TO_SHOW_STATIONS_MARKERS = [
   BS_PAGES.LOCATION_REQUEST,
 ];
 
-const getFirstPendingStopPoint = sps => (sps || []).find(sp => sp.state
+const getFirstPendingStopPoint = (sps) => (sps || []).find((sp) => sp.state
   === STOP_POINT_STATES.PENDING);
 
 export default React.forwardRef(({
@@ -129,7 +129,7 @@ export default React.forwardRef(({
     });
   };
 
-  const buildAvailabilityVehicles = () => (isMainPage ? availabilityVehicles.map(vehicle => (
+  const buildAvailabilityVehicles = () => (isMainPage ? availabilityVehicles.map((vehicle) => (
     <AvailabilityVehicle
       location={vehicle.location}
       id={vehicle.id}
@@ -140,7 +140,7 @@ export default React.forwardRef(({
   const initialLocation = async () => {
     try {
       const geoData = await getPosition();
-      setMapRegion(oldMapRegion => ({
+      setMapRegion((oldMapRegion) => ({
         ...oldMapRegion,
         ...(geoData || DEFAULT_COORDS).coords,
       }));
@@ -162,7 +162,7 @@ export default React.forwardRef(({
     };
 
     const allTerritoryPoints = territory.map(({ polygon: p }) => p.coordinates).flat().flat()
-      .map(coord => point([parseFloat(coord[1]), parseFloat(coord[0])]));
+      .map((coord) => point([parseFloat(coord[1]), parseFloat(coord[0])]));
     const targetPoint = point(
       [
         parseFloat(coordsToFindClosestTerritory.latitude),
@@ -172,11 +172,10 @@ export default React.forwardRef(({
     const points = featureCollection(allTerritoryPoints);
     const nearest = nearestPoint(targetPoint, points);
 
-    const closestTerritory = territory.find(bm => booleanPointInPolygon(nearest, polygon(bm.polygon.coordinates[0])));
+    const closestTerritory = territory.find((bm) => booleanPointInPolygon(nearest, polygon(bm.polygon.coordinates[0])));
     const coordsToFocus = [...closestTerritory.polygon.coordinates[0]];
 
-    coordsToFocus.push(...requestStopPoints.map(sp => [parseFloat(sp.lng), parseFloat(sp.lat)]));
-
+    coordsToFocus.push(...requestStopPoints.map((sp) => [parseFloat(sp.lng), parseFloat(sp.lat)]));
 
     focusMapToCoordinates(coordsToFocus.map(([lng, lat]) => ({
       latitude: lat,
@@ -203,7 +202,7 @@ export default React.forwardRef(({
       }
     }
     if (currentBsPage === BS_PAGES.CONFIRM_FUTURE_RIDE) {
-      focusMapToCoordinates(newFutureRide.stopPoints.map(sp => ({
+      focusMapToCoordinates(newFutureRide.stopPoints.map((sp) => ({
         latitude: sp.lat,
         longitude: sp.lng,
       })), false, MAP_EDGE_PADDING);
@@ -221,14 +220,14 @@ export default React.forwardRef(({
       };
       focusCurrentLocation();
     }
-    if (currentBsPage === BS_PAGES.NOT_IN_TERRITORY && requestStopPoints.filter((sp => sp.lat)).length > 1) {
+    if (currentBsPage === BS_PAGES.NOT_IN_TERRITORY && requestStopPoints.filter(((sp) => sp.lat)).length > 1) {
       showClosestTerritory();
     }
   }, [currentBsPage]);
 
   useEffect(() => {
     if ([RIDE_STATES.DISPATCHED, RIDE_STATES.ACTIVE].includes(ride.state)) {
-      const currentStopPoint = (ride.stopPoints || []).find(sp => sp.state === STOP_POINT_STATES.PENDING);
+      const currentStopPoint = (ride.stopPoints || []).find((sp) => sp.state === STOP_POINT_STATES.PENDING);
       if (currentStopPoint) {
         const coords = getPolylineList(currentStopPoint, ride);
         focusMapToCoordinates(coords, true, ACTIVE_RIDE_MAP_PADDING);
@@ -238,8 +237,8 @@ export default React.forwardRef(({
 
   const showInputPointsOnMap = () => {
     const coordsToFit = requestStopPoints
-      .filter((sp => sp.lat))
-      .map(sp => (
+      .filter(((sp) => sp.lat))
+      .map((sp) => (
         {
           latitude: parseFloat(sp.lat),
           longitude: parseFloat(sp.lng),
@@ -251,13 +250,12 @@ export default React.forwardRef(({
   };
 
   useEffect(() => {
-    if (requestStopPoints.filter((sp => sp.lat)).length > 1) {
+    if (requestStopPoints.filter(((sp) => sp.lat)).length > 1) {
       showInputPointsOnMap();
     }
   }, [requestStopPoints]);
 
   const { stopPoints } = ride;
-
 
   const currentStopPoint = getFirstPendingStopPoint(stopPoints);
   const precedingStopPoints = (currentStopPoint || {}).precedingStops || [];
@@ -267,8 +265,7 @@ export default React.forwardRef(({
 
   const finalStopPoints = stopPoints || requestStopPoints;
   const firstSpNotCompleted = (stopPoints
-    && stopPoints.find(p => p.state !== STOP_POINT_STATES.COMPLETED)) || requestStopPoints[0];
-
+    && stopPoints.find((p) => p.state !== STOP_POINT_STATES.COMPLETED)) || requestStopPoints[0];
 
   const getStopPointEtaText = (stopPoint, isNext) => {
     const { state } = stopPoint;
@@ -309,88 +306,85 @@ export default React.forwardRef(({
     position: 'absolute',
   };
 
-
   return (
-    <>
-      <MapView
-        showsUserLocation={PAGES_TO_SHOW_MY_LOCATION.includes(currentBsPage)}
-        style={mapPositionStyles}
-        onRegionChangeComplete={onRegionChangeComplete}
-        showsMyLocationButton={false}
-        loadingEnabled
-        showsCompass={false}
-        key="map"
-        followsUserLocation={isUserLocationFocused}
-        moveOnMarkerPress={false}
-        onPanDrag={() => {
-          setIsDraggingLocationPin(true);
-          if (!isUserLocationFocused === false) {
-            setIsUserLocationFocused(false);
-          }
-        }}
-        ref={ref}
-        userInterfaceStyle={isDarkMode ? THEME_MOD.DARK : undefined}
-        customMapStyle={isDarkMode ? mapDarkMode : undefined}
-        initialRegion={mapRegion}
-        {...mapSettings}
-      >
-        {ride.vehicle && ride.vehicle.location && currentStopPoint && (
-          <AvailabilityVehicle
-            location={
-                getVehicleLocation(ride.vehicle.location,
-                  decodePolyline(currentStopPoint.polyline))
-              }
-            id={ride.vehicle.id}
-            key={ride.vehicle.id}
-          />
-        )}
-
-        {finalStopPoints && !!precedingStopPoints.length
-          && precedingStopPoints.map(sp => <PrecedingStopPointMarker key={sp.id} stopPoint={sp} />)
+    <MapView
+      showsUserLocation={PAGES_TO_SHOW_MY_LOCATION.includes(currentBsPage)}
+      style={mapPositionStyles}
+      onRegionChangeComplete={onRegionChangeComplete}
+      showsMyLocationButton={false}
+      loadingEnabled
+      showsCompass={false}
+      key="map"
+      followsUserLocation={isUserLocationFocused}
+      moveOnMarkerPress={false}
+      onPanDrag={() => {
+        setIsDraggingLocationPin(true);
+        if (!isUserLocationFocused === false) {
+          setIsUserLocationFocused(false);
         }
-        {finalStopPoints && polylineList && (
-          <Polyline
-            strokeColor={primaryColor}
-            strokeWidth={5}
-            coordinates={polylineList}
-          />
-        )}
-        {PAGES_TO_SHOW_SP_MARKERS.includes(currentBsPage)
-          && finalStopPoints.filter(sp => !!sp.lat).length > 1
-          ? finalStopPoints
-            .filter(sp => !!sp.lat)
-            .map((sp, index) => {
-              const isNext = firstSpNotCompleted.id === sp.id;
-              return (
-                <StationsMap
-                  index={index}
-                  stopPoint={sp}
-                  key={sp.id}
-                  isNext={isNext}
-                  etaText={getStopPointEtaText(sp, isNext)}
-                  isFutureRide={ride.scheduledTo}
-                  isStationsEnabled={isStationsEnabled}
-                />
-              );
-            })
-          : null}
-        {[BS_PAGES.NOT_IN_TERRITORY, BS_PAGES.PICKUP_NOT_IN_TERRITORY].includes(currentBsPage)
-        && territory && territory.length ? territory
-            .map(t => t.polygon.coordinates.map(poly => (
-              <Polygon
-                key={`Polygon#${t.id}#${poly[1]}#${poly[0]}`}
-                strokeColor="transparent"
-                fillColor="#26333333"
-                coordinates={poly.map(p => (
-                  { latitude: parseFloat(p[1]), longitude: parseFloat(p[0]) }
-                ))}
-              />
-            ))) : null}
-        {buildAvailabilityVehicles()}
-        {isStationsEnabled && PAGES_TO_SHOW_STATIONS_MARKERS.includes(currentBsPage)
-          ? <StationMarkers requestedStopPoints={requestStopPoints} /> : null}
-      </MapView>
+      }}
+      ref={ref}
+      userInterfaceStyle={isDarkMode ? THEME_MOD.DARK : undefined}
+      customMapStyle={isDarkMode ? mapDarkMode : undefined}
+      initialRegion={mapRegion}
+      {...mapSettings}
+    >
+      {ride.vehicle && ride.vehicle.location && currentStopPoint && (
+      <AvailabilityVehicle
+        location={
+                getVehicleLocation(
+                  ride.vehicle.location,
+                  decodePolyline(currentStopPoint.polyline),
+                )
+              }
+        id={ride.vehicle.id}
+        key={ride.vehicle.id}
+      />
+      )}
 
-    </>
+      {finalStopPoints && !!precedingStopPoints.length
+          && precedingStopPoints.map((sp) => <PrecedingStopPointMarker key={sp.id} stopPoint={sp} />)}
+      {finalStopPoints && polylineList && (
+      <Polyline
+        strokeColor={primaryColor}
+        strokeWidth={5}
+        coordinates={polylineList}
+      />
+      )}
+      {PAGES_TO_SHOW_SP_MARKERS.includes(currentBsPage)
+          && finalStopPoints.filter((sp) => !!sp.lat).length > 1
+        ? finalStopPoints
+          .filter((sp) => !!sp.lat)
+          .map((sp, index) => {
+            const isNext = firstSpNotCompleted.id === sp.id;
+            return (
+              <StationsMap
+                index={index}
+                stopPoint={sp}
+                key={sp.id}
+                isNext={isNext}
+                etaText={getStopPointEtaText(sp, isNext)}
+                isFutureRide={ride.scheduledTo}
+                isStationsEnabled={isStationsEnabled}
+              />
+            );
+          })
+        : null}
+      {[BS_PAGES.NOT_IN_TERRITORY, BS_PAGES.PICKUP_NOT_IN_TERRITORY].includes(currentBsPage)
+        && territory && territory.length ? territory
+          .map((t) => t.polygon.coordinates.map((poly) => (
+            <Polygon
+              key={`Polygon#${t.id}#${poly[1]}#${poly[0]}`}
+              strokeColor="transparent"
+              fillColor="#26333333"
+              coordinates={poly.map((p) => (
+                { latitude: parseFloat(p[1]), longitude: parseFloat(p[0]) }
+              ))}
+            />
+          ))) : null}
+      {buildAvailabilityVehicles()}
+      {isStationsEnabled && PAGES_TO_SHOW_STATIONS_MARKERS.includes(currentBsPage)
+        ? <StationMarkers requestedStopPoints={requestStopPoints} /> : null}
+    </MapView>
   );
 });

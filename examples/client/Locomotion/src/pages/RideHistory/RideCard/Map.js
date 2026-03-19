@@ -14,24 +14,26 @@ const mapStyle = {
   ...StyleSheet.absoluteFillObject,
 };
 
-const SpMarker = ({ sp, disableMarkers }) => (
-  <Marker
-    key={`Marker#${sp.lat}#${sp.lng}#${sp.type}`}
-    coordinate={{
-      latitude: parseFloat(sp.lat),
-      longitude: parseFloat(sp.lng),
-    }}
-    style={{
-      alignItems: 'center',
-    }}
-  >
-    <MarkerTitle type={sp.type}>
-      {getSpTextWithNumberPrefix(sp)}
-    </MarkerTitle>
-    {sp.type === STOP_POINT_TYPES.STOP_POINT_PICKUP ? <PickupIconMarker disableMarkers={disableMarkers} onMap /> : undefined}
-    {sp.type === STOP_POINT_TYPES.STOP_POINT_DROPOFF ? <DropoffIconMarker disableMarkers={disableMarkers} onMap /> : undefined}
-  </Marker>
-);
+function SpMarker({ sp, disableMarkers }) {
+  return (
+    <Marker
+      key={`Marker#${sp.lat}#${sp.lng}#${sp.type}`}
+      coordinate={{
+        latitude: parseFloat(sp.lat),
+        longitude: parseFloat(sp.lng),
+      }}
+      style={{
+        alignItems: 'center',
+      }}
+    >
+      <MarkerTitle type={sp.type}>
+        {getSpTextWithNumberPrefix(sp)}
+      </MarkerTitle>
+      {sp.type === STOP_POINT_TYPES.STOP_POINT_PICKUP ? <PickupIconMarker disableMarkers={disableMarkers} onMap /> : undefined}
+      {sp.type === STOP_POINT_TYPES.STOP_POINT_DROPOFF ? <DropoffIconMarker disableMarkers={disableMarkers} onMap /> : undefined}
+    </Marker>
+  );
+}
 
 const Map = forwardRef(({
   ride: { stopPoints },
@@ -39,7 +41,6 @@ const Map = forwardRef(({
 }, ref) => {
   const mapInstance = useRef();
   const isFocused = useIsFocused();
-
 
   useEffect(() => {
     const timeout = setTimeout(async () => {
@@ -85,13 +86,13 @@ const Map = forwardRef(({
       showMyLocation={false}
       followMyLocation={false}
     >
-      {stopPoints && stopPoints.map(sp => (sp.lat && sp.lng ? (
+      {stopPoints && stopPoints.map((sp) => (sp.lat && sp.lng ? (
         <SpMarker
           key={`Marker#${sp.lat}#${sp.lng}#${sp.type}`}
           sp={sp}
           disableMarkers={disableMarkers}
         />
-      ) : (<></>)))}
+      ) : null))}
     </MapView>
   );
 });

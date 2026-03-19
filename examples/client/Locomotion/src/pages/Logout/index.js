@@ -3,7 +3,7 @@ import propTypes from 'prop-types';
 import { logout } from '../../services/logout';
 import FullPageLoader from '../../Components/FullPageLoader';
 
-const Logout = ({ navigation }) => {
+function Logout({ navigation }) {
   useEffect(() => {
     logout(navigation);
   }, []);
@@ -11,7 +11,7 @@ const Logout = ({ navigation }) => {
   return (
     <FullPageLoader />
   );
-};
+}
 
 export default Logout;
 

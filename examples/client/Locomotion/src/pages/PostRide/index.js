@@ -31,8 +31,8 @@ import { BS_PAGES } from '../../context/ridePageStateContext/utils';
 import * as navigationService from '../../services/navigation';
 import RideFeedback from './Feedback';
 
-const PostRidePage = ({ menuSide, route }) => {
-  const { rideId, priceCalculationId, fromHistory } = route?.params;
+function PostRidePage({ menuSide, route }) {
+  const { rideId, priceCalculationId, fromHistory } = route?.params ?? {};
   const [rating, setRating] = useState(null);
   const [ride, setRide] = useState(null);
   const [tipFromDb, setTipFromDb] = useState();
@@ -78,7 +78,7 @@ const PostRidePage = ({ menuSide, route }) => {
       ],
     );
     if (priceCalculation) {
-      const tipObj = priceCalculation.additionalCharges.find(charge => charge.chargeFor === 'tip');
+      const tipObj = priceCalculation.additionalCharges.find((charge) => charge.chargeFor === 'tip');
       setTipFromDb((tipObj || {}).amount);
     }
     setRide(rideData);
@@ -93,7 +93,7 @@ const PostRidePage = ({ menuSide, route }) => {
   const nextPage = () => {
     if (fromHistory) {
       const [formattedRide] = formatRides([ride]);
-      const newRidesHistory = pastRides.map(pr => (pr.id === ride.id ? formattedRide : pr));
+      const newRidesHistory = pastRides.map((pr) => (pr.id === ride.id ? formattedRide : pr));
       setPastRides(newRidesHistory);
       return navigationService.goBack();
     }
@@ -124,53 +124,50 @@ const PostRidePage = ({ menuSide, route }) => {
   const getButtonText = () => i18n.t('postRide.submit');
 
   return (
-    <>
-      {ride ? (
-        <PageContainer>
-          <PageHeader
-            title={i18n.t('postRide.pageTitle')}
-            onIconPress={nextPage}
-            iconSide={menuSide}
-            icon={closeIcon}
-          />
-          <PageContent alwaysBounceVertical={false} keyboardShouldPersistTaps={false}>
-            {!didUserRate(ride.rating, ride.rideFeedbacks) && (
-              <RatingContainer>
-                <SummaryStarsTitle>{i18n.t('postRide.ratingHeadline')}</SummaryStarsTitle>
-                <StarRating onUpdate={onRatingUpdate} />
-                <>
-                  <RideFeedback onTextChange={text => setRideFeedbackText(text)} />
-                </>
-              </RatingContainer>
-            )}
+    ride ? (
+      <PageContainer>
+        <PageHeader
+          title={i18n.t('postRide.pageTitle')}
+          onIconPress={nextPage}
+          iconSide={menuSide}
+          icon={closeIcon}
+        />
+        <PageContent alwaysBounceVertical={false} keyboardShouldPersistTaps={false}>
+          {!didUserRate(ride.rating, ride.rideFeedbacks) && (
+            <RatingContainer>
+              <SummaryStarsTitle>{i18n.t('postRide.ratingHeadline')}</SummaryStarsTitle>
+              <StarRating onUpdate={onRatingUpdate} />
+              <RideFeedback onTextChange={(text) => setRideFeedbackText(text)} />
+            </RatingContainer>
+          )}
 
-            {isCardPaymentMethod(ride?.payment?.paymentMethod) && !tipFromDb && (
-            <TipsContainer>
-              {ride?.priceCurrency && (ride?.priceAmount || ride?.priceAmount === 0)
-                ? (
-                  <Tips
-                    tipSettings={tipSettings}
-                    onSelectTip={onSelectTip}
-                    driver={{ firstName: ride?.driver?.firstName, avatar: ride?.driver?.avatar }}
-                    ridePrice={ride?.priceAmount}
-                    priceCurrency={ride?.priceCurrency}
-                  />
-                ) : null}
-            </TipsContainer>
-            )}
-            <SubmitContainer>
-              <Button testID="submitPostRide" onPress={onSubmit} disabled={isExpanded}>{getButtonText()}</Button>
-            </SubmitContainer>
-          </PageContent>
-        </PageContainer>
-      ) : <FullPageLoader />}
-    </>
+          {isCardPaymentMethod(ride?.payment?.paymentMethod) && !tipFromDb && (
+          <TipsContainer>
+            {ride?.priceCurrency && (ride?.priceAmount || ride?.priceAmount === 0)
+              ? (
+                <Tips
+                  tipSettings={tipSettings}
+                  onSelectTip={onSelectTip}
+                  driver={{ firstName: ride?.driver?.firstName, avatar: ride?.driver?.avatar }}
+                  ridePrice={ride?.priceAmount}
+                  priceCurrency={ride?.priceCurrency}
+                />
+              ) : null}
+          </TipsContainer>
+          )}
+          <SubmitContainer>
+            <Button testID="submitPostRide" onPress={onSubmit} disabled={isExpanded}>{getButtonText()}</Button>
+          </SubmitContainer>
+        </PageContent>
+      </PageContainer>
+    ) : <FullPageLoader />
   );
-};
+}
 
-
-export default props => (
-  <BottomSheetContextProvider {...props}>
-    <PostRidePage {...props} />
-  </BottomSheetContextProvider>
-);
+export default function (props) {
+  return (
+    <BottomSheetContextProvider {...props}>
+      <PostRidePage {...props} />
+    </BottomSheetContextProvider>
+  );
+}

@@ -1,4 +1,3 @@
-
 import React, {
   useEffect, useState, useRef, useContext,
 } from 'react';
@@ -11,25 +10,14 @@ import Button from '../../../Components/Button';
 import Thumbnail from '../../../Components/Thumbnail';
 import i18n from '../../../I18n';
 import SelectableButton from '../../../Components/SelectableButton';
-import { SubmitButtonText } from '../../../Components/SelectableButton/styled';
 import BottomSheet from '../../../Components/BottomSheet';
-import BottomSheetContextProvider, { BottomSheetContext, SNAP_POINT_STATES } from '../../../context/bottomSheetContext';
+import { BottomSheetContext, SNAP_POINT_STATES } from '../../../context/bottomSheetContext';
 import CustomTip from './CustomTip';
 import { getFormattedPrice, getCurrencySymbol } from '../../../context/newRideContext/utils';
 import SettingContext from '../../../context/settings';
 import PaymentContext from '../../../context/payments';
 import { RidePageContext } from '../../../context/newRideContext';
 import showPriceBasedOnAccount from '../../../services/showPriceBasedOnAccount';
-
-const TipSectionContainer = styled.View`
- width: 100%;
- flex:1;
-  z-index: 3;
-  elevation: 3;
-  background: red;
-
-`;
-
 
 const Container = styled.View`
   flex-direction: column;
@@ -85,7 +73,6 @@ const NoCustomTipContainer = styled.View`
   margin-top: 5px;
 `;
 
-
 export const DriverAvatar = styled(Image)`
   width: 60px;
   height: 60px;
@@ -94,20 +81,22 @@ export const DriverAvatar = styled(Image)`
   border-width: 4;
  `;
 
-const NoTipTextButton = ({ onPress, children }) => (
-  <NoCustomTipContainer>
-    <Button testID="resetTip" noBackground onPress={onPress}>
-      <NoCustomTipText>{children}</NoCustomTipText>
-    </Button>
-  </NoCustomTipContainer>
-);
-const Tips = ({
+function NoTipTextButton({ onPress, children }) {
+  return (
+    <NoCustomTipContainer>
+      <Button testID="resetTip" noBackground onPress={onPress}>
+        <NoCustomTipText>{children}</NoCustomTipText>
+      </Button>
+    </NoCustomTipContainer>
+  );
+}
+function Tips({
   driver,
   ridePrice,
   tipSettings,
   onSelectTip,
   priceCurrency = null,
-}) => {
+}) {
   const [selectedTip, setSelectedTip] = useState(null);
   const [customTip, setCustomTip] = useState(null);
   const { businessAccountId } = useContext(RidePageContext);
@@ -133,7 +122,6 @@ const Tips = ({
     showPriceBasedOnAccount(loadShowPrice, getBusinessAccountById, businessAccountId);
   }, [businessAccountId]);
 
-
   const resetTip = () => {
     setSelectedTip(null);
     setCustomTip(null);
@@ -158,7 +146,7 @@ const Tips = ({
     calculatedTip = customTip || selectedTip;
 
     if (isPercentage) {
-      calculatedTip = ridePrice * (calculatedTip) / 100;
+      calculatedTip = (ridePrice * calculatedTip) / 100;
     }
 
     return calculatedTip.toFixed(2);
@@ -184,9 +172,9 @@ const Tips = ({
               {`${i18n.t('postRide.tip.title')} ${driver.firstName}`}
             </Title>
             {showPrice && (
-            <SubTitle testID="postRideTip">
-              {`${i18n.t('postRide.tip.subTitle')} ${serviceDisplayPrice}`}
-            </SubTitle>
+              <SubTitle testID="postRideTip">
+                {`${i18n.t('postRide.tip.subTitle')} ${serviceDisplayPrice}`}
+              </SubTitle>
             )}
           </Column>
           <ThumbnailContainer>
@@ -227,7 +215,7 @@ const Tips = ({
       >
         <CustomTip
           customAmount={customTip}
-          onSubmit={value => onCustomTipSet(value)}
+          onSubmit={(value) => onCustomTipSet(value)}
           tipSuffix={tipSuffix}
           isExpanded={isExpanded}
         />
@@ -235,11 +223,8 @@ const Tips = ({
     </>
 
   );
-};
+}
 
-
-export default props => (
-
-  <Tips {...props} />
-
-);
+export default function (props) {
+  return <Tips {...props} />;
+}

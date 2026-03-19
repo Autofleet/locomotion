@@ -17,7 +17,7 @@ import * as navigationService from '../../services/navigation';
 import Button from '../Button';
 import showPriceBasedOnAccount from '../../services/showPriceBasedOnAccount';
 
-const RidePaymentDetails = ({
+function RidePaymentDetails({
   ride,
   paymentMethod,
   rideHistory = false,
@@ -29,7 +29,7 @@ const RidePaymentDetails = ({
   currency: string,
   state: string
 
-}) => {
+}) {
   const [priceCalculation, setPriceCalculation] = useState<PriceCalculation>();
   const {
     getRidePriceCalculation,
@@ -51,7 +51,6 @@ const RidePaymentDetails = ({
     showPriceBasedOnAccount(loadShowPrice, getBusinessAccountById, ride.businessAccountId);
   }, []);
 
-
   return (paymentMethod ? (
     <>
       <CardsTitle noPaddingLeft title={i18n.t('ride.paymentMethod')} />
@@ -66,8 +65,10 @@ const RidePaymentDetails = ({
             : (showPrice
               && (
               <PriceText testID="priceText">
-                {getFormattedPrice(priceCalculation?.currency,
-                  totalAmount)}
+                {getFormattedPrice(
+                  priceCalculation?.currency,
+                  totalAmount,
+                )}
               </PriceText>
               )
             )
@@ -77,12 +78,14 @@ const RidePaymentDetails = ({
           <Button
             testID="viewRidePaymentDetails"
             noBackground
-            onPress={() => navigationService.navigate(MAIN_ROUTES.RIDE_PRICE_BREAKDOWN,
-              { rideId: ride.id, rideHistory })}
+            onPress={() => navigationService.navigate(
+              MAIN_ROUTES.RIDE_PRICE_BREAKDOWN,
+              { rideId: ride.id, rideHistory },
+            )}
           >
             {state !== RIDE_STATES.CANCELED
             || (state === RIDE_STATES.CANCELED
-             && priceCalculation?.items.find(x => x.cancellationRule)) ? (
+             && priceCalculation?.items.find((x) => x.cancellationRule)) ? (
                <ViewDetails>
                  {i18n.t('ride.viewDetails').toString()}
                </ViewDetails>
@@ -94,7 +97,7 @@ const RidePaymentDetails = ({
     </>
   ) : null
   );
-};
+}
 
 RidePaymentDetails.propTypes = {
   rideHistory: propsTypes.bool,

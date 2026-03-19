@@ -676,12 +676,12 @@ export function ConfirmingRide() {
       'bottomSheetContent.confirmingFutureRide.subTitleText',
       { date: moment(ride?.scheduledTo).format('MMM D, h:mm A'), beforeTime },
     )
-    : null;
+    : undefined;
   return (
     <BsPage
       TitleText={TitleText}
       ButtonText=""
-      SecondaryButtonText={ride?.id ? i18n.t('bottomSheetContent.confirmingRide.secondaryButtonText') : null}
+      SecondaryButtonText={ride?.id ? i18n.t('bottomSheetContent.confirmingRide.secondaryButtonText') : undefined}
       onSecondaryButtonPress={() => {
         getCancellationReasons(ride?.id);
         changeBsPage(BS_PAGES.CANCEL_RIDE);

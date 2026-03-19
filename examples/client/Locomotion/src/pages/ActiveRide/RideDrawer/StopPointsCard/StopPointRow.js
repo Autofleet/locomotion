@@ -23,7 +23,6 @@ export const StopPointDot = styled.View`
   /* margin-top: 10; */
 `;
 
-
 export const PickupRow = styled.View`
 ${address}
 border-bottom-color: #f2f2f2;
@@ -46,7 +45,6 @@ const StopPointDotTimeLine = styled.View`
   flex: 1;
   background-color: #dbdbdb;
 `;
-
 
 const AddressTextCont = styled.View`
 `;
@@ -91,25 +89,27 @@ const AddressTitle = styled.Text`
   margin-bottom: 5px;
 `;
 
-export default ({
+export default function ({
   pickup, description, eta, completedAt, openLocationSelect, useBorder, title, selected,
-}) => (
-  <RowContainer pickup={pickup} onPress={openLocationSelect} useBorder={useBorder} paddingStart testID="OpenLocationSelectButton">
-    <StopPointDotContainer origin={pickup}>
-      <StopPointDot origin={pickup} />
-      <StopPointDotTimeLine />
-    </StopPointDotContainer>
-    <AddressTextCont>
-      <View>
-        <AddressTitle>
-          {title}
-        </AddressTitle>
-      </View>
-      <View>
-        <AddressText numberOfLines={2} selected={selected}>
-          {description || i18n.t(pickup ? 'addressView.pickupPlaceholder' : 'addressView.dropoffPlaceholder')}
-        </AddressText>
-      </View>
-    </AddressTextCont>
-  </RowContainer>
-);
+}) {
+  return (
+    <RowContainer pickup={pickup} onPress={openLocationSelect} useBorder={useBorder} paddingStart testID="OpenLocationSelectButton">
+      <StopPointDotContainer origin={pickup}>
+        <StopPointDot origin={pickup} />
+        <StopPointDotTimeLine />
+      </StopPointDotContainer>
+      <AddressTextCont>
+        <View>
+          <AddressTitle>
+            {title}
+          </AddressTitle>
+        </View>
+        <View>
+          <AddressText numberOfLines={2} selected={selected}>
+            {description || i18n.t(pickup ? 'addressView.pickupPlaceholder' : 'addressView.dropoffPlaceholder')}
+          </AddressText>
+        </View>
+      </AddressTextCont>
+    </RowContainer>
+  );
+}

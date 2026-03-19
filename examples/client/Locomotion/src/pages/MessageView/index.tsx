@@ -55,7 +55,7 @@ interface FutureRidesViewProps {
     route: any;
   }
 
-const MessageView = ({ menuSide, route }: FutureRidesViewProps) => {
+function MessageView({ menuSide, route }: FutureRidesViewProps) {
   const {
     getMessage, markReadMessages, toastMessageId, closeToast,
   } = useContext(MessagesContext);
@@ -137,8 +137,7 @@ const MessageView = ({ menuSide, route }: FutureRidesViewProps) => {
               </LinkText>
               <SvgIcon Svg={arrow} stroke={LINK_BLUE_COLOR} height={15} />
             </MessageLink>
-          )
-        }
+          )}
         </ScrollContainer>
       ) : (
         <LoaderContainer>
@@ -153,7 +152,6 @@ const MessageView = ({ menuSide, route }: FutureRidesViewProps) => {
       )}
     </PageContainer>
   );
-};
-
+}
 
 export default MessageView;

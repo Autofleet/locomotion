@@ -12,16 +12,18 @@ type NoTitleCardProps = {
     showArrow: boolean,
 }
 
-const NoTitleCard = ({
+function NoTitleCard({
   onPress, children, showArrow, ...props
-} : NoTitleCardProps) => (
-  <Button noBackground onPress={onPress} {...props}>
-    <CardContainer>
-      <CardText style={{ marginVertical: 10 }}>{children}</CardText>
-      <ArrowContainer>{showArrow ? <Arrow /> : undefined}</ArrowContainer>
-    </CardContainer>
-  </Button>
-);
+} : NoTitleCardProps) {
+  return (
+    <Button noBackground onPress={onPress} {...props}>
+      <CardContainer>
+        <CardText style={{ marginVertical: 10 }}>{children}</CardText>
+        <ArrowContainer>{showArrow ? <Arrow /> : undefined}</ArrowContainer>
+      </CardContainer>
+    </Button>
+  );
+}
 
 NoTitleCard.defaultProps = {
   onPress: undefined,

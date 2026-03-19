@@ -6,9 +6,9 @@ import {
 } from './styled';
 import { getTogglePopupsState } from '../context/state';
 
-export default ({
+export default function ({
   id, title, subTitle, closeAfter, content, onClose,
-}) => {
+}) {
   const [isPopupOpen, togglePopup] = getTogglePopupsState();
   const closePopup = () => {
     if (onClose) {
@@ -36,4 +36,4 @@ export default ({
       </KeyboardAvoidingView>
     </Modal>
   );
-};
+}

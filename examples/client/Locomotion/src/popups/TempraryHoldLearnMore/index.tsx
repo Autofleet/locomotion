@@ -12,27 +12,29 @@ interface TempraryHoldLearnMoreProps {
   closePopup: any | SetStateAction<boolean>;
 }
 
-const TempraryHoldLearnMorePopup = ({
+function TempraryHoldLearnMorePopup({
   isVisible,
   closePopup,
 
-}: TempraryHoldLearnMoreProps) => (
-  <Modal isVisible={isVisible}>
-    <Container>
-      <TitleContainer>
-        <Title>{i18n.t('temporaryHoldPopup.title')}</Title>
-      </TitleContainer>
-      <TextContainer>
-        <SubTitle>
-          {i18n.t('temporaryHoldPopup.text', { appName: Config.OPERATION_NAME })}
-        </SubTitle>
-      </TextContainer>
-      <CloseButton onPress={closePopup}>
-        <ButtonText>
-          {`${i18n.t('temporaryHoldPopup.buttonText')}`}
-        </ButtonText>
-      </CloseButton>
-    </Container>
-  </Modal>
-);
+}: TempraryHoldLearnMoreProps) {
+  return (
+    <Modal isVisible={isVisible}>
+      <Container>
+        <TitleContainer>
+          <Title>{i18n.t('temporaryHoldPopup.title')}</Title>
+        </TitleContainer>
+        <TextContainer>
+          <SubTitle>
+            {i18n.t('temporaryHoldPopup.text', { appName: Config.OPERATION_NAME })}
+          </SubTitle>
+        </TextContainer>
+        <CloseButton onPress={closePopup}>
+          <ButtonText>
+            {`${i18n.t('temporaryHoldPopup.buttonText')}`}
+          </ButtonText>
+        </CloseButton>
+      </Container>
+    </Modal>
+  );
+}
 export default TempraryHoldLearnMorePopup;

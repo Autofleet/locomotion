@@ -37,7 +37,7 @@ const Overlay = styled.View`
 
 `;
 
-export default ({
+export default function ({
   origin,
   destination,
   rideState,
@@ -51,10 +51,10 @@ export default ({
   loading,
   onRideSchedule,
   disableFutureBooking,
-}) => (
-  !requestStopPoints.openEdit
+}) {
+  return !requestStopPoints.openEdit
     ? (
-      <Fragment>
+      <>
         <StopPointRow
           pickup
           useBorder
@@ -78,20 +78,19 @@ export default ({
         />
         {readyToBook
           ? (
-            <Fragment>
+            <>
               <NumberOfPassenger onChange={onNumberOfPassengerChange} amount={numberOfPassenger} />
               <RideScheduler
                 onScheduleTimeSelect={onRideSchedule}
                 disableFuture={disableFutureBooking}
                 scheduledTo={requestStopPoints.scheduledTo}
               />
-            </Fragment>
+            </>
           )
           : null}
 
-
         {loading ? <Overlay /> : null}
-      </Fragment>
+      </>
     )
     : (
       <AddressView
@@ -100,5 +99,5 @@ export default ({
         type={requestStopPoints.selectedType}
         onClose={closeAddressViewer}
       />
-    )
-);
+    );
+}

@@ -1,5 +1,5 @@
 import React, {
-  createContext, Dispatch, SetStateAction, useEffect, useState,
+  createContext, Dispatch, SetStateAction, useEffect, useState, useMemo,
 } from 'react';
 import crashlytics from '@react-native-firebase/crashlytics';
 import Config from 'react-native-config';
@@ -77,7 +77,7 @@ export const UserContext = createContext<UserContextInterface>({
   onLogin: async (phoneNumber: string, channel: string) => undefined,
 });
 
-const UserContextProvider = ({ children }: { children: any }) => {
+function UserContextProvider({ children }: { children: any }) {
   const usePayments = PaymentsContext.useContainer();
   const [locationGranted, setLocationGranted] = useState();
   const [user, setUser] = useState<User | null>(null);
@@ -149,7 +149,6 @@ const UserContextProvider = ({ children }: { children: any }) => {
   const verifyEmail = async () => {
     await sendEmailVerification();
   };
-
 
   const updateUser = async (values: any): Promise<any> => updateUserApi(values);
 
@@ -261,35 +260,36 @@ const UserContextProvider = ({ children }: { children: any }) => {
     return result;
   };
 
+  const contextValue = useMemo(() => ({
+    setUser: (u: User | null) => setUser(u),
+    user,
+    updateState,
+    getUserFromStorage,
+    updateUserInfo,
+    onVert,
+    onEmailVert,
+    updateUserFromServer,
+    removeChangesToUser,
+    verifyEmail,
+    getUserFromServer,
+    locationGranted,
+    setLocationGranted,
+    deleteUser,
+    updateUser,
+    coupon,
+    getCoupon,
+    setCoupon: (c: any) => setCoupon(c),
+    createCoupon,
+    onLogin,
+  }), [user, locationGranted, coupon]);
+
   return (
     <UserContext.Provider
-      value={{
-        setUser: u => setUser(u),
-        user,
-        updateState,
-        getUserFromStorage,
-        updateUserInfo,
-        onVert,
-        onEmailVert,
-        updateUserFromServer,
-        removeChangesToUser,
-        verifyEmail,
-        getUserFromServer,
-        locationGranted,
-        setLocationGranted,
-        deleteUser,
-        updateUser,
-        coupon,
-        getCoupon,
-        setCoupon: c => setCoupon(c),
-        createCoupon,
-        onLogin,
-      }}
+      value={contextValue}
     >
       {children}
     </UserContext.Provider>
   );
-};
-
+}
 
 export default UserContextProvider;

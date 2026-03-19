@@ -38,7 +38,6 @@ export const BalanceTextContainer = styled.View`
     justify-content: center;
 `;
 
-
 export const BalanceTitle = styled.Text`
     color: #1e273d;
     font-size: 14px;
@@ -130,7 +129,6 @@ padding-bottom: 5;
 color: #24aaf2;
 ${FONT_SIZES.LARGE}
 `;
-
 
 export const PaymentCardContainer = styled.View`
   flex-direction: row;

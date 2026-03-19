@@ -22,7 +22,7 @@ export default class DeviceService {
       } else {
         DeviceService.link(link);
       }
-    }).catch(err => console.error('An error', err));
+    }).catch((err) => console.error('An error', err));
   }
 
   static async canOpenLink(link) {

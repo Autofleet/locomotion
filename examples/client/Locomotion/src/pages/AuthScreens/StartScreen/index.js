@@ -24,7 +24,7 @@ import SETTING_KEYS from '../../../context/settings/keys';
 import * as navigationService from '../../../services/navigation';
 import AppSettings from '../../../services/app-settings';
 
-const StartScreen = () => {
+function StartScreen() {
   const { setUser } = useContext(UserContext);
   const { getSettingByKey } = Settings.useContainer();
   const [webViewWindow, setWebViewWindow] = useState(null);
@@ -108,6 +108,6 @@ const StartScreen = () => {
     </SafeView>
 
   );
-};
+}
 
 export default StartScreen;

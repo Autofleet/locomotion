@@ -19,10 +19,10 @@ import ChoosePaymentMethod from '../../popups/ChoosePaymentMethod';
 import Section from './paymentMethodSection';
 import { PAYMENT_METHODS } from './consts';
 
-export default ({
+export default function ({
   loadingState = false,
   onAddClick = () => undefined,
-}) => {
+}) {
   const usePayments = PaymentsContext.useContainer();
   const [loading, setLoading] = useState(false);
   const [defaultMethod, setDefaultMethod] = useState({ id: null });
@@ -46,7 +46,6 @@ export default ({
     setLoading(loadingState);
   }, [loading]);
 
-
   return (
     <CardsListContainer>
       <ScrollView>
@@ -56,8 +55,10 @@ export default ({
               ? (
                 <Section
                   title={i18n.t('payments.defaultMethodTitle')}
-                  onPress={() => navigate(MAIN_ROUTES.CARD_DETAILS,
-                    { paymentMethod: defaultMethod })}
+                  onPress={() => navigate(
+                    MAIN_ROUTES.CARD_DETAILS,
+                    { paymentMethod: defaultMethod },
+                  )}
                   paymentMethods={[defaultMethod]}
                   showChangeButton
                   onPressChange={() => setShowChoosePayment(true)}
@@ -69,8 +70,10 @@ export default ({
                 <Section
                   title={i18n.t('payments.otherMethodsTitle')}
                   showChangeButton={false}
-                  onPress={(paymentMethod: any) => navigate(MAIN_ROUTES.CARD_DETAILS,
-                    { paymentMethod })}
+                  onPress={(paymentMethod: any) => navigate(
+                    MAIN_ROUTES.CARD_DETAILS,
+                    { paymentMethod },
+                  )}
                   paymentMethods={usePayments.paymentMethods
                     .filter(({ id }) => id !== defaultMethod.id)}
                 />
@@ -125,4 +128,4 @@ export default ({
 
     </CardsListContainer>
   );
-};
+}

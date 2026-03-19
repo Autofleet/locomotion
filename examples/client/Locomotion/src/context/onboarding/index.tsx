@@ -1,6 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
 import React, {
-  createContext, useContext, useState,
+  createContext, useContext, useState, useMemo,
 } from 'react';
 import { initStripe } from '@stripe/stripe-react-native';
 import AppSettings from '../../services/app-settings';
@@ -21,8 +21,8 @@ interface OnboardingContextInterface {
 }
 
 export const OnboardingContext = createContext<OnboardingContextInterface>({
-  verifyCode: async code => undefined,
-  navigateBasedOnUser: user => undefined,
+  verifyCode: async (code) => undefined,
+  navigateBasedOnUser: (user) => undefined,
   requiredOnboarding: {},
   nextScreen: (currentScreen: string) => undefined,
   fetchHideCaptchaSetting: async () => undefined,
@@ -50,7 +50,7 @@ const keyToScreen: any = {
   welcome: MAIN_ROUTES.WELCOME,
 };
 
-const OnboardingContextProvider = ({ children }: { children: any }) => {
+function OnboardingContextProvider({ children }: { children: any }) {
   const { setUser, onVert } = useContext(UserContext);
   const navigation: any = useNavigation();
   const { getSettingByKey } = settings.useContainer();
@@ -139,7 +139,7 @@ const OnboardingContextProvider = ({ children }: { children: any }) => {
         ...requiredOnboarding,
         [MAIN_ROUTES.AVATAR]: enforceProfilePicture,
       });
-      const screenKey: string | undefined = Object.keys(keyToScreen).find(key => !user[key]);
+      const screenKey: string | undefined = Object.keys(keyToScreen).find((key) => !user[key]);
       let unfinishedScreen = screenKey ? keyToScreen[screenKey] : keyToScreen.welcome;
       if (unfinishedScreen === MAIN_ROUTES.CARD) {
         const showCardPage = await shouldShowCardPage();
@@ -160,20 +160,22 @@ const OnboardingContextProvider = ({ children }: { children: any }) => {
     }
   };
 
+  const contextValue = useMemo(() => ({
+    verifyCode,
+    navigateBasedOnUser,
+    requiredOnboarding,
+    nextScreen,
+    fetchHideCaptchaSetting,
+    shouldHideCaptcha,
+  }), [requiredOnboarding, shouldHideCaptcha]);
+
   return (
     <OnboardingContext.Provider
-      value={{
-        verifyCode,
-        navigateBasedOnUser,
-        requiredOnboarding,
-        nextScreen,
-        fetchHideCaptchaSetting,
-        shouldHideCaptcha,
-      }}
+      value={contextValue}
     >
       {children}
     </OnboardingContext.Provider>
   );
-};
+}
 
 export default OnboardingContextProvider;

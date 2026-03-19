@@ -19,7 +19,7 @@ const modes = {
 const BORDER_RADIUS = 1000;
 
 const Container = styled.View``;
-const myThumbnail = (props) => {
+function myThumbnail(props) {
   const { primaryColor } = useContext(ThemeContext);
 
   const defaultStyles = {
@@ -91,7 +91,7 @@ const myThumbnail = (props) => {
       )}
     </Container>
   );
-};
+}
 
 export default myThumbnail;
 

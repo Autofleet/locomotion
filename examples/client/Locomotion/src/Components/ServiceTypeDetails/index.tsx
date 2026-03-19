@@ -10,17 +10,17 @@ const ServiceName = styled(Text)`
     ${FONT_WEIGHTS.MEDIUM};
 `;
 
-const ServiceTypeDetails = ({
+function ServiceTypeDetails({
   serviceType,
 }: {
     serviceType: any,
-}) => (serviceType ? (
-  <>
-    <CardsTitle noPaddingLeft title={i18n.t('ride.serviceType')} />
-    <ServiceName>{serviceType.displayName}</ServiceName>
-  </>
-) : null
-);
-
+}) {
+  return serviceType ? (
+    <>
+      <CardsTitle noPaddingLeft title={i18n.t('ride.serviceType')} />
+      <ServiceName>{serviceType.displayName}</ServiceName>
+    </>
+  ) : null;
+}
 
 export default ServiceTypeDetails;

@@ -1,15 +1,6 @@
 import styled from 'styled-components';
 import Button from '../Button';
 
-
-const colors = theme => ({
-  text: theme.primaryButtonTextColor,
-  selected: {
-    background: theme.primaryColor,
-    text: theme.primaryButtonTextColor,
-  },
-});
-
 export const SubmitButtonText = styled.Text`
   font-size: 16px;
   text-align: center;
@@ -20,13 +11,9 @@ export const SubmitButtonText = styled.Text`
 `;
 
 export const StyledButton = styled(Button)`
-  ${({
-    theme,
-  }) => `
   flex: 1;
   padding: 5px;
   height:  50px;
-`}
 `;
 
 export const ButtonTextContainer = styled.View`

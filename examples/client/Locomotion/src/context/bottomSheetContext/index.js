@@ -34,7 +34,7 @@ export const INITIAL_TOP_BAR_PROPS = {
   htmlTags: [],
 };
 
-const BottomSheetProvider = ({ children }) => {
+function BottomSheetProvider({ children }) {
   const [isExpanded, setIsExpanded] = useState(false);
   const [genericErrorDetails, setGenericErrorDetails] = useState({});
   const [snapPointsState, setSnapPointsState] = useState(SNAP_POINT_STATES[BS_PAGES.LOADING]);
@@ -42,24 +42,26 @@ const BottomSheetProvider = ({ children }) => {
   const [topBarProps, setTopBarProps] = useState(INITIAL_TOP_BAR_PROPS);
   const snapPoints = useMemo(() => snapPointsState, [snapPointsState]);
 
+  const contextValue = useMemo(() => ({
+    snapPoints,
+    isExpanded,
+    setIsExpanded,
+    setSnapPointsState,
+    setFooterComponent,
+    footerComponent,
+    genericErrorDetails,
+    setGenericErrorDetails,
+    topBarProps,
+    setTopBarProps,
+  }), [snapPoints, isExpanded, footerComponent, genericErrorDetails, topBarProps]);
+
   return (
     <BottomSheetContext.Provider
-      value={{
-        snapPoints,
-        isExpanded,
-        setIsExpanded,
-        setSnapPointsState,
-        setFooterComponent,
-        footerComponent,
-        genericErrorDetails,
-        setGenericErrorDetails,
-        topBarProps,
-        setTopBarProps,
-      }}
+      value={contextValue}
     >
       {children}
     </BottomSheetContext.Provider>
   );
-};
+}
 
 export default BottomSheetProvider;

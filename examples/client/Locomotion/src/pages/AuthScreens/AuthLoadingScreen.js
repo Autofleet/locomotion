@@ -30,11 +30,11 @@ export const INITIAL_USER_STATE = {
   pushUserId: '',
 };
 
-const AuthLoadingScreen = () => {
+function AuthLoadingScreen() {
   const [isConnected, setIsConnected] = useState(true);
   const { setUser, user, updateUser } = useContext(UserContext);
   const { navigateBasedOnUser } = useContext(OnboardingContext);
-  const { getSettingByKey, getAppSettings } = settings.useContainer();
+  const { getAppSettings } = settings.useContainer();
 
   const usePayments = PaymentsContext.useContainer();
 
@@ -42,7 +42,6 @@ const AuthLoadingScreen = () => {
     setUser(clientProfile);
     return StorageService.save({ clientProfile });
   };
-
 
   const init = async () => {
     async function getFromStorage() {
@@ -137,5 +136,5 @@ const AuthLoadingScreen = () => {
       />
     </>
   );
-};
+}
 export default AuthLoadingScreen;

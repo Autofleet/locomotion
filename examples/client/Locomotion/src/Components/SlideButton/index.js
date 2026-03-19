@@ -13,9 +13,9 @@ import {
 import arrowIcon from '../../assets/slider-arrow.png';
 import checkIcon from '../../assets/check.png';
 
-const Button = ({
+function Button({
   children, style, hollow, setLoading, onVerified, text, verifiedText, ...props
-}) => {
+}) {
   const theme = useContext(ThemeContext);
   const styleScheme = styleSchemed(theme);
   const [loadingState, setLoadingState] = useState(false);
@@ -35,7 +35,7 @@ const Button = ({
     <DrawerButtonContainer>
       <SliderContainer>
         <RNSwipeVerify
-          ref={ref => sliderRef.current = ref}
+          ref={(ref) => sliderRef.current = ref}
           okButton={{ visible: true, duration: 400 }}
           onVerified={async () => {
             try {
@@ -70,6 +70,6 @@ const Button = ({
       </SliderContainer>
     </DrawerButtonContainer>
   );
-};
+}
 
 export default Button;

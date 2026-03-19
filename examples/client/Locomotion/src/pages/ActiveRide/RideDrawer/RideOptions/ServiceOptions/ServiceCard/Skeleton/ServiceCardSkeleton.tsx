@@ -1,24 +1,26 @@
 import { StyleSheet, View } from 'react-native';
 import { Skeleton } from '../../../../../../../Components/Skeleton/Skeleton';
 
-export const ServiceCardSkeleton = () => (
-  <Skeleton>
-    <View style={styles.container}>
-      <View style={styles.cardIcon} />
-      <View style={styles.cardContentContainer}>
-        <View style={firstRowStyle.container}>
-          <View style={firstRowStyle.firstItem} />
-          <View style={firstRowStyle.secondItem} />
+export function ServiceCardSkeleton() {
+  return (
+    <Skeleton>
+      <View style={styles.container}>
+        <View style={styles.cardIcon} />
+        <View style={styles.cardContentContainer}>
+          <View style={firstRowStyle.container}>
+            <View style={firstRowStyle.firstItem} />
+            <View style={firstRowStyle.secondItem} />
+          </View>
+          <View style={secondRowStyle.container}>
+            <View style={secondRowStyle.firstItem} />
+            <View style={secondRowStyle.secondItem} />
+          </View>
+          <View style={thirdRowStyle.container} />
         </View>
-        <View style={secondRowStyle.container}>
-          <View style={secondRowStyle.firstItem} />
-          <View style={secondRowStyle.secondItem} />
-        </View>
-        <View style={thirdRowStyle.container} />
       </View>
-    </View>
-  </Skeleton>
-);
+    </Skeleton>
+  );
+}
 
 const styles = StyleSheet.create({
   container: {

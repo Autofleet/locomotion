@@ -28,7 +28,7 @@ interface CardComponentProps {
   }
   businessAccountId: string | undefined;
 }
-const CardComponent = ({ paymentMethod, businessAccountId }: CardComponentProps) => {
+function CardComponent({ paymentMethod, businessAccountId }: CardComponentProps) {
   const isCash = PAYMENT_METHODS.CASH === paymentMethod.id;
   const isOffline = PAYMENT_METHODS.OFFLINE === paymentMethod.id;
   const isExternal = PAYMENT_METHODS.EXTERNAL === paymentMethod.id;
@@ -85,7 +85,7 @@ const CardComponent = ({ paymentMethod, businessAccountId }: CardComponentProps)
       iconHeight={20}
     />
   );
-};
+}
 
 interface RideCardProps {
   ride: RideInterface;
@@ -96,9 +96,9 @@ interface RideCardProps {
   pickupWindowTime: number;
 }
 
-const RideCard = ({
+function RideCard({
   ride, onPress, serviceName, paymentMethod, scheduledTo, pickupWindowTime,
-}: RideCardProps) => {
+}: RideCardProps) {
   const [ridePriceCalculation, setRidePriceCalculation] = useState<PriceCalculation>();
   const [timezonedScheduledTo, setTimezonedScheduledTo] = useState<string | null>(null);
   const [displayTimezone, setDisplayTimezone] = useState<string | null>(null);
@@ -200,6 +200,6 @@ const RideCard = ({
       </RoundedButton>
     </CardContainer>
   );
-};
+}
 
 export default RideCard;

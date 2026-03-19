@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Platform } from 'react-native';
 import styled from 'styled-components';
@@ -28,7 +27,7 @@ export const StationDot = styled(PointDot)`
   height: 18px;
   border-radius: 20px;
 
-  ${props => `background-color: ${getBg(props)};`}
+  ${(props) => `background-color: ${getBg(props)};`}
 
   ${({ isGoogle }) => isGoogle && `
     shadow-opacity: 0;
@@ -42,7 +41,7 @@ export const MarkerToolTip = styled.View`
     border-radius: 4;
     box-shadow: 0 3px 6px #b5b5b5;
 
-    ${props => `background-color: ${getBg(props)};`}
+    ${(props) => `background-color: ${getBg(props)};`}
     align-items: center;
 `;
 

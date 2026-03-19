@@ -15,7 +15,7 @@ import { UserContext } from '../../context/user';
 import { PageContainer, ContentContainer } from '../styles';
 import * as navigationService from '../../services/navigation';
 
-const Email = () => {
+function Email() {
   const route = useRoute();
   const { nextScreen } = useContext(OnboardingContext);
   const {
@@ -107,6 +107,6 @@ const Email = () => {
       </ContentContainer>
     </PageContainer>
   );
-};
+}
 
 export default Email;

@@ -14,7 +14,7 @@ import i18n from '../../I18n';
 import Thumbnail from '../Thumbnail';
 import { ImageUpload } from '../../context/user/api';
 
-const ThumbnailPicker = (props) => {
+function ThumbnailPicker(props) {
   const [loading, setLoading] = useState(false);
   const onCancel = () => {
     console.log('User cancelled image picker');
@@ -97,7 +97,7 @@ const ThumbnailPicker = (props) => {
       maxHeight: 180,
       maxWidth: 180,
     };
-    const imageCallback = response => onSelectPicture(response);
+    const imageCallback = (response) => onSelectPicture(response);
 
     if (Platform.OS === 'android') {
       UIManager.showPopupMenu(
@@ -151,7 +151,7 @@ const ThumbnailPicker = (props) => {
       showLoader={loading}
     />
   );
-};
+}
 
 ThumbnailPicker.defaultProps = {
   onImageChoose: () => null,

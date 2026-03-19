@@ -28,7 +28,7 @@ class NetworkWithRetry {
       return cb();
     }
 
-    await new Promise(resolve => setTimeout(resolve, intervalInMilliseconds));
+    await new Promise<void>((resolve) => { setTimeout(resolve, intervalInMilliseconds); });
 
     if (maxRetries === -1) {
       return this.networkWithRetry(cb, {

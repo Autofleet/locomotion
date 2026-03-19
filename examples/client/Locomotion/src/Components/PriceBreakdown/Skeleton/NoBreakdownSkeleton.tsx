@@ -1,22 +1,26 @@
 import { StyleSheet, View } from 'react-native';
 import { Skeleton } from '../../Skeleton/Skeleton';
 
-const SkeletonItem = () => (
-  <Skeleton>
-    <View style={styles.container}>
-      <View style={styles.itemText} />
-      <View style={styles.itemButton} />
-    </View>
-  </Skeleton>
-);
+function SkeletonItem() {
+  return (
+    <Skeleton>
+      <View style={styles.container}>
+        <View style={styles.itemText} />
+        <View style={styles.itemButton} />
+      </View>
+    </Skeleton>
+  );
+}
 
-export const NoBreakdownSkeleton = () => (
-  <>
-    <SkeletonItem />
-    <SkeletonItem />
-    <SkeletonItem />
-  </>
-);
+export function NoBreakdownSkeleton() {
+  return (
+    <>
+      <SkeletonItem />
+      <SkeletonItem />
+      <SkeletonItem />
+    </>
+  );
+}
 
 const styles = StyleSheet.create({
   container: {

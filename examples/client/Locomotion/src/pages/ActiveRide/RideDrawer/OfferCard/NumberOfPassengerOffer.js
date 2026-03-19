@@ -42,12 +42,12 @@ const ClockIcon = styled.Image.attrs({ source: ClockIconSource })`
   height: 15px;
 `;
 
-export default ({ amount, onChange, scheduledTo }) => {
+export default function ({ amount, onChange, scheduledTo }) {
   const [newAmount, setNewAmount] = useState(amount);
 
   const validateChange = (validationAmount, change) => MAX_NUMBER_OF_PASSENGER >= (validationAmount + change) && (validationAmount + change) >= MIN_NUMBER_OF_PASSENGER;
 
-  const getNewAmountFunction = change => () => {
+  const getNewAmountFunction = (change) => () => {
     if (!validateChange(newAmount, change)) {
       return;
     }
@@ -81,4 +81,4 @@ export default ({ amount, onChange, scheduledTo }) => {
         ) : null}
     </PassengerAmountContainer>
   );
-};
+}

@@ -8,12 +8,11 @@ import UserContextProvider from './user';
 import OnboardingContextProvider from './onboarding';
 import { StateProvider } from './state';
 
-
-export const MainProvider = ({ children, LoginPage, i18n }) => {
+export function MainProvider({ children, LoginPage, i18n }) {
   const initialState = null;
   if (i18n) {
-    i18n.translations.map(async (lng) => {
-      await I18n.addResourceBundle(lng.lang, 'translation', lng.translation, true, true);
+    i18n.translations.map((lng) => {
+      I18n.addResourceBundle(lng.lang, 'translation', lng.translation, true, true);
     });
 
     if (i18n.default) {
@@ -34,7 +33,6 @@ export const MainProvider = ({ children, LoginPage, i18n }) => {
     return state;
   };
 
-
   return (
     <StateProvider initialState={initialState} reducer={reducer}>
       <SettingsContext.Provider>
@@ -52,7 +50,7 @@ export const MainProvider = ({ children, LoginPage, i18n }) => {
       </SettingsContext.Provider>
     </StateProvider>
   );
-};
+}
 
 export default {
   MainProvider,

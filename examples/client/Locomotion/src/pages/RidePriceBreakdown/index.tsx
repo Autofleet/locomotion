@@ -28,7 +28,7 @@ type RidePriceBreakdownParams = {
   rideHistory: boolean
 }
 
-const RidePriceBreakDown = () => {
+function RidePriceBreakDown() {
   const route = useRoute();
   const params : RidePriceBreakdownParams = route.params as RidePriceBreakdownParams;
   const [loading, setLoading] = useState<boolean>(true);
@@ -44,7 +44,6 @@ const RidePriceBreakDown = () => {
   const { businessAccountId } = useContext(RidePageContext);
   const { getBusinessAccountById } = PaymentContext.useContainer();
   const { showPrice, loadShowPrice } = SettingContext.useContainer();
-
 
   const updatePriceCalculation = async () => {
     try {
@@ -92,7 +91,8 @@ const RidePriceBreakDown = () => {
         onIconPress={
           () => navigationService.navigate(params.rideHistory
             ? MAIN_ROUTES.COMPLETED_RIDE_OVERVIEW_PAGE
-            : MAIN_ROUTES.HOME)}
+            : MAIN_ROUTES.HOME)
+}
       />
       <ScrollView>
         {loading ? (
@@ -133,6 +133,6 @@ const RidePriceBreakDown = () => {
       </ScrollView>
     </PageContainer>
   );
-};
+}
 
 export default RidePriceBreakDown;

@@ -16,7 +16,7 @@ interface ButtonProps {
   testID?: string;
 }
 
-const RoundedButton = ({
+function RoundedButton({
   onPress,
   style,
   hollow,
@@ -27,7 +27,7 @@ const RoundedButton = ({
   icon,
   children,
   ...props
-}: ButtonProps) => {
+}: ButtonProps) {
   const [loadingState, setLoadingState] = useState(false);
   const theme = useContext(ThemeContext);
 
@@ -76,7 +76,7 @@ const RoundedButton = ({
       </ButtonTextContainer>
     </StyledButton>
   );
-};
+}
 
 RoundedButton.defaultProps = {
   type: 'confirm',

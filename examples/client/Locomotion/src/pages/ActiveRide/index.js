@@ -75,7 +75,7 @@ import Mixpanel from '../../services/Mixpanel';
 
 const BLACK_OVERLAY_SCREENS = [BS_PAGES.CANCEL_RIDE];
 
-const RidePage = ({ mapSettings, navigation }) => {
+function RidePage({ mapSettings, navigation }) {
   const {
     locationGranted, setLocationGranted,
   } = useContext(UserContext);
@@ -133,7 +133,7 @@ const RidePage = ({ mapSettings, navigation }) => {
   const {
     futureRides,
   } = useContext(FutureRidesContext);
-  const isSpInputEmpty = sp => !sp?.lat || !sp?.lng;
+  const isSpInputEmpty = (sp) => !sp?.lat || !sp?.lng;
   const prevRequestStopPoints = useRef(requestStopPoints.length);
   useEffect(() => {
     if (requestStopPoints.length > prevRequestStopPoints.current.length) {
@@ -141,7 +141,7 @@ const RidePage = ({ mapSettings, navigation }) => {
     } else {
       const newFocusedSp = requestStopPoints[selectedInputIndex];
       if (!isSpInputEmpty(newFocusedSp)) {
-        setSelectedInputIndex(requestStopPoints.findIndex(sp => isSpInputEmpty(sp)));
+        setSelectedInputIndex(requestStopPoints.findIndex((sp) => isSpInputEmpty(sp)));
       }
     }
     prevRequestStopPoints.current = requestStopPoints;
@@ -278,6 +278,7 @@ const RidePage = ({ mapSettings, navigation }) => {
     ),
     [BS_PAGES.ACTIVE_RIDE]: () => <ActiveRide />,
   };
+
   const updateLocationOnMapData = async (lat, lng) => {
     const spData = await reverseLocationGeocode(lat, lng);
     if (spData) {
@@ -296,7 +297,7 @@ const RidePage = ({ mapSettings, navigation }) => {
     let coords;
     if ([RIDE_STATES.ACTIVE, RIDE_STATES.DISPATCHED].includes(ride.state)) {
       const currentStopPoint = (ride.stopPoints || [])
-        .find(sp => sp.state === STOP_POINT_STATES.PENDING);
+        .find((sp) => sp.state === STOP_POINT_STATES.PENDING);
       if (currentStopPoint) {
         coords = getPolylineList(currentStopPoint, ride);
         mapRef.current.fitToCoordinates(coords, {
@@ -379,13 +380,11 @@ const RidePage = ({ mapSettings, navigation }) => {
     await checkVersionAndForceUpdateIfNeeded(minAppVersion);
   };
 
-
   const initChecks = async () => {
     await versionCheck();
     await checkLocationPermission();
     await checkMessagesForToast();
   };
-
 
   useEffect(() => {
     initChecks();
@@ -410,7 +409,7 @@ const RidePage = ({ mapSettings, navigation }) => {
     }
   }, [isFocused]);
 
-  const getRequestSpsFromRide = () => ride.stopPoints.map(sp => ({
+  const getRequestSpsFromRide = () => ride.stopPoints.map((sp) => ({
     id: sp.id,
     lat: sp.lat,
     lng: sp.lng,
@@ -459,7 +458,7 @@ const RidePage = ({ mapSettings, navigation }) => {
       },
     };
 
-    const topMessageKey = Object.keys(MESSAGE_MAP).find(key => MESSAGE_MAP[key].condition());
+    const topMessageKey = Object.keys(MESSAGE_MAP).find((key) => MESSAGE_MAP[key].condition());
     setTopMessage(MESSAGE_MAP[topMessageKey]);
   };
 
@@ -472,10 +471,11 @@ const RidePage = ({ mapSettings, navigation }) => {
     const coords = await focusCurrentLocation();
     const lat = coords?.latitude;
     const lng = coords?.longitude;
-    Mixpanel.clickEvent('Target Icon',
-      { currentPage: currentBsPage, lat, lng });
+    Mixpanel.clickEvent(
+      'Target Icon',
+      { currentPage: currentBsPage, lat, lng },
+    );
   };
-
 
   const onRegionChangeComplete = async (event) => {
     if (isChooseLocationOnMap) {
@@ -502,18 +502,18 @@ const RidePage = ({ mapSettings, navigation }) => {
         mapSettings={mapSettings}
       />
       {isChooseLocationOnMap && (
-      <LocationMarkerContainer
-        pointerEvents="none"
-      >
-
-        <PickupTextContainer
-          hide={currentBsPage !== BS_PAGES.CONFIRM_PICKUP
-          || isDraggingLocationPin}
+        <LocationMarkerContainer
+          pointerEvents="none"
         >
-          <PickupText>{pickupChanged ? i18n.t('map.pickupChanged') : i18n.t('map.pickupHere')}</PickupText>
-        </PickupTextContainer>
-        <LocationMarker />
-      </LocationMarkerContainer>
+
+          <PickupTextContainer
+            hide={currentBsPage !== BS_PAGES.CONFIRM_PICKUP
+              || isDraggingLocationPin}
+          >
+            <PickupText>{pickupChanged ? i18n.t('map.pickupChanged') : i18n.t('map.pickupHere')}</PickupText>
+          </PickupTextContainer>
+          <LocationMarker />
+        </LocationMarkerContainer>
       )}
       {serviceEstimations || currentBsPage === BS_PAGES.SET_LOCATION_ON_MAP
         ? (
@@ -524,7 +524,7 @@ const RidePage = ({ mapSettings, navigation }) => {
             >
               {currentBsPage !== BS_PAGES.CONFIRM_PICKUP
                 ? <StopPointsViewer goBackToAddressSelector={goBackToAddress} />
-                : <></>}
+                : null}
             </Header>
             {topMessage ? (
               <TopMessage
@@ -562,16 +562,14 @@ const RidePage = ({ mapSettings, navigation }) => {
         }}
       >
         {currentBsPage === BS_PAGES.ADDRESS_SELECTOR
-        && !isExpanded && futureRides.length && !ride.id ? (
-          <FutureRidesButton />
-          ) : <View />}
+          && !isExpanded && futureRides.length && !ride.id ? (<FutureRidesButton />) : <View />}
         {!isExpanded && locationGranted && (
-        <SquareSvgButton
-          noLoader
-          onPress={onPressTargetIcon}
-          icon={targetIcon}
-          style={Platform.OS === 'android' ? { shadowColor: '#000' } : {}}
-        />
+          <SquareSvgButton
+            noLoader
+            onPress={onPressTargetIcon}
+            icon={targetIcon}
+            style={Platform.OS === 'android' ? { shadowColor: '#000' } : {}}
+          />
         )}
       </MapOverlayButtons>
       <BottomSheet
@@ -579,8 +577,8 @@ const RidePage = ({ mapSettings, navigation }) => {
         focusCurrentLocation={focusCurrentLocation}
       >
         {
-BS_PAGE_TO_COMP[currentBsPage] ? BS_PAGE_TO_COMP[currentBsPage]() : null
-          }
+          BS_PAGE_TO_COMP[currentBsPage] ? BS_PAGE_TO_COMP[currentBsPage]() : null
+        }
       </BottomSheet>
       {BLACK_OVERLAY_SCREENS.includes(currentBsPage) ? <BlackOverlay /> : null}
       <Portal>
@@ -599,8 +597,7 @@ BS_PAGE_TO_COMP[currentBsPage] ? BS_PAGE_TO_COMP[currentBsPage]() : null
             const sps = getRequestSpsFromRide();
             setRequestStopPoints(sps);
             cleanRideState(false);
-          }
-        }
+          }}
         />
         <CancellationReasonsPopup
           isVisible={ridePopup === RIDE_POPUPS.CANCELLATION_REASON}
@@ -610,7 +607,7 @@ BS_PAGE_TO_COMP[currentBsPage] ? BS_PAGE_TO_COMP[currentBsPage]() : null
       </Portal>
       <Toast
         config={{
-          tomatoToast: props => (
+          tomatoToast: (props) => (
             <AFToast
               {...props}
             />
@@ -619,12 +616,14 @@ BS_PAGE_TO_COMP[currentBsPage] ? BS_PAGE_TO_COMP[currentBsPage]() : null
       />
     </PageContainer>
   );
-};
+}
 
-export default props => (
-  <AvailabilityContextProvider>
-    <RidePage
-      {...props}
-    />
-  </AvailabilityContextProvider>
-);
+export default function (props) {
+  return (
+    <AvailabilityContextProvider>
+      <RidePage
+        {...props}
+      />
+    </AvailabilityContextProvider>
+  );
+}

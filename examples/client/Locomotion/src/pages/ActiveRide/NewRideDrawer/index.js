@@ -3,10 +3,10 @@ import MyLocationButton from '../../../Components/ShowMyLocationButton';
 import { DrawerContainer, MapButtonsContainer, DrawerContentContainer } from './style';
 import InputWithHistoryCard from '../../../Components/WhereTo/InputWithHistoryCard';
 
-const NewRideDrawer = ({
+function NewRideDrawer({
   focusCurrentLocation,
-}) => (
-  <>
+}) {
+  return (
     <DrawerContainer>
       <MapButtonsContainer>
         <MyLocationButton
@@ -15,7 +15,7 @@ const NewRideDrawer = ({
         />
       </MapButtonsContainer>
     </DrawerContainer>
-  </>
-);
+  );
+}
 
 export default NewRideDrawer;

@@ -28,7 +28,7 @@ import settings from '../../context/settings';
 import SETTINGS_KEYS from '../../context/settings/keys';
 import * as navigationService from '../../services/navigation';
 
-const DrawerHeader = ({ navigateTo }) => {
+function DrawerHeader({ navigateTo }) {
   const { user } = useContext(UserContext);
   return (
     <Header>
@@ -49,15 +49,16 @@ const DrawerHeader = ({ navigateTo }) => {
       </HeaderLink>
     </Header>
   );
-};
+}
 
-const DrawerLabel = ({
+function DrawerLabel({
   onPress, focused, tintColor, title, icon, lastItem, iconFill, testID, numberOfUpdates,
-}) => (
-  <StyledDrawerLabel focused={focused} onPress={onPress} lastItem={lastItem} testID={testID}>
-    <SvgIcon Svg={icon} width={23} height={23} style={{ marginRight: 15 }} fill={iconFill} />
-    <LabelText color={tintColor} focused={focused}>{title}</LabelText>
-    {!!numberOfUpdates
+}) {
+  return (
+    <StyledDrawerLabel focused={focused} onPress={onPress} lastItem={lastItem} testID={testID}>
+      <SvgIcon Svg={icon} width={23} height={23} style={{ marginRight: 15 }} fill={iconFill} />
+      <LabelText color={tintColor} focused={focused}>{title}</LabelText>
+      {!!numberOfUpdates
     && (
       <Updates>
         <UpdatesText>
@@ -65,10 +66,11 @@ const DrawerLabel = ({
         </UpdatesText>
       </Updates>
     )}
-  </StyledDrawerLabel>
-);
+    </StyledDrawerLabel>
+  );
+}
 
-export const DrawerContentComponent = ({ navigation, state }) => {
+export function DrawerContentComponent({ navigation, state }) {
   const route = state.routes[state.index].name;
   const { getSettingByKey } = settings.useContainer();
   const { userMessages } = useContext(MessagesContext);
@@ -91,7 +93,7 @@ export const DrawerContentComponent = ({ navigation, state }) => {
   }, []);
   return (
     <StyledSafeAreaView>
-      <DrawerHeader navigateTo={p => navigateTo(p)} />
+      <DrawerHeader navigateTo={(p) => navigateTo(p)} />
       <DrawerLabelsContainer>
         <DrawerLabel
           title={i18n.t('menu.messages')}
@@ -100,7 +102,7 @@ export const DrawerContentComponent = ({ navigation, state }) => {
           onPress={() => navigateTo(MAIN_ROUTES.MESSAGES)}
           iconFill="#333"
           focused={route === MAIN_ROUTES.MESSAGES}
-          numberOfUpdates={(userMessages || []).filter(m => !m.readAt).length}
+          numberOfUpdates={(userMessages || []).filter((m) => !m.readAt).length}
         />
         <DrawerLabel
           testID="rideHistory"
@@ -137,4 +139,4 @@ export const DrawerContentComponent = ({ navigation, state }) => {
       <Bottom />
     </StyledSafeAreaView>
   );
-};
+}

@@ -8,8 +8,7 @@
 import React, { memo } from 'react';
 import { View, PixelRatio, StyleSheet } from 'react-native';
 import { SvgXml } from 'react-native-svg';
-
-const flagSvgs = require('country-flag-icons/string/3x2');
+import flagSvgs from 'country-flag-icons/string/3x2';
 
 const styles = StyleSheet.create({
   container: {
@@ -40,12 +39,13 @@ const FlagImage = memo(({ countryCode, flagSize }) => {
   );
 });
 
-export const Flag = ({ countryCode, withEmoji = true, withFlagButton = true, flagSize }) => {
+export function Flag({
+  countryCode, withEmoji = true, withFlagButton = true, flagSize,
+}) {
   if (!withFlagButton) return null;
   return (
     <View style={styles.container}>
       <FlagImage countryCode={countryCode} flagSize={flagSize} />
     </View>
   );
-};
-
+}

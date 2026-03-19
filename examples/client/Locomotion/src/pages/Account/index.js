@@ -36,7 +36,7 @@ import { UserContext } from '../../context/user';
 import GenericErrorPopup from '../../popups/GenericError';
 import { PAYMENT_METHODS } from '../../pages/Payments/consts';
 
-const AccountHeader = () => {
+function AccountHeader() {
   const { updateUserInfo, user } = useContext(UserContext);
 
   const onImageChoose = (image) => {
@@ -67,9 +67,9 @@ const AccountHeader = () => {
       </AccountHeaderMainContainer>
     </AccountHeaderContainer>
   );
-};
+}
 
-const AccountContent = ({ setHeaderTitle }) => {
+function AccountContent({ setHeaderTitle }) {
   const [showError, setShowError] = useState(false);
   const [isDeleteUserVisible, setIsDeleteUserVisible] = useState(false);
   const [defaultPaymentMethod, setDefaultPaymentMethod] = useState(null);
@@ -81,7 +81,7 @@ const AccountContent = ({ setHeaderTitle }) => {
 
   const updateDefault = async () => {
     const { paymentMethods } = await usePayments.getOrFetchCustomer();
-    const defaultMethod = paymentMethods.find(x => x.isDefault);
+    const defaultMethod = paymentMethods.find((x) => x.isDefault);
     if (defaultMethod) {
       setDefaultPaymentMethod({ ...defaultMethod, mark: true });
     }
@@ -104,7 +104,7 @@ const AccountContent = ({ setHeaderTitle }) => {
 
   const fetchLanguageCode = async () => {
     const preferred = await getPreferredLanguageCode();
-    setChosenLanguageIndex(languageItems.findIndex(l => l.value === preferred));
+    setChosenLanguageIndex(languageItems.findIndex((l) => l.value === preferred));
   };
 
   const openLanguageSelector = () => {
@@ -125,8 +125,7 @@ const AccountContent = ({ setHeaderTitle }) => {
           title={i18n.t('onboarding.namePlaceholder')}
           onPress={() => navigationService.navigate(MAIN_ROUTES.NAME, {
             editAccount: true,
-          })
-          }
+          })}
         >
           {user ? `${user.firstName} ${user.lastName}` : ''}
         </Card>
@@ -227,15 +226,14 @@ const AccountContent = ({ setHeaderTitle }) => {
 
         <GenericErrorPopup
           isVisible={showError}
-          closePopup={() => setShowError(false)
-        }
+          closePopup={() => setShowError(false)}
         />
       </CardsContainer>
     </Container>
   );
-};
+}
 
-export default ({ navigation, menuSide }) => {
+export default function ({ navigation, menuSide }) {
   const [headerTitle, setHeaderTitle] = useState(i18n.t('onboarding.pageTitle'));
   return (
     <PageContainer>
@@ -250,4 +248,4 @@ export default ({ navigation, menuSide }) => {
       </KeyboardAwareScrollView>
     </PageContainer>
   );
-};
+}

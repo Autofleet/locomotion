@@ -38,7 +38,7 @@ const InfoText = styled.Text`
   text-align: center;
   width: 60%;
 `;
-const NoHistoryText = () => {
+function NoHistoryText() {
   const { primaryColor } = useContext(ThemeContext);
   return (
     <NoHistoryTextContainer>
@@ -48,7 +48,7 @@ const NoHistoryText = () => {
       </InfoText>
     </NoHistoryTextContainer>
   );
-};
+}
 
 const HistoryContainer = styled.View`
   margin-bottom: 10px;
@@ -70,7 +70,7 @@ const WelcomeText = styled.Text`
   align-self: flex-start;
   margin-bottom: 5px;
 `;
-const AddressSelectorBottomSheet = ({ addressSelectorFocusIndex }) => {
+function AddressSelectorBottomSheet({ addressSelectorFocusIndex }) {
   const userContext = useContext(RidePageContext);
   const { selectedInputIndex } = userContext;
   const { locationGranted, user } = useContext(UserContext);
@@ -87,7 +87,6 @@ const AddressSelectorBottomSheet = ({ addressSelectorFocusIndex }) => {
   } = useContext(BottomSheetContext);
 
   const { expand, collapse } = useBottomSheet();
-
 
   const loadHistory = async () => {
     userContext.loadHistory();
@@ -206,14 +205,15 @@ const AddressSelectorBottomSheet = ({ addressSelectorFocusIndex }) => {
 
                 {
                   userContext.searchResults && userContext.searchResults.length > 0
-                    ? userContext.searchResults.map((h, i) => <AddressRow testID={`searchResults_${i}`} {...h} key={h.placeId} onPress={() => userContext.onAddressSelected(h)} />)
+                    ? userContext.searchResults.map((h, i) => (
+                      <AddressRow testID={`searchResults_${i}`} {...h} key={h.placeId} onPress={() => userContext.onAddressSelected(h)} />
+                    ))
                     : getHistoryRows()
                 }
               </BottomSheetScrollView>
             </>
           )
-          : getHistoryRows()
-          }
+          : getHistoryRows()}
       </HistoryContainer>
       <GenericErrorPopup
         isVisible={userContext.ridePopup === RIDE_POPUPS.FAILED_SERVICE_REQUEST}
@@ -223,6 +223,6 @@ const AddressSelectorBottomSheet = ({ addressSelectorFocusIndex }) => {
       />
     </ContentContainer>
   );
-};
+}
 
 export default AddressSelectorBottomSheet;

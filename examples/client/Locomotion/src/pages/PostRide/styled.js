@@ -1,7 +1,6 @@
 import { ScrollView, View } from 'react-native';
 import styled from 'styled-components';
 
-
 export const SummaryStarsTitle = styled.Text`
   font-size: 20px;
   color: black;
@@ -39,14 +38,12 @@ export const PageContent = styled(ScrollView)`
     flex-direction: column;
 `;
 
-
 export const RatingContainer = styled(View)`
   padding: 25px 0px;
   border-bottom-width: 1px ;
   border-bottom-color: #e2e2e2;
   justify-content: space-between;
 `;
-
 
 export const TipsContainer = styled(View)`
   padding: 10px 20px 0px 20px;

@@ -7,17 +7,18 @@ import {
   BalanceTextContainer,
 } from './styled';
 
-
-export default ({ customer }) => (
-  <BalanceTextContainer>
-    <BalanceTitle>
-      {i18n.t('payments.balance')}
-      :
-    </BalanceTitle>
-    <BalanceText>
-      {customer ? customer.balance : null}
-      {' '}
-      {customer && customer.currency ? customer.currency : null}
-    </BalanceText>
-  </BalanceTextContainer>
-);
+export default function ({ customer }) {
+  return (
+    <BalanceTextContainer>
+      <BalanceTitle>
+        {i18n.t('payments.balance')}
+        :
+      </BalanceTitle>
+      <BalanceText>
+        {customer ? customer.balance : null}
+        {' '}
+        {customer && customer.currency ? customer.currency : null}
+      </BalanceText>
+    </BalanceTextContainer>
+  );
+}

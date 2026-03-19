@@ -2,10 +2,9 @@ import React, { useEffect, useState } from 'react';
 import i18n from '../../../I18n';
 import { ButtonText, NavButton } from './styles';
 
-
-const SaveButton = ({
+function SaveButton({
   isInvalid, onFail, onNext, buttonText, isLoading,
-}) => {
+}) {
   const [loading, setLoading] = useState(false);
   const nextScreen = async () => {
     setLoading(true);
@@ -26,6 +25,6 @@ const SaveButton = ({
       <ButtonText>{buttonText || i18n.t('general.next')}</ButtonText>
     </NavButton>
   );
-};
+}
 
 export default SaveButton;

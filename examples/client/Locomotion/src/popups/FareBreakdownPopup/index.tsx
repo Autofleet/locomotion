@@ -18,18 +18,17 @@ import PaymentContext from '../../context/payments';
 import { RidePageContext } from '../../context/newRideContext';
 import showPriceBasedOnAccount from '../../services/showPriceBasedOnAccount';
 
-
 interface FareBreakdownPopupProps {
   isVisible: boolean;
   service: any;
   onClose: any;
 }
 
-const FareBreakdownPopup = ({
+function FareBreakdownPopup({
   isVisible,
   service,
   onClose,
-}: FareBreakdownPopupProps) => {
+}: FareBreakdownPopupProps) {
   const [priceCalculation, setPriceCalculation] = useState(null);
   const [didRequestFail, setDidRequestFail] = useState(false);
   const { businessAccountId } = useContext(RidePageContext);
@@ -78,6 +77,6 @@ const FareBreakdownPopup = ({
       </OuterContainer>
     </Modal>
   );
-};
+}
 
 export default FareBreakdownPopup;

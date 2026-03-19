@@ -25,9 +25,9 @@ interface RideFeedbackProps {
 
 const MAX_LENGTH = 150;
 
-const RideFeedback = ({
+function RideFeedback({
   onTextChange,
-}: RideFeedbackProps) => {
+}: RideFeedbackProps) {
   const [isActive, setIsActive] = useState(false);
   const [shouldShowPage, setShouldShowPage] = useState(false);
   const [currentText, updateText] = useState('');
@@ -93,11 +93,10 @@ const RideFeedback = ({
                 placeholderTextColor={theme.disabledColor}
               />
             </WriteCommentContainer>
-          )
-      }
+          )}
       </Container>
     )
   );
-};
+}
 
 export default RideFeedback;

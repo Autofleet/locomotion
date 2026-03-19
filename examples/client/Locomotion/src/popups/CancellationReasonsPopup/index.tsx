@@ -27,12 +27,12 @@ interface CancellationReasonsProps {
   rideId: string;
 }
 
-const CancellationReasonsPopup = ({
+function CancellationReasonsPopup({
   isVisible,
   onCancel,
   onSubmit,
   rideId,
-}: CancellationReasonsProps) => {
+}: CancellationReasonsProps) {
   const { cancellationReasons, clearCancellationReasons } = useContext(CancellationReasonsContext);
   const { updateRide, ride } = useContext(RidePageContext);
   const [isLoading, setIsLoading] = useState(false);
@@ -51,7 +51,7 @@ const CancellationReasonsPopup = ({
         Mixpanel.setEvent('Cancellation reasons popup showed', {
           state: ride?.state,
           rideId: rideIdToUse,
-          cancellationReasonIds: cancellationReasons.map(cr => cr.id),
+          cancellationReasonIds: cancellationReasons.map((cr) => cr.id),
         });
       }
     } else {
@@ -99,7 +99,7 @@ const CancellationReasonsPopup = ({
                   </LoaderContainer>
                 )
                 : (
-                  cancellationReasons.map(cr => (
+                  cancellationReasons.map((cr) => (
                     <ClickableContainer
                       onPress={() => onCancellationReasonClick(cr.id)}
                       testID={`cancellationReason-${cr.category}`}
@@ -112,14 +112,13 @@ const CancellationReasonsPopup = ({
                       </CancellationReasonCard>
                     </ClickableContainer>
                   ))
-                )
-            }
+                )}
             </BodyContainer>
           </ScrollView>
         </Container>
       </Modal>
     ) : null
   );
-};
+}
 
 export default CancellationReasonsPopup;

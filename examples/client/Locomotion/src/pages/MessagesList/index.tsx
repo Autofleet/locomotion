@@ -1,5 +1,5 @@
 import React, {
-  useContext, useEffect, useState, useCallback,
+  useContext, useCallback,
 } from 'react';
 import styled from 'styled-components';
 import { ScrollView } from 'react-native-gesture-handler';
@@ -8,15 +8,11 @@ import { View } from 'react-native';
 import { MAIN_ROUTES } from '../routes';
 import PageHeader from '../../Components/PageHeader';
 import { PageContainer } from '../styles';
-import { RideStateContextContext } from '../..';
-import { RidePageContext } from '../../context/newRideContext';
 import i18n from '../../I18n';
-import { BS_PAGES } from '../../context/ridePageStateContext/utils';
 import * as NavigationService from '../../services/navigation';
 import { MessagesContext } from '../../context/messages';
 import MessageCard from './MessageCard';
 import Loader from '../../Components/Loader';
-import { NoRidesInList } from './styled';
 import { PageGenericMessage } from '../../Components/PageGenericMessage';
 
 const ScrollContainer = styled(ScrollView)`
@@ -26,20 +22,18 @@ height: 80%;
 justify-content: center;
 `;
 interface FutureRidesViewProps {
-    menuSide: 'right' | 'left';
-    route: any;
-  }
+  menuSide: 'right' | 'left';
+  route: any;
+}
 
-const Messages = ({ menuSide, route }: FutureRidesViewProps) => {
-  const { changeBsPage } = useContext(RideStateContextContext);
+function Messages({ menuSide }: FutureRidesViewProps) {
   const {
     userMessages, loadUserMessages, isLoading, markReadMessages,
   } = useContext(MessagesContext);
-  const { ride } = useContext(RidePageContext);
 
   const markMessagesAsRead = async () => {
     if (userMessages && userMessages.length) {
-      const unreadMessages = userMessages.filter(message => !message.readAt).map(message => message.id);
+      const unreadMessages = userMessages.filter((message) => !message.readAt).map((message) => message.id);
       if (unreadMessages.length) {
         await markReadMessages(unreadMessages);
       }
@@ -86,12 +80,11 @@ const Messages = ({ menuSide, route }: FutureRidesViewProps) => {
         : (
           <ScrollContainer>
             {userMessages && userMessages.length
-              ? (userMessages || []).map(m => (
+              ? (userMessages || []).map((m) => (
                 <MessageCard
                   key={m.id}
                   message={m}
                   readAt={m.readAt}
-                  dismissedAt={m.dismissedAt}
                 />
               ))
               : (
@@ -99,16 +92,12 @@ const Messages = ({ menuSide, route }: FutureRidesViewProps) => {
                   title={i18n.t('messages.noMessagesTitle')}
                   text={i18n.t('messages.noMessagesText')}
                 />
-              )
-          }
+              )}
           </ScrollContainer>
-        )
-          }
-
+        )}
 
     </PageContainer>
   );
-};
-
+}
 
 export default Messages;

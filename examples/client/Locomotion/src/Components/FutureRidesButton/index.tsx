@@ -8,13 +8,12 @@ import i18n from '../../I18n';
 import { FutureRidesContext } from '../../context/futureRides';
 import * as NavigationService from '../../services/navigation';
 
-const FutureRidesButton = () => {
+function FutureRidesButton() {
   const { futureRides } = useContext(FutureRidesContext);
   const theme = useContext(ThemeContext);
   const text = futureRides.length > 1
     ? i18n.t('home.futureRides.multipleUpcomingRides')
     : i18n.t('home.futureRides.oneUpcomingRide');
-
 
   return (
     <Container testID="upcomingRides" noLoader onPress={() => NavigationService.navigate(MAIN_ROUTES.FUTURE_RIDES)}>
@@ -35,6 +34,6 @@ const FutureRidesButton = () => {
       </UpcomingText>
     </Container>
   );
-};
+}
 
 export default FutureRidesButton;

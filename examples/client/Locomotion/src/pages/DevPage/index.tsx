@@ -11,8 +11,7 @@ import PageHeader from '../../Components/PageHeader';
 import * as navigationService from '../../services/navigation';
 import { InputContainer, Label } from './styles';
 
-
-const DevSettingPage = () => {
+function DevSettingPage() {
   const [operationId, setOperationId] = useState(Config.OPERATION_ID);
   const [serverUrl, setServerUrl] = useState(Config.SERVER_HOST);
   const [stripeKey, setStripeKey] = useState(Config.STRIPE_PUBLISHER_KEY);
@@ -22,7 +21,8 @@ const DevSettingPage = () => {
       <PageHeader
         title="Debug"
         onIconPress={
-          () => navigationService.goBack()}
+          () => navigationService.goBack()
+}
       />
       <Label>Operation Id</Label>
       <InputContainer>
@@ -68,6 +68,6 @@ const DevSettingPage = () => {
     </PageContainer>
 
   );
-};
+}
 
 export default DevSettingPage;

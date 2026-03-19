@@ -16,7 +16,7 @@ interface StopPointsViewerProps {
   goBackToAddressSelector: (selected: number | null) => void
 }
 
-const StopPointsViewer = ({ goBackToAddressSelector }: StopPointsViewerProps) => {
+function StopPointsViewer({ goBackToAddressSelector }: StopPointsViewerProps) {
   const { requestStopPoints } = useContext(RidePageContext);
   const firstSp: any = requestStopPoints[0];
   const lastSp: any = requestStopPoints[requestStopPoints.length - 1];
@@ -40,7 +40,7 @@ const StopPointsViewer = ({ goBackToAddressSelector }: StopPointsViewerProps) =>
     );
   };
   return (
-    requestStopPoints.filter(sp => !!sp.lat).length > 1 ? (
+    requestStopPoints.filter((sp) => !!sp.lat).length > 1 ? (
       <Container>
         <StreetAddressContainer
           testID="estimationsPickupEdit"
@@ -75,6 +75,6 @@ const StopPointsViewer = ({ goBackToAddressSelector }: StopPointsViewerProps) =>
         </TouchableOpacity>
       </Container>
     ) : null);
-};
+}
 
 export default StopPointsViewer;

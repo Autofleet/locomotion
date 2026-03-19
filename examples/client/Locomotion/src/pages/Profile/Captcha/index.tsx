@@ -17,12 +17,12 @@ interface CaptchaProps {
 
 const GOOGLE_RECAPTCHA_URL = 'https://www.google.com/recaptcha/api/siteverify';
 
-const Captcha = ({
+function Captcha({
   onVerified,
   onClose,
   onError,
   isOpen,
-}: CaptchaProps) => {
+}: CaptchaProps) {
   const { shouldHideCaptcha, fetchHideCaptchaSetting } = useContext(OnboardingContext);
   const { user } = useContext(UserContext);
   const recaptchaRef = useRef<RecaptchaHandles | null>(null);
@@ -83,7 +83,7 @@ const Captcha = ({
       style={{ backgroundColor: 'transparent' }}
     />
   );
-};
+}
 
 Captcha.defaultProps = {
   onClose: undefined,

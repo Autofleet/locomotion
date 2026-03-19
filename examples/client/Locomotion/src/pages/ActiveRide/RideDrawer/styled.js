@@ -29,7 +29,6 @@ const address = `
   flex-direction: row;
 `;
 
-
 export const RideCard = styled.View`
   ${address}
   min-height: 130px;
@@ -52,7 +51,6 @@ export const DriverAvatar = styled.Image`
 const styleForDriverIsArrivedState = `
   color: #08902d;
 `;
-
 
 export const RideDetailsText = styled.Text`
   font-size: 12px;
@@ -94,7 +92,6 @@ export const RideButtonText = styled.Text`
   color: #fff;
   font-size: 18px;
 `;
-
 
 export const RowContainer = styled.TouchableOpacity`
   min-height: 50px;
@@ -144,12 +141,10 @@ export const PreRideBox = styled(({ eta, estimatePrice, ...props }) => (
     flex-direction: row;
   `;
 
-
 export const RideTypeButton = styled(Button)`
   align-items: center;
   flex: 1;
 `;
-
 
 export const RideTypeButtonText = styled.Text`
   flex: 1;
@@ -165,7 +160,6 @@ export const RideTypeButtonText = styled.Text`
   box-shadow: 0px 5px 5px rgba(0,0,0,0.05);
   ` : null)}
 `;
-
 
 export const DrawerContainer = styled.View`
   flex-direction: column;
@@ -205,11 +199,13 @@ export const Arrow = styled.Image.attrs({ source: ArrowIconSource })`
   align-self: center;
 
 `;
-export const AddPaymentBar = props => (
-  <PaymentBarContainer {...props}>
-    <PaymentBarText>
-      {props.children}
-    </PaymentBarText>
-    <Arrow />
-  </PaymentBarContainer>
-);
+export function AddPaymentBar(props) {
+  return (
+    <PaymentBarContainer {...props}>
+      <PaymentBarText>
+        {props.children}
+      </PaymentBarText>
+      <Arrow />
+    </PaymentBarContainer>
+  );
+}

@@ -14,7 +14,7 @@ import { PageContainer } from '../styles';
 import { MAIN_ROUTES } from '../routes';
 import * as navigationService from '../../services/navigation';
 
-export default ({ menuSide }) => {
+export default function ({ menuSide }) {
   const route = useRoute();
   const usePayments = PaymentsContext.useContainer();
 
@@ -35,7 +35,6 @@ export default ({ menuSide }) => {
     await usePayments.getOrFetchCustomer();
     setPageLoading(false);
   };
-
 
   useEffect(() => {
     loadCustomerData();
@@ -91,4 +90,4 @@ export default ({ menuSide }) => {
       </PageContent>
     </PageContainer>
   );
-};
+}

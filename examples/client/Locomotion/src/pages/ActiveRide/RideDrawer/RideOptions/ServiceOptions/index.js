@@ -15,7 +15,7 @@ import { ServiceOptionsSkeleton } from './Skeleton/ServiceOptionsSkeleton';
 
 const SUCCESS_COLOR = '#25B861';
 
-const ServiceOptions = () => {
+function ServiceOptions() {
   const { serviceEstimations, stopRequestInterval } = useContext(RidePageContext);
   const { coupon } = useContext(UserContext);
   const { businessAccountId } = useContext(RidePageContext);
@@ -52,7 +52,7 @@ const ServiceOptions = () => {
     if (coupon && coupon.status !== 'error') {
       setCouponTopBar();
     } else if (showPrice
-      && (serviceEstimations || []).some(estimation => estimation.isPriceEstimated)) {
+      && (serviceEstimations || []).some((estimation) => estimation.isPriceEstimated)) {
       setEstimateFareTopBar();
     }
 
@@ -60,7 +60,6 @@ const ServiceOptions = () => {
       clearTopBar();
     };
   }, [serviceEstimations, coupon]);
-
 
   return (
     <ServiceOptionsContainer alwaysBounceVertical={false}>
@@ -71,20 +70,19 @@ const ServiceOptions = () => {
             description={i18n.t('services.emptyState.description')}
           />
         )
-        : (serviceEstimations || []).map(option => (
+        : (serviceEstimations || []).map((option) => (
           <ServiceCard
             withBorder
             service={option}
             key={option.id}
             descriptionNumberOfLines={2}
           />
-        ))
-      }
+        ))}
       {!serviceEstimations && (
         <ServiceOptionsSkeleton />
       )}
     </ServiceOptionsContainer>
   );
-};
+}
 
 export default ServiceOptions;

@@ -9,7 +9,7 @@ import {
 } from './styled';
 import { InformationCardProps } from '../InformationCard';
 
-const Card = ({
+function Card({
   title,
   children,
   onPress,
@@ -17,40 +17,40 @@ const Card = ({
   showUnverified = false,
   icon = undefined,
   onIconPress,
-}: InformationCardProps) => (
-  <CardContainer>
-    <CardContentContainer>
-      <CardTitleContainer>
-        <CardTitle>{title}</CardTitle>
-        {verified ? (
-          <View>
-            <VerifyContainer>
-              <VerifyText>{i18n.t('onboarding.verified')}</VerifyText>
-            </VerifyContainer>
-          </View>
-        ) : (
-          <>
-            {showUnverified ? (
+}: InformationCardProps) {
+  return (
+    <CardContainer>
+      <CardContentContainer>
+        <CardTitleContainer>
+          <CardTitle>{title}</CardTitle>
+          {verified ? (
+            <View>
+              <VerifyContainer>
+                <VerifyText>{i18n.t('onboarding.verified')}</VerifyText>
+              </VerifyContainer>
+            </View>
+          ) : (
+            showUnverified ? (
               <View>
                 <VerifyContainer unverified>
                   <VerifyText>{i18n.t('onboarding.unverified')}</VerifyText>
                 </VerifyContainer>
               </View>
-            ) : undefined}
-          </>
-        )}
-      </CardTitleContainer>
-      {children ? <CardText>{children}</CardText> : undefined}
-    </CardContentContainer>
-    {icon ? (
-      <TouchableIconContainer onPress={onIconPress}>
-        <IconContainer>
-          <SvgIcon Svg={icon} fill="#333" />
-        </IconContainer>
-      </TouchableIconContainer>
-    )
-      : <ArrowContainer>{onPress ? <Arrow /> : undefined}</ArrowContainer>}
-  </CardContainer>
-);
+            ) : undefined
+          )}
+        </CardTitleContainer>
+        {children ? <CardText>{children}</CardText> : undefined}
+      </CardContentContainer>
+      {icon ? (
+        <TouchableIconContainer onPress={onIconPress}>
+          <IconContainer>
+            <SvgIcon Svg={icon} fill="#333" />
+          </IconContainer>
+        </TouchableIconContainer>
+      )
+        : <ArrowContainer>{onPress ? <Arrow /> : undefined}</ArrowContainer>}
+    </CardContainer>
+  );
+}
 
 export default Card;

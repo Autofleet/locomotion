@@ -3,7 +3,7 @@ import i18n from '../../I18n';
 import SaveButton from './SaveButton';
 import { OnboardingContext } from '../../context/onboarding';
 import {
-  ImageContainer, Name, SafeView,
+  ImageContainer, Name,
 } from './styles';
 import Header from './Header';
 import ScreenText from './ScreenText/index';
@@ -12,7 +12,7 @@ import { MAIN_ROUTES } from '../routes';
 import { UserContext } from '../../context/user';
 import { PageContainer, ContentContainer } from '../styles';
 
-const Avatar = () => {
+function Avatar() {
   const { updateUserInfo, user } = useContext(UserContext);
   const [photoSelected, setPhotoSelected] = useState(user.avatar);
   const { nextScreen } = useContext(OnboardingContext);
@@ -51,6 +51,6 @@ const Avatar = () => {
       </ContentContainer>
     </PageContainer>
   );
-};
+}
 
 export default Avatar;

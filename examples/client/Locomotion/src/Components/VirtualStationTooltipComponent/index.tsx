@@ -5,9 +5,7 @@ import {
   StationDetails,
   Row,
   StationName,
-  DistanceText,
   AddressText,
-  BottomActions,
 } from './styled';
 import { Station } from '../../context/virtualStationsContext';
 
@@ -15,17 +13,19 @@ interface VirtualStationTooltipProps {
   station: Station;
 }
 
-const VirtualStationTooltip = ({ station }: VirtualStationTooltipProps) => (
-  <Tooltip>
-    <StationDetails>
-      <Row>
-        <StationName>{station.label}</StationName>
-      </Row>
-      <Row>
-        <AddressText>{station.address}</AddressText>
-      </Row>
-    </StationDetails>
-  </Tooltip>
-);
+function VirtualStationTooltip({ station }: VirtualStationTooltipProps) {
+  return (
+    <Tooltip>
+      <StationDetails>
+        <Row>
+          <StationName>{station.label}</StationName>
+        </Row>
+        <Row>
+          <AddressText>{station.address}</AddressText>
+        </Row>
+      </StationDetails>
+    </Tooltip>
+  );
+}
 
 export default VirtualStationTooltip;

@@ -49,7 +49,9 @@
       "no-restricted-syntax": "warn",
       "react/require-default-props": "off",
       "import/prefer-default-export": "off",
-      "react/react-in-jsx-scope": "off"
+      "react/react-in-jsx-scope": "off",
+      "react/jsx-props-no-spreading": "off",
+      "react/no-unstable-nested-components": "off"
   },
   "globals": {
       "navigator": true,

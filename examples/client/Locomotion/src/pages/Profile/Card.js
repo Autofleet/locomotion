@@ -7,7 +7,7 @@ import { OnboardingContext } from '../../context/onboarding';
 import { MAIN_ROUTES } from '../routes';
 import { PageContainer, ContentContainer } from '../styles';
 
-const Card = () => {
+function Card() {
   const { nextScreen } = useContext(OnboardingContext);
 
   const onDone = async () => {
@@ -25,6 +25,6 @@ const Card = () => {
       </ContentContainer>
     </PageContainer>
   );
-};
+}
 
 export default Card;

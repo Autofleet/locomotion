@@ -41,7 +41,6 @@ const StyledPop = styled(SelectDropdown).attrs<StyledPopProps>(({ theme, icon = 
   },
 }))<StyledPopProps>``;
 
-
 const StyledRow = styled(View)<{ selected: boolean }>`
   height: 40;
   display: flex;
@@ -81,16 +80,18 @@ interface StyledSelectRowProps {
   selected: boolean;
 }
 
-const StyledSelectRow = ({ item, selected }: StyledSelectRowProps) => (
-  <StyledRow selected={selected}>
-    <StyledIcon
-      Svg={person}
-      selected={selected}
-    />
-    <StyledText selected={selected}>{item.label}</StyledText>
+function StyledSelectRow({ item, selected }: StyledSelectRowProps) {
+  return (
+    <StyledRow selected={selected}>
+      <StyledIcon
+        Svg={person}
+        selected={selected}
+      />
+      <StyledText selected={selected}>{item.label}</StyledText>
 
-  </StyledRow>
-);
+    </StyledRow>
+  );
+}
 
 interface Item {
   value: string | number;
@@ -104,15 +105,15 @@ interface SelectModalProps {
   onError: (error: boolean) => void;
 }
 
-const SelectModal = ({
+function SelectModal({
   data, onSelect, onError, selectedValue,
-}: SelectModalProps) => {
+}: SelectModalProps) {
   const [selectedItem, setSelectedItem] = useState<Item| null>(null);
   const [error, setError] = useState(false);
 
   useEffect(() => {
     if (data?.length) {
-      const defaultItem = data.find(i => i.value === selectedValue);
+      const defaultItem = data.find((i) => i.value === selectedValue);
       if (defaultItem) {
         setSelectedItem(defaultItem);
       } else {
@@ -128,7 +129,7 @@ const SelectModal = ({
   useEffect(() => {
     if (selectedItem) {
       onSelect(selectedItem);
-      setError(!(data.find(item => item.value === selectedItem.value)));
+      setError(!(data.find((item) => item.value === selectedItem.value)));
     }
   }, [selectedItem]);
 
@@ -153,7 +154,7 @@ const SelectModal = ({
       )}
     />
   );
-};
+}
 SelectModal.defaultProps = {
   selectedValue: null,
 };

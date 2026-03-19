@@ -6,7 +6,7 @@ import { getDeviceId } from './device';
 
 const { MIXPANEL_EVENTS_NUMBER } = Config;
 
-export const getElementName = props => props.testID || props.id;
+export const getElementName = (props) => props.testID || props.id;
 
 const getRandomNumberByUuid = (uuid) => {
   try {
@@ -70,12 +70,14 @@ class MixpanelService {
   trackWithProperties = (event, props) => {
     if (!this.isInit) return;
     if (this.isInit && this.mixpanel) {
-      this.mixpanel.track(event,
+      this.mixpanel.track(
+        event,
         {
           ...props,
           demandSourceId: Config.OPERATION_ID,
           appName: Config.OPERATION_NAME,
-        });
+        },
+      );
     }
   };
 

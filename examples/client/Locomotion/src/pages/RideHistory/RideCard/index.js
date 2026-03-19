@@ -49,9 +49,9 @@ import contactUsIcon from '../../../assets/headset.svg';
 import sucessIcon from '../../../assets/checkmark.svg';
 import { TipButtonSkeleton } from './Skeleton/TipButtonSkeleton';
 
-const RideTitleCard = ({
+function RideTitleCard({
   ride, page, showTip, tip, isPaymentRejected,
-}) => {
+}) {
   const isDebuggingEnabled = (typeof atob !== 'undefined');
   const { getBusinessAccountById } = PaymentContext.useContainer();
   const { showPrice, loadShowPrice } = SettingContext.useContainer();
@@ -108,50 +108,50 @@ const RideTitleCard = ({
     );
   };
   return (
-    <>
-      <TitleContainer>
-        <RideViewTextContainer>
-          <DayTitleText bigText={page}>
-            {moment(ride.scheduledTo || ride.createdAt).format(MMMM_DD_YYYY)}
-          </DayTitleText>
-          {ride.state === RIDE_STATES.COMPLETED ? (
-            <DayTitleSubText noCap>
-              {`${moment(ride.lastMatchAttempt).format('h:mm A')
-              } · ${ride.appDuration}`}
-            </DayTitleSubText>
-          ) : <RideStateText>{i18n.t(`rideHistory.ride.states.${ride.state}`)}</RideStateText>}
-        </RideViewTextContainer>
-        <RideViewSecTextContainer>
-          {ride.showPrice && (
+    <TitleContainer>
+      <RideViewTextContainer>
+        <DayTitleText bigText={page}>
+          {moment(ride.scheduledTo || ride.createdAt).format(MMMM_DD_YYYY)}
+        </DayTitleText>
+        {ride.state === RIDE_STATES.COMPLETED ? (
+          <DayTitleSubText noCap>
+            {`${moment(ride.lastMatchAttempt).format('h:mm A')
+            } · ${ride.appDuration}`}
+          </DayTitleSubText>
+        ) : <RideStateText>{i18n.t(`rideHistory.ride.states.${ride.state}`)}</RideStateText>}
+      </RideViewTextContainer>
+      <RideViewSecTextContainer>
+        {ride.showPrice && (
           <DaySecTitleText markError={isPaymentRejected} testID="ridePrice">
             {getFormattedPrice(ride.priceCurrency, ride.priceAmount)}
           </DaySecTitleText>
-          )}
-          {getPriceSubtitle()}
-        </RideViewSecTextContainer>
-      </TitleContainer>
+        )}
+        {getPriceSubtitle()}
+      </RideViewSecTextContainer>
+    </TitleContainer>
+  );
+}
+
+export function RideListView({
+  ride, showSpacer, onPress, testID,
+}) {
+  return (
+    <>
+      <TouchableRideViewContainer testID={testID} onPress={onPress}>
+        <RideTitleCard
+          ride={ride}
+          isPaymentRejected={ride.payment?.state === PAYMENT_STATES.REJECTED}
+        />
+        <RideDrillDownContainer>
+          <RideDrillDownIcon />
+        </RideDrillDownContainer>
+      </TouchableRideViewContainer>
+      {showSpacer && <RideViewSpacer />}
     </>
   );
-};
+}
 
-export const RideListView = ({
-  ride, showSpacer, onPress, testID,
-}) => (
-  <>
-    <TouchableRideViewContainer testID={testID} onPress={onPress}>
-      <RideTitleCard
-        ride={ride}
-        isPaymentRejected={ride.payment?.state === PAYMENT_STATES.REJECTED}
-      />
-      <RideDrillDownContainer>
-        <RideDrillDownIcon />
-      </RideDrillDownContainer>
-    </TouchableRideViewContainer>
-    {showSpacer && <RideViewSpacer />}
-  </>
-);
-
-const RideView = ({ ride }) => {
+function RideView({ ride }) {
   const isRidePaymentRejected = ride.payment?.state === PAYMENT_STATES.REJECTED;
   const [tip, setTip] = useState(null);
   const [isPaymentSettled, setPaymentSettled] = useState(false);
@@ -164,7 +164,7 @@ const RideView = ({ ride }) => {
   const map = createRef();
   const getTip = async () => {
     const priceCalculation = await getPriceCalculation(ride.priceCalculationId);
-    const tipObj = priceCalculation.additionalCharges.find(charge => charge.chargeFor === 'tip');
+    const tipObj = priceCalculation.additionalCharges.find((charge) => charge.chargeFor === 'tip');
     setTip((tipObj || {}).amount);
   };
 
@@ -239,19 +239,20 @@ const RideView = ({ ride }) => {
                 {outstandingBalance
                   ? (
                     <OutstandBalanceText>
-                      {i18n.t('rideHistory.rideCard.paymentRetry.text',
+                      {i18n.t(
+                        'rideHistory.rideCard.paymentRetry.text',
                         {
                           price:
                           getFormattedPrice(outstandingBalance.currency, outstandingBalance.amount),
-                        })}
+                        },
+                      )}
                     </OutstandBalanceText>
                   ) : null}
                 <RoundedButton style={{ backgroundColor: '#24aaf2' }} onPress={retryPayment}>
                   {i18n.t('rideHistory.rideCard.paymentRetry.retryPaymentButton')}
                 </RoundedButton>
               </RetryPaymentButtonContainer>
-            ) : null
-        }
+            ) : null}
           <StopPointsVerticalViewContainer>
             <StopPointsVerticalView
               ride={ride}
@@ -297,6 +298,6 @@ const RideView = ({ ride }) => {
       />
     </>
   );
-};
+}
 
 export default RideView;

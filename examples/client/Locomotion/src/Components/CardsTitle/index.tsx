@@ -15,13 +15,15 @@ const StyledCardsTitle = styled(Text)<StyledCardsTitleInterface>`
   padding: ${({ noPaddingLeft }) => (noPaddingLeft ? '30px 0px 5px' : '30px 15px 5px')};
 `;
 
-const CardsTitle = ({
+function CardsTitle({
   title,
   noPaddingLeft,
 }: {
     title: string,
     noPaddingLeft?: boolean,
-}) => <StyledCardsTitle noPaddingLeft={noPaddingLeft}>{title}</StyledCardsTitle>;
+}) {
+  return <StyledCardsTitle noPaddingLeft={noPaddingLeft}>{title}</StyledCardsTitle>;
+}
 
 export default CardsTitle;
 

@@ -16,30 +16,32 @@ import * as navigationService from '../../../services/navigation';
 
 const DISTANCE_FROM_END = 400;
 
-const RideCardInList = ({
+function RideCardInList({
   showBottomLoader,
   ride,
   lastItem,
   showSpacer,
-}) => (
-  <>
-    <RideListView
-      ride={ride}
-      showSpacer={showSpacer}
-      testID={`rideHistoryCard-${ride.id}`}
-      onPress={() => navigationService.navigate(MAIN_ROUTES.COMPLETED_RIDE_OVERVIEW_PAGE, {
-        rideId: ride.id,
-      })}
-    />
-    {lastItem && showBottomLoader ? (
-      <CenterContainer>
-        <Loader dark lottieViewStyle={{ width: 24, height: 24 }} />
-      </CenterContainer>
-    ) : null}
-  </>
-);
+}) {
+  return (
+    <>
+      <RideListView
+        ride={ride}
+        showSpacer={showSpacer}
+        testID={`rideHistoryCard-${ride.id}`}
+        onPress={() => navigationService.navigate(MAIN_ROUTES.COMPLETED_RIDE_OVERVIEW_PAGE, {
+          rideId: ride.id,
+        })}
+      />
+      {lastItem && showBottomLoader ? (
+        <CenterContainer>
+          <Loader dark lottieViewStyle={{ width: 24, height: 24 }} />
+        </CenterContainer>
+      ) : null}
+    </>
+  );
+}
 
-const RidesView = ({ rides }) => {
+function RidesView({ rides }) {
   const { loadMoreRides } = useContext(ridesContext);
   const [stopLoading, setStopLoading] = useState(false);
   const [showBottomLoader, setShowBottomLoader] = useState(false);
@@ -62,9 +64,9 @@ const RidesView = ({ rides }) => {
     <RidesViewContainer>
       <FlatList
         data={rides}
-        onEndReached={info => startLoadMoreRides(info)}
+        onEndReached={(info) => startLoadMoreRides(info)}
         onEndReachedThreshold={0.5}
-        keyExtractor={ride => `ride#${ride.id}$${rides.indexOf(ride)}`}
+        keyExtractor={(ride) => `ride#${ride.id}$${rides.indexOf(ride)}`}
         renderItem={({ item: ride, index }) => (
           <RideCardInList
             showBottomLoader={showBottomLoader}
@@ -80,21 +82,19 @@ const RidesView = ({ rides }) => {
       />
     </RidesViewContainer>
   );
-};
+}
 
 const RidesList = React.memo(({
   rides,
 }) => (
-  <>
-    {rides && rides.length ? (
-      <RidesView rides={rides} />
-    ) : (
-      <NoRidesInList
-        title={i18n.t('rideHistory.noActivityYet')}
-        text={i18n.t('rideHistory.noActivitySub')}
-      />
-    )}
-  </>
+  rides && rides.length ? (
+    <RidesView rides={rides} />
+  ) : (
+    <NoRidesInList
+      title={i18n.t('rideHistory.noActivityYet')}
+      text={i18n.t('rideHistory.noActivitySub')}
+    />
+  )
 ));
 
 export default RidesList;

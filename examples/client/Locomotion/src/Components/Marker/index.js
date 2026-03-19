@@ -19,17 +19,17 @@ import Loader from '../Loader';
 import pulse from '../../assets/marker-pulse.json';
 import VirtualStationComponent from '../VirtualStationComponent';
 
-const StopPointMarker = ({
+function StopPointMarker({
   stopPoint,
   isNext,
   etaText,
   isFutureRide,
   isStationsEnabled = false,
   index,
-}) => {
+}) {
   const { lat, lng } = stopPoint;
   const theme = useContext(ThemeContext);
-  const stationIcon = type => <VirtualStationComponent type={type} isActive style={{ top: Platform.OS === 'ios' ? -35 : 0 }} />;
+  const stationIcon = (type) => <VirtualStationComponent type={type} isActive style={{ top: Platform.OS === 'ios' ? -35 : 0 }} />;
 
   const typeDetails = {
     [STOP_POINT_TYPES.STOP_POINT_PICKUP]: {
@@ -112,6 +112,6 @@ const StopPointMarker = ({
       </IconContainer>
     </Marker>
   );
-};
+}
 
 export default StopPointMarker;

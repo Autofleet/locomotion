@@ -172,7 +172,6 @@ export const HeaderIcon = styled.Image`
   height: ${({ height }) => (height || '18px')};
 `;
 
-
 export const StationIcon = styled.Image.attrs({ source: stationIcon })`
     display: flex;
     align-items: center;

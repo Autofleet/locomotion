@@ -1,5 +1,7 @@
 import VersionCheck from 'react-native-version-check';
-import { Alert, BackHandler, Linking, Platform } from 'react-native';
+import {
+  Alert, BackHandler, Linking, Platform,
+} from 'react-native';
 import Config from 'react-native-config';
 import DeviceInfo from 'react-native-device-info';
 import i18n from '../I18n';
@@ -34,7 +36,6 @@ const showUpdateVersionAlert = () => {
   );
 };
 
-// eslint-disable-next-line import/prefer-default-export
 export const checkVersionAndForceUpdateIfNeeded = async (minAppVersion?: string) => {
   if (minAppVersion) {
     const updateData = await VersionCheck.needUpdate({

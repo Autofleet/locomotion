@@ -41,7 +41,7 @@ export const SubNoRidesListContainer = styled(BaseText)`
   font-size: 16px;
 `;
 
-export const NoRidesInList = ({ title, text }) => {
+export function NoRidesInList({ title, text }) {
   const { primaryColor } = useContext(ThemeContext);
   return (
     <CenterContainer addTop>
@@ -56,7 +56,7 @@ export const NoRidesInList = ({ title, text }) => {
       </SubNoRidesListContainer>
     </CenterContainer>
   );
-};
+}
 
 export const DayTitleText = styled(BaseText)`
   font-size: 16px;

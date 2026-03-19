@@ -17,11 +17,13 @@ import cancel from '../../assets/bottomSheet/cancel.svg';
 import dragIcon from '../../assets/bottomSheet/drag-icon.svg';
 import deleteIcon from '../../assets/bottomSheet/trash.svg';
 
-const AddSpButton = ({ hasEnteredMultiSp, onPress }) => (
-  <AddSpContainer hasEnteredMultiSp={hasEnteredMultiSp} onPress={onPress} testID="addSpButton">
-    <PlusIcon />
-  </AddSpContainer>
-);
+function AddSpButton({ hasEnteredMultiSp, onPress }) {
+  return (
+    <AddSpContainer hasEnteredMultiSp={hasEnteredMultiSp} onPress={onPress} testID="addSpButton">
+      <PlusIcon />
+    </AddSpContainer>
+  );
+}
 const BottomSheetInputField = forwardRef((props, ref) => (
 
   <BottomSheetInputContainer>
@@ -37,7 +39,6 @@ const BottomSheetInputField = forwardRef((props, ref) => (
         ref={ref}
       />
 
-
       { !!props.value && props.value.length > 0 && props.clear && (
         <TouchableIconContainer
           marginLeft={props.isMultiSpEnabled && 20}
@@ -45,7 +46,6 @@ const BottomSheetInputField = forwardRef((props, ref) => (
             props.clear();
           }}
         >
-
 
           <SvgIcon
             Svg={cancel}
@@ -55,10 +55,8 @@ const BottomSheetInputField = forwardRef((props, ref) => (
             width={12}
           />
 
-
         </TouchableIconContainer>
       )}
-
 
       { props.onDrag && (
       <DragTouchableIconContainer
@@ -95,7 +93,6 @@ const BottomSheetInputField = forwardRef((props, ref) => (
       </RemoveIconContainer>
     </TouchableIconContainer>
     )}
-
 
   </BottomSheetInputContainer>
 

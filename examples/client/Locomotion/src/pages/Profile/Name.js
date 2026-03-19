@@ -33,7 +33,7 @@ const nameSchema = yup.object().shape({
     .required(),
 });
 
-const Name = () => {
+function Name() {
   const route = useRoute();
   const { nextScreen } = useContext(OnboardingContext);
   const secondTextInput = useRef(null);
@@ -123,6 +123,6 @@ const Name = () => {
       </ScrollView>
     </PageContainer>
   );
-};
+}
 
 export default Name;

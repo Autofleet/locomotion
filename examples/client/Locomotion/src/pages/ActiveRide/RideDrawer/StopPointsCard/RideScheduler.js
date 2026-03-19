@@ -62,16 +62,17 @@ const SelectionTitle = styled.Text`
   padding-bottom: 5px;
 `;
 
-const OrderTimeSelector = ({
+function OrderTimeSelector({
   selected, text, onPress, side, disabled,
-}) => (
-  <TimeItem selected={selected} onPress={onPress} side={side} disabled={disabled} testID={`${text}OrderTimeButton`}>
-    <TextContainer selected={selected}>{text}</TextContainer>
-  </TimeItem>
+}) {
+  return (
+    <TimeItem selected={selected} onPress={onPress} side={side} disabled={disabled} testID={`${text}OrderTimeButton`}>
+      <TextContainer selected={selected}>{text}</TextContainer>
+    </TimeItem>
+  );
+}
 
-);
-
-export default ({ onScheduleTimeSelect, disableFuture = false, scheduledTo }) => {
+export default function ({ onScheduleTimeSelect, disableFuture = false, scheduledTo }) {
   const [scheduleType, setScheduleType] = useState('now');
 
   const onScheduleTypeSelect = (type) => {
@@ -118,4 +119,4 @@ export default ({ onScheduleTimeSelect, disableFuture = false, scheduledTo }) =>
         : null}
     </Container>
   );
-};
+}

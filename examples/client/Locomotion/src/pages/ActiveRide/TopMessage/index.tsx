@@ -7,7 +7,7 @@ import {
   BodyText, Container, Title, TitleText, ButtonContainer, ButtonText,
 } from './styled';
 
-const TopMessage = ({
+function TopMessage({
   text, title, icon, button, onPress,
 }: {
     title: any,
@@ -15,8 +15,8 @@ const TopMessage = ({
     button: any,
     icon: any,
     onPress: any,
-}) => (
-  text
+}) {
+  return text
     ? (
       <SafeView>
         <Container testID={title}>
@@ -44,7 +44,7 @@ const TopMessage = ({
         </Container>
       </SafeView>
     )
-    : null
-);
+    : null;
+}
 
 export default TopMessage;

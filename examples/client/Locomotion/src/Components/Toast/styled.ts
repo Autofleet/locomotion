@@ -5,7 +5,6 @@ import styled from 'styled-components';
 import { FONT_SIZES, FONT_WEIGHTS } from '../../context/theme';
 import Button from '../Button';
 
-
 export const ToastContainer = styled(Button)`
   width: 92%;
   min-height: 70px;
@@ -56,7 +55,6 @@ export const Footer = styled(View)`
 export const FooterButton = styled(TouchableOpacity)`
   padding: 10px 0px 10px 15px;
 `;
-
 
 export const FooterButtonText = styled(Text)`
   ${FONT_SIZES.LARGE}

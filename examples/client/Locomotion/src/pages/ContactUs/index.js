@@ -27,7 +27,7 @@ import * as navigationService from '../../services/navigation';
 import Mixpanel from '../../services/Mixpanel';
 import DeviceService from '../../services/device';
 
-export default ({ menuSide }) => {
+export default function ({ menuSide }) {
   const useSettings = settingsContext.useContainer();
   const [webViewWindow, setWebViewWindow] = useState(null);
   const [settings, setSettings] = useState({
@@ -119,69 +119,67 @@ export default ({ menuSide }) => {
   return (
     <PageContainer>
       {!webViewWindow ? (
-        <>
-          <ContactUsPageView>
-            <PageHeader
-              showShadow={false}
-              title={i18n.t('contactUs.pageTitle')}
-              onIconPress={() => navigationService.navigate(MAIN_ROUTES.HOME)}
-              iconSide={menuSide}
-            />
-            <ScrollView>
-              <ContactUsPageLogoContainer style={Platform.OS === 'android' ? { shadowColor: '#000' } : {}}>
-                <ContactUsLogo resizeMode="contain" source={logo} />
-              </ContactUsPageLogoContainer>
-              <Container>
-                {settings.contactEmail || settings.contactPhone || settings.contactUsUrl ? (
-                  <CardsContainer>
-                    <CardsTitle title={i18n.t('contactUs.contactInformationTitle')} />
-                    {settings.contactEmail ? (
-                      <Card
-                        icon={emailIcon}
-                        onIconPress={() => {
-                          if (settings.contactEmail) {
-                            Linking.openURL(`mailto:${settings.contactEmail}`);
-                          }
-                        }}
-                        title={i18n.t('onboarding.emailPlaceholder')}
-                      >
-                        <Text>{settings.contactEmail}</Text>
-                      </Card>
-                    ) : null}
-                    {settings.contactPhone ? (
-                      <Card
-                        icon={phoneIcon}
-                        onIconPress={e => (settings.contactPhone ? ActionMenu(e, settings.contactPhone) : undefined)}
-                        title={i18n.t('onboarding.phonePlaceholder')}
-                      >
-                        <Text>{settings.contactPhone}</Text>
-                      </Card>
-                    ) : null}
-                    {settings.contactUsUrl ? (
-                      <NoTitleCard onPress={() => openContactUs()}>
-                        <LearnMoreButton onPress={() => openContactUs()}>
-                          <LearnMoreText>{settings.contactUsText || i18n.t('contactUs.learnMore')}</LearnMoreText>
-                          <LearnMoreIcon Svg={arrowBack} fill="#24aaf2" />
-                        </LearnMoreButton>
-                      </NoTitleCard>
-                    ) : null}
-                  </CardsContainer>
-                ) : null}
+        <ContactUsPageView>
+          <PageHeader
+            showShadow={false}
+            title={i18n.t('contactUs.pageTitle')}
+            onIconPress={() => navigationService.navigate(MAIN_ROUTES.HOME)}
+            iconSide={menuSide}
+          />
+          <ScrollView>
+            <ContactUsPageLogoContainer style={Platform.OS === 'android' ? { shadowColor: '#000' } : {}}>
+              <ContactUsLogo resizeMode="contain" source={logo} />
+            </ContactUsPageLogoContainer>
+            <Container>
+              {settings.contactEmail || settings.contactPhone || settings.contactUsUrl ? (
                 <CardsContainer>
-                  <CardsTitle title={i18n.t('contactUs.legalTitle')} />
-                  <NoTitleCard testID="privacyPolicy" showArrow onPress={() => openPrivacy()}>
-                    <Text>
-                      {i18n.t('contactUs.privacyPolicy')}
-                    </Text>
-                  </NoTitleCard>
-                  <NoTitleCard testID="termsOfUse" showArrow onPress={() => openTerms()}>
-                    <Text>{i18n.t('contactUs.termsOfUse')}</Text>
-                  </NoTitleCard>
+                  <CardsTitle title={i18n.t('contactUs.contactInformationTitle')} />
+                  {settings.contactEmail ? (
+                    <Card
+                      icon={emailIcon}
+                      onIconPress={() => {
+                        if (settings.contactEmail) {
+                          Linking.openURL(`mailto:${settings.contactEmail}`);
+                        }
+                      }}
+                      title={i18n.t('onboarding.emailPlaceholder')}
+                    >
+                      <Text>{settings.contactEmail}</Text>
+                    </Card>
+                  ) : null}
+                  {settings.contactPhone ? (
+                    <Card
+                      icon={phoneIcon}
+                      onIconPress={(e) => (settings.contactPhone ? ActionMenu(e, settings.contactPhone) : undefined)}
+                      title={i18n.t('onboarding.phonePlaceholder')}
+                    >
+                      <Text>{settings.contactPhone}</Text>
+                    </Card>
+                  ) : null}
+                  {settings.contactUsUrl ? (
+                    <NoTitleCard onPress={() => openContactUs()}>
+                      <LearnMoreButton onPress={() => openContactUs()}>
+                        <LearnMoreText>{settings.contactUsText || i18n.t('contactUs.learnMore')}</LearnMoreText>
+                        <LearnMoreIcon Svg={arrowBack} fill="#24aaf2" />
+                      </LearnMoreButton>
+                    </NoTitleCard>
+                  ) : null}
                 </CardsContainer>
-              </Container>
-            </ScrollView>
-          </ContactUsPageView>
-        </>
+              ) : null}
+              <CardsContainer>
+                <CardsTitle title={i18n.t('contactUs.legalTitle')} />
+                <NoTitleCard testID="privacyPolicy" showArrow onPress={() => openPrivacy()}>
+                  <Text>
+                    {i18n.t('contactUs.privacyPolicy')}
+                  </Text>
+                </NoTitleCard>
+                <NoTitleCard testID="termsOfUse" showArrow onPress={() => openTerms()}>
+                  <Text>{i18n.t('contactUs.termsOfUse')}</Text>
+                </NoTitleCard>
+              </CardsContainer>
+            </Container>
+          </ScrollView>
+        </ContactUsPageView>
       ) : (
         <WebView
           {...webViewWindow}
@@ -190,4 +188,4 @@ export default ({ menuSide }) => {
       )}
     </PageContainer>
   );
-};
+}

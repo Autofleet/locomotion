@@ -34,13 +34,14 @@ const currentLocationNative = async (options) => {
   };
   return new Promise((resolve, reject) => {
     Geolocation.getCurrentPosition(
-      resolve, reject,
+      resolve,
+      reject,
       mergedOptions,
     );
   });
 };
 
-const prepareCoords = locations => ({
+const prepareCoords = (locations) => ({
   coords: { latitude: locations[0].latitude, longitude: locations[0].longitude },
   speed: locations[0].speed,
   timestamp: new Date(),

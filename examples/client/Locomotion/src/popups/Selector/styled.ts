@@ -66,7 +66,6 @@ bottom: 0px;
 margin: 0 20px;
 `;
 
-
 export const ItemInnerContainer = styled(View)`
   flex-direction: row;
   justify-content: flex-start;

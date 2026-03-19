@@ -7,6 +7,8 @@ import {
 
 import SvgIcon from '../SvgIcon';
 
+type IconSide = 'left' | 'right';
+
 interface MarkerProps {
     theme?: Record<string, unknown>;
     width?: number;
@@ -14,8 +16,6 @@ interface MarkerProps {
     icon: React.FC;
     iconSide: IconSide;
 }
-
-type IconSide = 'left' | 'right';
 
 const isLeft = (side: IconSide) => side === 'left';
 

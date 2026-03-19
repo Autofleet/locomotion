@@ -1,11 +1,13 @@
 import { StyleSheet, View } from 'react-native';
 import { Skeleton } from '../../../../Components/Skeleton/Skeleton';
 
-export const TipButtonSkeleton = () => (
-  <Skeleton>
-    <View style={styles.content} />
-  </Skeleton>
-);
+export function TipButtonSkeleton() {
+  return (
+    <Skeleton>
+      <View style={styles.content} />
+    </Skeleton>
+  );
+}
 
 const styles = StyleSheet.create({
   content: {

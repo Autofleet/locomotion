@@ -6,7 +6,6 @@ export const ContentTitle = styled.Text`
   ${FONT_WEIGHTS.SEMI_BOLD};
 `;
 
-
 export const ContentSubTitle = styled.Text`
 `;
 

@@ -7,7 +7,6 @@ import LocationPinIcon from '../../../../assets/location_pin.svg';
 import Button from '../../../../Components/Button';
 import { AddressLineSkeleton } from './Skeleton/AddressLineSkeleton';
 
-
 const ICONS = {
   history: HistoryIcon,
   location: GeoIcon,
@@ -45,7 +44,6 @@ const AddressContainer = styled.View`
     align-self: center;
 `;
 
-
 const AddressText = styled.Text.attrs({
   numberOfLines: 1,
 })`
@@ -74,8 +72,7 @@ const Icon = styled(SvgIcon).attrs(({ actionButton, theme }) => ({
   fill: actionButton ? theme.primaryColor : theme.textColor,
 }))``;
 
-
-const AddressRow = ({
+function AddressRow({
   text,
   subText,
   icon = null,
@@ -86,7 +83,7 @@ const AddressRow = ({
   testID,
   label,
   distance,
-}) => {
+}) {
   const finalIcon = ICONS[icon] || (isHistory && HistoryIcon);
   return (
     <Row
@@ -125,6 +122,6 @@ const AddressRow = ({
       </SubRow>
     </Row>
   );
-};
+}
 
 export default AddressRow;

@@ -8,12 +8,12 @@ interface SkeletonProps {
   layout?: ICustomViewStyle[];
 }
 
-export const Skeleton = ({ children, layout }: SkeletonProps) => {
+export function Skeleton({ children, layout }: SkeletonProps) {
   const theme = useContext(ThemeContext);
 
   return (
     <SkeletonPlaceholder
-      isLoading={true}
+      isLoading
       animationType="pulse"
       layout={layout}
       containerStyle={{ borderRadius: theme.borderRadiusValues.SM }}
@@ -23,4 +23,4 @@ export const Skeleton = ({ children, layout }: SkeletonProps) => {
       {children}
     </SkeletonPlaceholder>
   );
-};
+}

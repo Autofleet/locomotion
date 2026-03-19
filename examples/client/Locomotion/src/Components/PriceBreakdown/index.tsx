@@ -26,7 +26,7 @@ interface NoBreakdownComponentProps {
   retryFunction: () => Promise<void>;
 }
 
-const NoBreakdownComponent = ({ didRequestFail, retryFunction }: NoBreakdownComponentProps) => {
+function NoBreakdownComponent({ didRequestFail, retryFunction }: NoBreakdownComponentProps) {
   if (didRequestFail) {
     return (
       <>
@@ -45,7 +45,7 @@ const NoBreakdownComponent = ({ didRequestFail, retryFunction }: NoBreakdownComp
   }
 
   return <NoBreakdownSkeleton />;
-};
+}
 
 interface PriceBreakdownProps {
   priceCalculation: any;
@@ -53,11 +53,11 @@ interface PriceBreakdownProps {
   reloadPriceBreakdown: () => Promise<void>;
 }
 
-const PriceBreakdown = ({
+function PriceBreakdown({
   priceCalculation,
   didRequestFail,
   reloadPriceBreakdown,
-}: PriceBreakdownProps) => {
+}: PriceBreakdownProps) {
   const { businessAccountId } = useContext(RidePageContext);
   const { getBusinessAccountById } = PaymentContext.useContainer();
   const { showPrice, loadShowPrice } = SettingContext.useContainer();
@@ -129,7 +129,7 @@ const PriceBreakdown = ({
       <InnerContainer>
         <Title>{`${i18n.t('ridePriceBreakdown.pageTitle')}`}</Title>
         {priceCalculationItems ? (
-          priceCalculationItems.map(item => (
+          priceCalculationItems.map((item) => (
             <Row>
               <ItemText>{item.name}</ItemText>
               <PriceText>{item.price}</PriceText>
@@ -161,6 +161,6 @@ const PriceBreakdown = ({
       <InnerContainer />
     </>
   );
-};
+}
 
 export default PriceBreakdown;

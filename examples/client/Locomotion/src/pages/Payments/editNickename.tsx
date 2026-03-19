@@ -23,8 +23,7 @@ type Route = {
   params?: Readonly<object | undefined> | Params
 }
 
-
-const EditCardName = () => {
+function EditCardName() {
   const route: Route = useRoute();
   const usePayments = PaymentsContext.useContainer();
   const [nickname, setNickname] = useState((route.params as Params).name);
@@ -69,6 +68,6 @@ const EditCardName = () => {
       </PageContainer>
     </ScrollView>
   );
-};
+}
 
 export default EditCardName;

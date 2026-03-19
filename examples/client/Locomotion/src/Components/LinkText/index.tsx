@@ -11,19 +11,20 @@ interface LinkTextProps {
     onPress: () => void;
 }
 
-
-const LinkTextComponent = ({
+function LinkTextComponent({
   children, icon, iconSide = 'left', onPress = () => null,
-}: LinkTextProps) => (
-  <TouchableContainer onPress={onPress}>
-    <Container iconSide={iconSide}>
-      {icon ? <StyledIcon icon={icon} iconSide={iconSide} width={18} height={18} /> : null}
-      <LinkText>
-        {children}
-      </LinkText>
-    </Container>
-  </TouchableContainer>
-);
+}: LinkTextProps) {
+  return (
+    <TouchableContainer onPress={onPress}>
+      <Container iconSide={iconSide}>
+        {icon ? <StyledIcon icon={icon} iconSide={iconSide} width={18} height={18} /> : null}
+        <LinkText>
+          {children}
+        </LinkText>
+      </Container>
+    </TouchableContainer>
+  );
+}
 
 LinkTextComponent.defaultProps = {
   icon: null,

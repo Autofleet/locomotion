@@ -50,7 +50,7 @@ export const RIDE_ACTIVE_STATES = [
 export const CHARGE_FOR_TIP = 'tip';
 
 export const RIDE_FINAL_STATES = Object.values(RIDE_STATES)
-  .filter(state => !RIDE_ACTIVE_STATES.find(as => as === state));
+  .filter((state) => !RIDE_ACTIVE_STATES.find((as) => as === state));
 export const isPickup = (sp: any) => sp.type === STOP_POINT_TYPES.STOP_POINT_PICKUP;
 
 export const formatUiDisplaySpType = (sp: any, index: number | null) => {

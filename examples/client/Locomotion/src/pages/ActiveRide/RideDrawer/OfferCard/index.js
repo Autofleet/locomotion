@@ -36,56 +36,56 @@ export const CloseContainer = styled(Button)`
     z-index: 999;
 `;
 
-
 export const ResetInputIcon = styled.Image.attrs({ source: xIcon })`
     display: flex;
     height: 12px;
     width: 12px;
 `;
 
-
-export default ({
+export default function ({
   origin, destination, rideState, requestStopPoints, pickupEtaDrift, dropoffEtaDrift, rideOffer, etaMediumThreshold, etaHighThreshold,
   offerExpired, onVerified, setLoading, onRenewOffer, cancelOffer, loading,
 
-}) => (
-  <Fragment>
+}) {
+  return (
+    <>
 
-    {!loading
-      ? (
-        <CloseContainer noBackground onPress={cancelOffer} testID="CancelOfferButton">
-          <ResetInputIcon />
-        </CloseContainer>
-      ) : null}
+      {!loading
+        ? (
+          <CloseContainer noBackground onPress={cancelOffer} testID="CancelOfferButton">
+            <ResetInputIcon />
+          </CloseContainer>
+        ) : null}
 
-    <OfferRow
-      pickup
-      description={rideState ? origin && origin.description
-        : requestStopPoints && requestStopPoints.pickup && requestStopPoints.pickup.description}
-      eta={rideOffer.pickupTime}
-      completedAt={rideState ? origin && origin.completedAt : undefined}
-      rideOffer={rideOffer}
-      etaDrift={pickupEtaDrift}
-      etaMediumThreshold={etaMediumThreshold}
-      etaHighThreshold={etaHighThreshold}
-    />
-    <OfferRow
-      useBorder
-      description={rideState ? destination && destination.description
-        : requestStopPoints && requestStopPoints.dropoff && requestStopPoints.dropoff.description}
-      eta={rideOffer.dropoffTime}
-      completedAt={rideState ? destination && destination.completedAt
-        : undefined}
-      rideOffer={rideOffer}
-      etaDrift={dropoffEtaDrift}
-    />
-    <NumberOfPassengerOffer amount={rideOffer.numberOfPassengers} scheduledTo={requestStopPoints.scheduledTo} />
-    <OfferButton
-      offerExpired={offerExpired}
-      onVerified={onVerified}
-      setLoading={setLoading}
-      onRenewOffer={onRenewOffer}
-      futureRide={requestStopPoints.scheduledTo !== null}
-    />
-  </Fragment>
-);
+      <OfferRow
+        pickup
+        description={rideState ? origin && origin.description
+          : requestStopPoints && requestStopPoints.pickup && requestStopPoints.pickup.description}
+        eta={rideOffer.pickupTime}
+        completedAt={rideState ? origin && origin.completedAt : undefined}
+        rideOffer={rideOffer}
+        etaDrift={pickupEtaDrift}
+        etaMediumThreshold={etaMediumThreshold}
+        etaHighThreshold={etaHighThreshold}
+      />
+      <OfferRow
+        useBorder
+        description={rideState ? destination && destination.description
+          : requestStopPoints && requestStopPoints.dropoff && requestStopPoints.dropoff.description}
+        eta={rideOffer.dropoffTime}
+        completedAt={rideState ? destination && destination.completedAt
+          : undefined}
+        rideOffer={rideOffer}
+        etaDrift={dropoffEtaDrift}
+      />
+      <NumberOfPassengerOffer amount={rideOffer.numberOfPassengers} scheduledTo={requestStopPoints.scheduledTo} />
+      <OfferButton
+        offerExpired={offerExpired}
+        onVerified={onVerified}
+        setLoading={setLoading}
+        onRenewOffer={onRenewOffer}
+        futureRide={requestStopPoints.scheduledTo !== null}
+      />
+    </>
+  );
+}

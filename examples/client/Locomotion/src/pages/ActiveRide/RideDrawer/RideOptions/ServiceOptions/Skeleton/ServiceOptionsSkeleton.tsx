@@ -1,9 +1,11 @@
 import { ServiceCardSkeleton } from '../ServiceCard/Skeleton/ServiceCardSkeleton';
 
-export const ServiceOptionsSkeleton = () => (
-  <>
-    <ServiceCardSkeleton />
-    <ServiceCardSkeleton />
-    <ServiceCardSkeleton />
-  </>
-);
+export function ServiceOptionsSkeleton() {
+  return (
+    <>
+      <ServiceCardSkeleton />
+      <ServiceCardSkeleton />
+      <ServiceCardSkeleton />
+    </>
+  );
+}

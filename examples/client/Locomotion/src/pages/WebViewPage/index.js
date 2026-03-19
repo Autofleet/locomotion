@@ -5,7 +5,7 @@ import WebView from '../WebView';
 import SafeView from '../../Components/SafeView';
 import * as navigationService from '../../services/navigation';
 
-export default () => {
+export default function () {
   const route = useRoute();
   const {
     url,
@@ -23,4 +23,4 @@ export default () => {
       />
     </SafeView>
   );
-};
+}

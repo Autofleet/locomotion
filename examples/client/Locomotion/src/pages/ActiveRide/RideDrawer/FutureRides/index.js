@@ -12,16 +12,15 @@ import {
   DateTitle,
   SpsContainer,
   CancelContainer,
-  CancelButtonContainer,
   DetailsRowContainer,
   CloseIcon,
   CloseIconContainer,
 } from './styled';
 import StopPointRow from './StopPointRow';
 
-export const FutureOrdersButton = ({
+export function FutureOrdersButton({
   futureRides, isOpen, onPress,
-}) => {
+}) {
   const onClosePress = () => {
     if (!futureRides || !futureRides.length) {
       return null;
@@ -36,25 +35,23 @@ export const FutureOrdersButton = ({
         <FutureRideButtonText>
           {isOpen
             ? i18n.t('home.futureRides.closeButton')
-            : i18n.t('home.futureRides.openBookingsButton', { openBookings: futureRides ? futureRides.length : 0 })
-        }
+            : i18n.t('home.futureRides.openBookingsButton', { openBookings: futureRides ? futureRides.length : 0 })}
         </FutureRideButtonText>
         {isOpen ? (<CloseIconContainer><CloseIcon /></CloseIconContainer>) : null}
       </FutureRidesButton>
     ) : null
   );
-};
+}
 
-export default ({
+export default function ({
   futureRides, isOpen, onCancel, onPress,
-}) => {
+}) {
   if (!futureRides || !isOpen) {
     return null;
   }
 
-
   return (
-    <Fragment>
+    <>
       {futureRides.map((ride) => {
         const { stopPoints } = ride;
 
@@ -86,6 +83,6 @@ export default ({
           </Container>
         );
       })}
-    </Fragment>
+    </>
   );
-};
+}

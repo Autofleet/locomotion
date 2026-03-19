@@ -3,6 +3,7 @@ import React, {
   useState,
   useEffect,
   useContext,
+  useMemo,
 } from 'react';
 import moment from 'moment';
 import Toast from 'react-native-toast-message';
@@ -70,7 +71,7 @@ export const MessagesContext = createContext<MessagesContextInterface>({
   closeToast: () => undefined,
 });
 
-const MessagesProvider = ({ children }: { children: any }) => {
+function MessagesProvider({ children }: { children: any }) {
   const { user } = useContext(UserContext);
   const { getRidesByParams } = useContext(RidePageContext);
   const [viewingMessage, setViewingMessage] = useState<messageProps | null>(null);
@@ -186,27 +187,29 @@ const MessagesProvider = ({ children }: { children: any }) => {
     }
   }, [user?.id]);
 
+  const contextValue = useMemo(() => ({
+    userMessages,
+    viewingMessage,
+    setViewingMessage,
+    setUserMessages,
+    loadUserMessages,
+    isLoading,
+    markReadMessages,
+    dismissMessages,
+    checkMessagesForToast,
+    getUserMessages,
+    getMessage,
+    toastMessageId,
+    closeToast,
+  }), [userMessages, viewingMessage, isLoading, toastMessageId]);
+
   return (
     <MessagesContext.Provider
-      value={{
-        userMessages,
-        viewingMessage,
-        setViewingMessage,
-        setUserMessages,
-        loadUserMessages,
-        isLoading,
-        markReadMessages,
-        dismissMessages,
-        checkMessagesForToast,
-        getUserMessages,
-        getMessage,
-        toastMessageId,
-        closeToast,
-      }}
+      value={contextValue}
     >
       {children}
     </MessagesContext.Provider>
   );
-};
+}
 
 export default MessagesProvider;

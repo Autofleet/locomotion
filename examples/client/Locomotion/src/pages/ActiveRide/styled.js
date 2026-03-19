@@ -41,11 +41,13 @@ export const VehicleIcon = styled.Image`
     border: 1px solid #09304e;
   `;
 
-export const VehicleDot = ({ source }) => (
-  <VehicleDotContainer>
-    <VehicleIcon source={vehicleIcon} />
-  </VehicleDotContainer>
-);
+export function VehicleDot({ source }) {
+  return (
+    <VehicleDotContainer>
+      <VehicleIcon source={vehicleIcon} />
+    </VehicleDotContainer>
+  );
+}
 
 export const MapButtonsContainer = styled.View``;
 
@@ -83,7 +85,6 @@ export const LocationMarker = styled(Icon).attrs(({ theme }) => ({
   stroke: theme.pageBackgroundColor,
   width: MARKER_SIZE.width,
 }))``;
-
 
 export const MapOverlayButtons = styled.View`
 position: absolute;

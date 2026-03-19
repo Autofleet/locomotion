@@ -19,7 +19,7 @@ import {
 import { getLocation, getPlacesByLocation } from '../../../../../context/places/api';
 import { RidePageContext } from '../../../../../context/newRideContext';
 
-export default (props) => {
+export default function (props) {
   const [searchText, setSearchText] = useState(
     props.requestStopPoints[props.type]
       && props.requestStopPoints[props.type].description,
@@ -83,7 +83,7 @@ export default (props) => {
     }
   };
 
-  const setSearchValue = async (value, type, showStations = null, place) => {
+  const setSearchValue = async (value, type, showStations, place) => {
     setSearchText(value);
     setAddressListItems({
       type,
@@ -98,7 +98,7 @@ export default (props) => {
       <Address>
         <AddressTextInput
           value={searchText}
-          onChangeText={value => setSearchValue(value, props.type)}
+          onChangeText={(value) => setSearchValue(value, props.type)}
           autoFocus
           placeholder={I18n.t('addressView.addressPlaceholder')}
         />
@@ -107,7 +107,7 @@ export default (props) => {
       <ScrollView keyboardShouldPersistTaps="handled">
         {addressListItems
           && addressListItems.list
-          && addressListItems.list.map(item => (
+          && addressListItems.list.map((item) => (
             <AddressSearchItem key={item.id} onPress={() => setPlace(item)}>
               <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                 {item.station ? <StationIcon /> : null}
@@ -128,4 +128,4 @@ export default (props) => {
       </ResetInputIconContainer>
     </AddressInputs>
   );
-};
+}

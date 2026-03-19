@@ -16,20 +16,22 @@ const LoaderContainer = styled.View`
     top: 50%;
     margin-top: -8px;
 `;
-const FullPageLoader = props => (
-  <FullPageLoaderWrapper>
-    <LoaderContainer>
-      <LottieView
-        style={{
-          width: 15,
-          height: 15,
-        }}
-        source={darkLoader}
-        autoPlay
-        loop
-        {...props}
-      />
-    </LoaderContainer>
-  </FullPageLoaderWrapper>
-);
+function FullPageLoader(props) {
+  return (
+    <FullPageLoaderWrapper>
+      <LoaderContainer>
+        <LottieView
+          style={{
+            width: 15,
+            height: 15,
+          }}
+          source={darkLoader}
+          autoPlay
+          loop
+          {...props}
+        />
+      </LoaderContainer>
+    </FullPageLoaderWrapper>
+  );
+}
 export default FullPageLoader;

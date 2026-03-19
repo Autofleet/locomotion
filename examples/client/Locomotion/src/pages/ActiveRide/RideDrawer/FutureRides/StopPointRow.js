@@ -18,9 +18,7 @@ export const StopPointDot = styled.View`
   height: 10px;
   background-color: ${({ origin }) => (origin ? '#6180c0' : '#08902d')};
   border-radius: 10px;
-  /* margin-top: 10; */
 `;
-
 
 export const PickupRow = styled.View`
 ${address}
@@ -45,7 +43,6 @@ const StopPointDotTimeLine = styled.View`
   background-color: #dbdbdb;
 `;
 
-
 const AddressTextCont = styled.View`
 `;
 
@@ -67,18 +64,20 @@ const RowContainer = styled(Button)`
   ` : null)}
 `;
 
-export default ({
+export default function ({
   pickup, description, eta, completedAt, openLocationSelect, useBorder, title, selected,
-}) => (
-  <RowContainer pickup={pickup} onPress={openLocationSelect} useBorder={useBorder} paddingStart testID="StopPointRowButton">
-    <StopPointDotContainer origin={pickup}>
-      <StopPointDot origin={pickup} />
-      <StopPointDotTimeLine />
-    </StopPointDotContainer>
-    <AddressTextCont>
-      <AddressText numberOfLines={2}>
-        {description || i18n.t(pickup ? 'addressView.pickupPlaceholder' : 'addressView.dropoffPlaceholder')}
-      </AddressText>
-    </AddressTextCont>
-  </RowContainer>
-);
+}) {
+  return (
+    <RowContainer pickup={pickup} onPress={openLocationSelect} useBorder={useBorder} paddingStart testID="StopPointRowButton">
+      <StopPointDotContainer origin={pickup}>
+        <StopPointDot origin={pickup} />
+        <StopPointDotTimeLine />
+      </StopPointDotContainer>
+      <AddressTextCont>
+        <AddressText numberOfLines={2}>
+          {description || i18n.t(pickup ? 'addressView.pickupPlaceholder' : 'addressView.dropoffPlaceholder')}
+        </AddressText>
+      </AddressTextCont>
+    </RowContainer>
+  );
+}

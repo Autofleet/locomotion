@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import Button from '../Button';
 
-const colors = theme => ({
+const colors = (theme) => ({
   confirm: {
     primary: {
       background: theme.primaryColor,

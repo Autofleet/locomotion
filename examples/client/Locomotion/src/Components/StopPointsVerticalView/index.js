@@ -10,7 +10,7 @@ import {
 } from '../../lib/commonTypes';
 import { Line } from './VerticalTimeLine/styled';
 
-const getEtaText = eta => moment(eta).format('h:mm A');
+const getEtaText = (eta) => moment(eta).format('h:mm A');
 
 const stopPointText = (sp, isFutureRide, rideState) => {
   if (isFutureRide) {
@@ -28,7 +28,7 @@ const stopPointText = (sp, isFutureRide, rideState) => {
 
 const MAX_DESC_LIMIT = 50;
 
-const Index = ({ ride }) => {
+function Index({ ride }) {
   const {
     state,
     stopPoints,
@@ -62,8 +62,7 @@ const Index = ({ ride }) => {
                 <ContentTitle>
                   {rideIsActive
                     ? stopPointText(sp, isFutureRide, ride.state)
-                    : getEtaText(sp.completedAt || sp.arrivedAt)
-                }
+                    : getEtaText(sp.completedAt || sp.arrivedAt)}
                 </ContentTitle>
             )}
             />
@@ -73,6 +72,6 @@ const Index = ({ ride }) => {
     );
   }
   return null;
-};
+}
 
 export default Index;

@@ -1,4 +1,6 @@
-import React, { createContext, useEffect, useState } from 'react';
+import React, {
+  createContext, useEffect, useState, useMemo,
+} from 'react';
 import moment from 'moment';
 import network from '../../services/network';
 import Mixpanel from '../../services/Mixpanel';
@@ -47,7 +49,6 @@ const getDuration = (stopPoints: Array<any>) => {
   ];
 };
 
-
 export const formatRides = (data: any) => data.map((r: any) => {
   const sortedSps = formatSps(r.stopPoints);
   const [appDuration, appDurationHours, appDurationMinutes] = getDuration(sortedSps);
@@ -60,7 +61,7 @@ export const formatRides = (data: any) => data.map((r: any) => {
   });
 });
 
-export const RideHistoryContextProvider = ({ children }: any) => {
+export function RideHistoryContextProvider({ children }: any) {
   const [rides, setRides] = useState<any>(null);
   const [savedParams, setSavedParams] = useState<any | null>(null);
   const [savedFilterScrollPos, saveFilterScrollPos] = useState<any | null>(null);
@@ -180,20 +181,22 @@ export const RideHistoryContextProvider = ({ children }: any) => {
     restore();
   }, []);
 
+  const contextValue = useMemo(() => ({
+    rides,
+    initRides,
+    loadRides,
+    savedParams,
+    loadMoreRides,
+    savedFilterScrollPos,
+    setRides,
+    saveFilterScrollPos: (pos: any) => saveFilterScrollPos(pos),
+  }), [rides, savedParams, savedFilterScrollPos]);
+
   return (
     <rideHistoryContext.Provider
-      value={{
-        rides,
-        initRides,
-        loadRides,
-        savedParams,
-        loadMoreRides,
-        savedFilterScrollPos,
-        setRides,
-        saveFilterScrollPos: (pos: any) => saveFilterScrollPos(pos),
-      }}
+      value={contextValue}
     >
       {children}
     </rideHistoryContext.Provider>
   );
-};
+}

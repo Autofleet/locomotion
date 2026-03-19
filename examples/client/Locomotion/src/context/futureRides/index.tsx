@@ -5,6 +5,7 @@ import React, {
   Dispatch,
   useContext,
   useRef,
+  useMemo,
 } from 'react';
 import useInterval from '../../lib/useInterval';
 import { RideInterface } from '../newRideContext';
@@ -28,7 +29,7 @@ export const FutureRidesContext = createContext<FutureRidesContextInterface>({
   onFutureRideTransition: () => undefined,
 });
 
-const FutureRidesProvider = ({ children }: { children: any }) => {
+function FutureRidesProvider({ children }: { children: any }) {
   const { user } = useContext(UserContext);
   const [futureRides, setFutureRides] = useState<RideInterface[]>([]);
   const [newFutureRide, setNewFutureRide] = useState<RideInterface | null>(null);
@@ -86,19 +87,21 @@ const FutureRidesProvider = ({ children }: { children: any }) => {
     }
   }, [user?.id]);
 
+  const contextValue = useMemo(() => ({
+    futureRides,
+    newFutureRide,
+    setNewFutureRide,
+    loadFutureRides,
+    onFutureRideTransition: setOnFutureRideTransition,
+  }), [futureRides, newFutureRide]);
+
   return (
     <FutureRidesContext.Provider
-      value={{
-        futureRides,
-        newFutureRide,
-        setNewFutureRide,
-        loadFutureRides,
-        onFutureRideTransition: setOnFutureRideTransition,
-      }}
+      value={contextValue}
     >
       {children}
     </FutureRidesContext.Provider>
   );
-};
+}
 
 export default FutureRidesProvider;

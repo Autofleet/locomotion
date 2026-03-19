@@ -11,12 +11,12 @@ import { ERROR_COLOR } from '../../context/theme';
 type SupportIsoCode = PhoneInputProps['defaultCode'];
 const ALL_SUPPORTED_ISO_CODES_FROM_LIB: SupportIsoCode[] = [];
 
-const PhoneNumberInput = ({
+function PhoneNumberInput({
   onPhoneNumberChange,
   autoFocus,
   error,
   value,
-}: any) => {
+}: any) {
   const [isFocused, setIsFocused] = useState(false);
   const [defaultCode, setDefaultCode] = useState<SupportIsoCode | null>(null);
   const theme = useContext(ThemeContext);
@@ -51,7 +51,7 @@ const PhoneNumberInput = ({
     if (!number) {
       return '';
     }
-    const numberCode = codes.find(c => c.code === defaultCode)?.dialCode;
+    const numberCode = codes.find((c) => c.code === defaultCode)?.dialCode;
     if (numberCode && number.startsWith(numberCode)) {
       return number.replace(numberCode, '');
     }
@@ -98,6 +98,6 @@ const PhoneNumberInput = ({
       }}
     />
   ) : null;
-};
+}
 
 export default PhoneNumberInput;

@@ -4,7 +4,6 @@ import { View } from 'react-native';
 import Card from './Card';
 import Button from '../Button';
 
-
 export type InformationCardProps = {
   title?: string,
   children?: any,
@@ -16,7 +15,7 @@ export type InformationCardProps = {
   testID?: string
 }
 
-const InformationCard = ({
+function InformationCard({
   title = '',
   children,
   onPress = undefined,
@@ -25,8 +24,8 @@ const InformationCard = ({
   icon = undefined,
   onIconPress,
   ...props
-}: InformationCardProps) => (
-  onPress
+}: InformationCardProps) {
+  return onPress
     ? (
       <Button onPress={onPress} {...props} style={{ flex: 1 }}>
         { children
@@ -78,10 +77,8 @@ const InformationCard = ({
             />
           )}
       </View>
-    )
-
-);
-
+    );
+}
 
 InformationCard.defaultProps = {
   title: '',

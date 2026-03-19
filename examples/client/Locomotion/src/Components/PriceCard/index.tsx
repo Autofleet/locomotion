@@ -6,13 +6,15 @@ type PriceCardProps = {
     text: string
 }
 
-const PriceCard = ({ name, text } : PriceCardProps) => (
-  <PriceCardContainer>
-    <PriceNameText>{name}</PriceNameText>
-    <PriceText>
-      {text}
-    </PriceText>
-  </PriceCardContainer>
-);
+function PriceCard({ name, text } : PriceCardProps) {
+  return (
+    <PriceCardContainer>
+      <PriceNameText>{name}</PriceNameText>
+      <PriceText>
+        {text}
+      </PriceText>
+    </PriceCardContainer>
+  );
+}
 
 export default PriceCard;

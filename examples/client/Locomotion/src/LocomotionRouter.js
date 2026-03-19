@@ -21,7 +21,7 @@ import initAppsFlyer from './services/appsflyer';
 
 LogBox.ignoreAllLogs();
 
-export default (props) => {
+export default function (props) {
   const navigatorRef = useRef(null);
   const appStateRef = useRef(AppState.currentState);
 
@@ -94,4 +94,4 @@ export default (props) => {
       </MainProvider>
     </NavigationContainer>
   );
-};
+}

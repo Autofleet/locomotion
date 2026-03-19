@@ -16,9 +16,9 @@ import { FlexCont } from '../../Components/Flex';
 
 const MAX_SIZE = 150;
 
-export default ({
+export default function ({
   isVisible, onSubmit, onCancel, notes,
-}) => {
+}) {
   const [currentText, updateText] = useState('');
   const inputRef = useRef();
   const theme = useContext(ThemeContext);
@@ -76,4 +76,4 @@ export default ({
       </KeyboardAvoidingView>
     </StyledModal>
   );
-};
+}

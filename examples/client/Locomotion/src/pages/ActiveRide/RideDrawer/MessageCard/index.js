@@ -9,9 +9,9 @@ import {
 } from './styled';
 import { getTogglePopupsState } from '../../../../context/state';
 
-export default ({
+export default function ({
   id, title, subTitle, closeAfter, onClose,
-}) => {
+}) {
   const [isPopupOpen, togglePopup] = getTogglePopupsState();
   const closePopup = () => {
     if (onClose) {
@@ -26,19 +26,17 @@ export default ({
   }, []);
 
   return (
-    <Fragment>
-      {isPopupOpen(id)
-        ? (
-          <MessageContainer>
-            <CloseContainer noBackground onPress={() => closePopup()} testID="CloseMessageCardButton">
-              <ResetInputIcon />
-            </CloseContainer>
-            <View style={{ flex: 2, textAlign: 'left', maxWidth: '80%' }}>
-              <MessageTitle>{title}</MessageTitle>
-              <MessageText>{subTitle}</MessageText>
-            </View>
-          </MessageContainer>
-        ) : null}
-    </Fragment>
+    isPopupOpen(id)
+      ? (
+        <MessageContainer>
+          <CloseContainer noBackground onPress={() => closePopup()} testID="CloseMessageCardButton">
+            <ResetInputIcon />
+          </CloseContainer>
+          <View style={{ flex: 2, textAlign: 'left', maxWidth: '80%' }}>
+            <MessageTitle>{title}</MessageTitle>
+            <MessageText>{subTitle}</MessageText>
+          </View>
+        </MessageContainer>
+      ) : null
   );
-};
+}

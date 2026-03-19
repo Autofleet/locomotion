@@ -18,7 +18,7 @@ import * as navigationService from '../../services/navigation';
 const CODE_LENGTH = 4;
 const RESEND_SECONDS = 60;
 
-const Code = () => {
+function Code() {
   const route = useRoute();
   const { nextScreen } = useContext(OnboardingContext);
   const {
@@ -123,6 +123,6 @@ const Code = () => {
       </ContentContainer>
     </PageContainer>
   );
-};
+}
 
 export default Code;

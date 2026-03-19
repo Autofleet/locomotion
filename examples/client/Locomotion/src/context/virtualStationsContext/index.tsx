@@ -5,6 +5,7 @@ import React, {
   useContext,
   useCallback,
   useRef,
+  useMemo,
 } from 'react';
 import { point, distance } from '@turf/turf';
 import { UserContext } from '../user';
@@ -61,7 +62,7 @@ export const VirtualStationsContext = createContext<VirtualStationsContextInterf
   stationCalloutsRef: { current: {} },
 });
 
-const StationsProvider = ({ children }: { children: React.ReactNode }) => {
+function StationsProvider({ children }: { children: React.ReactNode }) {
   const { user, locationGranted } = useContext(UserContext);
   const [isStationsEnabled, setIsStationsEnabled] = useState(false);
   const [rawStations, setRawStations] = useState<Station[]>([]);
@@ -96,7 +97,6 @@ const StationsProvider = ({ children }: { children: React.ReactNode }) => {
     setCurrentLocation(formatCoords(location.coords));
     return location.coords;
   };
-
 
   useEffect(() => {
     getCurrentLocation();
@@ -149,7 +149,6 @@ const StationsProvider = ({ children }: { children: React.ReactNode }) => {
     return sortedStations;
   };
 
-
   useEffect(() => {
     if (rawStations?.length) {
       sortAndUpdateStations();
@@ -163,7 +162,6 @@ const StationsProvider = ({ children }: { children: React.ReactNode }) => {
     }
   }, [user?.id]);
 
-
   const createMapMarker = (station: Station, stopPoints: StopPoint[]) => {
     let type = 'default';
 
@@ -175,12 +173,10 @@ const StationsProvider = ({ children }: { children: React.ReactNode }) => {
       type = STOP_POINT_TYPES.STOP_POINT_DROPOFF;
     }
 
-
     return (
       <VirtualStationMarker
         station={station}
         type={type}
-        onCalloutPress={(selectedStation: Station) => console.log('selectedStation', selectedStation)}
         ref={(r: unknown) => {
           stationCalloutsRef.current[station.externalId] = r;
         }}
@@ -188,30 +184,32 @@ const StationsProvider = ({ children }: { children: React.ReactNode }) => {
     );
   };
 
-  const getMapMarkers = (stopPoints: StopPoint[]): React.ReactNode[] => rawStations.map(s => createMapMarker(s, stopPoints));
+  const getMapMarkers = (stopPoints: StopPoint[]): React.ReactNode[] => rawStations.map((s) => createMapMarker(s, stopPoints));
 
-  const StationMarkers = ({ requestedStopPoints }: { requestedStopPoints: StopPoint[] }) => {
-    const markers = useCallback(() => rawStations.map(s => createMapMarker(s, requestedStopPoints)), [requestedStopPoints]);
+  function StationMarkers({ requestedStopPoints }: { requestedStopPoints: StopPoint[] }) {
+    const markers = useCallback(() => rawStations.map((s) => createMapMarker(s, requestedStopPoints)), [requestedStopPoints]);
     return <>{markers()}</>;
-  };
+  }
+
+  const contextValue = useMemo(() => ({
+    loadVirtualStations,
+    getMapMarkers,
+    StationMarkers,
+    isStationsEnabled,
+    rawStations,
+    stationsList,
+    sortAndUpdateStations,
+    getStationList,
+    stationCalloutsRef,
+  }), [isStationsEnabled, rawStations, stationsList, sortAndUpdateStations, StationMarkers, getMapMarkers]);
 
   return (
     <VirtualStationsContext.Provider
-      value={{
-        loadVirtualStations,
-        getMapMarkers,
-        StationMarkers,
-        isStationsEnabled,
-        rawStations,
-        stationsList,
-        sortAndUpdateStations,
-        getStationList,
-        stationCalloutsRef,
-      }}
+      value={contextValue}
     >
       {children}
     </VirtualStationsContext.Provider>
   );
-};
+}
 
 export default StationsProvider;

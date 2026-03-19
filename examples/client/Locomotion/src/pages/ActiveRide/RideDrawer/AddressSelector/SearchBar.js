@@ -44,7 +44,6 @@ const Row = styled(Animated.View)`
     
 `;
 
-
 const BackButtonContainer = styled.TouchableOpacity`
     width: 40px;
     height: 50px;
@@ -56,14 +55,12 @@ const BackButtonContainer = styled.TouchableOpacity`
 
 `;
 
-
 const ArrowImage = styled.Image.attrs({ source: backImage })`
     width: 25px;
     height: 25px;
 `;
 
-
-const BackButton = ({ isExpanded, onBack }) => {
+function BackButton({ isExpanded, onBack }) {
   if (!isExpanded) {
     return null;
   }
@@ -72,15 +69,15 @@ const BackButton = ({ isExpanded, onBack }) => {
       <ArrowImage />
     </BackButtonContainer>
   );
-};
+}
 
-const SearchBar = ({
+function SearchBar({
   isExpanded,
   onFocus = () => null,
   onBack,
   onSearch,
   selectedIndex,
-}) => {
+}) {
   const {
     setSelectedInputIndex,
     selectedInputTarget,
@@ -100,13 +97,13 @@ const SearchBar = ({
   const SP_AMOUNT_WITHOUT_MULTI = 2;
   const [searchTerm, setSearchTerm] = useState('');
   const [multiSpAmount, setMultiSpAmount] = useState(0);
-  const debouncedSearch = useCallback(debounce(async text => onSearch(text), 300), [locationGranted]);
+  const debouncedSearch = useCallback(debounce(async (text) => onSearch(text), 300), [locationGranted]);
   const isMultiSpEnabled = multiSpAmount > 0 && isExpanded;
   const amountOfEnteredSp = requestStopPoints.length;
   const canAddMoreMultiSp = isMultiSpEnabled
   && amountOfEnteredSp < multiSpAmount + SP_AMOUNT_WITHOUT_MULTI;
   const hasEnteredMultiSp = amountOfEnteredSp > SP_AMOUNT_WITHOUT_MULTI;
-  const isSpIndexMulti = i => hasEnteredMultiSp && i > 0 && i < amountOfEnteredSp - 1;
+  const isSpIndexMulti = (i) => hasEnteredMultiSp && i > 0 && i < amountOfEnteredSp - 1;
   const getSpPlaceholder = (sp, index) => {
     if (isSpIndexMulti(index)) {
       return 'addressView.multiStopPlaceholder';
@@ -116,7 +113,6 @@ const SearchBar = ({
     }
     return 'addressView.whereTo';
   };
-
 
   const onInputFocus = (target, index) => {
     setSelectedInputTarget(target);
@@ -166,7 +162,6 @@ const SearchBar = ({
     const autoFocus = isExpanded && index === selectedIndex;
     return (
 
-
       <Row
         {...rowProps}
         key={sp.id}
@@ -196,7 +191,7 @@ const SearchBar = ({
           }}
           isMultiSpEnabled={isMultiSpEnabled}
           hasEnteredMultiSp={hasEnteredMultiSp}
-          onPressIn={e => e.currentTarget?.setSelection((description?.length || 0), (description?.length || 0))}
+          onPressIn={(e) => e.currentTarget?.setSelection((description?.length || 0), (description?.length || 0))}
           key={`input_${sp.id}`}
           autoCorrect={false}
           clear={() => {
@@ -229,8 +224,7 @@ const SearchBar = ({
             if (e.currentTarget?.setSelection) {
               e.currentTarget?.setSelection(1, 1);
             }
-          }
-          }
+          }}
           onBlur={(e) => {
             if (e.currentTarget?.setSelection) {
               e.currentTarget?.setSelection(1, 1);
@@ -239,7 +233,6 @@ const SearchBar = ({
         />
       </Row>
 
-
     );
   };
   const buildSps = () => (
@@ -247,7 +240,7 @@ const SearchBar = ({
       data={requestStopPoints}
       scrollEnabled={false}
       renderItem={renderDraggableItem}
-      keyExtractor={item => item.id}
+      keyExtractor={(item) => item.id}
       keyboardShouldPersistTaps="always"
       onReordered={(fromIndex, toIndex) => {
         const newSps = [...requestStopPoints];
@@ -256,11 +249,9 @@ const SearchBar = ({
         const formattedMovedStopPoints = formatMovedMultiSps(newSps);
         setRequestStopPoints(formattedMovedStopPoints);
         Mixpanel.setEvent('finished drag multi sps', { formattedMovedStopPoints });
-      }
-      }
+      }}
     />
   );
-
 
   const onBackPress = useCallback(() => {
     initSps();
@@ -270,7 +261,6 @@ const SearchBar = ({
     }
     onBack();
   });
-
 
   useEffect(() => {
     if (!isExpanded && selectedInputTarget) {
@@ -307,6 +297,6 @@ const SearchBar = ({
       </View>
     </View>
   );
-};
+}
 
 export default SearchBar;

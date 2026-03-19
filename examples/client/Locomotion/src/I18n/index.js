@@ -36,7 +36,7 @@ const extractLanguageFromUrl = (url) => {
   return lastEndpoint.split('.')[0];
 };
 
-const updateUserLanguage = chosenLanguageCode => StorageService.save(
+const updateUserLanguage = (chosenLanguageCode) => StorageService.save(
   { [USER_LANGUAGE_STORAGE_KEY]: chosenLanguageCode },
 );
 
@@ -75,16 +75,10 @@ export const getPreferredLanguageCode = async () => (
   moment.locale(userLanguage);
 })();
 
-
 const languageDetector = {
   type: 'languageDetector',
-  async: true, // async detection
-  // eslint-disable-next-line no-return-await
-  detect: async cb => cb(await getPreferredLanguageCode()),
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  init: () => {},
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  cacheUserLanguage: () => {},
+  async: true,
+  detect: async (cb) => cb(await getPreferredLanguageCode()),
 };
 
 const localResources = {
@@ -106,7 +100,7 @@ i18n
         type: i18nHttpLoader,
         options: {
           loadPath: `${Config.LANGUAGE_FILES_STORAGE}/{{lng}}.json?timestamp=${moment().format('HH:mm')}`,
-          parse: data => data,
+          parse: (data) => data,
           request: async (options, url, payload, callback) => {
             try {
               const { data, status } = await axios.get(url);

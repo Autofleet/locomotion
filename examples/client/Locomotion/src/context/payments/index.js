@@ -105,11 +105,11 @@ const usePayments = () => {
   };
 
   const clientHasValidPaymentMethods = () => paymentMethods.length > 0
-  && paymentMethods.some(pm => !pm.isExpired);
+  && paymentMethods.some((pm) => !pm.isExpired);
 
   const getClientDefaultMethod = (enableCash) => {
     if (paymentMethods && paymentMethods.length) {
-      return (paymentMethods || []).find(pm => pm.isDefault) || paymentMethods[0];
+      return (paymentMethods || []).find((pm) => pm.isDefault) || paymentMethods[0];
     }
     if (enableCash) {
       return cashPaymentMethod;
@@ -154,13 +154,13 @@ const usePayments = () => {
   };
 
   const getClientOutstandingBalanceCard = () => {
-    const has = paymentMethods.find(pm => pm.hasOutstandingBalance);
+    const has = paymentMethods.find((pm) => pm.hasOutstandingBalance);
     return has;
   };
 
   useEffect(() => {
     if (paymentMethods && paymentMethods.length) {
-      if (paymentMethods.find(pm => pm.hasOutstandingBalance)) {
+      if (paymentMethods.find((pm) => pm.hasOutstandingBalance)) {
         setHasOutstandingPayment(true);
       } else {
         setHasOutstandingPayment(false);
@@ -197,7 +197,7 @@ const usePayments = () => {
   };
   const getBusinessAccountById = (id) => {
     if (!id) { return null; }
-    const relevantBusinessAccount = businessPaymentMethods.find(ba => ba.id === id);
+    const relevantBusinessAccount = businessPaymentMethods.find((ba) => ba.id === id);
     if (relevantBusinessAccount) {
       return relevantBusinessAccount;
     }

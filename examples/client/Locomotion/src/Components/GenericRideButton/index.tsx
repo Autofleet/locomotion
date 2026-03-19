@@ -16,10 +16,10 @@ interface GenericRideButtonProps {
     title: string;
 }
 
-const GenericRideButton = ({
+function GenericRideButton({
   icon,
   title,
-}: GenericRideButtonProps) => {
+}: GenericRideButtonProps) {
   const { primaryColor } = useContext(ThemeContext);
   return (
     <>
@@ -27,6 +27,6 @@ const GenericRideButton = ({
       <TimeText numberOfLines={1}>{title}</TimeText>
     </>
   );
-};
+}
 
 export default GenericRideButton;

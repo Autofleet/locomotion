@@ -34,9 +34,9 @@ export const RideStatusContainer = styled.View`
 
 `;
 
-export default ({
+export default function ({
   rideState, pickupEta, dropoffEta, arrivingReminderMin, arrivingPush,
-}) => {
+}) {
   const getTitle = () => {
     if (rideState === 'driverOnTheWay') {
       if ((pickupEta <= arrivingReminderMin && pickupEta > 0) || (arrivingPush !== null && pickupEta > 0)) {
@@ -65,16 +65,14 @@ export default ({
   };
 
   return (
-    <Fragment>
-      {rideState
-        ? (
-          <RideStatusContainer>
-            <RideStatusText state={rideState}>
-              {I18n.t(`home.rideStates.${getTitle()}`, { pickupEta, dropoffEta })}
-            </RideStatusText>
-          </RideStatusContainer>
-        )
-        : null}
-    </Fragment>
+    rideState
+      ? (
+        <RideStatusContainer>
+          <RideStatusText state={rideState}>
+            {I18n.t(`home.rideStates.${getTitle()}`, { pickupEta, dropoffEta })}
+          </RideStatusText>
+        </RideStatusContainer>
+      )
+      : null
   );
-};
+}

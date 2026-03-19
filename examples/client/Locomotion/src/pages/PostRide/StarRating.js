@@ -1,9 +1,8 @@
-
 import React, { useEffect, useState } from 'react';
 import { SummaryStars } from './styled';
 import Stars from '../../Components/Stars';
 
-const StarRating = ({ onUpdate }) => {
+function StarRating({ onUpdate }) {
   const [rating, setRating] = useState(null);
 
   const updateRating = async (rate) => {
@@ -19,7 +18,6 @@ const StarRating = ({ onUpdate }) => {
       <Stars size={33} rating={rating} updateRating={updateRating} />
     </SummaryStars>
   );
-};
-
+}
 
 export default StarRating;

@@ -111,13 +111,13 @@ const PassengerControlersContainer = styled.View`
   margin-right: 15;
 `;
 
-export default ({ amount, onChange }) => {
+export default function ({ amount, onChange }) {
   const [isPopupOpen, togglePopup] = getTogglePopupsState();
   const [newAmount, setNewAmount] = useState(amount);
 
   const validateChange = (validationAmount, change) => MAX_NUMBER_OF_PASSENGER >= (validationAmount + change) && (validationAmount + change) >= MIN_NUMBER_OF_PASSENGER;
 
-  const getNewAmountFunction = change => () => {
+  const getNewAmountFunction = (change) => () => {
     if (!validateChange(newAmount, change)) {
       return;
     }
@@ -150,4 +150,4 @@ export default ({ amount, onChange }) => {
       </View>
     </PassengerAmountContainer>
   );
-};
+}

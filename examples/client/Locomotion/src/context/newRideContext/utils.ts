@@ -80,7 +80,6 @@ export const INITIAL_STOP_POINTS: StopPoint[] = [{
   placeId: null,
 }];
 
-
 export const buildStreetAddress = (data: any) => {
   const streetAddress: any = {};
   data.results[0].address_components.map((ac: any) => {
@@ -187,14 +186,16 @@ export const formatEstimationsResult = (
   };
 };
 
-export const formatStopPointsForEstimations = (requestStopPoints: any[]) => requestStopPoints.map(sp => ({
+export const formatStopPointsForEstimations = (requestStopPoints: any[]) => requestStopPoints.map((sp) => ({
   type: sp.type,
   lat: sp.lat,
   lng: sp.lng,
 }));
 
-export const getFormattedPrice = (priceCurrency: string | undefined,
-  priceAmount: number | undefined) => {
+export const getFormattedPrice = (
+  priceCurrency: string | undefined,
+  priceAmount: number | undefined,
+) => {
   if (!priceCurrency) {
     return i18n.t('rideDetails.noCharge');
   }
@@ -207,7 +208,6 @@ export const getCouponText = (coupon: any) => {
   }
   return coupon.percent_off ? `${coupon.percent_off}%` : getFormattedPrice(coupon.currency, coupon.amount_off);
 };
-
 
 export const getCurrencySymbol = (priceCurrency?: string) => {
   if (!priceCurrency) {

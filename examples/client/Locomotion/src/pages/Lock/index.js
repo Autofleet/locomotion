@@ -31,7 +31,7 @@ const useInterval = (callback, delay) => {
   }, [delay]);
 };
 
-export default () => {
+export default function () {
   useInterval(async () => {
     const userData = await UserService.getUser();
     if (userData === null) {
@@ -68,4 +68,4 @@ export default () => {
       </ButtonContainer>
     </Container>
   );
-};
+}

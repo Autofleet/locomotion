@@ -68,7 +68,7 @@ class Auth {
     refreshToken: rt,
   });
 
-  updateCaptchaToken = captchaToken => StorageService.save({
+  updateCaptchaToken = (captchaToken) => StorageService.save({
     captchaToken,
   });
 

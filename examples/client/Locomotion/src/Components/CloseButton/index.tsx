@@ -11,7 +11,7 @@ const StyledCloseButton = styled(Button)`
   justify-content: center;
 `;
 
-const CloseButton = ({
+function CloseButton({
   onPress,
   size,
   containerStyles,
@@ -19,11 +19,13 @@ const CloseButton = ({
   onPress: any;
   size?: number;
   containerStyles?: any;
-}) => (
-  <StyledCloseButton style={containerStyles} noBackground onPress={onPress}>
-    <SvgIcon Svg={closeXIcon} width={size} height={size} fill="#333" />
-  </StyledCloseButton>
-);
+}) {
+  return (
+    <StyledCloseButton style={containerStyles} noBackground onPress={onPress}>
+      <SvgIcon Svg={closeXIcon} width={size} height={size} fill="#333" />
+    </StyledCloseButton>
+  );
+}
 
 CloseButton.defaultProps = {
   size: 15,

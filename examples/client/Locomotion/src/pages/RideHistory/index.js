@@ -23,7 +23,7 @@ import {
 import RangeDateTimePicker from './RangeDateTimePicker';
 import * as navigationService from '../../services/navigation';
 
-const getCustomFilter = filterId => ({
+const getCustomFilter = (filterId) => ({
   [filterId]: {
     id: filterId,
     title: filterId,
@@ -31,7 +31,7 @@ const getCustomFilter = filterId => ({
   },
 });
 
-const Page = ({ menuSide }) => {
+function Page({ menuSide }) {
   const {
     rides, loadRides, initRides, savedParams,
   } = useContext(rideHistoryContext);
@@ -145,6 +145,6 @@ const Page = ({ menuSide }) => {
       />
     </PageContainer>
   );
-};
+}
 
 export default Page;

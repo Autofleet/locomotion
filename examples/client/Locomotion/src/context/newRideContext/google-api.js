@@ -6,8 +6,10 @@ export const getPlaces = async (params) => {
 };
 
 export const getGeocode = async (params) => {
-  const { data } = await network.post('/api/v1/maps/reverse-geocode',
-    { params: { ...params, includePlaceId: true } });
+  const { data } = await network.post(
+    '/api/v1/maps/reverse-geocode',
+    { params: { ...params, includePlaceId: true } },
+  );
   return data.result;
 };
 

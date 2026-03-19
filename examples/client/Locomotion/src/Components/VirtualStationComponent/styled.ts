@@ -32,7 +32,7 @@ interface MarkerContainerProps {
   isActive?: boolean;
   theme: Theme;
   primaryButtonTextColor: string;
-};
+}
 
 export const MarkerContainer = styled.TouchableOpacity<MarkerContainerProps>`
     width: 25px;

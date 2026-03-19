@@ -39,12 +39,12 @@ export const OfferExpiredText = styled.Text`
   margin-bottom: 5px;
 `;
 
-export default ({
+export default function ({
   offerExpired, onVerified, setLoading, onRenewOffer, futureRide,
 
-}) => (
-  <Fragment>
-    {!offerExpired || futureRide
+}) {
+  return (
+    !offerExpired || futureRide
       ? (
         <SliderButton
           onVerified={onVerified}
@@ -67,6 +67,5 @@ export default ({
           </RoundedButton>
         </DrawerButtonContainer>
       )
-        }
-  </Fragment>
-);
+  );
+}

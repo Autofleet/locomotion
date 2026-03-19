@@ -16,7 +16,7 @@ const getMobileIsoCode = async () => {
 const getIsoCodeByList = (mccMnc, mobileIso) => {
   const result = MccMncList.filter({ mccmnc: mccMnc });
   if (result.length > 1) {
-    const accurateResult = result.find(r => r.countryCode === (mobileIso || defaultCountryCode));
+    const accurateResult = result.find((r) => r.countryCode === (mobileIso || defaultCountryCode));
     return accurateResult?.countryCode;
   }
   return result && result[0]?.countryCode;

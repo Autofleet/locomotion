@@ -6,7 +6,7 @@ import { OnboardingContext } from '../../context/onboarding';
 import { UserContext } from '../../context/user';
 import * as navigationService from '../../services/navigation';
 
-const Header = ({ title, page = undefined, showSkipButton }) => {
+function Header({ title, page = undefined, showSkipButton }) {
   const { nextScreen, requiredOnboarding } = useContext(OnboardingContext);
   const { removeChangesToUser } = useContext(UserContext);
   const route = useRoute();
@@ -38,6 +38,6 @@ const Header = ({ title, page = undefined, showSkipButton }) => {
       onPressSkip={() => nextScreen(route.name)}
     />
   );
-};
+}
 
 export default Header;

@@ -86,14 +86,12 @@ const PlusText = styled(Text)`
   line-height: 16px;
 `;
 
-
 const style = {
   marginTop: -10,
   [StartCapital()]: 28,
 };
 
-
-const CardRow = (paymentMethod: any) => {
+function CardRow(paymentMethod: any) {
   const { primaryColor } = useContext(ThemeContext);
   const {
     offlinePaymentText,
@@ -171,93 +169,86 @@ const CardRow = (paymentMethod: any) => {
   };
 
   return (
-    <>
-      <Button
-        noBackground
-        testID={testID}
-        activeOpacity={paymentMethod.onPress && !paymentMethod.disabledReason ? 0 : 1}
-        onPress={() => {
-          if (paymentMethod.onPress && !paymentMethod.disabledReason) {
-            paymentMethod.onPress();
-          }
-        }}
-      >
-        <Container
-          chooseMethodPage={paymentMethod.chooseMethodPage}
-          selected={paymentMethod.selected}
-          disabled={paymentMethod.disabledReason}
-        >
-          <InnerContainer>
-            <ImageContainer>
-              {paymentMethod.addNew
-                ? (
-                  <>
-                    <PlusContainer><PlusText>+</PlusText></PlusContainer>
-                  </>
-                )
-                : (
-                  <>
-                    {getPaymentMethodIcon()}
-                    {(paymentMethod.mark && !paymentMethod.alignMarkToRight) ? (
-                      <SvgIcon
-                        style={{
-                          position: 'absolute',
-                          right: -7,
-                          bottom: -7,
-                        }}
-                        Svg={selected}
-                        fill={primaryColor}
-                      />
-                    ) : null }
-                  </>
-                )
+    <Button
+      noBackground
+      testID={testID}
+      activeOpacity={paymentMethod.onPress && !paymentMethod.disabledReason ? 0 : 1}
+      onPress={() => {
+        if (paymentMethod.onPress && !paymentMethod.disabledReason) {
+          paymentMethod.onPress();
         }
+      }}
+    >
+      <Container
+        chooseMethodPage={paymentMethod.chooseMethodPage}
+        selected={paymentMethod.selected}
+        disabled={paymentMethod.disabledReason}
+      >
+        <InnerContainer>
+          <ImageContainer>
+            {paymentMethod.addNew
+              ? (
+                <PlusContainer><PlusText>+</PlusText></PlusContainer>
+              )
+              : (
+                <>
+                  {getPaymentMethodIcon()}
+                  {(paymentMethod.mark && !paymentMethod.alignMarkToRight) ? (
+                    <SvgIcon
+                      style={{
+                        position: 'absolute',
+                        right: -7,
+                        bottom: -7,
+                      }}
+                      Svg={selected}
+                      fill={primaryColor}
+                    />
+                  ) : null }
+                </>
+              )}
 
-            </ImageContainer>
-            <TextContainer>
-              {paymentMethod.addNew
-                ? (
-                  <>
-                    <Type>{i18n.t('payments.addNewCreditCard').toString()}</Type>
-                  </>
-                )
-                : (
-                  <>
+          </ImageContainer>
+          <TextContainer>
+            {paymentMethod.addNew
+              ? (
+                <Type>{i18n.t('payments.addNewCreditCard').toString()}</Type>
+              )
+              : (
+                <>
 
-                    <Type>
-                      {getPaymentMethodTitle()}
-                    </Type>
+                  <Type>
+                    {getPaymentMethodTitle()}
+                  </Type>
 
-                    {paymentMethod.lastFour
-                      ? <Description>{getLastFourForamttedShort(paymentMethod.lastFour)}</Description>
-                      : null}
-                    {paymentMethod && paymentMethod.expiresAt && !!paymentMethod.lastFour && isCardExpired ? <Error>{i18n.t('payments.expired').toString()}</Error> : null}
-                    {paymentMethod && !!paymentMethod.lastFour && paymentMethod.hasOutstandingBalance ? <Error>{i18n.t('payments.hasOutstandingBalance').toString()}</Error> : null}
-                  </>
-                )}
-            </TextContainer>
-            {paymentMethod.showArrow && <SvgIcon Svg={chevronIcon} stroke="#d7d7d7" />}
-          </InnerContainer>
-          {paymentMethod.disabledReason && (
+                  {paymentMethod.lastFour
+                    ? <Description>{getLastFourForamttedShort(paymentMethod.lastFour)}</Description>
+                    : null}
+                  {paymentMethod && paymentMethod.expiresAt && !!paymentMethod.lastFour && isCardExpired ? <Error>{i18n.t('payments.expired').toString()}</Error> : null}
+                  {paymentMethod && !!paymentMethod.lastFour && paymentMethod.hasOutstandingBalance ? <Error>{i18n.t('payments.hasOutstandingBalance').toString()}</Error> : null}
+                </>
+              )}
+          </TextContainer>
+          {paymentMethod.showArrow && <SvgIcon Svg={chevronIcon} stroke="#d7d7d7" />}
+        </InnerContainer>
+        {paymentMethod.disabledReason && (
           <Description>
             {paymentMethod.disabledReason}
           </Description>
-          )}
-          {(paymentMethod.mark && paymentMethod.alignMarkToRight) ? (
-            <SvgIcon
-              style={{
-                position: 'absolute',
-                right: 10,
-                bottom: 15,
-              }}
-              Svg={selected}
-              fill={primaryColor}
-            />
-          ) : null }
-        </Container>
-      </Button>
-    </>
+        )}
+        {(paymentMethod.mark && paymentMethod.alignMarkToRight) ? (
+          <SvgIcon
+            style={{
+              position: 'absolute',
+              right: 10,
+              bottom: 15,
+            }}
+            Svg={selected}
+            fill={primaryColor}
+          />
+        ) : null }
+      </Container>
+    </Button>
   );
-};
+}
 
 export default CardRow;

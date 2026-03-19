@@ -31,10 +31,9 @@ type CardDetailsRouteParams = {
   paymentMethod: PaymentMethodInterface
 };
 
-
-const CardDetails = ({
+function CardDetails({
   loadingState = false,
-}) => {
+}) {
   const [loading, setLoading] = useState(false);
   const [showError, setShowError] = useState(false);
   const [methodForDelete, setMethodForDelete] = useState(null);
@@ -160,11 +159,10 @@ const CardDetails = ({
       </KeyboardAwareScrollView>
       <GenericErrorPopup
         isVisible={showError}
-        closePopup={() => setShowError(false)
-        }
+        closePopup={() => setShowError(false)}
       />
     </PageContainer>
   );
-};
+}
 
 export default CardDetails;

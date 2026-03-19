@@ -1,23 +1,24 @@
 import React from 'react';
 import propTypes from 'prop-types';
-import { IconContainer } from './styled';
 
-const SvgIcon = ({
+function SvgIcon({
   Svg,
   stroke,
   fill,
   width,
   height,
   style,
-}) => (
-  <Svg
-    width={width}
-    height={height}
-    stroke={stroke}
-    fill={fill}
-    style={style}
-  />
-);
+}) {
+  return (
+    <Svg
+      width={width}
+      height={height}
+      stroke={stroke}
+      fill={fill}
+      style={style}
+    />
+  );
+}
 
 export default SvgIcon;
 

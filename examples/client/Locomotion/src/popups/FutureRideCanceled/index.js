@@ -11,10 +11,10 @@ import {
 } from './styled';
 import { getTogglePopupsState } from '../../context/state';
 
-export default ({
-  closeAfter, onClose, rideSummaryData, onRating,
-}) => {
-  const [isPopupOpen, togglePopup, popupData] = getTogglePopupsState();
+export default function ({
+  closeAfter, onClose,
+}) {
+  const [isPopupOpen, togglePopup] = getTogglePopupsState();
   const closePopup = () => {
     if (onClose) {
       onClose();
@@ -45,4 +45,4 @@ export default ({
       </Container>
     </Modal>
   );
-};
+}

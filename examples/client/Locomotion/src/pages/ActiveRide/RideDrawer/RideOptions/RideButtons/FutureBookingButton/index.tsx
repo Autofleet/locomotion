@@ -16,7 +16,7 @@ const TimeText = styled(Text)`
     max-width: 75%;
 `;
 
-const FutureBookingButton = () => {
+function FutureBookingButton() {
   const { chosenService, ride } = useContext(RidePageContext);
   const nowText = i18n.t('bottomSheetContent.ride.now');
   const { primaryColor } = useContext(ThemeContext);
@@ -31,6 +31,6 @@ const FutureBookingButton = () => {
       <SvgIcon stroke="#333333" Svg={chevron} height={10} width={10} style={{ transform: [{ rotate: '90deg' }] }} />
     </>
   );
-};
+}
 
 export default FutureBookingButton;

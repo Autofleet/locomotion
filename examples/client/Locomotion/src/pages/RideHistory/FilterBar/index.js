@@ -7,14 +7,14 @@ import {
 } from './styled';
 import { rideHistoryContext } from '../../../context/rideHistory';
 
-const TaskFilterBar = ({ filter, activeFilter }) => {
+function TaskFilterBar({ filter, activeFilter }) {
   const active = filter.id === activeFilter;
   return (
     <FilterView elevation={2} active={active} key={filter.id}>
       <FilterText active={active}>{filter.title}</FilterText>
     </FilterView>
   );
-};
+}
 
 const FilterBar = React.memo(({
   filters, activeFilter, onFilterClicked,
@@ -38,10 +38,10 @@ const FilterBar = React.memo(({
       ref={(ref) => {
         scrollView.current = ref;
       }}
-      onScrollEndDrag={e => saveScrollPos(e)}
+      onScrollEndDrag={(e) => saveScrollPos(e)}
       onContentSizeChange={onContentSizeChange}
     >
-      {Object.values(filters).map(filter => (
+      {Object.values(filters).map((filter) => (
         <FilterTouchableOpacity
           noLoader
           noBackground

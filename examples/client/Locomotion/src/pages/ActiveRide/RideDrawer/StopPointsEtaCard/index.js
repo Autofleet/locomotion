@@ -23,9 +23,9 @@ export const StopPointsEtaContainer = styled.View`
   justify-content: space-between;
 `;
 
-export default ({
+export default function ({
   pickup, origin, destination, rideState, requestStopPoints, pickupEtaDrift, dropoffEtaDrift,
-}) => {
+}) {
   const firstEta = rideState ? origin && origin.metadata && origin.metadata.firstEta : undefined;
   const firstEtaWithDrift = moment.utc(firstEta).add(pickupEtaDrift, 'minutes');
   const showEta = firstEta && (firstEtaWithDrift.diff(moment.now()) < 0);
@@ -54,4 +54,4 @@ export default ({
       />
     </StopPointsEtaContainer>
   );
-};
+}

@@ -24,7 +24,7 @@ const CODE_LENGTH = 4;
 const RESEND_SECONDS = 60;
 const RESEND_ATTEMPTS = 2;
 
-const Code = () => {
+function Code() {
   const { verifyCode } = useContext(OnboardingContext);
   const { user, onLogin } = useContext(UserContext);
   const [showErrorText, setShowErrorText] = useState(false);
@@ -95,14 +95,14 @@ const Code = () => {
   const onResendPress = async () => {
     setIsRetryingLogin(true);
     setRetryChannel('sms');
-    setResendCounter(currentValue => currentValue + 1);
+    setResendCounter((currentValue) => currentValue + 1);
     setTimer(RESEND_SECONDS);
   };
 
   const onCallPress = async () => {
     setIsRetryingLogin(true);
     setRetryChannel('call');
-    setCallCounter(currentValue => currentValue + 1);
+    setCallCounter((currentValue) => currentValue + 1);
     setIsCalling(true);
   };
 
@@ -205,6 +205,6 @@ const Code = () => {
       </ContentContainer>
     </PageContainer>
   );
-};
+}
 
 export default Code;

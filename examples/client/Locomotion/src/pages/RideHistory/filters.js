@@ -2,25 +2,9 @@ import moment from 'moment';
 import i18n from '../../I18n';
 import { startOfDayTime, YYYY_MM_DD, toDate } from './consts';
 
-export const formatDateBeforeSend = date => moment(date).toDate();
+export const formatDateBeforeSend = (date) => moment(date).toDate();
 
 export const FILTERS = () => ({
-  // quarter: {
-  //   id: 'quarter',
-  //   title: i18n.t('activityPage.filters.titles.quarter', 'Quarter'),
-  //   getParams: () => ({
-  //     fromDate: `${moment().subtract(6, 'month').format(YYYY_MM_DD)} ${startOfDayTime}`,
-  //     toDate,
-  //   }),
-  // },
-  // month: {
-  //   id: 'month',
-  //   title: i18n.t('activityPage.filters.titles.month', 'Month'),
-  //   getParams: () => ({
-  //     fromDate: `${moment().subtract(1, 'month').format(YYYY_MM_DD)} ${startOfDayTime}`,
-  //     toDate,
-  //   }),
-  // },
   today: {
     id: 'today',
     title: i18n.t('rideHistory.filters.titles.today'),
