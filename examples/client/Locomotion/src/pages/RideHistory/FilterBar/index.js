@@ -17,7 +17,7 @@ function TaskFilterBar({ filter, activeFilter }) {
 }
 
 const FilterBar = React.memo(({
-  filters, activeFilter, onFilterClicked,
+  filters = {}, activeFilter = undefined, onFilterClicked = () => null,
 }) => {
   const { savedFilterScrollPos, saveFilterScrollPos } = useContext(rideHistoryContext);
   const scrollView = useRef();
@@ -62,10 +62,4 @@ FilterBar.propTypes = {
   onFilterClicked: propTypes.func,
   activeFilter: propTypes.string,
   filters: propTypes.shape({}),
-};
-
-FilterBar.defaultProps = {
-  onFilterClicked: () => null,
-  activeFilter: undefined,
-  filters: {},
 };

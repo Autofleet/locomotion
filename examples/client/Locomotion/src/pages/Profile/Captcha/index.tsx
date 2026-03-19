@@ -19,8 +19,8 @@ const GOOGLE_RECAPTCHA_URL = 'https://www.google.com/recaptcha/api/siteverify';
 
 function Captcha({
   onVerified,
-  onClose,
-  onError,
+  onClose = undefined,
+  onError = undefined,
   isOpen,
 }: CaptchaProps) {
   const { shouldHideCaptcha, fetchHideCaptchaSetting } = useContext(OnboardingContext);
@@ -84,10 +84,5 @@ function Captcha({
     />
   );
 }
-
-Captcha.defaultProps = {
-  onClose: undefined,
-  onError: undefined,
-};
 
 export default Captcha;

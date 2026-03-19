@@ -22,7 +22,7 @@ function InformationCard({
   verified = false,
   showUnverified = false,
   icon = undefined,
-  onIconPress,
+  onIconPress = undefined,
   ...props
 }: InformationCardProps) {
   return onPress
@@ -79,17 +79,6 @@ function InformationCard({
       </View>
     );
 }
-
-InformationCard.defaultProps = {
-  title: '',
-  children: {},
-  onPress: undefined,
-  verified: false,
-  showUnverified: false,
-  icon: undefined,
-  onIconPress: undefined,
-  testID: '',
-};
 
 InformationCard.propTypes = {
   title: propsTypes.string,

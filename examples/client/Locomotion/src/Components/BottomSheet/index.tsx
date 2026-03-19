@@ -40,10 +40,10 @@ interface BottomSheetProps {
 }
 
 const BottomSheetComponent = forwardRef(({
-  children,
-  enablePanDownToClose,
-  index,
-  closeable,
+  children = null,
+  enablePanDownToClose = false,
+  index = 0,
+  closeable = false,
 }: BottomSheetProps, ref) => {
   const {
     setIsExpanded,
@@ -124,10 +124,4 @@ const BottomSheetComponent = forwardRef(({
     </BottomSheet>
   );
 });
-BottomSheetComponent.defaultProps = {
-  children: null,
-  enablePanDownToClose: false,
-  index: 0,
-  closeable: false,
-};
 export default BottomSheetComponent;

@@ -1,13 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { View } from 'react-native';
 import propsTypes from 'prop-types';
-import Loader from '../Loader';
 import { ButtonTextContainer, StyledButton, SubmitButtonText } from './styled';
 
 function SelectableButton({
   onPress,
   style,
-  selected,
+  selected = false,
   component,
   children,
   label,
@@ -24,34 +23,30 @@ function SelectableButton({
     >
       <ButtonTextContainer selected={selected}>
         {
-        children
-          ? (
-            <SubmitButtonText selected={selected}>
-              {children}
-            </SubmitButtonText>
-          ) : (
-            <>
-              <View style={{ marginLeft: 15 }}>
-                <SubmitButtonText selected={selected}>
-                  {label}
-                </SubmitButtonText>
-              </View>
-              <View style={{ marginRight: 15 }}>
-                <SubmitButtonText selected={selected}>
-                  {value}
-                </SubmitButtonText>
-              </View>
-            </>
-          )
-    }
+          children
+            ? (
+              <SubmitButtonText selected={selected}>
+                {children}
+              </SubmitButtonText>
+            ) : (
+              <>
+                <View style={{ marginLeft: 15 }}>
+                  <SubmitButtonText selected={selected}>
+                    {label}
+                  </SubmitButtonText>
+                </View>
+                <View style={{ marginRight: 15 }}>
+                  <SubmitButtonText selected={selected}>
+                    {value}
+                  </SubmitButtonText>
+                </View>
+              </>
+            )
+        }
       </ButtonTextContainer>
     </StyledButton>
   );
 }
-
-SelectableButton.defaultProps = {
-  selected: false,
-};
 
 SelectableButton.propTypes = {
   selected: propsTypes.bool,

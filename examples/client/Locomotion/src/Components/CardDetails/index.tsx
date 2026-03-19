@@ -152,7 +152,7 @@ function CardDetails({
             type="cancel"
             useCancelTextButton
             onSubmit={() => detachCard()}
-            onClose={() => setIsCancelPopupVisible(false)}
+            onClose={() => { setIsCancelPopupVisible(false); return undefined; }}
           />
 
         </>

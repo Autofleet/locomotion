@@ -9,7 +9,7 @@ interface EmptyStateProps {
 }
 function EmptyState({
   title,
-  description,
+  description = '',
 }: EmptyStateProps) {
   return (
     <Container>
@@ -21,7 +21,4 @@ function EmptyState({
     </Container>
   );
 }
-EmptyState.defaultProps = {
-  description: '',
-};
 export default EmptyState;

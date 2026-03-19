@@ -17,7 +17,7 @@ const StyledCardsTitle = styled(Text)<StyledCardsTitleInterface>`
 
 function CardsTitle({
   title,
-  noPaddingLeft,
+  noPaddingLeft = false,
 }: {
     title: string,
     noPaddingLeft?: boolean,
@@ -26,7 +26,3 @@ function CardsTitle({
 }
 
 export default CardsTitle;
-
-CardsTitle.defaultProps = {
-  noPaddingLeft: false,
-};

@@ -86,9 +86,9 @@ interface PaymentButtonProps {
 function PaymentButton({
   icon,
   title,
-  brand,
-  id,
-  invalid,
+  brand = undefined,
+  id = undefined,
+  invalid = false,
 }: PaymentButtonProps) {
   const { primaryColor } = useContext(ThemeContext);
   const { getCoupon, coupon, setCoupon } = useContext(UserContext);
@@ -173,9 +173,3 @@ function PaymentButton({
 }
 
 export default PaymentButton;
-
-PaymentButton.defaultProps = {
-  brand: null,
-  id: null,
-  invalid: false,
-};

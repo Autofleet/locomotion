@@ -21,13 +21,13 @@ function RidePaymentDetails({
   ride,
   paymentMethod,
   rideHistory = false,
-  state,
+  state = 'pending',
 } :{
   ride: RideInterface,
   paymentMethod: PaymentMethodInterface,
-  rideHistory: boolean
-  currency: string,
-  state: string
+  rideHistory?: boolean
+  currency?: string,
+  state?: string
 
 }) {
   const [priceCalculation, setPriceCalculation] = useState<PriceCalculation>();
@@ -102,11 +102,6 @@ function RidePaymentDetails({
 RidePaymentDetails.propTypes = {
   rideHistory: propsTypes.bool,
   state: propsTypes.string,
-};
-
-RidePaymentDetails.defaultProps = {
-  rideHistory: false,
-  state: 'pending',
 };
 
 export default RidePaymentDetails;

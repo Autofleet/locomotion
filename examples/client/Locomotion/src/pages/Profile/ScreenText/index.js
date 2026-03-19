@@ -2,7 +2,7 @@ import React from 'react';
 import propsTypes from 'prop-types';
 import { SubText, Text, TextContainer } from './styles';
 
-function ScreenText({ text, subText }) {
+function ScreenText({ text, subText = null }) {
   return (
     <TextContainer hasSubText={!!subText}>
       <Text>
@@ -20,10 +20,6 @@ function ScreenText({ text, subText }) {
 ScreenText.propTypes = {
   text: propsTypes.string.isRequired,
   subText: propsTypes.string,
-};
-
-ScreenText.defaultProps = {
-  subText: null,
 };
 
 export default ScreenText;

@@ -32,7 +32,7 @@ interface TextRowWithIconProps {
 }
 
 function TextRowWithIcon({
-  subTitle, text, icon, style, Image, iconWidth, iconHeight,
+  subTitle, text, icon = null, style = {}, Image = null, iconWidth = 15, iconHeight = 15,
 }: TextRowWithIconProps) {
   const theme = useContext(ThemeContext);
   const getImage = () => {
@@ -62,13 +62,5 @@ function TextRowWithIcon({
     </Container>
   );
 }
-
-TextRowWithIcon.defaultProps = {
-  icon: null,
-  style: {},
-  Image: null,
-  iconWidth: 15,
-  iconHeight: 15,
-};
 
 export default TextRowWithIcon;

@@ -11,13 +11,13 @@ import {
 import RoundedButton from '../../Components/RoundedButton';
 
 function ConfirmationPopup({
-  title,
-  text,
-  confirmText,
-  cancelText,
-  useCancelTextButton,
-  type,
-  onClose,
+  title = 'Confirmation Popup',
+  text = '',
+  confirmText = 'Submit',
+  cancelText = 'Cancel',
+  useCancelTextButton = false,
+  type = 'confirm',
+  onClose = () => undefined,
   onSubmit,
   isVisible,
 }) {
@@ -44,16 +44,6 @@ function ConfirmationPopup({
 }
 
 export default ConfirmationPopup;
-
-ConfirmationPopup.defaultProps = {
-  title: 'Confirmation Popup',
-  text: '',
-  confirmText: 'Submit',
-  cancelText: 'Cancel',
-  useCancelTextButton: false,
-  type: 'confirm',
-  onClose: () => null,
-};
 
 ConfirmationPopup.propTypes = {
   title: propsTypes.string,

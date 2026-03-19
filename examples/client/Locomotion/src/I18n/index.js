@@ -79,6 +79,12 @@ const languageDetector = {
   type: 'languageDetector',
   async: true,
   detect: async (cb) => cb(await getPreferredLanguageCode()),
+  init: () => {
+    // i18next language detector init method - no initialization needed
+  },
+  cacheUserLanguage: () => {
+    // i18next language detector cacheUserLanguage method - no caching needed
+  },
 };
 
 const localResources = {

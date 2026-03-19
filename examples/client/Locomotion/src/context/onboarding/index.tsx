@@ -167,7 +167,7 @@ function OnboardingContextProvider({ children }: { children: any }) {
     nextScreen,
     fetchHideCaptchaSetting,
     shouldHideCaptcha,
-  }), [requiredOnboarding, shouldHideCaptcha]);
+  }), [requiredOnboarding, shouldHideCaptcha, onVert]);
 
   return (
     <OnboardingContext.Provider

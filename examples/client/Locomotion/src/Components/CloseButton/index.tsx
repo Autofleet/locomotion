@@ -13,8 +13,8 @@ const StyledCloseButton = styled(Button)`
 
 function CloseButton({
   onPress,
-  size,
-  containerStyles,
+  size = 15,
+  containerStyles = {},
 }: {
   onPress: any;
   size?: number;
@@ -27,8 +27,4 @@ function CloseButton({
   );
 }
 
-CloseButton.defaultProps = {
-  size: 15,
-  containerStyles: {},
-};
 export default CloseButton;

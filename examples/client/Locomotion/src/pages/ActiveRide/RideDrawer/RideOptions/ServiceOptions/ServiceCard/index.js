@@ -27,7 +27,7 @@ import showPriceBasedOnAccount from '../../../../../../services/showPriceBasedOn
 const FARE_POPUP = 'farePopup';
 
 function ServiceCard({
-  service, withBorder, testID, descriptionNumberOfLines,
+  service = {}, withBorder = false, testID, descriptionNumberOfLines,
 }) {
   const { businessAccountId } = useContext(RidePageContext);
   const theme = useContext(ThemeContext);
@@ -208,11 +208,6 @@ function ServiceCard({
     </>
   );
 }
-
-ServiceCard.defaultProps = {
-  service: {},
-  withBorder: false,
-};
 
 ServiceCard.propTypes = {
   service: propsTypes.any,

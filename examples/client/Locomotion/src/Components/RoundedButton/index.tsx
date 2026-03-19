@@ -18,14 +18,14 @@ interface ButtonProps {
 
 function RoundedButton({
   onPress,
-  style,
-  hollow,
-  setLoading,
-  disabled,
-  type,
-  useCancelTextButton,
-  icon,
-  children,
+  style = {},
+  hollow = false,
+  setLoading = undefined,
+  disabled = false,
+  type = 'confirm',
+  useCancelTextButton = false,
+  icon = null,
+  children = null,
   ...props
 }: ButtonProps) {
   const [loadingState, setLoadingState] = useState(false);
@@ -77,17 +77,5 @@ function RoundedButton({
     </StyledButton>
   );
 }
-
-RoundedButton.defaultProps = {
-  type: 'confirm',
-  hollow: false,
-  disabled: false,
-  useCancelTextButton: false,
-  setLoading: null,
-  style: {},
-  children: null,
-  icon: null,
-  testID: '',
-};
 
 export default RoundedButton;

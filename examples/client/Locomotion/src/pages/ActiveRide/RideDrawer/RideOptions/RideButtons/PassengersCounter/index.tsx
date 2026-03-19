@@ -20,7 +20,7 @@ interface PassengersCounterProps {
 }
 
 function PassengersCounter({
-  service, onSelect, onError = () => undefined, selectedValue,
+  service, onSelect, onError = () => undefined, selectedValue = null,
 }: PassengersCounterProps) {
   const [passengersOptions, setPassengersOptions] = useState<Item[]>([]);
 
@@ -48,7 +48,4 @@ function PassengersCounter({
     />
   );
 }
-PassengersCounter.defaultProps = {
-  selectedValue: null,
-};
 export default PassengersCounter;
