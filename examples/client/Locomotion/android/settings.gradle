@@ -10,6 +10,11 @@ plugins { id("com.facebook.react.settings") }
 extensions.configure(com.facebook.react.ReactSettingsExtension){ ex -> ex.autolinkLibrariesFromCommand() }
 rootProject.name = 'Locomotion'
 
+// Root-level includeBuild enables dependency substitution of com.facebook.react:react-native-gradle-plugin
+// in buildscript classpath blocks, making "apply plugin: 'com.facebook.react'" work in library modules
+// that have their own buildscript {} block (e.g. lottie-react-native, async-storage, etc.)
+includeBuild("../node_modules/@react-native/gradle-plugin")
+
 include ':app'
 
 include ':react-native-linear-gradient'

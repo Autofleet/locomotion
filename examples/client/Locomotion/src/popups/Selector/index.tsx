@@ -76,6 +76,7 @@ const ItemSelector = ({
           <Container>
             {items.map((item: any, i) => (
               <Item
+                key={item.value}
                 selected={selectedItem === i}
                 item={item}
                 onPress={() => {
