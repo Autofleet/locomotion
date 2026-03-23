@@ -168,7 +168,6 @@ const ActiveRideContent = () => {
             ride={ride}
             paymentMethod={ride.payment?.paymentMethod}
             state={ride.state}
-            currency={ride.priceCurrency}
           />
           <ServiceTypeDetails
             serviceType={ride.serviceType}

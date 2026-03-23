@@ -1,7 +1,6 @@
 /* eslint-disable no-unused-expressions */
 import React, { useEffect, useState } from 'react';
-import PropTypes from 'prop-types';
-import Modal from 'react-native-modal';
+import Modal from '../../Components/CompatModal';
 import CloseButton from '../../Components/CloseButton';
 import i18n from '../../I18n';
 import {
@@ -19,7 +18,12 @@ import {
 import { FlexCont } from '../../Components/Flex';
 import Button from '../../Components/Button';
 
-const Item = ({ item, onPress, selected }) => (
+interface SelectorItem {
+  value: string;
+  label: string;
+}
+
+const Item = ({ item, onPress, selected }: { item: SelectorItem; onPress: () => void; selected: boolean }) => (
   <Button
     noBackground
     testID={`languageItem-${item.value}`}
@@ -38,9 +42,9 @@ const Item = ({ item, onPress, selected }) => (
 interface ItemSelectorProps {
   isVisible: boolean;
   onCancel: () => void;
-  onSubmit: (number) => void;
-  selected: any;
-  items: [];
+  onSubmit: (index: number) => void;
+  selected: number;
+  items: SelectorItem[];
   title: string;
 }
 
@@ -74,7 +78,7 @@ const ItemSelector = ({
         </TitleView>
         <ItemsScrollView>
           <Container>
-            {items.map((item: any, i) => (
+            {items.map((item: SelectorItem, i) => (
               <Item
                 key={item.value}
                 selected={selectedItem === i}
@@ -101,20 +105,6 @@ const ItemSelector = ({
       </SummaryContainer>
     </Modal>
   );
-};
-
-ItemSelector.propTypes = {
-  onSave: PropTypes.func,
-  showCash: PropTypes.bool,
-  rideFlow: PropTypes.bool,
-  selected: PropTypes.string,
-};
-
-ItemSelector.defaultProps = {
-  onSave: null,
-  showCash: true,
-  rideFlow: false,
-  selected: null,
 };
 
 export default ItemSelector;

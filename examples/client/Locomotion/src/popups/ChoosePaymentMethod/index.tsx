@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-expressions */
 import React, { useContext, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import Modal from 'react-native-modal';
+import Modal from '../../Components/CompatModal';
 import { useNavigation } from '@react-navigation/native';
 import EmptyState from '../../Components/EmptyState';
 import Mixpanel from '../../services/Mixpanel';

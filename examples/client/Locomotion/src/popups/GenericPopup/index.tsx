@@ -1,5 +1,5 @@
 import React, { SetStateAction } from 'react';
-import Modal from 'react-native-modal';
+import Modal from '../../Components/CompatModal';
 import SvgIcon from '../../Components/SvgIcon';
 import { SubTitle, Title } from '../styled';
 import i18n from '../../I18n';

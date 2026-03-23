@@ -2,8 +2,8 @@ import React, {
   useEffect, useRef, useState, useContext,
 } from 'react';
 import { KeyboardAvoidingView, SafeAreaView } from 'react-native';
-import Modal from 'react-native-modal';
 import { ThemeContext } from 'styled-components';
+import Modal from '../../Components/CompatModal';
 import i18n from '../../I18n';
 import {
   SummaryContainer,
@@ -34,7 +34,7 @@ export default ({
 
   return (
     <Modal isVisible={isVisible}>
-      <KeyboardAvoidingView style={{ flex: 1 }}>
+      <KeyboardAvoidingView>
         <SafeAreaView>
           <SummaryContainer>
             <FlexCont justifyContent="space-between">
