@@ -33,7 +33,7 @@ export default ({
   }, [isVisible]);
 
   return (
-    <Modal isVisible={isVisible}>
+    <Modal isVisible={isVisible} style={{ justifyContent: 'flex-start' }}>
       <KeyboardAvoidingView>
         <SafeAreaView>
           <SummaryContainer>
