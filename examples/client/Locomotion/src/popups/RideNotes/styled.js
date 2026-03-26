@@ -1,10 +1,12 @@
-import React from 'react';
-import {
-  View, Text, Image, TouchableOpacity,
-} from 'react-native';
 import styled from 'styled-components';
 import { TextArea } from '../../Components/TextArea';
 import { End } from '../../lib/text-direction';
+import Modal from '../../Components/CompatModal';
+
+export const StyledModal = styled(Modal)`
+  justify-content: flex-start;
+  padding-top: 30px;
+`;
 
 export const SummaryContainer = styled.View`
   padding: 20px;

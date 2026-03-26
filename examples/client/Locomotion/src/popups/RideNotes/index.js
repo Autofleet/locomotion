@@ -3,13 +3,13 @@ import React, {
 } from 'react';
 import { KeyboardAvoidingView, SafeAreaView } from 'react-native';
 import { ThemeContext } from 'styled-components';
-import Modal from '../../Components/CompatModal';
 import i18n from '../../I18n';
 import {
   SummaryContainer,
   Title,
   StyledTextArea,
   Counter,
+  StyledModal,
 } from './styled';
 import RoundedButton from '../../Components/RoundedButton';
 import { FlexCont } from '../../Components/Flex';
@@ -33,7 +33,7 @@ export default ({
   }, [isVisible]);
 
   return (
-    <Modal isVisible={isVisible} style={{ justifyContent: 'flex-start' }}>
+    <StyledModal isVisible={isVisible}>
       <KeyboardAvoidingView>
         <SafeAreaView>
           <SummaryContainer>
@@ -74,6 +74,6 @@ export default ({
           </SummaryContainer>
         </SafeAreaView>
       </KeyboardAvoidingView>
-    </Modal>
+    </StyledModal>
   );
 };
