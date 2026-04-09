@@ -14,26 +14,24 @@ const mapStyle = {
   ...StyleSheet.absoluteFillObject,
 };
 
-function SpMarker({ sp, disableMarkers }) {
-  return (
-    <Marker
-      key={`Marker#${sp.lat}#${sp.lng}#${sp.type}`}
-      coordinate={{
-        latitude: parseFloat(sp.lat),
-        longitude: parseFloat(sp.lng),
-      }}
-      style={{
-        alignItems: 'center',
-      }}
-    >
-      <MarkerTitle type={sp.type}>
-        {getSpTextWithNumberPrefix(sp)}
-      </MarkerTitle>
-      {sp.type === STOP_POINT_TYPES.STOP_POINT_PICKUP ? <PickupIconMarker disableMarkers={disableMarkers} onMap /> : undefined}
-      {sp.type === STOP_POINT_TYPES.STOP_POINT_DROPOFF ? <DropoffIconMarker disableMarkers={disableMarkers} onMap /> : undefined}
-    </Marker>
-  );
-}
+const SpMarker = ({ sp, disableMarkers }) => (
+  <Marker
+    key={`Marker#${sp.lat}#${sp.lng}#${sp.type}`}
+    coordinate={{
+      latitude: parseFloat(sp.lat),
+      longitude: parseFloat(sp.lng),
+    }}
+    style={{
+      alignItems: 'center',
+    }}
+  >
+    <MarkerTitle type={sp.type}>
+      {getSpTextWithNumberPrefix(sp)}
+    </MarkerTitle>
+    {sp.type === STOP_POINT_TYPES.STOP_POINT_PICKUP ? <PickupIconMarker disableMarkers={disableMarkers} onMap /> : undefined}
+    {sp.type === STOP_POINT_TYPES.STOP_POINT_DROPOFF ? <DropoffIconMarker disableMarkers={disableMarkers} onMap /> : undefined}
+  </Marker>
+);
 
 const Map = forwardRef(({
   ride: { stopPoints },

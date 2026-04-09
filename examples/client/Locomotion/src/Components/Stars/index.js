@@ -28,26 +28,22 @@ export const StarIcon = styled(StarSvg).attrs((({
 `;
 
 const NUM_OF_STARS = [1, 2, 3, 4, 5];
-function Star({
+const Star = ({
   onPress, isOn, size,
-}) {
-  return (
-    <Button
-      noBackground
-      testID={`RatingButton${isOn ? '_on' : '_off'}`}
-      onPress={onPress}
-    >
-      <StarIcon isOn={isOn} size={size} />
-    </Button>
-  );
-}
+}) => (
+  <Button
+    noBackground
+    testID={`RatingButton${isOn ? '_on' : '_off'}`}
+    onPress={onPress}
+  >
+    <StarIcon isOn={isOn} size={size} />
+  </Button>
+);
 
-function StarRating({ rating, updateRating = (newRating) => null, size = 16 }) {
-  return (
-    <SummaryStars>
-      {NUM_OF_STARS.map((num) => <Star num={num} size={size} isOn={rating >= num} onPress={() => updateRating(num)} />)}
-    </SummaryStars>
-  );
-}
+const StarRating = ({ rating, updateRating = (newRating) => null, size = 16 }) => (
+  <SummaryStars>
+    {NUM_OF_STARS.map((num) => <Star num={num} size={size} isOn={rating >= num} onPress={() => updateRating(num)} />)}
+  </SummaryStars>
+);
 
 export default StarRating;

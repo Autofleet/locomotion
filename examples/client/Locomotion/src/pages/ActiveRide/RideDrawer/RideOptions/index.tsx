@@ -20,7 +20,7 @@ import { BS_PAGES } from '../../../../context/ridePageStateContext/utils';
 import * as navigationService from '../../../../services/navigation';
 import { PAYMENT_METHODS } from '../../../../lib/commonTypes';
 
-function RideOptions() {
+const RideOptions = () => {
   const usePayments = payments.useContainer();
   const [defaultPaymentMethod, setDefaultPaymentMethod] = useState<PaymentMethodInterface | undefined>(undefined);
   const [popupToShow, setPopupToShow] = useState<popupNames | null>(null);
@@ -145,6 +145,6 @@ function RideOptions() {
       </Portal>
     </>
   );
-}
+};
 
 export default RideOptions;

@@ -12,7 +12,7 @@ export const CancellationReasonsContext = createContext<CancellationReasonsConte
   clearCancellationReasons: () => undefined,
 });
 
-function CancellationReasonsProvider({ children }: { children: any }) {
+const CancellationReasonsProvider = ({ children }: { children: any }) => {
   const [cancellationReasons, setCancellationReasons] = useState<CancellationReason[]>([]);
 
   const getCancellationReasons = async (rideId?: string) => {
@@ -39,6 +39,6 @@ function CancellationReasonsProvider({ children }: { children: any }) {
       {children}
     </CancellationReasonsContext.Provider>
   );
-}
+};
 
 export default CancellationReasonsProvider;

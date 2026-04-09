@@ -16,7 +16,7 @@ interface ButtonProps {
   testID?: string;
 }
 
-function RoundedButton({
+const RoundedButton = ({
   onPress,
   style = {},
   hollow = false,
@@ -27,7 +27,7 @@ function RoundedButton({
   icon = null,
   children = null,
   ...props
-}: ButtonProps) {
+}: ButtonProps) => {
   const [loadingState, setLoadingState] = useState(false);
   const theme = useContext(ThemeContext);
 
@@ -76,6 +76,6 @@ function RoundedButton({
       </ButtonTextContainer>
     </StyledButton>
   );
-}
+};
 
 export default RoundedButton;

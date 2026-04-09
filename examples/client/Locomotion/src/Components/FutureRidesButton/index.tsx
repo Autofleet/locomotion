@@ -8,7 +8,7 @@ import i18n from '../../I18n';
 import { FutureRidesContext } from '../../context/futureRides';
 import * as NavigationService from '../../services/navigation';
 
-function FutureRidesButton() {
+const FutureRidesButton = () => {
   const { futureRides } = useContext(FutureRidesContext);
   const theme = useContext(ThemeContext);
   const text = futureRides.length > 1
@@ -34,6 +34,6 @@ function FutureRidesButton() {
       </UpcomingText>
     </Container>
   );
-}
+};
 
 export default FutureRidesButton;

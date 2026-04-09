@@ -91,7 +91,7 @@ const style = {
   [StartCapital()]: 28,
 };
 
-function CardRow(paymentMethod: any) {
+const CardRow = (paymentMethod: any) => {
   const { primaryColor } = useContext(ThemeContext);
   const {
     offlinePaymentText,
@@ -249,6 +249,6 @@ function CardRow(paymentMethod: any) {
       </Container>
     </Button>
   );
-}
+};
 
 export default CardRow;

@@ -26,7 +26,7 @@ export const AvailabilityContext = createContext<AvailabilityContextInterface>({
   availabilityVehicles: [],
 });
 
-function AvailabilityContextProvider({ children }: { children: any }) {
+const AvailabilityContextProvider = ({ children }: { children: any }) => {
   const [availabilityVehicles, setAvailabilityVehicles] = useState<AvailabilityVehicles[]>([]);
   const { locationGranted } = useContext(UserContext);
   const getVehicles = async () => {
@@ -79,6 +79,6 @@ function AvailabilityContextProvider({ children }: { children: any }) {
       {children}
     </AvailabilityContext.Provider>
   );
-}
+};
 
 export default AvailabilityContextProvider;

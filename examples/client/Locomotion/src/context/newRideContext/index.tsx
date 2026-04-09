@@ -254,9 +254,9 @@ export const RidePageContext = createContext<RidePageContextInterface>({
 
 const HISTORY_RECORDS_NUM = 10;
 
-function RidePageContextProvider({ children }: {
+const RidePageContextProvider = ({ children }: {
   children: any
-}) {
+}) => {
   const { getClientDefaultMethod } = PaymentContext.useContainer();
   const { locationGranted, user } = useContext(UserContext);
   const {
@@ -1457,6 +1457,6 @@ function RidePageContextProvider({ children }: {
       {children}
     </RidePageContext.Provider>
   );
-}
+};
 
 export default RidePageContextProvider;

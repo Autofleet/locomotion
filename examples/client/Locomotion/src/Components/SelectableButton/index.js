@@ -3,7 +3,7 @@ import { View } from 'react-native';
 import propsTypes from 'prop-types';
 import { ButtonTextContainer, StyledButton, SubmitButtonText } from './styled';
 
-function SelectableButton({
+const SelectableButton = ({
   onPress,
   style,
   selected = false,
@@ -12,17 +12,16 @@ function SelectableButton({
   label,
   value,
   ...props
-}) {
-  return (
-    <StyledButton
-      {...props}
-      noBackground
-      onPress={onPress}
-      selected={selected}
-      style={style}
-    >
-      <ButtonTextContainer selected={selected}>
-        {
+}) => (
+  <StyledButton
+    {...props}
+    noBackground
+    onPress={onPress}
+    selected={selected}
+    style={style}
+  >
+    <ButtonTextContainer selected={selected}>
+      {
           children
             ? (
               <SubmitButtonText selected={selected}>
@@ -43,10 +42,9 @@ function SelectableButton({
               </>
             )
         }
-      </ButtonTextContainer>
-    </StyledButton>
-  );
-}
+    </ButtonTextContainer>
+  </StyledButton>
+);
 
 SelectableButton.propTypes = {
   selected: propsTypes.bool,

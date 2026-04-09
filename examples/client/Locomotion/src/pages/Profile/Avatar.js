@@ -12,7 +12,7 @@ import { MAIN_ROUTES } from '../routes';
 import { UserContext } from '../../context/user';
 import { PageContainer, ContentContainer } from '../styles';
 
-function Avatar() {
+const Avatar = () => {
   const { updateUserInfo, user } = useContext(UserContext);
   const [photoSelected, setPhotoSelected] = useState(user.avatar);
   const { nextScreen } = useContext(OnboardingContext);
@@ -51,6 +51,6 @@ function Avatar() {
       </ContentContainer>
     </PageContainer>
   );
-}
+};
 
 export default Avatar;

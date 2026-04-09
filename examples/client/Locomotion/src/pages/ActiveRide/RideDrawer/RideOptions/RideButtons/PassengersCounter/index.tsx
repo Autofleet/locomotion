@@ -19,9 +19,9 @@ interface PassengersCounterProps {
   selectedValue?: number | null;
 }
 
-function PassengersCounter({
+const PassengersCounter = ({
   service, onSelect, onError = () => undefined, selectedValue = null,
-}: PassengersCounterProps) {
+}: PassengersCounterProps) => {
   const [passengersOptions, setPassengersOptions] = useState<Item[]>([]);
 
   useEffect(() => {
@@ -47,5 +47,5 @@ function PassengersCounter({
       selectedValue={selectedValue}
     />
   );
-}
+};
 export default PassengersCounter;

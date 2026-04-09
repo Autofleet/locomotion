@@ -11,26 +11,24 @@ import {
   PickupIconMarker, DropoffIconMarker,
 } from '../../../pages/RideHistory/marker';
 
-function VerticalTimeLineCard({
+const VerticalTimeLineCard = ({
   sp: { type },
   first = false,
   last = false,
   content,
   underContent,
-}) {
-  return (
-    <MainContainer>
-      <IconContainer>
-        {type === STOP_POINT_TYPES.STOP_POINT_PICKUP ? <PickupIconMarker /> : <DropoffIconMarker />}
-      </IconContainer>
-      <Content>
-        {content}
-      </Content>
-      <EtaContent>
-        {underContent}
-      </EtaContent>
-    </MainContainer>
-  );
-}
+}) => (
+  <MainContainer>
+    <IconContainer>
+      {type === STOP_POINT_TYPES.STOP_POINT_PICKUP ? <PickupIconMarker /> : <DropoffIconMarker />}
+    </IconContainer>
+    <Content>
+      {content}
+    </Content>
+    <EtaContent>
+      {underContent}
+    </EtaContent>
+  </MainContainer>
+);
 
 export default VerticalTimeLineCard;

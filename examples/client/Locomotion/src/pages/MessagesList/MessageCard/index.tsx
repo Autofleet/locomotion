@@ -22,37 +22,35 @@ interface MessageCardProps {
   readAt: Date | null;
 }
 
-function MessageCard({ message, readAt }: MessageCardProps) {
-  return (
-    <CardContainer
-      noBackground
-      testID={`messageCard_${message.id}`}
-      onPress={() => {
-        NavigationService.navigate(MAIN_ROUTES.MESSAGE_VIEW, { messageId: message.id });
-      }}
-      isRead={readAt}
-    >
-      <ReadSymbolContainer>
-        {!readAt && <ReadSymbol />}
-      </ReadSymbolContainer>
-      <TextContainer>
-        <MessageTitle numberOfLines={2}>
-          {message.title}
-        </MessageTitle>
-        <MessageText numberOfLines={3}>
-          {message.subTitle}
-        </MessageText>
-        <MessageFooter>
-          <MessageDate>
-            {getFormattedMessageDate(message)}
-          </MessageDate>
-          <ReadMoreText>
-            {String(i18n.t('messages.readMore'))}
-          </ReadMoreText>
-        </MessageFooter>
-      </TextContainer>
-    </CardContainer>
-  );
-}
+const MessageCard = ({ message, readAt }: MessageCardProps) => (
+  <CardContainer
+    noBackground
+    testID={`messageCard_${message.id}`}
+    onPress={() => {
+      NavigationService.navigate(MAIN_ROUTES.MESSAGE_VIEW, { messageId: message.id });
+    }}
+    isRead={readAt}
+  >
+    <ReadSymbolContainer>
+      {!readAt && <ReadSymbol />}
+    </ReadSymbolContainer>
+    <TextContainer>
+      <MessageTitle numberOfLines={2}>
+        {message.title}
+      </MessageTitle>
+      <MessageText numberOfLines={3}>
+        {message.subTitle}
+      </MessageText>
+      <MessageFooter>
+        <MessageDate>
+          {getFormattedMessageDate(message)}
+        </MessageDate>
+        <ReadMoreText>
+          {String(i18n.t('messages.readMore'))}
+        </ReadMoreText>
+      </MessageFooter>
+    </TextContainer>
+  </CardContainer>
+);
 
 export default MessageCard;

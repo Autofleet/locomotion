@@ -10,7 +10,7 @@ const Stack = createNativeStackNavigator();
 
 const Drawer = createDrawerNavigator();
 
-function InnerHome() {
+const InnerHome = () => {
   const theme = useContext(ThemeContext);
 
   return (
@@ -35,76 +35,74 @@ function InnerHome() {
       />
     </Drawer.Navigator>
   );
-}
+};
 
-function Main() {
-  return (
-    <Stack.Navigator
-      initialRouteName={MAIN_ROUTES.HOME}
-      screenOptions={{
-        inactiveBackgroundColor: '#ffffff',
-        activeBackgroundColor: '#ffffff',
-        headerShown: false,
-      }}
-    >
-      <Stack.Screen
-        name={MAIN_ROUTES.HOME}
-        component={InnerHome}
-      />
-      <Stack.Screen
-        name={MAIN_ROUTES.COMPLETED_RIDE_OVERVIEW_PAGE}
-        component={ROUTES_COMPS[MAIN_ROUTES.COMPLETED_RIDE_OVERVIEW_PAGE]}
-      />
-      <Stack.Screen
-        name={MAIN_ROUTES.RIDE_HISTORY}
-        component={ROUTES_COMPS[MAIN_ROUTES.RIDE_HISTORY]}
-      />
-      <Stack.Screen
-        name={MAIN_ROUTES.PAYMENT}
-        component={ROUTES_COMPS[MAIN_ROUTES.PAYMENT]}
-      />
-      <Stack.Screen
-        name={MAIN_ROUTES.ACCOUNT}
-        component={ROUTES_COMPS[MAIN_ROUTES.ACCOUNT]}
-      />
-      <Stack.Screen
-        name={MAIN_ROUTES.CONTACT_US}
-        component={ROUTES_COMPS[MAIN_ROUTES.CONTACT_US]}
-      />
-      <Stack.Screen
-        name={MAIN_ROUTES.WEBVIEW}
-        component={ROUTES_COMPS[MAIN_ROUTES.WEBVIEW]}
-      />
-      <Stack.Screen
-        name={MAIN_ROUTES.POST_RIDE}
-        component={ROUTES_COMPS[MAIN_ROUTES.POST_RIDE]}
-      />
-      <Drawer.Screen
-        name={MAIN_ROUTES.CARD_DETAILS}
-        component={ROUTES_COMPS[MAIN_ROUTES.CARD_DETAILS]}
-      />
-      <Drawer.Screen
-        name={MAIN_ROUTES.MESSAGES}
-        component={ROUTES_COMPS[MAIN_ROUTES.MESSAGES]}
-      />
-      <Drawer.Screen
-        name={MAIN_ROUTES.MESSAGE_VIEW}
-        component={ROUTES_COMPS[MAIN_ROUTES.MESSAGE_VIEW]}
-      />
-      <Drawer.Screen
-        name={MAIN_ROUTES.FUTURE_RIDES}
-        component={ROUTES_COMPS[MAIN_ROUTES.FUTURE_RIDES]}
-      />
-      <Drawer.Screen
-        name={MAIN_ROUTES.EDIT_NICKNAME}
-        component={ROUTES_COMPS[MAIN_ROUTES.EDIT_NICKNAME]}
-      />
-      <Stack.Screen
-        name={MAIN_ROUTES.LOGOUT}
-        component={ROUTES_COMPS[MAIN_ROUTES.LOGOUT]}
-      />
-    </Stack.Navigator>
-  );
-}
+const Main = () => (
+  <Stack.Navigator
+    initialRouteName={MAIN_ROUTES.HOME}
+    screenOptions={{
+      inactiveBackgroundColor: '#ffffff',
+      activeBackgroundColor: '#ffffff',
+      headerShown: false,
+    }}
+  >
+    <Stack.Screen
+      name={MAIN_ROUTES.HOME}
+      component={InnerHome}
+    />
+    <Stack.Screen
+      name={MAIN_ROUTES.COMPLETED_RIDE_OVERVIEW_PAGE}
+      component={ROUTES_COMPS[MAIN_ROUTES.COMPLETED_RIDE_OVERVIEW_PAGE]}
+    />
+    <Stack.Screen
+      name={MAIN_ROUTES.RIDE_HISTORY}
+      component={ROUTES_COMPS[MAIN_ROUTES.RIDE_HISTORY]}
+    />
+    <Stack.Screen
+      name={MAIN_ROUTES.PAYMENT}
+      component={ROUTES_COMPS[MAIN_ROUTES.PAYMENT]}
+    />
+    <Stack.Screen
+      name={MAIN_ROUTES.ACCOUNT}
+      component={ROUTES_COMPS[MAIN_ROUTES.ACCOUNT]}
+    />
+    <Stack.Screen
+      name={MAIN_ROUTES.CONTACT_US}
+      component={ROUTES_COMPS[MAIN_ROUTES.CONTACT_US]}
+    />
+    <Stack.Screen
+      name={MAIN_ROUTES.WEBVIEW}
+      component={ROUTES_COMPS[MAIN_ROUTES.WEBVIEW]}
+    />
+    <Stack.Screen
+      name={MAIN_ROUTES.POST_RIDE}
+      component={ROUTES_COMPS[MAIN_ROUTES.POST_RIDE]}
+    />
+    <Drawer.Screen
+      name={MAIN_ROUTES.CARD_DETAILS}
+      component={ROUTES_COMPS[MAIN_ROUTES.CARD_DETAILS]}
+    />
+    <Drawer.Screen
+      name={MAIN_ROUTES.MESSAGES}
+      component={ROUTES_COMPS[MAIN_ROUTES.MESSAGES]}
+    />
+    <Drawer.Screen
+      name={MAIN_ROUTES.MESSAGE_VIEW}
+      component={ROUTES_COMPS[MAIN_ROUTES.MESSAGE_VIEW]}
+    />
+    <Drawer.Screen
+      name={MAIN_ROUTES.FUTURE_RIDES}
+      component={ROUTES_COMPS[MAIN_ROUTES.FUTURE_RIDES]}
+    />
+    <Drawer.Screen
+      name={MAIN_ROUTES.EDIT_NICKNAME}
+      component={ROUTES_COMPS[MAIN_ROUTES.EDIT_NICKNAME]}
+    />
+    <Stack.Screen
+      name={MAIN_ROUTES.LOGOUT}
+      component={ROUTES_COMPS[MAIN_ROUTES.LOGOUT]}
+    />
+  </Stack.Navigator>
+);
 
 export default Main;

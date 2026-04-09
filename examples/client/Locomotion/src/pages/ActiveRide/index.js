@@ -75,7 +75,7 @@ import Mixpanel from '../../services/Mixpanel';
 
 const BLACK_OVERLAY_SCREENS = [BS_PAGES.CANCEL_RIDE];
 
-function RidePage({ mapSettings, navigation }) {
+const RidePage = ({ mapSettings, navigation }) => {
   const {
     locationGranted, setLocationGranted,
   } = useContext(UserContext);
@@ -616,7 +616,7 @@ function RidePage({ mapSettings, navigation }) {
       />
     </PageContainer>
   );
-}
+};
 
 export default function (props) {
   return (

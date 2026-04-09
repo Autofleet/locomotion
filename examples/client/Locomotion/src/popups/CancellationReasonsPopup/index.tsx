@@ -27,12 +27,12 @@ interface CancellationReasonsProps {
   rideId: string;
 }
 
-function CancellationReasonsPopup({
+const CancellationReasonsPopup = ({
   isVisible,
   onCancel,
   onSubmit,
   rideId,
-}: CancellationReasonsProps) {
+}: CancellationReasonsProps) => {
   const { cancellationReasons, clearCancellationReasons } = useContext(CancellationReasonsContext);
   const { updateRide, ride } = useContext(RidePageContext);
   const [isLoading, setIsLoading] = useState(false);
@@ -119,6 +119,6 @@ function CancellationReasonsPopup({
       </Modal>
     ) : null
   );
-}
+};
 
 export default CancellationReasonsPopup;

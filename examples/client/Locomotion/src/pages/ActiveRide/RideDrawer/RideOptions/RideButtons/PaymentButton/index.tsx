@@ -83,13 +83,13 @@ interface PaymentButtonProps {
   invalid?: boolean;
 }
 
-function PaymentButton({
+const PaymentButton = ({
   icon,
   title,
   brand = undefined,
   id = undefined,
   invalid = false,
-}: PaymentButtonProps) {
+}: PaymentButtonProps) => {
   const { primaryColor } = useContext(ThemeContext);
   const { getCoupon, coupon, setCoupon } = useContext(UserContext);
   const isDebuggingEnabled = (typeof atob !== 'undefined');
@@ -170,6 +170,6 @@ function PaymentButton({
       </PromoButtonContainer>
     </Container>
   );
-}
+};
 
 export default PaymentButton;

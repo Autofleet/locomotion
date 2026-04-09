@@ -26,7 +26,7 @@ import CancellationReasonsProvider, { CancellationReasonsContext } from '../../c
 interface FutureRidesViewProps {
   menuSide: 'right' | 'left';
 }
-function FutureRidesView({ menuSide }: FutureRidesViewProps) {
+const FutureRidesView = ({ menuSide }: FutureRidesViewProps) => {
   const [rideToCancel, setRideToCancel] = useState<string | undefined>(undefined);
   const [showError, setShowError] = useState(false);
   const [services, setServices] = useState<any[]>([]);
@@ -145,6 +145,6 @@ function FutureRidesView({ menuSide }: FutureRidesViewProps) {
       />
     </PageContainer>
   );
-}
+};
 
 export default FutureRidesView;

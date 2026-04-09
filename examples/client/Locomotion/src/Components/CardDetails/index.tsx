@@ -31,9 +31,9 @@ type CardDetailsRouteParams = {
   paymentMethod: PaymentMethodInterface
 };
 
-function CardDetails({
+const CardDetails = ({
   loadingState = false,
-}) {
+}) => {
   const [loading, setLoading] = useState(false);
   const [showError, setShowError] = useState(false);
   const [methodForDelete, setMethodForDelete] = useState(null);
@@ -163,6 +163,6 @@ function CardDetails({
       />
     </PageContainer>
   );
-}
+};
 
 export default CardDetails;

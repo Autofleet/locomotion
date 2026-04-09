@@ -9,23 +9,21 @@ interface ButtonProps {
     noLoader: boolean,
     testID: string;
 }
-function SquareSvgButton({
+const SquareSvgButton = ({
   onPress, icon, style, noLoader, testID = 'headerButton',
-}: ButtonProps) {
-  return (
-    <ButtonContainer
-      noLoader={noLoader}
-      onPress={onPress}
-      testID={testID}
-      style={style}
-    >
-      <SvgIcon
-        Svg={icon}
-        height={20}
-        width={20}
-      />
-    </ButtonContainer>
-  );
-}
+}: ButtonProps) => (
+  <ButtonContainer
+    noLoader={noLoader}
+    onPress={onPress}
+    testID={testID}
+    style={style}
+  >
+    <SvgIcon
+      Svg={icon}
+      height={20}
+      width={20}
+    />
+  </ButtonContainer>
+);
 
 export default SquareSvgButton;

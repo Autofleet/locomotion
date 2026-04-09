@@ -17,27 +17,26 @@ interface ITabSwitchProps {
     tabs: TabItem[];
 }
 
-function TabSwitch({ onUnselectedClick, tabs, activeTabId }: ITabSwitchProps) {
-  return (
-    <Container>
+const TabSwitch = ({ onUnselectedClick, tabs, activeTabId }: ITabSwitchProps) => (
+  <Container>
 
-      {tabs.map((tab) => {
-        const isSelected = tab.id === activeTabId;
-        return (
-          <Tab
-            testID={tab.id}
-            key={tab.id}
-            id={tab.id}
-            onPress={() => {
-              if (!isSelected) {
-                onUnselectedClick(tab);
-              }
-            }}
-            isSelected={isSelected}
-          >
-            <TabInner isSelected={isSelected}>
+    {tabs.map((tab) => {
+      const isSelected = tab.id === activeTabId;
+      return (
+        <Tab
+          testID={tab.id}
+          key={tab.id}
+          id={tab.id}
+          onPress={() => {
+            if (!isSelected) {
+              onUnselectedClick(tab);
+            }
+          }}
+          isSelected={isSelected}
+        >
+          <TabInner isSelected={isSelected}>
 
-              {tab.Svg
+            {tab.Svg
                   && (
                   <SvgIcon
                     stroke={isSelected ? SELECTED_COLOR : UNSELECTED_COLOR}
@@ -46,16 +45,15 @@ function TabSwitch({ onUnselectedClick, tabs, activeTabId }: ITabSwitchProps) {
                     height={20}
                   />
                   )}
-              <TextContainer isSelected={isSelected}>
-                {i18n.t(tab.textKey)}
-              </TextContainer>
+            <TextContainer isSelected={isSelected}>
+              {i18n.t(tab.textKey)}
+            </TextContainer>
 
-            </TabInner>
-          </Tab>
-        );
-      })}
+          </TabInner>
+        </Tab>
+      );
+    })}
 
-    </Container>
-  );
-}
+  </Container>
+);
 export default TabSwitch;

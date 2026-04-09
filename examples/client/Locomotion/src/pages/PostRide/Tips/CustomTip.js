@@ -64,12 +64,12 @@ const isValidNumber = async (number) => {
   }
 };
 
-function Tips({
+const Tips = ({
   customAmount,
   onSubmit,
   tipSuffix,
   isExpanded,
-}) {
+}) => {
   const [customTip, setCustomTip] = useState(customAmount);
   const [isValid, setIsValid] = useState(null);
   const { expand, forceClose } = useBottomSheet();
@@ -194,6 +194,6 @@ function Tips({
 
     </Container>
   );
-}
+};
 
 export default Tips;

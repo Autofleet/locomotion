@@ -11,7 +11,7 @@ import { ErrorMessage, SkipSubmitContainer, SubmitContainer } from './styled';
 import { Context as ThemeContext } from '../../context/theme';
 import { getInputIsoCode } from '../../services/MccMnc';
 
-function NewCreditForm({ onDone, canSkip = false, PageText }) {
+const NewCreditForm = ({ onDone, canSkip = false, PageText }) => {
   const theme = useContext(ThemeContext);
   const { confirmSetupIntent } = useStripe();
   const usePayments = PaymentsContext.useContainer();
@@ -105,6 +105,6 @@ function NewCreditForm({ onDone, canSkip = false, PageText }) {
       </SubmitContainer>
     </ScrollView>
   );
-}
+};
 
 export default NewCreditForm;

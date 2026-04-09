@@ -10,7 +10,7 @@ import {
 } from './styled';
 import RoundedButton from '../../Components/RoundedButton';
 
-function ConfirmationPopup({
+const ConfirmationPopup = ({
   title = 'Confirmation Popup',
   text = '',
   confirmText = 'Submit',
@@ -20,7 +20,7 @@ function ConfirmationPopup({
   onClose = () => undefined,
   onSubmit,
   isVisible,
-}) {
+}) => {
   const closePopup = () => {
     onClose();
   };
@@ -41,7 +41,7 @@ function ConfirmationPopup({
       </PopupContainer>
     </Modal>
   );
-}
+};
 
 export default ConfirmationPopup;
 

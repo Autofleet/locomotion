@@ -31,7 +31,7 @@ import { BS_PAGES } from '../../context/ridePageStateContext/utils';
 import * as navigationService from '../../services/navigation';
 import RideFeedback from './Feedback';
 
-function PostRidePage({ menuSide, route }) {
+const PostRidePage = ({ menuSide, route }) => {
   const { rideId, priceCalculationId, fromHistory } = route?.params ?? {};
   const [rating, setRating] = useState(null);
   const [ride, setRide] = useState(null);
@@ -162,7 +162,7 @@ function PostRidePage({ menuSide, route }) {
       </PageContainer>
     ) : <FullPageLoader />
   );
-}
+};
 
 export default function (props) {
   return (

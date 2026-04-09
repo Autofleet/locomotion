@@ -49,9 +49,9 @@ import contactUsIcon from '../../../assets/headset.svg';
 import sucessIcon from '../../../assets/checkmark.svg';
 import { TipButtonSkeleton } from './Skeleton/TipButtonSkeleton';
 
-function RideTitleCard({
+const RideTitleCard = ({
   ride, page, showTip, tip, isPaymentRejected,
-}) {
+}) => {
   const isDebuggingEnabled = (typeof atob !== 'undefined');
   const { getBusinessAccountById } = PaymentContext.useContainer();
   const { showPrice, loadShowPrice } = SettingContext.useContainer();
@@ -130,7 +130,7 @@ function RideTitleCard({
       </RideViewSecTextContainer>
     </TitleContainer>
   );
-}
+};
 
 export function RideListView({
   ride, showSpacer, onPress, testID,
@@ -151,7 +151,7 @@ export function RideListView({
   );
 }
 
-function RideView({ ride }) {
+const RideView = ({ ride }) => {
   const isRidePaymentRejected = ride.payment?.state === PAYMENT_STATES.REJECTED;
   const [tip, setTip] = useState(null);
   const [isPaymentSettled, setPaymentSettled] = useState(false);
@@ -298,6 +298,6 @@ function RideView({ ride }) {
       />
     </>
   );
-}
+};
 
 export default RideView;

@@ -7,14 +7,14 @@ import {
 } from './styled';
 import { rideHistoryContext } from '../../../context/rideHistory';
 
-function TaskFilterBar({ filter, activeFilter }) {
+const TaskFilterBar = ({ filter, activeFilter }) => {
   const active = filter.id === activeFilter;
   return (
     <FilterView elevation={2} active={active} key={filter.id}>
       <FilterText active={active}>{filter.title}</FilterText>
     </FilterView>
   );
-}
+};
 
 const FilterBar = React.memo(({
   filters = {}, activeFilter = undefined, onFilterClicked = () => null,

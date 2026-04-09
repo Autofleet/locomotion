@@ -16,16 +16,14 @@ interface NoteButtonProps {
     title: string;
 }
 
-function NoteButton({
+const NoteButton = ({
   icon,
   title,
-}: NoteButtonProps) {
-  return (
-    <>
-      <SvgIcon stroke="#333" Svg={icon} height={15} width={15} />
-      <TimeText numberOfLines={1}>{title}</TimeText>
-    </>
-  );
-}
+}: NoteButtonProps) => (
+  <>
+    <SvgIcon stroke="#333" Svg={icon} height={15} width={15} />
+    <TimeText numberOfLines={1}>{title}</TimeText>
+  </>
+);
 
 export default NoteButton;

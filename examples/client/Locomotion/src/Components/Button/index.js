@@ -13,7 +13,7 @@ const LoaderContainer = styled.View`
   justify-content: center;
 `;
 
-function Button(props) {
+const Button = (props) => {
   const [isLoadingInternal, setIsLoadingInternal] = useState(false);
 
   return (
@@ -42,6 +42,6 @@ function Button(props) {
       ) : props.children}
     </Container>
   );
-}
+};
 
 export default Button;

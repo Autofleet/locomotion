@@ -7,9 +7,7 @@ const Switch = styled.Switch`
   margin-top: -15px;
 `;
 
-function MyRow({ onChange = () => null, active = false }) {
-  return <Switch onTintColor="#23a0fe" tintColor="#dedede" thumbTintColor="#fafafc" onValueChange={onChange} value={active} />;
-}
+const MyRow = ({ onChange = () => null, active = false }) => <Switch onTintColor="#23a0fe" tintColor="#dedede" thumbTintColor="#fafafc" onValueChange={onChange} value={active} />;
 
 export default MyRow;
 

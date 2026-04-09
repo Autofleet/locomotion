@@ -28,7 +28,7 @@ import ShareButton from './share';
 
 const DEFAULT_VEHICLE_IMAGE = 'https://res.cloudinary.com/autofleet/image/upload/w_700,h_500,c_thumb,q_auto/vehicle-images/Minivan/minivan_blue.png';
 
-function ActiveRideContent() {
+const ActiveRideContent = () => {
   const { ride, loadRide, updateRide } = useContext(RidePageContext);
   const { changeBsPage, setGenericErrorPopup } = useContext(RideStateContextContext);
   const {
@@ -195,6 +195,6 @@ function ActiveRideContent() {
       )
       : null
   );
-}
+};
 
 export default ActiveRideContent;

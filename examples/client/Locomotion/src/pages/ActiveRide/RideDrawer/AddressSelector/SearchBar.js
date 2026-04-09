@@ -60,7 +60,7 @@ const ArrowImage = styled.Image.attrs({ source: backImage })`
     height: 25px;
 `;
 
-function BackButton({ isExpanded, onBack }) {
+const BackButton = ({ isExpanded, onBack }) => {
   if (!isExpanded) {
     return null;
   }
@@ -69,15 +69,15 @@ function BackButton({ isExpanded, onBack }) {
       <ArrowImage />
     </BackButtonContainer>
   );
-}
+};
 
-function SearchBar({
+const SearchBar = ({
   isExpanded,
   onFocus = () => null,
   onBack,
   onSearch,
   selectedIndex,
-}) {
+}) => {
   const {
     setSelectedInputIndex,
     selectedInputTarget,
@@ -297,6 +297,6 @@ function SearchBar({
       </View>
     </View>
   );
-}
+};
 
 export default SearchBar;

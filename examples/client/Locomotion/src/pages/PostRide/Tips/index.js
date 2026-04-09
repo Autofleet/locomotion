@@ -81,22 +81,20 @@ export const DriverAvatar = styled(Image)`
   border-width: 4;
  `;
 
-function NoTipTextButton({ onPress, children }) {
-  return (
-    <NoCustomTipContainer>
-      <Button testID="resetTip" noBackground onPress={onPress}>
-        <NoCustomTipText>{children}</NoCustomTipText>
-      </Button>
-    </NoCustomTipContainer>
-  );
-}
-function Tips({
+const NoTipTextButton = ({ onPress, children }) => (
+  <NoCustomTipContainer>
+    <Button testID="resetTip" noBackground onPress={onPress}>
+      <NoCustomTipText>{children}</NoCustomTipText>
+    </Button>
+  </NoCustomTipContainer>
+);
+const Tips = ({
   driver,
   ridePrice,
   tipSettings,
   onSelectTip,
   priceCurrency = null,
-}) {
+}) => {
   const [selectedTip, setSelectedTip] = useState(null);
   const [customTip, setCustomTip] = useState(null);
   const { businessAccountId } = useContext(RidePageContext);
@@ -223,7 +221,7 @@ function Tips({
     </>
 
   );
-}
+};
 
 export default function (props) {
   return <Tips {...props} />;

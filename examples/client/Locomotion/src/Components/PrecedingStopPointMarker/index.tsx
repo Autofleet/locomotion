@@ -9,16 +9,14 @@ interface PrecedingStopPointMarkerProps {
     stopPoint: any;
 }
 
-function PrecedingStopPointMarker({ stopPoint }: PrecedingStopPointMarkerProps) {
-  return (
-    <Marker
-      coordinate={{ latitude: parseFloat(stopPoint.lat), longitude: parseFloat(stopPoint.lng) }}
-      zIndex={10}
-      tracksViewChanges={false}
-    >
-      <SvgIcon Svg={pickupIcon} width={10} height={10} />
-    </Marker>
-  );
-}
+const PrecedingStopPointMarker = ({ stopPoint }: PrecedingStopPointMarkerProps) => (
+  <Marker
+    coordinate={{ latitude: parseFloat(stopPoint.lat), longitude: parseFloat(stopPoint.lng) }}
+    zIndex={10}
+    tracksViewChanges={false}
+  >
+    <SvgIcon Svg={pickupIcon} width={10} height={10} />
+  </Marker>
+);
 
 export default PrecedingStopPointMarker;

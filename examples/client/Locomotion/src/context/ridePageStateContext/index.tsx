@@ -37,7 +37,7 @@ export const RideStateContextContext = createContext<RidePageStateContextProps>(
   setGenericErrorPopup: () => undefined,
 });
 
-function RideStateContextContextProvider({ children }: { children: any }) {
+const RideStateContextContextProvider = ({ children }: { children: any }) => {
   const [genericErrorPopup, setGenericErrorPopup] = useState<any | null>(null);
   const [territory, setTerritory] = useState<Array<any> | null>(null);
   const [isUserLocationFocused, setIsUserLocationFocused] = useState(false);
@@ -112,6 +112,6 @@ function RideStateContextContextProvider({ children }: { children: any }) {
       />
     </RideStateContextContext.Provider>
   );
-}
+};
 
 export default RideStateContextContextProvider;

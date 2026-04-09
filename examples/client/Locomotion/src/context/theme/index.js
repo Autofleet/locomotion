@@ -135,7 +135,7 @@ const useVehicleColor = () => {
   return { vehicleColor };
 };
 
-function Provider({ children }) {
+const Provider = ({ children }) => {
   const colorScheme = useColorScheme();
   const isInitDarkMode = FORCE_DARK_MODE || (Appearance.getColorScheme() === THEME_MOD.DARK && DARK_MODE_ENABLED);
   const [isDarkMode, setDarkMode] = useState(isInitDarkMode);
@@ -158,7 +158,7 @@ function Provider({ children }) {
       {children}
     </ThemeProvider>
   );
-}
+};
 
 export const Context = ThemeContext;
 

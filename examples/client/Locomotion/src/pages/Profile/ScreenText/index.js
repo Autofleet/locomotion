@@ -2,20 +2,18 @@ import React from 'react';
 import propsTypes from 'prop-types';
 import { SubText, Text, TextContainer } from './styles';
 
-function ScreenText({ text, subText = null }) {
-  return (
-    <TextContainer hasSubText={!!subText}>
-      <Text>
-        {text}
-      </Text>
-      {subText && (
+const ScreenText = ({ text, subText = null }) => (
+  <TextContainer hasSubText={!!subText}>
+    <Text>
+      {text}
+    </Text>
+    {subText && (
       <SubText>
         {subText}
       </SubText>
-      )}
-    </TextContainer>
-  );
-}
+    )}
+  </TextContainer>
+);
 
 ScreenText.propTypes = {
   text: propsTypes.string.isRequired,

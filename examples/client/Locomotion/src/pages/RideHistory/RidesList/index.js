@@ -16,32 +16,30 @@ import * as navigationService from '../../../services/navigation';
 
 const DISTANCE_FROM_END = 400;
 
-function RideCardInList({
+const RideCardInList = ({
   showBottomLoader,
   ride,
   lastItem,
   showSpacer,
-}) {
-  return (
-    <>
-      <RideListView
-        ride={ride}
-        showSpacer={showSpacer}
-        testID={`rideHistoryCard-${ride.id}`}
-        onPress={() => navigationService.navigate(MAIN_ROUTES.COMPLETED_RIDE_OVERVIEW_PAGE, {
-          rideId: ride.id,
-        })}
-      />
-      {lastItem && showBottomLoader ? (
-        <CenterContainer>
-          <Loader dark lottieViewStyle={{ width: 24, height: 24 }} />
-        </CenterContainer>
-      ) : null}
-    </>
-  );
-}
+}) => (
+  <>
+    <RideListView
+      ride={ride}
+      showSpacer={showSpacer}
+      testID={`rideHistoryCard-${ride.id}`}
+      onPress={() => navigationService.navigate(MAIN_ROUTES.COMPLETED_RIDE_OVERVIEW_PAGE, {
+        rideId: ride.id,
+      })}
+    />
+    {lastItem && showBottomLoader ? (
+      <CenterContainer>
+        <Loader dark lottieViewStyle={{ width: 24, height: 24 }} />
+      </CenterContainer>
+    ) : null}
+  </>
+);
 
-function RidesView({ rides }) {
+const RidesView = ({ rides }) => {
   const { loadMoreRides } = useContext(ridesContext);
   const [stopLoading, setStopLoading] = useState(false);
   const [showBottomLoader, setShowBottomLoader] = useState(false);
@@ -82,7 +80,7 @@ function RidesView({ rides }) {
       />
     </RidesViewContainer>
   );
-}
+};
 
 const RidesList = React.memo(({
   rides,

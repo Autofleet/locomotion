@@ -23,12 +23,12 @@ interface RidePaymentDetailsProps {
   state?: string;
 }
 
-function RidePaymentDetails({
+const RidePaymentDetails = ({
   ride,
   paymentMethod,
   rideHistory = false,
   state = 'pending',
-}: RidePaymentDetailsProps) {
+}: RidePaymentDetailsProps) => {
   const [priceCalculation, setPriceCalculation] = useState<PriceCalculation>();
   const {
     getRidePriceCalculation,
@@ -97,6 +97,6 @@ function RidePaymentDetails({
     </>
   ) : null
   );
-}
+};
 
 export default RidePaymentDetails;

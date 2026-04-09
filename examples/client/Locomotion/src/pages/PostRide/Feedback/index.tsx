@@ -25,9 +25,9 @@ interface RideFeedbackProps {
 
 const MAX_LENGTH = 150;
 
-function RideFeedback({
+const RideFeedback = ({
   onTextChange,
-}: RideFeedbackProps) {
+}: RideFeedbackProps) => {
   const [isActive, setIsActive] = useState(false);
   const [shouldShowPage, setShouldShowPage] = useState(false);
   const [currentText, updateText] = useState('');
@@ -97,6 +97,6 @@ function RideFeedback({
       </Container>
     )
   );
-}
+};
 
 export default RideFeedback;

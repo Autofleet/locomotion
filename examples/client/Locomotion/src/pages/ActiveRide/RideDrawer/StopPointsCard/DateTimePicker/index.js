@@ -15,7 +15,7 @@ const TimeSelectorsContainer = styled.View`
     flex-direction: row;
 `;
 
-function DateTimePicker({ onScheduleTimeSelect }) {
+const DateTimePicker = ({ onScheduleTimeSelect }) => {
   const useSettings = settingsContext.useContainer();
   const [optionalDates, setOptionalDates] = useState([]);
   const [optionalTimes, setOptionalTimes] = useState([]);
@@ -135,6 +135,6 @@ function DateTimePicker({ onScheduleTimeSelect }) {
 
     </TimeSelectorsContainer>
   );
-}
+};
 
 export default DateTimePicker;

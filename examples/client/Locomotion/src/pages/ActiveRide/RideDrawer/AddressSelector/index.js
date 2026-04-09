@@ -38,7 +38,7 @@ const InfoText = styled.Text`
   text-align: center;
   width: 60%;
 `;
-function NoHistoryText() {
+const NoHistoryText = () => {
   const { primaryColor } = useContext(ThemeContext);
   return (
     <NoHistoryTextContainer>
@@ -48,7 +48,7 @@ function NoHistoryText() {
       </InfoText>
     </NoHistoryTextContainer>
   );
-}
+};
 
 const HistoryContainer = styled.View`
   margin-bottom: 10px;
@@ -70,7 +70,7 @@ const WelcomeText = styled.Text`
   align-self: flex-start;
   margin-bottom: 5px;
 `;
-function AddressSelectorBottomSheet({ addressSelectorFocusIndex }) {
+const AddressSelectorBottomSheet = ({ addressSelectorFocusIndex }) => {
   const userContext = useContext(RidePageContext);
   const { selectedInputIndex } = userContext;
   const { locationGranted, user } = useContext(UserContext);
@@ -223,6 +223,6 @@ function AddressSelectorBottomSheet({ addressSelectorFocusIndex }) {
       />
     </ContentContainer>
   );
-}
+};
 
 export default AddressSelectorBottomSheet;

@@ -71,7 +71,7 @@ export const MessagesContext = createContext<MessagesContextInterface>({
   closeToast: () => undefined,
 });
 
-function MessagesProvider({ children }: { children: any }) {
+const MessagesProvider = ({ children }: { children: any }) => {
   const { user } = useContext(UserContext);
   const { getRidesByParams } = useContext(RidePageContext);
   const [viewingMessage, setViewingMessage] = useState<messageProps | null>(null);
@@ -210,6 +210,6 @@ function MessagesProvider({ children }: { children: any }) {
       {children}
     </MessagesContext.Provider>
   );
-}
+};
 
 export default MessagesProvider;

@@ -2,7 +2,7 @@ import React, { useState, useContext } from 'react';
 import { Share } from 'react-native';
 import Mixpanel from '../../../services/Mixpanel';
 import {
-  ButtonContainer, HALF_WIDTH,
+  ButtonContainer,
 } from './styled';
 import i18n from '../../../I18n';
 import Loader from '../../Loader';
@@ -10,8 +10,8 @@ import { RidePageContext } from '../../../context/newRideContext';
 import share from '../../../assets/bottomSheet/share.svg';
 import GenericRideButton from '../../GenericRideButton';
 
-function ShareButton() {
-  const { trackRide, ride } = useContext(RidePageContext);
+const ShareButton = () => {
+  const { trackRide } = useContext(RidePageContext);
   const [isLoading, setIsLoading] = useState(false);
 
   const onShare = async () => {
@@ -55,6 +55,6 @@ function ShareButton() {
         }
     </ButtonContainer>
   );
-}
+};
 
 export default ShareButton;

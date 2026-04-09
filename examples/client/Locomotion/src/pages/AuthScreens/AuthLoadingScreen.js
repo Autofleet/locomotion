@@ -30,7 +30,7 @@ export const INITIAL_USER_STATE = {
   pushUserId: '',
 };
 
-function AuthLoadingScreen() {
+const AuthLoadingScreen = () => {
   const [isConnected, setIsConnected] = useState(true);
   const { setUser, user, updateUser } = useContext(UserContext);
   const { navigateBasedOnUser } = useContext(OnboardingContext);
@@ -136,5 +136,5 @@ function AuthLoadingScreen() {
       />
     </>
   );
-}
+};
 export default AuthLoadingScreen;

@@ -62,15 +62,13 @@ const SelectionTitle = styled.Text`
   padding-bottom: 5px;
 `;
 
-function OrderTimeSelector({
+const OrderTimeSelector = ({
   selected, text, onPress, side, disabled,
-}) {
-  return (
-    <TimeItem selected={selected} onPress={onPress} side={side} disabled={disabled} testID={`${text}OrderTimeButton`}>
-      <TextContainer selected={selected}>{text}</TextContainer>
-    </TimeItem>
-  );
-}
+}) => (
+  <TimeItem selected={selected} onPress={onPress} side={side} disabled={disabled} testID={`${text}OrderTimeButton`}>
+    <TextContainer selected={selected}>{text}</TextContainer>
+  </TimeItem>
+);
 
 export default function ({ onScheduleTimeSelect, disableFuture = false, scheduledTo }) {
   const [scheduleType, setScheduleType] = useState('now');

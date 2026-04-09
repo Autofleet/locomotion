@@ -16,7 +16,7 @@ interface StopPointsViewerProps {
   goBackToAddressSelector: (selected: number | null) => void
 }
 
-function StopPointsViewer({ goBackToAddressSelector }: StopPointsViewerProps) {
+const StopPointsViewer = ({ goBackToAddressSelector }: StopPointsViewerProps) => {
   const { requestStopPoints } = useContext(RidePageContext);
   const firstSp: any = requestStopPoints[0];
   const lastSp: any = requestStopPoints[requestStopPoints.length - 1];
@@ -75,6 +75,6 @@ function StopPointsViewer({ goBackToAddressSelector }: StopPointsViewerProps) {
         </TouchableOpacity>
       </Container>
     ) : null);
-}
+};
 
 export default StopPointsViewer;

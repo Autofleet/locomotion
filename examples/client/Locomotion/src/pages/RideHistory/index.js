@@ -31,7 +31,7 @@ const getCustomFilter = (filterId) => ({
   },
 });
 
-function Page({ menuSide }) {
+const Page = ({ menuSide }) => {
   const {
     rides, loadRides, initRides, savedParams,
   } = useContext(rideHistoryContext);
@@ -145,6 +145,6 @@ function Page({ menuSide }) {
       />
     </PageContainer>
   );
-}
+};
 
 export default Page;

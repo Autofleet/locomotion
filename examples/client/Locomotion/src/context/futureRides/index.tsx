@@ -29,7 +29,7 @@ export const FutureRidesContext = createContext<FutureRidesContextInterface>({
   onFutureRideTransition: () => undefined,
 });
 
-function FutureRidesProvider({ children }: { children: any }) {
+const FutureRidesProvider = ({ children }: { children: any }) => {
   const { user } = useContext(UserContext);
   const [futureRides, setFutureRides] = useState<RideInterface[]>([]);
   const [newFutureRide, setNewFutureRide] = useState<RideInterface | null>(null);
@@ -102,6 +102,6 @@ function FutureRidesProvider({ children }: { children: any }) {
       {children}
     </FutureRidesContext.Provider>
   );
-}
+};
 
 export default FutureRidesProvider;

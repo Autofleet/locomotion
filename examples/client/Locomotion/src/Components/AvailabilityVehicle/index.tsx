@@ -47,10 +47,10 @@ const ensureNumberType = (v: string | number) => {
   }
   return v;
 };
-function AvailabilityVehicle({
+const AvailabilityVehicle = ({
   location,
   id,
-}: AvailabilityVehicleProps) {
+}: AvailabilityVehicleProps) => {
   const { useVehicleColor } = useContext(ThemeContext);
   const { vehicleColor } = useVehicleColor();
   const markerRef = useRef<MapMarker>(null);
@@ -115,6 +115,6 @@ function AvailabilityVehicle({
       />
     </MarkerAnimated>
   );
-}
+};
 
 export default React.memo(AvailabilityVehicle, areEqual);

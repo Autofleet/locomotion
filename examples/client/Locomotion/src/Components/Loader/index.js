@@ -11,12 +11,12 @@ const LoadingWrapper = styled.View`
   align-items: center;
 `;
 
-function Loader({
+const Loader = ({
   inSlider = false,
   dark = false,
   lottieViewStyle,
   sourceProp,
-}) {
+}) => {
   const Wrapper = inSlider ? View : LoadingWrapper;
   let source;
   if (inSlider) {
@@ -40,6 +40,6 @@ function Loader({
       />
     </Wrapper>
   );
-}
+};
 
 export default Loader;

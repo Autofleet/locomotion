@@ -26,7 +26,7 @@ interface FutureRidesViewProps {
   route: any;
 }
 
-function Messages({ menuSide }: FutureRidesViewProps) {
+const Messages = ({ menuSide }: FutureRidesViewProps) => {
   const {
     userMessages, loadUserMessages, isLoading, markReadMessages,
   } = useContext(MessagesContext);
@@ -98,6 +98,6 @@ function Messages({ menuSide }: FutureRidesViewProps) {
 
     </PageContainer>
   );
-}
+};
 
 export default Messages;

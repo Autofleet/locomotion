@@ -175,7 +175,7 @@ const RIDE_STATES_TO_BS_PAGES = objDefault({
   defaultValue: BS_PAGES.ACTIVE_RIDE,
 });
 
-function BsPage({
+const BsPage = ({
   onSecondaryButtonPress = () => undefined,
   onButtonPress,
   Image,
@@ -205,7 +205,7 @@ function BsPage({
   warning?: boolean
   fullWidthButtons?: boolean;
   subtitleTestId?: string
-}) {
+}) => {
   const buttonWidth = fullWidthButtons ? '100%' : '48%';
   return (
     <Container edges={['bottom']}>
@@ -255,7 +255,7 @@ function BsPage({
       </Footer>
     </Container>
   );
-}
+};
 
 export default BsPage;
 

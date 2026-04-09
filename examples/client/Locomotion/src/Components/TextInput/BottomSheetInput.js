@@ -17,13 +17,11 @@ import cancel from '../../assets/bottomSheet/cancel.svg';
 import dragIcon from '../../assets/bottomSheet/drag-icon.svg';
 import deleteIcon from '../../assets/bottomSheet/trash.svg';
 
-function AddSpButton({ hasEnteredMultiSp, onPress }) {
-  return (
-    <AddSpContainer hasEnteredMultiSp={hasEnteredMultiSp} onPress={onPress} testID="addSpButton">
-      <PlusIcon />
-    </AddSpContainer>
-  );
-}
+const AddSpButton = ({ hasEnteredMultiSp, onPress }) => (
+  <AddSpContainer hasEnteredMultiSp={hasEnteredMultiSp} onPress={onPress} testID="addSpButton">
+    <PlusIcon />
+  </AddSpContainer>
+);
 const BottomSheetInputField = forwardRef((props, ref) => (
 
   <BottomSheetInputContainer>

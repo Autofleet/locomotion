@@ -15,7 +15,7 @@ import * as NavigationService from '../../services/navigation';
 import { PageContainer, ContentContainer } from '../styles';
 import Captcha from './Captcha';
 
-function Phone({ navigation }) {
+const Phone = ({ navigation }) => {
   const { nextScreen } = useContext(OnboardingContext);
   const { updateState, user, onLogin } = useContext(UserContext);
   const [showErrorText, setShowErrorText] = useState(false);
@@ -125,6 +125,6 @@ function Phone({ navigation }) {
       </ScrollView>
     </PageContainer>
   );
-}
+};
 
 export default Phone;

@@ -28,7 +28,7 @@ type RidePriceBreakdownParams = {
   rideHistory: boolean
 }
 
-function RidePriceBreakDown() {
+const RidePriceBreakDown = () => {
   const route = useRoute();
   const params : RidePriceBreakdownParams = route.params as RidePriceBreakdownParams;
   const [loading, setLoading] = useState<boolean>(true);
@@ -133,6 +133,6 @@ function RidePriceBreakDown() {
       </ScrollView>
     </PageContainer>
   );
-}
+};
 
 export default RidePriceBreakDown;

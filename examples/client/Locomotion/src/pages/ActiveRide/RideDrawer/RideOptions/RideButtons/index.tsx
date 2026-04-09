@@ -40,10 +40,10 @@ interface RideButtonsProps {
     setPopupName: (popupName: popupNames) => void;
 }
 
-function RideButtons({
+const RideButtons = ({
   displayPassenger,
   setPopupName,
-}: RideButtonsProps) {
+}: RideButtonsProps) => {
   const theme = useContext(ThemeContext);
   const {
     ride,
@@ -376,6 +376,6 @@ function RideButtons({
       />
     </>
   );
-}
+};
 
 export default RideButtons;

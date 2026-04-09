@@ -7,7 +7,7 @@ import {
   BodyText, Container, Title, TitleText, ButtonContainer, ButtonText,
 } from './styled';
 
-function TopMessage({
+const TopMessage = ({
   text, title, icon, button, onPress,
 }: {
     title: any,
@@ -15,21 +15,20 @@ function TopMessage({
     button: any,
     icon: any,
     onPress: any,
-}) {
-  return text
-    ? (
-      <SafeView>
-        <Container testID={title}>
-          {title && (
+}) => (text
+  ? (
+    <SafeView>
+      <Container testID={title}>
+        {title && (
           <Title>
             {icon && <SvgIcon Svg={icon} height={20} width={20} style={{ marginRight: 10 }} />}
             <TitleText>{title}</TitleText>
           </Title>
-          )}
-          <BodyText>
-            {text}
-          </BodyText>
-          {button && onPress && (
+        )}
+        <BodyText>
+          {text}
+        </BodyText>
+        {button && onPress && (
           <ButtonContainer>
             <Button
               noBackground
@@ -40,11 +39,10 @@ function TopMessage({
               </ButtonText>
             </Button>
           </ButtonContainer>
-          )}
-        </Container>
-      </SafeView>
-    )
-    : null;
-}
+        )}
+      </Container>
+    </SafeView>
+  )
+  : null);
 
 export default TopMessage;

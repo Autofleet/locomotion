@@ -18,20 +18,19 @@ interface PageHeaderProps {
   action?: any,
 }
 
-function PageHeader({
+const PageHeader = ({
   title, icon = backArrow, onIconPress = () => null, iconSide = 'left', displayIcon = true, width = 25, showSkipButton = false, onPressSkip = undefined, action = null,
-}: PageHeaderProps) {
-  return (
-    <Header style={Platform.OS === 'android' ? { shadowColor: '#000' } : {}}>
-      {displayIcon !== false
-        ? (
-          <HeaderIconContainer side={iconSide} onPress={onIconPress} testID="NavigationPanelButton">
-            <HeaderIcon width={width} height={width} source={icon} side={iconSide} />
-          </HeaderIconContainer>
-        ) : <View />}
-      <HeaderText numberOfLines={2} style={{ color: 'transparent', position: 'relative' }}>{title}</HeaderText>
-      <HeaderText numberOfLines={2}>{title}</HeaderText>
-      {showSkipButton
+}: PageHeaderProps) => (
+  <Header style={Platform.OS === 'android' ? { shadowColor: '#000' } : {}}>
+    {displayIcon !== false
+      ? (
+        <HeaderIconContainer side={iconSide} onPress={onIconPress} testID="NavigationPanelButton">
+          <HeaderIcon width={width} height={width} source={icon} side={iconSide} />
+        </HeaderIconContainer>
+      ) : <View />}
+    <HeaderText numberOfLines={2} style={{ color: 'transparent', position: 'relative' }}>{title}</HeaderText>
+    <HeaderText numberOfLines={2}>{title}</HeaderText>
+    {showSkipButton
         && (
           <SkipButton
             testID="skipButton"
@@ -45,9 +44,8 @@ function PageHeader({
             </SkipButtonText>
           </SkipButton>
         )}
-      {action}
-    </Header>
-  );
-}
+    {action}
+  </Header>
+);
 
 export default PageHeader;

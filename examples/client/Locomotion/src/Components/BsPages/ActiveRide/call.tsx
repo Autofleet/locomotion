@@ -16,7 +16,7 @@ interface CallContactPersonMaskedProps {
   onError?: () => void;
 }
 
-function CallContactPersonMasked({ onError = () => null }: CallContactPersonMaskedProps) {
+const CallContactPersonMasked = ({ onError = () => null }: CallContactPersonMaskedProps) => {
   const { getCallNumbers } = useContext(RidePageContext);
   const [disabledPhoneButton, setDisabledPhoneButton] = useState(false);
 
@@ -95,6 +95,6 @@ function CallContactPersonMasked({ onError = () => null }: CallContactPersonMask
         )}
     </ButtonContainer>
   );
-}
+};
 
 export default CallContactPersonMasked;

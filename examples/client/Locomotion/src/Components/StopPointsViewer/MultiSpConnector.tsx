@@ -39,16 +39,14 @@ function ConnectorThreeDots(props: ConnectorThreeDotsProps) {
   );
 }
 
-function MultiSpConnector({ amountOfStops }: MultiSpConnectorProps) {
-  return (
-    <MultiSpConnectorContainer>
-      <ConnectorThreeDots />
-      <ConnectorText>
-        {`+${amountOfStops}`}
-      </ConnectorText>
-      <ConnectorThreeDots marginRight={2} />
-    </MultiSpConnectorContainer>
-  );
-}
+const MultiSpConnector = ({ amountOfStops }: MultiSpConnectorProps) => (
+  <MultiSpConnectorContainer>
+    <ConnectorThreeDots />
+    <ConnectorText>
+      {`+${amountOfStops}`}
+    </ConnectorText>
+    <ConnectorThreeDots marginRight={2} />
+  </MultiSpConnectorContainer>
+);
 
 export default MultiSpConnector;

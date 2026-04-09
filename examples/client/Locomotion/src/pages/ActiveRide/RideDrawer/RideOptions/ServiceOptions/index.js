@@ -15,7 +15,7 @@ import { ServiceOptionsSkeleton } from './Skeleton/ServiceOptionsSkeleton';
 
 const SUCCESS_COLOR = '#25B861';
 
-function ServiceOptions() {
+const ServiceOptions = () => {
   const { serviceEstimations, stopRequestInterval } = useContext(RidePageContext);
   const { coupon } = useContext(UserContext);
   const { businessAccountId } = useContext(RidePageContext);
@@ -83,6 +83,6 @@ function ServiceOptions() {
       )}
     </ServiceOptionsContainer>
   );
-}
+};
 
 export default ServiceOptions;

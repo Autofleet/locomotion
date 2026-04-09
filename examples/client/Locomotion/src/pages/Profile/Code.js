@@ -24,7 +24,7 @@ const CODE_LENGTH = 4;
 const RESEND_SECONDS = 60;
 const RESEND_ATTEMPTS = 2;
 
-function Code() {
+const Code = () => {
   const { verifyCode } = useContext(OnboardingContext);
   const { user, onLogin } = useContext(UserContext);
   const [showErrorText, setShowErrorText] = useState(false);
@@ -205,6 +205,6 @@ function Code() {
       </ContentContainer>
     </PageContainer>
   );
-}
+};
 
 export default Code;

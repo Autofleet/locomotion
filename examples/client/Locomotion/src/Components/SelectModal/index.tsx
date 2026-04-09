@@ -80,18 +80,16 @@ interface StyledSelectRowProps {
   selected: boolean;
 }
 
-function StyledSelectRow({ item, selected }: StyledSelectRowProps) {
-  return (
-    <StyledRow selected={selected}>
-      <StyledIcon
-        Svg={person}
-        selected={selected}
-      />
-      <StyledText selected={selected}>{item.label}</StyledText>
+const StyledSelectRow = ({ item, selected }: StyledSelectRowProps) => (
+  <StyledRow selected={selected}>
+    <StyledIcon
+      Svg={person}
+      selected={selected}
+    />
+    <StyledText selected={selected}>{item.label}</StyledText>
 
-    </StyledRow>
-  );
-}
+  </StyledRow>
+);
 
 interface Item {
   value: string | number;
@@ -105,9 +103,9 @@ interface SelectModalProps {
   onError: (error: boolean) => void;
 }
 
-function SelectModal({
+const SelectModal = ({
   data, onSelect, onError, selectedValue = null,
-}: SelectModalProps) {
+}: SelectModalProps) => {
   const [selectedItem, setSelectedItem] = useState<Item| null>(null);
   const [error, setError] = useState(false);
 
@@ -154,5 +152,5 @@ function SelectModal({
       )}
     />
   );
-}
+};
 export default SelectModal;

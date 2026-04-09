@@ -14,7 +14,7 @@ import i18n from '../../I18n';
 import Thumbnail from '../Thumbnail';
 import { ImageUpload } from '../../context/user/api';
 
-function ThumbnailPicker({ onImageChoose = () => null, avatarSource = undefined, size }) {
+const ThumbnailPicker = ({ onImageChoose = () => null, avatarSource = undefined, size }) => {
   const [loading, setLoading] = useState(false);
   const onCancel = () => {
     console.log('User cancelled image picker');
@@ -151,7 +151,7 @@ function ThumbnailPicker({ onImageChoose = () => null, avatarSource = undefined,
       showLoader={loading}
     />
   );
-}
+};
 
 ThumbnailPicker.propTypes = {
   onImageChoose: propsTypes.func,

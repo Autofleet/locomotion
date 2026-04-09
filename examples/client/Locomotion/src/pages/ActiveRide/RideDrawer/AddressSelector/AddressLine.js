@@ -72,7 +72,7 @@ const Icon = styled(SvgIcon).attrs(({ actionButton, theme }) => ({
   fill: actionButton ? theme.primaryColor : theme.textColor,
 }))``;
 
-function AddressRow({
+const AddressRow = ({
   text,
   subText,
   icon = null,
@@ -83,7 +83,7 @@ function AddressRow({
   testID,
   label,
   distance,
-}) {
+}) => {
   const finalIcon = ICONS[icon] || (isHistory && HistoryIcon);
   return (
     <Row
@@ -122,6 +122,6 @@ function AddressRow({
       </SubRow>
     </Row>
   );
-}
+};
 
 export default AddressRow;

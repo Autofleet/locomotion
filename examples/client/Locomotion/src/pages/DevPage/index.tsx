@@ -11,7 +11,7 @@ import PageHeader from '../../Components/PageHeader';
 import * as navigationService from '../../services/navigation';
 import { InputContainer, Label } from './styles';
 
-function DevSettingPage() {
+const DevSettingPage = () => {
   const [operationId, setOperationId] = useState(Config.OPERATION_ID);
   const [serverUrl, setServerUrl] = useState(Config.SERVER_HOST);
   const [stripeKey, setStripeKey] = useState(Config.STRIPE_PUBLISHER_KEY);
@@ -68,6 +68,6 @@ function DevSettingPage() {
     </PageContainer>
 
   );
-}
+};
 
 export default DevSettingPage;

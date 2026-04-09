@@ -55,7 +55,7 @@ interface FutureRidesViewProps {
     route: any;
   }
 
-function MessageView({ menuSide, route }: FutureRidesViewProps) {
+const MessageView = ({ menuSide, route }: FutureRidesViewProps) => {
   const {
     getMessage, markReadMessages, toastMessageId, closeToast,
   } = useContext(MessagesContext);
@@ -152,6 +152,6 @@ function MessageView({ menuSide, route }: FutureRidesViewProps) {
       )}
     </PageContainer>
   );
-}
+};
 
 export default MessageView;

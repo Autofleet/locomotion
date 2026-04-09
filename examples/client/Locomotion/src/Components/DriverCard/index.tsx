@@ -33,11 +33,11 @@ const MAX_NAME_LENGTH = 20;
 
 const formatDriverName = (name: string): string => name && name.substring(0, MAX_NAME_LENGTH);
 
-function DriverCard({
+const DriverCard = ({
   ride,
   activeRide,
   noPaddingLeft,
-}: DriverCardProps) {
+}: DriverCardProps) => {
   const getRatingSection = () => {
     if (didUserRate(ride.rating, ride.rideFeedbacks)) {
       return (
@@ -92,6 +92,6 @@ function DriverCard({
       </DriverRatingContainer>
     </DriverSectionContainer>
   );
-}
+};
 
 export default DriverCard;

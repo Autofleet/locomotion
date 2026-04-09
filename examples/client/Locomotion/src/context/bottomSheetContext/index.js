@@ -34,7 +34,7 @@ export const INITIAL_TOP_BAR_PROPS = {
   htmlTags: [],
 };
 
-function BottomSheetProvider({ children }) {
+const BottomSheetProvider = ({ children }) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const [genericErrorDetails, setGenericErrorDetails] = useState({});
   const [snapPointsState, setSnapPointsState] = useState(SNAP_POINT_STATES[BS_PAGES.LOADING]);
@@ -62,6 +62,6 @@ function BottomSheetProvider({ children }) {
       {children}
     </BottomSheetContext.Provider>
   );
-}
+};
 
 export default BottomSheetProvider;

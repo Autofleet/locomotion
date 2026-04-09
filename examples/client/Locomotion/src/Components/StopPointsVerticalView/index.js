@@ -28,7 +28,7 @@ const stopPointText = (sp, isFutureRide, rideState) => {
 
 const MAX_DESC_LIMIT = 50;
 
-function Index({ ride }) {
+const Index = ({ ride }) => {
   const {
     state,
     stopPoints,
@@ -72,6 +72,6 @@ function Index({ ride }) {
     );
   }
   return null;
-}
+};
 
 export default Index;

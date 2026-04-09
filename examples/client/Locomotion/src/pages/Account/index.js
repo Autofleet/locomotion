@@ -36,7 +36,7 @@ import { UserContext } from '../../context/user';
 import GenericErrorPopup from '../../popups/GenericError';
 import { PAYMENT_METHODS } from '../../pages/Payments/consts';
 
-function AccountHeader() {
+const AccountHeader = () => {
   const { updateUserInfo, user } = useContext(UserContext);
 
   const onImageChoose = (image) => {
@@ -67,9 +67,9 @@ function AccountHeader() {
       </AccountHeaderMainContainer>
     </AccountHeaderContainer>
   );
-}
+};
 
-function AccountContent({ setHeaderTitle }) {
+const AccountContent = ({ setHeaderTitle }) => {
   const [showError, setShowError] = useState(false);
   const [isDeleteUserVisible, setIsDeleteUserVisible] = useState(false);
   const [defaultPaymentMethod, setDefaultPaymentMethod] = useState(null);
@@ -231,7 +231,7 @@ function AccountContent({ setHeaderTitle }) {
       </CardsContainer>
     </Container>
   );
-}
+};
 
 export default function ({ navigation, menuSide }) {
   const [headerTitle, setHeaderTitle] = useState(i18n.t('onboarding.pageTitle'));

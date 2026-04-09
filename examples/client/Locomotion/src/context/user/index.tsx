@@ -77,7 +77,7 @@ export const UserContext = createContext<UserContextInterface>({
   onLogin: async (phoneNumber: string, channel: string) => undefined,
 });
 
-function UserContextProvider({ children }: { children: any }) {
+const UserContextProvider = ({ children }: { children: any }) => {
   const usePayments = PaymentsContext.useContainer();
   const [locationGranted, setLocationGranted] = useState();
   const [user, setUser] = useState<User | null>(null);
@@ -290,6 +290,6 @@ function UserContextProvider({ children }: { children: any }) {
       {children}
     </UserContext.Provider>
   );
-}
+};
 
 export default UserContextProvider;

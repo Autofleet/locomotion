@@ -14,7 +14,7 @@ export type InformationCardProps = {
   testID?: string
 }
 
-function InformationCard({
+const InformationCard = ({
   title = '',
   children,
   onPress = undefined,
@@ -23,60 +23,58 @@ function InformationCard({
   icon = undefined,
   onIconPress = undefined,
   ...props
-}: InformationCardProps) {
-  return onPress
-    ? (
-      <Button onPress={onPress} {...props} style={{ flex: 1 }}>
-        { children
-          ? (
-            <Card
-              title={title}
-              onPress={onPress}
-              verified={verified}
-              showUnverified={showUnverified}
-              icon={icon}
-              onIconPress={onIconPress}
-            >
-              {children}
-            </Card>
-          ) : (
-            <Card
-              title={title}
-              onPress={onPress}
-              verified={verified}
-              showUnverified={showUnverified}
-              icon={icon}
-              onIconPress={onIconPress}
-            />
-          )}
-      </Button>
-    )
-    : (
-      <View>
-        { children
-          ? (
-            <Card
-              title={title}
-              onPress={onPress}
-              verified={verified}
-              showUnverified={showUnverified}
-              icon={icon}
-              onIconPress={onIconPress}
-            >
-              {children}
-            </Card>
-          ) : (
-            <Card
-              title={title}
-              onPress={onPress}
-              verified={verified}
-              showUnverified={showUnverified}
-              icon={icon}
-              onIconPress={onIconPress}
-            />
-          )}
-      </View>
-    );
-}
+}: InformationCardProps) => (onPress
+  ? (
+    <Button onPress={onPress} {...props} style={{ flex: 1 }}>
+      { children
+        ? (
+          <Card
+            title={title}
+            onPress={onPress}
+            verified={verified}
+            showUnverified={showUnverified}
+            icon={icon}
+            onIconPress={onIconPress}
+          >
+            {children}
+          </Card>
+        ) : (
+          <Card
+            title={title}
+            onPress={onPress}
+            verified={verified}
+            showUnverified={showUnverified}
+            icon={icon}
+            onIconPress={onIconPress}
+          />
+        )}
+    </Button>
+  )
+  : (
+    <View>
+      { children
+        ? (
+          <Card
+            title={title}
+            onPress={onPress}
+            verified={verified}
+            showUnverified={showUnverified}
+            icon={icon}
+            onIconPress={onIconPress}
+          >
+            {children}
+          </Card>
+        ) : (
+          <Card
+            title={title}
+            onPress={onPress}
+            verified={verified}
+            showUnverified={showUnverified}
+            icon={icon}
+            onIconPress={onIconPress}
+          />
+        )}
+    </View>
+  ));
 
 export default InformationCard;

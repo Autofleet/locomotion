@@ -20,38 +20,36 @@ const InputArrow = styled.Image.attrs({ source: InputIcon })`
     width: 20px;
 `;
 
-function TimePicker({
+const TimePicker = ({
   title, items, value, onValueChange,
-}) {
-  return (
-    <TimeSelectorItemContainer>
-      <TimeSelectorTitle>{title}</TimeSelectorTitle>
-      <RNPickerSelect
-        items={items}
-        onValueChange={onValueChange}
-        style={{
-          inputIOS: {
-            fontSize: 14,
-            color: '#727272',
-            height: 20,
-          },
-          inputAndroid: {
-            fontSize: 14,
-            color: '#727272',
-            height: 20,
-            width: 180,
-            marginLeft: -15,
-            marginTop: -15,
-          },
+}) => (
+  <TimeSelectorItemContainer>
+    <TimeSelectorTitle>{title}</TimeSelectorTitle>
+    <RNPickerSelect
+      items={items}
+      onValueChange={onValueChange}
+      style={{
+        inputIOS: {
+          fontSize: 14,
+          color: '#727272',
+          height: 20,
+        },
+        inputAndroid: {
+          fontSize: 14,
+          color: '#727272',
+          height: 20,
+          width: 180,
+          marginLeft: -15,
+          marginTop: -15,
+        },
 
-        }}
-        value={value}
-        Icon={() => (<InputArrow />)}
-        placeholder={{}}
-      />
+      }}
+      value={value}
+      Icon={() => (<InputArrow />)}
+      placeholder={{}}
+    />
 
-    </TimeSelectorItemContainer>
-  );
-}
+  </TimeSelectorItemContainer>
+);
 
 export default TimePicker;

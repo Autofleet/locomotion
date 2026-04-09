@@ -62,7 +62,7 @@ export const VirtualStationsContext = createContext<VirtualStationsContextInterf
   stationCalloutsRef: { current: {} },
 });
 
-function StationsProvider({ children }: { children: React.ReactNode }) {
+const StationsProvider = ({ children }: { children: React.ReactNode }) => {
   const { user, locationGranted } = useContext(UserContext);
   const [isStationsEnabled, setIsStationsEnabled] = useState(false);
   const [rawStations, setRawStations] = useState<Station[]>([]);
@@ -186,10 +186,10 @@ function StationsProvider({ children }: { children: React.ReactNode }) {
 
   const getMapMarkers = (stopPoints: StopPoint[]): React.ReactNode[] => rawStations.map((s) => createMapMarker(s, stopPoints));
 
-  function StationMarkers({ requestedStopPoints }: { requestedStopPoints: StopPoint[] }) {
+  const StationMarkers = ({ requestedStopPoints }: { requestedStopPoints: StopPoint[] }) => {
     const markers = useCallback(() => rawStations.map((s) => createMapMarker(s, requestedStopPoints)), [requestedStopPoints]);
     return <>{markers()}</>;
-  }
+  };
 
   const contextValue = useMemo(() => ({
     loadVirtualStations,
@@ -210,6 +210,6 @@ function StationsProvider({ children }: { children: React.ReactNode }) {
       {children}
     </VirtualStationsContext.Provider>
   );
-}
+};
 
 export default StationsProvider;

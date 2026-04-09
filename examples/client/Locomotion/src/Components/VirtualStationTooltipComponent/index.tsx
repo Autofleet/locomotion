@@ -13,19 +13,17 @@ interface VirtualStationTooltipProps {
   station: Station;
 }
 
-function VirtualStationTooltip({ station }: VirtualStationTooltipProps) {
-  return (
-    <Tooltip>
-      <StationDetails>
-        <Row>
-          <StationName>{station.label}</StationName>
-        </Row>
-        <Row>
-          <AddressText>{station.address}</AddressText>
-        </Row>
-      </StationDetails>
-    </Tooltip>
-  );
-}
+const VirtualStationTooltip = ({ station }: VirtualStationTooltipProps) => (
+  <Tooltip>
+    <StationDetails>
+      <Row>
+        <StationName>{station.label}</StationName>
+      </Row>
+      <Row>
+        <AddressText>{station.address}</AddressText>
+      </Row>
+    </StationDetails>
+  </Tooltip>
+);
 
 export default VirtualStationTooltip;

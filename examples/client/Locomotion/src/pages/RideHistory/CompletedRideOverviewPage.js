@@ -14,7 +14,7 @@ import useBackHandler from '../../lib/useBackHandler';
 import { formatRides } from '../../context/rideHistory';
 import * as navigationService from '../../services/navigation';
 
-function Page({ menuSide }) {
+const Page = ({ menuSide }) => {
   const { getRideFromApi } = useContext(RidePageContext);
   const route = useRoute();
   const [ride, setRide] = useState();
@@ -54,6 +54,6 @@ function Page({ menuSide }) {
       </PageContent>
     </PageContainer>
   );
-}
+};
 
 export default Page;

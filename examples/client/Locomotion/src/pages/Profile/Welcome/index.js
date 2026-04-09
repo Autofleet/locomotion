@@ -13,7 +13,7 @@ import {
 import { UserContext } from '../../../context/user';
 import * as navigationService from '../../../services/navigation';
 
-function Welcome() {
+const Welcome = () => {
   const { updateUserInfo, user } = useContext(UserContext);
 
   const onNext = async () => {
@@ -40,6 +40,6 @@ function Welcome() {
       </PageContainer>
     </SafeView>
   );
-}
+};
 
 export default Welcome;

@@ -24,11 +24,11 @@ interface FareBreakdownPopupProps {
   onClose: any;
 }
 
-function FareBreakdownPopup({
+const FareBreakdownPopup = ({
   isVisible,
   service,
   onClose,
-}: FareBreakdownPopupProps) {
+}: FareBreakdownPopupProps) => {
   const [priceCalculation, setPriceCalculation] = useState(null);
   const [didRequestFail, setDidRequestFail] = useState(false);
   const { businessAccountId } = useContext(RidePageContext);
@@ -77,6 +77,6 @@ function FareBreakdownPopup({
       </OuterContainer>
     </Modal>
   );
-}
+};
 
 export default FareBreakdownPopup;

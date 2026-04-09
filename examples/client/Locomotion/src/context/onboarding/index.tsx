@@ -50,7 +50,7 @@ const keyToScreen: any = {
   welcome: MAIN_ROUTES.WELCOME,
 };
 
-function OnboardingContextProvider({ children }: { children: any }) {
+const OnboardingContextProvider = ({ children }: { children: any }) => {
   const { setUser, onVert } = useContext(UserContext);
   const navigation: any = useNavigation();
   const { getSettingByKey } = settings.useContainer();
@@ -176,6 +176,6 @@ function OnboardingContextProvider({ children }: { children: any }) {
       {children}
     </OnboardingContext.Provider>
   );
-}
+};
 
 export default OnboardingContextProvider;

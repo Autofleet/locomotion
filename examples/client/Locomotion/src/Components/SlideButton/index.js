@@ -13,9 +13,9 @@ import {
 import arrowIcon from '../../assets/slider-arrow.png';
 import checkIcon from '../../assets/check.png';
 
-function Button({
+const Button = ({
   children, style, hollow, setLoading, onVerified, text, verifiedText, ...props
-}) {
+}) => {
   const theme = useContext(ThemeContext);
   const styleScheme = styleSchemed(theme);
   const [loadingState, setLoadingState] = useState(false);
@@ -70,6 +70,6 @@ function Button({
       </SliderContainer>
     </DrawerButtonContainer>
   );
-}
+};
 
 export default Button;

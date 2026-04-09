@@ -28,7 +28,7 @@ import settings from '../../context/settings';
 import SETTINGS_KEYS from '../../context/settings/keys';
 import * as navigationService from '../../services/navigation';
 
-function DrawerHeader({ navigateTo }) {
+const DrawerHeader = ({ navigateTo }) => {
   const { user } = useContext(UserContext);
   return (
     <Header>
@@ -49,16 +49,15 @@ function DrawerHeader({ navigateTo }) {
       </HeaderLink>
     </Header>
   );
-}
+};
 
-function DrawerLabel({
+const DrawerLabel = ({
   onPress, focused, tintColor, title, icon, lastItem, iconFill, testID, numberOfUpdates,
-}) {
-  return (
-    <StyledDrawerLabel focused={focused} onPress={onPress} lastItem={lastItem} testID={testID}>
-      <SvgIcon Svg={icon} width={23} height={23} style={{ marginRight: 15 }} fill={iconFill} />
-      <LabelText color={tintColor} focused={focused}>{title}</LabelText>
-      {!!numberOfUpdates
+}) => (
+  <StyledDrawerLabel focused={focused} onPress={onPress} lastItem={lastItem} testID={testID}>
+    <SvgIcon Svg={icon} width={23} height={23} style={{ marginRight: 15 }} fill={iconFill} />
+    <LabelText color={tintColor} focused={focused}>{title}</LabelText>
+    {!!numberOfUpdates
     && (
       <Updates>
         <UpdatesText>
@@ -66,9 +65,8 @@ function DrawerLabel({
         </UpdatesText>
       </Updates>
     )}
-    </StyledDrawerLabel>
-  );
-}
+  </StyledDrawerLabel>
+);
 
 export function DrawerContentComponent({ navigation, state }) {
   const route = state.routes[state.index].name;

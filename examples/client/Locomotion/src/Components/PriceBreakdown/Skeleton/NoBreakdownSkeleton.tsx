@@ -1,16 +1,14 @@
 import { StyleSheet, View } from 'react-native';
 import { Skeleton } from '../../Skeleton/Skeleton';
 
-function SkeletonItem() {
-  return (
-    <Skeleton>
-      <View style={styles.container}>
-        <View style={styles.itemText} />
-        <View style={styles.itemButton} />
-      </View>
-    </Skeleton>
-  );
-}
+const SkeletonItem = () => (
+  <Skeleton>
+    <View style={styles.container}>
+      <View style={styles.itemText} />
+      <View style={styles.itemButton} />
+    </View>
+  </Skeleton>
+);
 
 export function NoBreakdownSkeleton() {
   return (

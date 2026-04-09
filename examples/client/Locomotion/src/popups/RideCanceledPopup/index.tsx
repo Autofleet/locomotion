@@ -13,29 +13,27 @@ interface RideCanceledProps {
   onSubmit: any;
 }
 
-function RideCanceledPopup({
+const RideCanceledPopup = ({
   isVisible,
   onCancel,
   onSubmit,
-}: RideCanceledProps) {
-  return (
-    <Modal isVisible={isVisible}>
-      <Container>
-        <TextContainer>
-          <Title>{i18n.t('popups.rideCanceled.title')}</Title>
-          <SubTitle>{i18n.t('popups.rideCanceled.text')}</SubTitle>
-        </TextContainer>
-        <ButtonContainer>
-          <RoundedButton onPress={onSubmit} style={{ marginBottom: 10 }}>
-            {i18n.t('popups.rideCanceled.buttonText')}
-          </RoundedButton>
-          <RoundedButton onPress={onCancel} hollow>
-            {i18n.t('popups.rideCanceled.closeButtonText')}
-          </RoundedButton>
-        </ButtonContainer>
-      </Container>
-    </Modal>
-  );
-}
+}: RideCanceledProps) => (
+  <Modal isVisible={isVisible}>
+    <Container>
+      <TextContainer>
+        <Title>{i18n.t('popups.rideCanceled.title')}</Title>
+        <SubTitle>{i18n.t('popups.rideCanceled.text')}</SubTitle>
+      </TextContainer>
+      <ButtonContainer>
+        <RoundedButton onPress={onSubmit} style={{ marginBottom: 10 }}>
+          {i18n.t('popups.rideCanceled.buttonText')}
+        </RoundedButton>
+        <RoundedButton onPress={onCancel} hollow>
+          {i18n.t('popups.rideCanceled.closeButtonText')}
+        </RoundedButton>
+      </ButtonContainer>
+    </Container>
+  </Modal>
+);
 
 export default RideCanceledPopup;
