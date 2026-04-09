@@ -64,6 +64,12 @@ target 'Locomotion' do
             config.build_settings['CODE_SIGNING_ALLOWED'] = 'NO'
         end
       end
+      # Fix fmt consteval errors with Xcode 26 / clang 21 (stricter C++20 consteval enforcement)
+      if target.name == 'fmt'
+        target.build_configurations.each do |config|
+          config.build_settings['CLANG_CXX_LANGUAGE_STANDARD'] = 'c++17'
+        end
+      end
     end
   end
 end
