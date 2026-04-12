@@ -3,7 +3,6 @@ import { ScrollView } from 'react-native-gesture-handler';
 import Modal from '../../Components/CompatModal';
 import CloseButton from '../../Components/CloseButton';
 import { CancellationReasonsContext } from '../../context/cancellation-reasons';
-import { CancellationReason } from '../../context/cancellation-reasons/interface';
 import { SubTitle, Title } from '../styled';
 import i18n from '../../I18n';
 import {

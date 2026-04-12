@@ -11,6 +11,9 @@ import { SvgXml } from 'react-native-svg';
 
 const flagSvgs = require('country-flag-icons/string/3x2');
 
+const FLAG_HEIGHT = 20;
+const FLAG_WIDTH = 30;
+
 const styles = StyleSheet.create({
   container: {
     justifyContent: 'center',
@@ -31,16 +34,14 @@ const styles = StyleSheet.create({
 const FlagImage = memo(({ countryCode, flagSize }) => {
   const svg = flagSvgs[countryCode];
   if (!svg) return null;
-  const height = 20;
-  const width = 30;
   return (
-    <View style={[styles.flagWrapper, { width, height }]}>
-      <SvgXml xml={svg} width={width} height={height} />
+    <View style={[styles.flagWrapper, { width: FLAG_WIDTH, height: FLAG_HEIGHT }]}>
+      <SvgXml xml={svg} width={FLAG_WIDTH} height={FLAG_HEIGHT} />
     </View>
   );
 });
 
-export const Flag = ({ countryCode, withEmoji = true, withFlagButton = true, flagSize }) => {
+export const Flag = ({ countryCode, withFlagButton = true, flagSize }) => {
   if (!withFlagButton) return null;
   return (
     <View style={styles.container}>
@@ -48,4 +49,3 @@ export const Flag = ({ countryCode, withEmoji = true, withFlagButton = true, fla
     </View>
   );
 };
-
