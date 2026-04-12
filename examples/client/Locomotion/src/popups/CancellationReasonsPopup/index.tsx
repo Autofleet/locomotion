@@ -51,7 +51,7 @@ const CancellationReasonsPopup = ({
         Mixpanel.setEvent('Cancellation reasons popup showed', {
           state: ride?.state,
           rideId: rideIdToUse,
-          cancellationReasonIds: cancellationReasons.map((cr) => cr.id),
+          cancellationReasonIds: cancellationReasons.map((cr: CancellationReason) => cr.id),
         });
       }
     } else {
@@ -99,7 +99,7 @@ const CancellationReasonsPopup = ({
                   </LoaderContainer>
                 )
                 : (
-                  cancellationReasons.map((cr) => (
+                  cancellationReasons.map((cr: CancellationReason) => (
                     <ClickableContainer
                       onPress={() => onCancellationReasonClick(cr.id)}
                       testID={`cancellationReason-${cr.category}`}

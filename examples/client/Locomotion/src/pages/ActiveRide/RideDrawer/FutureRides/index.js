@@ -18,9 +18,9 @@ import {
 } from './styled';
 import StopPointRow from './StopPointRow';
 
-export function FutureOrdersButton({
+export const FutureOrdersButton = ({
   futureRides, isOpen, onPress,
-}) {
+}) => {
   const onClosePress = () => {
     if (!futureRides || !futureRides.length) {
       return null;
@@ -41,7 +41,7 @@ export function FutureOrdersButton({
       </FutureRidesButton>
     ) : null
   );
-}
+};
 
 export default function ({
   futureRides, isOpen, onCancel, onPress,

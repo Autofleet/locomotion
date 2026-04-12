@@ -27,17 +27,15 @@ interface ConnectorThreeDotsProps {
   marginRight?: number;
 }
 
-function ConnectorThreeDots(props: ConnectorThreeDotsProps) {
-  return (
-    <ThreeDotsContainer {...props}>
-      <SvgIcon
-        Svg={connectorIcon}
-        width={ICON_SIZE}
-        height={ICON_SIZE}
-      />
-    </ThreeDotsContainer>
-  );
-}
+const ConnectorThreeDots = (props: ConnectorThreeDotsProps) => (
+  <ThreeDotsContainer {...props}>
+    <SvgIcon
+      Svg={connectorIcon}
+      width={ICON_SIZE}
+      height={ICON_SIZE}
+    />
+  </ThreeDotsContainer>
+);
 
 const MultiSpConnector = ({ amountOfStops }: MultiSpConnectorProps) => (
   <MultiSpConnectorContainer>

@@ -259,7 +259,7 @@ const BsPage = ({
 
 export default BsPage;
 
-export function ConfirmPickupTime() {
+export const ConfirmPickupTime = () => {
   const { getSettingByKey } = SettingContext.useContainer();
   const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
   const [minMinutesBeforeFutureRide, setMinMinutesBeforeFutureRide] = useState<number | null>(null);
@@ -369,9 +369,9 @@ export function ConfirmPickupTime() {
       />
     </BsPage>
   );
-}
+};
 
-export function GenericError() {
+export const GenericError = () => {
   const { genericErrorDetails } = useContext(BottomSheetContext);
   return (
     <BsPage
@@ -385,22 +385,20 @@ export function GenericError() {
       fullWidthButtons
     />
   );
-}
+};
 
-export function LocationRequest({ onSecondaryButtonPress }: { onSecondaryButtonPress?: any }) {
-  return (
-    <BsPage
-      TitleText={i18n.t('bottomSheetContent.locationRequest.titleText')}
-      ButtonText={i18n.t('bottomSheetContent.locationRequest.buttonText')}
-      SecondaryButtonText={i18n.t('bottomSheetContent.locationRequest.secondaryButtonText')}
-      SubTitleText={i18n.t('bottomSheetContent.locationRequest.subTitleText', { operation: Config.OPERATION_NAME })}
-      onButtonPress={Linking.openSettings}
-      onSecondaryButtonPress={onSecondaryButtonPress}
-      fullWidthButtons
-      subtitleTestId=""
-    />
-  );
-}
+export const LocationRequest = ({ onSecondaryButtonPress }: { onSecondaryButtonPress?: any }) => (
+  <BsPage
+    TitleText={i18n.t('bottomSheetContent.locationRequest.titleText')}
+    ButtonText={i18n.t('bottomSheetContent.locationRequest.buttonText')}
+    SecondaryButtonText={i18n.t('bottomSheetContent.locationRequest.secondaryButtonText')}
+    SubTitleText={i18n.t('bottomSheetContent.locationRequest.subTitleText', { operation: Config.OPERATION_NAME })}
+    onButtonPress={Linking.openSettings}
+    onSecondaryButtonPress={onSecondaryButtonPress}
+    fullWidthButtons
+    subtitleTestId=""
+  />
+);
 
 interface CancelRideProps {
   secondaryButtonText?: string;
@@ -408,11 +406,11 @@ interface CancelRideProps {
   onSecondaryButtonPress?: () => void;
 }
 
-export function CancelRide({
+export const CancelRide = ({
   secondaryButtonText,
   onButtonPress: onButtonPressProp,
   onSecondaryButtonPress: onSecondaryButtonPressProp,
-}: CancelRideProps = {}) {
+}: CancelRideProps = {}) => {
   const [isLoading, setIsLoading] = useState(false);
   const [showError, setShowError] = useState(false);
   const { cancelRide, ride, setRidePopup } = useContext(RidePageContext);
@@ -456,9 +454,9 @@ export function CancelRide({
       />
     </BsPage>
   );
-}
+};
 
-export function ConfirmFutureRide({ onButtonPress }: { onButtonPress?: () => void }) {
+export const ConfirmFutureRide = ({ onButtonPress }: { onButtonPress?: () => void }) => {
   const { newFutureRide } = useContext(FutureRidesContext);
   const { chosenService } = useContext(NewRidePageContext);
 
@@ -504,9 +502,9 @@ export function ConfirmFutureRide({ onButtonPress }: { onButtonPress?: () => voi
       {getDropOffDisplay()}
     </BsPage>
   );
-}
+};
 
-export function NotAvailableHere({ onButtonPress, SubTitleText }: { onButtonPress?: () => void, SubTitleText?: string }) {
+export const NotAvailableHere = ({ onButtonPress, SubTitleText }: { onButtonPress?: () => void, SubTitleText?: string }) => {
   const { setSnapPointsState, setIsExpanded } = useContext(BottomSheetContext);
   const { primaryColor } = useContext(ThemeContext);
   useEffect(() => {
@@ -526,9 +524,9 @@ export function NotAvailableHere({ onButtonPress, SubTitleText }: { onButtonPres
       onButtonPress={onButtonPress}
     />
   );
-}
+};
 
-export function ConfirmPickup({ onButtonPress, isConfirmPickup, initialLocation }: { onButtonPress?: (location: any) => void, isConfirmPickup?: boolean, initialLocation?: any }) {
+export const ConfirmPickup = ({ onButtonPress, isConfirmPickup, initialLocation }: { onButtonPress?: (location: any) => void, isConfirmPickup?: boolean, initialLocation?: any }) => {
   const {
     lastSelectedLocation,
     getCurrentLocationAddress,
@@ -584,9 +582,9 @@ export function ConfirmPickup({ onButtonPress, isConfirmPickup, initialLocation 
       {renderAddressContainer()}
     </BsPage>
   );
-}
+};
 
-export function NoPayment() {
+export const NoPayment = () => {
   const { setSnapPointsState } = useContext(BottomSheetContext);
   const { requestRide, ride } = useContext(RidePageContext);
 
@@ -621,28 +619,26 @@ export function NoPayment() {
       }}
     />
   );
-}
+};
 
-export function Loading() {
-  return (
-    <BsPage
-      TitleText=""
-      ButtonText=""
-    >
-      <LoaderContainer>
-        <Loader
-          dark
-          lottieViewStyle={{
-            height: '100%', width: '100%', alignItems: 'center', justifyContent: 'center',
-          }}
-          sourceProp={undefined}
-        />
-      </LoaderContainer>
-    </BsPage>
-  );
-}
+export const Loading = () => (
+  <BsPage
+    TitleText=""
+    ButtonText=""
+  >
+    <LoaderContainer>
+      <Loader
+        dark
+        lottieViewStyle={{
+          height: '100%', width: '100%', alignItems: 'center', justifyContent: 'center',
+        }}
+        sourceProp={undefined}
+      />
+    </LoaderContainer>
+  </BsPage>
+);
 
-export function ConfirmingRide() {
+export const ConfirmingRide = () => {
   const { setSnapPointsState } = useContext(BottomSheetContext);
   const { changeBsPage } = useContext(RideStateContextContext);
   const { ride, chosenService } = useContext(RidePageContext);
@@ -689,9 +685,9 @@ export function ConfirmingRide() {
       </LoaderContainer>
     </BsPage>
   );
-}
+};
 
-export function NoAvailableVehicles({ onButtonPress, ButtonText }: { onButtonPress?: () => void, ButtonText?: string }) {
+export const NoAvailableVehicles = ({ onButtonPress, ButtonText }: { onButtonPress?: () => void, ButtonText?: string }) => {
   const { setSnapPointsState } = useContext(BottomSheetContext);
   const { primaryColor } = useContext(ThemeContext);
 
@@ -709,15 +705,13 @@ export function NoAvailableVehicles({ onButtonPress, ButtonText }: { onButtonPre
       onButtonPress={onButtonPress}
     />
   );
-}
+};
 
-export function ActiveRide() {
-  return (
-    <BsPage
-      TitleText=""
-      ButtonText=""
-    >
-      <ActiveRideContent />
-    </BsPage>
-  );
-}
+export const ActiveRide = () => (
+  <BsPage
+    TitleText=""
+    ButtonText=""
+  >
+    <ActiveRideContent />
+  </BsPage>
+);

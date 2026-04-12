@@ -40,9 +40,9 @@ export const SubNoRidesListContainer = styled(BaseText)`
   font-size: 16px;
 `;
 
-export function PageGenericMessage({
+export const PageGenericMessage = ({
   title, text, svg = null, addTop = true,
-}) {
+}) => {
   const { primaryColor } = useContext(ThemeContext);
   return (
     <CenterContainer addTop={addTop}>
@@ -57,7 +57,7 @@ export function PageGenericMessage({
       </SubNoRidesListContainer>
     </CenterContainer>
   );
-}
+};
 
 export const DayTitleText = styled(BaseText)`
   font-size: 16px;

@@ -41,13 +41,11 @@ export const VehicleIcon = styled.Image`
     border: 1px solid #09304e;
   `;
 
-export function VehicleDot({ source }) {
-  return (
-    <VehicleDotContainer>
-      <VehicleIcon source={vehicleIcon} />
-    </VehicleDotContainer>
-  );
-}
+export const VehicleDot = ({ source }) => (
+  <VehicleDotContainer>
+    <VehicleIcon source={vehicleIcon} />
+  </VehicleDotContainer>
+);
 
 export const MapButtonsContainer = styled.View``;
 

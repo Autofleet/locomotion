@@ -8,7 +8,7 @@ interface SkeletonProps {
   layout?: ICustomViewStyle[];
 }
 
-export function Skeleton({ children, layout }: SkeletonProps) {
+export const Skeleton = ({ children, layout }: SkeletonProps) => {
   const theme = useContext(ThemeContext);
 
   return (
@@ -23,4 +23,4 @@ export function Skeleton({ children, layout }: SkeletonProps) {
       {children}
     </SkeletonPlaceholder>
   );
-}
+};

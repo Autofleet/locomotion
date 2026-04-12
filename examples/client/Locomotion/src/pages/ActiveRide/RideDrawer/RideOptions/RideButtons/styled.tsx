@@ -94,18 +94,16 @@ interface ButtonWithErrorProps {
   errorText: string;
 }
 
-export function ButtonWithError({ children, errorText }: ButtonWithErrorProps) {
-  return (
-    <ButtonContainerWithError>
-      <ButtonContainerInError>
-        {children}
-      </ButtonContainerInError>
-      {errorText
-    && (
-    <ErrorText>
-      {errorText}
-    </ErrorText>
-    )}
-    </ButtonContainerWithError>
-  );
-}
+export const ButtonWithError = ({ children, errorText }: ButtonWithErrorProps) => (
+  <ButtonContainerWithError>
+    <ButtonContainerInError>
+      {children}
+    </ButtonContainerInError>
+    {errorText
+  && (
+  <ErrorText>
+    {errorText}
+  </ErrorText>
+  )}
+  </ButtonContainerWithError>
+);

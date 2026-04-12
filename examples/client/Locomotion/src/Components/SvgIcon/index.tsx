@@ -10,23 +10,21 @@ interface SvgIconProps {
   style?: any;
 }
 
-function SvgIcon({
+const SvgIcon = ({
   Svg,
   stroke = null,
   fill = null,
   width = 20,
   height = 20,
   style = {},
-}: SvgIconProps) {
-  return (
-    <Svg
-      width={width}
-      height={height}
-      stroke={stroke}
-      fill={fill}
-      style={style}
-    />
-  );
-}
+}: SvgIconProps) => (
+  <Svg
+    width={width}
+    height={height}
+    stroke={stroke}
+    fill={fill}
+    style={style}
+  />
+);
 
 export default SvgIcon;

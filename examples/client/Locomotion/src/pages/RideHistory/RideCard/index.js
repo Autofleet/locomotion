@@ -132,24 +132,22 @@ const RideTitleCard = ({
   );
 };
 
-export function RideListView({
+export const RideListView = ({
   ride, showSpacer, onPress, testID,
-}) {
-  return (
-    <>
-      <TouchableRideViewContainer testID={testID} onPress={onPress}>
-        <RideTitleCard
-          ride={ride}
-          isPaymentRejected={ride.payment?.state === PAYMENT_STATES.REJECTED}
-        />
-        <RideDrillDownContainer>
-          <RideDrillDownIcon />
-        </RideDrillDownContainer>
-      </TouchableRideViewContainer>
-      {showSpacer && <RideViewSpacer />}
-    </>
-  );
-}
+}) => (
+  <>
+    <TouchableRideViewContainer testID={testID} onPress={onPress}>
+      <RideTitleCard
+        ride={ride}
+        isPaymentRejected={ride.payment?.state === PAYMENT_STATES.REJECTED}
+      />
+      <RideDrillDownContainer>
+        <RideDrillDownIcon />
+      </RideDrillDownContainer>
+    </TouchableRideViewContainer>
+    {showSpacer && <RideViewSpacer />}
+  </>
+);
 
 const RideView = ({ ride }) => {
   const isRidePaymentRejected = ride.payment?.state === PAYMENT_STATES.REJECTED;

@@ -24,11 +24,11 @@ const AUTO_COMPLETE = Platform.select<TextInputProps['autoComplete']>({
   default: 'one-time-code',
 });
 
-export function PinCode({
+export const PinCode = ({
   onLastDigit,
   onChange,
   error,
-}: PinCodeProps) {
+}: PinCodeProps) => {
   const [value, setValue] = useState('');
   const theme = useContext(Context);
   const ref = useBlurOnFulfill({ value, cellCount: CELL_COUNT });
@@ -77,4 +77,4 @@ export function PinCode({
       />
     </SafeAreaView>
   );
-}
+};

@@ -68,7 +68,7 @@ const DrawerLabel = ({
   </StyledDrawerLabel>
 );
 
-export function DrawerContentComponent({ navigation, state }) {
+export const DrawerContentComponent = ({ navigation, state }) => {
   const route = state.routes[state.index].name;
   const { getSettingByKey } = settings.useContainer();
   const { userMessages } = useContext(MessagesContext);
@@ -137,4 +137,4 @@ export function DrawerContentComponent({ navigation, state }) {
       <Bottom />
     </StyledSafeAreaView>
   );
-}
+};

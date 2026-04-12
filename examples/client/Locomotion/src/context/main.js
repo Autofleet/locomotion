@@ -8,7 +8,7 @@ import UserContextProvider from './user';
 import OnboardingContextProvider from './onboarding';
 import { StateProvider } from './state';
 
-export function MainProvider({ children, LoginPage, i18n }) {
+export const MainProvider = ({ children, LoginPage, i18n }) => {
   const initialState = null;
   if (i18n) {
     i18n.translations.map((lng) => {
@@ -50,7 +50,7 @@ export function MainProvider({ children, LoginPage, i18n }) {
       </SettingsContext.Provider>
     </StateProvider>
   );
-}
+};
 
 export default {
   MainProvider,

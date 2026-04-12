@@ -61,7 +61,7 @@ export const formatRides = (data: any) => data.map((r: any) => {
   });
 });
 
-export function RideHistoryContextProvider({ children }: any) {
+export const RideHistoryContextProvider = ({ children }: any) => {
   const [rides, setRides] = useState<any>(null);
   const [savedParams, setSavedParams] = useState<any | null>(null);
   const [savedFilterScrollPos, saveFilterScrollPos] = useState<any | null>(null);
@@ -199,4 +199,4 @@ export function RideHistoryContextProvider({ children }: any) {
       {children}
     </rideHistoryContext.Provider>
   );
-}
+};

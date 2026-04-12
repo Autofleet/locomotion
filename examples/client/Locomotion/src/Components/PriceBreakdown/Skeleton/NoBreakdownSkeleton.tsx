@@ -10,15 +10,13 @@ const SkeletonItem = () => (
   </Skeleton>
 );
 
-export function NoBreakdownSkeleton() {
-  return (
-    <>
-      <SkeletonItem />
-      <SkeletonItem />
-      <SkeletonItem />
-    </>
-  );
-}
+export const NoBreakdownSkeleton = () => (
+  <>
+    <SkeletonItem />
+    <SkeletonItem />
+    <SkeletonItem />
+  </>
+);
 
 const styles = StyleSheet.create({
   container: {

@@ -118,16 +118,14 @@ export const NoRidesListContainer = styled(BaseText)`
   font-size: 16px;
 `;
 
-export function NoRidesInList() {
-  return (
-    <CenterContainer addTop>
-      <NoRidesImage />
-      <NoRidesListContainer>
-        {i18n.t('activityPage.noActivity')}
-      </NoRidesListContainer>
-    </CenterContainer>
-  );
-}
+export const NoRidesInList = () => (
+  <CenterContainer addTop>
+    <NoRidesImage />
+    <NoRidesListContainer>
+      {i18n.t('activityPage.noActivity')}
+    </NoRidesListContainer>
+  </CenterContainer>
+);
 
 export const MarkerTitleContainer = styled.View`
   background-color: white;

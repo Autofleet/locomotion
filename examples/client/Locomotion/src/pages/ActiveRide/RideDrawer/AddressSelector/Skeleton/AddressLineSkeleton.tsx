@@ -7,10 +7,8 @@ const LAYOUT: ICustomViewStyle[] = [
   { width: 220, height: 20 },
 ];
 
-export function AddressLineSkeleton() {
-  return (
-    <Skeleton layout={LAYOUT}>
-      <View />
-    </Skeleton>
-  );
-}
+export const AddressLineSkeleton = () => (
+  <Skeleton layout={LAYOUT}>
+    <View />
+  </Skeleton>
+);
