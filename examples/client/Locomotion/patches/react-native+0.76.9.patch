@@ -1,3 +1,22 @@
+diff --git a/node_modules/react-native/Libraries/Core/ExceptionsManager.js b/node_modules/react-native/Libraries/Core/ExceptionsManager.js
+index eac2be1..3249a1d 100644
+--- a/node_modules/react-native/Libraries/Core/ExceptionsManager.js
++++ b/node_modules/react-native/Libraries/Core/ExceptionsManager.js
+@@ -204,7 +204,13 @@ function reactConsoleErrorHandler(...args) {
+   let error;
+ 
+   const firstArg = args[0];
+-  if (firstArg?.stack) {
++  let firstArgHasStack = false;
++  try {
++    firstArgHasStack = Boolean(firstArg?.stack);
++  } catch (_e) {
++    // Error.stack getter may throw with an invalid receiver on Hermes
++  }
++  if (firstArgHasStack) {
+     // reportException will console.error this with high enough fidelity.
+     error = firstArg;
+   } else {
 diff --git a/node_modules/react-native/Libraries/promiseRejectionTrackingOptions.js b/node_modules/react-native/Libraries/promiseRejectionTrackingOptions.js
 index 5a12d2d..947958d 100644
 --- a/node_modules/react-native/Libraries/promiseRejectionTrackingOptions.js
@@ -16,4 +35,4 @@ index 5a12d2d..947958d 100644
 +        // Error.stack getter may throw with an invalid receiver on Hermes
        }
      }
-
+ 

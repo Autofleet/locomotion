@@ -786,7 +786,7 @@ const RidePageContextProvider = ({ children }: {
   };
 
   useEffect(() => {
-    if (user?.id) {
+    if (user?.id && currentBsPage !== BS_PAGES.ADDRESS_SELECTOR) {
       if (requestStopPoints.filter((sp => sp.lat)).length <= 1) {
         initSps();
       }
