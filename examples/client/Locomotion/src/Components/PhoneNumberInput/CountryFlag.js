@@ -31,7 +31,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const FlagImage = memo(({ countryCode, flagSize }) => {
+const FlagImage = memo(({ countryCode }) => {
   const svg = flagSvgs[countryCode];
   if (!svg) return null;
   return (
@@ -41,11 +41,11 @@ const FlagImage = memo(({ countryCode, flagSize }) => {
   );
 });
 
-export const Flag = ({ countryCode, withFlagButton = true, flagSize }) => {
+export const Flag = ({ countryCode, withFlagButton = true }) => {
   if (!withFlagButton) return null;
   return (
     <View style={styles.container}>
-      <FlagImage countryCode={countryCode} flagSize={flagSize} />
+      <FlagImage countryCode={countryCode} />
     </View>
   );
 };
