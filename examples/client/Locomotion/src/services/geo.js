@@ -9,7 +9,7 @@ const ONE_SECOND = 1000;
 
 const DEFAULT_OPTIONS = {
   enableHighAccuracy: false,
-  timeout: 10 * ONE_SECOND,
+  timeout: 2 * ONE_SECOND,
   maximumAge: ONE_MINUTE,
   accuracy: {
     ios: 'best',
@@ -34,7 +34,8 @@ const currentLocationNative = async (options) => {
   };
   return new Promise((resolve, reject) => {
     Geolocation.getCurrentPosition(
-      resolve, reject, mergedOptions,
+      resolve, reject, 
+      mergedOptions,
     );
   });
 };
