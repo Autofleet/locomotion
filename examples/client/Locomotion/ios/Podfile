@@ -40,8 +40,8 @@ target 'Locomotion' do
   # use_frameworks!
 
   pod 'FirebaseCoreInternal', :modular_headers => true
-  pod 'FirebaseCrashlytics', '10.29.0', :modular_headers => true
-  pod 'FirebaseSessions', '10.29.0', :modular_headers => true
+  pod 'FirebaseCrashlytics', :modular_headers => true
+  pod 'FirebaseSessions', :modular_headers => true
   pod 'Firebase', :modular_headers => true
   pod 'GoogleUtilities', :modular_headers => true
   pod 'FirebaseCore', :modular_headers => true
@@ -59,9 +59,13 @@ target 'Locomotion' do
       # :ccache_enabled => true
     )
     installer.pods_project.targets.each do |target|
-      if target.respond_to?(:product_type) and target.product_type == "com.apple.product-type.bundle"
-        target.build_configurations.each do |config|
-            config.build_settings['CODE_SIGNING_ALLOWED'] = 'NO'
+      target.build_configurations.each do |config|
+        if target.respond_to?(:product_type) and target.product_type == "com.apple.product-type.bundle"
+          config.build_settings['CODE_SIGNING_ALLOWED'] = 'NO'
+        end
+        # Ensure no pod drops below the app's minimum deployment target
+        if config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'].to_f < 13.0
+          config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '13.0'
         end
       end
       # Fix fmt consteval errors with Xcode 26 / clang 21 (stricter C++20 consteval enforcement)
