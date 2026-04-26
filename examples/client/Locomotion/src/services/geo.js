@@ -33,14 +33,11 @@ const currentLocationNative = async (options) => {
     ...(options || {}),
   };
   return new Promise((resolve, reject) => {
-    Geolocation.getCurrentPosition(
-      resolve, reject, 
-      mergedOptions,
-    );
+    Geolocation.getCurrentPosition(resolve, reject, mergedOptions);
   });
 };
 
-const prepareCoords = locations => ({
+const prepareCoords = (locations) => ({
   coords: { latitude: locations[0].latitude, longitude: locations[0].longitude },
   speed: locations[0].speed,
   timestamp: new Date(),
@@ -59,31 +56,31 @@ class Geo {
     await this.checkPermission();
   };
 
-  configure = () => RNLocation.configure({
-    distanceFilter: 0,
-    desiredAccuracy: {
-      ios: 'nearestTenMeters',
-      android: 'balancedPowerAccuracy',
-    },
-    // Android only
-    androidProvider: 'playServices',
-    interval: 5000,
-    maxWaitTime: 5000,
-    // iOS Only
-    activityType: 'other',
-  });
+  configure = () => {
+    if (Platform.OS === 'android') {
+      return RNLocation.configure({
+        distanceFilter: 0,
+        desiredAccuracy: { android: 'balancedPowerAccuracy' },
+        androidProvider: 'playServices',
+        interval: 5000,
+        maxWaitTime: 5000,
+      });
+    }
+    // iOS: accuracy/distanceFilter set per-request via DEFAULT_OPTIONS
+  };
 
   checkPermission = async () => {
-    const result = await RNLocation.checkPermission({
-      ios: 'whenInUse',
-      android: {
-        detail: 'fine',
-      },
-    });
+    let result;
+    if (Platform.OS === 'ios') {
+      const status = await Geolocation.requestAuthorization('whenInUse');
+      result = status === 'granted';
+    } else {
+      result = await RNLocation.checkPermission({
+        android: { detail: 'fine' },
+      });
+    }
     if (result) {
       try {
-        // If permission is granted, we will warmup the location manager
-        // to get a faster response when requesting location updates
         currentLocationNative({
           maximumAge: 0,
           timeout: 10 * ONE_SECOND,
@@ -96,12 +93,11 @@ class Geo {
   };
 
   requestPermission = async () => {
-    await RNLocation.requestPermission({
-      ios: 'whenInUse',
-      android: {
-        detail: 'fine',
-      },
-    });
+    if (Platform.OS === 'ios') {
+      await Geolocation.requestAuthorization('whenInUse');
+      return;
+    }
+    await RNLocation.requestPermission({ android: { detail: 'fine' } });
   };
 
   currentLocation = async (options) => {
