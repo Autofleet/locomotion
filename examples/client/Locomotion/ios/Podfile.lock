@@ -1520,8 +1520,27 @@ PODS:
     - react-native-config/App (= 1.5.3)
   - react-native-config/App (1.5.3):
     - React-Core
-  - react-native-date-picker (4.2.6):
+  - react-native-date-picker (5.0.13):
+    - DoubleConversion
+    - glog
+    - hermes-engine
+    - RCT-Folly (= 2024.10.14.00)
+    - RCTRequired
+    - RCTTypeSafety
     - React-Core
+    - React-debug
+    - React-Fabric
+    - React-featureflags
+    - React-graphics
+    - React-ImageManager
+    - React-NativeModulesApple
+    - React-RCTFabric
+    - React-rendererdebug
+    - React-utils
+    - ReactCodegen
+    - ReactCommon/turbomodule/bridging
+    - ReactCommon/turbomodule/core
+    - Yoga
   - react-native-geolocation (3.4.0):
     - DoubleConversion
     - glog
@@ -2692,7 +2711,7 @@ SPEC CHECKSUMS:
   react-native-background-timer: 17ea5e06803401a379ebf1f20505b793ac44d0fe
   react-native-carrier-info: f94c990c4e27017648738430afc01acf367e102f
   react-native-config: aa47e487f8850a747bf849bb6a398a0bba93fbbd
-  react-native-date-picker: 93e43b3084cea595b4d68b1405d6d99849663bd6
+  react-native-date-picker: 243b10c8004a7adfe12993112c2b9ad3a3c03ee4
   react-native-geolocation: 89326371383135c84474ac156e8604196be8a40f
   react-native-geolocation-service: 608e1da71a1ac31b4de64d9ef2815f697978c55b
   react-native-image-picker: 4bc9ed38c8be255b515d8c88babbaf74973f91a8

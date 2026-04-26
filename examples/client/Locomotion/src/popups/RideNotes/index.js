@@ -1,7 +1,9 @@
 import React, {
   useEffect, useRef, useState, useContext,
 } from 'react';
-import { KeyboardAvoidingView, SafeAreaView } from 'react-native';
+import {
+  BackHandler, KeyboardAvoidingView, SafeAreaView, StyleSheet, View,
+} from 'react-native';
 import { ThemeContext } from 'styled-components';
 import i18n from '../../I18n';
 import {
@@ -9,7 +11,6 @@ import {
   Title,
   StyledTextArea,
   Counter,
-  StyledModal,
 } from './styled';
 import RoundedButton from '../../Components/RoundedButton';
 import { FlexCont } from '../../Components/Flex';
@@ -32,8 +33,19 @@ export default ({
     }, 100);
   }, [isVisible]);
 
+  useEffect(() => {
+    if (!isVisible) return;
+    const sub = BackHandler.addEventListener('hardwareBackPress', () => {
+      onCancel();
+      return true;
+    });
+    return () => sub.remove();
+  }, [isVisible]);
+
+  if (!isVisible) return null;
+
   return (
-    <StyledModal isVisible={isVisible}>
+    <View style={styles.overlay}>
       <KeyboardAvoidingView>
         <SafeAreaView>
           <SummaryContainer>
@@ -74,6 +86,15 @@ export default ({
           </SummaryContainer>
         </SafeAreaView>
       </KeyboardAvoidingView>
-    </StyledModal>
+    </View>
   );
 };
+
+const styles = StyleSheet.create({
+  overlay: {
+    ...StyleSheet.absoluteFillObject,
+    justifyContent: 'flex-start',
+    backgroundColor: 'rgba(0, 0, 0, 0.7)',
+    paddingTop: 30,
+  },
+});
