@@ -571,6 +571,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Locomotion.app/Locomotion";
+				TOOLCHAINS = com.apple.dt.toolchain.XcodeDefault;
 			};
 			name = Debug;
 		};
@@ -596,6 +597,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Locomotion.app/Locomotion";
+				TOOLCHAINS = com.apple.dt.toolchain.XcodeDefault;
 			};
 			name = Release;
 		};
@@ -628,6 +630,7 @@
 				SWIFT_OBJC_BRIDGING_HEADER = "Locomotion-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
+				TOOLCHAINS = com.apple.dt.toolchain.XcodeDefault;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Debug;
@@ -660,6 +663,7 @@
 				PRODUCT_NAME = Locomotion;
 				SWIFT_OBJC_BRIDGING_HEADER = "Locomotion-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
+				TOOLCHAINS = com.apple.dt.toolchain.XcodeDefault;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Release;

@@ -90,6 +90,23 @@ target 'Locomotion' do
       target.build_configurations.each do |config|
         config.build_settings['SWIFT_VERSION'] = '5'
       end
+      # Xcode 26 + macOS 15 CI stacks (Bitrise, GitHub Actions) ship a broken iPhoneOS SDK
+      # missing libswiftCompatibility{50,51,56,Concurrency,DynamicReplacements,Packs}.a — the
+      # libs exist only in the toolchain, not the SDK. FirebaseAnalytics force-loads them and
+      # the link fails. Forcing TOOLCHAINS=XcodeDefault makes ld search the toolchain path.
+      # https://github.com/actions/runner-images/issues/13135
+      target.build_configurations.each do |config|
+        config.build_settings['TOOLCHAINS'] = 'com.apple.dt.toolchain.XcodeDefault'
+      end
+    end
+    # Same TOOLCHAINS override on the user (app) project so the final link picks it up.
+    installer.aggregate_targets.each do |aggregate_target|
+      aggregate_target.user_project.native_targets.each do |t|
+        t.build_configurations.each do |c|
+          c.build_settings['TOOLCHAINS'] = 'com.apple.dt.toolchain.XcodeDefault'
+        end
+      end
+      aggregate_target.user_project.save
     end
   end
 end
