@@ -84,14 +84,6 @@ export const ErrorText = styled(Text)`
   color: #F83743;
 `;
 
-export const PromoContainer = styled(View)`
-  flex-direction: row;
-  align-items: center;
-  height: 100%;
-  width: ${HALF_WIDTH};
-  padding: 0 15px;
-`;
-
 export const ButtonWithError = ({ children, errorText }) => (
   <ButtonContainerWithError>
     <ButtonContainerInError>

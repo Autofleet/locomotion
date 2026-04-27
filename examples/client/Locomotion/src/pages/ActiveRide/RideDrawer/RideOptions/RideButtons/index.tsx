@@ -10,7 +10,6 @@ import FutureBookingButton from './FutureBookingButton';
 import {
   Container, RowContainer, ButtonContainer, ButtonText, StyledButton, HALF_WIDTH,
   PickerDate, PickerTimeRange, PickerTitle, ErrorText, ButtonContainerWithError, ButtonWithError,
-  PromoContainer,
 } from './styled';
 import { POOLING_TYPES, RidePageContext } from '../../../../../context/newRideContext';
 import NoteButton from '../../../../../Components/GenericRideButton';
@@ -266,7 +265,7 @@ const RideButtons = ({
         onPress={() => {
           setPopupName('payment');
         }}
-        style={{ width: HALF_WIDTH }}
+        style={{ width: displayPassenger ? HALF_WIDTH : '100%' }}
       >
         <PaymentButton
           brand={selectedPaymentMethod?.brand}
@@ -274,6 +273,7 @@ const RideButtons = ({
           title={getSelectedPaymentMethodTitle()}
           id={selectedPaymentMethod?.id}
           invalid={paymentMethodNotAllowedOnService}
+          promoButton={!displayPassenger ? <PromoCodeButton id={selectedPaymentMethod?.id} /> : undefined}
         />
       </ButtonContainer>
     );
@@ -286,26 +286,17 @@ const RideButtons = ({
       return capitalizeFirstLetter(ridePaymentMethod);
     };
 
-    return (
-      <>
-        {paymentMethodNotAllowedOnService
-          ? (
-            <ButtonWithError
-              errorText={i18n.t('bottomSheetContent.ride.paymentMethodNotAllowedOnService', {
-                type: getTypeText(),
-              })}
-            >
-              {paymentBtn}
-            </ButtonWithError>
-          )
-          : paymentBtn}
-        {!displayPassenger && (
-          <PromoContainer>
-            <PromoCodeButton id={selectedPaymentMethod?.id} />
-          </PromoContainer>
-        )}
-      </>
-    );
+    return paymentMethodNotAllowedOnService
+      ? (
+        <ButtonWithError
+          errorText={i18n.t('bottomSheetContent.ride.paymentMethodNotAllowedOnService', {
+            type: getTypeText(),
+          })}
+        >
+          {paymentBtn}
+        </ButtonWithError>
+      )
+      : paymentBtn;
   };
 
 

@@ -12,13 +12,31 @@ const TimeText = styled(Text)`
     ${FONT_WEIGHTS.MEDIUM}
     color: #333;
     margin: 5px;
+    max-width: 80%;
 `;
 
 const Container = styled(View)`
     display: flex;
+    justify-content: space-between;
     flex-direction: row;
     align-items: center;
     width: 100%;
+`;
+
+const CardNameContainer = styled(View)`
+    display: flex;
+    justify-content: flex-start;
+    flex-direction: row;
+    align-items: center;
+    width: ${({ fullWidth }: { fullWidth?: boolean }) => (fullWidth ? '100%' : '55%')};
+`;
+
+const PromoButtonContainer = styled(View)`
+    display: flex;
+    justify-content: flex-end;
+    flex-direction: row;
+    align-items: center;
+    flex: 1;
 `;
 
 interface PaymentButtonProps {
@@ -27,6 +45,7 @@ interface PaymentButtonProps {
   brand?: Brand;
   id?: string;
   invalid?: boolean;
+  promoButton?: React.ReactNode;
 }
 
 const PaymentButton = ({
@@ -35,22 +54,30 @@ const PaymentButton = ({
   brand,
   id,
   invalid,
+  promoButton,
 }: PaymentButtonProps) => {
   const { primaryColor } = useContext(ThemeContext);
   const IconColor = invalid ? '#F83743' : primaryColor;
   return (
     <Container>
-      {isCardPaymentMethod({ id }) ? (
-        <PaymentIcon type={brand || 'generic'} />
-      ) : (
-        <SvgIcon
-          fill={IconColor}
-          Svg={icon}
-          height={25}
-          width={40}
-        />
+      <CardNameContainer fullWidth={!promoButton}>
+        {isCardPaymentMethod({ id }) ? (
+          <PaymentIcon type={brand || 'generic'} />
+        ) : (
+          <SvgIcon
+            fill={IconColor}
+            Svg={icon}
+            height={25}
+            width={40}
+          />
+        )}
+        <TimeText numberOfLines={1}>{title}</TimeText>
+      </CardNameContainer>
+      {promoButton && (
+        <PromoButtonContainer>
+          {promoButton}
+        </PromoButtonContainer>
       )}
-      <TimeText numberOfLines={1}>{title}</TimeText>
     </Container>
   );
 };
@@ -61,4 +88,5 @@ PaymentButton.defaultProps = {
   brand: null,
   id: null,
   invalid: false,
+  promoButton: null,
 };
