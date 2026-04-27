@@ -68,11 +68,27 @@ target 'Locomotion' do
           config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '13.0'
         end
       end
+      # CocoaPods defaults to gnu++14; react_native_post_install misses some targets (e.g. React-jsi).
+      # Enforce c++17 minimum — Folly requires it.
+      target.build_configurations.each do |config|
+        cxx = config.build_settings['CLANG_CXX_LANGUAGE_STANDARD']
+        config.build_settings['CLANG_CXX_LANGUAGE_STANDARD'] = 'c++17' unless %w[c++17 gnu++17 c++20 gnu++20].include?(cxx)
+      end
       # Fix fmt consteval errors with Xcode 26 / clang 21 (stricter C++20 consteval enforcement)
       if target.name == 'fmt'
         target.build_configurations.each do |config|
           config.build_settings['CLANG_CXX_LANGUAGE_STANDARD'] = 'c++17'
         end
+      end
+      # Xcode 26 clang treats -Wincompatible-pointer-types as a hard error by default;
+      # suppress it for all pods to unblock Firebase and other older ObjC code.
+      target.build_configurations.each do |config|
+        config.build_settings['OTHER_CFLAGS'] = '$(inherited) -Wno-incompatible-pointer-types'
+      end
+      # Xcode 26 defaults to Swift 6 mode; force Swift 5 for all pods to avoid
+      # strict concurrency hard errors in Firebase and other Swift pods.
+      target.build_configurations.each do |config|
+        config.build_settings['SWIFT_VERSION'] = '5'
       end
     end
   end
