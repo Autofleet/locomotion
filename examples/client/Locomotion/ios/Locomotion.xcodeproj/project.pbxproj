@@ -567,6 +567,7 @@
 					"-ObjC",
 					"-lc++",
 					"$(inherited)",
+					"-L$(DT_TOOLCHAIN_DIR)/usr/lib/swift/$(PLATFORM_NAME)",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -593,6 +594,7 @@
 					"-ObjC",
 					"-lc++",
 					"$(inherited)",
+					"-L$(DT_TOOLCHAIN_DIR)/usr/lib/swift/$(PLATFORM_NAME)",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -624,6 +626,7 @@
 					"$(inherited)",
 					"-ObjC",
 					"-lc++",
+					"-L$(DT_TOOLCHAIN_DIR)/usr/lib/swift/$(PLATFORM_NAME)",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "locomotion.rider-app";
 				PRODUCT_NAME = Locomotion;
@@ -658,6 +661,7 @@
 					"$(inherited)",
 					"-ObjC",
 					"-lc++",
+					"-L$(DT_TOOLCHAIN_DIR)/usr/lib/swift/$(PLATFORM_NAME)",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "locomotion.rider-app";
 				PRODUCT_NAME = Locomotion;

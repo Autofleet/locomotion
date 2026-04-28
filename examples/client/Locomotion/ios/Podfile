@@ -93,17 +93,32 @@ target 'Locomotion' do
       # Xcode 26 + macOS 15 CI stacks (Bitrise, GitHub Actions) ship a broken iPhoneOS SDK
       # missing libswiftCompatibility{50,51,56,Concurrency,DynamicReplacements,Packs}.a — the
       # libs exist only in the toolchain, not the SDK. FirebaseAnalytics force-loads them and
-      # the link fails. Forcing TOOLCHAINS=XcodeDefault makes ld search the toolchain path.
+      # the link fails. TOOLCHAINS=XcodeDefault alone isn't enough as a per-target build
+      # setting (xcodebuild's ld still uses the broken Metal cryptex search path), so we
+      # also add an explicit -L to the XcodeDefault toolchain's swift libs via OTHER_LDFLAGS.
+      # DT_TOOLCHAIN_DIR always resolves to XcodeDefault.xctoolchain regardless of TOOLCHAINS.
       # https://github.com/actions/runner-images/issues/13135
       target.build_configurations.each do |config|
         config.build_settings['TOOLCHAINS'] = 'com.apple.dt.toolchain.XcodeDefault'
+        existing = config.build_settings['OTHER_LDFLAGS']
+        ldflags = existing.nil? || existing.to_s.empty? ? '$(inherited)' : existing
+        unless ldflags.to_s.include?('DT_TOOLCHAIN_DIR')
+          extra = '-L$(DT_TOOLCHAIN_DIR)/usr/lib/swift/$(PLATFORM_NAME)'
+          config.build_settings['OTHER_LDFLAGS'] = ldflags.is_a?(Array) ? (ldflags + [extra]) : "#{ldflags} #{extra}"
+        end
       end
     end
-    # Same TOOLCHAINS override on the user (app) project so the final link picks it up.
+    # Same overrides on the user (app) project so the final link picks them up.
     installer.aggregate_targets.each do |aggregate_target|
       aggregate_target.user_project.native_targets.each do |t|
         t.build_configurations.each do |c|
           c.build_settings['TOOLCHAINS'] = 'com.apple.dt.toolchain.XcodeDefault'
+          existing = c.build_settings['OTHER_LDFLAGS']
+          ldflags = existing.nil? || existing.to_s.empty? ? '$(inherited)' : existing
+          unless ldflags.to_s.include?('DT_TOOLCHAIN_DIR')
+            extra = '-L$(DT_TOOLCHAIN_DIR)/usr/lib/swift/$(PLATFORM_NAME)'
+            c.build_settings['OTHER_LDFLAGS'] = ldflags.is_a?(Array) ? (ldflags + [extra]) : "#{ldflags} #{extra}"
+          end
         end
       end
       aggregate_target.user_project.save
