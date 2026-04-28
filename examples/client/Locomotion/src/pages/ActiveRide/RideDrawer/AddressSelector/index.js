@@ -174,6 +174,7 @@ const AddressSelectorBottomSheet = ({ addressSelectorFocusIndex }) => {
             <>
               {locationGranted && userContext.addressSearchLabel && userContext.addressSearchLabel !== '' ? (
                 <AddressRow
+                  key="addressSearchLabel"
                   border={false}
                   text={userContext.addressSearchLabel}
                   onPress={() => null}

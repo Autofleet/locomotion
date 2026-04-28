@@ -59,7 +59,7 @@ export default ({
         const { stopPoints } = ride;
 
         return (
-          <Container>
+          <Container key={ride.externalId}>
             <DateTitle>{moment(ride.scheduledTo).format('DD.MM.YYYY HH:mm')}</DateTitle>
             <DetailsRowContainer>
               <SpsContainer>

@@ -651,6 +651,8 @@ const RidePageContextProvider = ({ children }: {
     }
     if (!RIDE_FINAL_STATES.includes(rideLoaded?.state || '')) {
       setRide(formattedRide);
+    } else if (ride?.id) {
+      cleanRideState();
     }
   };
 

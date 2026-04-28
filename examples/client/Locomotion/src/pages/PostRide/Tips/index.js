@@ -21,16 +21,6 @@ import PaymentContext from '../../../context/payments';
 import { RidePageContext } from '../../../context/newRideContext';
 import showPriceBasedOnAccount from '../../../services/showPriceBasedOnAccount';
 
-const TipSectionContainer = styled.View`
- width: 100%;
- flex:1;
-  z-index: 3;
-  elevation: 3;
-  background: red;
-
-`;
-
-
 const Container = styled.View`
   flex-direction: column;
   padding: 10px 0px 0px 10px;
@@ -197,7 +187,7 @@ const Tips = ({
         </DetailsContainer>
         <DetailsContainer style={{ marginTop: 30 }}>
           {buttons.map((b, i) => (
-            <SelectableButton testID={`tipButton${i}`} selected={b === selectedTip} onPress={() => onTipPressed(b)}>
+            <SelectableButton key={b} testID={`tipButton${i}`} selected={b === selectedTip} onPress={() => onTipPressed(b)}>
               {formatCurrency(b)}
             </SelectableButton>
           ))}

@@ -35,10 +35,14 @@ const CancellationReasonsPopup = ({
   const { cancellationReasons, clearCancellationReasons } = useContext(CancellationReasonsContext);
   const { updateRide, ride } = useContext(RidePageContext);
   const [isLoading, setIsLoading] = useState(false);
+  const [capturedRideId, setCapturedRideId] = useState<string | null>(null);
 
-  const rideIdToUse = rideId || ride?.id;
+  const rideIdToUse = rideId || capturedRideId || ride?.id;
   useEffect(() => {
     if (isVisible) {
+      if (ride?.id && !capturedRideId) {
+        setCapturedRideId(ride.id);
+      }
       if (!cancellationReasons
       || cancellationReasons.length === 0) {
         onCancel();
@@ -55,6 +59,7 @@ const CancellationReasonsPopup = ({
       }
     } else {
       setIsLoading(false);
+      setCapturedRideId(null);
       clearCancellationReasons();
     }
   }, [isVisible]);
@@ -100,11 +105,11 @@ const CancellationReasonsPopup = ({
                 : (
                   cancellationReasons.map(cr => (
                     <ClickableContainer
+                      key={cr.id}
                       onPress={() => onCancellationReasonClick(cr.id)}
                       testID={`cancellationReason-${cr.category}`}
                     >
-
-                      <CancellationReasonCard key={cr.id}>
+                      <CancellationReasonCard>
                         <CancellationReasonText>
                           {i18n.t(`cancellationReasons.${cr.value}`, cr.value)}
                         </CancellationReasonText>

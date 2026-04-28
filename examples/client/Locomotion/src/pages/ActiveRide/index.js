@@ -526,7 +526,7 @@ const RidePage = ({ mapSettings, navigation }) => {
             >
               {currentBsPage !== BS_PAGES.CONFIRM_PICKUP
                 ? <StopPointsViewer goBackToAddressSelector={goBackToAddress} />
-                : <></>}
+                : null}
             </Header>
             {topMessage ? (
               <TopMessage

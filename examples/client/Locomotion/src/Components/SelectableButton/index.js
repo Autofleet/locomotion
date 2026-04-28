@@ -22,27 +22,22 @@ const SelectableButton = ({
     style={style}
   >
     <ButtonTextContainer selected={selected}>
-      {
-        children
-          ? (
-            <SubmitButtonText selected={selected}>
-              {children}
-            </SubmitButtonText>
-          ) : (
-            <>
-              <View style={{ marginLeft: 15 }}>
-                <SubmitButtonText selected={selected}>
-                  {label}
-                </SubmitButtonText>
-              </View>
-              <View style={{ marginRight: 15 }}>
-                <SubmitButtonText selected={selected}>
-                  {value}
-                </SubmitButtonText>
-              </View>
-            </>
-          )
-    }
+      <SubmitButtonText
+        selected={selected}
+        style={children ? null : { display: 'none' }}
+      >
+        {children}
+      </SubmitButtonText>
+      <View style={[{ marginLeft: 15 }, children ? { display: 'none' } : null]}>
+        <SubmitButtonText selected={selected}>
+          {label}
+        </SubmitButtonText>
+      </View>
+      <View style={[{ marginRight: 15 }, children ? { display: 'none' } : null]}>
+        <SubmitButtonText selected={selected}>
+          {value}
+        </SubmitButtonText>
+      </View>
     </ButtonTextContainer>
   </StyledButton>
 );

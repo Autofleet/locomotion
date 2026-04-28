@@ -3,7 +3,7 @@ import React, {
 } from 'react';
 import moment from 'moment';
 import { ThemeContext } from 'styled-components';
-import { Animated } from 'react-native';
+import { Animated, View } from 'react-native';
 import { isCashPaymentMethod, isExternalPaymentMethod, isOfflinePaymentMethod } from '../../../../../lib/ride/utils';
 import DatePickerPoppup from '../../../../../popups/DatePickerPoppup';
 import FutureBookingButton from './FutureBookingButton';
@@ -326,7 +326,7 @@ const RideButtons = ({
       <Container>
         <RowContainer>
           {isFutureRidesEnabled && renderFutureBooking()}
-          {displayPassenger ? <></> : renderRideNotes()}
+          {!displayPassenger ? renderRideNotes() : null}
 
         </RowContainer>
         <RowContainer>
@@ -345,7 +345,7 @@ const RideButtons = ({
                 onError={setPassengersCounterError}
                 selectedValue={numberOfPassengers}
               />
-            ) : null}
+            ) : <View />}
 
           <StyledButton
             testID="selectService"
