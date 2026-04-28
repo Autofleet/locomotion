@@ -36,3 +36,19 @@ index 5a12d2d..947958d 100644
        }
      }
  
+diff --git a/node_modules/react-native/sdks/hermes-engine/utils/build-hermesc-xcode.sh b/node_modules/react-native/sdks/hermes-engine/utils/build-hermesc-xcode.sh
+index 132ee54..369c64d 100755
+--- a/node_modules/react-native/sdks/hermes-engine/utils/build-hermesc-xcode.sh
++++ b/node_modules/react-native/sdks/hermes-engine/utils/build-hermesc-xcode.sh
+@@ -14,5 +14,9 @@ jsi_path="$1"
+ # We want to make sure that hermesc is built for mac.
+ # So we clean the environment with env -i, and explicitly set SDKROOT to macosx
+ SDKROOT=$(xcode-select -p)/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk
+-env -i SDKROOT="$SDKROOT" "$CMAKE_BINARY" -S "${PODS_ROOT}/hermes-engine" -B "$hermesc_dir_path" -DJSI_DIR="$jsi_path"
+-env -i SDKROOT="$SDKROOT" "$CMAKE_BINARY" --build "$hermesc_dir_path" --target hermesc -j "$(sysctl -n hw.ncpu)"
++# Preserve PATH so cmake can find make and the Xcode toolchain compilers.
++# Without this, on macOS 15 / Apple Silicon CI stacks (e.g. Bitrise) cmake fails with
++# "CMake was unable to find a build program corresponding to 'Unix Makefiles'" and
++# "CMAKE_C_COMPILER not set" because /usr/bin/{make,cc} are not always present.
++env -i PATH="$PATH" SDKROOT="$SDKROOT" "$CMAKE_BINARY" -S "${PODS_ROOT}/hermes-engine" -B "$hermesc_dir_path" -DJSI_DIR="$jsi_path"
++env -i PATH="$PATH" SDKROOT="$SDKROOT" "$CMAKE_BINARY" --build "$hermesc_dir_path" --target hermesc -j "$(sysctl -n hw.ncpu)"
