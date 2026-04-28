@@ -138,9 +138,7 @@ const PostRidePage = ({ menuSide, route }) => {
               <RatingContainer>
                 <SummaryStarsTitle>{i18n.t('postRide.ratingHeadline')}</SummaryStarsTitle>
                 <StarRating onUpdate={onRatingUpdate} />
-                <>
-                  <RideFeedback onTextChange={text => setRideFeedbackText(text)} />
-                </>
+                <RideFeedback onTextChange={text => setRideFeedbackText(text)} />
               </RatingContainer>
             )}
 

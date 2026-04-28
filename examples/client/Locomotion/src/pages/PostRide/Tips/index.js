@@ -197,10 +197,10 @@ const Tips = ({
             testID="customTipButton"
             selected={!!customTip}
             onPress={() => bottomSheetRef.current.snapToIndex(0)}
-            label={i18n.t('postRide.tip.customTip.title')}
-            value={customTip ? formatCurrency(customTip) : null}
           >
-            {!customTip ? i18n.t('postRide.tip.setCustomTip') : null}
+            {customTip
+              ? `${i18n.t('postRide.tip.customTip.title')} ${formatCurrency(customTip)}`
+              : i18n.t('postRide.tip.setCustomTip')}
           </SelectableButton>
         </DetailsContainer>
         <NoTipTextButton onPress={resetTip}>{`${i18n.t('postRide.tip.noTip')}`}</NoTipTextButton>

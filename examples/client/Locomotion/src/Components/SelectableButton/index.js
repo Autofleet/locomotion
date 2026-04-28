@@ -1,14 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { View } from 'react-native';
 import propsTypes from 'prop-types';
-import Loader from '../Loader';
 import { ButtonTextContainer, StyledButton, SubmitButtonText } from './styled';
 
 const SelectableButton = ({
   onPress,
   style,
   selected,
-  component,
   children,
   label,
   value,
@@ -22,22 +20,24 @@ const SelectableButton = ({
     style={style}
   >
     <ButtonTextContainer selected={selected}>
-      <SubmitButtonText
-        selected={selected}
-        style={children ? null : { display: 'none' }}
-      >
-        {children}
-      </SubmitButtonText>
-      <View style={[{ marginLeft: 15 }, children ? { display: 'none' } : null]}>
+      {children ? (
         <SubmitButtonText selected={selected}>
-          {label}
+          {children}
         </SubmitButtonText>
-      </View>
-      <View style={[{ marginRight: 15 }, children ? { display: 'none' } : null]}>
-        <SubmitButtonText selected={selected}>
-          {value}
-        </SubmitButtonText>
-      </View>
+      ) : (
+        <>
+          <View style={{ marginLeft: 15 }}>
+            <SubmitButtonText selected={selected}>
+              {label}
+            </SubmitButtonText>
+          </View>
+          <View style={{ marginRight: 15 }}>
+            <SubmitButtonText selected={selected}>
+              {value}
+            </SubmitButtonText>
+          </View>
+        </>
+      )}
     </ButtonTextContainer>
   </StyledButton>
 );
