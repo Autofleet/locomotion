@@ -36,6 +36,30 @@ index 5a12d2d..947958d 100644
        }
      }
  
+diff --git a/node_modules/react-native/sdks/hermes-engine/hermes-utils.rb b/node_modules/react-native/sdks/hermes-engine/hermes-utils.rb
+index c0c7613..8f17734 100644
+--- a/node_modules/react-native/sdks/hermes-engine/hermes-utils.rb
++++ b/node_modules/react-native/sdks/hermes-engine/hermes-utils.rb
+@@ -241,9 +241,16 @@ end
+ # - version: the version of React Native
+ # - build_type: debug or release
+ def hermes_artifact_exists(tarball_url)
+-    # -L is used to follow redirects, useful for the nightlies
+-    # I also needed to wrap the url in quotes to avoid escaping & and ?.
+-    return (`curl -o /dev/null --silent -Iw '%{http_code}' -L "#{tarball_url}"` == "200")
++    # -L follows redirects (needed for nightlies). Quote the URL so & / ? aren't shell-escaped.
++    # Retry on transient failures: a single failed HEAD silently downgrades to
++    # BUILD_FROM_GITHUB_MAIN, which fetches a hermes source tree whose CMakeLists
++    # no longer matches the build-hermes-xcode.sh script shipped with this RN version.
++    3.times do |attempt|
++        code = `curl -o /dev/null --silent --max-time 30 --retry 3 --retry-delay 2 -Iw '%{http_code}' -L "#{tarball_url}"`.strip
++        return true if code == "200"
++        sleep(2 ** attempt) if attempt < 2
++    end
++    return false
+ end
+ 
+ def hermes_log(message, level = :warning)
 diff --git a/node_modules/react-native/sdks/hermes-engine/utils/build-hermesc-xcode.sh b/node_modules/react-native/sdks/hermes-engine/utils/build-hermesc-xcode.sh
 index 132ee54..369c64d 100755
 --- a/node_modules/react-native/sdks/hermes-engine/utils/build-hermesc-xcode.sh
