@@ -36,7 +36,8 @@ interface BottomSheetProps {
   children?: any,
   enablePanDownToClose?: boolean,
   index?: number,
-  closeable?: boolean
+  closeable?: boolean,
+  onClose?: () => void,
 }
 
 const BottomSheetComponent = forwardRef(({
@@ -44,6 +45,7 @@ const BottomSheetComponent = forwardRef(({
   enablePanDownToClose,
   index,
   closeable,
+  onClose,
 }: BottomSheetProps, ref) => {
   const {
     setIsExpanded,
@@ -93,6 +95,7 @@ const BottomSheetComponent = forwardRef(({
       ref={ref}
       snapPoints={snapPoints}
       onAnimate={onAnimate}
+      onClose={onClose}
       footerComponent={renderFooter}
       enablePanDownToClose={enablePanDownToClose}
       index={index}
