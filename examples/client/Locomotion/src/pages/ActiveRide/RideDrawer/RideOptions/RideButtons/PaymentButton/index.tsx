@@ -23,12 +23,12 @@ const Container = styled(View)`
     width: 100%;
 `;
 
-const CardNameContainer = styled(View)`
+const CardNameContainer = styled(View)<{ fullWidth?: boolean }>`
     display: flex;
     justify-content: flex-start;
     flex-direction: row;
     align-items: center;
-    width: ${({ fullWidth }: { fullWidth?: boolean }) => (fullWidth ? '100%' : '55%')};
+    width: ${({ fullWidth }) => (fullWidth ? '100%' : '55%')};
 `;
 
 const PromoButtonContainer = styled(View)`
