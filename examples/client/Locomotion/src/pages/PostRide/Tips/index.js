@@ -1,6 +1,6 @@
 
 import React, {
-  useEffect, useState, useContext,
+  useEffect, useState, useRef, useContext,
 } from 'react';
 import {
   View, Text, TouchableOpacity, Image,
@@ -100,7 +100,6 @@ const Tips = ({
 }) => {
   const [selectedTip, setSelectedTip] = useState(null);
   const [customTip, setCustomTip] = useState(null);
-  const [isCustomTipOpen, setIsCustomTipOpen] = useState(false);
   const { businessAccountId } = useContext(RidePageContext);
   const { getBusinessAccountById } = PaymentContext.useContainer();
   const { showPrice, loadShowPrice } = SettingContext.useContainer();
@@ -111,6 +110,7 @@ const Tips = ({
 
   const tipSuffix = isPercentage ? '%' : getCurrencySymbol(priceCurrency);
 
+  const bottomSheetRef = useRef(null);
   const {
     setSnapPointsState,
     isExpanded,
@@ -138,9 +138,6 @@ const Tips = ({
     setCustomTip(value);
     setSelectedTip(null);
   };
-
-  const openCustomTipSheet = () => setIsCustomTipOpen(true);
-  const closeCustomTipSheet = () => setIsCustomTipOpen(false);
 
   const calculateTipAmount = () => {
     let calculatedTip = 0;
@@ -199,7 +196,7 @@ const Tips = ({
           <SelectableButton
             testID="customTipButton"
             selected={!!customTip}
-            onPress={openCustomTipSheet}
+            onPress={() => bottomSheetRef.current.snapToIndex(0)}
           >
             {customTip
               ? `${i18n.t('postRide.tip.customTip.title')} ${formatCurrency(customTip)}`
@@ -208,25 +205,23 @@ const Tips = ({
         </DetailsContainer>
         <NoTipTextButton onPress={resetTip}>{`${i18n.t('postRide.tip.noTip')}`}</NoTipTextButton>
       </Container>
-      {isCustomTipOpen && (
-        <BottomSheet
-          enablePanDownToClose
-          index={0}
-          closeable
-          onClose={closeCustomTipSheet}
-          style={{
-            zIndex: 3,
-            elevation: 5,
-          }}
-        >
-          <CustomTip
-            customAmount={customTip}
-            onSubmit={value => onCustomTipSet(value)}
-            tipSuffix={tipSuffix}
-            isExpanded={isExpanded}
-          />
-        </BottomSheet>
-      )}
+      <BottomSheet
+        ref={bottomSheetRef}
+        enablePanDownToClose
+        index={-1}
+        closeable
+        style={{
+          zIndex: 3,
+          elevation: 5,
+        }}
+      >
+        <CustomTip
+          customAmount={customTip}
+          onSubmit={value => onCustomTipSet(value)}
+          tipSuffix={tipSuffix}
+          isExpanded={isExpanded}
+        />
+      </BottomSheet>
     </>
 
   );
