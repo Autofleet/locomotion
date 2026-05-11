@@ -1,8 +1,7 @@
 import React, {
-  useEffect, useState, useRef, useContext,
+  useEffect, useState, useContext,
 } from 'react';
 import { isCardPaymentMethod } from '../../lib/ride/utils';
-import { PAYMENT_METHODS } from '../../pages/Payments/consts';
 import { formatRides, rideHistoryContext } from '../../context/rideHistory';
 import FullPageLoader from '../../Components/FullPageLoader';
 import { getPriceCalculation } from '../../context/futureRides/api';
@@ -22,7 +21,7 @@ import Tips from './Tips';
 import Button from '../../Components/RoundedButton';
 import settings from '../../context/settings';
 import SETTINGS_KEYS from '../../context/settings/keys';
-import NewRidePageContextProvider, { RidePageContext } from '../../context/newRideContext';
+import { RidePageContext } from '../../context/newRideContext';
 import { didUserRate } from '../../context/newRideContext/utils';
 import closeIcon from '../../assets/x.png';
 import BottomSheetContextProvider, { BottomSheetContext } from '../../context/bottomSheetContext';
@@ -123,47 +122,43 @@ const PostRidePage = ({ menuSide, route }) => {
 
   const getButtonText = () => i18n.t('postRide.submit');
 
-  return (
-    <>
-      {ride ? (
-        <PageContainer>
-          <PageHeader
-            title={i18n.t('postRide.pageTitle')}
-            onIconPress={nextPage}
-            iconSide={menuSide}
-            icon={closeIcon}
-          />
-          <PageContent alwaysBounceVertical={false} keyboardShouldPersistTaps={false}>
-            {!didUserRate(ride.rating, ride.rideFeedbacks) && (
-              <RatingContainer>
-                <SummaryStarsTitle>{i18n.t('postRide.ratingHeadline')}</SummaryStarsTitle>
-                <StarRating onUpdate={onRatingUpdate} />
-                <RideFeedback onTextChange={text => setRideFeedbackText(text)} />
-              </RatingContainer>
-            )}
+  return ride ? (
+    <PageContainer>
+      <PageHeader
+        title={i18n.t('postRide.pageTitle')}
+        onIconPress={nextPage}
+        iconSide={menuSide}
+        icon={closeIcon}
+      />
+      <PageContent alwaysBounceVertical={false} keyboardShouldPersistTaps={false}>
+        {!didUserRate(ride.rating, ride.rideFeedbacks) && (
+          <RatingContainer>
+            <SummaryStarsTitle>{i18n.t('postRide.ratingHeadline')}</SummaryStarsTitle>
+            <StarRating onUpdate={onRatingUpdate} />
+            <RideFeedback onTextChange={text => setRideFeedbackText(text)} />
+          </RatingContainer>
+        )}
 
-            {isCardPaymentMethod(ride?.payment?.paymentMethod) && !tipFromDb && (
-            <TipsContainer>
-              {ride?.priceCurrency && (ride?.priceAmount || ride?.priceAmount === 0)
-                ? (
-                  <Tips
-                    tipSettings={tipSettings}
-                    onSelectTip={onSelectTip}
-                    driver={{ firstName: ride?.driver?.firstName, avatar: ride?.driver?.avatar }}
-                    ridePrice={ride?.priceAmount}
-                    priceCurrency={ride?.priceCurrency}
-                  />
-                ) : null}
-            </TipsContainer>
-            )}
-            <SubmitContainer>
-              <Button testID="submitPostRide" onPress={onSubmit} disabled={isExpanded}>{getButtonText()}</Button>
-            </SubmitContainer>
-          </PageContent>
-        </PageContainer>
-      ) : <FullPageLoader />}
-    </>
-  );
+        {isCardPaymentMethod(ride?.payment?.paymentMethod) && !tipFromDb && (
+        <TipsContainer>
+          {ride?.priceCurrency && (ride?.priceAmount || ride?.priceAmount === 0)
+            ? (
+              <Tips
+                tipSettings={tipSettings}
+                onSelectTip={onSelectTip}
+                driver={{ firstName: ride?.driver?.firstName, avatar: ride?.driver?.avatar }}
+                ridePrice={ride?.priceAmount}
+                priceCurrency={ride?.priceCurrency}
+              />
+            ) : null}
+        </TipsContainer>
+        )}
+        <SubmitContainer>
+          <Button testID="submitPostRide" onPress={onSubmit} disabled={isExpanded}>{getButtonText()}</Button>
+        </SubmitContainer>
+      </PageContent>
+    </PageContainer>
+  ) : <FullPageLoader />;
 };
 
 
