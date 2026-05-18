@@ -159,12 +159,12 @@ const RidePage = ({ mapSettings, navigation }) => {
   };
 
   const goBackToAddress = (selectedIndex, expand = true) => {
+    if (expand) {
+      bottomSheetRef.current?.expand();
+    }
     resetStateToAddressSelector(selectedIndex);
     if (expand) {
-      setTimeout(() => {
-        setIsExpanded(true);
-        bottomSheetRef.current.expand();
-      }, 100);
+      setIsExpanded(true);
     }
   };
 

@@ -92,6 +92,8 @@ const BottomSheetComponent = forwardRef(({
   return (
     <BottomSheet
       android_keyboardInputMode="adjustResize"
+      keyboardBehavior="extend"
+      keyboardBlurBehavior="restore"
       ref={ref}
       snapPoints={snapPoints}
       onAnimate={onAnimate}
