@@ -1,8 +1,8 @@
 diff --git a/node_modules/react-native/Libraries/Core/ExceptionsManager.js b/node_modules/react-native/Libraries/Core/ExceptionsManager.js
-index eac2be1..3249a1d 100644
+index ecb2171..43626b3 100644
 --- a/node_modules/react-native/Libraries/Core/ExceptionsManager.js
 +++ b/node_modules/react-native/Libraries/Core/ExceptionsManager.js
-@@ -204,7 +204,13 @@ function reactConsoleErrorHandler(...args) {
+@@ -218,7 +218,13 @@ function reactConsoleErrorHandler(...args) {
    let error;
  
    const firstArg = args[0];
@@ -18,17 +18,17 @@ index eac2be1..3249a1d 100644
      error = firstArg;
    } else {
 diff --git a/node_modules/react-native/Libraries/promiseRejectionTrackingOptions.js b/node_modules/react-native/Libraries/promiseRejectionTrackingOptions.js
-index 5a12d2d..947958d 100644
+index d8fdbd6..58fcd57 100644
 --- a/node_modules/react-native/Libraries/promiseRejectionTrackingOptions.js
 +++ b/node_modules/react-native/Libraries/promiseRejectionTrackingOptions.js
 @@ -36,8 +36,12 @@ let rejectionTrackingOptions: $NonMaybeType<Parameters<enable>[0]> = {
        }
        // It could although this object is not a standard error, it still has stack information to unwind
        // $FlowFixMe ignore types just check if stack is there
--      if (rejection.stack && typeof rejection.stack === 'string') {
+-      if (rejection?.stack && typeof rejection.stack === 'string') {
 -        stack = rejection.stack;
 +      try {
-+        if (rejection.stack && typeof rejection.stack === 'string') {
++        if (rejection?.stack && typeof rejection.stack === 'string') {
 +          stack = rejection.stack;
 +        }
 +      } catch (_e) {
@@ -37,24 +37,23 @@ index 5a12d2d..947958d 100644
      }
  
 diff --git a/node_modules/react-native/sdks/hermes-engine/hermes-utils.rb b/node_modules/react-native/sdks/hermes-engine/hermes-utils.rb
-index c0c7613..8f17734 100644
+index 5356dc1..4db6301 100644
 --- a/node_modules/react-native/sdks/hermes-engine/hermes-utils.rb
 +++ b/node_modules/react-native/sdks/hermes-engine/hermes-utils.rb
-@@ -241,9 +241,16 @@ end
- # - version: the version of React Native
- # - build_type: debug or release
+@@ -247,7 +247,17 @@ end
  def hermes_artifact_exists(tarball_url)
--    # -L is used to follow redirects, useful for the nightlies
--    # I also needed to wrap the url in quotes to avoid escaping & and ?.
+     # -L is used to follow redirects, useful for the nightlies
+     # I also needed to wrap the url in quotes to avoid escaping & and ?.
 -    return (`curl -o /dev/null --silent -Iw '%{http_code}' -L "#{tarball_url}"` == "200")
-+    # -L follows redirects (needed for nightlies). Quote the URL so & / ? aren't shell-escaped.
-+    # Retry on transient failures: a single failed HEAD silently downgrades to
-+    # BUILD_FROM_GITHUB_MAIN, which fetches a hermes source tree whose CMakeLists
-+    # no longer matches the build-hermes-xcode.sh script shipped with this RN version.
-+    3.times do |attempt|
-+        code = `curl -o /dev/null --silent --max-time 30 --retry 3 --retry-delay 2 -Iw '%{http_code}' -L "#{tarball_url}"`.strip
-+        return true if code == "200"
-+        sleep(2 ** attempt) if attempt < 2
++    # Retry up to 3 times with exponential backoff to tolerate transient
++    # Maven Central / Sonatype hiccups that otherwise force a from-source build.
++    attempts = 0
++    max_attempts = 3
++    while attempts < max_attempts
++        status = `curl -o /dev/null --silent -Iw '%{http_code}' -L "#{tarball_url}"`.strip
++        return true if status == "200"
++        attempts += 1
++        sleep(2 ** attempts) if attempts < max_attempts
 +    end
 +    return false
  end
