@@ -38,6 +38,8 @@ interface BottomSheetProps {
   index?: number,
   closeable?: boolean,
   onClose?: () => void,
+  keyboardBehavior?: 'extend' | 'interactive' | 'fillParent',
+  keyboardBlurBehavior?: 'none' | 'restore',
 }
 
 const BottomSheetComponent = forwardRef(({
@@ -46,6 +48,8 @@ const BottomSheetComponent = forwardRef(({
   index,
   closeable,
   onClose,
+  keyboardBehavior,
+  keyboardBlurBehavior,
 }: BottomSheetProps, ref) => {
   const {
     setIsExpanded,
@@ -92,8 +96,8 @@ const BottomSheetComponent = forwardRef(({
   return (
     <BottomSheet
       android_keyboardInputMode="adjustResize"
-      keyboardBehavior="extend"
-      keyboardBlurBehavior="restore"
+      keyboardBehavior={keyboardBehavior}
+      keyboardBlurBehavior={keyboardBlurBehavior}
       ref={ref}
       snapPoints={snapPoints}
       onAnimate={onAnimate}

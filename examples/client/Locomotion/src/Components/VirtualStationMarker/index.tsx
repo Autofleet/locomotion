@@ -1,13 +1,13 @@
 import React, {
-  forwardRef, useCallback, useImperativeHandle, useRef, useState,
+  forwardRef, useCallback, useImperativeHandle, useRef,
 } from 'react';
 import {
   Marker, Callout,
 } from 'react-native-maps';
-import { Platform } from 'react-native';
 
 import VirtualStationComponent from '../VirtualStationComponent';
 import VirtualStationTooltip from '../VirtualStationTooltipComponent';
+import { useMarkerTracksViewChanges } from '../Marker/useMarkerTracksViewChanges';
 
 const VirtualStationMarker = forwardRef(({
   station, onCalloutPress, type,
@@ -15,13 +15,7 @@ const VirtualStationMarker = forwardRef(({
   const isActive = useCallback(() => type !== 'default', [type]);
   const markerRef = useRef<any>(null);
   useImperativeHandle(ref, () => markerRef.current);
-  const [tracksViewChanges, setTracksViewChanges] = useState(true);
-  const onMarkerLayout = useCallback(() => {
-    if (Platform.OS === 'android' && markerRef.current?.redraw) {
-      markerRef.current.redraw();
-    }
-    setTracksViewChanges(prev => (prev ? false : prev));
-  }, []);
+  const { tracksViewChanges, onMarkerLayout } = useMarkerTracksViewChanges(markerRef);
   return (
     <Marker
       coordinate={{ latitude: parseFloat(station.coordinates.lat), longitude: parseFloat(station.coordinates.lng) }}

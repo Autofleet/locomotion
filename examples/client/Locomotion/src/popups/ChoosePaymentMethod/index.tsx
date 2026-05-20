@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-expressions */
 import React, { useContext, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { BackHandler, StyleSheet, View } from 'react-native';
+import Modal from '../../Components/CompatModal';
 import EmptyState from '../../Components/EmptyState';
 import Mixpanel from '../../services/Mixpanel';
 import { PAYMENT_MODES, PAYMENT_TABS } from '../../pages/Payments/consts';
@@ -122,15 +122,6 @@ const PaymentMethodPopup = ({
     updateDefaultPaymentMethod();
   }, [usePayments.paymentMethods, selected, chosenService]);
 
-  useEffect(() => {
-    if (!isVisible) return;
-    const sub = BackHandler.addEventListener('hardwareBackPress', () => {
-      onCancel();
-      return true;
-    });
-    return () => sub.remove();
-  }, [isVisible]);
-
   const onSave = () => {
     const businessPaymentSelected = showBusinessPaymentMethods
       && usePayments.businessPaymentMethods.some(
@@ -172,10 +163,12 @@ const PaymentMethodPopup = ({
   );
 
 
-  if (!isVisible) return null;
-
   return (
-    <View style={styles.overlay}>
+    <Modal
+      isVisible={isVisible}
+      onBackButtonPress={onCancel}
+      onBackdropPress={onCancel}
+    >
       <SummaryContainer>
         <TitleView>
           <Title>{i18n.t('popups.choosePaymentMethod.title')}</Title>
@@ -245,7 +238,7 @@ const PaymentMethodPopup = ({
           </FlexCont>
         </Footer>
       </SummaryContainer>
-    </View>
+    </Modal>
   );
 };
 
@@ -266,14 +259,5 @@ PaymentMethodPopup.defaultProps = {
   showOffline: false,
   showExternal: false,
 };
-
-const styles = StyleSheet.create({
-  overlay: {
-    ...StyleSheet.absoluteFillObject,
-    justifyContent: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.7)',
-    paddingHorizontal: '5%',
-  },
-});
 
 export default PaymentMethodPopup;

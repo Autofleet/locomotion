@@ -581,6 +581,8 @@ const RidePage = ({ mapSettings, navigation }) => {
       <BottomSheet
         ref={bottomSheetRef}
         focusCurrentLocation={focusCurrentLocation}
+        keyboardBehavior={currentBsPage === BS_PAGES.ADDRESS_SELECTOR ? 'extend' : undefined}
+        keyboardBlurBehavior={currentBsPage === BS_PAGES.ADDRESS_SELECTOR ? 'restore' : undefined}
       >
         {
 BS_PAGE_TO_COMP[currentBsPage] ? BS_PAGE_TO_COMP[currentBsPage]() : null

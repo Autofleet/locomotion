@@ -68,60 +68,38 @@ target 'Locomotion' do
           config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '13.0'
         end
       end
-      # CocoaPods defaults to gnu++14; react_native_post_install misses some targets (e.g. React-jsi).
-      # Enforce c++17 minimum — Folly requires it.
       target.build_configurations.each do |config|
         cxx = config.build_settings['CLANG_CXX_LANGUAGE_STANDARD']
         config.build_settings['CLANG_CXX_LANGUAGE_STANDARD'] = 'c++17' unless %w[c++17 gnu++17 c++20 gnu++20].include?(cxx)
       end
-      # Fix fmt consteval errors with Xcode 26 / clang 21 (stricter C++20 consteval enforcement)
       if target.name == 'fmt'
         target.build_configurations.each do |config|
           config.build_settings['CLANG_CXX_LANGUAGE_STANDARD'] = 'c++17'
         end
       end
-      # Xcode 26 clang treats -Wincompatible-pointer-types as a hard error by default;
-      # suppress it for all pods to unblock Firebase and other older ObjC code.
-      target.build_configurations.each do |config|
-        config.build_settings['OTHER_CFLAGS'] = '$(inherited) -Wno-incompatible-pointer-types'
-      end
-      # Xcode 26 defaults to Swift 6 mode; force Swift 5 for all pods to avoid
-      # strict concurrency hard errors in Firebase and other Swift pods.
-      target.build_configurations.each do |config|
-        config.build_settings['SWIFT_VERSION'] = '5'
-      end
-      # Xcode 26 + macOS 15 CI stacks (Bitrise, GitHub Actions) ship a broken iPhoneOS SDK
-      # missing libswiftCompatibility{50,51,56,Concurrency,DynamicReplacements,Packs}.a — the
-      # libs exist only in the toolchain, not the SDK. FirebaseAnalytics force-loads them and
-      # the link fails. TOOLCHAINS=XcodeDefault alone isn't enough as a per-target build
-      # setting (xcodebuild's ld still uses the broken Metal cryptex search path), so we
-      # also add an explicit -L to the XcodeDefault toolchain's swift libs via OTHER_LDFLAGS.
-      # DT_TOOLCHAIN_DIR always resolves to XcodeDefault.xctoolchain regardless of TOOLCHAINS.
-      # https://github.com/actions/runner-images/issues/13135
-      target.build_configurations.each do |config|
-        config.build_settings['TOOLCHAINS'] = 'com.apple.dt.toolchain.XcodeDefault'
-        existing = config.build_settings['OTHER_LDFLAGS']
-        ldflags = existing.nil? || existing.to_s.empty? ? '$(inherited)' : existing
-        unless ldflags.to_s.include?('DT_TOOLCHAIN_DIR')
-          extra = '-L$(DT_TOOLCHAIN_DIR)/usr/lib/swift/$(PLATFORM_NAME)'
-          config.build_settings['OTHER_LDFLAGS'] = ldflags.is_a?(Array) ? (ldflags + [extra]) : "#{ldflags} #{extra}"
-        end
-      end
     end
-    # Same overrides on the user (app) project so the final link picks them up.
-    installer.aggregate_targets.each do |aggregate_target|
-      aggregate_target.user_project.native_targets.each do |t|
-        t.build_configurations.each do |c|
-          c.build_settings['TOOLCHAINS'] = 'com.apple.dt.toolchain.XcodeDefault'
-          existing = c.build_settings['OTHER_LDFLAGS']
-          ldflags = existing.nil? || existing.to_s.empty? ? '$(inherited)' : existing
+
+    if ENV['CI'] || ENV['BITRISE_BUILD_NUMBER'] || ENV['GITHUB_ACTIONS']
+      installer.pods_project.targets.each do |target|
+        target.build_configurations.each do |config|
+          existing_cflags = config.build_settings['OTHER_CFLAGS']
+          cflags = existing_cflags.nil? || existing_cflags.to_s.empty? ? '$(inherited)' : existing_cflags
+          unless cflags.to_s.include?('-Wno-incompatible-pointer-types')
+            extra = '-Wno-incompatible-pointer-types'
+            config.build_settings['OTHER_CFLAGS'] = cflags.is_a?(Array) ? (cflags + [extra]) : "#{cflags} #{extra}"
+          end
+
+          config.build_settings['SWIFT_VERSION'] = '5'
+
+          config.build_settings['TOOLCHAINS'] = 'com.apple.dt.toolchain.XcodeDefault'
+          existing_ldflags = config.build_settings['OTHER_LDFLAGS']
+          ldflags = existing_ldflags.nil? || existing_ldflags.to_s.empty? ? '$(inherited)' : existing_ldflags
           unless ldflags.to_s.include?('DT_TOOLCHAIN_DIR')
             extra = '-L$(DT_TOOLCHAIN_DIR)/usr/lib/swift/$(PLATFORM_NAME)'
-            c.build_settings['OTHER_LDFLAGS'] = ldflags.is_a?(Array) ? (ldflags + [extra]) : "#{ldflags} #{extra}"
+            config.build_settings['OTHER_LDFLAGS'] = ldflags.is_a?(Array) ? (ldflags + [extra]) : "#{ldflags} #{extra}"
           end
         end
       end
-      aggregate_target.user_project.save
     end
   end
 end

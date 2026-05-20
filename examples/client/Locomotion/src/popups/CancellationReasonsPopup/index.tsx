@@ -1,4 +1,6 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, {
+  useContext, useEffect, useRef, useState,
+} from 'react';
 import { ScrollView } from 'react-native-gesture-handler';
 import Modal from '../../Components/CompatModal';
 import CloseButton from '../../Components/CloseButton';
@@ -35,14 +37,16 @@ const CancellationReasonsPopup = ({
   const { cancellationReasons, clearCancellationReasons } = useContext(CancellationReasonsContext);
   const { updateRide, ride } = useContext(RidePageContext);
   const [isLoading, setIsLoading] = useState(false);
-  const [capturedRideId, setCapturedRideId] = useState<string | null>(null);
+  const capturedRideIdRef = useRef<string | null>(null);
 
-  const rideIdToUse = rideId || capturedRideId || ride?.id;
+  const rideIdToUse = rideId || capturedRideIdRef.current || ride?.id;
+  useEffect(() => {
+    if (isVisible && ride?.id && !capturedRideIdRef.current) {
+      capturedRideIdRef.current = ride.id;
+    }
+  }, [isVisible, ride?.id]);
   useEffect(() => {
     if (isVisible) {
-      if (ride?.id && !capturedRideId) {
-        setCapturedRideId(ride.id);
-      }
       if (!cancellationReasons
       || cancellationReasons.length === 0) {
         onCancel();
@@ -59,7 +63,7 @@ const CancellationReasonsPopup = ({
       }
     } else {
       setIsLoading(false);
-      setCapturedRideId(null);
+      capturedRideIdRef.current = null;
       clearCancellationReasons();
     }
   }, [isVisible]);

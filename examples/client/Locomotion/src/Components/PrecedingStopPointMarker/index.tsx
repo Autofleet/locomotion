@@ -1,25 +1,16 @@
-import React, { useCallback, useRef, useState } from 'react';
-import { Platform } from 'react-native';
+import React, { useRef } from 'react';
 import { Marker } from 'react-native-maps';
 import SvgIcon from '../SvgIcon';
 import pickupIcon from '../../assets/map/markers/pickupIcon.svg';
+import { useMarkerTracksViewChanges } from '../Marker/useMarkerTracksViewChanges';
 
 interface PrecedingStopPointMarkerProps {
     stopPoint: any;
 }
 
-// Same Android react-native-maps bitmap-snapshot issue as the main Marker:
-// start with tracksViewChanges=true so SVG child paints, force an Android
-// redraw on layout, then freeze the bitmap. See ../Marker/index.js.
 const PrecedingStopPointMarker = ({ stopPoint }: PrecedingStopPointMarkerProps) => {
   const markerRef = useRef<any>(null);
-  const [tracksViewChanges, setTracksViewChanges] = useState(true);
-  const onMarkerLayout = useCallback(() => {
-    if (Platform.OS === 'android' && markerRef.current?.redraw) {
-      markerRef.current.redraw();
-    }
-    setTracksViewChanges(prev => (prev ? false : prev));
-  }, []);
+  const { tracksViewChanges, onMarkerLayout } = useMarkerTracksViewChanges(markerRef);
   return (
     <Marker
       ref={markerRef}
