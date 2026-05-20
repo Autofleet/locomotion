@@ -175,6 +175,7 @@ const RidePage = ({ mapSettings, navigation }) => {
       BS_PAGES.ACTIVE_RIDE,
       BS_PAGES.NO_AVAILABLE_SERVICES,
     ].includes(currentBsPage)) {
+      bottomSheetRef.current?.collapse();
       resetStateToAddressSelector();
       initSps();
     } else if (serviceEstimations || currentBsPage === BS_PAGES.CONFIRM_PICKUP_TIME) {
@@ -358,6 +359,7 @@ const RidePage = ({ mapSettings, navigation }) => {
     React.useCallback(() => {
       const onBackPress = () => {
         if (serviceEstimations) {
+          bottomSheetRef.current?.collapse();
           resetStateToAddressSelector();
           return true;
         }
@@ -365,12 +367,12 @@ const RidePage = ({ mapSettings, navigation }) => {
       };
       const backHandler = BackHandler.addEventListener('hardwareBackPress', onBackPress);
 
-      if (!currentBsPage === BS_PAGES.SERVICE_ESTIMATIONS) {
+      if (currentBsPage !== BS_PAGES.SERVICE_ESTIMATIONS) {
         focusCurrentLocation();
       }
 
       return () => backHandler.remove();
-    }, [serviceEstimations]),
+    }, [serviceEstimations, currentBsPage]),
   );
 
   const versionCheck = async () => {

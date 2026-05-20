@@ -1,0 +1,108 @@
+diff --git a/node_modules/react-native-maps/android/src/main/java/com/rnmaps/maps/MapView.java b/node_modules/react-native-maps/android/src/main/java/com/rnmaps/maps/MapView.java
+--- a/node_modules/react-native-maps/android/src/main/java/com/rnmaps/maps/MapView.java
++++ b/node_modules/react-native-maps/android/src/main/java/com/rnmaps/maps/MapView.java
+@@ -340,8 +340,17 @@
+         super.onSaveInstanceState(savedMapState);
+         super.onPause();
+         super.onStop();
+-        savedFeatures = new HashMap<>(features);
+-        savedFeatures.keySet().forEach(this::removeFeatureAt);
++        // Fabric on Android sometimes detaches + re-attaches the view twice
++        // back-to-back (e.g. when the side drawer slides over). If we always
++        // overwrite savedFeatures, the second detach copies an already-empty
++        // features map (the first detach's removeFeatureAt cleared it before
++        // the deferred attach getMapAsync callback could re-add anything),
++        // wiping the original snapshot and leaving the map empty on the next
++        // restore. Only overwrite when there's something new to save.
++        if (!features.isEmpty()) {
++            savedFeatures = new HashMap<>(features);
++            savedFeatures.keySet().forEach(this::removeFeatureAt);
++        }
+         removeView(attacherGroup);
+         attacherGroup = null;
+         detachLifecycleObserver();
+@@ -781,12 +790,17 @@
+     }
+ 
+     private void applyBridgedProps() {
+-        if (initialRegion != null) {
++        // Patched: gate initialRegion/initialCamera application by the *Set
++        // flags. Without this, every Fabric-driven re-attach (e.g. the side
++        // drawer animation) calls onMapReady → applyBridgedProps → resets
++        // the camera back to the initial region, losing whatever the user
++        // had panned/zoomed to.
++        if (initialRegion != null && !initialRegionSet) {
+             moveToRegion(initialRegion);
+             initialRegionSet = true;
+         } else if (region != null) {
+             moveToRegion(region);
+-        } else if (initialCamera != null) {
++        } else if (initialCamera != null && !initialCameraSet) {
+             moveToCamera(initialCamera);
+             initialCameraSet = true;
+         } else if (camera != null) {
+@@ -1119,6 +1133,18 @@
+         // Our desired API is to pass up annotations/overlays as children to the mapview component.
+         // This is where we intercept them and do the appropriate underlying mapview action.
+         if (child instanceof MapMarker) {
++            if (attacherGroup == null) {
++                // Fabric on Android sometimes mounts children before onAttachedToWindow
++                // recreates the attacher group (e.g. after returning from background or
++                // closing the side drawer). Recreate it lazily so markers still attach
++                // instead of being silently dropped (which leaves the map without route /
++                // pickup pins until the next full remount).
++                if (!isAttachedToWindow()) {
++                    // View is truly being destroyed (ride-finished teardown path).
++                    return;
++                }
++                prepareAttacherView();
++            }
+             MapMarker annotation = (MapMarker) child;
+             annotation.addToMap(markerCollection);
+             features.put(index, annotation);
+@@ -1213,7 +1239,9 @@
+         if (feature instanceof MapMarker) {
+             markerMap.remove(feature.getFeature());
+             feature.removeFromMap(markerCollection);
+-            attacherGroup.removeView(feature);
++            if (attacherGroup != null) {
++                attacherGroup.removeView(feature);
++            }
+         } else if (feature instanceof MapHeatmap) {
+             heatmapMap.remove(feature.getFeature());
+             feature.removeFromMap(map);
+@@ -1644,14 +1672,20 @@
+ 
+     private void removeCacheImageView() {
+         if (this.cacheImageView != null) {
+-            ((ViewGroup) this.cacheImageView.getParent()).removeView(this.cacheImageView);
++            ViewGroup parent = (ViewGroup) this.cacheImageView.getParent();
++            if (parent != null) {
++                parent.removeView(this.cacheImageView);
++            }
+             this.cacheImageView = null;
+         }
+     }
+ 
+     private void removeMapLoadingProgressBar() {
+         if (this.mapLoadingProgressBar != null) {
+-            ((ViewGroup) this.mapLoadingProgressBar.getParent()).removeView(this.mapLoadingProgressBar);
++            ViewGroup parent = (ViewGroup) this.mapLoadingProgressBar.getParent();
++            if (parent != null) {
++                parent.removeView(this.mapLoadingProgressBar);
++            }
+             this.mapLoadingProgressBar = null;
+         }
+     }
+@@ -1659,7 +1693,10 @@
+     private void removeMapLoadingLayoutView() {
+         this.removeMapLoadingProgressBar();
+         if (this.mapLoadingLayout != null) {
+-            ((ViewGroup) this.mapLoadingLayout.getParent()).removeView(this.mapLoadingLayout);
++            ViewGroup parent = (ViewGroup) this.mapLoadingLayout.getParent();
++            if (parent != null) {
++                parent.removeView(this.mapLoadingLayout);
++            }
+             this.mapLoadingLayout = null;
+         }
+     }

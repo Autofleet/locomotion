@@ -1,5 +1,5 @@
 import React, {
-  useContext, useEffect, useRef, useCallback,
+  useContext, useEffect, useRef, useCallback, useState,
 } from 'react';
 import {
   MarkerAnimated, AnimatedRegion, MapMarker, LatLng,
@@ -96,6 +96,14 @@ const AvailabilityVehicle = ({
     svgStyle.transform = [{ rotate: `${location.bearing}deg` }];
   }
 
+  const [tracksViewChanges, setTracksViewChanges] = useState(Platform.OS === 'android');
+  const onMarkerLayout = useCallback(() => {
+    if (Platform.OS === 'android' && markerRef.current?.redraw) {
+      markerRef.current.redraw();
+      setTracksViewChanges(false);
+    }
+  }, []);
+
   return (
     <MarkerAnimated
       key={id}
@@ -105,12 +113,14 @@ const AvailabilityVehicle = ({
       tappable={false}
       // tooltip workaround, need to upgrade library
       onPress={onPressWorkaround}
-      tracksViewChanges={false}
+      tracksViewChanges={tracksViewChanges}
+      onLayout={onMarkerLayout}
     >
       <SvgIcon
         Svg={carIcon}
         height={48}
         width={48}
+        color={vehicleColor}
         style={svgStyle}
       />
     </MarkerAnimated>

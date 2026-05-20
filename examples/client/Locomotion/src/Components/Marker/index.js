@@ -1,14 +1,13 @@
 import React, {
-  useContext, useEffect, useMemo, useState,
+  useCallback,
+  useContext, useRef, useState,
 } from 'react';
 import { Platform } from 'react-native';
-import Config from 'react-native-config';
 import { Marker } from 'react-native-maps';
 import { ThemeContext } from 'styled-components';
 import clockIcon from '../../assets/bottomSheet/clock.svg';
 import dropoffIcon from '../../assets/map/markers/dropoffIcon.svg';
 import pickupIcon from '../../assets/map/markers/pickupIcon.svg';
-import Mixpanel from '../../services/Mixpanel';
 import {
   InfoBox, Type, SubText, TypeText, IconContainer, SubContainer, PulseContainer,
 } from './styled';
@@ -29,6 +28,20 @@ const StopPointMarker = ({
 }) => {
   const { lat, lng } = stopPoint;
   const theme = useContext(ThemeContext);
+  const markerRef = useRef(null);
+  const [tracksViewChanges, setTracksViewChanges] = useState(true);
+  // Android react-native-maps captures the marker's children into a bitmap
+  // and freezes when tracksViewChanges=false. SVG/Text leaves the bitmap
+  // blank if captured before paint. Strategy: stay live (tracksViewChanges
+  // initially true), force one extra redraw via the marker ref once the
+  // marker has laid out, then stop tracking. Without the explicit redraw
+  // on Android the bitmap can stay as the empty first-frame snapshot.
+  const onMarkerLayout = useCallback(() => {
+    if (Platform.OS === 'android' && markerRef.current?.redraw) {
+      markerRef.current.redraw();
+    }
+    setTracksViewChanges(prev => (prev ? false : prev));
+  }, []);
   const stationIcon = type => <VirtualStationComponent type={type} isActive style={{ top: Platform.OS === 'ios' ? -35 : 0 }} />;
 
   const typeDetails = {
@@ -90,9 +103,11 @@ const StopPointMarker = ({
 
   return (
     <Marker
+      ref={markerRef}
       coordinate={{ latitude: parseFloat(lat), longitude: parseFloat(lng) }}
       zIndex={999}
-      tracksViewChanges={false}
+      tracksViewChanges={tracksViewChanges}
+      onLayout={onMarkerLayout}
     >
       <InfoBox>
         <Type>

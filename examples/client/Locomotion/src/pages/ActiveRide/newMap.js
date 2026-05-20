@@ -1,22 +1,17 @@
 import React, {
-  useContext, useEffect, useState,
+  useContext, useEffect, useRef, useState,
 } from 'react';
-import { Dimensions } from 'react-native';
+import { Dimensions, Platform } from 'react-native';
 import MapView, { Polygon, Polyline } from 'react-native-maps';
-import Config from 'react-native-config';
+import { useDrawerStatus } from '@react-navigation/drawer';
 import moment from 'moment';
 import {
   point, featureCollection, nearestPoint, booleanPointInPolygon, polygon, distance,
 } from '@turf/turf';
-import { debounce } from 'lodash';
-import Mixpanel from '../../services/Mixpanel';
 import { FutureRidesContext } from '../../context/futureRides';
 import { RidePageContext } from '../../context/newRideContext';
 import { RideStateContextContext } from '../../context';
 import { DEFAULT_COORDS, getPosition } from '../../services/geo';
-import {
-  LocationMarker, LocationMarkerContainer, PickupTextContainer, PickupText,
-} from './styled';
 import mapDarkMode from '../../assets/mapDarkMode.json';
 import { Context as ThemeContext, THEME_MOD } from '../../context/theme';
 import { AvailabilityContext } from '../../context/availability';
@@ -104,6 +99,22 @@ export default React.forwardRef(({
   } = useContext(BottomSheetContext);
 
   const { StationMarkers, isStationsEnabled } = useContext(VirtualStationsContext);
+
+  // Android: when the side drawer closes after being open, the GoogleMap's
+  // GLSurfaceView resumes but does NOT redraw the Polyline (route). Markers
+  // come back, polyline stays gone. Force a Polyline remount by bumping this
+  // counter on the drawer's close transition. No-op on iOS.
+  const drawerStatus = useDrawerStatus();
+  const prevDrawerStatusRef = useRef(drawerStatus);
+  const [polylineRedrawKey, setPolylineRedrawKey] = useState(0);
+  useEffect(() => {
+    if (Platform.OS === 'android'
+        && prevDrawerStatusRef.current === 'open'
+        && drawerStatus === 'closed') {
+      setPolylineRedrawKey(k => k + 1);
+    }
+    prevDrawerStatusRef.current = drawerStatus;
+  }, [drawerStatus]);
 
   const isMainPage = currentBsPage === BS_PAGES.ADDRESS_SELECTOR;
 
@@ -350,6 +361,7 @@ export default React.forwardRef(({
         }
         {finalStopPoints && polylineList && (
           <Polyline
+            key={`polyline-${polylineRedrawKey}`}
             strokeColor={primaryColor}
             strokeWidth={5}
             coordinates={polylineList}

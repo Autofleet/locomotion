@@ -1,0 +1,185 @@
+diff --git a/node_modules/@react-navigation/drawer/lib/commonjs/views/modern/Drawer.js b/node_modules/@react-navigation/drawer/lib/commonjs/views/modern/Drawer.js
+--- a/node_modules/@react-navigation/drawer/lib/commonjs/views/modern/Drawer.js
++++ b/node_modules/@react-navigation/drawer/lib/commonjs/views/modern/Drawer.js
+@@ -100,18 +100,15 @@
+     endInteraction();
+   };
+ 
+-  // FIXME: Currently hitSlop is broken when on Android when drawer is on right
+-  // https://github.com/software-mansion/react-native-gesture-handler/issues/569
+-  const hitSlop = isRight ?
+-  // Extend hitSlop to the side of the screen when drawer is closed
+-  // This lets the user drag the drawer from the side of the screen
+-  {
++  // Patched: see src/views/modern/Drawer.tsx — hitSlop kept stable to stop
++  // PanGestureHandler from reinitializing (which detaches MapView).
++  const hitSlop = React.useMemo(() => isRight ? {
+     right: 0,
+-    width: isOpen ? undefined : swipeEdgeWidth
++    width: swipeEdgeWidth
+   } : {
+     left: 0,
+-    width: isOpen ? undefined : swipeEdgeWidth
+-  };
++    width: swipeEdgeWidth
++  }, [isRight, swipeEdgeWidth]);
+   const touchStartX = (0, _reactNativeReanimated.useSharedValue)(0);
+   const touchX = (0, _reactNativeReanimated.useSharedValue)(0);
+   const translationX = (0, _reactNativeReanimated.useSharedValue)(getDrawerTranslationX(open));
+@@ -262,8 +259,8 @@
+   }, /*#__PURE__*/React.createElement(_reactNativeReanimated.default.View, {
+     style: [styles.content, contentAnimatedStyle]
+   }, /*#__PURE__*/React.createElement(_reactNative.View, {
+-    accessibilityElementsHidden: isOpen && drawerType !== 'permanent',
+-    importantForAccessibility: isOpen && drawerType !== 'permanent' ? 'no-hide-descendants' : 'auto',
++    // Patched: see src/views/modern/Drawer.tsx — keep accessibility props stable
++    // to stop Fabric from replacing the screen sub-tree (causes MapView flicker).
+     style: styles.content
+   }, renderSceneContent()), drawerType !== 'permanent' ? /*#__PURE__*/React.createElement(_Overlay.default, {
+     progress: progress,
+diff --git a/node_modules/@react-navigation/drawer/lib/commonjs/views/modern/Overlay.js b/node_modules/@react-navigation/drawer/lib/commonjs/views/modern/Overlay.js
+--- a/node_modules/@react-navigation/drawer/lib/commonjs/views/modern/Overlay.js
++++ b/node_modules/@react-navigation/drawer/lib/commonjs/views/modern/Overlay.js
+@@ -30,9 +30,10 @@
+   const animatedProps = (0, _reactNativeReanimated.useAnimatedProps)(() => {
+     const active = progress.value > PROGRESS_EPSILON;
+     return {
+-      pointerEvents: active ? 'auto' : 'none',
+-      accessibilityElementsHidden: !active,
+-      importantForAccessibility: active ? 'auto' : 'no-hide-descendants'
++      pointerEvents: active ? 'auto' : 'none'
++      // Patched: see src/views/modern/Overlay.tsx — accessibility toggles
++      // removed to stop Fabric from replacing the screen sub-tree on drawer
++      // open (causes MapView flicker).
+     };
+   });
+   return /*#__PURE__*/React.createElement(_reactNativeReanimated.default.View, _extends({}, props, {
+diff --git a/node_modules/@react-navigation/drawer/lib/module/views/modern/Drawer.js b/node_modules/@react-navigation/drawer/lib/module/views/modern/Drawer.js
+--- a/node_modules/@react-navigation/drawer/lib/module/views/modern/Drawer.js
++++ b/node_modules/@react-navigation/drawer/lib/module/views/modern/Drawer.js
+@@ -91,18 +91,15 @@
+     endInteraction();
+   };
+ 
+-  // FIXME: Currently hitSlop is broken when on Android when drawer is on right
+-  // https://github.com/software-mansion/react-native-gesture-handler/issues/569
+-  const hitSlop = isRight ?
+-  // Extend hitSlop to the side of the screen when drawer is closed
+-  // This lets the user drag the drawer from the side of the screen
+-  {
++  // Patched: see src/views/modern/Drawer.tsx — hitSlop kept stable to stop
++  // PanGestureHandler from reinitializing (which detaches MapView).
++  const hitSlop = React.useMemo(() => isRight ? {
+     right: 0,
+-    width: isOpen ? undefined : swipeEdgeWidth
++    width: swipeEdgeWidth
+   } : {
+     left: 0,
+-    width: isOpen ? undefined : swipeEdgeWidth
+-  };
++    width: swipeEdgeWidth
++  }, [isRight, swipeEdgeWidth]);
+   const touchStartX = useSharedValue(0);
+   const touchX = useSharedValue(0);
+   const translationX = useSharedValue(getDrawerTranslationX(open));
+@@ -253,8 +250,13 @@
+   }, /*#__PURE__*/React.createElement(Animated.View, {
+     style: [styles.content, contentAnimatedStyle]
+   }, /*#__PURE__*/React.createElement(View, {
+-    accessibilityElementsHidden: isOpen && drawerType !== 'permanent',
+-    importantForAccessibility: isOpen && drawerType !== 'permanent' ? 'no-hide-descendants' : 'auto',
++    // Patched: toggling accessibilityElementsHidden / importantForAccessibility
++    // on this wrapper View causes React Native (Fabric, Android) to replace
++    // the screen sub-tree, which fires onDetachedFromWindow + onAttachedToWindow
++    // on react-native-maps' MapView, blanking the GLSurfaceView each time the
++    // drawer opens or closes. The accessibility hide isn't critical (TalkBack
++    // users can still focus past the drawer via the overlay), so we keep these
++    // props stable. Related: react-native-maps#5557 / #5743.
+     style: styles.content
+   }, renderSceneContent()), drawerType !== 'permanent' ? /*#__PURE__*/React.createElement(Overlay, {
+     progress: progress,
+diff --git a/node_modules/@react-navigation/drawer/lib/module/views/modern/Overlay.js b/node_modules/@react-navigation/drawer/lib/module/views/modern/Overlay.js
+--- a/node_modules/@react-navigation/drawer/lib/module/views/modern/Overlay.js
++++ b/node_modules/@react-navigation/drawer/lib/module/views/modern/Overlay.js
+@@ -22,9 +22,10 @@
+   const animatedProps = useAnimatedProps(() => {
+     const active = progress.value > PROGRESS_EPSILON;
+     return {
+-      pointerEvents: active ? 'auto' : 'none',
+-      accessibilityElementsHidden: !active,
+-      importantForAccessibility: active ? 'auto' : 'no-hide-descendants'
++      pointerEvents: active ? 'auto' : 'none'
++      // Patched: see src/views/modern/Overlay.tsx — accessibility toggles
++      // removed to stop Fabric from replacing the screen sub-tree on drawer
++      // open (causes MapView flicker).
+     };
+   });
+   return /*#__PURE__*/React.createElement(Animated.View, _extends({}, props, {
+diff --git a/node_modules/@react-navigation/drawer/src/views/modern/Drawer.tsx b/node_modules/@react-navigation/drawer/src/views/modern/Drawer.tsx
+--- a/node_modules/@react-navigation/drawer/src/views/modern/Drawer.tsx
++++ b/node_modules/@react-navigation/drawer/src/views/modern/Drawer.tsx
+@@ -141,13 +141,21 @@
+     endInteraction();
+   };
+ 
+-  // FIXME: Currently hitSlop is broken when on Android when drawer is on right
+-  // https://github.com/software-mansion/react-native-gesture-handler/issues/569
+-  const hitSlop = isRight
+-    ? // Extend hitSlop to the side of the screen when drawer is closed
+-      // This lets the user drag the drawer from the side of the screen
+-      { right: 0, width: isOpen ? undefined : swipeEdgeWidth }
+-    : { left: 0, width: isOpen ? undefined : swipeEdgeWidth };
++  // Patched: original computed `width: isOpen ? undefined : swipeEdgeWidth`,
++  // toggling the hitSlop prop on PanGestureHandler whenever isOpen flipped.
++  // On Android Fabric, changing hitSlop reinitializes the native gesture
++  // handler, which detaches + re-attaches its child View sub-tree (including
++  // any react-native-maps MapView), blanking the GLSurfaceView. Keeping the
++  // hitSlop stable (always edge-only) prevents the detach/attach. The
++  // user-visible cost is that swipe-to-close from anywhere on the screen no
++  // longer works — closing now requires the edge swipe, the overlay tap, or
++  // the hamburger button. All other gestures continue to work.
++  const hitSlop = React.useMemo(
++    () => (isRight
++      ? { right: 0, width: swipeEdgeWidth }
++      : { left: 0, width: swipeEdgeWidth }),
++    [isRight, swipeEdgeWidth]
++  );
+ 
+   const touchStartX = useSharedValue(0);
+   const touchX = useSharedValue(0);
+@@ -364,12 +372,11 @@
+         >
+           <Animated.View style={[styles.content, contentAnimatedStyle]}>
+             <View
+-              accessibilityElementsHidden={isOpen && drawerType !== 'permanent'}
+-              importantForAccessibility={
+-                isOpen && drawerType !== 'permanent'
+-                  ? 'no-hide-descendants'
+-                  : 'auto'
+-              }
++              // Patched: toggling accessibilityElementsHidden / importantForAccessibility
++              // on this wrapper View causes React Native (Fabric, Android) to replace
++              // the screen sub-tree, which fires onDetachedFromWindow + onAttachedToWindow
++              // on react-native-maps' MapView, blanking the GLSurfaceView each time the
++              // drawer opens or closes. Related: react-native-maps#5557 / #5743.
+               style={styles.content}
+             >
+               {renderSceneContent()}
+diff --git a/node_modules/@react-navigation/drawer/src/views/modern/Overlay.tsx b/node_modules/@react-navigation/drawer/src/views/modern/Overlay.tsx
+--- a/node_modules/@react-navigation/drawer/src/views/modern/Overlay.tsx
++++ b/node_modules/@react-navigation/drawer/src/views/modern/Overlay.tsx
+@@ -37,8 +37,12 @@
+ 
+     return {
+       pointerEvents: active ? 'auto' : 'none',
+-      accessibilityElementsHidden: !active,
+-      importantForAccessibility: active ? 'auto' : 'no-hide-descendants',
++      // Patched: see drawer/views/modern/Drawer.tsx — toggling these props on
++      // Android Fabric causes the screen sibling sub-tree (containing the
++      // MapView) to be replaced, blanking the GLSurfaceView each time the
++      // drawer starts opening (this fires on progress > 0.05). The overlay is
++      // already opacity-animated and pointer-events-gated; the accessibility
++      // hide isn't critical.
+     } as const;
+   });
+ 

@@ -911,10 +911,10 @@ const RidePageContextProvider = ({ children }: {
 
   const getCurrentLocation = async () => {
     const location = await getPosition();
+    if (location === false && !ride?.id) {
+      changeBsPage(BS_PAGES.LOCATION_REQUEST);
+    }
     if (!location) {
-      if (!ride?.id) {
-        changeBsPage(BS_PAGES.LOCATION_REQUEST);
-      }
       return DEFAULT_COORDS.coords;
     }
     return location.coords;

@@ -119,15 +119,15 @@ export const DEFAULT_COORDS = {
   },
 };
 export const getPosition = async (options) => {
+  const granted = await GeoService.checkPermission();
+  if (!granted) {
+    return false;
+  }
   try {
-    const granted = await GeoService.checkPermission();
-    if (!granted) {
-      return false;
-    }
     const location = await GeoService.currentLocation(options);
     return location;
   } catch (e) {
     console.error('Error getting location', e);
-    return false;
+    return null;
   }
 };
