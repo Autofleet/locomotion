@@ -1,9 +1,10 @@
-import React, { useContext, useEffect, useState } from 'react';
-import Modal from 'react-native-modal';
+import React, {
+  useContext, useEffect, useRef, useState,
+} from 'react';
 import { ScrollView } from 'react-native-gesture-handler';
+import Modal from '../../Components/CompatModal';
 import CloseButton from '../../Components/CloseButton';
-import CancellationReasonsProvider, { CancellationReasonsContext } from '../../context/cancellation-reasons';
-import RoundedButton from '../../Components/RoundedButton';
+import { CancellationReasonsContext } from '../../context/cancellation-reasons';
 import { SubTitle, Title } from '../styled';
 import i18n from '../../I18n';
 import {
@@ -36,8 +37,14 @@ const CancellationReasonsPopup = ({
   const { cancellationReasons, clearCancellationReasons } = useContext(CancellationReasonsContext);
   const { updateRide, ride } = useContext(RidePageContext);
   const [isLoading, setIsLoading] = useState(false);
+  const capturedRideIdRef = useRef<string | null>(null);
 
-  const rideIdToUse = rideId || ride?.id;
+  const rideIdToUse = rideId || capturedRideIdRef.current || ride?.id;
+  useEffect(() => {
+    if (isVisible && ride?.id && !capturedRideIdRef.current) {
+      capturedRideIdRef.current = ride.id;
+    }
+  }, [isVisible, ride?.id]);
   useEffect(() => {
     if (isVisible) {
       if (!cancellationReasons
@@ -56,6 +63,7 @@ const CancellationReasonsPopup = ({
       }
     } else {
       setIsLoading(false);
+      capturedRideIdRef.current = null;
       clearCancellationReasons();
     }
   }, [isVisible]);
@@ -101,11 +109,11 @@ const CancellationReasonsPopup = ({
                 : (
                   cancellationReasons.map(cr => (
                     <ClickableContainer
+                      key={cr.id}
                       onPress={() => onCancellationReasonClick(cr.id)}
                       testID={`cancellationReason-${cr.category}`}
                     >
-
-                      <CancellationReasonCard key={cr.id}>
+                      <CancellationReasonCard>
                         <CancellationReasonText>
                           {i18n.t(`cancellationReasons.${cr.value}`, cr.value)}
                         </CancellationReasonText>

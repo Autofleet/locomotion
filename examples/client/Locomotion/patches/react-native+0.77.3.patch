@@ -1,0 +1,77 @@
+diff --git a/node_modules/react-native/Libraries/Core/ExceptionsManager.js b/node_modules/react-native/Libraries/Core/ExceptionsManager.js
+index ecb2171..43626b3 100644
+--- a/node_modules/react-native/Libraries/Core/ExceptionsManager.js
++++ b/node_modules/react-native/Libraries/Core/ExceptionsManager.js
+@@ -218,7 +218,13 @@ function reactConsoleErrorHandler(...args) {
+   let error;
+ 
+   const firstArg = args[0];
+-  if (firstArg?.stack) {
++  let firstArgHasStack = false;
++  try {
++    firstArgHasStack = Boolean(firstArg?.stack);
++  } catch (_e) {
++    // Error.stack getter may throw with an invalid receiver on Hermes
++  }
++  if (firstArgHasStack) {
+     // reportException will console.error this with high enough fidelity.
+     error = firstArg;
+   } else {
+diff --git a/node_modules/react-native/Libraries/promiseRejectionTrackingOptions.js b/node_modules/react-native/Libraries/promiseRejectionTrackingOptions.js
+index d8fdbd6..58fcd57 100644
+--- a/node_modules/react-native/Libraries/promiseRejectionTrackingOptions.js
++++ b/node_modules/react-native/Libraries/promiseRejectionTrackingOptions.js
+@@ -36,8 +36,12 @@ let rejectionTrackingOptions: $NonMaybeType<Parameters<enable>[0]> = {
+       }
+       // It could although this object is not a standard error, it still has stack information to unwind
+       // $FlowFixMe ignore types just check if stack is there
+-      if (rejection?.stack && typeof rejection.stack === 'string') {
+-        stack = rejection.stack;
++      try {
++        if (rejection?.stack && typeof rejection.stack === 'string') {
++          stack = rejection.stack;
++        }
++      } catch (_e) {
++        // Error.stack getter may throw with an invalid receiver on Hermes
+       }
+     }
+ 
+diff --git a/node_modules/react-native/sdks/hermes-engine/hermes-utils.rb b/node_modules/react-native/sdks/hermes-engine/hermes-utils.rb
+index 5356dc1..4db6301 100644
+--- a/node_modules/react-native/sdks/hermes-engine/hermes-utils.rb
++++ b/node_modules/react-native/sdks/hermes-engine/hermes-utils.rb
+@@ -247,7 +247,17 @@ end
+ def hermes_artifact_exists(tarball_url)
+     # -L is used to follow redirects, useful for the nightlies
+     # I also needed to wrap the url in quotes to avoid escaping & and ?.
+-    return (`curl -o /dev/null --silent -Iw '%{http_code}' -L "#{tarball_url}"` == "200")
++    # Retry up to 3 times with exponential backoff to tolerate transient
++    # Maven Central / Sonatype hiccups that otherwise force a from-source build.
++    attempts = 0
++    max_attempts = 3
++    while attempts < max_attempts
++        status = `curl -o /dev/null --silent -Iw '%{http_code}' -L "#{tarball_url}"`.strip
++        return true if status == "200"
++        attempts += 1
++        sleep(2 ** attempts) if attempts < max_attempts
++    end
++    return false
+ end
+ 
+ def hermes_log(message, level = :warning)
+diff --git a/node_modules/react-native/sdks/hermes-engine/utils/build-hermesc-xcode.sh b/node_modules/react-native/sdks/hermes-engine/utils/build-hermesc-xcode.sh
+index 132ee54..369c64d 100755
+--- a/node_modules/react-native/sdks/hermes-engine/utils/build-hermesc-xcode.sh
++++ b/node_modules/react-native/sdks/hermes-engine/utils/build-hermesc-xcode.sh
+@@ -14,5 +14,9 @@ jsi_path="$1"
+ # We want to make sure that hermesc is built for mac.
+ # So we clean the environment with env -i, and explicitly set SDKROOT to macosx
+ SDKROOT=$(xcode-select -p)/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk
+-env -i SDKROOT="$SDKROOT" "$CMAKE_BINARY" -S "${PODS_ROOT}/hermes-engine" -B "$hermesc_dir_path" -DJSI_DIR="$jsi_path"
+-env -i SDKROOT="$SDKROOT" "$CMAKE_BINARY" --build "$hermesc_dir_path" --target hermesc -j "$(sysctl -n hw.ncpu)"
++# Preserve PATH so cmake can find make and the Xcode toolchain compilers.
++# Without this, on macOS 15 / Apple Silicon CI stacks (e.g. Bitrise) cmake fails with
++# "CMake was unable to find a build program corresponding to 'Unix Makefiles'" and
++# "CMAKE_C_COMPILER not set" because /usr/bin/{make,cc} are not always present.
++env -i PATH="$PATH" SDKROOT="$SDKROOT" "$CMAKE_BINARY" -S "${PODS_ROOT}/hermes-engine" -B "$hermesc_dir_path" -DJSI_DIR="$jsi_path"
++env -i PATH="$PATH" SDKROOT="$SDKROOT" "$CMAKE_BINARY" --build "$hermesc_dir_path" --target hermesc -j "$(sysctl -n hw.ncpu)"

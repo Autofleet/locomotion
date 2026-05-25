@@ -8,6 +8,7 @@ import { Platform } from 'react-native';
 import { Context as ThemeContext } from '../../context/theme';
 import SvgIcon from '../SvgIcon';
 import carIcon from '../../assets/map/Autofleet_Car_Icon.svg';
+import { useMarkerTracksViewChanges } from '../Marker/useMarkerTracksViewChanges';
 
 interface Location {
   lat: number;
@@ -96,6 +97,8 @@ const AvailabilityVehicle = ({
     svgStyle.transform = [{ rotate: `${location.bearing}deg` }];
   }
 
+  const { tracksViewChanges, onMarkerLayout } = useMarkerTracksViewChanges(markerRef);
+
   return (
     <MarkerAnimated
       key={id}
@@ -105,12 +108,14 @@ const AvailabilityVehicle = ({
       tappable={false}
       // tooltip workaround, need to upgrade library
       onPress={onPressWorkaround}
-      tracksViewChanges={false}
+      tracksViewChanges={tracksViewChanges}
+      onLayout={onMarkerLayout}
     >
       <SvgIcon
         Svg={carIcon}
         height={48}
         width={48}
+        color={vehicleColor}
         style={svgStyle}
       />
     </MarkerAnimated>

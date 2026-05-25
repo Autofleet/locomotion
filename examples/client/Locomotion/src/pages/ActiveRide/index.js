@@ -159,12 +159,12 @@ const RidePage = ({ mapSettings, navigation }) => {
   };
 
   const goBackToAddress = (selectedIndex, expand = true) => {
+    if (expand) {
+      bottomSheetRef.current?.expand();
+    }
     resetStateToAddressSelector(selectedIndex);
     if (expand) {
-      setTimeout(() => {
-        setIsExpanded(true);
-        bottomSheetRef.current.expand();
-      }, 100);
+      setIsExpanded(true);
     }
   };
 
@@ -175,6 +175,7 @@ const RidePage = ({ mapSettings, navigation }) => {
       BS_PAGES.ACTIVE_RIDE,
       BS_PAGES.NO_AVAILABLE_SERVICES,
     ].includes(currentBsPage)) {
+      bottomSheetRef.current?.collapse();
       resetStateToAddressSelector();
       initSps();
     } else if (serviceEstimations || currentBsPage === BS_PAGES.CONFIRM_PICKUP_TIME) {
@@ -358,6 +359,7 @@ const RidePage = ({ mapSettings, navigation }) => {
     React.useCallback(() => {
       const onBackPress = () => {
         if (serviceEstimations) {
+          bottomSheetRef.current?.collapse();
           resetStateToAddressSelector();
           return true;
         }
@@ -365,12 +367,12 @@ const RidePage = ({ mapSettings, navigation }) => {
       };
       const backHandler = BackHandler.addEventListener('hardwareBackPress', onBackPress);
 
-      if (!currentBsPage === BS_PAGES.SERVICE_ESTIMATIONS) {
+      if (currentBsPage !== BS_PAGES.SERVICE_ESTIMATIONS) {
         focusCurrentLocation();
       }
 
       return () => backHandler.remove();
-    }, [serviceEstimations]),
+    }, [serviceEstimations, currentBsPage]),
   );
 
   const versionCheck = async () => {
@@ -526,7 +528,7 @@ const RidePage = ({ mapSettings, navigation }) => {
             >
               {currentBsPage !== BS_PAGES.CONFIRM_PICKUP
                 ? <StopPointsViewer goBackToAddressSelector={goBackToAddress} />
-                : <></>}
+                : null}
             </Header>
             {topMessage ? (
               <TopMessage
@@ -579,6 +581,8 @@ const RidePage = ({ mapSettings, navigation }) => {
       <BottomSheet
         ref={bottomSheetRef}
         focusCurrentLocation={focusCurrentLocation}
+        keyboardBehavior={currentBsPage === BS_PAGES.ADDRESS_SELECTOR ? 'extend' : undefined}
+        keyboardBlurBehavior={currentBsPage === BS_PAGES.ADDRESS_SELECTOR ? 'restore' : undefined}
       >
         {
 BS_PAGE_TO_COMP[currentBsPage] ? BS_PAGE_TO_COMP[currentBsPage]() : null

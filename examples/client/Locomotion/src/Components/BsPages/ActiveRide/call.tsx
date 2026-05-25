@@ -1,6 +1,6 @@
-import React, { useState, useRef, useContext } from 'react';
+import React, { useState, useContext } from 'react';
 import {
-  UIManager, findNodeHandle, Platform, ActionSheetIOS,
+  Alert, Platform, ActionSheetIOS,
 } from 'react-native';
 import propsTypes from 'prop-types';
 import Mixpanel from '../../../services/Mixpanel';
@@ -16,9 +16,8 @@ import { RidePageContext } from '../../../context/newRideContext';
 const CallContactPersonMasked = ({ onError }: { onError: any}) => {
   const { getCallNumbers } = useContext(RidePageContext);
   const [disabledPhoneButton, setDisabledPhoneButton] = useState(false);
-  const inputRef = useRef<any>(null);
 
-  const ActionMenu = (number: any, elementRef: any) => {
+  const ActionMenu = (number: any) => {
     const callPhone = (phoneNumber: any) => {
       Mixpanel.clickEvent('Call contact person');
       DeviceService.call(phoneNumber);
@@ -31,19 +30,14 @@ const CallContactPersonMasked = ({ onError }: { onError: any}) => {
 
     const options = [i18n.t('bottomSheetContent.ride.phoneCallOptions.call'), i18n.t('bottomSheetContent.ride.phoneCallOptions.sms')];
     if (Platform.OS === 'android') {
-      UIManager.showPopupMenu(
-        findNodeHandle(elementRef.current) as number,
-        options,
-        () => undefined,
-        (action, buttonIndex) => {
-          if (buttonIndex === 0) {
-            callPhone(number);
-          }
-
-          if (buttonIndex === 1) {
-            smsPhone(number);
-          }
-        },
+      Alert.alert(
+        i18n.t('bottomSheetContent.ride.contactDriver'),
+        undefined,
+        [
+          { text: options[0], onPress: () => callPhone(number) },
+          { text: options[1], onPress: () => smsPhone(number) },
+          { text: i18n.t('bottomSheetContent.ride.phoneCallOptions.cancel'), style: 'cancel' },
+        ],
       );
     } else {
       ActionSheetIOS.showActionSheetWithOptions(
@@ -67,12 +61,11 @@ const CallContactPersonMasked = ({ onError }: { onError: any}) => {
   return (
     <ButtonContainer
       disabled={disabledPhoneButton}
-      ref={inputRef}
       onPress={async () => {
         setDisabledPhoneButton(true);
         try {
           const number = await getCallNumbers();
-          ActionMenu(number, inputRef);
+          ActionMenu(number);
         } catch (e) {
           Mixpanel.setEvent('Call contact person Error');
           onError();

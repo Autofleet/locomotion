@@ -1,4 +1,4 @@
-import React, { useState, useContext, useRef } from 'react';
+import React, { useState } from 'react';
 import { ScrollView } from 'react-native';
 import { useRoute } from '@react-navigation/native';
 import { MAIN_ROUTES } from '../routes';
@@ -25,7 +25,7 @@ type Route = {
 
 
 const EditCardName = () => {
-  const route : Route = useRoute();
+  const route: Route = useRoute();
   const usePayments = PaymentsContext.useContainer();
   const [nickname, setNickname] = useState((route.params as Params).name);
   const [showErrorText, setShowErrorText] = useState(false);
@@ -49,7 +49,7 @@ const EditCardName = () => {
             <TextInput
               placeholder="Name"
               autoFocus
-              onChangeText={(v : string) => setNickname(v)}
+              onChangeText={(v: string) => setNickname(v)}
               value={nickname}
               autoCapitalize="words"
               error={nickname === ''}

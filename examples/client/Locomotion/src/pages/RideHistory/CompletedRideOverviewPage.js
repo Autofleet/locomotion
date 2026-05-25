@@ -50,9 +50,7 @@ const Page = ({ menuSide }) => {
           <RideView
             ride={ride}
           />
-        ) : (
-          <></>
-        )}
+        ) : null}
       </PageContent>
     </PageContainer>
   );

@@ -1,7 +1,6 @@
 import VersionCheck from 'react-native-version-check';
-import { Alert, BackHandler, Linking } from 'react-native';
+import { Alert, BackHandler, Linking, Platform } from 'react-native';
 import Config from 'react-native-config';
-import { exitApp } from 'react-native-exit-app';
 import DeviceInfo from 'react-native-device-info';
 import i18n from '../I18n';
 
@@ -25,7 +24,9 @@ const showUpdateVersionAlert = () => {
             Linking.openURL(storeUrl);
           }
 
-          exitApp();
+          if (Platform.OS === 'android') {
+            BackHandler.exitApp();
+          }
         },
       },
     ],
