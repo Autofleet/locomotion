@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import {
-  Linking, Platform, UIManager, findNodeHandle, ActionSheetIOS,
+  Linking, Platform, Alert, ActionSheetIOS,
 } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import NoTitleCard from '../../Components/NoTitleCard';
@@ -83,19 +83,14 @@ export default ({ menuSide }) => {
 
     const options = [i18n.t('bottomSheetContent.ride.phoneCallOptions.call'), i18n.t('bottomSheetContent.ride.phoneCallOptions.sms')];
     if (Platform.OS === 'android') {
-      UIManager.showPopupMenu(
-        findNodeHandle(event.target),
-        options,
-        () => undefined,
-        (action, buttonIndex) => {
-          if (buttonIndex === 0) {
-            callPhone(number);
-          }
-
-          if (buttonIndex === 1) {
-            smsPhone(number);
-          }
-        },
+      Alert.alert(
+        number,
+        undefined,
+        [
+          { text: options[0], onPress: () => callPhone(number) },
+          { text: options[1], onPress: () => smsPhone(number) },
+          { text: i18n.t('bottomSheetContent.ride.phoneCallOptions.cancel'), style: 'cancel' },
+        ],
       );
     } else {
       ActionSheetIOS.showActionSheetWithOptions(

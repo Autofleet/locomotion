@@ -8,7 +8,7 @@ import DriverCard from '../../DriverCard';
 import {
   TopContainer, VehicleDetails, VehicleImage, VehiclePlateText, VehiclePlateContainer,
   DriverCardContainer, StopPointTextContainer, StopPointText, StopPointsTimeContainer,
-  StopPointTimeText, PulseContainer, StopPointsVerticalViewContainer,
+  StopPointTimeText, PulseContainer,
   ButtonsContainer, RowContainer, ButtonContainer, Container,
 } from './styled';
 import { STOP_POINT_STATES, STOP_POINT_TYPES } from '../../../lib/commonTypes';
@@ -42,13 +42,14 @@ const ActiveRideContent = () => {
 
   const { stopPoints } = ride;
 
-  const firstSpNotCompleted = stopPoints?.find(p => p.state !== STOP_POINT_STATES.COMPLETED);
-  const pickupSp = stopPoints?.find(p => p.type === STOP_POINT_TYPES.STOP_POINT_PICKUP);
+  const firstSpNotCompleted = stopPoints?.find((p: any) => p.state !== STOP_POINT_STATES.COMPLETED);
+  const pickupSp = stopPoints?.find((p: any) => p.type === STOP_POINT_TYPES.STOP_POINT_PICKUP);
 
   const getTextBasedOnStopPoints = () => {
     if (firstSpNotCompleted) {
       return i18n.t(`activeRide.${firstSpNotCompleted.type}.${firstSpNotCompleted.state}`);
     }
+    return undefined;
   };
 
   const getMinDifferent = () => {
@@ -56,6 +57,7 @@ const ActiveRideContent = () => {
       const min = moment(firstSpNotCompleted.plannedArrivalTime).diff(moment(), 'minutes');
       return min < 1 ? i18n.t('now') : i18n.t('min', { min });
     }
+    return undefined;
   };
 
   const renderRideNotes = () => {
@@ -78,7 +80,7 @@ const ActiveRideContent = () => {
   };
 
   const renderCancelRide = () => (
-    ride.cancelable
+    ride?.cancelable
       ? (
         <ButtonContainer
           testID="cancelRideButton"
@@ -107,92 +109,98 @@ const ActiveRideContent = () => {
     setPopupToShow(null);
   };
 
+  if (!ride) {
+    return null;
+  }
+
   return (
-    <>
-      {ride
-      && (
-        <Container alwaysBounceVertical={false}>
-          <TopContainer>
-            <DriverCardContainer>
-              <DriverCard
-                noPaddingLeft={false}
-                activeRide
-                ride={ride}
-              />
-            </DriverCardContainer>
-            <VehicleDetails>
-              <VehicleImage resizeMode="contain" source={{ uri: (vehicle?.image) || DEFAULT_VEHICLE_IMAGE }} />
-              <VehiclePlateContainer>
-                <VehiclePlateText numberOfLines={1}>{(vehicle?.licensePlate) || ''}</VehiclePlateText>
-              </VehiclePlateContainer>
-            </VehicleDetails>
-          </TopContainer>
-          <StopPointTextContainer>
-            <StopPointText numberOfLines={1}>
-              {getTextBasedOnStopPoints()}
-            </StopPointText>
-            {firstSpNotCompleted?.state === STOP_POINT_STATES.PENDING
-              ? (
-                <StopPointsTimeContainer>
-                  <PulseContainer>
-                    <Loader dark={false} sourceProp={pulse} lottieViewStyle={{ width: 24, height: 24 }} />
-                  </PulseContainer>
-                  <StopPointTimeText>{getMinDifferent()}</StopPointTimeText>
-                </StopPointsTimeContainer>
-              )
-              : null}
-          </StopPointTextContainer>
-          <ButtonsContainer>
-            {firstSpNotCompleted?.type === 'pickup' ? (
-              <>
-                <RowContainer>
-                  <Call onError={() => { setGenericErrorPopup({}); }} />
-                  {renderRideNotes()}
-                </RowContainer>
-                <RowContainer>
-                  {renderCancelRide()}
-                  {renderShareRide()}
-                </RowContainer>
-              </>
-            ) : (
-              <RowContainer>
-                <Call onError={() => { setGenericErrorPopup({}); }} />
-                {renderShareRide()}
-              </RowContainer>
-            )}
-          </ButtonsContainer>
-          <StopPointsVerticalView
+    <Container alwaysBounceVertical={false}>
+      <TopContainer>
+        <DriverCardContainer>
+          <DriverCard
+            noPaddingLeft={false}
+            activeRide
             ride={ride}
           />
-          <RidePaymentDetails
-            ride={ride}
-            paymentMethod={ride.payment?.paymentMethod}
-            state={ride.state}
-            currency={ride.priceCurrency}
+        </DriverCardContainer>
+        <VehicleDetails>
+          <VehicleImage
+            resizeMode="contain"
+            source={{ uri: (vehicle?.image) || DEFAULT_VEHICLE_IMAGE }}
           />
-          <ServiceTypeDetails
-            serviceType={ride.serviceType}
-          />
-          <RideNotes
-            notes={pickupSp?.notes}
-            isVisible={popupToShow === 'notes'}
-            onSubmit={async (text: string) => {
-              await updateRide(ride.id, {
-                stopPoints: [{
-                  id: pickupSp.id,
-                  notes: text,
-                }],
-              });
-              await loadRide(ride.id || '');
-              clearPopup();
-            }}
-            onCancel={() => {
-              clearPopup();
-            }}
-          />
-        </Container>
-      )}
-    </>
+          <VehiclePlateContainer>
+            <VehiclePlateText numberOfLines={1}>{(vehicle?.licensePlate) || ''}</VehiclePlateText>
+          </VehiclePlateContainer>
+        </VehicleDetails>
+      </TopContainer>
+      <StopPointTextContainer>
+        <StopPointText numberOfLines={1}>
+          {getTextBasedOnStopPoints()}
+        </StopPointText>
+        {firstSpNotCompleted?.state === STOP_POINT_STATES.PENDING
+          ? (
+            <StopPointsTimeContainer>
+              <PulseContainer>
+                <Loader
+                  dark={false}
+                  sourceProp={pulse}
+                  lottieViewStyle={{ width: 24, height: 24 }}
+                />
+              </PulseContainer>
+              <StopPointTimeText>{getMinDifferent()}</StopPointTimeText>
+            </StopPointsTimeContainer>
+          )
+          : null}
+      </StopPointTextContainer>
+      <ButtonsContainer>
+        {firstSpNotCompleted?.type === 'pickup' ? (
+          <>
+            <RowContainer>
+              <Call onError={() => { setGenericErrorPopup({}); }} />
+              {renderRideNotes()}
+            </RowContainer>
+            <RowContainer>
+              {renderCancelRide()}
+              {renderShareRide()}
+            </RowContainer>
+          </>
+        ) : (
+          <RowContainer>
+            <Call onError={() => { setGenericErrorPopup({}); }} />
+            {renderShareRide()}
+          </RowContainer>
+        )}
+      </ButtonsContainer>
+      <StopPointsVerticalView
+        ride={ride}
+      />
+      <RidePaymentDetails
+        ride={ride}
+        paymentMethod={ride.payment?.paymentMethod}
+        state={ride.state}
+        currency={ride.priceCurrency}
+      />
+      <ServiceTypeDetails
+        serviceType={ride.serviceType}
+      />
+      <RideNotes
+        notes={pickupSp?.notes}
+        isVisible={popupToShow === 'notes'}
+        onSubmit={async (text: string) => {
+          await updateRide(ride.id, {
+            stopPoints: [{
+              id: pickupSp.id,
+              notes: text,
+            }],
+          });
+          await loadRide(ride.id || '');
+          clearPopup();
+        }}
+        onCancel={() => {
+          clearPopup();
+        }}
+      />
+    </Container>
   );
 };
 

@@ -241,6 +241,9 @@ export const RidePageContext = createContext<RidePageContextInterface>({
 
 const HISTORY_RECORDS_NUM = 10;
 
+const areStopPointsReady = (stopPoints: any[]) => stopPoints.length > 0
+  && stopPoints.every(sp => sp.lat && sp.lng && sp.description);
+
 const RidePageContextProvider = ({ children }: {
   children: any
 }) => {
@@ -445,7 +448,7 @@ const RidePageContextProvider = ({ children }: {
         scheduledTime = await getLocationTimezoneTime(formattedStopPoints[0].lat, formattedStopPoints[0].lng, unixScheduledTo);
       }
       const { estimations, services } = await rideApi
-        .createServiceEstimations(formattedStopPoints, scheduledTime, relevantBusinessAccountId);
+        .createServiceEstimations(formattedStopPoints, scheduledTime, relevantBusinessAccountId, ride.paymentMethodId);
 
       const tags = getEstimationTags(estimations);
       const formattedEstimations = formatEstimations(services, estimations, tags);
@@ -502,8 +505,7 @@ const RidePageContextProvider = ({ children }: {
 
   const validateRequestedStopPoints = (reqSps: any[], paymentChosen = true) => {
     const stopPoints = reqSps;
-    const isSpsReady = stopPoints.every(r => r.lat && r.lng && r.description);
-    if (stopPoints.length && isSpsReady) {
+    if (areStopPointsReady(stopPoints)) {
       tryServiceEstimations(paymentChosen);
     } else if (![BS_PAGES.ADDRESS_SELECTOR, BS_PAGES.LOADING].includes(currentBsPage)) {
       // reset req stop point request
@@ -651,6 +653,8 @@ const RidePageContextProvider = ({ children }: {
     }
     if (!RIDE_FINAL_STATES.includes(rideLoaded?.state || '')) {
       setRide(formattedRide);
+    } else if (ride?.id) {
+      cleanRideState();
     }
   };
 
@@ -675,6 +679,11 @@ const RidePageContextProvider = ({ children }: {
   useEffect(() => {
     validateRequestedStopPoints(requestStopPoints, false);
   }, [requestStopPoints]);
+
+  useEffect(() => {
+    if (!areStopPointsReady(requestStopPoints)) return;
+    tryServiceEstimations(true);
+  }, [ride.paymentMethodId]);
 
   const getRideFromApi = async (rideId: string): Promise<RideInterface> => formatRide(await rideApi.getRide(rideId));
 
@@ -786,7 +795,7 @@ const RidePageContextProvider = ({ children }: {
   };
 
   useEffect(() => {
-    if (user?.id) {
+    if (user?.id && currentBsPage !== BS_PAGES.ADDRESS_SELECTOR) {
       if (requestStopPoints.filter((sp => sp.lat)).length <= 1) {
         initSps();
       }
@@ -909,10 +918,10 @@ const RidePageContextProvider = ({ children }: {
 
   const getCurrentLocation = async () => {
     const location = await getPosition();
+    if (location === false && !ride?.id) {
+      changeBsPage(BS_PAGES.LOCATION_REQUEST);
+    }
     if (!location) {
-      if (!ride?.id) {
-        changeBsPage(BS_PAGES.LOCATION_REQUEST);
-      }
       return DEFAULT_COORDS.coords;
     }
     return location.coords;

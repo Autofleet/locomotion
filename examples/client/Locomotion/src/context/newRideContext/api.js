@@ -1,8 +1,10 @@
 import network from '../../services/network';
 
-export const createServiceEstimations = async (stopPoints, scheduledTo, businessAccountId) => {
+export const createServiceEstimations = async (stopPoints, scheduledTo, businessAccountId, paymentMethodId) => {
   try {
-    const { data } = await network.post('api/v1/services/service-estimations', { stopPoints, scheduledTo, businessAccountId });
+    const { data } = await network.post('api/v1/services/service-estimations', {
+      stopPoints, scheduledTo, businessAccountId, paymentMethodId,
+    });
     return data;
   } catch (e) {
     console.error(e);
@@ -109,7 +111,6 @@ export const fetchRides = async ({
   });
   return data;
 };
-
 
 export const getLocationTimezone = async (lat, lng) => {
   const { data } = await network.get('/api/v1/timezone', {

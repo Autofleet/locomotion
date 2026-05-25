@@ -88,6 +88,7 @@ const FutureRidesView = ({ menuSide }: FutureRidesViewProps) => {
               const service = services.find(s => s.id === fRide.serviceId);
               return (
                 <RideCard
+                  key={fRide.id}
                   ride={fRide}
                   onPress={() => onPressCancel(fRide?.id)}
                   serviceName={service?.displayName}

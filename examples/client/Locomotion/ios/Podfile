@@ -5,10 +5,9 @@ require Pod::Executable.execute_command('node', ['-p',
     {paths: [process.argv[1]]},
   )', __dir__]).strip
 
-require_relative '../node_modules/@react-native-community/cli-platform-ios/native_modules'
 # $RNFirebaseAsStaticFramework = true
 
-platform :ios, '13.4'
+platform :ios, min_ios_version_supported
 prepare_react_native_project!
 
 linkage = ENV['USE_FRAMEWORKS']
@@ -32,7 +31,6 @@ target 'Locomotion' do
 
   pod 'react-native-restart', :path => '../node_modules/react-native-restart'
 
-  pod 'RNExitApp', :path => '../node_modules/react-native-exit-app'
 
   target 'LocomotionTests' do
     inherit! :complete
@@ -42,8 +40,8 @@ target 'Locomotion' do
   # use_frameworks!
 
   pod 'FirebaseCoreInternal', :modular_headers => true
-  pod 'FirebaseCrashlytics', '10.29.0', :modular_headers => true
-  pod 'FirebaseSessions', '10.29.0', :modular_headers => true
+  pod 'FirebaseCrashlytics', :modular_headers => true
+  pod 'FirebaseSessions', :modular_headers => true
   pod 'Firebase', :modular_headers => true
   pod 'GoogleUtilities', :modular_headers => true
   pod 'FirebaseCore', :modular_headers => true
@@ -53,22 +51,6 @@ target 'Locomotion' do
   pod 'nanopb', :modular_headers => true
 
   post_install do |installer|
-    # Bitcode stripping for Hermes
-    bitcode_strip_path = `xcrun --find bitcode_strip`.chop!
-    hermes_framework_paths = [
-      "Pods/hermes-engine/destroot/Library/Frameworks/universal/hermes.xcframework/ios-arm64/hermes.framework/hermes",
-      "Pods/hermes-engine/destroot/Library/Frameworks/universal/hermes.xcframework/ios-arm64_x86_64-simulator/hermes.framework/hermes"
-    ]
-    
-    hermes_framework_paths.each do |framework_path|
-      full_path = File.join(Dir.pwd, framework_path)
-      if File.exist?(full_path)
-        strip_command = "#{bitcode_strip_path} #{full_path} -r -o #{full_path}"
-        puts "Stripping bitcode: #{strip_command}"
-        system(strip_command)
-      end
-    end
-    
     # https://github.com/facebook/react-native/blob/main/packages/react-native/scripts/react_native_pods.rb#L197-L202
     react_native_post_install(
       installer,
@@ -78,20 +60,44 @@ target 'Locomotion' do
     )
     installer.pods_project.targets.each do |target|
       target.build_configurations.each do |config|
-        # Explicitly disable Bitcode for all targets
-        config.build_settings['ENABLE_BITCODE'] = 'NO'
-        config.build_settings['GCC_PREPROCESSOR_DEFINITIONS'] ||= ['$(inherited)', '_LIBCPP_ENABLE_CXX17_REMOVED_UNARY_BINARY_FUNCTION']
-      end
-      if target.respond_to?(:product_type) and target.product_type == "com.apple.product-type.bundle"
-        target.build_configurations.each do |config|
-            config.build_settings['CODE_SIGNING_ALLOWED'] = 'NO'
+        if target.respond_to?(:product_type) and target.product_type == "com.apple.product-type.bundle"
+          config.build_settings['CODE_SIGNING_ALLOWED'] = 'NO'
+        end
+        # Ensure no pod drops below the app's minimum deployment target
+        if config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'].to_f < 13.0
+          config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '13.0'
         end
       end
-      if target.to_s === 'React-Codegen'
-        puts 'Updating React-Codegen to have the min SWIFT_VERSION & ios deployment target'
+      target.build_configurations.each do |config|
+        cxx = config.build_settings['CLANG_CXX_LANGUAGE_STANDARD']
+        config.build_settings['CLANG_CXX_LANGUAGE_STANDARD'] = 'c++17' unless %w[c++17 gnu++17 c++20 gnu++20].include?(cxx)
+      end
+      if target.name == 'fmt'
         target.build_configurations.each do |config|
-          config.build_settings['SWIFT_VERSION'] = '5.0'
-          config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '12.4'
+          config.build_settings['CLANG_CXX_LANGUAGE_STANDARD'] = 'c++17'
+        end
+      end
+    end
+
+    if ENV['CI'] || ENV['BITRISE_BUILD_NUMBER'] || ENV['GITHUB_ACTIONS']
+      installer.pods_project.targets.each do |target|
+        target.build_configurations.each do |config|
+          existing_cflags = config.build_settings['OTHER_CFLAGS']
+          cflags = existing_cflags.nil? || existing_cflags.to_s.empty? ? '$(inherited)' : existing_cflags
+          unless cflags.to_s.include?('-Wno-incompatible-pointer-types')
+            extra = '-Wno-incompatible-pointer-types'
+            config.build_settings['OTHER_CFLAGS'] = cflags.is_a?(Array) ? (cflags + [extra]) : "#{cflags} #{extra}"
+          end
+
+          config.build_settings['SWIFT_VERSION'] = '5'
+
+          config.build_settings['TOOLCHAINS'] = 'com.apple.dt.toolchain.XcodeDefault'
+          existing_ldflags = config.build_settings['OTHER_LDFLAGS']
+          ldflags = existing_ldflags.nil? || existing_ldflags.to_s.empty? ? '$(inherited)' : existing_ldflags
+          unless ldflags.to_s.include?('DT_TOOLCHAIN_DIR')
+            extra = '-L$(DT_TOOLCHAIN_DIR)/usr/lib/swift/$(PLATFORM_NAME)'
+            config.build_settings['OTHER_LDFLAGS'] = ldflags.is_a?(Array) ? (ldflags + [extra]) : "#{ldflags} #{extra}"
+          end
         end
       end
     end

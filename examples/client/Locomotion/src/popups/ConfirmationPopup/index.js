@@ -1,6 +1,6 @@
 import React from 'react';
-import Modal from 'react-native-modal';
 import propsTypes from 'prop-types';
+import Modal from '../../Components/CompatModal';
 import {
   PopupContainer,
   SummaryTitle,

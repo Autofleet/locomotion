@@ -42,7 +42,7 @@ const Star = ({
 
 const StarRating = ({ rating, updateRating = newRating => null, size = 16 }) => (
   <SummaryStars>
-    {NUM_OF_STARS.map(num => <Star num={num} size={size} isOn={rating >= num} onPress={() => updateRating(num)} />)}
+    {NUM_OF_STARS.map(num => <Star key={num} num={num} size={size} isOn={rating >= num} onPress={() => updateRating(num)} />)}
   </SummaryStars>
 );
 
