@@ -13,6 +13,7 @@ import {
   Line,
   InnerContainer,
   PriceText,
+  RoundedNoteText,
 } from './styled';
 import { COUPON_TYPE } from '../../lib/commonTypes';
 import SettingContext from '../../context/settings';
@@ -63,6 +64,7 @@ const PriceBreakdown = ({
   const { showPrice, loadShowPrice } = SettingContext.useContainer();
   const [priceCalculationItems, setPriceCalculationItems] = useState<any[]>();
   const [total, setTotal] = useState<null | string>(null);
+  const [isRounded, setIsRounded] = useState<boolean>(false);
 
   const getPriceWithCurrency = (amount: number) => `${getCurrencySymbol(priceCalculation.currency)}${amount.toFixed(2)}`;
 
@@ -74,7 +76,7 @@ const PriceBreakdown = ({
     }),
     duration: (price: string) => i18n.t('ridePriceBreakdown.perUnit', { unit: 'minute', price }),
   };
-
+  console.log('priceCalculation', priceCalculation);
   const loadPriceCalculationBreakdown = async () => {
     let totalPrice = 0;
     const items: any[] = [];
@@ -111,7 +113,13 @@ const PriceBreakdown = ({
       });
     });
 
-    setTotal(getFormattedPrice(priceCalculation.currency, totalPrice));
+    const authoritativeTotal = typeof priceCalculation.totalPrice === 'number'
+      ? priceCalculation.totalPrice
+      : totalPrice;
+    const formattedAuthoritative = getFormattedPrice(priceCalculation.currency, authoritativeTotal);
+    const formattedSum = getFormattedPrice(priceCalculation.currency, totalPrice);
+    setIsRounded(formattedSum !== formattedAuthoritative);
+    setTotal(formattedAuthoritative);
     setPriceCalculationItems(items);
   };
   useEffect(() => {
@@ -154,6 +162,11 @@ const PriceBreakdown = ({
                 <PriceBreakdownSkeleton />
               )}
             </Row>
+            {isRounded && priceCalculationItems && showPrice && (
+              <RoundedNoteText testID="roundedFareNote">
+                {`${i18n.t('ridePriceBreakdown.roundedFareNote')}`}
+              </RoundedNoteText>
+            )}
           </InnerContainer>
           <Line />
         </>

@@ -378,6 +378,7 @@
         "errorText": "Oups, on dirait que quelque chose n'a pas fonctionné",
         "errorButtonText": "Obtenir les détails des tarifs",
         "total": "Total",
+        "roundedFareNote": "Le tarif a été arrondi",
         "couponName": "Réduction",
         "estimatedText": "Les tarifs ci-dessous sont des estimations et seront mis à jour une fois le trajet terminé en fonction des conditions réelles du trajet.",
         "pageTitle": "Échec du paiement",
