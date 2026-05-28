@@ -367,7 +367,7 @@ const RidePage = ({ mapSettings, navigation }) => {
       };
       const backHandler = BackHandler.addEventListener('hardwareBackPress', onBackPress);
 
-      if (currentBsPage !== BS_PAGES.SERVICE_ESTIMATIONS) {
+      if (currentBsPage !== BS_PAGES.SERVICE_ESTIMATIONS && currentBsPage !== BS_PAGES.CONFIRM_PICKUP) {
         focusCurrentLocation();
       }
 
