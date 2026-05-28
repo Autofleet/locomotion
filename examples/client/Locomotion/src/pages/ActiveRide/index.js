@@ -85,6 +85,7 @@ const RidePage = ({ mapSettings, navigation }) => {
   const { getSettingByKey } = settings.useContainer();
 
   const mapRef = useRef();
+  const prevBsPageRef = useRef(null);
   const bottomSheetRef = useRef(null);
 
   const {
@@ -367,7 +368,12 @@ const RidePage = ({ mapSettings, navigation }) => {
       };
       const backHandler = BackHandler.addEventListener('hardwareBackPress', onBackPress);
 
-      if (currentBsPage !== BS_PAGES.SERVICE_ESTIMATIONS && currentBsPage !== BS_PAGES.CONFIRM_PICKUP) {
+      const comingFromLocationPicker = prevBsPageRef.current === BS_PAGES.SET_LOCATION_ON_MAP;
+      prevBsPageRef.current = currentBsPage;
+
+      if (currentBsPage !== BS_PAGES.SERVICE_ESTIMATIONS
+        && currentBsPage !== BS_PAGES.CONFIRM_PICKUP
+        && !comingFromLocationPicker) {
         focusCurrentLocation();
       }
 
