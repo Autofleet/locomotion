@@ -373,7 +373,6 @@
         "errorText": "Ups, parece que algo salió mal",
         "errorButtonText": "Obtener detalles de la tarifa",
         "total": "Total",
-        "roundedFareNote": "La tarifa ha sido redondeada",
         "couponName": "Descuento",
         "estimatedText": "Las tarifas a continuación son estimaciones y se actualizarán una vez que se complete el viaje en función de las condiciones reales del viaje.",
         "pageTitle": "Desglose de pagos",

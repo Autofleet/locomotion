@@ -76,7 +76,7 @@ const PriceBreakdown = ({
     }),
     duration: (price: string) => i18n.t('ridePriceBreakdown.perUnit', { unit: 'minute', price }),
   };
-  console.log('priceCalculation', priceCalculation);
+
   const loadPriceCalculationBreakdown = async () => {
     let totalPrice = 0;
     const items: any[] = [];
