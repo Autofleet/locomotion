@@ -19,6 +19,7 @@ import AvailabilityVehicle from '../../Components/AvailabilityVehicle';
 import StationsMap from '../../Components/Marker';
 import { BS_PAGES } from '../../context/ridePageStateContext/utils';
 import { RIDE_STATES, STOP_POINT_STATES } from '../../lib/commonTypes';
+import { beginProgrammaticAnimation } from './mapAnimationState';
 import PrecedingStopPointMarker from '../../Components/PrecedingStopPointMarker';
 import { decodePolyline, getPolylineList, getVehicleLocation } from '../../lib/polyline/utils';
 import { BottomSheetContext } from '../../context/bottomSheetContext';
@@ -134,6 +135,8 @@ export default React.forwardRef(({
   });
 
   const focusMapToCoordinates = (coords, animated, padding = {}) => {
+    if (!ref.current) return;
+    if (animated) beginProgrammaticAnimation(600);
     ref.current.fitToCoordinates(coords, {
       animated,
       edgePadding: padding,
@@ -204,7 +207,8 @@ export default React.forwardRef(({
   useEffect(() => {
     if (currentBsPage === BS_PAGES.CONFIRM_PICKUP) {
       const [pickupStopPoint] = requestStopPoints;
-      if (pickupStopPoint) {
+      if (pickupStopPoint && ref.current) {
+        beginProgrammaticAnimation(300);
         ref.current.animateToRegion({
           latitude: parseFloat(pickupStopPoint.lat),
           longitude: parseFloat(pickupStopPoint.lng),
@@ -223,6 +227,8 @@ export default React.forwardRef(({
       const focusCurrentLocation = async () => {
         const location = await getPosition();
         const { coords } = (location || DEFAULT_COORDS);
+        if (!ref.current) return;
+        beginProgrammaticAnimation(300);
         ref.current.animateToRegion({
           latitude: parseFloat(coords.latitude),
           longitude: parseFloat(coords.longitude),
