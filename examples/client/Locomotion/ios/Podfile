@@ -63,9 +63,13 @@ target 'Locomotion' do
         if target.respond_to?(:product_type) and target.product_type == "com.apple.product-type.bundle"
           config.build_settings['CODE_SIGNING_ALLOWED'] = 'NO'
         end
-        # Ensure no pod drops below the app's minimum deployment target
-        if config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'].to_f < 13.0
-          config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '13.0'
+        # Ensure no pod drops below the app's minimum deployment target.
+        # 15.6 avoids the Swift back-deployment shims (swiftCompatibility*,
+        # swiftCompatibilityConcurrency) that the newer Xcode toolchain no
+        # longer ships, and clears the hermes "built for newer version 13.4"
+        # link mismatch.
+        if config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'].to_f < 15.6
+          config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '15.6'
         end
       end
       target.build_configurations.each do |config|
