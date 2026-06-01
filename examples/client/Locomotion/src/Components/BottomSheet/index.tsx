@@ -6,6 +6,7 @@ import React, {
 import BottomSheet, {
   BottomSheetFooter,
   BottomSheetHandle,
+  BottomSheetView,
 } from '@gorhom/bottom-sheet';
 import styled from 'styled-components';
 import { Text, View } from 'react-native';
@@ -99,6 +100,7 @@ const BottomSheetComponent = forwardRef(({
       keyboardBehavior={keyboardBehavior}
       keyboardBlurBehavior={keyboardBlurBehavior}
       ref={ref}
+      enableDynamicSizing={false}
       snapPoints={snapPoints}
       onAnimate={onAnimate}
       onClose={onClose}
@@ -121,14 +123,16 @@ const BottomSheetComponent = forwardRef(({
         borderRadius: 8,
       }}
     >
-      <SafeView
-        style={{
-          flex: 1,
-          flexDirection: 'column',
-        }}
-      >
-        {children}
-      </SafeView>
+      <BottomSheetView style={{ flex: 1 }}>
+        <SafeView
+          style={{
+            flex: 1,
+            flexDirection: 'column',
+          }}
+        >
+          {children}
+        </SafeView>
+      </BottomSheetView>
 
     </BottomSheet>
   );
