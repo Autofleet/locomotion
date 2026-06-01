@@ -5,7 +5,7 @@ export const createServiceEstimations = async (stopPoints, scheduledTo, business
     const { data } = await network.post('api/v1/services/service-estimations', { stopPoints, scheduledTo, businessAccountId });
     return data;
   } catch (e) {
-    console.error(e);
+    console.error(e?.message || String(e));
     throw e;
   }
 };
@@ -15,7 +15,7 @@ export const getServices = async () => {
     const { data } = await network.get('api/v1/services');
     return data;
   } catch (e) {
-    console.error(e);
+    console.error(e?.message || String(e));
     throw e;
   }
 };
@@ -25,7 +25,7 @@ export const getService = async (serviceId) => {
     const { data } = await network.get(`api/v1/services/${serviceId}`);
     return data;
   } catch (e) {
-    console.error(e);
+    console.error(e?.message || String(e));
     throw e;
   }
 };
@@ -40,7 +40,7 @@ export const patchRide = async (rideId, newData) => {
     const { data } = await network.patch(`api/v1/rides/${rideId}`, newData);
     return data;
   } catch (e) {
-    console.error(e);
+    console.error(e?.message || String(e));
     throw e;
   }
 };
