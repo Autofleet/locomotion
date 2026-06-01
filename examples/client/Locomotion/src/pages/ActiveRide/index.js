@@ -45,6 +45,7 @@ import {
 } from './styled';
 import Header from '../../Components/Header';
 import MainMap, { ACTIVE_RIDE_MAP_PADDING } from './newMap';
+import { beginProgrammaticAnimation, isProgrammaticAnimationInFlight } from './mapAnimationState';
 import AvailabilityContextProvider from '../../context/availability';
 import BottomSheet from '../../Components/BottomSheet';
 import RideOptions from './RideDrawer/RideOptions';
@@ -86,6 +87,10 @@ const RidePage = ({ mapSettings, navigation }) => {
 
   const mapRef = useRef();
   const bottomSheetRef = useRef(null);
+  const isMountedRef = useRef(true);
+  const geocodeRequestIdRef = useRef(0);
+
+  useEffect(() => () => { isMountedRef.current = false; }, []);
 
   const {
     currentBsPage, changeBsPage, setIsDraggingLocationPin, isDraggingLocationPin,
@@ -258,6 +263,13 @@ const RidePage = ({ mapSettings, navigation }) => {
     [BS_PAGES.SET_LOCATION_ON_MAP]: () => (
       <ConfirmPickup onButtonPress={(sp) => {
         updateRequestSp(sp, selectedInputIndex);
+        // changeBsPage sets isExpanded=false + correct ADDRESS_SELECTOR snap
+        // points. We immediately override isExpanded back to true so the
+        // useEffect([isExpanded]) fires and expands to full screen, and so
+        // onSearchFocus doesn't see isExpanded=false and call initSps()
+        // (which would reset the pickup we just set).
+        changeBsPage(BS_PAGES.ADDRESS_SELECTOR);
+        setIsExpanded(true);
       }}
       />
     ),
@@ -282,7 +294,14 @@ const RidePage = ({ mapSettings, navigation }) => {
     [BS_PAGES.ACTIVE_RIDE]: () => <ActiveRide />,
   };
   const updateLocationOnMapData = async (lat, lng) => {
+    // Bump the request ID so stale in-flight geocodes are discarded when
+    // the user drags again before the previous one resolves.
+    geocodeRequestIdRef.current += 1;
+    const requestId = geocodeRequestIdRef.current;
+
     const spData = await reverseLocationGeocode(lat, lng);
+    if (!isMountedRef.current) return;
+    if (requestId !== geocodeRequestIdRef.current) return;
     if (spData) {
       saveSelectedLocation(spData);
       setPickupChanged(true);
@@ -295,6 +314,10 @@ const RidePage = ({ mapSettings, navigation }) => {
       });
     }
   };
+  // Focus-only. Does NOT reverse-geocode and does NOT save a selected location —
+  // those side effects used to live here and caused address overwrites whenever
+  // this fired (which was on every bottom-sheet page change). Address updates
+  // are now driven only by explicit user drag in onRegionChangeComplete.
   const focusCurrentLocation = async () => {
     let coords;
     if ([RIDE_STATES.ACTIVE, RIDE_STATES.DISPATCHED].includes(ride.state)) {
@@ -302,10 +325,13 @@ const RidePage = ({ mapSettings, navigation }) => {
         .find(sp => sp.state === STOP_POINT_STATES.PENDING);
       if (currentStopPoint) {
         coords = getPolylineList(currentStopPoint, ride);
-        mapRef.current.fitToCoordinates(coords, {
-          animated: true,
-          edgePadding: ACTIVE_RIDE_MAP_PADDING,
-        });
+        if (mapRef.current) {
+          beginProgrammaticAnimation(500);
+          mapRef.current.fitToCoordinates(coords, {
+            animated: true,
+            edgePadding: ACTIVE_RIDE_MAP_PADDING,
+          });
+        }
       }
     } else {
       let deltas = {
@@ -320,14 +346,17 @@ const RidePage = ({ mapSettings, navigation }) => {
       }
       setIsDraggingLocationPin(true);
       const location = await getPosition();
+      if (!isMountedRef.current) return undefined;
       ({ coords } = (location || DEFAULT_COORDS));
       const animateTime = 1000;
-      mapRef.current.animateToRegion({
-        latitude: parseFloat(coords.latitude),
-        longitude: parseFloat(coords.longitude),
-        ...deltas,
-      }, animateTime);
-      await updateLocationOnMapData(coords.latitude, coords.longitude);
+      if (mapRef.current) {
+        beginProgrammaticAnimation(animateTime);
+        mapRef.current.animateToRegion({
+          latitude: parseFloat(coords.latitude),
+          longitude: parseFloat(coords.longitude),
+          ...deltas,
+        }, animateTime);
+      }
     }
     return coords;
   };
@@ -355,6 +384,11 @@ const RidePage = ({ mapSettings, navigation }) => {
     loadCustomer();
   }, []);
 
+  // Intentionally does NOT call focusCurrentLocation on every bs-page change.
+  // That used to live here and was the root cause of AF-8509 / AF-8657: it
+  // animated the map + reverse-geocoded + overwrote the user's pickup on every
+  // navigation between bottom-sheet pages. Auto-center now only happens on
+  // explicit user intent: initial mount, backToMap, or target-icon press.
   useFocusEffect(
     React.useCallback(() => {
       const onBackPress = () => {
@@ -366,13 +400,8 @@ const RidePage = ({ mapSettings, navigation }) => {
         return false;
       };
       const backHandler = BackHandler.addEventListener('hardwareBackPress', onBackPress);
-
-      if (currentBsPage !== BS_PAGES.SERVICE_ESTIMATIONS && currentBsPage !== BS_PAGES.CONFIRM_PICKUP) {
-        focusCurrentLocation();
-      }
-
       return () => backHandler.remove();
-    }, [serviceEstimations, currentBsPage]),
+    }, [serviceEstimations]),
   );
 
   const versionCheck = async () => {
@@ -482,21 +511,39 @@ const RidePage = ({ mapSettings, navigation }) => {
 
 
   const onRegionChangeComplete = async (event) => {
-    if (isChooseLocationOnMap) {
-      const { latitude, longitude } = event;
-      const lat = latitude.toFixed(6);
-      const lng = longitude.toFixed(6);
-      const [pickup] = requestStopPoints;
-      const finalStopPoint = lastSelectedLocation || pickup;
-      const sourcePoint = point([finalStopPoint.lng, finalStopPoint.lat]);
-      const destinationPoint = point([lng, lat]);
-      const changeDistance = distance(sourcePoint, destinationPoint, { units: 'meters' });
-      if (changeDistance < 5 && networkInfo.isConnectionAvailable()) {
-        setIsDraggingLocationPin(false);
-        return;
-      }
-      await updateLocationOnMapData(lat, lng);
+    if (!isChooseLocationOnMap) return;
+    // Programmatic animation (e.g. focus on pickup when entering CONFIRM_PICKUP)
+    // fires this same callback. Don't treat it as a user drag — that's what was
+    // overwriting pickups with GPS coords.
+    // On CONFIRM_PICKUP the map animates to an already-known pickup address.
+    // Suppress geocoding for that programmatic move so we don't re-geocode
+    // something we already have and don't trigger a spurious "Pickup changed" toast.
+    // On SET_LOCATION_ON_MAP the initial animation IS the first geocode trigger,
+    // so we must NOT suppress it there.
+    if (currentBsPage === BS_PAGES.CONFIRM_PICKUP && isProgrammaticAnimationInFlight()) {
+      setIsDraggingLocationPin(false);
+      return;
     }
+    const { latitude, longitude } = event;
+    const lat = latitude.toFixed(6);
+    const lng = longitude.toFixed(6);
+    const [pickup] = requestStopPoints;
+    const finalStopPoint = lastSelectedLocation || pickup;
+    // No reference point yet — let setInitialLocation (in ConfirmPickup) handle
+    // the initial address. Don't call updateLocationOnMapData here or it will
+    // bump geocodeRequestIdRef and potentially race with setInitialLocation.
+    if (!finalStopPoint || !finalStopPoint.lat || !finalStopPoint.lng) {
+      setIsDraggingLocationPin(false);
+      return;
+    }
+    const sourcePoint = point([finalStopPoint.lng, finalStopPoint.lat]);
+    const destinationPoint = point([lng, lat]);
+    const changeDistance = distance(sourcePoint, destinationPoint, { units: 'meters' });
+    if (changeDistance < 5 && networkInfo.isConnectionAvailable()) {
+      setIsDraggingLocationPin(false);
+      return;
+    }
+    await updateLocationOnMapData(lat, lng);
   };
   return (
     <PageContainer>
