@@ -106,3 +106,14 @@ diff --git a/node_modules/react-native-maps/android/src/main/java/com/rnmaps/map
              this.mapLoadingLayout = null;
          }
      }
+diff --git a/node_modules/react-native-maps/ios/AirMaps/RNMapsAirModule.mm b/node_modules/react-native-maps/ios/AirMaps/RNMapsAirModule.mm
+index f238f63..496e62e 100644
+--- a/node_modules/react-native-maps/ios/AirMaps/RNMapsAirModule.mm
++++ b/node_modules/react-native-maps/ios/AirMaps/RNMapsAirModule.mm
+@@ -153,7 +153,7 @@ - (void)getCoordinateForPoint:(double)tag
+ }
+
+ + (NSString *)moduleName {
+-    return nil;
++    return @"RNMapsAirModule";
+ }
