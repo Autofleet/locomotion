@@ -22,11 +22,16 @@ const getIsoCodeByList = (mccMnc, mobileIso) => {
   return result && result[0]?.countryCode;
 };
 
+const withTimeout = (promise, ms) => Promise.race([
+  promise,
+  new Promise((_, reject) => setTimeout(() => reject(new Error('timeout')), ms)),
+]);
+
 export const getInputIsoCode = async () => {
   try {
     const [mmcMnc, mobileIso] = await Promise.all([
-      getMccMnc(),
-      getMobileIsoCode(),
+      withTimeout(getMccMnc(), 3000),
+      withTimeout(getMobileIsoCode(), 3000),
     ]);
 
     const IsoByMncMcc = mmcMnc ? getIsoCodeByList(mmcMnc, mobileIso) : null;

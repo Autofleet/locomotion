@@ -18,7 +18,9 @@ const PhoneNumberInput = ({
   value,
 }: any) => {
   const [isFocused, setIsFocused] = useState(false);
-  const [defaultCode, setDefaultCode] = useState<SupportIsoCode | null>(null);
+  const [defaultCode, setDefaultCode] = useState<SupportIsoCode | null>(
+    (Config.DEFAULT_COUNTRY_CODE as SupportIsoCode) || ('IL' as SupportIsoCode),
+  );
   const theme = useContext(ThemeContext);
   const asYouTypePhoneNumber = new AsYouType();
 
