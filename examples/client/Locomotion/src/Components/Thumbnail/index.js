@@ -1,6 +1,5 @@
 import React, { useContext } from 'react';
 import { Image, StyleSheet } from 'react-native';
-import FastImage from 'react-native-fast-image';
 import propsTypes from 'prop-types';
 import styled from 'styled-components';
 import Button from '../Button';
@@ -55,7 +54,7 @@ const myThumbnail = (props) => {
   defaultStyles.linearGradient.height = props.size;
   defaultStyles.linearGradient = Object.assign(defaultStyles.linearGradient);
   const styles = StyleSheet.create(defaultStyles);
-  const ImageComponent = props.source && props.source.substring(0, 4) === 'http' ? FastImage : Image;
+  const ImageComponent = Image;
   const borderRadius = { borderRadius: props.size };
   const borderRadiusSmall = { borderRadius: (props.size - 10) / 2 };
   return (
