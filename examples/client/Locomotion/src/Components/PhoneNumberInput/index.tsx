@@ -82,6 +82,11 @@ const PhoneNumberInput = ({
       }}
       containerStyle={{
         width: '100%',
+        // New Architecture (Fabric/Yoga): the library's internal flagButtonView
+        // uses height: '100%', which resolves to 0 against an indefinite parent
+        // height — collapsing the whole input. An explicit height makes the
+        // percentage children resolve correctly.
+        height: 56,
       }}
       placeholder={i18n.t('onboarding.pages.phone.placeholder')}
       textContainerStyle={{
@@ -89,6 +94,7 @@ const PhoneNumberInput = ({
         backgroundColor: '#f1f2f6',
         borderWidth: isFocused ? 0.5 : 0,
         borderColor: error ? ERROR_COLOR : '#333333',
+        paddingVertical: 0,
       }}
       textInputStyle={{
         color: error ? ERROR_COLOR : '#333333',
