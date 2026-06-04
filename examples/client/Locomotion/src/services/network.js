@@ -27,12 +27,15 @@ const formatResponseLog = function ({ data = '' }) {
 class Network {
   static defaultSettings = {
     baseURL: '/',
-    timeout: 2500,
+    // Generous cap so a stalled request can't hang the UI forever (e.g. the
+    // login spinner). Previously a bug created the client from the empty
+    // constructor arg, so NO timeout was ever applied.
+    timeout: 30000,
   };
 
   constructor(settings = {}) {
-    this.settings = Object.assign(Network.defaultSettings, settings);
-    this.axios = axios.create(settings);
+    this.settings = { ...Network.defaultSettings, ...settings };
+    this.axios = axios.create(this.settings);
     this.axios.interceptors.request.use((request) => {
       try {
         // Mixpanel.setEvent('Network request', { method: request.method, endpoint: request.url, params: request.params });
