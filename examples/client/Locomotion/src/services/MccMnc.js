@@ -16,16 +16,19 @@ const getMobileIsoCode = async () => {
 const getIsoCodeByList = (mccMnc, mobileIso) => {
   const result = MccMncList.filter({ mccmnc: mccMnc });
   if (result.length > 1) {
-    const accurateResult = result.find(r => r.countryCode === (mobileIso || defaultCountryCode));
+    const accurateResult = result.find((r) => r.countryCode === (mobileIso || defaultCountryCode));
     return accurateResult?.countryCode;
   }
   return result && result[0]?.countryCode;
 };
 
-const withTimeout = (promise, ms) => Promise.race([
-  promise,
-  new Promise((_, reject) => setTimeout(() => reject(new Error('timeout')), ms)),
-]);
+const withTimeout = (promise, ms) => {
+  let timer;
+  const timeout = new Promise((_, reject) => {
+    timer = setTimeout(() => reject(new Error('timeout')), ms);
+  });
+  return Promise.race([promise, timeout]).finally(() => clearTimeout(timer));
+};
 
 export const getInputIsoCode = async () => {
   try {

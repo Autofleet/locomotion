@@ -54,7 +54,6 @@ const myThumbnail = (props) => {
   defaultStyles.linearGradient.height = props.size;
   defaultStyles.linearGradient = Object.assign(defaultStyles.linearGradient);
   const styles = StyleSheet.create(defaultStyles);
-  const ImageComponent = Image;
   const borderRadius = { borderRadius: props.size };
   const borderRadiusSmall = { borderRadius: (props.size - 10) / 2 };
   return (
@@ -72,7 +71,7 @@ const myThumbnail = (props) => {
             }}
           />
         ) : (
-          <ImageComponent
+          <Image
             style={[styles.image, borderRadiusSmall]}
             source={props.source ? { uri: props.source } : avatarIcon}
           />
