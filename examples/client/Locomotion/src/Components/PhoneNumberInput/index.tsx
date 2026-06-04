@@ -13,7 +13,6 @@ const ALL_SUPPORTED_ISO_CODES_FROM_LIB: SupportIsoCode[] = [];
 
 const PhoneNumberInput = ({
   onPhoneNumberChange,
-  autoFocus,
   error,
   value,
 }: any) => {
@@ -53,7 +52,7 @@ const PhoneNumberInput = ({
     if (!number) {
       return '';
     }
-    const numberCode = codes.find(c => c.code === defaultCode)?.dialCode;
+    const numberCode = codes.find((c) => c.code === defaultCode)?.dialCode;
     if (numberCode && number.startsWith(numberCode)) {
       return number.replace(numberCode, '');
     }
@@ -68,7 +67,10 @@ const PhoneNumberInput = ({
     <PhoneInput
       key={defaultCode}
       value={cleanNumber(value)}
-      autoFocus={autoFocus}
+      // IMPORTANT: do NOT enable `autoFocus`. On iOS + New Architecture (Fabric),
+      // focusing this library's TextInput during mount deadlocks the JS thread and
+      // freezes the whole app on the phone screen. The user taps the field to type.
+      autoFocus={false}
       defaultCode={defaultCode}
       onChangeFormattedText={onChangeText}
       textInputProps={{
