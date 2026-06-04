@@ -90,6 +90,13 @@ android {
             keyPassword properties.getProperty('keyPassword')
         }
     }
+    lint {
+        // AGP 8.6 + Stripe SDK causes an IncompatibleClassChangeError in the Lint
+        // UAST visitor during lintVitalAnalyzeRelease. Skip the fatal-lint check;
+        // regular ./gradlew lint still runs for development checks.
+        checkReleaseBuilds false
+    }
+
     buildTypes {
         debug {
             signingConfig signingConfigs.debug
