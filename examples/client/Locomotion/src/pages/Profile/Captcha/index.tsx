@@ -16,6 +16,10 @@ interface CaptchaProps {
 }
 
 const GOOGLE_RECAPTCHA_URL = 'https://www.google.com/recaptcha/api/siteverify';
+// Max time to wait for the reCAPTCHA WebView to report a result before falling
+// back to the error path (prevents an indefinite spinner). Kept generous so a
+// human solving a slow image challenge isn't aborted mid-solve.
+const CAPTCHA_WATCHDOG_MS = 30000;
 
 const Captcha = ({
   onVerified,
@@ -26,44 +30,112 @@ const Captcha = ({
   const { shouldHideCaptcha, fetchHideCaptchaSetting } = useContext(OnboardingContext);
   const { user } = useContext(UserContext);
   const recaptchaRef = useRef<RecaptchaHandles | null>(null);
+  const watchdogRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  // true once onVerify or onError has fired — prevents a deferred close from
+  // overriding a verify/error outcome.
+  const verifiedRef = useRef(false);
+  // The library calls onClose synchronously BEFORE onVerify/onError in the same
+  // handleMessage call. We defer the close action by one tick so onVerify/onError
+  // can cancel it first, avoiding a race where "closed" always wins.
+  const pendingCloseRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
   const isDevSettingOn = () => Config.DEV_SETTINGS && Config.DEV_SETTINGS === 'true';
   const isDebugPhoneNumber = user?.phoneNumber === Config.DEV_PAGE_PHONE_NUMBER && isDevSettingOn();
 
+  const clearWatchdog = useCallback(() => {
+    if (watchdogRef.current) {
+      clearTimeout(watchdogRef.current);
+      watchdogRef.current = null;
+    }
+  }, []);
+
+  const cancelPendingClose = useCallback(() => {
+    if (pendingCloseRef.current) {
+      clearTimeout(pendingCloseRef.current);
+      pendingCloseRef.current = null;
+    }
+  }, []);
+
   const onVerifyCaptcha = useCallback(async (verifiedCaptchaToken: string) => {
+    // Outcome already decided (e.g. watchdog/error fired first) — ignore a late verify.
+    if (verifiedRef.current) {
+      return;
+    }
+    // Cancel the deferred close — library fires onClose before onVerify.
+    cancelPendingClose();
+    clearWatchdog();
+    verifiedRef.current = true;
     try {
       Mixpanel.setEvent('Captcha Verified successfully', { verifiedCaptchaToken });
       await Auth.updateCaptchaToken(verifiedCaptchaToken);
       onVerified();
     } catch (error) {
-      console.error('Captcha verification failed:', error);
       onError?.();
       Mixpanel.setEvent('Captcha verification error');
     }
-  }, [onVerified, onError]);
+  }, [cancelPendingClose, clearWatchdog, onVerified, onError]);
 
-  const handleClose = () => {
-    Mixpanel.setEvent('Captcha closed');
-    onClose?.();
-  };
+  const handleClose = useCallback(() => {
+    // The library fires onClose synchronously before onVerify/onError. Defer by
+    // one tick; onVerify/onError cancel the pending close if they arrive first.
+    clearWatchdog();
+    cancelPendingClose();
+    pendingCloseRef.current = setTimeout(() => {
+      pendingCloseRef.current = null;
+      if (!verifiedRef.current) {
+        Mixpanel.setEvent('Captcha closed');
+        onClose?.();
+      }
+    }, 0);
+  }, [clearWatchdog, cancelPendingClose, onClose]);
 
-  const handleError = (error: string) => {
+  const handleError = useCallback((error: string) => {
+    // Outcome already decided — ignore a late/duplicate error.
+    if (verifiedRef.current) {
+      return;
+    }
+    cancelPendingClose();
+    clearWatchdog();
+    verifiedRef.current = true;
     Mixpanel.setEvent('Captcha error', error);
     onError?.();
-  };
+  }, [cancelPendingClose, clearWatchdog, onError]);
 
   useEffect(() => {
     fetchHideCaptchaSetting();
   }, []);
 
   useEffect(() => {
-    if (!isOpen) return;
+    if (!isOpen) {
+      clearWatchdog();
+      cancelPendingClose();
+      verifiedRef.current = false;
+      return undefined;
+    }
+
+    verifiedRef.current = false;
 
     if (recaptchaRef.current && Config.CAPTCHA_KEY && !isDebugPhoneNumber && !shouldHideCaptcha) {
       recaptchaRef.current.open();
+      watchdogRef.current = setTimeout(() => {
+        watchdogRef.current = null;
+        cancelPendingClose();
+        if (!verifiedRef.current) {
+          // Mark the outcome as decided so a late onVerify/onError is ignored.
+          verifiedRef.current = true;
+          Mixpanel.setEvent('Captcha watchdog timeout');
+          onError?.();
+        }
+      }, CAPTCHA_WATCHDOG_MS);
     } else {
       Mixpanel.setEvent('Submit phone number, without captcha , (Config.CAPTCHA_KEY is not defined)');
       onVerified();
     }
+
+    return () => {
+      clearWatchdog();
+      cancelPendingClose();
+    };
   }, [isOpen, shouldHideCaptcha, isDebugPhoneNumber]);
 
   if (!Config.CAPTCHA_KEY) {
