@@ -263,11 +263,6 @@ const RidePage = ({ mapSettings, navigation }) => {
     [BS_PAGES.SET_LOCATION_ON_MAP]: () => (
       <ConfirmPickup onButtonPress={(sp) => {
         updateRequestSp(sp, selectedInputIndex);
-        // changeBsPage sets isExpanded=false + correct ADDRESS_SELECTOR snap
-        // points. We immediately override isExpanded back to true so the
-        // useEffect([isExpanded]) fires and expands to full screen, and so
-        // onSearchFocus doesn't see isExpanded=false and call initSps()
-        // (which would reset the pickup we just set).
         changeBsPage(BS_PAGES.ADDRESS_SELECTOR);
         setIsExpanded(true);
       }}
@@ -294,8 +289,6 @@ const RidePage = ({ mapSettings, navigation }) => {
     [BS_PAGES.ACTIVE_RIDE]: () => <ActiveRide />,
   };
   const updateLocationOnMapData = async (lat, lng) => {
-    // Bump the request ID so stale in-flight geocodes are discarded when
-    // the user drags again before the previous one resolves.
     geocodeRequestIdRef.current += 1;
     const requestId = geocodeRequestIdRef.current;
 
@@ -314,10 +307,6 @@ const RidePage = ({ mapSettings, navigation }) => {
       });
     }
   };
-  // Focus-only. Does NOT reverse-geocode and does NOT save a selected location —
-  // those side effects used to live here and caused address overwrites whenever
-  // this fired (which was on every bottom-sheet page change). Address updates
-  // are now driven only by explicit user drag in onRegionChangeComplete.
   const focusCurrentLocation = async () => {
     let coords;
     if ([RIDE_STATES.ACTIVE, RIDE_STATES.DISPATCHED].includes(ride.state)) {
@@ -384,11 +373,6 @@ const RidePage = ({ mapSettings, navigation }) => {
     loadCustomer();
   }, []);
 
-  // Intentionally does NOT call focusCurrentLocation on every bs-page change.
-  // That used to live here and was the root cause of AF-8509 / AF-8657: it
-  // animated the map + reverse-geocoded + overwrote the user's pickup on every
-  // navigation between bottom-sheet pages. Auto-center now only happens on
-  // explicit user intent: initial mount, backToMap, or target-icon press.
   useFocusEffect(
     React.useCallback(() => {
       const onBackPress = () => {
@@ -512,14 +496,6 @@ const RidePage = ({ mapSettings, navigation }) => {
 
   const onRegionChangeComplete = async (event) => {
     if (!isChooseLocationOnMap) return;
-    // Programmatic animation (e.g. focus on pickup when entering CONFIRM_PICKUP)
-    // fires this same callback. Don't treat it as a user drag — that's what was
-    // overwriting pickups with GPS coords.
-    // On CONFIRM_PICKUP the map animates to an already-known pickup address.
-    // Suppress geocoding for that programmatic move so we don't re-geocode
-    // something we already have and don't trigger a spurious "Pickup changed" toast.
-    // On SET_LOCATION_ON_MAP the initial animation IS the first geocode trigger,
-    // so we must NOT suppress it there.
     if (currentBsPage === BS_PAGES.CONFIRM_PICKUP && isProgrammaticAnimationInFlight()) {
       setIsDraggingLocationPin(false);
       return;
@@ -529,9 +505,6 @@ const RidePage = ({ mapSettings, navigation }) => {
     const lng = longitude.toFixed(6);
     const [pickup] = requestStopPoints;
     const finalStopPoint = lastSelectedLocation || pickup;
-    // No reference point yet — let setInitialLocation (in ConfirmPickup) handle
-    // the initial address. Don't call updateLocationOnMapData here or it will
-    // bump geocodeRequestIdRef and potentially race with setInitialLocation.
     if (!finalStopPoint || !finalStopPoint.lat || !finalStopPoint.lng) {
       setIsDraggingLocationPin(false);
       return;
