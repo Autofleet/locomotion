@@ -45,6 +45,7 @@ import {
 } from './styled';
 import Header from '../../Components/Header';
 import MainMap, { ACTIVE_RIDE_MAP_PADDING } from './newMap';
+import { beginProgrammaticAnimation, isProgrammaticAnimationInFlight } from './mapAnimationState';
 import AvailabilityContextProvider from '../../context/availability';
 import BottomSheet from '../../Components/BottomSheet';
 import RideOptions from './RideDrawer/RideOptions';
@@ -86,6 +87,10 @@ const RidePage = ({ mapSettings, navigation }) => {
 
   const mapRef = useRef();
   const bottomSheetRef = useRef(null);
+  const isMountedRef = useRef(true);
+  const geocodeRequestIdRef = useRef(0);
+
+  useEffect(() => () => { isMountedRef.current = false; }, []);
 
   const {
     currentBsPage, changeBsPage, setIsDraggingLocationPin, isDraggingLocationPin,
@@ -159,12 +164,12 @@ const RidePage = ({ mapSettings, navigation }) => {
   };
 
   const goBackToAddress = (selectedIndex, expand = true) => {
+    if (expand) {
+      bottomSheetRef.current?.expand();
+    }
     resetStateToAddressSelector(selectedIndex);
     if (expand) {
-      setTimeout(() => {
-        setIsExpanded(true);
-        bottomSheetRef.current.expand();
-      }, 100);
+      setIsExpanded(true);
     }
   };
 
@@ -175,6 +180,7 @@ const RidePage = ({ mapSettings, navigation }) => {
       BS_PAGES.ACTIVE_RIDE,
       BS_PAGES.NO_AVAILABLE_SERVICES,
     ].includes(currentBsPage)) {
+      bottomSheetRef.current?.collapse();
       resetStateToAddressSelector();
       initSps();
     } else if (serviceEstimations || currentBsPage === BS_PAGES.CONFIRM_PICKUP_TIME) {
@@ -257,6 +263,8 @@ const RidePage = ({ mapSettings, navigation }) => {
     [BS_PAGES.SET_LOCATION_ON_MAP]: () => (
       <ConfirmPickup onButtonPress={(sp) => {
         updateRequestSp(sp, selectedInputIndex);
+        changeBsPage(BS_PAGES.ADDRESS_SELECTOR);
+        setIsExpanded(true);
       }}
       />
     ),
@@ -281,7 +289,12 @@ const RidePage = ({ mapSettings, navigation }) => {
     [BS_PAGES.ACTIVE_RIDE]: () => <ActiveRide />,
   };
   const updateLocationOnMapData = async (lat, lng) => {
+    geocodeRequestIdRef.current += 1;
+    const requestId = geocodeRequestIdRef.current;
+
     const spData = await reverseLocationGeocode(lat, lng);
+    if (!isMountedRef.current) return;
+    if (requestId !== geocodeRequestIdRef.current) return;
     if (spData) {
       saveSelectedLocation(spData);
       setPickupChanged(true);
@@ -301,10 +314,13 @@ const RidePage = ({ mapSettings, navigation }) => {
         .find(sp => sp.state === STOP_POINT_STATES.PENDING);
       if (currentStopPoint) {
         coords = getPolylineList(currentStopPoint, ride);
-        mapRef.current.fitToCoordinates(coords, {
-          animated: true,
-          edgePadding: ACTIVE_RIDE_MAP_PADDING,
-        });
+        if (mapRef.current) {
+          beginProgrammaticAnimation(500);
+          mapRef.current.fitToCoordinates(coords, {
+            animated: true,
+            edgePadding: ACTIVE_RIDE_MAP_PADDING,
+          });
+        }
       }
     } else {
       let deltas = {
@@ -319,14 +335,17 @@ const RidePage = ({ mapSettings, navigation }) => {
       }
       setIsDraggingLocationPin(true);
       const location = await getPosition();
+      if (!isMountedRef.current) return undefined;
       ({ coords } = (location || DEFAULT_COORDS));
       const animateTime = 1000;
-      mapRef.current.animateToRegion({
-        latitude: parseFloat(coords.latitude),
-        longitude: parseFloat(coords.longitude),
-        ...deltas,
-      }, animateTime);
-      await updateLocationOnMapData(coords.latitude, coords.longitude);
+      if (mapRef.current) {
+        beginProgrammaticAnimation(animateTime);
+        mapRef.current.animateToRegion({
+          latitude: parseFloat(coords.latitude),
+          longitude: parseFloat(coords.longitude),
+          ...deltas,
+        }, animateTime);
+      }
     }
     return coords;
   };
@@ -358,17 +377,13 @@ const RidePage = ({ mapSettings, navigation }) => {
     React.useCallback(() => {
       const onBackPress = () => {
         if (serviceEstimations) {
+          bottomSheetRef.current?.collapse();
           resetStateToAddressSelector();
           return true;
         }
         return false;
       };
       const backHandler = BackHandler.addEventListener('hardwareBackPress', onBackPress);
-
-      if (!currentBsPage === BS_PAGES.SERVICE_ESTIMATIONS) {
-        focusCurrentLocation();
-      }
-
       return () => backHandler.remove();
     }, [serviceEstimations]),
   );
@@ -480,21 +495,28 @@ const RidePage = ({ mapSettings, navigation }) => {
 
 
   const onRegionChangeComplete = async (event) => {
-    if (isChooseLocationOnMap) {
-      const { latitude, longitude } = event;
-      const lat = latitude.toFixed(6);
-      const lng = longitude.toFixed(6);
-      const [pickup] = requestStopPoints;
-      const finalStopPoint = lastSelectedLocation || pickup;
-      const sourcePoint = point([finalStopPoint.lng, finalStopPoint.lat]);
-      const destinationPoint = point([lng, lat]);
-      const changeDistance = distance(sourcePoint, destinationPoint, { units: 'meters' });
-      if (changeDistance < 5 && networkInfo.isConnectionAvailable()) {
-        setIsDraggingLocationPin(false);
-        return;
-      }
-      await updateLocationOnMapData(lat, lng);
+    if (!isChooseLocationOnMap) return;
+    if (currentBsPage === BS_PAGES.CONFIRM_PICKUP && isProgrammaticAnimationInFlight()) {
+      setIsDraggingLocationPin(false);
+      return;
     }
+    const { latitude, longitude } = event;
+    const lat = latitude.toFixed(6);
+    const lng = longitude.toFixed(6);
+    const [pickup] = requestStopPoints;
+    const finalStopPoint = lastSelectedLocation || pickup;
+    if (!finalStopPoint || !finalStopPoint.lat || !finalStopPoint.lng) {
+      setIsDraggingLocationPin(false);
+      return;
+    }
+    const sourcePoint = point([finalStopPoint.lng, finalStopPoint.lat]);
+    const destinationPoint = point([lng, lat]);
+    const changeDistance = distance(sourcePoint, destinationPoint, { units: 'meters' });
+    if (changeDistance < 5 && networkInfo.isConnectionAvailable()) {
+      setIsDraggingLocationPin(false);
+      return;
+    }
+    await updateLocationOnMapData(lat, lng);
   };
   return (
     <PageContainer>
@@ -526,7 +548,7 @@ const RidePage = ({ mapSettings, navigation }) => {
             >
               {currentBsPage !== BS_PAGES.CONFIRM_PICKUP
                 ? <StopPointsViewer goBackToAddressSelector={goBackToAddress} />
-                : <></>}
+                : null}
             </Header>
             {topMessage ? (
               <TopMessage
@@ -579,6 +601,8 @@ const RidePage = ({ mapSettings, navigation }) => {
       <BottomSheet
         ref={bottomSheetRef}
         focusCurrentLocation={focusCurrentLocation}
+        keyboardBehavior={currentBsPage === BS_PAGES.ADDRESS_SELECTOR ? 'extend' : undefined}
+        keyboardBlurBehavior={currentBsPage === BS_PAGES.ADDRESS_SELECTOR ? 'restore' : undefined}
       >
         {
 BS_PAGE_TO_COMP[currentBsPage] ? BS_PAGE_TO_COMP[currentBsPage]() : null

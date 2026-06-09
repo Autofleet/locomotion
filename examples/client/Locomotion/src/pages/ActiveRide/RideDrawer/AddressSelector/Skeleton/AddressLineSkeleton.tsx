@@ -1,23 +1,14 @@
-import { StyleSheet, View } from 'react-native';
+import { View } from 'react-native';
 import { Skeleton } from '../../../../../Components/Skeleton/Skeleton';
+import { ICustomViewStyle } from 'react-native-reanimated-skeleton/lib/typescript/constants';
+
+const LAYOUT: ICustomViewStyle[] = [
+  { width: 180, height: 20, marginBottom: 6 },
+  { width: 220, height: 20 },
+];
 
 export const AddressLineSkeleton = () => (
-  <Skeleton>
-    <View>
-      <View style={styles.label} />
-      <View style={styles.text} />
-    </View>
+  <Skeleton layout={LAYOUT}>
+    <View />
   </Skeleton>
 );
-
-const styles = StyleSheet.create({
-  label: {
-    width: 180,
-    height: 20,
-    marginBottom: 6,
-  },
-  text: {
-    width: 220,
-    height: 20,
-  },
-});

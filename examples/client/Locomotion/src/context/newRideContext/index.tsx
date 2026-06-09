@@ -651,6 +651,8 @@ const RidePageContextProvider = ({ children }: {
     }
     if (!RIDE_FINAL_STATES.includes(rideLoaded?.state || '')) {
       setRide(formattedRide);
+    } else if (ride?.id) {
+      cleanRideState();
     }
   };
 
@@ -700,6 +702,7 @@ const RidePageContextProvider = ({ children }: {
           lng: currentCoords.longitude,
         };
       }
+
       const data = await getGeocode(location);
 
       const { placeId, formattedAddress } = data;
@@ -786,7 +789,7 @@ const RidePageContextProvider = ({ children }: {
   };
 
   useEffect(() => {
-    if (user?.id) {
+    if (user?.id && currentBsPage !== BS_PAGES.ADDRESS_SELECTOR) {
       if (requestStopPoints.filter((sp => sp.lat)).length <= 1) {
         initSps();
       }
@@ -909,10 +912,10 @@ const RidePageContextProvider = ({ children }: {
 
   const getCurrentLocation = async () => {
     const location = await getPosition();
+    if (location === false && !ride?.id) {
+      changeBsPage(BS_PAGES.LOCATION_REQUEST);
+    }
     if (!location) {
-      if (!ride?.id) {
-        changeBsPage(BS_PAGES.LOCATION_REQUEST);
-      }
       return DEFAULT_COORDS.coords;
     }
     return location.coords;

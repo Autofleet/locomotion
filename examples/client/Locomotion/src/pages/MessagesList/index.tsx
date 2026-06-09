@@ -88,6 +88,7 @@ const Messages = ({ menuSide, route }: FutureRidesViewProps) => {
             {userMessages && userMessages.length
               ? (userMessages || []).map(m => (
                 <MessageCard
+                  key={m.id}
                   {...m}
                 />
               ))
