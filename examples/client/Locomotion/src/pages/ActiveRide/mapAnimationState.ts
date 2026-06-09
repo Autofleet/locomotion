@@ -1,10 +1,4 @@
-// Shared, module-level flag so that programmatic map animations from any
-// component can suppress the onRegionChangeComplete handler in RidePage.
-//
-// react-native-maps fires onRegionChangeComplete for BOTH user drags and
-// programmatic animateToRegion/fitToCoordinates calls. Without this flag
-// the drag handler can't tell them apart and reverse-geocodes a region the
-// user never touched, overwriting their pickup.
+// Module-level flag: programmatic map animations suppress RidePage's onRegionChangeComplete drag handler.
 
 let suppressed = false;
 let clearTimer: ReturnType<typeof setTimeout> | null = null;
