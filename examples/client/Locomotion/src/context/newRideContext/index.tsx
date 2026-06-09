@@ -18,7 +18,6 @@ import { getPosition, DEFAULT_COORDS } from '../../services/geo';
 import {
   getPlaces, getGeocode, getPlaceDetails,
 } from './google-api';
-import { getCached, setCached } from './reverseGeocodeCache';
 import StorageService from '../../services/storage';
 import Mixpanel from '../../services/Mixpanel';
 import * as rideApi from './api';
@@ -704,9 +703,6 @@ const RidePageContextProvider = ({ children }: {
         };
       }
 
-      const cached = getCached(location.lat, location.lng);
-      if (cached) return cached;
-
       const data = await getGeocode(location);
 
       const { placeId, formattedAddress } = data;
@@ -718,7 +714,6 @@ const RidePageContextProvider = ({ children }: {
         lng: location.lng,
       };
 
-      setCached(location.lat, location.lng, geoLocation);
       return geoLocation;
     } catch (error) {
       console.log('Got error while try to get places', error);
