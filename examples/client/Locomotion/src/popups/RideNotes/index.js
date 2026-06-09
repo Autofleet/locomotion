@@ -26,24 +26,22 @@ export default ({
   const theme = useContext(ThemeContext);
 
   useEffect(() => {
-    if (!isVisible) return;
+    if (!isVisible) return undefined;
     updateText(notes || '');
     const t = setTimeout(() => {
       if (inputRef.current) {
         inputRef.current.focus();
       }
     }, 100);
-    // eslint-disable-next-line consistent-return
     return () => clearTimeout(t);
   }, [isVisible]);
 
   useEffect(() => {
-    if (!isVisible) return;
+    if (!isVisible) return undefined;
     const sub = BackHandler.addEventListener('hardwareBackPress', () => {
       onCancel();
       return true;
     });
-    // eslint-disable-next-line consistent-return
     return () => sub.remove();
   }, [isVisible]);
 
