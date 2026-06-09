@@ -101,10 +101,7 @@ export default React.forwardRef(({
 
   const { StationMarkers, isStationsEnabled } = useContext(VirtualStationsContext);
 
-  // Android: when the side drawer closes after being open, the GoogleMap's
-  // GLSurfaceView resumes but does NOT redraw the Polyline (route). Markers
-  // come back, polyline stays gone. Force a Polyline remount by bumping this
-  // counter on the drawer's close transition. No-op on iOS.
+  // Android only: remount the route Polyline when the drawer closes (GLSurfaceView resumes without redrawing it).
   const drawerStatus = useDrawerStatus();
   const prevDrawerStatusRef = useRef(drawerStatus);
   const [polylineRedrawKey, setPolylineRedrawKey] = useState(0);
