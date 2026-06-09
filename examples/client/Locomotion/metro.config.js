@@ -7,16 +7,8 @@
 
 const path = require('path');
 const { getDefaultConfig, mergeConfig } = require('@react-native/metro-config');
-const getRnPolyfills = require('@react-native/js-polyfills');
 
 const config = {
-  serializer: {
-    // setImmediate/clearImmediate fallback first — guards the Hermes bootstrap race (RN#49739).
-    getPolyfills: () => [
-      path.resolve(__dirname, 'polyfills/early-immediate-polyfill.js'),
-      ...getRnPolyfills(),
-    ],
-  },
   transformer: {
     getTransformOptions: async () => ({
       transform: {
