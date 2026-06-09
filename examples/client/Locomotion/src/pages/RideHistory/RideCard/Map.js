@@ -91,7 +91,7 @@ const Map = forwardRef(({
           sp={sp}
           disableMarkers={disableMarkers}
         />
-      ) : (<></>)))}
+      ) : null))}
     </MapView>
   );
 });

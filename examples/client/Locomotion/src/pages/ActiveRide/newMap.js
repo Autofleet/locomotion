@@ -1,22 +1,17 @@
 import React, {
-  useContext, useEffect, useState,
+  useContext, useEffect, useRef, useState,
 } from 'react';
-import { Dimensions } from 'react-native';
+import { Dimensions, Platform } from 'react-native';
 import MapView, { Polygon, Polyline } from 'react-native-maps';
-import Config from 'react-native-config';
+import { useDrawerStatus } from '@react-navigation/drawer';
 import moment from 'moment';
 import {
   point, featureCollection, nearestPoint, booleanPointInPolygon, polygon, distance,
 } from '@turf/turf';
-import { debounce } from 'lodash';
-import Mixpanel from '../../services/Mixpanel';
 import { FutureRidesContext } from '../../context/futureRides';
 import { RidePageContext } from '../../context/newRideContext';
 import { RideStateContextContext } from '../../context';
 import { DEFAULT_COORDS, getPosition } from '../../services/geo';
-import {
-  LocationMarker, LocationMarkerContainer, PickupTextContainer, PickupText,
-} from './styled';
 import mapDarkMode from '../../assets/mapDarkMode.json';
 import { Context as ThemeContext, THEME_MOD } from '../../context/theme';
 import { AvailabilityContext } from '../../context/availability';
@@ -24,6 +19,7 @@ import AvailabilityVehicle from '../../Components/AvailabilityVehicle';
 import StationsMap from '../../Components/Marker';
 import { BS_PAGES } from '../../context/ridePageStateContext/utils';
 import { RIDE_STATES, STOP_POINT_STATES } from '../../lib/commonTypes';
+import { beginProgrammaticAnimation } from './mapAnimationState';
 import PrecedingStopPointMarker from '../../Components/PrecedingStopPointMarker';
 import { decodePolyline, getPolylineList, getVehicleLocation } from '../../lib/polyline/utils';
 import { BottomSheetContext } from '../../context/bottomSheetContext';
@@ -105,6 +101,19 @@ export default React.forwardRef(({
 
   const { StationMarkers, isStationsEnabled } = useContext(VirtualStationsContext);
 
+  // Android only: remount the route Polyline when the drawer closes (GLSurfaceView resumes without redrawing it).
+  const drawerStatus = useDrawerStatus();
+  const prevDrawerStatusRef = useRef(drawerStatus);
+  const [polylineRedrawKey, setPolylineRedrawKey] = useState(0);
+  useEffect(() => {
+    if (Platform.OS === 'android'
+        && prevDrawerStatusRef.current === 'open'
+        && drawerStatus === 'closed') {
+      setPolylineRedrawKey(k => k + 1);
+    }
+    prevDrawerStatusRef.current = drawerStatus;
+  }, [drawerStatus]);
+
   const isMainPage = currentBsPage === BS_PAGES.ADDRESS_SELECTOR;
 
   const {
@@ -123,6 +132,8 @@ export default React.forwardRef(({
   });
 
   const focusMapToCoordinates = (coords, animated, padding = {}) => {
+    if (!ref.current) return;
+    if (animated) beginProgrammaticAnimation(600);
     ref.current.fitToCoordinates(coords, {
       animated,
       edgePadding: padding,
@@ -193,7 +204,8 @@ export default React.forwardRef(({
   useEffect(() => {
     if (currentBsPage === BS_PAGES.CONFIRM_PICKUP) {
       const [pickupStopPoint] = requestStopPoints;
-      if (pickupStopPoint) {
+      if (pickupStopPoint && ref.current) {
+        beginProgrammaticAnimation(300);
         ref.current.animateToRegion({
           latitude: parseFloat(pickupStopPoint.lat),
           longitude: parseFloat(pickupStopPoint.lng),
@@ -212,6 +224,8 @@ export default React.forwardRef(({
       const focusCurrentLocation = async () => {
         const location = await getPosition();
         const { coords } = (location || DEFAULT_COORDS);
+        if (!ref.current) return;
+        beginProgrammaticAnimation(300);
         ref.current.animateToRegion({
           latitude: parseFloat(coords.latitude),
           longitude: parseFloat(coords.longitude),
@@ -350,6 +364,7 @@ export default React.forwardRef(({
         }
         {finalStopPoints && polylineList && (
           <Polyline
+            key={`polyline-${polylineRedrawKey}`}
             strokeColor={primaryColor}
             strokeWidth={5}
             coordinates={polylineList}
