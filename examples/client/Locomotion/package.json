@@ -49,7 +49,7 @@
     "jwt-decode": "^3.1.2",
     "libphonenumber-js": "^1.11.7",
     "lodash": "^4.17.21",
-    "lottie-react-native": "^6.4.1",
+    "lottie-react-native": "^7.3.8",
     "mcc-mnc-list": "^1.1.8",
     "mixpanel-react-native": "^2.4.1",
     "moment": "^2.29.3",
@@ -94,7 +94,7 @@
     "react-native-table-component": "^1.2.2",
     "react-native-toast-message": "^2.1.5",
     "react-native-version-check": "^3.4.3",
-    "react-native-webview": "~13.12.5",
+    "react-native-webview": "~13.16.1",
     "shortid": "^2.2.16",
     "styled-components": "^5.3.5",
     "unstated-next": "^1.1.0",
@@ -102,7 +102,7 @@
   },
   "overrides": {
     "react-native-recaptcha-that-works": {
-      "react-native-webview": "~13.12.5"
+      "react-native-webview": "~13.16.1"
     }
   },
   "peerDependencies": {
