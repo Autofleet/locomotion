@@ -34,16 +34,6 @@ export const CenteredItemText = styled(ItemText)`
   margin: 10px;
 `;
 
-export const RoundedNoteText = styled(Text)`
-  ${FONT_SIZES.SMALL};
-  font-family: System;
-  font-style: italic;
-  font-weight: 300;
-  opacity: 0.7;
-  text-align: left;
-  padding: 4px 16px 0;
-`;
-
 export const Line = styled(View)`
   border: 0.5px solid #e6e6e6;
   width: 100%;
