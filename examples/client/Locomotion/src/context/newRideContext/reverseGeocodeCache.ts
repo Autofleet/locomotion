@@ -1,16 +1,9 @@
-// In-memory cache for reverse-geocode results. Same coordinate dragged twice
-// (within ~1m) returns instantly instead of round-tripping the network — which
-// matters most on Android, where the geocode round-trip is the dominant source
-// of map-drag latency.
-
 const TTL_MS = 5 * 60 * 1000;
 const MAX_ENTRIES = 200;
 
 type Entry = { result: any; t: number };
 const cache = new Map<string, Entry>();
 
-// Callers may pass strings (from event.latitude.toFixed(6)) or numbers.
-// Coerce defensively so cache keys are consistent and we never throw.
 const makeKey = (lat: number | string, lng: number | string): string => {
   const latNum = typeof lat === 'number' ? lat : parseFloat(lat);
   const lngNum = typeof lng === 'number' ? lng : parseFloat(lng);

@@ -67,9 +67,6 @@ const PhoneNumberInput = ({
     <PhoneInput
       key={defaultCode}
       value={cleanNumber(value)}
-      // IMPORTANT: do NOT enable `autoFocus`. On iOS + New Architecture (Fabric),
-      // focusing this library's TextInput during mount deadlocks the JS thread and
-      // freezes the whole app on the phone screen. The user taps the field to type.
       autoFocus={false}
       defaultCode={defaultCode}
       onChangeFormattedText={onChangeText}
@@ -84,10 +81,6 @@ const PhoneNumberInput = ({
       }}
       containerStyle={{
         width: '100%',
-        // New Architecture (Fabric/Yoga): the library's internal flagButtonView
-        // uses height: '100%', which resolves to 0 against an indefinite parent
-        // height — collapsing the whole input. An explicit height makes the
-        // percentage children resolve correctly.
         height: 56,
       }}
       placeholder={i18n.t('onboarding.pages.phone.placeholder')}

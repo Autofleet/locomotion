@@ -11,11 +11,6 @@ const getRnPolyfills = require('@react-native/js-polyfills');
 
 const config = {
   serializer: {
-    // Prepend our setImmediate/clearImmediate fallback before RN's default
-    // polyfill chain so it runs before any module-load warning can route into
-    // LogBox and hit the Hermes "Property 'setImmediate' doesn't exist" race
-    // on RN 0.76 + Fabric bootstrap. Once InitializeCore runs, RN's lazy
-    // polyfillGlobal definitions replace these stubs.
     getPolyfills: () => [
       path.resolve(__dirname, 'polyfills/early-immediate-polyfill.js'),
       ...getRnPolyfills(),

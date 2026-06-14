@@ -27,9 +27,6 @@ const formatResponseLog = function ({ data = '' }) {
 class Network {
   static defaultSettings = {
     baseURL: '/',
-    // Generous cap so a stalled request can't hang the UI forever (e.g. the
-    // login spinner). Previously a bug created the client from the empty
-    // constructor arg, so NO timeout was ever applied.
     timeout: 30000,
   };
 
