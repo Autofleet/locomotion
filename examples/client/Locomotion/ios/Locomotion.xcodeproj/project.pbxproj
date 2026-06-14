@@ -10,12 +10,11 @@
 		00E356F31AD99517003FC87E /* LocomotionTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* LocomotionTests.m */; };
 		0ADA1EB3C4C2A260A32DE6F8 /* libPods-Locomotion.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A9165B8E8C37AD3DB1A7EC9 /* libPods-Locomotion.a */; };
 		12149678B9D6492AB0BAB158 /* Inter-ExtraLight.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 3B665E249BD04D6E96D7A11D /* Inter-ExtraLight.ttf */; };
-		13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.mm */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
-		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		154FCEE410E4490C92A4A878 /* Inter-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 15293EEA882640B5AC14874F /* Inter-Regular.ttf */; };
 		16BBDB3C31154102967F3375 /* Inter-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 2CBB77652F6242089BA7AD06 /* Inter-Medium.ttf */; };
 		16D1A3AED5F34B3BBEB91D5B /* Inter-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 33155F0564184E3F830B1871 /* Inter-Light.ttf */; };
+		1A77300001000001A75B9A00 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A77300002000002A75B9A00 /* AppDelegate.swift */; };
 		458E87999E824EE4850D24B2 /* Inter-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 936414E5AF3B438FA30BDB03 /* Inter-Bold.ttf */; };
 		5D77025723914A4C9E60C5D9 /* Inter-Thin.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 3C0F833735144539A1D00D4A /* Inter-Thin.ttf */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
@@ -56,12 +55,10 @@
 		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		00E356F21AD99517003FC87E /* LocomotionTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LocomotionTests.m; sourceTree = "<group>"; };
 		13B07F961A680F5B00A75B9A /* Locomotion.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Locomotion.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = Locomotion/AppDelegate.h; sourceTree = "<group>"; };
-		13B07FB01A68108700A75B9A /* AppDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = AppDelegate.mm; path = Locomotion/AppDelegate.mm; sourceTree = "<group>"; };
 		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = Locomotion/Images.xcassets; sourceTree = "<group>"; };
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = Locomotion/Info.plist; sourceTree = "<group>"; };
-		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = Locomotion/main.m; sourceTree = "<group>"; };
 		15293EEA882640B5AC14874F /* Inter-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Inter-Regular.ttf"; path = "../src/assets/fonts/Inter-Regular.ttf"; sourceTree = "<group>"; };
+		1A77300002000002A75B9A00 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = Locomotion/AppDelegate.swift; sourceTree = "<group>"; };
 		1E7E7963EB185D16AC4231D3 /* Pods-Locomotion-LocomotionTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Locomotion-LocomotionTests.debug.xcconfig"; path = "Target Support Files/Pods-Locomotion-LocomotionTests/Pods-Locomotion-LocomotionTests.debug.xcconfig"; sourceTree = "<group>"; };
 		2CBB77652F6242089BA7AD06 /* Inter-Medium.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Inter-Medium.ttf"; path = "../src/assets/fonts/Inter-Medium.ttf"; sourceTree = "<group>"; };
 		33155F0564184E3F830B1871 /* Inter-Light.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Inter-Light.ttf"; path = "../src/assets/fonts/Inter-Light.ttf"; sourceTree = "<group>"; };
@@ -151,12 +148,10 @@
 			children = (
 				EC5ACF6D2871CBBE00B2D6D7 /* Locomotion.entitlements */,
 				EC8EB49F2811511C005D40A9 /* GoogleService-Info.plist */,
-				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
-				13B07FB01A68108700A75B9A /* AppDelegate.mm */,
+				1A77300002000002A75B9A00 /* AppDelegate.swift */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */,
-				13B07FB71A68108700A75B9A /* main.m */,
 				AE4C4563282D04BF007CCCE7 /* Locomotion-Bridging-Header.h */,
 				6CB6E0ED31D98FC091840794 /* PrivacyInfo.xcprivacy */,
 			);
@@ -530,8 +525,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */,
-				13B07FC11A68108700A75B9A /* main.m in Sources */,
+				1A77300001000001A75B9A00 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
