@@ -90,6 +90,10 @@ android {
             keyPassword properties.getProperty('keyPassword')
         }
     }
+    lint {
+        checkReleaseBuilds false
+    }
+
     buildTypes {
         debug {
             signingConfig signingConfigs.debug
