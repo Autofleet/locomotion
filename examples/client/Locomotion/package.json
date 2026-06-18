@@ -66,6 +66,7 @@
     "react-native-date-picker": "^5.0.13",
     "react-native-device-info": "^11.1.0",
     "react-native-draglist": "3.9.5",
+    "react-native-fast-image": "^8.5.11",
     "react-native-geolocation-service": "^5.3.1",
     "react-native-gesture-handler": "2.30.0",
     "react-native-image-picker": "^4.8.2",
