@@ -24,3 +24,23 @@ buildscript {
         classpath("com.facebook.react:react-native-gradle-plugin")
     }
 }
+
+// New Architecture clean-build fix: on a fresh build the app's native CMake
+// configure (Android-autolinking.cmake -> add_subdirectory of each library's
+// build/generated/source/codegen/jni) can run before the library modules have
+// generated their codegen, causing "add_subdirectory given source ... which is
+// not an existing directory". Force every library's generateCodegenArtifactsFromSchema
+// to run before the app configures/builds CMake.
+gradle.projectsEvaluated {
+    def appProject = rootProject.findProject(":app")
+    if (appProject != null) {
+        def codegenTasks = rootProject.subprojects.findResults {
+            it == appProject ? null : it.tasks.findByName("generateCodegenArtifactsFromSchema")
+        }
+        if (!codegenTasks.isEmpty()) {
+            appProject.tasks.matching {
+                it.name.startsWith("configureCMake") || it.name.startsWith("buildCMake")
+            }.configureEach { dependsOn(codegenTasks) }
+        }
+    }
+}
