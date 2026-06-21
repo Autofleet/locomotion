@@ -1,7 +1,5 @@
 import React, { useState, useContext } from 'react';
-import {
-  Alert, Platform, ActionSheetIOS,
-} from 'react-native';
+import { Alert } from 'react-native';
 import propsTypes from 'prop-types';
 import Mixpanel from '../../../services/Mixpanel';
 import Loader from '../../Loader';
@@ -29,33 +27,18 @@ const CallContactPersonMasked = ({ onError }: { onError: any}) => {
     };
 
     const options = [i18n.t('bottomSheetContent.ride.phoneCallOptions.call'), i18n.t('bottomSheetContent.ride.phoneCallOptions.sms')];
-    if (Platform.OS === 'android') {
-      Alert.alert(
-        i18n.t('bottomSheetContent.ride.contactDriver'),
-        undefined,
-        [
-          { text: options[0], onPress: () => callPhone(number) },
-          { text: options[1], onPress: () => smsPhone(number) },
-          { text: i18n.t('bottomSheetContent.ride.phoneCallOptions.cancel'), style: 'cancel' },
-        ],
-      );
-    } else {
-      ActionSheetIOS.showActionSheetWithOptions(
-        {
-          options: [i18n.t('bottomSheetContent.ride.phoneCallOptions.cancel'), ...options],
-          cancelButtonIndex: 0,
-        },
-        (buttonIndex) => {
-          if (buttonIndex === 1) {
-            callPhone(number);
-          }
-
-          if (buttonIndex === 2) {
-            smsPhone(number);
-          }
-        },
-      );
-    }
+    // Use the cross-platform Alert.alert on iOS too. The native ActionSheetIOS
+    // (a void TurboModule) throws on a background queue under the New Architecture,
+    // crashing the app (AF-9397) in a way the surrounding try/catch can't catch.
+    Alert.alert(
+      i18n.t('bottomSheetContent.ride.contactDriver'),
+      undefined,
+      [
+        { text: options[0], onPress: () => callPhone(number) },
+        { text: options[1], onPress: () => smsPhone(number) },
+        { text: i18n.t('bottomSheetContent.ride.phoneCallOptions.cancel'), style: 'cancel' },
+      ],
+    );
   };
 
   return (
