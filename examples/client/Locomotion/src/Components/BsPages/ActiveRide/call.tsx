@@ -27,9 +27,6 @@ const CallContactPersonMasked = ({ onError }: { onError: any}) => {
     };
 
     const options = [i18n.t('bottomSheetContent.ride.phoneCallOptions.call'), i18n.t('bottomSheetContent.ride.phoneCallOptions.sms')];
-    // Use the cross-platform Alert.alert on iOS too. The native ActionSheetIOS
-    // (a void TurboModule) throws on a background queue under the New Architecture,
-    // crashing the app (AF-9397) in a way the surrounding try/catch can't catch.
     Alert.alert(
       i18n.t('bottomSheetContent.ride.contactDriver'),
       undefined,
