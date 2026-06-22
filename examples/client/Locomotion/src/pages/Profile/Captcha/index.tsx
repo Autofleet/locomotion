@@ -102,7 +102,7 @@ const Captcha = ({
 
     verifiedRef.current = false;
 
-    if (recaptchaRef.current && Config.CAPTCHA_KEY && !isDebugPhoneNumber && !shouldHideCaptcha) {
+    if (recaptchaRef.current && Config.CAPTCHA_KEY && !isDevSettingOn() && !shouldHideCaptcha) {
       recaptchaRef.current.open();
       watchdogRef.current = setTimeout(() => {
         watchdogRef.current = null;
