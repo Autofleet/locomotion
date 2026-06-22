@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import {
-  Linking, Platform, Alert, ActionSheetIOS,
+  Linking, Platform, Alert,
 } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import NoTitleCard from '../../Components/NoTitleCard';
@@ -82,33 +82,15 @@ export default ({ menuSide }) => {
     };
 
     const options = [i18n.t('bottomSheetContent.ride.phoneCallOptions.call'), i18n.t('bottomSheetContent.ride.phoneCallOptions.sms')];
-    if (Platform.OS === 'android') {
-      Alert.alert(
-        number,
-        undefined,
-        [
-          { text: options[0], onPress: () => callPhone(number) },
-          { text: options[1], onPress: () => smsPhone(number) },
-          { text: i18n.t('bottomSheetContent.ride.phoneCallOptions.cancel'), style: 'cancel' },
-        ],
-      );
-    } else {
-      ActionSheetIOS.showActionSheetWithOptions(
-        {
-          options: [i18n.t('bottomSheetContent.ride.phoneCallOptions.cancel'), ...options],
-          cancelButtonIndex: 0,
-        },
-        (buttonIndex) => {
-          if (buttonIndex === 1) {
-            callPhone(number);
-          }
-
-          if (buttonIndex === 2) {
-            smsPhone(number);
-          }
-        },
-      );
-    }
+    Alert.alert(
+      number,
+      undefined,
+      [
+        { text: options[0], onPress: () => callPhone(number) },
+        { text: options[1], onPress: () => smsPhone(number) },
+        { text: i18n.t('bottomSheetContent.ride.phoneCallOptions.cancel'), style: 'cancel' },
+      ],
+    );
   };
 
   return (
