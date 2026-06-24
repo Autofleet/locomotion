@@ -1,14 +1,12 @@
 import React from 'react';
 import {
-  BackHandler,
-  Platform,
+  Modal,
   Pressable,
   StyleSheet,
   StyleProp,
   View,
   ViewStyle,
 } from 'react-native';
-import { Portal } from '@gorhom/portal';
 
 interface CompatModalProps {
   isVisible: boolean;
@@ -25,25 +23,14 @@ function CompatModal({
   onBackdropPress,
   style,
 }: CompatModalProps) {
-  React.useEffect(() => {
-    if (!isVisible || Platform.OS !== 'android') return undefined;
-    const handler = BackHandler.addEventListener('hardwareBackPress', () => {
-      const cb = onBackButtonPress || onBackdropPress;
-      if (cb) {
-        cb();
-        return true;
-      }
-      return false;
-    });
-    return () => handler.remove();
-  }, [isVisible, onBackButtonPress, onBackdropPress]);
-
-  if (!isVisible) {
-    return null;
-  }
-
   return (
-    <Portal>
+    <Modal
+      visible={isVisible}
+      transparent
+      animationType="fade"
+      statusBarTranslucent
+      onRequestClose={onBackButtonPress || onBackdropPress}
+    >
       <View style={styles.fill} pointerEvents="box-none">
         <Pressable
           style={styles.backdrop}
@@ -53,15 +40,13 @@ function CompatModal({
           {children}
         </View>
       </View>
-    </Portal>
+    </Modal>
   );
 }
 
 const styles = StyleSheet.create({
   fill: {
-    ...StyleSheet.absoluteFillObject,
-    zIndex: 9999,
-    elevation: 9999,
+    flex: 1,
   },
   backdrop: {
     ...StyleSheet.absoluteFillObject,
