@@ -1,4 +1,5 @@
 import React, { useState, useContext } from 'react';
+import { InteractionManager } from 'react-native';
 import propsTypes from 'prop-types';
 import Mixpanel from '../../../services/Mixpanel';
 import Loader from '../../Loader';
@@ -43,8 +44,10 @@ const CallContactPersonMasked = ({ onError }: { onError: any }) => {
             const number = await getCallNumbers();
             setDialogNumber(number as unknown as string | null);
           } catch (e) {
-            Mixpanel.setEvent('Call contact person Error');
-            onError();
+            InteractionManager.runAfterInteractions(() => {
+              Mixpanel.setEvent('Call contact person Error');
+              onError();
+            });
           } finally {
             setDisabledPhoneButton(false);
           }
