@@ -20,6 +20,7 @@ import Mixpanel from './services/Mixpanel';
 import initAppsFlyer from './services/appsflyer';
 
 LogBox.ignoreAllLogs();
+enableScreens(true);
 
 export default (props) => {
   const navigatorRef = useRef(null);
@@ -51,7 +52,6 @@ export default (props) => {
     sendAppLaunchEvent();
     crashlytics().log('App mounted.');
     initAppsFlyer();
-    enableScreens(false);
     const listener = registerAppStateListener();
     return () => {
       if (listener) {
