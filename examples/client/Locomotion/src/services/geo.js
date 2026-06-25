@@ -110,6 +110,18 @@ const GeoService = new Geo();
 
 export default GeoService;
 
+export const watchLocation = (onChange) => RNLocation.subscribeToLocationUpdates((locations) => {
+  if (locations && locations.length) {
+    onChange({ latitude: locations[0].latitude, longitude: locations[0].longitude });
+  }
+});
+
+export const getLatestLocation = async () => {
+  const location = await RNLocation.getLatestLocation({ timeout: 5 * ONE_SECOND });
+  if (!location) return null;
+  return { latitude: location.latitude, longitude: location.longitude };
+};
+
 export const { decodeGmPath } = Geo;
 
 export const DEFAULT_COORDS = {
