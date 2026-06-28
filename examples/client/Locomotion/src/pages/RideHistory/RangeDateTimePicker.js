@@ -1,43 +1,39 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import DatePicker from 'react-native-date-picker';
-import { getTextColorForTheme } from '../../context/theme';
 import i18n, { getUserLanguageCode } from '../../I18n';
 
-export default ({
-  onCancel, onConfirm,
-}) => {
+export default ({ onCancel, onConfirm }) => {
+  const today = useRef(new Date()).current;
   const [open, setOpen] = useState(true);
-  const [fromDate, saveFromDate] = useState(false);
-  const handleConfirm = async (date) => {
-    await setOpen(false);
+  const [fromDate, setFromDate] = useState(null);
+
+  const handleConfirm = (date) => {
     if (fromDate) {
       onConfirm(fromDate, date);
     } else {
-      await saveFromDate(date);
-      await setOpen(true);
+      setOpen(false);
+      setFromDate(date);
+      setTimeout(() => setOpen(true), 500);
     }
   };
 
   return (
-    <>
-      <DatePicker
-        testID="datePicker"
-        textColor={getTextColorForTheme()}
-        locale={getUserLanguageCode()}
-        open={open}
-        date={new Date()}
-        maximumDate={new Date()}
-        minimumDate={fromDate || undefined}
-        mode="date"
-        title={fromDate
-          ? i18n.t('rideHistory.rangeDateTimePicker.selectEndDate')
-          : i18n.t('rideHistory.rangeDateTimePicker.selectStartDate')}
-        confirmText={i18n.t('rideHistory.rangeDateTimePicker.confirmText')}
-        cancelText={i18n.t('rideHistory.rangeDateTimePicker.cancelText')}
-        onCancel={() => onCancel()}
-        onConfirm={handleConfirm}
-        modal
-      />
-    </>
+    <DatePicker
+      testID="datePicker"
+      modal
+      open={open}
+      locale={getUserLanguageCode()}
+      date={today}
+      maximumDate={today}
+      minimumDate={fromDate || undefined}
+      mode="date"
+      title={fromDate
+        ? i18n.t('rideHistory.rangeDateTimePicker.selectEndDate')
+        : i18n.t('rideHistory.rangeDateTimePicker.selectStartDate')}
+      confirmText={i18n.t('rideHistory.rangeDateTimePicker.confirmText')}
+      cancelText={i18n.t('rideHistory.rangeDateTimePicker.cancelText')}
+      onConfirm={handleConfirm}
+      onCancel={onCancel}
+    />
   );
 };

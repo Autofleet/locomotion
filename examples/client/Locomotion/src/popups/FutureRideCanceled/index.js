@@ -1,6 +1,6 @@
 import React, { Fragment, useEffect, useState } from 'react';
 import { View, TouchableOpacity } from 'react-native';
-import Modal from 'react-native-modal';
+import Modal from '../../Components/CompatModal';
 import i18n from '../../I18n';
 import {
   Container,

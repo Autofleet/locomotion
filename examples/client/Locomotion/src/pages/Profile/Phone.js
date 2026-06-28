@@ -15,7 +15,6 @@ import * as NavigationService from '../../services/navigation';
 import { PageContainer, ContentContainer } from '../styles';
 import Captcha from './Captcha';
 
-
 const Phone = ({ navigation }) => {
   const { nextScreen } = useContext(OnboardingContext);
   const { updateState, user, onLogin } = useContext(UserContext);
@@ -106,7 +105,6 @@ const Phone = ({ navigation }) => {
             key={renderId}
             value={user.phoneNumber}
             onPhoneNumberChange={onPhoneNumberChange}
-            autoFocus
             error={showErrorText}
           />
           {showErrorText && <ErrorText>{showErrorText}</ErrorText>}
@@ -114,8 +112,7 @@ const Phone = ({ navigation }) => {
             isLoading={isLoadingSaveButton}
             isInvalid={isInvalid}
             onNext={() => setIsLoadingSaveButton(true)}
-            onFail={() => setShowErrorText(i18n.t('login.invalidPhoneNumberError'))
-              }
+            onFail={() => setShowErrorText(i18n.t('login.invalidPhoneNumberError'))}
           />
           <Captcha
             isOpen={isLoadingSaveButton}

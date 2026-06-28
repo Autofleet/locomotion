@@ -1,8 +1,9 @@
 import React, {
-  createContext, useContext, useEffect, useState,
+  createContext, useContext, useState,
 } from 'react';
+import { Keyboard, Platform } from 'react-native';
 import { BottomSheetContext, SNAP_POINT_STATES } from '../bottomSheetContext';
-import geo, { DEFAULT_COORDS, getPosition } from '../../services/geo';
+import geo from '../../services/geo';
 import { getUserTerritories } from '../user/api';
 import pointInPolygon from './pointInPolygon';
 import { BsPages, BS_PAGES } from './utils';
@@ -47,6 +48,9 @@ const RideStateContextContextProvider = ({ children }: { children: any }) => {
 
   const changeBsPage = (pageName: BsPages) => {
     Mixpanel.pageView(`Bottom sheet - ${pageName}`);
+    if (Platform.OS === 'android' && pageName !== BS_PAGES.ADDRESS_SELECTOR) {
+      Keyboard.dismiss();
+    }
     setIsExpanded(false);
     setSnapPointsState(SNAP_POINT_STATES[pageName]);
     setCurrentBsPage(pageName);

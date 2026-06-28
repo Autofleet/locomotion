@@ -1,14 +1,10 @@
-import React, {
-  useContext, useEffect, useMemo, useState,
-} from 'react';
+import React, { useContext, useRef } from 'react';
 import { Platform } from 'react-native';
-import Config from 'react-native-config';
 import { Marker } from 'react-native-maps';
 import { ThemeContext } from 'styled-components';
 import clockIcon from '../../assets/bottomSheet/clock.svg';
 import dropoffIcon from '../../assets/map/markers/dropoffIcon.svg';
 import pickupIcon from '../../assets/map/markers/pickupIcon.svg';
-import Mixpanel from '../../services/Mixpanel';
 import {
   InfoBox, Type, SubText, TypeText, IconContainer, SubContainer, PulseContainer,
 } from './styled';
@@ -18,10 +14,10 @@ import { STOP_POINT_TYPES, formatUiDisplaySpType } from '../../lib/commonTypes';
 import Loader from '../Loader';
 import pulse from '../../assets/marker-pulse.json';
 import VirtualStationComponent from '../VirtualStationComponent';
+import { useMarkerTracksViewChanges } from './useMarkerTracksViewChanges';
 
 const StopPointMarker = ({
   stopPoint,
-  key,
   isNext,
   etaText,
   isFutureRide,
@@ -30,6 +26,8 @@ const StopPointMarker = ({
 }) => {
   const { lat, lng } = stopPoint;
   const theme = useContext(ThemeContext);
+  const markerRef = useRef(null);
+  const { tracksViewChanges, onMarkerLayout } = useMarkerTracksViewChanges(markerRef);
   const stationIcon = type => <VirtualStationComponent type={type} isActive style={{ top: Platform.OS === 'ios' ? -35 : 0 }} />;
 
   const typeDetails = {
@@ -91,10 +89,11 @@ const StopPointMarker = ({
 
   return (
     <Marker
-      key={key}
+      ref={markerRef}
       coordinate={{ latitude: parseFloat(lat), longitude: parseFloat(lng) }}
       zIndex={999}
-      tracksViewChanges={false}
+      tracksViewChanges={tracksViewChanges}
+      onLayout={onMarkerLayout}
     >
       <InfoBox>
         <Type>
