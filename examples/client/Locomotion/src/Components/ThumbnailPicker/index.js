@@ -2,8 +2,6 @@ import React, { useEffect, useState } from 'react';
 import propsTypes from 'prop-types';
 /* eslint-disable class-methods-use-this */
 import {
-  Platform,
-  ActionSheetIOS,
   Alert,
   PermissionsAndroid,
 } from 'react-native';
@@ -95,37 +93,15 @@ const ThumbnailPicker = (props) => {
     };
     const imageCallback = response => onSelectPicture(response);
 
-    if (Platform.OS === 'android') {
-      Alert.alert(
-        '',
-        undefined,
-        [
-          { text: options[0], onPress: async () => { await insurePermission(); launchCamera(pickerOptions, imageCallback); } },
-          { text: options[1], onPress: () => launchImageLibrary(pickerOptions, imageCallback) },
-          { text: i18n.t('general.cancel'), style: 'cancel' },
-        ],
-      );
-    } else {
-      ActionSheetIOS.showActionSheetWithOptions(
-        {
-          options: [i18n.t('general.cancel'), ...options],
-          cancelButtonIndex: 0,
-        },
-        (buttonIndex) => {
-          if (buttonIndex === 0) {
-            onCancel();
-          }
-
-          if (buttonIndex === 1) {
-            launchCamera(pickerOptions, imageCallback);
-          }
-
-          if (buttonIndex === 2) {
-            launchImageLibrary(pickerOptions, imageCallback);
-          }
-        },
-      );
-    }
+    Alert.alert(
+      '',
+      undefined,
+      [
+        { text: options[0], onPress: async () => { await insurePermission(); launchCamera(pickerOptions, imageCallback); } },
+        { text: options[1], onPress: () => launchImageLibrary(pickerOptions, imageCallback) },
+        { text: i18n.t('general.cancel'), style: 'cancel' },
+      ],
+    );
   };
 
   return (

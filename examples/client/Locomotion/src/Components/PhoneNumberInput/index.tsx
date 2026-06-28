@@ -21,9 +21,9 @@ const PhoneNumberInput = ({
     (Config.DEFAULT_COUNTRY_CODE as SupportIsoCode) || ('IL' as SupportIsoCode),
   );
   const theme = useContext(ThemeContext);
-  const asYouTypePhoneNumber = new AsYouType();
 
   const onChangeText = (v: any) => {
+    const asYouTypePhoneNumber = new AsYouType();
     const numberValue = `${v}`;
     asYouTypePhoneNumber.input(numberValue);
     const number = asYouTypePhoneNumber.getNumberValue();
