@@ -3,6 +3,7 @@ import React, {
 } from 'react';
 import Config from 'react-native-config';
 import Recaptcha, { RecaptchaHandles } from 'react-native-recaptcha-that-works';
+import { UserContext } from '../../../context/user';
 import Mixpanel from '../../../services/Mixpanel';
 import Auth from '../../../services/auth';
 import { OnboardingContext } from '../../../context/onboarding';
@@ -24,12 +25,14 @@ const Captcha = ({
   isOpen,
 }: CaptchaProps) => {
   const { shouldHideCaptcha, fetchHideCaptchaSetting } = useContext(OnboardingContext);
+  const { user } = useContext(UserContext);
   const recaptchaRef = useRef<RecaptchaHandles | null>(null);
   const watchdogRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const verifiedRef = useRef(false);
   const pendingCloseRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const skipCaptchaForDev = Boolean(Config.DEV_SETTINGS && Config.DEV_SETTINGS === 'true');
+  const isDebugPhoneNumber = user?.phoneNumber === Config.DEV_PAGE_PHONE_NUMBER && Config.DEV_SETTINGS === 'true';
+  const skipCaptcha = Config.SKIP_CAPTCHA === 'true' || isDebugPhoneNumber;
 
   const clearWatchdog = useCallback(() => {
     if (watchdogRef.current) {
@@ -99,7 +102,7 @@ const Captcha = ({
 
     verifiedRef.current = false;
 
-    if (recaptchaRef.current && Config.CAPTCHA_KEY && !skipCaptchaForDev && !shouldHideCaptcha) {
+    if (recaptchaRef.current && Config.CAPTCHA_KEY && !skipCaptcha && !shouldHideCaptcha) {
       recaptchaRef.current.open();
       watchdogRef.current = setTimeout(() => {
         watchdogRef.current = null;
@@ -119,7 +122,7 @@ const Captcha = ({
       clearWatchdog();
       cancelPendingClose();
     };
-  }, [isOpen, shouldHideCaptcha, skipCaptchaForDev]);
+  }, [isOpen, shouldHideCaptcha, skipCaptcha]);
 
   if (!Config.CAPTCHA_KEY) {
     return null;
