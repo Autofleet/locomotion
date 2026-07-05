@@ -41,7 +41,7 @@ import { BS_PAGES } from '../ridePageStateContext/utils';
 import {
   RIDE_STATES, RIDE_FINAL_STATES, STOP_POINT_TYPES, PAYMENT_STATES, CHARGE_FOR_TIP,
 } from '../../lib/commonTypes';
-import useBackgroundInterval from '../../lib/useBackgroundInterval';
+import useInterval from '../../lib/useInterval';
 import { formatSps } from '../../lib/ride/utils';
 import { APP_ROUTES, MAIN_ROUTES } from '../../pages/routes';
 import * as navigationService from '../../services/navigation';
@@ -656,7 +656,7 @@ const RidePageContextProvider = ({ children }: {
     }
   };
 
-  useBackgroundInterval(async () => {
+  useInterval(async () => {
     const appCurrentStateIsActive = AppState.currentState === 'active';
     setIsAppActive(appCurrentStateIsActive);
     if (appCurrentStateIsActive && user?.id && !rideRequestLoading) {
