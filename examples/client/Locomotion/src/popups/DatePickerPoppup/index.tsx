@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import Modal from 'react-native-modal';
+import React, { useState, useEffect, ComponentProps } from 'react';
 import DatePicker from 'react-native-date-picker';
+import Modal from '../../Components/CompatModal';
 import { getUserLanguageCode } from '../../I18n';
 
 import {

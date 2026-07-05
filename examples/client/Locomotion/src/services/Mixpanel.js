@@ -43,9 +43,10 @@ class MixpanelService {
 
     if (!this.isInit && Config.MIXPANEL_TOKEN) {
       const trackAutomaticEvents = true;
+      const serverURL = Config.MIXPANEL_SERVER_URL || 'https://api-eu.mixpanel.com';
       this.mixpanel = new Mixpanel(Config.MIXPANEL_TOKEN, trackAutomaticEvents);
 
-      this.mixpanel.init();
+      this.mixpanel.init(undefined, undefined, serverURL);
       this.mixpanel.setLoggingEnabled(true);
       this.isInit = true;
     }

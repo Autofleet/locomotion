@@ -13,6 +13,7 @@ const MARKER_SIZE = {
 
 export const PageContainer = styled.View({
   ...StyleSheet.absoluteFillObject,
+  ...(Platform.OS === 'android' ? { backgroundColor: '#e5e3df' } : {}),
 });
 
 export const PointDot = styled.View`
@@ -83,7 +84,6 @@ export const LocationMarker = styled(Icon).attrs(({ theme }) => ({
   stroke: theme.pageBackgroundColor,
   width: MARKER_SIZE.width,
 }))``;
-
 
 export const MapOverlayButtons = styled.View`
 position: absolute;

@@ -7,17 +7,40 @@ buildscript {
         compileSdkVersion = 35
         targetSdkVersion = 35
         supportLibVersion = "35.0.0"
-        kotlinVersion = "1.9.22"
-        ndkVersion = "26.1.10909125"
+        kotlinVersion = "2.0.21"
+        ndkVersion = "28.2.13676358"
     }
     repositories {
         google()
         mavenCentral()
     }
     dependencies {
-        classpath('com.android.tools.build:gradle:8.7.0')
-        classpath("com.facebook.react:react-native-gradle-plugin")
+        classpath('com.android.tools.build:gradle:8.6.0')
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
         classpath ('com.google.gms:google-services:4.3.13')
         classpath ('com.google.firebase:firebase-crashlytics-gradle:2.9.1')
+        // Makes com.facebook.react plugin resolvable via legacy "apply plugin:" in library subprojects.
+        // The root-level includeBuild in settings.gradle substitutes this with the local gradle plugin.
+        classpath("com.facebook.react:react-native-gradle-plugin")
+    }
+}
+
+// New Architecture clean-build fix: on a fresh build the app's native CMake
+// configure (Android-autolinking.cmake -> add_subdirectory of each library's
+// build/generated/source/codegen/jni) can run before the library modules have
+// generated their codegen, causing "add_subdirectory given source ... which is
+// not an existing directory". Force every library's generateCodegenArtifactsFromSchema
+// to run before the app configures/builds CMake.
+gradle.projectsEvaluated {
+    def appProject = rootProject.findProject(":app")
+    if (appProject != null) {
+        def codegenTasks = rootProject.subprojects.findResults {
+            it == appProject ? null : it.tasks.findByName("generateCodegenArtifactsFromSchema")
+        }
+        if (!codegenTasks.isEmpty()) {
+            appProject.tasks.matching {
+                it.name.startsWith("configureCMake") || it.name.startsWith("buildCMake")
+            }.configureEach { dependsOn(codegenTasks) }
+        }
     }
 }

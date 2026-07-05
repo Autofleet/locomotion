@@ -1,10 +1,9 @@
 import React, {
   useContext, useState, useEffect,
 } from 'react';
-import DatePicker from 'react-native-date-picker';
 import moment from 'moment';
 import { ThemeContext } from 'styled-components';
-import { Animated } from 'react-native';
+import { Animated, View } from 'react-native';
 import { isCashPaymentMethod, isExternalPaymentMethod, isOfflinePaymentMethod } from '../../../../../lib/ride/utils';
 import DatePickerPoppup from '../../../../../popups/DatePickerPoppup';
 import FutureBookingButton from './FutureBookingButton';
@@ -18,6 +17,7 @@ import i18n from '../../../../../I18n';
 import plus from '../../../../../assets/bottomSheet/plus.svg';
 import editNote from '../../../../../assets/bottomSheet/edit_note.svg';
 import PaymentButton from './PaymentButton';
+import PromoCodeButton from './PaymentButton/PromoCodeButton';
 import PaymentsContext from '../../../../../context/payments';
 import { PaymentMethodInterface } from '../../../../../context/payments/interface';
 import { RideStateContextContext } from '../../../../../context/ridePageStateContext';
@@ -71,9 +71,15 @@ const RideButtons = ({
   const {
     paymentMethods,
     getClientOutstandingBalanceCard,
+    offlinePaymentText,
+    getBusinessAccountById,
+    loadOfflinePaymentText,
   }: {
         paymentMethods: PaymentMethodInterface[],
         getClientOutstandingBalanceCard: () => PaymentMethodInterface | undefined,
+        offlinePaymentText: string,
+        getBusinessAccountById: (id: string) => { name: string },
+        loadOfflinePaymentText: () => void,
     } = PaymentsContext.useContainer();
 
   const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
@@ -108,6 +114,10 @@ const RideButtons = ({
     checkFutureRidesSetting();
     checkMinutesBeforeFutureRideSetting();
     loadFutureBookingDays();
+  }, []);
+
+  useEffect(() => {
+    loadOfflinePaymentText();
   }, []);
 
   const [animatedOpacity] = useState(new Animated.Value(0));
@@ -224,14 +234,6 @@ const RideButtons = ({
     [PAYMENT_METHODS.EXTERNAL]: externalPaymentMethod,
   };
   const renderPaymentButton = () => {
-    const {
-      offlinePaymentText,
-      getBusinessAccountById,
-      loadOfflinePaymentText,
-    } = PaymentsContext.useContainer();
-    useEffect(() => {
-      loadOfflinePaymentText();
-    }, []);
     const ridePaymentMethodId = ride?.paymentMethodId || chosenService?.allowedPaymentMethods?.[0] || '';
     const selectedPaymentMethod:
      PaymentMethodInterface | undefined = paymentMethodIdToDataMap[ridePaymentMethodId]
@@ -254,7 +256,8 @@ const RideButtons = ({
 
       return selectedPaymentMethod?.name || i18n.t('bottomSheetContent.ride.addPayment');
     };
-    const pureButton = () => (
+
+    const paymentBtn = (
       <ButtonContainer
         padding="0 10px"
         error={paymentMethodNotAllowedOnService}
@@ -270,6 +273,7 @@ const RideButtons = ({
           title={getSelectedPaymentMethodTitle()}
           id={selectedPaymentMethod?.id}
           invalid={paymentMethodNotAllowedOnService}
+          promoButton={!displayPassenger ? <PromoCodeButton id={selectedPaymentMethod?.id} /> : undefined}
         />
       </ButtonContainer>
     );
@@ -281,21 +285,18 @@ const RideButtons = ({
       }
       return capitalizeFirstLetter(ridePaymentMethod);
     };
-    return (
-      <>
-        {paymentMethodNotAllowedOnService
-          ? (
-            <ButtonWithError
-              errorText={i18n.t('bottomSheetContent.ride.paymentMethodNotAllowedOnService', {
-                type: getTypeText(),
-              })}
-            >
-              {pureButton()}
-            </ButtonWithError>
-          )
-          : pureButton() }
-      </>
-    );
+
+    return paymentMethodNotAllowedOnService
+      ? (
+        <ButtonWithError
+          errorText={i18n.t('bottomSheetContent.ride.paymentMethodNotAllowedOnService', {
+            type: getTypeText(),
+          })}
+        >
+          {paymentBtn}
+        </ButtonWithError>
+      )
+      : paymentBtn;
   };
 
 
@@ -325,7 +326,7 @@ const RideButtons = ({
       <Container>
         <RowContainer>
           {isFutureRidesEnabled && renderFutureBooking()}
-          {displayPassenger ? <></> : renderRideNotes()}
+          {!displayPassenger ? renderRideNotes() : null}
 
         </RowContainer>
         <RowContainer>
@@ -344,7 +345,7 @@ const RideButtons = ({
                 onError={setPassengersCounterError}
                 selectedValue={numberOfPassengers}
               />
-            ) : null}
+            ) : <View />}
 
           <StyledButton
             testID="selectService"

@@ -14,6 +14,7 @@
       android:allowBackup="false"
       android:theme="@style/SplashTheme"
       android:usesCleartextTraffic="true"
+      tools:replace="android:allowBackup"
       >
       <activity
         android:name=".MainActivity"

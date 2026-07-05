@@ -1,8 +1,7 @@
 /* eslint-disable no-unused-expressions */
 import React, { useContext, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import Modal from 'react-native-modal';
-import { useNavigation } from '@react-navigation/native';
+import Modal from '../../Components/CompatModal';
 import EmptyState from '../../Components/EmptyState';
 import Mixpanel from '../../services/Mixpanel';
 import { PAYMENT_MODES, PAYMENT_TABS } from '../../pages/Payments/consts';
@@ -167,6 +166,8 @@ const PaymentMethodPopup = ({
   return (
     <Modal
       isVisible={isVisible}
+      onBackButtonPress={onCancel}
+      onBackdropPress={onCancel}
     >
       <SummaryContainer>
         <TitleView>
