@@ -59,17 +59,10 @@ const Email = () => {
     email: yup.string().required().email().matches(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/),
   });
 
-  const onChange = async (value) => {
+  const onChange = (value) => {
     setErrorText(false);
     setEmail(value);
-
-    try {
-      await emailSchema.validateAt('email', { email: value });
-    } catch (e) {
-      updateState({ email: '' });
-      return;
-    }
-    updateState({ email: value });
+    updateState({ email: emailSchema.isValidSync({ email: value }) ? value : '' });
   };
 
   useEffect(() => {
