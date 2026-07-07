@@ -7,7 +7,7 @@ export const createServiceEstimations = async (stopPoints, scheduledTo, business
     });
     return data;
   } catch (e) {
-    console.error(e);
+    console.error(e?.message || String(e));
     throw e;
   }
 };
@@ -17,7 +17,7 @@ export const getServices = async () => {
     const { data } = await network.get('api/v1/services');
     return data;
   } catch (e) {
-    console.error(e);
+    console.error(e?.message || String(e));
     throw e;
   }
 };
@@ -27,7 +27,7 @@ export const getService = async (serviceId) => {
     const { data } = await network.get(`api/v1/services/${serviceId}`);
     return data;
   } catch (e) {
-    console.error(e);
+    console.error(e?.message || String(e));
     throw e;
   }
 };
@@ -42,7 +42,7 @@ export const patchRide = async (rideId, newData) => {
     const { data } = await network.patch(`api/v1/rides/${rideId}`, newData);
     return data;
   } catch (e) {
-    console.error(e);
+    console.error(e?.message || String(e));
     throw e;
   }
 };
@@ -111,7 +111,6 @@ export const fetchRides = async ({
   });
   return data;
 };
-
 
 export const getLocationTimezone = async (lat, lng) => {
   const { data } = await network.get('/api/v1/timezone', {

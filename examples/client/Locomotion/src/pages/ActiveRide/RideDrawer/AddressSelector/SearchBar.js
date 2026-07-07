@@ -158,8 +158,9 @@ const SearchBar = ({
   const renderDraggableItem = ({
     onStartDrag, item, onEndDrag,
   }) => {
-    const index = requestStopPoints.indexOf(item);
-    const sp = requestStopPoints[index];
+    const index = requestStopPoints.findIndex(s => s.id === item.id);
+    const sp = index === -1 ? item : requestStopPoints[index];
+    if (!sp) return null;
     const { type, description } = sp;
     const placeholder = getSpPlaceholder(sp, index);
     const rowProps = index === 0 ? { isExpanded } : { setMargin: true };

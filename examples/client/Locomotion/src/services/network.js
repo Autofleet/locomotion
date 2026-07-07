@@ -27,12 +27,12 @@ const formatResponseLog = function ({ data = '' }) {
 class Network {
   static defaultSettings = {
     baseURL: '/',
-    timeout: 2500,
+    timeout: 30000,
   };
 
   constructor(settings = {}) {
-    this.settings = Object.assign(Network.defaultSettings, settings);
-    this.axios = axios.create(settings);
+    this.settings = { ...Network.defaultSettings, ...settings };
+    this.axios = axios.create(this.settings);
     this.axios.interceptors.request.use((request) => {
       try {
         // Mixpanel.setEvent('Network request', { method: request.method, endpoint: request.url, params: request.params });

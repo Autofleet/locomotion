@@ -1,6 +1,6 @@
 import React, { SetStateAction } from 'react';
-import Modal from 'react-native-modal';
 import Config from 'react-native-config';
+import Modal from '../../Components/CompatModal';
 import { SubTitle, Title } from '../styled';
 import i18n from '../../I18n';
 import {

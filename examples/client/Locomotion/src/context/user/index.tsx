@@ -159,8 +159,8 @@ const UserContextProvider = ({ children }: { children: any }) => {
       if (methods.length) {
         return methods;
       }
-    } catch (e) {
-      console.error(e);
+    } catch (e: any) {
+      console.error(e?.message || String(e));
     }
   };
 
