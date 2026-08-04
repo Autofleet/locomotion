@@ -135,7 +135,8 @@ const CardRow = (paymentMethod: any) => {
   }, [paymentMethod]);
 
   const prefix = paymentMethod.testIdPrefix || '';
-  const { paymentMethodId, addNew } = paymentMethod;
+  const { addNew } = paymentMethod;
+  const paymentMethodId = paymentMethod.paymentMethodId ?? paymentMethod.id;
   const isSpecialMethod = [
     PAYMENT_METHODS.OFFLINE,
     PAYMENT_METHODS.CASH,

@@ -7,6 +7,16 @@ apply plugin: "com.google.gms.google-services"
 apply plugin: "com.google.firebase.crashlytics"
 
 apply from: project(':react-native-config').projectDir.getPath() + "/dotenv.gradle"
+
+android {
+    defaultConfig {
+        if (project.hasProperty('env') && project.env != null
+                && !project.env.containsKey('GOOGLE_MAPS_API_KEY')
+                && project.env.containsKey('GOOGLE_MAPS_KEY')) {
+            resValue "string", "GOOGLE_MAPS_API_KEY", "\"${project.env.get('GOOGLE_MAPS_KEY')}\""
+        }
+    }
+}
 /*
  * This is the configuration block to customize your React Native Android app.
  * By default you don't need to apply any configuration, just uncomment the lines you need.
