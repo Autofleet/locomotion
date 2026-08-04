@@ -26,6 +26,7 @@ export default ({
         {title}
         <DatePicker
           {...props}
+          theme="light"
           locale={getUserLanguageCode()}
           is24hourSource="locale"
           date={date}

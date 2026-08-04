@@ -184,7 +184,6 @@ const RideButtons = ({
         </ButtonContainer>
         <DatePickerPoppup
           testID="datePicker"
-          textColor="black"
           isVisible={isDatePickerOpen}
           date={tempSelectedDate}
           maximumDate={getFutureRideMaxDate(futureBookingDays)}
