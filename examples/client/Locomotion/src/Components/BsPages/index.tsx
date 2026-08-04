@@ -362,7 +362,6 @@ export const ConfirmPickupTime = (props: any) => {
       </RoundedButton>
       <DatePickerPoppup
         testID="datePicker"
-        textColor="black"
         isVisible={isDatePickerOpen}
         date={tempSelectedDate}
         maximumDate={getFutureRideMaxDate(futureBookingDays)}
