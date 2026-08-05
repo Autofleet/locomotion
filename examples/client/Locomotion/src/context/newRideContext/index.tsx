@@ -444,9 +444,8 @@ const RidePageContextProvider = ({ children }: {
         const unixScheduledTo = moment.unix(Number(ride.scheduledTo) / 1000);
         scheduledTime = await getLocationTimezoneTime(formattedStopPoints[0].lat, formattedStopPoints[0].lng, unixScheduledTo);
       }
-      const relevantPaymentMethodId = ride.paymentMethodId || getClientDefaultMethod()?.id;
       const { estimations, services } = await rideApi
-        .createServiceEstimations(formattedStopPoints, scheduledTime, relevantBusinessAccountId, relevantPaymentMethodId);
+        .createServiceEstimations(formattedStopPoints, scheduledTime, relevantBusinessAccountId);
 
       const tags = getEstimationTags(estimations);
       const formattedEstimations = formatEstimations(services, estimations, tags);
@@ -614,7 +613,7 @@ const RidePageContextProvider = ({ children }: {
       setServiceEstimations(null);
       tryServiceEstimations();
     }
-  }, [businessAccountId, ride.paymentMethodId]);
+  }, [businessAccountId]);
 
   useEffect(() => {
     setNumberOfPassengers(-1);
