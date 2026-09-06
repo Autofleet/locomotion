@@ -84,7 +84,7 @@ export const ErrorText = styled(Text)`
   color: #F83743;
 `;
 
-export const ButtonWithError = ({ children, errorText }) => (
+export const ButtonWithError = ({ children, errorText }: any) => (
   <ButtonContainerWithError>
     <ButtonContainerInError>
       {children}

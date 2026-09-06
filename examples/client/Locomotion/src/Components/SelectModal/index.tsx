@@ -66,7 +66,7 @@ const StyledIcon = styled(SvgIcon).attrs(({
 }))``;
 
 
-const StyledSelectRow = ({ item, theme, selected }) => (
+const StyledSelectRow = ({ item, theme, selected }: any) => (
   <StyledRow selected={selected}>
     <StyledIcon
       Svg={person}
@@ -123,13 +123,13 @@ const SelectModal = ({
       data={data}
       defaultValue={selectedItem}
       defaultButtonText={selectedItem?.label || '1'}
-      onSelect={(item, index) => {
+      onSelect={(item: Item, index: number) => {
         setSelectedItem(item);
       }}
       dropdownIconPosition="left"
       dropdownOverlayColor="transparent"
-      buttonTextAfterSelection={(item, index) => item.label}
-      renderCustomizedRowChild={(item, index) => (
+      buttonTextAfterSelection={(item: Item, index: number) => item.label}
+      renderCustomizedRowChild={(item: Item, index: number) => (
         <StyledSelectRow
           item={item}
           index={index}

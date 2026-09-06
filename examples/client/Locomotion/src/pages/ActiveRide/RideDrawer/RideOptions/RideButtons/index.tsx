@@ -78,7 +78,7 @@ const RideButtons = ({
         paymentMethods: PaymentMethodInterface[],
         getClientOutstandingBalanceCard: () => PaymentMethodInterface | undefined,
         offlinePaymentText: string,
-        getBusinessAccountById: (id: string) => { name: string },
+        getBusinessAccountById: (id: string) => any,
         loadOfflinePaymentText: () => void,
     } = PaymentsContext.useContainer();
 
@@ -122,7 +122,7 @@ const RideButtons = ({
 
   const [animatedOpacity] = useState(new Animated.Value(0));
 
-  const animatedStyle = {
+  const animatedStyle: any = {
     height: '100%',
     width: HALF_WIDTH,
     backgroundColor: '#d3eefc',
@@ -163,7 +163,7 @@ const RideButtons = ({
 
     const renderDatePickerTitle = () => (
       <>
-        <PickerTitle>{i18n.t('bottomSheetContent.ride.chosePickupTime')}</PickerTitle>
+        <PickerTitle>{i18n.t('bottomSheetContent.ride.chosePickupTime') as string}</PickerTitle>
         <PickerDate>{moment(tempSelectedDate).format('dddd, MMM Do')}</PickerDate>
         <PickerTimeRange>{`${afterTimeTitle} - ${beforeTimeTitle}`}</PickerTimeRange>
 
@@ -193,14 +193,14 @@ const RideButtons = ({
           confirmText={i18n.t('general.select')}
           cancelText={i18n.t('general.cancel')}
           onCancel={close}
-          onConfirm={(date) => {
+          onConfirm={(date: Date) => {
             if (unconfirmedPickupTime !== date.getTime()) {
               setUnconfirmedPickupTime(date.getTime());
               changeBsPage(BS_PAGES.CONFIRM_PICKUP_TIME);
             }
             close();
           }}
-          onChange={date => setTempSelectedDate(date)}
+          onChange={(date: Date) => setTempSelectedDate(date)}
         />
       </>
 

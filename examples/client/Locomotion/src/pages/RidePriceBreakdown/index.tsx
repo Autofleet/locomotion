@@ -58,7 +58,7 @@ const RidePriceBreakDown = () => {
 
   const updateRideFromApi = async () => {
     setLoading(true);
-    const rideId = params.rideId || ride.id;
+    const rideId = params.rideId || ride?.id;
     if (rideId) {
       const result = await getRideFromApi(rideId);
       setLocalRide(result);

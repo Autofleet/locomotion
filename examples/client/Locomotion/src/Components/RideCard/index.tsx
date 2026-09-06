@@ -44,7 +44,7 @@ const CardComponent = ({ paymentMethod, businessAccountId }: CardComponentProps)
 
   const getText = () => {
     if (businessAccountId) {
-      const { name } = getBusinessAccountById(businessAccountId);
+      const { name } = getBusinessAccountById(businessAccountId) as any;
       return name;
     }
     if (isCash) {

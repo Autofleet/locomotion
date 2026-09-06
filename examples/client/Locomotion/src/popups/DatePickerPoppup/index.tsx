@@ -10,7 +10,7 @@ import { isAndroid } from '../../services/isAndroid';
 
 export default ({
   title, date, onChange, isVisible, onConfirm, onCancel, confirmText, cancelText, ...props
-}) => {
+}: any) => {
   const [currentDate, setCurrentDate] = useState(date);
   useEffect(() => {
     setCurrentDate(date);

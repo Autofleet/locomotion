@@ -59,7 +59,7 @@ const MessageView = ({ menuSide, route }: FutureRidesViewProps) => {
   const {
     getMessage, markReadMessages, toastMessageId, closeToast,
   } = useContext(MessagesContext);
-  const [message, setMessage] = useState(null);
+  const [message, setMessage] = useState<any>(null);
 
   const loadMessage = async (messageId: string) => {
     const fetchedMessage = await getMessage(messageId);

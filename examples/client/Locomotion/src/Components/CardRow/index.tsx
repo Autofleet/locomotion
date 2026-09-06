@@ -104,7 +104,7 @@ const CardRow = (paymentMethod: any) => {
 
   const getPaymentMethodTitle = () => {
     if (businessAccountId) {
-      const { name } = getBusinessAccountById(businessAccountId);
+      const { name } = getBusinessAccountById(businessAccountId) as any;
       return name;
     }
 

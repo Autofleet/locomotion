@@ -38,13 +38,14 @@ export type Station = {
 
 interface VirtualStationsContextInterface {
   loadVirtualStations: () => Promise<void>;
-  getMapMarkers: () => any;
+  getMapMarkers?: () => any;
   isStationsEnabled: boolean;
   rawStations: Station[];
   stationsList: Station[];
   StationMarkers: any;
-  sortAndUpdateStations: () => void
-  getStationList: () => Station[]
+  sortAndUpdateStations: (location?: Location | null) => void
+  getStationList: (sourceLocation?: Location | null) => Station[]
+  sortStationsByDistanceUsingTurf?: (sourceLocation: Location) => Station[];
   stationCalloutsRef: any;
 }
 
@@ -70,7 +71,7 @@ const StationsProvider = ({ children }: { children: any }) => {
     lng: DEFAULT_COORDS.coords.longitude,
   });
   const [isLoading, setIsLoading] = useState(false);
-  const stationCalloutsRef = useRef([]);
+  const stationCalloutsRef = useRef<any>([]);
 
   const init = async () => {
     getCurrentLocation();
@@ -103,7 +104,7 @@ const StationsProvider = ({ children }: { children: any }) => {
 
   const formatCoords = (coords:Coords) => ({ lat: coords.latitude, lng: coords.longitude });
 
-  const sortAndUpdateStations = useCallback((location = null) => {
+  const sortAndUpdateStations = useCallback((location: Location | null = null) => {
     const sortedStations = sortStationsByDistanceUsingTurf(location || currentLocation);
     setStationsList(sortedStations);
   }, [rawStations, currentLocation]);
@@ -127,7 +128,7 @@ const StationsProvider = ({ children }: { children: any }) => {
     return sortedStations;
   };
 
-  const sortStationsByDistance = (stations:Station[]) => {
+  const sortStationsByDistance = (stations:(Station & { distance: number })[]) => {
     const sortedStations = stations.sort((a, b) => a.distance - b.distance);
     return sortedStations;
   };
@@ -163,7 +164,7 @@ const StationsProvider = ({ children }: { children: any }) => {
   }, [user?.id]);
 
 
-  const createMapMarker = (station:Station, stopPoints) => {
+  const createMapMarker = (station:Station, stopPoints: any) => {
     let type = 'default';
 
     if (station?.externalId === stopPoints[0]?.externalId) {
@@ -188,7 +189,10 @@ const StationsProvider = ({ children }: { children: any }) => {
     );
   };
 
-  const StationMarkers = ({ requestedStopPoints }) => useCallback(rawStations.map(s => createMapMarker(s, requestedStopPoints)), [requestedStopPoints]);
+  const StationMarkers = ({ requestedStopPoints }: any) => useCallback(
+    rawStations.map(s => createMapMarker(s, requestedStopPoints)) as any,
+    [requestedStopPoints],
+  );
 
   return (
     <VirtualStationsContext.Provider

@@ -31,7 +31,7 @@ const RideFeedback = ({
   const [isActive, setIsActive] = useState(false);
   const [shouldShowPage, setShouldShowPage] = useState(false);
   const [currentText, updateText] = useState('');
-  const inputRef = useRef();
+  const inputRef = useRef<any>(null);
   const theme = useContext(ThemeContext);
 
   const onChange = (text: string) => {

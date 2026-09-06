@@ -13,7 +13,7 @@ import LinkText from '../../Components/LinkText';
 import stationIcon from '../../assets/map/markers/stations/arrow.svg';
 
 
-const VirtualStationTooltip = ({ station, onPress }) => (
+const VirtualStationTooltip = ({ station, onPress }: any) => (
   <Tooltip>
     <StationDetails>
       <Row>

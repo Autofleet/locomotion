@@ -219,7 +219,10 @@ export const convertTimezoneByLocation = async (
   }
 };
 
-export const didUserRate = (rating: string | null, rideFeedback: any[] | null) => rating || rideFeedback?.length;
+export const didUserRate = (
+  rating?: number | string | null,
+  rideFeedback?: any[] | null,
+) => rating || rideFeedback?.length;
 
 const convertKmToMiles = (km: number) => km * 0.621371;
 

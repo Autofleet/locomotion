@@ -68,7 +68,7 @@ const RideOptions = () => {
         setDefaultPaymentMethod(paymentMethod);
       }
     };
-    if (!ride.paymentMethodId) {
+    if (!ride?.paymentMethodId) {
       updateDefaultPaymentMethod();
     }
   }, [usePayments.paymentMethods, showCash]);

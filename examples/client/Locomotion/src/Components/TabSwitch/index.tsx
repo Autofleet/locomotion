@@ -6,7 +6,7 @@ import {
 } from './styled';
 
 interface ITabSwitchProps {
-    onUnselectedClick: (tab) => void
+    onUnselectedClick: (tab: any) => void
     activeTabId: string;
     tabs: {
         textKey: string;

@@ -25,7 +25,7 @@ interface CancellationReasonsProps {
   isVisible: boolean;
   onCancel: any;
   onSubmit: any;
-  rideId: string;
+  rideId?: string;
 }
 
 const CancellationReasonsPopup = ({
@@ -115,7 +115,7 @@ const CancellationReasonsPopup = ({
                     >
                       <CancellationReasonCard>
                         <CancellationReasonText>
-                          {i18n.t(`cancellationReasons.${cr.value}`, cr.value)}
+                          {i18n.t(`cancellationReasons.${cr.value}`, cr.value) as string}
                         </CancellationReasonText>
                       </CancellationReasonCard>
                     </ClickableContainer>

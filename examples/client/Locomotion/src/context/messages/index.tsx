@@ -36,13 +36,15 @@ interface MessagesContextInterface {
     viewingMessage: messageProps | null;
     setViewingMessage: React.Dispatch<React.SetStateAction<messageProps | null>>;
     setUserMessages: React.Dispatch<React.SetStateAction<messageProps[]>>;
-    loadUserMessages: () => Promise<messageProps[]>;
+    loadUserMessages: () => Promise<messageProps[] | undefined>;
     isLoading: boolean;
     markReadMessages: (param: any) => Promise<any>
     dismissMessages: () => Promise<any>
     getUserMessages: () => Promise<any>
     checkMessagesForToast: () => any
     getMessage: (messageId: string) => Promise<any>
+    toastMessageId: string | null
+    closeToast: () => void
 
 }
 
@@ -58,6 +60,8 @@ export const MessagesContext = createContext<MessagesContextInterface>({
   getUserMessages: async () => undefined,
   checkMessagesForToast: () => undefined,
   getMessage: async () => undefined,
+  toastMessageId: null,
+  closeToast: () => undefined,
 });
 
 const MessagesProvider = ({ children }: { children: any }) => {
@@ -108,7 +112,7 @@ const MessagesProvider = ({ children }: { children: any }) => {
   };
 
   const markReadMessages = async (userMessageIds: string[]): Promise<void> => {
-    await markReadMessageCall(userMessageIds, user?.id);
+    await markReadMessageCall(userMessageIds);
   };
 
   const dismissMessages = async (userMessageIds:string[] = []) => {
@@ -120,7 +124,7 @@ const MessagesProvider = ({ children }: { children: any }) => {
   const checkMessagesForToast = async () => {
     const messages = await getUserMessages();
     setUserMessages(messages);
-    const unreadMessage = messages.find(message => !message.readAt && !message.dismissedAt);
+    const unreadMessage = messages.find((message: any) => !message.readAt && !message.dismissedAt);
     if (unreadMessage) {
       showToast(unreadMessage);
     }
@@ -161,7 +165,7 @@ const MessagesProvider = ({ children }: { children: any }) => {
   };
 
   const getMessage = async (messageId: string) => {
-    const fetchedMessage = await getMessageCall(messageId, user.id);
+    const fetchedMessage = await getMessageCall(messageId, user?.id);
     return fetchedMessage;
   };
 

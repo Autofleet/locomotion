@@ -86,7 +86,7 @@ const Messages = ({ menuSide, route }: FutureRidesViewProps) => {
         : (
           <ScrollContainer>
             {userMessages && userMessages.length
-              ? (userMessages || []).map(m => (
+              ? (userMessages || []).map((m: any) => (
                 <MessageCard
                   key={m.id}
                   {...m}
