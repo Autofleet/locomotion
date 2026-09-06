@@ -14,6 +14,7 @@
       android:allowBackup="false"
       android:theme="@style/SplashTheme"
       android:usesCleartextTraffic="true"
+      android:enableOnBackInvokedCallback="false"
       tools:replace="android:allowBackup"
       >
       <activity
@@ -35,6 +36,9 @@
       <meta-data android:name="google_analytics_adid_collection_enabled" android:value="false" />
       <meta-data android:name="google_analytics_default_allow_ad_personalization_signals" android:value="false" />
       <uses-library android:name="org.apache.http.legacy" android:required="false"/>
+      <property
+        android:name="android.window.PROPERTY_COMPAT_ALLOW_RESTRICTED_RESIZABILITY"
+        android:value="true"/>
     </application>
   <queries>
     <intent>
@@ -44,6 +48,14 @@
     <intent>
       <action android:name="android.intent.action.VIEW" />
       <data android:scheme="tel"/>
+    </intent>
+    <intent>
+      <action android:name="android.intent.action.VIEW" />
+      <data android:scheme="https"/>
+    </intent>
+    <intent>
+      <action android:name="android.intent.action.VIEW" />
+      <data android:scheme="mailto"/>
     </intent>
   </queries>
 </manifest>
