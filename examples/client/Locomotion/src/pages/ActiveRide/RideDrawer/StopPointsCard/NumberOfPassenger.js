@@ -61,7 +61,7 @@ const SetPassengerAmountContainer = styled.View`
   height: 50px;
   border-width: 1;
   border-color: #dedede;
-  border-radius: 2;
+  border-radius: 2px;
   align-self: center;
 `;
 

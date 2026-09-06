@@ -6,7 +6,7 @@ import i18n from '../I18n';
 import { linkColor } from '../assets/style-settings';
 import Button from '../Components/Button';
 
-const borderRadius = 2;
+const borderRadius = '2px';
 
 export const ModalContainer = styled.View`
   background-color: white;

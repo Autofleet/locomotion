@@ -39,7 +39,7 @@ export const MarkerToolTip = styled.View`
     min-width: 50px;
     height: 20px;
     padding: 3px 6px 3px 6px;
-    border-radius: 4;
+    border-radius: 4px;
     box-shadow: 0 3px 6px #b5b5b5;
 
     ${props => `background-color: ${getBg(props)};`}

@@ -58,12 +58,12 @@ export const THEME_MOD = {
 export const GREEN_COLOR = '#2cc36a';
 export const LINK_BLUE_COLOR = '#38a7fc';
 export const FONT_SIZES = {
-  H1: 'font-size: 22px',
-  H2: 'font-size: 18px',
-  H3: 'font-size: 16px',
-  LARGE: 'font-size: 14px',
-  MEDIUM: 'font-size: 12px',
-  SMALL: 'font-size: 10px',
+  H1: 'font-size: 22px;',
+  H2: 'font-size: 18px;',
+  H3: 'font-size: 16px;',
+  LARGE: 'font-size: 14px;',
+  MEDIUM: 'font-size: 12px;',
+  SMALL: 'font-size: 10px;',
 };
 
 export const FONT_SIZES_VALUES = {

@@ -39,7 +39,7 @@ export const RideCard = styled.View`
 export const DriverAvatar = styled.Image`
   width: 30px;
   height: 30px;
-  border-radius: 100;
+  border-radius: 100px;
   margin-left: 15px;
   border-width: 1px;
   border-color: #a7a7a7;

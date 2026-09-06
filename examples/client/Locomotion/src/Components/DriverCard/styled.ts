@@ -45,7 +45,6 @@ export const DriverAvatar = styled(Image)`
   border-radius: 100px;
   border-color: ${({ theme }) => theme.primaryColor};
   border-width: 4;
-  border-radius: 100;
  `;
 
 
