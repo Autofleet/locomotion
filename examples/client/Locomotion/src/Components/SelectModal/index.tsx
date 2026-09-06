@@ -90,7 +90,7 @@ interface SelectModalProps {
 }
 
 const SelectModal = ({
-  data, onSelect, onError, selectedValue,
+  data, onSelect, onError, selectedValue = null,
 }: SelectModalProps) => {
   const [selectedItem, setSelectedItem] = useState<Item| null>(null);
   const [error, setError] = useState(false);
@@ -138,9 +138,6 @@ const SelectModal = ({
       )}
     />
   );
-};
-SelectModal.defaultProps = {
-  selectedValue: null,
 };
 
 export default SelectModal;

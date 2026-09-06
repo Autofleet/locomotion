@@ -22,6 +22,7 @@ color: #333333;
 
 interface TextRowWithIconProps {
     text: string;
+    subTitle?: any;
     icon?: any;
     style?: Record<string, unknown>;
     Image?: any
@@ -31,7 +32,7 @@ interface TextRowWithIconProps {
 }
 
 const TextRowWithIcon = ({
-  subTitle, text, icon, style, Image, iconWidth, iconHeight,
+  subTitle, text, icon = null, style = {}, Image = null, iconWidth = 15, iconHeight = 15,
 }: TextRowWithIconProps) => {
   const theme = useContext(ThemeContext);
   const getImage = () => {
@@ -60,14 +61,6 @@ const TextRowWithIcon = ({
       </BasicText>
     </Container>
   );
-};
-
-TextRowWithIcon.defaultProps = {
-  icon: null,
-  style: {},
-  Image: null,
-  iconWidth: 15,
-  iconHeight: 15,
 };
 
 export default TextRowWithIcon;

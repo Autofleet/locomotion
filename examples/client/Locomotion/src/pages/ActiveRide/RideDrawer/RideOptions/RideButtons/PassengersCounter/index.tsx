@@ -9,8 +9,8 @@ interface Item {
 }
 
 const PassengersCounter = ({
-  service, onSelect, onError = () => null, selectedValue,
-}) => {
+  service, onSelect, onError = () => null, selectedValue = null,
+}: any) => {
   const [passengersOptions, setPassengersOptions] = useState<Item[]>([]);
 
   useEffect(() => {
@@ -35,8 +35,5 @@ const PassengersCounter = ({
       selectedValue={selectedValue}
     />
   );
-};
-PassengersCounter.defaultProps = {
-  selectedValue: null,
 };
 export default PassengersCounter;

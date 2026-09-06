@@ -7,13 +7,13 @@ import {
 import Button from '../Button';
 
 type NoTitleCardProps = {
-    onPress: () => void | undefined,
+    onPress?: () => void | undefined,
     children: any,
-    showArrow: boolean,
+    showArrow?: boolean,
 }
 
 const NoTitleCard = ({
-  onPress, children, showArrow, ...props
+  onPress = undefined, children, showArrow = false, ...props
 } : NoTitleCardProps) => (
   <Button noBackground onPress={onPress} {...props}>
     <CardContainer>
@@ -22,11 +22,6 @@ const NoTitleCard = ({
     </CardContainer>
   </Button>
 );
-
-NoTitleCard.defaultProps = {
-  onPress: undefined,
-  showArrow: false,
-};
 
 NoTitleCard.propTypes = {
   onPress: propsTypes.func,

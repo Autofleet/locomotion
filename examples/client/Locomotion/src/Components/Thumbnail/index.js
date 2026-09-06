@@ -20,6 +20,13 @@ const BORDER_RADIUS = 1000;
 
 const Container = styled.View``;
 const myThumbnail = (props) => {
+  const {
+    size = 220,
+    onPress = () => null,
+    mode = 'preview',
+    source = null,
+    showLoader = false,
+  } = props;
   const { primaryColor } = useContext(ThemeContext);
 
   const defaultStyles = {
@@ -51,22 +58,22 @@ const myThumbnail = (props) => {
     },
   };
 
-  defaultStyles.linearGradient.width = props.size;
-  defaultStyles.linearGradient.height = props.size;
+  defaultStyles.linearGradient.width = size;
+  defaultStyles.linearGradient.height = size;
   defaultStyles.linearGradient = Object.assign(defaultStyles.linearGradient);
   const styles = StyleSheet.create(defaultStyles);
-  const ImageComponent = props.source && props.source.substring(0, 4) === 'http' ? FastImage : Image;
-  const borderRadius = { borderRadius: props.size };
-  const borderRadiusSmall = { borderRadius: (props.size - 10) / 2 };
+  const ImageComponent = source && source.substring(0, 4) === 'http' ? FastImage : Image;
+  const borderRadius = { borderRadius: size };
+  const borderRadiusSmall = { borderRadius: (size - 10) / 2 };
   return (
-    <Container style={{ width: props.size, height: props.size }}>
+    <Container style={{ width: size, height: size }}>
       <Button
         noBackground
-        onPress={props.onPress}
+        onPress={onPress}
         style={[styles.croper, borderRadius]}
         testID="ImagePickerButton"
       >
-        {props.showLoader ? (
+        {showLoader ? (
           <Loader
             lottieViewStyle={{
               height: 15, width: 15,
@@ -75,18 +82,18 @@ const myThumbnail = (props) => {
         ) : (
           <ImageComponent
             style={[styles.image, borderRadiusSmall]}
-            source={props.source ? { uri: props.source } : avatarIcon}
+            source={source ? { uri: source } : avatarIcon}
           />
         )}
       </Button>
-      {props.mode in modes && (
+      {mode in modes && (
         <Button
           noBackground
-          onPress={props.onPress}
+          onPress={onPress}
           style={styles.iconContainer}
-          testID={`${props.mode}ImageButton`}
+          testID={`${mode}ImageButton`}
         >
-          <SvgIcon Svg={modes[props.mode]} height={48} width={48} fill={primaryColor} />
+          <SvgIcon Svg={modes[mode]} height={48} width={48} fill={primaryColor} />
         </Button>
       )}
     </Container>
@@ -94,14 +101,6 @@ const myThumbnail = (props) => {
 };
 
 export default myThumbnail;
-
-myThumbnail.defaultProps = {
-  size: 220,
-  onPress: () => null,
-  mode: 'preview',
-  source: null,
-  showLoader: false,
-};
 
 myThumbnail.propTypes = {
   size: propsTypes.oneOfType([propsTypes.number, propsTypes.string]),

@@ -44,10 +44,10 @@ interface BottomSheetProps {
 }
 
 const BottomSheetComponent = forwardRef(({
-  children,
-  enablePanDownToClose,
-  index,
-  closeable,
+  children = null,
+  enablePanDownToClose = false,
+  index = 0,
+  closeable = false,
   onClose,
   keyboardBehavior,
   keyboardBlurBehavior,
@@ -137,10 +137,4 @@ const BottomSheetComponent = forwardRef(({
     </BottomSheet>
   );
 });
-BottomSheetComponent.defaultProps = {
-  children: null,
-  enablePanDownToClose: false,
-  index: 0,
-  closeable: false,
-};
 export default BottomSheetComponent;

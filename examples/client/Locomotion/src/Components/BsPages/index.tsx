@@ -176,19 +176,19 @@ const RIDE_STATES_TO_BS_PAGES = objDefault({
 });
 
 const BsPage = ({
-  onSecondaryButtonPress,
+  onSecondaryButtonPress = () => undefined,
   onButtonPress,
   Image,
-  children,
-  titleIcon,
+  children = undefined,
+  titleIcon = undefined,
   TitleText,
   SubTitleText,
   ButtonText,
-  SecondaryButtonText,
-  isLoading,
-  buttonDisabled,
-  warning,
-  fullWidthButtons,
+  SecondaryButtonText = undefined,
+  isLoading = false,
+  buttonDisabled = false,
+  warning = false,
+  fullWidthButtons = false,
   subtitleTestId,
 }: {
   onSecondaryButtonPress?: any,
@@ -255,17 +255,6 @@ const BsPage = ({
       </Footer>
     </Container>
   );
-};
-
-BsPage.defaultProps = {
-  children: undefined,
-  titleIcon: undefined,
-  onSecondaryButtonPress: () => undefined,
-  SecondaryButtonText: undefined,
-  isLoading: false,
-  buttonDisabled: false,
-  warning: false,
-  fullWidthButtons: false,
 };
 
 export default BsPage;

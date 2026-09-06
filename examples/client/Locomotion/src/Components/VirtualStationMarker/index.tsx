@@ -10,8 +10,8 @@ import VirtualStationTooltip from '../VirtualStationTooltipComponent';
 import { useMarkerTracksViewChanges } from '../Marker/useMarkerTracksViewChanges';
 
 const VirtualStationMarker = forwardRef(({
-  station, onCalloutPress, type,
-}, ref) => {
+  station = {}, onCalloutPress = () => null, type = 'default',
+}: any, ref) => {
   const isActive = useCallback(() => type !== 'default', [type]);
   const markerRef = useRef<any>(null);
   useImperativeHandle(ref, () => markerRef.current);
@@ -35,9 +35,3 @@ const VirtualStationMarker = forwardRef(({
   );
 });
 export default VirtualStationMarker;
-
-VirtualStationMarker.defaultProps = {
-  station: {},
-  onCalloutPress: () => null,
-  type: 'default',
-};

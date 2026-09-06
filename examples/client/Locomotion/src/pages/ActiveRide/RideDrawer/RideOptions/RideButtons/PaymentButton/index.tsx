@@ -41,9 +41,9 @@ const PromoButtonContainer = styled(View)`
 
 interface PaymentButtonProps {
   icon: string;
-  title: string;
-  brand?: Brand;
-  id?: string;
+  title: string | null;
+  brand?: Brand | null;
+  id?: string | null;
   invalid?: boolean;
   promoButton?: React.ReactNode;
 }
@@ -51,10 +51,10 @@ interface PaymentButtonProps {
 const PaymentButton = ({
   icon,
   title,
-  brand,
-  id,
-  invalid,
-  promoButton,
+  brand = null,
+  id = null,
+  invalid = false,
+  promoButton = null,
 }: PaymentButtonProps) => {
   const { primaryColor } = useContext(ThemeContext);
   const IconColor = invalid ? '#F83743' : primaryColor;
@@ -83,10 +83,3 @@ const PaymentButton = ({
 };
 
 export default PaymentButton;
-
-PaymentButton.defaultProps = {
-  brand: null,
-  id: null,
-  invalid: false,
-  promoButton: null,
-};

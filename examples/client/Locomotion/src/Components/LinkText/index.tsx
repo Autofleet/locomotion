@@ -25,8 +25,4 @@ const LinkTextComponent = ({
   </TouchableContainer>
 );
 
-LinkTextComponent.defaultProps = {
-  icon: null,
-  iconSide: 'left',
-};
 export default LinkTextComponent;

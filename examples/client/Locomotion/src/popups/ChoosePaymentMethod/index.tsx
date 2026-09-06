@@ -33,26 +33,26 @@ interface PaymentMethodPopupProps {
   isVisible: boolean;
   onCancel: () => void;
   onSubmit: (payment: any) => void;
-  showCash: boolean;
-  rideFlow: boolean;
-  selected: any;
+  showCash?: boolean;
+  rideFlow?: boolean;
+  selected?: any;
   onAddNewMethod: () => void;
-  showOffline: boolean;
-  showExternal: boolean;
-  showBusinessPaymentMethods: boolean;
-  selectedBusinessAccountId: string | null;
+  showOffline?: boolean;
+  showExternal?: boolean;
+  showBusinessPaymentMethods?: boolean;
+  selectedBusinessAccountId?: string | null;
 }
 
 const PaymentMethodPopup = ({
   isVisible,
   onCancel,
   onSubmit,
-  showCash,
-  rideFlow,
-  selected,
+  showCash = true,
+  rideFlow = false,
+  selected = null,
   onAddNewMethod,
-  showOffline,
-  showExternal,
+  showOffline = false,
+  showExternal = false,
   showBusinessPaymentMethods,
   selectedBusinessAccountId,
 }: PaymentMethodPopupProps) => {
@@ -249,15 +249,6 @@ PaymentMethodPopup.propTypes = {
   selected: PropTypes.string,
   showOffline: PropTypes.bool,
   showExternal: PropTypes.bool,
-};
-
-PaymentMethodPopup.defaultProps = {
-  onSave: null,
-  showCash: true,
-  rideFlow: false,
-  selected: null,
-  showOffline: false,
-  showExternal: false,
 };
 
 export default PaymentMethodPopup;

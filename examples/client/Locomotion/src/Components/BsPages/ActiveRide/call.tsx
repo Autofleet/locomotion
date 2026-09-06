@@ -13,7 +13,7 @@ import GenericRideButton from '../../GenericRideButton';
 import phone from '../../../assets/bottomSheet/phone.svg';
 import { RidePageContext } from '../../../context/newRideContext';
 
-const CallContactPersonMasked = ({ onError }: { onError: any }) => {
+const CallContactPersonMasked = ({ onError = () => null }: { onError?: any }) => {
   const { getCallNumbers } = useContext(RidePageContext);
   const [disabledPhoneButton, setDisabledPhoneButton] = useState(false);
   const [dialogNumber, setDialogNumber] = useState<string | null>(null);
@@ -96,10 +96,6 @@ const CallContactPersonMasked = ({ onError }: { onError: any }) => {
 
 CallContactPersonMasked.propTypes = {
   onError: propsTypes.func,
-};
-
-CallContactPersonMasked.defaultProps = {
-  onError: () => null,
 };
 
 export default CallContactPersonMasked;

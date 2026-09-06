@@ -100,5 +100,3 @@ const RidesList = React.memo(({
 export default RidesList;
 
 RidesList.propTypes = {};
-
-RidesList.defaultProps = {};
