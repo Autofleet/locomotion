@@ -140,8 +140,5 @@
     "react-refresh": "^0.14.2",
     "react-test-renderer": "19.0.0",
     "typescript": "~5.1.6"
-  },
-  "jest": {
-    "preset": "react-native"
   }
 }
