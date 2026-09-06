@@ -19,7 +19,6 @@
     "patch-package": "patch-package"
   },
   "dependencies": {
-    "@autofleet/i18next-remote-backend-with-locals": "^1.0.0",
     "@gorhom/bottom-sheet": "^5.2.14",
     "@gorhom/portal": "^1.0.14",
     "@mapbox/polyline": "^1.1.0",
