@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled from 'styled-components/native';
 import { TextArea } from '../../Components/TextArea';
 import { End } from '../../lib/text-direction';
 

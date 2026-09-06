@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import { Image, StyleSheet } from 'react-native';
 import FastImage from '@d11/react-native-fast-image';
 import propsTypes from 'prop-types';
-import styled from 'styled-components';
+import styled from 'styled-components/native';
 import Button from '../Button';
 import avatarIcon from './default.png';
 import editIcon from './edit.svg';

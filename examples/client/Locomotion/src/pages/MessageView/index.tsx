@@ -2,7 +2,7 @@ import React, {
   Fragment,
   useContext, useEffect, useRef, useState,
 } from 'react';
-import styled from 'styled-components';
+import styled from 'styled-components/native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { Linking, Text, View } from 'react-native';
 import Markdown from 'react-native-markdown-display';

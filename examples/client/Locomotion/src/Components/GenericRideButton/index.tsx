@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import { Text } from 'react-native';
-import styled, { ThemeContext } from 'styled-components';
+import styled, { ThemeContext } from 'styled-components/native';
 import SvgIcon from '../SvgIcon';
 import { FONT_SIZES, FONT_WEIGHTS } from '../../context/theme';
 

@@ -2,7 +2,7 @@ import React, {
   useContext, useState, useEffect,
 } from 'react';
 import moment from 'moment';
-import { ThemeContext } from 'styled-components';
+import { ThemeContext } from 'styled-components/native';
 import { Animated, View } from 'react-native';
 import { isCashPaymentMethod, isExternalPaymentMethod, isOfflinePaymentMethod } from '../../../../../lib/ride/utils';
 import DatePickerPoppup from '../../../../../popups/DatePickerPoppup';

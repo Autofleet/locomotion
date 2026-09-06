@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import PhoneInput, { PhoneInputProps } from 'react-native-phone-number-input';
 import Config from 'react-native-config';
 import { AsYouType } from 'libphonenumber-js';
-import { ThemeContext } from 'styled-components';
+import { ThemeContext } from 'styled-components/native';
 import { getInputIsoCode } from '../../services/MccMnc';
 import i18n from '../../I18n';
 import codes from './codes.json';

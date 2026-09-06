@@ -1,7 +1,7 @@
 
 import React, { useEffect, useRef, useState } from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
-import styled from 'styled-components';
+import styled from 'styled-components/native';
 import { useBottomSheet } from '@gorhom/bottom-sheet';
 import * as yup from 'yup';
 import i18n from '../../../I18n';

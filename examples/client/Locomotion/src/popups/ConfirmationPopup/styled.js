@@ -2,7 +2,7 @@ import React from 'react';
 import {
   View, Text, Image, TouchableOpacity,
 } from 'react-native';
-import styled from 'styled-components';
+import styled from 'styled-components/native';
 import RoundedButton from '../../Components/RoundedButton';
 import xIcon from '../../assets/x.png';
 

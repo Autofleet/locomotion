@@ -1,5 +1,5 @@
 import React from 'react';
-import styled from 'styled-components';
+import styled from 'styled-components/native';
 import Button from '../Button';
 import SvgIcon from '../SvgIcon';
 import closeXIcon from '../../assets/close-x.svg';

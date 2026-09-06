@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { Text, View } from 'react-native';
 import { PaymentIcon } from 'react-native-payment-icons';
-import styled, { ThemeContext } from 'styled-components';
+import styled, { ThemeContext } from 'styled-components/native';
 import { isCardPaymentMethod } from '../../../../../../lib/ride/utils';
 import SvgIcon from '../../../../../../Components/SvgIcon';
 import { FONT_SIZES, FONT_WEIGHTS } from '../../../../../../context/theme';

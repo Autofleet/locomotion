@@ -8,7 +8,7 @@ import BottomSheet, {
   BottomSheetHandle,
   BottomSheetView,
 } from '@gorhom/bottom-sheet';
-import styled from 'styled-components';
+import styled from 'styled-components/native';
 import { Text, View } from 'react-native';
 import { Trans } from 'react-i18next';
 // eslint-disable-next-line import/no-unresolved

@@ -1,7 +1,7 @@
 import React, { ReactElement, useContext } from 'react';
 import SkeletonPlaceholder from 'react-native-reanimated-skeleton';
 import { ICustomViewStyle } from 'react-native-reanimated-skeleton/lib/typescript/constants';
-import { ThemeContext } from 'styled-components';
+import { ThemeContext } from 'styled-components/native';
 
 interface SkeletonProps {
   children: ReactElement;

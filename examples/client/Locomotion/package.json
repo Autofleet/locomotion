@@ -95,7 +95,7 @@
     "react-native-version-check": "^3.4.3",
     "react-native-webview": "~13.16.1",
     "shortid": "^2.2.16",
-    "styled-components": "^5.3.5",
+    "styled-components": "^6.4.3",
     "unstated-next": "^1.1.0",
     "yup": "0.28.5"
   },
@@ -122,7 +122,6 @@
     "@types/react-native-version-check": "^3.4.4",
     "@types/react-test-renderer": "^19.0.0",
     "@types/shortid": "0.0.29",
-    "@types/styled-components": "^5.1.25",
     "@typescript-eslint/eslint-plugin": "^5.29.0",
     "@typescript-eslint/parser": "^5.29.0",
     "babel-jest": "^29.6.3",

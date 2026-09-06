@@ -1,5 +1,5 @@
 import { View, Text, Dimensions } from 'react-native';
-import styled from 'styled-components';
+import styled from 'styled-components/native';
 import CalendarSvg from '../../assets/calendar.svg';
 
 export const PageContent = styled(View)`

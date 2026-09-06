@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { Text } from 'react-native';
 import moment from 'moment';
-import styled, { ThemeContext } from 'styled-components';
+import styled, { ThemeContext } from 'styled-components/native';
 import SvgIcon from '../../../../../../Components/SvgIcon';
 import clock from '../../../../../../assets/bottomSheet/clock.svg';
 import chevron from '../../../../../../assets/chevron.svg';

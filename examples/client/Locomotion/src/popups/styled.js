@@ -1,5 +1,5 @@
 import React from 'react';
-import styled from 'styled-components';
+import styled from 'styled-components/native';
 
 import { FONT_SIZES, FONT_WEIGHTS } from '../context/theme';
 import i18n from '../I18n';

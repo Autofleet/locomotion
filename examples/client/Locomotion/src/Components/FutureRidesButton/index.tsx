@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { ThemeContext } from 'styled-components';
+import { ThemeContext } from 'styled-components/native';
 import { MAIN_ROUTES } from '../../pages/routes';
 import SvgIcon from '../SvgIcon';
 import { Container, UpcomingText } from './styled';

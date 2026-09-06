@@ -2,7 +2,7 @@ import React, { useState, useEffect, Fragment } from 'react';
 import {
   Text, View, TouchableOpacity, TextInput,
 } from 'react-native';
-import styled from 'styled-components';
+import styled from 'styled-components/native';
 import moment from 'moment';
 import i18n from '../../../../../I18n';
 import InputIcon from '../../../../../assets/arrow-down.png';

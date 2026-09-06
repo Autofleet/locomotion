@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Text, View } from 'react-native';
-import styled from 'styled-components';
+import styled from 'styled-components/native';
 import SelectDropdown from 'react-native-select-dropdown';
 import SvgIcon from '../SvgIcon';
 import person from '../../assets/person.svg';

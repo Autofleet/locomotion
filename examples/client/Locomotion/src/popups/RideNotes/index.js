@@ -5,7 +5,7 @@ import {
   BackHandler, Platform, Pressable, StatusBar, StyleSheet, View,
 } from 'react-native';
 import { Portal } from '@gorhom/portal';
-import { ThemeContext } from 'styled-components';
+import { ThemeContext } from 'styled-components/native';
 import i18n from '../../I18n';
 import {
   SummaryContainer,

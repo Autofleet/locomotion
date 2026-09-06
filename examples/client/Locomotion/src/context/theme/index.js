@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useColorScheme, Appearance } from 'react-native';
-import { ThemeProvider, ThemeContext } from 'styled-components';
+import { ThemeProvider, ThemeContext } from 'styled-components/native';
 import Config from 'react-native-config';
 import settings from '../settings';
 import SETTINGS_KEYS from '../settings/keys';

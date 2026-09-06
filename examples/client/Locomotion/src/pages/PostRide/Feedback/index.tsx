@@ -1,7 +1,7 @@
 import React, {
   useContext, useEffect, useRef, useState,
 } from 'react';
-import { ThemeContext } from 'styled-components';
+import { ThemeContext } from 'styled-components/native';
 import { TouchableOpacity } from 'react-native';
 import i18n from '../../../I18n';
 import {

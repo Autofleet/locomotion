@@ -1,6 +1,6 @@
 import React, { useCallback, useContext } from 'react';
 import { Text } from 'react-native';
-import styled, { ThemeContext } from 'styled-components';
+import styled, { ThemeContext } from 'styled-components/native';
 import { useFocusEffect } from '@react-navigation/native';
 import {
   isCashPaymentMethod,
