@@ -145,3 +145,4 @@ watchmanScript.sh
 !.yarn/releases
 !.yarn/sdks
 !.yarn/versions
+.kotlin/
