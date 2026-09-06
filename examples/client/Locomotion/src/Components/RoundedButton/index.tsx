@@ -1,7 +1,7 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useTheme } from 'styled-components/native';
 import { ButtonTextContainer, StyledButton, SubmitButtonText } from './styled';
 import SvgIcon from '../SvgIcon';
-import { Context as ThemeContext } from '../../context/theme';
 
 interface ButtonProps {
   type?: string;
@@ -30,7 +30,7 @@ const RoundedButton = ({
   ...props
 }: ButtonProps) => {
   const [loadingState, setLoadingState] = useState(false);
-  const theme = useContext(ThemeContext);
+  const theme = useTheme();
 
   const onPressWithLoading = async (args: any) => {
     setLoadingState(true);

@@ -1,9 +1,9 @@
 /* eslint-disable no-nested-ternary */
 /* eslint-disable no-mixed-operators */
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text } from 'react-native';
 import moment from 'moment';
-import styled, { ThemeContext } from 'styled-components/native';
+import styled, { useTheme } from 'styled-components/native';
 import { PaymentIcon } from 'react-native-payment-icons';
 import { RideInterface, RidePageContext } from '../../context/newRideContext';
 import { PAYMENT_METHODS, paymentMethodToIconMap } from '../../pages/Payments/consts';
@@ -93,7 +93,7 @@ const style = {
 
 
 const CardRow = (paymentMethod: any) => {
-  const { primaryColor } = useContext(ThemeContext);
+  const { primaryColor } = useTheme();
   const {
     offlinePaymentText,
     loadOfflinePaymentText,

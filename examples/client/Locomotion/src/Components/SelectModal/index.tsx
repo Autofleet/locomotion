@@ -9,7 +9,7 @@ import {
 } from '../../context/theme';
 
 const ERROR_COLOR = '#f35657';
-const StyledPop = styled(SelectDropdown).attrs(({ theme, icon = person, error }) => ({
+const StyledPop = styled(SelectDropdown).attrs<{ icon?: any; error?: boolean }>(({ theme, icon = person, error }) => ({
   buttonStyle: {
     borderRadius: 8,
     flex: 1,

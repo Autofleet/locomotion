@@ -1,6 +1,6 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { Text } from 'react-native';
-import styled, { ThemeContext } from 'styled-components/native';
+import styled, { useTheme } from 'styled-components/native';
 import SvgIcon from '../SvgIcon';
 import { FONT_SIZES, FONT_WEIGHTS } from '../../context/theme';
 
@@ -20,7 +20,7 @@ const GenericRideButton = ({
   icon,
   title,
 }: GenericRideButtonProps) => {
-  const { primaryColor } = useContext(ThemeContext);
+  const { primaryColor } = useTheme();
   return (
     <>
       <SvgIcon stroke={primaryColor} fill={primaryColor} Svg={icon} height={15} width={15} />

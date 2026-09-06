@@ -1,6 +1,6 @@
 import React, { useCallback, useContext } from 'react';
 import { Text } from 'react-native';
-import styled, { ThemeContext } from 'styled-components/native';
+import styled, { useTheme } from 'styled-components/native';
 import { useFocusEffect } from '@react-navigation/native';
 import {
   isCashPaymentMethod,
@@ -37,7 +37,7 @@ interface PromoCodeButtonProps {
 }
 
 const PromoCodeButton = ({ id }: PromoCodeButtonProps) => {
-  const { primaryColor } = useContext(ThemeContext);
+  const { primaryColor } = useTheme();
   const { getCoupon, coupon, setCoupon } = useContext(UserContext);
   const isDebuggingEnabled = typeof atob !== 'undefined';
   const noCoupon = coupon && coupon.status === 'error';

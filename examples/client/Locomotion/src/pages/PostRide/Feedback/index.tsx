@@ -1,7 +1,7 @@
 import React, {
-  useContext, useEffect, useRef, useState,
+  useEffect, useRef, useState,
 } from 'react';
-import { ThemeContext } from 'styled-components/native';
+import { useTheme } from 'styled-components/native';
 import { TouchableOpacity } from 'react-native';
 import i18n from '../../../I18n';
 import {
@@ -32,14 +32,14 @@ const RideFeedback = ({
   const [shouldShowPage, setShouldShowPage] = useState(false);
   const [currentText, updateText] = useState('');
   const inputRef = useRef<any>(null);
-  const theme = useContext(ThemeContext);
+  const theme = useTheme();
 
   const onChange = (text: string) => {
     updateText(text);
     onTextChange(text);
   };
 
-  const { primaryColor } = useContext(ThemeContext);
+  const { primaryColor } = useTheme();
   const { getSettingByKey } = settings.useContainer();
 
   const onLabelClick = () => {

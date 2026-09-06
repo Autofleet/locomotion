@@ -1,6 +1,6 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { Text, View } from 'react-native';
-import styled, { ThemeContext } from 'styled-components/native';
+import styled, { useTheme } from 'styled-components/native';
 import { FONT_SIZES } from '../../context/theme';
 import SvgIcon from '../SvgIcon';
 
@@ -34,7 +34,7 @@ interface TextRowWithIconProps {
 const TextRowWithIcon = ({
   subTitle, text, icon = null, style = {}, Image = null, iconWidth = 15, iconHeight = 15,
 }: TextRowWithIconProps) => {
-  const theme = useContext(ThemeContext);
+  const theme = useTheme();
   const getImage = () => {
     if (icon) {
       return (
