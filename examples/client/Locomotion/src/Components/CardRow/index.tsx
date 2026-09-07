@@ -16,6 +16,7 @@ import { Start, StartCapital } from '../../lib/text-direction';
 import chevronIcon from '../../assets/chevron.svg';
 import { isCashPaymentMethod, isExternalPaymentMethod, isOfflinePaymentMethod } from '../../lib/ride/utils';
 import paymentContext from '../../context/payments';
+import { GetBusinessAccountById } from '../../context/payments/interface';
 
 type ContainerProps = {
   children: React.ReactNode,
@@ -98,13 +99,17 @@ const CardRow = (paymentMethod: any) => {
     offlinePaymentText,
     loadOfflinePaymentText,
     getBusinessAccountById,
+  }: {
+    offlinePaymentText: string,
+    loadOfflinePaymentText: () => void,
+    getBusinessAccountById: GetBusinessAccountById,
   } = paymentContext.useContainer();
   const { businessAccountId } = paymentMethod;
   const [isCardExpired, setIsCardExpired] = useState(false);
 
   const getPaymentMethodTitle = () => {
     if (businessAccountId) {
-      const { name } = getBusinessAccountById(businessAccountId) as any;
+      const { name } = getBusinessAccountById(businessAccountId) ?? {};
       return name;
     }
 

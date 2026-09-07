@@ -35,7 +35,7 @@ interface PaymentMethodPopupProps {
   onSubmit: (payment: any) => void;
   showCash?: boolean;
   rideFlow?: boolean;
-  selected?: any;
+  selected?: string | null;
   onAddNewMethod: () => void;
   showOffline?: boolean;
   showExternal?: boolean;
@@ -49,7 +49,7 @@ const PaymentMethodPopup = ({
   onSubmit,
   showCash = true,
   rideFlow = false,
-  selected = null,
+  selected,
   onAddNewMethod,
   showOffline = false,
   showExternal = false,
@@ -58,7 +58,7 @@ const PaymentMethodPopup = ({
 }: PaymentMethodPopupProps) => {
   const usePayments = PaymentsContext.useContainer();
   const { chosenService } = useContext(NewRidePageContext);
-  const [selectedPaymentId, setSelectedPaymentId] = useState<string | undefined>(selected);
+  const [selectedPaymentId, setSelectedPaymentId] = useState<string | null | undefined>(selected);
   const [activePaymentTab, setActivePaymentTab] = useState(
     selectedBusinessAccountId ? PAYMENT_MODES.BUSINESS : PAYMENT_MODES.PERSONAL,
   );

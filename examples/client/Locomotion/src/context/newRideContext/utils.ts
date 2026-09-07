@@ -3,6 +3,7 @@ import shortid from 'shortid';
 import i18n from '../../I18n';
 import { getGeocode } from './google-api';
 import { getLocationTimezone } from './api';
+import type { RequestStopPoint, RideFeedback } from './types';
 
 export const ESTIMATION_ERRORS = {
   'RIDE_VALIDATION:SOME_STOP_POINTS_ARE_OUT_OF_TERRITORY': 'RIDE_VALIDATION:SOME_STOP_POINTS_ARE_OUT_OF_TERRITORY',
@@ -42,7 +43,7 @@ export const RIDE_POPUPS: {[key: string]: RidePopupNames} = {
   CANCELLATION_REASON: 'CANCELLATION_REASON',
 };
 
-export const INITIAL_STOP_POINTS = [{
+export const INITIAL_STOP_POINTS: RequestStopPoint[] = [{
   type: 'pickup',
   lat: null,
   lng: null,
@@ -221,7 +222,7 @@ export const convertTimezoneByLocation = async (
 
 export const didUserRate = (
   rating?: number | string | null,
-  rideFeedback?: any[] | null,
+  rideFeedback?: RideFeedback[] | null,
 ) => rating || rideFeedback?.length;
 
 const convertKmToMiles = (km: number) => km * 0.621371;

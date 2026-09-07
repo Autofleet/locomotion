@@ -23,8 +23,8 @@ interface MultiSpConnectorProps {
   amountOfStops: number;
 }
 
-const ConnectorThreeDots = (props: any) => (
-  <ThreeDotsContainer {...props}>
+const ConnectorThreeDots = () => (
+  <ThreeDotsContainer>
     <SvgIcon
       Svg={connectorIcon}
       width={ICON_SIZE}
@@ -39,7 +39,7 @@ const MultiSpConnector = ({ amountOfStops }: MultiSpConnectorProps) => (
     <ConnectorText>
       {`+${amountOfStops}`}
     </ConnectorText>
-    <ConnectorThreeDots marginRight={2} />
+    <ConnectorThreeDots />
   </MultiSpConnectorContainer>
 );
 

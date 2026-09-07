@@ -1,5 +1,5 @@
 import React, {
-  useEffect, useRef, useState,
+  useEffect, useState,
 } from 'react';
 import { useTheme } from 'styled-components/native';
 import { TouchableOpacity } from 'react-native';
@@ -31,7 +31,6 @@ const RideFeedback = ({
   const [isActive, setIsActive] = useState(false);
   const [shouldShowPage, setShouldShowPage] = useState(false);
   const [currentText, updateText] = useState('');
-  const inputRef = useRef<any>(null);
   const theme = useTheme();
 
   const onChange = (text: string) => {
@@ -82,7 +81,6 @@ const RideFeedback = ({
               <StyledTextArea
                 testID="feedbackInput"
                 autoFocus={false}
-                ref={inputRef}
                 value={currentText}
                 multiline
                 numberOfLines={2}

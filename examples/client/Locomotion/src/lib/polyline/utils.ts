@@ -24,17 +24,17 @@ export const getVehicleLocation = (location: any, vehiclePolyline: any[]) => {
 export const decodePolyline = (stopPointPolyline: any) => polyline.decode(stopPointPolyline);
 
 export const getPolylineList = (currentStopPoint: any, ride: RideInterface) => {
-  let decodedPolyline: any[] = polyline.decode(currentStopPoint.polyline);
+  let decodedPolyline: [number, number][] = polyline.decode(currentStopPoint.polyline);
   let vehicleLocation;
 
   if (ride.vehicle?.location) {
     vehicleLocation = getVehicleLocation(ride.vehicle?.location, decodedPolyline);
     const split = lineSplit(
-      lineString(decodedPolyline.map((p: any) => ([p[1], p[0]]))),
+      lineString(decodedPolyline.map(([lat, lng]) => ([lng, lat]))),
       point([vehicleLocation.lng, vehicleLocation.lat]),
     );
     decodedPolyline = split.features[1]?.geometry.coordinates
-      .map((t: any) => [t[1], t[0]]) || decodedPolyline;
+      .map(([lng, lat]: number[]): [number, number] => [lat, lng]) || decodedPolyline;
   }
 
   return (vehicleLocation ? [{ latitude: vehicleLocation.lat, longitude: vehicleLocation.lng }] : [])

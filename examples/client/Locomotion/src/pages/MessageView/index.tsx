@@ -20,7 +20,7 @@ import Button from '../../Components/Button';
 import { LINK_BLUE_COLOR, FONT_SIZES } from '../../context/theme';
 import arrow from '../../assets/chevron.svg';
 import Loader from '../../Components/Loader';
-import { MessagesContext } from '../../context/messages';
+import { MessagesContext, messageWithUserMessages } from '../../context/messages';
 
 const ScrollContainer = styled(ScrollView)`
 padding: 25px;
@@ -59,7 +59,7 @@ const MessageView = ({ menuSide, route }: FutureRidesViewProps) => {
   const {
     getMessage, markReadMessages, toastMessageId, closeToast,
   } = useContext(MessagesContext);
-  const [message, setMessage] = useState<any>(null);
+  const [message, setMessage] = useState<messageWithUserMessages | null>(null);
 
   const loadMessage = async (messageId: string) => {
     const fetchedMessage = await getMessage(messageId);

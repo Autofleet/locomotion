@@ -1,6 +1,7 @@
 import React from 'react';
 import { Text, View } from 'react-native';
 import styled, { useTheme } from 'styled-components/native';
+import { SvgProps } from 'react-native-svg';
 import { FONT_SIZES } from '../../context/theme';
 import SvgIcon from '../SvgIcon';
 
@@ -22,10 +23,10 @@ color: #333333;
 
 interface TextRowWithIconProps {
     text: string;
-    subTitle?: any;
-    icon?: any;
+    subTitle?: string;
+    icon?: React.FC<SvgProps> | null;
     style?: Record<string, unknown>;
-    Image?: any
+    Image?: React.ComponentType | null;
     iconWidth?: number;
     iconHeight?: number;
 

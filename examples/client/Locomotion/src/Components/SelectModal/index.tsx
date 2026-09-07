@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Text, View } from 'react-native';
 import styled from 'styled-components/native';
 import SelectDropdown from 'react-native-select-dropdown';
+import { SvgProps } from 'react-native-svg';
 import SvgIcon from '../SvgIcon';
 import person from '../../assets/person.svg';
 import {
@@ -9,7 +10,13 @@ import {
 } from '../../context/theme';
 
 const ERROR_COLOR = '#f35657';
-const StyledPop = styled(SelectDropdown).attrs<{ icon?: any; error?: boolean }>(({ theme, icon = person, error }) => ({
+
+interface Item {
+  value: any;
+  label: string;
+}
+
+const StyledPop = styled(SelectDropdown).attrs<{ icon?: React.FC<SvgProps>; error?: boolean }>(({ theme, icon = person, error }) => ({
   buttonStyle: {
     borderRadius: 8,
     flex: 1,
@@ -65,8 +72,13 @@ const StyledIcon = styled(SvgIcon).attrs(({
   height: height || 16,
 }))``;
 
+interface StyledSelectRowProps {
+  item: Item;
+  selected: boolean;
+  index?: number;
+}
 
-const StyledSelectRow = ({ item, theme, selected }: any) => (
+const StyledSelectRow = ({ item, selected }: StyledSelectRowProps) => (
   <StyledRow selected={selected}>
     <StyledIcon
       Svg={person}
@@ -76,11 +88,6 @@ const StyledSelectRow = ({ item, theme, selected }: any) => (
 
   </StyledRow>
 );
-
-interface Item {
-  value: any;
-  label: string;
-}
 
 interface SelectModalProps {
   data: Item[];
@@ -133,7 +140,7 @@ const SelectModal = ({
         <StyledSelectRow
           item={item}
           index={index}
-          selected={selectedItem && item.value === selectedItem.value}
+          selected={!!selectedItem && item.value === selectedItem.value}
         />
       )}
     />

@@ -3,7 +3,7 @@ import React, {
 } from 'react';
 import moment from 'moment';
 import { ThemeContext } from 'styled-components/native';
-import { Animated, View } from 'react-native';
+import { Animated, View, ViewStyle } from 'react-native';
 import { isCashPaymentMethod, isExternalPaymentMethod, isOfflinePaymentMethod } from '../../../../../lib/ride/utils';
 import DatePickerPoppup from '../../../../../popups/DatePickerPoppup';
 import FutureBookingButton from './FutureBookingButton';
@@ -19,7 +19,7 @@ import editNote from '../../../../../assets/bottomSheet/edit_note.svg';
 import PaymentButton from './PaymentButton';
 import PromoCodeButton from './PaymentButton/PromoCodeButton';
 import PaymentsContext from '../../../../../context/payments';
-import { PaymentMethodInterface } from '../../../../../context/payments/interface';
+import { GetBusinessAccountById, PaymentMethodInterface } from '../../../../../context/payments/interface';
 import { RideStateContextContext } from '../../../../../context/ridePageStateContext';
 import { popupNames } from '../utils';
 import { BS_PAGES } from '../../../../../context/ridePageStateContext/utils';
@@ -78,7 +78,7 @@ const RideButtons = ({
         paymentMethods: PaymentMethodInterface[],
         getClientOutstandingBalanceCard: () => PaymentMethodInterface | undefined,
         offlinePaymentText: string,
-        getBusinessAccountById: (id: string) => any,
+        getBusinessAccountById: GetBusinessAccountById,
         loadOfflinePaymentText: () => void,
     } = PaymentsContext.useContainer();
 
@@ -122,7 +122,7 @@ const RideButtons = ({
 
   const [animatedOpacity] = useState(new Animated.Value(0));
 
-  const animatedStyle: any = {
+  const animatedStyle: Animated.WithAnimatedValue<ViewStyle> = {
     height: '100%',
     width: HALF_WIDTH,
     backgroundColor: '#d3eefc',
@@ -240,8 +240,8 @@ const RideButtons = ({
 
     const getSelectedPaymentMethodTitle = () : string | null => {
       if (businessAccountId) {
-        const { name } = getBusinessAccountById(businessAccountId);
-        return name;
+        const { name } = getBusinessAccountById(businessAccountId) ?? {};
+        return name ?? null;
       }
       if (isCashPaymentMethod(selectedPaymentMethod)) {
         return i18n.t('payments.cash');

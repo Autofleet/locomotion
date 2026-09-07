@@ -133,16 +133,3 @@ index 9b50112..ac948c8 100644
              this.mapLoadingLayout = null;
          }
      }
-diff --git a/node_modules/react-native-maps/src/MapOverlay.tsx b/node_modules/react-native-maps/src/MapOverlay.tsx
-index 1db5d07..ca9e0ac 100644
---- a/node_modules/react-native-maps/src/MapOverlay.tsx
-+++ b/node_modules/react-native-maps/src/MapOverlay.tsx
-@@ -168,7 +168,7 @@ const styles = StyleSheet.create({
-   },
- });
- 
--MapOverlay.Animated = Animated.createAnimatedComponent(MapOverlay);
-+MapOverlay.Animated = Animated.createAnimatedComponent(MapOverlay as any) as any;
- 
- export default decorateMapComponent(MapOverlay, 'Overlay', {
-   google: {

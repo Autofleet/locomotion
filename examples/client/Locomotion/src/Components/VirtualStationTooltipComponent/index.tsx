@@ -11,9 +11,14 @@ import {
 } from './styled';
 import LinkText from '../../Components/LinkText';
 import stationIcon from '../../assets/map/markers/stations/arrow.svg';
+import { Station } from '../../context/virtualStationsContext';
 
+interface VirtualStationTooltipProps {
+  station: Station;
+  onPress?: (station: Station) => void;
+}
 
-const VirtualStationTooltip = ({ station, onPress }: any) => (
+const VirtualStationTooltip = ({ station, onPress }: VirtualStationTooltipProps) => (
   <Tooltip>
     <StationDetails>
       <Row>

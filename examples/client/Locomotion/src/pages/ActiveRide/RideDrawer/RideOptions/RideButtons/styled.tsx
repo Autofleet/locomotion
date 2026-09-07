@@ -84,7 +84,12 @@ export const ErrorText = styled(Text)`
   color: #F83743;
 `;
 
-export const ButtonWithError = ({ children, errorText }: any) => (
+interface ButtonWithErrorProps {
+  children?: React.ReactNode;
+  errorText?: string;
+}
+
+export const ButtonWithError = ({ children, errorText }: ButtonWithErrorProps) => (
   <ButtonContainerWithError>
     <ButtonContainerInError>
       {children}

@@ -13,7 +13,11 @@ import GenericRideButton from '../../GenericRideButton';
 import phone from '../../../assets/bottomSheet/phone.svg';
 import { RidePageContext } from '../../../context/newRideContext';
 
-const CallContactPersonMasked = ({ onError = () => null }: { onError?: any }) => {
+interface CallContactPersonMaskedProps {
+  onError?: () => void;
+}
+
+const CallContactPersonMasked = ({ onError = () => null }: CallContactPersonMaskedProps) => {
   const { getCallNumbers } = useContext(RidePageContext);
   const [disabledPhoneButton, setDisabledPhoneButton] = useState(false);
   const [dialogNumber, setDialogNumber] = useState<string | null>(null);
