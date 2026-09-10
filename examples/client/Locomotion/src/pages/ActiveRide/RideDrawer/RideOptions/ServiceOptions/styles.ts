@@ -1,5 +1,5 @@
 import { BottomSheetScrollView } from '@gorhom/bottom-sheet';
-import styled from 'styled-components';
+import styled from 'styled-components/native';
 
 export const ServiceOptionsContainer = styled(BottomSheetScrollView)`
 width: 100%;

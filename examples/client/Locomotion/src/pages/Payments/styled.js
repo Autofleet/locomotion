@@ -1,6 +1,6 @@
 import React from 'react';
 import { View } from 'react-native';
-import styled from 'styled-components';
+import styled from 'styled-components/native';
 import { FONT_SIZES, FONT_WEIGHTS } from '../../context/theme';
 import { Text } from '../Profile/ScreenText/styles';
 import SvgIcon from '../../Components/SvgIcon';

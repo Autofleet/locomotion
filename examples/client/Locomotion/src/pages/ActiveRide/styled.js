@@ -1,6 +1,6 @@
 import React from 'react';
 import { StyleSheet, Dimensions, Platform } from 'react-native';
-import styled from 'styled-components';
+import styled from 'styled-components/native';
 import { STATIC_SNAP_POINTS } from '../../context/bottomSheetContext';
 import vehicleIcon from '../../assets/car-icon.png';
 import Icon from '../../assets/location_pin.svg';

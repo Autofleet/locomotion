@@ -1,36 +1,29 @@
 import React from 'react';
 import propTypes from 'prop-types';
 
-const SvgIcon = ({
-  Svg,
-  stroke,
-  fill,
-  color,
-  width,
-  height,
-  style,
-}) => (
-  <Svg
-    width={width}
-    height={height}
-    stroke={stroke}
-    fill={fill}
-    color={color}
-    style={style}
-  />
-);
+const SvgIcon = (props) => {
+  const {
+    Svg,
+    stroke = null,
+    fill = null,
+    color = undefined,
+    width = 20,
+    height = 20,
+    style = {},
+  } = props;
+  return (
+    <Svg
+      width={width}
+      height={height}
+      stroke={stroke}
+      fill={fill}
+      color={color}
+      style={style}
+    />
+  );
+};
 
 export default SvgIcon;
-
-SvgIcon.defaultProps = {
-  svg: '',
-  stroke: null,
-  fill: null,
-  color: undefined,
-  width: 20,
-  height: 20,
-  style: {},
-};
 
 SvgIcon.propTypes = {
   svg: propTypes.string,

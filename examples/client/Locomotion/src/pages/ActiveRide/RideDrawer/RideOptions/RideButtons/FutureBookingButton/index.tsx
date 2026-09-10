@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { Text } from 'react-native';
 import moment from 'moment';
-import styled, { ThemeContext } from 'styled-components';
+import styled, { useTheme } from 'styled-components/native';
 import SvgIcon from '../../../../../../Components/SvgIcon';
 import clock from '../../../../../../assets/bottomSheet/clock.svg';
 import chevron from '../../../../../../assets/chevron.svg';
@@ -19,11 +19,11 @@ const TimeText = styled(Text)`
 const FutureBookingButton = () => {
   const { chosenService, ride } = useContext(RidePageContext);
   const nowText = i18n.t('bottomSheetContent.ride.now');
-  const { primaryColor } = useContext(ThemeContext);
+  const { primaryColor } = useTheme();
   const isFutureRide = ride?.scheduledTo;
   const chosenTime = isFutureRide && moment(ride.scheduledTo).format('MMM D, h:mm A');
   const windowSize = chosenService?.futurePickupWindowSizeInMinutes;
-  const chosenBeforeTime = windowSize ? moment(ride.scheduledTo).add(windowSize, 'minutes').format('MMM D, h:mm A') : i18n.t('general.noTimeWindow');
+  const chosenBeforeTime = windowSize ? moment(ride?.scheduledTo).add(windowSize, 'minutes').format('MMM D, h:mm A') : i18n.t('general.noTimeWindow');
   return (
     <>
       <SvgIcon fill={primaryColor} Svg={clock} height={15} width={15} />

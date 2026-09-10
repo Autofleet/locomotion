@@ -4,7 +4,7 @@ import React, {
 import {
   Animated, View,
 } from 'react-native';
-import styled from 'styled-components';
+import styled from 'styled-components/native';
 import { debounce } from 'lodash';
 import shortid from 'shortid';
 import DraggableFlatList from 'react-native-draglist';

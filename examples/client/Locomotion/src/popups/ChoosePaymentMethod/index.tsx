@@ -33,32 +33,32 @@ interface PaymentMethodPopupProps {
   isVisible: boolean;
   onCancel: () => void;
   onSubmit: (payment: any) => void;
-  showCash: boolean;
-  rideFlow: boolean;
-  selected: any;
+  showCash?: boolean;
+  rideFlow?: boolean;
+  selected?: string | null;
   onAddNewMethod: () => void;
-  showOffline: boolean;
-  showExternal: boolean;
-  showBusinessPaymentMethods: boolean;
-  selectedBusinessAccountId: string | null;
+  showOffline?: boolean;
+  showExternal?: boolean;
+  showBusinessPaymentMethods?: boolean;
+  selectedBusinessAccountId?: string | null;
 }
 
 const PaymentMethodPopup = ({
   isVisible,
   onCancel,
   onSubmit,
-  showCash,
-  rideFlow,
+  showCash = true,
+  rideFlow = false,
   selected,
   onAddNewMethod,
-  showOffline,
-  showExternal,
+  showOffline = false,
+  showExternal = false,
   showBusinessPaymentMethods,
   selectedBusinessAccountId,
 }: PaymentMethodPopupProps) => {
   const usePayments = PaymentsContext.useContainer();
   const { chosenService } = useContext(NewRidePageContext);
-  const [selectedPaymentId, setSelectedPaymentId] = useState<string | undefined>(selected);
+  const [selectedPaymentId, setSelectedPaymentId] = useState<string | null | undefined>(selected);
   const [activePaymentTab, setActivePaymentTab] = useState(
     selectedBusinessAccountId ? PAYMENT_MODES.BUSINESS : PAYMENT_MODES.PERSONAL,
   );
@@ -249,15 +249,6 @@ PaymentMethodPopup.propTypes = {
   selected: PropTypes.string,
   showOffline: PropTypes.bool,
   showExternal: PropTypes.bool,
-};
-
-PaymentMethodPopup.defaultProps = {
-  onSave: null,
-  showCash: true,
-  rideFlow: false,
-  selected: null,
-  showOffline: false,
-  showExternal: false,
 };
 
 export default PaymentMethodPopup;

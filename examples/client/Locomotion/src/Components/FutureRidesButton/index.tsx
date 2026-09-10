@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { ThemeContext } from 'styled-components';
+import { useTheme } from 'styled-components/native';
 import { MAIN_ROUTES } from '../../pages/routes';
 import SvgIcon from '../SvgIcon';
 import { Container, UpcomingText } from './styled';
@@ -10,7 +10,7 @@ import * as NavigationService from '../../services/navigation';
 
 const FutureRidesButton = () => {
   const { futureRides } = useContext(FutureRidesContext);
-  const theme = useContext(ThemeContext);
+  const theme = useTheme();
   const text = futureRides.length > 1
     ? i18n.t('home.futureRides.multipleUpcomingRides')
     : i18n.t('home.futureRides.oneUpcomingRide');

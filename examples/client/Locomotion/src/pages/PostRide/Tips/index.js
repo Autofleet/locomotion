@@ -5,7 +5,7 @@ import React, {
 import {
   View, Text, TouchableOpacity, Image,
 } from 'react-native';
-import styled from 'styled-components';
+import styled from 'styled-components/native';
 import { useBottomSheet } from '@gorhom/bottom-sheet';
 import Button from '../../../Components/Button';
 import Thumbnail from '../../../Components/Thumbnail';

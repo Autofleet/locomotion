@@ -1,6 +1,6 @@
 import React from 'react';
 import { View } from 'react-native';
-import styled from 'styled-components';
+import styled from 'styled-components/native';
 import i18n from '../../../I18n';
 
 import RideRoundedButton from '../../../Components/RoundedButton';
@@ -39,7 +39,7 @@ export const RideCard = styled.View`
 export const DriverAvatar = styled.Image`
   width: 30px;
   height: 30px;
-  border-radius: 100;
+  border-radius: 100px;
   margin-left: 15px;
   border-width: 1px;
   border-color: #a7a7a7;

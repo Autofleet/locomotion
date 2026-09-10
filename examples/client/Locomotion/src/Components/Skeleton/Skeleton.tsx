@@ -1,7 +1,7 @@
-import React, { ReactElement, useContext } from 'react';
+import React, { ReactElement } from 'react';
 import SkeletonPlaceholder from 'react-native-reanimated-skeleton';
 import { ICustomViewStyle } from 'react-native-reanimated-skeleton/lib/typescript/constants';
-import { ThemeContext } from 'styled-components';
+import { useTheme } from 'styled-components/native';
 
 interface SkeletonProps {
   children: ReactElement;
@@ -9,7 +9,7 @@ interface SkeletonProps {
 }
 
 export const Skeleton = ({ children, layout }: SkeletonProps) => {
-  const theme = useContext(ThemeContext);
+  const theme = useTheme();
 
   return (
     <SkeletonPlaceholder

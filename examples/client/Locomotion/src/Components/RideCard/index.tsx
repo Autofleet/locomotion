@@ -15,6 +15,7 @@ import cashIcon from '../../assets/cash.svg';
 import offlineIcon from '../../assets/offline.svg';
 import { PAYMENT_METHODS } from '../../pages/Payments/consts';
 import PaymentContext from '../../context/payments';
+import { GetBusinessAccountById } from '../../context/payments/interface';
 import SettingContext from '../../context/settings';
 import showPriceBasedOnAccount from '../../services/showPriceBasedOnAccount';
 import { RideDateSkeleton } from './Skeleton/RideDateSkeleton';
@@ -36,6 +37,10 @@ const CardComponent = ({ paymentMethod, businessAccountId }: CardComponentProps)
     offlinePaymentText,
     loadOfflinePaymentText,
     getBusinessAccountById,
+  }: {
+    offlinePaymentText: string,
+    loadOfflinePaymentText: () => void,
+    getBusinessAccountById: GetBusinessAccountById,
   } = PaymentContext.useContainer();
 
   useEffect(() => {
@@ -44,7 +49,7 @@ const CardComponent = ({ paymentMethod, businessAccountId }: CardComponentProps)
 
   const getText = () => {
     if (businessAccountId) {
-      const { name } = getBusinessAccountById(businessAccountId);
+      const { name } = getBusinessAccountById(businessAccountId) ?? {};
       return name;
     }
     if (isCash) {

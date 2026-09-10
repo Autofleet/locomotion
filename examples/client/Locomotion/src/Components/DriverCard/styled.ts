@@ -1,5 +1,5 @@
 import { Image, Text, View } from 'react-native';
-import styled from 'styled-components';
+import styled from 'styled-components/native';
 import { FONT_SIZES, FONT_WEIGHTS } from '../../context/theme';
 
 const BaseRideViewContainer = styled(View)`
@@ -45,7 +45,6 @@ export const DriverAvatar = styled(Image)`
   border-radius: 100px;
   border-color: ${({ theme }) => theme.primaryColor};
   border-width: 4;
-  border-radius: 100;
  `;
 
 

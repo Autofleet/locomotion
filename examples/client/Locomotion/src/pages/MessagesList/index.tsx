@@ -1,7 +1,7 @@
 import React, {
   useContext, useEffect, useState, useCallback,
 } from 'react';
-import styled from 'styled-components';
+import styled from 'styled-components/native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { useFocusEffect } from '@react-navigation/native';
 import { View } from 'react-native';
@@ -86,7 +86,7 @@ const Messages = ({ menuSide, route }: FutureRidesViewProps) => {
         : (
           <ScrollContainer>
             {userMessages && userMessages.length
-              ? (userMessages || []).map(m => (
+              ? (userMessages || []).map((m) => (
                 <MessageCard
                   key={m.id}
                   {...m}

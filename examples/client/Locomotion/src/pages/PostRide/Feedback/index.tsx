@@ -1,7 +1,7 @@
 import React, {
-  useContext, useEffect, useRef, useState,
+  useEffect, useState,
 } from 'react';
-import { ThemeContext } from 'styled-components';
+import { useTheme } from 'styled-components/native';
 import { TouchableOpacity } from 'react-native';
 import i18n from '../../../I18n';
 import {
@@ -31,15 +31,14 @@ const RideFeedback = ({
   const [isActive, setIsActive] = useState(false);
   const [shouldShowPage, setShouldShowPage] = useState(false);
   const [currentText, updateText] = useState('');
-  const inputRef = useRef();
-  const theme = useContext(ThemeContext);
+  const theme = useTheme();
 
   const onChange = (text: string) => {
     updateText(text);
     onTextChange(text);
   };
 
-  const { primaryColor } = useContext(ThemeContext);
+  const { primaryColor } = useTheme();
   const { getSettingByKey } = settings.useContainer();
 
   const onLabelClick = () => {
@@ -82,7 +81,6 @@ const RideFeedback = ({
               <StyledTextArea
                 testID="feedbackInput"
                 autoFocus={false}
-                ref={inputRef}
                 value={currentText}
                 multiline
                 numberOfLines={2}

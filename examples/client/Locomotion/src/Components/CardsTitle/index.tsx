@@ -1,6 +1,6 @@
 import React from 'react';
 import { Text } from 'react-native';
-import styled from 'styled-components';
+import styled from 'styled-components/native';
 import { FONT_SIZES, FONT_WEIGHTS } from '../../context/theme';
 
 type StyledCardsTitleInterface = {
@@ -17,14 +17,10 @@ const StyledCardsTitle = styled(Text)<StyledCardsTitleInterface>`
 
 const CardsTitle = ({
   title,
-  noPaddingLeft,
+  noPaddingLeft = false,
 }: {
     title: string,
     noPaddingLeft?: boolean,
 }) => <StyledCardsTitle noPaddingLeft={noPaddingLeft}>{title}</StyledCardsTitle>;
 
 export default CardsTitle;
-
-CardsTitle.defaultProps = {
-  noPaddingLeft: false,
-};

@@ -1,9 +1,9 @@
 /* eslint-disable no-nested-ternary */
 /* eslint-disable no-mixed-operators */
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text } from 'react-native';
 import moment from 'moment';
-import styled, { ThemeContext } from 'styled-components';
+import styled, { useTheme } from 'styled-components/native';
 import { PaymentIcon } from 'react-native-payment-icons';
 import { RideInterface, RidePageContext } from '../../context/newRideContext';
 import { PAYMENT_METHODS, paymentMethodToIconMap } from '../../pages/Payments/consts';
@@ -16,6 +16,7 @@ import { Start, StartCapital } from '../../lib/text-direction';
 import chevronIcon from '../../assets/chevron.svg';
 import { isCashPaymentMethod, isExternalPaymentMethod, isOfflinePaymentMethod } from '../../lib/ride/utils';
 import paymentContext from '../../context/payments';
+import { GetBusinessAccountById } from '../../context/payments/interface';
 
 type ContainerProps = {
   children: React.ReactNode,
@@ -93,18 +94,22 @@ const style = {
 
 
 const CardRow = (paymentMethod: any) => {
-  const { primaryColor } = useContext(ThemeContext);
+  const { primaryColor } = useTheme();
   const {
     offlinePaymentText,
     loadOfflinePaymentText,
     getBusinessAccountById,
+  }: {
+    offlinePaymentText: string,
+    loadOfflinePaymentText: () => void,
+    getBusinessAccountById: GetBusinessAccountById,
   } = paymentContext.useContainer();
   const { businessAccountId } = paymentMethod;
   const [isCardExpired, setIsCardExpired] = useState(false);
 
   const getPaymentMethodTitle = () => {
     if (businessAccountId) {
-      const { name } = getBusinessAccountById(businessAccountId);
+      const { name } = getBusinessAccountById(businessAccountId) ?? {};
       return name;
     }
 

@@ -1,7 +1,7 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useTheme } from 'styled-components/native';
 import { ButtonTextContainer, StyledButton, SubmitButtonText } from './styled';
 import SvgIcon from '../SvgIcon';
-import { Context as ThemeContext } from '../../context/theme';
 
 interface ButtonProps {
   type?: string;
@@ -9,7 +9,7 @@ interface ButtonProps {
   onPress: (args?: any) => void;
   disabled?: boolean;
   useCancelTextButton?: boolean;
-  setLoading?: (state: boolean) => void;
+  setLoading?: ((state: boolean) => void) | null;
   style?: any;
   icon?: any;
   children?: any;
@@ -18,18 +18,19 @@ interface ButtonProps {
 
 const RoundedButton = ({
   onPress,
-  style,
-  hollow,
-  setLoading,
-  disabled,
-  type,
-  useCancelTextButton,
-  icon,
-  children,
+  style = {},
+  hollow = false,
+  setLoading = null,
+  disabled = false,
+  type = 'confirm',
+  useCancelTextButton = false,
+  icon = null,
+  children = null,
+  testID = '',
   ...props
 }: ButtonProps) => {
   const [loadingState, setLoadingState] = useState(false);
-  const theme = useContext(ThemeContext);
+  const theme = useTheme();
 
   const onPressWithLoading = async (args: any) => {
     setLoadingState(true);
@@ -45,6 +46,7 @@ const RoundedButton = ({
 
   return (
     <StyledButton
+      testID={testID}
       {...props}
       onPress={onPressWithLoading}
       hollow={hollow}
@@ -76,18 +78,6 @@ const RoundedButton = ({
       </ButtonTextContainer>
     </StyledButton>
   );
-};
-
-RoundedButton.defaultProps = {
-  type: 'confirm',
-  hollow: false,
-  disabled: false,
-  useCancelTextButton: false,
-  setLoading: null,
-  style: {},
-  children: null,
-  icon: null,
-  testID: '',
 };
 
 export default RoundedButton;
