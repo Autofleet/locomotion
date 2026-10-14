@@ -1,0 +1,132 @@
+---
+# Autofleet security gate -- the caller.
+#
+# This file does no work. It decides whether to call the gate, and the gate
+# lives in Autofleet/github-actions, in one place, for every repository.
+#
+# HOW IT RUNS. Label a pull request `ready-for-security` and the gate runs:
+# five scanners and an AI security review, about three minutes. The label is
+# consumed by the run, so a green result always belongs to the commit it was
+# read from -- push new code and ask again.
+#
+# WITHOUT THE LABEL NOTHING RUNS, AND NOTHING TURNS RED. The job below is
+# skipped, which shows as grey. An earlier version failed on purpose here, to
+# make "you did not ask" impossible to miss; what it actually produced was a
+# red cross on pull requests whose authors had never heard of the gate, which
+# is indistinguishable at a glance from a real finding. Measured over the first
+# week of the beta -- 24 of 38 runs were that cross, and most were ignored. A
+# red default teaches people to ignore red. (Counted across `telematics` and
+# `infra-code`, 7-14 Oct; method and per-repository breakdown in
+# Autofleet/github-actions#260.)
+#
+# AND IT IS MEANT TO BLOCK UNDER ENFORCEMENT, with no change to this file. Two
+# halves, and they are not equally certain:
+#
+#   * a skipped job publishes no `security / gate verdict` check at all --
+#     OBSERVED, on a real commit where the gate did not run;
+#   * a missing required check therefore stops the merge until someone asks for
+#     a review -- REASONED, never watched happen. It is the whole beta-to-
+#     enforcement story and it is confirmed under `evaluate` first. See
+#     Autofleet/github-actions#261, which also names the context that would
+#     silently invert this if someone sets it wrong.
+#
+# Beta and enforcement otherwise differ only by the org ruleset.
+#
+# DEPENDABOT runs without a label, because a bot cannot add one and a
+# dependency bump is exactly where a CVE scan earns its keep. The AI review
+# skips there regardless -- GitHub withholds repository secrets from bots.
+#
+# WHY `types: [labeled]` WORKS HERE. A workflow supplied by an org ruleset does
+# not choose its own triggers: GitHub runs those on opened/synchronize/reopened
+# and ignores the filter, so a label would deliver no event. That is why this
+# file is committed to each repository as an ordinary workflow it owns, and why
+# the ruleset carries only `required_status_checks`. If anyone ever adds the
+# `workflows` rule back, the label stops working and nothing says so.
+#
+# WHAT BELONGS HERE. Almost nothing. This file exists in ~158 repositories, so
+# every line in it costs 158 pull requests to change. It keeps only what cannot
+# move: the triggers, the secrets, and the one condition below. Everything else
+# -- including consuming the label -- is in security-gate.yml.
+
+name: pr-gate
+
+"on":
+  pull_request:
+    branches: [main, master]
+    types: [opened, synchronize, reopened, labeled]
+
+concurrency:
+  group: pr-gate-${{ github.ref }}
+  # NOT cancel-in-progress. Another label on the same pull request delivers a
+  # `labeled` event too, and cancelling would kill the scan that was actually
+  # asked for. A run whose only job skips still claims the group, so this is
+  # needed even though the job below usually skips -- which it does, and why,
+  # is the job's own comment. Not re-derived here.
+  cancel-in-progress: false
+
+# Per job, not here. A workflow-level block is the maximum every job in the
+# file gets, including ones added later -- the `quality:` job below is already
+# written and commented out. zizmor calls this `excessive-permissions`, and it
+# flagged this file when the grant lived up here.
+#
+# The one job below needs `pull-requests: write` so the gate can post its
+# review comment and its verdict. Attaching the grant to the job rather than to
+# the file means the next job added here starts from nothing.
+
+jobs:
+  security:
+    # The whole decision, in one condition. Why it is a skip rather than a job
+    # that fails on purpose, and what is known versus assumed about enforcement,
+    # is at the top of this file -- not restated here. Two copies of the same
+    # argument in a file that exists ~158 times is how the last three of these
+    # comments came to contradict the code.
+    #
+    # The middle clause is not redundant. The label is normally consumed as the
+    # run starts, so "present" and "just added" are the same thing for a second
+    # or two -- but when `removeLabel` cannot write, which is any fork and any
+    # Dependabot pull request, the label stays. After that every later `labeled`
+    # event -- `bug`, `ready-for-e2e` -- would find it still present and start
+    # another three-minute scan and another model call. The job this replaced
+    # short-circuited on exactly that and the first version of this condition
+    # dropped it. Ask about the label that was actually added.
+    #
+    # Pushes are deliberately NOT covered by that clause. A stuck label does
+    # mean every later `synchronize` scans again -- and it should: those are
+    # new commits, which is the one thing a security gate must not let through
+    # on the strength of an earlier green. The cost is a fork pull request
+    # scanning on every push until someone removes the label by hand, which is
+    # the right side to err on.
+    if: >-
+      github.repository != 'Autofleet/github-actions'
+      && (github.event.action != 'labeled'
+          || github.event.label.name == 'ready-for-security')
+      && (contains(github.event.pull_request.labels.*.name, 'ready-for-security')
+          || github.event.pull_request.user.login == 'dependabot[bot]')
+    # The called workflow narrows this further: only its `ai-review` and
+    # `verdict` jobs keep `pull-requests: write`, to post the comments. The
+    # scanner jobs run with `contents: read`. A called workflow can never hold
+    # more permission than its caller grants, so this is the ceiling.
+    permissions:
+      contents: read
+      pull-requests: write
+    # zizmor: ignore[unpinned-uses]
+    # Deliberate. `v1` is our own tag and we decide when it moves; pinning a SHA
+    # here would mean editing ~158 repositories for every change to the gate.
+    # `v*` in this repository is covered by a tag ruleset whose only bypass is
+    # the repository-admin role, so the tag is not freely movable.
+    uses: Autofleet/github-actions/.github/workflows/security-gate.yml@v1
+    with:
+      # Empty is not "never blocks". Critical and high AI findings block the
+      # merge whatever their category; this input only narrows that to a subset,
+      # and narrowing is a trap until the skill pins a fixed category
+      # vocabulary. Leave it empty.
+      ai_blocking_categories: ''
+    secrets:
+      ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+      ANTHROPIC_BASE_URL: ${{ secrets.ANTHROPIC_BASE_URL }}
+      CLAUDE_APP_ID: ${{ secrets.CLAUDE_APP_ID }}
+      CLAUDE_APP_PRIVATE_KEY: ${{ secrets.CLAUDE_APP_PRIVATE_KEY }}
+
+  # Enable once quality-gate.yml exists and has been tested on a pilot repo.
+  # quality:
+  #   uses: Autofleet/github-actions/.github/workflows/quality-gate.yml@v1
