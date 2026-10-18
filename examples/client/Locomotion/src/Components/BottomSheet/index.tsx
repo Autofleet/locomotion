@@ -41,6 +41,7 @@ interface BottomSheetProps {
   onClose?: () => void,
   keyboardBehavior?: 'extend' | 'interactive' | 'fillParent',
   keyboardBlurBehavior?: 'none' | 'restore',
+  topInset?: number,
 }
 
 const BottomSheetComponent = forwardRef(({
@@ -51,6 +52,7 @@ const BottomSheetComponent = forwardRef(({
   onClose,
   keyboardBehavior,
   keyboardBlurBehavior,
+  topInset = 0,
 }: BottomSheetProps, ref) => {
   const {
     setIsExpanded,
@@ -102,6 +104,7 @@ const BottomSheetComponent = forwardRef(({
       ref={ref}
       enableDynamicSizing={false}
       snapPoints={snapPoints}
+      topInset={topInset}
       onAnimate={onAnimate}
       onClose={onClose}
       footerComponent={renderFooter}
