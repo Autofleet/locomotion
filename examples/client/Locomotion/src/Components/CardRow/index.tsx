@@ -32,7 +32,7 @@ const InnerContainer = styled(View)`
 `;
 
 const Container = styled(View) < ContainerProps >`
-  background-color: ${(props: any) => (props.selected ? '#rgba(36, 170, 242, 0.2)' : '#fff')};
+  background-color: ${(props: any) => (props.selected ? 'rgba(36, 170, 242, 0.2)' : '#fff')};
   min-height: 50px;
   flex-direction: column;
   justify-content: center;

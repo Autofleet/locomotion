@@ -20,10 +20,6 @@ export const CancellationReasonCard = styled(View)`
 border-bottom-width: 1px;
 border-color: #f1f2f6;
 padding: 16px 3px;
-
-&:last-child {
-    border-bottom-width: 0px;
-}
 `;
 
 export const CancellationReasonText = styled(Text)`
