@@ -143,6 +143,7 @@ const PaymentMethodPopup = ({
         const reason = getDisabledReason(paymentMethod);
         return (
           <PaymentMethod
+            key={paymentMethod.id}
             testIdPrefix="Dialog"
             {...paymentMethod}
             chooseMethodPage
@@ -196,6 +197,7 @@ const PaymentMethodPopup = ({
             {isBusinessMode ? (
               usePayments.businessPaymentMethods.map((paymentMethod: any) => (
                 <PaymentMethod
+                  key={paymentMethod.id}
                   testIdPrefix="Dialog"
                   noSvg
                   alignMarkToRight
