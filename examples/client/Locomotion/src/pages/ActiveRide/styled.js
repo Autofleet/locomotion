@@ -54,7 +54,9 @@ export const LocationMarkerContainer = styled.View`
   background-color: transparent;
   position: absolute;
   top: ${(((Dimensions.get('window').height - STATIC_SNAP_POINTS) * 0.5) - MARKER_SIZE.height) - (Platform.OS === 'android' ? 35 : 0)};
-  left: ${(Dimensions.get('window').width - MARKER_SIZE.width) * 0.5};
+  left: 0;
+  right: 0;
+  align-items: center;
 `;
 
 export const PickupTextContainer = styled.View`
@@ -63,9 +65,7 @@ padding: 6px 8px;
 border-radius: 6px;
 justify-content: center;
 flex-direction: row;
-width: 140;
-right: ${(140 - MARKER_SIZE.width) * 0.5};
-top: -2;
+top: -2px;
 
 ${({ hide }) => hide && `
     opacity: 0;
