@@ -12,13 +12,12 @@ border-bottom-width: 1px;
 `;
 
 const fullBorderStyles = isFocused => `
-backgroundColor: #f1f2f6;
-borderRadius: 8px;
-${isFocused && `
-    border-width: 1px
-    border-color: #333333
-`};
-
+background-color: #f1f2f6;
+border-radius: 8px;
+${isFocused ? `
+    border-width: 1px;
+    border-color: #333333;
+` : ''}
 `;
 
 export const Input = styled.TextInput.attrs(props => ({
