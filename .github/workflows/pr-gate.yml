@@ -55,19 +55,10 @@ name: pr-gate
     branches: [main, master]
     types: [opened, synchronize, reopened, labeled]
 
-concurrency:
-  group: pr-gate-${{ github.ref }}
-  # NOT cancel-in-progress. Another label on the same pull request delivers a
-  # `labeled` event too, and cancelling would kill the scan that was actually
-  # asked for. A run whose only job skips still claims the group, so this is
-  # needed even though the job below usually skips -- which it does, and why,
-  # is the job's own comment. Not re-derived here.
-  cancel-in-progress: false
-
 # Per job, not here. A workflow-level block is the maximum every job in the
-# file gets, including ones added later -- the `quality:` job below is already
-# written and commented out. zizmor calls this `excessive-permissions`, and it
-# flagged this file when the grant lived up here.
+# file gets, including ones added later. zizmor calls this
+# `excessive-permissions`, and it flagged this file when the grant lived up
+# here.
 #
 # The one job below needs `pull-requests: write` so the gate can post its
 # review comment and its verdict. Attaching the grant to the job rather than to
@@ -75,6 +66,21 @@ concurrency:
 
 jobs:
   security:
+    # Per job, not per workflow.
+    #
+    # A workflow-level group would be shared with the second gate below, and
+    # GitHub keeps at most one pending run per group: a review queued behind a
+    # scan is
+    # cancelled by the next push or label, and the two delay each other for no
+    # reason. Raised by the owner of claude-review while this file was still in
+    # six repositories; the same fix after the rollout is 158 pull requests.
+    #
+    # NOT cancel-in-progress. Another label on the same pull request delivers a
+    # `labeled` event too, and cancelling would kill the scan that was actually
+    # asked for.
+    concurrency:
+      group: pr-gate-security-${{ github.ref }}
+      cancel-in-progress: false
     # The whole decision, in one condition. Why it is a skip rather than a job
     # that fails on purpose, and what is known versus assumed about enforcement,
     # is at the top of this file -- not restated here. Two copies of the same
@@ -127,6 +133,16 @@ jobs:
       CLAUDE_APP_ID: ${{ secrets.CLAUDE_APP_ID }}
       CLAUDE_APP_PRIVATE_KEY: ${{ secrets.CLAUDE_APP_PRIVATE_KEY }}
 
-  # Enable once quality-gate.yml exists and has been tested on a pilot repo.
-  # quality:
-  #   uses: Autofleet/github-actions/.github/workflows/quality-gate.yml@v1
+  # THE SECOND GATE GOES HERE -- `claude-review`, on its own label.
+  #
+  # Deliberately not written out. A previous version of this comment spelled
+  # the job out in full and got it wrong in three ways at once: no `pr_number`,
+  # no secrets, and permissions narrower than the called workflow asks for. It
+  # would have failed at startup, and it looked reviewed.
+  #
+  # The one thing worth recording here, because it is not obvious and it is why
+  # this file changed: GIVE IT ITS OWN CONCURRENCY GROUP. A group shared with
+  # `security:` above holds at most one pending run, so each gate would cancel
+  # the other's queued run and delay it besides. Everything else -- the inputs,
+  # the secrets, the label, whether `cancel-in-progress` should be true for a
+  # review -- belongs to whoever owns that workflow and can run it.
