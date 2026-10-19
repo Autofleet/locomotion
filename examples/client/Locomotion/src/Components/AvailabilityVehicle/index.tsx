@@ -4,7 +4,6 @@ import React, {
 import {
   MarkerAnimated, AnimatedRegion, MapMarker, LatLng,
 } from 'react-native-maps';
-import { Platform } from 'react-native';
 import { useTheme } from 'styled-components/native';
 import SvgIcon from '../SvgIcon';
 import carIcon from '../../assets/map/Autofleet_Car_Icon.svg';
@@ -78,10 +77,10 @@ const AvailabilityVehicle = ({
     }
   }, [location?.lat, location?.lng]);
 
+  const { tracksViewChanges, onMarkerLayout, scheduleRedraw } = useMarkerTracksViewChanges(markerRef);
+
   useEffect(() => {
-    if (Platform.OS === 'android') {
-      markerRef.current?.redraw();
-    }
+    scheduleRedraw();
   }, [vehicleColor, markerRef.current, location?.bearing]);
 
   const onPressWorkaround = useCallback(() => {
@@ -96,8 +95,6 @@ const AvailabilityVehicle = ({
   if (location?.bearing) {
     svgStyle.transform = [{ rotate: `${location.bearing}deg` }];
   }
-
-  const { tracksViewChanges, onMarkerLayout } = useMarkerTracksViewChanges(markerRef);
 
   return (
     <MarkerAnimated
