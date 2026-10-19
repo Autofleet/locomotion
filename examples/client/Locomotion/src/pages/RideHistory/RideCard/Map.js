@@ -84,6 +84,7 @@ const Map = forwardRef(({
       style={mapStyle}
       showMyLocation={false}
       followMyLocation={false}
+      showsCompass={false}
     >
       {stopPoints && stopPoints.map(sp => (sp.lat && sp.lng ? (
         <SpMarker
