@@ -19,7 +19,7 @@ interface CompatModalProps {
   style?: StyleProp<ViewStyle>;
 }
 
-const usePortalOverlay = Platform.OS === 'android';
+const isAndroidOverlay = Platform.OS === 'android';
 
 function CompatModal({
   isVisible,
@@ -28,21 +28,20 @@ function CompatModal({
   onBackdropPress,
   style,
 }: CompatModalProps) {
+  const onCloseRef = React.useRef(onBackButtonPress || onBackdropPress);
+  onCloseRef.current = onBackButtonPress || onBackdropPress;
+
   React.useEffect(() => {
-    if (!usePortalOverlay || !isVisible) return undefined;
+    if (!isAndroidOverlay || !isVisible) return undefined;
     const subscription = BackHandler.addEventListener('hardwareBackPress', () => {
-      const cb = onBackButtonPress || onBackdropPress;
-      if (cb) {
-        cb();
-        return true;
-      }
-      return false;
+      onCloseRef.current?.();
+      return true;
     });
     return () => subscription.remove();
-  }, [isVisible, onBackButtonPress, onBackdropPress]);
+  }, [isVisible]);
 
   const content = (
-    <View style={usePortalOverlay ? styles.portalFill : styles.fill} pointerEvents="box-none">
+    <View style={isAndroidOverlay ? styles.portalFill : styles.fill} pointerEvents="box-none">
       <Pressable
         style={styles.backdrop}
         onPress={onBackdropPress}
@@ -53,7 +52,7 @@ function CompatModal({
     </View>
   );
 
-  if (usePortalOverlay) {
+  if (isAndroidOverlay) {
     return isVisible ? <Portal>{content}</Portal> : null;
   }
 
