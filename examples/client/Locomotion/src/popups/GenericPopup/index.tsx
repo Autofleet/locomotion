@@ -14,21 +14,21 @@ interface GenericProps {
   title?: string;
   text?: string;
   buttonText?: string;
-  buttonColor?: string;
+  buttonColor?: string | null;
   customButton?: any;
   icon?: any;
-  iconFill?: string
+  iconFill?: string | null
 }
 
 const GenericPopup = ({
   isVisible,
   closePopup,
-  title,
-  text,
-  buttonText,
-  buttonColor,
-  customButton,
-  icon,
+  title = i18n.t('popups.genericError.title'),
+  text = i18n.t('popups.genericError.text'),
+  buttonText = i18n.t('popups.genericError.buttonText'),
+  buttonColor = null,
+  customButton = null,
+  icon = null,
   iconFill,
 }: GenericProps) => (
   <Modal isVisible={isVisible}>
@@ -53,13 +53,4 @@ const GenericPopup = ({
   </Modal>
 );
 
-GenericPopup.defaultProps = {
-  title: i18n.t('popups.genericError.title'),
-  text: i18n.t('popups.genericError.text'),
-  buttonText: i18n.t('popups.genericError.buttonText'),
-  buttonColor: null,
-  customButton: null,
-  icon: null,
-  iconFill: null,
-};
 export default GenericPopup;

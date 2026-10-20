@@ -227,7 +227,7 @@ const usePayments = () => {
     retryPayment,
     hasOutstandingPayment,
     loadOutstandingBalance,
-    offlinePaymentText: offlinePaymentText || i18n.t('payments.offline'),
+    offlinePaymentText: String(offlinePaymentText || i18n.t('payments.offline')),
     loadOfflinePaymentText,
     getBusinessAccountById,
   };

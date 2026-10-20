@@ -1,5 +1,5 @@
 import React from 'react';
-import styled from 'styled-components';
+import styled from 'styled-components/native';
 import LottieView from 'lottie-react-native';
 import darkLoader from '../../assets/loaders/dark-loader.json';
 

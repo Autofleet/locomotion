@@ -1,6 +1,6 @@
 
 import { View, Text, Dimensions } from 'react-native';
-import styled from 'styled-components';
+import styled from 'styled-components/native';
 
 export const PageContent = styled(View)`
     width: 100%;

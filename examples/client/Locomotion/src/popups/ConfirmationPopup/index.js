@@ -10,17 +10,18 @@ import {
 } from './styled';
 import RoundedButton from '../../Components/RoundedButton';
 
-const ConfirmationPopup = ({
-  title,
-  text,
-  confirmText,
-  cancelText,
-  useCancelTextButton,
-  type,
-  onClose,
-  onSubmit,
-  isVisible,
-}) => {
+const ConfirmationPopup = (props) => {
+  const {
+    title = 'Confirmation Popup',
+    text = '',
+    confirmText = 'Submit',
+    cancelText = 'Cancel',
+    useCancelTextButton = false,
+    type = 'confirm',
+    onClose = () => null,
+    onSubmit,
+    isVisible,
+  } = props;
   const closePopup = () => {
     onClose();
   };
@@ -44,16 +45,6 @@ const ConfirmationPopup = ({
 };
 
 export default ConfirmationPopup;
-
-ConfirmationPopup.defaultProps = {
-  title: 'Confirmation Popup',
-  text: '',
-  confirmText: 'Submit',
-  cancelText: 'Cancel',
-  useCancelTextButton: false,
-  type: 'confirm',
-  onClose: () => null,
-};
 
 ConfirmationPopup.propTypes = {
   title: propsTypes.string,

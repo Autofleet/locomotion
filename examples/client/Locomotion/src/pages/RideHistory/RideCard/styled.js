@@ -1,5 +1,5 @@
 import React from 'react';
-import styled from 'styled-components';
+import styled from 'styled-components/native';
 import i18n from '../../../I18n';
 import blackRightArrow from '../../../assets/arrowright.png';
 import noRides from '../../../assets/no_rides.svg';

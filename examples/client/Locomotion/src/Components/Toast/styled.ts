@@ -1,7 +1,7 @@
 import {
   Image, Text, View, TouchableOpacity,
 } from 'react-native';
-import styled from 'styled-components';
+import styled from 'styled-components/native';
 import { FONT_SIZES, FONT_WEIGHTS } from '../../context/theme';
 import Button from '../Button';
 

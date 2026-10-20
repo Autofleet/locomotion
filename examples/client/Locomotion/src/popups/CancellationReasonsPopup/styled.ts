@@ -1,5 +1,5 @@
 import { Text, View, TouchableOpacity } from 'react-native';
-import styled from 'styled-components';
+import styled from 'styled-components/native';
 import { FONT_SIZES, FONT_WEIGHTS } from '../../context/theme';
 
 export const Container = styled(View)`
@@ -20,10 +20,6 @@ export const CancellationReasonCard = styled(View)`
 border-bottom-width: 1px;
 border-color: #f1f2f6;
 padding: 16px 3px;
-
-&:last-child {
-    border-bottom-width: 0px;
-}
 `;
 
 export const CancellationReasonText = styled(Text)`

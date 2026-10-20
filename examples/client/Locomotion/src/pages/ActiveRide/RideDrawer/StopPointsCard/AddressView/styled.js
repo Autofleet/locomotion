@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, TouchableOpacity } from 'react-native';
-import styled from 'styled-components';
+import styled from 'styled-components/native';
 import TextInput from '../../../../../Components/TextInput';
 import xIcon from '../../../../../assets/x.png';
 import stationIcon from '../../../../../assets/marker-tip.png';

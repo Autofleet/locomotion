@@ -3,13 +3,13 @@ import _ from 'lodash';
 import * as axios from 'axios';
 import { initReactI18next } from 'react-i18next';
 import i18nHttpLoader from 'i18next-http-backend';
-import Backend from '@autofleet/i18next-remote-backend-with-locals';
 import * as RNLocalize from 'react-native-localize';
 import moment from 'moment';
 import 'moment/locale/es';
 import 'moment/locale/el';
 import 'moment/locale/fr';
 import Config from 'react-native-config';
+import Backend from './remoteBackendWithLocals';
 import Mixpanel from '../services/Mixpanel';
 import { StorageService } from '../services';
 

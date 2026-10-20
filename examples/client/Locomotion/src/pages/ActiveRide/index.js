@@ -83,6 +83,7 @@ const RidePage = ({ mapSettings, navigation }) => {
 
   const [pickupChanged, setPickupChanged] = useState(false);
   const [topMessage, setTopMessage] = useState(null);
+  const [headerHeight, setHeaderHeight] = useState(0);
   const { getSettingByKey } = settings.useContainer();
 
   const mapRef = useRef();
@@ -541,7 +542,7 @@ const RidePage = ({ mapSettings, navigation }) => {
       )}
       {serviceEstimations || currentBsPage === BS_PAGES.SET_LOCATION_ON_MAP
         ? (
-          <SafeView>
+          <SafeView onLayout={(e) => setHeaderHeight(e.nativeEvent.layout.height)}>
             <Header
               icon={backArrow}
               onPressIcon={backToMap}
@@ -601,6 +602,7 @@ const RidePage = ({ mapSettings, navigation }) => {
       <BottomSheet
         ref={bottomSheetRef}
         focusCurrentLocation={focusCurrentLocation}
+        topInset={currentBsPage === BS_PAGES.SERVICE_ESTIMATIONS && topBarProps.text ? headerHeight : 0}
         keyboardBehavior={currentBsPage === BS_PAGES.ADDRESS_SELECTOR ? 'extend' : undefined}
         keyboardBlurBehavior={currentBsPage === BS_PAGES.ADDRESS_SELECTOR ? 'restore' : undefined}
       >

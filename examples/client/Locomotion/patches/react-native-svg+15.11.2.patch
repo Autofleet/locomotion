@@ -1,0 +1,14 @@
+diff --git a/node_modules/react-native-svg/android/src/main/java/com/horcrux/svg/GlyphContext.java b/node_modules/react-native-svg/android/src/main/java/com/horcrux/svg/GlyphContext.java
+index 9de43aa..16b688f 100644
+--- a/node_modules/react-native-svg/android/src/main/java/com/horcrux/svg/GlyphContext.java
++++ b/node_modules/react-native-svg/android/src/main/java/com/horcrux/svg/GlyphContext.java
+@@ -256,6 +256,9 @@ class GlyphContext {
+   }
+ 
+   void popContext() {
++    if (mTop <= 0 || mFontContext.size() <= mTop) {
++      return;
++    }
+     mFontContext.remove(mTop);
+     mXsIndices.remove(mTop);
+     mYsIndices.remove(mTop);

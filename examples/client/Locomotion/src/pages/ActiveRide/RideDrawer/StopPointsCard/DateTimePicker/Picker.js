@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import styled from 'styled-components';
+import styled from 'styled-components/native';
 import RNPickerSelect from 'react-native-picker-select';
 import InputIcon from '../../../../../assets/arrow-down.png';
 

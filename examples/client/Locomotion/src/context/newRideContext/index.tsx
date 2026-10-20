@@ -46,18 +46,15 @@ import { formatSps } from '../../lib/ride/utils';
 import { APP_ROUTES, MAIN_ROUTES } from '../../pages/routes';
 import * as navigationService from '../../services/navigation';
 import { BottomSheetContext } from '../bottomSheetContext';
-import { VirtualStationsContext } from '../virtualStationsContext';
+import { VirtualStationsContext, Station, Location as StationLocation } from '../virtualStationsContext';
+import type { RequestStopPoint, RideFeedback, SearchResult } from './types';
+
+export type { RequestStopPoint, RideFeedback, SearchResult } from './types';
 
 
 type Dispatch<A> = (value: A) => void;
 type Nav = {
   navigate: (value: string, object?: any) => void;
-}
-
-interface RideFeedback {
-  value: string;
-  type: string;
-  source: string;
 }
 
 export interface RideInterface {
@@ -122,11 +119,11 @@ interface RidePageContextInterface {
   selectedInputTarget: any;
   setSelectedInputTarget: Dispatch<any | null>;
   onAddressSelected: (item: any, needToLoadRide: boolean, index?: number, refreshCurrentLocation?: boolean) => void;
-  requestStopPoints: any[];
+  requestStopPoints: RequestStopPoint[];
   searchResults: any;
   searchAddress: (searchText: string) => void;
   removeRequestSp: (index: number) => void;
-  updateRequestSp: (sp: any) => void;
+  updateRequestSp: (sp: Partial<RequestStopPoint>, index?: number | null) => void;
   addNewEmptyRequestSp: () => void;
   setSpCurrentLocation: () => void;
   historyResults: any[];
@@ -156,7 +153,7 @@ interface RidePageContextInterface {
   setRide: Dispatch<RideInterface>;
   updateRide: (rideId: string | undefined, ride: RideInterface) => Promise<void>;
   validateRequestedStopPoints: (reqSps: any[]) => void;
-  setRequestStopPoints: (sps: any) => void;
+  setRequestStopPoints: (sps: RequestStopPoint[]) => void;
   tryServiceEstimations: () => Promise<void>;
   getService: (serviceId: string) => Promise<any>;
   getServices: () => Promise<any[]>;
@@ -168,12 +165,16 @@ interface RidePageContextInterface {
   getRideTotalPriceWithCurrency: (rideId : string | undefined) => Promise<{ amount: number; currency: string; } | undefined>;
   getRidesByParams: (params: any) => Promise<RideInterface[]>;
   numberOfPassengers: number | null,
-  setNumberOfPassengers: (num: number) => void,
+  setNumberOfPassengers: (num: number | null) => void,
   setLastAcknowledgedRideCompletionTimestampToNow: () => void
   loadFutureBookingDays: () => void;
   futureBookingDays: number;
   businessAccountId: string | null,
   updateBusinessAccountId: (newBusinessAccountId: string | null) => void;
+  addressSearchLabel: string | null;
+  formatStationToSearchResult: (station: Station) => SearchResult;
+  formatStationsList: (stations: Station[]) => SearchResult[];
+  clearRequestSp: (index: number) => void;
 }
 
 export const RidePageContext = createContext<RidePageContextInterface>({
@@ -188,7 +189,7 @@ export const RidePageContext = createContext<RidePageContextInterface>({
   requestStopPoints: [],
   searchResults: [],
   searchAddress: (searchText: string) => undefined,
-  updateRequestSp: (sp: any) => undefined,
+  updateRequestSp: (sp: Partial<RequestStopPoint>, index?: number | null) => undefined,
   setSpCurrentLocation: () => undefined,
   historyResults: [],
   serviceEstimations: [],
@@ -217,7 +218,7 @@ export const RidePageContext = createContext<RidePageContextInterface>({
   setRide: () => undefined,
   updateRide: async (rideId: string | undefined, ride: RideInterface) => undefined,
   validateRequestedStopPoints: (reqSps: any[]) => undefined,
-  setRequestStopPoints: (sps: any) => undefined,
+  setRequestStopPoints: (sps: RequestStopPoint[]) => undefined,
   tryServiceEstimations: async () => undefined,
   getService: async (serviceId: string) => ({}),
   getServices: async () => [],
@@ -237,6 +238,10 @@ export const RidePageContext = createContext<RidePageContextInterface>({
   updateBusinessAccountId: (newBusinessAccountId: string | null) => undefined,
   addNewEmptyRequestSp: () => undefined,
   removeRequestSp: (index: number) => undefined,
+  addressSearchLabel: null,
+  formatStationToSearchResult: () => ({ text: '', fullText: '' }),
+  formatStationsList: () => [],
+  clearRequestSp: () => undefined,
 });
 
 const HISTORY_RECORDS_NUM = 10;
@@ -258,7 +263,7 @@ const RidePageContextProvider = ({ children }: {
   const { setGenericErrorDetails, setIsExpanded } = useContext(BottomSheetContext);
   const { checkStopPointsInTerritory, changeBsPage, currentBsPage } = useContext(RideStateContextContext);
   const { setNewFutureRide, loadFutureRides, onFutureRideTransition } = useContext(FutureRidesContext);
-  const [requestStopPoints, setRequestStopPoints] = useState(INITIAL_STOP_POINTS);
+  const [requestStopPoints, setRequestStopPoints] = useState<RequestStopPoint[]>(INITIAL_STOP_POINTS);
   const [currentGeocode, setCurrentGeocode] = useState<any | null>(null);
   const [selectedInputIndex, setSelectedInputIndex] = useState<number | null>(null);
   const [selectedInputTarget, setSelectedInputTarget] = useState<any | null>(null);
@@ -279,7 +284,7 @@ const RidePageContextProvider = ({ children }: {
   const [futureBookingDays, setFutureBookingDays] = useState(0);
   const [businessAccountId, setBusinessAccountId] = useState<string | null>(null);
 
-  const intervalRef = useRef<any>();
+  const intervalRef = useRef<ReturnType<typeof setInterval> | undefined>(undefined);
 
   const stopRequestInterval = () => {
     clearInterval(intervalRef.current);
@@ -755,19 +760,16 @@ const RidePageContextProvider = ({ children }: {
   }, [locationGranted]);
 
   const initSps = async () => {
-    let currentAddress = null;
     const [closesStation] = getStationList();
-    if (isStationsEnabled) {
-      currentAddress = {
+    const currentAddress: Pick<RequestStopPoint, 'externalId' | 'streetAddress' | 'description' | 'lat' | 'lng'> = isStationsEnabled
+      ? {
         externalId: closesStation.externalId,
         streetAddress: closesStation.label,
         description: closesStation.label,
         lat: closesStation.coordinates.lat,
         lng: closesStation.coordinates.lng,
-      };
-    } else {
-      currentAddress = await getCurrentLocationAddress();
-    }
+      }
+      : await getCurrentLocationAddress();
     if (currentGeocode) {
       const sps = [...INITIAL_STOP_POINTS].map((s) => {
         if (s.useDefaultLocation) {
@@ -797,7 +799,7 @@ const RidePageContextProvider = ({ children }: {
   }, [currentGeocode]);
 
 
-  const updateRequestSp = (data: any[], index?: number | null) => {
+  const updateRequestSp = (data: Partial<RequestStopPoint>, index?: number | null) => {
     const reqSps = [...requestStopPoints];
     if (_.isNil(index)) {
       index = (_.isNil(selectedInputIndex) ? requestStopPoints.length - 1 : selectedInputIndex);
@@ -936,13 +938,13 @@ const RidePageContextProvider = ({ children }: {
     setAddressSearchLabel(label);
   };
 
-  const filterSelectedStations = (stations) => {
+  const filterSelectedStations = (stations: Station[]) => {
     const stopPointsExternalIds = requestStopPoints.map(sp => sp.externalId);
-    const filteredStations = stations.filter(sp => !stopPointsExternalIds.includes(sp.externalId));
+    const filteredStations = stations.filter((sp) => !stopPointsExternalIds.includes(sp.externalId));
     return filteredStations;
   };
 
-  const formatStationsList = useCallback((stations) => {
+  const formatStationsList = useCallback((stations: Station[]) => {
     const filteredStations = filterSelectedStations(stations);
     return filteredStations.map(formatStationToSearchResult);
   }, [requestStopPoints]);
@@ -952,7 +954,7 @@ const RidePageContextProvider = ({ children }: {
   }, [stationsList]);
 
 
-  const useStationSearch = async (stopPoints, index) => {
+  const useStationSearch = async (stopPoints: RequestStopPoint[], index: number | null) => {
     if (index !== null && stopPoints?.length) {
       const selected = stopPoints[index];
 
@@ -962,7 +964,7 @@ const RidePageContextProvider = ({ children }: {
       }
 
       const [pickup] = stopPoints;
-      let result = {
+      let result: { type: string, coords: StationLocation | null } = {
         type: 'currentLocation',
         coords: null,
       };
@@ -1009,7 +1011,7 @@ const RidePageContextProvider = ({ children }: {
     }
   };
 
-  const formatStationToSearchResult = (station: any) => ({
+  const formatStationToSearchResult = (station: Station): SearchResult => ({
     //    id: station.id,
     externalId: station.externalId,
     text: station.label,
@@ -1425,7 +1427,6 @@ const RidePageContextProvider = ({ children }: {
         cancelRide,
         getCallNumbers,
         validateRequestedStopPoints,
-        setRequestStopPoints,
         tryServiceEstimations,
         getService,
         getServices,

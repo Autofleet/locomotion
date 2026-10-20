@@ -12,6 +12,7 @@
     }
   ],
   "rules": {
+      "react/style-prop-object": ["error", { "allow": ["SystemBars"] }],
       "func-names": [
           "error",
           "never"

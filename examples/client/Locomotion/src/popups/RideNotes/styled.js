@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled from 'styled-components/native';
 import { TextArea } from '../../Components/TextArea';
 import { End } from '../../lib/text-direction';
 
@@ -7,7 +7,7 @@ export const SummaryContainer = styled.View`
   background-color: white;
   justify-content: center;
   align-items: center;
-  border-radius: 2;
+  border-radius: 2px;
   border-color: rgba(0, 0, 0, 0.1);
 `;
 

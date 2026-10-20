@@ -1,5 +1,5 @@
 import React from 'react';
-import styled from 'styled-components';
+import styled from 'styled-components/native';
 import moment from 'moment';
 import EtaText from './EtaText';
 import i18n from '../../../../I18n';

@@ -38,9 +38,9 @@ const ActiveRideContent = () => {
 
   const {
     vehicle,
-  } = ride;
+  } = ride || {};
 
-  const { stopPoints } = ride;
+  const { stopPoints } = ride || {};
 
   const firstSpNotCompleted = stopPoints?.find((p: any) => p.state !== STOP_POINT_STATES.COMPLETED);
   const pickupSp = stopPoints?.find((p: any) => p.type === STOP_POINT_TYPES.STOP_POINT_PICKUP);

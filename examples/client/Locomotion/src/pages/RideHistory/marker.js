@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled from 'styled-components/native';
 import DropoffIcon from '../../assets/map/markers/dropoffIcon-nocolor.svg';
 import PickupIcon from '../../assets/map/markers/pickupIcon-nocolor.svg';
 

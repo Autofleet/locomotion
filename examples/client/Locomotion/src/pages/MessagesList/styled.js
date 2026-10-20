@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import styled, { ThemeContext } from 'styled-components';
+import styled, { ThemeContext } from 'styled-components/native';
 import { FONT_SIZES, FONT_WEIGHTS } from '../../context/theme';
 import noRides from '../../assets/no_rides.svg';
 import SvgIcon from '../../Components/SvgIcon';

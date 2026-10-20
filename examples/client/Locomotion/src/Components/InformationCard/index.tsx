@@ -18,17 +18,18 @@ export type InformationCardProps = {
 
 const InformationCard = ({
   title = '',
-  children,
+  children = {},
   onPress = undefined,
   verified = false,
   showUnverified = false,
   icon = undefined,
-  onIconPress,
+  onIconPress = undefined,
+  testID = '',
   ...props
 }: InformationCardProps) => (
   onPress
     ? (
-      <Button onPress={onPress} {...props} style={{ flex: 1 }}>
+      <Button onPress={onPress} testID={testID} {...props} style={{ flex: 1 }}>
         { children
           ? (
             <Card
@@ -82,17 +83,6 @@ const InformationCard = ({
 
 );
 
-
-InformationCard.defaultProps = {
-  title: '',
-  children: {},
-  onPress: undefined,
-  verified: false,
-  showUnverified: false,
-  icon: undefined,
-  onIconPress: undefined,
-  testID: '',
-};
 
 InformationCard.propTypes = {
   title: propsTypes.string,

@@ -1,5 +1,5 @@
 import { SafeAreaView } from 'react-native';
-import styled from 'styled-components';
+import styled from 'styled-components/native';
 import Button from '../Button';
 import { FONT_SIZES, FONT_WEIGHTS } from '../../context/theme';
 

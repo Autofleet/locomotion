@@ -1,5 +1,5 @@
 import React from 'react';
-import styled from 'styled-components';
+import styled from 'styled-components/native';
 import { View } from 'react-native';
 import Button from '../Button';
 import StarSvg from './star.svg';

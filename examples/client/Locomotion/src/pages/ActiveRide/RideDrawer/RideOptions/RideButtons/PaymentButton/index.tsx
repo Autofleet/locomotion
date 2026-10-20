@@ -1,7 +1,7 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { Text, View } from 'react-native';
 import { PaymentIcon } from 'react-native-payment-icons';
-import styled, { ThemeContext } from 'styled-components';
+import styled, { useTheme } from 'styled-components/native';
 import { isCardPaymentMethod } from '../../../../../../lib/ride/utils';
 import SvgIcon from '../../../../../../Components/SvgIcon';
 import { FONT_SIZES, FONT_WEIGHTS } from '../../../../../../context/theme';
@@ -41,9 +41,9 @@ const PromoButtonContainer = styled(View)`
 
 interface PaymentButtonProps {
   icon: string;
-  title: string;
-  brand?: Brand;
-  id?: string;
+  title: string | null;
+  brand?: Brand | null;
+  id?: string | null;
   invalid?: boolean;
   promoButton?: React.ReactNode;
 }
@@ -51,12 +51,12 @@ interface PaymentButtonProps {
 const PaymentButton = ({
   icon,
   title,
-  brand,
-  id,
-  invalid,
-  promoButton,
+  brand = null,
+  id = null,
+  invalid = false,
+  promoButton = null,
 }: PaymentButtonProps) => {
-  const { primaryColor } = useContext(ThemeContext);
+  const { primaryColor } = useTheme();
   const IconColor = invalid ? '#F83743' : primaryColor;
   return (
     <Container>
@@ -83,10 +83,3 @@ const PaymentButton = ({
 };
 
 export default PaymentButton;
-
-PaymentButton.defaultProps = {
-  brand: null,
-  id: null,
-  invalid: false,
-  promoButton: null,
-};

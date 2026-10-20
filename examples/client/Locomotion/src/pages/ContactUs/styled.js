@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled from 'styled-components/native';
 import { Dimensions } from 'react-native';
 import { LogoContainer } from '../AuthScreens/StartScreen/styles';
 import SafeView from '../../Components/SafeView';

@@ -3,7 +3,8 @@ import propTypes from 'prop-types';
 import { logout } from '../../services/logout';
 import FullPageLoader from '../../Components/FullPageLoader';
 
-const Logout = ({ navigation }) => {
+const Logout = (props) => {
+  const { navigation = undefined } = props;
   useEffect(() => {
     logout(navigation);
   }, []);
@@ -14,10 +15,6 @@ const Logout = ({ navigation }) => {
 };
 
 export default Logout;
-
-Logout.defaultProps = {
-  navigation: undefined,
-};
 
 Logout.propTypes = {
   navigation: propTypes.shape({}),

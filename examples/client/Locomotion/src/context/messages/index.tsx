@@ -31,18 +31,31 @@ export type messageProps = {
     dismissedAt: Date | null;
 }
 
+export type userMessageProps = {
+    id: string;
+    readAt: Date | null;
+    dismissedAt: Date | null;
+    message: messageProps;
+}
+
+export type messageWithUserMessages = messageProps & {
+    userMessages: userMessageProps[];
+}
+
 interface MessagesContextInterface {
-    userMessages: messageProps[];
+    userMessages: userMessageProps[];
     viewingMessage: messageProps | null;
     setViewingMessage: React.Dispatch<React.SetStateAction<messageProps | null>>;
-    setUserMessages: React.Dispatch<React.SetStateAction<messageProps[]>>;
-    loadUserMessages: () => Promise<messageProps[]>;
+    setUserMessages: React.Dispatch<React.SetStateAction<userMessageProps[]>>;
+    loadUserMessages: () => Promise<userMessageProps[] | undefined>;
     isLoading: boolean;
     markReadMessages: (param: any) => Promise<any>
     dismissMessages: () => Promise<any>
-    getUserMessages: () => Promise<any>
+    getUserMessages: () => Promise<userMessageProps[]>
     checkMessagesForToast: () => any
-    getMessage: (messageId: string) => Promise<any>
+    getMessage: (messageId: string) => Promise<messageWithUserMessages | undefined>
+    toastMessageId: string | null
+    closeToast: () => void
 
 }
 
@@ -55,20 +68,22 @@ export const MessagesContext = createContext<MessagesContextInterface>({
   isLoading: false,
   markReadMessages: async () => undefined,
   dismissMessages: async () => undefined,
-  getUserMessages: async () => undefined,
+  getUserMessages: async () => [],
   checkMessagesForToast: () => undefined,
   getMessage: async () => undefined,
+  toastMessageId: null,
+  closeToast: () => undefined,
 });
 
 const MessagesProvider = ({ children }: { children: any }) => {
   const { user } = useContext(UserContext);
   const { getRidesByParams } = useContext(RidePageContext);
   const [viewingMessage, setViewingMessage] = useState<messageProps | null>(null);
-  const [userMessages, setUserMessages] = useState<messageProps[]>([]);
+  const [userMessages, setUserMessages] = useState<userMessageProps[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [toastMessageId, setToastMessageId] = useState<string | null>(null);
 
-  const showToast = (userMessage: any) => {
+  const showToast = (userMessage: userMessageProps) => {
     const { id: userMessageId, message } = userMessage;
     Toast.show({
       type: 'tomatoToast',
@@ -108,7 +123,7 @@ const MessagesProvider = ({ children }: { children: any }) => {
   };
 
   const markReadMessages = async (userMessageIds: string[]): Promise<void> => {
-    await markReadMessageCall(userMessageIds, user?.id);
+    await markReadMessageCall(userMessageIds);
   };
 
   const dismissMessages = async (userMessageIds:string[] = []) => {
@@ -120,7 +135,7 @@ const MessagesProvider = ({ children }: { children: any }) => {
   const checkMessagesForToast = async () => {
     const messages = await getUserMessages();
     setUserMessages(messages);
-    const unreadMessage = messages.find(message => !message.readAt && !message.dismissedAt);
+    const unreadMessage = messages.find((message) => !message.readAt && !message.dismissedAt);
     if (unreadMessage) {
       showToast(unreadMessage);
     }
@@ -144,11 +159,11 @@ const MessagesProvider = ({ children }: { children: any }) => {
   };
 
   const getUserMessages = async () => {
-    const messages = await getUserMessagesCall(user?.id);
+    const messages: userMessageProps[] = await getUserMessagesCall(user?.id);
     return messages.sort(sortBySentAt);
   };
 
-  const sortBySentAt = (a: any, b:any) => {
+  const sortBySentAt = (a: userMessageProps, b: userMessageProps) => {
     const sentAtA = moment(a.message.sentAt);
     const sentAtB = moment(b.message.sentAt);
     if (sentAtA.isBefore(sentAtB)) {
@@ -161,7 +176,10 @@ const MessagesProvider = ({ children }: { children: any }) => {
   };
 
   const getMessage = async (messageId: string) => {
-    const fetchedMessage = await getMessageCall(messageId, user.id);
+    const fetchedMessage: messageWithUserMessages | undefined = await getMessageCall(
+      messageId,
+      user?.id,
+    );
     return fetchedMessage;
   };
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import styled from 'styled-components';
+import styled from 'styled-components/native';
 import SvgIcon from '../../../../Components/SvgIcon';
 import HistoryIcon from '../../../../assets/recent_search.svg';
 import GeoIcon from '../../../../assets/geo_location.svg';

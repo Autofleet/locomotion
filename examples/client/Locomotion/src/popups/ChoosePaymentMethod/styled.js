@@ -1,5 +1,5 @@
 import { View, ScrollView } from 'react-native';
-import styled from 'styled-components';
+import styled from 'styled-components/native';
 import RoundedButton from '../../Components/RoundedButton';
 import Button from '../../Components/Button';
 import { TextArea } from '../../Components/TextArea';

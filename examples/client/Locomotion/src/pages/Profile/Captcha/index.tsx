@@ -20,8 +20,8 @@ const CAPTCHA_WATCHDOG_MS = 30000;
 
 const Captcha = ({
   onVerified,
-  onClose,
-  onError,
+  onClose = undefined,
+  onError = undefined,
   isOpen,
 }: CaptchaProps) => {
   const { shouldHideCaptcha, fetchHideCaptchaSetting } = useContext(OnboardingContext);
@@ -141,11 +141,6 @@ const Captcha = ({
       style={{ backgroundColor: 'transparent' }}
     />
   );
-};
-
-Captcha.defaultProps = {
-  onClose: undefined,
-  onError: undefined,
 };
 
 export default Captcha;

@@ -1,5 +1,5 @@
 import { Text, View } from 'react-native';
-import styled from 'styled-components';
+import styled from 'styled-components/native';
 import { FONT_SIZES, FONT_WEIGHTS } from '../../../context/theme';
 
 export const Container = styled(View)`
@@ -36,7 +36,7 @@ export const ButtonContainer = styled(View)`
 `;
 
 export const ButtonText = styled(Text)`
-   color: #24aaf2
+   color: #24aaf2;
    ${FONT_SIZES.LARGE};
    ${FONT_WEIGHTS.SEMI_BOLD};
    margin-bottom: -10px;

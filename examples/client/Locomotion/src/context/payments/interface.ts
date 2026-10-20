@@ -19,3 +19,11 @@ export interface PaymentMethodInterface {
     updatedAt: Date;
     outstandingBalance: Balance
 }
+
+export interface BusinessAccount {
+    id: string;
+    name: string;
+    showPriceToMembers?: boolean;
+}
+
+export type GetBusinessAccountById = (id?: string | null) => Partial<BusinessAccount> | null;

@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import { View } from 'react-native';
-import styled from 'styled-components';
+import styled from 'styled-components/native';
 import moment from 'moment';
 import I18n from '../../../../I18n';
 

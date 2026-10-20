@@ -1,5 +1,5 @@
 import { Platform } from 'react-native';
-import styled from 'styled-components';
+import styled from 'styled-components/native';
 import { FONT_SIZES, FONT_WEIGHTS } from '../../context/theme';
 
 export const Container = styled.View`
@@ -10,6 +10,6 @@ padding: 2px 8px;
 export const TagText = styled.Text`
 ${FONT_SIZES.MEDIUM};
 ${FONT_WEIGHTS.REGULAR};
-${Platform.OS !== 'ios' && 'line-height: 16px'}
+${Platform.OS !== 'ios' ? 'line-height: 16px;' : ''}
 color:  ${({ color }) => color};
 `;

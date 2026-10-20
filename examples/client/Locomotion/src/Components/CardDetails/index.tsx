@@ -130,7 +130,7 @@ const CardDetails = ({
               <DeletePaymentContainer
                 testID="deletePaymentMethod"
                 disabled={paymentMethod?.hasOutstandingBalance
-                  || ride.payment?.paymentMethod?.id === paymentMethod?.id}
+                  || ride?.payment?.paymentMethod?.id === paymentMethod?.id}
                 onPress={async () => {
                   await onRemoveMethod(paymentMethod?.id);
                 }}

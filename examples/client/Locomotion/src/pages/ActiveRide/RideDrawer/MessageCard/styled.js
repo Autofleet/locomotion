@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
-import styled from 'styled-components';
+import styled from 'styled-components/native';
 import xIcon from '../../../../assets/x.png';
 import Button from '../../../../Components/Button';
 

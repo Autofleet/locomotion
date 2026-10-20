@@ -5,7 +5,7 @@ import {
   Linking, Platform, Text, View,
 } from 'react-native';
 import Config from 'react-native-config';
-import styled, { ThemeContext } from 'styled-components';
+import styled, { useTheme } from 'styled-components/native';
 import { useBottomSheet } from '@gorhom/bottom-sheet';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import moment from 'moment';
@@ -176,19 +176,19 @@ const RIDE_STATES_TO_BS_PAGES = objDefault({
 });
 
 const BsPage = ({
-  onSecondaryButtonPress,
+  onSecondaryButtonPress = () => undefined,
   onButtonPress,
   Image,
-  children,
-  titleIcon,
+  children = undefined,
+  titleIcon = undefined,
   TitleText,
   SubTitleText,
   ButtonText,
-  SecondaryButtonText,
-  isLoading,
-  buttonDisabled,
-  warning,
-  fullWidthButtons,
+  SecondaryButtonText = undefined,
+  isLoading = false,
+  buttonDisabled = false,
+  warning = false,
+  fullWidthButtons = false,
   subtitleTestId,
 }: {
   onSecondaryButtonPress?: any,
@@ -255,17 +255,6 @@ const BsPage = ({
       </Footer>
     </Container>
   );
-};
-
-BsPage.defaultProps = {
-  children: undefined,
-  titleIcon: undefined,
-  onSecondaryButtonPress: () => undefined,
-  SecondaryButtonText: undefined,
-  isLoading: false,
-  buttonDisabled: false,
-  warning: false,
-  fullWidthButtons: false,
 };
 
 export default BsPage;
@@ -501,7 +490,7 @@ export const ConfirmFutureRide = (props: any) => {
 
 export const NotAvailableHere = (props: any) => {
   const { setSnapPointsState, setIsExpanded } = useContext(BottomSheetContext);
-  const { primaryColor } = useContext(ThemeContext);
+  const { primaryColor } = useTheme();
   useEffect(() => {
     setSnapPointsState(SNAP_POINT_STATES.NOT_IN_TERRITORY);
     setIsExpanded(false);
@@ -683,7 +672,7 @@ export const ConfirmingRide = (props: any) => {
 
 export const NoAvailableVehicles = (props: any) => {
   const { setSnapPointsState } = useContext(BottomSheetContext);
-  const { primaryColor } = useContext(ThemeContext);
+  const { primaryColor } = useTheme();
 
   useEffect(() => {
     setSnapPointsState(SNAP_POINT_STATES.NO_AVAILABLE_VEHICLES);

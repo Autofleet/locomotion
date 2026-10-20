@@ -1,5 +1,5 @@
 import { TextInput } from 'react-native';
-import styled from 'styled-components';
+import styled from 'styled-components/native';
 
 export const TextArea = styled(TextInput)`
     width: 100%;

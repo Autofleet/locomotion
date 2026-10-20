@@ -1,7 +1,7 @@
 import React, { useContext, useRef } from 'react';
 import { Platform } from 'react-native';
 import { Marker } from 'react-native-maps';
-import { ThemeContext } from 'styled-components';
+import { ThemeContext } from 'styled-components/native';
 import clockIcon from '../../assets/bottomSheet/clock.svg';
 import dropoffIcon from '../../assets/map/markers/dropoffIcon.svg';
 import pickupIcon from '../../assets/map/markers/pickupIcon.svg';

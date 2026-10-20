@@ -57,7 +57,7 @@ export const DistanceText = styled.Text`
 `;
 
 export const Row = styled.View`
-  flex 1;
+  flex: 1;
   flex-direction: row;
   justify-content: space-between;
   margin-bottom: 5px;

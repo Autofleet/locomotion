@@ -12,7 +12,7 @@ export const Container = styled.View`
   justify-content: center;
   align-items: center;
   align-self: stretch;
-  border-color: rgba(125, 139, 172, 0.32)
+  border-color: rgba(125, 139, 172, 0.32);
   border-bottom-width: 1px;
   border-bottom-color: #7D8BAC52;
   margin-bottom: 16px;

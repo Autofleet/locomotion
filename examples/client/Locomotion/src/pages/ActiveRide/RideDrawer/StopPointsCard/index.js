@@ -1,6 +1,6 @@
 import React, { Fragment, useEffect } from 'react';
 import { View } from 'react-native';
-import styled from 'styled-components';
+import styled from 'styled-components/native';
 import moment from 'moment';
 import i18n from '../../../../I18n';
 import StopPointRow from './StopPointRow';

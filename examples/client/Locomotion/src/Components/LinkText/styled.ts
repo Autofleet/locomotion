@@ -14,7 +14,7 @@ interface MarkerProps {
     iconSide: 'left' | 'right';
 }
 
-const isLeft = side => side === 'left';
+const isLeft = (side: MarkerProps['iconSide']) => side === 'left';
 export const Container = styled.View`
     display: flex;
     flex-direction: ${({ iconSide }) => (isLeft(iconSide) ? 'row' : 'row-reverse')};

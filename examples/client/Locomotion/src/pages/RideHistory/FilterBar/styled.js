@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled from 'styled-components/native';
 import Button from '../../../Components/Button';
 import { isAndroid } from '../../../services/isAndroid';
 

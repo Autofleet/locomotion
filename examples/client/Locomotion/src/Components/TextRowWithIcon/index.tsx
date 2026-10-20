@@ -1,6 +1,7 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { Text, View } from 'react-native';
-import styled, { ThemeContext } from 'styled-components';
+import styled, { useTheme } from 'styled-components/native';
+import { SvgProps } from 'react-native-svg';
 import { FONT_SIZES } from '../../context/theme';
 import SvgIcon from '../SvgIcon';
 
@@ -22,18 +23,19 @@ color: #333333;
 
 interface TextRowWithIconProps {
     text: string;
-    icon?: any;
+    subTitle?: string;
+    icon?: React.FC<SvgProps> | null;
     style?: Record<string, unknown>;
-    Image?: any
+    Image?: React.ComponentType | null;
     iconWidth?: number;
     iconHeight?: number;
 
 }
 
 const TextRowWithIcon = ({
-  subTitle, text, icon, style, Image, iconWidth, iconHeight,
+  subTitle, text, icon = null, style = {}, Image = null, iconWidth = 15, iconHeight = 15,
 }: TextRowWithIconProps) => {
-  const theme = useContext(ThemeContext);
+  const theme = useTheme();
   const getImage = () => {
     if (icon) {
       return (
@@ -60,14 +62,6 @@ const TextRowWithIcon = ({
       </BasicText>
     </Container>
   );
-};
-
-TextRowWithIcon.defaultProps = {
-  icon: null,
-  style: {},
-  Image: null,
-  iconWidth: 15,
-  iconHeight: 15,
 };
 
 export default TextRowWithIcon;
