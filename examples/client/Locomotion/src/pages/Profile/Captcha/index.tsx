@@ -31,8 +31,8 @@ const Captcha = ({
   const verifiedRef = useRef(false);
   const pendingCloseRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const isDevSettingOn = () => Config.DEV_SETTINGS && Config.DEV_SETTINGS === 'true';
-  const isDebugPhoneNumber = user?.phoneNumber === Config.DEV_PAGE_PHONE_NUMBER && isDevSettingOn();
+  const isDebugPhoneNumber = user?.phoneNumber === Config.DEV_PAGE_PHONE_NUMBER && Config.DEV_SETTINGS === 'true';
+  const skipCaptcha = Config.SKIP_CAPTCHA === 'true' || isDebugPhoneNumber;
 
   const clearWatchdog = useCallback(() => {
     if (watchdogRef.current) {
@@ -102,7 +102,7 @@ const Captcha = ({
 
     verifiedRef.current = false;
 
-    if (recaptchaRef.current && Config.CAPTCHA_KEY && !isDebugPhoneNumber && !shouldHideCaptcha) {
+    if (recaptchaRef.current && Config.CAPTCHA_KEY && !skipCaptcha && !shouldHideCaptcha) {
       recaptchaRef.current.open();
       watchdogRef.current = setTimeout(() => {
         watchdogRef.current = null;
@@ -122,7 +122,7 @@ const Captcha = ({
       clearWatchdog();
       cancelPendingClose();
     };
-  }, [isOpen, shouldHideCaptcha, isDebugPhoneNumber]);
+  }, [isOpen, shouldHideCaptcha, skipCaptcha]);
 
   if (!Config.CAPTCHA_KEY) {
     return null;
