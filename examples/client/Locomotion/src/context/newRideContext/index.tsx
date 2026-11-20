@@ -181,6 +181,7 @@ interface RidePageContextInterface {
 
 const RIDE_POLL_MS = 4 * 1000;
 const RIDE_POLL_MAX_BACKOFF_MS = 60 * 1000;
+const IDLE_ACTIVE_RIDE_POLL_MS = 30 * 1000;
 
 export const RidePageContext = createContext<RidePageContextInterface>({
   loadAddress: (input: any) => undefined,
@@ -647,9 +648,7 @@ const RidePageContextProvider = ({ children }: {
     const cameToForeground = isAppActive && !wasAppActiveRef.current;
     wasAppActiveRef.current = isAppActive;
     if (cameToForeground && user?.id && !ride.id) {
-      if (!activeRideCheckFailed) {
-        loadActiveRide();
-      }
+      loadActiveRide();
       loadLastCompletedRide();
     }
   }, [isAppActive]);
@@ -698,19 +697,22 @@ const RidePageContextProvider = ({ children }: {
     maxMs: RIDE_POLL_MAX_BACKOFF_MS,
   });
 
-  const retryActiveRideCheckNow = usePolling(async () => {
+  // Rides created outside the app (operator bookings, scheduled rides entering their dispatch
+  // window) only reach the rider through /rides/active; /rides/future drops rides <15 min out.
+  const checkActiveRideNow = usePolling(async () => {
     if (!await loadActiveRide()) {
       throw new Error('active ride check failed');
     }
   }, {
-    enabled: activeRideCheckFailed && isAppActive && !!user?.id && !ride.id && !rideRequestLoading,
-    baseMs: RIDE_POLL_MS,
+    enabled: isAppActive && !!user?.id && !ride.id && !rideRequestLoading,
+    baseMs: activeRideCheckFailed ? RIDE_POLL_MS : IDLE_ACTIVE_RIDE_POLL_MS,
     maxMs: RIDE_POLL_MAX_BACKOFF_MS,
+    immediate: false,
   });
 
   useOnReconnect(() => {
     pollRideNow();
-    retryActiveRideCheckNow();
+    checkActiveRideNow();
   });
 
   useEffect(() => {
@@ -1344,8 +1346,12 @@ const RidePageContextProvider = ({ children }: {
 
 
   const cancelRide = async (rideId?: string) => {
-    await rideApi.cancelRide(rideId || ride?.id);
-    pollRideNow();
+    try {
+      await rideApi.cancelRide(rideId || ride?.id);
+    } finally {
+      // The backend can report a failed cancel after already committing CANCELED.
+      pollRideNow();
+    }
   };
 
   const getCallNumbers = async () => {

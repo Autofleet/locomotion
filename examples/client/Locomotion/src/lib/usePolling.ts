@@ -18,11 +18,14 @@ interface PollingOptions {
   enabled: boolean;
   baseMs: number;
   maxMs?: number;
+  immediate?: boolean;
 }
 
 const usePolling = (
   poll: () => Promise<unknown>,
-  { enabled, baseMs, maxMs = baseMs }: PollingOptions,
+  {
+    enabled, baseMs, maxMs = baseMs, immediate = true,
+  }: PollingOptions,
 ): () => void => {
   const pollRef = useRef(poll);
   const inFlightRef = useRef<Promise<unknown> | null>(null);
@@ -79,14 +82,18 @@ const usePolling = (
       clearTimeout(timer);
       run(true);
     };
-    run();
+    if (immediate) {
+      run();
+    } else {
+      timer = setTimeout(() => run(), nextPollDelay(0, baseMs, maxMs));
+    }
 
     return () => {
       cancelled = true;
       clearTimeout(timer);
       pollNowRef.current = noop;
     };
-  }, [enabled, baseMs, maxMs]);
+  }, [enabled, baseMs, maxMs, immediate]);
 
   return useCallback(() => pollNowRef.current(), []);
 };

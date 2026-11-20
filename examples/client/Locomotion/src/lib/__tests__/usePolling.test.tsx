@@ -89,6 +89,20 @@ describe('usePolling', () => {
     expect(poll).toHaveBeenCalledTimes(2);
   });
 
+  it('with immediate: false, waits one interval before the first poll', async () => {
+    const poll = jest.fn().mockResolvedValue(undefined);
+    const Delayed = () => {
+      usePolling(poll, {
+        enabled: true, baseMs: BASE, maxMs: MAX, immediate: false,
+      });
+      return null;
+    };
+    await act(async () => { renderer.create(<Delayed />); });
+    expect(poll).not.toHaveBeenCalled();
+    await act(async () => { jest.advanceTimersByTime(BASE); });
+    expect(poll).toHaveBeenCalledTimes(1);
+  });
+
   it('pollNow resets backoff and polls immediately', async () => {
     const poll = jest.fn()
       .mockRejectedValueOnce(new Error('boom'))
