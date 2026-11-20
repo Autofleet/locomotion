@@ -89,6 +89,49 @@ describe('usePolling', () => {
     expect(poll).toHaveBeenCalledTimes(2);
   });
 
+  it('pollNow resets backoff and polls immediately', async () => {
+    const poll = jest.fn()
+      .mockRejectedValueOnce(new Error('boom'))
+      .mockRejectedValueOnce(new Error('boom'))
+      .mockResolvedValue(undefined);
+    let pollNow: () => void = () => {};
+    const Capture = () => {
+      pollNow = usePolling(poll, { enabled: true, baseMs: BASE, maxMs: MAX });
+      return null;
+    };
+    await act(async () => { renderer.create(<Capture />); });
+    await act(async () => { jest.advanceTimersByTime(8000); });
+    await flush();
+    expect(poll).toHaveBeenCalledTimes(2);
+
+    await act(async () => { pollNow(); });
+    expect(poll).toHaveBeenCalledTimes(3);
+    await act(async () => { jest.advanceTimersByTime(BASE); });
+    expect(poll).toHaveBeenCalledTimes(4);
+  });
+
+  it('pollNow during an in-flight poll waits for it, then polls fresh on a single schedule', async () => {
+    const resolvers: Array<() => void> = [];
+    const poll = jest.fn(() => new Promise<void>((r) => { resolvers.push(r); }));
+    let pollNow: () => void = () => {};
+    const Capture = () => {
+      pollNow = usePolling(poll, { enabled: true, baseMs: BASE, maxMs: MAX });
+      return null;
+    };
+    await act(async () => { renderer.create(<Capture />); });
+    const setTimeoutSpy = jest.spyOn(global, 'setTimeout');
+    await act(async () => { pollNow(); });
+    expect(poll).toHaveBeenCalledTimes(1);
+
+    await act(async () => { resolvers[0](); });
+    expect(poll).toHaveBeenCalledTimes(2);
+
+    await act(async () => { resolvers[1](); });
+    expect(setTimeoutSpy.mock.calls.filter(([, ms]) => ms === BASE)).toHaveLength(1);
+    await act(async () => { jest.advanceTimersByTime(BASE); });
+    expect(poll).toHaveBeenCalledTimes(3);
+  });
+
   it('does not double up when re-enabled while a poll is still in flight', async () => {
     let resolve: () => void = () => {};
     const poll = jest.fn(() => new Promise<void>((r) => { resolve = r; }));

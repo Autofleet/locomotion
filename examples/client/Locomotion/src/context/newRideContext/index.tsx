@@ -43,6 +43,7 @@ import {
 } from '../../lib/commonTypes';
 import usePolling from '../../lib/usePolling';
 import useIsAppActive from '../../lib/useIsAppActive';
+import useOnReconnect from '../../lib/useOnReconnect';
 import { formatSps } from '../../lib/ride/utils';
 import { APP_ROUTES, MAIN_ROUTES } from '../../pages/routes';
 import * as navigationService from '../../services/navigation';
@@ -691,13 +692,13 @@ const RidePageContextProvider = ({ children }: {
     }
   };
 
-  usePolling(() => loadRide(ride.id as string), {
+  const pollRideNow = usePolling(() => loadRide(ride.id as string), {
     enabled: isAppActive && !!user?.id && !!ride.id && !rideRequestLoading,
     baseMs: RIDE_POLL_MS,
     maxMs: RIDE_POLL_MAX_BACKOFF_MS,
   });
 
-  usePolling(async () => {
+  const retryActiveRideCheckNow = usePolling(async () => {
     if (!await loadActiveRide()) {
       throw new Error('active ride check failed');
     }
@@ -705,6 +706,11 @@ const RidePageContextProvider = ({ children }: {
     enabled: activeRideCheckFailed && isAppActive && !!user?.id && !ride.id && !rideRequestLoading,
     baseMs: RIDE_POLL_MS,
     maxMs: RIDE_POLL_MAX_BACKOFF_MS,
+  });
+
+  useOnReconnect(() => {
+    pollRideNow();
+    retryActiveRideCheckNow();
   });
 
   useEffect(() => {
@@ -1339,6 +1345,7 @@ const RidePageContextProvider = ({ children }: {
 
   const cancelRide = async (rideId?: string) => {
     await rideApi.cancelRide(rideId || ride?.id);
+    pollRideNow();
   };
 
   const getCallNumbers = async () => {
