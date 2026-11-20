@@ -1,9 +1,10 @@
 import React, {
-  createContext, useEffect, useState, useContext,
+  createContext, useState, useContext,
 } from 'react';
 import { useIsFocused } from '@react-navigation/native';
 import { UserContext } from '../user';
-import useInterval from '../../lib/useInterval';
+import usePolling from '../../lib/usePolling';
+import useIsAppActive from '../../lib/useIsAppActive';
 import { getPosition } from '../../services/geo';
 import * as availabilityApi from './api';
 
@@ -26,6 +27,9 @@ interface AvailabilityContextInterface {
 export const AvailabilityContext = createContext<AvailabilityContextInterface>({
   availabilityVehicles: [],
 });
+
+const AVAILABILITY_POLL_MS = 15 * 1000;
+const AVAILABILITY_MAX_BACKOFF_MS = 60 * 1000;
 
 const AvailabilityContextProvider = ({ children }: { children: any }) => {
   const [availabilityVehicles, setAvailabilityVehicles] = useState<AvailabilityVehicles[]>([]);
@@ -53,21 +57,19 @@ const AvailabilityContextProvider = ({ children }: { children: any }) => {
         }
       } catch (e) {
         console.error('setAvailabilityVehicles', e);
+        throw e;
       }
     }
   };
 
   const isFocused = useIsFocused();
+  const isAppActive = useIsAppActive();
 
-  useInterval(() => {
-    if (isFocused) {
-      getVehicles();
-    }
-  }, 5000);
-
-  useEffect(() => {
-    getVehicles();
-  }, [isFocused]);
+  usePolling(getVehicles, {
+    enabled: isFocused && isAppActive && !!locationGranted,
+    baseMs: AVAILABILITY_POLL_MS,
+    maxMs: AVAILABILITY_MAX_BACKOFF_MS,
+  });
 
   return (
     <AvailabilityContext.Provider
