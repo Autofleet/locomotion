@@ -45,8 +45,8 @@ export const patchRide = async (rideId, newData) => {
   }
 };
 
-export const getActiveRide = async () => {
-  const { data } = await network.get('api/v1/rides/active');
+export const getActiveRide = async (config) => {
+  const { data } = await network.get('api/v1/rides/active', config);
   return data;
 };
 

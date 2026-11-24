@@ -45,6 +45,7 @@ import usePolling from '../../lib/usePolling';
 import useIsAppActive from '../../lib/useIsAppActive';
 import useOnReconnect from '../../lib/useOnReconnect';
 import { formatSps } from '../../lib/ride/utils';
+import { findActiveRideOrNull, guardInFlight } from '../../lib/ride/booking';
 import { APP_ROUTES, MAIN_ROUTES } from '../../pages/routes';
 import * as navigationService from '../../services/navigation';
 import { BottomSheetContext } from '../bottomSheetContext';
@@ -181,7 +182,8 @@ interface RidePageContextInterface {
 
 const RIDE_POLL_MS = 4 * 1000;
 const RIDE_POLL_MAX_BACKOFF_MS = 60 * 1000;
-const IDLE_ACTIVE_RIDE_POLL_MS = 30 * 1000;
+const IDLE_ACTIVE_RIDE_POLL_MS = 10 * 1000;
+const ACTIVE_RIDE_PRECHECK_TIMEOUT_MS = 5 * 1000;
 
 export const RidePageContext = createContext<RidePageContextInterface>({
   loadAddress: (input: any) => undefined,
@@ -570,6 +572,14 @@ const RidePageContextProvider = ({ children }: {
     return null;
   };
 
+  const showActiveRide = async (activeRide: RideInterface) => {
+    const formattedRide = await formatRide(activeRide);
+    const screenFunction = RIDE_STATES_TO_SCREENS[formattedRide?.state || ''];
+    if (screenFunction) {
+      screenFunction(formattedRide);
+    }
+  };
+
   const loadActiveRide = async () => {
     let activeRide;
     let checkSucceeded = true;
@@ -580,11 +590,7 @@ const RidePageContextProvider = ({ children }: {
     }
     setActiveRideCheckFailed(!checkSucceeded);
     if (activeRide) {
-      const formattedRide = await formatRide(activeRide);
-      const screenFunction = RIDE_STATES_TO_SCREENS[formattedRide?.state || ''];
-      if (screenFunction) {
-        screenFunction(formattedRide);
-      }
+      await showActiveRide(activeRide);
     } else {
       const lastRideId = checkSucceeded && await StorageService.get('lastRideId');
       if (lastRideId) {
@@ -1169,7 +1175,9 @@ const RidePageContextProvider = ({ children }: {
     },
   };
 
-  const requestRide = async (pickupLocation?: any): Promise<void> => {
+  // A ref, not rideRequestLoading: state lags a render behind, so a double tap would read it as false and book twice.
+  const rideRequestInFlightRef = useRef(false);
+  const requestRide = guardInFlight(rideRequestInFlightRef, async (pickupLocation?: any): Promise<void> => {
     Mixpanel.setEvent('Requesting ride');
     let stopPoints = requestStopPoints;
 
@@ -1196,6 +1204,17 @@ const RidePageContextProvider = ({ children }: {
     })));
 
     try {
+      // A ride booked for the rider elsewhere (e.g. by an operator) may not be on screen yet. A failed
+      // check falls through to booking: a possible duplicate is better than a rider who can't book.
+      const existingRide = await findActiveRideOrNull(
+        () => rideApi.getActiveRide({ timeout: ACTIVE_RIDE_PRECHECK_TIMEOUT_MS }),
+      );
+      if (existingRide) {
+        Mixpanel.setEvent('Ride request showed existing ride', { rideId: existingRide.id, state: existingRide.state });
+        await showActiveRide(existingRide);
+        return;
+      }
+
       let scheduledToMoment = ride.scheduledTo;
       if (ride.scheduledTo) {
         const unixScheduledTo = moment.unix(Number(ride.scheduledTo) / 1000);
@@ -1254,7 +1273,7 @@ const RidePageContextProvider = ({ children }: {
     } finally {
       setRideRequestLoading(false);
     }
-  };
+  });
 
 
   const fillLoadSkeleton = () => {
