@@ -43,7 +43,7 @@ export default ({
   offerExpired, onVerified, setLoading, onRenewOffer, futureRide,
 
 }) => (
-  <Fragment>
+  <>
     {!offerExpired || futureRide
       ? (
         <SliderButton
@@ -66,7 +66,6 @@ export default ({
             {`${I18n.t(!offerExpired ? 'home.offerCard.confirmOffer' : 'home.offerCard.expiredOffer')}`}
           </RoundedButton>
         </DrawerButtonContainer>
-      )
-        }
-  </Fragment>
+      )}
+  </>
 );

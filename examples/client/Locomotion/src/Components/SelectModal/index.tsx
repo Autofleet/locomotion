@@ -42,7 +42,6 @@ const StyledPop = styled(SelectDropdown).attrs<{ icon?: React.FC<SvgProps>; erro
   },
 }))``;
 
-
 const StyledRow = styled(View)`
   height: 40;
   display: flex;
@@ -104,7 +103,7 @@ const SelectModal = ({
 
   useEffect(() => {
     if (data?.length) {
-      const defaultItem = data.find(i => i.value === selectedValue);
+      const defaultItem = data.find((i) => i.value === selectedValue);
       if (defaultItem) {
         setSelectedItem(defaultItem);
       } else {
@@ -120,7 +119,7 @@ const SelectModal = ({
   useEffect(() => {
     if (selectedItem) {
       onSelect(selectedItem);
-      setError(!(data.find(item => item.value === selectedItem.value)));
+      setError(!(data.find((item) => item.value === selectedItem.value)));
     }
   }, [selectedItem]);
 

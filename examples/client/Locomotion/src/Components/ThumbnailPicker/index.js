@@ -96,7 +96,7 @@ const ThumbnailPicker = (props) => {
       maxHeight: 180,
       maxWidth: 180,
     };
-    const imageCallback = response => onSelectPicture(response);
+    const imageCallback = (response) => onSelectPicture(response);
 
     Alert.alert(
       '',

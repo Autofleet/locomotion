@@ -62,9 +62,9 @@ const RidesView = ({ rides }) => {
     <RidesViewContainer>
       <FlatList
         data={rides}
-        onEndReached={info => startLoadMoreRides(info)}
+        onEndReached={(info) => startLoadMoreRides(info)}
         onEndReachedThreshold={0.5}
-        keyExtractor={ride => `ride#${ride.id}$${rides.indexOf(ride)}`}
+        keyExtractor={(ride) => `ride#${ride.id}$${rides.indexOf(ride)}`}
         renderItem={({ item: ride, index }) => (
           <RideCardInList
             showBottomLoader={showBottomLoader}

@@ -21,8 +21,8 @@ interface OnboardingContextInterface {
 }
 
 export const OnboardingContext = createContext<OnboardingContextInterface>({
-  verifyCode: async code => undefined,
-  navigateBasedOnUser: user => undefined,
+  verifyCode: async (code) => undefined,
+  navigateBasedOnUser: (user) => undefined,
   requiredOnboarding: {},
   nextScreen: (currentScreen: string) => undefined,
   fetchHideCaptchaSetting: async () => undefined,
@@ -139,7 +139,7 @@ const OnboardingContextProvider = ({ children }: { children: any }) => {
         ...requiredOnboarding,
         [MAIN_ROUTES.AVATAR]: enforceProfilePicture,
       });
-      const screenKey: string | undefined = Object.keys(keyToScreen).find(key => !user[key]);
+      const screenKey: string | undefined = Object.keys(keyToScreen).find((key) => !user[key]);
       let unfinishedScreen = screenKey ? keyToScreen[screenKey] : keyToScreen.welcome;
       if (unfinishedScreen === MAIN_ROUTES.CARD) {
         const showCardPage = await shouldShowCardPage();

@@ -88,7 +88,6 @@ const AddressSelectorBottomSheet = ({ addressSelectorFocusIndex }) => {
 
   const { expand, collapse } = useBottomSheet();
 
-
   const loadHistory = async () => {
     userContext.loadHistory();
   };
@@ -213,8 +212,7 @@ const AddressSelectorBottomSheet = ({ addressSelectorFocusIndex }) => {
               </BottomSheetScrollView>
             </>
           )
-          : getHistoryRows()
-          }
+          : getHistoryRows()}
       </HistoryContainer>
       <GenericErrorPopup
         isVisible={userContext.ridePopup === RIDE_POPUPS.FAILED_SERVICE_REQUEST}

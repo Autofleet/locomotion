@@ -13,7 +13,7 @@ export const Skeleton = ({ children, layout }: SkeletonProps) => {
 
   return (
     <SkeletonPlaceholder
-      isLoading={true}
+      isLoading
       animationType="pulse"
       layout={layout}
       containerStyle={{ borderRadius: theme.borderRadiusValues.SM }}

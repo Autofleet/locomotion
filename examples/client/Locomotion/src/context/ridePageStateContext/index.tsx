@@ -70,7 +70,7 @@ const RideStateContextContextProvider = ({ children }: { children: any }) => {
   };
 
   const checkStopPointsInTerritory = (stopPoints: any[]) => {
-    const isInTerritory = stopPoints.every(sp => pointInPolygon(territory, {
+    const isInTerritory = stopPoints.every((sp) => pointInPolygon(territory, {
       coords: {
         latitude: sp.lat,
         longitude: sp.lng,
@@ -115,6 +115,5 @@ const RideStateContextContextProvider = ({ children }: { children: any }) => {
     </RideStateContextContext.Provider>
   );
 };
-
 
 export default RideStateContextContextProvider;

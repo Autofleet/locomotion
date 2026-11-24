@@ -91,8 +91,7 @@ const RideFeedback = ({
                 placeholderTextColor={theme.disabledColor}
               />
             </WriteCommentContainer>
-          )
-      }
+          )}
       </Container>
     )
   );

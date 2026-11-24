@@ -16,7 +16,7 @@ const InnerHome = () => {
   return (
     <Drawer.Navigator
       initialRouteName="innerHome"
-      drawerContent={props => (<DrawerContentComponent {...props} />)}
+      drawerContent={(props) => (<DrawerContentComponent {...props} />)}
       screenOptions={{
         inactiveBackgroundColor: '#ffffff',
         activeBackgroundColor: '#ffffff',

@@ -13,7 +13,6 @@ export const MessageContainer = styled.View`
     flex-direction: column;
 `;
 
-
 export const MessageTitle = styled.Text`
   font-size: 14px;
   color: #727272;
@@ -36,7 +35,6 @@ export const CloseContainer = styled(Button)`
     width: 13px;
     height: 13px;
 `;
-
 
 export const ResetInputIcon = styled.Image.attrs({ source: xIcon })`
     display: flex;

@@ -40,7 +40,6 @@ const Map = forwardRef(({
   const mapInstance = useRef();
   const isFocused = useIsFocused();
 
-
   useEffect(() => {
     const timeout = setTimeout(async () => {
       if (mapInstance && mapInstance.current && mapInstance.current.fitToElements) {
@@ -86,7 +85,7 @@ const Map = forwardRef(({
       followMyLocation={false}
       showsCompass={false}
     >
-      {stopPoints && stopPoints.map(sp => (sp.lat && sp.lng ? (
+      {stopPoints && stopPoints.map((sp) => (sp.lat && sp.lng ? (
         <SpMarker
           key={`Marker#${sp.lat}#${sp.lng}#${sp.type}`}
           sp={sp}

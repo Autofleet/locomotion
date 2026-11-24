@@ -35,7 +35,7 @@ const Button = ({
     <DrawerButtonContainer>
       <SliderContainer>
         <RNSwipeVerify
-          ref={ref => sliderRef.current = ref}
+          ref={(ref) => sliderRef.current = ref}
           okButton={{ visible: true, duration: 400 }}
           onVerified={async () => {
             try {

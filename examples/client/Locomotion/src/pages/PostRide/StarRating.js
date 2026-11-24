@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import { SummaryStars } from './styled';
 import Stars from '../../Components/Stars';
@@ -20,6 +19,5 @@ const StarRating = ({ onUpdate }) => {
     </SummaryStars>
   );
 };
-
 
 export default StarRating;

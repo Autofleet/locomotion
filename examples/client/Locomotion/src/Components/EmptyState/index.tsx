@@ -14,8 +14,7 @@ const EmptyState = ({
   <Container>
     {description
       ? <Title>{title}</Title>
-      : <TitleWithoutDescription>{title}</TitleWithoutDescription>
-    }
+      : <TitleWithoutDescription>{title}</TitleWithoutDescription>}
 
     {description ? <Description>{description}</Description> : null}
   </Container>

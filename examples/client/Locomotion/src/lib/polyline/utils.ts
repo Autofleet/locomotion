@@ -20,7 +20,6 @@ export const getVehicleLocation = (location: any, vehiclePolyline: any[]) => {
   };
 };
 
-
 export const decodePolyline = (stopPointPolyline: any) => polyline.decode(stopPointPolyline);
 
 export const getPolylineList = (currentStopPoint: any, ride: RideInterface) => {
@@ -38,5 +37,5 @@ export const getPolylineList = (currentStopPoint: any, ride: RideInterface) => {
   }
 
   return (vehicleLocation ? [{ latitude: vehicleLocation.lat, longitude: vehicleLocation.lng }] : [])
-    .concat(decodedPolyline.map(p => ({ latitude: p[0], longitude: p[1] })));
+    .concat(decodedPolyline.map((p) => ({ latitude: p[0], longitude: p[1] })));
 };

@@ -16,7 +16,7 @@ const LoaderContainer = styled.View`
     top: 50%;
     margin-top: -8px;
 `;
-const FullPageLoader = props => (
+const FullPageLoader = (props) => (
   <FullPageLoaderWrapper>
     <LoaderContainer>
       <LottieView

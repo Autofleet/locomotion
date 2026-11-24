@@ -7,7 +7,6 @@ import {
   BalanceTextContainer,
 } from './styled';
 
-
 export default ({ customer }) => (
   <BalanceTextContainer>
     <BalanceTitle>

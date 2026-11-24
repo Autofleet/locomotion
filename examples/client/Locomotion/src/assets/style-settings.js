@@ -10,7 +10,7 @@ export const commonInputStyle = `
   font-size: 17px;
 `;
 
-export const commonInputStyleWithTheme = theme => `
+export const commonInputStyleWithTheme = (theme) => `
   ${commonInputStyle}
   background-color: ${theme.pageBackgroundColor};
 `;

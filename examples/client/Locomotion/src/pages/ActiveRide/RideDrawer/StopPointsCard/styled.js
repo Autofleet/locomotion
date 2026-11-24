@@ -26,7 +26,6 @@ const address = `
   flex-direction: row;
 `;
 
-
 export const RideCard = styled.View`
   ${address}
   border-bottom-color: #f2f2f2;
@@ -99,7 +98,6 @@ export const RideButtonText = styled.Text`
   font-size: 18;
 `;
 
-
 export const RowContainer = styled.TouchableOpacity`
   min-height: 50;
   padding-top: 10;
@@ -148,12 +146,10 @@ export const PreRideBox = styled(({ eta, estimatePrice, ...props }) => (
     flex-direction: row;
   `;
 
-
 export const RideTypeButton = styled.TouchableOpacity`
   align-items: center;
   flex: 1;
 `;
-
 
 export const RideTypeButtonText = styled.Text`
   flex: 1;

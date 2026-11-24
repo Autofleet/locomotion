@@ -118,7 +118,6 @@ const PaymentMethodPopup = ({
       }
     };
 
-
     updateDefaultPaymentMethod();
   }, [usePayments.paymentMethods, selected, chosenService]);
 
@@ -162,7 +161,6 @@ const PaymentMethodPopup = ({
         />
       )
   );
-
 
   return (
     <Modal

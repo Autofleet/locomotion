@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 
-
 import SelectModal from '../../../../../../Components/SelectModal';
 
 interface Item {
@@ -29,7 +28,6 @@ const PassengersCounter = ({
       setPassengersOptions(array);
     }
   }, [service]);
-
 
   const onItemSelect = (item: Item) => {
     onSelect(item?.value);

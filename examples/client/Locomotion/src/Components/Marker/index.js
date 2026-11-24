@@ -28,7 +28,7 @@ const StopPointMarker = ({
   const theme = useContext(ThemeContext);
   const markerRef = useRef(null);
   const { tracksViewChanges, onMarkerLayout } = useMarkerTracksViewChanges(markerRef);
-  const stationIcon = type => <VirtualStationComponent type={type} isActive style={{ top: Platform.OS === 'ios' ? -35 : 0 }} />;
+  const stationIcon = (type) => <VirtualStationComponent type={type} isActive style={{ top: Platform.OS === 'ios' ? -35 : 0 }} />;
 
   const typeDetails = {
     [STOP_POINT_TYPES.STOP_POINT_PICKUP]: {

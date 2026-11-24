@@ -463,13 +463,13 @@ export const ConfirmFutureRide = (props: any) => {
 
   const getPickupDisplay = () => {
     const pickup = (newFutureRide?.stopPoints || [])
-      .find(sp => sp.type === STOP_POINT_TYPES.STOP_POINT_PICKUP);
+      .find((sp) => sp.type === STOP_POINT_TYPES.STOP_POINT_PICKUP);
     const pickupText = i18n.t('bottomSheetContent.confirmFutureRide.pickupText', { address: pickup?.description });
     return <TextRowWithIcon text={pickupText} />;
   };
   const getDropOffDisplay = () => {
     const dropOff = (newFutureRide?.stopPoints || [])
-      .find(sp => sp.type === STOP_POINT_TYPES.STOP_POINT_DROPOFF);
+      .find((sp) => sp.type === STOP_POINT_TYPES.STOP_POINT_DROPOFF);
     const dropOffText = i18n.t('bottomSheetContent.confirmFutureRide.dropOffText', { address: dropOff?.description });
     return <TextRowWithIcon text={dropOffText} />;
   };
@@ -642,8 +642,10 @@ export const ConfirmingRide = (props: any) => {
   const beforeTime = windowSize ? moment(ride?.scheduledTo).add(windowSize, 'minutes').format('h:mm A') : i18n.t('general.noTimeWindow');
 
   const SubTitleText = ride?.scheduledTo
-    ? i18n.t('bottomSheetContent.confirmingFutureRide.subTitleText',
-      { date: moment(ride?.scheduledTo).format('MMM D, h:mm A'), beforeTime })
+    ? i18n.t(
+      'bottomSheetContent.confirmingFutureRide.subTitleText',
+      { date: moment(ride?.scheduledTo).format('MMM D, h:mm A'), beforeTime },
+    )
     : null;
   return (
     <BsPage

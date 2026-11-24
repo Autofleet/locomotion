@@ -26,7 +26,7 @@ export default ({
   }, []);
 
   return (
-    <Fragment>
+    <>
       {isPopupOpen(id)
         ? (
           <MessageContainer>
@@ -39,6 +39,6 @@ export default ({
             </View>
           </MessageContainer>
         ) : null}
-    </Fragment>
+    </>
   );
 };

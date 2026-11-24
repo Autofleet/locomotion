@@ -53,40 +53,40 @@ export default ({
         <Pressable style={styles.backdrop} onPress={onCancel} />
         <View style={styles.topAnchor} pointerEvents="box-none">
           <SummaryContainer>
-              <FlexCont justifyContent="space-between">
-                <Title>{i18n.t('popups.rideNotes.title')}</Title>
-                <Counter>{`${currentText.length}/${MAX_SIZE}`}</Counter>
-              </FlexCont>
-              <StyledTextArea
-                autoFocus={false}
-                ref={inputRef}
-                value={currentText}
-                multiline
-                numberOfLines={7}
-                testID="notesInput"
-                textAlignVertical="top"
-                placeholder={i18n.t('popups.rideNotes.placeholder')}
-                maxLength={MAX_SIZE}
-                onChangeText={updateText}
-                placeholderTextColor={theme.disabledColor}
-              />
-              <FlexCont>
-                <RoundedButton
-                  width="48%"
-                  hollow
-                  testID="CancelRideNotes"
-                  onPress={() => onCancel()}
-                >
-                  {i18n.t('popups.rideNotes.cancel')}
-                </RoundedButton>
-                <RoundedButton
-                  width="48%"
-                  testID="SubmitRideNotes"
-                  onPress={() => onSubmit(currentText)}
-                >
-                  {i18n.t('popups.rideNotes.save')}
-                </RoundedButton>
-              </FlexCont>
+            <FlexCont justifyContent="space-between">
+              <Title>{i18n.t('popups.rideNotes.title')}</Title>
+              <Counter>{`${currentText.length}/${MAX_SIZE}`}</Counter>
+            </FlexCont>
+            <StyledTextArea
+              autoFocus={false}
+              ref={inputRef}
+              value={currentText}
+              multiline
+              numberOfLines={7}
+              testID="notesInput"
+              textAlignVertical="top"
+              placeholder={i18n.t('popups.rideNotes.placeholder')}
+              maxLength={MAX_SIZE}
+              onChangeText={updateText}
+              placeholderTextColor={theme.disabledColor}
+            />
+            <FlexCont>
+              <RoundedButton
+                width="48%"
+                hollow
+                testID="CancelRideNotes"
+                onPress={() => onCancel()}
+              >
+                {i18n.t('popups.rideNotes.cancel')}
+              </RoundedButton>
+              <RoundedButton
+                width="48%"
+                testID="SubmitRideNotes"
+                onPress={() => onSubmit(currentText)}
+              >
+                {i18n.t('popups.rideNotes.save')}
+              </RoundedButton>
+            </FlexCont>
           </SummaryContainer>
         </View>
       </View>

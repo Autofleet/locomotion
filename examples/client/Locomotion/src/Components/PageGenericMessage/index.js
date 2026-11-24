@@ -67,5 +67,4 @@ export const DayTitleText = styled(BaseText)`
 export const RidesViewContainer = styled.View`
 `;
 
-
 export default PageGenericMessage;

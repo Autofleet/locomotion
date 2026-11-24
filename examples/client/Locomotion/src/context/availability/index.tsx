@@ -7,7 +7,6 @@ import useInterval from '../../lib/useInterval';
 import { getPosition } from '../../services/geo';
 import * as availabilityApi from './api';
 
-
 interface AvailabilityLocation {
     lat: string;
     lng: string;
@@ -79,6 +78,5 @@ const AvailabilityContextProvider = ({ children }: { children: any }) => {
     </AvailabilityContext.Provider>
   );
 };
-
 
 export default AvailabilityContextProvider;

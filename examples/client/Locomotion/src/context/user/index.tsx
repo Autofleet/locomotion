@@ -150,7 +150,6 @@ const UserContextProvider = ({ children }: { children: any }) => {
     await sendEmailVerification();
   };
 
-
   const updateUser = async (values: any): Promise<any> => updateUserApi(values);
 
   const getCardInfo = () => {
@@ -264,7 +263,7 @@ const UserContextProvider = ({ children }: { children: any }) => {
   return (
     <UserContext.Provider
       value={{
-        setUser: u => setUser(u),
+        setUser: (u) => setUser(u),
         user,
         updateState,
         getUserFromStorage,
@@ -281,7 +280,7 @@ const UserContextProvider = ({ children }: { children: any }) => {
         updateUser,
         coupon,
         getCoupon,
-        setCoupon: c => setCoupon(c),
+        setCoupon: (c) => setCoupon(c),
         createCoupon,
         onLogin,
       }}
@@ -290,6 +289,5 @@ const UserContextProvider = ({ children }: { children: any }) => {
     </UserContext.Provider>
   );
 };
-
 
 export default UserContextProvider;

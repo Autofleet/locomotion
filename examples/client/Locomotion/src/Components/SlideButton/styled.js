@@ -16,7 +16,7 @@ export const DrawerButtonContainer = styled.View`
   min-height: 40px;
   width: 70%;
 `;
-export const styleSchemed = theme => ({
+export const styleSchemed = (theme) => ({
   default: {
     buttonSize: 50,
     backgroundColor: '#f0f0f0',

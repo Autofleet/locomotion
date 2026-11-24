@@ -39,10 +39,10 @@ const FilterBar = React.memo((props) => {
       ref={(ref) => {
         scrollView.current = ref;
       }}
-      onScrollEndDrag={e => saveScrollPos(e)}
+      onScrollEndDrag={(e) => saveScrollPos(e)}
       onContentSizeChange={onContentSizeChange}
     >
-      {Object.values(filters).map(filter => (
+      {Object.values(filters).map((filter) => (
         <FilterTouchableOpacity
           noLoader
           noBackground

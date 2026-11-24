@@ -15,7 +15,6 @@ export const RideDrillDownIcon = styled.Image.attrs({
   align-self: center;
 `;
 
-
 export const NoRidesImage = styled.Image.attrs({
   source: noRides,
 })`
@@ -47,7 +46,6 @@ export const MainRideViewSectionContainer = styled(BaseRideViewContainer)`
 export const RideViewSectionContainer = styled(BaseRideViewContainer)`
   padding: 5px 20px;
 `;
-
 
 export const RideViewContainer = styled.ScrollView.attrs(({
   contentContainerStyle: {
@@ -142,13 +140,11 @@ export const MarkerTitleText = styled.Text`
 `;
 
 export const MarkerTitle = React.memo(({ children }) => (
-  <>
-    <MarkerTitleContainer>
-      <MarkerTitleText>
-        {children}
-      </MarkerTitleText>
-    </MarkerTitleContainer>
-  </>
+  <MarkerTitleContainer>
+    <MarkerTitleText>
+      {children}
+    </MarkerTitleText>
+  </MarkerTitleContainer>
 ));
 
 export const DayTitleText = styled(BaseText)`

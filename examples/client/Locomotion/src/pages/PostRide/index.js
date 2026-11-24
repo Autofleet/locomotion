@@ -77,7 +77,7 @@ const PostRidePage = ({ menuSide, route }) => {
       ],
     );
     if (priceCalculation) {
-      const tipObj = priceCalculation.additionalCharges.find(charge => charge.chargeFor === 'tip');
+      const tipObj = priceCalculation.additionalCharges.find((charge) => charge.chargeFor === 'tip');
       setTipFromDb((tipObj || {}).amount);
     }
     setRide(rideData);
@@ -92,7 +92,7 @@ const PostRidePage = ({ menuSide, route }) => {
   const nextPage = () => {
     if (fromHistory) {
       const [formattedRide] = formatRides([ride]);
-      const newRidesHistory = pastRides.map(pr => (pr.id === ride.id ? formattedRide : pr));
+      const newRidesHistory = pastRides.map((pr) => (pr.id === ride.id ? formattedRide : pr));
       setPastRides(newRidesHistory);
       return navigationService.goBack();
     }
@@ -135,7 +135,7 @@ const PostRidePage = ({ menuSide, route }) => {
           <RatingContainer>
             <SummaryStarsTitle>{i18n.t('postRide.ratingHeadline')}</SummaryStarsTitle>
             <StarRating onUpdate={onRatingUpdate} />
-            <RideFeedback onTextChange={text => setRideFeedbackText(text)} />
+            <RideFeedback onTextChange={(text) => setRideFeedbackText(text)} />
           </RatingContainer>
         )}
 
@@ -161,8 +161,7 @@ const PostRidePage = ({ menuSide, route }) => {
   ) : <FullPageLoader />;
 };
 
-
-export default props => (
+export default (props) => (
   <BottomSheetContextProvider {...props}>
     <PostRidePage {...props} />
   </BottomSheetContextProvider>

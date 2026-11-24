@@ -40,7 +40,7 @@ const deviceStorage = {
     return result;
   },
   save(object: any, ttlInSeconds = 0) {
-    const pairs: any[] = Object.keys(object).map(pKey => [pKey, JSON.stringify({
+    const pairs: any[] = Object.keys(object).map((pKey) => [pKey, JSON.stringify({
       value: object[pKey],
       ...(ttlInSeconds !== 0 && { expireAt: moment().add(ttlInSeconds, 'seconds') }),
     })]);

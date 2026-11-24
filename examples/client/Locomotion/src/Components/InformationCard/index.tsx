@@ -4,7 +4,6 @@ import { View } from 'react-native';
 import Card from './Card';
 import Button from '../Button';
 
-
 export type InformationCardProps = {
   title?: string,
   children?: any,
@@ -82,7 +81,6 @@ const InformationCard = ({
     )
 
 );
-
 
 InformationCard.propTypes = {
   title: propsTypes.string,

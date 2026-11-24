@@ -39,7 +39,7 @@ const Messages = ({ menuSide, route }: FutureRidesViewProps) => {
 
   const markMessagesAsRead = async () => {
     if (userMessages && userMessages.length) {
-      const unreadMessages = userMessages.filter(message => !message.readAt).map(message => message.id);
+      const unreadMessages = userMessages.filter((message) => !message.readAt).map((message) => message.id);
       if (unreadMessages.length) {
         await markReadMessages(unreadMessages);
       }
@@ -97,16 +97,12 @@ const Messages = ({ menuSide, route }: FutureRidesViewProps) => {
                   title={i18n.t('messages.noMessagesTitle')}
                   text={i18n.t('messages.noMessagesText')}
                 />
-              )
-          }
+              )}
           </ScrollContainer>
-        )
-          }
-
+        )}
 
     </PageContainer>
   );
 };
-
 
 export default Messages;

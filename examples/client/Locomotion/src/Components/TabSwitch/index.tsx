@@ -45,8 +45,7 @@ const TabSwitch = ({ onUnselectedClick, tabs, activeTabId }: ITabSwitchProps) =>
                     width={20}
                     height={20}
                   />
-                  )
-            }
+                  )}
             <TextContainer isSelected={isSelected}>
               {i18n.t(tab.textKey)}
             </TextContainer>

@@ -129,7 +129,7 @@ const PriceBreakdown = ({
       <InnerContainer>
         <Title>{`${i18n.t('ridePriceBreakdown.pageTitle')}`}</Title>
         {priceCalculationItems ? (
-          priceCalculationItems.map(item => (
+          priceCalculationItems.map((item) => (
             <Row>
               <ItemText>{item.name}</ItemText>
               <PriceText>{item.price}</PriceText>

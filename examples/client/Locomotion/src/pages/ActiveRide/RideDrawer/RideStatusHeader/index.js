@@ -65,7 +65,7 @@ export default ({
   };
 
   return (
-    <Fragment>
+    <>
       {rideState
         ? (
           <RideStatusContainer>
@@ -75,6 +75,6 @@ export default ({
           </RideStatusContainer>
         )
         : null}
-    </Fragment>
+    </>
   );
 };
