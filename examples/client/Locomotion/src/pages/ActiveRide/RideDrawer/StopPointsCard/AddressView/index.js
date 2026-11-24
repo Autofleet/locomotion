@@ -83,12 +83,12 @@ export default (props) => {
     }
   };
 
-  const setSearchValue = async (value, type, showStations = null, place) => {
+  const setSearchValue = async (value, type, showStations, place) => {
     setSearchText(value);
     setAddressListItems({
       type,
       ...{
-        list: value ? await loadAddress(value, showStations, place) : undefined,
+        list: value ? await loadAddress(value, showStations ?? null, place) : undefined,
       },
     });
   };

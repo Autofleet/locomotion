@@ -31,7 +31,7 @@ import * as navigationService from '../../services/navigation';
 import RideFeedback from './Feedback';
 
 const PostRidePage = ({ menuSide, route }) => {
-  const { rideId, priceCalculationId, fromHistory } = route?.params;
+  const { rideId, priceCalculationId, fromHistory } = route?.params || {};
   const [rating, setRating] = useState(null);
   const [ride, setRide] = useState(null);
   const [tipFromDb, setTipFromDb] = useState();

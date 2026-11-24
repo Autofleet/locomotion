@@ -145,7 +145,7 @@ const Tips = ({
     calculatedTip = customTip || selectedTip;
 
     if (isPercentage) {
-      calculatedTip = ridePrice * (calculatedTip) / 100;
+      calculatedTip = (ridePrice * calculatedTip) / 100;
     }
 
     return calculatedTip.toFixed(2);

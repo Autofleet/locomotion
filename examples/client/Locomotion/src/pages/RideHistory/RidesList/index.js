@@ -84,18 +84,14 @@ const RidesView = ({ rides }) => {
 
 const RidesList = React.memo(({
   rides,
-}) => (
-  <>
-    {rides && rides.length ? (
-      <RidesView rides={rides} />
-    ) : (
-      <NoRidesInList
-        title={i18n.t('rideHistory.noActivityYet')}
-        text={i18n.t('rideHistory.noActivitySub')}
-      />
-    )}
-  </>
-));
+}) => (rides && rides.length ? (
+  <RidesView rides={rides} />
+) : (
+  <NoRidesInList
+    title={i18n.t('rideHistory.noActivityYet')}
+    text={i18n.t('rideHistory.noActivitySub')}
+  />
+)));
 
 export default RidesList;
 

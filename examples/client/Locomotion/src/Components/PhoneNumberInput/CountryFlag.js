@@ -9,7 +9,7 @@ import React, { memo } from 'react';
 import { View, PixelRatio, StyleSheet } from 'react-native';
 import { SvgXml } from 'react-native-svg';
 
-const flagSvgs = require('country-flag-icons/string/3x2');
+import * as flagSvgs from 'country-flag-icons/string/3x2';
 
 const FLAG_HEIGHT = 20;
 const FLAG_WIDTH = 30;
