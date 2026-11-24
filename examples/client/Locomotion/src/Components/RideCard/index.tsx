@@ -80,7 +80,7 @@ const CardComponent = ({ paymentMethod, businessAccountId }: CardComponentProps)
     <TextRowWithIcon
       text={getText() || ''}
       subTitle={businessAccountId ? offlinePaymentText : ''}
-      Image={() => !isCash && !isOffline && <PaymentIcon type={paymentMethod.brand} />}
+      Image={<PaymentIcon type={paymentMethod.brand} />}
       icon={getIcon()}
       style={{ marginTop: 10, marginBottom: 10 }}
       iconWidth={40}

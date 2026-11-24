@@ -74,9 +74,7 @@ const RidesView = ({ rides }) => {
             showSpacer={index + 1 !== rides.length}
           />
         )}
-        ListFooterComponent={() => (
-          <View style={{ height: 100 }} />
-        )}
+        ListFooterComponent={<View style={{ height: 100 }} />}
       />
     </RidesViewContainer>
   );
