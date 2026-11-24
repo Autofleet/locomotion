@@ -52,7 +52,8 @@
       "import/prefer-default-export": "off",
       "react/react-in-jsx-scope": "off",
       "react/function-component-definition": "off",
-      "react/jsx-props-no-spreading": "off"
+      "react/jsx-props-no-spreading": "off",
+      "react/jsx-no-constructed-context-values": "warn"
   },
   "globals": {
       "navigator": true,

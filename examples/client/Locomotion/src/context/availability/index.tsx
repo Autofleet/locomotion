@@ -1,5 +1,5 @@
 import React, {
-  createContext, useEffect, useState, useContext,
+  createContext, useContext, useEffect, useMemo, useState,
 } from 'react';
 import { useIsFocused } from '@react-navigation/native';
 import { UserContext } from '../user';
@@ -68,11 +68,13 @@ const AvailabilityContextProvider = ({ children }: { children: any }) => {
     getVehicles();
   }, [isFocused]);
 
+  const contextValue = useMemo(() => ({
+    availabilityVehicles,
+  }), [availabilityVehicles]);
+
   return (
     <AvailabilityContext.Provider
-      value={{
-        availabilityVehicles,
-      }}
+      value={contextValue}
     >
       {children}
     </AvailabilityContext.Provider>
