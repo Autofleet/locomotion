@@ -104,7 +104,7 @@ export const ButtonContainer = styled(TouchableOpacity)`
     display: flex;
     width: ${HALF_WIDTH};
     padding: 0 15px;
-    opacity: ${props => (props.disabled ? 0.5 : 1)};
+    opacity: ${(props) => (props.disabled ? 0.5 : 1)};
 `;
 
 export const Container = styled(BottomSheetScrollView)`

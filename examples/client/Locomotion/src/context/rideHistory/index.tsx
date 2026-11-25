@@ -47,7 +47,6 @@ const getDuration = (stopPoints: Array<any>) => {
   ];
 };
 
-
 export const formatRides = (data: any) => data.map((r: any) => {
   const sortedSps = formatSps(r.stopPoints);
   const [appDuration, appDurationHours, appDurationMinutes] = getDuration(sortedSps);

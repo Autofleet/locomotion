@@ -14,6 +14,8 @@ import { PageContainer } from '../styles';
 import { MAIN_ROUTES } from '../routes';
 import * as navigationService from '../../services/navigation';
 
+const NewCardText = () => <CreditFormText>{i18n.t('payments.newCardDetails')}</CreditFormText>;
+
 export default ({ menuSide }) => {
   const route = useRoute();
   const usePayments = PaymentsContext.useContainer();
@@ -35,7 +37,6 @@ export default ({ menuSide }) => {
     await usePayments.getOrFetchCustomer();
     setPageLoading(false);
   };
-
 
   useEffect(() => {
     loadCustomerData();
@@ -73,7 +74,7 @@ export default ({ menuSide }) => {
         ) : (
           <CardContainer>
             <NewCreditForm
-              PageText={() => <CreditFormText>{i18n.t('payments.newCardDetails')}</CreditFormText>}
+              PageText={NewCardText}
               onDone={(paymentMethodId) => {
                 if (route.params && route.params.rideFlow) {
                   updateRidePayload({

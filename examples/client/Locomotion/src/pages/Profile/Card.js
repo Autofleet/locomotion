@@ -7,6 +7,8 @@ import { OnboardingContext } from '../../context/onboarding';
 import { MAIN_ROUTES } from '../routes';
 import { PageContainer, ContentContainer } from '../styles';
 
+const CardScreenText = () => <ScreenText text={i18n.t('onboarding.pages.card.text')} />;
+
 const Card = () => {
   const { nextScreen } = useContext(OnboardingContext);
 
@@ -20,7 +22,7 @@ const Card = () => {
         <AddCard
           onDone={onDone}
           canSkip={false}
-          PageText={() => <ScreenText text={i18n.t('onboarding.pages.card.text')} />}
+          PageText={CardScreenText}
         />
       </ContentContainer>
     </PageContainer>

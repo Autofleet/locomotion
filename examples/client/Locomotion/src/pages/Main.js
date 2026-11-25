@@ -10,13 +10,15 @@ const Stack = createNativeStackNavigator();
 
 const Drawer = createDrawerNavigator();
 
+const renderDrawerContent = (props) => <DrawerContentComponent {...props} />;
+
 const InnerHome = () => {
   const theme = useContext(ThemeContext);
 
   return (
     <Drawer.Navigator
       initialRouteName="innerHome"
-      drawerContent={props => (<DrawerContentComponent {...props} />)}
+      drawerContent={renderDrawerContent}
       screenOptions={{
         inactiveBackgroundColor: '#ffffff',
         activeBackgroundColor: '#ffffff',

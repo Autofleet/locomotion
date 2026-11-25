@@ -1,5 +1,5 @@
 import React, {
-  createContext, useState, useContext,
+  createContext, useContext, useMemo, useState,
 } from 'react';
 import { useIsFocused } from '@react-navigation/native';
 import { UserContext } from '../user';
@@ -7,7 +7,6 @@ import usePolling from '../../lib/usePolling';
 import useIsAppForeground from '../../lib/useIsAppForeground';
 import { getPosition } from '../../services/geo';
 import * as availabilityApi from './api';
-
 
 interface AvailabilityLocation {
     lat: string;
@@ -67,16 +66,17 @@ const AvailabilityContextProvider = ({ children }: { children: any }) => {
     maxMs: AVAILABILITY_MAX_BACKOFF_MS,
   });
 
+  const contextValue = useMemo(() => ({
+    availabilityVehicles,
+  }), [availabilityVehicles]);
+
   return (
     <AvailabilityContext.Provider
-      value={{
-        availabilityVehicles,
-      }}
+      value={contextValue}
     >
       {children}
     </AvailabilityContext.Provider>
   );
 };
-
 
 export default AvailabilityContextProvider;

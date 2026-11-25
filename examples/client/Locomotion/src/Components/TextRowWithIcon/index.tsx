@@ -26,7 +26,7 @@ interface TextRowWithIconProps {
     subTitle?: string;
     icon?: React.FC<SvgProps> | null;
     style?: Record<string, unknown>;
-    Image?: React.ComponentType | null;
+    Image?: React.ComponentType | React.ReactElement | null;
     iconWidth?: number;
     iconHeight?: number;
 
@@ -46,6 +46,9 @@ const TextRowWithIcon = ({
           fill={theme.primaryColor}
         />
       );
+    }
+    if (React.isValidElement(Image)) {
+      return Image;
     }
     if (Image) {
       return <Image />;

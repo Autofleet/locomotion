@@ -17,7 +17,6 @@ import PaymentContext from '../../context/payments';
 import { RidePageContext } from '../../context/newRideContext';
 import showPriceBasedOnAccount from '../../services/showPriceBasedOnAccount';
 
-
 interface FareBreakdownPopupProps {
   isVisible: boolean;
   service: any;

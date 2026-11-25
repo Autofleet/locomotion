@@ -54,5 +54,4 @@ const MessageCard = ({ message, readAt, dismissedAt }: MessageCardProps) => (
   </CardContainer>
 );
 
-
 export default MessageCard;

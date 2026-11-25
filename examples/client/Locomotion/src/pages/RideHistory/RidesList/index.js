@@ -62,9 +62,9 @@ const RidesView = ({ rides }) => {
     <RidesViewContainer>
       <FlatList
         data={rides}
-        onEndReached={info => startLoadMoreRides(info)}
+        onEndReached={(info) => startLoadMoreRides(info)}
         onEndReachedThreshold={0.5}
-        keyExtractor={ride => `ride#${ride.id}$${rides.indexOf(ride)}`}
+        keyExtractor={(ride) => `ride#${ride.id}$${rides.indexOf(ride)}`}
         renderItem={({ item: ride, index }) => (
           <RideCardInList
             showBottomLoader={showBottomLoader}
@@ -74,9 +74,7 @@ const RidesView = ({ rides }) => {
             showSpacer={index + 1 !== rides.length}
           />
         )}
-        ListFooterComponent={() => (
-          <View style={{ height: 100 }} />
-        )}
+        ListFooterComponent={<View style={{ height: 100 }} />}
       />
     </RidesViewContainer>
   );
@@ -84,18 +82,14 @@ const RidesView = ({ rides }) => {
 
 const RidesList = React.memo(({
   rides,
-}) => (
-  <>
-    {rides && rides.length ? (
-      <RidesView rides={rides} />
-    ) : (
-      <NoRidesInList
-        title={i18n.t('rideHistory.noActivityYet')}
-        text={i18n.t('rideHistory.noActivitySub')}
-      />
-    )}
-  </>
-));
+}) => (rides && rides.length ? (
+  <RidesView rides={rides} />
+) : (
+  <NoRidesInList
+    title={i18n.t('rideHistory.noActivityYet')}
+    text={i18n.t('rideHistory.noActivitySub')}
+  />
+)));
 
 export default RidesList;
 

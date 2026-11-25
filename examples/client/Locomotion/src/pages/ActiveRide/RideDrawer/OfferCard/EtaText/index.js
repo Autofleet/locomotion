@@ -43,7 +43,6 @@ const WarningContainer = styled.View`
 
 `;
 
-
 export default ({
   eta, etaDrift, pickup, etaMediumThreshold, etaHighThreshold,
 }) => {
@@ -69,14 +68,14 @@ export default ({
       return null;
     }
     return (
-      <Fragment>
+      <>
         <WarningIcon
           source={etaThreshold === etaHighThreshold ? warningHighIcon : warningMediumIcon}
         />
         <EtaWarningText red={etaThreshold === etaHighThreshold}>
           {i18n.t(`home.offerCard.etaNotice.${warningText}`, { etaThreshold })}
         </EtaWarningText>
-      </Fragment>
+      </>
     );
   };
 

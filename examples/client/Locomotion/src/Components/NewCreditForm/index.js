@@ -35,7 +35,6 @@ const NewCreditForm = ({ onDone, canSkip = false, PageText }) => {
       },
     });
 
-
     if (error) {
       console.error(error);
       setErrorMessage(error.message);

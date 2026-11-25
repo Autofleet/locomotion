@@ -24,6 +24,8 @@ const InputArrow = styled.Image.attrs({ source: InputIcon })`
     width: 20px;
 `;
 
+const PickerIcon = () => <InputArrow />;
+
 const TimePicker = ({
   title, items, value, onValueChange,
 }) => (
@@ -49,7 +51,7 @@ const TimePicker = ({
 
       }}
       value={value}
-      Icon={() => (<InputArrow />)}
+      Icon={PickerIcon}
       placeholder={{}}
     />
 

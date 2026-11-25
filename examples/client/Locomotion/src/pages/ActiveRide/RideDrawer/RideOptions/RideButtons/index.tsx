@@ -59,7 +59,6 @@ const RideButtons = ({
     numberOfPassengers,
   } = useContext(RidePageContext);
 
-
   const {
     changeBsPage,
   } = useContext(RideStateContextContext);
@@ -92,7 +91,6 @@ const RideButtons = ({
   const selectedRequiredFields = chosenService && ridePaymentId && serviceEstimations?.length > 0;
   const paymentMethodNotAllowedOnService = !businessAccountId && selectedRequiredFields
   && !chosenService.allowedPaymentMethods.includes(getPaymentMethod(ridePaymentId));
-
 
   const checkFutureRidesSetting = async () => {
     const futureRidesEnabled = await getSettingByKey(
@@ -170,7 +168,6 @@ const RideButtons = ({
       </>
     );
 
-
     return (
       <>
         <Animated.View style={animatedStyle} />
@@ -236,7 +233,7 @@ const RideButtons = ({
     const ridePaymentMethodId = ride?.paymentMethodId || chosenService?.allowedPaymentMethods?.[0] || '';
     const selectedPaymentMethod:
      PaymentMethodInterface | undefined = paymentMethodIdToDataMap[ridePaymentMethodId]
-      || paymentMethods.find(pm => pm.id === ridePaymentMethodId);
+      || paymentMethods.find((pm) => pm.id === ridePaymentMethodId);
 
     const getSelectedPaymentMethodTitle = () : string | null => {
       if (businessAccountId) {
@@ -297,7 +294,6 @@ const RideButtons = ({
       )
       : paymentBtn;
   };
-
 
   useEffect(() => {
     if (!chosenService || chosenService?.pooling === POOLING_TYPES.NO) {
