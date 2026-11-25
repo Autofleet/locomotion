@@ -22,7 +22,6 @@ interface PollingOptions {
 }
 
 const usePolling = (
-  // eslint-disable-next-line no-unused-vars
   poll: (signal: AbortSignal) => Promise<unknown>,
   {
     enabled, baseMs, maxMs = baseMs, key,

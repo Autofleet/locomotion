@@ -4,7 +4,7 @@ import React, {
 import { useIsFocused } from '@react-navigation/native';
 import { UserContext } from '../user';
 import usePolling from '../../lib/usePolling';
-import useIsAppActive from '../../lib/useIsAppActive';
+import useIsAppForeground from '../../lib/useIsAppForeground';
 import { getPosition } from '../../services/geo';
 import * as availabilityApi from './api';
 
@@ -34,7 +34,7 @@ const AVAILABILITY_MAX_BACKOFF_MS = 60 * 1000;
 const AvailabilityContextProvider = ({ children }: { children: any }) => {
   const [availabilityVehicles, setAvailabilityVehicles] = useState<AvailabilityVehicles[]>([]);
   const { locationGranted } = useContext(UserContext);
-  const getVehicles = async () => {
+  const getVehicles = async (signal: AbortSignal) => {
     let coords;
     try {
       const location = await getPosition({
@@ -49,17 +49,20 @@ const AvailabilityContextProvider = ({ children }: { children: any }) => {
     const {
       latitude: lat, longitude: lng,
     } = coords || {};
-    if (lat && lng) {
-      const { vehicles } = await availabilityApi.getVehicles(lat, lng);
-      await setAvailabilityVehicles(vehicles);
+    if (!lat || !lng || signal.aborted) {
+      return;
+    }
+    const { vehicles } = await availabilityApi.getVehicles(lat, lng, signal);
+    if (!signal.aborted) {
+      setAvailabilityVehicles(vehicles);
     }
   };
 
   const isFocused = useIsFocused();
-  const isAppActive = useIsAppActive();
+  const isAppForeground = useIsAppForeground();
 
   usePolling(getVehicles, {
-    enabled: isFocused && isAppActive && !!locationGranted,
+    enabled: isFocused && isAppForeground && !!locationGranted,
     baseMs: AVAILABILITY_POLL_MS,
     maxMs: AVAILABILITY_MAX_BACKOFF_MS,
   });

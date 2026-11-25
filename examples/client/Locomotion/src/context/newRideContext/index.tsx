@@ -41,10 +41,10 @@ import {
   RIDE_STATES, RIDE_FINAL_STATES, STOP_POINT_TYPES, PAYMENT_STATES, CHARGE_FOR_TIP,
 } from '../../lib/commonTypes';
 import usePolling from '../../lib/usePolling';
-import useIsAppActive from '../../lib/useIsAppActive';
+import useIsAppForeground from '../../lib/useIsAppForeground';
 import useOnReconnect from '../../lib/useOnReconnect';
 import { formatSps } from '../../lib/ride/utils';
-import guardInFlight from '../../lib/guardInFlight';
+import useSingleFlight from '../../lib/useSingleFlight';
 import { APP_ROUTES, MAIN_ROUTES } from '../../pages/routes';
 import * as navigationService from '../../services/navigation';
 import { BottomSheetContext } from '../bottomSheetContext';
@@ -281,7 +281,7 @@ const RidePageContextProvider = ({ children }: {
   const [defaultService, setDefaultService] = useState<any | null>(null);
   const [lastSelectedLocation, saveSelectedLocation] = useState(false);
   const [rideRequestLoading, setRideRequestLoading] = useState(false);
-  const isAppActive = useIsAppActive();
+  const isAppForeground = useIsAppForeground();
   const [ridePopup, setRidePopup] = useState<RidePopupNames | null>(null);
   const [unconfirmedPickupTime, setUnconfirmedPickupTime] = useState<number | null>(null);
   const getRouteName = () => navigationService?.getNavigator()?.getCurrentRoute().name;
@@ -569,16 +569,22 @@ const RidePageContextProvider = ({ children }: {
     return null;
   };
 
-  const loadActiveRide = async () => {
+  const loadActiveRide = async (signal?: AbortSignal) => {
     let activeRide;
     let checkSucceeded = true;
     try {
-      activeRide = await rideApi.getActiveRide();
+      activeRide = await rideApi.getActiveRide({ signal });
     } catch (e) {
       checkSucceeded = false;
     }
+    if (signal?.aborted) {
+      return checkSucceeded;
+    }
     if (activeRide) {
       const formattedRide = await formatRide(activeRide);
+      if (signal?.aborted) {
+        return checkSucceeded;
+      }
       const screenFunction = RIDE_STATES_TO_SCREENS[formattedRide?.state || ''];
       if (screenFunction) {
         screenFunction(formattedRide);
@@ -587,7 +593,10 @@ const RidePageContextProvider = ({ children }: {
       const lastRideId = checkSucceeded && await StorageService.get('lastRideId');
       if (lastRideId) {
         try {
-          const lastRide = await rideApi.getRide(lastRideId);
+          const lastRide = await rideApi.getRide(lastRideId, { signal });
+          if (signal?.aborted) {
+            return checkSucceeded;
+          }
           if (RIDE_FINAL_STATES.includes(lastRide.state)) {
             await clearLastRide();
           }
@@ -599,6 +608,9 @@ const RidePageContextProvider = ({ children }: {
         } catch (e) {
           console.log(e);
         }
+      }
+      if (signal?.aborted) {
+        return checkSucceeded;
       }
       if (currentBsPage === BS_PAGES.LOADING) {
         changeBsPage(BS_PAGES.ADDRESS_SELECTOR);
@@ -640,14 +652,14 @@ const RidePageContextProvider = ({ children }: {
     setNumberOfPassengers(-1);
   }, [chosenService]);
 
-  const wasAppActiveRef = useRef(isAppActive);
+  const wasAppForegroundRef = useRef(isAppForeground);
   useEffect(() => {
-    const cameToForeground = isAppActive && !wasAppActiveRef.current;
-    wasAppActiveRef.current = isAppActive;
+    const cameToForeground = isAppForeground && !wasAppForegroundRef.current;
+    wasAppForegroundRef.current = isAppForeground;
     if (cameToForeground && user?.id && !ride.id) {
       loadLastCompletedRide();
     }
-  }, [isAppActive]);
+  }, [isAppForeground]);
 
   useEffect(() => {
     if (onFutureRideTransition) {
@@ -685,7 +697,7 @@ const RidePageContextProvider = ({ children }: {
   };
 
   const pollRideNow = usePolling((signal) => loadRide(ride.id as string, signal), {
-    enabled: isAppActive && !!user?.id && !!ride.id && !rideRequestLoading,
+    enabled: isAppForeground && !!user?.id && !!ride.id && !rideRequestLoading,
     baseMs: RIDE_POLL_MS,
     maxMs: RIDE_POLL_MAX_BACKOFF_MS,
     key: ride.id,
@@ -693,12 +705,12 @@ const RidePageContextProvider = ({ children }: {
 
   // Rides created outside the app (operator bookings, scheduled rides entering their dispatch
   // window) only reach the rider through /rides/active; /rides/future drops rides <15 min out.
-  const checkActiveRideNow = usePolling(async () => {
-    if (!await loadActiveRide()) {
+  const checkActiveRideNow = usePolling(async (signal) => {
+    if (!await loadActiveRide(signal)) {
       throw new Error('active ride check failed');
     }
   }, {
-    enabled: isAppActive && !!user?.id && !ride.id && !rideRequestLoading,
+    enabled: isAppForeground && !!user?.id && !ride.id && !rideRequestLoading,
     baseMs: IDLE_ACTIVE_RIDE_POLL_MS,
     maxMs: RIDE_POLL_MAX_BACKOFF_MS,
   });
@@ -1162,9 +1174,8 @@ const RidePageContextProvider = ({ children }: {
     },
   };
 
-  // A ref, not rideRequestLoading: state lags a render behind, so a double tap would read it as false and book twice.
-  const rideRequestInFlightRef = useRef(false);
-  const requestRide = guardInFlight(rideRequestInFlightRef, async (pickupLocation?: any): Promise<void> => {
+  // Not rideRequestLoading: state lags a render behind, so a double tap would read it as false and book twice.
+  const requestRide = useSingleFlight(async (pickupLocation?: any): Promise<void> => {
     Mixpanel.setEvent('Requesting ride');
     let stopPoints = requestStopPoints;
 
