@@ -47,7 +47,7 @@ export default ({ amount, onChange, scheduledTo }) => {
 
   const validateChange = (validationAmount, change) => MAX_NUMBER_OF_PASSENGER >= (validationAmount + change) && (validationAmount + change) >= MIN_NUMBER_OF_PASSENGER;
 
-  const getNewAmountFunction = change => () => {
+  const getNewAmountFunction = (change) => () => {
     if (!validateChange(newAmount, change)) {
       return;
     }

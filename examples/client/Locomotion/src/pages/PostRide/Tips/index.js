@@ -1,4 +1,3 @@
-
 import React, {
   useEffect, useState, useRef, useContext,
 } from 'react';
@@ -75,7 +74,6 @@ const NoCustomTipContainer = styled.View`
   margin-top: 5px;
 `;
 
-
 export const DriverAvatar = styled(Image)`
   width: 60px;
   height: 60px;
@@ -123,7 +121,6 @@ const Tips = ({
     showPriceBasedOnAccount(loadShowPrice, getBusinessAccountById, businessAccountId);
   }, [businessAccountId]);
 
-
   const resetTip = () => {
     setSelectedTip(null);
     setCustomTip(null);
@@ -148,7 +145,7 @@ const Tips = ({
     calculatedTip = customTip || selectedTip;
 
     if (isPercentage) {
-      calculatedTip = ridePrice * (calculatedTip) / 100;
+      calculatedTip = (ridePrice * calculatedTip) / 100;
     }
 
     return calculatedTip.toFixed(2);
@@ -217,7 +214,7 @@ const Tips = ({
       >
         <CustomTip
           customAmount={customTip}
-          onSubmit={value => onCustomTipSet(value)}
+          onSubmit={(value) => onCustomTipSet(value)}
           tipSuffix={tipSuffix}
           isExpanded={isExpanded}
         />
@@ -227,8 +224,7 @@ const Tips = ({
   );
 };
 
-
-export default props => (
+export default (props) => (
 
   <Tips {...props} />
 

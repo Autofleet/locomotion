@@ -58,7 +58,7 @@ const CancellationReasonsPopup = ({
         Mixpanel.setEvent('Cancellation reasons popup showed', {
           state: ride?.state,
           rideId: rideIdToUse,
-          cancellationReasonIds: cancellationReasons.map(cr => cr.id),
+          cancellationReasonIds: cancellationReasons.map((cr) => cr.id),
         });
       }
     } else {
@@ -107,7 +107,7 @@ const CancellationReasonsPopup = ({
                   </LoaderContainer>
                 )
                 : (
-                  cancellationReasons.map(cr => (
+                  cancellationReasons.map((cr) => (
                     <ClickableContainer
                       key={cr.id}
                       onPress={() => onCancellationReasonClick(cr.id)}
@@ -120,8 +120,7 @@ const CancellationReasonsPopup = ({
                       </CancellationReasonCard>
                     </ClickableContainer>
                   ))
-                )
-            }
+                )}
             </BodyContainer>
           </ScrollView>
         </Container>

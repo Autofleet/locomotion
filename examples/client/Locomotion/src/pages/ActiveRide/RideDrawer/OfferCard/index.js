@@ -36,20 +36,18 @@ export const CloseContainer = styled(Button)`
     z-index: 999;
 `;
 
-
 export const ResetInputIcon = styled.Image.attrs({ source: xIcon })`
     display: flex;
     height: 12px;
     width: 12px;
 `;
 
-
 export default ({
   origin, destination, rideState, requestStopPoints, pickupEtaDrift, dropoffEtaDrift, rideOffer, etaMediumThreshold, etaHighThreshold,
   offerExpired, onVerified, setLoading, onRenewOffer, cancelOffer, loading,
 
 }) => (
-  <Fragment>
+  <>
 
     {!loading
       ? (
@@ -87,5 +85,5 @@ export default ({
       onRenewOffer={onRenewOffer}
       futureRide={requestStopPoints.scheduledTo !== null}
     />
-  </Fragment>
+  </>
 );

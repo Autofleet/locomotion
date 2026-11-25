@@ -137,8 +137,7 @@ const MessageView = ({ menuSide, route }: FutureRidesViewProps) => {
               </LinkText>
               <SvgIcon Svg={arrow} stroke={LINK_BLUE_COLOR} height={15} />
             </MessageLink>
-          )
-        }
+          )}
         </ScrollContainer>
       ) : (
         <LoaderContainer>
@@ -154,6 +153,5 @@ const MessageView = ({ menuSide, route }: FutureRidesViewProps) => {
     </PageContainer>
   );
 };
-
 
 export default MessageView;

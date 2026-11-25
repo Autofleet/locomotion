@@ -64,17 +64,13 @@ export default ({
     }
   };
 
-  return (
-    <Fragment>
-      {rideState
-        ? (
-          <RideStatusContainer>
-            <RideStatusText state={rideState}>
-              {I18n.t(`home.rideStates.${getTitle()}`, { pickupEta, dropoffEta })}
-            </RideStatusText>
-          </RideStatusContainer>
-        )
-        : null}
-    </Fragment>
-  );
+  return rideState
+    ? (
+      <RideStatusContainer>
+        <RideStatusText state={rideState}>
+          {I18n.t(`home.rideStates.${getTitle()}`, { pickupEta, dropoffEta })}
+        </RideStatusText>
+      </RideStatusContainer>
+    )
+    : null;
 };

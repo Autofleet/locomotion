@@ -43,7 +43,6 @@ const AuthLoadingScreen = () => {
     return StorageService.save({ clientProfile });
   };
 
-
   const init = async () => {
     async function getFromStorage() {
       const clientProfile = await StorageService.get('clientProfile');

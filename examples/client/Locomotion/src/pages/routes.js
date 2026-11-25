@@ -1,4 +1,3 @@
-
 export const APP_ROUTES = {
   MAIN_APP: 'MainApp',
   AUTH_LOADING: 'AuthLoading',

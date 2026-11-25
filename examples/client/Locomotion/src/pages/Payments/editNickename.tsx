@@ -23,7 +23,6 @@ type Route = {
   params?: Readonly<object | undefined> | Params
 }
 
-
 const EditCardName = () => {
   const route: Route = useRoute();
   const usePayments = PaymentsContext.useContainer();

@@ -15,7 +15,6 @@ const FutureRidesButton = () => {
     ? i18n.t('home.futureRides.multipleUpcomingRides')
     : i18n.t('home.futureRides.oneUpcomingRide');
 
-
   return (
     <Container testID="upcomingRides" noLoader onPress={() => NavigationService.navigate(MAIN_ROUTES.FUTURE_RIDES)}>
       <SvgIcon

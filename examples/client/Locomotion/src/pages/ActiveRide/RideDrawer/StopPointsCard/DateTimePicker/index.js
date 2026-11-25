@@ -46,7 +46,7 @@ const DateTimePicker = ({ onScheduleTimeSelect }) => {
       if (workingHours[dayInWeek]) {
         displayDates.push(date.format('DD.MM.YYYY'));
         const timeData = getOptionalTimes(date.format('DD.MM.YYYY'), workingHours[dayInWeek]);
-        const filteredTimeData = timeData.filter(time => moment(time).isSameOrAfter(min));
+        const filteredTimeData = timeData.filter((time) => moment(time).isSameOrAfter(min));
 
         if (filteredTimeData.length > 0) {
           displayHours[date.format('DD.MM.YYYY')] = filteredTimeData;
@@ -91,7 +91,6 @@ const DateTimePicker = ({ onScheduleTimeSelect }) => {
     }
   }, [scheduleOptions]);
 
-
   useEffect(() => {
     if (selectedDate) {
       setOptionalTimes(prepareForTimePicker(scheduleOptions[selectedDate]));
@@ -104,7 +103,7 @@ const DateTimePicker = ({ onScheduleTimeSelect }) => {
 
   const prepareForDatePicker = (data) => {
     const dates = Object.getOwnPropertyNames(data);
-    const newData = dates.map(time => ({ label: time, value: time }));
+    const newData = dates.map((time) => ({ label: time, value: time }));
 
     return newData;
   };
@@ -118,21 +117,20 @@ const DateTimePicker = ({ onScheduleTimeSelect }) => {
     return newData;
   };
 
-
   return (
     <TimeSelectorsContainer>
       <TimePicker
         title={i18n.t('home.RideScheduler.timePicker.date')}
         items={optionalDates}
         value={selectedDate}
-        onValueChange={value => setSelectedDate(value)}
+        onValueChange={(value) => setSelectedDate(value)}
       />
 
       <TimePicker
         title={i18n.t('home.RideScheduler.timePicker.hour')}
         items={optionalTimes}
         value={selectedTime}
-        onValueChange={value => setSelectedTime(value)}
+        onValueChange={(value) => setSelectedTime(value)}
       />
 
     </TimeSelectorsContainer>

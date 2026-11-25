@@ -11,7 +11,6 @@ interface LinkTextProps {
     onPress: () => void;
 }
 
-
 const LinkTextComponent = ({
   children, icon, iconSide = 'left', onPress = () => null,
 }: LinkTextProps) => (

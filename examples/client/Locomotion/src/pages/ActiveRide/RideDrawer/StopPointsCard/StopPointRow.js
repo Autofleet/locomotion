@@ -23,7 +23,6 @@ export const StopPointDot = styled.View`
   /* margin-top: 10; */
 `;
 
-
 export const PickupRow = styled.View`
 ${address}
 border-bottom-color: #f2f2f2;
@@ -46,7 +45,6 @@ const StopPointDotTimeLine = styled.View`
   flex: 1;
   background-color: #dbdbdb;
 `;
-
 
 const AddressTextCont = styled.View`
 `;

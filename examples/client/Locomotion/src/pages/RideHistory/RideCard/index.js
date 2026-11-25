@@ -108,29 +108,27 @@ const RideTitleCard = ({
     );
   };
   return (
-    <>
-      <TitleContainer>
-        <RideViewTextContainer>
-          <DayTitleText bigText={page}>
-            {moment(ride.scheduledTo || ride.createdAt).format(MMMM_DD_YYYY)}
-          </DayTitleText>
-          {ride.state === RIDE_STATES.COMPLETED ? (
-            <DayTitleSubText noCap>
-              {`${moment(ride.lastMatchAttempt).format('h:mm A')
-              } · ${ride.appDuration}`}
-            </DayTitleSubText>
-          ) : <RideStateText>{i18n.t(`rideHistory.ride.states.${ride.state}`)}</RideStateText>}
-        </RideViewTextContainer>
-        <RideViewSecTextContainer>
-          {ride.showPrice && (
+    <TitleContainer>
+      <RideViewTextContainer>
+        <DayTitleText bigText={page}>
+          {moment(ride.scheduledTo || ride.createdAt).format(MMMM_DD_YYYY)}
+        </DayTitleText>
+        {ride.state === RIDE_STATES.COMPLETED ? (
+          <DayTitleSubText noCap>
+            {`${moment(ride.lastMatchAttempt).format('h:mm A')
+            } · ${ride.appDuration}`}
+          </DayTitleSubText>
+        ) : <RideStateText>{i18n.t(`rideHistory.ride.states.${ride.state}`)}</RideStateText>}
+      </RideViewTextContainer>
+      <RideViewSecTextContainer>
+        {ride.showPrice && (
           <DaySecTitleText markError={isPaymentRejected} testID="ridePrice">
             {getFormattedPrice(ride.priceCurrency, ride.priceAmount)}
           </DaySecTitleText>
-          )}
-          {getPriceSubtitle()}
-        </RideViewSecTextContainer>
-      </TitleContainer>
-    </>
+        )}
+        {getPriceSubtitle()}
+      </RideViewSecTextContainer>
+    </TitleContainer>
   );
 };
 
@@ -164,7 +162,7 @@ const RideView = ({ ride }) => {
   const map = createRef();
   const getTip = async () => {
     const priceCalculation = await getPriceCalculation(ride.priceCalculationId);
-    const tipObj = priceCalculation.additionalCharges.find(charge => charge.chargeFor === 'tip');
+    const tipObj = priceCalculation.additionalCharges.find((charge) => charge.chargeFor === 'tip');
     setTip((tipObj || {}).amount);
   };
 
@@ -239,19 +237,20 @@ const RideView = ({ ride }) => {
                 {outstandingBalance
                   ? (
                     <OutstandBalanceText>
-                      {i18n.t('rideHistory.rideCard.paymentRetry.text',
+                      {i18n.t(
+                        'rideHistory.rideCard.paymentRetry.text',
                         {
                           price:
                           getFormattedPrice(outstandingBalance.currency, outstandingBalance.amount),
-                        })}
+                        },
+                      )}
                     </OutstandBalanceText>
                   ) : null}
                 <RoundedButton style={{ backgroundColor: '#24aaf2' }} onPress={retryPayment}>
                   {i18n.t('rideHistory.rideCard.paymentRetry.retryPaymentButton')}
                 </RoundedButton>
               </RetryPaymentButtonContainer>
-            ) : null
-        }
+            ) : null}
           <StopPointsVerticalViewContainer>
             <StopPointsVerticalView
               ride={ride}

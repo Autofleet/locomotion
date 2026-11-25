@@ -25,20 +25,16 @@ export default ({
     }
   }, []);
 
-  return (
-    <Fragment>
-      {isPopupOpen(id)
-        ? (
-          <MessageContainer>
-            <CloseContainer noBackground onPress={() => closePopup()} testID="CloseMessageCardButton">
-              <ResetInputIcon />
-            </CloseContainer>
-            <View style={{ flex: 2, textAlign: 'left', maxWidth: '80%' }}>
-              <MessageTitle>{title}</MessageTitle>
-              <MessageText>{subTitle}</MessageText>
-            </View>
-          </MessageContainer>
-        ) : null}
-    </Fragment>
-  );
+  return isPopupOpen(id)
+    ? (
+      <MessageContainer>
+        <CloseContainer noBackground onPress={() => closePopup()} testID="CloseMessageCardButton">
+          <ResetInputIcon />
+        </CloseContainer>
+        <View style={{ flex: 2, textAlign: 'left', maxWidth: '80%' }}>
+          <MessageTitle>{title}</MessageTitle>
+          <MessageText>{subTitle}</MessageText>
+        </View>
+      </MessageContainer>
+    ) : null;
 };

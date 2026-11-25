@@ -74,7 +74,6 @@ background-color: ${LINK_BLUE_COLOR};
 border-radius: 100px;
 `;
 
-
 export const MARKDOWN_TEXT_STYLE = {
   fontSize: FONT_SIZES_VALUES.H3,
   opacity: 0.8,

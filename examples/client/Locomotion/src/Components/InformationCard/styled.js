@@ -71,7 +71,6 @@ export const Arrow = styled(SvgIcon).attrs({
   height: 15,
 })``;
 
-
 export const CardsContainer = styled.View`
   width: 100%;
   height: auto;

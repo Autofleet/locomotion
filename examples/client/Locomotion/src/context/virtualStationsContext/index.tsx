@@ -98,7 +98,6 @@ const StationsProvider = ({ children }: { children: any }) => {
     return location.coords;
   };
 
-
   useEffect(() => {
     getCurrentLocation();
   }, [locationGranted]);
@@ -150,7 +149,6 @@ const StationsProvider = ({ children }: { children: any }) => {
     return sortedStations;
   };
 
-
   useEffect(() => {
     if (rawStations?.length) {
       sortAndUpdateStations();
@@ -164,7 +162,6 @@ const StationsProvider = ({ children }: { children: any }) => {
     }
   }, [user?.id]);
 
-
   const createMapMarker = (station:Station, stopPoints: RequestStopPoint[]) => {
     let type = 'default';
 
@@ -175,7 +172,6 @@ const StationsProvider = ({ children }: { children: any }) => {
     if (station?.externalId === stopPoints[1]?.externalId) {
       type = STOP_POINT_TYPES.STOP_POINT_DROPOFF;
     }
-
 
     return (
       <VirtualStationMarker

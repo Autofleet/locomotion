@@ -22,5 +22,4 @@ const ServiceTypeDetails = ({
 ) : null
 );
 
-
 export default ServiceTypeDetails;

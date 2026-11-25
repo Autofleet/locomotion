@@ -135,7 +135,6 @@ const useVehicleColor = () => {
   return { vehicleColor };
 };
 
-
 const Provider = ({ children }) => {
   const colorScheme = useColorScheme();
   const isInitDarkMode = FORCE_DARK_MODE || (Appearance.getColorScheme() === THEME_MOD.DARK && DARK_MODE_ENABLED);

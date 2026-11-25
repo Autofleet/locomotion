@@ -7,7 +7,6 @@ import {
   FONT_SIZES, FONT_SIZES_VALUES, FONT_WEIGHTS, convertHextToRgba, LINK_BLUE_COLOR,
 } from '../../context/theme';
 
-
 export const Tooltip = styled.View`
   background-color: #f0f0f0;
   display: flex;
@@ -30,14 +29,12 @@ export const StationDetails = styled.View`
   padding-bottom: 0;
 `;
 
-
 export const BottomActions = styled.View`
   flex: 1;
   display: flex;
   background-color: #f0f0f0;
   padding: 6px;
 `;
-
 
 export const StationName = styled.Text`
   ${FONT_SIZES.H2}

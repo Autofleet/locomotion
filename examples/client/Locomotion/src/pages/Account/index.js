@@ -81,7 +81,7 @@ const AccountContent = ({ setHeaderTitle }) => {
 
   const updateDefault = async () => {
     const { paymentMethods } = await usePayments.getOrFetchCustomer();
-    const defaultMethod = paymentMethods.find(x => x.isDefault);
+    const defaultMethod = paymentMethods.find((x) => x.isDefault);
     if (defaultMethod) {
       setDefaultPaymentMethod({ ...defaultMethod, mark: true });
     }
@@ -104,7 +104,7 @@ const AccountContent = ({ setHeaderTitle }) => {
 
   const fetchLanguageCode = async () => {
     const preferred = await getPreferredLanguageCode();
-    setChosenLanguageIndex(languageItems.findIndex(l => l.value === preferred));
+    setChosenLanguageIndex(languageItems.findIndex((l) => l.value === preferred));
   };
 
   const openLanguageSelector = () => {
@@ -125,8 +125,7 @@ const AccountContent = ({ setHeaderTitle }) => {
           title={i18n.t('onboarding.namePlaceholder')}
           onPress={() => navigationService.navigate(MAIN_ROUTES.NAME, {
             editAccount: true,
-          })
-          }
+          })}
         >
           {user ? `${user.firstName} ${user.lastName}` : ''}
         </Card>
@@ -227,8 +226,7 @@ const AccountContent = ({ setHeaderTitle }) => {
 
         <GenericErrorPopup
           isVisible={showError}
-          closePopup={() => setShowError(false)
-        }
+          closePopup={() => setShowError(false)}
         />
       </CardsContainer>
     </Container>

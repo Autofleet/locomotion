@@ -73,7 +73,6 @@ const RideOptions = () => {
     }
   }, [usePayments.paymentMethods, showCash]);
 
-
   useEffect(() => {
     setFooterComponent(() => (
       <RideButtons

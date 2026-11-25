@@ -1,12 +1,11 @@
 import React, {
-  createContext, useEffect, useState, useContext,
+  createContext, useContext, useEffect, useMemo, useState,
 } from 'react';
 import { useIsFocused } from '@react-navigation/native';
 import { UserContext } from '../user';
 import useInterval from '../../lib/useInterval';
 import { getPosition } from '../../services/geo';
 import * as availabilityApi from './api';
-
 
 interface AvailabilityLocation {
     lat: string;
@@ -69,16 +68,17 @@ const AvailabilityContextProvider = ({ children }: { children: any }) => {
     getVehicles();
   }, [isFocused]);
 
+  const contextValue = useMemo(() => ({
+    availabilityVehicles,
+  }), [availabilityVehicles]);
+
   return (
     <AvailabilityContext.Provider
-      value={{
-        availabilityVehicles,
-      }}
+      value={contextValue}
     >
       {children}
     </AvailabilityContext.Provider>
   );
 };
-
 
 export default AvailabilityContextProvider;

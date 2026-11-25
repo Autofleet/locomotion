@@ -85,7 +85,7 @@ const FutureRidesView = ({ menuSide }: FutureRidesViewProps) => {
         {futureRides.length ? (
           <>
             {(futureRides || []).map((fRide) => {
-              const service = services.find(s => s.id === fRide.serviceId);
+              const service = services.find((s) => s.id === fRide.serviceId);
               return (
                 <RideCard
                   key={fRide.id}

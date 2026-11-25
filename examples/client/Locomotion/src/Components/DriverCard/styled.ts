@@ -32,7 +32,6 @@ export const DriverRatingText = styled(Text)`
     color: ${({ theme }) => theme.disabledColor};
 `;
 
-
 export const DriverDetailText = styled<any>(Text)`
     ${({ activeRide }) => (activeRide ? FONT_SIZES.H2 : FONT_SIZES.LARGE)};
     ${FONT_WEIGHTS.MEDIUM}
@@ -47,10 +46,8 @@ export const DriverAvatar = styled(Image)`
   border-width: 4;
  `;
 
-
 export const DriverSectionContainer = styled(BaseRideViewContainer)`
 `;
-
 
 export const DriverRatingContainer = styled(View)`
   flex-direction: row;

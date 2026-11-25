@@ -95,14 +95,14 @@ const Code = () => {
   const onResendPress = async () => {
     setIsRetryingLogin(true);
     setRetryChannel('sms');
-    setResendCounter(currentValue => currentValue + 1);
+    setResendCounter((currentValue) => currentValue + 1);
     setTimer(RESEND_SECONDS);
   };
 
   const onCallPress = async () => {
     setIsRetryingLogin(true);
     setRetryChannel('call');
-    setCallCounter(currentValue => currentValue + 1);
+    setCallCounter((currentValue) => currentValue + 1);
     setIsCalling(true);
   };
 
