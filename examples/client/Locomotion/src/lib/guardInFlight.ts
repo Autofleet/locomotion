@@ -1,16 +1,6 @@
 import type { MutableRefObject } from 'react';
 
-export const findActiveRideOrNull = async <T>(
-  getActiveRide: () => Promise<T | null | undefined>,
-): Promise<T | null> => {
-  try {
-    return (await getActiveRide()) || null;
-  } catch (e) {
-    return null;
-  }
-};
-
-export const guardInFlight = <A extends unknown[]>(
+const guardInFlight = <A extends unknown[]>(
   inFlightRef: MutableRefObject<boolean>,
   // eslint-disable-next-line no-unused-vars
   fn: (...args: A) => Promise<void>,
@@ -28,3 +18,5 @@ export const guardInFlight = <A extends unknown[]>(
     }
   };
 };
+
+export default guardInFlight;

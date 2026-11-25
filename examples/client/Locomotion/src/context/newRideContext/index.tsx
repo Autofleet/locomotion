@@ -3,7 +3,6 @@ import React, {
   useState, useEffect, useRef, createContext, useContext, useCallback,
 } from 'react';
 import Config from 'react-native-config';
-import axios from 'axios';
 import { useNavigation } from '@react-navigation/native';
 import _, { pick } from 'lodash';
 import moment, { Moment } from 'moment-timezone';
@@ -45,7 +44,7 @@ import usePolling from '../../lib/usePolling';
 import useIsAppActive from '../../lib/useIsAppActive';
 import useOnReconnect from '../../lib/useOnReconnect';
 import { formatSps } from '../../lib/ride/utils';
-import { findActiveRideOrNull, guardInFlight } from '../../lib/ride/booking';
+import guardInFlight from '../../lib/guardInFlight';
 import { APP_ROUTES, MAIN_ROUTES } from '../../pages/routes';
 import * as navigationService from '../../services/navigation';
 import { BottomSheetContext } from '../bottomSheetContext';
@@ -183,7 +182,6 @@ interface RidePageContextInterface {
 const RIDE_POLL_MS = 4 * 1000;
 const RIDE_POLL_MAX_BACKOFF_MS = 60 * 1000;
 const IDLE_ACTIVE_RIDE_POLL_MS = 10 * 1000;
-const ACTIVE_RIDE_PRECHECK_TIMEOUT_MS = 5 * 1000;
 
 export const RidePageContext = createContext<RidePageContextInterface>({
   loadAddress: (input: any) => undefined,
@@ -284,7 +282,6 @@ const RidePageContextProvider = ({ children }: {
   const [lastSelectedLocation, saveSelectedLocation] = useState(false);
   const [rideRequestLoading, setRideRequestLoading] = useState(false);
   const isAppActive = useIsAppActive();
-  const [activeRideCheckFailed, setActiveRideCheckFailed] = useState(false);
   const [ridePopup, setRidePopup] = useState<RidePopupNames | null>(null);
   const [unconfirmedPickupTime, setUnconfirmedPickupTime] = useState<number | null>(null);
   const getRouteName = () => navigationService?.getNavigator()?.getCurrentRoute().name;
@@ -572,14 +569,6 @@ const RidePageContextProvider = ({ children }: {
     return null;
   };
 
-  const showActiveRide = async (activeRide: RideInterface) => {
-    const formattedRide = await formatRide(activeRide);
-    const screenFunction = RIDE_STATES_TO_SCREENS[formattedRide?.state || ''];
-    if (screenFunction) {
-      screenFunction(formattedRide);
-    }
-  };
-
   const loadActiveRide = async () => {
     let activeRide;
     let checkSucceeded = true;
@@ -588,9 +577,12 @@ const RidePageContextProvider = ({ children }: {
     } catch (e) {
       checkSucceeded = false;
     }
-    setActiveRideCheckFailed(!checkSucceeded);
     if (activeRide) {
-      await showActiveRide(activeRide);
+      const formattedRide = await formatRide(activeRide);
+      const screenFunction = RIDE_STATES_TO_SCREENS[formattedRide?.state || ''];
+      if (screenFunction) {
+        screenFunction(formattedRide);
+      }
     } else {
       const lastRideId = checkSucceeded && await StorageService.get('lastRideId');
       if (lastRideId) {
@@ -633,7 +625,6 @@ const RidePageContextProvider = ({ children }: {
 
   useEffect(() => {
     if (user?.id) {
-      loadActiveRide();
       loadLastCompletedRide();
     }
   }, [user?.id]);
@@ -654,7 +645,6 @@ const RidePageContextProvider = ({ children }: {
     const cameToForeground = isAppActive && !wasAppActiveRef.current;
     wasAppActiveRef.current = isAppActive;
     if (cameToForeground && user?.id && !ride.id) {
-      loadActiveRide();
       loadLastCompletedRide();
     }
   }, [isAppActive]);
@@ -673,14 +663,11 @@ const RidePageContextProvider = ({ children }: {
     }
   }, [onFutureRideTransition]);
 
-  const currentRideIdRef = useRef(ride.id);
-  currentRideIdRef.current = ride.id;
-
-  const loadRide = async (rideId: string) => {
-    const rideLoaded = await rideApi.getRide(rideId);
+  const loadRide = async (rideId: string, signal?: AbortSignal) => {
+    const rideLoaded = await rideApi.getRide(rideId, { signal });
     const formattedRide = await formatRide(rideLoaded);
     // A slow response can arrive after the ride was cancelled/cleared and would bring it back.
-    if (currentRideIdRef.current !== rideId) {
+    if (signal?.aborted) {
       return;
     }
     if (ride.state !== rideLoaded.state) {
@@ -697,10 +684,11 @@ const RidePageContextProvider = ({ children }: {
     }
   };
 
-  const pollRideNow = usePolling(() => loadRide(ride.id as string), {
+  const pollRideNow = usePolling((signal) => loadRide(ride.id as string, signal), {
     enabled: isAppActive && !!user?.id && !!ride.id && !rideRequestLoading,
     baseMs: RIDE_POLL_MS,
     maxMs: RIDE_POLL_MAX_BACKOFF_MS,
+    key: ride.id,
   });
 
   // Rides created outside the app (operator bookings, scheduled rides entering their dispatch
@@ -711,9 +699,8 @@ const RidePageContextProvider = ({ children }: {
     }
   }, {
     enabled: isAppActive && !!user?.id && !ride.id && !rideRequestLoading,
-    baseMs: activeRideCheckFailed ? RIDE_POLL_MS : IDLE_ACTIVE_RIDE_POLL_MS,
+    baseMs: IDLE_ACTIVE_RIDE_POLL_MS,
     maxMs: RIDE_POLL_MAX_BACKOFF_MS,
-    immediate: false,
   });
 
   useOnReconnect(() => {
@@ -1204,17 +1191,6 @@ const RidePageContextProvider = ({ children }: {
     })));
 
     try {
-      // A ride booked for the rider elsewhere (e.g. by an operator) may not be on screen yet. A failed
-      // check falls through to booking: a possible duplicate is better than a rider who can't book.
-      const existingRide = await findActiveRideOrNull(
-        () => rideApi.getActiveRide({ timeout: ACTIVE_RIDE_PRECHECK_TIMEOUT_MS }),
-      );
-      if (existingRide) {
-        Mixpanel.setEvent('Ride request showed existing ride', { rideId: existingRide.id, state: existingRide.state });
-        await showActiveRide(existingRide);
-        return;
-      }
-
       let scheduledToMoment = ride.scheduledTo;
       if (ride.scheduledTo) {
         const unixScheduledTo = moment.unix(Number(ride.scheduledTo) / 1000);
@@ -1265,10 +1241,6 @@ const RidePageContextProvider = ({ children }: {
         FAILED_TO_CREATE_RIDE_ACTIONS[key]();
       } else {
         FAILED_TO_CREATE_RIDE_ACTIONS[RIDE_FAILED_REASONS.BUSY]();
-      }
-      // No response (timeout/network) means the ride may still have been created server-side.
-      if (axios.isAxiosError(e) && !e.response) {
-        loadActiveRide();
       }
     } finally {
       setRideRequestLoading(false);

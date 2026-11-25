@@ -45,13 +45,13 @@ export const patchRide = async (rideId, newData) => {
   }
 };
 
-export const getActiveRide = async (config) => {
-  const { data } = await network.get('api/v1/rides/active', config);
+export const getActiveRide = async () => {
+  const { data } = await network.get('api/v1/rides/active');
   return data;
 };
 
-export const getRide = async (rideId) => {
-  const { data } = await network.get(`api/v1/rides/${rideId}`);
+export const getRide = async (rideId, config) => {
+  const { data } = await network.get(`api/v1/rides/${rideId}`, config);
   return data;
 };
 

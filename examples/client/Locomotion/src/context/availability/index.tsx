@@ -35,30 +35,23 @@ const AvailabilityContextProvider = ({ children }: { children: any }) => {
   const [availabilityVehicles, setAvailabilityVehicles] = useState<AvailabilityVehicles[]>([]);
   const { locationGranted } = useContext(UserContext);
   const getVehicles = async () => {
-    if (locationGranted) {
-      try {
-        let coords;
-        try {
-          const location = await getPosition({
-            maximumAge: 1000 * 60 * 2,
-          });
-          if (location) {
-            ({ coords } = location);
-          }
-        } catch (e) {
-          console.error('no pos', e);
-        }
-        const {
-          latitude: lat, longitude: lng,
-        } = coords || {};
-        if (lat && lng) {
-          const { vehicles } = await availabilityApi.getVehicles(lat, lng);
-          await setAvailabilityVehicles(vehicles);
-        }
-      } catch (e) {
-        console.error('setAvailabilityVehicles', e);
-        throw e;
+    let coords;
+    try {
+      const location = await getPosition({
+        maximumAge: 1000 * 60 * 2,
+      });
+      if (location) {
+        ({ coords } = location);
       }
+    } catch (e) {
+      console.error('no pos', e);
+    }
+    const {
+      latitude: lat, longitude: lng,
+    } = coords || {};
+    if (lat && lng) {
+      const { vehicles } = await availabilityApi.getVehicles(lat, lng);
+      await setAvailabilityVehicles(vehicles);
     }
   };
 

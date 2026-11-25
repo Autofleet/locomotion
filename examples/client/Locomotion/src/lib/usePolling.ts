@@ -18,17 +18,19 @@ interface PollingOptions {
   enabled: boolean;
   baseMs: number;
   maxMs?: number;
-  immediate?: boolean;
+  key?: unknown;
 }
 
 const usePolling = (
-  poll: () => Promise<unknown>,
+  // eslint-disable-next-line no-unused-vars
+  poll: (signal: AbortSignal) => Promise<unknown>,
   {
-    enabled, baseMs, maxMs = baseMs, immediate = true,
+    enabled, baseMs, maxMs = baseMs, key,
   }: PollingOptions,
 ): () => void => {
   const pollRef = useRef(poll);
-  const inFlightRef = useRef<Promise<unknown> | null>(null);
+  // Outlives the effect so that toggling `enabled` (e.g. backgrounding the app) can't reset the backoff.
+  const failuresRef = useRef(0);
   const pollNowRef = useRef(noop);
 
   useEffect(() => {
@@ -37,63 +39,43 @@ const usePolling = (
 
   useEffect(() => {
     if (!enabled) {
-      return undefined;
+      return noop;
     }
-    let cancelled = false;
     let timer: ReturnType<typeof setTimeout> | undefined;
-    let failures = 0;
-    let chain = 0;
+    let controller: AbortController | undefined;
 
-    const startPoll = () => {
-      inFlightRef.current = pollRef.current().finally(() => {
-        inFlightRef.current = null;
-      });
-      return inFlightRef.current;
-    };
-
-    const run = async (fresh = false) => {
-      const myChain = chain;
-      const isCurrent = () => !cancelled && myChain === chain;
+    const run = async () => {
+      controller?.abort();
+      const current = new AbortController();
+      controller = current;
       try {
-        if (fresh && inFlightRef.current) {
-          // The in-flight response predates the caller's reason for polling now (e.g. a cancel).
-          await inFlightRef.current.catch(() => undefined);
-          if (!isCurrent()) {
-            return;
-          }
+        await pollRef.current(current.signal);
+        if (current.signal.aborted) {
+          return;
         }
-        await (inFlightRef.current || startPoll());
-        if (isCurrent()) {
-          failures = 0;
-        }
+        failuresRef.current = 0;
       } catch (e) {
-        if (isCurrent()) {
-          failures += 1;
+        if (current.signal.aborted) {
+          return;
         }
+        failuresRef.current += 1;
       }
-      if (isCurrent()) {
-        timer = setTimeout(() => run(), nextPollDelay(failures, baseMs, maxMs));
-      }
+      timer = setTimeout(run, nextPollDelay(failuresRef.current, baseMs, maxMs));
     };
 
     pollNowRef.current = () => {
-      chain += 1;
-      failures = 0;
       clearTimeout(timer);
-      run(true);
-    };
-    if (immediate) {
+      failuresRef.current = 0;
       run();
-    } else {
-      timer = setTimeout(() => run(), nextPollDelay(0, baseMs, maxMs));
-    }
+    };
+    run();
 
     return () => {
-      cancelled = true;
       clearTimeout(timer);
+      controller?.abort();
       pollNowRef.current = noop;
     };
-  }, [enabled, baseMs, maxMs, immediate]);
+  }, [enabled, baseMs, maxMs, key]);
 
   return useCallback(() => pollNowRef.current(), []);
 };
