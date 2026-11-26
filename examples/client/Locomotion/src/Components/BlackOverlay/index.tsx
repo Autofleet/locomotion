@@ -1,6 +1,6 @@
 import React from 'react';
 import { Dimensions, View } from 'react-native';
-import styled from 'styled-components';
+import styled from 'styled-components/native';
 
 const Overlay = styled(View)`
 width: 100%;

@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled from 'styled-components/native';
 import RoundedButton from '../../../../Components/RoundedButton';
 import xIconWhite from '../../../../assets/x-white.png';
 import Button from '../../../../Components/Button';

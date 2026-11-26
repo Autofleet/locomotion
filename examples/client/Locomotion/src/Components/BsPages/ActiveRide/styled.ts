@@ -1,8 +1,8 @@
 import { BottomSheetScrollView } from '@gorhom/bottom-sheet';
 import {
-  Image, Text, View, TouchableOpacity, Platform,
+  Image, Text, View, TouchableOpacity, Platform, StyleSheet,
 } from 'react-native';
-import styled from 'styled-components';
+import styled from 'styled-components/native';
 import { FONT_SIZES, FONT_WEIGHTS } from '../../../context/theme';
 
 export const HALF_WIDTH = '49%';
@@ -104,9 +104,35 @@ export const ButtonContainer = styled(TouchableOpacity)`
     display: flex;
     width: ${HALF_WIDTH};
     padding: 0 15px;
-    opacity: ${props => (props.disabled ? 0.5 : 1)};
+    opacity: ${(props) => (props.disabled ? 0.5 : 1)};
 `;
 
 export const Container = styled(BottomSheetScrollView)`
     padding: 0 10px;
+`;
+
+export const DialogCard = styled(View)`
+    background-color: #fff;
+    border-radius: 12px;
+    padding: 8px 0;
+`;
+
+export const DialogTitle = styled(Text)`
+    font-size: 16px;
+    font-weight: 600;
+    text-align: center;
+    padding: 14px 16px;
+    color: #333;
+`;
+
+export const DialogRow = styled(TouchableOpacity)`
+    border-top-width: ${StyleSheet.hairlineWidth}px;
+    border-top-color: #e0e0e0;
+`;
+
+export const DialogOption = styled(Text)<{ cancel?: boolean }>`
+    font-size: 16px;
+    text-align: center;
+    padding: 14px 0;
+    color: ${(props) => (props.cancel ? '#FF3B30' : '#007AFF')};
 `;

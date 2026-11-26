@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import styled from 'styled-components';
+import styled from 'styled-components/native';
 import i18n from '../../../../I18n';
 import DateTimePicker from './DateTimePicker';
 import Button from '../../../../Components/Button';

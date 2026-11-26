@@ -29,15 +29,13 @@ const Card = ({
             </VerifyContainer>
           </View>
         ) : (
-          <>
-            {showUnverified ? (
-              <View>
-                <VerifyContainer unverified>
-                  <VerifyText>{i18n.t('onboarding.unverified')}</VerifyText>
-                </VerifyContainer>
-              </View>
-            ) : undefined}
-          </>
+          showUnverified ? (
+            <View>
+              <VerifyContainer unverified>
+                <VerifyText>{i18n.t('onboarding.unverified')}</VerifyText>
+              </VerifyContainer>
+            </View>
+          ) : undefined
         )}
       </CardTitleContainer>
       {children ? <CardText>{children}</CardText> : undefined}

@@ -1,5 +1,5 @@
 import React from 'react';
-import styled from 'styled-components';
+import styled from 'styled-components/native';
 import moment from 'moment';
 import EtaText from './EtaText';
 import i18n from '../../../../I18n';
@@ -19,7 +19,6 @@ export const StopPointDot = styled.View`
   background-color: ${({ origin, theme }) => (origin ? theme.primaryColor : theme.secondaryColor)};
   border-radius: 10px;
 `;
-
 
 export const PickupRow = styled.View`
   border-bottom-color: #f2f2f2;
@@ -44,7 +43,6 @@ const StopPointDotTimeLine = styled.View`
   background-color: ${({ origin, theme }) => (origin ? theme.primaryColor : theme.secondaryColor)};
 `;
 
-
 const AddressTextCont = styled.View`
   flex: 1;
 `;
@@ -55,7 +53,6 @@ const AddressText = styled.Text`
   margin-start: 22;
   margin-end: 16;
 `;
-
 
 const RowContainer = styled.View`
   min-height: 20px;

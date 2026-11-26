@@ -1,6 +1,6 @@
 import React from 'react';
 import { Text } from 'react-native';
-import styled from 'styled-components';
+import styled from 'styled-components/native';
 import CardsTitle from '../CardsTitle';
 import i18n from '../../I18n';
 import { FONT_SIZES, FONT_WEIGHTS } from '../../context/theme';
@@ -21,6 +21,5 @@ const ServiceTypeDetails = ({
   </>
 ) : null
 );
-
 
 export default ServiceTypeDetails;

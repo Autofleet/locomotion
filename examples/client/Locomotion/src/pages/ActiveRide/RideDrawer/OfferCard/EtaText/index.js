@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import { View } from 'react-native';
-import styled from 'styled-components';
+import styled from 'styled-components/native';
 import moment from 'moment';
 
 import i18n from '../../../../../I18n';
@@ -43,7 +43,6 @@ const WarningContainer = styled.View`
 
 `;
 
-
 export default ({
   eta, etaDrift, pickup, etaMediumThreshold, etaHighThreshold,
 }) => {
@@ -69,14 +68,14 @@ export default ({
       return null;
     }
     return (
-      <Fragment>
+      <>
         <WarningIcon
           source={etaThreshold === etaHighThreshold ? warningHighIcon : warningMediumIcon}
         />
         <EtaWarningText red={etaThreshold === etaHighThreshold}>
           {i18n.t(`home.offerCard.etaNotice.${warningText}`, { etaThreshold })}
         </EtaWarningText>
-      </Fragment>
+      </>
     );
   };
 

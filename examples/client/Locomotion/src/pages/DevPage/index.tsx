@@ -11,7 +11,6 @@ import PageHeader from '../../Components/PageHeader';
 import * as navigationService from '../../services/navigation';
 import { InputContainer, Label } from './styles';
 
-
 const DevSettingPage = () => {
   const [operationId, setOperationId] = useState(Config.OPERATION_ID);
   const [serverUrl, setServerUrl] = useState(Config.SERVER_HOST);
@@ -22,13 +21,14 @@ const DevSettingPage = () => {
       <PageHeader
         title="Debug"
         onIconPress={
-          () => navigationService.goBack()}
+          () => navigationService.goBack()
+        }
       />
       <Label>Operation Id</Label>
       <InputContainer>
         <TextInput
           testID="operationId"
-          autoFocus
+          autoFocus={false}
           onChangeText={(newOperationId : string) => {
             setOperationId(newOperationId);
           }}
@@ -38,7 +38,7 @@ const DevSettingPage = () => {
       <Label>Server Host</Label>
       <TextInput
         testID="serverUrl"
-        autoFocus
+        autoFocus={false}
         onChangeText={(newServerUrl: string) => {
           setServerUrl(newServerUrl);
         }}
@@ -47,7 +47,7 @@ const DevSettingPage = () => {
       <Label>Stripe Key</Label>
       <TextInput
         testID="stripeKey"
-        autoFocus
+        autoFocus={false}
         onChangeText={(newStripeKey: string) => {
           setStripeKey(newStripeKey);
         }}

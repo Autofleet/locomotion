@@ -1,5 +1,5 @@
 import { View, ScrollView, Text } from 'react-native';
-import styled from 'styled-components';
+import styled from 'styled-components/native';
 import RoundedButton from '../../Components/RoundedButton';
 import Button from '../../Components/Button';
 import { TextArea } from '../../Components/TextArea';
@@ -66,7 +66,6 @@ bottom: 0px;
 margin: 0 20px;
 `;
 
-
 export const ItemInnerContainer = styled(View)`
   flex-direction: row;
   justify-content: flex-start;
@@ -76,7 +75,7 @@ export const ItemInnerContainer = styled(View)`
 `;
 
 export const ItemContainer = styled(View)`
-  background-color: ${({ selected }) => (selected ? '#rgba(36, 170, 242, 0.2)' : '#fff')};
+  background-color: ${({ selected }) => (selected ? 'rgba(36, 170, 242, 0.2)' : '#fff')};
   min-height: 50px;
   flex-direction: row;
   justify-content: flex-start;

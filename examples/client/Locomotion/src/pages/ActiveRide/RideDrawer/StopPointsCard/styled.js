@@ -1,6 +1,6 @@
 import React from 'react';
 import { View } from 'react-native';
-import styled from 'styled-components';
+import styled from 'styled-components/native';
 import i18n from '../../../I18n';
 
 import RideRoundedButton from '../../../Components/RoundedButton';
@@ -26,7 +26,6 @@ const address = `
   flex-direction: row;
 `;
 
-
 export const RideCard = styled.View`
   ${address}
   border-bottom-color: #f2f2f2;
@@ -39,7 +38,7 @@ export const RideCard = styled.View`
 export const DriverAvatar = styled.Image`
   width: 30px;
   height: 30px;
-  border-radius: 100;
+  border-radius: 100px;
   margin-left: 15px;
   border-width: 1px;
   border-color: #a7a7a7;
@@ -99,7 +98,6 @@ export const RideButtonText = styled.Text`
   font-size: 18;
 `;
 
-
 export const RowContainer = styled.TouchableOpacity`
   min-height: 50;
   padding-top: 10;
@@ -148,12 +146,10 @@ export const PreRideBox = styled(({ eta, estimatePrice, ...props }) => (
     flex-direction: row;
   `;
 
-
 export const RideTypeButton = styled.TouchableOpacity`
   align-items: center;
   flex: 1;
 `;
-
 
 export const RideTypeButtonText = styled.Text`
   flex: 1;

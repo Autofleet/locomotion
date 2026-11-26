@@ -1,11 +1,10 @@
-
 import React, {
   useEffect, useState, useRef, useContext,
 } from 'react';
 import {
   View, Text, TouchableOpacity, Image,
 } from 'react-native';
-import styled from 'styled-components';
+import styled from 'styled-components/native';
 import { useBottomSheet } from '@gorhom/bottom-sheet';
 import Button from '../../../Components/Button';
 import Thumbnail from '../../../Components/Thumbnail';
@@ -20,16 +19,6 @@ import SettingContext from '../../../context/settings';
 import PaymentContext from '../../../context/payments';
 import { RidePageContext } from '../../../context/newRideContext';
 import showPriceBasedOnAccount from '../../../services/showPriceBasedOnAccount';
-
-const TipSectionContainer = styled.View`
- width: 100%;
- flex:1;
-  z-index: 3;
-  elevation: 3;
-  background: red;
-
-`;
-
 
 const Container = styled.View`
   flex-direction: column;
@@ -85,7 +74,6 @@ const NoCustomTipContainer = styled.View`
   margin-top: 5px;
 `;
 
-
 export const DriverAvatar = styled(Image)`
   width: 60px;
   height: 60px;
@@ -133,7 +121,6 @@ const Tips = ({
     showPriceBasedOnAccount(loadShowPrice, getBusinessAccountById, businessAccountId);
   }, [businessAccountId]);
 
-
   const resetTip = () => {
     setSelectedTip(null);
     setCustomTip(null);
@@ -158,7 +145,7 @@ const Tips = ({
     calculatedTip = customTip || selectedTip;
 
     if (isPercentage) {
-      calculatedTip = ridePrice * (calculatedTip) / 100;
+      calculatedTip = (ridePrice * calculatedTip) / 100;
     }
 
     return calculatedTip.toFixed(2);
@@ -197,7 +184,7 @@ const Tips = ({
         </DetailsContainer>
         <DetailsContainer style={{ marginTop: 30 }}>
           {buttons.map((b, i) => (
-            <SelectableButton testID={`tipButton${i}`} selected={b === selectedTip} onPress={() => onTipPressed(b)}>
+            <SelectableButton key={b} testID={`tipButton${i}`} selected={b === selectedTip} onPress={() => onTipPressed(b)}>
               {formatCurrency(b)}
             </SelectableButton>
           ))}
@@ -207,10 +194,10 @@ const Tips = ({
             testID="customTipButton"
             selected={!!customTip}
             onPress={() => bottomSheetRef.current.snapToIndex(0)}
-            label={i18n.t('postRide.tip.customTip.title')}
-            value={customTip ? formatCurrency(customTip) : null}
           >
-            {!customTip ? i18n.t('postRide.tip.setCustomTip') : null}
+            {customTip
+              ? `${i18n.t('postRide.tip.customTip.title')} ${formatCurrency(customTip)}`
+              : i18n.t('postRide.tip.setCustomTip')}
           </SelectableButton>
         </DetailsContainer>
         <NoTipTextButton onPress={resetTip}>{`${i18n.t('postRide.tip.noTip')}`}</NoTipTextButton>
@@ -227,7 +214,7 @@ const Tips = ({
       >
         <CustomTip
           customAmount={customTip}
-          onSubmit={value => onCustomTipSet(value)}
+          onSubmit={(value) => onCustomTipSet(value)}
           tipSuffix={tipSuffix}
           isExpanded={isExpanded}
         />
@@ -237,8 +224,7 @@ const Tips = ({
   );
 };
 
-
-export default props => (
+export default (props) => (
 
   <Tips {...props} />
 

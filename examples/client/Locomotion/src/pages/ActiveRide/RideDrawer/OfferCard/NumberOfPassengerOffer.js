@@ -1,6 +1,6 @@
 import React, { useState, Fragment } from 'react';
 import { Text, View } from 'react-native';
-import styled from 'styled-components';
+import styled from 'styled-components/native';
 import moment from 'moment';
 import i18n from '../../../../I18n';
 
@@ -47,7 +47,7 @@ export default ({ amount, onChange, scheduledTo }) => {
 
   const validateChange = (validationAmount, change) => MAX_NUMBER_OF_PASSENGER >= (validationAmount + change) && (validationAmount + change) >= MIN_NUMBER_OF_PASSENGER;
 
-  const getNewAmountFunction = change => () => {
+  const getNewAmountFunction = (change) => () => {
     if (!validateChange(newAmount, change)) {
       return;
     }

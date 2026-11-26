@@ -21,13 +21,13 @@ const RidePaymentDetails = ({
   ride,
   paymentMethod,
   rideHistory = false,
-  state,
+  state = 'pending',
 } :{
   ride: RideInterface,
   paymentMethod: PaymentMethodInterface,
-  rideHistory: boolean
-  currency: string,
-  state: string
+  rideHistory?: boolean
+  currency?: string,
+  state?: string
 
 }) => {
   const [priceCalculation, setPriceCalculation] = useState<PriceCalculation>();
@@ -51,7 +51,6 @@ const RidePaymentDetails = ({
     showPriceBasedOnAccount(loadShowPrice, getBusinessAccountById, ride.businessAccountId);
   }, []);
 
-
   return (paymentMethod ? (
     <>
       <CardsTitle noPaddingLeft title={i18n.t('ride.paymentMethod')} />
@@ -66,8 +65,10 @@ const RidePaymentDetails = ({
             : (showPrice
               && (
               <PriceText testID="priceText">
-                {getFormattedPrice(priceCalculation?.currency,
-                  totalAmount)}
+                {getFormattedPrice(
+                  priceCalculation?.currency,
+                  totalAmount,
+                )}
               </PriceText>
               )
             )
@@ -77,12 +78,14 @@ const RidePaymentDetails = ({
           <Button
             testID="viewRidePaymentDetails"
             noBackground
-            onPress={() => navigationService.navigate(MAIN_ROUTES.RIDE_PRICE_BREAKDOWN,
-              { rideId: ride.id, rideHistory })}
+            onPress={() => navigationService.navigate(
+              MAIN_ROUTES.RIDE_PRICE_BREAKDOWN,
+              { rideId: ride.id, rideHistory },
+            )}
           >
             {state !== RIDE_STATES.CANCELED
             || (state === RIDE_STATES.CANCELED
-             && priceCalculation?.items.find(x => x.cancellationRule)) ? (
+             && priceCalculation?.items.find((x) => x.cancellationRule)) ? (
                <ViewDetails>
                  {i18n.t('ride.viewDetails').toString()}
                </ViewDetails>
@@ -99,11 +102,6 @@ const RidePaymentDetails = ({
 RidePaymentDetails.propTypes = {
   rideHistory: propsTypes.bool,
   state: propsTypes.string,
-};
-
-RidePaymentDetails.defaultProps = {
-  rideHistory: false,
-  state: 'pending',
 };
 
 export default RidePaymentDetails;

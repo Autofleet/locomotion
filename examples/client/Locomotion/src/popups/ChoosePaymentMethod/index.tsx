@@ -1,8 +1,7 @@
 /* eslint-disable no-unused-expressions */
 import React, { useContext, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import Modal from 'react-native-modal';
-import { useNavigation } from '@react-navigation/native';
+import Modal from '../../Components/CompatModal';
 import EmptyState from '../../Components/EmptyState';
 import Mixpanel from '../../services/Mixpanel';
 import { PAYMENT_MODES, PAYMENT_TABS } from '../../pages/Payments/consts';
@@ -34,32 +33,32 @@ interface PaymentMethodPopupProps {
   isVisible: boolean;
   onCancel: () => void;
   onSubmit: (payment: any) => void;
-  showCash: boolean;
-  rideFlow: boolean;
-  selected: any;
+  showCash?: boolean;
+  rideFlow?: boolean;
+  selected?: string | null;
   onAddNewMethod: () => void;
-  showOffline: boolean;
-  showExternal: boolean;
-  showBusinessPaymentMethods: boolean;
-  selectedBusinessAccountId: string | null;
+  showOffline?: boolean;
+  showExternal?: boolean;
+  showBusinessPaymentMethods?: boolean;
+  selectedBusinessAccountId?: string | null;
 }
 
 const PaymentMethodPopup = ({
   isVisible,
   onCancel,
   onSubmit,
-  showCash,
-  rideFlow,
+  showCash = true,
+  rideFlow = false,
   selected,
   onAddNewMethod,
-  showOffline,
-  showExternal,
+  showOffline = false,
+  showExternal = false,
   showBusinessPaymentMethods,
   selectedBusinessAccountId,
 }: PaymentMethodPopupProps) => {
   const usePayments = PaymentsContext.useContainer();
   const { chosenService } = useContext(NewRidePageContext);
-  const [selectedPaymentId, setSelectedPaymentId] = useState<string | undefined>(selected);
+  const [selectedPaymentId, setSelectedPaymentId] = useState<string | null | undefined>(selected);
   const [activePaymentTab, setActivePaymentTab] = useState(
     selectedBusinessAccountId ? PAYMENT_MODES.BUSINESS : PAYMENT_MODES.PERSONAL,
   );
@@ -119,7 +118,6 @@ const PaymentMethodPopup = ({
       }
     };
 
-
     updateDefaultPaymentMethod();
   }, [usePayments.paymentMethods, selected, chosenService]);
 
@@ -144,6 +142,7 @@ const PaymentMethodPopup = ({
         const reason = getDisabledReason(paymentMethod);
         return (
           <PaymentMethod
+            key={paymentMethod.id}
             testIdPrefix="Dialog"
             {...paymentMethod}
             chooseMethodPage
@@ -163,10 +162,11 @@ const PaymentMethodPopup = ({
       )
   );
 
-
   return (
     <Modal
       isVisible={isVisible}
+      onBackButtonPress={onCancel}
+      onBackdropPress={onCancel}
     >
       <SummaryContainer>
         <TitleView>
@@ -195,6 +195,7 @@ const PaymentMethodPopup = ({
             {isBusinessMode ? (
               usePayments.businessPaymentMethods.map((paymentMethod: any) => (
                 <PaymentMethod
+                  key={paymentMethod.id}
                   testIdPrefix="Dialog"
                   noSvg
                   alignMarkToRight
@@ -248,15 +249,6 @@ PaymentMethodPopup.propTypes = {
   selected: PropTypes.string,
   showOffline: PropTypes.bool,
   showExternal: PropTypes.bool,
-};
-
-PaymentMethodPopup.defaultProps = {
-  onSave: null,
-  showCash: true,
-  rideFlow: false,
-  selected: null,
-  showOffline: false,
-  showExternal: false,
 };
 
 export default PaymentMethodPopup;

@@ -6,8 +6,9 @@ import React, {
 import BottomSheet, {
   BottomSheetFooter,
   BottomSheetHandle,
+  BottomSheetView,
 } from '@gorhom/bottom-sheet';
-import styled from 'styled-components';
+import styled from 'styled-components/native';
 import { Text, View } from 'react-native';
 import { Trans } from 'react-i18next';
 // eslint-disable-next-line import/no-unresolved
@@ -15,7 +16,7 @@ import SafeView from '../SafeView';
 import { BottomSheetContext } from '../../context/bottomSheetContext';
 
 const BottomSheetTopInfo = styled(View)<{backgroundColor: string}>`
-background-color: ${props => props.backgroundColor || '#989898'};
+background-color: ${(props) => props.backgroundColor || '#989898'};
 /* position: absolute;
 height: 38px;
 top: -38px; */
@@ -36,14 +37,22 @@ interface BottomSheetProps {
   children?: any,
   enablePanDownToClose?: boolean,
   index?: number,
-  closeable?: boolean
+  closeable?: boolean,
+  onClose?: () => void,
+  keyboardBehavior?: 'extend' | 'interactive' | 'fillParent',
+  keyboardBlurBehavior?: 'none' | 'restore',
+  topInset?: number,
 }
 
 const BottomSheetComponent = forwardRef(({
-  children,
-  enablePanDownToClose,
-  index,
-  closeable,
+  children = null,
+  enablePanDownToClose = false,
+  index = 0,
+  closeable = false,
+  onClose,
+  keyboardBehavior,
+  keyboardBlurBehavior,
+  topInset = 0,
 }: BottomSheetProps, ref) => {
   const {
     setIsExpanded,
@@ -90,9 +99,14 @@ const BottomSheetComponent = forwardRef(({
   return (
     <BottomSheet
       android_keyboardInputMode="adjustResize"
+      keyboardBehavior={keyboardBehavior}
+      keyboardBlurBehavior={keyboardBlurBehavior}
       ref={ref}
+      enableDynamicSizing={false}
       snapPoints={snapPoints}
+      topInset={topInset}
       onAnimate={onAnimate}
+      onClose={onClose}
       footerComponent={renderFooter}
       enablePanDownToClose={enablePanDownToClose}
       index={index}
@@ -112,22 +126,18 @@ const BottomSheetComponent = forwardRef(({
         borderRadius: 8,
       }}
     >
-      <SafeView
-        style={{
-          flex: 1,
-          flexDirection: 'column',
-        }}
-      >
-        {children}
-      </SafeView>
+      <BottomSheetView style={{ flex: 1 }}>
+        <SafeView
+          style={{
+            flex: 1,
+            flexDirection: 'column',
+          }}
+        >
+          {children}
+        </SafeView>
+      </BottomSheetView>
 
     </BottomSheet>
   );
 });
-BottomSheetComponent.defaultProps = {
-  children: null,
-  enablePanDownToClose: false,
-  index: 0,
-  closeable: false,
-};
 export default BottomSheetComponent;

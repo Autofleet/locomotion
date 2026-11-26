@@ -23,7 +23,7 @@ import {
 import RangeDateTimePicker from './RangeDateTimePicker';
 import * as navigationService from '../../services/navigation';
 
-const getCustomFilter = filterId => ({
+const getCustomFilter = (filterId) => ({
   [filterId]: {
     id: filterId,
     title: filterId,

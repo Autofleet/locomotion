@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled from 'styled-components/native';
 import { BaseText } from '../../Components/BaseText';
 import { ERROR_COLOR, FONT_SIZES, FONT_WEIGHTS } from '../../context/theme';
 import Button from '../../Components/Button';

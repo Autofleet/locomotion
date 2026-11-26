@@ -15,12 +15,20 @@ interface PageHeaderProps {
   displayIcon?: boolean,
   width?: number,
   showSkipButton?: boolean,
-  onPressSkip?: () => void,
+  onPressSkip?: (() => void) | null,
   action?: any,
 }
 
 const PageHeader = ({
-  title, icon, onIconPress, iconSide, displayIcon, width, showSkipButton, onPressSkip, action,
+  title,
+  icon = backArrow,
+  onIconPress = () => null,
+  iconSide = 'left',
+  displayIcon = true,
+  width = 25,
+  showSkipButton = false,
+  onPressSkip = null,
+  action = null,
 }: PageHeaderProps) => (
   <Header style={Platform.OS === 'android' ? { shadowColor: '#000' } : {}}>
     {displayIcon !== false
@@ -50,14 +58,3 @@ const PageHeader = ({
 );
 
 export default PageHeader;
-
-PageHeader.defaultProps = {
-  icon: backArrow,
-  iconSide: 'left',
-  onIconPress: () => null,
-  width: 25,
-  displayIcon: true,
-  showSkipButton: false,
-  onPressSkip: null,
-  action: null,
-};

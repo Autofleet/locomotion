@@ -1,9 +1,9 @@
-import styled from 'styled-components';
+import styled from 'styled-components/native';
 import { FONT_SIZES, FONT_WEIGHTS } from '../../context/theme';
 
 export const PriceCardContainer = styled.View`
   flex-direction: row;
-  margin: 5px 0 5px 15px
+  margin: 5px 0 5px 15px;
   width: 300px;
   justify-content: space-between;
    `;

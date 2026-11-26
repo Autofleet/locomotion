@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, TouchableOpacity } from 'react-native';
-import styled from 'styled-components';
+import styled from 'styled-components/native';
 import TextInput from '../../../../../Components/TextInput';
 import xIcon from '../../../../../assets/x.png';
 import stationIcon from '../../../../../assets/marker-tip.png';
@@ -171,7 +171,6 @@ export const HeaderIcon = styled.Image`
   width: ${({ width }) => (width || '18px')};
   height: ${({ height }) => (height || '18px')};
 `;
-
 
 export const StationIcon = styled.Image.attrs({ source: stationIcon })`
     display: flex;

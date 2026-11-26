@@ -5,7 +5,7 @@ import {
   Linking, Platform, Text, View,
 } from 'react-native';
 import Config from 'react-native-config';
-import styled, { ThemeContext } from 'styled-components';
+import styled, { useTheme } from 'styled-components/native';
 import { useBottomSheet } from '@gorhom/bottom-sheet';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import moment from 'moment';
@@ -69,6 +69,7 @@ const MainContent = styled(View)`
   flex: 1;
   width: 100%;
   margin-bottom: 5px;
+  min-height: 150px;
 `;
 
 const CardText = styled(View)`
@@ -175,19 +176,19 @@ const RIDE_STATES_TO_BS_PAGES = objDefault({
 });
 
 const BsPage = ({
-  onSecondaryButtonPress,
+  onSecondaryButtonPress = () => undefined,
   onButtonPress,
   Image,
-  children,
-  titleIcon,
+  children = undefined,
+  titleIcon = undefined,
   TitleText,
   SubTitleText,
   ButtonText,
-  SecondaryButtonText,
-  isLoading,
-  buttonDisabled,
-  warning,
-  fullWidthButtons,
+  SecondaryButtonText = undefined,
+  isLoading = false,
+  buttonDisabled = false,
+  warning = false,
+  fullWidthButtons = false,
   subtitleTestId,
 }: {
   onSecondaryButtonPress?: any,
@@ -209,25 +210,23 @@ const BsPage = ({
   return (
     <Container edges={['bottom']}>
       <MainContent>
-        <>
-          {TitleText && (
-            <Header>
-              <CardText style={{ width: Image ? '50%' : '100%' }}>
-                <TitleContainer>
-                  {titleIcon && <SvgIcon Svg={titleIcon} style={{ marginRight: 5 }} />}
-                  <Title>{TitleText}</Title>
-                </TitleContainer>
-                <SubTitle testID={subtitleTestId}>{SubTitleText}</SubTitle>
-              </CardText>
-              {Image ? (
-                <ImageContainer>
-                  {Image}
-                </ImageContainer>
-              ) : undefined}
-            </Header>
-          )}
-          {children}
-        </>
+        {TitleText && (
+          <Header>
+            <CardText style={{ width: Image ? '50%' : '100%' }}>
+              <TitleContainer>
+                {titleIcon && <SvgIcon Svg={titleIcon} style={{ marginRight: 5 }} />}
+                <Title>{TitleText}</Title>
+              </TitleContainer>
+              <SubTitle testID={subtitleTestId}>{SubTitleText}</SubTitle>
+            </CardText>
+            {Image ? (
+              <ImageContainer>
+                {Image}
+              </ImageContainer>
+            ) : undefined}
+          </Header>
+        )}
+        {children}
       </MainContent>
       <Footer fullWidthButtons={fullWidthButtons}>
         {ButtonText && (
@@ -256,17 +255,6 @@ const BsPage = ({
       </Footer>
     </Container>
   );
-};
-
-BsPage.defaultProps = {
-  children: undefined,
-  titleIcon: undefined,
-  onSecondaryButtonPress: () => undefined,
-  SecondaryButtonText: undefined,
-  isLoading: false,
-  buttonDisabled: false,
-  warning: false,
-  fullWidthButtons: false,
 };
 
 export default BsPage;
@@ -319,7 +307,7 @@ export const ConfirmPickupTime = (props: any) => {
     || i18n.t('general.noTimeWindow');
   const renderDatePickerTitle = () => (
     <>
-      <PickerTitle>{i18n.t('bottomSheetContent.ride.chosePickupTime')}</PickerTitle>
+      <PickerTitle>{String(i18n.t('bottomSheetContent.ride.chosePickupTime'))}</PickerTitle>
       <PickerDate>{moment(tempSelectedDate).format('dddd, MMM Do')}</PickerDate>
       <PickerTimeRange>{`${afterTimeTitle} - ${beforeTimeTitle}`}</PickerTimeRange>
 
@@ -363,7 +351,6 @@ export const ConfirmPickupTime = (props: any) => {
       </RoundedButton>
       <DatePickerPoppup
         testID="datePicker"
-        textColor="black"
         isVisible={isDatePickerOpen}
         date={tempSelectedDate}
         maximumDate={getFutureRideMaxDate(futureBookingDays)}
@@ -439,7 +426,7 @@ export const CancelRide = (props: any) => {
         }
       }}
       onSecondaryButtonPress={() => changeBsPage(
-        RIDE_STATES_TO_BS_PAGES[ride.state || RIDE_STATES.ACTIVE],
+        RIDE_STATES_TO_BS_PAGES[ride?.state || RIDE_STATES.ACTIVE],
       )}
       warning
       buttonDisabled={isLoading}
@@ -476,13 +463,13 @@ export const ConfirmFutureRide = (props: any) => {
 
   const getPickupDisplay = () => {
     const pickup = (newFutureRide?.stopPoints || [])
-      .find(sp => sp.type === STOP_POINT_TYPES.STOP_POINT_PICKUP);
+      .find((sp) => sp.type === STOP_POINT_TYPES.STOP_POINT_PICKUP);
     const pickupText = i18n.t('bottomSheetContent.confirmFutureRide.pickupText', { address: pickup?.description });
     return <TextRowWithIcon text={pickupText} />;
   };
   const getDropOffDisplay = () => {
     const dropOff = (newFutureRide?.stopPoints || [])
-      .find(sp => sp.type === STOP_POINT_TYPES.STOP_POINT_DROPOFF);
+      .find((sp) => sp.type === STOP_POINT_TYPES.STOP_POINT_DROPOFF);
     const dropOffText = i18n.t('bottomSheetContent.confirmFutureRide.dropOffText', { address: dropOff?.description });
     return <TextRowWithIcon text={dropOffText} />;
   };
@@ -503,7 +490,7 @@ export const ConfirmFutureRide = (props: any) => {
 
 export const NotAvailableHere = (props: any) => {
   const { setSnapPointsState, setIsExpanded } = useContext(BottomSheetContext);
-  const { primaryColor } = useContext(ThemeContext);
+  const { primaryColor } = useTheme();
   useEffect(() => {
     setSnapPointsState(SNAP_POINT_STATES.NOT_IN_TERRITORY);
     setIsExpanded(false);
@@ -592,7 +579,7 @@ export const NoPayment = (props: any) => {
   } = payments.useContainer();
 
   const proceedIfPaymentMethodsAreValid = () => {
-    if (clientHasValidPaymentMethods() || ride.paymentMethodId === PAYMENT_METHODS.CASH) {
+    if (clientHasValidPaymentMethods() || ride?.paymentMethodId === PAYMENT_METHODS.CASH) {
       requestRide();
     }
   };
@@ -603,7 +590,7 @@ export const NoPayment = (props: any) => {
 
   useEffect(() => {
     proceedIfPaymentMethodsAreValid();
-  }, [ride.paymentMethodId]);
+  }, [ride?.paymentMethodId]);
 
   return (
     <BsPage
@@ -652,11 +639,13 @@ export const ConfirmingRide = (props: any) => {
     : i18n.t('bottomSheetContent.confirmingRide.titleText');
 
   const windowSize = chosenService?.futurePickupWindowSizeInMinutes;
-  const beforeTime = windowSize ? moment(ride.scheduledTo).add(windowSize, 'minutes').format('h:mm A') : i18n.t('general.noTimeWindow');
+  const beforeTime = windowSize ? moment(ride?.scheduledTo).add(windowSize, 'minutes').format('h:mm A') : i18n.t('general.noTimeWindow');
 
   const SubTitleText = ride?.scheduledTo
-    ? i18n.t('bottomSheetContent.confirmingFutureRide.subTitleText',
-      { date: moment(ride.scheduledTo).format('MMM D, h:mm A'), beforeTime })
+    ? i18n.t(
+      'bottomSheetContent.confirmingFutureRide.subTitleText',
+      { date: moment(ride?.scheduledTo).format('MMM D, h:mm A'), beforeTime },
+    )
     : null;
   return (
     <BsPage
@@ -685,7 +674,7 @@ export const ConfirmingRide = (props: any) => {
 
 export const NoAvailableVehicles = (props: any) => {
   const { setSnapPointsState } = useContext(BottomSheetContext);
-  const { primaryColor } = useContext(ThemeContext);
+  const { primaryColor } = useTheme();
 
   useEffect(() => {
     setSnapPointsState(SNAP_POINT_STATES.NO_AVAILABLE_VEHICLES);

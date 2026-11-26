@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 
-
 import SelectModal from '../../../../../../Components/SelectModal';
 
 interface Item {
@@ -8,21 +7,27 @@ interface Item {
   label: string;
 }
 
+interface PassengersCounterProps {
+  service?: { availableSeats?: number } | null;
+  onSelect: (value: number) => void;
+  onError?: (error: boolean) => void;
+  selectedValue?: number | null;
+}
+
 const PassengersCounter = ({
-  service, onSelect, onError = () => null, selectedValue,
-}) => {
+  service, onSelect, onError = () => null, selectedValue = null,
+}: PassengersCounterProps) => {
   const [passengersOptions, setPassengersOptions] = useState<Item[]>([]);
 
   useEffect(() => {
     if (service?.availableSeats) {
-      const array = [];
+      const array: Item[] = [];
       for (let i = 1; i <= service.availableSeats; i += 1) {
         array.push({ label: i.toString(), value: i });
       }
       setPassengersOptions(array);
     }
   }, [service]);
-
 
   const onItemSelect = (item: Item) => {
     onSelect(item?.value);
@@ -35,8 +40,5 @@ const PassengersCounter = ({
       selectedValue={selectedValue}
     />
   );
-};
-PassengersCounter.defaultProps = {
-  selectedValue: null,
 };
 export default PassengersCounter;

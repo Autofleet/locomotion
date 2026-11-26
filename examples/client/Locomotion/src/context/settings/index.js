@@ -16,14 +16,12 @@ const fieldNameToSettingKeyMap = {
   measureSystem: settingsKeys.MEASURE_SYSTEM,
 };
 
-
 const useSettings = () => {
   const [settingsList, setSettingsList] = useState({});
   const [workingHours, setWorkingHours] = useState({});
   const [measureSystem, setMeasureSystem] = useState('metric');
   const [appSettingsState, setAppSettingsState] = useState({});
   const [showPrice, setShowPrice] = useState(false);
-
 
   const getSettingByKey = async (key, invalidateCache = false) => {
     let value = await StorageService.get(key);
@@ -39,7 +37,7 @@ const useSettings = () => {
   const getMultipleSettingByKey = async (keys) => {
     const keyValueMap = await StorageService.get(keys);
     const cachedKeys = Object.keys(keyValueMap);
-    const keysAfterCache = cachedKeys.filter(cacheKey => !Object.keys(keyValueMap)
+    const keysAfterCache = cachedKeys.filter((cacheKey) => !Object.keys(keyValueMap)
       .includes(cacheKey) || keyValueMap[cacheKey] === undefined);
     const settingMap = {};
     if (keysAfterCache.length > 0) {
@@ -65,7 +63,7 @@ const useSettings = () => {
     // this format meant for us not changing a lot of code in case changing settings keys
     Object.keys(loginSettings).map((key) => {
       const fieldName = Object.keys(fieldNameToSettingKeyMap)
-        .find(field => fieldNameToSettingKeyMap[field] === key);
+        .find((field) => fieldNameToSettingKeyMap[field] === key);
       formattedResult[fieldName] = loginSettings[key];
       return formattedResult;
     });

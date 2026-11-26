@@ -1,12 +1,11 @@
 import React from 'react';
-import styled from 'styled-components';
+import styled from 'styled-components/native';
 import SvgIcon from '../../../../Components/SvgIcon';
 import HistoryIcon from '../../../../assets/recent_search.svg';
 import GeoIcon from '../../../../assets/geo_location.svg';
 import LocationPinIcon from '../../../../assets/location_pin.svg';
 import Button from '../../../../Components/Button';
 import { AddressLineSkeleton } from './Skeleton/AddressLineSkeleton';
-
 
 const ICONS = {
   history: HistoryIcon,
@@ -45,7 +44,6 @@ const AddressContainer = styled.View`
     align-self: center;
 `;
 
-
 const AddressText = styled.Text.attrs({
   numberOfLines: 1,
 })`
@@ -73,7 +71,6 @@ const Icon = styled(SvgIcon).attrs(({ actionButton, theme }) => ({
   stroke: actionButton ? theme.primaryColor : theme.textColor,
   fill: actionButton ? theme.primaryColor : theme.textColor,
 }))``;
-
 
 const AddressRow = ({
   text,

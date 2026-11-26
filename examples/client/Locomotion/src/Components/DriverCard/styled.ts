@@ -1,5 +1,5 @@
 import { Image, Text, View } from 'react-native';
-import styled from 'styled-components';
+import styled from 'styled-components/native';
 import { FONT_SIZES, FONT_WEIGHTS } from '../../context/theme';
 
 const BaseRideViewContainer = styled(View)`
@@ -32,7 +32,6 @@ export const DriverRatingText = styled(Text)`
     color: ${({ theme }) => theme.disabledColor};
 `;
 
-
 export const DriverDetailText = styled<any>(Text)`
     ${({ activeRide }) => (activeRide ? FONT_SIZES.H2 : FONT_SIZES.LARGE)};
     ${FONT_WEIGHTS.MEDIUM}
@@ -45,13 +44,10 @@ export const DriverAvatar = styled(Image)`
   border-radius: 100px;
   border-color: ${({ theme }) => theme.primaryColor};
   border-width: 4;
-  border-radius: 100;
  `;
-
 
 export const DriverSectionContainer = styled(BaseRideViewContainer)`
 `;
-
 
 export const DriverRatingContainer = styled(View)`
   flex-direction: row;

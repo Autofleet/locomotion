@@ -6,7 +6,7 @@ import {
   BottomSheetScrollView,
 } from '@gorhom/bottom-sheet';
 
-import styled, { ThemeContext } from 'styled-components';
+import styled, { ThemeContext } from 'styled-components/native';
 import SvgIcon from '../../../../Components/SvgIcon';
 import { RIDE_POPUPS, formatDistanceByMeasurement } from '../../../../context/newRideContext/utils';
 import GenericErrorPopup from '../../../../popups/GenericError';
@@ -87,7 +87,6 @@ const AddressSelectorBottomSheet = ({ addressSelectorFocusIndex }) => {
   } = useContext(BottomSheetContext);
 
   const { expand, collapse } = useBottomSheet();
-
 
   const loadHistory = async () => {
     userContext.loadHistory();
@@ -174,6 +173,7 @@ const AddressSelectorBottomSheet = ({ addressSelectorFocusIndex }) => {
             <>
               {locationGranted && userContext.addressSearchLabel && userContext.addressSearchLabel !== '' ? (
                 <AddressRow
+                  key="addressSearchLabel"
                   border={false}
                   text={userContext.addressSearchLabel}
                   onPress={() => null}
@@ -212,8 +212,7 @@ const AddressSelectorBottomSheet = ({ addressSelectorFocusIndex }) => {
               </BottomSheetScrollView>
             </>
           )
-          : getHistoryRows()
-          }
+          : getHistoryRows()}
       </HistoryContainer>
       <GenericErrorPopup
         isVisible={userContext.ridePopup === RIDE_POPUPS.FAILED_SERVICE_REQUEST}

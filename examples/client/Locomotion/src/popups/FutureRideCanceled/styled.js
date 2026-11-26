@@ -1,5 +1,5 @@
 import React from 'react';
-import styled from 'styled-components';
+import styled from 'styled-components/native';
 import xIcon from '../../assets/x.png';
 import Button from '../../Components/Button';
 
@@ -9,7 +9,7 @@ export const Container = styled.View`
   background-color: white;
   justify-content: center;
   align-items: center;
-  border-radius: 2;
+  border-radius: 2px;
   border-color: rgba(0, 0, 0, 0.1);
   overflow: hidden;
 `;

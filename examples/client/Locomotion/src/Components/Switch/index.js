@@ -1,5 +1,5 @@
 import React from 'react';
-import styled from 'styled-components';
+import styled from 'styled-components/native';
 import propsTypes from 'prop-types';
 
 const Switch = styled.Switch`
@@ -7,17 +7,14 @@ const Switch = styled.Switch`
   margin-top: -15px;
 `;
 
-const MyRow = ({ onChange, active }) => (
-  <Switch onTintColor="#23a0fe" tintColor="#dedede" thumbTintColor="#fafafc" onValueChange={onChange} value={active} />
-);
+const MyRow = (props) => {
+  const { onChange = () => null, active = false } = props;
+  return (
+    <Switch onTintColor="#23a0fe" tintColor="#dedede" thumbTintColor="#fafafc" onValueChange={onChange} value={active} />
+  );
+};
 
 export default MyRow;
-
-MyRow.defaultProps = {
-  text: '',
-  active: false,
-  onChange: () => null,
-};
 
 MyRow.propTypes = {
   text: propsTypes.string,

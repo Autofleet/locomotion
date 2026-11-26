@@ -1,0 +1,43 @@
+diff --git a/node_modules/@stripe/stripe-react-native/ios/NewArch/ConnectAccountOnboardingViewComponentView.mm b/node_modules/@stripe/stripe-react-native/ios/NewArch/ConnectAccountOnboardingViewComponentView.mm
+new file mode 100644
+index 0000000..0e0751d
+--- /dev/null
++++ b/node_modules/@stripe/stripe-react-native/ios/NewArch/ConnectAccountOnboardingViewComponentView.mm
+@@ -0,0 +1,9 @@
++#import <React/RCTFabricComponentsPlugins.h>
++#import <React/RCTViewComponentView.h>
++
++// On older versions of react-native every single spec is linked so we need
++// to include a dummy implementation to avoid linker errors.
++Class<RCTComponentViewProtocol> ConnectAccountOnboardingViewCls(void)
++{
++  return RCTViewComponentView.class;
++}
+diff --git a/node_modules/@stripe/stripe-react-native/ios/NewArch/PaymentMethodMessagingElementViewComponentView.mm b/node_modules/@stripe/stripe-react-native/ios/NewArch/PaymentMethodMessagingElementViewComponentView.mm
+new file mode 100644
+index 0000000..9f6758c
+--- /dev/null
++++ b/node_modules/@stripe/stripe-react-native/ios/NewArch/PaymentMethodMessagingElementViewComponentView.mm
+@@ -0,0 +1,9 @@
++#import <React/RCTFabricComponentsPlugins.h>
++#import <React/RCTViewComponentView.h>
++
++// On older versions of react-native every single spec is linked so we need
++// to include a dummy implementation to avoid linker errors.
++Class<RCTComponentViewProtocol> PaymentMethodMessagingElementViewCls(void)
++{
++  return RCTViewComponentView.class;
++}
+diff --git a/node_modules/@stripe/stripe-react-native/ios/StripeSwiftInterop.h b/node_modules/@stripe/stripe-react-native/ios/StripeSwiftInterop.h
+index c7a804d..2dfbfdb 100644
+--- a/node_modules/@stripe/stripe-react-native/ios/StripeSwiftInterop.h
++++ b/node_modules/@stripe/stripe-react-native/ios/StripeSwiftInterop.h
+@@ -11,7 +11,7 @@
+ @protocol STPPaymentCardTextFieldDelegate;
+ @protocol STPCardFormViewDelegate;
+
+-typedef NS_ENUM(NSUInteger, STPPaymentStatus);
++typedef NS_ENUM(NSInteger, STPPaymentStatus);
+
+ // stripe_react_native-Swift.h also depends on these headers.
+ #import <React/RCTBridgeModule.h>

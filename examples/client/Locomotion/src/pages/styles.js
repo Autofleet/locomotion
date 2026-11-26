@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled from 'styled-components/native';
 import SafeView from '../Components/SafeView';
 
 export const PageContainer = styled(SafeView)`

@@ -1,6 +1,6 @@
 import React from 'react';
 import { View } from 'react-native';
-import styled from 'styled-components';
+import styled from 'styled-components/native';
 import moment from 'moment';
 
 import i18n from '../../../../I18n';
@@ -22,7 +22,6 @@ export const StopPointDot = styled.View`
   border-radius: 10px;
   /* margin-top: 10; */
 `;
-
 
 export const PickupRow = styled.View`
 ${address}
@@ -46,7 +45,6 @@ const StopPointDotTimeLine = styled.View`
   flex: 1;
   background-color: #dbdbdb;
 `;
-
 
 const AddressTextCont = styled.View`
 `;

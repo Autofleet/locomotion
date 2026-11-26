@@ -6,7 +6,7 @@ import { getDeviceId } from './device';
 
 const { MIXPANEL_EVENTS_NUMBER } = Config;
 
-export const getElementName = props => props.testID || props.id;
+export const getElementName = (props) => props.testID || props.id;
 
 const getRandomNumberByUuid = (uuid) => {
   try {
@@ -43,9 +43,10 @@ class MixpanelService {
 
     if (!this.isInit && Config.MIXPANEL_TOKEN) {
       const trackAutomaticEvents = true;
+      const serverURL = Config.MIXPANEL_SERVER_URL || 'https://api-eu.mixpanel.com';
       this.mixpanel = new Mixpanel(Config.MIXPANEL_TOKEN, trackAutomaticEvents);
 
-      this.mixpanel.init();
+      this.mixpanel.init(undefined, undefined, serverURL);
       this.mixpanel.setLoggingEnabled(true);
       this.isInit = true;
     }
@@ -70,12 +71,14 @@ class MixpanelService {
   trackWithProperties = (event, props) => {
     if (!this.isInit) return;
     if (this.isInit && this.mixpanel) {
-      this.mixpanel.track(event,
+      this.mixpanel.track(
+        event,
         {
           ...props,
           demandSourceId: Config.OPERATION_ID,
           appName: Config.OPERATION_NAME,
-        });
+        },
+      );
     }
   };
 

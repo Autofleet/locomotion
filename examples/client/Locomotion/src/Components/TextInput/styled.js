@@ -1,6 +1,6 @@
 import React from 'react';
 import { Text, View } from 'react-native';
-import styled from 'styled-components';
+import styled from 'styled-components/native';
 import { BottomSheetTextInput } from '@gorhom/bottom-sheet';
 import plusImage from '../../assets/plus.png';
 
@@ -11,17 +11,16 @@ border-bottom-color: #e2e2e2;
 border-bottom-width: 1px;
 `;
 
-const fullBorderStyles = isFocused => `
-backgroundColor: #f1f2f6;
-borderRadius: 8px;
-${isFocused && `
-    border-width: 1px
-    border-color: #333333
-`};
-
+const fullBorderStyles = (isFocused) => `
+background-color: #f1f2f6;
+border-radius: 8px;
+${isFocused ? `
+    border-width: 1px;
+    border-color: #333333;
+` : ''}
 `;
 
-export const Input = styled.TextInput.attrs(props => ({
+export const Input = styled.TextInput.attrs((props) => ({
   placeholderTextColor: props.theme.disabledColor,
 }))`
     width: 100%;
@@ -45,7 +44,6 @@ export const BottomSheetInput = styled(BottomSheetTextInput)`
   flex: 1;
   margin-right: ${({ dragIsRendered, clearIsRendered }) => ((dragIsRendered && !clearIsRendered) ? '12px' : '0px')};
 `;
-
 
 export const BottomSheetInputContainer = styled(View)`
   flex-direction: row;

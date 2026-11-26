@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import styled from 'styled-components';
+import styled from 'styled-components/native';
 import Loader from '../Loader';
 import Mixpanel from '../../services/Mixpanel';
 
@@ -43,6 +43,5 @@ const Button = (props) => {
     </Container>
   );
 };
-
 
 export default Button;

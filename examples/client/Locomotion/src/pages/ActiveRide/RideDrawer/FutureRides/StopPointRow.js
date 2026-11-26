@@ -1,5 +1,5 @@
 import React from 'react';
-import styled from 'styled-components';
+import styled from 'styled-components/native';
 
 import i18n from '../../../../I18n';
 import Button from '../../../../Components/Button';
@@ -20,7 +20,6 @@ export const StopPointDot = styled.View`
   border-radius: 10px;
   /* margin-top: 10; */
 `;
-
 
 export const PickupRow = styled.View`
 ${address}
@@ -44,7 +43,6 @@ const StopPointDotTimeLine = styled.View`
   flex: 1;
   background-color: #dbdbdb;
 `;
-
 
 const AddressTextCont = styled.View`
 `;

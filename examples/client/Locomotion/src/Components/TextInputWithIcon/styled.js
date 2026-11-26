@@ -1,14 +1,12 @@
-import styled from 'styled-components';
+import styled from 'styled-components/native';
 
 import { ERROR_COLOR } from '../../context/theme';
-
 
 export const IconContainer = styled.View`
   position: absolute;
   right: 15;
   top: 15;
 `;
-
 
 export const InputIconContainer = styled.View`
     flex-direction: row;

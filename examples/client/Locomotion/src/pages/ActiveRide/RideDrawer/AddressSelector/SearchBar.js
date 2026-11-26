@@ -4,7 +4,7 @@ import React, {
 import {
   Animated, View,
 } from 'react-native';
-import styled from 'styled-components';
+import styled from 'styled-components/native';
 import { debounce } from 'lodash';
 import shortid from 'shortid';
 import DraggableFlatList from 'react-native-draglist';
@@ -44,7 +44,6 @@ const Row = styled(Animated.View)`
     
 `;
 
-
 const BackButtonContainer = styled.TouchableOpacity`
     width: 40px;
     height: 50px;
@@ -56,12 +55,10 @@ const BackButtonContainer = styled.TouchableOpacity`
 
 `;
 
-
 const ArrowImage = styled.Image.attrs({ source: backImage })`
     width: 25px;
     height: 25px;
 `;
-
 
 const BackButton = ({ isExpanded, onBack }) => {
   if (!isExpanded) {
@@ -100,13 +97,13 @@ const SearchBar = ({
   const SP_AMOUNT_WITHOUT_MULTI = 2;
   const [searchTerm, setSearchTerm] = useState('');
   const [multiSpAmount, setMultiSpAmount] = useState(0);
-  const debouncedSearch = useCallback(debounce(async text => onSearch(text), 300), [locationGranted]);
+  const debouncedSearch = useCallback(debounce(async (text) => onSearch(text), 300), [locationGranted]);
   const isMultiSpEnabled = multiSpAmount > 0 && isExpanded;
   const amountOfEnteredSp = requestStopPoints.length;
   const canAddMoreMultiSp = isMultiSpEnabled
   && amountOfEnteredSp < multiSpAmount + SP_AMOUNT_WITHOUT_MULTI;
   const hasEnteredMultiSp = amountOfEnteredSp > SP_AMOUNT_WITHOUT_MULTI;
-  const isSpIndexMulti = i => hasEnteredMultiSp && i > 0 && i < amountOfEnteredSp - 1;
+  const isSpIndexMulti = (i) => hasEnteredMultiSp && i > 0 && i < amountOfEnteredSp - 1;
   const getSpPlaceholder = (sp, index) => {
     if (isSpIndexMulti(index)) {
       return 'addressView.multiStopPlaceholder';
@@ -116,7 +113,6 @@ const SearchBar = ({
     }
     return 'addressView.whereTo';
   };
-
 
   const onInputFocus = (target, index) => {
     setSelectedInputTarget(target);
@@ -158,14 +154,14 @@ const SearchBar = ({
   const renderDraggableItem = ({
     onStartDrag, item, onEndDrag,
   }) => {
-    const index = requestStopPoints.indexOf(item);
-    const sp = requestStopPoints[index];
+    const index = requestStopPoints.findIndex((s) => s.id === item.id);
+    const sp = index === -1 ? item : requestStopPoints[index];
+    if (!sp) return null;
     const { type, description } = sp;
     const placeholder = getSpPlaceholder(sp, index);
     const rowProps = index === 0 ? { isExpanded } : { setMargin: true };
     const autoFocus = isExpanded && index === selectedIndex;
     return (
-
 
       <Row
         {...rowProps}
@@ -196,7 +192,7 @@ const SearchBar = ({
           }}
           isMultiSpEnabled={isMultiSpEnabled}
           hasEnteredMultiSp={hasEnteredMultiSp}
-          onPressIn={e => e.currentTarget?.setSelection((description?.length || 0), (description?.length || 0))}
+          onPressIn={(e) => e.currentTarget?.setSelection((description?.length || 0), (description?.length || 0))}
           key={`input_${sp.id}`}
           autoCorrect={false}
           clear={() => {
@@ -229,8 +225,7 @@ const SearchBar = ({
             if (e.currentTarget?.setSelection) {
               e.currentTarget?.setSelection(1, 1);
             }
-          }
-          }
+          }}
           onBlur={(e) => {
             if (e.currentTarget?.setSelection) {
               e.currentTarget?.setSelection(1, 1);
@@ -239,7 +234,6 @@ const SearchBar = ({
         />
       </Row>
 
-
     );
   };
   const buildSps = () => (
@@ -247,7 +241,7 @@ const SearchBar = ({
       data={requestStopPoints}
       scrollEnabled={false}
       renderItem={renderDraggableItem}
-      keyExtractor={item => item.id}
+      keyExtractor={(item) => item.id}
       keyboardShouldPersistTaps="always"
       onReordered={(fromIndex, toIndex) => {
         const newSps = [...requestStopPoints];
@@ -256,11 +250,9 @@ const SearchBar = ({
         const formattedMovedStopPoints = formatMovedMultiSps(newSps);
         setRequestStopPoints(formattedMovedStopPoints);
         Mixpanel.setEvent('finished drag multi sps', { formattedMovedStopPoints });
-      }
-      }
+      }}
     />
   );
-
 
   const onBackPress = useCallback(() => {
     initSps();
@@ -270,7 +262,6 @@ const SearchBar = ({
     }
     onBack();
   });
-
 
   useEffect(() => {
     if (!isExpanded && selectedInputTarget) {

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, Fragment } from 'react';
 import { Text, View } from 'react-native';
-import styled from 'styled-components';
+import styled from 'styled-components/native';
 import i18n from '../../../../I18n';
 import { getTogglePopupsState } from '../../../../context/state';
 import Button from '../../../../Components/Button';
@@ -61,7 +61,7 @@ const SetPassengerAmountContainer = styled.View`
   height: 50px;
   border-width: 1;
   border-color: #dedede;
-  border-radius: 2;
+  border-radius: 2px;
   align-self: center;
 `;
 
@@ -117,7 +117,7 @@ export default ({ amount, onChange }) => {
 
   const validateChange = (validationAmount, change) => MAX_NUMBER_OF_PASSENGER >= (validationAmount + change) && (validationAmount + change) >= MIN_NUMBER_OF_PASSENGER;
 
-  const getNewAmountFunction = change => () => {
+  const getNewAmountFunction = (change) => () => {
     if (!validateChange(newAmount, change)) {
       return;
     }

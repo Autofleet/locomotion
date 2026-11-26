@@ -1,9 +1,9 @@
 /* eslint-disable no-nested-ternary */
 /* eslint-disable no-mixed-operators */
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text } from 'react-native';
 import moment from 'moment';
-import styled, { ThemeContext } from 'styled-components';
+import styled, { useTheme } from 'styled-components/native';
 import { PaymentIcon } from 'react-native-payment-icons';
 import { RideInterface, RidePageContext } from '../../context/newRideContext';
 import { PAYMENT_METHODS, paymentMethodToIconMap } from '../../pages/Payments/consts';
@@ -16,6 +16,7 @@ import { Start, StartCapital } from '../../lib/text-direction';
 import chevronIcon from '../../assets/chevron.svg';
 import { isCashPaymentMethod, isExternalPaymentMethod, isOfflinePaymentMethod } from '../../lib/ride/utils';
 import paymentContext from '../../context/payments';
+import { GetBusinessAccountById } from '../../context/payments/interface';
 
 type ContainerProps = {
   children: React.ReactNode,
@@ -31,7 +32,7 @@ const InnerContainer = styled(View)`
 `;
 
 const Container = styled(View) < ContainerProps >`
-  background-color: ${(props: any) => (props.selected ? '#rgba(36, 170, 242, 0.2)' : '#fff')};
+  background-color: ${(props: any) => (props.selected ? 'rgba(36, 170, 242, 0.2)' : '#fff')};
   min-height: 50px;
   flex-direction: column;
   justify-content: center;
@@ -85,26 +86,28 @@ const PlusText = styled(Text)`
   line-height: 16px;
 `;
 
-
 const style = {
   marginTop: -10,
   [StartCapital()]: 28,
 };
 
-
 const CardRow = (paymentMethod: any) => {
-  const { primaryColor } = useContext(ThemeContext);
+  const { primaryColor } = useTheme();
   const {
     offlinePaymentText,
     loadOfflinePaymentText,
     getBusinessAccountById,
+  }: {
+    offlinePaymentText: string,
+    loadOfflinePaymentText: () => void,
+    getBusinessAccountById: GetBusinessAccountById,
   } = paymentContext.useContainer();
   const { businessAccountId } = paymentMethod;
   const [isCardExpired, setIsCardExpired] = useState(false);
 
   const getPaymentMethodTitle = () => {
     if (businessAccountId) {
-      const { name } = getBusinessAccountById(businessAccountId);
+      const { name } = getBusinessAccountById(businessAccountId) ?? {};
       return name;
     }
 
@@ -167,92 +170,85 @@ const CardRow = (paymentMethod: any) => {
   };
 
   return (
-    <>
-      <Button
-        noBackground
-        testID={testID}
-        activeOpacity={paymentMethod.onPress && !paymentMethod.disabledReason ? 0 : 1}
-        onPress={() => {
-          if (paymentMethod.onPress && !paymentMethod.disabledReason) {
-            paymentMethod.onPress();
-          }
-        }}
-      >
-        <Container
-          chooseMethodPage={paymentMethod.chooseMethodPage}
-          selected={paymentMethod.selected}
-          disabled={paymentMethod.disabledReason}
-        >
-          <InnerContainer>
-            <ImageContainer>
-              {paymentMethod.addNew
-                ? (
-                  <>
-                    <PlusContainer><PlusText>+</PlusText></PlusContainer>
-                  </>
-                )
-                : (
-                  <>
-                    {getPaymentMethodIcon()}
-                    {(paymentMethod.mark && !paymentMethod.alignMarkToRight) ? (
-                      <SvgIcon
-                        style={{
-                          position: 'absolute',
-                          right: -7,
-                          bottom: -7,
-                        }}
-                        Svg={selected}
-                        fill={primaryColor}
-                      />
-                    ) : null }
-                  </>
-                )
+    <Button
+      noBackground
+      testID={testID}
+      activeOpacity={paymentMethod.onPress && !paymentMethod.disabledReason ? 0 : 1}
+      onPress={() => {
+        if (paymentMethod.onPress && !paymentMethod.disabledReason) {
+          paymentMethod.onPress();
         }
+      }}
+    >
+      <Container
+        chooseMethodPage={paymentMethod.chooseMethodPage}
+        selected={paymentMethod.selected}
+        disabled={paymentMethod.disabledReason}
+      >
+        <InnerContainer>
+          <ImageContainer>
+            {paymentMethod.addNew
+              ? (
+                <PlusContainer><PlusText>+</PlusText></PlusContainer>
+              )
+              : (
+                <>
+                  {getPaymentMethodIcon()}
+                  {(paymentMethod.mark && !paymentMethod.alignMarkToRight) ? (
+                    <SvgIcon
+                      style={{
+                        position: 'absolute',
+                        right: -7,
+                        bottom: -7,
+                      }}
+                      Svg={selected}
+                      fill={primaryColor}
+                    />
+                  ) : null }
+                </>
+              )}
 
-            </ImageContainer>
-            <TextContainer>
-              {paymentMethod.addNew
-                ? (
-                  <>
-                    <Type>{i18n.t('payments.addNewCreditCard').toString()}</Type>
-                  </>
-                )
-                : (
-                  <>
+          </ImageContainer>
+          <TextContainer>
+            {paymentMethod.addNew
+              ? (
+                <Type>{i18n.t('payments.addNewCreditCard').toString()}</Type>
+              )
+              : (
+                <>
 
-                    <Type>
-                      {getPaymentMethodTitle()}
-                    </Type>
+                  <Type>
+                    {getPaymentMethodTitle()}
+                  </Type>
 
-                    {paymentMethod.lastFour
-                      ? <Description>{getLastFourForamttedShort(paymentMethod.lastFour)}</Description>
-                      : null}
-                    {paymentMethod && paymentMethod.expiresAt && !!paymentMethod.lastFour && isCardExpired ? <Error>{i18n.t('payments.expired').toString()}</Error> : null}
-                    {paymentMethod && !!paymentMethod.lastFour && paymentMethod.hasOutstandingBalance ? <Error>{i18n.t('payments.hasOutstandingBalance').toString()}</Error> : null}
-                  </>
-                )}
-            </TextContainer>
-            {paymentMethod.showArrow && <SvgIcon Svg={chevronIcon} stroke="#d7d7d7" />}
-          </InnerContainer>
-          {paymentMethod.disabledReason && (
+                  {paymentMethod.lastFour
+                    ? <Description>{getLastFourForamttedShort(paymentMethod.lastFour)}</Description>
+                    : null}
+                  {paymentMethod && paymentMethod.expiresAt && !!paymentMethod.lastFour && isCardExpired ? <Error>{i18n.t('payments.expired').toString()}</Error> : null}
+                  {paymentMethod && !!paymentMethod.lastFour && paymentMethod.hasOutstandingBalance ? <Error>{i18n.t('payments.hasOutstandingBalance').toString()}</Error> : null}
+                </>
+              )}
+          </TextContainer>
+          {paymentMethod.showArrow && <SvgIcon Svg={chevronIcon} stroke="#d7d7d7" />}
+        </InnerContainer>
+        {paymentMethod.disabledReason && (
           <Description>
             {paymentMethod.disabledReason}
           </Description>
-          )}
-          {(paymentMethod.mark && paymentMethod.alignMarkToRight) ? (
-            <SvgIcon
-              style={{
-                position: 'absolute',
-                right: 10,
-                bottom: 15,
-              }}
-              Svg={selected}
-              fill={primaryColor}
-            />
-          ) : null }
-        </Container>
-      </Button>
-    </>
+        )}
+        {(paymentMethod.mark && paymentMethod.alignMarkToRight) ? (
+          <SvgIcon
+            style={{
+              position: 'absolute',
+              right: 10,
+              bottom: 15,
+            }}
+            Svg={selected}
+            fill={primaryColor}
+          />
+        ) : null }
+      </Container>
+    </Button>
   );
 };
 

@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled from 'styled-components/native';
 import Button from '../../../Components/Button';
 import { isAndroid } from '../../../services/isAndroid';
 
@@ -30,7 +30,7 @@ export const FilterText = styled.Text`
   font-size: 16px;
 `;
 
-export const FilterBarContainer = styled.ScrollView.attrs(props => ({
+export const FilterBarContainer = styled.ScrollView.attrs((props) => ({
   accessibilityLabel: props.testID,
   testID: props.testID,
   horizontal: true,

@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import i18n from '../../../I18n';
 import { ButtonText, NavButton } from './styles';
 
-
 const SaveButton = ({
   isInvalid, onFail, onNext, buttonText, isLoading,
 }) => {

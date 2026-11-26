@@ -16,9 +16,10 @@ const TaskFilterBar = ({ filter, activeFilter }) => {
   );
 };
 
-const FilterBar = React.memo(({
-  filters, activeFilter, onFilterClicked,
-}) => {
+const FilterBar = React.memo((props) => {
+  const {
+    filters = {}, activeFilter = undefined, onFilterClicked = () => null,
+  } = props;
   const { savedFilterScrollPos, saveFilterScrollPos } = useContext(rideHistoryContext);
   const scrollView = useRef();
 
@@ -38,10 +39,10 @@ const FilterBar = React.memo(({
       ref={(ref) => {
         scrollView.current = ref;
       }}
-      onScrollEndDrag={e => saveScrollPos(e)}
+      onScrollEndDrag={(e) => saveScrollPos(e)}
       onContentSizeChange={onContentSizeChange}
     >
-      {Object.values(filters).map(filter => (
+      {Object.values(filters).map((filter) => (
         <FilterTouchableOpacity
           noLoader
           noBackground
@@ -62,10 +63,4 @@ FilterBar.propTypes = {
   onFilterClicked: propTypes.func,
   activeFilter: propTypes.string,
   filters: propTypes.shape({}),
-};
-
-FilterBar.defaultProps = {
-  onFilterClicked: () => null,
-  activeFilter: undefined,
-  filters: {},
 };

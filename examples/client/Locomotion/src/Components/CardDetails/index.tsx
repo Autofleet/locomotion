@@ -31,7 +31,6 @@ type CardDetailsRouteParams = {
   paymentMethod: PaymentMethodInterface
 };
 
-
 const CardDetails = ({
   loadingState = false,
 }) => {
@@ -130,7 +129,7 @@ const CardDetails = ({
               <DeletePaymentContainer
                 testID="deletePaymentMethod"
                 disabled={paymentMethod?.hasOutstandingBalance
-                  || ride.payment?.paymentMethod?.id === paymentMethod?.id}
+                  || ride?.payment?.paymentMethod?.id === paymentMethod?.id}
                 onPress={async () => {
                   await onRemoveMethod(paymentMethod?.id);
                 }}
@@ -160,8 +159,7 @@ const CardDetails = ({
       </KeyboardAwareScrollView>
       <GenericErrorPopup
         isVisible={showError}
-        closePopup={() => setShowError(false)
-        }
+        closePopup={() => setShowError(false)}
       />
     </PageContainer>
   );

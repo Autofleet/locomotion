@@ -45,7 +45,6 @@ const RidePriceBreakDown = () => {
   const { getBusinessAccountById } = PaymentContext.useContainer();
   const { showPrice, loadShowPrice } = SettingContext.useContainer();
 
-
   const updatePriceCalculation = async () => {
     try {
       setDidRequestFail(false);
@@ -58,7 +57,7 @@ const RidePriceBreakDown = () => {
 
   const updateRideFromApi = async () => {
     setLoading(true);
-    const rideId = params.rideId || ride.id;
+    const rideId = params.rideId || ride?.id;
     if (rideId) {
       const result = await getRideFromApi(rideId);
       setLocalRide(result);
@@ -92,7 +91,8 @@ const RidePriceBreakDown = () => {
         onIconPress={
           () => navigationService.navigate(params.rideHistory
             ? MAIN_ROUTES.COMPLETED_RIDE_OVERVIEW_PAGE
-            : MAIN_ROUTES.HOME)}
+            : MAIN_ROUTES.HOME)
+}
       />
       <ScrollView>
         {loading ? (

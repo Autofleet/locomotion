@@ -9,18 +9,14 @@ interface EmptyStateProps {
 }
 const EmptyState = ({
   title,
-  description,
+  description = '',
 }: EmptyStateProps) => (
   <Container>
     {description
       ? <Title>{title}</Title>
-      : <TitleWithoutDescription>{title}</TitleWithoutDescription>
-    }
+      : <TitleWithoutDescription>{title}</TitleWithoutDescription>}
 
     {description ? <Description>{description}</Description> : null}
   </Container>
 );
-EmptyState.defaultProps = {
-  description: '',
-};
 export default EmptyState;

@@ -3,13 +3,13 @@ import _ from 'lodash';
 import * as axios from 'axios';
 import { initReactI18next } from 'react-i18next';
 import i18nHttpLoader from 'i18next-http-backend';
-import Backend from '@autofleet/i18next-remote-backend-with-locals';
 import * as RNLocalize from 'react-native-localize';
 import moment from 'moment';
 import 'moment/locale/es';
 import 'moment/locale/el';
 import 'moment/locale/fr';
 import Config from 'react-native-config';
+import Backend from './remoteBackendWithLocals';
 import Mixpanel from '../services/Mixpanel';
 import { StorageService } from '../services';
 
@@ -36,7 +36,7 @@ const extractLanguageFromUrl = (url) => {
   return lastEndpoint.split('.')[0];
 };
 
-const updateUserLanguage = chosenLanguageCode => StorageService.save(
+const updateUserLanguage = (chosenLanguageCode) => StorageService.save(
   { [USER_LANGUAGE_STORAGE_KEY]: chosenLanguageCode },
 );
 
@@ -75,12 +75,11 @@ export const getPreferredLanguageCode = async () => (
   moment.locale(userLanguage);
 })();
 
-
 const languageDetector = {
   type: 'languageDetector',
   async: true, // async detection
   // eslint-disable-next-line no-return-await
-  detect: async cb => cb(await getPreferredLanguageCode()),
+  detect: async (cb) => cb(await getPreferredLanguageCode()),
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   init: () => {},
   // eslint-disable-next-line @typescript-eslint/no-empty-function
@@ -106,7 +105,7 @@ i18n
         type: i18nHttpLoader,
         options: {
           loadPath: `${Config.LANGUAGE_FILES_STORAGE}/{{lng}}.json?timestamp=${moment().format('HH:mm')}`,
-          parse: data => data,
+          parse: (data) => data,
           request: async (options, url, payload, callback) => {
             try {
               const { data, status } = await axios.get(url);

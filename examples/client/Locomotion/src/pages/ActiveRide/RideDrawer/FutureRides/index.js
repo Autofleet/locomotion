@@ -36,8 +36,7 @@ export const FutureOrdersButton = ({
         <FutureRideButtonText>
           {isOpen
             ? i18n.t('home.futureRides.closeButton')
-            : i18n.t('home.futureRides.openBookingsButton', { openBookings: futureRides ? futureRides.length : 0 })
-        }
+            : i18n.t('home.futureRides.openBookingsButton', { openBookings: futureRides ? futureRides.length : 0 })}
         </FutureRideButtonText>
         {isOpen ? (<CloseIconContainer><CloseIcon /></CloseIconContainer>) : null}
       </FutureRidesButton>
@@ -52,14 +51,13 @@ export default ({
     return null;
   }
 
-
   return (
-    <Fragment>
+    <>
       {futureRides.map((ride) => {
         const { stopPoints } = ride;
 
         return (
-          <Container>
+          <Container key={ride.externalId}>
             <DateTitle>{moment(ride.scheduledTo).format('DD.MM.YYYY HH:mm')}</DateTitle>
             <DetailsRowContainer>
               <SpsContainer>
@@ -86,6 +84,6 @@ export default ({
           </Container>
         );
       })}
-    </Fragment>
+    </>
   );
 };

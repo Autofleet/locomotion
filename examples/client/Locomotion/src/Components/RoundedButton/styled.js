@@ -1,7 +1,7 @@
-import styled from 'styled-components';
+import styled from 'styled-components/native';
 import Button from '../Button';
 
-const colors = theme => ({
+const colors = (theme) => ({
   confirm: {
     primary: {
       background: theme.primaryColor,
@@ -36,7 +36,7 @@ export const SubmitButtonText = styled.Text`
   }) => (useCancelTextButton ? `
       color: ${colors(theme).confirm.hollow.text};
   ` : `
-      color: ${colors(theme)[type][hollow ? 'hollow' : 'primary'].text}
+      color: ${colors(theme)[type][hollow ? 'hollow' : 'primary'].text};
   `)}
 
 
@@ -56,7 +56,7 @@ export const StyledButton = styled(Button)`
       min-height: ${height || '50px'};
       ${withIcon
     ? `justify-content: flex-start;
-      align-items: center`
+      align-items: center;`
     : ''}
 
       background-color: ${colors(theme)[type][hollow ? 'hollow' : 'primary'].background};

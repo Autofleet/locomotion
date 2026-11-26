@@ -1,6 +1,6 @@
 import React, { Fragment, useEffect } from 'react';
 import { View } from 'react-native';
-import styled from 'styled-components';
+import styled from 'styled-components/native';
 import moment from 'moment';
 import i18n from '../../../../I18n';
 import StopPointRow from './StopPointRow';
@@ -54,7 +54,7 @@ export default ({
 }) => (
   !requestStopPoints.openEdit
     ? (
-      <Fragment>
+      <>
         <StopPointRow
           pickup
           useBorder
@@ -78,20 +78,19 @@ export default ({
         />
         {readyToBook
           ? (
-            <Fragment>
+            <>
               <NumberOfPassenger onChange={onNumberOfPassengerChange} amount={numberOfPassenger} />
               <RideScheduler
                 onScheduleTimeSelect={onRideSchedule}
                 disableFuture={disableFutureBooking}
                 scheduledTo={requestStopPoints.scheduledTo}
               />
-            </Fragment>
+            </>
           )
           : null}
 
-
         {loading ? <Overlay /> : null}
-      </Fragment>
+      </>
     )
     : (
       <AddressView

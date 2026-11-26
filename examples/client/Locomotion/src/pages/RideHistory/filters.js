@@ -2,7 +2,7 @@ import moment from 'moment';
 import i18n from '../../I18n';
 import { startOfDayTime, YYYY_MM_DD, toDate } from './consts';
 
-export const formatDateBeforeSend = date => moment(date).toDate();
+export const formatDateBeforeSend = (date) => moment(date).toDate();
 
 export const FILTERS = () => ({
   // quarter: {

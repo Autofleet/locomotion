@@ -11,7 +11,6 @@ interface LinkTextProps {
     onPress: () => void;
 }
 
-
 const LinkTextComponent = ({
   children, icon, iconSide = 'left', onPress = () => null,
 }: LinkTextProps) => (
@@ -25,8 +24,4 @@ const LinkTextComponent = ({
   </TouchableContainer>
 );
 
-LinkTextComponent.defaultProps = {
-  icon: null,
-  iconSide: 'left',
-};
 export default LinkTextComponent;

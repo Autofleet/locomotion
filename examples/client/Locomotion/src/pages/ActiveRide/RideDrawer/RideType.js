@@ -10,8 +10,8 @@ const values = [
 
 export default ({ rideType, setRideType }) => (
   <RowContainer>
-    {values.map(v => (
-      <RideTypeButton onPress={() => setRideType(v.value)} testID={`${v.label}-RideTypeButton`}>
+    {values.map((v) => (
+      <RideTypeButton key={v.value} onPress={() => setRideType(v.value)} testID={`${v.label}-RideTypeButton`}>
         <RideTypeButtonText active={rideType === v.value}>
           {' '}
           {v.label}

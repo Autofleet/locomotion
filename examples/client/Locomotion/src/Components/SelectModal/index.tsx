@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Text, View } from 'react-native';
-import styled from 'styled-components';
+import styled from 'styled-components/native';
 import SelectDropdown from 'react-native-select-dropdown';
+import { SvgProps } from 'react-native-svg';
 import SvgIcon from '../SvgIcon';
 import person from '../../assets/person.svg';
 import {
@@ -9,7 +10,13 @@ import {
 } from '../../context/theme';
 
 const ERROR_COLOR = '#f35657';
-const StyledPop = styled(SelectDropdown).attrs(({ theme, icon = person, error }) => ({
+
+interface Item {
+  value: any;
+  label: string;
+}
+
+const StyledPop = styled(SelectDropdown).attrs<{ icon?: React.FC<SvgProps>; error?: boolean }>(({ theme, icon = person, error }) => ({
   buttonStyle: {
     borderRadius: 8,
     flex: 1,
@@ -34,7 +41,6 @@ const StyledPop = styled(SelectDropdown).attrs(({ theme, icon = person, error })
     height: 40,
   },
 }))``;
-
 
 const StyledRow = styled(View)`
   height: 40;
@@ -65,8 +71,13 @@ const StyledIcon = styled(SvgIcon).attrs(({
   height: height || 16,
 }))``;
 
+interface StyledSelectRowProps {
+  item: Item;
+  selected: boolean;
+  index?: number;
+}
 
-const StyledSelectRow = ({ item, theme, selected }) => (
+const StyledSelectRow = ({ item, selected }: StyledSelectRowProps) => (
   <StyledRow selected={selected}>
     <StyledIcon
       Svg={person}
@@ -77,11 +88,6 @@ const StyledSelectRow = ({ item, theme, selected }) => (
   </StyledRow>
 );
 
-interface Item {
-  value: any;
-  label: string;
-}
-
 interface SelectModalProps {
   data: Item[];
   selectedValue?: any;
@@ -90,14 +96,14 @@ interface SelectModalProps {
 }
 
 const SelectModal = ({
-  data, onSelect, onError, selectedValue,
+  data, onSelect, onError, selectedValue = null,
 }: SelectModalProps) => {
   const [selectedItem, setSelectedItem] = useState<Item| null>(null);
   const [error, setError] = useState(false);
 
   useEffect(() => {
     if (data?.length) {
-      const defaultItem = data.find(i => i.value === selectedValue);
+      const defaultItem = data.find((i) => i.value === selectedValue);
       if (defaultItem) {
         setSelectedItem(defaultItem);
       } else {
@@ -113,7 +119,7 @@ const SelectModal = ({
   useEffect(() => {
     if (selectedItem) {
       onSelect(selectedItem);
-      setError(!(data.find(item => item.value === selectedItem.value)));
+      setError(!(data.find((item) => item.value === selectedItem.value)));
     }
   }, [selectedItem]);
 
@@ -123,24 +129,21 @@ const SelectModal = ({
       data={data}
       defaultValue={selectedItem}
       defaultButtonText={selectedItem?.label || '1'}
-      onSelect={(item, index) => {
+      onSelect={(item: Item, index: number) => {
         setSelectedItem(item);
       }}
       dropdownIconPosition="left"
       dropdownOverlayColor="transparent"
-      buttonTextAfterSelection={(item, index) => item.label}
-      renderCustomizedRowChild={(item, index) => (
+      buttonTextAfterSelection={(item: Item, index: number) => item.label}
+      renderCustomizedRowChild={(item: Item, index: number) => (
         <StyledSelectRow
           item={item}
           index={index}
-          selected={selectedItem && item.value === selectedItem.value}
+          selected={!!selectedItem && item.value === selectedItem.value}
         />
       )}
     />
   );
-};
-SelectModal.defaultProps = {
-  selectedValue: null,
 };
 
 export default SelectModal;

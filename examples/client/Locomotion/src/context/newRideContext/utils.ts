@@ -3,6 +3,7 @@ import shortid from 'shortid';
 import i18n from '../../I18n';
 import { getGeocode } from './google-api';
 import { getLocationTimezone } from './api';
+import type { RequestStopPoint, RideFeedback } from './types';
 
 export const ESTIMATION_ERRORS = {
   'RIDE_VALIDATION:SOME_STOP_POINTS_ARE_OUT_OF_TERRITORY': 'RIDE_VALIDATION:SOME_STOP_POINTS_ARE_OUT_OF_TERRITORY',
@@ -42,7 +43,7 @@ export const RIDE_POPUPS: {[key: string]: RidePopupNames} = {
   CANCELLATION_REASON: 'CANCELLATION_REASON',
 };
 
-export const INITIAL_STOP_POINTS = [{
+export const INITIAL_STOP_POINTS: RequestStopPoint[] = [{
   type: 'pickup',
   lat: null,
   lng: null,
@@ -62,7 +63,6 @@ export const INITIAL_STOP_POINTS = [{
   streetAddress: null,
   placeId: null,
 }];
-
 
 export const buildStreetAddress = (data: any) => {
   const streetAddress: any = {};
@@ -170,14 +170,16 @@ export const formatEstimationsResult = (
   };
 };
 
-export const formatStopPointsForEstimations = (requestStopPoints: any[]) => requestStopPoints.map(sp => ({
+export const formatStopPointsForEstimations = (requestStopPoints: any[]) => requestStopPoints.map((sp) => ({
   type: sp.type,
   lat: sp.lat,
   lng: sp.lng,
 }));
 
-export const getFormattedPrice = (priceCurrency: string | undefined,
-  priceAmount: number | undefined) => {
+export const getFormattedPrice = (
+  priceCurrency: string | undefined,
+  priceAmount: number | undefined,
+) => {
   if (!priceCurrency) {
     return i18n.t('rideDetails.noCharge');
   }
@@ -190,7 +192,6 @@ export const getCouponText = (coupon: any) => {
   }
   return coupon.percent_off ? `${coupon.percent_off}%` : getFormattedPrice(coupon.currency, coupon.amount_off);
 };
-
 
 export const getCurrencySymbol = (priceCurrency?: string) => {
   if (!priceCurrency) {
@@ -219,7 +220,10 @@ export const convertTimezoneByLocation = async (
   }
 };
 
-export const didUserRate = (rating: string | null, rideFeedback: any[] | null) => rating || rideFeedback?.length;
+export const didUserRate = (
+  rating?: number | string | null,
+  rideFeedback?: RideFeedback[] | null,
+) => rating || rideFeedback?.length;
 
 const convertKmToMiles = (km: number) => km * 0.621371;
 

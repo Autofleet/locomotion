@@ -1,6 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import Modal from 'react-native-modal';
-import { BackHandler } from 'react-native';
+import Modal from '../../Components/CompatModal';
 import PriceBreakdown from '../../Components/PriceBreakdown';
 import CloseButton from '../../Components/CloseButton';
 import ServiceCard from '../../pages/ActiveRide/RideDrawer/RideOptions/ServiceOptions/ServiceCard';
@@ -17,7 +16,6 @@ import SettingContext from '../../context/settings';
 import PaymentContext from '../../context/payments';
 import { RidePageContext } from '../../context/newRideContext';
 import showPriceBasedOnAccount from '../../services/showPriceBasedOnAccount';
-
 
 interface FareBreakdownPopupProps {
   isVisible: boolean;

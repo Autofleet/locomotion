@@ -12,6 +12,7 @@
     }
   ],
   "rules": {
+      "react/style-prop-object": ["error", { "allow": ["SystemBars"] }],
       "func-names": [
           "error",
           "never"
@@ -37,7 +38,6 @@
       "no-use-before-define": ["error", {"variables": false}],
       "import/extensions": 0,
       "import/named": 1,
-      "no-unused-vars": 1,
       "react/prop-types": 1,
       "react/sort-comp": ["off"],
       "react/prefer-stateless-function": ["off"],
@@ -49,7 +49,10 @@
       "no-restricted-syntax": "warn",
       "react/require-default-props": "off",
       "import/prefer-default-export": "off",
-      "react/react-in-jsx-scope": "off"
+      "react/react-in-jsx-scope": "off",
+      "react/function-component-definition": "off",
+      "react/jsx-props-no-spreading": "off",
+      "react/jsx-no-constructed-context-values": "warn"
   },
   "globals": {
       "navigator": true,

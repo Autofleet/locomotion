@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled from 'styled-components/native';
 import Button from '../Button';
 import ArrowIconSource from '../../assets/chevron.svg';
 import { FONT_SIZES, FONT_WEIGHTS } from '../../context/theme';
@@ -70,7 +70,6 @@ export const Arrow = styled(SvgIcon).attrs({
   width: 15,
   height: 15,
 })``;
-
 
 export const CardsContainer = styled.View`
   width: 100%;

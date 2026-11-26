@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import { View } from 'react-native';
-import styled from 'styled-components';
+import styled from 'styled-components/native';
 import moment from 'moment';
 import I18n from '../../../../I18n';
 
@@ -64,17 +64,13 @@ export default ({
     }
   };
 
-  return (
-    <Fragment>
-      {rideState
-        ? (
-          <RideStatusContainer>
-            <RideStatusText state={rideState}>
-              {I18n.t(`home.rideStates.${getTitle()}`, { pickupEta, dropoffEta })}
-            </RideStatusText>
-          </RideStatusContainer>
-        )
-        : null}
-    </Fragment>
-  );
+  return rideState
+    ? (
+      <RideStatusContainer>
+        <RideStatusText state={rideState}>
+          {I18n.t(`home.rideStates.${getTitle()}`, { pickupEta, dropoffEta })}
+        </RideStatusText>
+      </RideStatusContainer>
+    )
+    : null;
 };

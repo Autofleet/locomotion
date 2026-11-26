@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import { View } from 'react-native';
-import styled from 'styled-components';
+import styled from 'styled-components/native';
 import moment from 'moment';
 import I18n from '../../../../../I18n';
 import RoundedButton from '../../../../../Components/RoundedButton';
@@ -42,31 +42,26 @@ export const OfferExpiredText = styled.Text`
 export default ({
   offerExpired, onVerified, setLoading, onRenewOffer, futureRide,
 
-}) => (
-  <Fragment>
-    {!offerExpired || futureRide
-      ? (
-        <SliderButton
-          onVerified={onVerified}
-          setLoading={setLoading}
-        />
-      )
+}) => (!offerExpired || futureRide
+  ? (
+    <SliderButton
+      onVerified={onVerified}
+      setLoading={setLoading}
+    />
+  )
 
-      : (
-        <DrawerButtonContainer>
-          <OfferExpiredText>
-            {`${offerExpired ? I18n.t('home.offerCard.expiredOfferText') : ''}`}
-          </OfferExpiredText>
-          <RoundedButton
-            onPress={onRenewOffer}
-            setLoading={setLoading}
-            hollow={offerExpired}
-            testID="RenewOfferButton"
-          >
-            {`${I18n.t(!offerExpired ? 'home.offerCard.confirmOffer' : 'home.offerCard.expiredOffer')}`}
-          </RoundedButton>
-        </DrawerButtonContainer>
-      )
-        }
-  </Fragment>
-);
+  : (
+    <DrawerButtonContainer>
+      <OfferExpiredText>
+        {`${offerExpired ? I18n.t('home.offerCard.expiredOfferText') : ''}`}
+      </OfferExpiredText>
+      <RoundedButton
+        onPress={onRenewOffer}
+        setLoading={setLoading}
+        hollow={offerExpired}
+        testID="RenewOfferButton"
+      >
+        {`${I18n.t(!offerExpired ? 'home.offerCard.confirmOffer' : 'home.offerCard.expiredOffer')}`}
+      </RoundedButton>
+    </DrawerButtonContainer>
+  ));

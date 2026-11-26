@@ -47,12 +47,11 @@ const MessageCard = ({ message, readAt, dismissedAt }: MessageCardProps) => (
           {getFormattedMessageDate(message)}
         </MessageDate>
         <ReadMoreText>
-          {i18n.t('messages.readMore')}
+          {i18n.t('messages.readMore') as string}
         </ReadMoreText>
       </MessageFooter>
     </TextContainer>
   </CardContainer>
 );
-
 
 export default MessageCard;

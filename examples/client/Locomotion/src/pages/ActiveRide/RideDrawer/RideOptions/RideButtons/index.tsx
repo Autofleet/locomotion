@@ -1,10 +1,9 @@
 import React, {
   useContext, useState, useEffect,
 } from 'react';
-import DatePicker from 'react-native-date-picker';
 import moment from 'moment';
-import { ThemeContext } from 'styled-components';
-import { Animated } from 'react-native';
+import { ThemeContext } from 'styled-components/native';
+import { Animated, View, ViewStyle } from 'react-native';
 import { isCashPaymentMethod, isExternalPaymentMethod, isOfflinePaymentMethod } from '../../../../../lib/ride/utils';
 import DatePickerPoppup from '../../../../../popups/DatePickerPoppup';
 import FutureBookingButton from './FutureBookingButton';
@@ -18,8 +17,9 @@ import i18n from '../../../../../I18n';
 import plus from '../../../../../assets/bottomSheet/plus.svg';
 import editNote from '../../../../../assets/bottomSheet/edit_note.svg';
 import PaymentButton from './PaymentButton';
+import PromoCodeButton from './PaymentButton/PromoCodeButton';
 import PaymentsContext from '../../../../../context/payments';
-import { PaymentMethodInterface } from '../../../../../context/payments/interface';
+import { GetBusinessAccountById, PaymentMethodInterface } from '../../../../../context/payments/interface';
 import { RideStateContextContext } from '../../../../../context/ridePageStateContext';
 import { popupNames } from '../utils';
 import { BS_PAGES } from '../../../../../context/ridePageStateContext/utils';
@@ -59,7 +59,6 @@ const RideButtons = ({
     numberOfPassengers,
   } = useContext(RidePageContext);
 
-
   const {
     changeBsPage,
   } = useContext(RideStateContextContext);
@@ -71,9 +70,15 @@ const RideButtons = ({
   const {
     paymentMethods,
     getClientOutstandingBalanceCard,
+    offlinePaymentText,
+    getBusinessAccountById,
+    loadOfflinePaymentText,
   }: {
         paymentMethods: PaymentMethodInterface[],
         getClientOutstandingBalanceCard: () => PaymentMethodInterface | undefined,
+        offlinePaymentText: string,
+        getBusinessAccountById: GetBusinessAccountById,
+        loadOfflinePaymentText: () => void,
     } = PaymentsContext.useContainer();
 
   const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
@@ -86,7 +91,6 @@ const RideButtons = ({
   const selectedRequiredFields = chosenService && ridePaymentId && serviceEstimations?.length > 0;
   const paymentMethodNotAllowedOnService = !businessAccountId && selectedRequiredFields
   && !chosenService.allowedPaymentMethods.includes(getPaymentMethod(ridePaymentId));
-
 
   const checkFutureRidesSetting = async () => {
     const futureRidesEnabled = await getSettingByKey(
@@ -110,9 +114,13 @@ const RideButtons = ({
     loadFutureBookingDays();
   }, []);
 
+  useEffect(() => {
+    loadOfflinePaymentText();
+  }, []);
+
   const [animatedOpacity] = useState(new Animated.Value(0));
 
-  const animatedStyle = {
+  const animatedStyle: Animated.WithAnimatedValue<ViewStyle> = {
     height: '100%',
     width: HALF_WIDTH,
     backgroundColor: '#d3eefc',
@@ -153,13 +161,12 @@ const RideButtons = ({
 
     const renderDatePickerTitle = () => (
       <>
-        <PickerTitle>{i18n.t('bottomSheetContent.ride.chosePickupTime')}</PickerTitle>
+        <PickerTitle>{i18n.t('bottomSheetContent.ride.chosePickupTime') as string}</PickerTitle>
         <PickerDate>{moment(tempSelectedDate).format('dddd, MMM Do')}</PickerDate>
         <PickerTimeRange>{`${afterTimeTitle} - ${beforeTimeTitle}`}</PickerTimeRange>
 
       </>
     );
-
 
     return (
       <>
@@ -174,7 +181,6 @@ const RideButtons = ({
         </ButtonContainer>
         <DatePickerPoppup
           testID="datePicker"
-          textColor="black"
           isVisible={isDatePickerOpen}
           date={tempSelectedDate}
           maximumDate={getFutureRideMaxDate(futureBookingDays)}
@@ -184,14 +190,14 @@ const RideButtons = ({
           confirmText={i18n.t('general.select')}
           cancelText={i18n.t('general.cancel')}
           onCancel={close}
-          onConfirm={(date) => {
+          onConfirm={(date: Date) => {
             if (unconfirmedPickupTime !== date.getTime()) {
               setUnconfirmedPickupTime(date.getTime());
               changeBsPage(BS_PAGES.CONFIRM_PICKUP_TIME);
             }
             close();
           }}
-          onChange={date => setTempSelectedDate(date)}
+          onChange={(date: Date) => setTempSelectedDate(date)}
         />
       </>
 
@@ -224,23 +230,15 @@ const RideButtons = ({
     [PAYMENT_METHODS.EXTERNAL]: externalPaymentMethod,
   };
   const renderPaymentButton = () => {
-    const {
-      offlinePaymentText,
-      getBusinessAccountById,
-      loadOfflinePaymentText,
-    } = PaymentsContext.useContainer();
-    useEffect(() => {
-      loadOfflinePaymentText();
-    }, []);
     const ridePaymentMethodId = ride?.paymentMethodId || chosenService?.allowedPaymentMethods?.[0] || '';
     const selectedPaymentMethod:
      PaymentMethodInterface | undefined = paymentMethodIdToDataMap[ridePaymentMethodId]
-      || paymentMethods.find(pm => pm.id === ridePaymentMethodId);
+      || paymentMethods.find((pm) => pm.id === ridePaymentMethodId);
 
     const getSelectedPaymentMethodTitle = () : string | null => {
       if (businessAccountId) {
-        const { name } = getBusinessAccountById(businessAccountId);
-        return name;
+        const { name } = getBusinessAccountById(businessAccountId) ?? {};
+        return name ?? null;
       }
       if (isCashPaymentMethod(selectedPaymentMethod)) {
         return i18n.t('payments.cash');
@@ -254,7 +252,8 @@ const RideButtons = ({
 
       return selectedPaymentMethod?.name || i18n.t('bottomSheetContent.ride.addPayment');
     };
-    const pureButton = () => (
+
+    const paymentBtn = (
       <ButtonContainer
         padding="0 10px"
         error={paymentMethodNotAllowedOnService}
@@ -270,6 +269,7 @@ const RideButtons = ({
           title={getSelectedPaymentMethodTitle()}
           id={selectedPaymentMethod?.id}
           invalid={paymentMethodNotAllowedOnService}
+          promoButton={!displayPassenger ? <PromoCodeButton id={selectedPaymentMethod?.id} /> : undefined}
         />
       </ButtonContainer>
     );
@@ -281,23 +281,19 @@ const RideButtons = ({
       }
       return capitalizeFirstLetter(ridePaymentMethod);
     };
-    return (
-      <>
-        {paymentMethodNotAllowedOnService
-          ? (
-            <ButtonWithError
-              errorText={i18n.t('bottomSheetContent.ride.paymentMethodNotAllowedOnService', {
-                type: getTypeText(),
-              })}
-            >
-              {pureButton()}
-            </ButtonWithError>
-          )
-          : pureButton() }
-      </>
-    );
-  };
 
+    return paymentMethodNotAllowedOnService
+      ? (
+        <ButtonWithError
+          errorText={i18n.t('bottomSheetContent.ride.paymentMethodNotAllowedOnService', {
+            type: getTypeText(),
+          })}
+        >
+          {paymentBtn}
+        </ButtonWithError>
+      )
+      : paymentBtn;
+  };
 
   useEffect(() => {
     if (!chosenService || chosenService?.pooling === POOLING_TYPES.NO) {
@@ -325,7 +321,7 @@ const RideButtons = ({
       <Container>
         <RowContainer>
           {isFutureRidesEnabled && renderFutureBooking()}
-          {displayPassenger ? <></> : renderRideNotes()}
+          {!displayPassenger ? renderRideNotes() : null}
 
         </RowContainer>
         <RowContainer>
@@ -344,7 +340,7 @@ const RideButtons = ({
                 onError={setPassengersCounterError}
                 selectedValue={numberOfPassengers}
               />
-            ) : null}
+            ) : <View />}
 
           <StyledButton
             testID="selectService"

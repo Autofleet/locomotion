@@ -1,8 +1,7 @@
 import { Text } from 'react-native';
-import styled from 'styled-components';
+import styled from 'styled-components/native';
 import Button from '../Button';
 import { FONT_SIZES } from '../../context/theme';
-
 
 export const Container = styled(Button)`
 max-width: 45%;

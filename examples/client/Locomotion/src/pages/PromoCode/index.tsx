@@ -1,6 +1,6 @@
 import React, { useContext, useState } from 'react';
 import { useRoute } from '@react-navigation/native';
-import styled from 'styled-components';
+import styled from 'styled-components/native';
 import TextInput from '../../Components/TextInput';
 import {
   ErrorText, InputContainer,

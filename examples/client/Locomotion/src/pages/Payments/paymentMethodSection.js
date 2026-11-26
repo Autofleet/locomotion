@@ -14,7 +14,6 @@ import { HeaderLink } from '../../Components/Menu/styled';
 
 import PaymentMethod from '../../Components/CardRow';
 
-
 const Section = ({
   onPress,
   paymentMethods,
@@ -42,16 +41,15 @@ const Section = ({
         </HeaderLink>
       </CardTitleContainer>
       <CardContentContainer>
-        {paymentMethods.map(paymentMethod => (
-          <MethodCard>
+        {paymentMethods.map((paymentMethod) => (
+          <MethodCard key={paymentMethod.id}>
             <PaymentMethod
               {...paymentMethod}
               onPress={() => onPress(paymentMethod)}
               showArrow
             />
           </MethodCard>
-        ))
-      }
+        ))}
       </CardContentContainer>
     </View>
   </PaymentCardContainer>

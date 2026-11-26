@@ -1,7 +1,7 @@
 import React, {
   useContext, useEffect, useState, useCallback,
 } from 'react';
-import styled from 'styled-components';
+import styled from 'styled-components/native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { useFocusEffect } from '@react-navigation/native';
 import { View } from 'react-native';
@@ -39,7 +39,7 @@ const Messages = ({ menuSide, route }: FutureRidesViewProps) => {
 
   const markMessagesAsRead = async () => {
     if (userMessages && userMessages.length) {
-      const unreadMessages = userMessages.filter(message => !message.readAt).map(message => message.id);
+      const unreadMessages = userMessages.filter((message) => !message.readAt).map((message) => message.id);
       if (unreadMessages.length) {
         await markReadMessages(unreadMessages);
       }
@@ -86,8 +86,9 @@ const Messages = ({ menuSide, route }: FutureRidesViewProps) => {
         : (
           <ScrollContainer>
             {userMessages && userMessages.length
-              ? (userMessages || []).map(m => (
+              ? (userMessages || []).map((m) => (
                 <MessageCard
+                  key={m.id}
                   {...m}
                 />
               ))
@@ -96,16 +97,12 @@ const Messages = ({ menuSide, route }: FutureRidesViewProps) => {
                   title={i18n.t('messages.noMessagesTitle')}
                   text={i18n.t('messages.noMessagesText')}
                 />
-              )
-          }
+              )}
           </ScrollContainer>
-        )
-          }
-
+        )}
 
     </PageContainer>
   );
 };
-
 
 export default Messages;

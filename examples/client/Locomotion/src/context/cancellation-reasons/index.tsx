@@ -5,7 +5,6 @@ import React, {
 import * as cancellationReasonsApi from './api';
 import { CancellationReason, CancellationReasonsContextInterface } from './interface';
 
-
 export const CancellationReasonsContext = createContext<CancellationReasonsContextInterface>({
   cancellationReasons: [],
   getCancellationReasons: async (rideId?: string) => undefined,

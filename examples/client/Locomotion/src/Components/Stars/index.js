@@ -1,5 +1,5 @@
 import React from 'react';
-import styled from 'styled-components';
+import styled from 'styled-components/native';
 import { View } from 'react-native';
 import Button from '../Button';
 import StarSvg from './star.svg';
@@ -40,9 +40,9 @@ const Star = ({
   </Button>
 );
 
-const StarRating = ({ rating, updateRating = newRating => null, size = 16 }) => (
+const StarRating = ({ rating, updateRating = (newRating) => null, size = 16 }) => (
   <SummaryStars>
-    {NUM_OF_STARS.map(num => <Star num={num} size={size} isOn={rating >= num} onPress={() => updateRating(num)} />)}
+    {NUM_OF_STARS.map((num) => <Star key={num} num={num} size={size} isOn={rating >= num} onPress={() => updateRating(num)} />)}
   </SummaryStars>
 );
 

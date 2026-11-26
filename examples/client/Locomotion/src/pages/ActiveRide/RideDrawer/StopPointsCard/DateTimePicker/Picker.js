@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import styled from 'styled-components';
+import styled from 'styled-components/native';
 import RNPickerSelect from 'react-native-picker-select';
 import InputIcon from '../../../../../assets/arrow-down.png';
 
@@ -23,6 +23,8 @@ const InputArrow = styled.Image.attrs({ source: InputIcon })`
     height: 20px;
     width: 20px;
 `;
+
+const PickerIcon = () => <InputArrow />;
 
 const TimePicker = ({
   title, items, value, onValueChange,
@@ -49,7 +51,7 @@ const TimePicker = ({
 
       }}
       value={value}
-      Icon={() => (<InputArrow />)}
+      Icon={PickerIcon}
       placeholder={{}}
     />
 

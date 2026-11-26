@@ -1,18 +1,21 @@
 import React from 'react';
+import { SvgProps } from 'react-native-svg';
 import SvgIcon from '../SvgIcon';
 import i18n from '../../I18n';
 import {
   Container, SELECTED_COLOR, Tab, TabInner, TextContainer, UNSELECTED_COLOR,
 } from './styled';
 
+export interface TabSwitchTab {
+    textKey: string;
+    id: string;
+    Svg?: React.FC<SvgProps>;
+}
+
 interface ITabSwitchProps {
-    onUnselectedClick: (tab) => void
+    onUnselectedClick: (tab: TabSwitchTab) => void
     activeTabId: string;
-    tabs: {
-        textKey: string;
-        id: string;
-        Svg: any;
-    }[];
+    tabs: TabSwitchTab[];
 }
 
 const TabSwitch = ({ onUnselectedClick, tabs, activeTabId }: ITabSwitchProps) => (
@@ -42,8 +45,7 @@ const TabSwitch = ({ onUnselectedClick, tabs, activeTabId }: ITabSwitchProps) =>
                     width={20}
                     height={20}
                   />
-                  )
-            }
+                  )}
             <TextContainer isSelected={isSelected}>
               {i18n.t(tab.textKey)}
             </TextContainer>

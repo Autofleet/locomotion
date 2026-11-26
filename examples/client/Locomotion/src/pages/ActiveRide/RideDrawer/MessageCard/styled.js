@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
-import styled from 'styled-components';
+import styled from 'styled-components/native';
 import xIcon from '../../../../assets/x.png';
 import Button from '../../../../Components/Button';
 
@@ -12,7 +12,6 @@ export const MessageContainer = styled.View`
     flex-direction: row;
     flex-direction: column;
 `;
-
 
 export const MessageTitle = styled.Text`
   font-size: 14px;
@@ -36,7 +35,6 @@ export const CloseContainer = styled(Button)`
     width: 13px;
     height: 13px;
 `;
-
 
 export const ResetInputIcon = styled.Image.attrs({ source: xIcon })`
     display: flex;

@@ -1,5 +1,5 @@
 import { Text, View } from 'react-native';
-import styled from 'styled-components';
+import styled from 'styled-components/native';
 import Button from '../../../Components/Button';
 import {
   FONT_SIZES, FONT_WEIGHTS, LINK_BLUE_COLOR, FONT_SIZES_VALUES,
@@ -73,7 +73,6 @@ width: 10px;
 background-color: ${LINK_BLUE_COLOR};
 border-radius: 100px;
 `;
-
 
 export const MARKDOWN_TEXT_STYLE = {
   fontSize: FONT_SIZES_VALUES.H3,

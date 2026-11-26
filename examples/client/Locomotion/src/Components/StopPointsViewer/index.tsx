@@ -40,7 +40,7 @@ const StopPointsViewer = ({ goBackToAddressSelector }: StopPointsViewerProps) =>
     );
   };
   return (
-    requestStopPoints.filter(sp => !!sp.lat).length > 1 ? (
+    requestStopPoints.filter((sp) => !!sp.lat).length > 1 ? (
       <Container>
         <StreetAddressContainer
           testID="estimationsPickupEdit"

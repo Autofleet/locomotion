@@ -8,12 +8,12 @@ export const StateProvider = ({ reducer, initialState, children }) => (
 );
 export const useStateValue = () => useContext(StateContext);
 
-const getPopupKey = key => `popup_${key}`;
+const getPopupKey = (key) => `popup_${key}`;
 
 export const getTogglePopupsState = () => {
   const [state, dispatch] = useContext(StateContext);
 
-  return [id => state && (state[getPopupKey(id)] || false), (id, open) => dispatch({
+  return [(id) => state && (state[getPopupKey(id)] || false), (id, open) => dispatch({
     type: 'changeState',
     payload: {
       [getPopupKey('ridePopupsStatus')]: open,

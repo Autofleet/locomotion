@@ -27,7 +27,6 @@ export const formatSps = function (stopPoints: any) {
     }));
 };
 
-
 export const getOrdinal = (n: number) => {
   const s = ['th', 'st', 'nd', 'rd'];
   const v = n % 100;

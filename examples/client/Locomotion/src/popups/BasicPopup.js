@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { KeyboardAvoidingView } from 'react-native';
-import Modal from 'react-native-modal';
+import Modal from '../Components/CompatModal';
 import {
   ModalContainer, Content, FooterButton, Title, SubTitle,
 } from './styled';
@@ -24,7 +24,7 @@ export default ({
 
   return (
     <Modal isVisible={isPopupOpen(id) || false}>
-      <KeyboardAvoidingView style={{ flex: 1, justifyContent: 'flex-end' }} behavior="padding">
+      <KeyboardAvoidingView style={{ justifyContent: 'flex-end' }} behavior="padding">
         <ModalContainer>
           <Content>
             <Title>{title}</Title>

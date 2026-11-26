@@ -4,8 +4,10 @@ import React, {
   useEffect,
   useContext,
   useCallback,
+  useMemo,
   useRef,
 } from 'react';
+import type { MapMarker } from 'react-native-maps';
 import { point, distance } from '@turf/turf';
 import { UserContext } from '../user';
 import {
@@ -16,8 +18,9 @@ import {
   STOP_POINT_TYPES,
 } from '../../lib/commonTypes';
 import VirtualStationMarker from '../../Components/VirtualStationMarker';
+import type { RequestStopPoint } from '../newRideContext/types';
 
-type Location = {
+export type Location = {
   lat: number;
   lng: number;
 }
@@ -38,26 +41,25 @@ export type Station = {
 
 interface VirtualStationsContextInterface {
   loadVirtualStations: () => Promise<void>;
-  getMapMarkers: () => any;
   isStationsEnabled: boolean;
   rawStations: Station[];
   stationsList: Station[];
-  StationMarkers: any;
-  sortAndUpdateStations: () => void
-  getStationList: () => Station[]
-  stationCalloutsRef: any;
+  StationMarkers: React.FC<{ requestedStopPoints: RequestStopPoint[] }>;
+  sortAndUpdateStations: (location?: Location | null) => void
+  getStationList: (sourceLocation?: Location | null) => Station[]
+  sortStationsByDistanceUsingTurf?: (sourceLocation: Location) => Station[];
+  stationCalloutsRef: React.MutableRefObject<Record<string, MapMarker | null>>;
 }
 
 export const VirtualStationsContext = createContext<VirtualStationsContextInterface>({
   loadVirtualStations: async () => undefined,
-  getMapMarkers: () => undefined,
   isStationsEnabled: false,
   rawStations: [],
   stationsList: [],
-  StationMarkers: [],
+  StationMarkers: () => null,
   sortAndUpdateStations: () => undefined,
   getStationList: () => [],
-  stationCalloutsRef: [],
+  stationCalloutsRef: { current: {} },
 });
 
 const StationsProvider = ({ children }: { children: any }) => {
@@ -70,7 +72,7 @@ const StationsProvider = ({ children }: { children: any }) => {
     lng: DEFAULT_COORDS.coords.longitude,
   });
   const [isLoading, setIsLoading] = useState(false);
-  const stationCalloutsRef = useRef([]);
+  const stationCalloutsRef = useRef<Record<string, MapMarker | null>>({});
 
   const init = async () => {
     getCurrentLocation();
@@ -96,14 +98,13 @@ const StationsProvider = ({ children }: { children: any }) => {
     return location.coords;
   };
 
-
   useEffect(() => {
     getCurrentLocation();
   }, [locationGranted]);
 
   const formatCoords = (coords:Coords) => ({ lat: coords.latitude, lng: coords.longitude });
 
-  const sortAndUpdateStations = useCallback((location = null) => {
+  const sortAndUpdateStations = useCallback((location: Location | null = null) => {
     const sortedStations = sortStationsByDistanceUsingTurf(location || currentLocation);
     setStationsList(sortedStations);
   }, [rawStations, currentLocation]);
@@ -127,7 +128,7 @@ const StationsProvider = ({ children }: { children: any }) => {
     return sortedStations;
   };
 
-  const sortStationsByDistance = (stations:Station[]) => {
+  const sortStationsByDistance = (stations:(Station & { distance: number })[]) => {
     const sortedStations = stations.sort((a, b) => a.distance - b.distance);
     return sortedStations;
   };
@@ -148,7 +149,6 @@ const StationsProvider = ({ children }: { children: any }) => {
     return sortedStations;
   };
 
-
   useEffect(() => {
     if (rawStations?.length) {
       sortAndUpdateStations();
@@ -162,8 +162,7 @@ const StationsProvider = ({ children }: { children: any }) => {
     }
   }, [user?.id]);
 
-
-  const createMapMarker = (station:Station, stopPoints) => {
+  const createMapMarker = (station:Station, stopPoints: RequestStopPoint[]) => {
     let type = 'default';
 
     if (station?.externalId === stopPoints[0]?.externalId) {
@@ -174,13 +173,11 @@ const StationsProvider = ({ children }: { children: any }) => {
       type = STOP_POINT_TYPES.STOP_POINT_DROPOFF;
     }
 
-
     return (
       <VirtualStationMarker
         station={station}
         type={type}
-        stopPointsonCalloutPress={(selectedStation:Station) => console.log('selectedStation', selectedStation)}
-        forwardedRef={stationCalloutsRef.current[station.externalId]}
+        onCalloutPress={(selectedStation:Station) => console.log('selectedStation', selectedStation)}
         ref={(r) => {
           stationCalloutsRef.current[station.externalId] = r;
         }}
@@ -188,7 +185,12 @@ const StationsProvider = ({ children }: { children: any }) => {
     );
   };
 
-  const StationMarkers = ({ requestedStopPoints }) => useCallback(rawStations.map(s => createMapMarker(s, requestedStopPoints)), [requestedStopPoints]);
+  const StationMarkers = ({ requestedStopPoints }: { requestedStopPoints: RequestStopPoint[] }) => (
+    useMemo(
+      () => rawStations.map((s) => createMapMarker(s, requestedStopPoints)),
+      [rawStations, requestedStopPoints],
+    )
+  );
 
   return (
     <VirtualStationsContext.Provider

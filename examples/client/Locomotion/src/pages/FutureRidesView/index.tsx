@@ -76,7 +76,7 @@ const FutureRidesView = ({ menuSide }: FutureRidesViewProps) => {
       <PageHeader
         title={i18n.t('futureRides.pageTitle')}
         onIconPress={() => {
-          changeBsPage(ride.id ? BS_PAGES.ACTIVE_RIDE : BS_PAGES.ADDRESS_SELECTOR);
+          changeBsPage(ride?.id ? BS_PAGES.ACTIVE_RIDE : BS_PAGES.ADDRESS_SELECTOR);
           NavigationService.navigate(MAIN_ROUTES.HOME);
         }}
         iconSide={menuSide}
@@ -85,9 +85,10 @@ const FutureRidesView = ({ menuSide }: FutureRidesViewProps) => {
         {futureRides.length ? (
           <>
             {(futureRides || []).map((fRide) => {
-              const service = services.find(s => s.id === fRide.serviceId);
+              const service = services.find((s) => s.id === fRide.serviceId);
               return (
                 <RideCard
+                  key={fRide.id}
                   ride={fRide}
                   onPress={() => onPressCancel(fRide?.id)}
                   serviceName={service?.displayName}
@@ -121,7 +122,7 @@ const FutureRidesView = ({ menuSide }: FutureRidesViewProps) => {
               Mixpanel.setEvent('Trying to cancel ride');
               await cancelRide(rideToCancel);
               await loadFutureRides();
-              changeBsPage(ride.id ? BS_PAGES.ACTIVE_RIDE : BS_PAGES.ADDRESS_SELECTOR);
+              changeBsPage(ride?.id ? BS_PAGES.ACTIVE_RIDE : BS_PAGES.ADDRESS_SELECTOR);
               setShowCancellationReasonPopup(true);
             } catch (e: any) {
               setShowError(true);
@@ -129,7 +130,7 @@ const FutureRidesView = ({ menuSide }: FutureRidesViewProps) => {
             }
           }}
           onSecondaryButtonPress={() => {
-            changeBsPage(ride.id ? BS_PAGES.ACTIVE_RIDE : BS_PAGES.ADDRESS_SELECTOR);
+            changeBsPage(ride?.id ? BS_PAGES.ACTIVE_RIDE : BS_PAGES.ADDRESS_SELECTOR);
           }}
         />
       </BottomSheetComponent>

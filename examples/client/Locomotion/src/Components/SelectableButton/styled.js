@@ -1,8 +1,7 @@
-import styled from 'styled-components';
+import styled from 'styled-components/native';
 import Button from '../Button';
 
-
-const colors = theme => ({
+const colors = (theme) => ({
   text: theme.primaryButtonTextColor,
   selected: {
     background: theme.primaryColor,

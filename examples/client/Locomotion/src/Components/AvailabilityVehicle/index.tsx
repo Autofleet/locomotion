@@ -1,13 +1,13 @@
 import React, {
-  useContext, useEffect, useRef, useCallback,
+  useEffect, useRef, useCallback,
 } from 'react';
 import {
   MarkerAnimated, AnimatedRegion, MapMarker, LatLng,
 } from 'react-native-maps';
-import { Platform } from 'react-native';
-import { Context as ThemeContext } from '../../context/theme';
+import { useTheme } from 'styled-components/native';
 import SvgIcon from '../SvgIcon';
 import carIcon from '../../assets/map/Autofleet_Car_Icon.svg';
+import { useMarkerTracksViewChanges } from '../Marker/useMarkerTracksViewChanges';
 
 interface Location {
   lat: number;
@@ -51,7 +51,7 @@ const AvailabilityVehicle = ({
   location,
   id,
 }: AvailabilityVehicleProps) => {
-  const { useVehicleColor } = useContext(ThemeContext);
+  const { useVehicleColor } = useTheme();
   const { vehicleColor } = useVehicleColor();
   const markerRef = useRef<MapMarker>(null);
   const locationAnimationRef = useRef<AnimatedRegion>(
@@ -77,10 +77,10 @@ const AvailabilityVehicle = ({
     }
   }, [location?.lat, location?.lng]);
 
+  const { tracksViewChanges, onMarkerLayout, scheduleRedraw } = useMarkerTracksViewChanges(markerRef);
+
   useEffect(() => {
-    if (Platform.OS === 'android') {
-      markerRef.current?.redraw();
-    }
+    scheduleRedraw();
   }, [vehicleColor, markerRef.current, location?.bearing]);
 
   const onPressWorkaround = useCallback(() => {
@@ -105,12 +105,14 @@ const AvailabilityVehicle = ({
       tappable={false}
       // tooltip workaround, need to upgrade library
       onPress={onPressWorkaround}
-      tracksViewChanges={false}
+      tracksViewChanges={tracksViewChanges}
+      onLayout={onMarkerLayout}
     >
       <SvgIcon
         Svg={carIcon}
         height={48}
         width={48}
+        color={vehicleColor}
         style={svgStyle}
       />
     </MarkerAnimated>
