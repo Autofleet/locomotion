@@ -129,6 +129,7 @@ interface RidePageContextInterface {
   setSpCurrentLocation: () => void;
   historyResults: any[];
   serviceEstimations: any[];
+  isEstimateOutdated: boolean;
   ride: RideInterface | null;
   updateRidePayload: (ride: any) => void;
   chosenService: any;
@@ -198,6 +199,7 @@ export const RidePageContext = createContext<RidePageContextInterface>({
   setSpCurrentLocation: () => undefined,
   historyResults: [],
   serviceEstimations: [],
+  isEstimateOutdated: false,
   updateRidePayload: (ride: any) => undefined,
   chosenService: null,
   defaultService: null,
@@ -251,6 +253,9 @@ export const RidePageContext = createContext<RidePageContextInterface>({
 
 const HISTORY_RECORDS_NUM = 10;
 
+const areStopPointsReady = (stopPoints: RequestStopPoint[]) => stopPoints.length > 0
+  && stopPoints.every((sp) => sp.lat && sp.lng && sp.description);
+
 const RidePageContextProvider = ({ children }: {
   children: any
 }) => {
@@ -275,6 +280,7 @@ const RidePageContextProvider = ({ children }: {
   const [searchResults, setSearchResults] = useState<any[] | null>(null);
   const [historyResults, setHistoryResults] = useState([]);
   const [serviceEstimations, setServiceEstimations] = useState<any | null>(null);
+  const [estimatedPaymentMethodId, setEstimatedPaymentMethodId] = useState<string | undefined>();
   const [ride, setRide] = useState<RideInterface>({});
   const [chosenService, setChosenService] = useState<any | null>(null);
   const [defaultService, setDefaultService] = useState<any | null>(null);
@@ -290,6 +296,7 @@ const RidePageContextProvider = ({ children }: {
   const [businessAccountId, setBusinessAccountId] = useState<string | null>(null);
 
   const intervalRef = useRef<ReturnType<typeof setInterval> | undefined>(undefined);
+  const estimationRequestIdRef = useRef(0);
 
   const stopRequestInterval = () => {
     clearInterval(intervalRef.current);
@@ -438,28 +445,43 @@ const RidePageContextProvider = ({ children }: {
     return fallbackId;
   };
 
-  const getServiceEstimations = async (throwError = true, paymentChosen = true) => {
+  // Resolves false when a newer estimation request superseded this one and its result was dropped.
+  const getServiceEstimations = async (throwError = true, paymentChosen = true): Promise<boolean> => {
+    estimationRequestIdRef.current += 1;
+    const requestId = estimationRequestIdRef.current;
+    // A payment-method switch can overlap the periodic refresh; a slower, older response must not
+    // overwrite the newer price (it would show the previous payment method's rounding).
+    const isStale = () => requestId !== estimationRequestIdRef.current;
     const relevantBusinessAccountId = await getBusinessAccountIdWithFallback(paymentChosen);
     changeBsPage(BS_PAGES.SERVICE_ESTIMATIONS);
     try {
       const formattedStopPoints = formatStopPointsForEstimations(requestStopPoints);
       Mixpanel.setEvent('Get service estimations');
 
+      const { paymentMethodId } = ride;
       let scheduledTime: any = ride.scheduledTo;
       if (ride.scheduledTo) {
         const unixScheduledTo = moment.unix(Number(ride.scheduledTo) / 1000);
         scheduledTime = await getLocationTimezoneTime(formattedStopPoints[0].lat, formattedStopPoints[0].lng, unixScheduledTo);
       }
       const { estimations, services } = await rideApi
-        .createServiceEstimations(formattedStopPoints, scheduledTime, relevantBusinessAccountId);
+        .createServiceEstimations(formattedStopPoints, scheduledTime, relevantBusinessAccountId, paymentMethodId);
+      if (isStale()) {
+        return false;
+      }
 
       const tags = getEstimationTags(estimations);
       const formattedEstimations = formatEstimations(services, estimations, tags);
       const newChosenService = chosenService && formattedEstimations.find((e: any) => e.id === chosenService.id);
       setChosenService(newChosenService || formattedEstimations.find((e: any) => e.currency));
       setDefaultService(formattedEstimations?.[0]);
+      setEstimatedPaymentMethodId(paymentMethodId);
       setServiceEstimations(formattedEstimations);
+      return true;
     } catch (e: any) {
+      if (isStale()) {
+        return false;
+      }
       Mixpanel.setEvent('service estimations failed', { status: e?.response?.status });
       if (throwError) {
         const error = e?.response?.data?.errors[0];
@@ -494,8 +516,14 @@ const RidePageContextProvider = ({ children }: {
   };
 
   const tryServiceEstimations = async (paymentChosen = true) => {
+    // Stop the old refresh first: its callback captured the previous payment method, and if it fired
+    // during this request it would be the newest request and its stale price would win.
+    clearInterval(intervalRef.current);
+    intervalRef.current = undefined;
     const serviceEstimationsInterval = await getServiceEstimationsFetchingInterval();
-    await getServiceEstimations(true, paymentChosen);
+    if (!await getServiceEstimations(true, paymentChosen)) {
+      return;
+    }
     clearInterval(intervalRef.current);
     intervalRef.current = setInterval(async () => {
       if (intervalRef.current) {
@@ -508,8 +536,7 @@ const RidePageContextProvider = ({ children }: {
 
   const validateRequestedStopPoints = (reqSps: any[], paymentChosen = true) => {
     const stopPoints = reqSps;
-    const isSpsReady = stopPoints.every((r) => r.lat && r.lng && r.description);
-    if (stopPoints.length && isSpsReady) {
+    if (areStopPointsReady(stopPoints)) {
       tryServiceEstimations(paymentChosen);
     } else if (![BS_PAGES.ADDRESS_SELECTOR, BS_PAGES.LOADING].includes(currentBsPage)) {
       // reset req stop point request
@@ -717,6 +744,14 @@ const RidePageContextProvider = ({ children }: {
   useEffect(() => {
     validateRequestedStopPoints(requestStopPoints, false);
   }, [requestStopPoints]);
+
+  useEffect(() => {
+    // paymentMethodId also changes outside the price screen (cancel, a ride loading), and
+    // getServiceEstimations always switches to that screen.
+    if (currentBsPage === BS_PAGES.SERVICE_ESTIMATIONS && areStopPointsReady(requestStopPoints)) {
+      tryServiceEstimations();
+    }
+  }, [ride.paymentMethodId]);
 
   const getRideFromApi = async (rideId: string): Promise<RideInterface> => formatRide(await rideApi.getRide(rideId));
 
@@ -1437,6 +1472,7 @@ const RidePageContextProvider = ({ children }: {
         historyResults,
         loadHistory,
         serviceEstimations,
+        isEstimateOutdated: !!serviceEstimations && estimatedPaymentMethodId !== ride.paymentMethodId,
         ride,
         setRide,
         updateRide,
