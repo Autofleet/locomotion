@@ -1,6 +1,11 @@
 import network from '../../services/network';
 
-export const createServiceEstimations = async (stopPoints, scheduledTo, businessAccountId, paymentMethodId) => {
+export const createServiceEstimations = async (
+  stopPoints,
+  scheduledTo,
+  businessAccountId,
+  paymentMethodId,
+) => {
   try {
     const { data } = await network.post('api/v1/services/service-estimations', {
       stopPoints, scheduledTo, businessAccountId, paymentMethodId,

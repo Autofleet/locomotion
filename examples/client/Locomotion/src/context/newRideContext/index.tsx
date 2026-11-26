@@ -251,8 +251,8 @@ export const RidePageContext = createContext<RidePageContextInterface>({
 
 const HISTORY_RECORDS_NUM = 10;
 
-const areStopPointsReady = (stopPoints: any[]) => stopPoints.length > 0
-  && stopPoints.every(sp => sp.lat && sp.lng && sp.description);
+const areStopPointsReady = (stopPoints: RequestStopPoint[]) => stopPoints.length > 0
+  && stopPoints.every((sp) => sp.lat && sp.lng && sp.description);
 
 const RidePageContextProvider = ({ children }: {
   children: any
@@ -293,6 +293,7 @@ const RidePageContextProvider = ({ children }: {
   const [businessAccountId, setBusinessAccountId] = useState<string | null>(null);
 
   const intervalRef = useRef<ReturnType<typeof setInterval> | undefined>(undefined);
+  const estimationRequestIdRef = useRef(0);
 
   const stopRequestInterval = () => {
     clearInterval(intervalRef.current);
@@ -441,7 +442,13 @@ const RidePageContextProvider = ({ children }: {
     return fallbackId;
   };
 
-  const getServiceEstimations = async (throwError = true, paymentChosen = true) => {
+  // Resolves false when a newer estimation request superseded this one and its result was dropped.
+  const getServiceEstimations = async (throwError = true, paymentChosen = true): Promise<boolean> => {
+    estimationRequestIdRef.current += 1;
+    const requestId = estimationRequestIdRef.current;
+    // A payment-method switch can overlap the periodic refresh; a slower, older response must not
+    // overwrite the newer price (it would show the previous payment method's rounding).
+    const isStale = () => requestId !== estimationRequestIdRef.current;
     const relevantBusinessAccountId = await getBusinessAccountIdWithFallback(paymentChosen);
     changeBsPage(BS_PAGES.SERVICE_ESTIMATIONS);
     try {
@@ -455,6 +462,9 @@ const RidePageContextProvider = ({ children }: {
       }
       const { estimations, services } = await rideApi
         .createServiceEstimations(formattedStopPoints, scheduledTime, relevantBusinessAccountId, ride.paymentMethodId);
+      if (isStale()) {
+        return false;
+      }
 
       const tags = getEstimationTags(estimations);
       const formattedEstimations = formatEstimations(services, estimations, tags);
@@ -462,7 +472,11 @@ const RidePageContextProvider = ({ children }: {
       setChosenService(newChosenService || formattedEstimations.find((e: any) => e.currency));
       setDefaultService(formattedEstimations?.[0]);
       setServiceEstimations(formattedEstimations);
+      return true;
     } catch (e: any) {
+      if (isStale()) {
+        return false;
+      }
       Mixpanel.setEvent('service estimations failed', { status: e?.response?.status });
       if (throwError) {
         const error = e?.response?.data?.errors[0];
@@ -497,8 +511,14 @@ const RidePageContextProvider = ({ children }: {
   };
 
   const tryServiceEstimations = async (paymentChosen = true) => {
+    // Stop the old refresh first: its callback captured the previous payment method, and if it fired
+    // during this request it would be the newest request and its stale price would win.
+    clearInterval(intervalRef.current);
+    intervalRef.current = undefined;
     const serviceEstimationsInterval = await getServiceEstimationsFetchingInterval();
-    await getServiceEstimations(true, paymentChosen);
+    if (!await getServiceEstimations(true, paymentChosen)) {
+      return;
+    }
     clearInterval(intervalRef.current);
     intervalRef.current = setInterval(async () => {
       if (intervalRef.current) {
@@ -721,8 +741,11 @@ const RidePageContextProvider = ({ children }: {
   }, [requestStopPoints]);
 
   useEffect(() => {
-    if (!areStopPointsReady(requestStopPoints)) return;
-    tryServiceEstimations(true);
+    // paymentMethodId also changes outside the price screen (cancel, a ride loading), and
+    // getServiceEstimations always switches to that screen.
+    if (currentBsPage === BS_PAGES.SERVICE_ESTIMATIONS && areStopPointsReady(requestStopPoints)) {
+      tryServiceEstimations();
+    }
   }, [ride.paymentMethodId]);
 
   const getRideFromApi = async (rideId: string): Promise<RideInterface> => formatRide(await rideApi.getRide(rideId));
