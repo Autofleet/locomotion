@@ -56,6 +56,7 @@ const RideButtons = ({
     futureBookingDays,
     businessAccountId,
     serviceEstimations,
+    isEstimateOutdated,
     numberOfPassengers,
   } = useContext(RidePageContext);
 
@@ -307,6 +308,7 @@ const RideButtons = ({
   const isSelectButtonDisabled = () => (
     !chosenService || !(chosenService?.isHighEtaAsapRide ? allowRideOrderIfNoMatchedVehicles : chosenService)
     || !!getClientOutstandingBalanceCard() || passengersCounterError || paymentMethodNotAllowedOnService
+    || isEstimateOutdated
   );
 
   const selectButtonText = () => {

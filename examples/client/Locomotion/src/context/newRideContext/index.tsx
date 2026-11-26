@@ -129,6 +129,7 @@ interface RidePageContextInterface {
   setSpCurrentLocation: () => void;
   historyResults: any[];
   serviceEstimations: any[];
+  isEstimateOutdated: boolean;
   ride: RideInterface | null;
   updateRidePayload: (ride: any) => void;
   chosenService: any;
@@ -198,6 +199,7 @@ export const RidePageContext = createContext<RidePageContextInterface>({
   setSpCurrentLocation: () => undefined,
   historyResults: [],
   serviceEstimations: [],
+  isEstimateOutdated: false,
   updateRidePayload: (ride: any) => undefined,
   chosenService: null,
   defaultService: null,
@@ -278,6 +280,7 @@ const RidePageContextProvider = ({ children }: {
   const [searchResults, setSearchResults] = useState<any[] | null>(null);
   const [historyResults, setHistoryResults] = useState([]);
   const [serviceEstimations, setServiceEstimations] = useState<any | null>(null);
+  const [estimatedPaymentMethodId, setEstimatedPaymentMethodId] = useState<string | undefined>();
   const [ride, setRide] = useState<RideInterface>({});
   const [chosenService, setChosenService] = useState<any | null>(null);
   const [defaultService, setDefaultService] = useState<any | null>(null);
@@ -455,13 +458,14 @@ const RidePageContextProvider = ({ children }: {
       const formattedStopPoints = formatStopPointsForEstimations(requestStopPoints);
       Mixpanel.setEvent('Get service estimations');
 
+      const { paymentMethodId } = ride;
       let scheduledTime: any = ride.scheduledTo;
       if (ride.scheduledTo) {
         const unixScheduledTo = moment.unix(Number(ride.scheduledTo) / 1000);
         scheduledTime = await getLocationTimezoneTime(formattedStopPoints[0].lat, formattedStopPoints[0].lng, unixScheduledTo);
       }
       const { estimations, services } = await rideApi
-        .createServiceEstimations(formattedStopPoints, scheduledTime, relevantBusinessAccountId, ride.paymentMethodId);
+        .createServiceEstimations(formattedStopPoints, scheduledTime, relevantBusinessAccountId, paymentMethodId);
       if (isStale()) {
         return false;
       }
@@ -471,6 +475,7 @@ const RidePageContextProvider = ({ children }: {
       const newChosenService = chosenService && formattedEstimations.find((e: any) => e.id === chosenService.id);
       setChosenService(newChosenService || formattedEstimations.find((e: any) => e.currency));
       setDefaultService(formattedEstimations?.[0]);
+      setEstimatedPaymentMethodId(paymentMethodId);
       setServiceEstimations(formattedEstimations);
       return true;
     } catch (e: any) {
@@ -1467,6 +1472,7 @@ const RidePageContextProvider = ({ children }: {
         historyResults,
         loadHistory,
         serviceEstimations,
+        isEstimateOutdated: !!serviceEstimations && estimatedPaymentMethodId !== ride.paymentMethodId,
         ride,
         setRide,
         updateRide,
